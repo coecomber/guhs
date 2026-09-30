@@ -21,8 +21,8 @@ JAVA = "25"
 GUHS = "1.1.0"
 MAP_URL = "https://map.guhs.nl/"
 PACK_REPO = "https://github.com/coecomber/guhs-pack"
-PACK_TOML = "https://coecomber.github.io/guhs-pack/pack.toml"
-PRISM_ZIP = "https://coecomber.github.io/guhs-pack/prism/guhs-server-instance.zip"
+PACK_TOML = "https://pack.guhs.nl/pack.toml"
+PRISM_ZIP = "https://pack.guhs.nl/prism/guhs-server-instance.zip"
 PRISM_SITE = "https://prismlauncher.org/"
 NEOFORGE_SITE = "https://neoforged.net/"
 
@@ -166,6 +166,10 @@ class ServerPage(Guide):
              f"Paste this link into the box: {_code(PRISM_ZIP)}"),
             ("Klik <b>OK</b>. Prism maakt een nieuwe instance aan (de naam mag je houden of veranderen).",
              "Click <b>OK</b>. Prism creates a new instance (keep the name or change it)."),
+            (f"Controleer de <b>Java</b>: selecteer de instance &rarr; <b>Edit</b> &rarr; <b>Settings</b> &rarr; <b>Java</b>. Staat daar Java 17 of 21? Vink "
+             f"<b>Java installation</b> aan, klik <b>Download Java</b>, kies <b>Java {JAVA}</b> en klik <b>OK</b>. Prism kiest bij het importeren soms een te oude Java.",
+             f"Check the <b>Java</b>: select the instance &rarr; <b>Edit</b> &rarr; <b>Settings</b> &rarr; <b>Java</b>. Does it say Java 17 or 21? Tick "
+             f"<b>Java installation</b>, click <b>Download Java</b>, pick <b>Java {JAVA}</b> and click <b>OK</b>. Prism sometimes picks a Java that's too old when importing."),
         ]) + _tip("Je hoeft zelf geen mods te downloaden. De instance haalt ze bij elke start op van het pack, en kijkt dan meteen of er iets nieuws is.",
                   "You don't have to download any mods yourself. The instance fetches them from the pack on every start, and checks for updates straight away.")
         return self.step("importeren", 4, "Importeer de Guhs-instance", "Import the Guhs instance", body)
@@ -270,6 +274,11 @@ class ServerPage(Guide):
              f"(of <b>Auto-detect</b> als je hem al hebt). Handmatig spelen? Installeer een Java {JAVA} (bijvoorbeeld van Adoptium).",
              f"Minecraft {MC} wants <b>Java {JAVA}</b>. Normally Prism fetches it by itself. Still an error? In Prism: Settings &rarr; Java &rarr; <b>Download Java</b> and pick Java {JAVA} "
              f"(or <b>Auto-detect</b> if you already have it). Playing by hand? Install a Java {JAVA} (from Adoptium, for example)."),
+            ("'Pre-Launch command failed' of 'The process failed to start'", "'Pre-Launch command failed' or 'The process failed to start'",
+             f"Je hebt nog een oude versie van de instance (die had een foutje in het startcommando). Verwijder de instance en importeer hem opnieuw met {_code(PRISM_ZIP)}. "
+             f"Of zet in Edit &rarr; Settings &rarr; <b>Custom commands</b> bij Pre-launch command precies: {_code(chr(34) + '$INST_JAVA' + chr(34) + ' -jar packwiz-installer-bootstrap.jar ' + PACK_TOML)}",
+             f"You still have an old version of the instance (it had a small bug in its start command). Remove the instance and import it again from {_code(PRISM_ZIP)}. "
+             f"Or set the Pre-launch command in Edit &rarr; Settings &rarr; <b>Custom commands</b> to exactly: {_code(chr(34) + '$INST_JAVA' + chr(34) + ' -jar packwiz-installer-bootstrap.jar ' + PACK_TOML)}"),
             ("'Unknown host' of 'Can't connect to server'", "'Unknown host' or 'Can't connect to server'",
              f"Probeer het adres {_code(IP)} of {_code(HOST)}. Werkt niets? Misschien is het net 05:00 (herstart) of is de server even in onderhoud: "
              "wacht een paar minuten.",
