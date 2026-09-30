@@ -857,6 +857,28 @@ def villager_trades():
 # The data files, per folder
 # ---------------------------------------------------------------------------------------------------------------------
 
+# vanilla ids renamed since 1.21.1 (structure .nbt files keep DataVersion 1.21.1: the game's DataFixer renames those itself)
+VANILLA_RENAMES = {"minecraft:chain": "minecraft:iron_chain"}
+
+
+def renamed_ids(o):
+    if isinstance(o, list):
+        return [renamed_ids(x) for x in o]
+    if isinstance(o, dict):
+        return {k: renamed_ids(v) for k, v in o.items()}
+    if isinstance(o, str):
+        return VANILLA_RENAMES.get(o, o)
+    return o
+
+
+def vanilla_renames():
+    for path in glob.glob(os.path.join(R, "data", "**", "*.json"), recursive=True):
+        d = rd(path)
+        n = renamed_ids(d)
+        if n != d:
+            w(path, n)
+
+
 def data_files():
     for ns_dir in glob.glob(os.path.join(R, "data", "*")):
         for path in glob.glob(os.path.join(ns_dir, "recipe", "**", "*.json"), recursive=True):
@@ -886,6 +908,7 @@ def run():
     del changed[:]
     geckolib_folders()
     data_files()
+    vanilla_renames()
     tags()
     villager_trades()
     models()

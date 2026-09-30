@@ -40,8 +40,8 @@ def reports():
     rep = os.path.join("build", "vanilla26", "reports")
     if not os.path.exists(os.path.join(rep, "registries.json")):
         os.makedirs(os.path.join("build", "vanilla26"), exist_ok=True)
-        subprocess.run([java25(), "-DbundlerMainClass=net.minecraft.data.Main", "-jar", SERVER_JAR, "--reports", "--output",
-                        os.path.join("build", "vanilla26")], cwd=".", check=True, stdout=subprocess.DEVNULL)
+        subprocess.run([java25(), "-DbundlerMainClass=net.minecraft.data.Main", "-jar", SERVER_JAR, "--reports", "--output", "."],
+                       cwd=os.path.join("build", "vanilla26"), check=True, stdout=subprocess.DEVNULL)
     regs = json.load(open(os.path.join(rep, "registries.json")))
     blocks = json.load(open(os.path.join(rep, "blocks.json")))
     return {k: set(v["entries"]) for k, v in regs.items()}, blocks
@@ -208,6 +208,8 @@ def tag_values(d, reg):
             continue  # NeoForge's common tags
         if own(ref) and not ref.startswith("#") and reg and not known(reg, ref):
             REPLACED[(reg, ref)] = REPLACED.get((reg, ref), 0) + 1
+            if reg in ("minecraft:item", "minecraft:block"):
+                vals.append("minecraft:stick" if reg == "minecraft:item" else "minecraft:stone")
             continue
         vals.append(v)
     d["values"] = vals
@@ -298,7 +300,8 @@ def run_server(world, gen):
     open(os.path.join(run_dir, "eula.txt"), "w").write("eula=true\n")
     open(os.path.join(run_dir, "server.properties"), "w").write(
         "level-name=world\nonline-mode=false\nspawn-protection=0\nmax-tick-time=-1\nsync-chunk-writes=false\n"
-        "level-type=minecraft\\:flat\ngenerate-structures=false\nserver-port=25599\n")
+        "level-type=minecraft\\:flat\ngenerate-structures=false\nserver-port=25599\n"
+        'generator-settings={"layers"\\:[{"block"\\:"minecraft\\:bedrock","height"\\:1}],"biome"\\:"minecraft\\:plains"}\n')
     log_path = os.path.join(run_dir, "server.log")
     cmds = []
     if gen:
