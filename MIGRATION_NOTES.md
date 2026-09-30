@@ -964,3 +964,27 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
   is picked from texture alpha now (PORT_PLAN 7.9).
 * R: dev AutoCheck: the check world's game rules are set right after joining (26.1 `LevelSettings` has no game rules); "mist off" can no longer
   cancel the fog event, it only pushes the terrain fog out to the render distance.
+* S6: Guhvleugels (guheinde) are a plain item with vanilla's elytra components (`GLIDER`, `EQUIPPABLE` chest with equipment asset
+  `guhs:guhvleugels`, `repairable(mika_vet)`, durability 540, no damage on hurt); `ElytraItem`/`ElytraLayer` are gone, so the wings on your
+  back are drawn by vanilla's `WingsLayer` from the equipment asset (D: `assets/guhs/equipment/guhvleugels.json` with a `wings` layer). Same
+  look and gliding; like vanilla elytra they now also show on armour stands and other humanoids that wear them (1.0.0: players only).
+* S6: Knabbelkroon is a plain item with `humanoidArmor(KROON_MATERIAL, HELMET)` (same numbers: 4 armour, 3 toughness, 0.1 knockback
+  resistance, durability 11 x 45, enchantability 25, gold equip sound), repaired with the vahoege vads ingot; worn look = equipment asset
+  `guhs:knabbelkroon` (D). The aura (saturation, hearts, Mika's) is unchanged (inventoryTick was already server-side logic).
+* S6: Knabbelkristal is no longer an `EndCrystal` subclass (26.1's `EndCrystal#hurtServer` is final and always explodes): its own entity
+  with the end crystal's spin/beam/show-bottom (same save keys `beam_target`/`ShowBottom`), drawn with vanilla 26.1's end crystal model.
+  Smashing, the beam and the fight hooks are unchanged; vanilla code that looks for `EndCrystal` (dragon respawn, none in the Guheinde) no
+  longer sees it.
+* S6: Pluizenboom leaves (knuffeldal) extend 26.1's abstract `LeavesBlock` with falling-leaf chance 0 (1.0.0's leaves had no falling-leaf
+  particles; the pluisjes still drift down from `animateTick`). Pluisgras/Guhpaddenstoel extend `VegetationBlock` (1.21.1's `BushBlock`).
+* S6: Guh gieter (tuintjes): `setNoRepair()` is gone -> `isCombineRepairable` returns false (no grid repair), and without an
+  `ENCHANTABLE` component it can't be enchanted (1.0.0 overrode `isEnchantable` to false): same behaviour.
+* S6: Warme chocovet / snert (elftocht): the Speed II boost is an `ApplyStatusEffectsConsumeEffect` of the drink's `Consumable`
+  (0.8 s drink = old `fast()`, honey-drink sound, no crumbs) instead of a food effect; stille knabbel (gatenkaas) likewise. Same result.
+* S6: Skating (elftocht): the skates on your feet (`SchaatsLaag`) and the skater's lean/sway are prepared at render-state extraction
+  (NeoForge `registerAvatarEntityModifier`) and applied in `RenderLivingEvent.Pre/Post` / the player layer; same numbers as 1.0.0.
+  The skates are drawn under the legs of player renderers only (mannequins not), like 1.0.0.
+* S6: Guheinde fight saved data is `guhs:guheinde` (the 1.0.0 file `guhs_guheinde.dat` of the Guheinde is moved once by `GuhSavedData`).
+* S6: NPC animators (Schaatsmeester, Stempelguh, Kapper Krulletje, Burgemeester, Cocotje) moved to the 1.1.0 `(npc, tick) -> BoneMove`
+  form; the Stempelguh's stamping arm now sets its rotation relative to the model's base rotation (GeckoLib 5 snapshots), which is the
+  old "initial + plof" value.
