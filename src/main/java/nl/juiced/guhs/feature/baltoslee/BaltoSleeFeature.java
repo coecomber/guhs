@@ -70,8 +70,8 @@ public final class BaltoSleeFeature {
 
     // --- items -----------------------------------------------------------------------------------------------------------
     /** Your own snow sled (balto gives it as the quest reward): put it down on snow and ride. */
-    public static final DeferredItem<Item> SNEEUWSLEE = ITEMS.register("sneeuwslee",
-            () -> new SneeuwsleeItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+    public static final DeferredItem<Item> SNEEUWSLEE = ITEMS.registerItem("sneeuwslee",
+            SneeuwsleeItem::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
     /** The coin of the sledesprint: a little golden sled bell with a red ribbon. */
     public static final DeferredItem<Item> SLEDEBELLETJE = ITEMS.registerSimpleItem("sledebelletje", () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 

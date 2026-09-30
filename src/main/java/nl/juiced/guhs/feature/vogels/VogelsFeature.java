@@ -57,7 +57,7 @@ public final class VogelsFeature {
     public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(Registries.PARTICLE_TYPE, Guhs.MODID);
 
     /** A soft pink-white fluff feather, dropped by the Pluisvinkjes now and then (the hemel quest asks one). */
-    public static final DeferredItem<Item> PLUISVEERTJE = ITEMS.register("pluisveertje", () -> new Pluisveertje(new Item.Properties()));
+    public static final DeferredItem<Item> PLUISVEERTJE = ITEMS.registerItem("pluisveertje", Pluisveertje::new, () -> new Item.Properties());
 
     // --- the birds ---------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<PluisvinkjeEntity>> PLUISVINKJE = ENTITY_TYPES.register("pluisvinkje",

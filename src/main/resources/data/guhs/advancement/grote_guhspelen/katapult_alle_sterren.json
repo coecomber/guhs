@@ -2,7 +2,7 @@
   "parent": "guhs:grote_guhspelen/katapult_lastig",
   "display": {
     "icon": {
-      "id": "guhs:katapult_mika"
+      "id": "guhs:katapult_mikaplank"
     },
     "title": {
       "translate": "advancements.guhs.grote_guhspelen.katapult_alle_sterren.title"

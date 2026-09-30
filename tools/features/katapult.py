@@ -284,16 +284,16 @@ def npc(h):
 # advancements and texts
 # ---------------------------------------------------------------------------------------------------------------------
 ADVANCEMENTS = [
-    ("katapult_gevonden", "root", "guhs:katapult_werper", "task",
+    ("katapult_gevonden", "root", "guhs:katapult_pluisballen", "task",
      {"done": {"trigger": "minecraft:location", "conditions": {"player": {"location": {"structures": "guhs:knabbelkatapult"}}}}},
      "Floep!", "Vind de Knabbelkatapult op de Vadskliffen: een guhkasteel tegenover een scheef Mika-fort"),
     ("katapult_gespeeld", "katapult_gevonden", "guhs:katapultster", "task", {"done": {"trigger": "minecraft:impossible"}},
      "Twaalf forten", "Schiet alle twaalf Mika-forten van één ronde plat bij Kapitein Floepguh"),
-    ("katapult_drie_sterren", "katapult_gespeeld", "guhs:katapult_knabbelkist", "goal", {"done": {"trigger": "minecraft:impossible"}},
+    ("katapult_drie_sterren", "katapult_gespeeld", "guhs:katapultster", "goal", {"done": {"trigger": "minecraft:impossible"}},
      "Drie sterren!", "Haal drie sterren bij een fort: alle Mika's weg, alle kisten open en nog een pluisbal over"),
     ("katapult_lastig", "katapult_drie_sterren", "guhs:katapult_pluisballen", "challenge", {"done": {"trigger": "minecraft:impossible"}},
      "Tegen de wind in", "Speel een hele ronde op lastig: drie pluisballen per fort, en het waait!"),
-    ("katapult_alle_sterren", "katapult_lastig", "guhs:katapult_mika", "challenge", {"done": {"trigger": "minecraft:impossible"}},
+    ("katapult_alle_sterren", "katapult_lastig", "guhs:katapult_mikaplank", "challenge", {"done": {"trigger": "minecraft:impossible"}},
      "Zesendertig sterren", "Haal in één ronde alle 36 sterren. De Mika's zijn helemaal van slag!"),
     ("katapult_kleding", "katapult_gespeeld", "guhs:katapult_helmpje", "goal",
      {"items": {"trigger": "minecraft:inventory_changed", "conditions": {"items": [
@@ -464,19 +464,19 @@ def selfcheck(h):
 def ftb(fq):
     q = fq.q
     q("katapult_kasteel", "De Knabbelkatapult", "Op de &dVadskliffen&r staat soms een vrolijk guhkasteel met een katapult op de muur, "
-      "tegenover een scheef Mika-fort (superkompas: Minigames). Op de muur staat &6Kapitein Floepguh&r.", "guhs:katapult_werper",
+      "tegenover een scheef Mika-fort (superkompas: Minigames). Op de muur staat &6Kapitein Floepguh&r.", "guhs:katapult_pluisballen",
       [fq.structure(NAME)], rewards=(("guhs:kaas_knabbels", 8),), x=-8, y=0, shape="circle", xp=100)
     q("katapult_ronde", "Twaalf forten", "Kies een niveau bij de Kapitein en schiet twaalf Mika-forten plat. Kijk, houd rechtsklik ingedrukt "
       "en laat los: FLOEP! Mika's rennen giechelend weg (ze doen niemand pijn) en de gestolen kaasknabbels zijn weer vrij.",
       "guhs:katapultster", [fq.adv("katapult_gespeeld")], rewards=(("guhs:katapultster", 2),), x=-6.5, y=0, xp=150)
     q("katapult_sterren", "Drie sterren!", "Haal drie sterren bij één fort: alle Mika's weg, alle knabbelkisten open, en nog een pluisbal "
-      "over. Tip: raak de dunne paaltjes onderaan!", "guhs:katapult_knabbelkist", [fq.adv("katapult_drie_sterren")],
+      "over. Tip: raak de dunne paaltjes onderaan!", "guhs:katapultster", [fq.adv("katapult_drie_sterren")],
       rewards=(("guhs:katapultster", 2),), x=-5, y=0, xp=200)
     q("katapult_lastig", "Tegen de wind in", "Speel een hele ronde op &clastig&r: drie pluisballen per fort, en het waait. Let op de "
       "windpijltjes onderin je scherm!", "guhs:katapult_pluisballen", [fq.adv("katapult_lastig")],
       rewards=(("guhs:gefrituurde_kaasknabbels", 8),), x=-3.5, y=0, shape="hexagon", xp=400)
     q("katapult_alle_sterren", "Zesendertig sterren", "Haal in één ronde alle 36 sterren. Dan is Kapitein Floepguh helemaal sprakeloos.",
-      "guhs:katapult_mika", [fq.adv("katapult_alle_sterren")], rewards=(("guhs:vahoege_vads_ingot", 1),), x=-2, y=0, shape="hexagon", xp=500)
+      "guhs:katapult_mikaplank", [fq.adv("katapult_alle_sterren")], rewards=(("guhs:vahoege_vads_ingot", 1),), x=-2, y=0, shape="hexagon", xp=500)
     q("katapult_pakje", "Klaar om te floepen", "Verzamel het hele katapultpakje bij de Kapitein: het katapulthelmpje, de katapultriem en de "
       "pluisbal-oorbelletjes.", "guhs:katapult_helmpje", [fq.adv("katapult_kleding")], rewards=(("guhs:katapultster", 3),),
       x=-0.5, y=0, shape="gear", xp=300)

@@ -4,7 +4,10 @@
   "package": "nl.juiced.guhs.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "EntityRidingMixin",
     "FlowingFluidMixin",
+    "GameTestInfoMixin",
+    "MockConnectionMixin",
     "ServerLevelMixin",
     "VillagerMixin"
   ],

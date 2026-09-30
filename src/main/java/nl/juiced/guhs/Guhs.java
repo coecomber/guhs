@@ -55,6 +55,7 @@ public class Guhs {
         nl.juiced.guhs.gametest.GuhsGameTests.register(modBus);   // 26.1: our @GuhTest registrar (only when gametests are enabled)
 
         modBus.addListener(ModEntities::registerAttributes);
+        modBus.addListener(ModEntities::addTemptRange);
         modBus.addListener(ModPoiTypes::addHiveBlocks);
         modBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) -> event.enqueueWork(ModBlocks::registerPots));
         modBus.addListener((net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent event) -> nl.juiced.guhs.compat.FtbQuestsChapter.install());

@@ -1032,7 +1032,7 @@ def guh_sea_and_crystals():
         w(f"{D}/recipe/gebakken_guh_vis_{kind}.json", {"type": typ, "category": "food", "ingredient": {"item": "guhs:guh_vis"},
                                                         "result": {"id": "guhs:gebakken_guh_vis"}, "experience": 0.35, "cookingtime": t})
     # fishing in the Guhmension also brings up guh fish
-    w(f"{R}/data/neoforge/loot_modifiers/global_loot_modifiers.json", {"replace": False, "entries": ["guhs:guh_vis_fishing"]})
+    # (26.1: NeoForge loads every file in data/*/loot_modifiers itself; the global_loot_modifiers.json list is gone)
     w(f"{D}/loot_modifiers/guh_vis_fishing.json", {
         "type": "neoforge:add_table", "table": "guhs:gameplay/guh_vis_fishing", "conditions": [
             {"condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:gameplay/fishing/fish"},

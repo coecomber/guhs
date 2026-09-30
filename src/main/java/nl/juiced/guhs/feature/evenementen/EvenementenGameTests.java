@@ -376,7 +376,7 @@ public class EvenementenGameTests {
     public static void paradeOutfitAndCommandExist(GameTestHelper helper) {
         helper.assertTrue(GuhClothes.VADSPARADE_SJAKO.slot == GuhClothes.Slot.HEAD && GuhClothes.VADSPARADE_JASJE.slot == GuhClothes.Slot.BODY
                 && GuhClothes.VADSPARADE_TROMMELTJE.slot == GuhClothes.Slot.NECK, "three pieces in three slots");
-        try (var in = Guhs.class.getResourceAsStream("/assets/guhs/geo/entity/guh.geo.json")) {
+        try (var in = Guhs.class.getResourceAsStream("/assets/guhs/geckolib/models/entity/guh.geo.json")) {
             String geo = new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
             for (String bone : List.of("outfit_parade_sjako", "outfit_parade_epaulet", "outfit_parade_trommel")) {
                 helper.assertTrue(geo.contains("\"" + bone + "\""), "the guh model has " + bone);

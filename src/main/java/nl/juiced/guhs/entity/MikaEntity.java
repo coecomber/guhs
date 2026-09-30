@@ -50,7 +50,7 @@ import com.geckolib.util.GeckoLibUtil;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
 /**
- * Mika: the evil guh. Same model as a guh but with an evil face and devil tail (assets/guhs/geo/entity/mika.geo.json).
+ * Mika: the evil guh. Same model as a guh but with an evil face and devil tail (assets/guhs/geckolib/models/entity/mika.geo.json).
  * Hostile and chases you, but its "attacks" only shove you hard. 50 HP, drops Mika's vet.
  * Big Mika (NBT {@code Boss:1}, the guardian of challenging guh caves) is different: it really hurts, has a boss bar,
  * lots of HP and drops a big reward.

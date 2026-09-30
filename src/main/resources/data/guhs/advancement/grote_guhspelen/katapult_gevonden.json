@@ -2,7 +2,7 @@
   "parent": "guhs:grote_guhspelen/root",
   "display": {
     "icon": {
-      "id": "guhs:katapult_werper"
+      "id": "guhs:katapult_pluisballen"
     },
     "title": {
       "translate": "advancements.guhs.grote_guhspelen.katapult_gevonden.title"

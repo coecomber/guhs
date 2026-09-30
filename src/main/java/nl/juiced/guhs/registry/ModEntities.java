@@ -87,6 +87,20 @@ public final class ModEntities {
             () -> EntityType.Builder.<nl.juiced.guhs.entity.GuhSeatEntity>of(nl.juiced.guhs.entity.GuhSeatEntity::new, MobCategory.MISC)
                     .sized(0.01f, 0.01f).noSave().noSummon().clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_seat"))));
 
+    /**
+     * 26.1: {@code TemptGoal} reads the tempt range from the new {@code minecraft:tempt_range} attribute (1.21.1: always
+     * 10 blocks) and crashes when the mob does not have it. Every guhs living entity gets it with the old 10 blocks,
+     * unless its own attribute set already has one (vanilla's {@code Animal.createAnimalAttributes()} does).
+     */
+    public static void addTemptRange(net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent event) {
+        for (var type : event.getTypes()) {
+            if (Guhs.MODID.equals(EntityType.getKey(type).getNamespace())
+                    && !event.has(type, net.minecraft.world.entity.ai.attributes.Attributes.TEMPT_RANGE)) {
+                event.add(type, net.minecraft.world.entity.ai.attributes.Attributes.TEMPT_RANGE, 10.0);
+            }
+        }
+    }
+
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(GUH_BEE.get(), net.minecraft.world.entity.animal.bee.Bee.createAttributes().build());
         event.put(GUH_SLIME.get(), net.minecraft.world.entity.monster.Monster.createMonsterAttributes().build());

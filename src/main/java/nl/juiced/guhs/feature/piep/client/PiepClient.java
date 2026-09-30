@@ -43,7 +43,7 @@ import nl.juiced.guhs.feature.piep.PieppiepmuisjeEntity;
 import nl.juiced.guhs.feature.piep.PoepschillyEntity;
 
 /**
- * Client side of Piep: the GeckoLib renderers (the exported models in assets/guhs/geo/entity: pieppiepmuisje, poepschilly,
+ * Client side of Piep: the GeckoLib renderers (the exported models in assets/guhs/geckolib/models/entity: pieppiepmuisje, poepschilly,
  * boze_kaasknabbel, boze_oppernabbel), the muisje on a player's shoulder (a render layer on every player), the guh that
  * wiggles while Poepschilly is inside it, and the particles (piepje, fris_sparkel).
  */

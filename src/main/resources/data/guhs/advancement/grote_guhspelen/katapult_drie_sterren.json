@@ -2,7 +2,7 @@
   "parent": "guhs:grote_guhspelen/katapult_gespeeld",
   "display": {
     "icon": {
-      "id": "guhs:katapult_knabbelkist"
+      "id": "guhs:katapultster"
     },
     "title": {
       "translate": "advancements.guhs.grote_guhspelen.katapult_drie_sterren.title"

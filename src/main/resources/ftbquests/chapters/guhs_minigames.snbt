@@ -3863,7 +3863,7 @@
 		{
 			id: "475548A68B4F7834"
 			icon: {
-				id: "guhs:katapult_werper"
+				id: "guhs:katapult_pluisballen"
 			}
 			tasks: [
 				{
@@ -3930,7 +3930,7 @@
 		{
 			id: "47554832B053900E"
 			icon: {
-				id: "guhs:katapult_knabbelkist"
+				id: "guhs:katapultster"
 			}
 			tasks: [
 				{
@@ -3997,7 +3997,7 @@
 		{
 			id: "475548504EE48A0E"
 			icon: {
-				id: "guhs:katapult_mika"
+				id: "guhs:katapult_mikaplank"
 			}
 			tasks: [
 				{

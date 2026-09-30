@@ -73,16 +73,16 @@ public final class LanddiertjesFeature {
      * An invisible, no-collision marker (no item): mewtwo puts 5-8 on the rocky coast of the kloon-eiland; each keeps 1-2
      * Sjokkels around ({@link ShucklePlekjeBlock}).
      */
-    public static final DeferredBlock<Block> SHUCKLE_PLEKJE = BLOCKS.register("shuckle_plekje", () -> new ShucklePlekjeBlock(BlockBehaviour.Properties.of()
+    public static final DeferredBlock<Block> SHUCKLE_PLEKJE = BLOCKS.registerBlock("shuckle_plekje", ShucklePlekjeBlock::new, () -> BlockBehaviour.Properties.of()
             .noCollision().noLootTable().strength(-1f, 3600000f).noOcclusion().pushReaction(PushReaction.BLOCK).randomTicks()
-            .isValidSpawn((s, l, p, t) -> false)));
+            .isValidSpawn((s, l, p, t) -> false));
     /** A squirrel's stash of kaasknabbels (no item). */
-    public static final DeferredBlock<KnabbelvoorraadjeBlock> KNABBELVOORRAADJE = BLOCKS.register("landdiertjes_knabbelvoorraadje",
-            () -> new KnabbelvoorraadjeBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).strength(0.3f).sound(SoundType.ROOTED_DIRT)
-                    .noCollision().noOcclusion().pushReaction(PushReaction.DESTROY).replaceable()));
+    public static final DeferredBlock<KnabbelvoorraadjeBlock> KNABBELVOORRAADJE = BLOCKS.registerBlock("landdiertjes_knabbelvoorraadje",
+            KnabbelvoorraadjeBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).strength(0.3f).sound(SoundType.ROOTED_DIRT)
+                    .noCollision().noOcclusion().pushReaction(PushReaction.DESTROY).replaceable());
     /** A path of polished guhsteentjes (like a carpet). */
-    public static final DeferredBlock<CarpetBlock> STEENTJESPAD = BLOCKS.register("landdiertjes_steentjespad",
-            () -> new CarpetBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(0.4f).sound(SoundType.STONE)));
+    public static final DeferredBlock<CarpetBlock> STEENTJESPAD = BLOCKS.registerBlock("landdiertjes_steentjespad",
+            CarpetBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(0.4f).sound(SoundType.STONE));
     public static final DeferredItem<net.minecraft.world.item.BlockItem> STEENTJESPAD_ITEM = ITEMS.registerSimpleBlockItem(STEENTJESPAD);
 
     // --- the critters ------------------------------------------------------------------------------------------------------------
