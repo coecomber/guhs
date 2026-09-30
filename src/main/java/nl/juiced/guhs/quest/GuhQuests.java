@@ -84,7 +84,7 @@ public final class GuhQuests {
      */
     public static net.minecraft.nbt.CompoundTag saved(net.minecraft.world.entity.player.Player player) {
         net.minecraft.nbt.CompoundTag root = player.getPersistentData();
-        if (!root.contains("PlayerPersisted", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
+        if (!root.getCompound("PlayerPersisted").isPresent()) {
             root.put("PlayerPersisted", new net.minecraft.nbt.CompoundTag());
         }
         net.minecraft.nbt.CompoundTag saved = root.getCompoundOrEmpty("PlayerPersisted");
@@ -247,7 +247,7 @@ public final class GuhQuests {
         player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DARKNESS, 60, 0, false, false));
         player.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.BLINDNESS, 50, 0, false, false));
         npc.level().playSound(null, player.blockPosition(), nl.juiced.guhs.registry.ModSounds.GUH_EAT.get(), SoundSource.NEUTRAL, 2f, 0.5f);
-        npc.level().playSound(null, player.blockPosition(), SoundEvents.GENERIC_DRINK, SoundSource.NEUTRAL, 1.5f, 0.6f);
+        npc.level().playSound(null, player.blockPosition(), SoundEvents.GENERIC_DRINK.value(), SoundSource.NEUTRAL, 1.5f, 0.6f);
         SWALLOWING.put(player.getUUID(), 40);
     }
 
@@ -309,7 +309,7 @@ public final class GuhQuests {
         GuhWorldData.PlayerData p = data.player(player.getUUID());
         if (p.maagQuest == 2) {
             ServerLevel level = player.level();
-            var picnic = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(GUH_PICNIC);
+            var picnic = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(GUH_PICNIC);
             if (picnic != null && level.structureManager().getStructureWithPieceAt(player.blockPosition(), picnic).isValid()) {
                 p.maagQuest = 3;
                 data.setDirty();
@@ -378,7 +378,7 @@ public final class GuhQuests {
             for (Need n : up.needs()) {
                 int have = count(player, n.get());
                 player.sendSystemMessage(Component.literal("  - ").append(Component.translatable("quest.guhs.need.item", Math.min(have, n.count()), n.count(),
-                        n.get().getDescription())).withStyle(have >= n.count() ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+                        n.get().getName(new net.minecraft.world.item.ItemStack(n.get())))).withStyle(have >= n.count() ? ChatFormatting.GREEN : ChatFormatting.GRAY));
             }
             if (up.bigMika()) {
                 player.sendSystemMessage(Component.translatable("quest.guhs.need.big_mika").withStyle(mika ? ChatFormatting.GREEN : ChatFormatting.GRAY));

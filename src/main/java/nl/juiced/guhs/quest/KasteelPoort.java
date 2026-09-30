@@ -120,7 +120,7 @@ public final class KasteelPoort {
                 Vec3 back = mid.subtract(inward.scale(3));
                 player.teleportTo(level, back.x, mid.y, back.z, java.util.Set.of(), gateYaw, player.getXRot(), true);
                 player.sendOverlayMessage(Component.translatable("quest.guhs.poort.pushed").withStyle(ChatFormatting.LIGHT_PURPLE));
-                level.playSound(null, player.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.NEUTRAL, 0.6f, 1.4f);
+                level.playSound(null, player.blockPosition(), SoundEvents.SHIELD_BLOCK.value(), SoundSource.NEUTRAL, 0.6f, 1.4f);
             }
         }
     }

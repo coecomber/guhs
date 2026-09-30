@@ -64,7 +64,7 @@ public class MikaEntity extends Monster implements GeoEntity {
     public static final double BOSS_DAMAGE = 9.0;
 
     private boolean boss;
-    private final ServerBossEvent bossBar = new ServerBossEvent(Component.translatable("entity.guhs.big_mika"),
+    private final ServerBossEvent bossBar = new ServerBossEvent(net.minecraft.util.Mth.createInsecureUUID(this.random), Component.translatable("entity.guhs.big_mika"),
             BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.NOTCHED_10);
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.guh.idle");
@@ -123,11 +123,11 @@ public class MikaEntity extends Monster implements GeoEntity {
 
     /** Mika is all bark and no bite: it shoves you away hard with an evil squeak, but never hurts. Big Mika does hurt. */
     @Override
-    public boolean doHurtTarget(Entity target) {
+    public boolean doHurtTarget(ServerLevel serverLevel, Entity target) {
         this.swing(this.getUsedItemHand());
         this.triggerAnim("action", "pounce");
         this.playSound(ModSounds.MIKA_HURT.get(), 1f, this.getVoicePitch());
-        boolean hurt = boss && super.doHurtTarget(target);
+        boolean hurt = boss && super.doHurtTarget(serverLevel, target);
         if (target instanceof LivingEntity living) {
             living.knockback(boss ? 1.8 : 1.2, Mth.sin(this.getYRot() * Mth.DEG_TO_RAD), -Mth.cos(this.getYRot() * Mth.DEG_TO_RAD));
             living.setDeltaMovement(living.getDeltaMovement().add(0, boss ? 0.45 : 0.3, 0)); // a little hop backwards
@@ -171,8 +171,8 @@ public class MikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         if (boss) {
             bossBar.setProgress(this.getHealth() / this.getMaxHealth());
         }
@@ -196,14 +196,14 @@ public class MikaEntity extends Monster implements GeoEntity {
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
         if (boss) { // Big Mika's reward
-            this.spawnAtLocation(new ItemStack(ModItems.MIKA_VET.get(), 6));
-            this.spawnAtLocation(new ItemStack(ModItems.VAHOEGE_VADS_INGOT.get(), 3));
-            this.spawnAtLocation(new ItemStack(ModItems.SUPERKOMPAS.get()));
+            this.spawnAtLocation(level, new ItemStack(ModItems.MIKA_VET.get(), 6));
+            this.spawnAtLocation(level, new ItemStack(ModItems.VAHOEGE_VADS_INGOT.get(), 3));
+            this.spawnAtLocation(level, new ItemStack(ModItems.SUPERKOMPAS.get()));
         }
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false;
     }
 

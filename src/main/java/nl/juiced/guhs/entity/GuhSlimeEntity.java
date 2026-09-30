@@ -35,14 +35,14 @@ public class GuhSlimeEntity extends Slime {
     protected void dealDamage(LivingEntity target) {
     }
 
-    @Override
+    /** 26.1: the peaceful check moved to the entity type (EntityType.Builder#notInPeaceful); guh slimes stay (default). */
     public boolean shouldDespawnInPeaceful() {
         return false;
     }
 
     @Override
     protected ParticleOptions getParticleType() {
-        return new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(ModItems.GUH_SLIMEBALL.get()));
+        return new ItemParticleOption(ParticleTypes.ITEM, ModItems.GUH_SLIMEBALL.get());
     }
 
     public static boolean checkGuhSlimeSpawnRules(EntityType<GuhSlimeEntity> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {

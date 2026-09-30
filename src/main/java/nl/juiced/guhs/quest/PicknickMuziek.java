@@ -27,7 +27,7 @@ public final class PicknickMuziek {
             return;
         }
         ServerLevel level = player.level();
-        Structure picnic = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(PICNIC);
+        Structure picnic = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(PICNIC);
         if (picnic == null) {
             return;
         }

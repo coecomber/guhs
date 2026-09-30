@@ -242,7 +242,7 @@ public final class VerstopGame {
             player.sendOverlayMessage(Component.translatable("quest.guhs.verstop.not_playing").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
-        world.sendParticles(new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(1f, 0.55f, 0.8f), 1.2f),
+        world.sendParticles(new net.minecraft.core.particles.DustParticleOptions(0xFF8CCC, 1.2f),
                 guh.getX(), guh.getY() + 0.3, guh.getZ(), 30, 0.3, 0.3, 0.3, 0.05);
         soundForSeekers(guh, ModSounds.GUH_HAPPY.get(), 1f, 1.4f);
         guh.discard();
@@ -744,7 +744,7 @@ public final class VerstopGame {
         for (Tag t : tag.getListOrEmpty("LampsOff")) {
             CompoundTag l = (CompoundTag) t;
             lampsOff.put(BlockPos.of(l.getLongOr("Pos", 0L)), NbtUtils.readBlockState(
-                    net.minecraft.core.registries.BuiltInRegistries.BLOCK.asLookup(), l.getCompoundOrEmpty("State")));
+                    net.minecraft.core.registries.BuiltInRegistries.BLOCK, l.getCompoundOrEmpty("State")));
         }
         if (tag.contains("Lamps") && tag.contains("Glass")) {
             lamps = new ArrayList<>();
@@ -772,7 +772,7 @@ public final class VerstopGame {
 
     /** No wild guhs pop up in (or on) the house: they'd get mixed up with the hidden ones. */
     public static boolean inHouse(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).get(HOUSE);
+        var structure = world.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getValue(HOUSE);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 }

@@ -101,7 +101,7 @@ public final class Reisguh {
             for (String key : players.keySet()) {
                 Set<UUID> set = new HashSet<>();
                 for (Tag t : players.getListOrEmpty(key)) {
-                    set.add(UUID.fromString(t.getAsString()));
+                    set.add(UUID.fromString(t.asString().orElse("")));
                 }
                 data.discovered.put(UUID.fromString(key), set);
             }
@@ -260,8 +260,7 @@ public final class Reisguh {
         Data data = Data.get(player.level().getServer());
         data.points.remove(npc.getUUID());                          // (back in the list where it's put down again)
         data.setDirty();
-        CompoundTag tag = new CompoundTag();
-        npc.saveWithoutId(tag);
+        CompoundTag tag = nl.juiced.guhs.entity.EntityNbt.save(npc);
         tag.putString("id", "guhs:guh_npc");
         tag.putString("GuhDisplayName", name(npc));
         npc.discard();

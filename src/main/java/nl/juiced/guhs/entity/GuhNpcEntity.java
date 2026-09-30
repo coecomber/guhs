@@ -233,13 +233,13 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
             tag.store("MaagOwner", UUIDUtil.CODEC, maagOwner);
         }
         if (getKind() == Kind.VERSTOPGUHTJE) {
-            tag.put("Verstop", verstop.save());
+            tag.store("Verstop", CompoundTag.CODEC, verstop.save());
         }
         if (!reisName.isEmpty()) {
             tag.putString("ReisName", reisName);
         }
         if (!roleData.isEmpty()) {
-            tag.put("RoleData", roleData);
+            tag.store("RoleData", CompoundTag.CODEC, roleData);
         }
     }
 
@@ -252,9 +252,9 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
             }
         }
         maagOwner = tag.read("MaagOwner", UUIDUtil.CODEC).isPresent() ? tag.read("MaagOwner", UUIDUtil.CODEC).orElseThrow() : null;
-        verstop.load(tag.getCompoundOrEmpty("Verstop"));
+        verstop.load(tag.read("Verstop", CompoundTag.CODEC).orElseGet(CompoundTag::new));
         setReisName(tag.getStringOr("ReisName", ""));
-        roleData = tag.getCompoundOrEmpty("RoleData");
+        roleData = tag.read("RoleData", CompoundTag.CODEC).orElseGet(CompoundTag::new);
         if (getKind() == Kind.POORTWACHTER && !roleData.contains("GateYaw")) {
             roleData.putFloat("GateYaw", getYRot()); // (the Rotation from a structure is already loaded here)
         }
@@ -263,7 +263,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     // --- a quest character: can't be hurt, pushed or leashed, never despawns ---
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(net.minecraft.server.level.ServerLevel serverLevel, DamageSource source) {
         return !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
@@ -379,6 +379,12 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     @Override
     public net.minecraft.sounds.SoundEvent getNotifyTradeSound() {
         return nl.juiced.guhs.registry.ModSounds.GUH_AMBIENT.get();
+    }
+
+    /** 26.1: Merchant#stillValid is abstract now; 1.21.1's MerchantMenu checked just the trading player. */
+    @Override
+    public boolean stillValid(Player player) {
+        return this.getTradingPlayer() == player;
     }
 
     @Override

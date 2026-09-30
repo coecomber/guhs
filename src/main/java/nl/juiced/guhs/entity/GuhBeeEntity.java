@@ -67,9 +67,10 @@ public class GuhBeeEntity extends Bee implements GeoEntity {
         return false;
     }
 
+    /** 26.1: anger is an end time now (was setRemainingPersistentAngerTime): never angry. */
     @Override
-    public void setRemainingPersistentAngerTime(int time) {
-        super.setRemainingPersistentAngerTime(0);
+    public void setPersistentAngerEndTime(long endTime) {
+        super.setPersistentAngerEndTime(-1L);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class GuhBeeEntity extends Bee implements GeoEntity {
     }
 
     @Override
-    public boolean doHurtTarget(Entity target) {
+    public boolean doHurtTarget(net.minecraft.server.level.ServerLevel serverLevel, Entity target) {
         return false;
     }
 
