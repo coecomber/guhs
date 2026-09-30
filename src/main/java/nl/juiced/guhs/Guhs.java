@@ -9,7 +9,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import nl.juiced.guhs.client.GuhsClient;
 import nl.juiced.guhs.network.ModNetworking;
 import nl.juiced.guhs.event.KeepOnDeathHandler;
-import nl.juiced.guhs.registry.ModArmorMaterials;
 import nl.juiced.guhs.registry.ModBlockEntities;
 import nl.juiced.guhs.registry.ModBlocks;
 import nl.juiced.guhs.registry.ModFeatures;
@@ -35,7 +34,7 @@ public class Guhs {
         ModFluids.FLUID_TYPES.register(modBus);
         ModFluids.FLUIDS.register(modBus);
         ModBlocks.BLOCKS.register(modBus);
-        ModArmorMaterials.ARMOR_MATERIALS.register(modBus);
+        // (26.1: armour materials are no registry any more - ModArmorMaterials.ARMOR_MATERIALS is gone)
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITY_TYPES.register(modBus);
         ModFeatures.FEATURES.register(modBus);
