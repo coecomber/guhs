@@ -149,6 +149,7 @@ public final class WaterdiertjesEvents {
         }
         lhb.snapTo(van.x, van.y, van.z, level.getRandom().nextFloat() * 360, 0);
         lhb.finalizeSpawn(level, level.getCurrentDifficultyAt(tuin), EntitySpawnReason.EVENT, null);
+        nl.juiced.guhs.world.WildeDieren.markeer(lhb);   // 1.1.2: comes and goes (not saved)
         level.addFreshEntity(lhb);
     }
 
