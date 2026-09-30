@@ -8255,5 +8255,10 @@
   "gui.guhs.verhalen.beroep_bouw.waar.0": "Bob de Guhbouwer in een Guhdorp (Guhmensie)",
   "gui.guhs.verhalen.beroep_bouw.waar.1": "Praat met Bob de Guhbouwer in het Guhdorp",
   "gui.guhs.verhalen.beroep_bouw.waar.2": "Het dak bij Bob in het Guhdorp",
-  "gui.guhs.verhalen.beroep_bouw.waar.klaar": "Bob de Guhbouwer in het Guhdorp"
+  "gui.guhs.verhalen.beroep_bouw.waar.klaar": "Bob de Guhbouwer in het Guhdorp",
+  "guhs.configuration.title": "Guhs Settings",
+  "guhs.configuration.section.guhs.client.toml": "Client settings",
+  "guhs.configuration.section.guhs.client.toml.title": "Guhs client settings",
+  "guhs.configuration.addOfficialServer": "Add the official Guhs server",
+  "guhs.configuration.addOfficialServer.tooltip": "Adds \"Guhs Server\" (guhs.nl) to the top of the multiplayer server list, once per installation. A server you removed never comes back."
 }

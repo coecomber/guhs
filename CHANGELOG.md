@@ -3,6 +3,15 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.0.1 — not released yet
+
+- **The official Guhs server in your server list.** The first time the title screen opens, *Guhs Server*
+  (`guhs.nl`, online 24/7) is added once to the top of the multiplayer server list. It happens only once per
+  installation (a marker file in `config/` remembers it), so a server you remove never comes back, and nothing is
+  added when `guhs.nl`, `play.guhs.nl` or `2.28.142.15` is already in the list. Modpack makers can turn it off
+  with `addOfficialServer = false` in `config/guhs-client.toml` (also in the mod list's Config screen).
+- **Wiki:** a new page *Play on the official server* (Prism Launcher step by step, rules, commands, common problems).
+
 ## 1.0.0 — first public release
 
 Minecraft 1.21.1 · NeoForge 21.1.0+ · GeckoLib 4.8+. All in-game texts are in Dutch.
