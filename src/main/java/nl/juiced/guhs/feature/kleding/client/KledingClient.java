@@ -2,9 +2,8 @@ package nl.juiced.guhs.feature.kleding.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -22,7 +21,7 @@ public final class KledingClient {
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(KledingFeature.CONFETTI.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Confetti(level, x, y, z, dx, dy, dz, sprites));
+        event.registerSpriteSet(KledingFeature.CONFETTI.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Confetti(level, x, y, z, dx, dy, dz, sprites));
     }
 
     /** guhs:kleding_ontgrendeld: the piece pops up big in the middle of your screen. */
@@ -35,12 +34,11 @@ public final class KledingClient {
     }
 
     /** A little paper snipper in guh colours: pops up, flutters down turning, and fades. */
-    static class Confetti extends TextureSheetParticle {
+    static class Confetti extends SingleQuadParticle {
         private final float spin;
 
         Confetti(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z, dx, dy, dz);
-            pickSprite(sprites);
+            super(level, x, y, z, dx, dy, dz, sprites.get(level.getRandom()));
             lifetime = 30 + random.nextInt(30);
             quadSize = 0.05f + random.nextFloat() * 0.05f;
             gravity = 0.35f;
@@ -66,8 +64,8 @@ public final class KledingClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

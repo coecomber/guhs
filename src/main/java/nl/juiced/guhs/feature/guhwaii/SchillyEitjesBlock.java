@@ -29,6 +29,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.feature.piep.PiepFeature;
 import nl.juiced.guhs.feature.piep.PoepschillyEntity;
 
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * Schilly-eitjes: 1-4 round turtle eggs (pale green with little dark-green spots) in the warm beach sand of Guhwai'i. They
  * slowly get ready ({@link GuhwaiiBlokken#RIJP} 0..2, faster at night, like vanilla turtle eggs), wiggle, and then hatch:
@@ -83,7 +84,7 @@ public class SchillyEitjesBlock extends Block {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction dir, BlockState other, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction dir, BlockPos otherPos, BlockState other, RandomSource random) {
         return canSurvive(state, level, pos) ? state : Blocks.AIR.defaultBlockState();
     }
 
@@ -98,7 +99,7 @@ public class SchillyEitjesBlock extends Block {
         if (!level.getBlockState(pos.below()).is(BlockTags.SAND)) {
             return;
         }
-        if (random.nextInt(level.isNight() ? 6 : 18) == 0) {
+        if (random.nextInt(level.isDarkOutside() ? 6 : 18) == 0) {
             broed(level, pos, state);
         }
     }

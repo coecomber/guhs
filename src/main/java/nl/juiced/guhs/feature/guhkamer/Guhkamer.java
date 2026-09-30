@@ -314,7 +314,7 @@ public final class Guhkamer {
     /** A guh as saved data (like picking it up: same UUID, owner, everything). */
     static CompoundTag bewaarData(Entity e) {
         CompoundTag tag = new CompoundTag();
-        e.saveWithoutId(tag);
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(e, tag);
         tag.putString("id", EntityType.getKey(e.getType()).toString());
         tag.putBoolean("Sitting", false);
         return tag;
@@ -358,7 +358,7 @@ public final class Guhkamer {
             if (e != null) {
                 markeer(e, true);
                 if (e instanceof PathfinderMob mob && !Huisjes.isBewoner(e)) {
-                    mob.restrictTo(p.midden(), k.breedte / 2 + 1);
+                    mob.setHomeTo(p.midden(), k.breedte / 2 + 1);
                 }
                 g.data = new CompoundTag();
                 anders = true;
@@ -380,7 +380,7 @@ public final class Guhkamer {
             Entity e = p.level().getEntity(g.id);
             if (e == null || !e.isAlive()) {
                 BlockPos waar = g.plek != null ? BlockPos.containing(g.plek) : p.midden();
-                if (p.level().areEntitiesLoaded(ChunkPos.asLong(waar)) && Band.zoekGeladen(p.level().getServer(), g.id) == null) {
+                if (p.level().areEntitiesLoaded(ChunkPos.pack(waar)) && Band.zoekGeladen(p.level().getServer(), g.id) == null) {
                     weg.add(g.id);   // (its chunk is there but it isn't: picked up as an item, or gone; it's not a guest any more)
                 } else {
                     alles = false;
@@ -543,7 +543,7 @@ public final class Guhkamer {
         }
         Vec3 at = aankomst(p.midden(), k.breedte);
         speler.getPersistentData().putLong(DEUR_TOT, speler.level().getGameTime() + 40);
-        speler.teleportTo(p.level(), at.x, at.y, at.z, 180f, 0f);
+        speler.teleportTo(p.level(), at.x, at.y, at.z, java.util.Set.of(), 180f, 0f, true);
         p.level().playSound(null, BlockPos.containing(at), GuhkamerFeature.DEUR_GELUID.get(), SoundSource.PLAYERS, 1f, 1f);
         materialiseer(p, k);
         if (speler.getUUID().equals(eigenaar)) {
@@ -576,7 +576,7 @@ public final class Guhkamer {
             at = Vec3.atBottomCenterOf(p.midden().offset(0, 0, -(k.breedte / 2 + 4)));
         }
         speler.getPersistentData().putLong(DEUR_TOT, speler.level().getGameTime() + 40);
-        speler.teleportTo(p.level(), at.x, at.y, at.z, 180f, 0f);
+        speler.teleportTo(p.level(), at.x, at.y, at.z, java.util.Set.of(), 180f, 0f, true);
         p.level().playSound(null, BlockPos.containing(at), GuhkamerFeature.DEUR_GELUID.get(), SoundSource.PLAYERS, 1f, 0.9f);
     }
 

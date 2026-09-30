@@ -114,9 +114,9 @@ public final class GuhwaiiFeature {
                     .lightLevel(s -> 7));
     public static final DeferredBlock<GuhwaiiBlokken.Poster> VADSIGHEID_POSTER = BLOCKS.registerBlock("vadsigheid_poster", GuhwaiiBlokken.Poster::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(0.3f).sound(SoundType.WOOL).noOcclusion()
-                    .noCollission().pushReaction(PushReaction.DESTROY));
+                    .noCollision().pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<GuhwaiiBlokken.Rommeltje> ROMMELTJE = BLOCKS.registerBlock("guhwaii_rommeltje", GuhwaiiBlokken.Rommeltje::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.SAND).instabreak().sound(SoundType.WOOL).noOcclusion().noCollission()
+            BlockBehaviour.Properties.of().mapColor(MapColor.SAND).instabreak().sound(SoundType.WOOL).noOcclusion().noCollision()
                     .pushReaction(PushReaction.DESTROY));
 
     // --- items -------------------------------------------------------------------------------------------------------------------

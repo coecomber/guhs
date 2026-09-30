@@ -329,7 +329,7 @@ public final class BandEvents {
                 Band.moment(guh, owner, Moment.GETEMD, "");
                 Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.band.geboren");
             }
-        } else if (e instanceof PiepMaatje && e instanceof net.minecraft.world.entity.TamableAnimal a && a.isTame() && a.getOwnerUUID() != null) {
+        } else if (e instanceof PiepMaatje && e instanceof net.minecraft.world.entity.TamableAnimal a && a.isTame() && nl.juiced.guhs.entity.Owners.uuid(a) != null) {
             GuhVolger.zet(e, plekSoort(e), plekDetail(e));
         }
     }
@@ -339,11 +339,11 @@ public final class BandEvents {
     public static void onEntityTick(net.neoforged.neoforge.event.tick.EntityTickEvent.Post event) {
         Entity e = event.getEntity();
         if (!(e instanceof PiepMaatje) || e.level().isClientSide() || (e.tickCount + e.getId()) % 100 != 0
-                || !(e instanceof net.minecraft.world.entity.TamableAnimal a) || !a.isTame() || a.getOwnerUUID() == null) {
+                || !(e instanceof net.minecraft.world.entity.TamableAnimal a) || !a.isTame() || nl.juiced.guhs.entity.Owners.uuid(a) == null) {
             return;
         }
         if (e instanceof nl.juiced.guhs.feature.piep.PoepschillyEntity turtle && turtle.isBinnen()) {
-            GuhEntity guh = e.level().getNearestEntity(GuhEntity.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forNonCombat()
+            GuhEntity guh = ((net.minecraft.server.level.ServerLevel) e.level()).getNearestEntity(GuhEntity.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forNonCombat()
                     .ignoreLineOfSight(), null, e.getX(), e.getY(), e.getZ(), e.getBoundingBox().inflate(2));
             GuhVolger.zet(e, PlekSoort.IN_GUH, guh == null ? "" : guh.getName().getString());
             return;

@@ -81,7 +81,7 @@ public final class Band {
 
     @Nullable
     public static UUID eigenaar(Entity e) {
-        return e instanceof OwnableEntity o ? o.getOwnerUUID() : null;
+        return e instanceof OwnableEntity o ? nl.juiced.guhs.entity.Owners.uuid(o) : null;
     }
 
     /** The player's own loaded band guhs within r blocks (not the ones asleep inside a huisje). */
@@ -114,7 +114,7 @@ public final class Band {
 
     /** The Minecraft day (overworld clock). */
     public static long dag(MinecraftServer s) {
-        return s.overworld().getDayTime() / 24000L;
+        return nl.juiced.guhs.world.GuhTime.dayTime(s.overworld()) / 24000L;
     }
 
     @Nullable

@@ -128,8 +128,8 @@ public final class Wolkjes {
             motion.add(DoubleTag.valueOf(0));
             tag.put("Motion", motion);
             tag.store("UUID", UUIDUtil.CODEC, bandId);
-            Entity e = EntityType.loadEntityRecursive(tag, level, ent -> {
-                ent.moveTo(pos.x, pos.y, pos.z, ent.getYRot(), 0f);
+            Entity e = EntityType.loadEntityRecursive(tag, level, net.minecraft.world.entity.EntitySpawnReason.LOAD, ent -> {
+                ent.snapTo(pos.x, pos.y, pos.z, ent.getYRot(), 0f);
                 return ent;
             });
             if (e instanceof GuhEntity guh) {
@@ -196,7 +196,7 @@ public final class Wolkjes {
             }
             nl.juiced.guhs.feature.guhkamer.Guhkamer.markeer(guh, false);
         }
-        CompoundTag lichaam = guh.saveWithoutId(new CompoundTag());
+        CompoundTag lichaam = nl.juiced.guhs.storage.Nbt.saveWithoutId(guh);
         lichaam.putString("id", nl.juiced.guhs.Guhs.id("guh").toString());
         r.lichaam = lichaam;
         r.dood = true;
@@ -207,7 +207,7 @@ public final class Wolkjes {
         Band.moment(guh, online, Moment.DOOD, "");
         ItemStack ster = nl.juiced.guhs.feature.hemel.Herinnering.maak(guh);
         if (!ster.isEmpty()) {
-            guh.spawnAtLocation(ster, 0.5f);
+            guh.spawnAtLocation((net.minecraft.server.level.ServerLevel) guh.level(), ster, 0.5f);
         }
         if (online != null) {
             online.sendSystemMessage(Component.translatable("gui.guhs.wolkjes.dood", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));

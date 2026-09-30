@@ -125,7 +125,7 @@ public final class WaterdiertjesEvents {
      * (also in the overworld, wherever you have your tuintjes).
      */
     static void lokLieveheersbeestje(ServerLevel level, ServerPlayer p) {
-        if (!level.isDay() || level.getRandom().nextInt(3) != 0) {
+        if (!level.isBrightOutside() || level.getRandom().nextInt(3) != 0) {
             return;
         }
         BlockPos here = p.blockPosition();

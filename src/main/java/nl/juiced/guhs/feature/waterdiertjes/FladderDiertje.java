@@ -109,7 +109,7 @@ public abstract class FladderDiertje extends AmbientCreature implements GeoEntit
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false;
     }
 

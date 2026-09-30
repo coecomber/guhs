@@ -32,6 +32,8 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.emotes.Emote;
 import nl.juiced.guhs.feature.emotes.GuhEmotes;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** The items of Guhwai'i: the kokosnoot, kokosmelk, the ukelele, and block items with a line of lore. */
 public final class GuhwaiiItems {
     private GuhwaiiItems() {
@@ -48,7 +50,7 @@ public final class GuhwaiiItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             lore(this, tooltip);
         }
     }
@@ -107,7 +109,7 @@ public final class GuhwaiiItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             lore(this, tooltip);
         }
     }
@@ -152,7 +154,7 @@ public final class GuhwaiiItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             lore(this, tooltip);
         }
     }
@@ -197,7 +199,7 @@ public final class GuhwaiiItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             lore(this, tooltip);
         }
     }

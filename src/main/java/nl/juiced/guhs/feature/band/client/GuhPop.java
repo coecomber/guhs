@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -79,7 +78,6 @@ public final class GuhPop {
      */
     public static void teken(GuiGraphicsExtractor g, int x1, int y1, int x2, int y2, LivingEntity e, float yaw, float pitch) {
         g.enableScissor(x1, y1, x2, y2);
-        float cx = (x1 + x2) / 2f, cy = (y1 + y2) / 2f + (y2 - y1) * 0.08f;
         boolean guh = e instanceof GuhEntity;
         float groot = e instanceof AgeableMob a && a.isBaby() ? 0.6f : 1f;
         float breed = guh ? 2.2f : Math.max(0.6f, e.getBbWidth() * 2.2f), hoog = guh ? 1.6f : Math.max(0.5f, e.getBbHeight() * 2f);
@@ -93,8 +91,12 @@ public final class GuhPop {
         e.setXRot(0);
         e.yHeadRot = e.getYRot();
         e.yHeadRotO = e.getYRot();
-        InventoryScreen.renderEntityInInventory(g, cx, cy, schaal, new Vector3f(0, (guh ? 0.42f : e.getBbHeight() * 0.5f) * groot, 0), pose,
-                camera, e);
+        // (1.1.0: entities in a GUI are drawn picture-in-picture, centred in the box; the old 8 % lower centre is in the translation)
+        net.minecraft.client.renderer.entity.state.EntityRenderState state = Minecraft.getInstance().getEntityRenderDispatcher().extractEntity(e, 1.0F);
+        state.shadowPieces.clear();
+        state.outlineColor = 0;
+        g.entity(state, schaal, new Vector3f(0, (guh ? 0.42f : e.getBbHeight() * 0.5f) * groot + (y2 - y1) * 0.08f / schaal, 0), pose,
+                camera, x1, y1, x2, y2);
         g.disableScissor();
     }
 }

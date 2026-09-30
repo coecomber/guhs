@@ -14,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * De Guhbel: a little golden bell with a pink bow and guh ears. Ring it (right-click) and its screen opens: send one of
  * your guhs nearby to the Guhkamer in your maag ("ga maar lekker logeren!"), or call a guest back to you, wherever you
@@ -31,13 +33,13 @@ public class GuhbelItem extends Item {
         if (player instanceof ServerPlayer sp) {
             GuhkamerPayloads.open(sp);
         }
-        player.getCooldowns().addCooldown(this, 10);
+        player.getCooldowns().addCooldown(stack, 10);
         return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.guhbel.lore").withStyle(ChatFormatting.LIGHT_PURPLE));
-        tooltip.add(Component.translatable("item.guhs.guhbel.uitleg").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.guhbel.lore").withStyle(ChatFormatting.LIGHT_PURPLE));
+        tooltip.accept(Component.translatable("item.guhs.guhbel.uitleg").withStyle(ChatFormatting.GRAY));
     }
 }

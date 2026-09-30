@@ -123,7 +123,7 @@ public class KledingGameTests {
         KledingKast.kleed(ander, guh, outfit(GuhClothes.PARTY_HAT, GuhClothes.SUNGLASSES, GuhClothes.OORSTRIKJE_ROZE));
         helper.assertTrue(guh.getClothes(GuhClothes.Slot.OREN) == null, "but not with the old owner's unlocks");
         CompoundTag tag = new CompoundTag();
-        guh.saveWithoutId(tag);
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(guh, tag);
         helper.assertTrue(tag.getStringOr("ClothesEyes", "").equals("sunglasses"), "saved");
         leave(helper, baas, ander);
         helper.succeed();

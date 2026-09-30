@@ -64,7 +64,7 @@ public class KnabbelvlindertjeEntity extends FladderDiertje {
                 || spawnType == EntitySpawnReason.COMMAND) {
             return true;
         }
-        if (!(level instanceof Level l) || !l.isDay() || !level.getBlockState(pos).isAir() || !level.canSeeSky(pos)) {
+        if (!(level instanceof Level l) || !l.isBrightOutside() || !level.getBlockState(pos).isAir() || !level.canSeeSky(pos)) {
             return false;
         }
         return bloemIn(level, pos, 5) && level.getEntitiesOfClass(KnabbelvlindertjeEntity.class, new AABB(pos).inflate(24)).size() < 6;
@@ -120,12 +120,12 @@ public class KnabbelvlindertjeEntity extends FladderDiertje {
 
     @Override
     protected int zitDuur() {
-        return level().isNight() ? 20 * 60 * 3 : 120 + random.nextInt(300);
+        return level().isDarkOutside() ? 20 * 60 * 3 : 120 + random.nextInt(300);
     }
 
     @Override
     protected boolean schrikt() {
-        return !level().isNight() && super.schrikt();
+        return !level().isDarkOutside() && super.schrikt();
     }
 
     @Override

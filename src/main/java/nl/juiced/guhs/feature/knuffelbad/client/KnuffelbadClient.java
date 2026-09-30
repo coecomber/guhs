@@ -77,13 +77,13 @@ public final class KnuffelbadClient {
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(KnuffelbadFeature.ZEEPBELLETJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) ->
+        event.registerSpriteSet(KnuffelbadFeature.ZEEPBELLETJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) ->
                 new KnuffelbadParticles.Zeepbelletje(level, x, y, z, dx, dy, dz, sprites));
-        event.registerSpriteSet(KnuffelbadFeature.SCHUIMVLOKJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) ->
+        event.registerSpriteSet(KnuffelbadFeature.SCHUIMVLOKJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) ->
                 new KnuffelbadParticles.Schuimvlokje(level, x, y, z, dx, dy, dz, sprites));
-        event.registerSpriteSet(KnuffelbadFeature.GLINSTERING.get(), sprites -> (type, level, x, y, z, dx, dy, dz) ->
+        event.registerSpriteSet(KnuffelbadFeature.GLINSTERING.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) ->
                 new KnuffelbadParticles.Glinstering(level, x, y, z, dx, dy, dz, sprites));
-        event.registerSpriteSet(KnuffelbadFeature.PLONS.get(), sprites -> (type, level, x, y, z, dx, dy, dz) ->
+        event.registerSpriteSet(KnuffelbadFeature.PLONS.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) ->
                 new KnuffelbadParticles.Plons(level, x, y, z, dx, dy, dz, sprites));
     }
 

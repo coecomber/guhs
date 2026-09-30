@@ -55,7 +55,7 @@ public class LieveheersbeestjeEntity extends FladderDiertje {
                 || spawnType == EntitySpawnReason.COMMAND || spawnType == EntitySpawnReason.EVENT) {
             return true;
         }
-        if (!(level instanceof Level l) || !l.isDay() || !level.getBlockState(pos).isAir() || !level.canSeeSky(pos)) {
+        if (!(level instanceof Level l) || !l.isBrightOutside() || !level.getBlockState(pos).isAir() || !level.canSeeSky(pos)) {
             return false;
         }
         if (level.getEntitiesOfClass(LieveheersbeestjeEntity.class, new AABB(pos).inflate(24)).size() >= 4) {

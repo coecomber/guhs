@@ -77,7 +77,7 @@ public final class CrecheFeature {
     public static final DeferredBlock<CrecheBlocks.Speelkleed> SPEELKLEED = BLOCKS.registerBlock("speelkleed", CrecheBlocks.Speelkleed::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.1f).sound(SoundType.WOOL).ignitedByLava());
     public static final DeferredBlock<CrecheBlocks.Feestslingers> FEESTSLINGERS = BLOCKS.registerBlock("feestslingers", CrecheBlocks.Feestslingers::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2f).sound(SoundType.WOOL).noCollission().noOcclusion()
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2f).sound(SoundType.WOOL).noCollision().noOcclusion()
                     .pushReaction(PushReaction.DESTROY).ignitedByLava());
 
     public static final DeferredItem<BlockItem> GUH_WIEGJE_ITEM = ITEMS.registerItem("guh_wiegje",

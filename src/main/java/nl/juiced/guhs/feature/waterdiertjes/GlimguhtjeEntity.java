@@ -42,7 +42,7 @@ public class GlimguhtjeEntity extends FladderDiertje {
                 || spawnType == EntitySpawnReason.COMMAND) {
             return true;
         }
-        if (!(level instanceof Level l) || !l.isNight() || !level.getBlockState(pos).isAir() || !level.canSeeSky(pos)) {
+        if (!(level instanceof Level l) || !l.isDarkOutside() || !level.getBlockState(pos).isAir() || !level.canSeeSky(pos)) {
             return false;
         }
         int grond = level.getHeight(Heightmap.Types.MOTION_BLOCKING, pos.getX(), pos.getZ());
@@ -92,7 +92,7 @@ public class GlimguhtjeEntity extends FladderDiertje {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
-        if (level().isDay() && !hasCustomName() && random.nextInt(200) == 0 && level() instanceof ServerLevel sl) {
+        if (level().isBrightOutside() && !hasCustomName() && random.nextInt(200) == 0 && level() instanceof ServerLevel sl) {
             sl.sendParticles(ParticleTypes.END_ROD, getX(), getY() + 0.1, getZ(), 6, 0.15, 0.15, 0.15, 0.01);
             discard();                                          // (morning: it fades away)
         }

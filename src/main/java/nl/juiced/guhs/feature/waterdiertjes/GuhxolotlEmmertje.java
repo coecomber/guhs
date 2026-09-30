@@ -23,6 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.piep.PiepDierItem;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * Het guhxolotl-emmertje: a guhxolotl in a bucket of water (a {@link PiepDierItem}, so "waar is hij", the guhhuisje and the
  * band id all work). Scooped up with a water bucket, or picked up by its owner (sneak + empty hand, or "Oppakken" in its
@@ -106,17 +108,17 @@ public class GuhxolotlEmmertje extends PiepDierItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         if (data != null) {
             CompoundTag tag = data.copyTag();
             if (tag.contains("Owner")) {
-                tooltip.add(Component.translatable("item.guhs.guhxolotl_emmertje.getemd").withStyle(ChatFormatting.LIGHT_PURPLE));
+                tooltip.accept(Component.translatable("item.guhs.guhxolotl_emmertje.getemd").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             if (tag.getIntOr("Age", 0) < 0) {
-                tooltip.add(Component.translatable("item.guhs.guhxolotl_emmertje.kleintje").withStyle(ChatFormatting.LIGHT_PURPLE));
+                tooltip.accept(Component.translatable("item.guhs.guhxolotl_emmertje.kleintje").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
-        tooltip.add(Component.translatable("item.guhs.guhxolotl_emmertje.tooltip").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.guhxolotl_emmertje.tooltip").withStyle(ChatFormatting.GRAY));
     }
 }

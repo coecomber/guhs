@@ -21,6 +21,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** A rubber duck: put it on the water (or anywhere) and it floats there, bobbing and squeaking when you poke it. */
 public class BadeendjeItem extends Item {
     public BadeendjeItem(Properties properties) {
@@ -65,7 +67,7 @@ public class BadeendjeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.knuffelbad_badeendje.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.knuffelbad_badeendje.lore").withStyle(ChatFormatting.GRAY));
     }
 }

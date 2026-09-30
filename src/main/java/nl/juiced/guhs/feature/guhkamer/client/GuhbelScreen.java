@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.guhkamer.client;
 
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,8 +122,10 @@ public class GuhbelScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mx, double my, int button) {
-        return super.mouseClicked(mx, my, button) || bij.klik(mx, my, button) || gasten.klik(mx, my, button);
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mx = event.x(), my = event.y();
+        int button = event.button();
+        return super.mouseClicked(event, doubleClick) || bij.klik(mx, my, button) || gasten.klik(mx, my, button);
     }
 
     @Override
@@ -130,15 +134,19 @@ public class GuhbelScreen extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
-        return bij.sleep(my) || gasten.sleep(my) || super.mouseDragged(mx, my, button, dx, dy);
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        double mx = event.x(), my = event.y();
+        int button = event.button();
+        return bij.sleep(my) || gasten.sleep(my) || super.mouseDragged(event, dx, dy);
     }
 
     @Override
-    public boolean mouseReleased(double mx, double my, int button) {
+    public boolean mouseReleased(MouseButtonEvent event) {
+        double mx = event.x(), my = event.y();
+        int button = event.button();
         bij.los();
         gasten.los();
-        return super.mouseReleased(mx, my, button);
+        return super.mouseReleased(event);
     }
 
     @Override

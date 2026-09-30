@@ -11,7 +11,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -28,6 +27,8 @@ import net.minecraft.core.UUIDUtil;
  */
 public final class BandData extends SavedData {
     public static final String NAAM = "guhs_band";
+    public static final net.minecraft.world.level.saveddata.SavedDataType<BandData> TYPE =
+            nl.juiced.guhs.storage.GuhSavedData.tagType("band", BandData::new, BandData::load, d -> d.save(new CompoundTag()));
     /** Wist-je-datjes kept per guh (newest first). */
     public static final int WIST_MAX = 40;
 
@@ -205,7 +206,7 @@ public final class BandData extends SavedData {
     final Map<String, Integer> vriendjes = new HashMap<>();
 
     public static BandData get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(new SavedData.Factory<>(BandData::new, BandData::load, null), NAAM);
+        return nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), TYPE, NAAM);
     }
 
     /** The Guhdex "Mijn guhs" data of this owner: one CompoundTag per band guh (see {@link MijnGuhs#snapshot}). */
@@ -267,8 +268,7 @@ public final class BandData extends SavedData {
 
     // --- saving -------------------------------------------------------------------------------------------------------------
 
-    @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public CompoundTag save(CompoundTag tag) {
         ListTag list = new ListTag();
         for (Map.Entry<UUID, Map<UUID, Rec>> e : eigenaars.entrySet()) {
             CompoundTag o = new CompoundTag();
@@ -285,7 +285,7 @@ public final class BandData extends SavedData {
         return tag;
     }
 
-    public static BandData load(CompoundTag tag, HolderLookup.Provider registries) {
+    public static BandData load(CompoundTag tag) {
         BandData d = new BandData();
         ListTag list = tag.getListOrEmpty("Eigenaars");
         for (int i = 0; i < list.size(); i++) {

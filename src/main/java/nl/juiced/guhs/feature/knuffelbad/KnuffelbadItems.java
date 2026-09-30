@@ -23,6 +23,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** The Knuffelbad's tools: guhshampoo (step 1 of the wash) and the guh-föhn (step 4). */
 public final class KnuffelbadItems {
     /** A bottle of pink guh shampoo (16 washes): use it on your own tamed guh next to a wash tub. */
@@ -43,8 +45,8 @@ public final class KnuffelbadItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("item.guhs.guhshampoo.lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("item.guhs.guhshampoo.lore").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -95,8 +97,8 @@ public final class KnuffelbadItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("item.guhs.guh_fohn.lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("item.guhs.guh_fohn.lore").withStyle(ChatFormatting.GRAY));
         }
 
         /** The guh the player aims at (within reach, nothing in between). */

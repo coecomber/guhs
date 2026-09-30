@@ -171,7 +171,7 @@ public class GuhkamerGameTests {
             helper.assertTrue(e instanceof GuhEntity && Guhkamer.isGast(e) && box.inflate(0.5).contains(e.position()), "the guest is in the room");
             helper.assertFalse(k.gasten.get(id).opgeslagen(), "in the world while somebody is there");
             // out again: after a moment the guest is kept as data
-            p.teleportTo(level, m.getX() + 0.5 - 13, m.getY() - 2, m.getZ() + 0.5 - 13, 0, 0);
+            p.teleportTo(level, m.getX() + 0.5 - 13, m.getY() - 2, m.getZ() + 0.5 - 13, java.util.Set.of(), 0, 0, true);
             helper.runAfterDelay(25, () -> {
                 helper.assertTrue(level.getEntity(id) == null && k.gasten.get(id).opgeslagen(), "the empty room keeps its guest as data");
                 // the Guhbel calls it back
@@ -231,7 +231,7 @@ public class GuhkamerGameTests {
             helper.assertTrue(!k.gasten.containsKey(id) && t.isTame() && p.getUUID().equals(t.getOwnerUUID()) && !t.isOrderedToSit(),
                     "off the room's list, still yours, ready to follow you out");
             // out of the room: it stays with you (not kept as a guest)
-            p.teleportTo(level, m.getX() + 0.5 - 13, m.getY() - 2, m.getZ() + 0.5 - 13, 0, 0);
+            p.teleportTo(level, m.getX() + 0.5 - 13, m.getY() - 2, m.getZ() + 0.5 - 13, java.util.Set.of(), 0, 0, true);
             helper.runAfterDelay(25, () -> {
                 helper.assertTrue(level.getEntity(id) != null && !k.gasten.containsKey(id), "not put back in the room");
                 level.getEntity(id).discard();
@@ -256,7 +256,7 @@ public class GuhkamerGameTests {
             helper.assertTrue(e instanceof GuhEntity, "the guest is in the room");
             // the owner picks it up (sneak-tap) and takes it along as an item
             net.minecraft.world.item.ItemStack item = nl.juiced.guhs.item.PickedUpGuhItem.pickUp((GuhEntity) e);
-            p.teleportTo(level, m.getX() + 0.5 - 13, m.getY() - 2, m.getZ() + 0.5 - 13, 0, 0);
+            p.teleportTo(level, m.getX() + 0.5 - 13, m.getY() - 2, m.getZ() + 0.5 - 13, java.util.Set.of(), 0, 0, true);
             helper.runAfterDelay(25, () -> {
                 GuhkamerData.Kamer k = GuhkamerData.get(level.getServer()).vind(p.getUUID());
                 helper.assertFalse(k.gasten.containsKey(id), "picked up out of the room: not a guest any more");

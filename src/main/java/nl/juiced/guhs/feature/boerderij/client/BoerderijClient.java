@@ -2,9 +2,8 @@ package nl.juiced.guhs.feature.boerderij.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.neoforged.bus.api.IEventBus;
@@ -70,15 +69,14 @@ public final class BoerderijClient {
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(BoerderijFeature.WOLPLUKJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Wolplukje(level, x, y, z, dx, dy, dz, sprites));
-        event.registerSpriteSet(BoerderijFeature.MELKDRUPPEL.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Melkdruppel(level, x, y, z, sprites));
+        event.registerSpriteSet(BoerderijFeature.WOLPLUKJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Wolplukje(level, x, y, z, dx, dy, dz, sprites));
+        event.registerSpriteSet(BoerderijFeature.MELKDRUPPEL.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Melkdruppel(level, x, y, z, sprites));
     }
 
     /** A soft tuft of pluiswol: pops out, then drifts down slowly, swaying. */
-    static class Wolplukje extends TextureSheetParticle {
+    static class Wolplukje extends SingleQuadParticle {
         Wolplukje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.get(level.getRandom()));
             lifetime = 40 + random.nextInt(40);
             quadSize = 0.08f + random.nextFloat() * 0.06f;
             gravity = 0.02f;
@@ -96,16 +94,15 @@ public final class BoerderijClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A drop of kaasmelk: falls and is gone. */
-    static class Melkdruppel extends TextureSheetParticle {
+    static class Melkdruppel extends SingleQuadParticle {
         Melkdruppel(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.get(level.getRandom()));
             lifetime = 16 + random.nextInt(10);
             quadSize = 0.06f + random.nextFloat() * 0.03f;
             gravity = 0.7f;
@@ -115,8 +112,8 @@ public final class BoerderijClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.OPAQUE;
         }
     }
 

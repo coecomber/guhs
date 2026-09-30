@@ -2,9 +2,8 @@ package nl.juiced.guhs.feature.creche.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -49,7 +48,7 @@ public final class CrecheClient {
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(CrecheFeature.SLAAPSTERRETJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Sterretje(level, x, y, z, sprites));
+        event.registerSpriteSet(CrecheFeature.SLAAPSTERRETJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Sterretje(level, x, y, z, sprites));
     }
 
     /** guhs:creche_open: Juf Knuffel's screen. */
@@ -63,10 +62,9 @@ public final class CrecheClient {
     }
 
     /** A little sleepy star: rises slowly, twinkles and fades. */
-    static class Sterretje extends TextureSheetParticle {
+    static class Sterretje extends SingleQuadParticle {
         Sterretje(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.get(level.getRandom()));
             lifetime = 40 + random.nextInt(30);
             quadSize = 0.06f + random.nextFloat() * 0.05f;
             gravity = -0.004f;
@@ -84,12 +82,12 @@ public final class CrecheClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
 
         @Override
-        protected int getLightColor(float partialTick) {
+        protected int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
     }

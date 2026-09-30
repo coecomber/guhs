@@ -210,8 +210,8 @@ public final class GlijRit {
         player.stopRiding();
         player.closeContainer();
         Vec3 at = ring.position();
-        player.teleportTo(level, at.x, at.y, at.z, ring.getYRot(), 10f);
-        player.startRiding(ring, true);
+        player.teleportTo(level, at.x, at.y, at.z, java.util.Set.of(), ring.getYRot(), 10f, true);
+        player.startRiding(ring, true, true);
         Minigames.startKeeping(player);
         level.playSound(null, ring.blockPosition(), KnuffelbadFeature.FLUIT.get(), SoundSource.PLAYERS, 0.8f, 1.1f);
         player.sendSystemMessage(Component.translatable("gui.guhs.knuffelbad.start." + glijbaan.id(), rit.eenden.size()).withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -282,7 +282,7 @@ public final class GlijRit {
         }
         Minigames.keep(player);
         if (player.getVehicle() != ring && !stopt) {
-            player.startRiding(ring, true);                  // (you can't get out on the way: hold sneak to stop)
+            player.startRiding(ring, true, true);                  // (you can't get out on the way: hold sneak to stop)
         }
         GlijPad pad = baan.pad();
         switch (fase) {
@@ -540,7 +540,7 @@ public final class GlijRit {
             hudUit(player);
             if (player.level() == lv && player.isAlive()) {
                 Vec3 uit = baan.uitstap();
-                player.teleportTo(lv, uit.x, uit.y, uit.z, baan.uitstapYaw(), 0);
+                player.teleportTo(lv, uit.x, uit.y, uit.z, java.util.Set.of(), baan.uitstapYaw(), 0, true);
                 player.fallDistance = 0;
                 if (!terug) {
                     player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0, false, false));

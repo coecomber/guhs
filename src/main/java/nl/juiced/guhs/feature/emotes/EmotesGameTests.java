@@ -131,7 +131,7 @@ public class EmotesGameTests {
             helper.assertTrue(!ask(other, guh, EmotePayload.FAVORITE, Emote.VAHOEG) && guh.emotes.favorite() == null, "no favourite either");
             helper.assertTrue(!ask(owner, guh, EmotePayload.NOW, null), "a bad emote number is refused");
             helper.assertTrue(ask(owner, guh, EmotePayload.LOOP, Emote.ROLLEN), "rolling");
-            owner.startRiding(guh, true);
+            owner.startRiding(guh, true, true);
         });
         helper.runAfterDelay(7, () -> {
             helper.assertTrue(guh.isVehicle(), "ridden");
@@ -197,7 +197,7 @@ public class EmotesGameTests {
         GuhEntity guh = tamed(helper, owner);
         BlockPos pos = new BlockPos(0, 1, 4);
         helper.setBlock(pos, Blocks.JUKEBOX);
-        JukeboxBlockEntity jukebox = (JukeboxBlockEntity) helper.getBlockEntity(pos);
+        JukeboxBlockEntity jukebox = helper.getBlockEntity(pos, JukeboxBlockEntity.class);
         jukebox.setSongItemWithoutPlaying(new ItemStack(Items.MUSIC_DISC_CAT));
         jukebox.getSongPlayer().stop(helper.getLevel(), jukebox.getBlockState());
         helper.assertTrue(GuhEmotes.playingJukebox(helper.getLevel(), guh.blockPosition(), GuhEmotes.JUKEBOX_RANGE) == null, "quiet");

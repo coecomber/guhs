@@ -207,7 +207,7 @@ public final class GuhEmotes {
         }
         if (phase % 200 == 0 && current() == null && guh.getNavigation().isDone() && !guh.isInLove()) {
             if (!guh.isTame() && guh.getRandom().nextInt(WILD_CHANCE) == 0) {
-                start(randomFor(guh.getPersonality(), guh.level().isNight(), guh.getRandom().nextInt(100)), false, Source.SELF);
+                start(randomFor(guh.getPersonality(), guh.level().isDarkOutside(), guh.getRandom().nextInt(100)), false, Source.SELF);
             } else if (guh.isTame() && favorite() != null && guh.getRandom().nextInt(FAVORITE_CHANCE) == 0) {
                 start(favorite(), false, Source.SELF);
             }

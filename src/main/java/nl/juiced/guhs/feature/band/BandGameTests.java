@@ -271,8 +271,8 @@ public class BandGameTests {
         BandData.Rec r = BandData.get(p.level().getServer()).vind(p.getUUID(), id);
         helper.assertTrue(r.wist.size() == BandData.WIST_MAX && r.wist.get(0).args().get(0).equals("44"), "newest first, 40 kept");
         // saved and loaded
-        CompoundTag tag = BandData.get(p.level().getServer()).save(new CompoundTag(), p.registryAccess());
-        BandData.Rec terug = BandData.load(tag, p.registryAccess()).vind(p.getUUID(), id);
+        CompoundTag tag = BandData.get(p.level().getServer()).save(new CompoundTag());
+        BandData.Rec terug = BandData.load(tag).vind(p.getUUID(), id);
         helper.assertTrue(terug != null && terug.stat(DagboekStat.KLUSJES) == 5 && terug.heeftEerste("eerste_klusje") && terug.wist.size() == 40,
                 "save and load keep the dagboekje");
         weg(helper, p);
