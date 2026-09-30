@@ -1779,9 +1779,15 @@ public final class AutoCheck {
                     level.addFreshEntity(t);
                     nl.juiced.guhs.feature.huisje.Huisjes.trekIn(h, t);
                 }
-                // (1.1.0: the dome first, so the screen's "Klus-area" button already says "aan" when it opens)
-                Minecraft.getInstance().execute(() -> nl.juiced.guhs.feature.huisje.client.HuisjeKoepel.zet(pos, true));
                 nl.juiced.guhs.feature.huisje.HuisjePayloads.open(sp, h);
+                // (1.1.0: 26.1 handles the open packet before this task, so the open screen is rebuilt: "Klus-area: aan")
+                Minecraft.getInstance().execute(() -> {
+                    nl.juiced.guhs.feature.huisje.client.HuisjeKoepel.zet(pos, true);
+                    Minecraft m = Minecraft.getInstance();
+                    if (m.screen != null) {
+                        m.screen.resize(m.screen.width, m.screen.height);
+                    }
+                });
                 return "huisje " + h.naam() + " at " + pos.toShortString() + " with " + h.bewoners().size() + " residents";
             }, r -> note("  " + r)));
             return true;

@@ -70,6 +70,11 @@ public final class BarbecuetherClient {
                 || !event.getType().equals(net.minecraft.world.level.material.FogType.ATMOSPHERIC)) { // 1.1.0: air = ATMOSPHERIC
             return;
         }
+        // 1.1.0: 1.0.0's "foggy everywhere" (DimensionSpecialEffects#isFoggyAt, like the nether) scaled with the render distance:
+        // start at 5 %, end at half of it (max 192). The dimension type's fixed 10..96 only matches that at 12 chunks.
+        float rd = event.getFogData().renderDistanceEnd;
+        event.setNearPlaneDistance(rd * 0.05f);
+        event.setFarPlaneDistance(Math.min(rd, 192f) * 0.5f);
         var biome = level.getBiome(camera.blockPosition());
         float far;
         if (biome.is(ROOKDELTA)) {
