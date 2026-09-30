@@ -72,7 +72,7 @@ public class GuhxolotlEmmertje extends PiepDierItem {
         ItemStack stack = context.getItemInHand();
         boolean water = player == null || !player.isSecondaryUseActive();
         BlockState at = level.getBlockState(pos);
-        if (water && !level.dimensionType().ultraWarm() && (at.isAir() || at.canBeReplaced()) && at.getFluidState().isEmpty()) {
+        if (water && !level.environmentAttributes().getValue(net.minecraft.world.attribute.EnvironmentAttributes.WATER_EVAPORATES, pos) && (at.isAir() || at.canBeReplaced()) && at.getFluidState().isEmpty()) {
             level.setBlock(pos, Blocks.WATER.defaultBlockState(), 11);
         }
         boolean emmer = metEmmer(stack);

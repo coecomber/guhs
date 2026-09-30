@@ -149,16 +149,16 @@ public class CrecheBabyguh extends PathfinderMob implements GeoEntity {
     // --- never hurt, never saved, never despawns on its own --------------------------------------------------------------
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(net.minecraft.server.level.ServerLevel level, DamageSource source) {
         return !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (!level().isClientSide() && source.getEntity() instanceof Player) {
-            level().playSound(null, this, CrecheFeature.BABYGIECHEL.get(), SoundSource.NEUTRAL, 0.8f, 1.2f + random.nextFloat() * 0.3f);
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
+        if (source.getEntity() instanceof Player) {
+            level.playSound(null, this, CrecheFeature.BABYGIECHEL.get(), SoundSource.NEUTRAL, 0.8f, 1.2f + random.nextFloat() * 0.3f);
         }
-        return !isInvulnerableTo(source) && super.hurt(source, amount);
+        return !isInvulnerableTo(level, source) && super.hurtServer(level, source, amount);
     }
 
     @Override

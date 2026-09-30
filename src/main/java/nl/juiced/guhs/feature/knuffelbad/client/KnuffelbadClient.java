@@ -38,33 +38,38 @@ public final class KnuffelbadClient {
             event.registerEntityRenderer(KnuffelbadFeature.BADEENDJE.get(), BadeendjeRenderer::new);
         });
         modBus.addListener(KnuffelbadClient::particles);
-        modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(Guhs.id("knuffelbad_hud"), GlijHud::render));
+        modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(Guhs.id("knuffelbad_hud"), GlijHud::extractRenderState));
         // Badmeester Bubbel: the sitting guh with a swim cap, a lifebuoy and a whistle (tools/features/knuffelbad.py)
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.BADMEESTERGUH, Guhs.id("geo/entity/guh_npc_badmeesterguh.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.BADMEESTERGUH, (npc, state, bot) -> {
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.BADMEESTERGUH, Guhs.id("entity/guh_npc_badmeesterguh"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.BADMEESTERGUH, (npc, tick) -> {
             // the whistle goes to his mouth when you run by the pool (TUUUT, like the server's Badmeester.tick), now and then
-            // a little practice toot, and the lifebuoy wobbles a little
-            double t = state.getAnimationTick();
+            // a little practice toot, and the lifebuoy wobbles a little (1.1.0: worked out at extract time, bones at render time)
+            double t = tick;
             long now = npc.level().getGameTime();
             LocalPlayer me = Minecraft.getInstance().player;
             if (me != null && me.isSprinting() && me.onGround() && me.distanceToSqr(npc) < Badmeester.FLUIT_AFSTAND * Badmeester.FLUIT_AFSTAND
                     && now - FLUIT.getOrDefault(npc, -10000L) > Badmeester.FLUIT_RUST) {
                 FLUIT.put(npc, now);
             }
-            double sinds = now - FLUIT.getOrDefault(npc, -10000L) + state.getPartialTick();
+            double sinds = now - FLUIT.getOrDefault(npc, -10000L) + (tick - npc.tickCount);
             double cycle = (t + npc.getId() * 37) % 600;
             float blaas = sinds < 30 ? (float) Math.sin(sinds / 30 * Math.PI) : cycle < 20 ? (float) Math.sin(cycle / 20 * Math.PI) * 0.6f : 0f;
-            bot.apply("badmeester_fluitje").ifPresent(b -> {
-                b.setRotX(-blaas * 1.1f);
-                b.setPosY(blaas * 1.5f);
-            });
-            bot.apply("badmeester_boei").ifPresent(b -> b.setRotZ((float) Math.sin(t * 0.07) * 0.04f));
+            float boei = (float) Math.sin(t * 0.07) * 0.04f;
+            return bones -> {
+                bones.ifPresent("badmeester_fluitje", b -> {
+                    b.setRotX(-blaas * 1.1f);
+                    b.setTranslateY(blaas * 1.5f);
+                });
+                bones.ifPresent("badmeester_boei", b -> b.setRotZ(boei));
+            };
         });
-        GuhRenderHooks.laag(GlansLaag::render);
+        GuhRenderHooks.laag(GlansLaag::extract);
         ZwembandjeEntity.lokaal = () -> Minecraft.getInstance().player;
         ZwembandjeEntity.stuur = () -> {
             LocalPlayer p = Minecraft.getInstance().player;
-            return p == null || Minecraft.getInstance().screen != null ? 0 : -p.input.leftImpulse;
+            // (1.1.0: ClientInput has no leftImpulse; the raw left/right keys, like 1.0.0 without sneaking)
+            return p == null || Minecraft.getInstance().screen != null ? 0
+                    : -((p.input.keyPresses.left() ? 1f : 0f) - (p.input.keyPresses.right() ? 1f : 0f));
         };
         ZwembandjeEntity.clientTick = GlijEffecten::tick;
         NeoForge.EVENT_BUS.addListener((ViewportEvent.ComputeCameraAngles event) -> GlijCamera.hoeken(event));

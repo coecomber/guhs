@@ -1,90 +1,115 @@
 package nl.juiced.guhs.feature.knuffelbad.client;
 
+import javax.annotation.Nullable;
+
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.knuffelbad.BadeendjeEntity;
 import nl.juiced.guhs.feature.knuffelbad.Eendsoort;
-import com.geckolib.cache.model.BakedGeoModel;
 import com.geckolib.cache.model.GeoBone;
+import com.geckolib.constant.dataticket.DataTicket;
 import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.base.BoneSnapshots;
+import com.geckolib.renderer.base.GeoRenderState;
+import com.geckolib.renderer.base.RenderPassInfo;
 import com.geckolib.renderer.layer.GeoRenderLayer;
 
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
- * A rubber duck (geo/entity/badeendje.geo.json), in its kind's colours (textures/entity/badeendje_&lt;kind&gt;.png) with the
+ * A rubber duck (geckolib/models/entity/badeendje.geo.json), in its kind's colours (textures/entity/badeendje_&lt;kind&gt;.png) with the
  * kind's little extras (a cap, a snorkel, guh ears...). It bobs and turns slowly; the glowing kinds shine in the dark
  * (and every duck is a bit easier to see in the star tunnel). The rider's own game hides a duck as soon as it's picked up.
+ * <p>
+ * 1.1.0 (GeckoLib 5): kind, bobbing time, spin and yaw are copied into the render state at extract time.
  */
-public class BadeendjeRenderer extends GeoEntityRenderer<BadeendjeEntity> {
+public class BadeendjeRenderer extends GeoEntityRenderer<BadeendjeEntity, EntityRenderState> {
+    static final DataTicket<Eendsoort> SOORT = DataTicket.create("guhs_badeendje_soort", Eendsoort.class);
+    /** Bobbing time (age + a per-duck offset), spin (degrees, only on a ride) and the duck's yaw. */
+    static final DataTicket<float[]> BEWEGING = DataTicket.create("guhs_badeendje_beweging", float[].class);
+
     public BadeendjeRenderer(EntityRendererProvider.Context context) {
         super(context, new DefaultedEntityGeoModel<BadeendjeEntity>(Guhs.id("badeendje")) {
             @Override
-            public Identifier getTextureResource(BadeendjeEntity duck) {
-                return Guhs.id("textures/entity/badeendje_" + duck.getSoort().id() + ".png");
+            public void addAdditionalStateData(BadeendjeEntity duck, @Nullable Object related, GeoRenderState state) {
+                state.addGeckolibData(SOORT, duck.getSoort());
+            }
+
+            @Override
+            public Identifier getTextureResource(GeoRenderState state) {
+                Eendsoort soort = state.getGeckolibData(SOORT);
+                return soort == null ? super.getTextureResource(state) : Guhs.id("textures/entity/badeendje_" + soort.id() + ".png");
             }
         });
         this.shadowRadius = 0.2f;
-        addRenderLayer(new GeoRenderLayer<>(this) {
+        withRenderLayer(new GeoRenderLayer<>(this) {
             @Override
-            public void render(PoseStack pose, BadeendjeEntity duck, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers, VertexConsumer buffer,
-                               float partialTick, int packedLight, int packedOverlay) {
-                if (duck.getSoort().glimt) {
-                    RenderType glow = RenderTypes.eyes(Guhs.id("textures/entity/badeendje_" + duck.getSoort().id() + "_glow.png"));
-                    getRenderer().reRender(model, pose, buffers, duck, glow, buffers.getBuffer(glow), partialTick, LightCoordsUtil.FULL_BRIGHT,
-                            packedOverlay, 0xFFFFFFFF);
+            public void submitRenderTask(RenderPassInfo<EntityRenderState> info, SubmitNodeCollector collector) {
+                Eendsoort soort = info.getGeckolibData(SOORT);
+                if (soort != null && soort.glimt && info.willRender()) {
+                    // (the eyes render type is full bright, like the old re-render with FULL_BRIGHT)
+                    getRenderer().submitRenderTasks(info, collector.order(1),
+                            RenderTypes.eyes(Guhs.id("textures/entity/badeendje_" + soort.id() + "_glow.png")));
                 }
             }
         });
     }
 
+    /** The rider's own game hides a duck as soon as it's picked up. */
     @Override
-    public void render(BadeendjeEntity duck, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        if (duck.lokaalGepakt) {
-            return;
-        }
-        // never pitch dark: a duck in the star tunnel should still be found
-        int block = Math.max(LightCoordsUtil.block(packedLight), 7);
-        super.render(duck, entityYaw, partialTick, poseStack, bufferSource, LightCoordsUtil.pack(block, LightCoordsUtil.sky(packedLight)));
+    public boolean shouldRender(BadeendjeEntity duck, Frustum culler, double camX, double camY, double camZ) {
+        return !duck.lokaalGepakt && super.shouldRender(duck, culler, camX, camY, camZ);
     }
 
     @Override
-    protected void applyRotations(BadeendjeEntity duck, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick, float nativeScale) {
-        float t = ageInTicks + duck.getId() * 13;
-        poseStack.translate(0, Math.sin(t * 0.12) * 0.05, 0);
+    public void addRenderData(BadeendjeEntity duck, @Nullable Void related, EntityRenderState state, float partialTick) {
+        float t = duck.tickCount + partialTick + duck.getId() * 13;
         float spin = duck.vanRit() ? (float) Math.sin(t * 0.05) * 25f : 0f;
-        poseStack.mulPose(Axis.YP.rotationDegrees(180f - duck.getYRot() + spin));
+        state.addGeckolibData(BEWEGING, new float[]{t, spin, duck.getYRot()});
+    }
+
+    @Override
+    public void extractRenderState(BadeendjeEntity duck, EntityRenderState state, float partialTick) {
+        super.extractRenderState(duck, state, partialTick);
+        // never pitch dark: a duck in the star tunnel should still be found
+        int block = Math.max(LightCoordsUtil.block(state.lightCoords), 7);
+        state.lightCoords = LightCoordsUtil.pack(block, LightCoordsUtil.sky(state.lightCoords));
+    }
+
+    @Override
+    protected void applyRotations(RenderPassInfo<EntityRenderState> info, PoseStack poseStack, float nativeScale) {
+        float[] b = info.getGeckolibData(BEWEGING);
+        if (b == null) {
+            super.applyRotations(info, poseStack, nativeScale);
+            return;
+        }
+        float t = b[0];
+        poseStack.translate(0, Math.sin(t * 0.12) * 0.05, 0);
+        poseStack.mulPose(Axis.YP.rotationDegrees(180f - b[2] + b[1]));
         poseStack.mulPose(Axis.ZP.rotationDegrees((float) Math.sin(t * 0.09) * 6f));
     }
 
-    @Override
-    public void preRender(PoseStack poseStack, BadeendjeEntity duck, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer,
-                          boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
-        if (!isReRender) {
-            Eendsoort soort = duck.getSoort();
-            for (GeoBone bone : model.topLevelBones()) {
-                toon(bone, soort);
-            }
-        }
-        super.preRender(poseStack, duck, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
-    }
-
     /** The extra bones (eend_*) only for the kinds that have them. */
-    private static void toon(GeoBone bone, Eendsoort soort) {
-        String name = bone.getName();
-        if (name.startsWith("eend_")) {
-            bone.setHidden(soort.bones.stream().noneMatch(name::startsWith));
+    @Override
+    public void adjustModelBonesForRender(RenderPassInfo<EntityRenderState> info, BoneSnapshots bones) {
+        Eendsoort soort = info.getGeckolibData(SOORT);
+        if (soort == null) {
+            return;
         }
-        for (GeoBone child : bone.getChildBones()) {
-            toon(child, soort);
+        for (GeoBone bone : info.model().boneLookup().get().values()) {
+            String name = bone.name();
+            if (name.startsWith("eend_")) {
+                boolean hidden = soort.bones.stream().noneMatch(name::startsWith);
+                bones.get(bone).skipRender(hidden).skipChildrenRender(hidden);
+            }
         }
     }
 

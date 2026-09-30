@@ -39,8 +39,8 @@ public final class GuhwaiiItems {
     private GuhwaiiItems() {
     }
 
-    static void lore(Item item, List<Component> tooltip) {
-        tooltip.add(Component.translatable(item.getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+    static void lore(Item item, Consumer<Component> tooltip) {
+        tooltip.accept(Component.translatable(item.getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
     }
 
     /** A block item with one line of lore (lang: its key + ".lore"). */
@@ -104,11 +104,6 @@ public final class GuhwaiiItems {
         }
 
         @Override
-        public SoundEvent getEatingSound() {
-            return SoundEvents.GENERIC_DRINK;
-        }
-
-        @Override
         public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             lore(this, tooltip);
         }
@@ -123,16 +118,6 @@ public final class GuhwaiiItems {
         @Override
         public ItemUseAnimation getUseAnimation(ItemStack stack) {
             return ItemUseAnimation.DRINK;
-        }
-
-        @Override
-        public SoundEvent getDrinkingSound() {
-            return SoundEvents.HONEY_DRINK;
-        }
-
-        @Override
-        public SoundEvent getEatingSound() {
-            return SoundEvents.HONEY_DRINK;
         }
 
         @Override
@@ -185,7 +170,7 @@ public final class GuhwaiiItems {
                     GuhwaiiFeature.advancement(sp, "ukelele_speler");
                 }
             }
-            player.getCooldowns().addCooldown(this, 16);
+            player.getCooldowns().addCooldown(stack, 16);
             return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
         }
 

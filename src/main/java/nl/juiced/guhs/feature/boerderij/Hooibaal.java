@@ -197,9 +197,10 @@ public final class Hooibaal implements NpcRole {
         for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (left > 0 && s.is(tag)) {
                 int take = Math.min(left, s.getCount());
-                if (s.hasCraftingRemainingItem()) {
+                net.minecraft.world.item.ItemStackTemplate rest = s.getItem().getCraftingRemainder(s);
+                if (rest != null) {
                     for (int i = 0; i < take; i++) {
-                        Minigames.give(player, s.getCraftingRemainingItem());
+                        Minigames.give(player, rest.create());
                     }
                 }
                 s.shrink(take);

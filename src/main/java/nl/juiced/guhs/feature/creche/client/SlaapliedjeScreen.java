@@ -99,7 +99,7 @@ public class SlaapliedjeScreen extends Screen {
             tik();
             return true;
         }
-        return super.keyPressed(key, scan, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override

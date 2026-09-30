@@ -1,8 +1,6 @@
 package nl.juiced.guhs.feature.kleding;
 
 import net.minecraft.world.entity.npc.villager.Villager;
-import net.minecraft.world.item.trading.VillagerTrades;
-import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import nl.juiced.guhs.registry.ModVillagers;
 
@@ -18,7 +16,7 @@ public final class KledingKleermaker {
 
     /** True for a guh-village kleermaker. */
     public static boolean is(Villager villager) {
-        return villager.getVillagerData().getProfession() == ModVillagers.GUH_KLEERMAKER.get();
+        return ModVillagers.is(villager, ModVillagers.GUH_KLEERMAKER);
     }
 
     /** Gives a kleermaker the fixed full offer (once, or again when {@link #VERSIE} changed). Returns whether it changed. */
@@ -31,11 +29,8 @@ public final class KledingKleermaker {
             return false;
         }
         MerchantOffers offers = new MerchantOffers();
-        for (VillagerTrades.ItemListing listing : ModVillagers.kleermakerAanbod()) {
-            MerchantOffer offer = listing.getOffer(villager, villager.getRandom());
-            if (offer != null) {
-                offers.add(offer);
-            }
+        for (ModVillagers.Trade t : ModVillagers.kleermakerAanbod()) {
+            offers.add(t.offer());
         }
         villager.setOffers(offers);
         villager.getPersistentData().putInt(TAG, VERSIE);

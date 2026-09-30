@@ -400,7 +400,7 @@ public final class GuhEmotes {
             case SMAKKEN -> {
                 if (clientTicks % 5 == 0) {
                     Vec3 mouth = guh.position().add(forward.scale(w * 0.6)).add(0, h * 0.35, 0);
-                    level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(ModItems.KAAS_KNABBELS.get())),
+                    level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, ModItems.KAAS_KNABBELS.get()),
                             mouth.x, mouth.y, mouth.z, (random.nextDouble() - 0.5) * 0.08, 0.05 + random.nextDouble() * 0.05,
                             (random.nextDouble() - 0.5) * 0.08);
                 }

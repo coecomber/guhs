@@ -126,8 +126,20 @@ public final class GuhwaiiBlokken {
 
     /** Palm fronds (leaves: they decay without a trunk nearby); now and then a coconut grows under them. */
     public static class PalmBlad extends LeavesBlock {
+        public static final com.mojang.serialization.MapCodec<PalmBlad> CODEC = simpleCodec(PalmBlad::new);
+
         public PalmBlad(Properties properties) {
-            super(properties);
+            // 26.1: LeavesBlock has falling-leaf particles; palm fronds had none in 1.0.0 (chance 0, no particle)
+            super(0f, properties);
+        }
+
+        @Override
+        public com.mojang.serialization.MapCodec<PalmBlad> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
         }
 
         @Override

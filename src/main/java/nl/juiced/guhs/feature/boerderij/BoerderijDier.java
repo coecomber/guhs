@@ -176,7 +176,7 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
     public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         entityData.set(DATA_ZORG, tag.getIntOr("Zorg", 0));
-        zorgDag = tag.keySet().contains("ZorgDag") ? tag.getLongOr("ZorgDag", 0L) : -1;
+        zorgDag = tag.getLong("ZorgDag").orElse(-1L);
         setProductGegeven(tag.getBooleanOr("ProductGegeven", false));
     }
 

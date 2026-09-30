@@ -291,13 +291,13 @@ public final class GlijRit {
                     int n = 3 - aftel / 20;
                     titel(player, Component.literal(String.valueOf(n)).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
                             Component.translatable("gui.guhs.knuffelbad.klaar"), 0, 18, 2);
-                    player.playNotifySound(SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1f, 1f);
+                    player.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.NOTE_BLOCK_PLING.value()), SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 1f, 1f, player.getRandom().nextLong()));
                 }
                 if (++aftel >= AFTEL) {
                     fase = ZwembandjeEntity.GLIJDT;
                     tau = 0;
                     titel(player, Component.translatable("gui.guhs.knuffelbad.vahoeg").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD), null, 0, 20, 10);
-                    player.playNotifySound(SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1f, 2f);
+                    player.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.NOTE_BLOCK_PLING.value()), SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 1f, 2f, player.getRandom().nextLong()));
                     level.playSound(null, ring.blockPosition(), KnuffelbadFeature.GLIJDEN.get(), SoundSource.PLAYERS, 1f, 1f);
                     hud(player);
                 }
@@ -500,7 +500,7 @@ public final class GlijRit {
         }
         Badmeester.toonScores(level, baan.start());
         Badmeester.toonPoortBord(level, baan.start(), glijbaan);
-        player.playNotifySound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.7f, 1.3f);
+        player.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE), SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.7f, 1.3f, player.getRandom().nextLong()));
         opruimen(level, true);
     }
 

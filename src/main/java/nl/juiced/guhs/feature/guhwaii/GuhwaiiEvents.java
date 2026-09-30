@@ -50,7 +50,7 @@ public final class GuhwaiiEvents {
     }
 
     static boolean in(ServerLevel level, BlockPos pos, ResourceKey<Structure> key) {
-        Structure s = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).get(key);
+        Structure s = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getValue(key);
         return s != null && level.structureManager().getStructureWithPieceAt(pos, s).isValid();
     }
 

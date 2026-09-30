@@ -99,7 +99,7 @@ public class WaterdiertjesGameTests {
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
         nl.juiced.guhs.storage.Nbt.saveWithoutId(x, tag);
         GuhxolotlEntity kopie = WaterdiertjesFeature.GUHXOLOTL.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        kopie.load(tag);
+        nl.juiced.guhs.storage.Nbt.load(kopie, tag);
         helper.assertTrue(kopie.kleur() == GuhxolotlEntity.Kleur.GOUD && "goud".equals(tag.getStringOr("Kleur", "")), "saved and loaded by name");
         // a spawn egg / natural spawn rolls a colour; babies take a parent's colour (or, now and then, gold)
         GuhxolotlEntity a = xolotl(helper, new BlockPos(5, 2, 5), GuhxolotlEntity.Kleur.MINT);
@@ -274,7 +274,7 @@ public class WaterdiertjesGameTests {
             helper.assertTrue(GuhDex.isCreaturePage(v) && GuhDex.TELLEND.contains(v) && v.isCharacter() && !GuhDex.TAMEABLE.contains(v),
                     v + ": a counting creature page");
             helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.containsKey(Guhs.id(v.id())), v + ": its entity exists (" + v.id() + ")");
-            helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.get(Guhs.id(v.id())).getCategory().isFriendly(), v + ": friendly");
+            helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.getValue(Guhs.id(v.id())).getCategory().isFriendly(), v + ": friendly");
         }
         helper.succeed();
     }

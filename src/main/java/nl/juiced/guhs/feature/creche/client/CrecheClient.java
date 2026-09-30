@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.resources.Identifier;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -16,6 +16,9 @@ import nl.juiced.guhs.feature.creche.CrecheFeature;
 import nl.juiced.guhs.feature.creche.CrechePayloads;
 import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.constant.DefaultAnimations;
+import com.geckolib.renderer.base.RenderPassInfo;
+import com.geckolib.renderer.base.BoneSnapshots;
 
 /**
  * Client side of the Knuffelcreche: the babyguhtjes (a tiny guh with a pacifier, the guh's own animations), the sleepy
@@ -26,22 +29,24 @@ public final class CrecheClient {
     public static void init(IEventBus modBus) {
         modBus.addListener(CrecheClient::renderers);
         modBus.addListener(CrecheClient::particles);
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.JUF_KNUFFEL, Guhs.id("geo/entity/guh_npc_juf_knuffel.geo.json"));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.JUF_KNUFFEL, Guhs.id("entity/guh_npc_juf_knuffel"));
         // her cap's little heart bobs along with her breathing
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.JUF_KNUFFEL, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.07f;
-            bot.apply("juf_hartje").ifPresent(b -> b.setPosY((float) Math.sin(t) * 0.25f));   // (not animated: absolute)
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.JUF_KNUFFEL, (npc, tick) -> {
+            float t = (float) tick * 0.07f;
+            return bones -> bones.ifPresent("juf_hartje", b -> b.setTranslateY((float) Math.sin(t) * 0.25f));   // (not animated: absolute)
         });
     }
 
     private static void renderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(CrecheFeature.BABYGUH.get(), context -> {
-            GeoEntityRenderer<CrecheBabyguh> renderer = new GeoEntityRenderer<>(context, new DefaultedEntityGeoModel<CrecheBabyguh>(Guhs.id("creche_babyguh"), true) {
+            // (1.1.0: the guh's own animations via withAltAnimations; the head follows the look like DefaultedEntityGeoModel(id, true) did)
+            GeoEntityRenderer<CrecheBabyguh, LivingEntityRenderState> renderer = new GeoEntityRenderer<CrecheBabyguh, LivingEntityRenderState>(context,
+                    new DefaultedEntityGeoModel<CrecheBabyguh>(Guhs.id("creche_babyguh")).withAltAnimations(Guhs.id("guh"))) {
                 @Override
-                public Identifier getAnimationResource(CrecheBabyguh baby) {
-                    return Guhs.id("animations/entity/guh.animation.json");
+                public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
+                    DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
                 }
-            });
+            };
             renderer.withScale(0.42f);
             return renderer;
         });

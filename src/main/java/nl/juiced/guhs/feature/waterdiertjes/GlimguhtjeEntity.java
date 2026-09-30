@@ -90,8 +90,8 @@ public class GlimguhtjeEntity extends FladderDiertje {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(net.minecraft.server.level.ServerLevel level) {
+        super.customServerAiStep(level);
         if (level().isBrightOutside() && !hasCustomName() && random.nextInt(200) == 0 && level() instanceof ServerLevel sl) {
             sl.sendParticles(ParticleTypes.END_ROD, getX(), getY() + 0.1, getZ(), 6, 0.15, 0.15, 0.15, 0.01);
             discard();                                          // (morning: it fades away)

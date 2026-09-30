@@ -57,7 +57,7 @@ public final class BoerderijProtection {
         if (server.dimension() != nl.juiced.guhs.world.ModDimensions.GUHMENSION) {
             return false;                                      // (it only generates in the Guhmensie)
         }
-        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(BoerderijFeature.GUHBOERDERIJ);
+        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(BoerderijFeature.GUHBOERDERIJ);
         return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
     }
 

@@ -75,7 +75,7 @@ public class KledingGameTests {
                 "about 1.5 seconds of holding");
         helper.assertFalse(KledingUnlocks.heeft(player, GuhClothes.RAIN_HAT), "not unlocked yet");
         player.setItemInHand(InteractionHand.MAIN_HAND, hoed);
-        helper.assertTrue(item.use(helper.getLevel(), player, InteractionHand.MAIN_HAND).getResult().consumesAction() && player.isUsingItem(),
+        helper.assertTrue(item.use(helper.getLevel(), player, InteractionHand.MAIN_HAND).consumesAction() && player.isUsingItem(),
                 "holding right-click starts using it");
         player.stopUsingItem();
         ItemStack rest = item.finishUsingItem(hoed, helper.getLevel(), player);
@@ -84,7 +84,7 @@ public class KledingGameTests {
         helper.assertTrue(klaar(player, "grote_guhspelen/kleding_eerste") && klaar(player, "quest/kleding_eerste"), "the first-unlock advancements");
         ItemStack tweede = new ItemStack(ModItems.RAIN_HAT.get(), 1);
         player.setItemInHand(InteractionHand.MAIN_HAND, tweede);
-        helper.assertFalse(item.use(helper.getLevel(), player, InteractionHand.MAIN_HAND).getResult().consumesAction(), "the second one can't be used up");
+        helper.assertFalse(item.use(helper.getLevel(), player, InteractionHand.MAIN_HAND).consumesAction(), "the second one can't be used up");
         item.finishUsingItem(tweede, helper.getLevel(), player);
         helper.assertTrue(tweede.getCount() == 1 && KledingUnlocks.alle(player).size() == 1, "still whole (give it to a friend), still one unlock");
         // the unlocks survive in the saved data, and hair is never an unlock
@@ -137,7 +137,7 @@ public class KledingGameTests {
         guh.wear(GuhClothes.CHEF_JACKET);
         guh.wear(GuhClothes.GUH_BACKPACK);
         guh.getBackpack().setItem(2, new ItemStack(Items.DIAMOND, 4));
-        guh.kill();
+        guh.kill(helper.getLevel());
         helper.succeedWhen(() -> {
             List<ItemEntity> items = helper.getEntities(EntityType.ITEM);
             helper.assertTrue(items.stream().anyMatch(i -> i.getItem().is(Items.DIAMOND) && i.getItem().getCount() == 4), "the backpack's diamonds fall out");
@@ -149,7 +149,7 @@ public class KledingGameTests {
     @GuhTest(template = EMPTY)
     public static void kledingKleermakerVastAanbod(GameTestHelper helper) {
         Villager villager = helper.spawn(EntityType.VILLAGER, new BlockPos(2, 1, 2));
-        villager.setVillagerData(villager.getVillagerData().setType(ModVillagers.GUH.get()).setProfession(ModVillagers.GUH_KLEERMAKER.get()));
+        villager.setVillagerData(villager.getVillagerData().withType(ModVillagers.GUH).withProfession(ModVillagers.GUH_KLEERMAKER));
         helper.assertTrue(KledingKleermaker.zorgVoorAanbod(villager), "the offer is put in");
         List<GuhClothes> sold = villager.getOffers().stream().map(MerchantOffer::getResult)
                 .filter(s -> s.getItem() instanceof GuhClothingItem).map(s -> ((GuhClothingItem) s.getItem()).getClothes()).toList();

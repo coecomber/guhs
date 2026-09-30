@@ -231,7 +231,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
                 }
             }
             if (distanceToSqr(voor) > 20 * 20) {
-                moveTo(voor.getX(), voor.getY(), voor.getZ(), getYRot(), getXRot());   // (lost: hop back in line)
+                snapTo(voor.getX(), voor.getY(), voor.getZ(), getYRot(), getXRot());   // (lost: hop back in line)
             }
         }
 
@@ -331,7 +331,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
     @Override
     public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        mama = tag.read("Mama", UUIDUtil.CODEC).isPresent() ? tag.read("Mama", UUIDUtil.CODEC).orElseThrow() : null;
+        mama = tag.read("Mama", UUIDUtil.CODEC).orElse(null);
     }
 
     // --- sounds --------------------------------------------------------------------------------------------------------------

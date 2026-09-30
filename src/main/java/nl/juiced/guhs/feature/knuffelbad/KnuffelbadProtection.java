@@ -65,7 +65,7 @@ public final class KnuffelbadProtection {
                 return true;
             }
         }
-        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(STRUCTUUR);
+        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(STRUCTUUR);
         return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
     }
 

@@ -39,7 +39,7 @@ public final class KnuffelbadItems {
                 return InteractionResult.PASS;
             }
             if (!player.level().isClientSide() && player instanceof ServerPlayer sp && Wasritueel.inzepen(sp, guh)) {
-                stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
+                stack.hurtAndBreak(1, player, hand);
             }
             return InteractionResult.SUCCESS;
         }

@@ -57,16 +57,6 @@ public final class BoerderijItems {
         }
 
         @Override
-        public SoundEvent getDrinkingSound() {
-            return SoundEvents.GENERIC_DRINK;
-        }
-
-        @Override
-        public SoundEvent getEatingSound() {
-            return SoundEvents.GENERIC_DRINK;
-        }
-
-        @Override
         public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
             if (!level.isClientSide()) {
                 entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 0));

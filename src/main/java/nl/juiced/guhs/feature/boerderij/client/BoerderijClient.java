@@ -1,10 +1,11 @@
 package nl.juiced.guhs.feature.boerderij.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import javax.annotation.Nullable;
+
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.SingleQuadParticle;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -14,8 +15,10 @@ import nl.juiced.guhs.client.SittingGuhRenderers;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.boerderij.BoerderijDier;
 import nl.juiced.guhs.feature.boerderij.BoerderijFeature;
-import com.geckolib.animation.state.AnimationTest;
-import com.geckolib.cache.model.GeoBone;
+import com.geckolib.constant.DefaultAnimations;
+import com.geckolib.constant.dataticket.DataTicket;
+import com.geckolib.renderer.base.BoneSnapshots;
+import com.geckolib.renderer.base.RenderPassInfo;
 import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
 
@@ -28,10 +31,10 @@ public final class BoerderijClient {
     public static void init(IEventBus modBus) {
         modBus.addListener(BoerderijClient::renderers);
         modBus.addListener(BoerderijClient::particles);
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.BOERINNEGUH, Guhs.id("geo/entity/guh_npc_boerinneguh.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.BOERINNEGUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.08f;
-            bot.apply("boerin_strootje").ifPresent(b -> b.setRotY((float) Math.sin(t) * 0.25f));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.BOERINNEGUH, Guhs.id("entity/guh_npc_boerinneguh"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.BOERINNEGUH, (npc, tick) -> {
+            float t = (float) tick * 0.08f;
+            return bones -> bones.ifPresent("boerin_strootje", b -> b.setRotY((float) Math.sin(t) * 0.25f));
         });
     }
 
@@ -42,29 +45,40 @@ public final class BoerderijClient {
     }
 
     /** A farm animal: its own model, a turning head, babies at 60 %, and the wool that goes and comes back (bones wol / kaal). */
-    public static class DierRenderer<T extends BoerderijDier> extends GeoEntityRenderer<T> {
+    public static class DierRenderer<T extends BoerderijDier> extends GeoEntityRenderer<T, LivingEntityRenderState> {
+        /** 1.1.0 (GeckoLib 5): "shorn" is copied into the render state at extract time. */
+        static final DataTicket<Boolean> KAAL = DataTicket.create("guhs_boerderij_kaal", Boolean.class);
+
         public DierRenderer(EntityRendererProvider.Context context, String naam, float schaduw) {
-            super(context, new DefaultedEntityGeoModel<T>(Guhs.id(naam), true) {
-                @Override
-                public void setCustomAnimations(T dier, long instanceId, AnimationTest<T> state) {
-                    super.setCustomAnimations(dier, instanceId, state);
-                    GeoBone wol = getAnimationProcessor().getBone("wol");
-                    GeoBone kaal = getAnimationProcessor().getBone("kaal");
-                    if (wol != null && kaal != null) {
-                        wol.setHidden(dier.productGegeven());
-                        kaal.setHidden(!dier.productGegeven());
-                    }
-                }
-            });
+            super(context, new DefaultedEntityGeoModel<T>(Guhs.id(naam)));
             this.shadowRadius = schaduw;
         }
 
         @Override
-        public void render(T dier, float yaw, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
-            float scale = dier.isBaby() ? 0.6f : 1f;
-            this.scaleWidth = scale;
-            this.scaleHeight = scale;
-            super.render(dier, yaw, partialTick, pose, buffers, light);
+        public void addRenderData(T dier, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
+            state.addGeckolibData(KAAL, dier.productGegeven());
+        }
+
+        @Override
+        public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
+            DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
+            boolean kaal = info.getOrDefaultGeckolibData(KAAL, false);
+            if (bones.get("wol").isPresent() && bones.get("kaal").isPresent()) {
+                bones.ifPresent("wol", b -> b.skipRender(kaal).skipChildrenRender(kaal));
+                bones.ifPresent("kaal", b -> b.skipRender(!kaal).skipChildrenRender(!kaal));
+            }
+        }
+
+        @Override
+        public void scaleModelForRender(RenderPassInfo<LivingEntityRenderState> info, float widthScale, float heightScale) {
+            float scale = info.renderState().isBaby ? 0.6f : 1f;
+            super.scaleModelForRender(info, widthScale * scale, heightScale * scale);
+        }
+
+        /** 1.21.1 halved the shadow of baby mobs in the entity render dispatcher. */
+        @Override
+        protected float getShadowRadius(LivingEntityRenderState state) {
+            return state.isBaby ? this.shadowRadius * 0.5f : this.shadowRadius;
         }
     }
 

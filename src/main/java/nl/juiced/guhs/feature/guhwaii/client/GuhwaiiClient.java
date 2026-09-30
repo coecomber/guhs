@@ -1,12 +1,8 @@
 package nl.juiced.guhs.feature.guhwaii.client;
 
-import java.util.Optional;
-import java.util.function.Function;
-
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -15,6 +11,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.client.GuhRenderFrame;
+import nl.juiced.guhs.client.GuhRenderer;
 import nl.juiced.guhs.client.SittingGuhRenderers;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -25,7 +23,6 @@ import nl.juiced.guhs.feature.guhwaii.GuhwaiiPayloads;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.verhaal.VerhaalVlaggen;
 import nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk;
-import com.geckolib.cache.model.GeoBone;
 
 /**
  * Client side of Guhwai'i: the looks of Lilo-guh (a red dress with white leaves, long black hair, a pink hibiscus behind her
@@ -36,17 +33,19 @@ public final class GuhwaiiClient {
     private static ItemStack ukelele;
 
     public static void init(IEventBus modBus) {
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.LILO_GUH, Guhs.id("geo/entity/guh_npc_lilo_guh.geo.json"));
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.NANI_GUH, Guhs.id("geo/entity/guh_npc_nani_guh.geo.json"));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.LILO_GUH, Guhs.id("entity/guh_npc_lilo_guh"));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.NANI_GUH, Guhs.id("entity/guh_npc_nani_guh"));
         // Lilo's hair and her skirt sway a little in the sea breeze; Nani's flower nods
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.LILO_GUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.07f;
-            bot.apply("lilo_haar").ifPresent(b -> b.setRotX((float) Math.sin(t) * 0.05f));
-            bot.apply("lilo_rokje").ifPresent(b -> b.setRotZ((float) Math.sin(t * 1.3f) * 0.04f));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.LILO_GUH, (npc, tick) -> {
+            float t = (float) tick * 0.07f;
+            return bones -> {
+                bones.ifPresent("lilo_haar", b -> b.setRotX((float) Math.sin(t) * 0.05f));
+                bones.ifPresent("lilo_rokje", b -> b.setRotZ((float) Math.sin(t * 1.3f) * 0.04f));
+            };
         });
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.NANI_GUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.05f;
-            bot.apply("nani_bloem").ifPresent(b -> b.setRotZ((float) Math.sin(t) * 0.06f));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.NANI_GUH, (npc, tick) -> {
+            float t = (float) tick * 0.05f;
+            return bones -> bones.ifPresent("nani_bloem", b -> b.setRotZ((float) Math.sin(t) * 0.06f));
         });
         VariantUiterlijk.zet(GuhVariant.STITCH626, new Uiterlijk626());
     }
@@ -56,32 +55,37 @@ public final class GuhwaiiClient {
         Minecraft.getInstance().setScreen(new ScannerScherm(scan));
     }
 
-    /** The 626-guh's own moves. */
+    /** The 626-guh's own moves (1.1.0: values computed at extract time, bone moves / the ukelele handed to the frame). */
     static class Uiterlijk626 implements VariantUiterlijk.Uiterlijk {
         @Override
-        public void botten(GuhEntity guh, Function<String, Optional<GeoBone>> bot, float pt) {
+        public void botten(GuhEntity guh, GuhRenderFrame frame, float pt) {
             float t = guh.tickCount + pt;
             boolean uke = guh.emotes.current() == Emote.UKELELE;
             if (!uke) {
                 // the extra arms: a lazy little wiggle (the ukelele emote animates them itself)
-                bot.apply("stitch_arm_links").ifPresent(b -> b.setRotX((float) Math.sin(t * 0.15f) * 0.25f));
-                bot.apply("stitch_arm_rechts").ifPresent(b -> b.setRotX((float) Math.sin(t * 0.15f + 2f) * 0.25f));
+                frame.bones(bones -> {
+                    bones.ifPresent("stitch_arm_links", b -> b.setRotX((float) Math.sin(t * 0.15f) * 0.25f));
+                    bones.ifPresent("stitch_arm_rechts", b -> b.setRotX((float) Math.sin(t * 0.15f + 2f) * 0.25f));
+                });
             }
             if (!GuhHooks.heeft(guh, VerhaalVlaggen.KLIMT)) {
                 return;
             }
-            bot.apply("root").ifPresent(root -> {
-                if (plafond(guh)) {
-                    // upside down under the ceiling: flipped, feet against it
+            if (plafond(guh)) {
+                // upside down under the ceiling: flipped, feet against it
+                float hoog = guh.getBbHeight() / Math.max(0.1f, guh.getScale()) * 16f;
+                frame.bones(bones -> bones.ifPresent("root", root -> {
                     root.setRotZ(Mth.PI);
-                    root.setPosY(guh.getBbHeight() / Math.max(0.1f, guh.getScale()) * 16f);
-                } else {
-                    // up the wall: nose up, belly against it
+                    root.setTranslateY(hoog);
+                }));
+            } else {
+                // up the wall: nose up, belly against it
+                frame.bones(bones -> bones.ifPresent("root", root -> {
                     root.setRotX(1.25f);
-                    root.setPosY(4f);
-                    root.setPosZ(-3f);
-                }
-            });
+                    root.setTranslateY(4f);
+                    root.setTranslateZ(-3f);
+                }));
+            }
         }
 
         /** Is there a ceiling right above his head (else he's on a wall)? */
@@ -92,7 +96,7 @@ public final class GuhwaiiClient {
         }
 
         @Override
-        public void extra(GuhEntity guh, PoseStack pose, MultiBufferSource buffers, int light, float pt) {
+        public void extra(GuhEntity guh, GuhRenderFrame frame, float pt) {
             if (guh.emotes.current() != Emote.UKELELE || guh.isInvisible()) {
                 return;
             }
@@ -102,15 +106,17 @@ public final class GuhwaiiClient {
             float s = guh.getScale();
             float t = guh.tickCount + pt;
             float yaw = Mth.rotLerp(pt, guh.yBodyRotO, guh.yBodyRot);
-            pose.mulPose(Axis.YP.rotationDegrees(180f - yaw));
-            pose.scale(s, s, s);
-            // held in front of the belly, neck to the right and a little up, strummed
-            pose.translate(0.05, 0.36, -0.62);
-            pose.mulPose(Axis.ZP.rotationDegrees(-28f + (float) Math.sin(t * 0.9f) * 3f));
-            pose.mulPose(Axis.YP.rotationDegrees(180f));
-            pose.scale(0.62f, 0.62f, 0.62f);
-            Minecraft.getInstance().getItemRenderer().renderStatic(ukelele, ItemDisplayContext.FIXED, light, OverlayTexture.NO_OVERLAY, pose,
-                    buffers, guh.level(), guh.getId());
+            ItemStackRenderState item = GuhRenderer.itemState(ukelele, ItemDisplayContext.FIXED, guh);
+            frame.extra((pose, collector, light) -> {
+                pose.mulPose(Axis.YP.rotationDegrees(180f - yaw));
+                pose.scale(s, s, s);
+                // held in front of the belly, neck to the right and a little up, strummed
+                pose.translate(0.05, 0.36, -0.62);
+                pose.mulPose(Axis.ZP.rotationDegrees(-28f + (float) Math.sin(t * 0.9f) * 3f));
+                pose.mulPose(Axis.YP.rotationDegrees(180f));
+                pose.scale(0.62f, 0.62f, 0.62f);
+                item.submit(pose, collector, light, OverlayTexture.NO_OVERLAY, 0);
+            });
         }
     }
 
