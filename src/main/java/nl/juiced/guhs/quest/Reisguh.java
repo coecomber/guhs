@@ -64,11 +64,11 @@ public final class Reisguh {
         final Map<UUID, Set<UUID>> discovered = new java.util.HashMap<>();
 
         public static Data get(MinecraftServer server) {
-            return nl.juiced.guhs.world.GuhSavedData.get(server.overworld(), Data.TYPE);
+            return nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), Data.TYPE, "guhs_reisguhs");
         }
 
-        static final net.minecraft.world.level.saveddata.SavedDataType<Data> TYPE = nl.juiced.guhs.world.GuhSavedData.type("guhs_reisguhs",
-                Data::new, Data::load, (d, r) -> d.save(new CompoundTag(), r));
+        static final net.minecraft.world.level.saveddata.SavedDataType<Data> TYPE = nl.juiced.guhs.storage.GuhSavedData.tagType("reisguhs",
+                Data::new, t -> Data.load(t, null), d -> d.save(new CompoundTag(), null));   // (the registries were never used)
 
         public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
             ListTag list = new ListTag();
@@ -260,7 +260,7 @@ public final class Reisguh {
         Data data = Data.get(player.level().getServer());
         data.points.remove(npc.getUUID());                          // (back in the list where it's put down again)
         data.setDirty();
-        CompoundTag tag = nl.juiced.guhs.entity.EntityNbt.save(npc);
+        CompoundTag tag = nl.juiced.guhs.storage.Nbt.saveWithoutId(npc);
         tag.putString("id", "guhs:guh_npc");
         tag.putString("GuhDisplayName", name(npc));
         npc.discard();

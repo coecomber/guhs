@@ -539,9 +539,9 @@ public class GuhGameTests {
         guh.setSoundsEnabled(false);
         guh.setBehavior(GuhEntity.Behavior.NEUTRAL);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(guh));
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(guh, tag);
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
+        nl.juiced.guhs.storage.Nbt.load(copy, tag);
         helper.assertTrue(!copy.areSoundsEnabled() && copy.getBehavior() == GuhEntity.Behavior.NEUTRAL && copy.getSoundFrequency() == 4,
                 "settings should be saved");
         helper.succeed();
@@ -587,9 +587,9 @@ public class GuhGameTests {
         helper.assertTrue(husk.getHealth() <= before - 5, "Big Mika should deal real damage: " + (before - husk.getHealth()));
         // a Big Mika saved and loaded stays Big Mika
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(mika));
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(mika, tag);
         MikaEntity copy = ModEntities.MIKA.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
+        nl.juiced.guhs.storage.Nbt.load(copy, tag);
         helper.assertTrue(copy.isBoss() && copy.getMaxHealth() == MikaEntity.BOSS_HEALTH, "Big Mika should survive a reload");
         helper.succeed();
     }
@@ -733,9 +733,9 @@ public class GuhGameTests {
         GuhEntity bronto = helper.spawn(ModEntities.GUH.get(), POS);
         bronto.setVariant(nl.juiced.guhs.entity.GuhVariant.BRONTOSAURUS);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(bronto));
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(bronto, tag);
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
+        nl.juiced.guhs.storage.Nbt.load(copy, tag);
         helper.assertTrue(copy.getVariant() == nl.juiced.guhs.entity.GuhVariant.BRONTOSAURUS, "the variant should be saved");
         helper.assertTrue(nameKey(copy.getDisplayName()).equals("entity.guhs.guh.brontosaurus"), "shows its variant name");
         copy.setCustomName(net.minecraft.network.chat.Component.literal("Henk"));
@@ -795,9 +795,9 @@ public class GuhGameTests {
         guh.setPersonality(nl.juiced.guhs.entity.GuhPersonality.PLAYFUL);
         helper.assertTrue(guh.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED) > lazy, "playful guhs are faster than lazy ones");
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(guh));
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(guh, tag);
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
+        nl.juiced.guhs.storage.Nbt.load(copy, tag);
         helper.assertTrue(copy.getPersonality() == nl.juiced.guhs.entity.GuhPersonality.PLAYFUL, "the personality is saved");
         helper.succeed();
     }
@@ -898,18 +898,18 @@ public class GuhGameTests {
         helper.assertTrue(player.getMainHandItem().is(ModItems.PARTY_HAT.get()), "the hat item stays in the player's hand (it's an unlock)");
         guh.wear(nl.juiced.guhs.entity.GuhClothes.RED_BOWTIE);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(guh));
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(guh, tag);
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
+        nl.juiced.guhs.storage.Nbt.load(copy, tag);
         helper.assertTrue(copy.getClothes(nl.juiced.guhs.entity.GuhClothes.Slot.NECK) == nl.juiced.guhs.entity.GuhClothes.RED_BOWTIE, "clothes are saved");
         var off = copy.takeOffClothes();
         helper.assertTrue(off.size() == 2 && !copy.isWearingClothes(), "taking clothes off tells what it wore: " + off);
         // guhs saved as the old "rain" variant now wear the rain outfit
         net.minecraft.nbt.CompoundTag old = new net.minecraft.nbt.CompoundTag();
-        old.merge(nl.juiced.guhs.entity.EntityNbt.save(copy));
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(copy, old);
         old.putString("Variant", "rain");
         GuhEntity rain = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        nl.juiced.guhs.entity.EntityNbt.load(rain, old);
+        nl.juiced.guhs.storage.Nbt.load(rain, old);
         helper.assertTrue(rain.getVariant() == nl.juiced.guhs.entity.GuhVariant.NORMAL
                 && rain.getClothes(nl.juiced.guhs.entity.GuhClothes.Slot.BODY) == nl.juiced.guhs.entity.GuhClothes.RAINCOAT, "old rain guhs wear a raincoat");
         helper.succeed();
@@ -962,9 +962,9 @@ public class GuhGameTests {
         helper.assertTrue(guh.hasBackpack() && guh.getClothes(nl.juiced.guhs.entity.GuhClothes.Slot.EYES) == null,
                 "a backpack with things in it stays on (the rest comes off)");
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(guh));
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(guh, tag);
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
+        nl.juiced.guhs.storage.Nbt.load(copy, tag);
         helper.assertTrue(copy.getBackpack().getItem(3).getCount() == 5 && copy.hasBackpack(), "the backpack contents are saved");
         guh.getBackpack().removeItemNoUpdate(3);
         nl.juiced.guhs.feature.kleding.KledingKast.kleed(player, guh, niets);

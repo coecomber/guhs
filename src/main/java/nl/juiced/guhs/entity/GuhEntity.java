@@ -1456,7 +1456,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
                 // unknown value: keep the default
             }
         }
-        emotes.load(EntityNbt.whole(tag));
+        emotes.load(nl.juiced.guhs.storage.Nbt.toTag(tag));
         setKnusVlaggen(tag.getIntOr("KnusVlaggen", 0));
         setHaarkleur(tag.keySet().contains("Haarkleur") ? tag.getIntOr("Haarkleur", 0) : -1);
     }

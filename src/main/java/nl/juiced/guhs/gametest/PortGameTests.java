@@ -16,12 +16,12 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import net.minecraft.world.level.storage.LevelResource;
-import nl.juiced.guhs.entity.EntityNbt;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.entity.Owners;
 import nl.juiced.guhs.registry.ModEntities;
-import nl.juiced.guhs.world.GuhSavedData;
+import nl.juiced.guhs.storage.GuhSavedData;
+import nl.juiced.guhs.storage.Nbt;
 import nl.juiced.guhs.world.GuhTime;
 
 /**
@@ -49,7 +49,7 @@ public class PortGameTests {
         }
     }
 
-    static final SavedDataType<TestData> TYPE = GuhSavedData.simpleType("guhs_port_testdata", TestData::new, TestData::load, TestData::save);
+    static final SavedDataType<TestData> TYPE = GuhSavedData.tagType("port_testdata", TestData::new, TestData::load, TestData::save);
 
     /** The registrar found the tests (this one included) and the ids are the 1.0.0 names. */
     @GuhTest(template = EMPTY, batch = "port")
@@ -75,7 +75,7 @@ public class PortGameTests {
         data.putInt("Value", 42);
         file.put("data", data);
         NbtIo.writeCompressed(file, oldFile);
-        TestData loaded = GuhSavedData.get(level, TYPE);
+        TestData loaded = GuhSavedData.get(level, TYPE, "guhs_port_testdata");
         helper.assertTrue(loaded.value == 42, "the 1.0.0 value came along: " + loaded.value);
         helper.assertTrue(Files.exists(newFile) && !Files.exists(oldFile), "the file moved to " + newFile);
         helper.succeed();
@@ -104,9 +104,9 @@ public class PortGameTests {
         guh.tame(player);
         guh.setVariant(GuhVariant.GHOST);
         helper.assertTrue(player.getUUID().equals(guh.getOwnerUUID()) && Owners.isOwner(guh, player.getUUID()), "owner");
-        CompoundTag tag = EntityNbt.save(guh);
+        CompoundTag tag = Nbt.saveWithoutId(guh);
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        EntityNbt.load(copy, tag);
+        Nbt.load(copy, tag);
         helper.assertTrue(copy.getVariant() == GuhVariant.GHOST && player.getUUID().equals(copy.getOwnerUUID()), "saved and loaded: " + tag);
         copy.setOwnerUUID(null);
         helper.assertTrue(copy.getOwnerUUID() == null, "owner cleared");

@@ -33,7 +33,7 @@ import net.minecraft.core.UUIDUtil;
 public class GuhWorldData extends SavedData {
     private static final String NAME = "guhs_world";
     private static final net.minecraft.world.level.saveddata.SavedDataType<GuhWorldData> TYPE =
-            GuhSavedData.type(NAME, GuhWorldData::new, GuhWorldData::load, (d, r) -> d.save(new CompoundTag(), r));
+            nl.juiced.guhs.storage.GuhSavedData.tagType("world", GuhWorldData::new, t -> load(t, null), d -> d.save(new CompoundTag(), null));   // (registries never used)
 
     public enum Access { PUBLIC, PRIVATE, WHITELIST }
 
@@ -103,7 +103,7 @@ public class GuhWorldData extends SavedData {
     private boolean lobbyBuilt;
 
     public static GuhWorldData get(MinecraftServer server) {
-        return GuhSavedData.get(server.overworld(), TYPE);
+        return nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), TYPE, NAME);
     }
 
     public PlayerData player(UUID id) {

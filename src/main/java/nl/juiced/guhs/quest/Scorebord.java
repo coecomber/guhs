@@ -166,11 +166,11 @@ public final class Scorebord {
         final Map<String, List<Entry>> boards = new HashMap<>();
 
         public static Data get(MinecraftServer server) {
-            return nl.juiced.guhs.world.GuhSavedData.get(server.overworld(), Data.TYPE);
+            return nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), Data.TYPE, "guhs_scoreborden");
         }
 
-        static final net.minecraft.world.level.saveddata.SavedDataType<Data> TYPE = nl.juiced.guhs.world.GuhSavedData.type("guhs_scoreborden",
-                Data::new, Data::load, (d, r) -> d.save(new CompoundTag(), r));
+        static final net.minecraft.world.level.saveddata.SavedDataType<Data> TYPE = nl.juiced.guhs.storage.GuhSavedData.tagType("scoreborden",
+                Data::new, t -> Data.load(t, null), d -> d.save(new CompoundTag(), null));   // (the registries were never used)
 
         public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
             CompoundTag all = new CompoundTag();
