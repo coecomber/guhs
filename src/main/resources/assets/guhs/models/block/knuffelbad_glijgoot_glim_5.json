@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/knuffelbad_glijgoot_glim_zijkant",
     "top": "guhs:block/knuffelbad_glijgoot_glim",
@@ -100,9 +99,8 @@
         }
       },
       "neoforge_data": {
-        "block_light": 15,
-        "sky_light": 15,
-        "ambient_occlusion": false
+        "ambient_occlusion": false,
+        "light_emission": 15
       }
     }
   ]

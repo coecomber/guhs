@@ -6,9 +6,7 @@
     "HH"
   ],
   "key": {
-    "H": {
-      "item": "guhs:houtskoolsteen"
-    }
+    "H": "guhs:houtskoolsteen"
   },
   "result": {
     "id": "guhs:houtskoolsteen_stenen",

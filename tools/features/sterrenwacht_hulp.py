@@ -224,14 +224,14 @@ def paint_swatch(arr, swatch, colour, rng, var=8, pattern=None):
 
 
 def sitting_geo(h, identifier):
-    geo_file = json.load(open(os.path.join(h.A, "geo", "entity", "guh_sitting.geo.json"), encoding="utf-8"))
+    geo_file = json.load(open(os.path.join(h.A, "geckolib", "models", "entity", "guh_sitting.geo.json"), encoding="utf-8"))
     geo = geo_file["minecraft:geometry"][0]
     geo["description"]["identifier"] = identifier
     return geo_file, geo
 
 
 def save_geo(h, name, geo_file):
-    h.w(os.path.join(h.A, "geo", "entity", name), geo_file)
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", name), geo_file)
 
 
 def sitting_texture(h, hue, sat, val):

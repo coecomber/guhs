@@ -1,10 +1,7 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "guhs:gatenkaas"
-  },
+  "ingredient": "guhs:gatenkaas",
   "result": {
-    "id": "guhs:gatenkaas_stenen",
-    "count": 1
+    "id": "guhs:gatenkaas_stenen"
   }
 }

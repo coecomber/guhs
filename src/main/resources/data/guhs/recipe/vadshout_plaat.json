@@ -3,9 +3,7 @@
   "category": "building",
   "group": "vadshout_slab",
   "key": {
-    "#": {
-      "item": "guhs:vadshout_planken"
-    }
+    "#": "guhs:vadshout_planken"
   },
   "pattern": [
     "###"

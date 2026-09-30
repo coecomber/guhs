@@ -258,7 +258,7 @@ def paint_belly(box):
 def lieke_face():
     """Lieke's face (from the guh model/texture) as a picture, or None if it isn't there."""
     try:
-        geo = json.load(open(os.path.join(ASSETS, "geo", "entity", "guh.geo.json")))["minecraft:geometry"][0]
+        geo = json.load(open(os.path.join(ASSETS, "geckolib", "models", "entity", "guh.geo.json")))["minecraft:geometry"][0]
         tex = Image.open(os.path.join(ASSETS, "textures", "entity", "guh.png")).convert("RGBA")
     except OSError:
         return None
@@ -430,17 +430,17 @@ animations = {
     },
 }
 
-os.makedirs(os.path.join(ASSETS, "geo", "entity"), exist_ok=True)
-os.makedirs(os.path.join(ASSETS, "animations", "entity"), exist_ok=True)
+os.makedirs(os.path.join(ASSETS, "geckolib", "models", "entity"), exist_ok=True)
+os.makedirs(os.path.join(ASSETS, "geckolib", "animations", "entity"), exist_ok=True)
 os.makedirs(os.path.join(ASSETS, "textures", "entity"), exist_ok=True)
 # The guh itself is now Lieke's model (tools/import_lieke_model.py / blockbench/guh.bbmodel), so only Mika is built here.
 for name, cubes, fur, evil in (("mika", MIKA_CUBES, MIKA_FUR, True),):
     geo, texture = build("geometry." + name, cubes, fur, evil)
-    with open(os.path.join(ASSETS, "geo", "entity", name + ".geo.json"), "w") as f:
+    with open(os.path.join(ASSETS, "geckolib", "models", "entity", name + ".geo.json"), "w") as f:
         json.dump(geo, f, indent=2)
     texture.save(os.path.join(ASSETS, "textures", "entity", name + ".png"))
 geo, texture = build("geometry.guh_sitting", SITTING_CUBES, FUR, bones=SITTING_BONES, lieke=True)
-with open(os.path.join(ASSETS, "geo", "entity", "guh_sitting.geo.json"), "w") as f:
+with open(os.path.join(ASSETS, "geckolib", "models", "entity", "guh_sitting.geo.json"), "w") as f:
     json.dump(geo, f, indent=2)
 texture.save(os.path.join(ASSETS, "textures", "entity", "guh_sitting.png"))
 sitting_animations = {
@@ -468,8 +468,8 @@ sitting_animations = {
         },
     },
 }
-with open(os.path.join(ASSETS, "animations", "entity", "guh_sitting.animation.json"), "w") as f:
+with open(os.path.join(ASSETS, "geckolib", "animations", "entity", "guh_sitting.animation.json"), "w") as f:
     json.dump(sitting_animations, f, indent=2)
 # Mika re-uses the guh animations (same bone names)
-with open(os.path.join(ASSETS, "animations", "entity", "guh.animation.json"), "w") as f:
+with open(os.path.join(ASSETS, "geckolib", "animations", "entity", "guh.animation.json"), "w") as f:
     json.dump(animations, f, indent=2)

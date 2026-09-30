@@ -7,15 +7,9 @@
     "S S"
   ],
   "key": {
-    "P": {
-      "item": "minecraft:cherry_planks"
-    },
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "P": "minecraft:cherry_planks",
+    "W": "minecraft:pink_wool",
+    "S": "minecraft:stick"
   },
   "result": {
     "id": "guhs:guh_stoel",

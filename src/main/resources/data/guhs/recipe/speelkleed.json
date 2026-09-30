@@ -5,12 +5,8 @@
     "PB"
   ],
   "key": {
-    "P": {
-      "item": "minecraft:pink_carpet"
-    },
-    "B": {
-      "item": "minecraft:light_blue_carpet"
-    }
+    "P": "minecraft:pink_carpet",
+    "B": "minecraft:light_blue_carpet"
   },
   "result": {
     "id": "guhs:speelkleed",

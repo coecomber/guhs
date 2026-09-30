@@ -433,7 +433,7 @@ def selfcheck(h):
                     f"gui.guhs.guhdex.info.{e}"):
             if key not in h.NL:
                 problems.append(f"missing lang {key}")
-        for p in (f"{h.A}/geo/entity/{e}.geo.json", f"{h.A}/animations/entity/{e}.animation.json",
+        for p in (f"{h.A}/geckolib/models/entity/{e}.geo.json", f"{h.A}/geckolib/animations/entity/{e}.animation.json",
                   f"{h.A}/models/item/{e}_item.json", f"{h.D}/advancement/quest/seen_{e}.json"):
             if not os.path.exists(p):
                 problems.append(f"missing {p}")

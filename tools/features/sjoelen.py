@@ -481,7 +481,7 @@ def build(h):
 
 def selfcheck(h):
     import os
-    missing = [f for f in ("blockstates/sjoelen_poort.json", "models/block/sjoelen_vak_4.json", "geo/entity/guh_npc_sjoelguh.geo.json",
+    missing = [f for f in ("blockstates/sjoelen_poort.json", "models/block/sjoelen_vak_4.json", "geckolib/models/entity/guh_npc_sjoelguh.geo.json",
                            "textures/entity/sjoelschijf.png", "textures/entity/npc_sjoelguh.png", "textures/item/sjoelschijfje.png")
                if not os.path.exists(f"{h.A}/{f}")]
     for key in ("quest.guhs.sjoelen.hello4", "gui.guhs.sjoelen.bar", "entity.guhs.guh_npc.sjoelguh"):

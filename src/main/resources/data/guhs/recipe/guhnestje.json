@@ -7,18 +7,11 @@
     "SSS"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:stick"
-    },
-    "W": {
-      "tag": "minecraft:wool"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    }
+    "S": "minecraft:stick",
+    "W": "#minecraft:wool",
+    "K": "guhs:kaas_knabbels"
   },
   "result": {
-    "id": "guhs:guhnestje",
-    "count": 1
+    "id": "guhs:guhnestje"
   }
 }

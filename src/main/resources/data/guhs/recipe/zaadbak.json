@@ -6,18 +6,11 @@
     "PCP"
   ],
   "key": {
-    "S": {
-      "item": "guhs:kaasknabbelzaadjes"
-    },
-    "P": {
-      "item": "minecraft:pink_wool"
-    },
-    "C": {
-      "item": "minecraft:composter"
-    }
+    "S": "guhs:kaasknabbelzaadjes",
+    "P": "minecraft:pink_wool",
+    "C": "minecraft:composter"
   },
   "result": {
-    "id": "guhs:zaadbak",
-    "count": 1
+    "id": "guhs:zaadbak"
   }
 }

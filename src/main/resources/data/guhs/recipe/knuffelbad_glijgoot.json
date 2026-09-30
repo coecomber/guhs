@@ -6,12 +6,8 @@
     "TS"
   ],
   "key": {
-    "T": {
-      "item": "guhs:trechtertegel"
-    },
-    "S": {
-      "item": "minecraft:slime_ball"
-    }
+    "T": "guhs:trechtertegel",
+    "S": "minecraft:slime_ball"
   },
   "result": {
     "id": "guhs:knuffelbad_glijgoot",

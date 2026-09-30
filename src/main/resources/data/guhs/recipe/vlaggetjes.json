@@ -6,18 +6,10 @@
     "PWY"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:string"
-    },
-    "P": {
-      "item": "minecraft:pink_wool"
-    },
-    "W": {
-      "item": "minecraft:white_wool"
-    },
-    "Y": {
-      "item": "minecraft:yellow_wool"
-    }
+    "S": "minecraft:string",
+    "P": "minecraft:pink_wool",
+    "W": "minecraft:white_wool",
+    "Y": "minecraft:yellow_wool"
   },
   "result": {
     "id": "guhs:vlaggetjes",

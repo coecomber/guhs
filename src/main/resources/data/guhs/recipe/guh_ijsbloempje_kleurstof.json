@@ -2,12 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:guh_ijsbloempje"
-    }
+    "guhs:guh_ijsbloempje"
   ],
   "result": {
-    "id": "minecraft:light_blue_dye",
-    "count": 1
+    "id": "minecraft:light_blue_dye"
   }
 }

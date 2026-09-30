@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:guhwaii_plumeria"
-    }
+    "guhs:guhwaii_plumeria"
   ],
   "result": {
     "id": "minecraft:white_dye",

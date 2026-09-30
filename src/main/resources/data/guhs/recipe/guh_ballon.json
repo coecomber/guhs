@@ -7,12 +7,8 @@
     " S "
   ],
   "key": {
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "S": {
-      "item": "minecraft:string"
-    }
+    "W": "minecraft:pink_wool",
+    "S": "minecraft:string"
   },
   "result": {
     "id": "guhs:guh_ballon",

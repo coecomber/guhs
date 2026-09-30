@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/cube_bottom_top",
-  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "top": "guhs:block/sneeuwguhspar_naalden_sneeuw_top",
     "side": "guhs:block/sneeuwguhspar_naalden_sneeuw",

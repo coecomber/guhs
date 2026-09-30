@@ -1,9 +1,7 @@
 {
   "type": "minecraft:blasting",
   "category": "misc",
-  "ingredient": {
-    "item": "guhs:kaaskorrelerts"
-  },
+  "ingredient": "guhs:kaaskorrelerts",
   "result": {
     "id": "guhs:kaaskorrel"
   },

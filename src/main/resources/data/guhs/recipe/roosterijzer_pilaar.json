@@ -6,9 +6,7 @@
     "P"
   ],
   "key": {
-    "P": {
-      "item": "guhs:gepolijst_roosterijzer"
-    }
+    "P": "guhs:gepolijst_roosterijzer"
   },
   "result": {
     "id": "guhs:roosterijzer_pilaar",

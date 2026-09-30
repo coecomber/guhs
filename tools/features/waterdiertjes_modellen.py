@@ -692,36 +692,36 @@ def build(h):
         h.save(atlas.image(), "entity", f"guhxolotl_{kleur}.png")
         if kleur == "goud":
             h.save(atlas.glowmask(), "entity", "guhxolotl_goud_glowmask.png")
-    _write(A, "geo/entity/guhxolotl.geo.json", g)
-    _write(A, "animations/entity/guhxolotl.animation.json", guhxolotl_anims())
+    _write(A, "geckolib/models/entity/guhxolotl.geo.json", g)
+    _write(A, "geckolib/animations/entity/guhxolotl.animation.json", guhxolotl_anims())
     for soort, tex in (("mama", "guh_eendje"), ("kuiken", "guh_eendje_kuiken")):
         atlas = Atlas(64, 8, 30140102)
         g = eendje(atlas, soort)
         h.save(atlas.image(), "entity", f"{tex}.png")
-    _write(A, "geo/entity/guh_eendje.geo.json", g)
-    _write(A, "animations/entity/guh_eendje.animation.json", eendje_anims())
+    _write(A, "geckolib/models/entity/guh_eendje.geo.json", g)
+    _write(A, "geckolib/animations/entity/guh_eendje.animation.json", eendje_anims())
     for kleur in VLINDER:
         atlas = Atlas(32, 16, 30140103)
         g = vlindertje(atlas, kleur)
         h.save(atlas.image(), "entity", f"knabbelvlindertje_{kleur}.png")
-    _write(A, "geo/entity/knabbelvlindertje.geo.json", g)
-    _write(A, "animations/entity/knabbelvlindertje.animation.json", vlindertje_anims())
+    _write(A, "geckolib/models/entity/knabbelvlindertje.geo.json", g)
+    _write(A, "geckolib/animations/entity/knabbelvlindertje.animation.json", vlindertje_anims())
     atlas = Atlas(32, 16, 30140104)
-    _write(A, "geo/entity/glimguhtje.geo.json", glimguhtje(atlas))
+    _write(A, "geckolib/models/entity/glimguhtje.geo.json", glimguhtje(atlas))
     h.save(atlas.image(), "entity", "glimguhtje.png")
     h.save(atlas.glowmask(), "entity", "glimguhtje_glowmask.png")
-    _write(A, "animations/entity/glimguhtje.animation.json", glimguhtje_anims())
+    _write(A, "geckolib/animations/entity/glimguhtje.animation.json", glimguhtje_anims())
     atlas = Atlas(32, 16, 30140105)
-    _write(A, "geo/entity/lieveheersbeestje.geo.json", lieveheersbeestje(atlas))
+    _write(A, "geckolib/models/entity/lieveheersbeestje.geo.json", lieveheersbeestje(atlas))
     h.save(atlas.image(), "entity", "lieveheersbeestje.png")
-    _write(A, "animations/entity/lieveheersbeestje.animation.json", lieveheersbeestje_anims())
+    _write(A, "geckolib/animations/entity/lieveheersbeestje.animation.json", lieveheersbeestje_anims())
 
 
 def check(h):
     A = h.A
     problems = []
     for name in MODELS:
-        g = json.load(open(os.path.join(A, "geo", "entity", f"{name}.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
+        g = json.load(open(os.path.join(A, "geckolib", "models", "entity", f"{name}.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
         names = [b["name"] for b in g["bones"]]
         if len(set(names)) != len(names):
             problems.append(f"{name}: duplicate bone names")
@@ -733,7 +733,7 @@ def check(h):
                     (u, v), (w, hh) = uv["uv"], uv["uv_size"]
                     if u + w > g["description"]["texture_width"] + 1e-6 or v + hh > g["description"]["texture_height"] + 1e-6:
                         problems.append(f"{name}: a uv outside the atlas ({b['name']} {f})")
-        anims = json.load(open(os.path.join(A, "animations", "entity", f"{name}.animation.json"), encoding="utf-8"))["animations"]
+        anims = json.load(open(os.path.join(A, "geckolib", "animations", "entity", f"{name}.animation.json"), encoding="utf-8"))["animations"]
         for an in ANIMS[name]:
             if an not in anims:
                 problems.append(f"{name}: no animation {an}")
@@ -767,7 +767,7 @@ def preview(out):
             [("knabbelvlindertje", f"knabbelvlindertje_{k}") for k in VLINDER] + [("glimguhtje", "glimguhtje"), ("lieveheersbeestje", "lieveheersbeestje")]
     tiles = []
     for model, tex in shots:
-        q = wr.geo_quads(os.path.join(A, "geo", "entity", f"{model}.geo.json"), f"guhs:entity/{tex}")
+        q = wr.geo_quads(os.path.join(A, "geckolib", "models", "entity", f"{model}.geo.json"), f"guhs:entity/{tex}")
         front = wr.render(q, 20, -20, 256, margin=0.06)
         side = wr.render(q, 60, -25, 256, margin=0.06)
         tile = Image.new("RGBA", (512, 256), (120, 170, 210, 255))

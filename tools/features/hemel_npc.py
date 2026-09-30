@@ -3,7 +3,7 @@
 
 The sitting guh, but as soft as a cloud: pale cloud-white fur with a sky-blue shimmer, a little cloud puff between its ears,
 a tiny golden halo above it, a fluffy cloud collar, and its golden shepherd's crook (herdersstaf) standing next to it.
-Geo: assets/guhs/geo/entity/guh_npc_wolkenhoeder.geo.json (registered in SittingGuhRenderers.NPC_MODELEN by HemelClient),
+Geo: assets/guhs/geckolib/models/entity/guh_npc_wolkenhoeder.geo.json (registered in SittingGuhRenderers.NPC_MODELEN by HemelClient),
 texture: textures/entity/npc_wolkenhoeder.png. Extra bones sample 8x8 swatches in free parts of the UV sheet
 (knuffeldal_npcs helpers).
 """

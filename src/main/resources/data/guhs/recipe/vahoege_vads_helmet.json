@@ -6,12 +6,9 @@
     "V V"
   ],
   "key": {
-    "V": {
-      "item": "guhs:vahoege_vads_ingot"
-    }
+    "V": "guhs:vahoege_vads_ingot"
   },
   "result": {
-    "id": "guhs:vahoege_vads_helmet",
-    "count": 1
+    "id": "guhs:vahoege_vads_helmet"
   }
 }

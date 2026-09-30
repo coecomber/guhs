@@ -1,50 +1,14 @@
 {
-  "type": "minecraft:random_patch",
+  "type": "minecraft:simple_block",
   "config": {
-    "tries": 28,
-    "xz_spread": 5,
-    "y_spread": 2,
-    "feature": {
-      "feature": {
-        "type": "minecraft:simple_block",
-        "config": {
-          "to_place": {
-            "type": "minecraft:simple_state_provider",
-            "state": {
-              "Name": "guhs:kaasriet",
-              "Properties": {
-                "half": "lower"
-              }
-            }
-          }
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "guhs:kaasriet",
+        "Properties": {
+          "half": "lower"
         }
-      },
-      "placement": [
-        {
-          "type": "minecraft:block_predicate_filter",
-          "predicate": {
-            "type": "minecraft:all_of",
-            "predicates": [
-              {
-                "type": "minecraft:matching_blocks",
-                "blocks": "minecraft:air"
-              },
-              {
-                "type": "minecraft:would_survive",
-                "state": {
-                  "Name": "guhs:kaasriet",
-                  "Properties": {
-                    "half": "lower"
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "guhs:buiten_gebouwen"
-        }
-      ]
+      }
     }
   }
 }

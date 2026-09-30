@@ -1,55 +1,11 @@
 {
-  "type": "minecraft:random_patch",
+  "type": "minecraft:simple_block",
   "config": {
-    "tries": 6,
-    "xz_spread": 2,
-    "y_spread": 0,
-    "feature": {
-      "feature": {
-        "type": "minecraft:simple_block",
-        "config": {
-          "to_place": {
-            "type": "minecraft:simple_state_provider",
-            "state": {
-              "Name": "guhs:borrelende_kaassaus"
-            }
-          }
-        }
-      },
-      "placement": [
-        {
-          "type": "minecraft:random_offset",
-          "xz_spread": 0,
-          "y_spread": -1
-        },
-        {
-          "type": "minecraft:block_predicate_filter",
-          "predicate": {
-            "type": "minecraft:all_of",
-            "predicates": [
-              {
-                "type": "minecraft:matching_blocks",
-                "blocks": [
-                  "guhs:modderig_kaasgras",
-                  "guhs:kaasmodder"
-                ]
-              },
-              {
-                "type": "minecraft:matching_blocks",
-                "offset": [
-                  0,
-                  1,
-                  0
-                ],
-                "blocks": "minecraft:air"
-              }
-            ]
-          }
-        },
-        {
-          "type": "guhs:buiten_gebouwen"
-        }
-      ]
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "guhs:borrelende_kaassaus"
+      }
     }
   }
 }

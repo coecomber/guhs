@@ -6,9 +6,7 @@
     "KK"
   ],
   "key": {
-    "K": {
-      "item": "guhs:kaaskorst"
-    }
+    "K": "guhs:kaaskorst"
   },
   "result": {
     "id": "guhs:kaaskorst_stenen",

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:guhwaii_palm_stam"
-    }
+    "guhs:guhwaii_palm_stam"
   ],
   "result": {
     "id": "guhs:guhwaii_palm_planken",

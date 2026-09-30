@@ -5,12 +5,8 @@
     "WFW"
   ],
   "key": {
-    "W": {
-      "item": "minecraft:black_wool"
-    },
-    "F": {
-      "item": "minecraft:feather"
-    }
+    "W": "minecraft:black_wool",
+    "F": "minecraft:feather"
   },
   "result": {
     "id": "guhs:black_kussen",

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:roze_guhbloem"
-    }
+    "guhs:roze_guhbloem"
   ],
   "result": {
     "id": "guhs:guhbloemzaadjes",

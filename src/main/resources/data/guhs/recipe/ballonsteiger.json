@@ -6,12 +6,8 @@
     "PPP"
   ],
   "key": {
-    "W": {
-      "tag": "minecraft:wool"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    }
+    "W": "#minecraft:wool",
+    "P": "#minecraft:planks"
   },
   "result": {
     "id": "guhs:ballonsteiger",

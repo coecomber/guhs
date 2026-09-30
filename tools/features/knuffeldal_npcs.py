@@ -71,11 +71,11 @@ def _paint(arr, swatch, colour, rng, var=8, pattern=None):
 
 
 def _load(h, name):
-    return json.load(open(os.path.join(h.A, "geo", "entity", name), encoding="utf-8"))
+    return json.load(open(os.path.join(h.A, "geckolib", "models", "entity", name), encoding="utf-8"))
 
 
 def _save_geo(h, name, geo_file):
-    h.w(os.path.join(h.A, "geo", "entity", name), geo_file)
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", name), geo_file)
 
 
 def burgemeester(h):

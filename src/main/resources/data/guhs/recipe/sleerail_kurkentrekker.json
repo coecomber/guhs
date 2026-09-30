@@ -7,21 +7,12 @@
     "ISI"
   ],
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "B": {
-      "item": "guhs:sleebouwersboek"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "I": "minecraft:iron_ingot",
+    "W": "minecraft:pink_wool",
+    "B": "guhs:sleebouwersboek",
+    "S": "minecraft:stick"
   },
   "result": {
-    "id": "guhs:sleerail_kurkentrekker",
-    "count": 1
+    "id": "guhs:sleerail_kurkentrekker"
   }
 }

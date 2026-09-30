@@ -88,13 +88,13 @@ def item_model(name, tex=None, parent="minecraft:item/generated"):
 
 def shaped(name, pattern, key, result, count=1):
     w(f"{D}/recipe/{name}.json", {"type": "minecraft:crafting_shaped", "category": "misc", "pattern": pattern,
-                                  "key": {k: ({"item": v} if not v.startswith("#") else {"tag": v[1:]}) for k, v in key.items()},
+                                  "key": dict(key),  # 1.21.2+: ingredients are plain "item" / "#tag" strings
                                   "result": {"id": result, "count": count}})
 
 
 def shapeless(name, ingredients, result, count=1):
     w(f"{D}/recipe/{name}.json", {"type": "minecraft:crafting_shapeless", "category": "misc",
-                                  "ingredients": [({"item": v} if not v.startswith("#") else {"tag": v[1:]}) for v in ingredients],
+                                  "ingredients": list(ingredients),
                                   "result": {"id": result, "count": count}})
 
 
@@ -442,6 +442,7 @@ def phase2_lang():
         lang(f"gui.guhs.guhdex.info.{v}", ien, inl)
     for key, en, nl in [
         ("key.categories.guhs", "Guhs", "Guhs"),
+        ("key.category.guhs.guhs", "Guhs", "Guhs"),  # 1.1.0 (26.1): KeyMapping.Category guhs:guhs
         ("key.guhs.maag", "Guh stomach (there and back)", "Guhmaag (heen en terug)"),
         # stomach
         ("gui.guhs.maag.locked", "You don't have a guh stomach yet... (Mother Vadsig's quest)",
@@ -763,8 +764,8 @@ def sled_model():
         "description": {"identifier": "geometry.guh_slee", "texture_width": 64, "texture_height": 64,
                         "visible_bounds_width": 3, "visible_bounds_height": 2, "visible_bounds_offset": [0, 0.5, 0]},
         "bones": [{"name": "sled", "pivot": [0, 0, 0], "cubes": cubes}]}]}
-    w(f"{A}/geo/entity/guh_slee.geo.json", geo)
-    w(f"{A}/animations/entity/guh_slee.animation.json", {"format_version": "1.8.0", "animations": {}})
+    w(f"{A}/geckolib/models/entity/guh_slee.geo.json", geo)
+    w(f"{A}/geckolib/animations/entity/guh_slee.animation.json", {"format_version": "1.8.0", "animations": {}})
     swatch_texture(("entity", "guh_slee.png"), SWATCH, seed=3, var=8)
 
 
@@ -988,8 +989,8 @@ def guh_vis_model():
                 {"origin": [1.5, 5, -3.5], "size": [1, 1, 1], "uv": {f: uv(0) for f in ("north", "south", "east", "west", "up", "down")}}]},
             {"name": "tail", "parent": "body", "pivot": [0, 2.5, 5], "cubes": [
                 {"origin": [0, 0, 5], "size": [0, 5, 4], "uv": fin}]}]}]}
-    w(f"{A}/geo/entity/guh_vis.geo.json", geo)
-    w(f"{A}/animations/entity/guh_vis.animation.json", {"format_version": "1.8.0", "animations": {
+    w(f"{A}/geckolib/models/entity/guh_vis.geo.json", geo)
+    w(f"{A}/geckolib/animations/entity/guh_vis.animation.json", {"format_version": "1.8.0", "animations": {
         "animation.guh_vis.swim": {"loop": True, "animation_length": 0.6, "bones": {
             "tail": {"rotation": {"0.0": [0, 0, 0], "0.15": [0, 25, 0], "0.3": [0, 0, 0], "0.45": [0, -25, 0], "0.6": [0, 0, 0]}},
             "body": {"rotation": {"0.0": [0, 0, 0], "0.15": [0, -4, 0], "0.3": [0, 0, 0], "0.45": [0, 4, 0], "0.6": [0, 0, 0]}}}}}})
@@ -1253,8 +1254,8 @@ def guh_bee_model():
                 {"origin": [1.5, 9, -2], "size": [7, 0, 5], "uv": wing}]},
             {"name": "wing_right", "parent": "body", "pivot": [-1.5, 9, -2], "cubes": [
                 {"origin": [-8.5, 9, -2], "size": [7, 0, 5], "uv": wing}]}]}]}
-    w(f"{A}/geo/entity/guh_bee.geo.json", geo)
-    w(f"{A}/animations/entity/guh_bee.animation.json", {"format_version": "1.8.0", "animations": {
+    w(f"{A}/geckolib/models/entity/guh_bee.geo.json", geo)
+    w(f"{A}/geckolib/animations/entity/guh_bee.animation.json", {"format_version": "1.8.0", "animations": {
         "animation.guh_bee.fly": {"loop": True, "animation_length": 0.2, "bones": {
             "wing_left": {"rotation": {"0.0": [0, 0, -15], "0.1": [0, 0, 35], "0.2": [0, 0, -15]}},
             "wing_right": {"rotation": {"0.0": [0, 0, 15], "0.1": [0, 0, -35], "0.2": [0, 0, 15]}},
@@ -2380,7 +2381,7 @@ def kermis():
 
 def sled_knopjes():
     """Adds the dashboard (a 'knopjes' bone) to the sled model, a green swatch, and the blink animation."""
-    path = f"{A}/geo/entity/guh_slee.geo.json"
+    path = f"{A}/geckolib/models/entity/guh_slee.geo.json"
     geo = json.load(open(path, encoding="utf-8"))
     bones = geo["minecraft:geometry"][0]["bones"]
     bones[:] = [b for b in bones if b["name"] not in ("dashboard", "knopjes")]
@@ -2389,7 +2390,7 @@ def sled_knopjes():
     bones.append({"name": "knopjes", "parent": "dashboard", "pivot": [0, 6, -9], "cubes": [
         geo_cube([-3.5, 6, -9], [2, 1, 1], 10), geo_cube([-1, 6, -9], [2, 1, 1], 4), geo_cube([1.5, 6, -9], [2, 1, 1], 6)]})
     w(path, geo)
-    w(f"{A}/animations/entity/guh_slee.animation.json", {"format_version": "1.8.0", "animations": {
+    w(f"{A}/geckolib/animations/entity/guh_slee.animation.json", {"format_version": "1.8.0", "animations": {
         "animation.guh_slee.knopjes": {"loop": True, "animation_length": 1.2, "bones": {
             "knopjes": {"scale": {"0.0": [1, 1, 1], "0.3": [1.25, 1.8, 1.25], "0.6": [1, 1, 1], "1.2": [1, 1, 1]},
                         "position": {"0.0": [0, 0, 0], "0.3": [0, 0.4, 0], "0.6": [0, 0, 0]}}}}}})
@@ -2691,7 +2692,7 @@ def reisguh_conducteur(src):
     animation is done in code (ReisguhFluitClient: the fluitje goes up to his mouth, a paw waves, "tuut!")."""
     from features import spiesburcht_modellen as sm
     tex = recolour(src, hue=0.55, sat=0.85, val=1.05, only=pinkish)        # the Reisguh: sky blue (as before)
-    model = json.load(open(os.path.join(A, "geo", "entity", "guh_sitting.geo.json"), encoding="utf-8"))
+    model = json.load(open(os.path.join(A, "geckolib", "models", "entity", "guh_sitting.geo.json"), encoding="utf-8"))
     geo = model["minecraft:geometry"][0]
     sheet = sm.Sheet(tex, geo["bones"])
     rng = np.random.default_rng(2808)
@@ -2738,7 +2739,7 @@ def reisguh_conducteur(src):
         cube(sheet, "koord", [-0.25, 11.1, -5.6], [0.5, 0.5, 0.5])]}
     geo["description"]["identifier"] = f"geometry.{REIS_MODEL}"
     geo["bones"] = [b for b in geo["bones"] if not b["name"].startswith("reis_")] + [pet, koord, fluit]
-    w(os.path.join(A, "geo", "entity", f"{REIS_MODEL}.geo.json"), model)
+    w(os.path.join(A, "geckolib", "models", "entity", f"{REIS_MODEL}.geo.json"), model)
     img = Image.fromarray(np.clip(sheet.img, 0, 255).astype(np.uint8))
     save(img, "entity", "npc_reisguh.png")
     reisguh_tuut()

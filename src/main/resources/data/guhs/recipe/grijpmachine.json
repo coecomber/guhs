@@ -7,21 +7,12 @@
     "PRP"
   ],
   "key": {
-    "G": {
-      "item": "minecraft:glass"
-    },
-    "K": {
-      "item": "minecraft:chain"
-    },
-    "P": {
-      "item": "minecraft:pink_concrete"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    }
+    "G": "minecraft:glass",
+    "K": "minecraft:iron_chain",
+    "P": "minecraft:pink_concrete",
+    "R": "minecraft:redstone"
   },
   "result": {
-    "id": "guhs:grijpmachine",
-    "count": 1
+    "id": "guhs:grijpmachine"
   }
 }

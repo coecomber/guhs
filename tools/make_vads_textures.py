@@ -82,7 +82,7 @@ save(Image.fromarray(pa, "RGBA"), "item", "vahoege_vads_paxel.png")
 # armour as worn (the 3D layers)
 for layer in (1, 2):
     save(recolour(vanilla(f"models/armor/diamond_layer_{layer}"), PINK, 1.1, is_diamond),
-         "models", "armor", f"vahoege_vads_layer_{layer}.png")
+         "entity", "equipment", "humanoid" if layer == 1 else "humanoid_leggings", "vahoege_vads.png")  # 26.1 equipment asset
 
 # the ore: lilac "compressed" stone with glossy pink/magenta vads crystals
 rng = np.random.default_rng(42)

@@ -7,12 +7,8 @@
     " I "
   ],
   "key": {
-    "I": {
-      "item": "minecraft:pink_dye"
-    },
-    "T": {
-      "item": "minecraft:lantern"
-    }
+    "I": "minecraft:pink_dye",
+    "T": "minecraft:lantern"
   },
   "result": {
     "id": "guhs:doolhof_lantaarn",

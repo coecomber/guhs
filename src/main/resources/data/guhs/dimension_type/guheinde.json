@@ -1,24 +1,47 @@
 {
-  "ultrawarm": false,
-  "natural": false,
-  "piglin_safe": false,
-  "respawn_anchor_works": false,
-  "bed_works": false,
-  "has_raids": false,
+  "attributes": {
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.game",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:gameplay/bed_rule": {
+      "can_set_spawn": "never",
+      "can_sleep": "never",
+      "explodes": true
+    },
+    "minecraft:gameplay/can_start_raid": false,
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:visual/ambient_light_color": "#3f473f",
+    "minecraft:visual/fog_color": "#3d1f33",
+    "minecraft:visual/sky_color": "#000000",
+    "minecraft:visual/sky_light_color": "#ac60cd",
+    "minecraft:visual/sky_light_factor": 0.0,
+    "neoforge:custom_skybox": "guhs:guheinde"
+  },
   "has_skylight": false,
   "has_ceiling": false,
+  "has_ender_dragon_fight": false,
   "coordinate_scale": 1.0,
   "ambient_light": 0.0,
-  "fixed_time": 6000,
-  "logical_height": 256,
   "min_y": 0,
   "height": 256,
+  "logical_height": 256,
   "infiniburn": "#minecraft:infiniburn_end",
-  "effects": "guhs:guheinde",
   "monster_spawn_light_level": {
     "type": "minecraft:uniform",
     "min_inclusive": 0,
     "max_inclusive": 7
   },
-  "monster_spawn_block_light_limit": 0
+  "monster_spawn_block_light_limit": 0,
+  "skybox": "end",
+  "has_fixed_time": true,
+  "timelines": "#minecraft:universal"
 }

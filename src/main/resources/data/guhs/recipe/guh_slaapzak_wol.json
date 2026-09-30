@@ -6,15 +6,10 @@
     "PPP"
   ],
   "key": {
-    "P": {
-      "tag": "minecraft:wool"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    }
+    "P": "#minecraft:wool",
+    "K": "guhs:kaas_knabbels"
   },
   "result": {
-    "id": "guhs:guh_slaapzak",
-    "count": 1
+    "id": "guhs:guh_slaapzak"
   }
 }

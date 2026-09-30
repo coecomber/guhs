@@ -6,15 +6,10 @@
     "SDS"
   ],
   "key": {
-    "S": {
-      "item": "guhs:knuffelsteen"
-    },
-    "D": {
-      "item": "minecraft:dirt"
-    }
+    "S": "guhs:knuffelsteen",
+    "D": "minecraft:dirt"
   },
   "result": {
-    "id": "guhs:seizoensbloembak",
-    "count": 1
+    "id": "guhs:seizoensbloembak"
   }
 }

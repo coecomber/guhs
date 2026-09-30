@@ -6,15 +6,10 @@
     "P"
   ],
   "key": {
-    "S": {
-      "item": "guhs:guh_slimeball"
-    },
-    "P": {
-      "item": "minecraft:piston"
-    }
+    "S": "guhs:guh_slimeball",
+    "P": "minecraft:piston"
   },
   "result": {
-    "id": "minecraft:sticky_piston",
-    "count": 1
+    "id": "minecraft:sticky_piston"
   }
 }

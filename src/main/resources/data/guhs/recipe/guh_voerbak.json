@@ -6,15 +6,10 @@
     "PPP"
   ],
   "key": {
-    "P": {
-      "tag": "minecraft:planks"
-    },
-    "D": {
-      "item": "minecraft:pink_dye"
-    }
+    "P": "#minecraft:planks",
+    "D": "minecraft:pink_dye"
   },
   "result": {
-    "id": "guhs:guh_voerbak",
-    "count": 1
+    "id": "guhs:guh_voerbak"
   }
 }

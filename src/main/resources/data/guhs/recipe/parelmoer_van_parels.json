@@ -6,9 +6,7 @@
     "PP"
   ],
   "key": {
-    "P": {
-      "item": "guhs:parel"
-    }
+    "P": "guhs:parel"
   },
   "result": {
     "id": "guhs:parelmoer",

@@ -6,15 +6,10 @@
     "S "
   ],
   "key": {
-    "W": {
-      "tag": "minecraft:wool"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "W": "#minecraft:wool",
+    "S": "minecraft:stick"
   },
   "result": {
-    "id": "guhs:guhborstel",
-    "count": 1
+    "id": "guhs:guhborstel"
   }
 }

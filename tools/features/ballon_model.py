@@ -182,8 +182,8 @@ def textures(rng_seed=28701):
 
 
 def build(h):
-    h.w(f"{h.A}/geo/entity/guh_luchtballon.geo.json", geo())
-    h.w(f"{h.A}/animations/entity/guh_luchtballon.animation.json", animation())
+    h.w(f"{h.A}/geckolib/models/entity/guh_luchtballon.geo.json", geo())
+    h.w(f"{h.A}/geckolib/animations/entity/guh_luchtballon.animation.json", animation())
     for kleur, img in textures().items():
         h.save(img, "entity", f"guh_luchtballon_{kleur}.png")
     # GeckoLib's DefaultedEntityGeoModel also looks for textures/entity/guh_luchtballon.png (the renderer picks the colour)

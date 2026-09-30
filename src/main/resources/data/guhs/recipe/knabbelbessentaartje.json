@@ -2,24 +2,13 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:knabbelbessen"
-    },
-    {
-      "item": "guhs:knabbelbessen"
-    },
-    {
-      "item": "guhs:knabbelbessen"
-    },
-    {
-      "item": "minecraft:sugar"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    }
+    "guhs:knabbelbessen",
+    "guhs:knabbelbessen",
+    "guhs:knabbelbessen",
+    "minecraft:sugar",
+    "guhs:kaas_knabbels"
   ],
   "result": {
-    "id": "guhs:knabbelbessentaartje",
-    "count": 1
+    "id": "guhs:knabbelbessentaartje"
   }
 }

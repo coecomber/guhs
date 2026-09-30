@@ -471,24 +471,24 @@ def build(h):
     A = h.A
     for name, maker, anims, seed in DIEREN:
         atlas = Atlas(seed)
-        h.w(f"{A}/geo/entity/{name}.geo.json", maker(atlas))
-        h.w(f"{A}/animations/entity/{name}.animation.json", anims())
+        h.w(f"{A}/geckolib/models/entity/{name}.geo.json", maker(atlas))
+        h.w(f"{A}/geckolib/animations/entity/{name}.animation.json", anims())
         h.save(Image.fromarray(atlas.img), "entity", f"{name}.png")
     for i, kleur in enumerate(KONIJN_KLEUREN):
         atlas = Atlas(2030152)
         model = konijntje(atlas, kleur)
         if i == 0:
-            h.w(f"{A}/geo/entity/guh_konijntje.geo.json", model)
+            h.w(f"{A}/geckolib/models/entity/guh_konijntje.geo.json", model)
             h.save(Image.fromarray(atlas.img), "entity", "guh_konijntje.png")      # (the default texture: roze)
         h.save(Image.fromarray(atlas.img), "entity", f"guh_konijntje_{kleur}.png")
-    h.w(f"{A}/animations/entity/guh_konijntje.animation.json", konijntje_anims())
+    h.w(f"{A}/geckolib/animations/entity/guh_konijntje.animation.json", konijntje_anims())
 
 
 def check(h):
     import json
     problems = []
     for name, wanted in NODIG.items():
-        g = json.load(open(f"{h.A}/geo/entity/{name}.geo.json", encoding="utf-8"))["minecraft:geometry"][0]
+        g = json.load(open(f"{h.A}/geckolib/models/entity/{name}.geo.json", encoding="utf-8"))["minecraft:geometry"][0]
         names = {b["name"] for b in g["bones"]}
         for b in g["bones"]:
             if b.get("parent") and b["parent"] not in names:
@@ -497,7 +497,7 @@ def check(h):
                 problems.append(f"{name}: bone name {b['name']} clashes with the guh variant bone prefixes")
         if "head" not in names:
             problems.append(f"{name}: no head bone")
-        anims = json.load(open(f"{h.A}/animations/entity/{name}.animation.json", encoding="utf-8"))["animations"]
+        anims = json.load(open(f"{h.A}/geckolib/animations/entity/{name}.animation.json", encoding="utf-8"))["animations"]
         for an in wanted:
             if an not in anims:
                 problems.append(f"{name}: no animation {an}")
@@ -513,7 +513,7 @@ def preview(out):
     sys.path.insert(0, "tools")
     import wiki_renders as wr
     os.makedirs(out, exist_ok=True)
-    geo_dir = os.path.join("src", "main", "resources", "assets", "guhs", "geo", "entity")
+    geo_dir = os.path.join("src", "main", "resources", "assets", "guhs", "geckolib", "models", "entity")
     tiles = []
     for name, tex in [("pluisegeltje", "pluisegeltje"), ("guh_konijntje", "guh_konijntje_roze"), ("guh_konijntje", "guh_konijntje_wit"),
                       ("guh_konijntje", "guh_konijntje_choco"), ("guh_konijntje", "guh_konijntje_grijs"),

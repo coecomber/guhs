@@ -7,12 +7,9 @@
     " G "
   ],
   "key": {
-    "G": {
-      "item": "guhs:guhbloemetje"
-    }
+    "G": "guhs:guhbloemetje"
   },
   "result": {
-    "id": "guhs:feestboeket",
-    "count": 1
+    "id": "guhs:feestboeket"
   }
 }

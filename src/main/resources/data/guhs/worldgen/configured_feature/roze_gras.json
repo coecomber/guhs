@@ -1,47 +1,14 @@
 {
-  "type": "minecraft:random_patch",
+  "type": "minecraft:simple_block",
   "config": {
-    "tries": 32,
-    "xz_spread": 7,
-    "y_spread": 2,
-    "feature": {
-      "feature": {
-        "type": "minecraft:simple_block",
-        "config": {
-          "to_place": {
-            "type": "minecraft:weighted_state_provider",
-            "entries": [
-              {
-                "weight": 1,
-                "data": {
-                  "Name": "guhs:roze_gras"
-                }
-              }
-            ]
-          }
-        }
-      },
-      "placement": [
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
         {
-          "type": "minecraft:block_predicate_filter",
-          "predicate": {
-            "type": "minecraft:all_of",
-            "predicates": [
-              {
-                "type": "minecraft:matching_blocks",
-                "blocks": "minecraft:air"
-              },
-              {
-                "type": "minecraft:would_survive",
-                "state": {
-                  "Name": "guhs:roze_gras"
-                }
-              }
-            ]
+          "weight": 1,
+          "data": {
+            "Name": "guhs:roze_gras"
           }
-        },
-        {
-          "type": "guhs:buiten_gebouwen"
         }
       ]
     }

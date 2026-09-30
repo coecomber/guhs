@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:kaasbrok"
-    }
+    "guhs:kaasbrok"
   ],
   "result": {
     "id": "guhs:kaas_knabbels",

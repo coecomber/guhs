@@ -6,15 +6,10 @@
     "PPP"
   ],
   "key": {
-    "P": {
-      "tag": "minecraft:planks"
-    },
-    "D": {
-      "item": "minecraft:dirt"
-    }
+    "P": "#minecraft:planks",
+    "D": "minecraft:dirt"
   },
   "result": {
-    "id": "guhs:guh_moestuinbak",
-    "count": 1
+    "id": "guhs:guh_moestuinbak"
   }
 }

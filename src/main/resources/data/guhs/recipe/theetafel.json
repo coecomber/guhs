@@ -7,15 +7,10 @@
     " P "
   ],
   "key": {
-    "C": {
-      "item": "minecraft:white_carpet"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    }
+    "C": "minecraft:white_carpet",
+    "P": "#minecraft:planks"
   },
   "result": {
-    "id": "guhs:theetafel",
-    "count": 1
+    "id": "guhs:theetafel"
   }
 }

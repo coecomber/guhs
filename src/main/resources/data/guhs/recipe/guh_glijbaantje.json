@@ -7,21 +7,12 @@
     "L S"
   ],
   "key": {
-    "L": {
-      "item": "minecraft:ladder"
-    },
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    },
-    "S": {
-      "tag": "minecraft:wooden_slabs"
-    }
+    "L": "minecraft:ladder",
+    "W": "minecraft:pink_wool",
+    "P": "#minecraft:planks",
+    "S": "#minecraft:wooden_slabs"
   },
   "result": {
-    "id": "guhs:guh_glijbaantje",
-    "count": 1
+    "id": "guhs:guh_glijbaantje"
   }
 }

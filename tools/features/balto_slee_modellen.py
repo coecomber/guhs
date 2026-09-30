@@ -150,10 +150,10 @@ def hondje():
 
 
 def build(h):
-    h.w(os.path.join(h.A, "geo", "entity", "baltoslee_slee.geo.json"), slee())
-    h.w(os.path.join(h.A, "animations", "entity", "baltoslee_slee.animation.json"), {"format_version": "1.8.0", "animations": {}})
-    h.w(os.path.join(h.A, "geo", "entity", "baltoslee_sledehondje.geo.json"), hondje())
-    h.w(os.path.join(h.A, "animations", "entity", "baltoslee_sledehondje.animation.json"), {"format_version": "1.8.0", "animations": {}})
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "baltoslee_slee.geo.json"), slee())
+    h.w(os.path.join(h.A, "geckolib", "animations", "entity", "baltoslee_slee.animation.json"), {"format_version": "1.8.0", "animations": {}})
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "baltoslee_sledehondje.geo.json"), hondje())
+    h.w(os.path.join(h.A, "geckolib", "animations", "entity", "baltoslee_sledehondje.animation.json"), {"format_version": "1.8.0", "animations": {}})
     deco(h)
 
 

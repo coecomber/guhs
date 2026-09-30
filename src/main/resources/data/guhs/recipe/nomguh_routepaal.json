@@ -7,15 +7,9 @@
     "S"
   ],
   "key": {
-    "R": {
-      "item": "minecraft:glowstone_dust"
-    },
-    "W": {
-      "item": "minecraft:red_wool"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "R": "minecraft:glowstone_dust",
+    "W": "minecraft:red_wool",
+    "S": "minecraft:stick"
   },
   "result": {
     "id": "guhs:nomguh_routepaal",

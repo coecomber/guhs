@@ -6,15 +6,10 @@
     "PP"
   ],
   "key": {
-    "V": {
-      "item": "guhs:vahoege_vads"
-    },
-    "P": {
-      "item": "minecraft:pink_terracotta"
-    }
+    "V": "guhs:vahoege_vads",
+    "P": "minecraft:pink_terracotta"
   },
   "result": {
-    "id": "guhs:vadsaambeeld",
-    "count": 1
+    "id": "guhs:vadsaambeeld"
   }
 }

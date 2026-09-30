@@ -6,15 +6,10 @@
     "PWP"
   ],
   "key": {
-    "P": {
-      "tag": "guhs:knus/pluiswol"
-    },
-    "W": {
-      "item": "minecraft:pink_wool"
-    }
+    "P": "#guhs:knus/pluiswol",
+    "W": "minecraft:pink_wool"
   },
   "result": {
-    "id": "guhs:knuffeldekentje",
-    "count": 1
+    "id": "guhs:knuffeldekentje"
   }
 }

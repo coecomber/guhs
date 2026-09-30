@@ -6,9 +6,7 @@
     "W W"
   ],
   "key": {
-    "W": {
-      "item": "minecraft:pink_wool"
-    }
+    "W": "minecraft:pink_wool"
   },
   "result": {
     "id": "guhs:pluizige_tunnel",

@@ -7,9 +7,7 @@
     "DDD"
   ],
   "key": {
-    "D": {
-      "item": "guhs:nomguh_sneeuwdak"
-    }
+    "D": "guhs:nomguh_sneeuwdak"
   },
   "result": {
     "id": "guhs:nomguh_sneeuwdak_trap",

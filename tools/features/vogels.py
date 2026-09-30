@@ -346,7 +346,7 @@ def ftb(fq):
 def selfcheck(h):
     p = []
     for b in BIRDS:
-        for f in (f"{h.A}/geo/entity/{b}.geo.json", f"{h.A}/animations/entity/{b}.animation.json",
+        for f in (f"{h.A}/geckolib/models/entity/{b}.geo.json", f"{h.A}/geckolib/animations/entity/{b}.animation.json",
                   os.path.join(h.TEX, "entity", f"{b}.png"), os.path.join(h.TEX, "entity", f"{b}_dicht.png"),
                   f"{h.D}/neoforge/biome_modifier/vogels_{b}.json", f"{h.D}/loot_table/entities/{b}.json"):
             if not os.path.exists(f):

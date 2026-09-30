@@ -1,6 +1,6 @@
 """
 One-off import of Lieke's improved guh model ("Guhs Lieke" folder) into the mod:
-  - copies her model + texture over assets/guhs/geo/entity/guh.geo.json and textures/entity/guh.png
+  - copies her model + texture over assets/guhs/geckolib/models/entity/guh.geo.json and textures/entity/guh.png
   - adds the `saddle` bone the game needs (hidden unless the guh wears a saddle) and paints the leather into a
     free part of her texture
   - writes her Blockbench project to blockbench/guh.bbmodel (with the saddle too), pointing at the game texture,
@@ -111,7 +111,7 @@ for tier, cubes in armor_bones.items():
     geo["bones"].append({"name": f"armor_{tier}", "parent": "head", "pivot": [0, 6, -2], "cubes": cubes[:2]})
     geo["bones"].append({"name": f"armor_{tier}_body", "parent": "body", "pivot": [0, 6, 6], "cubes": cubes[2:]})
 
-with open(os.path.join(ASSETS, "geo", "entity", "guh.geo.json"), "w", encoding="utf-8") as f:
+with open(os.path.join(ASSETS, "geckolib", "models", "entity", "guh.geo.json"), "w", encoding="utf-8") as f:
     json.dump(geo_file, f, indent=2)
 texture.save(os.path.join(ASSETS, "textures", "entity", "guh.png"))
 

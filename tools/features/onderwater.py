@@ -1362,8 +1362,8 @@ def armor_texture(h):
                 px[u + x, v + y] = light + (255,)
             for (x, y) in ((1, 1), (6, 1)):
                 px[u + x, v + y] = (246, 150, 190, 255)        # guh ears painted on
-    h.save(img, "models", "armor", "duikhelm_layer_1.png")
-    h.save(Image.new("RGBA", (64, 32), (0, 0, 0, 0)), "models", "armor", "duikhelm_layer_2.png")
+    h.save(img, "entity", "equipment", "humanoid", "duikhelm.png")  # 26.1 equipment asset guhs:duikhelm
+    h.save(Image.new("RGBA", (64, 32), (0, 0, 0, 0)), "entity", "equipment", "humanoid_leggings", "duikhelm.png")
 
 
 # =====================================================================================================================
@@ -1518,7 +1518,7 @@ def build(h):
     for key, (en, nl) in LANG.items():
         h.lang(key, en, nl)
     # the Zeemeerguh's fish tail swishes (GeckoLib animation, played by GuhEntity's "zeemeer" controller)
-    anim_path = os.path.join(A, "animations", "entity", "guh.animation.json")
+    anim_path = os.path.join(A, "geckolib", "animations", "entity", "guh.animation.json")
     anim = json.load(open(anim_path, encoding="utf-8"))
     anim["animations"]["animation.guh.zeemeer_swim"] = {"loop": True, "animation_length": 1.2, "bones": {
         "zeemeer_staart": {"rotation": {"0.0": [0, 14, 0], "0.3": [6, 0, 0], "0.6": [0, -14, 0], "0.9": [-6, 0, 0], "1.2": [0, 14, 0]}},
@@ -1544,7 +1544,7 @@ def npc_tail(h, img):
         px = v.SWATCH * 4
         a[w_ * 4:w_ * 4 + px, u * 4:u * 4 + px, :3] = paint().astype(np.uint8)
         a[w_ * 4:w_ * 4 + px, u * 4:u * 4 + px, 3] = 255
-    geo_path = os.path.join(h.A, "geo", "entity", "guh_sitting.geo.json")
+    geo_path = os.path.join(h.A, "geckolib", "models", "entity", "guh_sitting.geo.json")
     geo = json.load(open(geo_path, encoding="utf-8"))
     model = geo["minecraft:geometry"][0]
     model["description"]["identifier"] = "geometry.guh_npc_zeemeerguh"
@@ -1575,7 +1575,7 @@ def npc_tail(h, img):
             cube([-0.5, 5, 3.4], [1, 5, 2.4], NPC_FIN_UV), cube([-0.5, 7, 5.8], [1, 2.4, 1.2], NPC_FIN_UV)]},
     ]
     model["bones"] = bones
-    h.w(os.path.join(h.A, "geo", "entity", "guh_npc_zeemeerguh.geo.json"), geo)
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "guh_npc_zeemeerguh.geo.json"), geo)
     return Image.fromarray(a)
 
 
@@ -1645,7 +1645,7 @@ def selfcheck_assets(h):
     for i in ("parel", "duikhelm"):
         if not os.path.exists(f"{A}/models/item/{i}.json") or not os.path.exists(f"{A}/textures/item/{i}.png"):
             missing.append(f"item {i}")
-    if not os.path.exists(f"{A}/textures/models/armor/duikhelm_layer_1.png"):
+    if not os.path.exists(f"{A}/textures/entity/equipment/humanoid/duikhelm.png"):
         missing.append("armor texture")
     if missing:
         raise SystemExit(f"onderwater assets missing: {missing}")

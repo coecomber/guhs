@@ -7,12 +7,8 @@
     "SSS"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:smooth_sandstone"
-    },
-    "P": {
-      "item": "minecraft:pink_dye"
-    }
+    "S": "minecraft:smooth_sandstone",
+    "P": "minecraft:pink_dye"
   },
   "result": {
     "id": "guhs:knuffelsteen",

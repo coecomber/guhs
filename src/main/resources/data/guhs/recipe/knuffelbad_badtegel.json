@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:white_concrete"
-    },
-    {
-      "item": "minecraft:white_concrete"
-    },
-    {
-      "item": "minecraft:white_concrete"
-    },
-    {
-      "item": "minecraft:white_concrete"
-    },
-    {
-      "item": "minecraft:light_blue_dye"
-    }
+    "minecraft:white_concrete",
+    "minecraft:white_concrete",
+    "minecraft:white_concrete",
+    "minecraft:white_concrete",
+    "minecraft:light_blue_dye"
   ],
   "result": {
     "id": "guhs:knuffelbad_badtegel",

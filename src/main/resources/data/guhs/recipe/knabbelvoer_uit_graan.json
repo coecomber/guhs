@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "tag": "guhs:knus/knabbelgraan"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    }
+    "#guhs:knus/knabbelgraan",
+    "guhs:kaas_knabbels"
   ],
   "result": {
     "id": "guhs:knabbelvoer",

@@ -6,15 +6,10 @@
     "TTT"
   ],
   "key": {
-    "T": {
-      "item": "minecraft:white_terracotta"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    }
+    "T": "minecraft:white_terracotta",
+    "K": "guhs:kaas_knabbels"
   },
   "result": {
-    "id": "guhs:theepotje",
-    "count": 1
+    "id": "guhs:theepotje"
   }
 }

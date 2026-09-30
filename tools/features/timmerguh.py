@@ -347,7 +347,7 @@ def selfcheck(h):
     A, D = h.A, h.D
     missing = []
     for p in ([f"{A}/blockstates/timmerguh_dakplek.json", f"{A}/models/item/timmerguh_bouwboekje.json",
-               f"{A}/models/item/timmerguh_dakpluisje.json", f"{A}/geo/entity/guh_npc_timmerguh.geo.json",
+               f"{A}/models/item/timmerguh_dakpluisje.json", f"{A}/geckolib/models/entity/guh_npc_timmerguh.geo.json",
                os.path.join(h.TEX, "entity", "npc_timmerguh.png"), f"{D}/worldgen/template_pool/knuffeldal_stadje/bouwplaats.json"]
               + [os.path.join(h.TEX, "block", f"timmerguh_dakplek_{d}.png") for d in DEEL_KLEUR]
               + [os.path.join(h.TEX, "item", f"timmerguh_{i}.png") for i in ("bouwboekje", "dakpluisje")]):

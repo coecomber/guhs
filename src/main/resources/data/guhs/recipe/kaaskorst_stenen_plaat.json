@@ -5,9 +5,7 @@
     "KKK"
   ],
   "key": {
-    "K": {
-      "item": "guhs:kaaskorst_stenen"
-    }
+    "K": "guhs:kaaskorst_stenen"
   },
   "result": {
     "id": "guhs:kaaskorst_stenen_plaat",

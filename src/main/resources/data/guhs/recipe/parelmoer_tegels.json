@@ -6,9 +6,7 @@
     "PP"
   ],
   "key": {
-    "P": {
-      "item": "guhs:parelmoer"
-    }
+    "P": "guhs:parelmoer"
   },
   "result": {
     "id": "guhs:parelmoer_tegels",

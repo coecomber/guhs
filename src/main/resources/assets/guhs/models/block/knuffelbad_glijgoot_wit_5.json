@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/knuffelbad_glijgoot_wit_zijkant",
     "top": "guhs:block/knuffelbad_glijgoot_wit",

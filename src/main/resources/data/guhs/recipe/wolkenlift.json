@@ -7,15 +7,9 @@
     "WWW"
   ],
   "key": {
-    "W": {
-      "item": "minecraft:white_wool"
-    },
-    "F": {
-      "item": "minecraft:feather"
-    },
-    "K": {
-      "item": "guhs:guh_kristal"
-    }
+    "W": "minecraft:white_wool",
+    "F": "minecraft:feather",
+    "K": "guhs:guh_kristal"
   },
   "result": {
     "id": "guhs:wolkenlift",

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:roze_hibiscus"
-    }
+    "guhs:roze_hibiscus"
   ],
   "result": {
     "id": "minecraft:pink_dye",

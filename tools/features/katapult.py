@@ -448,7 +448,7 @@ def build(h):
 
 def selfcheck(h):
     import os
-    missing = [f for f in ("blockstates/katapult_mika.json", "models/block/katapult_werper.json", "geo/entity/guh_npc_katapultguh.geo.json",
+    missing = [f for f in ("blockstates/katapult_mika.json", "models/block/katapult_werper.json", "geckolib/models/entity/guh_npc_katapultguh.geo.json",
                            "textures/entity/pluisbal.png", "textures/entity/npc_katapultguh.png", "textures/item/katapultster.png")
                if not os.path.exists(f"{h.A}/{f}")]
     for i in range(1, 13):

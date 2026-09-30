@@ -1,7 +1,9 @@
 {
   "parent": "minecraft:block/cross",
-  "render_type": "minecraft:translucent",
   "textures": {
-    "cross": "guhs:block/ijspegelguh_kristal"
+    "cross": {
+      "sprite": "guhs:block/ijspegelguh_kristal",
+      "force_translucent": true
+    }
   }
 }

@@ -7,24 +7,13 @@
     "PDP"
   ],
   "key": {
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    },
-    "D": {
-      "tag": "minecraft:wooden_doors"
-    },
-    "T": {
-      "item": "guhs:timmerguh_bouwboekje"
-    }
+    "W": "minecraft:pink_wool",
+    "K": "guhs:kaas_knabbels",
+    "P": "#minecraft:planks",
+    "D": "#minecraft:wooden_doors",
+    "T": "guhs:timmerguh_bouwboekje"
   },
   "result": {
-    "id": "guhs:guhhuisje_klein",
-    "count": 1
+    "id": "guhs:guhhuisje_klein"
   }
 }

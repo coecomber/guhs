@@ -1,0 +1,245 @@
+{
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:compass",
+    "target": "lodestone",
+    "scale": 32.0,
+    "entries": [
+      {
+        "threshold": 0.0,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_16"
+        }
+      },
+      {
+        "threshold": 0.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_17"
+        }
+      },
+      {
+        "threshold": 1.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_18"
+        }
+      },
+      {
+        "threshold": 2.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_19"
+        }
+      },
+      {
+        "threshold": 3.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_20"
+        }
+      },
+      {
+        "threshold": 4.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_21"
+        }
+      },
+      {
+        "threshold": 5.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_22"
+        }
+      },
+      {
+        "threshold": 6.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_23"
+        }
+      },
+      {
+        "threshold": 7.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_24"
+        }
+      },
+      {
+        "threshold": 8.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_25"
+        }
+      },
+      {
+        "threshold": 9.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_26"
+        }
+      },
+      {
+        "threshold": 10.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_27"
+        }
+      },
+      {
+        "threshold": 11.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_28"
+        }
+      },
+      {
+        "threshold": 12.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_29"
+        }
+      },
+      {
+        "threshold": 13.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_30"
+        }
+      },
+      {
+        "threshold": 14.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_31"
+        }
+      },
+      {
+        "threshold": 15.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_00"
+        }
+      },
+      {
+        "threshold": 16.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_01"
+        }
+      },
+      {
+        "threshold": 17.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_02"
+        }
+      },
+      {
+        "threshold": 18.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_03"
+        }
+      },
+      {
+        "threshold": 19.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_04"
+        }
+      },
+      {
+        "threshold": 20.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_05"
+        }
+      },
+      {
+        "threshold": 21.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_06"
+        }
+      },
+      {
+        "threshold": 22.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_07"
+        }
+      },
+      {
+        "threshold": 23.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_08"
+        }
+      },
+      {
+        "threshold": 24.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_09"
+        }
+      },
+      {
+        "threshold": 25.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_10"
+        }
+      },
+      {
+        "threshold": 26.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_11"
+        }
+      },
+      {
+        "threshold": 27.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_12"
+        }
+      },
+      {
+        "threshold": 28.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_13"
+        }
+      },
+      {
+        "threshold": 29.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_14"
+        }
+      },
+      {
+        "threshold": 30.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_15"
+        }
+      },
+      {
+        "threshold": 31.5,
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/koningskompas_16"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "guhs:item/koningskompas"
+    }
+  }
+}

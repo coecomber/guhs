@@ -6,12 +6,8 @@
     "WP"
   ],
   "key": {
-    "P": {
-      "item": "minecraft:pink_terracotta"
-    },
-    "W": {
-      "item": "minecraft:white_terracotta"
-    }
+    "P": "minecraft:pink_terracotta",
+    "W": "minecraft:white_terracotta"
   },
   "result": {
     "id": "guhs:knuffelklinkers",

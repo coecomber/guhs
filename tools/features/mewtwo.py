@@ -507,7 +507,7 @@ def selfcheck(h):
                     if isinstance(t, str) and t.startswith("guhs:") and not os.path.exists(f"{A}/textures/{t[5:]}.png"):
                         missing.append(f"texture {t} ({f})")
     for g in ("mew", "guh_npc_knabbelkloon"):
-        if not os.path.exists(f"{A}/geo/entity/{g}.geo.json"):
+        if not os.path.exists(f"{A}/geckolib/models/entity/{g}.geo.json"):
             missing.append(f"geo {g}")
     # every text key the Java code uses exists
     java = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "mewtwo")

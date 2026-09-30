@@ -2,21 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:stick"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    }
+    "minecraft:stick",
+    "guhs:kaas_knabbels",
+    "guhs:kaas_knabbels",
+    "guhs:kaas_knabbels"
   ],
   "result": {
-    "id": "guhs:kaasknabbelsate",
-    "count": 1
+    "id": "guhs:kaasknabbelsate"
   }
 }

@@ -107,10 +107,18 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.eerste_guh.0\"}",
-                "{\"translate\": \"book.guhs.bieb.eerste_guh.1\"}",
-                "{\"translate\": \"book.guhs.bieb.eerste_guh.2\"}",
-                "{\"translate\": \"book.guhs.bieb.eerste_guh.3\"}"
+                {
+                  "translate": "book.guhs.bieb.eerste_guh.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.eerste_guh.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.eerste_guh.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.eerste_guh.3"
+                }
               ]
             },
             {
@@ -163,11 +171,21 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.moeder_vadsig.0\"}",
-                "{\"translate\": \"book.guhs.bieb.moeder_vadsig.1\"}",
-                "{\"translate\": \"book.guhs.bieb.moeder_vadsig.2\"}",
-                "{\"translate\": \"book.guhs.bieb.moeder_vadsig.3\"}",
-                "{\"translate\": \"book.guhs.bieb.moeder_vadsig.4\"}"
+                {
+                  "translate": "book.guhs.bieb.moeder_vadsig.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.moeder_vadsig.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.moeder_vadsig.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.moeder_vadsig.3"
+                },
+                {
+                  "translate": "book.guhs.bieb.moeder_vadsig.4"
+                }
               ]
             },
             {
@@ -220,10 +238,18 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.kaasknabbels.0\"}",
-                "{\"translate\": \"book.guhs.bieb.kaasknabbels.1\"}",
-                "{\"translate\": \"book.guhs.bieb.kaasknabbels.2\"}",
-                "{\"translate\": \"book.guhs.bieb.kaasknabbels.3\"}"
+                {
+                  "translate": "book.guhs.bieb.kaasknabbels.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.kaasknabbels.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.kaasknabbels.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.kaasknabbels.3"
+                }
               ]
             },
             {
@@ -276,10 +302,18 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.guhmensie.0\"}",
-                "{\"translate\": \"book.guhs.bieb.guhmensie.1\"}",
-                "{\"translate\": \"book.guhs.bieb.guhmensie.2\"}",
-                "{\"translate\": \"book.guhs.bieb.guhmensie.3\"}"
+                {
+                  "translate": "book.guhs.bieb.guhmensie.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.guhmensie.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.guhmensie.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.guhmensie.3"
+                }
               ]
             },
             {
@@ -332,10 +366,18 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.mika_oorlog.0\"}",
-                "{\"translate\": \"book.guhs.bieb.mika_oorlog.1\"}",
-                "{\"translate\": \"book.guhs.bieb.mika_oorlog.2\"}",
-                "{\"translate\": \"book.guhs.bieb.mika_oorlog.3\"}"
+                {
+                  "translate": "book.guhs.bieb.mika_oorlog.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.mika_oorlog.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.mika_oorlog.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.mika_oorlog.3"
+                }
               ]
             },
             {
@@ -388,10 +430,18 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.koningskroon.0\"}",
-                "{\"translate\": \"book.guhs.bieb.koningskroon.1\"}",
-                "{\"translate\": \"book.guhs.bieb.koningskroon.2\"}",
-                "{\"translate\": \"book.guhs.bieb.koningskroon.3\"}"
+                {
+                  "translate": "book.guhs.bieb.koningskroon.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.koningskroon.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.koningskroon.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.koningskroon.3"
+                }
               ]
             },
             {
@@ -444,10 +494,18 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.vahoeg.0\"}",
-                "{\"translate\": \"book.guhs.bieb.vahoeg.1\"}",
-                "{\"translate\": \"book.guhs.bieb.vahoeg.2\"}",
-                "{\"translate\": \"book.guhs.bieb.vahoeg.3\"}"
+                {
+                  "translate": "book.guhs.bieb.vahoeg.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.vahoeg.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.vahoeg.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.vahoeg.3"
+                }
               ]
             },
             {
@@ -500,10 +558,18 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.roze_maan.0\"}",
-                "{\"translate\": \"book.guhs.bieb.roze_maan.1\"}",
-                "{\"translate\": \"book.guhs.bieb.roze_maan.2\"}",
-                "{\"translate\": \"book.guhs.bieb.roze_maan.3\"}"
+                {
+                  "translate": "book.guhs.bieb.roze_maan.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.roze_maan.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.roze_maan.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.roze_maan.3"
+                }
               ]
             },
             {
@@ -556,10 +622,18 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.gouden_guh.0\"}",
-                "{\"translate\": \"book.guhs.bieb.gouden_guh.1\"}",
-                "{\"translate\": \"book.guhs.bieb.gouden_guh.2\"}",
-                "{\"translate\": \"book.guhs.bieb.gouden_guh.3\"}"
+                {
+                  "translate": "book.guhs.bieb.gouden_guh.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.gouden_guh.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.gouden_guh.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.gouden_guh.3"
+                }
               ]
             },
             {
@@ -612,10 +686,18 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.guhmaag.0\"}",
-                "{\"translate\": \"book.guhs.bieb.guhmaag.1\"}",
-                "{\"translate\": \"book.guhs.bieb.guhmaag.2\"}",
-                "{\"translate\": \"book.guhs.bieb.guhmaag.3\"}"
+                {
+                  "translate": "book.guhs.bieb.guhmaag.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.guhmaag.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.guhmaag.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.guhmaag.3"
+                }
               ]
             },
             {
@@ -668,10 +750,18 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.slee_kermis.0\"}",
-                "{\"translate\": \"book.guhs.bieb.slee_kermis.1\"}",
-                "{\"translate\": \"book.guhs.bieb.slee_kermis.2\"}",
-                "{\"translate\": \"book.guhs.bieb.slee_kermis.3\"}"
+                {
+                  "translate": "book.guhs.bieb.slee_kermis.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.slee_kermis.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.slee_kermis.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.slee_kermis.3"
+                }
               ]
             },
             {
@@ -724,11 +814,21 @@
               "function": "minecraft:set_written_book_pages",
               "mode": "replace_all",
               "pages": [
-                "{\"translate\": \"book.guhs.bieb.guheinde.0\"}",
-                "{\"translate\": \"book.guhs.bieb.guheinde.1\"}",
-                "{\"translate\": \"book.guhs.bieb.guheinde.2\"}",
-                "{\"translate\": \"book.guhs.bieb.guheinde.3\"}",
-                "{\"translate\": \"book.guhs.bieb.guheinde.4\"}"
+                {
+                  "translate": "book.guhs.bieb.guheinde.0"
+                },
+                {
+                  "translate": "book.guhs.bieb.guheinde.1"
+                },
+                {
+                  "translate": "book.guhs.bieb.guheinde.2"
+                },
+                {
+                  "translate": "book.guhs.bieb.guheinde.3"
+                },
+                {
+                  "translate": "book.guhs.bieb.guheinde.4"
+                }
               ]
             },
             {

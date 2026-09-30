@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:sugar"
-    },
-    {
-      "item": "minecraft:white_wool"
-    },
-    {
-      "item": "minecraft:stick"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    }
+    "minecraft:sugar",
+    "minecraft:white_wool",
+    "minecraft:stick",
+    "guhs:kaas_knabbels"
   ],
   "result": {
     "id": "guhs:wolkensuikerspin",

@@ -53,8 +53,8 @@ def zwembandje(h):
     bones.append({"name": "oor_links", "parent": "kop", "pivot": [2.3, 8.8, -10.8], "cubes": [cube([1.3, 8.6, -11.4], [2.2, 2.6, 1.0], sw["oor"])]})
     bones.append({"name": "oor_rechts", "parent": "kop", "pivot": [-2.3, 8.8, -10.8], "cubes": [cube([-3.5, 8.6, -11.4], [2.2, 2.6, 1.0], sw["oor"])]})
     bones.append({"name": "staartje", "parent": "root", "pivot": [0, 4, 10], "cubes": [cube([-1.0, 3.6, 9.4], [2.0, 2.0, 2.2], sw["vacht"])]})
-    h.w(os.path.join(h.A, "geo", "entity", "zwembandje.geo.json"), geo("geometry.zwembandje", 64, 64, bones, (2.2, 1.2, 0.3)))
-    h.w(os.path.join(h.A, "animations", "entity", "zwembandje.animation.json"), {"format_version": "1.8.0", "animations": {}})
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "zwembandje.geo.json"), geo("geometry.zwembandje", 64, 64, bones, (2.2, 1.2, 0.3)))
+    h.w(os.path.join(h.A, "geckolib", "animations", "entity", "zwembandje.animation.json"), {"format_version": "1.8.0", "animations": {}})
     return sw
 
 
@@ -92,8 +92,8 @@ def badeendje(h):
              {"name": "eend_snorkel", "parent": "kop", "pivot": [0, 5, -2.5], "cubes": [_c([2.1, 5, -3.6], [0.8, 4.2, 0.8], "snorkel")]},
              {"name": "eend_bril", "parent": "kop", "pivot": [0, 6, -4.5], "cubes": [_c([-2.3, 5.5, -4.8], [4.6, 1.3, 0.6], "bril")]},
              {"name": "eend_kroontje", "parent": "kop", "pivot": [0, 7.5, -2.5], "cubes": [_c([-1.5, 7.4, -3.8], [3, 1.4, 3], "kroontje")]}]
-    h.w(os.path.join(h.A, "geo", "entity", "badeendje.geo.json"), geo("geometry.badeendje", 32, 32, bones, (1.2, 1.0, 0.3)))
-    h.w(os.path.join(h.A, "animations", "entity", "badeendje.animation.json"), {"format_version": "1.8.0", "animations": {}})
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "badeendje.geo.json"), geo("geometry.badeendje", 32, 32, bones, (1.2, 1.0, 0.3)))
+    h.w(os.path.join(h.A, "geckolib", "animations", "entity", "badeendje.animation.json"), {"format_version": "1.8.0", "animations": {}})
     return sw
 
 
@@ -138,7 +138,7 @@ def _swatches(g, names):
 
 
 def badmeester(h):
-    g_file = json.load(open(os.path.join(h.A, "geo", "entity", "guh_sitting.geo.json"), encoding="utf-8"))
+    g_file = json.load(open(os.path.join(h.A, "geckolib", "models", "entity", "guh_sitting.geo.json"), encoding="utf-8"))
     g = g_file["minecraft:geometry"][0]
     g["description"]["identifier"] = "geometry.guh_npc_badmeesterguh"
     g["bones"] = [b for b in g["bones"] if not b["name"].startswith("badmeester_")]
@@ -163,7 +163,7 @@ def badmeester(h):
         c([-2.3, 9.2, -4.9], [0.5, 3.4, 0.5], "koord"), c([1.8, 9.2, -4.9], [0.5, 3.4, 0.5], "koord"),
         c([-2.3, 9.0, -4.9], [4.6, 0.5, 0.5], "koord"),
         c([-1.0, 7.8, -6.0], [2.0, 1.4, 2.4], "zilver"), c([-0.4, 8.2, -6.9], [0.8, 0.8, 1.0], "zilver")]})
-    h.w(os.path.join(h.A, "geo", "entity", "guh_npc_badmeesterguh.geo.json"), g_file)
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "guh_npc_badmeesterguh.geo.json"), g_file)
     src = Image.open(os.path.join(h.TEX, "entity", "guh_sitting.png")).convert("RGBA")
     img = h.recolour(src, hue=0.53, sat=1.0, val=1.0, only=h.pinkish).convert("RGBA")
     a = np.asarray(img).copy()

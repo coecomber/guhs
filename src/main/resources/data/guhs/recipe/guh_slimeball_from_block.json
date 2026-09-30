@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:roze_slijmblok"
-    }
+    "guhs:roze_slijmblok"
   ],
   "result": {
     "id": "guhs:guh_slimeball",

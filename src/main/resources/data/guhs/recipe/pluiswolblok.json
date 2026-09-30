@@ -6,12 +6,9 @@
     "WW"
   ],
   "key": {
-    "W": {
-      "item": "guhs:pluiswol"
-    }
+    "W": "guhs:pluiswol"
   },
   "result": {
-    "id": "guhs:pluiswolblok",
-    "count": 1
+    "id": "guhs:pluiswolblok"
   }
 }

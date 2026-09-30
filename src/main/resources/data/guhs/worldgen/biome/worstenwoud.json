@@ -1,41 +1,53 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "minecraft:ambient.warped_forest.loop",
+      "mood": {
+        "sound": "minecraft:ambient.warped_forest.mood",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      },
+      "additions": {
+        "sound": "minecraft:ambient.warped_forest.additions",
+        "tick_chance": 0.0111
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.nether.warped_forest",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:dust",
+          "color": [
+            0.95,
+            0.78,
+            0.15
+          ],
+          "scale": 0.8
+        },
+        "probability": 0.012
+      }
+    ],
+    "minecraft:visual/fog_color": "#5c4a10",
+    "minecraft:visual/sky_color": "#6a5a1a",
+    "minecraft:visual/water_fog_color": "#050533"
+  },
   "has_precipitation": false,
   "temperature": 2.0,
   "downfall": 0.0,
   "effects": {
-    "fog_color": 6048272,
-    "sky_color": 6969882,
-    "water_color": 4159204,
-    "water_fog_color": 329011,
-    "particle": {
-      "options": {
-        "type": "minecraft:dust",
-        "color": [
-          0.95,
-          0.78,
-          0.15
-        ],
-        "scale": 0.8
-      },
-      "probability": 0.012
-    },
-    "ambient_sound": "minecraft:ambient.warped_forest.loop",
-    "additions_sound": {
-      "sound": "minecraft:ambient.warped_forest.additions",
-      "tick_chance": 0.0111
-    },
-    "mood_sound": {
-      "sound": "minecraft:ambient.warped_forest.mood",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    },
-    "music": {
-      "sound": "minecraft:music.nether.warped_forest",
-      "min_delay": 12000,
-      "max_delay": 24000,
-      "replace_current_music": false
-    }
+    "water_color": "#3f76e4"
   },
   "spawners": {
     "monster": [
@@ -55,11 +67,9 @@
     "misc": []
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": [
-      "guhs:barbecuegrot"
-    ]
-  },
+  "carvers": [
+    "guhs:barbecuegrot"
+  ],
   "features": [
     [],
     [],

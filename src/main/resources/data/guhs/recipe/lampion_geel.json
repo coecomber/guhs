@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:paper"
-    },
-    {
-      "item": "minecraft:paper"
-    },
-    {
-      "item": "minecraft:torch"
-    },
-    {
-      "item": "minecraft:string"
-    },
-    {
-      "item": "minecraft:yellow_dye"
-    }
+    "minecraft:paper",
+    "minecraft:paper",
+    "minecraft:torch",
+    "minecraft:string",
+    "minecraft:yellow_dye"
   ],
   "result": {
     "id": "guhs:lampion_geel",

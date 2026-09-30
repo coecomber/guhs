@@ -324,7 +324,7 @@ def selfcheck(h, prefix, blokken, items, clothes_ids, textures, geos, lang):
         if not os.path.exists(f"{A}/textures/{t}.png"):
             missing.append(f"texture {t}")
     for g in geos:
-        if not os.path.exists(f"{A}/geo/entity/{g}.geo.json"):
+        if not os.path.exists(f"{A}/geckolib/models/entity/{g}.geo.json"):
             missing.append(f"geo {g}")
     for key in lang:
         if key not in h.NL or key not in h.EN:

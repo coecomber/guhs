@@ -151,7 +151,7 @@ def knabbel(px, angle=0):
 # ---------------------------------------------------------------------------------------------------------------------
 # sprites: guhs, NPCs, creatures (rendered) and structures (wiki renders)
 # ---------------------------------------------------------------------------------------------------------------------
-GEO = lambda n: os.path.join(wr.ASSETS, "geo", "entity", n + ".geo.json")  # noqa: E731
+GEO = lambda n: os.path.join(wr.ASSETS, "geckolib", "models", "entity", n + ".geo.json")  # noqa: E731
 HIDE = ("saddle",) + tuple(f"armor_{t}{p}" for t in ("iron", "diamond", "netherite") for p in ("", "_body"))
 VARIANT_BONES = {"teckel": ("teckel",), "ender": ("ender",), "koning": ("koning",), "wolk": ("wolk",), "zeemeerguh": ("zeemeer",),
                  "asguh": ("asguh",), "pluisguh": ("pluis",), "brontosaurus": ("neck",), "vahoege_ender": ("ender",),

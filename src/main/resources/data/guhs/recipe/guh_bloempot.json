@@ -6,9 +6,7 @@
     " T "
   ],
   "key": {
-    "T": {
-      "item": "minecraft:terracotta"
-    }
+    "T": "minecraft:terracotta"
   },
   "result": {
     "id": "guhs:guh_bloempot",

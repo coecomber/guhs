@@ -63,7 +63,7 @@ def mewtwo_textures(h):
     import make_guh_variants as mgv
     from features import guhpolder_tex as gt
     ent = os.path.join(h.TEX, "entity")
-    geo = json.load(open(os.path.join(h.A, "geo", "entity", "guh.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
+    geo = json.load(open(os.path.join(h.A, "geckolib", "models", "entity", "guh.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
     base = Image.open(os.path.join(ent, "guh.png")).convert("RGBA")
     p = gt.Painter(base, LILA)
     # the belly and the chest: purple (Guhtwo's own), the cheeks stay soft lilac
@@ -202,7 +202,7 @@ def mew_model(h):
         "description": {"identifier": "geometry.mew", "texture_width": 128, "texture_height": 128, "visible_bounds_width": 2,
                         "visible_bounds_height": 1.5, "visible_bounds_offset": [0, 0.5, 0]},
         "bones": bones}]}
-    h.w(os.path.join(h.A, "geo", "entity", "mew.geo.json"), geo)
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "mew.geo.json"), geo)
     # the texture
     img = Image.new("RGBA", (128, 128), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
@@ -256,7 +256,7 @@ def mew_model(h):
                                        "1.0": [0, 0, 0]}},
             "head": {"rotation": {"0.0": [0, 0, 0], "0.5": [0, 0, -10], "1.0": [0, 0, 0]}}}},
     }}
-    h.w(os.path.join(h.A, "animations", "entity", "mew.animation.json"), anim)
+    h.w(os.path.join(h.A, "geckolib", "animations", "entity", "mew.animation.json"), anim)
 
 
 # =====================================================================================================================

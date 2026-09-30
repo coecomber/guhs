@@ -1,34 +1,46 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.overworld.snowy_slopes",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "guhs:guhpolder_glinster"
+        },
+        "probability": 0.004
+      }
+    ],
+    "minecraft:visual/fog_color": "#e6f2fb",
+    "minecraft:visual/sky_color": "#b9d6f2",
+    "minecraft:visual/water_fog_color": "#4f84b5"
+  },
   "has_precipitation": true,
   "temperature": -0.3,
   "downfall": 0.5,
-  "creature_spawn_probability": 0.3,
   "effects": {
-    "sky_color": 12179186,
-    "fog_color": 15135483,
-    "water_color": 8830438,
-    "water_fog_color": 5211317,
-    "grass_color": 13493214,
-    "foliage_color": 10518122,
-    "mood_sound": {
-      "sound": "minecraft:ambient.cave",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    },
-    "music": {
-      "sound": "minecraft:music.overworld.snowy_slopes",
-      "min_delay": 12000,
-      "max_delay": 24000,
-      "replace_current_music": false
-    },
-    "particle": {
-      "options": {
-        "type": "guhs:guhpolder_glinster"
-      },
-      "probability": 0.004
-    }
+    "water_color": "#86bde6",
+    "foliage_color": "#a07e6a",
+    "grass_color": "#cde3de"
   },
+  "creature_spawn_probability": 0.3,
   "spawners": {
     "monster": [],
     "ambient": [],
@@ -47,9 +59,7 @@
     ]
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": []
-  },
+  "carvers": [],
   "features": [
     [],
     [],

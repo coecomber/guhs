@@ -6,12 +6,9 @@
     "P"
   ],
   "key": {
-    "P": {
-      "item": "guhs:mika_steen_plaat"
-    }
+    "P": "guhs:mika_steen_plaat"
   },
   "result": {
-    "id": "guhs:mika_steen_pilaar",
-    "count": 1
+    "id": "guhs:mika_steen_pilaar"
   }
 }

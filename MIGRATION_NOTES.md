@@ -902,6 +902,50 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
 * Equipment assets for armour, client item definitions for every item, recipes with plain-string ingredients, `random_patch` removed,
   biome/dimension `attributes`, `villager_trade` registry - see PORT_PLAN 4.8.
 
+**D (data/tools): how the resources are made for 26.1.2** (branch `mc26-d`)
+
+* The generators still build everything in their old shapes; **`tools/mc26.py`** turns the tree into 26.1.2 formats and is
+  the last step of `python tools/make_resources.py` (run alone: `python tools/mc26.py`; it only rewrites files still in an old
+  shape, a second run writes nothing). A full `make_resources.py` run reproduces the committed tree byte for byte (except
+  gzip timestamps of the .nbt files and one ogg: do not commit those).
+* The generators need the **1.21.1 vanilla resources jar** for their recoloured vanilla textures (keeps the textures identical
+  to 1.0.0): copy `guhs/build/moddev/artifacts/neoforge-21.1.251-client-extra-aka-minecraft-resources.jar` into
+  `<worktree>/build/moddev/artifacts/` once (`mc26.py` itself also finds it in `../guhs/build/...`).
+* **`tools/check_datapack26.py`** loads `src/main/resources/data` into a plain 26.1.2 dedicated server (the server jar from the
+  Gradle cache, JDK 25 from `~/.gradle/jdks`) and prints every file the game refuses; `--gen` also generates chunks in the four
+  Guhs dimensions. Ids only our Java code knows (blocks, items, entities, sounds, particles, feature/structure/placement/
+  pool-element/processor types) are replaced by vanilla stand-ins first, so what it reports are real format errors. It is a
+  stop-gap until `runGameTestServer` runs; `tools/check_assets.py` does the same for the client assets (items/ definitions,
+  models, textures incl. the minecraft: ones against the 26.1.2 client jar, equipment, GeckoLib folders).
+* Ids code owners need:
+  * item model properties: guh compasses = vanilla `minecraft:compass` (target `lodestone`), Guhvis-hengel = vanilla
+    `minecraft:fishing_rod/cast`, motknabbel = vanilla `minecraft:block_state` (`kleur`) -> **delete** the old
+    `ItemProperties.register` calls (GuhsClient, KaasmoerasClient, VissenClient). Two need code: the guhxolotl emmertje uses the
+    select property **`guhs:guhxolotl_kleur`** (register with `RegisterSelectItemModelPropertyEvent`, value =
+    `GuhxolotlEmmertje.kleur(stack).getSerializedName()`: roze/mint/choco/wit/goud), and the Mewtwo tankonderdeel uses
+    `minecraft:custom_model_data` **floats[0]** 1..4 (`new CustomModelData(List.of((float) n), List.of(), List.of(), List.of())`).
+  * items with NeoForge `separate_transforms` models (guhhuisje_klein/medium/groot, guh_glijbaantje, guh_schommel, guh_wip,
+    guh_schaatsen) are `minecraft:display_context` selects now - no code needed.
+  * spawn eggs: every `*_spawn_egg` has its own texture `guhs:item/<name>` baked from the 1.21.1 template + old colours; the
+    items only need `SpawnEggItem` + the entity type component.
+  * equipment assets: `guhs:vahoege_vads`, `guhs:duikhelm`, `guhs:knabbelkroon` (humanoid + humanoid_leggings) -> use
+    `ResourceKey.create(EquipmentAssets.ROOT_ID, Guhs.id("duikhelm"))` etc. in the armour materials / Equippable.
+  * skies: dimension types carry `neoforge:custom_skybox` = `guhs:guhmension` / `guhs:guheinde` (register those ids with
+    `RegisterCustomEnvironmentEffectRendererEvent`); barbecuether/guhmaag have `skybox: none`. No `custom_weather_effects`
+    is set anywhere yet (Guhpolder snow: tell D the renderer id if you want it on the guhpolder biome).
+  * `META-INF/accesstransformer.cfg`: `FireBlock#setFlammable` is public (A's request); regenerate the patched jar
+    (`gradle_slot.sh createMinecraftArtifacts`) in your worktree after merging.
+  * Lang: `key.category.guhs.guhs` (26.1 key category label) exists, and every block with an item also has an
+    `item.guhs.<name>` name (26.1 BlockItems made without `useBlockDescriptionPrefix()` look that one up).
+  * GeckoLib ids in Java must be bare: `Guhs.id("entity/guh_npc_x")`, not `Guhs.id("geo/entity/guh_npc_x.geo.json")` -
+    GeckoLib 5's legacy-path fallback only strips a leading `geckolib/`/`models/` and the `.geo.json` suffix, so
+    `geo/entity/...` ids end up as "missing model" at runtime.
+  * Entity NBT used by advancement predicates (keep these keys in the save data): guh `Saddle` (byte), guh `Variant`
+    (string), Mika `Boss` (byte).
+* Structure templates (`data/guhs/structure/*.nbt`, also the gametest rooms) keep **DataVersion 3955 (1.21.1)** on purpose:
+  `make_structures.py` writes 1.21.1 block names/block entity data, and 26.1.2's DataFixer upgrades every older template
+  when it is loaded (e.g. `minecraft:chain` -> `minecraft:iron_chain`, sign texts, item components).
+
 ## Behaviour changes
 
 (append, prefix with your role)
@@ -964,3 +1008,36 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
   is picked from texture alpha now (PORT_PLAN 7.9).
 * R: dev AutoCheck: the check world's game rules are set right after joining (26.1 `LevelSettings` has no game rules); "mist off" can no longer
   cancel the fog event, it only pushes the terrain fog out to the render distance.
+* D: **Biome/dimension looks** are environment attributes now (1.21.11). Converted 1:1: fog/sky/water fog colours, ambient
+  particles, ambient loop/mood/additions sounds, music. Music follows 1.21.1's rules for non-vanilla dimensions exactly:
+  every biome/dimension has `background_music` = biome music (or the game music) + creative music (1.21.1 played the
+  creative music when flying in creative outside the nether); none of our biomes played the under-water music. Dimension
+  looks come from the 1.21.1 effects: Guhmension = overworld sky/lighting/clouds (cloud height 192.33 = the old 192 + the
+  0.33 the old cloud renderer added) + `neoforge:custom_skybox guhs:guhmension`; Guheinde = end sky/lighting, fog
+  #3d1f33 + `neoforge:custom_skybox guhs:guheinde`; Guhmaag (old `effects: the_nether`) and Barbecuether = nether lighting,
+  no sky, nether fog distances (10/96, 1.21.1's "foggy" dimensions), fog colour per biome.
+* D: **Dimension type flags** became attributes: `ultrawarm` -> water evaporates + fast lava + lava dripstone particle,
+  `bed_works: false` -> exploding bed, `has_raids: false` -> `can_start_raid false`, `natural` -> nether portals spawn
+  zombified piglins (Guhmension). `fixed_time` -> `has_fixed_time` + `sky_light_level` 4 for the midnight dims (15 - the
+  old skyDarken 11) and no day timeline (`#minecraft:universal`); the Guhmension keeps the overworld clock
+  (`default_clock minecraft:overworld`, `#minecraft:in_overworld` timelines) like 1.21.1 shared the overworld day time.
+* D: **random_patch** (24 flower/grass/fire/plant patches): the configured feature is now the inner feature, and the placed
+  feature got `count(tries)` + `random_offset(trapezoid +-xz, +-y)` + the old inner filters. Same distribution as
+  random_patch's `rand(n+1) - rand(n+1)` offsets, same number of tries.
+* D: **noise settings**: the router's `initial_density_without_jaggedness` became `preliminary_surface_level` =
+  `find_top_surface(initial - 0.390625, upper = min_y + height, lower = min_y, cell_height = size_vertical * 4)`, the same
+  scan 1.21.1's NoiseChunk did (only difference: "nothing found" is `min_y` instead of Integer.MAX_VALUE).
+* D: **Block render layers**: `render_type` is gone; models that were `translucent` got `force_translucent` textures (same
+  look). `cutout`/`cutout_mipped` models are left to 26.1's texture-alpha detection: a cutout texture with half-transparent
+  pixels now renders translucent (small look difference possible, check in the client).
+* D: **Glowing faces** (glimtegel, knuffelbad glijgoot): NeoForge's `neoforge_data` block_light/sky_light 15 -> `light_emission` 15.
+* D: **Spawn eggs** keep their 1.21.1 look: the two tint colours are baked into one texture per egg (1.21.1's
+  template_spawn_egg textures multiplied like the old item tint).
+* D: **Huge mushroom features** (reuze_guhpaddenstoel) need a ground predicate in 26.1: vanilla's
+  `#minecraft:huge_red_mushroom_can_place_on` (= 1.21.1's dirt + mushroom_grow_block).
+* D: **Villager trades** stay in code (A: ModVillagers + mixin/VillagerMixin, 2 random offers per level as in 1.21.1); no
+  `trade_set`/`villager_trade` data is shipped.
+* D: **GeckoLib 5** refuses animation files without animations in a dev environment: the five "empty" ones (sled, sled dog,
+  surfboard, swim ring, rubber duck) got one empty looping animation `animation.guhs.leeg` (nothing plays it).
+* D: FTB Quests SNBT needs no changes for FTB Quests 26.1.2.8 (same task/reward types, `ftbquests:custom_icon` +
+  `ftbquests:icon` component still exist); verify the quest book in the dev client.

@@ -1,76 +1,38 @@
 {
-  "type": "minecraft:random_patch",
+  "type": "minecraft:simple_block",
   "config": {
-    "tries": 24,
-    "xz_spread": 5,
-    "y_spread": 2,
-    "feature": {
-      "feature": {
-        "type": "minecraft:simple_block",
-        "config": {
-          "to_place": {
-            "type": "minecraft:weighted_state_provider",
-            "entries": [
-              {
-                "weight": 3,
-                "data": {
-                  "Name": "guhs:roze_guhbloem"
-                }
-              },
-              {
-                "weight": 2,
-                "data": {
-                  "Name": "guhs:knabbelroos"
-                }
-              },
-              {
-                "weight": 2,
-                "data": {
-                  "Name": "guhs:guhoortjes"
-                }
-              },
-              {
-                "weight": 1,
-                "data": {
-                  "Name": "minecraft:pink_tulip"
-                }
-              },
-              {
-                "weight": 1,
-                "data": {
-                  "Name": "minecraft:allium"
-                }
-              }
-            ]
-          }
-        }
-      },
-      "placement": [
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
         {
-          "type": "minecraft:block_predicate_filter",
-          "predicate": {
-            "type": "minecraft:all_of",
-            "predicates": [
-              {
-                "type": "minecraft:matching_blocks",
-                "blocks": "minecraft:air"
-              },
-              {
-                "type": "minecraft:matching_blocks",
-                "offset": [
-                  0,
-                  -1,
-                  0
-                ],
-                "blocks": [
-                  "guhs:knuffelgras"
-                ]
-              }
-            ]
+          "weight": 3,
+          "data": {
+            "Name": "guhs:roze_guhbloem"
           }
         },
         {
-          "type": "guhs:buiten_gebouwen"
+          "weight": 2,
+          "data": {
+            "Name": "guhs:knabbelroos"
+          }
+        },
+        {
+          "weight": 2,
+          "data": {
+            "Name": "guhs:guhoortjes"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "minecraft:pink_tulip"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "minecraft:allium"
+          }
         }
       ]
     }

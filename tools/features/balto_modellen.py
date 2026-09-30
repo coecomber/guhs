@@ -169,8 +169,8 @@ def boris_anims():
 
 def boris(h):
     atlas = bd.Atlas(20300711)
-    h.w(os.path.join(h.A, "geo", "entity", "guh_npc_boris.geo.json"), boris_geo(atlas))
-    h.w(os.path.join(h.A, "animations", "entity", "guh_npc_boris.animation.json"), boris_anims())
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "guh_npc_boris.geo.json"), boris_geo(atlas))
+    h.w(os.path.join(h.A, "geckolib", "animations", "entity", "guh_npc_boris.animation.json"), boris_anims())
     h.save(Image.fromarray(atlas.img), "entity", "npc_boris.png")
 
 
@@ -206,7 +206,7 @@ def steele(h):
     kn._paint(a, sw["lint"], (60, 110, 220), rng, 5)
     kn._paint(a, sw["medaille"], (250, 204, 70), rng, 5, _medaille)
     h.save(Image.fromarray(a), "entity", "npc_steele_mika.png")
-    h.w(os.path.join(h.A, "animations", "entity", "guh_npc_steele_mika.animation.json"), steele_anims())
+    h.w(os.path.join(h.A, "geckolib", "animations", "entity", "guh_npc_steele_mika.animation.json"), steele_anims())
 
 
 def _bril(block):
@@ -449,7 +449,7 @@ def build(h):
 def preview(out):
     import wiki_renders as wr
     os.makedirs(out, exist_ok=True)
-    geo = os.path.join("src", "main", "resources", "assets", "guhs", "geo", "entity")
+    geo = os.path.join("src", "main", "resources", "assets", "guhs", "geckolib", "models", "entity")
     for kind in ("boris", "steele_mika", "muk", "luk", "rosy", "witte_wolfguh"):
         q = wr.geo_quads(os.path.join(geo, f"guh_npc_{kind}.geo.json"), f"guhs:entity/npc_{kind}")
         for yaw in (35, 160):

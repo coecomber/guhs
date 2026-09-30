@@ -7,21 +7,11 @@
     "YBP"
   ],
   "key": {
-    "P": {
-      "item": "minecraft:pink_dye"
-    },
-    "B": {
-      "item": "minecraft:light_blue_dye"
-    },
-    "Y": {
-      "item": "minecraft:yellow_dye"
-    },
-    "G": {
-      "item": "minecraft:glass"
-    },
-    "L": {
-      "item": "minecraft:glowstone"
-    }
+    "P": "minecraft:pink_dye",
+    "B": "minecraft:light_blue_dye",
+    "Y": "minecraft:yellow_dye",
+    "G": "minecraft:glass",
+    "L": "minecraft:glowstone"
   },
   "result": {
     "id": "guhs:disco_dansvloer",

@@ -6,12 +6,8 @@
     "BS"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:birch_slab"
-    },
-    "B": {
-      "item": "minecraft:honeycomb"
-    }
+    "S": "minecraft:birch_slab",
+    "B": "minecraft:honeycomb"
   },
   "result": {
     "id": "guhs:sjoelen_bakplank",
