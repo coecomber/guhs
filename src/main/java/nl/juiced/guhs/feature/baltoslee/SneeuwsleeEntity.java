@@ -60,8 +60,9 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
     public static final double TOP = 0.55, LANGZAAM = 0.045;
     public static final int METERS_VOOR_ADVANCEMENT = 200;
 
-    private static final EntityDataAccessor<Optional<UUID>> DATA_EIGENAAR = SynchedEntityData.defineId(SneeuwsleeEntity.class,
-            EntityDataSerializers.OPTIONAL_UUID);
+    // 26.1: no OPTIONAL_UUID serializer any more; an entity reference carries the owner's UUID the same way
+    private static final EntityDataAccessor<Optional<net.minecraft.world.entity.EntityReference<net.minecraft.world.entity.LivingEntity>>> DATA_EIGENAAR =
+            SynchedEntityData.defineId(SneeuwsleeEntity.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
     private static final EntityDataAccessor<Boolean> DATA_OP_SNEEUW = SynchedEntityData.defineId(SneeuwsleeEntity.class, EntityDataSerializers.BOOLEAN);
 
     /** The rider's keys (set by the client). */
@@ -97,12 +98,12 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
     }
 
     public void zetEigenaar(@Nullable UUID id) {
-        entityData.set(DATA_EIGENAAR, Optional.ofNullable(id));
+        entityData.set(DATA_EIGENAAR, Optional.ofNullable(id).map(net.minecraft.world.entity.EntityReference::of));
     }
 
     @Nullable
     public UUID eigenaar() {
-        return entityData.get(DATA_EIGENAAR).orElse(null);
+        return entityData.get(DATA_EIGENAAR).map(net.minecraft.world.entity.EntityReference::getUUID).orElse(null);
     }
 
     /** Are the dogs on snow or ice (synced: they sit down when not)? */
@@ -129,13 +130,13 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (lerpSteps > 0 && !isControlledByLocalInstance()) {
+        if (lerpSteps > 0 && !bestuurdHier()) {
             double f = 1.0 / lerpSteps;
             setPos(getX() + (lerpX - getX()) * f, getY() + (lerpY - getY()) * f, getZ() + (lerpZ - getZ()) * f);
             setYRot(getYRot() + (float) Mth.wrapDegrees(lerpYRot - getYRot()) * (float) f);
             lerpSteps--;
         }
-        if (isControlledByLocalInstance()) {
+        if (bestuurdHier()) {
             SleeRijden.Invoer in = getControllingPassenger() instanceof Player && level().isClientSide() && invoer != null ? invoer.get() : SleeRijden.Invoer.NIKS;
             rijd(in);
         } else if (level().isClientSide()) {
@@ -147,7 +148,7 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
             loopTik++;
             Vec3 d = getDeltaMovement();
             getoondeSnelheid = (float) Math.sqrt(d.x * d.x + d.z * d.z);
-            if (!isControlledByLocalInstance()) {
+            if (!bestuurdHier()) {
                 getoondeSnelheid = (float) Math.sqrt((getX() - xo) * (getX() - xo) + (getZ() - zo) * (getZ() - zo));
             }
             afstand += getoondeSnelheid;
@@ -212,18 +213,40 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
         vorige = nu;
     }
 
-    @Override
-    public boolean isControlledByLocalInstance() {
+    /** 1.21.1 isControlledByLocalInstance (26.1 made its replacement final): the rider's own game, or the server without rider. */
+    public boolean bestuurdHier() {
         return getControllingPassenger() instanceof Player p ? p.isLocalPlayer() : !level().isClientSide();
     }
 
+    /** 26.1: server positions arrive through the interpolation handler (was lerpTo); our own 10-step glide in tick(). */
+    private final net.minecraft.world.entity.InterpolationHandler glijden = new net.minecraft.world.entity.InterpolationHandler(this) {
+        @Override
+        public void interpolateTo(Vec3 position, float yRot, float xRot) {
+            lerpX = position.x;
+            lerpY = position.y;
+            lerpZ = position.z;
+            lerpYRot = yRot;
+            lerpSteps = 10;
+        }
+
+        @Override
+        public boolean hasActiveInterpolation() {
+            return lerpSteps > 0;
+        }
+
+        @Override
+        public void interpolate() {
+        }
+
+        @Override
+        public void cancel() {
+            lerpSteps = 0;
+        }
+    };
+
     @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
-        lerpX = x;
-        lerpY = y;
-        lerpZ = z;
-        lerpYRot = yRot;
-        lerpSteps = 10;
+    public net.minecraft.world.entity.InterpolationHandler getInterpolation() {
+        return glijden;
     }
 
     @Override
@@ -269,18 +292,18 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
         ItemStack held = player.getItemInHand(hand);
         if (player.isSecondaryUseActive()) {
-            if (!level().isClientSide() && (player.getUUID().equals(eigenaar()) || eigenaar() == null || player.hasPermissions(2))) {
+            if (!level().isClientSide() && (player.getUUID().equals(eigenaar()) || eigenaar() == null || player.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER))) {
                 ejectPassengers();
                 if (!player.getAbilities().instabuild || !player.getInventory().contains(new ItemStack(BaltoSleeFeature.SNEEUWSLEE.get()))) {
                     ItemStack item = new ItemStack(BaltoSleeFeature.SNEEUWSLEE.get());
                     if (!player.getInventory().add(item)) {
-                        spawnAtLocation(item);
+                        spawnAtLocation((ServerLevel) level(), item);
                     }
                 }
                 level().playSound(null, blockPosition(), BaltoSleeFeature.BELLEN.get(), SoundSource.PLAYERS, 0.7f, 1.4f);
@@ -321,7 +344,7 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean canBeCollidedWith(@Nullable Entity other) {
         return true;
     }
 
@@ -331,7 +354,7 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 

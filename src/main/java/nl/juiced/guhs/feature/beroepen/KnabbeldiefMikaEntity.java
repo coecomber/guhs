@@ -152,12 +152,12 @@ public class KnabbeldiefMikaEntity extends PathfinderMob implements GeoEntity {
     // --- a Mika never fights ---------------------------------------------------------------------------------------------
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(ServerLevel level, DamageSource source) {
         return !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     @Override
-    public boolean doHurtTarget(Entity target) {
+    public boolean doHurtTarget(ServerLevel level, Entity target) {
         return false;
     }
 

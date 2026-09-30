@@ -189,7 +189,7 @@ public class GuhbubbelStructure extends Structure implements nl.juiced.guhs.worl
         }
         // (max depth 1, not 0: with 0 vanilla's jigsaw placement never adds even the start piece)
         return nl.juiced.guhs.world.BouwRuimte.claim(context, this, JigsawPlacement.addPieces(context, startPool, Optional.of(startJigsawName), 1,
-                new BlockPos(peak.x, waterLevel + 1, peak.z), false, Optional.empty(), 80, PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
+                new BlockPos(peak.x, waterLevel + 1, peak.z), false, Optional.empty(), new net.minecraft.world.level.levelgen.structure.structures.JigsawStructure.MaxDistance(80), PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
                 LiquidSettings.IGNORE_WATERLOGGING));
     }
 

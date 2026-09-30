@@ -144,7 +144,31 @@ public final class BaltoSleeFeature {
         }
     }
 
+    /**
+     * 26.1: vanilla dropped EntityDataSerializers.COMPOUND_TAG; the sled syncs its route as a tag, so it has its own
+     * (same stream format, copies the tag like the old one).
+     */
+    public static final net.minecraft.network.syncher.EntityDataSerializer<net.minecraft.nbt.CompoundTag> COMPOUND_TAG =
+            new net.minecraft.network.syncher.EntityDataSerializer<>() {
+                @Override
+                public net.minecraft.network.codec.StreamCodec<? super net.minecraft.network.RegistryFriendlyByteBuf, net.minecraft.nbt.CompoundTag> codec() {
+                    return net.minecraft.network.codec.ByteBufCodecs.COMPOUND_TAG;
+                }
+
+                @Override
+                public net.minecraft.nbt.CompoundTag copy(net.minecraft.nbt.CompoundTag tag) {
+                    return tag.copy();
+                }
+            };
+    public static final DeferredRegister<net.minecraft.network.syncher.EntityDataSerializer<?>> DATA_SERIALIZERS =
+            DeferredRegister.create(net.neoforged.neoforge.registries.NeoForgeRegistries.Keys.ENTITY_DATA_SERIALIZERS, Guhs.MODID);
+
+    static {
+        DATA_SERIALIZERS.register("baltoslee_compound_tag", () -> COMPOUND_TAG);
+    }
+
     public static void register(IEventBus modBus) {
+        DATA_SERIALIZERS.register(modBus);
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         ENTITY_TYPES.register(modBus);

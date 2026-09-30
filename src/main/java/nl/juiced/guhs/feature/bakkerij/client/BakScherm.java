@@ -1,5 +1,9 @@
 package nl.juiced.guhs.feature.bakkerij.client;
 
+import net.minecraft.client.input.KeyEvent;
+
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -196,12 +200,13 @@ public class BakScherm extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int key, int scan, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
+        int key = event.key(), scan = event.scancode(), modifiers = event.modifiers();
         if (key == org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE && bakt >= 0) {
             eruit();
             return true;
         }
-        return super.keyPressed(key, scan, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override
@@ -211,7 +216,9 @@ public class BakScherm extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mx, double my, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mx = event.x(), my = event.y();
+        int button = event.button();
         if (spel() && bakt < 0) {
             List<CompoundTag> orders = bestellingen();
             for (int i = 0; i < orders.size(); i++) {
@@ -228,7 +235,7 @@ public class BakScherm extends Screen {
                 }
             }
         }
-        return super.mouseClicked(mx, my, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     private List<CompoundTag> bestellingen() {
@@ -379,7 +386,7 @@ public class BakScherm extends Screen {
 
     /** An icon from the button sheet (row 0 dough, 1 shape, 2 topping). */
     private void icoon(GuiGraphicsExtractor g, int rij, int i, int x, int y, int size) {
-        g.blit(KNOPPEN, x, y, size, size, i * 16, rij * 16, 16, 16, TEX_W, TEX_H);
+        g.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, KNOPPEN, x, y, i * 16, rij * 16, size, size, 16, 16, TEX_W, TEX_H);
     }
 
     @Override
@@ -399,7 +406,7 @@ public class BakScherm extends Screen {
         }
 
         @Override
-        public void onPress() {
+        public void onPress(net.minecraft.client.input.InputWithModifiers input) {
             switch (rij) {
                 case 0 -> deeg = i;
                 case 1 -> vorm = i;
@@ -417,7 +424,7 @@ public class BakScherm extends Screen {
         }
 
         @Override
-        protected void extractWidgetRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        protected void extractContents(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
             boolean kies = gekozen();
             g.fill(getX(), getY(), getX() + width, getY() + height, kies ? 0xFFFFC040 : isHoveredOrFocused() ? 0xFFB08868 : 0xFF6A4A38);
             g.fill(getX() + 1, getY() + 1, getX() + width - 1, getY() + height - 1, kies ? 0xFFFFF0C8 : active ? 0xFFF3DCC0 : 0xFFA89888);

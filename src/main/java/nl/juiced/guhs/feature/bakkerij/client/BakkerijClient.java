@@ -2,9 +2,8 @@ package nl.juiced.guhs.feature.bakkerij.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -23,18 +22,18 @@ public final class BakkerijClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> event.registerEntityRenderer(BakkerijFeature.KLANT.get(), KlantRenderer::new));
         modBus.addListener(BakkerijClient::particles);
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.BAKKERGUH, Guhs.id("geo/entity/guh_npc_bakkerguh.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.BAKKERGUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.07f;
-            bot.apply("korstje_muts").ifPresent(b -> b.setRotZ((float) Math.sin(t) * 0.06f));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.BAKKERGUH, Guhs.id("entity/guh_npc_bakkerguh"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.BAKKERGUH, (npc, tick) -> {
+            float t = (float) tick * 0.07f;
+            return bones -> bones.ifPresent("korstje_muts", b -> b.setRotZ((float) Math.sin(t) * 0.06f));
         });
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(BakkerijFeature.KNABBELWOLKJE.get(),
-                sprites -> (type, level, x, y, z, dx, dy, dz) -> new Wolkje(level, x, y, z, dx, dy, dz, sprites));
+                sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Wolkje(level, x, y, z, dx, dy, dz, sprites.get(random)));
         event.registerSpriteSet(BakkerijFeature.MEELSTOFJE.get(),
-                sprites -> (type, level, x, y, z, dx, dy, dz) -> new Meel(level, x, y, z, dx, dy, dz, sprites));
+                sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Meel(level, x, y, z, dx, dy, dz, sprites.get(random)));
     }
 
     /** guhs:bakkerij_open: Korstje's screen or the baking screen. */
@@ -55,12 +54,11 @@ public final class BakkerijClient {
     }
 
     /** A little knabbel-shaped cloud: rises, grows a bit, drifts and fades. */
-    static class Wolkje extends TextureSheetParticle {
+    static class Wolkje extends SingleQuadParticle {
         private final float start;
 
-        Wolkje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+        Wolkje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, TextureAtlasSprite sprite) {
+            super(level, x, y, z, sprite);
             lifetime = 50 + random.nextInt(40);
             start = quadSize = 0.18f + random.nextFloat() * 0.12f;
             xd = dx + (random.nextDouble() - 0.5) * 0.01;
@@ -82,16 +80,15 @@ public final class BakkerijClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A pinch of flour: tiny, drifts down slowly. */
-    static class Meel extends TextureSheetParticle {
-        Meel(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+    static class Meel extends SingleQuadParticle {
+        Meel(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, TextureAtlasSprite sprite) {
+            super(level, x, y, z, sprite);
             lifetime = 30 + random.nextInt(30);
             quadSize = 0.04f + random.nextFloat() * 0.04f;
             xd = dx + (random.nextDouble() - 0.5) * 0.02;
@@ -102,8 +99,8 @@ public final class BakkerijClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

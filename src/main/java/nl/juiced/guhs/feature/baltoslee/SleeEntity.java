@@ -54,7 +54,7 @@ public class SleeEntity extends Entity implements GeoEntity {
     /** Where the musher stands on the runners (behind the middle) and how high. */
     public static final double ACHTER = 1.2, OP_DE_LATTEN = 0.22;
 
-    private static final EntityDataAccessor<CompoundTag> DATA_ROUTE = SynchedEntityData.defineId(SleeEntity.class, EntityDataSerializers.COMPOUND_TAG);
+    private static final EntityDataAccessor<CompoundTag> DATA_ROUTE = SynchedEntityData.defineId(SleeEntity.class, BaltoSleeFeature.COMPOUND_TAG);
     private static final EntityDataAccessor<Byte> DATA_SOORT = SynchedEntityData.defineId(SleeEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_FASE = SynchedEntityData.defineId(SleeEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> DATA_PAUZE = SynchedEntityData.defineId(SleeEntity.class, EntityDataSerializers.BYTE);
@@ -329,9 +329,19 @@ public class SleeEntity extends Entity implements GeoEntity {
         BaltoSleePayloads.stuur(getId(), mijnGen, been, (float) s, (float) lat, (float) v, (float) latV);
     }
 
-    /** The rider's game moves the sled itself: the server's position packets would only make it shake. */
+    /**
+     * The rider's game moves the sled itself: the server's position packets would only make it shake. 26.1: server
+     * positions arrive through the interpolation handler (was lerpTo), which ignores them.
+     */
+    private final net.minecraft.world.entity.InterpolationHandler negeer = new net.minecraft.world.entity.InterpolationHandler(this) {
+        @Override
+        public void interpolateTo(Vec3 position, float yRot, float xRot) {
+        }
+    };
+
     @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
+    public net.minecraft.world.entity.InterpolationHandler getInterpolation() {
+        return negeer;
     }
 
     @Override
@@ -395,7 +405,7 @@ public class SleeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean canBeCollidedWith(@Nullable Entity other) {
         return false;
     }
 
@@ -405,7 +415,7 @@ public class SleeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 

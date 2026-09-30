@@ -18,6 +18,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A dakpan (loaned by Bob de Guhbouwer): it only fits on a ghost tile of Bob's roof ({@link DakplekBlock}); right-click
  * one and the tile is laid (tik tik with the hammer). Anywhere else: "die past alleen op Bob's dak".
@@ -60,7 +62,7 @@ public class DakpanItem extends BlockItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.beroepen_dakpan.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.beroepen_dakpan.lore").withStyle(ChatFormatting.GRAY));
     }
 }

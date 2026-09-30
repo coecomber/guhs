@@ -19,9 +19,9 @@ import nl.juiced.guhs.feature.reisguh.ReisguhFluit;
  * when he blows his whistle ({@link ReisguhFluit.Fluit}), the whistle goes up into his mouth, he puffs his cheeks, leans
  * back a little and waves a paw ("Instappen!").
  */
-@EventBusSubscriber(modid = Guhs.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Guhs.MODID, value = Dist.CLIENT)
 public final class ReisguhFluitClient {
-    public static final net.minecraft.resources.Identifier MODEL = Guhs.id("geo/entity/guh_npc_reisguh.geo.json");
+    public static final net.minecraft.resources.Identifier MODEL = Guhs.id("entity/guh_npc_reisguh");
     /** Entity id -> client game time when he started blowing. */
     private static final Map<Integer, Long> START = new ConcurrentHashMap<>();
     /** Where the whistle goes (model units, from its place on his chest) and how far it turns (mouthpiece into the mouth). */
@@ -30,25 +30,28 @@ public final class ReisguhFluitClient {
     @SubscribeEvent
     static void setup(FMLClientSetupEvent event) {
         SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.REISGUH, MODEL);
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.REISGUH, (npc, state, bot) -> {
-            float k = blaas(npc.getId(), state.getPartialTick());
-            bot.apply("reis_fluitje").ifPresent(b -> {
-                b.setPosY(OMHOOG * k);
-                b.setPosZ(-NAAR_VOREN * k);
-                b.setRotX(DRAAI * k);
-            });
-            bot.apply("head").ifPresent(b -> b.setScaleX(1 + 0.05f * k));   // puffed cheeks (absolute: nothing else scales it)
-            if (k <= 0) {
-                return;
-            }
-            bot.apply("head").ifPresent(b -> {
-                b.setRotY(b.getRotY() * (1 - k));                    // he looks straight ahead while blowing
-                b.setRotX(b.getRotX() * (1 - k) - 0.12f * k);        // and leans back a little
-            });
-            bot.apply("arm_left").ifPresent(b -> {                   // "Instappen!": a paw up high
-                b.setRotX(-2.5f * k);
-                b.setRotZ(-0.35f * k + 0.15f * k * Mth.sin((float) state.getAnimationTick() * 0.6f));
-            });
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.REISGUH, (npc, tick) -> {
+            float k = blaas(npc.getId(), tick - npc.tickCount);
+            float zwaai = Mth.sin((float) tick * 0.6f);
+            return bones -> {
+                bones.ifPresent("reis_fluitje", b -> {
+                    b.setTranslateY(OMHOOG * k);
+                    b.setTranslateZ(-NAAR_VOREN * k);
+                    b.setRotX(DRAAI * k);
+                });
+                bones.ifPresent("head", b -> b.setScaleX(1 + 0.05f * k));   // puffed cheeks (absolute: nothing else scales it)
+                if (k <= 0) {
+                    return;
+                }
+                bones.ifPresent("head", b -> {
+                    b.setRotY(b.getRotY() * (1 - k));                    // he looks straight ahead while blowing
+                    b.setRotX(b.getRotX() * (1 - k) - 0.12f * k);        // and leans back a little
+                });
+                bones.ifPresent("arm_left", b -> {                       // "Instappen!": a paw up high
+                    b.setRotX(-2.5f * k);
+                    b.setRotZ(-0.35f * k + 0.15f * k * zwaai);
+                });
+            };
         });
     }
 

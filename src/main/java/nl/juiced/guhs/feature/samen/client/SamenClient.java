@@ -2,9 +2,9 @@ package nl.juiced.guhs.feature.samen.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
@@ -35,9 +35,9 @@ public final class SamenClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((RegisterParticleProvidersEvent event) -> {
             event.registerSpriteSet(SamenFeature.ZIELSHARTJE.get(),
-                    sprites -> (type, level, x, y, z, dx, dy, dz) -> new Hart(level, x, y, z, dx, dy, dz, sprites, false));
+                    sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Hart(level, x, y, z, dx, dy, dz, sprites, sprites.get(random), false));
             event.registerSpriteSet(SamenFeature.BFF_HART.get(),
-                    sprites -> (type, level, x, y, z, dx, dy, dz) -> new Hart(level, x, y, z, dx, dy, dz, sprites, true));
+                    sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Hart(level, x, y, z, dx, dy, dz, sprites, sprites.get(random), true));
         });
         NeoForge.EVENT_BUS.addListener(SamenClient::naam);
         NeoForge.EVENT_BUS.addListener(SamenClient::tick);
@@ -58,8 +58,8 @@ public final class SamenClient {
         return glinster ? Component.literal("✦").withStyle(s -> s.withColor(TextColor.fromRgb(0xFFF6FB))).append(hart) : hart;
     }
 
-    private static void naam(RenderNameTagEvent event) {
-        if (isZielsguh(event.getEntity()) && Minecraft.getInstance().level != null) {
+    private static void naam(RenderNameTagEvent.CanRender event) {
+        if (isZielsguh(event.getEntity()) && Minecraft.getInstance().level != null && event.getContent() != null) {
             long tijd = Minecraft.getInstance().level.getGameTime();
             event.setContent(event.getContent().copy().append(" ").append(hart(tijd, event.getEntity().getId())));
         }
@@ -104,13 +104,13 @@ public final class SamenClient {
     }
 
     /** The zielsguh's sparkling heart (small, twinkling, floats up and fades) or the big bff heart (grows, beats, lingers). */
-    static class Hart extends TextureSheetParticle {
+    static class Hart extends SingleQuadParticle {
         private final boolean groot;
         private final SpriteSet sprites;
         private final float basis;
 
-        Hart(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites, boolean groot) {
-            super(level, x, y, z);
+        Hart(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites, TextureAtlasSprite sprite, boolean groot) {
+            super(level, x, y, z, sprite);
             this.groot = groot;
             this.sprites = sprites;
             this.lifetime = groot ? 70 : 30 + random.nextInt(12);
@@ -144,13 +144,13 @@ public final class SamenClient {
         }
 
         @Override
-        protected int getLightColor(float partialTick) {
+        protected int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

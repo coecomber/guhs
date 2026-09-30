@@ -23,6 +23,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The guh-brandslang (loaned by Brandweercommandant Blusguh): hold right-click to spray a jet of water where you look
  * ({@link #BEREIK} blocks). Every {@link #BLUS_TICKS} ticks of spraying on a marshmallow fire makes it one step smaller.
@@ -112,8 +114,8 @@ public class BrandslangItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.guh_brandslang.lore").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.guhs.guh_brandslang.lore2").withStyle(ChatFormatting.DARK_GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.guh_brandslang.lore").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.guh_brandslang.lore2").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

@@ -16,6 +16,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The sneeuwslee in your pocket (balto gives it at the end of the Nomguh story): right-click the ground to put it down,
  * with its four guh-sledehondjes. Best on snow: that's the only place they run.
@@ -57,8 +59,8 @@ public class SneeuwsleeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.sneeuwslee.lore").withStyle(ChatFormatting.AQUA));
-        tooltip.add(Component.translatable("item.guhs.sneeuwslee.lore2").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.sneeuwslee.lore").withStyle(ChatFormatting.AQUA));
+        tooltip.accept(Component.translatable("item.guhs.sneeuwslee.lore2").withStyle(ChatFormatting.GRAY));
     }
 }

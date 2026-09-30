@@ -49,7 +49,7 @@ public final class MewtwoProtection {
         if (server.dimension() != ModDimensions.GUHMENSION || pos.getY() < 60) {
             return false;
         }
-        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(MewtwoFeature.KLOON_EILAND);
+        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(MewtwoFeature.KLOON_EILAND);
         return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
     }
 

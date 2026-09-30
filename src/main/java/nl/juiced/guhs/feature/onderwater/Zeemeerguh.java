@@ -93,7 +93,7 @@ public final class Zeemeerguh {
      * false when the guh isn't a Zeemeerguh in water (then it moves like any guh).
      */
     public static boolean travel(GuhEntity guh, Vec3 input) {
-        if (!guh.isZeemeer() || !guh.isInWater() || !guh.isControlledByLocalInstance()) {
+        if (!guh.isZeemeer() || !guh.isInWater() || !guh.isLocalInstanceAuthoritative()) {
             return false;
         }
         if (guh.getControllingPassenger() instanceof Player rider) {

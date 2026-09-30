@@ -254,8 +254,8 @@ public final class SleeRit {
         player.stopRiding();
         player.closeContainer();
         Vec3 at = sled.position();
-        player.teleportTo(level, at.x, at.y, at.z, sled.getYRot(), 10f);
-        player.startRiding(sled, true);
+        player.teleportTo(level, at.x, at.y, at.z, java.util.Set.of(), sled.getYRot(), 10f, true);
+        player.startRiding(sled, true, true);
         Minigames.startKeeping(player);
         level.playSound(null, sled.blockPosition(), BaltoSleeFeature.BELLEN.get(), SoundSource.PLAYERS, 1f, 1f);
         if (modus == Modus.TOCHT) {
@@ -330,7 +330,7 @@ public final class SleeRit {
         }
         Minigames.keep(player);
         if (player.getVehicle() != sled && !stopt) {
-            player.startRiding(sled, true);                       // (you can't get off on the way: hold sneak to stop)
+            player.startRiding(sled, true, true);                       // (you can't get off on the way: hold sneak to stop)
         }
         switch (fase) {
             case SleeEntity.WACHT -> aftellen(level, player, sled);
@@ -405,13 +405,13 @@ public final class SleeRit {
             int n = 3 - aftel / 20;
             titel(player, Component.literal(String.valueOf(n)).withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
                     Component.translatable(modus == Modus.TOCHT ? "gui.guhs.baltoslee.klaar.tocht" : "gui.guhs.baltoslee.klaar.sprint"), 0, 18, 2);
-            player.playNotifySound(SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 1f, 1f);
+            notifySound(player,SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 1f, 1f);
         }
         if (++aftel >= AFTEL) {
             fase = SleeEntity.RIJDT;
             clientTick = level.getGameTime();
             titel(player, Component.translatable("gui.guhs.baltoslee.hup").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD), null, 0, 20, 10);
-            player.playNotifySound(SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 1f, 2f);
+            notifySound(player,SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 1f, 2f);
             geluid(level, sled, BaltoSleeFeature.WOEF.get(), 1.2f, 1f);
             geluid(level, sled, BaltoSleeFeature.BELLEN.get(), 1f, 1.1f);
         }
@@ -685,7 +685,7 @@ public final class SleeRit {
         titel(player, Component.translatable("gui.guhs.baltoslee.aankomst").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
                 Component.translatable("gui.guhs.baltoslee.aankomst.sub", tijdTekst(Math.max(0, limiet - tijdTerug))), 5, 70, 20);
         player.sendSystemMessage(Component.translatable("gui.guhs.baltoslee.aankomst.uitleg").withStyle(ChatFormatting.GOLD));
-        player.playNotifySound(BaltoSleeFeature.FANFARE.get(), SoundSource.PLAYERS, 1f, 1f);
+        notifySound(player,BaltoSleeFeature.FANFARE.get(), SoundSource.PLAYERS, 1f, 1f);
         adv(player, "balto_slee_tocht");
         CompoundTag d = data(player);
         d.putInt("Tochten", d.getIntOr("Tochten", 0) + 1);
@@ -722,7 +722,7 @@ public final class SleeRit {
             player.sendSystemMessage(Component.translatable("gui.guhs.baltoslee.steele.uitgelachen").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         Scorebord.submit(player, bord(niveau), tijd, true);
-        player.playNotifySound(gewonnen ? BaltoSleeFeature.FANFARE.get() : SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 1f, 1f);
+        notifySound(player,gewonnen ? BaltoSleeFeature.FANFARE.get() : SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 1f, 1f);
         adv(player, "balto_slee_sprint");
         adv(player, "balto_slee_sprint_" + n);
         if (gewonnen) {
@@ -766,7 +766,7 @@ public final class SleeRit {
         if (player != null && player.level() == lv && player.isAlive()) {
             Vec3 uit = einde == Einde.AANKOMST ? route.ziekenhuis : route.stal;
             if (uit != Vec3.ZERO) {
-                player.teleportTo(lv, uit.x, uit.y, uit.z, player.getYRot(), 0);
+                player.teleportTo(lv, uit.x, uit.y, uit.z, java.util.Set.of(), player.getYRot(), 0, true);
             }
             player.fallDistance = 0;
             if (einde == Einde.WEG) {
@@ -1010,5 +1010,13 @@ public final class SleeRit {
 
     public void zetLimiet(int ticks) {
         this.limiet = ticks;
+    }
+    /** 26.1: ServerPlayer#playNotifySound is gone (same packet as 1.21.1's). */
+    private static void notifySound(net.minecraft.server.level.ServerPlayer p, net.minecraft.sounds.SoundEvent sound, net.minecraft.sounds.SoundSource source, float volume, float pitch) {
+        notifySound(p, net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), source, volume, pitch);
+    }
+
+    private static void notifySound(net.minecraft.server.level.ServerPlayer p, net.minecraft.core.Holder<net.minecraft.sounds.SoundEvent> sound, net.minecraft.sounds.SoundSource source, float volume, float pitch) {
+        p.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(sound, source, p.getX(), p.getY(), p.getZ(), volume, pitch, p.getRandom().nextLong()));
     }
 }

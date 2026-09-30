@@ -2,9 +2,8 @@ package nl.juiced.guhs.feature.baltoslee.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
@@ -35,8 +34,8 @@ public final class BaltoSleeClient {
             event.registerEntityRenderer(BaltoSleeFeature.SLEDEHONDJE.get(), SledehondjeRenderer::new);
         });
         modBus.addListener((RegisterParticleProvidersEvent event) -> event.registerSpriteSet(BaltoSleeFeature.SNUFFEL.get(),
-                sprites -> (type, level, x, y, z, dx, dy, dz) -> new Snuffel(level, x, y, z, dx, dy, dz, sprites)));
-        modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(Guhs.id("baltoslee_hud"), SleeHud::render));
+                sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Snuffel(level, x, y, z, dx, dy, dz, sprites.get(random))));
+        modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(Guhs.id("baltoslee_hud"), SleeHud::extractRenderState));
         SleeEntity.lokaal = () -> Minecraft.getInstance().player;
         SleeEntity.invoer = BaltoSleeClient::toetsen;
         SleeEntity.clientTick = SleeEffecten::tick;
@@ -66,16 +65,19 @@ public final class BaltoSleeClient {
         if (p == null || Minecraft.getInstance().screen != null) {
             return SleeRijden.Invoer.NIKS;
         }
-        return new SleeRijden.Invoer(p.input.forwardImpulse, -p.input.leftImpulse);
+        // (26.1: the move vector is normalised; the sled wants the plain keys like 1.21.1's impulses)
+        var keys = p.input.keyPresses;
+        float vooruit = keys.forward() == keys.backward() ? 0f : keys.forward() ? 1f : -1f;
+        float links = keys.left() == keys.right() ? 0f : keys.left() ? 1f : -1f;
+        return new SleeRijden.Invoer(vooruit, -links);
     }
 
     /** Baltoguh's nose: a little glowing golden-blue sparkle on the snow, twinkling, slowly rising. */
-    static final class Snuffel extends TextureSheetParticle {
+    static final class Snuffel extends SingleQuadParticle {
         private final float basis;
 
-        Snuffel(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z, dx, dy, dz);
-            pickSprite(sprites);
+        Snuffel(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, TextureAtlasSprite sprite) {
+            super(level, x, y, z, dx, dy, dz, sprite);
             lifetime = 22 + random.nextInt(14);
             basis = 0.07f + random.nextFloat() * 0.05f;
             quadSize = basis;
@@ -95,13 +97,13 @@ public final class BaltoSleeClient {
         }
 
         @Override
-        protected int getLightColor(float partialTick) {
+        protected int getLightCoords(float partialTick) {
             return LightCoordsUtil.FULL_BRIGHT;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

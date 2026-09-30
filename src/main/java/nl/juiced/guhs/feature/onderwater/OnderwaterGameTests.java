@@ -205,9 +205,9 @@ public class OnderwaterGameTests {
             helper.assertTrue(guh.isAlive() && guh.isInWater(), "still in the water after 4 seconds");
             helper.assertTrue(guh.getAirSupply() == guh.getMaxAirSupply() && guh.getHealth() == guh.getMaxHealth(), "and never short of air");
             var tag = new net.minecraft.nbt.CompoundTag();
-            guh.saveWithoutId(tag);
+            nl.juiced.guhs.storage.Nbt.saveWithoutId(guh, tag);
             GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-            copy.load(tag);
+            nl.juiced.guhs.storage.Nbt.load(copy, tag);
             helper.assertTrue(copy.isZeemeer() && copy.getNavigation() instanceof AmphibiousPathNavigation, "saved and loaded, it still swims");
             guh.discard();
             helper.succeed();
@@ -282,16 +282,16 @@ public class OnderwaterGameTests {
     @GuhTest(template = EMPTY)
     public static void theBubbleGeneratesInTheDeepSea(GameTestHelper helper) {
         var registry = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE);
-        var structure = registry.get(OnderwaterProtection.BUBBLE);
+        var structure = registry.getValue(OnderwaterProtection.BUBBLE);
         helper.assertTrue(structure instanceof GuhbubbelStructure, "the Guhbubbel's own structure type: " + structure);
         var biomes = helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME);
-        var deep = biomes.getHolder(Zeemeerguh.DIEPE_GUHZEE);
+        var deep = biomes.get(Zeemeerguh.DIEPE_GUHZEE);
         helper.assertTrue(deep.isPresent() && structure.biomes().contains(deep.get()), "in the deep guh sea");
         helper.assertTrue(structure.biomes().size() == 1, "and nowhere else");
-        var sea = biomes.getHolder(Zeemeerguh.GUH_SEA);
+        var sea = biomes.get(Zeemeerguh.GUH_SEA);
         helper.assertTrue(sea.isPresent() && sea.get().is(Zeemeerguh.GUHZEEEN) && deep.get().is(Zeemeerguh.GUHZEEEN),
                 "wild Zeemeerguhs turn up in both guh seas");
-        var set = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).get(Guhs.id("onderwater"));
+        var set = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).getValue(Guhs.id("onderwater"));
         helper.assertTrue(set != null && set.placement() instanceof net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement spread
                 && spread.spacing() == ((GuhbubbelStructure) structure).cellChunks(), "one start chunk per cell");
         var template = helper.getLevel().getStructureManager().get(Guhs.id("onderwater"));
@@ -400,7 +400,7 @@ public class OnderwaterGameTests {
     public static void aGeneratedBubbleLiesOnTheBottomOfADeepSea(GameTestHelper helper) {
         ServerLevel guhmension = helper.getLevel().getServer().getLevel(ModDimensions.GUHMENSION);
         helper.assertTrue(guhmension != null, "the Guhmension exists");
-        var holder = guhmension.registryAccess().lookupOrThrow(Registries.STRUCTURE).getHolderOrThrow(OnderwaterProtection.BUBBLE);
+        var holder = guhmension.registryAccess().lookupOrThrow(Registries.STRUCTURE).getOrThrow(OnderwaterProtection.BUBBLE);
         var found = guhmension.getChunkSource().getGenerator().findNearestMapStructure(guhmension, net.minecraft.core.HolderSet.direct(holder),
                 BlockPos.ZERO, 200, false);
         helper.assertTrue(found != null, "there is a Guhbubbel");
@@ -461,7 +461,7 @@ public class OnderwaterGameTests {
         var ops = net.minecraft.resources.RegistryOps.create(com.mojang.serialization.JsonOps.INSTANCE, access);
         var with = net.minecraft.world.level.biome.BiomeSource.CODEC.parse(ops, source).getOrThrow();
         var before = net.minecraft.world.level.biome.BiomeSource.CODEC.parse(ops, without).getOrThrow();
-        var settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        var settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).getValue(Guhs.id("guhmension"));
         java.util.Map<String, Integer> now = new java.util.HashMap<>(), then = new java.util.HashMap<>();
         int samples = 0;
         for (long seed : new long[]{1L, 20270501L, -778899L}) {
@@ -469,8 +469,8 @@ public class OnderwaterGameTests {
             for (int x = -4000; x < 4000; x += 40) {
                 for (int z = -4000; z < 4000; z += 40) {
                     int qx = net.minecraft.core.QuartPos.fromBlock(x), qy = net.minecraft.core.QuartPos.fromBlock(80), qz = net.minecraft.core.QuartPos.fromBlock(z);
-                    now.merge(with.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().location().getPath(), 1, Integer::sum);
-                    then.merge(before.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().location().getPath(), 1, Integer::sum);
+                    now.merge(with.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().identifier().getPath(), 1, Integer::sum);
+                    then.merge(before.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().identifier().getPath(), 1, Integer::sum);
                     samples++;
                 }
             }
@@ -505,8 +505,8 @@ public class OnderwaterGameTests {
     @GuhTest(template = EMPTY, timeoutTicks = 400)
     public static void oneBubblePerDeepSea(GameTestHelper helper) {
         var access = helper.getLevel().getServer().registryAccess();
-        var bubble = (GuhbubbelStructure) access.lookupOrThrow(Registries.STRUCTURE).get(OnderwaterProtection.BUBBLE);
-        var settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        var bubble = (GuhbubbelStructure) access.lookupOrThrow(Registries.STRUCTURE).getValue(OnderwaterProtection.BUBBLE);
+        var settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).getValue(Guhs.id("guhmension"));
         int size = bubble.cellChunks(), cells = 40, total = 0;
         StringBuilder report = new StringBuilder();
         for (long seed : new long[]{1L, 20270501L, -778899L}) {

@@ -738,7 +738,7 @@ public final class BakkerijGame {
         if (p instanceof FakePlayer || p.connection == null) {
             p.snapTo(x, y, z, yRot, 0);
         } else {
-            p.teleportTo(world, x, y, z, yRot, 0);
+            p.teleportTo(world, x, y, z, java.util.Set.of(), yRot, 0, true);
         }
     }
 

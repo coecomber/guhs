@@ -16,7 +16,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.item.ArmorItem;
+import java.util.Map;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAsset;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -44,6 +49,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.quest.GuhAdvancements;
 
+import net.minecraft.world.item.component.TooltipDisplay;
 /**
  * De Guhbubbel (onderwater): one in the deep middle of every Diepe Guhzee (tools/features/onderwater.py builds it, the
  * sea itself is tools/features/diepzee.py; {@link GuhbubbelStructure} finds the spot): on the sea floor a glass bubble
@@ -63,7 +69,6 @@ import nl.juiced.guhs.quest.GuhAdvancements;
 public final class OnderwaterFeature {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
-    public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS = DeferredRegister.create(Registries.ARMOR_MATERIAL, Guhs.MODID);
     public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(Registries.STRUCTURE_TYPE, Guhs.MODID);
 
     /** The Guhbubbel's structure type: one bubble in the deep middle of every Diepe Guhzee ({@link GuhbubbelStructure}). */
@@ -83,7 +88,7 @@ public final class OnderwaterFeature {
 
     // --- blocks ------------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<KaaskoraalBlock> KAASKORAAL = BLOCKS.registerBlock("kaaskoraal", KaaskoraalBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).noCollission().instabreak().sound(SoundType.WET_GRASS)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).noCollision().instabreak().sound(SoundType.WET_GRASS)
                     .lightLevel(s -> 10).pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<net.minecraft.world.level.block.Block> KAASKORAALBLOK = BLOCKS.registerSimpleBlock("kaaskoraalblok",
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BRAIN_CORAL_BLOCK).mapColor(MapColor.GOLD).lightLevel(s -> 3));
@@ -97,17 +102,23 @@ public final class OnderwaterFeature {
 
     // --- items -------------------------------------------------------------------------------------------------------------
     /** The duikhelm's material: a brass helmet (only the helmet exists), repaired with pearls. */
-    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> DUIK = ARMOR_MATERIALS.register("duikhelm", () -> {
-        EnumMap<ArmorItem.Type, Integer> defense = new EnumMap<>(ArmorItem.Type.class);
-        for (ArmorItem.Type type : ArmorItem.Type.values()) {
-            defense.put(type, type == ArmorItem.Type.HELMET ? 2 : 0);
+    // 26.1: ArmorMaterial is a plain record (no registry); the texture is the equipment asset guhs:duikhelm
+    // (assets/guhs/equipment/duikhelm.json -> textures/entity/equipment/humanoid/duikhelm.png). Repaired with a parel
+    // (set on the item; the tag only exists because the record wants one).
+    public static final ResourceKey<EquipmentAsset> DUIK_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Guhs.id("duikhelm"));
+    public static final ArmorMaterial DUIK;
+
+    static {
+        Map<ArmorType, Integer> defense = new EnumMap<>(ArmorType.class);
+        for (ArmorType type : ArmorType.values()) {
+            defense.put(type, type == ArmorType.HELMET ? 2 : 0);
         }
-        return new ArmorMaterial(defense, 12, SoundEvents.ARMOR_EQUIP_TURTLE, () -> Ingredient.of(OnderwaterFeature.PAREL.get()),
-                List.of(new ArmorMaterial.Layer(Guhs.id("duikhelm"))), 0f, 0f);
-    });
+        DUIK = new ArmorMaterial(20, defense, 12, SoundEvents.ARMOR_EQUIP_TURTLE, 0f, 0f, ItemTags.create(Guhs.id("duikhelm_repair")), DUIK_ASSET);
+    }
+
     public static final DeferredItem<Item> PAREL = ITEMS.registerItem("parel", LoreItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
-    public static final DeferredItem<DuikhelmItem> DUIKHELM = ITEMS.registerItem("duikhelm", p -> new DuikhelmItem(DUIK, p),
-            new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(20)).rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<DuikhelmItem> DUIKHELM = ITEMS.registerItem("duikhelm", DuikhelmItem::new,
+            () -> new Item.Properties().humanoidArmor(DUIK, ArmorType.HELMET).repairable(PAREL.get()).rarity(Rarity.UNCOMMON));
 
     static {
         ITEMS.registerItem("kaaskoraal", p -> new LoreItem.Block(KAASKORAAL.get(), p));
@@ -121,7 +132,6 @@ public final class OnderwaterFeature {
     public static void register(IEventBus modBus) {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
-        ARMOR_MATERIALS.register(modBus);
         STRUCTURE_TYPES.register(modBus);
         FEATURES.register(modBus);
         PLACEMENT_MODIFIERS.register(modBus);
@@ -212,8 +222,8 @@ public final class OnderwaterFeature {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
 
         /** The same for a block item. */
@@ -223,8 +233,8 @@ public final class OnderwaterFeature {
             }
 
             @Override
-            public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-                tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+            public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+                tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
             }
         }
     }

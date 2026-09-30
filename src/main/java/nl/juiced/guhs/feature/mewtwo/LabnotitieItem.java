@@ -16,6 +16,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A lab note of Professor Knabbelkloon (numbered 1..6 in its custom data {@code guhs_mewtwo_notitie}): right-click to read its
  * bit of the story (the talking screen, no speaker). Found at the note spots of the kloon-eiland ({@link MewtwoBlokken.Notitieplek}).
@@ -56,7 +58,7 @@ public class LabnotitieItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.mewtwo_labnotitie.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.mewtwo_labnotitie.lore").withStyle(ChatFormatting.GRAY));
     }
 }

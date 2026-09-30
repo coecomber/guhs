@@ -2,86 +2,115 @@ package nl.juiced.guhs.feature.mewtwo.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import net.minecraft.data.AtlasIds;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.mewtwo.KloontankBlockEntity;
 import nl.juiced.guhs.feature.mewtwo.MewtwoFeature;
 import nl.juiced.guhs.feature.mewtwo.MewtwoStand;
 
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * Draws the kloontank round its block (the middle of its floor): an eight-sided glass tube (3 blocks wide, almost 3 high)
  * with metal rings, the pink knabbelsap inside (it glows), and as long as YOUR questline hasn't repaired it (the client's
  * {@link MewtwoStand}): cracks in three of its panes, one pane broken down to a stump, the liquid only a puddle high, and four
  * lamps on the front of the base (red = that part is missing, green = built in). Repaired: whole glass, full to the top.
  */
-public class KloontankRenderer implements BlockEntityRenderer<KloontankBlockEntity> {
+public class KloontankRenderer implements BlockEntityRenderer<KloontankBlockEntity, KloontankRenderer.State> {
     private static final int ZIJDEN = 8;
     private static final float R_GLAS = 1.38f, R_VLOEI = 1.28f, ONDER = 0.125f, BOVEN = 2.97f;
+
+    /** 1.1.0 render state: what the tank looks like this frame (worked out at extract time). */
+    public static class State extends BlockEntityRenderState {
+        boolean heel;
+        float tijd;
+        Direction voor = Direction.SOUTH;
+        final boolean[] ingebouwd = new boolean[MewtwoFeature.ONDERDELEN + 1];
+    }
 
     public KloontankRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     private static TextureAtlasSprite sprite(String naam) {
-        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(Guhs.id("block/" + naam));
+        return Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).getSprite(Guhs.id("block/" + naam));
     }
 
     @Override
-    public void render(KloontankBlockEntity tank, float partialTick, PoseStack pose, MultiBufferSource buffers, int light, int overlay) {
-        boolean heel = MewtwoStand.tankHeel();
-        float tijd = (tank.getLevel() == null ? 0 : tank.getLevel().getGameTime()) + partialTick;
+    public State createRenderState() {
+        return new State();
+    }
+
+    @Override
+    public void extractRenderState(KloontankBlockEntity tank, State state, float partialTick, Vec3 camera,
+                                   @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+        BlockEntityRenderer.super.extractRenderState(tank, state, partialTick, camera, breakProgress);
+        state.heel = MewtwoStand.tankHeel();
+        state.tijd = (tank.getLevel() == null ? 0 : tank.getLevel().getGameTime()) + partialTick;
+        state.voor = tank.getBlockState().hasProperty(HorizontalDirectionalBlock.FACING)
+                ? tank.getBlockState().getValue(HorizontalDirectionalBlock.FACING) : Direction.SOUTH;
+        for (int n = 1; n <= MewtwoFeature.ONDERDELEN; n++) {
+            state.ingebouwd[n] = MewtwoStand.isIngebouwd(n);
+        }
+    }
+
+    @Override
+    public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
+        boolean heel = state.heel;
+        float tijd = state.tijd;
+        int light = state.lightCoords;
+        TextureAtlasSprite vloei = sprite("mewtwo_kloonvloeistof"), glas = sprite("mewtwo_tankglas"), barst = sprite("mewtwo_tankglas_barst"),
+                metaal = sprite("mewtwo_tankmetaal"), groen = sprite("mewtwo_lampje_groen"), rood = sprite("mewtwo_lampje_rood");
         pose.pushPose();
         pose.translate(0.5, 0, 0.5);
-        VertexConsumer vc = buffers.getBuffer(RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS));
-        PoseStack.Pose last = pose.last();
-        // the liquid: a glowing pink column (full and wavy when whole, a puddle when cracked)
-        TextureAtlasSprite vloei = sprite("mewtwo_kloonvloeistof");
-        float hoog = heel ? BOVEN - 0.12f + (float) Math.sin(tijd * 0.08) * 0.03f : 0.42f + (float) Math.sin(tijd * 0.05) * 0.02f;
-        int roze = heel ? 0xE0FFFFFF : 0xD0FFFFFF;
-        for (int i = 0; i < ZIJDEN; i++) {
-            zijde(vc, last, i, R_VLOEI, ONDER, hoog, vloei, roze, LightCoordsUtil.FULL_BRIGHT, -1);
-        }
-        deksel(vc, last, R_VLOEI, hoog, vloei, roze, LightCoordsUtil.FULL_BRIGHT);
-        // the glass: eight panes, three cracked and one broken while it isn't repaired
-        TextureAtlasSprite glas = sprite("mewtwo_tankglas"), barst = sprite("mewtwo_tankglas_barst");
-        for (int i = 0; i < ZIJDEN; i++) {
-            if (!heel && i == 3) {
-                zijde(vc, last, i, R_GLAS, ONDER, 0.9f, barst, 0xFFFFFFFF, light, 1);   // (only the stump of the broken pane is left)
-                continue;
+        collector.submitCustomGeometry(pose, RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), (last, vc) -> {
+            // the liquid: a glowing pink column (full and wavy when whole, a puddle when cracked)
+            float hoog = heel ? BOVEN - 0.12f + (float) Math.sin(tijd * 0.08) * 0.03f : 0.42f + (float) Math.sin(tijd * 0.05) * 0.02f;
+            int roze = heel ? 0xE0FFFFFF : 0xD0FFFFFF;
+            for (int i = 0; i < ZIJDEN; i++) {
+                zijde(vc, last, i, R_VLOEI, ONDER, hoog, vloei, roze, LightCoordsUtil.FULL_BRIGHT, -1);
             }
-            boolean kapot = !heel && (i == 1 || i == 2 || i == 5);
-            zijde(vc, last, i, R_GLAS, ONDER, BOVEN, kapot ? barst : glas, 0xFFFFFFFF, light, 1);
-        }
-        // metal rings at the bottom and the top
-        TextureAtlasSprite metaal = sprite("mewtwo_tankmetaal");
-        for (int i = 0; i < ZIJDEN; i++) {
-            zijde(vc, last, i, R_GLAS + 0.04f, 0.0f, ONDER + 0.12f, metaal, 0xFFFFFFFF, light, 1);
-            zijde(vc, last, i, R_GLAS + 0.04f, BOVEN - 0.14f, BOVEN + 0.02f, metaal, 0xFFFFFFFF, light, 1);
-        }
+            deksel(vc, last, R_VLOEI, hoog, vloei, roze, LightCoordsUtil.FULL_BRIGHT);
+            // the glass: eight panes, three cracked and one broken while it isn't repaired
+            for (int i = 0; i < ZIJDEN; i++) {
+                if (!heel && i == 3) {
+                    zijde(vc, last, i, R_GLAS, ONDER, 0.9f, barst, 0xFFFFFFFF, light, 1);   // (only the stump of the broken pane is left)
+                    continue;
+                }
+                boolean kapot = !heel && (i == 1 || i == 2 || i == 5);
+                zijde(vc, last, i, R_GLAS, ONDER, BOVEN, kapot ? barst : glas, 0xFFFFFFFF, light, 1);
+            }
+            // metal rings at the bottom and the top
+            for (int i = 0; i < ZIJDEN; i++) {
+                zijde(vc, last, i, R_GLAS + 0.04f, 0.0f, ONDER + 0.12f, metaal, 0xFFFFFFFF, light, 1);
+                zijde(vc, last, i, R_GLAS + 0.04f, BOVEN - 0.14f, BOVEN + 0.02f, metaal, 0xFFFFFFFF, light, 1);
+            }
+        });
         // the four lamps on the front of the base: red = missing, green = built in
-        Direction voor = tank.getBlockState().hasProperty(HorizontalDirectionalBlock.FACING)
-                ? tank.getBlockState().getValue(HorizontalDirectionalBlock.FACING) : Direction.SOUTH;
         pose.pushPose();
-        pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-voor.toYRot()));
-        PoseStack.Pose lamp = pose.last();
-        for (int n = 1; n <= MewtwoFeature.ONDERDELEN; n++) {
-            boolean in = MewtwoStand.isIngebouwd(n);
-            TextureAtlasSprite s = sprite(in ? "mewtwo_lampje_groen" : "mewtwo_lampje_rood");
-            float x = -0.52f + (n - 1) * 0.3f, z = R_GLAS + 0.07f;
-            int flits = !in && ((int) (tijd / 10) + n) % 4 == 0 ? 0xFFFFB0B0 : 0xFFFFFFFF;
-            vierkant(vc, lamp, x, 0.03f, z, x + 0.16f, 0.2f, s, flits, LightCoordsUtil.FULL_BRIGHT);
-        }
+        pose.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-state.voor.toYRot()));
+        collector.submitCustomGeometry(pose, RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS), (lamp, vc) -> {
+            for (int n = 1; n <= MewtwoFeature.ONDERDELEN; n++) {
+                boolean in = state.ingebouwd[n];
+                float x = -0.52f + (n - 1) * 0.3f, z = R_GLAS + 0.07f;
+                int flits = !in && ((int) (tijd / 10) + n) % 4 == 0 ? 0xFFFFB0B0 : 0xFFFFFFFF;
+                vierkant(vc, lamp, x, 0.03f, z, x + 0.16f, 0.2f, in ? groen : rood, flits, LightCoordsUtil.FULL_BRIGHT);
+            }
+        });
         pose.popPose();
         pose.popPose();
     }
@@ -130,7 +159,7 @@ public class KloontankRenderer implements BlockEntityRenderer<KloontankBlockEnti
     }
 
     @Override
-    public boolean shouldRenderOffScreen(KloontankBlockEntity tank) {
+    public boolean shouldRenderOffScreen() {
         return true;
     }
 }

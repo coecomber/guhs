@@ -1,10 +1,18 @@
 package nl.juiced.guhs.feature.baltoslee.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import com.google.common.reflect.TypeToken;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -14,21 +22,40 @@ import nl.juiced.guhs.feature.baltoslee.SledehondjeEntity;
 import nl.juiced.guhs.feature.baltoslee.SleeBaan;
 import nl.juiced.guhs.feature.baltoslee.SleeEntity;
 import nl.juiced.guhs.feature.baltoslee.SleeRijden;
-import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.constant.dataticket.DataTicket;
 import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.base.BoneSnapshots;
+import com.geckolib.renderer.base.GeoRenderState;
+import com.geckolib.renderer.base.RenderPassInfo;
 
 /**
- * The Nomguh sled (geo/entity/baltoslee_slee.geo.json): turned along its track, tilted on slopes, leaning into the bends,
- * the medicine chest on board after the berghut; in front the team ({@link Span}): four guh-sledehondjes two by two and the
- * lead (Baltoguh on the medicine ride, a lead dog with a bell in the race), roped to the sled. Steele-Mika's sled is darker,
- * pulled by his own dogs, with Steele-Mika sitting in it.
+ * The Nomguh sled (geckolib/models/entity/baltoslee_slee.geo.json): turned along its track, tilted on slopes, leaning into
+ * the bends, the medicine chest on board after the berghut; in front the team ({@link Span}): four guh-sledehondjes two by
+ * two and the lead (Baltoguh on the medicine ride, a lead dog with a bell in the race), roped to the sled. Steele-Mika's sled
+ * is darker, pulled by his own dogs, with Steele-Mika sitting in it.
+ * <p>
+ * 1.1.0 (GeckoLib 5 / MC 26.1): turn, look and team are worked out at extract time ({@link #addRenderData}); the team is
+ * submitted after the sled like vanilla's passengers ({@link Span#submit}).
  */
-public class SleeRenderer extends GeoEntityRenderer<SleeEntity> {
+public class SleeRenderer extends GeoEntityRenderer<SleeEntity, EntityRenderState> {
     private static final Identifier TEX = Guhs.id("textures/entity/baltoslee_slee.png");
     private static final Identifier TEX_STEELE = Guhs.id("textures/entity/baltoslee_slee_steele.png");
     /** Where the team runs: blocks ahead of the sled's middle, and sideways (the last one is the lead). */
     static final double[][] PLEKKEN = {{2.0, -0.4}, {2.0, 0.4}, {3.05, -0.4}, {3.05, 0.4}, {4.3, 0}};
+
+    /** The sled's look this frame: Steele's, the chest on board, how fast (0..1, bells and lantern swing), its clock. */
+    record Uiterlijk(boolean steele, boolean kist, float v, float tijd) {
+    }
+
+    /** The team this frame: members (extracted render states) and ropes (relative to the drawn sled). */
+    record Team(List<Span.Lid> leden, List<Vec3[]> touwen) {
+    }
+
+    static final DataTicket<Uiterlijk> UITERLIJK = DataTicket.create("guhs_baltoslee_slee", Uiterlijk.class);
+    /** Yaw, pitch, lean and the digging wobble (degrees), or absent: no turn at all (no route yet). */
+    private static final DataTicket<float[]> DRAAI = DataTicket.create("guhs_baltoslee_draai", float[].class);
+    static final DataTicket<Team> TEAM = DataTicket.create("guhs_baltoslee_team", new TypeToken<Team>() {});
 
     private final EntityRenderDispatcher dispatcher;
 
@@ -44,18 +71,9 @@ public class SleeRenderer extends GeoEntityRenderer<SleeEntity> {
         }
 
         @Override
-        public Identifier getTextureResource(SleeEntity sled) {
-            return sled.soort() == SleeEntity.STEELE ? TEX_STEELE : TEX;
-        }
-
-        @Override
-        public void setCustomAnimations(SleeEntity sled, long instanceId, AnimationTest<SleeEntity> state) {
-            getBone("kist").ifPresent(b -> b.setHidden(!sled.kist()));
-            getBone("musher").ifPresent(b -> b.setHidden(true));
-            float t = (float) state.getAnimationTick();
-            float v = (float) Math.min(1, sled.v / SleeRijden.KRUIS);
-            getBone("bellen").ifPresent(b -> b.setRotZ(Mth.sin(t * 0.9f) * 0.25f * v));
-            getBone("lantaarn").ifPresent(b -> b.setRotX(Mth.sin(t * 0.45f) * 0.12f * v));
+        public Identifier getTextureResource(GeoRenderState state) {
+            Uiterlijk u = state.getGeckolibData(UITERLIJK);
+            return u != null && u.steele() ? TEX_STEELE : TEX;
         }
     }
 
@@ -69,11 +87,19 @@ public class SleeRenderer extends GeoEntityRenderer<SleeEntity> {
     }
 
     @Override
-    protected void applyRotations(SleeEntity sled, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick, float nativeScale) {
+    public void addRenderData(SleeEntity sled, @Nullable Void related, EntityRenderState state, float partialTick) {
+        state.addGeckolibData(UITERLIJK, new Uiterlijk(sled.soort() == SleeEntity.STEELE, sled.kist(),
+                (float) Math.min(1, sled.v / SleeRijden.KRUIS), sled.tickCount + partialTick));
         RitRoute r = sled.route();
         if (r == null) {
             return;
         }
+        draai(sled, r, state, partialTick);
+        state.addGeckolibData(TEAM, team(sled, r, state.lightCoords, partialTick));
+    }
+
+    /** Turned along its track, tilted on slopes, leaning into the bends (was applyRotations; eases once per frame). */
+    private static void draai(SleeEntity sled, RitRoute r, EntityRenderState state, float partialTick) {
         SleeBaan b = r.baan(sled.been);
         double s = tekenS(sled, partialTick);
         Vec3 t = b.richting(s);
@@ -85,21 +111,45 @@ public class SleeRenderer extends GeoEntityRenderer<SleeEntity> {
             doelLean += (float) Mth.clamp(sled.latV * 60, -8, 8);
         }
         sled.lean = Mth.lerp(0.1f, sled.lean, doelLean);
-        poseStack.mulPose(Axis.YP.rotationDegrees(180f - sled.tekenYaw));
-        poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(sled.lean));
-        if (sled.fase() == SleeEntity.VAST) {
-            poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.sin((sled.tickCount + partialTick) * 1.7f) * 3f));   // (digging out: it wobbles)
+        float wiebel = sled.fase() == SleeEntity.VAST ? Mth.sin((sled.tickCount + partialTick) * 1.7f) * 3f : 0f;   // (digging out: it wobbles)
+        state.addGeckolibData(DRAAI, new float[]{sled.tekenYaw, pitch, sled.lean, wiebel});
+    }
+
+    @Override
+    protected void applyRotations(RenderPassInfo<EntityRenderState> info, PoseStack poseStack, float nativeScale) {
+        float[] d = info.getGeckolibData(DRAAI);
+        if (d == null) {
+            return;
+        }
+        poseStack.mulPose(Axis.YP.rotationDegrees(180f - d[0]));
+        poseStack.mulPose(Axis.XP.rotationDegrees(d[1]));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(d[2]));
+        if (d[3] != 0f) {
+            poseStack.mulPose(Axis.ZP.rotationDegrees(d[3]));
         }
     }
 
     @Override
-    public void render(SleeEntity sled, float entityYaw, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
-        super.render(sled, entityYaw, partialTick, pose, buffers, light);
-        RitRoute r = sled.route();
-        if (r == null) {
+    public void adjustModelBonesForRender(RenderPassInfo<EntityRenderState> info, BoneSnapshots bones) {
+        Uiterlijk u = info.getGeckolibData(UITERLIJK);
+        if (u == null) {
             return;
         }
+        bonen(bones, !u.kist(), u.v(), u.tijd());
+    }
+
+    /** The chest (hidden unless on board), no musher bone (the player stands there), bells and lantern swinging with the speed. */
+    static void bonen(BoneSnapshots bones, boolean kistWeg, float v, float t) {
+        bones.ifPresent("kist", b -> b.skipRender(kistWeg).skipChildrenRender(kistWeg));
+        bones.ifPresent("musher", b -> b.skipRender(true).skipChildrenRender(true));
+        bones.ifPresent("bellen", b -> b.setRotZ(Mth.sin(t * 0.9f) * 0.25f * v));
+        bones.ifPresent("lantaarn", b -> b.setRotX(Mth.sin(t * 0.45f) * 0.12f * v));
+    }
+
+    /** The team in front (was drawn in render(); now extracted here and submitted with the sled). */
+    private Team team(SleeEntity sled, RitRoute r, int light, float partialTick) {
+        List<Span.Lid> leden = new ArrayList<>();
+        List<Vec3[]> touwen = new ArrayList<>();
         boolean steele = sled.soort() == SleeEntity.STEELE;
         boolean balto = sled.soort() == SleeEntity.TOCHT;
         Span span = Span.van(sled, balto ? 4 : 5, steele ? SledehondjeEntity.STEELE : SledehondjeEntity.GEWOON, balto, steele);
@@ -124,20 +174,30 @@ public class SleeRenderer extends GeoEntityRenderer<SleeEntity> {
             }
             Vec3 at = span.naar(i, doel, doelYaw);
             Vec3 harnas = at.add(0, 0.34, 0);
-            Span.touw(haak, harnas, origin, pose, buffers, light);
-            if (lead) {
-                if (balto) {
-                    span.leider(at, origin, dispatcher, partialTick, pose, buffers, light);
-                } else {
-                    span.hond(i, at, origin, loop, legs, zit, blij, dispatcher, partialTick, pose, buffers, light);
-                }
-            } else {
-                span.hond(i, at, origin, loop, legs, zit, blij, dispatcher, partialTick, pose, buffers, light);
+            touwen.add(new Vec3[]{haak.subtract(origin), harnas.subtract(origin)});
+            Span.Lid lid = lead && balto ? span.leider(at, origin, dispatcher, partialTick, light)
+                    : span.hond(i, at, origin, loop, legs, zit, blij, dispatcher, partialTick, light);
+            if (lid != null) {
+                leden.add(lid);
             }
         }
         if (steele) {
             Vec3 seat = origin.add(new Vec3(t0.x, 0, t0.z).normalize().scale(0.1)).add(0, 0.28, 0);
-            span.steele(seat, origin, sled.tekenYaw, dispatcher, partialTick, pose, buffers, light);
+            Span.Lid lid = span.steele(seat, origin, sled.tekenYaw, dispatcher, partialTick, light);
+            if (lid != null) {
+                leden.add(lid);
+            }
+        }
+        return new Team(leden, touwen);
+    }
+
+    @Override
+    public void submit(EntityRenderState state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
+        super.submit(state, pose, collector, camera);
+        Team team = state.getGeckolibData(TEAM);
+        if (team != null) {
+            Span.touwen(team.touwen(), state.lightCoords, pose, collector);
+            Span.submit(team.leden(), dispatcher, camera, pose, collector);
         }
     }
 

@@ -25,6 +25,8 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** The beroepen's small items (lang: the item's key + ".lore"). */
 public final class BeroepenItems {
     /** A block item with a line of lore. */
@@ -34,8 +36,8 @@ public final class BeroepenItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -59,11 +61,6 @@ public final class BeroepenItems {
         }
 
         @Override
-        public SoundEvent getDrinkingSound() {
-            return SoundEvents.GENERIC_DRINK;
-        }
-
-        @Override
         public InteractionResult use(Level level, Player player, InteractionHand hand) {
             return ItemUtils.startUsingInstantly(level, player, hand);
         }
@@ -71,7 +68,7 @@ public final class BeroepenItems {
         @Override
         public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
             if (!level.isClientSide()) {
-                entity.removeEffectsCuredBy(net.neoforged.neoforge.common.EffectCures.MILK);
+                entity.removeAllEffects();                     // 26.1: NeoForge effect cures are gone; milk clears all effects
                 entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 0));
                 if (entity instanceof Player p) {
                     p.sendOverlayMessage(Component.translatable("item.guhs.kaasmelkdrankje.gedronken").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -91,8 +88,8 @@ public final class BeroepenItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("item.guhs.kaasmelkdrankje.lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("item.guhs.kaasmelkdrankje.lore").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -110,13 +107,13 @@ public final class BeroepenItems {
                 server.sendParticles(ParticleTypes.SNEEZE, player.getX() + look.x * 0.6, player.getEyeY() - 0.1, player.getZ() + look.z * 0.6, 8,
                         0.1, 0.05, 0.1, 0.03);
             }
-            player.getCooldowns().addCooldown(this, 40);
+            player.getCooldowns().addCooldown(player.getItemInHand(hand), 40);
             return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(hand));
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("item.guhs.snotkruidje.lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("item.guhs.snotkruidje.lore").withStyle(ChatFormatting.GRAY));
         }
     }
 

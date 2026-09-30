@@ -16,6 +16,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -70,7 +72,7 @@ public final class BakkerijFeature {
     public static final DeferredBlock<VerstopBlocks.Marker> INGANG = marker("bakkerij_ingang");
 
     private static DeferredBlock<VerstopBlocks.Marker> marker(String name) {
-        return BLOCKS.registerBlock(name, VerstopBlocks.Marker::new, BlockBehaviour.Properties.of().noCollission().noLootTable()
+        return BLOCKS.registerBlock(name, VerstopBlocks.Marker::new, () -> BlockBehaviour.Properties.of().noCollision().noLootTable()
                 .strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false));
     }
 
@@ -87,29 +89,36 @@ public final class BakkerijFeature {
 
     static {
         for (Recept r : Recept.BOEK) {
-            BAKJES.put(r, ITEMS.registerItem(r.id(), p -> new BakjeItem(r, p), () -> new Item.Properties().food(eten(r))));
+            BAKJES.put(r, ITEMS.registerItem(r.id(), p -> new BakjeItem(r, p), () -> eten(r, new Item.Properties())));
         }
     }
 
-    /** What a pastry does for you: food, and a small cute effect (the guh humour is in the lang). */
-    static FoodProperties eten(Recept r) {
-        FoodProperties.Builder f = new FoodProperties.Builder();
-        switch (r) {
-            case KNABBELBROODJE -> f.nutrition(6).saturationModifier(0.7f).effect(() -> effect(MobEffects.SPEED, 30, 0), 1f);
-            case KAASKRAKELING -> f.nutrition(5).saturationModifier(0.6f).effect(() -> effect(MobEffects.HASTE, 60, 0), 1f);
-            case VADSVLAAI -> f.nutrition(8).saturationModifier(0.8f).effect(() -> effect(MobEffects.ABSORPTION, 60, 0), 1f);
-            case GUHCROISSANT -> f.nutrition(5).saturationModifier(0.6f).effect(() -> effect(MobEffects.JUMP_BOOST, 40, 0), 1f);
-            case KNABBELKOEKJE -> f.nutrition(3).saturationModifier(0.4f).fast().effect(() -> effect(MobEffects.SPEED, 15, 1), 1f);
-            case KAASBOLLETJE -> f.nutrition(6).saturationModifier(0.7f).effect(() -> effect(MobEffects.REGENERATION, 8, 0), 1f);
-            case PLUISMUFFIN -> f.nutrition(5).saturationModifier(0.5f).effect(() -> effect(MobEffects.SLOW_FALLING, 30, 0), 1f);
-            case THEETAARTJE -> f.nutrition(4).saturationModifier(0.6f).effect(() -> effect(MobEffects.LUCK, 120, 0), 1f);
-            case KNABBELTOMPOUCE -> f.nutrition(6).saturationModifier(0.6f).effect(() -> effect(MobEffects.RESISTANCE, 30, 0), 1f);
-            case VADSDONUT -> f.nutrition(5).saturationModifier(0.5f).effect(() -> effect(MobEffects.JUMP_BOOST, 20, 1), 1f);
-            case GUHWAFEL -> f.nutrition(5).saturationModifier(0.6f).effect(() -> effect(MobEffects.WATER_BREATHING, 60, 0), 1f);
-            case STERRENKOEKJE -> f.nutrition(3).saturationModifier(0.4f).fast().effect(() -> effect(MobEffects.NIGHT_VISION, 90, 0), 1f);
-            default -> f.nutrition(4).saturationModifier(0.5f);
-        }
-        return f.build();
+    /**
+     * What a pastry does for you: food, and a small cute effect (the guh humour is in the lang). 26.1: the effect and the
+     * eating speed ({@code fast()} = 0.8 s) live in the CONSUMABLE component next to the food.
+     */
+    static Item.Properties eten(Recept r, Item.Properties p) {
+        return switch (r) {
+            case KNABBELBROODJE -> eten(p, 6, 0.7f, false, effect(MobEffects.SPEED, 30, 0));
+            case KAASKRAKELING -> eten(p, 5, 0.6f, false, effect(MobEffects.HASTE, 60, 0));
+            case VADSVLAAI -> eten(p, 8, 0.8f, false, effect(MobEffects.ABSORPTION, 60, 0));
+            case GUHCROISSANT -> eten(p, 5, 0.6f, false, effect(MobEffects.JUMP_BOOST, 40, 0));
+            case KNABBELKOEKJE -> eten(p, 3, 0.4f, true, effect(MobEffects.SPEED, 15, 1));
+            case KAASBOLLETJE -> eten(p, 6, 0.7f, false, effect(MobEffects.REGENERATION, 8, 0));
+            case PLUISMUFFIN -> eten(p, 5, 0.5f, false, effect(MobEffects.SLOW_FALLING, 30, 0));
+            case THEETAARTJE -> eten(p, 4, 0.6f, false, effect(MobEffects.LUCK, 120, 0));
+            case KNABBELTOMPOUCE -> eten(p, 6, 0.6f, false, effect(MobEffects.RESISTANCE, 30, 0));
+            case VADSDONUT -> eten(p, 5, 0.5f, false, effect(MobEffects.JUMP_BOOST, 20, 1));
+            case GUHWAFEL -> eten(p, 5, 0.6f, false, effect(MobEffects.WATER_BREATHING, 60, 0));
+            case STERRENKOEKJE -> eten(p, 3, 0.4f, true, effect(MobEffects.NIGHT_VISION, 90, 0));
+            default -> p.food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.5f).build());
+        };
+    }
+
+    private static Item.Properties eten(Item.Properties p, int nutrition, float saturation, boolean fast, MobEffectInstance effect) {
+        return p.food(new FoodProperties.Builder().nutrition(nutrition).saturationModifier(saturation).build(),
+                Consumables.defaultFood().consumeSeconds(fast ? 0.8f : 1.6f)
+                        .onConsume(new ApplyStatusEffectsConsumeEffect(effect, 1f)).build());
     }
 
     private static MobEffectInstance effect(net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> effect, int seconds, int level) {

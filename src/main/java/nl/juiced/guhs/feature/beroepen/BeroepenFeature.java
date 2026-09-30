@@ -71,12 +71,12 @@ public final class BeroepenFeature {
     public static final DeferredBlock<VerstopBlocks.Marker> KLUISPLEK = marker("beroepen_kluisplek");
     public static final DeferredBlock<VerstopBlocks.Marker> VERSTOPPLEK = marker("beroepen_verstopplek");
     public static final DeferredBlock<PootafdrukBlock> POOTAFDRUK = BLOCKS.registerBlock("beroepen_pootafdruk", PootafdrukBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollission().instabreak().noLootTable().sound(SoundType.WOOL)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollision().instabreak().noLootTable().sound(SoundType.WOOL)
                     .pushReaction(PushReaction.DESTROY).replaceable());
     public static final DeferredBlock<KnabbelbuitBlock> KNABBELBUIT = BLOCKS.registerBlock("beroepen_knabbelbuit", KnabbelbuitBlock::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.8f).sound(SoundType.WOOL).noOcclusion().noLootTable());
     public static final DeferredBlock<SnotkruidBlock> SNOTKRUID = BLOCKS.registerBlock("beroepen_snotkruid", SnotkruidBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().randomTicks().sound(SoundType.CROP)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollision().instabreak().randomTicks().sound(SoundType.CROP)
                     .pushReaction(PushReaction.DESTROY).noLootTable());
     public static final DeferredBlock<MengketelBlock> MENGKETEL = BLOCKS.registerBlock("beroepen_mengketel", MengketelBlock::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(2.0f).sound(SoundType.COPPER).noOcclusion());
@@ -90,7 +90,7 @@ public final class BeroepenFeature {
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DECORATED_POT));
 
     private static DeferredBlock<VerstopBlocks.Marker> marker(String name) {
-        return BLOCKS.registerBlock(name, VerstopBlocks.Marker::new, BlockBehaviour.Properties.of().noCollission().noLootTable()
+        return BLOCKS.registerBlock(name, VerstopBlocks.Marker::new, () -> BlockBehaviour.Properties.of().noCollision().noLootTable()
                 .strength(-1.0f, 3600000.0f).noOcclusion().replaceable().pushReaction(PushReaction.BLOCK));
     }
 
@@ -98,7 +98,9 @@ public final class BeroepenFeature {
     public static final DeferredItem<BrandslangItem> GUH_BRANDSLANG = ITEMS.registerItem("guh_brandslang", BrandslangItem::new,
             () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<BeroepenItems.Drankje> KAASMELKDRANKJE = ITEMS.registerItem("kaasmelkdrankje", BeroepenItems.Drankje::new,
-            () -> new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE));
+            () -> new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)
+                    // 26.1: the drinking sound comes from a CONSUMABLE component (use/finishUsingItem stay the item's own)
+                    .component(net.minecraft.core.component.DataComponents.CONSUMABLE, net.minecraft.world.item.component.Consumables.defaultDrink().build()));
     public static final DeferredItem<BeroepenItems.Snotkruidje> SNOTKRUIDJE = ITEMS.registerItem("snotkruidje", BeroepenItems.Snotkruidje::new,
             () -> new Item.Properties());
     public static final DeferredItem<DakpanItem> DAKPAN_ITEM = ITEMS.registerItem("beroepen_dakpan", p -> new DakpanItem(DAKPAN.get(), p),

@@ -10,6 +10,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** The kloon-eiland's block items: a grey lore line under the name (lang key {@code <item>.lore}, when there is one). */
 public final class MewtwoItems {
     private MewtwoItems() {
@@ -21,10 +23,10 @@ public final class MewtwoItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             String key = getDescriptionId() + ".lore";
             if (Language.getInstance().has(key)) {
-                tooltip.add(Component.translatable(key).withStyle(ChatFormatting.GRAY));
+                tooltip.accept(Component.translatable(key).withStyle(ChatFormatting.GRAY));
             }
         }
     }

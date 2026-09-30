@@ -48,7 +48,8 @@ public class KlassiekersGameTests {
         Scorebord.submit(player, "klassiekers_testbord_lastig", 4242, false);
         Component text = Klassiekers.bord(helper.getLevel().getServer(), Component.literal("Test"), "klassiekers_testbord",
                 n -> Component.literal("extra" + n), s -> s + " pt");
-        String json = Component.Serializer.toJson(text, helper.getLevel().registryAccess());
+        String json = net.minecraft.network.chat.ComponentSerialization.CODEC
+                .encodeStart(helper.getLevel().registryAccess().createSerializationContext(com.mojang.serialization.JsonOps.INSTANCE), text).getOrThrow().toString();
         helper.assertTrue(json.contains("gui.guhs.niveau.makkelijk") && json.contains("gui.guhs.niveau.medium") && json.contains("gui.guhs.niveau.lastig"),
                 "three levels: " + json);
         helper.assertTrue(json.contains("extra0") && json.contains("extra2"), "with their extra line");

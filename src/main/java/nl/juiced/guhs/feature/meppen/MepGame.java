@@ -294,9 +294,9 @@ public final class MepGame {
         if (p instanceof FakePlayer) {
             p.snapTo(c.x, c.y, c.z, yaw, 40f);
         } else {
-            p.teleportTo(world, c.x, c.y, c.z, yaw, 40f);
+            p.teleportTo(world, c.x, c.y, c.z, java.util.Set.of(), yaw, 40f, true);
         }
-        bar = new ServerBossEvent(Component.translatable("gui.guhs.mika_mep.bar.ready"), BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.NOTCHED_10);
+        bar = new ServerBossEvent(Mth.createInsecureUUID(world.getRandom()), Component.translatable("gui.guhs.mika_mep.bar.ready"), BossEvent.BossBarColor.PINK, BossEvent.BossBarOverlay.NOTCHED_10);
         bar.setProgress(1f);
         bar.addPlayer(p);
         GuhQuests.say(p, npc, "quest.guhs.mika_mep.go");
@@ -448,14 +448,14 @@ public final class MepGame {
         if (p != null) {
             double dx = p.getX() - (pos.getX() + 0.5), dz = p.getZ() - (pos.getZ() + 0.5);
             if (dx * dx + dz * dz > 0.01) {
-                facing = Direction.getNearest(dx, 0, dz);
+                facing = Direction.getApproximateNearest(dx, 0, dz);
             }
         }
         world.setBlock(pos, MeppenFeature.MEP_KOP.get().defaultBlockState().setValue(MepKop.FACING, facing).setValue(MepKop.KOP, kop), 3);
         heads.put(pos, new Head(kop, tick + up));
         world.sendParticles(ParticleTypes.POOF, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, 4, 0.2, 0.05, 0.2, 0.01);
         if (kop == Kop.GOUD) {
-            world.sendParticles(new DustParticleOptions(new org.joml.Vector3f(1f, 0.85f, 0.2f), 1.2f), pos.getX() + 0.5, pos.getY() + 0.6,
+            world.sendParticles(new DustParticleOptions(0xFFD933 /* 1, 0.85, 0.2 */, 1.2f), pos.getX() + 0.5, pos.getY() + 0.6,
                     pos.getZ() + 0.5, 12, 0.35, 0.35, 0.35, 0);
             sound(world, pos, SoundEvents.AMETHYST_BLOCK_CHIME, 1f, 1.4f);
         } else if (kop == Kop.GUH) {
@@ -727,10 +727,11 @@ public final class MepGame {
     }
 
     private static void setText(Display.TextDisplay display, Component text) {
-        CompoundTag tag = new CompoundTag();
-        display.saveWithoutId(tag);
-        tag.putString("text", Component.Serializer.toJson(text, display.registryAccess()));
-        display.load(tag);
+        // 26.1: TextDisplay#setText is private and entity NBT keeps the text as a component (no JSON string)
+        CompoundTag tag = nl.juiced.guhs.storage.Nbt.saveWithoutId(display);
+        tag.put("text", net.minecraft.network.chat.ComponentSerialization.CODEC
+                .encodeStart(display.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), text).getOrThrow());
+        nl.juiced.guhs.storage.Nbt.load(display, tag);
     }
 
     /** The live board above the stage: the score while playing, an invitation otherwise. */
@@ -803,7 +804,7 @@ public final class MepGame {
         if (slot < 0) {
             slot = inv.getSelectedSlot();
             CompoundTag saved = GuhQuests.saved(p);
-            saved.put(STASH, inv.getItem(slot).save(p.registryAccess()));
+            saved.put(STASH, nl.juiced.guhs.storage.Nbt.saveStack(p.registryAccess(), inv.getItem(slot)));
             saved.putInt(STASH_SLOT, slot);
         }
         inv.setItem(slot, new ItemStack(MeppenFeature.MEP_HAMER.get()));
@@ -826,7 +827,7 @@ public final class MepGame {
         }
         CompoundTag saved = GuhQuests.saved(p);
         if (saved.contains(STASH)) {
-            ItemStack stack = ItemStack.parseOptional(p.registryAccess(), saved.getCompoundOrEmpty(STASH));
+            ItemStack stack = nl.juiced.guhs.storage.Nbt.parseStack(p.registryAccess(), saved.getCompoundOrEmpty(STASH));
             int slot = saved.getIntOr(STASH_SLOT, 0);
             saved.remove(STASH);
             saved.remove(STASH_SLOT);

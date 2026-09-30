@@ -254,7 +254,7 @@ public class SamenGameTests {
         kart.setUpForRace();
         helper.runAfterDelay(2, () -> {
             helper.assertTrue(!guh.startRiding(kart), "without a racer in front: no seat for a guh");
-            helper.assertTrue(p.startRiding(kart, true), "the racer gets on");
+            helper.assertTrue(p.startRiding(kart, true, true), "the racer gets on");
             SamenMee.testKart(p, guh);
             helper.assertTrue(guh.startRiding(kart), "the guh hops on behind");
             helper.assertTrue(kart.getPassengers().size() == 2 && kart.getPassengers().get(0) == p && kart.getControllingPassenger() == p,

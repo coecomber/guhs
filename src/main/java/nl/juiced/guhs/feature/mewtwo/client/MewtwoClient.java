@@ -1,9 +1,9 @@
 package nl.juiced.guhs.feature.mewtwo.client;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.util.Mth;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -19,6 +19,10 @@ import nl.juiced.guhs.feature.mewtwo.MewtwoStand;
 import nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk;
 import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.constant.DefaultAnimations;
+import com.geckolib.renderer.base.BoneSnapshots;
+import com.geckolib.renderer.base.RenderPassInfo;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 
 /**
  * The kloon-eiland on the client: Mieuwguh's renderer, the kloontank's renderer (your own tank: {@link KloontankRenderer}),
@@ -29,25 +33,28 @@ public final class MewtwoClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> {
             event.registerEntityRenderer(MewtwoFeature.MEW.get(), context -> {
-                GeoEntityRenderer<MewEntity> r = new GeoEntityRenderer<>(context, new DefaultedEntityGeoModel<MewEntity>(Guhs.id("mew"), true));
-                r.withScale(1.0f);
-                return r;
+                return new GeoEntityRenderer<MewEntity, LivingEntityRenderState>(context, new DefaultedEntityGeoModel<MewEntity>(Guhs.id("mew"))) {
+                    @Override
+                    public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
+                        DefaultAnimations.hardcodedHeadRotation(info, bones, "head");   // was DefaultedEntityGeoModel(id, true)
+                    }
+                };
             });
             event.registerBlockEntityRenderer(MewtwoFeature.KLOONTANK_BE.get(), KloontankRenderer::new);
         });
         modBus.addListener((RegisterParticleProvidersEvent event) -> {
-            event.registerSpriteSet(MewtwoFeature.GLOED.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Deeltje(level, x, y, z, dx, dy, dz, sprites, 0));
-            event.registerSpriteSet(MewtwoFeature.X2.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Deeltje(level, x, y, z, dx, dy, dz, sprites, 1));
-            event.registerSpriteSet(MewtwoFeature.BUBBEL.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Deeltje(level, x, y, z, dx, dy, dz, sprites, 2));
+            event.registerSpriteSet(MewtwoFeature.GLOED.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Deeltje(level, x, y, z, dx, dy, dz, sprites, sprites.get(random), 0));
+            event.registerSpriteSet(MewtwoFeature.X2.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Deeltje(level, x, y, z, dx, dy, dz, sprites, sprites.get(random), 1));
+            event.registerSpriteSet(MewtwoFeature.BUBBEL.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Deeltje(level, x, y, z, dx, dy, dz, sprites, sprites.get(random), 2));
         });
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.KNABBELKLOON, Guhs.id("geo/entity/guh_npc_knabbelkloon.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.KNABBELKLOON, (npc, state, bot) -> {
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.KNABBELKLOON, Guhs.id("entity/guh_npc_knabbelkloon"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.KNABBELKLOON, (npc, tick) -> {
             // his glasses slide askew, and now and then he pushes them straight (for a moment)
-            float t = (float) state.getAnimationTick();
+            float t = (float) tick;
             float duw = (t % 200) < 12 ? (t % 200) / 12f : 1f;
-            bot.apply("kloon_bril").ifPresent(b -> {
+            return bones -> bones.ifPresent("kloon_bril", b -> {
                 b.setRotZ(0.10f * duw + Mth.sin(t * 0.03f) * 0.015f);
-                b.setPosY(-0.3f * duw);
+                b.setTranslateY(-0.3f * duw);
             });
         });
         VariantUiterlijk.zet(GuhVariant.MEWTWO, new MewtwoUiterlijk());
@@ -56,15 +63,14 @@ public final class MewtwoClient {
     }
 
     /** The kloon-eiland's particles: 0 a purple sparkle (twinkles, drifts), 1 the "x2" (floats up, pops in), 2 a pink bubble (rises). */
-    static class Deeltje extends TextureSheetParticle {
+    static class Deeltje extends SingleQuadParticle {
         private final int soort;
         private final SpriteSet sprites;
 
-        Deeltje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites, int soort) {
-            super(level, x, y, z);
+        Deeltje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites, TextureAtlasSprite sprite, int soort) {
+            super(level, x, y, z, sprite);
             this.soort = soort;
             this.sprites = sprites;
-            pickSprite(sprites);
             hasPhysics = false;
             xd = dx;
             yd = dy;
@@ -106,13 +112,13 @@ public final class MewtwoClient {
         }
 
         @Override
-        public int getLightColor(float partialTick) {
+        public int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

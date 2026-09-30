@@ -1,26 +1,20 @@
 package nl.juiced.guhs.feature.mewtwo.client;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.client.GuhRenderer;
+import nl.juiced.guhs.client.GuhRenderFrame;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.verhaal.VerhaalVlaggen;
 import nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk;
-import com.geckolib.cache.model.GeoBone;
 
 import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
@@ -65,15 +59,12 @@ public final class MewtwoUiterlijk implements VariantUiterlijk.Uiterlijk {
     }
 
     @Override
-    public void botten(GuhEntity guh, Function<String, Optional<GeoBone>> bot, float pt) {
+    public void botten(GuhEntity guh, GuhRenderFrame frame, float pt) {
+        // 1.1.0: everything is worked out now (extract time); the bone moves only use these values
         float h = hoogte(guh, pt);
-        bot.apply("root").ifPresent(b -> b.setPosY(h));
         float t = guh.tickCount + pt;
-        bot.apply("mewtwo_staart").ifPresent(b -> {
-            b.setRotY(Mth.sin(t * 0.05f + guh.getId()) * 0.28f);
-            b.setRotX(0.12f + Mth.sin(t * 0.07f) * 0.06f);
-        });
-        bot.apply("head").ifPresent(b -> b.setScaleX(1f));
+        float staartY = Mth.sin(t * 0.05f + guh.getId()) * 0.28f, staartX = 0.12f + Mth.sin(t * 0.07f) * 0.06f;
+        float nod = -1f;
         Long hap = HAPPEN.get(guh.getId());
         if (hap != null && guh.level() != null) {
             float d = guh.level().getGameTime() - hap + pt;
@@ -81,18 +72,28 @@ public final class MewtwoUiterlijk implements VariantUiterlijk.Uiterlijk {
                 HAPPEN.remove(guh.getId());
             } else {
                 // two quick chomps: the head nods down twice, the cheeks puff (the head a little wider)
-                float nod = Mth.sin(d / HAP_TICKS * Mth.PI * 4) * 0.35f;
-                bot.apply("head").ifPresent(b -> {
-                    b.setRotX(b.getRotX() + Math.max(0, nod));
-                    float s = 1f + Math.max(0, nod) * 0.25f;
-                    b.setScaleX(s);
-                });
+                nod = Mth.sin(d / HAP_TICKS * Mth.PI * 4) * 0.35f;
             }
         }
+        float knik = nod;
+        frame.bones(bones -> {
+            bones.ifPresent("root", b -> b.setTranslateY(h));
+            bones.ifPresent("mewtwo_staart", b -> {
+                b.setRotY(staartY);
+                b.setRotX(staartX);
+            });
+            bones.ifPresent("head", b -> b.setScaleX(1f));
+            if (knik >= -0.5f) {
+                bones.ifPresent("head", b -> {
+                    b.setRotX(b.getRotX() + Math.max(0, knik));
+                    b.setScaleX(1f + Math.max(0, knik) * 0.25f);
+                });
+            }
+        });
     }
 
     @Override
-    public void extra(GuhEntity guh, PoseStack pose, MultiBufferSource buffers, int light, float pt) {
+    public void extra(GuhEntity guh, GuhRenderFrame frame, float pt) {
         float h = hoogte(guh, pt);
         if (h < 2f || guh.isInvisible()) {
             return;
@@ -101,12 +102,12 @@ public final class MewtwoUiterlijk implements VariantUiterlijk.Uiterlijk {
         float r = 0.55f * guh.getScale() * guh.getAgeScale() * (1f + Mth.sin((guh.tickCount + pt) * 0.08f) * 0.06f);
         int a = (int) (150 + 40 * Mth.sin((guh.tickCount + pt) * 0.08f));
         int kleur = (a << 24) | 0xFFFFFF;
-        VertexConsumer vc = buffers.getBuffer(RenderTypes.eyes(ZWEEFGLOED));
-        PoseStack.Pose p = pose.last();
-        float y = 0.03f;
-        vc.addVertex(p, -r, y, -r).setColor(kleur).setUv(0, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
-        vc.addVertex(p, -r, y, r).setColor(kleur).setUv(0, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
-        vc.addVertex(p, r, y, r).setColor(kleur).setUv(1, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
-        vc.addVertex(p, r, y, -r).setColor(kleur).setUv(1, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
+        frame.extra((pose, collector, light) -> collector.submitCustomGeometry(pose, RenderTypes.eyes(ZWEEFGLOED), (p, vc) -> {
+            float y = 0.03f;
+            vc.addVertex(p, -r, y, -r).setColor(kleur).setUv(0, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
+            vc.addVertex(p, -r, y, r).setColor(kleur).setUv(0, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
+            vc.addVertex(p, r, y, r).setColor(kleur).setUv(1, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
+            vc.addVertex(p, r, y, -r).setColor(kleur).setUv(1, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
+        }));
     }
 }
