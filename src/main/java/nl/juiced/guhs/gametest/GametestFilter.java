@@ -11,7 +11,7 @@ import nl.juiced.guhs.gametest.GuhTest;
 /**
  * Runs only some gametests (2.9, for the slices): {@code ./gradlew runGameTestServer -Pgt=KnusGameTests,HighscoresGameTests}
  * passes {@code -Dguhs.gametests=<list>} (build.gradle) and only test methods whose class simple name OR batch starts with
- * one of the entries (ignoring case) are registered (mixin.GameTestRegistryMixin). Without the property (or empty)
+ * one of the entries (ignoring case) are registered (26.1: by GuhsGameTests; 1.0.0: mixin.GameTestRegistryMixin). Without the property (or empty)
  * everything runs, as before.
  */
 public final class GametestFilter {

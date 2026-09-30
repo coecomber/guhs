@@ -132,18 +132,18 @@ public class GuhGameTests {
         TeleportTransition there = GuhPortalForcer.getDestination(helper.getLevel(), guh, portalPos);
         helper.assertTrue(there != null && there.newLevel().dimension() == ModDimensions.GUHMENSION, "should lead to the Guhmension");
         ServerLevel guhmension = there.newLevel();
-        helper.assertTrue(guhmension.getBlockState(BlockPos.containing(there.pos())).is(ModBlocks.GUH_PORTAL.get()),
+        helper.assertTrue(guhmension.getBlockState(BlockPos.containing(there.position())).is(ModBlocks.GUH_PORTAL.get()),
                 "should arrive inside a (new) guh portal");
-        helper.assertTrue(guhmension.getBlockState(BlockPos.containing(there.pos()).below()).is(ModBlocks.BLOCK_OF_KAASKNABBELS.get()),
+        helper.assertTrue(guhmension.getBlockState(BlockPos.containing(there.position()).below()).is(ModBlocks.BLOCK_OF_KAASKNABBELS.get()),
                 "exit portal should have a kaasknabbel frame");
         // the new portal must be on the surface, not buried: open sky right above its top frame
-        helper.assertTrue(guhmension.canSeeSky(BlockPos.containing(there.pos()).above(4)),
-                "exit portal should be built on the surface, got y=" + there.pos().y);
+        helper.assertTrue(guhmension.canSeeSky(BlockPos.containing(there.position()).above(4)),
+                "exit portal should be built on the surface, got y=" + there.position().y);
 
         // coming back from the Guhmension at the same x/z should find our original portal again
-        TeleportTransition back = GuhPortalForcer.getDestination(guhmension, guh, BlockPos.containing(there.pos()));
+        TeleportTransition back = GuhPortalForcer.getDestination(guhmension, guh, BlockPos.containing(there.position()));
         helper.assertTrue(back != null && back.newLevel().dimension() == Level.OVERWORLD, "should lead back to the overworld");
-        helper.assertTrue(back.pos().distanceTo(Vec3.atBottomCenterOf(portalPos)) < 3, "should come back through the original portal, got " + back.pos());
+        helper.assertTrue(back.position().distanceTo(Vec3.atBottomCenterOf(portalPos)) < 3, "should come back through the original portal, got " + back.position());
         helper.succeed();
     }
 
@@ -204,7 +204,7 @@ public class GuhGameTests {
         MikaEntity mika = helper.spawn(ModEntities.MIKA.get(), POS);
         helper.assertTrue(mika.getMaxHealth() == MikaEntity.HEALTH, "Mika should have 50 hp");
         float before = player.getHealth();
-        mika.doHurtTarget(player);
+        mika.doHurtTarget(helper.getLevel(), player);
         helper.assertTrue(player.getHealth() == before, "Mika should not deal damage");
         helper.succeed();
     }
@@ -225,7 +225,7 @@ public class GuhGameTests {
 
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.MIKA_VET.get(), 1));
         helper.useBlock(pan, player);
-        FryingPanBlockEntity be = (FryingPanBlockEntity) helper.getBlockEntity(pan);
+        FryingPanBlockEntity be = helper.getBlockEntity(pan, FryingPanBlockEntity.class);
         helper.assertTrue(be.getCharges() == 64, "one vet should give 64 charges, got " + be.getCharges());
 
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 74));
@@ -353,10 +353,10 @@ public class GuhGameTests {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         QuestGuhEntity quest = helper.spawn(ModEntities.QUEST_GUH.get(), POS);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.GEFRITUURDE_KAASKNABBELS.get(), 9));
-        quest.interact(player, InteractionHand.MAIN_HAND);
+        quest.interact(player, InteractionHand.MAIN_HAND, quest.position());
         helper.assertTrue(!quest.isRemoved() && player.getMainHandItem().getCount() == 9, "9 is not enough");
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.GEFRITUURDE_KAASKNABBELS.get(), 12));
-        quest.interact(player, InteractionHand.MAIN_HAND);
+        quest.interact(player, InteractionHand.MAIN_HAND, quest.position());
         helper.assertTrue(quest.isRemoved(), "the Hungry Guh should leave after the trade");
         helper.assertTrue(player.getInventory().countItem(ModItems.GEFRITUURDE_KAASKNABBELS.get()) == 2, "10 knabbels should be taken");
         helper.assertTrue(player.getInventory().countItem(ModItems.BANK_GUH.get()) == 1, "should get a Bank Guh");
@@ -367,7 +367,7 @@ public class GuhGameTests {
     public static void bankGuhStoresInfinitelyAndKeepsItWhenBroken(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 1, 2);
         helper.setBlock(pos, ModBlocks.BANK_GUH.get());
-        BankGuhBlockEntity bank = (BankGuhBlockEntity) helper.getBlockEntity(pos);
+        BankGuhBlockEntity bank = helper.getBlockEntity(pos, BankGuhBlockEntity.class);
         for (int i = 0; i < 1000; i++) {
             bank.getStorage().insert(new ItemStack(Items.COBBLESTONE, 64));
         }
@@ -539,9 +539,9 @@ public class GuhGameTests {
         guh.setSoundsEnabled(false);
         guh.setBehavior(GuhEntity.Behavior.NEUTRAL);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        guh.saveWithoutId(tag);
+        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(guh));
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        copy.load(tag);
+        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
         helper.assertTrue(!copy.areSoundsEnabled() && copy.getBehavior() == GuhEntity.Behavior.NEUTRAL && copy.getSoundFrequency() == 4,
                 "settings should be saved");
         helper.succeed();
@@ -567,9 +567,9 @@ public class GuhGameTests {
     @GuhTest(template = EMPTY)
     public static void mikaShovesHard(GameTestHelper helper) {
         MikaEntity mika = helper.spawn(ModEntities.MIKA.get(), POS);
-        net.minecraft.world.entity.monster.Husk husk = helper.spawn(net.minecraft.world.entity.EntityType.HUSK, POS.east());
+        net.minecraft.world.entity.monster.zombie.Husk husk = helper.spawn(net.minecraft.world.entity.EntityType.HUSK, POS.east());
         float before = husk.getHealth();
-        mika.doHurtTarget(husk);
+        mika.doHurtTarget(helper.getLevel(), husk);
         helper.assertTrue(husk.getHealth() == before, "a normal Mika should not hurt");
         helper.assertTrue(husk.getDeltaMovement().horizontalDistance() > 0.5, "Mika should shove hard: " + husk.getDeltaMovement());
         helper.succeed();
@@ -581,15 +581,15 @@ public class GuhGameTests {
         mika.makeBoss();
         mika.setHealth(mika.getMaxHealth());
         helper.assertTrue(mika.isBoss() && mika.getMaxHealth() == MikaEntity.BOSS_HEALTH, "Big Mika should have 200 hp");
-        net.minecraft.world.entity.monster.Husk husk = helper.spawn(net.minecraft.world.entity.EntityType.HUSK, POS.east());
+        net.minecraft.world.entity.monster.zombie.Husk husk = helper.spawn(net.minecraft.world.entity.EntityType.HUSK, POS.east());
         float before = husk.getHealth();
-        mika.doHurtTarget(husk);
+        mika.doHurtTarget(helper.getLevel(), husk);
         helper.assertTrue(husk.getHealth() <= before - 5, "Big Mika should deal real damage: " + (before - husk.getHealth()));
         // a Big Mika saved and loaded stays Big Mika
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        mika.saveWithoutId(tag);
+        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(mika));
         MikaEntity copy = ModEntities.MIKA.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        copy.load(tag);
+        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
         helper.assertTrue(copy.isBoss() && copy.getMaxHealth() == MikaEntity.BOSS_HEALTH, "Big Mika should survive a reload");
         helper.succeed();
     }
@@ -688,7 +688,7 @@ public class GuhGameTests {
     public static void importedKaasknabbelKeepsItsSign(GameTestHelper helper) {
         // the build from the "Guh structures" world: sign at world (-14, -59, 23) -> template (22, 2, 5) -> test (22, 3, 5)
         helper.succeedWhen(() -> {
-            var sign = helper.getBlockEntity(new BlockPos(22, 3, 5));
+            var sign = helper.getBlockEntity(new BlockPos(22, 3, 5), net.minecraft.world.level.block.entity.BlockEntity.class);
             helper.assertTrue(sign instanceof net.minecraft.world.level.block.entity.SignBlockEntity, "the sign should be there");
             String line = ((net.minecraft.world.level.block.entity.SignBlockEntity) sign).getFrontText().getMessage(1, false).getString();
             helper.assertTrue(line.equals("Ik had zn honger"), "the sign should keep its text: " + line);
@@ -733,9 +733,9 @@ public class GuhGameTests {
         GuhEntity bronto = helper.spawn(ModEntities.GUH.get(), POS);
         bronto.setVariant(nl.juiced.guhs.entity.GuhVariant.BRONTOSAURUS);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        bronto.saveWithoutId(tag);
+        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(bronto));
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        copy.load(tag);
+        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
         helper.assertTrue(copy.getVariant() == nl.juiced.guhs.entity.GuhVariant.BRONTOSAURUS, "the variant should be saved");
         helper.assertTrue(nameKey(copy.getDisplayName()).equals("entity.guhs.guh.brontosaurus"), "shows its variant name");
         copy.setCustomName(net.minecraft.network.chat.Component.literal("Henk"));
@@ -795,9 +795,9 @@ public class GuhGameTests {
         guh.setPersonality(nl.juiced.guhs.entity.GuhPersonality.PLAYFUL);
         helper.assertTrue(guh.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED) > lazy, "playful guhs are faster than lazy ones");
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        guh.saveWithoutId(tag);
+        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(guh));
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        copy.load(tag);
+        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
         helper.assertTrue(copy.getPersonality() == nl.juiced.guhs.entity.GuhPersonality.PLAYFUL, "the personality is saved");
         helper.succeed();
     }
@@ -833,9 +833,11 @@ public class GuhGameTests {
     // Guh villages, clothes
     // ------------------------------------------------------------------------------------------------------------
 
-    private static net.minecraft.world.entity.npc.Villager guhVillager(GameTestHelper helper, BlockPos pos, net.minecraft.world.entity.npc.VillagerProfession profession) {
+    private static net.minecraft.world.entity.npc.villager.Villager guhVillager(GameTestHelper helper, BlockPos pos,
+            net.minecraft.resources.ResourceKey<net.minecraft.world.entity.npc.villager.VillagerProfession> profession) {
         var villager = helper.spawn(net.minecraft.world.entity.EntityType.VILLAGER, pos);
-        villager.setVillagerData(villager.getVillagerData().setType(nl.juiced.guhs.registry.ModVillagers.GUH.get()).setProfession(profession));
+        var access = helper.getLevel().registryAccess();
+        villager.setVillagerData(villager.getVillagerData().withType(access, nl.juiced.guhs.registry.ModVillagers.GUH.getKey()).withProfession(access, profession));
         return villager;
     }
 
@@ -843,8 +845,8 @@ public class GuhGameTests {
     public static void guhmensionBiomesHaveGuhVillagers(GameTestHelper helper) {
         var biomes = helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.BIOME);
         for (String b : new String[]{"guh_fields", "kaas_flats", "guh_peaks", "mikas_biome"}) {
-            var holder = biomes.getHolderOrThrow(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BIOME, Guhs.id(b)));
-            helper.assertTrue(net.minecraft.world.entity.npc.VillagerType.byBiome(holder) == nl.juiced.guhs.registry.ModVillagers.GUH.get(),
+            var holder = biomes.getOrThrow(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BIOME, Guhs.id(b)));
+            helper.assertTrue(net.minecraft.world.entity.npc.villager.VillagerType.byBiome(holder) == nl.juiced.guhs.registry.ModVillagers.GUH.getKey(),
                     "villagers born in " + b + " should be guh villagers");
         }
         helper.succeed();
@@ -852,12 +854,12 @@ public class GuhGameTests {
 
     @GuhTest(template = EMPTY)
     public static void guhProfessionsHaveTheirTrades(GameTestHelper helper) {
-        var temmer = guhVillager(helper, POS, nl.juiced.guhs.registry.ModVillagers.VADS_TEMMER.get());
+        var temmer = guhVillager(helper, POS, nl.juiced.guhs.registry.ModVillagers.VADS_TEMMER.getKey());
         helper.assertTrue(temmer.getOffers().stream().anyMatch(o -> o.getResult().is(ModItems.GUH_SPAWN_EGG.get())),
                 "the vads temmer sells guh spawn eggs: " + temmer.getOffers().size());
-        for (var profession : new net.minecraft.world.entity.npc.VillagerProfession[]{nl.juiced.guhs.registry.ModVillagers.GUH_KLEERMAKER.get(),
-                nl.juiced.guhs.registry.ModVillagers.VADSSMID.get(), nl.juiced.guhs.registry.ModVillagers.HAMSTERBOUWER.get(),
-                nl.juiced.guhs.registry.ModVillagers.MIKA_JAGER.get()}) {
+        for (var profession : java.util.List.of(nl.juiced.guhs.registry.ModVillagers.GUH_KLEERMAKER.getKey(),
+                nl.juiced.guhs.registry.ModVillagers.VADSSMID.getKey(), nl.juiced.guhs.registry.ModVillagers.HAMSTERBOUWER.getKey(),
+                nl.juiced.guhs.registry.ModVillagers.MIKA_JAGER.getKey())) {
             var villager = guhVillager(helper, POS.east(), profession);
             helper.assertFalse(villager.getOffers().isEmpty(), profession + " should have trades");
         }
@@ -866,8 +868,8 @@ public class GuhGameTests {
 
     @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void guhVillagersDropVanillaJobs(GameTestHelper helper) {
-        var villager = guhVillager(helper, POS, net.minecraft.world.entity.npc.VillagerProfession.LIBRARIAN);
-        helper.succeedWhen(() -> helper.assertTrue(villager.getVillagerData().getProfession() == net.minecraft.world.entity.npc.VillagerProfession.NONE,
+        var villager = guhVillager(helper, POS, net.minecraft.world.entity.npc.villager.VillagerProfession.LIBRARIAN);
+        helper.succeedWhen(() -> helper.assertTrue(villager.getVillagerData().profession().is(net.minecraft.world.entity.npc.villager.VillagerProfession.NONE),
                 "a guh villager doesn't become a librarian"));
     }
 
@@ -875,8 +877,8 @@ public class GuhGameTests {
     public static void guhVillagerTakesAGuhJob(GameTestHelper helper) {
         // (this room has no floor of its own: the knabbelbak goes on the ground, at y 0)
         helper.setBlock(new BlockPos(6, 0, 1), ModBlocks.KNABBELBAK.get());
-        var villager = guhVillager(helper, new BlockPos(3, 1, 1), net.minecraft.world.entity.npc.VillagerProfession.NONE);
-        helper.succeedWhen(() -> helper.assertTrue(villager.getVillagerData().getProfession() == nl.juiced.guhs.registry.ModVillagers.VADS_TEMMER.get(),
+        var villager = guhVillager(helper, new BlockPos(3, 1, 1), net.minecraft.world.entity.npc.villager.VillagerProfession.NONE);
+        helper.succeedWhen(() -> helper.assertTrue(villager.getVillagerData().profession().is(nl.juiced.guhs.registry.ModVillagers.VADS_TEMMER.getKey()),
                 "the villager should become a vads temmer at the knabbelbak"));
     }
 
@@ -896,18 +898,18 @@ public class GuhGameTests {
         helper.assertTrue(player.getMainHandItem().is(ModItems.PARTY_HAT.get()), "the hat item stays in the player's hand (it's an unlock)");
         guh.wear(nl.juiced.guhs.entity.GuhClothes.RED_BOWTIE);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        guh.saveWithoutId(tag);
+        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(guh));
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        copy.load(tag);
+        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
         helper.assertTrue(copy.getClothes(nl.juiced.guhs.entity.GuhClothes.Slot.NECK) == nl.juiced.guhs.entity.GuhClothes.RED_BOWTIE, "clothes are saved");
         var off = copy.takeOffClothes();
         helper.assertTrue(off.size() == 2 && !copy.isWearingClothes(), "taking clothes off tells what it wore: " + off);
         // guhs saved as the old "rain" variant now wear the rain outfit
         net.minecraft.nbt.CompoundTag old = new net.minecraft.nbt.CompoundTag();
-        copy.saveWithoutId(old);
+        old.merge(nl.juiced.guhs.entity.EntityNbt.save(copy));
         old.putString("Variant", "rain");
         GuhEntity rain = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        rain.load(old);
+        nl.juiced.guhs.entity.EntityNbt.load(rain, old);
         helper.assertTrue(rain.getVariant() == nl.juiced.guhs.entity.GuhVariant.NORMAL
                 && rain.getClothes(nl.juiced.guhs.entity.GuhClothes.Slot.BODY) == nl.juiced.guhs.entity.GuhClothes.RAINCOAT, "old rain guhs wear a raincoat");
         helper.succeed();
@@ -930,7 +932,7 @@ public class GuhGameTests {
         helper.succeedWhen(() -> {
             var villagers = helper.getEntities(net.minecraft.world.entity.EntityType.VILLAGER);
             helper.assertTrue(villagers.size() >= 9, "a guh village has at least 9 villagers: " + villagers.size());
-            helper.assertTrue(villagers.stream().allMatch(v -> v.getVillagerData().getType() == nl.juiced.guhs.registry.ModVillagers.GUH.get()),
+            helper.assertTrue(villagers.stream().allMatch(v -> v.getVillagerData().type().is(nl.juiced.guhs.registry.ModVillagers.GUH.getKey())),
                     "all of them guh villagers");
         });
     }
@@ -960,9 +962,9 @@ public class GuhGameTests {
         helper.assertTrue(guh.hasBackpack() && guh.getClothes(nl.juiced.guhs.entity.GuhClothes.Slot.EYES) == null,
                 "a backpack with things in it stays on (the rest comes off)");
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        guh.saveWithoutId(tag);
+        tag.merge(nl.juiced.guhs.entity.EntityNbt.save(guh));
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        copy.load(tag);
+        nl.juiced.guhs.entity.EntityNbt.load(copy, tag);
         helper.assertTrue(copy.getBackpack().getItem(3).getCount() == 5 && copy.hasBackpack(), "the backpack contents are saved");
         guh.getBackpack().removeItemNoUpdate(3);
         nl.juiced.guhs.feature.kleding.KledingKast.kleed(player, guh, niets);
@@ -986,7 +988,7 @@ public class GuhGameTests {
         guh.tame(player);
         guh.equipSaddle(new ItemStack(Items.SADDLE), null);
         player.snapTo(guh.getX(), guh.getY(), guh.getZ(), -90f, 0f); // looking towards +x, the wall
-        player.startRiding(guh, true);
+        player.startRiding(guh, true, true);
         double startX = guh.getX();
         guh.onLaunchPressed(player);
         helper.assertTrue(guh.getLaunchState() == GuhEntity.LAUNCH_CHARGING, "right-click starts sucking in air");
@@ -1224,7 +1226,7 @@ public class GuhGameTests {
         nl.juiced.guhs.entity.GuhSleeEntity sled = sledOn(helper, pieces.get(1));
         net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.snapTo(sled.position());
-        player.startRiding(sled, true);
+        player.startRiding(sled, true, true);
         sled.setSpeed(3);
         sled.setRunning(true);
         helper.succeedWhen(() -> {
@@ -1255,7 +1257,7 @@ public class GuhGameTests {
     public static void emptyRoyalThroneGetsANewKing(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 1, 2);
         helper.setBlock(pos, ModBlocks.KONINGSTROON.get().defaultBlockState().setValue(nl.juiced.guhs.block.KoningsTroonBlock.ROYAL, true));
-        var throne = (nl.juiced.guhs.block.KoningsTroonBlock.Entity) helper.getBlockEntity(pos);
+        var throne = helper.getBlockEntity(pos, nl.juiced.guhs.block.KoningsTroonBlock.Entity.class);
         BlockPos abs = helper.absolutePos(pos);
         throne.setLastKing(helper.getLevel().getGameTime() - 100);
         throne.check(helper.getLevel(), abs, helper.getBlockState(pos));
@@ -1281,7 +1283,7 @@ public class GuhGameTests {
         // the guards stand outside the 5-deep room: keep their chunks ticking (the mock player doesn't load chunks)
         java.util.Set<net.minecraft.world.level.ChunkPos> forced = new java.util.HashSet<>();
         for (int i = 0; i < 2; i++) {
-            net.minecraft.world.level.ChunkPos c = new net.minecraft.world.level.ChunkPos(helper.absolutePos(new BlockPos(1 + i * 6, 2, 8)));
+            net.minecraft.world.level.ChunkPos c = net.minecraft.world.level.ChunkPos.containing(helper.absolutePos(new BlockPos(1 + i * 6, 2, 8)));
             if (level.setChunkForced(c.x(), c.z(), true)) {
                 forced.add(c);
             }
@@ -1318,7 +1320,7 @@ public class GuhGameTests {
     public static void guhPileIsANineByNinePainting(GameTestHelper helper) {
         var level = helper.getLevel();
         var variant = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.PAINTING_VARIANT)
-                .getHolder(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.PAINTING_VARIANT, nl.juiced.guhs.Guhs.id("guh_stapel")));
+                .get(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.PAINTING_VARIANT, nl.juiced.guhs.Guhs.id("guh_stapel")));
         helper.assertTrue(variant.isPresent() && variant.get().value().width() == 9 && variant.get().value().height() == 9, "the guh pile is 9x9");
         helper.succeed();
     }
@@ -1374,14 +1376,14 @@ public class GuhGameTests {
             for (String id : category.structures()) {
                 var key = net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.STRUCTURE, nl.juiced.guhs.Guhs.id(id));
                 BlockPos ours = nl.juiced.guhs.item.GuhCompassItem.findCenter(guhmension, key, from);
-                var holder = guhmension.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getHolderOrThrow(key);
+                var holder = guhmension.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getOrThrow(key);
                 var vanilla = guhmension.getChunkSource().getGenerator().findNearestMapStructure(guhmension,
                         net.minecraft.core.HolderSet.direct(holder), from, 100, false);
                 if (ours == null && vanilla == null) {
                     continue;   // (not in this dimension at all, e.g. the structures of the Barbecuether)
                 }
                 if (ours == null || vanilla == null) {
-                    report.append(id).append(": ours=").append(ours).append(" locate=").append(vanilla == null ? null : vanilla.getFirst()).append("; ");
+                    report.append(id).append(": ours=").append(ours).append(" locate=").append((Object) (vanilla == null ? null : vanilla.getFirst())).append("; ");
                     continue;
                 }
                 // (the compass looks at every possible spot by distance, so it may find a nearer one than /locate does)
@@ -1583,7 +1585,7 @@ public class GuhGameTests {
                     + sleds.size() + " " + sleds.stream().map(sl -> sl.getPiece() != null).toList());
             sled[0] = sleds.get(0);
             player.snapTo(sled[0].position());
-            player.startRiding(sled[0], true);
+            player.startRiding(sled[0], true, true);
             sled[0].setSpeed(3);
             sled[0].setRunning(true);
         });
@@ -1640,7 +1642,7 @@ public class GuhGameTests {
         for (var key : java.util.List.of(nl.juiced.guhs.item.GuhCompassItem.MIKA_KAMP, nl.juiced.guhs.item.GuhCompassItem.GUH_CAVES)) {
             BlockPos from = new BlockPos(24000, 64, -17000);
             BlockPos ours = nl.juiced.guhs.item.GuhCompassItem.findCenter(guhmension, key, from);
-            var holder = guhmension.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getHolderOrThrow(key);
+            var holder = guhmension.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getOrThrow(key);
             var vanilla = guhmension.getChunkSource().getGenerator().findNearestMapStructure(guhmension,
                     net.minecraft.core.HolderSet.direct(holder), from, 100, false);
             helper.assertTrue(ours != null && vanilla != null, key.identifier() + " is found far from 0,0");
@@ -1679,7 +1681,7 @@ public class GuhGameTests {
         BlockPos pos = new BlockPos(2, 1, 2);
         helper.setBlock(pos, ModBlocks.KNABBELKORF.get().defaultBlockState()
                 .setValue(net.minecraft.world.level.block.BeehiveBlock.HONEY_LEVEL, 5));
-        helper.assertTrue(helper.getBlockEntity(pos) instanceof net.minecraft.world.level.block.entity.BeehiveBlockEntity,
+        helper.assertTrue(helper.getBlockEntity(pos, net.minecraft.world.level.block.entity.BlockEntity.class) instanceof net.minecraft.world.level.block.entity.BeehiveBlockEntity,
                 "the knabbelkorf is a real beehive");
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.SHEARS));
@@ -1802,7 +1804,7 @@ public class GuhGameTests {
         // (the tree itself is too big for a test room: it's checked in a real world with /place feature guhs:guhbloesem)
         var key = net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.CONFIGURED_FEATURE, Guhs.id("guhbloesem"));
         helper.assertTrue(helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.CONFIGURED_FEATURE)
-                .getHolder(key).isPresent(), "the guh blossom tree feature is loaded");
+                .get(key).isPresent(), "the guh blossom tree feature is loaded");
         helper.succeed();
     }
 
@@ -1975,10 +1977,10 @@ public class GuhGameTests {
     @GuhTest(template = EMPTY)
     public static void picnicJukeboxPlaysTheGuhRecord(GameTestHelper helper) {
         var disc = new net.minecraft.world.item.ItemStack(ModItems.MUSIC_DISC_ZE_HANGEN.get());
-        helper.assertTrue(net.minecraft.world.item.JukeboxSong.fromStack(helper.getLevel().registryAccess(), disc).isPresent(), "a jukebox song");
+        helper.assertTrue(net.minecraft.world.item.JukeboxSong.fromStack(disc).isPresent(), "a jukebox song");
         BlockPos pos = new BlockPos(1, 2, 1);
         helper.setBlock(pos, net.minecraft.world.level.block.Blocks.JUKEBOX);
-        var jukebox = (net.minecraft.world.level.block.entity.JukeboxBlockEntity) helper.getBlockEntity(pos);
+        var jukebox = helper.getBlockEntity(pos, net.minecraft.world.level.block.entity.JukeboxBlockEntity.class);
         jukebox.setSongItemWithoutPlaying(disc.copy()); // (marks it as quietly playing: stop that, like a jukebox loaded from a structure)
         jukebox.getSongPlayer().stop(helper.getLevel(), jukebox.getBlockState());
         helper.assertTrue(!nl.juiced.guhs.quest.PicknickMuziek.play(jukebox, false) && !jukebox.getSongPlayer().isPlaying(), "not away from the picnic");

@@ -41,7 +41,7 @@ public class KnuffeldalKruisGameTests {
     private static final String EMPTY = "empty";
 
     private static Item item(String id) {
-        return BuiltInRegistries.ITEM.get(Guhs.id(id));
+        return BuiltInRegistries.ITEM.getValue(Guhs.id(id));
     }
 
     private static ItemStack stack(String id) {
@@ -125,17 +125,20 @@ public class KnuffeldalKruisGameTests {
         // marshmallows at the campfire
         helper.assertTrue(KampvuurMarshmallow.isMarshmallow(stack("marshmallow_knabbel")), "a marshmallow_knabbel roasts at the campfire");
         // recipes with a Knus tag accept the real product
-        var recipes = helper.getLevel().getRecipeManager();
-        var access = helper.getLevel().registryAccess();
+        var recipes = helper.getLevel().recipeAccess();
         Object[][] need = {{"knuffeldekentje", "pluiswol"}, {"guh_slaapzak", "pluiswol"}, {"babyflesje", "kaasmelk"}};
         for (Object[] n : need) {
             Item result = item((String) n[0]);
             ItemStack product = stack((String) n[1]);
             boolean found = false;
-            for (var holder : recipes.getAllRecipesFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING)) {
-                CraftingRecipe r = holder.value();
-                if (r.getResultItem(access).is(result)) {
-                    for (Ingredient ing : r.getIngredients()) {
+            for (var holder : recipes.getRecipes()) {
+                // 26.1: no getResultItem/getIngredients; shaped and shapeless recipes give their result for any input
+                if (!(holder.value() instanceof CraftingRecipe r) || !(r instanceof net.minecraft.world.item.crafting.ShapedRecipe
+                        || r instanceof net.minecraft.world.item.crafting.ShapelessRecipe)) {
+                    continue;
+                }
+                if (r.assemble(net.minecraft.world.item.crafting.CraftingInput.EMPTY).is(result)) {
+                    for (Ingredient ing : r.placementInfo().ingredients()) {
                         found |= ing.test(product);
                     }
                 }

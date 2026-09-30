@@ -53,6 +53,7 @@ public class Guhs {
         ModDataComponents.COMPONENTS.register(modBus);
         nl.juiced.guhs.world.BouwCheck.TICKET_TYPES.register(modBus);   // 26.1: ticket types are a registry
         nl.juiced.guhs.feature.Features.register(modBus);   // the 2.4 minigames and rare structures
+        nl.juiced.guhs.gametest.GuhsGameTests.register(modBus);   // 26.1: our @GuhTest registrar (only when gametests are enabled)
 
         modBus.addListener(ModEntities::registerAttributes);
         modBus.addListener(ModPoiTypes::addHiveBlocks);
