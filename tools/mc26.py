@@ -553,9 +553,31 @@ def effective_textures(ref, seen=None):
     return tex
 
 
+def face_data(o):
+    """NeoForge 26.1 ExtraFaceData: (color, light_emission, ambient_occlusion) instead of block_light/sky_light."""
+    if isinstance(o, list):
+        return [face_data(x) for x in o]
+    if not isinstance(o, dict):
+        return o
+    out = {}
+    for k, v in o.items():
+        if k == "neoforge_data" and isinstance(v, dict) and ("block_light" in v or "sky_light" in v):
+            v = dict(v)
+            light = max(v.pop("block_light", 0), v.pop("sky_light", 0))
+            if light:
+                v["light_emission"] = light
+            out[k] = v
+        else:
+            out[k] = face_data(v)
+    return out
+
+
 def models():
     for path in glob.glob(os.path.join(A, "models", "**", "*.json"), recursive=True):
         d = rd(path)
+        if "neoforge_data" in json.dumps(d):
+            d = face_data(d)
+            w(path, d)
         rt = d.pop("render_type", None)
         if rt is None:
             continue
@@ -684,11 +706,33 @@ def from_overrides(base_ref, overrides):
 OVERRIDE_BASES = {}  # item name -> (base model ref, overrides), filled from the 1.21.1 shapes before they are dropped
 
 
+def separate_transforms(item_dir, name, d, sub_models):
+    """NeoForge's separate_transforms model loader is gone in 26.1: the per-perspective models become a display_context select."""
+    def ref_of(model, suffix):
+        if set(model) == {"parent"}:
+            if model["parent"].startswith("guhs:item/"):
+                sub_models.add(model["parent"][len("guhs:item/"):])
+            return model["parent"]
+        w(os.path.join(item_dir, f"{name}{suffix}.json"), model)
+        sub_models.add(f"{name}{suffix}")
+        return f"guhs:item/{name}{suffix}"
+    cases = [{"when": p, "model": plain(ref_of(m, "_" + p))} for p, m in d.get("perspectives", {}).items()]
+    base = d["base"]
+    w(os.path.join(item_dir, f"{name}.json"), base)  # the loader file becomes the plain base model
+    base_ref = f"guhs:item/{name}"
+    return {"type": "minecraft:select", "property": "minecraft:display_context", "cases": cases, "fallback": plain(base_ref)}
+
+
 def item_definitions():
     item_dir = os.path.join(A, "models", "item")
     defs_dir = os.path.join(A, "items")
     sub_models = set()
     specials = {}
+    for path in glob.glob(os.path.join(item_dir, "*.json")):
+        name = os.path.basename(path)[:-5]
+        d = rd(path)
+        if d.get("loader") == "neoforge:separate_transforms":
+            specials[name] = separate_transforms(item_dir, name, d, sub_models)
     for path in glob.glob(os.path.join(item_dir, "*.json")):
         name = os.path.basename(path)[:-5]
         d = rd(path)
