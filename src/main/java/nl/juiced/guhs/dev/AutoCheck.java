@@ -219,14 +219,20 @@ public final class AutoCheck {
 
     private static void onFog(net.neoforged.neoforge.client.event.ViewportEvent.RenderFog event) {
         // (1.1.0: RenderFog has no terrain/sky mode and cannot be cancelled any more; its distances are the terrain fog)
-        if (mistOff && event.getType() == net.minecraft.world.level.material.FogType.NONE) {
+        if (mistOff && event.getType() == net.minecraft.world.level.material.FogType.ATMOSPHERIC) {
             float far = Minecraft.getInstance().options.getEffectiveRenderDistance() * 16f;
             event.setFarPlaneDistance(far);
             event.setNearPlaneDistance(far - Math.max(4, Math.min(64, far / 10)));
         }
     }
 
+    private static int frames;
+
     private static void onFrame(RenderFrameEvent.Pre event) {
+        if (state == State.BOOT && frames++ % 300 == 0) {
+            Minecraft mc = Minecraft.getInstance();
+            LOG.info("AutoCheck frame {}: loadFinished {}, overlay {}, screen {}", frames, mc.isGameLoadFinished(), mc.getOverlay(), mc.screen);
+        }
         applyLock();
     }
 
@@ -262,6 +268,9 @@ public final class AutoCheck {
         }
         switch (state) {
             case BOOT -> {
+                if (stateTicks % 200 == 0) {
+                    LOG.info("AutoCheck boot: overlay {}, screen {}", mc.getOverlay(), mc.screen);
+                }
                 if (mc.getOverlay() == null && mc.screen != null && stateTicks > 40) {
                     setupOptions(mc);
                     outDir = new File(mc.gameDirectory, "screenshots/autocheck");
@@ -347,6 +356,7 @@ public final class AutoCheck {
         o.skipMultiplayerWarning = true;
         o.hideGui = false;
         o.cloudStatus().set(net.minecraft.client.CloudStatus.OFF);
+        o.chunkSectionFadeInTime().set(0.0); // 1.1.0: 26.1 fades new chunk sections in; screenshots want them at once
         o.renderDistance().set(Integer.getInteger("guhs.autocheck.renderDistance", 8));
         o.simulationDistance().set(6);
         o.tutorialStep = net.minecraft.client.tutorial.TutorialSteps.NONE;
@@ -670,7 +680,7 @@ public final class AutoCheck {
                 // mouse <guiX> <guiY>: move the cursor (gui coordinates) for hover tooltips
                 return mc2 -> {
                     double s = mc2.getWindow().getGuiScale();
-                    org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc2.getWindow().handle(), Double.parseDouble(a[1]) * s, Double.parseDouble(a[2]) * s);
+                    setCursor(mc2, Double.parseDouble(a[1]) * s, Double.parseDouble(a[2]) * s);
                     return true;
                 };
             case "click":
@@ -1057,7 +1067,24 @@ public final class AutoCheck {
     }
 
     /** Run a command on the integrated server as the player (op level 4), recording its output and failure. */
-    private static Action command(String cmd) {
+    /** 1.1.0: the 1.21.1 game rule names of the scripts -> the 26.1 ids. */
+    private static final java.util.Map<String, String> OLD_GAMERULES = java.util.Map.of(
+            "doDaylightCycle", "advance_time", "doWeatherCycle", "advance_weather", "doMobSpawning", "spawn_mobs",
+            "doMobLoot", "mob_drops", "doFireTick", "fire_spread_radius_around_player", "randomTickSpeed", "random_tick_speed",
+            "mobGriefing", "mob_griefing", "sendCommandFeedback", "send_command_feedback", "keepInventory", "keep_inventory");
+
+    private static Action command(String rawCmd) {
+        String fixed = rawCmd;
+        java.util.regex.Matcher gm = java.util.regex.Pattern.compile("^((?:execute .* run )?gamerule )([A-Za-z]+)(.*)$").matcher(rawCmd);
+        if (gm.matches() && OLD_GAMERULES.containsKey(gm.group(2))) {
+            String rule = OLD_GAMERULES.get(gm.group(2));
+            String rest = gm.group(3);
+            if (rule.startsWith("fire_spread")) {
+                rest = rest.trim().equals("false") ? " 0" : " 128";
+            }
+            fixed = gm.group(1) + rule + rest;
+        }
+        final String cmd = fixed;
         CompletableFuture<?>[] f = {null};
         List<String> out = new ArrayList<>();
         boolean[] failed = {false};
@@ -1468,14 +1495,15 @@ public final class AutoCheck {
                 return mc -> {
                     try {
                         Class<?> cqf = Class.forName("dev.ftb.mods.ftbquests.client.ClientQuestFile");
-                        Object file = cqf.getField("INSTANCE").get(null);
+                        // (1.1.0: FTB Quests 26.1 has ClientQuestFile.getInstance() instead of the INSTANCE field)
+                        Object file = (boolean) cqf.getMethod("exists").invoke(null) ? cqf.getMethod("getInstance").invoke(null) : null;
                         if (file == null) {
                             problem("ftbquests: no quest file on the client (is FTB Quests loaded?)");
                             return true;
                         }
                         List<Object> chapters = new ArrayList<>();
                         for (Object ch : (List<?>) file.getClass().getMethod("getAllChapters").invoke(file)) {
-                            if (String.valueOf(ch.getClass().getMethod("getFilename").invoke(ch)).startsWith("guhs")) {
+                            if (ftbChapterName(ch).startsWith("guhs")) {
                                 chapters.add(ch);
                             }
                         }
@@ -1505,7 +1533,7 @@ public final class AutoCheck {
                                 } catch (Exception e) {
                                     problem("ftbquests: cannot open the chapter list: " + e);
                                 }
-                                org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc2.getWindow().handle(), 12, mc2.getWindow().getScreenHeight() / 2.0);
+                                setCursor(mc2, 12, mc2.getWindow().getScreenHeight() / 2.0);
                                 return true;
                             });
                             acts.add(waitTicks(15));
@@ -1517,7 +1545,7 @@ public final class AutoCheck {
                             acts.add(waitTicks(10));
                         }
                         for (Object ch : chapters) {
-                            String name = String.valueOf(ch.getClass().getMethod("getFilename").invoke(ch));
+                            String name = ftbChapterName(ch);
                             List<?> quests = (List<?>) ch.getClass().getMethod("getQuests").invoke(ch);
                             List<?> links = (List<?>) ch.getClass().getMethod("getQuestLinks").invoke(ch);
                             List<?> images = (List<?>) ch.getClass().getMethod("getImages").invoke(ch);
@@ -1540,7 +1568,7 @@ public final class AutoCheck {
                                 Object target = ((java.util.Optional<?>) link.getClass().getMethod("getQuest").invoke(link)).orElse(null);
                                 Object tch = target == null ? null : target.getClass().getMethod("getChapter").invoke(target);
                                 note("    link -> " + (target == null ? "MISSING" : ((Component) target.getClass().getMethod("getTitle").invoke(target)).getString()
-                                        + " (in " + tch.getClass().getMethod("getFilename").invoke(tch) + ")"));
+                                        + " (in " + ftbChapterName(tch) + ")"));
                                 if (target == null) {
                                     problem("ftbquests: a link in " + name + " points nowhere");
                                 }
@@ -1621,6 +1649,19 @@ public final class AutoCheck {
             }
             return true;
         };
+    }
+
+    /** FTB Quests: a chapter's file name (1.1.0: FTB Quests 26.1 made getFilename private; the chapter's file path is public). */
+    private static String ftbChapterName(Object chapter) throws ReflectiveOperationException {
+        Object path = ((java.util.Optional<?>) chapter.getClass().getMethod("getPath").invoke(chapter)).orElse(null);
+        if (path instanceof java.nio.file.Path p) {
+            String n = p.getFileName().toString();
+            int dot = n.indexOf('.');
+            return dot > 0 ? n.substring(0, dot) : n;
+        }
+        var m = chapter.getClass().getDeclaredMethod("getFilename");
+        m.setAccessible(true);
+        return String.valueOf(m.invoke(chapter));
     }
 
     /** FTB Quests: the quest screen inside FTB Library's screen wrapper (or null). */
@@ -1738,8 +1779,9 @@ public final class AutoCheck {
                     level.addFreshEntity(t);
                     nl.juiced.guhs.feature.huisje.Huisjes.trekIn(h, t);
                 }
-                nl.juiced.guhs.feature.huisje.HuisjePayloads.open(sp, h);
+                // (1.1.0: the dome first, so the screen's "Klus-area" button already says "aan" when it opens)
                 Minecraft.getInstance().execute(() -> nl.juiced.guhs.feature.huisje.client.HuisjeKoepel.zet(pos, true));
+                nl.juiced.guhs.feature.huisje.HuisjePayloads.open(sp, h);
                 return "huisje " + h.naam() + " at " + pos.toShortString() + " with " + h.bewoners().size() + " residents";
             }, r -> note("  " + r)));
             return true;
@@ -2016,7 +2058,23 @@ public final class AutoCheck {
 
     private static void parkMouse(Minecraft mc) {
         mc.mouseHandler.releaseMouse();
-        org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc.getWindow().handle(), mc.getWindow().getScreenWidth() / 2.0, 3);
+        setCursor(mc, mc.getWindow().getScreenWidth() / 2.0, 3);
+    }
+
+    /**
+     * Put the mouse at these window pixels. (1.1.0: GLFW ignores glfwSetCursorPos while the window has no focus, e.g. when
+     * another window is in front during a long round; the mouse handler is then told directly.)
+     */
+    private static void setCursor(Minecraft mc, double x, double y) {
+        long handle = mc.getWindow().handle();
+        org.lwjgl.glfw.GLFW.glfwSetCursorPos(handle, x, y);
+        try {
+            var m = net.minecraft.client.MouseHandler.class.getDeclaredMethod("onMove", long.class, double.class, double.class);
+            m.setAccessible(true);
+            m.invoke(mc.mouseHandler, handle, x, y);
+        } catch (ReflectiveOperationException | RuntimeException e) {
+            // GLFW alone then
+        }
     }
 
     private static void pressButton(Screen screen, String label) {

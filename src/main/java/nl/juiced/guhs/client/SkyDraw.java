@@ -60,6 +60,7 @@ public final class SkyDraw {
     public static void registerPipelines(RegisterRenderPipelinesEvent event) {
         event.registerPipeline(CELESTIAL_TRANSLUCENT);
         event.registerPipeline(COLOURED_STARS);
+        event.registerPipeline(GuhRenderTypes.EYES_ADDITIVE);
     }
 
     public static AbstractTexture texture(Identifier id) {

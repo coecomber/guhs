@@ -73,7 +73,7 @@ public final class KaasmoerasClient {
 
     /** (1.1.0: one fog event now; the environmental fog is the old terrain fog. The old cylinder shape is gone.) */
     private static void onFog(ViewportEvent.RenderFog event) {
-        if (event.getType() != FogType.NONE) {
+        if (event.getType() != FogType.ATMOSPHERIC) { // 1.1.0: air is ATMOSPHERIC in 26.1 (NONE never comes)
             return;
         }
         float m = Mth.lerp((float) event.getPartialTick(), lastMist, mist);

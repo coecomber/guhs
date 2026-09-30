@@ -57,7 +57,7 @@ public class BadeendjeRenderer extends GeoEntityRenderer<BadeendjeEntity, Entity
                 if (soort != null && soort.glimt && info.willRender()) {
                     // (the eyes render type is full bright, like the old re-render with FULL_BRIGHT)
                     getRenderer().submitRenderTasks(info, collector.order(1),
-                            RenderTypes.eyes(Guhs.id("textures/entity/badeendje_" + soort.id() + "_glow.png")));
+                            nl.juiced.guhs.client.GuhRenderTypes.eyes(Guhs.id("textures/entity/badeendje_" + soort.id() + "_glow.png")));
                 }
             }
         });

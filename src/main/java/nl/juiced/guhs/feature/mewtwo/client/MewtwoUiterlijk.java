@@ -102,7 +102,7 @@ public final class MewtwoUiterlijk implements VariantUiterlijk.Uiterlijk {
         float r = 0.55f * guh.getScale() * guh.getAgeScale() * (1f + Mth.sin((guh.tickCount + pt) * 0.08f) * 0.06f);
         int a = (int) (150 + 40 * Mth.sin((guh.tickCount + pt) * 0.08f));
         int kleur = (a << 24) | 0xFFFFFF;
-        frame.extra((pose, collector, light) -> collector.submitCustomGeometry(pose, RenderTypes.eyes(ZWEEFGLOED), (p, vc) -> {
+        frame.extra((pose, collector, light) -> collector.submitCustomGeometry(pose, nl.juiced.guhs.client.GuhRenderTypes.eyes(ZWEEFGLOED), (p, vc) -> {
             float y = 0.03f;
             vc.addVertex(p, -r, y, -r).setColor(kleur).setUv(0, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
             vc.addVertex(p, -r, y, r).setColor(kleur).setUv(0, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);

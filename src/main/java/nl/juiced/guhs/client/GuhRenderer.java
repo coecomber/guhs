@@ -344,10 +344,10 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
                 default -> null;
             };
             if (own != null) {
-                getRenderer().submitRenderTasks(info, collector.order(1), RenderTypes.eyes(own));
+                getRenderer().submitRenderTasks(info, collector.order(1), nl.juiced.guhs.client.GuhRenderTypes.eyes(own));
             }
             for (Identifier glow : frame.glows) {
-                getRenderer().submitRenderTasks(info, collector.order(1), RenderTypes.eyes(glow));
+                getRenderer().submitRenderTasks(info, collector.order(1), nl.juiced.guhs.client.GuhRenderTypes.eyes(glow));
             }
         }
     }
@@ -355,7 +355,8 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
     /** A guh with a secret note holds a paper in its mouth (on the "head" bone). */
     static class PaperLayer extends GeoRenderLayer<GuhEntity, Void, LivingEntityRenderState> {
         private static final DataTicket<ItemStackRenderState> PAPER = DataTicket.create("guhs_guh_paper", ItemStackRenderState.class);
-        private final ItemStack paper = new ItemStack(Items.PAPER);
+        /** Made on first use: renderers are built during the resource reload, before item components are bound. */
+        private @Nullable ItemStack paper;
 
         PaperLayer(GeoRenderer<GuhEntity, Void, LivingEntityRenderState> renderer) {
             super(renderer);
@@ -364,6 +365,9 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
         @Override
         public void addRenderData(GuhEntity guh, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
             if (guh.hasSecretNote()) {
+                if (paper == null) {
+                    paper = new ItemStack(Items.PAPER);
+                }
                 state.addGeckolibData(PAPER, itemState(paper, ItemDisplayContext.FIXED, guh));
             }
         }

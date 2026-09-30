@@ -324,10 +324,22 @@
       ],
       "faces": {
         "north": {
-          "texture": "#vuur"
+          "texture": "#vuur",
+          "uv": [
+            3,
+            0,
+            13,
+            8
+          ]
         },
         "south": {
-          "texture": "#vuur"
+          "texture": "#vuur",
+          "uv": [
+            3,
+            0,
+            13,
+            8
+          ]
         }
       }
     },
@@ -344,10 +356,22 @@
       ],
       "faces": {
         "east": {
-          "texture": "#vuur"
+          "texture": "#vuur",
+          "uv": [
+            3,
+            0,
+            13,
+            8
+          ]
         },
         "west": {
-          "texture": "#vuur"
+          "texture": "#vuur",
+          "uv": [
+            3,
+            0,
+            13,
+            8
+          ]
         }
       }
     }

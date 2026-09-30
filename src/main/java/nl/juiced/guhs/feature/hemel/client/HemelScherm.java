@@ -82,7 +82,7 @@ public class HemelScherm extends Screen {
             }
         }
         scroll = Mth.clamp(scroll, 0, Math.max(0, guhs.size() - LIJST_H / RIJ));
-        if (minecraft != null) {
+        if (width > 0) { // 1.1.0: minecraft is set in the constructor now; before init() the first init builds the widgets
             rebuildWidgets();
         }
     }

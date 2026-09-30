@@ -14,11 +14,20 @@ public final class ModCreativeTabs {
             .title(Component.translatable("itemGroup.guhs"))
             .icon(() -> ModItems.GUH_SPAWN_EGG.get().getDefaultInstance())
             // every item this mod registers shows up in the tab automatically
-            .displayItems((params, output) -> {
+            .displayItems((params, tabOutput) -> {
+                // 1.1.0: 26.1 throws on a stack that is added twice (the features re-add some registered items, e.g. the kapsels,
+                // to put them next to each other); 1.0.0 showed them once -> skip repeats
+                java.util.List<net.minecraft.world.item.ItemStack> seen = new java.util.ArrayList<>();
+                java.util.function.Consumer<net.minecraft.world.item.ItemStack> output = stack -> {
+                    if (seen.stream().noneMatch(s -> net.minecraft.world.item.ItemStack.isSameItemSameComponents(s, stack))) {
+                        seen.add(stack);
+                        tabOutput.accept(stack);
+                    }
+                };
                 // (the old single-purpose compasses are replaced by the super compass: not in the tab any more)
                 ModItems.ITEMS.getEntries().stream().filter(item -> !(item.get() instanceof nl.juiced.guhs.item.GuhCompassItem c && c.isOld()))
-                        .forEach(item -> output.accept(item.get()));
-                nl.juiced.guhs.feature.Features.creative(output::accept);
+                        .forEach(item -> output.accept(new net.minecraft.world.item.ItemStack(item.get())));
+                nl.juiced.guhs.feature.Features.creative(output);
                 // the guh paintings: a painting item that always hangs that picture
                 params.holders().lookup(Registries.PAINTING_VARIANT).ifPresent(paintings -> paintings.listElements()
                         .filter(p -> p.key().identifier().getNamespace().equals(Guhs.MODID))

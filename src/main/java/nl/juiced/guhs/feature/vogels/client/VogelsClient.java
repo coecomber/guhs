@@ -77,7 +77,7 @@ public final class VogelsClient {
                     @Override
                     public void submitRenderTask(RenderPassInfo<LivingEntityRenderState> info, SubmitNodeCollector collector) {
                         if (Boolean.TRUE.equals(info.getGeckolibData(GLOEIT)) && info.willRender()) {
-                            getRenderer().submitRenderTasks(info, collector.order(1), RenderTypes.eyes(glow));
+                            getRenderer().submitRenderTasks(info, collector.order(1), nl.juiced.guhs.client.GuhRenderTypes.eyes(glow));
                         }
                     }
                 });

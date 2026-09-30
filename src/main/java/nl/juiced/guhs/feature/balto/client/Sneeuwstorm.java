@@ -157,7 +157,7 @@ public final class Sneeuwstorm {
     private static void onFog(ViewportEvent.RenderFog event) {
         // (1.1.0: one fog event for everything; the environmental fog is the old terrain fog. The old sphere shape and the
         // cancel that applied it are gone: the new values are simply used)
-        if (event.getType() != FogType.NONE) {
+        if (event.getType() != FogType.ATMOSPHERIC) { // 1.1.0: air is ATMOSPHERIC in 26.1 (NONE never comes)
             return;
         }
         float m = Mth.lerp((float) event.getPartialTick(), oudZicht, zicht);

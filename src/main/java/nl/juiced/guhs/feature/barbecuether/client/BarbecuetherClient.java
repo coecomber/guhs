@@ -67,7 +67,7 @@ public final class BarbecuetherClient {
     private static void fog(ViewportEvent.RenderFog event) {
         Camera camera = event.getCamera();
         if (camera.entity() == null || !(camera.entity().level() instanceof ClientLevel level) || level.dimension() != BarbecuetherFeature.BARBECUETHER
-                || !event.getType().equals(net.minecraft.world.level.material.FogType.NONE)) {
+                || !event.getType().equals(net.minecraft.world.level.material.FogType.ATMOSPHERIC)) { // 1.1.0: air = ATMOSPHERIC
             return;
         }
         var biome = level.getBiome(camera.blockPosition());
