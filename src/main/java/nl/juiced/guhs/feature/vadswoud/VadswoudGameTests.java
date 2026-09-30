@@ -64,7 +64,7 @@ public class VadswoudGameTests {
 
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper, BlockPos at) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.setGameMode(GameType.SURVIVAL);
         BlockPos abs = helper.absolutePos(at);
         player.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
@@ -268,7 +268,8 @@ public class VadswoudGameTests {
         });
     }
 
-    @GuhTest(template = WEIDE, timeoutTicks = 900)
+    // (1.1.0: own batch - 26.1 runs tests in id order; its neighbours in the shared batch disturbed it)
+    @GuhTest(template = WEIDE, timeoutTicks = 900, batch = "vadswoud_nest_nacht")
     public static void guhsSleepInANestAtNight(GameTestHelper helper) {
         BlockPos nest = new BlockPos(20, 1, 4);
         helper.setBlock(nest, VadswoudFeature.GUHNESTJE.get());

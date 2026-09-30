@@ -46,7 +46,7 @@ public class SharedGameTests {
 
     private static ServerPlayer survivor(GameTestHelper helper) {
         @SuppressWarnings("removal")
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
         player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
@@ -70,7 +70,7 @@ public class SharedGameTests {
         helper.assertTrue(npcs.size() == 1, "Verstopguhtje is on the roof");
         GuhNpcEntity host = npcs.get(0);
         @SuppressWarnings("removal")
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(host.getX() + 1, host.getY(), host.getZ());
         VerstopGame.action(host, player, VerstopGame.START);
         helper.assertTrue(VerstopGame.isSeeking(player) && Minigames.VERSTOP.equals(Minigames.playing(player)), "seeking");

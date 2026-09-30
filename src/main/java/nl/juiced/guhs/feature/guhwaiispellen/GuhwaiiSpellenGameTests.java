@@ -149,7 +149,7 @@ public class GuhwaiiSpellenGameTests {
 
     @SuppressWarnings("removal")
     private static ServerPlayer speler(GameTestHelper helper, GuhNpcEntity npc) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
         p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
         return p;

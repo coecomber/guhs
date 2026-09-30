@@ -522,7 +522,7 @@ def miner(m, x, y, z, yaw, variant="normal", neck=True, scale=1.0):
     nbt = {"id": "guhs:guh", "NoAI": m.h.Byte(1), "Sitting": m.h.Byte(1), "PersistenceRequired": m.h.Byte(1), "Variant": variant,
            "Invulnerable": m.h.Byte(1), "Tags": m.h.ms.NbtList(8, ["guhs_kaasmijn_mijnwerker"]),
            "ClothesHead": "kaasmijn_helm", "Rotation": m.h.floats(float(yaw), 0.0),
-           "attributes": m.h.compounds([{"id": "minecraft:generic.scale", "base": m.h.Double(scale)}])}
+           "attributes": m.h.compounds([{"id": "minecraft:scale", "base": m.h.Double(scale)}])}
     if neck:
         nbt["ClothesNeck"] = "kaasmijn_zakdoek"
     m.s.entity(x + 0.5, float(y), z + 0.5, nbt)

@@ -36,7 +36,7 @@ public class FavorietjesGameTests {
 
     @SuppressWarnings("removal")
     static ServerPlayer speler(GameTestHelper helper) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(new BlockPos(1, 1, 1));

@@ -55,7 +55,7 @@ public class TimmerguhGameTests {
 
     @SuppressWarnings("removal")
     static ServerPlayer speler(GameTestHelper helper, BlockPos at) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);

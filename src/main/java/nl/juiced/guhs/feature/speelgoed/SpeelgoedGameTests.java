@@ -62,7 +62,7 @@ public class SpeelgoedGameTests {
 
     @SuppressWarnings("removal")
     static ServerPlayer speler(GameTestHelper helper, BlockPos at) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
@@ -271,7 +271,8 @@ public class SpeelgoedGameTests {
         });
     }
 
-    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 1400)
+    // (1.1.0: own batch - 26.1 runs tests in id order; its neighbours in the shared batch disturbed it)
+    @GuhTest(template = TUIN, timeoutTicks = 1400, batch = "speelgoed_bewoner")
     public static void speelgoedBewonerSpeeltBijZijnHuisje(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(18, 2, 18));

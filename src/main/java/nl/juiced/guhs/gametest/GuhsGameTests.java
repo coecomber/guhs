@@ -161,11 +161,22 @@ public final class GuhsGameTests {
         }
     }
 
+    /**
+     * The game rules 1.21.1's gametest server had and 26.1's no longer sets (it only turns off mob spawning and weather):
+     * no random ticks and no fire ticks. All Guhs tests were written for them (plants that must not grow by themselves,
+     * fire that stays put), so every batch environment sets them again (and puts the old values back afterwards).
+     */
+    private static final net.minecraft.world.level.gamerules.GameRuleMap OLD_TEST_RULES = new net.minecraft.world.level.gamerules.GameRuleMap.Builder()
+            .set(net.minecraft.world.level.gamerules.GameRules.RANDOM_TICK_SPEED, 0)
+            .set(net.minecraft.world.level.gamerules.GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER, 0)
+            .build();
+
     private static void onRegisterTests(RegisterGameTestsEvent event) {
         Map<Identifier, Holder<TestEnvironmentDefinition<?>>> environments = new HashMap<>();
         for (Entry e : ENTRIES) {
             GuhTest t = e.test();
-            Holder<TestEnvironmentDefinition<?>> env = environments.computeIfAbsent(batchId(t.batch()), id -> event.registerEnvironment(id));
+            Holder<TestEnvironmentDefinition<?>> env = environments.computeIfAbsent(batchId(t.batch()),
+                    id -> event.registerEnvironment(id, new TestEnvironmentDefinition.SetGameRules(OLD_TEST_RULES)));
             TestData<Holder<TestEnvironmentDefinition<?>>> data = new TestData<>(env, structureId(t.template()), Math.max(1, t.timeoutTicks()),
                     (int) t.setupTicks(), t.required(), Rotation.values()[t.rotationSteps() & 3], t.manualOnly(), Math.max(1, t.attempts()),
                     Math.max(1, t.requiredSuccesses()), t.skyAccess(), 0);

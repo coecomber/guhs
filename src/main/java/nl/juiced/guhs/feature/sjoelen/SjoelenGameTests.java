@@ -35,7 +35,7 @@ public class SjoelenGameTests {
     private static final String BATCH = "sjoelen_huisje";
 
     private static ServerPlayer player(GameTestHelper helper) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         return p;

@@ -35,16 +35,18 @@ public class MeppenGameTests {
     private static final String EMPTY = "empty";
     private static final String HALL = "mika_mep_hal";
 
+    // (1.1.0: 26.1 runs the tests sorted by id, so other meppen rooms stand right next to this one; every search stays
+    // inside this test's own area)
     private static GuhNpcEntity mepguh(GameTestHelper helper, int radius) {
         List<GuhNpcEntity> npcs = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class,
-                new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(radius), n -> n.getKind() == GuhNpcEntity.Kind.MEPGUH);
+                new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(radius).intersect(helper.getBounds().inflate(1)), n -> n.getKind() == GuhNpcEntity.Kind.MEPGUH);
         helper.assertTrue(npcs.size() == 1, "one Mepguh: " + npcs.size());
         return npcs.get(0);
     }
 
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper, GuhNpcEntity npc) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         return player;
     }
@@ -179,7 +181,7 @@ public class MeppenGameTests {
         for (BlockPos hole : game.holes()) {
             helper.assertTrue(!helper.getLevel().getBlockState(hole.above()).is(MeppenFeature.MEP_KOP.get()), "the board is empty again");
         }
-        var marker = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(16),
+        var marker = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(16).intersect(helper.getBounds().inflate(1)),
                 d -> d.entityTags().contains(MepGame.TAG_TOP));
         helper.assertTrue(!marker.isEmpty(), "a spot for the top 3");
         Display.TextDisplay spot = marker.stream().min(java.util.Comparator.comparingDouble(d -> d.distanceToSqr(npc))).get();
@@ -326,7 +328,7 @@ public class MeppenGameTests {
         BlockPos stand = game.stand();
         helper.assertTrue(stand != null && helper.getLevel().getBlockState(stand.below()).isSolid()
                 && helper.getLevel().getBlockState(stand).isAir(), "you stand on the board, between the holes");
-        var boards = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(110),
+        var boards = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(110).intersect(helper.getBounds().inflate(1)),
                 d -> d.entityTags().contains(MepGame.TAG_LIVE) || d.entityTags().contains(MepGame.TAG_TOP));
         helper.assertTrue(boards.size() == 2, "the scoreboard wall: " + boards.size());
         helper.assertTrue(game.holes().stream().map(BlockPos::getX).distinct().count() == 4
@@ -371,7 +373,7 @@ public class MeppenGameTests {
         helper.assertTrue(nl.juiced.guhs.feature.klassiekers.Klassiekers.done(player, "grote_guhspelen/klassiekers_meppen_lastig"),
                 "the lastig advancement");
         // the floating board has all three levels
-        var spot = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(16),
+        var spot = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(16).intersect(helper.getBounds().inflate(1)),
                 d -> d.entityTags().contains(MepGame.TAG_TOP)).stream().min(java.util.Comparator.comparingDouble(d -> d.distanceToSqr(npc))).orElseThrow();
         String text = nl.juiced.guhs.storage.Nbt.saveWithoutId(helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, spot.getBoundingBox().inflate(1.5),
                 d -> d.entityTags().contains(Scorebord.TAG)).get(0)).get("text").toString();

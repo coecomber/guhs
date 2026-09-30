@@ -134,7 +134,7 @@ public class GolfGameTests {
 
     @GuhTest(template = "empty", batch = BATCH)
     public static void golfClubStaysInTheGame(GameTestHelper helper) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         ItemStack club = new ItemStack(GolfFeature.GOLFCLUB.get());
         helper.assertTrue(!club.getItem().onDroppedByPlayer(club, player), "it can't be dropped");
         helper.assertTrue(!club.getItem().canFitInsideContainerItems(), "nor go into a bundle or a shulker box");
@@ -150,7 +150,7 @@ public class GolfGameTests {
     @GuhTest(template = COURSE, timeoutTicks = 400, batch = BATCH)
     public static void golfRoundWithAHoleInOne(GameTestHelper helper) {
         GuhNpcEntity npc = golfguh(helper);
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         GolfGame.action(npc, player, GolfGame.START);
         GolfGame game = GolfGame.of(npc);
@@ -171,7 +171,7 @@ public class GolfGameTests {
         player.getFoodData().setFoodLevel(3);
         player.hurtServer(helper.getLevel(), helper.getLevel().damageSources().fall(), 6f);
         helper.assertTrue(player.getHealth() == player.getMaxHealth(), "golfers can't get hurt");
-        ServerPlayer other = helper.makeMockServerPlayerInLevel();
+        ServerPlayer other = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         other.snapTo(npc.getX() + 1, npc.getY(), npc.getZ() + 1);
         GolfGame.action(npc, other, GolfGame.START);
         helper.assertTrue(game.isPlayedBy(player) && !GolfGame.isGolfing(other), "one round at a time");
@@ -228,7 +228,7 @@ public class GolfGameTests {
     @GuhTest(template = COURSE, timeoutTicks = 400, batch = BATCH)
     public static void golfKaassausVahoegschansAndWalkingAway(GameTestHelper helper) {
         GuhNpcEntity npc = golfguh(helper);
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         GolfGame.action(npc, player, GolfGame.START);
         GolfGame game = GolfGame.of(npc);
@@ -280,7 +280,7 @@ public class GolfGameTests {
     @GuhTest(template = COURSE, timeoutTicks = 200, batch = BATCH)
     public static void golfWrongCupCostsAPenalty(GameTestHelper helper) {
         GuhNpcEntity npc = golfguh(helper);
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         GolfGame.action(npc, player, GolfGame.START);
         GolfGame game = GolfGame.of(npc);
@@ -343,7 +343,7 @@ public class GolfGameTests {
     @GuhTest(template = COURSE, timeoutTicks = 200, batch = BATCH)
     public static void golfLastigFarTeesBumpersSixStrokes(GameTestHelper helper) {
         GuhNpcEntity npc = golfguh(helper);
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         var lastig = nl.juiced.guhs.feature.spelen.Niveau.LASTIG;
         GolfGame.action(npc, player, nl.juiced.guhs.feature.klassiekers.Klassiekers.metNiveau(GolfGame.START, lastig));
@@ -389,7 +389,7 @@ public class GolfGameTests {
     @GuhTest(template = COURSE, timeoutTicks = 200, batch = BATCH)
     public static void golfMakkelijkHasNoPenaltyStrokes(GameTestHelper helper) {
         GuhNpcEntity npc = golfguh(helper);
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         GolfGame.action(npc, player, nl.juiced.guhs.feature.klassiekers.Klassiekers.metNiveau(GolfGame.START, nl.juiced.guhs.feature.spelen.Niveau.MAKKELIJK));
         GolfGame game = GolfGame.of(npc);

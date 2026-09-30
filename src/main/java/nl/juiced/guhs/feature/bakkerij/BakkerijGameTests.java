@@ -84,7 +84,7 @@ public class BakkerijGameTests {
 
     private static ServerPlayer player(GameTestHelper helper, Vec3 at) {
         @SuppressWarnings("removal")
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         p.snapTo(at.x, at.y, at.z);

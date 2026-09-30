@@ -43,7 +43,7 @@ public class PiepMenuGameTests {
 
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper, BlockPos at) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
@@ -185,7 +185,8 @@ public class PiepMenuGameTests {
 
     // --- rondvadsen, renaming, the click rules ------------------------------------------------------------------------------------
 
-    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 400)
+    // (1.1.0: own batch - 26.1 runs tests in id order; its neighbours in the shared batch disturbed it)
+    @GuhTest(template = WEI, timeoutTicks = 400, batch = "piepmenu_rondvadsen")
     public static void piepmenuRondvadsenUitBlijftStaan(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         PieppiepmuisjeEntity muis = helper.spawn(PiepFeature.PIEPPIEPMUISJE.get(), new BlockPos(7, 2, 7));

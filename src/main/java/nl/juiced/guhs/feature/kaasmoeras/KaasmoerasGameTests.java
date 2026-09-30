@@ -79,7 +79,7 @@ public class KaasmoerasGameTests {
 
     @GuhTest(template = EMPTY)
     public static void sneakingWadesThroughBorrelendeKaassaus(GameTestHelper helper) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         try {
             BlockPos pos = helper.absolutePos(new BlockPos(2, 0, 2));
             helper.getLevel().setBlockAndUpdate(pos, KaasmoerasFeature.BORRELENDE_KAASSAUS.get().defaultBlockState());
@@ -207,7 +207,7 @@ public class KaasmoerasGameTests {
     @GuhTest(template = EMPTY)
     public static void moerasheksThrowsWeakDrankjesAndDropsMoeraskaas(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         try {
             player.setGameMode(GameType.SURVIVAL);
             player.snapTo(helper.absoluteVec(new Vec3(2.5, 1, 4.5)));
@@ -296,7 +296,7 @@ public class KaasmoerasGameTests {
         }
         helper.assertTrue(GuhVariant.MIJNGUH.npcKind() == GuhNpcEntity.Kind.MIJNGUH, "the guh characters still have their kind");
         helper.assertTrue(GuhDex.ENTRIES.contains(GuhVariant.KAASMOERASGUH), "the Kaasmoerasguh has a page");
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         try {
             KikkerguhEntity kikker = helper.spawn(KaasmoerasFeature.KIKKERGUH.get(), new BlockPos(2, 1, 2));
             player.snapTo(kikker.position().add(0.5, 0, 0));

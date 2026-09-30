@@ -44,7 +44,7 @@ public class PrizesGameTests {
 
     private static ServerPlayer player(GameTestHelper helper) {
         @SuppressWarnings("removal")
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(2, 1, 2));
         player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);

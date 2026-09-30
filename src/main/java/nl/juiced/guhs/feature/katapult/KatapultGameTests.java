@@ -39,7 +39,7 @@ public class KatapultGameTests {
     private static final String BATCH = "katapult_kasteel";
 
     private static ServerPlayer player(GameTestHelper helper) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         return p;

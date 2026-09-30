@@ -306,6 +306,7 @@ public final class Kaasfrituursaus {
             }
             return;
         }
+        entity.lavaIgnite();   // (26.1: lavaHurt no longer sets you on fire; 1.21.1 lavaHurt did both)
         entity.lavaHurt();
         entity.fallDistance *= 0.5F;
     }

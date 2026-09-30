@@ -34,7 +34,7 @@ public class EvenementenGameTests {
     private static final String EMPTY = "empty";
 
     private static ServerPlayer player(GameTestHelper helper, int x, int z) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.setGameMode(GameType.SURVIVAL);
         Vec3 at = helper.absoluteVec(new Vec3(x + 0.5, 1, z + 0.5));
         player.snapTo(at.x, at.y, at.z, 0, 0);

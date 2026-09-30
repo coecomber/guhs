@@ -491,7 +491,7 @@ public class GuhGameTests {
                 helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE);
             }
         }
-        Player player = helper.makeMockServerPlayerInLevel(); // a real (online) owner, so the guh doesn't just sit
+        Player player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper); // a real (online) owner, so the guh doesn't just sit
         BlockPos near = helper.absolutePos(new BlockPos(1, 1, 1));
         player.snapTo(near.getX() + 0.5, near.getY(), near.getZ() + 0.5);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 1));
@@ -511,7 +511,7 @@ public class GuhGameTests {
                 helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE);
             }
         }
-        Player player = helper.makeMockServerPlayerInLevel(); // a real (online) owner, so the guh doesn't just sit
+        Player player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper); // a real (online) owner, so the guh doesn't just sit
         BlockPos near = helper.absolutePos(new BlockPos(1, 1, 1));
         player.snapTo(near.getX() + 0.5, near.getY(), near.getZ() + 0.5);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 1));
@@ -672,7 +672,7 @@ public class GuhGameTests {
 
     @GuhTest(template = WIRE_ROOM, timeoutTicks = 200)
     public static void secretNoteGuhWalksUpAndHandsOverBork(GameTestHelper helper) {
-        Player player = helper.makeMockServerPlayerInLevel();
+        Player player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(helper.absoluteVec(new Vec3(3.5, 1, 1.5)));
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(14, 1, 1));
         guh.setSecretNote(true);
@@ -764,7 +764,7 @@ public class GuhGameTests {
 
     @GuhTest(template = WIRE_ROOM, timeoutTicks = 120)
     public static void sittingGuhIgnoresKaasKnabbels(GameTestHelper helper) {
-        Player player = helper.makeMockServerPlayerInLevel();
+        Player player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(helper.absoluteVec(new Vec3(4.5, 1, 1.5)));
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 16));
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(14, 1, 1));
@@ -943,7 +943,7 @@ public class GuhGameTests {
 
     @GuhTest(template = EMPTY)
     public static void wardrobeBackpackKeepsItsContents(GameTestHelper helper) {
-        var player = helper.makeMockServerPlayerInLevel();
+        var player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
         guh.tame(player);
         nl.juiced.guhs.feature.kleding.KledingUnlocks.ontgrendel(player, nl.juiced.guhs.entity.GuhClothes.GUH_BACKPACK);
@@ -982,7 +982,7 @@ public class GuhGameTests {
                 helper.setBlock(new BlockPos(20, y, z), Blocks.PINK_WOOL);
             }
         }
-        Player player = helper.makeMockServerPlayerInLevel();
+        Player player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 1, 1));
         guh.setGuhScale(1.5f);
         guh.tame(player);
@@ -1007,8 +1007,8 @@ public class GuhGameTests {
 
     @GuhTest(template = EMPTY)
     public static void stomachIsBuiltAndPrivateStomachsStayClosed(GameTestHelper helper) {
-        net.minecraft.server.level.ServerPlayer owner = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayerInLevel();
-        net.minecraft.server.level.ServerPlayer visitor = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayerInLevel();
+        net.minecraft.server.level.ServerPlayer owner = (net.minecraft.server.level.ServerPlayer) nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
+        net.minecraft.server.level.ServerPlayer visitor = (net.minecraft.server.level.ServerPlayer) nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         // (the headless test server has no datapack dimensions; in a real world the stomach gets built too)
         ServerLevel maagLevel = nl.juiced.guhs.world.MaagManager.level(helper.getLevel().getServer());
         nl.juiced.guhs.world.GuhWorldData.Maag maag = maagLevel != null ? nl.juiced.guhs.world.MaagManager.ensureMaag(maagLevel, owner)
@@ -1038,7 +1038,7 @@ public class GuhGameTests {
 
     @GuhTest(template = EMPTY)
     public static void vadsThreeTimesInARowFreesGuhbert(GameTestHelper helper) {
-        net.minecraft.server.level.ServerPlayer player = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayerInLevel();
+        net.minecraft.server.level.ServerPlayer player = (net.minecraft.server.level.ServerPlayer) nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(helper.absoluteVec(new Vec3(2.5, 1, 2.5)));
         nl.juiced.guhs.entity.MikaBaasEntity mika = helper.spawn(ModEntities.MIKA_BAAS.get(), POS);
         var p = nl.juiced.guhs.world.GuhWorldData.get(player.level().getServer()).player(player.getUUID());
@@ -1060,7 +1060,7 @@ public class GuhGameTests {
 
     @GuhTest(template = EMPTY)
     public static void guhdexMilestoneGivesItsRewardOnce(GameTestHelper helper) {
-        net.minecraft.server.level.ServerPlayer player = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayerInLevel();
+        net.minecraft.server.level.ServerPlayer player = (net.minecraft.server.level.ServerPlayer) nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         var p = nl.juiced.guhs.world.GuhWorldData.get(player.level().getServer()).player(player.getUUID());
         nl.juiced.guhs.quest.GuhDex.claim(player, 0);
         helper.assertTrue(player.getInventory().isEmpty(), "not enough guhs seen yet");
@@ -1224,7 +1224,7 @@ public class GuhGameTests {
         helper.assertTrue(nl.juiced.guhs.slee.SleePath.next(helper.getLevel(), pieces.get(7), true) != null, "the loop is closed");
         ((nl.juiced.guhs.block.entity.SleeRailBlockEntity) helper.getLevel().getBlockEntity(pieces.get(0).anchor())).setFinish(true);
         nl.juiced.guhs.entity.GuhSleeEntity sled = sledOn(helper, pieces.get(1));
-        net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        net.minecraft.server.level.ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(sled.position());
         player.startRiding(sled, true, true);
         sled.setSpeed(3);
@@ -1296,7 +1296,7 @@ public class GuhGameTests {
             guards[i].snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, 0f, 0f);    // looking out (+z): the castle is behind them (-z)
             level.addFreshEntity(guards[i]);
         }
-        net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        net.minecraft.server.level.ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.setGameMode(GameType.SURVIVAL);
         BlockPos inside = helper.absolutePos(new BlockPos(4, 2, 5));
         player.teleportTo(inside.getX() + 0.5, inside.getY(), inside.getZ() + 0.5);
@@ -1435,7 +1435,7 @@ public class GuhGameTests {
 
     @GuhTest(template = EMPTY)
     public static void guhdexHasTheReisguhAndTheGateGuard(GameTestHelper helper) {
-        net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        net.minecraft.server.level.ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         BlockPos at = helper.absolutePos(new BlockPos(2, 2, 2));
         player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         var npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
@@ -1492,7 +1492,7 @@ public class GuhGameTests {
     @GuhTest(template = "verstopguh_huis", timeoutTicks = 200)
     public static void verstopguhFindThemAllForTickets(GameTestHelper helper) {
         var npc = verstopguhtje(helper);
-        net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        net.minecraft.server.level.ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         nl.juiced.guhs.quest.VerstopGame.action(npc, player, nl.juiced.guhs.quest.VerstopGame.START); // makkelijk
         helper.assertTrue(npc.verstop.isRunning() && npc.verstop.isPlaying(player), "the game is on");
@@ -1525,7 +1525,7 @@ public class GuhGameTests {
     @GuhTest(template = "verstopguh_huis", timeoutTicks = 200)
     public static void verstopguhWalkingOutEndsTheGame(GameTestHelper helper) {
         var npc = verstopguhtje(helper);
-        net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        net.minecraft.server.level.ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         nl.juiced.guhs.quest.VerstopGame.action(npc, player, nl.juiced.guhs.quest.VerstopGame.START + 2); // moeilijk
         var guhs = hiddenGuhs(helper);
@@ -1576,7 +1576,7 @@ public class GuhGameTests {
     /** The real guh kermis: its station sleds find the rails, and a whole lap round the coaster gives kermisbonnen. */
     @GuhTest(template = "guh_kermis", timeoutTicks = 1200)
     public static void kermisCoasterGoesAllTheWayRound(GameTestHelper helper) {
-        net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        net.minecraft.server.level.ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         nl.juiced.guhs.entity.GuhSleeEntity[] sled = {null};
         helper.runAfterDelay(30, () -> {
             // (2.9: only the sleds of this test's own kermis - with -Pgt the other tests' templates can stand closer by)
@@ -1740,7 +1740,7 @@ public class GuhGameTests {
     @GuhTest(template = EMPTY)
     public static void youCanSitOnAGuhChair(GameTestHelper helper) {
         helper.setBlock(POS, ModBlocks.GUH_STOEL.get());
-        Player player = helper.makeMockServerPlayerInLevel();
+        Player player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         BlockPos abs = helper.absolutePos(POS);
         player.snapTo(abs.getX() + 0.5, abs.getY() + 1, abs.getZ() + 1.5);
         helper.getLevel().getBlockState(abs).useWithoutItem(helper.getLevel(), player,

@@ -44,7 +44,7 @@ public class EilandenGameTests {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 2));
         guh.setVariant(GuhVariant.WOLK);
         guh.setPersonality(GuhPersonality.VADSIG); // (1 in 2 per knabbel, once it trusts you)
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.setGameMode(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 64));
         try {
@@ -135,7 +135,7 @@ public class EilandenGameTests {
     /** A wild Wolkguh can't be hurt (only tamed), it stays unique (its babies are snow guhs), and water can't wash a lift away. */
     @GuhTest(template = EMPTY)
     public static void wolkguhIsUntouchableAndLiftsAreWaterproof(GameTestHelper helper) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         try {
             player.setGameMode(GameType.SURVIVAL);
             GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(1, 1, 1));
@@ -179,8 +179,8 @@ public class EilandenGameTests {
 
     @GuhTest(template = EMPTY)
     public static void yourWolkguhCatchesYou(GameTestHelper helper) {
-        ServerPlayer owner = helper.makeMockServerPlayerInLevel();
-        ServerPlayer other = helper.makeMockServerPlayerInLevel();
+        ServerPlayer owner = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
+        ServerPlayer other = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         try {
             owner.setGameMode(GameType.SURVIVAL);
             other.setGameMode(GameType.SURVIVAL);

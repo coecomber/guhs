@@ -58,7 +58,7 @@ public class BibliotheekGameTests {
     }
 
     private static ServerPlayer player(GameTestHelper helper, Entity near) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.setGameMode(GameType.SURVIVAL);
         player.getInventory().clearContent();
         player.snapTo(near.getX() + 1, near.getY(), near.getZ());
@@ -143,7 +143,7 @@ public class BibliotheekGameTests {
         BoundingBox box = lectern(helper, Guhboek.VAHOEG);
         try {
             BlockPos pos = helper.absolutePos(POS);
-            ServerPlayer player = helper.makeMockServerPlayerInLevel();
+            ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
             player.setGameMode(GameType.SURVIVAL);
             player.getInventory().clearContent();
             player.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 1.5);
@@ -290,7 +290,7 @@ public class BibliotheekGameTests {
     @GuhTest(template = EMPTY)
     public static void bookStandGivesTheSecretBookOnce(GameTestHelper helper) {
         helper.setBlock(POS, BibliotheekFeature.BOEKALTAAR.get().defaultBlockState());
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.getInventory().clearContent();
         player.snapTo(helper.absolutePos(POS).getX() + 1.5, helper.absolutePos(POS).getY(), helper.absolutePos(POS).getZ() + 0.5);
         helper.assertTrue(Leeszaal.bookAt(helper.getLevel(), helper.absolutePos(POS)) == Guhboek.GEHEIM, "the secret book lies on the stand");
@@ -323,7 +323,7 @@ public class BibliotheekGameTests {
         BoundingBox box = BoundingBox.fromCorners(helper.absolutePos(BlockPos.ZERO), helper.absolutePos(new BlockPos(4, 3, 4)));
         BibliotheekProtection.TEST_AREAS.add(box);
         try {
-            ServerPlayer player = helper.makeMockServerPlayerInLevel();
+            ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
             player.setGameMode(GameType.SURVIVAL);
             BlockState state = helper.getLevel().getBlockState(pos);
             helper.assertTrue(NeoForge.EVENT_BUS.post(new BreakBlockEvent(helper.getLevel(), pos, state, player)).isCanceled(),

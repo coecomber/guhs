@@ -35,7 +35,7 @@ public class EmotesGameTests {
     private static final BlockPos POS = new BlockPos(2, 1, 2);
 
     private static ServerPlayer player(GameTestHelper helper) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));

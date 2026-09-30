@@ -25,7 +25,7 @@ public class ZienGameTests {
     public static void zienGuhsEnNpcsOpDrieBlokjes(GameTestHelper helper) {
         helper.assertTrue(GuhDex.SEE_RANGE == 3, "the Guhdex sees 3 blocks far: " + GuhDex.SEE_RANGE);
         @SuppressWarnings("removal")
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         try {
             Vec3 at = helper.absoluteVec(new Vec3(1.5, 1, 1.5));
             player.snapTo(at.x, at.y, at.z);

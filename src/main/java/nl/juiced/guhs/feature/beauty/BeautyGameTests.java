@@ -40,7 +40,7 @@ public class BeautyGameTests {
 
     private static ServerPlayer player(GameTestHelper helper, GuhNpcEntity npc) {
         @SuppressWarnings("removal")
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         return player;
     }

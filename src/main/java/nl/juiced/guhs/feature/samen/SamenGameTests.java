@@ -86,7 +86,7 @@ public class SamenGameTests {
     @SuppressWarnings("removal")
     static ServerPlayer speler(GameTestHelper helper, BlockPos at) {
         vloer(helper);
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
@@ -282,7 +282,7 @@ public class SamenGameTests {
         helper.assertTrue(npcs.size() == 1, "the Raceguh is there");
         GuhNpcEntity npc = npcs.get(0);
         @SuppressWarnings("removal")
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.snapTo(npc.getX(), npc.getY(), npc.getZ() - 2);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), helper.relativePos(p.blockPosition()));
         guh.tame(p);

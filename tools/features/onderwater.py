@@ -826,7 +826,7 @@ def reef(b):
     for (x, y, z) in ((CX + 44, G - 8, CZ - 6), (CX - 45, G - 10, CZ + 10)):
         if b.get(x, y, z) == "minecraft:water":
             b.s.entity(x + 0.5, float(y), z + 0.5, {"id": "guhs:guh", "Variant": "zeemeerguh", "attributes": b.h.ms.compounds(
-                [{"id": "minecraft:generic.scale", "base": b.h.Double(1.45)}])})
+                [{"id": "minecraft:scale", "base": b.h.Double(1.45)}])})
 
 
 def wreck(b):

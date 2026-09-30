@@ -36,7 +36,7 @@ public class VissenGameTests {
 
     @SuppressWarnings("removal")
     private static ServerPlayer angler(GameTestHelper helper, GuhNpcEntity npc) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.getInventory().clearContent();
         player.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         return player;

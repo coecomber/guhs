@@ -54,7 +54,7 @@ public class WereldlevenGameTests {
 
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper, BlockPos at) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
@@ -130,6 +130,9 @@ public class WereldlevenGameTests {
 
     @GuhTest(template = PLEIN, timeoutTicks = 900, batch = "wereldleven_dutje")   // own batch: no neighbours around the nest
     public static void wereldlevenDagritmeDutjeInHetNest(GameTestHelper helper) {
+        // (1.1.0: the shared test clock may stand at night after the tests before this batch, and then the nest is for
+        //  the night's sleep (SleepInNestGoal) instead of the afternoon nap: noon for this test)
+        nl.juiced.guhs.world.GuhTime.setDayTime(helper.getLevel(), nl.juiced.guhs.world.GuhTime.day(helper.getLevel()) * nl.juiced.guhs.world.GuhTime.DAY + 6000);
         helper.setBlock(NEST, nl.juiced.guhs.feature.vadswoud.VadswoudFeature.GUHNESTJE.get());
         GuhEntity guh = guh(helper, new BlockPos(13, 2, 4), Dagdeel.DUTJE);
         BlockPos nest = helper.absolutePos(NEST);

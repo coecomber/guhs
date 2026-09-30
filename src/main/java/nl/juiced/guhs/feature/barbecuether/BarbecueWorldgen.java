@@ -20,7 +20,7 @@ public final class BarbecueWorldgen {
     static boolean free(WorldGenLevel level, BlockPos pos) {
         BlockState s = level.getBlockState(pos);
         // (plants count as free: a sprout that grows into a giant skewer or sausage makes room for it)
-        return s.isAir() || (s.canBeReplaced() && s.getFluidState().isEmpty()) || s.getBlock() instanceof net.minecraft.world.level.block.BushBlock;
+        return s.isAir() || (s.canBeReplaced() && s.getFluidState().isEmpty()) || s.getBlock() instanceof net.minecraft.world.level.block.VegetationBlock;   // (1.21.1 BushBlock)
     }
 
     static boolean solid(WorldGenLevel level, BlockPos pos) {

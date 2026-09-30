@@ -47,7 +47,7 @@ public class DoolhofGameTests {
 
     private static ServerPlayer speler(GameTestHelper helper, GuhNpcEntity npc) {
         @SuppressWarnings("removal")
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
@@ -165,7 +165,7 @@ public class DoolhofGameTests {
     @GuhTest(template = EMPTY)
     public static void doolhofBeschermdEnLantaarns(GameTestHelper helper) {
         @SuppressWarnings("removal")
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         helper.assertTrue(DoolhofProtection.denied(p, true), "a survival player can't break the maze");
         helper.assertTrue(!DoolhofProtection.denied(p, false), "outside it: fine");

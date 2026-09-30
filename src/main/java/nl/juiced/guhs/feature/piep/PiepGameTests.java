@@ -42,7 +42,7 @@ public class PiepGameTests {
 
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(1, 2, 1));
@@ -283,7 +283,9 @@ public class PiepGameTests {
 
     // --- the nest ---------------------------------------------------------------------------------------------------------------------
 
-    @GuhTest(template = ARENA, timeoutTicks = 1400)
+    // (1.1.0: own batch - 26.1 runs tests in id order, so piepNestTweedeKeerZonderRecept's arena stood next to this one
+    //  and its wins counted for this test's player too)
+    @GuhTest(template = ARENA, batch = "piep_nest_golven", timeoutTicks = 1400)
     public static void piepNestGolvenEnOppernabbel(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         p.setGameMode(GameType.CREATIVE);                      // (the knabbels leave a creative player alone)

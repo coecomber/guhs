@@ -55,7 +55,7 @@ public class GuhkamerGameTests {
 
     @SuppressWarnings("removal")
     static ServerPlayer speler(GameTestHelper helper, BlockPos at) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         BlockPos abs = helper.absolutePos(at);
         p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);

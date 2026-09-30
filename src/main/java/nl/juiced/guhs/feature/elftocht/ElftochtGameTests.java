@@ -77,7 +77,7 @@ public class ElftochtGameTests {
 
     private static ServerPlayer speler(GameTestHelper helper, int x, int z) {
         @SuppressWarnings("removal")
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         Vec3 at = op(helper, x, z);

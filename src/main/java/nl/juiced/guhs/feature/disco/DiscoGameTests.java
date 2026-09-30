@@ -33,7 +33,7 @@ public class DiscoGameTests {
 
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper, GuhNpcEntity npc) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
         player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);   // (mock players start in creative: no damage anyway)
         return player;

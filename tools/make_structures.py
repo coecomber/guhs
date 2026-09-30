@@ -219,9 +219,9 @@ def mc(name):
 
 def guh_nbt(scale, health=None, **extra):
     nbt = {"id": "guhs:guh", "PersistenceRequired": Byte(1),
-           "attributes": compounds([{"id": "minecraft:generic.scale", "base": Double(scale)}])}
+           "attributes": compounds([{"id": "minecraft:scale", "base": Double(scale)}])}
     if health:
-        nbt["attributes"].append({"id": "minecraft:generic.max_health", "base": Double(health)})
+        nbt["attributes"].append({"id": "minecraft:max_health", "base": Double(health)})
         nbt["Health"] = Float(health)
     nbt.update(extra)
     return nbt
@@ -829,9 +829,9 @@ def evil_shell(s, wall="polished_blackstone_bricks", floor="blackstone", trim="c
 
 def mika_nbt(scale=1.0, health=None, boss=False):
     nbt = {"id": "guhs:mika", "PersistenceRequired": Byte(1), "Boss": Byte(1 if boss else 0),
-           "attributes": compounds([{"id": "minecraft:generic.scale", "base": Double(scale)}])}
+           "attributes": compounds([{"id": "minecraft:scale", "base": Double(scale)}])}
     if health:
-        nbt["attributes"].append({"id": "minecraft:generic.max_health", "base": Double(health)})
+        nbt["attributes"].append({"id": "minecraft:max_health", "base": Double(health)})
         nbt["Health"] = Float(health)
     return nbt
 

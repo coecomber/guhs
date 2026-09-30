@@ -4090,14 +4090,14 @@ def koning_nbt():
     return {"id": "guhs:guh", "Variant": "koning", "Sitting": Byte(1), "PersistenceRequired": Byte(1), "Personality": "brave",
             "ClothesHead": "koning_kroon", "ClothesBody": "koning_mantel", "ClothesNeck": "koning_ketting",
             "Rotation": floats(0.0, 0.0),
-            "attributes": compounds([{"id": "minecraft:generic.scale", "base": Double(1.72)}])}
+            "attributes": compounds([{"id": "minecraft:scale", "base": Double(1.72)}])}
 
 
 def guard(s, x, y, z, yaw):
     """A guh guard in knight's armour: stands still at its post (until someone tames it)."""
     s.entity(x, y, z, {"id": "guhs:guh", "NoAI": Byte(1), "PersistenceRequired": Byte(1), "ClothesHead": "knight_helmet",
                        "ClothesBody": "knight_armour", "Rotation": floats(yaw, 0.0),
-                       "attributes": compounds([{"id": "minecraft:generic.scale", "base": Double(1.0)}])})
+                       "attributes": compounds([{"id": "minecraft:scale", "base": Double(1.0)}])})
 
 
 def round_tower(s, rng, cx, cz, r, y0, h, roof=True):

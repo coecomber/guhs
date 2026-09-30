@@ -41,7 +41,7 @@ public class GuheindeGameTests {
     private static final String EMPTY = "empty";
 
     private static ServerPlayer player(GameTestHelper helper) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
         player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);

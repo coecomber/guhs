@@ -44,7 +44,7 @@ public class KlassiekersGameTests {
     @GuhTest(template = EMPTY)
     public static void klassiekersBoardShowsAllThreeLevels(GameTestHelper helper) {
         @SuppressWarnings("removal")
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         Scorebord.submit(player, "klassiekers_testbord_lastig", 4242, false);
         Component text = Klassiekers.bord(helper.getLevel().getServer(), Component.literal("Test"), "klassiekers_testbord",
                 n -> Component.literal("extra" + n), s -> s + " pt");
@@ -62,7 +62,7 @@ public class KlassiekersGameTests {
     @GuhTest(template = EMPTY)
     public static void klassiekersKampioenAfterAllFiveOnLastig(GameTestHelper helper) {
         @SuppressWarnings("removal")
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         helper.assertTrue(!Klassiekers.done(player, Klassiekers.ADV_MAKKELIJK), "nothing yet");
         Klassiekers.gespeeld(player, "golf", Niveau.MAKKELIJK);
         Klassiekers.gespeeld(player, "golf", Niveau.MEDIUM);

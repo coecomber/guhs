@@ -40,7 +40,7 @@ public class SmulGameTests {
 
     /** A survival player without anything, right next to the Smulguh. */
     private static ServerPlayer player(GameTestHelper helper, GuhNpcEntity npc) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
@@ -210,7 +210,7 @@ public class SmulGameTests {
 
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void smulschaalCantBeKept(GameTestHelper helper) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.getInventory().clearContent();
         p.getInventory().add(new ItemStack(SmulFeature.SMULSCHAAL.get()));
         p.getInventory().tick();

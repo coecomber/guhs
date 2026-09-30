@@ -168,7 +168,7 @@ class Kit:
         """A decoration guh (stil = stays put, e.g. behind a counter; zit = sitting, e.g. on a sled)."""
         from make_structures import Byte, Double, NbtList, compounds, floats
         nbt = {"id": "guhs:guh", "PersistenceRequired": Byte(1), "Rotation": floats(float(yaw), 0.0),
-               "attributes": compounds([{"id": "minecraft:generic.scale", "base": Double(scale)}])}
+               "attributes": compounds([{"id": "minecraft:scale", "base": Double(scale)}])}
         if stil:
             nbt["NoAI"] = Byte(1)
         if zit:

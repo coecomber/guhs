@@ -51,7 +51,7 @@ public class OnderwaterGameTests {
     private static final int F = 8, G = 36, CX = 64, CZ = 64, TX = 64, TZ = 114;
 
     private static ServerPlayer diver(GameTestHelper helper, BlockPos at) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.setGameMode(GameType.SURVIVAL);
         BlockPos abs = helper.absolutePos(at);
         player.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);

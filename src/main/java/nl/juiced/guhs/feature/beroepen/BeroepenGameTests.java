@@ -40,7 +40,7 @@ import nl.juiced.guhs.registry.ModItems;
 public class BeroepenGameTests {
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper, int x, int z) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(x, 2, z));

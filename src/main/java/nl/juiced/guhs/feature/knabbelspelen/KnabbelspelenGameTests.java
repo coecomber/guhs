@@ -44,7 +44,7 @@ public class KnabbelspelenGameTests {
 
     private static ServerPlayer speler(GameTestHelper helper, GuhNpcEntity npc) {
         @SuppressWarnings("removal")
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
@@ -115,7 +115,7 @@ public class KnabbelspelenGameTests {
         }
         helper.assertTrue(!Features.isLoaned(new ItemStack(KnabbelspelenFeature.SPELENLINTJE.get())), "the lintje is yours");
         @SuppressWarnings("removal")
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         helper.assertTrue(KnabbelspelenProtection.denied(p, true) && !KnabbelspelenProtection.denied(p, false), "the fields are protected");
         helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);

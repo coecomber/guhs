@@ -140,7 +140,7 @@ def guh_publiek(s, x, y, z, yaw, scale=None, rng=None):
     nbt = {"id": "guhs:guh", "PersistenceRequired": Byte(1), "Rotation": floats(float(yaw), 0.0),
            "Tags": _strings(["guhs_elftocht_publiek"])}
     if scale:
-        nbt["attributes"] = compounds([{"id": "minecraft:generic.scale", "base": Double(scale)}])
+        nbt["attributes"] = compounds([{"id": "minecraft:scale", "base": Double(scale)}])
     s.entity(x + 0.5, y, z + 0.5, nbt)
 
 

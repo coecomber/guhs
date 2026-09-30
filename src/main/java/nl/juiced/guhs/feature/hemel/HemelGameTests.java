@@ -53,7 +53,7 @@ public class HemelGameTests {
 
     @SuppressWarnings("removal")
     private static ServerPlayer speler(GameTestHelper helper, BlockPos at, GameType mode) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(mode);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);

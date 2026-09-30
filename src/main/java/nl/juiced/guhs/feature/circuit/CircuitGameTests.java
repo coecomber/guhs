@@ -53,7 +53,7 @@ public class CircuitGameTests {
 
     private static ServerPlayer racer(GameTestHelper helper, GuhNpcEntity npc) {
         @SuppressWarnings("removal")
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         return player;
     }

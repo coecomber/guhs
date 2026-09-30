@@ -71,7 +71,7 @@ public class KnuffeldalGameTests {
 
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper, BlockPos at) {
-        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        ServerPlayer p = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
@@ -224,7 +224,8 @@ public class KnuffeldalGameTests {
     }
 
     /** During a feast every participant's tamed guhs come to the buffet (from far away with a poof) and eat there. */
-    @GuhTest(template = PLEIN, timeoutTicks = 400)
+    // (1.1.0: own batch - 26.1 runs tests in id order; its neighbours in the shared batch disturbed it)
+    @GuhTest(template = PLEIN, timeoutTicks = 400, batch = "knuffeldal_buffet")
     public static void knuffeldalGuhsKomenNaarHetBuffet(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(13, 2, 13));
