@@ -9,7 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -65,8 +65,8 @@ public class VadsverdrijvendDrankjeEntity extends ThrowableItemProjectile {
             hit++;
             if (living instanceof ServerPlayer player) {
                 GuhAdvancements.grant(player, "kaasmoeras_onvahoeg");
-                player.displayClientMessage(net.minecraft.network.chat.Component.translatable("quest.guhs.kaasmoeras.onvahoeg")
-                        .withStyle(net.minecraft.ChatFormatting.DARK_GREEN), true);
+                player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("quest.guhs.kaasmoeras.onvahoeg")
+                        .withStyle(net.minecraft.ChatFormatting.DARK_GREEN));
             }
         }
         server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, getItem()), getX(), getY(), getZ(), 8, 0.1, 0.1, 0.1, 0.1);

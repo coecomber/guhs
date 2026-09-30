@@ -29,14 +29,14 @@ public final class VogelsEvents {
         }
         controleer(player);
         if ((player.tickCount + player.getId()) % VogelSpawns.AANVUL_TIJD == 0 && !player.isSpectator()
-                && player.serverLevel().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_DOMOBSPAWNING)) {
+                && player.level().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_DOMOBSPAWNING)) {
             VogelSpawns.aanvullen(player, player.getRandom());
         }
     }
 
     /** Grants what the player has earned (also used by the tests). */
     public static void controleer(ServerPlayer player) {
-        var seen = GuhWorldData.get(player.server).player(player.getUUID()).seen;
+        var seen = GuhWorldData.get(player.level().getServer()).player(player.getUUID()).seen;
         int n = 0;
         for (var e : PAGINAS.entrySet()) {
             if (seen.contains(e.getKey())) {

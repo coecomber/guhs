@@ -98,7 +98,7 @@ public final class DoolhofGame {
     private DoolhofGame(UUID npcId, ServerPlayer player, Niveau niveau, Anker anker, long seed) {
         this.npcId = npcId;
         this.player = player.getUUID();
-        this.playerName = player.getGameProfile().getName();
+        this.playerName = player.getGameProfile().name();
         this.niveau = niveau;
         this.anker = anker;
         this.kaart = new DoolhofKaart(niveau, seed);
@@ -168,7 +168,7 @@ public final class DoolhofGame {
     public static void talk(GuhNpcEntity npc, ServerPlayer player) {
         DoolhofGame game = of(npc);
         boolean mine = game != null && game.player.equals(player.getUUID());
-        GuhQuests.say(player, npc, game == null ? (GuhQuests.saved(player).getBoolean(PLAYED_KEY) ? "quest.guhs.doolhof.hello_again" : "quest.guhs.doolhof.hello")
+        GuhQuests.say(player, npc, game == null ? (GuhQuests.saved(player).getBooleanOr(PLAYED_KEY, false) ? "quest.guhs.doolhof.hello_again" : "quest.guhs.doolhof.hello")
                 : mine ? "quest.guhs.doolhof.busy_you" : "quest.guhs.doolhof.busy", game == null ? "" : game.playerName);
         npc.playSound(ModSounds.GUH_AMBIENT.get(), 1f, 0.9f);
         Adv.grant(player, "doolhof_gevonden");
@@ -184,7 +184,7 @@ public final class DoolhofGame {
         for (Niveau n : Niveau.values()) {
             data.putInt("Best" + n.ordinal(), best(player, n));
         }
-        data.putInt("Games", GuhQuests.saved(player).getInt(GAMES_KEY));
+        data.putInt("Games", GuhQuests.saved(player).getIntOr(GAMES_KEY, 0));
         data.putBoolean("Anker", DoolhofVeld.anker(npc) != null);
         nl.juiced.guhs.network.ModNetworking.sendTo(player, new DoolhofPayloads.Open(npc.getId(), data));
     }
@@ -240,7 +240,7 @@ public final class DoolhofGame {
     /** Old knabbels and Mika's of an earlier game go. */
     static void opruimen(ServerLevel world, Anker anker) {
         var box = DoolhofVeld.veld(anker).inflate(4);
-        for (Entity e : world.getEntitiesOfClass(ItemEntity.class, box, e -> e.getTags().contains(TAG))) {
+        for (Entity e : world.getEntitiesOfClass(ItemEntity.class, box, e -> e.entityTags().contains(TAG))) {
             e.discard();
         }
         for (DoolhofMikaEntity m : world.getEntitiesOfClass(DoolhofMikaEntity.class, box)) {
@@ -258,7 +258,7 @@ public final class DoolhofGame {
             double h = DoolhofVeld.hoogte(anker, p.getY());
             if (h < DoolhofVeld.G + 6) {
                 teleport(p, world, plein.x, plein.y, plein.z, p.getYRot());
-                p.displayClientMessage(Component.translatable("quest.guhs.doolhof.opzij").withStyle(ChatFormatting.GREEN), false);
+                p.sendSystemMessage(Component.translatable("quest.guhs.doolhof.opzij").withStyle(ChatFormatting.GREEN));
             }
         }
     }
@@ -301,7 +301,7 @@ public final class DoolhofGame {
             Vec3 s = start();
             teleport(p, world, s.x, s.y, s.z, anker.yaw(180f));
             laatsteGoed = s;
-            p.displayClientMessage(Component.translatable("quest.guhs.doolhof.klaar_staan", DoolhofKaart.aantalKnabbels(niveau)).withStyle(ChatFormatting.GREEN), false);
+            p.sendSystemMessage(Component.translatable("quest.guhs.doolhof.klaar_staan", DoolhofKaart.aantalKnabbels(niveau)).withStyle(ChatFormatting.GREEN));
         }
     }
 
@@ -363,8 +363,8 @@ public final class DoolhofGame {
         knabbels.keySet().removeIf(id -> !(world.getEntity(id) instanceof ItemEntity item) || !item.isAlive());
         int mist = DoolhofKaart.aantalKnabbels(niveau) - inZak - verstopt();
         for (ItemEntity los : world.getEntitiesOfClass(ItemEntity.class, DoolhofVeld.veld(anker).inflate(4),
-                e -> e.getTags().contains(TAG) && !knabbels.containsKey(e.getUUID()))) {
-            if (mist > 0 && !los.getTags().contains(TAG_NEP) && los.isAlive()) {
+                e -> e.entityTags().contains(TAG) && !knabbels.containsKey(e.getUUID()))) {
+            if (mist > 0 && !los.entityTags().contains(TAG_NEP) && los.isAlive()) {
                 knabbels.put(los.getUUID(), false);           // (there it is again)
                 mist--;
             } else {
@@ -421,7 +421,7 @@ public final class DoolhofGame {
         if (h > DoolhofVeld.HEG_TOT + 1.2) {
             // (on top of the hedges? that's cheating, njeg: back down)
             teleport(p, world, laatsteGoed.x, laatsteGoed.y, laatsteGoed.z, p.getYRot());
-            p.displayClientMessage(Component.translatable("quest.guhs.doolhof.niet_klimmen").withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.doolhof.niet_klimmen").withStyle(ChatFormatting.GOLD));
         } else if (p.onGround() && ticks % 10 == 0) {
             laatsteGoed = pos;
         }
@@ -448,7 +448,7 @@ public final class DoolhofGame {
             Component bar = niveau == Niveau.MAKKELIJK
                     ? Component.translatable("quest.guhs.doolhof.bar_makkelijk", Highscores.tijd(tijd()), inZak, DoolhofKaart.aantalKnabbels(niveau), verstopt())
                     : Component.translatable("quest.guhs.doolhof.bar", Highscores.tijd(tijd()), inZak, DoolhofKaart.aantalKnabbels(niveau));
-            p.displayClientMessage(bar.copy().withStyle(ChatFormatting.GREEN), true);
+            p.sendOverlayMessage(bar.copy().withStyle(ChatFormatting.GREEN));
         }
         if (uitgangMelding > 0) {
             uitgangMelding--;
@@ -477,7 +477,7 @@ public final class DoolhofGame {
             straf += NEP_STRAF_TICKS;
             world.sendParticles(ParticleTypes.POOF, item.getX(), item.getY(), item.getZ(), 10, 0.2, 0.2, 0.2, 0.02);
             world.playSound(null, item.blockPosition(), DoolhofFeature.GIECHEL.get(), SoundSource.NEUTRAL, 1f, 1.6f);
-            p.displayClientMessage(Component.translatable("quest.guhs.doolhof.nep", NEP_STRAF_TICKS / 20).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.doolhof.nep", NEP_STRAF_TICKS / 20).withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         inZak++;
@@ -490,7 +490,7 @@ public final class DoolhofGame {
             title(p, Component.empty(), Component.translatable("quest.guhs.doolhof.alles").withStyle(ChatFormatting.YELLOW), 0, 40, 10);
             world.playSound(null, p.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.7f, 1.4f);
         } else {
-            p.displayClientMessage(Component.translatable("quest.guhs.doolhof.gevonden", inZak, wil).withStyle(ChatFormatting.YELLOW), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.doolhof.gevonden", inZak, wil).withStyle(ChatFormatting.YELLOW));
         }
     }
 
@@ -500,7 +500,7 @@ public final class DoolhofGame {
         mika.giechel();
         world.sendParticles(ParticleTypes.CHERRY_LEAVES, mika.getX(), mika.getY() + 0.6, mika.getZ(), 10, 0.3, 0.3, 0.3, 0.02);
         if (inZak <= 0) {
-            p.displayClientMessage(Component.translatable("quest.guhs.doolhof.tong").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.doolhof.tong").withStyle(ChatFormatting.LIGHT_PURPLE));
             mika.wegrennen(this, p);
             return;
         }
@@ -508,8 +508,8 @@ public final class DoolhofGame {
         gepikt++;
         neemEen(p);
         herstel(world);                                        // (hidden again, far away: always, see herstel)
-        p.displayClientMessage(Component.translatable("quest.guhs.doolhof.gepikt", inZak, DoolhofKaart.aantalKnabbels(niveau))
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        p.sendOverlayMessage(Component.translatable("quest.guhs.doolhof.gepikt", inZak, DoolhofKaart.aantalKnabbels(niveau))
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         world.playSound(null, p.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.7f, 0.6f);
         mika.wegrennen(this, p);
     }
@@ -577,7 +577,7 @@ public final class DoolhofGame {
         end(world, p);
         CompoundTag saved = GuhQuests.saved(p);
         saved.putBoolean(PLAYED_KEY, true);
-        saved.putInt(GAMES_KEY, saved.getInt(GAMES_KEY) + 1);
+        saved.putInt(GAMES_KEY, saved.getIntOr(GAMES_KEY, 0) + 1);
         int best = best(p, niveau);
         boolean record = best < 0 || tijd < best;
         if (record) {
@@ -696,9 +696,9 @@ public final class DoolhofGame {
             return;
         }
         DoolhofGame game = gameOf(p);
-        if (game == null || p.serverLevel().getGameTime() - game.lastTick > 40) {
+        if (game == null || p.level().getGameTime() - game.lastTick > 40) {
             if (game != null) {
-                game.end(p.serverLevel(), p);
+                game.end(p.level(), p);
             }
             cleanup(p);
             p.sendSystemMessage(Component.translatable("quest.guhs.doolhof.stopped").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -714,7 +714,7 @@ public final class DoolhofGame {
     public static void stopFor(ServerPlayer p) {
         DoolhofGame game = gameOf(p);
         if (game != null) {
-            game.stop(p.serverLevel(), p, "quest.guhs.doolhof.stopped");
+            game.stop(p.level(), p, "quest.guhs.doolhof.stopped");
         }
         cleanup(p);
     }
@@ -731,7 +731,7 @@ public final class DoolhofGame {
     /** Your best time on this level (ticks), -1 when you never finished it. */
     public static int best(Player player, Niveau niveau) {
         CompoundTag saved = GuhQuests.saved(player);
-        return saved.contains(BEST_KEY + niveau.id()) ? saved.getInt(BEST_KEY + niveau.id()) : -1;
+        return saved.contains(BEST_KEY + niveau.id()) ? saved.getIntOr(BEST_KEY + niveau.id(), 0) : -1;
     }
 
     public static void showScores(GuhNpcEntity npc) {
@@ -750,7 +750,7 @@ public final class DoolhofGame {
 
     static void teleport(ServerPlayer p, ServerLevel world, double x, double y, double z, float yRot) {
         if (p instanceof FakePlayer || p.connection == null) {
-            p.moveTo(x, y, z, yRot, 0);
+            p.snapTo(x, y, z, yRot, 0);
         } else {
             p.teleportTo(world, x, y, z, yRot, 0);
         }

@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
+import net.minecraft.world.entity.player.PlayerSkin;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.neoforged.bus.api.IEventBus;
@@ -91,7 +91,7 @@ public final class ElftochtClient {
 
     private static void layers(EntityRenderersEvent.AddLayers event) {
         for (PlayerSkin.Model skin : event.getSkins()) {
-            if (event.getSkin(skin) instanceof PlayerRenderer renderer) {
+            if (event.getSkin(skin) instanceof AvatarRenderer renderer) {
                 renderer.addLayer(new SchaatsLaag(renderer));
             }
         }

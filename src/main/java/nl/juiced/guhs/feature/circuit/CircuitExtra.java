@@ -27,6 +27,7 @@ import nl.juiced.guhs.feature.spelen.Niveau;
 import nl.juiced.guhs.registry.ModSounds;
 import org.joml.Vector3f;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * What the Guh-Circuit's tracks add to a race ({@link RaceBaan.Extra}):
  * <ul>
@@ -88,7 +89,7 @@ public final class CircuitExtra implements RaceBaan.Extra {
     }
 
     private static MikaPikkerEntity spawn(ServerLevel level, Vec3 at, float yaw, boolean duwer) {
-        MikaPikkerEntity mika = CircuitFeature.MIKAPIKKER.get().create(level);
+        MikaPikkerEntity mika = CircuitFeature.MIKAPIKKER.get().create(level, EntitySpawnReason.TRIGGERED);
         if (mika == null) {
             return null;
         }
@@ -151,12 +152,12 @@ public final class CircuitExtra implements RaceBaan.Extra {
 
     /** A kaasknabbel starts rolling down from a rolplek. */
     static RolknabbelEntity rolKnabbel(ServerLevel level, RaceTrack.Marker m) {
-        RolknabbelEntity knabbel = CircuitFeature.ROLKNABBEL.get().create(level);
+        RolknabbelEntity knabbel = CircuitFeature.ROLKNABBEL.get().create(level, EntitySpawnReason.TRIGGERED);
         if (knabbel == null) {
             return null;
         }
         Vec3 at = m.centre().add(0, 0.1, 0);
-        knabbel.moveTo(at.x, at.y, at.z, 0, 0);
+        knabbel.snapTo(at.x, at.y, at.z, 0, 0);
         knabbel.rol(Vec3.atLowerCornerOf(m.direction().getNormal()));
         LIVE.add(knabbel.getUUID());
         level.addFreshEntity(knabbel);

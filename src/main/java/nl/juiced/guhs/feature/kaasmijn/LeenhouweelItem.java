@@ -27,7 +27,7 @@ public class LeenhouweelItem extends PickaxeItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && entity instanceof ServerPlayer player && (selected || player.tickCount % 20 == 0)
+        if (!level.isClientSide() && entity instanceof ServerPlayer player && (selected || player.tickCount % 20 == 0)
                 && !KaasmijnProtection.inMine(level, player.blockPosition())) {     // (in hand: checked every tick, no mining outside)
             takeBack(player);
         }
@@ -69,7 +69,7 @@ public class LeenhouweelItem extends PickaxeItem {
     /** Dropped outside a mine (or carried out of it by a hopper, water...): it vanishes back to the Mijnguh. */
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.level().isClientSide && entity.tickCount % 20 == 0 && !KaasmijnProtection.inMine(entity.level(), entity.blockPosition())) {
+        if (!entity.level().isClientSide() && entity.tickCount % 20 == 0 && !KaasmijnProtection.inMine(entity.level(), entity.blockPosition())) {
             entity.discard();
             return true;
         }

@@ -28,7 +28,7 @@ public final class Dagboek {
             return;
         }
         r.stats.merge(stat, n, Long::sum);
-        BandData.get(guh.getServer()).setDirty();
+        BandData.get(guh.level().getServer()).setDirty();
     }
 
     public static long stat(MinecraftServer s, UUID eigenaar, UUID bandId, DagboekStat stat) {
@@ -41,11 +41,11 @@ public final class Dagboek {
      * the chat: "Nieuw in het dagboekje van ...".
      */
     public static boolean eersteKeer(Mob guh, @Nullable ServerPlayer speler, String id) {
-        if (!Band.isBandGuh(guh) || guh.getServer() == null) {
+        if (!Band.isBandGuh(guh) || guh.level().getServer() == null) {
             return false;
         }
         Band.bijwerken(guh);
-        return eersteKeer(guh.getServer(), Band.eigenaar(guh), Band.id(guh), id);
+        return eersteKeer(guh.level().getServer(), Band.eigenaar(guh), Band.id(guh), id);
     }
 
     /** {@link #eersteKeer(Mob, ServerPlayer, String)} for a guh that isn't loaded (e.g. at the owner's login). */
@@ -73,11 +73,11 @@ public final class Dagboek {
 
     /** The guh "writes" a sentence (a translatable key + args), newest first, 40 kept. */
     public static void wistJeDat(Mob guh, String langKey, String... args) {
-        if (!Band.isBandGuh(guh) || guh.getServer() == null) {
+        if (!Band.isBandGuh(guh) || guh.level().getServer() == null) {
             return;
         }
         Band.bijwerken(guh);
-        wistJeDat(guh.getServer(), Band.eigenaar(guh), Band.id(guh), langKey, args);
+        wistJeDat(guh.level().getServer(), Band.eigenaar(guh), Band.id(guh), langKey, args);
     }
 
     /** {@link #wistJeDat(Mob, String, String...)} for a guh that isn't loaded. */

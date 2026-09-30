@@ -17,9 +17,9 @@ public class StempelRole implements NpcRole {
     /** The village (1..11) of this Stempelguh, 0 when it has none. */
     public static int dorp(GuhNpcEntity npc) {
         if (npc.roleData.contains("Dorp")) {
-            return npc.roleData.getInt("Dorp");
+            return npc.roleData.getIntOr("Dorp", 0);
         }
-        for (String tag : npc.getTags()) {
+        for (String tag : npc.entityTags()) {
             if (tag.startsWith(TAG)) {
                 try {
                     int n = Integer.parseInt(tag.substring(TAG.length()));

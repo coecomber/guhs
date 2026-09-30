@@ -1,12 +1,12 @@
 package nl.juiced.guhs.feature.kaasmijn;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
@@ -14,8 +14,6 @@ import net.minecraft.world.level.block.PoweredRailBlock;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -23,13 +21,12 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the kaasmijn: the loaner pickaxe (you need nothing of your own), mining veins and their regrowth, the
  * protection, the kaaskluis, the cart dispenser and the Mijnguh's shop, and the mine template itself.
  * (A test marks its little area as "a mine" with {@link KaasmijnProtection#TEST_AREAS}.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KaasmijnGameTests {
     private static final String EMPTY = "empty";
 
@@ -45,15 +42,15 @@ public class KaasmijnGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return player;
     }
 
     private static GuhNpcEntity mijnguh(GameTestHelper helper) {
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(GuhNpcEntity.Kind.MIJNGUH);
         BlockPos at = helper.absolutePos(new BlockPos(3, 1, 3));
-        npc.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        npc.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         helper.getLevel().addFreshEntity(npc);
         return npc;
     }
@@ -66,7 +63,7 @@ public class KaasmijnGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void mijnguhLendsAPickaxeAndYouMineCheese(GameTestHelper helper) {
         AABB area = mine(helper);
         try {
@@ -75,7 +72,7 @@ public class KaasmijnGameTests {
             helper.assertTrue(player.getInventory().isEmpty(), "you come with empty paws");
             KaasmijnFeature.role().talk(npc, player);
             helper.assertTrue(LeenhouweelItem.count(player) == 1, "the Mijnguh lends a pickaxe");
-            helper.assertTrue(GuhQuests.saved(player).getBoolean(Mijnguh.MET_KEY), "and remembers you");
+            helper.assertTrue(GuhQuests.saved(player).getBooleanOr(Mijnguh.MET_KEY, false), "and remembers you");
             helper.assertTrue(player.getMainHandItem().getItem() instanceof LeenhouweelItem, "it's in your hand");
             KaasmijnFeature.role().talk(npc, player);
             helper.assertTrue(LeenhouweelItem.count(player) == 1, "one at a time");
@@ -102,7 +99,7 @@ public class KaasmijnGameTests {
         }
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void minedOutVeinsGrowBack(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 1, 2);
         helper.setBlock(pos, KaasmijnFeature.UITGEMIJNDE_GOUDEN_KAASADER.get());
@@ -114,7 +111,7 @@ public class KaasmijnGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theMineCantBeBrokenOrBuiltIn(GameTestHelper helper) {
         AABB area = mine(helper);
         try {
@@ -140,12 +137,12 @@ public class KaasmijnGameTests {
     }
 
     /** The sitting guh miners stay put: no taming, leashing or undressing them (and they can't be hurt). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theGuhMinersCantBeTakenAway(GameTestHelper helper) {
         ServerPlayer player = miner(helper);
-        var guh = ModEntities.GUH.get().create(helper.getLevel());
+        var guh = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         BlockPos at = helper.absolutePos(new BlockPos(3, 1, 3));
-        guh.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        guh.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         guh.addTag(KaasmijnProtection.MINER_TAG);
         helper.getLevel().addFreshEntity(guh);
         player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.LEAD));
@@ -169,7 +166,7 @@ public class KaasmijnGameTests {
         return event.isCanceled();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kaaskluisOpensForGoudkaas(GameTestHelper helper) {
         AABB area = mine(helper);
         try {
@@ -183,7 +180,7 @@ public class KaasmijnGameTests {
             helper.assertTrue(KaaskluisBlock.open(player, helper.absolutePos(pos)), "two open the vault");
             helper.assertTrue(GuhQuests.count(player, KaasmijnFeature.GOUDKAAS.get()) == 1, "it costs two");
             int treasure = 0;
-            for (ItemStack stack : player.getInventory().items) {
+            for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
                 if (!stack.isEmpty() && !stack.is(KaasmijnFeature.GOUDKAAS.get())) {
                     treasure += stack.getCount();
                 }
@@ -195,7 +192,7 @@ public class KaasmijnGameTests {
         }
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void karretjesautomaatPutsOneCartOnTheRails(GameTestHelper helper) {
         AABB area = mine(helper);
         try {
@@ -216,7 +213,7 @@ public class KaasmijnGameTests {
             for (int i = 0; i < KaasmijnFeature.RIDE_SECONDS; i++) {
                 KaasmijnFeature.rideSecond(player);
             }
-            helper.assertTrue(GuhQuests.saved(player).getInt(KaasmijnFeature.RIDE_KEY) == KaasmijnFeature.RIDE_SECONDS, "half a minute in the Kaasexpress");
+            helper.assertTrue(GuhQuests.saved(player).getIntOr(KaasmijnFeature.RIDE_KEY, 0) == KaasmijnFeature.RIDE_SECONDS, "half a minute in the Kaasexpress");
             helper.assertTrue(KarretjesautomaatBlock.cleanupCarts(helper.getLevel(), area, KarretjesautomaatBlock.IDLE_TICKS) == 0, "a cart with someone in it stays");
             player.stopRiding();
             helper.assertTrue(KarretjesautomaatBlock.cleanupCarts(helper.getLevel(), area, KarretjesautomaatBlock.IDLE_TICKS / 2) == 0, "an empty one waits a while");
@@ -227,7 +224,7 @@ public class KaasmijnGameTests {
         }
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void mijnguhSellsTheMinerOutfit(GameTestHelper helper) {
         GuhNpcEntity npc = mijnguh(helper);
         var offers = npc.getOffers();
@@ -242,7 +239,7 @@ public class KaasmijnGameTests {
     }
 
     /** The outfit is only sold by the Mijnguh (not in the treasure chests), and a vein never drops itself: cheese ore stays in the mine. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void outfitAndVeinsOnlyInTheMine(GameTestHelper helper) {
         var level = helper.getLevel();
         var table = level.getServer().reloadableRegistries().getLootTable(net.minecraft.resources.ResourceKey.create(
@@ -266,7 +263,7 @@ public class KaasmijnGameTests {
     }
 
     /** The mine as generated: the Mijnguh at his counter, veins, a closed powered loop with carts, the way down, the vault. */
-    @GameTest(template = "kaasmijn", timeoutTicks = 100)
+    @GuhTest(template = "kaasmijn", timeoutTicks = 100)
     public static void theMineTemplateIsComplete(GameTestHelper helper) {
         var npcs = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class, helper.getBounds().inflate(1),
                 n -> n.getKind() == GuhNpcEntity.Kind.MIJNGUH);

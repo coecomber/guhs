@@ -19,7 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -126,7 +126,7 @@ public final class Knabbelgeluid {
         if (!audible(player)) {
             return;
         }
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         for (VadswakerEntity vadswaker : level.getEntitiesOfClass(VadswakerEntity.class, new AABB(at).inflate(noise.range))) {
             vadswaker.hear(player, at, noise.anger);
         }
@@ -166,9 +166,9 @@ public final class Knabbelgeluid {
     /** How many warnings this player has now (after fading). */
     public static int warnings(ServerPlayer player) {
         CompoundTag saved = GuhQuests.saved(player);
-        long now = player.serverLevel().getGameTime();
-        int w = saved.getInt(WARNINGS);
-        long from = saved.getLong(FADE_FROM);
+        long now = player.level().getGameTime();
+        int w = saved.getIntOr(WARNINGS, 0);
+        long from = saved.getLongOr(FADE_FROM, 0L);
         if (w > 0 && now - from >= FADE) {
             int steps = (int) Math.min(w, (now - from) / FADE);
             w -= steps;
@@ -180,11 +180,11 @@ public final class Knabbelgeluid {
 
     /** A schreeuwer heard this player: scream, count a warning, and at the third one wake the Vadswaker. */
     public static void warn(ServerPlayer player, BlockPos shrieker) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         CompoundTag saved = GuhQuests.saved(player);
         long now = level.getGameTime();
         int w = warnings(player);
-        if (saved.contains(LAST_WARNING) && now - saved.getLong(LAST_WARNING) < WARN_COOLDOWN && now >= saved.getLong(LAST_WARNING)) {
+        if (saved.contains(LAST_WARNING) && now - saved.getLongOr(LAST_WARNING, 0L) < WARN_COOLDOWN && now >= saved.getLongOr(LAST_WARNING, 0L)) {
             return;
         }
         BlockState state = level.getBlockState(shrieker);
@@ -199,7 +199,7 @@ public final class Knabbelgeluid {
         saved.putLong(LAST_WARNING, now);
         saved.putLong(FADE_FROM, now);
         GatenkaasEvents.grant(player, "gatenkaas_geschreeuw");
-        player.displayClientMessage(Component.translatable("quest.guhs.gatenkaas.warning." + w).withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.gatenkaas.warning." + w).withStyle(ChatFormatting.GOLD));
         // it gets dark around the schreeuwer: the lights of the larder flicker
         for (ServerPlayer near : level.getEntitiesOfClass(ServerPlayer.class, new AABB(shrieker).inflate(40), Knabbelgeluid::audible)) {
             near.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 20 * 12, 0, false, false), null);
@@ -221,7 +221,7 @@ public final class Knabbelgeluid {
         if (spot == null) {
             return null;
         }
-        VadswakerEntity vadswaker = GatenkaasFeature.VADSWAKER.get().spawn(level, spot, MobSpawnType.TRIGGERED);
+        VadswakerEntity vadswaker = GatenkaasFeature.VADSWAKER.get().spawn(level, spot, EntitySpawnReason.TRIGGERED);
         if (vadswaker != null) {
             vadswaker.hear(player, player.blockPosition(), 40);
             player.sendSystemMessage(Component.translatable("quest.guhs.gatenkaas.vadswaker_wakker").withStyle(ChatFormatting.RED));
@@ -237,7 +237,7 @@ public final class Knabbelgeluid {
         var type = GatenkaasFeature.VADSWAKER.get();
         for (int attempt = 0; attempt < 40; attempt++) {
             int r = attempt < 10 ? 3 : 6;
-            BlockPos column = near.offset(level.random.nextInt(2 * r + 1) - r, 0, level.random.nextInt(2 * r + 1) - r);
+            BlockPos column = near.offset(level.getRandom().nextInt(2 * r + 1) - r, 0, level.getRandom().nextInt(2 * r + 1) - r);
             for (int dy = 3; dy >= -5; dy--) {
                 BlockPos p = column.above(dy);
                 if (level.getBlockState(p.below()).isFaceSturdy(level, p.below(), net.minecraft.core.Direction.UP)
@@ -255,7 +255,7 @@ public final class Knabbelgeluid {
     public static List<BlockPos> find(ServerLevel level, BlockPos centre, int radius, Predicate<BlockState> test) {
         List<BlockPos> out = new ArrayList<>();
         int r2 = radius * radius;
-        int minY = Math.max(level.getMinBuildHeight(), centre.getY() - radius), maxY = Math.min(level.getMaxBuildHeight() - 1, centre.getY() + radius);
+        int minY = Math.max(level.getMinY(), centre.getY() - radius), maxY = Math.min(level.getMaxY() + 1 - 1, centre.getY() + radius);
         for (int sx = SectionPos.blockToSectionCoord(centre.getX() - radius); sx <= SectionPos.blockToSectionCoord(centre.getX() + radius); sx++) {
             for (int sz = SectionPos.blockToSectionCoord(centre.getZ() - radius); sz <= SectionPos.blockToSectionCoord(centre.getZ() + radius); sz++) {
                 LevelChunk chunk = level.getChunkSource().getChunkNow(sx, sz);

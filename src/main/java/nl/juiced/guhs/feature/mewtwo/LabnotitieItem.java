@@ -8,7 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -38,11 +38,11 @@ public class LabnotitieItem extends Item {
 
     public static int nummer(ItemStack s) {
         CustomData d = s.get(DataComponents.CUSTOM_DATA);
-        return d == null ? 0 : d.copyTag().getInt(NUMMER);
+        return d == null ? 0 : d.copyTag().getIntOr(NUMMER, 0);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack s = player.getItemInHand(hand);
         int n = nummer(s);
         if (n >= 1 && n <= MewtwoFeature.NOTITIES) {
@@ -50,9 +50,9 @@ public class LabnotitieItem extends Item {
                 level.playSound(null, player.blockPosition(), MewtwoFeature.NOTITIE.get(), net.minecraft.sounds.SoundSource.PLAYERS, 0.8f, 1.1f);
                 MewtwoVerhaal.leesNotitie(sp, n);
             }
-            return InteractionResultHolder.sidedSuccess(s, level.isClientSide);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(s);
         }
-        return InteractionResultHolder.pass(s);
+        return InteractionResult.PASS;
     }
 
     @Override

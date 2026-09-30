@@ -65,7 +65,7 @@ public class RaceGhostEntity extends GuhEntity {
     public void tick() {
         super.tick();
         this.noPhysics = true;
-        if (!this.level().isClientSide && !RaceGame.isGhost(this) && this.tickCount > 40) {
+        if (!this.level().isClientSide() && !RaceGame.isGhost(this) && this.tickCount > 40) {
             this.discard(); // its race is over
         }
     }

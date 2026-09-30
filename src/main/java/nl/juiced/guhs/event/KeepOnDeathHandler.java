@@ -3,14 +3,14 @@ package nl.juiced.guhs.event;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import nl.juiced.guhs.Guhs;
@@ -21,11 +21,11 @@ import nl.juiced.guhs.Guhs;
  * slot, when you respawn.
  */
 public final class KeepOnDeathHandler {
-    public static final TagKey<Item> KEEP_ON_DEATH = TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(Guhs.MODID, "keep_on_death"));
+    public static final TagKey<Item> KEEP_ON_DEATH = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Guhs.MODID, "keep_on_death"));
     private static final String KEY = "guhs_kept_items";
 
     public static void onDeath(LivingDeathEvent event) {
-        if (!(event.getEntity() instanceof Player player) || player.level().isClientSide
+        if (!(event.getEntity() instanceof Player player) || player.level().isClientSide()
                 || player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
             return;
         }
@@ -55,11 +55,11 @@ public final class KeepOnDeathHandler {
             return;
         }
         Player player = event.getEntity();
-        ListTag kept = old.getList(KEY, Tag.TAG_COMPOUND);
+        ListTag kept = old.getListOrEmpty(KEY);
         for (int i = 0; i < kept.size(); i++) {
-            CompoundTag entry = kept.getCompound(i);
-            ItemStack stack = ItemStack.parseOptional(player.registryAccess(), entry.getCompound("Item"));
-            int slot = entry.getInt("Slot");
+            CompoundTag entry = kept.getCompoundOrEmpty(i);
+            ItemStack stack = ItemStack.parseOptional(player.registryAccess(), entry.getCompoundOrEmpty("Item"));
+            int slot = entry.getIntOr("Slot", 0);
             if (player.getInventory().getItem(slot).isEmpty()) {
                 player.getInventory().setItem(slot, stack);
             } else {

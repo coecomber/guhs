@@ -24,6 +24,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The Enderguh-ei (what Opper-Mika leaves after the first win): put it down and it cracks, bit by bit (random ticks),
  * until a baby Vahoege Enderguh hops out. A wild one: tame it with kaasknabbels, give it away, or keep it.
@@ -71,21 +72,21 @@ public class EnderguhEiBlock extends Block {
         level.removeBlock(pos, false);
         level.playSound(null, pos, SoundEvents.TURTLE_EGG_HATCH, SoundSource.BLOCKS, 1f, 0.8f);
         level.sendParticles(ParticleTypes.PORTAL, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 40, 0.4, 0.4, 0.4, 0.3);
-        GuhEntity baby = ModEntities.GUH.get().create(level);
+        GuhEntity baby = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (baby != null) {
             baby.setVariant(GuhVariant.VAHOEGE_ENDER);
             baby.setAge(-24000);
             baby.setPersistenceRequired();
-            baby.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.random.nextFloat() * 360f, 0f);
+            baby.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, level.getRandom().nextFloat() * 360f, 0f);
             level.addFreshEntity(baby);
         }
     }
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide) {
-            player.displayClientMessage(Component.translatable("gui.guhs.guheinde.ei." + state.getValue(HATCH)).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        if (!level.isClientSide()) {
+            player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.ei." + state.getValue(HATCH)).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 }

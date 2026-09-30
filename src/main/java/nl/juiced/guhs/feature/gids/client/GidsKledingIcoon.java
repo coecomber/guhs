@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import nl.juiced.guhs.entity.GuhClothes;
@@ -34,7 +34,7 @@ public final class GidsKledingIcoon {
     }
 
     /** Draws the square (CEL - 2 big) at (x, y). */
-    public static void teken(GuiGraphics g, GuhClothes c, int x, int y, boolean hover) {
+    public static void teken(GuiGraphicsExtractor g, GuhClothes c, int x, int y, boolean hover) {
         int s = CEL - 2;
         boolean kapsel = !GidsData.ontgrendelbaar(c);
         boolean open = kapsel || heeft(c);
@@ -45,13 +45,13 @@ public final class GidsKledingIcoon {
         }
         g.fill(x, y, x + s, y + s, rand);
         g.fill(x + 1, y + 1, x + s - 1, y + s - 1, binnen);
-        g.renderItem(item(c), x + 1, y + 1);
+        g.item(item(c), x + 1, y + 1);
         if (!open) {
             // locked: a grey veil over the icon (drawn above the item)
-            g.pose().pushPose();
-            g.pose().translate(0, 0, 250);
+            g.pose().pushMatrix();
+            g.pose().translate(0, 0);
             g.fill(x + 1, y + 1, x + s - 1, y + s - 1, 0xB08A8088);
-            g.pose().popPose();
+            g.pose().popMatrix();
         }
     }
 

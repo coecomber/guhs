@@ -26,7 +26,7 @@ public class KaasknabbelBlock extends Block {
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         super.onPlace(state, level, pos, oldState, movedByPiston);
-        if (level.isClientSide || oldState.is(state.getBlock())) {
+        if (level.isClientSide() || oldState.is(state.getBlock())) {
             return;
         }
         // any empty neighbour could be the inside of a freshly completed frame

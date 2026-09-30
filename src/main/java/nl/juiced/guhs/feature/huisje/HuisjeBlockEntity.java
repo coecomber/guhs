@@ -16,6 +16,7 @@ import nl.juiced.guhs.feature.band.BandFeature;
 import nl.juiced.guhs.feature.band.Vriendjes;
 import nl.juiced.guhs.feature.emotes.EmotesFeature;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * The controller of a Guhhuisje: drawn big by the client's HuisjeRenderer. Server side it breathes: while residents
  * sleep inside, zzz float out of the eye windows (and little hearts when friends sleep together), with a soft snore now
@@ -36,7 +37,7 @@ public class HuisjeBlockEntity extends BlockEntity {
         if (!id.equals(eigenaar)) {
             eigenaar = id;
             setChanged();
-            if (level != null && !level.isClientSide) {
+            if (level != null && !level.isClientSide()) {
                 level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
             }
         }
@@ -51,21 +52,21 @@ public class HuisjeBlockEntity extends BlockEntity {
     protected void saveAdditional(net.minecraft.nbt.CompoundTag tag, net.minecraft.core.HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         if (eigenaar != null) {
-            tag.putUUID("Eigenaar", eigenaar);
+            tag.store("Eigenaar", UUIDUtil.CODEC, eigenaar);
         }
     }
 
     @Override
     protected void loadAdditional(net.minecraft.nbt.CompoundTag tag, net.minecraft.core.HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        eigenaar = tag.hasUUID("Eigenaar") ? tag.getUUID("Eigenaar") : null;
+        eigenaar = tag.read("Eigenaar", UUIDUtil.CODEC).isPresent() ? tag.read("Eigenaar", UUIDUtil.CODEC).orElseThrow() : null;
     }
 
     @Override
     public net.minecraft.nbt.CompoundTag getUpdateTag(net.minecraft.core.HolderLookup.Provider registries) {
         net.minecraft.nbt.CompoundTag tag = super.getUpdateTag(registries);
         if (eigenaar != null) {
-            tag.putUUID("Eigenaar", eigenaar);
+            tag.store("Eigenaar", UUIDUtil.CODEC, eigenaar);
         }
         return tag;
     }
@@ -100,11 +101,11 @@ public class HuisjeBlockEntity extends BlockEntity {
         if (slapers.isEmpty()) {
             return;
         }
-        boolean links = sl.random.nextBoolean();
+        boolean links = sl.getRandom().nextBoolean();
         Vec3 raam = h.raam(links);
         sl.sendParticles(EmotesFeature.GUH_ZZZ.get(), raam.x, raam.y, raam.z, 1, 0.05, 0.05, 0.05, 0.01);
-        if (sl.random.nextInt(4) == 0) {
-            sl.playSound(null, pos, HuisjeFeature.SNURK_GELUID.get(), SoundSource.NEUTRAL, 0.35f, 0.9f + sl.random.nextFloat() * 0.2f);
+        if (sl.getRandom().nextInt(4) == 0) {
+            sl.playSound(null, pos, HuisjeFeature.SNURK_GELUID.get(), SoundSource.NEUTRAL, 0.35f, 0.9f + sl.getRandom().nextFloat() * 0.2f);
         }
         if (slapers.size() >= 2 && vriendjesSamen(sl, slapers)) {
             Vec3 ander = h.raam(!links);

@@ -43,7 +43,7 @@ public final class HemelEvents {
     public static void onBreak(BlockEvent.BreakEvent event) {
         if (event.getState().is(HemelFeature.KNUFFELHART.get()) && !event.getPlayer().getAbilities().instabuild) {
             event.setCanceled(true);
-            event.getPlayer().displayClientMessage(Component.translatable("gui.guhs.hemel.hart_heel").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            event.getPlayer().sendOverlayMessage(Component.translatable("gui.guhs.hemel.hart_heel").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -70,7 +70,7 @@ public final class HemelEvents {
         if (!GuhHooks.heeft(guh, VerhaalVlaggen.GLANS) || !(guh.level() instanceof ServerLevel level)) {
             return;
         }
-        long tot = guh.getPersistentData().getLong(Hemel.GLANS_TOT);
+        long tot = guh.getPersistentData().getLongOr(Hemel.GLANS_TOT, 0L);
         if (level.getGameTime() > tot) {
             GuhHooks.zet(guh, VerhaalVlaggen.GLANS, false);
             guh.getPersistentData().remove(Hemel.GLANS_TOT);

@@ -54,7 +54,7 @@ public final class RaceRole implements NpcRole {
         data.putBoolean("Busy", game != null);
         if (game != null) {
             ServerPlayer racer = ((ServerLevel) npc.level()).getServer().getPlayerList().getPlayer(game.racer());
-            data.putString("Racer", racer == null ? "?" : racer.getGameProfile().getName());
+            data.putString("Racer", racer == null ? "?" : racer.getGameProfile().name());
             data.putInt("Lap", Math.min(game.lap() + 1, game.laps()));
         }
         RaceBaan baan = RaceBaan.RACEBAAN;
@@ -65,7 +65,7 @@ public final class RaceRole implements NpcRole {
             data.putInt("BestLap_" + n.id(), RaceRecords.bestLap(player, rec));
             data.putInt("Races_" + n.id(), RaceRecords.races(player, rec));
             anyGhost |= RaceRecords.ghost(player, rec).length > 0;
-            List<Scorebord.Entry> top = Scorebord.top(player.server, baan.boardTotal(n));
+            List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), baan.boardTotal(n));
             data.putInt("Record_" + n.id(), top.isEmpty() ? -1 : top.get(0).score());
             data.putString("RecordName_" + n.id(), top.isEmpty() ? "" : top.get(0).name());
         }
@@ -76,7 +76,7 @@ public final class RaceRole implements NpcRole {
         data.putBoolean("HasGhost", anyGhost);
         data.putBoolean("GhostOn", RaceRecords.ghostOn(player));
         data.putBoolean("GoudOn", RaceRecords.goudOn(player));
-        List<Scorebord.Entry> top = Scorebord.top(player.server, BOARD_TOTAL);
+        List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), BOARD_TOTAL);
         data.putInt("RecordTicks", top.isEmpty() ? -1 : top.get(0).score());
         data.putString("RecordName", top.isEmpty() ? "" : top.get(0).name());
         return data;

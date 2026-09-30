@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,8 +15,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.golf.GolfGame;
 import nl.juiced.guhs.feature.race.RaceRecords;
@@ -31,8 +29,6 @@ import nl.juiced.guhs.quest.VerstopGame;
  * The Highscores page of the Guhdex: your personal best per minigame (kept, never made worse, also outside the top 3),
  * lower-is-better games, the server record, the formats and the payload.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class HighscoresGameTests {
     private static final String EMPTY = "empty";
 
@@ -41,7 +37,7 @@ public class HighscoresGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return player;
     }
 
@@ -58,7 +54,7 @@ public class HighscoresGameTests {
     }
 
     /** Your best goes up with a better score and never down with a worse one; also for a player outside the top 3. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void personalBestOnlyImproves(GameTestHelper helper) {
         Highscores.Game game = testGame(false);
         ServerPlayer a = player(helper), b = player(helper), c = player(helper), d = player(helper);
@@ -74,13 +70,13 @@ public class HighscoresGameTests {
         helper.assertTrue(Integer.valueOf(10).equals(Highscores.personalBest(d, game)), "a worse score doesn't overwrite it");
         Scorebord.submit(d, game.board(), 40, false);
         helper.assertTrue(Integer.valueOf(40).equals(Highscores.personalBest(d, game)), "a better one does");
-        helper.assertTrue(GuhQuests.saved(d).getCompound(Highscores.KEY).getInt(game.board()) == 40, "saved with the player");
+        helper.assertTrue(GuhQuests.saved(d).getCompoundOrEmpty(Highscores.KEY).getIntOr(game.board(), 0) == 40, "saved with the player");
         leave(helper, a, b, c, d);
         helper.succeed();
     }
 
     /** Times and strokes: lower is better, for your own best and for the server record. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void lowerIsBetterForTimes(GameTestHelper helper) {
         Highscores.Game game = testGame(true);
         ServerPlayer a = player(helper), b = player(helper);
@@ -101,7 +97,7 @@ public class HighscoresGameTests {
     }
 
     /** The server record is place 1 of the board, with the holder's name; a new record takes over. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void serverRecordHasTheBestAndItsName(GameTestHelper helper) {
         Highscores.Game game = testGame(false);
         ServerPlayer a = player(helper), b = player(helper);
@@ -109,16 +105,16 @@ public class HighscoresGameTests {
         Scorebord.submit(a, game.board(), 120, false);
         Scorebord.submit(b, game.board(), 100, false);
         Scorebord.Entry record = Highscores.record(helper.getLevel().getServer(), game);
-        helper.assertTrue(record != null && record.score() == 120 && record.name().equals(a.getGameProfile().getName()), "a has it");
+        helper.assertTrue(record != null && record.score() == 120 && record.name().equals(a.getGameProfile().name()), "a has it");
         Scorebord.submit(b, game.board(), 150, false);
         record = Highscores.record(helper.getLevel().getServer(), game);
-        helper.assertTrue(record != null && record.score() == 150 && record.name().equals(b.getGameProfile().getName()), "now b has it");
+        helper.assertTrue(record != null && record.score() == 150 && record.name().equals(b.getGameProfile().name()), "now b has it");
         leave(helper, a, b);
         helper.succeed();
     }
 
     /** Every minigame has a line, formatted the way the game does; the payload survives the trip to the client. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void pageFormatsAndPayload(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         List<MaagPayloads.HighscoreRow> rows = Highscores.rows(p);
@@ -155,7 +151,7 @@ public class HighscoresGameTests {
         MaagPayloads.HighscoresData.STREAM_CODEC.encode(buf, data);
         MaagPayloads.HighscoresData back = MaagPayloads.HighscoresData.STREAM_CODEC.decode(buf);
         helper.assertTrue(back.equals(data) && back.rows().get(0).hasRecord() && !back.rows().get(1).hasRecord(), "the payload survives: " + back);
-        CompoundTag none = GuhQuests.saved(p).getCompound(Highscores.KEY);
+        CompoundTag none = GuhQuests.saved(p).getCompoundOrEmpty(Highscores.KEY);
         helper.assertTrue(none.isEmpty(), "looking doesn't save anything");
         leave(helper, p);
         helper.succeed();

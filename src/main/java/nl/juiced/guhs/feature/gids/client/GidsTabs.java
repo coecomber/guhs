@@ -2,7 +2,7 @@ package nl.juiced.guhs.feature.gids.client;
 
 import java.util.List;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -21,7 +21,7 @@ public final class GidsTabs {
     public static final Stijl SUPERKOMPAS = new Stijl(0xFFF7D27A, 0xFF4A2A3A, 0xFF6A3E54, 0xFF301A26, 0x30FFFFFF);
 
     /** Draws the tabs from (x, y) to the right; the chosen tab reaches 1 pixel lower (it merges into the page). */
-    public static void teken(GuiGraphics g, int x, int y, List<ItemStack> icons, int actief, double mouseX, double mouseY, Stijl s) {
+    public static void teken(GuiGraphicsExtractor g, int x, int y, List<ItemStack> icons, int actief, double mouseX, double mouseY, Stijl s) {
         for (int i = 0; i < icons.size(); i++) {
             int tx = x + i * (W + GAP);
             boolean on = i == actief;
@@ -35,7 +35,7 @@ public final class GidsTabs {
             g.fill(tx + 1, top + 1, tx + W - 1, bottom, on ? s.actief() : hover ? s.hover() : s.tab());
             g.fill(tx + 2, top + 1, tx + W - 2, top + 2, s.glans());
             int iy = top + (bottom - top - 16) / 2 + (on ? 0 : 1);
-            g.renderItem(icons.get(i), tx + (W - 16) / 2, iy);
+            g.item(icons.get(i), tx + (W - 16) / 2, iy);
         }
     }
 

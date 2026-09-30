@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.doolhof.Anker;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Spijkerpoepen: a big knabbelspijker dangles on a string behind your guh belt. It swings along with every step and
  * turn (a little pendulum, {@link #slinger}). Back up to a kaasmelk bottle, hold still, and crouch to lower the spijker
@@ -52,14 +53,14 @@ public final class Spijkerpoepen implements Wedstrijd.Spel {
         for (int i = 0; i < Speelvelden.FLES_U.length; i++) {
             level.setBlock(fles(w.anker, d.baan, i), KnabbelspelenFeature.KAASMELKFLES.get().defaultBlockState(), 2);
         }
-        SpelDing ding = KnabbelspelenFeature.DING.get().create(level);
+        SpelDing ding = KnabbelspelenFeature.DING.get().create(level, EntitySpawnReason.TRIGGERED);
         if (ding != null) {
             ding.soort(SpelDing.SPIJKER);
             ding.spel = w.npcId;
             ding.baan = d.baan;
             ding.eigenaar(p.getId());
             Vec3 tip = riem(p).add(0, -LENGTE, 0);
-            ding.moveTo(tip.x, tip.y, tip.z, 0, 0);
+            ding.snapTo(tip.x, tip.y, tip.z, 0, 0);
             level.addFreshEntity(ding);
             s.ding = ding;
         }
@@ -124,9 +125,9 @@ public final class Spijkerpoepen implements Wedstrijd.Spel {
         }
         if (t % 4 == 0) {
             int zwiep = (int) Math.min(5, Math.round(Math.hypot(s.dx, s.dz) * 10));
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.spijker.bar", nl.juiced.guhs.quest.Highscores.tijd(t),
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.spijker.bar", nl.juiced.guhs.quest.Highscores.tijd(t),
                     Math.min(s.fles + 1, Speelvelden.FLES_U.length), Speelvelden.FLES_U.length, "~".repeat(zwiep) + "|" + "~".repeat(zwiep))
-                    .withStyle(ChatFormatting.AQUA), true);
+                    .withStyle(ChatFormatting.AQUA));
         }
     }
 
@@ -138,8 +139,8 @@ public final class Spijkerpoepen implements Wedstrijd.Spel {
         level.sendParticles(ParticleTypes.SPLASH, f.getX() + 0.5, f.getY() + 1.0, f.getZ() + 0.5, 12, 0.15, 0.1, 0.15, 0.05);
         s.fles++;
         s.stil = 0;
-        p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.spijker.plonk", s.fles, Speelvelden.FLES_U.length)
-                .withStyle(ChatFormatting.GREEN), false);
+        p.sendSystemMessage(Component.translatable("quest.guhs.knabbelspelen.spijker.plonk", s.fles, Speelvelden.FLES_U.length)
+                .withStyle(ChatFormatting.GREEN));
     }
 
     @Override

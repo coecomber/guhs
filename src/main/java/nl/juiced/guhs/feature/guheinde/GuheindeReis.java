@@ -26,7 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
@@ -67,7 +67,7 @@ public final class GuheindeReis {
     // ------------------------------------------------------------------------------------------------------------
 
     @Nullable
-    public static DimensionTransition portalDestination(ServerLevel from, Entity entity, BlockPos portal) {
+    public static TeleportTransition portalDestination(ServerLevel from, Entity entity, BlockPos portal) {
         if (GuheindeFeature.isGuheinde(from)) {
             ServerLevel guhmension = from.getServer().getLevel(ModDimensions.GUHMENSION);
             if (guhmension == null) {
@@ -75,15 +75,15 @@ public final class GuheindeReis {
             }
             Vec3 back = null;
             if (entity instanceof ServerPlayer player && GuhQuests.saved(player).contains(TERUG)) {
-                CompoundTag t = GuhQuests.saved(player).getCompound(TERUG);
-                back = new Vec3(t.getDouble("X"), t.getDouble("Y"), t.getDouble("Z"));
+                CompoundTag t = GuhQuests.saved(player).getCompoundOrEmpty(TERUG);
+                back = new Vec3(t.getDoubleOr("X", 0.0), t.getDoubleOr("Y", 0.0), t.getDoubleOr("Z", 0.0));
             }
             if (back == null) {
                 guhmension.getChunk(0, 0);
                 back = new Vec3(0.5, guhmension.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, 0, 0) + 1, 0.5);
             }
-            return new DimensionTransition(guhmension, back, Vec3.ZERO, entity.getYRot(), entity.getXRot(),
-                    DimensionTransition.PLAY_PORTAL_SOUND.then(DimensionTransition.PLACE_PORTAL_TICKET).then(nl.juiced.guhs.quest.GuhDex.GIVE_ON_ARRIVAL));
+            return new TeleportTransition(guhmension, back, Vec3.ZERO, entity.getYRot(), entity.getXRot(),
+                    TeleportTransition.PLAY_PORTAL_SOUND.then(TeleportTransition.PLACE_PORTAL_TICKET).then(nl.juiced.guhs.quest.GuhDex.GIVE_ON_ARRIVAL));
         }
         ServerLevel guheinde = from.getServer().getLevel(GuheindeFeature.GUHEINDE);
         if (guheinde == null) {
@@ -98,8 +98,8 @@ public final class GuheindeReis {
             GuhQuests.saved(player).put(TERUG, t);
         }
         Vec3 arrival = arrival(guheinde);
-        return new DimensionTransition(guheinde, arrival, Vec3.ZERO, Direction.WEST.toYRot(), 0f,
-                DimensionTransition.PLAY_PORTAL_SOUND.then(DimensionTransition.PLACE_PORTAL_TICKET));
+        return new TeleportTransition(guheinde, arrival, Vec3.ZERO, Direction.WEST.toYRot(), 0f,
+                TeleportTransition.PLAY_PORTAL_SOUND.then(TeleportTransition.PLACE_PORTAL_TICKET));
     }
 
     /** The arrival platform on the island (made fresh every time, like the obsidian platform of the End). */
@@ -107,7 +107,7 @@ public final class GuheindeReis {
         int x = GuheindeGevecht.ARRIVAL_X, z = GuheindeGevecht.ARRIVAL_Z;
         level.getChunk(x >> 4, z >> 4);
         int ground = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
-        int y = ground > level.getMinBuildHeight() + 8 ? ground : 60;
+        int y = ground > level.getMinY() + 8 ? ground : 60;
         BlockState floor = GuheindeFeature.KAASKORST_STENEN.get().defaultBlockState();
         for (int dx = -2; dx <= 2; dx++) {
             for (int dz = -2; dz <= 2; dz++) {
@@ -185,7 +185,7 @@ public final class GuheindeReis {
      * blocks further out in the same direction, to the first outer island there, where a poort back is built.
      */
     @Nullable
-    public static DimensionTransition poortDestination(ServerLevel level, Entity entity, BlockPos pos, KnabbelpoortBlock.Entity poort) {
+    public static TeleportTransition poortDestination(ServerLevel level, Entity entity, BlockPos pos, KnabbelpoortBlock.Entity poort) {
         if (poort.terug) {
             return terugpoortDestination(level, entity);
         }
@@ -201,22 +201,22 @@ public final class GuheindeReis {
         if (entity instanceof ServerPlayer player) {
             GuheindeEvents.advancement(player, "guheinde_poort");
         }
-        return new DimensionTransition(level, Vec3.atBottomCenterOf(stand), Vec3.ZERO, entity.getYRot(), entity.getXRot(),
-                DimensionTransition.PLAY_PORTAL_SOUND.then(DimensionTransition.PLACE_PORTAL_TICKET));
+        return new TeleportTransition(level, Vec3.atBottomCenterOf(stand), Vec3.ZERO, entity.getYRot(), entity.getXRot(),
+                TeleportTransition.PLAY_PORTAL_SOUND.then(TeleportTransition.PLACE_PORTAL_TICKET));
     }
 
     /**
      * 2.8: a Terugpoort (structure guhs:guheinde_terugpoort, everywhere on the outer islands) brings you back to the main
      * island: onto the arrival platform next to the Knabbelberg (made fresh, like when you come in: never the void).
      */
-    public static DimensionTransition terugpoortDestination(ServerLevel level, Entity entity) {
+    public static TeleportTransition terugpoortDestination(ServerLevel level, Entity entity) {
         Vec3 landing = terugLanding(level);
         if (entity instanceof ServerPlayer player) {
             GuheindeEvents.advancement(player, "guheinde_terugpoort");
-            player.displayClientMessage(Component.translatable("gui.guhs.guheinde.terugpoort").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.terugpoort").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
-        return new DimensionTransition(level, landing, Vec3.ZERO, Direction.WEST.toYRot(), 0f,
-                DimensionTransition.PLAY_PORTAL_SOUND.then(DimensionTransition.PLACE_PORTAL_TICKET));
+        return new TeleportTransition(level, landing, Vec3.ZERO, Direction.WEST.toYRot(), 0f,
+                TeleportTransition.PLAY_PORTAL_SOUND.then(TeleportTransition.PLACE_PORTAL_TICKET));
     }
 
     /** Where a Terugpoort lands you: on the arrival platform of the main island (in the Guheinde; elsewhere its spawn). */
@@ -241,7 +241,7 @@ public final class GuheindeReis {
                 for (int oz = 0; oz < 16; oz += 4) {
                     int bx = (x & ~15) + ox, bz = (z & ~15) + oz;
                     int h = level.getHeight(Heightmap.Types.WORLD_SURFACE, bx, bz);
-                    if (h > level.getMinBuildHeight() + 20) {
+                    if (h > level.getMinY() + 20) {
                         return new BlockPos(bx, h + 1, bz);
                     }
                 }
@@ -302,7 +302,7 @@ public final class GuheindeReis {
         List<ItemStack> kept = KEPT.remove(player.getUUID());
         if (kept == null && saved.contains(BEWAARD)) {
             kept = new ArrayList<>();
-            for (Tag t : saved.getList(BEWAARD, Tag.TAG_COMPOUND)) {
+            for (Tag t : saved.getListOrEmpty(BEWAARD)) {
                 ItemStack.parse(player.registryAccess(), t).ifPresent(kept::add);
             }
         }

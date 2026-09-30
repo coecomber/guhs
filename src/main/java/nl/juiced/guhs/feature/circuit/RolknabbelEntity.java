@@ -60,7 +60,7 @@ public class RolknabbelEntity extends Entity {
     public void tick() {
         super.tick();
         rolO = rol;
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             Vec3 d = this.position().subtract(this.xo, this.yo, this.zo);
             rol += (float) (Math.sqrt(d.x * d.x + d.z * d.z) / 0.7);
             return;
@@ -78,7 +78,7 @@ public class RolknabbelEntity extends Entity {
             crumble(false);
             return;
         }
-        if (this.isInWater() || this.isInLava() || this.getY() < this.level().getMinBuildHeight()) {
+        if (this.isInWater() || this.isInLava() || this.getY() < this.level().getMinY()) {
             crumble(false);
             return;
         }
@@ -95,7 +95,7 @@ public class RolknabbelEntity extends Entity {
         bumped = true;
         guh.schok(RaceGuhEntity.SCHOK_BOTS);
         if (guh.getFirstPassenger() instanceof ServerPlayer racer) {
-            racer.displayClientMessage(Component.translatable("quest.guhs.circuit.rolknabbel").withStyle(ChatFormatting.GOLD), true);
+            racer.sendOverlayMessage(Component.translatable("quest.guhs.circuit.rolknabbel").withStyle(ChatFormatting.GOLD));
         }
         crumble(true);
     }

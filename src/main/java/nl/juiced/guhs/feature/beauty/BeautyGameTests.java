@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.beauty;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -13,8 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -27,8 +25,6 @@ import nl.juiced.guhs.registry.ModEntities;
  * Tests of the Guh Beauty Vads-wedstrijd: the jury, a whole show without any items of your own, borrowing your own guh
  * (and getting it back, also after a crash), one show at a time, the shop, and the real theatre template.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class BeautyGameTests {
     private static final String EMPTY = "empty";
     private static final BlockPos MODEL = new BlockPos(1, 1, 1), END = new BlockPos(1, 1, 4), NPC = new BlockPos(3, 1, 1);
@@ -45,7 +41,7 @@ public class BeautyGameTests {
     private static ServerPlayer player(GameTestHelper helper, GuhNpcEntity npc) {
         @SuppressWarnings("removal")
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX() + 1, npc.getY(), npc.getZ());
+        player.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         return player;
     }
 
@@ -69,11 +65,11 @@ public class BeautyGameTests {
     }
 
     private static boolean advancement(ServerPlayer player, String name) {
-        var holder = player.server.getAdvancements().get(Guhs.id("quest/" + name));
+        var holder = player.level().getServer().getAdvancements().get(Guhs.id("quest/" + name));
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void beautyJuryLovesTheTheme(GameTestHelper helper) {
         RandomSource random = RandomSource.create(7);
         var winter = BeautyJury.judge(ShowTheme.WINTER, List.of(GuhClothes.SANTA_HAT, GuhClothes.CHRISTMAS_SWEATER, GuhClothes.WINTER_SCARF),
@@ -102,7 +98,7 @@ public class BeautyGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void beautyJurySaysWhy(GameTestHelper helper) {
         RandomSource random = RandomSource.create(3);
         Component model = Component.literal("Vadsy");
@@ -134,7 +130,7 @@ public class BeautyGameTests {
         return c.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t ? t.getKey() : "";
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void beautyWholeShowWithoutOwnItems(GameTestHelper helper) {
         GuhNpcEntity npc = miniTheatre(helper);
         ServerPlayer player = player(helper, npc);
@@ -143,7 +139,7 @@ public class BeautyGameTests {
         BeautyShow show = BeautyShow.at(npc);
         helper.assertTrue(show != null && BeautyShow.of(player) == show && BeautyShow.isPerforming(player), "the show is on");
         GuhEntity model = show.model();
-        helper.assertTrue(model != null && model.getTags().contains(BeautyShow.MODEL_TAG) && model.isNoAi() && model.isInvulnerable(),
+        helper.assertTrue(model != null && model.entityTags().contains(BeautyShow.MODEL_TAG) && model.isNoAi() && model.isInvulnerable(),
                 "a model guh is provided");
         helper.assertTrue(model.blockPosition().equals(helper.absolutePos(MODEL)), "on the stage");
         player.getFoodData().setFoodLevel(2);
@@ -184,17 +180,17 @@ public class BeautyGameTests {
         helper.assertTrue(BeautyShow.best(player) == show.total() && show.total() > 40, "the record is saved: " + show.total());
         helper.assertTrue(count(player, nl.juiced.guhs.registry.ModItems.GUH_BALLON.get()) == 3, "the first-show present");
         helper.assertTrue(advancement(player, "beauty_first"), "the first-show advancement");
-        helper.assertTrue(GuhQuests.saved(player).getInt("guhs_beauty_shows") == 1, "one show played");
+        helper.assertTrue(GuhQuests.saved(player).getIntOr("guhs_beauty_shows", 0) == 1, "one show played");
         helper.assertTrue(nl.juiced.guhs.quest.Scorebord.top(helper.getLevel().getServer(), BeautyShow.SCOREBORD).stream()
                 .anyMatch(e -> e.player().equals(player.getUUID()) && e.score() == show.total()), "the show is on the world's top 3");
         BeautyShow.showScores(npc);
         helper.assertTrue(!helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class, npc.getBoundingBox().inflate(4),
-                d -> d.getTags().contains(nl.juiced.guhs.quest.Scorebord.TAG)).isEmpty(), "the top 3 floats over the Showguh");
+                d -> d.entityTags().contains(nl.juiced.guhs.quest.Scorebord.TAG)).isEmpty(), "the top 3 floats over the Showguh");
         leave(helper, player);
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void beautyNakedShowEarnsNothing(GameTestHelper helper) {
         GuhNpcEntity npc = miniTheatre(helper);
         ServerPlayer player = player(helper, npc);
@@ -208,12 +204,12 @@ public class BeautyGameTests {
         helper.assertTrue(BeautyShow.at(npc) == null && !BeautyShow.isPerforming(player), "the show is over");
         helper.assertTrue(show.rosettes() == 0 && count(player, BeautyFeature.SHOWROZET.get()) == 0,
                 "three naked walks earn no rosettes, not even the finish bonus: " + show.rosettes());
-        helper.assertTrue(GuhQuests.saved(player).getInt("guhs_beauty_shows") == 1, "but it counts as a show");
+        helper.assertTrue(GuhQuests.saved(player).getIntOr("guhs_beauty_shows", 0) == 1, "but it counts as a show");
         leave(helper, player);
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void beautyOwnGuhComesBackInItsOwnClothes(GameTestHelper helper) {
         GuhNpcEntity npc = miniTheatre(helper);
         ServerPlayer player = player(helper, npc);
@@ -256,7 +252,7 @@ public class BeautyGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void beautyOneShowAtATime(GameTestHelper helper) {
         GuhNpcEntity npc = miniTheatre(helper);
         ServerPlayer a = player(helper, npc), b = player(helper, npc);
@@ -279,7 +275,7 @@ public class BeautyGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void beautyShopSellsTheShowsterSet(GameTestHelper helper) {
         GuhNpcEntity npc = miniTheatre(helper);
         var offers = npc.getOffers();
@@ -296,13 +292,13 @@ public class BeautyGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "guh_beauty_theater", timeoutTicks = 400)
+    @GuhTest(template = "guh_beauty_theater", timeoutTicks = 400)
     public static void beautyTheatreHasItAll(GameTestHelper helper) {
         AABB area = new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(120);
         List<GuhNpcEntity> hosts = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class, area, n -> n.getKind() == GuhNpcEntity.Kind.SHOWGUH);
         helper.assertTrue(hosts.size() == 1, "one Showguh on the stage: " + hosts.size());
         GuhNpcEntity npc = hosts.get(0);
-        List<GuhEntity> jury = helper.getLevel().getEntitiesOfClass(GuhEntity.class, area, g -> g.getTags().contains(BeautyShow.JURY_TAG));
+        List<GuhEntity> jury = helper.getLevel().getEntitiesOfClass(GuhEntity.class, area, g -> g.entityTags().contains(BeautyShow.JURY_TAG));
         helper.assertTrue(jury.size() == 3 && jury.stream().allMatch(g -> g.isInvulnerable() && g.isNoAi() && g.isOrderedToSit()),
                 "three sitting jury guhs");
         var spots = BeautyShow.spots(npc);
@@ -330,7 +326,7 @@ public class BeautyGameTests {
     // --- 2.9: makkelijk / medium / lastig -----------------------------------------------------------------------------------
 
     /** Makkelijk: a mild jury and a whole minute; lastig: a strict jury and 30 seconds. Medium is the jury as it was. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void beautyJuryAndDressTimePerLevel(GameTestHelper helper) {
         var m = nl.juiced.guhs.feature.spelen.Niveau.MAKKELIJK;
         var n = nl.juiced.guhs.feature.spelen.Niveau.MEDIUM;
@@ -352,7 +348,7 @@ public class BeautyGameTests {
     }
 
     /** A whole show on lastig: its own record and board, half as many rosettes more, and the lastig advancement. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void beautyLastigShowHasItsOwnBoard(GameTestHelper helper) {
         GuhNpcEntity npc = miniTheatre(helper);
         ServerPlayer player = player(helper, npc);

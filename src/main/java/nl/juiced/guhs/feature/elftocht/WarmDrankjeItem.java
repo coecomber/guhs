@@ -13,7 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 
 /**
@@ -29,8 +29,8 @@ public class WarmDrankjeItem extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.DRINK;
     }
 
     @Override
@@ -49,7 +49,7 @@ public class WarmDrankjeItem extends Item {
         if (level instanceof ServerLevel server && entity instanceof ServerPlayer player) {
             server.sendParticles(ParticleTypes.HEART, player.getX(), player.getY() + 1.9, player.getZ(), 3, 0.3, 0.2, 0.3, 0);
             server.sendParticles(ParticleTypes.WHITE_SMOKE, player.getX(), player.getY() + 1.5, player.getZ(), 8, 0.25, 0.2, 0.25, 0.01);
-            player.displayClientMessage(Component.translatable("gui.guhs.elftocht.warm").withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.elftocht.warm").withStyle(ChatFormatting.GOLD));
         }
         return rest;
     }

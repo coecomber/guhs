@@ -6,7 +6,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -20,8 +20,6 @@ import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -39,8 +37,6 @@ import nl.juiced.guhs.registry.ModItems;
  * the Knabbeldief never does anything but giggle and run, the street piece and Bob's village layout, the sources of the
  * clothing, the roles and the loaned items. (Templates beroepen_test_*: a floor at helper y = 1.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class BeroepenGameTests {
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper, int x, int z) {
@@ -48,7 +44,7 @@ public class BeroepenGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(x, 2, z));
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         BeroepenVoortgang.wis(p);
         return p;
     }
@@ -67,7 +63,7 @@ public class BeroepenGameTests {
 
     private static int count(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -76,7 +72,7 @@ public class BeroepenGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -90,7 +86,7 @@ public class BeroepenGameTests {
 
     // --- Blusguh -------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = "beroepen_test_brandweer", batch = "beroepen_brandweer", timeoutTicks = 100)
+    @GuhTest(template = "beroepen_test_brandweer", batch = "beroepen_brandweer", timeoutTicks = 100)
     public static void beroepenBrandweerBlussenEnGuhtjeRedden(GameTestHelper helper) {
         ServerPlayer p = player(helper, 2, 12);
         ServerPlayer q = player(helper, 3, 12);
@@ -108,7 +104,7 @@ public class BeroepenGameTests {
             helper.assertTrue(BeroepenVoortgang.stap(q, Beroep.BRANDWEER) == 0 && count(q, BeroepenFeature.GUH_BRANDSLANG.get()) == 0, "one helper at a time");
             // the hose really sprays the fire you look at: stand before pit 1 and spray
             BlockPos voor = helper.absolutePos(new BlockPos(5, 2, 8));
-            p.moveTo(voor.getX() + 0.5, voor.getY(), voor.getZ() + 0.5);
+            p.snapTo(voor.getX() + 0.5, voor.getY(), voor.getZ() + 0.5);
             p.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atCenterOf(pit1));
             for (int t = 0; t <= BrandslangItem.BLUS_TICKS * 3; t++) {
                 BrandslangItem.spuit(p, t);
@@ -141,7 +137,7 @@ public class BeroepenGameTests {
 
     // --- Vahoegsma -----------------------------------------------------------------------------------------------------
 
-    @GameTest(template = "beroepen_test_politie", batch = "beroepen_politie", timeoutTicks = 100)
+    @GuhTest(template = "beroepen_test_politie", batch = "beroepen_politie", timeoutTicks = 100)
     public static void beroepenPolitieVolgHetSpoor(GameTestHelper helper) {
         ServerPlayer p = player(helper, 4, 2);
         ServerPlayer q = player(helper, 5, 2);
@@ -193,7 +189,7 @@ public class BeroepenGameTests {
 
     // --- Snotneus-guh --------------------------------------------------------------------------------------------------
 
-    @GameTest(template = "beroepen_test_apotheek", batch = "beroepen_apotheek", timeoutTicks = 100)
+    @GuhTest(template = "beroepen_test_apotheek", batch = "beroepen_apotheek", timeoutTicks = 100)
     public static void beroepenApotheekSnotjeWordtBeter(GameTestHelper helper) {
         ServerPlayer p = player(helper, 4, 4);
         GuhNpcEntity npc = npc(helper, GuhNpcEntity.Kind.APOTHEKERGUH, 2, 2);
@@ -203,7 +199,7 @@ public class BeroepenGameTests {
         BlockPos plant = helper.absolutePos(new BlockPos(6, 2, 6)), ketel = helper.absolutePos(new BlockPos(3, 2, 8));
         try {
             Apotheek.ROLE.talk(npc, p);
-            helper.assertTrue(BeroepenVoortgang.stap(p, Beroep.APOTHEEK) == 1 && snotje.getPersistentData().getBoolean(Apotheek.SNOTJE),
+            helper.assertTrue(BeroepenVoortgang.stap(p, Beroep.APOTHEEK) == 1 && snotje.getPersistentData().getBooleanOr(Apotheek.SNOTJE, false),
                     "step 1: Snotje is snotterig");
             helper.assertTrue(count(p, BoerderijFeature.KAASMELK.get()) == 1, "a bottle of kaasmelk from the fridge");
             helper.assertTrue(!MengketelBlock.meng(helper.getLevel(), ketel, p), "no drankje without snotkruidjes");
@@ -216,10 +212,10 @@ public class BeroepenGameTests {
             helper.assertTrue(MengketelBlock.meng(helper.getLevel(), ketel, p), "blub blub");
             helper.assertTrue(count(p, BeroepenFeature.KAASMELKDRANKJE.get()) == 1 && count(p, BeroepenFeature.SNOTKRUIDJE.get()) == 0
                     && count(p, BoerderijFeature.KAASMELK.get()) == 0, "one kaasmelkdrankje, the herbs and the kaasmelk are in it");
-            ItemStack drankje = p.getInventory().items.stream().filter(s -> s.is(BeroepenFeature.KAASMELKDRANKJE.get())).findFirst().orElseThrow();
+            ItemStack drankje = p.getInventory().getNonEquipmentItems().stream().filter(s -> s.is(BeroepenFeature.KAASMELKDRANKJE.get())).findFirst().orElseThrow();
             helper.assertTrue(!Apotheek.snotje(p, snotje, ItemStack.EMPTY), "an empty hand: he only sniffs");
             helper.assertTrue(Apotheek.snotje(p, snotje, drankje), "he drinks it");
-            helper.assertTrue(!snotje.getPersistentData().getBoolean(Apotheek.SNOTJE) && BeroepenVoortgang.stap(p, Beroep.APOTHEEK) == 2,
+            helper.assertTrue(!snotje.getPersistentData().getBooleanOr(Apotheek.SNOTJE, false) && BeroepenVoortgang.stap(p, Beroep.APOTHEEK) == 2,
                     "Snotje is better, step 2");
             helper.assertTrue(count(p, Items.GLASS_BOTTLE) == 1 && count(p, BeroepenFeature.KAASMELKDRANKJE.get()) == 0, "the bottle stays");
             Apotheek.ROLE.talk(npc, p);
@@ -234,7 +230,7 @@ public class BeroepenGameTests {
 
     // --- Bob -----------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = "beroepen_test_bouw", batch = "beroepen_bouw", timeoutTicks = 100)
+    @GuhTest(template = "beroepen_test_bouw", batch = "beroepen_bouw", timeoutTicks = 100)
     public static void beroepenBouwDeVlagInTop(GameTestHelper helper) {
         ServerPlayer p = player(helper, 5, 7);
         ServerPlayer q = player(helper, 5, 9);
@@ -254,7 +250,7 @@ public class BeroepenGameTests {
                     "16 planks and 8 knabbels taken");
             helper.assertTrue(count(p, BeroepenFeature.DAKPAN_ITEM.get()) == 8, "a dakpan per ghost tile");
             helper.assertTrue(Features.isLoaned(new ItemStack(BeroepenFeature.DAKPAN_ITEM.get())), "the dakpannen are loaned");
-            ItemStack pannen = p.getInventory().items.stream().filter(s -> s.is(BeroepenFeature.DAKPAN_ITEM.get())).findFirst().orElseThrow();
+            ItemStack pannen = p.getInventory().getNonEquipmentItems().stream().filter(s -> s.is(BeroepenFeature.DAKPAN_ITEM.get())).findFirst().orElseThrow();
             helper.assertTrue(!DakpanItem.leg(helper.getLevel(), helper.absolutePos(new BlockPos(3, 1, 3)), p, pannen), "only on a ghost tile");
             List<BlockPos> plekken = Bouw.plekken(npc);
             for (int i = 0; i < plekken.size(); i++) {
@@ -279,7 +275,7 @@ public class BeroepenGameTests {
 
     // --- all four ------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = "beroepen_test_brandweer", batch = "beroepen_alle")
+    @GuhTest(template = "beroepen_test_brandweer", batch = "beroepen_alle")
     public static void beroepenAlleVierEnDeBronnen(GameTestHelper helper) {
         ServerPlayer p = player(helper, 2, 2);
         try {
@@ -311,7 +307,7 @@ public class BeroepenGameTests {
         return t.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), block, true).size();
     }
 
-    @GameTest(template = "beroepen_test_bouw", batch = "beroepen_gebouwen")
+    @GuhTest(template = "beroepen_test_bouw", batch = "beroepen_gebouwen")
     public static void beroepenDeStraatEnHetHalveHuisje(GameTestHelper helper) {
         var templates = helper.getLevel().getStructureManager();
         var straat = templates.get(Guhs.id("knuffeldal_stadje/beroepenstraat"));
@@ -319,18 +315,18 @@ public class BeroepenGameTests {
         StructureTemplate s = straat.get();
         var jigsaws = s.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW, true);
         helper.assertTrue(jigsaws.size() == 1 && jigsaws.get(0).pos().equals(new BlockPos(0, 4, 40))
-                && jigsaws.get(0).nbt().getString("name").equals("guhs:knuffeldal_straat_vrij")
+                && jigsaws.get(0).nbt().getStringOr("name", "").equals("guhs:knuffeldal_straat_vrij")
                 && jigsaws.get(0).state().getValue(JigsawBlock.ORIENTATION) == FrontAndTop.WEST_UP, "its jigsaw on the west side: " + jigsaws);
         helper.assertTrue(blocks(s, BeroepenFeature.MARSHMALLOWVUUR.get()) == 5 && blocks(s, BeroepenFeature.GUHTJEPLEK.get()) == 1
                 && blocks(s, BeroepenFeature.KLUISPLEK.get()) == 1 && blocks(s, BeroepenFeature.VERSTOPPLEK.get()) == 6
                 && blocks(s, BeroepenFeature.MENGKETEL.get()) == 1 && blocks(s, BeroepenFeature.SNOTKRUID.get()) >= 12, "the jobs' things are there");
-        var pool = helper.getLevel().registryAccess().registryOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id("knuffeldal_stadje/vrij"));
+        var pool = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id("knuffeldal_stadje/vrij"));
         helper.assertTrue(pool != null && pool.size() == 1
                 && pool.getShuffledTemplates(net.minecraft.util.RandomSource.create(1)).get(0).toString().contains("beroepenstraat"),
                 "the town's free street pool holds the Beroepenstraat");
         var dorp = templates.get(Guhs.id("guh_village/layout_c"));
         helper.assertTrue(dorp.isPresent() && blocks(dorp.get(), BeroepenFeature.DAKPLEK.get()) == 16, "Bob's roof: 16 ghost tiles");
-        var dorpen = helper.getLevel().registryAccess().registryOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id("guh_village/start"));
+        var dorpen = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id("guh_village/start"));
         helper.assertTrue(dorpen != null && dorpen.size() == 3, "three village layouts");
         helper.succeed();
     }

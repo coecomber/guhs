@@ -58,7 +58,7 @@ public final class BaltoClient {
         // the Baltoguh: nose down and a little sniff-sniff while he smells the way home
         VariantUiterlijk.zet(GuhVariant.BALTOGUH, new VariantUiterlijk.Uiterlijk() {
             @Override
-            public void botten(GuhEntity guh, java.util.function.Function<String, java.util.Optional<software.bernie.geckolib.cache.object.GeoBone>> bot,
+            public void botten(GuhEntity guh, java.util.function.Function<String, java.util.Optional<com.geckolib.cache.model.GeoBone>> bot,
                                float partialTick) {
                 if (GuhHooks.heeft(guh, VerhaalVlaggen.SNUFFELT)) {
                     float t = (guh.tickCount + partialTick) * 0.9f;

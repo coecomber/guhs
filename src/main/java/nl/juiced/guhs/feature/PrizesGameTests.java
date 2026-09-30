@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -15,10 +15,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.beauty.BeautyShow;
 import nl.juiced.guhs.feature.disco.DiscoBlocks;
@@ -41,8 +39,6 @@ import nl.juiced.guhs.world.ModDimensions;
  * Prizes of the minigames: whatever doesn't fit in your pockets drops in front of you, every reward is (at least) one
  * more than before 2.7.0, and a Guhdex for everyone who steps into the Guhmensie through a portal without one.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class PrizesGameTests {
     private static final String EMPTY = "empty";
 
@@ -51,7 +47,7 @@ public class PrizesGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(2, 1, 2));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return player;
     }
 
@@ -62,8 +58,8 @@ public class PrizesGameTests {
     }
 
     private static void fillPockets(ServerPlayer player) {
-        for (int i = 0; i < player.getInventory().items.size(); i++) {
-            player.getInventory().items.set(i, new ItemStack(Items.COBBLESTONE, 64));
+        for (int i = 0; i < player.getInventory().getNonEquipmentItems().size(); i++) {
+            player.getInventory().getNonEquipmentItems().set(i, new ItemStack(Items.COBBLESTONE, 64));
         }
     }
 
@@ -78,7 +74,7 @@ public class PrizesGameTests {
     }
 
     /** Full pockets: the prize lands on the ground in front of you; with a little room, the rest does. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void prizesDropWhenPocketsAreFull(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         clearGround(p);
@@ -87,7 +83,7 @@ public class PrizesGameTests {
         helper.assertTrue(GuhQuests.count(p, DiscoBlocks.DISCOMUNT.get()) == 0 && onGround(p, DiscoBlocks.DISCOMUNT.get()) == 5,
                 "all 5 discomunten on the ground: " + onGround(p, DiscoBlocks.DISCOMUNT.get()));
         clearGround(p);
-        p.getInventory().items.set(7, new ItemStack(ModItems.VERSTOPGUHTICKET.get(), 62));
+        p.getInventory().getNonEquipmentItems().set(7, new ItemStack(ModItems.VERSTOPGUHTICKET.get(), 62));
         helper.assertTrue(Minigames.give(p, new ItemStack(ModItems.VERSTOPGUHTICKET.get(), 5)), "only partly fits");
         helper.assertTrue(GuhQuests.count(p, ModItems.VERSTOPGUHTICKET.get()) == 64 && onGround(p, ModItems.VERSTOPGUHTICKET.get()) == 3,
                 "2 in the pockets, 3 on the ground");
@@ -100,7 +96,7 @@ public class PrizesGameTests {
     }
 
     /** A Guhdex when you come in without one (on the ground with full pockets), not a second one when you have it. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhdexForNewcomersOnlyOnce(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         clearGround(p);
@@ -121,11 +117,11 @@ public class PrizesGameTests {
      * The portals into the Guhmensie hand it out (the guh portal, and back from the Guheinde). Needs the Guhmension
      * dimension, so like the other portal tests this runs on the dev server (/test runall).
      */
-    @GameTest(template = EMPTY, timeoutTicks = 400, required = false)
+    @GuhTest(template = EMPTY, timeoutTicks = 400, required = false)
     public static void guhmensiePortalsGiveAGuhdex(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         ServerLevel overworld = helper.getLevel();
-        DimensionTransition in = GuhPortalForcer.getDestination(overworld, p, p.blockPosition());
+        TeleportTransition in = GuhPortalForcer.getDestination(overworld, p, p.blockPosition());
         helper.assertTrue(in != null && in.newLevel().dimension() == ModDimensions.GUHMENSION, "the guh portal leads into the Guhmensie (no Guhmension dimension? run this on the dev server)");
         in.postDimensionTransition().onTransition(p);
         helper.assertTrue(GuhQuests.count(p, ModItems.GUHDEX.get()) == 1, "a Guhdex on arrival");
@@ -139,7 +135,7 @@ public class PrizesGameTests {
             back.putDouble("Y", 80);
             back.putDouble("Z", 0.5);
             GuhQuests.saved(p).put(GuheindeReis.TERUG, back);
-            DimensionTransition home = GuheindeReis.portalDestination(guheinde, p, BlockPos.ZERO);
+            TeleportTransition home = GuheindeReis.portalDestination(guheinde, p, BlockPos.ZERO);
             helper.assertTrue(home != null && home.newLevel().dimension() == ModDimensions.GUHMENSION, "the Guheinde portal leads back");
             home.postDimensionTransition().onTransition(p);
             helper.assertTrue(GuhQuests.count(p, ModItems.GUHDEX.get()) == 1, "back from the Guheinde: a Guhdex too");
@@ -150,7 +146,7 @@ public class PrizesGameTests {
     }
 
     /** Every reward rule of every minigame gives (at least) one more than before 2.7.0; the anti-AFK zeros stay zero. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void everyRewardIsOneMore(GameTestHelper helper) {
         // beauty: rosettes per round (by the round's points), the finish bonus, the first show
         helper.assertTrue(BeautyShow.finishBonus(4, 40) == 1 + 1 && BeautyShow.finishBonus(4, BeautyShow.GOOD_SHOW) == 3 + 2

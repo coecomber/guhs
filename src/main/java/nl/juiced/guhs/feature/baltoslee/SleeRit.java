@@ -39,6 +39,7 @@ import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.quest.Scorebord;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * One sled ride over the Nomguh route (one per player), on the server.
  * <ul>
@@ -215,7 +216,7 @@ public final class SleeRit {
     @Nullable
     public static SleeRit start(ServerPlayer player, NomguhRoute wereld, Modus modus, Niveau niveau, @Nullable GuhEntity kopie,
                                 @Nullable GuhNpcEntity npc) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         String game = modus == Modus.TOCHT ? GAME_TOCHT : GAME_SPRINT;
         if (rijdt(player) || Minigames.busyElsewhere(player, game)) {
             return null;
@@ -224,7 +225,7 @@ public final class SleeRit {
         SleeRit rit = new SleeRit(player, modus, niveau, route);
         SleeBaan b = route.baan(0);
         double w = b.breedte(0);
-        SleeEntity sled = BaltoSleeFeature.SLEE.get().create(level);
+        SleeEntity sled = BaltoSleeFeature.SLEE.get().create(level, EntitySpawnReason.TRIGGERED);
         if (sled == null) {
             return null;
         }
@@ -234,7 +235,7 @@ public final class SleeRit {
         level.addFreshEntity(sled);
         rit.slee = sled.getUUID();
         if (modus == Modus.SPRINT) {
-            SleeEntity st = BaltoSleeFeature.SLEE.get().create(level);
+            SleeEntity st = BaltoSleeFeature.SLEE.get().create(level, EntitySpawnReason.TRIGGERED);
             if (st != null) {
                 rit.steele.lat = 0.45 * w;
                 st.zet(route, SleeEntity.STEELE, niveau.ordinal(), rit.seed);
@@ -353,7 +354,7 @@ public final class SleeRit {
                     if (pauzeTicks >= RUST_TICKS) {
                         fase = SleeEntity.RIJDT;
                         pauze = SleeEntity.GEEN;
-                        player.displayClientMessage(Component.translatable("gui.guhs.baltoslee.rust.verder").withStyle(ChatFormatting.GOLD), true);
+                        player.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.rust.verder").withStyle(ChatFormatting.GOLD));
                         geluid(level, sled, BaltoSleeFeature.WOEF.get(), 1f, 1.1f);
                     }
                 } else if (pauzeTicks >= PAUZE_MAX) {
@@ -367,7 +368,7 @@ public final class SleeRit {
                 if (--vastTicks <= 0) {
                     fase = SleeEntity.RIJDT;
                     clientTick = now;
-                    player.displayClientMessage(Component.translatable("gui.guhs.baltoslee.weer_los").withStyle(ChatFormatting.GOLD), true);
+                    player.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.weer_los").withStyle(ChatFormatting.GOLD));
                 }
             }
             default -> {
@@ -450,7 +451,7 @@ public final class SleeRit {
             tijdTerug++;
             int over = limiet - tijdTerug;
             if (over == 20 * 30 || over == 20 * 10) {
-                player.displayClientMessage(Component.translatable("gui.guhs.baltoslee.tijd.bijna", over / 20).withStyle(ChatFormatting.RED), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.tijd.bijna", over / 20).withStyle(ChatFormatting.RED));
             }
             if (tijdTerug >= limiet) {
                 titel(player, Component.translatable("gui.guhs.baltoslee.te_laat").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
@@ -465,7 +466,7 @@ public final class SleeRit {
 
     /** The rider's game: sled in generation gen of its resets, on leg been at s, lat, going v. */
     public void meld(ServerPlayer player, int gen, int beenC, double s, double lat, double v, double latV) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (fase != SleeEntity.RIJDT || !(level.getEntity(slee) instanceof SleeEntity sled) || gen != sled.gen() || beenC != been) {
             return;                                                  // (about an old spot: a reset or a new leg won)
         }
@@ -503,7 +504,7 @@ public final class SleeRit {
                 if (stand.lat * -z.kant() >= LAWINE_VEILIG * w) {
                     ontweken++;
                     level.broadcastEntityEvent(sled, SleeEntity.EV_ONTWEKEN);
-                    player.displayClientMessage(Component.translatable("gui.guhs.baltoslee.lawine.ontweken").withStyle(ChatFormatting.GREEN), true);
+                    player.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.lawine.ontweken").withStyle(ChatFormatting.GREEN));
                     adv(player, "balto_slee_lawine");
                 } else {
                     bedolven++;
@@ -520,7 +521,7 @@ public final class SleeRit {
             }
             if (z.soort() == RitRoute.Soort.IJSBRUG && sOud < z.s0() && stand.s >= z.s0()) {
                 ijsGevallen.remove(i);
-                player.displayClientMessage(Component.translatable("gui.guhs.baltoslee.ijsbrug").withStyle(ChatFormatting.AQUA), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.ijsbrug").withStyle(ChatFormatting.AQUA));
                 geluid(level, sled, BaltoSleeFeature.IJS.get(), 0.8f, 1f);
             }
         }
@@ -563,7 +564,7 @@ public final class SleeRit {
                 continue;
             }
             if (rustGehint.add(been * 100 + i)) {
-                player.displayClientMessage(Component.translatable("gui.guhs.baltoslee.rust.hint").withStyle(ChatFormatting.GOLD), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.rust.hint").withStyle(ChatFormatting.GOLD));
             }
             if (stand.v < 0.04) {
                 if (++stilTicks >= RUST_STIL) {
@@ -623,7 +624,7 @@ public final class SleeRit {
             } else {
                 nieuwBeen(level, stand.v * 0.6);
                 level.broadcastEntityEvent(sled, SleeEntity.EV_KEER);
-                player.displayClientMessage(Component.translatable("gui.guhs.baltoslee.sprint.keer").withStyle(ChatFormatting.GOLD), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.sprint.keer").withStyle(ChatFormatting.GOLD));
                 geluid(level, sled, BaltoSleeFeature.BELLEN.get(), 1f, 1.2f);
             }
             return;
@@ -655,7 +656,7 @@ public final class SleeRit {
         if (fase != SleeEntity.PAUZE || pauze == SleeEntity.RUST) {
             return;
         }
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (pauze == SleeEntity.BERGHUT) {
             nieuwBeen(level, 0);
             player.sendSystemMessage(Component.translatable("gui.guhs.baltoslee.terug", tijdTekst(limiet))
@@ -674,7 +675,7 @@ public final class SleeRit {
     public void stormKlaartOp(ServerPlayer player) {
         if (!helder) {
             helder = true;
-            player.displayClientMessage(Component.translatable("gui.guhs.baltoslee.helder").withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.helder").withStyle(ChatFormatting.AQUA));
         }
     }
 
@@ -687,7 +688,7 @@ public final class SleeRit {
         player.playNotifySound(BaltoSleeFeature.FANFARE.get(), SoundSource.PLAYERS, 1f, 1f);
         adv(player, "balto_slee_tocht");
         CompoundTag d = data(player);
-        d.putInt("Tochten", d.getInt("Tochten") + 1);
+        d.putInt("Tochten", d.getIntOr("Tochten", 0) + 1);
         einde(level, Einde.AANKOMST);
     }
 
@@ -696,15 +697,15 @@ public final class SleeRit {
         boolean gewonnen = steeleKlaar < 0 || tijd < steeleKlaar;
         CompoundTag d = data(player);
         String n = niveau.id();
-        int ritten = d.getInt("Ritten_" + n) + 1;
-        int oud = d.getInt("Best_" + n);
+        int ritten = d.getIntOr("Ritten_" + n, 0) + 1;
+        int oud = d.getIntOr("Best_" + n, 0);
         boolean record = oud <= 0 || tijd < oud;
         d.putInt("Ritten_" + n, ritten);
         if (record) {
             d.putInt("Best_" + n, tijd);
         }
         if (gewonnen) {
-            d.putInt("Gewonnen_" + n, d.getInt("Gewonnen_" + n) + 1);
+            d.putInt("Gewonnen_" + n, d.getIntOr("Gewonnen_" + n, 0) + 1);
         }
         int munten = niveau.munten(MUNTEN_BASIS + (gewonnen ? MUNTEN_STEELE : 0) + (ritten == 1 ? MUNTEN_EERSTE : 0) + (record && oud > 0 ? MUNTEN_RECORD : 0));
         Minigames.give(player, new ItemStack(BaltoSleeFeature.SLEDEBELLETJE.get(), munten));
@@ -845,7 +846,7 @@ public final class SleeRit {
     }
 
     private void steeleZegt(ServerPlayer player, String key) {
-        Entity npc = steeleNpc == null ? null : player.serverLevel().getEntity(steeleNpc);
+        Entity npc = steeleNpc == null ? null : player.level().getEntity(steeleNpc);
         Component naam = npc != null ? npc.getDisplayName() : Component.translatable("entity.guhs.guh_npc.steele_mika");
         player.sendSystemMessage(Component.literal("<").append(naam).append("> ").withStyle(ChatFormatting.LIGHT_PURPLE)
                 .append(Component.translatable(key).withStyle(ChatFormatting.WHITE)));
@@ -926,11 +927,11 @@ public final class SleeRit {
         if (!saved.contains("guhs_baltoslee")) {
             saved.put("guhs_baltoslee", new CompoundTag());
         }
-        return saved.getCompound("guhs_baltoslee");
+        return saved.getCompoundOrEmpty("guhs_baltoslee");
     }
 
     public static int best(Player player, Niveau n) {
-        return data(player).getInt("Best_" + n.id());
+        return data(player).getIntOr("Best_" + n.id(), 0);
     }
 
     // --- events -------------------------------------------------------------------------------------------------------------------
@@ -939,8 +940,8 @@ public final class SleeRit {
     public static void spelerWeg(ServerPlayer player) {
         SleeRit rit = RIJDERS.get(player.getUUID());
         if (rit != null) {
-            ServerLevel home = player.server.getLevel(rit.dim);
-            rit.einde(home != null ? home : player.serverLevel(), Einde.WEG);
+            ServerLevel home = player.level().getServer().getLevel(rit.dim);
+            rit.einde(home != null ? home : player.level(), Einde.WEG);
         }
     }
 
@@ -950,8 +951,8 @@ public final class SleeRit {
         if (rit == null) {
             return;
         }
-        ServerLevel home = player.server.getLevel(rit.dim);
-        ServerLevel level = home != null ? home : player.serverLevel();
+        ServerLevel home = player.level().getServer().getLevel(rit.dim);
+        ServerLevel level = home != null ? home : player.level();
         if (level.getGameTime() - rit.lastTick > 60) {
             rit.einde(level, Einde.WEG);
         }
@@ -966,7 +967,7 @@ public final class SleeRit {
 
     public static void opAfstappen(net.neoforged.neoforge.event.entity.EntityMountEvent event) {
         if (event.isDismounting() && event.getEntityMounting() instanceof Player player && event.getEntityBeingMounted() instanceof SleeEntity
-                && !player.level().isClientSide) {
+                && !player.level().isClientSide()) {
             SleeRit rit = RIJDERS.get(player.getUUID());
             if (rit != null && !rit.stopt) {
                 event.setCanceled(true);

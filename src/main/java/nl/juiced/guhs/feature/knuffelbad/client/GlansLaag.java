@@ -3,24 +3,24 @@ package nl.juiced.guhs.feature.knuffelbad.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.knuffelbad.KnuffelbadFeature;
 import nl.juiced.guhs.feature.knus.GuhHooks;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.renderer.GeoRenderer;
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.renderer.base.GeoRenderer;
 
 /**
  * A freshly washed guh (GuhHooks.GLANZEND, for a day after the Knuffelbad's washing ritual): soft pink-and-white glints
  * glide over its fluffy fur (the model drawn again with a moving shimmer), and little sparkles twinkle around it.
  */
 final class GlansLaag {
-    private static final ResourceLocation GLANS = Guhs.id("textures/entity/guh_glans.png");
+    private static final Identifier GLANS = Guhs.id("textures/entity/guh_glans.png");
 
     private GlansLaag() {
     }
@@ -41,7 +41,7 @@ final class GlansLaag {
         if (mc.level == null || mc.player == null || mc.isPaused()) {
             return;
         }
-        RandomSource r = mc.level.random;
+        RandomSource r = mc.level.getRandom();
         for (Entity e : mc.level.entitiesForRendering()) {
             if (e instanceof GuhEntity guh && GuhHooks.heeft(guh, GuhHooks.GLANZEND) && ((guh.tickCount + guh.getId()) % 7 == 0)
                     && guh.distanceToSqr(mc.player) < 32 * 32 && !guh.isInvisible()) {

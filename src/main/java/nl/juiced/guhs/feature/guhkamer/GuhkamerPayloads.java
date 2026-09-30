@@ -82,14 +82,14 @@ public final class GuhkamerPayloads {
     public static CompoundTag data(ServerPlayer player) {
         CompoundTag t = new CompoundTag();
         UUID eigenaar = player.getUUID();
-        int z = Guhkamer.zielsguhs(player.server, eigenaar);
-        t.putBoolean("Maag", Guhkamer.heeftMaag(player.server, eigenaar));
+        int z = Guhkamer.zielsguhs(player.level().getServer(), eigenaar);
+        t.putBoolean("Maag", Guhkamer.heeftMaag(player.level().getServer(), eigenaar));
         t.putInt("Zielsguhs", z);
         t.putInt("Breedte", Guhkamer.breedte(z));
         t.putInt("Plekken", Guhkamer.plekken(z));
-        BandData band = BandData.get(player.server);
+        BandData band = BandData.get(player.level().getServer());
         ListTag gasten = new ListTag();
-        GuhkamerData.Kamer k = GuhkamerData.get(player.server).vind(eigenaar);
+        GuhkamerData.Kamer k = GuhkamerData.get(player.level().getServer()).vind(eigenaar);
         if (k != null) {
             for (GuhkamerData.Gast g : k.gasten.values()) {
                 CompoundTag c = new CompoundTag();
@@ -98,7 +98,7 @@ public final class GuhkamerPayloads {
                 c.put("Looks", g.looks.copy());
                 BandData.Rec r = band.vind(eigenaar, g.id);
                 c.putInt("Niveau", r == null ? 0 : r.niveau().ordinal());
-                Huisje h = Huisjes.vanBewoner(player.server, eigenaar, g.id);
+                Huisje h = Huisjes.vanBewoner(player.level().getServer(), eigenaar, g.id);
                 c.putString("Woont", h == null ? "" : h.naam());
                 gasten.add(c);
             }
@@ -131,7 +131,7 @@ public final class GuhkamerPayloads {
         }
         Actie actie = p.actie() >= 0 && p.actie() < Actie.values().length ? Actie.values()[p.actie()] : null;
         if (actie == Actie.STUUR) {
-            Entity e = player.serverLevel().getEntity(id);
+            Entity e = player.level().getEntity(id);
             if (e instanceof GuhEntity g && g.distanceTo(player) <= BIJ + 8) {
                 meld(player, g, Guhkamer.stuur(player, g));
             }
@@ -149,8 +149,8 @@ public final class GuhkamerPayloads {
             case GEEN_MAAG -> "gui.guhs.guhkamer.geen_maag";
             case NIET_JOUW -> "gui.guhs.guhkamer.niet_jouw";
         };
-        player.displayClientMessage(Component.translatable(key, g.getName()).withStyle(u == Guhkamer.Uitkomst.OK
-                ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY), true);
+        player.sendOverlayMessage(Component.translatable(key, g.getName()).withStyle(u == Guhkamer.Uitkomst.OK
+                ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY));
     }
 
     /** The Guh menu's "Logeren in de Guhkamer" (2.10.1): like sending it with the Guhbel (own tamed guh, room not full). */

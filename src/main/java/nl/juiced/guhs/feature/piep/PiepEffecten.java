@@ -100,7 +100,7 @@ public final class PiepEffecten {
         if (guh.isTame() || !stack.is(ModItems.KAAS_KNABBELS.get()) || !player.hasEffect(PiepFeature.LIEF_KIJKEN)) {
             return InteractionResult.PASS;
         }
-        if (guh.level().isClientSide || guh.getRandom().nextInt(LIEF_TEMKANS) != 0
+        if (guh.level().isClientSide() || guh.getRandom().nextInt(LIEF_TEMKANS) != 0
                 || net.neoforged.neoforge.event.EventHooks.onAnimalTame(guh, player)) {
             return InteractionResult.PASS;
         }

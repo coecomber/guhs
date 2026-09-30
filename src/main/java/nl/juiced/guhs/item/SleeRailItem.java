@@ -55,19 +55,19 @@ public class SleeRailItem extends Item {
                 ? SleePath.attachTo(clicked, context.getClickLocation(), shape, down)
                 : SleePath.fresh(new BlockPlaceContext(context).getClickedPos(), context.getHorizontalDirection(), shape);
         if (!canPlace(level, placement, player)) {
-            if (player != null && level.isClientSide) {
-                player.displayClientMessage(Component.translatable("item.guhs.sleerail.blocked").withStyle(ChatFormatting.RED), true);
+            if (player != null && level.isClientSide()) {
+                player.sendOverlayMessage(Component.translatable("item.guhs.sleerail.blocked").withStyle(ChatFormatting.RED));
             }
             return InteractionResult.FAIL;
         }
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             place(level, placement);
             level.playSound(null, placement.anchor(), SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 1f, 1f);
             if (player == null || !player.getAbilities().instabuild) {
                 context.getItemInHand().shrink(1);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     public static boolean canPlace(Level level, SleePath.Placement placement, Player player) {

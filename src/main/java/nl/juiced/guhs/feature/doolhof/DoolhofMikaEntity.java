@@ -22,13 +22,15 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * A Heg-Mika of Het Guhdoolhof: a Mika with twigs and leaves on its head, sneaking through the hedges. It never hurts
  * anyone and can't be hurt. It wanders the maze; when it sees the player it comes after them, and when it touches
@@ -162,9 +164,9 @@ public class DoolhofMikaEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (!level().isClientSide && source.getEntity() instanceof ServerPlayer player && isInvulnerableTo(source)) {
+        if (!level().isClientSide() && source.getEntity() instanceof ServerPlayer player && isInvulnerableTo(source)) {
             giechel();
-            player.displayClientMessage(Component.translatable("gui.guhs.doolhof.niet_meppen"), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.doolhof.niet_meppen"));
             return false;
         }
         return super.hurt(source, amount);
@@ -209,14 +211,14 @@ public class DoolhofMikaEntity extends PathfinderMob implements GeoEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         if (spel != null) {
-            tag.putUUID("Spel", spel);
+            tag.store("Spel", UUIDUtil.CODEC, spel);
         }
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        spel = tag.hasUUID("Spel") ? tag.getUUID("Spel") : null;
+        spel = tag.read("Spel", UUIDUtil.CODEC).isPresent() ? tag.read("Spel", UUIDUtil.CODEC).orElseThrow() : null;
     }
 
     // --- animations (the guh ones: its model is the Mika's) -----------------------------------------------------------
@@ -234,11 +236,11 @@ public class DoolhofMikaEntity extends PathfinderMob implements GeoEntity {
     /** (Tests) a Mika belonging to no game. */
     @Nullable
     static DoolhofMikaEntity maak(ServerLevel level, UUID npc, Vec3 at, double snelheid) {
-        DoolhofMikaEntity mika = DoolhofFeature.MIKA.get().create(level);
+        DoolhofMikaEntity mika = DoolhofFeature.MIKA.get().create(level, EntitySpawnReason.TRIGGERED);
         if (mika == null) {
             return null;
         }
-        mika.moveTo(at.x, at.y, at.z, level.getRandom().nextFloat() * 360f, 0);
+        mika.snapTo(at.x, at.y, at.z, level.getRandom().nextFloat() * 360f, 0);
         mika.spel(npc, snelheid);
         level.addFreshEntity(mika);
         return mika;

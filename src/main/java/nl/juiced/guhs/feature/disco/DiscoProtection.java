@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -28,7 +28,7 @@ public final class DiscoProtection {
 
     /** Is this spot part of a Guhdisco? */
     public static boolean inDisco(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().registryOrThrow(Registries.STRUCTURE).get(DISCO);
+        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(DISCO);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -46,7 +46,7 @@ public final class DiscoProtection {
         if (!protectedSpot || player.getAbilities().instabuild) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.disco.no_build").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.disco.no_build").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -68,7 +68,7 @@ public final class DiscoProtection {
     /** Using an item on a block (buckets, flint and steel, axes...): not in the disco. Sipping a guhshake is fine. */
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty()) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty()) {
             return;
         }
         if (denied(event.getEntity(), event.getPos()) || denied(event.getEntity(), event.getPos().relative(event.getFace() == null ? net.minecraft.core.Direction.UP : event.getFace()))) {
@@ -79,7 +79,7 @@ public final class DiscoProtection {
     /** Buckets are used "in the air" too. */
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }

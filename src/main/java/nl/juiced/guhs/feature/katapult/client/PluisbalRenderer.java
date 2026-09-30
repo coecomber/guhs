@@ -9,11 +9,11 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.katapult.PluisbalEntity;
@@ -21,7 +21,7 @@ import nl.juiced.guhs.feature.katapult.PluisbalEntity;
 /** The pluisbal: a big fluffy pink ball (a cube with fluff tufts on every side and two little guh ears), tumbling as it flies. */
 public class PluisbalRenderer extends EntityRenderer<PluisbalEntity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Guhs.id("pluisbal"), "main");
-    private static final ResourceLocation TEXTURE = Guhs.id("textures/entity/pluisbal.png");
+    private static final Identifier TEXTURE = Guhs.id("textures/entity/pluisbal.png");
     private final ModelPart ball;
 
     public PluisbalRenderer(EntityRendererProvider.Context context) {
@@ -56,7 +56,7 @@ public class PluisbalRenderer extends EntityRenderer<PluisbalEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(PluisbalEntity entity) {
+    public Identifier getTextureLocation(PluisbalEntity entity) {
         return TEXTURE;
     }
 }

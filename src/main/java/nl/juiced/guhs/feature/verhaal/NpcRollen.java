@@ -55,7 +55,7 @@ public final class NpcRollen {
 
     /** The role this very NPC has (its plek, else the default of its kind, else "binnenkort"). */
     public static NpcRole van(GuhNpcEntity npc) {
-        String plek = npc.roleData.getString(PLEK);
+        String plek = npc.roleData.getStringOr(PLEK, "");
         if (!plek.isEmpty()) {
             NpcRole r = PLEKKEN.get(npc.getKind().id() + "|" + plek);
             if (r != null) {

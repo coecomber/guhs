@@ -69,7 +69,7 @@ public final class GuhkamerFeature {
                 GuhVolger.zet(guh, PlekSoort.GUHKAMER, "");
             }
             // 2.10.1: the synced guest flag (the Guh menu's button) follows the server-side mark (guests from 2.10.0 too)
-            if (!guh.level().isClientSide && (guh.tickCount + guh.getId()) % 20 == 0
+            if (!guh.level().isClientSide() && (guh.tickCount + guh.getId()) % 20 == 0
                     && nl.juiced.guhs.feature.band.BandVlaggen.heeft(guh, nl.juiced.guhs.feature.band.BandVlaggen.GUHKAMER_GAST) != Guhkamer.isGast(guh)) {
                 nl.juiced.guhs.feature.band.BandVlaggen.zet(guh, nl.juiced.guhs.feature.band.BandVlaggen.GUHKAMER_GAST, Guhkamer.isGast(guh));
             }

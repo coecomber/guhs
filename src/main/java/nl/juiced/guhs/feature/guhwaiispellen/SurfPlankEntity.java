@@ -15,10 +15,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.spelen.Niveau;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * A surfplankje on the waves of Guhwai'i (3.0): Lilo-guh's loaned board that you stand on (or Lilo-guh's own, with her
@@ -132,7 +132,7 @@ public class SurfPlankEntity extends Entity implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide && ++wees > 60) {
+        if (!level().isClientSide() && ++wees > 60) {
             discard();                                   // (its game is over or gone)
         }
     }

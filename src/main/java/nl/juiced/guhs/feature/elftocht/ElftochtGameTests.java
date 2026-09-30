@@ -6,7 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -21,8 +21,6 @@ import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -37,6 +35,7 @@ import nl.juiced.guhs.quest.Scorebord;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * De Elf-Guhjestocht: the rewards (+1 per speed mark), starting the tour (skates, card, start line, countdown), the
  * fixed stamp order and split colours, the finish (elfstempels, the kruisje only once, the board, the advancement),
@@ -44,8 +43,6 @@ import nl.juiced.guhs.registry.ModItems;
  * Stempelguh's village, the shop and clothing sources, protection, a tamed Pinguh coming along, and the structure type,
  * its placement and noise.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class ElftochtGameTests {
     private static final String BAAN = "elftocht_test_baan";
     private static final String EMPTY = "empty";
@@ -84,7 +81,7 @@ public class ElftochtGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         Vec3 at = op(helper, x, z);
-        p.moveTo(at.x, at.y, at.z);
+        p.snapTo(at.x, at.y, at.z);
         var saved = GuhQuests.saved(p);
         for (String key : new String[]{ElftochtTocht.PB, ElftochtTocht.BESTE, ElftochtTocht.RITTEN, ElftochtTocht.KRUISJE}) {
             saved.remove(key);
@@ -101,7 +98,7 @@ public class ElftochtGameTests {
 
     private static int tel(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -112,7 +109,7 @@ public class ElftochtGameTests {
     // --- the rules ------------------------------------------------------------------------------------------------------
 
     /** Always 12 elfstempels, +2 for every speed mark beaten (2.10.1: more generous; each rule is +2), and the split colours. */
-    @GameTest(template = EMPTY, batch = "elftocht_regels")
+    @GuhTest(template = EMPTY, batch = "elftocht_regels")
     public static void elftochtBeloningPerSnelheidsgrens(GameTestHelper helper) {
         helper.assertTrue(ElftochtTocht.munten(ElftochtTocht.MAX_TICKS) == ElftochtTocht.BASIS && ElftochtTocht.BASIS == 12, "a slow tour: 12");
         helper.assertTrue(ElftochtTocht.PER_GRENS == 2 && ElftochtTocht.EERSTE_KEER == 5, "+2 per mark, +5 the first time");
@@ -134,7 +131,7 @@ public class ElftochtGameTests {
     // --- the tour -------------------------------------------------------------------------------------------------------
 
     /** Schaatsmeester Guhglij lends skates and a card, puts you on the start line; the stamps only count in the right order. */
-    @GameTest(template = BAAN, batch = "elftocht_start", timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = "elftocht_start", timeoutTicks = 200)
     public static void elftochtStartEnStempelvolgorde(GameTestHelper helper) {
         GuhNpcEntity meester = npc(helper, GuhNpcEntity.Kind.SCHAATSMEESTERGUH, 0);
         ServerPlayer p = speler(helper, 3, 4);
@@ -152,7 +149,7 @@ public class ElftochtGameTests {
         helper.assertTrue(ElftochtTocht.stempel(snuh, p, 2), "Snuh first: PLOF");
         helper.assertTrue(ElftochtTocht.rit(p).volgende() == 1 && ElftochtTocht.rit(p).splits()[0] == 400, "the split");
         helper.assertFalse(ElftochtTocht.stempel(snuh, p, 2), "the same stamp twice doesn't count");
-        ItemStack kaart = p.getInventory().items.stream().filter(s -> s.is(ElftochtFeature.STEMPELKAART.get())).findFirst().orElseThrow();
+        ItemStack kaart = p.getInventory().getNonEquipmentItems().stream().filter(s -> s.is(ElftochtFeature.STEMPELKAART.get())).findFirst().orElseThrow();
         helper.assertTrue(StempelkaartItem.stempels(kaart) == 1, "the card has one stamp");
         helper.assertTrue(ElftochtTocht.stempel(ijlguh, p, 3), "then IJlguh");
         weg(helper, p);
@@ -160,7 +157,7 @@ public class ElftochtGameTests {
     }
 
     /** The finish: elfstempels (12 + speed, +5 the first time), the kruisje only the first time, the board, the advancement; the loan ends. */
-    @GameTest(template = BAAN, batch = "elftocht_finish", timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = "elftocht_finish", timeoutTicks = 200)
     public static void elftochtFinishBeloningEnKruisje(GameTestHelper helper) {
         GuhNpcEntity meester = npc(helper, GuhNpcEntity.Kind.SCHAATSMEESTERGUH, 0);
         GuhNpcEntity guhwarden = npc(helper, GuhNpcEntity.Kind.STEMPELGUH, 1);
@@ -175,11 +172,11 @@ public class ElftochtGameTests {
         helper.assertTrue(tel(p, ElftochtFeature.ELFSTEMPEL.get()) == 25, "12 + 8 + 5 elfstempels: " + tel(p, ElftochtFeature.ELFSTEMPEL.get()));
         helper.assertTrue(tel(p, ElftochtFeature.KRUISJE_ITEM.get()) == 1, "the Elf-Guhjeskruisje");
         helper.assertTrue(tel(p, ElftochtFeature.SCHAATSEN.get()) == 0 && tel(p, ElftochtFeature.STEMPELKAART.get()) == 0, "skates and card back");
-        helper.assertTrue(Scorebord.top(p.server, ElftochtTocht.BOARD).stream().anyMatch(e -> e.player().equals(p.getUUID()) && e.score() == snel),
+        helper.assertTrue(Scorebord.top(p.level().getServer(), ElftochtTocht.BOARD).stream().anyMatch(e -> e.player().equals(p.getUUID()) && e.score() == snel),
                 "on the board");
         helper.assertTrue(ElftochtVoortgang.heeft(p, "elftocht_uitgereden") && ElftochtVoortgang.heeft(p, "elftocht_snel"), "the advancements");
-        helper.assertTrue(GuhQuests.saved(p).getIntArray(ElftochtTocht.PB).length == 11
-                && GuhQuests.saved(p).getIntArray(ElftochtTocht.PB)[10] == snel, "the best tour's splits");
+        helper.assertTrue(GuhQuests.saved(p).getIntArray(ElftochtTocht.PB).orElse(new int[0]).length == 11
+                && GuhQuests.saved(p).getIntArray(ElftochtTocht.PB).orElse(new int[0])[10] == snel, "the best tour's splits");
         // a second, slow tour: 12 elfstempels, no second kruisje, the best splits stay
         helper.assertTrue(ElftochtTocht.start(meester, p, false), "start 2");
         ElftochtTocht.testStempels(p, 10);
@@ -187,8 +184,8 @@ public class ElftochtGameTests {
         helper.assertTrue(ElftochtTocht.stempel(guhwarden, p, 1), "finish 2");
         helper.assertTrue(tel(p, ElftochtFeature.ELFSTEMPEL.get()) == 25 + 12, "12 more: " + tel(p, ElftochtFeature.ELFSTEMPEL.get()));
         helper.assertTrue(tel(p, ElftochtFeature.KRUISJE_ITEM.get()) == 1, "still one kruisje");
-        helper.assertTrue(GuhQuests.saved(p).getIntArray(ElftochtTocht.PB)[10] == snel, "the record stays");
-        helper.assertTrue(GuhQuests.saved(p).getInt(ElftochtTocht.RITTEN) == 2, "two tours");
+        helper.assertTrue(GuhQuests.saved(p).getIntArray(ElftochtTocht.PB).orElse(new int[0])[10] == snel, "the record stays");
+        helper.assertTrue(GuhQuests.saved(p).getIntOr(ElftochtTocht.RITTEN, 0) == 2, "two tours");
         weg(helper, p);
         helper.succeed();
     }
@@ -196,7 +193,7 @@ public class ElftochtGameTests {
     /** The whole Elf-Guhjestocht is the tour (DESIGN 2.10 §9.8): in the far corner of its square, much farther from the start
      *  than the old circle of 220, you keep your skates; a little over the edge still counts; only well outside it, and
      *  after a few seconds of grace (coming back in time resets it), do the skates go back. */
-    @GameTest(template = BAAN, batch = "elftocht_gebied", timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = "elftocht_gebied", timeoutTicks = 200)
     public static void elftochtSchaatsenOpDeHeleTocht(GameTestHelper helper) {
         GuhNpcEntity meester = npc(helper, GuhNpcEntity.Kind.SCHAATSMEESTERGUH, 0);
         ServerPlayer p = speler(helper, 3, 4);
@@ -238,7 +235,7 @@ public class ElftochtGameTests {
     }
 
     /** Free skating: skates, no card, no stamps; "Stoppen" takes the skates back. Friends ride at the same time. */
-    @GameTest(template = BAAN, batch = "elftocht_vrij", timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = "elftocht_vrij", timeoutTicks = 200)
     public static void elftochtVrijSchaatsenEnVrienden(GameTestHelper helper) {
         GuhNpcEntity meester = npc(helper, GuhNpcEntity.Kind.SCHAATSMEESTERGUH, 0);
         ServerPlayer p = speler(helper, 3, 4), vriend = speler(helper, 4, 4);
@@ -257,16 +254,16 @@ public class ElftochtGameTests {
     }
 
     /** With skates on ice you're fast; off the ice (grass) you walk; without skates nothing changes. */
-    @GameTest(template = BAAN, batch = "elftocht_schaatsen", timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = "elftocht_schaatsen", timeoutTicks = 200)
     public static void elftochtSchaatsenGlijdenOpIjs(GameTestHelper helper) {
         GuhNpcEntity meester = npc(helper, GuhNpcEntity.Kind.SCHAATSMEESTERGUH, 0);
         ServerPlayer p = speler(helper, 6, 8);
         ElftochtTocht.start(meester, p, true);
-        ItemStack skates = p.getInventory().items.stream().filter(s -> s.is(ElftochtFeature.SCHAATSEN.get())).findFirst().orElseThrow();
+        ItemStack skates = p.getInventory().getNonEquipmentItems().stream().filter(s -> s.is(ElftochtFeature.SCHAATSEN.get())).findFirst().orElseThrow();
         p.setItemInHand(InteractionHand.MAIN_HAND, skates.copy());
         skates.setCount(0);
         Vec3 ijs = op(helper, 6, 8);
-        p.moveTo(ijs.x, ijs.y, ijs.z);
+        p.snapTo(ijs.x, ijs.y, ijs.z);
         p.setOnGround(true);
         double basis = p.getAttributeValue(Attributes.MOVEMENT_SPEED);
         ElftochtSchaatsen.tick(p);
@@ -274,12 +271,12 @@ public class ElftochtGameTests {
         helper.assertTrue(p.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(ElftochtSchaatsen.MODIFIER)
                 && p.getAttributeValue(Attributes.MOVEMENT_SPEED) > basis * 1.3, "faster on the ice");
         Vec3 gras = op(helper, 6, 0);
-        p.moveTo(gras.x, gras.y, gras.z);
+        p.snapTo(gras.x, gras.y, gras.z);
         p.setOnGround(true);
         p.tickCount += ElftochtSchaatsen.SPRONG + 5;
         ElftochtSchaatsen.tick(p);
         helper.assertFalse(p.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(ElftochtSchaatsen.MODIFIER), "walking on the grass");
-        p.moveTo(ijs.x, ijs.y, ijs.z);
+        p.snapTo(ijs.x, ijs.y, ijs.z);
         p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         ElftochtSchaatsen.tick(p);
         helper.assertFalse(ElftochtSchaatsen.schaatst(p), "no skates, no skating");
@@ -288,7 +285,7 @@ public class ElftochtGameTests {
     }
 
     /** The stall's tray gives a warm drink (then it's still too hot for a while); drinking it gives the speed boost. */
-    @GameTest(template = BAAN, batch = "elftocht_kopjes", timeoutTicks = 100)
+    @GuhTest(template = BAAN, batch = "elftocht_kopjes", timeoutTicks = 100)
     public static void elftochtWarmeChocovetGeeftBoost(GameTestHelper helper) {
         ServerPlayer p = speler(helper, 19, 13);
         BlockPos kopjes = blok(helper, 20, 2, 12);
@@ -305,7 +302,7 @@ public class ElftochtGameTests {
     }
 
     /** The lampions and vuurkorven light up at night and go out in the morning. */
-    @GameTest(template = BAAN, batch = "elftocht_licht", timeoutTicks = 100)
+    @GuhTest(template = BAAN, batch = "elftocht_licht", timeoutTicks = 100)
     public static void elftochtLichtenAanInDeNacht(GameTestHelper helper) {
         var level = helper.getLevel();
         long was = level.getDayTime();
@@ -330,10 +327,10 @@ public class ElftochtGameTests {
     }
 
     /** An audience guh cheers when a skater glides past (VAHOEG, a wave or a dance), then catches its breath. */
-    @GameTest(template = BAAN, batch = "elftocht_publiek", timeoutTicks = 100)
+    @GuhTest(template = BAAN, batch = "elftocht_publiek", timeoutTicks = 100)
     public static void elftochtPubliekJuichtVoorSchaatsers(GameTestHelper helper) {
         List<GuhEntity> publiek = helper.getLevel().getEntitiesOfClass(GuhEntity.class, helper.getBounds().inflate(1),
-                g -> g.getTags().contains(ElftochtPubliek.TAG));
+                g -> g.entityTags().contains(ElftochtPubliek.TAG));
         helper.assertTrue(publiek.size() == 1, "one audience guh: " + publiek.size());
         GuhEntity guh = publiek.get(0);
         GuhNpcEntity meester = npc(helper, GuhNpcEntity.Kind.SCHAATSMEESTERGUH, 0);
@@ -341,7 +338,7 @@ public class ElftochtGameTests {
         helper.assertTrue(ElftochtPubliek.schaatserBij(guh) == null, "nobody skating yet");
         ElftochtTocht.start(meester, p, true);
         Vec3 bij = op(helper, 12, 8);
-        p.moveTo(bij.x, bij.y, bij.z);
+        p.snapTo(bij.x, bij.y, bij.z);
         p.setDeltaMovement(0.35, 0, 0);
         helper.assertTrue(ElftochtPubliek.schaatserBij(guh) == p, "a skater gliding past");
         // (a guh only starts an emote standing on the ground: give it a moment to land after the template placed it)
@@ -354,7 +351,7 @@ public class ElftochtGameTests {
     }
 
     /** A Stempelguh knows its village from its tag and is called after it. */
-    @GameTest(template = BAAN, batch = "elftocht_stempelguh", timeoutTicks = 100)
+    @GuhTest(template = BAAN, batch = "elftocht_stempelguh", timeoutTicks = 100)
     public static void elftochtStempelguhKentZijnDorp(GameTestHelper helper) {
         GuhNpcEntity snuh = npc(helper, GuhNpcEntity.Kind.STEMPELGUH, 2);
         helper.assertTrue(StempelRole.dorp(snuh) == 2, "village 2");
@@ -364,7 +361,7 @@ public class ElftochtGameTests {
     }
 
     /** Guhglij's shop: the four tour clothes for elfstempels (their only source), warm drinks and lamps; loaned things are loaned. */
-    @GameTest(template = BAAN, batch = "elftocht_winkel", timeoutTicks = 100)
+    @GuhTest(template = BAAN, batch = "elftocht_winkel", timeoutTicks = 100)
     public static void elftochtWinkelEnKledingbronnen(GameTestHelper helper) {
         GuhNpcEntity meester = npc(helper, GuhNpcEntity.Kind.SCHAATSMEESTERGUH, 0);
         var offers = ElftochtFeature.schaatsmeester().offers(meester);
@@ -381,7 +378,7 @@ public class ElftochtGameTests {
     }
 
     /** The tour can't be broken (survival), creative may. */
-    @GameTest(template = EMPTY, batch = "elftocht_regels")
+    @GuhTest(template = EMPTY, batch = "elftocht_regels")
     public static void elftochtBescherming(GameTestHelper helper) {
         ServerPlayer p = speler(helper, 1, 1);
         helper.assertTrue(ElftochtProtection.denied(p, true), "no breaking the tour");
@@ -393,20 +390,20 @@ public class ElftochtGameTests {
     }
 
     /** A tamed Pinguh of a skater comes along (never gets lost behind). */
-    @GameTest(template = BAAN, batch = "elftocht_pinguh", timeoutTicks = 100)
+    @GuhTest(template = BAAN, batch = "elftocht_pinguh", timeoutTicks = 100)
     public static void elftochtPinguhGlijdtMee(GameTestHelper helper) {
         GuhNpcEntity meester = npc(helper, GuhNpcEntity.Kind.SCHAATSMEESTERGUH, 0);
         ServerPlayer p = speler(helper, 3, 8);
         ElftochtTocht.start(meester, p, true);
-        GuhEntity pinguh = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity pinguh = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(pinguh != null, "a guh");
         Vec3 ver = op(helper, 23, 14).add(20, 0, 0);
-        pinguh.moveTo(ver.x, ver.y, ver.z);
+        pinguh.snapTo(ver.x, ver.y, ver.z);
         pinguh.setVariant(GuhVariant.PINGUH);
         pinguh.tame(p);
         helper.getLevel().addFreshEntity(pinguh);
         Vec3 bij = op(helper, 3, 8);
-        p.moveTo(bij.x, bij.y, bij.z);
+        p.snapTo(bij.x, bij.y, bij.z);
         ElftochtPubliek.pinguhs(p);
         helper.assertTrue(pinguh.distanceTo(p) < 5, "the Pinguh came along: " + pinguh.distanceTo(p));
         helper.assertTrue(PinguhMeeglijden.glijdtMee(pinguh), "the Pinguh belly-slides along (PinguhMeeglijden)");
@@ -420,20 +417,20 @@ public class ElftochtGameTests {
 
     /** The structure: our own type (voorrang 900, room for the 256 x 256 tour), our placement with cells, and the noise the
      *  placement makes from the seed is exactly the terrain's noise. */
-    @GameTest(template = EMPTY, batch = "elftocht_structuur", timeoutTicks = 200)
+    @GuhTest(template = EMPTY, batch = "elftocht_structuur", timeoutTicks = 200)
     public static void elftochtStructuurPlaatsingEnRuis(GameTestHelper helper) {
         var access = helper.getLevel().getServer().registryAccess();
-        var structure = access.registryOrThrow(Registries.STRUCTURE).get(ElftochtFeature.STRUCTURE);
+        var structure = access.lookupOrThrow(Registries.STRUCTURE).get(ElftochtFeature.STRUCTURE);
         helper.assertTrue(structure instanceof ElftochtStructure s && s.voorrang() == 900 && s.keepClear() >= 136, "the structure: " + structure);
         ElftochtStructure tocht = (ElftochtStructure) structure;
-        var set = access.registryOrThrow(Registries.STRUCTURE_SET).get(Guhs.id("elfguhjestocht"));
+        var set = access.lookupOrThrow(Registries.STRUCTURE_SET).get(Guhs.id("elfguhjestocht"));
         helper.assertTrue(set != null && set.placement() instanceof ElftochtPlacement p && p.spacing() == tocht.cell(), "the placement: "
                 + (set == null ? null : set.placement()));
         ElftochtPlacement placement = (ElftochtPlacement) set.placement();
         helper.assertTrue(placement.vlak().minVlak() > 0 && placement.vlak().minVlak() == tocht.vlak().minVlak()
                 && placement.vlak().zee().isPresent() && placement.vlak().knuffel().isPresent(), "the dead-flat polder rules (sea + Knuffeldal masks)");
         Holder<NormalNoise.NoiseParameters> noise = placement.noise();
-        NoiseGeneratorSettings settings = access.registryOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
         for (long seed : new long[]{1L, 20290601L, -42L}) {
             RandomState state = RandomState.create(settings, access.lookupOrThrow(Registries.NOISE), seed);
             NormalNoise terrein = state.getOrCreateNoise(noise.unwrapKey().orElseThrow());
@@ -448,10 +445,10 @@ public class ElftochtGameTests {
                 var chunk = placement.getPotentialStructureChunk(seed, c * placement.spacing(), -c * placement.spacing());
                 ElftochtPiek.Peak peak = ElftochtPiek.peak(seed, noise, placement.spacing(), c, -c);
                 ElftochtPiek.Spot spot = ElftochtPiek.spot(seed, noise, placement.vlak(), placement.spacing(), c, -c);
-                helper.assertTrue(chunk.x == spot.x() >> 4 && chunk.z == spot.z() >> 4, "the spot's chunk");
+                helper.assertTrue(chunk.x() == spot.x() >> 4 && chunk.z() == spot.z() >> 4, "the spot's chunk");
                 helper.assertTrue(Math.abs(spot.x() - peak.x()) <= ElftochtPiek.ZOEK && Math.abs(spot.z() - peak.z()) <= ElftochtPiek.ZOEK, "near the peak");
-                helper.assertTrue(Math.floorDiv(chunk.x, placement.spacing()) == c && Math.floorDiv(chunk.z, placement.spacing()) == -c, "inside its cell");
-                ElftochtPiek.Spot plek = tocht.plek(seed, chunk.x, chunk.z);
+                helper.assertTrue(Math.floorDiv(chunk.x(), placement.spacing()) == c && Math.floorDiv(chunk.z(), placement.spacing()) == -c, "inside its cell");
+                ElftochtPiek.Spot plek = tocht.plek(seed, chunk.x(), chunk.z());
                 helper.assertTrue(plek == null || plek.equals(spot) && spot.vlak() >= placement.vlak().minVlak(), "the structure agrees: " + plek);
             }
         }

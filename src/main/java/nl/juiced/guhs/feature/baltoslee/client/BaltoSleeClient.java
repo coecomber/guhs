@@ -6,7 +6,7 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -96,7 +96,7 @@ public final class BaltoSleeClient {
 
         @Override
         protected int getLightColor(float partialTick) {
-            return LightTexture.FULL_BRIGHT;
+            return LightCoordsUtil.FULL_BRIGHT;
         }
 
         @Override

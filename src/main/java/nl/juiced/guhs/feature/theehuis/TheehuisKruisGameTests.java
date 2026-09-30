@@ -2,15 +2,13 @@ package nl.juiced.guhs.feature.theehuis;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -21,8 +19,6 @@ import nl.juiced.guhs.registry.ModEntities;
  * 2.8 merge QA (cross-slice, see gametest.KnuffeldalKruisGameTests): the theekransje with real products of the other
  * slices. In this package because the kransje's guests are package-private.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class TheehuisKruisGameTests {
     private static final String THEEKAMER = "theehuis_test_kamer";
 
@@ -36,7 +32,7 @@ public class TheehuisKruisGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -45,7 +41,7 @@ public class TheehuisKruisGameTests {
     }
 
     /** Home-baked at the theekransje: a real bakery pastry counts as zelfgebakken, a real kaasmelkthee as a special tea. */
-    @GameTest(template = THEEKAMER)
+    @GuhTest(template = THEEKAMER)
     public static void theehuisKruisZelfgebakkenUitDeBakkerij(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(10, 2, 10));
         GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(12, 2, 12));

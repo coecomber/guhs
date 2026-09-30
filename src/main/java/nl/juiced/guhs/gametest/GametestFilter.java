@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 
 /**
  * Runs only some gametests (2.9, for the slices): {@code ./gradlew runGameTestServer -Pgt=KnusGameTests,HighscoresGameTests}
@@ -31,7 +31,7 @@ public final class GametestFilter {
 
     /** Does this test method pass the filter (always true without a filter; non-test methods always pass)? */
     public static boolean allowed(Method method) {
-        GameTest test = method.getAnnotation(GameTest.class);
+        GuhTest test = method.getAnnotation(GuhTest.class);
         if (!active() || test == null) {
             return true;
         }

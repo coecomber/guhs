@@ -26,6 +26,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * A piep-maatje you picked up (sneak + right-click it with an empty hand, or "Oppakken" in its menu; owner only): the whole
  * creature (name, owner, health, age, its menu settings, its rest timer...) rides along in the item's custom data, like the
@@ -71,11 +72,11 @@ public class PiepDierItem extends Item {
     public static boolean pakOp(PiepMaatje maatje, ServerPlayer player) {
         TamableAnimal dier = maatje.dier();
         if (!dier.isAlive() || !dier.isTame() || !dier.isOwnedBy(player)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.piep.niet_jouw_maatje").withStyle(ChatFormatting.GRAY), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.piep.niet_jouw_maatje").withStyle(ChatFormatting.GRAY));
             return false;
         }
         if (maatje.isBezig()) {
-            player.displayClientMessage(Component.translatable("gui.guhs.piep.even_bezig", dier.getDisplayName()).withStyle(ChatFormatting.GRAY), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.piep.even_bezig", dier.getDisplayName()).withStyle(ChatFormatting.GRAY));
             return false;
         }
         if (dier.isLeashed()) {
@@ -89,8 +90,8 @@ public class PiepDierItem extends Item {
         if (!player.getInventory().add(stack)) {
             player.drop(stack, false);
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.piep.opgepakt." + maatje.soort(), dier.getDisplayName())
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.piep.opgepakt." + maatje.soort(), dier.getDisplayName())
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -99,7 +100,7 @@ public class PiepDierItem extends Item {
     /** A fresh creature from an item (not yet in the world); an item without data gives a new, wild one. */
     @Nullable
     public static <T extends TamableAnimal> T naar(ItemStack stack, Level level, EntityType<T> type) {
-        T dier = type.create(level);
+        T dier = type.create(level, EntitySpawnReason.TRIGGERED);
         if (dier == null) {
             return null;
         }
@@ -121,7 +122,7 @@ public class PiepDierItem extends Item {
         if (dier == null) {
             return null;
         }
-        dier.moveTo(at.x, at.y, at.z, yaw, 0);
+        dier.snapTo(at.x, at.y, at.z, yaw, 0);
         dier.setYHeadRot(yaw);
         dier.setYBodyRot(yaw);
         dier.setDeltaMovement(Vec3.ZERO);
@@ -152,8 +153,8 @@ public class PiepDierItem extends Item {
         }
         stack.shrink(1);
         if (player instanceof ServerPlayer sp && dier instanceof PiepMaatje m) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.piep.neergezet." + m.soort(), dier.getDisplayName())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.piep.neergezet." + m.soort(), dier.getDisplayName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return InteractionResult.CONSUME;
     }
@@ -161,7 +162,7 @@ public class PiepDierItem extends Item {
     /** 2.10: "waar is mijn guh": in someone's pockets (checked every 5 seconds). */
     @Override
     public void inventoryTick(ItemStack stack, Level level, net.minecraft.world.entity.Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && entity instanceof Player holder && (level.getGameTime() + slot) % 100 == 0) {
+        if (!level.isClientSide() && entity instanceof Player holder && (level.getGameTime() + slot) % 100 == 0) {
             nl.juiced.guhs.feature.band.GuhVolger.inZakken(stack, holder);
         }
     }
@@ -169,7 +170,7 @@ public class PiepDierItem extends Item {
     /** 2.10: "waar is mijn guh": dropped on the ground. */
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, net.minecraft.world.entity.item.ItemEntity entity) {
-        if (!entity.level().isClientSide && entity.tickCount % 100 == 1) {
+        if (!entity.level().isClientSide() && entity.tickCount % 100 == 1) {
             nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.ITEM_GROND, entity.level().dimension(), entity.blockPosition(), "", entity.level().getGameTime());
         }
         return false;

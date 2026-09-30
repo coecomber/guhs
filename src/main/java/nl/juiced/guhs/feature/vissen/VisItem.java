@@ -48,12 +48,12 @@ public class VisItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        if (!level.isClientSide && soort == VisSoort.GUHPUFFER) {
+        if (!level.isClientSide() && soort == VisSoort.GUHPUFFER) {
             entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 30, 1));
             entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 6));
             level.playSound(null, entity.blockPosition(), SoundEvents.PUFFER_FISH_BLOW_UP, SoundSource.PLAYERS, 1f, 1.2f);
             if (entity instanceof ServerPlayer player) {
-                player.displayClientMessage(Component.translatable("item.guhs.vissen.puffer_eaten").withStyle(ChatFormatting.GREEN), true);
+                player.sendOverlayMessage(Component.translatable("item.guhs.vissen.puffer_eaten").withStyle(ChatFormatting.GREEN));
             }
         }
         return super.finishUsingItem(stack, level, entity);
@@ -81,8 +81,8 @@ public class VisItem extends Item {
                 soort.isBad() ? String.valueOf(soort.base) : "+" + soort.base).withStyle(soort.colour));
         CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (tag.contains("GuhvisVanger")) {
-            tooltip.add(Component.translatable("item.guhs.vissen.golden_caught", tag.getString("GuhvisVanger"),
-                    VisSoort.kg(tag.getInt("GuhvisGram")), tag.getInt("GuhvisNr")).withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
+            tooltip.add(Component.translatable("item.guhs.vissen.golden_caught", tag.getStringOr("GuhvisVanger", ""),
+                    VisSoort.kg(tag.getIntOr("GuhvisGram", 0)), tag.getIntOr("GuhvisNr", 0)).withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
         } else if (soort == VisSoort.GOUDEN_GUHVIS) {
             tooltip.add(Component.translatable("item.guhs.vissen.golden_collect").withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
         }

@@ -16,6 +16,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * Every player's Guhkamer (SavedData {@value #NAAM}, overworld storage): how big it is built, where its door in the maag
  * is, and its guests ("gasten"): the guhs that stay there. A guest is either in the world (in the room, while someone is
@@ -45,7 +46,7 @@ public class GuhkamerData extends SavedData {
 
         CompoundTag save() {
             CompoundTag t = new CompoundTag();
-            t.putUUID("Eigenaar", eigenaar);
+            t.store("Eigenaar", UUIDUtil.CODEC, eigenaar);
             t.putInt("Breedte", breedte);
             t.putInt("Hoogte", hoogte);
             if (maagDeur != null) {
@@ -58,15 +59,15 @@ public class GuhkamerData extends SavedData {
         }
 
         static Kamer load(CompoundTag t) {
-            Kamer k = new Kamer(t.getUUID("Eigenaar"));
-            k.breedte = t.getInt("Breedte");
-            k.hoogte = t.getInt("Hoogte");
+            Kamer k = new Kamer(t.read("Eigenaar", UUIDUtil.CODEC).orElseThrow());
+            k.breedte = t.getIntOr("Breedte", 0);
+            k.hoogte = t.getIntOr("Hoogte", 0);
             if (t.contains("MaagDeur")) {
-                k.maagDeur = BlockPos.of(t.getLong("MaagDeur"));
+                k.maagDeur = BlockPos.of(t.getLongOr("MaagDeur", 0L));
             }
-            ListTag list = t.getList("Gasten", Tag.TAG_COMPOUND);
+            ListTag list = t.getListOrEmpty("Gasten");
             for (int i = 0; i < list.size(); i++) {
-                Gast g = Gast.load(list.getCompound(i));
+                Gast g = Gast.load(list.getCompoundOrEmpty(i));
                 k.gasten.put(g.id, g);
             }
             return k;
@@ -96,7 +97,7 @@ public class GuhkamerData extends SavedData {
 
         CompoundTag save() {
             CompoundTag t = new CompoundTag();
-            t.putUUID("Id", id);
+            t.store("Id", UUIDUtil.CODEC, id);
             t.putString("Naam", naam);
             if (!data.isEmpty()) {
                 t.put("Data", data);
@@ -112,13 +113,13 @@ public class GuhkamerData extends SavedData {
         }
 
         static Gast load(CompoundTag t) {
-            Gast g = new Gast(t.getUUID("Id"), t.getString("Naam"));
-            g.data = t.getCompound("Data");
+            Gast g = new Gast(t.read("Id", UUIDUtil.CODEC).orElseThrow(), t.getStringOr("Naam", ""));
+            g.data = t.getCompoundOrEmpty("Data");
             if (t.contains("X")) {
-                g.plek = new Vec3(t.getDouble("X"), t.getDouble("Y"), t.getDouble("Z"));
+                g.plek = new Vec3(t.getDoubleOr("X", 0.0), t.getDoubleOr("Y", 0.0), t.getDoubleOr("Z", 0.0));
             }
-            g.looks = t.getCompound("Looks");
-            g.sinds = t.getLong("Sinds");
+            g.looks = t.getCompoundOrEmpty("Looks");
+            g.sinds = t.getLongOr("Sinds", 0L);
             return g;
         }
     }
@@ -164,9 +165,9 @@ public class GuhkamerData extends SavedData {
 
     public static GuhkamerData load(CompoundTag tag, HolderLookup.Provider registries) {
         GuhkamerData d = new GuhkamerData();
-        ListTag list = tag.getList("Kamers", Tag.TAG_COMPOUND);
+        ListTag list = tag.getListOrEmpty("Kamers");
         for (int i = 0; i < list.size(); i++) {
-            Kamer k = Kamer.load(list.getCompound(i));
+            Kamer k = Kamer.load(list.getCompoundOrEmpty(i));
             d.kamers.put(k.eigenaar, k);
         }
         return d;

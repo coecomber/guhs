@@ -50,7 +50,7 @@ public class KnabbelkristalItem extends Item {
             }
         }
         context.getItemInHand().shrink(1);
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

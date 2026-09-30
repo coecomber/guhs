@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.smul;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
@@ -13,8 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -27,8 +25,6 @@ import nl.juiced.guhs.registry.ModItems;
  * back), stopping early, the borrowed bowl, the shop and the protection. Most run in a small test arena (smul_testarena),
  * one in the real festival.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class SmulGameTests {
     private static final String EMPTY = "empty";
     private static final String ARENA = "smul_testarena";
@@ -47,7 +43,7 @@ public class SmulGameTests {
         ServerPlayer p = helper.makeMockServerPlayerInLevel();
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
-        p.moveTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
+        p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
         return p;
     }
 
@@ -67,11 +63,11 @@ public class SmulGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id("quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id("quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
-    @GameTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
+    @GuhTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
     public static void smulStartsWithoutOwnThingsAndProtectsYou(GameTestHelper helper) {
         GuhNpcEntity npc = smulguh(helper);
         ServerPlayer p = player(helper, npc);
@@ -107,7 +103,7 @@ public class SmulGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
+    @GuhTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
     public static void smulCatchingScoresCombosGoldAndMikaVet(GameTestHelper helper) {
         GuhNpcEntity npc = smulguh(helper);
         ServerPlayer p = player(helper, npc);
@@ -144,7 +140,7 @@ public class SmulGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
+    @GuhTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
     public static void smulEndGivesMuntenRecordAndTakesTheBowl(GameTestHelper helper) {
         GuhNpcEntity npc = smulguh(helper);
         ServerPlayer p = player(helper, npc);
@@ -164,16 +160,16 @@ public class SmulGameTests {
                     helper.assertTrue(count(p, SmulFeature.SMULMUNT.get()) == munten + SmulGame.FIRST_BONUS, "plus the welcome bonus the first time");
                     helper.assertTrue(count(p, ModItems.GUH_TAART.get()) == 1, "and a guh cake");
                     helper.assertTrue(SmulGame.best(p) == 130, "a record");
-                    var top = nl.juiced.guhs.quest.Scorebord.top(p.server, SmulGame.BOARD);
+                    var top = nl.juiced.guhs.quest.Scorebord.top(p.level().getServer(), SmulGame.BOARD);
                     helper.assertTrue(top.stream().anyMatch(e -> e.player().equals(p.getUUID()) && e.score() == 130)
                             || (top.size() == 3 && top.stream().allMatch(e -> e.score() >= 130)), "the score went to the world's top 3: " + top);
                     helper.assertTrue(!helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class, npc.getBoundingBox().inflate(1, 4, 1),
-                            d -> d.getTags().contains(nl.juiced.guhs.quest.Scorebord.TAG)).isEmpty(), "and the top 3 board floats above the Smulguh");
+                            d -> d.entityTags().contains(nl.juiced.guhs.quest.Scorebord.TAG)).isEmpty(), "and the top 3 board floats above the Smulguh");
                     helper.assertTrue(advancement(p, "smul_gespeeld") && advancement(p, "smul_100") && advancement(p, "smul_goud")
                             && !advancement(p, "smul_200"), "the advancements");
                     helper.assertTrue(p.getZ() > npc.getZ() + 1.5 && Math.abs(p.getY() - npc.getY()) < 1.01, "back in front of the Smulguh, on the floor: " + p.position());
                     helper.assertTrue(SmulGame.munten(0) == 0 && SmulGame.munten(1) == 2 && SmulGame.munten(250) == 8, "nothing for standing still, 2 for playing, 8 at most");
-                    p.moveTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
+                    p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
                     helper.assertTrue(SmulGame.start(npc, p), "play again");
                     SmulGame.of(npc).spawning = false;
                 })
@@ -183,27 +179,27 @@ public class SmulGameTests {
                     second.score = 50;
                     second.finish(npc, p);
                     helper.assertTrue(count(p, SmulFeature.SMULMUNT.get()) == SmulGame.munten(130) + SmulGame.FIRST_BONUS + SmulGame.munten(50), "50 points: 4 more, no bonus");
-                    helper.assertTrue(SmulGame.best(p) == 130 && GuhQuests.saved(p).getInt(SmulGame.GAMES_KEY) == 2, "the record stays, 2 games");
+                    helper.assertTrue(SmulGame.best(p) == 130 && GuhQuests.saved(p).getIntOr(SmulGame.GAMES_KEY, 0) == 2, "the record stays, 2 games");
                     leave(helper, p);
                 })
                 .thenSucceed();
     }
 
-    @GameTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
+    @GuhTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
     public static void smulWalkingOffLoggingOutOrDyingStopsWithoutMunten(GameTestHelper helper) {
         GuhNpcEntity npc = smulguh(helper);
         ServerPlayer p = player(helper, npc);
         SmulGame.start(npc, p);
         helper.startSequence()
-                .thenExecuteAfter(70, () -> p.moveTo(p.getX() + 30, p.getY(), p.getZ()))
+                .thenExecuteAfter(70, () -> p.snapTo(p.getX() + 30, p.getY(), p.getZ()))
                 .thenExecuteAfter(2, () -> {
                     helper.assertTrue(!SmulGame.isPlaying(p) && SmulGame.of(npc) == null && !hasBowl(p), "walking off stops the game");
                     helper.assertTrue(count(p, SmulFeature.SMULMUNT.get()) == 0 && SmulGame.best(p) == 0, "without smulmunten or a record");
-                    p.moveTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
+                    p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
                     SmulGame.start(npc, p);
                     SmulGame.onLogout(new net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent(p));
                     helper.assertTrue(!SmulGame.isPlaying(p) && SmulGame.of(npc) == null && !hasBowl(p), "logging out stops it");
-                    p.moveTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
+                    p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
                     SmulGame.start(npc, p);
                     SmulGame.onDeath(new net.neoforged.neoforge.event.entity.living.LivingDeathEvent(p, helper.getLevel().damageSources().fellOutOfWorld()));
                     helper.assertTrue(!SmulGame.isPlaying(p) && SmulGame.of(npc) == null && !hasBowl(p), "dying stops it (before the bowl drops)");
@@ -212,7 +208,7 @@ public class SmulGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = EMPTY, batch = BATCH)
+    @GuhTest(template = EMPTY, batch = BATCH)
     public static void smulschaalCantBeKept(GameTestHelper helper) {
         ServerPlayer p = helper.makeMockServerPlayerInLevel();
         p.getInventory().clearContent();
@@ -238,7 +234,7 @@ public class SmulGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY, batch = BATCH)
+    @GuhTest(template = EMPTY, batch = BATCH)
     public static void smulguhSellsTheSmulOutfitForSmulmunten(GameTestHelper helper) {
         GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(2, 2, 2));
         npc.setKind(GuhNpcEntity.Kind.SMULGUH);
@@ -253,7 +249,7 @@ public class SmulGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY, batch = BATCH)
+    @GuhTest(template = EMPTY, batch = BATCH)
     public static void smulFestijnCantBeBrokenBySurvivalPlayers(GameTestHelper helper) {
         var survival = helper.makeMockPlayer(GameType.SURVIVAL);
         var creative = helper.makeMockPlayer(GameType.CREATIVE);
@@ -264,7 +260,7 @@ public class SmulGameTests {
     }
 
     /** The real festival: the Smulguh finds her arena (24x24, four chutes), food falls inside it, you come out on the floor. */
-    @GameTest(template = "vadsig_eetfestijn", timeoutTicks = 400, batch = BATCH)
+    @GuhTest(template = "vadsig_eetfestijn", timeoutTicks = 400, batch = BATCH)
     public static void smulRealFestijnArenaWorks(GameTestHelper helper) {
         GuhNpcEntity npc = smulguh(helper);
         SmulGame.Arena arena = SmulGame.arena(npc);
@@ -293,7 +289,7 @@ public class SmulGameTests {
     // --- 2.9: makkelijk / medium / lastig -----------------------------------------------------------------------------------
 
     /** The levels: more Mika-vet and faster food on lastig, less and slower on makkelijk (medium = the old game). */
-    @GameTest(template = EMPTY, batch = BATCH)
+    @GuhTest(template = EMPTY, batch = BATCH)
     public static void smulLevelsChangeMikaVetAndFallSpeed(GameTestHelper helper) {
         var m = nl.juiced.guhs.feature.spelen.Niveau.MAKKELIJK;
         var n = nl.juiced.guhs.feature.spelen.Niveau.MEDIUM;
@@ -320,7 +316,7 @@ public class SmulGameTests {
     }
 
     /** A game on lastig: half as many smulmunten more, its own record and board, and the lastig advancement. */
-    @GameTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
+    @GuhTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
     public static void smulLastigGivesMoreMuntenAndItsOwnBoard(GameTestHelper helper) {
         GuhNpcEntity npc = smulguh(helper);
         ServerPlayer p = player(helper, npc);
@@ -341,7 +337,7 @@ public class SmulGameTests {
                     helper.assertTrue(munten == 9, "130 points on lastig: 6 smulmunten become 9: " + munten);
                     helper.assertTrue(count(p, SmulFeature.SMULMUNT.get()) == munten + SmulGame.FIRST_BONUS, "smulmunten: " + count(p, SmulFeature.SMULMUNT.get()));
                     helper.assertTrue(SmulGame.best(p, lastig) == 130 && SmulGame.best(p) == 0, "the lastig record, medium untouched");
-                    helper.assertTrue(nl.juiced.guhs.quest.Scorebord.top(p.server, "smul_punten_lastig").stream()
+                    helper.assertTrue(nl.juiced.guhs.quest.Scorebord.top(p.level().getServer(), "smul_punten_lastig").stream()
                             .anyMatch(e -> e.player().equals(p.getUUID()) && e.score() == 130), "on the lastig board");
                     helper.assertTrue(nl.juiced.guhs.feature.klassiekers.Klassiekers.done(p, "grote_guhspelen/klassiekers_smul_lastig"),
                             "the lastig advancement");

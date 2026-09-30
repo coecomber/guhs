@@ -9,7 +9,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -41,7 +41,7 @@ public class RegioJigsawStructure extends Structure implements BouwRuimte.Ruimte
     public static final MapCodec<RegioJigsawStructure> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             settingsCodec(i),
             StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(s -> s.startPool),
-            ResourceLocation.CODEC.fieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
+            Identifier.CODEC.fieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
             RegioPlek.CODEC.fieldOf("plek").forGetter(s -> s.plek),
             Codec.INT.optionalFieldOf("keep_clear", 0).forGetter(s -> s.keepClear),
             Codec.INT.optionalFieldOf("voorrang").forGetter(s -> s.voorrang),
@@ -53,7 +53,7 @@ public class RegioJigsawStructure extends Structure implements BouwRuimte.Ruimte
     ).apply(i, RegioJigsawStructure::new));
 
     private final Holder<StructureTemplatePool> startPool;
-    private final ResourceLocation startJigsawName;
+    private final Identifier startJigsawName;
     private final RegioPlek plek;
     private final int keepClear;
     private final Optional<Integer> voorrang;
@@ -63,7 +63,7 @@ public class RegioJigsawStructure extends Structure implements BouwRuimte.Ruimte
     private final int diep;
     private final int waterLevel;
 
-    public RegioJigsawStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, ResourceLocation startJigsawName, RegioPlek plek,
+    public RegioJigsawStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, Identifier startJigsawName, RegioPlek plek,
                                 int keepClear, Optional<Integer> voorrang, Optional<Integer> vasteY, int grondY, int reach, int diep, int waterLevel) {
         super(settings);
         this.startPool = startPool;
@@ -85,8 +85,8 @@ public class RegioJigsawStructure extends Structure implements BouwRuimte.Ruimte
     @Override
     protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
         ChunkPos chunk = context.chunkPos();
-        Optional<RegioPlek.Plek> spot = plek.plekVoorChunk(context.seed(), chunk.x, chunk.z);
-        if (spot.isEmpty() || (spot.get().x() >> 4) != chunk.x || (spot.get().z() >> 4) != chunk.z) {
+        Optional<RegioPlek.Plek> spot = plek.plekVoorChunk(context.seed(), chunk.x(), chunk.z());
+        if (spot.isEmpty() || (spot.get().x() >> 4) != chunk.x() || (spot.get().z() >> 4) != chunk.z()) {
             return Optional.empty();
         }
         int x = spot.get().x(), z = spot.get().z();
@@ -132,7 +132,7 @@ public class RegioJigsawStructure extends Structure implements BouwRuimte.Ruimte
         BlockPos jig = null;
         List<StructureTemplate.StructureBlockInfo> jigsaws = element.getShuffledJigsawBlocks(manager, pos, Rotation.NONE, context.random());
         for (StructureTemplate.StructureBlockInfo info : jigsaws) {
-            if (info.nbt() != null && startJigsawName.equals(ResourceLocation.tryParse(info.nbt().getString("name")))) {
+            if (info.nbt() != null && startJigsawName.equals(Identifier.tryParse(info.nbt().getStringOr("name", "")))) {
                 jig = info.pos();
                 break;
             }

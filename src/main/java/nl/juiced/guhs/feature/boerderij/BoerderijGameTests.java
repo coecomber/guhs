@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -22,8 +22,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.entity.GuhVariant;
@@ -38,14 +36,13 @@ import nl.juiced.guhs.quest.GuhDex;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the Guhboerderij: care makes the animals content and they give their products (pluiswol, a knabbelei in
  * the nest, kaasmelk with a bottle), the voerbak feeds them by itself, Boerin Hooibaal's chores and shop, the Knus
  * counters and milestones, the tags, the Guhdex pages and the protection. (Template boerderij_test_wei: a grass floor at
  * helper y = 1.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class BoerderijGameTests {
     private static final String WEI = "boerderij_test_wei";
 
@@ -55,7 +52,7 @@ public class BoerderijGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(1, 2, 1));
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return p;
     }
 
@@ -66,13 +63,13 @@ public class BoerderijGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
     private static int count(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -88,7 +85,7 @@ public class BoerderijGameTests {
 
     // --- care, content, products ---------------------------------------------------------------------------------------
 
-    @GameTest(template = WEI, timeoutTicks = 100)
+    @GuhTest(template = WEI, timeoutTicks = 100)
     public static void boerderijSchaapjeWordtBlijEnGeeftPluiswol(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         GuhschaapjeEntity schaap = dier(helper, BoerderijFeature.GUHSCHAAPJE.get(), 6, 6);
@@ -116,7 +113,7 @@ public class BoerderijGameTests {
         });
     }
 
-    @GameTest(template = WEI)
+    @GuhTest(template = WEI)
     public static void boerderijKippetjeLegtInHetNestje(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         BlockPos nest = new BlockPos(3, 2, 3);
@@ -140,7 +137,7 @@ public class BoerderijGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI)
+    @GuhTest(template = WEI)
     public static void boerderijGuhkoeGeeftKaasmelk(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         GuhkoeEntity koe = dier(helper, BoerderijFeature.GUHKOE.get(), 6, 6);
@@ -162,7 +159,7 @@ public class BoerderijGameTests {
     }
 
     /** Milked yesterday and cared for yesterday: a new day resets both (set through the saved data, the world day stays). */
-    @GameTest(template = WEI)
+    @GuhTest(template = WEI)
     public static void boerderijGuhkoeNieuweDag(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         GuhkoeEntity koe = dier(helper, BoerderijFeature.GUHKOE.get(), 6, 6);
@@ -188,7 +185,7 @@ public class BoerderijGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI)
+    @GuhTest(template = WEI)
     public static void boerderijAlleProductenEnMijlpalen(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         try {
@@ -209,7 +206,7 @@ public class BoerderijGameTests {
     }
 
     /** A hungry animal walks to a filled voerbak and eats from it by itself. */
-    @GameTest(template = WEI, timeoutTicks = 500)
+    @GuhTest(template = WEI, timeoutTicks = 500)
     public static void boerderijVoerbakVoertVanzelf(GameTestHelper helper) {
         BlockPos bak = new BlockPos(2, 2, 2);
         helper.setBlock(bak, BoerderijFeature.GUH_VOERBAK.get().defaultBlockState().setValue(GuhVoerbakBlock.VOER, 2));
@@ -225,7 +222,7 @@ public class BoerderijGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = WEI)
+    @GuhTest(template = WEI)
     public static void boerderijVoerbakVullen(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         BlockPos bak = new BlockPos(3, 2, 3);
@@ -244,7 +241,7 @@ public class BoerderijGameTests {
 
     // --- Boerin Hooibaal ------------------------------------------------------------------------------------------------
 
-    @GameTest(template = WEI)
+    @GuhTest(template = WEI)
     public static void boerderijHooibaalKlusjes(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         try {
@@ -277,19 +274,19 @@ public class BoerderijGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI)
+    @GuhTest(template = WEI)
     public static void boerderijHooibaalPraatEnVerkoopt(GameTestHelper helper) {
         ServerPlayer p = player(helper);
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(GuhNpcEntity.Kind.BOERINNEGUH);
         BlockPos at = helper.absolutePos(new BlockPos(4, 2, 4));
-        npc.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        npc.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         helper.getLevel().addFreshEntity(npc);
         try {
             var role = Features.role(GuhNpcEntity.Kind.BOERINNEGUH);
             helper.assertTrue(role instanceof Hooibaal, "Boerin Hooibaal has her own role: " + role);
             role.talk(npc, p);
-            helper.assertTrue(BoerderijVoortgang.data(p).getBoolean("Ontmoet") && Hooibaal.vandaag(p) != null, "met her; today's chore");
+            helper.assertTrue(BoerderijVoortgang.data(p).getBooleanOr("Ontmoet", false) && Hooibaal.vandaag(p) != null, "met her; today's chore");
             helper.assertTrue(advancement(p, "boerderij_hooibaal"), "the quest advancement");
             var offers = role.offers(npc);
             helper.assertTrue(offers != null && offers.stream().anyMatch(o -> o.getResult().is(BoerderijFeature.GUHBORSTEL.get()))
@@ -303,7 +300,7 @@ public class BoerderijGameTests {
 
     // --- tags, pages, protection -----------------------------------------------------------------------------------------
 
-    @GameTest(template = WEI)
+    @GuhTest(template = WEI)
     public static void boerderijTagsPaginasEnBescherming(GameTestHelper helper) {
         helper.assertTrue(new ItemStack(BoerderijFeature.PLUISWOL.get()).is(KnusTags.PLUISWOL), "pluiswol in #knus/pluiswol");
         helper.assertTrue(new ItemStack(BoerderijFeature.KNABBELEI.get()).is(KnusTags.KNABBELEI), "knabbelei in #knus/knabbelei");
@@ -347,7 +344,7 @@ public class BoerderijGameTests {
      * The protection for real (through the event handlers, the way a survival player does it): no breaking, no building,
      * no bone meal, no buckets; but planting seeds, harvesting and filling a voerbak still work. Creative may change it.
      */
-    @GameTest(template = WEI)
+    @GuhTest(template = WEI)
     public static void boerderijBeschermingVoorEchteSpelers(GameTestHelper helper) {
         var level = helper.getLevel();
         BlockPos grond = new BlockPos(4, 1, 4), gras = new BlockPos(5, 1, 5);
@@ -375,7 +372,7 @@ public class BoerderijGameTests {
             helper.assertTrue(beendermeel.getCount() == 4, "no bone meal on the farm");
             // no buckets (emptied where you look)
             BlockPos boven = helper.absolutePos(new BlockPos(8, 3, 8));
-            p.moveTo(boven.getX() + 0.5, boven.getY(), boven.getZ() + 0.5, 0f, 90f);
+            p.snapTo(boven.getX() + 0.5, boven.getY(), boven.getZ() + 0.5, 0f, 90f);
             p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.WATER_BUCKET));
             p.gameMode.useItem(p, level, p.getMainHandItem(), InteractionHand.MAIN_HAND);
             helper.assertTrue(p.getMainHandItem().is(Items.WATER_BUCKET) && helper.getBlockState(new BlockPos(8, 2, 8)).isAir(),

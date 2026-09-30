@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -15,8 +15,6 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -25,14 +23,13 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * GameTests of the guh events: the kaasregen (catching, happy guhs, the golden knabbel), the parade (route, marching,
  * the reward, cleaning up), the sterrenregen (stars, starry guhs that stay or fly back), dropping out, leftovers and the
  * scheduler. The tests run in the overworld, so they start their events directly (the dimension check is the
  * scheduler's and the command's job), with auto-join off so neighbouring tests don't join in.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class EvenementenGameTests {
     private static final String EMPTY = "empty";
 
@@ -40,7 +37,7 @@ public class EvenementenGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         Vec3 at = helper.absoluteVec(new Vec3(x + 0.5, 1, z + 0.5));
-        player.moveTo(at.x, at.y, at.z, 0, 0);
+        player.snapTo(at.x, at.y, at.z, 0, 0);
         return player;
     }
 
@@ -52,7 +49,7 @@ public class EvenementenGameTests {
 
     private static int count(ServerPlayer player, net.minecraft.world.item.Item item) {
         int n = 0;
-        for (ItemStack stack : player.getInventory().items) {
+        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
             if (stack.is(item)) {
                 n += stack.getCount();
             }
@@ -73,7 +70,7 @@ public class EvenementenGameTests {
 
     // --- kaasregen -----------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY, timeoutTicks = 120)
+    @GuhTest(template = EMPTY, timeoutTicks = 120)
     public static void kaasregenKnabbelsFallAndAreCaught(GameTestHelper helper) {
         ServerPlayer player = player(helper, 2, 2);
         Kaasregen rain = kaasregen(helper, player);
@@ -97,7 +94,7 @@ public class EvenementenGameTests {
         });
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void aGuhThatAteFromTheSkyIsEasyToTame(GameTestHelper helper) {
         ServerPlayer player = player(helper, 0, 0);
         Kaasregen rain = kaasregen(helper, player);
@@ -116,7 +113,7 @@ public class EvenementenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void goldenKnabbelTamesAWildGuhAtOnce(GameTestHelper helper) {
         ServerPlayer player = player(helper, 0, 0);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 2));
@@ -134,7 +131,7 @@ public class EvenementenGameTests {
 
     // --- the parade ----------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void paradeRouteWindsOverWalkableGround(GameTestHelper helper) {
         RandomSource random = RandomSource.create(5);
         // hilly ground with a deep ditch at x = 30..32 and water north of z = -20
@@ -174,7 +171,7 @@ public class EvenementenGameTests {
         return new ParadeRoute(points);
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 400)
+    @GuhTest(template = EMPTY, timeoutTicks = 400)
     public static void paradeMarchesRewardsWalkersAndCleansUp(GameTestHelper helper) {
         ServerPlayer walker = player(helper, 2, 2);
         Vadsparade parade = new Vadsparade(helper.getLevel(), zigzag(helper));
@@ -216,7 +213,7 @@ public class EvenementenGameTests {
         });
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void paradeWithoutAnyoneStopsAndLeavesNothing(GameTestHelper helper) {
         ServerPlayer player = player(helper, 2, 2);
         Vadsparade parade = new Vadsparade(helper.getLevel(), zigzag(helper));
@@ -234,7 +231,7 @@ public class EvenementenGameTests {
 
     // --- the sterrenregen ------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, timeoutTicks = 200)
     public static void sterrenregenStarsLandAndStarryGuhsStayOrGoBack(GameTestHelper helper) {
         ServerPlayer player = player(helper, 0, 0);
         Sterrenregen stars = new Sterrenregen(helper.getLevel(), player.position());
@@ -269,7 +266,7 @@ public class EvenementenGameTests {
      * distance; in the GameTestServer: outside the test's own chunks). It must still fall and land there: its sterrenregen
      * moves it, not its own entity tick.
      */
-    @GameTest(template = EMPTY, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, timeoutTicks = 200)
     public static void starsFallAlsoFromChunksThatDontTick(GameTestHelper helper) {
         ServerPlayer player = player(helper, 0, 0);
         Sterrenregen stars = new Sterrenregen(helper.getLevel(), player.position());
@@ -290,7 +287,7 @@ public class EvenementenGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void walkingIntoALandedStarGivesSterrenstof(GameTestHelper helper) {
         ServerPlayer player = player(helper, 2, 2);
         Sterrenregen stars = new Sterrenregen(helper.getLevel(), player.position());
@@ -308,7 +305,7 @@ public class EvenementenGameTests {
 
     // --- dropping out, leftovers ----------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY, timeoutTicks = 60)
+    @GuhTest(template = EMPTY, timeoutTicks = 60)
     public static void dyingDropsYouOutAndAnEmptyEventStops(GameTestHelper helper) {
         ServerPlayer player = player(helper, 2, 2);
         Kaasregen rain = kaasregen(helper, player);
@@ -322,16 +319,16 @@ public class EvenementenGameTests {
         });
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void leftoversCleanThemselvesUp(GameTestHelper helper) {
         ParadeGuhEntity stray = helper.spawn(EvenementenFeature.PARADE_GUH.get(), new BlockPos(1, 1, 1));
         VallendeKnabbelEntity snack = helper.spawn(EvenementenFeature.VALLENDE_KNABBEL.get(), new BlockPos(3, 1, 3));
-        GuhEntity starry = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity starry = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         starry.getPersistentData().putLong(Evenementen.STER, helper.getLevel().getGameTime() + 1000);
         EntityJoinLevelEvent loaded = new EntityJoinLevelEvent(starry, helper.getLevel(), true);
         Evenementen.onJoinLevel(loaded);
         helper.assertTrue(loaded.isCanceled(), "a starry guh of an event that's long over doesn't come back after a restart");
-        GuhEntity tamed = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity tamed = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         tamed.getPersistentData().putLong(Evenementen.STER, helper.getLevel().getGameTime() + 1000);
         tamed.setTame(true, false);
         EntityJoinLevelEvent mine = new EntityJoinLevelEvent(tamed, helper.getLevel(), true);
@@ -346,7 +343,7 @@ public class EvenementenGameTests {
 
     // --- the scheduler and the rest ----------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void schedulerIsFairAndOnlyInTheGuhmension(GameTestHelper helper) {
         RandomSource random = RandomSource.create(1);
         long sum = 0;
@@ -375,7 +372,7 @@ public class EvenementenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void paradeOutfitAndCommandExist(GameTestHelper helper) {
         helper.assertTrue(GuhClothes.VADSPARADE_SJAKO.slot == GuhClothes.Slot.HEAD && GuhClothes.VADSPARADE_JASJE.slot == GuhClothes.Slot.BODY
                 && GuhClothes.VADSPARADE_TROMMELTJE.slot == GuhClothes.Slot.NECK, "three pieces in three slots");

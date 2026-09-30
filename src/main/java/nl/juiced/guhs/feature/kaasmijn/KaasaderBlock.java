@@ -34,7 +34,7 @@ public class KaasaderBlock extends DropExperienceBlock {
     /** Mined by a player: the mined-out vein takes its place (the drops still come from the full vein). */
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        return level.setBlock(pos, minedOut.get().defaultBlockState(), level.isClientSide ? 11 : 3);
+        return level.setBlock(pos, minedOut.get().defaultBlockState(), level.isClientSide() ? 11 : 3);
     }
 
     /** What's left of a vein: plain rock with crumbs of cheese. Grows back on random ticks (about 1 in 5 per tick, times slowness). */

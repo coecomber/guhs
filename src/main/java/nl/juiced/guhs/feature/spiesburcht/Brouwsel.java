@@ -9,7 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -36,7 +36,7 @@ public enum Brouwsel {
     GUHSPRONG(0x8CD2F0);
 
     /** The effect Sluipknabbel gives: registered by another part of the mod (the Stille Voorraadkelder). */
-    public static final ResourceLocation STIL = Guhs.id("stil");
+    public static final Identifier STIL = Guhs.id("stil");
 
     public final int colour;
 

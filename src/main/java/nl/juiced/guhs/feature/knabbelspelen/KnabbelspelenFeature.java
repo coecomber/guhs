@@ -36,6 +36,8 @@ import nl.juiced.guhs.feature.doolhof.DoolhofBlocks;
 import nl.juiced.guhs.feature.kleding.KledingBronnen;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * De Knabbelspelen (2.9, De Grote Guhspelen; structure knabbelspelen in the Guhweides and Roze pluisjes): a big striped
  * circus tent with a guh face and two guh ears as tent tops, and six play fields around it. Juf Vahoegsakee
@@ -112,7 +114,7 @@ public final class KnabbelspelenFeature {
     // --- the moving things -----------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<SpelDing>> DING = ENTITY_TYPES.register("knabbelspelen_ding",
             () -> EntityType.Builder.<SpelDing>of(SpelDing::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(6).updateInterval(1)
-                    .noSave().build("guhs:knabbelspelen_ding"));
+                    .noSave().build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.parse("guhs:knabbelspelen_ding"))));
 
     // --- sounds --------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<SoundEvent, SoundEvent> FLUIT = sound("knabbelspelen.fluit");

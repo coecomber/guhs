@@ -9,7 +9,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +20,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /** A rubber duck: put it on the water (or anywhere) and it floats there, bobbing and squeaking when you poke it. */
 public class BadeendjeItem extends Item {
     public BadeendjeItem(Properties properties) {
@@ -31,32 +31,32 @@ public class BadeendjeItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         Vec3 at = context.getClickLocation();
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             zet((ServerLevel) level, new Vec3(at.x, context.getClickedPos().getY() + 1.0, at.z), context.getPlayer(), context.getItemInHand());
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         BlockHitResult hit = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
         if (hit.getType() != HitResult.Type.BLOCK || !level.getFluidState(hit.getBlockPos()).isSource()) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         }
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             BlockPos p = hit.getBlockPos();
             zet((ServerLevel) level, new Vec3(hit.getLocation().x, p.getY() + 0.9, hit.getLocation().z), player, stack);
         }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     private static void zet(ServerLevel level, Vec3 at, Player player, ItemStack stack) {
-        BadeendjeEntity duck = KnuffelbadFeature.BADEENDJE.get().create(level);
+        BadeendjeEntity duck = KnuffelbadFeature.BADEENDJE.get().create(level, EntitySpawnReason.TRIGGERED);
         if (duck == null) {
             return;
         }
-        duck.moveTo(at.x, at.y, at.z, player == null ? 0 : player.getYRot() + 180f, 0);
+        duck.snapTo(at.x, at.y, at.z, player == null ? 0 : player.getYRot() + 180f, 0);
         level.addFreshEntity(duck);
         level.playSound(null, duck.blockPosition(), KnuffelbadFeature.EENDJE_PIEP.get(), SoundSource.NEUTRAL, 1f, 1.1f);
         if (player == null || !player.getAbilities().instabuild) {

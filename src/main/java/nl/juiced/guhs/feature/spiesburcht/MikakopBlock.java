@@ -29,10 +29,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.level.block.state.pattern.BlockPattern;
 import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * De verkoolde mikakop: the charred head of a Knekel-Mika (a skull, standing or on a wall; you can wear it). Three of
  * them on a T of four as_blok wake up the Aangebrande Mika, in any dimension ({@link #checkSpawn}).
@@ -119,14 +120,14 @@ public class MikakopBlock extends HorizontalDirectionalBlock implements Equipabl
     /** A head was just put down: is it the last one of a T? Then the Aangebrande Mika wakes up. */
     @Nullable
     public static AangebrandeMikaEntity checkSpawn(ServerLevel level, BlockPos pos) {
-        if (pos.getY() < level.getMinBuildHeight() || level.getDifficulty() == Difficulty.PEACEFUL) {
+        if (pos.getY() < level.getMinY() || level.getDifficulty() == Difficulty.PEACEFUL) {
             return null;
         }
         BlockPattern.BlockPatternMatch match = pattern().find(level, pos);
         if (match == null) {
             return null;
         }
-        AangebrandeMikaEntity boss = SpiesburchtFeature.AANGEBRANDE_MIKA.get().create(level);
+        AangebrandeMikaEntity boss = SpiesburchtFeature.AANGEBRANDE_MIKA.get().create(level, EntitySpawnReason.TRIGGERED);
         if (boss == null) {
             return null;
         }
@@ -134,7 +135,7 @@ public class MikakopBlock extends HorizontalDirectionalBlock implements Equipabl
         BlockInWorld centre = match.getBlock(1, 2, 0);
         BlockPos at = centre.getPos();
         float yaw = match.getForwards().getAxis() == Direction.Axis.X ? 0.0f : 90.0f;
-        boss.moveTo(at.getX() + 0.5, at.getY() + 0.55, at.getZ() + 0.5, yaw, 0.0f);
+        boss.snapTo(at.getX() + 0.5, at.getY() + 0.55, at.getZ() + 0.5, yaw, 0.0f);
         boss.yBodyRot = yaw;
         boss.startSpawning();
         for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, boss.getBoundingBox().inflate(50.0))) {
@@ -150,7 +151,7 @@ public class MikakopBlock extends HorizontalDirectionalBlock implements Equipabl
     /** The head on a wall. */
     public static class Wall extends MikakopBlock {
         public static final MapCodec<Wall> WALL_CODEC = simpleCodec(Wall::new);
-        public static final DirectionProperty WALL_FACING = FACING;
+        public static final EnumProperty<Direction> WALL_FACING = FACING;
         private static final Map<Direction, VoxelShape> AABBS = ImmutableMap.of(
                 Direction.NORTH, Block.box(4.0, 4.0, 8.0, 12.0, 12.0, 16.0),
                 Direction.SOUTH, Block.box(4.0, 4.0, 0.0, 12.0, 12.0, 8.0),

@@ -11,7 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -44,14 +44,14 @@ public class WenssterItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             wens(serverPlayer, level.getRandom());
             stack.consume(1, player);
             player.getCooldowns().addCooldown(this, 20);
         }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     /**
@@ -83,8 +83,8 @@ public class WenssterItem extends Item {
             Minigames.give(player, new ItemStack(ModItems.VAHOEGE_VADS_INGOT.get(), 1 + 1));
             what = "vahoeg";
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.sterrenwacht.wens." + what).withStyle(ChatFormatting.LIGHT_PURPLE), false);
-        ServerLevel level = player.serverLevel();
+        player.sendSystemMessage(Component.translatable("gui.guhs.sterrenwacht.wens." + what).withStyle(ChatFormatting.LIGHT_PURPLE));
+        ServerLevel level = player.level();
         for (int i = 0; i < 12; i++) {       // the star flies up, sparkling
             level.sendParticles(SterrenwachtFeature.WENSSTER_DEELTJE.get(), player.getX() + player.getLookAngle().x * (0.5 + i * 0.3),
                     player.getEyeY() + i * 0.35, player.getZ() + player.getLookAngle().z * (0.5 + i * 0.3), 2, 0.05, 0.05, 0.05, 0.01);

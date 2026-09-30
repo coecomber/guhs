@@ -47,7 +47,7 @@ final class GlijEffecten {
         }
         Staat staat = STATEN.computeIfAbsent(ring.getId(), id -> new Staat());
         GlijPad pad = ring.baan().pad();
-        RandomSource r = level.random;
+        RandomSource r = level.getRandom();
         boolean glijdt = ring.fase() == ZwembandjeEntity.GLIJDT || ring.fase() == ZwembandjeEntity.PLONS;
         double s = pad.sAt(ring.tau);
         double v = glijdt ? pad.snelheid(ring.tau) : 0;

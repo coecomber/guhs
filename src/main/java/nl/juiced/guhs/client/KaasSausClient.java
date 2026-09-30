@@ -3,7 +3,7 @@ package nl.juiced.guhs.client;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -22,12 +22,12 @@ public final class KaasSausClient {
     public static void registerFluidLooks(RegisterClientExtensionsEvent event) {
         event.registerFluidType(new IClientFluidTypeExtensions() {
             @Override
-            public ResourceLocation getStillTexture() {
+            public Identifier getStillTexture() {
                 return Guhs.id("block/kaas_saus_still");
             }
 
             @Override
-            public ResourceLocation getFlowingTexture() {
+            public Identifier getFlowingTexture() {
                 return Guhs.id("block/kaas_saus_flow");
             }
 
@@ -44,18 +44,18 @@ public final class KaasSausClient {
         }, ModFluids.KAAS_SAUS_TYPE.get());
         event.registerFluidType(new IClientFluidTypeExtensions() {
             @Override
-            public ResourceLocation getStillTexture() {
-                return ResourceLocation.withDefaultNamespace("block/water_still");
+            public Identifier getStillTexture() {
+                return Identifier.withDefaultNamespace("block/water_still");
             }
 
             @Override
-            public ResourceLocation getFlowingTexture() {
-                return ResourceLocation.withDefaultNamespace("block/water_flow");
+            public Identifier getFlowingTexture() {
+                return Identifier.withDefaultNamespace("block/water_flow");
             }
 
             @Override
-            public ResourceLocation getOverlayTexture() {
-                return ResourceLocation.withDefaultNamespace("block/water_overlay");
+            public Identifier getOverlayTexture() {
+                return Identifier.withDefaultNamespace("block/water_overlay");
             }
 
             @Override

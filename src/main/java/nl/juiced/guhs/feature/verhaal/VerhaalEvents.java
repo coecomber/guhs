@@ -10,7 +10,7 @@ public final class VerhaalEvents {
     /** A guh placed by a template with the story keys becomes a real story copy. */
     @SubscribeEvent
     public static void onJoin(EntityJoinLevelEvent event) {
-        if (!event.getLevel().isClientSide && event.getEntity() instanceof GuhEntity guh && VerhaalGuhs.isKopie(guh)) {
+        if (!event.getLevel().isClientSide() && event.getEntity() instanceof GuhEntity guh && VerhaalGuhs.isKopie(guh)) {
             VerhaalGuhs.opJoin(guh);
         }
     }

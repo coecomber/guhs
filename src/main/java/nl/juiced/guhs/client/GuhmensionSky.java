@@ -13,9 +13,9 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
-import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.material.FogType;
@@ -29,8 +29,8 @@ import org.joml.Matrix4f;
  * (The dimension type points its "effects" at guhs:guhmension.)
  */
 public class GuhmensionSky extends DimensionSpecialEffects {
-    private static final ResourceLocation SUN = ResourceLocation.withDefaultNamespace("textures/environment/sun.png");
-    private static final ResourceLocation MOON = Guhs.id("textures/environment/pink_moon.png");
+    private static final Identifier SUN = Identifier.withDefaultNamespace("textures/environment/sun.png");
+    private static final Identifier MOON = Guhs.id("textures/environment/pink_moon.png");
 
     private VertexBuffer skyBuffer;
     private VertexBuffer starBuffer;

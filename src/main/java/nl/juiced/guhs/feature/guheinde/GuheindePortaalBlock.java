@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Portal;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -60,7 +60,7 @@ public class GuheindePortaalBlock extends Block implements Portal {
 
     @Nullable
     @Override
-    public DimensionTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
+    public TeleportTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
         return GuheindeReis.portalDestination(level, entity, pos);
     }
 

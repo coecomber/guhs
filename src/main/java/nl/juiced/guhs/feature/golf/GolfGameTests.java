@@ -4,15 +4,13 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -24,8 +22,6 @@ import nl.juiced.guhs.registry.ModItems;
  * Guh golf: the ball's physics on the little test lanes (golf_testbaan: a plain lane, one with a cup at x=10, one with
  * a kaassaus ditch at x=10-11), and whole games on the real course (guh_golfbaan).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class GolfGameTests {
     private static final String LANES = "golf_testbaan", COURSE = "guh_golfbaan";
     /** Their own batch: the big course doesn't crowd the other tests. */
@@ -59,7 +55,7 @@ public class GolfGameTests {
 
     // --- the Golfguh's shop ---------------------------------------------------------------------------------------------
 
-    @GameTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH)
     public static void golfguhSellsTheGolfOutfitForGolfballetjes(GameTestHelper helper) {
         GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(2, 2, 2));
         npc.setKind(GuhNpcEntity.Kind.GOLFGUH);
@@ -75,7 +71,7 @@ public class GolfGameTests {
 
     // --- the ball ---------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = LANES, timeoutTicks = 200, batch = BATCH)
+    @GuhTest(template = LANES, timeoutTicks = 200, batch = BATCH)
     public static void golfBallBouncesOffTheWallAndStops(GameTestHelper helper) {
         GolfBallEntity b = ball(helper, 15.5, 2.5);
         helper.runAfterDelay(2, () -> b.hit(new Vec3(0.5, 0, 0)));
@@ -89,7 +85,7 @@ public class GolfGameTests {
         });
     }
 
-    @GameTest(template = LANES, timeoutTicks = 200, batch = BATCH)
+    @GuhTest(template = LANES, timeoutTicks = 200, batch = BATCH)
     public static void golfBallDropsIntoTheCupWhenSlow(GameTestHelper helper) {
         GolfBallEntity b = ball(helper, 4.5, 6.5);
         helper.runAfterDelay(2, () -> b.hit(new Vec3(0.55, 0, 0)));
@@ -100,7 +96,7 @@ public class GolfGameTests {
         });
     }
 
-    @GameTest(template = LANES, timeoutTicks = 100, batch = BATCH)
+    @GuhTest(template = LANES, timeoutTicks = 100, batch = BATCH)
     public static void golfBallRollsOverTheCupWhenFast(GameTestHelper helper) {
         GolfBallEntity b = ball(helper, 4.5, 6.5);
         helper.runAfterDelay(2, () -> b.hit(new Vec3(1.3, 0, 0)));
@@ -112,7 +108,7 @@ public class GolfGameTests {
         });
     }
 
-    @GameTest(template = LANES, timeoutTicks = 100, batch = BATCH)
+    @GuhTest(template = LANES, timeoutTicks = 100, batch = BATCH)
     public static void golfBallSplashesIntoTheKaassaus(GameTestHelper helper) {
         GolfBallEntity b = ball(helper, 4.5, 10.5);
         helper.runAfterDelay(2, () -> b.hit(new Vec3(0.6, 0, 0)));
@@ -122,7 +118,7 @@ public class GolfGameTests {
         });
     }
 
-    @GameTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH)
     public static void golfCourseBlocksAreWhereTheBallMayRoll(GameTestHelper helper) {
         helper.assertTrue(GolfBallEntity.isCourse(GolfFeature.VILT.get().defaultBlockState()), "felt");
         helper.assertTrue(GolfBallEntity.isCourse(net.minecraft.world.level.block.Blocks.CHERRY_STAIRS.defaultBlockState()), "ramps");
@@ -136,7 +132,7 @@ public class GolfGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH)
     public static void golfClubStaysInTheGame(GameTestHelper helper) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         ItemStack club = new ItemStack(GolfFeature.GOLFCLUB.get());
@@ -151,11 +147,11 @@ public class GolfGameTests {
 
     // --- a whole round on the real course ------------------------------------------------------------------------------
 
-    @GameTest(template = COURSE, timeoutTicks = 400, batch = BATCH)
+    @GuhTest(template = COURSE, timeoutTicks = 400, batch = BATCH)
     public static void golfRoundWithAHoleInOne(GameTestHelper helper) {
         GuhNpcEntity npc = golfguh(helper);
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX(), npc.getY(), npc.getZ() + 2);
+        player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         GolfGame.action(npc, player, GolfGame.START);
         GolfGame game = GolfGame.of(npc);
         helper.assertTrue(game.complete() && game.hubs().size() == 1, "all 9 tees and cups and the windmill found");
@@ -176,7 +172,7 @@ public class GolfGameTests {
         player.hurt(helper.getLevel().damageSources().fall(), 6f);
         helper.assertTrue(player.getHealth() == player.getMaxHealth(), "golfers can't get hurt");
         ServerPlayer other = helper.makeMockServerPlayerInLevel();
-        other.moveTo(npc.getX() + 1, npc.getY(), npc.getZ() + 1);
+        other.snapTo(npc.getX() + 1, npc.getY(), npc.getZ() + 1);
         GolfGame.action(npc, other, GolfGame.START);
         helper.assertTrue(game.isPlayedBy(player) && !GolfGame.isGolfing(other), "one round at a time");
         leave(helper, other);
@@ -193,7 +189,7 @@ public class GolfGameTests {
             BlockPos cup = game.cup(0);
             Vec3 spot = new Vec3(cup.getX() + 0.5 - way.getStepX() * 2, cup.getY() + 1, cup.getZ() + 0.5 - way.getStepZ() * 2);
             b.resetTo(spot);
-            player.moveTo(spot.x - way.getStepX() * 1.5, spot.y, spot.z - way.getStepZ() * 1.5, way.toYRot(), 30);
+            player.snapTo(spot.x - way.getStepX() * 1.5, spot.y, spot.z - way.getStepZ() * 1.5, way.toYRot(), 30);
         });
         helper.runAfterDelay(8, () -> GolfGame.swing(player, 0.31f));
         helper.runAfterDelay(40, () -> {
@@ -212,12 +208,12 @@ public class GolfGameTests {
             // 6 (ace) + 8 x 3 (par) + 3 (a whole round) + 4 (at par or better) + 6 (the very first round)
             helper.assertTrue(count(player, GolfFeature.GOLFBALLETJE.get()) == 43, "golfballetjes: " + count(player, GolfFeature.GOLFBALLETJE.get()));
             helper.assertTrue(count(player, ModItems.KAAS_KNABBELS.get()) == 16, "and a present for the first round");
-            helper.assertTrue(GuhQuests.saved(player).getInt("guhs_golf_aces") == 1 && GuhQuests.saved(player).getInt("guhs_golf_rounds") == 1, "counted");
+            helper.assertTrue(GuhQuests.saved(player).getIntOr("guhs_golf_aces", 0) == 1 && GuhQuests.saved(player).getIntOr("guhs_golf_rounds", 0) == 1, "counted");
             helper.assertTrue(nl.juiced.guhs.quest.Scorebord.top(helper.getLevel().getServer(), GolfGame.BOARD).stream()
                     .anyMatch(e -> e.player().equals(player.getUUID()) && e.score() == 26), "on the world's top 3");
             GolfGame.showScores(npc);
             helper.assertTrue(!helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class, npc.getBoundingBox().inflate(4),
-                    d -> d.getTags().contains(nl.juiced.guhs.quest.Scorebord.TAG)).isEmpty(), "the top 3 floats above the Golfguh");
+                    d -> d.entityTags().contains(nl.juiced.guhs.quest.Scorebord.TAG)).isEmpty(), "the top 3 floats above the Golfguh");
             helper.assertTrue(player.distanceTo(npc) < 5, "and you're back at the Golfguh");
             helper.assertTrue(game.ball(helper.getLevel()) == null, "the ball is gone");
             leave(helper, player);
@@ -229,11 +225,11 @@ public class GolfGameTests {
      * Hole 4: straight into the kaassaus costs a penalty stroke and the ball goes back. Hole 5, De Vahoegschans: a good
      * hit rolls up the ramp and the slime pad throws the ball over the ditch. Then the golfer walks off: game over.
      */
-    @GameTest(template = COURSE, timeoutTicks = 400, batch = BATCH)
+    @GuhTest(template = COURSE, timeoutTicks = 400, batch = BATCH)
     public static void golfKaassausVahoegschansAndWalkingAway(GameTestHelper helper) {
         GuhNpcEntity npc = golfguh(helper);
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX(), npc.getY(), npc.getZ() + 2);
+        player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         GolfGame.action(npc, player, GolfGame.START);
         GolfGame game = GolfGame.of(npc);
         game.testSkipCountdown();
@@ -270,7 +266,7 @@ public class GolfGameTests {
                         + game.phase() + " " + game.strokes());
                 helper.assertTrue(game.phase() == GolfGame.Phase.HOLED || gone > 13.5, "and landed on the other side: " + gone);
             }
-            player.moveTo(npc.getX() + 120, npc.getY(), npc.getZ());
+            player.snapTo(npc.getX() + 120, npc.getY(), npc.getZ());
         });
         helper.runAfterDelay(204, () -> {
             helper.assertTrue(!game.isRunning() && !GolfGame.isGolfing(player), "walking away ends it");
@@ -281,11 +277,11 @@ public class GolfGameTests {
     }
 
     /** Holing out in the cup of another hole doesn't count: a penalty stroke and the ball goes back. */
-    @GameTest(template = COURSE, timeoutTicks = 200, batch = BATCH)
+    @GuhTest(template = COURSE, timeoutTicks = 200, batch = BATCH)
     public static void golfWrongCupCostsAPenalty(GameTestHelper helper) {
         GuhNpcEntity npc = golfguh(helper);
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX(), npc.getY(), npc.getZ() + 2);
+        player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         GolfGame.action(npc, player, GolfGame.START);
         GolfGame game = GolfGame.of(npc);
         game.testSkipCountdown();
@@ -294,7 +290,7 @@ public class GolfGameTests {
             BlockPos cup = game.cup(1);                        // the cup of hole 2 (its lane goes east there)
             Vec3 spot = new Vec3(cup.getX() - 1.5, cup.getY() + 1, cup.getZ() + 0.5);
             game.ball(helper.getLevel()).resetTo(spot);
-            player.moveTo(spot.x - 1.5, spot.y, spot.z, Direction.EAST.toYRot(), 30);
+            player.snapTo(spot.x - 1.5, spot.y, spot.z, Direction.EAST.toYRot(), 30);
         });
         helper.runAfterDelay(8, () -> GolfGame.swing(player, 0.31f));
         helper.runAfterDelay(40, () -> helper.assertTrue(game.hole() == 0 && game.phase() == GolfGame.Phase.HAZARD && game.strokes() == 2
@@ -310,13 +306,13 @@ public class GolfGameTests {
 
     private static void behindTee(GameTestHelper helper, ServerPlayer player, BlockPos tee) {
         Direction way = helper.getLevel().getBlockState(tee).getValue(GolfBlocks.Afslag.FACING);
-        player.moveTo(tee.getX() + 0.5 - way.getStepX() * 1.5, tee.getY() + 1, tee.getZ() + 0.5 - way.getStepZ() * 1.5, way.toYRot(), 30);
+        player.snapTo(tee.getX() + 0.5 - way.getStepX() * 1.5, tee.getY() + 1, tee.getZ() + 0.5 - way.getStepZ() * 1.5, way.toYRot(), 30);
     }
 
     // --- 2.9: makkelijk / medium / lastig -----------------------------------------------------------------------------------
 
     /** 2.10: the lastig bumpers turn with the course (it is only ever turned, never mirrored), from the cup of the hole. */
-    @GameTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH)
     public static void golfBumpersTurnWithTheCourse(GameTestHelper helper) {
         // hole 1 in the template: cup (12, 1, 84), its medium tee faces west; bumper (27, 83) is 15 east, 1 north of the cup, 1 up
         BlockPos cup = new BlockPos(100, 64, 100);
@@ -344,11 +340,11 @@ public class GolfGameTests {
      * Lastig: 6 strokes a hole from the far (red) tees, its own par, extra slime bumpers on the course during the round (gone
      * after it), no wind any more, its own board and record, and half as many golfballetjes more.
      */
-    @GameTest(template = COURSE, timeoutTicks = 200, batch = BATCH)
+    @GuhTest(template = COURSE, timeoutTicks = 200, batch = BATCH)
     public static void golfLastigFarTeesBumpersSixStrokes(GameTestHelper helper) {
         GuhNpcEntity npc = golfguh(helper);
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX(), npc.getY(), npc.getZ() + 2);
+        player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         var lastig = nl.juiced.guhs.feature.spelen.Niveau.LASTIG;
         GolfGame.action(npc, player, nl.juiced.guhs.feature.klassiekers.Klassiekers.metNiveau(GolfGame.START, lastig));
         GolfGame game = GolfGame.of(npc);
@@ -382,7 +378,7 @@ public class GolfGameTests {
             helper.assertTrue(nl.juiced.guhs.quest.Scorebord.top(helper.getLevel().getServer(), "golf_rondje_lastig").stream()
                     .anyMatch(e -> e.player().equals(player.getUUID()) && e.score() == 36), "on the lastig board");
             helper.assertTrue(nl.juiced.guhs.feature.klassiekers.Klassiekers.done(player, "grote_guhspelen/klassiekers_golf_lastig"), "the lastig advancement");
-            var adv = player.server.getAdvancements().get(Guhs.id("quest/golf_lastig_par"));
+            var adv = player.level().getServer().getAdvancements().get(Guhs.id("quest/golf_lastig_par"));
             helper.assertTrue(adv != null && player.getAdvancements().getOrStartProgress(adv).isDone(), "at par from the far tees: golf_lastig_par");
             leave(helper, player);
             helper.succeed();
@@ -390,11 +386,11 @@ public class GolfGameTests {
     }
 
     /** Makkelijk: the green tees close to the cup, par 2 each, 10 strokes, and the wrong cup (or kaassaus) costs no penalty stroke: the ball just goes back. */
-    @GameTest(template = COURSE, timeoutTicks = 200, batch = BATCH)
+    @GuhTest(template = COURSE, timeoutTicks = 200, batch = BATCH)
     public static void golfMakkelijkHasNoPenaltyStrokes(GameTestHelper helper) {
         GuhNpcEntity npc = golfguh(helper);
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX(), npc.getY(), npc.getZ() + 2);
+        player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         GolfGame.action(npc, player, nl.juiced.guhs.feature.klassiekers.Klassiekers.metNiveau(GolfGame.START, nl.juiced.guhs.feature.spelen.Niveau.MAKKELIJK));
         GolfGame game = GolfGame.of(npc);
         var makkelijk = nl.juiced.guhs.feature.spelen.Niveau.MAKKELIJK;
@@ -407,7 +403,7 @@ public class GolfGameTests {
             BlockPos cup = game.cup(1);                        // the cup of hole 2 (its lane goes east there)
             Vec3 spot = new Vec3(cup.getX() - 1.5, cup.getY() + 1, cup.getZ() + 0.5);
             game.ball(helper.getLevel()).resetTo(spot);
-            player.moveTo(spot.x - 1.5, spot.y, spot.z, Direction.EAST.toYRot(), 30);
+            player.snapTo(spot.x - 1.5, spot.y, spot.z, Direction.EAST.toYRot(), 30);
         });
         helper.runAfterDelay(8, () -> GolfGame.swing(player, 0.31f));
         helper.runAfterDelay(40, () -> helper.assertTrue(game.phase() == GolfGame.Phase.HAZARD && game.strokes() == 1,

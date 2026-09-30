@@ -87,8 +87,8 @@ public final class MewtwoVerhaal {
     public static void begin(ServerPlayer p) {
         MewtwoVoortgang.zetStap(p, MewtwoVoortgang.NOTITIES);
         adv(p, "mewtwo_welkom");
-        p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.prof.zoek", MewtwoVoortgang.aantalNotities(p),
-                MewtwoFeature.NOTITIES - MewtwoVoortgang.aantalNotities(p), Component.translatable(plekNotitie(p))).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        p.sendSystemMessage(Component.translatable("gui.guhs.mewtwo.prof.zoek", MewtwoVoortgang.aantalNotities(p),
+                MewtwoFeature.NOTITIES - MewtwoVoortgang.aantalNotities(p), Component.translatable(plekNotitie(p))).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     // =================================================================================================================
@@ -97,19 +97,19 @@ public final class MewtwoVerhaal {
 
     /** A note spot was clicked: its note, once per player (and its text); a second time: read it again. */
     public static void vindNotitie(ServerPlayer p, BlockPos spot, int n) {
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         if (MewtwoVoortgang.vondNotitie(p, n)) {
             Minigames.give(p, LabnotitieItem.maak(n));
             level.playSound(null, spot, MewtwoFeature.NOTITIE.get(), SoundSource.PLAYERS, 1f, 1.1f);
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, spot.getX() + 0.5, spot.getY() + 0.4, spot.getZ() + 0.5, 8, 0.3, 0.2, 0.3, 0.0);
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.notitie.gevonden", n, MewtwoVoortgang.aantalNotities(p))
-                    .withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.notitie.gevonden", n, MewtwoVoortgang.aantalNotities(p))
+                    .withStyle(ChatFormatting.GOLD));
             leesNotitie(p, n);
             if (MewtwoVoortgang.aantalNotities(p) == MewtwoFeature.NOTITIES) {
                 p.sendSystemMessage(Component.translatable("gui.guhs.mewtwo.notitie.alle").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         } else {
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.notitie.al").withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.notitie.al").withStyle(ChatFormatting.GRAY));
             if (!heeftItem(p, LabnotitieItem.class, n)) {
                 Minigames.give(p, LabnotitieItem.maak(n));      // (lost it? here's the note again)
             }
@@ -123,7 +123,7 @@ public final class MewtwoVerhaal {
     }
 
     private static boolean heeftItem(ServerPlayer p, Class<?> soort, int n) {
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (soort.isInstance(s.getItem()) && (s.getItem() instanceof LabnotitieItem ? LabnotitieItem.nummer(s) : TankonderdeelItem.soort(s)) == n) {
                 return true;
             }
@@ -181,41 +181,41 @@ public final class MewtwoVerhaal {
     public static void vindOnderdeel(ServerPlayer p, BlockPos spot, int n) {
         int stap = MewtwoVoortgang.stap(p);
         if (stap < MewtwoVoortgang.ONDERDELEN) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.kist.nog_niet").withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.kist.nog_niet").withStyle(ChatFormatting.GRAY));
             return;
         }
         if (stap > MewtwoVoortgang.ONDERDELEN) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.kist.klaar").withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.kist.klaar").withStyle(ChatFormatting.GRAY));
             return;
         }
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         boolean nieuw = MewtwoVoortgang.vondOnderdeel(p, n);
         if (!nieuw && (MewtwoVoortgang.isIngebouwd(p, n) || heeftItem(p, TankonderdeelItem.class, n))) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.kist.al").withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.kist.al").withStyle(ChatFormatting.GRAY));
             return;
         }
         ItemStack deel = TankonderdeelItem.maak(n);
         Minigames.give(p, deel);
         level.playSound(null, spot, SoundEvents.BARREL_OPEN, SoundSource.BLOCKS, 0.8f, 1.2f);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, spot.getX() + 0.5, spot.getY() + 0.8, spot.getZ() + 0.5, 8, 0.3, 0.2, 0.3, 0.0);
-        p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.kist.gevonden", deel.getHoverName()).withStyle(ChatFormatting.GOLD), true);
+        p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.kist.gevonden", deel.getHoverName()).withStyle(ChatFormatting.GOLD));
     }
 
     /** The kloontank was clicked: build in the parts you carry; with all four it's repaired. */
     public static void klikTank(ServerPlayer p, BlockPos tank) {
         int stap = MewtwoVoortgang.stap(p);
         if (stap >= MewtwoVoortgang.MAALTIJD) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.tank.heel").withStyle(ChatFormatting.LIGHT_PURPLE), true);
-            p.serverLevel().playSound(null, tank, MewtwoFeature.TANK_BORREL.get(), SoundSource.BLOCKS, 0.8f, 1.1f);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.tank.heel").withStyle(ChatFormatting.LIGHT_PURPLE));
+            p.level().playSound(null, tank, MewtwoFeature.TANK_BORREL.get(), SoundSource.BLOCKS, 0.8f, 1.1f);
             return;
         }
         if (stap < MewtwoVoortgang.ONDERDELEN) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.tank.kapot").withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.tank.kapot").withStyle(ChatFormatting.GRAY));
             return;
         }
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         boolean iets = false;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.getItem() instanceof TankonderdeelItem) {
                 int n = TankonderdeelItem.soort(s);
                 if (n >= 1 && n <= MewtwoFeature.ONDERDELEN && !MewtwoVoortgang.isIngebouwd(p, n)) {
@@ -226,16 +226,16 @@ public final class MewtwoVerhaal {
                     iets = true;
                     level.playSound(null, tank, MewtwoFeature.TANK_KLIK.get(), SoundSource.BLOCKS, 1f, 1f + n * 0.1f);
                     level.sendParticles(MewtwoFeature.GLOED.get(), tank.getX() + 0.5, tank.getY() + 1.5, tank.getZ() + 0.5, 12, 0.8, 0.8, 0.8, 0.02);
-                    p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.tank.ingebouwd", naam,
-                            MewtwoFeature.ONDERDELEN - MewtwoVoortgang.aantalIngebouwd(p)).withStyle(ChatFormatting.GOLD), true);
+                    p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.tank.ingebouwd", naam,
+                            MewtwoFeature.ONDERDELEN - MewtwoVoortgang.aantalIngebouwd(p)).withStyle(ChatFormatting.GOLD));
                 }
             }
         }
         if (MewtwoVoortgang.aantalIngebouwd(p) >= MewtwoFeature.ONDERDELEN) {
             tankGerepareerd(p, tank);
         } else if (!iets) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.tank.mist", MewtwoFeature.ONDERDELEN - MewtwoVoortgang.aantalIngebouwd(p))
-                    .withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.tank.mist", MewtwoFeature.ONDERDELEN - MewtwoVoortgang.aantalIngebouwd(p))
+                    .withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -244,7 +244,7 @@ public final class MewtwoVerhaal {
         if (MewtwoVoortgang.stap(p) != MewtwoVoortgang.ONDERDELEN) {
             return;
         }
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         MewtwoVoortgang.zetStap(p, MewtwoVoortgang.MAALTIJD);
         adv(p, "mewtwo_tank");
         level.playSound(null, tank, MewtwoFeature.TANK_HEEL.get(), SoundSource.BLOCKS, 1f, 1.2f);
@@ -280,16 +280,16 @@ public final class MewtwoVerhaal {
     public static void klikSchaal(ServerPlayer p, BlockPos schaal) {
         int stap = MewtwoVoortgang.stap(p);
         if (stap < MewtwoVoortgang.MAALTIJD) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.schaal.nog_niet").withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.schaal.nog_niet").withStyle(ChatFormatting.GRAY));
             return;
         }
         if (stap > MewtwoVoortgang.MAALTIJD) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.schaal.klaar").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.schaal.klaar").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         int knabbels = MewtwoVoortgang.knabbels(p), snacks = MewtwoVoortgang.snacks(p);
         boolean iets = false;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (knabbels < MewtwoFeature.PORTIE_KNABBELS && s.is(ModItems.KAAS_KNABBELS.get())) {
                 int n = Math.min(s.getCount(), MewtwoFeature.PORTIE_KNABBELS - knabbels);
                 s.shrink(n);
@@ -303,7 +303,7 @@ public final class MewtwoVerhaal {
             }
         }
         MewtwoVoortgang.zetSchaal(p, knabbels, snacks);
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         if (iets) {
             level.playSound(null, schaal, SoundEvents.GENERIC_EAT, SoundSource.BLOCKS, 0.6f, 1.3f);
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, schaal.getX() + 0.5, schaal.getY() + 0.9, schaal.getZ() + 0.5, 6, 0.3, 0.1, 0.3, 0.0);
@@ -311,9 +311,9 @@ public final class MewtwoVerhaal {
         if (knabbels >= MewtwoFeature.PORTIE_KNABBELS && snacks >= MewtwoFeature.PORTIE_SNACKS) {
             maaltijd(p, schaal);
         } else {
-            p.displayClientMessage(Component.translatable(iets ? "gui.guhs.mewtwo.schaal.erin" : "gui.guhs.mewtwo.schaal.meer",
+            p.sendOverlayMessage(Component.translatable(iets ? "gui.guhs.mewtwo.schaal.erin" : "gui.guhs.mewtwo.schaal.meer",
                     iets ? knabbels : MewtwoFeature.PORTIE_KNABBELS - knabbels, iets ? MewtwoFeature.PORTIE_KNABBELS : MewtwoFeature.PORTIE_SNACKS - snacks,
-                    snacks, MewtwoFeature.PORTIE_SNACKS).withStyle(ChatFormatting.GOLD), true);
+                    snacks, MewtwoFeature.PORTIE_SNACKS).withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -322,7 +322,7 @@ public final class MewtwoVerhaal {
         if (MewtwoVoortgang.stap(p) != MewtwoVoortgang.MAALTIJD) {
             return;
         }
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         MewtwoVoortgang.zetStap(p, MewtwoVoortgang.KLAAR);
         VerhaalGuhs.geefVrij(p, VerhaalGuh.MEWTWO);
         adv(p, "mewtwo_maaltijd");
@@ -339,7 +339,7 @@ public final class MewtwoVerhaal {
             mew = MewSpawner.spawn(level, schaal.above(3), thuis != null ? thuis : schaal, true);
         }
         if (mew != null) {
-            mew.moveTo(schaal.getX() + 0.5, schaal.getY() + 2.5, schaal.getZ() + 0.5);
+            mew.snapTo(schaal.getX() + 0.5, schaal.getY() + 2.5, schaal.getZ() + 0.5);
             mew.giechel();
         }
         if (kopie != null) {
@@ -392,8 +392,8 @@ public final class MewtwoVerhaal {
         Vec3 waar = kopie != null ? kopie.position().add(1.5, 0, 0) : p.position().add(p.getLookAngle().multiply(2, 0, 2));
         GuhEntity guh = VerhaalGuhs.tem(p, VerhaalGuh.MEWTWO, waar);
         if (guh != null) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mewtwo.tem.gelukt").withStyle(ChatFormatting.GOLD), false);
-            ServerLevel level = p.serverLevel();
+            p.sendSystemMessage(Component.translatable("gui.guhs.mewtwo.tem.gelukt").withStyle(ChatFormatting.GOLD));
+            ServerLevel level = p.level();
             level.sendParticles(MewtwoFeature.GLOED.get(), guh.getX(), guh.getY() + 0.8, guh.getZ(), 30, 0.6, 0.6, 0.6, 0.05);
             for (MewEntity mew : level.getEntitiesOfClass(MewEntity.class, guh.getBoundingBox().inflate(32))) {
                 mew.giechel();
@@ -412,7 +412,7 @@ public final class MewtwoVerhaal {
     }
 
     static void feestje(ServerPlayer p, @Nullable Entity bij) {
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         level.playSound(null, p.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.7f, 1.4f);
         Entity e = bij != null ? bij : p;
         level.sendParticles(ParticleTypes.HEART, e.getX(), e.getY() + 1.4, e.getZ(), 8, 0.4, 0.3, 0.4, 0.05);

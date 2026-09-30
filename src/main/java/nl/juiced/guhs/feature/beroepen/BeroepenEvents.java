@@ -21,7 +21,7 @@ public final class BeroepenEvents {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onInteract(PlayerInteractEvent.EntityInteract event) {
-        if (event.getLevel().isClientSide || !vanOns(event.getTarget())) {
+        if (event.getLevel().isClientSide() || !vanOns(event.getTarget())) {
             return;
         }
         event.setCanceled(true);
@@ -30,7 +30,7 @@ public final class BeroepenEvents {
             return;
         }
         GuhEntity g = (GuhEntity) event.getTarget();
-        if (g.getPersistentData().getBoolean(Brandweer.BOOMGUHTJE)) {
+        if (g.getPersistentData().getBooleanOr(Brandweer.BOOMGUHTJE, false)) {
             Brandweer.red(player, g);
         } else if (g.getPersistentData().contains(Apotheek.SNOTJE)) {
             Apotheek.snotje(player, g, event.getItemStack());
@@ -39,7 +39,7 @@ public final class BeroepenEvents {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onInteractAt(PlayerInteractEvent.EntityInteractSpecific event) {
-        if (!event.getLevel().isClientSide && vanOns(event.getTarget())) {
+        if (!event.getLevel().isClientSide() && vanOns(event.getTarget())) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
         }

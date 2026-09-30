@@ -7,7 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
@@ -40,7 +40,7 @@ public class GrondPoolElement extends SinglePoolElement {
 
     private final int groundLevelDelta;
 
-    public GrondPoolElement(Either<ResourceLocation, StructureTemplate> template, Holder<StructureProcessorList> processors,
+    public GrondPoolElement(Either<Identifier, StructureTemplate> template, Holder<StructureProcessorList> processors,
                             StructureTemplatePool.Projection projection, Optional<LiquidSettings> overrideLiquidSettings, int groundLevelDelta) {
         super(template, processors, projection, overrideLiquidSettings);
         this.groundLevelDelta = groundLevelDelta;

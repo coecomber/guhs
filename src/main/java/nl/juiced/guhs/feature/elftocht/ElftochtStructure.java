@@ -7,7 +7,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -36,7 +36,7 @@ public class ElftochtStructure extends Structure implements BouwRuimte.Ruimte {
     public static final MapCodec<ElftochtStructure> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             settingsCodec(i),
             StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(s -> s.startPool),
-            ResourceLocation.CODEC.fieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
+            Identifier.CODEC.fieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
             NormalNoise.NoiseParameters.CODEC.fieldOf("polder_noise").forGetter(s -> s.noise),
             Codec.intRange(2, 64).fieldOf("cell").forGetter(s -> s.cell),
             Codec.intRange(1, 4).optionalFieldOf("cell_chunks", 1).forGetter(s -> s.cellChunks),
@@ -55,7 +55,7 @@ public class ElftochtStructure extends Structure implements BouwRuimte.Ruimte {
     public static final int ZAKKEN = 10, STIJGEN = 12;
 
     private final Holder<StructureTemplatePool> startPool;
-    private final ResourceLocation startJigsawName;
+    private final Identifier startJigsawName;
     private final Holder<NormalNoise.NoiseParameters> noise;
     private final int cell;
     private final int cellChunks;
@@ -69,7 +69,7 @@ public class ElftochtStructure extends Structure implements BouwRuimte.Ruimte {
     private final ElftochtPiek.Vlak vlak;
     private final int maxOngelijk;
 
-    public ElftochtStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, ResourceLocation startJigsawName,
+    public ElftochtStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, Identifier startJigsawName,
                              Holder<NormalNoise.NoiseParameters> noise, int cell, int cellChunks, double minValue, double dalValue,
                              double flatValue, int flatRadius, int maxDistance, int keepClear, Optional<Integer> voorrang,
                              ElftochtPiek.Vlak vlak, int maxOngelijk) {
@@ -129,8 +129,8 @@ public class ElftochtStructure extends Structure implements BouwRuimte.Ruimte {
     @Override
     protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
         ChunkPos chunk = context.chunkPos();
-        ElftochtPiek.Spot spot = plek(context.seed(), chunk.x, chunk.z);
-        if (spot == null || (spot.x() >> 4) != chunk.x || (spot.z() >> 4) != chunk.z) {
+        ElftochtPiek.Spot spot = plek(context.seed(), chunk.x(), chunk.z());
+        if (spot == null || (spot.x() >> 4) != chunk.x() || (spot.z() >> 4) != chunk.z()) {
             return Optional.empty();
         }
         int surface = context.chunkGenerator().getBaseHeight(spot.x(), spot.z(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(),

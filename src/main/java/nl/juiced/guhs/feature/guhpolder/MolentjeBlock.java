@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -81,29 +80,29 @@ public class MolentjeBlock extends HorizontalDirectionalBlock implements EntityB
         if (type != GuhpolderFeature.GUH_MOLENTJE_BE.get()) {
             return null;
         }
-        return level.isClientSide ? (BlockEntityTicker<T>) (BlockEntityTicker<MolentjeBlockEntity>) (l, p, s, be) -> be.clientTick()
+        return level.isClientSide() ? (BlockEntityTicker<T>) (BlockEntityTicker<MolentjeBlockEntity>) (l, p, s, be) -> be.clientTick()
                 : (BlockEntityTicker<T>) (BlockEntityTicker<MolentjeBlockEntity>) (l, p, s, be) -> be.serverTick();
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                               BlockHitResult hit) {
         if (!stack.is(KnusTags.KNABBELGRAAN)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
         if (!(level.getBlockEntity(pos) instanceof MolentjeBlockEntity molen)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             int in = molen.stort(stack);
             if (in > 0) {
                 level.playSound(null, pos, SoundEvents.COMPOSTER_FILL, SoundSource.BLOCKS, 0.8f, 1.2f);
-                player.displayClientMessage(Component.translatable("gui.guhs.guhpolder.molentje.gestort", in).withStyle(ChatFormatting.AQUA), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.guhpolder.molentje.gestort", in).withStyle(ChatFormatting.AQUA));
             } else {
-                player.displayClientMessage(Component.translatable("gui.guhs.guhpolder.molentje.vol").withStyle(ChatFormatting.GOLD), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.guhpolder.molentje.vol").withStyle(ChatFormatting.GOLD));
             }
         }
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -111,7 +110,7 @@ public class MolentjeBlock extends HorizontalDirectionalBlock implements EntityB
         if (!(level.getBlockEntity(pos) instanceof MolentjeBlockEntity molen)) {
             return InteractionResult.PASS;
         }
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             ItemStack meel = molen.neemMeel();
             if (!meel.isEmpty()) {
                 int n = meel.getCount();
@@ -119,19 +118,19 @@ public class MolentjeBlock extends HorizontalDirectionalBlock implements EntityB
                     player.drop(meel, false);
                 }
                 level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.6f, 0.9f);
-                player.displayClientMessage(Component.translatable("gui.guhs.guhpolder.molentje.meel", n).withStyle(ChatFormatting.AQUA), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.guhpolder.molentje.meel", n).withStyle(ChatFormatting.AQUA));
             } else if (player.isShiftKeyDown() && !molen.graan().isEmpty()) {
                 ItemStack graan = molen.neemGraan();
                 if (!player.addItem(graan)) {
                     player.drop(graan, false);
                 }
             } else {
-                player.displayClientMessage(molen.graan().isEmpty()
+                player.sendOverlayMessage(molen.graan().isEmpty()
                         ? Component.translatable("gui.guhs.guhpolder.molentje.leeg").withStyle(ChatFormatting.GRAY)
-                        : Component.translatable("gui.guhs.guhpolder.molentje.maalt", molen.graan().getCount()).withStyle(ChatFormatting.AQUA), true);
+                        : Component.translatable("gui.guhs.guhpolder.molentje.maalt", molen.graan().getCount()).withStyle(ChatFormatting.AQUA));
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

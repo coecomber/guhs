@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -50,7 +50,7 @@ public final class EilandenProtection {
         if (player.getAbilities().instabuild || !protectedAt(player.level(), pos)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.eilanden.no_build").withStyle(ChatFormatting.AQUA), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.eilanden.no_build").withStyle(ChatFormatting.AQUA));
         return true;
     }
 
@@ -72,7 +72,7 @@ public final class EilandenProtection {
     /** Using an item on a block (buckets, flint and steel, axes, hoes...): not on the islands. Opening the chest is fine. */
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty()) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty()) {
             return;
         }
         Direction face = event.getFace() == null ? Direction.UP : event.getFace();
@@ -84,7 +84,7 @@ public final class EilandenProtection {
     /** Buckets are used "in the air" too. */
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }

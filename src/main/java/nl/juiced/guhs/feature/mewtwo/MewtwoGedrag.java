@@ -56,7 +56,7 @@ public class MewtwoGedrag implements VariantGedrag {
 
     @Override
     public void tick(GuhEntity guh) {
-        if (guh.level().isClientSide) {
+        if (guh.level().isClientSide()) {
             // purple sparkles drifting from under the floating guh
             if (GuhHooks.heeft(guh, VerhaalVlaggen.ZWEEFT) && guh.getRandom().nextInt(guh.isVehicle() ? 12 : 6) == 0 && !guh.isInvisible()) {
                 double r = guh.getBbWidth() * 0.6;
@@ -80,7 +80,7 @@ public class MewtwoGedrag implements VariantGedrag {
 
     /** A tamed Guhtwo (not the story copy) with its telekinesis on, not inside a huisje. */
     public static boolean magTelekinese(GuhEntity guh) {
-        return guh.isTame() && guh.getOwnerUUID() != null && !VerhaalGuhs.isKopie(guh) && !guh.getPersistentData().getBoolean(UIT)
+        return guh.isTame() && guh.getOwnerUUID() != null && !VerhaalGuhs.isKopie(guh) && !guh.getPersistentData().getBooleanOr(UIT, false)
                 && !Huisjes.isBinnen(guh) && guh.isAlive();
     }
 
@@ -112,10 +112,10 @@ public class MewtwoGedrag implements VariantGedrag {
                 item.setDeltaMovement(d.scale(speed / Math.max(len, 1e-3)).add(0, 0.045, 0));
             }
             item.hasImpulse = true;
-            if (!item.getPersistentData().getBoolean(ZWEEFT_ITEM)) {
+            if (!item.getPersistentData().getBooleanOr(ZWEEFT_ITEM, false)) {
                 item.getPersistentData().putBoolean(ZWEEFT_ITEM, true);
                 level.playSound(null, item.getX(), item.getY(), item.getZ(), MewtwoFeature.TELEKINESE.get(), SoundSource.NEUTRAL, 0.6f,
-                        1.4f + level.random.nextFloat() * 0.3f);
+                        1.4f + level.getRandom().nextFloat() * 0.3f);
                 if (baas instanceof ServerPlayer sp && item.getItem().is(ModItems.KAAS_KNABBELS.get())) {
                     MewtwoVerhaal.adv(sp, "mewtwo_telekinese");
                 }
@@ -191,10 +191,10 @@ public class MewtwoGedrag implements VariantGedrag {
 
     @Override
     public void speciaal(GuhEntity guh, ServerPlayer owner) {
-        boolean uit = !guh.getPersistentData().getBoolean(UIT);
+        boolean uit = !guh.getPersistentData().getBooleanOr(UIT, false);
         guh.getPersistentData().putBoolean(UIT, uit);
-        owner.displayClientMessage(Component.translatable(uit ? "gui.guhs.mewtwo.telekinese.uit" : "gui.guhs.mewtwo.telekinese.aan",
-                guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        owner.sendOverlayMessage(Component.translatable(uit ? "gui.guhs.mewtwo.telekinese.uit" : "gui.guhs.mewtwo.telekinese.aan",
+                guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         if (guh.level() instanceof ServerLevel level) {
             level.playSound(null, guh, MewtwoFeature.TELEKINESE.get(), SoundSource.NEUTRAL, 0.8f, uit ? 0.8f : 1.5f);
             level.sendParticles(MewtwoFeature.GLOED.get(), guh.getX(), guh.getY() + 0.8, guh.getZ(), uit ? 4 : 16, 0.5, 0.4, 0.5, 0.04);

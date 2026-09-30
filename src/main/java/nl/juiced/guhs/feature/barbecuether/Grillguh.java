@@ -43,7 +43,7 @@ public final class Grillguh implements NpcRole {
     public static final int PIT_RADIUS = 16;
 
     public static int step(ServerPlayer player) {
-        return GuhQuests.saved(player).getInt(STEP_KEY);
+        return GuhQuests.saved(player).getIntOr(STEP_KEY, 0);
     }
 
     public static void setStep(ServerPlayer player, int step) {

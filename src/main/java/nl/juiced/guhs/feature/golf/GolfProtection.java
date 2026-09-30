@@ -13,7 +13,7 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -30,7 +30,7 @@ public final class GolfProtection {
 
     /** Is this spot part of a guh golf course? */
     public static boolean inCourse(ServerLevel world, BlockPos pos) {
-        Structure structure = world.registryAccess().registryOrThrow(Registries.STRUCTURE).get(COURSE);
+        Structure structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(COURSE);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -42,7 +42,7 @@ public final class GolfProtection {
         if (player.getAbilities().instabuild || !protectedAt(player.level(), pos)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.golf.no_build").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.golf.no_build").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -63,7 +63,7 @@ public final class GolfProtection {
 
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty() || event.getItemStack().is(GolfFeature.GOLFCLUB.get())) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty() || event.getItemStack().is(GolfFeature.GOLFCLUB.get())) {
             return;                                                    // (swinging the club at the ball on the ground is fine)
         }
         if (denied(event.getEntity(), event.getPos()) || denied(event.getEntity(), event.getPos().relative(event.getFace() == null ? Direction.UP : event.getFace()))) {
@@ -73,7 +73,7 @@ public final class GolfProtection {
 
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof BucketItem && denied(event.getEntity(), event.getEntity().blockPosition())) {
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof BucketItem && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }
     }

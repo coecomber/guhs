@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
@@ -45,19 +45,19 @@ public enum PleinSlot {
     }
 
     /** The template of the slot's building: guhs:knuffeldal_stadje/&lt;id&gt;. */
-    public ResourceLocation template() {
+    public Identifier template() {
         return Guhs.id("knuffeldal_stadje/" + id());
     }
 
     /** The template pool of the slot (one element: {@link #template}). */
-    public ResourceLocation pool() {
+    public Identifier pool() {
         return Guhs.id("knuffeldal_stadje/" + id());
     }
 
     /** The town (structure start) around pos, or null. */
     @Nullable
     public static StructureStart stadje(ServerLevel level, BlockPos pos) {
-        Structure structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(STADJE);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(STADJE);
         if (structure == null) {
             return null;
         }
@@ -106,7 +106,7 @@ public enum PleinSlot {
         }
         for (StructurePiece piece : start.getPieces()) {
             if (piece.getBoundingBox().isInside(pos)) {
-                ResourceLocation t = template(piece);
+                Identifier t = template(piece);
                 for (PleinSlot slot : values()) {
                     if (slot.template().equals(t)) {
                         return slot;
@@ -124,19 +124,19 @@ public enum PleinSlot {
                 return true;
             }
         }
-        Structure structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(STADJE);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(STADJE);
         return structure != null && level.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
     /** The template a jigsaw piece was made from (null for other pieces). */
     @Nullable
-    public static ResourceLocation template(StructurePiece piece) {
+    public static Identifier template(StructurePiece piece) {
         if (!(piece instanceof PoolElementStructurePiece pool)) {
             return null;
         }
         // (SinglePoolElement keeps its location to itself; its toString is "Single[Left[<location>]]")
         Matcher m = TEMPLATE.matcher(pool.getElement().toString());
-        return m.find() ? ResourceLocation.tryParse(m.group(1)) : null;
+        return m.find() ? Identifier.tryParse(m.group(1)) : null;
     }
 
     // --- game tests -----------------------------------------------------------------------------------------------------

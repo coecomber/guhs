@@ -129,7 +129,7 @@ public final class Speeltjes {
                 continue;
             }
             List<BlockPos> r = TunnelBlock.route(level, in.pos(), i.pos(), 128);
-            if (!r.isEmpty() && (uit == in || r.size() > route.size() || (r.size() == route.size() && level.random.nextBoolean()))) {
+            if (!r.isEmpty() && (uit == in || r.size() > route.size() || (r.size() == route.size() && level.getRandom().nextBoolean()))) {
                 uit = i;
                 route = r;
             }

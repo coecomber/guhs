@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Het knabbelkippetje: a round cheese-yellow chick with guh ears, big guh eyes and a tiny beak. When it is content it lays
  * a knabbelei: into the nearest kippennestje with room (within {@link BoerderijDier#VOERBAK_AFSTAND} blocks), or else on
@@ -102,6 +103,6 @@ public class KnabbelkippetjeEntity extends BoerderijDier {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
-        return BoerderijFeature.KNABBELKIPPETJE.get().create(level);
+        return BoerderijFeature.KNABBELKIPPETJE.get().create(level, EntitySpawnReason.TRIGGERED);
     }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -12,8 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -22,12 +20,11 @@ import nl.juiced.guhs.quest.Scorebord;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Tests of the guhrace: a whole race on the real racebaan (no own items needed, rings in order, prizes, records, the
  * ghost, cleanup of the rental guh), the protection, the shop, the race guh itself and the time maths.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class RaceGameTests {
     private static final String TRACK = "guh_racebaan";
     private static final String EMPTY = "empty";
@@ -44,7 +41,7 @@ public class RaceGameTests {
     private static ServerPlayer racer(GameTestHelper helper, GuhNpcEntity npc) {
         @SuppressWarnings("removal")
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX(), npc.getY(), npc.getZ() - 2);
+        player.snapTo(npc.getX(), npc.getY(), npc.getZ() - 2);
         return player;
     }
 
@@ -68,7 +65,7 @@ public class RaceGameTests {
         }
     }
 
-    @GameTest(batch = BATCH, template = TRACK, timeoutTicks = 200)
+    @GuhTest(batch = BATCH, template = TRACK, timeoutTicks = 200)
     public static void raceThreeLapsForPrizesAndARecord(GameTestHelper helper) {
         GuhNpcEntity npc = raceguh(helper);
         ServerPlayer player = racer(helper, npc);
@@ -116,20 +113,20 @@ public class RaceGameTests {
         helper.assertTrue(best > 0 && RaceRecords.bestLap(player) > 0 && RaceRecords.races(player) == 1, "a record: " + best);
         helper.assertTrue(RaceRecords.splits(player).length == 3 * 6, "a time for every ring: " + RaceRecords.splits(player).length);
         helper.assertTrue(RaceRecords.ghost(player).length >= 3, "the race was recorded for the ghost");
-        helper.assertTrue(Scorebord.top(player.server, RaceRole.BOARD_TOTAL).stream().anyMatch(e -> e.player().equals(player.getUUID()) && e.score() == best),
+        helper.assertTrue(Scorebord.top(player.level().getServer(), RaceRole.BOARD_TOTAL).stream().anyMatch(e -> e.player().equals(player.getUUID()) && e.score() == best),
                 "on the world's top 3 of race times");
-        helper.assertTrue(Scorebord.top(player.server, RaceRole.BOARD_LAP).stream().anyMatch(e -> e.player().equals(player.getUUID())
+        helper.assertTrue(Scorebord.top(player.level().getServer(), RaceRole.BOARD_LAP).stream().anyMatch(e -> e.player().equals(player.getUUID())
                 && e.score() == RaceRecords.bestLap(player)), "and of the fastest laps");
-        helper.assertTrue(RaceRole.trackRecord(player.server) <= best, "the track record is at least that fast");
+        helper.assertTrue(RaceRole.trackRecord(player.level().getServer()) <= best, "the track record is at least that fast");
         helper.assertTrue(!helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class, npc.getBoundingBox().inflate(1, 4, 1),
-                d -> d.getTags().contains(Scorebord.TAG)).isEmpty(), "the top-3 board floats above the Raceguh");
+                d -> d.entityTags().contains(Scorebord.TAG)).isEmpty(), "the top-3 board floats above the Raceguh");
         helper.assertTrue(player.distanceToSqr(npc) < 16, "back at the Raceguh");
         helper.assertTrue(player.getHealth() == player.getMaxHealth() && player.getAbilities().mayBuild, "an ordinary player again");
         leave(helper, player, other);
         helper.succeed();
     }
 
-    @GameTest(batch = BATCH, template = TRACK, timeoutTicks = 200)
+    @GuhTest(batch = BATCH, template = TRACK, timeoutTicks = 200)
     public static void raceGhostDrivesYourBestRace(GameTestHelper helper) {
         GuhNpcEntity npc = raceguh(helper);
         ServerPlayer player = racer(helper, npc);
@@ -162,7 +159,7 @@ public class RaceGameTests {
         helper.succeed();
     }
 
-    @GameTest(batch = BATCH, template = TRACK, timeoutTicks = 300)
+    @GuhTest(batch = BATCH, template = TRACK, timeoutTicks = 300)
     public static void raceBackToTheRingAndGettingOffEndsIt(GameTestHelper helper) {
         GuhNpcEntity npc = raceguh(helper);
         ServerPlayer player = racer(helper, npc);
@@ -201,7 +198,7 @@ public class RaceGameTests {
         helper.succeed();
     }
 
-    @GameTest(batch = BATCH, template = TRACK, timeoutTicks = 200)
+    @GuhTest(batch = BATCH, template = TRACK, timeoutTicks = 200)
     public static void raceShoosWildGuhsAndNeverHangsAround(GameTestHelper helper) {
         GuhNpcEntity npc = raceguh(helper);
         ServerPlayer player = racer(helper, npc);
@@ -214,10 +211,10 @@ public class RaceGameTests {
         game.skipCountdown(npc);
         // a wild guh wanders onto the road ahead, a named (someone's) guh stands next to it
         Vec3 ahead = game.track().toWorld(new Vec3(0, 0, 4)), next = game.track().toWorld(new Vec3(2, 0, 6));
-        nl.juiced.guhs.entity.GuhEntity wild = ModEntities.GUH.get().create(helper.getLevel());
-        nl.juiced.guhs.entity.GuhEntity named = ModEntities.GUH.get().create(helper.getLevel());
-        wild.moveTo(ahead.x, ahead.y, ahead.z, 0, 0);
-        named.moveTo(next.x, next.y, next.z, 0, 0);
+        nl.juiced.guhs.entity.GuhEntity wild = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        nl.juiced.guhs.entity.GuhEntity named = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        wild.snapTo(ahead.x, ahead.y, ahead.z, 0, 0);
+        named.snapTo(next.x, next.y, next.z, 0, 0);
         named.setCustomName(net.minecraft.network.chat.Component.literal("Gerrit"));
         helper.getLevel().addFreshEntity(wild);
         helper.getLevel().addFreshEntity(named);
@@ -235,7 +232,7 @@ public class RaceGameTests {
         helper.succeed();
     }
 
-    @GameTest(batch = BATCH, template = TRACK, timeoutTicks = 200)
+    @GuhTest(batch = BATCH, template = TRACK, timeoutTicks = 200)
     public static void racebaanIsProtected(GameTestHelper helper) {
         GuhNpcEntity npc = raceguh(helper);
         RaceTrack track = RaceTrack.of(npc);
@@ -250,7 +247,7 @@ public class RaceGameTests {
         helper.succeed();
     }
 
-    @GameTest(batch = BATCH, template = EMPTY)
+    @GuhTest(batch = BATCH, template = EMPTY)
     public static void raceguhSellsTheJockeyOutfit(GameTestHelper helper) {
         GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(2, 1, 2));
         npc.setKind(GuhNpcEntity.Kind.RACEGUH);
@@ -265,12 +262,12 @@ public class RaceGameTests {
         helper.succeed();
     }
 
-    @GameTest(batch = BATCH, template = EMPTY, timeoutTicks = 120)
+    @GuhTest(batch = BATCH, template = EMPTY, timeoutTicks = 120)
     public static void raceGuhBoostsOnAPadAndNeverStaysBehind(GameTestHelper helper) {
-        RaceGuhEntity guh = RaceFeature.RACE_GUH.get().create(helper.getLevel());
+        RaceGuhEntity guh = RaceFeature.RACE_GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(guh != null && !guh.getType().canSerialize(), "a race guh is never saved");
         Vec3 at = helper.absoluteVec(new Vec3(2.5, 1, 2.5));
-        guh.moveTo(at.x, at.y, at.z, 0, 0);
+        guh.snapTo(at.x, at.y, at.z, 0, 0);
         guh.setUpForRace();
         helper.getLevel().addFreshEntity(guh);
         helper.assertTrue(guh.isSaddled() && guh.isInvulnerable() && !guh.isTame(), "saddled, can't be hurt, and not yours");
@@ -290,7 +287,7 @@ public class RaceGameTests {
         helper.succeedWhen(() -> helper.assertTrue(guh.isRemoved(), "a race guh without a race goes away"));
     }
 
-    @GameTest(batch = BATCH, template = EMPTY)
+    @GuhTest(batch = BATCH, template = EMPTY)
     public static void raceTimesMedalsAndTheTrackFrame(GameTestHelper helper) {
         helper.assertTrue(RaceRecords.time(0).equals("0:00.00") && RaceRecords.time(1234).equals("1:01.70") && RaceRecords.time(-1).equals("-"),
                 "race times: " + RaceRecords.time(1234));
@@ -318,7 +315,7 @@ public class RaceGameTests {
     }
 
     /** The rider's game moves the race guh, so the server checks it: no false start, no flying around the track. */
-    @GameTest(batch = BATCH, template = TRACK, timeoutTicks = 200)
+    @GuhTest(batch = BATCH, template = TRACK, timeoutTicks = 200)
     public static void raceGuhCantCheat(GameTestHelper helper) {
         GuhNpcEntity npc = raceguh(helper);
         ServerPlayer player = racer(helper, npc);
@@ -344,7 +341,7 @@ public class RaceGameTests {
      * 2.10: no more "Oepsie!" loop. After a reset the rider's game may still send a few old positions (down where it fell):
      * during the grace that doesn't send it back again, and more resets soon after one don't fill the chat.
      */
-    @GameTest(batch = BATCH, template = TRACK, timeoutTicks = 300)
+    @GuhTest(batch = BATCH, template = TRACK, timeoutTicks = 300)
     public static void raceResetHasAGraceAndNoChatSpam(GameTestHelper helper) {
         GuhNpcEntity npc = raceguh(helper);
         ServerPlayer player = racer(helper, npc);
@@ -392,7 +389,7 @@ public class RaceGameTests {
     // --- 2.9: levels, the golden ghost -------------------------------------------------------------------------------------
 
     /** Lastig on the old racebaan: its own boards and records, 50 % more raceprijsjes, Mika-pikkers along the track. */
-    @GameTest(batch = "guhrace_lastig", template = TRACK, timeoutTicks = 200)
+    @GuhTest(batch = "guhrace_lastig", template = TRACK, timeoutTicks = 200)
     public static void raceLastigHasItsOwnBoardsAndMikaPikkers(GameTestHelper helper) {
         GuhNpcEntity npc = raceguh(helper);
         ServerPlayer player = racer(helper, npc);
@@ -428,8 +425,8 @@ public class RaceGameTests {
         helper.assertTrue(prizes == nl.juiced.guhs.feature.spelen.Niveau.LASTIG.munten(RaceGame.Medal.GOUD.prizes) + RaceGame.FIRST_PRIZES,
                 "gold on lastig (9) + the first race bag (4): " + prizes);
         helper.assertTrue(RaceRecords.best(player, "_racebaan_lastig") > 0 && RaceRecords.best(player) < 0, "a lastig record, the medium one untouched");
-        helper.assertTrue(Scorebord.top(player.server, "race_total_lastig").stream().anyMatch(e -> e.player().equals(player.getUUID()))
-                && Scorebord.top(player.server, "race_lap_lastig").stream().anyMatch(e -> e.player().equals(player.getUUID())), "on the lastig boards");
+        helper.assertTrue(Scorebord.top(player.level().getServer(), "race_total_lastig").stream().anyMatch(e -> e.player().equals(player.getUUID()))
+                && Scorebord.top(player.level().getServer(), "race_lap_lastig").stream().anyMatch(e -> e.player().equals(player.getUUID())), "on the lastig boards");
         helper.assertTrue(helper.getLevel().getEntitiesOfClass(nl.juiced.guhs.feature.circuit.MikaPikkerEntity.class, helper.getBounds().inflate(8),
                 Entity::isAlive).isEmpty(), "the Mika-pikkers go away with the race");
         leave(helper, player);
@@ -437,7 +434,7 @@ public class RaceGameTests {
     }
 
     /** Makkelijk ("wide rails"): longer off the road before it counts, and then only back a little way. */
-    @GameTest(batch = "guhrace_makkelijk", template = TRACK, timeoutTicks = 300)
+    @GuhTest(batch = "guhrace_makkelijk", template = TRACK, timeoutTicks = 300)
     public static void raceMakkelijkGoesBackOnlyALittle(GameTestHelper helper) {
         GuhNpcEntity npc = raceguh(helper);
         ServerPlayer player = racer(helper, npc);
@@ -475,7 +472,7 @@ public class RaceGameTests {
     }
 
     /** The golden ghost: the world's track record (someone else's) drives along in gold, unless you switch it off. */
-    @GameTest(batch = "guhrace_goud", template = TRACK, timeoutTicks = 200)
+    @GuhTest(batch = "guhrace_goud", template = TRACK, timeoutTicks = 200)
     public static void raceGoldenGhostDrivesTheTrackRecord(GameTestHelper helper) {
         GuhNpcEntity npc = raceguh(helper);
         ServerPlayer holder = racer(helper, npc);
@@ -484,7 +481,7 @@ public class RaceGameTests {
         for (int i = 0; i < 200; i++) {
             recording[i * 3 + 2] = i * 8;                                   // straight ahead, half a block per sample
         }
-        RaceGeesten.forget(player.server, RaceRole.BOARD_TOTAL);
+        RaceGeesten.forget(player.level().getServer(), RaceRole.BOARD_TOTAL);
         helper.assertTrue(RaceGeesten.offer(holder, RaceRole.BOARD_TOTAL, 1500, recording), "a track record with its race");
         helper.assertTrue(!RaceGeesten.offer(holder, RaceRole.BOARD_TOTAL, 1600, recording), "a slower race doesn't replace it");
         RaceRole.action(npc, player, RaceRole.START);
@@ -514,17 +511,17 @@ public class RaceGameTests {
         RaceGame own = RaceGame.of(npc);
         helper.assertTrue(own != null && own.goudGhost() == null, "the record holder doesn't race their own golden ghost");
         RaceGame.playerGone(holder);
-        RaceGeesten.forget(player.server, RaceRole.BOARD_TOTAL);
+        RaceGeesten.forget(player.level().getServer(), RaceRole.BOARD_TOTAL);
         leave(helper, player, holder);
         helper.succeed();
     }
 
     /** The race guh per level: lastig turns after the mouse and ignores the silver pads; calmer on makkelijk. */
-    @GameTest(batch = BATCH, template = EMPTY)
+    @GuhTest(batch = BATCH, template = EMPTY)
     public static void raceGuhPerLevel(GameTestHelper helper) {
-        RaceGuhEntity guh = RaceFeature.RACE_GUH.get().create(helper.getLevel());
+        RaceGuhEntity guh = RaceFeature.RACE_GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         Vec3 at = helper.absoluteVec(new Vec3(2.5, 1, 2.5));
-        guh.moveTo(at.x, at.y, at.z, 0, 0);
+        guh.snapTo(at.x, at.y, at.z, 0, 0);
         guh.setUpForRace();
         helper.getLevel().addFreshEntity(guh);
         helper.setBlock(new BlockPos(2, 1, 2), RaceFeature.RACE_PAD.get().defaultBlockState().setValue(RaceBlocks.LASTIG, false));

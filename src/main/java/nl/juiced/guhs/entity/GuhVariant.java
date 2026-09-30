@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import nl.juiced.guhs.Guhs;
 
@@ -203,12 +203,12 @@ public enum GuhVariant {
      * their NPC/creature textures don't fit the guh model, so a plain guh that got one of those ids (/summon, NBT) just
      * looks like a normal guh instead of a purple-black missing texture.
      */
-    public ResourceLocation texture() {
+    public Identifier texture() {
         return Guhs.id(this == NORMAL || isCharacter() ? "textures/entity/guh.png" : "textures/entity/guh_" + id() + ".png");
     }
 
     /** The rainbow guh cycles through its colour frames; everyone else has one texture. */
-    public ResourceLocation texture(int tick) {
+    public Identifier texture(int tick) {
         return this == RAINBOW ? Guhs.id("textures/entity/guh_rainbow_" + Math.floorMod(tick / 10, RAINBOW_FRAMES) + ".png") : texture();
     }
 

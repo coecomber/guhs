@@ -39,6 +39,7 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.sterrenwacht.Buiten;
 
+import net.minecraft.resources.Identifier;
 /**
  * Piep (2.8.1): four new little creatures and a pink cake, between Knuffeldal (2.8) and 2.9.
  * <ul>
@@ -86,20 +87,20 @@ public final class PiepFeature {
     // --- the creatures -------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<PieppiepmuisjeEntity>> PIEPPIEPMUISJE = ENTITY_TYPES.register("pieppiepmuisje",
             () -> EntityType.Builder.of(PieppiepmuisjeEntity::new, MobCategory.CREATURE).sized(0.38f, 0.32f).eyeHeight(0.22f)
-                    .clientTrackingRange(8).build(Guhs.id("pieppiepmuisje").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("pieppiepmuisje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<PoepschillyEntity>> POEPSCHILLY = ENTITY_TYPES.register("poepschilly",
             () -> EntityType.Builder.of(PoepschillyEntity::new, MobCategory.CREATURE).sized(0.55f, 0.32f).eyeHeight(0.2f)
-                    .clientTrackingRange(10).build(Guhs.id("poepschilly").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("poepschilly"))));
     /** Schilly: Poepschilly's look-alike, the minihoofdje-bestie of the guhs (no poetsbeurt). */
     public static final DeferredHolder<EntityType<?>, EntityType<SchillyEntity>> SCHILLY = ENTITY_TYPES.register("schilly",
             () -> EntityType.Builder.of(SchillyEntity::new, MobCategory.CREATURE).sized(0.55f, 0.32f).eyeHeight(0.2f)
-                    .clientTrackingRange(10).build(Guhs.id("schilly").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("schilly"))));
     public static final DeferredHolder<EntityType<?>, EntityType<BozeKaasknabbelEntity>> BOZE_KAASKNABBEL = ENTITY_TYPES.register("boze_kaasknabbel",
             () -> EntityType.Builder.of(BozeKaasknabbelEntity::new, MobCategory.MONSTER).sized(0.4f, 0.55f).eyeHeight(0.4f)
-                    .clientTrackingRange(10).build(Guhs.id("boze_kaasknabbel").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("boze_kaasknabbel"))));
     public static final DeferredHolder<EntityType<?>, EntityType<BozeOppernabbelEntity>> BOZE_OPPERNABBEL = ENTITY_TYPES.register("boze_oppernabbel",
             () -> EntityType.Builder.of(BozeOppernabbelEntity::new, MobCategory.MONSTER).sized(0.9f, 1.6f).eyeHeight(1.2f)
-                    .clientTrackingRange(12).fireImmune().build(Guhs.id("boze_oppernabbel").toString()));
+                    .clientTrackingRange(12).fireImmune().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("boze_oppernabbel"))));
 
     public static final DeferredItem<MuisjeItem> PIEPPIEPMUISJE_ITEM = ITEMS.registerItem("pieppiepmuisje_item", MuisjeItem::new,
             new Item.Properties().stacksTo(1));
@@ -164,7 +165,7 @@ public final class PiepFeature {
                     (type, level, spawnType, pos, random) -> PoepschillyEntity.checkSpawn(level, spawnType, pos),
                     RegisterSpawnPlacementsEvent.Operation.REPLACE);
             event.register(PIEPPIEPMUISJE.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                    (type, level, spawnType, pos, random) -> spawnType != net.minecraft.world.entity.MobSpawnType.NATURAL,
+                    (type, level, spawnType, pos, random) -> spawnType != net.minecraft.world.entity.EntitySpawnReason.NATURAL,
                     RegisterSpawnPlacementsEvent.Operation.REPLACE);
         });
         NEST_BESCHERMING.register();

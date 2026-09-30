@@ -16,7 +16,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -52,7 +52,7 @@ public class SnotkruidBlock extends BushBlock {
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-        return state.is(BlockTags.DIRT) || state.getBlock() instanceof FarmBlock || state.is(KnuffeldalFeature.KNUFFELGRAS.get());
+        return state.is(BlockTags.DIRT) || state.getBlock() instanceof FarmlandBlock || state.is(KnuffeldalFeature.KNUFFELGRAS.get());
     }
 
     @Override
@@ -77,10 +77,10 @@ public class SnotkruidBlock extends BushBlock {
         if (state.getValue(AGE) < MAX) {
             return InteractionResult.PASS;
         }
-        if (!level.isClientSide && player instanceof ServerPlayer sp) {
+        if (!level.isClientSide() && player instanceof ServerPlayer sp) {
             pluk((ServerLevel) level, pos, sp);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Picks a snotkruidje (the plant starts over): true when there was one. */

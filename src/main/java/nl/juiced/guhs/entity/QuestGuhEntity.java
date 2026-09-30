@@ -21,12 +21,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * The Hungry Guh from the guh picnics: sits up and never moves. Right-click it and it asks (in chat) for
@@ -62,7 +62,7 @@ public class QuestGuhEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         ItemStack stack = player.getItemInHand(hand);

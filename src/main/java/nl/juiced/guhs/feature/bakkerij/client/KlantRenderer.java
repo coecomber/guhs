@@ -5,14 +5,14 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import nl.juiced.guhs.Guhs;
@@ -20,10 +20,10 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.bakkerij.BakkerijFeature;
 import nl.juiced.guhs.feature.bakkerij.BakkerijKlant;
 import nl.juiced.guhs.feature.bakkerij.Recept;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * A customer guh: the guh model (without clothes or variant extras) in one of a few fur colours - the feestklant is a
@@ -31,19 +31,19 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
  * underneath (green, then yellow, then red). When you bring the wrong thing the bubble shakes.
  */
 public class KlantRenderer extends GeoEntityRenderer<BakkerijKlant> {
-    private static final ResourceLocation[] VACHTEN = {tex("guh"), tex("guh_mint"), tex("guh_choco"), tex("guh_snow"), tex("guh_starry"),
+    private static final Identifier[] VACHTEN = {tex("guh"), tex("guh_mint"), tex("guh_choco"), tex("guh_snow"), tex("guh_starry"),
             tex("guh_pluisguh"), tex("guh_kaasmoerasguh")};
-    private static final ResourceLocation FEEST = tex("guh_golden");
-    private static final ResourceLocation BUBBEL = Guhs.id("textures/entity/bakkerij_bubbel.png");
+    private static final Identifier FEEST = tex("guh_golden");
+    private static final Identifier BUBBEL = Guhs.id("textures/entity/bakkerij_bubbel.png");
 
-    private static ResourceLocation tex(String name) {
+    private static Identifier tex(String name) {
         return Guhs.id("textures/entity/" + name + ".png");
     }
 
     public KlantRenderer(EntityRendererProvider.Context context) {
         super(context, new DefaultedEntityGeoModel<BakkerijKlant>(Guhs.id("guh"), true) {
             @Override
-            public ResourceLocation getTextureResource(BakkerijKlant klant) {
+            public Identifier getTextureResource(BakkerijKlant klant) {
                 int i = klant.uiterlijk();
                 return i >= 0 && i < VACHTEN.length ? VACHTEN[i] : FEEST;
             }
@@ -85,7 +85,7 @@ public class KlantRenderer extends GeoEntityRenderer<BakkerijKlant> {
         if (klant.neeTimer() > 0) {
             pose.mulPose(Axis.ZP.rotationDegrees(Mth.sin((klant.neeTimer() - partialTick) * 1.4f) * 14f));
         }
-        int light = LightTexture.FULL_BRIGHT;
+        int light = LightCoordsUtil.FULL_BRIGHT;
         VertexConsumer bubbel = buffers.getBuffer(RenderType.entityTranslucent(BUBBEL));
         // the bubble: 24 x 24 of the 32 x 32 texture, its little tail pointing down to the guh
         quad(bubbel, pose, -0.36f, -0.3f, 0.36f, 0.42f, 0, 0, 24 / 32f, 24 / 32f, 0xFFFFFFFF, light, 0f);

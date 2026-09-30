@@ -117,7 +117,7 @@ public class GatenkaasHolteFeature extends Feature<NoneFeatureConfiguration> {
         if (random.nextInt(3) == 0) {
             int bottom = (int) Math.floor(main.y - main.r);
             for (BlockPos c : carved) {
-                if (c.getY() <= bottom + 2 && main.contains(c, 0)) {
+                if (c.getY() <= bottom + 2 && main.contains(c)) {
                     pool.add(c);
                 }
             }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -12,8 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.knus.Feesttaak;
@@ -27,8 +25,6 @@ import nl.juiced.guhs.registry.ModEntities;
  * Game tests of the guhtuintjes: plant, grow, harvest (the tuinboek), the gieter, a tamed guh that waters, singing that
  * makes plants grow, the feestboeket for the Knusfeest, the tags. (Template tuintjes_test_tuin: a grass floor at helper y = 1.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class TuintjesGameTests {
     private static final String TUIN = "tuintjes_test_tuin";
 
@@ -38,7 +34,7 @@ public class TuintjesGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(pos);
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return p;
     }
 
@@ -49,13 +45,13 @@ public class TuintjesGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
     private static int count(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -69,7 +65,7 @@ public class TuintjesGameTests {
         return helper.absolutePos(pos);
     }
 
-    @GameTest(template = TUIN)
+    @GuhTest(template = TUIN)
     public static void tuintjesPlantenGroeienEnOogsten(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         BlockPos pos = pot(helper, new BlockPos(3, 2, 3), false, TuinPlant.LEEG);
@@ -108,7 +104,7 @@ public class TuintjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = TUIN)
+    @GuhTest(template = TUIN)
     public static void tuintjesGieterGeeftWater(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         var level = helper.getLevel();
@@ -135,7 +131,7 @@ public class TuintjesGameTests {
     }
 
     /** A tamed guh walks to a thirsty plant nearby and waters it (its owner's Knus tab counts it). */
-    @GameTest(template = TUIN, timeoutTicks = 500)
+    @GuhTest(template = TUIN, timeoutTicks = 500)
     public static void tuintjesTammeGuhGeeftWater(GameTestHelper helper) {
         ServerPlayer owner = player(helper, new BlockPos(2, 2, 9));
         BlockPos pos = pot(helper, new BlockPos(8, 2, 8), true, TuinPlant.GUHBLOEM);
@@ -157,7 +153,7 @@ public class TuintjesGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = TUIN)
+    @GuhTest(template = TUIN)
     public static void tuintjesZangLaatPlantjesGroeien(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         var level = helper.getLevel();
@@ -191,7 +187,7 @@ public class TuintjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = TUIN)
+    @GuhTest(template = TUIN)
     public static void tuintjesFeestboeketVoorHetKnusfeest(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         try {
@@ -216,7 +212,7 @@ public class TuintjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = TUIN)
+    @GuhTest(template = TUIN)
     public static void tuintjesTags(GameTestHelper helper) {
         helper.assertTrue(new ItemStack(TuintjesFeature.FEESTBOEKET.get()).is(KnusTags.FEESTBLOEMEN), "feestboeket in #knus/feestbloemen");
         helper.assertTrue(new ItemStack(TuintjesFeature.THEEKRUID.get()).is(KnusTags.THEEKRUID), "#knus/theekruid");

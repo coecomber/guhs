@@ -60,10 +60,10 @@ public class KnabbelovenBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide && player instanceof ServerPlayer p) {
+        if (!level.isClientSide() && player instanceof ServerPlayer p) {
             Bakken.open(p, pos);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Glows while baking: off again when nothing bakes in it any more. */

@@ -7,7 +7,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -18,7 +18,7 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.kamperen.KamperenFeature;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.knus.client.GuhRenderHooks;
-import software.bernie.geckolib.cache.object.GeoBone;
+import com.geckolib.cache.model.GeoBone;
 
 /**
  * Client side of the kampeerplekjes: the pyjamas (a guh with the PYJAMA flag is drawn in the pyjama_pakje and the

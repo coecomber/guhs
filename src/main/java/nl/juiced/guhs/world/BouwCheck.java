@@ -20,7 +20,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
@@ -30,7 +30,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -133,7 +133,7 @@ public final class BouwCheck {
             return 0;
         }
         scanning = true;
-        String dim = level.dimension().location().toString();
+        String dim = level.dimension().identifier().toString();
         source.sendSuccess(() -> Component.literal("Bouwcheck " + dim + ": gebouwen zoeken binnen " + radius + " blokken, "
                 + (seeds < 0 ? "seed " + com.mojang.brigadier.arguments.LongArgumentType.getLong(c, "seed") : seeds + (seeds == 1 ? " seed" : " seeds"))
                 + "...").withStyle(ChatFormatting.GRAY), true);
@@ -154,14 +154,14 @@ public final class BouwCheck {
                 return;
             }
             StringBuilder report = new StringBuilder();
-            List<String> chat = overlapReport(found, radius, report, level.getMinBuildHeight(), level.getMaxBuildHeight());
+            List<String> chat = overlapReport(found, radius, report, level.getMinY(), level.getMaxY() + 1);
             write(server, level, "overlap", report.toString());
             chat.forEach(line -> source.sendSuccess(() -> Component.literal(line), false));
             if (complete) {
                 List<Start> mine = new ArrayList<>(found.get(worldSeed).stream().filter(Start::guhs).toList());
                 if (max > 0) {
                     Map<String, Integer> per = new HashMap<>();
-                    mine.sort(Comparator.comparingLong(s -> (long) s.chunk.x * s.chunk.x + (long) s.chunk.z * s.chunk.z));
+                    mine.sort(Comparator.comparingLong(s -> (long) s.chunk.x() * s.chunk.x() + (long) s.chunk.z() * s.chunk.z()));
                     mine.removeIf(s -> per.merge(s.id, 1, Integer::sum) > max);
                 }
                 job = new Job(source, level, mine, found.get(worldSeed));
@@ -193,7 +193,7 @@ public final class BouwCheck {
         state.ensureStructuresGenerated();
         BouwRuimte.remember(random, state);
         StructureTemplateManager templates = level.getStructureManager();
-        var structures = access.registryOrThrow(Registries.STRUCTURE);
+        var structures = access.lookupOrThrow(Registries.STRUCTURE);
         int lo = SectionPos.blockToSectionCoord(-radius), hi = SectionPos.blockToSectionCoord(radius);
         List<Start> out = new ArrayList<>();
         for (Holder<StructureSet> set : state.possibleStructureSets()) {
@@ -203,23 +203,23 @@ public final class BouwCheck {
                 for (int rx = Math.floorDiv(lo, spread.spacing()); rx <= Math.floorDiv(hi, spread.spacing()); rx++) {
                     for (int rz = Math.floorDiv(lo, spread.spacing()); rz <= Math.floorDiv(hi, spread.spacing()); rz++) {
                         ChunkPos c = spread.getPotentialStructureChunk(seed, rx * spread.spacing(), rz * spread.spacing());
-                        if (c.x >= lo && c.x <= hi && c.z >= lo && c.z <= hi && placement.isStructureChunk(state, c.x, c.z)) {
+                        if (c.x() >= lo && c.x() <= hi && c.z() >= lo && c.z() <= hi && placement.isStructureChunk(state, c.x(), c.z())) {
                             candidates.add(c);
                         }
                     }
                 }
             } else if (placement instanceof ConcentricRingsStructurePlacement rings) {
                 for (ChunkPos c : state.getRingPositionsFor(rings)) {
-                    if (c.x >= lo && c.x <= hi && c.z >= lo && c.z <= hi && placement.isStructureChunk(state, c.x, c.z)) {
+                    if (c.x() >= lo && c.x() <= hi && c.z() >= lo && c.z() <= hi && placement.isStructureChunk(state, c.x(), c.z())) {
                         candidates.add(c);
                     }
                 }
             }
-            String setId = set.unwrapKey().map(k -> k.location().toString()).orElse("?");
+            String setId = set.unwrapKey().map(k -> k.identifier().toString()).orElse("?");
             for (ChunkPos c : candidates) {
                 List<StructureSet.StructureSelectionEntry> list = new ArrayList<>(set.value().structures());
                 WorldgenRandom pick = new WorldgenRandom(new LegacyRandomSource(0L));
-                pick.setLargeFeatureSeed(seed, c.x, c.z);
+                pick.setLargeFeatureSeed(seed, c.x(), c.z());
                 int total = list.stream().mapToInt(StructureSet.StructureSelectionEntry::weight).sum();
                 while (!list.isEmpty()) {
                     int k = 0;
@@ -243,7 +243,7 @@ public final class BouwCheck {
                         start = StructureStart.INVALID_START;
                     }
                     if (start.isValid()) {
-                        ResourceLocation id = structures.getKey(structure);
+                        Identifier id = structures.getKey(structure);
                         List<BoundingBox> pieces = start.getPieces().stream().map(StructurePiece::getBoundingBox).toList();
                         out.add(new Start(String.valueOf(id), setId, id != null && id.getNamespace().equals("guhs"), seed, c,
                                 start.getBoundingBox(), pieces, structure));
@@ -423,7 +423,7 @@ public final class BouwCheck {
             BoundingBox b = s.box;
             int x0 = b.minX() >> 4, x1 = b.maxX() >> 4, z0 = b.minZ() >> 4, z1 = b.maxZ() >> 4;
             ChunkPos centre = new ChunkPos((x0 + x1) >> 1, (z0 + z1) >> 1);
-            int radius = Math.max(Math.max(centre.x - x0, x1 - centre.x), Math.max(centre.z - z0, z1 - centre.z)) + 2;
+            int radius = Math.max(Math.max(centre.x() - x0, x1 - centre.x()), Math.max(centre.z() - z0, z1 - centre.z())) + 2;
             chunks.addRegionTicket(TICKET, centre, radius, centre);
             j.busy.add(new Object[]{s, centre, radius, 0});
         }
@@ -476,7 +476,7 @@ public final class BouwCheck {
         r.id = s.id;
         r.at = s.box.getCenter();
         ServerLevel level = j.level;
-        LevelChunk home = level.getChunkSource().getChunkNow(s.chunk.x, s.chunk.z);
+        LevelChunk home = level.getChunkSource().getChunkNow(s.chunk.x(), s.chunk.z());
         StructureStart start = home == null ? null : home.getStartForStructure(s.structure);
         if (start == null || !start.isValid()) {
             r.noStart = true;
@@ -504,7 +504,7 @@ public final class BouwCheck {
                     settings = tp.placeSettings();
                     pos = tp.templatePosition();
                 } else if (piece instanceof PoolElementStructurePiece pp && pp.getElement() instanceof SinglePoolElement single) {
-                    Either<ResourceLocation, StructureTemplate> either = (Either<ResourceLocation, StructureTemplate>) template.get(single);
+                    Either<Identifier, StructureTemplate> either = (Either<Identifier, StructureTemplate>) template.get(single);
                     t = either.map(level.getStructureManager()::getOrCreate, x -> x);
                     settings = new StructurePlaceSettings().setRotation(pp.getRotation());
                     pos = pp.getPosition();
@@ -595,7 +595,7 @@ public final class BouwCheck {
     static int land(LevelChunk chunk, int x, int z) {
         int y = chunk.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, x & 15, z & 15);
         BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos(x, y, z);
-        while (y > chunk.getMinBuildHeight()) {
+        while (y > chunk.getMinY()) {
             BlockState state = chunk.getBlockState(at.setY(y));
             if (!(state.isAir() || state.is(BlockTags.LEAVES) || state.is(BlockTags.LOGS) || state.canBeReplaced()
                     || !state.getFluidState().isEmpty() || state.is(Blocks.SNOW))) {
@@ -616,7 +616,7 @@ public final class BouwCheck {
     }
 
     private static String name(BlockState state) {
-        return state.getBlock().builtInRegistryHolder().key().location().getPath();
+        return state.getBlock().builtInRegistryHolder().key().identifier().getPath();
     }
 
     /** Same block, or a change the game makes on its own (grass under a block turns to dirt, fluids flow...). */
@@ -643,7 +643,7 @@ public final class BouwCheck {
         for (Result r : j.results) {
             per.computeIfAbsent(r.id, k -> new ArrayList<>()).add(r);
         }
-        report.append(String.format("Bouwcheck volledigheid %s (wereldseed %d)%n%n", j.level.dimension().location(), j.level.getSeed()));
+        report.append(String.format("Bouwcheck volledigheid %s (wereldseed %d)%n%n", j.level.dimension().identifier(), j.level.getSeed()));
         report.append(String.format("%-40s %4s %7s %7s %6s %7s %7s %7s %s%n", "structuur", "n", "gem%", "min%", "<95%", "lucht%", "zweef%", "ander", "fout"));
         List<String> chat = new ArrayList<>();
         int bad = 0;
@@ -734,7 +734,7 @@ public final class BouwCheck {
         try {
             Path dir = server.getWorldPath(LevelResource.ROOT).resolve("bouwcheck");
             Files.createDirectories(dir);
-            Path file = dir.resolve(level.dimension().location().getPath() + "_" + kind + ".txt");
+            Path file = dir.resolve(level.dimension().identifier().getPath() + "_" + kind + ".txt");
             Files.writeString(file, text);
         } catch (IOException ignored) {
         }

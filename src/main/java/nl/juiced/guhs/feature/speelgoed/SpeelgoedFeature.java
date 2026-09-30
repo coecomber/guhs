@@ -28,6 +28,8 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.huisje.Speelgoed;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * Het speelgoed (2.10 "Lieve vadsjes van elkaar", slice speelgoed): four toys in guh style that guhs play with when a
  * player is near ({@link SpeelGoal}) and that the residents of a Guhhuisje sometimes use at random (the four
@@ -80,11 +82,11 @@ public final class SpeelgoedFeature {
     public static final DeferredHolder<EntityType<?>, EntityType<KnabbelbalEntity>> KNABBELBAL = ENTITIES.register("knabbelbal",
             () -> EntityType.Builder.<KnabbelbalEntity>of(KnabbelbalEntity::new, MobCategory.MISC)
                     .sized(KnabbelbalEntity.SIZE, KnabbelbalEntity.SIZE).clientTrackingRange(8).updateInterval(1)
-                    .build(Guhs.id("knabbelbal").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("knabbelbal"))));
     public static final DeferredHolder<EntityType<?>, EntityType<ZitjeEntity>> ZITJE = ENTITIES.register("speelgoed_zitje",
             () -> EntityType.Builder.<ZitjeEntity>of(ZitjeEntity::new, MobCategory.MISC)
                     .sized(0.4f, 0.2f).clientTrackingRange(10).updateInterval(20).noSummon()
-                    .build(Guhs.id("speelgoed_zitje").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("speelgoed_zitje"))));
 
     /** Every toy block that guhs can find (glijbaantje, wip, schommel and every tunnel piece). */
     public static final DeferredHolder<PoiType, PoiType> POI = POI_TYPES.register("speelgoed", () -> new PoiType(ImmutableSet.<BlockState>builder()

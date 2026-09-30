@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.BlockUtil;
+import net.minecraft.util.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.level.portal.PortalShape;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.world.ModDimensions;
@@ -53,7 +53,7 @@ public final class GrillPortalForcer {
     }
 
     @Nullable
-    public static DimensionTransition getDestination(ServerLevel from, Entity entity, BlockPos portalPos) {
+    public static TeleportTransition getDestination(ServerLevel from, Entity entity, BlockPos portalPos) {
         ResourceKey<Level> targetKey = targetDimension(from.dimension());
         ServerLevel target = targetKey == null ? null : from.getServer().getLevel(targetKey);
         if (target == null) {
@@ -65,13 +65,13 @@ public final class GrillPortalForcer {
 
         Optional<BlockPos> existing = findClosestPortalPosition(target, exitPos, toBarbecue, border);
         BlockUtil.FoundRectangle rect;
-        DimensionTransition.PostDimensionTransition post;
+        TeleportTransition.PostDimensionTransition post;
         if (existing.isPresent()) {
             BlockPos found = existing.get();
             BlockState state = target.getBlockState(found);
             rect = BlockUtil.getLargestRectangleAround(found, state.getValue(GrillPortalBlock.AXIS), 21, Direction.Axis.Y, 21,
                     p -> target.getBlockState(p) == state);
-            post = DimensionTransition.PLAY_PORTAL_SOUND.then(e -> e.placePortalTicket(found));
+            post = TeleportTransition.PLAY_PORTAL_SOUND.then(e -> e.placePortalTicket(found));
         } else {
             Direction.Axis axis = entity.level().getBlockState(portalPos).getOptionalValue(GrillPortalBlock.AXIS).orElse(Direction.Axis.X);
             Optional<BlockUtil.FoundRectangle> made = createPortal(target, exitPos, axis);
@@ -79,7 +79,7 @@ public final class GrillPortalForcer {
                 return null;
             }
             rect = made.get();
-            post = DimensionTransition.PLAY_PORTAL_SOUND.then(DimensionTransition.PLACE_PORTAL_TICKET);
+            post = TeleportTransition.PLAY_PORTAL_SOUND.then(TeleportTransition.PLACE_PORTAL_TICKET);
         }
         if (targetKey == nl.juiced.guhs.world.ModDimensions.GUHMENSION) {
             post = post.then(nl.juiced.guhs.quest.GuhDex.GIVE_ON_ARRIVAL);     // back in the Guhmensie: a Guhdex if you lost yours
@@ -98,8 +98,8 @@ public final class GrillPortalForcer {
                 .min(Comparator.<BlockPos>comparingDouble(p -> p.distSqr(exitPos)).thenComparingInt(Vec3i::getY));
     }
 
-    private static DimensionTransition transition(Entity entity, BlockPos pos, BlockUtil.FoundRectangle rect, ServerLevel level,
-                                                  DimensionTransition.PostDimensionTransition post) {
+    private static TeleportTransition transition(Entity entity, BlockPos pos, BlockUtil.FoundRectangle rect, ServerLevel level,
+                                                  TeleportTransition.PostDimensionTransition post) {
         BlockState here = entity.level().getBlockState(pos);
         Direction.Axis axis;
         Vec3 offset;
@@ -125,7 +125,7 @@ public final class GrillPortalForcer {
         boolean alongX = exitAxis == Direction.Axis.X;
         Vec3 target = new Vec3(corner.getX() + (alongX ? along : across), corner.getY() + up, corner.getZ() + (alongX ? across : along));
         Vec3 free = PortalShape.findCollisionFreePosition(target, level, entity, dims);
-        return new DimensionTransition(level, free, newSpeed, entity.getYRot() + turn, entity.getXRot(), post);
+        return new TeleportTransition(level, free, newSpeed, entity.getYRot() + turn, entity.getXRot(), post);
     }
 
     /** Vanilla's PortalForcer.createPortal, with a grillkool frame (and grillkool platform). */
@@ -136,17 +136,17 @@ public final class GrillPortalForcer {
         double fallback = -1.0;
         BlockPos fallbackPos = null;
         WorldBorder border = level.getWorldBorder();
-        int top = Math.min(level.getMaxBuildHeight(), level.getMinBuildHeight() + level.getLogicalHeight()) - 1;
+        int top = Math.min(level.getMaxY() + 1, level.getMinY() + level.getLogicalHeight()) - 1;
         BlockPos.MutableBlockPos m = pos.mutable();
         for (BlockPos.MutableBlockPos p : BlockPos.spiralAround(pos, 16, Direction.EAST, Direction.SOUTH)) {
             int k = Math.min(top, level.getHeight(Heightmap.Types.MOTION_BLOCKING, p.getX(), p.getZ()));
             if (border.isWithinBounds(p) && border.isWithinBounds(p.move(direction, 1))) {
                 p.move(direction.getOpposite(), 1);
-                for (int l = k; l >= level.getMinBuildHeight(); l--) {
+                for (int l = k; l >= level.getMinY(); l--) {
                     p.setY(l);
                     if (canReplace(level, p)) {
                         int start = l;
-                        while (l > level.getMinBuildHeight() && canReplace(level, p.move(Direction.DOWN))) {
+                        while (l > level.getMinY() && canReplace(level, p.move(Direction.DOWN))) {
                             l--;
                         }
                         if (l + 4 <= top) {
@@ -177,7 +177,7 @@ public final class GrillPortalForcer {
         }
         BlockState frame = BarbecuetherFeature.GRILLKOOL.get().defaultBlockState();
         if (best == -1.0) {
-            int low = Math.max(level.getMinBuildHeight() + 1, 70);
+            int low = Math.max(level.getMinY() + 1, 70);
             int high = top - 9;
             if (high < low) {
                 return Optional.empty();

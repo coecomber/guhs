@@ -40,6 +40,7 @@ import nl.juiced.guhs.feature.verhaal.VerhaalGuh;
 import nl.juiced.guhs.feature.verhaal.VerhaalGuhs;
 import nl.juiced.guhs.quest.GuhDex;
 
+import net.minecraft.resources.Identifier;
 /**
  * 3.0 (Guhverhalen), slice mewtwo: Het kloon-eiland (DESIGN_30 §3). Resources: tools/features/mewtwo.py (+ mewtwo_bouw.py,
  * mewtwo_tex.py).
@@ -112,7 +113,7 @@ public final class MewtwoFeature {
     // --- Mieuwguh -----------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<MewEntity>> MEW = ENTITY_TYPES.register("mew",
             () -> EntityType.Builder.of(MewEntity::new, MobCategory.AMBIENT).sized(0.5f, 0.6f).eyeHeight(0.45f)
-                    .clientTrackingRange(10).build(Guhs.id("mew").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("mew"))));
     public static final DeferredItem<DeferredSpawnEggItem> MEW_SPAWN_EGG = ITEMS.registerItem("mew_spawn_egg",
             p -> new DeferredSpawnEggItem(MEW, 0xFAB2D2, 0x4682DE, p));
 

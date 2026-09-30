@@ -28,6 +28,7 @@ import nl.juiced.guhs.feature.verhaal.VerhaalVlaggen;
 import nl.juiced.guhs.network.ModNetworking;
 import nl.juiced.guhs.quest.GuhAdvancements;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * What the Knuffelhart does (server side): the revive screen ({@link #openScherm}: all your dead tamed guhs, from
  * {@link Wolkjes#dood}), bringing one back ({@link #terug}: {@link Wolkjes#terug} + a celebration + a minute of glans), and a
@@ -54,14 +55,14 @@ public final class Hemel {
     public static CompoundTag data(ServerPlayer p, BlockPos hart, @Nullable String net) {
         CompoundTag t = new CompoundTag();
         t.putLong("Pos", hart.asLong());
-        t.putLong("Dag", Band.dag(p.server));
+        t.putLong("Dag", Band.dag(p.level().getServer()));
         if (net != null) {
             t.putString("Net", net);
         }
         ListTag lijst = new ListTag();
-        for (Wolkjes.DodeGuh d : Wolkjes.dood(p.server, p.getUUID())) {
+        for (Wolkjes.DodeGuh d : Wolkjes.dood(p.level().getServer(), p.getUUID())) {
             CompoundTag g = new CompoundTag();
-            g.putUUID("Id", d.bandId());
+            g.store("Id", UUIDUtil.CODEC, d.bandId());
             g.putString("Naam", d.naam());
             g.putString("Variant", d.variant());
             g.putInt("Hartjes", d.hartjes());
@@ -77,7 +78,7 @@ public final class Hemel {
     /** Opens the revive screen at this heart (only when it beats for the player). */
     public static boolean openScherm(ServerPlayer p, BlockPos hart) {
         if (!HemelQuest.klopt(p)) {
-            p.displayClientMessage(Component.translatable("gui.guhs.hemel.slaapt").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.hemel.slaapt").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         OPEN.put(p.getUUID(), hart.immutable());
@@ -104,17 +105,17 @@ public final class Hemel {
     @Nullable
     public static GuhEntity terug(ServerPlayer p, BlockPos hart, UUID id) {
         if (!HemelQuest.klopt(p)) {
-            p.displayClientMessage(Component.translatable("gui.guhs.hemel.slaapt").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.hemel.slaapt").withStyle(ChatFormatting.LIGHT_PURPLE));
             return null;
         }
         if (!bijHetHart(p, hart)) {
-            p.displayClientMessage(Component.translatable("gui.guhs.hemel.te_ver").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.hemel.te_ver").withStyle(ChatFormatting.LIGHT_PURPLE));
             return null;
         }
         ServerLevel level = (ServerLevel) p.level();
         GuhEntity guh = Wolkjes.terug(level, p, id, plek(p, hart));
         if (guh == null) {
-            p.displayClientMessage(Component.translatable("gui.guhs.hemel.terug.mislukt").withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.hemel.terug.mislukt").withStyle(ChatFormatting.GRAY));
             return null;
         }
         feest(level, p, hart, guh);
@@ -159,19 +160,19 @@ public final class Hemel {
         level.playSound(null, hart, HemelFeature.STER.get(), SoundSource.BLOCKS, 0.8f, 1f);
         level.sendParticles(HemelFeature.STERRETJE.get(), hart.getX() + 0.5, hart.getY() + 0.7, hart.getZ() + 0.5, 10, 0.3, 0.3, 0.3, 0.03);
         if (!HemelQuest.klopt(p)) {
-            p.displayClientMessage(Component.translatable("gui.guhs.hemel.slaapt").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.hemel.slaapt").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         GuhAdvancements.grant(p, "hemel_ster");
         GidsFeature.grant(p, "verhalen/hemel_ster");
         CompoundTag data = Herinnering.data(stack);
-        if (!data.hasUUID("Band")) {
-            p.displayClientMessage(Component.translatable("gui.guhs.hemel.ster.leeg").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        if (!data.read("Band", UUIDUtil.CODEC).isPresent()) {
+            p.sendOverlayMessage(Component.translatable("gui.guhs.hemel.ster.leeg").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
-        UUID id = data.getUUID("Band");
-        String naam = data.getString("Naam");
-        if (Wolkjes.isDood(p.server, p.getUUID(), id)) {
+        UUID id = data.read("Band", UUIDUtil.CODEC).orElseThrow();
+        String naam = data.getStringOr("Naam", "");
+        if (Wolkjes.isDood(p.level().getServer(), p.getUUID(), id)) {
             GuhEntity guh = terug(p, hart, id);
             if (guh != null) {
                 stack.shrink(1);
@@ -179,15 +180,15 @@ public final class Hemel {
             }
             return false;
         }
-        BandData.Rec rec = BandData.get(p.server).vind(p.getUUID(), id);
-        p.displayClientMessage(Component.translatable(rec != null ? "gui.guhs.hemel.ster.leeft" : "gui.guhs.hemel.ster.niet_van_jou", naam)
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        BandData.Rec rec = BandData.get(p.level().getServer()).vind(p.getUUID(), id);
+        p.sendOverlayMessage(Component.translatable(rec != null ? "gui.guhs.hemel.ster.leeft" : "gui.guhs.hemel.ster.niet_van_jou", naam)
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         return false;
     }
 
     /** (tests) the dead guhs the screen would list. */
     public static List<Wolkjes.DodeGuh> lijst(ServerPlayer p) {
-        return Wolkjes.dood(p.server, p.getUUID());
+        return Wolkjes.dood(p.level().getServer(), p.getUUID());
     }
 
     static void vergeet(ServerPlayer p) {

@@ -65,7 +65,7 @@ public interface PiepMaatje {
     default boolean aan(PiepInstelling instelling) {
         TamableAnimal dier = dier();
         if (instelling == PiepInstelling.RONDVADSEN) {
-            return !(dier.level().isClientSide ? dier.isInSittingPose() : dier.isOrderedToSit());
+            return !(dier.level().isClientSide() ? dier.isInSittingPose() : dier.isOrderedToSit());
         }
         return (uitVlaggen() & (1 << instelling.bit)) == 0;
     }

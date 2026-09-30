@@ -17,7 +17,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -178,12 +178,12 @@ public final class OnderwaterFeature {
         }
         boolean gasping = player.getAirSupply() < player.getMaxAirSupply() / 3;
         player.setAirSupply(Math.min(player.getMaxAirSupply(), player.getAirSupply() + AIR_PER_BREATH));
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         level.sendParticles(ParticleTypes.BUBBLE_COLUMN_UP, coral.getX() + 0.5, coral.getY() + 0.6, coral.getZ() + 0.5, 8, 0.2, 0.3, 0.2, 0.05);
         level.sendParticles(ParticleTypes.BUBBLE, player.getX(), player.getEyeY(), player.getZ(), 6, 0.25, 0.2, 0.25, 0.02);
         level.playSound(null, coral, SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.BLOCKS, 0.8f, 1.2f);
         if (gasping) {
-            player.displayClientMessage(Component.translatable("quest.guhs.onderwater.air").withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.onderwater.air").withStyle(ChatFormatting.AQUA));
         }
         GuhAdvancements.grant(player, "onderwater_lucht");
         return true;
@@ -201,7 +201,7 @@ public final class OnderwaterFeature {
     private static void onMount(EntityMountEvent event) {
         if (event.isMounting() && event.getEntityMounting() instanceof ServerPlayer player && event.getEntityBeingMounted() instanceof GuhEntity guh
                 && guh.isZeemeer()) {
-            player.displayClientMessage(Component.translatable("quest.guhs.onderwater.ride").withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.onderwater.ride").withStyle(ChatFormatting.AQUA));
         }
     }
 

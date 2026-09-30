@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -19,8 +19,6 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.bakkerij.Bakken;
 import nl.juiced.guhs.feature.kamperen.KampvuurMarshmallow;
@@ -39,8 +37,6 @@ import nl.juiced.guhs.feature.theehuis.Theekransje;
  * recipes, the grijpmachine, the feestbuffet, marshmallows at the campfire, and (TheehuisKruisGameTests) home-baked cake at the theekransje), and
  * the Grote Knusfeest takes the six real feest-items.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KnuffeldalKruisGameTests {
     private static final String EMPTY = "empty";
 
@@ -58,7 +54,7 @@ public class KnuffeldalKruisGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -67,12 +63,12 @@ public class KnuffeldalKruisGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
     /** Every Knus tag holds what its owner promised (§7), and every id exists. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knuffeldal28TagsZijnGevuld(GameTestHelper helper) {
         Object[][] tags = {
                 {KnusTags.KAASMELK, List.of("kaasmelk")}, {KnusTags.KNABBELEI, List.of("knabbelei")}, {KnusTags.PLUISWOL, List.of("pluiswol")},
@@ -112,7 +108,7 @@ public class KnuffeldalKruisGameTests {
     }
 
     /** The consumers take the real products: bakery ingredients are 'fresh', the tea pot knows them, recipes use them. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knuffeldal28ProductenWordenGebruikt(GameTestHelper helper) {
         // the Knabbelbakkerij: farm and garden products are fresh ingredients
         helper.assertTrue(Bakken.Nodig.GRAAN.past(stack("knabbelgraan")) && Bakken.Nodig.KAASMELK.past(stack("kaasmelk"))
@@ -150,7 +146,7 @@ public class KnuffeldalKruisGameTests {
     }
 
     /** A real marshmallow_knabbel roasted over a burning campfire: a bite, the Knus counter, the guhs come and sit. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knuffeldal28MarshmallowBijHetKampvuur(GameTestHelper helper) {
         BlockPos vuur = new BlockPos(2, 1, 2);
         helper.setBlock(vuur, Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, true));
@@ -169,7 +165,7 @@ public class KnuffeldalKruisGameTests {
     }
 
     /** The Grote Knusfeest with the six real feest-items: the Burgemeester takes them all (and the lanterns count as made). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knuffeldal28KnusfeestMetEchteSpullen(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 1, 1));
         try {

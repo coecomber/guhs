@@ -23,7 +23,7 @@ public class MepHamerItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && entity instanceof ServerPlayer player && !MepGame.isPlaying(player)) {
+        if (!level.isClientSide() && entity instanceof ServerPlayer player && !MepGame.isPlaying(player)) {
             MepGame.takeBack(player);                 // (all mallets gone, and the item it replaced comes back)
             stack.setCount(0);
         }
@@ -31,7 +31,7 @@ public class MepHamerItem extends Item {
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.level().isClientSide) {
+        if (!entity.level().isClientSide()) {
             entity.discard();
         }
         return true;

@@ -8,7 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.NoiseColumn;
@@ -37,7 +37,7 @@ public class BarbecuePutStructure extends Structure implements nl.juiced.guhs.wo
     public static final MapCodec<BarbecuePutStructure> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             settingsCodec(i),
             StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(s -> s.startPool),
-            ResourceLocation.CODEC.fieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
+            Identifier.CODEC.fieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
             Codec.INT.fieldOf("check_radius").forGetter(s -> s.checkRadius),
             Codec.INT.fieldOf("max_height_difference").forGetter(s -> s.maxHeightDifference),
             Codec.INT.optionalFieldOf("headroom", 10).forGetter(s -> s.headroom),
@@ -49,7 +49,7 @@ public class BarbecuePutStructure extends Structure implements nl.juiced.guhs.wo
     public static final TagKey<Biome> CAVE_BIOMES = TagKey.create(Registries.BIOME, Guhs.id("is_barbecuether"));
 
     private final Holder<StructureTemplatePool> startPool;
-    private final ResourceLocation startJigsawName;
+    private final Identifier startJigsawName;
     private final int checkRadius;
     private final int maxHeightDifference;
     private final int headroom;
@@ -57,7 +57,7 @@ public class BarbecuePutStructure extends Structure implements nl.juiced.guhs.wo
     private final int keepClear;
     private final Optional<Integer> voorrang;
 
-    public BarbecuePutStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, ResourceLocation startJigsawName,
+    public BarbecuePutStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, Identifier startJigsawName,
                                 int checkRadius, int maxHeightDifference, int headroom, int keepClear, Optional<Integer> voorrang) {
         super(settings);
         this.startPool = startPool;
@@ -129,8 +129,8 @@ public class BarbecuePutStructure extends Structure implements nl.juiced.guhs.wo
     private int caveFloor(GenerationContext context, int x, int z) {
         NoiseColumn column = context.chunkGenerator().getBaseColumn(x, z, context.heightAccessor(), context.randomState());
         int seaLevel = context.chunkGenerator().getSeaLevel();
-        int top = context.heightAccessor().getMaxBuildHeight() - 12;
-        for (int y = top; y > Math.max(seaLevel + 1, context.heightAccessor().getMinBuildHeight() + 6); y--) {
+        int top = context.heightAccessor().getMaxY() + 1 - 12;
+        for (int y = top; y > Math.max(seaLevel + 1, context.heightAccessor().getMinY() + 6); y--) {
             if (isFloor(column, y) && roomAbove(column, y, headroom)) {
                 return y;
             }

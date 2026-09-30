@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,13 +23,11 @@ import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -75,8 +73,6 @@ import nl.juiced.guhs.registry.ModItems;
  * off every other chore of its resident and resets the chores' wait times, so it runs quickly. Each in its own batch
  * (the home base is bigger than a test plot).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KlusjesGameTests {
     private static final String TUIN = "klusjes_test_tuin";
     private static final BlockPos HUISJE = new BlockPos(11, 2, 11);
@@ -89,7 +85,7 @@ public class KlusjesGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -146,7 +142,7 @@ public class KlusjesGameTests {
                 taak = (g.taak() == null ? "geen taak" : g.taak().getClass().getSimpleName()) + (w.isRunning() ? " (loopt)" : " (goal staat stil)");
             }
         }
-        return " [" + helper.relativePos(mob.blockPosition()) + ", " + taak + ", klusjes " + Dagboek.stat(mob.getServer(), Band.eigenaar(mob), Band.id(mob), DagboekStat.KLUSJES) + "]";
+        return " [" + helper.relativePos(mob.blockPosition()) + ", " + taak + ", klusjes " + Dagboek.stat(mob.level().getServer(), Band.eigenaar(mob), Band.id(mob), DagboekStat.KLUSJES) + "]";
     }
 
     static void normaal(GameTestHelper helper) {
@@ -157,7 +153,7 @@ public class KlusjesGameTests {
 
     // =====================================================================================================================
 
-    @GameTest(template = TUIN, batch = "klusjes_register")
+    @GuhTest(template = TUIN, batch = "klusjes_register")
     public static void klusjesTienInDeGoedeVolgorde(GameTestHelper helper) {
         List<String> ids = Klusjes.alle().stream().map(Klus::id).filter(KlusjesFeature.IDS::contains).toList();
         helper.assertTrue(ids.equals(KlusjesFeature.IDS), "the ten chores in contract order: " + ids);
@@ -189,7 +185,7 @@ public class KlusjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_opgraven", timeoutTicks = 800)
+    @GuhTest(template = TUIN, batch = "klusjes_opgraven", timeoutTicks = 800)
     public static void klusjesOpgravenVindtKnabbels(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         Huisje h = huisje(helper, p);
@@ -199,11 +195,11 @@ public class KlusjesGameTests {
         int hartjes = Band.hartjes(guh);
         helper.succeedWhen(() -> {
             helper.assertTrue(!kist.isEmpty(), "something dug up in the chest");
-            helper.assertTrue(Dagboek.stat(p.server, p.getUUID(), id, DagboekStat.KLUSJES) >= 1, "counted in the dagboek");
+            helper.assertTrue(Dagboek.stat(p.level().getServer(), p.getUUID(), id, DagboekStat.KLUSJES) >= 1, "counted in the dagboek");
             helper.assertTrue(Band.hartjes(guh) > hartjes, "hearts for the chore");
-            helper.assertTrue(Dagboek.heeftEersteKeer(p.server, p.getUUID(), id, "eerste_klusje")
-                    && Dagboek.heeftEersteKeer(p.server, p.getUUID(), id, "klusjes_opgraven"), "the first times");
-            helper.assertTrue((GuhQuests.saved(p).getInt(KlusBeloning.GEDAAN) & 1) != 0, "the owner's chore bits");
+            helper.assertTrue(Dagboek.heeftEersteKeer(p.level().getServer(), p.getUUID(), id, "eerste_klusje")
+                    && Dagboek.heeftEersteKeer(p.level().getServer(), p.getUUID(), id, "klusjes_opgraven"), "the first times");
+            helper.assertTrue((GuhQuests.saved(p).getIntOr(KlusBeloning.GEDAAN, 0) & 1) != 0, "the owner's chore bits");
             for (int x = 0; x < 24; x++) {
                 for (int z = 0; z < 24; z++) {
                     helper.assertBlockPresent(Blocks.GRASS_BLOCK, new BlockPos(x, 1, z));
@@ -213,14 +209,14 @@ public class KlusjesGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_farmen", timeoutTicks = 900)
+    @GuhTest(template = TUIN, batch = "klusjes_farmen", timeoutTicks = 900)
     public static void klusjesFarmenOogstEnPlantOpnieuw(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         ChestBlockEntity kist = kist(helper);
         BlockPos[] tarwe = {new BlockPos(6, 2, 15), new BlockPos(7, 2, 15), new BlockPos(8, 2, 15)};
         helper.setBlock(new BlockPos(7, 1, 16), Blocks.WATER);
         for (BlockPos t : tarwe) {
-            helper.setBlock(t.below(), Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7));
+            helper.setBlock(t.below(), Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, 7));
             helper.setBlock(t, ((CropBlock) Blocks.WHEAT).getStateForAge(7));
         }
         BlockPos bak = new BlockPos(15, 2, 15);
@@ -246,7 +242,7 @@ public class KlusjesGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_opruimen", timeoutTicks = 900)
+    @GuhTest(template = TUIN, batch = "klusjes_opruimen", timeoutTicks = 900)
     public static void klusjesOpruimenEnSorterenInDeBankGuh(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         ChestBlockEntity kist = kist(helper);
@@ -273,7 +269,7 @@ public class KlusjesGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_dieren", timeoutTicks = 1600)
+    @GuhTest(template = TUIN, batch = "klusjes_dieren", timeoutTicks = 1600)
     public static void klusjesDierenVerzorgenEnOogsten(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         ChestBlockEntity kist = kist(helper);
@@ -300,7 +296,7 @@ public class KlusjesGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_bakken", timeoutTicks = 1600)
+    @GuhTest(template = TUIN, batch = "klusjes_bakken", timeoutTicks = 1600)
     public static void klusjesBakkenMetMeelEnMolen(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         ChestBlockEntity kist = kist(helper);
@@ -326,7 +322,7 @@ public class KlusjesGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_vissen", timeoutTicks = 900)
+    @GuhTest(template = TUIN, batch = "klusjes_vissen", timeoutTicks = 900)
     public static void klusjesVissenInDeVijver(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         ChestBlockEntity kist = kist(helper);
@@ -343,7 +339,7 @@ public class KlusjesGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_waken", timeoutTicks = 900)
+    @GuhTest(template = TUIN, batch = "klusjes_waken", timeoutTicks = 900)
     public static void klusjesWakenDuwtMikaZachtjesWeg(GameTestHelper helper) {
         normaal(helper);
         ServerPlayer p = speler(helper, new BlockPos(18, 2, 6));
@@ -369,13 +365,13 @@ public class KlusjesGameTests {
             double nu = mika.position().distanceToSqr(m.x, mika.getY(), m.z);
             helper.assertTrue(Math.sqrt(nu) > Math.sqrt(start) + 1.5, "pushed away from the huisje: " + Math.sqrt(start) + " -> " + Math.sqrt(nu)
                     + staat(helper, guh));
-            helper.assertTrue((GuhQuests.saved(p).getInt(KlusBeloning.GEDAAN) & (1 << KlusjesFeature.IDS.indexOf("waken"))) != 0, "the owner knows");
+            helper.assertTrue((GuhQuests.saved(p).getIntOr(KlusBeloning.GEDAAN, 0) & (1 << KlusjesFeature.IDS.indexOf("waken"))) != 0, "the owner knows");
             mika.discard();
             weg(helper, h, p);
         });
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_plukken", timeoutTicks = 900)
+    @GuhTest(template = TUIN, batch = "klusjes_plukken", timeoutTicks = 900)
     public static void klusjesPlukkenBessenEnBloemetjes(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         ChestBlockEntity kist = kist(helper);
@@ -396,7 +392,7 @@ public class KlusjesGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_lampjes", timeoutTicks = 900)
+    @GuhTest(template = TUIN, batch = "klusjes_lampjes", timeoutTicks = 900)
     public static void klusjesLampjesAvondAanOchtendUit(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         BlockPos[] lampen = {new BlockPos(6, 2, 14), new BlockPos(16, 2, 14), new BlockPos(11, 2, 18)};
@@ -431,7 +427,7 @@ public class KlusjesGameTests {
         return helper.getBlockState(kaars).getValue(CandleBlock.LIT) == aan;
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_oppas", timeoutTicks = 1200)
+    @GuhTest(template = TUIN, batch = "klusjes_oppas", timeoutTicks = 1200)
     public static void klusjesOppasSnackjeEnKnuffel(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         ChestBlockEntity kist = kist(helper);
@@ -455,13 +451,13 @@ public class KlusjesGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = "klusjes_schakelaar", timeoutTicks = 900)
+    @GuhTest(template = TUIN, batch = "klusjes_schakelaar", timeoutTicks = 900)
     public static void klusjesSchakelaarUitIsUit(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         kist(helper);
         BlockPos t = new BlockPos(7, 2, 15);
         helper.setBlock(new BlockPos(7, 1, 16), Blocks.WATER);
-        helper.setBlock(t.below(), Blocks.FARMLAND.defaultBlockState().setValue(FarmBlock.MOISTURE, 7));
+        helper.setBlock(t.below(), Blocks.FARMLAND.defaultBlockState().setValue(FarmlandBlock.MOISTURE, 7));
         helper.setBlock(t, ((CropBlock) Blocks.WHEAT).getStateForAge(7));
         Huisje h = huisje(helper, p);
         GuhEntity guh = bewoner(helper, h, p, new BlockPos(12, 2, 14), "(niks)");

@@ -8,13 +8,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.feature.kleding.KledingBronnen;
@@ -49,19 +49,19 @@ public class GuhClothingItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!isOntgrendelbaar()) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         }
         if (KledingUnlocks.heeft(player, clothes)) {
             if (player instanceof ServerPlayer sp) {
                 KledingOntgrendel.alGehad(sp, clothes);
             }
-            return InteractionResultHolder.fail(stack);
+            return InteractionResult.FAIL;
         }
         player.startUsingItem(hand);
-        return InteractionResultHolder.consume(stack);
+        return InteractionResult.CONSUME.heldItemTransformedTo(stack);
     }
 
     @Override
@@ -70,8 +70,8 @@ public class GuhClothingItem extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return isOntgrendelbaar() ? UseAnim.EAT : UseAnim.NONE;   // (the crumbs look like confetti of the piece)
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return isOntgrendelbaar() ? ItemUseAnimation.EAT : ItemUseAnimation.NONE;   // (the crumbs look like confetti of the piece)
     }
 
     @Override

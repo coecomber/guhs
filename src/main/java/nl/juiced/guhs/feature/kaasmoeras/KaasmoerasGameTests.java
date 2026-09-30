@@ -7,7 +7,7 @@ import java.util.Set;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +18,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.animal.pig.Pig;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
@@ -29,8 +29,6 @@ import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -41,6 +39,7 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.world.GuhWorldData;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * GameTests of the kaasmoeras: bouncing on borrelende kaassaus, the motknabbel colours, kikkerguhs snapping up
  * kaasmotten, kaasmotten stealing kaasknabbels, the Moerasheks-Mika and her drankjes, the Kaasmoerasguh, the Guhdex
@@ -48,8 +47,6 @@ import nl.juiced.guhs.world.GuhWorldData;
  * (The biome itself lives in the Guhmension, which the GameTest server doesn't have: the worldgen is checked with a
  * dev server, see NOTES_kaasmoeras.md.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KaasmoerasGameTests {
     private static final String EMPTY = "empty";
     private static final String POEL = "kaasmoeras_poeltest";
@@ -57,7 +54,7 @@ public class KaasmoerasGameTests {
 
     // --- borrelende kaassaus ---------------------------------------------------------------------------------------------
 
-    @GameTest(template = POEL, timeoutTicks = 120)
+    @GuhTest(template = POEL, timeoutTicks = 120)
     public static void borrelendeKaassausBouncesAndNeverHurts(GameTestHelper helper) {
         // (the template's layers are at y 1..8 here: the grass is at y 3)
         helper.setBlock(new BlockPos(13, 3, 13), KaasmoerasFeature.BORRELENDE_KAASSAUS.get());
@@ -80,7 +77,7 @@ public class KaasmoerasGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void sneakingWadesThroughBorrelendeKaassaus(GameTestHelper helper) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         try {
@@ -105,7 +102,7 @@ public class KaasmoerasGameTests {
 
     // --- motknabbels -----------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void motknabbelKeepsItsColour(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos pos = new BlockPos(2, 1, 2);
@@ -125,7 +122,7 @@ public class KaasmoerasGameTests {
 
     // --- kikkerguhs and kaasmotten -------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, timeoutTicks = 200)
     public static void kikkerguhSnapsUpAKaasmotAndSpitsOutAMotknabbel(GameTestHelper helper) {
         KikkerguhEntity kikker = helper.spawn(KaasmoerasFeature.KIKKERGUH.get(), new BlockPos(1, 1, 1));
         kikker.setKleur(MotknabbelBlock.Kleur.MINT);
@@ -142,7 +139,7 @@ public class KaasmoerasGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kikkerguhsAreFriendlyAndBreedWithKaasknabbels(GameTestHelper helper) {
         KikkerguhEntity a = helper.spawn(KaasmoerasFeature.KIKKERGUH.get(), new BlockPos(1, 1, 1));
         KikkerguhEntity b = helper.spawn(KaasmoerasFeature.KIKKERGUH.get(), new BlockPos(3, 1, 3));
@@ -165,7 +162,7 @@ public class KaasmoerasGameTests {
      * 2.8: "een guh die een kikker is": the model has the guh head with both round ears and still all the frog parts the
      * animations move (throat pouch, tongue, four legs); a texture per colour; its hitbox fits the bigger guh head.
      */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kikkerguhIsAGuhThatIsAFrog(GameTestHelper helper) {
         KikkerguhEntity kikker = helper.spawn(KaasmoerasFeature.KIKKERGUH.get(), new BlockPos(1, 1, 1));
         helper.assertTrue(kikker.getBbHeight() >= 0.75f && kikker.getBbWidth() <= 0.7f, "its hitbox: " + kikker.getBbWidth() + " x " + kikker.getBbHeight());
@@ -188,7 +185,7 @@ public class KaasmoerasGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, timeoutTicks = 200)
     public static void kaasmotStealsKaasknabbelsAndLovesCheese(GameTestHelper helper) {
         helper.setBlock(new BlockPos(0, 1, 0), ModBlocks.BLOCK_OF_KAASKNABBELS.get());
         KaasmotEntity mot = helper.spawn(KaasmoerasFeature.KAASMOT.get(), new BlockPos(3, 2, 3));
@@ -207,13 +204,13 @@ public class KaasmoerasGameTests {
 
     // --- the Moerasheks-Mika ------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void moerasheksThrowsWeakDrankjesAndDropsMoeraskaas(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         try {
             player.setGameMode(GameType.SURVIVAL);
-            player.moveTo(helper.absoluteVec(new Vec3(2.5, 1, 4.5)));
+            player.snapTo(helper.absoluteVec(new Vec3(2.5, 1, 4.5)));
             MoerasheksMikaEntity heks = helper.spawn(KaasmoerasFeature.MOERASHEKS_MIKA.get(), new BlockPos(2, 1, 1));
             AABB area = new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(8);
             heks.performRangedAttack(player, 1f);
@@ -253,7 +250,7 @@ public class KaasmoerasGameTests {
 
     // --- the Kaasmoerasguh and the Guhdex -----------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kaasmoerasguhOnlyComesFromTheKaasmoeras(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         helper.assertTrue(!GuhVariant.KAASMOERASGUH.isCharacter() && GuhVariant.KAASMOERASGUH.weight == 0,
@@ -262,7 +259,7 @@ public class KaasmoerasGameTests {
         helper.assertTrue(Guhs.class.getResource("/assets/guhs/textures/entity/guh_kaasmoerasguh.png") != null, "its texture");
         int made = 0;
         for (int i = 0; i < 60; i++) {
-            GuhEntity guh = ModEntities.GUH.get().create(level);
+            GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
             if (KaasmoerasEvents.decide(guh, true)) {
                 made++;
                 helper.assertTrue(guh.getVariant() == GuhVariant.KAASMOERASGUH, "it became a Kaasmoerasguh");
@@ -271,12 +268,12 @@ public class KaasmoerasGameTests {
             guh.discard();
         }
         helper.assertTrue(made > 5 && made < 55, "some of the guhs in the kaasmoeras, not all: " + made);
-        GuhEntity outside = ModEntities.GUH.get().create(level);
+        GuhEntity outside = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         helper.assertTrue(!KaasmoerasEvents.decide(outside, false), "not outside the kaasmoeras");
-        GuhEntity baby = ModEntities.GUH.get().create(level);
+        GuhEntity baby = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         baby.setAge(-24000);
         helper.assertTrue(!KaasmoerasEvents.decide(baby, true), "not babies (they have their parents' colour)");
-        GuhEntity mint = ModEntities.GUH.get().create(level);
+        GuhEntity mint = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         mint.setVariant(GuhVariant.MINT);
         helper.assertTrue(!KaasmoerasEvents.decide(mint, true) && mint.getVariant() == GuhVariant.MINT, "other variants stay what they are");
         GuhEntity here = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 2));
@@ -288,7 +285,7 @@ public class KaasmoerasGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhdexHasTheKaasmoerasPages(GameTestHelper helper) {
         for (GuhVariant v : List.of(GuhVariant.KIKKERGUH, GuhVariant.KAASMOT, GuhVariant.MOERASHEKS_MIKA)) {
             helper.assertTrue(v.isCharacter() && v.npcKind() == null, v + ": a creature page (not a guh character)");
@@ -301,9 +298,9 @@ public class KaasmoerasGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         try {
             KikkerguhEntity kikker = helper.spawn(KaasmoerasFeature.KIKKERGUH.get(), new BlockPos(2, 1, 2));
-            player.moveTo(kikker.position().add(0.5, 0, 0));
+            player.snapTo(kikker.position().add(0.5, 0, 0));
             KaasmoerasEvents.seeCreatures(player);
-            Set<GuhVariant> seen = EnumSet.copyOf(GuhWorldData.get(player.server).player(player.getUUID()).seen);
+            Set<GuhVariant> seen = EnumSet.copyOf(GuhWorldData.get(player.level().getServer()).player(player.getUUID()).seen);
             helper.assertTrue(seen.contains(GuhVariant.KIKKERGUH), "next to a kikkerguh: its page fills in");
             helper.assertTrue(!seen.contains(GuhVariant.KAASMOT), "but not the kaasmot's");
             kikker.discard();
@@ -315,7 +312,7 @@ public class KaasmoerasGameTests {
 
     // --- the pools ----------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = POEL, timeoutTicks = 100)
+    @GuhTest(template = POEL, timeoutTicks = 100)
     public static void poolWithAKnabbelvlotjeKeepsItsWater(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos origin = helper.absolutePos(new BlockPos(13, 4, 13));
@@ -339,7 +336,7 @@ public class KaasmoerasGameTests {
         });
     }
 
-    @GameTest(template = POEL, timeoutTicks = 100)
+    @GuhTest(template = POEL, timeoutTicks = 100)
     public static void borrelplasIsFullOfBubblingCheese(GameTestHelper helper) {
         BlockPos origin = helper.absolutePos(new BlockPos(13, 4, 13));
         helper.assertTrue(KaasmoerasPoelFeature.place(helper.getLevel(), RandomSource.create(8), origin, KaasmoerasPoelFeature.Kind.BORREL,
@@ -366,7 +363,7 @@ public class KaasmoerasGameTests {
 
     // --- the paalhut ------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = HUT, timeoutTicks = 200)
+    @GuhTest(template = HUT, timeoutTicks = 200)
     public static void theHutTemplateIsComplete(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         AABB box = helper.getBounds().inflate(1);

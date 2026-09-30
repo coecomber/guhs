@@ -2,7 +2,7 @@ package nl.juiced.guhs.feature.creche.client;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
@@ -131,8 +131,8 @@ public class SlaapliedjeScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         long t = nu();
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, 0xFFB9D8F7);
         g.fill(left, top, left + W, top + H, 0xF0161A38);
@@ -141,7 +141,7 @@ public class SlaapliedjeScreen extends Screen {
             int a = (int) (90 + 90 * Math.sin(t / 500.0 + i * 1.7));
             g.fill(sx, sy, sx + 1, sy + 1, (a << 24) | 0xFFFFFF);
         }
-        g.drawCenteredString(font, Component.translatable("gui.guhs.creche.liedje.kop", Component.translatable("gui.guhs.knus.slaapliedjes." + liedje.id()))
+        g.centeredText(font, Component.translatable("gui.guhs.creche.liedje.kop", Component.translatable("gui.guhs.knus.slaapliedjes." + liedje.id()))
                 .withStyle(ChatFormatting.BOLD), width / 2, top + 8, 0xFFFFE6A0);
         // the babyguhtje (its eyes close as you sing)
         float slaap = liedje.aantal() == 0 ? 0 : hits / (float) liedje.aantal();
@@ -163,7 +163,7 @@ public class SlaapliedjeScreen extends Screen {
         g.fill(fx + 22, fy + 34, fx + fw - 22, fy + 40, 0xFF8FD0F5);          // the pacifier
         g.fill(fx + 25, fy + 40, fx + fw - 25, fy + 44, 0xFFFFE08A);
         if (slaap > 0.6f) {
-            g.drawString(font, "z", fx + fw + 2, fy - 4 - (int) ((t / 90) % 8), 0xFFB9D8F7, false);
+            g.text(font, "z", fx + fw + 2, fy - 4 - (int) ((t / 90) % 8), 0xFFB9D8F7, false);
         }
         // the lane: the moon on the left, the stars float in from the right
         int laneL = left + 90, laneR = left + W - 12, laneY = top + 74;
@@ -185,13 +185,13 @@ public class SlaapliedjeScreen extends Screen {
             g.fill(sx - 1, sy - 4, sx + 2, sy + 5, c);                      // a little star
             g.fill(sx - 4, sy - 1, sx + 5, sy + 2, c);
         }
-        g.drawCenteredString(font, Component.translatable("gui.guhs.creche.liedje.raak", hits, liedje.aantal()), laneL + (laneR - laneL) / 2, top + 100, 0xFFFFE6EE);
+        g.centeredText(font, Component.translatable("gui.guhs.creche.liedje.raak", hits, liedje.aantal()), laneL + (laneR - laneL) / 2, top + 100, 0xFFFFE6EE);
         Component hint = klaarOp >= 0
                 ? Component.translatable(liedje.gelukt(hits) ? "gui.guhs.creche.liedje.gelukt" : "gui.guhs.creche.liedje.mislukt")
                 : Component.translatable("gui.guhs.creche.liedje.uitleg");
         int y = top + 116;
         for (var line : font.split(hint, W - 24)) {
-            g.drawCenteredString(font, line, width / 2, y, klaarOp >= 0 ? 0xFFFFD27A : 0xFFB9D8F7);
+            g.centeredText(font, line, width / 2, y, klaarOp >= 0 ? 0xFFFFD27A : 0xFFB9D8F7);
             y += 10;
         }
     }

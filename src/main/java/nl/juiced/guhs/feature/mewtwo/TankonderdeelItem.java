@@ -36,7 +36,7 @@ public class TankonderdeelItem extends Item {
 
     public static int soort(ItemStack s) {
         CustomData d = s.get(DataComponents.CUSTOM_DATA);
-        return d == null ? 0 : d.copyTag().getInt(SOORT);
+        return d == null ? 0 : d.copyTag().getIntOr(SOORT, 0);
     }
 
     @Override

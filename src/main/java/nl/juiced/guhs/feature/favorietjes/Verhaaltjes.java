@@ -11,7 +11,7 @@ import com.google.gson.JsonElement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -92,7 +92,7 @@ public final class Verhaaltjes {
     // =====================================================================================================================
 
     static void moment(Mob guh, @Nullable ServerPlayer speler, Moment m, String waarde) {
-        if (!Band.isBandGuh(guh) || guh.getServer() == null) {
+        if (!Band.isBandGuh(guh) || guh.level().getServer() == null) {
             return;
         }
         ServerPlayer getuige = Favorietjes.getuige(guh, speler);
@@ -173,7 +173,7 @@ public final class Verhaaltjes {
                 wist(guh, varianten("speeltje_" + waarde) > 0 ? "speeltje_" + waarde : "speeltje", 2,
                         Favorieten.naam(FavorietSoort.SPEELTJE, waarde).getString());
             }
-            case VRIENDJE -> wist(guh, "vriendje", 2, guhNaam(guh.getServer(), waarde));
+            case VRIENDJE -> wist(guh, "vriendje", 2, guhNaam(guh.level().getServer(), waarde));
             case SLAAP -> {
                 eerste(guh, getuige != null ? getuige : Band.eigenaarOnline(guh), "favorietjes_nachtje");
                 wist(guh, "droom", 2, "");
@@ -271,7 +271,7 @@ public final class Verhaaltjes {
 
     static long stat(Mob guh, DagboekStat stat) {
         UUID eigenaar = Band.eigenaar(guh);
-        return eigenaar == null || guh.getServer() == null ? 0 : Dagboek.stat(guh.getServer(), eigenaar, Band.id(guh), stat);
+        return eigenaar == null || guh.level().getServer() == null ? 0 : Dagboek.stat(guh.level().getServer(), eigenaar, Band.id(guh), stat);
     }
 
     /**
@@ -280,16 +280,16 @@ public final class Verhaaltjes {
      */
     public static boolean wist(Mob guh, String sleutel, int kans, String ding) {
         int n = varianten(sleutel);
-        MinecraftServer s = guh.getServer();
+        MinecraftServer s = guh.level().getServer();
         if (n <= 0 || s == null || !Band.isBandGuh(guh)) {
             return false;
         }
-        CompoundTag dagen = guh.getPersistentData().getCompound(DAG_KEY);
+        CompoundTag dagen = guh.getPersistentData().getCompoundOrEmpty(DAG_KEY);
         long vandaag = Band.dag(s);
-        if (dagen.contains(sleutel) && dagen.getLong(sleutel) == vandaag) {
+        if (dagen.contains(sleutel) && dagen.getLongOr(sleutel, 0L) == vandaag) {
             return false;
         }
-        int vandaagAl = dagen.getLong(TELLER_DAG) == vandaag ? dagen.getInt(TELLER) : 0;
+        int vandaagAl = dagen.getLongOr(TELLER_DAG, 0L) == vandaag ? dagen.getIntOr(TELLER, 0) : 0;
         if (vandaagAl >= PER_DAG || (kans > 1 && guh.getRandom().nextInt(kans) != 0)) {
             return false;
         }
@@ -306,7 +306,7 @@ public final class Verhaaltjes {
     static String baasjeNaam(MinecraftServer s, UUID eigenaar) {
         ServerPlayer p = s.getPlayerList().getPlayer(eigenaar);
         if (p != null) {
-            return p.getGameProfile().getName();
+            return p.getGameProfile().name();
         }
         return s.getProfileCache() == null ? "mijn baasje"
                 : s.getProfileCache().get(eigenaar).map(com.mojang.authlib.GameProfile::getName).orElse("mijn baasje");
@@ -325,7 +325,7 @@ public final class Verhaaltjes {
     }
 
     static String itemNaam(String itemId) {
-        ResourceLocation id = ResourceLocation.tryParse(itemId);
+        Identifier id = Identifier.tryParse(itemId);
         Item item = id == null ? null : BuiltInRegistries.ITEM.getOptional(id).orElse(null);
         return item == null ? itemId : new ItemStack(item).getHoverName().getString();
     }

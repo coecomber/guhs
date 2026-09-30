@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,8 +18,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -40,8 +38,6 @@ import nl.juiced.guhs.registry.ModItems;
  * end with bakmunten and the highscore), the customers' pastries that vanish, Korstje's role and shop, and the real
  * building (its markers, ovens, and a customer walking from the door to the counter).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class BakkerijGameTests {
     private static final String EMPTY = "empty";
     private static final String TEST = "bakkerij_test";
@@ -91,7 +87,7 @@ public class BakkerijGameTests {
         ServerPlayer p = helper.makeMockServerPlayerInLevel();
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
-        p.moveTo(at.x, at.y, at.z);
+        p.snapTo(at.x, at.y, at.z);
         GuhQuests.saved(p).remove(BakkerijGame.PLAYED_KEY);
         GuhQuests.saved(p).remove(BakkerijGame.BEST_KEY);
         GuhQuests.saved(p).remove(KnusVoortgang.KEY);
@@ -122,7 +118,7 @@ public class BakkerijGameTests {
     }
 
     /** Twelve different recipes (plus the feesttaart), all gebak; the feesttaart and the bakmunt in their Knus tags. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void bakkerijReceptenEnTags(GameTestHelper helper) {
         Set<String> combos = new HashSet<>();
         for (Recept r : Recept.values()) {
@@ -149,7 +145,7 @@ public class BakkerijGameTests {
     }
 
     /** Every reward rule gives one more (like all minigames since 2.7): bakmunten per score and the first-game bonus. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void bakkerijBeloningenEenMeer(GameTestHelper helper) {
         for (int score = 0; score <= 800; score++) {
             int old = score <= 0 ? 0 : Math.min(12, 1 + score / 40);
@@ -160,7 +156,7 @@ public class BakkerijGameTests {
     }
 
     /** Your own oven: takes the ingredients (vanilla ones work too), bakes with timing, and fills the receptenboek. */
-    @GameTest(template = TEST, timeoutTicks = 200, batch = BATCH + "_oven")
+    @GuhTest(template = TEST, timeoutTicks = 200, batch = BATCH + "_oven")
     public static void bakkerijEigenOven(GameTestHelper helper) {
         BlockPos oven = oven(helper);
         ServerPlayer p = player(helper, Vec3.atBottomCenterOf(oven.south()));
@@ -204,7 +200,7 @@ public class BakkerijGameTests {
      * A forgotten bake burns by itself (the player tick listener): after bakTicks + VERGETEN it's burnt, you get nothing
      * but a message, the oven goes out, and you're free to bake again at any oven.
      */
-    @GameTest(template = TEST, timeoutTicks = 300, batch = BATCH + "_vergeten")
+    @GuhTest(template = TEST, timeoutTicks = 300, batch = BATCH + "_vergeten")
     public static void bakkerijVergetenBakBrandtAan(GameTestHelper helper) {
         BlockPos oven = oven(helper);
         ServerPlayer p = player(helper, Vec3.atBottomCenterOf(oven.south()));
@@ -237,7 +233,7 @@ public class BakkerijGameTests {
     }
 
     /** The order game: customers walk to the counter, serving scores with combos, a wrong or late order, the end. */
-    @GameTest(template = TEST, timeoutTicks = 600, batch = BATCH + "_spel")
+    @GuhTest(template = TEST, timeoutTicks = 600, batch = BATCH + "_spel")
     public static void bakkerijSpelServerenEnCombo(GameTestHelper helper) {
         GuhNpcEntity npc = korstje(helper);
         ServerPlayer p = player(helper, npc.position().add(0, 0, 1));
@@ -294,7 +290,7 @@ public class BakkerijGameTests {
                     helper.assertTrue(count(p, BakkerijFeature.BAKMUNT.get()) == BakkerijGame.munten(score) + BakkerijGame.FIRST_BONUS,
                             "bakmunten + the first-game bonus: " + count(p, BakkerijFeature.BAKMUNT.get()));
                     helper.assertTrue(count(p, BakkerijFeature.bakje(Recept.GUHWAFEL)) == 0, "the customers' pastries are gone");
-                    helper.assertTrue(BakkerijGame.best(p) == score && GuhQuests.saved(p).getCompound(Highscores.KEY).getInt(BakkerijGame.BOARD) == score,
+                    helper.assertTrue(BakkerijGame.best(p) == score && GuhQuests.saved(p).getCompoundOrEmpty(Highscores.KEY).getIntOr(BakkerijGame.BOARD, 0) == score,
                             "the record, also on the Guhdex Highscores page");
                     helper.assertTrue(KnusVoortgang.teller(p, BakkerijVoortgang.HIGHSCORE) == score, "the Knus highscore milestone counter");
                 })
@@ -304,7 +300,7 @@ public class BakkerijGameTests {
     }
 
     /** The Grote Knusfeest: with the task open a feestklant orders the feesttaart; serving it gives the real one. */
-    @GameTest(template = TEST, timeoutTicks = 400, batch = BATCH + "_feest")
+    @GuhTest(template = TEST, timeoutTicks = 400, batch = BATCH + "_feest")
     public static void bakkerijFeesttaartVoorHetKnusfeest(GameTestHelper helper) {
         GuhNpcEntity npc = korstje(helper);
         ServerPlayer p = player(helper, npc.position().add(0, 0, 1));
@@ -339,7 +335,7 @@ public class BakkerijGameTests {
     }
 
     /** A customer's pastry outside the game vanishes (and a dropped one too). */
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void bakkerijKlantgebakVerdwijnt(GameTestHelper helper) {
         ServerPlayer p = player(helper, Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(1, 1, 1))));
         p.getInventory().add(BakjeItem.voorKlant(Recept.GUHWAFEL, Recept.Kwaliteit.GOED));
@@ -354,7 +350,7 @@ public class BakkerijGameTests {
     }
 
     /** A customer from /summon (the autocheck): it waits where it stands with its order and patience, without a game. */
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void bakkerijKlantVanSummonWacht(GameTestHelper helper) {
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
         tag.putString("id", "guhs:bakkerij_klant");
@@ -384,7 +380,7 @@ public class BakkerijGameTests {
     }
 
     /** Korstje's role (not the placeholder), his shop in bakmunten with the baker's outfit and an oven. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void bakkerijKorstjeEnWinkel(GameTestHelper helper) {
         var role = Features.role(GuhNpcEntity.Kind.BAKKERGUH);
         helper.assertTrue(role instanceof BakkerijRole && role != Binnenkort.ROLE, "Bakker Korstje has his own role");
@@ -402,7 +398,7 @@ public class BakkerijGameTests {
     }
 
     /** The real building: Korstje, three customer spots, the door and three ovens; a customer walks from the door to the counter. */
-    @GameTest(template = GEBOUW, timeoutTicks = 800, batch = "bakkerij_gebouw")
+    @GuhTest(template = GEBOUW, timeoutTicks = 800, batch = "bakkerij_gebouw")
     public static void bakkerijGebouwKlantLooptNaarDeToonbank(GameTestHelper helper) {
         GuhNpcEntity npc = korstje(helper);
         for (String key : List.of("BakIngang", "BakPlekken", "BakOvens")) {   // the real building: Korstje scans it himself

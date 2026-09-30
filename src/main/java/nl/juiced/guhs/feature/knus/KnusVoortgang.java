@@ -170,30 +170,30 @@ public final class KnusVoortgang {
     /** The player's Knus data (a live compound in their saved data). */
     static CompoundTag data(ServerPlayer player) {
         CompoundTag saved = GuhQuests.saved(player);
-        if (!saved.contains(KEY, Tag.TAG_COMPOUND)) {
+        if (!saved.contains(KEY)) {
             saved.put(KEY, new CompoundTag());
         }
-        return saved.getCompound(KEY);
+        return saved.getCompoundOrEmpty(KEY);
     }
 
     private static CompoundTag compound(CompoundTag parent, String key) {
-        if (!parent.contains(key, Tag.TAG_COMPOUND)) {
+        if (!parent.contains(key)) {
             parent.put(key, new CompoundTag());
         }
-        return parent.getCompound(key);
+        return parent.getCompoundOrEmpty(key);
     }
 
     private static ListTag strings(CompoundTag parent, String key) {
-        if (!parent.contains(key, Tag.TAG_LIST)) {
+        if (!parent.contains(key)) {
             parent.put(key, new ListTag());
         }
-        return parent.getList(key, Tag.TAG_STRING);
+        return parent.getListOrEmpty(key);
     }
 
     /** Adds to a counter (never below 0); returns the new total. Reached milestones get a toast; the client is updated. */
     public static int tel(ServerPlayer player, String teller, int erbij) {
         CompoundTag tellers = compound(data(player), "Tellers");
-        int was = tellers.getInt(teller);
+        int was = tellers.getIntOr(teller, 0);
         int now = (int) Math.max(0, Math.min(Integer.MAX_VALUE, (long) was + erbij));
         tellers.putInt(teller, now);
         afterChange(player, teller, was, now);
@@ -203,7 +203,7 @@ public final class KnusVoortgang {
     /** Keeps the highest value (records, e.g. a best score); returns the counter afterwards. */
     public static int hoogste(ServerPlayer player, String teller, int waarde) {
         CompoundTag tellers = compound(data(player), "Tellers");
-        int was = tellers.getInt(teller);
+        int was = tellers.getIntOr(teller, 0);
         if (waarde <= was) {
             return was;
         }
@@ -213,7 +213,7 @@ public final class KnusVoortgang {
     }
 
     public static int teller(ServerPlayer player, String teller) {
-        return compound(data(player), "Tellers").getInt(teller);
+        return compound(data(player), "Tellers").getIntOr(teller, 0);
     }
 
     /** Fills in a collection entry; true when it is new (a toast, and the client is updated). */
@@ -232,8 +232,8 @@ public final class KnusVoortgang {
         list.add(StringTag.valueOf(item));
         long found = list.size();
         melden(player, "verzameling", verzameling, item);
-        player.displayClientMessage(Component.translatable("gui.guhs.knus.nieuw_item", v.item(item), v.naam(), found, v.items().size())
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.knus.nieuw_item", v.item(item), v.naam(), found, v.items().size())
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         player.level().playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1f, 1.3f);
         sync(player);
         return true;
@@ -245,8 +245,8 @@ public final class KnusVoortgang {
 
     public static Set<String> ontdekt(ServerPlayer player, String verzameling) {
         Set<String> out = new LinkedHashSet<>();
-        CompoundTag all = data(player).getCompound("Verzamelingen");
-        for (Tag t : all.getList(verzameling, Tag.TAG_STRING)) {
+        CompoundTag all = data(player).getCompoundOrEmpty("Verzamelingen");
+        for (Tag t : all.getListOrEmpty(verzameling)) {
             out.add(t.getAsString());
         }
         return out;
@@ -258,7 +258,7 @@ public final class KnusVoortgang {
     }
 
     public static boolean geclaimd(ServerPlayer player, String mijlpaal) {
-        for (Tag t : data(player).getList("Geclaimd", Tag.TAG_STRING)) {
+        for (Tag t : data(player).getListOrEmpty("Geclaimd")) {
             if (t.getAsString().equals(mijlpaal)) {
                 return true;
             }
@@ -338,7 +338,7 @@ public final class KnusVoortgang {
         }
 
         public static int teller(String teller) {
-            return data.getCompound("Tellers").getInt(teller);
+            return data.getCompoundOrEmpty("Tellers").getIntOr(teller, 0);
         }
 
         public static boolean bereikt(Mijlpaal m) {
@@ -346,7 +346,7 @@ public final class KnusVoortgang {
         }
 
         public static boolean geclaimd(String mijlpaal) {
-            for (Tag t : data.getList("Geclaimd", Tag.TAG_STRING)) {
+            for (Tag t : data.getListOrEmpty("Geclaimd")) {
                 if (t.getAsString().equals(mijlpaal)) {
                     return true;
                 }
@@ -356,7 +356,7 @@ public final class KnusVoortgang {
 
         public static Set<String> ontdekt(String verzameling) {
             Set<String> out = new LinkedHashSet<>();
-            for (Tag t : data.getCompound("Verzamelingen").getList(verzameling, Tag.TAG_STRING)) {
+            for (Tag t : data.getCompoundOrEmpty("Verzamelingen").getListOrEmpty(verzameling)) {
                 out.add(t.getAsString());
             }
             return out;

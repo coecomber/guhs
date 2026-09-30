@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,8 +26,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -40,14 +38,13 @@ import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.world.GuhWorldData;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the Guhbubbel: kaaskoraal air, the shells and their pearls, the duikhelm, the Zeemeerguh's shop and
  * Guhdex page, the Zeemeerguh variant (swimming, riding, breathing), the protection, the template as placed by the game
  * (air-tight, on the sea floor, everything in place) and the worldgen settings; plus an optional check on a real
  * Guhmension world that a generated bubble really lies on the bottom of a Diepe Guhzee, completely under water.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class OnderwaterGameTests {
     private static final String EMPTY = "empty";
     /** Template layout (tools/features/onderwater.py). */
@@ -57,7 +54,7 @@ public class OnderwaterGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos abs = helper.absolutePos(at);
-        player.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        player.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return player;
     }
 
@@ -79,7 +76,7 @@ public class OnderwaterGameTests {
         }
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kaaskoraalGivesAirUnderWater(GameTestHelper helper) {
         pool(helper, 4);
         ServerPlayer player = diver(helper, new BlockPos(2, 1, 2));
@@ -99,7 +96,7 @@ public class OnderwaterGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kaaskoraalNeedsSomethingToStandOn(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 2, 2);
         helper.setBlock(pos.below(), Blocks.SAND);
@@ -110,7 +107,7 @@ public class OnderwaterGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void shellsGivePearlsAndGrowNewOnes(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 1, 2);
         helper.setBlock(pos, OnderwaterFeature.REUZENSCHELP.get().defaultBlockState());
@@ -138,7 +135,7 @@ public class OnderwaterGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void duikhelmLetsYouBreatheUnderWater(GameTestHelper helper) {
         pool(helper, 4);
         ServerPlayer player = diver(helper, new BlockPos(2, 1, 2));
@@ -149,7 +146,7 @@ public class OnderwaterGameTests {
             helper.assertTrue(DuikhelmItem.divingTick(player, player.getItemBySlot(EquipmentSlot.HEAD)), "worn under water");
             helper.assertTrue(player.hasEffect(MobEffects.WATER_BREATHING) && player.hasEffect(MobEffects.NIGHT_VISION), "you breathe and see");
             player.removeAllEffects();
-            player.moveTo(player.getX(), player.getY() + 10, player.getZ());
+            player.snapTo(player.getX(), player.getY() + 10, player.getZ());
             helper.assertTrue(!DuikhelmItem.divingTick(player, player.getItemBySlot(EquipmentSlot.HEAD)), "not above water");
             helper.assertTrue(!player.hasEffect(MobEffects.WATER_BREATHING), "no effect in the air");
         } finally {
@@ -158,19 +155,19 @@ public class OnderwaterGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void zeemeerguhSellsTheDiveGearForPearls(GameTestHelper helper) {
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(GuhNpcEntity.Kind.ZEEMEERGUH);
         BlockPos at = helper.absolutePos(new BlockPos(3, 1, 3));
-        npc.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        npc.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         helper.getLevel().addFreshEntity(npc);
         ServerPlayer player = diver(helper, new BlockPos(1, 1, 1));
         try {
             helper.assertTrue(nl.juiced.guhs.feature.Features.role(GuhNpcEntity.Kind.ZEEMEERGUH) instanceof ZeemeerguhRole, "she has a role");
             OnderwaterFeature.role().talk(npc, player);
-            helper.assertTrue(GuhQuests.saved(player).getBoolean(ZeemeerguhRole.MET_KEY), "she remembers you");
-            helper.assertTrue(GuhWorldData.get(player.server).player(player.getUUID()).seen.contains(GuhVariant.ZEEMEERGUH),
+            helper.assertTrue(GuhQuests.saved(player).getBooleanOr(ZeemeerguhRole.MET_KEY, false), "she remembers you");
+            helper.assertTrue(GuhWorldData.get(player.level().getServer()).player(player.getUUID()).seen.contains(GuhVariant.ZEEMEERGUH),
                     "meeting her fills in the Zeemeerguh page of the Guhdex");
             var offers = OnderwaterFeature.role().offers(npc);
             List<net.minecraft.world.item.Item> sold = new ArrayList<>();
@@ -194,7 +191,7 @@ public class OnderwaterGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, timeoutTicks = 200)
     public static void zeemeerguhDivesAndBreathesUnderWater(GameTestHelper helper) {
         pool(helper, 4);
         GuhEntity guh = Zeemeerguh.spawnAt(helper.getLevel(), helper.absolutePos(new BlockPos(2, 1, 2)), helper.getLevel().getRandom());
@@ -209,7 +206,7 @@ public class OnderwaterGameTests {
             helper.assertTrue(guh.getAirSupply() == guh.getMaxAirSupply() && guh.getHealth() == guh.getMaxHealth(), "and never short of air");
             var tag = new net.minecraft.nbt.CompoundTag();
             guh.saveWithoutId(tag);
-            GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel());
+            GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
             copy.load(tag);
             helper.assertTrue(copy.isZeemeer() && copy.getNavigation() instanceof AmphibiousPathNavigation, "saved and loaded, it still swims");
             guh.discard();
@@ -217,14 +214,14 @@ public class OnderwaterGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void ridingAZeemeerguhUnderWater(GameTestHelper helper) {
         pool(helper, 4);
         ServerPlayer player = diver(helper, new BlockPos(2, 1, 2));
-        GuhEntity guh = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity guh = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         try {
             BlockPos at = helper.absolutePos(new BlockPos(2, 1, 2));
-            guh.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+            guh.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
             Zeemeerguh.become(guh, helper.getLevel().getRandom());
             helper.getLevel().addFreshEntity(guh);
             guh.tame(player);
@@ -256,7 +253,7 @@ public class OnderwaterGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theBubbleCantBeBrokenOrFlooded(GameTestHelper helper) {
         BlockPos corner = helper.absolutePos(BlockPos.ZERO);
         AABB area = new AABB(corner.getX(), corner.getY(), corner.getZ(), corner.getX() + 5, corner.getY() + 4, corner.getZ() + 5);
@@ -282,19 +279,19 @@ public class OnderwaterGameTests {
     }
 
     /** The worldgen settings: in the Diepe Guhzee only, placed by the Guhbubbel's own type; Zeemeerguhs in both guh seas. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theBubbleGeneratesInTheDeepSea(GameTestHelper helper) {
-        var registry = helper.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
+        var registry = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE);
         var structure = registry.get(OnderwaterProtection.BUBBLE);
         helper.assertTrue(structure instanceof GuhbubbelStructure, "the Guhbubbel's own structure type: " + structure);
-        var biomes = helper.getLevel().registryAccess().registryOrThrow(Registries.BIOME);
+        var biomes = helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME);
         var deep = biomes.getHolder(Zeemeerguh.DIEPE_GUHZEE);
         helper.assertTrue(deep.isPresent() && structure.biomes().contains(deep.get()), "in the deep guh sea");
         helper.assertTrue(structure.biomes().size() == 1, "and nowhere else");
         var sea = biomes.getHolder(Zeemeerguh.GUH_SEA);
         helper.assertTrue(sea.isPresent() && sea.get().is(Zeemeerguh.GUHZEEEN) && deep.get().is(Zeemeerguh.GUHZEEEN),
                 "wild Zeemeerguhs turn up in both guh seas");
-        var set = helper.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE_SET).get(Guhs.id("onderwater"));
+        var set = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).get(Guhs.id("onderwater"));
         helper.assertTrue(set != null && set.placement() instanceof net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement spread
                 && spread.spacing() == ((GuhbubbelStructure) structure).cellChunks(), "one start chunk per cell");
         var template = helper.getLevel().getStructureManager().get(Guhs.id("onderwater"));
@@ -308,7 +305,7 @@ public class OnderwaterGameTests {
      * are still dry, the dome is on the sea floor with water above it, and everything is where it belongs. (In the world
      * the sea goes on around the template's round piece of sea; here a stone ring keeps the water in.)
      */
-    @GameTest(template = "onderwater", timeoutTicks = 400)
+    @GuhTest(template = "onderwater", timeoutTicks = 400)
     public static void theBubbleIsAirTightOnTheSeaFloor(GameTestHelper helper) {
         for (int x = 0; x < 128; x++) {
             for (int z = 0; z < 128; z++) {
@@ -399,11 +396,11 @@ public class OnderwaterGameTests {
      * On a real Guhmension world (dev server: /test runall): the nearest Guhbubbel really lies on the bottom of a Diepe
      * Guhzee, its water surface level with the sea's, the sea going on around it, and the dome is dry.
      */
-    @GameTest(template = EMPTY, required = false, timeoutTicks = 2400)
+    @GuhTest(template = EMPTY, required = false, timeoutTicks = 2400)
     public static void aGeneratedBubbleLiesOnTheBottomOfADeepSea(GameTestHelper helper) {
         ServerLevel guhmension = helper.getLevel().getServer().getLevel(ModDimensions.GUHMENSION);
         helper.assertTrue(guhmension != null, "the Guhmension exists");
-        var holder = guhmension.registryAccess().registryOrThrow(Registries.STRUCTURE).getHolderOrThrow(OnderwaterProtection.BUBBLE);
+        var holder = guhmension.registryAccess().lookupOrThrow(Registries.STRUCTURE).getHolderOrThrow(OnderwaterProtection.BUBBLE);
         var found = guhmension.getChunkSource().getGenerator().findNearestMapStructure(guhmension, net.minecraft.core.HolderSet.direct(holder),
                 BlockPos.ZERO, 200, false);
         helper.assertTrue(found != null, "there is a Guhbubbel");
@@ -414,7 +411,7 @@ public class OnderwaterGameTests {
             }
         }
         net.minecraft.world.level.levelgen.structure.StructureStart bubble = null;
-        for (int y = guhmension.getMinBuildHeight(); y < guhmension.getMaxBuildHeight() && bubble == null; y += 4) {
+        for (int y = guhmension.getMinY(); y < guhmension.getMaxY() + 1 && bubble == null; y += 4) {
             var here = guhmension.structureManager().getStructureWithPieceAt(start.atY(y), holder.value());
             bubble = here.isValid() ? here : null;
         }
@@ -443,7 +440,7 @@ public class OnderwaterGameTests {
      * Samples the Guhmension's surface biomes with and without the Diepe Guhzee (from the dimension JSON and its noise
      * settings, three seeds): the deep sea gets a fair share (not too much) and every other biome keeps most of its own.
      */
-    @GameTest(template = EMPTY, timeoutTicks = 400)
+    @GuhTest(template = EMPTY, timeoutTicks = 400)
     public static void theDeepSeaTakesItsShareAndLeavesTheRest(GameTestHelper helper) {
         var server = helper.getLevel().getServer();
         var access = server.registryAccess();
@@ -464,7 +461,7 @@ public class OnderwaterGameTests {
         var ops = net.minecraft.resources.RegistryOps.create(com.mojang.serialization.JsonOps.INSTANCE, access);
         var with = net.minecraft.world.level.biome.BiomeSource.CODEC.parse(ops, source).getOrThrow();
         var before = net.minecraft.world.level.biome.BiomeSource.CODEC.parse(ops, without).getOrThrow();
-        var settings = access.registryOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        var settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
         java.util.Map<String, Integer> now = new java.util.HashMap<>(), then = new java.util.HashMap<>();
         int samples = 0;
         for (long seed : new long[]{1L, 20270501L, -778899L}) {
@@ -505,11 +502,11 @@ public class OnderwaterGameTests {
      * The Guhbubbel's spots (GuhbubbelStructure, on the real sea noise of three seeds): there are plenty, each on a deep
      * peak, and no two of them in the same sea.
      */
-    @GameTest(template = EMPTY, timeoutTicks = 400)
+    @GuhTest(template = EMPTY, timeoutTicks = 400)
     public static void oneBubblePerDeepSea(GameTestHelper helper) {
         var access = helper.getLevel().getServer().registryAccess();
-        var bubble = (GuhbubbelStructure) access.registryOrThrow(Registries.STRUCTURE).get(OnderwaterProtection.BUBBLE);
-        var settings = access.registryOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        var bubble = (GuhbubbelStructure) access.lookupOrThrow(Registries.STRUCTURE).get(OnderwaterProtection.BUBBLE);
+        var settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
         int size = bubble.cellChunks(), cells = 40, total = 0;
         StringBuilder report = new StringBuilder();
         for (long seed : new long[]{1L, 20270501L, -778899L}) {

@@ -39,6 +39,7 @@ import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.quest.Scorebord;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * A ride down one of the Knuffelbad's slides (one rider per slide at a time).
  * <ol>
@@ -119,7 +120,7 @@ public final class GlijRit {
         this.glijbaan = glijbaan;
         this.baan = new GlijPad.Baan(glijbaan.pad(), start, facing);
         this.dim = player.level().dimension();
-        this.sleutel = dim.location() + "@" + start.asLong();
+        this.sleutel = dim.identifier() + "@" + start.asLong();
         this.lastTick = player.level().getGameTime();
     }
 
@@ -140,7 +141,7 @@ public final class GlijRit {
 
     @Nullable
     public static GlijRit op(Level level, BlockPos start) {
-        return BANEN.get(level.dimension().location() + "@" + start.asLong());
+        return BANEN.get(level.dimension().identifier() + "@" + start.asLong());
     }
 
     public int fase() {
@@ -176,23 +177,23 @@ public final class GlijRit {
 
     /** The player right-clicked a slide's start gate. Returns true when the ride started. */
     public static boolean start(ServerPlayer player, BlockPos start, Glijbaan glijbaan, Direction facing) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (rijdt(player)) {
             return false;
         }
         GlijRit bezet = op(level, start);
         if (bezet != null) {
             ServerPlayer other = level.getServer().getPlayerList().getPlayer(bezet.speler);
-            player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.bezet", other == null ? "?" : other.getDisplayName())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.bezet", other == null ? "?" : other.getDisplayName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         if (Minigames.busyElsewhere(player, Minigames.KNUFFELBAD)) {
-            player.displayClientMessage(Component.translatable("quest.guhs.minigame.busy").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.minigame.busy").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         GlijRit rit = new GlijRit(player, glijbaan, start, facing);
-        ZwembandjeEntity ring = KnuffelbadFeature.ZWEMBANDJE.get().create(level);
+        ZwembandjeEntity ring = KnuffelbadFeature.ZWEMBANDJE.get().create(level, EntitySpawnReason.TRIGGERED);
         if (ring == null) {
             return false;
         }
@@ -236,12 +237,12 @@ public final class GlijRit {
     Eend maakEend(ServerLevel level, double s, double lat, Eendsoort soort) {
         GlijPad.Stand st = baan.stand(s, lat);
         Vec3 pos = st.midden(baan.pad().ring);
-        BadeendjeEntity duck = KnuffelbadFeature.BADEENDJE.get().create(level);
+        BadeendjeEntity duck = KnuffelbadFeature.BADEENDJE.get().create(level, EntitySpawnReason.TRIGGERED);
         if (duck == null) {
             return null;
         }
         Vec3 t = st.tangent();
-        duck.moveTo(pos.x, pos.y - 0.12, pos.z, (float) Math.toDegrees(Math.atan2(-t.x, t.z)) + 180f, 0);
+        duck.snapTo(pos.x, pos.y - 0.12, pos.z, (float) Math.toDegrees(Math.atan2(-t.x, t.z)) + 180f, 0);
         duck.setSoort(soort);
         duck.setRit(id);
         level.addFreshEntity(duck);
@@ -345,7 +346,7 @@ public final class GlijRit {
         if (fase != ZwembandjeEntity.GLIJDT) {
             return;
         }
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         clientTick = level.getGameTime();
         double latFrom = lat;
         lat = Mth.clamp(latC, lat - 0.35, lat + 0.35);        // (no jumping across the slide)
@@ -453,14 +454,14 @@ public final class GlijRit {
         }
         CompoundTag data = data(player);
         String sid = glijbaan.id();
-        int oudRecord = data.getInt("Best_" + sid);
-        int ritten = data.getInt("Ritten_" + sid) + 1;
+        int oudRecord = data.getIntOr("Best_" + sid, 0);
+        int ritten = data.getIntOr("Ritten_" + sid, 0) + 1;
         boolean record = score > oudRecord;
         data.putInt("Ritten_" + sid, ritten);
         if (record) {
             data.putInt("Best_" + sid, score);
         }
-        data.putInt("Eendjes", data.getInt("Eendjes") + gepakt);
+        data.putInt("Eendjes", data.getIntOr("Eendjes", 0) + gepakt);
         int munten = munten(score) + (ritten == 1 ? EERSTE_MUNTEN : 0) + (record && oudRecord > 0 ? RECORD_MUNTEN : 0) + (alle ? ALLE_MUNTEN : 0);
         Minigames.give(player, new ItemStack(KnuffelbadFeature.EENDJESMUNT.get(), munten));
 
@@ -487,7 +488,7 @@ public final class GlijRit {
         KnuffelbadVoortgang.toon(player, "knuffelbad_glijbaan");
         boolean alleDrie = true;
         for (Glijbaan g : Glijbaan.values()) {
-            alleDrie &= data.getInt("Ritten_" + g.id()) > 0;
+            alleDrie &= data.getIntOr("Ritten_" + g.id(), 0) > 0;
         }
         if (alleDrie) {
             GuhAdvancements.grant(player, "knuffelbad_alle_glijbanen");
@@ -554,8 +555,8 @@ public final class GlijRit {
     public static void spelerWeg(ServerPlayer player) {
         GlijRit rit = RIJDERS.get(player.getUUID());
         if (rit != null) {
-            ServerLevel home = player.server.getLevel(rit.dim);
-            rit.opruimen(home != null ? home : player.serverLevel(), true);
+            ServerLevel home = player.level().getServer().getLevel(rit.dim);
+            rit.opruimen(home != null ? home : player.level(), true);
         }
     }
 
@@ -565,8 +566,8 @@ public final class GlijRit {
         if (rit == null) {
             return;
         }
-        ServerLevel home = player.server.getLevel(rit.dim);
-        ServerLevel level = home != null ? home : player.serverLevel();
+        ServerLevel home = player.level().getServer().getLevel(rit.dim);
+        ServerLevel level = home != null ? home : player.level();
         if (level.getGameTime() - rit.lastTick > 60) {
             rit.einde(level, Einde.WEG);
         }
@@ -584,7 +585,7 @@ public final class GlijRit {
     public static void opAfstappen(net.neoforged.neoforge.event.entity.EntityMountEvent event) {
         if (event.isDismounting() && event.getEntityMounting() instanceof Player player && event.getEntityBeingMounted() instanceof ZwembandjeEntity) {
             GlijRit rit = RIJDERS.get(player.getUUID());
-            if (rit != null && !rit.stopt && !player.level().isClientSide) {
+            if (rit != null && !rit.stopt && !player.level().isClientSide()) {
                 event.setCanceled(true);
             }
         }
@@ -604,15 +605,15 @@ public final class GlijRit {
         if (!saved.contains("guhs_knuffelbad")) {
             saved.put("guhs_knuffelbad", new CompoundTag());
         }
-        return saved.getCompound("guhs_knuffelbad");
+        return saved.getCompoundOrEmpty("guhs_knuffelbad");
     }
 
     public static int best(Player player, Glijbaan g) {
-        return data(player).getInt("Best_" + g.id());
+        return data(player).getIntOr("Best_" + g.id(), 0);
     }
 
     public static int ritten(Player player, Glijbaan g) {
-        return data(player).getInt("Ritten_" + g.id());
+        return data(player).getIntOr("Ritten_" + g.id(), 0);
     }
 
     static void titel(ServerPlayer player, Component title, @Nullable Component subtitle, int in, int stay, int out) {
@@ -635,7 +636,7 @@ public final class GlijRit {
         d.putInt("Combo", combo);
         d.putInt("Punten", laatstePunten);
         d.putInt("Best", best(player, glijbaan));
-        List<Scorebord.Entry> top = Scorebord.top(player.server, glijbaan.board());
+        List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), glijbaan.board());
         d.putInt("Record", top.isEmpty() ? 0 : top.get(0).score());
         KnuffelbadPayloads.naar(player, new KnuffelbadPayloads.Hud(d));
     }

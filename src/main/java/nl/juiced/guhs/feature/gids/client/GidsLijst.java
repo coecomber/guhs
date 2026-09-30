@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
@@ -23,7 +23,7 @@ public final class GidsLijst {
     public interface Regel {
         int hoogte();
 
-        void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover);
+        void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover);
 
         /** A click at (mx, my) inside the row; true = handled. */
         default boolean klik(double mx, double my, int x, int y, int w) {
@@ -105,7 +105,7 @@ public final class GidsLijst {
         return mx >= x && mx < x + w && my >= y && my < y + h;
     }
 
-    public void teken(GuiGraphics g, int mouseX, int mouseY, int balkKleur, int balkAchter) {
+    public void teken(GuiGraphicsExtractor g, int mouseX, int mouseY, int balkKleur, int balkAchter) {
         int rw = rijBreedte();
         boolean muisErin = binnen(mouseX, mouseY);
         g.enableScissor(x, y, x + w, y + h);

@@ -17,7 +17,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket;
+import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -209,7 +209,7 @@ public final class MepGame {
     public static void talk(GuhNpcEntity npc, ServerPlayer player) {
         MepGame game = of(npc);
         CompoundTag saved = GuhQuests.saved(player);
-        boolean first = !saved.getBoolean(FIRST);
+        boolean first = !saved.getBooleanOr(FIRST, false);
         String line = game.running ? (player.getUUID().equals(game.player) ? "running_you" : "running") : first ? "hello_first" : "hello";
         if (game.running && !player.getUUID().equals(game.player)) {
             GuhQuests.say(player, npc, "quest.guhs.mika_mep." + line, game.playerName, game.secondsLeft());
@@ -222,7 +222,7 @@ public final class MepGame {
         data.putString("Player", game.playerName);
         data.putInt("Left", game.secondsLeft());
         data.putInt("Best", best(player));
-        data.putInt("HallBest", hallBest(player.server));
+        data.putInt("HallBest", hallBest(player.level().getServer()));
         Klassiekers.records(data, n -> best(player, n));
         data.putString("Niveau", game.niveau.id());
         data.putInt("Coins", GuhQuests.count(player, MeppenFeature.MEPMUNT.get()));
@@ -278,7 +278,7 @@ public final class MepGame {
         running = true;
         niveau = level;
         player = p.getUUID();
-        playerName = p.getGameProfile().getName();
+        playerName = p.getGameProfile().name();
         tick = 0;
         nextSpawn = COUNTDOWN + 8;
         lastHit = -100;
@@ -292,7 +292,7 @@ public final class MepGame {
         Vec3 c = Vec3.atBottomCenterOf(stand);
         float yaw = (float) (Mth.atan2(c.z - npc.getZ(), c.x - npc.getX()) * Mth.RAD_TO_DEG) - 90f;
         if (p instanceof FakePlayer) {
-            p.moveTo(c.x, c.y, c.z, yaw, 40f);
+            p.snapTo(c.x, c.y, c.z, yaw, 40f);
         } else {
             p.teleportTo(world, c.x, c.y, c.z, yaw, 40f);
         }
@@ -405,11 +405,11 @@ public final class MepGame {
     private void escaped(ServerLevel world, ServerPlayer p, BlockPos pos, Head h) {
         if (h.kop == Kop.GUH) {
             score += GUH_SPARED;
-            p.displayClientMessage(Component.translatable("gui.guhs.mika_mep.spared", GUH_SPARED).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mika_mep.spared", GUH_SPARED).withStyle(ChatFormatting.LIGHT_PURPLE));
         } else {
             missed++;
             if (combo >= COMBO_STEP) {
-                p.displayClientMessage(Component.translatable("gui.guhs.mika_mep.escaped").withStyle(ChatFormatting.GRAY), true);
+                p.sendOverlayMessage(Component.translatable("gui.guhs.mika_mep.escaped").withStyle(ChatFormatting.GRAY));
             }
             combo = 0;
             sound(world, pos, ModSounds.MIKA_AMBIENT.get(), 0.5f, 1.6f);
@@ -467,16 +467,16 @@ public final class MepGame {
 
     /** The player left-clicked a head or a hole of this board. */
     void hit(ServerPlayer p, BlockPos pos) {
-        ServerLevel world = p.serverLevel();
+        ServerLevel world = p.level();
         if (!running || !p.getUUID().equals(player)) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mika_mep.not_playing").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mika_mep.not_playing").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         if (tick <= COUNTDOWN) {
             return;
         }
         if (!p.getMainHandItem().is(MeppenFeature.MEP_HAMER.get())) {
-            p.displayClientMessage(Component.translatable("gui.guhs.mika_mep.take_hammer").withStyle(ChatFormatting.YELLOW), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.mika_mep.take_hammer").withStyle(ChatFormatting.YELLOW));
             return;
         }
         if (tick - lastHit < HIT_COOLDOWN) {
@@ -492,7 +492,7 @@ public final class MepGame {
         if (h == null) {                                          // an empty hole: BONK on wood, combo gone
             nl.juiced.guhs.feature.samen.SamenSpel.mis(p, "meppen"); // samen
             if (combo > 0) {
-                p.displayClientMessage(Component.translatable("gui.guhs.mika_mep.miss").withStyle(ChatFormatting.GRAY), true);
+                p.sendOverlayMessage(Component.translatable("gui.guhs.mika_mep.miss").withStyle(ChatFormatting.GRAY));
             }
             combo = 0;
             sound(world, pos, SoundEvents.WOOD_HIT, 1f, 0.7f);
@@ -545,8 +545,8 @@ public final class MepGame {
             if (mult >= MAX_MULTIPLIER) {
                 GuhAdvancements.grant(p, "mika_meppen_combo");
             }
-            p.displayClientMessage(Component.translatable(mult > before ? "gui.guhs.mika_mep.combo_up" : "gui.guhs.mika_mep.hit",
-                    points, combo, mult).withStyle(mult > before ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable(mult > before ? "gui.guhs.mika_mep.combo_up" : "gui.guhs.mika_mep.hit",
+                    points, combo, mult).withStyle(mult > before ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE));
         }
         updateBar();
     }
@@ -560,7 +560,7 @@ public final class MepGame {
         CompoundTag saved = GuhQuests.saved(p);
         // no mepmunten for just standing there (letting guhs go): you have to whack at least one Mika
         int coins = niveau.munten(coins(endScore, mikas + golds));
-        boolean first = !saved.getBoolean(FIRST);
+        boolean first = !saved.getBooleanOr(FIRST, false);
         title(p, Component.translatable("gui.guhs.mika_mep.time").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
                 Component.translatable("gui.guhs.mika_mep.score", endScore).withStyle(ChatFormatting.WHITE), 50);
         p.sendSystemMessage(Component.translatable("quest.guhs.mika_mep.end", endScore, mikas, golds, guhs, bestCombo).withStyle(ChatFormatting.GOLD));
@@ -723,7 +723,7 @@ public final class MepGame {
         if (npc == null) {
             return List.of();
         }
-        return world.getEntitiesOfClass(Display.TextDisplay.class, npc.getBoundingBox().inflate(48, 20, 48), d -> d.getTags().contains(tag));
+        return world.getEntitiesOfClass(Display.TextDisplay.class, npc.getBoundingBox().inflate(48, 20, 48), d -> d.entityTags().contains(tag));
     }
 
     private static void setText(Display.TextDisplay display, Component text) {
@@ -781,12 +781,12 @@ public final class MepGame {
     }
 
     public static int best(Player player) {
-        return GuhQuests.saved(player).getInt(BEST);
+        return GuhQuests.saved(player).getIntOr(BEST, 0);
     }
 
     /** Your best score on this level (medium = the old record). */
     public static int best(Player player, Niveau niveau) {
-        return GuhQuests.saved(player).getInt(Klassiekers.sleutel(BEST, niveau));
+        return GuhQuests.saved(player).getIntOr(Klassiekers.sleutel(BEST, niveau), 0);
     }
 
     // --- the loaned mallet ---------------------------------------------------------------------------------------------
@@ -794,22 +794,22 @@ public final class MepGame {
     /** The mallet goes in your hand: in the selected slot if it's free, else a free hotbar slot, else the item there is kept safe. */
     private static void giveHammer(ServerPlayer p) {
         Inventory inv = p.getInventory();
-        int slot = inv.getItem(inv.selected).isEmpty() ? inv.selected : -1;
+        int slot = inv.getItem(inv.getSelectedSlot()).isEmpty() ? inv.getSelectedSlot() : -1;
         for (int i = 0; i < 9 && slot < 0; i++) {
             if (inv.getItem(i).isEmpty()) {
                 slot = i;
             }
         }
         if (slot < 0) {
-            slot = inv.selected;
+            slot = inv.getSelectedSlot();
             CompoundTag saved = GuhQuests.saved(p);
             saved.put(STASH, inv.getItem(slot).save(p.registryAccess()));
             saved.putInt(STASH_SLOT, slot);
         }
         inv.setItem(slot, new ItemStack(MeppenFeature.MEP_HAMER.get()));
-        inv.selected = slot;
+        inv.setSelectedSlot(slot);
         if (p.connection != null && !(p instanceof FakePlayer)) {
-            p.connection.send(new ClientboundSetCarriedItemPacket(slot));
+            p.connection.send(new ClientboundSetHeldSlotPacket(slot));
         }
     }
 
@@ -826,8 +826,8 @@ public final class MepGame {
         }
         CompoundTag saved = GuhQuests.saved(p);
         if (saved.contains(STASH)) {
-            ItemStack stack = ItemStack.parseOptional(p.registryAccess(), saved.getCompound(STASH));
-            int slot = saved.getInt(STASH_SLOT);
+            ItemStack stack = ItemStack.parseOptional(p.registryAccess(), saved.getCompoundOrEmpty(STASH));
+            int slot = saved.getIntOr(STASH_SLOT, 0);
             saved.remove(STASH);
             saved.remove(STASH_SLOT);
             if (!stack.isEmpty()) {
@@ -844,7 +844,7 @@ public final class MepGame {
 
     /** Whacking: a left-click on a head or a hole. The board itself never breaks (except for builders in creative mode). */
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        if (event.getLevel().isClientSide || event.getAction() != PlayerInteractEvent.LeftClickBlock.Action.START
+        if (event.getLevel().isClientSide() || event.getAction() != PlayerInteractEvent.LeftClickBlock.Action.START
                 || !(event.getEntity() instanceof ServerPlayer p)) {
             return;
         }
@@ -861,7 +861,7 @@ public final class MepGame {
         if (game != null) {
             game.hit(p, event.getPos());
         } else if (head) {
-            removeHead(p.serverLevel(), event.getPos());             // (a leftover head nobody knows)
+            removeHead(p.level(), event.getPos());             // (a leftover head nobody knows)
         }
     }
 
@@ -892,7 +892,7 @@ public final class MepGame {
         event.setCanceled(true);
         if (isPlaying(event.getPlayer()) && event.getPlayer() instanceof ServerPlayer p) {
             if (!p.getInventory().add(stack.copy())) {
-                p.getInventory().setItem(p.getInventory().selected, stack.copy());
+                p.getInventory().setItem(p.getInventory().getSelectedSlot(), stack.copy());
             }
         }
     }
@@ -954,7 +954,7 @@ public final class MepGame {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (event.getEntity() instanceof ServerPlayer p && p.tickCount % 20 == 0 && isPlaying(p)) {
             MepGame game = GAMES.get(PLAYING.get(p.getUUID()));
-            if (game == null || !game.running || p.serverLevel().getGameTime() - game.lastTicked > 60) {
+            if (game == null || !game.running || p.level().getGameTime() - game.lastTicked > 60) {
                 if (game != null && game.running) {
                     game.abort(p, "gone");
                 } else {

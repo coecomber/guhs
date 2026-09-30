@@ -37,6 +37,7 @@ import nl.juiced.guhs.feature.kleding.KledingBronnen;
 import nl.juiced.guhs.feature.kleding.KledingUnlocks;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.resources.Identifier;
 /**
  * Guh-sjoelen (2.9, De Grote Guhspelen): the Sjoelhuisje in the Guhweides, a wooden house with a giant sjoelbak as its
  * roof, round puck windows and a guh face at the front. Inside, Opoe Njegschuif (SJOELGUH) lets you slide 20 real
@@ -80,7 +81,7 @@ public final class SjoelenFeature {
     public static final DeferredHolder<EntityType<?>, EntityType<SjoelSchijfEntity>> SCHIJF = ENTITIES.register("sjoelschijf",
             () -> EntityType.Builder.<SjoelSchijfEntity>of(SjoelSchijfEntity::new, MobCategory.MISC)
                     .sized(SjoelSchijfEntity.SIZE, SjoelSchijfEntity.HEIGHT).clientTrackingRange(6).updateInterval(1)
-                    .build(Guhs.id("sjoelschijf").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("sjoelschijf"))));
 
     /** Opoe's knitted sjoel outfit and its price in sjoelschijfjes (a good turn earns 4-7). */
     public static final int PRIJS_PETJE = 4, PRIJS_BROCHE = 6, PRIJS_VESTJE = 10;
@@ -121,7 +122,7 @@ public final class SjoelenFeature {
      */
     public static void advancement(ServerPlayer player, String name) {
         for (String path : new String[] {"quest/" + name, "grote_guhspelen/" + name}) {
-            AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(path));
+            AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(path));
             if (holder == null) {
                 continue;
             }
@@ -138,7 +139,7 @@ public final class SjoelenFeature {
 
     /** Has this player got the advancement (quest/&lt;name&gt;)? */
     public static boolean has(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("quest/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("quest/" + name));
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
     }
 

@@ -5,14 +5,12 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -32,8 +30,6 @@ import nl.juiced.guhs.registry.ModEntities;
  * at a favourite (colour, friend), the favourite song in minigames, and the dagboekje stories (eerste keren, wist-je-datjes
  * once a day). (Template favorietjes_test_wei: grass at y 0.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class FavorietjesGameTests {
     private static final String WEI = "favorietjes_test_wei";
     private static final String BATCH = "favorietjes";
@@ -44,7 +40,7 @@ public class FavorietjesGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(new BlockPos(1, 1, 1));
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -87,12 +83,12 @@ public class FavorietjesGameTests {
 
     // =====================================================================================================================
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void favorietjesElkeSoortEenKeerOntdekt(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity a = guh(helper, p, new BlockPos(4, 1, 4));
         GuhEntity b = guh(helper, p, new BlockPos(8, 1, 8));
-        MinecraftServer s = p.server;
+        MinecraftServer s = p.level().getServer();
         UUID id = Band.id(a);
         helper.assertTrue(Favorieten.waarde(a, FavorietSoort.VRIEND) != null, "two guhs: a friend favourite");
         int hartjes = Band.hartjes(a);
@@ -118,11 +114,11 @@ public class FavorietjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void favorietjesHintsWarmEnKoud(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
-        MinecraftServer s = p.server;
+        MinecraftServer s = p.level().getServer();
         // the families
         helper.assertTrue(Hints.warm(s, null, FavorietSoort.ETEN, "guhs:macaron_roze", "guhs:macaron_mint")
                 && Hints.warm(s, null, FavorietSoort.ETEN, "guhs:kaasijsje_roze", "guhs:kaasknabbel_milkshake")
@@ -154,7 +150,7 @@ public class FavorietjesGameTests {
                     "discovery texts of " + soort);
         }
         // without the owner nearby: no hint and no discovery (only a happy guh)
-        p.moveTo(p.getX() + 200, p.getY(), p.getZ());
+        p.snapTo(p.getX() + 200, p.getY(), p.getZ());
         Favorietjes.vergeetRust(guh);
         helper.assertTrue(Favorietjes.probeer(guh, p, FavorietSoort.SPEELTJE, fout) == Favorietjes.Uitkomst.NIETS, "no hint far away");
         String fav = Favorieten.waarde(guh, FavorietSoort.SPEELTJE);
@@ -164,7 +160,7 @@ public class FavorietjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void favorietjesBlijBuffEnHartjesNooitOmlaag(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
@@ -177,7 +173,7 @@ public class FavorietjesGameTests {
         helper.assertTrue(Band.isBlij(guh) && Band.klusSnelheid(guh) == 1.5f, "blij: faster chores");
         helper.assertTrue(FavorietLiedje.volume(guh) > 1f, "blij: cheers louder");
         // lots of hints, again-moments, wrong things: hearts never go down
-        MinecraftServer s = p.server;
+        MinecraftServer s = p.level().getServer();
         for (int i = 0; i < 30; i++) {
             Favorietjes.vergeetRust(guh);
             FavorietSoort soort = FavorietSoort.values()[i % 7];
@@ -190,7 +186,7 @@ public class FavorietjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void favorietjesKleurTabel(GameTestHelper helper) {
         for (String kleur : Favorieten.KLEUREN) {
             helper.assertTrue(!KledingKleuren.van(kleur).isEmpty(), "clothes in every colour: " + kleur);
@@ -204,7 +200,7 @@ public class FavorietjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void favorietjesBijEenFavoriet(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity a = guh(helper, p, new BlockPos(4, 1, 4));
@@ -223,11 +219,11 @@ public class FavorietjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 200)
     public static void favorietjesLiedjeJuichtHarder(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
-        for (String liedje : Favorieten.kandidaten(p.server, FavorietSoort.LIEDJE)) {
+        for (String liedje : Favorieten.kandidaten(p.level().getServer(), FavorietSoort.LIEDJE)) {
             helper.assertTrue(FavorietLiedje.noten(liedje) != null, "every song can be sung: " + liedje);
         }
         helper.assertTrue(FavorietLiedje.juich(guh) == 1f && !FavorietLiedje.zingt(guh), "not blij: a normal cheer, no song");
@@ -245,12 +241,12 @@ public class FavorietjesGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void favorietjesDagboekVerhaaltjes(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity a = guh(helper, p, new BlockPos(4, 1, 4));
         GuhEntity b = guh(helper, p, new BlockPos(8, 1, 8));
-        MinecraftServer s = p.server;
+        MinecraftServer s = p.level().getServer();
         UUID id = Band.id(a);
         // the generated texts are loaded
         for (String sleutel : List.of("droom", "aai", "eten_ijskoud", "plek_guhmensie", "spel_sjoelen", "klus_opgraven", "speeltje_tunnel",

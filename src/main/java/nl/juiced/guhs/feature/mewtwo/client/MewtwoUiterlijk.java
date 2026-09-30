@@ -8,11 +8,11 @@ import java.util.function.Function;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.client.GuhRenderer;
@@ -20,7 +20,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.verhaal.VerhaalVlaggen;
 import nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk;
-import software.bernie.geckolib.cache.object.GeoBone;
+import com.geckolib.cache.model.GeoBone;
 
 /**
  * The Guhtwo's look on the client: it floats (the flag ZWEEFT lifts the whole model a little, bobbing; less when it
@@ -28,9 +28,9 @@ import software.bernie.geckolib.cache.object.GeoBone;
  * layer; not the eyes while it sleeps), a slowly swaying tail, and the funny x2 double chomp when it eats (two quick nods).
  */
 public final class MewtwoUiterlijk implements VariantUiterlijk.Uiterlijk {
-    private static final ResourceLocation GLOED = Guhs.id("textures/entity/guh_mewtwo_gloed.png");
-    private static final ResourceLocation GLOED_SLAAP = Guhs.id("textures/entity/guh_mewtwo_gloed_slaap.png");
-    private static final ResourceLocation ZWEEFGLOED = Guhs.id("textures/entity/mewtwo_zweefgloed.png");
+    private static final Identifier GLOED = Guhs.id("textures/entity/guh_mewtwo_gloed.png");
+    private static final Identifier GLOED_SLAAP = Guhs.id("textures/entity/guh_mewtwo_gloed_slaap.png");
+    private static final Identifier ZWEEFGLOED = Guhs.id("textures/entity/mewtwo_zweefgloed.png");
     /** How high it floats (model pixels, before its size): walking/standing, sitting, ridden. */
     public static final float ZWEEF = 7f, ZWEEF_ZIT = 3f, ZWEEF_RIJ = 0.8f;
     /** When each Guhtwo last ate (entity id -> client game time): the x2 chomp. */
@@ -59,7 +59,7 @@ public final class MewtwoUiterlijk implements VariantUiterlijk.Uiterlijk {
     }
 
     @Override
-    public ResourceLocation glow(GuhEntity guh) {
+    public Identifier glow(GuhEntity guh) {
         return GuhRenderer.slaapt(guh) ? GLOED_SLAAP : GLOED;
     }
 
@@ -103,9 +103,9 @@ public final class MewtwoUiterlijk implements VariantUiterlijk.Uiterlijk {
         VertexConsumer vc = buffers.getBuffer(RenderType.eyes(ZWEEFGLOED));
         PoseStack.Pose p = pose.last();
         float y = 0.03f;
-        vc.addVertex(p, -r, y, -r).setColor(kleur).setUv(0, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(p, 0, 1, 0);
-        vc.addVertex(p, -r, y, r).setColor(kleur).setUv(0, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(p, 0, 1, 0);
-        vc.addVertex(p, r, y, r).setColor(kleur).setUv(1, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(p, 0, 1, 0);
-        vc.addVertex(p, r, y, -r).setColor(kleur).setUv(1, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightTexture.FULL_BRIGHT).setNormal(p, 0, 1, 0);
+        vc.addVertex(p, -r, y, -r).setColor(kleur).setUv(0, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
+        vc.addVertex(p, -r, y, r).setColor(kleur).setUv(0, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
+        vc.addVertex(p, r, y, r).setColor(kleur).setUv(1, 1).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
+        vc.addVertex(p, r, y, -r).setColor(kleur).setUv(1, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);
     }
 }

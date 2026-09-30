@@ -39,6 +39,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.quest.Scorebord;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * De kappersshow of Kapper Krulletje: customer guhs come in one by one and sit down in the kappersstoel nearest to
  * Krulletje, each with a picture of the hairstyle it wants (a style and a colour, or natural). In the knip screen you
@@ -228,9 +229,9 @@ public final class KappersShow {
         ServerPlayer other = show.isRunning() ? show.speler((ServerLevel) npc.level()) : null;
         CompoundTag data = new CompoundTag();
         data.putBoolean("Running", show.isRunning());
-        data.putString("Speler", other == null ? "?" : other.getGameProfile().getName());
+        data.putString("Speler", other == null ? "?" : other.getGameProfile().name());
         data.putInt("Best", best(player));
-        data.putBoolean("Played", GuhQuests.saved(player).getBoolean(FIRST));
+        data.putBoolean("Played", GuhQuests.saved(player).getBooleanOr(FIRST, false));
         data.putInt("Munten", GuhQuests.count(player, KapperFeature.KRULMUNT.get()));
         data.putBoolean("Feest", Knusfeest.open(player, Feesttaak.FEESTKAPSELS));
         ModNetworking.sendTo(player, new KapperPayloads.Open(npc.getId(), data));
@@ -276,7 +277,7 @@ public final class KappersShow {
         if (player.getUUID().equals(show.speler)) {
             show.openKnip(npc, player);
         } else {
-            player.displayClientMessage(Component.translatable("quest.guhs.kapper.niet_jouw_klant").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.kapper.niet_jouw_klant").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -364,10 +365,10 @@ public final class KappersShow {
                     nieuweKlant(npc, level, p);
                     return;
                 }
-                k.moveTo(stoelPlek().x, stoelPlek().y, stoelPlek().z, k.getYRot(), 0);
+                k.snapTo(stoelPlek().x, stoelPlek().y, stoelPlek().z, k.getYRot(), 0);
                 if (fotoTot > 0 && --fotoTot == 0) {
                     stuur(npc, p);                                 // the picture goes away
-                    p.displayClientMessage(Component.translatable("quest.guhs.kapper.bar.foto_weg").withStyle(ChatFormatting.YELLOW), true);
+                    p.sendOverlayMessage(Component.translatable("quest.guhs.kapper.bar.foto_weg").withStyle(ChatFormatting.YELLOW));
                 }
                 if (--timer <= 0) {
                     teLaat(npc, level, p, k);
@@ -405,7 +406,7 @@ public final class KappersShow {
         } else {
             wensVerf = r.nextFloat() < (nr < 2 ? 0.45f : 0.2f) ? null : Haarverf.values()[r.nextInt(Haarverf.values().length)];
         }
-        KapperKlantEntity k = KapperFeature.KAPPER_KLANT.get().create(level);
+        KapperKlantEntity k = KapperFeature.KAPPER_KLANT.get().create(level, EntitySpawnReason.TRIGGERED);
         if (k == null) {
             return;
         }
@@ -421,7 +422,7 @@ public final class KappersShow {
         Vec3 plek = stoelPlek();
         BlockState state = level.getBlockState(stoel);
         float yaw = state.hasProperty(HorizontalDirectionalBlock.FACING) ? state.getValue(HorizontalDirectionalBlock.FACING).toYRot() : 0f;
-        k.moveTo(plek.x, plek.y, plek.z, yaw, 0);
+        k.snapTo(plek.x, plek.y, plek.z, yaw, 0);
         k.setYHeadRot(yaw);
         k.setYBodyRot(yaw);
         k.setNoGravity(true);
@@ -437,7 +438,7 @@ public final class KappersShow {
         fotoTot = nr >= FOTO_WEG_VANAF ? FOTO_TICKS : -1;
         level.playSound(null, stoel, SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.NEUTRAL, 1f, 1.5f);
         level.sendParticles(ParticleTypes.HEART, plek.x, plek.y + 1.1, plek.z, 2, 0.2, 0.1, 0.2, 0);
-        p.displayClientMessage(Component.translatable("quest.guhs.kapper.bar.tingeling", nr + 1, aantal).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        p.sendOverlayMessage(Component.translatable("quest.guhs.kapper.bar.tingeling", nr + 1, aantal).withStyle(ChatFormatting.LIGHT_PURPLE));
         openKnip(npc, p);
     }
 
@@ -466,7 +467,7 @@ public final class KappersShow {
             return;
         }
         if (gewassen < WASSEN) {
-            p.displayClientMessage(Component.translatable("quest.guhs.kapper.bar.eerst_wassen").withStyle(ChatFormatting.RED), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.kapper.bar.eerst_wassen").withStyle(ChatFormatting.RED));
         } else {
             gekozen = kapsel;
             KapperHaar.geefKapsel(k, kapsel);
@@ -481,7 +482,7 @@ public final class KappersShow {
             return;
         }
         if (gekozen == null) {
-            p.displayClientMessage(Component.translatable("quest.guhs.kapper.bar.eerst_knippen").withStyle(ChatFormatting.RED), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.kapper.bar.eerst_knippen").withStyle(ChatFormatting.RED));
         } else {
             gekozenVerf = verf;
             KapperHaar.verf(k, verf >= NATUREL ? null : Haarverf.values()[verf]);
@@ -506,7 +507,7 @@ public final class KappersShow {
             return;
         }
         if (gekozen == null) {
-            p.displayClientMessage(Component.translatable("quest.guhs.kapper.bar.eerst_knippen").withStyle(ChatFormatting.RED), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.kapper.bar.eerst_knippen").withStyle(ChatFormatting.RED));
             stuur(npc, p);
             return;
         }
@@ -582,7 +583,7 @@ public final class KappersShow {
         if (score > 0 && Scorebord.submit(p, BOARD, score, false) > 0) {
             showScores(npc);
         }
-        if (!saved.getBoolean(FIRST)) {
+        if (!saved.getBooleanOr(FIRST, false)) {
             saved.putBoolean(FIRST, true);
             Minigames.give(p, new ItemStack(KapperFeature.KRULMUNT.get(), FIRST_MUNTEN));
             GuhQuests.say(p, npc, "quest.guhs.kapper.eerste");
@@ -711,7 +712,7 @@ public final class KappersShow {
     }
 
     public static int best(Player player) {
-        return GuhQuests.saved(player).getInt(BEST);
+        return GuhQuests.saved(player).getIntOr(BEST, 0);
     }
 
     @Nullable
@@ -746,7 +747,7 @@ public final class KappersShow {
     /** A player whose show stopped ticking (its chunk unloaded, Krulletje vanished) is an ordinary player again. */
     public static void onPlayerTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        if (player.level().isClientSide || player.tickCount % 20 != 0) {
+        if (player.level().isClientSide() || player.tickCount % 20 != 0) {
             return;
         }
         Long seen = SPELERS.get(player.getUUID());

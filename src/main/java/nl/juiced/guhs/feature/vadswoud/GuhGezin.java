@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.goal.FollowParentGoal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -102,8 +102,8 @@ public final class GuhGezin {
         if (level.dimension() != ModDimensions.GUHMENSION || guh.isTame() || guh.getPersistentData().contains(TAG)) {
             return;
         }
-        MobSpawnType type = guh.getSpawnType();
-        boolean fresh = type == MobSpawnType.NATURAL ? !event.loadedFromDisk() : type == MobSpawnType.CHUNK_GENERATION;
+        EntitySpawnReason type = guh.getSpawnType();
+        boolean fresh = type == EntitySpawnReason.NATURAL ? !event.loadedFromDisk() : type == EntitySpawnReason.CHUNK_GENERATION;
         if (fresh) {
             join(level, guh);
         }
@@ -203,16 +203,16 @@ public final class GuhGezin {
     /** A baby for this family, right next to its parent (or null if there's no room). */
     @Nullable
     public static GuhEntity spawnBaby(ServerLevel level, GuhEntity parent, long familyId, int place) {
-        GuhEntity baby = ModEntities.GUH.get().create(level);
+        GuhEntity baby = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (baby == null) {
             return null;
         }
         double a = parent.getRandom().nextDouble() * Math.PI * 2;
-        baby.moveTo(parent.getX() + Math.cos(a) * 0.9, parent.getY(), parent.getZ() + Math.sin(a) * 0.9, parent.getYRot(), 0);
+        baby.snapTo(parent.getX() + Math.cos(a) * 0.9, parent.getY(), parent.getZ() + Math.sin(a) * 0.9, parent.getYRot(), 0);
         if (!level.noCollision(baby)) {
-            baby.moveTo(parent.getX(), parent.getY(), parent.getZ(), parent.getYRot(), 0);
+            baby.snapTo(parent.getX(), parent.getY(), parent.getZ(), parent.getYRot(), 0);
         }
-        net.neoforged.neoforge.event.EventHooks.finalizeMobSpawn(baby, level, level.getCurrentDifficultyAt(parent.blockPosition()), MobSpawnType.EVENT, null);
+        net.neoforged.neoforge.event.EventHooks.finalizeMobSpawn(baby, level, level.getCurrentDifficultyAt(parent.blockPosition()), EntitySpawnReason.EVENT, null);
         baby.setVariant(parent.getVariant() == GuhVariant.BROCOCOLIEF ? GuhVariant.NORMAL : parent.getVariant());
         makeBaby(baby, parent.getGuhScale());
         if (parent.getRandom().nextInt(3) > 0) {
@@ -242,16 +242,16 @@ public final class GuhGezin {
 
     /** The family id of a guh (0: none). */
     public static long familyOf(GuhEntity guh) {
-        return guh.getPersistentData().getCompound(TAG).getLong("Id");
+        return guh.getPersistentData().getCompoundOrEmpty(TAG).getLongOr("Id", 0L);
     }
 
     public static boolean isParent(GuhEntity guh) {
-        return OUDER.equals(guh.getPersistentData().getCompound(TAG).getString("Rol"));
+        return OUDER.equals(guh.getPersistentData().getCompoundOrEmpty(TAG).getStringOr("Rol", ""));
     }
 
     /** A baby's place in the line (1 walks right behind the parent), 0 when it has none. */
     public static int placeOf(GuhEntity guh) {
-        return guh.getPersistentData().getCompound(TAG).getInt("Plek");
+        return guh.getPersistentData().getCompoundOrEmpty(TAG).getIntOr("Plek", 0);
     }
 
     /** A bred baby joins its parents' family (they start one if they have none): at the back of the line. */
@@ -281,7 +281,7 @@ public final class GuhGezin {
 
     @SubscribeEvent
     public static void onInteract(PlayerInteractEvent.EntityInteract event) {
-        if (event.getLevel().isClientSide || !(event.getTarget() instanceof GuhEntity guh) || !(event.getEntity() instanceof ServerPlayer player)
+        if (event.getLevel().isClientSide() || !(event.getTarget() instanceof GuhEntity guh) || !(event.getEntity() instanceof ServerPlayer player)
                 || guh.getHiddenBy() != null) {
             return;
         }
@@ -296,11 +296,11 @@ public final class GuhGezin {
     /** Knabbelbessen (and kaasknabbels) for a baby; null when the guh's own interaction should go on. */
     @Nullable
     public static InteractionResult feed(GuhEntity guh, ServerPlayer player, ItemStack stack) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (stack.is(VadswoudFeature.KNABBELBESSEN.get())) {
             if (!guh.isBaby()) {
                 if (!guh.isTame()) {
-                    player.displayClientMessage(Component.translatable("gui.guhs.vadswoud.alleen_babys").withStyle(ChatFormatting.GOLD), true);
+                    player.sendOverlayMessage(Component.translatable("gui.guhs.vadswoud.alleen_babys").withStyle(ChatFormatting.GOLD));
                 }
                 return null;
             }
@@ -309,7 +309,7 @@ public final class GuhGezin {
             if (guh.isTame()) {
                 guh.ageUp(AgeableMob.getSpeedUpSecondsWhenFeeding(-guh.getAge()), true);
                 guh.triggerAnim("action", "happy");
-                player.displayClientMessage(Component.translatable("gui.guhs.vadswoud.baby_bessen").withStyle(ChatFormatting.GOLD), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.vadswoud.baby_bessen").withStyle(ChatFormatting.GOLD));
             } else if (guh.getRandom().nextInt(BESSEN_TAME_CHANCE) == 0 && !net.neoforged.neoforge.event.EventHooks.onAnimalTame(guh, player)) {
                 tame(guh, player);
             } else {
@@ -337,7 +337,7 @@ public final class GuhGezin {
         if (!guh.hasPersonality()) {
             guh.setPersonality(GuhPersonality.random(guh.getRandom()));
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.vadswoud.baby_getemd").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.vadswoud.baby_getemd").withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     @SubscribeEvent

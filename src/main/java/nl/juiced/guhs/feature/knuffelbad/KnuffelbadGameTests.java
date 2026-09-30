@@ -7,7 +7,7 @@ import java.util.Set;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,8 +19,6 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -41,8 +39,6 @@ import nl.juiced.guhs.registry.ModEntities;
  * highscores, the Knus tab, advancements, getting off at the pool), one rider per slide, the washing ritual (in the right
  * order: shiny for a day), Badmeester Bubbel's shop and gifts, the prize rules (+1), the protection, the rubber duck.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KnuffelbadGameTests {
     private static final String EMPTY = "empty";
     private static final String BAD = "knuffelbad";
@@ -56,7 +52,7 @@ public class KnuffelbadGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -72,7 +68,7 @@ public class KnuffelbadGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -106,7 +102,7 @@ public class KnuffelbadGameTests {
     // =================================================================================================================
 
     /** The three paths load (from the mod's own files, like the client does), they are smooth, and the rides end. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knuffelbadPadenZijnGlad(GameTestHelper helper) {
         for (Glijbaan g : Glijbaan.values()) {
             GlijPad pad = GlijPad.laad(g.id());
@@ -167,7 +163,7 @@ public class KnuffelbadGameTests {
      * The slides in the structure itself: under every running part of every ride there are slide blocks (glijgoot) and
      * above it there is room: the rides follow the visible slides. Plus the gates, Badmeester Bubbel and the tubs.
      */
-    @GameTest(batch = BATCH, template = BAD, timeoutTicks = 400)
+    @GuhTest(batch = BATCH, template = BAD, timeoutTicks = 400)
     public static void knuffelbadGlijbanenVolgenDeBlokken(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         List<BlockPos> poorten = poorten(helper);
@@ -224,7 +220,7 @@ public class KnuffelbadGameTests {
      * Down all three slides (the autopilot steers to the ducks): points, eendjesmunten (with the first-ride bonus), the
      * highscore of each slide, the Knus tab, the advancements, and off at the pool; one rider per slide at a time.
      */
-    @GameTest(batch = BATCH, template = BAD, timeoutTicks = 600)
+    @GuhTest(batch = BATCH, template = BAD, timeoutTicks = 600)
     public static void knuffelbadRitVanBovenTotBeneden(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         List<BlockPos> poorten = poorten(helper);
@@ -262,7 +258,7 @@ public class KnuffelbadGameTests {
             helper.assertTrue(aantal(p, KnuffelbadFeature.EENDJESMUNT.get()) == munten, g + ": eendjesmunten " + aantal(p, KnuffelbadFeature.EENDJESMUNT.get())
                     + " (expected " + munten + ")");
             helper.assertTrue(GlijRit.best(p, g) == score && GlijRit.ritten(p, g) == 1, g + ": your record");
-            helper.assertTrue(Scorebord.top(p.server, g.board()).stream().anyMatch(e -> e.player().equals(p.getUUID()) && e.score() == score), g + ": the world's top 3");
+            helper.assertTrue(Scorebord.top(p.level().getServer(), g.board()).stream().anyMatch(e -> e.player().equals(p.getUUID()) && e.score() == score), g + ": the world's top 3");
             helper.assertTrue(KnusVoortgang.teller(p, KnuffelbadVoortgang.teller(g)) == 1, g + ": the Knus tab counts the ride");
             helper.assertTrue(advancement(p, "knuffelbad_" + g.id()), g + ": the slide's quest advancement");
             Vec3 uit = rit.baan.uitstap();
@@ -276,7 +272,7 @@ public class KnuffelbadGameTests {
     }
 
     /** Getting off halfway (hold sneak), logging out: the ride ends, the ring and the ducks go, you land at the pool, no prize. */
-    @GameTest(batch = BATCH, template = BAD, timeoutTicks = 400)
+    @GuhTest(batch = BATCH, template = BAD, timeoutTicks = 400)
     public static void knuffelbadUitstappenEnWeggaan(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos poort = poort(poorten(helper), level, Glijbaan.GLIMTUNNEL);
@@ -320,7 +316,7 @@ public class KnuffelbadGameTests {
     // =================================================================================================================
 
     /** Points and prizes: a duck is 10 (special 25, gold 50), a combo adds 2 per duck in a row; every prize rule is one more. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knuffelbadPuntenEnPrijzen(GameTestHelper helper) {
         helper.assertTrue(GlijRit.punten(Eendsoort.NORMAAL, 1) == 10 && GlijRit.punten(Eendsoort.NORMAAL, 3) == 14
                 && GlijRit.punten(Eendsoort.PLUISEENDJE, 1) == 25 && GlijRit.punten(Eendsoort.GOUDEN_EENDJE, 1) == 50, "duck points");
@@ -360,7 +356,7 @@ public class KnuffelbadGameTests {
     // =================================================================================================================
 
     /** Inzepen, schuimen, spoelen, föhnen - in that order - and your guh shines for a day (then it's over). */
-    @GameTest(template = TOBBE, timeoutTicks = 200)
+    @GuhTest(template = TOBBE, timeoutTicks = 200)
     public static void knuffelbadWasritueel(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
@@ -402,7 +398,7 @@ public class KnuffelbadGameTests {
         helper.assertTrue(aantal(p, KnuffelbadFeature.EENDJESMUNT.get()) == Wasritueel.WAS_MUNTEN, "an eendjesmunt for a clean guh");
         helper.assertTrue(KnusVoortgang.teller(p, KnuffelbadVoortgang.WASSEN) == 1 && advancement(p, "knuffelbad_gewassen"), "the Knus tab and the quest");
         helper.assertTrue(Minigames.playing(p) == null, "done washing");
-        long tot = guh.getPersistentData().getLong(Wasritueel.GLANS_TOT);
+        long tot = guh.getPersistentData().getLongOr(Wasritueel.GLANS_TOT, 0L);
         helper.assertTrue(tot - level.getGameTime() > Wasritueel.GLANS_DUUR - 5, "shiny for a whole day");
         // a day later: just a lovely guh again
         guh.getPersistentData().putLong(Wasritueel.GLANS_TOT, level.getGameTime() - 1);
@@ -416,7 +412,7 @@ public class KnuffelbadGameTests {
     // Badmeester Bubbel
     // =================================================================================================================
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knuffelbadBadmeesterWinkelEnCadeautje(GameTestHelper helper) {
         GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(2, 1, 2));
         npc.setKind(GuhNpcEntity.Kind.BADMEESTERGUH);
@@ -439,7 +435,7 @@ public class KnuffelbadGameTests {
         npc.tickCount = 100 - npc.getId() % 100;
         Badmeester.toonBord(npc);
         helper.assertTrue(!helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class, npc.getBoundingBox().inflate(1, 4, 1),
-                d -> d.getTags().contains(Scorebord.TAG)).isEmpty(), "the slides' top 3 floats above him");
+                d -> d.entityTags().contains(Scorebord.TAG)).isEmpty(), "the slides' top 3 floats above him");
         weg(helper, p);
         helper.succeed();
     }
@@ -448,7 +444,7 @@ public class KnuffelbadGameTests {
     // the building and the ducks
     // =================================================================================================================
 
-    @GameTest(template = TOBBE)
+    @GuhTest(template = TOBBE)
     public static void knuffelbadIsBeschermd(GameTestHelper helper) {
         KnuffelbadProtection.testGebied(helper.getLevel(), helper.getBounds());
         BlockPos tobbe = helper.absolutePos(new BlockPos(4, 2, 4));
@@ -462,7 +458,7 @@ public class KnuffelbadGameTests {
     }
 
     /** A rubber duck of your own: it floats, squeaks, is saved (a ride's duck isn't). */
-    @GameTest(template = TOBBE, timeoutTicks = 100)
+    @GuhTest(template = TOBBE, timeoutTicks = 100)
     public static void knuffelbadEigenBadeendje(GameTestHelper helper) {
         BadeendjeEntity deco = helper.spawn(KnuffelbadFeature.BADEENDJE.get(), new BlockPos(2, 2, 2));
         BadeendjeEntity rit = helper.spawn(KnuffelbadFeature.BADEENDJE.get(), new BlockPos(6, 3, 6));

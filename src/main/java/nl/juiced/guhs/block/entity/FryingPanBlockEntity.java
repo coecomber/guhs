@@ -27,7 +27,7 @@ public class FryingPanBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        charges = tag.getInt("Charges");
+        charges = tag.getIntOr("Charges", 0);
     }
 
     @Override

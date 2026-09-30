@@ -147,7 +147,7 @@ public final class SpelGroepen {
         if (ids.contains(groepId)) {
             return false;
         }
-        ListTag list = GuhQuests.saved(player).getList(KEY, Tag.TAG_STRING);
+        ListTag list = GuhQuests.saved(player).getListOrEmpty(KEY);
         list.add(StringTag.valueOf(groepId));
         GuhQuests.saved(player).put(KEY, list);
         sync(player);
@@ -155,10 +155,10 @@ public final class SpelGroepen {
     }
 
     private static List<String> lijst(Player player) {
-        ListTag list = GuhQuests.saved(player).getList(KEY, Tag.TAG_STRING);
+        ListTag list = GuhQuests.saved(player).getListOrEmpty(KEY);
         List<String> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            out.add(list.getString(i));
+            out.add(list.getStringOr(i, ""));
         }
         return out;
     }
@@ -178,7 +178,7 @@ public final class SpelGroepen {
             return nieuw;
         }
         List<String> al = lijst(player);
-        var structures = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        var structures = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
         for (Groep g : alle()) {
             if (g.structuur() == null || al.contains(g.id())) {
                 continue;

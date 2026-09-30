@@ -4,7 +4,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,8 +18,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -44,8 +42,6 @@ import nl.juiced.guhs.registry.ModItems;
  * rocking a crib and the babyflesje for your own baby guh, Juf Knuffel's role and shop, and the building template.
  * The room creche_test_kamer: six cribs (template y 1 = helper y 2).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class CrecheGameTests {
     private static final String KAMER = "creche_test_kamer";
     private static final String EMPTY = "empty";
@@ -56,7 +52,7 @@ public class CrecheGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -73,7 +69,7 @@ public class CrecheGameTests {
     }
 
     private static ItemStack stack(ServerPlayer p, Item item) {
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 return s;
             }
@@ -111,7 +107,7 @@ public class CrecheGameTests {
         }
     }
 
-    @GameTest(template = KAMER)
+    @GuhTest(template = KAMER)
     public static void crecheVerzorgronde(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 5));
         GuhNpcEntity npc = juf(helper);
@@ -159,7 +155,7 @@ public class CrecheGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = KAMER)
+    @GuhTest(template = KAMER)
     public static void crecheSlingersVoorHetKnusfeest(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 5));
         GuhNpcEntity npc = juf(helper);
@@ -180,7 +176,7 @@ public class CrecheGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = KAMER)
+    @GuhTest(template = KAMER)
     public static void crecheTerugbrengen(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
         ServerPlayer ander = player(helper, new BlockPos(9, 2, 7));
@@ -227,7 +223,7 @@ public class CrecheGameTests {
     }
 
     /** Every reward rule gives one more than it would have before the "+1 per reward" of 2.7.0. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void crecheBeloningenPlusEen(GameTestHelper helper) {
         for (int score = 0; score <= 1000; score += 5) {
             int old = score <= 0 ? 0 : Math.min(12, score / 60) + 1;
@@ -242,7 +238,7 @@ public class CrecheGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = KAMER)
+    @GuhTest(template = KAMER)
     public static void crecheWiegenEnBabyflesje(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
         try {
@@ -270,7 +266,7 @@ public class CrecheGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void crecheWinkelEnTags(GameTestHelper helper) {
         var offers = CrecheFeature.shop();
         helper.assertTrue(offers.stream().allMatch(o -> o.getCostA().is(CrecheFeature.SPEENMUNT.get())), "paid in speenmunten");
@@ -285,7 +281,7 @@ public class CrecheGameTests {
     }
 
     /** The building (the plein slot template): 31 x 40 x 31, one jigsaw at (15, 4, 30), cribs round the Juf. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void crecheGebouw(GameTestHelper helper) {
         StructureTemplate t = helper.getLevel().getStructureManager().get(Guhs.id("knuffeldal_stadje/creche")).orElse(null);
         helper.assertTrue(t != null, "the template exists");

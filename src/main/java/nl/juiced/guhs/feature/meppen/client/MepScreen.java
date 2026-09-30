@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.meppen.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -38,7 +38,7 @@ public class MepScreen extends Screen {
         left = (width - W) / 2;
         top = (height - H) / 2;
         int bw = (W - 48) / 2;
-        if (data.getBoolean("You")) {
+        if (data.getBooleanOr("You", false)) {
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.mika_mep.stop"), b -> send(MepGame.STOP))
                     .bounds(left + 20, top + 96, W - 40, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.mika_mep.stop.tooltip"))).build());
         } else {
@@ -46,7 +46,7 @@ public class MepScreen extends Screen {
             Button play = Button.builder(Component.translatable("gui.guhs.mika_mep.play").withStyle(ChatFormatting.BOLD),
                             b -> send(NiveauKeuze.actie("meppen", MepGame.START)))
                     .bounds(left + 20, top + 96, W - 40, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.mika_mep.play.tooltip"))).build();
-            play.active = !data.getBoolean("Running");
+            play.active = !data.getBooleanOr("Running", false);
             addRenderableWidget(play);
         }
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.mika_mep.help"), b -> send(MepGame.HELP))
@@ -58,22 +58,22 @@ public class MepScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFFF5C542);
         g.fill(left, top, left + W, top + H, 0xE8301A26);
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6EE);
-        Component question = data.getBoolean("You") ? Component.translatable("gui.guhs.mika_mep.question.you", data.getInt("Left"))
-                : data.getBoolean("Running") ? Component.translatable("gui.guhs.mika_mep.question.busy", data.getString("Player"), data.getInt("Left"))
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6EE);
+        Component question = data.getBooleanOr("You", false) ? Component.translatable("gui.guhs.mika_mep.question.you", data.getIntOr("Left", 0))
+                : data.getBooleanOr("Running", false) ? Component.translatable("gui.guhs.mika_mep.question.busy", data.getStringOr("Player", ""), data.getIntOr("Left", 0))
                 : Component.translatable("gui.guhs.mika_mep.question");
         int y = top + 28;
         for (var line : font.split(question, W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFD8B8C8);
+            g.centeredText(font, line, width / 2, y, 0xFFD8B8C8);
             y += 11;
         }
         NiveauKeuze.records(g, font, data, width / 2, top + 124, s -> String.valueOf(s), 0);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.klassiekers.wereldrecord", data.getInt("HallBest")), width / 2, top + 136, 0xFFFFE6EE);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.mika_mep.coins", data.getInt("Coins")), width / 2, top + 147, 0xFFFFE6EE);
+        g.centeredText(font, Component.translatable("gui.guhs.klassiekers.wereldrecord", data.getIntOr("HallBest", 0)), width / 2, top + 136, 0xFFFFE6EE);
+        g.centeredText(font, Component.translatable("gui.guhs.mika_mep.coins", data.getIntOr("Coins", 0)), width / 2, top + 147, 0xFFFFE6EE);
     }
 
     @Override

@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -56,7 +56,7 @@ public final class BoerderijProtection {
         if (server.dimension() != nl.juiced.guhs.world.ModDimensions.GUHMENSION) {
             return false;                                      // (it only generates in the Guhmensie)
         }
-        Structure structure = server.registryAccess().registryOrThrow(Registries.STRUCTURE).get(BoerderijFeature.GUHBOERDERIJ);
+        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(BoerderijFeature.GUHBOERDERIJ);
         return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -65,7 +65,7 @@ public final class BoerderijProtection {
             return false;
         }
         if (!quiet) {
-            player.displayClientMessage(Component.translatable("gui.guhs.boerderij.beschermd").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.boerderij.beschermd").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return true;
     }
@@ -86,7 +86,7 @@ public final class BoerderijProtection {
     /** Blocks, buckets and bone meal on a block of the farm: the item isn't used (the block itself still reacts). */
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
         ItemStack stack = event.getItemStack();
-        if (event.getLevel().isClientSide || stack.isEmpty()) {
+        if (event.getLevel().isClientSide() || stack.isEmpty()) {
             return;
         }
         boolean building = stack.getItem() instanceof BlockItem || stack.getItem() instanceof BucketItem || stack.is(Items.BONE_MEAL);

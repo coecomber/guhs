@@ -9,7 +9,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -137,7 +137,7 @@ public final class Kaasfrituursaus {
     }
 
     private static boolean flammable(LevelReader level, BlockPos pos, Direction face) {
-        if (pos.getY() >= level.getMinBuildHeight() && pos.getY() < level.getMaxBuildHeight() && !level.hasChunkAt(pos)) {
+        if (pos.getY() >= level.getMinY() && pos.getY() < level.getMaxY() + 1 && !level.hasChunkAt(pos)) {
             return false;
         }
         return level.getBlockState(pos).ignitedByLava(level, pos, face);
@@ -284,7 +284,7 @@ public final class Kaasfrituursaus {
 
         @Override
         protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-            if (!level.isClientSide && entity.getBoundingBox().minY < pos.getY() + state.getFluidState().getHeight(level, pos)) {
+            if (!level.isClientSide() && entity.getBoundingBox().minY < pos.getY() + state.getFluidState().getHeight(level, pos)) {
                 burn(entity);
             }
             super.entityInside(state, level, pos, entity);

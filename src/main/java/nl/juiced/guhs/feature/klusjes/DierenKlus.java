@@ -136,7 +136,7 @@ public class DierenKlus extends BasisKlus {
                     pak(new ItemStack(ModItems.KAASHONING.get()));
                 } else {
                     level.playSound(null, blok, SoundEvents.BEEHIVE_SHEAR, SoundSource.BLOCKS, 1f, 1.1f);
-                    pak(new ItemStack(ModItems.KAAS_KNABBELS.get(), 3 + level.random.nextInt(3)));
+                    pak(new ItemStack(ModItems.KAAS_KNABBELS.get(), 3 + level.getRandom().nextInt(3)));
                 }
                 level.gameEvent(mob, GameEvent.SHEAR, blok);
                 korf.resetHoneyLevel(level, s, blok);        // (guh bees never get angry: nobody gets stung)

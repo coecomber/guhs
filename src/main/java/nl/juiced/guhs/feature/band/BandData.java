@@ -19,6 +19,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * Everything the 2.10 band keeps per owner and per guh (SavedData {@code guhs_band} in the overworld): the hearts, the
  * favourites, the dagboekje (stats, eerste keren, wist-je-datjes), where it is ({@link GuhVolger}), a looks snapshot for
@@ -89,7 +90,7 @@ public final class BandData extends SavedData {
 
         CompoundTag save() {
             CompoundTag t = new CompoundTag();
-            t.putUUID("Id", id);
+            t.store("Id", UUIDUtil.CODEC, id);
             t.putBoolean("Guh", guh);
             t.putString("Soort", soort);
             t.putString("Naam", naam);
@@ -141,60 +142,60 @@ public final class BandData extends SavedData {
         }
 
         static Rec load(CompoundTag t) {
-            Rec r = new Rec(t.getUUID("Id"));
-            r.guh = !t.contains("Guh") || t.getBoolean("Guh");
-            r.soort = t.getString("Soort").isEmpty() ? "guh" : t.getString("Soort");
-            r.naam = t.getString("Naam");
-            r.looks = t.getCompound("Looks");
-            r.hartjes = Math.max(0, t.getInt("Hartjes"));
-            r.niveau = t.getInt("Niveau");
-            for (int i : t.getIntArray("TeMelden")) {
+            Rec r = new Rec(t.read("Id", UUIDUtil.CODEC).orElseThrow());
+            r.guh = !t.contains("Guh") || t.getBooleanOr("Guh", false);
+            r.soort = t.getStringOr("Soort", "").isEmpty() ? "guh" : t.getStringOr("Soort", "");
+            r.naam = t.getStringOr("Naam", "");
+            r.looks = t.getCompoundOrEmpty("Looks");
+            r.hartjes = Math.max(0, t.getIntOr("Hartjes", 0));
+            r.niveau = t.getIntOr("Niveau", 0);
+            for (int i : t.getIntArray("TeMelden").orElse(new int[0])) {
                 r.teMelden.add(i);
             }
-            r.dag = t.contains("Dag") ? t.getLong("Dag") : -1;
-            int[] v = t.getIntArray("Vandaag");
+            r.dag = t.contains("Dag") ? t.getLongOr("Dag", 0L) : -1;
+            int[] v = t.getIntArray("Vandaag").orElse(new int[0]);
             System.arraycopy(v, 0, r.vandaag, 0, Math.min(v.length, r.vandaag.length));
-            CompoundTag f = t.getCompound("Fav");
-            for (String k : f.getAllKeys()) {
+            CompoundTag f = t.getCompoundOrEmpty("Fav");
+            for (String k : f.keySet()) {
                 FavorietSoort s = FavorietSoort.byId(k);
                 if (s != null) {
-                    r.fav.put(s, f.getString(k));
+                    r.fav.put(s, f.getStringOr(k, ""));
                 }
             }
-            ListTag o = t.getList("Ontdekt", Tag.TAG_STRING);
+            ListTag o = t.getListOrEmpty("Ontdekt");
             for (int i = 0; i < o.size(); i++) {
-                FavorietSoort s = FavorietSoort.byId(o.getString(i));
+                FavorietSoort s = FavorietSoort.byId(o.getStringOr(i, ""));
                 if (s != null) {
                     r.ontdekt.add(s);
                 }
             }
-            CompoundTag st = t.getCompound("Stats");
-            for (String k : st.getAllKeys()) {
+            CompoundTag st = t.getCompoundOrEmpty("Stats");
+            for (String k : st.keySet()) {
                 DagboekStat s = DagboekStat.byId(k);
                 if (s != null) {
-                    r.stats.put(s, st.getLong(k));
+                    r.stats.put(s, st.getLongOr(k, 0L));
                 }
             }
-            ListTag e = t.getList("Eerste", Tag.TAG_COMPOUND);
+            ListTag e = t.getListOrEmpty("Eerste");
             for (int i = 0; i < e.size(); i++) {
-                r.eerste.add(new Eerste(e.getCompound(i).getString("Id"), e.getCompound(i).getLong("Dag")));
+                r.eerste.add(new Eerste(e.getCompoundOrEmpty(i).getStringOr("Id", ""), e.getCompoundOrEmpty(i).getLongOr("Dag", 0L)));
             }
-            ListTag w = t.getList("Wist", Tag.TAG_COMPOUND);
+            ListTag w = t.getListOrEmpty("Wist");
             for (int i = 0; i < w.size(); i++) {
-                CompoundTag c = w.getCompound(i);
+                CompoundTag c = w.getCompoundOrEmpty(i);
                 List<String> args = new ArrayList<>();
-                ListTag a = c.getList("Args", Tag.TAG_STRING);
+                ListTag a = c.getListOrEmpty("Args");
                 for (int j = 0; j < a.size(); j++) {
-                    args.add(a.getString(j));
+                    args.add(a.getStringOr(j, ""));
                 }
-                r.wist.add(new WistJeDat(c.getString("Key"), args, c.getLong("Dag")));
+                r.wist.add(new WistJeDat(c.getStringOr("Key", ""), args, c.getLongOr("Dag", 0L)));
             }
-            r.plek = Plek.load(t.getCompound("Plek"));
-            r.samenDag = t.contains("SamenDag") ? t.getLong("SamenDag") : -1;
-            r.sindsDag = t.contains("SindsDag") ? t.getLong("SindsDag") : -1;
-            r.dood = t.getBoolean("Dood");
-            r.doodDag = t.contains("DoodDag") ? t.getLong("DoodDag") : -1;
-            r.lichaam = t.getCompound("Lichaam");
+            r.plek = Plek.load(t.getCompoundOrEmpty("Plek"));
+            r.samenDag = t.contains("SamenDag") ? t.getLongOr("SamenDag", 0L) : -1;
+            r.sindsDag = t.contains("SindsDag") ? t.getLongOr("SindsDag", 0L) : -1;
+            r.dood = t.getBooleanOr("Dood", false);
+            r.doodDag = t.contains("DoodDag") ? t.getLongOr("DoodDag", 0L) : -1;
+            r.lichaam = t.getCompoundOrEmpty("Lichaam");
             return r;
         }
     }
@@ -209,7 +210,7 @@ public final class BandData extends SavedData {
 
     /** The Guhdex "Mijn guhs" data of this owner: one CompoundTag per band guh (see {@link MijnGuhs#snapshot}). */
     public static ListTag snapshot(net.minecraft.server.level.ServerPlayer player) {
-        return MijnGuhs.snapshot(player, null).getList("Guhs", Tag.TAG_COMPOUND);
+        return MijnGuhs.snapshot(player, null).getListOrEmpty("Guhs");
     }
 
     /** The record of this guh of this owner (made when it doesn't exist yet). */
@@ -271,7 +272,7 @@ public final class BandData extends SavedData {
         ListTag list = new ListTag();
         for (Map.Entry<UUID, Map<UUID, Rec>> e : eigenaars.entrySet()) {
             CompoundTag o = new CompoundTag();
-            o.putUUID("Eigenaar", e.getKey());
+            o.store("Eigenaar", UUIDUtil.CODEC, e.getKey());
             ListTag recs = new ListTag();
             e.getValue().values().forEach(r -> recs.add(r.save()));
             o.put("Guhs", recs);
@@ -286,20 +287,20 @@ public final class BandData extends SavedData {
 
     public static BandData load(CompoundTag tag, HolderLookup.Provider registries) {
         BandData d = new BandData();
-        ListTag list = tag.getList("Eigenaars", Tag.TAG_COMPOUND);
+        ListTag list = tag.getListOrEmpty("Eigenaars");
         for (int i = 0; i < list.size(); i++) {
-            CompoundTag o = list.getCompound(i);
+            CompoundTag o = list.getCompoundOrEmpty(i);
             Map<UUID, Rec> van = new LinkedHashMap<>();
-            ListTag recs = o.getList("Guhs", Tag.TAG_COMPOUND);
+            ListTag recs = o.getListOrEmpty("Guhs");
             for (int j = 0; j < recs.size(); j++) {
-                Rec r = Rec.load(recs.getCompound(j));
+                Rec r = Rec.load(recs.getCompoundOrEmpty(j));
                 van.put(r.id, r);
             }
-            d.eigenaars.put(o.getUUID("Eigenaar"), van);
+            d.eigenaars.put(o.read("Eigenaar", UUIDUtil.CODEC).orElseThrow(), van);
         }
-        CompoundTag v = tag.getCompound("Vriendjes");
-        for (String k : v.getAllKeys()) {
-            d.vriendjes.put(k, v.getInt(k));
+        CompoundTag v = tag.getCompoundOrEmpty("Vriendjes");
+        for (String k : v.keySet()) {
+            d.vriendjes.put(k, v.getIntOr(k, 0));
         }
         return d;
     }

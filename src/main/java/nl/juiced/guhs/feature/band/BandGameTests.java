@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -23,8 +23,6 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.knus.GuhHooks;
@@ -39,8 +37,6 @@ import nl.juiced.guhs.registry.ModItems;
  * (made once, deterministic, discovered once), friendships (thresholds, only up), the dagboekje, "waar is mijn guh"
  * (picked up, in the Guh Wheel, back in your pockets) and the Mijn guhs snapshot. (Template band_test_wei: grass at y 0.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class BandGameTests {
     private static final String WEI = "band_test_wei";
     private static final String BATCH = "band";
@@ -51,7 +47,7 @@ public class BandGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(new BlockPos(1, 1, 1));
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -70,7 +66,7 @@ public class BandGameTests {
 
     /** Forget today's caps of this guh (as if a new day started), without touching the world's clock. */
     static void nieuweDag(GuhEntity guh) {
-        BandData.Rec r = BandData.get(guh.getServer()).vind(guh.getOwnerUUID(), guh.getUUID());
+        BandData.Rec r = BandData.get(guh.level().getServer()).vind(guh.getOwnerUUID(), guh.getUUID());
         if (r != null) {
             r.dag = -1;
         }
@@ -78,7 +74,7 @@ public class BandGameTests {
 
     // =====================================================================================================================
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void bandHartjesGaanNooitOmlaag(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
@@ -106,7 +102,7 @@ public class BandGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void bandNiveausEnEenMeldingPerNiveau(GameTestHelper helper) {
         helper.assertTrue(BandNiveau.van(0) == BandNiveau.GEEN && BandNiveau.van(99) == BandNiveau.GEEN && BandNiveau.van(100) == BandNiveau.LIEF
                 && BandNiveau.van(599) == BandNiveau.LIEF && BandNiveau.van(600) == BandNiveau.MEGA && BandNiveau.van(1999) == BandNiveau.MEGA
@@ -132,15 +128,15 @@ public class BandGameTests {
         helper.assertTrue(Band.hartjes(guh) >= 2000 && Band.niveau(guh) == BandNiveau.ZIELSGUH, "zielsguh: " + Band.hartjes(guh));
         helper.assertTrue(gemeld.equals(List.of(BandNiveau.LIEF, BandNiveau.MEGA, BandNiveau.ZIELSGUH)), "each level once, in order: " + gemeld);
         helper.assertTrue(GuhHooks.heeft(guh, BandVlaggen.ZIELSGUH), "a zielsguh carries the flag");
-        helper.assertTrue(Dagboek.heeftEersteKeer(p.server, p.getUUID(), id, "eerste_lief")
-                && Dagboek.heeftEersteKeer(p.server, p.getUUID(), id, "eerste_zielsguh"), "the level-ups are in the dagboekje");
-        helper.assertTrue(Band.aantal(p.server, p.getUUID(), BandNiveau.ZIELSGUH) >= 1, "one zielsguh for the Guhkamer");
+        helper.assertTrue(Dagboek.heeftEersteKeer(p.level().getServer(), p.getUUID(), id, "eerste_lief")
+                && Dagboek.heeftEersteKeer(p.level().getServer(), p.getUUID(), id, "eerste_zielsguh"), "the level-ups are in the dagboekje");
+        helper.assertTrue(Band.aantal(p.level().getServer(), p.getUUID(), BandNiveau.ZIELSGUH) >= 1, "one zielsguh for the Guhkamer");
         helper.assertTrue(nl.juiced.guhs.feature.gids.GidsFeature.heeft(p, "lieve_vadsjes/band_zielsguh"), "the advancement");
         weg(helper, p);
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void bandOfflineNiveauBijInloggen(GameTestHelper helper) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(5, 1, 5));
         UUID owner = UUID.randomUUID();   // an owner who isn't online
@@ -160,7 +156,7 @@ public class BandGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void bandBlijGeeftAnderhalfKeer(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
@@ -172,7 +168,7 @@ public class BandGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void bandVoerenEnKnuffelenGevenMomenten(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
@@ -189,14 +185,14 @@ public class BandGameTests {
         helper.assertTrue(p.getMainHandItem().getCount() == 2, "one cupcake eaten");
         helper.assertTrue(Band.hartjes(guh) == Reden.VOEREN.standaard(), "feeding gives hearts: " + Band.hartjes(guh));
         helper.assertTrue(momenten.contains("gegeten:guhs:guh_cupcake"), "the GEGETEN moment with the item: " + momenten);
-        helper.assertTrue(Dagboek.stat(p.server, p.getUUID(), id, DagboekStat.KNABBELS_GEGETEN) == 1, "counted in the dagboekje");
+        helper.assertTrue(Dagboek.stat(p.level().getServer(), p.getUUID(), id, DagboekStat.KNABBELS_GEGETEN) == 1, "counted in the dagboekje");
         // the menu's big cuddle (once it stands on the grass), then 30 seconds rest
         helper.runAfterDelay(10, () -> {
             guh.emotes.stop();
             helper.assertTrue(BandEvents.knuffel(guh, p), "a cuddle");
             int na = Band.hartjes(guh);
             helper.assertTrue(!BandEvents.knuffel(guh, p) && Band.hartjes(guh) == na, "right after: resting, nothing more");
-            helper.assertTrue(momenten.contains("geknuffeld:") && Dagboek.heeftEersteKeer(p.server, p.getUUID(), id, "eerste_knuffel"),
+            helper.assertTrue(momenten.contains("geknuffeld:") && Dagboek.heeftEersteKeer(p.level().getServer(), p.getUUID(), id, "eerste_knuffel"),
                     "the GEKNUFFELD moment and the first time");
             // a tap: a little pet
             BandEvents.aai(guh, p);
@@ -206,37 +202,37 @@ public class BandGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void bandFavorietenVastEnEenKeerOntdekt(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity a = guh(helper, p, new BlockPos(3, 1, 3));
         Map<FavorietSoort, String> fav = Favorieten.van(a);
         for (FavorietSoort s : FavorietSoort.values()) {
             if (s != FavorietSoort.VRIEND) {
-                helper.assertTrue(fav.get(s) != null && Favorieten.kandidaten(p.server, s).contains(fav.get(s)), "a favourite " + s + ": " + fav.get(s));
+                helper.assertTrue(fav.get(s) != null && Favorieten.kandidaten(p.level().getServer(), s).contains(fav.get(s)), "a favourite " + s + ": " + fav.get(s));
             }
         }
         helper.assertTrue(!fav.containsKey(FavorietSoort.VRIEND), "no friend favourite without a second guh");
         helper.assertTrue(Favorieten.van(a).equals(fav), "made once: the same every time");
-        helper.assertTrue(Favorieten.kandidaten(p.server, FavorietSoort.ETEN).size() >= 10, "at least ten favourite foods");
-        helper.assertTrue(Favorieten.kandidaten(p.server, FavorietSoort.PLEK).contains("guhs:pink_puffs"), "the favourite places tag");
+        helper.assertTrue(Favorieten.kandidaten(p.level().getServer(), FavorietSoort.ETEN).size() >= 10, "at least ten favourite foods");
+        helper.assertTrue(Favorieten.kandidaten(p.level().getServer(), FavorietSoort.PLEK).contains("guhs:pink_puffs"), "the favourite places tag");
         GuhEntity b = guh(helper, p, new BlockPos(8, 1, 8));
         helper.assertTrue(Band.id(b).toString().equals(Favorieten.waarde(a, FavorietSoort.VRIEND)), "with a second guh: that one is its friend");
         // discovering
         helper.assertTrue(!Favorieten.ontdekt(a, FavorietSoort.ETEN), "not discovered yet");
         helper.assertTrue(Favorieten.ontdek(a, p, FavorietSoort.ETEN) && !Favorieten.ontdek(a, p, FavorietSoort.ETEN), "discovered once");
-        helper.assertTrue(Favorieten.ontdekt(p.server, p.getUUID(), Band.id(a)).equals(EnumSet.of(FavorietSoort.ETEN)), "stored");
+        helper.assertTrue(Favorieten.ontdekt(p.level().getServer(), p.getUUID(), Band.id(a)).equals(EnumSet.of(FavorietSoort.ETEN)), "stored");
         helper.assertTrue(!Favorieten.naam(FavorietSoort.ETEN, fav.get(FavorietSoort.ETEN)).getString().isEmpty(), "it has a name");
         weg(helper, p);
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void bandVriendjesDrempels(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity a = guh(helper, p, new BlockPos(3, 1, 3));
         GuhEntity b = guh(helper, p, new BlockPos(8, 1, 8));
-        MinecraftServer s = p.server;
+        MinecraftServer s = p.level().getServer();
         List<Boolean> nieuw = new CopyOnWriteArrayList<>();
         Vriendjes.opNieuw((server, x, y, besties) -> {
             if ((x.equals(Band.id(a)) && y.equals(Band.id(b))) || (x.equals(Band.id(b)) && y.equals(Band.id(a)))) {
@@ -258,24 +254,24 @@ public class BandGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void bandDagboekje(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
         UUID id = Band.id(guh);
-        helper.assertTrue(Dagboek.heeftEersteKeer(p.server, p.getUUID(), id, "getemd"), "taming is the first page");
+        helper.assertTrue(Dagboek.heeftEersteKeer(p.level().getServer(), p.getUUID(), id, "getemd"), "taming is the first page");
         Dagboek.tel(guh, DagboekStat.KLUSJES, 3);
         Dagboek.tel(guh, DagboekStat.KLUSJES, 2);
         Dagboek.tel(guh, DagboekStat.KLUSJES, -7);
-        helper.assertTrue(Dagboek.stat(p.server, p.getUUID(), id, DagboekStat.KLUSJES) == 5, "stats add up (never down)");
+        helper.assertTrue(Dagboek.stat(p.level().getServer(), p.getUUID(), id, DagboekStat.KLUSJES) == 5, "stats add up (never down)");
         helper.assertTrue(Dagboek.eersteKeer(guh, p, "eerste_klusje") && !Dagboek.eersteKeer(guh, p, "eerste_klusje"), "a first time is once");
         for (int i = 0; i < 45; i++) {
             Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.test", String.valueOf(i));
         }
-        BandData.Rec r = BandData.get(p.server).vind(p.getUUID(), id);
+        BandData.Rec r = BandData.get(p.level().getServer()).vind(p.getUUID(), id);
         helper.assertTrue(r.wist.size() == BandData.WIST_MAX && r.wist.get(0).args().get(0).equals("44"), "newest first, 40 kept");
         // saved and loaded
-        CompoundTag tag = BandData.get(p.server).save(new CompoundTag(), p.registryAccess());
+        CompoundTag tag = BandData.get(p.level().getServer()).save(new CompoundTag(), p.registryAccess());
         BandData.Rec terug = BandData.load(tag, p.registryAccess()).vind(p.getUUID(), id);
         helper.assertTrue(terug != null && terug.stat(DagboekStat.KLUSJES) == 5 && terug.heeftEerste("eerste_klusje") && terug.wist.size() == 40,
                 "save and load keep the dagboekje");
@@ -283,12 +279,12 @@ public class BandGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 60)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 60)
     public static void bandVolgerOppakkenEnGuhWiel(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
         UUID id = Band.id(guh);
-        MinecraftServer s = p.server;
+        MinecraftServer s = p.level().getServer();
         GuhVolger.zet(guh, PlekSoort.WERELD, "");
         helper.assertTrue(GuhVolger.plek(s, p.getUUID(), id).soort() == PlekSoort.WERELD, "walking around");
         ItemStack item = PickedUpGuhItem.pickUp(guh);
@@ -310,7 +306,7 @@ public class BandGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void bandMijnGuhsSnapshot(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         GuhEntity a = guh(helper, p, new BlockPos(3, 1, 3));
@@ -320,32 +316,32 @@ public class BandGameTests {
         Favorieten.van(a);
         Favorieten.ontdek(a, p, FavorietSoort.KLEUR);
         CompoundTag data = MijnGuhs.snapshot(p, Band.id(a));
-        ListTag guhs = data.getList("Guhs", Tag.TAG_COMPOUND);
-        helper.assertTrue(guhs.size() == 2 && data.getString("Focus").equals(Band.id(a).toString()), "both guhs, and the focus");
+        ListTag guhs = data.getListOrEmpty("Guhs");
+        helper.assertTrue(guhs.size() == 2 && data.getStringOr("Focus", "").equals(Band.id(a).toString()), "both guhs, and the focus");
         CompoundTag eerste = null;
         for (int i = 0; i < guhs.size(); i++) {
-            if (guhs.getCompound(i).getString("Id").equals(Band.id(a).toString())) {
-                eerste = guhs.getCompound(i);
+            if (guhs.getCompoundOrEmpty(i).getStringOr("Id", "").equals(Band.id(a).toString())) {
+                eerste = guhs.getCompoundOrEmpty(i);
             }
         }
-        helper.assertTrue(eerste != null && eerste.getString("Naam").equals("Knabbeltje") && eerste.getInt("Hartjes") == 150
-                && eerste.getInt("Niveau") == BandNiveau.LIEF.ordinal() && eerste.getInt("Volgende") == 600, "name, hearts, level: " + eerste);
-        helper.assertTrue(eerste.getCompound("Looks").getString("Variant").equals(a.getVariant().id()), "the looks for the preview");
-        ListTag fav = eerste.getList("Fav", Tag.TAG_COMPOUND);
+        helper.assertTrue(eerste != null && eerste.getStringOr("Naam", "").equals("Knabbeltje") && eerste.getIntOr("Hartjes", 0) == 150
+                && eerste.getIntOr("Niveau", 0) == BandNiveau.LIEF.ordinal() && eerste.getIntOr("Volgende", 0) == 600, "name, hearts, level: " + eerste);
+        helper.assertTrue(eerste.getCompoundOrEmpty("Looks").getStringOr("Variant", "").equals(a.getVariant().id()), "the looks for the preview");
+        ListTag fav = eerste.getListOrEmpty("Fav");
         int bekend = 0;
         for (int i = 0; i < fav.size(); i++) {
-            bekend += fav.getCompound(i).getString("Naam").isEmpty() ? 0 : 1;
+            bekend += fav.getCompoundOrEmpty(i).getStringOr("Naam", "").isEmpty() ? 0 : 1;
         }
         helper.assertTrue(fav.size() == FavorietSoort.values().length && bekend == 1, "one discovered favourite, the rest ???");
-        helper.assertTrue(eerste.getCompound("Stats").getAllKeys().size() == DagboekStat.values().length && !eerste.getString("Plek").isEmpty()
-                && !eerste.getList("Eerste", Tag.TAG_COMPOUND).isEmpty(), "stats, where it is, eerste keren");
+        helper.assertTrue(eerste.getCompoundOrEmpty("Stats").keySet().size() == DagboekStat.values().length && !eerste.getStringOr("Plek", "").isEmpty()
+                && !eerste.getListOrEmpty("Eerste").isEmpty(), "stats, where it is, eerste keren");
         helper.assertTrue(BandData.snapshot(p).size() == 2, "BandData.snapshot");
         helper.assertTrue(b.isAlive(), "(the second guh)");
         weg(helper, p);
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void bandTemmenOpentHetHoofdstuk(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         List<String> momenten = new ArrayList<>();
@@ -359,7 +355,7 @@ public class BandGameTests {
         guh.tame(p);
         helper.assertTrue(momenten.contains("getemd"), "tamed: the GETEMD moment");
         helper.assertTrue(nl.juiced.guhs.feature.gids.GidsFeature.heeft(p, "lieve_vadsjes/root"), "the Lieve vadsjes tab opens");
-        helper.assertTrue(BandData.get(p.server).vind(p.getUUID(), id) != null, "it has a record");
+        helper.assertTrue(BandData.get(p.level().getServer()).vind(p.getUUID(), id) != null, "it has a record");
         weg(helper, p);
         helper.succeed();
     }

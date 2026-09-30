@@ -6,19 +6,19 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.animal.AbstractSchoolingFish;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.animal.fish.AbstractSchoolingFish;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import nl.juiced.guhs.registry.ModItems;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /** The guh fish: a little pink fish with guh eyes, swimming in schools in the pools of the guh sea. */
 public class GuhVisEntity extends AbstractSchoolingFish implements GeoEntity {
@@ -60,7 +60,7 @@ public class GuhVisEntity extends AbstractSchoolingFish implements GeoEntity {
     }
 
     /** The pools are shallow and far above sea level: any water will do. */
-    public static boolean checkGuhVisSpawnRules(EntityType<GuhVisEntity> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+    public static boolean checkGuhVisSpawnRules(EntityType<GuhVisEntity> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
         return level.getFluidState(pos).is(FluidTags.WATER);
     }
 

@@ -150,8 +150,8 @@ public final class Favorietjes {
         Band.maakBlij(guh, BLIJ_ONTDEKT);
         eigenaar.sendSystemMessage(Component.translatable("gui.guhs.favorietjes.ontdekt." + soort.id(), guh.getDisplayName(),
                 naam.copy().withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE));
-        eigenaar.displayClientMessage(Component.translatable("gui.guhs.favorietjes.ontdekt_titel").withStyle(ChatFormatting.LIGHT_PURPLE,
-                ChatFormatting.BOLD), true);
+        eigenaar.sendOverlayMessage(Component.translatable("gui.guhs.favorietjes.ontdekt_titel").withStyle(ChatFormatting.LIGHT_PURPLE,
+                ChatFormatting.BOLD));
         Dagboek.eersteKeer(guh, eigenaar, "eerste_favoriet");
         Dagboek.eersteKeer(guh, eigenaar, "favorietjes_fav_" + soort.id());
         Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.favorietjes.ontdekt_" + soort.id(), naam.getString());
@@ -161,7 +161,7 @@ public final class Favorietjes {
         if (alle.size() == FavorietSoort.values().length) {
             eigenaar.sendSystemMessage(Component.translatable("gui.guhs.favorietjes.alle", guh.getDisplayName()).withStyle(ChatFormatting.GOLD));
             Dagboek.eersteKeer(guh, eigenaar, "favorietjes_alle");
-            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.favorietjes.alle", eigenaar.getGameProfile().getName());
+            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.favorietjes.alle", eigenaar.getGameProfile().name());
             GidsFeature.grant(eigenaar, "lieve_vadsjes/favorietjes_alle");
             level.sendParticles(BandFeature.GROOT_HARTJE.get(), guh.getX(), guh.getY() + guh.getBbHeight() + 1.2, guh.getZ(), 1, 0, 0, 0, 0);
         }
@@ -192,8 +192,8 @@ public final class Favorietjes {
         level.sendParticles(FavorietjesFeature.GLINSTER.get(), guh.getX(), guh.getY() + guh.getBbHeight() * 0.8, guh.getZ(), 6,
                 guh.getBbWidth() * 0.6, 0.3, guh.getBbWidth() * 0.6, 0.02);
         level.playSound(null, guh.blockPosition(), BandFeature.HARTJES_GELUID.get(), SoundSource.NEUTRAL, 0.8f, 1.2f);
-        eigenaar.displayClientMessage(Component.translatable("gui.guhs.favorietjes.weer." + soort.id(), guh.getDisplayName(),
-                Favorieten.naam(soort, favoriet)).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        eigenaar.sendOverlayMessage(Component.translatable("gui.guhs.favorietjes.weer." + soort.id(), guh.getDisplayName(),
+                Favorieten.naam(soort, favoriet)).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     // =====================================================================================================================
@@ -211,8 +211,8 @@ public final class Favorietjes {
         boolean warm = Hints.warm(level.getServer(), id, soort, favoriet, waarde);
         Random rng = new Random(SALT ^ id.getLeastSignificantBits() ^ nu * 31L ^ soort.ordinal());
         String key = "gui.guhs.favorietjes.hint." + (warm ? "warm." : "koud.") + soort.id() + "." + rng.nextInt(HINT_VARIANTEN);
-        eigenaar.displayClientMessage(Component.translatable(key, guh.getDisplayName())
-                .withStyle(warm ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY), true);
+        eigenaar.sendOverlayMessage(Component.translatable(key, guh.getDisplayName())
+                .withStyle(warm ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY));
         double top = guh.getY() + guh.getBbHeight();
         if (warm) {
             level.sendParticles(FavorietjesFeature.VRAAGJE.get(), guh.getX(), top + 0.35, guh.getZ(), 1, 0, 0, 0, 0);
@@ -252,7 +252,7 @@ public final class Favorietjes {
         ServerPlayer eigenaar = BandEvents.nabijeEigenaar(guh, 16);
         // its favourite place
         String plek = fav.get(FavorietSoort.PLEK);
-        String hier = level.getBiome(guh.blockPosition()).unwrapKey().map(k -> k.location().toString()).orElse("");
+        String hier = level.getBiome(guh.blockPosition()).unwrapKey().map(k -> k.identifier().toString()).orElse("");
         if (plek != null && plek.equals(hier)) {
             bij(guh, eigenaar, FavorietSoort.PLEK, plek);
         }

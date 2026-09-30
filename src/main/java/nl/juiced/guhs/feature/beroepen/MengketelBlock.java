@@ -62,10 +62,10 @@ public class MengketelBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide && player instanceof ServerPlayer sp) {
+        if (!level.isClientSide() && player instanceof ServerPlayer sp) {
             meng((ServerLevel) level, pos, sp);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -80,15 +80,15 @@ public class MengketelBlock extends HorizontalDirectionalBlock {
     public static boolean meng(ServerLevel level, BlockPos pos, ServerPlayer player) {
         int kruidjes = GuhQuests.count(player, BeroepenFeature.SNOTKRUIDJE.get());
         ItemStack melk = ItemStack.EMPTY;
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (s.is(KnusTags.KAASMELK)) {
                 melk = s;
                 break;
             }
         }
         if (kruidjes < Apotheek.KRUIDJES || melk.isEmpty()) {
-            player.displayClientMessage(Component.translatable("gui.guhs.beroepen.mengketel.nodig", Math.min(kruidjes, Apotheek.KRUIDJES),
-                    Apotheek.KRUIDJES, melk.isEmpty() ? 0 : 1).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.mengketel.nodig", Math.min(kruidjes, Apotheek.KRUIDJES),
+                    Apotheek.KRUIDJES, melk.isEmpty() ? 0 : 1).withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         GuhQuests.take(player, BeroepenFeature.SNOTKRUIDJE.get(), Apotheek.KRUIDJES);
@@ -99,7 +99,7 @@ public class MengketelBlock extends HorizontalDirectionalBlock {
         level.sendParticles(ParticleTypes.BUBBLE_POP, x, y, z, 20, 0.25, 0.1, 0.25, 0.05);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y + 0.3, z, 10, 0.3, 0.3, 0.3, 0.05);
         level.sendParticles(ParticleTypes.CLOUD, x, y + 0.2, z, 6, 0.2, 0.2, 0.2, 0.02);
-        player.displayClientMessage(Component.translatable("gui.guhs.beroepen.mengketel.klaar").withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.mengketel.klaar").withStyle(ChatFormatting.GOLD));
         return true;
     }
 }

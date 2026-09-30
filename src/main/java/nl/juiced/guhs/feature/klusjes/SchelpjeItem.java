@@ -6,7 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,15 +26,15 @@ public class SchelpjeItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!level.isClientSide) {
-            level.playSound(null, player.blockPosition(), KlusjesFeature.ZEE.get(), SoundSource.PLAYERS, 0.8f, 0.9f + level.random.nextFloat() * 0.2f);
-            player.displayClientMessage(Component.translatable("item.guhs.klusjes_schelpje.oor." + level.random.nextInt(OOR_ZINNEN))
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        if (!level.isClientSide()) {
+            level.playSound(null, player.blockPosition(), KlusjesFeature.ZEE.get(), SoundSource.PLAYERS, 0.8f, 0.9f + level.getRandom().nextFloat() * 0.2f);
+            player.sendOverlayMessage(Component.translatable("item.guhs.klusjes_schelpje.oor." + level.getRandom().nextInt(OOR_ZINNEN))
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             player.getCooldowns().addCooldown(this, 40);
         }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     @Override

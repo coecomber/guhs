@@ -102,7 +102,7 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
         }
         int before = baken.levels;
         baken.levels = countLevels(level, pos);
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             baken.beamHeight = beam(level, pos);
             return;
         }
@@ -127,7 +127,7 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
         int found = 0;
         for (int layer = 1; layer <= MAX_LEVELS; layer++) {
             int y = pos.getY() - layer;
-            if (y < level.getMinBuildHeight()) {
+            if (y < level.getMinY()) {
                 break;
             }
             for (int x = pos.getX() - layer; x <= pos.getX() + layer; x++) {
@@ -148,9 +148,9 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
      * so it stops at the roof instead of poking out on top of it.
      */
     static int beam(Level level, BlockPos pos) {
-        int top = level.getMaxBuildHeight();
+        int top = level.getMaxY() + 1;
         if (level.dimensionType().hasCeiling()) {
-            top = Math.min(top, level.getMinBuildHeight() + level.dimensionType().logicalHeight());
+            top = Math.min(top, level.getMinY() + level.dimensionType().logicalHeight());
         }
         int h = 0;
         for (int y = pos.getY() + 1; y < top; y++) {
@@ -189,7 +189,7 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
         }
         levels = countLevels(level, worldPosition);
         if (levels == 0) {
-            player.displayClientMessage(Component.translatable("quest.guhs.knabbelbaken.geen_piramide").withStyle(ChatFormatting.GRAY), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.knabbelbaken.geen_piramide").withStyle(ChatFormatting.GRAY));
             return;
         }
         Gunst[] all = Gunst.values();
@@ -199,8 +199,8 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
         } while (all[i].levels > levels);
         gunst = all[i];
         level.playSound(null, worldPosition, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 1f, 1.2f);
-        player.displayClientMessage(Component.translatable("quest.guhs.knabbelbaken.gekozen",
-                Component.translatable("quest.guhs.knabbelbaken.gunst." + gunst.id()), levels, range()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.knabbelbaken.gekozen",
+                Component.translatable("quest.guhs.knabbelbaken.gunst." + gunst.id()), levels, range()).withStyle(ChatFormatting.LIGHT_PURPLE));
         pulse();
         sync();
     }
@@ -234,9 +234,9 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        levels = tag.getInt("Levels");
+        levels = tag.getIntOr("Levels", 0);
         for (Gunst g : Gunst.values()) {
-            if (g.id().equals(tag.getString("Gunst"))) {
+            if (g.id().equals(tag.getStringOr("Gunst", ""))) {
                 gunst = g;
             }
         }

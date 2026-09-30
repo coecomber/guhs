@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -50,7 +50,7 @@ public class GuhbelScreen extends Screen {
     }
 
     private ListTag lijst(String key) {
-        return data.getList(key, Tag.TAG_COMPOUND);
+        return data.getListOrEmpty(key);
     }
 
     private void stuur(GuhkamerPayloads.Actie actie, String id) {
@@ -72,7 +72,7 @@ public class GuhbelScreen extends Screen {
     private List<GidsLijst.Regel> rijen(String key, GuhkamerPayloads.Actie actie, String klikKey, String leegKey) {
         List<GidsLijst.Regel> out = new ArrayList<>();
         ListTag l = lijst(key);
-        if (!data.getBoolean("Maag")) {
+        if (!data.getBooleanOr("Maag", false)) {
             out.add(new Tekst(Component.translatable("gui.guhs.guhkamer.bel.geen_maag"), LICHT));
             return out;
         }
@@ -80,23 +80,23 @@ public class GuhbelScreen extends Screen {
             out.add(new Tekst(Component.translatable(leegKey), LICHT));
         }
         for (int i = 0; i < l.size(); i++) {
-            out.add(new GuhRij(l.getCompound(i), actie, klikKey));
+            out.add(new GuhRij(l.getCompoundOrEmpty(i), actie, klikKey));
         }
         return out;
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, RAND);
         g.fill(left, top, left + W, top + H, PANEEL);
         g.fill(left, top, left + W, top + 18, 0xFFFBE0EA);
         g.fill(left, top + 18, left + W, top + 19, 0xFFD27A9C);
-        g.drawString(font, Component.translatable("gui.guhs.guhkamer.bel.titel").withStyle(ChatFormatting.BOLD), left + 8, top + 5, ROZE, false);
-        int b = data.getInt("Breedte");
-        Component maat = Component.translatable("gui.guhs.guhkamer.bel.kamer", b, b, lijst("Gasten").size(), data.getInt("Plekken"));
+        g.text(font, Component.translatable("gui.guhs.guhkamer.bel.titel").withStyle(ChatFormatting.BOLD), left + 8, top + 5, ROZE, false);
+        int b = data.getIntOr("Breedte", 0);
+        Component maat = Component.translatable("gui.guhs.guhkamer.bel.kamer", b, b, lijst("Gasten").size(), data.getIntOr("Plekken", 0));
         GidsTekst.passend(g, maat, left + W - 8, top + 5, 180, 0.875f, ROZE, true);
-        Component groei = Component.translatable("gui.guhs.guhkamer.bel.groei", data.getInt("Zielsguhs"));
+        Component groei = Component.translatable("gui.guhs.guhkamer.bel.groei", data.getIntOr("Zielsguhs", 0));
         GidsTekst.alinea(g, groei, left + 8, top + 23, W - 16, 0.75f, LICHT);
         int kolom = (W - 24) / 2;
         GidsTekst.schaal(g, Component.translatable("gui.guhs.guhkamer.bel.kop.bij").withStyle(ChatFormatting.BOLD), left + 8, top + 47, 0.875f, ROZE, false);
@@ -107,14 +107,14 @@ public class GuhbelScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.render(g, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
         List<Component> tip = bij.tip(mouseX, mouseY);
         if (tip == null) {
             tip = gasten.tip(mouseX, mouseY);
         }
         if (tip != null && !tip.isEmpty()) {
-            g.renderComponentTooltip(font, tip, mouseX, mouseY);
+            g.setComponentTooltipForNextFrame(font, tip, mouseX, mouseY);
         }
     }
 
@@ -147,8 +147,8 @@ public class GuhbelScreen extends Screen {
 
     @Nullable
     private LivingEntity pop(CompoundTag c) {
-        return c.contains("Looks") && !c.getCompound("Looks").isEmpty()
-                ? poppen.computeIfAbsent(c.getString("Id"), k -> GuhPop.van(c.getCompound("Looks"))) : null;
+        return c.contains("Looks") && !c.getCompoundOrEmpty("Looks").isEmpty()
+                ? poppen.computeIfAbsent(c.getStringOr("Id", ""), k -> GuhPop.van(c.getCompoundOrEmpty("Looks"))) : null;
     }
 
     /** A guh: a little picture, its name and hearts level; click to send it / call it. */
@@ -169,30 +169,30 @@ public class GuhbelScreen extends Screen {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
             g.fill(x, y, x + w, y + RIJ - 2, hover ? 0x40F77AB0 : 0x18F7B6CB);
             LivingEntity pop = pop(c);
             if (pop != null) {
                 GuhPop.teken(g, x + 1, y + 1, x + 29, y + RIJ - 3, pop, 30, -5);
             }
-            GidsTekst.passend(g, Component.literal(c.getString("Naam")).withStyle(ChatFormatting.BOLD), x + 32, y + 4, w - 36, 0.875f, DONKER, false);
-            BandNiveau n = BandNiveau.byIndex(c.getInt("Niveau"));
+            GidsTekst.passend(g, Component.literal(c.getStringOr("Naam", "")).withStyle(ChatFormatting.BOLD), x + 32, y + 4, w - 36, 0.875f, DONKER, false);
+            BandNiveau n = BandNiveau.byIndex(c.getIntOr("Niveau", 0));
             Component onder = MijnGuhsTab.hartje(n).append(" ").append(MijnGuhsTab.niveauNaam(n));
-            if (!c.getString("Woont").isEmpty()) {
-                onder = Component.translatable("gui.guhs.guhkamer.bel.woont", c.getString("Woont")).append(" · ").append(onder);
+            if (!c.getStringOr("Woont", "").isEmpty()) {
+                onder = Component.translatable("gui.guhs.guhkamer.bel.woont", c.getStringOr("Woont", "")).append(" · ").append(onder);
             }
             GidsTekst.passend(g, onder, x + 32, y + 16, w - 36, 0.625f, MijnGuhsTab.kleur(n), false);
         }
 
         @Override
         public boolean klik(double mx, double my, int x, int y, int w) {
-            stuur(actie, c.getString("Id"));
+            stuur(actie, c.getStringOr("Id", ""));
             return true;
         }
 
         @Override
         public List<Component> tip(double mx, double my, int x, int y, int w) {
-            return List.of(Component.translatable(klikKey, c.getString("Naam")));
+            return List.of(Component.translatable(klikKey, c.getStringOr("Naam", "")));
         }
     }
 
@@ -212,7 +212,7 @@ public class GuhbelScreen extends Screen {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
             GidsTekst.alinea(g, tekst, x + 2, y + 2, w - 4, 0.75f, kleur);
         }
     }

@@ -14,16 +14,16 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import nl.juiced.guhs.feature.tuintjes.TuinBlock;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
 
 /**
  * Het lieveheersbeestje (3.0, DESIGN_30 §6): a ladybird whose black spots are little guh heads. By day it flies to growing
@@ -48,9 +48,9 @@ public class LieveheersbeestjeEntity extends FladderDiertje {
     }
 
     /** By day, in the open air near flowers or tuintjes; never too many together. */
-    public static boolean checkSpawn(EntityType<LieveheersbeestjeEntity> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        if (MobSpawnType.isSpawner(spawnType) || spawnType == MobSpawnType.STRUCTURE || spawnType == MobSpawnType.SPAWN_EGG
-                || spawnType == MobSpawnType.COMMAND || spawnType == MobSpawnType.EVENT) {
+    public static boolean checkSpawn(EntityType<LieveheersbeestjeEntity> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
+        if (EntitySpawnReason.isSpawner(spawnType) || spawnType == EntitySpawnReason.STRUCTURE || spawnType == EntitySpawnReason.SPAWN_ITEM_USE
+                || spawnType == EntitySpawnReason.COMMAND || spawnType == EntitySpawnReason.EVENT) {
             return true;
         }
         if (!(level instanceof Level l) || !l.isDay() || !level.getBlockState(pos).isAir() || !level.canSeeSky(pos)) {
@@ -165,7 +165,7 @@ public class LieveheersbeestjeEntity extends FladderDiertje {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        hulpRust = tag.getLong("HulpRust");
+        hulpRust = tag.getLongOr("HulpRust", 0L);
     }
 
     @Override

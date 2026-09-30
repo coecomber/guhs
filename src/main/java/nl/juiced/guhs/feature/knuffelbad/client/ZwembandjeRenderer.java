@@ -8,8 +8,8 @@ import nl.juiced.guhs.feature.knuffelbad.GlijPad;
 import nl.juiced.guhs.feature.knuffelbad.ZwembandjeEntity;
 import org.joml.Matrix3f;
 import org.joml.Quaternionf;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * The zwembandje (geo/entity/zwembandje.geo.json: a pink-and-white swim ring with a little guh head at the front), turned

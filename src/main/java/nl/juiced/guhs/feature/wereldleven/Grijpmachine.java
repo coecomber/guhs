@@ -149,13 +149,13 @@ public final class Grijpmachine {
             return;
         }
         if (Minigames.busyElsewhere(player, Minigames.GRIJPMACHINE)) {
-            player.displayClientMessage(Component.translatable("quest.guhs.minigame.busy").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.minigame.busy").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         Beurt al = BEURTEN.get(player.getUUID());
         if (al == null || !al.pos().equals(pos)) {
             if (!betaal(player)) {
-                player.displayClientMessage(Component.translatable("gui.guhs.wereldleven.grijp_kaartje").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.wereldleven.grijp_kaartje").withStyle(ChatFormatting.LIGHT_PURPLE));
                 return;
             }
             BEURTEN.put(player.getUUID(), new Beurt(pos, player.level().getGameTime()));
@@ -178,7 +178,7 @@ public final class Grijpmachine {
                 return true;
             }
         }
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (s.is(KnusTags.GRIJPTICKETS)) {
                 s.shrink(1);
                 return true;
@@ -209,7 +209,7 @@ public final class Grijpmachine {
         int i = onderKlauw(prijzen, x, z);
         boolean gepakt = i >= 0 && player.getRandom().nextDouble() < greep(prijzen.get(i), x, z);
         String knuffel = i >= 0 ? prijzen.get(i).knuffel() : "";
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         level.playSound(null, pos, WereldlevenFeature.GRIJPKLAUW.get(), SoundSource.BLOCKS, 1f, gepakt ? 1.2f : 0.8f);
         if (gepakt) {
             prijzen.remove(i);
@@ -217,8 +217,8 @@ public final class Grijpmachine {
             geefPrijs(player, knuffel);
             level.sendParticles(WereldlevenFeature.IJSJESHARTJE.get(), pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, 6, 0.3, 0.3, 0.3, 0.02);
         } else {
-            player.displayClientMessage(Component.translatable(i >= 0 ? "gui.guhs.wereldleven.grijp_glipt" : "gui.guhs.wereldleven.grijp_mis")
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable(i >= 0 ? "gui.guhs.wereldleven.grijp_glipt" : "gui.guhs.wereldleven.grijp_mis")
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         machine.veranderd();
         Uitslag uitslag = new Uitslag(i, gepakt, knuffel);
@@ -238,8 +238,8 @@ public final class Grijpmachine {
         Knuffels.ontdek(player, stack);
         KnusVoortgang.tel(player, WereldlevenVoortgang.GRIJPEN, 1);
         WereldlevenVoortgang.toon(player, "wereldleven_grijpmachine");
-        player.displayClientMessage(Component.translatable(knuffel.equals(WereldlevenFeature.GLITTER) ? "gui.guhs.wereldleven.grijp_glitter"
-                : "gui.guhs.wereldleven.grijp_gepakt", stack.getHoverName()).withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable(knuffel.equals(WereldlevenFeature.GLITTER) ? "gui.guhs.wereldleven.grijp_glitter"
+                : "gui.guhs.wereldleven.grijp_gepakt", stack.getHoverName()).withStyle(ChatFormatting.GOLD));
     }
 
     /** The player closed the screen without dropping: the turn is over (the ticket is spent). */
@@ -247,7 +247,7 @@ public final class Grijpmachine {
         Beurt beurt = BEURTEN.get(player.getUUID());
         if (beurt != null && beurt.pos().equals(pos)) {
             BEURTEN.remove(player.getUUID());
-            player.displayClientMessage(Component.translatable("gui.guhs.wereldleven.grijp_gestopt").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.wereldleven.grijp_gestopt").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 

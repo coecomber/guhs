@@ -298,10 +298,10 @@ public class RaceGuhEntity extends GuhEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && !this.isVehicle() && !player.isPassenger()) {
-            if (!this.level().isClientSide && player instanceof ServerPlayer racer && RaceGame.isRacerOf(racer, this)) {
+            if (!this.level().isClientSide() && player instanceof ServerPlayer racer && RaceGame.isRacerOf(racer, this)) {
                 racer.startRiding(this, true);
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }
@@ -418,7 +418,7 @@ public class RaceGuhEntity extends GuhEntity {
         zweeft = true;
         gesprongen = true;
         this.resetFallDistance();
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             this.level().playLocalSound(getX(), getY(), getZ(), net.minecraft.sounds.SoundEvents.AMETHYST_BLOCK_CHIME,
                     net.minecraft.sounds.SoundSource.NEUTRAL, 1.5f, 1.4f, false);
         }
@@ -503,20 +503,20 @@ public class RaceGuhEntity extends GuhEntity {
             ritTick++;
             if (ritTick >= rit.ticks()) {
                 endRit();
-                if (!this.level().isClientSide) {
+                if (!this.level().isClientSide()) {
                     this.entityData.set(DATA_RIT, new CompoundTag());
                 }
-            } else if (!this.level().isClientSide || !this.isControlledByLocalInstance()) {
+            } else if (!this.level().isClientSide() || !this.isControlledByLocalInstance()) {
                 Vec3 p = rit.at(ritTick);
                 this.setDeltaMovement(Vec3.ZERO);
                 this.setPos(p.x, p.y, p.z);
             }
         }
         super.tick();
-        if (zweeft && this.level().isClientSide) {
+        if (zweeft && this.level().isClientSide()) {
             regenboogGlitter();
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (padCooldown > 0) {
                 padCooldown--;
             } else if (this.isVehicle() && boostHere() && !inRit()) {

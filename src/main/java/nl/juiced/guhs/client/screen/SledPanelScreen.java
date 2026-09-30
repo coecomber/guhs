@@ -1,6 +1,6 @@
 package nl.juiced.guhs.client.screen;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -54,11 +54,11 @@ public class SledPanelScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFFF7B6CB);
         g.fill(left, top, left + W, top + H, 0xE0FFF4F8);
-        g.drawCenteredString(font, title, width / 2, top + 8, 0xFF7A2848);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.sled.speed"), width / 2, top + 52, 0xFF7A2848);
+        g.centeredText(font, title, width / 2, top + 8, 0xFF7A2848);
+        g.centeredText(font, Component.translatable("gui.guhs.sled.speed"), width / 2, top + 52, 0xFF7A2848);
     }
 
     @Override

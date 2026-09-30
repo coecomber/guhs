@@ -43,7 +43,7 @@ public final class ZeemeerguhRole implements NpcRole {
         npc.level().playSound(null, npc, SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.NEUTRAL, 1f, 1f);
         seen(player);
         var saved = GuhQuests.saved(player);
-        if (!saved.getBoolean(MET_KEY)) {
+        if (!saved.getBooleanOr(MET_KEY, false)) {
             saved.putBoolean(MET_KEY, true);
             GuhQuests.say(player, npc, "quest.guhs.onderwater.hello");
         } else {
@@ -64,11 +64,11 @@ public final class ZeemeerguhRole implements NpcRole {
     /** The Zeemeerguh page of the Guhdex (the character and the wild variant share it). */
     public static void seen(ServerPlayer player) {
         GuhAdvancements.grant(player, "seen_" + GuhVariant.ZEEMEERGUH.id());
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         if (data.player(player.getUUID()).seen.add(GuhVariant.ZEEMEERGUH)) {
             data.setDirty();
-            player.displayClientMessage(Component.translatable("gui.guhs.guhdex.new", GuhVariant.ZEEMEERGUH.displayName())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.guhdex.new", GuhVariant.ZEEMEERGUH.displayName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             player.level().playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1f, 1.2f);
         }
     }

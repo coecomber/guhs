@@ -6,7 +6,7 @@ import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -50,7 +50,7 @@ public final class Pinguh {
     static final String GEGROEID = "guhs_guhpolder_keizer_gegroeid";
     /** The belly-slide on ice: this much faster (on top of the ice's own slipperiness). */
     public static final double GLIJ_BOOST = 0.6;
-    static final ResourceLocation GLIJ_ID = Guhs.id("guhpolder_buikglij");
+    static final Identifier GLIJ_ID = Guhs.id("guhpolder_buikglij");
 
     public enum Look {
         KLASSIEK, KEIZER, PLUIS;
@@ -95,7 +95,7 @@ public final class Pinguh {
 
     /** Decides (once per guh) whether a new wild guh in the Guhpolder becomes a Pinguh. Returns true when it did. */
     public static boolean maybePinguh(ServerLevel level, GuhEntity guh) {
-        if (guh.getClass() != GuhEntity.class || guh.getPersistentData().getBoolean(CHECKED)) {
+        if (guh.getClass() != GuhEntity.class || guh.getPersistentData().getBooleanOr(CHECKED, false)) {
             return false;
         }
         return decide(guh, level.dimension() == ModDimensions.GUHMENSION && inPolder(level, guh.blockPosition()));
@@ -104,12 +104,12 @@ public final class Pinguh {
     /** The decision itself (once per guh): in the Guhpolder, a plain wild guh may become a Pinguh. */
     public static boolean decide(GuhEntity guh, boolean inPolder) {
         CompoundTag data = guh.getPersistentData();
-        if (data.getBoolean(CHECKED)) {
+        if (data.getBooleanOr(CHECKED, false)) {
             return false;
         }
         data.putBoolean(CHECKED, true);
         if (!inPolder || guh.isTame() || guh.hasCustomName() || guh.getVariant() != GuhVariant.NORMAL || GuhHooks.isBewoner(guh)
-                || guh.getTags().contains(GEEN_PINGUH)) {
+                || guh.entityTags().contains(GEEN_PINGUH)) {
             return false;
         }
         if (guh.getRandom().nextFloat() < KANS) {
@@ -126,7 +126,7 @@ public final class Pinguh {
 
     /** A grown-up keizer gets a bit bigger (once). */
     static void groei(GuhEntity guh) {
-        if (guh.getVariant() != GuhVariant.PINGUH || guh.isBaby() || look(guh) != Look.KEIZER || guh.getPersistentData().getBoolean(GEGROEID)) {
+        if (guh.getVariant() != GuhVariant.PINGUH || guh.isBaby() || look(guh) != Look.KEIZER || guh.getPersistentData().getBooleanOr(GEGROEID, false)) {
             return;
         }
         guh.getPersistentData().putBoolean(GEGROEID, true);
@@ -165,12 +165,12 @@ public final class Pinguh {
         if (ijs && v > 0.08) {
             // a belly-slide: snow dust and frost glitter behind it, and now and then a happy "wiiie"
             level.sendParticles(ParticleTypes.SNOWFLAKE, guh.getX(), guh.getY() + 0.1, guh.getZ(), 2, 0.15, 0.02, 0.15, 0.01);
-            if (level.random.nextInt(3) == 0) {
+            if (level.getRandom().nextInt(3) == 0) {
                 level.sendParticles(GuhpolderFeature.GLINSTER.get(), guh.getX(), guh.getY() + 0.2, guh.getZ(), 1, 0.2, 0.05, 0.2, 0);
             }
-            if (level.random.nextInt(45) == 0) {
+            if (level.getRandom().nextInt(45) == 0) {
                 level.playSound(null, guh.blockPosition(), GuhpolderFeature.PINGUH_GLIJ.get(), SoundSource.NEUTRAL, 0.6f,
-                        1.3f + level.random.nextFloat() * 0.3f);
+                        1.3f + level.getRandom().nextFloat() * 0.3f);
             }
         }
     }

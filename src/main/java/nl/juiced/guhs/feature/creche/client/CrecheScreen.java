@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.creche.client;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -45,12 +45,12 @@ public class CrecheScreen extends Screen {
         top = (height - H) / 2;
         int x = left + 12, w = W - 24;
         int y = top + 22 + PIC + 30;
-        boolean running = data.getBoolean("Running"), mine = data.getBoolean("Mine");
+        boolean running = data.getBooleanOr("Running", false), mine = data.getBooleanOr("Mine", false);
         if (mine) {
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.creche.knop.stop"), b -> send(CrecheGame.STOP))
                     .bounds(x, y, w, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.creche.knop.stop.tooltip"))).build());
         } else {
-            boolean feest = data.getBoolean("Feest");
+            boolean feest = data.getBooleanOr("Feest", false);
             Button zorg = Button.builder(Component.translatable(feest ? "gui.guhs.creche.knop.knutselen" : "gui.guhs.creche.knop.verzorgen"),
                     b -> send(CrecheGame.VERZORGEN)).bounds(x, y, w / 2 - 2, 20)
                     .tooltip(Tooltip.create(Component.translatable(feest ? "gui.guhs.creche.knop.knutselen.tooltip" : "gui.guhs.creche.knop.verzorgen.tooltip")))
@@ -70,8 +70,8 @@ public class CrecheScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, BORDER);
         g.fill(left, top, left + W, top + H, PANEL);
         long ms = System.currentTimeMillis();
@@ -80,7 +80,7 @@ public class CrecheScreen extends Screen {
             int a = (int) (120 + 120 * Math.sin(ms / 400.0 + i));
             g.fill(sx, sy, sx + 2, sy + 2, (a << 24) | 0xFFF3A0);
         }
-        g.drawString(font, title.copy().withStyle(ChatFormatting.BOLD), left + 12, top + 10, 0xFFB9D8F7, false);
+        g.text(font, title.copy().withStyle(ChatFormatting.BOLD), left + 12, top + 10, 0xFFB9D8F7, false);
         Entity npc = minecraft.level == null ? null : minecraft.level.getEntity(npcId);
         g.fill(left + 12, top + 22, left + 12 + PIC, top + 22 + PIC, 0x30B9D8F7);
         if (npc instanceof LivingEntity living) {
@@ -90,19 +90,19 @@ public class CrecheScreen extends Screen {
         int bx = left + 12 + PIC + 8, by = top + 22, bw = W - (bx - left) - 12;
         g.fill(bx, by, bx + bw, by + PIC, 0xFFF4F8FF);
         g.fill(bx - 4, by + 12, bx, by + 18, 0xFFF4F8FF);
-        boolean running = data.getBoolean("Running"), mine = data.getBoolean("Mine");
-        Component text = mine ? Component.translatable("gui.guhs.creche.scherm.jij_" + data.getString("Modus").toLowerCase(java.util.Locale.ROOT))
-                : running ? Component.translatable("gui.guhs.creche.scherm.bezig", data.getString("Speler"))
-                : Component.translatable(data.getBoolean("Feest") ? "gui.guhs.creche.scherm.feest" : "gui.guhs.creche.scherm.uitleg");
+        boolean running = data.getBooleanOr("Running", false), mine = data.getBooleanOr("Mine", false);
+        Component text = mine ? Component.translatable("gui.guhs.creche.scherm.jij_" + data.getStringOr("Modus", "").toLowerCase(java.util.Locale.ROOT))
+                : running ? Component.translatable("gui.guhs.creche.scherm.bezig", data.getStringOr("Speler", ""))
+                : Component.translatable(data.getBooleanOr("Feest", false) ? "gui.guhs.creche.scherm.feest" : "gui.guhs.creche.scherm.uitleg");
         List<FormattedCharSequence> lines = font.split(text, bw - 10);
         for (int i = 0; i < lines.size() && i < 6; i++) {
-            g.drawString(font, lines.get(i), bx + 5, by + 5 + i * 10, 0xFF2A2440, false);
+            g.text(font, lines.get(i), bx + 5, by + 5 + i * 10, 0xFF2A2440, false);
         }
         int y = top + 22 + PIC + 6;
-        int best = data.getInt("Best");
-        g.drawString(font, best > 0 ? Component.translatable("gui.guhs.creche.scherm.best", best) : Component.translatable("gui.guhs.creche.scherm.geen_best"),
+        int best = data.getIntOr("Best", 0);
+        g.text(font, best > 0 ? Component.translatable("gui.guhs.creche.scherm.best", best) : Component.translatable("gui.guhs.creche.scherm.geen_best"),
                 left + 12, y, 0xFFFFD27A, false);
-        g.drawString(font, Component.translatable("gui.guhs.creche.scherm.munten", data.getInt("Munten"), data.getInt("Liedjes")), left + 12, y + 11, TEXT, false);
+        g.text(font, Component.translatable("gui.guhs.creche.scherm.munten", data.getIntOr("Munten", 0), data.getIntOr("Liedjes", 0)), left + 12, y + 11, TEXT, false);
     }
 
     @Override

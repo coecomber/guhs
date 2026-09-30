@@ -24,7 +24,7 @@ public class GuhSeatEntity extends Entity {
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide && (!isVehicle() || !(level().getBlockState(blockPosition()).getBlock() instanceof GuhFurnitureBlock))) {
+        if (!level().isClientSide() && (!isVehicle() || !(level().getBlockState(blockPosition()).getBlock() instanceof GuhFurnitureBlock))) {
             ejectPassengers();
             discard();
         }

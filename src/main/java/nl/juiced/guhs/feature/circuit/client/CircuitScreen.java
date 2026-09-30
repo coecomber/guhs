@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.circuit.client;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -82,11 +82,11 @@ public class CircuitScreen extends Screen {
         Button race = addRenderableWidget(Button.builder(Component.translatable("gui.guhs.circuit.start", baan().naam(), Niveau.of(gekozenNiveau).naam())
                 .withStyle(ChatFormatting.GOLD), x -> send(CircuitRole.START, true)).bounds(left + 20, top + 176, W - 40, 20)
                 .tooltip(tip(Component.translatable("gui.guhs.circuit.start.tooltip"))).build());
-        race.active = !data.getBoolean("Busy");
+        race.active = !data.getBooleanOr("Busy", false);
         int sw = (W - 40 - 12) / 4;
-        addRenderableWidget(Button.builder(Component.translatable(data.getBoolean("GhostOn") ? "gui.guhs.race.ghost.on" : "gui.guhs.race.ghost.off"),
+        addRenderableWidget(Button.builder(Component.translatable(data.getBooleanOr("GhostOn", false) ? "gui.guhs.race.ghost.on" : "gui.guhs.race.ghost.off"),
                 x -> send(CircuitRole.GHOST, true)).bounds(left + 20, top + H - 30, sw, 20).tooltip(tip(Component.translatable("gui.guhs.race.ghost.tooltip"))).build());
-        addRenderableWidget(Button.builder(Component.translatable(data.getBoolean("GoudOn") ? "gui.guhs.race.goud.on" : "gui.guhs.race.goud.off"),
+        addRenderableWidget(Button.builder(Component.translatable(data.getBooleanOr("GoudOn", false) ? "gui.guhs.race.goud.on" : "gui.guhs.race.goud.off"),
                 x -> send(CircuitRole.GOUD, true)).bounds(left + 24 + sw, top + H - 30, sw, 20).tooltip(tip(Component.translatable("gui.guhs.race.goud.tooltip"))).build());
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.race.shop"), x -> send(CircuitRole.SHOP, true))
                 .bounds(left + 28 + sw * 2, top + H - 30, sw, 20).tooltip(tip(Component.translatable("gui.guhs.circuit.shop.tooltip"))).build());
@@ -94,8 +94,8 @@ public class CircuitScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         int kleur = BAAN_KLEUR[gekozenBaan];
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, kleur);
         g.fill(left, top, left + W, top + H, 0xE82A1830);
@@ -105,30 +105,30 @@ public class CircuitScreen extends Screen {
             int rgb = java.awt.Color.HSBtoRGB(i / (float) (W / 6), 0.55f, 1f);
             g.fill(left + i * 6, top + H - 3, left + i * 6 + 6, top + H, 0xFF000000 | rgb);
         }
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFFFE6EE);
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFFFE6EE);
         RaceBaan b = baan();
         Niveau n = Niveau.of(gekozenNiveau);
         int y = top + 74;
-        Component info = data.getBoolean("Busy")
-                ? Component.translatable("gui.guhs.circuit.busy", data.getString("Racer"),
-                Component.translatable("gui.guhs.race.baan." + data.getString("RaceBaan")), data.getInt("Lap"))
+        Component info = data.getBooleanOr("Busy", false)
+                ? Component.translatable("gui.guhs.circuit.busy", data.getStringOr("Racer", ""),
+                Component.translatable("gui.guhs.race.baan." + data.getStringOr("RaceBaan", "")), data.getIntOr("Lap", 0))
                 : Component.translatable("gui.guhs.circuit.baan." + b.id);
         List<FormattedCharSequence> lines = font.split(info, W - 30);
         for (FormattedCharSequence line : lines.subList(0, Math.min(4, lines.size()))) {
-            g.drawCenteredString(font, line, width / 2, y, data.getBoolean("Busy") ? 0xFFFFB0C8 : 0xFFE8D8F0);
+            g.centeredText(font, line, width / 2, y, data.getBooleanOr("Busy", false) ? 0xFFFFB0C8 : 0xFFE8D8F0);
             y += 10;
         }
         String key = b.id + "_" + n.id();
         int ry = top + 120;
-        g.drawString(font, Component.translatable("gui.guhs.circuit.jouw", n.naam()).withStyle(ChatFormatting.BOLD), left + 16, ry, NIVEAU_KLEUR[n.ordinal()]);
-        g.drawString(font, Component.translatable("gui.guhs.race.best", RaceRecords.time(data.getInt("Best_" + key)), RaceRecords.time(data.getInt("BestLap_" + key)),
-                data.getInt("Races_" + key)), left + 16, ry + 11, 0xFFFFE6EE);
-        int record = data.getInt("Record_" + key);
-        g.drawString(font, record < 0 ? Component.translatable("gui.guhs.race.track_record.none")
-                : Component.translatable("gui.guhs.race.track_record", data.getString("RecordName_" + key), RaceRecords.time(record)), left + 16, ry + 22, 0xFFFFD27A);
-        g.drawString(font, Component.translatable("gui.guhs.circuit.medailles", RaceRecords.time(b.medalTicks(0, n)), RaceRecords.time(b.medalTicks(1, n)),
+        g.text(font, Component.translatable("gui.guhs.circuit.jouw", n.naam()).withStyle(ChatFormatting.BOLD), left + 16, ry, NIVEAU_KLEUR[n.ordinal()]);
+        g.text(font, Component.translatable("gui.guhs.race.best", RaceRecords.time(data.getIntOr("Best_" + key, 0)), RaceRecords.time(data.getIntOr("BestLap_" + key, 0)),
+                data.getIntOr("Races_" + key, 0)), left + 16, ry + 11, 0xFFFFE6EE);
+        int record = data.getIntOr("Record_" + key, 0);
+        g.text(font, record < 0 ? Component.translatable("gui.guhs.race.track_record.none")
+                : Component.translatable("gui.guhs.race.track_record", data.getStringOr("RecordName_" + key, ""), RaceRecords.time(record)), left + 16, ry + 22, 0xFFFFD27A);
+        g.text(font, Component.translatable("gui.guhs.circuit.medailles", RaceRecords.time(b.medalTicks(0, n)), RaceRecords.time(b.medalTicks(1, n)),
                 RaceRecords.time(b.medalTicks(2, n)), b.laps), left + 16, ry + 33, 0xFFC8B0D8);
-        g.drawString(font, Component.translatable("gui.guhs.circuit.munten", n.munten(RaceGame.Medal.GOUD.prizes), n.munten(RaceGame.Medal.FINISH.prizes)),
+        g.text(font, Component.translatable("gui.guhs.circuit.munten", n.munten(RaceGame.Medal.GOUD.prizes), n.munten(RaceGame.Medal.FINISH.prizes)),
                 left + 16, ry + 44, 0xFFB89AAA);
     }
 

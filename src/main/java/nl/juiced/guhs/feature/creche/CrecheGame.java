@@ -48,6 +48,7 @@ import nl.juiced.guhs.registry.ModSounds;
 import nl.juiced.guhs.feature.creche.WiegjeBlock.Baby;
 import nl.juiced.guhs.feature.creche.WiegjeBlock.Wens;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Juf Knuffel's two games in the Knuffelcreche (one player at a time per creche; the state lives in memory, per Juf):
  * <ul>
@@ -156,11 +157,11 @@ public final class CrecheGame {
         data.putBoolean("Mine", mine);
         data.putString("Modus", game.modus.name());
         ServerPlayer other = game.spelerIn((ServerLevel) npc.level());
-        data.putString("Speler", other == null ? "?" : other.getGameProfile().getName());
+        data.putString("Speler", other == null ? "?" : other.getGameProfile().name());
         data.putInt("Best", best(player));
         data.putInt("Munten", GuhQuests.count(player, CrecheFeature.SPEENMUNT.get()));
         data.putBoolean("Feest", Knusfeest.open(player, Feesttaak.FEESTSLINGERS));
-        data.putBoolean("Gespeeld", GuhQuests.saved(player).getBoolean(FIRST_SPEL));
+        data.putBoolean("Gespeeld", GuhQuests.saved(player).getBooleanOr(FIRST_SPEL, false));
         data.putInt("Liedjes", KnusVoortgang.ontdekt(player, CrecheVoortgang.SLAAPLIEDJES).size());
         ModNetworking.sendTo(player, new CrechePayloads.Open(npc.getId(), data));
     }
@@ -263,7 +264,7 @@ public final class CrecheGame {
         List<Wens> stap = stappen(feest);
         int i = zorg.get(pos);
         if (i >= stap.size()) {
-            player.displayClientMessage(Component.translatable("gui.guhs.creche.slaapt_al").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.creche.slaapt_al").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         Wens wens = stap.get(i);
@@ -276,8 +277,8 @@ public final class CrecheGame {
             default -> false;
         };
         if (!goed) {
-            player.displayClientMessage(Component.translatable("gui.guhs.creche.wil", Component.translatable(wens.key()))
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.creche.wil", Component.translatable(wens.key()))
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         if (wens == Wens.LIEDJE) {
@@ -319,8 +320,8 @@ public final class CrecheGame {
         zorg.put(pos, i);
         if (i < stap.size()) {
             zet(level, pos, stap.get(i) == Wens.LIEDJE || stap.get(i - 1) == Wens.SLAAP ? Baby.INGESTOPT : Baby.WAKKER, stap.get(i));
-            player.displayClientMessage(Component.translatable("gui.guhs.creche.nu", Component.translatable(stap.get(i).key()))
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.creche.nu", Component.translatable(stap.get(i).key()))
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         // asleep
@@ -328,8 +329,8 @@ public final class CrecheGame {
         level.sendParticles(CrecheFeature.SLAAPSTERRETJE.get(), pos.getX() + 0.5, pos.getY() + 0.9, pos.getZ() + 0.5, 10, 0.3, 0.3, 0.3, 0.02);
         KnusVoortgang.tel(player, CrecheVoortgang.INGESTOPT, 1);
         long wakker = zorg.values().stream().filter(v -> v < stap.size()).count();
-        player.displayClientMessage(Component.translatable("gui.guhs.creche.slaapt", VERZORG_BABYS - wakker, VERZORG_BABYS)
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.creche.slaapt", VERZORG_BABYS - wakker, VERZORG_BABYS)
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         if (wakker == 0) {
             klaarVerzorgen(level, player);
         }
@@ -369,7 +370,7 @@ public final class CrecheGame {
         GuhNpcEntity npc = juf(level);
         CompoundTag saved = GuhQuests.saved(player);
         Minigames.give(player, new ItemStack(CrecheFeature.SPEENMUNT.get(), VERZORG_MUNTEN));
-        if (!saved.getBoolean(FIRST_ZORG)) {
+        if (!saved.getBooleanOr(FIRST_ZORG, false)) {
             saved.putBoolean(FIRST_ZORG, true);
             Minigames.give(player, new ItemStack(CrecheFeature.SPEENMUNT.get(), FIRST_COINS));
         }
@@ -493,12 +494,12 @@ public final class CrecheGame {
             return;
         }
         BlockPos wieg = vol.get(level.getRandom().nextInt(vol.size()));
-        CrecheBabyguh baby = CrecheFeature.BABYGUH.get().create(level);
+        CrecheBabyguh baby = CrecheFeature.BABYGUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (baby == null) {
             return;
         }
         Vec3 at = naastWieg(level, wieg);
-        baby.moveTo(at.x, at.y, at.z, level.getRandom().nextFloat() * 360f, 0);
+        baby.snapTo(at.x, at.y, at.z, level.getRandom().nextFloat() * 360f, 0);
         baby.juf = jufId;
         baby.wieg = wieg;
         baby.uitSinds = level.getGameTime();
@@ -553,7 +554,7 @@ public final class CrecheGame {
         level.playSound(null, wieg, CrecheFeature.BABYGIECHEL.get(), SoundSource.NEUTRAL, 1f, 1.5f);
         level.playSound(null, wieg, SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.RECORDS, 0.6f, 1.0f + Math.min(1f, reeks * 0.08f));
         level.sendParticles(ParticleTypes.HEART, wieg.getX() + 0.5, wieg.getY() + 0.9, wieg.getZ() + 0.5, 3, 0.25, 0.15, 0.25, 0.01);
-        p.displayClientMessage(Component.translatable("gui.guhs.creche.terug", erbij, reeks).withStyle(ChatFormatting.GOLD), true);
+        p.sendOverlayMessage(Component.translatable("gui.guhs.creche.terug", erbij, reeks).withStyle(ChatFormatting.GOLD));
     }
 
     /** Out too long (or too far): Juf Knuffel brings it back herself. No points, the row starts over. */
@@ -568,7 +569,7 @@ public final class CrecheGame {
         }
         ontsnapt++;
         reeks = 0;
-        p.displayClientMessage(Component.translatable("gui.guhs.creche.ontsnapt").withStyle(ChatFormatting.RED), true);
+        p.sendOverlayMessage(Component.translatable("gui.guhs.creche.ontsnapt").withStyle(ChatFormatting.RED));
         level.playSound(null, p.blockPosition(), SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), SoundSource.RECORDS, 0.6f, 0.8f);
     }
 
@@ -579,11 +580,11 @@ public final class CrecheGame {
             return;
         }
         if (!player.getUUID().equals(game.speler)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.creche.niet_jouw_spel").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.creche.niet_jouw_spel").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         if (game.gedragen((ServerLevel) baby.level(), player) >= MAX_DRAGEN) {
-            player.displayClientMessage(Component.translatable("gui.guhs.creche.handen_vol", MAX_DRAGEN).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.creche.handen_vol", MAX_DRAGEN).withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         baby.draag(player);
@@ -646,7 +647,7 @@ public final class CrecheGame {
             Scorebord.submit(p, BOARD, score, false);
             KnusVoortgang.hoogste(p, CrecheVoortgang.RECORD, score);
         }
-        if (!saved.getBoolean(FIRST_SPEL)) {
+        if (!saved.getBooleanOr(FIRST_SPEL, false)) {
             saved.putBoolean(FIRST_SPEL, true);
             Minigames.give(p, new ItemStack(CrecheFeature.SPEENMUNT.get(), FIRST_COINS));
             if (npc != null) {
@@ -828,14 +829,14 @@ public final class CrecheGame {
             return false;
         }
         if (!player.getUUID().equals(game.speler)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.creche.niet_jouw_spel").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.creche.niet_jouw_spel").withStyle(ChatFormatting.LIGHT_PURPLE));
             return true;
         }
         if (game.modus == Modus.VERZORGEN) {
             if (game.zorg.containsKey(pos)) {
                 game.verzorg(level, pos, player, stack);
             } else {
-                player.displayClientMessage(Component.translatable("gui.guhs.creche.deze_slaapt").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.creche.deze_slaapt").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             return true;
         }
@@ -861,7 +862,7 @@ public final class CrecheGame {
         int gegroeid = 0;
         long now = level.getGameTime();
         for (GuhEntity guh : level.getEntitiesOfClass(GuhEntity.class, new AABB(pos).inflate(4))) {
-            if (!guh.isBaby() || (guh.getPersistentData().contains(GEWIEGD) && now - guh.getPersistentData().getLong(GEWIEGD) < WIEG_COOLDOWN)) {
+            if (!guh.isBaby() || (guh.getPersistentData().contains(GEWIEGD) && now - guh.getPersistentData().getLongOr(GEWIEGD, 0L) < WIEG_COOLDOWN)) {
                 continue;
             }
             guh.getPersistentData().putLong(GEWIEGD, now);
@@ -870,13 +871,13 @@ public final class CrecheGame {
             gegroeid++;
         }
         if (gegroeid > 0) {
-            player.displayClientMessage(Component.translatable("gui.guhs.creche.gewiegd", gegroeid).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.creche.gewiegd", gegroeid).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
     /** Your best score in the minigame (the Guhdex highscores keep it; 0: never played). */
     public static int best(Player player) {
-        return GuhQuests.saved(player).getCompound(nl.juiced.guhs.quest.Highscores.KEY).getInt(BOARD);
+        return GuhQuests.saved(player).getCompoundOrEmpty(nl.juiced.guhs.quest.Highscores.KEY).getIntOr(BOARD, 0);
     }
 
     public static final String GEWIEGD = "guhs_creche_gewiegd";
@@ -928,7 +929,7 @@ public final class CrecheGame {
     /** A player whose game stopped ticking (its chunk unloaded, the Juf vanished) is an ordinary player again. */
     public static void onPlayerTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        if (player.level().isClientSide || player.tickCount % 20 != 0) {
+        if (player.level().isClientSide() || player.tickCount % 20 != 0) {
             return;
         }
         Long seen = SPELERS.get(player.getUUID());

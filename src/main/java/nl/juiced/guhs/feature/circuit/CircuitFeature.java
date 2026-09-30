@@ -37,6 +37,8 @@ import nl.juiced.guhs.feature.race.RaceBaan;
 import nl.juiced.guhs.feature.race.RaceGame;
 import nl.juiced.guhs.feature.race.RaceProtection;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * Het Guh-Circuit (2.9, De Grote Guhspelen): one big circuit in the Guhvelden and the Kaasvlakte with three race tracks
  * around a Pitpaleis with two grandstands, and Coach Vahoegvroem (CIRCUITGUH) who lends you a race guh on the track and
@@ -99,11 +101,11 @@ public final class CircuitFeature {
     /** The Mika-pikkers and the pushers of the Knabbelhelling (never saved). */
     public static final DeferredHolder<EntityType<?>, EntityType<MikaPikkerEntity>> MIKAPIKKER = ENTITY_TYPES.register("circuit_mikapikker",
             () -> EntityType.Builder.of(MikaPikkerEntity::new, MobCategory.MISC).sized(0.7f, 0.65f).eyeHeight(0.45f).clientTrackingRange(10)
-                    .noSave().noSummon().build(Guhs.id("circuit_mikapikker").toString()));
+                    .noSave().noSummon().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("circuit_mikapikker"))));
     /** A rolling kaasknabbel (never saved). */
     public static final DeferredHolder<EntityType<?>, EntityType<RolknabbelEntity>> ROLKNABBEL = ENTITY_TYPES.register("circuit_rolknabbel",
             () -> EntityType.Builder.<RolknabbelEntity>of(RolknabbelEntity::new, MobCategory.MISC).sized(1.2f, 1.2f).clientTrackingRange(10)
-                    .updateInterval(1).noSave().noSummon().build(Guhs.id("circuit_rolknabbel").toString()));
+                    .updateInterval(1).noSave().noSummon().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("circuit_rolknabbel"))));
 
     private static final NpcRole ROLE = new CircuitRole();
 

@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +45,7 @@ public class OogVanVadsigItem extends Item {
         if (!(state.getBlock() instanceof KnabbelportaalframeBlock) || state.getValue(KnabbelportaalframeBlock.OOG)) {
             return InteractionResult.PASS;
         }
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         BlockState filled = state.setValue(KnabbelportaalframeBlock.OOG, true);
@@ -64,22 +63,22 @@ public class OogVanVadsigItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         BlockHitResult hit = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
         if (hit.getType() == HitResult.Type.BLOCK && level.getBlockState(hit.getBlockPos()).getBlock() instanceof KnabbelportaalframeBlock) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         }
         player.startUsingItem(hand);
         if (level instanceof ServerLevel server) {
             if (server.dimension() != ModDimensions.GUHMENSION) {
-                player.displayClientMessage(Component.translatable("gui.guhs.guheinde.oog_alleen_guhmensie").withStyle(ChatFormatting.LIGHT_PURPLE), true);
-                return InteractionResultHolder.fail(stack);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.oog_alleen_guhmensie").withStyle(ChatFormatting.LIGHT_PURPLE));
+                return InteractionResult.FAIL;
             }
             BlockPos target = server.findNearestMapStructure(GuheindeFeature.OOG_LOCATED, player.blockPosition(), 100, false);
             if (target == null) {
-                player.displayClientMessage(Component.translatable("gui.guhs.guheinde.oog_niks").withStyle(ChatFormatting.LIGHT_PURPLE), true);
-                return InteractionResultHolder.fail(stack);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.oog_niks").withStyle(ChatFormatting.LIGHT_PURPLE));
+                return InteractionResult.FAIL;
             }
             OogVanVadsigEntity oog = new OogVanVadsigEntity(server, player.getX(), player.getY(0.5), player.getZ());
             oog.setItem(stack);
@@ -92,12 +91,12 @@ public class OogVanVadsigItem extends Item {
                 GuheindeEvents.advancement(sp, "guheinde_oog");   // (the shown one: guheinde/, not quest/)
             }
             server.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDER_EYE_LAUNCH, SoundSource.NEUTRAL, 1f,
-                    Mth.lerp(server.random.nextFloat(), 0.33f, 0.5f));
+                    Mth.lerp(server.getRandom().nextFloat(), 0.33f, 0.5f));
             stack.consume(1, player);
             player.swing(hand, true);
-            return InteractionResultHolder.success(stack);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
         }
-        return InteractionResultHolder.consume(stack);
+        return InteractionResult.CONSUME.heldItemTransformedTo(stack);
     }
 
     @Override

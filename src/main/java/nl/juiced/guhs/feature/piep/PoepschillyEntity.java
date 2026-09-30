@@ -29,7 +29,7 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -57,14 +57,15 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.network.ModNetworking;
 import nl.juiced.guhs.registry.ModItems;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * Poepschilly: a green sea turtle plush from the guhzee coasts of the Guhmensie. It swims well and crawls on land. Always lief.
  * <p>
@@ -132,8 +133,8 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
     }
 
     /** Spawns on the guhzee coasts: at the water's surface, with land close by (spawn eggs and commands: anywhere). */
-    public static boolean checkSpawn(LevelAccessor level, MobSpawnType spawnType, BlockPos pos) {
-        if (spawnType != MobSpawnType.NATURAL && spawnType != MobSpawnType.CHUNK_GENERATION) {
+    public static boolean checkSpawn(LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos) {
+        if (spawnType != EntitySpawnReason.NATURAL && spawnType != EntitySpawnReason.CHUNK_GENERATION) {
             return true;
         }
         int sea = level instanceof Level l ? l.getSeaLevel() : 63;
@@ -312,9 +313,9 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
             return super.mobInteract(player, hand);
         }
         if (fase != null || isBinnen()) {
-            return InteractionResult.sidedSuccess(level().isClientSide);     // busy with a kontje: leave it be
+            return InteractionResult.SUCCESS;     // busy with a kontje: leave it be
         }
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer sp = (ServerPlayer) player;
@@ -345,7 +346,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         if (isTame() && isOwnedBy(player)) {
             PiepMenu.open(sp, this);                                    // empty hand (owner): its menu
         } else if (isTame() && player.isSecondaryUseActive()) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.piep.niet_jouw_maatje").withStyle(ChatFormatting.GRAY), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.piep.niet_jouw_maatje").withStyle(ChatFormatting.GRAY));
         }
         return InteractionResult.SUCCESS;
     }
@@ -355,7 +356,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         getNavigation().stop();
         level().broadcastEntityEvent(this, (byte) 7);
         triggerAnim("actie", "blij");
-        player.displayClientMessage(Component.translatable("gui.guhs.piep." + soort() + "_getamed").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.piep." + soort() + "_getamed").withStyle(ChatFormatting.LIGHT_PURPLE));
         PiepVoortgang.tel(player, "piep." + soort() + "_getamed", 1, adv() + "_getamed");
         PiepVoortgang.pagina(player, soort());
     }
@@ -414,8 +415,8 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
     public void speciaal(ServerPlayer player) {
         if (level().getGameTime() < rustTot) {
             long sec = (rustTot - level().getGameTime()) / 20;
-            player.displayClientMessage(Component.translatable("gui.guhs.piep." + soort() + "_rust", sec / 60, String.format(Locale.ROOT, "%02d", sec % 60))
-                    .withStyle(ChatFormatting.GRAY), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.piep." + soort() + "_rust", sec / 60, String.format(Locale.ROOT, "%02d", sec % 60))
+                    .withStyle(ChatFormatting.GRAY));
             return;
         }
         klaarVoor = player.getUUID();
@@ -423,7 +424,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         triggerAnim("actie", "blij");
         playSound(SoundEvents.TURTLE_AMBIENT_LAND, 1f, 1.5f);
         ModNetworking.sendTo(player, new PiepPayloads.Klaar(getId(), KLAAR_TICKS));
-        player.displayClientMessage(Component.translatable("gui.guhs.piep." + soort() + "_klaar").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.piep." + soort() + "_klaar").withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     /** Rests this many ticks (no poetsbeurt or bestie-moment). */
@@ -460,7 +461,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         if (schilly == null) {
             return InteractionResult.PASS;
         }
-        if (guh.level().isClientSide) {
+        if (guh.level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         schilly.klaarVoor = null;
@@ -496,11 +497,11 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
     protected void opGuh(GuhEntity guh, ServerPlayer sp) {
         ModNetworking.sendTo(sp, new PiepPayloads.Klaar(getId(), 0));
         if (!guh.isTame()) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.piep.schilly_alleen_tam").withStyle(ChatFormatting.GRAY), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.piep.schilly_alleen_tam").withStyle(ChatFormatting.GRAY));
             return;
         }
         if (guh.hasEffect(PiepFeature.FRIS_VAN_BINNEN)) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.piep.al_fris", guh.getDisplayName()).withStyle(ChatFormatting.GRAY), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.piep.al_fris", guh.getDisplayName()).withStyle(ChatFormatting.GRAY));
             return;
         }
         startPoets(guh, sp);
@@ -520,7 +521,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         GuhHooks.bezig(guh, LOOP_TICKS + KRUIP_TICKS + POETS_TICKS + UIT_TICKS + 20);   // (the day rhythm leaves it alone)
         guh.getNavigation().stop();
         if (player != null) {
-            player.displayClientMessage(Component.translatable("gui.guhs.piep.schilly_waggelt", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.piep.schilly_waggelt", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -618,7 +619,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         guh.triggerAnim("action", "happy");
         ServerPlayer speler = speler(level);
         if (speler != null) {
-            speler.displayClientMessage(Component.translatable("gui.guhs.piep.schilly_kruipt", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            speler.sendOverlayMessage(Component.translatable("gui.guhs.piep.schilly_kruipt", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -737,7 +738,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
                 level.sendParticles(ParticleTypes.BUBBLE_POP, getX(), getY() + 0.3, getZ(), 6, 0.25, 0.2, 0.25, 0.05);
             }
             if (speler != null) {
-                speler.displayClientMessage(Component.translatable("gui.guhs.piep.schilly_afgebroken").withStyle(ChatFormatting.GRAY), true);
+                speler.sendOverlayMessage(Component.translatable("gui.guhs.piep.schilly_afgebroken").withStyle(ChatFormatting.GRAY));
             }
             return;
         }
@@ -754,7 +755,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         triggerAnim("actie", "blij");
         rust(COOLDOWN);
         if (speler != null) {
-            speler.displayClientMessage(Component.translatable("gui.guhs.piep.fris", guh.getDisplayName()).withStyle(ChatFormatting.AQUA), true);
+            speler.sendOverlayMessage(Component.translatable("gui.guhs.piep.fris", guh.getDisplayName()).withStyle(ChatFormatting.AQUA));
             PiepVoortgang.tel(speler, PiepVoortgang.POETSBEURTEN, 1, "piep_poetsbeurt");
         }
     }
@@ -762,7 +763,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         if (fase != null) {
@@ -844,10 +845,10 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
             poets.putString("Fase", fase.name());
             poets.putInt("Tick", faseTick);
             if (poetsGuhId != null) {
-                poets.putUUID("Guh", poetsGuhId);
+                poets.store("Guh", UUIDUtil.CODEC, poetsGuhId);
             }
             if (poetsSpeler != null) {
-                poets.putUUID("Speler", poetsSpeler);
+                poets.store("Speler", UUIDUtil.CODEC, poetsSpeler);
             }
             tag.put("Poets", poets);
         }
@@ -856,8 +857,8 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        rustTot = tag.getLong("RustTot");
-        setUitVlaggen(tag.getInt("PiepUit"));
+        rustTot = tag.getLongOr("RustTot", 0L);
+        setUitVlaggen(tag.getIntOr("PiepUit", 0));
         fase = null;
         poetsGuh = null;
         poetsGuhId = null;
@@ -865,15 +866,15 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         zoekTicks = 0;
         faseTick = 0;
         if (tag.contains("Poets", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
-            CompoundTag poets = tag.getCompound("Poets");
+            CompoundTag poets = tag.getCompoundOrEmpty("Poets");
             try {
-                fase = Fase.valueOf(poets.getString("Fase"));
+                fase = Fase.valueOf(poets.getStringOr("Fase", ""));
             } catch (IllegalArgumentException e) {
                 fase = null;
             }
-            faseTick = poets.getInt("Tick");
-            poetsGuhId = poets.hasUUID("Guh") ? poets.getUUID("Guh") : null;
-            poetsSpeler = poets.hasUUID("Speler") ? poets.getUUID("Speler") : null;
+            faseTick = poets.getIntOr("Tick", 0);
+            poetsGuhId = poets.read("Guh", UUIDUtil.CODEC).isPresent() ? poets.read("Guh", UUIDUtil.CODEC).orElseThrow() : null;
+            poetsSpeler = poets.read("Speler", UUIDUtil.CODEC).isPresent() ? poets.read("Speler", UUIDUtil.CODEC).orElseThrow() : null;
         }
         // hidden only while it is really inside a guh (this also frees a Poepschilly that was saved invisible by an older version)
         setBinnen(fase == Fase.BINNEN);

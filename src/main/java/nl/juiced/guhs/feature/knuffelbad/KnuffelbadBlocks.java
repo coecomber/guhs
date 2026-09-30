@@ -13,7 +13,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -107,16 +106,16 @@ public final class KnuffelbadBlocks {
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (!level.isClientSide && player instanceof ServerPlayer sp) {
+            if (!level.isClientSide() && player instanceof ServerPlayer sp) {
                 GlijRit.start(sp, pos, state.getValue(GLIJBAAN), state.getValue(FACING));
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Override
-        protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+        protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                                   BlockHitResult hit) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
 
         @Override
@@ -175,22 +174,22 @@ public final class KnuffelbadBlocks {
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (!level.isClientSide && player instanceof ServerPlayer sp) {
+            if (!level.isClientSide() && player instanceof ServerPlayer sp) {
                 Wasritueel.douche(sp, pos);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Override
-        protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+        protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                                   BlockHitResult hit) {
             if (stack.is(Items.WATER_BUCKET)) {
-                if (!level.isClientSide && player instanceof ServerPlayer sp) {
+                if (!level.isClientSide() && player instanceof ServerPlayer sp) {
                     Wasritueel.douche(sp, pos);
                 }
-                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.SUCCESS;
             }
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
 
         @Override
@@ -326,7 +325,7 @@ public final class KnuffelbadBlocks {
             if (entity instanceof LivingEntity || entity instanceof net.minecraft.world.entity.item.ItemEntity) {
                 entity.makeStuckInBlock(state, new Vec3(0.85, 0.55, 0.85));
                 entity.resetFallDistance();
-                if (level.isClientSide && level.getRandom().nextInt(4) == 0 && entity.getDeltaMovement().horizontalDistanceSqr() > 1e-4) {
+                if (level.isClientSide() && level.getRandom().nextInt(4) == 0 && entity.getDeltaMovement().horizontalDistanceSqr() > 1e-4) {
                     level.addParticle(KnuffelbadFeature.SCHUIMVLOKJE.get(), entity.getX(), entity.getY() + 0.5, entity.getZ(),
                             (level.getRandom().nextDouble() - 0.5) * 0.1, 0.05, (level.getRandom().nextDouble() - 0.5) * 0.1);
                 }

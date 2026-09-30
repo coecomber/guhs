@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import nl.juiced.guhs.client.screen.GuhDexScreen;
@@ -114,7 +114,7 @@ public final class GidsMinigamesTab {
 
     static String jij() {
         var p = Minecraft.getInstance().player;
-        return p == null ? "" : p.getGameProfile().getName();
+        return p == null ? "" : p.getGameProfile().name();
     }
 
     static Component label(String gameId) {
@@ -132,7 +132,7 @@ public final class GidsMinigamesTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             int gebouwen = 0, bezocht = 0;
             for (SpelGroepen.Groep gr : SpelGroepen.alle()) {
                 if (gr.structuur() != null) {
@@ -167,7 +167,7 @@ public final class GidsMinigamesTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             g.fill(x, y + 1, x + w, y + 15, hover ? 0xFFF9CFDE : 0xFFF3B8CD);
             g.fill(x, y + 1, x + w, y + 2, 0x70FFFFFF);
             g.fill(x, y + 14, x + w, y + 15, 0xFFD27A9C);
@@ -194,11 +194,11 @@ public final class GidsMinigamesTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             g.fill(x + 2, y + 1, x + w, y + 23, hover ? 0x60F7B6CB : open ? 0x48F7B6CB : 0x26F7B6CB);
             g.fill(x + 2, y + 1, x + 4, y + 23, open ? FEL : 0xFFF7B6CB);
             GidsTekst.schaal(g, Component.literal(open ? "▼" : "▶"), x + 7, y + 9, 0.6f, ROZE, false);
-            g.renderItem(groep.icoon().get(), x + 14, y + 4);
+            g.item(groep.icoon().get(), x + 14, y + 4);
             boolean bezocht = SpelGroepen.Client.bezocht(groep.id());
             int rechts = 74;
             GidsTekst.passend(g, groep.naam().copy().withStyle(ChatFormatting.BOLD), x + 34, y + 4, w - 34 - rechts, 1f, DONKER, false);
@@ -242,7 +242,7 @@ public final class GidsMinigamesTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             g.fill(x + 2, y, x + 4, y + hoogte(), 0x60F7B6CB);
             GidsTekst.schaal(g, Component.literal("⌂"), x + 10, y + 3, S, ROZE, false);
             int h = GidsTekst.alinea(g, groep.waar(), x + 20, y + 3, Math.min(w, 250) - 28, S, 0xFF5A3A4A);
@@ -264,7 +264,7 @@ public final class GidsMinigamesTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             g.fill(x + 2, y, x + 4, y + hoogte(), 0x60F7B6CB);
             long heb = kleding.stream().filter(GidsKledingIcoon::heeft).count();
             GidsTekst.schaal(g, Component.translatable("gui.guhs.gids.minigames.kleding", heb, kleding.size()), x + 10, y + 7, 0.75f,
@@ -297,7 +297,7 @@ public final class GidsMinigamesTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             g.fill(x + 2, y, x + 4, y + 11, 0x60F7B6CB);
             int[] c = kolommen(x, w);
             GidsTekst.schaal(g, Component.translatable("gui.guhs.gids.minigames.kolom.spel"), c[0], y + 3, 0.6f, GRIJS, false);
@@ -320,7 +320,7 @@ public final class GidsMinigamesTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             g.fill(x + 2, y, x + 4, y + 11, 0x60F7B6CB);
             int[] c = kolommen(x, w);
             if (even || hover) {
@@ -368,7 +368,7 @@ public final class GidsMinigamesTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             g.fill(x + 2, y, x + 4, y + 12, 0x60F7B6CB);
             GidsTekst.passend(g, Component.translatable("gui.guhs.gids.minigames.geen_scores").withStyle(ChatFormatting.ITALIC), x + 10, y + 3,
                     w - 14, 0.75f, GRIJS, false);
@@ -383,7 +383,7 @@ public final class GidsMinigamesTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
         }
     }
 

@@ -16,16 +16,16 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
 
 /**
  * Het knabbelvlindertje (3.0, DESIGN_30 §6): a butterfly with a tiny guh head and big wings with knabbel dots and a
@@ -57,9 +57,9 @@ public class KnabbelvlindertjeEntity extends FladderDiertje {
     }
 
     /** By day, in the open air close to flowers; never too many together. */
-    public static boolean checkSpawn(EntityType<KnabbelvlindertjeEntity> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        if (MobSpawnType.isSpawner(spawnType) || spawnType == MobSpawnType.STRUCTURE || spawnType == MobSpawnType.SPAWN_EGG
-                || spawnType == MobSpawnType.COMMAND) {
+    public static boolean checkSpawn(EntityType<KnabbelvlindertjeEntity> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
+        if (EntitySpawnReason.isSpawner(spawnType) || spawnType == EntitySpawnReason.STRUCTURE || spawnType == EntitySpawnReason.SPAWN_ITEM_USE
+                || spawnType == EntitySpawnReason.COMMAND) {
             return true;
         }
         if (!(level instanceof Level l) || !l.isDay() || !level.getBlockState(pos).isAir() || !level.canSeeSky(pos)) {
@@ -93,7 +93,7 @@ public class KnabbelvlindertjeEntity extends FladderDiertje {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData data) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData data) {
         setKleur(Kleur.van(level.getRandom().nextInt(Kleur.values().length)));
         return super.finalizeSpawn(level, difficulty, spawnType, data);
     }
@@ -146,7 +146,7 @@ public class KnabbelvlindertjeEntity extends FladderDiertje {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         for (Kleur k : Kleur.values()) {
-            if (k.id().equals(tag.getString("Kleur"))) {
+            if (k.id().equals(tag.getStringOr("Kleur", ""))) {
                 setKleur(k);
             }
         }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,8 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
@@ -32,14 +30,13 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.world.GuhWorldData;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the Guheinde: the portal ring and the Oog van Vadsig, the knabbelkristallen, Opper-Mika and his starved
  * Enderguh (the floor while riding, feeding, stealing knabbels), Mika-larfjes, magere guhs, the Koningguh's story, the
  * rewards, the Knabbelkroon, the Enderguh-ei, the Guhvleugels, Mika-tranen, recipes and the templates. The tests that
  * need the Guheinde dimension itself are optional (dev server: /test runall).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class GuheindeGameTests {
     private static final String EMPTY = "empty";
 
@@ -47,7 +44,7 @@ public class GuheindeGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return player;
     }
 
@@ -59,9 +56,9 @@ public class GuheindeGameTests {
     }
 
     private static <T extends Entity> T spawn(GameTestHelper helper, net.minecraft.world.entity.EntityType<T> type, double x, double y, double z) {
-        T e = type.create(helper.getLevel());
+        T e = type.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         Vec3 at = helper.absoluteVec(new Vec3(x, y, z));
-        e.moveTo(at.x, at.y, at.z, 0f, 0f);
+        e.snapTo(at.x, at.y, at.z, 0f, 0f);
         helper.getLevel().addFreshEntity(e);
         return e;
     }
@@ -73,7 +70,7 @@ public class GuheindeGameTests {
     }
 
     /** Twelve frames around a 3x3: the last Oog van Vadsig opens the portal; eleven don't. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void twelveEyesOpenThePortal(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         BlockPos c = new BlockPos(2, 1, 2);
@@ -98,7 +95,7 @@ public class GuheindeGameTests {
     }
 
     /** Outside the Guhmension an Oog van Vadsig only blinks: not thrown, not used up. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theEyeOnlyWorksInTheGuhmension(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         ItemStack eye = new ItemStack(GuheindeFeature.OOG_VAN_VADSIG.get(), 3);
@@ -110,7 +107,7 @@ public class GuheindeGameTests {
     }
 
     /** A thrown eye flies off and after 4 seconds drops back as an item (or breaks). */
-    @GameTest(template = EMPTY, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, timeoutTicks = 200)
     public static void aThrownEyeFliesAndComesDown(GameTestHelper helper) {
         OogVanVadsigEntity eye = spawn(helper, GuheindeFeature.OOG_ENTITY.get(), 2.5, 2, 2.5);
         eye.setItem(new ItemStack(GuheindeFeature.OOG_VAN_VADSIG.get()));
@@ -136,7 +133,7 @@ public class GuheindeGameTests {
     // --- crystals, Opper-Mika and his Enderguh ------------------------------------------------------------------------
 
     /** Smashing a knabbelkristal: it's gone and the stolen knabbels fly out. Opper-Mika can't smash his own. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void smashedCrystalsGiveTheKnabbelsBack(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         KnabbelkristalEntity crystal = spawn(helper, GuheindeFeature.KNABBELKRISTAL_ENTITY.get(), 2.5, 1, 2.5);
@@ -152,7 +149,7 @@ public class GuheindeGameTests {
     }
 
     /** On his Enderguh, Opper-Mika never goes below half his health; on foot he does. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void opperMikaHoldsOnWhileRiding(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         HongerigeEnderguhEntity mount = spawn(helper, GuheindeFeature.HONGERIGE_ENDERGUH.get(), 2.5, 3, 2.5);
@@ -171,7 +168,7 @@ public class GuheindeGameTests {
     }
 
     /** You can't hurt the Enderguh; it's scared until it's worn out; then a knabbel frees it and Opper-Mika falls off. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void aKnabbelFreesTheEnderguh(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         HongerigeEnderguhEntity mount = spawn(helper, GuheindeFeature.HONGERIGE_ENDERGUH.get(), 2.5, 1, 2.5);
@@ -196,7 +193,7 @@ public class GuheindeGameTests {
     }
 
     /** On foot Opper-Mika steals your knabbels (four at a time) and drops them all when he's beaten. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void opperMikaStealsKnabbelsAndGivesThemBack(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         player.getInventory().add(new ItemStack(ModItems.KAAS_KNABBELS.get(), 10));
@@ -212,7 +209,7 @@ public class GuheindeGameTests {
     }
 
     /** A Mika-larfje steals a knabbel per bite and gives it back when squashed; aangevreten stones hide one. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void mikaLarfjesStealKnabbels(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         player.getInventory().add(new ItemStack(ModItems.KAAS_KNABBELS.get(), 5));
@@ -233,7 +230,7 @@ public class GuheindeGameTests {
     // --- the Knabbelkelder's magere guhs, the Koningguh ----------------------------------------------------------------
 
     /** A magere guh eats a knabbel: VAHOEG! It gets a colour, the Guhdex a page with its star. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void aMagereGuhGoesVahoeg(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         GuhEntity guh = spawn(helper, ModEntities.GUH.get(), 3.5, 1, 3.5);
@@ -243,31 +240,31 @@ public class GuheindeGameTests {
         helper.assertTrue(guh.getVariant() != GuhVariant.MAGER, "no longer grey");
         helper.assertTrue(player.getMainHandItem().getCount() == 1, "it ate the knabbel");
         helper.assertTrue(!guh.isTame(), "it runs off, it isn't yours");
-        GuhWorldData.PlayerData p = GuhWorldData.get(player.server).player(player.getUUID());
+        GuhWorldData.PlayerData p = GuhWorldData.get(player.level().getServer()).player(player.getUUID());
         helper.assertTrue(p.seen.contains(GuhVariant.MAGER) && p.tamed.contains(GuhVariant.MAGER), "Guhdex page + star");
-        helper.assertTrue(GuhQuests.saved(player).getInt(GuheindeEvents.GERED) == 1, "counted");
+        helper.assertTrue(GuhQuests.saved(player).getIntOr(GuheindeEvents.GERED, 0) == 1, "counted");
         guh.discard();
         done(helper, player);
     }
 
     /** The Koningguh tells the story (and gives the book); after a win he knights you. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theKoningguhTellsTheStoryAndKnightsYou(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         GuhEntity koning = spawn(helper, ModEntities.GUH.get(), 3.5, 1, 3.5);
         koning.setVariant(GuhVariant.KONING);
         player.interactOn(koning, InteractionHand.MAIN_HAND);
-        helper.assertTrue(GuhQuests.saved(player).getInt(GuheindeEvents.KONING) == 1, "story told");
+        helper.assertTrue(GuhQuests.saved(player).getIntOr(GuheindeEvents.KONING, 0) == 1, "story told");
         boolean book = false;
-        for (ItemStack stack : player.getInventory().items) {
+        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
             book |= Guhboek.of(stack) == Guhboek.GUHEINDE;
         }
         helper.assertTrue(book, "the Guheinde book");
         player.interactOn(koning, InteractionHand.MAIN_HAND);
-        helper.assertTrue(GuhQuests.saved(player).getInt(GuheindeEvents.KONING) == 1, "no knighthood before a win");
+        helper.assertTrue(GuhQuests.saved(player).getIntOr(GuheindeEvents.KONING, 0) == 1, "no knighthood before a win");
         GuhQuests.saved(player).putInt(GuheindeGevecht.WINS, 1);
         player.interactOn(koning, InteractionHand.MAIN_HAND);
-        helper.assertTrue(GuhQuests.saved(player).getInt(GuheindeEvents.KONING) == 2, "Ridder van het Guheinde");
+        helper.assertTrue(GuhQuests.saved(player).getIntOr(GuheindeEvents.KONING, 0) == 2, "Ridder van het Guheinde");
         koning.discard();
         done(helper, player);
     }
@@ -275,7 +272,7 @@ public class GuheindeGameTests {
     // --- rewards and items ------------------------------------------------------------------------------------------
 
     /** First win: the Knabbelkroon, the trophy and a tamed Vahoege Enderguh; second win: an Enderguh-ei. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void rewardsForBeatingOpperMika(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         GuheindeGevecht.reward(player, null, 250);
@@ -287,13 +284,13 @@ public class GuheindeGameTests {
                 "a tamed, saddled, flying Vahoege Enderguh");
         GuheindeGevecht.reward(player, null, 400);
         helper.assertTrue(GuhQuests.count(player, GuheindeFeature.ENDERGUH_EI.get().asItem()) == 1, "an egg the second time");
-        helper.assertTrue(GuhQuests.saved(player).getInt(GuheindeGevecht.WINS) == 2, "two wins");
+        helper.assertTrue(GuhQuests.saved(player).getIntOr(GuheindeGevecht.WINS, 0) == 2, "two wins");
         guhs.forEach(Entity::discard);
         done(helper, player);
     }
 
     /** The Knabbelkroon: Mika's take half as much again. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theCrownHitsMikasHarder(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         MikaEntity plain = spawn(helper, ModEntities.MIKA.get(), 3.5, 1, 1.5);
@@ -309,7 +306,7 @@ public class GuheindeGameTests {
     }
 
     /** An Enderguh-ei cracks twice and then a baby Vahoege Enderguh hops out. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void anEnderguhEiHatches(GameTestHelper helper) {
         BlockPos egg = new BlockPos(2, 1, 2);
         helper.setBlock(egg, GuheindeFeature.ENDERGUH_EI.get());
@@ -326,7 +323,7 @@ public class GuheindeGameTests {
     }
 
     /** The Guhvleugels glide like an elytra and are mended with Mika's vet. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhvleugelsGlide(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         ItemStack wings = new ItemStack(GuheindeFeature.GUHVLEUGELS.get());
@@ -338,7 +335,7 @@ public class GuheindeGameTests {
     }
 
     /** Big Mika always cries Mika-tranen when beaten. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void bigMikaCriesMikaTranen(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         MikaEntity mika = spawn(helper, ModEntities.MIKA.get(), 3.5, 1, 3.5);
@@ -353,7 +350,7 @@ public class GuheindeGameTests {
     }
 
     /** The recipes: the eye, the crystal; and the Knabbelkelder library chest holds the Guheinde book. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void recipesAndTheLibraryBook(GameTestHelper helper) {
         var recipes = helper.getLevel().getRecipeManager();
         helper.assertTrue(recipes.byKey(Guhs.id("oog_van_vadsig")).isPresent(), "the eye recipe");
@@ -369,7 +366,7 @@ public class GuheindeGameTests {
     }
 
     /** The Knabbelberg template has the size GuheindeGevecht counts on; the Knabbelkelder and Mika-vesting exist. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theTemplatesAreThere(GameTestHelper helper) {
         var manager = helper.getLevel().getStructureManager();
         var berg = manager.get(Guhs.id("guheinde_knabbelberg"));
@@ -386,7 +383,7 @@ public class GuheindeGameTests {
     // --- the Guheinde itself (dev server only: the game test server has no mod dimensions) ------------------------------
 
     /** The island: the Knabbelberg, eight pillars with crystals, Opper-Mika on his Enderguh; the win opens everything. */
-    @GameTest(template = EMPTY, required = false, timeoutTicks = 400)
+    @GuhTest(template = EMPTY, required = false, timeoutTicks = 400)
     public static void theGuheindeIslandAndTheFight(GameTestHelper helper) {
         ServerLevel level = helper.getLevel().getServer().getLevel(GuheindeFeature.GUHEINDE);
         if (level == null) {
@@ -406,7 +403,7 @@ public class GuheindeGameTests {
     }
 
     /** Dying in the Guheinde: you keep everything except your kaasknabbels. */
-    @GameTest(template = EMPTY, required = false)
+    @GuhTest(template = EMPTY, required = false)
     public static void dyingInTheGuheindeKeepsYourThings(GameTestHelper helper) {
         ServerLevel level = helper.getLevel().getServer().getLevel(GuheindeFeature.GUHEINDE);
         if (level == null) {
@@ -415,7 +412,7 @@ public class GuheindeGameTests {
         }
         ServerPlayer player = net.neoforged.neoforge.common.util.FakePlayerFactory.get(level, new com.mojang.authlib.GameProfile(
                 java.util.UUID.randomUUID(), "guheinde_test"));
-        player.moveTo(GuheindeGevecht.ARRIVAL_X + 0.5, 100, 0.5);
+        player.snapTo(GuheindeGevecht.ARRIVAL_X + 0.5, 100, 0.5);
         java.util.List<ItemEntity> drops = new java.util.ArrayList<>(List.of(
                 new ItemEntity(level, 0, 100, 0, new ItemStack(ModItems.KAAS_KNABBELS.get(), 5)),
                 new ItemEntity(level, 0, 100, 0, new ItemStack(net.minecraft.world.item.Items.DIAMOND_SWORD))));
@@ -429,9 +426,9 @@ public class GuheindeGameTests {
     // --- 2.8: half the Mika-vestingen have a vetschip, and Terugpoorten on the outer islands -----------------------------
 
     /** The start pool of the Mika-vesting: the tower alone and the tower with the vetschip, 1:1. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guheindeVestingIsHalfShips(GameTestHelper helper) {
-        var pool = helper.getLevel().registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.TEMPLATE_POOL)
+        var pool = helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.TEMPLATE_POOL)
                 .get(Guhs.id("mika_vesting/start"));
         helper.assertTrue(pool != null, "the vesting's start pool");
         int ship = 0, tower = 0;
@@ -456,7 +453,7 @@ public class GuheindeGameTests {
      * The Terugpoort: its template (a gate of twelve poort blocks that lead back), its structure (only on the outer
      * islands, like the vestingen), its structure set (salt 20280901, kept away from the vestingen).
      */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guheindeTerugpoortTemplateAndWorldgen(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         var template = level.getStructureManager().get(Guhs.id("guheinde_terugpoort"));
@@ -468,7 +465,7 @@ public class GuheindeGameTests {
             var be = net.minecraft.world.level.block.entity.BlockEntity.loadStatic(info.pos(), info.state(), info.nbt(), level.registryAccess());
             helper.assertTrue(be instanceof KnabbelpoortBlock.Entity poort && poort.terug, "every poort block leads back: " + info.nbt());
         }
-        var structure = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).get(Guhs.id("guheinde_terugpoort"));
+        var structure = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).get(Guhs.id("guheinde_terugpoort"));
         helper.assertTrue(structure instanceof GuheindeEilandStructure, "only on the outer islands: " + structure);
         var set = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/data/guhs/worldgen/structure_set/guheinde_terugpoort.json");
         helper.assertTrue(set != null, "the structure set");
@@ -477,7 +474,7 @@ public class GuheindeGameTests {
         helper.assertTrue(placement.get("spacing").getAsInt() <= 32, "common: every few hundred blocks");
         helper.assertTrue("guhs:mika_vesting".equals(placement.getAsJsonObject("exclusion_zone").get("other_set").getAsString()),
                 "kept away from the Mika-vestingen");
-        helper.assertTrue(level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE_SET)
+        helper.assertTrue(level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE_SET)
                 .containsKey(Guhs.id("guheinde_terugpoort")), "the set is loaded");
         helper.succeed();
     }
@@ -487,27 +484,27 @@ public class GuheindeGameTests {
      * platform, on solid ground with room to stand, never in the void (dev server only: needs the Guheinde; forceload
      * the chunks at 0,0 .. 80,0 and 1504,0 first).
      */
-    @GameTest(template = EMPTY, required = false, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, required = false, timeoutTicks = 200)
     public static void guheindeTerugpoortBringsYouHome(GameTestHelper helper) {
         ServerLevel level = helper.getLevel().getServer().getLevel(GuheindeFeature.GUHEINDE);
         if (level == null) {
             helper.fail("no Guheinde dimension (run this on the dev server)");
             return;
         }
-        BlockPos at = new BlockPos(1504, level.getMaxBuildHeight() - 20, 8);
+        BlockPos at = new BlockPos(1504, level.getMaxY() + 1 - 20, 8);
         BlockState old = level.getBlockState(at);
         level.setBlock(at, GuheindeFeature.KNABBELPOORT.get().defaultBlockState(), 3);
         try {
             helper.assertTrue(level.getBlockEntity(at) instanceof KnabbelpoortBlock.Entity, "a poort");
             ((KnabbelpoortBlock.Entity) level.getBlockEntity(at)).terug = true;
-            MikaEntity someone = ModEntities.MIKA.get().create(level);
-            someone.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+            MikaEntity someone = ModEntities.MIKA.get().create(level, EntitySpawnReason.TRIGGERED);
+            someone.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
             var transition = GuheindeFeature.KNABBELPOORT.get().getPortalDestination(level, someone, at);
             helper.assertTrue(transition != null && transition.newLevel() == level, "it leads somewhere in the Guheinde");
             Vec3 p = transition.pos();
             helper.assertTrue(p.x * p.x + p.z * p.z < 150 * 150, "on the main island: " + p);
             BlockPos stand = BlockPos.containing(p);
-            helper.assertTrue(p.y > level.getMinBuildHeight() + 20, "not in the void: " + p);
+            helper.assertTrue(p.y > level.getMinY() + 20, "not in the void: " + p);
             helper.assertTrue(level.getBlockState(stand.below()).isSolid(), "solid ground under your feet at " + stand);
             helper.assertTrue(level.getBlockState(stand).isAir() && level.getBlockState(stand.above()).isAir(), "room to stand at " + stand);
             someone.discard();

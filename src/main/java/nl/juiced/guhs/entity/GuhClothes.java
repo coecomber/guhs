@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import nl.juiced.guhs.Guhs;
 
 /**
@@ -394,7 +394,7 @@ public enum GuhClothes {
         return name().toLowerCase(Locale.ROOT);
     }
 
-    public ResourceLocation texture() {
+    public Identifier texture() {
         return Guhs.id("textures/entity/guh_clothes/" + id() + ".png");
     }
 

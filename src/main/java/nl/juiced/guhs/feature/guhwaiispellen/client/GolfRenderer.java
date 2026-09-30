@@ -9,11 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -33,7 +33,7 @@ import org.joml.Matrix4f;
  * its own ride's step (smooth), the others the board's synced step.
  */
 public final class GolfRenderer {
-    public static final ResourceLocation TEXTUUR = Guhs.id("textures/misc/guhwaiispellen_golf.png");
+    public static final Identifier TEXTUUR = Guhs.id("textures/misc/guhwaiispellen_golf.png");
     /** The profile: blocks from the crest (below 0: the face towards the beach). */
     private static final double[] X = {-5.2, -4.2, -3.4, -2.7, -2.1, -1.6, -1.15, -0.75, -0.4, -0.12, 0.0, 0.35, 0.9, 1.8, 3.0, 4.6, 6.6, 9.0, 12.0, 15.5};
     private static final Map<Long, SurfGolven> GOLVEN = new HashMap<>();

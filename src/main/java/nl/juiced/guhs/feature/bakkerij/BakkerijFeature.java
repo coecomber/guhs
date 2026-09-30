@@ -38,6 +38,8 @@ import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * De Knabbelbakkerij (2.8, plein slot bakkerij of the Knuffeldal town): a giant kaasknabbel bread with a guh face in
  * the crust and a chimney puffing knabbelwolkjes. Inside Bakker Korstje (NPC BAKKERGUH, {@link BakkerijRole}) runs his
@@ -125,7 +127,7 @@ public final class BakkerijFeature {
     // --- the customers --------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<BakkerijKlant>> KLANT = ENTITY_TYPES.register("bakkerij_klant",
             () -> EntityType.Builder.of(BakkerijKlant::new, MobCategory.MISC).sized(0.9f, 0.9f).clientTrackingRange(8).updateInterval(2)
-                    .build("guhs:bakkerij_klant"));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.parse("guhs:bakkerij_klant"))));
 
     // --- particles and sounds -------------------------------------------------------------------------------------------
     /** A little cloud shaped like a kaasknabbel: the bakery's chimney puffs them. */

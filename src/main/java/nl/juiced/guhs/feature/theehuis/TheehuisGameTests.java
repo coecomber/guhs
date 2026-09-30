@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.theehuis;
 import java.util.EnumSet;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,8 +15,6 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -38,8 +36,6 @@ import nl.juiced.guhs.registry.ModItems;
  * the feest_theeservies while THEESERVIES is open, and everybody stands up again), no kransje without tamed guhs, the
  * points, Mevrouw Theelepel's role and the building template. The room theehuis_test_kamer: four tables and eight chairs.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class TheehuisGameTests {
     private static final String KAMER = "theehuis_test_kamer";
     private static final String EMPTY = "empty";
@@ -50,7 +46,7 @@ public class TheehuisGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -66,7 +62,7 @@ public class TheehuisGameTests {
         return npc;
     }
 
-    @GameTest(template = KAMER)
+    @GuhTest(template = KAMER)
     public static void theehuisTheeZetten(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(3, 2, 3));
         try {
@@ -91,7 +87,7 @@ public class TheehuisGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = KAMER)
+    @GuhTest(template = KAMER)
     public static void theehuisGezelligTheekransje(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(10, 2, 10));
         GuhNpcEntity npc = theelepel(helper);
@@ -161,7 +157,7 @@ public class TheehuisGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = KAMER)
+    @GuhTest(template = KAMER)
     public static void theehuisGeenGuhsGeenKransje(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(10, 2, 10));
         GuhNpcEntity npc = theelepel(helper);
@@ -175,7 +171,7 @@ public class TheehuisGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theehuisPunten(GameTestHelper helper) {
         helper.assertTrue(Theekransje.punten(true, false) == Theekransje.PUNT_THEE && Theekransje.punten(true, true) == Theekransje.PUNT_BIJZONDER
                 && Theekransje.punten(false, false) == Theekransje.PUNT_GEBAK && Theekransje.punten(false, true) == Theekransje.PUNT_ZELFGEBAKKEN,
@@ -185,7 +181,7 @@ public class TheehuisGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theehuisGebouw(GameTestHelper helper) {
         StructureTemplate t = helper.getLevel().getStructureManager().get(Guhs.id("knuffeldal_stadje/theehuis")).orElse(null);
         helper.assertTrue(t != null, "the template exists");

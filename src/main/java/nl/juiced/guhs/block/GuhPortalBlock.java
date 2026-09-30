@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.world.GuhPortalForcer;
@@ -88,7 +88,7 @@ public class GuhPortalBlock extends Block implements Portal {
 
     @Nullable
     @Override
-    public DimensionTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
+    public TeleportTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
         return GuhPortalForcer.getDestination(level, entity, pos);
     }
 

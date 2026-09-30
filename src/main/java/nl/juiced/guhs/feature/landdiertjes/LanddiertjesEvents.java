@@ -7,10 +7,10 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
@@ -32,7 +32,7 @@ public final class LanddiertjesEvents {
 
     @SubscribeEvent
     public static void onAdvancement(AdvancementEvent.AdvancementEarnEvent event) {
-        ResourceLocation id = event.getAdvancement().id();
+        Identifier id = event.getAdvancement().id();
         if (Guhs.MODID.equals(id.getNamespace()) && event.getEntity() instanceof ServerPlayer p) {
             String zichtbaar = GEZIEN.get(id.getPath());
             if (zichtbaar != null) {
@@ -55,7 +55,7 @@ public final class LanddiertjesEvents {
                 })))
                 .then(Commands.literal("schouder").executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
-                    PluiseekhoorntjeEntity e = LanddiertjesFeature.PLUISEEKHOORNTJE.get().create(p.serverLevel());
+                    PluiseekhoorntjeEntity e = LanddiertjesFeature.PLUISEEKHOORNTJE.get().create(p.level(), EntitySpawnReason.TRIGGERED);
                     if (e == null || Schouder.heeft(p)) {
                         return 0;
                     }
@@ -81,16 +81,16 @@ public final class LanddiertjesEvents {
 
     /** A tame row: egeltje, the four bunnies, eekhoorntje, Sjokkel (facing south), 1.5 blocks apart along x. */
     static int rij(ServerPlayer owner, BlockPos pos) {
-        ServerLevel level = owner.serverLevel();
+        ServerLevel level = owner.level();
         int x = 0;
-        for (Landdiertje d : new Landdiertje[]{LanddiertjesFeature.PLUISEGELTJE.get().create(level), maakKonijn(level, GuhKonijntjeEntity.Kleur.ROZE),
+        for (Landdiertje d : new Landdiertje[]{LanddiertjesFeature.PLUISEGELTJE.get().create(level, EntitySpawnReason.TRIGGERED), maakKonijn(level, GuhKonijntjeEntity.Kleur.ROZE),
                 maakKonijn(level, GuhKonijntjeEntity.Kleur.WIT), maakKonijn(level, GuhKonijntjeEntity.Kleur.CHOCO),
-                maakKonijn(level, GuhKonijntjeEntity.Kleur.GRIJS), LanddiertjesFeature.PLUISEEKHOORNTJE.get().create(level),
-                LanddiertjesFeature.SHUCKLE.get().create(level)}) {
+                maakKonijn(level, GuhKonijntjeEntity.Kleur.GRIJS), LanddiertjesFeature.PLUISEEKHOORNTJE.get().create(level, EntitySpawnReason.TRIGGERED),
+                LanddiertjesFeature.SHUCKLE.get().create(level, EntitySpawnReason.TRIGGERED)}) {
             if (d == null) {
                 continue;
             }
-            d.moveTo(pos.getX() + 0.5 + x * 1.5, pos.getY(), pos.getZ() + 0.5, 0f, 0f);
+            d.snapTo(pos.getX() + 0.5 + x * 1.5, pos.getY(), pos.getZ() + 0.5, 0f, 0f);
             d.setYHeadRot(0f);
             d.setYBodyRot(0f);
             d.tame(owner);
@@ -104,9 +104,9 @@ public final class LanddiertjesEvents {
     }
 
     private static GuhKonijntjeEntity maakKonijn(ServerLevel level, GuhKonijntjeEntity.Kleur kleur) {
-        GuhKonijntjeEntity k = LanddiertjesFeature.GUH_KONIJNTJE.get().create(level);
+        GuhKonijntjeEntity k = LanddiertjesFeature.GUH_KONIJNTJE.get().create(level, EntitySpawnReason.TRIGGERED);
         if (k != null) {
-            k.finalizeSpawn(level, level.getCurrentDifficultyAt(k.blockPosition()), MobSpawnType.COMMAND, null);
+            k.finalizeSpawn(level, level.getCurrentDifficultyAt(k.blockPosition()), EntitySpawnReason.COMMAND, null);
             k.setKleur(kleur);
         }
         return k;

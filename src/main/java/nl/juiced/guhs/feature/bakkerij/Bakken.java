@@ -209,11 +209,11 @@ public final class Bakken {
         BakkerijGame game = BakkerijGame.gameOf(player);
         boolean spel = game != null && game.oven(oven);
         if (game != null && !spel) {
-            player.displayClientMessage(Component.translatable("gui.guhs.bakkerij.andere_oven").withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.bakkerij.andere_oven").withStyle(ChatFormatting.GOLD));
             return;
         }
         if (!spel && Minigames.playing(player) != null) {
-            player.displayClientMessage(Component.translatable("quest.guhs.minigame.busy").withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.minigame.busy").withStyle(ChatFormatting.GOLD));
             return;
         }
         CompoundTag data = status(player, spel ? game : null);
@@ -261,7 +261,7 @@ public final class Bakken {
     /** Slide it in: returns the lang key of why not, or null when it bakes. */
     @Nullable
     public static String start(ServerPlayer player, BlockPos oven, Recept.Deeg deeg, Recept.Vorm vorm, Recept.Topping topping) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (!(level.getBlockState(oven).getBlock() instanceof KnabbelovenBlock) || player.distanceToSqr(oven.getCenter()) > 49) {
             return "gui.guhs.bakkerij.te_ver";
         }
@@ -322,7 +322,7 @@ public final class Bakken {
 
     /** Takes a bake out with a given quality (the tests; also the burnt one that was forgotten). */
     static Uit klaar(ServerPlayer player, Bak bak, Recept.Kwaliteit k) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         BlockPos oven = bak.oven();
         level.playSound(null, oven, BakkerijFeature.OVEN_DING.get(), SoundSource.BLOCKS, 1f, k == Recept.Kwaliteit.PERFECT ? 1.5f : 1.1f);
         if (k == Recept.Kwaliteit.AANGEBRAND) {
@@ -352,7 +352,7 @@ public final class Bakken {
         }
         if (aantal > 0 && bak.meel()) {   // 2.9: baked with knabbelmeel from a guh-molentje
             aantal *= MEEL_KEER;
-            player.displayClientMessage(Component.translatable("gui.guhs.guhpolder.meel_dubbel").withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.guhpolder.meel_dubbel").withStyle(ChatFormatting.AQUA));
         }
         if (aantal > 0) {
             Minigames.give(player, new ItemStack(BakkerijFeature.bakje(bak.recept()), aantal));
@@ -397,7 +397,7 @@ public final class Bakken {
         if (p.level().getGameTime() - bak.start() > bak.recept().bakTicks + VERGETEN) {
             BAKKEN.remove(p.getUUID());
             klaar(p, bak, Recept.Kwaliteit.AANGEBRAND);
-            p.displayClientMessage(Component.translatable("gui.guhs.bakkerij.vergeten").withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.bakkerij.vergeten").withStyle(ChatFormatting.GRAY));
             nl.juiced.guhs.network.ModNetworking.sendTo(p, new BakkerijPayloads.Status(uitStatus(p, new Uit(bak.recept(), Recept.Kwaliteit.AANGEBRAND, 0, bak.spel()))));
         }
     }

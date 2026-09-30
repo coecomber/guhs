@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,8 +19,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -44,8 +42,6 @@ import nl.juiced.guhs.registry.ModItems;
  * lab floor: the kloontank at helper (4, 2, 4), the knabbelschaal at (10, 2, 10), note spot 3 at (10, 2, 3), parts crate 2
  * at (11, 2, 3)), mewtwo_test_wei (20 x 20 grass).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class MewtwoGameTests {
     private static final String LAB = "mewtwo_test_lab", WEI = "mewtwo_test_wei", BATCH = "mewtwo";
 
@@ -55,7 +51,7 @@ public class MewtwoGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         MewtwoVoortgang.wis(p);
         VerhaalGuhs.vergeet(p, VerhaalGuh.MEWTWO);
         Praat.vergeet(p);
@@ -72,7 +68,7 @@ public class MewtwoGameTests {
 
     static int tel(ServerPlayer p, java.util.function.Predicate<ItemStack> wat) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (!s.isEmpty() && wat.test(s)) {
                 n += s.getCount();
             }
@@ -95,7 +91,7 @@ public class MewtwoGameTests {
     // =================================================================================================================
 
     /** The notes (each once, the note spot block too), the professor's memory (the petje), the parts and the tank (the pakje, Mieuwguh). */
-    @GameTest(template = LAB, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = LAB, batch = BATCH, timeoutTicks = 200)
     public static void mewtwoNotitiesEnTank(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(7, 1, 7));
         ServerLevel level = helper.getLevel();
@@ -149,7 +145,7 @@ public class MewtwoGameTests {
     }
 
     /** The big meal: a double portion (knabbels + snacks, in bits), then the Guhtwo is tameable once; not for another player. */
-    @GameTest(template = LAB, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = LAB, batch = BATCH, timeoutTicks = 200)
     public static void mewtwoMaaltijdEnEenKeerTemmen(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(8, 1, 10)), b = speler(helper, new BlockPos(12, 1, 12));
         ServerLevel level = helper.getLevel();
@@ -190,7 +186,7 @@ public class MewtwoGameTests {
     // =================================================================================================================
 
     /** Knabbel telekinesis: an item 7 blocks away floats to it, one 10.5 blocks away stays; not for the story copy. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 200)
     public static void mewtwoTelekineseAchtBlokken(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(18, 1, 18));
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 1, 10));
@@ -228,7 +224,7 @@ public class MewtwoGameTests {
     }
 
     /** x2: every snack gives twice the VOEREN hearts, and the day cap doubles too; hearts never go down; the x2 moment. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 200)
     public static void mewtwoX2Hartjes(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(10, 2, 10));
         GuhEntity gewoon = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 2, 4));
@@ -265,7 +261,7 @@ public class MewtwoGameTests {
     }
 
     /** Mieuwguh floats round the island only for players who reached the meal of the story; she leaves when nobody like that is near. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 200)
     public static void mewtwoMewAlleenNaHetVerhaal(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(10, 2, 10));
         BlockPos midden = helper.absolutePos(new BlockPos(10, 6, 10));
@@ -295,7 +291,7 @@ public class MewtwoGameTests {
     }
 
     /** The story copy: sulky before the meal, never tamed by knabbels; the variant's behaviour and outfits are registered. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void mewtwoKopieEnGedrag(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(10, 2, 10));
         GuhEntity kopie = VerhaalGuhs.maakKopie(helper.getLevel(), VerhaalGuh.MEWTWO, helper.absolutePos(new BlockPos(5, 1, 5)));
@@ -320,7 +316,7 @@ public class MewtwoGameTests {
     }
 
     /** The kloon_eiland template: 6 note spots (1..6), 4 parts crates (1..4), the tank (+26 glass parts), the bowl, 5-8 shuckle plekjes. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void mewtwoEilandTemplate(GameTestHelper helper) {
         StructureTemplate t = helper.getLevel().getStructureManager().get(Guhs.id("kloon_eiland")).orElse(null);
         helper.assertTrue(t != null && t.getSize().getX() == 80 && t.getSize().getZ() == 80, "the template exists (80 x 80)");

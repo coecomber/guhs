@@ -42,6 +42,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.NpcRole;
 
+import net.minecraft.resources.Identifier;
 /**
  * Het Kaasmoeras: a misty, bubbling swamp biome in the Guhmension (tools/features/kaasmoeras.py makes the biome, the
  * pools and the paalhut).
@@ -97,16 +98,16 @@ public final class KaasmoerasFeature {
     // --- entities -------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<KikkerguhEntity>> KIKKERGUH = ENTITY_TYPES.register("kikkerguh",
             () -> EntityType.Builder.of(KikkerguhEntity::new, MobCategory.CREATURE).sized(0.6f, 0.8f).eyeHeight(0.55f)
-                    .clientTrackingRange(10).build(Guhs.id("kikkerguh").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("kikkerguh"))));
     public static final DeferredHolder<EntityType<?>, EntityType<KaasmotEntity>> KAASMOT = ENTITY_TYPES.register("kaasmot",
             () -> EntityType.Builder.of(KaasmotEntity::new, MobCategory.AMBIENT).sized(0.4f, 0.35f).eyeHeight(0.2f)
-                    .clientTrackingRange(6).build(Guhs.id("kaasmot").toString()));
+                    .clientTrackingRange(6).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("kaasmot"))));
     public static final DeferredHolder<EntityType<?>, EntityType<MoerasheksMikaEntity>> MOERASHEKS_MIKA = ENTITY_TYPES.register("moerasheks_mika",
             () -> EntityType.Builder.of(MoerasheksMikaEntity::new, MobCategory.MONSTER).sized(0.9f, 1.3f).eyeHeight(0.8f)
-                    .clientTrackingRange(10).build(Guhs.id("moerasheks_mika").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("moerasheks_mika"))));
     public static final DeferredHolder<EntityType<?>, EntityType<VadsverdrijvendDrankjeEntity>> DRANKJE = ENTITY_TYPES.register("vadsverdrijvend_drankje",
             () -> EntityType.Builder.<VadsverdrijvendDrankjeEntity>of(VadsverdrijvendDrankjeEntity::new, MobCategory.MISC).sized(0.25f, 0.25f)
-                    .clientTrackingRange(4).updateInterval(10).build(Guhs.id("vadsverdrijvend_drankje").toString()));
+                    .clientTrackingRange(4).updateInterval(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vadsverdrijvend_drankje"))));
 
     public static final DeferredItem<DeferredSpawnEggItem> KIKKERGUH_SPAWN_EGG = ITEMS.registerItem("kikkerguh_spawn_egg",
             p -> new DeferredSpawnEggItem(KIKKERGUH, 0xF08CB4, 0x9CC84A, p));

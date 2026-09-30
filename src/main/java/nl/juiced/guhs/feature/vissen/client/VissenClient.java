@@ -2,7 +2,7 @@ package nl.juiced.guhs.feature.vissen.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FishingRodItem;
 import net.neoforged.bus.api.IEventBus;
@@ -18,7 +18,7 @@ public final class VissenClient {
 
     private static void clientSetup(FMLClientSetupEvent event) {
         // like the vanilla rod: the line is out -> the "cast" model
-        event.enqueueWork(() -> ItemProperties.register(VissenFeature.GUHVIS_HENGEL.get(), ResourceLocation.withDefaultNamespace("cast"),
+        event.enqueueWork(() -> ItemProperties.register(VissenFeature.GUHVIS_HENGEL.get(), Identifier.withDefaultNamespace("cast"),
                 (stack, level, entity, seed) -> {
                     if (!(entity instanceof Player player) || player.fishing == null) {
                         return 0f;

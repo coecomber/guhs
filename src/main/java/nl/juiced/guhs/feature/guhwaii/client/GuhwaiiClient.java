@@ -25,7 +25,7 @@ import nl.juiced.guhs.feature.guhwaii.GuhwaiiPayloads;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.verhaal.VerhaalVlaggen;
 import nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk;
-import software.bernie.geckolib.cache.object.GeoBone;
+import com.geckolib.cache.model.GeoBone;
 
 /**
  * Client side of Guhwai'i: the looks of Lilo-guh (a red dress with white leaves, long black hair, a pink hibiscus behind her

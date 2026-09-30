@@ -38,6 +38,8 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The questline "Baltoguh en Nomguh" (DESIGN_30 §2, CONTRACT_30 §6.1), per player in {@code GuhQuests.saved(p)}:
  * <ol start="0">
@@ -77,7 +79,7 @@ public final class BaltoVerhaal {
     // =================================================================================================================
 
     public static int stap(ServerPlayer p) {
-        return GuhQuests.saved(p).getInt(STAP);
+        return GuhQuests.saved(p).getIntOr(STAP, 0);
     }
 
     public static void zet(ServerPlayer p, int stap) {
@@ -85,7 +87,7 @@ public final class BaltoVerhaal {
     }
 
     public static boolean isHeld(ServerPlayer p) {
-        return GuhQuests.saved(p).getBoolean(HELD);
+        return GuhQuests.saved(p).getBooleanOr(HELD, false);
     }
 
     /** (Tests / ops) forget everything of this questline (Baltoguh's release and taming too). */
@@ -213,7 +215,7 @@ public final class BaltoVerhaal {
     static boolean start(ServerPlayer p) {
         GuhEntity balto = baltoKopie(p);
         if (!SleeTocht.startMedicijn(p, balto)) {
-            p.displayClientMessage(Component.translatable("gui.guhs.balto.slee_niet").withStyle(ChatFormatting.AQUA), false);
+            p.sendSystemMessage(Component.translatable("gui.guhs.balto.slee_niet").withStyle(ChatFormatting.AQUA));
             return false;
         }
         if (stap(p) < HEEN) {
@@ -237,7 +239,7 @@ public final class BaltoVerhaal {
                     zet(p, HEEN);
                 }
                 if (stap(p) == HEEN) {
-                    p.displayClientMessage(Component.translatable("gui.guhs.balto.moment.start").withStyle(ChatFormatting.AQUA), false);
+                    p.sendSystemMessage(Component.translatable("gui.guhs.balto.moment.start").withStyle(ChatFormatting.AQUA));
                     grant(p, "balto_tocht");
                 }
             }
@@ -266,8 +268,8 @@ public final class BaltoVerhaal {
                 if (stap == HEEN || stap == TERUG) {
                     zet(p, KLAAR_VOOR_TOCHT);
                     neemKist(p);
-                    p.displayClientMessage(Component.translatable(m == SleeTocht.Moment.TE_LAAT ? "gui.guhs.balto.moment.te_laat"
-                            : "gui.guhs.balto.moment.gestopt").withStyle(ChatFormatting.LIGHT_PURPLE), false);
+                    p.sendSystemMessage(Component.translatable(m == SleeTocht.Moment.TE_LAAT ? "gui.guhs.balto.moment.te_laat"
+                            : "gui.guhs.balto.moment.gestopt").withStyle(ChatFormatting.LIGHT_PURPLE));
                     GuhQuests.hint(p, "gui.guhs.balto.hint.start");
                 }
             }
@@ -304,18 +306,18 @@ public final class BaltoVerhaal {
     /** The white wolf-guh (a glowing NPC for this player, gone after the howl or after {@link #WOLF_TICKS}). */
     @Nullable
     static GuhNpcEntity spawnWolf(ServerPlayer p) {
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         Vec3 look = p.getLookAngle().multiply(1, 0, 1);
         look = look.lengthSqr() < 1e-4 ? new Vec3(0, 0, 1) : look.normalize();
         Vec3 at = p.position().add(look.scale(6));
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) Math.floor(at.x), (int) Math.floor(at.z));
-        GuhNpcEntity wolf = ModEntities.GUH_NPC.get().create(level);
+        GuhNpcEntity wolf = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
         if (wolf == null) {
             return null;
         }
         wolf.setKind(GuhNpcEntity.Kind.WITTE_WOLFGUH);
-        wolf.moveTo(at.x, Math.abs(y - p.getY()) < 6 ? y : p.getY(), at.z, (float) Math.toDegrees(Math.atan2(look.x, -look.z)), 0f);
-        wolf.roleData.putUUID(WOLF_VOOR, p.getUUID());
+        wolf.snapTo(at.x, Math.abs(y - p.getY()) < 6 ? y : p.getY(), at.z, (float) Math.toDegrees(Math.atan2(look.x, -look.z)), 0f);
+        wolf.roleData.store(WOLF_VOOR, UUIDUtil.CODEC, p.getUUID());
         wolf.roleData.putLong(WOLF_TOT, level.getGameTime() + WOLF_TICKS);
         level.addFreshEntity(wolf);
         level.sendParticles(BaltoFeature.WOLFGLANS.get(), wolf.getX(), wolf.getY() + 1, wolf.getZ(), 40, 0.6, 0.8, 0.6, 0.02);
@@ -325,18 +327,18 @@ public final class BaltoVerhaal {
 
     /** "Huil mee!": Baltoguh (and the white wolf-guh) howl, the storm clears, the ride goes on. */
     static void huil(ServerPlayer p) {
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         level.playSound(null, p.blockPosition(), BaltoFeature.HUIL.get(), SoundSource.NEUTRAL, 1.4f, 1.0f);
         for (GuhNpcEntity wolf : level.getEntitiesOfClass(GuhNpcEntity.class, p.getBoundingBox().inflate(40),
-                n -> n.getKind() == GuhNpcEntity.Kind.WITTE_WOLFGUH && n.roleData.hasUUID(WOLF_VOOR) && p.getUUID().equals(n.roleData.getUUID(WOLF_VOOR)))) {
+                n -> n.getKind() == GuhNpcEntity.Kind.WITTE_WOLFGUH && n.roleData.read(WOLF_VOOR, UUIDUtil.CODEC).isPresent() && p.getUUID().equals(n.roleData.read(WOLF_VOOR, UUIDUtil.CODEC).orElseThrow()))) {
             level.playSound(null, wolf.blockPosition(), BaltoFeature.HUIL.get(), SoundSource.NEUTRAL, 1.0f, 1.25f);
             level.sendParticles(BaltoFeature.WOLFGLANS.get(), wolf.getX(), wolf.getY() + 1.2, wolf.getZ(), 60, 0.8, 1.2, 0.8, 0.04);
-            wolf.roleData.putLong(WOLF_TOT, Math.min(wolf.roleData.getLong(WOLF_TOT), level.getGameTime() + 60));   // she fades away
+            wolf.roleData.putLong(WOLF_TOT, Math.min(wolf.roleData.getLongOr(WOLF_TOT, 0L), level.getGameTime() + 60));   // she fades away
         }
         level.sendParticles(ParticleTypes.NOTE, p.getX(), p.getY() + 2.2, p.getZ(), 6, 0.8, 0.3, 0.8, 1);
         if (stap(p) == TERUG) {
             grant(p, "balto_wolf");
-            p.displayClientMessage(Component.translatable("gui.guhs.balto.moment.storm_klaart_op").withStyle(ChatFormatting.AQUA), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.balto.moment.storm_klaart_op").withStyle(ChatFormatting.AQUA));
         }
         SleeTocht.stormKlaartOp(p);
         SleeTocht.verder(p);
@@ -346,7 +348,7 @@ public final class BaltoVerhaal {
     static void aankomst(ServerPlayer p) {
         zet(p, AANGEKOMEN);
         grant(p, "balto_aankomst");
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         Entity steele = npc(p, GuhNpcEntity.Kind.STEELE_MIKA);
         for (GuhEntity guh : level.getEntitiesOfClass(GuhEntity.class, p.getBoundingBox().inflate(24))) {
             level.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + 1, guh.getZ(), 3, 0.3, 0.3, 0.3, 0.02);
@@ -391,7 +393,7 @@ public final class BaltoVerhaal {
         GuhQuests.saved(p).putBoolean(HELD, true);
         p.refreshTabListName();
         grant(p, "balto_held");
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         Vec3 at = bij != null ? bij.position() : p.position();
         level.sendParticles(ParticleTypes.HEART, at.x, at.y + 1.2, at.z, 16, 0.8, 0.6, 0.8, 0.05);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, p.getX(), p.getY() + 1, p.getZ(), 30, 0.8, 0.8, 0.8, 0.1);
@@ -411,7 +413,7 @@ public final class BaltoVerhaal {
         GuhEntity guh = VerhaalGuhs.tem(p, VerhaalGuh.BALTOGUH, p.position().add(look.scale(1.6)));
         if (guh != null) {
             p.level().playSound(null, guh.blockPosition(), BaltoFeature.HUIL.get(), SoundSource.NEUTRAL, 0.6f, 1.3f);
-            p.displayClientMessage(Component.translatable("gui.guhs.balto.getemd").withStyle(ChatFormatting.AQUA), false);
+            p.sendSystemMessage(Component.translatable("gui.guhs.balto.getemd").withStyle(ChatFormatting.AQUA));
         }
         return guh;
     }
@@ -445,14 +447,14 @@ public final class BaltoVerhaal {
     /** The nearest NPC of this kind (within {@link #SPREKERS}), or null. */
     @Nullable
     static GuhNpcEntity npc(ServerPlayer p, GuhNpcEntity.Kind kind) {
-        return p.serverLevel().getEntitiesOfClass(GuhNpcEntity.class, p.getBoundingBox().inflate(SPREKERS), n -> n.getKind() == kind).stream()
+        return p.level().getEntitiesOfClass(GuhNpcEntity.class, p.getBoundingBox().inflate(SPREKERS), n -> n.getKind() == kind).stream()
                 .min(Comparator.comparingDouble(n -> n.distanceToSqr(p))).orElse(null);
     }
 
     /** Baltoguh's nearest story copy (within {@link #SPREKERS}), or null. */
     @Nullable
     static GuhEntity baltoKopie(ServerPlayer p) {
-        List<GuhEntity> list = new ArrayList<>(p.serverLevel().getEntitiesOfClass(GuhEntity.class, p.getBoundingBox().inflate(SPREKERS),
+        List<GuhEntity> list = new ArrayList<>(p.level().getEntitiesOfClass(GuhEntity.class, p.getBoundingBox().inflate(SPREKERS),
                 g -> VerhaalGuhs.kopieVan(g) == VerhaalGuh.BALTOGUH));
         return list.stream().min(Comparator.comparingDouble(g -> g.distanceToSqr(p))).orElse(null);
     }

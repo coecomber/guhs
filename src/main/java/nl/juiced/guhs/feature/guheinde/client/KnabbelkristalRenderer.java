@@ -6,7 +6,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -14,14 +14,14 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EndCrystalRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.guheinde.KnabbelkristalEntity;
 import org.joml.Quaternionf;
 
 /** A knabbelkristal: the end crystal model (spinning cubes on a base) with a cheese-and-knabbel texture, and its beam. */
 public class KnabbelkristalRenderer extends EntityRenderer<KnabbelkristalEntity> {
-    private static final ResourceLocation TEXTURE = Guhs.id("textures/entity/knabbelkristal.png");
+    private static final Identifier TEXTURE = Guhs.id("textures/entity/knabbelkristal.png");
     private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(TEXTURE);
     private static final float SIN_45 = (float) Math.sin(Math.PI / 4);
     private final ModelPart cube, glass, base;
@@ -76,7 +76,7 @@ public class KnabbelkristalRenderer extends EntityRenderer<KnabbelkristalEntity>
     }
 
     @Override
-    public ResourceLocation getTextureLocation(KnabbelkristalEntity entity) {
+    public Identifier getTextureLocation(KnabbelkristalEntity entity) {
         return TEXTURE;
     }
 

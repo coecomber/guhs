@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.piep;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -19,8 +19,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.bakkerij.BakkerijFeature;
@@ -38,8 +36,6 @@ import nl.juiced.guhs.registry.ModItems;
  * filter), the knabbel loot, and the FTB chapter file. (Templates piep_test_wei: grass at helper y 1; piep_test_arena:
  * a 23 x 23 floor at helper y 1 with the kern in the middle.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class PiepGameTests {
     private static final String WEI = "piep_test_wei";
     private static final String ARENA = "piep_test_arena";
@@ -50,7 +46,7 @@ public class PiepGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(1, 2, 1));
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return p;
     }
 
@@ -61,13 +57,13 @@ public class PiepGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id("quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id("quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
     private static int count(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -77,7 +73,7 @@ public class PiepGameTests {
 
     // --- the pieppiepmuisje ------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = WEI, timeoutTicks = 60)
+    @GuhTest(template = WEI, timeoutTicks = 60)
     public static void piepMuisjeAaienEnTemmen(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         PieppiepmuisjeEntity muis = helper.spawn(PiepFeature.PIEPPIEPMUISJE.get(), new BlockPos(4, 2, 4));
@@ -96,7 +92,7 @@ public class PiepGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, timeoutTicks = 60)
+    @GuhTest(template = WEI, timeoutTicks = 60)
     public static void piepMuisjeOppakkenEnNeerzetten(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         PieppiepmuisjeEntity muis = helper.spawn(PiepFeature.PIEPPIEPMUISJE.get(), new BlockPos(4, 2, 4));
@@ -129,7 +125,7 @@ public class PiepGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, timeoutTicks = 60)
+    @GuhTest(template = WEI, timeoutTicks = 60)
     public static void piepVerstoppertje(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         BlockPos pot = new BlockPos(6, 2, 6);
@@ -162,7 +158,7 @@ public class PiepGameTests {
 
     // --- Poepschilly ---------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = WEI, timeoutTicks = 400)
+    @GuhTest(template = WEI, timeoutTicks = 400)
     public static void piepPoepschillyPoetsbeurt(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(5, 2, 5));
@@ -193,7 +189,7 @@ public class PiepGameTests {
         });
     }
 
-    @GameTest(template = WEI, timeoutTicks = 200)
+    @GuhTest(template = WEI, timeoutTicks = 200)
     public static void piepSchillyBestieEnBeef(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(5, 2, 5));
@@ -230,7 +226,7 @@ public class PiepGameTests {
 
     // --- the recipe and the koek ---------------------------------------------------------------------------------------------------
 
-    @GameTest(template = WEI, timeoutTicks = 60)
+    @GuhTest(template = WEI, timeoutTicks = 60)
     public static void piepReceptLerenEnBakken(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         helper.assertTrue(Recept.van(Recept.Deeg.ZOETDEEG, Recept.Vorm.PLAATJE, Recept.Topping.GLAZUUR) == Recept.ROZE_GUH_KOEK
@@ -240,7 +236,7 @@ public class PiepGameTests {
         BlockPos oven = new BlockPos(4, 2, 4);
         helper.setBlock(oven, BakkerijFeature.KNABBELOVEN.get());
         BlockPos abs = helper.absolutePos(oven);
-        p.moveTo(abs.getX() + 1.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 1.5, abs.getY(), abs.getZ() + 0.5);
         helper.assertTrue("gui.guhs.piep.recept_onbekend".equals(Bakken.start(p, abs, Recept.Deeg.ZOETDEEG, Recept.Vorm.PLAATJE, Recept.Topping.GLAZUUR)),
                 "unknown recipe: the oven says no");
         p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(PiepFeature.ROZE_GUH_KOEK_RECEPT.get()));
@@ -253,7 +249,7 @@ public class PiepGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, timeoutTicks = 60)
+    @GuhTest(template = WEI, timeoutTicks = 60)
     public static void piepKoekBakje(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         BlockPos pos = new BlockPos(4, 2, 4);
@@ -287,13 +283,13 @@ public class PiepGameTests {
 
     // --- the nest ---------------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = ARENA, timeoutTicks = 1400)
+    @GuhTest(template = ARENA, timeoutTicks = 1400)
     public static void piepNestGolvenEnOppernabbel(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         p.setGameMode(GameType.CREATIVE);                      // (the knabbels leave a creative player alone)
         ServerLevel level = helper.getLevel();
         BlockPos kern = helper.absolutePos(new BlockPos(11, 1, 11));
-        p.moveTo(kern.getX() + 0.5, kern.getY() + 1, kern.getZ() + 0.5);
+        p.snapTo(kern.getX() + 0.5, kern.getY() + 1, kern.getZ() + 0.5);
         KaasknabbelNest.Gevecht g = KaasknabbelNest.gevecht(level, "test_" + kern.asLong(), kern);
         KaasknabbelNest.start(level, g);
         helper.assertTrue(g.fase() == KaasknabbelNest.Fase.GOLF && g.levend(level) == KaasknabbelNest.GOLVEN[0], "wave 1: four knabbels");
@@ -321,7 +317,7 @@ public class PiepGameTests {
         });
     }
 
-    @GameTest(template = ARENA, timeoutTicks = 100)
+    @GuhTest(template = ARENA, timeoutTicks = 100)
     public static void piepNestTweedeKeerZonderRecept(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos kern = helper.absolutePos(new BlockPos(11, 1, 11));
@@ -337,14 +333,14 @@ public class PiepGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = ARENA, timeoutTicks = 60)
+    @GuhTest(template = ARENA, timeoutTicks = 60)
     public static void piepOppernabbelStampt(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         ServerLevel level = helper.getLevel();
         BozeOppernabbelEntity baas = helper.spawn(PiepFeature.BOZE_OPPERNABBEL.get(), new BlockPos(11, 2, 11));
         baas.setNoAi(true);
         BlockPos at = helper.absolutePos(new BlockPos(13, 2, 11));
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         p.setDeltaMovement(Vec3.ZERO);
         baas.slam(level);                                        // (the test player counts as creative: the wave passes it)
         helper.assertTrue(p.getDeltaMovement().lengthSqr() < 1e-6, "creative players are left alone");
@@ -359,7 +355,7 @@ public class PiepGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, timeoutTicks = 40)
+    @GuhTest(template = WEI, timeoutTicks = 40)
     public static void piepKnabbelsLatenKnabbelsVallen(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         var table = level.getServer().reloadableRegistries().getLootTable(PiepFeature.BOZE_KAASKNABBEL.get().getDefaultLootTable());
@@ -378,7 +374,7 @@ public class PiepGameTests {
 
     // --- the spawn hook -----------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = WEI, timeoutTicks = 40)
+    @GuhTest(template = WEI, timeoutTicks = 40)
     public static void piepSpawnHookKansEnDimensie(GameTestHelper helper) {
         RandomSource random = RandomSource.create(2811);
         int ja = 0;
@@ -399,7 +395,7 @@ public class PiepGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, timeoutTicks = 40)
+    @GuhTest(template = WEI, timeoutTicks = 40)
     public static void piepFtbHoofdstuk(GameTestHelper helper) {
         try {
             java.nio.file.Path quests = java.nio.file.Files.createTempDirectory("guhs-ftbpiep");
@@ -430,7 +426,7 @@ public class PiepGameTests {
     // --- 2.10: names above their heads ------------------------------------------------------------------------------------
 
     /** Schilly, Poepschilly and the muisje show their name like a guh; not while the muisje hides or a schilly is inside a guh. */
-    @GameTest(template = WEI, timeoutTicks = 40)
+    @GuhTest(template = WEI, timeoutTicks = 40)
     public static void piepNamenBovenHetHoofd(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         PieppiepmuisjeEntity muis = helper.spawn(PiepFeature.PIEPPIEPMUISJE.get(), new BlockPos(3, 2, 3));

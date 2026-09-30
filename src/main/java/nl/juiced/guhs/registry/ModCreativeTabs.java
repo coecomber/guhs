@@ -21,12 +21,12 @@ public final class ModCreativeTabs {
                 nl.juiced.guhs.feature.Features.creative(output::accept);
                 // the guh paintings: a painting item that always hangs that picture
                 params.holders().lookup(Registries.PAINTING_VARIANT).ifPresent(paintings -> paintings.listElements()
-                        .filter(p -> p.key().location().getNamespace().equals(Guhs.MODID))
+                        .filter(p -> p.key().identifier().getNamespace().equals(Guhs.MODID))
                         .forEach(p -> {
                             net.minecraft.world.item.ItemStack stack = new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.PAINTING);
                             net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
                             tag.putString("id", "minecraft:painting");
-                            tag.putString("variant", p.key().location().toString());
+                            tag.putString("variant", p.key().identifier().toString());
                             stack.set(net.minecraft.core.component.DataComponents.ENTITY_DATA, net.minecraft.world.item.component.CustomData.of(tag));
                             output.accept(stack);
                         }));

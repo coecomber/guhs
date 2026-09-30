@@ -102,7 +102,7 @@ public final class Timmerguh implements NpcRole {
                 if (heeftBewoner(player)) {
                     klaar(npc, player);
                 } else {
-                    if (Huisjes.vanEigenaar(player.server, player.getUUID()).isEmpty()
+                    if (Huisjes.vanEigenaar(player.level().getServer(), player.getUUID()).isEmpty()
                             && GuhQuests.count(player, HuisjeFeature.KLEIN.get().asItem()) == 0) {
                         Minigames.give(player, new ItemStack(HuisjeFeature.KLEIN.get()));      // (lost it? here's another one)
                     }
@@ -221,15 +221,15 @@ public final class Timmerguh implements NpcRole {
 
     /** Band moment: one of your guhs moved into a huisje. At step 3 that's what the Timmerguh wanted to hear. */
     static void moment(Mob guh, @Nullable ServerPlayer speler, Moment m, String waarde) {
-        if (m != Moment.HUISJE_IN || guh.getServer() == null) {
+        if (m != Moment.HUISJE_IN || guh.level().getServer() == null) {
             return;
         }
         ServerPlayer eigenaar = speler != null ? speler : Band.eigenaarOnline(guh);
         if (eigenaar != null && TimmerguhVoortgang.stap(eigenaar) == TimmerguhVoortgang.BEWONER) {
             GuhAdvancements.grant(eigenaar, "timmerguh_bewoner");
             GidsFeature.grant(eigenaar, "verhalen/timmerguh_bewoner");
-            eigenaar.displayClientMessage(Component.translatable("gui.guhs.timmerguh.vertel_het", guh.getDisplayName())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), false);
+            eigenaar.sendSystemMessage(Component.translatable("gui.guhs.timmerguh.vertel_het", guh.getDisplayName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -271,14 +271,14 @@ public final class Timmerguh implements NpcRole {
             npc.roleData.putIntArray("Delen", delen);
         }
         List<BlockPos> out = new ArrayList<>();
-        for (long l : npc.roleData.getLongArray("Plekken")) {
+        for (long l : npc.roleData.getLongArray("Plekken").orElse(new long[0])) {
             out.add(BlockPos.of(l));
         }
         return out;
     }
 
     private static DakplekBlock.Deel deel(GuhNpcEntity npc, int i) {
-        int[] delen = npc.roleData.getIntArray("Delen");
+        int[] delen = npc.roleData.getIntArray("Delen").orElse(new int[0]);
         DakplekBlock.Deel[] alle = DakplekBlock.Deel.values();
         return i < delen.length ? alle[Math.floorMod(delen[i], alle.length)] : DakplekBlock.Deel.DAK;
     }
@@ -302,7 +302,7 @@ public final class Timmerguh implements NpcRole {
             level.setBlock(ps.get(i), TimmerguhFeature.DAKPLEK.get().defaultBlockState().setValue(DakplekBlock.DEEL, deel(npc, i)), 3);
         }
         if (npc.roleData.contains("Vlag")) {
-            BlockPos v = BlockPos.of(npc.roleData.getLong("Vlag"));
+            BlockPos v = BlockPos.of(npc.roleData.getLongOr("Vlag", 0L));
             if (level.getBlockState(v).getBlock() instanceof BannerBlock) {
                 level.setBlock(v, Blocks.AIR.defaultBlockState(), 3);
             }
@@ -359,7 +359,7 @@ public final class Timmerguh implements NpcRole {
             }
             int open = open(npc);
             if (open > 0) {
-                player.displayClientMessage(Component.translatable("gui.guhs.timmerguh.nog", open).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.timmerguh.nog", open).withStyle(ChatFormatting.LIGHT_PURPLE));
                 return;
             }
             vlag(npc);
@@ -386,7 +386,7 @@ public final class Timmerguh implements NpcRole {
 
     static int planken(ServerPlayer player) {
         int n = 0;
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (s.is(ItemTags.PLANKS)) {
                 n += s.getCount();
             }
@@ -395,7 +395,7 @@ public final class Timmerguh implements NpcRole {
     }
 
     static void neemPlanken(ServerPlayer player, int n) {
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (n > 0 && s.is(ItemTags.PLANKS)) {
                 int take = Math.min(n, s.getCount());
                 s.shrink(take);
@@ -422,7 +422,7 @@ public final class Timmerguh implements NpcRole {
 
     /** Does one of this player's guhs live in one of their huisjes? */
     public static boolean heeftBewoner(ServerPlayer player) {
-        for (Huisje h : Huisjes.vanEigenaar(player.server, player.getUUID())) {
+        for (Huisje h : Huisjes.vanEigenaar(player.level().getServer(), player.getUUID())) {
             for (UUID id : h.bewoners()) {
                 if ("guh".equals(h.soort(id))) {
                     return true;
@@ -447,8 +447,8 @@ public final class Timmerguh implements NpcRole {
      * or a knabbelbal) and a guhlampje in its home area?
      */
     public static boolean isKnus(ServerPlayer player) {
-        for (Huisje h : Huisjes.vanEigenaar(player.server, player.getUUID())) {
-            ServerLevel level = player.server.getLevel(h.dim());
+        for (Huisje h : Huisjes.vanEigenaar(player.level().getServer(), player.getUUID())) {
+            ServerLevel level = player.level().getServer().getLevel(h.dim());
             if (level != null && level.isLoaded(h.pos()) && speeltje(level, h) && lampje(level, h)) {
                 return true;
             }
@@ -476,7 +476,7 @@ public final class Timmerguh implements NpcRole {
     /** (Tests) the flag's spot, or null. */
     @Nullable
     public static BlockPos vlagPlek(GuhNpcEntity npc) {
-        return npc.roleData.contains("Vlag") ? BlockPos.of(npc.roleData.getLong("Vlag")) : null;
+        return npc.roleData.contains("Vlag") ? BlockPos.of(npc.roleData.getLongOr("Vlag", 0L)) : null;
     }
 
     /** (Tests) forget the remembered roof spots. */

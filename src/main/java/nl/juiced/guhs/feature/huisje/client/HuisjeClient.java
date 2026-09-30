@@ -28,7 +28,7 @@ public final class HuisjeClient {
         });
         HuisjePayloads.opener = p -> Minecraft.getInstance().execute(() -> {
             Minecraft mc = Minecraft.getInstance();
-            if (mc.screen instanceof HuisjeScreen s && s.pos().asLong() == p.data().getLong("Pos")) {
+            if (mc.screen instanceof HuisjeScreen s && s.pos().asLong() == p.data().getLongOr("Pos", 0L)) {
                 s.update(p.data());
             } else {
                 mc.setScreen(new HuisjeScreen(p.data()));

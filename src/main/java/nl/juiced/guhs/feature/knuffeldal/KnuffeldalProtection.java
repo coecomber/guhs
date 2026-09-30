@@ -12,7 +12,7 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -44,7 +44,7 @@ public final class KnuffeldalProtection {
             return false;
         }
         if (!quiet) {
-            player.displayClientMessage(Component.translatable("gui.guhs.knuffeldal.beschermd").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.knuffeldal.beschermd").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return true;
     }
@@ -68,7 +68,7 @@ public final class KnuffeldalProtection {
      */
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
         ItemStack stack = event.getItemStack();
-        if (event.getLevel().isClientSide || stack.isEmpty()) {
+        if (event.getLevel().isClientSide() || stack.isEmpty()) {
             return;
         }
         boolean building = stack.getItem() instanceof BlockItem || stack.getItem() instanceof BucketItem

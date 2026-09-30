@@ -113,7 +113,7 @@ public final class BaltoRollen {
     /** Talked to both polar-bear guhs: the little side quest. */
     static void mukluk(ServerPlayer p, int bit) {
         var saved = GuhQuests.saved(p);
-        int oud = saved.getInt(BaltoVerhaal.MUKLUK);
+        int oud = saved.getIntOr(BaltoVerhaal.MUKLUK, 0);
         int nu = oud | bit;
         saved.putInt(BaltoVerhaal.MUKLUK, nu);
         if (nu == 3 && oud != 3) {
@@ -187,7 +187,7 @@ public final class BaltoRollen {
             if (npc.tickCount % 4 == 0) {
                 level.sendParticles(BaltoFeature.WOLFGLANS.get(), npc.getX(), npc.getY() + 0.9, npc.getZ(), 2, 0.5, 0.6, 0.5, 0.01);
             }
-            if (npc.roleData.contains(BaltoVerhaal.WOLF_TOT) && level.getGameTime() > npc.roleData.getLong(BaltoVerhaal.WOLF_TOT)) {
+            if (npc.roleData.contains(BaltoVerhaal.WOLF_TOT) && level.getGameTime() > npc.roleData.getLongOr(BaltoVerhaal.WOLF_TOT, 0L)) {
                 level.sendParticles(BaltoFeature.WOLFGLANS.get(), npc.getX(), npc.getY() + 1, npc.getZ(), 50, 0.6, 0.9, 0.6, 0.05);
                 npc.discard();
             }

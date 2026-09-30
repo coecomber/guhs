@@ -40,6 +40,8 @@ import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.feature.knus.KnusVoortgang;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * Het Knuffelbad (2.8): a big bath house with water slides on the guhzee coast. tools/features/knuffelbad.py (+
  * knuffelbad_*.py) makes the resources and the structure.
@@ -105,10 +107,10 @@ public final class KnuffelbadFeature {
     // --- entities ----------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<ZwembandjeEntity>> ZWEMBANDJE = ENTITY_TYPES.register("zwembandje",
             () -> EntityType.Builder.<ZwembandjeEntity>of(ZwembandjeEntity::new, MobCategory.MISC).sized(1.3f, 0.35f).clientTrackingRange(10)
-                    .updateInterval(1).noSave().noSummon().build(Guhs.id("zwembandje").toString()));
+                    .updateInterval(1).noSave().noSummon().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("zwembandje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<BadeendjeEntity>> BADEENDJE = ENTITY_TYPES.register("badeendje",
             () -> EntityType.Builder.<BadeendjeEntity>of(BadeendjeEntity::new, MobCategory.MISC).sized(0.45f, 0.45f).clientTrackingRange(8)
-                    .updateInterval(2).build(Guhs.id("badeendje").toString()));
+                    .updateInterval(2).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("badeendje"))));
 
     // --- particles and sounds ------------------------------------------------------------------------------------------------
     /** A soap bubble: floats up, shimmering, and pops. */

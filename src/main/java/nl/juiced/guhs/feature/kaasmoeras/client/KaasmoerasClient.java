@@ -2,12 +2,12 @@ package nl.juiced.guhs.feature.kaasmoeras.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.FogType;
 import net.neoforged.bus.api.IEventBus;
@@ -23,8 +23,8 @@ import nl.juiced.guhs.feature.kaasmoeras.KaasmotEntity;
 import nl.juiced.guhs.feature.kaasmoeras.KikkerguhEntity;
 import nl.juiced.guhs.feature.kaasmoeras.MoerasheksMikaEntity;
 import nl.juiced.guhs.feature.kaasmoeras.MotknabbelBlock;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * Client side of the kaasmoeras: the GeckoLib renderers of the kikkerguh (a texture per colour, babies half size), the
@@ -88,7 +88,7 @@ public final class KaasmoerasClient {
         public KikkerguhRenderer(EntityRendererProvider.Context context) {
             super(context, new DefaultedEntityGeoModel<KikkerguhEntity>(Guhs.id("kikkerguh"), true) {
                 @Override
-                public ResourceLocation getTextureResource(KikkerguhEntity kikker) {
+                public Identifier getTextureResource(KikkerguhEntity kikker) {
                     return Guhs.id("textures/entity/kikkerguh_" + kikker.getKleur().getSerializedName() + ".png");
                 }
             });

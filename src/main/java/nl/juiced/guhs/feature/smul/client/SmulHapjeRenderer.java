@@ -3,14 +3,14 @@ package nl.juiced.guhs.feature.smul.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import nl.juiced.guhs.feature.smul.SmulHapje;
@@ -32,14 +32,14 @@ public class SmulHapjeRenderer extends EntityRenderer<SmulHapje> {
         pose.translate(0, 0.35 + (hapje.hasLanded() ? 0 : Mth.sin(spin * 0.05f) * 0.05f), 0);
         pose.mulPose(Axis.YP.rotationDegrees(spin));
         pose.scale(1.7f, 1.7f, 1.7f);
-        int l = hapje.soort() == SmulHapje.Soort.GOUD ? LightTexture.FULL_BRIGHT : light;
+        int l = hapje.soort() == SmulHapje.Soort.GOUD ? LightCoordsUtil.FULL_BRIGHT : light;
         items.renderStatic(hapje.stack(), ItemDisplayContext.GROUND, l, OverlayTexture.NO_OVERLAY, pose, buffers, hapje.level(), hapje.getId());
         pose.popPose();
         super.render(hapje, yaw, partialTick, pose, buffers, light);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(SmulHapje hapje) {
+    public Identifier getTextureLocation(SmulHapje hapje) {
         return TextureAtlas.LOCATION_BLOCKS;
     }
 }

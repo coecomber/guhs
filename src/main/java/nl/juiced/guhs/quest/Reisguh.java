@@ -35,6 +35,8 @@ import nl.juiced.guhs.network.ModNetworking;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Reisguhs: guh waypoints in the Guhmension. Right-click a Reisguh once to discover it; after that a right-click opens
  * its menu: rename it, or travel to any other Reisguh you have discovered. They only work in the Guhmension. One stands
@@ -70,7 +72,7 @@ public final class Reisguh {
             ListTag list = new ListTag();
             for (Point p : points.values()) {
                 CompoundTag c = new CompoundTag();
-                c.putUUID("Id", p.id());
+                c.store("Id", UUIDUtil.CODEC, p.id());
                 c.putString("Name", p.name());
                 c.putLong("Pos", p.pos().asLong());
                 c.putFloat("Yaw", p.yaw());
@@ -89,14 +91,14 @@ public final class Reisguh {
 
         static Data load(CompoundTag tag, HolderLookup.Provider registries) {
             Data data = new Data();
-            for (Tag t : tag.getList("Points", Tag.TAG_COMPOUND)) {
+            for (Tag t : tag.getListOrEmpty("Points")) {
                 CompoundTag c = (CompoundTag) t;
-                data.points.put(c.getUUID("Id"), new Point(c.getUUID("Id"), c.getString("Name"), BlockPos.of(c.getLong("Pos")), c.getFloat("Yaw")));
+                data.points.put(c.read("Id", UUIDUtil.CODEC).orElseThrow(), new Point(c.read("Id", UUIDUtil.CODEC).orElseThrow(), c.getStringOr("Name", ""), BlockPos.of(c.getLongOr("Pos", 0L)), c.getFloatOr("Yaw", 0.0F)));
             }
-            CompoundTag players = tag.getCompound("Discovered");
-            for (String key : players.getAllKeys()) {
+            CompoundTag players = tag.getCompoundOrEmpty("Discovered");
+            for (String key : players.keySet()) {
                 Set<UUID> set = new HashSet<>();
-                for (Tag t : players.getList(key, Tag.TAG_STRING)) {
+                for (Tag t : players.getListOrEmpty(key)) {
                     set.add(UUID.fromString(t.getAsString()));
                 }
                 data.discovered.put(UUID.fromString(key), set);
@@ -159,7 +161,7 @@ public final class Reisguh {
 
     /** Right-click: discover it, or open its menu. */
     public static void talk(GuhNpcEntity npc, ServerPlayer player) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (level.dimension() != ModDimensions.GUHMENSION) {
             GuhQuests.say(player, npc, "quest.guhs.reis.only_guhmension");
             return;
@@ -181,7 +183,7 @@ public final class Reisguh {
     }
 
     private static void open(GuhNpcEntity npc, ServerPlayer player) {
-        Data data = Data.get(player.getServer());
+        Data data = Data.get(player.level().getServer());
         List<Point> list = new ArrayList<>();
         for (UUID id : data.of(player.getUUID())) {
             Point p = data.points.get(id);
@@ -195,7 +197,7 @@ public final class Reisguh {
         ListTag points = new ListTag();
         for (Point p : list) {
             CompoundTag c = new CompoundTag();
-            c.putUUID("Id", p.id());
+            c.store("Id", UUIDUtil.CODEC, p.id());
             c.putString("Name", p.name());
             c.putInt("Distance", (int) Math.sqrt(p.pos().distSqr(npc.blockPosition())));
             points.add(c);
@@ -209,7 +211,7 @@ public final class Reisguh {
         if (npc.getKind() != GuhNpcEntity.Kind.REISGUH || player.distanceToSqr(npc) > 64 || player.level().dimension() != ModDimensions.GUHMENSION) {
             return;
         }
-        Data data = Data.get(player.getServer());
+        Data data = Data.get(player.level().getServer());
         if (!data.of(player.getUUID()).contains(npc.getUUID())) {
             return;
         }
@@ -222,7 +224,7 @@ public final class Reisguh {
             tick(npc);
             data.points.put(npc.getUUID(), new Point(npc.getUUID(), name, npc.blockPosition(), npc.getYRot()));
             data.setDirty();
-            player.displayClientMessage(Component.translatable("quest.guhs.reis.renamed", name).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.reis.renamed", name).withStyle(ChatFormatting.LIGHT_PURPLE));
             open(npc, player);
         } else if (action == TRAVEL) {
             UUID target;
@@ -236,24 +238,24 @@ public final class Reisguh {
                 return;
             }
             travel(player, p);
-            nl.juiced.guhs.feature.reisguh.ReisguhFluit.reis(npc, player.serverLevel(), target);   // (2.8: both conductors whistle)
+            nl.juiced.guhs.feature.reisguh.ReisguhFluit.reis(npc, player.level(), target);   // (2.8: both conductors whistle)
         }
     }
 
     private static void travel(ServerPlayer player, Point p) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         level.sendParticles(ParticleTypes.PORTAL, player.getX(), player.getY() + 1, player.getZ(), 40, 0.4, 0.8, 0.4, 0.3);
         BlockPos spot = arrival(level, p);
         player.teleportTo(level, spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, p.yaw() + 180, 0);
         level.playSound(null, spot, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 0.7f, 1.3f);
         level.sendParticles(ParticleTypes.PORTAL, spot.getX() + 0.5, spot.getY() + 1, spot.getZ() + 0.5, 40, 0.4, 0.8, 0.4, 0.3);
-        player.displayClientMessage(Component.translatable("quest.guhs.reis.arrived", p.name()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.reis.arrived", p.name()).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     // --- moving Reisguhs: pick one up like a tamed guh, put it down somewhere else -------------------------------------
 
     public static void pickUp(GuhNpcEntity npc, ServerPlayer player) {
-        Data data = Data.get(player.getServer());
+        Data data = Data.get(player.level().getServer());
         data.points.remove(npc.getUUID());                          // (back in the list where it's put down again)
         data.setDirty();
         CompoundTag tag = new CompoundTag();
@@ -262,8 +264,8 @@ public final class Reisguh {
         tag.putString("GuhDisplayName", name(npc));
         npc.discard();
         player.getInventory().placeItemBackInInventory(nl.juiced.guhs.item.PickedUpGuhItem.of(tag));
-        player.displayClientMessage(Component.translatable("quest.guhs.reis.picked_up", name(npc)).withStyle(ChatFormatting.LIGHT_PURPLE), true);
-        player.serverLevel().playSound(null, npc.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.8f, 1.2f);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.reis.picked_up", name(npc)).withStyle(ChatFormatting.LIGHT_PURPLE));
+        player.level().playSound(null, npc.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.8f, 1.2f);
     }
 
     /** Now and then a Reisguh just turns up in the Guhmension (never close to another one). */
@@ -296,13 +298,13 @@ public final class Reisguh {
     /** A new Reisguh at a spot (made sure it has a floor and room), looking `yaw`. */
     @Nullable
     public static GuhNpcEntity place(ServerLevel level, BlockPos pos, float yaw, String name) {
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level);
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
         if (npc == null) {
             return null;
         }
         npc.setKind(GuhNpcEntity.Kind.REISGUH);
         npc.setReisName(name);
-        npc.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, yaw, 0);
+        npc.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, yaw, 0);
         npc.setYHeadRot(yaw);
         npc.setYBodyRot(yaw);
         level.addFreshEntity(npc);
@@ -342,7 +344,7 @@ public final class Reisguh {
 
     /** For tests: has this player discovered that Reisguh? */
     public static boolean discovered(ServerPlayer player, UUID reisguh) {
-        return Data.get(player.getServer()).of(player.getUUID()).contains(reisguh);
+        return Data.get(player.level().getServer()).of(player.getUUID()).contains(reisguh);
     }
 
     private Reisguh() {

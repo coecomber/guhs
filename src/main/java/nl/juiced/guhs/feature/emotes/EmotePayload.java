@@ -53,12 +53,12 @@ public record EmotePayload(int entityId, int action, int emote) implements Custo
                     return false;
                 }
                 if (!Emote.magVoor(emote, guh)) {   // 3.0: the ukelele is the 626-guh's
-                    player.displayClientMessage(Component.translatable("gui.guhs.emotes.alleen_voor",
-                            Component.translatable("entity.guhs.guh." + Emote.alleenVoor(emote).id())), true);
+                    player.sendOverlayMessage(Component.translatable("gui.guhs.emotes.alleen_voor",
+                            Component.translatable("entity.guhs.guh." + Emote.alleenVoor(emote).id())));
                     return false;
                 }
                 if (!guh.emotes.start(emote, p.action() == LOOP, GuhEmotes.Source.OWNER)) {
-                    player.displayClientMessage(Component.translatable("gui.guhs.emotes.busy"), true);
+                    player.sendOverlayMessage(Component.translatable("gui.guhs.emotes.busy"));
                     return false;
                 }
                 GuhEmotes.countForPlayer(player, emote);

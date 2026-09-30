@@ -44,7 +44,7 @@ public class GuhvisDobber extends FishingHook {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide || NIBBLE == null || niveau == Niveau.MEDIUM || isRemoved()) {
+        if (level().isClientSide() || NIBBLE == null || niveau == Niveau.MEDIUM || isRemoved()) {
             return;
         }
         int nibble = nibble();

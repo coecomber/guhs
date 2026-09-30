@@ -22,7 +22,7 @@ import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.Saddleable;
 import net.minecraft.world.entity.SpawnGroupData;
@@ -54,15 +54,16 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 import nl.juiced.guhs.world.ModDimensions;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * De Guh: a chubby pink plush mouse.
  * <ul>
@@ -130,7 +131,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     public static final int LAUNCH_CHARGE_TICKS = 80, LAUNCH_COOLDOWN = 200, LAUNCH_MAX_FLIGHT = 160;
     public static final double LAUNCH_SPEED = 1.95, LAUNCH_SINK = 0.06;
     public static final int BACKPACK_SIZE = 18;
-    private static final net.minecraft.resources.ResourceLocation PERSONALITY_SPEED = nl.juiced.guhs.Guhs.id("personality_speed");
+    private static final net.minecraft.resources.Identifier PERSONALITY_SPEED = nl.juiced.guhs.Guhs.id("personality_speed");
     /** About 1 in this many spawned guhs carries a secret note for the first player it meets. */
     public static final int SECRET_NOTE_CHANCE = 200;
     /** About 1 in this many wild Guhmension guhs already wears an outfit. */
@@ -185,8 +186,8 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     }
 
     /** Spawn on any solid block in daylight-ish light, so guhs show up everywhere (deserts, snow, beaches...). */
-    public static boolean checkGuhSpawnRules(EntityType<? extends Mob> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        boolean lightOk = MobSpawnType.ignoresLightRequirements(spawnType) || level.getRawBrightness(pos, 0) > 8;
+    public static boolean checkGuhSpawnRules(EntityType<? extends Mob> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
+        boolean lightOk = EntitySpawnReason.ignoresLightRequirements(spawnType) || level.getRawBrightness(pos, 0) > 8;
         return lightOk && Mob.checkMobSpawnRules(type, level, spawnType, pos, random);
     }
 
@@ -290,12 +291,12 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData spawnGroupData) {
         if (!hasPersonality()) {
             setPersonality(GuhPersonality.random(this.random));
         }
         // Guhs placed by a structure (e.g. the giant in the hamster house) keep the size saved in the structure.
-        if (spawnType != MobSpawnType.STRUCTURE) {
+        if (spawnType != EntitySpawnReason.STRUCTURE) {
             // Skewed random so most guhs are normal-sized and the huge ones are a nice surprise.
             float r = this.random.nextFloat();
             setGuhScale(MIN_SCALE + (MAX_SCALE - MIN_SCALE) * (float) Math.pow(r, 1.8));
@@ -341,7 +342,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
 
     /** Whispers to the player (only they see it) and hands over the note: a paper that says "bork". */
     public void deliverSecretNote(Player player) {
-        if (!hasSecretNote() || this.level().isClientSide) {
+        if (!hasSecretNote() || this.level().isClientSide()) {
             return;
         }
         setSecretNote(false);
@@ -435,7 +436,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     public void playAmbientSound() {
         if (hiddenBy != null) {
             // a hidden guh's giggle is only for the seekers inside (nobody outside the house hears it)
-            if (!this.level().isClientSide && getAmbientSound() != null) {
+            if (!this.level().isClientSide() && getAmbientSound() != null) {
                 nl.juiced.guhs.quest.VerstopGame.soundForSeekers(this, getAmbientSound(), getSoundVolume(), getVoicePitch());
             }
             return;
@@ -659,26 +660,26 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
             }
         }
         if (hiddenBy != null) {
-            if (!this.level().isClientSide && hand == InteractionHand.MAIN_HAND && player instanceof net.minecraft.server.level.ServerPlayer seeker) {
+            if (!this.level().isClientSide() && hand == InteractionHand.MAIN_HAND && player instanceof net.minecraft.server.level.ServerPlayer seeker) {
                 nl.juiced.guhs.quest.VerstopGame.foundGuh(this, seeker);
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         ItemStack stack = player.getItemInHand(hand);
         if (stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()) && isEnder() && !this.isTame()) {
             // the ender guh can't resist fried knabbels
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 stack.consume(1, player);
                 this.playSound(ModSounds.GUH_EAT.get(), 1f, this.getVoicePitch());
                 if (!net.neoforged.neoforge.event.EventHooks.onAnimalTame(this, player)) {
                     tamedBy(player);
                 }
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         if (stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()) && this.isTame() && this.getHealth() < this.getMaxHealth()) {
             // fried knabbels: instantly back to full health
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 ItemStack eaten = stack.copyWithCount(1);
                 stack.consume(1, player);
                 this.setHealth(this.getMaxHealth());
@@ -689,37 +690,37 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
                     nl.juiced.guhs.feature.band.BandEvents.gevoerd(this, sp, eaten);   // 2.10: hearts for feeding
                 }
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         if (stack.getItem() instanceof nl.juiced.guhs.item.GuhClothingItem clothing && this.isTame() && player.getUUID().equals(this.getOwnerUUID())
                 && nl.juiced.guhs.feature.kleding.KledingUnlocks.heeft(player, clothing.getClothes())
                 && clothing.getClothes().slot != GuhClothes.Slot.HAAR) {
             // 2.9: a piece you already unlocked goes straight on (the item stays yours); a piece you don't have yet is
             // unlocked by holding right-click (GuhClothingItem), so this passes
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 nl.juiced.guhs.feature.kleding.KledingKast.trekAan(this, player, clothing.getClothes());
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         if (isBodyArmorItem(stack) && this.isTame() && player.getUUID().equals(this.getOwnerUUID()) && this.getBodyArmorItem().isEmpty()) {
-            if (!this.level().isClientSide) {
+            if (!this.level().isClientSide()) {
                 this.setBodyArmorItem(stack.copyWithCount(1));
                 stack.consume(1, player);
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         if (!isFood(stack) && this.isTame() && player.getUUID().equals(this.getOwnerUUID()) && nl.juiced.guhs.feature.band.BandEvents.isSnack(stack)) {
             // 2.10: feeding your own guh a snack (#guhs:band/snacks): it munches it, hearts
-            if (!this.level().isClientSide && player instanceof net.minecraft.server.level.ServerPlayer sp) {
+            if (!this.level().isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer sp) {
                 nl.juiced.guhs.feature.band.BandEvents.voer(this, sp, stack);
             }
-            return InteractionResult.sidedSuccess(this.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         if (!isFood(stack)) {
             // Empty-hand interaction by the owner is handled through the tap/hold packets (GuhActionPayload).
             return super.mobInteract(player, hand);
         }
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             return InteractionResult.CONSUME;
         }
 
@@ -810,7 +811,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
-        GuhEntity baby = ModEntities.GUH.get().create(level);
+        GuhEntity baby = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (baby != null) {
             float parentsScale = otherParent instanceof GuhEntity other ? (getGuhScale() + other.getGuhScale()) / 2f : getGuhScale();
             baby.setGuhScale(parentsScale + (this.random.nextFloat() - 0.5f) * 0.4f);
@@ -862,14 +863,14 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
 
     /** The rider pressed right-click. */
     public void onLaunchPressed(Player rider) {
-        if (this.level().isClientSide || rider.getVehicle() != this || !this.isOwnedBy(rider) || isEnder()) {
+        if (this.level().isClientSide() || rider.getVehicle() != this || !this.isOwnedBy(rider) || isEnder()) {
             return;
         }
         switch (getLaunchState()) {
             case LAUNCH_NONE -> {
                 if (launchCooldown > 0) {
-                    rider.displayClientMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.launch.cooldown",
-                            (launchCooldown + 19) / 20), true);
+                    rider.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.launch.cooldown",
+                            (launchCooldown + 19) / 20));
                     return;
                 }
                 setLaunchState(LAUNCH_CHARGING);
@@ -1027,7 +1028,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     @Override
     protected void removePassenger(net.minecraft.world.entity.Entity passenger) {
         super.removePassenger(passenger);
-        if (!this.level().isClientSide && isEnder() && passenger instanceof LivingEntity living && !this.onGround()) {
+        if (!this.level().isClientSide() && isEnder() && passenger instanceof LivingEntity living && !this.onGround()) {
             living.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 200, 0, false, false));
         }
     }
@@ -1235,31 +1236,31 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
 
     @Override
     public void tick() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             tickLaunch();
         }
         super.tick();
-        if (hiddenBy != null && !this.level().isClientSide && this.tickCount % 100 == 0
+        if (hiddenBy != null && !this.level().isClientSide() && this.tickCount % 100 == 0
                 && ((ServerLevel) this.level()).getEntity(hiddenBy) instanceof GuhNpcEntity npc && !npc.verstop.isHiding(this.getUUID())) {
             this.discard();
             return;
         }
         // wild ghost guhs fade away when the sun comes up
-        if (!this.level().isClientSide && getVariant() == GuhVariant.GHOST && !this.isTame() && this.tickCount % 100 == 0
+        if (!this.level().isClientSide() && getVariant() == GuhVariant.GHOST && !this.isTame() && this.tickCount % 100 == 0
                 && this.level().isDay() && !this.isPersistenceRequired()) {
             ((ServerLevel) this.level()).sendParticles(net.minecraft.core.particles.ParticleTypes.POOF, getX(), getY() + 0.4, getZ(), 12, 0.3, 0.3, 0.3, 0.02);
             this.discard();
             return;
         }
         // CUDDLY: cuddles heal its owner a little (half a heart about every 30 seconds, when close)
-        if (!this.level().isClientSide && getPersonality() == GuhPersonality.CUDDLY && this.isTame() && this.tickCount % 600 == 0
+        if (!this.level().isClientSide() && getPersonality() == GuhPersonality.CUDDLY && this.isTame() && this.tickCount % 600 == 0
                 && this.getOwner() instanceof Player owner && owner.distanceTo(this) < 4 + this.getBbWidth()
                 && owner.getHealth() < owner.getMaxHealth()) {
             owner.heal(1f);
             this.level().broadcastEntityEvent(this, (byte) 7); // hearts
         }
         if (isEnder()) {
-            if (this.level().isClientSide && this.random.nextInt(3) == 0) {
+            if (this.level().isClientSide() && this.random.nextInt(3) == 0) {
                 this.level().addParticle(net.minecraft.core.particles.ParticleTypes.PORTAL, this.getRandomX(0.6), this.getRandomY() - 0.2,
                         this.getRandomZ(0.6), (this.random.nextDouble() - 0.5) * 0.5, -this.random.nextDouble() * 0.3, (this.random.nextDouble() - 0.5) * 0.5);
             }
@@ -1269,12 +1270,12 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
             if (this.isVehicle()) {
                 this.getPassengers().forEach(p -> p.resetFallDistance());
             }
-            if (!this.level().isClientSide && this.isInSittingPose() && this.isNoGravity()) {
+            if (!this.level().isClientSide() && this.isInSittingPose() && this.isNoGravity()) {
                 this.setNoGravity(false); // sitting: come down and land
             }
         }
         emotes.tick();
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             nl.juiced.guhs.feature.knus.GuhHooks.runTick(this);   // 2.8: the Knus features
         }
         if (isZeemeer()) {
@@ -1284,7 +1285,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
         if (gedrag != null) {
             gedrag.tick(this);   // 3.0: a story variant's own behaviour (both sides)
         }
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             this.squishO = this.squish;
             this.squish = Mth.approach(this.squish, isGravityEnabled() ? 1f : 0f, 0.15f);
         }
@@ -1356,7 +1357,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
         tag.putBoolean("Wander", isWandering());
         tag.putBoolean("Gravity", isGravityEnabled());
         if (hiddenBy != null) {
-            tag.putUUID("VerstopNpc", hiddenBy);
+            tag.store("VerstopNpc", UUIDUtil.CODEC, hiddenBy);
         }
         tag.putBoolean("Saddle", isSaddled());
         tag.putBoolean("AmbientSounds", areSoundsEnabled());
@@ -1389,53 +1390,53 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains("Wander")) {
-            setWandering(tag.getBoolean("Wander"));
+            setWandering(tag.getBooleanOr("Wander", false));
         }
         if (tag.contains("TeleportToOwner")) {
-            setTeleportEnabled(tag.getBoolean("TeleportToOwner"));
+            setTeleportEnabled(tag.getBooleanOr("TeleportToOwner", false));
         }
-        setGravityEnabled(tag.getBoolean("Gravity"));
-        this.entityData.set(DATA_SADDLED, tag.getBoolean("Saddle"));
-        setSecretNote(tag.getBoolean("SecretNote"));
-        setVariant(GuhVariant.byId(tag.getString("Variant")));
-        if (tag.hasUUID("VerstopNpc")) {
-            this.hiddenBy = tag.getUUID("VerstopNpc");
+        setGravityEnabled(tag.getBooleanOr("Gravity", false));
+        this.entityData.set(DATA_SADDLED, tag.getBooleanOr("Saddle", false));
+        setSecretNote(tag.getBooleanOr("SecretNote", false));
+        setVariant(GuhVariant.byId(tag.getStringOr("Variant", "")));
+        if (tag.read("VerstopNpc", UUIDUtil.CODEC).isPresent()) {
+            this.hiddenBy = tag.read("VerstopNpc", UUIDUtil.CODEC).orElseThrow();
             this.entityData.set(DATA_HIDDEN, true);
         }
         // guhs saved as one of the old outfit variants become a normal guh wearing that outfit
-        java.util.List<GuhClothes> oldOutfit = switch (tag.getString("Variant")) {
+        java.util.List<GuhClothes> oldOutfit = switch (tag.getStringOr("Variant", "")) {
             case "sweater" -> GuhClothes.WILD_OUTFITS.get(0);
             case "rain" -> GuhClothes.WILD_OUTFITS.get(1);
             case "party" -> GuhClothes.WILD_OUTFITS.get(2);
             case "chef" -> GuhClothes.WILD_OUTFITS.get(3);
             default -> java.util.List.of();
         };
-        GuhPersonality personality = GuhPersonality.byId(tag.getString("Personality"));
+        GuhPersonality personality = GuhPersonality.byId(tag.getStringOr("Personality", ""));
         for (GuhClothes.Slot slot : GuhClothes.Slot.values()) {
             String key = "Clothes" + slot.name().charAt(0) + slot.name().substring(1).toLowerCase(java.util.Locale.ROOT);
-            GuhClothes worn = GuhClothes.byId(tag.getString(key));
+            GuhClothes worn = GuhClothes.byId(tag.getStringOr(key, ""));
             this.entityData.set(DATA_CLOTHES.get(slot.ordinal()), worn != null && worn.slot == slot ? worn.ordinal() : -1);
         }
         oldOutfit.forEach(this::wear);
         backpack.clearContent();
         if (tag.contains("Backpack")) {
-            net.minecraft.world.ContainerHelper.loadAllItems(tag.getCompound("Backpack"), backpack.getItems(), this.registryAccess());
+            net.minecraft.world.ContainerHelper.loadAllItems(tag.getCompoundOrEmpty("Backpack"), backpack.getItems(), this.registryAccess());
         }
         // guhs from before personalities existed (or placed by structures) get one now
         setPersonality(personality != null ? personality : GuhPersonality.random(this.random));
         if (tag.contains("AmbientSounds")) {
-            setSoundsEnabled(tag.getBoolean("AmbientSounds"));
-            setSoundFrequency(tag.getInt("SoundFrequency"));
-            setAttackRadius(tag.getInt("AttackRadius"));
+            setSoundsEnabled(tag.getBooleanOr("AmbientSounds", false));
+            setSoundFrequency(tag.getIntOr("SoundFrequency", 0));
+            setAttackRadius(tag.getIntOr("AttackRadius", 0));
             try {
-                setBehavior(Behavior.valueOf(tag.getString("Behavior")));
+                setBehavior(Behavior.valueOf(tag.getStringOr("Behavior", "")));
             } catch (IllegalArgumentException ignored) {
                 // unknown value: keep the default
             }
         }
         emotes.load(tag);
-        setKnusVlaggen(tag.getInt("KnusVlaggen"));
-        setHaarkleur(tag.contains("Haarkleur") ? tag.getInt("Haarkleur") : -1);
+        setKnusVlaggen(tag.getIntOr("KnusVlaggen", 0));
+        setHaarkleur(tag.contains("Haarkleur") ? tag.getIntOr("Haarkleur", 0) : -1);
     }
 
     // ------------------------------------------------------------------------------------------------------------
@@ -1467,7 +1468,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
         this.runningInWheel = running;
     }
 
-    private PlayState mainAnimation(AnimationState<GuhEntity> state) {
+    private PlayState mainAnimation(AnimationTest<GuhEntity> state) {
         if (runningInWheel) {
             state.getController().setAnimationSpeed(1.6);
             return state.setAndContinue(WALK);

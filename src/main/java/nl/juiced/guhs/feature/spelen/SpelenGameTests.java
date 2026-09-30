@@ -7,15 +7,13 @@ import java.util.Set;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -32,9 +30,8 @@ import nl.juiced.guhs.quest.GuhDex;
 import nl.juiced.guhs.quest.Highscores;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /** The shared 2.9 framework (phase 1, fundament): levels, the Minigames tab groups, clothing unlocks, OREN, scaffolding. */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class SpelenGameTests {
     private static final String EMPTY = "empty";
 
@@ -43,7 +40,7 @@ public class SpelenGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return player;
     }
 
@@ -54,7 +51,7 @@ public class SpelenGameTests {
     }
 
     /** Makkelijk / medium / lastig: ids, boards (medium keeps the old board), coins (+50 % on lastig, rounded up), clamping. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void spelenNiveaus(GameTestHelper helper) {
         helper.assertTrue(Niveau.MAKKELIJK.id().equals("makkelijk") && Niveau.MEDIUM.id().equals("medium") && Niveau.LASTIG.id().equals("lastig"), "ids");
         helper.assertTrue(Niveau.MEDIUM.board("golf_rondje").equals("golf_rondje") && Niveau.MAKKELIJK.board("golf_rondje").equals("golf_rondje_makkelijk")
@@ -69,14 +66,14 @@ public class SpelenGameTests {
     }
 
     /** Every group of the Minigames tab: known era, real structure, a guh character with a role, rows that exist in Highscores. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void spelenGroepenKloppen(GameTestHelper helper) {
         List<SpelGroepen.Groep> alle = SpelGroepen.alle();
         helper.assertTrue(alle.size() == 22, "22 groups: " + alle.size());
         helper.assertTrue(SpelGroepen.van(SpelGroepen.Tijdperk.KLASSIEKERS).size() == 9 && SpelGroepen.van(SpelGroepen.Tijdperk.KNUFFELDAL).size() == 5
                 && SpelGroepen.van(SpelGroepen.Tijdperk.GROTE_GUHSPELEN).size() == 6 && SpelGroepen.van(SpelGroepen.Tijdperk.VERHALEN).size() == 2,
                 "per era (3.0: two story groups)");
-        var structures = helper.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
+        var structures = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE);
         Set<String> rows = new HashSet<>();
         for (SpelGroepen.Groep g : alle) {
             helper.assertTrue(SpelGroepen.van(g.id()) == g, "lookup " + g.id());
@@ -103,7 +100,7 @@ public class SpelenGameTests {
     }
 
     /** The 2.9 Highscores rows: times in ticks as m:ss.t (lower is better, "never" = -1), points as N pt; unique boards. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void spelenHighscoresRijen(GameTestHelper helper) {
         helper.assertTrue(Highscores.tijd(1234).equals("1:01.7") && Highscores.tijd(0).equals("0:00.0") && Highscores.tijd(-1).equals("-")
                 && Highscores.tijd(20 * 75 + 3).equals("1:15.1"), "tijd: " + Highscores.tijd(1234));
@@ -127,7 +124,7 @@ public class SpelenGameTests {
     }
 
     /** Visited buildings: remembered once per player, survive in the saved data, go to the client with guhs:spelgroepen_data. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void spelenBezocht(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         helper.assertTrue(!SpelGroepen.bezocht(p, "sjoelen") && SpelGroepen.kijk(p).isEmpty(), "nothing visited on an empty test floor");
@@ -145,14 +142,14 @@ public class SpelenGameTests {
     }
 
     /** Clothing unlocks: per player, once, saved as ids; the sources; the payload guhs:kleding_data. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void spelenKledingUnlocks(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         helper.assertTrue(KledingUnlocks.alle(p).isEmpty() && !KledingUnlocks.heeft(p, GuhClothes.STRIPED_SWEATER), "nothing yet");
         helper.assertTrue(KledingUnlocks.ontgrendel(p, GuhClothes.STRIPED_SWEATER) && !KledingUnlocks.ontgrendel(p, GuhClothes.STRIPED_SWEATER), "new once");
         KledingUnlocks.ontgrendel(p, GuhClothes.RAIN_HAT);
         helper.assertTrue(KledingUnlocks.heeft(p, GuhClothes.RAIN_HAT) && KledingUnlocks.alle(p).size() == 2, "two unlocks");
-        helper.assertTrue(nl.juiced.guhs.quest.GuhQuests.saved(p).getList(KledingUnlocks.KEY, net.minecraft.nbt.Tag.TAG_STRING).getString(0).equals("striped_sweater"),
+        helper.assertTrue(nl.juiced.guhs.quest.GuhQuests.saved(p).getListOrEmpty(KledingUnlocks.KEY).getStringOr(0, "").equals("striped_sweater"),
                 "saved as ids in the player's data");
         var data = new KledingPayloads.KledingData(List.of("striped_sweater", "rain_hat", "no_such_piece"));
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
@@ -172,7 +169,7 @@ public class SpelenGameTests {
     }
 
     /** OREN: the seventh slot, a wardrobe slot (six in the wardrobe), saved like the others; the wardrobe menu's indices. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void spelenOrenSlot(GameTestHelper helper) {
         helper.assertTrue(GuhClothes.Slot.OREN.ordinal() == 6 && GuhClothes.Slot.values().length == 7, "OREN is the seventh slot");
         helper.assertTrue(GuhClothes.Slot.kleding().equals(List.of(GuhClothes.Slot.HEAD, GuhClothes.Slot.EYES, GuhClothes.Slot.BODY, GuhClothes.Slot.NECK,
@@ -185,16 +182,16 @@ public class SpelenGameTests {
         guh.wear(GuhClothes.WINTER_SCARF);
         CompoundTag tag = new CompoundTag();
         guh.saveWithoutId(tag);
-        helper.assertTrue(tag.getString("ClothesNeck").equals("winter_scarf") && !tag.contains("ClothesOren"), "saved per slot");
+        helper.assertTrue(tag.getStringOr("ClothesNeck", "").equals("winter_scarf") && !tag.contains("ClothesOren"), "saved per slot");
         tag.putString("ClothesOren", "winter_scarf");   // a piece of another slot is never worn on the ears
-        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         copy.load(tag);
         helper.assertTrue(copy.getClothes(GuhClothes.Slot.NECK) == GuhClothes.WINTER_SCARF && copy.getClothes(GuhClothes.Slot.OREN) == null, "loaded");
         helper.succeed();
     }
 
     /** The scaffolding: the 2.9 characters (roles, Guhdex pages), PINGUH, the stub games, the gametest filter's matching. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void spelenSteigers(GameTestHelper helper) {
         List<GuhNpcEntity.Kind> kinds = List.of(GuhNpcEntity.Kind.SJOELGUH, GuhNpcEntity.Kind.DOOLHOFGUH, GuhNpcEntity.Kind.KATAPULTGUH,
                 GuhNpcEntity.Kind.SPELLEIDERGUH, GuhNpcEntity.Kind.SCHAATSMEESTERGUH, GuhNpcEntity.Kind.STEMPELGUH, GuhNpcEntity.Kind.CIRCUITGUH,

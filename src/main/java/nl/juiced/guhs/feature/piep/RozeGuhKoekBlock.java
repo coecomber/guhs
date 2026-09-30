@@ -108,7 +108,7 @@ public class RozeGuhKoekBlock extends HorizontalDirectionalBlock {
         if (!player.getMainHandItem().isEmpty()) {
             return InteractionResult.PASS;
         }
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer sp = (ServerPlayer) player;
@@ -141,7 +141,7 @@ public class RozeGuhKoekBlock extends HorizontalDirectionalBlock {
     /** A koek eaten (from the tray or the hand): "Lief kijken", the counter, the quest. */
     public static void gegeten(ServerPlayer player) {
         player.addEffect(new MobEffectInstance(PiepFeature.LIEF_KIJKEN, PiepEffecten.LIEF_TICKS, 0));
-        player.displayClientMessage(Component.translatable("gui.guhs.piep.lief_kijken").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.piep.lief_kijken").withStyle(ChatFormatting.LIGHT_PURPLE));
         PiepVoortgang.tel(player, PiepVoortgang.KOEKJES, 1, "piep_koek");
         PiepVoortgang.pagina(player, "roze_guh_koek");
     }

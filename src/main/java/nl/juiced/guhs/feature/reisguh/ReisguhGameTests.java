@@ -8,17 +8,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /** 2.8: the Reisguh as a guh-conductor: his cap and whistle in his own model, the "tuut" and the whistle's rest. 2.10.1: where she lives. */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class ReisguhGameTests {
     private static final String EMPTY = "empty";
 
@@ -41,7 +38,7 @@ public class ReisguhGameTests {
         return out;
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void reisguhIsAConductorWithAWhistle(GameTestHelper helper) {
         JsonObject geo = json("/assets/guhs/geo/entity/guh_npc_reisguh.geo.json");
         helper.assertTrue(geo != null, "the Reisguh's own model");
@@ -59,12 +56,12 @@ public class ReisguhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void reisguhBlowsHisWhistleWithARest(GameTestHelper helper) {
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(GuhNpcEntity.Kind.REISGUH);
         BlockPos at = helper.absolutePos(new BlockPos(2, 1, 2));
-        npc.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0, 0);
+        npc.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0, 0);
         helper.getLevel().addFreshEntity(npc);
         helper.assertTrue(ReisguhFluit.laatst(npc) == -1, "no whistle yet");
         helper.assertTrue(ReisguhFluit.fluit(npc), "tuut tuut!");
@@ -84,7 +81,7 @@ public class ReisguhGameTests {
      * 2.10.1: a Reisguh lives in the big places too: exactly one in each of these templates, with her own name, standing on
      * a floor with room for her head.
      */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void reisguhWoontInDeGroteBouwwerken(GameTestHelper helper) {
         var manager = helper.getLevel().getStructureManager();
         Map<String, String> plekken = new java.util.LinkedHashMap<>();
@@ -96,24 +93,24 @@ public class ReisguhGameTests {
         plekken.put("guh_circuit", "Guhcircuit");
         plekken.forEach((template, naam) -> {
             var tag = manager.get(Guhs.id(template)).orElseThrow().save(new net.minecraft.nbt.CompoundTag());
-            var palette = tag.getList("palette", 10);
+            var palette = tag.getListOrEmpty("palette");
             Map<BlockPos, String> blocks = new HashMap<>();
-            for (var b : tag.getList("blocks", 10)) {
+            for (var b : tag.getListOrEmpty("blocks")) {
                 var c = (net.minecraft.nbt.CompoundTag) b;
-                var pos = c.getList("pos", 3);
-                blocks.put(new BlockPos(pos.getInt(0), pos.getInt(1), pos.getInt(2)), palette.getCompound(c.getInt("state")).getString("Name"));
+                var pos = c.getListOrEmpty("pos");
+                blocks.put(new BlockPos(pos.getIntOr(0, 0), pos.getIntOr(1, 0), pos.getIntOr(2, 0)), palette.getCompoundOrEmpty(c.getIntOr("state", 0)).getStringOr("Name", ""));
             }
             int n = 0;
-            for (var e : tag.getList("entities", 10)) {
+            for (var e : tag.getListOrEmpty("entities")) {
                 var c = (net.minecraft.nbt.CompoundTag) e;
-                var nbt = c.getCompound("nbt");
-                if (!nbt.getString("id").equals("guhs:guh_npc") || !nbt.getString("Kind").equals("reisguh")) {
+                var nbt = c.getCompoundOrEmpty("nbt");
+                if (!nbt.getStringOr("id", "").equals("guhs:guh_npc") || !nbt.getStringOr("Kind", "").equals("reisguh")) {
                     continue;
                 }
                 n++;
-                helper.assertTrue(nbt.getString("ReisName").equals(naam), template + ": her name is " + naam + ", not " + nbt.getString("ReisName"));
-                var bp = c.getList("blockPos", 3);
-                BlockPos at = new BlockPos(bp.getInt(0), bp.getInt(1), bp.getInt(2));
+                helper.assertTrue(nbt.getStringOr("ReisName", "").equals(naam), template + ": her name is " + naam + ", not " + nbt.getStringOr("ReisName", ""));
+                var bp = c.getListOrEmpty("blockPos");
+                BlockPos at = new BlockPos(bp.getIntOr(0, 0), bp.getIntOr(1, 0), bp.getIntOr(2, 0));
                 String onder = blocks.getOrDefault(at.below(), "minecraft:air");
                 helper.assertFalse(onder.equals("minecraft:air"), template + ": she stands on something at " + at);
                 helper.assertTrue(blocks.getOrDefault(at, "minecraft:air").equals("minecraft:air")

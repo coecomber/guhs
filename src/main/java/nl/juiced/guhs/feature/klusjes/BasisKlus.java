@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.klusjes;
 import java.util.function.Supplier;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
@@ -61,13 +61,13 @@ public abstract class BasisKlus implements Klus {
 
     /** Any kind of Mika (guhs:*mika*, not the game ones): the only ones a guh may gently push away. */
     public static boolean isMika(Entity e) {
-        ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(e.getType());
+        Identifier key = BuiltInRegistries.ENTITY_TYPE.getKey(e.getType());
         return Guhs.MODID.equals(key.getNamespace()) && key.getPath().contains("mika") && !SPEL_MIKAS.contains(key.getPath());
     }
 
     /** A Mika of a game or a character (never a threat for the huisje). */
     public static boolean isSpelMika(Entity e) {
-        ResourceLocation key = BuiltInRegistries.ENTITY_TYPE.getKey(e.getType());
+        Identifier key = BuiltInRegistries.ENTITY_TYPE.getKey(e.getType());
         return Guhs.MODID.equals(key.getNamespace()) && SPEL_MIKAS.contains(key.getPath());
     }
 }

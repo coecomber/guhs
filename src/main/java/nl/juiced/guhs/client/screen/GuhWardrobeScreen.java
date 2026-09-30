@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
@@ -36,6 +36,7 @@ import nl.juiced.guhs.registry.ModItems;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The guh's wardrobe (2.9). Tab "Kleding": a big 3D preview of your guh (drag to turn it around) that tries on
  * everything you click, per slot a scrollable list of the pieces YOU unlocked (plus "niets"), search and a filter per
@@ -153,7 +154,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             pop = null;
             return;
         }
-        GuhEntity copy = (GuhEntity) guh.getType().create(minecraft.level);
+        GuhEntity copy = (GuhEntity) guh.getType().create(minecraft.level, EntitySpawnReason.TRIGGERED);
         if (copy == null) {
             pop = null;
             return;
@@ -397,7 +398,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
     // ---------------------------------------------------------------------------------------------------------------
 
     @Override
-    protected void renderBg(GuiGraphics g, float partialTick, int mouseX, int mouseY) {
+    protected void renderBg(GuiGraphicsExtractor g, float partialTick, int mouseX, int mouseY) {
         int x = leftPos, y = topPos;
         g.fill(x - 2, y - 2, x + W + 2, y + H + 2, GOLD);
         g.fill(x - 1, y - 1, x + W + 1, y + H + 1, BORDER);
@@ -409,7 +410,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
         }
     }
 
-    private void renderKleding(GuiGraphics g, int mouseX, int mouseY) {
+    private void renderKleding(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         int x = leftPos, y = topPos;
         // the preview: a little stage with a spotlight
         g.fill(x + PREVIEW_X - 1, y + PREVIEW_Y - 1, x + PREVIEW_X + PREVIEW_W + 1, y + PREVIEW_Y + PREVIEW_H + 1, BORDER);
@@ -418,10 +419,10 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
         if (pop != null) {
             renderPop(g, x + PREVIEW_X, y + PREVIEW_Y + 4, x + PREVIEW_X + PREVIEW_W, y + PREVIEW_Y + PREVIEW_H - 8, pop);
         }
-        g.drawCenteredString(font, Component.translatable("gui.guhs.kleding.draai"), x + PREVIEW_X + PREVIEW_W / 2,
+        g.centeredText(font, Component.translatable("gui.guhs.kleding.draai"), x + PREVIEW_X + PREVIEW_W / 2,
                 y + PREVIEW_Y + PREVIEW_H - 10, TEXT_DIM);
         if (anders()) {
-            g.drawCenteredString(font, Component.translatable("gui.guhs.kleding.pas_aan"), x + PREVIEW_X + PREVIEW_W / 2, y + PREVIEW_Y + 4, GOLD);
+            g.centeredText(font, Component.translatable("gui.guhs.kleding.pas_aan"), x + PREVIEW_X + PREVIEW_W / 2, y + PREVIEW_Y + 4, GOLD);
         }
         // the slot tabs: the piece the preview has in each slot
         for (int i = 0; i < SLOTS.size(); i++) {
@@ -432,12 +433,12 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             g.fill(tx + 1, ty + 1, tx + TAB_W - 1, ty + TAB_H - (s == slot ? 0 : 1), s == slot ? PANEL : SLOT_IN);
             GuhClothes c = preview.get(s);
             if (c != null) {
-                g.renderItem(icon(c), tx + (TAB_W - 16) / 2, ty + 3);
+                g.item(icon(c), tx + (TAB_W - 16) / 2, ty + 3);
             } else {
-                g.drawCenteredString(font, slotLetter(s), tx + TAB_W / 2, ty + 7, TEXT_DIM);
+                g.centeredText(font, slotLetter(s), tx + TAB_W / 2, ty + 7, TEXT_DIM);
             }
         }
-        g.drawString(font, Component.translatable("gui.guhs.menu.clothes." + slot.name().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.BOLD),
+        g.text(font, Component.translatable("gui.guhs.menu.clothes." + slot.name().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.BOLD),
                 x + LIST_X, y + TAB_Y + TAB_H + 3, BORDER, false);
         // (the search box and the source filter sit under it: widgets)
         // the list: "niets" first, then your unlocks
@@ -455,15 +456,15 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             boolean kan = magWissel(slot, c);
             g.fill(x + LIST_X, ry, x + LIST_X + LIST_W, ry + ROW_H - 1, gekozen ? ROW_SEL : over && kan ? ROW_OVER : ROW);
             if (c == null) {
-                g.drawString(font, Component.translatable("gui.guhs.kleding.niets"), x + LIST_X + 22, ry + 5, kan ? TEXT_DIM : 0xFF806070, false);
+                g.text(font, Component.translatable("gui.guhs.kleding.niets"), x + LIST_X + 22, ry + 5, kan ? TEXT_DIM : 0xFF806070, false);
             } else {
-                g.renderItem(icon(c), x + LIST_X + 2, ry + 1);
+                g.item(icon(c), x + LIST_X + 2, ry + 1);
                 int ruimte = LIST_W - 26 - (guh != null && guh.getClothes(slot) == c ? font.width(Component.translatable("gui.guhs.kleding.draagt")) + 8 : 4);
                 String naam = font.plainSubstrByWidth(icon(c).getHoverName().getString(), ruimte);
-                g.drawString(font, naam, x + LIST_X + 22, ry + 5, kan ? TEXT : 0xFF806070, false);
+                g.text(font, naam, x + LIST_X + 22, ry + 5, kan ? TEXT : 0xFF806070, false);
             }
             if (guh != null && guh.getClothes(slot) == c) {
-                g.drawString(font, Component.translatable("gui.guhs.kleding.draagt"), x + LIST_X + LIST_W - 4 - font.width(
+                g.text(font, Component.translatable("gui.guhs.kleding.draagt"), x + LIST_X + LIST_W - 4 - font.width(
                         Component.translatable("gui.guhs.kleding.draagt")), ry + 5, GREEN, false);
             }
         }
@@ -471,7 +472,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             List<net.minecraft.util.FormattedCharSequence> regels = font.split(Component.translatable(
                     bronFilter == null && zoek.getValue().isBlank() ? "gui.guhs.kleding.leeg" : "gui.guhs.kleding.niks_gevonden"), LIST_W - 12);
             for (int i = 0; i < regels.size() && i < 5; i++) {
-                g.drawString(font, regels.get(i), x + LIST_X + 6, y + LIST_Y + ROW_H + 6 + i * 10, TEXT_DIM, false);
+                g.text(font, regels.get(i), x + LIST_X + 6, y + LIST_Y + ROW_H + 6 + i * 10, TEXT_DIM, false);
             }
         }
         // the scrollbar
@@ -483,12 +484,12 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             g.fill(barX, ky, barX + 4, ky + knob, BORDER);
         }
         // favourites label and the message line
-        g.drawString(font, Component.translatable("gui.guhs.kleding.favorieten"), x + LIST_X, y + FAV_Y + 5, TEXT_DIM, false);
+        g.text(font, Component.translatable("gui.guhs.kleding.favorieten"), x + LIST_X, y + FAV_Y + 5, TEXT_DIM, false);
         Component regel = meldingTicks > 0 ? melding
                 : Component.translatable("gui.guhs.kleding.ontgrendeld_aantal", aantalUnlocks, KledingBronnen.aantalOntgrendelbaar());
         List<net.minecraft.util.FormattedCharSequence> regels = font.split(regel, W - LIST_X - 8);
         for (int i = 0; i < regels.size() && i < 2; i++) {
-            g.drawCenteredString(font, regels.get(i), x + (LIST_X + W) / 2, y + MELDING_Y + i * 10, meldingTicks > 0 ? TEXT : TEXT_DIM);
+            g.centeredText(font, regels.get(i), x + (LIST_X + W) / 2, y + MELDING_Y + i * 10, meldingTicks > 0 ? TEXT : TEXT_DIM);
         }
     }
 
@@ -504,7 +505,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
         };
     }
 
-    private void renderRugzak(GuiGraphics g, int mouseX, int mouseY) {
+    private void renderRugzak(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         int x = leftPos, y = topPos;
         // the real guh on the left
         g.fill(x + 8, y + 30, x + GuhWardrobeMenu.OFFSET_X - 6, y + 140, 0x40FFFFFF);
@@ -517,9 +518,9 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
                     mouseX, mouseY, guh);
             guh.hideName = naam;
         }
-        g.drawString(font, Component.translatable("gui.guhs.wardrobe.armor"), x + GuhWardrobeMenu.ARMOR_X - 60, y + GuhWardrobeMenu.ARMOR_Y + 4,
+        g.text(font, Component.translatable("gui.guhs.wardrobe.armor"), x + GuhWardrobeMenu.ARMOR_X - 60, y + GuhWardrobeMenu.ARMOR_Y + 4,
                 TEXT, false);
-        g.drawString(font, Component.translatable(menu.hasBackpack() ? "gui.guhs.wardrobe.backpack" : "gui.guhs.wardrobe.no_backpack"),
+        g.text(font, Component.translatable(menu.hasBackpack() ? "gui.guhs.wardrobe.backpack" : "gui.guhs.wardrobe.no_backpack"),
                 x + GuhWardrobeMenu.PACK_X, y + GuhWardrobeMenu.PACK_Y - 11, menu.hasBackpack() ? TEXT : 0xFF8A6A7A, false);
         for (var s : menu.slots) {
             if (s.isActive()) {
@@ -537,17 +538,17 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             // (over the empty places of the backpack)
             List<net.minecraft.util.FormattedCharSequence> regels = font.split(Component.translatable("gui.guhs.kleding.geen_rugzak"), 156);
             for (int i = 0; i < regels.size() && i < 3; i++) {
-                g.drawCenteredString(font, regels.get(i), x + GuhWardrobeMenu.PACK_X + 80, y + GuhWardrobeMenu.PACK_Y + 4 + i * 10, TEXT_DIM);
+                g.centeredText(font, regels.get(i), x + GuhWardrobeMenu.PACK_X + 80, y + GuhWardrobeMenu.PACK_Y + 4 + i * 10, TEXT_DIM);
             }
         } else if (!menu.backpackIsEmpty()) {
             Component label = Component.translatable("gui.guhs.wardrobe.backpack");
-            g.drawString(font, Component.translatable("gui.guhs.kleding.rugzak_vol"), x + GuhWardrobeMenu.PACK_X + font.width(label) + 6,
+            g.text(font, Component.translatable("gui.guhs.kleding.rugzak_vol"), x + GuhWardrobeMenu.PACK_X + font.width(label) + 6,
                     y + GuhWardrobeMenu.PACK_Y - 11, TEXT_DIM, false);
         }
     }
 
     /** Draws the preview guh turned by {@link #yaw} (you turn it by dragging), big enough to fill the stage. */
-    private void renderPop(GuiGraphics g, int x1, int y1, int x2, int y2, GuhEntity e) {
+    private void renderPop(GuiGraphicsExtractor g, int x1, int y1, int x2, int y2, GuhEntity e) {
         g.enableScissor(x1, y1, x2, y2);
         float cx = (x1 + x2) / 2f, cy = (y1 + y2) / 2f + 6;
         // (2.9 visual QA: the hitbox is much smaller than the model, so sizing by the hitbox showed only a huge head. A guh
@@ -575,17 +576,17 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
     }
 
     @Override
-    protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
-        g.drawString(font, font.plainSubstrByWidth(title.getString(), W - 200), 8, 9, TEXT, false);
+    protected void extractLabels(GuiGraphicsExtractor g, int mouseX, int mouseY) {
+        g.text(font, font.plainSubstrByWidth(title.getString(), W - 200), 8, 9, TEXT, false);
         if (!kledingTab) {
             // (2.9 visual QA: our own Dutch label instead of vanilla's "Inventory")
-            g.drawString(font, Component.translatable("gui.guhs.kleding.jouw_spullen"), inventoryLabelX, inventoryLabelY, TEXT, false);
+            g.text(font, Component.translatable("gui.guhs.kleding.jouw_spullen"), inventoryLabelX, inventoryLabelY, TEXT, false);
         }
     }
 
     @Override
-    public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.render(g, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
         if (kledingTab) {
             tooltips(g, mouseX, mouseY);
         } else {
@@ -593,7 +594,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
         }
     }
 
-    private void tooltips(GuiGraphics g, int mouseX, int mouseY) {
+    private void tooltips(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         int x = leftPos, y = topPos;
         for (int i = 0; i < SLOTS.size(); i++) {
             int tx = x + LIST_X + i * (TAB_W + 2), ty = y + TAB_Y;
@@ -603,7 +604,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
                 tip.add(Component.translatable("gui.guhs.menu.clothes." + s.name().toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.GOLD));
                 GuhClothes c = preview.get(s);
                 tip.add(c == null ? Component.translatable("gui.guhs.kleding.niets").withStyle(ChatFormatting.GRAY) : icon(c).getHoverName());
-                g.renderComponentTooltip(font, tip, mouseX, mouseY);
+                g.setComponentTooltipForNextFrame(font, tip, mouseX, mouseY);
                 return;
             }
         }
@@ -621,7 +622,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             } else {
                 tip.add(Component.translatable("gui.guhs.kleding.klik_passen").withStyle(ChatFormatting.DARK_GRAY));
             }
-            g.renderComponentTooltip(font, tip, mouseX, mouseY);
+            g.setComponentTooltipForNextFrame(font, tip, mouseX, mouseY);
         }
     }
 

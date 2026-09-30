@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -114,14 +114,14 @@ public final class MijnGuhsTab {
     // drawing
     // =====================================================================================================================
 
-    public void teken(GuiGraphics g, int mouseX, int mouseY) {
+    public void teken(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         MijnGuhsCache.Guh guh = open == null ? null : MijnGuhsCache.van(open);
         if (guh == null) {
             if (MijnGuhsCache.guhs().isEmpty()) {
                 GidsTekst.alinea(g, Component.translatable("gui.guhs.mijnguhs.leeg"), left + 20, top + 60, w - 40, 1f, TEKST);
             } else {
                 String n = String.valueOf(MijnGuhsCache.guhs().size());
-                g.drawString(font, n + " ♥", left + w - 8 - font.width(n + " ♥"), top + 9, ROZE, false);
+                g.text(font, n + " ♥", left + w - 8 - font.width(n + " ♥"), top + 9, ROZE, false);
             }
             lijst.teken(g, mouseX, mouseY, 0xFFD27A9C, 0x30D27A9C);
             return;
@@ -227,7 +227,7 @@ public final class MijnGuhsTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
             g.fill(x, y, x + w, y + RIJ - 2, hover ? 0x40F77AB0 : 0x20F7B6CB);
             LivingEntity pop = pop(guh);
             if (pop != null) {
@@ -354,7 +354,7 @@ public final class MijnGuhsTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
             GidsTekst.passend(g, tekst.copy().withStyle(ChatFormatting.BOLD), x + 1, y + 4, w - 2, 1f, ROZE, false);
             g.fill(x, y + KOP - 2, x + w, y + KOP - 1, 0x60D27A9C);
         }
@@ -378,7 +378,7 @@ public final class MijnGuhsTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
             GidsTekst.alinea(g, tekst, x + 2, y + 1, w - 4, schaal, kleur);
         }
     }
@@ -398,7 +398,7 @@ public final class MijnGuhsTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
             int vw = GidsTekst.passend(g, waarde, x + w - 2, y + 1, (w - 4) / 2, 0.875f, TEKST, true);
             GidsTekst.passend(g, naam, x + 2, y + 1, w - vw - 8, 0.875f, LICHT, false);
         }
@@ -409,8 +409,8 @@ public final class MijnGuhsTab {
     // =====================================================================================================================
 
     static Component soortRegel(MijnGuhsCache.Guh guh) {
-        GuhVariant v = GuhVariant.byId(guh.looks().getString("Variant"));
-        GuhPersonality p = GuhPersonality.byId(guh.looks().getString("Personality"));
+        GuhVariant v = GuhVariant.byId(guh.looks().getStringOr("Variant", ""));
+        GuhPersonality p = GuhPersonality.byId(guh.looks().getStringOr("Personality", ""));
         Component c = v.displayName().copy();
         return p == null ? c : c.copy().append(" · ").append(p.displayName());
     }

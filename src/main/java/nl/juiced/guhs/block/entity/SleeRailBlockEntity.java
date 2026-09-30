@@ -30,7 +30,7 @@ public class SleeRailBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        finish = tag.getBoolean("Finish");
+        finish = tag.getBooleanOr("Finish", false);
     }
 
     @Override

@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.vissen;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -16,8 +16,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -27,8 +25,6 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
 /** GameTests of the Guhvis-wedstrijd (run with the others:  gradlew runGameTestServer). */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class VissenGameTests {
     private static final String EMPTY = "empty";
 
@@ -42,7 +38,7 @@ public class VissenGameTests {
     private static ServerPlayer angler(GameTestHelper helper, GuhNpcEntity npc) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.getInventory().clearContent();
-        player.moveTo(npc.getX() + 1, npc.getY(), npc.getZ());
+        player.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         return player;
     }
 
@@ -65,7 +61,7 @@ public class VissenGameTests {
     }
 
     /** Walk in with empty pockets, get a rod, catch fish (points by weight), time's up: visbonnen, records, rod gone. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vissenContestWithoutOwnItems(GameTestHelper helper) {
         GuhNpcEntity npc = visguh(helper);
         ServerPlayer player = angler(helper, npc);
@@ -104,7 +100,7 @@ public class VissenGameTests {
     }
 
     /** A second, better contest: a new record with a bonus; a worse one doesn't overwrite it. No second present. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vissenRecordsSurviveAndImprove(GameTestHelper helper) {
         GuhNpcEntity npc = visguh(helper);
         ServerPlayer player = angler(helper, npc);
@@ -117,11 +113,11 @@ public class VissenGameTests {
             VisWedstrijd contest = VisWedstrijd.of(npc);
             if (round == 1) {
                 contest.land(npc, player, VisSoort.GOUDEN_GUHVIS, 3000, npc.position());          // 150 + 45 = 195
-                ItemStack gold = player.getInventory().items.stream().filter(st -> st.is(VissenFeature.vis(VisSoort.GOUDEN_GUHVIS)))
+                ItemStack gold = player.getInventory().getNonEquipmentItems().stream().filter(st -> st.is(VissenFeature.vis(VisSoort.GOUDEN_GUHVIS)))
                         .findFirst().orElse(ItemStack.EMPTY);
                 var tag = gold.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA,
                         net.minecraft.world.item.component.CustomData.EMPTY).copyTag();
-                helper.assertTrue(tag.getInt("GuhvisNr") == 1 && tag.getInt("GuhvisGram") == 3000 && VisWedstrijd.golden(player) == 1,
+                helper.assertTrue(tag.getIntOr("GuhvisNr", 0) == 1 && tag.getIntOr("GuhvisGram", 0) == 3000 && VisWedstrijd.golden(player) == 1,
                         "the golden guhfish is a numbered collector's piece: " + tag);
             } else {
                 contest.land(npc, player, VisSoort.KAASVIS, round == 0 ? 2500 : 1000, npc.position());
@@ -138,7 +134,7 @@ public class VissenGameTests {
     }
 
     /** Vanilla fishing in the pond during the contest lands one of our fish instead of the vanilla loot. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vissenRealBiteGivesContestFish(GameTestHelper helper) {
         GuhNpcEntity npc = visguh(helper);
         ServerPlayer player = angler(helper, npc);
@@ -172,7 +168,7 @@ public class VissenGameTests {
     }
 
     /** The loaned rod can't be thrown away, stored or kept, and anglers can't get hurt or hungry. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vissenRodIsNeverKept(GameTestHelper helper) {
         GuhNpcEntity npc = visguh(helper);
         ServerPlayer player = angler(helper, npc);
@@ -212,7 +208,7 @@ public class VissenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vissenAnglersAreSafe(GameTestHelper helper) {
         GuhNpcEntity npc = visguh(helper);
         ServerPlayer player = angler(helper, npc);
@@ -235,12 +231,12 @@ public class VissenGameTests {
     }
 
     /** Walking off (or logging out, dying, another dimension) takes you out of the contest, and the rod goes back. */
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void vissenWalkingOffEndsIt(GameTestHelper helper) {
         GuhNpcEntity npc = visguh(helper);
         ServerPlayer player = angler(helper, npc);
         VisWedstrijd.action(npc, player, VisWedstrijd.START);
-        player.moveTo(npc.getX() + VisWedstrijd.AREA_RADIUS + 20, npc.getY(), npc.getZ());
+        player.snapTo(npc.getX() + VisWedstrijd.AREA_RADIUS + 20, npc.getY(), npc.getZ());
         helper.succeedWhen(() -> {
             helper.assertTrue(!VisWedstrijd.isFishing(player), "still fishing");
             helper.assertTrue(VisWedstrijd.rods(player) == 0, "the rod went back");
@@ -250,7 +246,7 @@ public class VissenGameTests {
     }
 
     /** Fishing together: a friend joins during the contest, both get their own score, the winner a bonus. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vissenTogetherHasAWinner(GameTestHelper helper) {
         GuhNpcEntity npc = visguh(helper);
         ServerPlayer first = angler(helper, npc), friend = angler(helper, npc);
@@ -270,7 +266,7 @@ public class VissenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void visguhSellsTheAnglerOutfit(GameTestHelper helper) {
         GuhNpcEntity npc = visguh(helper);
         var offers = npc.getOffers();
@@ -284,7 +280,7 @@ public class VissenGameTests {
     }
 
     /** The real pond: the Visguh on solid ground at her desk, water close by, and the record board fills in. */
-    @GameTest(template = "guhvis_vijver", timeoutTicks = 100)
+    @GuhTest(template = "guhvis_vijver", timeoutTicks = 100)
     public static void vissenThePondItself(GameTestHelper helper) {
         var npcs = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class, helper.getBounds(),
                 n -> n.getKind() == GuhNpcEntity.Kind.VISGUH);
@@ -311,10 +307,10 @@ public class VissenGameTests {
         }
         helper.assertTrue(sign != null, "the record board is there");
         var boards = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class,
-                new net.minecraft.world.phys.AABB(sign).inflate(1, 4, 1), d -> d.getTags().contains(Scorebord.TAG));
+                new net.minecraft.world.phys.AABB(sign).inflate(1, 4, 1), d -> d.entityTags().contains(Scorebord.TAG));
         helper.assertTrue(boards.size() == 1, "one floating top 3 above the record board: " + boards.size());
         var saved = boards.get(0).saveWithoutId(new net.minecraft.nbt.CompoundTag());
-        helper.assertTrue(saved.getString("text").contains("99999"), "the top 3 shows the champion: " + saved.getString("text"));
+        helper.assertTrue(saved.getStringOr("text", "").contains("99999"), "the top 3 shows the champion: " + saved.getStringOr("text", ""));
         leave(helper, champ);
         var shown = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.ItemDisplay.class, helper.getBounds());
         helper.assertTrue(shown.size() == 11 && shown.stream().allMatch(d -> !d.getSlot(0).get().isEmpty()), "the fish on show: " + shown.size());
@@ -326,7 +322,7 @@ public class VissenGameTests {
     // --- 2.9: makkelijk / medium / lastig -----------------------------------------------------------------------------------
 
     /** The bite window per level: makkelijk long, medium vanilla's own, lastig short; the float knows the contest's level. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vissenBiteWindowPerLevel(GameTestHelper helper) {
         helper.assertTrue(GuhvisDobber.werkt(), "the float can set the bite window");
         net.minecraft.util.RandomSource random = net.minecraft.util.RandomSource.create(7);
@@ -349,7 +345,7 @@ public class VissenGameTests {
     }
 
     /** Lastig: fish can wriggle off the hook (not the Mika-meerval), its own board and record, and more visbonnen. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vissenLastigFishEscapeAndMoreBonnen(GameTestHelper helper) {
         var lastig = nl.juiced.guhs.feature.spelen.Niveau.LASTIG;
         helper.assertTrue(VisWedstrijd.ontsnapKans(VisSoort.MIKA_MEERVAL, 7000, lastig) == 0f, "the Mika-meerval never lets go");

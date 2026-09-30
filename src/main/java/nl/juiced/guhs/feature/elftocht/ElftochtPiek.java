@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
@@ -29,10 +29,10 @@ public final class ElftochtPiek {
     public record Peak(int x, int z, double value) {
     }
 
-    private record NoiseKey(long seed, ResourceLocation id) {
+    private record NoiseKey(long seed, Identifier id) {
     }
 
-    private record CellKey(long seed, ResourceLocation id, int size, int cx, int cz) {
+    private record CellKey(long seed, Identifier id, int size, int cx, int cz) {
     }
 
     private static final Map<NoiseKey, NormalNoise> NOISES = new ConcurrentHashMap<>();
@@ -40,14 +40,14 @@ public final class ElftochtPiek {
 
     /** The polder noise of this world seed, made like the terrain makes it. */
     public static NormalNoise noise(long seed, Holder<NormalNoise.NoiseParameters> params) {
-        ResourceLocation id = params.unwrapKey().orElseThrow().location();
+        Identifier id = params.unwrapKey().orElseThrow().identifier();
         return NOISES.computeIfAbsent(new NoiseKey(seed, id), k -> NormalNoise.create(
                 WorldgenRandom.Algorithm.XOROSHIRO.newInstance(seed).forkPositional().fromHashOf(id), params.value()));
     }
 
     /** The highest point of the noise in cell (cx, cz) of size x size chunks. */
     public static Peak peak(long seed, Holder<NormalNoise.NoiseParameters> params, int size, int cx, int cz) {
-        ResourceLocation id = params.unwrapKey().orElseThrow().location();
+        Identifier id = params.unwrapKey().orElseThrow().identifier();
         CellKey key = new CellKey(seed, id, size, cx, cz);
         Peak known = PEAKS.get(key);
         if (known != null) {
@@ -170,7 +170,7 @@ public final class ElftochtPiek {
     public record Spot(int x, int z, int vlak) {
     }
 
-    private record SpotKey(long seed, ResourceLocation id, int size, int cx, int cz, Vlak vlak) {
+    private record SpotKey(long seed, Identifier id, int size, int cx, int cz, Vlak vlak) {
     }
 
     private static final Map<SpotKey, Spot> SPOTS = new ConcurrentHashMap<>();
@@ -184,7 +184,7 @@ public final class ElftochtPiek {
         if (v.minVlak() <= 0) {
             return new Spot(peak.x(), peak.z(), GRID * GRID);
         }
-        SpotKey key = new SpotKey(seed, params.unwrapKey().orElseThrow().location(), size, cx, cz, v);
+        SpotKey key = new SpotKey(seed, params.unwrapKey().orElseThrow().identifier(), size, cx, cz, v);
         Spot known = SPOTS.get(key);
         if (known != null) {
             return known;

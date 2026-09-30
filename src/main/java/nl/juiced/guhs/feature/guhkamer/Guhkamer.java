@@ -129,7 +129,7 @@ public final class Guhkamer {
     }
 
     public static boolean isGast(Entity e) {
-        return e.getPersistentData().getBoolean(GAST);
+        return e.getPersistentData().getBooleanOr(GAST, false);
     }
 
     /** Marks a guh as a guest (or not): the server-side mark and the synced flag the Guh menu reads (2.10.1). */
@@ -188,7 +188,7 @@ public final class Guhkamer {
         if (!eerste) {
             ServerPlayer baas = s.getPlayerList().getPlayer(eigenaar);
             if (baas != null) {
-                baas.displayClientMessage(Component.translatable("gui.guhs.guhkamer.gegroeid", b, b, plekken(z)).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+                baas.sendSystemMessage(Component.translatable("gui.guhs.guhkamer.gegroeid", b, b, plekken(z)).withStyle(ChatFormatting.LIGHT_PURPLE));
                 GidsFeature.grant(baas, "lieve_vadsjes/guhkamer_groei");
             }
             p.level().playSound(null, p.midden(), GuhkamerFeature.GROEI.get(), SoundSource.BLOCKS, 1f, 1f);
@@ -202,7 +202,7 @@ public final class Guhkamer {
 
     /** Sends one of the player's own guhs to their Guhkamer. */
     public static Uitkomst stuur(ServerPlayer speler, GuhEntity guh) {
-        MinecraftServer s = speler.server;
+        MinecraftServer s = speler.level().getServer();
         if (!Band.isBandGuh(guh) || !speler.getUUID().equals(guh.getOwnerUUID())) {
             return Uitkomst.NIET_JOUW;
         }
@@ -228,8 +228,8 @@ public final class Guhkamer {
         Band.moment(guh, speler, Moment.GUHKAMER, "");
         if (Dagboek.eersteKeer(guh, speler, "eerste_guhkamer")) {
             Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.guhkamer.eerste");
-        } else if (van.random.nextInt(3) == 0) {
-            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.guhkamer.logeren_" + (1 + van.random.nextInt(3)));
+        } else if (van.getRandom().nextInt(3) == 0) {
+            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.guhkamer.logeren_" + (1 + van.getRandom().nextInt(3)));
         }
         markeer(guh, true);
         GuhkamerData.Gast gast = k.gasten.computeIfAbsent(id, i -> new GuhkamerData.Gast(i, guh.getName().getString()));
@@ -259,7 +259,7 @@ public final class Guhkamer {
     /** Calls a guest back to the player (from the room, wherever the player is). Returns the guh, or null. */
     @Nullable
     public static Entity roep(ServerPlayer speler, UUID id) {
-        MinecraftServer s = speler.server;
+        MinecraftServer s = speler.level().getServer();
         GuhkamerData data = GuhkamerData.get(s);
         GuhkamerData.Kamer k = data.vind(speler.getUUID());
         GuhkamerData.Gast gast = k == null ? null : k.gasten.get(id);
@@ -280,7 +280,7 @@ public final class Guhkamer {
                 live = Band.zoekGeladen(s, id);
             }
             if (live == null) {
-                speler.displayClientMessage(Component.translatable("gui.guhs.guhkamer.even_geduld", gast.naam).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                speler.sendOverlayMessage(Component.translatable("gui.guhs.guhkamer.even_geduld", gast.naam).withStyle(ChatFormatting.LIGHT_PURPLE));
                 KWIJT.merge(speler.getUUID(), 200, Math::max);   // (load its room to find it)
                 return null;
             }
@@ -292,10 +292,10 @@ public final class Guhkamer {
             live.discard();
         }
         tag = bevrijd(tag);
-        ServerLevel naar = speler.serverLevel();
+        ServerLevel naar = speler.level();
         Vec3 kijk = speler.getLookAngle();
         Vec3 voor = speler.position().add(kijk.x * 1.5, 0, kijk.z * 1.5);
-        AABB ruimte = EntityType.byString(tag.getString("id")).map(t -> t.getDimensions().makeBoundingBox(voor)).orElse(new AABB(BlockPos.containing(voor)));
+        AABB ruimte = EntityType.byString(tag.getStringOr("id", "")).map(t -> t.getDimensions().makeBoundingBox(voor)).orElse(new AABB(BlockPos.containing(voor)));
         Vec3 at = naar.noCollision(ruimte) ? voor : speler.position();
         Entity e = PickedUpGuhItem.release(naar, tag, at.x, at.y, at.z, speler.getYRot() + 180);
         if (e == null) {
@@ -307,7 +307,7 @@ public final class Guhkamer {
         naar.sendParticles(nl.juiced.guhs.feature.band.BandFeature.HARTJE.get(), e.getX(), e.getY() + 1, e.getZ(), 5, 0.3, 0.2, 0.3, 0);
         naar.playSound(null, e.blockPosition(), GuhkamerFeature.TERUG.get(), SoundSource.NEUTRAL, 1f, 1f);
         GuhVolger.zet(e, PlekSoort.WERELD, "");
-        speler.displayClientMessage(Component.translatable("gui.guhs.guhkamer.geroepen", e.getName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        speler.sendOverlayMessage(Component.translatable("gui.guhs.guhkamer.geroepen", e.getName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         return e;
     }
 
@@ -323,17 +323,17 @@ public final class Guhkamer {
     /** Takes the guest mark, and any huisje home / asleep-inside state, off a guh's saved data. */
     static CompoundTag bevrijd(CompoundTag tag) {
         CompoundTag t = tag.copy();
-        CompoundTag nf = t.getCompound("NeoForgeData");
+        CompoundTag nf = t.getCompoundOrEmpty("NeoForgeData");
         nf.remove(GAST);
-        t.putInt("KnusVlaggen", t.getInt("KnusVlaggen") & ~BandVlaggen.GUHKAMER_GAST);
-        boolean binnen = nf.getBoolean(Huisjes.BINNEN);
+        t.putInt("KnusVlaggen", t.getIntOr("KnusVlaggen", 0) & ~BandVlaggen.GUHKAMER_GAST);
+        boolean binnen = nf.getBooleanOr(Huisjes.BINNEN, false);
         nf.remove(Huisjes.THUIS);
         nf.remove(Huisjes.DIM);
         nf.remove(Huisjes.BINNEN);
         t.put("NeoForgeData", nf);
         if (binnen) {
             t.putBoolean("NoGravity", false);
-            t.putInt("KnusVlaggen", t.getInt("KnusVlaggen") & ~BandVlaggen.HUISJE_BINNEN);
+            t.putInt("KnusVlaggen", t.getIntOr("KnusVlaggen", 0) & ~BandVlaggen.HUISJE_BINNEN);
         }
         return t;
     }
@@ -354,7 +354,7 @@ public final class Guhkamer {
                 continue;
             }
             Vec3 at = g.plek != null && box.contains(g.plek) ? g.plek : vrijePlek(p, k);
-            Entity e = PickedUpGuhItem.release(p.level(), g.data, at.x, at.y, at.z, p.level().random.nextFloat() * 360);
+            Entity e = PickedUpGuhItem.release(p.level(), g.data, at.x, at.y, at.z, p.level().getRandom().nextFloat() * 360);
             if (e != null) {
                 markeer(e, true);
                 if (e instanceof PathfinderMob mob && !Huisjes.isBewoner(e)) {
@@ -412,7 +412,7 @@ public final class Guhkamer {
     static Vec3 vrijePlek(Plek p, GuhkamerData.Kamer k) {
         int h = Math.max(2, k.breedte / 2 - 2);
         for (int i = 0; i < 12; i++) {
-            BlockPos q = p.midden().offset(p.level().random.nextInt(2 * h) - h, 0, p.level().random.nextInt(2 * h) - h);
+            BlockPos q = p.midden().offset(p.level().getRandom().nextInt(2 * h) - h, 0, p.level().getRandom().nextInt(2 * h) - h);
             if (p.level().getBlockState(q).getCollisionShape(p.level(), q).isEmpty()
                     && p.level().getBlockState(q.above()).getCollisionShape(p.level(), q.above()).isEmpty()) {
                 return Vec3.atBottomCenterOf(q);
@@ -469,7 +469,7 @@ public final class Guhkamer {
         List<ChunkPos> chunks = GEFORCEERD.remove(eigenaar);
         if (chunks != null) {
             for (ChunkPos c : chunks) {
-                p.level().setChunkForced(c.x, c.z, false);
+                p.level().setChunkForced(c.x(), c.z(), false);
             }
         }
     }
@@ -493,18 +493,18 @@ public final class Guhkamer {
     /** Somebody walks through a Guhkamer door. */
     static void deur(ServerPlayer speler, BlockPos onder, GuhkamerDeurBlock.Kant kant) {
         long nu = speler.level().getGameTime();
-        if (speler.getPersistentData().getLong(DEUR_TOT) > nu) {
+        if (speler.getPersistentData().getLongOr(DEUR_TOT, 0L) > nu) {
             return;
         }
         speler.getPersistentData().putLong(DEUR_TOT, nu + 40);
-        UUID eigenaar = eigenaarBij(speler.serverLevel(), onder);
+        UUID eigenaar = eigenaarBij(speler.level(), onder);
         if (eigenaar == null) {
             return;
         }
         if (kant == GuhkamerDeurBlock.Kant.MAAG) {
-            GuhWorldData.Maag maag = GuhWorldData.get(speler.server).maagOf(eigenaar);
+            GuhWorldData.Maag maag = GuhWorldData.get(speler.level().getServer()).maagOf(eigenaar);
             if (maag != null && !maag.mayVisit(speler.getUUID())) {
-                speler.displayClientMessage(Component.translatable("gui.guhs.guhkamer.prive", maag.ownerName).withStyle(ChatFormatting.RED), true);
+                speler.sendOverlayMessage(Component.translatable("gui.guhs.guhkamer.prive", maag.ownerName).withStyle(ChatFormatting.RED));
                 return;
             }
             gaNaarBinnen(speler, eigenaar);
@@ -534,7 +534,7 @@ public final class Guhkamer {
 
     /** Into the owner's Guhkamer (building it first when needed). */
     public static boolean gaNaarBinnen(ServerPlayer speler, UUID eigenaar) {
-        MinecraftServer s = speler.server;
+        MinecraftServer s = speler.level().getServer();
         zorgGebouwd(s, eigenaar);
         Plek p = plek(s, eigenaar);
         GuhkamerData.Kamer k = GuhkamerData.get(s).kamer(eigenaar);
@@ -548,19 +548,19 @@ public final class Guhkamer {
         materialiseer(p, k);
         if (speler.getUUID().equals(eigenaar)) {
             GidsFeature.grant(speler, "lieve_vadsjes/guhkamer_binnen");
-            speler.displayClientMessage(Component.translatable("gui.guhs.guhkamer.welkom_thuis", k.gasten.size()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            speler.sendOverlayMessage(Component.translatable("gui.guhs.guhkamer.welkom_thuis", k.gasten.size()).withStyle(ChatFormatting.LIGHT_PURPLE));
         } else {
             GidsFeature.grant(speler, "lieve_vadsjes/guhkamer_bezoek");
             GuhWorldData.Maag maag = GuhWorldData.get(s).maagOf(eigenaar);
-            speler.displayClientMessage(Component.translatable("gui.guhs.guhkamer.welkom_bezoek", maag == null ? "?" : maag.ownerName)
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            speler.sendOverlayMessage(Component.translatable("gui.guhs.guhkamer.welkom_bezoek", maag == null ? "?" : maag.ownerName)
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return true;
     }
 
     /** Out of the room, back to its door in the maag. */
     public static void gaNaarBuiten(ServerPlayer speler, UUID eigenaar) {
-        MinecraftServer s = speler.server;
+        MinecraftServer s = speler.level().getServer();
         Plek p = plek(s, eigenaar);
         if (p == null) {
             return;
@@ -608,11 +608,11 @@ public final class Guhkamer {
         if (niveau != BandNiveau.ZIELSGUH) {
             return;
         }
-        GuhkamerData.Kamer k = GuhkamerData.get(eigenaar.server).vind(eigenaar.getUUID());
+        GuhkamerData.Kamer k = GuhkamerData.get(eigenaar.level().getServer()).vind(eigenaar.getUUID());
         if (k != null && k.breedte > 0) {
-            zorgGebouwd(eigenaar.server, eigenaar.getUUID());
-        } else if (heeftMaag(eigenaar.server, eigenaar.getUUID())) {
-            eigenaar.displayClientMessage(Component.translatable("gui.guhs.guhkamer.groeit_straks").withStyle(ChatFormatting.LIGHT_PURPLE), false);
+            zorgGebouwd(eigenaar.level().getServer(), eigenaar.getUUID());
+        } else if (heeftMaag(eigenaar.level().getServer(), eigenaar.getUUID())) {
+            eigenaar.sendSystemMessage(Component.translatable("gui.guhs.guhkamer.groeit_straks").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 }

@@ -11,7 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
@@ -54,7 +54,7 @@ public final class PiepEvents {
             return;
         }
         Entity e = event.getEntity();
-        if (e.getTags().contains(ZIELI_TAG) && event.loadedFromDisk()) {
+        if (e.entityTags().contains(ZIELI_TAG) && event.loadedFromDisk()) {
             event.setCanceled(true);
             return;
         }
@@ -64,9 +64,9 @@ public final class PiepEvents {
         }
         // the muisje hook: every guh a structure template puts into the Guhmensie has one chance
         if ((e instanceof GuhEntity || e instanceof GuhNpcEntity) && level.dimension() == ModDimensions.GUHMENSION
-                && ((Mob) e).getSpawnType() == MobSpawnType.STRUCTURE && !e.getPersistentData().getBoolean(PiepSpawns.GEHAD)) {
+                && ((Mob) e).getSpawnType() == EntitySpawnReason.STRUCTURE && !e.getPersistentData().getBooleanOr(PiepSpawns.GEHAD, false)) {
             e.getPersistentData().putBoolean(PiepSpawns.GEHAD, true);
-            if (e instanceof GuhEntity guh && (guh.getTags().contains("guhs_caged_guhbert") || guh.getVariant() == nl.juiced.guhs.entity.GuhVariant.MAGER)) {
+            if (e instanceof GuhEntity guh && (guh.entityTags().contains("guhs_caged_guhbert") || guh.getVariant() == nl.juiced.guhs.entity.GuhVariant.MAGER)) {
                 return;
             }
             KANSEN.add(new Kans(level, e.blockPosition(), e.getUUID().getLeastSignificantBits()));
@@ -172,7 +172,7 @@ public final class PiepEvents {
         var piep = net.minecraft.commands.Commands.literal("piep").requires(s -> s.hasPermission(2))
                 .then(net.minecraft.commands.Commands.literal("schouder").executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
-                    PieppiepmuisjeEntity muis = PiepFeature.PIEPPIEPMUISJE.get().create(p.serverLevel());
+                    PieppiepmuisjeEntity muis = PiepFeature.PIEPPIEPMUISJE.get().create(p.level(), EntitySpawnReason.TRIGGERED);
                     if (muis == null || Schouder.heeft(p)) {
                         return 0;
                     }

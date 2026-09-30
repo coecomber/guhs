@@ -31,7 +31,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
@@ -50,6 +50,7 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * The Guh Beauty Vads-wedstrijd: one show in the beauty theatre, run by its Showguh. A show has three rounds; every
  * round the Showguh picks a theme, the performer dresses the model guh on the guh-face stage from the loaner wardrobe
@@ -246,7 +247,7 @@ public final class BeautyShow {
         npc.level().playSound(null, npc, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1.25f);
         CompoundTag saved = GuhQuests.saved(player);
         GuhQuests.say(player, npc, show != null ? "quest.guhs.beauty.running"
-                : saved.getBoolean(FIRST) ? "quest.guhs.beauty.hello" : "quest.guhs.beauty.hello_first");
+                : saved.getBooleanOr(FIRST, false) ? "quest.guhs.beauty.hello" : "quest.guhs.beauty.hello_first");
         CompoundTag data = new CompoundTag();
         data.putString("Mode", "lobby");
         data.putBoolean("Running", show != null);
@@ -258,7 +259,7 @@ public final class BeautyShow {
         }
         data.putInt("Best", best(player));
         Klassiekers.records(data, n -> best(player, n));
-        data.putInt("Shows", saved.getInt(SHOWS_PLAYED));
+        data.putInt("Shows", saved.getIntOr(SHOWS_PLAYED, 0));
         GuhEntity own = ownGuh(player);
         data.putString("OwnGuh", own == null ? "" : own.getDisplayName().getString());
         ModNetworking.sendTo(player, new BeautyPayloads.Open(npc.getId(), data));
@@ -330,12 +331,12 @@ public final class BeautyShow {
             }
             name = guh.getDisplayName();
         } else {
-            guh = ModEntities.GUH.get().create(world);
+            guh = ModEntities.GUH.get().create(world, EntitySpawnReason.TRIGGERED);
             if (guh == null) {
                 return null;
             }
-            guh.moveTo(spots[0].getX() + 0.5, spots[0].getY(), spots[0].getZ() + 0.5, 0, 0);
-            guh.finalizeSpawn(world, world.getCurrentDifficultyAt(spots[0]), MobSpawnType.EVENT, null);
+            guh.snapTo(spots[0].getX() + 0.5, spots[0].getY(), spots[0].getZ() + 0.5, 0, 0);
+            guh.finalizeSpawn(world, world.getCurrentDifficultyAt(spots[0]), EntitySpawnReason.EVENT, null);
             guh.setVariant(MODEL_LOOKS[world.getRandom().nextInt(MODEL_LOOKS.length)]);
             guh.setGuhScale(1.1f);
             guh.takeOffClothes();
@@ -391,7 +392,7 @@ public final class BeautyShow {
     private static void borrow(GuhEntity guh, GuhNpcEntity npc) {
         CompoundTag loan = new CompoundTag();
         if (guh.getOwnerUUID() != null) {
-            loan.putUUID("Owner", guh.getOwnerUUID());
+            loan.store("Owner", UUIDUtil.CODEC, guh.getOwnerUUID());
         }
         for (GuhClothes.Slot slot : ShowTheme.SLOTS) {
             GuhClothes worn = guh.getClothes(slot);
@@ -400,7 +401,7 @@ public final class BeautyShow {
         loan.putBoolean("NoAi", guh.isNoAi());
         loan.putBoolean("Invulnerable", guh.isInvulnerable());
         loan.putBoolean("Sitting", guh.isOrderedToSit());
-        loan.putUUID("Npc", npc.getUUID());
+        loan.store("Npc", UUIDUtil.CODEC, npc.getUUID());
         guh.getPersistentData().put(LOAN, loan);
         guh.ejectPassengers();
         guh.setOwnerUUID(null);            // nobody can undress it, pick it up or ride it now
@@ -412,24 +413,24 @@ public final class BeautyShow {
 
     /** Gives a borrowed guh back its owner, its own clothes and its own ways (after the show, or found after a crash). */
     public static void giveBack(GuhEntity guh) {
-        CompoundTag loan = guh.getPersistentData().getCompound(LOAN);
+        CompoundTag loan = guh.getPersistentData().getCompoundOrEmpty(LOAN);
         if (loan.isEmpty()) {
             return;
         }
         for (GuhClothes.Slot slot : ShowTheme.SLOTS) {
             guh.takeOff(slot);                 // (loaner clothes go back into the wardrobe)
-            GuhClothes own = GuhClothes.byId(loan.getString(slot.name()));
+            GuhClothes own = GuhClothes.byId(loan.getStringOr(slot.name(), ""));
             if (own != null && own.slot == slot) {
                 guh.wear(own);
             }
         }
-        if (loan.hasUUID("Owner")) {
-            guh.setOwnerUUID(loan.getUUID("Owner"));
+        if (loan.read("Owner", UUIDUtil.CODEC).isPresent()) {
+            guh.setOwnerUUID(loan.read("Owner", UUIDUtil.CODEC).orElseThrow());
         }
-        guh.setNoAi(loan.getBoolean("NoAi"));
-        guh.setInvulnerable(loan.getBoolean("Invulnerable"));
-        guh.setOrderedToSit(loan.getBoolean("Sitting"));
-        guh.setInSittingPose(loan.getBoolean("Sitting"));
+        guh.setNoAi(loan.getBooleanOr("NoAi", false));
+        guh.setInvulnerable(loan.getBooleanOr("Invulnerable", false));
+        guh.setOrderedToSit(loan.getBooleanOr("Sitting", false));
+        guh.setInSittingPose(loan.getBooleanOr("Sitting", false));
         guh.getPersistentData().remove(LOAN);
     }
 
@@ -438,7 +439,7 @@ public final class BeautyShow {
     public static BlockPos[] spots(GuhNpcEntity npc) {
         CompoundTag data = npc.roleData;
         if (data.contains("Model") && data.contains("Einde")) {
-            BlockPos a = BlockPos.of(data.getLong("Model")), b = BlockPos.of(data.getLong("Einde"));
+            BlockPos a = BlockPos.of(data.getLongOr("Model", 0L)), b = BlockPos.of(data.getLongOr("Einde", 0L));
             if (npc.level().getBlockState(a).is(BeautyFeature.PLEK.get()) && npc.level().getBlockState(b).is(BeautyFeature.PLEK.get())) {
                 return new BlockPos[]{a, b};
             }
@@ -470,7 +471,7 @@ public final class BeautyShow {
         List<UUID> list = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
             String tag = JURY_TAG + i;
-            List<GuhEntity> found = world.getEntitiesOfClass(GuhEntity.class, new AABB(end).inflate(24, 10, 24), g -> g.getTags().contains(tag));
+            List<GuhEntity> found = world.getEntitiesOfClass(GuhEntity.class, new AABB(end).inflate(24, 10, 24), g -> g.entityTags().contains(tag));
             list.add(found.isEmpty() ? null : found.get(0).getUUID());
         }
         return list;
@@ -771,7 +772,7 @@ public final class BeautyShow {
                 .append(Component.literal(score + "! ").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD))
                 .append(BeautyJury.reason(i, verdict, theme(), worn(), modelName, level.getRandom()).copy().withStyle(ChatFormatting.WHITE)));
         if (p != null) {
-            p.displayClientMessage(Component.translatable("quest.guhs.beauty.jury_bar", name, score).withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.beauty.jury_bar", name, score).withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -810,7 +811,7 @@ public final class BeautyShow {
     /** The audience guhs on the benches jump for joy. */
     private void cheer() {
         for (GuhEntity fan : level.getEntitiesOfClass(GuhEntity.class, new AABB(modelSpot).inflate(THEATRE, 16, THEATRE),
-                g -> g.getTags().contains(AUDIENCE_TAG))) {
+                g -> g.entityTags().contains(AUDIENCE_TAG))) {
             fan.triggerAnim("action", "happy");
             level.sendParticles(ParticleTypes.HEART, fan.getX(), fan.getY() + 1, fan.getZ(), 3, 0.3, 0.2, 0.3, 0.1);
             if (level.getRandom().nextInt(3) == 0) {
@@ -836,10 +837,10 @@ public final class BeautyShow {
             if (record) {
                 saved.putInt(Klassiekers.sleutel(BEST, niveau), total);
             }
-            saved.putInt(SHOWS_PLAYED, saved.getInt(SHOWS_PLAYED) + 1);
+            saved.putInt(SHOWS_PLAYED, saved.getIntOr(SHOWS_PLAYED, 0) + 1);
             p.sendSystemMessage(Component.translatable("quest.guhs.beauty.finale", total, ROUNDS * MAX_ROUND, rosettes, bonus)
                     .withStyle(ChatFormatting.GOLD));
-            if (!saved.getBoolean(FIRST)) {
+            if (!saved.getBooleanOr(FIRST, false)) {
                 saved.putBoolean(FIRST, true);
                 give(p, new ItemStack(BeautyFeature.SHOWROZET.get(), FIRST_ROSETTES));
                 give(p, new ItemStack(ModItems.GUH_BALLON.get(), 3));
@@ -881,7 +882,7 @@ public final class BeautyShow {
             if (ownGuh) {
                 giveBack(m);
                 if (p != null && p.level() == level && p.isAlive()) {
-                    m.moveTo(p.getX(), p.getY(), p.getZ(), p.getYRot(), 0);  // back to you, in its own clothes
+                    m.snapTo(p.getX(), p.getY(), p.getZ(), p.getYRot(), 0);  // back to you, in its own clothes
                 }
             } else {
                 level.sendParticles(ParticleTypes.POOF, m.getX(), m.getY() + 0.5, m.getZ(), 12, 0.3, 0.3, 0.3, 0.02);
@@ -933,12 +934,12 @@ public final class BeautyShow {
     }
 
     public static int best(Player player) {
-        return GuhQuests.saved(player).getInt(BEST);
+        return GuhQuests.saved(player).getIntOr(BEST, 0);
     }
 
     /** Your best show total on this level (medium = the old record). */
     public static int best(Player player, Niveau niveau) {
-        return GuhQuests.saved(player).getInt(Klassiekers.sleutel(BEST, niveau));
+        return GuhQuests.saved(player).getIntOr(Klassiekers.sleutel(BEST, niveau), 0);
     }
 
     public static MutableComponent themeName(ShowTheme theme) {
@@ -987,7 +988,7 @@ public final class BeautyShow {
 
     /** A big score card (a text display) floating over a jury guh's head. */
     private void scoreCard(Vec3 at, int score) {
-        Display.TextDisplay card = EntityType.TEXT_DISPLAY.create(level);
+        Display.TextDisplay card = EntityType.TEXT_DISPLAY.create(level, EntitySpawnReason.TRIGGERED);
         if (card == null) {
             return;
         }
@@ -1004,7 +1005,7 @@ public final class BeautyShow {
         transform.put("right_rotation", floats(0, 0, 0, 1));
         tag.put("transformation", transform);
         card.load(tag);
-        card.moveTo(at.x, at.y, at.z, 0, 0);
+        card.snapTo(at.x, at.y, at.z, 0, 0);
         card.addTag(SCORE_TAG);
         displays.add(card.getUUID());
         level.addFreshEntity(card);

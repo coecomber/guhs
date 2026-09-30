@@ -54,11 +54,11 @@ public class KatapultBrokjeEntity extends Entity {
 
     public static KatapultBrokjeEntity create(ServerLevel level, BlockPos pos, BlockState state, Vec3 velocity, @Nullable UUID npc) {
         KatapultBrokjeEntity e = new KatapultBrokjeEntity(KatapultFeature.BROKJE.get(), level);
-        e.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+        e.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
         e.entityData.set(STATE, state);
         e.setDeltaMovement(velocity);
         e.npc = npc;
-        e.life = LIFE + level.random.nextInt(20);
+        e.life = LIFE + level.getRandom().nextInt(20);
         level.addFreshEntity(e);
         return e;
     }
@@ -75,7 +75,7 @@ public class KatapultBrokjeEntity extends Entity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         Vec3 v = getDeltaMovement().add(0, -GRAVITY, 0).scale(DRAG);
@@ -97,7 +97,7 @@ public class KatapultBrokjeEntity extends Entity {
         } else {
             setDeltaMovement(v);
         }
-        if (--life <= 0 || getY() < level().getMinBuildHeight()) {
+        if (--life <= 0 || getY() < level().getMinY()) {
             poof();
         }
     }

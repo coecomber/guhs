@@ -53,14 +53,14 @@ public abstract class SchommelToestel extends ToestelBlock implements ToestelBlo
         }
         if (rijder instanceof GuhEntity g) {
             be.minstens(basis(bezet(level, pos)));
-            if (level.random.nextInt(90) == 0) {
+            if (level.getRandom().nextInt(90) == 0) {
                 level.playSound(null, rijder.blockPosition(), ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 0.8f, g.getVoicePitch() * 1.1f);
             }
-            if (level.random.nextInt(25) == 0) {
+            if (level.getRandom().nextInt(25) == 0) {
                 Vec3 p = rijder.position();
                 level.sendParticles(nl.juiced.guhs.feature.band.BandFeature.HARTJE.get(), p.x, p.y + rijder.getBbHeight() + 0.2, p.z, 1, 0.2, 0.1, 0.2, 0);
             }
-            if (level.random.nextInt(160) == 0 && be.amplitude(level.getGameTime()) > maxHoek() * 0.4f) {
+            if (level.getRandom().nextInt(160) == 0 && be.amplitude(level.getGameTime()) > maxHoek() * 0.4f) {
                 level.playSound(null, rijder.blockPosition(), SpeelgoedFeature.WIEEE.get(), SoundSource.NEUTRAL, 0.8f, g.getVoicePitch());
             }
         }
@@ -71,9 +71,9 @@ public abstract class SchommelToestel extends ToestelBlock implements ToestelBlo
         if (player.isShiftKeyDown()) {
             int plek = vrijePlek(level, pos);
             if (plek < 0) {
-                player.displayClientMessage(Component.translatable("gui.guhs.speelgoed.vol").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.speelgoed.vol").withStyle(ChatFormatting.LIGHT_PURPLE));
             } else if (ZitjeEntity.zet(level, pos, plek, player, 0, 1) != null) {
-                player.displayClientMessage(Component.translatable("gui.guhs.speelgoed.zit").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.speelgoed.zit").withStyle(ChatFormatting.LIGHT_PURPLE));
                 Spelen.spelerSpeelt(player, speeltje());
             }
             return InteractionResult.CONSUME;
@@ -85,12 +85,12 @@ public abstract class SchommelToestel extends ToestelBlock implements ToestelBlo
     /** A push by a player: more swing, and the guhs on it love it (hearts from their owner). */
     public boolean duw(ServerLevel level, BlockPos pos, ServerPlayer player) {
         long nu = level.getGameTime();
-        if (player.getPersistentData().getLong(DUW_TOT) > nu || !(level.getBlockEntity(pos) instanceof ToestelBlockEntity be)) {
+        if (player.getPersistentData().getLongOr(DUW_TOT, 0L) > nu || !(level.getBlockEntity(pos) instanceof ToestelBlockEntity be)) {
             return false;
         }
         player.getPersistentData().putLong(DUW_TOT, nu + 8);
         be.duw(duwKracht());
-        level.playSound(null, pos, SpeelgoedFeature.DUW.get(), SoundSource.BLOCKS, 0.8f, 0.9f + level.random.nextFloat() * 0.3f);
+        level.playSound(null, pos, SpeelgoedFeature.DUW.get(), SoundSource.BLOCKS, 0.8f, 0.9f + level.getRandom().nextFloat() * 0.3f);
         boolean guh = false;
         for (int i = 0; i < plekken(); i++) {
             ZitjeEntity z = zitje(level, pos, i);
@@ -100,7 +100,7 @@ public abstract class SchommelToestel extends ToestelBlock implements ToestelBlo
                 Spelen.geduwd(player, g);
             }
         }
-        player.displayClientMessage(Component.translatable(guh ? "gui.guhs.speelgoed.duw.guh" : "gui.guhs.speelgoed.duw").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable(guh ? "gui.guhs.speelgoed.duw.guh" : "gui.guhs.speelgoed.duw").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 }

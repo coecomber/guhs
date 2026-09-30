@@ -91,7 +91,7 @@ public final class BouwRuimte {
     private static final Map<String, List<BoundingBox>> STARTS = new ConcurrentHashMap<>();
 
     private static Index index(RegistryAccess access) {
-        Registry<StructureSet> registry = access.registryOrThrow(Registries.STRUCTURE_SET);
+        Registry<StructureSet> registry = access.lookupOrThrow(Registries.STRUCTURE_SET);
         Index i = index;
         if (i != null && i.registry == registry) {
             return i;
@@ -107,14 +107,14 @@ public final class BouwRuimte {
                 }
             }
             if (reach > 0) {
-                SetInfo info = new SetInfo(set, set.key().location().toString(), voorrang, reach);
+                SetInfo info = new SetInfo(set, set.key().identifier().toString(), voorrang, reach);
                 sets.add(info);
                 for (StructureSet.StructureSelectionEntry entry : set.value().structures()) {
                     by.putIfAbsent(entry.structure().value(), info);
                 }
             } else {
                 // someone else's structures (vanilla villages, other mods): those always go first
-                sets.add(new SetInfo(set, set.key().location().toString(), Integer.MAX_VALUE, FOREIGN_REACH));
+                sets.add(new SetInfo(set, set.key().identifier().toString(), Integer.MAX_VALUE, FOREIGN_REACH));
             }
         }
         i = new Index(registry, List.copyOf(sets), Map.copyOf(by));
@@ -143,7 +143,7 @@ public final class BouwRuimte {
         }
         // only where it fits: nothing can be built in the bottom layer of the world or above the top
         BoundingBox all = builder.getBoundingBox();
-        if (all.minY() <= context.heightAccessor().getMinBuildHeight() || all.maxY() >= context.heightAccessor().getMaxBuildHeight()) {
+        if (all.minY() <= context.heightAccessor().getMinY() || all.maxY() >= context.heightAccessor().getMaxY() + 1) {
             return Optional.empty();
         }
         List<BoundingBox> pieces = boxes(builder);
@@ -193,10 +193,10 @@ public final class BouwRuimte {
         for (var entry : chunk.getAllReferences().entrySet()) {
             for (long ref : entry.getValue()) {
                 ChunkPos at = new ChunkPos(ref);
-                if (centre.getChessboardDistance(at) > 8 || !region.hasChunk(at.x, at.z)) {
+                if (centre.getChessboardDistance(at) > 8 || !region.hasChunk(at.x(), at.z())) {
                     continue;
                 }
-                var home = region.getChunk(at.x, at.z, net.minecraft.world.level.chunk.status.ChunkStatus.STRUCTURE_STARTS, false);
+                var home = region.getChunk(at.x(), at.z(), net.minecraft.world.level.chunk.status.ChunkStatus.STRUCTURE_STARTS, false);
                 var start = home == null ? null : home.getStartForStructure(entry.getKey());
                 if (start != null && start.isValid()) {
                     out.add(start);
@@ -268,7 +268,7 @@ public final class BouwRuimte {
             }
             int range = myReach + other.reach + MARGIN + 16;
             for (ChunkPos c : candidates(other, state, context.seed(), here, range)) {
-                if (same && (c.x > here.x || (c.x == here.x && c.z >= here.z))) {
+                if (same && (c.x() > here.x() || (c.x() == here.x() && c.z() >= here.z()))) {
                     continue; // (within one set the lower chunk goes first)
                 }
                 // (where its pieces could be at most: skip it when that is nowhere near our pieces)
@@ -315,11 +315,11 @@ public final class BouwRuimte {
         List<ChunkPos> out = new ArrayList<>();
         if (placement instanceof RandomSpreadStructurePlacement spread) {
             int s = spread.spacing();
-            for (int rx = Math.floorDiv(here.x - r, s); rx <= Math.floorDiv(here.x + r, s); rx++) {
-                for (int rz = Math.floorDiv(here.z - r, s); rz <= Math.floorDiv(here.z + r, s); rz++) {
+            for (int rx = Math.floorDiv(here.x() - r, s); rx <= Math.floorDiv(here.x() + r, s); rx++) {
+                for (int rz = Math.floorDiv(here.z() - r, s); rz <= Math.floorDiv(here.z() + r, s); rz++) {
                     ChunkPos c = spread.getPotentialStructureChunk(seed, rx * s, rz * s);
-                    if (Math.abs(c.x - here.x) <= r && Math.abs(c.z - here.z) <= r
-                            && (state == null || placement.isStructureChunk(state, c.x, c.z))) {
+                    if (Math.abs(c.x() - here.x()) <= r && Math.abs(c.z() - here.z()) <= r
+                            && (state == null || placement.isStructureChunk(state, c.x(), c.z()))) {
                         out.add(c);
                     }
                 }
@@ -328,7 +328,7 @@ public final class BouwRuimte {
             List<ChunkPos> ring = state.getRingPositionsFor(rings);
             if (ring != null) {
                 for (ChunkPos c : ring) {
-                    if (Math.abs(c.x - here.x) <= r && Math.abs(c.z - here.z) <= r) {
+                    if (Math.abs(c.x() - here.x()) <= r && Math.abs(c.z() - here.z()) <= r) {
                         out.add(c);
                     }
                 }
@@ -350,7 +350,7 @@ public final class BouwRuimte {
             found = tryStart(context, list.get(0).structure().value(), c);
         } else {
             WorldgenRandom random = new WorldgenRandom(new LegacyRandomSource(0L));
-            random.setLargeFeatureSeed(context.seed(), c.x, c.z);
+            random.setLargeFeatureSeed(context.seed(), c.x(), c.z());
             int total = list.stream().mapToInt(StructureSet.StructureSelectionEntry::weight).sum();
             while (!list.isEmpty()) {
                 int j = random.nextInt(total), k = 0;

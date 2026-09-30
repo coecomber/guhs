@@ -69,7 +69,7 @@ public final class KaasmoerasEvents {
      * guhs (not tamed, no variant, no name) in the Guhmension. Returns true when it did.
      */
     public static boolean maybeMoerasguh(ServerLevel level, GuhEntity guh) {
-        if (guh.getClass() != GuhEntity.class || guh.getPersistentData().getBoolean(CHECKED)) {
+        if (guh.getClass() != GuhEntity.class || guh.getPersistentData().getBooleanOr(CHECKED, false)) {
             return false;
         }
         return decide(guh, level.dimension() == ModDimensions.GUHMENSION && inKaasmoeras(level, guh.blockPosition()));
@@ -78,7 +78,7 @@ public final class KaasmoerasEvents {
     /** The decision itself (once per guh): in the kaasmoeras, a plain wild grown-up guh may become a Kaasmoerasguh. */
     public static boolean decide(GuhEntity guh, boolean inKaasmoeras) {
         CompoundTag data = guh.getPersistentData();
-        if (data.getBoolean(CHECKED)) {
+        if (data.getBooleanOr(CHECKED, false)) {
             return false;
         }
         data.putBoolean(CHECKED, true);
@@ -126,14 +126,14 @@ public final class KaasmoerasEvents {
         if (near.isEmpty()) {
             return;
         }
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.PlayerData p = data.player(player.getUUID());
         for (GuhVariant v : near) {
             GuhAdvancements.grant(player, "seen_" + v.id());
             if (p.seen.add(v)) {
                 data.setDirty();
-                player.displayClientMessage(Component.translatable("gui.guhs.guhdex.new", Component.translatable("entity.guhs." + v.id()))
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.guhdex.new", Component.translatable("entity.guhs." + v.id()))
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 player.level().playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1f, 1.2f);
             }
         }
@@ -141,7 +141,7 @@ public final class KaasmoerasEvents {
 
     public static boolean hasAllMotknabbels(ServerPlayer player) {
         Set<MotknabbelBlock.Kleur> kleuren = EnumSet.noneOf(MotknabbelBlock.Kleur.class);
-        for (ItemStack stack : player.getInventory().items) {
+        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
             if (stack.is(KaasmoerasFeature.MOTKNABBEL_ITEM.get())) {
                 kleuren.add(MotknabbelBlock.kleur(stack));
             }
@@ -168,7 +168,7 @@ public final class KaasmoerasEvents {
 
     /** Grants one of our shown advancements (with an impossible trigger: the mod decides when). */
     public static void grantShown(ServerPlayer player, String path) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(path));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(path));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }

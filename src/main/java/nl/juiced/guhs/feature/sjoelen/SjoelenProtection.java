@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -47,7 +47,7 @@ public final class SjoelenProtection {
         if (server.dimension() != ModDimensions.GUHMENSION) {
             return false;
         }
-        Structure structure = server.registryAccess().registryOrThrow(Registries.STRUCTURE).get(SjoelenFeature.SJOELHUISJE);
+        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(SjoelenFeature.SJOELHUISJE);
         return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -56,7 +56,7 @@ public final class SjoelenProtection {
             return false;
         }
         if (!quiet) {
-            player.displayClientMessage(Component.translatable("gui.guhs.sjoelen.no_build").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.sjoelen.no_build").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return true;
     }
@@ -79,7 +79,7 @@ public final class SjoelenProtection {
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
         ItemStack stack = event.getItemStack();
-        if (event.getLevel().isClientSide || stack.isEmpty()) {
+        if (event.getLevel().isClientSide() || stack.isEmpty()) {
             return;
         }
         if (!(stack.getItem() instanceof BlockItem || stack.getItem() instanceof BucketItem || stack.is(Items.BONE_MEAL))) {
@@ -93,7 +93,7 @@ public final class SjoelenProtection {
 
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof BucketItem && denied(event.getEntity(), event.getEntity().blockPosition(), false)) {
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof BucketItem && denied(event.getEntity(), event.getEntity().blockPosition(), false)) {
             event.setCanceled(true);
         }
     }

@@ -98,7 +98,7 @@ public final class Bouw implements NpcRole {
 
     static int planken(ServerPlayer player) {
         int n = 0;
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (s.is(ItemTags.PLANKS)) {
                 n += s.getCount();
             }
@@ -107,7 +107,7 @@ public final class Bouw implements NpcRole {
     }
 
     static void neemPlanken(ServerPlayer player, int n) {
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (n > 0 && s.is(ItemTags.PLANKS)) {
                 int take = Math.min(n, s.getCount());
                 s.shrink(take);
@@ -153,7 +153,7 @@ public final class Bouw implements NpcRole {
             level.setBlock(p, BeroepenFeature.DAKPLEK.get().defaultBlockState(), 3);
         }
         if (npc.roleData.contains("Vlag")) {
-            BlockPos v = BlockPos.of(npc.roleData.getLong("Vlag"));
+            BlockPos v = BlockPos.of(npc.roleData.getLongOr("Vlag", 0L));
             if (level.getBlockState(v).getBlock() instanceof BannerBlock) {
                 level.setBlock(v, Blocks.AIR.defaultBlockState(), 3);
             }
@@ -203,7 +203,7 @@ public final class Bouw implements NpcRole {
             }
             int open = open(npc);
             if (open > 0) {
-                player.displayClientMessage(Component.translatable("gui.guhs.beroepen.bouw.nog", open).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.bouw.nog", open).withStyle(ChatFormatting.LIGHT_PURPLE));
                 return;
             }
             vlag(npc);
@@ -231,6 +231,6 @@ public final class Bouw implements NpcRole {
     /** (Tests) the flag's spot, or null. */
     @Nullable
     public static BlockPos vlagPlek(GuhNpcEntity npc) {
-        return npc.roleData.contains("Vlag") ? BlockPos.of(npc.roleData.getLong("Vlag")) : null;
+        return npc.roleData.contains("Vlag") ? BlockPos.of(npc.roleData.getLongOr("Vlag", 0L)) : null;
     }
 }

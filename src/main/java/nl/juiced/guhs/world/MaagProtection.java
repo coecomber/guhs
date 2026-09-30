@@ -20,8 +20,8 @@ public final class MaagProtection {
         if (!MaagManager.isGuhmaag(player.level()) || MaagManager.mayBuild(player, pos)) {
             return false;
         }
-        if (!player.level().isClientSide) {
-            player.displayClientMessage(Component.translatable("gui.guhs.maag.no_build").withStyle(ChatFormatting.RED), true);
+        if (!player.level().isClientSide()) {
+            player.sendOverlayMessage(Component.translatable("gui.guhs.maag.no_build").withStyle(ChatFormatting.RED));
         }
         return true;
     }

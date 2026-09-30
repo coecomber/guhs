@@ -77,7 +77,7 @@ public class ToestelBlockEntity extends BlockEntity {
 
     private void sync() {
         setChanged();
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
@@ -92,8 +92,8 @@ public class ToestelBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        amp = tag.getFloat("Amp");
-        sinds = tag.getLong("Sinds");
+        amp = tag.getFloatOr("Amp", 0.0F);
+        sinds = tag.getLongOr("Sinds", 0L);
     }
 
     @Override

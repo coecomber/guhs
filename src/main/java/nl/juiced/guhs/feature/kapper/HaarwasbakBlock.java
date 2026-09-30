@@ -24,7 +24,7 @@ public class HaarwasbakBlock extends GuhFurnitureBlock {
         if (level instanceof ServerLevel server) {
             schuim(server, pos);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Water from the tap, bubbles and foam in the basin. */

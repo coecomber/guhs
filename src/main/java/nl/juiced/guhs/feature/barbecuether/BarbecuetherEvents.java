@@ -46,9 +46,9 @@ public final class BarbecuetherEvents {
     }
 
     public static void tooHot(ServerPlayer player) {
-        player.displayClientMessage(Component.translatable("quest.guhs.barbecuether.te_warm").withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.barbecuether.te_warm").withStyle(ChatFormatting.GOLD));
         GuhAdvancements.grant(player, "te_warm");
-        var shown = player.server.getAdvancements().get(Guhs.id("barbecuether/te_warm"));
+        var shown = player.level().getServer().getAdvancements().get(Guhs.id("barbecuether/te_warm"));
         if (shown != null && !player.getAdvancements().getOrStartProgress(shown).isDone()) {
             player.getAdvancements().award(shown, "done");
         }
@@ -71,7 +71,7 @@ public final class BarbecuetherEvents {
                 || GuhQuests.count(player, BarbecuetherFeature.AANMAAKBLOKJE.get()) >= MAX_CARRIED) {
             return ItemStack.EMPTY;
         }
-        player.displayClientMessage(Component.translatable("quest.guhs.grillguh.mika_drop").withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.grillguh.mika_drop").withStyle(ChatFormatting.GOLD));
         return new ItemStack(BarbecuetherFeature.AANMAAKBLOKJE.get());
     }
 
@@ -81,7 +81,7 @@ public final class BarbecuetherEvents {
                 return true;
             }
         }
-        var structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(MIKA_KAMP);
+        var structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(MIKA_KAMP);
         return structure != null && level.structureManager().getStructureAt(pos, structure).isValid();
     }
 

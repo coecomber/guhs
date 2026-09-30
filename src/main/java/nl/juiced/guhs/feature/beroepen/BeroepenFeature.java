@@ -33,6 +33,8 @@ import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.feature.kleding.KledingBronnen;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * De beroepen (2.9, slice beroepen): four guh characters who each have one job for you, once. tools/features/beroepen.py
  * makes the resources (the Beroepenstraat piece of the Knuffeldal town, Bob's bouwplaats in guh village layout_c, the
@@ -111,7 +113,7 @@ public final class BeroepenFeature {
     // --- the Knabbeldief -----------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<KnabbeldiefMikaEntity>> KNABBELDIEF_MIKA = ENTITY_TYPES.register("knabbeldief_mika",
             () -> EntityType.Builder.of(KnabbeldiefMikaEntity::new, MobCategory.MISC).sized(0.6f, 0.55f).eyeHeight(0.4f)
-                    .clientTrackingRange(10).build(Guhs.id("knabbeldief_mika").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("knabbeldief_mika"))));
 
     // --- sounds --------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<SoundEvent, SoundEvent> SIRENE = sound("beroepen.sirene");

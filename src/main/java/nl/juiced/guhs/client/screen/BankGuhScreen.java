@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -173,15 +173,15 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
     // --- drawing ---
 
     @Override
-    public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
         refresh(false);
-        super.render(g, mouseX, mouseY, partialTick);
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
         renderGridTooltip(g, mouseX, mouseY);
         renderTooltip(g, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphics g, float partialTick, int mouseX, int mouseY) {
+    protected void renderBg(GuiGraphicsExtractor g, float partialTick, int mouseX, int mouseY) {
         int x = leftPos, y = topPos;
         g.fill(x - 1, y - 1, x + imageWidth + 1, y + imageHeight + 1, BG);
         g.fill(x, y, x + imageWidth, y + imageHeight, PANEL);
@@ -205,7 +205,7 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
                 slotBox(g, x + BankGuhMenu.CRAFT_X - 1 + c * 18, y + BankGuhMenu.CRAFT_Y - 1 + r * 18);
             }
         }
-        g.drawString(font, "➜", x + 81, y + 135, TEXT, false);
+        g.text(font, "➜", x + 81, y + 135, TEXT, false);
         g.fill(x + BankGuhMenu.RESULT_X - 5, y + BankGuhMenu.RESULT_Y - 5, x + BankGuhMenu.RESULT_X + 21, y + BankGuhMenu.RESULT_Y + 21, PANEL_DARK);
         slotBox(g, x + BankGuhMenu.RESULT_X - 1, y + BankGuhMenu.RESULT_Y - 1);
         // inventory
@@ -219,18 +219,18 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
         }
     }
 
-    private void slotBox(GuiGraphics g, int x, int y) {
+    private void slotBox(GuiGraphicsExtractor g, int x, int y) {
         g.fill(x, y, x + 18, y + 18, SLOT);
         g.fill(x + 1, y + 1, x + 17, y + 17, 0xFFB98398);
     }
 
     @Override
-    protected void renderLabels(GuiGraphics g, int mouseX, int mouseY) {
-        g.drawString(font, title, titleLabelX, titleLabelY, TEXT, false);
-        g.drawString(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, TEXT, false);
+    protected void extractLabels(GuiGraphicsExtractor g, int mouseX, int mouseY) {
+        g.text(font, title, titleLabelX, titleLabelY, TEXT, false);
+        g.text(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, TEXT, false);
         long total = menu.getClientContents().totalItems();
         Component summary = Component.translatable("gui.guhs.bank.summary", shortCount(total), menu.getClientContents().entries().size());
-        g.drawString(font, summary, imageWidth - 8 - font.width(summary), titleLabelY, 0xFF8B4A68, false);
+        g.text(font, summary, imageWidth - 8 - font.width(summary), titleLabelY, 0xFF8B4A68, false);
 
         // the stored items
         int start = scrollRow * BankGuhMenu.GRID_COLS;
@@ -238,22 +238,22 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
             BankContents.Entry e = visible.get(start + i);
             int sx = BankGuhMenu.GRID_X + 1 + (i % BankGuhMenu.GRID_COLS) * 18;
             int sy = BankGuhMenu.GRID_Y + 1 + (i / BankGuhMenu.GRID_COLS) * 18;
-            g.renderItem(e.item(), sx, sy);
+            g.item(e.item(), sx, sy);
             String count = shortCount(e.count());
-            g.pose().pushPose();
-            g.pose().translate(0, 0, 200);
-            g.pose().scale(0.66f, 0.66f, 1f);
+            g.pose().pushMatrix();
+            g.pose().translate(0, 0);
+            g.pose().scale(0.66f, 0.66f);
             float tx = (sx + 17 - font.width(count) * 0.66f) / 0.66f;
             float ty = (sy + 11) / 0.66f;
-            g.drawString(font, count, (int) tx, (int) ty, 0xFFFFFFFF, true);
-            g.pose().popPose();
+            g.text(font, count, (int) tx, (int) ty, 0xFFFFFFFF, true);
+            g.pose().popMatrix();
             if (isHovering(sx - 1, sy - 1, 18, 18, mouseX, mouseY)) {
                 g.fill(sx, sy, sx + 16, sy + 16, SLOT_HOVER);
             }
         }
     }
 
-    private void renderGridTooltip(GuiGraphics g, int mouseX, int mouseY) {
+    private void renderGridTooltip(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         int index = gridIndexAt(mouseX, mouseY);
         if (index < 0 || !menu.getCarried().isEmpty()) {
             return;
@@ -261,7 +261,7 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
         BankContents.Entry e = visible.get(index);
         List<Component> lines = new ArrayList<>(getTooltipFromContainerItem(e.item()));
         lines.add(Component.translatable("gui.guhs.bank.stored", String.format(Locale.ROOT, "%,d", e.count())).withStyle(ChatFormatting.LIGHT_PURPLE));
-        g.renderTooltip(font, lines, e.item().getTooltipImage(), e.item(), mouseX, mouseY);
+        g.setTooltipForNextFrame(font, lines, e.item().getTooltipImage(), e.item(), mouseX, mouseY);
     }
 
     public static String shortCount(long n) {

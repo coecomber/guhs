@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -16,6 +16,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.network.MaagPayloads;
 import nl.juiced.guhs.world.GuhWorldData;
 
+import net.minecraft.core.UUIDUtil;
 /** The Maagenzym-guh's menu: who may come into your stomach (and build), and how big it is / can get. */
 public class MaagSettingsScreen extends Screen {
     private static final int W = 260, H = 230;
@@ -44,7 +45,7 @@ public class MaagSettingsScreen extends Screen {
     protected void init() {
         left = (width - W) / 2;
         top = (height - H) / 2;
-        String access = data.getString("Access");
+        String access = data.getStringOr("Access", "");
         int x = left + 10;
         int y = top + 26;
         GuhWorldData.Access[] modes = GuhWorldData.Access.values();
@@ -59,11 +60,11 @@ public class MaagSettingsScreen extends Screen {
             addRenderableWidget(b);
         }
         y += 58;
-        ListTag list = data.getList("Whitelist", Tag.TAG_COMPOUND);
+        ListTag list = data.getListOrEmpty("Whitelist");
         for (int i = 0; i < list.size() && i < 5; i++) {
-            CompoundTag e = list.getCompound(i);
-            String id = e.getUUID("Id").toString();
-            boolean build = e.getBoolean("Build");
+            CompoundTag e = list.getCompoundOrEmpty(i);
+            String id = e.read("Id", UUIDUtil.CODEC).orElseThrow().toString();
+            boolean build = e.getBooleanOr("Build", false);
             addRenderableWidget(Button.builder(Component.translatable(build ? "gui.guhs.maag.build_on" : "gui.guhs.maag.build_off"),
                     b -> send(MaagPayloads.MaagSettingsAction.TOGGLE_BUILD, id)).bounds(left + W - 110, y + i * 22, 70, 20).build());
             addRenderableWidget(Button.builder(Component.literal("✖"), b -> send(MaagPayloads.MaagSettingsAction.REMOVE, id))
@@ -83,25 +84,25 @@ public class MaagSettingsScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, BORDER);
         g.fill(left, top, left + W, top + H, BG);
-        g.drawString(font, title, left + 10, top + 8, TEXT);
-        int size = data.getInt("Size"), next = data.getInt("NextSize");
-        g.drawString(font, Component.translatable("gui.guhs.maag.size", size, size), left + 10, top + 52, BORDER);
-        g.drawString(font, next > 0 ? Component.translatable("gui.guhs.maag.grow", next, next) : Component.translatable("gui.guhs.maag.max"),
+        g.text(font, title, left + 10, top + 8, TEXT);
+        int size = data.getIntOr("Size", 0), next = data.getIntOr("NextSize", 0);
+        g.text(font, Component.translatable("gui.guhs.maag.size", size, size), left + 10, top + 52, BORDER);
+        g.text(font, next > 0 ? Component.translatable("gui.guhs.maag.grow", next, next) : Component.translatable("gui.guhs.maag.max"),
                 left + 10, top + 64, 0xFFD8B8C8);
         List<Component> names = new ArrayList<>();
-        ListTag list = data.getList("Whitelist", Tag.TAG_COMPOUND);
+        ListTag list = data.getListOrEmpty("Whitelist");
         for (int i = 0; i < list.size() && i < 5; i++) {
-            g.drawString(font, list.getCompound(i).getString("Name"), left + 12, top + 84 + i * 22 + 6, TEXT);
+            g.text(font, list.getCompoundOrEmpty(i).getStringOr("Name", ""), left + 12, top + 84 + i * 22 + 6, TEXT);
         }
         if (list.isEmpty()) {
-            g.drawString(font, Component.translatable("gui.guhs.maag.whitelist_empty").withStyle(ChatFormatting.GRAY), left + 12, top + 90, 0xFF9A8090);
+            g.text(font, Component.translatable("gui.guhs.maag.whitelist_empty").withStyle(ChatFormatting.GRAY), left + 12, top + 90, 0xFF9A8090);
         }
-        if (!"WHITELIST".equals(data.getString("Access")) && !list.isEmpty()) {
-            g.drawString(font, Component.translatable("gui.guhs.maag.whitelist_off").withStyle(ChatFormatting.ITALIC), left + 12, top + H - 46, 0xFF9A8090);
+        if (!"WHITELIST".equals(data.getStringOr("Access", "")) && !list.isEmpty()) {
+            g.text(font, Component.translatable("gui.guhs.maag.whitelist_off").withStyle(ChatFormatting.ITALIC), left + 12, top + H - 46, 0xFF9A8090);
         }
     }
 

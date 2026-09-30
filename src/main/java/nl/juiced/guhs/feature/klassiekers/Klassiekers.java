@@ -125,7 +125,7 @@ public final class Klassiekers {
 
     /** Grants an advancement of the mod (every criterion of it) by its path, e.g. grote_guhspelen/klassiekers_golf_lastig. */
     public static void grant(ServerPlayer player, String path) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(path));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(path));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             for (String criterion : holder.value().criteria().keySet()) {
                 player.getAdvancements().award(holder, criterion);
@@ -134,7 +134,7 @@ public final class Klassiekers {
     }
 
     public static boolean done(ServerPlayer player, String path) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(path));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(path));
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
     }
 

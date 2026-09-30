@@ -63,9 +63,9 @@ public class VisguhRole implements NpcRole {
             data.putDouble("HomeZ", npc.getZ());
             return;
         }
-        Vec3 home = new Vec3(data.getDouble("HomeX"), data.getDouble("HomeY"), data.getDouble("HomeZ"));
+        Vec3 home = new Vec3(data.getDoubleOr("HomeX", 0.0), data.getDoubleOr("HomeY", 0.0), data.getDoubleOr("HomeZ", 0.0));
         if (npc.position().distanceToSqr(home) > 0.04) {
-            npc.moveTo(home.x, home.y, home.z, npc.getYRot(), npc.getXRot());
+            npc.snapTo(home.x, home.y, home.z, npc.getYRot(), npc.getXRot());
             npc.setDeltaMovement(Vec3.ZERO);
         }
     }

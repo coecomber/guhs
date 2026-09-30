@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.knabbelspelen.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -42,13 +42,13 @@ public class SpelleiderScherm extends Screen {
         left = (width - W) / 2;
         top = (height - H) / 2;
         clearWidgets();
-        boolean running = data.getBoolean("Running");
-        boolean vrij = !running && data.getBoolean("Anker");
+        boolean running = data.getBooleanOr("Running", false);
+        boolean vrij = !running && data.getBooleanOr("Anker", false);
         if (!tabel) {
             int bw = (W - 40) / 3;
             for (Onderdeel o : Onderdeel.values()) {
                 int i = o.ordinal();
-                int best = data.getInt("Best" + i);
+                int best = data.getIntOr("Best" + i, 0);
                 MutableComponent tip = Component.translatable("gui.guhs.knabbelspelen.uitleg." + o.id()).copy().append("\n\n")
                         .append(best < 0 ? Component.translatable("gui.guhs.knabbelspelen.nog_geen_record")
                                 : Component.translatable("gui.guhs.knabbelspelen.jouw_record", o.tijd ? Component.literal(Highscores.tijd(best))
@@ -65,18 +65,18 @@ public class SpelleiderScherm extends Screen {
             }
             Button zes = Button.builder(Component.translatable("gui.guhs.knabbelspelen.zeskamp").withStyle(ChatFormatting.BOLD, ChatFormatting.GOLD),
                             x -> send(Wedstrijd.ZESKAMP)).bounds(left + 12, top + 154, W - 24, 20)
-                    .tooltip(Tooltip.create(Component.translatable("gui.guhs.knabbelspelen.zeskamp.tooltip", data.getInt("BestZeskamp")))).build();
+                    .tooltip(Tooltip.create(Component.translatable("gui.guhs.knabbelspelen.zeskamp.tooltip", data.getIntOr("BestZeskamp", 0)))).build();
             zes.active = vrij;
             addRenderableWidget(zes);
-            if (running && data.getInt("Fase") == Wedstrijd.Fase.INSCHRIJVEN.ordinal()) {
+            if (running && data.getIntOr("Fase", 0) == Wedstrijd.Fase.INSCHRIJVEN.ordinal()) {
                 Button mee = Button.builder(Component.translatable("gui.guhs.knabbelspelen.mee").withStyle(ChatFormatting.BOLD), x -> send(Wedstrijd.MEEDOEN))
                         .bounds(left + 12, top + 180, (W - 32) / 2, 20).build();
-                mee.active = !data.getBoolean("Mee") && data.getList("Namen", Tag.TAG_STRING).size() < Wedstrijd.MAX;
+                mee.active = !data.getBooleanOr("Mee", false) && data.getListOrEmpty("Namen").size() < Wedstrijd.MAX;
                 addRenderableWidget(mee);
                 Button nu = Button.builder(Component.translatable("gui.guhs.knabbelspelen.nu"), x -> send(Wedstrijd.NU))
                         .bounds(left + 20 + (W - 32) / 2, top + 180, (W - 32) / 2, 20)
                         .tooltip(Tooltip.create(Component.translatable("gui.guhs.knabbelspelen.nu.tooltip"))).build();
-                nu.active = data.getBoolean("Host");
+                nu.active = data.getBooleanOr("Host", false);
                 addRenderableWidget(nu);
             }
         }
@@ -92,45 +92,45 @@ public class SpelleiderScherm extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, 0xFFE0406C);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFFFFF0F6);
         g.fill(left, top, left + W, top + H, 0xEC2A1036);
         for (int x = left; x < left + W; x += 20) {                 // circus stripes at the top
             g.fill(x, top, Math.min(x + 10, left + W), top + 5, 0xFFE0406C);
         }
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6F0);
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6F0);
         int y = top + 26;
         if (tabel) {
             for (var line : font.split(Component.translatable("gui.guhs.knabbelspelen.tabel.uitleg"), W - 30)) {
-                g.drawString(font, line, left + 14, y, 0xFFF6DDEA);
+                g.text(font, line, left + 14, y, 0xFFF6DDEA);
                 y += 10;
             }
             return;
         }
         for (var line : font.split(Component.translatable("gui.guhs.knabbelspelen.rules"), W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFF6DDEA);
+            g.centeredText(font, line, width / 2, y, 0xFFF6DDEA);
             y += 10;
         }
         y = Math.max(y + 4, top + 74);
         Component status;
-        if (!data.getBoolean("Anker")) {
+        if (!data.getBooleanOr("Anker", false)) {
             status = Component.translatable("gui.guhs.knabbelspelen.kapot");
-        } else if (data.getBoolean("Running")) {
+        } else if (data.getBooleanOr("Running", false)) {
             StringBuilder namen = new StringBuilder();
-            for (Tag t : data.getList("Namen", Tag.TAG_STRING)) {
+            for (Tag t : data.getListOrEmpty("Namen")) {
                 namen.append(namen.isEmpty() ? "" : ", ").append(t.getAsString());
             }
-            Component wat = data.getBoolean("Zeskamp") ? Component.translatable("gui.guhs.knabbelspelen.zeskamp") : Onderdeel.of(data.getInt("Onderdeel")).naam();
-            status = data.getInt("Fase") == Wedstrijd.Fase.INSCHRIJVEN.ordinal()
-                    ? Component.translatable("gui.guhs.knabbelspelen.inschrijven", wat, namen.toString(), data.getInt("Nog"))
+            Component wat = data.getBooleanOr("Zeskamp", false) ? Component.translatable("gui.guhs.knabbelspelen.zeskamp") : Onderdeel.of(data.getIntOr("Onderdeel", 0)).naam();
+            status = data.getIntOr("Fase", 0) == Wedstrijd.Fase.INSCHRIJVEN.ordinal()
+                    ? Component.translatable("gui.guhs.knabbelspelen.inschrijven", wat, namen.toString(), data.getIntOr("Nog", 0))
                     : Component.translatable("gui.guhs.knabbelspelen.bezig", wat, namen.toString());
         } else {
             status = Component.translatable("gui.guhs.knabbelspelen.free");
         }
         for (var line : font.split(status, W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, data.getBoolean("Running") ? 0xFFFFD0A0 : 0xFFB8F0C8);
+            g.centeredText(font, line, width / 2, y, data.getBooleanOr("Running", false) ? 0xFFFFD0A0 : 0xFFB8F0C8);
             y += 10;
         }
     }

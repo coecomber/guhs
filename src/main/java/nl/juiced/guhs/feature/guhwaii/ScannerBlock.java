@@ -11,7 +11,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -77,20 +76,20 @@ public class ScannerBlock extends HorizontalDirectionalBlock {
         if (level instanceof ServerLevel server && player instanceof ServerPlayer sp) {
             Scanner.gebruik(server, pos, sp, ItemStack.EMPTY);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                               BlockHitResult hit) {
         if (stack.getItem() instanceof net.minecraft.world.item.BlockItem && !(stack.getItem() instanceof nl.juiced.guhs.item.PickedUpGuhItem)
                 && player.isSecondaryUseActive()) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
         if (level instanceof ServerLevel server && player instanceof ServerPlayer sp) {
             Scanner.gebruik(server, pos, sp, stack);
         }
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** A soft blue glow drifting up from the scan plate now and then. */

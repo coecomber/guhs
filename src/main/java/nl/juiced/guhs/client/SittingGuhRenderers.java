@@ -2,37 +2,37 @@ package nl.juiced.guhs.client;
 
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.AABB;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.entity.QuestGuhEntity;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoBlockRenderer;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.model.GeoModel;
+import com.geckolib.renderer.GeoBlockRenderer;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /** Renderers for the sitting guh model (geo/entity/guh_sitting.geo.json): the quest guh and the Bank Guh block. */
 public final class SittingGuhRenderers {
-    private static final ResourceLocation MODEL = Guhs.id("geo/entity/guh_sitting.geo.json");
-    private static final ResourceLocation TEXTURE = Guhs.id("textures/entity/guh_sitting.png");
-    private static final ResourceLocation ANIMATIONS = Guhs.id("animations/entity/guh_sitting.animation.json");
-    private static final ResourceLocation ZEEMEER_MODEL = Guhs.id("geo/entity/guh_npc_zeemeerguh.geo.json");
+    private static final Identifier MODEL = Guhs.id("geo/entity/guh_sitting.geo.json");
+    private static final Identifier TEXTURE = Guhs.id("textures/entity/guh_sitting.png");
+    private static final Identifier ANIMATIONS = Guhs.id("animations/entity/guh_sitting.animation.json");
+    private static final Identifier ZEEMEER_MODEL = Guhs.id("geo/entity/guh_npc_zeemeerguh.geo.json");
 
     /**
      * 2.8: a guh character (NPC kind) can have its own model and animation file (e.g. a hat, a whistle, a fish tail),
      * and its own code that moves bones every frame. Fill these from your feature's client init; every other kind is
      * the plain sitting guh. The Guhdex page draws the character through this same renderer.
      */
-    public static final java.util.Map<nl.juiced.guhs.entity.GuhNpcEntity.Kind, ResourceLocation> NPC_MODELEN = new java.util.concurrent.ConcurrentHashMap<>();
-    public static final java.util.Map<nl.juiced.guhs.entity.GuhNpcEntity.Kind, ResourceLocation> NPC_ANIMATIES = new java.util.concurrent.ConcurrentHashMap<>();
+    public static final java.util.Map<nl.juiced.guhs.entity.GuhNpcEntity.Kind, Identifier> NPC_MODELEN = new java.util.concurrent.ConcurrentHashMap<>();
+    public static final java.util.Map<nl.juiced.guhs.entity.GuhNpcEntity.Kind, Identifier> NPC_ANIMATIES = new java.util.concurrent.ConcurrentHashMap<>();
     public static final java.util.Map<nl.juiced.guhs.entity.GuhNpcEntity.Kind, NpcAnimator> NPC_ANIMATORS = new java.util.concurrent.ConcurrentHashMap<>();
 
     /** Moves bones of an NPC every frame (after its animation): bot(name) gives the bone, if the model has it. */
     @FunctionalInterface
     public interface NpcAnimator {
-        void animeer(nl.juiced.guhs.entity.GuhNpcEntity npc, software.bernie.geckolib.animation.AnimationState<nl.juiced.guhs.entity.GuhNpcEntity> state,
-                     java.util.function.Function<String, java.util.Optional<software.bernie.geckolib.cache.object.GeoBone>> bot);
+        void animeer(nl.juiced.guhs.entity.GuhNpcEntity npc, com.geckolib.animation.state.AnimationTest<nl.juiced.guhs.entity.GuhNpcEntity> state,
+                     java.util.function.Function<String, java.util.Optional<com.geckolib.cache.model.GeoBone>> bot);
     }
 
     static {
@@ -57,17 +57,17 @@ public final class SittingGuhRenderers {
         public BankGuhRenderer(BlockEntityRendererProvider.Context context) {
             super(new GeoModel<>() {
                 @Override
-                public ResourceLocation getModelResource(BankGuhBlockEntity animatable) {
+                public Identifier getModelResource(BankGuhBlockEntity animatable) {
                     return MODEL;
                 }
 
                 @Override
-                public ResourceLocation getTextureResource(BankGuhBlockEntity animatable) {
+                public Identifier getTextureResource(BankGuhBlockEntity animatable) {
                     return TEXTURE;
                 }
 
                 @Override
-                public ResourceLocation getAnimationResource(BankGuhBlockEntity animatable) {
+                public Identifier getAnimationResource(BankGuhBlockEntity animatable) {
                     return ANIMATIONS;
                 }
             });
@@ -86,25 +86,25 @@ public final class SittingGuhRenderers {
         public NpcRenderer(EntityRendererProvider.Context context) {
             super(context, new DefaultedEntityGeoModel<nl.juiced.guhs.entity.GuhNpcEntity>(Guhs.id("guh_sitting"), true) {
                 @Override
-                public ResourceLocation getTextureResource(nl.juiced.guhs.entity.GuhNpcEntity npc) {
+                public Identifier getTextureResource(nl.juiced.guhs.entity.GuhNpcEntity npc) {
                     return Guhs.id("textures/entity/npc_" + npc.getKind().id() + ".png");
                 }
 
                 /** Its own model (NPC_MODELEN), or the plain sitting guh. */
                 @Override
-                public ResourceLocation getModelResource(nl.juiced.guhs.entity.GuhNpcEntity npc) {
+                public Identifier getModelResource(nl.juiced.guhs.entity.GuhNpcEntity npc) {
                     return NPC_MODELEN.getOrDefault(npc.getKind(), super.getModelResource(npc));
                 }
 
                 /** Its own animations (NPC_ANIMATIES), or the sitting guh's. */
                 @Override
-                public ResourceLocation getAnimationResource(nl.juiced.guhs.entity.GuhNpcEntity npc) {
+                public Identifier getAnimationResource(nl.juiced.guhs.entity.GuhNpcEntity npc) {
                     return NPC_ANIMATIES.getOrDefault(npc.getKind(), super.getAnimationResource(npc));
                 }
 
                 @Override
                 public void setCustomAnimations(nl.juiced.guhs.entity.GuhNpcEntity npc, long instanceId,
-                                                software.bernie.geckolib.animation.AnimationState<nl.juiced.guhs.entity.GuhNpcEntity> state) {
+                                                com.geckolib.animation.state.AnimationTest<nl.juiced.guhs.entity.GuhNpcEntity> state) {
                     super.setCustomAnimations(npc, instanceId, state);
                     NpcAnimator animator = NPC_ANIMATORS.get(npc.getKind());
                     if (animator != null) {

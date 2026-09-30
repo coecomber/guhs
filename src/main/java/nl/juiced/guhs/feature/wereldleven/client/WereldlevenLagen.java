@@ -7,9 +7,9 @@ import java.util.Map;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -17,9 +17,9 @@ import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.vadswoud.VadswoudFeature;
 import nl.juiced.guhs.feature.wereldleven.Dagritme;
 import nl.juiced.guhs.feature.wereldleven.Kaasijsjes;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.renderer.GeoRenderer;
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.renderer.base.GeoRenderer;
 
 /**
  * The wereldleven layers on every guh (via GuhRenderHooks): the ice-cream hat (a waffle cone upside down on its head, the
@@ -30,8 +30,8 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 public final class WereldlevenLagen {
     public static final String HOORNTJE = "outfit_wl_hoorntje", BOLLETJE = "outfit_wl_bolletje", KERSJE = "outfit_wl_kersje",
             BLOSJES = "outfit_wl_blosjes";
-    private static final ResourceLocation HOED_TEX = Guhs.id("textures/entity/guh_clothes/wereldleven_ijshoedje.png");
-    private static final ResourceLocation BLOS_TEX = Guhs.id("textures/entity/guh_clothes/wereldleven_blosjes.png");
+    private static final Identifier HOED_TEX = Guhs.id("textures/entity/guh_clothes/wereldleven_ijshoedje.png");
+    private static final Identifier BLOS_TEX = Guhs.id("textures/entity/guh_clothes/wereldleven_blosjes.png");
 
     static void render(GeoRenderer<GuhEntity> renderer, PoseStack pose, GuhEntity guh, BakedGeoModel model, MultiBufferSource buffers,
                        float partialTick, int light, int overlay) {
@@ -66,7 +66,7 @@ public final class WereldlevenLagen {
     }
 
     private static void pass(GeoRenderer<GuhEntity> renderer, PoseStack pose, GuhEntity guh, BakedGeoModel model, MultiBufferSource buffers,
-                             float partialTick, int light, ResourceLocation texture, List<String> bones, int colour) {
+                             float partialTick, int light, Identifier texture, List<String> bones, int colour) {
         for (GeoBone bone : model.topLevelBones()) {
             alleen(bone, bones);
         }

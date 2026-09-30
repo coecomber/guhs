@@ -22,7 +22,7 @@ import nl.juiced.guhs.entity.GuhEntity;
  *   <li>{@link #tick}: every tick of every guh, server side only (keep it cheap: spread work with
  *       {@code (guh.tickCount + guh.getId()) % N}).</li>
  *   <li>{@link #klik}: a right-click on a guh, before its own handling (taming, feeding, clothes...). Called on both sides;
- *       the first hook that doesn't return PASS wins (return {@code InteractionResult.sidedSuccess(level.isClientSide)}
+ *       the first hook that doesn't return PASS wins (return {@code InteractionResult.SUCCESS}
  *       when you handled it).</li>
  *   <li>Visual flags ({@link #GLANZEND}, {@link #PYJAMA}, {@link #IJSHOEDJE}, {@link #BLOSJES}): synced to the client and
  *       saved ("KnusVlaggen"); the owner keeps its own timers in {@code guh.getPersistentData()} keys {@code guhs_<pkg>_*}
@@ -114,20 +114,20 @@ public final class GuhHooks {
     }
 
     public static boolean isBezig(GuhEntity guh) {
-        return guh.getPersistentData().getLong(BEZIG) > guh.level().getGameTime();
+        return guh.getPersistentData().getLongOr(BEZIG, 0L) > guh.level().getGameTime();
     }
 
     // --- residents ----------------------------------------------------------------------------------------------------------
 
     /** A guh that lives in a Knuffeldal town (placed by the town template). */
     public static boolean isBewoner(GuhEntity guh) {
-        return guh.getPersistentData().getBoolean(BEWONER);
+        return guh.getPersistentData().getBooleanOr(BEWONER, false);
     }
 
     /** Where a resident lives (its spot when it first came into the world), or null. */
     @Nullable
     public static BlockPos thuis(GuhEntity guh) {
-        return guh.getPersistentData().contains(THUIS) ? BlockPos.of(guh.getPersistentData().getLong(THUIS)) : null;
+        return guh.getPersistentData().contains(THUIS) ? BlockPos.of(guh.getPersistentData().getLongOr(THUIS, 0L)) : null;
     }
 
     /** Makes a guh a resident living at this spot (the town does it for its own guhs; tests too). */

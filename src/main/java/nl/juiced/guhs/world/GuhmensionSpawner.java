@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
@@ -51,20 +51,20 @@ public final class GuhmensionSpawner {
             int gx = x + random.nextInt(5) - 2;
             int gz = z + random.nextInt(5) - 2;
             BlockPos pos = new BlockPos(gx, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, gx, gz), gz);
-            if (!GuhEntity.checkGuhSpawnRules(ModEntities.GUH.get(), level, MobSpawnType.NATURAL, pos, random)
+            if (!GuhEntity.checkGuhSpawnRules(ModEntities.GUH.get(), level, EntitySpawnReason.NATURAL, pos, random)
                     || nl.juiced.guhs.quest.VerstopGame.inHouse(level, pos) || nl.juiced.guhs.feature.beauty.BeautyProtection.inTheatre(level, pos)) {
                 continue;
             }
             if (i == 0) {
                 nl.juiced.guhs.quest.Reisguh.maybeWander(level, pos, random);   // (very rarely: a Reisguh)
             }
-            GuhEntity guh = ModEntities.GUH.get().create(level);
+            GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
             if (guh == null) {
                 return;
             }
-            guh.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, random.nextFloat() * 360f, 0);
+            guh.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, random.nextFloat() * 360f, 0);
             if (level.noCollision(guh)) {
-                guh.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null);
+                guh.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.NATURAL, null);
                 level.addFreshEntity(guh);
             }
         }

@@ -26,13 +26,13 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * A boze kaasknabbel: a cheese-puff plush (a flattened crescent standing on one end) with cross little brows. It is NOT a
@@ -81,7 +81,7 @@ public class BozeKaasknabbelEntity extends PathfinderMob implements Enemy, GeoEn
 
     /** The nest this knabbel came from ("" for one from an egg). */
     public String nest() {
-        return getPersistentData().getString(NEST);
+        return getPersistentData().getStringOr(NEST, "");
     }
 
     public void setNest(String key) {

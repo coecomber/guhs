@@ -9,17 +9,17 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.animal.bee.Bee;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import nl.juiced.guhs.registry.ModEntities;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * The guh bee: a fluffy pink bee with guh eyes. Collects pollen like a normal bee and fills a knabbelkorf (or a
@@ -53,7 +53,7 @@ public class GuhBeeEntity extends Bee implements GeoEntity {
 
     @Override
     public void tick() {
-        if (goalsPending && !this.level().isClientSide) {
+        if (goalsPending && !this.level().isClientSide()) {
             goalsPending = false;
             super.registerGoals();
         }
@@ -89,11 +89,11 @@ public class GuhBeeEntity extends Bee implements GeoEntity {
     @Nullable
     @Override
     public Bee getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
-        return ModEntities.GUH_BEE.get().create(level);
+        return ModEntities.GUH_BEE.get().create(level, EntitySpawnReason.TRIGGERED);
     }
 
     /** Anywhere with room to fly: the Guhmension has no grass for vanilla bee rules. */
-    public static boolean checkGuhBeeSpawnRules(EntityType<GuhBeeEntity> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+    public static boolean checkGuhBeeSpawnRules(EntityType<GuhBeeEntity> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
         return level.getBlockState(pos.below()).isSolid() && level.getRawBrightness(pos, 0) > 8;
     }
 

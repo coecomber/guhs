@@ -17,12 +17,12 @@ import nl.juiced.guhs.registry.ModBlockEntities;
 import nl.juiced.guhs.registry.ModDataComponents;
 import nl.juiced.guhs.storage.BankContents;
 import nl.juiced.guhs.storage.BankStorage;
-import software.bernie.geckolib.animatable.GeoBlockEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoBlockEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /** The Bank Guh: a sitting guh that keeps an infinite amount of items in its stomach. */
 public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, MenuProvider {

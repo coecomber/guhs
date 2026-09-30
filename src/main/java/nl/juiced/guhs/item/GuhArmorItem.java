@@ -2,7 +2,7 @@ package nl.juiced.guhs.item;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.AnimalArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 
 /**
  * Guh armour (iron / diamond / netherite). Right-click your tamed guh with it; it shows as a little helmet + side

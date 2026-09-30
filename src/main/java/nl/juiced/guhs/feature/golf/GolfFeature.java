@@ -24,6 +24,8 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.NpcRole;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * Guhgolf: a 9-hole guh minigolf course (the guh_golfbaan structure) with the Golfguh in its guh-face clubhouse. She
  * lends you a golf club and puts a guh golf ball on the tee; right-click and hold to swing (the longer, the harder, up
@@ -60,7 +62,7 @@ public final class GolfFeature {
     public static final DeferredHolder<EntityType<?>, EntityType<GolfBallEntity>> BALL = ENTITIES.register("guh_golfbal",
             () -> EntityType.Builder.<GolfBallEntity>of(GolfBallEntity::new, MobCategory.MISC)
                     .sized(GolfBallEntity.SIZE, GolfBallEntity.SIZE).clientTrackingRange(8).updateInterval(1)
-                    .build(Guhs.id("guh_golfbal").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_golfbal"))));
 
     public static void register(IEventBus modBus) {
         BLOCKS.register(modBus);

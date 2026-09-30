@@ -6,14 +6,12 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.Features;
@@ -25,14 +23,13 @@ import nl.juiced.guhs.quest.Highscores;
 import nl.juiced.guhs.quest.Scorebord;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * GameTests of the surf beach of Guhwai'i (3.0, guhwaii-spellen): the surf ride (catching, pumping, a knabbeldraai off
  * the lip, the whitewater, a crooked landing), a whole surf game with Lilo-guh (schelpjesmunten, the level's own board),
  * the hula steps on the song's beat, the judging and a dance with Lilo-guh on the flower mat, Tikiguh's shop, the levels'
  * own boards and Highscores rows, and finding the open water from the surf shack.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class GuhwaiiSpellenGameTests {
     private static final String STRAND = "guhwaiispellen_test_strand";
     private static final String WATER = "guhwaiispellen_test_water";
@@ -76,7 +73,7 @@ public class GuhwaiiSpellenGameTests {
     }
 
     /** The ride: you catch waves, ride them, land a knabbeldraai for its points (x the multiplier), and it all ends. */
-    @GameTest(template = STRAND)
+    @GuhTest(template = STRAND)
     public static void guhwaiispellenSurfScoreEnTrucs(GameTestHelper helper) {
         for (Niveau n : Niveau.values()) {
             boolean draai = false;
@@ -141,11 +138,11 @@ public class GuhwaiiSpellenGameTests {
     }
 
     private static GuhNpcEntity lilo(GameTestHelper helper, String plek, BlockPos rel) {
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(GuhNpcEntity.Kind.LILO_GUH);
         npc.roleData.putString(NpcRollen.PLEK, plek);
         BlockPos p = helper.absolutePos(rel);
-        npc.moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, 0, 0);
+        npc.snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, 0, 0);
         helper.getLevel().addFreshEntity(npc);
         return npc;
     }
@@ -153,7 +150,7 @@ public class GuhwaiiSpellenGameTests {
     @SuppressWarnings("removal")
     private static ServerPlayer speler(GameTestHelper helper, GuhNpcEntity npc) {
         ServerPlayer p = helper.makeMockServerPlayerInLevel();
-        p.moveTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
+        p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
         p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
         return p;
     }
@@ -163,7 +160,7 @@ public class GuhwaiiSpellenGameTests {
     }
 
     /** A whole surf game with Lilo-guh: the roles, the loaned board, the boards on the water, schelpjesmunten, the level's own board. */
-    @GameTest(template = STRAND, timeoutTicks = 200)
+    @GuhTest(template = STRAND, timeoutTicks = 200)
     public static void guhwaiispellenSurfSpelMunten(GameTestHelper helper) {
         GuhNpcEntity npc = lilo(helper, "surf", new BlockPos(2, 2, 2));
         helper.assertTrue(NpcRollen.van(npc) == GuhwaiiSpellenFeature.LILO_SURF && Features.role(GuhNpcEntity.Kind.LILO_GUH) != null,
@@ -188,17 +185,17 @@ public class GuhwaiiSpellenGameTests {
                 "schelpjesmunten for " + score + " (+ the welcome present): " + GuhQuests.count(p, GuhwaiiSpellenBlocks.SCHELPJESMUNT.get()) + " != " + verwacht);
         helper.assertTrue(GuhQuests.count(p, GuhwaiiSpellenBlocks.SURFPLANKJE_LEEN.get()) == 0 && !SurfSpel.surft(p) && p.getVehicle() == null,
                 "the board goes back, the game is over");
-        helper.assertTrue(!Scorebord.top(p.server, "surfen_medium").isEmpty() && Scorebord.top(p.server, "surfen_lastig").stream()
+        helper.assertTrue(!Scorebord.top(p.level().getServer(), "surfen_medium").isEmpty() && Scorebord.top(p.level().getServer(), "surfen_lastig").stream()
                 .noneMatch(e -> e.player().equals(p.getUUID())), "on the medium board only");
-        helper.assertTrue(GuhwaiiSpellenFeature.data(p).getInt("Surf_medium") == score, "the record of medium");
-        helper.assertTrue(p.getAdvancements().getOrStartProgress(p.server.getAdvancements().get(Guhs.id("verhalen/guhwaii_spellen_surf"))).isDone(),
+        helper.assertTrue(GuhwaiiSpellenFeature.data(p).getIntOr("Surf_medium", 0) == score, "the record of medium");
+        helper.assertTrue(p.getAdvancements().getOrStartProgress(p.level().getServer().getAdvancements().get(Guhs.id("verhalen/guhwaii_spellen_surf"))).isDone(),
                 "the advancement of a ridden wave");
         weg(helper, p);
         helper.succeed();
     }
 
     /** The hula steps sit on the song's beat grid (whole beats, eighths on lastig), makkelijk only the hips, lastig the VAHOEG!s. */
-    @GameTest(template = STRAND)
+    @GuhTest(template = STRAND)
     public static void guhwaiispellenHulaOpDeBeat(GameTestHelper helper) {
         for (HulaLiedje l : HulaLiedje.values()) {
             List<HulaKaart.Noot> kaart = HulaKaart.van(l);
@@ -241,7 +238,7 @@ public class GuhwaiiSpellenGameTests {
     }
 
     /** A dance with Lilo-guh on the flower mat: steps judged on the beat, a wrong move doesn't count, misses, coins, the board. */
-    @GameTest(template = STRAND, timeoutTicks = 200)
+    @GuhTest(template = STRAND, timeoutTicks = 200)
     public static void guhwaiispellenHulaDans(GameTestHelper helper) {
         GuhNpcEntity npc = lilo(helper, "hula", new BlockPos(6, 2, 2));
         helper.assertTrue(NpcRollen.van(npc) == GuhwaiiSpellenFeature.LILO_HULA, "Lilo-guh on the podium has the hula role");
@@ -277,15 +274,15 @@ public class GuhwaiiSpellenGameTests {
         helper.assertTrue(!HulaSpel.danst(p) && !spel.bezig(), "the dance is over");
         int munten = Niveau.MEDIUM.munten(HulaKaart.munten(na3)) + HulaSpel.EERSTE_MUNTEN;
         helper.assertTrue(GuhQuests.count(p, GuhwaiiSpellenBlocks.SCHELPJESMUNT.get()) == munten, "coins: " + munten);
-        helper.assertTrue(Scorebord.top(p.server, "hula_medium").stream().anyMatch(e -> e.player().equals(p.getUUID()) && e.score() == na3),
+        helper.assertTrue(Scorebord.top(p.level().getServer(), "hula_medium").stream().anyMatch(e -> e.player().equals(p.getUUID()) && e.score() == na3),
                 "on the hula_medium board");
-        helper.assertTrue(GuhwaiiSpellenFeature.data(p).getInt("Hula_medium") == na3, "the record of the medium song");
+        helper.assertTrue(GuhwaiiSpellenFeature.data(p).getIntOr("Hula_medium", 0) == na3, "the record of the medium song");
         weg(helper, p);
         helper.succeed();
     }
 
     /** Tikiguh's stall: every Tiki decoration for schelpjesmunten, never sold out, no clothes. */
-    @GameTest(template = STRAND)
+    @GuhTest(template = STRAND)
     public static void guhwaiispellenTikiWinkel(GameTestHelper helper) {
         var offers = TikiWinkel.offers();
         Set<Item> verkocht = new HashSet<>();
@@ -299,7 +296,7 @@ public class GuhwaiiSpellenGameTests {
             helper.assertTrue(verkocht.contains(b.get().asItem()), "Tikiguh sells " + b.getId());
         }
         helper.assertTrue(NpcRollen.rol(GuhNpcEntity.Kind.TIKIGUH) != null, "Tikiguh has his role");
-        GuhNpcEntity tiki = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity tiki = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         tiki.setKind(GuhNpcEntity.Kind.TIKIGUH);
         helper.assertTrue(NpcRollen.van(tiki) == GuhwaiiSpellenFeature.TIKIGUH && NpcRollen.van(tiki).offers(tiki).size() == offers.size(),
                 "his shop is the Tiki stall");
@@ -307,7 +304,7 @@ public class GuhwaiiSpellenGameTests {
     }
 
     /** Each level has its own board and Highscores row; the Minigames group lists all six. */
-    @GameTest(template = STRAND)
+    @GuhTest(template = STRAND)
     public static void guhwaiispellenNiveausEigenBorden(GameTestHelper helper) {
         Set<String> borden = new HashSet<>();
         for (Niveau n : Niveau.values()) {
@@ -327,7 +324,7 @@ public class GuhwaiiSpellenGameTests {
     }
 
     /** From the surf shack, the way to the open water is found (the direction along the water, its first block at the beach). */
-    @GameTest(template = WATER)
+    @GuhTest(template = WATER)
     public static void guhwaiispellenSurfplekZoekt(GameTestHelper helper) {
         BlockPos lilo = helper.absolutePos(new BlockPos(2, 2, 5));
         Surfplek.Spot spot = Surfplek.zoek(helper.getLevel(), lilo, 8, 16);

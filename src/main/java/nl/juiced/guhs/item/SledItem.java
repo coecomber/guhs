@@ -18,6 +18,7 @@ import nl.juiced.guhs.entity.GuhSleeEntity;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.slee.SleePath;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /** The guh sled as an item: put it on a sled rail. */
 public class SledItem extends Item {
     public SledItem(Properties properties) {
@@ -29,19 +30,19 @@ public class SledItem extends Item {
         Level level = context.getLevel();
         SleePath.Piece piece = SleePath.Piece.of(level, context.getClickedPos());
         if (piece == null) {
-            if (level.isClientSide && context.getPlayer() != null) {
-                context.getPlayer().displayClientMessage(Component.translatable("item.guhs.guh_slee.needs_rail").withStyle(ChatFormatting.RED), true);
+            if (level.isClientSide() && context.getPlayer() != null) {
+                context.getPlayer().sendOverlayMessage(Component.translatable("item.guhs.guh_slee.needs_rail").withStyle(ChatFormatting.RED));
             }
             return InteractionResult.FAIL;
         }
-        if (!level.isClientSide) {
-            GuhSleeEntity sled = ModEntities.GUH_SLEE.get().create(level);
+        if (!level.isClientSide()) {
+            GuhSleeEntity sled = ModEntities.GUH_SLEE.get().create(level, EntitySpawnReason.TRIGGERED);
             if (sled == null) {
                 return InteractionResult.FAIL;
             }
             Player player = context.getPlayer();
             Vec3 look = player != null ? player.getLookAngle() : new Vec3(0, 0, 1);
-            sled.moveTo(context.getClickLocation());
+            sled.snapTo(context.getClickLocation());
             sled.putOn(piece, context.getClickLocation(), look);
             level.addFreshEntity(sled);
             level.playSound(null, sled.blockPosition(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.NEUTRAL, 1f, 1.5f);
@@ -49,7 +50,7 @@ public class SledItem extends Item {
                 context.getItemInHand().shrink(1);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

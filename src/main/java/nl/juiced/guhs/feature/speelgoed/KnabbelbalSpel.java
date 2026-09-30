@@ -35,7 +35,7 @@ class KnabbelbalSpel extends SpeelTaak {
     KnabbelbalSpel(Mob mob, ServerLevel level, KnabbelbalEntity bal) {
         super(mob, level);
         this.bal = bal;
-        this.maxDuwtjes = 4 + level.random.nextInt(5);
+        this.maxDuwtjes = 4 + level.getRandom().nextInt(5);
     }
 
     KnabbelbalEntity bal() {
@@ -65,12 +65,12 @@ class KnabbelbalSpel extends SpeelTaak {
         }
         if (loopNaar(bal.position(), 1.15, 1.1 + mob.getBbWidth() * 0.5)) {
             Vec3 r = bal.position().subtract(mob.position());
-            double hoek = (level.random.nextDouble() - 0.5) * 1.0;
+            double hoek = (level.getRandom().nextDouble() - 0.5) * 1.0;
             Vec3 dir = new Vec3(r.x * Math.cos(hoek) - r.z * Math.sin(hoek), 0, r.x * Math.sin(hoek) + r.z * Math.cos(hoek));
-            knabbel = bal.duw(dir, 0.28 + level.random.nextDouble() * 0.2, mob);
+            knabbel = bal.duw(dir, 0.28 + level.getRandom().nextDouble() * 0.2, mob);
             duwtjes++;
-            kijken = 12 + level.random.nextInt(14);
-            if (level.random.nextInt(3) == 0) {
+            kijken = 12 + level.getRandom().nextInt(14);
+            if (level.getRandom().nextInt(3) == 0) {
                 level.playSound(null, mob.blockPosition(), ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 0.7f,
                         mob instanceof GuhEntity g ? g.getVoicePitch() * 1.1f : 1.2f);
             }

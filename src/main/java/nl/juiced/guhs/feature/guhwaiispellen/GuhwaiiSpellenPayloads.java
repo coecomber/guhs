@@ -47,7 +47,7 @@ public final class GuhwaiiSpellenPayloads {
         public static void handle(Actie p, IPayloadContext context) {
             if (context.player() instanceof ServerPlayer player && player.level().getEntity(p.npcId()) instanceof GuhNpcEntity npc
                     && npc.getKind() == GuhNpcEntity.Kind.LILO_GUH) {
-                String plek = npc.roleData.getString(NpcRollen.PLEK);
+                String plek = npc.roleData.getStringOr(NpcRollen.PLEK, "");
                 if (plek.equals("surf")) {
                     SurfSpel.actie(npc, player, p.actie());
                 } else if (plek.equals("hula")) {

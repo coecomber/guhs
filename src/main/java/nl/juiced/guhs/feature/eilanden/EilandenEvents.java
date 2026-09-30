@@ -57,7 +57,7 @@ public final class EilandenEvents {
     }
 
     public static int knabbelsFed(GuhEntity guh) {
-        return guh.getPersistentData().getInt(FED);
+        return guh.getPersistentData().getIntOr(FED, 0);
     }
 
     // --- taming the Wolkguh: patience (and a lot of knabbels) ---------------------------------------------------------
@@ -65,21 +65,21 @@ public final class EilandenEvents {
     /** Counts the knabbels a wild Wolkguh eats (this runs just before the guh itself eats it and rolls for taming). */
     @SubscribeEvent
     public static void onFeed(PlayerInteractEvent.EntityInteract event) {
-        if (event.getLevel().isClientSide || !(event.getTarget() instanceof GuhEntity guh) || !isWolk(guh) || guh.isTame()
+        if (event.getLevel().isClientSide() || !(event.getTarget() instanceof GuhEntity guh) || !isWolk(guh) || guh.isTame()
                 || guh.getHiddenBy() != null || !event.getItemStack().is(ModItems.KAAS_KNABBELS.get())
                 || !(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
         int fed = knabbelsFed(guh) + 1;
         guh.getPersistentData().putInt(FED, fed);
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         level.sendParticles(ParticleTypes.CLOUD, guh.getX(), guh.getY() + guh.getBbHeight() * 0.6, guh.getZ(), 6, 0.3, 0.2, 0.3, 0.01);
         if (fed < KNABBELS_NEEDED) {
-            player.displayClientMessage(Component.translatable("quest.guhs.eilanden.feed", KNABBELS_NEEDED - fed)
-                    .withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.eilanden.feed", KNABBELS_NEEDED - fed)
+                    .withStyle(ChatFormatting.AQUA));
         } else {
             if (fed == KNABBELS_NEEDED) {
-                player.displayClientMessage(Component.translatable("quest.guhs.eilanden.fed").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("quest.guhs.eilanden.fed").withStyle(ChatFormatting.LIGHT_PURPLE));
                 level.playSound(null, guh.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1f, 1.4f);
             }
             GuhAdvancements.grant(player, "eilanden_gevoerd");
@@ -98,7 +98,7 @@ public final class EilandenEvents {
         } else if (event.getTamer() instanceof ServerPlayer player) {
             guh.getPersistentData().remove(HOME);
             player.sendSystemMessage(Component.translatable("quest.guhs.eilanden.tamed").withStyle(ChatFormatting.AQUA));
-            player.serverLevel().sendParticles(ParticleTypes.CLOUD, guh.getX(), guh.getY() + 0.5, guh.getZ(), 30, 0.8, 0.5, 0.8, 0.02);
+            player.level().sendParticles(ParticleTypes.CLOUD, guh.getX(), guh.getY() + 0.5, guh.getZ(), 30, 0.8, 0.5, 0.8, 0.02);
         }
     }
 
@@ -111,8 +111,8 @@ public final class EilandenEvents {
         }
         event.setCanceled(true);
         if (event.getSource().getEntity() instanceof ServerPlayer player) {
-            player.displayClientMessage(Component.translatable("quest.guhs.eilanden.no_hurt").withStyle(ChatFormatting.AQUA), true);
-            player.serverLevel().sendParticles(ParticleTypes.CLOUD, event.getEntity().getX(), event.getEntity().getY() + 0.5,
+            player.sendOverlayMessage(Component.translatable("quest.guhs.eilanden.no_hurt").withStyle(ChatFormatting.AQUA));
+            player.level().sendParticles(ParticleTypes.CLOUD, event.getEntity().getX(), event.getEntity().getY() + 0.5,
                     event.getEntity().getZ(), 8, 0.4, 0.3, 0.4, 0.02);
         }
     }
@@ -129,7 +129,7 @@ public final class EilandenEvents {
 
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Post event) {
-        if (!isWolk(event.getEntity()) || event.getEntity().level().isClientSide) {
+        if (!isWolk(event.getEntity()) || event.getEntity().level().isClientSide()) {
             return;
         }
         GuhEntity guh = (GuhEntity) event.getEntity();
@@ -157,7 +157,7 @@ public final class EilandenEvents {
             }
             return;
         }
-        BlockPos home = BlockPos.of(data.getLong(HOME));
+        BlockPos home = BlockPos.of(data.getLongOr(HOME, 0L));
         double dx = guh.getX() - (home.getX() + 0.5), dz = guh.getZ() - (home.getZ() + 0.5);
         if (dx * dx + dz * dz > HOME_RANGE * HOME_RANGE || guh.getY() < home.getY() - HOME_DROP) {
             level.sendParticles(ParticleTypes.POOF, guh.getX(), guh.getY() + 0.4, guh.getZ(), 12, 0.3, 0.3, 0.3, 0.02);
@@ -182,12 +182,12 @@ public final class EilandenEvents {
             return;
         }
         event.setDamageMultiplier(0);
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         level.sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY() + 0.1, player.getZ(), 20, 0.5, 0.1, 0.5, 0.03);
         level.playSound(null, player.blockPosition(), SoundEvents.WOOL_FALL, SoundSource.PLAYERS, 1f, 0.8f);
         if (event.getDistance() >= 6) {
-            player.displayClientMessage(Component.translatable("quest.guhs.eilanden.caught_by_guh", wolken.get(0).getDisplayName())
-                    .withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.eilanden.caught_by_guh", wolken.get(0).getDisplayName())
+                    .withStyle(ChatFormatting.AQUA));
             GuhAdvancements.grant(player, "eilanden_opgevangen");
         }
     }
@@ -211,8 +211,8 @@ public final class EilandenEvents {
             return;
         }
         CompoundTag data = player.getPersistentData();
-        boolean lifted = data.contains(LIFT_MSG) && player.level().getGameTime() - data.getLong(LIFT_MSG) < LIFT_GRACE;
-        if (lifted || EilandenFeature.islandsAt(player.serverLevel(), player.blockPosition()) != null) {
+        boolean lifted = data.contains(LIFT_MSG) && player.level().getGameTime() - data.getLongOr(LIFT_MSG, 0L) < LIFT_GRACE;
+        if (lifted || EilandenFeature.islandsAt(player.level(), player.blockPosition()) != null) {
             catchFalling(player);
         }
     }
@@ -221,10 +221,10 @@ public final class EilandenEvents {
     public static void catchFalling(ServerPlayer player) {
         player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 12, 0, false, false, true));
         player.resetFallDistance();
-        if (!player.getPersistentData().getBoolean(CAUGHT)) {
+        if (!player.getPersistentData().getBooleanOr(CAUGHT, false)) {
             player.getPersistentData().putBoolean(CAUGHT, true);
-            player.displayClientMessage(Component.translatable("quest.guhs.eilanden.caught").withStyle(ChatFormatting.AQUA), true);
-            player.serverLevel().sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY(), player.getZ(), 16, 0.6, 0.3, 0.6, 0.02);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.eilanden.caught").withStyle(ChatFormatting.AQUA));
+            player.level().sendParticles(ParticleTypes.CLOUD, player.getX(), player.getY(), player.getZ(), 16, 0.6, 0.3, 0.6, 0.02);
         }
     }
 
@@ -234,9 +234,9 @@ public final class EilandenEvents {
     public static void onLift(ServerPlayer player, boolean down) {
         CompoundTag data = player.getPersistentData();
         long now = player.level().getGameTime();
-        if (now - data.getLong(LIFT_MSG) > 60) {
-            player.displayClientMessage(Component.translatable(down ? "quest.guhs.eilanden.lift_down" : "quest.guhs.eilanden.lift_up")
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        if (now - data.getLongOr(LIFT_MSG, 0L) > 60) {
+            player.sendOverlayMessage(Component.translatable(down ? "quest.guhs.eilanden.lift_down" : "quest.guhs.eilanden.lift_up")
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             player.level().playSound(null, player.blockPosition(), down ? SoundEvents.WOOL_PLACE : SoundEvents.FIREWORK_ROCKET_LAUNCH,
                     SoundSource.PLAYERS, 0.8f, down ? 0.8f : 1.3f);
         }

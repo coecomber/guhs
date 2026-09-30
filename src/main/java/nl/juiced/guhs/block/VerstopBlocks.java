@@ -113,7 +113,7 @@ public final class VerstopBlocks {
 
         @Override
         protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-            if (!level.isClientSide && entity instanceof ServerPlayer player && !player.isPassenger()) {
+            if (!level.isClientSide() && entity instanceof ServerPlayer player && !player.isPassenger()) {
                 nl.juiced.guhs.quest.VerstopGame.walkOut(player, pos);
             }
         }

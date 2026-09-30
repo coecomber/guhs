@@ -11,7 +11,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -44,6 +44,8 @@ import nl.juiced.guhs.feature.huisje.Klusjes;
 import nl.juiced.guhs.feature.piep.PiepDierItem;
 import nl.juiced.guhs.quest.GuhDex;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * 3.0 (Guhverhalen), slice landdiertjes: the little land critters of the Guhmensie (DESIGN_30 §6) and Sjokkel (§3).
  * <ul>
@@ -86,16 +88,16 @@ public final class LanddiertjesFeature {
     // --- the critters ------------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<PluisegeltjeEntity>> PLUISEGELTJE = ENTITY_TYPES.register("pluisegeltje",
             () -> EntityType.Builder.of(PluisegeltjeEntity::new, MobCategory.CREATURE).sized(0.5f, 0.42f).eyeHeight(0.3f)
-                    .clientTrackingRange(8).build(Guhs.id("pluisegeltje").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("pluisegeltje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<GuhKonijntjeEntity>> GUH_KONIJNTJE = ENTITY_TYPES.register("guh_konijntje",
             () -> EntityType.Builder.of(GuhKonijntjeEntity::new, MobCategory.CREATURE).sized(0.45f, 0.55f).eyeHeight(0.42f)
-                    .clientTrackingRange(8).build(Guhs.id("guh_konijntje").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_konijntje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<PluiseekhoorntjeEntity>> PLUISEEKHOORNTJE = ENTITY_TYPES.register("pluiseekhoorntje",
             () -> EntityType.Builder.of(PluiseekhoorntjeEntity::new, MobCategory.CREATURE).sized(0.42f, 0.5f).eyeHeight(0.38f)
-                    .clientTrackingRange(8).build(Guhs.id("pluiseekhoorntje").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("pluiseekhoorntje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<ShuckleEntity>> SHUCKLE = ENTITY_TYPES.register("shuckle",
             () -> EntityType.Builder.of(ShuckleEntity::new, MobCategory.CREATURE).sized(0.62f, 0.55f).eyeHeight(0.35f)
-                    .clientTrackingRange(8).build(Guhs.id("shuckle").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("shuckle"))));
 
     // --- picked up (the whole critter in the item) -------------------------------------------------------------------------------
     public static final DeferredItem<PiepDierItem> PLUISEGELTJE_ITEM = ITEMS.registerItem("pluisegeltje_item",
@@ -175,8 +177,8 @@ public final class LanddiertjesFeature {
      * Sjokkel's natural spawns (the biome modifier puts it only in the Gatenkaasgrotten): rarely, deep down (below y 48) on
      * solid rock/cheese, and never when another Sjokkel is within 32 blocks. Spawn eggs, commands and the plekjes always work.
      */
-    public static boolean shuckleMagSpawnen(ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        if (spawnType != MobSpawnType.NATURAL && spawnType != MobSpawnType.CHUNK_GENERATION) {
+    public static boolean shuckleMagSpawnen(ServerLevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
+        if (spawnType != EntitySpawnReason.NATURAL && spawnType != EntitySpawnReason.CHUNK_GENERATION) {
             return true;
         }
         if (pos.getY() > 48 || random.nextInt(6) != 0 || !level.getBiome(pos).is(GatenkaasFeature.GATENKAASGROTTEN)) {

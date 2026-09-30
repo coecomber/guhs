@@ -23,6 +23,8 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.block.VerstopBlocks;
 import nl.juiced.guhs.feature.NpcRole;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * Het Vadsig eetfestijn: a big guh food festival in the Guhmension. In its arena the Smulguh lets you catch falling
  * food for a minute with a big borrowed bowl (see {@link SmulGame}); you earn smulmunten for the smul outfit in her shop.
@@ -52,7 +54,7 @@ public final class SmulFeature {
 
     public static final DeferredHolder<EntityType<?>, EntityType<SmulHapje>> HAPJE = ENTITY_TYPES.register("smul_hapje",
             () -> EntityType.Builder.<SmulHapje>of(SmulHapje::new, MobCategory.MISC).sized(0.7f, 0.7f).clientTrackingRange(6)
-                    .updateInterval(2).build("smul_hapje"));
+                    .updateInterval(2).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("smul_hapje"))));
 
     private static DeferredBlock<VerstopBlocks.Marker> marker(String name) {
         return BLOCKS.registerBlock(name, VerstopBlocks.Marker::new, BlockBehaviour.Properties.of().noCollission().noLootTable()

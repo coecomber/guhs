@@ -146,7 +146,7 @@ public final class Theekransje {
         data.putBoolean("Running", k.isBezig());
         data.putBoolean("Mine", mine);
         ServerPlayer host = k.gastheerIn((ServerLevel) npc.level());
-        data.putString("Gastheer", host == null ? "?" : host.getGameProfile().getName());
+        data.putString("Gastheer", host == null ? "?" : host.getGameProfile().name());
         data.putInt("Gezelligheid", k.gezelligheid);
         data.putInt("Doel", DOEL);
         data.putInt("Gasten", eigenGuhs((ServerLevel) npc.level(), player, npc.position()).size());
@@ -223,7 +223,7 @@ public final class Theekransje {
             dek(level, t, true);
         }
         int thee = 0;
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (s.is(KnusTags.THEE) || s.getItem() instanceof TheeBlocks.Thee) {
                 thee += s.getCount();
             }
@@ -312,7 +312,7 @@ public final class Theekransje {
         Vec3 at = Vec3.atBottomCenterOf(g.stoel).add(0, 0.5625, 0);
         float yaw = (float) Math.toDegrees(Math.atan2(-(centre.x - at.x), centre.z - at.z));
         guh.getNavigation().stop();
-        guh.moveTo(at.x, at.y, at.z, yaw, 0);
+        guh.snapTo(at.x, at.y, at.z, yaw, 0);
         guh.setYHeadRot(yaw);
         guh.yBodyRot = yaw;
         guh.setDeltaMovement(Vec3.ZERO);
@@ -341,7 +341,7 @@ public final class Theekransje {
             g.wens = Wens.GEEN;
             g.rust = 100 + level.getRandom().nextInt(100);
             level.playSound(null, guh, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 0.6f, 0.75f);
-            host.displayClientMessage(Component.translatable("gui.guhs.theehuis.vergeten", guh.getDisplayName()).withStyle(ChatFormatting.GRAY), true);
+            host.sendOverlayMessage(Component.translatable("gui.guhs.theehuis.vergeten", guh.getDisplayName()).withStyle(ChatFormatting.GRAY));
             return true;
         }
         return false;
@@ -379,7 +379,7 @@ public final class Theekransje {
 
     /** A right-click on a guh: pouring tea / serving cake to a guest (the host), a friendly word otherwise. */
     static InteractionResult klikOpGuh(GuhEntity guh, Player player, InteractionHand hand) {
-        if (player.level().isClientSide) {
+        if (player.level().isClientSide()) {
             Integer w = TheehuisPayloads.CLIENT_WENSEN.get(guh.getId());
             return w == null ? InteractionResult.PASS : InteractionResult.SUCCESS;
         }
@@ -395,8 +395,8 @@ public final class Theekransje {
         Gast g = k.gast(guh);
         if (!sp.getUUID().equals(k.gastheer)) {
             ServerPlayer host = k.gastheerIn(level);
-            sp.displayClientMessage(Component.translatable("gui.guhs.theehuis.niet_jouw", host == null ? "?" : host.getGameProfile().getName())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.theehuis.niet_jouw", host == null ? "?" : host.getGameProfile().name())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             return InteractionResult.SUCCESS;
         }
         ItemStack stack = player.getItemInHand(hand);
@@ -405,12 +405,12 @@ public final class Theekransje {
         if (g == null || !g.zit || (!thee && !gebak)) {
             String wil = g == null || !g.zit ? "gui.guhs.theehuis.gaat_zitten" : g.wens == Wens.THEE ? "gui.guhs.theehuis.wil_thee"
                     : g.wens == Wens.GEBAK ? "gui.guhs.theehuis.wil_gebak" : "gui.guhs.theehuis.kletst";
-            sp.displayClientMessage(Component.translatable(wil, guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            sp.sendOverlayMessage(Component.translatable(wil, guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
             return InteractionResult.SUCCESS;
         }
         if ((thee && g.wens != Wens.THEE) || (gebak && g.wens != Wens.GEBAK)) {
-            sp.displayClientMessage(Component.translatable(g.wens == Wens.GEEN ? "gui.guhs.theehuis.heeft_al" : g.wens == Wens.THEE
-                    ? "gui.guhs.theehuis.wil_thee" : "gui.guhs.theehuis.wil_gebak", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            sp.sendOverlayMessage(Component.translatable(g.wens == Wens.GEEN ? "gui.guhs.theehuis.heeft_al" : g.wens == Wens.THEE
+                    ? "gui.guhs.theehuis.wil_thee" : "gui.guhs.theehuis.wil_gebak", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
             return InteractionResult.SUCCESS;
         }
         k.serveer(level, sp, guh, g, stack, thee);
@@ -457,8 +457,8 @@ public final class Theekransje {
         level.playSound(null, guh, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 0.8f, 1.2f);
         TheeBlocks.hartjes(level, guh.getX(), guh.getY() + 1.0, guh.getZ(), 3);
         guh.emotes.start(thee ? Emote.VAHOEG : Emote.SMAKKEN, false, GuhEmotes.Source.SELF);
-        host.displayClientMessage(Component.translatable(bijzonder ? (thee ? "gui.guhs.theehuis.lekker_bijzonder" : "gui.guhs.theehuis.lekker_zelfgebakken")
-                : "gui.guhs.theehuis.lekker", guh.getDisplayName(), erbij).withStyle(ChatFormatting.GOLD), true);
+        host.sendOverlayMessage(Component.translatable(bijzonder ? (thee ? "gui.guhs.theehuis.lekker_bijzonder" : "gui.guhs.theehuis.lekker_zelfgebakken")
+                : "gui.guhs.theehuis.lekker", guh.getDisplayName(), erbij).withStyle(ChatFormatting.GOLD));
         sync(level);
         if (gezelligheid >= DOEL) {
             klaar(level, true);
@@ -497,7 +497,7 @@ public final class Theekransje {
                 if (npc != null) {
                     GuhQuests.say(host, npc, "quest.guhs.theeguh.gezellig");
                 }
-                if (!saved.getBoolean(EERSTE)) {
+                if (!saved.getBooleanOr(EERSTE, false)) {
                     saved.putBoolean(EERSTE, true);
                     Minigames.give(host, new ItemStack(ModItems.clothingItem(GuhClothes.THEEMUTSJE)));
                     if (npc != null) {
@@ -638,7 +638,7 @@ public final class Theekransje {
 
     public static void onPlayerTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        if (player.level().isClientSide || player.tickCount % 20 != 0) {
+        if (player.level().isClientSide() || player.tickCount % 20 != 0) {
             return;
         }
         Long seen = GASTHEREN.get(player.getUUID());

@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.guhwaii.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -63,8 +63,8 @@ public class ScannerScherm extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float pt) {
-        super.renderBackground(g, mouseX, mouseY, pt);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float pt) {
+        super.extractBackground(g, mouseX, mouseY, pt);
         float nu = t + pt;
         boolean kapot = nu >= Scanner.METING_TICKS;
         float na = nu - Scanner.METING_TICKS;
@@ -82,9 +82,9 @@ public class ScannerScherm extends Screen {
         for (int y = o + 2; y < o + H - 2; y += 3) {
             g.fill(l + 1, y, l + W - 1, y + 1, 0x14FFFFFF);
         }
-        g.drawString(font, title.copy().withStyle(ChatFormatting.BOLD), l + 10, o + 7, RAND, false);
+        g.text(font, title.copy().withStyle(ChatFormatting.BOLD), l + 10, o + 7, RAND, false);
         String exp = "EXPERIMENT 626";
-        g.drawString(font, exp, l + W - 10 - font.width(exp), o + 7, 0xFF7FA8D8, false);
+        g.text(font, exp, l + W - 10 - font.width(exp), o + 7, 0xFF7FA8D8, false);
         // the guh on the plate
         int px = l + 10, py = o + 22;
         g.fill(px - 1, py - 1, px + PIC + 1, py + PIC + 1, RAND2);
@@ -100,11 +100,11 @@ public class ScannerScherm extends Screen {
         } else if (((int) nu / 4) % 2 == 0) {
             g.fill(px, py, px + PIC, py + PIC, 0x30FF8CC8);
         }
-        g.drawString(font, font.plainSubstrByWidth(scan.naam(), PIC), px, py + PIC + 4, TEKST, false);
-        g.drawString(font, font.plainSubstrByWidth(scan.soort(), PIC), px, py + PIC + 14, 0xFF8FB8E0, false);
+        g.text(font, font.plainSubstrByWidth(scan.naam(), PIC), px, py + PIC + 4, TEKST, false);
+        g.text(font, font.plainSubstrByWidth(scan.soort(), PIC), px, py + PIC + 14, 0xFF8FB8E0, false);
         // the meter
         int mx = l + 10 + PIC + 14, my = o + 22;
-        g.drawString(font, Component.translatable("gui.guhs.guhwaii.scanner.niveau").withStyle(ChatFormatting.BOLD), mx, my, TEKST, false);
+        g.text(font, Component.translatable("gui.guhs.guhwaii.scanner.niveau").withStyle(ChatFormatting.BOLD), mx, my, TEKST, false);
         int bx = mx, by = my + 14, bw = 22, bh = 118;
         g.fill(bx - 2, by - 2, bx + bw + 2, by + bh + 2, RAND);
         g.fill(bx, by, bx + bw, by + bh, 0xFF06101E);
@@ -124,7 +124,7 @@ public class ScannerScherm extends Screen {
             int ly = by + bh - (int) ((i + 1f) / LABELS.length * bh * 0.95f);
             g.fill(bx + bw + 2, ly, bx + bw + 6, ly + 1, RAND);
             boolean bereikt = vol >= (i + 1f) / LABELS.length * 0.95f;
-            g.drawString(font, Component.translatable(LABELS[i]), bx + bw + 9, ly - 4, bereikt ? KLEUREN[Math.min(segs - 1, (i + 1) * segs / LABELS.length - 1)]
+            g.text(font, Component.translatable(LABELS[i]), bx + bw + 9, ly - 4, bereikt ? KLEUREN[Math.min(segs - 1, (i + 1) * segs / LABELS.length - 1)]
                     : 0xFF5A7090, false);
         }
         // the needle going up... and through the top
@@ -150,26 +150,26 @@ public class ScannerScherm extends Screen {
         int rx = bx + bw + 68, ry = by + 2, rw = l + W - 10 - rx;
         if (!kapot) {
             int pct = (int) (vol * 100);
-            g.drawString(font, pct + "%", rx, ry, TEKST, false);
+            g.text(font, pct + "%", rx, ry, TEKST, false);
             String dots = ".".repeat(1 + ((int) nu / 5) % 3);
-            g.drawString(font, Component.translatable("gui.guhs.guhwaii.scanner.meten").getString() + dots, rx, ry + 12, 0xFF8FB8E0, false);
+            g.text(font, Component.translatable("gui.guhs.guhwaii.scanner.meten").getString() + dots, rx, ry + 12, 0xFF8FB8E0, false);
         } else {
             boolean flits = ((int) nu / 3) % 2 == 0;
             Component groot = Component.translatable("gui.guhs.guhwaii.scanner.onberekenbaar.kort").withStyle(ChatFormatting.BOLD);
-            g.pose().pushPose();
+            g.pose().pushMatrix();
             float schaal = 1.3f + (na < 8 ? (8 - na) * 0.08f : 0f);
-            g.pose().translate(rx, ry, 0);
-            g.pose().scale(schaal, schaal, 1f);
+            g.pose().translate(rx, ry);
+            g.pose().scale(schaal, schaal);
             for (var line : font.split(groot, (int) (rw / schaal))) {
-                g.drawString(font, line, 0, 0, flits ? ROZE : 0xFFFFE070, true);
-                g.pose().translate(0, 11, 0);
+                g.text(font, line, 0, 0, flits ? ROZE : 0xFFFFE070, true);
+                g.pose().translate(0, 11);
             }
-            g.pose().popPose();
+            g.pose().popMatrix();
             int y = ry + 42;
             for (int i = 0; i < METINGEN.length; i++) {
                 if (na > 14 + i * 9) {
                     for (var line : font.split(Component.translatable(METINGEN[i]), rw)) {
-                        g.drawString(font, line, rx, y, TEKST, false);
+                        g.text(font, line, rx, y, TEKST, false);
                         y += 10;
                     }
                     y += 2;

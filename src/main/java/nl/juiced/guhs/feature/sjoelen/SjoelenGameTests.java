@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.sjoelen;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -14,8 +14,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -32,8 +30,6 @@ import nl.juiced.guhs.registry.ModItems;
  * Guh-sjoelen: the physics of the bak (pure, no world), the points and the sjoelschijfjes (+1 per rule), Opoe's shop and
  * the clothing sources, the loaned pucks, the protection, and a whole turn in the real Sjoelhuisje.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class SjoelenGameTests {
     private static final String BATCH = "sjoelen_huisje";
 
@@ -64,7 +60,7 @@ public class SjoelenGameTests {
     }
 
     /** Straight slides into every gate, too weak stops short, the corner of a divider sends a puck off, pucks push each other. */
-    @GameTest(template = "empty")
+    @GuhTest(template = "empty")
     public static void sjoelenBakNatuurkunde(GameTestHelper helper) {
         for (int k = 0; k < 4; k++) {
             SjoelBak bak = new SjoelBak();
@@ -91,7 +87,7 @@ public class SjoelenGameTests {
     }
 
     /** Sets of 2-3-4-1 are 20 points; the rest counts per gate; sjoelschijfjes: 1, +1 per set, +1 for a record. */
-    @GameTest(template = "empty")
+    @GuhTest(template = "empty")
     public static void sjoelenPuntenEnMunten(GameTestHelper helper) {
         helper.assertTrue(SjoelBak.score(new int[] {5, 5, 5, 5}) == 100, "five sets: 100");
         helper.assertTrue(SjoelBak.score(new int[] {3, 2, 2, 6}) == 46, "2 sets (40) + 1x2 + 4x1 = 46");
@@ -107,7 +103,7 @@ public class SjoelenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GuhTest(template = "empty")
     public static void sjoelenWinkelEnBronnen(GameTestHelper helper) {
         GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(2, 2, 2));
         npc.setKind(GuhNpcEntity.Kind.SJOELGUH);
@@ -125,7 +121,7 @@ public class SjoelenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GuhTest(template = "empty")
     public static void sjoelenSchijvenBlijvenGeleend(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         ItemStack pucks = new ItemStack(SjoelenFeature.SCHIJVEN.get(), 20);
@@ -138,7 +134,7 @@ public class SjoelenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GuhTest(template = "empty")
     public static void sjoelenBescherming(GameTestHelper helper) {
         BlockPos floor = new BlockPos(2, 1, 2);
         helper.setBlock(floor, Blocks.OAK_PLANKS);
@@ -162,19 +158,19 @@ public class SjoelenGameTests {
     }
 
     /** A whole turn at Opoe's: 20 loaned pucks, a real slide into gate 4, the rest landed, Opoe counts: 100! */
-    @GameTest(template = "sjoelhuisje", timeoutTicks = 500, batch = BATCH)
+    @GuhTest(template = "sjoelhuisje", timeoutTicks = 500, batch = BATCH)
     public static void sjoelenBeurtInHetHuisje(GameTestHelper helper) {
         List<GuhNpcEntity> npcs = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class, helper.getBounds(), n -> n.getKind() == GuhNpcEntity.Kind.SJOELGUH);
         helper.assertTrue(npcs.size() == 1, "Opoe Njegschuif is in her Sjoelhuisje: " + npcs.size());
         GuhNpcEntity npc = npcs.get(0);
         ServerPlayer p = player(helper);
-        p.moveTo(npc.getX() + 1, npc.getY(), npc.getZ());
+        p.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         SjoelGame.action(npc, p, SjoelGame.START);
         SjoelGame game = SjoelGame.of(npc);
         helper.assertTrue(game.isPlayedBy(p) && SjoelGame.isPlaying(p) && game.kop() != null, "the turn is on, the bak found");
         helper.assertTrue(count(p, SjoelenFeature.SCHIJVEN.get()) == 20, "twenty loaned pucks");
         ServerPlayer other = player(helper);
-        other.moveTo(npc.getX(), npc.getY(), npc.getZ() + 1);
+        other.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1);
         SjoelGame.action(npc, other, SjoelGame.START);
         helper.assertTrue(!SjoelGame.isPlaying(other), "one player at a time");
         leave(helper, other);
@@ -182,7 +178,7 @@ public class SjoelenGameTests {
         helper.runAfterDelay(12, () -> {
             helper.assertTrue(game.phase() == SjoelGame.Phase.PLAYING, "the countdown is over: " + game.phase());
             Vec3 spot = game.world(-1.2, 3.125);
-            p.moveTo(spot.x, spot.y - 1, spot.z, game.facing().toYRot(), 10);
+            p.snapTo(spot.x, spot.y - 1, spot.z, game.facing().toYRot(), 10);
             helper.assertTrue(game.slideWith(p, 0.75f, 0), "slid");
             helper.assertTrue(game.thrown() == 1 && count(p, SjoelenFeature.SCHIJVEN.get()) == 19, "one puck gone from the stack");
             helper.assertTrue(game.testEntities(helper.getLevel()).size() == 1, "a real puck entity on the bak");
@@ -205,7 +201,7 @@ public class SjoelenGameTests {
             helper.assertTrue(SjoelenFeature.has(p, "sjoelen_gespeeld") && SjoelenFeature.has(p, "sjoelen_honderd"), "advancements");
             helper.assertTrue(Scorebord.top(helper.getLevel().getServer(), SjoelGame.BOARD).stream().anyMatch(en -> en.player().equals(p.getUUID())
                     && en.score() == 100), "on the house top 3");
-            helper.assertTrue(GuhQuests.saved(p).getInt(SjoelGame.GAMES_KEY) == 1, "one turn counted");
+            helper.assertTrue(GuhQuests.saved(p).getIntOr(SjoelGame.GAMES_KEY, 0) == 1, "one turn counted");
         });
         helper.runAfterDelay(150 + SjoelGame.TALLY_TICKS + 5, () -> {
             helper.assertTrue(!game.isRunning() && !SjoelGame.isPlaying(p), "the turn is over");

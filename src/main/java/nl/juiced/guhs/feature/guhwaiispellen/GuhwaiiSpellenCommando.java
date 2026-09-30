@@ -46,7 +46,7 @@ public final class GuhwaiiSpellenCommando {
     @Nullable
     private static GuhNpcEntity lilo(ServerPlayer p, String plek) {
         return p.level().getEntitiesOfClass(GuhNpcEntity.class, p.getBoundingBox().inflate(BEREIK),
-                        n -> n.getKind() == GuhNpcEntity.Kind.LILO_GUH && plek.equals(n.roleData.getString(NpcRollen.PLEK)))
+                        n -> n.getKind() == GuhNpcEntity.Kind.LILO_GUH && plek.equals(n.roleData.getStringOr(NpcRollen.PLEK, "")))
                 .stream().min(Comparator.comparingDouble(n -> n.distanceToSqr(p))).orElse(null);
     }
 
@@ -81,7 +81,7 @@ public final class GuhwaiiSpellenCommando {
         ServerLevel level = source.getLevel();
         var pos = source.getPosition();
         GuhNpcEntity lilo = level.getEntitiesOfClass(GuhNpcEntity.class, new net.minecraft.world.phys.AABB(pos, pos).inflate(BEREIK),
-                        n -> n.getKind() == GuhNpcEntity.Kind.LILO_GUH && "surf".equals(n.roleData.getString(NpcRollen.PLEK)))
+                        n -> n.getKind() == GuhNpcEntity.Kind.LILO_GUH && "surf".equals(n.roleData.getStringOr(NpcRollen.PLEK, "")))
                 .stream().min(Comparator.comparingDouble(n -> n.distanceToSqr(pos))).orElse(null);
         if (lilo == null) {
             source.sendFailure(Component.literal("Njeg: geen surf-Lilo-guh binnen " + (int) BEREIK + " blokken."));

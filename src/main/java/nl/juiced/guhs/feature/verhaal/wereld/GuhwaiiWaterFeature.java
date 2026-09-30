@@ -47,7 +47,7 @@ public class GuhwaiiWaterFeature extends Feature<GuhwaiiWaterFeature.Config> {
                 if (c.regio().waarde(seed, x, z) < c.minValue()) {
                     continue;
                 }
-                for (int y = c.waterLevel() - 1; y > level.getMinBuildHeight(); y--) {
+                for (int y = c.waterLevel() - 1; y > level.getMinY(); y--) {
                     p.set(x, y, z);
                     if (!level.getBlockState(p).isAir()) {
                         break;

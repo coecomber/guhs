@@ -46,16 +46,16 @@ public final class BandClient {
             for (int i = 0; i < 24; i++) {
                 double a = i * Math.PI * 2 / 24;
                 level.addParticle(BandFeature.HARTJE.get(), guh.getX() + Math.cos(a) * 0.3, top, guh.getZ() + Math.sin(a) * 0.3,
-                        Math.cos(a) * 0.12, 0.08 + level.random.nextDouble() * 0.05, Math.sin(a) * 0.12);
+                        Math.cos(a) * 0.12, 0.08 + level.getRandom().nextDouble() * 0.05, Math.sin(a) * 0.12);
             }
             level.addParticle(BandFeature.GROOT_HARTJE.get(), guh.getX(), top + 0.4, guh.getZ(), 0, 0.02, 0);
             return;
         }
         int count = Math.min(8, 1 + n / 2);
         for (int i = 0; i < count; i++) {
-            level.addParticle(BandFeature.HARTJE.get(), guh.getX() + (level.random.nextDouble() - 0.5) * guh.getBbWidth(),
-                    top + level.random.nextDouble() * 0.2, guh.getZ() + (level.random.nextDouble() - 0.5) * guh.getBbWidth(),
-                    (level.random.nextDouble() - 0.5) * 0.02, 0.04 + level.random.nextDouble() * 0.03, (level.random.nextDouble() - 0.5) * 0.02);
+            level.addParticle(BandFeature.HARTJE.get(), guh.getX() + (level.getRandom().nextDouble() - 0.5) * guh.getBbWidth(),
+                    top + level.getRandom().nextDouble() * 0.2, guh.getZ() + (level.getRandom().nextDouble() - 0.5) * guh.getBbWidth(),
+                    (level.getRandom().nextDouble() - 0.5) * 0.02, 0.04 + level.getRandom().nextDouble() * 0.03, (level.getRandom().nextDouble() - 0.5) * 0.02);
         }
     }
 

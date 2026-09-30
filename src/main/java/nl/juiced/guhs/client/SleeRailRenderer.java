@@ -4,12 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
@@ -22,7 +22,7 @@ import nl.juiced.guhs.slee.SleePath;
  * The path is the same one the sled follows, so the sled always sits right on top of the rails.
  */
 public class SleeRailRenderer implements BlockEntityRenderer<SleeRailBlockEntity> {
-    public static final ResourceLocation TEXTURE = Guhs.id("textures/block/slee_rail.png");
+    public static final Identifier TEXTURE = Guhs.id("textures/block/slee_rail.png");
     /** Rails: sideways from the middle, thickness and height (the top is where the sled rides). */
     public static final double RAIL_OFFSET = 0.55, RAIL_HALF_WIDTH = 0.07, SLEEPER_HEIGHT = 0.08;
     public static final double SLEEPER_HALF_WIDTH = 0.8, SLEEPER_HALF_LENGTH = 0.14, SLEEPER_SPACING = 0.5;

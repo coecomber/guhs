@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -22,8 +22,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -33,16 +31,15 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.world.GuhWorldData;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /** GameTests of the floating guh islands: the Wolkguh, the wolkenlift, falling safely and the protection. */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class EilandenGameTests {
     private static final String EMPTY = "empty";
     private static final String ISLANDS = "zwevende_eilanden";
     /** Template layout (tools/features/eilanden.py): the main island's top block and the lift columns' height. */
     private static final int S0 = 62, TOP = 64;
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void wolkguhOnlyTrustsYouWhenItsVadsEnough(GameTestHelper helper) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 2));
         guh.setVariant(GuhVariant.WOLK);
@@ -69,11 +66,11 @@ public class EilandenGameTests {
             player.interactOn(guh, InteractionHand.MAIN_HAND);
         }
         helper.assertTrue(guh.isTame() && player.getUUID().equals(guh.getOwnerUUID()), "vads enough: tamed in the end");
-        helper.assertTrue(GuhWorldData.get(player.server).player(player.getUUID()).tamed.contains(GuhVariant.WOLK), "a Guhdex star");
+        helper.assertTrue(GuhWorldData.get(player.level().getServer()).player(player.getUUID()).tamed.contains(GuhVariant.WOLK), "a Guhdex star");
     }
 
     /** The Wolkguh always has its little cloud on its head (a variant bone, not a hat: it stays when you undress it). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void wolkguhHasACloudOnItsHead(GameTestHelper helper) {
         String bone = "wolk_wolkje";
         helper.assertTrue(GuhVariant.WOLK.shows(bone), "the Wolkguh should show its head cloud");
@@ -89,7 +86,7 @@ public class EilandenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void wolkenstroomLiftsPuffsOffAndSinks(GameTestHelper helper) {
         BlockPos pad = helper.absolutePos(new BlockPos(2, 0, 2));
         BlockPos ceiling = pad.above(4);
@@ -136,7 +133,7 @@ public class EilandenGameTests {
     }
 
     /** A wild Wolkguh can't be hurt (only tamed), it stays unique (its babies are snow guhs), and water can't wash a lift away. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void wolkguhIsUntouchableAndLiftsAreWaterproof(GameTestHelper helper) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         try {
@@ -153,7 +150,7 @@ public class EilandenGameTests {
             guh.hurt(helper.getLevel().damageSources().playerAttack(player), 2);
             helper.assertTrue(guh.getHealth() < health, "a tamed one is a normal guh again");
 
-            GuhEntity baby = ModEntities.GUH.get().create(helper.getLevel());
+            GuhEntity baby = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
             baby.setVariant(GuhVariant.WOLK);
             BabyEntitySpawnEvent birth = new BabyEntitySpawnEvent(guh, guh, baby);
             EilandenEvents.onBaby(birth);
@@ -180,7 +177,7 @@ public class EilandenGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void yourWolkguhCatchesYou(GameTestHelper helper) {
         ServerPlayer owner = helper.makeMockServerPlayerInLevel();
         ServerPlayer other = helper.makeMockServerPlayerInLevel();
@@ -190,8 +187,8 @@ public class EilandenGameTests {
             GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 2));
             guh.setVariant(GuhVariant.WOLK);
             guh.tame(owner);
-            guh.moveTo(owner.position());
-            other.moveTo(owner.position());
+            guh.snapTo(owner.position());
+            other.snapTo(owner.position());
             helper.assertTrue(EilandenEvents.ownWolkguhs(owner).size() == 1 && EilandenEvents.ownWolkguhs(other).isEmpty(), "only the owner's");
             helper.assertTrue(CommonHooks.onLivingFall(owner, 12, 1)[1] == 0, "the owner is caught: no fall damage");
             helper.assertTrue(CommonHooks.onLivingFall(other, 12, 1)[1] == 1, "someone else does get hurt");
@@ -206,7 +203,7 @@ public class EilandenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void protectionCoversTheSkyAndTheLiftSquare(GameTestHelper helper) {
         BoundingBox piece = new BoundingBox(1000, 60, 2000, 1100, 151, 2100);   // the islands: 101 x 92 x 101
         helper.assertTrue(EilandenProtection.protectedPart(piece, new BlockPos(1010, 60 + EilandenProtection.ISLANDS_FROM, 2010)), "the sky part");
@@ -219,7 +216,7 @@ public class EilandenGameTests {
     }
 
     /** The real structure: one wild Wolkguh in its outfit, two chests, and both lifts carry things up and softly down. */
-    @GameTest(template = ISLANDS, timeoutTicks = 700)
+    @GuhTest(template = ISLANDS, timeoutTicks = 700)
     public static void islandsHaveTheirWolkguhAndWorkingLifts(GameTestHelper helper) {
         var level = helper.getLevel();
         List<BlockPos> ups = new ArrayList<>(), downs = new ArrayList<>(), chests = new ArrayList<>();

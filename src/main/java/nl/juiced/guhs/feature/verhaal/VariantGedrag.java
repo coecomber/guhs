@@ -7,7 +7,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
-import software.bernie.geckolib.animation.RawAnimation;
+import com.geckolib.animation.RawAnimation;
 
 /**
  * 3.0 (Guhverhalen): the behaviour of one guh variant, hooked into GuhEntity so the owner slice never edits it. Register it
@@ -20,7 +20,7 @@ import software.bernie.geckolib.animation.RawAnimation;
  * </ul>
  */
 public interface VariantGedrag {
-    /** Every tick of a guh of this variant, both sides (server-only work: check {@code guh.level().isClientSide}). */
+    /** Every tick of a guh of this variant, both sides (server-only work: check {@code guh.level().isClientSide()}). */
     default void tick(GuhEntity guh) {
     }
 

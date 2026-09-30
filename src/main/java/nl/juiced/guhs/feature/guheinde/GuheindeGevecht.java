@@ -48,6 +48,8 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import org.joml.Vector3f;
 
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The fight in the Guheinde (the EndDragonFight of the guhs), saved with the Guheinde level.
  * <ul>
@@ -268,7 +270,7 @@ public class GuheindeGevecht extends SavedData {
     public void buildIsland(ServerLevel level) {
         level.getChunk(0, 0);
         int h = level.getHeight(Heightmap.Types.WORLD_SURFACE, 0, 0);
-        groundY = h > level.getMinBuildHeight() + 8 ? h : 64;
+        groundY = h > level.getMinY() + 8 ? h : 64;
         placeBerg(level);
         for (int i = 0; i < PILLARS; i++) {
             buildPillar(level, i, true);
@@ -289,7 +291,7 @@ public class GuheindeGevecht extends SavedData {
                 level.getChunk(cx, cz);
             }
         }
-        template.placeInWorld(level, origin, origin, new StructurePlaceSettings(), level.random, 2);
+        template.placeInWorld(level, origin, origin, new StructurePlaceSettings(), level.getRandom(), 2);
         return true;
     }
 
@@ -364,20 +366,20 @@ public class GuheindeGevecht extends SavedData {
 
     private void spawnBoss(ServerLevel level, @Nullable HongerigeEnderguhEntity mount) {
         if (mount == null) {
-            mount = GuheindeFeature.HONGERIGE_ENDERGUH.get().create(level);
+            mount = GuheindeFeature.HONGERIGE_ENDERGUH.get().create(level, EntitySpawnReason.TRIGGERED);
             if (mount == null) {
                 return;
             }
-            mount.moveTo(0.5, plateauY() + 30, -70.5, 0f, 0f);
+            mount.snapTo(0.5, plateauY() + 30, -70.5, 0f, 0f);
             mount.setVahoeg(PILLARS - pillarCrystalsLeft(level));
             level.addFreshEntity(mount);
         }
         mount.setArena(center(), perch());
-        OpperMikaEntity boss = GuheindeFeature.OPPER_MIKA.get().create(level);
+        OpperMikaEntity boss = GuheindeFeature.OPPER_MIKA.get().create(level, EntitySpawnReason.TRIGGERED);
         if (boss == null) {
             return;
         }
-        boss.moveTo(mount.getX(), mount.getY() + 2, mount.getZ(), 0f, 0f);
+        boss.snapTo(mount.getX(), mount.getY() + 2, mount.getZ(), 0f, 0f);
         level.addFreshEntity(boss);
         if (mount.getToestand() != HongerigeEnderguhEntity.Toestand.VRIJ) {
             boss.startRiding(mount, true);
@@ -451,7 +453,7 @@ public class GuheindeGevecht extends SavedData {
         HongerigeEnderguhEntity mount = mount(level);
         ServerPlayer mountFor = null;
         for (ServerPlayer p : winners) {
-            if (GuhQuests.saved(p).getInt(WINS) == 0 && (mountFor == null || p.getUUID().equals(feeder))) {
+            if (GuhQuests.saved(p).getIntOr(WINS, 0) == 0 && (mountFor == null || p.getUUID().equals(feeder))) {
                 mountFor = p;
             }
         }
@@ -480,24 +482,24 @@ public class GuheindeGevecht extends SavedData {
      * one when given, otherwise a fresh one); after that an Enderguh-ei. Plus the scoreboard and advancements.
      */
     public static void reward(ServerPlayer player, @Nullable HongerigeEnderguhEntity freed, int seconds) {
-        int wins = GuhQuests.saved(player).getInt(WINS);
+        int wins = GuhQuests.saved(player).getIntOr(WINS, 0);
         GuhQuests.saved(player).putInt(WINS, wins + 1);
         GuheindeEvents.advancement(player, "guheinde_winst");
         if (wins == 0) {
             GuhQuests.give(player, GuheindeFeature.KNABBELKROON.get());
             GuhQuests.give(player, GuheindeFeature.OPPER_MIKATROFEE.get().asItem());
             Vec3 at = freed != null ? freed.position() : player.position().add(2, 1, 0);
-            GuhEntity guh = ModEntities.GUH.get().create(player.serverLevel());
+            GuhEntity guh = ModEntities.GUH.get().create(player.level(), EntitySpawnReason.TRIGGERED);
             if (guh != null) {
                 guh.setVariant(GuhVariant.VAHOEGE_ENDER);
                 guh.setGuhScale(1.7f);
-                guh.moveTo(at.x, at.y, at.z, player.getYRot(), 0f);
+                guh.snapTo(at.x, at.y, at.z, player.getYRot(), 0f);
                 guh.tame(player);
                 guh.equipSaddle(new ItemStack(net.minecraft.world.item.Items.SADDLE), null);
                 guh.setCustomName(Component.translatable("entity.guhs.guh.vahoege_ender"));
                 guh.setPersistenceRequired();
-                player.serverLevel().addFreshEntity(guh);
-                player.serverLevel().sendParticles(ParticleTypes.HEART, at.x, at.y + 2, at.z, 15, 1.5, 1, 1.5, 0);
+                player.level().addFreshEntity(guh);
+                player.level().sendParticles(ParticleTypes.HEART, at.x, at.y + 2, at.z, 15, 1.5, 1, 1.5, 0);
             }
             if (freed != null) {
                 freed.discard();
@@ -525,12 +527,12 @@ public class GuheindeGevecht extends SavedData {
             if (player.distanceToSqr(Vec3.atCenterOf(center())) > 120 * 120) {
                 continue;
             }
-            double x = player.getX() + level.random.nextGaussian() * 10, z = player.getZ() + level.random.nextGaussian() * 10;
+            double x = player.getX() + level.getRandom().nextGaussian() * 10, z = player.getZ() + level.getRandom().nextGaussian() * 10;
             ItemEntity knabbel = new ItemEntity(level, x, player.getY() + 18, z,
-                    new ItemStack(level.random.nextInt(8) == 0 ? ModItems.GEFRITUURDE_KAASKNABBELS.get() : ModItems.KAAS_KNABBELS.get()));
+                    new ItemStack(level.getRandom().nextInt(8) == 0 ? ModItems.GEFRITUURDE_KAASKNABBELS.get() : ModItems.KAAS_KNABBELS.get()));
             knabbel.setDeltaMovement(0, -0.3, 0);
             level.addFreshEntity(knabbel);
-            if (level.random.nextInt(4) == 0) {
+            if (level.getRandom().nextInt(4) == 0) {
                 level.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.82f, 0.3f), 2f), x, player.getY() + 16, z, 6, 1, 0.5, 1, 0);
             }
         }
@@ -671,19 +673,19 @@ public class GuheindeGevecht extends SavedData {
         tag.putBoolean("TreasureOpen", treasureOpen);
         tag.putBoolean("FightActive", fightActive);
         if (bossId != null) {
-            tag.putUUID("Boss", bossId);
+            tag.store("Boss", UUIDUtil.CODEC, bossId);
         }
         if (mountId != null) {
-            tag.putUUID("Mount", mountId);
+            tag.store("Mount", UUIDUtil.CODEC, mountId);
         }
         if (feeder != null) {
-            tag.putUUID("Feeder", feeder);
+            tag.store("Feeder", UUIDUtil.CODEC, feeder);
         }
         tag.putLong("FightStart", fightStart);
         tag.putInt("Gateways", gateways);
         ListTag list = new ListTag();
         for (UUID id : participants) {
-            list.add(NbtUtils.createUUID(id));
+            list.add(new net.minecraft.nbt.IntArrayTag(UUIDUtil.uuidToIntArray(id)));
         }
         tag.put("Participants", list);
         return tag;
@@ -691,18 +693,18 @@ public class GuheindeGevecht extends SavedData {
 
     public static GuheindeGevecht load(CompoundTag tag, HolderLookup.Provider registries) {
         GuheindeGevecht f = new GuheindeGevecht();
-        f.islandBuilt = tag.getBoolean("IslandBuilt");
-        f.groundY = tag.contains("GroundY") ? tag.getInt("GroundY") : 64;
-        f.everWon = tag.getBoolean("EverWon");
-        f.treasureOpen = tag.getBoolean("TreasureOpen");
-        f.fightActive = tag.getBoolean("FightActive");
-        f.bossId = tag.hasUUID("Boss") ? tag.getUUID("Boss") : null;
-        f.mountId = tag.hasUUID("Mount") ? tag.getUUID("Mount") : null;
-        f.feeder = tag.hasUUID("Feeder") ? tag.getUUID("Feeder") : null;
-        f.fightStart = tag.getLong("FightStart");
-        f.gateways = tag.getInt("Gateways");
-        for (Tag t : tag.getList("Participants", Tag.TAG_INT_ARRAY)) {
-            f.participants.add(NbtUtils.loadUUID(t));
+        f.islandBuilt = tag.getBooleanOr("IslandBuilt", false);
+        f.groundY = tag.contains("GroundY") ? tag.getIntOr("GroundY", 0) : 64;
+        f.everWon = tag.getBooleanOr("EverWon", false);
+        f.treasureOpen = tag.getBooleanOr("TreasureOpen", false);
+        f.fightActive = tag.getBooleanOr("FightActive", false);
+        f.bossId = tag.read("Boss", UUIDUtil.CODEC).isPresent() ? tag.read("Boss", UUIDUtil.CODEC).orElseThrow() : null;
+        f.mountId = tag.read("Mount", UUIDUtil.CODEC).isPresent() ? tag.read("Mount", UUIDUtil.CODEC).orElseThrow() : null;
+        f.feeder = tag.read("Feeder", UUIDUtil.CODEC).isPresent() ? tag.read("Feeder", UUIDUtil.CODEC).orElseThrow() : null;
+        f.fightStart = tag.getLongOr("FightStart", 0L);
+        f.gateways = tag.getIntOr("Gateways", 0);
+        for (Tag t : tag.getListOrEmpty("Participants")) {
+            f.participants.add(UUIDUtil.uuidFromIntArray(((net.minecraft.nbt.IntArrayTag) t).getAsIntArray()));
         }
         return f;
     }

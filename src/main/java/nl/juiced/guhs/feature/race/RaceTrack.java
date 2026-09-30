@@ -114,7 +114,7 @@ public final class RaceTrack {
     private static RaceTrack of(GuhNpcEntity npc, RaceBaan baan, boolean onlyLoaded) {
         String key = baan.trackKey();
         if (npc.roleData.contains(key)) {
-            RaceTrack track = load(npc.roleData.getCompound(key));
+            RaceTrack track = load(npc.roleData.getCompoundOrEmpty(key));
             if (track != null) {
                 RaceProtection.remember(npc.level(), track.protectedArea());
                 return track;
@@ -137,7 +137,7 @@ public final class RaceTrack {
     /** The racebaan's own box if the Raceguh stands in one, otherwise the template's box around her start marker. */
     @Nullable
     static BoundingBox searchBox(ServerLevel level, BlockPos npc) {
-        Structure structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(STRUCTURE);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(STRUCTURE);
         if (structure != null) {
             var start = level.structureManager().getStructureAt(npc, structure);
             if (start.isValid()) {
@@ -363,19 +363,19 @@ public final class RaceTrack {
             return null;
         }
         List<AABB> gates = new ArrayList<>();
-        for (Tag t : tag.getList("Gates", Tag.TAG_COMPOUND)) {
+        for (Tag t : tag.getListOrEmpty("Gates")) {
             CompoundTag g = (CompoundTag) t;
-            gates.add(new AABB(g.getDouble("X0"), g.getDouble("Y0"), g.getDouble("Z0"), g.getDouble("X1"), g.getDouble("Y1"), g.getDouble("Z1")));
+            gates.add(new AABB(g.getDoubleOr("X0", 0.0), g.getDoubleOr("Y0", 0.0), g.getDoubleOr("Z0", 0.0), g.getDoubleOr("X1", 0.0), g.getDoubleOr("Y1", 0.0), g.getDoubleOr("Z1", 0.0)));
         }
         if (gates.size() < 2) {
             return null;
         }
-        AABB area = new AABB(tag.getDouble("AX0"), tag.getDouble("AY0"), tag.getDouble("AZ0"), tag.getDouble("AX1"), tag.getDouble("AY1"), tag.getDouble("AZ1"));
+        AABB area = new AABB(tag.getDoubleOr("AX0", 0.0), tag.getDoubleOr("AY0", 0.0), tag.getDoubleOr("AZ0", 0.0), tag.getDoubleOr("AX1", 0.0), tag.getDoubleOr("AY1", 0.0), tag.getDoubleOr("AZ1", 0.0));
         List<Marker> markers = new ArrayList<>();
-        for (Tag t : tag.getList("Markers", Tag.TAG_COMPOUND)) {
+        for (Tag t : tag.getListOrEmpty("Markers")) {
             CompoundTag m = (CompoundTag) t;
-            markers.add(new Marker(m.getString("Kind"), BlockPos.of(m.getLong("Pos")), m.getInt("Facing"), m.getInt("Vanaf")));
+            markers.add(new Marker(m.getStringOr("Kind", ""), BlockPos.of(m.getLongOr("Pos", 0L)), m.getIntOr("Facing", 0), m.getIntOr("Vanaf", 0)));
         }
-        return new RaceTrack(BlockPos.of(tag.getLong("Start")), Direction.from2DDataValue(tag.getInt("Facing")), gates, area, markers);
+        return new RaceTrack(BlockPos.of(tag.getLongOr("Start", 0L)), Direction.from2DDataValue(tag.getIntOr("Facing", 0)), gates, area, markers);
     }
 }

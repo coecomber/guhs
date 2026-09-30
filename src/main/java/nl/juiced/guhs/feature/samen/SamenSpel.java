@@ -102,7 +102,7 @@ public final class SamenSpel {
 
     /** Every free own guh within {@link #BEREIK} reacts (the ones that rested long enough). Returns how many did. */
     static int reageer(@Nullable ServerPlayer player, String spel, Soort soort) {
-        if (player == null || player.level().isClientSide) {
+        if (player == null || player.level().isClientSide()) {
             return 0;
         }
         int n = 0;
@@ -125,7 +125,7 @@ public final class SamenSpel {
     public static List<GuhEntity> juichers(ServerPlayer player) {
         List<GuhEntity> out = new ArrayList<>();
         for (GuhEntity guh : Band.samenGuhs(player, BEREIK)) {
-            if (guh.isAlive() && !guh.isNoAi() && !guh.getTags().contains("guhs_beauty_model") && !GuhHooks.isBezig(guh)
+            if (guh.isAlive() && !guh.isNoAi() && !guh.entityTags().contains("guhs_beauty_model") && !GuhHooks.isBezig(guh)
                     && guh.emotes.current() != Emote.SLAPEN) {
                 out.add(guh);
             }
@@ -137,7 +137,7 @@ public final class SamenSpel {
     /** One guh reacts (if it rested long enough). */
     public static boolean juich(GuhEntity guh, ServerPlayer player, Soort soort) {
         long nu = guh.level().getGameTime();
-        if (guh.getPersistentData().getLong(RUST_TOT) > nu || !(guh.level() instanceof ServerLevel level)) {
+        if (guh.getPersistentData().getLongOr(RUST_TOT, 0L) > nu || !(guh.level() instanceof ServerLevel level)) {
             return false;
         }
         guh.getPersistentData().putLong(RUST_TOT, nu + RUST);
@@ -222,13 +222,13 @@ public final class SamenSpel {
                 Band.geefHartjes(guh, speler, Reden.RECORD.standaard(), Reden.RECORD);
                 guh.getPersistentData().remove(RUST_TOT);
                 juich(guh, speler, Soort.RECORD);
-                Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.record", speler.getGameProfile().getName());
+                Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.record", speler.getGameProfile().name());
                 GidsFeature.grant(speler, "lieve_vadsjes/samen_record");
             }
             case REIS -> {
                 Band.geefHartjes(guh, speler, Reden.REIZEN.standaard(), Reden.REIZEN);
                 if (Dagboek.eersteKeer(guh, speler, "samen_op_reis")) {
-                    Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.op_reis", speler.getGameProfile().getName());
+                    Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.op_reis", speler.getGameProfile().name());
                 }
             }
             default -> {
@@ -243,13 +243,13 @@ public final class SamenSpel {
         boolean bekend = SPELLEN.contains(spel);
         Component naam = bekend ? Component.translatable("gui.guhs.samen.spel." + spel) : Component.literal(spel);
         if (Dagboek.eersteKeer(guh, speler, "eerste_minigame")) {
-            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.eerste_minigame", speler.getGameProfile().getName());
+            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.eerste_minigame", speler.getGameProfile().name());
         } else if (bekend && guh.getRandom().nextInt(3) == 0) {
             Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.spel." + spel);   // (each game has its own little line)
         }
         GuhAdvancements.grant(speler, "samen_gespeeld");
         GidsFeature.grant(speler, "lieve_vadsjes/samen_gespeeld");
-        speler.displayClientMessage(Component.translatable("gui.guhs.samen.samen_gespeeld", guh.getDisplayName(), naam)
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        speler.sendOverlayMessage(Component.translatable("gui.guhs.samen.samen_gespeeld", guh.getDisplayName(), naam)
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 }

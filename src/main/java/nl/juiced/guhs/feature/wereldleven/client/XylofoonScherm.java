@@ -7,7 +7,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -163,11 +163,11 @@ public class XylofoonScherm extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, BORDER);
         g.fill(left, top, left + W, top + H, PANEL);
-        g.drawString(font, title.copy().withStyle(ChatFormatting.BOLD), left + 10, top + 8, 0xFFFFB6D8, false);
+        g.text(font, title.copy().withStyle(ChatFormatting.BOLD), left + 10, top + 8, 0xFFFFB6D8, false);
         // the xylofoon: a pink frame with two rails, the bars on top
         g.fill(left + 8, top + 34, left + 166, top + 160, 0xFF5A2E44);
         g.fill(left + 10, top + 36, left + 164, top + 158, 0xFFF7B6CB);
@@ -186,16 +186,16 @@ public class XylofoonScherm extends Screen {
             g.fill(x + 6, y0 + 8, x + 10, y0 + 12, 0xFF3A1C30);    // the nail
             g.fill(x + 6, y1 - 12, x + 10, y1 - 8, 0xFF3A1C30);
             if (i == next && (ticks / 6) % 2 == 0) {
-                g.renderOutline(x - 3, y0 - 3, 22, y1 - y0 + 6, 0xFFFFFFFF);
+                g.outline(x - 3, y0 - 3, 22, y1 - y0 + 6, 0xFFFFFFFF);
             }
-            g.drawCenteredString(font, String.valueOf(i + 1), x + 8, y1 + 2, TEXT);
+            g.centeredText(font, String.valueOf(i + 1), x + 8, y1 + 2, TEXT);
         }
         // the little guh mallets (a knabbel on a stick)
-        g.drawString(font, Component.translatable(pos == null ? "gui.guhs.wereldleven.oefenen" : "gui.guhs.wereldleven.xylofoon_tip"),
+        g.text(font, Component.translatable(pos == null ? "gui.guhs.wereldleven.oefenen" : "gui.guhs.wereldleven.xylofoon_tip"),
                 left + 10, top + 176, 0xFFB8A0B0, false);
         // the liedjesboekje
         g.fill(left + 172, top + 20, left + 324, top + 172, 0xFFFFF4F8);
-        g.drawString(font, Component.translatable("gui.guhs.wereldleven.liedjesboekje"), left + 176, top + 22 - 12, 0xFFFFB6D8, false);
+        g.text(font, Component.translatable("gui.guhs.wereldleven.liedjesboekje"), left + 176, top + 22 - 12, 0xFFFFB6D8, false);
         Set<String> ontdekt = KnusVoortgang.Client.ontdekt(WereldlevenVoortgang.LIEDJESBOEK);
         int y = top + 24;
         for (Koortje.Liedje l : Koortje.Liedje.values()) {
@@ -209,7 +209,7 @@ public class XylofoonScherm extends Screen {
                 dx += 9;
             }
             if (ontdekt.contains(l.id())) {
-                g.drawString(font, "✔", left + 312, y + 17, 0xFF3C9A5A, false);
+                g.text(font, "✔", left + 312, y + 17, 0xFF3C9A5A, false);
             }
             y += 24;
         }
@@ -217,7 +217,7 @@ public class XylofoonScherm extends Screen {
             Component b = Component.literal("♪ ").append(Component.translatable("gui.guhs.knus.liedjesboek." + banner.id())).append(" ♪");
             int bw = font.width(b) + 16;
             g.fill(left + 88 - bw / 2, top + 90, left + 88 + bw / 2, top + 108, 0xE0FFF4F8);
-            g.drawCenteredString(font, b, left + 88, top + 95, 0xFFD04A8A);
+            g.centeredText(font, b, left + 88, top + 95, 0xFFD04A8A);
         }
     }
 

@@ -119,7 +119,7 @@ public class OogVanVadsigEntity extends Entity implements ItemSupplier {
         double h = v.horizontalDistance();
         setXRot(lerpRotation(xRotO, (float) (Mth.atan2(v.y, h) * 180 / Math.PI)));
         setYRot(lerpRotation(yRotO, (float) (Mth.atan2(v.x, v.z) * 180 / Math.PI)));
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             double dx = tx - nx, dz = tz - nz;
             float dist = (float) Math.sqrt(dx * dx + dz * dz);
             float angle = (float) Mth.atan2(dz, dx);
@@ -136,7 +136,7 @@ public class OogVanVadsigEntity extends Entity implements ItemSupplier {
         // a trail of pink and cheese-yellow sparkles
         level().addParticle(new DustParticleOptions(random.nextBoolean() ? new Vector3f(1f, 0.55f, 0.75f) : new Vector3f(1f, 0.82f, 0.3f), 1f),
                 nx - v.x * 0.25 + random.nextDouble() * 0.6 - 0.3, ny - v.y * 0.25 - 0.3, nz - v.z * 0.25 + random.nextDouble() * 0.6 - 0.3, 0, 0, 0);
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             setPos(nx, ny, nz);
             if (++life > 80) {
                 finish();
@@ -158,7 +158,7 @@ public class OogVanVadsigEntity extends Entity implements ItemSupplier {
             server.sendParticles(ParticleTypes.POOF, getX(), getY(), getZ(), 12, 0.2, 0.2, 0.2, 0.02);
             server.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.82f, 0.3f), 1.5f), getX(), getY(), getZ(), 20, 0.3, 0.3, 0.3, 0.05);
             if (owner != null && server.getPlayerByUUID(owner) instanceof ServerPlayer player && player.distanceToSqr(this) < 64 * 64) {
-                player.displayClientMessage(Component.translatable("gui.guhs.guheinde.oog_kapot").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.oog_kapot").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
     }
@@ -181,7 +181,7 @@ public class OogVanVadsigEntity extends Entity implements ItemSupplier {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        setItem(tag.contains("Item") ? ItemStack.parse(registryAccess(), tag.getCompound("Item")).orElse(defaultItem()) : defaultItem());
+        setItem(tag.contains("Item") ? ItemStack.parse(registryAccess(), tag.getCompoundOrEmpty("Item")).orElse(defaultItem()) : defaultItem());
     }
 
     @Override

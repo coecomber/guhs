@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -24,8 +24,6 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
@@ -53,8 +51,6 @@ import nl.juiced.guhs.registry.ModItems;
  * up next to a player), rolling up / the shell (no damage), the bessensapje, a squirrel's present stash, the Guhdex pages.
  * Templates landdiertjes_test_wei (10 x 10 grass) and landdiertjes_test_tuin (24 x 24 grass).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class LanddiertjesGameTests {
     private static final String WEI = "landdiertjes_test_wei";
     private static final String TUIN = "landdiertjes_test_tuin";
@@ -67,7 +63,7 @@ public class LanddiertjesGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -92,7 +88,7 @@ public class LanddiertjesGameTests {
 
     // =====================================================================================================================
 
-    @GameTest(template = WEI, batch = "landdiertjes")
+    @GuhTest(template = WEI, batch = "landdiertjes")
     public static void landdiertjesTemmenEnOppakken(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(1, 2, 1));
@@ -132,7 +128,7 @@ public class LanddiertjesGameTests {
             p.setShiftKeyDown(false);
             helper.assertTrue(d.isRemoved(), d.soort() + " is picked up");
             ItemStack item = ItemStack.EMPTY;
-            for (ItemStack st : p.getInventory().items) {
+            for (ItemStack st : p.getInventory().getNonEquipmentItems()) {
                 if (st.getItem() instanceof PiepDierItem pi && pi.type() == type) {
                     item = st;
                 }
@@ -155,7 +151,7 @@ public class LanddiertjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = TUIN, batch = "landdiertjes_huisje")
+    @GuhTest(template = TUIN, batch = "landdiertjes_huisje")
     public static void landdiertjesWonenInEenHuisje(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         Huisje h = HuisjeBlock.bouw(helper.getLevel(), helper.absolutePos(HUISJE), Direction.SOUTH, HuisjeMaat.MEDIUM, p.getUUID());
@@ -175,7 +171,7 @@ public class LanddiertjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = "landdiertjes_schouder")
+    @GuhTest(template = WEI, batch = "landdiertjes_schouder")
     public static void landdiertjesEekhoorntjeOpJeSchouder(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(5, 2, 5));
         PluiseekhoorntjeEntity e = helper.spawn(LanddiertjesFeature.PLUISEEKHOORNTJE.get(), new BlockPos(3, 2, 3));
@@ -186,8 +182,8 @@ public class LanddiertjesGameTests {
         helper.assertTrue(!egel.kanOpSchouder(), "the egeltje doesn't");
         e.speciaal(p);
         helper.assertTrue(Schouder.heeft(p) && e.isRemoved(), "on the shoulder (and out of the world)");
-        CompoundTag tag = p.getPersistentData().getCompound(Schouder.KEY);
-        helper.assertTrue("guhs:pluiseekhoorntje".equals(tag.getString("id")), "the shoulder knows it is an eekhoorntje: " + tag.getString("id"));
+        CompoundTag tag = p.getPersistentData().getCompoundOrEmpty(Schouder.KEY);
+        helper.assertTrue("guhs:pluiseekhoorntje".equals(tag.getStringOr("id", "")), "the shoulder knows it is an eekhoorntje: " + tag.getStringOr("id", ""));
         // a second one: the shoulder is full
         PluiseekhoorntjeEntity tweede = helper.spawn(LanddiertjesFeature.PLUISEEKHOORNTJE.get(), new BlockPos(2, 2, 7));
         tweede.tame(p);
@@ -208,7 +204,7 @@ public class LanddiertjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = TUIN, batch = "landdiertjes_polijsten", timeoutTicks = 1600)
+    @GuhTest(template = TUIN, batch = "landdiertjes_polijsten", timeoutTicks = 1600)
     public static void landdiertjesShucklePolijstStenen(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(21, 2, 21));
         Huisje h = HuisjeBlock.bouw(helper.getLevel(), helper.absolutePos(HUISJE), Direction.SOUTH, HuisjeMaat.KLEIN, p.getUUID());
@@ -248,7 +244,7 @@ public class LanddiertjesGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = "landdiertjes")
+    @GuhTest(template = WEI, batch = "landdiertjes")
     public static void landdiertjesPolijstenOpbrengst(GameTestHelper helper) {
         net.minecraft.util.RandomSource rng = net.minecraft.util.RandomSource.create(7);
         int glad = 0, steentjes = 0;
@@ -271,7 +267,7 @@ public class LanddiertjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = TUIN, batch = "landdiertjes_plekje", timeoutTicks = 200)
+    @GuhTest(template = TUIN, batch = "landdiertjes_plekje", timeoutTicks = 200)
     public static void landdiertjesPlekjeHoudtTweeShuckles(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos plek = new BlockPos(11, 2, 11);
@@ -301,7 +297,7 @@ public class LanddiertjesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = "landdiertjes_schrik", timeoutTicks = 400)
+    @GuhTest(template = WEI, batch = "landdiertjes_schrik", timeoutTicks = 400)
     public static void landdiertjesOprollenEnSchelp(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         PluisegeltjeEntity egel = helper.spawn(LanddiertjesFeature.PLUISEGELTJE.get(), new BlockPos(3, 2, 3));
@@ -328,7 +324,7 @@ public class LanddiertjesGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = "landdiertjes_voorraadje", timeoutTicks = 800)
+    @GuhTest(template = TUIN, batch = "landdiertjes_voorraadje", timeoutTicks = 800)
     public static void landdiertjesEekhoorntjeGraaftEenVoorraadjeOp(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(12, 2, 12));
@@ -352,7 +348,7 @@ public class LanddiertjesGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = "landdiertjes")
+    @GuhTest(template = WEI, batch = "landdiertjes")
     public static void landdiertjesGuhdexPaginas(GameTestHelper helper) {
         for (GuhVariant v : List.of(GuhVariant.PLUISEGELTJE, GuhVariant.GUH_KONIJNTJE, GuhVariant.PLUISEEKHOORNTJE, GuhVariant.SHUCKLE)) {
             helper.assertTrue(GuhDex.isCreaturePage(v), v.id() + " is a creature page");

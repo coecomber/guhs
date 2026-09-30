@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -32,8 +32,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -46,6 +44,7 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the Barbecuether: the grillkool portal (frame sizes, lighting, going out, 1:8 linking), the frying
  * sauce (burns, glows, cools into grillkool / houtskoolsteen, kaassaus bakes coal), the blocks, the Grillguh's
@@ -54,8 +53,6 @@ import nl.juiced.guhs.world.ModDimensions;
  * The GameTest server has no datapack dimensions: {@link #portalLinksBothWays} then only checks the maths; run
  * {@code /test runall} in a dev server (runServer) to also go through a real portal pair.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class BarbecuetherGameTests {
     private static final String EMPTY = "empty";
     private static final String ROOM = "bbq_testkamer";
@@ -65,7 +62,7 @@ public class BarbecuetherGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return player;
     }
 
@@ -96,7 +93,7 @@ public class BarbecuetherGameTests {
 
     // ------------------------------------------------------------------------------------------------------------------
     /** Frames from 4x5 to 23x23 (corners optional) light up; too small or too big ones don't; a portal goes out when the frame breaks. */
-    @GameTest(template = ROOM, timeoutTicks = 100)
+    @GuhTest(template = ROOM, timeoutTicks = 100)
     public static void grillkoolFramesLikeANetherPortal(GameTestHelper helper) {
         floor(helper);
         frame(helper, new BlockPos(1, 1, 4), 2, 3, true);
@@ -120,7 +117,7 @@ public class BarbecuetherGameTests {
     }
 
     /** The biggest frame (23x23 with the frame) is fine, one bigger isn't. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void grillkoolFramesUpTo23(GameTestHelper helper) {
         helper.assertTrue(GrillPortalShape.MAX_SIZE == 21 && GrillPortalShape.MIN_WIDTH == 2 && GrillPortalShape.MIN_HEIGHT == 3,
                 "inside 2x3 to 21x21, like vanilla (frame 4x5 to 23x23)");
@@ -128,7 +125,7 @@ public class BarbecuetherGameTests {
     }
 
     /** The Aanmaakblokje only opens the barbecue portal in the Guhmensie and the Barbecuether; elsewhere it's a lighter. */
-    @GameTest(template = ROOM, timeoutTicks = 60)
+    @GuhTest(template = ROOM, timeoutTicks = 60)
     public static void aanmaakblokjeOnlyInTheGuhmensie(GameTestHelper helper) {
         floor(helper);
         helper.assertTrue(GrillPortalForcer.targetDimension(Level.OVERWORLD) == null, "no barbecue portal in the overworld");
@@ -155,7 +152,7 @@ public class BarbecuetherGameTests {
     }
 
     /** 1:8 like the Nether; with the dimensions there (dev server) a real portal pair is made and linked both ways. */
-    @GameTest(template = EMPTY, timeoutTicks = 1200)
+    @GuhTest(template = EMPTY, timeoutTicks = 1200)
     public static void portalLinksBothWays(GameTestHelper helper) {
         try {
             portalLinks(helper);
@@ -167,7 +164,7 @@ public class BarbecuetherGameTests {
     }
 
     private static void portalLinks(GameTestHelper helper) {
-        var types = helper.getLevel().registryAccess().registryOrThrow(Registries.DIMENSION_TYPE);
+        var types = helper.getLevel().registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
         var bbq = types.get(Guhs.id("barbecuether"));
         var guh = types.get(Guhs.id("guhmension"));
         helper.assertTrue(bbq != null && guh != null, "both dimension types are there");
@@ -199,7 +196,7 @@ public class BarbecuetherGameTests {
         helper.assertTrue(shape.isPresent(), "the frame in the Guhmensie");
         shape.get().createPortalBlocks();
         ArmorStand walker = new ArmorStand(EntityType.ARMOR_STAND, guhmensie);
-        walker.moveTo(base.getX() + 0.5, base.getY(), base.getZ() + 0.5);
+        walker.snapTo(base.getX() + 0.5, base.getY(), base.getZ() + 0.5);
         var there = GrillPortalForcer.getDestination(guhmensie, walker, base);
         helper.assertTrue(there != null && there.newLevel() == ether, "it leads to the Barbecuether");
         BlockPos arrive = BlockPos.containing(there.pos());
@@ -222,7 +219,7 @@ public class BarbecuetherGameTests {
     }
 
     // ------------------------------------------------------------------------------------------------------------------
-    @GameTest(template = ROOM, timeoutTicks = 200)
+    @GuhTest(template = ROOM, timeoutTicks = 200)
     public static void kaasfrituursausBurnsAndGlows(GameTestHelper helper) {
         helper.assertTrue(BarbecuetherFeature.KAASFRITUURSAUS_BLOCK.get().defaultBlockState().getLightEmission() == 15, "the sauce glows like lava");
         helper.assertTrue(BarbecuetherFeature.KAASFRITUURSAUS_BUCKET.get() instanceof BucketItem bucket
@@ -238,7 +235,7 @@ public class BarbecuetherGameTests {
         helper.succeedWhen(() -> helper.assertTrue(pig.isOnFire() && (pig.getHealth() < health || !pig.isAlive()), "a pig in it catches fire and gets hurt"));
     }
 
-    @GameTest(template = ROOM, timeoutTicks = 100)
+    @GuhTest(template = ROOM, timeoutTicks = 100)
     public static void sauceAndWaterMakeGrillkool(GameTestHelper helper) {
         floor(helper);
         helper.setBlock(new BlockPos(2, 1, 2), BarbecuetherFeature.KAASFRITUURSAUS_BLOCK.get());
@@ -252,7 +249,7 @@ public class BarbecuetherGameTests {
     }
 
     /** The recipe from the Guhmensie: kaassaus flowing onto a block of coal bakes it into grillkool. */
-    @GameTest(template = ROOM, timeoutTicks = 100)
+    @GuhTest(template = ROOM, timeoutTicks = 100)
     public static void kaassausBakesCoalIntoGrillkool(GameTestHelper helper) {
         floor(helper);
         helper.setBlock(new BlockPos(2, 1, 2), Blocks.COAL_BLOCK);
@@ -266,7 +263,7 @@ public class BarbecuetherGameTests {
     }
 
     // ------------------------------------------------------------------------------------------------------------------
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void theBlocksBehaveLikeTheirNetherCousins(GameTestHelper helper) {
         var level = helper.getLevel();
         helper.assertTrue(BarbecuetherFeature.AS_BLOK.get().getSpeedFactor() < 0.5f, "ash slows you down like soul sand");
@@ -291,7 +288,7 @@ public class BarbecuetherGameTests {
     }
 
     /** Bone meal on a saté sprout on pindasaus nylium grows a giant saté skewer. */
-    @GameTest(template = ROOM, timeoutTicks = 40)
+    @GuhTest(template = ROOM, timeoutTicks = 40)
     public static void sateSproutGrowsIntoASkewer(GameTestHelper helper) {
         for (int x = 0; x < 9; x++) {
             for (int z = 0; z < 9; z++) {
@@ -316,14 +313,14 @@ public class BarbecuetherGameTests {
 
     // ------------------------------------------------------------------------------------------------------------------
     /** The whole questline: meet him, mend the frame, bring an Aanmaakblokje, light the pit; then his recipe works. */
-    @GameTest(template = ROOM, batch = "barbecuether_quest", timeoutTicks = 100)
+    @GuhTest(template = ROOM, batch = "barbecuether_quest", timeoutTicks = 100)
     public static void grillguhQuestline(GameTestHelper helper) {
         floor(helper);
         ServerPlayer player = player(helper);
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(GuhNpcEntity.Kind.GRILLGUH);
         BlockPos at = helper.absolutePos(new BlockPos(7, 1, 7));
-        npc.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        npc.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         helper.getLevel().addFreshEntity(npc);
         var role = BarbecuetherFeature.role();
         helper.assertTrue(role == nl.juiced.guhs.feature.Features.role(GuhNpcEntity.Kind.GRILLGUH), "the Grillguh has his role");
@@ -382,7 +379,7 @@ public class BarbecuetherGameTests {
     }
 
     /** Mikas in a Mika-kamp drop an Aanmaakblokje, but only while the quest runs (and not a pile of them). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void mikasDropTheStolenAanmaakblokjes(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         BlockPos in = helper.absolutePos(new BlockPos(2, 1, 2));
@@ -408,7 +405,7 @@ public class BarbecuetherGameTests {
 
     // ------------------------------------------------------------------------------------------------------------------
     /** The big pit as generated: the Grillguh on his spot, a chest, a broken frame that becomes whole with grillkool. */
-    @GameTest(template = "barbecueput_groot", timeoutTicks = 100)
+    @GuhTest(template = "barbecueput_groot", timeoutTicks = 100)
     public static void theBigPitHasTheGrillguhAndAFrameToMend(GameTestHelper helper) {
         var npcs = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class, helper.getBounds().inflate(1),
                 n -> n.getKind() == GuhNpcEntity.Kind.GRILLGUH);
@@ -441,7 +438,7 @@ public class BarbecuetherGameTests {
     }
 
     /** The pit chests help you build a portal (grillkool, coal, and sometimes an Aanmaakblokje). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void pitChestsHaveGrillkool(GameTestHelper helper) {
         var level = helper.getLevel();
         var table = level.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Guhs.id("chests/barbecueput_klein")));
@@ -459,17 +456,17 @@ public class BarbecuetherGameTests {
     }
 
     /** The dimension's data is all there: biomes, the structure, the compass category, the Guhdex page. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theBarbecuetherDataIsComplete(GameTestHelper helper) {
         var access = helper.getLevel().registryAccess();
         for (String b : new String[]{"houtskoolvlakte", "satebos", "worstenwoud", "asdal", "rookdelta"}) {
-            helper.assertTrue(access.registryOrThrow(Registries.BIOME).containsKey(Guhs.id(b)), "biome " + b);
+            helper.assertTrue(access.lookupOrThrow(Registries.BIOME).containsKey(Guhs.id(b)), "biome " + b);
         }
-        helper.assertTrue(access.registryOrThrow(Registries.STRUCTURE).containsKey(Guhs.id("barbecueput")), "the barbecueput structure");
-        Structure put = access.registryOrThrow(Registries.STRUCTURE).get(Guhs.id("barbecueput"));
+        helper.assertTrue(access.lookupOrThrow(Registries.STRUCTURE).containsKey(Guhs.id("barbecueput")), "the barbecueput structure");
+        Structure put = access.lookupOrThrow(Registries.STRUCTURE).get(Guhs.id("barbecueput"));
         helper.assertTrue(put instanceof BarbecuePutStructure, "of its own type");
-        helper.assertTrue(access.registryOrThrow(Registries.CONFIGURED_FEATURE).containsKey(BarbecuetherFeature.SATE_GEKWEEKT.location())
-                && access.registryOrThrow(Registries.CONFIGURED_FEATURE).containsKey(BarbecuetherFeature.WORST_GEKWEEKT.location()), "the grown features");
+        helper.assertTrue(access.lookupOrThrow(Registries.CONFIGURED_FEATURE).containsKey(BarbecuetherFeature.SATE_GEKWEEKT.identifier())
+                && access.lookupOrThrow(Registries.CONFIGURED_FEATURE).containsKey(BarbecuetherFeature.WORST_GEKWEEKT.identifier()), "the grown features");
         helper.assertTrue(SuperkompasItem.CATEGORIES.stream().anyMatch(c -> c.id().equals("barbecue"))
                 && SuperkompasItem.allowed("barbecueput"), "the super compass looks for barbecue pits");
         helper.assertTrue(GuhDex.ENTRIES.contains(GuhVariant.GRILLGUH) && GuhVariant.GRILLGUH.isCharacter()

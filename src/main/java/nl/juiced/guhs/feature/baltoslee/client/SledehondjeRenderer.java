@@ -3,13 +3,13 @@ package nl.juiced.guhs.feature.baltoslee.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.baltoslee.SledehondjeEntity;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * A guh-sledehondje (geo/entity/baltoslee_sledehondje.geo.json): its legs, ears, tail and tongue are moved by hand from its
@@ -17,7 +17,7 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
  * little gallop, flapping ears, a wagging tail; sitting with its tongue out when the sled stands still.
  */
 public class SledehondjeRenderer extends GeoEntityRenderer<SledehondjeEntity> {
-    private static final ResourceLocation[] TEXTUREN = {Guhs.id("textures/entity/baltoslee_sledehondje.png"),
+    private static final Identifier[] TEXTUREN = {Guhs.id("textures/entity/baltoslee_sledehondje.png"),
             Guhs.id("textures/entity/baltoslee_sledehondje_steele.png"), Guhs.id("textures/entity/baltoslee_sledehondje.png")};
 
     public SledehondjeRenderer(EntityRendererProvider.Context context) {
@@ -36,12 +36,12 @@ public class SledehondjeRenderer extends GeoEntityRenderer<SledehondjeEntity> {
         }
 
         @Override
-        public ResourceLocation getTextureResource(SledehondjeEntity dog) {
+        public Identifier getTextureResource(SledehondjeEntity dog) {
             return TEXTUREN[Mth.clamp(dog.soort, 0, TEXTUREN.length - 1)];
         }
 
         @Override
-        public void setCustomAnimations(SledehondjeEntity dog, long instanceId, AnimationState<SledehondjeEntity> state) {
+        public void setCustomAnimations(SledehondjeEntity dog, long instanceId, AnimationTest<SledehondjeEntity> state) {
             float f = dog.fase, a = 0.95f * dog.loop, zit = dog.zit;
             float t = (float) state.getAnimationTick() + (dog.getId() * 13 % 40);
             float lopen = 1 - zit;

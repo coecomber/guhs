@@ -9,11 +9,11 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.golf.GolfBallEntity;
@@ -21,7 +21,7 @@ import nl.juiced.guhs.feature.golf.GolfBallEntity;
 /** The guh golf ball: a little pink guh curled up into a ball (with ears and a face), rolling as it goes. */
 public class GolfBallRenderer extends EntityRenderer<GolfBallEntity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Guhs.id("guh_golfbal"), "main");
-    private static final ResourceLocation TEXTURE = Guhs.id("textures/entity/guh_golfbal.png");
+    private static final Identifier TEXTURE = Guhs.id("textures/entity/guh_golfbal.png");
     private final ModelPart ball;
 
     public GolfBallRenderer(EntityRendererProvider.Context context) {
@@ -52,7 +52,7 @@ public class GolfBallRenderer extends EntityRenderer<GolfBallEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(GolfBallEntity entity) {
+    public Identifier getTextureLocation(GolfBallEntity entity) {
         return TEXTURE;
     }
 }

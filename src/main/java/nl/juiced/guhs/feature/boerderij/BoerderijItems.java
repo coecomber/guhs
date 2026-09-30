@@ -13,7 +13,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
@@ -50,8 +50,8 @@ public final class BoerderijItems {
         }
 
         @Override
-        public UseAnim getUseAnimation(ItemStack stack) {
-            return UseAnim.DRINK;
+        public ItemUseAnimation getUseAnimation(ItemStack stack) {
+            return ItemUseAnimation.DRINK;
         }
 
         @Override
@@ -66,7 +66,7 @@ public final class BoerderijItems {
 
         @Override
         public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 0));
             }
             return super.finishUsingItem(stack, level, entity);

@@ -31,7 +31,7 @@ public final class KasteelPoort {
     private static final Map<UUID, Integer> SITTING = new HashMap<>();
 
     public static boolean isFriend(net.minecraft.world.entity.player.Player player) {
-        return GuhQuests.saved(player).getBoolean(FRIEND);
+        return GuhQuests.saved(player).getBooleanOr(FRIEND, false);
     }
 
     public static void makeFriend(ServerPlayer player, GuhNpcEntity guard, String how) {
@@ -40,8 +40,8 @@ public final class KasteelPoort {
         }
         GuhQuests.saved(player).putBoolean(FRIEND, true);
         GuhQuests.say(player, guard, "quest.guhs.poort.welcome_" + how);
-        player.serverLevel().playSound(null, guard.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 0.8f, 1.2f);
-        player.serverLevel().sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, player.getX(), player.getY() + 2, player.getZ(), 8, 0.5, 0.3, 0.5, 0);
+        player.level().playSound(null, guard.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 0.8f, 1.2f);
+        player.level().sendParticles(net.minecraft.core.particles.ParticleTypes.HEART, player.getX(), player.getY() + 2, player.getZ(), 8, 0.5, 0.3, 0.5, 0);
         GuhAdvancements.grant(player, "guhvriend");
     }
 
@@ -61,10 +61,10 @@ public final class KasteelPoort {
         if (isFriend(player) || !event.getRawText().toLowerCase(java.util.Locale.ROOT).contains("njeg")) {
             return;
         }
-        List<GuhNpcEntity> guards = guards(player.serverLevel(), player.position(), REACH);
+        List<GuhNpcEntity> guards = guards(player.level(), player.position(), REACH);
         if (!guards.isEmpty()) {
             GuhNpcEntity guard = guards.get(0);
-            player.getServer().execute(() -> makeFriend(player, guard, "word"));
+            player.level().getServer().execute(() -> makeFriend(player, guard, "word"));
         }
     }
 
@@ -91,7 +91,7 @@ public final class KasteelPoort {
         }
         GuhNpcEntity other = pair.get(0);
         Vec3 mid = guard.position().add(other.position()).scale(0.5);
-        float gateYaw = guard.roleData.getFloat("GateYaw");
+        float gateYaw = guard.roleData.getFloatOr("GateYaw", 0.0F);
         Vec3 inward = Vec3.directionFromRotation(0, gateYaw).reverse();
         Vec3 across = new Vec3(-inward.z, 0, inward.x);
         double halfWidth = guard.position().distanceTo(other.position()) / 2 + 1.5;
@@ -103,8 +103,8 @@ public final class KasteelPoort {
             if (!isFriend(player) && guard.tickCount % 20 == 0) {
                 if (player.getVehicle() instanceof GuhSeatEntity) {
                     int sat = SITTING.merge(player.getUUID(), 20, Integer::sum);
-                    player.displayClientMessage(Component.translatable("quest.guhs.poort.sitting", sat / 20, SIT_TICKS / 20)
-                            .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                    player.sendOverlayMessage(Component.translatable("quest.guhs.poort.sitting", sat / 20, SIT_TICKS / 20)
+                            .withStyle(ChatFormatting.LIGHT_PURPLE));
                     if (sat >= SIT_TICKS) {
                         SITTING.remove(player.getUUID());
                         makeFriend(player, guard, "lazy");
@@ -119,7 +119,7 @@ public final class KasteelPoort {
             if (!isFriend(player) && in > 0.3 && in < 10 && side < halfWidth && Math.abs(rel.y) < 6) {
                 Vec3 back = mid.subtract(inward.scale(3));
                 player.teleportTo(level, back.x, mid.y, back.z, gateYaw, player.getXRot());
-                player.displayClientMessage(Component.translatable("quest.guhs.poort.pushed").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("quest.guhs.poort.pushed").withStyle(ChatFormatting.LIGHT_PURPLE));
                 level.playSound(null, player.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.NEUTRAL, 0.6f, 1.4f);
             }
         }

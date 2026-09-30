@@ -31,12 +31,12 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhNpcEntity;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * The guh_luchtballon: a hot-air balloon shaped like a big guh head (ears, eyes, blush and all) with a wicker basket.
@@ -144,10 +144,10 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
     }
 
     private float[] lifts() {
-        ListTag list = entityData.get(DATA_LIFT).getList("L", Tag.TAG_FLOAT);
+        ListTag list = entityData.get(DATA_LIFT).getListOrEmpty("L");
         float[] out = new float[list.size()];
         for (int i = 0; i < out.length; i++) {
-            out[i] = list.getFloat(i);
+            out[i] = list.getFloatOr(i, 0.0F);
         }
         return out;
     }
@@ -164,7 +164,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
      * so the path stays {@value BallonRoute#VRIJ_BOVEN_GROND} blocks above the ground there and halfway to the next.
      */
     public boolean stijgOp(ServerPlayer player, BallonRoute route, @Nullable GuhNpcEntity kapiteinNpc) {
-        if (vliegt() || deco || level().isClientSide) {
+        if (vliegt() || deco || level().isClientSide()) {
             return false;
         }
         Vec3 home = thuis();
@@ -209,7 +209,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
 
     /** Server: back home (landed, or broken off): passengers out on the steiger, the Kapitein back at his kiosk. */
     public void land(boolean geslaagd) {
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         BallonRoute route = route();
@@ -247,12 +247,12 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (!heeftThuis && !level().isClientSide) {
+        if (!heeftThuis && !level().isClientSide()) {
             setThuis(blockPosition(), getYRot());
         }
         if (!vliegt()) {
             Vec3 home = thuis();
-            if (!level().isClientSide && heeftThuis && position().distanceToSqr(home) > 0.01) {
+            if (!level().isClientSide() && heeftThuis && position().distanceToSqr(home) > 0.01) {
                 setPos(home);
             }
             return;
@@ -269,7 +269,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
             float doel = (float) Math.toDegrees(Math.atan2(-dir.x, dir.z));
             setYRot(Mth.approachDegrees(getYRot(), doel, 1.5f));
         }
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             if (random.nextInt(dir.y > 0.02 ? 3 : 9) == 0) {       // the burner
                 level().addParticle(ParticleTypes.SMALL_FLAME, getX() + (random.nextDouble() - 0.5) * 0.3, getY() + 2.6,
                         getZ() + (random.nextDouble() - 0.5) * 0.3, 0, 0.05, 0);
@@ -301,7 +301,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             return;
         }
         if (key == DATA_VLIEGT || key == DATA_LIFT || key == DATA_ROUTE || key == DATA_THUIS || key == DATA_YAW) {
@@ -328,11 +328,11 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
-        if (!level().isClientSide && !vliegt() && player instanceof ServerPlayer sp) {
-            sp.displayClientMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.ballon.praat_met_wolkje")
-                    .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE), true);
+        if (!level().isClientSide() && !vliegt() && player instanceof ServerPlayer sp) {
+            sp.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.ballon.praat_met_wolkje")
+                    .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
         }
-        return InteractionResult.sidedSuccess(level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -388,7 +388,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
     @Override
     protected void removePassenger(Entity passenger) {
         super.removePassenger(passenger);
-        if (!level().isClientSide && vliegt() && passenger instanceof net.minecraft.world.entity.LivingEntity living) {
+        if (!level().isClientSide() && vliegt() && passenger instanceof net.minecraft.world.entity.LivingEntity living) {
             living.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 400, 0, false, false));
         }
     }
@@ -416,7 +416,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
         tag.putInt("Kleur", kleur());
         tag.putBoolean("Deco", deco);
         if (heeftThuis) {
-            tag.put("Thuis", NbtUtils.writeBlockPos(thuisBlok()));
+            tag.store("Thuis", BlockPos.CODEC, thuisBlok());
             tag.putFloat("RouteYaw", routeYaw());
         }
         // (a flight in progress isn't saved: after a restart the balloon is home again)
@@ -424,9 +424,9 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        setKleur(tag.getInt("Kleur"));
-        deco = tag.getBoolean("Deco");
-        NbtUtils.readBlockPos(tag, "Thuis").ifPresent(pos -> setThuis(pos, tag.getFloat("RouteYaw")));
+        setKleur(tag.getIntOr("Kleur", 0));
+        deco = tag.getBooleanOr("Deco", false);
+        (tag).read("Thuis", BlockPos.CODEC).ifPresent(pos -> setThuis(pos, tag.getFloatOr("RouteYaw", 0.0F)));
     }
 
     // --- GeckoLib -----------------------------------------------------------------------------------------------------------

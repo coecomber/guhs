@@ -75,12 +75,12 @@ public final class KampvuurMarshmallow {
             return;
         }
         event.setCanceled(true);
-        event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide));
+        event.setCancellationResult(InteractionResult.SUCCESS);
         if (!(event.getEntity() instanceof ServerPlayer player) || player.getCooldowns().isOnCooldown(stack.getItem())) {
             return;
         }
         if (!avond(level)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.kamperen.marshmallow_overdag").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.kamperen.marshmallow_overdag").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         rooster(player, event.getPos(), stack);
@@ -91,7 +91,7 @@ public final class KampvuurMarshmallow {
      * use a stand-in item: the tag is filled by another slice). Returns the player's total of roasted marshmallows.
      */
     public static int rooster(ServerPlayer player, BlockPos vuur, ItemStack stack) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         ItemStack een = stack.copyWithCount(1);
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
@@ -106,7 +106,7 @@ public final class KampvuurMarshmallow {
         level.sendParticles(ParticleTypes.HEART, player.getX(), player.getEyeY() + 0.6, player.getZ(), 1, 0.1, 0.1, 0.1, 0);
         level.playSound(null, vuur, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 1f, 1.3f);
         level.playSound(null, player.blockPosition(), SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.8f, 1.2f);
-        player.displayClientMessage(Component.translatable("gui.guhs.kamperen.marshmallow").withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.kamperen.marshmallow").withStyle(ChatFormatting.GOLD));
         int totaal = KnusVoortgang.tel(player, GEROOSTERD, 1);
         GuhAdvancements.grant(player, "kamperen_marshmallow");
         // the guhs nearby smell it: they come and sit by the fire, very happy
@@ -118,7 +118,7 @@ public final class KampvuurMarshmallow {
         GuhNpcEntity opa = opa(level, vuur);
         if (opa != null) {
             GuhQuests.say(player, opa, Verhalen.vertelt(opa) ? "quest.guhs.kamperen.marshmallow_sst"
-                    : "quest.guhs.kamperen.marshmallow" + level.random.nextInt(OPA_ZINNEN));
+                    : "quest.guhs.kamperen.marshmallow" + level.getRandom().nextInt(OPA_ZINNEN));
         }
         return totaal;
     }

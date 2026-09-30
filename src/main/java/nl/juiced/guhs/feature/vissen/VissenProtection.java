@@ -13,7 +13,7 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -31,7 +31,7 @@ public final class VissenProtection {
 
     /** Is this spot in a guhvis pond (the structure)? */
     public static boolean inVijver(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().registryOrThrow(Registries.STRUCTURE).get(VIJVER);
+        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(VIJVER);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -43,7 +43,7 @@ public final class VissenProtection {
         if (player.getAbilities().instabuild || !protectedAt(player.level(), pos)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.vissen.no_build").withStyle(ChatFormatting.AQUA), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.vissen.no_build").withStyle(ChatFormatting.AQUA));
         return true;
     }
 
@@ -66,7 +66,7 @@ public final class VissenProtection {
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
         var stack = event.getItemStack();
-        if (event.getLevel().isClientSide || stack.isEmpty() || stack.getItem() instanceof net.minecraft.world.item.FishingRodItem
+        if (event.getLevel().isClientSide() || stack.isEmpty() || stack.getItem() instanceof net.minecraft.world.item.FishingRodItem
                 || stack.has(net.minecraft.core.component.DataComponents.FOOD)) {
             return;         // (casting a line or eating a fish while looking at the pier is fine)
         }
@@ -79,7 +79,7 @@ public final class VissenProtection {
     /** Buckets are used "in the air" too (scooping the pond empty: njeg!). */
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }

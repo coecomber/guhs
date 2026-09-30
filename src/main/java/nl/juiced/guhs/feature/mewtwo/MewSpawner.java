@@ -9,7 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
@@ -44,7 +44,7 @@ public final class MewSpawner {
         if (level.dimension() != ModDimensions.GUHMENSION) {
             return null;
         }
-        Structure structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(MewtwoFeature.KLOON_EILAND);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(MewtwoFeature.KLOON_EILAND);
         if (structure == null) {
             return null;
         }
@@ -73,13 +73,13 @@ public final class MewSpawner {
     /** Spawns a Mieuwguh at a spot with that home (wild: the spawner takes her away again). */
     @Nullable
     public static MewEntity spawn(ServerLevel level, BlockPos at, BlockPos thuis, boolean wild) {
-        MewEntity mew = MewtwoFeature.MEW.get().create(level);
+        MewEntity mew = MewtwoFeature.MEW.get().create(level, EntitySpawnReason.TRIGGERED);
         if (mew == null) {
             return null;
         }
-        mew.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, level.random.nextFloat() * 360f, 0f);
+        mew.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, level.getRandom().nextFloat() * 360f, 0f);
         mew.zetThuis(thuis, wild);
-        mew.finalizeSpawn(level, level.getCurrentDifficultyAt(at), MobSpawnType.EVENT, null);
+        mew.finalizeSpawn(level, level.getCurrentDifficultyAt(at), EntitySpawnReason.EVENT, null);
         level.addFreshEntity(mew);
         level.sendParticles(MewtwoFeature.GLOED.get(), mew.getX(), mew.getY() + 0.3, mew.getZ(), 20, 0.3, 0.3, 0.3, 0.05);
         mew.giechel();

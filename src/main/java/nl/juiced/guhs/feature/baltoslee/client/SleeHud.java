@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.baltoslee.client;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.feature.baltoslee.RitRoute;
@@ -26,7 +26,7 @@ public final class SleeHud {
     private SleeHud() {
     }
 
-    static void render(GuiGraphics g, DeltaTracker delta) {
+    static void extractRenderState(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         SleeEntity sled = SleeEffecten.eigenSlee();
         if (mc.options.hideGui) {
@@ -63,7 +63,7 @@ public final class SleeHud {
         boolean sprint = sled.soort() != SleeEntity.TOCHT;
         Component titel = sprint ? Component.translatable("gui.guhs.baltoslee.hud.sprint", Niveau.of(sled.niveau()).naam())
                 : Component.translatable(sled.kist() ? "gui.guhs.baltoslee.hud.tocht_kist" : "gui.guhs.baltoslee.hud.tocht");
-        g.drawCenteredString(font, titel, x + w / 2, y + 3, 0xFFE8F6FF);
+        g.centeredText(font, titel, x + w / 2, y + 3, 0xFFE8F6FF);
 
         // the route: there (left half), the berghut, back (right half)
         int bx = x + 10, bl = w - 20, by = y + 22;
@@ -93,7 +93,7 @@ public final class SleeHud {
             }
         }
         g.fill(bx + bl / 2 - 2, by - 3, bx + bl / 2 + 2, by + 7, 0xFFB07A48);          // the berghut
-        g.drawString(font, "⌂", bx + bl / 2 - 3, by - 11, 0xFFE0C090, true);
+        g.text(font, "⌂", bx + bl / 2 - 3, by - 11, 0xFFE0C090, true);
         if (sled.tegen() >= 0) {
             int st = bx + (int) (Mth.clamp(sled.tegen() / 2f, 0, 1) * bl);
             g.fill(st - 2, by - 2, st + 2, by + 6, 0xFFC080FF);
@@ -113,27 +113,27 @@ public final class SleeHud {
             klok = Component.translatable("gui.guhs.baltoslee.hud.heen");
         }
         int klokKleur = !sprint && tijd >= 0 && tijd < 20 * 30 ? (now / 5 % 2 == 0 ? 0xFFFF7070 : 0xFFFFFFFF) : 0xFFFFFFFF;
-        g.drawString(font, klok, x + 8, ly, klokKleur, true);
+        g.text(font, klok, x + 8, ly, klokKleur, true);
         float warmte = sled.warmte();
         int wbl = 60, wbx = x + w - 8 - wbl;
         Component wl = Component.translatable("gui.guhs.baltoslee.hud.warmte");
-        g.drawString(font, wl, wbx - 4 - font.width(wl), ly, 0xFFFFD8A0, true);
+        g.text(font, wl, wbx - 4 - font.width(wl), ly, 0xFFFFD8A0, true);
         g.fill(wbx, ly + 1, wbx + wbl, ly + 7, BALK);
         int wk = warmte < 10 ? 0xFF7FB8FF : warmte < 30 ? 0xFFFFC060 : 0xFFFF8A3A;
         g.fill(wbx, ly + 1, wbx + (int) (wbl * warmte / 100f), ly + 7, wk);
         int vy = y + 44;
-        g.drawString(font, Component.translatable("gui.guhs.baltoslee.hud.vaart"), x + 8, vy, 0xFFCFE8FF, true);
+        g.text(font, Component.translatable("gui.guhs.baltoslee.hud.vaart"), x + 8, vy, 0xFFCFE8FF, true);
         int vx = x + 8 + font.width(Component.translatable("gui.guhs.baltoslee.hud.vaart")) + 4;
         int pootjes = (int) Math.round(Mth.clamp(sled.v / SleeRijden.TOP, 0, 1.2) * 8);
         for (int i = 0; i < 8; i++) {
-            g.drawString(font, "•", vx + i * 7, vy, i < pootjes ? 0xFFFFF0A0 : 0xFF45507A, false);
+            g.text(font, "•", vx + i * 7, vy, i < pootjes ? 0xFFFFF0A0 : 0xFF45507A, false);
         }
         if (!sprint && sled.kist()) {
-            g.drawString(font, Component.translatable("gui.guhs.baltoslee.hud.kist"), x + w - 8 - font.width(Component.translatable("gui.guhs.baltoslee.hud.kist")),
+            g.text(font, Component.translatable("gui.guhs.baltoslee.hud.kist"), x + w - 8 - font.width(Component.translatable("gui.guhs.baltoslee.hud.kist")),
                     vy, 0xFFFFB0D0, true);
         } else if (sprint && sled.tegen() >= 0) {
             Component st = Component.translatable("gui.guhs.baltoslee.hud.steele");
-            g.drawString(font, st, x + w - 8 - font.width(st), vy, 0xFFD8A8FF, true);
+            g.text(font, st, x + w - 8 - font.width(st), vy, 0xFFD8A8FF, true);
         }
 
         // what's coming, under the crosshair
@@ -195,10 +195,10 @@ public final class SleeHud {
             }
         }
         if (waarschuwing != null) {
-            g.drawCenteredString(font, waarschuwing, sw / 2, sh / 2 + 26, kleur);
+            g.centeredText(font, waarschuwing, sw / 2, sh / 2 + 26, kleur);
         }
         if (sled.tickCount < 260 || sled.fase() == SleeEntity.WACHT) {
-            g.drawCenteredString(font, Component.translatable("gui.guhs.baltoslee.hud.toetsen"), sw / 2, sh - 62, 0xFFDDE8FF);
+            g.centeredText(font, Component.translatable("gui.guhs.baltoslee.hud.toetsen"), sw / 2, sh - 62, 0xFFDDE8FF);
         }
     }
 

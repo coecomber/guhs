@@ -32,7 +32,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.FlyingMob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -46,15 +46,16 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * De Rookguh: a sad, skinny cloud of smoke with a guh face, drifting through the Rookdelta and the Houtskoolvlakte
  * (the ghast of the Barbecuether). The Mikas took all its kaasknabbels... It is ALWAYS peaceful: nothing you do makes
@@ -91,8 +92,8 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
     }
 
     /** Now and then on the floor of the Rookdelta / Houtskoolvlakte (they float up from there); also in peaceful. */
-    public static boolean checkRookguhSpawnRules(EntityType<RookguhEntity> type, LevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource random) {
-        if (MobSpawnType.isSpawner(reason) || reason == MobSpawnType.STRUCTURE) {
+    public static boolean checkRookguhSpawnRules(EntityType<RookguhEntity> type, LevelAccessor level, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        if (EntitySpawnReason.isSpawner(reason) || reason == EntitySpawnReason.STRUCTURE) {
             return true;
         }
         return random.nextInt(6) == 0 && level.getBlockState(pos).isAir() && level.getBlockState(pos.above()).isAir()
@@ -137,16 +138,16 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!isKnabbel(stack) || isVahoeg()) {
-            if (!level().isClientSide && hand == InteractionHand.MAIN_HAND && !isVahoeg()) {
-                player.displayClientMessage(Component.translatable("quest.guhs.rookguh.honger", NEEDED - fed()).withStyle(ChatFormatting.GRAY), true);
+            if (!level().isClientSide() && hand == InteractionHand.MAIN_HAND && !isVahoeg()) {
+                player.sendOverlayMessage(Component.translatable("quest.guhs.rookguh.honger", NEEDED - fed()).withStyle(ChatFormatting.GRAY));
             }
             return super.mobInteract(player, hand);
         }
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             stack.consume(1, player);
             feed(player instanceof ServerPlayer sp ? sp : null);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** One kaasknabbel for the Rookguh (from this player, or from nobody in particular). */
@@ -167,7 +168,7 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
         if (fed >= NEEDED) {
             startHomeward(level);
         } else if (feeder != null) {
-            feeder.displayClientMessage(Component.translatable("quest.guhs.rookguh.gevoerd", NEEDED - fed).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            feeder.sendOverlayMessage(Component.translatable("quest.guhs.rookguh.gevoerd", NEEDED - fed).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -210,7 +211,7 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
                     this.discard();
                 }
             }
-        } else if (level().isClientSide && this.random.nextInt(3) == 0) {
+        } else if (level().isClientSide() && this.random.nextInt(3) == 0) {
             // a little trail of smoke (thinner the hungrier it is)
             level().addParticle(ParticleTypes.SMOKE, getRandomX(0.6), getY() + 0.2, getRandomZ(0.6), 0, -0.02, 0);
         }
@@ -229,8 +230,8 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
         if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             return super.hurt(source, amount);
         }
-        if (source.getEntity() instanceof ServerPlayer player && !level().isClientSide) {
-            player.displayClientMessage(Component.translatable("quest.guhs.rookguh.niet_slaan").withStyle(ChatFormatting.GRAY), true);
+        if (source.getEntity() instanceof ServerPlayer player && !level().isClientSide()) {
+            player.sendOverlayMessage(Component.translatable("quest.guhs.rookguh.niet_slaan").withStyle(ChatFormatting.GRAY));
             ((ServerLevel) level()).sendParticles(ParticleTypes.CLOUD, getX(), getY() + 0.8, getZ(), 6, 0.5, 0.4, 0.5, 0.02);
         }
         return false;
@@ -278,17 +279,17 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
         super.addAdditionalSaveData(tag);
         tag.putInt("Fed", fed());
         ListTag list = new ListTag();
-        feeders.forEach(id -> list.add(NbtUtils.createUUID(id)));
+        feeders.forEach(id -> list.add(new net.minecraft.nbt.IntArrayTag(UUIDUtil.uuidToIntArray(id))));
         tag.put("Feeders", list);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.entityData.set(DATA_FED, Math.min(NEEDED - 1, tag.getInt("Fed")));
+        this.entityData.set(DATA_FED, Math.min(NEEDED - 1, tag.getIntOr("Fed", 0)));
         feeders.clear();
-        for (Tag t : tag.getList("Feeders", Tag.TAG_INT_ARRAY)) {
-            feeders.add(NbtUtils.loadUUID(t));
+        for (Tag t : tag.getListOrEmpty("Feeders")) {
+            feeders.add(UUIDUtil.uuidFromIntArray(((net.minecraft.nbt.IntArrayTag) t).getAsIntArray()));
         }
     }
 
@@ -300,7 +301,7 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
         controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("eat", EAT));
     }
 
-    private PlayState mainAnimation(AnimationState<RookguhEntity> state) {
+    private PlayState mainAnimation(AnimationTest<RookguhEntity> state) {
         return state.setAndContinue(isVahoeg() ? HOME : FLOAT);
     }
 

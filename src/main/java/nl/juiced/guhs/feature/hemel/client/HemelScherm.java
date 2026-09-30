@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -22,6 +22,7 @@ import nl.juiced.guhs.feature.band.client.GuhPop;
 import nl.juiced.guhs.feature.gids.client.GidsTekst;
 import nl.juiced.guhs.feature.hemel.HemelPayloads;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * The Knuffelhart's screen: every tamed guh of yours that is in the wolkjes (name, variant, hearts level, how long, and a
  * little stand-in with its clothes, turnable by dragging). Pick one and "Haal ... terug ♥": free, as often as you like.
@@ -59,10 +60,10 @@ public class HemelScherm extends Screen {
         UUID was = guhs.isEmpty() ? null : guhs.get(Mth.clamp(gekozen, 0, guhs.size() - 1)).id();
         this.data = nieuw;
         guhs.clear();
-        for (Tag t : nieuw.getList("Guhs", Tag.TAG_COMPOUND)) {
+        for (Tag t : nieuw.getListOrEmpty("Guhs")) {
             CompoundTag g = (CompoundTag) t;
-            guhs.add(new Guh(g.getUUID("Id"), g.getString("Naam"), g.getString("Variant"), g.getInt("Hartjes"), g.getInt("Niveau"),
-                    g.getCompound("Looks"), g.getLong("DoodDag")));
+            guhs.add(new Guh(g.read("Id", UUIDUtil.CODEC).orElseThrow(), g.getStringOr("Naam", ""), g.getStringOr("Variant", ""), g.getIntOr("Hartjes", 0), g.getIntOr("Niveau", 0),
+                    g.getCompoundOrEmpty("Looks"), g.getLongOr("DoodDag", 0L)));
         }
         gekozen = 0;
         for (int i = 0; i < guhs.size(); i++) {
@@ -71,7 +72,7 @@ public class HemelScherm extends Screen {
             }
         }
         if (nieuw.contains("Net")) {
-            netNaam = nieuw.getString("Net");
+            netNaam = nieuw.getStringOr("Net", "");
             netTijd = 100;
             for (int i = 0; i < 24; i++) {
                 nieuwHartje(true);
@@ -84,7 +85,7 @@ public class HemelScherm extends Screen {
     }
 
     private BlockPos hart() {
-        return BlockPos.of(data.getLong("Pos"));
+        return BlockPos.of(data.getLongOr("Pos", 0L));
     }
 
     @Override
@@ -112,7 +113,7 @@ public class HemelScherm extends Screen {
         if (guhs.isEmpty()) {
             return;
         }
-        PacketDistributor.sendToServer(new HemelPayloads.Terug(data.getLong("Pos"), guhs.get(gekozen).id()));
+        PacketDistributor.sendToServer(new HemelPayloads.Terug(data.getLongOr("Pos", 0L), guhs.get(gekozen).id()));
     }
 
     // --- input ---------------------------------------------------------------------------------------------------------
@@ -152,8 +153,8 @@ public class HemelScherm extends Screen {
     // --- drawing -------------------------------------------------------------------------------------------------------
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, RAND);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFFFFE9A8);
         g.fill(left, top, left + W, top + H, PANEL);
@@ -168,18 +169,18 @@ public class HemelScherm extends Screen {
             float y = h.y() - (tijd + partialTick) * h.snel();
             int a = (int) (Mth.clamp((y - top) / 40f, 0, 1) * 160);
             if (y > top && y < top + H) {
-                g.drawString(font, "♥", (int) (h.x() + Mth.sin((tijd + partialTick) * 0.1f + h.fase()) * 3), (int) y, (a << 24) | h.kleur(), false);
+                g.text(font, "♥", (int) (h.x() + Mth.sin((tijd + partialTick) * 0.1f + h.fase()) * 3), (int) y, (a << 24) | h.kleur(), false);
             }
         }
         Component titel = Component.literal("♥ ").append(title).append(" ♥").withStyle(ChatFormatting.BOLD);
-        g.drawString(font, titel, left + (W - font.width(titel)) / 2, top + 8, ROZE, false);
+        g.text(font, titel, left + (W - font.width(titel)) / 2, top + 8, ROZE, false);
         Component sub = Component.translatable("gui.guhs.hemel.scherm.sub");
-        g.drawString(font, sub, left + (W - font.width(sub)) / 2, top + 21, GRIJS, false);
+        g.text(font, sub, left + (W - font.width(sub)) / 2, top + 21, GRIJS, false);
     }
 
     @Override
-    public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.render(g, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
         if (guhs.isEmpty()) {
             leeg(g);
             return;
@@ -188,25 +189,25 @@ public class HemelScherm extends Screen {
         kaart(g);
     }
 
-    private void leeg(GuiGraphics g) {
+    private void leeg(GuiGraphicsExtractor g) {
         int cy = top + 80;
         String hart = "♥";
-        g.pose().pushPose();
-        g.pose().translate(left + W / 2f, cy, 0);
+        g.pose().pushMatrix();
+        g.pose().translate(left + W / 2f, cy);
         float s = 3f + 0.25f * Mth.sin(tijd * 0.25f);
-        g.pose().scale(s, s, 1);
-        g.drawString(font, hart, -font.width(hart) / 2, -4, ROZE, false);
-        g.pose().popPose();
+        g.pose().scale(s, s);
+        g.text(font, hart, -font.width(hart) / 2, -4, ROZE, false);
+        g.pose().popMatrix();
         Component a = Component.translatable("gui.guhs.hemel.scherm.leeg"), b = Component.translatable("gui.guhs.hemel.scherm.leeg2");
-        g.drawString(font, a, left + (W - font.width(a)) / 2, cy + 26, DONKER, false);
-        g.drawString(font, b, left + (W - font.width(b)) / 2, cy + 38, GRIJS, false);
+        g.text(font, a, left + (W - font.width(a)) / 2, cy + 26, DONKER, false);
+        g.text(font, b, left + (W - font.width(b)) / 2, cy + 38, GRIJS, false);
         if (netNaam != null && netTijd > 0) {
             Component n = Component.translatable("gui.guhs.hemel.scherm.net", netNaam);
-            g.drawString(font, n, left + (W - font.width(n)) / 2, cy + 56, 0xFFD89A1A, false);
+            g.text(font, n, left + (W - font.width(n)) / 2, cy + 56, 0xFFD89A1A, false);
         }
     }
 
-    private void lijst(GuiGraphics g, int mouseX, int mouseY) {
+    private void lijst(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         int lx = left + 10, ly = top + 42;
         g.fill(lx - 1, ly - 1, lx + LIJST_W + 1, ly + LIJST_H + 1, 0xFFF4C6DC);
         g.fill(lx, ly, lx + LIJST_W, ly + LIJST_H, 0xFFFFFBFD);
@@ -221,14 +222,14 @@ public class HemelScherm extends Screen {
             } else if (over) {
                 g.fill(lx, y, lx + LIJST_W, y + RIJ, 0xFFFFEEF6);
             }
-            g.drawString(font, "☁", lx + 5, y + 7, 0xFFB8D4F0, false);
-            g.drawString(font, font.plainSubstrByWidth(guh.naam(), LIJST_W - 24), lx + 17, y + 3, DONKER, false);
+            g.text(font, "☁", lx + 5, y + 7, 0xFFB8D4F0, false);
+            g.text(font, font.plainSubstrByWidth(guh.naam(), LIJST_W - 24), lx + 17, y + 3, DONKER, false);
             Component v = Component.translatable("entity.guhs.guh." + guh.variant());
-            g.pose().pushPose();
-            g.pose().translate(lx + 17, y + 13, 0);
-            g.pose().scale(0.75f, 0.75f, 1);
-            g.drawString(font, font.plainSubstrByWidth(v.getString(), (int) ((LIJST_W - 24) / 0.75f)), 0, 0, GRIJS, false);
-            g.pose().popPose();
+            g.pose().pushMatrix();
+            g.pose().translate(lx + 17, y + 13);
+            g.pose().scale(0.75f, 0.75f);
+            g.text(font, font.plainSubstrByWidth(v.getString(), (int) ((LIJST_W - 24) / 0.75f)), 0, 0, GRIJS, false);
+            g.pose().popMatrix();
         }
         g.disableScissor();
         if (guhs.size() * RIJ > LIJST_H) {
@@ -239,7 +240,7 @@ public class HemelScherm extends Screen {
         }
     }
 
-    private void kaart(GuiGraphics g) {
+    private void kaart(GuiGraphicsExtractor g) {
         Guh guh = guhs.get(Mth.clamp(gekozen, 0, guhs.size() - 1));
         int kx = left + 144, ky = top + 42, kw = W - 144 - 10;
         // (3.0 QA: the card is 86 high, so the three text lines below it fit above the button without overlapping)
@@ -259,7 +260,7 @@ public class HemelScherm extends Screen {
         GidsTekst.passend(g, Component.literal(guh.naam()).withStyle(ChatFormatting.BOLD), kx, y, kw, 1f, DONKER, false);
         Component niveau = BandNiveau.byIndex(guh.niveau()).naam();
         GidsTekst.passend(g, Component.translatable("gui.guhs.hemel.scherm.hartjes", guh.hartjes()).append(" · ").append(niveau), kx, y + 11, kw, 1f, ROZE, false);
-        long dag = data.getLong("Dag");
+        long dag = data.getLongOr("Dag", 0L);
         Component sinds = guh.doodDag() >= dag || guh.doodDag() < 0 ? Component.translatable("gui.guhs.hemel.scherm.vandaag")
                 : Component.translatable("gui.guhs.hemel.scherm.sinds", guh.doodDag());
         GidsTekst.passend(g, sinds, kx, y + 22, kw, 1f, GRIJS, false);
@@ -271,7 +272,7 @@ public class HemelScherm extends Screen {
             Component n = Component.translatable("gui.guhs.hemel.scherm.net", netNaam);
             int nx = kx + (kw - font.width(n)) / 2;
             g.fill(nx - 4, ky + 3, nx + font.width(n) + 4, ky + 15, 0xE0FFF4C0);
-            g.drawString(font, n, nx, ky + 5, 0xFFB07A10, false);
+            g.text(font, n, nx, ky + 5, 0xFFB07A10, false);
         }
     }
 

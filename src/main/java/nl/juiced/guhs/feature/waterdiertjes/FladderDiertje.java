@@ -19,9 +19,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * The little flying critters of the waterdiertjes slice (knabbelvlindertje, glimguhtje, lieveheersbeestje): an ambient
@@ -161,7 +161,7 @@ public abstract class FladderDiertje extends AmbientCreature implements GeoEntit
                 return;
             }
         }
-        if (doel != null && (!level().isEmptyBlock(doel) || doel.getY() <= level().getMinBuildHeight())) {
+        if (doel != null && (!level().isEmptyBlock(doel) || doel.getY() <= level().getMinY())) {
             doel = null;
         }
         if (doel == null || random.nextInt(30) == 0 || doel.closerToCenterThan(position(), 1.5)) {
@@ -232,9 +232,9 @@ public abstract class FladderDiertje extends AmbientCreature implements GeoEntit
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains("Landplek")) {
-            landplek = BlockPos.of(tag.getLong("Landplek"));
-            zitTicks = tag.getInt("ZitTicks");
-            setZit(tag.getBoolean("Zit"));
+            landplek = BlockPos.of(tag.getLongOr("Landplek", 0L));
+            zitTicks = tag.getIntOr("ZitTicks", 0);
+            setZit(tag.getBooleanOr("Zit", false));
         }
     }
 

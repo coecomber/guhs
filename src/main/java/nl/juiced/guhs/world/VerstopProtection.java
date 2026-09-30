@@ -8,7 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -30,7 +30,7 @@ public final class VerstopProtection {
         if (player.getAbilities().instabuild || !protectedAt(player.level(), pos)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.verstop.no_build").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.verstop.no_build").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -52,7 +52,7 @@ public final class VerstopProtection {
     /** Using an item on a block (buckets, flint and steel, axes stripping logs, hoes...): not in the house. Opening things is fine. */
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty()) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty()) {
             return;
         }
         if (denied(event.getEntity(), event.getPos()) || denied(event.getEntity(), event.getPos().relative(event.getFace() == null ? net.minecraft.core.Direction.UP : event.getFace()))) {
@@ -63,7 +63,7 @@ public final class VerstopProtection {
     /** Buckets are used "in the air" too. */
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }

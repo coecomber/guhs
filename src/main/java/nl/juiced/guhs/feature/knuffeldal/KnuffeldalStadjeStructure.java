@@ -9,7 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -44,7 +44,7 @@ public class KnuffeldalStadjeStructure extends Structure implements BouwRuimte.R
     public static final MapCodec<KnuffeldalStadjeStructure> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             settingsCodec(i),
             StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(s -> s.startPool),
-            ResourceLocation.CODEC.fieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
+            Identifier.CODEC.fieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
             ResourceKey.codec(Registries.NOISE).fieldOf("knuffel_noise").forGetter(s -> s.knuffelNoise),
             Codec.intRange(1, 5).fieldOf("cell_chunks").forGetter(s -> s.cellChunks),
             Codec.intRange(1, 12).fieldOf("neighbourhood").forGetter(s -> s.neighbourhood),
@@ -59,7 +59,7 @@ public class KnuffeldalStadjeStructure extends Structure implements BouwRuimte.R
     ).apply(i, KnuffeldalStadjeStructure::new));
 
     private final Holder<StructureTemplatePool> startPool;
-    private final ResourceLocation startJigsawName;
+    private final Identifier startJigsawName;
     private final ResourceKey<NormalNoise.NoiseParameters> knuffelNoise;
     private final int cellChunks;
     private final int neighbourhood;
@@ -73,7 +73,7 @@ public class KnuffeldalStadjeStructure extends Structure implements BouwRuimte.R
     private final int keepClear;
     private final Optional<Integer> voorrang;
 
-    public KnuffeldalStadjeStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, ResourceLocation startJigsawName,
+    public KnuffeldalStadjeStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, Identifier startJigsawName,
                                      ResourceKey<NormalNoise.NoiseParameters> knuffelNoise, int cellChunks, int neighbourhood, double minValue,
                                      double dalValue, double flatValue, int flatRadius, int size, int maxDistance, int keepClear,
                                      Optional<Integer> voorrang) {
@@ -112,7 +112,7 @@ public class KnuffeldalStadjeStructure extends Structure implements BouwRuimte.R
     protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
         ChunkPos chunk = context.chunkPos();
         NormalNoise noise = context.randomState().getOrCreateNoise(knuffelNoise);
-        int cx = Math.floorDiv(chunk.x, cellChunks), cz = Math.floorDiv(chunk.z, cellChunks);
+        int cx = Math.floorDiv(chunk.x(), cellChunks), cz = Math.floorDiv(chunk.z(), cellChunks);
         if (!plek(context.seed(), noise, cx, cz)) {
             return Optional.empty();
         }

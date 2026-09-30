@@ -12,7 +12,7 @@ import nl.juiced.guhs.quest.GuhAdvancements;
 public final class Adv {
     public static void grant(ServerPlayer player, String name) {
         GuhAdvancements.grant(player, name);
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
         if (holder == null) {
             return;
         }

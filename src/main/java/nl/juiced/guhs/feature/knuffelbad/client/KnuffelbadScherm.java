@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.knuffelbad.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -54,8 +54,8 @@ public class KnuffelbadScherm extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFF7CD8FF);
         g.fill(left, top, left + W, top + H, 0xEE16263A);
         // water waves along the top, rubber ducks bobbing on them
@@ -71,33 +71,33 @@ public class KnuffelbadScherm extends Screen {
             g.fill(dx + 4, dy - 3, dx + 8, dy + 1, 0xFFFFD83C);
             g.fill(dx + 8, dy - 1, dx + 10, dy, 0xFFFF8A2A);
         }
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 11, 0xFFFFFFFF);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.knuffelbad.scherm.intro"), width / 2, top + 24, 0xFFBFE8FF);
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 11, 0xFFFFFFFF);
+        g.centeredText(font, Component.translatable("gui.guhs.knuffelbad.scherm.intro"), width / 2, top + 24, 0xFFBFE8FF);
         int y = top + 40;
         int colW = (W - 24) / 3;
         int i = 0;
         for (Glijbaan baan : Glijbaan.values()) {
-            CompoundTag b = data.getCompound(baan.id());
+            CompoundTag b = data.getCompoundOrEmpty(baan.id());
             int x = left + 12 + i * colW;
             g.fill(x, y, x + colW - 6, y + 64, 0x40FFFFFF);
             g.fill(x, y, x + colW - 6, y + 2, baan.kleur);
-            g.drawCenteredString(font, baan.naam().copy().withStyle(ChatFormatting.BOLD), x + (colW - 6) / 2, y + 6, baan.licht);
-            g.drawCenteredString(font, Component.translatable("gui.guhs.knuffelbad.scherm.jouw_record", b.getInt("Best")), x + (colW - 6) / 2, y + 20, 0xFFFFFFFF);
-            g.drawCenteredString(font, Component.translatable("gui.guhs.knuffelbad.scherm.ritten", b.getInt("Ritten")), x + (colW - 6) / 2, y + 32, 0xFFD0D8E8);
-            int rec = b.getInt("Record");
+            g.centeredText(font, baan.naam().copy().withStyle(ChatFormatting.BOLD), x + (colW - 6) / 2, y + 6, baan.licht);
+            g.centeredText(font, Component.translatable("gui.guhs.knuffelbad.scherm.jouw_record", b.getIntOr("Best", 0)), x + (colW - 6) / 2, y + 20, 0xFFFFFFFF);
+            g.centeredText(font, Component.translatable("gui.guhs.knuffelbad.scherm.ritten", b.getIntOr("Ritten", 0)), x + (colW - 6) / 2, y + 32, 0xFFD0D8E8);
+            int rec = b.getIntOr("Record", 0);
             Component wr = rec < 0 ? Component.translatable("gui.guhs.knuffelbad.scherm.geen_record")
                     : Component.translatable("gui.guhs.knuffelbad.scherm.wereldrecord", rec);
-            g.drawCenteredString(font, wr, x + (colW - 6) / 2, y + 44, 0xFFFFD27A);
+            g.centeredText(font, wr, x + (colW - 6) / 2, y + 44, 0xFFFFD27A);
             if (rec >= 0) {
-                g.drawCenteredString(font, Component.literal(b.getString("Naam")), x + (colW - 6) / 2, y + 54, 0xFFB8A8C8);
+                g.centeredText(font, Component.literal(b.getStringOr("Naam", "")), x + (colW - 6) / 2, y + 54, 0xFFB8A8C8);
             }
             i++;
         }
         y += 72;
-        g.drawCenteredString(font, Component.translatable("gui.guhs.knuffelbad.scherm.munten", data.getInt("Munten")), width / 2, y, 0xFFFFE27A);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.knuffelbad.scherm.wassen_telt", data.getInt("Wassen"), data.getInt("Eendjes"),
-                data.getInt("EendjesTotaal")), width / 2, y + 12, 0xFFD8C8E8);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.knuffelbad.scherm.besturing"), width / 2, y + 28, 0xFF9FB8D0);
+        g.centeredText(font, Component.translatable("gui.guhs.knuffelbad.scherm.munten", data.getIntOr("Munten", 0)), width / 2, y, 0xFFFFE27A);
+        g.centeredText(font, Component.translatable("gui.guhs.knuffelbad.scherm.wassen_telt", data.getIntOr("Wassen", 0), data.getIntOr("Eendjes", 0),
+                data.getIntOr("EendjesTotaal", 0)), width / 2, y + 12, 0xFFD8C8E8);
+        g.centeredText(font, Component.translatable("gui.guhs.knuffelbad.scherm.besturing"), width / 2, y + 28, 0xFF9FB8D0);
     }
 
     @Override

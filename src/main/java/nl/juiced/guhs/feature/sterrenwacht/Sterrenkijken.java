@@ -104,23 +104,23 @@ public final class Sterrenkijken {
         if (!saved.contains(KEY)) {
             saved.put(KEY, new CompoundTag());
         }
-        return saved.getCompound(KEY);
+        return saved.getCompoundOrEmpty(KEY);
     }
 
     /** How many constellations the player found this night. */
     public static int vannacht(ServerPlayer player) {
         CompoundTag d = data(player);
-        return d.getLong("Nacht") == nacht(player.level()) ? d.getInt("Aantal") : 0;
+        return d.getLongOr("Nacht", 0L) == nacht(player.level()) ? d.getIntOr("Aantal", 0) : 0;
     }
 
     private static void telVannacht(ServerPlayer player) {
         CompoundTag d = data(player);
         long n = nacht(player.level());
-        if (d.getLong("Nacht") != n) {
+        if (d.getLongOr("Nacht", 0L) != n) {
             d.putLong("Nacht", n);
             d.putInt("Aantal", 0);
         }
-        d.putInt("Aantal", d.getInt("Aantal") + 1);
+        d.putInt("Aantal", d.getIntOr("Aantal", 0) + 1);
     }
 
     /** (Tests) a new night for this player. */
@@ -166,16 +166,16 @@ public final class Sterrenkijken {
     /** Right-clicked a telescope: at night (and not too tired) the sky opens. */
     public static void kijk(ServerPlayer player, BlockPos telescoop) {
         if (Minigames.busyElsewhere(player, Minigames.STERRENWACHT)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.sterrenwacht.bezig").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.sterrenwacht.bezig").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         boolean regen = sterrenregen(player);
         if (!donker(player.level()) && !regen) {
-            player.displayClientMessage(Component.translatable("gui.guhs.sterrenwacht.overdag").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.sterrenwacht.overdag").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         if (vannacht(player) >= MAX_PER_NACHT) {
-            player.displayClientMessage(Component.translatable("gui.guhs.sterrenwacht.moe", MAX_PER_NACHT).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.sterrenwacht.moe", MAX_PER_NACHT).withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         start(player, telescoop, kies(player, regen, player.getRandom()));
@@ -240,7 +240,7 @@ public final class Sterrenkijken {
     }
 
     private static void melding(ServerPlayer player, String key) {
-        player.displayClientMessage(Component.translatable(key).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        player.sendSystemMessage(Component.translatable(key).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     /**
@@ -294,7 +294,7 @@ public final class Sterrenkijken {
             Knusfeest.gemaakt(player, Feesttaak.STERRENLANTAARNS);
             Buiten.zeg(player, professor(), "quest.guhs.sterrenwacht.lantaarns", LANTAARNS);
         }
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         BlockPos at = telescoop != null ? telescoop : player.blockPosition();
         level.sendParticles(SterrenwachtFeature.WENSSTER_DEELTJE.get(), at.getX() + 0.5, at.getY() + 1.5, at.getZ() + 0.5, 30, 0.8, 0.8, 0.8, 0.05);
         level.sendParticles(ParticleTypes.END_ROD, at.getX() + 0.5, at.getY() + 1.5, at.getZ() + 0.5, 8, 0.5, 0.5, 0.5, 0.02);
@@ -304,7 +304,7 @@ public final class Sterrenkijken {
 
     private static int lantaarnsBij(ServerPlayer player) {
         int n = 0;
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (s.is(SterrenwachtFeature.STERRENLANTAARN_ITEM.get())) {
                 n += s.getCount();
             }

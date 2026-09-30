@@ -42,7 +42,7 @@ public class SjoelSchijfEntity extends Entity {
         SjoelSchijfEntity e = new SjoelSchijfEntity(SjoelenFeature.SCHIJF.get(), level);
         e.game = game;
         e.puck = puck;
-        e.moveTo(x, y, z, 0, 0);
+        e.snapTo(x, y, z, 0, 0);
         e.entityData.set(KLEUR, kleur);
         level.addFreshEntity(e);
         return e;
@@ -74,7 +74,7 @@ public class SjoelSchijfEntity extends Entity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             if (lerpSteps > 0) {
                 double d = 1.0 / lerpSteps;
                 setPos(getX() + (lerpX - getX()) * d, getY() + (lerpY - getY()) * d, getZ() + (lerpZ - getZ()) * d);

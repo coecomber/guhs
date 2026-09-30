@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -23,7 +23,7 @@ import nl.juiced.guhs.world.ModDimensions;
 public final class SurfstrandBescherming {
     /** Is this spot part of a surf beach? */
     public static boolean inSurfstrand(ServerLevel level, BlockPos pos) {
-        var structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(Surfplek.SURFSTRAND);
+        var structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(Surfplek.SURFSTRAND);
         return structure != null && level.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 
@@ -35,7 +35,7 @@ public final class SurfstrandBescherming {
         if (player.getAbilities().instabuild || !beschermd(player.level(), pos)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.guhwaiispellen.niet_bouwen").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.guhwaiispellen.niet_bouwen").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -56,7 +56,7 @@ public final class SurfstrandBescherming {
 
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty()) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty()) {
             return;
         }
         if (nee(event.getEntity(), event.getPos().relative(event.getFace() == null ? net.minecraft.core.Direction.UP : event.getFace()))) {

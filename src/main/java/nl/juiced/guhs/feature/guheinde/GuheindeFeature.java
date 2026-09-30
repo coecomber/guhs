@@ -14,7 +14,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -48,6 +48,7 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.resources.Identifier;
 /**
  * Het Guheinde: the endgame, a parody of the End and the Ender Dragon. Opper-Mika steals all the kaasknabbels of the
  * guh kingdom (without knabbels a guh is never vahoeg) and keeps them in the Guheinde.
@@ -173,22 +174,22 @@ public final class GuheindeFeature {
     // --- entities ----------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<OpperMikaEntity>> OPPER_MIKA = ENTITY_TYPES.register("opper_mika",
             () -> EntityType.Builder.of(OpperMikaEntity::new, MobCategory.MONSTER).sized(0.9f, 0.8f).eyeHeight(0.55f).fireImmune()
-                    .clientTrackingRange(16).build(Guhs.id("opper_mika").toString()));
+                    .clientTrackingRange(16).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("opper_mika"))));
     public static final DeferredHolder<EntityType<?>, EntityType<HongerigeEnderguhEntity>> HONGERIGE_ENDERGUH = ENTITY_TYPES.register("hongerige_enderguh",
             () -> EntityType.Builder.of(HongerigeEnderguhEntity::new, MobCategory.MISC).sized(1.1f, 0.9f).eyeHeight(0.55f).fireImmune()
-                    .passengerAttachments(new Vec3(0, 0.62, -0.2)).clientTrackingRange(16).updateInterval(1).build(Guhs.id("hongerige_enderguh").toString()));
+                    .passengerAttachments(new Vec3(0, 0.62, -0.2)).clientTrackingRange(16).updateInterval(1).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("hongerige_enderguh"))));
     public static final DeferredHolder<EntityType<?>, EntityType<KnabbelkristalEntity>> KNABBELKRISTAL_ENTITY = ENTITY_TYPES.register("knabbelkristal",
             () -> EntityType.Builder.<KnabbelkristalEntity>of(KnabbelkristalEntity::new, MobCategory.MISC).sized(2f, 2f).fireImmune()
-                    .clientTrackingRange(16).updateInterval(Integer.MAX_VALUE).build(Guhs.id("knabbelkristal").toString()));
+                    .clientTrackingRange(16).updateInterval(Integer.MAX_VALUE).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("knabbelkristal"))));
     public static final DeferredHolder<EntityType<?>, EntityType<MikaLarfjeEntity>> MIKA_LARFJE = ENTITY_TYPES.register("mika_larfje",
             () -> EntityType.Builder.of(MikaLarfjeEntity::new, MobCategory.MONSTER).sized(0.4f, 0.35f).eyeHeight(0.22f)
-                    .clientTrackingRange(8).build(Guhs.id("mika_larfje").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("mika_larfje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<OogVanVadsigEntity>> OOG_ENTITY = ENTITY_TYPES.register("oog_van_vadsig",
             () -> EntityType.Builder.<OogVanVadsigEntity>of(OogVanVadsigEntity::new, MobCategory.MISC).sized(0.25f, 0.25f)
-                    .clientTrackingRange(4).updateInterval(4).build(Guhs.id("oog_van_vadsig").toString()));
+                    .clientTrackingRange(4).updateInterval(4).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("oog_van_vadsig"))));
     public static final DeferredHolder<EntityType<?>, EntityType<MikaVetbalEntity>> MIKA_VETBAL = ENTITY_TYPES.register("mika_vetbal",
             () -> EntityType.Builder.<MikaVetbalEntity>of(MikaVetbalEntity::new, MobCategory.MISC).sized(0.5f, 0.5f)
-                    .clientTrackingRange(8).updateInterval(2).build(Guhs.id("mika_vetbal").toString()));
+                    .clientTrackingRange(8).updateInterval(2).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("mika_vetbal"))));
 
     public static final DeferredItem<DeferredSpawnEggItem> MIKA_LARFJE_SPAWN_EGG = ITEMS.registerItem("mika_larfje_spawn_egg",
             p -> new DeferredSpawnEggItem(MIKA_LARFJE, 0xE8C25A, 0x8C1428, p));

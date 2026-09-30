@@ -15,7 +15,7 @@ public final class BeautyClient {
     /** Opens (or closes) a screen for the server. */
     public static void open(BeautyPayloads.Open payload) {
         Minecraft mc = Minecraft.getInstance();
-        switch (payload.data().getString("Mode")) {
+        switch (payload.data().getStringOr("Mode", "")) {
             case "lobby" -> mc.setScreen(new ShowguhScreen(payload.npcId(), payload.data()));
             case "dress" -> mc.setScreen(new DressScreen(payload.npcId(), payload.data()));
             case "close" -> {

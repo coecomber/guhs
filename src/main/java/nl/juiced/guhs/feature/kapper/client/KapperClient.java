@@ -69,7 +69,7 @@ public final class KapperClient {
     /** guhs:kapper_knip: open, update or close the knip screen. */
     public static void knip(KapperPayloads.Knip payload) {
         Minecraft mc = Minecraft.getInstance();
-        if (payload.data().getBoolean("Sluit")) {
+        if (payload.data().getBooleanOr("Sluit", false)) {
             if (mc.screen instanceof KnipScreen) {
                 mc.setScreen(null);
             }
@@ -77,7 +77,7 @@ public final class KapperClient {
         }
         if (mc.screen instanceof KnipScreen screen && screen.npcId() == payload.npcId()) {
             screen.update(payload.data());
-        } else if (payload.data().getBoolean("Open")) {
+        } else if (payload.data().getBooleanOr("Open", false)) {
             mc.setScreen(new KnipScreen(payload.npcId(), payload.data()));
         }
     }

@@ -52,7 +52,7 @@ public class ReuzenguhboomFeature extends Feature<NoneFeatureConfiguration> {
             for (ServerPlayer player : server.getEntitiesOfClass(ServerPlayer.class, new net.minecraft.world.phys.AABB(context.origin()).inflate(32))) {
                 VadsAdvancements.grant(player, "vadswoud_reuzenboom");
                 VadsAdvancements.award(player, "guhmension/vadswoud_reuzenboom");
-                player.displayClientMessage(Component.translatable("gui.guhs.vadswoud.reuzenboom").withStyle(ChatFormatting.GREEN), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.vadswoud.reuzenboom").withStyle(ChatFormatting.GREEN));
             }
         }
         return tree != null;
@@ -80,7 +80,7 @@ public class ReuzenguhboomFeature extends Feature<NoneFeatureConfiguration> {
         }
         double r = fromSaplings ? 2.0 + rnd.nextDouble() * 0.8 : 2.2 + rnd.nextDouble() * 1.2;
         int height = fromSaplings ? 22 + rnd.nextInt(8) : 26 + rnd.nextInt(13);
-        if (base + height + 12 >= level.getMaxBuildHeight()) {
+        if (base + height + 12 >= level.getMaxY() + 1) {
             return null;
         }
         int top = base + height;

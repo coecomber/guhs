@@ -49,7 +49,7 @@ public final class MijnGuhs {
 
     /** Everything the tab shows, for this owner. */
     public static CompoundTag snapshot(ServerPlayer player, @Nullable UUID focus) {
-        MinecraftServer s = player.server;
+        MinecraftServer s = player.level().getServer();
         BandData data = BandData.get(s);
         CompoundTag root = new CompoundTag();
         ListTag guhs = new ListTag();

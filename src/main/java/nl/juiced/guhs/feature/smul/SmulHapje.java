@@ -166,7 +166,7 @@ public class SmulHapje extends Entity {
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide && (game == null || !SmulGame.isRunning(game))) {
+        if (!level().isClientSide() && (game == null || !SmulGame.isRunning(game))) {
             discard();                                    // its game is over (or this is a leftover after a restart)
             return;
         }
@@ -176,16 +176,16 @@ public class SmulHapje extends Entity {
             if (onGround() || verticalCollisionBelow) {
                 landed = 1;
                 setDeltaMovement(0, 0, 0);
-                if (!level().isClientSide) {
+                if (!level().isClientSide()) {
                     level().playSound(null, getX(), getY(), getZ(), soort().good() ? SoundEvents.WOOL_PLACE : SoundEvents.HONEY_BLOCK_PLACE,
                             SoundSource.NEUTRAL, 0.35f, 1.3f);
                 }
             }
-        } else if (++landed > LIE_TICKS && !level().isClientSide) {
+        } else if (++landed > LIE_TICKS && !level().isClientSide()) {
             splat();
             return;
         }
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             clientEffects();
         }
     }
@@ -206,7 +206,7 @@ public class SmulHapje extends Entity {
     private void clientEffects() {
         if (landed == 0 && tickCount % 3 == 0) {
             BlockPos.MutableBlockPos pos = blockPosition().mutable();
-            for (int i = 0; i < 32 && pos.getY() > level().getMinBuildHeight(); i++) {
+            for (int i = 0; i < 32 && pos.getY() > level().getMinY(); i++) {
                 pos.move(0, -1, 0);
                 if (!level().getBlockState(pos).getCollisionShape(level(), pos).isEmpty()) {
                     org.joml.Vector3f colour = switch (soort()) {

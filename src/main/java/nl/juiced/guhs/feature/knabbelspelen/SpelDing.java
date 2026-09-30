@@ -102,7 +102,7 @@ public class SpelDing extends Entity {
     public void tick() {
         super.tick();
         leeftijd++;
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         if (soort() == HANGKNABBEL && lengte > 0) {
@@ -129,7 +129,7 @@ public class SpelDing extends Entity {
     /** Hitting it = a bite (no damage, nothing breaks). */
     @Override
     public boolean skipAttackInteraction(Entity attacker) {
-        if (!level().isClientSide && attacker instanceof ServerPlayer p && soort() == HANGKNABBEL) {
+        if (!level().isClientSide() && attacker instanceof ServerPlayer p && soort() == HANGKNABBEL) {
             Knabbelhappen.hap(p, this);
         }
         return true;
@@ -140,10 +140,10 @@ public class SpelDing extends Entity {
         if (soort() != HANGKNABBEL) {
             return InteractionResult.PASS;
         }
-        if (!level().isClientSide && player instanceof ServerPlayer p && hand == InteractionHand.MAIN_HAND) {
+        if (!level().isClientSide() && player instanceof ServerPlayer p && hand == InteractionHand.MAIN_HAND) {
             Knabbelhappen.hap(p, this);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

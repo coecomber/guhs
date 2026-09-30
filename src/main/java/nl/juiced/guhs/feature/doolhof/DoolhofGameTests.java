@@ -5,7 +5,7 @@ import java.util.Map;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,8 +17,6 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -36,8 +34,6 @@ import nl.juiced.guhs.registry.ModItems;
  * a whole game (growing the maze, finding every knabbel, out through the exit), a Mika that pinches without hurting,
  * a fake knabbel's penalty and the exit that sends you back without all knabbels.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class DoolhofGameTests {
     private static final String EMPTY = "empty";
     private static final String GEBOUW = "guhdoolhof";
@@ -54,7 +50,7 @@ public class DoolhofGameTests {
         ServerPlayer p = helper.makeMockServerPlayerInLevel();
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
-        p.moveTo(npc.getX(), npc.getY(), npc.getZ() + 2);
+        p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         for (Niveau n : Niveau.values()) {
             GuhQuests.saved(p).remove(DoolhofGame.BEST_KEY + n.id());
         }
@@ -73,7 +69,7 @@ public class DoolhofGameTests {
     // --- pure logic -------------------------------------------------------------------------------------------------------
 
     /** Every maze, on every level, with many seeds: all cells reachable, the right number of knabbels (and fakes only on lastig in dead ends). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void doolhofKaartenZijnAltijdOplosbaar(GameTestHelper helper) {
         for (Niveau n : Niveau.values()) {
             for (long seed = 0; seed < 40; seed++) {
@@ -106,7 +102,7 @@ public class DoolhofGameTests {
     }
 
     /** The anchor turns template spots into world spots and back, for all four ways a structure can be turned. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void doolhofAnkerDraaitMee(GameTestHelper helper) {
         BlockPos pos = new BlockPos(100, 64, -40);
         for (Direction f : Direction.Plane.HORIZONTAL) {
@@ -130,7 +126,7 @@ public class DoolhofGameTests {
     }
 
     /** Coins: the level's base, a speed bonus, lastig +50 %, and +1 like every reward. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void doolhofBeloningPlusEen(GameTestHelper helper) {
         int traag = 20 * 60 * 10;
         helper.assertTrue(DoolhofGame.munten(Niveau.MAKKELIJK, traag) == 2 + 1, "makkelijk, slow: 2 +1");
@@ -143,7 +139,7 @@ public class DoolhofGameTests {
     }
 
     /** Meneer Vadskronkel's role and shop, the one source of the explorer's outfit, the loaned knabbel. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void doolhofRolWinkelEnKleding(GameTestHelper helper) {
         helper.assertTrue(Features.role(GuhNpcEntity.Kind.DOOLHOFGUH) instanceof DoolhofRole, "Meneer Vadskronkel has his role");
         var offers = new DoolhofRole().offers(null);
@@ -166,7 +162,7 @@ public class DoolhofGameTests {
     }
 
     /** Nobody breaks the maze (only creative); the lanterns know when it's night. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void doolhofBeschermdEnLantaarns(GameTestHelper helper) {
         @SuppressWarnings("removal")
         ServerPlayer p = helper.makeMockServerPlayerInLevel();
@@ -190,7 +186,7 @@ public class DoolhofGameTests {
     // --- the real building ------------------------------------------------------------------------------------------------
 
     /** The building: the anchor under Meneer Vadskronkel, the border, posts, tower and exit where DoolhofVeld expects them. */
-    @GameTest(template = GEBOUW, timeoutTicks = 100, batch = "doolhof_gebouw")
+    @GuhTest(template = GEBOUW, timeoutTicks = 100, batch = "doolhof_gebouw")
     public static void doolhofGebouwKlopt(GameTestHelper helper) {
         GuhNpcEntity npc = vadskronkel(helper);
         Anker a = DoolhofVeld.anker(npc);
@@ -218,7 +214,7 @@ public class DoolhofGameTests {
     }
 
     /** A whole makkelijk game: the maze grows, 8 knabbels and a Mika, find them all, out of the exit: coins, record, board. */
-    @GameTest(template = GEBOUW, timeoutTicks = 400, batch = "doolhof_spel")
+    @GuhTest(template = GEBOUW, timeoutTicks = 400, batch = "doolhof_spel")
     public static void doolhofHeelSpel(GameTestHelper helper) {
         GuhNpcEntity npc = vadskronkel(helper);
         ServerPlayer p = speler(helper, npc);
@@ -250,7 +246,7 @@ public class DoolhofGameTests {
         helper.assertTrue(game.inZak() == 8 && tel(p, DoolhofFeature.GESTOLEN_KNABBEL.get()) == 8, "8 knabbels in the bag");
         // out through the exit
         Vec3 uit = a.punt(DoolhofVeld.FX + DoolhofVeld.P * DoolhofKaart.MIDDEN + 2.0, DoolhofVeld.G + 1, DoolhofVeld.FZ - 2.0);
-        p.moveTo(uit.x, uit.y, uit.z);
+        p.snapTo(uit.x, uit.y, uit.z);
         helper.succeedWhen(() -> {
             helper.assertTrue(!DoolhofGame.isPlaying(p), "the game ended at the exit");
             int munten = tel(p, DoolhofFeature.DOOLHOFKNABBEL.get());
@@ -258,7 +254,7 @@ public class DoolhofGameTests {
                     "doolhofknabbels: " + munten);
             helper.assertTrue(tel(p, DoolhofFeature.GESTOLEN_KNABBEL.get()) == 0, "the gestolen knabbels went back");
             helper.assertTrue(DoolhofGame.best(p, Niveau.MAKKELIJK) >= 0, "a record");
-            helper.assertTrue(Scorebord.top(level.getServer(), "doolhof_makkelijk").stream().anyMatch(s -> s.name().equals(p.getGameProfile().getName())),
+            helper.assertTrue(Scorebord.top(level.getServer(), "doolhof_makkelijk").stream().anyMatch(s -> s.name().equals(p.getGameProfile().name())),
                     "on the board");
             helper.assertTrue(level.getEntitiesOfClass(DoolhofMikaEntity.class, DoolhofVeld.veld(a), m -> m.isAlive()).isEmpty(), "the Mika's went poof");
             weg(helper, p);
@@ -270,7 +266,7 @@ public class DoolhofGameTests {
      * none ever gets lost: a knabbel whose entity went away is hidden again within a second (self-heal), a lost one that turns
      * up again is taken back. On makkelijk the bar counts how many are still hidden.
      */
-    @GameTest(template = GEBOUW, timeoutTicks = 300, batch = "doolhof_heel")
+    @GuhTest(template = GEBOUW, timeoutTicks = 300, batch = "doolhof_heel")
     public static void doolhofKnabbelsZwevenEnRakenNooitZoek(GameTestHelper helper) {
         GuhNpcEntity npc = vadskronkel(helper);
         ServerPlayer p = speler(helper, npc);
@@ -301,7 +297,7 @@ public class DoolhofGameTests {
         }
         helper.assertTrue(game.herstel(level) == 2 && game.verstopt() == 8, "two hidden again");
         long knabbelsInHetVeld = level.getEntitiesOfClass(ItemEntity.class, DoolhofVeld.veld(a).inflate(4),
-                e -> e.getTags().contains(DoolhofGame.TAG) && e.isAlive()).size();
+                e -> e.entityTags().contains(DoolhofGame.TAG) && e.isAlive()).size();
         helper.assertTrue(knabbelsInHetVeld == 8, "exactly 8 knabbels in the field, none extra: " + knabbelsInHetVeld);
         // the game heals by itself while you play (every second)
         java.util.UUID nogEen = game.knabbels.keySet().iterator().next();
@@ -313,7 +309,7 @@ public class DoolhofGameTests {
             ItemEntity item = (ItemEntity) level.getEntity(doel);
             int[] cel = DoolhofVeld.celVan(a, item.position());
             Vec3 onder = DoolhofVeld.cel(a, cel[0], cel[1], DoolhofVeld.G + 1);
-            p.moveTo(onder.x, onder.y, onder.z);
+            p.snapTo(onder.x, onder.y, onder.z);
         });
         helper.succeedWhen(() -> {
             helper.assertTrue(game.inZak() + game.gepikt >= 1, "picked up by walking under it");
@@ -323,7 +319,7 @@ public class DoolhofGameTests {
     }
 
     /** A Heg-Mika touches you: one knabbel goes back into the maze, it runs off, and you're not hurt (neither is it). */
-    @GameTest(template = GEBOUW, timeoutTicks = 200, batch = "doolhof_mika")
+    @GuhTest(template = GEBOUW, timeoutTicks = 200, batch = "doolhof_mika")
     public static void doolhofMikaPiktZonderPijn(GameTestHelper helper) {
         GuhNpcEntity npc = vadskronkel(helper);
         ServerPlayer p = speler(helper, npc);
@@ -363,7 +359,7 @@ public class DoolhofGameTests {
     }
 
     /** Lastig: 16 knabbels, 3 Mika's, fake knabbels cost 5 seconds; at the exit without all knabbels you're sent back in. */
-    @GameTest(template = GEBOUW, timeoutTicks = 200, batch = "doolhof_lastig")
+    @GuhTest(template = GEBOUW, timeoutTicks = 200, batch = "doolhof_lastig")
     public static void doolhofLastigNepEnUitgang(GameTestHelper helper) {
         GuhNpcEntity npc = vadskronkel(helper);
         ServerPlayer p = speler(helper, npc);
@@ -381,7 +377,7 @@ public class DoolhofGameTests {
         game.pak(level, p, item, true);
         helper.assertTrue(game.tijd() - voor == DoolhofGame.NEP_STRAF_TICKS && game.inZak() == 0, "a fake knabbel: +5 seconds, nothing in the bag");
         Vec3 uit = game.anker.punt(DoolhofVeld.FX + DoolhofVeld.P * DoolhofKaart.MIDDEN + 2.0, DoolhofVeld.G + 1, DoolhofVeld.FZ - 2.0);
-        p.moveTo(uit.x, uit.y, uit.z);
+        p.snapTo(uit.x, uit.y, uit.z);
         helper.runAfterDelay(3, () -> {
             helper.assertTrue(DoolhofGame.isPlaying(p), "without all knabbels the game goes on");
             helper.assertTrue(!DoolhofVeld.bijUitgang(game.anker, p.position()), "and you're back in the maze");

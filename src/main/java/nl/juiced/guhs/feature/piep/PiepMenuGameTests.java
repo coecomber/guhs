@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -22,13 +22,12 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.knus.KnusVoortgang;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the piep-maatje menus (piepmenu, 2.9): picking up and putting down keeps everything (name, owner, health, age,
  * the menu settings) for all three; only the owner can pick up or use the menu; rondvadsen uit keeps them in place (and
@@ -37,8 +36,6 @@ import nl.juiced.guhs.registry.ModEntities;
  * to popping out again, robust against the guh disappearing and a save/load in the middle. (Template piep_test_wei: grass
  * at helper y 1.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class PiepMenuGameTests {
     private static final String WEI = "piep_test_wei";
     /** Our own batch (the nest test counts the players around it). */
@@ -50,7 +47,7 @@ public class PiepMenuGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -61,12 +58,12 @@ public class PiepMenuGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id("quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id("quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
     private static ItemStack vind(ServerPlayer p, Item item) {
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 return s;
             }
@@ -95,7 +92,7 @@ public class PiepMenuGameTests {
 
     // --- picking up and putting down --------------------------------------------------------------------------------------------
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 60)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 60)
     public static void piepmenuOppakkenHoudtAllesSchildpadjes(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         record Geval(EntityType<? extends PoepschillyEntity> type, Item item, String naam, PiepInstelling eigen) {
@@ -131,7 +128,7 @@ public class PiepMenuGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 60)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 60)
     public static void piepmenuOppakkenMuisjeHoudtAlles(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         PieppiepmuisjeEntity muis = helper.spawn(PiepFeature.PIEPPIEPMUISJE.get(), new BlockPos(4, 2, 4));
@@ -157,7 +154,7 @@ public class PiepMenuGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 60)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 60)
     public static void piepmenuAlleenHetBaasje(GameTestHelper helper) {
         ServerPlayer baas = player(helper, new BlockPos(1, 2, 1));
         ServerPlayer ander = player(helper, new BlockPos(2, 2, 1));
@@ -188,7 +185,7 @@ public class PiepMenuGameTests {
 
     // --- rondvadsen, renaming, the click rules ------------------------------------------------------------------------------------
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 400)
     public static void piepmenuRondvadsenUitBlijftStaan(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         PieppiepmuisjeEntity muis = helper.spawn(PiepFeature.PIEPPIEPMUISJE.get(), new BlockPos(7, 2, 7));
@@ -225,7 +222,7 @@ public class PiepMenuGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 60)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 60)
     public static void piepmenuNaamVeranderen(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         for (EntityType<? extends TamableAnimal> type : List.<EntityType<? extends TamableAnimal>>of(PiepFeature.PIEPPIEPMUISJE.get(),
@@ -245,7 +242,7 @@ public class PiepMenuGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 60)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 60)
     public static void piepmenuKlikRegels(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         PoepschillyEntity s = helper.spawn(PiepFeature.POEPSCHILLY.get(), new BlockPos(3, 2, 3));
@@ -275,7 +272,7 @@ public class PiepMenuGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 60)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 60)
     public static void piepmenuMuisjeInstellingen(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         PieppiepmuisjeEntity muis = helper.spawn(PiepFeature.PIEPPIEPMUISJE.get(), new BlockPos(4, 2, 4));
@@ -291,7 +288,7 @@ public class PiepMenuGameTests {
         // saved and loaded
         CompoundTag tag = new CompoundTag();
         muis.saveWithoutId(tag);
-        PieppiepmuisjeEntity kopie = PiepFeature.PIEPPIEPMUISJE.get().create(helper.getLevel());
+        PieppiepmuisjeEntity kopie = PiepFeature.PIEPPIEPMUISJE.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         kopie.load(tag);
         helper.assertTrue(!kopie.aan(PiepInstelling.PIEPJES) && !kopie.aan(PiepInstelling.VERSTOPPEN) && kopie.aan(PiepInstelling.VOLGEN),
                 "the settings are saved");
@@ -319,7 +316,7 @@ public class PiepMenuGameTests {
         return s;
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 500)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 500)
     public static void piepmenuPoetsbeurtOpEigenTammeGuh(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         GuhEntity guh = eigenGuh(helper, p, new BlockPos(5, 2, 5));
@@ -356,7 +353,7 @@ public class PiepMenuGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 60)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 60)
     public static void piepmenuPoetsbeurtWildeGuhWeigert(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         GuhEntity wild = helper.spawn(ModEntities.GUH.get(), new BlockPos(5, 2, 5));
@@ -372,7 +369,7 @@ public class PiepMenuGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 400)
     public static void piepmenuPoetsbeurtGuhWegPoepschillyKomtEruit(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         GuhEntity guh = eigenGuh(helper, p, new BlockPos(5, 2, 5));
@@ -395,7 +392,7 @@ public class PiepMenuGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 600)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 600)
     public static void piepmenuPoetsbeurtOverleeftOpslaanEnLaden(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         ServerLevel level = helper.getLevel();
@@ -428,7 +425,7 @@ public class PiepMenuGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 400)
     public static void piepmenuPoetsbeurtGeladenZonderGuh(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         ServerLevel level = helper.getLevel();

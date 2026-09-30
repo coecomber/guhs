@@ -63,7 +63,7 @@ public record RaceRit(Vec3 entrance, Direction forward, double radius, double le
         if (!tag.contains("Ticks")) {
             return null;
         }
-        return new RaceRit(new Vec3(tag.getDouble("X"), tag.getDouble("Y"), tag.getDouble("Z")), Direction.from2DDataValue(tag.getInt("Forward")),
-                tag.getDouble("Radius"), tag.getDouble("Length"), tag.getDouble("Side"), Math.max(1, tag.getInt("Ticks")));
+        return new RaceRit(new Vec3(tag.getDoubleOr("X", 0.0), tag.getDoubleOr("Y", 0.0), tag.getDoubleOr("Z", 0.0)), Direction.from2DDataValue(tag.getIntOr("Forward", 0)),
+                tag.getDoubleOr("Radius", 0.0), tag.getDoubleOr("Length", 0.0), tag.getDoubleOr("Side", 0.0), Math.max(1, tag.getIntOr("Ticks", 0)));
     }
 }

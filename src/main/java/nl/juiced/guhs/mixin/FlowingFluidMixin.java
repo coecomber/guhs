@@ -21,7 +21,7 @@ public abstract class FlowingFluidMixin {
     @Inject(method = "canSpreadTo", at = @At("HEAD"), cancellable = true)
     private void guhs$keepOutOfBuildings(BlockGetter level, BlockPos fromPos, BlockState fromBlockState, Direction direction, BlockPos toPos,
             BlockState toBlockState, FluidState toFluidState, Fluid fluid, CallbackInfoReturnable<Boolean> cir) {
-        if (level instanceof Level world && !world.isClientSide && Protected.keepsFluidOut(world, fromPos, toPos)) {
+        if (level instanceof Level world && !world.isClientSide() && Protected.keepsFluidOut(world, fromPos, toPos)) {
             cir.setReturnValue(false);
         }
     }

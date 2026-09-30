@@ -107,7 +107,7 @@ public class Wolkenhoeder implements NpcRole {
 
     /** After the questline: how many are in the wolkjes, and the screen. */
     private void klaar(GuhNpcEntity npc, ServerPlayer p) {
-        int n = Wolkjes.dood(p.server, p.getUUID()).size();
+        int n = Wolkjes.dood(p.level().getServer(), p.getUUID()).size();
         if (n > 0) {
             Praat.open(p, npc, null, "gui.guhs.hemel.hoeder.klaar", new Object[]{n}, new Praat.Optie(WOLKJES, "gui.guhs.hemel.optie.wolkjes"),
                     new Praat.Optie(VERTEL, "gui.guhs.hemel.optie.vertel"));
@@ -158,7 +158,7 @@ public class Wolkenhoeder implements NpcRole {
     @Nullable
     static BlockPos hart(GuhNpcEntity npc) {
         if (npc.roleData.contains(HART)) {
-            BlockPos pos = BlockPos.of(npc.roleData.getLong(HART));
+            BlockPos pos = BlockPos.of(npc.roleData.getLongOr(HART, 0L));
             if (npc.level().getBlockState(pos).is(HemelFeature.KNUFFELHART.get())) {
                 return pos;
             }

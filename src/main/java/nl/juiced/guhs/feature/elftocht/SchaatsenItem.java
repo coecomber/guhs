@@ -25,7 +25,7 @@ public class SchaatsenItem extends Item {
     /** Only skaters keep their skates. */
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && (!(entity instanceof Player player) || !ElftochtTocht.isBezig(player))) {
+        if (!level.isClientSide() && (!(entity instanceof Player player) || !ElftochtTocht.isBezig(player))) {
             stack.setCount(0);
         }
     }
@@ -37,7 +37,7 @@ public class SchaatsenItem extends Item {
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.level().isClientSide) {
+        if (!entity.level().isClientSide()) {
             entity.discard();
         }
         return true;

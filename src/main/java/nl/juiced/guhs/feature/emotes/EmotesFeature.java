@@ -39,7 +39,7 @@ public final class EmotesFeature {
 
     /** Getting hurt ends any emote. */
     private static void onDamage(LivingDamageEvent.Post event) {
-        if (event.getEntity() instanceof GuhEntity guh && !guh.level().isClientSide && event.getNewDamage() > 0) {
+        if (event.getEntity() instanceof GuhEntity guh && !guh.level().isClientSide() && event.getNewDamage() > 0) {
             guh.emotes.onHurt();
         }
     }

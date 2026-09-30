@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * De guhkoe: a big, vadsige cow with cheese-coloured spots (with little holes, like gatenkaas), a pink guh face, round guh
  * ears and two stubby horns. When she is content she gives kaasmelk: right-click her with an empty glass bottle (once a
@@ -58,7 +59,7 @@ public class GuhkoeEntity extends BoerderijDier {
         if (!stack.is(Items.GLASS_BOTTLE) || isBaby()) {
             return super.mobInteract(player, hand);
         }
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         return melk((ServerPlayer) player, hand) ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
@@ -68,8 +69,8 @@ public class GuhkoeEntity extends BoerderijDier {
     public boolean melk(ServerPlayer player, InteractionHand hand) {
         nieuweDag();                                        // (a new day first: not yesterday's care, not yesterday's milking)
         if (!isBlij() || productGegeven()) {
-            player.displayClientMessage(Component.translatable(productGegeven() ? "gui.guhs.boerderij.koe.al_gemolken" : "gui.guhs.boerderij.koe.niet_blij")
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable(productGegeven() ? "gui.guhs.boerderij.koe.al_gemolken" : "gui.guhs.boerderij.koe.niet_blij")
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             playSound(BoerderijFeature.KOE_MOEH.get(), 0.7f, 0.8f);
             return false;
         }
@@ -132,6 +133,6 @@ public class GuhkoeEntity extends BoerderijDier {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
-        return BoerderijFeature.GUHKOE.get().create(level);
+        return BoerderijFeature.GUHKOE.get().create(level, EntitySpawnReason.TRIGGERED);
     }
 }

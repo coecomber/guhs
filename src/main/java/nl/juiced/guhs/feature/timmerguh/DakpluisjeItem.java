@@ -35,15 +35,15 @@ public class DakpluisjeItem extends Item {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         if (!level.getBlockState(pos).is(TimmerguhFeature.DAKPLEK.get())) {
-            if (!level.isClientSide && context.getPlayer() instanceof ServerPlayer p) {
-                p.displayClientMessage(Component.translatable("gui.guhs.timmerguh.past_niet").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            if (!level.isClientSide() && context.getPlayer() instanceof ServerPlayer p) {
+                p.sendOverlayMessage(Component.translatable("gui.guhs.timmerguh.past_niet").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             return InteractionResult.FAIL;
         }
-        if (!level.isClientSide && context.getPlayer() instanceof ServerPlayer p) {
+        if (!level.isClientSide() && context.getPlayer() instanceof ServerPlayer p) {
             leg((ServerLevel) level, pos, p, context.getItemInHand());
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Lays the bit of roof on the ghost tile at pos (one dakpluisje from the stack): true when it worked. */
@@ -57,7 +57,7 @@ public class DakpluisjeItem extends Item {
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }
-        level.playSound(null, pos, BeroepenFeature.HAMER.get(), SoundSource.BLOCKS, 0.9f, 1.05f + level.random.nextFloat() * 0.2f);
+        level.playSound(null, pos, BeroepenFeature.HAMER.get(), SoundSource.BLOCKS, 0.9f, 1.05f + level.getRandom().nextFloat() * 0.2f);
         level.playSound(null, pos, SoundEvents.WOOL_PLACE, SoundSource.BLOCKS, 0.8f, 1.2f);
         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, gelegd), pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                 8, 0.3, 0.1, 0.3, 0.05);

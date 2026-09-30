@@ -9,9 +9,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -56,7 +56,7 @@ public class SuperkompasItem extends GuhCompassItem {
 
         /** The tab's icon. */
         public ItemStack icoon() {
-            net.minecraft.world.item.Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(ResourceLocation.parse(icon));
+            net.minecraft.world.item.Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(Identifier.parse(icon));
             return new ItemStack(item == net.minecraft.world.item.Items.AIR ? standIn : item);
         }
 
@@ -118,7 +118,7 @@ public class SuperkompasItem extends GuhCompassItem {
 
     @Nullable
     public static String chosen(ItemStack stack) {
-        String id = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getString("Structure");
+        String id = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getStringOr("Structure", "");
         return id.isEmpty() ? null : id;
     }
 
@@ -140,11 +140,11 @@ public class SuperkompasItem extends GuhCompassItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (level.isClientSide) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (level.isClientSide()) {
             nl.juiced.guhs.client.GuhsClientHooks.openSuperkompas(hand, chosen(player.getItemInHand(hand)));
         }
-        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
+        return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(hand));
     }
 
     @Override
@@ -160,7 +160,7 @@ public class SuperkompasItem extends GuhCompassItem {
         tooltip.add(Component.translatable("item.guhs.guh_compass.how").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 
-    public static ResourceLocation key(String structure) {
+    public static Identifier key(String structure) {
         return Guhs.id(structure);
     }
 }

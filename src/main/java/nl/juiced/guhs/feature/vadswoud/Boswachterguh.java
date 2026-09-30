@@ -32,7 +32,7 @@ public final class Boswachterguh implements NpcRole {
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
         npc.level().playSound(null, npc, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 0.85f);
         var saved = GuhQuests.saved(player);
-        if (!saved.getBoolean(MET_KEY)) {
+        if (!saved.getBooleanOr(MET_KEY, false)) {
             saved.putBoolean(MET_KEY, true);
             GuhQuests.say(player, npc, "quest.guhs.vadswoud.boswachter.hello");
         } else {

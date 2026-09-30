@@ -5,7 +5,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -15,8 +15,8 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.creche.CrecheBabyguh;
 import nl.juiced.guhs.feature.creche.CrecheFeature;
 import nl.juiced.guhs.feature.creche.CrechePayloads;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * Client side of the Knuffelcreche: the babyguhtjes (a tiny guh with a pacifier, the guh's own animations), the sleepy
@@ -39,7 +39,7 @@ public final class CrecheClient {
         event.registerEntityRenderer(CrecheFeature.BABYGUH.get(), context -> {
             GeoEntityRenderer<CrecheBabyguh> renderer = new GeoEntityRenderer<>(context, new DefaultedEntityGeoModel<CrecheBabyguh>(Guhs.id("creche_babyguh"), true) {
                 @Override
-                public ResourceLocation getAnimationResource(CrecheBabyguh baby) {
+                public Identifier getAnimationResource(CrecheBabyguh baby) {
                     return Guhs.id("animations/entity/guh.animation.json");
                 }
             });

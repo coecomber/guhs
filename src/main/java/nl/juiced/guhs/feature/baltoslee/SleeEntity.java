@@ -20,10 +20,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * The Nomguh sled (guhs:baltoslee_slee): a wooden sled with a red blanket, the handlebar with sled bells, a lantern, and -
@@ -272,7 +272,7 @@ public class SleeEntity extends Entity implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             if (!SleeRit.tickVan(this) && tickCount > 5) {
                 ejectPassengers();
                 discard();

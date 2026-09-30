@@ -32,12 +32,12 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 import org.joml.Vector3f;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * The starved Enderguh that Opper-Mika rides: a huge Enderguh, grey and thin because the Mika's never give it a single
@@ -261,7 +261,7 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() instanceof ServerPlayer player && messageCooldown <= 0) {
             messageCooldown = 60;
-            player.displayClientMessage(Component.translatable("gui.guhs.guheinde.enderguh.niet_meppen").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.enderguh.niet_meppen").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return false;
     }
@@ -277,17 +277,17 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         boolean knabbel = stack.is(ModItems.KAAS_KNABBELS.get()) || stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get());
         if (getToestand() != Toestand.UITGEPUT) {
-            player.displayClientMessage(Component.translatable(getToestand() == Toestand.VRIJ ? "gui.guhs.guheinde.enderguh.blij"
-                    : "gui.guhs.guheinde.enderguh.bang").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable(getToestand() == Toestand.VRIJ ? "gui.guhs.guheinde.enderguh.blij"
+                    : "gui.guhs.guheinde.enderguh.bang").withStyle(ChatFormatting.LIGHT_PURPLE));
             return InteractionResult.CONSUME;
         }
         if (!knabbel) {
-            player.displayClientMessage(Component.translatable("gui.guhs.guheinde.enderguh.honger").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.enderguh.honger").withStyle(ChatFormatting.LIGHT_PURPLE));
             return InteractionResult.CONSUME;
         }
         stack.consume(1, player);
@@ -361,14 +361,14 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        setVahoeg(tag.getInt("Vahoeg"));
+        setVahoeg(tag.getIntOr("Vahoeg", 0));
         try {
-            setToestand(Toestand.valueOf(tag.getString("Toestand")));
+            setToestand(Toestand.valueOf(tag.getStringOr("Toestand", "")));
         } catch (IllegalArgumentException e) {
             setToestand(Toestand.CIRKEL);
         }
-        center = BlockPos.of(tag.getLong("Center"));
-        perch = BlockPos.of(tag.getLong("Perch"));
+        center = BlockPos.of(tag.getLongOr("Center", 0L));
+        perch = BlockPos.of(tag.getLongOr("Perch", 0L));
     }
 
     @Override

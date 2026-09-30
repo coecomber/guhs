@@ -27,6 +27,7 @@ import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.knus.KnusVoortgang;
 import nl.juiced.guhs.quest.GuhAdvancements;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * The washing ritual: your own tamed guh gets a bath in a guh wash tub and comes out fluffy and shiny for a whole day.
  * <ol>
@@ -58,7 +59,7 @@ public final class Wasritueel {
     }
 
     public static int stap(GuhEntity guh) {
-        return guh.getPersistentData().getInt(STAP);
+        return guh.getPersistentData().getIntOr(STAP, 0);
     }
 
     public static boolean glanst(GuhEntity guh) {
@@ -79,9 +80,9 @@ public final class Wasritueel {
 
     /** Guhshampoo on a guh. True: it was soaped (the shampoo loses a use). */
     public static boolean inzepen(ServerPlayer player, GuhEntity guh) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (!guh.isTame() || !guh.isOwnedBy(player)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.was.niet_van_jou").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.was.niet_van_jou").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         if (stap(guh) > 0) {
@@ -89,18 +90,18 @@ public final class Wasritueel {
             return false;
         }
         if (Minigames.busyElsewhere(player, Minigames.KNUFFELBAD)) {
-            player.displayClientMessage(Component.translatable("quest.guhs.minigame.busy").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.minigame.busy").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         BlockPos tobbe = vrijeTobbe(level, guh.blockPosition());
         if (tobbe == null) {
-            player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.was.geen_tobbe").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.was.geen_tobbe").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         CompoundTag d = guh.getPersistentData();
         d.putBoolean(ZAT, guh.isOrderedToSit());
         d.putInt(STAP, INGEZEEPT);
-        d.putUUID(WASSER, player.getUUID());
+        d.store(WASSER, UUIDUtil.CODEC, player.getUUID());
         d.putLong(TOBBE, tobbe.asLong());
         d.putLong(TIJD, level.getGameTime());
         d.putInt(SCHROB, 0);
@@ -113,7 +114,7 @@ public final class Wasritueel {
         WASSERS.put(player.getUUID(), level.getGameTime());
         level.sendParticles(KnuffelbadFeature.ZEEPBELLETJE.get(), guh.getX(), guh.getY() + 0.6, guh.getZ(), 16, 0.4, 0.3, 0.4, 0.02);
         level.playSound(null, guh.blockPosition(), KnuffelbadFeature.SCHUIM.get(), SoundSource.NEUTRAL, 0.8f, 1.2f);
-        player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.was.ingezeept", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.was.ingezeept", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -140,7 +141,7 @@ public final class Wasritueel {
     @Nullable
     static GuhEntity gastIn(ServerLevel level, BlockPos tobbe) {
         for (GuhEntity g : level.getEntitiesOfClass(GuhEntity.class, new net.minecraft.world.phys.AABB(tobbe).inflate(3))) {
-            if (stap(g) > 0 && g.getPersistentData().getLong(TOBBE) == tobbe.asLong()) {
+            if (stap(g) > 0 && g.getPersistentData().getLongOr(TOBBE, 0L) == tobbe.asLong()) {
                 return g;
             }
         }
@@ -148,7 +149,7 @@ public final class Wasritueel {
     }
 
     private static void inTobbe(GuhEntity guh, BlockPos tobbe) {
-        guh.moveTo(tobbe.getX() + 0.5, tobbe.getY() + 0.15, tobbe.getZ() + 0.5, guh.getYRot(), 0);
+        guh.snapTo(tobbe.getX() + 0.5, tobbe.getY() + 0.15, tobbe.getZ() + 0.5, guh.getYRot(), 0);
         guh.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
     }
 
@@ -170,15 +171,15 @@ public final class Wasritueel {
         if (!held.isEmpty() && !held.is(KnuffelbadFeature.GUHSHAMPOO.get())) {
             return held.is(KnuffelbadFeature.GUH_FOHN.get()) ? InteractionResult.PASS : InteractionResult.PASS;
         }
-        if (!player.level().isClientSide && player instanceof ServerPlayer sp) {
+        if (!player.level().isClientSide() && player instanceof ServerPlayer sp) {
             schrobben(sp, guh);
         }
-        return InteractionResult.sidedSuccess(player.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** One scrub. After {@value #SCHROBBEN}: the guh is all foam. */
     public static void schrobben(ServerPlayer player, GuhEntity guh) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (!wasser(player, guh)) {
             return;
         }
@@ -187,7 +188,7 @@ public final class Wasritueel {
             return;
         }
         CompoundTag d = guh.getPersistentData();
-        int n = d.getInt(SCHROB) + 1;
+        int n = d.getIntOr(SCHROB, 0) + 1;
         d.putInt(SCHROB, n);
         d.putLong(TIJD, level.getGameTime());
         WASSERS.put(player.getUUID(), level.getGameTime());
@@ -195,11 +196,11 @@ public final class Wasritueel {
         level.playSound(null, guh.blockPosition(), KnuffelbadFeature.SCHUIM.get(), SoundSource.NEUTRAL, 0.6f, 0.9f + n * 0.08f);
         if (n >= SCHROBBEN) {
             d.putInt(STAP, GESCHUIMD);
-            BlockPos tobbe = BlockPos.of(d.getLong(TOBBE));
+            BlockPos tobbe = BlockPos.of(d.getLongOr(TOBBE, 0L));
             zetVulling(level, tobbe, KnuffelbadBlocks.Vulling.SCHUIM);
-            player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.was.geschuimd").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.was.geschuimd").withStyle(ChatFormatting.LIGHT_PURPLE));
         } else {
-            player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.was.schrobben", n, SCHROBBEN).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.was.schrobben", n, SCHROBBEN).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -207,7 +208,7 @@ public final class Wasritueel {
 
     /** The shower of a wash tub (right-click it). */
     public static void douche(ServerPlayer player, BlockPos tobbe) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         level.sendParticles(ParticleTypes.SPLASH, tobbe.getX() + 0.5, tobbe.getY() + 1.2, tobbe.getZ() + 0.5, 30, 0.3, 0.3, 0.3, 0.1);
         level.sendParticles(ParticleTypes.FALLING_WATER, tobbe.getX() + 0.5, tobbe.getY() + 1.8, tobbe.getZ() + 0.5, 12, 0.25, 0.1, 0.25, 0);
         level.playSound(null, tobbe, KnuffelbadFeature.SPETTER.get(), SoundSource.BLOCKS, 0.7f, 1.2f);
@@ -228,14 +229,14 @@ public final class Wasritueel {
         WASSERS.put(player.getUUID(), level.getGameTime());
         zetVulling(level, tobbe, KnuffelbadBlocks.Vulling.WATER);
         level.sendParticles(ParticleTypes.SPLASH, guh.getX(), guh.getY() + 0.8, guh.getZ(), 40, 0.4, 0.3, 0.4, 0.1);
-        player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.was.gespoeld").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.was.gespoeld").withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     // --- 4. blow-dry --------------------------------------------------------------------------------------------------------------
 
     /** A tick of the föhn aimed at a guh. */
     public static void fohn(ServerPlayer player, GuhEntity guh) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         int stap = stap(guh);
         if (stap == 0) {
             if (level.getGameTime() % 10 == 0) {
@@ -253,7 +254,7 @@ public final class Wasritueel {
             return;
         }
         CompoundTag d = guh.getPersistentData();
-        int n = d.getInt(GEFOHND) + 1;
+        int n = d.getIntOr(GEFOHND, 0) + 1;
         d.putInt(GEFOHND, n);
         d.putLong(TIJD, level.getGameTime());
         WASSERS.put(player.getUUID(), level.getGameTime());
@@ -262,7 +263,7 @@ public final class Wasritueel {
             level.sendParticles(KnuffelbadFeature.GLINSTERING.get(), guh.getX(), guh.getY() + 0.8, guh.getZ(), 2, 0.4, 0.3, 0.4, 0.01);
         }
         if (n % 10 == 0) {
-            player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.was.fohnen", Math.min(100, n * 100 / FOHN_TICKS)).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.was.fohnen", Math.min(100, n * 100 / FOHN_TICKS)).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         if (n >= FOHN_TICKS) {
             klaar(player, guh);
@@ -271,15 +272,15 @@ public final class Wasritueel {
 
     /** Dry, fluffy and shiny: GLANZEND for a day. */
     static void klaar(ServerPlayer player, GuhEntity guh) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         CompoundTag d = guh.getPersistentData();
-        BlockPos tobbe = BlockPos.of(d.getLong(TOBBE));
-        boolean zat = d.getBoolean(ZAT);
+        BlockPos tobbe = BlockPos.of(d.getLongOr(TOBBE, 0L));
+        boolean zat = d.getBooleanOr(ZAT, false);
         vergeet(guh);
         zetVulling(level, tobbe, KnuffelbadBlocks.Vulling.LEEG);
         guh.setOrderedToSit(zat);
         glans(guh, level.getGameTime());
-        guh.moveTo(tobbe.getX() + 0.5, tobbe.getY() + 1.0, tobbe.getZ() + 0.5, guh.getYRot(), 0);
+        guh.snapTo(tobbe.getX() + 0.5, tobbe.getY() + 1.0, tobbe.getZ() + 0.5, guh.getYRot(), 0);
         guh.emotes.start(Emote.VAHOEG, false, GuhEmotes.Source.SELF);
         level.sendParticles(KnuffelbadFeature.GLINSTERING.get(), guh.getX(), guh.getY() + 0.7, guh.getZ(), 40, 0.5, 0.5, 0.5, 0.05);
         level.playSound(null, guh.blockPosition(), nl.juiced.guhs.registry.ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1.3f);
@@ -288,7 +289,7 @@ public final class Wasritueel {
         KnusVoortgang.tel(player, KnuffelbadVoortgang.WASSEN, 1);
         GuhAdvancements.grant(player, "knuffelbad_gewassen");
         KnuffelbadVoortgang.toon(player, "knuffelbad_gewassen");
-        player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.was.klaar", guh.getDisplayName()).withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.was.klaar", guh.getDisplayName()).withStyle(ChatFormatting.GOLD));
         player.sendSystemMessage(Component.translatable("gui.guhs.knuffelbad.was.klaar.chat", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
@@ -302,7 +303,7 @@ public final class Wasritueel {
 
     private static void tick(GuhEntity guh) {
         if (((guh.tickCount + guh.getId()) & 31) == 0 && GuhHooks.heeft(guh, GuhHooks.GLANZEND)
-                && guh.level().getGameTime() >= guh.getPersistentData().getLong(GLANS_TOT)) {
+                && guh.level().getGameTime() >= guh.getPersistentData().getLongOr(GLANS_TOT, 0L)) {
             GuhHooks.zet(guh, GuhHooks.GLANZEND, false);        // a day has gone: just a normal (lovely) guh again
         }
         int stap = stap(guh);
@@ -311,8 +312,8 @@ public final class Wasritueel {
         }
         CompoundTag d = guh.getPersistentData();
         ServerLevel level = (ServerLevel) guh.level();
-        BlockPos tobbe = BlockPos.of(d.getLong(TOBBE));
-        if (!level.getBlockState(tobbe).is(KnuffelbadFeature.GUH_WASTOBBE.get()) || level.getGameTime() - d.getLong(TIJD) > VERGEET) {
+        BlockPos tobbe = BlockPos.of(d.getLongOr(TOBBE, 0L));
+        if (!level.getBlockState(tobbe).is(KnuffelbadFeature.GUH_WASTOBBE.get()) || level.getGameTime() - d.getLongOr(TIJD, 0L) > VERGEET) {
             stop(guh);
             return;
         }
@@ -328,13 +329,13 @@ public final class Wasritueel {
     /** The wash is off (the tub is gone, or nobody came back): the guh hops out. */
     public static void stop(GuhEntity guh) {
         CompoundTag d = guh.getPersistentData();
-        if (d.getInt(STAP) == 0) {
+        if (d.getIntOr(STAP, 0) == 0) {
             return;
         }
-        boolean zat = d.getBoolean(ZAT);
-        BlockPos tobbe = BlockPos.of(d.getLong(TOBBE));
-        if (d.hasUUID(WASSER)) {
-            WASSERS.remove(d.getUUID(WASSER));
+        boolean zat = d.getBooleanOr(ZAT, false);
+        BlockPos tobbe = BlockPos.of(d.getLongOr(TOBBE, 0L));
+        if (d.read(WASSER, UUIDUtil.CODEC).isPresent()) {
+            WASSERS.remove(d.read(WASSER, UUIDUtil.CODEC).orElseThrow());
         }
         vergeet(guh);
         guh.setOrderedToSit(zat);
@@ -354,8 +355,8 @@ public final class Wasritueel {
 
     private static boolean wasser(ServerPlayer player, GuhEntity guh) {
         CompoundTag d = guh.getPersistentData();
-        if (d.hasUUID(WASSER) && !d.getUUID(WASSER).equals(player.getUUID())) {
-            player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.was.iemand_anders").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        if (d.read(WASSER, UUIDUtil.CODEC).isPresent() && !d.read(WASSER, UUIDUtil.CODEC).orElseThrow().equals(player.getUUID())) {
+            player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.was.iemand_anders").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         return true;
@@ -369,7 +370,7 @@ public final class Wasritueel {
             case GESPOELD -> "gui.guhs.knuffelbad.was.hint.fohnen";
             default -> "gui.guhs.knuffelbad.was.hint.inzepen";
         };
-        player.displayClientMessage(Component.translatable(key).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable(key).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     private Wasritueel() {

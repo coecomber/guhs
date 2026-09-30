@@ -115,7 +115,7 @@ public final class Speelvelden {
     @Nullable
     public static Anker anker(GuhNpcEntity npc) {
         if (npc.roleData.contains("SpelenAnker")) {
-            return Anker.load(npc.roleData.getCompound("SpelenAnker"), AX, AY, AZ);
+            return Anker.load(npc.roleData.getCompoundOrEmpty("SpelenAnker"), AX, AY, AZ);
         }
         Anker a = zoek(npc.level(), npc.blockPosition());
         if (a != null) {

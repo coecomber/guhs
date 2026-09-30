@@ -14,7 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -34,7 +33,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.band.Band;
@@ -52,7 +51,7 @@ import nl.juiced.guhs.registry.ModItems;
  * the owner (or an op) changes it, moves guhs in or out, or breaks it (fundament: {@link Huisjes#magBewerken}).
  */
 public class HuisjeBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
     private final HuisjeMaat maat;
     private final MapCodec<HuisjeBlock> codec;
@@ -97,7 +96,7 @@ public class HuisjeBlock extends BaseEntityBlock {
         zetDelen(level, pos, state);
         if (level instanceof ServerLevel sl && placer instanceof ServerPlayer player) {
             Huisje h = Huisjes.registreer(sl, pos, state.getValue(FACING), maat, player.getUUID());
-            player.displayClientMessage(Component.translatable("gui.guhs.huisje.gebouwd", h.naam()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+            player.sendSystemMessage(Component.translatable("gui.guhs.huisje.gebouwd", h.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
             GidsFeature.grant(player, "lieve_vadsjes/huisje_gebouwd");
             if (maat == HuisjeMaat.GROOT) {
                 GidsFeature.grant(player, "lieve_vadsjes/huisje_groot");
@@ -167,7 +166,7 @@ public class HuisjeBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, HuisjeFeature.HUISJE_BE.get(), HuisjeBlockEntity::serverTick);
+        return level.isClientSide() ? null : createTickerHelper(type, HuisjeFeature.HUISJE_BE.get(), HuisjeBlockEntity::serverTick);
     }
 
     // --- using it ----------------------------------------------------------------------------------------------------------
@@ -186,22 +185,22 @@ public class HuisjeBlock extends BaseEntityBlock {
 
     /** With a picked-up guh or a maatje in your hand: it moves right in (out of the door). */
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                               InteractionHand hand, BlockHitResult hit) {
         boolean guh = stack.is(ModItems.PICKED_UP_GUH.get());
         if (!guh && !(stack.getItem() instanceof PiepDierItem)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
         if (!(level instanceof ServerLevel sl) || !(player instanceof ServerPlayer sp)) {
-            return ItemInteractionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
         Huisje h = eigen(sl, pos, state, sp);
         if (h == null) {
-            return ItemInteractionResult.CONSUME;
+            return InteractionResult.CONSUME;
         }
         if (h.isVol()) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.huisje.vol", h.naam()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
-            return ItemInteractionResult.CONSUME;
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.huisje.vol", h.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
+            return InteractionResult.CONSUME;
         }
         BlockPos d = h.deur();
         Entity e;
@@ -211,13 +210,13 @@ public class HuisjeBlock extends BaseEntityBlock {
             e = PiepDierItem.zetNeer(stack, sl, Vec3.atBottomCenterOf(d), h.facing().toYRot(), ((PiepDierItem) stack.getItem()).type());
         }
         if (e == null) {
-            return ItemInteractionResult.CONSUME;
+            return InteractionResult.CONSUME;
         }
         stack.consume(1, sp);
         if (!Huisjes.trekIn(h, e)) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.huisje.niet_jouw_guh").withStyle(ChatFormatting.GRAY), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.huisje.niet_jouw_guh").withStyle(ChatFormatting.GRAY));
         }
-        return ItemInteractionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     /** The huisje, when this player may use it (the owner; an unregistered huisje is claimed); else a message and null. */
@@ -225,7 +224,7 @@ public class HuisjeBlock extends BaseEntityBlock {
     private Huisje eigen(ServerLevel level, BlockPos pos, BlockState state, ServerPlayer player) {
         Huisje h = kijk(level, pos, state, player);
         if (h != null && !Huisjes.magBewerken(player, h)) {
-            player.displayClientMessage(Huisjes.vanWie(h).copy().withStyle(ChatFormatting.GRAY), true);   // (3.0: "Dit is het huisje van X")
+            player.sendOverlayMessage(Huisjes.vanWie(h).copy().withStyle(ChatFormatting.GRAY));   // (3.0: "Dit is het huisje van X")
             return null;
         }
         return h;

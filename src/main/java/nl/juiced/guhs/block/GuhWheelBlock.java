@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -26,7 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -44,7 +43,7 @@ import nl.juiced.guhs.registry.ModSounds;
  */
 public class GuhWheelBlock extends BaseEntityBlock {
     public static final MapCodec<GuhWheelBlock> CODEC = simpleCodec(GuhWheelBlock::new);
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty RUNNING = BooleanProperty.create("running");
     private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
 
@@ -124,22 +123,22 @@ public class GuhWheelBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? createTickerHelper(type, ModBlockEntities.GUH_WHEEL.get(), GuhWheelBlockEntity::clientTick) : null;
+        return level.isClientSide() ? createTickerHelper(type, ModBlockEntities.GUH_WHEEL.get(), GuhWheelBlockEntity::clientTick) : null;
     }
 
     /** Right-click with a picked-up guh: in it goes. */
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                               InteractionHand hand, BlockHitResult hit) {
         if (!stack.is(ModItems.PICKED_UP_GUH.get())) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
-        if (level.isClientSide || !(level.getBlockEntity(pos) instanceof GuhWheelBlockEntity wheel)) {
-            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof GuhWheelBlockEntity wheel)) {
+            return InteractionResult.SUCCESS;
         }
         if (wheel.hasGuh()) {
-            player.displayClientMessage(Component.translatable("block.guhs.guh_wheel.occupied"), true);
-            return ItemInteractionResult.CONSUME;
+            player.sendOverlayMessage(Component.translatable("block.guhs.guh_wheel.occupied"));
+            return InteractionResult.CONSUME;
         }
         wheel.insert(PickedUpGuhItem.guhData(stack));
         nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.GUHWIEL, level.dimension(), pos, "",
@@ -147,21 +146,21 @@ public class GuhWheelBlock extends BaseEntityBlock {
         stack.consume(1, player);
         level.playSound(null, pos, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1f);
         level.setBlock(pos, state.setValue(RUNNING, true), 3);
-        return ItemInteractionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     /** Right-click the running wheel: you get your guh back (as an item). */
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (level.isClientSide || !(level.getBlockEntity(pos) instanceof GuhWheelBlockEntity wheel)) {
-            return InteractionResult.sidedSuccess(level.isClientSide);
+        if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof GuhWheelBlockEntity wheel)) {
+            return InteractionResult.SUCCESS;
         }
         if (!wheel.hasGuh()) {
-            player.displayClientMessage(Component.translatable("block.guhs.guh_wheel.no_guh"), true);
+            player.sendOverlayMessage(Component.translatable("block.guhs.guh_wheel.no_guh"));
             return InteractionResult.CONSUME;
         }
         if (!player.getUUID().equals(wheel.getGuhOwner()) && !player.getAbilities().instabuild) {
-            player.displayClientMessage(Component.translatable("block.guhs.guh_wheel.not_yours"), true);
+            player.sendOverlayMessage(Component.translatable("block.guhs.guh_wheel.not_yours"));
             return InteractionResult.CONSUME;
         }
         CompoundTag guh = wheel.takeOut();
@@ -177,7 +176,7 @@ public class GuhWheelBlock extends BaseEntityBlock {
     /** Breaking the wheel drops the guh that was in it (as a picked-up guh item). */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && !level.isClientSide && level.getBlockEntity(pos) instanceof GuhWheelBlockEntity wheel) {
+        if (!state.is(newState.getBlock()) && !level.isClientSide() && level.getBlockEntity(pos) instanceof GuhWheelBlockEntity wheel) {
             CompoundTag guh = wheel.takeOut();
             if (guh != null) {
                 ItemStack item = PickedUpGuhItem.of(guh);

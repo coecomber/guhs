@@ -94,6 +94,6 @@ public record Anker(BlockPos pos, Rotation rot, int ax, int ay, int az) {
     }
 
     public static Anker load(CompoundTag tag, int ax, int ay, int az) {
-        return new Anker(BlockPos.of(tag.getLong("Pos")), Rotation.values()[Math.floorMod(tag.getInt("Rot"), Rotation.values().length)], ax, ay, az);
+        return new Anker(BlockPos.of(tag.getLongOr("Pos", 0L)), Rotation.values()[Math.floorMod(tag.getIntOr("Rot", 0), Rotation.values().length)], ax, ay, az);
     }
 }

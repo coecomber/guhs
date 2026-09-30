@@ -81,24 +81,24 @@ public final class Knusfeest {
 
     static CompoundTag data(ServerPlayer player) {
         CompoundTag saved = GuhQuests.saved(player);
-        if (!saved.contains(KEY, Tag.TAG_COMPOUND)) {
+        if (!saved.contains(KEY)) {
             saved.put(KEY, new CompoundTag());
         }
-        return saved.getCompound(KEY);
+        return saved.getCompoundOrEmpty(KEY);
     }
 
     /** The step of this task in the current round (null: not asked in this round). */
     @Nullable
     public static Stap stap(ServerPlayer player, Feesttaak taak) {
-        int i = data(player).getCompound("Stappen").getInt(taak.id());
+        int i = data(player).getCompoundOrEmpty("Stappen").getIntOr(taak.id(), 0);
         return i >= 1 && i <= Stap.values().length ? Stap.values()[i - 1] : null;
     }
 
     /** Sets a task's step (and tells the listeners when it changed). */
     public static void zet(ServerPlayer player, Feesttaak taak, @Nullable Stap stap) {
         CompoundTag d = data(player);
-        CompoundTag stappen = d.getCompound("Stappen");
-        int was = stappen.getInt(taak.id());
+        CompoundTag stappen = d.getCompoundOrEmpty("Stappen");
+        int was = stappen.getIntOr(taak.id(), 0);
         int now = stap == null ? 0 : stap.ordinal() + 1;
         if (was == now) {
             return;
@@ -106,7 +106,7 @@ public final class Knusfeest {
         stappen.putInt(taak.id(), now);
         d.put("Stappen", stappen);
         if (stap == Stap.GESTOLEN) {
-            CompoundTag when = d.getCompound("GestolenOp");
+            CompoundTag when = d.getCompoundOrEmpty("GestolenOp");
             when.putLong(taak.id(), player.level().getGameTime());
             d.put("GestolenOp", when);
         }
@@ -119,7 +119,7 @@ public final class Knusfeest {
 
     /** Game time when this task's item was stolen (0: never). */
     public static long gestolenOp(ServerPlayer player, Feesttaak taak) {
-        return data(player).getCompound("GestolenOp").getLong(taak.id());
+        return data(player).getCompoundOrEmpty("GestolenOp").getLongOr(taak.id(), 0L);
     }
 
     /** The tasks of the current round (asked, in any step). */
@@ -157,12 +157,12 @@ public final class Knusfeest {
     /** The current round: 0 = the Grote Knusfeest, n > 0 = the seasonal feest of season n - 1; -1 = none yet. */
     public static long ronde(ServerPlayer player) {
         CompoundTag d = data(player);
-        return d.getBoolean("RondeBezig") || d.contains("Ronde") ? d.getLong("Ronde") : -1;
+        return d.getBooleanOr("RondeBezig", false) || d.contains("Ronde") ? d.getLongOr("Ronde", 0L) : -1;
     }
 
     /** Is a round going on (asked and not celebrated yet)? */
     public static boolean rondeBezig(ServerPlayer player) {
-        return data(player).getBoolean("RondeBezig");
+        return data(player).getBooleanOr("RondeBezig", false);
     }
 
     /** The round was celebrated (finale or seasonal feest): nothing is open any more. */
@@ -170,28 +170,28 @@ public final class Knusfeest {
         CompoundTag d = data(player);
         d.putBoolean("RondeBezig", false);
         d.putBoolean("RondeKlaar", true);
-        if (d.getLong("Ronde") == 0) {
+        if (d.getLongOr("Ronde", 0L) == 0) {
             d.putBoolean("Klaar", true);
         } else {
-            d.putLong("LaatsteSeizoensfeest", d.getLong("Ronde"));
+            d.putLong("LaatsteSeizoensfeest", d.getLongOr("Ronde", 0L));
         }
         d.put("Stappen", new CompoundTag());
     }
 
     /** Has the player celebrated the Grote Knusfeest (the finale)? */
     public static boolean isKlaar(ServerPlayer player) {
-        return data(player).getBoolean("Klaar");
+        return data(player).getBooleanOr("Klaar", false);
     }
 
     /** Counts this season's feast as done (the Grote Knusfeest's finale: the seasonal feasts start next season). */
     public static void markeerSeizoensfeest(ServerPlayer player, long ronde) {
         CompoundTag d = data(player);
-        d.putLong("LaatsteSeizoensfeest", Math.max(d.getLong("LaatsteSeizoensfeest"), ronde));
+        d.putLong("LaatsteSeizoensfeest", Math.max(d.getLongOr("LaatsteSeizoensfeest", 0L), ronde));
     }
 
     /** The last seasonal round that was celebrated (0: none). */
     public static long laatsteSeizoensfeest(ServerPlayer player) {
-        return data(player).getLong("LaatsteSeizoensfeest");
+        return data(player).getLongOr("LaatsteSeizoensfeest", 0L);
     }
 
     /** (Tests / new start) forgets everything. */

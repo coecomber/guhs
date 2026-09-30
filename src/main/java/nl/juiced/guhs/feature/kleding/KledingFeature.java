@@ -9,7 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -104,7 +104,7 @@ public final class KledingFeature {
 
     /** The pink onesie for taming a Brococolief guh (once per player). True when it was given now. */
     public static boolean brococoliefBeloning(ServerPlayer player) {
-        if (GuhQuests.saved(player).getBoolean(ONESIE_KEY)) {
+        if (GuhQuests.saved(player).getBooleanOr(ONESIE_KEY, false)) {
             return false;
         }
         GuhQuests.saved(player).putBoolean(ONESIE_KEY, true);

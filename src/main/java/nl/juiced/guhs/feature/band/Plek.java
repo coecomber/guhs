@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 
 /** Where a guh (or maatje) was last seen: what kind of place, the dimension, the position, a detail and the game time. */
@@ -14,7 +14,7 @@ public record Plek(PlekSoort soort, ResourceKey<Level> dim, BlockPos pos, String
     public CompoundTag save() {
         CompoundTag t = new CompoundTag();
         t.putString("Soort", soort.id());
-        t.putString("Dim", dim.location().toString());
+        t.putString("Dim", dim.identifier().toString());
         t.putLong("Pos", pos.asLong());
         t.putString("Detail", detail);
         t.putLong("Tijd", tijd);
@@ -25,10 +25,10 @@ public record Plek(PlekSoort soort, ResourceKey<Level> dim, BlockPos pos, String
         if (!t.contains("Soort")) {
             return ONBEKEND;
         }
-        ResourceLocation dim = ResourceLocation.tryParse(t.getString("Dim"));
-        return new Plek(PlekSoort.byId(t.getString("Soort")),
-                ResourceKey.create(Registries.DIMENSION, dim == null ? Level.OVERWORLD.location() : dim),
-                BlockPos.of(t.getLong("Pos")), t.getString("Detail"), t.getLong("Tijd"));
+        Identifier dim = Identifier.tryParse(t.getStringOr("Dim", ""));
+        return new Plek(PlekSoort.byId(t.getStringOr("Soort", "")),
+                ResourceKey.create(Registries.DIMENSION, dim == null ? Level.OVERWORLD.identifier() : dim),
+                BlockPos.of(t.getLongOr("Pos", 0L)), t.getStringOr("Detail", ""), t.getLongOr("Tijd", 0L));
     }
 
     /** Same place (ignoring the time)? */

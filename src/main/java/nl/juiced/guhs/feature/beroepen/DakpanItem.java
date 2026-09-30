@@ -32,15 +32,15 @@ public class DakpanItem extends BlockItem {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         if (!level.getBlockState(pos).is(BeroepenFeature.DAKPLEK.get())) {
-            if (!level.isClientSide && context.getPlayer() instanceof ServerPlayer p) {
-                p.displayClientMessage(Component.translatable("gui.guhs.beroepen.bouw.past_niet").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            if (!level.isClientSide() && context.getPlayer() instanceof ServerPlayer p) {
+                p.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.bouw.past_niet").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             return InteractionResult.FAIL;
         }
-        if (!level.isClientSide && context.getPlayer() instanceof ServerPlayer p) {
+        if (!level.isClientSide() && context.getPlayer() instanceof ServerPlayer p) {
             leg((ServerLevel) level, pos, p, context.getItemInHand());
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Lays a dakpan on the ghost tile at pos (one from the stack): true when it worked. */
@@ -52,7 +52,7 @@ public class DakpanItem extends BlockItem {
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }
-        level.playSound(null, pos, BeroepenFeature.HAMER.get(), SoundSource.BLOCKS, 1.0f, 0.9f + level.random.nextFloat() * 0.2f);
+        level.playSound(null, pos, BeroepenFeature.HAMER.get(), SoundSource.BLOCKS, 1.0f, 0.9f + level.getRandom().nextFloat() * 0.2f);
         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, BeroepenFeature.DAKPAN.get().defaultBlockState()),
                 pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 8, 0.3, 0.1, 0.3, 0.05);
         Bouw.gelegd(level, pos, player);

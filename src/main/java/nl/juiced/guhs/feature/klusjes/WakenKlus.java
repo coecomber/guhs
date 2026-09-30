@@ -60,7 +60,7 @@ public class WakenKlus extends BasisKlus {
         if (dreiging == null) {
             return null;
         }
-        String key = level.dimension().location() + "|" + huisje.pos().asLong();
+        String key = level.dimension().identifier() + "|" + huisje.pos().asLong();
         long nu = level.getGameTime();
         boolean waarschuwen = GEWAARSCHUWD.getOrDefault(key, Long.MIN_VALUE / 2) + RUST <= nu;
         boolean duwen = isMika(dreiging) && isGuh(bewoner) && huisje.inGebied(dreiging.blockPosition());
@@ -165,14 +165,14 @@ public class WakenKlus extends BasisKlus {
                 mob.getLookControl().setLookAt(baas, 30f, 30f);
                 level.playSound(null, mob.blockPosition(), KlusjesFeature.PIEP.get(), SoundSource.NEUTRAL, 1f, 1.5f);
                 level.sendParticles(KlusjesFeature.UITROEP.get(), mob.getX(), mob.getY() + mob.getBbHeight() + 0.5, mob.getZ(), 1, 0, 0, 0, 0);
-                baas.displayClientMessage(Component.translatable("gui.guhs.klusjes.waken.hier", mob.getName(), wat, huisje.naam())
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                baas.sendOverlayMessage(Component.translatable("gui.guhs.klusjes.waken.hier", mob.getName(), wat, huisje.naam())
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 if (mob instanceof GuhEntity g) {
                     g.emotes.start(Emote.ZWAAIEN, false, GuhEmotes.Source.SELF);
                 }
             } else {
-                baas.displayClientMessage(Component.translatable("gui.guhs.klusjes.waken.ver", mob.getName(), wat, huisje.naam())
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), false);
+                baas.sendSystemMessage(Component.translatable("gui.guhs.klusjes.waken.ver", mob.getName(), wat, huisje.naam())
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             gelukt();
         }

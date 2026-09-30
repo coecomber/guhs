@@ -105,7 +105,7 @@ public enum Guhboek {
         if (data == null) {
             return null;
         }
-        String id = data.copyTag().getString(TAG);
+        String id = data.copyTag().getStringOr(TAG, "");
         return byId(id);
     }
 

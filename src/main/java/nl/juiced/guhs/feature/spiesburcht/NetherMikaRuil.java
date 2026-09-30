@@ -43,6 +43,7 @@ import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * The greedy Nether-Mikas (guhs:nether_mika) of the Barbecuether and the Nether, like piglins with their gold:
  * <ul>
@@ -91,7 +92,7 @@ public final class NetherMikaRuil {
 
     public static boolean isAngryAt(MikaEntity mika, Player player) {
         CompoundTag data = mika.getPersistentData();
-        return data.hasUUID(ANGRY_AT) && data.getUUID(ANGRY_AT).equals(player.getUUID()) && data.getLong(ANGRY_UNTIL) > mika.level().getGameTime();
+        return data.read(ANGRY_AT, UUIDUtil.CODEC).isPresent() && data.read(ANGRY_AT, UUIDUtil.CODEC).orElseThrow().equals(player.getUUID()) && data.getLongOr(ANGRY_UNTIL, 0L) > mika.level().getGameTime();
     }
 
     /** Does this Nether-Mika go after this player? */
@@ -104,7 +105,7 @@ public final class NetherMikaRuil {
 
     public static void makeAngry(MikaEntity mika, Player player) {
         CompoundTag data = mika.getPersistentData();
-        data.putUUID(ANGRY_AT, player.getUUID());
+        data.store(ANGRY_AT, UUIDUtil.CODEC, player.getUUID());
         data.putLong(ANGRY_UNTIL, mika.level().getGameTime() + ANGRY_TICKS);
         stopAdmiring(mika, false);
         mika.setTarget(player);
@@ -114,7 +115,7 @@ public final class NetherMikaRuil {
 
     /** Nether-Mikas get their greed: they only target players without vads (or who hit them), and like ingots. */
     static void onJoin(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide || !isNetherMika(event.getEntity())) {
+        if (event.getLevel().isClientSide() || !isNetherMika(event.getEntity())) {
             return;
         }
         MikaEntity mika = (MikaEntity) event.getEntity();
@@ -140,17 +141,17 @@ public final class NetherMikaRuil {
     /** A player offers an ingot from this stack. True: the Mika took it. */
     public static boolean offer(MikaEntity mika, ServerPlayer player, ItemStack stack) {
         if (isAngryAt(mika, player)) {
-            player.displayClientMessage(Component.translatable("quest.guhs.nether_mika.boos").withStyle(ChatFormatting.RED), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.nether_mika.boos").withStyle(ChatFormatting.RED));
             return false;
         }
         if (isAdmiring(mika)) {
-            player.displayClientMessage(Component.translatable("quest.guhs.nether_mika.bezig").withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.nether_mika.bezig").withStyle(ChatFormatting.GOLD));
             return false;
         }
         ItemStack ingot = stack.copyWithCount(1);
         stack.consume(1, player);
         startAdmiring(mika, ingot, player.getUUID());
-        player.displayClientMessage(Component.translatable("quest.guhs.nether_mika.hmm").withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.nether_mika.hmm").withStyle(ChatFormatting.GOLD));
         return true;
     }
 
@@ -176,7 +177,7 @@ public final class NetherMikaRuil {
     // --- admiring and trading ----------------------------------------------------------------------------------------------
 
     public static boolean isAdmiring(MikaEntity mika) {
-        return mika.getPersistentData().getLong(ADMIRE_UNTIL) > 0;
+        return mika.getPersistentData().getLongOr(ADMIRE_UNTIL, 0L) > 0;
     }
 
     static void startAdmiring(MikaEntity mika, ItemStack ingot, @Nullable UUID partner) {
@@ -185,7 +186,7 @@ public final class NetherMikaRuil {
         CompoundTag data = mika.getPersistentData();
         data.putLong(ADMIRE_UNTIL, mika.level().getGameTime() + ADMIRE_TICKS);
         if (partner != null) {
-            data.putUUID(PARTNER, partner);
+            data.store(PARTNER, UUIDUtil.CODEC, partner);
         } else {
             data.remove(PARTNER);
         }
@@ -206,7 +207,7 @@ public final class NetherMikaRuil {
         if (!(mika.level() instanceof ServerLevel level)) {
             return;
         }
-        Player partner = data.hasUUID(PARTNER) ? level.getPlayerByUUID(data.getUUID(PARTNER)) : null;
+        Player partner = data.read(PARTNER, UUIDUtil.CODEC).isPresent() ? level.getPlayerByUUID(data.read(PARTNER, UUIDUtil.CODEC).orElseThrow()) : null;
         data.remove(PARTNER);
         if (!trade) {
             if (!held.isEmpty()) {
@@ -223,7 +224,7 @@ public final class NetherMikaRuil {
         mika.playSound(SoundEvents.PIGLIN_CELEBRATE, 1.0f, 1.3f);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, mika.getX(), mika.getY() + 1.0, mika.getZ(), 6, 0.3, 0.3, 0.3, 0.0);
         if (partner instanceof ServerPlayer sp) {
-            sp.displayClientMessage(Component.translatable("quest.guhs.nether_mika.ruil").withStyle(ChatFormatting.GOLD), true);
+            sp.sendOverlayMessage(Component.translatable("quest.guhs.nether_mika.ruil").withStyle(ChatFormatting.GOLD));
             GuhAdvancements.grant(sp, "nether_mika_ruil");
             SpiesburchtStats.award(sp, "barbecuether/ruilen");
         }
@@ -270,7 +271,7 @@ public final class NetherMikaRuil {
                             ? new ItemStack(ModItems.VAHOEGE_VADS_INGOT.get()) : mika.getMainHandItem()),
                             mika.getX(), mika.getY() + mika.getBbHeight() + 0.2, mika.getZ(), 2, 0.15, 0.1, 0.15, 0.02);
                 }
-                if (mika.getPersistentData().getLong(ADMIRE_UNTIL) <= level.getGameTime()) {
+                if (mika.getPersistentData().getLongOr(ADMIRE_UNTIL, 0L) <= level.getGameTime()) {
                     stopAdmiring(mika, true);
                 }
             }

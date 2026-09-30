@@ -44,9 +44,9 @@ public class PickedUpGuhItem extends Item {
         }
         guh.discard();
         ItemStack stack = of(tag);
-        if (!guh.level().isClientSide) {   // 2.10: "waar is mijn guh": in its owner's pockets now
+        if (!guh.level().isClientSide()) {   // 2.10: "waar is mijn guh": in its owner's pockets now
             nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.ITEM_SPELER, guh.level().dimension(), guh.blockPosition(),
-                    guh.getOwner() instanceof net.minecraft.world.entity.player.Player owner ? owner.getGameProfile().getName() : "", guh.level().getGameTime());
+                    guh.getOwner() instanceof net.minecraft.world.entity.player.Player owner ? owner.getGameProfile().name() : "", guh.level().getGameTime());
         }
         return stack;
     }
@@ -54,7 +54,7 @@ public class PickedUpGuhItem extends Item {
     /** 2.10: "waar is mijn guh": in someone's pockets (checked every 5 seconds). */
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && entity instanceof net.minecraft.world.entity.player.Player holder && (level.getGameTime() + slot) % 100 == 0) {
+        if (!level.isClientSide() && entity instanceof net.minecraft.world.entity.player.Player holder && (level.getGameTime() + slot) % 100 == 0) {
             nl.juiced.guhs.feature.band.GuhVolger.inZakken(stack, holder);
         }
     }
@@ -62,7 +62,7 @@ public class PickedUpGuhItem extends Item {
     /** 2.10: "waar is mijn guh": dropped on the ground. */
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, net.minecraft.world.entity.item.ItemEntity entity) {
-        if (!entity.level().isClientSide && entity.tickCount % 100 == 1) {
+        if (!entity.level().isClientSide() && entity.tickCount % 100 == 1) {
             nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.ITEM_GROND, entity.level().dimension(), entity.blockPosition(), "", entity.level().getGameTime());
         }
         return false;
@@ -96,7 +96,7 @@ public class PickedUpGuhItem extends Item {
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
@@ -113,7 +113,7 @@ public class PickedUpGuhItem extends Item {
     public Component getName(ItemStack stack) {
         CompoundTag data = guhData(stack);
         if (data.contains("GuhDisplayName")) {
-            return Component.translatable("item.guhs.picked_up_guh.named", data.getString("GuhDisplayName"));
+            return Component.translatable("item.guhs.picked_up_guh.named", data.getStringOr("GuhDisplayName", ""));
         }
         return super.getName(stack);
     }
@@ -123,18 +123,18 @@ public class PickedUpGuhItem extends Item {
         CompoundTag data = guhData(stack);
         double scale = 1.0;
         double maxHealth = 25;
-        ListTag attributes = data.getList("attributes", Tag.TAG_COMPOUND);
+        ListTag attributes = data.getListOrEmpty("attributes");
         for (int i = 0; i < attributes.size(); i++) {
-            CompoundTag attribute = attributes.getCompound(i);
-            if (attribute.getString("id").endsWith("scale")) {
-                scale = attribute.getDouble("base");
-            } else if (attribute.getString("id").endsWith("max_health")) {
-                maxHealth = attribute.getDouble("base");
+            CompoundTag attribute = attributes.getCompoundOrEmpty(i);
+            if (attribute.getStringOr("id", "").endsWith("scale")) {
+                scale = attribute.getDoubleOr("base", 0.0);
+            } else if (attribute.getStringOr("id", "").endsWith("max_health")) {
+                maxHealth = attribute.getDoubleOr("base", 0.0);
             }
         }
         tooltip.add(Component.translatable("gui.guhs.menu.size", String.format(Locale.ROOT, "%.1f", scale * 1.45)).withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("gui.guhs.menu.hp", (int) Math.ceil(data.getFloat("Health")), (int) maxHealth).withStyle(ChatFormatting.GRAY));
-        if (data.getBoolean("Saddle")) {
+        tooltip.add(Component.translatable("gui.guhs.menu.hp", (int) Math.ceil(data.getFloatOr("Health", 0.0F)), (int) maxHealth).withStyle(ChatFormatting.GRAY));
+        if (data.getBooleanOr("Saddle", false)) {
             tooltip.add(Component.translatable("item.minecraft.saddle").withStyle(ChatFormatting.GRAY));
         }
         tooltip.add(Component.translatable("item.guhs.picked_up_guh.hint").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));

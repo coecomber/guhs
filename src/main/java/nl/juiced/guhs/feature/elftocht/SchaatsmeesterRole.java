@@ -36,7 +36,7 @@ public class SchaatsmeesterRole implements NpcRole {
         if (!npc.roleData.contains("Kijk")) {
             npc.roleData.putFloat("Kijk", npc.getYRot());
         }
-        return npc.roleData.getFloat("Kijk");
+        return npc.roleData.getFloatOr("Kijk", 0.0F);
     }
 
     @Override
@@ -47,10 +47,10 @@ public class SchaatsmeesterRole implements NpcRole {
         ElftochtTocht.Rit rit = ElftochtTocht.rit(player);
         data.putInt("Bezig", rit == null ? 0 : rit.vrij ? 2 : 1);
         CompoundTag saved = GuhQuests.saved(player);
-        int[] pb = saved.getIntArray(ElftochtTocht.PB);
+        int[] pb = saved.getIntArray(ElftochtTocht.PB).orElse(new int[0]);
         data.putInt("Best", pb.length == ElftochtTocht.VOLGORDE.length ? pb[pb.length - 1] : -1);
-        data.putInt("Ritten", saved.getInt(ElftochtTocht.RITTEN));
-        List<Scorebord.Entry> top = Scorebord.top(player.server, ElftochtTocht.BOARD);
+        data.putInt("Ritten", saved.getIntOr(ElftochtTocht.RITTEN, 0));
+        List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), ElftochtTocht.BOARD);
         if (!top.isEmpty()) {
             data.putString("RecordNaam", top.get(0).name());
             data.putInt("Record", top.get(0).score());

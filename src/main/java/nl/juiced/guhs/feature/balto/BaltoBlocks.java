@@ -108,14 +108,14 @@ public final class BaltoBlocks {
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
             if (level instanceof ServerLevel server) {
                 long nu = server.getGameTime();
-                if (nu - player.getPersistentData().getLong("guhs_balto_beeldje") > 40) {
+                if (nu - player.getPersistentData().getLongOr("guhs_balto_beeldje", 0L) > 40) {
                     player.getPersistentData().putLong("guhs_balto_beeldje", nu);
                     server.playSound(null, pos, BaltoFeature.HUIL.get(), SoundSource.BLOCKS, 0.35f, 1.35f);
                     server.sendParticles(BaltoFeature.WOLFGLANS.get(), pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, 8, 0.3, 0.3, 0.3, 0.01);
-                    player.displayClientMessage(Component.translatable("block.guhs.baltoguh_beeldje.klik").withStyle(ChatFormatting.AQUA), true);
+                    player.sendOverlayMessage(Component.translatable("block.guhs.baltoguh_beeldje.klik").withStyle(ChatFormatting.AQUA));
                 }
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
     }
 

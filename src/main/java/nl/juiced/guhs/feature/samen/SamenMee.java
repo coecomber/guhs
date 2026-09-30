@@ -145,7 +145,7 @@ public final class SamenMee {
         GuhAdvancements.grant(racer, "samen_kart");
         GidsFeature.grant(racer, "lieve_vadsjes/samen_kart");
         if (Dagboek.eersteKeer(guh, racer, "samen_kart")) {
-            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.kart", racer.getGameProfile().getName());
+            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.kart", racer.getGameProfile().name());
         }
         return true;
     }
@@ -178,10 +178,10 @@ public final class SamenMee {
 
     /** A guh that still sits in a race guh that has no race (any more), or isn't ours: off it goes. */
     static void opruimen(GuhEntity guh) {
-        if (guh.getVehicle() instanceof RaceGuhEntity kart && (guh.tickCount & 7) == 0 && !guh.level().isClientSide
+        if (guh.getVehicle() instanceof RaceGuhEntity kart && (guh.tickCount & 7) == 0 && !guh.level().isClientSide()
                 && KART.values().stream().noneMatch(m -> m.guh().equals(guh.getUUID()))) {
             guh.stopRiding();
-            guh.moveTo(kart.getX(), kart.getY(), kart.getZ());
+            guh.snapTo(kart.getX(), kart.getY(), kart.getZ());
         }
     }
 
@@ -214,7 +214,7 @@ public final class SamenMee {
                 GuhAdvancements.grant(owner, "samen_schaatsen");
                 GidsFeature.grant(owner, "lieve_vadsjes/samen_schaatsen");
                 if (Dagboek.eersteKeer(guh, owner, "samen_schaatsen")) {
-                    Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.schaatsen", owner.getGameProfile().getName());
+                    Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.schaatsen", owner.getGameProfile().name());
                 }
                 Band.geefHartjes(guh, owner, 1, Reden.MINIGAME);
             }
@@ -256,7 +256,7 @@ public final class SamenMee {
 
         @Override
         public boolean canUse() {
-            if ((guh.tickCount + guh.getId()) % 10 != 0 || !Band.isBandGuh(guh) || !vrij(guh) || guh.level().isClientSide) {
+            if ((guh.tickCount + guh.getId()) % 10 != 0 || !Band.isBandGuh(guh) || !vrij(guh) || guh.level().isClientSide()) {
                 return false;
             }
             ServerPlayer p = Band.eigenaarOnline(guh);
@@ -310,7 +310,7 @@ public final class SamenMee {
             if (afstand > 12 || vast > 60) {                   // far behind (or no way in): a hop into the water with a splash
                 vast = 0;
                 level.sendParticles(ParticleTypes.POOF, guh.getX(), guh.getY() + 0.3, guh.getZ(), 5, 0.2, 0.2, 0.2, 0.02);
-                guh.moveTo(doel.x, p.getY(), doel.z, p.getYRot(), 0);
+                guh.snapTo(doel.x, p.getY(), doel.z, p.getYRot(), 0);
                 guh.setDeltaMovement(Vec3.ZERO);
                 level.sendParticles(ParticleTypes.SPLASH, guh.getX(), guh.getY() + 0.5, guh.getZ(), 20, 0.4, 0.1, 0.4, 0.1);
                 return;
@@ -351,8 +351,8 @@ public final class SamenMee {
         GidsFeature.grant(p, "lieve_vadsjes/samen_zwemmen");
         Band.geefHartjes(guh, p, 2, Reden.MINIGAME);
         if (Dagboek.eersteKeer(guh, p, "samen_zwemmen")) {
-            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.zwemmen", p.getGameProfile().getName());
-            p.displayClientMessage(Component.translatable("gui.guhs.samen.zwemmen", guh.getDisplayName()).withStyle(ChatFormatting.AQUA), true);
+            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.zwemmen", p.getGameProfile().name());
+            p.sendOverlayMessage(Component.translatable("gui.guhs.samen.zwemmen", guh.getDisplayName()).withStyle(ChatFormatting.AQUA));
         }
     }
 

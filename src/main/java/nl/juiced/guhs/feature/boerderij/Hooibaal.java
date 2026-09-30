@@ -72,24 +72,24 @@ public final class Hooibaal implements NpcRole {
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
         npc.level().playSound(null, npc, nl.juiced.guhs.registry.ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 0.95f);
         CompoundTag d = BoerderijVoortgang.data(player);
-        if (!d.getBoolean("Ontmoet")) {
+        if (!d.getBooleanOr("Ontmoet", false)) {
             d.putBoolean("Ontmoet", true);
             GuhQuests.say(player, npc, "quest.guhs.boerderij.hallo");
             GuhAdvancements.grant(player, "boerderij_hooibaal");
         }
         long dag = Seizoen.dag(player.level());
-        Klus klus = Klus.byId(d.getString("Klus"));
-        if (d.getLong("Dag") != dag || klus == null || !d.contains("Dag")) {
+        Klus klus = Klus.byId(d.getStringOr("Klus", ""));
+        if (d.getLongOr("Dag", 0L) != dag || klus == null || !d.contains("Dag")) {
             klus = nieuweKlus(player, dag);
             GuhQuests.say(player, npc, "quest.guhs.boerderij.klus." + klus.id(), klus.doel);
             return;                                                // (first read the chore; the shop opens next time)
         }
-        if (d.getBoolean("Klaar")) {
+        if (d.getBooleanOr("Klaar", false)) {
             GuhQuests.say(player, npc, "quest.guhs.boerderij.al_klaar");
         } else if (probeerAf(player, klus)) {
             beloon(player, npc);
         } else {
-            int stand = klus.brengen() ? teller(player, klus) : d.getInt("Stand");
+            int stand = klus.brengen() ? teller(player, klus) : d.getIntOr("Stand", 0);
             GuhQuests.say(player, npc, "quest.guhs.boerderij.nog." + klus.id(), Math.min(stand, klus.doel), klus.doel);
         }
         npc.openShop(player);
@@ -99,7 +99,7 @@ public final class Hooibaal implements NpcRole {
     public static Klus nieuweKlus(ServerPlayer player, long dag) {
         CompoundTag d = BoerderijVoortgang.data(player);
         Klus[] all = Klus.values();
-        int i = Math.floorMod((int) (dag * 7919L) + player.getUUID().hashCode() + d.getInt("Totaal"), all.length);
+        int i = Math.floorMod((int) (dag * 7919L) + player.getUUID().hashCode() + d.getIntOr("Totaal", 0), all.length);
         Klus klus = all[i];
         d.putLong("Dag", dag);
         d.putString("Klus", klus.id());
@@ -120,12 +120,12 @@ public final class Hooibaal implements NpcRole {
     @Nullable
     public static Klus vandaag(ServerPlayer player) {
         CompoundTag d = BoerderijVoortgang.data(player);
-        return d.getLong("Dag") == Seizoen.dag(player.level()) && !d.getBoolean("Klaar") ? Klus.byId(d.getString("Klus")) : null;
+        return d.getLongOr("Dag", 0L) == Seizoen.dag(player.level()) && !d.getBooleanOr("Klaar", false) ? Klus.byId(d.getStringOr("Klus", "")) : null;
     }
 
     public static boolean klaarVandaag(ServerPlayer player) {
         CompoundTag d = BoerderijVoortgang.data(player);
-        return d.getLong("Dag") == Seizoen.dag(player.level()) && d.getBoolean("Klaar");
+        return d.getLongOr("Dag", 0L) == Seizoen.dag(player.level()) && d.getBooleanOr("Klaar", false);
     }
 
     // --- the doing chores count while you work ---------------------------------------------------------------------------
@@ -148,13 +148,13 @@ public final class Hooibaal implements NpcRole {
 
     private static void stap(ServerPlayer player, Klus klus) {
         CompoundTag d = BoerderijVoortgang.data(player);
-        int stand = d.getInt("Stand") + 1;
+        int stand = d.getIntOr("Stand", 0) + 1;
         d.putInt("Stand", stand);
         if (stand == klus.doel) {
-            player.displayClientMessage(Component.translatable("gui.guhs.boerderij.klus_klaar").withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.boerderij.klus_klaar").withStyle(ChatFormatting.GOLD));
             player.level().playSound(null, player.blockPosition(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.6f, 1.4f);
         } else if (stand < klus.doel) {
-            player.displayClientMessage(Component.translatable("gui.guhs.boerderij.klus_stand", stand, klus.doel).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.boerderij.klus_stand", stand, klus.doel).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -175,7 +175,7 @@ public final class Hooibaal implements NpcRole {
         TagKey<Item> tag = wat(klus);
         int n = 0;
         if (tag != null) {
-            for (ItemStack s : player.getInventory().items) {
+            for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
                 if (s.is(tag)) {
                     n += s.getCount();
                 }
@@ -187,14 +187,14 @@ public final class Hooibaal implements NpcRole {
     /** Is the chore done (a bringing chore: the things are taken now)? */
     static boolean probeerAf(ServerPlayer player, Klus klus) {
         if (!klus.brengen()) {
-            return BoerderijVoortgang.data(player).getInt("Stand") >= klus.doel;
+            return BoerderijVoortgang.data(player).getIntOr("Stand", 0) >= klus.doel;
         }
         TagKey<Item> tag = wat(klus);
         if (tag == null || teller(player, klus) < klus.doel) {
             return false;
         }
         int left = klus.doel;
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (left > 0 && s.is(tag)) {
                 int take = Math.min(left, s.getCount());
                 if (s.hasCraftingRemainingItem()) {
@@ -213,7 +213,7 @@ public final class Hooibaal implements NpcRole {
     static void beloon(ServerPlayer player, @Nullable GuhNpcEntity npc) {
         CompoundTag d = BoerderijVoortgang.data(player);
         d.putBoolean("Klaar", true);
-        d.putInt("Totaal", d.getInt("Totaal") + 1);
+        d.putInt("Totaal", d.getIntOr("Totaal", 0) + 1);
         if (npc != null) {
             GuhQuests.say(player, npc, "quest.guhs.boerderij.bedankt" + player.getRandom().nextInt(4));
         }
@@ -225,7 +225,7 @@ public final class Hooibaal implements NpcRole {
         KnusVoortgang.tel(player, BoerderijVoortgang.KLUSJES, 1);
         GuhAdvancements.grant(player, "boerderij_klusje");
         // 2.9: her straw hat after your first chore, the overalls after a few more (their only source, feature.kleding)
-        int totaal = d.getInt("Totaal");
+        int totaal = d.getIntOr("Totaal", 0);
         if (totaal == nl.juiced.guhs.feature.kleding.KledingFeature.STROOHOED_KLUSJES) {
             Minigames.give(player, new ItemStack(ModItems.clothingItem(GuhClothes.STRAW_HAT)));
             player.sendSystemMessage(Component.translatable("gui.guhs.kleding.hooibaal.strohoed").withStyle(ChatFormatting.GOLD));

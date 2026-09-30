@@ -41,6 +41,8 @@ import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * De Pluiskapper "Knip &amp; Vads" (2.8, plein slot kapper of the Knuffeldal town): Kapper Krulletje (KAPPERGUH), the
  * hairstyles (GuhClothes.Slot.HAAR: {@link Kapsel}, permanent) and the hair dyes ({@link Haarverf}), the kappersshow
@@ -90,7 +92,7 @@ public final class KapperFeature {
     // --- the customer ----------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<KapperKlantEntity>> KAPPER_KLANT = ENTITY_TYPES.register("kapper_klant",
             () -> EntityType.Builder.of(KapperKlantEntity::new, MobCategory.MISC).sized(0.9f, 0.8f).eyeHeight(0.55f)
-                    .clientTrackingRange(10).noSave().noSummon().build(Guhs.id("kapper_klant").toString()));
+                    .clientTrackingRange(10).noSave().noSummon().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("kapper_klant"))));
 
     // --- particles and sounds ----------------------------------------------------------------------------------------------
     /** A little tuft of cut hair, twirling down. */

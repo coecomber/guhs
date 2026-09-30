@@ -196,8 +196,8 @@ public final class ElftochtTocht {
     public static Vec3 startPlek(GuhNpcEntity npc) {
         float yaw = SchaatsmeesterRole.kijk(npc);
         double fx = -Math.sin(Math.toRadians(yaw)), fz = Math.cos(Math.toRadians(yaw));
-        double vooruit = npc.roleData.contains("StartVooruit") ? npc.roleData.getFloat("StartVooruit") : 4;
-        double links = npc.roleData.contains("StartLinks") ? npc.roleData.getFloat("StartLinks") : 0;
+        double vooruit = npc.roleData.contains("StartVooruit") ? npc.roleData.getFloatOr("StartVooruit", 0.0F) : 4;
+        double links = npc.roleData.contains("StartLinks") ? npc.roleData.getFloatOr("StartLinks", 0.0F) : 0;
         // his left, looking along (fx, fz), is (fz, -fx)
         double x = npc.getBlockX() + 0.5 + fx * vooruit + fz * links;
         double z = npc.getBlockZ() + 0.5 + fz * vooruit - fx * links;
@@ -239,7 +239,7 @@ public final class ElftochtTocht {
     }
 
     private static void geef(ServerPlayer player, ItemStack stack) {
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (s.is(stack.getItem())) {
                 return;
             }
@@ -257,7 +257,7 @@ public final class ElftochtTocht {
         PinguhMeeglijden.stop(player);      // the Pinguhs just follow as usual again
         opruimen(player);
         if (rit != null && reden != null) {
-            player.displayClientMessage(Component.translatable(reden).withStyle(ChatFormatting.GOLD), false);
+            player.sendSystemMessage(Component.translatable(reden).withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -281,7 +281,7 @@ public final class ElftochtTocht {
     /** The square of the Elf-Guhjestocht at this spot (the structure start's bounding box), or null outside one. */
     @Nullable
     static BoundingBox tochtGebied(ServerLevel level, BlockPos pos) {
-        Structure structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(ElftochtFeature.STRUCTURE);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(ElftochtFeature.STRUCTURE);
         if (structure == null) {
             return null;
         }
@@ -328,14 +328,14 @@ public final class ElftochtTocht {
             stop(player, "gui.guhs.elftocht.verlaten");
             return;
         } else if (rit.buiten % 10 == 1) {
-            player.displayClientMessage(Component.translatable("gui.guhs.elftocht.bijna_weg").withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.elftocht.bijna_weg").withStyle(ChatFormatting.GOLD));
         }
         if (player.tickCount % 20 == 0) {
             ElftochtPubliek.pinguhs(player);
         }
         if (rit.vrij) {
             if (player.tickCount % 20 == 0 && rit.buiten == 0) {
-                player.displayClientMessage(Component.translatable("gui.guhs.elftocht.vrij_balk").withStyle(ChatFormatting.AQUA), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.elftocht.vrij_balk").withStyle(ChatFormatting.AQUA));
             }
             return;
         }
@@ -351,8 +351,8 @@ public final class ElftochtTocht {
         if (rit.splitToon > 0) {
             rit.splitToon--;
         } else if (rit.tijd % 4 == 0 && rit.buiten == 0) {
-            player.displayClientMessage(Component.translatable("gui.guhs.elftocht.balk", Highscores.tijd(rit.tijd),
-                    dorpNaam(VOLGORDE[rit.volgende]), rit.volgende, VOLGORDE.length).withStyle(ChatFormatting.WHITE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.elftocht.balk", Highscores.tijd(rit.tijd),
+                    dorpNaam(VOLGORDE[rit.volgende]), rit.volgende, VOLGORDE.length).withStyle(ChatFormatting.WHITE));
         }
     }
 
@@ -419,14 +419,14 @@ public final class ElftochtTocht {
         rit.splits[k] = rit.tijd;
         rit.volgende++;
         plof(npc);
-        int[] pb = GuhQuests.saved(player).getIntArray(PB);
+        int[] pb = GuhQuests.saved(player).getIntArray(PB).orElse(new int[0]);
         int best = pb.length == VOLGORDE.length ? pb[k] : 0;
         MutableComponent split = Component.translatable("gui.guhs.elftocht.split", dorpNaam(dorp), Highscores.tijd(rit.tijd));
         if (best > 0) {
             int diff = rit.tijd - best;
             split.append(Component.literal("  (" + (diff < 0 ? "-" : "+") + Highscores.tijd(Math.abs(diff)) + ")"));
         }
-        player.displayClientMessage(split.withStyle(kleur(rit.tijd, best)), true);
+        player.sendOverlayMessage(split.withStyle(kleur(rit.tijd, best)));
         rit.splitToon = 50;
         ElftochtPubliek.juichAllemaal((ServerLevel) npc.level(), npc.position(), 24, player);   // the whole village cheers
         kaart(player, rit);
@@ -442,7 +442,7 @@ public final class ElftochtTocht {
     /** The stamp: a PLOF sound, a puff of flour-white and pink hearts, and the Stempelguh's stamping animation. */
     static void plof(GuhNpcEntity npc) {
         ServerLevel level = (ServerLevel) npc.level();
-        level.playSound(null, npc.blockPosition(), ElftochtFeature.PLOF.get(), SoundSource.NEUTRAL, 1f, 0.9f + level.random.nextFloat() * 0.2f);
+        level.playSound(null, npc.blockPosition(), ElftochtFeature.PLOF.get(), SoundSource.NEUTRAL, 1f, 0.9f + level.getRandom().nextFloat() * 0.2f);
         Vec3 voor = Vec3.directionFromRotation(0, npc.getYRot()).scale(0.6);
         level.sendParticles(ParticleTypes.POOF, npc.getX() + voor.x, npc.getY() + 0.6, npc.getZ() + voor.z, 8, 0.15, 0.1, 0.15, 0.02);
         level.sendParticles(ParticleTypes.HEART, npc.getX(), npc.getY() + 1.7, npc.getZ(), 2, 0.3, 0.2, 0.3, 0);
@@ -453,8 +453,8 @@ public final class ElftochtTocht {
     static void vuurwerk(ServerLevel level, Vec3 boven) {
         int[] kleuren = {0xFF7FC0, 0xFF9020, 0x5AA0FF, 0xFFFFFF, 0xFFD040};
         for (int b = 0; b < 5; b++) {
-            double bx = boven.x + (level.random.nextDouble() - 0.5) * 10, by = boven.y + level.random.nextDouble() * 4,
-                    bz = boven.z + (level.random.nextDouble() - 0.5) * 10;
+            double bx = boven.x + (level.getRandom().nextDouble() - 0.5) * 10, by = boven.y + level.getRandom().nextDouble() * 4,
+                    bz = boven.z + (level.getRandom().nextDouble() - 0.5) * 10;
             int c = kleuren[b % kleuren.length];
             var stof = new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(((c >> 16) & 255) / 255f,
                     ((c >> 8) & 255) / 255f, (c & 255) / 255f), 1.6f);
@@ -478,7 +478,7 @@ public final class ElftochtTocht {
     /** The card in the chat: every village, stamped or not, with your split and your best there. */
     public static void toonKaart(ServerPlayer player) {
         Rit rit = RITTEN_NU.get(player.getUUID());
-        int[] pb = GuhQuests.saved(player).getIntArray(PB);
+        int[] pb = GuhQuests.saved(player).getIntArray(PB).orElse(new int[0]);
         player.sendSystemMessage(Component.translatable("gui.guhs.elftocht.kaart.titel").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         for (int k = 0; k < VOLGORDE.length; k++) {
             boolean klaar = rit != null && k < rit.volgende;
@@ -498,19 +498,19 @@ public final class ElftochtTocht {
     private static void finish(GuhNpcEntity npc, ServerPlayer player, Rit rit) {
         int tijd = rit.tijd;
         CompoundTag saved = GuhQuests.saved(player);
-        boolean eerste = !saved.getBoolean(KRUISJE);
+        boolean eerste = !saved.getBooleanOr(KRUISJE, false);
         int munten = munten(tijd) + (eerste ? EERSTE_KEER : 0);
         Minigames.give(player, new ItemStack(ElftochtFeature.ELFSTEMPEL.get(), munten));
         if (eerste) {
             saved.putBoolean(KRUISJE, true);
             Minigames.give(player, new ItemStack(ElftochtFeature.KRUISJE_ITEM.get()));
         }
-        int[] pb = saved.getIntArray(PB);
+        int[] pb = saved.getIntArray(PB).orElse(new int[0]);
         boolean record = pb.length != VOLGORDE.length || tijd < pb[VOLGORDE.length - 1];
         if (record) {
             saved.putIntArray(PB, rit.splits.clone());
         }
-        int[] beste = saved.getIntArray(BESTE);
+        int[] beste = saved.getIntArray(BESTE).orElse(new int[0]);
         if (beste.length != VOLGORDE.length) {
             beste = rit.splits.clone();
         } else {
@@ -519,7 +519,7 @@ public final class ElftochtTocht {
             }
         }
         saved.putIntArray(BESTE, beste);
-        saved.putInt(RITTEN, saved.getInt(RITTEN) + 1);
+        saved.putInt(RITTEN, saved.getIntOr(RITTEN, 0) + 1);
         int plaats = Scorebord.submit(player, BOARD, tijd, true);
         ElftochtVoortgang.grant(player, "elftocht_uitgereden");
         if (bonus(tijd) == SNEL.length) {
@@ -553,7 +553,7 @@ public final class ElftochtTocht {
 
     /** Your best split per village (the fastest time you reached it in any tour), in stamp order; empty when none. */
     public static int[] besteSplits(Player player) {
-        return GuhQuests.saved(player).getIntArray(BESTE);
+        return GuhQuests.saved(player).getIntArray(BESTE).orElse(new int[0]);
     }
 
     // --- tests ------------------------------------------------------------------------------------------------------------

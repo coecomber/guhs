@@ -87,7 +87,7 @@ public enum Seizoen implements net.minecraft.util.StringRepresentable {
 
     /** The day number: overworld dayTime / 24000 plus the offset (server and client). */
     public static long dag(Level level) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return Math.floorDiv(level.getDayTime(), 24000L) + clientOffset;
         }
         MinecraftServer server = level.getServer();
@@ -188,7 +188,7 @@ public enum Seizoen implements net.minecraft.util.StringRepresentable {
 
     /** Sends the offset to a client. */
     public static void sync(ServerPlayer player) {
-        nl.juiced.guhs.network.ModNetworking.sendTo(player, new KnusPayloads.SeizoenSync(Data.get(player.server).offset));
+        nl.juiced.guhs.network.ModNetworking.sendTo(player, new KnusPayloads.SeizoenSync(Data.get(player.level().getServer()).offset));
     }
 
     /** The saved offset (overworld data storage, "guhs_knus"). */
@@ -202,7 +202,7 @@ public enum Seizoen implements net.minecraft.util.StringRepresentable {
 
         static Data load(CompoundTag tag, HolderLookup.Provider registries) {
             Data d = new Data();
-            d.offset = tag.getLong("SeizoenOffset");
+            d.offset = tag.getLongOr("SeizoenOffset", 0L);
             return d;
         }
 

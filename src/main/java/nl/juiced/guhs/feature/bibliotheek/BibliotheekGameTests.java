@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,8 +33,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -47,8 +45,6 @@ import nl.juiced.guhs.registry.ModItems;
  * player), the Bibliothecaris (first visit, the quiz, the shop), the secret bookcase, the book stand, the protection,
  * the archive loot, and the structure itself.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class BibliotheekGameTests {
     private static final String EMPTY = "empty";
     private static final String LIBRARY = "guhbibliotheek";
@@ -64,7 +60,7 @@ public class BibliotheekGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         player.getInventory().clearContent();
-        player.moveTo(near.getX() + 1, near.getY(), near.getZ());
+        player.snapTo(near.getX() + 1, near.getY(), near.getZ());
         return player;
     }
 
@@ -83,7 +79,7 @@ public class BibliotheekGameTests {
     }
 
     private static boolean done(ServerPlayer player, String advancement) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(advancement));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(advancement));
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -103,7 +99,7 @@ public class BibliotheekGameTests {
         return NeoForge.EVENT_BUS.post(new PlayerInteractEvent.RightClickBlock(player, InteractionHand.MAIN_HAND, pos, hit)).isCanceled();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhBooksAreTranslatedWrittenBooks(GameTestHelper helper) {
         for (Guhboek book : Guhboek.values()) {
             ItemStack stack = book.stack();
@@ -121,13 +117,13 @@ public class BibliotheekGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void firstVisitIsAWelcomeAndBooksCount(GameTestHelper helper) {
         GuhNpcEntity npc = bibliothecaris(helper);
         ServerPlayer player = player(helper, npc);
         helper.assertTrue(Bibliothecaris.count(player) == 0, "a new reader has no books");
         npc.interact(player, InteractionHand.MAIN_HAND);
-        helper.assertTrue(GuhQuests.saved(player).getBoolean(Bibliothecaris.WELCOMED), "welcomed");
+        helper.assertTrue(GuhQuests.saved(player).getBooleanOr(Bibliothecaris.WELCOMED, false), "welcomed");
         helper.assertTrue(Bibliothecaris.count(player) == 0, "no lending: the books are on the lecterns");
         // a guh book in the inventory goes into the collection, and losing it doesn't lose it from the collection
         player.getInventory().add(Guhboek.EERSTE_GUH.stack());
@@ -141,7 +137,7 @@ public class BibliotheekGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void lecternBooksAreReadRightAwayAndTakenOnce(GameTestHelper helper) {
         BoundingBox box = lectern(helper, Guhboek.VAHOEG);
         try {
@@ -149,14 +145,14 @@ public class BibliotheekGameTests {
             ServerPlayer player = helper.makeMockServerPlayerInLevel();
             player.setGameMode(GameType.SURVIVAL);
             player.getInventory().clearContent();
-            player.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 1.5);
+            player.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 1.5);
             helper.assertTrue(Leeszaal.bookAt(helper.getLevel(), pos) == Guhboek.VAHOEG, "the lectern holds a guh book");
             helper.assertTrue(rightClick(player, pos), "a right-click opens the book (no vanilla lectern menu)");
             helper.assertTrue((Leeszaal.read(player) & Guhboek.VAHOEG.bit()) != 0, "read right away, no waiting");
             helper.assertTrue(books(player, Guhboek.VAHOEG) == 0, "reading doesn't take it");
             // other books can be read at once too, and the quiz asks about what you have read
             helper.assertTrue(Bibliothecaris.screenData(player).contains("Question")
-                    && Guhboek.bookOfQuestion(Bibliothecaris.screenData(player).getInt("Question")) == Guhboek.VAHOEG, "a quiz question about the book you read");
+                    && Guhboek.bookOfQuestion(Bibliothecaris.screenData(player).getIntOr("Question", 0)) == Guhboek.VAHOEG, "a quiz question about the book you read");
             Leeszaal.take(player, pos);
             helper.assertTrue(books(player, Guhboek.VAHOEG) == 1 && Leeszaal.taken(player, Guhboek.VAHOEG), "one copy to take home");
             helper.assertTrue(Bibliothecaris.has(player, Guhboek.VAHOEG), "and it is in the collection");
@@ -166,7 +162,7 @@ public class BibliotheekGameTests {
             helper.assertTrue(books(player, Guhboek.VAHOEG) == 0, "only once per book, even when you lost it");
             var lectern = (LecternBlockEntity) helper.getLevel().getBlockEntity(pos);
             helper.assertTrue(Guhboek.of(lectern.getBook()) == Guhboek.VAHOEG, "the book stays on the lectern");
-            player.moveTo(pos.getX() + 20, pos.getY(), pos.getZ());
+            player.snapTo(pos.getX() + 20, pos.getY(), pos.getZ());
             GuhQuests.saved(player).putInt(Leeszaal.TAKEN, 0);
             Leeszaal.take(player, pos);
             helper.assertTrue(books(player, Guhboek.VAHOEG) == 0, "not from across the room");
@@ -179,17 +175,17 @@ public class BibliotheekGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void quizGivesVouchersForRightAnswers(GameTestHelper helper) {
         GuhNpcEntity npc = bibliothecaris(helper);
         ServerPlayer player = player(helper, npc);
-        helper.assertTrue(Bibliothecaris.screenData(player).getBoolean("QuizNone"), "no questions without books");
+        helper.assertTrue(Bibliothecaris.screenData(player).getBooleanOr("QuizNone", false), "no questions without books");
         player.getInventory().add(Guhboek.EERSTE_GUH.stack());          // book 1: its two questions
         Bibliothecaris.collect(player);
         var data = Bibliothecaris.screenData(player);
-        int question = data.getInt("Question");
+        int question = data.getIntOr("Question", 0);
         helper.assertTrue(data.contains("Question") && Guhboek.bookOfQuestion(question) == Guhboek.EERSTE_GUH, "a question about your book");
-        int[] order = Bibliothecaris.ORDERS[data.getInt("Order")];
+        int[] order = Bibliothecaris.ORDERS[data.getIntOr("Order", 0)];
         int right = 0, wrong = 0;
         for (int i = 0; i < 3; i++) {
             if (order[i] == 0) {
@@ -204,8 +200,8 @@ public class BibliotheekGameTests {
         helper.assertTrue(Bibliothecaris.screenData(player).contains("QuizWait"), "a moment before the next question");
         GuhQuests.saved(player).putLong(Bibliothecaris.QUIZ_WAIT, 0);
         data = Bibliothecaris.screenData(player);
-        helper.assertTrue(data.getInt("Question") != question, "the next question is the other one");
-        order = Bibliothecaris.ORDERS[data.getInt("Order")];
+        helper.assertTrue(data.getIntOr("Question", 0) != question, "the next question is the other one");
+        order = Bibliothecaris.ORDERS[data.getIntOr("Order", 0)];
         for (int i = 0; i < 3; i++) {
             if (order[i] != 0) {
                 wrong = i;
@@ -213,7 +209,7 @@ public class BibliotheekGameTests {
         }
         Bibliothecaris.action(npc, player, Bibliothecaris.ANSWER + wrong);
         helper.assertTrue(GuhQuests.count(player, BibliotheekFeature.BOEKENBON.get()) == 1, "wrong: nothing");
-        helper.assertTrue(Bibliothecaris.screenData(player).getInt("QuizWait") > 20, "and half a minute to read again");
+        helper.assertTrue(Bibliothecaris.screenData(player).getIntOr("QuizWait", 0) > 20, "and half a minute to read again");
         Bibliothecaris.action(npc, player, Bibliothecaris.ANSWER + right);
         helper.assertTrue(GuhQuests.count(player, BibliotheekFeature.BOEKENBON.get()) == 1, "no answering while waiting");
         // all questions of all books right: the quiz master
@@ -221,7 +217,7 @@ public class BibliotheekGameTests {
         for (int n = 0; n < 60 && Long.bitCount(Bibliothecaris.rightAnswers(player)) < Guhboek.questionCount(); n++) {
             GuhQuests.saved(player).putLong(Bibliothecaris.QUIZ_WAIT, 0);
             var d = Bibliothecaris.screenData(player);
-            int[] o = Bibliothecaris.ORDERS[d.getInt("Order")];
+            int[] o = Bibliothecaris.ORDERS[d.getIntOr("Order", 0)];
             for (int i = 0; i < 3; i++) {
                 if (o[i] == 0) {
                     Bibliothecaris.action(npc, player, Bibliothecaris.ANSWER + i);
@@ -233,7 +229,7 @@ public class BibliotheekGameTests {
         helper.assertTrue(done(player, "quest/bieb_kwismeester"), "the quiz master");
         GuhQuests.saved(player).putLong(Bibliothecaris.QUIZ_WAIT, 0);
         var d = Bibliothecaris.screenData(player);
-        int[] o = Bibliothecaris.ORDERS[d.getInt("Order")];
+        int[] o = Bibliothecaris.ORDERS[d.getIntOr("Order", 0)];
         for (int i = 0; i < 3; i++) {
             if (o[i] == 0) {
                 Bibliothecaris.action(npc, player, Bibliothecaris.ANSWER + i);
@@ -241,12 +237,12 @@ public class BibliotheekGameTests {
         }
         helper.assertTrue(GuhQuests.count(player, BibliotheekFeature.BOEKENBON.get()) == Guhboek.questionCount()
                 && GuhQuests.count(player, ModItems.KAAS_KNABBELS.get()) == 2, "asked again: knabbels, no voucher");
-        helper.assertTrue(Bibliothecaris.screenData(player).getInt("QuizWait") > 30, "and a longer wait: no knabbel farm");
+        helper.assertTrue(Bibliothecaris.screenData(player).getIntOr("QuizWait", 0) > 30, "and a longer wait: no knabbel farm");
         leave(helper, player);
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void shopSellsBooksAndTheOutfitForVouchers(GameTestHelper helper) {
         GuhNpcEntity npc = bibliothecaris(helper);
         var offers = npc.getOffers();
@@ -265,7 +261,7 @@ public class BibliotheekGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, timeoutTicks = 200)
     public static void secretBookcaseSwingsOpenAndShut(GameTestHelper helper) {
         BlockPos low = new BlockPos(2, 1, 2), high = low.above();
         helper.setBlock(low, BibliotheekFeature.GEHEIME_KAST.get().defaultBlockState());
@@ -290,12 +286,12 @@ public class BibliotheekGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void bookStandGivesTheSecretBookOnce(GameTestHelper helper) {
         helper.setBlock(POS, BibliotheekFeature.BOEKALTAAR.get().defaultBlockState());
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.getInventory().clearContent();
-        player.moveTo(helper.absolutePos(POS).getX() + 1.5, helper.absolutePos(POS).getY(), helper.absolutePos(POS).getZ() + 0.5);
+        player.snapTo(helper.absolutePos(POS).getX() + 1.5, helper.absolutePos(POS).getY(), helper.absolutePos(POS).getZ() + 0.5);
         helper.assertTrue(Leeszaal.bookAt(helper.getLevel(), helper.absolutePos(POS)) == Guhboek.GEHEIM, "the secret book lies on the stand");
         Leeszaal.open(player, helper.absolutePos(POS), Guhboek.GEHEIM);
         helper.assertTrue((Leeszaal.read(player) & Guhboek.GEHEIM.bit()) != 0 && books(player, Guhboek.GEHEIM) == 0, "read it on the stand");
@@ -319,7 +315,7 @@ public class BibliotheekGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void libraryIsProtected(GameTestHelper helper) {
         BlockPos pos = helper.absolutePos(POS);
         helper.setBlock(POS, Blocks.BOOKSHELF);
@@ -345,7 +341,7 @@ public class BibliotheekGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void archiveChestsHaveGuhBooks(GameTestHelper helper) {
         LootTable table = helper.getLevel().getServer().reloadableRegistries()
                 .getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Guhs.id("chests/guhbibliotheek_archief")));
@@ -370,7 +366,7 @@ public class BibliotheekGameTests {
 
     // --- the real thing ---------------------------------------------------------------------------------------------
 
-    @GameTest(template = LIBRARY, timeoutTicks = 200, batch = "guhbibliotheek")
+    @GuhTest(template = LIBRARY, timeoutTicks = 200, batch = "guhbibliotheek")
     public static void theLibraryHasItsBibliothecarisAndSecretRoom(GameTestHelper helper) {
         AABB all = new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(120);
         List<GuhNpcEntity> npcs = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class, all, n -> n.getKind() == GuhNpcEntity.Kind.BIBLIOTHECARIS);
@@ -417,10 +413,10 @@ public class BibliotheekGameTests {
             ServerPlayer player = player(helper, npc);
             Bibliothecaris.INSTANCE.talk(npc, player);
             helper.assertTrue(Bibliothecaris.count(player) == 0, "no lending at the desk");
-            player.moveTo(firstLectern.getX() + 0.5, firstLectern.getY(), firstLectern.getZ() + 1.5);
+            player.snapTo(firstLectern.getX() + 0.5, firstLectern.getY(), firstLectern.getZ() + 1.5);
             helper.assertTrue(Leeszaal.bookAt(helper.getLevel(), firstLectern) != null, "the lectern is a reading lectern");
             Leeszaal.take(player, firstLectern);
-            player.moveTo(stand.getX() + 1.5, stand.getY(), stand.getZ() + 0.5);
+            player.snapTo(stand.getX() + 1.5, stand.getY(), stand.getZ() + 0.5);
             Leeszaal.take(player, stand);
             helper.assertTrue(Bibliothecaris.count(player) == 2, "a lectern book and the secret one");
             leave(helper, player);

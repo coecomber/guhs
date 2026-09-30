@@ -18,13 +18,14 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhVariant;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * Everything the Guhs mod remembers per world (stored with the overworld): every player's guh stomach (maag), their
  * quest progress, where they came from before stepping into a stomach, and their Guhdex.
@@ -153,7 +154,7 @@ public class GuhWorldData extends SavedData {
         ListTag maagList = new ListTag();
         for (Maag maag : maags.values()) {
             CompoundTag m = new CompoundTag();
-            m.putUUID("Owner", maag.owner);
+            m.store("Owner", UUIDUtil.CODEC, maag.owner);
             m.putString("Name", maag.ownerName);
             m.putInt("Index", maag.index);
             m.putInt("Size", maag.size);
@@ -162,7 +163,7 @@ public class GuhWorldData extends SavedData {
             ListTag wl = new ListTag();
             maag.whitelist.forEach((id, entry) -> {
                 CompoundTag e = new CompoundTag();
-                e.putUUID("Id", id);
+                e.store("Id", UUIDUtil.CODEC, id);
                 e.putString("Name", entry.name);
                 e.putBoolean("Build", entry.build);
                 wl.add(e);
@@ -174,14 +175,14 @@ public class GuhWorldData extends SavedData {
         ListTag playerList = new ListTag();
         players.forEach((id, p) -> {
             CompoundTag c = new CompoundTag();
-            c.putUUID("Id", id);
+            c.store("Id", UUIDUtil.CODEC, id);
             c.putInt("MaagQuest", p.maagQuest);
             c.putInt("RpsStreak", p.rpsStreak);
             c.putBoolean("VadsRevealed", p.vadsRevealed);
             c.putInt("SledQuest", p.sledQuest);
             c.putBoolean("BeatBigMika", p.beatBigMika);
             if (p.returnDimension != null) {
-                c.putString("ReturnDim", p.returnDimension.location().toString());
+                c.putString("ReturnDim", p.returnDimension.identifier().toString());
                 c.putDouble("ReturnX", p.returnPos.x);
                 c.putDouble("ReturnY", p.returnPos.y);
                 c.putDouble("ReturnZ", p.returnPos.z);
@@ -205,8 +206,8 @@ public class GuhWorldData extends SavedData {
 
     private static void readVariants(ListTag list, Set<GuhVariant> into) {
         for (int i = 0; i < list.size(); i++) {
-            GuhVariant v = GuhVariant.byId(list.getString(i));
-            if (v != GuhVariant.NORMAL || "normal".equals(list.getString(i))) {
+            GuhVariant v = GuhVariant.byId(list.getStringOr(i, ""));
+            if (v != GuhVariant.NORMAL || "normal".equals(list.getStringOr(i, ""))) {
                 into.add(v);
             }
         }
@@ -214,46 +215,46 @@ public class GuhWorldData extends SavedData {
 
     public static GuhWorldData load(CompoundTag tag, HolderLookup.Provider registries) {
         GuhWorldData data = new GuhWorldData();
-        ListTag maagList = tag.getList("Maags", Tag.TAG_COMPOUND);
+        ListTag maagList = tag.getListOrEmpty("Maags");
         for (int i = 0; i < maagList.size(); i++) {
-            CompoundTag m = maagList.getCompound(i);
-            Maag maag = new Maag(m.getUUID("Owner"), m.getString("Name"), m.getInt("Index"));
-            maag.size = m.getInt("Size");
+            CompoundTag m = maagList.getCompoundOrEmpty(i);
+            Maag maag = new Maag(m.read("Owner", UUIDUtil.CODEC).orElseThrow(), m.getStringOr("Name", ""), m.getIntOr("Index", 0));
+            maag.size = m.getIntOr("Size", 0);
             try {
-                maag.access = Access.valueOf(m.getString("Access"));
+                maag.access = Access.valueOf(m.getStringOr("Access", ""));
             } catch (IllegalArgumentException ignored) {
                 maag.access = Access.PUBLIC;
             }
-            maag.built = m.getBoolean("Built");
-            ListTag wl = m.getList("Whitelist", Tag.TAG_COMPOUND);
+            maag.built = m.getBooleanOr("Built", false);
+            ListTag wl = m.getListOrEmpty("Whitelist");
             for (int j = 0; j < wl.size(); j++) {
-                CompoundTag e = wl.getCompound(j);
-                maag.whitelist.put(e.getUUID("Id"), new WhitelistEntry(e.getString("Name"), e.getBoolean("Build")));
+                CompoundTag e = wl.getCompoundOrEmpty(j);
+                maag.whitelist.put(e.read("Id", UUIDUtil.CODEC).orElseThrow(), new WhitelistEntry(e.getStringOr("Name", ""), e.getBooleanOr("Build", false)));
             }
             data.maags.put(maag.owner, maag);
         }
-        ListTag playerList = tag.getList("Players", Tag.TAG_COMPOUND);
+        ListTag playerList = tag.getListOrEmpty("Players");
         for (int i = 0; i < playerList.size(); i++) {
-            CompoundTag c = playerList.getCompound(i);
+            CompoundTag c = playerList.getCompoundOrEmpty(i);
             PlayerData p = new PlayerData();
-            p.maagQuest = c.getInt("MaagQuest");
-            p.rpsStreak = c.getInt("RpsStreak");
-            p.vadsRevealed = c.getBoolean("VadsRevealed");
-            p.sledQuest = c.getInt("SledQuest");
-            p.beatBigMika = c.getBoolean("BeatBigMika");
+            p.maagQuest = c.getIntOr("MaagQuest", 0);
+            p.rpsStreak = c.getIntOr("RpsStreak", 0);
+            p.vadsRevealed = c.getBooleanOr("VadsRevealed", false);
+            p.sledQuest = c.getIntOr("SledQuest", 0);
+            p.beatBigMika = c.getBooleanOr("BeatBigMika", false);
             if (c.contains("ReturnDim")) {
-                p.returnDimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(c.getString("ReturnDim")));
-                p.returnPos = new Vec3(c.getDouble("ReturnX"), c.getDouble("ReturnY"), c.getDouble("ReturnZ"));
-                p.returnYaw = c.getFloat("ReturnYaw");
+                p.returnDimension = ResourceKey.create(Registries.DIMENSION, Identifier.parse(c.getStringOr("ReturnDim", "")));
+                p.returnPos = new Vec3(c.getDoubleOr("ReturnX", 0.0), c.getDoubleOr("ReturnY", 0.0), c.getDoubleOr("ReturnZ", 0.0));
+                p.returnYaw = c.getFloatOr("ReturnYaw", 0.0F);
             }
-            readVariants(c.getList("Seen", Tag.TAG_STRING), p.seen);
-            readVariants(c.getList("Tamed", Tag.TAG_STRING), p.tamed);
-            for (int r : c.getIntArray("Rewards")) {
+            readVariants(c.getListOrEmpty("Seen"), p.seen);
+            readVariants(c.getListOrEmpty("Tamed"), p.tamed);
+            for (int r : c.getIntArray("Rewards").orElse(new int[0])) {
                 p.rewards.add(r);
             }
-            data.players.put(c.getUUID("Id"), p);
+            data.players.put(c.read("Id", UUIDUtil.CODEC).orElseThrow(), p);
         }
-        data.lobbyBuilt = tag.getBoolean("LobbyBuilt");
+        data.lobbyBuilt = tag.getBooleanOr("LobbyBuilt", false);
         return data;
     }
 }

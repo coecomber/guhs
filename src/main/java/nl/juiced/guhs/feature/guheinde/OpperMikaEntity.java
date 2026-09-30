@@ -43,14 +43,15 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 import org.joml.Vector3f;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Opper-Mika: the boss of all Mika's, who stole every kaasknabbel of the guh kingdom. 150 HP, "pittig maar vergevend".
  * <ul>
@@ -249,10 +250,10 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
     private void callHulpjes() {
         shout("gui.guhs.guheinde.opper.hulpjes");
         for (int i = 0; i < 2; i++) {
-            MikaEntity mika = ModEntities.MIKA.get().create(this.level());
+            MikaEntity mika = ModEntities.MIKA.get().create(this.level(), EntitySpawnReason.TRIGGERED);
             if (mika != null) {
                 double a = this.random.nextDouble() * Math.PI * 2;
-                mika.moveTo(getX() + Math.cos(a) * 3, getY() + 0.5, getZ() + Math.sin(a) * 3, this.random.nextFloat() * 360f, 0f);
+                mika.snapTo(getX() + Math.cos(a) * 3, getY() + 0.5, getZ() + Math.sin(a) * 3, this.random.nextFloat() * 360f, 0f);
                 mika.setTarget(this.getTarget());
                 this.level().addFreshEntity(mika);
             }
@@ -273,7 +274,7 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
     /** Takes up to four kaasknabbels from a player. */
     public int steal(ServerPlayer player) {
         int stolen = 0;
-        for (ItemStack stack : player.getInventory().items) {
+        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
             if (stolen < 4 && (stack.is(ModItems.KAAS_KNABBELS.get()) || stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()))) {
                 int t = Math.min(4 - stolen, stack.getCount());
                 stack.shrink(t);
@@ -282,14 +283,14 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
         }
         if (stolen > 0) {
             buit += stolen;
-            player.displayClientMessage(Component.translatable("gui.guhs.guheinde.opper.roof", stolen).withStyle(ChatFormatting.DARK_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.opper.roof", stolen).withStyle(ChatFormatting.DARK_PURPLE));
         }
         return stolen;
     }
 
     @Override
     public void die(DamageSource source) {
-        if (!this.level().isClientSide && !this.isRemoved() && !this.dead) {
+        if (!this.level().isClientSide() && !this.isRemoved() && !this.dead) {
             shout("gui.guhs.guheinde.opper.gevadst");
             dropBuit();
             GuheindeGevecht fight = GuheindeGevecht.of(this.level());
@@ -346,8 +347,8 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        buit = tag.getInt("Buit");
-        hulpjes = tag.getInt("Hulpjes");
+        buit = tag.getIntOr("Buit", 0);
+        hulpjes = tag.getIntOr("Hulpjes", 0);
         bossBar.setName(this.getDisplayName());
     }
 

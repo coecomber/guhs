@@ -59,7 +59,7 @@ public final class MewtwoEvents {
                 }))
                 .then(Commands.literal("mew").executes(ctx -> {
                     ServerPlayer p = ctx.getSource().getPlayerOrException();
-                    MewSpawner.spawn(p.serverLevel(), p.blockPosition().above(2), p.blockPosition(), false);
+                    MewSpawner.spawn(p.level(), p.blockPosition().above(2), p.blockPosition(), false);
                     return 1;
                 }))));
     }

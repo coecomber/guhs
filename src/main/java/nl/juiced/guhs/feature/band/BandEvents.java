@@ -135,15 +135,15 @@ public final class BandEvents {
         }
         long nu = guh.level().getGameTime();
         CompoundTag data = guh.getPersistentData();
-        if (data.getLong(KNUFFEL_TOT) > nu) {
-            player.displayClientMessage(Component.translatable("gui.guhs.band.knuffel_rust", guh.getDisplayName())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        if (data.getLongOr(KNUFFEL_TOT, 0L) > nu) {
+            player.sendOverlayMessage(Component.translatable("gui.guhs.band.knuffel_rust", guh.getDisplayName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         guh.getLookControl().setLookAt(player);
         if (!guh.emotes.start(Emote.KNUFFELEN, false, GuhEmotes.Source.OWNER)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.band.knuffel_nu_niet", guh.getDisplayName())
-                    .withStyle(ChatFormatting.GRAY), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.band.knuffel_nu_niet", guh.getDisplayName())
+                    .withStyle(ChatFormatting.GRAY));
             return false;
         }
         data.putLong(KNUFFEL_TOT, nu + KNUFFEL_RUST);
@@ -194,7 +194,7 @@ public final class BandEvents {
         CompoundTag data = guh.getPersistentData();
         double x = guh.getX(), z = guh.getZ();
         boolean had = data.contains(REIS_X);
-        double dx = had ? x - data.getDouble(REIS_X) : 0, dz = had ? z - data.getDouble(REIS_Z) : 0;
+        double dx = had ? x - data.getDoubleOr(REIS_X, 0.0) : 0, dz = had ? z - data.getDoubleOr(REIS_Z, 0.0) : 0;
         data.putDouble(REIS_X, x);
         data.putDouble(REIS_Z, z);
         ServerPlayer owner = Band.eigenaarOnline(guh);
@@ -206,13 +206,13 @@ public final class BandEvents {
         if (d < 0.5 || d > 80) {
             return;   // (standing still, or a teleport)
         }
-        double acc = data.getDouble(REIS) + d;
+        double acc = data.getDoubleOr(REIS, 0.0) + d;
         int blokken = (int) acc;
         if (blokken > 0) {
             Dagboek.tel(guh, DagboekStat.BLOKKEN_SAMEN, blokken);
         }
         acc -= blokken;
-        long totaal = data.getLong(REIS + "_totaal") + blokken;
+        long totaal = data.getLongOr(REIS + "_totaal", 0L) + blokken;
         data.putLong(REIS + "_totaal", totaal % 64);
         for (long i = 0; i < totaal / 64; i++) {
             Band.moment(guh, owner, Moment.REIS, "64");
@@ -228,7 +228,7 @@ public final class BandEvents {
         }
         Band.geefHartjes(guh, owner, Reden.SAMEN_TIJD.standaard(), Reden.SAMEN_TIJD);
         BandData.Rec r = Band.rec(guh);
-        long vandaag = Band.dag(guh.getServer());
+        long vandaag = Band.dag(guh.level().getServer());
         if (r != null && r.samenDag != vandaag) {
             r.samenDag = vandaag;
             Dagboek.tel(guh, DagboekStat.DAGEN_SAMEN, 1);
@@ -244,14 +244,14 @@ public final class BandEvents {
         GuhVolger.zet(guh, plekSoort(guh), plekDetail(guh));
         BandVlaggen.zet(guh, BandVlaggen.ZIELSGUH, r.niveau() == BandNiveau.ZIELSGUH);
         CompoundTag data = guh.getPersistentData();
-        String dim = guh.level().dimension().location().toString();
-        if (!dim.equals(data.getString(DIM))) {
+        String dim = guh.level().dimension().identifier().toString();
+        if (!dim.equals(data.getStringOr(DIM, ""))) {
             data.putString(DIM, dim);   // (also the first time we see it: tamed in the Guhmensie counts as arriving there)
             Band.moment(guh, nabijeEigenaar(guh, 32), Moment.DIMENSIE, dim);
         }
         Holder<Biome> biome = guh.level().getBiome(guh.blockPosition());
-        String bioom = biome.unwrapKey().map(k -> k.location().toString()).orElse("");
-        if (!bioom.isEmpty() && !bioom.equals(data.getString(BIOOM))) {
+        String bioom = biome.unwrapKey().map(k -> k.identifier().toString()).orElse("");
+        if (!bioom.isEmpty() && !bioom.equals(data.getStringOr(BIOOM, ""))) {
             data.putString(BIOOM, bioom);
             Band.moment(guh, nabijeEigenaar(guh, 32), Moment.PLEK, bioom);
         }
@@ -290,7 +290,7 @@ public final class BandEvents {
             return h == null ? "" : h.naam();
         }
         if (e.isVehicle() && e instanceof Mob m && m.getControllingPassenger() instanceof Player p) {
-            return p.getGameProfile().getName();
+            return p.getGameProfile().name();
         }
         if (e.getVehicle() != null) {
             return e.getVehicle().getName().getString();
@@ -315,12 +315,12 @@ public final class BandEvents {
 
     @SubscribeEvent
     public static void onJoin(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide) {
+        if (event.getLevel().isClientSide()) {
             return;
         }
         Entity e = event.getEntity();
         if (Band.isBandGuh(e) && e instanceof GuhEntity guh) {
-            boolean nieuw = guh.getPersistentData().getBoolean(GEBOREN);
+            boolean nieuw = guh.getPersistentData().getBooleanOr(GEBOREN, false);
             Band.bijwerken(guh);
             GuhVolger.zet(guh, plekSoort(guh), plekDetail(guh));
             if (nieuw) {
@@ -338,7 +338,7 @@ public final class BandEvents {
     @SubscribeEvent
     public static void onEntityTick(net.neoforged.neoforge.event.tick.EntityTickEvent.Post event) {
         Entity e = event.getEntity();
-        if (!(e instanceof PiepMaatje) || e.level().isClientSide || (e.tickCount + e.getId()) % 100 != 0
+        if (!(e instanceof PiepMaatje) || e.level().isClientSide() || (e.tickCount + e.getId()) % 100 != 0
                 || !(e instanceof net.minecraft.world.entity.TamableAnimal a) || !a.isTame() || a.getOwnerUUID() == null) {
             return;
         }
@@ -354,7 +354,7 @@ public final class BandEvents {
     @SubscribeEvent
     public static void onLeave(EntityLeaveLevelEvent event) {
         Entity e = event.getEntity();
-        if (event.getLevel().isClientSide || e.getRemovalReason() == Entity.RemovalReason.DISCARDED
+        if (event.getLevel().isClientSide() || e.getRemovalReason() == Entity.RemovalReason.DISCARDED
                 || e.getRemovalReason() == Entity.RemovalReason.KILLED) {
             return;   // (picked up: the item takes over; died: see onDeath)
         }
@@ -366,7 +366,7 @@ public final class BandEvents {
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
         LivingEntity e = event.getEntity();
-        if (e.level().isClientSide) {
+        if (e.level().isClientSide()) {
             return;
         }
         if (Band.isBandGuh(e) && e instanceof GuhEntity guh) {
@@ -378,7 +378,7 @@ public final class BandEvents {
 
     @SubscribeEvent
     public static void onMount(EntityMountEvent event) {
-        if (event.isMounting() && !event.getLevel().isClientSide && event.getEntityMounting() instanceof ServerPlayer player
+        if (event.isMounting() && !event.getLevel().isClientSide() && event.getEntityMounting() instanceof ServerPlayer player
                 && Band.isBandGuh(event.getEntityBeingMounted()) && event.getEntityBeingMounted() instanceof GuhEntity guh
                 && player.getUUID().equals(guh.getOwnerUUID())) {
             Band.moment(guh, player, Moment.RIT, "");
@@ -389,7 +389,7 @@ public final class BandEvents {
     public static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             Band.meldAchterstallig(player);
-            if (!BandData.get(player.server).guhsVan(player.getUUID()).isEmpty()) {
+            if (!BandData.get(player.level().getServer()).guhsVan(player.getUUID()).isEmpty()) {
                 GidsFeature.grant(player, "lieve_vadsjes/root");
             }
         }
@@ -479,7 +479,7 @@ public final class BandEvents {
 
     /** The Bank Guhs around a player: guhs and maatjes stored in them. */
     private static void bankScan(ServerPlayer player) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         BlockPos c = player.blockPosition();
         for (int cx = (c.getX() - 8) >> 4; cx <= (c.getX() + 8) >> 4; cx++) {
             for (int cz = (c.getZ() - 8) >> 4; cz <= (c.getZ() + 8) >> 4; cz++) {

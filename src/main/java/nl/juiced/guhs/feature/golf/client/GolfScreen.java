@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.golf.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -41,15 +41,15 @@ public class GolfScreen extends Screen {
     protected void init() {
         left = (width - W) / 2;
         top = (height - H) / 2;
-        boolean mine = data.getBoolean("Mine");
-        if (!mine && !data.getBoolean("Running")) {
+        boolean mine = data.getBooleanOr("Mine", false);
+        if (!mine && !data.getBooleanOr("Running", false)) {
             NiveauKeuze.knoppen(this::addRenderableWidget, "golf", left + 20, top + 60, W - 40);
         }
         Button play = Button.builder(Component.translatable(mine ? "gui.guhs.golf.stop" : "gui.guhs.golf.play"),
                         b -> send(mine ? GolfGame.STOP : NiveauKeuze.actie("golf", GolfGame.START)))
                 .bounds(left + 20, top + 82, W - 40, 20)
                 .tooltip(Tooltip.create(Component.translatable(mine ? "gui.guhs.golf.stop.tooltip" : "gui.guhs.golf.play.tooltip"))).build();
-        play.active = mine || !data.getBoolean("Running");
+        play.active = mine || !data.getBooleanOr("Running", false);
         addRenderableWidget(play);
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.golf.shop"), b -> send(GolfGame.SHOP))
                 .bounds(left + 20, top + H - 30, (W - 44) / 2, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.golf.shop.tooltip"))).build());
@@ -58,17 +58,17 @@ public class GolfScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFFF7B6CB);
         g.fill(left, top, left + W, top + H, 0xE8301A26);
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6EE);
-        Component question = data.getBoolean("Mine") ? Component.translatable("gui.guhs.golf.mine", data.getInt("Hole"))
-                : data.getBoolean("Running") ? Component.translatable("gui.guhs.golf.busy", data.getString("Player"), data.getInt("Hole"))
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6EE);
+        Component question = data.getBooleanOr("Mine", false) ? Component.translatable("gui.guhs.golf.mine", data.getIntOr("Hole", 0))
+                : data.getBooleanOr("Running", false) ? Component.translatable("gui.guhs.golf.busy", data.getStringOr("Player", ""), data.getIntOr("Hole", 0))
                 : Component.translatable("gui.guhs.golf.question");
         int y = top + 26;
         for (var line : font.split(question, W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFD8B8C8);
+            g.centeredText(font, line, width / 2, y, 0xFFD8B8C8);
             y += 11;
         }
         // the par of every hole, from the tees of the chosen level (2.10: every level has its own tees)
@@ -80,27 +80,27 @@ public class GolfScreen extends Screen {
             par.append(i == 0 ? "" : " ").append(pars[i]);
             total += pars[i];
         }
-        g.drawCenteredString(font, Component.translatable("gui.guhs.golf.par_line_niveau", Klassiekers.naam(gekozen), par.toString(), total),
+        g.centeredText(font, Component.translatable("gui.guhs.golf.par_line_niveau", Klassiekers.naam(gekozen), par.toString(), total),
                 width / 2, top + 110, 0xFFFFE6EE);
         // your records (per level, against that level's par) and the club record
         MutableComponent line = Component.translatable("gui.guhs.klassiekers.records").withStyle(ChatFormatting.GOLD);
         for (Niveau n : Niveau.values()) {
-            int best = data.getInt("Best_" + n.id()), nPar = java.util.Arrays.stream(pars(n)).sum();
+            int best = data.getIntOr("Best_" + n.id(), 0), nPar = java.util.Arrays.stream(pars(n)).sum();
             line.append(Component.literal(n == Niveau.MAKKELIJK ? " " : "  ·  ").withStyle(ChatFormatting.DARK_GRAY))
                     .append(Klassiekers.naam(n))
                     .append(Component.literal(" " + (best == -1 ? "-" : best + " (" + GolfGame.rel(best - nPar) + ")")).withStyle(ChatFormatting.WHITE));
         }
-        g.drawCenteredString(font, line, width / 2, top + 126, 0xFFFFD27A);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.klassiekers.golf.rondjes", data.getInt("Rounds"), data.getInt("Aces")),
+        g.centeredText(font, line, width / 2, top + 126, 0xFFFFD27A);
+        g.centeredText(font, Component.translatable("gui.guhs.klassiekers.golf.rondjes", data.getIntOr("Rounds", 0), data.getIntOr("Aces", 0)),
                 width / 2, top + 138, 0xFFFFE6EE);
-        int club = data.getInt("RecordScore");
-        g.drawCenteredString(font, club < 0 ? Component.translatable("gui.guhs.golf.club_none")
-                : Component.translatable("gui.guhs.golf.club", data.getString("RecordName"), club), width / 2, top + 152, 0xFFFFE6EE);
+        int club = data.getIntOr("RecordScore", 0);
+        g.centeredText(font, club < 0 ? Component.translatable("gui.guhs.golf.club_none")
+                : Component.translatable("gui.guhs.golf.club", data.getStringOr("RecordName", ""), club), width / 2, top + 152, 0xFFFFE6EE);
     }
 
     /** The par per hole of a level on this course (sent by the Golfguh; the plan's pars when she didn't). */
     private int[] pars(Niveau n) {
-        int[] p = data.getIntArray("Par_" + n.id());
+        int[] p = data.getIntArray("Par_" + n.id()).orElse(new int[0]);
         return p.length == GolfGame.HOLES ? p : GolfBanen.PARS[n.ordinal()];
     }
 

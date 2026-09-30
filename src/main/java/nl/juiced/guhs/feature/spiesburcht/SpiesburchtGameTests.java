@@ -6,14 +6,14 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
@@ -36,8 +36,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
@@ -49,6 +47,7 @@ import nl.juiced.guhs.registry.ModBlocks;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the Spiesburcht: the Rookguh (fed by hand and with thrown knabbels, floats home, counts per player,
  * can't be hurt), the Nether-Mikas (vads keeps them calm, hitting one makes them angry, the trade), the brewing (every
@@ -56,8 +55,6 @@ import nl.juiced.guhs.registry.ModItems;
  * he can't be hurt while he bakes up, he breaks nothing, he drops the gloeister), the Knabbelbaken (players and tamed
  * guhs, more layers more effects), the Asguh, the drops, and the data (structures, tiles, spawns, compass).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class SpiesburchtGameTests {
     private static final String ROOM = "spiesburcht_testkamer";
     private static final String EMPTY = "empty";
@@ -67,7 +64,7 @@ public class SpiesburchtGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return player;
     }
 
@@ -96,7 +93,7 @@ public class SpiesburchtGameTests {
     // --- the Rookguh -------------------------------------------------------------------------------------------------------
 
     /** Six knabbels by hand: rounder every time, then VAHOEG, it floats home (gone) and the player saved one. */
-    @GameTest(template = ROOM, timeoutTicks = 200)
+    @GuhTest(template = ROOM, timeoutTicks = 200)
     public static void rookguhFedByHandFloatsHome(GameTestHelper helper) {
         floor(helper);
         ServerPlayer player = player(helper);
@@ -126,7 +123,7 @@ public class SpiesburchtGameTests {
      * 2.10.1: the Rookguh has its own Guhdex page (a creature page: its id is its entity id, no NPC kind, can't be tamed)
      * with its texts; saving a Rookguh fills in that page (it shows "Rookguhs gered: N", no longer above the whole Guhdex).
      */
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void rookguhHeeftEenGuhdexPagina(GameTestHelper helper) {
         GuhVariant page = GuhVariant.ROOKGUH;
         helper.assertTrue(GuhDex.ENTRIES.contains(page) && page.isCharacter() && page.npcKind() == null && !GuhDex.TAMEABLE.contains(page),
@@ -152,7 +149,7 @@ public class SpiesburchtGameTests {
      * 2.10.1 (user decision): the Rookguh page is a bonus page. It doesn't count for "alles verzameld": the all-pages
      * milestones, the full-Guhdex maag upgrade and the seen counter are exactly what they were in 2.10.0.
      */
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void rookguhPaginaTeltNietMeeVoorVoltooiing(GameTestHelper helper) {
         GuhVariant page = GuhVariant.ROOKGUH;
         helper.assertTrue(GuhDex.EXTRA.contains(page) && !GuhDex.TELLEND.contains(page) && GuhDex.TELLEND.size() == GuhDex.ENTRIES.size() - 1,
@@ -184,7 +181,7 @@ public class SpiesburchtGameTests {
      * 2.8: the Rookguh is a ghast of 3/4 size (hitbox 3x3, the model a 16-unit cube with nine tentacles, drawn 3.375
      * blocks big) with a flat guh face and its cheeks, and the animations its code plays; still peaceful.
      */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void rookguhIsASmallGhastWithAGuhFace(GameTestHelper helper) {
         RookguhEntity guh = helper.spawn(SpiesburchtFeature.ROOKGUH.get(), new BlockPos(1, 4, 1));
         helper.assertTrue(Math.abs(guh.getBbWidth() - 3.0f) < 0.01f && Math.abs(guh.getBbHeight() - 3.0f) < 0.01f,
@@ -208,7 +205,7 @@ public class SpiesburchtGameTests {
     }
 
     /** Thrown knabbels: it swoops down to eat them, and whoever threw them gets the credit. */
-    @GameTest(template = ROOM, timeoutTicks = 300)
+    @GuhTest(template = ROOM, timeoutTicks = 300)
     public static void rookguhEatsThrownKnabbels(GameTestHelper helper) {
         floor(helper);
         ServerPlayer player = player(helper);
@@ -231,15 +228,15 @@ public class SpiesburchtGameTests {
     // --- the Nether-Mikas -----------------------------------------------------------------------------------------------------
 
     private static MikaEntity netherMika(GameTestHelper helper, BlockPos at) {
-        MikaEntity mika = ModEntities.NETHER_MIKA.get().create(helper.getLevel());
+        MikaEntity mika = ModEntities.NETHER_MIKA.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         BlockPos p = helper.absolutePos(at);
-        mika.moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
+        mika.snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5);
         helper.getLevel().addFreshEntity(mika);
         return mika;
     }
 
     /** Without vads they go for you; with a piece of vads armour they leave you alone, until you hit one of them. */
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void netherMikasLeaveVadsWearersAlone(GameTestHelper helper) {
         floor(helper);
         ServerPlayer player = player(helper);
@@ -261,7 +258,7 @@ public class SpiesburchtGameTests {
     }
 
     /** Give a Nether-Mika a vahoege vads ingot: it sniffs it, then throws you something. */
-    @GameTest(template = ROOM, timeoutTicks = NetherMikaRuil.ADMIRE_TICKS + 80)
+    @GuhTest(template = ROOM, timeoutTicks = NetherMikaRuil.ADMIRE_TICKS + 80)
     public static void netherMikaTradesAnIngot(GameTestHelper helper) {
         floor(helper);
         ServerPlayer player = player(helper);
@@ -303,12 +300,12 @@ public class SpiesburchtGameTests {
     }
 
     /** Stoke it, pour kaassaus in, stir in knabbels, let it bubble, bottle three Drankjes van Vahoegheid, drink one. */
-    @GameTest(template = ROOM, timeoutTicks = GuhbrouwketelBlockEntity.BREW_TICKS + 60)
+    @GuhTest(template = ROOM, timeoutTicks = GuhbrouwketelBlockEntity.BREW_TICKS + 60)
     public static void brewingAGuhdrankje(GameTestHelper helper) {
         floor(helper);
         ServerPlayer player = player(helper);
         BlockPos at = new BlockPos(5, 1, 5);
-        player.getInventory().selected = 8;             // (the drankjes go into the first free slots, not into the hand)
+        player.getInventory().setSelectedSlot(8);             // (the drankjes go into the first free slots, not into the hand)
         GuhbrouwketelBlockEntity ketel = ketel(helper, at);
         use(player, ketel, new ItemStack(ModItems.KAAS_KNABBELS.get()));
         helper.assertTrue(!ketel.isBrewing() && ketel.portions() == 0, "no sauce yet: nothing happens");
@@ -330,7 +327,7 @@ public class SpiesburchtGameTests {
             for (int i = 0; i < 3; i++) {
                 use(player, ketel, new ItemStack(Items.GLASS_BOTTLE));
             }
-            for (ItemStack s : player.getInventory().items) {
+            for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
                 drankjes += s.is(SpiesburchtFeature.DRANKJE_VAN_VAHOEGHEID.get()) ? s.getCount() : 0;
             }
             helper.assertTrue(drankjes == 3 && ketel.portions() == 0 && ketel.contents() == Brouwsel.BOUILLON, "three drankjes, an empty pan: " + drankjes);
@@ -343,7 +340,7 @@ public class SpiesburchtGameTests {
     }
 
     /** Every Guhdrankje can be brewed, also without guhs:moeraskaas (Mika's vet) and without the effect guhs:stil. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void brewingWorksWithoutTheOtherSlices(GameTestHelper helper) {
         helper.assertTrue(Brouwsel.forIngredient(new ItemStack(ModItems.KAAS_KNABBELS.get())) == Brouwsel.VAHOEGHEID, "knabbels: Vahoegheid");
         helper.assertTrue(Brouwsel.forIngredient(new ItemStack(BarbecuetherFeature.GLOEIKOOLGRUIS.get())) == Brouwsel.ROOKLOOP, "gloeikoolgruis: Rookloop");
@@ -351,7 +348,7 @@ public class SpiesburchtGameTests {
         helper.assertTrue(Brouwsel.forIngredient(new ItemStack(BuiltInRegistries.ITEM.get(Guhs.id("guh_slimeball")))) == Brouwsel.GUHSPRONG, "guh slime: Guhsprong");
         helper.assertTrue(Brouwsel.forIngredient(new ItemStack(Items.DIRT)) == null, "dirt brews nothing");
         // guhs:moeraskaas (Kaasmoeras) is an optional ingredient: when it's there it brews Sluipknabbel too
-        ResourceLocation moeraskaas = Guhs.id("moeraskaas");
+        Identifier moeraskaas = Guhs.id("moeraskaas");
         if (BuiltInRegistries.ITEM.containsKey(moeraskaas)) {
             helper.assertTrue(Brouwsel.forIngredient(new ItemStack(BuiltInRegistries.ITEM.get(moeraskaas))) == Brouwsel.SLUIPKNABBEL, "moeraskaas: Sluipknabbel");
         }
@@ -374,7 +371,7 @@ public class SpiesburchtGameTests {
     // --- the Aangebrande Mika -----------------------------------------------------------------------------------------------
 
     /** A T of ash with three heads: he wakes up (the T is used up), can't be hurt while he bakes, breaks nothing, drops the gloeister. */
-    @GameTest(template = ROOM, timeoutTicks = 200)
+    @GuhTest(template = ROOM, timeoutTicks = 200)
     public static void aangebrandeMikaFromTheT(GameTestHelper helper) {
         floor(helper);
         normalDifficulty(helper);
@@ -425,7 +422,7 @@ public class SpiesburchtGameTests {
     }
 
     /** His burning coals (and the Vonk-Mika's embers) singe what they hit, but never set a block on fire. */
-    @GameTest(template = ROOM, timeoutTicks = 100)
+    @GuhTest(template = ROOM, timeoutTicks = 100)
     public static void kooltjesBurnNoBlocks(GameTestHelper helper) {
         floor(helper);
         for (int y = 1; y < 6; y++) {
@@ -436,7 +433,7 @@ public class SpiesburchtGameTests {
         BlockPos start = helper.absolutePos(new BlockPos(3, 3, 8));
         for (var type : List.of(SpiesburchtFeature.BRANDEND_KOOLTJE.get(), SpiesburchtFeature.GLOEIEND_KOOLTJE.get())) {
             GloeiendKooltje coal = new GloeiendKooltje(type, helper.getLevel());
-            coal.moveTo(start.getX() + 0.5, start.getY() + 0.5, start.getZ() + 0.5);
+            coal.snapTo(start.getX() + 0.5, start.getY() + 0.5, start.getZ() + 0.5);
             coal.setDeltaMovement(new Vec3(1, 0, 0));
             coal.accelerationPower = 0.1;
             helper.getLevel().addFreshEntity(coal);
@@ -455,7 +452,7 @@ public class SpiesburchtGameTests {
     // --- the Knabbelbaken ---------------------------------------------------------------------------------------------------
 
     /** On a pyramid it gives its effect to players and tamed guhs (not wild ones); a second layer unlocks Guhsprong. */
-    @GameTest(template = ROOM, timeoutTicks = 60)
+    @GuhTest(template = ROOM, timeoutTicks = 60)
     public static void knabbelbakenForYouAndYourGuhs(GameTestHelper helper) {
         floor(helper);
         ServerPlayer player = player(helper);
@@ -500,7 +497,7 @@ public class SpiesburchtGameTests {
     // --- the Asguh, the drops, the heads -----------------------------------------------------------------------------------
 
     /** The Asguh: fire can't hurt it, it has a Guhdex page and it can be tamed. */
-    @GameTest(template = ROOM, timeoutTicks = 60)
+    @GuhTest(template = ROOM, timeoutTicks = 60)
     public static void asguhIsFireproofAndInTheGuhdex(GameTestHelper helper) {
         floor(helper);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(8, 1, 8));
@@ -535,14 +532,14 @@ public class SpiesburchtGameTests {
     }
 
     /** Vonk-Mika's drop grillspiesen (two powder each), Knekel-Mika's now and then a head, the boss always the gloeister. */
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void theDrops(GameTestHelper helper) {
         floor(helper);
         ServerPlayer player = player(helper);
         VonkMikaEntity vonk = helper.spawn(SpiesburchtFeature.VONK_MIKA.get(), new BlockPos(4, 2, 4));
         KnekelMikaEntity knekel = helper.spawn(SpiesburchtFeature.KNEKEL_MIKA.get(), new BlockPos(10, 1, 10));
-        AangebrandeMikaEntity boss = SpiesburchtFeature.AANGEBRANDE_MIKA.get().create(helper.getLevel());
-        boss.moveTo(helper.absoluteVec(new Vec3(8, 3, 8)));
+        AangebrandeMikaEntity boss = SpiesburchtFeature.AANGEBRANDE_MIKA.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        boss.snapTo(helper.absoluteVec(new Vec3(8, 3, 8)));
         int spiesen = 0, koppen = 0;
         for (int i = 0; i < 1500; i++) {
             for (ItemStack s : roll(helper, "entities/vonk_mika", vonk, player)) {
@@ -579,15 +576,15 @@ public class SpiesburchtGameTests {
         }
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theSpiesburchtDataIsComplete(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        var structures = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        var structures = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
         for (String s : new String[]{"spiesburcht", "mika_grillpaleis"}) {
             helper.assertTrue(structures.get(Guhs.id(s)) instanceof BurchtStructure, "structure " + s);
             helper.assertTrue(SuperkompasItem.allowed(s), "the super compass finds " + s);
         }
-        helper.assertTrue(level.registryAccess().registryOrThrow(Registries.STRUCTURE_SET).containsKey(Guhs.id("barbecue_burchten")), "their structure set");
+        helper.assertTrue(level.registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).containsKey(Guhs.id("barbecue_burchten")), "their structure set");
         // the tiles: the Vonk-Mika spawner and chests in the Spiesburcht, the Nether-Mikas and the knabbel pile in the palace
         int spawners = 0, chests = 0, mikas = 0, knabbels = 0;
         var manager = level.getStructureManager();
@@ -596,14 +593,14 @@ public class SpiesburchtGameTests {
                 var t = manager.get(Guhs.id("spiesburcht/stuk_" + i + "_" + j));
                 if (t.isPresent()) {
                     for (StructureTemplate.StructureBlockInfo info : t.get().filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.SPAWNER)) {
-                        spawners += info.nbt() != null && info.nbt().getCompound("SpawnData").getCompound("entity").getString("id").equals("guhs:vonk_mika") ? 1 : 0;
+                        spawners += info.nbt() != null && info.nbt().getCompoundOrEmpty("SpawnData").getCompoundOrEmpty("entity").getStringOr("id", "").equals("guhs:vonk_mika") ? 1 : 0;
                     }
                     chests += t.get().filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.CHEST).size();
                 }
                 CompoundTag nbt = tile(level, "mika_grillpaleis", i, j);
                 if (nbt != null) {
-                    for (Tag e : nbt.getList("entities", Tag.TAG_COMPOUND)) {
-                        mikas += ((CompoundTag) e).getCompound("nbt").getString("id").equals("guhs:nether_mika") ? 1 : 0;
+                    for (Tag e : nbt.getListOrEmpty("entities")) {
+                        mikas += ((CompoundTag) e).getCompoundOrEmpty("nbt").getStringOr("id", "").equals("guhs:nether_mika") ? 1 : 0;
                     }
                     var gp = manager.get(Guhs.id("mika_grillpaleis/stuk_" + i + "_" + j)).orElseThrow();
                     knabbels += gp.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), ModBlocks.BLOCK_OF_KAASKNABBELS.get()).size();
@@ -615,7 +612,7 @@ public class SpiesburchtGameTests {
         helper.assertTrue(mikas >= 10, "Nether-Mikas at home in the palace: " + mikas);
         helper.assertTrue(knabbels >= 60, "a mountain of stolen knabbels: " + knabbels);
         // spawns per biome
-        var biomes = level.registryAccess().registryOrThrow(Registries.BIOME);
+        var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
         MobSpawnSettings asdal = biomes.get(SpiesburchtFeature.ASDAL).getMobSettings();
         helper.assertTrue(asdal.getMobs(net.minecraft.world.entity.MobCategory.MONSTER).unwrap().stream().anyMatch(d -> d.type == SpiesburchtFeature.KNEKEL_MIKA.get()),
                 "Knekel-Mika's in the Asdal");
@@ -624,7 +621,7 @@ public class SpiesburchtGameTests {
         MobSpawnSettings delta = biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("rookdelta"))).getMobSettings();
         helper.assertTrue(delta.getMobs(net.minecraft.world.entity.MobCategory.CREATURE).unwrap().stream().anyMatch(d -> d.type == SpiesburchtFeature.ROOKGUH.get()),
                 "Rookguhs in the Rookdelta");
-        helper.assertTrue(level.registryAccess().registryOrThrow(Registries.BLOCK).getTag(SpiesburchtFeature.BAKEN_BASIS).isPresent(), "the baken's base tag");
+        helper.assertTrue(level.registryAccess().lookupOrThrow(Registries.BLOCK).getTag(SpiesburchtFeature.BAKEN_BASIS).isPresent(), "the baken's base tag");
         helper.assertTrue(EntityType.getKey(SpiesburchtFeature.AANGEBRANDE_MIKA.get()).equals(Guhs.id("aangebrande_mika")), "the boss's id");
         helper.succeed();
     }

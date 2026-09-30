@@ -179,7 +179,7 @@ public class BankGuhMenu extends AbstractContainerMenu {
 
     @Override
     public void slotsChanged(Container container) {
-        if (container == craftGrid && player.level() instanceof Level level && !level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (container == craftGrid && player.level() instanceof Level level && !level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             CraftingInput input = craftGrid.asCraftInput();
             ItemStack result = ItemStack.EMPTY;
             Optional<RecipeHolder<CraftingRecipe>> recipe = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level);
@@ -249,7 +249,7 @@ public class BankGuhMenu extends AbstractContainerMenu {
                     bank.getStorage().insert(craftGrid.removeItemNoUpdate(i));
                 }
             }
-        } else if (!player.level().isClientSide) {
+        } else if (!player.level().isClientSide()) {
             clearContainer(player, craftGrid);
         }
     }

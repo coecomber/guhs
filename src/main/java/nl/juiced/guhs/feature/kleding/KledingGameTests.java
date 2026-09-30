@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,13 +13,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.GameType;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -35,8 +33,6 @@ import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModVillagers;
 
 /** Clothing as a one-time unlock (2.9): using it up, dressing, the wardrobe rules, favourites, sources and the source moves. */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KledingGameTests {
     private static final String EMPTY = "empty";
 
@@ -45,7 +41,7 @@ public class KledingGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         KledingUnlocks.wis(player);
         return player;
     }
@@ -57,7 +53,7 @@ public class KledingGameTests {
     }
 
     private static boolean klaar(ServerPlayer player, String advancement) {
-        var holder = player.server.getAdvancements().get(Guhs.id(advancement));
+        var holder = player.level().getServer().getAdvancements().get(Guhs.id(advancement));
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -70,7 +66,7 @@ public class KledingGameTests {
     }
 
     /** Holding right-click uses the item up once (+1 unlock), a second one is refused ("Deze heb je al") and stays whole. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kledingOntgrendelVerbruiktEenStuk(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         ItemStack hoed = new ItemStack(ModItems.RAIN_HAT.get(), 1);
@@ -92,7 +88,7 @@ public class KledingGameTests {
         item.finishUsingItem(tweede, helper.getLevel(), player);
         helper.assertTrue(tweede.getCount() == 1 && KledingUnlocks.alle(player).size() == 1, "still whole (give it to a friend), still one unlock");
         // the unlocks survive in the saved data, and hair is never an unlock
-        helper.assertTrue(nl.juiced.guhs.quest.GuhQuests.saved(player).getList(KledingUnlocks.KEY, 8).size() == 1, "saved per player");
+        helper.assertTrue(nl.juiced.guhs.quest.GuhQuests.saved(player).getListOrEmpty(KledingUnlocks.KEY).size() == 1, "saved per player");
         GuhClothingItem kapsel = (GuhClothingItem) ModItems.clothingItem(GuhClothes.KAPSEL_KRULLEN);
         helper.assertTrue(!kapsel.isOntgrendelbaar() && !KledingOntgrendel.ontgrendel(player, GuhClothes.KAPSEL_KRULLEN), "hair stays with the kapper");
         leave(helper, player);
@@ -100,7 +96,7 @@ public class KledingGameTests {
     }
 
     /** Only the owner dresses a guh, only with their own unlocks; a guh keeps what it wears when it changes owner. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kledingAlleenEigenaarMetEigenUnlocks(GameTestHelper helper) {
         ServerPlayer baas = player(helper), ander = player(helper);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 1, 3));
@@ -128,13 +124,13 @@ public class KledingGameTests {
         helper.assertTrue(guh.getClothes(GuhClothes.Slot.OREN) == null, "but not with the old owner's unlocks");
         CompoundTag tag = new CompoundTag();
         guh.saveWithoutId(tag);
-        helper.assertTrue(tag.getString("ClothesEyes").equals("sunglasses"), "saved");
+        helper.assertTrue(tag.getStringOr("ClothesEyes", "").equals("sunglasses"), "saved");
         leave(helper, baas, ander);
         helper.succeed();
     }
 
     /** Wild guhs wear clothes for looks but drop none; what's in a backpack does fall out. */
-    @GameTest(template = EMPTY, timeoutTicks = 60)
+    @GuhTest(template = EMPTY, timeoutTicks = 60)
     public static void kledingWildeGuhsLatenNietsVallen(GameTestHelper helper) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 1, 3));
         guh.wear(GuhClothes.CHEF_HAT);
@@ -150,7 +146,7 @@ public class KledingGameTests {
     }
 
     /** The kleermaker's fixed full offer: his everyday set and the three ear bows, nothing that moved elsewhere. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kledingKleermakerVastAanbod(GameTestHelper helper) {
         Villager villager = helper.spawn(EntityType.VILLAGER, new BlockPos(2, 1, 2));
         villager.setVillagerData(villager.getVillagerData().setType(ModVillagers.GUH.get()).setProfession(ModVillagers.GUH_KLEERMAKER.get()));
@@ -169,7 +165,7 @@ public class KledingGameTests {
     }
 
     /** Every piece (not the hair) has exactly one registered source, and the moves of DESIGN_29 §10.1. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kledingElkStukEenBron(GameTestHelper helper) {
         List<GuhClothes> zonder = new ArrayList<>();
         for (GuhClothes c : GuhClothes.values()) {
@@ -196,7 +192,7 @@ public class KledingGameTests {
     }
 
     /** Bakker Korstje sells the chef set; Boerin Hooibaal gives the straw hat (first chore) and the overalls (third chore). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kledingBakkerEnBoerin(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         GuhNpcEntity bakker = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(2, 1, 2));
@@ -220,7 +216,7 @@ public class KledingGameTests {
     }
 
     /** Taming a Brococolief guh gives its pink onesie, once per player. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kledingBrococoliefOnesieEenKeer(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         nl.juiced.guhs.quest.GuhQuests.saved(player).remove(KledingFeature.ONESIE_KEY);
@@ -237,7 +233,7 @@ public class KledingGameTests {
     }
 
     /** Favourite outfits: saved per player, five of them, back in one piece. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kledingFavorieten(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         List<GuhClothes> mooi = outfit(GuhClothes.PARTY_HAT, GuhClothes.SUNGLASSES, GuhClothes.OORSTRIKJE_GEEL);
@@ -255,7 +251,7 @@ public class KledingGameTests {
     }
 
     /** "Get the whole outfit" advancements of other features count unlocked pieces (they aren't in your inventory any more). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kledingSetAdvancementsTellenUnlocks(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         helper.assertFalse(klaar(player, "guhmension/koning_pakje"), "not yet");
@@ -273,7 +269,7 @@ public class KledingGameTests {
     }
 
     /** The beauty show's "own pieces" are your unlocks (not loaners, and only as many as fit the dressing screen). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kledingBeautyEigenStukken(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         KledingUnlocks.ontgrendel(player, GuhClothes.SHOWSTER_TIARA);

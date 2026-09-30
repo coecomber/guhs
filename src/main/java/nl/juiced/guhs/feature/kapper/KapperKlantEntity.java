@@ -58,10 +58,10 @@ public class KapperKlantEntity extends GuhEntity {
     /** Right-click: the knip screen of the show it belongs to. */
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (hand == InteractionHand.MAIN_HAND && !this.level().isClientSide && player instanceof ServerPlayer sp) {
+        if (hand == InteractionHand.MAIN_HAND && !this.level().isClientSide() && player instanceof ServerPlayer sp) {
             KappersShow.klik(this, sp);
         }
-        return InteractionResult.sidedSuccess(this.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class KapperKlantEntity extends GuhEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             return;
         }
         if (weg > 0 && --weg == 0) {

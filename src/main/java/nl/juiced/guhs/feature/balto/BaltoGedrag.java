@@ -12,7 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -24,7 +24,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SnowyDirtBlock;
+import net.minecraft.world.level.block.SnowyBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
@@ -48,7 +48,7 @@ import nl.juiced.guhs.feature.verhaal.VerhaalVlaggen;
  * </ul>
  */
 public class BaltoGedrag implements VariantGedrag {
-    public static final ResourceLocation SNEEUW_MODIFIER = Guhs.id("balto_sneeuwsnel");
+    public static final Identifier SNEEUW_MODIFIER = Guhs.id("balto_sneeuwsnel");
     /** Extra walking speed on snow (x the base speed). */
     public static final double SNEEUW_EXTRA = 0.45;
     /** Ridden on snow: this factor on top. */
@@ -73,7 +73,7 @@ public class BaltoGedrag implements VariantGedrag {
         BlockState on = e.getBlockStateOn();
         BlockState in = e.level().getBlockState(e.blockPosition());
         return on.is(BlockTags.SNOW) || in.is(Blocks.SNOW) || on.is(BlockTags.ICE) || on.is(BaltoFeature.SNEEUWSPOOR.get())
-                || on.is(BaltoFeature.SNEEUWDAK.get()) || on.hasProperty(SnowyDirtBlock.SNOWY) && on.getValue(SnowyDirtBlock.SNOWY)
+                || on.is(BaltoFeature.SNEEUWDAK.get()) || on.hasProperty(SnowyBlock.SNOWY) && on.getValue(SnowyBlock.SNOWY)
                 || on.is(nl.juiced.guhs.feature.guhpolder.GuhpolderFeature.RIJPGRAS.get());
     }
 
@@ -86,7 +86,7 @@ public class BaltoGedrag implements VariantGedrag {
     public void tick(GuhEntity guh) {
         Level level = guh.level();
         boolean sneeuw = (guh.tickCount + guh.getId()) % 5 == 0 ? opSneeuw(guh) : false;
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             // snow puffs from his paws when he runs through snow
             if (guh.tickCount % 3 == 0 && guh.onGround() && guh.getDeltaMovement().horizontalDistanceSqr() > 0.004 && opSneeuw(guh)) {
                 level.addParticle(ParticleTypes.SNOWFLAKE, guh.getX() + (guh.getRandom().nextDouble() - 0.5) * 0.6, guh.getY() + 0.1,
@@ -106,14 +106,14 @@ public class BaltoGedrag implements VariantGedrag {
     /** Ridden fast over the snow for ~10 seconds (not necessarily in one go): the advancement "Zo snel als de wind". */
     static void rit(GuhEntity guh) {
         var data = guh.getPersistentData();
-        double lx = data.getDouble("guhs_balto_rit_x"), lz = data.getDouble("guhs_balto_rit_z");
+        double lx = data.getDoubleOr("guhs_balto_rit_x", 0.0), lz = data.getDoubleOr("guhs_balto_rit_z", 0.0);
         data.putDouble("guhs_balto_rit_x", guh.getX());
         data.putDouble("guhs_balto_rit_z", guh.getZ());
         if (!(guh.getControllingPassenger() instanceof ServerPlayer rider) || !opSneeuw(guh)
                 || Mth.square(guh.getX() - lx) + Mth.square(guh.getZ() - lz) < 9) {
             return;
         }
-        int n = data.getInt("guhs_balto_rit") + 1;
+        int n = data.getIntOr("guhs_balto_rit", 0) + 1;
         data.putInt("guhs_balto_rit", n);
         if (n >= 10) {
             BaltoVerhaal.grant(rider, "balto_sneeuwsnel");
@@ -193,19 +193,19 @@ public class BaltoGedrag implements VariantGedrag {
         Vec3 doel = d == null ? null : (Vec3) d[0];
         SPOREN.put(guh.getUUID(), new Spoor(owner.getUUID(), doel, level.getGameTime() + SNUFFEL_TICKS));
         if (doel == null) {
-            owner.displayClientMessage(Component.translatable("gui.guhs.balto.snuffel.andere_wereld", guh.getDisplayName())
-                    .withStyle(ChatFormatting.AQUA), false);
+            owner.sendSystemMessage(Component.translatable("gui.guhs.balto.snuffel.andere_wereld", guh.getDisplayName())
+                    .withStyle(ChatFormatting.AQUA));
             return null;
         }
         double dx = doel.x - guh.getX(), dz = doel.z - guh.getZ();
         int afstand = (int) Math.round(Math.sqrt(dx * dx + dz * dz));
         String soort = (String) d[1];
         if (afstand < 6) {
-            owner.displayClientMessage(Component.translatable("gui.guhs.balto.snuffel.al_thuis." + soort, guh.getDisplayName())
-                    .withStyle(ChatFormatting.AQUA), false);
+            owner.sendSystemMessage(Component.translatable("gui.guhs.balto.snuffel.al_thuis." + soort, guh.getDisplayName())
+                    .withStyle(ChatFormatting.AQUA));
         } else {
-            owner.displayClientMessage(Component.translatable("gui.guhs.balto.snuffel." + soort, guh.getDisplayName(), afstand,
-                    Component.translatable("gui.guhs.balto.richting." + richting(dx, dz))).withStyle(ChatFormatting.AQUA), false);
+            owner.sendSystemMessage(Component.translatable("gui.guhs.balto.snuffel." + soort, guh.getDisplayName(), afstand,
+                    Component.translatable("gui.guhs.balto.richting." + richting(dx, dz))).withStyle(ChatFormatting.AQUA));
         }
         BaltoVerhaal.grant(owner, "balto_snuffel");
         return doel;

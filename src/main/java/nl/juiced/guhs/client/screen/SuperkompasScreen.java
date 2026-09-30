@@ -6,7 +6,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -109,19 +109,19 @@ public class SuperkompasScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, GOUD);
         g.fill(left, top, left + W, top + H, 0xE8301A26);
         g.fill(left, top, left + W, top + TABS_Y + GidsTabs.H, 0xF0241320);
         g.fill(left, top + TABS_Y + GidsTabs.H, left + W, top + TABS_Y + GidsTabs.H + 1, GOUD);
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 7, LICHT);
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 7, LICHT);
         List<ItemStack> icons = SuperkompasItem.CATEGORIES.stream().map(SuperkompasItem.Category::icoon).toList();
         GidsTabs.teken(g, tabsX(), top + TABS_Y, icons, tab, mouseX, mouseY, GidsTabs.SUPERKOMPAS);
         // the category: its name and what it is about
         SuperkompasItem.Category c = SuperkompasItem.CATEGORIES.get(tab);
         int y = top + TABS_Y + GidsTabs.H + 5;
-        g.drawString(font, c.naam().copy().withStyle(ChatFormatting.BOLD), left + 10, y, GOUD, false);
+        g.text(font, c.naam().copy().withStyle(ChatFormatting.BOLD), left + 10, y, GOUD, false);
         GidsTekst.passend(g, Component.translatable("gui.guhs.superkompas." + c.id() + ".tooltip"), left + 10, y + 11, W - 20, 0.75f, ZACHT, false);
         lijst.teken(g, mouseX, mouseY, GOUD, 0x40F7D27A);
         // (wrapped at 0.75 so it never runs under the Done button)
@@ -129,17 +129,17 @@ public class SuperkompasScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.render(g, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
         int hover = GidsTabs.onder(tabsX(), top + TABS_Y, SuperkompasItem.CATEGORIES.size(), mouseX, mouseY);
         if (hover >= 0) {
             SuperkompasItem.Category c = SuperkompasItem.CATEGORIES.get(hover);
-            g.renderComponentTooltip(font, List.of(c.naam().copy().withStyle(ChatFormatting.BOLD),
+            g.setComponentTooltipForNextFrame(font, List.of(c.naam().copy().withStyle(ChatFormatting.BOLD),
                     Component.translatable("gui.guhs.superkompas." + c.id() + ".tooltip").withStyle(ChatFormatting.GRAY)), mouseX, mouseY);
         } else {
             List<Component> tip = lijst.tip(mouseX, mouseY);
             if (tip != null) {
-                g.renderComponentTooltip(font, tip, mouseX, mouseY);
+                g.setComponentTooltipForNextFrame(font, tip, mouseX, mouseY);
             }
         }
     }
@@ -192,7 +192,7 @@ public class SuperkompasScreen extends Screen {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             int tw = GidsTekst.passend(g, Component.literal("✦ ").append(naam).withStyle(ChatFormatting.BOLD), x + 1, y + 4, w - 20, 0.875f, GOUD, false);
             g.fill(x + tw + 6, y + 8, x + w - 1, y + 9, 0x80F7D27A);
         }
@@ -242,14 +242,14 @@ public class SuperkompasScreen extends Screen {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             knop(g, links, x, y + 1, bw(w), hover && links.equals(onder(mx, my, x, y, w)));
             if (rechts != null) {
                 knop(g, rechts, x + bw(w) + 4, y + 1, bw(w), hover && rechts.equals(onder(mx, my, x, y, w)));
             }
         }
 
-        private void knop(GuiGraphics g, String id, int x, int y, int w, boolean on) {
+        private void knop(GuiGraphicsExtractor g, String id, int x, int y, int w, boolean on) {
             boolean gekozen = id.equals(chosen);
             int rand = gekozen ? GOUD : on ? 0xFFE8B8CC : 0xFF6A4A5A;
             g.fill(x, y, x + w, y + KNOP_H, rand);
@@ -258,11 +258,11 @@ public class SuperkompasScreen extends Screen {
             SpelGroepen.Groep groep = GidsData.groepVanStructuur(id);
             int tx = x + 5;
             if (groep != null) {
-                g.pose().pushPose();
-                g.pose().translate(x + 3, y + 3, 0);
-                g.pose().scale(0.875f, 0.875f, 1);
-                g.renderItem(groep.icoon().get(), 0, 0);
-                g.pose().popPose();
+                g.pose().pushMatrix();
+                g.pose().translate(x + 3, y + 3);
+                g.pose().scale(0.875f, 0.875f);
+                g.item(groep.icoon().get(), 0, 0);
+                g.pose().popMatrix();
                 tx = x + 20;
             }
             int rechtsRuimte = 4;

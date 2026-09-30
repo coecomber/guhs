@@ -38,7 +38,7 @@ public final class SamenEvents {
 
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player && !player.level().isClientSide) {
+        if (event.getEntity() instanceof ServerPlayer player && !player.level().isClientSide()) {
             SamenReacties.gestorven(player);
         }
     }
@@ -97,7 +97,7 @@ public final class SamenEvents {
             return 0;
         }
         for (int dag = 0; dag < 40 && Band.hartjes(guh) < doel.drempel(); dag++) {
-            BandData.Rec r = BandData.get(player.server).vind(player.getUUID(), guh.getUUID());
+            BandData.Rec r = BandData.get(player.level().getServer()).vind(player.getUUID(), guh.getUUID());
             if (r != null) {
                 r.dag = -1;   // (a new "day": the caps start over)
             }

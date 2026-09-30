@@ -20,7 +20,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -41,13 +41,13 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.registry.ModItems;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * De kikkerguh: "een guh die een kikker is" (2.8: the real guh head with its round ears, glossy guh eyes, snoet and
@@ -79,12 +79,12 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
     }
 
     /** Kikkerguhs spawn on the soggy ground of the kaasmoeras (and any grass or mud), in the light. */
-    public static boolean checkKikkerguhSpawnRules(EntityType<KikkerguhEntity> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos,
+    public static boolean checkKikkerguhSpawnRules(EntityType<KikkerguhEntity> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos,
                                                    RandomSource random) {
         BlockState below = level.getBlockState(pos.below());
         boolean ground = below.is(KaasmoerasFeature.MODDERIG_KAASGRAS.get()) || below.is(KaasmoerasFeature.KAASMODDER.get())
                 || below.is(BlockTags.DIRT) || below.is(BlockTags.ANIMALS_SPAWNABLE_ON);
-        return ground && (MobSpawnType.ignoresLightRequirements(spawnType) || level.getRawBrightness(pos, 0) > 8);
+        return ground && (EntitySpawnReason.ignoresLightRequirements(spawnType) || level.getRawBrightness(pos, 0) > 8);
     }
 
     @Override
@@ -111,7 +111,7 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         for (MotknabbelBlock.Kleur k : MotknabbelBlock.Kleur.values()) {
-            if (k.getSerializedName().equals(tag.getString("Kleur"))) {
+            if (k.getSerializedName().equals(tag.getStringOr("Kleur", ""))) {
                 setKleur(k);
             }
         }
@@ -119,8 +119,8 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData data) {
-        if (spawnType != MobSpawnType.STRUCTURE) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData data) {
+        if (spawnType != EntitySpawnReason.STRUCTURE) {
             setKleur(MotknabbelBlock.Kleur.byIndex(random.nextInt(3)));
         }
         return super.finalizeSpawn(level, difficulty, spawnType, data);
@@ -146,7 +146,7 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
-        KikkerguhEntity baby = KaasmoerasFeature.KIKKERGUH.get().create(level);
+        KikkerguhEntity baby = KaasmoerasFeature.KIKKERGUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (baby != null) {
             baby.setKleur(other instanceof KikkerguhEntity o && random.nextBoolean() ? o.getKleur() : getKleur());
         }
@@ -156,7 +156,7 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (!level().isClientSide && snapCooldown > 0) {
+        if (!level().isClientSide() && snapCooldown > 0) {
             snapCooldown--;
         }
     }
@@ -249,7 +249,7 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
     @Override
     public void playAmbientSound() {
         super.playAmbientSound();
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             triggerAnim("action", "croak");
         }
     }

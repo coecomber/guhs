@@ -121,7 +121,7 @@ public final class TuintjesFeature {
         KnusVoortgang.tel(player, TuintjesVoortgang.FEESTBOEKET, 1);
         if (Knusfeest.open(player, Feesttaak.FEESTBLOEMEN)) {
             Knusfeest.gemaakt(player, Feesttaak.FEESTBLOEMEN);
-            player.displayClientMessage(Component.translatable("gui.guhs.tuintjes.feestboeket_klaar").withStyle(ChatFormatting.LIGHT_PURPLE), false);
+            player.sendSystemMessage(Component.translatable("gui.guhs.tuintjes.feestboeket_klaar").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 

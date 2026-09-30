@@ -164,8 +164,8 @@ public final class Minigames {
         item.setPickUpDelay(20);
         item.setTarget(player.getUUID());                  // only the winner may pick it up
         player.level().addFreshEntity(item);
-        player.displayClientMessage(net.minecraft.network.chat.Component.translatable("quest.guhs.minigame.dropped", rest.getCount(),
-                rest.getHoverName()).withStyle(net.minecraft.ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("quest.guhs.minigame.dropped", rest.getCount(),
+                rest.getHoverName()).withStyle(net.minecraft.ChatFormatting.GOLD));
         return true;
     }
 

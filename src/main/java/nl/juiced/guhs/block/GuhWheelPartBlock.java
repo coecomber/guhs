@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -16,7 +15,7 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import nl.juiced.guhs.registry.ModBlocks;
@@ -27,7 +26,7 @@ import nl.juiced.guhs.registry.ModBlocks;
  */
 public class GuhWheelPartBlock extends Block {
     public static final MapCodec<GuhWheelPartBlock> CODEC = simpleCodec(GuhWheelPartBlock::new);
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     /** Sideways position along the wheel: 0 = left, 1 = middle, 2 = right. */
     public static final IntegerProperty SIDE = IntegerProperty.create("side", 0, 2);
     /** Height above the wheel block: 0..2. */
@@ -87,13 +86,13 @@ public class GuhWheelPartBlock extends Block {
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         super.onRemove(state, level, pos, newState, movedByPiston);
         BlockPos wheel = wheelPos(state, pos);
-        if (!newState.is(this) && !level.isClientSide && level.getBlockState(wheel).is(ModBlocks.GUH_WHEEL.get())) {
+        if (!newState.is(this) && !level.isClientSide() && level.getBlockState(wheel).is(ModBlocks.GUH_WHEEL.get())) {
             level.destroyBlock(wheel, true);
         }
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                               InteractionHand hand, BlockHitResult hit) {
         BlockPos wheel = wheelPos(state, pos);
         return level.getBlockState(wheel).useItemOn(stack, level, player, hand, hit.withPosition(wheel));

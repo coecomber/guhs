@@ -15,6 +15,8 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.MikaEntity;
 import nl.juiced.guhs.entity.QuestGuhEntity;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 public final class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
 
@@ -28,7 +30,7 @@ public final class ModEntities {
                     .eyeHeight(0.55f)
                     .passengerAttachments(new Vec3(0, 0.6, -0.3))
                     .clientTrackingRange(10)
-                    .build(Guhs.id("guh").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh"))));
 
     /** Mika: the evil guh (hostile, harmless). Fixed base size, randomised a little on spawn. */
     public static final DeferredHolder<EntityType<?>, EntityType<MikaEntity>> MIKA = ENTITY_TYPES.register("mika",
@@ -36,7 +38,7 @@ public final class ModEntities {
                     .sized(0.9f, 0.8f)
                     .eyeHeight(0.55f)
                     .clientTrackingRange(8)
-                    .build(Guhs.id("mika").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("mika"))));
 
     /** The Hungry Guh (quest NPC at guh picnics). Sits up, so it's taller than a normal guh. */
     public static final DeferredHolder<EntityType<?>, EntityType<QuestGuhEntity>> QUEST_GUH = ENTITY_TYPES.register("quest_guh",
@@ -44,45 +46,45 @@ public final class ModEntities {
                     .sized(0.9f, 1.9f)
                     .eyeHeight(1.5f)
                     .clientTrackingRange(10)
-                    .build(Guhs.id("quest_guh").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("quest_guh"))));
 
     /** The quest characters (Moeder Vadsig, Tandarts-guh, Maagenzym-guh, Slee-guh); their size follows their kind. */
     public static final DeferredHolder<EntityType<?>, EntityType<nl.juiced.guhs.entity.GuhNpcEntity>> GUH_NPC = ENTITY_TYPES.register("guh_npc",
             () -> EntityType.Builder.of(nl.juiced.guhs.entity.GuhNpcEntity::new, MobCategory.MISC)
-                    .sized(0.9f, 1.9f).eyeHeight(1.5f).clientTrackingRange(10).build(Guhs.id("guh_npc").toString()));
+                    .sized(0.9f, 1.9f).eyeHeight(1.5f).clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_npc"))));
 
     /** The Mika-baas of the Mika camp (rock-paper-scissors-VADS). */
     public static final DeferredHolder<EntityType<?>, EntityType<nl.juiced.guhs.entity.MikaBaasEntity>> MIKA_BAAS = ENTITY_TYPES.register("mika_baas",
             () -> EntityType.Builder.of(nl.juiced.guhs.entity.MikaBaasEntity::new, MobCategory.MISC)
-                    .sized(0.9f, 0.8f).eyeHeight(0.55f).clientTrackingRange(10).build(Guhs.id("mika_baas").toString()));
+                    .sized(0.9f, 0.8f).eyeHeight(0.55f).clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("mika_baas"))));
 
     /** The guh sled (rides on sled rails). */
     public static final DeferredHolder<EntityType<?>, EntityType<nl.juiced.guhs.entity.GuhSleeEntity>> GUH_SLEE = ENTITY_TYPES.register("guh_slee",
             () -> EntityType.Builder.<nl.juiced.guhs.entity.GuhSleeEntity>of(nl.juiced.guhs.entity.GuhSleeEntity::new, MobCategory.MISC)
-                    .sized(1.2f, 0.5f).clientTrackingRange(10).updateInterval(2).build(Guhs.id("guh_slee").toString()));
+                    .sized(1.2f, 0.5f).clientTrackingRange(10).updateInterval(2).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_slee"))));
 
     /** Guh fish: schools of them in the pink pools of the guh sea. */
     public static final DeferredHolder<EntityType<?>, EntityType<nl.juiced.guhs.entity.GuhVisEntity>> GUH_VIS = ENTITY_TYPES.register("guh_vis",
             () -> EntityType.Builder.of(nl.juiced.guhs.entity.GuhVisEntity::new, MobCategory.WATER_AMBIENT)
-                    .sized(0.5f, 0.35f).eyeHeight(0.2f).clientTrackingRange(4).build(Guhs.id("guh_vis").toString()));
+                    .sized(0.5f, 0.35f).eyeHeight(0.2f).clientTrackingRange(4).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_vis"))));
 
     /** Guh bees: peaceful, pink, fill a knabbelkorf. */
     public static final DeferredHolder<EntityType<?>, EntityType<nl.juiced.guhs.entity.GuhBeeEntity>> GUH_BEE = ENTITY_TYPES.register("guh_bee",
             () -> EntityType.Builder.<nl.juiced.guhs.entity.GuhBeeEntity>of(nl.juiced.guhs.entity.GuhBeeEntity::new, MobCategory.CREATURE)
-                    .sized(0.7f, 0.6f).eyeHeight(0.3f).clientTrackingRange(8).build(Guhs.id("guh_bee").toString()));
+                    .sized(0.7f, 0.6f).eyeHeight(0.3f).clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_bee"))));
     /** Pink guh slimes: peaceful (a creature, not a monster). */
     public static final DeferredHolder<EntityType<?>, EntityType<nl.juiced.guhs.entity.GuhSlimeEntity>> GUH_SLIME = ENTITY_TYPES.register("guh_slime",
             () -> EntityType.Builder.<nl.juiced.guhs.entity.GuhSlimeEntity>of(nl.juiced.guhs.entity.GuhSlimeEntity::new, MobCategory.CREATURE)
-                    .sized(0.52f, 0.52f).eyeHeight(0.325f).spawnDimensionsScale(4f).clientTrackingRange(10).build(Guhs.id("guh_slime").toString()));
+                    .sized(0.52f, 0.52f).eyeHeight(0.325f).spawnDimensionsScale(4f).clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_slime"))));
     /** Nether Mikas: scorched, fire-proof Mikas in the Nether. */
     public static final DeferredHolder<EntityType<?>, EntityType<MikaEntity>> NETHER_MIKA = ENTITY_TYPES.register("nether_mika",
             () -> EntityType.Builder.<MikaEntity>of(MikaEntity::new, MobCategory.MONSTER).fireImmune()
-                    .sized(0.9f, 0.8f).eyeHeight(0.55f).clientTrackingRange(10).build(Guhs.id("nether_mika").toString()));
+                    .sized(0.9f, 0.8f).eyeHeight(0.55f).clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("nether_mika"))));
 
     /** What you sit on when sitting on guh furniture (invisible, never saved). */
     public static final DeferredHolder<EntityType<?>, EntityType<nl.juiced.guhs.entity.GuhSeatEntity>> GUH_SEAT = ENTITY_TYPES.register("guh_seat",
             () -> EntityType.Builder.<nl.juiced.guhs.entity.GuhSeatEntity>of(nl.juiced.guhs.entity.GuhSeatEntity::new, MobCategory.MISC)
-                    .sized(0.01f, 0.01f).noSave().noSummon().clientTrackingRange(8).build(Guhs.id("guh_seat").toString()));
+                    .sized(0.01f, 0.01f).noSave().noSummon().clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_seat"))));
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(GUH_BEE.get(), net.minecraft.world.entity.animal.Bee.createAttributes().build());

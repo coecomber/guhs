@@ -58,7 +58,7 @@ public final class Scanner {
     }
 
     private static String sleutel(ServerLevel level, BlockPos pos) {
-        return level.dimension().location() + "|" + pos.asLong();
+        return level.dimension().identifier() + "|" + pos.asLong();
     }
 
     /** Is a measurement running on this scanner? */

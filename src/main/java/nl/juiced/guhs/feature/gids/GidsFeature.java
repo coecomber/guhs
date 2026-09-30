@@ -67,14 +67,14 @@ public final class GidsFeature {
 
     /** Grants a code-granted advancement (criterion "done", trigger minecraft:impossible). */
     public static void grant(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(name));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }
     }
 
     public static boolean heeft(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(name));
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
     }
 

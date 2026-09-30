@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.guhwaii;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,8 +16,6 @@ import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -34,6 +32,7 @@ import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of Guhwai'i (feature/guhwaii): the vadsigheid-scanner on any guh, the Schilly-eitjes that hatch, the ohana
  * questline step by step (with the 626-guh tameable once per player), the 626-guh's climbing, ceiling and carrying, his
@@ -41,8 +40,6 @@ import nl.juiced.guhs.registry.ModItems;
  * helper 4,2,4), guhwaii_test_strand (sand, water on the east side), guhwaii_test_huisje (20 x 20 floor), guhwaii_test_muur
  * (a wall on the west side, a ceiling 4 blocks over the floor). A template's y 0 is helper y 1: things stand at helper y 2.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class GuhwaiiGameTests {
     private static final String BATCH = "guhwaii";
 
@@ -52,7 +49,7 @@ public class GuhwaiiGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -63,9 +60,9 @@ public class GuhwaiiGameTests {
     }
 
     static GuhEntity guh(GameTestHelper helper, double x, double y, double z) {
-        GuhEntity g = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity g = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         Vec3 v = helper.absoluteVec(new Vec3(x, y, z));
-        g.moveTo(v.x, v.y, v.z, 0f, 0f);
+        g.snapTo(v.x, v.y, v.z, 0f, 0f);
         g.setPersistenceRequired();
         helper.getLevel().addFreshEntity(g);
         return g;
@@ -76,7 +73,7 @@ public class GuhwaiiGameTests {
     // =================================================================================================================
 
     /** Every guh on the plate is ONBEREKENBAAR VAHOEG: a wild one, a tamed 626-guh, a tiny baby; your own guh hops on. */
-    @GameTest(template = "guhwaii_test_scanner", batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = "guhwaii_test_scanner", batch = BATCH, timeoutTicks = 400)
     public static void guhwaiiScannerOpElkeGuh(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos scanner = helper.absolutePos(new BlockPos(4, 2, 4));
@@ -122,7 +119,7 @@ public class GuhwaiiGameTests {
     // =================================================================================================================
 
     /** Schilly-eitjes get ready (rijp 0, 1, 2) and hatch: one baby Poepschilly or Schilly per egg. */
-    @GameTest(template = "guhwaii_test_strand", batch = BATCH)
+    @GuhTest(template = "guhwaii_test_strand", batch = BATCH)
     public static void guhwaiiEitjesKomenUit(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos pos = helper.absolutePos(new BlockPos(4, 2, 4));
@@ -150,7 +147,7 @@ public class GuhwaiiGameTests {
     // =================================================================================================================
 
     /** The whole questline: Lilo, the capsule, the adoption, cleaning up, being lief, ohana, and 626-guh once per player. */
-    @GameTest(template = "guhwaii_test_huisje", batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = "guhwaii_test_huisje", batch = BATCH, timeoutTicks = 200)
     public static void guhwaiiOhanaStappen(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(10, 2, 13)), q = speler(helper, new BlockPos(12, 2, 13));
@@ -224,10 +221,10 @@ public class GuhwaiiGameTests {
     }
 
     private static GuhNpcEntity npc(GameTestHelper helper, GuhNpcEntity.Kind kind, int x, int z) {
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(kind);
         Vec3 v = helper.absoluteVec(new Vec3(x + 0.5, 2, z + 0.5));
-        npc.moveTo(v.x, v.y, v.z, 0f, 0f);
+        npc.snapTo(v.x, v.y, v.z, 0f, 0f);
         helper.getLevel().addFreshEntity(npc);
         return npc;
     }
@@ -257,7 +254,7 @@ public class GuhwaiiGameTests {
     // =================================================================================================================
 
     /** 626-guh climbs walls, hangs from the ceiling (and lets go), carries two, strums the ukelele; other guhs don't. */
-    @GameTest(template = "guhwaii_test_muur", batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = "guhwaii_test_muur", batch = BATCH, timeoutTicks = 200)
     public static void guhwaii626KlimtEnDraagt(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(5, 2, 5));
         GuhEntity stitch = guh(helper, 1.5, 2, 4.5);
@@ -306,13 +303,13 @@ public class GuhwaiiGameTests {
     // =================================================================================================================
 
     /** A guh-palm on the beach: a trunk with a guh face, fronds that touch (they never decay), coconuts; the outfit sources. */
-    @GameTest(template = "guhwaii_test_strand", batch = BATCH)
+    @GuhTest(template = "guhwaii_test_strand", batch = BATCH)
     public static void guhwaiiPalmEnKleding(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos grond = helper.absolutePos(new BlockPos(4, 1, 5));
         boolean gezet = false;
         for (int i = 0; i < 20 && !gezet; i++) {
-            gezet = GuhwaiiWorldgen.boom(level, level.random, grond);
+            gezet = GuhwaiiWorldgen.boom(level, level.getRandom(), grond);
         }
         helper.assertTrue(gezet, "a palm grows on the sand");
         int gezichten = 0, bladeren = 0, noten = 0;

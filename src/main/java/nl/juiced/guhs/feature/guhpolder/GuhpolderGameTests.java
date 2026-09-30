@@ -14,10 +14,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.QuartPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -32,13 +32,11 @@ import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.SnowyDirtBlock;
+import net.minecraft.world.level.block.SnowyBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
@@ -56,8 +54,6 @@ import nl.juiced.guhs.registry.ModItems;
  * the meeglijden API for the Elf-Guhjestocht, and the polder's share of the Guhmension with room for the tour (worked
  * out from the dimension's own biome source and noise, so it runs on the GameTest server).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class GuhpolderGameTests {
     /** 16 x 12 x 16: rijpgras at x < 8, polderijs at x >= 8 (the floor at relative y 1: the template sits on its structure block). */
     private static final String IJSBAAN = "guhpolder_test_ijsbaan";
@@ -70,7 +66,7 @@ public class GuhpolderGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -83,7 +79,7 @@ public class GuhpolderGameTests {
 
     private static int count(ServerPlayer p, net.minecraft.world.item.Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -103,7 +99,7 @@ public class GuhpolderGameTests {
     // blocks
     // =================================================================================================================
 
-    @GameTest(template = IJSBAAN)
+    @GuhTest(template = IJSBAAN)
     public static void guhpolderBlokken(GameTestHelper helper) {
         var level = helper.getLevel();
         BlockState ijs = GuhpolderFeature.POLDERIJS.get().defaultBlockState();
@@ -114,15 +110,15 @@ public class GuhpolderGameTests {
         BlockPos p = new BlockPos(10, 1, 4);
         helper.setBlock(p.above(), Blocks.CAMPFIRE);
         for (int i = 0; i < 50; i++) {
-            helper.getBlockState(p).randomTick(level, helper.absolutePos(p), level.random);
+            helper.getBlockState(p).randomTick(level, helper.absolutePos(p), level.getRandom());
         }
         helper.assertBlockPresent(GuhpolderFeature.POLDERIJS.get(), p);
         // rijpgras shows its snowy sides under snow
         BlockPos g = new BlockPos(3, 1, 3);
         helper.setBlock(g.above(), Blocks.SNOW);
-        helper.assertTrue(helper.getBlockState(g).getValue(SnowyDirtBlock.SNOWY), "rijpgras is snowy under snow");
+        helper.assertTrue(helper.getBlockState(g).getValue(SnowyBlock.SNOWY), "rijpgras is snowy under snow");
         helper.setBlock(g.above(), Blocks.AIR);
-        helper.assertTrue(!helper.getBlockState(g).getValue(SnowyDirtBlock.SNOWY), "and not without");
+        helper.assertTrue(!helper.getBlockState(g).getValue(SnowyBlock.SNOWY), "and not without");
         // plants: the ijsbloempje and the sprietjes grow on rijpgras, the crystal glows
         helper.setBlock(new BlockPos(2, 2, 2), GuhpolderFeature.GUH_IJSBLOEMPJE.get());
         helper.setBlock(new BlockPos(4, 2, 2), GuhpolderFeature.RIJPSPRIETJES.get());
@@ -136,23 +132,23 @@ public class GuhpolderGameTests {
                 "the ijsbloempje gives light blue dye");
         helper.assertTrue(level.getRecipeManager().byKey(Guhs.id("guh_molentje")).isPresent(), "the molentje can be crafted");
         // the knabbelkelder may lie under the polder; the biome: guhs yes, Mika's never
-        var biome = level.registryAccess().registryOrThrow(Registries.BIOME).get(GuhpolderFeature.GUHPOLDER);
+        var biome = level.registryAccess().lookupOrThrow(Registries.BIOME).get(GuhpolderFeature.GUHPOLDER);
         helper.assertTrue(biome != null && biome.hasPrecipitation() && biome.coldEnoughToSnow(helper.absolutePos(g)), "a snowy biome");
         var creatures = biome.getMobSettings().getMobs(net.minecraft.world.entity.MobCategory.CREATURE).unwrap();
         helper.assertTrue(creatures.stream().allMatch(s -> s.type == ModEntities.GUH.get()) && !creatures.isEmpty(), "only guhs spawn");
         for (var cat : net.minecraft.world.entity.MobCategory.values()) {
             for (MobSpawnSettings.SpawnerData s : biome.getMobSettings().getMobs(cat).unwrap()) {
-                helper.assertTrue(!s.type.builtInRegistryHolder().key().location().getPath().contains("mika"), "no Mika's in the polder");
+                helper.assertTrue(!s.type.builtInRegistryHolder().key().identifier().getPath().contains("mika"), "no Mika's in the polder");
             }
         }
-        var kelder = level.registryAccess().registryOrThrow(Registries.BIOME).getTag(
+        var kelder = level.registryAccess().lookupOrThrow(Registries.BIOME).getTag(
                 net.minecraft.tags.TagKey.create(Registries.BIOME, Guhs.id("has_structure/knabbelkelder")));
         helper.assertTrue(kelder.isPresent() && kelder.get().stream().anyMatch(h -> h.is(GuhpolderFeature.GUHPOLDER)), "knabbelkelder tag");
         helper.succeed();
     }
 
     /** A knotwilg from the worldgen: trunk, knobs, twigs that don't fall off, snow caps on top. */
-    @GameTest(template = IJSBAAN)
+    @GuhTest(template = IJSBAAN)
     public static void guhpolderKnotwilg(GameTestHelper helper) {
         BlockPos grond = new BlockPos(3, 1, 8);
         boolean ok = GuhpolderWorldgen.boom(helper.getLevel(), RandomSource.create(7), helper.absolutePos(grond));
@@ -188,7 +184,7 @@ public class GuhpolderGameTests {
     // the guh-molentje and knabbelmeel
     // =================================================================================================================
 
-    @GameTest(template = IJSBAAN, timeoutTicks = 400)
+    @GuhTest(template = IJSBAAN, timeoutTicks = 400)
     public static void guhpolderMolentjeMaalt(GameTestHelper helper) {
         BlockPos m = new BlockPos(3, 2, 3);
         helper.setBlock(m, GuhpolderFeature.GUH_MOLENTJE.get());
@@ -234,7 +230,7 @@ public class GuhpolderGameTests {
     }
 
     /** The knabbeloven takes knabbelmeel instead of knabbelgraan and bakes twice as much. */
-    @GameTest(template = IJSBAAN, timeoutTicks = 300)
+    @GuhTest(template = IJSBAAN, timeoutTicks = 300)
     public static void guhpolderKnabbelovenMetMeel(GameTestHelper helper) {
         BlockPos o = new BlockPos(3, 2, 3);
         helper.setBlock(o, BakkerijFeature.KNABBELOVEN.get());
@@ -265,7 +261,7 @@ public class GuhpolderGameTests {
     // the Pinguh
     // =================================================================================================================
 
-    @GameTest(template = IJSBAAN)
+    @GuhTest(template = IJSBAAN)
     public static void guhpolderPinguhGeboren(GameTestHelper helper) {
         int pinguhs = 0, n = 120;
         for (int i = 0; i < n; i++) {
@@ -304,7 +300,7 @@ public class GuhpolderGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhpolderPinguhLooks(GameTestHelper helper) {
         Map<Pinguh.Look, Integer> n = new HashMap<>();
         RandomSource r = RandomSource.create(29);
@@ -337,11 +333,11 @@ public class GuhpolderGameTests {
     }
 
     /** On the ice a Pinguh belly-slides faster; on the rijpgras it waddles at its normal speed. */
-    @GameTest(template = IJSBAAN, timeoutTicks = 200)
+    @GuhTest(template = IJSBAAN, timeoutTicks = 200)
     public static void guhpolderPinguhGlijdt(GameTestHelper helper) {
         GuhEntity opIJs = guh(helper, new BlockPos(12, 2, 8), GuhVariant.PINGUH);
         GuhEntity opGras = guh(helper, new BlockPos(3, 2, 8), GuhVariant.PINGUH);
-        ResourceLocation id = Pinguh.GLIJ_ID;
+        Identifier id = Pinguh.GLIJ_ID;
         helper.startSequence()
                 .thenWaitUntil(() -> helper.assertTrue(opIJs.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(id), "sliding on the ice..."))
                 .thenExecute(() -> {
@@ -352,7 +348,7 @@ public class GuhpolderGameTests {
     }
 
     /** The API for the Elf-Guhjestocht: a tamed Pinguh slides along next to a skater, and stops when told. */
-    @GameTest(template = IJSBAAN, timeoutTicks = 300)
+    @GuhTest(template = IJSBAAN, timeoutTicks = 300)
     public static void guhpolderPinguhGlijdtMee(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(9, 2, 2));
         GuhEntity pinguh = guh(helper, new BlockPos(13, 2, 13), GuhVariant.PINGUH);
@@ -412,7 +408,7 @@ public class GuhpolderGameTests {
      * samples): how wide they are, and on how many the peak of the polder noise is high enough, with the noise dead flat on a
      * ring of 136 blocks, for the Elf-Guhjestocht.
      */
-    @GameTest(template = EMPTY, timeoutTicks = 6000)
+    @GuhTest(template = EMPTY, timeoutTicks = 6000)
     public static void guhpolderDeelEnRuimte(GameTestHelper helper) {
         var server = helper.getLevel().getServer();
         var access = server.registryAccess();
@@ -434,7 +430,7 @@ public class GuhpolderGameTests {
         BiomeSource with = BiomeSource.CODEC.parse(ops, source).getOrThrow();
         net.minecraft.world.level.biome.MultiNoiseBiomeSource before =
                 (net.minecraft.world.level.biome.MultiNoiseBiomeSource) BiomeSource.CODEC.parse(ops, without).getOrThrow();
-        NoiseGeneratorSettings settings = access.registryOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
         var zeeKey = net.minecraft.resources.ResourceKey.create(Registries.NOISE, Guhs.id("guhmension_zee"));
         var knuffelKey = net.minecraft.resources.ResourceKey.create(Registries.NOISE, Guhs.id("guhmension_knuffel"));
         Map<String, Integer> now = new HashMap<>(), then = new HashMap<>();
@@ -455,7 +451,7 @@ public class GuhpolderGameTests {
                 for (int j = 0; j < n; j++) {
                     int x = -half + i * step, z = -half + j * step;
                     int qx = QuartPos.fromBlock(x), qy = QuartPos.fromBlock(100), qz = QuartPos.fromBlock(z);
-                    String b = with.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().location().getPath();
+                    String b = with.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().identifier().getPath();
                     double v = noise.getValue(x, 0, z);
                     double buiten = spline(zee.getValue(x, 0, z), SEA_OFF[0], SEA_OFF[1], 1, 0)
                             * spline(knuffel.getValue(x, 0, z), KNUFFEL_OFF[0], KNUFFEL_OFF[1], 1, 0);
@@ -463,7 +459,7 @@ public class GuhpolderGameTests {
                     Climate.TargetPoint tp = sampler.sample(qx, qy, qz);
                     Climate.TargetPoint undone = new Climate.TargetPoint(tp.temperature(), tp.humidity(), tp.continentalness(), tp.erosion(),
                             tp.depth() + Climate.quantizeCoord((float) (t * DEPTH_SHIFT)), tp.weirdness() + Climate.quantizeCoord((float) (t * WEIRD_SHIFT)));
-                    String was = before.getNoiseBiome(undone).unwrapKey().orElseThrow().location().getPath();
+                    String was = before.getNoiseBiome(undone).unwrapKey().orElseThrow().identifier().getPath();
                     now.merge(b, 1, Integer::sum);
                     then.merge(was, 1, Integer::sum);
                     if (!b.equals("guhpolder") && !b.equals(was)) {
@@ -592,10 +588,10 @@ public class GuhpolderGameTests {
      * No snow piling up and no ice forming from the weather in the Guhpolder (GuhpolderWeer + mixin.ServerLevelMixin), while
      * a vanilla snowy biome on the very same spot still freezes its water and gets a snow layer (vanilla stays vanilla).
      */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhpolderWeerLaatDePolderMetRust(GameTestHelper helper) {
         var level = helper.getLevel();
-        var biomes = level.registryAccess().registryOrThrow(Registries.BIOME);
+        var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
         var polder = biomes.getHolderOrThrow(GuhpolderFeature.GUHPOLDER);
         var sneeuwvlakte = biomes.getHolderOrThrow(net.minecraft.world.level.biome.Biomes.SNOWY_PLAINS);
         var hoogte = net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING;

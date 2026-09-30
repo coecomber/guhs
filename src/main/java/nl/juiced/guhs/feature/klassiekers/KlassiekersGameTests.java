@@ -1,12 +1,10 @@
 package nl.juiced.guhs.feature.klassiekers;
 
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.spelen.Niveau;
 import nl.juiced.guhs.quest.Highscores;
@@ -18,12 +16,10 @@ import nl.juiced.guhs.quest.Scorebord;
  * The games' own level tests are in their own GameTests classes (MeppenGameTests, GolfGameTests, SmulGameTests,
  * VissenGameTests, BeautyGameTests).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KlassiekersGameTests {
     private static final String EMPTY = "empty";
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void klassiekersActionsCarryTheLevel(GameTestHelper helper) {
         for (int action = 0; action < 8; action++) {
             helper.assertTrue(Klassiekers.niveau(action) == Niveau.MEDIUM && Klassiekers.actie(action) == action, "a plain action is medium: " + action);
@@ -45,7 +41,7 @@ public class KlassiekersGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void klassiekersBoardShowsAllThreeLevels(GameTestHelper helper) {
         @SuppressWarnings("removal")
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
@@ -56,13 +52,13 @@ public class KlassiekersGameTests {
         helper.assertTrue(json.contains("gui.guhs.niveau.makkelijk") && json.contains("gui.guhs.niveau.medium") && json.contains("gui.guhs.niveau.lastig"),
                 "three levels: " + json);
         helper.assertTrue(json.contains("extra0") && json.contains("extra2"), "with their extra line");
-        helper.assertTrue(json.contains(player.getGameProfile().getName() + "  4242 pt"), "and the lastig score");
+        helper.assertTrue(json.contains(player.getGameProfile().name() + "  4242 pt"), "and the lastig score");
         helper.assertTrue(json.indexOf("gui.guhs.niveau.lastig") < json.indexOf("4242"), "under the lastig heading");
         helper.getLevel().removePlayerImmediately(player, Entity.RemovalReason.DISCARDED);
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void klassiekersKampioenAfterAllFiveOnLastig(GameTestHelper helper) {
         @SuppressWarnings("removal")
         ServerPlayer player = helper.makeMockServerPlayerInLevel();

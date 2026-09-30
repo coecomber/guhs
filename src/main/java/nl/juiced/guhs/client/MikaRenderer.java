@@ -5,8 +5,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.MikaEntity;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /** Mika: geo/entity/mika.geo.json + textures/entity/mika.png, animated with the guh animations. */
 public class MikaRenderer extends GeoEntityRenderer<MikaEntity> {

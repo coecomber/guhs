@@ -89,9 +89,9 @@ public final class MijnGuhsCache {
     static void zet(CompoundTag data) {
         HolderLookup.Provider reg = Minecraft.getInstance().level != null ? Minecraft.getInstance().level.registryAccess() : RegistryAccess.EMPTY;
         List<Guh> list = new ArrayList<>();
-        ListTag guhList = data.getList("Guhs", Tag.TAG_COMPOUND);
+        ListTag guhList = data.getListOrEmpty("Guhs");
         for (int i = 0; i < guhList.size(); i++) {
-            CompoundTag t = guhList.getCompound(i);
+            CompoundTag t = guhList.getCompoundOrEmpty(i);
             try {
                 list.add(lees(t, reg));
             } catch (RuntimeException e) {
@@ -99,10 +99,10 @@ public final class MijnGuhsCache {
             }
         }
         guhs = List.copyOf(list);
-        dag = data.getLong("Dag");
+        dag = data.getLongOr("Dag", 0L);
         if (data.contains("Focus")) {
             try {
-                focus = UUID.fromString(data.getString("Focus"));
+                focus = UUID.fromString(data.getStringOr("Focus", ""));
             } catch (IllegalArgumentException ignored) {
                 focus = null;
             }
@@ -127,39 +127,39 @@ public final class MijnGuhsCache {
 
     private static Guh lees(CompoundTag t, HolderLookup.Provider reg) {
         List<Fav> fav = new ArrayList<>();
-        ListTag f = t.getList("Fav", Tag.TAG_COMPOUND);
+        ListTag f = t.getListOrEmpty("Fav");
         for (int i = 0; i < f.size(); i++) {
-            String naam = f.getCompound(i).getString("Naam");
-            fav.add(new Fav(f.getCompound(i).getString("Soort"), naam.isEmpty() ? null : tekst(naam, reg)));
+            String naam = f.getCompoundOrEmpty(i).getStringOr("Naam", "");
+            fav.add(new Fav(f.getCompoundOrEmpty(i).getStringOr("Soort", ""), naam.isEmpty() ? null : tekst(naam, reg)));
         }
         List<Vriend> vrienden = new ArrayList<>();
-        ListTag v = t.getList("Vrienden", Tag.TAG_COMPOUND);
+        ListTag v = t.getListOrEmpty("Vrienden");
         for (int i = 0; i < v.size(); i++) {
-            vrienden.add(new Vriend(v.getCompound(i).getString("Naam"), v.getCompound(i).getBoolean("Bestie")));
+            vrienden.add(new Vriend(v.getCompoundOrEmpty(i).getStringOr("Naam", ""), v.getCompoundOrEmpty(i).getBooleanOr("Bestie", false)));
         }
         List<Component> klussen = new ArrayList<>();
-        ListTag k = t.getList("Klussen", Tag.TAG_STRING);
+        ListTag k = t.getListOrEmpty("Klussen");
         for (int i = 0; i < k.size(); i++) {
-            klussen.add(tekst(k.getString(i), reg));
+            klussen.add(tekst(k.getStringOr(i, ""), reg));
         }
         Map<String, Long> stats = new LinkedHashMap<>();
-        CompoundTag st = t.getCompound("Stats");
-        for (String key : st.getAllKeys()) {
-            stats.put(key, st.getLong(key));
+        CompoundTag st = t.getCompoundOrEmpty("Stats");
+        for (String key : st.keySet()) {
+            stats.put(key, st.getLongOr(key, 0L));
         }
         List<Eerste> eerste = new ArrayList<>();
-        ListTag e = t.getList("Eerste", Tag.TAG_COMPOUND);
+        ListTag e = t.getListOrEmpty("Eerste");
         for (int i = 0; i < e.size(); i++) {
-            eerste.add(new Eerste(e.getCompound(i).getString("Id"), e.getCompound(i).getLong("Dag")));
+            eerste.add(new Eerste(e.getCompoundOrEmpty(i).getStringOr("Id", ""), e.getCompoundOrEmpty(i).getLongOr("Dag", 0L)));
         }
         List<Wist> wist = new ArrayList<>();
-        ListTag w = t.getList("Wist", Tag.TAG_COMPOUND);
+        ListTag w = t.getListOrEmpty("Wist");
         for (int i = 0; i < w.size(); i++) {
-            wist.add(new Wist(tekst(w.getCompound(i).getString("Tekst"), reg), w.getCompound(i).getLong("Dag")));
+            wist.add(new Wist(tekst(w.getCompoundOrEmpty(i).getStringOr("Tekst", ""), reg), w.getCompoundOrEmpty(i).getLongOr("Dag", 0L)));
         }
-        return new Guh(UUID.fromString(t.getString("Id")), t.getString("Naam"), t.getCompound("Looks"), t.getInt("Hartjes"), t.getInt("Niveau"),
-                t.getInt("Volgende"), fav, vrienden, t.getString("Huisje"), klussen, tekst(t.getString("Plek"), reg), stats, eerste, wist,
-                t.getLong("Sinds"), t.getBoolean("Dood"));
+        return new Guh(UUID.fromString(t.getStringOr("Id", "")), t.getStringOr("Naam", ""), t.getCompoundOrEmpty("Looks"), t.getIntOr("Hartjes", 0), t.getIntOr("Niveau", 0),
+                t.getIntOr("Volgende", 0), fav, vrienden, t.getStringOr("Huisje", ""), klussen, tekst(t.getStringOr("Plek", ""), reg), stats, eerste, wist,
+                t.getLongOr("Sinds", 0L), t.getBooleanOr("Dood", false));
     }
 
     private static Component tekst(String json, HolderLookup.Provider reg) {

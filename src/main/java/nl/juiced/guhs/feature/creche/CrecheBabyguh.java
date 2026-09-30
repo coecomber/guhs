@@ -25,12 +25,12 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * guhs:creche_babyguh (a prop, no Guhdex page): a tiny baby guh with a pacifier that crawls out of its crib during Juf
@@ -109,7 +109,7 @@ public class CrecheBabyguh extends PathfinderMob implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         if (drager != null) {
@@ -139,10 +139,10 @@ public class CrecheBabyguh extends PathfinderMob implements GeoEntity {
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
-        if (!level().isClientSide && player instanceof ServerPlayer sp) {
+        if (!level().isClientSide() && player instanceof ServerPlayer sp) {
             CrecheGame.pakOp(this, sp);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     // --- never hurt, never saved, never despawns on its own --------------------------------------------------------------
@@ -154,7 +154,7 @@ public class CrecheBabyguh extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (!level().isClientSide && source.getEntity() instanceof Player) {
+        if (!level().isClientSide() && source.getEntity() instanceof Player) {
             level().playSound(null, this, CrecheFeature.BABYGIECHEL.get(), SoundSource.NEUTRAL, 0.8f, 1.2f + random.nextFloat() * 0.3f);
         }
         return !isInvulnerableTo(source) && super.hurt(source, amount);

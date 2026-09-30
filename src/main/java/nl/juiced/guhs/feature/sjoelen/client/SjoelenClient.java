@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -58,7 +58,7 @@ public final class SjoelenClient {
         return player.isUsingItem() && player.getUseItem().getItem() instanceof SjoelSchijvenItem ? player.getTicksUsingItem() : -1;
     }
 
-    private static void renderPower(GuiGraphics g, DeltaTracker delta) {
+    private static void renderPower(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.options.hideGui) {
             return;
@@ -83,7 +83,7 @@ public final class SjoelenClient {
         g.fill(x + good0, y - 2, x + good0 + 1, y + h + 2, 0xFFFFF0C0);               // Opoe's two marks
         g.fill(x + good1, y - 2, x + good1 + 1, y + h + 2, 0xFFFFF0C0);
         Component label = Component.translatable("gui.guhs.sjoelen.power", Math.round(power * 100));
-        g.drawCenteredString(mc.font, label, g.guiWidth() / 2, y - 11, good ? 0xFFB6F5A0 : 0xFFFFE6CC);
+        g.centeredText(mc.font, label, g.guiWidth() / 2, y - 11, good ? 0xFFB6F5A0 : 0xFFFFE6CC);
     }
 
     /** The head of a sjoelbak near the player (the kop block with deel 0), or null. */

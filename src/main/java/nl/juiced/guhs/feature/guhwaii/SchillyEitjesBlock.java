@@ -15,7 +15,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -111,7 +111,7 @@ public class SchillyEitjesBlock extends Block {
         int rijp = state.getValue(GuhwaiiBlokken.RIJP);
         if (rijp < 2) {
             level.setBlock(pos, state.setValue(GuhwaiiBlokken.RIJP, rijp + 1), Block.UPDATE_CLIENTS);
-            level.playSound(null, pos, SoundEvents.TURTLE_EGG_CRACK, SoundSource.BLOCKS, 0.7f, 1.1f + level.random.nextFloat() * 0.2f);
+            level.playSound(null, pos, SoundEvents.TURTLE_EGG_CRACK, SoundSource.BLOCKS, 0.7f, 1.1f + level.getRandom().nextFloat() * 0.2f);
             level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5,
                     6, 0.2, 0.1, 0.2, 0.05);
             return List.of();
@@ -129,14 +129,14 @@ public class SchillyEitjesBlock extends Block {
         level.sendParticles(ParticleTypes.HEART, pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 3, 0.4, 0.2, 0.4, 0.02);
         List<AgeableMob> babies = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            PoepschillyEntity baby = (level.random.nextBoolean() ? PiepFeature.SCHILLY : PiepFeature.POEPSCHILLY).get().create(level);
+            PoepschillyEntity baby = (level.getRandom().nextBoolean() ? PiepFeature.SCHILLY : PiepFeature.POEPSCHILLY).get().create(level, EntitySpawnReason.TRIGGERED);
             if (baby == null) {
                 continue;
             }
             baby.setAge(-24000);
-            baby.moveTo(pos.getX() + 0.3 + level.random.nextDouble() * 0.4, pos.getY(), pos.getZ() + 0.3 + level.random.nextDouble() * 0.4,
-                    level.random.nextFloat() * 360f, 0f);
-            baby.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.BREEDING, null);
+            baby.snapTo(pos.getX() + 0.3 + level.getRandom().nextDouble() * 0.4, pos.getY(), pos.getZ() + 0.3 + level.getRandom().nextDouble() * 0.4,
+                    level.getRandom().nextFloat() * 360f, 0f);
+            baby.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.BREEDING, null);
             baby.setAge(-24000);
             level.addFreshEntity(baby);
             babies.add(baby);

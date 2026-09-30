@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -23,8 +23,6 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -45,8 +43,6 @@ import nl.juiced.guhs.registry.ModItems;
  * loaned things); unique names; breaking the huisje sets everyone free; "waar is mijn guh" for residents.
  * (Template huisje_test_tuin: 24 x 24 grass at y 0.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class HuisjeGameTests {
     private static final String TUIN = "huisje_test_tuin";
     private static final String BATCH = "huisje";
@@ -91,7 +87,7 @@ public class HuisjeGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -113,7 +109,7 @@ public class HuisjeGameTests {
 
     // =====================================================================================================================
 
-    @GameTest(template = TUIN, batch = BATCH)
+    @GuhTest(template = TUIN, batch = BATCH)
     public static void huisjePlekkenDrieVijfAcht(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(12, 1, 12));
         for (HuisjeMaat maat : HuisjeMaat.values()) {
@@ -140,28 +136,28 @@ public class HuisjeGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = TUIN, batch = BATCH)
+    @GuhTest(template = TUIN, batch = BATCH)
     public static void huisjeVerhuizenEnUniekeNamen(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(12, 1, 12));
         Huisje a = bouw(helper, new BlockPos(3, 1, 3), HuisjeMaat.KLEIN, p);
         Huisje b = bouw(helper, new BlockPos(12, 1, 3), HuisjeMaat.KLEIN, p);
         helper.assertTrue(!a.naam().equalsIgnoreCase(b.naam()), "every huisje has its own name: " + a.naam() + " / " + b.naam());
-        helper.assertTrue(!Huisjes.hernoem(p.server, b, a.naam().toUpperCase()), "a name that is taken can't be used again");
-        helper.assertTrue(Huisjes.hernoem(p.server, b, "Villa Vadsig") && b.naam().equals("Villa Vadsig"), "renamed");
-        helper.assertTrue(!Huisjes.hernoem(p.server, b, "  ") && !Huisjes.hernoem(p.server, b, "x".repeat(40)), "not empty, not too long");
+        helper.assertTrue(!Huisjes.hernoem(p.level().getServer(), b, a.naam().toUpperCase()), "a name that is taken can't be used again");
+        helper.assertTrue(Huisjes.hernoem(p.level().getServer(), b, "Villa Vadsig") && b.naam().equals("Villa Vadsig"), "renamed");
+        helper.assertTrue(!Huisjes.hernoem(p.level().getServer(), b, "  ") && !Huisjes.hernoem(p.level().getServer(), b, "x".repeat(40)), "not empty, not too long");
         GuhEntity guh = guh(helper, p, new BlockPos(6, 1, 10));
         Huisjes.trekIn(a, guh);
         helper.assertTrue(Huisjes.thuisVan(guh) == a, "lives in a");
         Huisjes.trekIn(b, guh);
         helper.assertTrue(Huisjes.thuisVan(guh) == b && !a.bewoners().contains(Band.id(guh)), "moved to b");
-        helper.assertTrue(GuhVolger.plek(p.server, p.getUUID(), Band.id(guh)).soort() == PlekSoort.HUISJE, "waar is mijn guh: at home");
+        helper.assertTrue(GuhVolger.plek(p.level().getServer(), p.getUUID(), Band.id(guh)).soort() == PlekSoort.HUISJE, "waar is mijn guh: at home");
         Huisjes.trekUit(guh);
         helper.assertTrue(!Huisjes.isBewoner(guh) && b.bewoners().isEmpty(), "moved out");
         weg(helper, p);
         helper.succeed();
     }
 
-    @GameTest(template = TUIN, batch = BATCH, timeoutTicks = 900)
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 900)
     public static void huisjeBewonersBlijvenThuis(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(22, 1, 22));
         Huisje h = bouw(helper, new BlockPos(2, 1, 2), HuisjeMaat.KLEIN, p);
@@ -171,7 +167,7 @@ public class HuisjeGameTests {
         helper.assertTrue(!h.inGebied(guh.blockPosition()), "it starts far from its new home");
         helper.assertTrue(!guh.shouldTryTeleportToOwner(), "a resident never teleports to its owner");
         // the owner walks away; the guh goes home to its huisje instead of following
-        p.moveTo(helper.absolutePos(new BlockPos(23, 1, 23)).getCenter());
+        p.snapTo(helper.absolutePos(new BlockPos(23, 1, 23)).getCenter());
         helper.succeedWhen(() -> {
             helper.assertTrue(h.inGebied(guh.blockPosition()), "walked back home: " + guh.blockPosition() + " / " + h.midden());
             HuisjeGoal.TEST_DAGDEEL.remove(h.pos());
@@ -179,7 +175,7 @@ public class HuisjeGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = BATCH, timeoutTicks = 900)
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 900)
     public static void huisjeSlapenBinnenEnGapendWakker(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(22, 1, 22));
         Huisje h = bouw(helper, new BlockPos(4, 1, 4), HuisjeMaat.MEDIUM, p);
@@ -193,7 +189,7 @@ public class HuisjeGameTests {
         helper.onEachTick(() -> {
             if (fase.get() == 0 && Huisjes.isBinnen(guh) && Huisjes.isBinnen(muis)) {
                 helper.assertTrue(guh.isInvisible() && muis.isInvisible() && BandVlaggen.heeft(guh, BandVlaggen.HUISJE_BINNEN), "hidden inside");
-                helper.assertTrue(GuhVolger.plek(p.server, p.getUUID(), Band.id(guh)).soort() == PlekSoort.SLAAPT_IN_HUISJE, "asleep in its huisje");
+                helper.assertTrue(GuhVolger.plek(p.level().getServer(), p.getUUID(), Band.id(guh)).soort() == PlekSoort.SLAAPT_IN_HUISJE, "asleep in its huisje");
                 fase.set(1);
                 HuisjeGoal.TEST_DAGDEEL.put(h.pos(), Dagdeel.OCHTEND);
             }
@@ -208,7 +204,7 @@ public class HuisjeGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 400)
     public static void huisjeKlusjeLooptEnSchakelaarBewaard(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(20, 1, 20));
         Huisje h = bouw(helper, new BlockPos(4, 1, 4), HuisjeMaat.KLEIN, p);
@@ -228,7 +224,7 @@ public class HuisjeGameTests {
             }
         }
         // saved and loaded: the toggles stay
-        CompoundTag tag = Huisjes.get(p.server).save(new CompoundTag(), p.registryAccess());
+        CompoundTag tag = Huisjes.get(p.level().getServer()).save(new CompoundTag(), p.registryAccess());
         Huisje terug = null;
         for (Huisje x : Huisjes.load(tag, p.registryAccess()).huisjesVoorTest()) {
             if (x.pos().equals(h.pos())) {
@@ -246,7 +242,7 @@ public class HuisjeGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = BATCH)
+    @GuhTest(template = TUIN, batch = BATCH)
     public static void huisjeOpslagKistEnBankGuh(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(20, 1, 20));
         Huisje h = bouw(helper, new BlockPos(4, 1, 4), HuisjeMaat.KLEIN, p);
@@ -288,7 +284,7 @@ public class HuisjeGameTests {
         return ItemStack.EMPTY;
     }
 
-    @GameTest(template = TUIN, batch = BATCH, timeoutTicks = 60)
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 60)
     public static void huisjeKapotZetIedereenVrij(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(20, 1, 20));
         Huisje h = bouw(helper, new BlockPos(4, 1, 4), HuisjeMaat.MEDIUM, p);
@@ -306,7 +302,7 @@ public class HuisjeGameTests {
         // breaking one invisible part breaks the whole huisje
         helper.getLevel().destroyBlock(delen.get(delen.size() - 1), true);
         helper.succeedWhen(() -> {
-            helper.assertTrue(Huisjes.op(p.server, helper.getLevel().dimension(), h.pos()) == null, "the huisje is gone");
+            helper.assertTrue(Huisjes.op(p.level().getServer(), helper.getLevel().dimension(), h.pos()) == null, "the huisje is gone");
             for (BlockPos d : delen) {
                 helper.assertTrue(helper.getLevel().getBlockState(d).isAir(), "no parts left at " + d);
             }

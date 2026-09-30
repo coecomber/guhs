@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.kleding;
 
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.item.trading.VillagerTrades;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import nl.juiced.guhs.registry.ModVillagers;
@@ -27,7 +27,7 @@ public final class KledingKleermaker {
             villager.getPersistentData().remove(TAG);   // (lost the job: a new kleermaker career starts fresh)
             return false;
         }
-        if (villager.level().isClientSide() || villager.getPersistentData().getInt(TAG) == VERSIE) {
+        if (villager.level().isClientSide() || villager.getPersistentData().getIntOr(TAG, 0) == VERSIE) {
             return false;
         }
         MerchantOffers offers = new MerchantOffers();

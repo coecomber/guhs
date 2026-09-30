@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,8 +21,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.band.Band;
@@ -48,8 +46,6 @@ import nl.juiced.guhs.registry.ModItems;
  * SPEELGOED hearts (never takes any), the SPEELTJE moment, the SPEELTJES stat and "eerste speeltje".
  * (Templates speelgoed_test_tuin: 20 x 20 grass at y 0; speelgoed_test_speelkamer: 14 x 14 with a wool wall.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class SpeelgoedGameTests {
     private static final String TUIN = "speelgoed_test_tuin", KAMER = "speelgoed_test_speelkamer";
     private static final String BATCH = "speelgoed";
@@ -70,7 +66,7 @@ public class SpeelgoedGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -90,7 +86,7 @@ public class SpeelgoedGameTests {
     }
 
     static long speeltjes(GuhEntity guh) {
-        return Dagboek.stat(guh.getServer(), guh.getOwnerUUID(), guh.getUUID(), DagboekStat.SPEELTJES);
+        return Dagboek.stat(guh.level().getServer(), guh.getOwnerUUID(), guh.getUUID(), DagboekStat.SPEELTJES);
     }
 
     static boolean moment(GuhEntity guh, String speeltje) {
@@ -104,7 +100,7 @@ public class SpeelgoedGameTests {
 
     // =====================================================================================================================
 
-    @GameTest(template = TUIN, batch = BATCH)
+    @GuhTest(template = TUIN, batch = BATCH)
     public static void speelgoedVierSoortenGeregistreerd(GameTestHelper helper) {
         Set<String> ids = Speelgoed.alle().stream().map(s -> s.id()).collect(Collectors.toSet());
         helper.assertTrue(ids.containsAll(Spelen.SPEELTJES), "the four toy kinds are registered: " + ids);
@@ -112,7 +108,7 @@ public class SpeelgoedGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = KAMER, batch = BATCH, timeoutTicks = 1400)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 1400)
     public static void speelgoedKnabbelbalTotDeKnabbelEruitRolt(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
         GuhEntity guh = guh(helper, p, new BlockPos(4, 2, 4), true);
@@ -132,13 +128,13 @@ public class SpeelgoedGameTests {
                     i -> i.getItem().is(ModItems.KAAS_KNABBELS.get())).isEmpty(), "and the guh ate it");
             helper.assertTrue(speeltjes(guh) >= 1 && moment(guh, "knabbelbal"), "counted as playing (stat + SPEELTJE moment)");
             helper.assertTrue(Band.hartjes(guh) > 0, "playing gives hearts");
-            helper.assertTrue(nl.juiced.guhs.feature.band.BandData.get(guh.getServer()).vind(p.getUUID(), guh.getUUID()).heeftEerste("eerste_speeltje"),
+            helper.assertTrue(nl.juiced.guhs.feature.band.BandData.get(guh.level().getServer()).vind(p.getUUID(), guh.getUUID()).heeftEerste("eerste_speeltje"),
                     "eerste speeltje in the dagboek");
             klaar(helper, guh, p);
         });
     }
 
-    @GameTest(template = KAMER, batch = BATCH)
+    @GuhTest(template = KAMER, batch = BATCH)
     public static void speelgoedSchoppenEnVullen(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(3, 2, 3));
         GuhEntity guh = guh(helper, p, new BlockPos(9, 2, 9), false);
@@ -146,7 +142,7 @@ public class SpeelgoedGameTests {
         p.lookAt(net.minecraft.commands.arguments.EntityAnchorArgument.Anchor.EYES, bal.position());
         bal.skipAttackInteraction(p);
         helper.assertTrue(bal.getDeltaMovement().horizontalDistance() > 0.3, "a kick sends it rolling");
-        helper.assertTrue(guh.getPersistentData().getLong(Spelen.BAL_TOT) > helper.getLevel().getGameTime(), "your guh wants to chase it");
+        helper.assertTrue(guh.getPersistentData().getLongOr(Spelen.BAL_TOT, 0L) > helper.getLevel().getGameTime(), "your guh wants to chase it");
         // an empty ball, filled with a kaasknabbel
         p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 2));
         bal.interact(p, InteractionHand.MAIN_HAND);
@@ -156,13 +152,13 @@ public class SpeelgoedGameTests {
         p.setShiftKeyDown(true);
         bal.interact(p, InteractionHand.MAIN_HAND);
         helper.assertTrue(bal.isRemoved(), "sneak + right-click picks it up");
-        ItemStack item = p.getInventory().items.stream().filter(s -> s.is(SpeelgoedFeature.KNABBELBAL_ITEM.get())).findFirst().orElse(ItemStack.EMPTY);
+        ItemStack item = p.getInventory().getNonEquipmentItems().stream().filter(s -> s.is(SpeelgoedFeature.KNABBELBAL_ITEM.get())).findFirst().orElse(ItemStack.EMPTY);
         helper.assertTrue(!item.isEmpty() && KnabbelbalItem.isVol(item), "the ball item, still full");
         klaar(helper, guh, p);
         helper.succeed();
     }
 
-    @GameTest(template = TUIN, batch = BATCH, timeoutTicks = 1200)
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 1200)
     public static void speelgoedGlijbaantjeKlimmenEnGlijden(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
         BlockPos pos = helper.absolutePos(new BlockPos(10, 2, 10));
@@ -189,7 +185,7 @@ public class SpeelgoedGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 400)
     public static void speelgoedSchommelDuwtje(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(10, 2, 7));
         ServerLevel level = helper.getLevel();
@@ -216,7 +212,7 @@ public class SpeelgoedGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = BATCH, timeoutTicks = 900)
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 900)
     public static void speelgoedSamenOpDeWip(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
         BlockPos pos = helper.absolutePos(new BlockPos(10, 2, 10));
@@ -235,7 +231,7 @@ public class SpeelgoedGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = BATCH, timeoutTicks = 1200)
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 1200)
     public static void speelgoedTunnelVerstoppertje(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
@@ -275,7 +271,7 @@ public class SpeelgoedGameTests {
         });
     }
 
-    @GameTest(template = TUIN, batch = BATCH, timeoutTicks = 1400)
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 1400)
     public static void speelgoedBewonerSpeeltBijZijnHuisje(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(18, 2, 18));

@@ -13,9 +13,10 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhSleeEntity;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.slee.SleePath;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The guh sled: geo/entity/guh_slee.geo.json, turned along the track and tilted on slopes, pulled by four little guhs
  * (two by two) that walk along the rails in front of it.
@@ -53,7 +54,7 @@ public class GuhSleeRenderer extends GeoEntityRenderer<GuhSleeEntity> {
         }
         if (sled.pullers.isEmpty()) {
             for (int i = 0; i < PULLERS.length; i++) {
-                GuhEntity guh = ModEntities.GUH.get().create(sled.level());
+                GuhEntity guh = ModEntities.GUH.get().create(sled.level(), EntitySpawnReason.TRIGGERED);
                 if (guh == null) {
                     return;
                 }

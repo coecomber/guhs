@@ -56,23 +56,23 @@ public final class GuhsClient {
         event.registerEntityRenderer(ModEntities.GUH_NPC.get(), SittingGuhRenderers.NpcRenderer::new);
         event.registerEntityRenderer(ModEntities.GUH_SLEE.get(), GuhSleeRenderer::new);
         event.registerEntityRenderer(ModEntities.GUH_SEAT.get(), net.minecraft.client.renderer.entity.NoopRenderer::new);
-        event.registerEntityRenderer(ModEntities.GUH_BEE.get(), context -> new software.bernie.geckolib.renderer.GeoEntityRenderer<>(context,
-                new software.bernie.geckolib.model.DefaultedEntityGeoModel<nl.juiced.guhs.entity.GuhBeeEntity>(nl.juiced.guhs.Guhs.id("guh_bee"))));
+        event.registerEntityRenderer(ModEntities.GUH_BEE.get(), context -> new com.geckolib.renderer.GeoEntityRenderer<>(context,
+                new com.geckolib.model.DefaultedEntityGeoModel<nl.juiced.guhs.entity.GuhBeeEntity>(nl.juiced.guhs.Guhs.id("guh_bee"))));
         event.registerEntityRenderer(ModEntities.GUH_SLIME.get(), context -> new net.minecraft.client.renderer.entity.SlimeRenderer(context) {
             @Override
-            public net.minecraft.resources.ResourceLocation getTextureLocation(net.minecraft.world.entity.monster.Slime slime) {
+            public net.minecraft.resources.Identifier getTextureLocation(net.minecraft.world.entity.monster.Slime slime) {
                 return nl.juiced.guhs.Guhs.id("textures/entity/guh_slime.png");
             }
         });
-        event.registerEntityRenderer(ModEntities.NETHER_MIKA.get(), context -> new software.bernie.geckolib.renderer.GeoEntityRenderer<>(context,
-                new software.bernie.geckolib.model.DefaultedEntityGeoModel<nl.juiced.guhs.entity.MikaEntity>(nl.juiced.guhs.Guhs.id("mika"), true) {
+        event.registerEntityRenderer(ModEntities.NETHER_MIKA.get(), context -> new com.geckolib.renderer.GeoEntityRenderer<>(context,
+                new com.geckolib.model.DefaultedEntityGeoModel<nl.juiced.guhs.entity.MikaEntity>(nl.juiced.guhs.Guhs.id("mika"), true) {
                     @Override
-                    public net.minecraft.resources.ResourceLocation getTextureResource(nl.juiced.guhs.entity.MikaEntity mika) {
+                    public net.minecraft.resources.Identifier getTextureResource(nl.juiced.guhs.entity.MikaEntity mika) {
                         return nl.juiced.guhs.Guhs.id("textures/entity/nether_mika.png");
                     }
                 }.withAltAnimations(nl.juiced.guhs.Guhs.id("guh"))));
-        event.registerEntityRenderer(ModEntities.GUH_VIS.get(), context -> new software.bernie.geckolib.renderer.GeoEntityRenderer<>(context,
-                new software.bernie.geckolib.model.DefaultedEntityGeoModel<nl.juiced.guhs.entity.GuhVisEntity>(nl.juiced.guhs.Guhs.id("guh_vis"))));
+        event.registerEntityRenderer(ModEntities.GUH_VIS.get(), context -> new com.geckolib.renderer.GeoEntityRenderer<>(context,
+                new com.geckolib.model.DefaultedEntityGeoModel<nl.juiced.guhs.entity.GuhVisEntity>(nl.juiced.guhs.Guhs.id("guh_vis"))));
         event.registerBlockEntityRenderer(ModBlockEntities.SLEE_RAIL.get(), SleeRailRenderer::new);
         event.registerEntityRenderer(ModEntities.MIKA_BAAS.get(), SittingGuhRenderers.MikaBaasRenderer::new);
     }
@@ -86,7 +86,7 @@ public final class GuhsClient {
                     nl.juiced.guhs.registry.ModItems.HEILIGDOM_KOMPAS.get(), nl.juiced.guhs.registry.ModItems.KERMISKOMPAS.get(),
                     nl.juiced.guhs.registry.ModItems.VERSTOPKOMPAS.get(), nl.juiced.guhs.registry.ModItems.KONINGSKOMPAS.get(),
                     nl.juiced.guhs.registry.ModItems.SUPERKOMPAS.get())) {
-                net.minecraft.client.renderer.item.ItemProperties.register(compass, net.minecraft.resources.ResourceLocation.withDefaultNamespace("angle"),
+                net.minecraft.client.renderer.item.ItemProperties.register(compass, net.minecraft.resources.Identifier.withDefaultNamespace("angle"),
                         new net.minecraft.client.renderer.item.CompassItemPropertyFunction((level, stack, entity) -> {
                             var tracker = stack.get(net.minecraft.core.component.DataComponents.LODESTONE_TRACKER);
                             return tracker == null ? null : tracker.target().orElse(null);

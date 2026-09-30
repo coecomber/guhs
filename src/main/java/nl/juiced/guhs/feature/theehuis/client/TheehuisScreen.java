@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.theehuis.client;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -44,13 +44,13 @@ public class TheehuisScreen extends Screen {
         left = (width - W) / 2;
         top = (height - H) / 2;
         int y = top + 22 + PIC + 30;
-        if (data.getBoolean("Mine")) {
+        if (data.getBooleanOr("Mine", false)) {
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.theehuis.knop.stop"), b -> send(Theekransje.STOP))
                     .bounds(left + 12, y, W - 24, 20).build());
         } else {
             Button start = Button.builder(Component.translatable("gui.guhs.theehuis.knop.start"), b -> send(Theekransje.START))
                     .bounds(left + 12, y, W - 24, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.theehuis.knop.start.tooltip"))).build();
-            start.active = !data.getBoolean("Running") && data.getInt("Gasten") > 0;
+            start.active = !data.getBooleanOr("Running", false) && data.getIntOr("Gasten", 0) > 0;
             addRenderableWidget(start);
         }
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.theehuis.knop.doei"), b -> onClose())
@@ -58,15 +58,15 @@ public class TheehuisScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, BORDER);
         g.fill(left, top, left + W, top + H, PANEL);
         for (int i = 0; i < 12; i++) {                             // a flowery porcelain border
             int fx = left + 8 + i * 24;
             g.fill(fx, top + H - 5, fx + 4, top + H - 2, i % 2 == 0 ? 0xFFF7A6C8 : 0xFFA6D8F7);
         }
-        g.drawString(font, title.copy().withStyle(ChatFormatting.BOLD), left + 12, top + 9, 0xFFF2D7A6, false);
+        g.text(font, title.copy().withStyle(ChatFormatting.BOLD), left + 12, top + 9, 0xFFF2D7A6, false);
         Entity npc = minecraft.level == null ? null : minecraft.level.getEntity(npcId);
         g.fill(left + 12, top + 22, left + 12 + PIC, top + 22 + PIC, 0x30F2D7A6);
         if (npc instanceof LivingEntity living) {
@@ -77,24 +77,24 @@ public class TheehuisScreen extends Screen {
         g.fill(bx, by, bx + bw, by + PIC, 0xFFFFF8EE);
         g.fill(bx - 4, by + 12, bx, by + 18, 0xFFFFF8EE);
         Component text;
-        if (data.getBoolean("Mine")) {
-            text = Component.translatable("gui.guhs.theehuis.scherm.bezig_jij", data.getInt("Gezelligheid"), data.getInt("Doel"));
-        } else if (data.getBoolean("Running")) {
-            text = Component.translatable("gui.guhs.theehuis.scherm.bezig", data.getString("Gastheer"));
-        } else if (data.getInt("Gasten") == 0) {
+        if (data.getBooleanOr("Mine", false)) {
+            text = Component.translatable("gui.guhs.theehuis.scherm.bezig_jij", data.getIntOr("Gezelligheid", 0), data.getIntOr("Doel", 0));
+        } else if (data.getBooleanOr("Running", false)) {
+            text = Component.translatable("gui.guhs.theehuis.scherm.bezig", data.getStringOr("Gastheer", ""));
+        } else if (data.getIntOr("Gasten", 0) == 0) {
             text = Component.translatable("gui.guhs.theehuis.scherm.geen_guhs");
         } else {
-            text = Component.translatable(data.getBoolean("Feest") ? "gui.guhs.theehuis.scherm.feest" : "gui.guhs.theehuis.scherm.uitleg",
-                    data.getInt("Gasten"));
+            text = Component.translatable(data.getBooleanOr("Feest", false) ? "gui.guhs.theehuis.scherm.feest" : "gui.guhs.theehuis.scherm.uitleg",
+                    data.getIntOr("Gasten", 0));
         }
         List<FormattedCharSequence> lines = font.split(text, bw - 10);
         for (int i = 0; i < lines.size() && i < 6; i++) {
-            g.drawString(font, lines.get(i), bx + 5, by + 5 + i * 10, 0xFF3A2418, false);
+            g.text(font, lines.get(i), bx + 5, by + 5 + i * 10, 0xFF3A2418, false);
         }
         int y = top + 22 + PIC + 6;
-        g.drawString(font, Component.translatable("gui.guhs.theehuis.scherm.kransjes", data.getInt("Kransjes"), data.getInt("Soorten")), left + 12, y,
+        g.text(font, Component.translatable("gui.guhs.theehuis.scherm.kransjes", data.getIntOr("Kransjes", 0), data.getIntOr("Soorten", 0)), left + 12, y,
                 0xFFFFD27A, false);
-        g.drawString(font, Component.translatable("gui.guhs.theehuis.scherm.tip"), left + 12, y + 11, TEXT, false);
+        g.text(font, Component.translatable("gui.guhs.theehuis.scherm.tip"), left + 12, y + 11, TEXT, false);
     }
 
     @Override

@@ -90,8 +90,8 @@ public final class Eierlopen implements Wedstrijd.Spel {
                 s.herstartS = Speelvelden.EI_KANT[s.vlag];
                 s.vlag++;
                 level.playSound(null, p.blockPosition(), net.minecraft.sounds.SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.8f, 1f + 0.15f * s.vlag);
-                p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.ei.vlag", s.vlag, Speelvelden.EI_VLAGGEN.length)
-                        .withStyle(ChatFormatting.GREEN), true);
+                p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.ei.vlag", s.vlag, Speelvelden.EI_VLAGGEN.length)
+                        .withStyle(ChatFormatting.GREEN));
             }
         }
         double[] b = Speelvelden.baan(w.anker, Onderdeel.EIERLOPEN, d.baan, pos);
@@ -101,13 +101,13 @@ public final class Eierlopen implements Wedstrijd.Spel {
                 return;
             }
             if (s.melding-- <= 0) {
-                p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.ei.gemist", s.vlag + 1).withStyle(ChatFormatting.GOLD), false);
+                p.sendSystemMessage(Component.translatable("quest.guhs.knabbelspelen.ei.gemist", s.vlag + 1).withStyle(ChatFormatting.GOLD));
                 s.melding = 60;
             }
         }
         if (t % 3 == 0) {
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.ei.bar", nl.juiced.guhs.quest.Highscores.tijd(t), meter(s.wiebel),
-                    s.vlag, Speelvelden.EI_VLAGGEN.length), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.ei.bar", nl.juiced.guhs.quest.Highscores.tijd(t), meter(s.wiebel),
+                    s.vlag, Speelvelden.EI_VLAGGEN.length));
         }
     }
 
@@ -130,7 +130,7 @@ public final class Eierlopen implements Wedstrijd.Spel {
         Wedstrijd.teleport(p, level, terug.x, terug.y, terug.z, Speelvelden.yaw(w.anker, Onderdeel.EIERLOPEN));
         s.vorige = terug;
         s.vorigeYaw = Speelvelden.yaw(w.anker, Onderdeel.EIERLOPEN);
-        p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.ei.valt").withStyle(ChatFormatting.GOLD), false);
+        p.sendSystemMessage(Component.translatable("quest.guhs.knabbelspelen.ei.valt").withStyle(ChatFormatting.GOLD));
     }
 
     /** A jump while carrying the egg: a big wobble (from Zaklopen.onJump, which listens to all jumps). */

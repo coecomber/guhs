@@ -43,14 +43,16 @@ import nl.juiced.guhs.feature.knus.Knusfeest;
 import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.world.ModDimensions;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * A Kruimel-Mika (2.8, Grote Knusfeest): a small, sandy-coloured Mika with crumbs all over its face. It never fights:
  * it can't be hurt and it doesn't hurt anyone. It only steals.
@@ -135,14 +137,14 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
     /** The steal itself, with this loot (already out of the player's pockets; tests use a stand-in item). */
     @Nullable
     public static KruimelMikaEntity steel(ServerPlayer player, Feesttaak taak, ItemStack loot) {
-        ServerLevel level = player.serverLevel();
-        KruimelMikaEntity mika = KnuffeldalFeature.KRUIMEL_MIKA.get().create(level);
+        ServerLevel level = player.level();
+        KruimelMikaEntity mika = KnuffeldalFeature.KRUIMEL_MIKA.get().create(level, EntitySpawnReason.TRIGGERED);
         if (mika == null) {
             Minigames.give(player, loot);
             return null;
         }
         Vec3 behind = player.position().subtract(player.getLookAngle().multiply(1, 0, 1).normalize().scale(2));
-        mika.moveTo(behind.x, player.getY(), behind.z, player.getYRot(), 0);
+        mika.snapTo(behind.x, player.getY(), behind.z, player.getYRot(), 0);
         mika.eigenaar = player.getUUID();
         mika.taak = taak;
         mika.buit = loot;
@@ -200,7 +202,7 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
 
     /** No Kruimel-Mika is after this player right now. */
     static boolean heeftGeen(ServerPlayer player) {
-        return player.serverLevel().getEntitiesOfClass(KruimelMikaEntity.class, player.getBoundingBox().inflate(128),
+        return player.level().getEntitiesOfClass(KruimelMikaEntity.class, player.getBoundingBox().inflate(128),
                 m -> player.getUUID().equals(m.eigenaar) && m.toestand != Toestand.WEG).isEmpty();
     }
 
@@ -233,7 +235,7 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         ServerLevel server = (ServerLevel) level();
@@ -262,10 +264,10 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
                 if (owner != null && owner.distanceTo(this) < LOK_AFSTAND) {
                     if (lekkernij(owner)) {
                         toestand = Toestand.GELOKT;
-                        owner.displayClientMessage(Component.translatable("gui.guhs.kruimel_mika.gelokt").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                        owner.sendOverlayMessage(Component.translatable("gui.guhs.kruimel_mika.gelokt").withStyle(ChatFormatting.LIGHT_PURPLE));
                     } else if (owner.distanceTo(this) < 4) {
                         giechel();
-                        owner.displayClientMessage(Component.translatable("gui.guhs.kruimel_mika.zonder").withStyle(ChatFormatting.GOLD), true);
+                        owner.sendOverlayMessage(Component.translatable("gui.guhs.kruimel_mika.zonder").withStyle(ChatFormatting.GOLD));
                         vlucht(owner.position(), 10);
                     }
                 }
@@ -312,7 +314,7 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         boolean treat = stack.is(KnusTags.LEKKERNIJ) || stack.is(ModItems.KAAS_KNABBELS.get());
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return treat ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
         if (!(player instanceof ServerPlayer sp) || toestand == Toestand.WEG) {
@@ -320,7 +322,7 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
         }
         if (!treat) {
             giechel();
-            sp.displayClientMessage(Component.translatable("gui.guhs.kruimel_mika.zonder").withStyle(ChatFormatting.GOLD), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.kruimel_mika.zonder").withStyle(ChatFormatting.GOLD));
             return InteractionResult.CONSUME;
         }
         stack.consume(1, player);
@@ -392,9 +394,9 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (!level().isClientSide && source.getEntity() instanceof ServerPlayer player && isInvulnerableTo(source)) {
+        if (!level().isClientSide() && source.getEntity() instanceof ServerPlayer player && isInvulnerableTo(source)) {
             giechel();
-            player.displayClientMessage(Component.translatable("gui.guhs.kruimel_mika.niet_meppen").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.kruimel_mika.niet_meppen").withStyle(ChatFormatting.LIGHT_PURPLE));
             if (toestand != Toestand.WEG) {
                 vlucht(player.position(), 6);
             }
@@ -436,7 +438,7 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
         super.addAdditionalSaveData(tag);
         tag.putString("Toestand", toestand.name());
         if (eigenaar != null) {
-            tag.putUUID("Eigenaar", eigenaar);
+            tag.store("Eigenaar", UUIDUtil.CODEC, eigenaar);
         }
         if (taak != null) {
             tag.putString("Taak", taak.id());
@@ -455,15 +457,15 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         try {
-            toestand = Toestand.valueOf(tag.getString("Toestand"));
+            toestand = Toestand.valueOf(tag.getStringOr("Toestand", ""));
         } catch (IllegalArgumentException e) {
             toestand = Toestand.VERSTOPT;
         }
-        eigenaar = tag.hasUUID("Eigenaar") ? tag.getUUID("Eigenaar") : null;
-        taak = Feesttaak.byId(tag.getString("Taak"));
-        buit = tag.contains("Buit") ? ItemStack.parse(registryAccess(), tag.getCompound("Buit")).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
+        eigenaar = tag.read("Eigenaar", UUIDUtil.CODEC).isPresent() ? tag.read("Eigenaar", UUIDUtil.CODEC).orElseThrow() : null;
+        taak = Feesttaak.byId(tag.getStringOr("Taak", ""));
+        buit = tag.contains("Buit") ? ItemStack.parse(registryAccess(), tag.getCompoundOrEmpty("Buit")).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
         spoor.clear();
-        for (Tag t : tag.getList("Spoor", Tag.TAG_LONG)) {
+        for (Tag t : tag.getListOrEmpty("Spoor")) {
             spoor.add(net.minecraft.world.phys.Vec3.atBottomCenterOf(BlockPos.of(((LongTag) t).getAsLong())));
         }
     }

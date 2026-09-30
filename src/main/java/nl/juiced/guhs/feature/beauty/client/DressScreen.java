@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -45,12 +45,12 @@ public class DressScreen extends Screen {
     public DressScreen(int npcId, CompoundTag data) {
         super(Component.translatable("gui.guhs.beauty.wardrobe"));
         this.npcId = npcId;
-        this.modelId = data.getInt("Model");
-        this.theme = ShowTheme.byId(data.getString("Theme"));
-        this.round = data.getInt("Round");
-        this.rounds = data.getInt("Rounds");
-        this.ticksLeft = data.getInt("Ticks");
-        for (int i : data.getIntArray("Own")) {
+        this.modelId = data.getIntOr("Model", 0);
+        this.theme = ShowTheme.byId(data.getStringOr("Theme", ""));
+        this.round = data.getIntOr("Round", 0);
+        this.rounds = data.getIntOr("Rounds", 0);
+        this.ticksLeft = data.getIntOr("Ticks", 0);
+        for (int i : data.getIntArray("Own").orElse(new int[0])) {
             GuhClothes c = GuhClothes.byIndex(i);
             if (c != null) {
                 own.add(c);
@@ -59,7 +59,7 @@ public class DressScreen extends Screen {
         for (GuhClothes.Slot slot : ShowTheme.SLOTS) {
             wardrobe.put(slot, new ArrayList<>());
         }
-        for (int i : data.getIntArray("Wardrobe")) {
+        for (int i : data.getIntArray("Wardrobe").orElse(new int[0])) {
             GuhClothes c = GuhClothes.byIndex(i);
             if (c != null && wardrobe.containsKey(c.slot)) {
                 wardrobe.get(c.slot).add(c);
@@ -107,15 +107,15 @@ public class DressScreen extends Screen {
     }
 
     /** The pink frame all beauty screens share. */
-    static void frame(GuiGraphics g, int left, int top, int w, int h) {
+    static void frame(GuiGraphicsExtractor g, int left, int top, int w, int h) {
         g.fill(left - 2, top - 2, left + w + 2, top + h + 2, 0xFFF2C14E);
         g.fill(left - 1, top - 1, left + w + 1, top + h + 1, 0xFFF7B6CB);
         g.fill(left, top, left + w, top + h, 0xEE301A26);
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         frame(g, left, top, W, H);
         // the stage: the model on a little pink spotlight circle
         g.fill(left + 6, top + 6, left + 118, top + H - 32, 0xFF4A2338);
@@ -123,30 +123,30 @@ public class DressScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.render(g, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
         GuhEntity model = model();
         if (model != null) {
             InventoryScreen.renderEntityInInventoryFollowsMouse(g, left + 12, top + 30, left + 112, top + H - 52, 38, 0.0625f,
                     mouseX, mouseY, model);
-            g.drawCenteredString(font, model.getDisplayName(), left + 62, top + 12, 0xFFFFE6EE);
+            g.centeredText(font, model.getDisplayName(), left + 62, top + 12, 0xFFFFE6EE);
         }
         // the theme and the clock
-        g.drawString(font, Component.translatable("gui.guhs.beauty.round", round, rounds), left + GRID_X, top + 8, 0xFFD8B8C8);
-        g.pose().pushPose();
-        g.pose().translate(left + GRID_X, top + 18, 0);
-        g.pose().scale(1.4f, 1.4f, 1f);
-        g.drawString(font, BeautyShow.themeName(theme).withStyle(ChatFormatting.BOLD), 0, 0, 0xFFFFD27A);
-        g.pose().popPose();
+        g.text(font, Component.translatable("gui.guhs.beauty.round", round, rounds), left + GRID_X, top + 8, 0xFFD8B8C8);
+        g.pose().pushMatrix();
+        g.pose().translate(left + GRID_X, top + 18);
+        g.pose().scale(1.4f, 1.4f);
+        g.text(font, BeautyShow.themeName(theme).withStyle(ChatFormatting.BOLD), 0, 0, 0xFFFFD27A);
+        g.pose().popMatrix();
         String clock = BeautyShow.time(Math.max(0, ticksLeft));
-        g.drawString(font, clock, left + W - 8 - font.width(clock), top + 8, ticksLeft <= 200 ? 0xFFFF6060 : 0xFFFFE6EE);
-        g.drawString(font, Component.translatable("gui.guhs.beauty.hint." + theme.id()).withStyle(ChatFormatting.ITALIC),
+        g.text(font, clock, left + W - 8 - font.width(clock), top + 8, ticksLeft <= 200 ? 0xFFFF6060 : 0xFFFFE6EE);
+        g.text(font, Component.translatable("gui.guhs.beauty.hint." + theme.id()).withStyle(ChatFormatting.ITALIC),
                 left + GRID_X, top + 33, 0xFFB898A8);
         // the wardrobe, slot by slot
         int y = top + 46;
         GuhClothes hovered = null;
         for (GuhClothes.Slot slot : ShowTheme.SLOTS) {
-            g.drawString(font, Component.translatable("gui.guhs.menu.clothes." + slot.name().toLowerCase(java.util.Locale.ROOT)),
+            g.text(font, Component.translatable("gui.guhs.menu.clothes." + slot.name().toLowerCase(java.util.Locale.ROOT)),
                     left + GRID_X, y, 0xFFF7B6CB);
             y += 10;
             List<GuhClothes> pieces = wardrobe.get(slot);
@@ -157,7 +157,7 @@ public class DressScreen extends Screen {
                 boolean over = mouseX >= x && mouseX < x + CELL && mouseY >= cy && mouseY < cy + CELL;
                 int bg = c == worn ? 0xFFF2C14E : own.contains(c) ? 0xFF8A3A66 : over ? 0xFF7A4A62 : 0xFF4A2338;
                 g.fill(x, cy, x + CELL - 1, cy + CELL - 1, bg);
-                g.renderItem(icons.get(c), x + 1, cy + 1);
+                g.item(icons.get(c), x + 1, cy + 1);
                 if (over) {
                     hovered = c;
                 }
@@ -172,7 +172,7 @@ public class DressScreen extends Screen {
             }
             tip.add(Component.translatable(model != null && model.getClothes(hovered.slot) == hovered ? "gui.guhs.beauty.click_off"
                     : "gui.guhs.beauty.click_on").withStyle(ChatFormatting.GRAY));
-            g.renderComponentTooltip(font, tip, mouseX, mouseY);
+            g.setComponentTooltipForNextFrame(font, tip, mouseX, mouseY);
         }
     }
 

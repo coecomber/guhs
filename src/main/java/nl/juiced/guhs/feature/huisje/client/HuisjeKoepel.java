@@ -7,7 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -32,7 +32,7 @@ public final class HuisjeKoepel {
 
     static String sleutel(BlockPos pos) {
         Minecraft mc = Minecraft.getInstance();
-        return (mc.level == null ? "?" : mc.level.dimension().location().toString()) + "|" + pos.asLong();
+        return (mc.level == null ? "?" : mc.level.dimension().identifier().toString()) + "|" + pos.asLong();
     }
 
     public static boolean aan(BlockPos pos) {
@@ -55,7 +55,7 @@ public final class HuisjeKoepel {
         if (mc.level == null) {
             return;
         }
-        String dim = mc.level.dimension().location() + "|";
+        String dim = mc.level.dimension().identifier() + "|";
         Vec3 cam = event.getCamera().getPosition();
         MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
         PoseStack pose = event.getPoseStack();

@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -151,12 +151,12 @@ public final class KaasmijnFeature {
     /** Another second in a cart in the mine (the ride counter survives dying and logging out). */
     public static void rideSecond(ServerPlayer player) {
         var saved = GuhQuests.saved(player);
-        int seconds = saved.getInt(RIDE_KEY);
+        int seconds = saved.getIntOr(RIDE_KEY, 0);
         if (seconds >= RIDE_SECONDS) {
             return;
         }
         saved.putInt(RIDE_KEY, ++seconds);
-        player.displayClientMessage(Component.translatable("quest.guhs.kaasmijn.ride", seconds, RIDE_SECONDS).withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.kaasmijn.ride", seconds, RIDE_SECONDS).withStyle(ChatFormatting.GOLD));
         if (seconds >= RIDE_SECONDS) {
             GuhAdvancements.grant(player, "kaasmijn_rondrit");
             player.sendSystemMessage(Component.translatable("quest.guhs.kaasmijn.ride_done").withStyle(ChatFormatting.GOLD));

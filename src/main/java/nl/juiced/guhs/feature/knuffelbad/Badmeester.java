@@ -41,7 +41,7 @@ public final class Badmeester implements NpcRole {
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
         npc.level().playSound(null, npc, KnuffelbadFeature.FLUIT.get(), SoundSource.NEUTRAL, 0.6f, 1.2f);
         CompoundTag data = GlijRit.data(player);
-        boolean eerste = !data.getBoolean("Begroet");
+        boolean eerste = !data.getBooleanOr("Begroet", false);
         if (eerste) {
             data.putBoolean("Begroet", true);
             KnuffelbadVoortgang.gevonden(player);
@@ -57,7 +57,7 @@ public final class Badmeester implements NpcRole {
             CompoundTag b = new CompoundTag();
             b.putInt("Best", GlijRit.best(player, g));
             b.putInt("Ritten", GlijRit.ritten(player, g));
-            List<Scorebord.Entry> top = Scorebord.top(player.server, g.board());
+            List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), g.board());
             b.putInt("Record", top.isEmpty() ? -1 : top.get(0).score());
             b.putString("Naam", top.isEmpty() ? "" : top.get(0).name());
             d.put(g.id(), b);
@@ -83,7 +83,7 @@ public final class Badmeester implements NpcRole {
             case WASSEN -> {
                 CompoundTag data = GlijRit.data(player);
                 GuhQuests.say(player, npc, "quest.guhs.knuffelbad.badmeester.wassen");
-                if (!data.getBoolean("WasSet")) {
+                if (!data.getBooleanOr("WasSet", false)) {
                     data.putBoolean("WasSet", true);
                     nl.juiced.guhs.feature.Minigames.give(player, new ItemStack(KnuffelbadFeature.GUHSHAMPOO.get()));
                     nl.juiced.guhs.feature.Minigames.give(player, new ItemStack(KnuffelbadFeature.GUH_FOHN.get()));
@@ -105,7 +105,7 @@ public final class Badmeester implements NpcRole {
             return;
         }
         long now = npc.level().getGameTime();
-        if (now - npc.roleData.getLong("Fluit") < FLUIT_RUST) {
+        if (now - npc.roleData.getLongOr("Fluit", 0L) < FLUIT_RUST) {
             return;
         }
         for (ServerPlayer p : npc.level().getEntitiesOfClass(ServerPlayer.class, npc.getBoundingBox().inflate(FLUIT_AFSTAND),

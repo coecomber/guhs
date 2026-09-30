@@ -3,17 +3,17 @@ package nl.juiced.guhs.feature.race.client;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import nl.juiced.guhs.client.GuhRenderer;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
-import software.bernie.geckolib.util.Color;
+import com.geckolib.util.Color;
 
 /** The ghost of your best race: a guh in the pale ghost-guh fur, half see-through, that always runs (the golden one: gold). */
 public class RaceGhostRenderer extends GuhRenderer {
-    private static final ResourceLocation TEXTURE = GuhVariant.GHOST.texture();
+    private static final Identifier TEXTURE = GuhVariant.GHOST.texture();
 
     public RaceGhostRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -21,7 +21,7 @@ public class RaceGhostRenderer extends GuhRenderer {
     }
 
     @Override
-    public RenderType getRenderType(GuhEntity guh, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+    public RenderType getRenderType(GuhEntity guh, Identifier texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
         return RenderType.entityTranslucent(TEXTURE);
     }
 

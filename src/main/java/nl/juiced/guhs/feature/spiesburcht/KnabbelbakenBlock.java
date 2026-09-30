@@ -54,10 +54,10 @@ public class KnabbelbakenBlock extends BaseEntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide && level.getBlockEntity(pos) instanceof KnabbelbakenBlockEntity baken && player instanceof ServerPlayer sp) {
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof KnabbelbakenBlockEntity baken && player instanceof ServerPlayer sp) {
             baken.cycle(sp);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

@@ -56,7 +56,7 @@ public final class KlusBeloning {
             return;
         }
         CompoundTag t = GuhQuests.saved(p);
-        int bits = t.getInt(GEDAAN);
+        int bits = t.getIntOr(GEDAAN, 0);
         if ((bits & (1 << i)) == 0) {
             bits |= 1 << i;
             t.putInt(GEDAAN, bits);
@@ -65,7 +65,7 @@ public final class KlusBeloning {
                 GidsFeature.grant(p, "lieve_vadsjes/klusjes_alle");
             }
         }
-        int totaal = t.getInt(TOTAAL) + 1;
+        int totaal = t.getIntOr(TOTAAL, 0) + 1;
         t.putInt(TOTAAL, totaal);
         if (totaal >= HONDERD) {
             GidsFeature.grant(p, "lieve_vadsjes/klusjes_honderd");
@@ -74,7 +74,7 @@ public final class KlusBeloning {
 
     /** How many different chores this player's residents did (0..10). */
     public static int soorten(ServerPlayer p) {
-        return Integer.bitCount(GuhQuests.saved(p).getInt(GEDAAN));
+        return Integer.bitCount(GuhQuests.saved(p).getIntOr(GEDAAN, 0));
     }
 
     public static void bankGesorteerd(Mob mob) {
@@ -90,8 +90,8 @@ public final class KlusBeloning {
         Dagboek.wistJeDat(mob, "gui.guhs.wistjedat.klusjes.zeldzaam", vondst.getHoverName().getString(), h.naam());
         if (owner != null) {
             GidsFeature.grant(owner, "lieve_vadsjes/klusjes_zeldzaam");
-            owner.displayClientMessage(Component.translatable("gui.guhs.klusjes.zeldzaam", mob.getName(), vondst.getHoverName(), h.naam())
-                    .withStyle(ChatFormatting.GOLD), false);
+            owner.sendSystemMessage(Component.translatable("gui.guhs.klusjes.zeldzaam", mob.getName(), vondst.getHoverName(), h.naam())
+                    .withStyle(ChatFormatting.GOLD));
         }
     }
 }

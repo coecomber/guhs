@@ -8,8 +8,8 @@ import net.minecraft.world.entity.ai.control.BodyRotationControl;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import nl.juiced.guhs.feature.gids.GidsFeature;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.RawAnimation;
 
 /**
  * The guh-uiltje: a round cocoa-pink owl whose ear tufts are two guh ears. By day it sleeps on its perch (eyes closed,
@@ -144,7 +144,7 @@ public class GuhUiltjeEntity extends Vogeltje {
     }
 
     @Override
-    protected RawAnimation beweging(AnimationState<Vogeltje> state) {
+    protected RawAnimation beweging(AnimationTest<Vogeltje> state) {
         if (!vliegt() && slaapt()) {
             return anim("slaap", true);
         }

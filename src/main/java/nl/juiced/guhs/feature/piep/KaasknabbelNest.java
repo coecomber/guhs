@@ -26,7 +26,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
@@ -118,16 +118,16 @@ public final class KaasknabbelNest {
         CompoundTag save() {
             CompoundTag t = new CompoundTag();
             t.putString("Key", key);
-            t.put("Kern", NbtUtils.writeBlockPos(kern));
+            t.store("Kern", BlockPos.CODEC, kern);
             t.putLong("GewonnenOp", gewonnenOp);
             t.putBoolean("Recept", receptGegeven);
             return t;
         }
 
         static Gevecht load(CompoundTag t) {
-            Gevecht g = new Gevecht(t.getString("Key"), NbtUtils.readBlockPos(t, "Kern").orElse(BlockPos.ZERO));
-            g.gewonnenOp = t.getLong("GewonnenOp");
-            g.receptGegeven = t.getBoolean("Recept");
+            Gevecht g = new Gevecht(t.getStringOr("Key", ""), (t).read("Kern", BlockPos.CODEC).orElse(BlockPos.ZERO));
+            g.gewonnenOp = t.getLongOr("GewonnenOp", 0L);
+            g.receptGegeven = t.getBooleanOr("Recept", false);
             g.fase = g.gewonnenOp >= 0 ? Fase.GEWONNEN : Fase.RUST;   // (a fight going on when the server stopped starts over)
             return g;
         }
@@ -143,7 +143,7 @@ public final class KaasknabbelNest {
 
         static Nesten load(CompoundTag tag, HolderLookup.Provider registries) {
             Nesten n = new Nesten();
-            for (Tag t : tag.getList("Nesten", Tag.TAG_COMPOUND)) {
+            for (Tag t : tag.getListOrEmpty("Nesten")) {
                 Gevecht g = Gevecht.load((CompoundTag) t);
                 n.nesten.put(g.key, g);
             }
@@ -164,7 +164,7 @@ public final class KaasknabbelNest {
     /** The nest a spot is in: its fight (made the first time), or null. */
     @Nullable
     public static Gevecht nestBij(ServerLevel level, BlockPos pos) {
-        var registry = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
+        var registry = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
         var structure = registry.get(PiepFeature.KAASKNABBEL_NEST);
         if (structure == null) {
             return null;
@@ -174,7 +174,7 @@ public final class KaasknabbelNest {
             return null;
         }
         BoundingBox box = start.getPieces().get(0).getBoundingBox();
-        String key = start.getChunkPos().x + "," + start.getChunkPos().z;
+        String key = start.getChunkPos().x() + "," + start.getChunkPos().z();
         BlockPos kern = new BlockPos((box.minX() + box.maxX() + 1) / 2, box.minY() + VLOER, (box.minZ() + box.maxZ() + 1) / 2);
         return gevecht(level, key, kern);
     }
@@ -202,7 +202,7 @@ public final class KaasknabbelNest {
         if (player.isSpectator()) {
             return;
         }
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         Gevecht g = nestBij(level, player.blockPosition());
         if (g == null) {
             return;
@@ -226,7 +226,7 @@ public final class KaasknabbelNest {
         g.mobs.clear();
         g.spelers.clear();
         g.leegSinds = -1;
-        GEVECHTEN.put(level.dimension().location() + "|" + g.key, new Actief(level, g));
+        GEVECHTEN.put(level.dimension().identifier() + "|" + g.key, new Actief(level, g));
         verwijderKist(level, g);
         zeg(level, g, Component.translatable("gui.guhs.piep.nest_start").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         level.playSound(null, g.kern, SoundEvents.RAID_HORN.value(), SoundSource.HOSTILE, 0.8f, 1.6f);
@@ -240,12 +240,12 @@ public final class KaasknabbelNest {
         for (int i = 0; i < n; i++) {
             int hoek = SPAWN_HOEKEN[(i + g.golf) % SPAWN_HOEKEN.length];
             BlockPos at = spawnPlek(g, hoek);
-            BozeKaasknabbelEntity k = PiepFeature.BOZE_KAASKNABBEL.get().create(level);
+            BozeKaasknabbelEntity k = PiepFeature.BOZE_KAASKNABBEL.get().create(level, EntitySpawnReason.TRIGGERED);
             if (k == null) {
                 continue;
             }
-            k.moveTo(at.getX() + 0.5 + (i / 6) * 0.3, at.getY(), at.getZ() + 0.5, level.random.nextFloat() * 360, 0);
-            k.finalizeSpawn(level, level.getCurrentDifficultyAt(at), MobSpawnType.EVENT, null);
+            k.snapTo(at.getX() + 0.5 + (i / 6) * 0.3, at.getY(), at.getZ() + 0.5, level.getRandom().nextFloat() * 360, 0);
+            k.finalizeSpawn(level, level.getCurrentDifficultyAt(at), EntitySpawnReason.EVENT, null);
             k.setNest(g.key);
             level.addFreshEntity(k);
             g.mobs.add(k.getUUID());
@@ -260,13 +260,13 @@ public final class KaasknabbelNest {
 
     private static void baas(ServerLevel level, Gevecht g) {
         g.fase = Fase.BAAS;
-        BozeOppernabbelEntity baas = PiepFeature.BOZE_OPPERNABBEL.get().create(level);
+        BozeOppernabbelEntity baas = PiepFeature.BOZE_OPPERNABBEL.get().create(level, EntitySpawnReason.TRIGGERED);
         if (baas == null) {
             return;
         }
         BlockPos at = spawnPlek(g, 180).relative(net.minecraft.core.Direction.EAST, 2);
-        baas.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0, 0);
-        baas.finalizeSpawn(level, level.getCurrentDifficultyAt(at), MobSpawnType.EVENT, null);
+        baas.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0, 0);
+        baas.finalizeSpawn(level, level.getCurrentDifficultyAt(at), EntitySpawnReason.EVENT, null);
         baas.setNest(g.key);
         level.addFreshEntity(baas);
         g.mobs.add(baas.getUUID());
@@ -278,13 +278,13 @@ public final class KaasknabbelNest {
     static void roepHulp(ServerLevel level, BozeOppernabbelEntity baas, int n) {
         Gevecht g = actief(level, baas.nest());
         for (int i = 0; i < n; i++) {
-            BozeKaasknabbelEntity k = PiepFeature.BOZE_KAASKNABBEL.get().create(level);
+            BozeKaasknabbelEntity k = PiepFeature.BOZE_KAASKNABBEL.get().create(level, EntitySpawnReason.TRIGGERED);
             if (k == null) {
                 continue;
             }
             BlockPos at = g != null ? spawnPlek(g, SPAWN_HOEKEN[i * 2 % SPAWN_HOEKEN.length]) : baas.blockPosition();
-            k.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0, 0);
-            k.finalizeSpawn(level, level.getCurrentDifficultyAt(at), MobSpawnType.EVENT, null);
+            k.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, 0, 0);
+            k.finalizeSpawn(level, level.getCurrentDifficultyAt(at), EntitySpawnReason.EVENT, null);
             k.setNest(baas.nest());
             level.addFreshEntity(k);
             if (g != null) {
@@ -320,13 +320,13 @@ public final class KaasknabbelNest {
         BlockPos kist = g.kern.above();
         level.setBlock(kist, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, net.minecraft.core.Direction.SOUTH), 3);
         if (level.getBlockEntity(kist) instanceof ChestBlockEntity chest) {
-            chest.setLootTable(eersteKeer ? SCHAT : KNABBELS, level.random.nextLong());
+            chest.setLootTable(eersteKeer ? SCHAT : KNABBELS, level.getRandom().nextLong());
             chest.getPersistentData().putBoolean("guhs_piep_schat", true);
         }
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, kist.getX() + 0.5, kist.getY() + 0.8, kist.getZ() + 0.5, 20, 0.6, 0.4, 0.6, 0);
         level.playSound(null, kist, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1f, 1.2f);
         for (ServerPlayer p : spelersBij(level, g)) {
-            p.displayClientMessage(Component.translatable("gui.guhs.piep.gewoon_zieli").withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.piep.gewoon_zieli").withStyle(ChatFormatting.GOLD));
             PiepVoortgang.tel(p, PiepVoortgang.NEST, 1, "piep_nest_gewonnen");
         }
         for (UUID id : g.spelers) {
@@ -335,7 +335,7 @@ public final class KaasknabbelNest {
                 PiepVoortgang.tel(p, PiepVoortgang.NEST, 1, "piep_nest_gewonnen");
             }
         }
-        GEVECHTEN.remove(level.dimension().location() + "|" + g.key);
+        GEVECHTEN.remove(level.dimension().identifier() + "|" + g.key);
     }
 
     /** Stops a fight (everyone gone): the knabbels hop back into their holes. */
@@ -352,12 +352,12 @@ public final class KaasknabbelNest {
         if (g.fase == Fase.GEWONNEN) {
             g.gewonnenOp = Math.min(g.gewonnenOp, level.getGameTime() - HERSTEL);   // (a lost rematch may be tried again)
         }
-        GEVECHTEN.remove(level.dimension().location() + "|" + g.key);
+        GEVECHTEN.remove(level.dimension().identifier() + "|" + g.key);
     }
 
     private static void verwijderKist(ServerLevel level, Gevecht g) {
         BlockPos kist = g.kern.above();
-        if (level.getBlockEntity(kist) instanceof ChestBlockEntity chest && chest.getPersistentData().getBoolean("guhs_piep_schat")) {
+        if (level.getBlockEntity(kist) instanceof ChestBlockEntity chest && chest.getPersistentData().getBooleanOr("guhs_piep_schat", false)) {
             level.removeBlockEntity(kist);                     // (an old treasure chest: whatever is left in it goes back to the nest)
             level.setBlock(kist, Blocks.AIR.defaultBlockState(), 3);
         }
@@ -388,7 +388,7 @@ public final class KaasknabbelNest {
 
     @Nullable
     static Gevecht actief(ServerLevel level, String key) {
-        Actief a = GEVECHTEN.get(level.dimension().location() + "|" + key);
+        Actief a = GEVECHTEN.get(level.dimension().identifier() + "|" + key);
         return a == null ? null : a.gevecht();
     }
 

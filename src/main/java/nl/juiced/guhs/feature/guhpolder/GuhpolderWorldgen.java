@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
-import net.minecraft.world.level.block.SnowyDirtBlock;
+import net.minecraft.world.level.block.SnowyBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -177,8 +177,8 @@ public final class GuhpolderWorldgen {
     /** Rijpgras under snow shows its snowy sides. */
     static void sneeuwig(WorldGenLevel level, BlockPos pos) {
         BlockState s = level.getBlockState(pos);
-        if (s.hasProperty(SnowyDirtBlock.SNOWY)) {
-            level.setBlock(pos, s.setValue(SnowyDirtBlock.SNOWY, true), Block.UPDATE_CLIENTS);
+        if (s.hasProperty(SnowyBlock.SNOWY)) {
+            level.setBlock(pos, s.setValue(SnowyBlock.SNOWY, true), Block.UPDATE_CLIENTS);
         }
     }
 

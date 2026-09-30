@@ -47,6 +47,8 @@ import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * De Knuffelcreche (2.8, plein slot "creche" of the Knuffeldal town): a giant baby guh with a pacifier, where Juf Knuffel
  * looks after the babyguhtjes. Resources: tools/features/creche.py.
@@ -94,7 +96,7 @@ public final class CrecheFeature {
     // --- the babies ---------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<CrecheBabyguh>> BABYGUH = ENTITY_TYPES.register("creche_babyguh",
             () -> EntityType.Builder.of(CrecheBabyguh::new, MobCategory.MISC).sized(0.45f, 0.4f).eyeHeight(0.3f).clientTrackingRange(8)
-                    .updateInterval(1).noSave().build("guhs:creche_babyguh"));
+                    .updateInterval(1).noSave().build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.parse("guhs:creche_babyguh"))));
 
     // --- particles, sounds --------------------------------------------------------------------------------------------------
     /** A little sleepy star rising from a baby that sleeps. */
@@ -193,12 +195,12 @@ public final class CrecheFeature {
             return InteractionResult.PASS;
         }
         if (!guh.isBaby()) {
-            if (!player.level().isClientSide) {
-                player.displayClientMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.creche.alleen_babys"), true);
+            if (!player.level().isClientSide()) {
+                player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.creche.alleen_babys"));
             }
-            return InteractionResult.sidedSuccess(player.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide()) {
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
@@ -213,7 +215,7 @@ public final class CrecheFeature {
                 server.sendParticles(fles ? ParticleTypes.HEART : ParticleTypes.CLOUD, guh.getX(), guh.getY() + 0.6, guh.getZ(), 4, 0.25, 0.2, 0.25, 0.01);
             }
         }
-        return InteractionResult.sidedSuccess(player.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     private CrecheFeature() {

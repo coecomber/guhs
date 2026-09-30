@@ -17,7 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -78,7 +78,7 @@ public final class Dagritme {
     /** How far a guh of a Knuffeldal town looks for a campfire (from its house or street to the plein's fire), and how far up or down. */
     public static final int VUUR_ZOEK_BEWONER = 56, VUUR_DY = 4, VUUR_DY_BEWONER = 10;
     /** While a guh walks to a far campfire it may plan a longer path (the guh's own follow range is only 16). */
-    private static final ResourceLocation VER_PAD = Guhs.id("wereldleven_kampvuur_pad");
+    private static final Identifier VER_PAD = Guhs.id("wereldleven_kampvuur_pad");
     /** A napping tamed guh wakes up when its owner walks further away than this. */
     public static final double BAAS_WEG = 14;
 
@@ -213,7 +213,7 @@ public final class Dagritme {
             return;
         }
         Kaasijsjes.tick(guh);
-        if (!guh.level().isClientSide && guh.getPersistentData().getBoolean(KAMPVUUR) && !aanHetVuur(guh)) {
+        if (!guh.level().isClientSide() && guh.getPersistentData().getBooleanOr(KAMPVUUR, false) && !aanHetVuur(guh)) {
             guh.getPersistentData().remove(KAMPVUUR);   // (left over: the chunk unloaded while it sat at the fire, or the evening is over)
         }
         if (guh.isNoAi()) {
@@ -221,7 +221,7 @@ public final class Dagritme {
         }
         telZwaai(guh);
         CompoundTag data = guh.getPersistentData();
-        String slaap = data.getString(SLAAP);
+        String slaap = data.getStringOr(SLAAP, "");
         if (!slaap.isEmpty() || (guh.getKnusVlaggen() & DUTJE) != 0) {
             if (moetWakker(guh, slaap)) {
                 wakker(guh, slaap.equals("nacht") && dagdeel(guh) == Dagdeel.OCHTEND);
@@ -234,7 +234,7 @@ public final class Dagritme {
         }
         if (d == Dagdeel.OCHTEND) {
             long dag = ritmeDag(guh.level()) + 1;   // (+1: 0 means "never")
-            if (data.getLong(GAAP_DAG) != dag && guh.getRandom().nextInt(6) == 0) {
+            if (data.getLongOr(GAAP_DAG, 0L) != dag && guh.getRandom().nextInt(6) == 0) {
                 gapen(guh);
             }
         } else if (d == Dagdeel.DAG && guh.isTame()) {
@@ -267,12 +267,12 @@ public final class Dagritme {
             return;
         }
         String id = near.getUUID().toString();
-        if (id.equals(data.getString(ZWAAI_BIJ))) {
+        if (id.equals(data.getStringOr(ZWAAI_BIJ, ""))) {
             return;
         }
         data.putString(ZWAAI_BIJ, id);
         long now = guh.level().getGameTime();
-        if (now >= data.getLong(ZWAAI_TOT) && !near.isInvisible() && guh.emotes.greet(near)) {
+        if (now >= data.getLongOr(ZWAAI_TOT, 0L) && !near.isInvisible() && guh.emotes.greet(near)) {
             data.putLong(ZWAAI_TOT, now + 20 * 60);
         }
     }
@@ -328,7 +328,7 @@ public final class Dagritme {
     }
 
     public static boolean slaapt(GuhEntity guh) {
-        return !guh.getPersistentData().getString(SLAAP).isEmpty();
+        return !guh.getPersistentData().getStringOr(SLAAP, "").isEmpty();
     }
 
     private static boolean moetWakker(GuhEntity guh, String slaap) {
@@ -370,10 +370,10 @@ public final class Dagritme {
         if (!stack.is(KnusTags.MARSHMALLOW)) {
             return InteractionResult.PASS;
         }
-        if (guh.level().isClientSide) {
+        if (guh.level().isClientSide()) {
             return guh.isInSittingPose() && !guh.isOrderedToSit() ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
-        if (!guh.getPersistentData().getBoolean(KAMPVUUR) || !aanHetVuur(guh) || !(player instanceof ServerPlayer sp)) {
+        if (!guh.getPersistentData().getBooleanOr(KAMPVUUR, false) || !aanHetVuur(guh) || !(player instanceof ServerPlayer sp)) {
             return InteractionResult.PASS;
         }
         roosterMarshmallow(guh, stack.copyWithCount(1));
@@ -384,7 +384,7 @@ public final class Dagritme {
                 guh.getBbWidth() * 0.4, 0.2, guh.getBbWidth() * 0.4, 0.02);
         KnusVoortgang.tel(sp, WereldlevenVoortgang.MARSHMALLOWS, 1);
         GuhAdvancements.grant(sp, "wereldleven_kampvuur");
-        sp.displayClientMessage(Component.translatable("gui.guhs.wereldleven.marshmallow", guh.getDisplayName()).withStyle(ChatFormatting.GOLD), true);
+        sp.sendOverlayMessage(Component.translatable("gui.guhs.wereldleven.marshmallow", guh.getDisplayName()).withStyle(ChatFormatting.GOLD));
         return InteractionResult.SUCCESS;
     }
 
@@ -461,7 +461,7 @@ public final class Dagritme {
             switch (d) {
                 case DUTJE -> {
                     long dag = ritmeDag(guh.level()) + 1;
-                    if (guh.getPersistentData().getLong(DUTJE_DAG) == dag || guh.getRandom().nextInt(3) != 0) {
+                    if (guh.getPersistentData().getLongOr(DUTJE_DAG, 0L) == dag || guh.getRandom().nextInt(3) != 0) {
                         return false;
                     }
                     plan = Plan.DUTJE;   // (the day's nap counts once it really naps: see slaap)
@@ -516,7 +516,7 @@ public final class Dagritme {
             if (klaar || doel == null || !mag() || !fits(dagdeel(guh))) {
                 return false;
             }
-            if (GuhHooks.isBezig(guh) && (bezigTot == 0 || guh.getPersistentData().getLong("guhs_knus_bezig_tot") != bezigTot)) {
+            if (GuhHooks.isBezig(guh) && (bezigTot == 0 || guh.getPersistentData().getLongOr("guhs_knus_bezig_tot", 0L) != bezigTot)) {
                 return false;    // (someone else's activity)
             }
             if (plan == Plan.KAMPVUUR) {
@@ -559,7 +559,7 @@ public final class Dagritme {
 
         private void claimBezig(int t) {
             GuhHooks.bezig(guh, t);
-            bezigTot = guh.getPersistentData().getLong("guhs_knus_bezig_tot");
+            bezigTot = guh.getPersistentData().getLongOr("guhs_knus_bezig_tot", 0L);
         }
 
         @Override
@@ -626,7 +626,7 @@ public final class Dagritme {
             if (zit && !guh.isOrderedToSit()) {
                 guh.setInSittingPose(false);
             }
-            if (bezigTot != 0 && guh.getPersistentData().getLong("guhs_knus_bezig_tot") == bezigTot) {
+            if (bezigTot != 0 && guh.getPersistentData().getLongOr("guhs_knus_bezig_tot", 0L) == bezigTot) {
                 GuhHooks.bezig(guh, 0);   // (only our own claim)
             }
             bezigTot = 0;
@@ -741,7 +741,7 @@ public final class Dagritme {
     // --- seats and the campfire cache ---------------------------------------------------------------------------------------------
 
     private static String sleutel(Level level, BlockPos pos) {
-        return level.dimension().location() + "|" + pos.asLong();
+        return level.dimension().identifier() + "|" + pos.asLong();
     }
 
     /** Is this seat taken (walked to, or sat on) by another guh? */
@@ -766,7 +766,7 @@ public final class Dagritme {
     /** The campfires around this spot's cell (the cell plus {@link #VUUR_ZOEK_BEWONER} on every side), scanned at most every 5 s. */
     private static List<BlockPos> vurenRond(Level level, BlockPos center) {
         int celX = Math.floorDiv(center.getX(), VUUR_CEL), celZ = Math.floorDiv(center.getZ(), VUUR_CEL);
-        String key = level.dimension().location() + "|" + celX + "," + celZ;
+        String key = level.dimension().identifier() + "|" + celX + "," + celZ;
         long nu = level.getGameTime();
         VuurScan scan = VUUR_CACHE.get(key);
         if (scan != null && nu >= scan.tijd() && nu - scan.tijd() < VUUR_CACHE_TICKS) {

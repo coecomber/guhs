@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.CandleBlock;
 import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -33,7 +33,7 @@ public final class SmulProtection {
 
     /** Is this spot part of an eetfestijn? */
     public static boolean inFestijn(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().registryOrThrow(Registries.STRUCTURE).get(FESTIJN);
+        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(FESTIJN);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -50,7 +50,7 @@ public final class SmulProtection {
         if (!denies(player, protectedAt(player.level(), pos))) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.smul.no_build").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.smul.no_build").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -72,7 +72,7 @@ public final class SmulProtection {
      * but the decoration cakes can't be eaten up and the flowers stay in their pots.
      */
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide) {
+        if (event.getLevel().isClientSide()) {
             return;
         }
         if (event.getItemStack().isEmpty()) {
@@ -90,7 +90,7 @@ public final class SmulProtection {
 
     /** Buckets are used "in the air" too. */
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }

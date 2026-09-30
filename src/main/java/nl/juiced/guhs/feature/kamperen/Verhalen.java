@@ -83,13 +83,13 @@ public final class Verhalen {
         if (!saved.contains(KEY)) {
             saved.put(KEY, new CompoundTag());
         }
-        return saved.getCompound(KEY);
+        return saved.getCompoundOrEmpty(KEY);
     }
 
     /** Has the player heard a story tonight already? */
     public static boolean vannachtGehoord(ServerPlayer player) {
         CompoundTag d = data(player);
-        return d.contains("Nacht") && d.getLong("Nacht") == nacht(player.level());
+        return d.contains("Nacht") && d.getLongOr("Nacht", 0L) == nacht(player.level());
     }
 
     /** (Tests) forgets tonight's story. */
@@ -188,7 +188,7 @@ public final class Verhalen {
             GuhQuests.say(p, opa, "quest.guhs.kamperen.verhaal." + id + "." + v.regel);
             v.luisteraars.merge(p.getUUID(), 1, Integer::sum);
         }
-        level.playSound(null, opa, KamperenFeature.OPA_VERHAAL.get(), SoundSource.NEUTRAL, 0.9f, 0.9f + level.random.nextFloat() * 0.1f);
+        level.playSound(null, opa, KamperenFeature.OPA_VERHAAL.get(), SoundSource.NEUTRAL, 0.9f, 0.9f + level.getRandom().nextFloat() * 0.1f);
         v.regel++;
         v.volgende = nu + INTERVAL;
         if (v.regel >= REGELS) {

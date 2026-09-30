@@ -37,6 +37,7 @@ import nl.juiced.guhs.feature.kleding.KledingBronnen;
 import nl.juiced.guhs.feature.kleding.KledingUnlocks;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.resources.Identifier;
 /**
  * De Knabbelkatapult (2.9, De Grote Guhspelen): on the Vadskliffen a cheerful guh castle with a big catapult on its wall
  * looks across a gorge at a crooked Mika fort on a cliff ledge. Kapitein Floepguh (KATAPULTGUH) lends you pluisballen;
@@ -81,11 +82,11 @@ public final class KatapultFeature {
     public static final DeferredHolder<EntityType<?>, EntityType<PluisbalEntity>> PLUISBAL = ENTITIES.register("pluisbal",
             () -> EntityType.Builder.<PluisbalEntity>of(PluisbalEntity::new, MobCategory.MISC)
                     .sized(PluisbalEntity.SIZE, PluisbalEntity.SIZE).clientTrackingRange(10).updateInterval(1)
-                    .build(Guhs.id("pluisbal").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("pluisbal"))));
     public static final DeferredHolder<EntityType<?>, EntityType<KatapultBrokjeEntity>> BROKJE = ENTITIES.register("katapult_brokje",
             () -> EntityType.Builder.<KatapultBrokjeEntity>of(KatapultBrokjeEntity::new, MobCategory.MISC)
                     .sized(0.98f, 0.98f).clientTrackingRange(10).updateInterval(2)
-                    .build(Guhs.id("katapult_brokje").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("katapult_brokje"))));
 
     /** The Kapitein's outfit and its price in katapultsterren (a run earns 1-6, lastig more). */
     public static final int PRIJS_HELMPJE = 4, PRIJS_OORBELLETJES = 6, PRIJS_RIEM = 10;
@@ -122,7 +123,7 @@ public final class KatapultFeature {
     /** Grants quest/&lt;name&gt; and grote_guhspelen/&lt;name&gt; (all criteria), whichever exist. */
     public static void advancement(ServerPlayer player, String name) {
         for (String path : new String[] {"quest/" + name, "grote_guhspelen/" + name}) {
-            AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(path));
+            AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(path));
             if (holder == null) {
                 continue;
             }
@@ -138,7 +139,7 @@ public final class KatapultFeature {
     }
 
     public static boolean has(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("quest/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("quest/" + name));
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
     }
 

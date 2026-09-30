@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +15,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,8 +24,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.gids.GidsFeature;
@@ -40,8 +38,6 @@ import nl.juiced.guhs.world.GuhWorldData;
  * Template vogels_test_wei: 12 x 12 grass (floor at helper y 1: birds stand at y 2), a log with a 3 x 3 leaf roof at the
  * corner (leaves at helper y 5 over x/z 0..2), a sand strip at x 11.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class VogelsGameTests {
     private static final String WEI = "vogels_test_wei";
     private static final String BATCH = "vogels";
@@ -52,7 +48,7 @@ public class VogelsGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -63,9 +59,9 @@ public class VogelsGameTests {
     }
 
     static <T extends Vogeltje> T vogel(GameTestHelper helper, EntityType<T> type, double x, double y, double z) {
-        T v = type.create(helper.getLevel());
+        T v = type.create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         Vec3 at = helper.absoluteVec(new Vec3(x, y, z));
-        v.moveTo(at.x, at.y, at.z, 0, 0);
+        v.snapTo(at.x, at.y, at.z, 0, 0);
         v.zetThuis(BlockPos.containing(at));
         helper.getLevel().addFreshEntity(v);
         return v;
@@ -77,7 +73,7 @@ public class VogelsGameTests {
     }
 
     /** Birds never attack, never aim at anyone; hitting one only makes it fly up. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 200)
     public static void vogelsNooitBoos(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(6, 2, 6));
         List<Vogeltje> vogels = List.of(vogel(helper, VogelsFeature.PLUISVINKJE.get(), 5.5, 2, 6.5), vogel(helper, VogelsFeature.KAASMEESJE.get(), 7.5, 2, 6.5),
@@ -101,7 +97,7 @@ public class VogelsGameTests {
     }
 
     /** The four pages are counting creature pages, seen from 8 blocks; the Guhdex fills them and the advancements follow. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void vogelsPaginasTellen(GameTestHelper helper) {
         List<GuhVariant> pages = List.of(GuhVariant.PLUISVINKJE, GuhVariant.KAASMEESJE, GuhVariant.GUH_UILTJE, GuhVariant.ZEEMEEUWTJE);
         for (GuhVariant v : pages) {
@@ -109,7 +105,7 @@ public class VogelsGameTests {
                     && GuhDex.isCreaturePage(v) && v.isCharacter(), v.id() + " is a counting creature page");
         }
         ServerPlayer p = speler(helper, new BlockPos(1, 2, 6));
-        GuhWorldData data = GuhWorldData.get(p.server);
+        GuhWorldData data = GuhWorldData.get(p.level().getServer());
         data.player(p.getUUID()).seen.removeAll(pages);
         List<Vogeltje> vogels = List.of(vogel(helper, VogelsFeature.PLUISVINKJE.get(), 7.5, 2, 6.5), vogel(helper, VogelsFeature.KAASMEESJE.get(), 7.5, 2, 5.5),
                 vogel(helper, VogelsFeature.GUH_UILTJE.get(), 7.5, 2, 7.5), vogel(helper, VogelsFeature.ZEEMEEUWTJE.get(), 8.5, 2, 6.5));
@@ -127,7 +123,7 @@ public class VogelsGameTests {
     }
 
     /** Seeds for a pluisvinkje: a feather (not again right away); by itself it drops one too. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void vogelsPluisveertje(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(5, 2, 6));
         PluisvinkjeEntity vink = vogel(helper, VogelsFeature.PLUISVINKJE.get(), 6.5, 2, 6.5);
@@ -157,7 +153,7 @@ public class VogelsGameTests {
 
     /** Spawn rules: on top of the world on something to sit on; day birds by day, the owl at night (with the world always);
      *  the biome modifiers put each bird in its biomes. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void vogelsSpawnRegels(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         long was = level.getDayTime();
@@ -176,11 +172,11 @@ public class VogelsGameTests {
         helper.assertTrue(!VogelSpawns.plekOk(vink, level, binnen) && !VogelSpawns.plekOk(vink, level, onderBlad), "not in the ground, not under a roof");
         helper.assertTrue(VogelSpawns.plekOk(meeuw, level, zand), "the gull on the sand");
         tijd(level, 6000);
-        helper.assertTrue(VogelSpawns.check(vink, level, MobSpawnType.NATURAL, gras, r) && !VogelSpawns.check(uil, level, MobSpawnType.NATURAL, gras, r),
+        helper.assertTrue(VogelSpawns.check(vink, level, EntitySpawnReason.NATURAL, gras, r) && !VogelSpawns.check(uil, level, EntitySpawnReason.NATURAL, gras, r),
                 "by day: vinkjes, no owls");
-        helper.assertTrue(VogelSpawns.check(uil, level, MobSpawnType.CHUNK_GENERATION, gras, r), "with the world an owl may come by day (it sleeps)");
+        helper.assertTrue(VogelSpawns.check(uil, level, EntitySpawnReason.CHUNK_GENERATION, gras, r), "with the world an owl may come by day (it sleeps)");
         tijd(level, 18000);
-        helper.assertTrue(!VogelSpawns.check(vink, level, MobSpawnType.NATURAL, gras, r) && VogelSpawns.check(uil, level, MobSpawnType.NATURAL, gras, r),
+        helper.assertTrue(!VogelSpawns.check(vink, level, EntitySpawnReason.NATURAL, gras, r) && VogelSpawns.check(uil, level, EntitySpawnReason.NATURAL, gras, r),
                 "at night: owls, no vinkjes");
         tijd(level, was);
         // not too many
@@ -190,10 +186,10 @@ public class VogelsGameTests {
             m.setNoAi(true);
             veel.add(m);
         }
-        helper.assertTrue(!VogelSpawns.check(meeuw, level, MobSpawnType.CHUNK_GENERATION, zand, r), "a crowd of gulls: no more");
+        helper.assertTrue(!VogelSpawns.check(meeuw, level, EntitySpawnReason.CHUNK_GENERATION, zand, r), "a crowd of gulls: no more");
         veel.forEach(Entity::discard);
         // the biome modifiers (applied to the biome registry at server start)
-        var biomes = level.registryAccess().registryOrThrow(Registries.BIOME);
+        var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
         helper.assertTrue(spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("guh_fields"))), vink), "vinkjes in the Guhvelden");
         helper.assertTrue(spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("pink_puffs"))), vink), "vinkjes in the Roze pluisjes");
         helper.assertTrue(spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("vadswoud"))), VogelsFeature.KAASMEESJE.get())
@@ -218,7 +214,7 @@ public class VogelsGameTests {
     }
 
     /** The kaasmeesje finds the underside of the leaves, hangs there upside down (no gravity) and lets go when the leaf is gone. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 120)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 120)
     public static void vogelsKaasmeesjeHangt(GameTestHelper helper) {
         KaasmeesjeEntity mees = vogel(helper, VogelsFeature.KAASMEESJE.get(), 3.5, 2, 3.5);
         BlockPos hang = null;
@@ -233,7 +229,7 @@ public class VogelsGameTests {
         p.setShiftKeyDown(true);
         mees.zetHouding(Vogeltje.HANGT);
         Vec3 at = mees.landDoel(plek);
-        mees.moveTo(at.x, at.y, at.z);
+        mees.snapTo(at.x, at.y, at.z);
         mees.land();
         mees.geland(plek);
         helper.assertTrue(GidsFeature.heeft(p, "diertjes/vogels_ondersteboven"), "a player saw it hang");
@@ -251,7 +247,7 @@ public class VogelsGameTests {
     }
 
     /** The owl sleeps by day (and its head turns far), wakes at night and its "oehoe" is an advancement at night. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 120)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 120)
     public static void vogelsUiltjeSlaaptOverdag(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         long was = level.getDayTime();
@@ -279,7 +275,7 @@ public class VogelsGameTests {
 
     /** Gulls: not afraid of someone with fish, they come for it ("Mijn! Mijn!"), fish on the ground is snatched, a player
      *  without food scares them, a sneaking one doesn't. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 120)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 120)
     public static void vogelsZeemeeuwMijn(GameTestHelper helper) {
         ZeemeeuwtjeEntity meeuw = vogel(helper, VogelsFeature.ZEEMEEUWTJE.get(), 6.5, 2, 6.5);
         ServerPlayer p = speler(helper, new BlockPos(8, 2, 6));
@@ -309,7 +305,7 @@ public class VogelsGameTests {
     }
 
     /** The bird feeder: seeds fill it, birds find it, pecks eat it empty, then it isn't found any more. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void vogelsVoerhuisje(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos pos = helper.absolutePos(new BlockPos(6, 2, 6));
@@ -339,7 +335,7 @@ public class VogelsGameTests {
     }
 
     /** A flock has one leader (the lowest id); when one gets a fright the whole flock flies up. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void vogelsZwerm(GameTestHelper helper) {
         List<PluisvinkjeEntity> zwerm = new ArrayList<>();
         for (int i = 0; i < 4; i++) {

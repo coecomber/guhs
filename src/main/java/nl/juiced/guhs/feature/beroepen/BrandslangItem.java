@@ -10,13 +10,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -42,19 +42,19 @@ public class BrandslangItem extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.BOW;
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
-        return InteractionResultHolder.consume(player.getItemInHand(hand));
+        return InteractionResult.CONSUME.heldItemTransformedTo(player.getItemInHand(hand));
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity user, ItemStack stack, int remaining) {
-        if (!level.isClientSide && user instanceof ServerPlayer player) {
+        if (!level.isClientSide() && user instanceof ServerPlayer player) {
             int t = getUseDuration(stack, user) - remaining;
             spuit(player, t);
         }
@@ -62,7 +62,7 @@ public class BrandslangItem extends Item {
 
     /** One tick of spraying: the jet (particles, every few ticks the sound) and, now and then, the fire it hits. */
     public static void spuit(ServerPlayer player, int t) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         Vec3 eye = player.getEyePosition();
         Vec3 look = player.getLookAngle();
         Vec3 end = eye.add(look.scale(BEREIK));

@@ -96,7 +96,7 @@ public final class HuisjeFeature {
         });
         // maatjes (muisjes, Schilly, Poepschilly) get the home-base goal when they join the level
         NeoForge.EVENT_BUS.addListener((EntityJoinLevelEvent event) -> {
-            if (!event.getLevel().isClientSide && event.getEntity() instanceof PiepMaatje && event.getEntity() instanceof PathfinderMob mob) {
+            if (!event.getLevel().isClientSide() && event.getEntity() instanceof PiepMaatje && event.getEntity() instanceof PathfinderMob mob) {
                 HuisjeGoal.zorgVoor(mob);
                 if (Huisjes.isBewoner(mob)) {
                     Huisje h = Huisjes.thuisVan(mob);
@@ -116,7 +116,7 @@ public final class HuisjeFeature {
                 Huisje h = Huisjes.van(sl, c);
                 if (h != null && !Huisjes.magBewerken(event.getPlayer(), h)) {
                     event.setCanceled(true);
-                    event.getPlayer().displayClientMessage(Huisjes.vanWie(h).copy().withStyle(net.minecraft.ChatFormatting.GRAY), true);
+                    event.getPlayer().sendOverlayMessage(Huisjes.vanWie(h).copy().withStyle(net.minecraft.ChatFormatting.GRAY));
                 }
             }
         });
@@ -126,7 +126,7 @@ public final class HuisjeFeature {
             }
         });
         NeoForge.EVENT_BUS.addListener((EntityTickEvent.Pre event) -> {
-            if (event.getEntity() instanceof PiepMaatje && !event.getEntity().level().isClientSide && Huisjes.isBinnen(event.getEntity())) {
+            if (event.getEntity() instanceof PiepMaatje && !event.getEntity().level().isClientSide() && Huisjes.isBinnen(event.getEntity())) {
                 Huisjes.houdBinnen(event.getEntity());
             }
         });

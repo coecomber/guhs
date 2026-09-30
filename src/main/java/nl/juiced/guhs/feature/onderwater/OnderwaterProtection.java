@@ -18,7 +18,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -64,7 +64,7 @@ public final class OnderwaterProtection {
         if (server.dimension() != ModDimensions.GUHMENSION) {
             return false;
         }
-        Structure bubble = server.registryAccess().registryOrThrow(Registries.STRUCTURE).get(BUBBLE);
+        Structure bubble = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(BUBBLE);
         return bubble != null && server.structureManager().getStructureWithPieceAt(pos, bubble).isValid();
     }
 
@@ -74,7 +74,7 @@ public final class OnderwaterProtection {
             return false;
         }
         if (!quiet) {
-            player.displayClientMessage(Component.translatable("quest.guhs.onderwater.no_build").withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.onderwater.no_build").withStyle(ChatFormatting.AQUA));
         }
         return true;
     }
@@ -97,7 +97,7 @@ public final class OnderwaterProtection {
      * (doors, chests, the shells), so a full hand never stops you from taking a pearl.
      */
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty()) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty()) {
             return;
         }
         Direction face = event.getFace() == null ? Direction.UP : event.getFace();
@@ -110,7 +110,7 @@ public final class OnderwaterProtection {
 
     /** Buckets are also used "in the air" (scooping up the sea, or pouring into the dome). */
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition(), false)) {
             event.setCanceled(true);
         }

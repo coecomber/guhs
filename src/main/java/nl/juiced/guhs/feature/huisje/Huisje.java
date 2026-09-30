@@ -16,7 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
@@ -24,6 +24,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.band.Band;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * One Guhhuisje (2.10): where it stands (dimension + controller block), which way its snoet (the door) faces, its size,
  * owner and unique name, its residents (band ids of guhs and maatjes) and per resident which chores it does. Kept in
@@ -207,17 +208,17 @@ public final class Huisje {
 
     CompoundTag save() {
         CompoundTag t = new CompoundTag();
-        t.putString("Dim", dim.location().toString());
+        t.putString("Dim", dim.identifier().toString());
         t.putLong("Pos", pos.asLong());
         t.putString("Facing", facing.getName());
         t.putString("Maat", maat.id());
-        t.putUUID("Eigenaar", eigenaar);
+        t.store("Eigenaar", UUIDUtil.CODEC, eigenaar);
         t.putString("EigenaarNaam", eigenaarNaam);
         t.putString("Naam", naam);
         ListTag list = new ListTag();
         for (UUID b : bewoners) {
             CompoundTag c = new CompoundTag();
-            c.putUUID("Id", b);
+            c.store("Id", UUIDUtil.CODEC, b);
             c.putString("Soort", soort(b));
             c.putString("Naam", naamVan(b));
             CompoundTag k = new CompoundTag();
@@ -231,27 +232,27 @@ public final class Huisje {
 
     @Nullable
     static Huisje load(CompoundTag t) {
-        ResourceLocation dim = ResourceLocation.tryParse(t.getString("Dim"));
-        if (dim == null || !t.hasUUID("Eigenaar")) {
+        Identifier dim = Identifier.tryParse(t.getStringOr("Dim", ""));
+        if (dim == null || !t.read("Eigenaar", UUIDUtil.CODEC).isPresent()) {
             return null;
         }
-        Direction facing = Direction.byName(t.getString("Facing"));
-        Huisje h = new Huisje(ResourceKey.create(Registries.DIMENSION, dim), BlockPos.of(t.getLong("Pos")),
-                facing == null || facing.getAxis().isVertical() ? Direction.NORTH : facing, HuisjeMaat.byId(t.getString("Maat")),
-                t.getUUID("Eigenaar"), t.getString("Naam"));
-        h.eigenaarNaam = t.getString("EigenaarNaam");
-        ListTag list = t.getList("Bewoners", Tag.TAG_COMPOUND);
+        Direction facing = Direction.byName(t.getStringOr("Facing", ""));
+        Huisje h = new Huisje(ResourceKey.create(Registries.DIMENSION, dim), BlockPos.of(t.getLongOr("Pos", 0L)),
+                facing == null || facing.getAxis().isVertical() ? Direction.NORTH : facing, HuisjeMaat.byId(t.getStringOr("Maat", "")),
+                t.read("Eigenaar", UUIDUtil.CODEC).orElseThrow(), t.getStringOr("Naam", ""));
+        h.eigenaarNaam = t.getStringOr("EigenaarNaam", "");
+        ListTag list = t.getListOrEmpty("Bewoners");
         for (int i = 0; i < list.size(); i++) {
-            CompoundTag c = list.getCompound(i);
-            UUID id = c.getUUID("Id");
+            CompoundTag c = list.getCompoundOrEmpty(i);
+            UUID id = c.read("Id", UUIDUtil.CODEC).orElseThrow();
             h.bewoners.add(id);
-            h.soorten.put(id, c.getString("Soort"));
-            h.namen.put(id, c.getString("Naam"));
-            CompoundTag k = c.getCompound("Klussen");
+            h.soorten.put(id, c.getStringOr("Soort", ""));
+            h.namen.put(id, c.getStringOr("Naam", ""));
+            CompoundTag k = c.getCompoundOrEmpty("Klussen");
             if (!k.isEmpty()) {
                 Map<String, Boolean> m = new LinkedHashMap<>();
-                for (String key : k.getAllKeys()) {
-                    m.put(key, k.getBoolean(key));
+                for (String key : k.keySet()) {
+                    m.put(key, k.getBooleanOr(key, false));
                 }
                 h.klussen.put(id, m);
             }

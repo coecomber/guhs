@@ -104,7 +104,7 @@ public final class SchaatsEffecten {
             Double vorig = VORIG_SWAY.put(p.getUUID(), sway);
             if (vorig != null && Math.signum(vorig) != Math.signum(sway) && v > 0.15) {
                 level.playLocalSound(p.getX(), p.getY(), p.getZ(), ElftochtFeature.KRAS.get(), SoundSource.PLAYERS,
-                        0.25f + (float) v * 0.4f, 0.9f + level.random.nextFloat() * 0.25f, false);
+                        0.25f + (float) v * 0.4f, 0.9f + level.getRandom().nextFloat() * 0.25f, false);
             }
             // frosty breath: a little white puff in front of the face now and then (not in your own face in first person)
             boolean eigenOog = p == mc.player && mc.options.getCameraType().isFirstPerson();

@@ -23,7 +23,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
@@ -105,7 +105,7 @@ public final class Protected {
         if (player.getAbilities().instabuild || !near(player.level(), pos, MARGIN)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.protected.no_fire").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.protected.no_fire").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -127,7 +127,7 @@ public final class Protected {
 
     /** Flint and steel, a fire charge or a full bucket on (or next to) a building. */
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || !firestarter(event.getItemStack())) {
+        if (event.getLevel().isClientSide() || !firestarter(event.getItemStack())) {
             return;
         }
         BlockPos target = event.getPos().relative(event.getFace() == null ? Direction.UP : event.getFace());
@@ -139,7 +139,7 @@ public final class Protected {
 
     /** Buckets are emptied where you look (also without clicking a block first). */
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (event.getLevel().isClientSide || !(event.getItemStack().getItem() instanceof BucketItem) || !firestarter(event.getItemStack())) {
+        if (event.getLevel().isClientSide() || !(event.getItemStack().getItem() instanceof BucketItem) || !firestarter(event.getItemStack())) {
             return;
         }
         Player player = event.getEntity();

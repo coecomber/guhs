@@ -8,12 +8,12 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -59,16 +59,16 @@ public final class HulaClient {
     private static long uitslagTot;
 
     public static void start(CompoundTag data) {
-        HulaLiedje l = HulaLiedje.of(data.getInt("Liedje"));
+        HulaLiedje l = HulaLiedje.of(data.getIntOr("Liedje", 0));
         long now = Util.getMillis();
-        DANSEN.put(data.getInt("Npc"), new Dans(l, now));
-        if (!data.getBoolean("Danser")) {
+        DANSEN.put(data.getIntOr("Npc", 0), new Dans(l, now));
+        if (!data.getBooleanOr("Danser", false)) {
             return;
         }
-        npc = data.getInt("Npc");
+        npc = data.getIntOr("Npc", 0);
         liedje = l;
         startMs = now;
-        record = data.getInt("Record");
+        record = data.getIntOr("Record", 0);
         GEDANST.clear();
         POPUPS.clear();
         score = combo = maxCombo = serverScore = 0;
@@ -77,14 +77,14 @@ public final class HulaClient {
     }
 
     public static void stand(CompoundTag data) {
-        int id = data.getInt("Npc");
-        if (data.getBoolean("Einde")) {
+        int id = data.getIntOr("Npc", 0);
+        if (data.getBooleanOr("Einde", false)) {
             DANSEN.remove(id);
             if (id == npc && liedje != null) {
                 uitslag = data;
                 uitslagTot = Util.getMillis() + 7000;
                 if (data.contains("Score")) {
-                    serverScore = data.getInt("Score");
+                    serverScore = data.getIntOr("Score", 0);
                 }
                 npc = -1;
                 liedje = null;
@@ -92,7 +92,7 @@ public final class HulaClient {
             return;
         }
         if (id == npc) {
-            serverScore = data.getInt("Score");
+            serverScore = data.getIntOr("Score", 0);
         }
     }
 
@@ -255,7 +255,7 @@ public final class HulaClient {
 
     private static final int[] KLEUR = {0xFFFF7EB8, 0xFF3CE0C8, 0xFFFFD84D, 0xFFB98CFF, 0xFFFFA630};
 
-    public static void hud(GuiGraphics g, DeltaTracker delta) {
+    public static void hud(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui) {
             return;
@@ -266,10 +266,10 @@ public final class HulaClient {
             if (uitslag != null && Util.getMillis() < uitslagTot) {
                 int x0 = w / 2 - 110, y0 = 6;
                 g.fill(x0, y0, x0 + 220, y0 + 34, 0xB0401040);
-                g.drawCenteredString(font, Component.translatable("gui.guhs.guhwaiispellen.hula.einde", serverScore, uitslag.getInt("MaxCombo")),
+                g.centeredText(font, Component.translatable("gui.guhs.guhwaiispellen.hula.einde", serverScore, uitslag.getIntOr("MaxCombo", 0)),
                         w / 2, y0 + 5, 0xFFFFE6A0);
-                g.drawCenteredString(font, Component.translatable("gui.guhs.guhwaiispellen.hula.telling", uitslag.getInt("vahoeg"), uitslag.getInt("njeg"),
-                        uitslag.getInt("guh"), uitslag.getInt("mis")), w / 2, y0 + 19, 0xFFFF9EC8);
+                g.centeredText(font, Component.translatable("gui.guhs.guhwaiispellen.hula.telling", uitslag.getIntOr("vahoeg", 0), uitslag.getIntOr("njeg", 0),
+                        uitslag.getIntOr("guh", 0), uitslag.getIntOr("mis", 0)), w / 2, y0 + 19, 0xFFFF9EC8);
             }
             return;
         }
@@ -310,28 +310,28 @@ public final class HulaClient {
             int c = KLEUR[n.pas().ordinal()];
             g.fill(x - 9, cy - 9, x + 9, cy + 9, 0xFF000000 | 0x301020);
             g.fill(x - 8, cy - 8, x + 8, cy + 8, c);
-            g.drawCenteredString(font, n.pas().pijl, x, cy - 4, 0xFF2A1030);
-            g.drawCenteredString(font, toets(n.pas()), x, y0 + laneH + 3, 0xFFEEDDEE);
+            g.centeredText(font, n.pas().pijl, x, cy - 4, 0xFF2A1030);
+            g.centeredText(font, toets(n.pas()), x, y0 + laneH + 3, 0xFFEEDDEE);
         }
         // popups, score, combo, the song
         int py = y0 - 14;
         for (Popup p : POPUPS) {
-            g.drawCenteredString(font, p.tekst, hitX + 40, py, p.kleur);
+            g.centeredText(font, p.tekst, hitX + 40, py, p.kleur);
             py -= 10;
         }
-        g.drawString(font, Component.translatable("gui.guhs.guhwaiispellen.hula.score", score), x0 + laneW - 120, y0 - 24, 0xFFFFE6A0, true);
+        g.text(font, Component.translatable("gui.guhs.guhwaiispellen.hula.score", score), x0 + laneW - 120, y0 - 24, 0xFFFFE6A0, true);
         if (combo > 1) {
-            g.drawString(font, Component.translatable("gui.guhs.guhwaiispellen.hula.combo", combo), x0 + laneW - 120, y0 - 13, 0xFFFF9EC8, true);
+            g.text(font, Component.translatable("gui.guhs.guhwaiispellen.hula.combo", combo), x0 + laneW - 120, y0 - 13, 0xFFFF9EC8, true);
         }
-        g.drawString(font, liedje.naam().copy().withStyle(ChatFormatting.ITALIC), x0, y0 - 24, 0xFFFFFFFF, true);
-        g.drawString(font, Component.translatable("gui.guhs.guhwaiispellen.hula.record", record), x0, y0 - 13, 0xFFD8B8E8, true);
+        g.text(font, liedje.naam().copy().withStyle(ChatFormatting.ITALIC), x0, y0 - 24, 0xFFFFFFFF, true);
+        g.text(font, Component.translatable("gui.guhs.guhwaiispellen.hula.record", record), x0, y0 - 13, 0xFFD8B8E8, true);
         List<HulaKaart.Noot> kaart = HulaKaart.van(liedje);
         double eind = liedje.ms(kaart.get(kaart.size() - 1).beat());
         int voortgang = (int) (laneW * Mth.clamp(nu / eind, 0, 1));
         g.fill(x0, y0 + laneH + 13, x0 + laneW, y0 + laneH + 15, 0x60FFFFFF);
         g.fill(x0, y0 + laneH + 13, x0 + voortgang, y0 + laneH + 15, 0xFFFF7EB8);
         if (nu < liedje.ms(kaart.get(0).beat()) - 600) {
-            g.drawCenteredString(font, Component.translatable("gui.guhs.guhwaiispellen.hula.klaar_" + (liedje.niveau == Niveau.MAKKELIJK ? "makkelijk"
+            g.centeredText(font, Component.translatable("gui.guhs.guhwaiispellen.hula.klaar_" + (liedje.niveau == Niveau.MAKKELIJK ? "makkelijk"
                     : liedje.niveau == Niveau.MEDIUM ? "medium" : "lastig")), w / 2, y0 - 40, 0xFFFFFFFF);
         }
     }
@@ -350,7 +350,7 @@ public final class HulaClient {
     }
 
     /** A little pink hibiscus of squares (five petals round a yellow heart). */
-    private static void bloem(GuiGraphics g, int x, int y, int r) {
+    private static void bloem(GuiGraphicsExtractor g, int x, int y, int r) {
         int p = Math.max(3, r / 2);
         for (int k = 0; k < 5; k++) {
             double a = -Math.PI / 2 + k * Math.PI * 2 / 5;

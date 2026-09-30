@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.knabbelspelen;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,8 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -33,8 +31,6 @@ import nl.juiced.guhs.registry.ModItems;
  * falling in a pyramid, the wobbling egg and its flags, the swinging spijker and a plonk, the blind pin), friends
  * joining in their own lanes, and a whole Grote Zeskamp with its lintjes and board.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KnabbelspelenGameTests {
     private static final String EMPTY = "empty";
     private static final String GEBOUW = "knabbelspelen";
@@ -51,7 +47,7 @@ public class KnabbelspelenGameTests {
         ServerPlayer p = helper.makeMockServerPlayerInLevel();
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
-        p.moveTo(npc.getX(), npc.getY(), npc.getZ() + 2);
+        p.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         for (Onderdeel o : Onderdeel.values()) {
             GuhQuests.saved(p).remove(Wedstrijd.BEST_KEY + o.id());
         }
@@ -78,7 +74,7 @@ public class KnabbelspelenGameTests {
     // --- pure logic -------------------------------------------------------------------------------------------------------
 
     /** Zeskamp points 0..1000 (points, times, the pin), lintjes +1. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knabbelspelenPuntenEnLintjes(GameTestHelper helper) {
         Onderdeel zak = Onderdeel.ZAKLOPEN;
         helper.assertTrue(zak.zeskamp(zak.perfect) == 1000 && zak.zeskamp(zak.perfect / 2) == 1000, "perfect time or faster = 1000");
@@ -98,7 +94,7 @@ public class KnabbelspelenGameTests {
     }
 
     /** Juf Vahoegsakee's role and shop, the one source of the sports outfit, the loaned things. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knabbelspelenRolWinkelEnKleding(GameTestHelper helper) {
         helper.assertTrue(Features.role(GuhNpcEntity.Kind.SPELLEIDERGUH) instanceof KnabbelspelenRole, "Juf Vahoegsakee has her role");
         var offers = new KnabbelspelenRole().offers(null);
@@ -129,7 +125,7 @@ public class KnabbelspelenGameTests {
     // --- the real building ------------------------------------------------------------------------------------------------
 
     /** The anchor under Juf Vahoegsakee, and every lane holds what its event needs, where Speelvelden says. */
-    @GameTest(template = GEBOUW, timeoutTicks = 100, batch = "spelen_gebouw")
+    @GuhTest(template = GEBOUW, timeoutTicks = 100, batch = "spelen_gebouw")
     public static void knabbelspelenVeldenKloppen(GameTestHelper helper) {
         GuhNpcEntity npc = juf(helper);
         Anker a = Speelvelden.anker(npc);
@@ -161,7 +157,7 @@ public class KnabbelspelenGameTests {
     }
 
     /** Knabbelhappen: two swinging knabbels per lane; a bite counts (a golden one 3), then a new knabbel swings; time's up: lintjes. */
-    @GameTest(template = GEBOUW, timeoutTicks = 300, batch = "spelen_hap")
+    @GuhTest(template = GEBOUW, timeoutTicks = 300, batch = "spelen_hap")
     public static void knabbelspelenKnabbelhappen(GameTestHelper helper) {
         GuhNpcEntity npc = juf(helper);
         ServerPlayer p = speler(helper, npc);
@@ -193,7 +189,7 @@ public class KnabbelspelenGameTests {
     }
 
     /** Zaklopen: a hop pushes you forward the way you look (not before the whistle); at the finish your time counts. */
-    @GameTest(template = GEBOUW, timeoutTicks = 200, batch = "spelen_zak")
+    @GuhTest(template = GEBOUW, timeoutTicks = 200, batch = "spelen_zak")
     public static void knabbelspelenZaklopen(GameTestHelper helper) {
         GuhNpcEntity npc = juf(helper);
         ServerPlayer p = speler(helper, npc);
@@ -208,7 +204,7 @@ public class KnabbelspelenGameTests {
         Vec3 langs = w.anker.vector(0, Speelvelden.veld(Onderdeel.ZAKLOPEN).richting());
         helper.assertTrue(Math.abs(v.x * langs.x + v.z * langs.z - Zaklopen.HOP) < 0.02 && v.y > 0.3, "a hop along the lane: " + v);
         Vec3 finish = Speelvelden.punt(w.anker, Onderdeel.ZAKLOPEN, d.baan, Speelvelden.ZAK_FINISH + 0.5, 0, Speelvelden.G + 1);
-        p.moveTo(finish.x, finish.y, finish.z);
+        p.snapTo(finish.x, finish.y, finish.z);
         helper.succeedWhen(() -> {
             helper.assertTrue(d.klaar && d.score[Onderdeel.ZAKLOPEN.ordinal()] >= 0, "finished with a time");
             helper.assertTrue(d.punten[Onderdeel.ZAKLOPEN.ordinal()] == 1000, "that fast: 1000 zeskamp points");
@@ -217,7 +213,7 @@ public class KnabbelspelenGameTests {
     }
 
     /** Mika-blikgooien: a hit tin falls, and every tin resting on it; all six down is 20 extra and a fresh pyramid. */
-    @GameTest(template = GEBOUW, timeoutTicks = 200, batch = "spelen_blik")
+    @GuhTest(template = GEBOUW, timeoutTicks = 200, batch = "spelen_blik")
     public static void knabbelspelenBlikgooien(GameTestHelper helper) {
         GuhNpcEntity npc = juf(helper);
         ServerPlayer p = speler(helper, npc);
@@ -242,7 +238,7 @@ public class KnabbelspelenGameTests {
     }
 
     /** Eierlopen: a flag counts when you pass it; running makes the egg drop, back to the last flag. */
-    @GameTest(template = GEBOUW, timeoutTicks = 200, batch = "spelen_ei")
+    @GuhTest(template = GEBOUW, timeoutTicks = 200, batch = "spelen_ei")
     public static void knabbelspelenEierlopen(GameTestHelper helper) {
         GuhNpcEntity npc = juf(helper);
         ServerPlayer p = speler(helper, npc);
@@ -252,7 +248,7 @@ public class KnabbelspelenGameTests {
         helper.assertTrue(p.getMainHandItem().is(KnabbelspelenFeature.KNABBELEI_LEPEL.get()), "the spoon with the egg");
         Eierlopen.Staat s = Eierlopen.staat(d);
         Vec3 vlag = Eierlopen.vlag(w, d.baan, 0);
-        p.moveTo(vlag.x, vlag.y, vlag.z);
+        p.snapTo(vlag.x, vlag.y, vlag.z);
         s.vorige = vlag;
         Eierlopen.SPEL.tick(w, d, p, level, 5);
         helper.assertTrue(s.vlag == 1, "the first flag counts");
@@ -270,7 +266,7 @@ public class KnabbelspelenGameTests {
     }
 
     /** Spijkerpoepen: the spijker swings after a jolt and calms down; crouched and still over the bottle: plonk. */
-    @GameTest(template = GEBOUW, timeoutTicks = 200, batch = "spelen_spijker")
+    @GuhTest(template = GEBOUW, timeoutTicks = 200, batch = "spelen_spijker")
     public static void knabbelspelenSpijkerpoepen(GameTestHelper helper) {
         // the pendulum on its own
         Spijkerpoepen.Staat t = new Spijkerpoepen.Staat();
@@ -293,13 +289,13 @@ public class KnabbelspelenGameTests {
         double r = Math.toRadians(yaw);
         Vec3 achter = new Vec3(Math.sin(r), 0, -Math.cos(r)).scale(Spijkerpoepen.ACHTER);
         Vec3 plek = Vec3.atBottomCenterOf(fles).add(0, 1, 0).subtract(achter);
-        p.moveTo(plek.x, plek.y, plek.z, yaw, 0);
+        p.snapTo(plek.x, plek.y, plek.z, yaw, 0);
         p.setShiftKeyDown(true);
         p.setPose(Pose.CROUCHING);
         s.dx = s.dz = s.vx = s.vz = 0;
         s.riem = s.riem1 = s.riem2 = Spijkerpoepen.riem(p);
         helper.succeedWhen(() -> {
-            p.moveTo(plek.x, plek.y, plek.z, yaw, 0);
+            p.snapTo(plek.x, plek.y, plek.z, yaw, 0);
             p.setShiftKeyDown(true);
             p.setPose(Pose.CROUCHING);
             helper.assertTrue(level.getBlockState(fles).getValue(KnabbelspelenBlocks.KaasmelkFles.VOL), "plonk: the first bottle is full");
@@ -309,7 +305,7 @@ public class KnabbelspelenGameTests {
     }
 
     /** Guhguhtje prik: blindfolded and spun; right on the spot = 1000, the tail stays on the board, the blindfold comes off. */
-    @GameTest(template = GEBOUW, timeoutTicks = 200, batch = "spelen_prik")
+    @GuhTest(template = GEBOUW, timeoutTicks = 200, batch = "spelen_prik")
     public static void knabbelspelenGuhguhtjePrik(GameTestHelper helper) {
         GuhNpcEntity npc = juf(helper);
         ServerPlayer p = speler(helper, npc);
@@ -337,7 +333,7 @@ public class KnabbelspelenGameTests {
     }
 
     /** A friend joins: two players, each in their own lane, a zeskamp all the way to the lintjes, the winner's extra and the board. */
-    @GameTest(template = GEBOUW, timeoutTicks = 1600, batch = "spelen_zeskamp")
+    @GuhTest(template = GEBOUW, timeoutTicks = 1600, batch = "spelen_zeskamp")
     public static void knabbelspelenZeskampMetVriend(GameTestHelper helper) {
         GuhNpcEntity npc = juf(helper);
         ServerPlayer p = speler(helper, npc);
@@ -373,7 +369,7 @@ public class KnabbelspelenGameTests {
                     "zeskamp lintjes, +1 for the winner");
             helper.assertTrue(GuhQuests.count(q, KnabbelspelenFeature.SPELENLINTJE.get()) == Wedstrijd.zeskampLintjes(dq.totaal()), "the friend's lintjes");
             helper.assertTrue(Wedstrijd.bestZeskamp(p) == 6000, "the zeskamp record");
-            helper.assertTrue(Scorebord.top(level.getServer(), Onderdeel.ZESKAMP_BOARD).stream().anyMatch(e -> e.name().equals(p.getGameProfile().getName())),
+            helper.assertTrue(Scorebord.top(level.getServer(), Onderdeel.ZESKAMP_BOARD).stream().anyMatch(e -> e.name().equals(p.getGameProfile().name())),
                     "on the zeskamp board");
             helper.assertTrue(!Wedstrijd.isPlaying(p) && !Wedstrijd.isPlaying(q), "nobody is still playing");
             helper.assertTrue(!KnabbelspelenFeature.heeftGeleend(p) && !KnabbelspelenFeature.heeftGeleend(q), "every loaned thing went back");

@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -13,8 +13,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -35,14 +33,13 @@ import nl.juiced.guhs.quest.Scorebord;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Tests of the Guh-Circuit: whole races on the real circuit (the three tracks found from Coach Vahoegvroem, coins,
  * records and boards per track and level, the golden ghost, the Mika-pikkers per level, the rolling kaasknabbels, the
  * Vadslooping, cleanup, protection), and the small things on their own (boost rings, kaassaus, stuiterpaddenstoel, the
  * looping's path, a pinching Mika, a rolling knabbel, the shop, the prizes and medal times).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class CircuitGameTests {
     private static final String CIRCUIT = "guh_circuit";
     private static final String EMPTY = "empty";
@@ -57,7 +54,7 @@ public class CircuitGameTests {
     private static ServerPlayer racer(GameTestHelper helper, GuhNpcEntity npc) {
         @SuppressWarnings("removal")
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX(), npc.getY(), npc.getZ() + 2);
+        player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
         return player;
     }
 
@@ -87,13 +84,13 @@ public class CircuitGameTests {
 
     // --- whole races on the real circuit ----------------------------------------------------------------------------------
 
-    @GameTest(batch = "circuit_regenboog", template = CIRCUIT, timeoutTicks = 400)
+    @GuhTest(batch = "circuit_regenboog", template = CIRCUIT, timeoutTicks = 400)
     public static void circuitRegenboogRaceForCircuitbekers(GameTestHelper helper) {
         GuhNpcEntity npc = coach(helper);
         ServerPlayer player = racer(helper, npc);
         CircuitBanen.Frame frame = CircuitBanen.frame(helper.getLevel(), npc);
         helper.assertTrue(frame != null && frame.facing() == Direction.EAST, "the coach finds her circuit: " + frame);
-        RaceGeesten.forget(player.server, CircuitBanen.REGENBOOG.boardTotal(Niveau.MEDIUM));
+        RaceGeesten.forget(player.level().getServer(), CircuitBanen.REGENBOOG.boardTotal(Niveau.MEDIUM));
         CircuitRole.action(npc, player, CircuitRole.START, "regenboog", Niveau.MEDIUM.ordinal());
         RaceGame game = RaceGame.of(npc);
         helper.assertTrue(game != null && game.baan() == CircuitBanen.REGENBOOG && game.niveau() == Niveau.MEDIUM, "a race on the Regenboogbaan");
@@ -129,11 +126,11 @@ public class CircuitGameTests {
         helper.assertTrue(best > 0 && RaceRecords.best(player) < 0 && RaceRecords.finishedOnce(player, "regenboog"),
                 "a record of its own (not the old racebaan's): " + best);
         helper.assertTrue(RaceRecords.splits(player, rec).length == 3 * 5, "a time for every ring");
-        helper.assertTrue(Scorebord.top(player.server, "circuit_regenboog_medium").stream().anyMatch(e -> e.player().equals(player.getUUID())),
+        helper.assertTrue(Scorebord.top(player.level().getServer(), "circuit_regenboog_medium").stream().anyMatch(e -> e.player().equals(player.getUUID())),
                 "on the board circuit_regenboog_medium");
-        helper.assertTrue(Scorebord.top(player.server, "circuit_regenboog_medium_ronde").stream().anyMatch(e -> e.player().equals(player.getUUID())),
+        helper.assertTrue(Scorebord.top(player.level().getServer(), "circuit_regenboog_medium_ronde").stream().anyMatch(e -> e.player().equals(player.getUUID())),
                 "and on circuit_regenboog_medium_ronde");
-        RaceGeesten.Geest goud = RaceGeesten.geest(player.server, "circuit_regenboog_medium");
+        RaceGeesten.Geest goud = RaceGeesten.geest(player.level().getServer(), "circuit_regenboog_medium");
         helper.assertTrue(goud != null && goud.player().equals(player.getUUID()) && goud.ticks() == best, "the track record is the golden ghost now");
         // the other two tracks are there too
         RaceTrack vads = RaceTrack.of(npc, CircuitBanen.VADS), berg = RaceTrack.of(npc, CircuitBanen.KAASBERG);
@@ -145,16 +142,16 @@ public class CircuitGameTests {
         // the scoreboards float at the tracks
         CircuitRole.showScores(npc);
         helper.assertTrue(!helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class, helper.getBounds(),
-                d -> d.getTags().contains(Scorebord.TAG)).isEmpty(), "the boards float at the tracks");
+                d -> d.entityTags().contains(Scorebord.TAG)).isEmpty(), "the boards float at the tracks");
         leave(helper, player, other);
         helper.succeed();
     }
 
-    @GameTest(batch = "circuit_kaasberg", template = CIRCUIT, timeoutTicks = 400)
+    @GuhTest(batch = "circuit_kaasberg", template = CIRCUIT, timeoutTicks = 400)
     public static void circuitKaasbergLastigPikkersAndRollingKnabbels(GameTestHelper helper) {
         GuhNpcEntity npc = coach(helper);
         ServerPlayer player = racer(helper, npc);
-        RaceGeesten.forget(player.server, CircuitBanen.KAASBERG.boardTotal(Niveau.LASTIG));
+        RaceGeesten.forget(player.level().getServer(), CircuitBanen.KAASBERG.boardTotal(Niveau.LASTIG));
         CircuitRole.action(npc, player, CircuitRole.START, "kaasberg", Niveau.LASTIG.ordinal());
         RaceGame game = RaceGame.of(npc);
         helper.assertTrue(game != null && game.baan() == CircuitBanen.KAASBERG && game.niveau() == Niveau.LASTIG, "a lastig race on the Kaasberg");
@@ -186,7 +183,7 @@ public class CircuitGameTests {
         helper.succeed();
     }
 
-    @GameTest(batch = "circuit_vads", template = CIRCUIT, timeoutTicks = 400)
+    @GuhTest(batch = "circuit_vads", template = CIRCUIT, timeoutTicks = 400)
     public static void circuitVadsloopingGoesRoundAndOut(GameTestHelper helper) {
         GuhNpcEntity npc = coach(helper);
         ServerPlayer player = racer(helper, npc);
@@ -235,7 +232,7 @@ public class CircuitGameTests {
      * 2.10: the Regenboogbaan's last leg runs down from ring 4 (high in the sky) to the ground: more than 10 blocks lower
      * than the ring. That is driving, not falling (falls are measured from the last height on the road), so no "Oepsie!".
      */
-    @GameTest(batch = "circuit_regenboog_af", template = CIRCUIT, timeoutTicks = 400)
+    @GuhTest(batch = "circuit_regenboog_af", template = CIRCUIT, timeoutTicks = 400)
     public static void circuitRegenboogDownhillIsNoFall(GameTestHelper helper) {
         GuhNpcEntity npc = coach(helper);
         ServerPlayer player = racer(helper, npc);
@@ -299,7 +296,7 @@ public class CircuitGameTests {
      * in the left, middle and right lane, from a standing start (worst case, after a reset) and at cruising speed: it has to
      * land on the road on the other side, never lower than it. And without the rainbow jump the gap really is too wide.
      */
-    @GameTest(batch = "circuit_sprong", template = CIRCUIT, timeoutTicks = 100)
+    @GuhTest(batch = "circuit_sprong", template = CIRCUIT, timeoutTicks = 100)
     public static void circuitRegenboogJumpsAreClearable(GameTestHelper helper) {
         GuhNpcEntity npc = coach(helper);
         CircuitBanen.Frame frame = CircuitBanen.frame(helper.getLevel(), npc);
@@ -355,11 +352,11 @@ public class CircuitGameTests {
         Vec3 start = Vec3.atBottomCenterOf(frame.toWorld(new BlockPos(edge + runUp, walk, SPRONG_Z))).add(south.scale(lane));
         Vec3 landing = Vec3.atBottomCenterOf(frame.toWorld(new BlockPos(land, landWalk, SPRONG_Z)));
         float yaw = (float) (Mth.atan2(west.z, west.x) * Mth.RAD_TO_DEG) - 90f;
-        RaceGuhEntity guh = RaceFeature.RACE_GUH.get().create(helper.getLevel());
+        RaceGuhEntity guh = RaceFeature.RACE_GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         guh.setUpForRace();
         guh.setNiveau(niveau);
         guh.setSprongen(sprongen);
-        guh.moveTo(start.x, start.y, start.z, yaw, 0);
+        guh.snapTo(start.x, start.y, start.z, yaw, 0);
         guh.setYHeadRot(yaw);
         guh.setOnGround(true);
         if (cruising) {
@@ -402,15 +399,15 @@ public class CircuitGameTests {
     }
 
     private static RaceGuhEntity raceGuh(GameTestHelper helper, double x, double y, double z) {
-        RaceGuhEntity guh = RaceFeature.RACE_GUH.get().create(helper.getLevel());
+        RaceGuhEntity guh = RaceFeature.RACE_GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         Vec3 at = helper.absoluteVec(new Vec3(x, y, z));
-        guh.moveTo(at.x, at.y, at.z, 0, 0);
+        guh.snapTo(at.x, at.y, at.z, 0, 0);
         guh.setUpForRace();
         helper.getLevel().addFreshEntity(guh);
         return guh;
     }
 
-    @GameTest(batch = "circuit_klein", template = EMPTY)
+    @GuhTest(batch = "circuit_klein", template = EMPTY)
     public static void circuitBoostRingKaassausAndStuiterpaddenstoel(GameTestHelper helper) {
         floor(helper);
         RaceGuhEntity guh = raceGuh(helper, 2.5, 1, 2.5);
@@ -438,7 +435,7 @@ public class CircuitGameTests {
         helper.succeed();
     }
 
-    @GameTest(batch = "circuit_klein", template = EMPTY)
+    @GuhTest(batch = "circuit_klein", template = EMPTY)
     public static void circuitLoopingPathGoesRoundAndOut(GameTestHelper helper) {
         Vec3 in = new Vec3(10.5, 64, 10.5);
         RaceRit rit = new RaceRit(in, Direction.SOUTH, CircuitBanen.LOOP_R, CircuitBanen.LOOP_L, CircuitBanen.LOOP_W, CircuitBanen.LOOP_TICKS);
@@ -463,11 +460,11 @@ public class CircuitGameTests {
         });
     }
 
-    @GameTest(batch = "circuit_klein", template = EMPTY, timeoutTicks = 100)
+    @GuhTest(batch = "circuit_klein", template = EMPTY, timeoutTicks = 100)
     public static void circuitMikaPikkerPinchesAndPopsBack(GameTestHelper helper) {
         floor(helper);
         RaceGuhEntity guh = raceGuh(helper, 1.5, 1, 1.5);
-        MikaPikkerEntity mika = CircuitFeature.MIKAPIKKER.get().create(helper.getLevel());
+        MikaPikkerEntity mika = CircuitFeature.MIKAPIKKER.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         Vec3 home = helper.absoluteVec(new Vec3(3.5, 1, 3.5));
         mika.setHome(home, 90);
         CircuitExtra.markLive(mika);
@@ -484,13 +481,13 @@ public class CircuitGameTests {
         });
     }
 
-    @GameTest(batch = "circuit_klein", template = EMPTY, timeoutTicks = 100)
+    @GuhTest(batch = "circuit_klein", template = EMPTY, timeoutTicks = 100)
     public static void circuitRolknabbelBumpsARaceGuh(GameTestHelper helper) {
         floor(helper);
         RaceGuhEntity guh = raceGuh(helper, 4.2, 1, 2.5);
-        RolknabbelEntity knabbel = CircuitFeature.ROLKNABBEL.get().create(helper.getLevel());
+        RolknabbelEntity knabbel = CircuitFeature.ROLKNABBEL.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         Vec3 at = helper.absoluteVec(new Vec3(0.8, 1, 2.5));
-        knabbel.moveTo(at.x, at.y, at.z, 0, 0);
+        knabbel.snapTo(at.x, at.y, at.z, 0, 0);
         knabbel.rol(new Vec3(1, 0, 0));
         CircuitExtra.markLive(knabbel);
         helper.getLevel().addFreshEntity(knabbel);
@@ -501,7 +498,7 @@ public class CircuitGameTests {
         });
     }
 
-    @GameTest(batch = "circuit_klein", template = EMPTY)
+    @GuhTest(batch = "circuit_klein", template = EMPTY)
     public static void circuitCoachSellsTheOutfitOnlyHere(GameTestHelper helper) {
         GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(2, 1, 2));
         npc.setKind(GuhNpcEntity.Kind.CIRCUITGUH);
@@ -522,7 +519,7 @@ public class CircuitGameTests {
         helper.succeed();
     }
 
-    @GameTest(batch = "circuit_klein", template = EMPTY)
+    @GuhTest(batch = "circuit_klein", template = EMPTY)
     public static void circuitPrizesLevelsAndMedalTimes(GameTestHelper helper) {
         // every reward rule is one more than its base (the 2.7 rule): medals 5/3/2/1 + 1, record 1 + 1, first race 3 + 1
         int[] base = {5, 3, 2, 1};

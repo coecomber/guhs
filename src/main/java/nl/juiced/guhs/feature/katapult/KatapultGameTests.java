@@ -6,7 +6,7 @@ import java.util.Set;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -17,8 +17,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -36,8 +34,6 @@ import nl.juiced.guhs.registry.ModItems;
  * katapultsterren (+1 per rule), the shop and clothing sources, the loaned pluisballen, the protection, and a whole run of
  * 12 forts on the real castle (with a real shot).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KatapultGameTests {
     private static final String BATCH = "katapult_kasteel";
 
@@ -59,7 +55,7 @@ public class KatapultGameTests {
     }
 
     /** All 12 forts load from their templates, fit the plot, have a Mika and stand by themselves. */
-    @GameTest(template = "empty")
+    @GuhTest(template = "empty")
     public static void katapultFortenStaanStevig(GameTestHelper helper) {
         KatapultFort.forget();
         for (int i = 0; i < KatapultFort.FORTS; i++) {
@@ -101,7 +97,7 @@ public class KatapultGameTests {
     }
 
     /** Levels: 5 / 4 / 3 pluisballen; stars; katapultsterren: 1, +1 per 9 stars, +1 record, lastig +50%. */
-    @GameTest(template = "empty")
+    @GuhTest(template = "empty")
     public static void katapultNiveausSterrenEnMunten(GameTestHelper helper) {
         helper.assertTrue(KatapultGame.balls(Niveau.MAKKELIJK) == 5 && KatapultGame.balls(Niveau.MEDIUM) == 4 && KatapultGame.balls(Niveau.LASTIG) == 3,
                 "5 / 4 / 3 pluisballen");
@@ -119,7 +115,7 @@ public class KatapultGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GuhTest(template = "empty")
     public static void katapultWinkelBronnenEnLeen(GameTestHelper helper) {
         GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(2, 2, 2));
         npc.setKind(GuhNpcEntity.Kind.KATAPULTGUH);
@@ -142,7 +138,7 @@ public class KatapultGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "empty")
+    @GuhTest(template = "empty")
     public static void katapultBescherming(GameTestHelper helper) {
         BlockPos floor = new BlockPos(2, 1, 2);
         helper.setBlock(floor, Blocks.OAK_PLANKS);
@@ -163,13 +159,13 @@ public class KatapultGameTests {
     }
 
     /** A whole run on makkelijk: fort 1 is built, a real pluisbal flies, then all 12 forts fall; stars, sterren, knabbels, board. */
-    @GameTest(template = "knabbelkatapult", timeoutTicks = 600, batch = BATCH)
+    @GuhTest(template = "knabbelkatapult", timeoutTicks = 600, batch = BATCH)
     public static void katapultRondeOpHetKasteel(GameTestHelper helper) {
         List<GuhNpcEntity> npcs = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class, helper.getBounds(), n -> n.getKind() == GuhNpcEntity.Kind.KATAPULTGUH);
         helper.assertTrue(npcs.size() == 1, "Kapitein Floepguh is on his wall: " + npcs.size());
         GuhNpcEntity npc = npcs.get(0);
         ServerPlayer p = player(helper);
-        p.moveTo(npc.getX() + 1, npc.getY(), npc.getZ());
+        p.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         KatapultGame.action(npc, p, KatapultGame.START + Niveau.MAKKELIJK.ordinal());
         KatapultGame game = KatapultGame.of(npc);
         helper.assertTrue(game.isPlayedBy(p) && KatapultGame.isPlaying(p) && game.werper() != null && game.plek() != null, "the run is on");

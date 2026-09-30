@@ -32,7 +32,7 @@ public final class GatenkaasEvents {
 
     /** One of our visible advancements whose criterion is "done" (granted by the mod). */
     public static void award(ServerPlayer player, String path) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(path));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(path));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }

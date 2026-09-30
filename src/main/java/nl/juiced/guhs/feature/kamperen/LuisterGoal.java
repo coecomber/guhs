@@ -37,7 +37,7 @@ public class LuisterGoal extends Goal {
 
     /** Is this guh listening to a story right now? */
     public static boolean luistert(GuhEntity guh) {
-        return guh.getPersistentData().getLong(TOT) > guh.level().getGameTime();
+        return guh.getPersistentData().getLongOr(TOT, 0L) > guh.level().getGameTime();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class LuisterGoal extends Goal {
         if (!luistert(guh) || guh.isOrderedToSit() || guh.isPassenger() || guh.isLeashed()) {
             return false;
         }
-        vuur = BlockPos.of(guh.getPersistentData().getLong(VUUR));
+        vuur = BlockPos.of(guh.getPersistentData().getLongOr(VUUR, 0L));
         double hoek = (guh.getId() * 2.39996) % (Math.PI * 2);
         double r = 2.6 + (guh.getId() % 3) * 0.6;
         plek = Vec3.atBottomCenterOf(vuur).add(Math.cos(hoek) * r, 0, Math.sin(hoek) * r);

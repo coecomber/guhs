@@ -39,6 +39,7 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.quest.GuhDex;
 
+import net.minecraft.resources.Identifier;
 /**
  * De Guhboerderij (2.8, slice boerderij): the farm of Boerin Hooibaal in the guhweides and the kaasvlakte, and its three
  * cuddly animals. tools/features/boerderij.py makes the resources (models, textures, the farm template...).
@@ -93,13 +94,13 @@ public final class BoerderijFeature {
     // --- the animals -------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<GuhschaapjeEntity>> GUHSCHAAPJE = ENTITY_TYPES.register("guhschaapje",
             () -> EntityType.Builder.of(GuhschaapjeEntity::new, MobCategory.CREATURE).sized(0.9f, 1.1f).eyeHeight(0.85f)
-                    .clientTrackingRange(10).build(Guhs.id("guhschaapje").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guhschaapje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<KnabbelkippetjeEntity>> KNABBELKIPPETJE = ENTITY_TYPES.register("knabbelkippetje",
             () -> EntityType.Builder.of(KnabbelkippetjeEntity::new, MobCategory.CREATURE).sized(0.5f, 0.65f).eyeHeight(0.5f)
-                    .clientTrackingRange(10).build(Guhs.id("knabbelkippetje").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("knabbelkippetje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<GuhkoeEntity>> GUHKOE = ENTITY_TYPES.register("guhkoe",
             () -> EntityType.Builder.of(GuhkoeEntity::new, MobCategory.CREATURE).sized(1.0f, 1.35f).eyeHeight(1.15f)
-                    .clientTrackingRange(10).build(Guhs.id("guhkoe").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guhkoe"))));
 
     public static final DeferredItem<DeferredSpawnEggItem> GUHSCHAAPJE_SPAWN_EGG = ITEMS.registerItem("guhschaapje_spawn_egg",
             p -> new DeferredSpawnEggItem(GUHSCHAAPJE, 0xFFF0F6, 0xF08CB4, p));

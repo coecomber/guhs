@@ -165,12 +165,12 @@ public class GuhbrouwketelBlockEntity extends BlockEntity {
     }
 
     public void status(ServerPlayer player) {
-        player.displayClientMessage(Component.translatable("quest.guhs.guhbrouwketel.status", fuel, portions(),
-                Component.translatable("quest.guhs.guhbrouwketel.brouwsel." + contents().id())).withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.guhbrouwketel.status", fuel, portions(),
+                Component.translatable("quest.guhs.guhbrouwketel.brouwsel." + contents().id())).withStyle(ChatFormatting.GOLD));
     }
 
     private void say(ServerPlayer player, String key, ChatFormatting colour) {
-        player.displayClientMessage(Component.translatable("quest.guhs.guhbrouwketel." + key).withStyle(colour), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.guhbrouwketel." + key).withStyle(colour));
     }
 
     /** Broken: whole pinches of grillspiespoeder that are left come back out. */
@@ -193,11 +193,11 @@ public class GuhbrouwketelBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        fuel = tag.getInt("Fuel");
-        brewing = tag.getInt("Brewing");
+        fuel = tag.getIntOr("Fuel", 0);
+        brewing = tag.getIntOr("Brewing", 0);
         next = Brouwsel.BOUILLON;
         for (Brouwsel b : Brouwsel.values()) {
-            if (b.id().equals(tag.getString("Next"))) {
+            if (b.id().equals(tag.getStringOr("Next", ""))) {
                 next = b;
             }
         }

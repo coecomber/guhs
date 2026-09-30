@@ -35,7 +35,7 @@ public final class SterrenwachtRole implements NpcRole {
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
         npc.level().playSound(null, npc, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 0.95f);
         var saved = GuhQuests.saved(player);
-        int keer = saved.getInt(GESPROKEN);
+        int keer = saved.getIntOr(GESPROKEN, 0);
         saved.putInt(GESPROKEN, keer + 1);
         if (keer == 0) {
             GuhQuests.say(player, npc, "quest.guhs.sterrenwacht.hallo");

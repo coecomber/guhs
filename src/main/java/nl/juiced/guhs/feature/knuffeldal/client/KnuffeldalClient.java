@@ -6,7 +6,7 @@ import net.minecraft.client.particle.CherryParticle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -16,8 +16,8 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.knuffeldal.KnuffeldalFeature;
 import nl.juiced.guhs.feature.knuffeldal.KnuffeldalPayloads;
 import nl.juiced.guhs.feature.knuffeldal.KruimelMikaEntity;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * Client side of the Knuffeldal: the Kruimel-Mika (the Mika's model with its own texture), the particles (pluisje,
@@ -47,7 +47,7 @@ public final class KnuffeldalClient {
         event.registerEntityRenderer(KnuffeldalFeature.KRUIMEL_MIKA.get(), context -> new GeoEntityRenderer<KruimelMikaEntity>(context,
                 new DefaultedEntityGeoModel<KruimelMikaEntity>(Guhs.id("kruimel_mika"), true) {
                     @Override
-                    public ResourceLocation getAnimationResource(KruimelMikaEntity mika) {
+                    public Identifier getAnimationResource(KruimelMikaEntity mika) {
                         return Guhs.id("animations/entity/guh.animation.json");
                     }
                 }) {
@@ -67,7 +67,7 @@ public final class KnuffeldalClient {
     /** guhs:knuffeldal_open: the talking screen (opened, updated or closed). */
     public static void open(KnuffeldalPayloads.Open payload) {
         Minecraft mc = Minecraft.getInstance();
-        if (payload.data().getBoolean("Sluit")) {
+        if (payload.data().getBooleanOr("Sluit", false)) {
             if (mc.screen instanceof PraatScherm) {
                 mc.setScreen(null);
             }

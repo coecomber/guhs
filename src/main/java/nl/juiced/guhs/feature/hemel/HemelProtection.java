@@ -20,7 +20,7 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -83,7 +83,7 @@ public final class HemelProtection {
         if (level.dimension() != ModDimensions.GUHMENSION) {
             return null;
         }
-        Structure structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(HemelFeature.KAPELLETJE);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(HemelFeature.KAPELLETJE);
         if (structure == null) {
             return null;
         }
@@ -95,7 +95,7 @@ public final class HemelProtection {
         if (player.getAbilities().instabuild || !protectedAt(player.level(), pos)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.hemel.no_build").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.hemel.no_build").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -117,7 +117,7 @@ public final class HemelProtection {
     /** Using an item on a block (buckets, flint and steel, axes, hoes...): not here. Opening the chest, sitting, the heart: fine. */
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty() || event.getItemStack().is(HemelFeature.HERINNERING.get())) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty() || event.getItemStack().is(HemelFeature.HERINNERING.get())) {
             return;
         }
         Direction face = event.getFace() == null ? Direction.UP : event.getFace();
@@ -128,7 +128,7 @@ public final class HemelProtection {
 
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }

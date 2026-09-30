@@ -8,14 +8,12 @@ import java.util.Set;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.locale.Language;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.feature.kleding.KledingBronnen;
@@ -29,8 +27,6 @@ import nl.juiced.guhs.quest.Highscores;
  * the data of the Guhdex's Minigames and Kleding tabs (every Highscores row in exactly one building, every piece in exactly
  * one source group, hair apart), the texts, and the two explorer advancements.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class GidsGameTests {
     private static final String EMPTY = "empty";
 
@@ -39,7 +35,7 @@ public class GidsGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return player;
     }
 
@@ -48,12 +44,12 @@ public class GidsGameTests {
     }
 
     /** The Superkompas: at most 14 icon tabs with a real icon, known ids kept, every structure exists, every game in Minigames. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void gidsSuperkompasTabs(GameTestHelper helper) {
         var cats = SuperkompasItem.CATEGORIES;
         helper.assertTrue(cats.size() <= 14, "fits on one row of icon tabs: " + cats.size());
         Set<String> ids = new HashSet<>();
-        var structures = helper.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE);
+        var structures = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE);
         for (SuperkompasItem.Category c : cats) {
             helper.assertTrue(ids.add(c.id()), "tab once: " + c.id());
             helper.assertTrue(!c.icoon().isEmpty(), "an icon for " + c.id());
@@ -96,7 +92,7 @@ public class GidsGameTests {
     }
 
     /** The Minigames tab: every Highscores row sits in exactly one building, in the order of its group, with a short label. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void gidsMinigamesRijen(GameTestHelper helper) {
         Map<String, String> waar = new HashMap<>();
         for (SpelGroepen.Groep g : SpelGroepen.alle()) {
@@ -118,7 +114,7 @@ public class GidsGameTests {
     }
 
     /** The Kleding tab: every unlockable piece in exactly one group (per source, kinds in order), the hairstyles apart, counts. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void gidsKledingGroepen(GameTestHelper helper) {
         List<GidsData.KledingGroep> groepen = GidsData.kledingGroepen();
         Set<GuhClothes> gezien = new HashSet<>();
@@ -155,7 +151,7 @@ public class GidsGameTests {
     }
 
     /** Every text the gids screens show exists (the server's en_us: Dutch, like everything). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void gidsTekstenBestaan(GameTestHelper helper) {
         Language lang = Language.getInstance();
         helper.assertTrue(lang.has("gui.guhs.guhdex.tab.minigames") && lang.has("gui.guhs.guhdex.tab.kleding"), "the tab names");
@@ -182,7 +178,7 @@ public class GidsGameTests {
     }
 
     /** The explorer advancements: all six new buildings -> Guhspelen-ontdekker; every building -> Vahoege wereldreiziger. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void gidsOntdekkerAdvancements(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         helper.assertTrue(helper.getLevel().getServer().getAdvancements().get(Guhs.id(GidsFeature.ONTDEKKER)) != null

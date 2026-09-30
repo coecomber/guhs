@@ -9,7 +9,7 @@ import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
@@ -21,9 +21,10 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.ballon.BallonFeature;
 import nl.juiced.guhs.feature.ballon.LuchtballonEntity;
 import nl.juiced.guhs.registry.ModEntities;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Client side of the Ballonfestival: the guh balloon (geo/entity/guh_luchtballon.geo.json in four colours, turned
  * along its flight and swaying gently, with Kapitein Wolkje in the basket while it flies), the cloud puffs, and the
@@ -62,7 +63,7 @@ public final class BallonClient {
         public LuchtballonRenderer(EntityRendererProvider.Context context) {
             super(context, new DefaultedEntityGeoModel<LuchtballonEntity>(Guhs.id("guh_luchtballon")) {
                 @Override
-                public ResourceLocation getTextureResource(LuchtballonEntity ballon) {
+                public Identifier getTextureResource(LuchtballonEntity ballon) {
                     return Guhs.id("textures/entity/guh_luchtballon_" + KLEUREN[ballon.kleur()] + ".png");
                 }
             });
@@ -92,7 +93,7 @@ public final class BallonClient {
                 return;
             }
             if (wolkje == null || wolkje.level() != ballon.level()) {
-                wolkje = ModEntities.GUH_NPC.get().create(ballon.level());
+                wolkje = ModEntities.GUH_NPC.get().create(ballon.level(), EntitySpawnReason.TRIGGERED);
                 if (wolkje == null) {
                     return;
                 }

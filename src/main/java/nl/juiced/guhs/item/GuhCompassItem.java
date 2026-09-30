@@ -78,14 +78,14 @@ public class GuhCompassItem extends Item {
         ResourceKey<Structure> target = target(stack);
         if (target == null) {
             if (entity instanceof net.minecraft.world.entity.player.Player player && (player.getMainHandItem() == stack || player.getOffhandItem() == stack)) {
-                player.displayClientMessage(Component.translatable("item.guhs.guhmensie_superkompas.choose").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("item.guhs.guhmensie_superkompas.choose").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             return;
         }
-        String dim = server.dimension().location().toString();
+        String dim = server.dimension().identifier().toString();
         BlockPos here = entity.blockPosition();
-        boolean fresh = data.getInt("SearchVersion") == SEARCH_VERSION && dim.equals(data.getString("SearchedDim")) && data.contains("SearchedAt")
-                && BlockPos.of(data.getLong("SearchedAt")).closerThan(here, 16);
+        boolean fresh = data.getIntOr("SearchVersion", 0) == SEARCH_VERSION && dim.equals(data.getStringOr("SearchedDim", "")) && data.contains("SearchedAt")
+                && BlockPos.of(data.getLongOr("SearchedAt", 0L)).closerThan(here, 16);
         if (!fresh) {
             BlockPos found = findCenter(server, target, here);
             data.putString("SearchedDim", dim);
@@ -105,13 +105,13 @@ public class GuhCompassItem extends Item {
         if (held) {
             Component text;
             if (data.contains("Target")) {
-                BlockPos t = BlockPos.of(data.getLong("Target"));
+                BlockPos t = BlockPos.of(data.getLongOr("Target", 0L));
                 int blocks = (int) Math.round(Math.hypot(t.getX() - here.getX(), t.getZ() - here.getZ()) / 10) * 10;
                 text = Component.translatable("item.guhs.guh_compass.distance", Math.max(blocks, 5));
             } else {
                 text = Component.translatable("item.guhs.guh_compass.none");
             }
-            ((net.minecraft.world.entity.player.Player) entity).displayClientMessage(text.copy().withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            ((net.minecraft.world.entity.player.Player) entity).sendOverlayMessage(text.copy().withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -128,7 +128,7 @@ public class GuhCompassItem extends Item {
      * by distance and the first one that really has the structure wins.)
      */
     public static BlockPos findCenter(ServerLevel level, ResourceKey<Structure> key, BlockPos from) {
-        Optional<Holder.Reference<Structure>> holder = level.registryAccess().registryOrThrow(Registries.STRUCTURE).getHolder(key);
+        Optional<Holder.Reference<Structure>> holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getHolder(key);
         if (holder.isEmpty()) {
             return null;
         }
@@ -141,7 +141,7 @@ public class GuhCompassItem extends Item {
                 var spots = state.getRingPositionsFor(rings);
                 if (spots != null) {
                     for (net.minecraft.world.level.ChunkPos c : spots) {
-                        candidates.add(new Object[]{(long) (c.x - px) * (c.x - px) + (long) (c.z - pz) * (c.z - pz), c, rings});
+                        candidates.add(new Object[]{(long) (c.x() - px) * (c.x() - px) + (long) (c.z() - pz) * (c.z() - pz), c, rings});
                     }
                 }
                 continue;
@@ -150,14 +150,14 @@ public class GuhCompassItem extends Item {
                 continue;
             }
             // the rare ones are far apart (and big ones often skip a spot that isn't flat enough): look ten of their grid cells far
-            int radius = FAR.contains(key.location().getPath()) ? CASTLE_RADIUS_CHUNKS : Math.max(SEARCH_RADIUS_CHUNKS, Math.min(1000, spread.spacing() * 16));   // (2.7: new biomes made some rarer; 2.8: the Knuffeldal too, e.g. a kaasmijn 10 km away)
+            int radius = FAR.contains(key.identifier().getPath()) ? CASTLE_RADIUS_CHUNKS : Math.max(SEARCH_RADIUS_CHUNKS, Math.min(1000, spread.spacing() * 16));   // (2.7: new biomes made some rarer; 2.8: the Knuffeldal too, e.g. a kaasmijn 10 km away)
             int cells = radius / spread.spacing() + 1;
             int cx = Math.floorDiv(px, spread.spacing()), cz = Math.floorDiv(pz, spread.spacing());
             for (int dx = -cells; dx <= cells; dx++) {
                 for (int dz = -cells; dz <= cells; dz++) {
                     net.minecraft.world.level.ChunkPos c = spread.getPotentialStructureChunk(state.getLevelSeed(),
                             (cx + dx) * spread.spacing(), (cz + dz) * spread.spacing()); // takes chunk coordinates, not cell numbers
-                    long d = (long) (c.x - px) * (c.x - px) + (long) (c.z - pz) * (c.z - pz);
+                    long d = (long) (c.x() - px) * (c.x() - px) + (long) (c.z() - pz) * (c.z() - pz);
                     if (d <= (long) radius * radius) {
                         candidates.add(new Object[]{d, c, spread});
                     }
@@ -172,8 +172,8 @@ public class GuhCompassItem extends Item {
             if (result == net.minecraft.world.level.levelgen.structure.StructureCheckResult.START_NOT_PRESENT) {
                 continue;
             }
-            StructureStart start = level.structureManager().getStartForStructure(SectionPos.bottomOf(level.getChunk(c.x, c.z, ChunkStatus.STRUCTURE_STARTS)),
-                    holder.get().value(), level.getChunk(c.x, c.z, ChunkStatus.STRUCTURE_STARTS));
+            StructureStart start = level.structureManager().getStartForStructure(SectionPos.bottomOf(level.getChunk(c.x(), c.z(), ChunkStatus.STRUCTURE_STARTS)),
+                    holder.get().value(), level.getChunk(c.x(), c.z(), ChunkStatus.STRUCTURE_STARTS));
             if (start != null && start.isValid() && !start.getPieces().isEmpty()) {
                 return start.getPieces().get(0).getBoundingBox().getCenter();
             }

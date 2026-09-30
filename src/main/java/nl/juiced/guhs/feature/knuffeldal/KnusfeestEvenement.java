@@ -112,7 +112,7 @@ public class KnusfeestEvenement extends Evenement {
                         guh.getNavigation().moveTo(spot.x, spot.y, spot.z, 1.1);
                     }
                 } else if (guh.emotes.current() == null) {
-                    guh.emotes.start(level.random.nextInt(3) == 0 ? Emote.DANSEN : Emote.SMAKKEN, false, GuhEmotes.Source.SELF);
+                    guh.emotes.start(level.getRandom().nextInt(3) == 0 ? Emote.DANSEN : Emote.SMAKKEN, false, GuhEmotes.Source.SELF);
                     level.broadcastEntityEvent(guh, (byte) 7);
                 }
             }

@@ -83,7 +83,7 @@ public final class DoolhofBlocks {
 
         @Override
         protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState old, boolean moved) {
-            if (!level.isClientSide && !old.is(this)) {
+            if (!level.isClientSide() && !old.is(this)) {
                 level.scheduleTick(pos, this, 20 + level.getRandom().nextInt(60));
             }
         }

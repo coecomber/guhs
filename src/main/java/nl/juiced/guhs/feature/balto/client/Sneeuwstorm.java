@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -125,7 +125,7 @@ public final class Sneeuwstorm {
             return;
         }
         Vec3 c = cam.getPosition();
-        RandomSource r = level.random;
+        RandomSource r = level.getRandom();
         long tijd = level.getGameTime();
         float vlaag = 1f + 0.55f * Mth.sin(tijd * 0.045f) + 0.3f * Mth.sin(tijd * 0.17f + 1.3f);     // gusts
         double wx = windX * 0.42 * vlaag, wz = windZ * 0.42 * vlaag;

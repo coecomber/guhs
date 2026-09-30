@@ -58,10 +58,10 @@ public class KnuffelBlock extends HorizontalDirectionalBlock {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level instanceof ServerLevel server) {
-            server.playSound(null, pos, ModSounds.GUH_HAPPY.get(), SoundSource.BLOCKS, 0.7f, 1.6f + level.random.nextFloat() * 0.3f);
+            server.playSound(null, pos, ModSounds.GUH_HAPPY.get(), SoundSource.BLOCKS, 0.7f, 1.6f + level.getRandom().nextFloat() * 0.3f);
             server.sendParticles(WereldlevenFeature.IJSJESHARTJE.get(), pos.getX() + 0.5, pos.getY() + 0.9, pos.getZ() + 0.5, 3, 0.2, 0.1, 0.2, 0.01);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

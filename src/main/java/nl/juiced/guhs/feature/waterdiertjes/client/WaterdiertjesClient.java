@@ -3,10 +3,10 @@ package nl.juiced.guhs.feature.waterdiertjes.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -18,10 +18,10 @@ import nl.juiced.guhs.feature.waterdiertjes.GuhxolotlEntity;
 import nl.juiced.guhs.feature.waterdiertjes.KnabbelvlindertjeEntity;
 import nl.juiced.guhs.feature.waterdiertjes.LieveheersbeestjeEntity;
 import nl.juiced.guhs.feature.waterdiertjes.WaterdiertjesFeature;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer;
 
 /**
  * Client side of the waterdiertjes: the GeckoLib renderers (a texture per colour for the guhxolotl and the knabbelvlindertje,
@@ -36,7 +36,7 @@ public final class WaterdiertjesClient {
             event.registerEntityRenderer(WaterdiertjesFeature.KNABBELVLINDERTJE.get(), context -> new GeoEntityRenderer<>(context,
                     new DefaultedEntityGeoModel<KnabbelvlindertjeEntity>(Guhs.id("knabbelvlindertje")) {
                         @Override
-                        public ResourceLocation getTextureResource(KnabbelvlindertjeEntity v) {
+                        public Identifier getTextureResource(KnabbelvlindertjeEntity v) {
                             return Guhs.id("textures/entity/knabbelvlindertje_" + v.kleur().id() + ".png");
                         }
                     }) {
@@ -69,7 +69,7 @@ public final class WaterdiertjesClient {
         public GuhxolotlRenderer(EntityRendererProvider.Context context) {
             super(context, new DefaultedEntityGeoModel<GuhxolotlEntity>(Guhs.id("guhxolotl"), true) {
                 @Override
-                public ResourceLocation getTextureResource(GuhxolotlEntity x) {
+                public Identifier getTextureResource(GuhxolotlEntity x) {
                     return Guhs.id("textures/entity/guhxolotl_" + x.kleur().getSerializedName() + ".png");
                 }
             });
@@ -99,7 +99,7 @@ public final class WaterdiertjesClient {
         public EendjeRenderer(EntityRendererProvider.Context context) {
             super(context, new DefaultedEntityGeoModel<GuhEendjeEntity>(Guhs.id("guh_eendje"), true) {
                 @Override
-                public ResourceLocation getTextureResource(GuhEendjeEntity e) {
+                public Identifier getTextureResource(GuhEendjeEntity e) {
                     return Guhs.id(e.isBaby() ? "textures/entity/guh_eendje_kuiken.png" : "textures/entity/guh_eendje.png");
                 }
             });

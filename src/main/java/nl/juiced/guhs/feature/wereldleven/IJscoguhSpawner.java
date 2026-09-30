@@ -15,8 +15,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.neoforged.neoforge.common.NeoForge;
@@ -72,12 +72,12 @@ public final class IJscoguhSpawner {
             if (now < next) {
                 continue;
             }
-            VOLGENDE.put(player.getUUID(), now + POGING + level.random.nextInt(POGING / 2));
+            VOLGENDE.put(player.getUUID(), now + POGING + level.getRandom().nextInt(POGING / 2));
             if (nearest(level, player.blockPosition(), AL_EEN) != null) {
                 continue;    // (he's around already: the next chance comes later)
             }
-            if (level.random.nextFloat() < KANS && spawnBij(level, player, level.random) != null) {
-                VOLGENDE.put(player.getUUID(), now + NA_BEZOEK + level.random.nextInt(POGING / 2));
+            if (level.getRandom().nextFloat() < KANS && spawnBij(level, player, level.getRandom()) != null) {
+                VOLGENDE.put(player.getUUID(), now + NA_BEZOEK + level.getRandom().nextInt(POGING / 2));
             }
         }
     }
@@ -113,16 +113,16 @@ public final class IJscoguhSpawner {
         if (spot == null) {
             return null;
         }
-        IJscoguhEntity ijsco = WereldlevenFeature.IJSCOGUH.get().create(level);
+        IJscoguhEntity ijsco = WereldlevenFeature.IJSCOGUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (ijsco == null) {
             return null;
         }
-        ijsco.moveTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, random.nextFloat() * 360f, 0f);
-        ijsco.finalizeSpawn(level, level.getCurrentDifficultyAt(spot), MobSpawnType.EVENT, null);
+        ijsco.snapTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, random.nextFloat() * 360f, 0f);
+        ijsco.finalizeSpawn(level, level.getCurrentDifficultyAt(spot), EntitySpawnReason.EVENT, null);
         ijsco.setDoel(surfaceOr(level, doel));
         level.addFreshEntity(ijsco);
         ijsco.bel();
-        player.displayClientMessage(Component.translatable("gui.guhs.wereldleven.ijscoguh_komt").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.wereldleven.ijscoguh_komt").withStyle(ChatFormatting.LIGHT_PURPLE));
         return ijsco;
     }
 
@@ -150,7 +150,7 @@ public final class IJscoguhSpawner {
     private static void commands(RegisterCommandsEvent event) {
         LiteralArgumentBuilder<CommandSourceStack> cmd = Commands.literal("ijscoguh").requires(s -> s.hasPermission(2)).executes(c -> {
             ServerPlayer player = c.getSource().getPlayerOrException();
-            IJscoguhEntity ijsco = spawnBij(player.serverLevel(), player, player.getRandom());
+            IJscoguhEntity ijsco = spawnBij(player.level(), player, player.getRandom());
             if (ijsco == null) {
                 c.getSource().sendFailure(Component.translatable("gui.guhs.wereldleven.ijscoguh_geen_plek"));
                 return 0;

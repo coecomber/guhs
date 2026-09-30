@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -64,7 +64,7 @@ public final class KatapultClient {
         return player.isUsingItem() && player.getUseItem().getItem() instanceof PluisballenItem ? player.getTicksUsingItem() : -1;
     }
 
-    private static void renderPower(GuiGraphics g, DeltaTracker delta) {
+    private static void renderPower(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.options.hideGui) {
             return;
@@ -87,7 +87,7 @@ public final class KatapultClient {
         }
         g.fill(x + w - 2, y - 1, x + w - 1, y + h + 1, 0xFFFFFFFF);
         Component label = Component.translatable("gui.guhs.katapult.power", Math.round(power * 100));
-        g.drawCenteredString(mc.font, label, g.guiWidth() / 2, y - 11, power > 0.99f ? 0xFFFFD27A : 0xFFFFE6EE);
+        g.centeredText(mc.font, label, g.guiWidth() / 2, y - 11, power > 0.99f ? 0xFFFFD27A : 0xFFFFE6EE);
     }
 
     @Nullable

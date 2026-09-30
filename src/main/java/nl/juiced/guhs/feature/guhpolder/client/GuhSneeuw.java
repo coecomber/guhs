@@ -70,7 +70,7 @@ public final class GuhSneeuw {
             rest = 0;
             return;
         }
-        RandomSource r = level.random;
+        RandomSource r = level.getRandom();
         // a soft wind that slowly turns
         double t = level.getGameTime() / 900.0;
         double windX = Math.sin(t) * 0.012 + 0.004, windZ = Math.cos(t * 0.7) * 0.009;

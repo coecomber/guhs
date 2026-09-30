@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -248,7 +248,7 @@ public final class VerhalenVoortgang {
     // =====================================================================================================================
 
     static VerhaalStand vadsig(ServerPlayer p) {
-        GuhWorldData.PlayerData d = GuhWorldData.get(p.server).player(p.getUUID());
+        GuhWorldData.PlayerData d = GuhWorldData.get(p.level().getServer()).player(p.getUUID());
         int stap = Math.min(4, d.maagQuest);
         List<VerhaalStand.Nodig> nodig = new ArrayList<>();
         if (stap == 1) {
@@ -266,7 +266,7 @@ public final class VerhalenVoortgang {
     }
 
     static VerhaalStand slee(ServerPlayer p) {
-        int stap = Math.min(2, GuhWorldData.get(p.server).player(p.getUUID()).sledQuest);
+        int stap = Math.min(2, GuhWorldData.get(p.level().getServer()).player(p.getUUID()).sledQuest);
         List<VerhaalStand.Nodig> nodig = new ArrayList<>();
         if (stap == 1) {
             for (String id : List.of("guhs:sleeglijder", "guhs:guh_belletje", "guhs:roze_lint")) {
@@ -318,8 +318,8 @@ public final class VerhalenVoortgang {
 
     static VerhaalStand guheinde(ServerPlayer p) {
         CompoundTag saved = GuhQuests.saved(p);
-        int koning = saved.getInt(GuheindeEvents.KONING);
-        int wins = saved.getInt(GuheindeGevecht.WINS);
+        int koning = saved.getIntOr(GuheindeEvents.KONING, 0);
+        int wins = saved.getIntOr(GuheindeGevecht.WINS, 0);
         boolean[] gedaan = {
                 koning >= 1 || GidsFeature.heeft(p, "guheinde/guheinde_opdracht"),
                 GidsFeature.heeft(p, "guheinde/root") || GuhQuests.count(p, item("guhs:mika_traan")) > 0,
@@ -403,7 +403,7 @@ public final class VerhalenVoortgang {
     }
 
     static Item item(String id) {
-        return BuiltInRegistries.ITEM.get(ResourceLocation.parse(id));
+        return BuiltInRegistries.ITEM.get(Identifier.parse(id));
     }
 
     static String itemId(Item item) {
@@ -435,7 +435,7 @@ public final class VerhalenVoortgang {
     /** How many items of a tag the player carries (main inventory). */
     static int tel(ServerPlayer p, TagKey<Item> tag) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(tag)) {
                 n += s.getCount();
             }

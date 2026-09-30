@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -44,14 +44,14 @@ public class DiscoScreen extends Screen {
         top = (height - H) / 2;
         songs.clear();
         int half = (W - 44) / 2;
-        if (data.getBoolean("Mine")) {
+        if (data.getBooleanOr("Mine", false)) {
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.disco.stop"), b -> send(DiscoGame.STOP))
                     .bounds(left + 20, top + 92, W - 40, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.disco.stop.tooltip"))).build());
         } else {
             DiscoLiedje[] all = DiscoLiedje.values();
             for (int i = 0; i < all.length; i++) {
                 DiscoLiedje l = all[i];
-                int best = data.getInt("Best_" + l.id);
+                int best = data.getIntOr("Best_" + l.id, 0);
                 Component label = Component.translatable("gui.guhs.disco.lied.knop", l.naam(), l.niveauNaam());
                 if (font.width(label) > half - 8) {        // (too long for the button: the short name, the full one is in the tooltip)
                     label = Component.translatable("gui.guhs.disco.lied.knop",
@@ -63,7 +63,7 @@ public class DiscoScreen extends Screen {
                         .append("\n").append(best > 0 ? Component.translatable("gui.guhs.disco.best", best) : Component.translatable("gui.guhs.disco.no_best"));
                 Button b = Button.builder(label, x -> send(DiscoGame.START_LIED + l.ordinal()))
                         .bounds(left + 20 + (i % 2) * (half + 4), top + 84 + (i / 2) * 26, half, 20).tooltip(Tooltip.create(tip)).build();
-                b.active = !data.getBoolean("Running");
+                b.active = !data.getBooleanOr("Running", false);
                 songs.add(addRenderableWidget(b));
             }
         }
@@ -80,12 +80,12 @@ public class DiscoScreen extends Screen {
                 return DiscoLiedje.of(i);
             }
         }
-        return data.getBoolean("Running") ? DiscoLiedje.of(data.getInt("Liedje")) : DiscoLiedje.DISCO70;
+        return data.getBooleanOr("Running", false) ? DiscoLiedje.of(data.getIntOr("Liedje", 0)) : DiscoLiedje.DISCO70;
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         DiscoLiedje l = shown(mouseX, mouseY);
         long ms = System.currentTimeMillis();
         int beat = (int) ((ms * l.bpm / 60000.0) % 4);
@@ -96,18 +96,18 @@ public class DiscoScreen extends Screen {
             int c = l.kleur(i);
             g.fill(x, top + 22, x + 14, top + 26, i == beat ? 0xFF000000 | c : 0x66000000 | c);
         }
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFFFE6EE);
-        Component text = data.getBoolean("Mine") ? Component.translatable("gui.guhs.disco.mine", data.getInt("Round"))
-                : data.getBoolean("Running") ? Component.translatable("gui.guhs.disco.running", data.getString("Dancer"), data.getInt("Round"),
-                DiscoLiedje.of(data.getInt("Liedje")).naam())
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFFFE6EE);
+        Component text = data.getBooleanOr("Mine", false) ? Component.translatable("gui.guhs.disco.mine", data.getIntOr("Round", 0))
+                : data.getBooleanOr("Running", false) ? Component.translatable("gui.guhs.disco.running", data.getStringOr("Dancer", ""), data.getIntOr("Round", 0),
+                DiscoLiedje.of(data.getIntOr("Liedje", 0)).naam())
                 : Component.translatable("gui.guhs.disco.question");
         int y = top + 32;
         for (var line : font.split(text, W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFD8B8E8);
+            g.centeredText(font, line, width / 2, y, 0xFFD8B8E8);
             y += 10;
         }
-        if (!data.getBoolean("Mine")) {
-            g.drawCenteredString(font, Component.translatable("gui.guhs.disco.kies").withStyle(ChatFormatting.BOLD), width / 2, top + 72, 0xFFFFE14D);
+        if (!data.getBooleanOr("Mine", false)) {
+            g.centeredText(font, Component.translatable("gui.guhs.disco.kies").withStyle(ChatFormatting.BOLD), width / 2, top + 72, 0xFFFFE14D);
             for (int i = 0; i < songs.size(); i++) {               // a stripe in each song's colours under its button
                 Button b = songs.get(i);
                 DiscoLiedje s = DiscoLiedje.of(i);
@@ -117,8 +117,8 @@ public class DiscoScreen extends Screen {
                 }
             }
         }
-        g.drawCenteredString(font, Component.translatable(data.getBoolean("Played") ? "gui.guhs.disco.munten" : "gui.guhs.disco.first",
-                data.getInt("Munten")), width / 2, top + H - 44, 0xFFFFE6EE);
+        g.centeredText(font, Component.translatable(data.getBooleanOr("Played", false) ? "gui.guhs.disco.munten" : "gui.guhs.disco.first",
+                data.getIntOr("Munten", 0)), width / 2, top + H - 44, 0xFFFFE6EE);
     }
 
     @Override

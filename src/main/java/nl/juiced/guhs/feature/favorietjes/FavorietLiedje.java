@@ -170,9 +170,9 @@ public final class FavorietLiedje {
                     Band.maakBlij(guh, MINIGAME_BLIJ);
                     zing(guh, 0.9f, 5);
                     if (speler != null) {
-                        speler.displayClientMessage(Component.translatable("gui.guhs.favorietjes.neuriet", guh.getDisplayName(),
+                        speler.sendOverlayMessage(Component.translatable("gui.guhs.favorietjes.neuriet", guh.getDisplayName(),
                                 Favorieten.naam(FavorietSoort.LIEDJE, Favorieten.waarde(guh, FavorietSoort.LIEDJE)))
-                                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                                .withStyle(ChatFormatting.LIGHT_PURPLE));
                     }
                 }
             }

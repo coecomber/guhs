@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -82,7 +82,7 @@ public final class RaceProtection {
             return null;
         }
         for (var entry : STRUCTURES.entrySet()) {
-            Structure structure = server.registryAccess().registryOrThrow(Registries.STRUCTURE).get(entry.getKey());
+            Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(entry.getKey());
             if (structure != null && server.structureManager().getStructureAt(pos, structure).isValid()) {
                 return entry.getValue();
             }
@@ -99,7 +99,7 @@ public final class RaceProtection {
         if (why == null) {
             return false;
         }
-        player.displayClientMessage(Component.translatable(why).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable(why).withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -117,7 +117,7 @@ public final class RaceProtection {
     }
 
     private static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty()) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty()) {
             return;
         }
         if (denied(event.getEntity(), event.getPos()) || denied(event.getEntity(),
@@ -127,14 +127,14 @@ public final class RaceProtection {
     }
 
     private static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }
     }
 
     private static void onExplosion(ExplosionEvent.Detonate event) {
-        if (!event.getLevel().isClientSide) {
+        if (!event.getLevel().isClientSide()) {
             event.getAffectedBlocks().removeIf(pos -> protectedAt(event.getLevel(), pos));
         }
     }

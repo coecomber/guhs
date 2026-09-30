@@ -6,7 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 
 /** The kaasknabbel milkshake: a drink that, like milk, clears all effects. */
@@ -18,7 +18,7 @@ public class MilkshakeItem extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         ItemStack rest = super.finishUsingItem(stack, level, entity);
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             entity.removeAllEffects();
         }
         if (entity instanceof ServerPlayer player && player.getAbilities().instabuild) {
@@ -34,8 +34,8 @@ public class MilkshakeItem extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.DRINK;
     }
 
     @Override

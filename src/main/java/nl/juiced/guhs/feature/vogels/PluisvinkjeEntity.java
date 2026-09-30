@@ -189,8 +189,8 @@ public class PluisvinkjeEntity extends Vogeltje {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains("VeertjeTijd")) {
-            veertjeTijd = tag.getInt("VeertjeTijd");
+            veertjeTijd = tag.getIntOr("VeertjeTijd", 0);
         }
-        voerVeertje = tag.getInt("VoerVeertje");
+        voerVeertje = tag.getIntOr("VoerVeertje", 0);
     }
 }

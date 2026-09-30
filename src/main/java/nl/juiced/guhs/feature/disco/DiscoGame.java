@@ -197,14 +197,14 @@ public final class DiscoGame {
         CompoundTag data = new CompoundTag();
         data.putBoolean("Running", game.isRunning());
         data.putBoolean("Mine", mine);
-        data.putString("Dancer", other == null ? "?" : other.getGameProfile().getName());
+        data.putString("Dancer", other == null ? "?" : other.getGameProfile().name());
         data.putInt("Round", game.sequence.size());
         data.putInt("Liedje", game.liedje.ordinal());
         data.putInt("Best", best(player));
         for (DiscoLiedje l : DiscoLiedje.values()) {
             data.putInt("Best_" + l.id, best(player, l));
         }
-        data.putBoolean("Played", GuhQuests.saved(player).getBoolean(FIRST));
+        data.putBoolean("Played", GuhQuests.saved(player).getBooleanOr(FIRST, false));
         data.putInt("Munten", GuhQuests.count(player, DiscoBlocks.DISCOMUNT.get()));
         net.neoforged.neoforge.network.PacketDistributor.sendToPlayer(player, new DiscoPayloads.Open(npc.getId(), data));
     }
@@ -342,8 +342,8 @@ public final class DiscoGame {
                     step = 0;
                     timer = stepTimeout(liedje);
                     lastPad = padUnder(world, p);
-                    p.displayClientMessage(Component.translatable("quest.guhs.disco.bar.jouw_beurt", 0, sequence.size())
-                            .withStyle(ChatFormatting.GREEN), true);
+                    p.sendOverlayMessage(Component.translatable("quest.guhs.disco.bar.jouw_beurt", 0, sequence.size())
+                            .withStyle(ChatFormatting.GREEN));
                     if (lastPad >= 0 && lastPad == sequence.get(0)) {   // already standing on the right one: that counts
                         press(npc, world, p, lastPad);
                     }
@@ -419,7 +419,7 @@ public final class DiscoGame {
             title(p, Component.translatable("quest.guhs.disco.title.dubbel").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
                     Component.translatable("quest.guhs.disco.title.dubbel.sub"), 20);
         }
-        p.displayClientMessage(Component.translatable("quest.guhs.disco.bar.kijk", sequence.size()).withStyle(ChatFormatting.AQUA), true);
+        p.sendOverlayMessage(Component.translatable("quest.guhs.disco.bar.kijk", sequence.size()).withStyle(ChatFormatting.AQUA));
     }
 
     /** The dancer stepped on a tile of colour c. */
@@ -436,7 +436,7 @@ public final class DiscoGame {
         step++;
         timer = stepTimeout(liedje);
         if (step < sequence.size()) {
-            p.displayClientMessage(Component.translatable("quest.guhs.disco.bar.jouw_beurt", step, sequence.size()).withStyle(ChatFormatting.GREEN), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.disco.bar.jouw_beurt", step, sequence.size()).withStyle(ChatFormatting.GREEN));
             return;
         }
         // the whole row right: a little party, then the next round on the next half bar (at least two beats later)
@@ -456,7 +456,7 @@ public final class DiscoGame {
             title(p, Component.translatable("quest.guhs.disco.title.vahoeg").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
                     Component.translatable("quest.guhs.disco.title.vahoeg.sub", score), 25);
         }
-        p.displayClientMessage(Component.translatable("quest.guhs.disco.bar.goed", score).withStyle(ChatFormatting.GOLD), true);
+        p.sendOverlayMessage(Component.translatable("quest.guhs.disco.bar.goed", score).withStyle(ChatFormatting.GOLD));
     }
 
     /** A wrong step (or too late, expected -1 = time's up): the right tile lights up, and it's over. */
@@ -495,7 +495,7 @@ public final class DiscoGame {
         if (score > 0 && Scorebord.submit(p, liedje.board(), score, false) > 0) {   // the song's world top 3
             showScores(npc);
         }
-        if (!saved.getBoolean(FIRST)) {                       // the first game ever: a welcome present
+        if (!saved.getBooleanOr(FIRST, false)) {                       // the first game ever: a welcome present
             saved.putBoolean(FIRST, true);
             give(p, new ItemStack(DiscoBlocks.DISCOMUNT.get(), FIRST_COINS));
             give(p, new ItemStack(ModItems.KAASKNABBEL_MILKSHAKE.get()));
@@ -515,7 +515,7 @@ public final class DiscoGame {
             grantSpelen(p, "disco_mambo_meester");
         }
         if (score >= GEDANST) {
-            String list = saved.getString(LIEDJES);
+            String list = saved.getStringOr(LIEDJES, "");
             if (!(" " + list + " ").contains(" " + liedje.id + " ")) {
                 saved.putString(LIEDJES, (list + " " + liedje.id).trim());
             }
@@ -598,7 +598,7 @@ public final class DiscoGame {
     }
 
     public static int best(Player player, DiscoLiedje liedje) {
-        return GuhQuests.saved(player).getInt(bestKey(liedje));
+        return GuhQuests.saved(player).getIntOr(bestKey(liedje), 0);
     }
 
     private static String bestKey(DiscoLiedje liedje) {
@@ -607,7 +607,7 @@ public final class DiscoGame {
 
     /** The songs you danced at least {@link #GEDANST} colours on. */
     public static List<DiscoLiedje> gedanst(Player player) {
-        String list = " " + GuhQuests.saved(player).getString(LIEDJES) + " ";
+        String list = " " + GuhQuests.saved(player).getStringOr(LIEDJES, "") + " ";
         List<DiscoLiedje> out = new ArrayList<>();
         for (DiscoLiedje l : DiscoLiedje.values()) {
             if (list.contains(" " + l.id + " ")) {
@@ -619,7 +619,7 @@ public final class DiscoGame {
 
     /** Grants a shown advancement of the "De Grote Guhspelen" tab (guhs:grote_guhspelen/&lt;name&gt;). */
     static void grantSpelen(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }
@@ -841,11 +841,11 @@ public final class DiscoGame {
                 .withStyle(ChatFormatting.LIGHT_PURPLE);
         for (ServerPlayer other : world.getEntitiesOfClass(ServerPlayer.class, new net.minecraft.world.phys.AABB(centre).inflate(32, 12, 32))) {
             if (other != p) {
-                other.displayClientMessage(watch, true);
+                other.sendOverlayMessage(watch);
             }
         }
         if (phase == Phase.SHOW) {
-            p.displayClientMessage(Component.translatable("quest.guhs.disco.bar.kijk", sequence.size()).withStyle(ChatFormatting.AQUA), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.disco.bar.kijk", sequence.size()).withStyle(ChatFormatting.AQUA));
         } else if (phase == Phase.INPUT) {
             int seconds = (timer + 19) / 20;
             p.displayClientMessage(Component.translatable("quest.guhs.disco.bar.jouw_beurt_tijd", step, sequence.size(), seconds)
@@ -884,7 +884,7 @@ public final class DiscoGame {
     /** A dancer whose game stopped ticking (its chunk unloaded, the DJ-guh vanished) is an ordinary player again. */
     public static void onPlayerTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        if (player.level().isClientSide || player.tickCount % 20 != 0) {
+        if (player.level().isClientSide() || player.tickCount % 20 != 0) {
             return;
         }
         Long seen = DANCERS.get(player.getUUID());

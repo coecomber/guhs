@@ -8,21 +8,19 @@ import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.band.Band;
@@ -46,8 +44,6 @@ import nl.juiced.guhs.registry.ModItems;
  * it rests), the five counting Guhdex pages, and the spawn rules (day/night, water). Template waterdiertjes_test_wei: 14 x 14
  * grass at y 0 (things stand on helper y 2... the floor is helper y 1).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class WaterdiertjesGameTests {
     private static final String WEI = "waterdiertjes_test_wei";
     private static final String BATCH = "waterdiertjes";
@@ -58,7 +54,7 @@ public class WaterdiertjesGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -85,7 +81,7 @@ public class WaterdiertjesGameTests {
     // =================================================================================================================
 
     /** Five colours: gold about 1 in 100 in the wild, the others about equally often; the colour is saved and loaded. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void waterdiertjesKleurenEnGoud(GameTestHelper helper) {
         RandomSource r = RandomSource.create(20301401L);
         Map<GuhxolotlEntity.Kleur, Integer> n = new EnumMap<>(GuhxolotlEntity.Kleur.class);
@@ -102,9 +98,9 @@ public class WaterdiertjesGameTests {
         GuhxolotlEntity x = xolotl(helper, new BlockPos(3, 2, 3), GuhxolotlEntity.Kleur.GOUD);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
         x.saveWithoutId(tag);
-        GuhxolotlEntity kopie = WaterdiertjesFeature.GUHXOLOTL.get().create(helper.getLevel());
+        GuhxolotlEntity kopie = WaterdiertjesFeature.GUHXOLOTL.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         kopie.load(tag);
-        helper.assertTrue(kopie.kleur() == GuhxolotlEntity.Kleur.GOUD && "goud".equals(tag.getString("Kleur")), "saved and loaded by name");
+        helper.assertTrue(kopie.kleur() == GuhxolotlEntity.Kleur.GOUD && "goud".equals(tag.getStringOr("Kleur", "")), "saved and loaded by name");
         // a spawn egg / natural spawn rolls a colour; babies take a parent's colour (or, now and then, gold)
         GuhxolotlEntity a = xolotl(helper, new BlockPos(5, 2, 5), GuhxolotlEntity.Kleur.MINT);
         GuhxolotlEntity b = xolotl(helper, new BlockPos(6, 2, 5), GuhxolotlEntity.Kleur.MINT);
@@ -121,7 +117,7 @@ public class WaterdiertjesGameTests {
     }
 
     /** A guhvisje tames it; a tamed one isn't hostile, has its menu settings, and is a piep-maatje. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void waterdiertjesTemmenMetGuhvisje(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
         GuhxolotlEntity x = xolotl(helper, new BlockPos(4, 2, 4), GuhxolotlEntity.Kleur.CHOCO);
@@ -140,7 +136,7 @@ public class WaterdiertjesGameTests {
     }
 
     /** The emmertje: a water bucket scoops it up, putting it down gives the same guhxolotl (band id, owner, colour) + the bucket. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void waterdiertjesEmmertjeHoudtBandId(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
@@ -159,7 +155,7 @@ public class WaterdiertjesGameTests {
         // the owner's pick-up by hand (sneak + empty hand / "Oppakken"): a knuffel-emmertje without a bucket
         helper.assertTrue(PiepDierItem.pakOp(terug, p), "picked up by its owner");
         ItemStack hand = ItemStack.EMPTY;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(WaterdiertjesFeature.GUHXOLOTL_EMMERTJE.get()) && !GuhxolotlEmmertje.metEmmer(s)) {
                 hand = s;
             }
@@ -186,7 +182,7 @@ public class WaterdiertjesGameTests {
     }
 
     /** A tamed guhxolotl lives in a guhhuisje and never dries out there; a wild one on land gets dry (never hurt) and wet again in water. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 200)
     public static void waterdiertjesHuisjeBewonerDroogtNietUit(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
@@ -203,7 +199,7 @@ public class WaterdiertjesGameTests {
             helper.assertTrue(!thuis.isDroog() && thuis.droogTicks() == 0, "a huisje resident stays moist");
             helper.assertTrue(buiten.isDroog(), "a wild one on land gets dry after a while");
             helper.assertTrue(buiten.getHealth() >= leven && buiten.isAlive(), "but it is never hurt by it");
-            buiten.moveTo(buiten.getX(), buiten.getY(), buiten.getZ());
+            buiten.snapTo(buiten.getX(), buiten.getY(), buiten.getZ());
             helper.setBlock(new BlockPos(11, 2, 11), Blocks.WATER);
             helper.runAfterDelay(10, () -> {
                 helper.assertTrue(!buiten.isDroog(), "in the water it is fine again");
@@ -217,20 +213,20 @@ public class WaterdiertjesGameTests {
     }
 
     /** A wild mama comes with a rijtje; each duckling walks behind the one in front of it, mama first. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 400)
     public static void waterdiertjesKuikentjesVolgenInEenRijtje(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        GuhEendjeEntity mama = WaterdiertjesFeature.GUH_EENDJE.get().create(level);
+        GuhEendjeEntity mama = WaterdiertjesFeature.GUH_EENDJE.get().create(level, EntitySpawnReason.TRIGGERED);
         BlockPos start = helper.absolutePos(new BlockPos(2, 2, 2));
-        mama.moveTo(start.getX() + 0.5, start.getY(), start.getZ() + 0.5, 180, 0);
-        mama.finalizeSpawn(level, level.getCurrentDifficultyAt(start), MobSpawnType.NATURAL, null);
+        mama.snapTo(start.getX() + 0.5, start.getY(), start.getZ() + 0.5, 180, 0);
+        mama.finalizeSpawn(level, level.getCurrentDifficultyAt(start), EntitySpawnReason.NATURAL, null);
         level.addFreshEntity(mama);
         List<GuhEendjeEntity> rij = mama.rijtje();
         helper.assertTrue(rij.size() >= GuhEendjeEntity.MIN_KUIKENS && rij.size() <= GuhEendjeEntity.MAX_KUIKENS, "a mama with 2-4 kuikentjes: " + rij.size());
         helper.assertTrue(rij.stream().allMatch(k -> k.isBaby() && mama.getUUID().equals(k.mama())), "her own babies");
         helper.assertTrue(rij.get(0).voorganger() == mama && (rij.size() < 2 || rij.get(1).voorganger() == rij.get(0)), "the first follows mama, the next the first");
         // mama walks off to the other corner: the rijtje follows
-        mama.moveTo(helper.absolutePos(new BlockPos(11, 2, 11)).getX() + 0.5, start.getY(), helper.absolutePos(new BlockPos(11, 2, 11)).getZ() + 0.5, 0, 0);
+        mama.snapTo(helper.absolutePos(new BlockPos(11, 2, 11)).getX() + 0.5, start.getY(), helper.absolutePos(new BlockPos(11, 2, 11)).getZ() + 0.5, 0, 0);
         mama.setNoAi(true);
         helper.succeedWhen(() -> {
             for (GuhEendjeEntity k : rij) {
@@ -248,7 +244,7 @@ public class WaterdiertjesGameTests {
     }
 
     /** A lieveheersbeestje on a growing guhtuintje helps it one step, then rests; it doesn't help a ripe or empty one. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void waterdiertjesLieveheersbeestjeHelptGroeien(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos pot = helper.absolutePos(new BlockPos(5, 2, 5));
@@ -272,7 +268,7 @@ public class WaterdiertjesGameTests {
     }
 
     /** The five pages are registered counting creature pages; every critter is friendly. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void waterdiertjesGuhdexPaginas(GameTestHelper helper) {
         for (GuhVariant v : WaterdiertjesFeature.PAGINAS) {
             helper.assertTrue(GuhDex.isCreaturePage(v) && GuhDex.TELLEND.contains(v) && v.isCharacter() && !GuhDex.TAMEABLE.contains(v),
@@ -284,27 +280,27 @@ public class WaterdiertjesGameTests {
     }
 
     /** Spawn rules: butterflies and ladybirds by day near flowers, glimguhtjes only at night, guhxolotls in shallow water, ducks at the water's edge. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void waterdiertjesSpawnRegels(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        RandomSource r = level.random;
+        RandomSource r = level.getRandom();
         BlockPos water = helper.absolutePos(new BlockPos(3, 1, 3));
         level.setBlockAndUpdate(water, Blocks.WATER.defaultBlockState());
         level.setBlockAndUpdate(water.east(), Blocks.WATER.defaultBlockState());
-        helper.assertTrue(GuhxolotlEntity.checkSpawn(WaterdiertjesFeature.GUHXOLOTL.get(), level, MobSpawnType.SPAWN_EGG, water.above(5), r),
+        helper.assertTrue(GuhxolotlEntity.checkSpawn(WaterdiertjesFeature.GUHXOLOTL.get(), level, EntitySpawnReason.SPAWN_ITEM_USE, water.above(5), r),
                 "a spawn egg works anywhere");
-        helper.assertTrue(!GuhxolotlEntity.checkSpawn(WaterdiertjesFeature.GUHXOLOTL.get(), level, MobSpawnType.NATURAL, water.above(3), r),
+        helper.assertTrue(!GuhxolotlEntity.checkSpawn(WaterdiertjesFeature.GUHXOLOTL.get(), level, EntitySpawnReason.NATURAL, water.above(3), r),
                 "not in the air");
-        helper.assertTrue(GuhEendjeEntity.checkSpawn(WaterdiertjesFeature.GUH_EENDJE.get(), level, MobSpawnType.SPAWN_EGG, water.above(), r), "egg");
+        helper.assertTrue(GuhEendjeEntity.checkSpawn(WaterdiertjesFeature.GUH_EENDJE.get(), level, EntitySpawnReason.SPAWN_ITEM_USE, water.above(), r), "egg");
         boolean dag = level.isDay();
         BlockPos lucht = helper.absolutePos(new BlockPos(7, 3, 7));
-        helper.assertTrue(GlimguhtjeEntity.checkSpawn(WaterdiertjesFeature.GLIMGUHTJE.get(), level, MobSpawnType.NATURAL, lucht, r) == (!dag
-                && GlimguhtjeEntity.checkSpawn(WaterdiertjesFeature.GLIMGUHTJE.get(), level, MobSpawnType.NATURAL, lucht, r)), "glimguhtjes never by day");
+        helper.assertTrue(GlimguhtjeEntity.checkSpawn(WaterdiertjesFeature.GLIMGUHTJE.get(), level, EntitySpawnReason.NATURAL, lucht, r) == (!dag
+                && GlimguhtjeEntity.checkSpawn(WaterdiertjesFeature.GLIMGUHTJE.get(), level, EntitySpawnReason.NATURAL, lucht, r)), "glimguhtjes never by day");
         if (dag) {
-            helper.assertTrue(!KnabbelvlindertjeEntity.checkSpawn(WaterdiertjesFeature.KNABBELVLINDERTJE.get(), level, MobSpawnType.NATURAL, lucht, r),
+            helper.assertTrue(!KnabbelvlindertjeEntity.checkSpawn(WaterdiertjesFeature.KNABBELVLINDERTJE.get(), level, EntitySpawnReason.NATURAL, lucht, r),
                     "no flowers: no butterflies");
             level.setBlockAndUpdate(helper.absolutePos(new BlockPos(8, 2, 8)), Blocks.POPPY.defaultBlockState());
-            helper.assertTrue(KnabbelvlindertjeEntity.checkSpawn(WaterdiertjesFeature.KNABBELVLINDERTJE.get(), level, MobSpawnType.NATURAL, lucht, r)
+            helper.assertTrue(KnabbelvlindertjeEntity.checkSpawn(WaterdiertjesFeature.KNABBELVLINDERTJE.get(), level, EntitySpawnReason.NATURAL, lucht, r)
                     == level.canSeeSky(lucht), "a flower: butterflies (under the open sky)");
         }
         helper.succeed();

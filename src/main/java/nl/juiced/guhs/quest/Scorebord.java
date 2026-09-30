@@ -24,6 +24,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * The top 3 of every minigame, for the whole world: each player is on a board once (with their best score). A floating
  * scoreboard (a text display) shows them in the minigame's building; {@link #show} keeps it up to date.
@@ -52,7 +53,7 @@ public final class Scorebord {
 
     /** Hands in a score; lowerIsBetter for times and strokes. Returns the place it got on the board (1-3), or 0. */
     public static int submit(ServerPlayer player, String board, int score, boolean lowerIsBetter) {
-        Data data = Data.get(player.server);
+        Data data = Data.get(player.level().getServer());
         // your own best (for the Guhdex highscores), also when it never makes the top 3
         boolean personal = Highscores.remember(player, board, score, lowerIsBetter);
         List<Entry> before = data.boards.getOrDefault(board, List.of());
@@ -60,7 +61,7 @@ public final class Scorebord {
         int place = enter(data, player, board, score, lowerIsBetter);
         List<Entry> after = data.boards.getOrDefault(board, List.of());
         if (!after.isEmpty() && !after.get(0).equals(oldRecord)) {
-            Highscores.syncAll(player.server);                   // a new server record: everyone's Guhdex changes
+            Highscores.syncAll(player.level().getServer());                   // a new server record: everyone's Guhdex changes
         } else if (personal || place > 0) {
             Highscores.sync(player);
         }
@@ -81,7 +82,7 @@ public final class Scorebord {
             return 0;
         }
         list.remove(old);
-        list.add(new Entry(player.getUUID(), player.getGameProfile().getName(), score));
+        list.add(new Entry(player.getUUID(), player.getGameProfile().name(), score));
         list.sort((a, b) -> lowerIsBetter ? Integer.compare(a.score(), b.score()) : Integer.compare(b.score(), a.score()));
         while (list.size() > PLACES) {
             list.remove(list.size() - 1);
@@ -125,10 +126,10 @@ public final class Scorebord {
         String json = Component.Serializer.toJson(text, level.registryAccess());
         String stamp = TAG + ":" + id + ":" + Integer.toHexString(json.hashCode());
         List<Display.TextDisplay> here = level.getEntitiesOfClass(Display.TextDisplay.class, new AABB(pos, pos).inflate(1.5),
-                d -> d.getTags().contains(TAG) && d.getTags().stream().anyMatch(t -> t.startsWith(TAG + ":" + id + ":")));
+                d -> d.entityTags().contains(TAG) && d.entityTags().stream().anyMatch(t -> t.startsWith(TAG + ":" + id + ":")));
         boolean current = false;
         for (Display.TextDisplay d : here) {
-            if (!current && d.getTags().contains(stamp)) {
+            if (!current && d.entityTags().contains(stamp)) {
                 current = true;
             } else {
                 d.discard();
@@ -172,7 +173,7 @@ public final class Scorebord {
                 ListTag entries = new ListTag();
                 for (Entry e : list) {
                     CompoundTag t = new CompoundTag();
-                    t.putUUID("Player", e.player());
+                    t.store("Player", UUIDUtil.CODEC, e.player());
                     t.putString("Name", e.name());
                     t.putInt("Score", e.score());
                     entries.add(t);
@@ -185,12 +186,12 @@ public final class Scorebord {
 
         static Data load(CompoundTag tag, HolderLookup.Provider registries) {
             Data data = new Data();
-            CompoundTag all = tag.getCompound("Boards");
-            for (String board : all.getAllKeys()) {
+            CompoundTag all = tag.getCompoundOrEmpty("Boards");
+            for (String board : all.keySet()) {
                 List<Entry> list = new ArrayList<>();
-                for (Tag t : all.getList(board, Tag.TAG_COMPOUND)) {
+                for (Tag t : all.getListOrEmpty(board)) {
                     CompoundTag e = (CompoundTag) t;
-                    list.add(new Entry(e.getUUID("Player"), e.getString("Name"), e.getInt("Score")));
+                    list.add(new Entry(e.read("Player", UUIDUtil.CODEC).orElseThrow(), e.getStringOr("Name", ""), e.getIntOr("Score", 0)));
                 }
                 data.boards.put(board, list);
             }

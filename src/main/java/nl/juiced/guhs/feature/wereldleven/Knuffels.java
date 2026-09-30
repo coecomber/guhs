@@ -89,7 +89,7 @@ public final class Knuffels {
             }
             cooldown = 60 + guh.getRandom().nextInt(60);
             if (!mag() || GuhHooks.isBezig(guh) || guh.emotes.current() != null || !Dagritme.magInTest(guh)
-                    || guh.level().getGameTime() < guh.getPersistentData().getLong(KNUFFEL_TOT)) {
+                    || guh.level().getGameTime() < guh.getPersistentData().getLongOr(KNUFFEL_TOT, 0L)) {
                 return false;
             }
             knuffel = knuffel(guh);

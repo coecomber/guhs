@@ -16,7 +16,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.QuartPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
@@ -36,8 +36,6 @@ import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -57,6 +55,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the Knuffeldal (2.8): Cocotje's dialogue (the right answer and the others), the Grote Knusfeest (the
  * Burgemeester's round, the six tasks, the feast with its rewards, then the seasonal feasts), the Kruimel-Mika (steals,
@@ -64,8 +63,6 @@ import nl.juiced.guhs.registry.ModItems;
  * seasonal activities, the town's templates and protection, the blocks, and the Knuffeldal's share of the Guhmension
  * with one town per dal (worked out from the dimension's own biome source and noise, so it runs on the GameTest server).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KnuffeldalGameTests {
     private static final String EMPTY = "empty";
     /** (its floor is at relative y 1: a test's structure sits one block above its structure block) */
@@ -78,7 +75,7 @@ public class KnuffeldalGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -96,7 +93,7 @@ public class KnuffeldalGameTests {
 
     private static int count(ServerPlayer p, net.minecraft.world.item.Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -105,7 +102,7 @@ public class KnuffeldalGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -113,7 +110,7 @@ public class KnuffeldalGameTests {
     // Cocotje
     // =================================================================================================================
 
-    @GameTest(template = PLEIN)
+    @GuhTest(template = PLEIN)
     public static void knuffeldalCocotjeGoedAntwoord(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
         try {
@@ -165,7 +162,7 @@ public class KnuffeldalGameTests {
     // the Grote Knusfeest
     // =================================================================================================================
 
-    @GameTest(template = PLEIN, timeoutTicks = 200, batch = "knuffeldal_feest")
+    @GuhTest(template = PLEIN, timeoutTicks = 200, batch = "knuffeldal_feest")
     public static void knuffeldalGroteKnusfeestEnSeizoensfeest(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 6));
         try {
@@ -227,7 +224,7 @@ public class KnuffeldalGameTests {
     }
 
     /** During a feast every participant's tamed guhs come to the buffet (from far away with a poof) and eat there. */
-    @GameTest(template = PLEIN, timeoutTicks = 400)
+    @GuhTest(template = PLEIN, timeoutTicks = 400)
     public static void knuffeldalGuhsKomenNaarHetBuffet(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(13, 2, 13));
@@ -250,7 +247,7 @@ public class KnuffeldalGameTests {
     // the Kruimel-Mika
     // =================================================================================================================
 
-    @GameTest(template = PLEIN, timeoutTicks = 300)
+    @GuhTest(template = PLEIN, timeoutTicks = 300)
     public static void knuffeldalKruimelMikaSteeltEnWordtWeggelokt(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
         Knusfeest.vergeet(p);
@@ -280,7 +277,7 @@ public class KnuffeldalGameTests {
     }
 
     /** A stolen item that stays gone too long: the Burgemeester found it back himself (nobody gets stuck). */
-    @GameTest(template = PLEIN)
+    @GuhTest(template = PLEIN)
     public static void knuffeldalGestolenKomtAltijdTerug(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
         try {
@@ -288,7 +285,7 @@ public class KnuffeldalGameTests {
             Knusfeest.nieuweRonde(p, 0, EnumSet.of(Feesttaak.THEESERVIES));
             Knusfeest.zet(p, Feesttaak.THEESERVIES, Knusfeest.Stap.GESTOLEN);
             helper.assertTrue(Burgemeester.lever(p) == 0, "just stolen: not yet");
-            GuhQuests.saved(p).getCompound(Knusfeest.KEY).getCompound("GestolenOp")
+            GuhQuests.saved(p).getCompoundOrEmpty(Knusfeest.KEY).getCompoundOrEmpty("GestolenOp")
                     .putLong(Feesttaak.THEESERVIES.id(), helper.getLevel().getGameTime() - KruimelMikaEntity.TERUG_NA - 1);
             helper.assertTrue(Burgemeester.lever(p) == 1 && Knusfeest.gebracht(p, Feesttaak.THEESERVIES), "after a while it counts as brought");
         } finally {
@@ -302,11 +299,11 @@ public class KnuffeldalGameTests {
     // the Pluisguh and the residents
     // =================================================================================================================
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knuffeldalPluisguhAlleenInHetDal(GameTestHelper helper) {
         int pluis = 0, n = 400;
         for (int i = 0; i < n; i++) {
-            GuhEntity guh = ModEntities.GUH.get().create(helper.getLevel());
+            GuhEntity guh = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
             if (KnuffeldalEvents.decide(guh, true)) {
                 pluis++;
                 helper.assertTrue(guh.getVariant() == GuhVariant.PLUISGUH, "a Pluisguh");
@@ -314,9 +311,9 @@ public class KnuffeldalGameTests {
             helper.assertTrue(!KnuffeldalEvents.decide(guh, true), "decided only once");
         }
         helper.assertTrue(pluis > n * 0.25 && pluis < n * 0.45, "about 35%: " + pluis + " of " + n);
-        GuhEntity outside = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity outside = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         helper.assertTrue(!KnuffeldalEvents.decide(outside, false) && outside.getVariant() == GuhVariant.NORMAL, "never outside the Knuffeldal");
-        GuhEntity bewoner = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity bewoner = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         GuhHooks.maakBewoner(bewoner, BlockPos.ZERO);
         helper.assertTrue(!KnuffeldalEvents.decide(bewoner, true), "residents keep their looks");
         helper.assertTrue(!GuhVariant.PLUISGUH.isCharacter() && nl.juiced.guhs.quest.GuhDex.TAMEABLE.contains(GuhVariant.PLUISGUH),
@@ -324,7 +321,7 @@ public class KnuffeldalGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = PLEIN, timeoutTicks = 400)
+    @GuhTest(template = PLEIN, timeoutTicks = 400)
     public static void knuffeldalBewonersBlijvenThuisEnWillenNietMee(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
         BlockPos home = helper.absolutePos(new BlockPos(3, 2, 3));
@@ -353,7 +350,7 @@ public class KnuffeldalGameTests {
     // the seasons
     // =================================================================================================================
 
-    @GameTest(template = PLEIN, batch = "knuffeldal_seizoen")
+    @GuhTest(template = PLEIN, batch = "knuffeldal_seizoen")
     public static void knuffeldalSeizoensactiviteiten(GameTestHelper helper) {
         var server = helper.getLevel().getServer();
         ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
@@ -373,12 +370,12 @@ public class KnuffeldalGameTests {
                     && count(p, ModItems.clothingItem(GuhClothes.ZONNEHOEDJE)) == 1, "a zonnehoedje");
             // the flower box and the leaf pile follow the season (random ticks)
             BlockState box = helper.getBlockState(new BlockPos(2, 2, 12));
-            box.randomTick(helper.getLevel(), bak, helper.getLevel().random);
+            box.randomTick(helper.getLevel(), bak, helper.getLevel().getRandom());
             helper.assertTrue(helper.getBlockState(new BlockPos(2, 2, 12)).getValue(KnuffeldalBlocks.SEIZOEN) == Seizoen.ZOMER, "the flower box shows summer");
             // autumn: the leaf piles fill up; jumping in counts; leaves on the box make leaf piles
             Seizoen.zet(server, Seizoen.HERFST);
             BlockPos hoop = helper.absolutePos(new BlockPos(12, 2, 12));
-            helper.getBlockState(new BlockPos(12, 2, 12)).randomTick(helper.getLevel(), hoop, helper.getLevel().random);
+            helper.getBlockState(new BlockPos(12, 2, 12)).randomTick(helper.getLevel(), hoop, helper.getLevel().getRandom());
             helper.assertTrue(helper.getBlockState(new BlockPos(12, 2, 12)).getValue(KnuffeldalBlocks.Bladerhoopje.VOL), "a big leaf pile in autumn");
             GuhEntity mijnGuh = helper.spawn(ModEntities.GUH.get(), new BlockPos(11, 2, 11));
             mijnGuh.tame(p);
@@ -420,7 +417,7 @@ public class KnuffeldalGameTests {
     // the town: templates and protection; the blocks
     // =================================================================================================================
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knuffeldalStadjeEnBescherming(GameTestHelper helper) {
         var templates = helper.getLevel().getStructureManager();
         var plein = templates.get(Guhs.id("knuffeldal_stadje/plein"));
@@ -429,7 +426,7 @@ public class KnuffeldalGameTests {
                 Blocks.JIGSAW, true);
         Map<String, BlockPos> named = new HashMap<>();
         for (var j : jigsaws) {
-            named.put(j.nbt().getString("name") + (j.nbt().getString("name").equals("guhs:plein_hoek") ? j.pos().toShortString() : ""), j.pos());
+            named.put(j.nbt().getStringOr("name", "") + (j.nbt().getStringOr("name", "").equals("guhs:plein_hoek") ? j.pos().toShortString() : ""), j.pos());
         }
         helper.assertTrue(new BlockPos(24, 4, 24).equals(named.get("guhs:knuffeldal_midden")), "the anchor in the middle: " + named);
         helper.assertTrue(new BlockPos(24, 4, 0).equals(named.get("guhs:plein_bakkerij")) && new BlockPos(48, 4, 24).equals(named.get("guhs:plein_theehuis"))
@@ -441,10 +438,10 @@ public class KnuffeldalGameTests {
             helper.assertTrue(t.isPresent() && t.get().getSize().equals(new net.minecraft.core.Vec3i(40, 30, 31)), "corner " + hoek);
             // the town's one free street jigsaw (for later versions) sits at the east end of hoek_noordoost's street
             var vrij = t.get().filterBlocks(BlockPos.ZERO, new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(),
-                    Blocks.JIGSAW, true).stream().filter(j -> j.nbt().getString("name").equals("guhs:knuffeldal_straat_vrij")).toList();
+                    Blocks.JIGSAW, true).stream().filter(j -> j.nbt().getStringOr("name", "").equals("guhs:knuffeldal_straat_vrij")).toList();
             if (hoek.equals("noordoost")) {
                 helper.assertTrue(vrij.size() == 1 && vrij.get(0).pos().equals(new BlockPos(39, 4, 23))
-                        && vrij.get(0).nbt().getString("pool").equals("guhs:knuffeldal_stadje/vrij")
+                        && vrij.get(0).nbt().getStringOr("pool", "").equals("guhs:knuffeldal_stadje/vrij")
                         && vrij.get(0).state().getValue(net.minecraft.world.level.block.JigsawBlock.ORIENTATION)
                         == net.minecraft.core.FrontAndTop.EAST_UP, "the free street jigsaw: " + vrij);
             } else {
@@ -452,7 +449,7 @@ public class KnuffeldalGameTests {
             }
         }
         // its pool exists and holds the 2.9 street piece (the Beroepenstraat, feature.beroepen)
-        var vrijPool = helper.getLevel().registryAccess().registryOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id("knuffeldal_stadje/vrij"));
+        var vrijPool = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id("knuffeldal_stadje/vrij"));
         helper.assertTrue(vrijPool != null && vrijPool.size() == 1
                 && vrijPool.getShuffledTemplates(net.minecraft.util.RandomSource.create(1)).get(0).toString().contains("beroepenstraat"),
                 "the free street pool holds the Beroepenstraat");
@@ -478,7 +475,7 @@ public class KnuffeldalGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knuffeldalBlokkenEnRecepten(GameTestHelper helper) {
         BlockPos face = new BlockPos(2, 1, 2);
         helper.setBlock(face, KnuffeldalFeature.KNUFFELSTEEN_GEZICHT.get().defaultBlockState().setValue(KnuffeldalBlocks.Gezicht.STEMMING, 0));
@@ -495,11 +492,11 @@ public class KnuffeldalGameTests {
             }
             helper.assertTrue(KnuffeldalFeature.KNUFFELGRAS.get().defaultBlockState().is(net.minecraft.tags.BlockTags.DIRT), "knuffelgras is dirt for plants");
             helper.assertTrue(KnuffeldalFeature.PLUIZENBOOM_BLADEREN.get().defaultBlockState().is(net.minecraft.tags.BlockTags.LEAVES), "leaves");
-            var features = helper.getLevel().registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE);
-            helper.assertTrue(features.containsKey(KnuffeldalFeature.PLUIZENBOOM.location()) && features.containsKey(KnuffeldalFeature.REUZE_GUHPADDENSTOEL.location()),
+            var features = helper.getLevel().registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE);
+            helper.assertTrue(features.containsKey(KnuffeldalFeature.PLUIZENBOOM.identifier()) && features.containsKey(KnuffeldalFeature.REUZE_GUHPADDENSTOEL.identifier()),
                     "the tree and the huge mushroom");
-            helper.assertTrue(helper.getLevel().registryAccess().registryOrThrow(Registries.BIOME).containsKey(KnuffeldalFeature.KNUFFELDAL), "the biome");
-            var structure = helper.getLevel().registryAccess().registryOrThrow(Registries.STRUCTURE).get(KnuffeldalFeature.STADJE);
+            helper.assertTrue(helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME).containsKey(KnuffeldalFeature.KNUFFELDAL), "the biome");
+            var structure = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE).get(KnuffeldalFeature.STADJE);
             helper.assertTrue(structure instanceof KnuffeldalStadjeStructure s && s.keepClear() > 60 && s.voorrang() == 800, "the town: " + structure);
         } finally {
             leave(helper, p);
@@ -516,7 +513,7 @@ public class KnuffeldalGameTests {
      * three seeds): the Knuffeldal is small but findable, and every other surface biome keeps most of its share. Then the
      * dalen (connected Knuffeldal samples) and the town spots: never two towns in one dal, and most (big) dalen have one.
      */
-    @GameTest(template = EMPTY, timeoutTicks = 2400)
+    @GuhTest(template = EMPTY, timeoutTicks = 2400)
     public static void knuffeldalDeelEnEenStadjePerDal(GameTestHelper helper) {
         var server = helper.getLevel().getServer();
         var access = server.registryAccess();
@@ -537,8 +534,8 @@ public class KnuffeldalGameTests {
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
         BiomeSource with = BiomeSource.CODEC.parse(ops, source).getOrThrow();
         BiomeSource before = BiomeSource.CODEC.parse(ops, without).getOrThrow();
-        NoiseGeneratorSettings settings = access.registryOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
-        KnuffeldalStadjeStructure town = (KnuffeldalStadjeStructure) access.registryOrThrow(Registries.STRUCTURE).get(KnuffeldalFeature.STADJE);
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        KnuffeldalStadjeStructure town = (KnuffeldalStadjeStructure) access.lookupOrThrow(Registries.STRUCTURE).get(KnuffeldalFeature.STADJE);
         Map<String, Integer> now = new HashMap<>(), then = new HashMap<>();
         int samples = 0, dalen = 0, dalenMetStadje = 0, groteDalen = 0, groteMetStadje = 0, stadjes = 0, kruimels = 0, middel = 0;
         final int step = 32, half = 3200, n = 2 * half / step;
@@ -551,9 +548,9 @@ public class KnuffeldalGameTests {
                 for (int j = 0; j < n; j++) {
                     int x = -half + i * step, z = -half + j * step;
                     int qx = QuartPos.fromBlock(x), qy = QuartPos.fromBlock(100), qz = QuartPos.fromBlock(z);
-                    String b = with.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().location().getPath();
+                    String b = with.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().identifier().getPath();
                     now.merge(b, 1, Integer::sum);
-                    then.merge(before.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().location().getPath(), 1, Integer::sum);
+                    then.merge(before.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().identifier().getPath(), 1, Integer::sum);
                     dal[i][j] = b.equals("knuffeldal");
                     samples++;
                 }
@@ -567,7 +564,7 @@ public class KnuffeldalGameTests {
                     if (town.plek(seed, noise, cx, cz)) {
                         GuhbubbelStructure.Peak peak = GuhbubbelStructure.peak(seed, noise, size, cx, cz);
                         String b = with.getNoiseBiome(QuartPos.fromBlock(peak.x()), QuartPos.fromBlock(100), QuartPos.fromBlock(peak.z()), sampler)
-                                .unwrapKey().orElseThrow().location().getPath();
+                                .unwrapKey().orElseThrow().identifier().getPath();
                         if (b.equals("knuffeldal")) {
                             found.add(peak);
                         }

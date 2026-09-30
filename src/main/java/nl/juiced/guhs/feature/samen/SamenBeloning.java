@@ -98,19 +98,19 @@ public final class SamenBeloning {
         if (!isBandEmote(emote)) {
             return true;
         }
-        int bits = player.level().isClientSide ? Client.bits : GuhQuests.saved(player).getInt(EMOTES);
+        int bits = player.level().isClientSide() ? Client.bits : GuhQuests.saved(player).getIntOr(EMOTES, 0);
         return (bits & (1 << emote.ordinal())) != 0;
     }
 
     /** The unlocked hartjes emotes of this player (bits, server). */
     public static int bits(Player player) {
-        return GuhQuests.saved(player).getInt(EMOTES);
+        return GuhQuests.saved(player).getIntOr(EMOTES, 0);
     }
 
     /** Unlocks a hartjes emote; true when it was new (saved, synced, a message). */
     public static boolean ontgrendelEmote(ServerPlayer player, Emote emote) {
         CompoundTag saved = GuhQuests.saved(player);
-        int bits = saved.getInt(EMOTES);
+        int bits = saved.getIntOr(EMOTES, 0);
         int bit = 1 << emote.ordinal();
         if ((bits & bit) != 0) {
             return false;
@@ -125,8 +125,8 @@ public final class SamenBeloning {
     /** "Nog op slot": the owner asked for a hartjes emote they haven't unlocked yet. */
     public static void opSlot(ServerPlayer player, Emote emote) {
         BandNiveau n = niveau(emote);
-        player.displayClientMessage(Component.translatable("gui.guhs.samen.emote_op_slot", emote.displayName(),
-                n == null ? Component.empty() : n.naam()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.samen.emote_op_slot", emote.displayName(),
+                n == null ? Component.empty() : n.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     /** (Tests / admin) forget the unlocked hartjes emotes. */
@@ -186,7 +186,7 @@ public final class SamenBeloning {
     static void inhalen(ServerPlayer player) {
         BandNiveau hoogste = BandNiveau.GEEN;
         for (BandNiveau n : BandNiveau.values()) {
-            if (n != BandNiveau.GEEN && Band.aantal(player.server, player.getUUID(), n) > 0) {
+            if (n != BandNiveau.GEEN && Band.aantal(player.level().getServer(), player.getUUID(), n) > 0) {
                 hoogste = n;
             }
         }

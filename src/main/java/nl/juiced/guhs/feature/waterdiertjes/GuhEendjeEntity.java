@@ -23,7 +23,7 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -48,14 +48,15 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.tuintjes.TuintjesFeature;
 import nl.juiced.guhs.registry.ModItems;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * Het guh-eendje (3.0, DESIGN_30 §6): a round, cream-white mama duck with a guh face and round guh ears, paddling on the
  * ponds and the Guhzee with a <b>rijtje kuikentjes</b> behind her: fluffy yellow ducklings (her babies) that each follow the
@@ -96,8 +97,8 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
      * On the water surface of a pond, a lake edge or the coast (land within a few blocks), or on the grass right next to
      * the water; not too many families together. Spawn eggs and commands: anywhere.
      */
-    public static boolean checkSpawn(EntityType<GuhEendjeEntity> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        if (spawnType != MobSpawnType.NATURAL && spawnType != MobSpawnType.CHUNK_GENERATION) {
+    public static boolean checkSpawn(EntityType<GuhEendjeEntity> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
+        if (spawnType != EntitySpawnReason.NATURAL && spawnType != EntitySpawnReason.CHUNK_GENERATION) {
             return true;
         }
         if (!level.getBlockState(pos).isAir() && !level.getFluidState(pos).is(FluidTags.WATER)) {
@@ -122,17 +123,17 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData data) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData data) {
         SpawnGroupData out = super.finalizeSpawn(level, difficulty, spawnType, data);
-        if (!isBaby() && (spawnType == MobSpawnType.NATURAL || spawnType == MobSpawnType.CHUNK_GENERATION)) {
+        if (!isBaby() && (spawnType == EntitySpawnReason.NATURAL || spawnType == EntitySpawnReason.CHUNK_GENERATION)) {
             int n = MIN_KUIKENS + level.getRandom().nextInt(MAX_KUIKENS - MIN_KUIKENS + 1);
             for (int i = 0; i < n; i++) {
-                GuhEendjeEntity kuiken = WaterdiertjesFeature.GUH_EENDJE.get().create(level.getLevel());
+                GuhEendjeEntity kuiken = WaterdiertjesFeature.GUH_EENDJE.get().create(level.getLevel(), EntitySpawnReason.TRIGGERED);
                 if (kuiken == null) {
                     continue;
                 }
                 Vec3 achter = Vec3.directionFromRotation(0, getYRot()).scale(-(i + 1) * AFSTAND);
-                kuiken.moveTo(getX() + achter.x, getY(), getZ() + achter.z, getYRot(), 0);
+                kuiken.snapTo(getX() + achter.x, getY(), getZ() + achter.z, getYRot(), 0);
                 kuiken.setAge(KUIKEN_TIJD);
                 kuiken.mama = getUUID();
                 level.addFreshEntity(kuiken);
@@ -143,8 +144,8 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
 
     /** Hatches a duckling that follows this mama (tests, breeding). */
     public GuhEendjeEntity kuiken(ServerLevel level, Vec3 at) {
-        GuhEendjeEntity kuiken = WaterdiertjesFeature.GUH_EENDJE.get().create(level);
-        kuiken.moveTo(at.x, at.y, at.z, getYRot(), 0);
+        GuhEendjeEntity kuiken = WaterdiertjesFeature.GUH_EENDJE.get().create(level, EntitySpawnReason.TRIGGERED);
+        kuiken.snapTo(at.x, at.y, at.z, getYRot(), 0);
         kuiken.setAge(KUIKEN_TIJD);
         kuiken.mama = getUUID();
         level.addFreshEntity(kuiken);
@@ -281,7 +282,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         InteractionResult r = super.mobInteract(player, hand);
-        if (r.consumesAction() && !level().isClientSide) {
+        if (r.consumesAction() && !level().isClientSide()) {
             triggerAnim("actie", "eet");
         }
         return r;
@@ -290,7 +291,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
-        GuhEendjeEntity kuiken = WaterdiertjesFeature.GUH_EENDJE.get().create(level);
+        GuhEendjeEntity kuiken = WaterdiertjesFeature.GUH_EENDJE.get().create(level, EntitySpawnReason.TRIGGERED);
         if (kuiken != null) {
             kuiken.mama = getUUID();
         }
@@ -321,14 +322,14 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         if (mama != null) {
-            tag.putUUID("Mama", mama);
+            tag.store("Mama", UUIDUtil.CODEC, mama);
         }
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        mama = tag.hasUUID("Mama") ? tag.getUUID("Mama") : null;
+        mama = tag.read("Mama", UUIDUtil.CODEC).isPresent() ? tag.read("Mama", UUIDUtil.CODEC).orElseThrow() : null;
     }
 
     // --- sounds --------------------------------------------------------------------------------------------------------------
@@ -346,7 +347,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
     @Override
     public void playAmbientSound() {
         super.playAmbientSound();
-        if (!level().isClientSide && !isBaby()) {
+        if (!level().isClientSide() && !isBaby()) {
             triggerAnim("actie", "kwak");
         }
     }

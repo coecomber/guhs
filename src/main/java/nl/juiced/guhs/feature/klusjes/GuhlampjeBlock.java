@@ -76,10 +76,10 @@ public class GuhlampjeBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             zet(level, pos, !state.getValue(LIT));
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Switches any lamp with a LIT property (a guhlampje, a candle...): true when it changed. */

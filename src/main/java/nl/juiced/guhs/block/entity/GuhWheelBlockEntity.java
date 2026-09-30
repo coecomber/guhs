@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.registry.ModBlockEntities;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * Holds the guh that's running in the wheel (stored as entity data, like bees in a beehive),
  * plus client-side animation state for the spinning wheel.
@@ -41,7 +42,7 @@ public class GuhWheelBlockEntity extends BlockEntity {
 
     @Nullable
     public UUID getGuhOwner() {
-        return guhData != null && guhData.hasUUID("Owner") ? guhData.getUUID("Owner") : null;
+        return guhData != null && guhData.read("Owner", UUIDUtil.CODEC).isPresent() ? guhData.read("Owner", UUIDUtil.CODEC).orElseThrow() : null;
     }
 
     /** Puts a (picked-up) guh into the wheel. */
@@ -103,7 +104,7 @@ public class GuhWheelBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        CompoundTag newData = tag.contains("Guh") ? tag.getCompound("Guh") : null;
+        CompoundTag newData = tag.contains("Guh") ? tag.getCompoundOrEmpty("Guh") : null;
         if (newData == null || !newData.equals(guhData)) {
             displayGuh = null;
         }

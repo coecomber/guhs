@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.band.client;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +20,7 @@ import nl.juiced.guhs.registry.ModEntities;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * A little client-side stand-in of one of your guhs, built from its looks snapshot (variant, clothes, hair, baby), for
  * the Guhdex tab "Mijn guhs" and the huisje screen: the real guh is usually far away (or an item in a chest).
@@ -35,26 +36,26 @@ public final class GuhPop {
         if (mc.level == null) {
             return null;
         }
-        GuhEntity guh = ModEntities.GUH.get().create(mc.level);
+        GuhEntity guh = ModEntities.GUH.get().create(mc.level, EntitySpawnReason.TRIGGERED);
         if (guh == null) {
             return null;
         }
-        guh.setVariant(GuhVariant.byId(looks.getString("Variant")));
-        GuhPersonality aard = GuhPersonality.byId(looks.getString("Personality"));
+        guh.setVariant(GuhVariant.byId(looks.getStringOr("Variant", "")));
+        GuhPersonality aard = GuhPersonality.byId(looks.getStringOr("Personality", ""));
         if (aard != null) {
             guh.setPersonality(aard);
         }
-        CompoundTag clothes = looks.getCompound("Clothes");
+        CompoundTag clothes = looks.getCompoundOrEmpty("Clothes");
         for (GuhClothes.Slot slot : GuhClothes.Slot.values()) {
-            GuhClothes c = GuhClothes.byId(clothes.getString(slot.name()));
+            GuhClothes c = GuhClothes.byId(clothes.getStringOr(slot.name(), ""));
             if (c != null) {
                 guh.wear(c);
             }
         }
         if (looks.contains("Haar")) {
-            guh.setHaarkleur(looks.getInt("Haar"));
+            guh.setHaarkleur(looks.getIntOr("Haar", 0));
         }
-        if (looks.getBoolean("Baby")) {
+        if (looks.getBooleanOr("Baby", false)) {
             guh.setAge(-24000);
         }
         guh.hideName = true;
@@ -68,7 +69,7 @@ public final class GuhPop {
         if (mc.level == null) {
             return null;
         }
-        Entity e = BuiltInRegistries.ENTITY_TYPE.getOptional(Guhs.id(soort)).map(t -> t.create(mc.level)).orElse(null);
+        Entity e = BuiltInRegistries.ENTITY_TYPE.getOptional(Guhs.id(soort)).map(t -> t.create(mc.level, EntitySpawnReason.TRIGGERED)).orElse(null);
         return e instanceof LivingEntity le ? le : null;
     }
 
@@ -76,7 +77,7 @@ public final class GuhPop {
      * Draws the stand-in inside the box, turned by yaw (dragging) and tilted by pitch, sized by the model (a guh with its
      * tail, paws and a hat is about 2.2 x 1.6 blocks at scale 1).
      */
-    public static void teken(GuiGraphics g, int x1, int y1, int x2, int y2, LivingEntity e, float yaw, float pitch) {
+    public static void teken(GuiGraphicsExtractor g, int x1, int y1, int x2, int y2, LivingEntity e, float yaw, float pitch) {
         g.enableScissor(x1, y1, x2, y2);
         float cx = (x1 + x2) / 2f, cy = (y1 + y2) / 2f + (y2 - y1) * 0.08f;
         boolean guh = e instanceof GuhEntity;

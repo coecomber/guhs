@@ -20,18 +20,18 @@ public final class KermisRides {
     public static void lap(ServerPlayer player, GuhSleeEntity sled) {
         give(player, new ItemStack(ModItems.KERMISBON.get()));
         CompoundTag data = GuhQuests.saved(player);
-        if (!data.getBoolean(FIRST)) {
+        if (!data.getBooleanOr(FIRST, false)) {
             data.putBoolean(FIRST, true);
             give(player, new ItemStack(ModItems.GUH_BALLON.get(), 3));
             give(player, new ItemStack(ModItems.KAASHONING.get(), 4));
             give(player, new ItemStack(ModItems.GUH_KRISTAL.get(), 8));
             give(player, new ItemStack(ModItems.KERMISBON.get(), 2));
             player.sendSystemMessage(Component.translatable("quest.guhs.kermis.first").withStyle(ChatFormatting.GOLD));
-            player.serverLevel().playSound(null, sled.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 1.4f);
+            player.level().playSound(null, sled.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 1.4f);
         } else {
-            player.serverLevel().playSound(null, sled.blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 0.9f, 1.5f);
+            player.level().playSound(null, sled.blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 0.9f, 1.5f);
         }
-        player.displayClientMessage(Component.translatable("quest.guhs.kermis.lap").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.kermis.lap").withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     private static void give(ServerPlayer player, ItemStack stack) {

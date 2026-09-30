@@ -41,7 +41,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.ItemFishedEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.allay.Allay;
@@ -233,8 +233,8 @@ public final class VisWedstrijd {
             data.put("Top_" + n.id(), board(npc, n.board(BOARD_POINTS)));
             data.put("Zwaarste_" + n.id(), board(npc, n.board(BOARD_HEAVIEST)));
         }
-        data.putInt("Heaviest", saved.getInt(HEAVIEST));
-        data.putString("HeaviestSoort", saved.getString(HEAVIEST_SOORT));
+        data.putInt("Heaviest", saved.getIntOr(HEAVIEST, 0));
+        data.putString("HeaviestSoort", saved.getStringOr(HEAVIEST_SOORT, ""));
         data.putInt("Games", games(player));
         data.put("Top", board(npc, BOARD_POINTS));
         data.put("Zwaarste", board(npc, BOARD_HEAVIEST));
@@ -296,7 +296,7 @@ public final class VisWedstrijd {
             together = true;
             tell(npc, Component.translatable("quest.guhs.vissen.joined", player.getDisplayName()).withStyle(ChatFormatting.AQUA));
         }
-        scores.put(player.getUUID(), new Score(player.getGameProfile().getName()));
+        scores.put(player.getUUID(), new Score(player.getGameProfile().name()));
         if (niveau != Niveau.MEDIUM) {
             player.sendSystemMessage(Component.translatable("gui.guhs.klassiekers.vissen.niveau", Klassiekers.naam(niveau)).withStyle(ChatFormatting.AQUA));
         }
@@ -361,7 +361,7 @@ public final class VisWedstrijd {
                 }
                 if (now > startTick && left <= 20 * 10 && left > 0) {             // the last ten seconds tick away
                     sound(p, SoundEvents.NOTE_BLOCK_HAT.value(), 0.8f, 1.6f);
-                    p.displayClientMessage(Component.translatable("gui.guhs.vissen.last_seconds", left / 20).withStyle(ChatFormatting.GOLD), true);
+                    p.sendOverlayMessage(Component.translatable("gui.guhs.vissen.last_seconds", left / 20).withStyle(ChatFormatting.GOLD));
                 }
             }
             if (endIfEmpty()) {
@@ -426,7 +426,7 @@ public final class VisWedstrijd {
         if (s == null) {
             return;
         }
-        ServerLevel world = player.serverLevel();
+        ServerLevel world = player.level();
         CompoundTag saved = GuhQuests.saved(player);
         String bestKey = Klassiekers.sleutel(BEST, niveau);
         int oldBest = best(player, niveau);
@@ -461,7 +461,7 @@ public final class VisWedstrijd {
             player.sendSystemMessage((complete || s.points <= 0 ? Component.translatable("quest.guhs.vissen.no_bonnen")
                     : Component.translatable("quest.guhs.vissen.no_bonnen_early", POINTS_PER_BON)).withStyle(ChatFormatting.GRAY));
         }
-        if (!saved.getBoolean(FIRST)) {                                         // the very first contest: a present
+        if (!saved.getBooleanOr(FIRST, false)) {                                         // the very first contest: a present
             saved.putBoolean(FIRST, true);
             give(player, new ItemStack(VissenFeature.VISBON.get(), FIRST_BONNEN));
             give(player, new ItemStack(ModItems.GEBAKKEN_GUH_VIS.get(), 4));
@@ -505,7 +505,7 @@ public final class VisWedstrijd {
         UUID npc = ANGLERS.remove(player.getUUID());
         VisWedstrijd contest = npc == null ? null : CONTESTS.get(npc);
         if (contest != null) {
-            contest.drop(player.serverLevel(), player.getUUID());
+            contest.drop(player.level(), player.getUUID());
             contest.endIfEmpty();
         }
         takeRods(player);
@@ -532,17 +532,17 @@ public final class VisWedstrijd {
         if (contest == null) {
             return;
         }
-        ServerLevel world = player.serverLevel();
+        ServerLevel world = player.level();
         if (!(world.getEntity(contest.npcId) instanceof GuhNpcEntity npc) || !inPond(npc, event.getHookEntity().position())) {
             if (player.getMainHandItem().getItem() instanceof GuhvisHengel || player.getOffhandItem().getItem() instanceof GuhvisHengel) {
                 event.setCanceled(true);          // the loaned rod only catches in the pond
-                player.displayClientMessage(Component.translatable("gui.guhs.vissen.wrong_water").withStyle(ChatFormatting.AQUA), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.vissen.wrong_water").withStyle(ChatFormatting.AQUA));
             }
             return;
         }
         event.setCanceled(true);
         if (contest.isCountingDown(world.getGameTime())) {
-            player.displayClientMessage(Component.translatable("gui.guhs.vissen.too_early").withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.vissen.too_early").withStyle(ChatFormatting.AQUA));
             return;
         }
         VisSoort soort = VisSoort.random(world.getRandom());
@@ -561,14 +561,14 @@ public final class VisWedstrijd {
         }
         if (roll < ontsnapKans(soort, grams, niveau)) {
             s.escaped++;
-            ServerLevel world = player.serverLevel();
+            ServerLevel world = player.level();
             world.sendParticles(ParticleTypes.SPLASH, from.x, from.y + 0.2, from.z, 30, 0.5, 0.1, 0.5, 0.2);
             world.sendParticles(ParticleTypes.BUBBLE_POP, from.x, from.y + 0.1, from.z, 10, 0.4, 0.1, 0.4, 0.02);
             world.playSound(null, from.x, from.y, from.z, SoundEvents.FISH_SWIM, SoundSource.PLAYERS, 1f, 0.7f);
             world.playSound(null, from.x, from.y, from.z, SoundEvents.GENERIC_SPLASH, SoundSource.PLAYERS, 0.8f, 1.3f);
             Component name = Component.translatable("item.guhs." + soort.id()).withStyle(soort.colour);
-            player.displayClientMessage(Component.translatable("gui.guhs.klassiekers.vissen.ontsnapt", name, VisSoort.kg(grams))
-                    .withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.klassiekers.vissen.ontsnapt", name, VisSoort.kg(grams))
+                    .withStyle(ChatFormatting.AQUA));
             return null;
         }
         return land(npc, player, soort, grams, from);
@@ -582,7 +582,7 @@ public final class VisWedstrijd {
             return null;
         }
         nl.juiced.guhs.feature.samen.SamenSpel.uitslag(player, "vissen", !soort.isBad()); // samen
-        ServerLevel world = player.serverLevel();
+        ServerLevel world = player.level();
         int points = soort.points(grams);
         s.points += points;
         s.fish++;
@@ -593,7 +593,7 @@ public final class VisWedstrijd {
         ItemStack caught = new ItemStack(VissenFeature.vis(soort));
         if (soort == VisSoort.GOUDEN_GUHVIS) {                                  // a collector's piece: who, how heavy, which one
             CompoundTag saved = GuhQuests.saved(player);
-            int nr = saved.getInt(GOLDEN) + 1;
+            int nr = saved.getIntOr(GOLDEN, 0) + 1;
             saved.putInt(GOLDEN, nr);
             VisItem.stamp(caught, s.name, grams, nr);
         }
@@ -610,8 +610,8 @@ public final class VisWedstrijd {
         world.sendParticles(ParticleTypes.BUBBLE_POP, from.x, from.y + 0.1, from.z, 8, 0.3, 0.1, 0.3, 0.02);
 
         Component name = Component.translatable("item.guhs." + soort.id()).withStyle(soort.colour);
-        player.displayClientMessage(Component.translatable(soort.isBad() ? "gui.guhs.vissen.caught_bad" : "gui.guhs.vissen.caught",
-                name, VisSoort.kg(grams), (points >= 0 ? "+" : "") + points, s.points).withStyle(ChatFormatting.WHITE), true);
+        player.sendOverlayMessage(Component.translatable(soort.isBad() ? "gui.guhs.vissen.caught_bad" : "gui.guhs.vissen.caught",
+                name, VisSoort.kg(grams), (points >= 0 ? "+" : "") + points, s.points).withStyle(ChatFormatting.WHITE));
         switch (soort) {
             case MIKA_MEERVAL -> {
                 sound(player, ModSounds.MIKA_AMBIENT.get(), 1f, 1.2f);
@@ -639,13 +639,13 @@ public final class VisWedstrijd {
         }
         // the Visboek: every species once
         CompoundTag saved = GuhQuests.saved(player);
-        int mask = saved.getInt(SPECIES) | 1 << soort.ordinal();
+        int mask = saved.getIntOr(SPECIES, 0) | 1 << soort.ordinal();
         saved.putInt(SPECIES, mask);
         if (mask == (1 << VisSoort.values().length) - 1) {
             GuhAdvancements.grant(player, "vissen_alle_soorten");
         }
         // your heaviest fish ever, and the pond's
-        if (!soort.isBad() && grams > saved.getInt(HEAVIEST)) {
+        if (!soort.isBad() && grams > saved.getIntOr(HEAVIEST, 0)) {
             boolean first = !saved.contains(HEAVIEST);
             saved.putInt(HEAVIEST, grams);
             saved.putString(HEAVIEST_SOORT, soort.id());
@@ -673,25 +673,25 @@ public final class VisWedstrijd {
 
     /** Your best contest total on medium (0 = none yet). */
     public static int best(ServerPlayer player) {
-        return GuhQuests.saved(player).getInt(BEST);
+        return GuhQuests.saved(player).getIntOr(BEST, 0);
     }
 
     /** Your best contest total on this level (medium = the old record; 0 = none yet). */
     public static int best(ServerPlayer player, Niveau niveau) {
-        return GuhQuests.saved(player).getInt(Klassiekers.sleutel(BEST, niveau));
+        return GuhQuests.saved(player).getIntOr(Klassiekers.sleutel(BEST, niveau), 0);
     }
 
     public static int heaviest(ServerPlayer player) {
-        return GuhQuests.saved(player).getInt(HEAVIEST);
+        return GuhQuests.saved(player).getIntOr(HEAVIEST, 0);
     }
 
     /** How many Gouden Guhvissen you ever caught. */
     public static int golden(ServerPlayer player) {
-        return GuhQuests.saved(player).getInt(GOLDEN);
+        return GuhQuests.saved(player).getIntOr(GOLDEN, 0);
     }
 
     public static int games(ServerPlayer player) {
-        return GuhQuests.saved(player).getInt(GAMES);
+        return GuhQuests.saved(player).getIntOr(GAMES, 0);
     }
 
     public static int bonnen(int points) {
@@ -706,7 +706,7 @@ public final class VisWedstrijd {
     /** A top-3 board for the Visguh's screen: a list of {Name, Points}. */
     private static ListTag board(GuhNpcEntity npc, String board) {
         ListTag list = new ListTag();
-        for (Scorebord.Entry e : Scorebord.top(npc.getServer(), board)) {
+        for (Scorebord.Entry e : Scorebord.top(npc.level().getServer(), board)) {
             CompoundTag t = new CompoundTag();
             t.putString("Name", e.name());
             t.putInt("Points", e.score());
@@ -723,24 +723,24 @@ public final class VisWedstrijd {
     public static void showScores(GuhNpcEntity npc) {
         ServerLevel world = (ServerLevel) npc.level();
         CompoundTag data = npc.roleData;
-        if (!data.getBoolean("Board")) {
+        if (!data.getBooleanOr("Board", false)) {
             BlockPos found = recordSign(world, npc.blockPosition());
             if (found != null) {
                 world.getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class, npc.getBoundingBox().inflate(2, 3, 2),
-                        d -> d.getTags().contains(Scorebord.TAG)).forEach(net.minecraft.world.entity.Entity::discard);   // (the one above the Visguh goes)
+                        d -> d.entityTags().contains(Scorebord.TAG)).forEach(net.minecraft.world.entity.Entity::discard);   // (the one above the Visguh goes)
                 data.putBoolean("Board", true);
                 data.putInt("BoardX", found.getX());
                 data.putInt("BoardY", found.getY());
                 data.putInt("BoardZ", found.getZ());
             }
         }
-        Vec3 pos = data.getBoolean("Board")
-                ? new Vec3(data.getInt("BoardX") + 0.5, data.getInt("BoardY") + 2.7, data.getInt("BoardZ") + 0.5)
+        Vec3 pos = data.getBooleanOr("Board", false)
+                ? new Vec3(data.getIntOr("BoardX", 0) + 0.5, data.getIntOr("BoardY", 0) + 2.7, data.getIntOr("BoardZ", 0) + 0.5)
                 : npc.position().add(0, 2.4, 0);
         // two boards side by side (2.9: every level has its own top 3): the most points, and beside it the heaviest fish
         net.minecraft.core.Direction side = net.minecraft.core.Direction.EAST;
-        if (data.getBoolean("Board")) {
-            var state = world.getBlockState(new BlockPos(data.getInt("BoardX"), data.getInt("BoardY"), data.getInt("BoardZ")));
+        if (data.getBooleanOr("Board", false)) {
+            var state = world.getBlockState(new BlockPos(data.getIntOr("BoardX", 0), data.getIntOr("BoardY", 0), data.getIntOr("BoardZ", 0)));
             if (state.hasProperty(net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING)) {
                 side = state.getValue(net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING).getClockWise();
             }
@@ -786,13 +786,13 @@ public final class VisWedstrijd {
         ItemStack rod = new ItemStack(VissenFeature.GUHVIS_HENGEL.get());
         Inventory inv = player.getInventory();
         if (inv.getSelected().isEmpty()) {
-            inv.setItem(inv.selected, rod);
+            inv.setItem(inv.getSelectedSlot(), rod);
             return true;
         }
         for (int i = 0; i < Inventory.getSelectionSize(); i++) {         // an empty hotbar slot becomes the selected one
             if (inv.getItem(i).isEmpty()) {
                 inv.setItem(i, rod);
-                inv.selected = i;
+                inv.setSelectedSlot(i);
                 if (player.connection != null) {
                     player.connection.send(new net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket(i));
                 }
@@ -802,7 +802,7 @@ public final class VisWedstrijd {
         int free = inv.getFreeSlot();                                    // hotbar full: your own item moves to the backpack
         if (free >= 0) {
             inv.setItem(free, inv.getSelected());
-            inv.setItem(inv.selected, rod);
+            inv.setItem(inv.getSelectedSlot(), rod);
             return true;
         }
         if (player.getOffhandItem().isEmpty()) {
@@ -852,7 +852,7 @@ public final class VisWedstrijd {
     /** Anglers can't get hurt (falling off the pier, a stray arrow...). */
     /** Is this angler at the pond (only there can't they get hurt)? */
     static boolean atThePond(ServerPlayer player) {
-        ServerLevel world = player.serverLevel();
+        ServerLevel world = player.level();
         if (world.dimension() == ModDimensions.GUHMENSION) {
             return VissenProtection.inVijver(world, player.blockPosition());
         }
@@ -892,7 +892,7 @@ public final class VisWedstrijd {
         }
         if (took && isFishing(player)) {
             giveRod(player);
-            player.displayClientMessage(Component.translatable("gui.guhs.vissen.no_drop").withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.vissen.no_drop").withStyle(ChatFormatting.AQUA));
         }
     }
 
@@ -956,7 +956,7 @@ public final class VisWedstrijd {
             return;
         }
         VisWedstrijd contest = CONTESTS.get(npc);
-        if (contest == null || player.serverLevel().getGameTime() - contest.lastTick > 60) {
+        if (contest == null || player.level().getGameTime() - contest.lastTick > 60) {
             player.sendSystemMessage(Component.translatable("quest.guhs.vissen.stopped").withStyle(ChatFormatting.AQUA));
             leave(player);
         }
@@ -1011,7 +1011,7 @@ public final class VisWedstrijd {
     }
 
     private static void sound(ServerPlayer player, SoundEvent sound, float volume, float pitch) {
-        player.serverLevel().playSound(null, player.getX(), player.getY(), player.getZ(), sound, SoundSource.PLAYERS, volume, pitch);
+        player.level().playSound(null, player.getX(), player.getY(), player.getZ(), sound, SoundSource.PLAYERS, volume, pitch);
     }
 
     private static void give(ServerPlayer player, ItemStack stack) {

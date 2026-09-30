@@ -25,7 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -50,7 +50,7 @@ public final class Buiten {
 
     /** Grants a shown advancement of the Knuffeldal tab (guhs:knuffeldal/&lt;name&gt;) that the game can't detect itself. */
     public static void toon(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("knuffeldal/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("knuffeldal/" + name));
         if (holder == null) {
             return;
         }
@@ -62,7 +62,7 @@ public final class Buiten {
 
     /** Has the player got this shown advancement of the Knuffeldal tab? */
     public static boolean heeft(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("knuffeldal/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("knuffeldal/" + name));
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -140,7 +140,7 @@ public final class Buiten {
                     return true;
                 }
             }
-            Structure s = server.registryAccess().registryOrThrow(Registries.STRUCTURE).get(structuur);
+            Structure s = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(structuur);
             return s != null && server.structureManager().getStructureWithPieceAt(pos, s).isValid();
         }
 
@@ -149,7 +149,7 @@ public final class Buiten {
                 return false;
             }
             if (!quiet) {
-                player.displayClientMessage(Component.translatable(melding).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable(melding).withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             return true;
         }
@@ -169,7 +169,7 @@ public final class Buiten {
 
         private void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
             ItemStack stack = event.getItemStack();
-            if (event.getLevel().isClientSide || stack.isEmpty()) {
+            if (event.getLevel().isClientSide() || stack.isEmpty()) {
                 return;
             }
             boolean building = stack.getItem() instanceof BlockItem || stack.getItem() instanceof BucketItem || stack.getItem() instanceof ShovelItem

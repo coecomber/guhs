@@ -12,6 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.saveddata.SavedData;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * The golden ghosts (2.9): per track and level (by its whole-race board) the fastest race of the world, with its
  * recording. When someone else races there, that race drives along in gold (unless they switched it off:
@@ -36,12 +37,12 @@ public final class RaceGeesten extends SavedData {
 
     /** A finished race: kept as the golden ghost when it's the fastest ever on that board. Returns true if so. */
     public static boolean offer(ServerPlayer player, String board, int ticks, int[] samples) {
-        RaceGeesten data = get(player.server);
+        RaceGeesten data = get(player.level().getServer());
         Geest old = data.geesten.get(board);
         if (samples.length < 6 || old != null && old.ticks() <= ticks) {
             return false;
         }
-        data.geesten.put(board, new Geest(player.getUUID(), player.getGameProfile().getName(), ticks, samples));
+        data.geesten.put(board, new Geest(player.getUUID(), player.getGameProfile().name(), ticks, samples));
         data.setDirty();
         return true;
     }
@@ -59,7 +60,7 @@ public final class RaceGeesten extends SavedData {
         CompoundTag all = new CompoundTag();
         geesten.forEach((board, g) -> {
             CompoundTag t = new CompoundTag();
-            t.putUUID("Player", g.player());
+            t.store("Player", UUIDUtil.CODEC, g.player());
             t.putString("Name", g.name());
             t.putInt("Ticks", g.ticks());
             t.putIntArray("Samples", g.samples());
@@ -71,10 +72,10 @@ public final class RaceGeesten extends SavedData {
 
     static RaceGeesten load(CompoundTag tag, HolderLookup.Provider registries) {
         RaceGeesten data = new RaceGeesten();
-        CompoundTag all = tag.getCompound("Geesten");
-        for (String board : all.getAllKeys()) {
-            CompoundTag t = all.getCompound(board);
-            data.geesten.put(board, new Geest(t.getUUID("Player"), t.getString("Name"), t.getInt("Ticks"), t.getIntArray("Samples")));
+        CompoundTag all = tag.getCompoundOrEmpty("Geesten");
+        for (String board : all.keySet()) {
+            CompoundTag t = all.getCompoundOrEmpty(board);
+            data.geesten.put(board, new Geest(t.read("Player", UUIDUtil.CODEC).orElseThrow(), t.getStringOr("Name", ""), t.getIntOr("Ticks", 0), t.getIntArray("Samples").orElse(new int[0])));
         }
         return data;
     }

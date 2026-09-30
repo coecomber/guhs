@@ -51,8 +51,8 @@ public class SpeelGoal extends Goal {
         long nu = level.getGameTime();
         var data = guh.getPersistentData();
         // invited: its player kicked the ball
-        if (data.getLong(Spelen.BAL_TOT) > nu) {
-            Entity e = level.getEntity(data.getInt(Spelen.BAL));
+        if (data.getLongOr(Spelen.BAL_TOT, 0L) > nu) {
+            Entity e = level.getEntity(data.getIntOr(Spelen.BAL, 0));
             data.remove(Spelen.BAL_TOT);
             if (e instanceof KnabbelbalEntity bal && bal.distanceToSqr(guh) < 20 * 20) {
                 taak = new KnabbelbalSpel(guh, level, bal);
@@ -61,7 +61,7 @@ public class SpeelGoal extends Goal {
         }
         boolean test = TEST_ALTIJD.contains(guh.getUUID());
         if (!test) {
-            if ((guh.tickCount + guh.getId()) % 40 != 0 || data.getLong(RUST) > nu) {
+            if ((guh.tickCount + guh.getId()) % 40 != 0 || data.getLongOr(RUST, 0L) > nu) {
                 return false;
             }
             Player p = level.getNearestPlayer(guh, SPELER);

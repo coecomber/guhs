@@ -41,13 +41,13 @@ import nl.juiced.guhs.feature.piep.PiepDierItem;
 import nl.juiced.guhs.feature.piep.PiepInstelling;
 import nl.juiced.guhs.feature.piep.PiepMaatje;
 import nl.juiced.guhs.feature.piep.PiepMenu;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * A little land critter of the Guhmensie (3.0, DESIGN_30 §6): the {@link PluisegeltjeEntity pluisegeltje}, the
@@ -118,7 +118,7 @@ public abstract class Landdiertje extends TamableAnimal implements GeoEntity, Pi
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        setUitVlaggen(tag.getInt("PiepUit"));
+        setUitVlaggen(tag.getIntOr("PiepUit", 0));
     }
 
     // --- goals -----------------------------------------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ public abstract class Landdiertje extends TamableAnimal implements GeoEntity, Pi
         if (!voer && !leeg) {
             return super.mobInteract(player, hand);
         }
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer sp = (ServerPlayer) player;
@@ -189,7 +189,7 @@ public abstract class Landdiertje extends TamableAnimal implements GeoEntity, Pi
         if (!isTame()) {
             Component waarom = nietNu();
             if (waarom != null) {
-                player.displayClientMessage(waarom.copy().withStyle(ChatFormatting.GRAY), true);
+                player.sendOverlayMessage(waarom.copy().withStyle(ChatFormatting.GRAY));
                 return InteractionResult.SUCCESS;
             }
             stack.consume(1, player);
@@ -243,8 +243,8 @@ public abstract class Landdiertje extends TamableAnimal implements GeoEntity, Pi
         setTarget(null);
         level().broadcastEntityEvent(this, (byte) 7);
         triggerAnim("actie", "blij");
-        player.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.getemd." + soort(), getDisplayName())
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.getemd." + soort(), getDisplayName())
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     @Override
@@ -282,7 +282,7 @@ public abstract class Landdiertje extends TamableAnimal implements GeoEntity, Pi
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide && isTame() && level().getGameTime() >= volgendeHuisjeCheck) {
+        if (!level().isClientSide() && isTame() && level().getGameTime() >= volgendeHuisjeCheck) {
             volgendeHuisjeCheck = level().getGameTime() + 100 + random.nextInt(40);
             if (Huisjes.isBewoner(this) && getOwner() instanceof ServerPlayer owner) {
                 GidsFeature.grant(owner, "diertjes/landdiertjes_huisje");
@@ -439,7 +439,7 @@ public abstract class Landdiertje extends TamableAnimal implements GeoEntity, Pi
     // --- GeckoLib --------------------------------------------------------------------------------------------------------------------
 
     /** The looping animation right now (override for rolled up / in its shell). */
-    protected RawAnimation beweging(software.bernie.geckolib.animation.AnimationState<Landdiertje> state) {
+    protected RawAnimation beweging(com.geckolib.animation.state.AnimationTest<Landdiertje> state) {
         if (opSchouder || isInSittingPose()) {
             return ZIT;
         }

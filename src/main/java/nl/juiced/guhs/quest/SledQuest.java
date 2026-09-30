@@ -18,7 +18,7 @@ import nl.juiced.guhs.world.GuhWorldData;
  */
 public final class SledQuest {
     public static void talk(GuhNpcEntity npc, ServerPlayer player) {
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.PlayerData p = data.player(player.getUUID());
         if (p.sledQuest >= 2) {
             GuhQuests.say(player, npc, "quest.guhs.sled.done");

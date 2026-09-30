@@ -23,6 +23,8 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.NpcRole;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * Guh events in the Guhmension (evenementen): now and then (about every 2-3 Minecraft days of your time there) something
  * happens around you outdoors, with a chat announcement and a boss bar with the time left: a {@link Kaasregen}, the
@@ -45,15 +47,15 @@ public final class EvenementenFeature {
     public static final DeferredHolder<EntityType<?>, EntityType<ParadeGuhEntity>> PARADE_GUH = ENTITY_TYPES.register("parade_guh",
             () -> EntityType.Builder.of(ParadeGuhEntity::new, MobCategory.MISC).sized(0.9f, 0.8f).eyeHeight(0.55f)
                     .passengerAttachments(new Vec3(0, 0.6, -0.3)).clientTrackingRange(10).updateInterval(1).noSave().noSummon()
-                    .build(Guhs.id("parade_guh").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("parade_guh"))));
     /** A knabbel of the kaasregen (never saved). */
     public static final DeferredHolder<EntityType<?>, EntityType<VallendeKnabbelEntity>> VALLENDE_KNABBEL = ENTITY_TYPES.register("vallende_knabbel",
             () -> EntityType.Builder.<VallendeKnabbelEntity>of(VallendeKnabbelEntity::new, MobCategory.MISC).sized(0.4f, 0.3f)
-                    .clientTrackingRange(6).updateInterval(10).noSave().noSummon().fireImmune().build(Guhs.id("vallende_knabbel").toString()));
+                    .clientTrackingRange(6).updateInterval(10).noSave().noSummon().fireImmune().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vallende_knabbel"))));
     /** A falling star of the sterrenregen (never saved). */
     public static final DeferredHolder<EntityType<?>, EntityType<VallendeSterEntity>> VALLENDE_STER = ENTITY_TYPES.register("vallende_ster",
             () -> EntityType.Builder.<VallendeSterEntity>of(VallendeSterEntity::new, MobCategory.MISC).sized(0.5f, 0.5f)
-                    .clientTrackingRange(10).updateInterval(10).noSave().noSummon().fireImmune().build(Guhs.id("vallende_ster").toString()));
+                    .clientTrackingRange(10).updateInterval(10).noSave().noSummon().fireImmune().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vallende_ster"))));
 
     public static void register(IEventBus modBus) {
         ITEMS.register(modBus);

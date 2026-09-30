@@ -3,9 +3,9 @@ package nl.juiced.guhs.feature.hemel.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
@@ -56,14 +56,14 @@ public class KnuffelhartRenderer implements BlockEntityRenderer<KnuffelhartBlock
         BakedModel model = mc.getModelManager().getModel(HART);
         float kleur = wakker ? 1f : 0.82f;
         mc.getBlockRenderer().getModelRenderer().renderModel(pose.last(), buffer.getBuffer(RenderType.cutout()), hart.getBlockState(), model,
-                kleur, kleur, kleur, LightTexture.FULL_BRIGHT, overlay);
+                kleur, kleur, kleur, LightCoordsUtil.FULL_BRIGHT, overlay);
         if (wakker) {
             float gloed = 1f + (schaal - 1f) * 1.8f;
             pose.translate(MX, MY, MZ);
             pose.scale(gloed, gloed, gloed);
             pose.translate(-MX, -MY, -MZ);
             mc.getBlockRenderer().getModelRenderer().renderModel(pose.last(), buffer.getBuffer(RenderType.translucent()), hart.getBlockState(),
-                    mc.getModelManager().getModel(GLOED), 1f, 1f, 1f, LightTexture.FULL_BRIGHT, overlay);
+                    mc.getModelManager().getModel(GLOED), 1f, 1f, 1f, LightCoordsUtil.FULL_BRIGHT, overlay);
         }
         pose.popPose();
     }

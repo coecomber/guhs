@@ -29,13 +29,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModSounds;
 import org.joml.Vector3f;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * De Vonk-Mika: the blaze of the Barbecuether. A glowing Mika head in a whirl of grillspiesjes, hovering in the
@@ -96,7 +96,7 @@ public class VonkMikaEntity extends Monster implements GeoEntity {
         if (!this.onGround() && this.getDeltaMovement().y < 0.0) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(1.0, 0.6, 1.0));
         }
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             if (this.random.nextInt(24) == 0 && !this.isSilent()) {
                 this.level().playLocalSound(getX() + 0.5, getY() + 0.5, getZ() + 0.5, SoundEvents.BLAZE_BURN, getSoundSource(),
                         1.0f + random.nextFloat(), random.nextFloat() * 0.7f + 0.3f, false);

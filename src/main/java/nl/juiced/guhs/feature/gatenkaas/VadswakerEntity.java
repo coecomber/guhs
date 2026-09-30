@@ -22,7 +22,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -38,14 +38,14 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModSounds;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * De Vadswaker: a huge, blind Mika who guards the Stille Voorraadkelder (the Warden of the Guhmension). He sleeps under
@@ -192,7 +192,7 @@ public class VadswakerEntity extends Monster implements GeoEntity {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData data) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData data) {
         startEmerging();
         return super.finalizeSpawn(level, difficulty, spawnType, data);
     }
@@ -410,8 +410,8 @@ public class VadswakerEntity extends Monster implements GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        life = tag.getInt("Life");
-        calmTicks = tag.getInt("Calm");
+        life = tag.getIntOr("Life", 0);
+        calmTicks = tag.getIntOr("Calm", 0);
     }
 
     // --- sounds: he chews all the time (stolen knabbels), and grumbles like a Mika, only much deeper -----------------
@@ -459,7 +459,7 @@ public class VadswakerEntity extends Monster implements GeoEntity {
         controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("attack", ATTACK));
     }
 
-    private PlayState mainAnimation(AnimationState<VadswakerEntity> state) {
+    private PlayState mainAnimation(AnimationTest<VadswakerEntity> state) {
         return state.setAndContinue(switch (getPose()) {
             case EMERGING -> EMERGE;
             case DIGGING -> DIG;

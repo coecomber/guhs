@@ -13,7 +13,7 @@ import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.core.QuartPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
@@ -23,8 +23,6 @@ import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.onderwater.GuhbubbelStructure;
 import nl.juiced.guhs.feature.verhaal.wereld.Regio;
@@ -39,8 +37,6 @@ import nl.juiced.guhs.feature.verhaal.wereld.RegioPlek;
  * region (Nomguh per tundra, the capsule per island); no Guhwai'i island near a Guhbubbel peak (it still spawns in every sea);
  * guh villagers in both biomes; the region structures load (types, placements).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class VerhaalWereldGameTests {
     private static final String EMPTY = "empty";
     private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger("guhs");
@@ -110,7 +106,7 @@ public class VerhaalWereldGameTests {
      * The share of the two biomes (the tundra ~3-5 % of the Guhmension, the islands in part of the seas) and nothing else moves:
      * with both terms undone on the sampler's target point, the biome source without them gives the very same biome.
      */
-    @GameTest(template = EMPTY, timeoutTicks = 6000)
+    @GuhTest(template = EMPTY, timeoutTicks = 6000)
     public static void verhaalWereldDeelEnRuimte(GameTestHelper helper) {
         var access = helper.getLevel().registryAccess();
         JsonObject source = json(helper, "dimension/guhmension.json").getAsJsonObject("generator").getAsJsonObject("biome_source");
@@ -126,7 +122,7 @@ public class VerhaalWereldGameTests {
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
         BiomeSource with = BiomeSource.CODEC.parse(ops, source).getOrThrow();
         MultiNoiseBiomeSource before = (MultiNoiseBiomeSource) BiomeSource.CODEC.parse(ops, without).getOrThrow();
-        NoiseGeneratorSettings settings = access.registryOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
         Map<String, Integer> now = new HashMap<>(), then = new HashMap<>();
         final int step = 32, half = 6400, n = 2 * half / step;
         int samples = 0, anders = 0, zeeen = 0, toendras = 0, groteToendras = 0, breedsteToendra = 0;
@@ -142,13 +138,13 @@ public class VerhaalWereldGameTests {
                 for (int j = 0; j < n; j++) {
                     int x = -half + i * step, z = -half + j * step;
                     int qx = QuartPos.fromBlock(x), qy = QuartPos.fromBlock(100), qz = QuartPos.fromBlock(z);
-                    String b = with.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().location().getPath();
+                    String b = with.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().identifier().getPath();
                     double tt = r.toendraTerm(x, z), tg = r.guhwaiiTerm(x, z);
                     Climate.TargetPoint tp = sampler.sample(qx, qy, qz);
                     Climate.TargetPoint undone = new Climate.TargetPoint(tp.temperature(), tp.humidity(),
                             tp.continentalness() - Climate.quantizeCoord((float) (tt * TOENDRA_CONT + tg * GUHWAII_CONT)), tp.erosion(),
                             tp.depth(), tp.weirdness());   // (both shifts undone)
-                    String was = before.getNoiseBiome(undone).unwrapKey().orElseThrow().location().getPath();
+                    String was = before.getNoiseBiome(undone).unwrapKey().orElseThrow().identifier().getPath();
                     now.merge(b, 1, Integer::sum);
                     then.merge(was, 1, Integer::sum);
                     if (!b.equals("sneeuwguhtoendra") && !b.equals("guhwaii") && !b.equals(was)) {
@@ -251,16 +247,16 @@ public class VerhaalWereldGameTests {
      * inside their biome, never two in one region; and no Guhwai'i island reaches a Guhbubbel peak or its rings (so the bubble
      * still spawns in every sea).
      */
-    @GameTest(template = EMPTY, timeoutTicks = 6000)
+    @GuhTest(template = EMPTY, timeoutTicks = 6000)
     public static void verhaalWereldEenPerRegio(GameTestHelper helper) {
         var access = helper.getLevel().registryAccess();
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
-        NoiseGeneratorSettings settings = access.registryOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
         BiomeSource with = BiomeSource.CODEC.parse(ops, json(helper, "dimension/guhmension.json").getAsJsonObject("generator")
                 .getAsJsonObject("biome_source")).getOrThrow();
         // the placements load and the structures are of our type
-        var sets = access.registryOrThrow(Registries.STRUCTURE_SET);
-        var structures = access.registryOrThrow(Registries.STRUCTURE);
+        var sets = access.lookupOrThrow(Registries.STRUCTURE_SET);
+        var structures = access.lookupOrThrow(Registries.STRUCTURE);
         Map<String, RegioPlek> plekken = new HashMap<>();
         for (String name : List.of("nomguh", "guhwaii_capsule", "guhwaii_ohana", "guhwaii_surfstrand", "kloon_eiland")) {
             var set = sets.get(Guhs.id(name));
@@ -282,7 +278,7 @@ public class VerhaalWereldGameTests {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     bioom[i][j] = with.getNoiseBiome(QuartPos.fromBlock(-half + i * step), QuartPos.fromBlock(100), QuartPos.fromBlock(-half + j * step),
-                            sampler).unwrapKey().orElseThrow().location().getPath();
+                            sampler).unwrapKey().orElseThrow().identifier().getPath();
                 }
             }
             int labels = 0;
@@ -396,7 +392,7 @@ public class VerhaalWereldGameTests {
     }
 
     /** Guh villagers in both new biomes; the weather tag has the Guhpolder (and not the tundra). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void verhaalWereldDorpelingenEnWeer(GameTestHelper helper) {
         JsonObject types;
         try (var in = VerhaalWereldGameTests.class.getResourceAsStream("/data/neoforge/data_maps/worldgen/biome/villager_types.json")) {
@@ -407,7 +403,7 @@ public class VerhaalWereldGameTests {
         for (String b : List.of("guhs:sneeuwguhtoendra", "guhs:guhwaii")) {
             helper.assertTrue(types.has(b) && types.getAsJsonObject(b).get("villager_type").getAsString().equals("guhs:guh"), "guh villagers in " + b);
         }
-        var biomes = helper.getLevel().registryAccess().registryOrThrow(Registries.BIOME);
+        var biomes = helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME);
         helper.assertTrue(biomes.getHolderOrThrow(ResourceKey.create(Registries.BIOME, Guhs.id("guhpolder"))).is(nl.juiced.guhs.feature.guhpolder.GuhpolderWeer.GEEN_WEER)
                 && !biomes.getHolderOrThrow(VerhaalFeature.SNEEUWGUHTOENDRA).is(nl.juiced.guhs.feature.guhpolder.GuhpolderWeer.GEEN_WEER)
                 && biomes.getHolderOrThrow(VerhaalFeature.SNEEUWGUHTOENDRA).value().hasPrecipitation(), "the weather: polder calm, tundra snowy");

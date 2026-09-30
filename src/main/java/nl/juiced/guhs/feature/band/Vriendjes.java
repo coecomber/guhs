@@ -41,10 +41,10 @@ public final class Vriendjes {
 
     /** Adds points to two band guhs' friendship (never subtracts); returns the new total (0 when not two band guhs). */
     public static int samen(Mob a, Mob b, int punten) {
-        if (a == b || !Band.isBandGuh(a) || !Band.isBandGuh(b) || a.getServer() == null) {
+        if (a == b || !Band.isBandGuh(a) || !Band.isBandGuh(b) || a.level().getServer() == null) {
             return 0;
         }
-        return samen(a.getServer(), Band.id(a), Band.id(b), punten);
+        return samen(a.level().getServer(), Band.id(a), Band.id(b), punten);
     }
 
     /** {@link #samen(Mob, Mob, int)} by band id. */

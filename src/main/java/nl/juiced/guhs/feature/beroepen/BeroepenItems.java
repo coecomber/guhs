@@ -10,7 +10,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
@@ -54,8 +54,8 @@ public final class BeroepenItems {
         }
 
         @Override
-        public UseAnim getUseAnimation(ItemStack stack) {
-            return UseAnim.DRINK;
+        public ItemUseAnimation getUseAnimation(ItemStack stack) {
+            return ItemUseAnimation.DRINK;
         }
 
         @Override
@@ -64,17 +64,17 @@ public final class BeroepenItems {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
             return ItemUtils.startUsingInstantly(level, player, hand);
         }
 
         @Override
         public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 entity.removeEffectsCuredBy(net.neoforged.neoforge.common.EffectCures.MILK);
                 entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 0));
                 if (entity instanceof Player p) {
-                    p.displayClientMessage(Component.translatable("item.guhs.kaasmelkdrankje.gedronken").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                    p.sendOverlayMessage(Component.translatable("item.guhs.kaasmelkdrankje.gedronken").withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
             }
             if (entity instanceof Player p && p.getAbilities().instabuild) {
@@ -103,15 +103,15 @@ public final class BeroepenItems {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
             if (level instanceof ServerLevel server) {
-                server.playSound(null, player, BeroepenFeature.HATSJOE.get(), SoundSource.PLAYERS, 0.8f, 0.8f + level.random.nextFloat() * 0.2f);
+                server.playSound(null, player, BeroepenFeature.HATSJOE.get(), SoundSource.PLAYERS, 0.8f, 0.8f + level.getRandom().nextFloat() * 0.2f);
                 var look = player.getLookAngle();
                 server.sendParticles(ParticleTypes.SNEEZE, player.getX() + look.x * 0.6, player.getEyeY() - 0.1, player.getZ() + look.z * 0.6, 8,
                         0.1, 0.05, 0.1, 0.03);
             }
             player.getCooldowns().addCooldown(this, 40);
-            return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(hand));
         }
 
         @Override

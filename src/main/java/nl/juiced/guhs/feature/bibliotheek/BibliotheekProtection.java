@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -58,7 +58,7 @@ public final class BibliotheekProtection {
         if (server.dimension() != nl.juiced.guhs.world.ModDimensions.GUHMENSION) {
             return false;                                      // (it only generates in the Guhmension)
         }
-        Structure structure = server.registryAccess().registryOrThrow(Registries.STRUCTURE).get(LIBRARY);
+        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(LIBRARY);
         return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -66,7 +66,7 @@ public final class BibliotheekProtection {
         if (player.getAbilities().instabuild || !inLibrary(player.level(), pos)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.bieb.no_build").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.bieb.no_build").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -94,7 +94,7 @@ public final class BibliotheekProtection {
     /** Using an item on a block (buckets, flint and steel, axes...) is not allowed; opening things is fine. */
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide) {
+        if (event.getLevel().isClientSide()) {
             return;
         }
         Player player = event.getEntity();
@@ -126,7 +126,7 @@ public final class BibliotheekProtection {
     /** Buckets are used "in the air" too. */
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }

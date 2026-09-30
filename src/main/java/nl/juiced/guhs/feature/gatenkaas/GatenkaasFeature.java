@@ -40,6 +40,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
 
+import net.minecraft.resources.Identifier;
 /**
  * De Gatenkaasgrotten (2.7): the underground of the Guhmension (below about y 40) in some places turns into one big
  * cheese with holes. Round gatenkaas holes (the {@link GatenkaasHolteFeature}), kaas stalactites and stalagmites that
@@ -129,7 +130,7 @@ public final class GatenkaasFeature {
 
     public static final DeferredHolder<EntityType<?>, EntityType<VadswakerEntity>> VADSWAKER = ENTITY_TYPES.register("vadswaker",
             () -> EntityType.Builder.of(VadswakerEntity::new, MobCategory.MONSTER).sized(1.9f, 1.75f).eyeHeight(1.2f)
-                    .clientTrackingRange(16).fireImmune().build(Guhs.id("vadswaker").toString()));
+                    .clientTrackingRange(16).fireImmune().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vadswaker"))));
     public static final DeferredItem<DeferredSpawnEggItem> VADSWAKER_SPAWN_EGG = ITEMS.registerItem("vadswaker_spawn_egg",
             p -> new DeferredSpawnEggItem(VADSWAKER, 0x6B4A2E, 0xF2C94C, p));
 

@@ -9,7 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -34,15 +34,15 @@ public class GuhvisHengel extends FishingRodItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (player instanceof ServerPlayer serverPlayer && !VisWedstrijd.isFishing(serverPlayer)) {
             stack.setCount(0);
-            serverPlayer.displayClientMessage(Component.translatable("gui.guhs.vissen.rod_gone").withStyle(ChatFormatting.AQUA), true);
-            return InteractionResultHolder.consume(stack);
+            serverPlayer.sendOverlayMessage(Component.translatable("gui.guhs.vissen.rod_gone").withStyle(ChatFormatting.AQUA));
+            return InteractionResult.CONSUME.heldItemTransformedTo(stack);
         }
         if (player.fishing != null) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 player.fishing.retrieve(stack);
             }
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL,
@@ -51,7 +51,7 @@ public class GuhvisHengel extends FishingRodItem {
         } else {
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL,
                     0.5f, 0.4f / (level.getRandom().nextFloat() * 0.4f + 0.8f));
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 level.addFreshEntity(player instanceof ServerPlayer sp
                         ? new GuhvisDobber(player, level, 0, LURE_TICKS, VisWedstrijd.niveauVan(sp))   // (the bite window of your level)
                         : new FishingHook(player, level, 0, LURE_TICKS));
@@ -59,13 +59,13 @@ public class GuhvisHengel extends FishingRodItem {
             player.awardStat(Stats.ITEM_USED.get(this));
             player.gameEvent(GameEvent.ITEM_INTERACT_START);
         }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     /** Outside a contest the rod goes back (so it's never kept: not after the game, not after taking it out of a chest). */
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && entity instanceof ServerPlayer player && !VisWedstrijd.isFishing(player)) {
+        if (!level.isClientSide() && entity instanceof ServerPlayer player && !VisWedstrijd.isFishing(player)) {
             stack.setCount(0);
         }
     }
@@ -73,7 +73,7 @@ public class GuhvisHengel extends FishingRodItem {
     @Override
     public boolean onDroppedByPlayer(ItemStack item, Player player) {
         if (player instanceof ServerPlayer serverPlayer && VisWedstrijd.isFishing(serverPlayer)) {
-            serverPlayer.displayClientMessage(Component.translatable("gui.guhs.vissen.no_drop").withStyle(ChatFormatting.AQUA), true);
+            serverPlayer.sendOverlayMessage(Component.translatable("gui.guhs.vissen.no_drop").withStyle(ChatFormatting.AQUA));
         }
         return false;
     }
@@ -81,7 +81,7 @@ public class GuhvisHengel extends FishingRodItem {
     /** A rod on the ground (somehow) is gone at once. */
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.level().isClientSide) {
+        if (!entity.level().isClientSide()) {
             entity.discard();
         }
         return true;

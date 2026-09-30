@@ -11,7 +11,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -97,9 +96,9 @@ public class KnabbelbessenstruikBlock extends BushBlock implements BonemealableB
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                               BlockHitResult hit) {
-        return state.getValue(AGE) != MAX_AGE && stack.is(Items.BONE_MEAL) ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
+        return state.getValue(AGE) != MAX_AGE && stack.is(Items.BONE_MEAL) ? InteractionResult.PASS
                 : super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 
@@ -107,7 +106,7 @@ public class KnabbelbessenstruikBlock extends BushBlock implements BonemealableB
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (state.getValue(AGE) > 1) {
             pick(level, pos, state, player);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
         return super.useWithoutItem(state, level, pos, player, hit);
     }
@@ -115,10 +114,10 @@ public class KnabbelbessenstruikBlock extends BushBlock implements BonemealableB
     /** Picks the yellow berries: 1-2 (a ripe bush one more), and the bush starts again from age 1. */
     public static int pick(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
         int age = state.getValue(AGE);
-        int count = 1 + level.random.nextInt(2) + (age == MAX_AGE ? 1 : 0);
-        if (!level.isClientSide) {
+        int count = 1 + level.getRandom().nextInt(2) + (age == MAX_AGE ? 1 : 0);
+        if (!level.isClientSide()) {
             popResource(level, pos, new ItemStack(VadswoudFeature.KNABBELBESSEN.get(), count));
-            level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1f, 1.1f + level.random.nextFloat() * 0.3f);
+            level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1f, 1.1f + level.getRandom().nextFloat() * 0.3f);
             BlockState picked = state.setValue(AGE, 1);
             level.setBlock(pos, picked, Block.UPDATE_CLIENTS);
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, picked));

@@ -65,7 +65,7 @@ public final class CircuitRole implements NpcRole {
         data.putBoolean("Busy", game != null);
         if (game != null) {
             ServerPlayer racer = ((ServerLevel) npc.level()).getServer().getPlayerList().getPlayer(game.racer());
-            data.putString("Racer", racer == null ? "?" : racer.getGameProfile().getName());
+            data.putString("Racer", racer == null ? "?" : racer.getGameProfile().name());
             data.putInt("Lap", Math.min(game.lap() + 1, game.laps()));
             data.putString("RaceBaan", game.baan().id);
         }
@@ -75,7 +75,7 @@ public final class CircuitRole implements NpcRole {
                 data.putInt("Best_" + key, RaceRecords.best(player, rec));
                 data.putInt("BestLap_" + key, RaceRecords.bestLap(player, rec));
                 data.putInt("Races_" + key, RaceRecords.races(player, rec));
-                List<Scorebord.Entry> top = Scorebord.top(player.server, baan.boardTotal(n));
+                List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), baan.boardTotal(n));
                 data.putInt("Record_" + key, top.isEmpty() ? -1 : top.get(0).score());
                 data.putString("RecordName_" + key, top.isEmpty() ? "" : top.get(0).name());
             }

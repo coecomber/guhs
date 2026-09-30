@@ -30,6 +30,8 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.quest.GuhDex;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * 3.0 (Guhverhalen), slice vogels: De vogeltjes (DESIGN_30 §6). Four little birds make the Guhmensie livelier. They are
  * birds, not guhs, but each has a guh twist (glossy guh eyes, a blush, two round guh ears):
@@ -60,16 +62,16 @@ public final class VogelsFeature {
     // --- the birds ---------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<PluisvinkjeEntity>> PLUISVINKJE = ENTITY_TYPES.register("pluisvinkje",
             () -> EntityType.Builder.of(PluisvinkjeEntity::new, MobCategory.CREATURE).sized(0.4f, 0.5f).eyeHeight(0.4f)
-                    .clientTrackingRange(8).build(Guhs.id("pluisvinkje").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("pluisvinkje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<KaasmeesjeEntity>> KAASMEESJE = ENTITY_TYPES.register("kaasmeesje",
             () -> EntityType.Builder.of(KaasmeesjeEntity::new, MobCategory.CREATURE).sized(0.4f, 0.5f).eyeHeight(0.4f)
-                    .clientTrackingRange(8).build(Guhs.id("kaasmeesje").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("kaasmeesje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<GuhUiltjeEntity>> GUH_UILTJE = ENTITY_TYPES.register("guh_uiltje",
             () -> EntityType.Builder.of(GuhUiltjeEntity::new, MobCategory.CREATURE).sized(0.5f, 0.8f).eyeHeight(0.6f)
-                    .clientTrackingRange(8).build(Guhs.id("guh_uiltje").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_uiltje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<ZeemeeuwtjeEntity>> ZEEMEEUWTJE = ENTITY_TYPES.register("zeemeeuwtje",
             () -> EntityType.Builder.of(ZeemeeuwtjeEntity::new, MobCategory.CREATURE).sized(0.5f, 0.6f).eyeHeight(0.5f)
-                    .clientTrackingRange(8).build(Guhs.id("zeemeeuwtje").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("zeemeeuwtje"))));
 
     public static final DeferredItem<DeferredSpawnEggItem> PLUISVINKJE_SPAWN_EGG = ITEMS.registerItem("pluisvinkje_spawn_egg",
             p -> new DeferredSpawnEggItem(PLUISVINKJE, 0xFFE2EE, 0xF696BE, p));

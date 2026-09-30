@@ -1,15 +1,15 @@
 package nl.juiced.guhs.feature.landdiertjes.client;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.landdiertjes.GuhKonijntjeEntity;
 import nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature;
 import nl.juiced.guhs.feature.landdiertjes.Landdiertje;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * 3.0 (Guhverhalen), slice landdiertjes, client side: the GeckoLib renderers of the four critters (models, animations and
@@ -42,7 +42,7 @@ public final class LanddiertjesClient {
         public KonijntjeRenderer(EntityRendererProvider.Context context) {
             super(context, new DefaultedEntityGeoModel<GuhKonijntjeEntity>(Guhs.id("guh_konijntje"), true) {
                 @Override
-                public ResourceLocation getTextureResource(GuhKonijntjeEntity konijn) {
+                public Identifier getTextureResource(GuhKonijntjeEntity konijn) {
                     return Guhs.id("textures/entity/guh_konijntje_" + konijn.kleur().id() + ".png");
                 }
             });

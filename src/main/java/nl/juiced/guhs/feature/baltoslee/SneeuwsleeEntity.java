@@ -36,11 +36,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.registry.ModItems;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * Your own sneeuwslee (guhs:sneeuwslee, from the item {@link SneeuwsleeItem}): a pink-and-blue sled pulled by four
  * guh-sledehondjes, to ride through the snowy biomes after the Nomguh story. You stand on the runners: W = "Hup, hup!",
@@ -133,12 +134,12 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
             lerpSteps--;
         }
         if (isControlledByLocalInstance()) {
-            SleeRijden.Invoer in = getControllingPassenger() instanceof Player && level().isClientSide && invoer != null ? invoer.get() : SleeRijden.Invoer.NIKS;
+            SleeRijden.Invoer in = getControllingPassenger() instanceof Player && level().isClientSide() && invoer != null ? invoer.get() : SleeRijden.Invoer.NIKS;
             rijd(in);
-        } else if (level().isClientSide) {
+        } else if (level().isClientSide()) {
             setDeltaMovement(Vec3.ZERO);
         }
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             serverTick();
         } else {
             loopTik++;
@@ -195,7 +196,7 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
             double gereden = vorige == null ? 0 : Math.sqrt(Math.pow(nu.x - vorige.x, 2) + Math.pow(nu.z - vorige.z, 2));
             if (sneeuw && gereden > 0.02 && gereden < 2) {
                 CompoundTag d = SleeRit.data(rijder);
-                float meters = d.getFloat("Meters") + (float) gereden;
+                float meters = d.getFloatOr("Meters", 0.0F) + (float) gereden;
                 d.putFloat("Meters", meters);
                 if (meters >= METERS_VOOR_ADVANCEMENT) {
                     SleeRit.adv(rijder, "balto_slee_eigen");
@@ -203,7 +204,7 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
             }
             if (!sneeuw && gereden < 0.1 && tickCount - geenSneeuwBericht > 80) {
                 geenSneeuwBericht = tickCount;
-                rijder.displayClientMessage(Component.translatable("gui.guhs.baltoslee.eigen.geen_sneeuw").withStyle(ChatFormatting.AQUA), true);
+                rijder.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.eigen.geen_sneeuw").withStyle(ChatFormatting.AQUA));
             }
         }
         vorige = nu;
@@ -211,7 +212,7 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
 
     @Override
     public boolean isControlledByLocalInstance() {
-        return getControllingPassenger() instanceof Player p ? p.isLocalPlayer() : !level().isClientSide;
+        return getControllingPassenger() instanceof Player p ? p.isLocalPlayer() : !level().isClientSide();
     }
 
     @Override
@@ -272,7 +273,7 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
         }
         ItemStack held = player.getItemInHand(hand);
         if (player.isSecondaryUseActive()) {
-            if (!level().isClientSide && (player.getUUID().equals(eigenaar()) || eigenaar() == null || player.hasPermissions(2))) {
+            if (!level().isClientSide() && (player.getUUID().equals(eigenaar()) || eigenaar() == null || player.hasPermissions(2))) {
                 ejectPassengers();
                 if (!player.getAbilities().instabuild || !player.getInventory().contains(new ItemStack(BaltoSleeFeature.SNEEUWSLEE.get()))) {
                     ItemStack item = new ItemStack(BaltoSleeFeature.SNEEUWSLEE.get());
@@ -282,32 +283,32 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
                 }
                 level().playSound(null, blockPosition(), BaltoSleeFeature.BELLEN.get(), SoundSource.PLAYERS, 0.7f, 1.4f);
                 discard();
-            } else if (!level().isClientSide) {
-                player.displayClientMessage(Component.translatable("gui.guhs.baltoslee.eigen.niet_van_jou").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            } else if (!level().isClientSide()) {
+                player.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.eigen.niet_van_jou").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
-            return InteractionResult.sidedSuccess(level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         if (held.is(ModItems.KAAS_KNABBELS.get())) {
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 if (!player.getAbilities().instabuild) {
                     held.shrink(1);
                 }
                 ((ServerLevel) level()).sendParticles(ParticleTypes.HEART, getX() + Vec3.directionFromRotation(0, getYRot()).x * 2.5, getY() + 0.8,
                         getZ() + Vec3.directionFromRotation(0, getYRot()).z * 2.5, 6, 0.8, 0.3, 0.8, 0);
                 level().playSound(null, blockPosition(), BaltoSleeFeature.WOEF.get(), SoundSource.NEUTRAL, 1f, 1.2f);
-                player.displayClientMessage(Component.translatable("gui.guhs.baltoslee.eigen.knabbel").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.baltoslee.eigen.knabbel").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
-            return InteractionResult.sidedSuccess(level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         if (!isVehicle() && !player.isPassenger()) {
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 player.startRiding(this);
-                if (player instanceof ServerPlayer sp && !sp.getPersistentData().getBoolean("guhs_baltoslee_uitleg")) {
+                if (player instanceof ServerPlayer sp && !sp.getPersistentData().getBooleanOr("guhs_baltoslee_uitleg", false)) {
                     sp.getPersistentData().putBoolean("guhs_baltoslee_uitleg", true);
                     sp.sendSystemMessage(Component.translatable("gui.guhs.baltoslee.eigen.uitleg").withStyle(ChatFormatting.AQUA));
                 }
             }
-            return InteractionResult.sidedSuccess(level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }
@@ -340,8 +341,8 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        if (tag.hasUUID("Eigenaar")) {
-            zetEigenaar(tag.getUUID("Eigenaar"));
+        if (tag.read("Eigenaar", UUIDUtil.CODEC).isPresent()) {
+            zetEigenaar(tag.read("Eigenaar", UUIDUtil.CODEC).orElseThrow());
         }
     }
 
@@ -349,7 +350,7 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
     protected void addAdditionalSaveData(CompoundTag tag) {
         UUID e = eigenaar();
         if (e != null) {
-            tag.putUUID("Eigenaar", e);
+            tag.store("Eigenaar", UUIDUtil.CODEC, e);
         }
     }
 

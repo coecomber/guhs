@@ -99,7 +99,7 @@ public final class SmulGame {
     private SmulGame(UUID npcId, ServerPlayer player, Arena arena, long now, Niveau niveau) {
         this.npcId = npcId;
         this.player = player.getUUID();
-        this.playerName = player.getGameProfile().getName();
+        this.playerName = player.getGameProfile().name();
         this.arena = arena;
         this.lastTick = now;
         this.niveau = niveau;
@@ -180,8 +180,8 @@ public final class SmulGame {
         }
         data.putInt("Best", best(player));
         Klassiekers.records(data, n -> best(player, n));
-        data.putInt("Games", GuhQuests.saved(player).getInt(GAMES_KEY));
-        data.putBoolean("First", !GuhQuests.saved(player).getBoolean(PLAYED_KEY));
+        data.putInt("Games", GuhQuests.saved(player).getIntOr(GAMES_KEY, 0));
+        data.putBoolean("First", !GuhQuests.saved(player).getBooleanOr(PLAYED_KEY, false));
         nl.juiced.guhs.network.ModNetworking.sendTo(player, new SmulPayloads.Open(npc.getId(), data));
     }
 
@@ -330,7 +330,7 @@ public final class SmulGame {
 
     SmulHapje spawnAt(ServerLevel world, SmulHapje.Soort soort, Vec3 pos, float speed) {
         SmulHapje hapje = SmulHapje.create(world, soort, speed, npcId);
-        hapje.moveTo(pos.x, pos.y, pos.z, world.getRandom().nextFloat() * 360f, 0);
+        hapje.snapTo(pos.x, pos.y, pos.z, world.getRandom().nextFloat() * 360f, 0);
         world.addFreshEntity(hapje);
         return hapje;
     }
@@ -362,7 +362,7 @@ public final class SmulGame {
             p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, MIKA_SLOW_TICKS, 2, false, true));
             world.sendParticles(ParticleTypes.LARGE_SMOKE, hapje.getX(), hapje.getY() + 0.3, hapje.getZ(), 12, 0.3, 0.3, 0.3, 0.02);
             world.playSound(null, p.blockPosition(), ModSounds.MIKA_HURT.get(), SoundSource.PLAYERS, 0.9f, 1.3f);
-            p.displayClientMessage(Component.translatable("quest.guhs.smul.mika", MIKA_PENALTY).withStyle(ChatFormatting.DARK_GRAY), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.smul.mika", MIKA_PENALTY).withStyle(ChatFormatting.DARK_GRAY));
             lastMessage = playTicks();
             if (mikas == 1 || world.getRandom().nextInt(3) == 0) {
                 cheer(npc, p, "quest.guhs.smul.cheer.mika");
@@ -394,7 +394,7 @@ public final class SmulGame {
                 cheer(npc, p, "quest.guhs.smul.cheer.combo");
             }
         }
-        p.displayClientMessage(Component.translatable("quest.guhs.smul.caught", gained, score).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        p.sendOverlayMessage(Component.translatable("quest.guhs.smul.caught", gained, score).withStyle(ChatFormatting.LIGHT_PURPLE));
         lastMessage = playTicks();
     }
 
@@ -415,7 +415,7 @@ public final class SmulGame {
         Component bar = Component.translatable(goldMode() ? "quest.guhs.smul.bar.gold" : "quest.guhs.smul.bar", score,
                 String.format(java.util.Locale.ROOT, "%d", (left + 19) / 20), combo(streak)).withStyle(goldMode() ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE)
                 .append(Component.literal("  ")).append(Klassiekers.naam(niveau));
-        p.displayClientMessage(bar, true);
+        p.sendOverlayMessage(bar);
     }
 
     /** The Smulguh cheers you on (in the chat, with a happy squeak and hearts over her head). */
@@ -433,8 +433,8 @@ public final class SmulGame {
         }
         Player near = world.getNearestPlayer(npc, 10);
         if (near instanceof ServerPlayer p && !isPlaying(p) && !p.isSpectator()) {
-            p.displayClientMessage(Component.literal("<").append(npc.getDisplayName()).append("> ")
-                    .append(Component.translatable("quest.guhs.smul.invite" + (1 + world.getRandom().nextInt(3)))).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.literal("<").append(npc.getDisplayName()).append("> ")
+                    .append(Component.translatable("quest.guhs.smul.invite" + (1 + world.getRandom().nextInt(3)))).withStyle(ChatFormatting.LIGHT_PURPLE));
             npc.playSound(ModSounds.GUH_AMBIENT.get(), 1f, 1.3f);
             world.sendParticles(ParticleTypes.HEART, npc.getX(), npc.getY() + npc.getBbHeight() + 0.4, npc.getZ(), 2, 0.3, 0.1, 0.3, 0);
         }
@@ -463,10 +463,10 @@ public final class SmulGame {
         end(npc, p);
         CompoundTag saved = GuhQuests.saved(p);
         int munten = niveau.munten(munten(score));
-        boolean first = !saved.getBoolean(PLAYED_KEY);
+        boolean first = !saved.getBooleanOr(PLAYED_KEY, false);
         saved.putBoolean(PLAYED_KEY, true);
-        saved.putInt(GAMES_KEY, saved.getInt(GAMES_KEY) + 1);
-        saved.putInt(GOLD_KEY, saved.getInt(GOLD_KEY) + golden);
+        saved.putInt(GAMES_KEY, saved.getIntOr(GAMES_KEY, 0) + 1);
+        saved.putInt(GOLD_KEY, saved.getIntOr(GOLD_KEY, 0) + golden);
         int best = best(p, niveau);
         boolean record = score > best;
         if (record) {
@@ -558,13 +558,13 @@ public final class SmulGame {
     static boolean giveBowl(ServerPlayer p) {
         Inventory inv = p.getInventory();
         ItemStack bowl = new ItemStack(SmulFeature.SMULSCHAAL.get());
-        if (inv.getItem(inv.selected).isEmpty()) {
-            inv.setItem(inv.selected, bowl);
+        if (inv.getItem(inv.getSelectedSlot()).isEmpty()) {
+            inv.setItem(inv.getSelectedSlot(), bowl);
             return true;
         }
         for (int i = 0; i < Inventory.getSelectionSize(); i++) {
             if (inv.getItem(i).isEmpty()) {
-                inv.selected = i;
+                inv.setSelectedSlot(i);
                 if (p.connection != null) {
                     p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket(i));
                 }
@@ -576,8 +576,8 @@ public final class SmulGame {
         if (free < 0) {
             return false;
         }
-        inv.setItem(free, inv.getItem(inv.selected));
-        inv.setItem(inv.selected, bowl);
+        inv.setItem(free, inv.getItem(inv.getSelectedSlot()));
+        inv.setItem(inv.getSelectedSlot(), bowl);
         return true;
     }
 
@@ -655,7 +655,7 @@ public final class SmulGame {
         }
         UUID npc = PLAYERS.get(p.getUUID());
         SmulGame game = npc == null ? null : GAMES.get(npc);
-        if (game == null || p.serverLevel().getGameTime() - game.lastTick > 40) {
+        if (game == null || p.level().getGameTime() - game.lastTick > 40) {
             if (game != null) {
                 GAMES.remove(npc, game);
             }
@@ -673,8 +673,8 @@ public final class SmulGame {
     static void stopFor(ServerPlayer p) {
         UUID npcId = PLAYERS.get(p.getUUID());
         SmulGame game = npcId == null ? null : GAMES.get(npcId);
-        if (game != null && p.server != null) {
-            for (ServerLevel level : p.server.getAllLevels()) {
+        if (game != null && p.level().getServer() != null) {
+            for (ServerLevel level : p.level().getServer().getAllLevels()) {
                 if (level.getEntity(npcId) instanceof GuhNpcEntity npc) {
                     game.stop(npc, p);
                     return;
@@ -693,10 +693,10 @@ public final class SmulGame {
         CompoundTag data = npc.roleData;
         if (data.contains("ArenaStart")) {
             List<BlockPos> chutes = new ArrayList<>();
-            for (long l : data.getLongArray("ArenaChutes")) {
+            for (long l : data.getLongArray("ArenaChutes").orElse(new long[0])) {
                 chutes.add(BlockPos.of(l));
             }
-            return new Arena(BlockPos.of(data.getLong("ArenaStart")), BlockPos.of(data.getLong("ArenaMin")), BlockPos.of(data.getLong("ArenaMax")), chutes);
+            return new Arena(BlockPos.of(data.getLongOr("ArenaStart", 0L)), BlockPos.of(data.getLongOr("ArenaMin", 0L)), BlockPos.of(data.getLongOr("ArenaMax", 0L)), chutes);
         }
         Arena arena = findArena(npc);
         if (arena != null) {
@@ -752,12 +752,12 @@ public final class SmulGame {
 
     /** Your highest score (0 = never played), on medium. */
     public static int best(Player player) {
-        return GuhQuests.saved(player).getInt(BEST_KEY);
+        return GuhQuests.saved(player).getIntOr(BEST_KEY, 0);
     }
 
     /** Your highest score on this level (medium = the old record). */
     public static int best(Player player, Niveau niveau) {
-        return GuhQuests.saved(player).getInt(Klassiekers.sleutel(BEST_KEY, niveau));
+        return GuhQuests.saved(player).getIntOr(Klassiekers.sleutel(BEST_KEY, niveau), 0);
     }
 
     /** While playing: no hungrier or weaker than at the start, never out of breath. */
@@ -787,7 +787,7 @@ public final class SmulGame {
 
     private static void teleport(ServerPlayer p, ServerLevel world, double x, double y, double z, float yRot) {
         if (p instanceof FakePlayer || p.connection == null) {
-            p.moveTo(x, y, z, yRot, 0);
+            p.snapTo(x, y, z, yRot, 0);
         } else {
             p.teleportTo(world, x, y, z, yRot, 0);
         }

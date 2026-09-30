@@ -16,12 +16,12 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import nl.juiced.guhs.quest.GuhQuests;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * The Mika-baas in the Mika camp: guards Guhbert's cage and plays rock-paper-scissors-VADS with you (he always picks
@@ -54,10 +54,10 @@ public class MikaBaasEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (hand == InteractionHand.MAIN_HAND && !this.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (hand == InteractionHand.MAIN_HAND && !this.level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
             GuhQuests.openRps(this, serverPlayer);
         }
-        return InteractionResult.sidedSuccess(this.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

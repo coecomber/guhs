@@ -88,7 +88,7 @@ public final class Stitch626 implements VariantGedrag {
     @Override
     public void tick(GuhEntity guh) {
         Level level = guh.level();
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return;
         }
         // clinging to a wall (going up) or hanging from a ceiling: the flag the client draws him by
@@ -102,7 +102,7 @@ public final class Stitch626 implements VariantGedrag {
         // the ukelele: "Aloha, njeg!" once, then a strum every half second
         if (guh.emotes.current() == Emote.UKELELE && level instanceof ServerLevel server) {
             long nu = level.getGameTime();
-            long start = guh.getPersistentData().getLong(UKE_START);
+            long start = guh.getPersistentData().getLongOr(UKE_START, 0L);
             if (nu - start > Emote.UKELELE.onceTicks + 10) {
                 guh.getPersistentData().putLong(UKE_START, nu);
                 start = nu;
@@ -168,7 +168,7 @@ public final class Stitch626 implements VariantGedrag {
 
         /** (tick) the goal isn't running but the marker is still there (saved mid-hang): gravity back on. */
         static void opruimen(GuhEntity guh) {
-            if (guh.getPersistentData().getBoolean(HANGT) && !LOPEND.contains(guh)) {
+            if (guh.getPersistentData().getBooleanOr(HANGT, false) && !LOPEND.contains(guh)) {
                 guh.getPersistentData().remove(HANGT);
                 guh.setNoGravity(false);
                 GuhHooks.zet(guh, VerhaalVlaggen.KLIMT, false);

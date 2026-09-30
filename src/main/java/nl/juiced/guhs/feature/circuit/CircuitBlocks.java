@@ -163,8 +163,8 @@ public final class CircuitBlocks {
             Vec3 v = entity.getDeltaMovement();
             entity.setDeltaMovement(v.x * 1.1, STUITER, v.z * 1.1);
             entity.hasImpulse = true;
-            if (!level.isClientSide) {
-                level.playSound(null, pos, SoundEvents.SLIME_JUMP, SoundSource.BLOCKS, 0.9f, 1.3f + level.random.nextFloat() * 0.3f);
+            if (!level.isClientSide()) {
+                level.playSound(null, pos, SoundEvents.SLIME_JUMP, SoundSource.BLOCKS, 0.9f, 1.3f + level.getRandom().nextFloat() * 0.3f);
                 ((net.minecraft.server.level.ServerLevel) level).sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 1.1,
                         pos.getZ() + 0.5, 4, 0.3, 0.1, 0.3, 0.02);
             }

@@ -80,8 +80,8 @@ public final class Feestbuffet {
         stack.consume(1, player);
         level.sendParticles(ParticleTypes.HEART, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 3, 0.3, 0.1, 0.3, 0.02);
         level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.8f, 1.2f);
-        player.displayClientMessage(Component.translatable(zelfgemaakt ? "gui.guhs.knuffeldal.buffet.zelfgemaakt" : "gui.guhs.knuffeldal.buffet.erop", naam)
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable(zelfgemaakt ? "gui.guhs.knuffeldal.buffet.zelfgemaakt" : "gui.guhs.knuffeldal.buffet.erop", naam)
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         KnusVoortgang.tel(player, "knuffeldal.buffet", zelfgemaakt ? 2 : 1);
         return true;
     }
@@ -107,7 +107,7 @@ public final class Feestbuffet {
             GuhAdvancements.grant(player, "knuffeldal_finale");
             KnuffeldalAdvancements.toon(player, "knusfeest_klaar");
             KnuffeldalAdvancements.toon(player, "knuffelburgemeester");
-            player.server.getPlayerList().broadcastSystemMessage(Component.translatable("gui.guhs.knuffeldal.titel_gekregen", player.getDisplayName())
+            player.level().getServer().getPlayerList().broadcastSystemMessage(Component.translatable("gui.guhs.knuffeldal.titel_gekregen", player.getDisplayName())
                     .withStyle(ChatFormatting.LIGHT_PURPLE), false);
         } else {
             // a seasonal feast: a treat of the season

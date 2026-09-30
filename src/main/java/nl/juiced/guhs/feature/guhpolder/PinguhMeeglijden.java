@@ -57,7 +57,7 @@ public final class PinguhMeeglijden {
         Vec3 snelheid = Vec3.ZERO;
 
         Tocht(ServerPlayer player) {
-            this.level = player.serverLevel();
+            this.level = player.level();
             this.last = player.position();
         }
     }
@@ -79,13 +79,13 @@ public final class PinguhMeeglijden {
      */
     public static List<GuhEntity> start(ServerPlayer skater) {
         Tocht tocht = TOCHTEN.computeIfAbsent(skater.getUUID(), id -> new Tocht(skater));
-        for (GuhEntity guh : skater.serverLevel().getEntitiesOfClass(GuhEntity.class, new AABB(skater.blockPosition()).inflate(BEREIK),
+        for (GuhEntity guh : skater.level().getEntitiesOfClass(GuhEntity.class, new AABB(skater.blockPosition()).inflate(BEREIK),
                 g -> (g.getVariant() == GuhVariant.PINGUH || ookMee(g, skater)) && g.isTame() && g.isOwnedBy(skater) && !g.isOrderedToSit()
                         && !g.isVehicle() && !g.isPassenger() && !g.isLeashed() && g.isAlive())) {
             if (tocht.guhs.add(guh.getUUID())) {
                 MEE.put(guh.getUUID(), skater.getUUID());
                 guh.getNavigation().stop();
-                skater.serverLevel().sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.3, guh.getZ(), 2,
+                skater.level().sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.3, guh.getZ(), 2,
                         0.2, 0.1, 0.2, 0);
                 guh.playSound(ModSounds.GUH_HAPPY.get(), 1f, 1.3f);
             }
@@ -138,7 +138,7 @@ public final class PinguhMeeglijden {
         Tocht tocht = TOCHTEN.get(skater.getUUID());
         if (tocht != null) {
             for (UUID id : tocht.guhs) {
-                if (skater.serverLevel().getEntity(id) instanceof GuhEntity g) {
+                if (skater.level().getEntity(id) instanceof GuhEntity g) {
                     out.add(g);
                 }
             }
@@ -182,7 +182,7 @@ public final class PinguhMeeglijden {
         if (tocht == null) {
             return;
         }
-        if (!p.isAlive() || p.serverLevel() != tocht.level || p.isSpectator()) {
+        if (!p.isAlive() || p.level() != tocht.level || p.isSpectator()) {
             stop(p);
             return;
         }
@@ -272,7 +272,7 @@ public final class PinguhMeeglijden {
                 y = (int) Math.floor(doel.y);
             }
             level.sendParticles(ParticleTypes.POOF, guh.getX(), guh.getY() + 0.3, guh.getZ(), 5, 0.2, 0.2, 0.2, 0.02);
-            guh.moveTo(doel.x, y, doel.z, guh.getYRot(), guh.getXRot());
+            guh.snapTo(doel.x, y, doel.z, guh.getYRot(), guh.getXRot());
             guh.setDeltaMovement(Vec3.ZERO);
             guh.resetFallDistance();
             level.sendParticles(ParticleTypes.SNOWFLAKE, guh.getX(), guh.getY() + 0.3, guh.getZ(), 6, 0.3, 0.2, 0.3, 0.02);

@@ -5,22 +5,22 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.baltoslee.SledehondjeEntity;
 import nl.juiced.guhs.feature.baltoslee.SneeuwsleeEntity;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * Your own sneeuwslee: the sled model with its pink-and-blue blanket and little hearts, four guh-sledehondjes in front
  * (two by two, roped to it) that swing along through the bends; they sit down and wait when there's no snow.
  */
 public class SneeuwsleeRenderer extends GeoEntityRenderer<SneeuwsleeEntity> {
-    private static final ResourceLocation TEX = Guhs.id("textures/entity/sneeuwslee.png");
+    private static final Identifier TEX = Guhs.id("textures/entity/sneeuwslee.png");
     private static final double[][] PLEKKEN = {{2.0, -0.4}, {2.0, 0.4}, {3.05, -0.4}, {3.05, 0.4}};
 
     private final EntityRenderDispatcher dispatcher;
@@ -37,12 +37,12 @@ public class SneeuwsleeRenderer extends GeoEntityRenderer<SneeuwsleeEntity> {
         }
 
         @Override
-        public ResourceLocation getTextureResource(SneeuwsleeEntity sled) {
+        public Identifier getTextureResource(SneeuwsleeEntity sled) {
             return TEX;
         }
 
         @Override
-        public void setCustomAnimations(SneeuwsleeEntity sled, long instanceId, AnimationState<SneeuwsleeEntity> state) {
+        public void setCustomAnimations(SneeuwsleeEntity sled, long instanceId, AnimationTest<SneeuwsleeEntity> state) {
             getBone("kist").ifPresent(b -> b.setHidden(true));
             getBone("musher").ifPresent(b -> b.setHidden(true));
             float t = (float) state.getAnimationTick();

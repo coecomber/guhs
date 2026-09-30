@@ -26,12 +26,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.knuffeldal.KnuffeldalFeature;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * The Knabbeldief (Inspecteur Vahoegsma's case): a small Mika with a burglar's mask, a striped shirt and a loot sack on
@@ -84,7 +84,7 @@ public class KnabbeldiefMikaEntity extends PathfinderMob implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         ServerLevel server = (ServerLevel) level();
@@ -125,7 +125,7 @@ public class KnabbeldiefMikaEntity extends PathfinderMob implements GeoEntity {
         giechel(1.0f);
         for (Player p : level().players()) {
             if (p.distanceTo(this) < 24 && p instanceof ServerPlayer sp) {
-                sp.displayClientMessage(Component.translatable("gui.guhs.beroepen.knabbeldief.betrapt").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                sp.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.knabbeldief.betrapt").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
         Vec3 weg = DefaultRandomPos.getPosAway(this, 16, 5, player.position());
@@ -182,9 +182,9 @@ public class KnabbeldiefMikaEntity extends PathfinderMob implements GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        vlucht = tag.getBoolean("Vlucht");
-        leeftijd = tag.getInt("Leeftijd");
-        buit = tag.contains("Buit") ? BlockPos.of(tag.getLong("Buit")) : null;
+        vlucht = tag.getBooleanOr("Vlucht", false);
+        leeftijd = tag.getIntOr("Leeftijd", 0);
+        buit = tag.contains("Buit") ? BlockPos.of(tag.getLongOr("Buit", 0L)) : null;
     }
 
     @Override

@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -72,12 +71,12 @@ public final class KnuffeldalItems {
             BlockPos bottom = top.below();
             if (context.getClickedFace() != Direction.UP || !level.getBlockState(top).is(Blocks.SNOW_BLOCK) || !level.getBlockState(bottom).is(Blocks.SNOW_BLOCK)
                     || !level.getBlockState(top.above()).canBeReplaced()) {
-                if (!level.isClientSide && context.getPlayer() != null) {
-                    context.getPlayer().displayClientMessage(Component.translatable("item.guhs.sneeuwguhkopje.hoe").withStyle(ChatFormatting.AQUA), true);
+                if (!level.isClientSide() && context.getPlayer() != null) {
+                    context.getPlayer().sendOverlayMessage(Component.translatable("item.guhs.sneeuwguhkopje.hoe").withStyle(ChatFormatting.AQUA));
                 }
                 return InteractionResult.FAIL;
             }
-            if (level.isClientSide) {
+            if (level.isClientSide()) {
                 return InteractionResult.SUCCESS;
             }
             Player player = context.getPlayer();
@@ -111,11 +110,11 @@ public final class KnuffeldalItems {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
             if (player instanceof ServerPlayer sp) {
                 Burgemeester.toonLijstje(sp);
             }
-            return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(hand));
         }
     }
 

@@ -18,8 +18,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.vadswoud.KnabbelbessenstruikBlock;
 import nl.juiced.guhs.feature.vadswoud.VadswoudFeature;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.RawAnimation;
 
 /**
  * The kaasmeesje: a great tit in cheese colours. It likes to hang upside down under leaves (it looks for a leaf with air
@@ -87,7 +87,7 @@ public class KaasmeesjeEntity extends Vogeltje {
             int x = from.getX() + random.nextInt(r * 2 + 1) - r;
             int z = from.getZ() + random.nextInt(r * 2 + 1) - r;
             // from a bit above it down: the underside of a leaf with two air blocks under it
-            for (int y = from.getY() + 7; y > from.getY() - 6 && y > level().getMinBuildHeight() + 2; y--) {
+            for (int y = from.getY() + 7; y > from.getY() - 6 && y > level().getMinY() + 2; y--) {
                 p.set(x, y, z);
                 if (level().getBlockState(p).is(BlockTags.LEAVES) && level().getBlockState(p.below()).isAir()
                         && level().getBlockState(p.below(2)).isAir()) {
@@ -159,7 +159,7 @@ public class KaasmeesjeEntity extends Vogeltje {
     }
 
     @Override
-    protected RawAnimation beweging(AnimationState<Vogeltje> state) {
+    protected RawAnimation beweging(AnimationTest<Vogeltje> state) {
         if (!vliegt() && hangt()) {
             return anim("hang", true);
         }

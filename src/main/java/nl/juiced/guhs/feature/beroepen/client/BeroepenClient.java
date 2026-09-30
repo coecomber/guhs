@@ -1,6 +1,6 @@
 package nl.juiced.guhs.feature.beroepen.client;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import nl.juiced.guhs.Guhs;
@@ -8,8 +8,8 @@ import nl.juiced.guhs.client.SittingGuhRenderers;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.beroepen.BeroepenFeature;
 import nl.juiced.guhs.feature.beroepen.KnabbeldiefMikaEntity;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * Client side of the beroepen: the four characters' own models (Blusguh's fire helmet and jacket, Vahoegsma's cap and
@@ -29,7 +29,7 @@ public final class BeroepenClient {
         event.registerEntityRenderer(BeroepenFeature.KNABBELDIEF_MIKA.get(), context -> new GeoEntityRenderer<KnabbeldiefMikaEntity>(context,
                 new DefaultedEntityGeoModel<KnabbeldiefMikaEntity>(Guhs.id("knabbeldief_mika"), true) {
                     @Override
-                    public ResourceLocation getAnimationResource(KnabbeldiefMikaEntity mika) {
+                    public Identifier getAnimationResource(KnabbeldiefMikaEntity mika) {
                         return Guhs.id("animations/entity/guh.animation.json");
                     }
                 }) {

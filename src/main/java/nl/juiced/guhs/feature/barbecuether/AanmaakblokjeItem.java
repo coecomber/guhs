@@ -34,18 +34,18 @@ public class AanmaakblokjeItem extends FlintAndSteelItem {
         if (shape.isPresent()) {
             if (GrillPortalForcer.targetDimension(level.dimension()) == null) {
                 if (context.getPlayer() instanceof ServerPlayer player) {
-                    player.displayClientMessage(Component.translatable("quest.guhs.barbecuether.wrong_dimension").withStyle(ChatFormatting.GOLD), true);
+                    player.sendOverlayMessage(Component.translatable("quest.guhs.barbecuether.wrong_dimension").withStyle(ChatFormatting.GOLD));
                 }
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.SUCCESS;
             }
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 light(level, shape.get(), inside, context.getPlayer() instanceof ServerPlayer p ? p : null);
                 ItemStack stack = context.getItemInHand();
                 if (context.getPlayer() != null) {
                     stack.hurtAndBreak(1, context.getPlayer(), LivingEntity.getSlotForHand(context.getHand()));
                 }
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
         return super.useOn(context);
     }

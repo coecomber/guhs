@@ -25,6 +25,8 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Brandweercommandant Blusguh (BRANDWEERGUH), by the door of the Brandweerkazerne. His job (once per player):
  * <ol>
@@ -129,7 +131,7 @@ public final class Brandweer implements NpcRole {
             }
             npc.roleData.putLong("Boom", ps.get(0).asLong());
         }
-        return BlockPos.of(npc.roleData.getLong("Boom"));
+        return BlockPos.of(npc.roleData.getLongOr("Boom", 0L));
     }
 
     /** How many fires still burn. */
@@ -154,7 +156,7 @@ public final class Brandweer implements NpcRole {
     /** Every second: all fires out -> the guhtje in the tree; the rescued guhtje goes home; a session that ran out ends. */
     public static void controleer(GuhNpcEntity npc) {
         long now = npc.level().getGameTime();
-        if (npc.roleData.contains("Weg") && now >= npc.roleData.getLong("Weg")) {
+        if (npc.roleData.contains("Weg") && now >= npc.roleData.getLongOr("Weg", 0L)) {
             npc.roleData.remove("Weg");
             GuhEntity g = guhtje(npc);
             if (g != null) {
@@ -186,10 +188,10 @@ public final class Brandweer implements NpcRole {
     /** The guhtje of this job (null: none now). */
     @Nullable
     public static GuhEntity guhtje(GuhNpcEntity npc) {
-        if (!npc.roleData.hasUUID("Guhtje")) {
+        if (!npc.roleData.read("Guhtje", UUIDUtil.CODEC).isPresent()) {
             return null;
         }
-        Entity e = ((ServerLevel) npc.level()).getEntity(npc.roleData.getUUID("Guhtje"));
+        Entity e = ((ServerLevel) npc.level()).getEntity(npc.roleData.read("Guhtje", UUIDUtil.CODEC).orElseThrow());
         return e instanceof GuhEntity g && g.isAlive() ? g : null;
     }
 
@@ -205,23 +207,23 @@ public final class Brandweer implements NpcRole {
             return null;
         }
         ServerLevel level = (ServerLevel) npc.level();
-        GuhEntity g = ModEntities.GUH.get().create(level);
+        GuhEntity g = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (g == null) {
             return null;
         }
-        g.moveTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, npc.getYRot(), 0);
+        g.snapTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, npc.getYRot(), 0);
         g.setGuhScale(0.45f);
         g.setNoAi(true);
         g.setInvulnerable(true);
         g.setPersistenceRequired();
         g.getPersistentData().putBoolean(BOOMGUHTJE, true);
-        g.getPersistentData().putUUID(NPC, npc.getUUID());
+        g.getPersistentData().store(NPC, UUIDUtil.CODEC, npc.getUUID());
         g.getPersistentData().putBoolean("guhs_knuffeldal_checked", true);
         g.setCustomName(Component.translatable("entity.guhs.beroepen_boomguhtje"));
         g.setCustomNameVisible(true);
         level.addFreshEntity(g);
         level.sendParticles(ParticleTypes.CLOUD, g.getX(), g.getY() + 0.4, g.getZ(), 8, 0.3, 0.2, 0.3, 0.02);
-        npc.roleData.putUUID("Guhtje", g.getUUID());
+        npc.roleData.store("Guhtje", UUIDUtil.CODEC, g.getUUID());
         npc.roleData.remove("Weg");
         return g;
     }
@@ -231,15 +233,15 @@ public final class Brandweer implements NpcRole {
      * arms and lands by Blusguh - the job is done. Returns true when it was rescued.
      */
     public static boolean red(ServerPlayer player, GuhEntity g) {
-        if (!(player.level() instanceof ServerLevel level) || !g.getPersistentData().hasUUID(NPC)) {
+        if (!(player.level() instanceof ServerLevel level) || !g.getPersistentData().read(NPC, UUIDUtil.CODEC).isPresent()) {
             return false;
         }
-        Entity e = level.getEntity(g.getPersistentData().getUUID(NPC));
+        Entity e = level.getEntity(g.getPersistentData().read(NPC, UUIDUtil.CODEC).orElseThrow());
         if (!(e instanceof GuhNpcEntity npc)) {
             return false;
         }
         if (!player.getUUID().equals(BeroepenHulp.speler(npc)) || BeroepenVoortgang.stap(player, BEROEP) != 2) {
-            player.displayClientMessage(Component.translatable("gui.guhs.beroepen.brandweer.guhtje_wacht").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.brandweer.guhtje_wacht").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         Vec3 bij = npc.position().add(npc.getLookAngle().multiply(1, 0, 1).normalize().scale(1.2));
@@ -278,7 +280,7 @@ public final class Brandweer implements NpcRole {
         }
         if (!geslaagd) {
             GuhEntity g = guhtje(npc);
-            if (g != null && g.getPersistentData().getBoolean(BOOMGUHTJE)) {
+            if (g != null && g.getPersistentData().getBooleanOr(BOOMGUHTJE, false)) {
                 g.discard();
                 npc.roleData.remove("Guhtje");
             }
@@ -292,7 +294,7 @@ public final class Brandweer implements NpcRole {
 
     /** (Tests) is this the guhtje of a job? */
     public static boolean isBoomguhtje(Entity e) {
-        return e.getPersistentData().getBoolean(BOOMGUHTJE);
+        return e.getPersistentData().getBooleanOr(BOOMGUHTJE, false);
     }
 
     /** (Tests) whose job: the helper's UUID. */

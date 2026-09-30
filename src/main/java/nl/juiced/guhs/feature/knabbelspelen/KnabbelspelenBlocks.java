@@ -11,7 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -122,16 +122,16 @@ public final class KnabbelspelenBlocks {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
             ItemStack stack = player.getItemInHand(hand);
-            if (level.isClientSide) {
-                return InteractionResultHolder.sidedSuccess(stack, true);
+            if (level.isClientSide()) {
+                return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
             }
             if (player instanceof ServerPlayer p && Blikgooien.gooi(p, hand)) {
                 p.getCooldowns().addCooldown(this, 8);
-                return InteractionResultHolder.consume(stack);
+                return InteractionResult.CONSUME.heldItemTransformedTo(stack);
             }
-            return InteractionResultHolder.fail(stack);
+            return InteractionResult.FAIL;
         }
     }
 
@@ -143,7 +143,7 @@ public final class KnabbelspelenBlocks {
 
         @Override
         public net.minecraft.world.InteractionResult useOn(UseOnContext context) {
-            if (context.getLevel().isClientSide) {
+            if (context.getLevel().isClientSide()) {
                 return net.minecraft.world.InteractionResult.SUCCESS;
             }
             if (context.getPlayer() instanceof ServerPlayer p && GuhguhtjePrik.prik(p, context.getClickLocation(), context.getClickedPos())) {

@@ -81,11 +81,11 @@ public final class VadshoutBlocks {
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 level.setBlock(pos, state.cycle(STEMMING), Block.UPDATE_ALL);
                 level.playSound(null, pos, ModSounds.GUH_HAPPY.get(), SoundSource.BLOCKS, 0.5f, 1.4f + level.getRandom().nextFloat() * 0.3f);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Nullable

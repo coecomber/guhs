@@ -5,7 +5,7 @@ import java.util.Locale;
 import javax.annotation.Nullable;
 
 import net.minecraft.network.chat.Component;
-import software.bernie.geckolib.animation.RawAnimation;
+import com.geckolib.animation.RawAnimation;
 
 /**
  * The guh emotes (seven since 2.5, three more in 2.8: GAPEN, ZINGEN, KNUFFELEN; four in 2.10: HARTJES,

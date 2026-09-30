@@ -21,7 +21,7 @@ import nl.juiced.guhs.feature.reisguh.ReisguhFluit;
  */
 @EventBusSubscriber(modid = Guhs.MODID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public final class ReisguhFluitClient {
-    public static final net.minecraft.resources.ResourceLocation MODEL = Guhs.id("geo/entity/guh_npc_reisguh.geo.json");
+    public static final net.minecraft.resources.Identifier MODEL = Guhs.id("geo/entity/guh_npc_reisguh.geo.json");
     /** Entity id -> client game time when he started blowing. */
     private static final Map<Integer, Long> START = new ConcurrentHashMap<>();
     /** Where the whistle goes (model units, from its place on his chest) and how far it turns (mouthpiece into the mouth). */

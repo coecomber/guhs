@@ -74,7 +74,7 @@ public final class Ohana {
     // =================================================================================================================
 
     public static int stap(ServerPlayer p) {
-        return GuhQuests.saved(p).getInt(STAP);
+        return GuhQuests.saved(p).getIntOr(STAP, 0);
     }
 
     public static void zet(ServerPlayer p, int stap) {
@@ -82,11 +82,11 @@ public final class Ohana {
     }
 
     public static int gaven(ServerPlayer p) {
-        return GuhQuests.saved(p).getInt(GAVEN);
+        return GuhQuests.saved(p).getIntOr(GAVEN, 0);
     }
 
     public static int rommel(ServerPlayer p) {
-        return GuhQuests.saved(p).getInt(ROMMEL);
+        return GuhQuests.saved(p).getIntOr(ROMMEL, 0);
     }
 
     /** (tests / ops) start over. */
@@ -103,7 +103,7 @@ public final class Ohana {
     // =================================================================================================================
 
     static void lilo(GuhNpcEntity npc, ServerPlayer p) {
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         npc.playSound(ModSounds.GUH_AMBIENT.get(), 1f, 1.35f);
         Entity nani = dichtste(level, npc, GuhNpcEntity.Kind.NANI_GUH);
         Entity stitch = kopie(level, npc.position());
@@ -171,7 +171,7 @@ public final class Ohana {
         if (stitch instanceof GuhEntity s) {
             blij(s, Emote.KNUFFELEN);
         }
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         level.sendParticles(ParticleTypes.HEART, lilo.getX(), lilo.getY() + 1.2, lilo.getZ(), 12, 1.2, 0.6, 1.2, 0.05);
         level.sendParticles(ParticleTypes.FIREWORK, lilo.getX(), lilo.getY() + 2.5, lilo.getZ(), 30, 1.5, 0.8, 1.5, 0.08);
         level.playSound(null, lilo.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 0.8f, 1.3f);
@@ -202,7 +202,7 @@ public final class Ohana {
             case NIEUW, CAPSULE, TERUG -> GuhQuests.say(p, npc, "gui.guhs.guhwaii.nani.begin");
             case OPRUIMEN -> {
                 int nodig = ROMMEL_NODIG - rommel(p);
-                int liggen = strooiRommel(p.serverLevel(), npc.blockPosition());
+                int liggen = strooiRommel(p.level(), npc.blockPosition());
                 GuhQuests.say(p, npc, "gui.guhs.guhwaii.nani.opruimen", nodig);
                 if (liggen == 0) {
                     GuhQuests.hint(p, "gui.guhs.guhwaii.hint.opruimen");
@@ -223,7 +223,7 @@ public final class Ohana {
         if (stap(p) == CAPSULE) {
             zet(p, TERUG);
             GuhQuests.hint(p, "gui.guhs.guhwaii.hint.capsule_gevonden");
-            p.serverLevel().playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1f, 0.8f);
+            p.level().playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 1f, 0.8f);
         }
         GuhwaiiFeature.advancement(p, "capsule");
     }
@@ -241,9 +241,9 @@ public final class Ohana {
         }
         int tries = 0;
         while (al.size() < ROMMEL_NODIG && tries++ < 200) {
-            BlockPos q = rond.offset(level.random.nextInt(ROMMEL_STRAAL * 2 + 1) - ROMMEL_STRAAL, level.random.nextInt(3) - 1,
-                    level.random.nextInt(ROMMEL_STRAAL * 2 + 1) - ROMMEL_STRAAL);
-            BlockState st = GuhwaiiFeature.ROMMELTJE.get().defaultBlockState().setValue(GuhwaiiBlokken.SOORT, level.random.nextInt(4));
+            BlockPos q = rond.offset(level.getRandom().nextInt(ROMMEL_STRAAL * 2 + 1) - ROMMEL_STRAAL, level.getRandom().nextInt(3) - 1,
+                    level.getRandom().nextInt(ROMMEL_STRAAL * 2 + 1) - ROMMEL_STRAAL);
+            BlockState st = GuhwaiiFeature.ROMMELTJE.get().defaultBlockState().setValue(GuhwaiiBlokken.SOORT, level.getRandom().nextInt(4));
             if (level.isEmptyBlock(q) && level.isEmptyBlock(q.above()) && st.canSurvive(level, q) && level.getFluidState(q).isEmpty()
                     && al.stream().noneMatch(a -> a.distManhattan(q) < 2) && !level.getBlockState(q.below()).is(GuhwaiiFeature.ROMMELTJE.get())) {
                 level.setBlock(q, st, Block.UPDATE_ALL);
@@ -256,7 +256,7 @@ public final class Ohana {
 
     /** A click on a rommeltje: it's cleaned up (poof) and counted. */
     public static void opgeruimd(ServerPlayer p, BlockPos pos) {
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         if (!level.getBlockState(pos).is(GuhwaiiFeature.ROMMELTJE.get())) {
             return;
         }
@@ -266,7 +266,7 @@ public final class Ohana {
 
     /** A rommeltje was cleaned up by p (clicked or broken). */
     public static void telOpgeruimd(ServerPlayer p, BlockPos pos) {
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         level.sendParticles(ParticleTypes.POOF, pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5, 6, 0.25, 0.15, 0.25, 0.02);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 4, 0.3, 0.2, 0.3, 0.02);
         level.playSound(null, pos, SoundEvents.BRUSH_SAND_COMPLETED, SoundSource.BLOCKS, 0.8f, 1.2f);
@@ -286,7 +286,7 @@ public final class Ohana {
         } else if (nani != null) {
             GuhQuests.say(p, nani, "gui.guhs.guhwaii.nani.nog", ROMMEL_NODIG - n);
         } else {
-            p.displayClientMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guhwaii.rommel.teller", n, ROMMEL_NODIG), true);
+            p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guhwaii.rommel.teller", n, ROMMEL_NODIG));
         }
     }
 
@@ -372,7 +372,7 @@ public final class Ohana {
                 : "gui.guhs.guhwaii.626.gave.knabbels";
         GuhQuests.say(p, kopie, key);
         kopie.playSound(ModSounds.GUH_EAT.get(), 1f, 1.3f);
-        p.serverLevel().sendParticles(ParticleTypes.HEART, kopie.getX(), kopie.getY() + 1.0, kopie.getZ(), 5, 0.4, 0.3, 0.4, 0.02);
+        p.level().sendParticles(ParticleTypes.HEART, kopie.getX(), kopie.getY() + 1.0, kopie.getZ(), 5, 0.4, 0.3, 0.4, 0.02);
         blij(kopie, gave == GAVE_BLOEM ? Emote.VERLEGEN : Emote.SMAKKEN);
         if (gaven == ALLE_GAVEN) {
             zet(p, OHANA);
@@ -389,7 +389,7 @@ public final class Ohana {
     static void luisteraars() {
         Praat.luister(SCENE, (p, spreker, optie) -> {
             if (optie < 0) {
-                Entity stitch = kopie(p.serverLevel(), p.position());
+                Entity stitch = kopie(p.level(), p.position());
                 if (stitch instanceof GuhEntity s && stap(p) >= OPRUIMEN) {
                     blij(s, Emote.VAHOEG);
                 }

@@ -118,7 +118,7 @@ public final class Cocotje implements NpcRole {
     }
 
     public static int state(ServerPlayer player) {
-        return GuhQuests.saved(player).getInt(KEY);
+        return GuhQuests.saved(player).getIntOr(KEY, 0);
     }
 
     static void setState(ServerPlayer player, int state) {

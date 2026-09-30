@@ -5,7 +5,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
@@ -14,9 +14,9 @@ import nl.juiced.guhs.feature.baltoslee.SledehondjeEntity;
 import nl.juiced.guhs.feature.baltoslee.SleeBaan;
 import nl.juiced.guhs.feature.baltoslee.SleeEntity;
 import nl.juiced.guhs.feature.baltoslee.SleeRijden;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * The Nomguh sled (geo/entity/baltoslee_slee.geo.json): turned along its track, tilted on slopes, leaning into the bends,
@@ -25,8 +25,8 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
  * pulled by his own dogs, with Steele-Mika sitting in it.
  */
 public class SleeRenderer extends GeoEntityRenderer<SleeEntity> {
-    private static final ResourceLocation TEX = Guhs.id("textures/entity/baltoslee_slee.png");
-    private static final ResourceLocation TEX_STEELE = Guhs.id("textures/entity/baltoslee_slee_steele.png");
+    private static final Identifier TEX = Guhs.id("textures/entity/baltoslee_slee.png");
+    private static final Identifier TEX_STEELE = Guhs.id("textures/entity/baltoslee_slee_steele.png");
     /** Where the team runs: blocks ahead of the sled's middle, and sideways (the last one is the lead). */
     static final double[][] PLEKKEN = {{2.0, -0.4}, {2.0, 0.4}, {3.05, -0.4}, {3.05, 0.4}, {4.3, 0}};
 
@@ -44,12 +44,12 @@ public class SleeRenderer extends GeoEntityRenderer<SleeEntity> {
         }
 
         @Override
-        public ResourceLocation getTextureResource(SleeEntity sled) {
+        public Identifier getTextureResource(SleeEntity sled) {
             return sled.soort() == SleeEntity.STEELE ? TEX_STEELE : TEX;
         }
 
         @Override
-        public void setCustomAnimations(SleeEntity sled, long instanceId, AnimationState<SleeEntity> state) {
+        public void setCustomAnimations(SleeEntity sled, long instanceId, AnimationTest<SleeEntity> state) {
             getBone("kist").ifPresent(b -> b.setHidden(!sled.kist()));
             getBone("musher").ifPresent(b -> b.setHidden(true));
             float t = (float) state.getAnimationTick();

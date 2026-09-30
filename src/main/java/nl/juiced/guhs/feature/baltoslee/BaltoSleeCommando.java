@@ -22,6 +22,7 @@ import nl.juiced.guhs.feature.balto.Nomguh;
 import nl.juiced.guhs.feature.spelen.Niveau;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Op commands of the sled (testing, the autocheck; Brigadier merges them into the /guhs tree):
  * <ul>
@@ -62,7 +63,7 @@ public final class BaltoSleeCommando {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     SleeRit rit = SleeRit.van(p);
                     if (rit != null) {
-                        rit.einde(p.serverLevel(), SleeRit.Einde.GESTOPT);
+                        rit.einde(p.level(), SleeRit.Einde.GESTOPT);
                     }
                     return rit != null ? 1 : 0;
                 }))
@@ -84,7 +85,7 @@ public final class BaltoSleeCommando {
     }
 
     private static NomguhRoute route(CommandSourceStack source, ServerPlayer p, BlockPos anker) {
-        BlockPos a = anker != null ? anker : Nomguh.anker(p.serverLevel(), p.blockPosition());
+        BlockPos a = anker != null ? anker : Nomguh.anker(p.level(), p.blockPosition());
         if (a == null) {
             source.sendFailure(Component.literal("Njeg: geen Nomguh in de buurt. Geef een anker op, of probeer /guhs baltoslee proef."));
             return null;
@@ -146,15 +147,15 @@ public final class BaltoSleeCommando {
 
     private static int steele(CommandSourceStack source, BlockPos anker) throws CommandSyntaxException {
         ServerPlayer p = source.getPlayerOrException();
-        ServerLevel level = p.serverLevel();
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level);
+        ServerLevel level = p.level();
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
         if (npc == null) {
             return 0;
         }
         npc.setKind(GuhNpcEntity.Kind.STEELE_MIKA);
         npc.roleData.putString(nl.juiced.guhs.feature.verhaal.NpcRollen.PLEK, SteeleSprint.PLEK);
         npc.roleData.putLong(SteeleSprint.ANKER, anker.asLong());
-        npc.moveTo(p.getX(), p.getY(), p.getZ(), p.getYRot() + 180, 0);
+        npc.snapTo(p.getX(), p.getY(), p.getZ(), p.getYRot() + 180, 0);
         npc.setPersistenceRequired();
         level.addFreshEntity(npc);
         source.sendSuccess(() -> Component.literal("Steele-Mika staat klaar voor de sledesprint. Njeh-heh!"), true);
@@ -163,14 +164,14 @@ public final class BaltoSleeCommando {
 
     private static int toon(CommandSourceStack source) throws CommandSyntaxException {
         ServerPlayer p = source.getPlayerOrException();
-        SneeuwsleeEntity s = BaltoSleeFeature.SNEEUWSLEE_ENTITY.get().create(p.serverLevel());
+        SneeuwsleeEntity s = BaltoSleeFeature.SNEEUWSLEE_ENTITY.get().create(p.level(), EntitySpawnReason.TRIGGERED);
         if (s == null) {
             return 0;
         }
         Vec3 at = p.position().add(Vec3.directionFromRotation(0, p.getYRot()).scale(3));
-        s.moveTo(at.x, p.getY(), at.z, p.getYRot() + 90, 0);
+        s.snapTo(at.x, p.getY(), at.z, p.getYRot() + 90, 0);
         s.zetEigenaar(p.getUUID());
-        p.serverLevel().addFreshEntity(s);
+        p.level().addFreshEntity(s);
         return 1;
     }
 }

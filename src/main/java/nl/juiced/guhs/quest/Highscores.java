@@ -178,8 +178,8 @@ public final class Highscores {
      * Returns true when it was.
      */
     public static boolean remember(ServerPlayer player, String board, int score, boolean lowerIsBetter) {
-        CompoundTag all = GuhQuests.saved(player).getCompound(KEY);
-        if (all.contains(board) && !better(score, all.getInt(board), lowerIsBetter)) {
+        CompoundTag all = GuhQuests.saved(player).getCompoundOrEmpty(KEY);
+        if (all.contains(board) && !better(score, all.getIntOr(board, 0), lowerIsBetter)) {
             return false;
         }
         all.putInt(board, score);
@@ -191,15 +191,15 @@ public final class Highscores {
     @Nullable
     public static Integer personalBest(ServerPlayer player, Game game) {
         Integer best = null;
-        CompoundTag all = GuhQuests.saved(player).getCompound(KEY);
+        CompoundTag all = GuhQuests.saved(player).getCompoundOrEmpty(KEY);
         if (all.contains(game.board())) {
-            best = all.getInt(game.board());
+            best = all.getIntOr(game.board(), 0);
         }
         int old = game.legacy().applyAsInt(player);
         if (valid(old, game.lowerIsBetter()) && (best == null || better(old, best, game.lowerIsBetter()))) {
             best = old;
         }
-        for (Scorebord.Entry e : Scorebord.top(player.server, game.board())) {
+        for (Scorebord.Entry e : Scorebord.top(player.level().getServer(), game.board())) {
             if (e.player().equals(player.getUUID()) && (best == null || better(e.score(), best, game.lowerIsBetter()))) {
                 best = e.score();
             }
@@ -219,7 +219,7 @@ public final class Highscores {
         List<MaagPayloads.HighscoreRow> rows = new ArrayList<>();
         for (Game game : GAMES) {
             Integer best = personalBest(player, game);
-            Scorebord.Entry record = record(player.server, game);
+            Scorebord.Entry record = record(player.level().getServer(), game);
             rows.add(new MaagPayloads.HighscoreRow(game.id(), best != null, best != null ? game.format().apply(best) : "",
                     record == null ? "" : game.format().apply(record.score()), record == null ? "" : record.name()));
         }

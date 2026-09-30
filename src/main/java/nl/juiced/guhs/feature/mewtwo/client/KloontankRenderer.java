@@ -3,9 +3,9 @@ package nl.juiced.guhs.feature.mewtwo.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -49,9 +49,9 @@ public class KloontankRenderer implements BlockEntityRenderer<KloontankBlockEnti
         float hoog = heel ? BOVEN - 0.12f + (float) Math.sin(tijd * 0.08) * 0.03f : 0.42f + (float) Math.sin(tijd * 0.05) * 0.02f;
         int roze = heel ? 0xE0FFFFFF : 0xD0FFFFFF;
         for (int i = 0; i < ZIJDEN; i++) {
-            zijde(vc, last, i, R_VLOEI, ONDER, hoog, vloei, roze, LightTexture.FULL_BRIGHT, -1);
+            zijde(vc, last, i, R_VLOEI, ONDER, hoog, vloei, roze, LightCoordsUtil.FULL_BRIGHT, -1);
         }
-        deksel(vc, last, R_VLOEI, hoog, vloei, roze, LightTexture.FULL_BRIGHT);
+        deksel(vc, last, R_VLOEI, hoog, vloei, roze, LightCoordsUtil.FULL_BRIGHT);
         // the glass: eight panes, three cracked and one broken while it isn't repaired
         TextureAtlasSprite glas = sprite("mewtwo_tankglas"), barst = sprite("mewtwo_tankglas_barst");
         for (int i = 0; i < ZIJDEN; i++) {
@@ -79,7 +79,7 @@ public class KloontankRenderer implements BlockEntityRenderer<KloontankBlockEnti
             TextureAtlasSprite s = sprite(in ? "mewtwo_lampje_groen" : "mewtwo_lampje_rood");
             float x = -0.52f + (n - 1) * 0.3f, z = R_GLAS + 0.07f;
             int flits = !in && ((int) (tijd / 10) + n) % 4 == 0 ? 0xFFFFB0B0 : 0xFFFFFFFF;
-            vierkant(vc, lamp, x, 0.03f, z, x + 0.16f, 0.2f, s, flits, LightTexture.FULL_BRIGHT);
+            vierkant(vc, lamp, x, 0.03f, z, x + 0.16f, 0.2f, s, flits, LightCoordsUtil.FULL_BRIGHT);
         }
         pose.popPose();
         pose.popPose();

@@ -40,7 +40,7 @@ public final class Mijnguh implements NpcRole {
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
         npc.level().playSound(null, npc, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 0.8f);
         var saved = GuhQuests.saved(player);
-        if (!saved.getBoolean(MET_KEY)) {
+        if (!saved.getBooleanOr(MET_KEY, false)) {
             saved.putBoolean(MET_KEY, true);
             GuhQuests.say(player, npc, "quest.guhs.kaasmijn.hello");
             lend(player, npc);
@@ -73,7 +73,7 @@ public final class Mijnguh implements NpcRole {
     public static boolean lend(ServerPlayer player, GuhNpcEntity npc) {
         ItemStack pickaxe = new ItemStack(KaasmijnFeature.LEENHOUWEEL.get());
         if (player.getInventory().getSelected().isEmpty()) {
-            player.getInventory().setItem(player.getInventory().selected, pickaxe);
+            player.getInventory().setItem(player.getInventory().getSelectedSlot(), pickaxe);
         } else if (!player.getInventory().add(pickaxe)) {
             GuhQuests.say(player, npc, "quest.guhs.kaasmijn.full");
             return false;

@@ -13,7 +13,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
@@ -23,7 +23,7 @@ import net.minecraft.world.entity.ai.navigation.AmphibiousPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -123,7 +123,7 @@ public final class Zeemeerguh {
 
     /** Every tick of a Zeemeerguh: it keeps its rider breathing under water; bubbles now and then. */
     public static void tick(GuhEntity guh) {
-        if (guh.level().isClientSide) {
+        if (guh.level().isClientSide()) {
             if (guh.isInWater() && guh.getRandom().nextInt(8) == 0) {
                 guh.level().addParticle(ParticleTypes.BUBBLE, guh.getRandomX(0.5), guh.getY() + guh.getBbHeight() * 0.8, guh.getRandomZ(0.5), 0, 0.05, 0);
             }
@@ -195,12 +195,12 @@ public final class Zeemeerguh {
     /** A new wild Zeemeerguh in the water at pos (null if there's no room). */
     @Nullable
     public static GuhEntity spawnAt(ServerLevel level, BlockPos pos, RandomSource random) {
-        GuhEntity guh = ModEntities.GUH.get().create(level);
+        GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (guh == null) {
             return null;
         }
-        guh.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, random.nextFloat() * 360f, 0);
-        guh.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.NATURAL, null);
+        guh.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, random.nextFloat() * 360f, 0);
+        guh.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.NATURAL, null);
         become(guh, random);
         if (!level.noCollision(guh)) {
             guh.discard();

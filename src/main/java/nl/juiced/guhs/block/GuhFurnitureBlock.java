@@ -23,6 +23,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.entity.GuhSeatEntity;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Guh furniture (chair, table, sofa, bean bags, cushions): turns to face you when placed; the seats can be sat on
  * (right-click with an empty hand).
@@ -85,17 +86,17 @@ public class GuhFurnitureBlock extends HorizontalDirectionalBlock {
         if (!isSeat() || player.isSecondaryUseActive() || player.isPassenger()) {
             return InteractionResult.PASS;
         }
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             if (!level.getEntitiesOfClass(GuhSeatEntity.class, new AABB(pos)).isEmpty()) {
                 return InteractionResult.CONSUME; // someone is already sitting here
             }
-            GuhSeatEntity seat = ModEntities.GUH_SEAT.get().create(level);
+            GuhSeatEntity seat = ModEntities.GUH_SEAT.get().create(level, EntitySpawnReason.TRIGGERED);
             if (seat != null) {
-                seat.moveTo(pos.getX() + 0.5, pos.getY() + seatHeight, pos.getZ() + 0.5, state.getValue(FACING).toYRot(), 0);
+                seat.snapTo(pos.getX() + 0.5, pos.getY() + seatHeight, pos.getZ() + 0.5, state.getValue(FACING).toYRot(), 0);
                 level.addFreshEntity(seat);
                 player.startRiding(seat);
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 }

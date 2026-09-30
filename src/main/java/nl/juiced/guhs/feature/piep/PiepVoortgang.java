@@ -64,10 +64,10 @@ public final class PiepVoortgang {
     /** The player's own Piep data (a live compound in their saved data). */
     public static CompoundTag data(ServerPlayer player) {
         CompoundTag saved = GuhQuests.saved(player);
-        if (!saved.contains(KEY, Tag.TAG_COMPOUND)) {
+        if (!saved.contains(KEY)) {
             saved.put(KEY, new CompoundTag());
         }
-        return saved.getCompound(KEY);
+        return saved.getCompoundOrEmpty(KEY);
     }
 
     /** Counts one (and grants a hidden quest advancement guhs:quest/&lt;adv&gt;, if given). */

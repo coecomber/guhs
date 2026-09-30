@@ -59,7 +59,7 @@ public final class HemelQuest {
     }
 
     public static int stap(ServerPlayer p) {
-        return saved(p).getInt(STAP);
+        return saved(p).getIntOr(STAP, 0);
     }
 
     public static void zetStap(ServerPlayer p, int stap) {
@@ -67,11 +67,11 @@ public final class HemelQuest {
     }
 
     public static boolean klopt(ServerPlayer p) {
-        return saved(p).getBoolean(HART);
+        return saved(p).getBooleanOr(HART, false);
     }
 
     public static boolean heeft(ServerPlayer p, Ding d) {
-        return (saved(p).getInt(GEBRACHT) & d.bit()) != 0;
+        return (saved(p).getIntOr(GEBRACHT, 0) & d.bit()) != 0;
     }
 
     /** What the Knuffelhart still needs. */
@@ -91,7 +91,7 @@ public final class HemelQuest {
         for (Ding d : nodig(p)) {
             if (GuhQuests.count(p, d.item()) > 0) {
                 GuhQuests.take(p, d.item(), 1);
-                saved(p).putInt(GEBRACHT, saved(p).getInt(GEBRACHT) | d.bit());
+                saved(p).putInt(GEBRACHT, saved(p).getIntOr(GEBRACHT, 0) | d.bit());
                 GuhAdvancements.grant(p, "hemel_" + d.id());
                 gebracht.add(d);
             }
@@ -114,7 +114,7 @@ public final class HemelQuest {
     }
 
     public static int terug(ServerPlayer p) {
-        return saved(p).getInt(TERUG);
+        return saved(p).getIntOr(TERUG, 0);
     }
 
     static void telTerug(ServerPlayer p) {

@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -40,7 +40,7 @@ public class KnabbelkroonItem extends ArmorItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (level.isClientSide || !(entity instanceof Player player) || player.getItemBySlot(EquipmentSlot.HEAD) != stack) {
+        if (level.isClientSide() || !(entity instanceof Player player) || player.getItemBySlot(EquipmentSlot.HEAD) != stack) {
             return;
         }
         if (player.tickCount % 100 == 0) {
@@ -48,9 +48,9 @@ public class KnabbelkroonItem extends ArmorItem {
         }
         if (player.tickCount % 60 == 0 && level instanceof ServerLevel server) {
             for (GuhEntity guh : server.getEntitiesOfClass(GuhEntity.class, player.getBoundingBox().inflate(AURA_RANGE))) {
-                if (server.random.nextInt(3) == 0) {
+                if (server.getRandom().nextInt(3) == 0) {
                     server.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.3, guh.getZ(), 1, 0.2, 0.1, 0.2, 0);
-                    if (server.random.nextInt(4) == 0) {
+                    if (server.getRandom().nextInt(4) == 0) {
                         guh.playSound(ModSounds.GUH_HAPPY.get(), 0.8f, guh.getVoicePitch());
                     }
                 }

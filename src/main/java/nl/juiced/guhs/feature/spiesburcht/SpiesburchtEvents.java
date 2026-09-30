@@ -16,7 +16,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
@@ -61,7 +61,7 @@ public final class SpiesburchtEvents {
     }
 
     /** Guhs may be born in the dark Asdal (on its ash), where a normal guh would find it too dark. */
-    public static boolean asguhMaySpawn(EntityType<GuhEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, RandomSource random) {
+    public static boolean asguhMaySpawn(EntityType<GuhEntity> type, ServerLevelAccessor level, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
         return level.getBiome(pos).is(SpiesburchtFeature.ASDAL) && Mob.checkMobSpawnRules(type, level, reason, pos, random)
                 && (level.getBlockState(pos.below()).is(nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature.AS_BLOK.get())
                 || level.getBlockState(pos.below()).is(nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature.AS_AARDE.get()));
@@ -69,8 +69,8 @@ public final class SpiesburchtEvents {
 
     /** A guh born in the Asdal is an Asguh. */
     static void onFinalizeSpawn(FinalizeSpawnEvent event) {
-        if (event.getEntity() instanceof GuhEntity guh && (event.getSpawnType() == MobSpawnType.NATURAL
-                || event.getSpawnType() == MobSpawnType.CHUNK_GENERATION || event.getSpawnType() == MobSpawnType.SPAWNER)
+        if (event.getEntity() instanceof GuhEntity guh && (event.getSpawnType() == EntitySpawnReason.NATURAL
+                || event.getSpawnType() == EntitySpawnReason.CHUNK_GENERATION || event.getSpawnType() == EntitySpawnReason.SPAWNER)
                 && event.getLevel().getBiome(BlockPos.containing(event.getX(), event.getY(), event.getZ())).is(SpiesburchtFeature.ASDAL)) {
             guh.setVariant(GuhVariant.ASGUH);
         }
@@ -92,7 +92,7 @@ public final class SpiesburchtEvents {
         if (e.isOnFire()) {
             e.clearFire();
         }
-        if (e.level().isClientSide && e.getRandom().nextInt(12) == 0) {
+        if (e.level().isClientSide() && e.getRandom().nextInt(12) == 0) {
             e.level().addParticle(ParticleTypes.ASH, e.getRandomX(0.5), e.getY() + e.getBbHeight() * 0.6, e.getRandomZ(0.5), 0, 0, 0);
             if (e.getRandom().nextInt(3) == 0) {
                 e.level().addParticle(ParticleTypes.SMALL_FLAME, e.getRandomX(0.4), e.getY() + e.getBbHeight() * 0.5, e.getRandomZ(0.4), 0, 0.01, 0);
@@ -102,7 +102,7 @@ public final class SpiesburchtEvents {
 
     /** An Asguh with a kaasknabbel: it glows with joy (the guh itself still eats it as usual). */
     static void onFeed(PlayerInteractEvent.EntityInteract event) {
-        if (event.getLevel().isClientSide || !isAsguh(event.getTarget()) || !event.getItemStack().is(ModItems.KAAS_KNABBELS.get())
+        if (event.getLevel().isClientSide() || !isAsguh(event.getTarget()) || !event.getItemStack().is(ModItems.KAAS_KNABBELS.get())
                 || !(event.getEntity() instanceof ServerPlayer player) || !(event.getLevel() instanceof ServerLevel level)) {
             return;
         }
@@ -111,7 +111,7 @@ public final class SpiesburchtEvents {
         level.sendParticles(ParticleTypes.FLAME, guh.getX(), guh.getY() + guh.getBbHeight() * 0.5, guh.getZ(), 12, 0.4, 0.3, 0.4, 0.02);
         level.sendParticles(ParticleTypes.LAVA, guh.getX(), guh.getY() + guh.getBbHeight() * 0.5, guh.getZ(), 3, 0.3, 0.2, 0.3, 0.0);
         level.playSound(null, guh.blockPosition(), SoundEvents.FIRECHARGE_USE, SoundSource.NEUTRAL, 0.4f, 1.8f);
-        player.displayClientMessage(Component.translatable("quest.guhs.asguh.blij").withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.asguh.blij").withStyle(ChatFormatting.GOLD));
         GuhAdvancements.grant(player, "asguh_gevoerd");
     }
 

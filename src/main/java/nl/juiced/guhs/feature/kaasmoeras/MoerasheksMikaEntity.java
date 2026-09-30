@@ -19,7 +19,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -38,12 +38,12 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModSounds;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * De Moerasheks-Mika: a witch parody (a Mika in a big pointy hat) who lives in her paalhut in the kaasmoeras. She keeps
@@ -83,12 +83,12 @@ public class MoerasheksMikaEntity extends Monster implements RangedAttackMob, Ge
     }
 
     /** Rare natural spawns in the dark kaasmoeras (the hut has its own), never more than one around. */
-    public static boolean checkMoerasheksSpawnRules(EntityType<? extends Monster> type, ServerLevelAccessor level, MobSpawnType spawnType,
+    public static boolean checkMoerasheksSpawnRules(EntityType<? extends Monster> type, ServerLevelAccessor level, EntitySpawnReason spawnType,
                                                      BlockPos pos, RandomSource random) {
         if (!Monster.checkMonsterSpawnRules(type, level, spawnType, pos, random)) {
             return false;
         }
-        if (MobSpawnType.isSpawner(spawnType) || spawnType == MobSpawnType.STRUCTURE) {
+        if (EntitySpawnReason.isSpawner(spawnType) || spawnType == EntitySpawnReason.STRUCTURE) {
             return true;
         }
         return random.nextInt(4) == 0 && level.getEntitiesOfClass(MoerasheksMikaEntity.class, new AABB(pos).inflate(48)).size() < MAX_NEARBY;
@@ -137,7 +137,7 @@ public class MoerasheksMikaEntity extends Monster implements RangedAttackMob, Ge
     @Override
     public void aiStep() {
         super.aiStep();
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             if (nibbleCooldown > 0) {
                 nibbleCooldown--;
             }
@@ -224,7 +224,7 @@ public class MoerasheksMikaEntity extends Monster implements RangedAttackMob, Ge
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "move", 4, state -> state.setAndContinue(state.isMoving() ? WALK : IDLE)));
-        controllers.add(new AnimationController<>(this, "action", 2, state -> software.bernie.geckolib.animation.PlayState.STOP)
+        controllers.add(new AnimationController<>(this, "action", 2, state -> com.geckolib.animation.object.PlayState.STOP)
                 .triggerableAnim("throw", THROW).triggerableAnim("nibble", NIBBLE));
     }
 

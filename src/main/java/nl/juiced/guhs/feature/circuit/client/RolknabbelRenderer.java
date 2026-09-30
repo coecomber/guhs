@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.feature.circuit.RolknabbelEntity;
 import nl.juiced.guhs.registry.ModBlocks;
@@ -36,7 +36,7 @@ public class RolknabbelRenderer extends EntityRenderer<RolknabbelEntity> {
 
     @Override
     @SuppressWarnings("deprecation")
-    public ResourceLocation getTextureLocation(RolknabbelEntity knabbel) {
+    public Identifier getTextureLocation(RolknabbelEntity knabbel) {
         return TextureAtlas.LOCATION_BLOCKS;
     }
 }

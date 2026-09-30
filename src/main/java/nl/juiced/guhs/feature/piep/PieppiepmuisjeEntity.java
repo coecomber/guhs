@@ -41,13 +41,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModItems;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * The pieppiepmuisje: a tiny plush mouse (dark purple-black, a fluffy cream band, a pink nose). Always lief.
@@ -165,7 +165,7 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
         if (!knabbel && !leeg) {
             return super.mobInteract(player, hand);
         }
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer sp = (ServerPlayer) player;
@@ -220,7 +220,7 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
         getNavigation().stop();
         level().broadcastEntityEvent(this, (byte) 7);
         triggerAnim("actie", "blij");
-        player.displayClientMessage(Component.translatable("gui.guhs.piep.muisje_getamed").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.piep.muisje_getamed").withStyle(ChatFormatting.LIGHT_PURPLE));
         PiepVoortgang.tel(player, PiepVoortgang.GETAMED, 1, "piep_muisje_getamed");
         PiepVoortgang.pagina(player, "pieppiepmuisje");
     }
@@ -262,7 +262,7 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             verstop().tick();
         }
     }
@@ -307,7 +307,7 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
     @Override
     public void playAmbientSound() {
         super.playAmbientSound();
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             triggerAnim("actie", "piep");
         }
     }
@@ -325,7 +325,7 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         verstop().load(tag);
-        setUitVlaggen(tag.getInt("PiepUit"));
+        setUitVlaggen(tag.getIntOr("PiepUit", 0));
     }
 
     // --- the menu (PiepMaatje) ----------------------------------------------------------------------------------------------
@@ -379,7 +379,7 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
     @Override
     public void speciaal(ServerPlayer player) {
         if (Schouder.heeft(player)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.piep.schouder_vol").withStyle(ChatFormatting.GRAY), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.piep.schouder_vol").withStyle(ChatFormatting.GRAY));
             return;
         }
         Schouder.zet(player, this);

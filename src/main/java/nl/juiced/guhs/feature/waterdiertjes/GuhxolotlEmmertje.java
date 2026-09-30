@@ -49,13 +49,13 @@ public class GuhxolotlEmmertje extends PiepDierItem {
 
     public static boolean metEmmer(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        return data != null && data.copyTag().getBoolean(MET_EMMER);
+        return data != null && data.copyTag().getBooleanOr(MET_EMMER, false);
     }
 
     /** The colour of the guhxolotl inside (roze for an empty/new one). */
     public static GuhxolotlEntity.Kleur kleur(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        return data == null ? GuhxolotlEntity.Kleur.ROZE : GuhxolotlEntity.Kleur.van(data.copyTag().getString("Kleur"));
+        return data == null ? GuhxolotlEntity.Kleur.ROZE : GuhxolotlEntity.Kleur.van(data.copyTag().getStringOr("Kleur", ""));
     }
 
     @Override
@@ -81,8 +81,8 @@ public class GuhxolotlEmmertje extends PiepDierItem {
         }
         level.playSound(null, pos, SoundEvents.BUCKET_EMPTY_AXOLOTL, SoundSource.NEUTRAL, 1f, 1f);
         if (player instanceof ServerPlayer sp) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.piep.neergezet.guhxolotl", x.getDisplayName())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.piep.neergezet.guhxolotl", x.getDisplayName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         stack.shrink(1);
         if (emmer && player != null && !player.hasInfiniteMaterials()) {
@@ -113,7 +113,7 @@ public class GuhxolotlEmmertje extends PiepDierItem {
             if (tag.contains("Owner")) {
                 tooltip.add(Component.translatable("item.guhs.guhxolotl_emmertje.getemd").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
-            if (tag.getInt("Age") < 0) {
+            if (tag.getIntOr("Age", 0) < 0) {
                 tooltip.add(Component.translatable("item.guhs.guhxolotl_emmertje.kleintje").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }

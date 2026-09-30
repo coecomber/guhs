@@ -66,14 +66,14 @@ public class VallendeKnabbelEntity extends Entity implements ItemSupplier {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide && this.tickCount % 20 == 0 && !Evenementen.owns(this)) {
+        if (!this.level().isClientSide() && this.tickCount % 20 == 0 && !Evenementen.owns(this)) {
             this.discard(); // a leftover of an event that's over
             return;
         }
-        if (this.level().isClientSide && !landed()) {
+        if (this.level().isClientSide() && !landed()) {
             fall(); // (on the server its kaasregen moves it: see serverStep)
         }
-        if (this.level().isClientSide && isGolden() && this.tickCount % 3 == 0) {
+        if (this.level().isClientSide() && isGolden() && this.tickCount % 3 == 0) {
             this.level().addParticle(GOLD, this.getX() + (this.random.nextDouble() - 0.5) * 0.4, this.getY() + 0.2,
                     this.getZ() + (this.random.nextDouble() - 0.5) * 0.4, 0, 0, 0);
             if (this.random.nextInt(4) == 0) {

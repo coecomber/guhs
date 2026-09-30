@@ -7,19 +7,17 @@ import java.util.List;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -37,14 +35,13 @@ import nl.juiced.guhs.quest.Highscores;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the shared Knus framework of 2.8 (package feature.knus) and the scaffolding phase 1 made for every
  * 2.8 feature: seasons and parts of the day, the Knus progress (counters, milestones, claims, collections, the payloads),
  * the Knusfeest hooks, the guh hooks and flags, the hair slot, registerGame, the plein slots, the tags, the new emotes,
  * NPC kinds and Guhdex pages, the superkompas category, the Highscores rows and the Knusfeest event type.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KnusGameTests {
     private static final String EMPTY = "empty";
 
@@ -54,7 +51,7 @@ public class KnusGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return p;
     }
 
@@ -65,13 +62,13 @@ public class KnusGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id("quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id("quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
     private static int count(ServerPlayer p, net.minecraft.world.item.Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -81,7 +78,7 @@ public class KnusGameTests {
 
     // --- seasons and parts of the day -----------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY, batch = "knus_seizoen_a")
+    @GuhTest(template = EMPTY, batch = "knus_seizoen_a")
     public static void knusSeizoenWisseltEnGaatNooitTerug(GameTestHelper helper) {
         var server = helper.getLevel().getServer();
         List<Seizoen> heard = new ArrayList<>();
@@ -119,7 +116,7 @@ public class KnusGameTests {
 
     // --- the Knus tab -----------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knusVoortgangTeltClaimtEnOntdekt(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         try {
@@ -150,7 +147,7 @@ public class KnusGameTests {
             CompoundTag saved = nl.juiced.guhs.quest.GuhQuests.saved(p);
             helper.assertTrue(saved.contains(KnusVoortgang.KEY), "saved in the persisted player data");
             // the payloads
-            KnusPayloads.KnusData data = new KnusPayloads.KnusData(saved.getCompound(KnusVoortgang.KEY).copy(), new CompoundTag());
+            KnusPayloads.KnusData data = new KnusPayloads.KnusData(saved.getCompoundOrEmpty(KnusVoortgang.KEY).copy(), new CompoundTag());
             FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
             KnusPayloads.KnusData.STREAM_CODEC.encode(buf, data);
             helper.assertTrue(KnusPayloads.KnusData.STREAM_CODEC.decode(buf).equals(data), "guhs:knus_data survives the trip");
@@ -176,7 +173,7 @@ public class KnusGameTests {
 
     // --- the Knusfeest --------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knusfeestHaakjesVoorDeFeatures(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         try {
@@ -222,7 +219,7 @@ public class KnusGameTests {
 
     // --- guh hooks, flags, the hair slot --------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void knusGuhHooksVlaggenEnHaar(GameTestHelper helper) {
         for (int x = 0; x < 5; x++) {
             for (int z = 0; z < 5; z++) {
@@ -248,7 +245,7 @@ public class KnusGameTests {
         guh.wear(GuhClothes.WINTER_SCARF);
         CompoundTag tag = new CompoundTag();
         guh.saveWithoutId(tag);
-        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         copy.load(tag);
         helper.assertTrue(copy.getHaarkleur() == 0xFF88CC && GuhHooks.heeft(copy, GuhHooks.GLANZEND) && GuhHooks.isBewoner(copy),
                 "hair colour, flags and residents survive saving");
@@ -267,7 +264,7 @@ public class KnusGameTests {
 
     // --- registerGame, Binnenkort, NPC kinds and pages ------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knusSteigersVoorDeAndereFeatures(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         try {
@@ -307,7 +304,7 @@ public class KnusGameTests {
 
     // --- plein slots, tags, superkompas, highscores, the event type -----------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knusPleinSlotsTagsEnMenus(GameTestHelper helper) {
         var level = helper.getLevel();
         var templates = level.getStructureManager();
@@ -323,10 +320,10 @@ public class KnusGameTests {
                 var jigsaws = t.get().filterBlocks(BlockPos.ZERO, new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(),
                         Blocks.JIGSAW, true);
                 helper.assertTrue(jigsaws.size() == 1 && jigsaws.get(0).pos().equals(new BlockPos(15, 4, 30))
-                        && jigsaws.get(0).nbt().getString("name").equals("guhs:plein_ingang"), "one jigsaw guhs:plein_ingang at (15, 4, 30): " + slot);
+                        && jigsaws.get(0).nbt().getStringOr("name", "").equals("guhs:plein_ingang"), "one jigsaw guhs:plein_ingang at (15, 4, 30): " + slot);
             }
-            ResourceLocation pool = slot.pool();
-            helper.assertTrue(level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.TEMPLATE_POOL).containsKey(pool),
+            Identifier pool = slot.pool();
+            helper.assertTrue(level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.TEMPLATE_POOL).containsKey(pool),
                     "a pool for " + slot);
         }
         // the test areas
@@ -349,7 +346,7 @@ public class KnusGameTests {
         var knus = SuperkompasItem.CATEGORIES.stream().filter(c -> c.id().equals("knus")).findFirst().orElse(null);
         helper.assertTrue(knus != null && knus.structures().equals(List.of("knuffeldal_stadje", "guhboerderij", "guh_sterrenwacht", "ballonfestival",
                 "kampeerplekje", "knuffelbad")), "the knus category: " + knus);
-        var structures = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
+        var structures = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
         for (String s : knus.structures()) {
             helper.assertTrue(structures.containsKey(Guhs.id(s)), "structure " + s);
         }
@@ -371,7 +368,7 @@ public class KnusGameTests {
 
     // --- the new emotes; singing is a signal -------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY, timeoutTicks = 120)
+    @GuhTest(template = EMPTY, timeoutTicks = 120)
     public static void knusNieuweEmotesZingenIsEenSignaal(GameTestHelper helper) {
         for (int x = 0; x < 5; x++) {
             for (int z = 0; z < 5; z++) {

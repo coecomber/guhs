@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,8 +17,6 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -32,8 +30,6 @@ import nl.juiced.guhs.registry.ModItems;
  * world's top 3 at the scoreboard wall), walking away, the loaned mallet (never kept), the shop and the real hall. Most run in the small test
  * room mika_mep_proefhal (4 holes, the Mepguh and the two scoreboards).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class MeppenGameTests {
     private static final String ROOM = "mika_mep_proefhal";
     private static final String EMPTY = "empty";
@@ -49,7 +45,7 @@ public class MeppenGameTests {
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper, GuhNpcEntity npc) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX() + 1, npc.getY(), npc.getZ());
+        player.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         return player;
     }
 
@@ -72,7 +68,7 @@ public class MeppenGameTests {
     /** Pops a head and whacks it (on the head block). */
     private static void whack(MepGame game, GuhNpcEntity npc, ServerPlayer player, int hole, Kop kop) {
         BlockPos pos = game.holes().get(hole);
-        game.pop(player.serverLevel(), player, pos, kop, 1000);
+        game.pop(player.level(), player, pos, kop, 1000);
         game.hit(player, pos.above());
         advance(game, npc, MepGame.BONK_TICKS + 1);
     }
@@ -93,7 +89,7 @@ public class MeppenGameTests {
         return GuhQuests.count(player, item);
     }
 
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void mepStartsWithoutOwnItems(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 16);
         ServerPlayer player = player(helper, npc);
@@ -118,7 +114,7 @@ public class MeppenGameTests {
         done(helper, npc, player);
     }
 
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void mepScoresCombosGoldAndTheGuh(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 16);
         ServerPlayer player = player(helper, npc);
@@ -153,14 +149,14 @@ public class MeppenGameTests {
         advance(game, npc, 4);
         helper.assertTrue(game.combo() == 0 && game.score() == before + MepGame.GUH_SPARED && game.headsUp() == 0, "escaped Mika / spared guh");
         // without the mallet in hand nothing counts
-        player.getInventory().selected = (player.getInventory().selected + 1) % 9;
+        player.getInventory().setSelectedSlot((player.getInventory().getSelectedSlot() + 1) % 9);
         game.pop(helper.getLevel(), player, game.holes().get(1), Kop.MIKA, 1000);
         game.hit(player, game.holes().get(1).above());
         helper.assertTrue(game.score() == before + MepGame.GUH_SPARED, "only the mallet whacks");
         done(helper, npc, player);
     }
 
-    @GameTest(template = ROOM, timeoutTicks = 200)
+    @GuhTest(template = ROOM, timeoutTicks = 200)
     public static void mepTimeUpGivesCoinsAndARecord(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 16);
         ServerPlayer player = player(helper, npc);
@@ -184,13 +180,13 @@ public class MeppenGameTests {
             helper.assertTrue(!helper.getLevel().getBlockState(hole.above()).is(MeppenFeature.MEP_KOP.get()), "the board is empty again");
         }
         var marker = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(16),
-                d -> d.getTags().contains(MepGame.TAG_TOP));
+                d -> d.entityTags().contains(MepGame.TAG_TOP));
         helper.assertTrue(!marker.isEmpty(), "a spot for the top 3");
         Display.TextDisplay spot = marker.stream().min(java.util.Comparator.comparingDouble(d -> d.distanceToSqr(npc))).get();
         var top = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, spot.getBoundingBox().inflate(1.5),
-                d -> d.getTags().contains(Scorebord.TAG));
-        helper.assertTrue(top.size() == 1 && top.get(0).saveWithoutId(new net.minecraft.nbt.CompoundTag()).getString("text")
-                .contains(player.getGameProfile().getName() + "  " + MepGame.points(score)), "the top 3 floats at the scoreboard wall with the score");
+                d -> d.entityTags().contains(Scorebord.TAG));
+        helper.assertTrue(top.size() == 1 && top.get(0).saveWithoutId(new net.minecraft.nbt.CompoundTag()).getStringOr("text", "")
+                .contains(player.getGameProfile().name() + "  " + MepGame.points(score)), "the top 3 floats at the scoreboard wall with the score");
         // a second, worse game: no bonus, the record stays
         game = play(helper, npc, player);
         whack(game, npc, player, 0, Kop.MIKA);
@@ -203,13 +199,13 @@ public class MeppenGameTests {
     }
 
     /** Just standing there (letting every guh go) earns nothing: no free mepmunten for AFK players. */
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void mepStandingStillEarnsNoCoins(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 16);
         ServerPlayer player = player(helper, npc);
         GuhQuests.saved(player).putBoolean("guhs_mep_first", true);           // (not the first game: no bonus)
         MepGame game = play(helper, npc, player);
-        game.pop(player.serverLevel(), player, game.holes().get(0), Kop.GUH, 2);
+        game.pop(player.level(), player, game.holes().get(0), Kop.GUH, 2);
         advance(game, npc, 5);
         helper.assertTrue(game.score() == MepGame.GUH_SPARED, "a guh let go: a few points " + game.score());
         game.finishNow(npc);
@@ -220,13 +216,13 @@ public class MeppenGameTests {
         done(helper, npc, player);
     }
 
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void mepWalkingAwayEndsTheGame(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 16);
         ServerPlayer player = player(helper, npc);
         MepGame game = play(helper, npc, player);
         whack(game, npc, player, 0, Kop.MIKA);
-        player.moveTo(player.getX() + MepGame.LEAVE_RADIUS + 3, player.getY(), player.getZ());
+        player.snapTo(player.getX() + MepGame.LEAVE_RADIUS + 3, player.getY(), player.getZ());
         game.step(npc);
         helper.assertTrue(!game.isRunning() && !MepGame.isPlaying(player), "walking away stops the game");
         helper.assertTrue(count(player, MeppenFeature.MEP_HAMER.get()) == 0 && count(player, MeppenFeature.MEPMUNT.get()) == 0,
@@ -234,14 +230,14 @@ public class MeppenGameTests {
         done(helper, npc, player);
     }
 
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void mepFullHotbarGetsItsItemBack(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 16);
         ServerPlayer player = player(helper, npc);
         for (int i = 0; i < 9; i++) {
             player.getInventory().setItem(i, new ItemStack(Items.DIRT, 5));
         }
-        player.getInventory().selected = 4;
+        player.getInventory().setSelectedSlot(4);
         player.getInventory().setItem(4, new ItemStack(Items.DIAMOND, 3));
         MepGame.action(npc, player, MepGame.START);
         helper.assertTrue(player.getMainHandItem().is(MeppenFeature.MEP_HAMER.get()), "the mallet goes in your hand");
@@ -254,13 +250,13 @@ public class MeppenGameTests {
         done(helper, npc, player);
     }
 
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void mepMalletCantBeKept(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 16);
         ServerPlayer player = player(helper, npc);
         MepGame game = play(helper, npc, player);
         ItemStack mallet = player.getMainHandItem().copy();
-        player.getInventory().setItem(player.getInventory().selected, ItemStack.EMPTY);
+        player.getInventory().setItem(player.getInventory().getSelectedSlot(), ItemStack.EMPTY);
         ItemEntity thrown = new ItemEntity(helper.getLevel(), player.getX(), player.getY(), player.getZ(), mallet);
         ItemTossEvent toss = new ItemTossEvent(thrown, player);
         MepGame.onToss(toss);
@@ -279,7 +275,7 @@ public class MeppenGameTests {
         done(helper, npc, player, other);
     }
 
-    @GameTest(template = ROOM)
+    @GuhTest(template = ROOM)
     public static void mepOneGameAtATime(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 16);
         ServerPlayer a = player(helper, npc), b = player(helper, npc);
@@ -294,7 +290,7 @@ public class MeppenGameTests {
         done(helper, npc, a, b);
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void mepShopSellsTheMikaHunterOutfit(GameTestHelper helper) {
         GuhNpcEntity npc = helper.spawn(nl.juiced.guhs.registry.ModEntities.GUH_NPC.get(), new BlockPos(2, 1, 2));
         npc.setKind(GuhNpcEntity.Kind.MEPGUH);
@@ -309,7 +305,7 @@ public class MeppenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void mepBoardBlocksNeverBreak(GameTestHelper helper) {
         helper.setBlock(new BlockPos(2, 1, 2), MeppenFeature.MEP_GAT.get());
         ServerLevel level = helper.getLevel();
@@ -319,7 +315,7 @@ public class MeppenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = HALL, timeoutTicks = 200)
+    @GuhTest(template = HALL, timeoutTicks = 200)
     public static void mepHallHasABoardAndTheMepguh(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 110);
         ServerPlayer player = player(helper, npc);
@@ -331,15 +327,15 @@ public class MeppenGameTests {
         helper.assertTrue(stand != null && helper.getLevel().getBlockState(stand.below()).isSolid()
                 && helper.getLevel().getBlockState(stand).isAir(), "you stand on the board, between the holes");
         var boards = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(110),
-                d -> d.getTags().contains(MepGame.TAG_LIVE) || d.getTags().contains(MepGame.TAG_TOP));
+                d -> d.entityTags().contains(MepGame.TAG_LIVE) || d.entityTags().contains(MepGame.TAG_TOP));
         helper.assertTrue(boards.size() == 2, "the scoreboard wall: " + boards.size());
         helper.assertTrue(game.holes().stream().map(BlockPos::getX).distinct().count() == 4
                 && game.holes().stream().map(BlockPos::getZ).distinct().count() == 4, "the holes are 4 rows of 4");
         // the world's top 3 floats at the scoreboard wall (at the marker), not above the Mepguh
         MepGame.showScores(npc);
-        Display.TextDisplay spot = boards.stream().filter(d -> d.getTags().contains(MepGame.TAG_TOP)).findFirst().orElseThrow();
+        Display.TextDisplay spot = boards.stream().filter(d -> d.entityTags().contains(MepGame.TAG_TOP)).findFirst().orElseThrow();
         var top = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, spot.getBoundingBox().inflate(1.5),
-                d -> d.getTags().stream().anyMatch(t -> t.startsWith(Scorebord.TAG + ":meppen:")));
+                d -> d.entityTags().stream().anyMatch(t -> t.startsWith(Scorebord.TAG + ":meppen:")));
         helper.assertTrue(top.size() == 1, "the top 3 at the scoreboard wall: " + top.size());
         helper.assertTrue(spot.distanceToSqr(npc) > 20 * 20, "(the wall is across the hall)");
         done(helper, npc, player);
@@ -348,7 +344,7 @@ public class MeppenGameTests {
     // --- 2.9: makkelijk / medium / lastig -----------------------------------------------------------------------------------
 
     /** Lastig: its own board and record, half as many mepmunten more, and the lastig advancement. Medium stays untouched. */
-    @GameTest(template = ROOM, timeoutTicks = 200)
+    @GuhTest(template = ROOM, timeoutTicks = 200)
     public static void mepLastigHasItsOwnBoardAndMoreCoins(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 16);
         ServerPlayer player = player(helper, npc);
@@ -376,16 +372,16 @@ public class MeppenGameTests {
                 "the lastig advancement");
         // the floating board has all three levels
         var spot = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(16),
-                d -> d.getTags().contains(MepGame.TAG_TOP)).stream().min(java.util.Comparator.comparingDouble(d -> d.distanceToSqr(npc))).orElseThrow();
-        String text = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, spot.getBoundingBox().inflate(1.5), d -> d.getTags().contains(Scorebord.TAG))
-                .get(0).saveWithoutId(new net.minecraft.nbt.CompoundTag()).getString("text");
+                d -> d.entityTags().contains(MepGame.TAG_TOP)).stream().min(java.util.Comparator.comparingDouble(d -> d.distanceToSqr(npc))).orElseThrow();
+        String text = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, spot.getBoundingBox().inflate(1.5), d -> d.entityTags().contains(Scorebord.TAG))
+                .get(0).saveWithoutId(new net.minecraft.nbt.CompoundTag()).getStringOr("text", "");
         helper.assertTrue(text.contains("gui.guhs.niveau.makkelijk") && text.contains("gui.guhs.niveau.medium") && text.contains("gui.guhs.niveau.lastig")
-                && text.contains(player.getGameProfile().getName() + "  " + MepGame.points(score)), "one board, three levels: " + text);
+                && text.contains(player.getGameProfile().name() + "  " + MepGame.points(score)), "one board, three levels: " + text);
         done(helper, npc, player);
     }
 
     /** Makkelijk is calmer (slower, longer up, fewer guh decoys, more gold), lastig the other way round. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void mepLevelsHaveTheirOwnTempo(GameTestHelper helper) {
         var m = MepGame.Tempo.of(nl.juiced.guhs.feature.spelen.Niveau.MAKKELIJK);
         var n = MepGame.Tempo.of(nl.juiced.guhs.feature.spelen.Niveau.MEDIUM);

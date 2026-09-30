@@ -49,12 +49,12 @@ import nl.juiced.guhs.feature.knus.Seizoen;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * IJscoguh Tingeling (2.8, wereldleven): a guh on his ice-cream bike (a box full of kaasijsjes, a parasol, a bell). Like
@@ -185,7 +185,7 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         LEVEND.add(this);
@@ -267,7 +267,7 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
         if (held.is(WereldlevenFeature.IJSCOGUH_SPAWN_EGG.get())) {
             return InteractionResult.PASS;
         }
-        if (!level().isClientSide && player instanceof ServerPlayer sp) {
+        if (!level().isClientSide() && player instanceof ServerPlayer sp) {
             if (tradingPlayer != null && tradingPlayer != player) {
                 GuhQuests.say(sp, this, "quest.guhs.shop.busy");
                 return InteractionResult.CONSUME;
@@ -277,7 +277,7 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
             setTradingPlayer(player);
             openTradingScreen(player, getDisplayName(), 1);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** The first meeting counts (Knus tab, quest). */
@@ -335,7 +335,7 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
         if (tradingPlayer instanceof ServerPlayer sp) {
             ItemStack result = offer.getResult();
             if (result.getItem() instanceof KaasijsjeItem) {
-                sp.displayClientMessage(Component.translatable("quest.guhs.ijscoguh.alsjeblieft").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                sp.sendOverlayMessage(Component.translatable("quest.guhs.ijscoguh.alsjeblieft").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
     }
@@ -365,7 +365,7 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
 
     @Override
     public boolean isClientSide() {
-        return level().isClientSide;
+        return level().isClientSide();
     }
 
     // --- saving ---------------------------------------------------------------------------------------------------------------
@@ -375,7 +375,7 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
         super.addAdditionalSaveData(tag);
         tag.putInt("Blijft", blijft);
         if (doel != null) {
-            tag.put("Doel", NbtUtils.writeBlockPos(doel));
+            tag.store("Doel", BlockPos.CODEC, doel);
         }
     }
 
@@ -383,9 +383,9 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         if (tag.contains("Blijft")) {
-            blijft = tag.getInt("Blijft");
+            blijft = tag.getIntOr("Blijft", 0);
         }
-        doel = NbtUtils.readBlockPos(tag, "Doel").orElse(null);
+        doel = (tag).read("Doel", BlockPos.CODEC).orElse(null);
     }
 
     // --- GeckoLib -------------------------------------------------------------------------------------------------------------

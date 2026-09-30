@@ -8,11 +8,11 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -20,10 +20,10 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.vogels.GuhUiltjeEntity;
 import nl.juiced.guhs.feature.vogels.Vogeltje;
 import nl.juiced.guhs.feature.vogels.VogelsFeature;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.layer.GeoRenderLayer;
 
 /**
  * The birds' renderers (3.0 vogels): their own GeckoLib models (tools/features/vogels_modellen.py) with a turning head, eyes
@@ -52,18 +52,18 @@ public final class VogelsClient {
     public static class VogelRenderer<T extends Vogeltje> extends GeoEntityRenderer<T> {
         public VogelRenderer(EntityRendererProvider.Context context, String naam, float schaduw) {
             super(context, new DefaultedEntityGeoModel<T>(Guhs.id(naam), true) {
-                private final ResourceLocation open = Guhs.id("textures/entity/" + naam + ".png");
-                private final ResourceLocation dicht = Guhs.id("textures/entity/" + naam + "_dicht.png");
+                private final Identifier open = Guhs.id("textures/entity/" + naam + ".png");
+                private final Identifier dicht = Guhs.id("textures/entity/" + naam + "_dicht.png");
 
                 @Override
-                public ResourceLocation getTextureResource(T vogel) {
+                public Identifier getTextureResource(T vogel) {
                     return ogenDicht(vogel) ? dicht : open;
                 }
             });
             this.shadowRadius = schaduw;
             if (naam.equals("guh_uiltje")) {
                 addRenderLayer(new GeoRenderLayer<>(this) {
-                    private final ResourceLocation glow = Guhs.id("textures/entity/guh_uiltje_glowmask.png");
+                    private final Identifier glow = Guhs.id("textures/entity/guh_uiltje_glowmask.png");
 
                     @Override
                     public void render(PoseStack poseStack, T vogel, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
@@ -71,7 +71,7 @@ public final class VogelsClient {
                         if (vogel instanceof GuhUiltjeEntity uil && uil.nacht() && !ogenDicht(vogel)) {
                             RenderType type = RenderType.eyes(glow);
                             getRenderer().reRender(model, poseStack, buffers, vogel, type, buffers.getBuffer(type), partialTick,
-                                    LightTexture.FULL_BRIGHT, overlay, 0xFFFFFFFF);
+                                    LightCoordsUtil.FULL_BRIGHT, overlay, 0xFFFFFFFF);
                         }
                     }
                 });

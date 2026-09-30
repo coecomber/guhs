@@ -27,6 +27,7 @@ import nl.juiced.guhs.feature.spelen.Niveau;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.quest.Scorebord;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Surfing with Lilo-guh at the surf beach of Guhwai'i (3.0). Lilo-guh at the surf shack (plek "surf") lends you a
  * surfplankje and paddles out with you: a set of waves rolls in ({@link SurfGolven}, makkelijk / medium / lastig), you
@@ -105,7 +106,7 @@ public final class SurfSpel {
     public static void talk(GuhNpcEntity npc, ServerPlayer player) {
         boolean bezig = surft(player);
         CompoundTag saved = GuhwaiiSpellenFeature.data(player);
-        GuhQuests.say(player, npc, bezig ? "quest.guhs.guhwaiispellen.surf.bezig" : saved.getBoolean("EersteSurf")
+        GuhQuests.say(player, npc, bezig ? "quest.guhs.guhwaiispellen.surf.bezig" : saved.getBooleanOr("EersteSurf", false)
                 ? "quest.guhs.guhwaiispellen.surf.hallo" + (1 + player.getRandom().nextInt(4)) : "quest.guhs.guhwaiispellen.surf.welkom");
         CompoundTag data = GuhwaiiSpellenFeature.scherm(player, "surf");
         data.putBoolean("Mine", bezig);
@@ -144,8 +145,8 @@ public final class SurfSpel {
     public static boolean start(GuhNpcEntity npc, ServerPlayer player, Niveau niveau, Surfplek.Spot spot, int seed) {
         ServerLevel level = (ServerLevel) npc.level();
         SurfSpel s = new SurfSpel(player, npc, niveau, spot, seed);
-        SurfPlankEntity bord = GuhwaiiSpellenBlocks.SURFPLANK.get().create(level);
-        SurfPlankEntity liloBord = GuhwaiiSpellenBlocks.SURFPLANK.get().create(level);
+        SurfPlankEntity bord = GuhwaiiSpellenBlocks.SURFPLANK.get().create(level, EntitySpawnReason.TRIGGERED);
+        SurfPlankEntity liloBord = GuhwaiiSpellenBlocks.SURFPLANK.get().create(level, EntitySpawnReason.TRIGGERED);
         if (bord == null || liloBord == null) {
             return false;
         }
@@ -174,7 +175,7 @@ public final class SurfSpel {
         start.putDouble("Hoek", spot.hoek());
         start.putInt("Niveau", niveau.ordinal());
         start.putInt("Seed", seed);
-        start.putInt("Record", GuhwaiiSpellenFeature.data(player).getInt("Surf_" + niveau.id()));
+        start.putInt("Record", GuhwaiiSpellenFeature.data(player).getIntOr("Surf_" + niveau.id(), 0));
         nl.juiced.guhs.network.ModNetworking.sendTo(player, new GuhwaiiSpellenPayloads.SurfStart(start));
         GuhwaiiSpellenFeature.titel(player, Component.translatable("gui.guhs.guhwaiispellen.surf.titel").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
                 Component.translatable("gui.guhs.guhwaiispellen.surf.titel.sub", niveau.naam()), 50);
@@ -188,7 +189,7 @@ public final class SurfSpel {
     public static Surfplek.Spot spot(GuhNpcEntity npc) {
         CompoundTag rd = npc.roleData;
         if (rd.contains("SurfOrigin")) {
-            return new Surfplek.Spot(BlockPos.of(rd.getLong("SurfOrigin")), rd.getDouble("SurfHoek"));
+            return new Surfplek.Spot(BlockPos.of(rd.getLongOr("SurfOrigin", 0L)), rd.getDoubleOr("SurfHoek", 0.0));
         }
         Surfplek.Spot spot = Surfplek.zoek(npc.level(), npc.blockPosition());
         if (spot != null) {
@@ -231,7 +232,7 @@ public final class SurfSpel {
         // hold sneak: back to the beach
         if (player.isShiftKeyDown()) {
             if (++s.sneak == 10) {
-                player.displayClientMessage(Component.translatable("gui.guhs.guhwaiispellen.surf.sneak").withStyle(ChatFormatting.GRAY), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.guhwaiispellen.surf.sneak").withStyle(ChatFormatting.GRAY));
             }
             if (s.sneak >= STOP_TICKS) {
                 s.einde(level, player, true);
@@ -335,7 +336,7 @@ public final class SurfSpel {
                 level.playSound(null, player.blockPosition(), GuhwaiiSpellenBlocks.SCHELPJE.get(), SoundSource.PLAYERS, 1f, 1f);
             }
             uitslag.putInt("Munten", munten);
-            int oud = data.getInt("Surf_" + niveau.id());
+            int oud = data.getIntOr("Surf_" + niveau.id(), 0);
             if (score > oud) {
                 data.putInt("Surf_" + niveau.id(), score);
                 uitslag.putBoolean("Record", true);
@@ -356,7 +357,7 @@ public final class SurfSpel {
             if (niveau == Niveau.LASTIG && score >= LASTIG_KONING) {
                 GuhwaiiSpellenFeature.grant(player, "guhwaii_spellen_surf_lastig");
             }
-            if (!data.getBoolean("EersteSurf")) {
+            if (!data.getBooleanOr("EersteSurf", false)) {
                 data.putBoolean("EersteSurf", true);
                 Minigames.give(player, new ItemStack(GuhwaiiSpellenBlocks.SCHELPJESMUNT.get(), EERSTE_MUNTEN));
                 Minigames.give(player, new ItemStack(GuhwaiiSpellenBlocks.SURFPLANK_REK.get()));

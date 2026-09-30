@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -27,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -40,7 +39,7 @@ import nl.juiced.guhs.registry.ModItems;
  */
 public class FryingPanBlock extends BaseEntityBlock {
     public static final MapCodec<FryingPanBlock> CODEC = simpleCodec(FryingPanBlock::new);
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty FILLED = BooleanProperty.create("filled");
     public static final int CHARGES_PER_VET = 64;
     public static final int MAX_CHARGES = 256;
@@ -84,29 +83,29 @@ public class FryingPanBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                               InteractionHand hand, BlockHitResult hit) {
         boolean vet = stack.is(ModItems.MIKA_VET.get());
         boolean knabbels = stack.is(ModItems.KAAS_KNABBELS.get()) || stack.is(ModItems.GUH_VIS.get());
         if (!vet && !knabbels) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
-        if (level.isClientSide || !(level.getBlockEntity(pos) instanceof FryingPanBlockEntity pan)) {
-            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        if (level.isClientSide() || !(level.getBlockEntity(pos) instanceof FryingPanBlockEntity pan)) {
+            return InteractionResult.SUCCESS;
         }
 
         if (vet) {
             if (pan.getCharges() + CHARGES_PER_VET > MAX_CHARGES) {
-                player.displayClientMessage(Component.translatable("block.guhs.frying_pan.full"), true);
-                return ItemInteractionResult.CONSUME;
+                player.sendOverlayMessage(Component.translatable("block.guhs.frying_pan.full"));
+                return InteractionResult.CONSUME;
             }
             stack.consume(1, player);
             pan.setCharges(pan.getCharges() + CHARGES_PER_VET);
             level.playSound(null, pos, SoundEvents.HONEY_BLOCK_PLACE, SoundSource.BLOCKS, 1f, 0.8f);
         } else {
             if (pan.getCharges() <= 0) {
-                player.displayClientMessage(Component.translatable("block.guhs.frying_pan.no_fat"), true);
-                return ItemInteractionResult.CONSUME;
+                player.sendOverlayMessage(Component.translatable("block.guhs.frying_pan.no_fat"));
+                return InteractionResult.CONSUME;
             }
             int fried = Math.min(stack.getCount(), pan.getCharges());
             // kaas knabbels -> fried kaas knabbels, guh fish -> fried guh fish
@@ -124,18 +123,18 @@ public class FryingPanBlock extends BaseEntityBlock {
         }
         level.setBlock(pos, state.setValue(FILLED, pan.getCharges() > 0), 3);
         showCharges(player, pan);
-        return ItemInteractionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide && level.getBlockEntity(pos) instanceof FryingPanBlockEntity pan) {
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FryingPanBlockEntity pan) {
             showCharges(player, pan);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     private static void showCharges(Player player, FryingPanBlockEntity pan) {
-        player.displayClientMessage(Component.translatable("block.guhs.frying_pan.charges", pan.getCharges(), MAX_CHARGES), true);
+        player.sendOverlayMessage(Component.translatable("block.guhs.frying_pan.charges", pan.getCharges(), MAX_CHARGES));
     }
 }

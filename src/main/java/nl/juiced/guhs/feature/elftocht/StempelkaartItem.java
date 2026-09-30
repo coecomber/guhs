@@ -7,7 +7,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -37,21 +37,21 @@ public class StempelkaartItem extends Item {
     }
 
     public static int stempels(ItemStack stack) {
-        return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getInt("Stempels");
+        return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getIntOr("Stempels", 0);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!level.isClientSide && player instanceof ServerPlayer sp) {
+        if (!level.isClientSide() && player instanceof ServerPlayer sp) {
             ElftochtTocht.toonKaart(sp);
         }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && (!(entity instanceof Player player) || !ElftochtTocht.opTocht(player))) {
+        if (!level.isClientSide() && (!(entity instanceof Player player) || !ElftochtTocht.opTocht(player))) {
             stack.setCount(0);
         }
     }
@@ -63,7 +63,7 @@ public class StempelkaartItem extends Item {
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.level().isClientSide) {
+        if (!entity.level().isClientSide()) {
             entity.discard();
         }
         return true;
@@ -72,8 +72,8 @@ public class StempelkaartItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
-        int n = tag.getInt("Stempels");
-        int[] tijden = tag.getIntArray("Tijden");
+        int n = tag.getIntOr("Stempels", 0);
+        int[] tijden = tag.getIntArray("Tijden").orElse(new int[0]);
         tooltip.add(Component.translatable("item.guhs.stempelkaart.lore", n).withStyle(ChatFormatting.GRAY));
         for (int k = 0; k < ElftochtTocht.VOLGORDE.length; k++) {
             int dorp = ElftochtTocht.VOLGORDE[k];

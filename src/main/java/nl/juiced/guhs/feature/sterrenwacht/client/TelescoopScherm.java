@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Set;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -190,8 +190,8 @@ public class TelescoopScherm extends Screen {
         } else if (feestTijd < 0 && tick >= Sterrenkijken.KIJK_TICKS) {
             // the look took too long: the stars have turned away (the server forgets the look too)
             if (minecraft != null && minecraft.player != null) {
-                minecraft.player.displayClientMessage(Component.translatable("gui.guhs.sterrenwacht.te_laat")
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), false);
+                minecraft.player.sendSystemMessage(Component.translatable("gui.guhs.sterrenwacht.te_laat")
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             onClose();
         }
@@ -210,8 +210,8 @@ public class TelescoopScherm extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, BORDER);
         g.fill(left, top, left + W, top + H, PANEL);
         float t = tick + partialTick;
@@ -275,18 +275,18 @@ public class TelescoopScherm extends Screen {
     }
 
     /** The card on the right: which constellation, its shape, tonight's count and the mistakes. */
-    private void renderKaart(GuiGraphics g) {
+    private void renderKaart(GuiGraphicsExtractor g) {
         int x = left + 8 + 2 * R + 10, w = left + W - 8 - x;
         int y = top + 10;
-        g.drawString(font, Component.translatable("gui.guhs.sterrenwacht.zoek").withStyle(ChatFormatting.ITALIC), x, y, 0xFFB8A8E8, false);
+        g.text(font, Component.translatable("gui.guhs.sterrenwacht.zoek").withStyle(ChatFormatting.ITALIC), x, y, 0xFFB8A8E8, false);
         y += 11;
         List<FormattedCharSequence> naam = font.split(beeld.naam().copy().withStyle(ChatFormatting.BOLD), w);
         for (FormattedCharSequence line : naam) {
-            g.drawString(font, line, x, y, beeld.zeldzaam ? GOUD : TEKST, false);
+            g.text(font, line, x, y, beeld.zeldzaam ? GOUD : TEKST, false);
             y += 10;
         }
         if (nieuw) {
-            g.drawString(font, Component.translatable("gui.guhs.sterrenwacht.nieuw"), x, y, 0xFFFF9AD0, false);
+            g.text(font, Component.translatable("gui.guhs.sterrenwacht.nieuw"), x, y, 0xFFFF9AD0, false);
             y += 10;
         }
         // the shape
@@ -305,27 +305,27 @@ public class TelescoopScherm extends Screen {
             g.fill(sx - 1, sy - 1, sx + 2, sy + 2, 0xFFFFF6D8);
         }
         y = by + box + 6;
-        g.drawString(font, Component.translatable("gui.guhs.sterrenwacht.lijnen", getrokken.size(), beeld.sleutels().size()), x, y, TEKST, false);
+        g.text(font, Component.translatable("gui.guhs.sterrenwacht.lijnen", getrokken.size(), beeld.sleutels().size()), x, y, TEKST, false);
         y += 10;
-        g.drawString(font, Component.translatable("gui.guhs.sterrenwacht.fouten", fouten), x, y, fouten > 0 ? 0xFFFFA0A8 : TEKST, false);
+        g.text(font, Component.translatable("gui.guhs.sterrenwacht.fouten", fouten), x, y, fouten > 0 ? 0xFFFFA0A8 : TEKST, false);
         y += 10;
-        g.drawString(font, Component.translatable("gui.guhs.sterrenwacht.vannacht", vannacht, Sterrenkijken.MAX_PER_NACHT), x, y, 0xFFB8A8E8, false);
+        g.text(font, Component.translatable("gui.guhs.sterrenwacht.vannacht", vannacht, Sterrenkijken.MAX_PER_NACHT), x, y, 0xFFB8A8E8, false);
         if (feestTijd >= 0) {
             Component vahoeg = Component.translatable("gui.guhs.sterrenwacht.vahoeg").withStyle(ChatFormatting.BOLD);
             int tw = font.width(vahoeg);
             g.fill(cx - tw / 2 - 6, cy + R - 30, cx + tw / 2 + 6, cy + R - 16, 0xC0301A40);
-            g.drawString(font, vahoeg, cx - tw / 2, cy + R - 27, GOUD, false);
+            g.text(font, vahoeg, cx - tw / 2, cy + R - 27, GOUD, false);
         } else {
             List<FormattedCharSequence> hint = font.split(Component.translatable("gui.guhs.sterrenwacht.hint"), 2 * R - 20);
             int hy = top + H - 4 - hint.size() * 9;
             for (FormattedCharSequence line : hint) {
-                g.drawString(font, line, left + 8 + R - font.width(line) / 2, hy, 0xFF9A90C8, false);
+                g.text(font, line, left + 8 + R - font.width(line) / 2, hy, 0xFF9A90C8, false);
                 hy += 9;
             }
         }
     }
 
-    private static void lijn(GuiGraphics g, float x0, float y0, float x1, float y1, int kleur) {
+    private static void lijn(GuiGraphicsExtractor g, float x0, float y0, float x1, float y1, int kleur) {
         int steps = (int) Math.max(1, Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)));
         for (int i = 0; i <= steps; i++) {
             float f = i / (float) steps;
@@ -334,7 +334,7 @@ public class TelescoopScherm extends Screen {
         }
     }
 
-    private static void ring(GuiGraphics g, int x, int y, int r, int kleur) {
+    private static void ring(GuiGraphicsExtractor g, int x, int y, int r, int kleur) {
         for (int a = 0; a < 24; a++) {
             double h = a * Math.PI * 2 / 24;
             int px = x + (int) Math.round(Math.cos(h) * r), py = y + (int) Math.round(Math.sin(h) * r);
@@ -342,7 +342,7 @@ public class TelescoopScherm extends Screen {
         }
     }
 
-    private static void ringDik(GuiGraphics g, int x, int y, int r, int kleur) {
+    private static void ringDik(GuiGraphicsExtractor g, int x, int y, int r, int kleur) {
         for (int a = 0; a < 360; a++) {
             double h = Math.toRadians(a);
             int px = x + (int) Math.round(Math.cos(h) * r), py = y + (int) Math.round(Math.sin(h) * r);
@@ -351,8 +351,8 @@ public class TelescoopScherm extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.render(g, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
     }
 
     @Override

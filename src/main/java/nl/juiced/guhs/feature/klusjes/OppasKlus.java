@@ -43,7 +43,7 @@ public class OppasKlus extends BasisKlus {
 
     /** Not looked after in the last {@code rust} ticks. */
     static boolean uitgerust(Mob m, int rust, long nu) {
-        return !m.getPersistentData().contains(VERZORGD) || m.getPersistentData().getLong(VERZORGD) + rust <= nu;
+        return !m.getPersistentData().contains(VERZORGD) || m.getPersistentData().getLongOr(VERZORGD, 0L) + rust <= nu;
     }
 
     OppasKlus() {

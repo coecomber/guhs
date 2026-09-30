@@ -51,17 +51,17 @@ public final class BoerderijVoortgang {
     /** The player's own farm data (a live compound in their saved data). */
     public static CompoundTag data(ServerPlayer player) {
         CompoundTag saved = GuhQuests.saved(player);
-        if (!saved.contains(KEY, Tag.TAG_COMPOUND)) {
+        if (!saved.contains(KEY)) {
             saved.put(KEY, new CompoundTag());
         }
-        return saved.getCompound(KEY);
+        return saved.getCompoundOrEmpty(KEY);
     }
 
     /** A product came to this player (counts, the "all three" milestone and advancement). */
     public static void product(ServerPlayer player, Product product, int count) {
         KnusVoortgang.tel(player, PRODUCTEN, count);
         CompoundTag d = data(player);
-        int bits = d.getInt("Producten") | (1 << product.ordinal());
+        int bits = d.getIntOr("Producten", 0) | (1 << product.ordinal());
         d.putInt("Producten", bits);
         KnusVoortgang.hoogste(player, SOORTEN, Integer.bitCount(bits));
         if (Integer.bitCount(bits) >= Product.values().length) {
@@ -78,7 +78,7 @@ public final class BoerderijVoortgang {
 
     /** Grants a shown advancement of the Knuffeldal tab (guhs:knuffeldal/&lt;name&gt;). */
     public static void toon(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("knuffeldal/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("knuffeldal/" + name));
         if (holder == null) {
             return;
         }

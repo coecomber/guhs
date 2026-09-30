@@ -35,7 +35,7 @@ public class KnabbelbalItem extends Item {
     }
 
     public static boolean isVol(ItemStack stack) {
-        return !stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBoolean("Leeg");
+        return !stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getBooleanOr("Leeg", false);
     }
 
     @Override

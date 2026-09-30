@@ -12,11 +12,12 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.RelativeMovement;
+import net.minecraft.world.entity.Relative;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.FakePlayer;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Guhguhtje prik: a big guh on a board (seen from behind, with its tail missing). A blindfold on, spun around three
  * times, and then find the board and pin the tail on (right-click the board with the staartje). The closer to the spot
@@ -86,21 +87,21 @@ public final class GuhguhtjePrik implements Wedstrijd.Spel {
                 level.playSound(null, p.blockPosition(), KnabbelspelenFeature.HOP.get(), SoundSource.PLAYERS, 0.6f, 1.6f);
             }
             if (s.draai == 0) {
-                p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.prik.zoek").withStyle(ChatFormatting.AQUA), false);
+                p.sendSystemMessage(Component.translatable("quest.guhs.knabbelspelen.prik.zoek").withStyle(ChatFormatting.AQUA));
             }
             return;
         }
         if (t % 10 == 0) {
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.prik.bar", (Onderdeel.GUHGUHTJE_PRIK.maxTicks - t + 19) / 20)
-                    .withStyle(ChatFormatting.AQUA), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.prik.bar", (Onderdeel.GUHGUHTJE_PRIK.maxTicks - t + 19) / 20)
+                    .withStyle(ChatFormatting.AQUA));
         }
     }
 
     private static void draai(ServerPlayer p, ServerLevel level, Vec3 m, float yaw) {
         if (p instanceof FakePlayer || p.connection == null) {
-            p.moveTo(m.x, m.y, m.z, yaw, p.getXRot());
+            p.snapTo(m.x, m.y, m.z, yaw, p.getXRot());
         } else {
-            p.connection.teleport(m.x, m.y, m.z, yaw, 0f, Set.of(RelativeMovement.X_ROT));
+            p.connection.teleport(m.x, m.y, m.z, yaw, 0f, Set.of(Relative.X_ROT));
         }
     }
 
@@ -120,7 +121,7 @@ public final class GuhguhtjePrik implements Wedstrijd.Spel {
         }
         double[] b = Speelvelden.baan(w.anker, Onderdeel.GUHGUHTJE_PRIK, d.baan, Vec3.atCenterOf(blok));
         if (Math.abs(b[0] - Speelvelden.PRIK_BORD) > 0.6 || Math.abs(b[1]) > 2.6 || b[2] < Speelvelden.G + 0.5 || b[2] > Speelvelden.G + 6.5) {
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.prik.geen_bord").withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.prik.geen_bord").withStyle(ChatFormatting.GOLD));
             return false;
         }
         prikOp(w, d, p, hit);
@@ -130,26 +131,26 @@ public final class GuhguhtjePrik implements Wedstrijd.Spel {
     /** (Also for the tests) the tail goes on here: the score, the tail stays on the board, the blindfold comes off. */
     static int prikOp(Wedstrijd w, Wedstrijd.Deelnemer d, ServerPlayer p, Vec3 hit) {
         Staat s = staat(d);
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         double[] h = Speelvelden.baan(w.anker, Onderdeel.GUHGUHTJE_PRIK, d.baan, hit);
         double afstand = Math.hypot(h[1], h[2] - Speelvelden.PRIK_DOEL_Y);
         int score = score(afstand);
         s.geprikt = true;
-        SpelDing staart = KnabbelspelenFeature.DING.get().create(level);
+        SpelDing staart = KnabbelspelenFeature.DING.get().create(level, EntitySpawnReason.TRIGGERED);
         if (staart != null) {
             staart.soort(SpelDing.STAARTJE);
             staart.spel = w.npcId;
             staart.baan = d.baan;
             Vec3 at = Speelvelden.punt(w.anker, Onderdeel.GUHGUHTJE_PRIK, d.baan, Speelvelden.PRIK_BORD - 0.55, h[1], h[2]);
-            staart.moveTo(at.x, at.y - 0.25, at.z, Speelvelden.yaw(w.anker, Onderdeel.GUHGUHTJE_PRIK), 0);
+            staart.snapTo(at.x, at.y - 0.25, at.z, Speelvelden.yaw(w.anker, Onderdeel.GUHGUHTJE_PRIK), 0);
             level.addFreshEntity(staart);
             s.staartje = staart;
         }
         blinddoek(p, false);
         level.playSound(null, p.blockPosition(), KnabbelspelenFeature.JUICH.get(), SoundSource.PLAYERS, 1f, score >= 800 ? 1.3f : 0.9f);
         level.sendParticles(score >= 800 ? ParticleTypes.HEART : ParticleTypes.POOF, hit.x, hit.y, hit.z, 8, 0.2, 0.2, 0.2, 0.02);
-        p.displayClientMessage(Component.translatable(score >= 950 ? "quest.guhs.knabbelspelen.prik.raak" : "quest.guhs.knabbelspelen.prik.naast",
-                String.format(java.util.Locale.ROOT, "%.1f", afstand), score).withStyle(ChatFormatting.YELLOW), false);
+        p.sendSystemMessage(Component.translatable(score >= 950 ? "quest.guhs.knabbelspelen.prik.raak" : "quest.guhs.knabbelspelen.prik.naast",
+                String.format(java.util.Locale.ROOT, "%.1f", afstand), score).withStyle(ChatFormatting.YELLOW));
         w.klaar(d, p, score, false);
         return score;
     }

@@ -6,14 +6,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.piep.PiepDierItem;
@@ -34,26 +34,26 @@ public final class LanddierItems {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
             ItemStack stack = player.getItemInHand(hand);
-            if (level.isClientSide) {
-                return InteractionResultHolder.success(stack);
+            if (level.isClientSide()) {
+                return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
             }
             ServerPlayer sp = (ServerPlayer) player;
             if (Schouder.heeft(sp)) {
-                sp.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.schouder_vol").withStyle(ChatFormatting.GRAY), true);
-                return InteractionResultHolder.fail(stack);
+                sp.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.schouder_vol").withStyle(ChatFormatting.GRAY));
+                return InteractionResult.FAIL;
             }
             PluiseekhoorntjeEntity eekhoorn = PiepDierItem.naar(stack, level, LanddiertjesFeature.PLUISEEKHOORNTJE.get());
             if (eekhoorn == null) {
-                return InteractionResultHolder.fail(stack);
+                return InteractionResult.FAIL;
             }
             if (!eekhoorn.isTame()) {
                 eekhoorn.tame(sp);                               // (a creative item without data: a new one, yours)
             }
             PluiseekhoorntjeEntity.opSchouder(sp, eekhoorn);
             stack.shrink(1);
-            return InteractionResultHolder.consume(stack);
+            return InteractionResult.CONSUME.heldItemTransformedTo(stack);
         }
     }
 
@@ -67,8 +67,8 @@ public final class LanddierItems {
         }
 
         @Override
-        public UseAnim getUseAnimation(ItemStack stack) {
-            return UseAnim.DRINK;
+        public ItemUseAnimation getUseAnimation(ItemStack stack) {
+            return ItemUseAnimation.DRINK;
         }
 
         @Override
@@ -77,7 +77,7 @@ public final class LanddierItems {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
             return ItemUtils.startUsingInstantly(level, player, hand);
         }
 

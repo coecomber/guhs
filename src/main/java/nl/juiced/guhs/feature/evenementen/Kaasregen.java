@@ -26,6 +26,7 @@ import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The kaasregen: for a minute kaasknabbels rain down around the players (now and then a golden one). You catch them by
  * walking into them; the ones nobody catches lie on the ground for a bit, and wild guhs come running to eat them: a guh
@@ -99,22 +100,22 @@ public class Kaasregen extends Evenement {
     @Nullable
     public VallendeKnabbelEntity spawnSnack() {
         Vec3 around = aroundSomeone();
-        double angle = level.random.nextDouble() * Math.PI * 2, dist = Math.sqrt(level.random.nextDouble()) * radius;
+        double angle = level.getRandom().nextDouble() * Math.PI * 2, dist = Math.sqrt(level.getRandom().nextDouble()) * radius;
         BlockPos ground = Evenementen.ground(level, Mth.floor(around.x + Math.cos(angle) * dist), Mth.floor(around.z + Math.sin(angle) * dist),
                 around.y, false);
         if (ground == null) {
             return null;
         }
-        return dropSnack(ground, level.random.nextInt(GOLDEN_CHANCE) == 0);
+        return dropSnack(ground, level.getRandom().nextInt(GOLDEN_CHANCE) == 0);
     }
 
     /** Drops a knabbel onto this spot. */
     public VallendeKnabbelEntity dropSnack(BlockPos ground, boolean golden) {
-        VallendeKnabbelEntity snack = EvenementenFeature.VALLENDE_KNABBEL.get().create(level);
+        VallendeKnabbelEntity snack = EvenementenFeature.VALLENDE_KNABBEL.get().create(level, EntitySpawnReason.TRIGGERED);
         double landY = ground.getY() + 0.05;
         snack.setUp(golden, landY);
-        snack.moveTo(ground.getX() + 0.2 + level.random.nextDouble() * 0.6, landY + height + level.random.nextDouble() * 4,
-                ground.getZ() + 0.2 + level.random.nextDouble() * 0.6, 0, 0);
+        snack.snapTo(ground.getX() + 0.2 + level.getRandom().nextDouble() * 0.6, landY + height + level.getRandom().nextDouble() * 4,
+                ground.getZ() + 0.2 + level.getRandom().nextDouble() * 0.6, 0, 0);
         entities.add(snack.getUUID());
         level.addFreshEntity(snack);
         snacks.add(snack);
@@ -132,14 +133,14 @@ public class Kaasregen extends Evenement {
                 : new ItemStack(ModItems.KAAS_KNABBELS.get()));
         int count = caught.merge(player.getUUID(), 1, Integer::sum);
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.4f,
-                1.2f + level.random.nextFloat() * 0.6f);
+                1.2f + level.getRandom().nextFloat() * 0.6f);
         if (golden) {
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.2f, 1.3f);
             level.sendParticles(ParticleTypes.WAX_OFF, player.getX(), player.getY() + 1, player.getZ(), 12, 0.4, 0.5, 0.4, 0.1);
-            player.displayClientMessage(Component.translatable("gui.guhs.evenement.kaasregen.golden").withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.evenement.kaasregen.golden").withStyle(ChatFormatting.GOLD));
             GuhAdvancements.grant(player, "evenement_gouden_knabbel");
         } else {
-            player.displayClientMessage(Component.translatable("gui.guhs.evenement.kaasregen.caught", count).withStyle(ChatFormatting.YELLOW), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.evenement.kaasregen.caught", count).withStyle(ChatFormatting.YELLOW));
         }
         if (count >= GOAL) {
             GuhAdvancements.grant(player, "evenement_kaasregen");

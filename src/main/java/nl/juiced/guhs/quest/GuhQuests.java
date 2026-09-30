@@ -37,6 +37,7 @@ import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.world.GuhWorldData;
 import nl.juiced.guhs.world.MaagManager;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The quests.
  * <p>
@@ -86,8 +87,8 @@ public final class GuhQuests {
         if (!root.contains("PlayerPersisted", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
             root.put("PlayerPersisted", new net.minecraft.nbt.CompoundTag());
         }
-        net.minecraft.nbt.CompoundTag saved = root.getCompound("PlayerPersisted");
-        for (String key : java.util.List.copyOf(root.getAllKeys())) {
+        net.minecraft.nbt.CompoundTag saved = root.getCompoundOrEmpty("PlayerPersisted");
+        for (String key : java.util.List.copyOf(root.keySet())) {
             if (key.startsWith("guhs_verstop_best_") || key.equals("guhs_kermis_first_lap") || key.equals("guhs_guhvriend")) {
                 saved.put(key, root.get(key));
                 root.remove(key);
@@ -112,7 +113,7 @@ public final class GuhQuests {
     // ------------------------------------------------------------------------------------------------------------
 
     private static void vadsig(GuhNpcEntity npc, ServerPlayer player) {
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.PlayerData p = data.player(player.getUUID());
         // however you got them: the cake and the balloons in your pockets means party time
         if (p.maagQuest < 4 && count(player, ModItems.VERLOREN_GUH_TAART.get()) > 0) {
@@ -152,7 +153,7 @@ public final class GuhQuests {
                     give(player, ModItems.GUH_BUIKFLUITJE.get());
                     player.sendSystemMessage(Component.translatable("quest.guhs.vadsig.unlocked").withStyle(ChatFormatting.GOLD));
                     GuhAdvancements.grant(player, "maag_unlocked");
-                    ServerLevel maagLevel = MaagManager.level(player.server);
+                    ServerLevel maagLevel = MaagManager.level(player.level().getServer());
                     if (maagLevel != null) {
                         MaagManager.ensureMaag(maagLevel, player);
                         swallow(npc, player); // NJEG... HAP!
@@ -193,13 +194,13 @@ public final class GuhQuests {
     // ------------------------------------------------------------------------------------------------------------
 
     public static void openRps(MikaBaasEntity mika, ServerPlayer player) {
-        GuhWorldData.PlayerData p = GuhWorldData.get(player.server).player(player.getUUID());
+        GuhWorldData.PlayerData p = GuhWorldData.get(player.level().getServer()).player(player.getUUID());
         say(player, mika, p.maagQuest == 1 ? "quest.guhs.mika.challenge" : "quest.guhs.mika.play");
         nl.juiced.guhs.network.ModNetworking.sendTo(player, new MaagPayloads.RpsState(mika.getId(), p.rpsStreak, -1, false, true, p.vadsRevealed));
     }
 
     public static void playRps(ServerPlayer player, MikaBaasEntity mika, Rps choice) {
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.PlayerData p = data.player(player.getUUID());
         if (choice == Rps.VADS && !p.vadsRevealed) {
             return; // (not a move you know about yet)
@@ -258,9 +259,9 @@ public final class GuhQuests {
     /** Guhbert (a little baby guh) is free and follows you from now on. */
     private static void freeGuhbert(ServerPlayer player, MikaBaasEntity mika) {
         ServerLevel level = (ServerLevel) mika.level();
-        GuhEntity guhbert = ModEntities.GUH.get().create(level);
+        GuhEntity guhbert = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (guhbert != null) {
-            guhbert.moveTo(player.getX(), player.getY(), player.getZ(), player.getYRot(), 0);
+            guhbert.snapTo(player.getX(), player.getY(), player.getZ(), player.getYRot(), 0);
             guhbert.setGuhScale(0.6f);
             guhbert.setVariant(GuhVariant.NORMAL);
             guhbert.setPersonality(GuhPersonality.CUDDLY);
@@ -275,7 +276,7 @@ public final class GuhQuests {
             GuhAdvancements.grant(player, "guhbert_free");
         }
         // the caged Guhbert of the camp is the one that got out
-        level.getEntitiesOfClass(GuhEntity.class, mika.getBoundingBox().inflate(32), g -> g.getTags().contains("guhs_caged_guhbert"))
+        level.getEntitiesOfClass(GuhEntity.class, mika.getBoundingBox().inflate(32), g -> g.entityTags().contains("guhs_caged_guhbert"))
                 .forEach(g -> g.discard());
         giveIfMissing(player, ModItems.TAARTKRUIMELS.get());
     }
@@ -304,11 +305,11 @@ public final class GuhQuests {
                     .withStyle(ChatFormatting.LIGHT_PURPLE).append(Component.translatable("quest.guhs.vadsig.belly." + player.getRandom().nextInt(BELLY_LINES))
                             .withStyle(ChatFormatting.ITALIC)));
         }
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.PlayerData p = data.player(player.getUUID());
         if (p.maagQuest == 2) {
-            ServerLevel level = player.serverLevel();
-            var picnic = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(GUH_PICNIC);
+            ServerLevel level = player.level();
+            var picnic = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(GUH_PICNIC);
             if (picnic != null && level.structureManager().getStructureWithPieceAt(player.blockPosition(), picnic).isValid()) {
                 p.maagQuest = 3;
                 data.setDirty();
@@ -353,7 +354,7 @@ public final class GuhQuests {
     };
 
     private static void dentist(GuhNpcEntity npc, ServerPlayer player) {
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.Maag maag = data.maagOf(player.getUUID());
         if (maag == null) {
             say(player, npc, "quest.guhs.dentist.no_maag");
@@ -392,7 +393,7 @@ public final class GuhQuests {
             return;
         }
         up.needs().forEach(n -> take(player, n.get(), n.count()));
-        ServerLevel maagLevel = MaagManager.level(player.server);
+        ServerLevel maagLevel = MaagManager.level(player.level().getServer());
         if (maagLevel != null && MaagManager.grow(maagLevel, maag)) {
             say(player, npc, "quest.guhs.dentist.done." + up.id(), maag.size);
             nl.juiced.guhs.quest.GuhAdvancements.grant(player, "maag_" + maag.size);
@@ -411,7 +412,7 @@ public final class GuhQuests {
     // ------------------------------------------------------------------------------------------------------------
 
     private static void enzyme(GuhNpcEntity npc, ServerPlayer player) {
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         if (npc.getMaagOwner() == null || !npc.getMaagOwner().equals(player.getUUID())) {
             GuhWorldData.Maag maag = npc.getMaagOwner() == null ? null : data.maagOf(npc.getMaagOwner());
             say(player, npc, "quest.guhs.enzyme.not_yours", maag == null ? "?" : maag.ownerName);
@@ -426,7 +427,7 @@ public final class GuhQuests {
     public static void onBigMikaKilled(LivingDeathEvent event) {
         if (event.getEntity() instanceof MikaEntity mika && mika.isBoss()
                 && event.getSource().getEntity() instanceof ServerPlayer player) {
-            GuhWorldData data = GuhWorldData.get(player.server);
+            GuhWorldData data = GuhWorldData.get(player.level().getServer());
             data.player(player.getUUID()).beatBigMika = true;
             data.setDirty();
         }
@@ -438,7 +439,7 @@ public final class GuhQuests {
 
     public static int count(ServerPlayer player, Item item) {
         int n = 0;
-        for (ItemStack stack : player.getInventory().items) {
+        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
             if (stack.is(item)) {
                 n += stack.getCount();
             }
@@ -447,7 +448,7 @@ public final class GuhQuests {
     }
 
     public static void take(ServerPlayer player, Item item, int amount) {
-        for (ItemStack stack : player.getInventory().items) {
+        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
             if (amount <= 0) {
                 return;
             }

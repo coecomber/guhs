@@ -99,7 +99,7 @@ public final class GuhwaiiBlokken {
             if (hit.getDirection() != state.getValue(FACING)) {
                 return InteractionResult.PASS;
             }
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 level.setBlock(pos, state.setValue(KNIPOOG, true), Block.UPDATE_ALL);
                 level.scheduleTick(pos, this, 30);
                 level.playSound(null, pos, ModSounds.GUH_AMBIENT.get(), SoundSource.BLOCKS, 0.7f, 1.4f);
@@ -112,7 +112,7 @@ public final class GuhwaiiBlokken {
                     GuhwaiiFeature.advancement(sp, "palm_knipoog");
                 }
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Override
@@ -265,12 +265,12 @@ public final class GuhwaiiBlokken {
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
             if (state.getValue(RIJP) < 2) {
-                if (!level.isClientSide && player instanceof ServerPlayer sp) {
+                if (!level.isClientSide() && player instanceof ServerPlayer sp) {
                     GuhQuests.hint(sp, "gui.guhs.guhwaii.kokos_onrijp");
                 }
-                return InteractionResult.sidedSuccess(level.isClientSide);
+                return InteractionResult.SUCCESS;
             }
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 if (state.getValue(HANGEND)) {
                     level.setBlock(pos, state.setValue(RIJP, 0), Block.UPDATE_ALL);
                 } else {
@@ -280,7 +280,7 @@ public final class GuhwaiiBlokken {
                 level.playSound(null, pos, SoundEvents.WOOD_HIT, SoundSource.BLOCKS, 0.8f, 1.2f);
                 level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Override
@@ -377,15 +377,15 @@ public final class GuhwaiiBlokken {
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (!level.isClientSide && player instanceof ServerPlayer sp) {
+            if (!level.isClientSide() && player instanceof ServerPlayer sp) {
                 Ohana.opgeruimd(sp, pos);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Override
         public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-            if (!level.isClientSide && player instanceof ServerPlayer sp) {
+            if (!level.isClientSide() && player instanceof ServerPlayer sp) {
                 Ohana.telOpgeruimd(sp, pos);
             }
             return super.playerWillDestroy(level, pos, state, player);

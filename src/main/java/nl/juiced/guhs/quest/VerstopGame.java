@@ -22,7 +22,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -33,6 +33,7 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * Verstopguh (hide-and-seek) in the verstopguh house. Verstopguhtje on the roof hides 5 / 8 / 12 guhs (1.5 / 1 / 0.5
  * blocks long) on random spots of the house (the invisible "verstopplek" markers) and sends the seekers inside. Right-click
@@ -187,12 +188,12 @@ public final class VerstopGame {
         hidden.clear();
         for (int i = 0; i < newLevel.guhs; i++) {
             BlockPos spot = free.get(i);
-            GuhEntity guh = ModEntities.GUH.get().create(world);
+            GuhEntity guh = ModEntities.GUH.get().create(world, EntitySpawnReason.TRIGGERED);
             if (guh == null) {
                 continue;
             }
-            guh.moveTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, world.getRandom().nextFloat() * 360f, 0);
-            guh.finalizeSpawn(world, world.getCurrentDifficultyAt(spot), MobSpawnType.EVENT, null);
+            guh.snapTo(spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, world.getRandom().nextFloat() * 360f, 0);
+            guh.finalizeSpawn(world, world.getCurrentDifficultyAt(spot), EntitySpawnReason.EVENT, null);
             guh.setVariant(HIDERS[world.getRandom().nextInt(HIDERS.length)]);
             guh.setGuhScale(newLevel.length / 1.45f);
             guh.setHiddenBy(npc.getUUID(), newLevel.soundFrequency);
@@ -238,7 +239,7 @@ public final class VerstopGame {
         }
         VerstopGame game = npc.verstop;
         if (!game.isPlaying(player) || !game.hidden.remove(guh.getUUID())) {
-            player.displayClientMessage(Component.translatable("quest.guhs.verstop.not_playing").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.verstop.not_playing").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         world.sendParticles(new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(1f, 0.55f, 0.8f), 1.2f),
@@ -298,10 +299,10 @@ public final class VerstopGame {
         for (int[] d : new int[][]{{2, 2}, {-2, 2}, {2, -2}, {-2, -2}, {3, 0}, {0, 3}}) {
             BlockPos pos = start.offset(d[0], 0, d[1]);
             if (world.isEmptyBlock(pos) && world.isEmptyBlock(pos.above()) && !world.isEmptyBlock(pos.below())) {
-                GuhNpcEntity tip = nl.juiced.guhs.registry.ModEntities.GUH_NPC.get().create(world);
+                GuhNpcEntity tip = nl.juiced.guhs.registry.ModEntities.GUH_NPC.get().create(world, EntitySpawnReason.TRIGGERED);
                 if (tip != null) {
                     tip.setKind(GuhNpcEntity.Kind.TIPGUH);
-                    tip.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, world.getRandom().nextFloat() * 360f, 0);
+                    tip.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, world.getRandom().nextFloat() * 360f, 0);
                     world.addFreshEntity(tip);
                 }
                 return;
@@ -311,7 +312,7 @@ public final class VerstopGame {
 
     /** Someone right-clicked the Tipguh. */
     public static void askTip(GuhNpcEntity tipguh, ServerPlayer player) {
-        ServerLevel world = player.serverLevel();
+        ServerLevel world = player.level();
         List<GuhNpcEntity> hosts = world.getEntitiesOfClass(GuhNpcEntity.class, new AABB(tipguh.blockPosition()).inflate(HOUSE_RADIUS + 8, HOUSE_DEPTH + 8, HOUSE_RADIUS + 8),
                 n -> n.getKind() == GuhNpcEntity.Kind.VERSTOPGUHTJE);
         if (hosts.isEmpty() || !hosts.get(0).verstop.isRunning() || !hosts.get(0).verstop.isPlaying(player)) {
@@ -346,7 +347,7 @@ public final class VerstopGame {
 
     /** Someone stepped on the way out. */
     public static void walkOut(ServerPlayer player, BlockPos exit) {
-        ServerLevel world = player.serverLevel();
+        ServerLevel world = player.level();
         List<GuhNpcEntity> npcs = world.getEntitiesOfClass(GuhNpcEntity.class, new AABB(exit).inflate(HOUSE_RADIUS + 8, HOUSE_DEPTH + 8, HOUSE_RADIUS + 8),
                 n -> n.getKind() == GuhNpcEntity.Kind.VERSTOPGUHTJE);
         if (npcs.isEmpty()) {
@@ -391,7 +392,7 @@ public final class VerstopGame {
         Component bar = Component.translatable("quest.guhs.verstop.bar", Component.translatable("gui.guhs.verstop." + level.id()), found,
                 level.guhs, time((int) (world.getGameTime() - startTick))).withStyle(ChatFormatting.LIGHT_PURPLE);
         online(world).forEach(p -> {
-            p.displayClientMessage(bar, true);
+            p.sendOverlayMessage(bar);
             refresh(p);
         });
         hidden.removeIf(id -> world.getEntity(id) == null && world.isLoaded(npc.blockPosition())); // (lost somehow: don't wait for it forever)
@@ -545,11 +546,11 @@ public final class VerstopGame {
     /** Is this seeker's game still on, with them in it, near the house, and still ticking? */
     public static boolean stillSeeking(ServerPlayer player) {
         UUID npcId = SEEKERS.get(player.getUUID());
-        if (npcId == null || !(player.serverLevel().getEntity(npcId) instanceof GuhNpcEntity npc)) {
+        if (npcId == null || !(player.level().getEntity(npcId) instanceof GuhNpcEntity npc)) {
             return false;
         }
         VerstopGame game = npc.verstop;
-        return game.isRunning() && game.isPlaying(player) && player.serverLevel().getGameTime() - game.lastTick <= STALE_TICKS
+        return game.isRunning() && game.isPlaying(player) && player.level().getGameTime() - game.lastTick <= STALE_TICKS
                 && player.distanceToSqr(npc) <= (HOUSE_RADIUS + 30) * (HOUSE_RADIUS + 30);
     }
 
@@ -664,7 +665,7 @@ public final class VerstopGame {
     public static int best(ServerPlayer player, Level level) {
         CompoundTag data = GuhQuests.saved(player);
         String key = "guhs_verstop_best_" + level.id();
-        return data.contains(key) ? data.getInt(key) : -1;
+        return data.contains(key) ? data.getIntOr(key, 0) : -1;
     }
 
     public static String time(int ticks) {
@@ -688,16 +689,16 @@ public final class VerstopGame {
             tag.putBoolean("Tipped", tipped);
             tag.putLong("LastTip", lastTip);
             ListTag p = new ListTag();
-            players.forEach(id -> p.add(NbtUtils.createUUID(id)));
+            players.forEach(id -> p.add(new net.minecraft.nbt.IntArrayTag(UUIDUtil.uuidToIntArray(id))));
             tag.put("Players", p);
             ListTag h = new ListTag();
-            hidden.forEach(id -> h.add(NbtUtils.createUUID(id)));
+            hidden.forEach(id -> h.add(new net.minecraft.nbt.IntArrayTag(UUIDUtil.uuidToIntArray(id))));
             tag.put("Hidden", h);
         }
         tag.putLong("NextHint", nextHint);
         tag.putInt("Hints", hints);
         ListTag sn = new ListTag();
-        sniffers.forEach(id -> sn.add(NbtUtils.createUUID(id)));
+        sniffers.forEach(id -> sn.add(new net.minecraft.nbt.IntArrayTag(UUIDUtil.uuidToIntArray(id))));
         tag.put("Sniffers", sn);
         ListTag off = new ListTag();
         lampsOff.forEach((pos, lamp) -> {
@@ -721,46 +722,46 @@ public final class VerstopGame {
     public void load(CompoundTag tag) {
         level = null;
         for (Level l : Level.values()) {
-            if (l.id().equals(tag.getString("Level"))) {
+            if (l.id().equals(tag.getStringOr("Level", ""))) {
                 level = l;
             }
         }
-        startTick = tag.getLong("Start");
-        found = tag.getInt("Found");
-        together = tag.getBoolean("Together");
-        tipped = tag.getBoolean("Tipped");
-        lastTip = tag.contains("LastTip") ? tag.getLong("LastTip") : Long.MIN_VALUE / 2;
+        startTick = tag.getLongOr("Start", 0L);
+        found = tag.getIntOr("Found", 0);
+        together = tag.getBooleanOr("Together", false);
+        tipped = tag.getBooleanOr("Tipped", false);
+        lastTip = tag.contains("LastTip") ? tag.getLongOr("LastTip", 0L) : Long.MIN_VALUE / 2;
         players.clear();
-        tag.getList("Players", Tag.TAG_INT_ARRAY).forEach(t -> players.add(NbtUtils.loadUUID(t)));
+        tag.getListOrEmpty("Players").forEach(t -> players.add(UUIDUtil.uuidFromIntArray(((net.minecraft.nbt.IntArrayTag) t).getAsIntArray())));
         // (the seekers get their protection back on the next tick, if they are still there)
         hidden.clear();
-        tag.getList("Hidden", Tag.TAG_INT_ARRAY).forEach(t -> hidden.add(NbtUtils.loadUUID(t)));
-        nextHint = tag.getLong("NextHint");
-        hints = tag.getInt("Hints");
+        tag.getListOrEmpty("Hidden").forEach(t -> hidden.add(UUIDUtil.uuidFromIntArray(((net.minecraft.nbt.IntArrayTag) t).getAsIntArray())));
+        nextHint = tag.getLongOr("NextHint", 0L);
+        hints = tag.getIntOr("Hints", 0);
         sniffers.clear();
-        tag.getList("Sniffers", Tag.TAG_INT_ARRAY).forEach(t -> sniffers.add(NbtUtils.loadUUID(t)));
+        tag.getListOrEmpty("Sniffers").forEach(t -> sniffers.add(UUIDUtil.uuidFromIntArray(((net.minecraft.nbt.IntArrayTag) t).getAsIntArray())));
         lampsOff.clear();
-        for (Tag t : tag.getList("LampsOff", Tag.TAG_COMPOUND)) {
+        for (Tag t : tag.getListOrEmpty("LampsOff")) {
             CompoundTag l = (CompoundTag) t;
-            lampsOff.put(BlockPos.of(l.getLong("Pos")), NbtUtils.readBlockState(
-                    net.minecraft.core.registries.BuiltInRegistries.BLOCK.asLookup(), l.getCompound("State")));
+            lampsOff.put(BlockPos.of(l.getLongOr("Pos", 0L)), NbtUtils.readBlockState(
+                    net.minecraft.core.registries.BuiltInRegistries.BLOCK.asLookup(), l.getCompoundOrEmpty("State")));
         }
         if (tag.contains("Lamps") && tag.contains("Glass")) {
             lamps = new ArrayList<>();
-            for (long l : tag.getLongArray("Lamps")) {
+            for (long l : tag.getLongArray("Lamps").orElse(new long[0])) {
                 lamps.add(BlockPos.of(l));
             }
             glass = new ArrayList<>();
-            for (long l : tag.getLongArray("Glass")) {
+            for (long l : tag.getLongArray("Glass").orElse(new long[0])) {
                 glass.add(BlockPos.of(l));
             }
         }
         if (tag.contains("Spots")) {
             spots = new ArrayList<>();
-            for (long l : tag.getLongArray("Spots")) {
+            for (long l : tag.getLongArray("Spots").orElse(new long[0])) {
                 spots.add(BlockPos.of(l));
             }
-            start = BlockPos.of(tag.getLong("StartPos"));
+            start = BlockPos.of(tag.getLongOr("StartPos", 0L));
         }
     }
 
@@ -771,7 +772,7 @@ public final class VerstopGame {
 
     /** No wild guhs pop up in (or on) the house: they'd get mixed up with the hidden ones. */
     public static boolean inHouse(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).get(HOUSE);
+        var structure = world.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).get(HOUSE);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 }

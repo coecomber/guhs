@@ -10,7 +10,7 @@ import net.minecraft.client.CameraType;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -52,12 +52,12 @@ public final class SurfClient {
     private static int uitslagTot;
 
     public static void start(CompoundTag data) {
-        spot = new Surfplek.Spot(BlockPos.of(data.getLong("Origin")), data.getDouble("Hoek"));
-        niveau = Niveau.of(data.getInt("Niveau"));
-        sim = new SurfSim(niveau, data.getInt("Seed"));
-        bordId = data.getInt("Bord");
-        liloId = data.getInt("Lilo");
-        record = data.getInt("Record");
+        spot = new Surfplek.Spot(BlockPos.of(data.getLongOr("Origin", 0L)), data.getDoubleOr("Hoek", 0.0));
+        niveau = Niveau.of(data.getIntOr("Niveau", 0));
+        sim = new SurfSim(niveau, data.getIntOr("Seed", 0));
+        bordId = data.getIntOr("Bord", 0);
+        liloId = data.getIntOr("Lilo", 0);
+        record = data.getIntOr("Record", 0);
         MELDINGEN.clear();
         uitslag = null;
         Minecraft mc = Minecraft.getInstance();
@@ -207,7 +207,7 @@ public final class SurfClient {
 
     // --- the panel -------------------------------------------------------------------------------------------------------
 
-    public static void hud(GuiGraphics g, DeltaTracker delta) {
+    public static void hud(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.options.hideGui) {
             return;
@@ -225,18 +225,18 @@ public final class SurfClient {
         g.fill(x0, y0 + 44, x0 + 220, y0 + 46, 0xFF3CE0C8);
         SurfGolven golven = sim.golven();
         int golf = Math.min(golven.golven().size(), Math.max(1, sim.volgende() + 1));
-        g.drawCenteredString(font, Component.translatable("gui.guhs.guhwaiispellen.surf.paneel", niveau.naam(), golf, golven.golven().size())
+        g.centeredText(font, Component.translatable("gui.guhs.guhwaiispellen.surf.paneel", niveau.naam(), golf, golven.golven().size())
                 .withStyle(ChatFormatting.AQUA), w / 2, y0 + 4, 0xFFFFFFFF);
         String score = String.valueOf(sim.score());
-        g.pose().pushPose();
-        g.pose().translate(w / 2f - font.width(score), y0 + 15, 0);
-        g.pose().scale(2f, 2f, 1f);
-        g.drawString(font, score, 0, 0, 0xFFFFE6A0, true);
-        g.pose().popPose();
+        g.pose().pushMatrix();
+        g.pose().translate(w / 2f - font.width(score), y0 + 15);
+        g.pose().scale(2f, 2f);
+        g.text(font, score, 0, 0, 0xFFFFE6A0, true);
+        g.pose().popMatrix();
         if (sim.mult() > 1) {
-            g.drawString(font, "x" + sim.mult(), w / 2 + font.width(score) + 6, y0 + 20, 0xFFFF7EB8, true);
+            g.text(font, "x" + sim.mult(), w / 2 + font.width(score) + 6, y0 + 20, 0xFFFF7EB8, true);
         }
-        g.drawString(font, Component.translatable("gui.guhs.guhwaiispellen.surf.record", record), x0 + 4, y0 + 34, 0xFFB8E8F0, false);
+        g.text(font, Component.translatable("gui.guhs.guhwaiispellen.surf.record", record), x0 + 4, y0 + 34, 0xFFB8E8F0, false);
         // speed
         if (sim.fase() == SurfSim.Fase.RIJDEN || sim.fase() == SurfSim.Fase.LUCHT) {
             int len = (int) (80 * (sim.vaart() - SurfSim.MIN_VAART) / (SurfSim.MAX_VAART - SurfSim.MIN_VAART));
@@ -255,25 +255,25 @@ public final class SurfClient {
         };
         boolean knipper = sim.fase() == SurfSim.Fase.PEDDELEN && sim.kanVangen() && (ticks / 4) % 2 == 0;
         int hy = g.guiHeight() - 72;
-        g.drawCenteredString(font, hint, w / 2, hy, knipper ? 0xFFFFE14D : 0xFFE8FFFF);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.guhwaiispellen.surf.hint.stoppen").withStyle(ChatFormatting.GRAY), w / 2, hy + 11, 0xFFAAAAAA);
+        g.centeredText(font, hint, w / 2, hy, knipper ? 0xFFFFE14D : 0xFFE8FFFF);
+        g.centeredText(font, Component.translatable("gui.guhs.guhwaiispellen.surf.hint.stoppen").withStyle(ChatFormatting.GRAY), w / 2, hy + 11, 0xFFAAAAAA);
         int y = y0 + 54;
         for (Melding m : MELDINGEN) {
             int left = m.tot - ticks;
             int a = Mth.clamp(left * 12, 30, 255);
-            g.drawCenteredString(font, m.tekst, w / 2, y, (a << 24) | (m.kleur & 0xFFFFFF));
+            g.centeredText(font, m.tekst, w / 2, y, (a << 24) | (m.kleur & 0xFFFFFF));
             y += 11;
         }
     }
 
-    private static void uitslagPaneel(GuiGraphics g, Font font, int w) {
+    private static void uitslagPaneel(GuiGraphicsExtractor g, Font font, int w) {
         int x0 = w / 2 - 100, y0 = 6;
         g.fill(x0, y0, x0 + 200, y0 + 34, 0xB0103A4A);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.guhwaiispellen.surf.einde", uitslag.getInt("Score"),
-                Niveau.of(uitslag.getInt("Niveau")).naam()), w / 2, y0 + 5, 0xFFFFE6A0);
-        Component tweede = uitslag.getBoolean("Record") ? Component.translatable("gui.guhs.guhwaiispellen.nieuw_record")
-                : Component.translatable("gui.guhs.guhwaiispellen.munten", uitslag.getInt("Munten"));
-        g.drawCenteredString(font, tweede, w / 2, y0 + 19, 0xFFFF9EC8);
+        g.centeredText(font, Component.translatable("gui.guhs.guhwaiispellen.surf.einde", uitslag.getIntOr("Score", 0),
+                Niveau.of(uitslag.getIntOr("Niveau", 0)).naam()), w / 2, y0 + 5, 0xFFFFE6A0);
+        Component tweede = uitslag.getBooleanOr("Record", false) ? Component.translatable("gui.guhs.guhwaiispellen.nieuw_record")
+                : Component.translatable("gui.guhs.guhwaiispellen.munten", uitslag.getIntOr("Munten", 0));
+        g.centeredText(font, tweede, w / 2, y0 + 19, 0xFFFF9EC8);
     }
 
     /** (for the renderer: the Lilo-guh board of your own game) */

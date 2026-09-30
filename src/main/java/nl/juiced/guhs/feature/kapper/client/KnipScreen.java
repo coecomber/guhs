@@ -6,7 +6,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -27,6 +27,7 @@ import nl.juiced.guhs.feature.kapper.KappersShow;
 import nl.juiced.guhs.feature.kapper.Kapsel;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The knip screen of the kappersshow: left the customer's picture ("zo wil ik het!": a guh with the wished hairstyle and
  * colour; from the 4th customer on it's put away after a few seconds), in the middle the customer in the chair (live:
@@ -66,7 +67,7 @@ public class KnipScreen extends Screen {
     }
 
     private void ontvang() {
-        timer = data.getInt("Timer");
+        timer = data.getIntOr("Timer", 0);
         ontvangen = minecraft != null && minecraft.level != null ? minecraft.level.getGameTime()
                 : net.minecraft.client.Minecraft.getInstance().level == null ? 0 : net.minecraft.client.Minecraft.getInstance().level.getGameTime();
         foto = null;
@@ -77,7 +78,7 @@ public class KnipScreen extends Screen {
     }
 
     private boolean klant() {
-        return "KLANT".equals(data.getString("Fase"));
+        return "KLANT".equals(data.getStringOr("Fase", ""));
     }
 
     @Override
@@ -88,7 +89,7 @@ public class KnipScreen extends Screen {
         verfKnoppen.clear();
         boolean aan = klant();
         int cx = left + 240;
-        int gewassen = data.getInt("Gewassen");
+        int gewassen = data.getIntOr("Gewassen", 0);
         Button was = Button.builder(Component.translatable("gui.guhs.kapper.knip.wassen", gewassen, KappersShow.WASSEN), b -> send(KappersShow.WAS))
                 .bounds(cx, top + 36, 112, 18).tooltip(Tooltip.create(Component.translatable("gui.guhs.kapper.knip.wassen.tooltip"))).build();
         was.active = aan && gewassen < KappersShow.WASSEN;
@@ -102,7 +103,7 @@ public class KnipScreen extends Screen {
             b.active = aan && gewassen >= KappersShow.WASSEN;
             stijlKnoppen.add(addRenderableWidget(b));
         }
-        boolean geknipt = data.getInt("Gekozen") >= 0;
+        boolean geknipt = data.getIntOr("Gekozen", 0) >= 0;
         for (int i = 0; i <= KappersShow.NATUREL; i++) {
             int n = i;
             String key = i == KappersShow.NATUREL ? "gui.guhs.kapper.verf.naturel" : "gui.guhs.kapper.verf." + Haarverf.values()[i].kleur();
@@ -115,7 +116,7 @@ public class KnipScreen extends Screen {
                 .bounds(cx, top + 162, 112, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.kapper.knip.fohn.tooltip"))).build();
         fohn.active = aan && geknipt;
         addRenderableWidget(fohn);
-        if (aan && !data.getBoolean("Foto")) {
+        if (aan && !data.getBooleanOr("Foto", false)) {
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.kapper.knip.kijk", KappersShow.KIJK_PRIJS), b -> send(KappersShow.KIJK))
                     .bounds(left + 8, top + 162, 108, 20).build());
         }
@@ -136,49 +137,49 @@ public class KnipScreen extends Screen {
 
     @Nullable
     private KapperKlantEntity foto() {
-        if (foto == null && minecraft != null && minecraft.level != null && data.getInt("Wens") >= 0) {
-            foto = KapperFeature.KAPPER_KLANT.get().create(minecraft.level);
+        if (foto == null && minecraft != null && minecraft.level != null && data.getIntOr("Wens", 0) >= 0) {
+            foto = KapperFeature.KAPPER_KLANT.get().create(minecraft.level, EntitySpawnReason.TRIGGERED);
             if (foto != null) {
-                foto.setVariant(GuhVariant.byId(data.getString("Variant")));
-                foto.wear(Kapsel.values()[data.getInt("Wens")].kleding);
-                int v = data.getInt("WensVerf");
+                foto.setVariant(GuhVariant.byId(data.getStringOr("Variant", "")));
+                foto.wear(Kapsel.values()[data.getIntOr("Wens", 0)].kleding);
+                int v = data.getIntOr("WensVerf", 0);
                 foto.setHaarkleur(v < 0 ? -1 : Haarverf.values()[v].rgb);
             }
         }
-        if (foto != null && data.getInt("WensVerf") == Haarverf.REGENBOOG.ordinal() && minecraft.level != null) {
+        if (foto != null && data.getIntOr("WensVerf", 0) == Haarverf.REGENBOOG.ordinal() && minecraft.level != null) {
             foto.setHaarkleur(KapperHaar.regenboog(minecraft.level.getGameTime()));
         }
         return foto;
     }
 
     @Override
-    public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.render(g, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
         // the icons on the buttons: the hairstyles, the colours
         Kapsel[] kapsels = Kapsel.values();
         for (int i = 0; i < stijlKnoppen.size(); i++) {
             Button b = stijlKnoppen.get(i);
-            g.renderItem(new ItemStack(ModItems.clothingItem(kapsels[i].kleding)), b.getX() + 5, b.getY() + 1);
-            if (data.getInt("Gekozen") == i) {
+            g.item(new ItemStack(ModItems.clothingItem(kapsels[i].kleding)), b.getX() + 5, b.getY() + 1);
+            if (data.getIntOr("Gekozen", 0) == i) {
                 outline(g, b.getX() - 1, b.getY() - 1, b.getWidth() + 2, b.getHeight() + 2, GOUD);
             }
         }
         for (int i = 0; i < verfKnoppen.size(); i++) {
             Button b = verfKnoppen.get(i);
             if (i == KappersShow.NATUREL) {
-                g.drawCenteredString(font, "N", b.getX() + b.getWidth() / 2, b.getY() + 4, 0xFFFFF0DD);
+                g.centeredText(font, "N", b.getX() + b.getWidth() / 2, b.getY() + 4, 0xFFFFF0DD);
             } else {
                 int rgb = Haarverf.values()[i] == Haarverf.REGENBOOG && minecraft.level != null
                         ? KapperHaar.regenboog(minecraft.level.getGameTime()) : Haarverf.values()[i].rgb;
                 g.fill(b.getX() + 4, b.getY() + 3, b.getX() + b.getWidth() - 4, b.getY() + b.getHeight() - 3, 0xFF000000 | rgb);
             }
-            if (data.getInt("GekozenVerf") == i) {
+            if (data.getIntOr("GekozenVerf", 0) == i) {
                 outline(g, b.getX() - 1, b.getY() - 1, b.getWidth() + 2, b.getHeight() + 2, GOUD);
             }
         }
     }
 
-    private static void outline(GuiGraphics g, int x, int y, int w, int h, int c) {
+    private static void outline(GuiGraphicsExtractor g, int x, int y, int w, int h, int c) {
         g.fill(x, y, x + w, y + 1, c);
         g.fill(x, y + h - 1, x + w, y + h, c);
         g.fill(x, y, x + 1, y + h, c);
@@ -186,18 +187,18 @@ public class KnipScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, ROZE);
         g.fill(left, top, left + W, top + H, PANEL);
-        boolean feest = data.getBoolean("Feest");
+        boolean feest = data.getBooleanOr("Feest", false);
         Component kop = Component.translatable(feest ? "gui.guhs.kapper.knip.kop_feest" : "gui.guhs.kapper.knip.kop",
-                Math.min(data.getInt("Nr") + 1, data.getInt("Aantal")), data.getInt("Aantal"));
-        g.drawString(font, kop.copy().withStyle(ChatFormatting.BOLD), left + 8, top + 7, TEXT, false);
-        Component score = Component.translatable("gui.guhs.kapper.knip.score", data.getInt("Score"), data.getInt("Combo"));
-        g.drawString(font, score, left + W - 8 - font.width(score), top + 7, GOUD, false);
+                Math.min(data.getIntOr("Nr", 0) + 1, data.getIntOr("Aantal", 0)), data.getIntOr("Aantal", 0));
+        g.text(font, kop.copy().withStyle(ChatFormatting.BOLD), left + 8, top + 7, TEXT, false);
+        Component score = Component.translatable("gui.guhs.kapper.knip.score", data.getIntOr("Score", 0), data.getIntOr("Combo", 0));
+        g.text(font, score, left + W - 8 - font.width(score), top + 7, GOUD, false);
         // the patience bar
-        int geduld = Math.max(1, data.getInt("Geduld"));
+        int geduld = Math.max(1, data.getIntOr("Geduld", 0));
         int over = tijdOver();
         float f = klant() ? Math.min(1f, over / (float) geduld) : 0f;
         g.fill(left + 8, top + 19, left + W - 8, top + 25, 0xFF4A2A3A);
@@ -205,18 +206,18 @@ public class KnipScreen extends Screen {
         g.fill(left + 8, top + 19, left + 8 + (int) ((W - 16) * f), top + 25, col);
         if (klant()) {
             String s = ((over + 19) / 20) + " s";
-            g.drawCenteredString(font, s, width / 2, top + 18, 0xFFFFFFFF);
+            g.centeredText(font, s, width / 2, top + 18, 0xFFFFFFFF);
         }
         // the three panels
         int py0 = top + 32, py1 = top + 158;
         g.fill(left + 8, py0, left + 116, py1, 0xFFFFF6F0);                   // the picture: a polaroid
         g.fill(left + 12, py0 + 4, left + 112, py1 - 22, 0xFFBFE6FF);
         g.fill(left + 124, py0, left + 232, py1, 0x30F7B6CB);
-        g.drawString(font, Component.translatable("gui.guhs.kapper.knip.stap_was"), left + 240, top + 28, stapKleur(data.getInt("Gewassen") >= KappersShow.WASSEN), false);
-        g.drawString(font, Component.translatable("gui.guhs.kapper.knip.stap_knip"), left + 240, top + 58, stapKleur(data.getInt("Gekozen") >= 0), false);
-        g.drawString(font, Component.translatable("gui.guhs.kapper.knip.stap_verf"), left + 240, top + 112, stapKleur(data.getInt("GekozenVerf") >= 0), false);
-        boolean fotoZichtbaar = data.getBoolean("Foto");
-        int wens = data.getInt("Wens"), wensVerf = data.getInt("WensVerf");
+        g.text(font, Component.translatable("gui.guhs.kapper.knip.stap_was"), left + 240, top + 28, stapKleur(data.getIntOr("Gewassen", 0) >= KappersShow.WASSEN), false);
+        g.text(font, Component.translatable("gui.guhs.kapper.knip.stap_knip"), left + 240, top + 58, stapKleur(data.getIntOr("Gekozen", 0) >= 0), false);
+        g.text(font, Component.translatable("gui.guhs.kapper.knip.stap_verf"), left + 240, top + 112, stapKleur(data.getIntOr("GekozenVerf", 0) >= 0), false);
+        boolean fotoZichtbaar = data.getBooleanOr("Foto", false);
+        int wens = data.getIntOr("Wens", 0), wensVerf = data.getIntOr("WensVerf", 0);
         if (klant() && fotoZichtbaar && wens >= 0) {
             KapperKlantEntity f1 = foto();
             if (f1 != null) {
@@ -224,30 +225,30 @@ public class KnipScreen extends Screen {
             }
             Component naam = Component.translatable("gui.guhs.kapper.kapsel." + Kapsel.values()[wens].stijl());
             Component kleur = Component.translatable(wensVerf < 0 ? "gui.guhs.kapper.verf.naturel" : "gui.guhs.kapper.verf." + Haarverf.values()[wensVerf].kleur());
-            g.drawCenteredString(font, naam, left + 62, py1 - 19, 0xFF7A2848);
-            g.drawCenteredString(font, kleur, left + 62, py1 - 9, 0xFF7A2848);
+            g.centeredText(font, naam, left + 62, py1 - 19, 0xFF7A2848);
+            g.centeredText(font, kleur, left + 62, py1 - 9, 0xFF7A2848);
         } else if (klant()) {
-            g.drawCenteredString(font, Component.literal("?").withStyle(ChatFormatting.BOLD), left + 62, py0 + 50, 0xFF7A2848);
-            g.drawCenteredString(font, Component.translatable("gui.guhs.kapper.knip.foto_weg"), left + 62, py1 - 14, 0xFF7A2848);
+            g.centeredText(font, Component.literal("?").withStyle(ChatFormatting.BOLD), left + 62, py0 + 50, 0xFF7A2848);
+            g.centeredText(font, Component.translatable("gui.guhs.kapper.knip.foto_weg"), left + 62, py1 - 14, 0xFF7A2848);
         }
-        g.drawCenteredString(font, Component.translatable("gui.guhs.kapper.knip.foto"), left + 62, py0 - 9 + 1, ROZE);
+        g.centeredText(font, Component.translatable("gui.guhs.kapper.knip.foto"), left + 62, py0 - 9 + 1, ROZE);
         // the customer in the chair (live)
-        g.drawCenteredString(font, Component.translatable("gui.guhs.kapper.knip.klant"), left + 178, py0 - 8, ROZE);
-        Entity e = minecraft != null && minecraft.level != null ? minecraft.level.getEntity(data.getInt("Klant")) : null;
+        g.centeredText(font, Component.translatable("gui.guhs.kapper.knip.klant"), left + 178, py0 - 8, ROZE);
+        Entity e = minecraft != null && minecraft.level != null ? minecraft.level.getEntity(data.getIntOr("Klant", 0)) : null;
         if (klant() && e instanceof LivingEntity living) {
             InventoryScreen.renderEntityInInventoryFollowsMouse(g, left + 124, py0 + 4, left + 232, py1 - 4, 34, 0.0625f, mouseX, mouseY, living);
         } else {
-            String fase = data.getString("Fase");
-            Component t = "TUSSEN".equals(fase) && !data.getString("Uitslag").isEmpty()
-                    ? Component.translatable(data.getString("Uitslag"), data.getInt("UitslagPunten"), data.getInt("Combo"))
+            String fase = data.getStringOr("Fase", "");
+            Component t = "TUSSEN".equals(fase) && !data.getStringOr("Uitslag", "").isEmpty()
+                    ? Component.translatable(data.getStringOr("Uitslag", ""), data.getIntOr("UitslagPunten", 0), data.getIntOr("Combo", 0))
                     : Component.translatable("AFTELLEN".equals(fase) ? "gui.guhs.kapper.knip.aftellen" : "gui.guhs.kapper.knip.volgende");
             int y = py0 + 40;
             for (var line : font.split(t, 100)) {
-                g.drawCenteredString(font, line, left + 178, y, TEXT);
+                g.centeredText(font, line, left + 178, y, TEXT);
                 y += 10;
             }
         }
-        g.drawCenteredString(font, Component.translatable("gui.guhs.kapper.knip.hint"), width / 2, top + H - 36, 0xFFB898C8);
+        g.centeredText(font, Component.translatable("gui.guhs.kapper.knip.hint"), width / 2, top + H - 36, 0xFFB898C8);
     }
 
     private static int stapKleur(boolean klaar) {

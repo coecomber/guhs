@@ -35,10 +35,10 @@ public final class BakkerijEvents {
             world.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 5, 0.4, 0.2, 0.4, 0);
             world.sendParticles(BakkerijFeature.KNABBELWOLKJE.get(), guh.getX(), guh.getY() + guh.getBbHeight() * 0.7, guh.getZ(), 4, 0.3, 0.2, 0.3, 0.01);
             world.playSound(null, guh.blockPosition(), ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1.2f);
-            player.displayClientMessage(Component.translatable("gui.guhs.bakkerij.guh_eet", guh.getDisplayName(), bakje.recept.naam())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.bakkerij.guh_eet", guh.getDisplayName(), bakje.recept.naam())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
-        return InteractionResult.sidedSuccess(guh.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     private BakkerijEvents() {

@@ -44,7 +44,7 @@ public class RadiootjeBlock extends TikiBlock {
             int volgende = nu + 1 >= HulaLiedje.values().length ? -1 : nu + 1;
             if (volgende < 0) {
                 SPEELT.remove(key);
-                player.displayClientMessage(Component.translatable("block.guhs.tiki_radiootje.uit").withStyle(ChatFormatting.GRAY), true);
+                player.sendOverlayMessage(Component.translatable("block.guhs.tiki_radiootje.uit").withStyle(ChatFormatting.GRAY));
             } else {
                 SPEELT.put(key, volgende);
                 HulaLiedje l = HulaLiedje.of(volgende);
@@ -54,10 +54,10 @@ public class RadiootjeBlock extends TikiBlock {
                                 pos.getY() + 0.5, pos.getZ() + 0.5, 1.4f, 1.0f, server.getRandom().nextLong()));
                     }
                 }
-                player.displayClientMessage(Component.translatable("block.guhs.tiki_radiootje.speelt", l.naam()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("block.guhs.tiki_radiootje.speelt", l.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     private static void stop(ServerLevel server, BlockPos pos, int liedje) {

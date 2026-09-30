@@ -155,7 +155,7 @@ public final class SamenVriendjes {
 
     /** Two friends side by side in their huisje tonight (once per night per guh): points, hearts at the window. */
     static boolean samenGeslapen(ServerLevel level, Huisje h, Mob a, Mob b, long dag) {
-        if (a.getPersistentData().getLong(SLAAP_DAG) == dag + 1) {
+        if (a.getPersistentData().getLongOr(SLAAP_DAG, 0L) == dag + 1) {
             return false;
         }
         a.getPersistentData().putLong(SLAAP_DAG, dag + 1);
@@ -178,7 +178,7 @@ public final class SamenVriendjes {
     /** A friend of this guh that's loaded, close by (16) and free, or null (besties first). */
     @Nullable
     static GuhEntity vriendInDeBuurt(GuhEntity guh) {
-        MinecraftServer s = guh.getServer();
+        MinecraftServer s = guh.level().getServer();
         if (s == null) {
             return null;
         }
@@ -229,7 +229,7 @@ public final class SamenVriendjes {
 
         @Override
         public boolean canUse() {
-            if (guh.level().isClientSide || !vrij(guh) || !baasDichtbij(guh)) {
+            if (guh.level().isClientSide() || !vrij(guh) || !baasDichtbij(guh)) {
                 return false;
             }
             Uitnodiging u = UITNODIGINGEN.remove(guh.getUUID());
@@ -242,7 +242,7 @@ public final class SamenVriendjes {
                 return true;
             }
             Wat test = TEST_NU.remove(guh.getUUID());
-            if (test == null && ((guh.tickCount + guh.getId()) % 40 != 0 || guh.getPersistentData().getLong(RUST_TOT) > guh.level().getGameTime()
+            if (test == null && ((guh.tickCount + guh.getId()) % 40 != 0 || guh.getPersistentData().getLongOr(RUST_TOT, 0L) > guh.level().getGameTime()
                     || guh.getRandom().nextInt(3) != 0)) {
                 return false;
             }

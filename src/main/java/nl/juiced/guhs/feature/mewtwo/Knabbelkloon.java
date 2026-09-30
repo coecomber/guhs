@@ -40,7 +40,7 @@ public class Knabbelkloon implements NpcRole {
             case MewtwoVoortgang.ONDERDELEN -> {
                 int nog = MewtwoFeature.ONDERDELEN - MewtwoVoortgang.aantalIngebouwd(p);
                 int bij = 0;
-                for (ItemStack s : p.getInventory().items) {
+                for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
                     if (s.getItem() instanceof TankonderdeelItem && !MewtwoVoortgang.isIngebouwd(p, TankonderdeelItem.soort(s))) {
                         bij++;
                     }

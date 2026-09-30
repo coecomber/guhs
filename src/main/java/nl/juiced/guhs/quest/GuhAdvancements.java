@@ -11,7 +11,7 @@ import nl.juiced.guhs.Guhs;
  */
 public final class GuhAdvancements {
     public static void grant(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("quest/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("quest/" + name));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }

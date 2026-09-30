@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -45,7 +45,7 @@ public class KatapultScreen extends Screen {
     protected void init() {
         left = (width - W) / 2;
         top = (height - H) / 2;
-        boolean mine = data.getBoolean("Mine"), running = data.getBoolean("Running");
+        boolean mine = data.getBooleanOr("Mine", false), running = data.getBooleanOr("Running", false);
         if (mine) {
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.katapult.stop"), b -> send(KatapultGame.STOP))
                     .bounds(left + 20, top + 62, W - 40, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.katapult.stop.tooltip"))).build());
@@ -83,32 +83,32 @@ public class KatapultScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, 0xFFF7B6CB);
         g.fill(left, top, left + W, top + H, 0xEA2A1A30);
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6EE);
-        Component question = data.getBoolean("Mine") ? Component.translatable("gui.guhs.katapult.mine", data.getInt("Fort"))
-                : data.getBoolean("Running") ? Component.translatable("gui.guhs.katapult.busy", data.getString("Player"), data.getInt("Fort"))
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6EE);
+        Component question = data.getBooleanOr("Mine", false) ? Component.translatable("gui.guhs.katapult.mine", data.getIntOr("Fort", 0))
+                : data.getBooleanOr("Running", false) ? Component.translatable("gui.guhs.katapult.busy", data.getStringOr("Player", ""), data.getIntOr("Fort", 0))
                 : Component.translatable("gui.guhs.katapult.question");
         int y = top + 26;
         for (var line : font.split(question, W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFD8B8C8);
+            g.centeredText(font, line, width / 2, y, 0xFFD8B8C8);
             y += 11;
         }
         y = top + 108;
         for (var line : font.split(Component.translatable("gui.guhs.katapult.rules"), W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFFFE6EE);
+            g.centeredText(font, line, width / 2, y, 0xFFFFE6EE);
             y += 11;
         }
         y = Math.max(y + 4, top + 142);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.katapult.records", data.getInt("Runs")), width / 2, y, 0xFFFFD27A);
+        g.centeredText(font, Component.translatable("gui.guhs.katapult.records", data.getIntOr("Runs", 0)), width / 2, y, 0xFFFFD27A);
         for (Niveau n : Niveau.values()) {
             y += 12;
-            int best = data.getInt("Best_" + n.id()), rec = data.getInt("RecordScore_" + n.id());
+            int best = data.getIntOr("Best_" + n.id(), 0), rec = data.getIntOr("RecordScore_" + n.id(), 0);
             Component castle = rec < 0 ? Component.translatable("gui.guhs.katapult.kasteel_none")
-                    : Component.translatable("gui.guhs.katapult.kasteel", data.getString("RecordName_" + n.id()), rec);
-            g.drawCenteredString(font, Component.translatable("gui.guhs.katapult.best", n.naam(), best < 0 ? "-" : String.valueOf(best), castle),
+                    : Component.translatable("gui.guhs.katapult.kasteel", data.getStringOr("RecordName_" + n.id(), ""), rec);
+            g.centeredText(font, Component.translatable("gui.guhs.katapult.best", n.naam(), best < 0 ? "-" : String.valueOf(best), castle),
                     width / 2, y, 0xFFFFE6EE);
         }
     }

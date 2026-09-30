@@ -31,18 +31,18 @@ public final class SpiesburchtStats {
         if (!root.contains(Player.PERSISTED_NBT_TAG)) {
             root.put(Player.PERSISTED_NBT_TAG, new CompoundTag());
         }
-        return root.getCompound(Player.PERSISTED_NBT_TAG);
+        return root.getCompoundOrEmpty(Player.PERSISTED_NBT_TAG);
     }
 
     public static int rookguhs(Player player) {
-        return data(player).getInt(ROOKGUHS);
+        return data(player).getIntOr(ROOKGUHS, 0);
     }
 
     /** One more Rookguh safely home, thanks to this player. */
     public static void rookguhSaved(ServerPlayer player) {
         int count = rookguhs(player) + 1;
         data(player).putInt(ROOKGUHS, count);
-        player.displayClientMessage(Component.translatable("quest.guhs.rookguh.gered", count).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        player.sendSystemMessage(Component.translatable("quest.guhs.rookguh.gered", count).withStyle(ChatFormatting.LIGHT_PURPLE));
         GuhAdvancements.grant(player, "rookguh_gered");
         award(player, "barbecuether/rookguh");
         if (count >= REDDER) {
@@ -55,7 +55,7 @@ public final class SpiesburchtStats {
 
     /** An advancement of our tab (criterion "done", granted by the mod). */
     public static void award(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(name));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }

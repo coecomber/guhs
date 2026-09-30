@@ -149,7 +149,7 @@ public class WolkenstroomBlock extends HorizontalDirectionalBlock implements Liq
             return; // only the block at its feet
         }
         push(state, level, pos, entity);
-        if (!level.isClientSide && entity instanceof ServerPlayer player) {
+        if (!level.isClientSide() && entity instanceof ServerPlayer player) {
             EilandenEvents.onLift(player, state.getValue(DOWN));
         }
     }

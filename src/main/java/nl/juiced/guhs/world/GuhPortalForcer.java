@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.BlockUtil;
+import net.minecraft.util.BlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.block.GuhPortalBlock;
 import nl.juiced.guhs.registry.ModBlocks;
@@ -33,7 +33,7 @@ public final class GuhPortalForcer {
     private static final int SEARCH_RADIUS = 48;
 
     @Nullable
-    public static DimensionTransition getDestination(ServerLevel from, Entity entity, BlockPos portalPos) {
+    public static TeleportTransition getDestination(ServerLevel from, Entity entity, BlockPos portalPos) {
         ResourceKey<Level> targetKey = from.dimension() == ModDimensions.GUHMENSION ? Level.OVERWORLD : ModDimensions.GUHMENSION;
         ServerLevel target = from.getServer().getLevel(targetKey);
         if (target == null) {
@@ -57,11 +57,11 @@ public final class GuhPortalForcer {
         Vec3 pos = axis == Direction.Axis.X
                 ? new Vec3(corner.getX() + along, corner.getY(), corner.getZ() + 0.5)
                 : new Vec3(corner.getX() + 0.5, corner.getY(), corner.getZ() + along);
-        DimensionTransition.PostDimensionTransition post = DimensionTransition.PLAY_PORTAL_SOUND.then(DimensionTransition.PLACE_PORTAL_TICKET);
+        TeleportTransition.PostDimensionTransition post = TeleportTransition.PLAY_PORTAL_SOUND.then(TeleportTransition.PLACE_PORTAL_TICKET);
         if (targetKey == ModDimensions.GUHMENSION) {
             post = post.then(nl.juiced.guhs.quest.GuhDex.GIVE_ON_ARRIVAL);     // a Guhdex for everyone who comes in without one
         }
-        return new DimensionTransition(target, pos, Vec3.ZERO, entity.getYRot(), entity.getXRot(), post);
+        return new TeleportTransition(target, pos, Vec3.ZERO, entity.getYRot(), entity.getXRot(), post);
     }
 
     private static Optional<BlockPos> findPortal(ServerLevel level, BlockPos near) {
@@ -83,7 +83,7 @@ public final class GuhPortalForcer {
         // bottom of the world, which buried the portal deep underground.
         ChunkAccess chunk = level.getChunk(near.getX() >> 4, near.getZ() >> 4);
         int surface = chunk.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, near.getX() & 15, near.getZ() & 15) + 1;
-        int y = Math.max(level.getMinBuildHeight() + 2, Math.min(surface, level.getMaxBuildHeight() - 8));
+        int y = Math.max(level.getMinY() + 2, Math.min(surface, level.getMaxY() + 1 - 8));
         BlockPos base = new BlockPos(near.getX(), y, near.getZ());
         BlockState frame = ModBlocks.BLOCK_OF_KAASKNABBELS.get().defaultBlockState();
         BlockState portal = ModBlocks.GUH_PORTAL.get().defaultBlockState().setValue(GuhPortalBlock.AXIS, Direction.Axis.X);

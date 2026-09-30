@@ -23,6 +23,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.world.GuhWorldData;
 import nl.juiced.guhs.world.MaagManager;
 
+import net.minecraft.core.UUIDUtil;
 /** Network messages for the guh stomachs, the Mika-baas' game and the Guhdex. */
 public final class MaagPayloads {
 
@@ -60,7 +61,7 @@ public final class MaagPayloads {
             ListTag list = new ListTag();
             maag.whitelist.forEach((id, entry) -> {
                 CompoundTag e = new CompoundTag();
-                e.putUUID("Id", id);
+                e.store("Id", UUIDUtil.CODEC, id);
                 e.putString("Name", entry.name);
                 e.putBoolean("Build", entry.build);
                 list.add(e);
@@ -95,7 +96,7 @@ public final class MaagPayloads {
             if (!(context.player() instanceof ServerPlayer player)) {
                 return;
             }
-            GuhWorldData data = GuhWorldData.get(player.server);
+            GuhWorldData data = GuhWorldData.get(player.level().getServer());
             GuhWorldData.Maag maag = data.maagOf(player.getUUID());
             if (maag == null) {
                 return;
@@ -110,15 +111,15 @@ public final class MaagPayloads {
                 }
                 case ADD -> {
                     String name = p.text().strip();
-                    var profile = player.server.getProfileCache() == null ? java.util.Optional.<com.mojang.authlib.GameProfile>empty()
-                            : player.server.getProfileCache().get(name);
-                    ServerPlayer online = player.server.getPlayerList().getPlayerByName(name);
+                    var profile = player.level().getServer().getProfileCache() == null ? java.util.Optional.<com.mojang.authlib.GameProfile>empty()
+                            : player.level().getServer().getProfileCache().get(name);
+                    ServerPlayer online = player.level().getServer().getPlayerList().getPlayerByName(name);
                     UUID id = online != null ? online.getUUID() : profile.map(com.mojang.authlib.GameProfile::getId).orElse(null);
                     if (id == null || id.equals(player.getUUID())) {
-                        player.displayClientMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.maag.unknown_player", name), true);
+                        player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.maag.unknown_player", name));
                         return;
                     }
-                    maag.whitelist.putIfAbsent(id, new GuhWorldData.WhitelistEntry(online != null ? online.getGameProfile().getName() : name, false));
+                    maag.whitelist.putIfAbsent(id, new GuhWorldData.WhitelistEntry(online != null ? online.getGameProfile().name() : name, false));
                 }
                 case REMOVE -> maag.whitelist.remove(UUID.fromString(p.text()));
                 case TOGGLE_BUILD -> {
@@ -331,8 +332,8 @@ public final class MaagPayloads {
                 if (stack.getItem() instanceof nl.juiced.guhs.item.SuperkompasItem) {
                     nl.juiced.guhs.item.SuperkompasItem.choose(stack, p.structure());
                     nl.juiced.guhs.feature.verhaal.VerhaalFeature.kompasGekozen(player, p.structure());   // 3.0: the Verhalen tab
-                    player.displayClientMessage(net.minecraft.network.chat.Component.translatable("item.guhs.guhmensie_superkompas.chosen",
-                            net.minecraft.network.chat.Component.translatable("structure.guhs." + p.structure())), true);
+                    player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("item.guhs.guhmensie_superkompas.chosen",
+                            net.minecraft.network.chat.Component.translatable("structure.guhs." + p.structure())));
                 }
             }
         }

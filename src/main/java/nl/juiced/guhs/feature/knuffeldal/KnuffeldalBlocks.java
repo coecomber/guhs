@@ -17,7 +17,6 @@ import net.minecraft.util.ParticleUtils;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -164,7 +163,7 @@ public final class KnuffeldalBlocks {
 
         @Override
         public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
-            var feature = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.CONFIGURED_FEATURE)
+            var feature = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.CONFIGURED_FEATURE)
                     .getHolder(KnuffeldalFeature.REUZE_GUHPADDENSTOEL);
             if (feature.isEmpty()) {
                 return;
@@ -242,11 +241,11 @@ public final class KnuffeldalBlocks {
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 level.setBlock(pos, state.cycle(STEMMING), Block.UPDATE_ALL);
                 level.playSound(null, pos, ModSounds.GUH_HAPPY.get(), SoundSource.BLOCKS, 0.5f, 1.4f + level.getRandom().nextFloat() * 0.3f);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
     }
 
@@ -302,23 +301,23 @@ public final class KnuffeldalBlocks {
         }
 
         @Override
-        protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+        protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                                   BlockHitResult hit) {
-            if (level.isClientSide) {
-                return ItemInteractionResult.SUCCESS;
+            if (level.isClientSide()) {
+                return InteractionResult.SUCCESS;
             }
             if (player instanceof ServerPlayer sp && Seizoensactiviteiten.bloembak(sp, (ServerLevel) level, pos, stack)) {
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (!level.isClientSide && player instanceof ServerPlayer sp) {
+            if (!level.isClientSide() && player instanceof ServerPlayer sp) {
                 Seizoensactiviteiten.bloembakTip(sp, Seizoen.huidig(level));
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
     }
 
@@ -448,7 +447,7 @@ public final class KnuffeldalBlocks {
         protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
             if (state.getValue(VOL)) {
                 if (entity.fallDistance >= Seizoensactiviteiten.SPRONG) {
-                    if (!level.isClientSide) {
+                    if (!level.isClientSide()) {
                         Seizoensactiviteiten.gesprongen((ServerLevel) level, pos, entity);
                     }
                     entity.resetFallDistance();
@@ -505,7 +504,7 @@ public final class KnuffeldalBlocks {
         @Override
         public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
             BlockPos other = state.getValue(HALF) == DoubleBlockHalf.LOWER ? pos.above() : pos.below();
-            if (!level.isClientSide && level.getBlockState(other).is(this)) {
+            if (!level.isClientSide() && level.getBlockState(other).is(this)) {
                 level.setBlock(other, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL | Block.UPDATE_SUPPRESS_DROPS);
             }
             return super.playerWillDestroy(level, pos, state, player);
@@ -553,24 +552,24 @@ public final class KnuffeldalBlocks {
         }
 
         @Override
-        protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+        protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                                   BlockHitResult hit) {
-            if (level.isClientSide) {
-                return ItemInteractionResult.SUCCESS;
+            if (level.isClientSide()) {
+                return InteractionResult.SUCCESS;
             }
             if (player instanceof ServerPlayer sp && Feestbuffet.opTafel(sp, (ServerLevel) level, pos, stack)) {
-                return ItemInteractionResult.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (!level.isClientSide) {
-                player.displayClientMessage(Component.translatable(state.getValue(GEDEKT) ? "gui.guhs.knuffeldal.buffet.gedekt"
-                        : "gui.guhs.knuffeldal.buffet.leeg").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            if (!level.isClientSide()) {
+                player.sendOverlayMessage(Component.translatable(state.getValue(GEDEKT) ? "gui.guhs.knuffeldal.buffet.gedekt"
+                        : "gui.guhs.knuffeldal.buffet.leeg").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Override
@@ -620,9 +619,9 @@ public final class KnuffeldalBlocks {
             if (level instanceof ServerLevel server) {
                 server.sendParticles(ParticleTypes.HEART, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, 4, 0.3, 0.2, 0.3, 0.02);
                 server.playSound(null, pos, SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.BLOCKS, 0.6f, 1.6f);
-                player.displayClientMessage(Component.translatable("gui.guhs.knuffeldal.oorkonde").withStyle(ChatFormatting.GOLD), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.knuffeldal.oorkonde").withStyle(ChatFormatting.GOLD));
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
     }
 

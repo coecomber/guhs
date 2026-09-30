@@ -25,13 +25,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerPlayer;
 import nl.juiced.guhs.quest.GuhQuests;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * The sitting guh characters of the quests (same model as the Hungry Guh): Moeder Vadsig (huge, in her shrine), the
  * Tandarts-guh (in the mouth), the Maagenzym-guh (in every stomach) and the Slee-guh (in the sled hut).
@@ -196,7 +197,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
-        if (!this.level().isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (!this.level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
             nl.juiced.guhs.feature.NpcRole role = nl.juiced.guhs.feature.Features.role(getKind());
             if (role != null) {
                 role.talk(this, serverPlayer);
@@ -219,7 +220,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
                 GuhQuests.talkTo(this, serverPlayer);
             }
         }
-        return InteractionResult.sidedSuccess(this.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -227,7 +228,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         super.addAdditionalSaveData(tag);
         tag.putString("Kind", getKind().id());
         if (maagOwner != null) {
-            tag.putUUID("MaagOwner", maagOwner);
+            tag.store("MaagOwner", UUIDUtil.CODEC, maagOwner);
         }
         if (getKind() == Kind.VERSTOPGUHTJE) {
             tag.put("Verstop", verstop.save());
@@ -244,14 +245,14 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         for (Kind kind : Kind.values()) {
-            if (kind.id().equals(tag.getString("Kind"))) {
+            if (kind.id().equals(tag.getStringOr("Kind", ""))) {
                 setKind(kind);
             }
         }
-        maagOwner = tag.hasUUID("MaagOwner") ? tag.getUUID("MaagOwner") : null;
-        verstop.load(tag.getCompound("Verstop"));
-        setReisName(tag.getString("ReisName"));
-        roleData = tag.getCompound("RoleData");
+        maagOwner = tag.read("MaagOwner", UUIDUtil.CODEC).isPresent() ? tag.read("MaagOwner", UUIDUtil.CODEC).orElseThrow() : null;
+        verstop.load(tag.getCompoundOrEmpty("Verstop"));
+        setReisName(tag.getStringOr("ReisName", ""));
+        roleData = tag.getCompoundOrEmpty("RoleData");
         if (getKind() == Kind.POORTWACHTER && !roleData.contains("GateYaw")) {
             roleData.putFloat("GateYaw", getYRot()); // (the Rotation from a structure is already loaded here)
         }
@@ -380,7 +381,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
 
     @Override
     public boolean isClientSide() {
-        return this.level().isClientSide;
+        return this.level().isClientSide();
     }
 
     @Override
@@ -390,19 +391,19 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
             roleData.putFloat("GateYaw", getYRot());
         }
         super.tick();
-        if (!this.level().isClientSide && getKind() == Kind.VERSTOPGUHTJE) {
+        if (!this.level().isClientSide() && getKind() == Kind.VERSTOPGUHTJE) {
             verstop.tick(this);
         }
-        if (!this.level().isClientSide && getKind() == Kind.REISGUH) {
+        if (!this.level().isClientSide() && getKind() == Kind.REISGUH) {
             nl.juiced.guhs.quest.Reisguh.tick(this);
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             nl.juiced.guhs.feature.NpcRole role = nl.juiced.guhs.feature.Features.role(getKind());
             if (role != null) {
                 role.tick(this);
             }
         }
-        if (!this.level().isClientSide && getKind() == Kind.POORTWACHTER) {
+        if (!this.level().isClientSide() && getKind() == Kind.POORTWACHTER) {
             nl.juiced.guhs.quest.KasteelPoort.tick(this);
         }
         if (tradingPlayer != null && (!tradingPlayer.isAlive() || !(tradingPlayer.containerMenu instanceof net.minecraft.world.inventory.MerchantMenu)

@@ -11,7 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -45,7 +45,7 @@ public class GuhbubbelStructure extends Structure implements nl.juiced.guhs.worl
     public static final MapCodec<GuhbubbelStructure> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             settingsCodec(i),
             StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(s -> s.startPool),
-            ResourceLocation.CODEC.fieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
+            Identifier.CODEC.fieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
             ResourceKey.codec(Registries.NOISE).fieldOf("sea_noise").forGetter(s -> s.seaNoise),
             Codec.intRange(1, 5).fieldOf("cell_chunks").forGetter(s -> s.cellChunks),
             Codec.intRange(1, 10).fieldOf("neighbourhood").forGetter(s -> s.neighbourhood),
@@ -63,7 +63,7 @@ public class GuhbubbelStructure extends Structure implements nl.juiced.guhs.worl
     public static final int STEP = 8;
 
     private final Holder<StructureTemplatePool> startPool;
-    private final ResourceLocation startJigsawName;
+    private final Identifier startJigsawName;
     private final ResourceKey<NormalNoise.NoiseParameters> seaNoise;
     private final int cellChunks;
     private final int neighbourhood;
@@ -77,7 +77,7 @@ public class GuhbubbelStructure extends Structure implements nl.juiced.guhs.worl
     private final int keepClear;
     private final Optional<Integer> voorrang;
 
-    public GuhbubbelStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, ResourceLocation startJigsawName,
+    public GuhbubbelStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, Identifier startJigsawName,
                               ResourceKey<NormalNoise.NoiseParameters> seaNoise, int cellChunks, int neighbourhood, double minValue,
                               double seaValue, int waterLevel, int centreDepth, int minDepth, int checkRadius, int keepClear,
                               Optional<Integer> voorrang) {
@@ -169,7 +169,7 @@ public class GuhbubbelStructure extends Structure implements nl.juiced.guhs.worl
     protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
         ChunkPos chunk = context.chunkPos();
         NormalNoise noise = context.randomState().getOrCreateNoise(seaNoise);
-        int cx = Math.floorDiv(chunk.x, cellChunks), cz = Math.floorDiv(chunk.z, cellChunks);
+        int cx = Math.floorDiv(chunk.x(), cellChunks), cz = Math.floorDiv(chunk.z(), cellChunks);
         Peak peak = peak(context.seed(), noise, cellChunks, cx, cz);
         if (peak.value < minValue || !highestOfItsSea(context.seed(), noise, cellChunks, neighbourhood, seaValue, cx, cz)) {
             return Optional.empty();

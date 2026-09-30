@@ -6,7 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 
 /**
@@ -41,9 +41,9 @@ public class SjoelSchijvenItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
-        return InteractionResultHolder.consume(player.getItemInHand(hand));
+        return InteractionResult.CONSUME.heldItemTransformedTo(player.getItemInHand(hand));
     }
 
     @Override
@@ -52,13 +52,13 @@ public class SjoelSchijvenItem extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.BOW;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
-        if (!level.isClientSide && entity instanceof ServerPlayer player) {
+        if (!level.isClientSide() && entity instanceof ServerPlayer player) {
             SjoelGame.slide(player, power(getUseDuration(stack, entity) - timeLeft));
         }
     }
@@ -66,7 +66,7 @@ public class SjoelSchijvenItem extends Item {
     /** Only players at the sjoelbak keep their pucks. */
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && (!(entity instanceof Player player) || !SjoelGame.isPlaying(player))) {
+        if (!level.isClientSide() && (!(entity instanceof Player player) || !SjoelGame.isPlaying(player))) {
             stack.setCount(0);
         }
     }
@@ -78,7 +78,7 @@ public class SjoelSchijvenItem extends Item {
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.level().isClientSide) {
+        if (!entity.level().isClientSide()) {
             entity.discard();
         }
         return true;

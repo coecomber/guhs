@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -43,7 +43,7 @@ public class GuhkamerDeurBlock extends Block {
         }
     }
 
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
     public static final EnumProperty<Kant> KANT = EnumProperty.create("kant", Kant.class);
     private static final VoxelShape NZ = Block.box(0, 0, 6, 16, 16, 10), OW = Block.box(6, 0, 0, 10, 16, 16);
@@ -85,7 +85,7 @@ public class GuhkamerDeurBlock extends Block {
 
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (!level.isClientSide && entity instanceof ServerPlayer player && !player.isPassenger()) {
+        if (!level.isClientSide() && entity instanceof ServerPlayer player && !player.isPassenger()) {
             BlockPos onder = state.getValue(HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();
             Guhkamer.deur(player, onder, state.getValue(KANT));
         }

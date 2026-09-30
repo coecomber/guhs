@@ -10,7 +10,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.RegistryOps;
@@ -28,8 +28,6 @@ import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 
 /**
@@ -39,13 +37,11 @@ import nl.juiced.guhs.Guhs;
  * buildings stay vanilla, the Beardifier fills the land up to the floor next to the wall instead of digging a moat, and the
  * ring measurement of /guhs bouwcheck.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class GrondGameTests {
     private static final String EMPTY = "empty";
 
     private static StructureTemplatePool pool(GameTestHelper helper, String id) {
-        StructureTemplatePool pool = helper.getLevel().registryAccess().registryOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id(id));
+        StructureTemplatePool pool = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id(id));
         helper.assertTrue(pool != null, "pool " + id);
         return pool;
     }
@@ -57,12 +53,12 @@ public class GrondGameTests {
     }
 
     /** guhs:grond_single_pool_element survives the codec (JSON and back) with its ground, and says its type. */
-    @GameTest(template = EMPTY, batch = "grond")
+    @GuhTest(template = EMPTY, batch = "grond")
     public static void grondPoolElementCodec(GameTestHelper helper) {
         var access = helper.getLevel().registryAccess();
         Holder<net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList> empty =
-                access.registryOrThrow(Registries.PROCESSOR_LIST).getHolderOrThrow(
-                        net.minecraft.resources.ResourceKey.create(Registries.PROCESSOR_LIST, net.minecraft.resources.ResourceLocation.withDefaultNamespace("empty")));
+                access.lookupOrThrow(Registries.PROCESSOR_LIST).getHolderOrThrow(
+                        net.minecraft.resources.ResourceKey.create(Registries.PROCESSOR_LIST, net.minecraft.resources.Identifier.withDefaultNamespace("empty")));
         GrondPoolElement element = new GrondPoolElement(Either.left(Guhs.id("sjoelhuisje")), empty, StructureTemplatePool.Projection.RIGID,
                 Optional.empty(), 13);
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
@@ -79,7 +75,7 @@ public class GrondGameTests {
     }
 
     /** Every sunk building's start element knows its real ground; the buildings that stand on the surface stay vanilla (1). */
-    @GameTest(template = EMPTY, batch = "grond")
+    @GuhTest(template = EMPTY, batch = "grond")
     public static void grondStartPoolsKennenHunVloer(GameTestHelper helper) {
         Map<String, Integer> sunk = Map.ofEntries(Map.entry("sjoelhuisje", 5), Map.entry("guh_sterrenwacht", 25),
                 Map.entry("knabbelkatapult", 13), Map.entry("guh_circuit", 4), Map.entry("guh_racebaan", 4), Map.entry("guhvis_vijver", 8),
@@ -100,7 +96,7 @@ public class GrondGameTests {
             StructurePoolElement e = start(helper, custom[0]);
             int anchorY = Integer.MIN_VALUE;
             for (StructureTemplate.StructureBlockInfo info : e.getShuffledJigsawBlocks(templates, BlockPos.ZERO, Rotation.NONE, RandomSource.create(0L))) {
-                if (custom[1].equals(info.nbt() == null ? null : info.nbt().getString("name"))) {
+                if (custom[1].equals(info.nbt() == null ? null : info.nbt().getStringOr("name", ""))) {
                     anchorY = info.pos().getY();
                 }
             }
@@ -108,7 +104,7 @@ public class GrondGameTests {
             helper.assertTrue(e instanceof GrondPoolElement && e.getGroundLevelDelta() == anchorY + 1,
                     custom[0] + ": ground = anchor " + anchorY + " + 1, got " + e.getGroundLevelDelta());
             // the anchor still lands on the top block of the ground: vanilla sinks the piece by its delta
-            var holder = helper.getLevel().registryAccess().registryOrThrow(Registries.TEMPLATE_POOL).getHolderOrThrow(
+            var holder = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).getHolderOrThrow(
                     net.minecraft.resources.ResourceKey.create(Registries.TEMPLATE_POOL, Guhs.id(custom[0] + "/start")));
             helper.assertTrue(Grond.startY(holder, 70) - e.getGroundLevelDelta() == 69, custom[0] + ": anchor on the top block (69)");
         }
@@ -116,7 +112,7 @@ public class GrondGameTests {
     }
 
     /** A sunk piece keeps its ground when the chunk is saved and loaded again (so the beard of later chunks is right too). */
-    @GameTest(template = EMPTY, batch = "grond")
+    @GuhTest(template = EMPTY, batch = "grond")
     public static void grondStukBewaartZijnVloer(GameTestHelper helper) {
         var templates = helper.getLevel().getServer().getStructureManager();
         StructurePoolElement e = start(helper, "knabbelkatapult");
@@ -135,7 +131,7 @@ public class GrondGameTests {
 
     /** The Beardifier next to the wall of a sunk building (ground at template y 4, you walk at 5): the land is filled up to the
      *  floor and there is air above it. With vanilla's ground (1) the floor layer next to the wall was dug out: the moat. */
-    @GameTest(template = EMPTY, batch = "grond")
+    @GuhTest(template = EMPTY, batch = "grond")
     public static void grondBaardSluitAanOpDeVloer(GameTestHelper helper) {
         BoundingBox box = new BoundingBox(0, 60, 0, 43, 91, 57);   // like the sjoelhuisje: minY 60, floor block 64, walk at 65
         int floor = 64;
@@ -158,7 +154,7 @@ public class GrondGameTests {
     }
 
     /** The ring measurement of /guhs bouwcheck: land at the floor = 0, the old moat = -3, -2, -1. */
-    @GameTest(template = EMPTY, batch = "grond")
+    @GuhTest(template = EMPTY, batch = "grond")
     public static void grondRandMeting(GameTestHelper helper) {
         BoundingBox box = new BoundingBox(0, 60, 0, 9, 80, 9);
         int delta = 5;   // floor block at 64, walk at 65 (first free y)

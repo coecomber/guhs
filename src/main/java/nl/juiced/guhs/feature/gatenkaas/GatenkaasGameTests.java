@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,8 +28,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.bibliotheek.Guhboek;
 import nl.juiced.guhs.quest.GuhQuests;
@@ -40,8 +38,6 @@ import nl.juiced.guhs.quest.GuhQuests;
  * when their ceiling goes; the lore book and the two templates (with their geometry checked in gatenkaas.py).
  * (Every noise test has its own batch: a sensor of one test must not hear the player of another.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class GatenkaasGameTests {
     private static final String EMPTY = "empty";
 
@@ -60,7 +56,7 @@ public class GatenkaasGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(x, 1, z));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         player.setOnGround(true);
         return player;
     }
@@ -82,7 +78,7 @@ public class GatenkaasGameTests {
     }
 
     /** Walking and digging light up a sensor; creative players, sneaking steps and guhs:stil don't. */
-    @GameTest(template = EMPTY, batch = "gatenkaas_1")
+    @GuhTest(template = EMPTY, batch = "gatenkaas_1")
     public static void sensorsHearYouUnlessYouAreStil(GameTestHelper helper) {
         floor(helper);
         BlockPos sensor = new BlockPos(3, 1, 3);
@@ -125,7 +121,7 @@ public class GatenkaasGameTests {
     }
 
     /** Chewing is a noise too: every few ticks while you eat. */
-    @GameTest(template = EMPTY, batch = "gatenkaas_2")
+    @GuhTest(template = EMPTY, batch = "gatenkaas_2")
     public static void chewingIsHeard(GameTestHelper helper) {
         floor(helper);
         BlockPos sensor = new BlockPos(3, 1, 3);
@@ -138,7 +134,7 @@ public class GatenkaasGameTests {
     }
 
     /** Three warnings from a Mika-built schreeuwer wake the Vadswaker; a home-made one only screams. */
-    @GameTest(template = EMPTY, batch = "gatenkaas_3", timeoutTicks = 240)
+    @GuhTest(template = EMPTY, batch = "gatenkaas_3", timeoutTicks = 240)
     public static void thirdWarningWakesTheVadswaker(GameTestHelper helper) {
         floor(helper);
         BlockPos sensor = new BlockPos(1, 1, 3), shrieker = new BlockPos(3, 1, 3);
@@ -168,7 +164,7 @@ public class GatenkaasGameTests {
         VadswakerEntity vadswaker = woken.get(0);
         // (he comes up within 6 blocks of the schreeuwer: keep him on the test floor, where the chunks tick)
         net.minecraft.world.phys.Vec3 onFloor = helper.absoluteVec(new net.minecraft.world.phys.Vec3(2.5, 1, 1.5));
-        vadswaker.moveTo(onFloor.x, onFloor.y, onFloor.z, 0, 0);
+        vadswaker.snapTo(onFloor.x, onFloor.y, onFloor.z, 0, 0);
         helper.assertTrue(vadswaker.isEmerging() && vadswaker.isInvulnerableTo(helper.getLevel().damageSources().playerAttack(player)),
                 "he climbs out of the ground (and can't be hurt while he does)");
         helper.assertTrue(vadswaker.anger(player) > 0, "and he knows about you");
@@ -192,13 +188,13 @@ public class GatenkaasGameTests {
     }
 
     /** He hears you chew from far away, gets angry and goes for you; with guhs:stil you can eat right next to him. */
-    @GameTest(template = EMPTY, batch = "gatenkaas_4", timeoutTicks = 60)
+    @GuhTest(template = EMPTY, batch = "gatenkaas_4", timeoutTicks = 60)
     public static void theVadswakerHearsYouChew(GameTestHelper helper) {
         floor(helper);
         VadswakerEntity vadswaker = helper.spawn(GatenkaasFeature.VADSWAKER.get(), new BlockPos(2, 1, 2));
         vadswaker.standUp();
         ServerPlayer player = survivor(helper, 0, 0);
-        player.moveTo(vadswaker.getX() + 15, vadswaker.getY(), vadswaker.getZ());
+        player.snapTo(vadswaker.getX() + 15, vadswaker.getY(), vadswaker.getZ());
         ServerPlayer quiet = survivor(helper, 4, 4);
         quiet.addEffect(new MobEffectInstance(GatenkaasFeature.STIL, 400));
         ItemStack snack = new ItemStack(nl.juiced.guhs.registry.ModItems.KAAS_KNABBELS.get());
@@ -216,7 +212,7 @@ public class GatenkaasGameTests {
     }
 
     /** Angry at someone behind a wall, he still breaks nothing (even with mob griefing on). */
-    @GameTest(template = EMPTY, batch = "gatenkaas_5", timeoutTicks = 140)
+    @GuhTest(template = EMPTY, batch = "gatenkaas_5", timeoutTicks = 140)
     public static void theVadswakerBreaksNoBlocks(GameTestHelper helper) {
         floor(helper);
         for (int y = 1; y <= 3; y++) {
@@ -240,7 +236,7 @@ public class GatenkaasGameTests {
     }
 
     /** After a long quiet he digs himself back into the ground and is gone. */
-    @GameTest(template = EMPTY, batch = "gatenkaas_6", timeoutTicks = 120)
+    @GuhTest(template = EMPTY, batch = "gatenkaas_6", timeoutTicks = 120)
     public static void theVadswakerDigsBackIn(GameTestHelper helper) {
         floor(helper);
         VadswakerEntity vadswaker = helper.spawn(GatenkaasFeature.VADSWAKER.get(), new BlockPos(2, 1, 2));
@@ -254,7 +250,7 @@ public class GatenkaasGameTests {
     }
 
     /** Stacked pieces get their thickness; when the ceiling goes, the stalactite falls (and a stalagmite breaks). */
-    @GameTest(template = EMPTY, batch = "gatenkaas_7", timeoutTicks = 60)
+    @GuhTest(template = EMPTY, batch = "gatenkaas_7", timeoutTicks = 60)
     public static void stalactitesFallWhenTheCeilingGoes(GameTestHelper helper) {
         var block = GatenkaasFeature.KAAS_STALACTIET.get();
         helper.setBlock(1, 3, 1, GatenkaasFeature.GATENKAAS.get());
@@ -291,7 +287,7 @@ public class GatenkaasGameTests {
     }
 
     /** The lore book: a real guh book, in the Mika-voorraadschuur's chest every time. The biome and features exist. */
-    @GameTest(template = EMPTY, batch = "gatenkaas_8")
+    @GuhTest(template = EMPTY, batch = "gatenkaas_8")
     public static void theLoreBookAndTheWorldgen(GameTestHelper helper) {
         Guhboek book = Guhboek.VOORRAADKELDER;
         helper.assertTrue(Guhboek.of(book.stack()) == book && !book.secret(), "the diary of the Voorraadmika is a guh book");
@@ -303,16 +299,16 @@ public class GatenkaasGameTests {
             helper.assertTrue(table.getRandomItems(params).stream().anyMatch(s -> Guhboek.of(s) == book), "the big chest always has the book");
         }
         var registries = level.registryAccess();
-        helper.assertTrue(registries.registryOrThrow(Registries.BIOME).containsKey(GatenkaasFeature.GATENKAASGROTTEN), "the biome");
-        helper.assertTrue(registries.registryOrThrow(Registries.PLACED_FEATURE).containsKey(Guhs.id("gatenkaas_holte")), "the cheese holes");
-        helper.assertTrue(registries.registryOrThrow(Registries.STRUCTURE).containsKey(GatenkaasFeature.VOORRAADKELDER)
-                && registries.registryOrThrow(Registries.STRUCTURE).containsKey(GatenkaasFeature.MIJNSCHACHT), "both structures");
-        helper.assertTrue(registries.registryOrThrow(Registries.BIOME).containsKey(Guhs.id("guh_kristalmijn")), "the crystal mine is still there");
+        helper.assertTrue(registries.lookupOrThrow(Registries.BIOME).containsKey(GatenkaasFeature.GATENKAASGROTTEN), "the biome");
+        helper.assertTrue(registries.lookupOrThrow(Registries.PLACED_FEATURE).containsKey(Guhs.id("gatenkaas_holte")), "the cheese holes");
+        helper.assertTrue(registries.lookupOrThrow(Registries.STRUCTURE).containsKey(GatenkaasFeature.VOORRAADKELDER)
+                && registries.lookupOrThrow(Registries.STRUCTURE).containsKey(GatenkaasFeature.MIJNSCHACHT), "both structures");
+        helper.assertTrue(registries.lookupOrThrow(Registries.BIOME).containsKey(Guhs.id("guh_kristalmijn")), "the crystal mine is still there");
         helper.succeed();
     }
 
     /** The larder as generated: the lectern with the diary, sensors and Mika-built schreeuwers, chests, the moat. */
-    @GameTest(template = "stille_voorraadkelder", batch = "gatenkaas_templates", timeoutTicks = 100)
+    @GuhTest(template = "stille_voorraadkelder", batch = "gatenkaas_templates", timeoutTicks = 100)
     public static void theLarderTemplateIsComplete(GameTestHelper helper) {
         int sensors = 0, shriekers = 0, chests = 0, sauce = 0, lecterns = 0;
         var level = helper.getLevel();
@@ -338,7 +334,7 @@ public class GatenkaasGameTests {
     }
 
     /** The abandoned mine shaft: a chest, a chest cart on the old track, a ladder up the caved-in shaft. */
-    @GameTest(template = "gatenkaas_mijnschacht", batch = "gatenkaas_templates", timeoutTicks = 60)
+    @GuhTest(template = "gatenkaas_mijnschacht", batch = "gatenkaas_templates", timeoutTicks = 60)
     public static void theMineShaftTemplateIsComplete(GameTestHelper helper) {
         // (relative to the test's structure block, one below the template: template y + 1)
         helper.assertBlockPresent(Blocks.CHEST, new BlockPos(13, 4, 21));

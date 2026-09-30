@@ -7,7 +7,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -317,11 +317,11 @@ public class GrijpmachineScherm extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, BORDER);
         g.fill(left, top, left + W, top + H, PANEL);
-        g.drawString(font, title.copy().withStyle(ChatFormatting.BOLD), left + 10, top + 8, 0xFFFFB6D8, false);
+        g.text(font, title.copy().withStyle(ChatFormatting.BOLD), left + 10, top + 8, 0xFFFFB6D8, false);
         // the case: glass, a pink frame, the floor (a trapezium, lighter at the back)
         int l = kastL(), r = kastR();
         g.fill(l - 3, top + 22, r + 3, top + 206, 0xFFE88AB4);
@@ -336,7 +336,7 @@ public class GrijpmachineScherm extends Screen {
         float gx = schermX(GOOT_X, GOOT_Z), gy = schermY(GOOT_Z);
         g.fill((int) gx - 16, (int) gy - 10, (int) gx + 16, (int) gy + 8, 0xFF3A1C30);
         g.fill((int) gx - 14, (int) gy - 8, (int) gx + 14, (int) gy + 6, 0xFF1A0C18);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.wereldleven.grijp_goot"), (int) gx, (int) gy - 22, 0xFFFFE6EE);
+        g.centeredText(font, Component.translatable("gui.guhs.wereldleven.grijp_goot"), (int) gx, (int) gy - 22, 0xFFFFE6EE);
         // the rail at the top
         g.fill(l + 4, railY() - 2, r - 4, railY() + 2, 0xFFB0B8C8);
         float kx = Mth.lerp(partialTick, klauwXo, klauwX), kz = Mth.lerp(partialTick, klauwZo, klauwZ);
@@ -377,26 +377,26 @@ public class GrijpmachineScherm extends Screen {
         List<net.minecraft.util.FormattedCharSequence> lines = font.split(info, r - l);
         int y = top + 209;
         for (var line : lines.subList(0, Math.min(2, lines.size()))) {
-            g.drawCenteredString(font, line, (l + r) / 2, y, TEXT);
+            g.centeredText(font, line, (l + r) / 2, y, TEXT);
             y += 10;
         }
     }
 
-    private void knuffel(GuiGraphics g, GrijpmachineBlockEntity.Prijs p, float x, float y, float lift) {
+    private void knuffel(GuiGraphicsExtractor g, GrijpmachineBlockEntity.Prijs p, float x, float y, float lift) {
         Block block = WereldlevenFeature.knuffel(p.knuffel());
         if (block == null) {
             return;
         }
         float s = 1.5f * diepte(p.z());
-        g.pose().pushPose();
-        g.pose().translate(x - 8 * s, y - 14 * s - lift, 50);
-        g.pose().scale(s, s, 1f);
-        g.renderItem(new ItemStack(block), 0, 0);
-        g.pose().popPose();
+        g.pose().pushMatrix();
+        g.pose().translate(x - 8 * s, y - 14 * s - lift);
+        g.pose().scale(s, s);
+        g.item(new ItemStack(block), 0, 0);
+        g.pose().popMatrix();
     }
 
     /** The claw: the rope from the rail, the head, three prongs (open or closed), and what it holds. */
-    private void klauw(GuiGraphics g, float kx, float kz, float zak, float dicht) {
+    private void klauw(GuiGraphicsExtractor g, float kx, float kz, float zak, float dicht) {
         float f = diepte(kz);
         int x = (int) schermX(kx, kz);
         int grond = (int) (schermY(kz) - 26 * f);
@@ -426,7 +426,7 @@ public class GrijpmachineScherm extends Screen {
     }
 
     /** The floor seen from above: the plushies as dots, the chute, the claw as a cross. */
-    private void kaart(GuiGraphics g, float kx, float kz) {
+    private void kaart(GuiGraphicsExtractor g, float kx, float kz) {
         int x0 = left + 234, y0 = top + 22, s = 80;
         g.fill(x0 - 1, y0 - 1, x0 + s + 1, y0 + s + 1, 0xFFF7B6CB);
         g.fill(x0, y0, x0 + s, y0 + s, 0xFFFFE6F0);
@@ -439,10 +439,10 @@ public class GrijpmachineScherm extends Screen {
         }
         int cx = (int) (x0 + kx * s), cy = (int) (y0 + kz * s);
         int reach = (int) (Grijpmachine.GRIJP_BEREIK * s);
-        g.renderOutline(cx - reach, cy - reach, reach * 2, reach * 2, 0x805B9DFF);
+        g.outline(cx - reach, cy - reach, reach * 2, reach * 2, 0x805B9DFF);
         g.fill(cx - 5, cy, cx + 6, cy + 1, 0xFF2A3A55);
         g.fill(cx, cy - 5, cx + 1, cy + 6, 0xFF2A3A55);
-        g.drawString(font, Component.translatable("gui.guhs.wereldleven.grijp_kaart"), x0, y0 + s + 3, 0xFFB8A0B0, false);
+        g.text(font, Component.translatable("gui.guhs.wereldleven.grijp_kaart"), x0, y0 + s + 3, 0xFFB8A0B0, false);
     }
 
     @Override

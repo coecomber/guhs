@@ -44,6 +44,7 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.resources.Identifier;
 /**
  * De Spiesburcht (slice 2 of 2.7.0): the creatures, buildings, brewing and the boss of the Guhbarbecuether.
  * <ul>
@@ -76,24 +77,24 @@ public final class SpiesburchtFeature {
     // --- creatures -------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<RookguhEntity>> ROOKGUH = ENTITY_TYPES.register("rookguh",
             () -> EntityType.Builder.of(RookguhEntity::new, MobCategory.CREATURE).sized(3.0f, 3.0f).eyeHeight(2.2f).fireImmune()
-                    .clientTrackingRange(10).build(Guhs.id("rookguh").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("rookguh"))));
     public static final DeferredHolder<EntityType<?>, EntityType<VonkMikaEntity>> VONK_MIKA = ENTITY_TYPES.register("vonk_mika",
             () -> EntityType.Builder.of(VonkMikaEntity::new, MobCategory.MONSTER).sized(0.8f, 1.8f).eyeHeight(1.35f).fireImmune()
-                    .clientTrackingRange(8).build(Guhs.id("vonk_mika").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vonk_mika"))));
     public static final DeferredHolder<EntityType<?>, EntityType<KnekelMikaEntity>> KNEKEL_MIKA = ENTITY_TYPES.register("knekel_mika",
             () -> EntityType.Builder.of(KnekelMikaEntity::new, MobCategory.MONSTER).sized(0.7f, 2.4f).eyeHeight(2.1f).fireImmune()
-                    .clientTrackingRange(8).build(Guhs.id("knekel_mika").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("knekel_mika"))));
     public static final DeferredHolder<EntityType<?>, EntityType<AangebrandeMikaEntity>> AANGEBRANDE_MIKA = ENTITY_TYPES.register("aangebrande_mika",
             () -> EntityType.Builder.of(AangebrandeMikaEntity::new, MobCategory.MONSTER).sized(1.6f, 3.0f).eyeHeight(2.5f).fireImmune()
-                    .clientTrackingRange(10).build(Guhs.id("aangebrande_mika").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("aangebrande_mika"))));
     /** The Vonk-Mika's glowing ember. */
     public static final DeferredHolder<EntityType<?>, EntityType<GloeiendKooltje>> GLOEIEND_KOOLTJE = ENTITY_TYPES.register("gloeiend_kooltje",
             () -> EntityType.Builder.<GloeiendKooltje>of(GloeiendKooltje::new, MobCategory.MISC).sized(0.3125f, 0.3125f)
-                    .clientTrackingRange(4).updateInterval(10).build(Guhs.id("gloeiend_kooltje").toString()));
+                    .clientTrackingRange(4).updateInterval(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("gloeiend_kooltje"))));
     /** The Aangebrande Mika's big burning coal (slow: you can dodge it). */
     public static final DeferredHolder<EntityType<?>, EntityType<GloeiendKooltje>> BRANDEND_KOOLTJE = ENTITY_TYPES.register("brandend_kooltje",
             () -> EntityType.Builder.<GloeiendKooltje>of(GloeiendKooltje::new, MobCategory.MISC).sized(0.6f, 0.6f)
-                    .clientTrackingRange(6).updateInterval(5).build(Guhs.id("brandend_kooltje").toString()));
+                    .clientTrackingRange(6).updateInterval(5).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("brandend_kooltje"))));
 
     // --- blocks ----------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<MikakopBlock> VERKOOLDE_MIKAKOP = BLOCKS.registerBlock("verkoolde_mikakop", MikakopBlock::new,
@@ -186,8 +187,8 @@ public final class SpiesburchtFeature {
         event.register(KNEKEL_MIKA.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkMonsterSpawnRules, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         event.register(AANGEBRANDE_MIKA.get(), SpawnPlacementTypes.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (type, level, reason, pos, random) -> reason != net.minecraft.world.entity.MobSpawnType.NATURAL
-                        && reason != net.minecraft.world.entity.MobSpawnType.CHUNK_GENERATION, RegisterSpawnPlacementsEvent.Operation.REPLACE);
+                (type, level, reason, pos, random) -> reason != net.minecraft.world.entity.EntitySpawnReason.NATURAL
+                        && reason != net.minecraft.world.entity.EntitySpawnReason.CHUNK_GENERATION, RegisterSpawnPlacementsEvent.Operation.REPLACE);
         // guhs in the dark ash valley: the Asguh (a guh normally needs light to be born)
         event.register(ModEntities.GUH.get(), SpiesburchtEvents::asguhMaySpawn, RegisterSpawnPlacementsEvent.Operation.OR);
     }

@@ -6,10 +6,10 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * A guh-sledehondje: a round little guh with husky ears, a curly tail and a red harness. Never a real entity in the world:
@@ -54,7 +54,7 @@ public class SledehondjeEntity extends Entity implements GeoEntity {
 
     @Override
     public void tick() {
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             discard();                                             // (never in the world)
         }
     }

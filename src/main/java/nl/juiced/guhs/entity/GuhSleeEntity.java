@@ -25,10 +25,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.slee.SleePath;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * The guh sled: rides along sled rails ({@link SleePath}), forwards or backwards, at 3 speeds. The rider controls it
@@ -125,7 +125,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     }
 
     private void sync() {
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             entityData.set(DATA_ON_RAIL, piece != null);
             if (piece != null) {
                 entityData.set(DATA_PIECE, piece.anchor());
@@ -141,7 +141,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             return;
         }
         if (key == DATA_ON_RAIL && !entityData.get(DATA_ON_RAIL)) {
@@ -170,7 +170,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             for (GuhEntity guh : pullers) { // keep them walking (their animations run on their own tick count)
                 guh.tickCount++;
                 guh.walkAnimation.update(isRunning() && piece != null ? Math.min(1f, SPEEDS[getSpeed() - 1] * 2.5f) : 0f, 0.4f);
@@ -182,13 +182,13 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
             sync();
         }
         if (piece == null) {
-            if (!level().isClientSide && tickCount % 10 == 0) {
+            if (!level().isClientSide() && tickCount % 10 == 0) {
                 snapToRail();
             }
             return;
         }
         moveAlong(isRunning() ? SPEEDS[getSpeed() - 1] * slopeFactor() : 0);
-        if (!level().isClientSide && tickCount % 20 == 0) {
+        if (!level().isClientSide() && tickCount % 20 == 0) {
             sync();
         }
         if (isRunning() && tickCount % 16 == 0 && isVehicle()) {
@@ -237,7 +237,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
             SleePath.Next next = SleePath.next(level(), piece, forward);
             if (next == null) { // end of the line: stop, and next time go back
                 t = forward ? 1 : 0;
-                if (!level().isClientSide) {
+                if (!level().isClientSide()) {
                     entityData.set(DATA_RUNNING, false);
                     entityData.set(DATA_FORWARD, !forward);
                     sync();
@@ -248,7 +248,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
             piece = next.piece();
             forward = next.forward();
             t = forward ? 0 : 1;
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 enteredPiece();
             }
             entityData.set(DATA_FORWARD, forward); // both sides: the client follows the track by itself
@@ -320,18 +320,18 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (player.isSecondaryUseActive()) {
             if (isLocked()) {
-                player.displayClientMessage(Component.translatable("entity.guhs.guh_slee.locked").withStyle(ChatFormatting.LIGHT_PURPLE), true);
-                return InteractionResult.sidedSuccess(level().isClientSide);
+                player.sendOverlayMessage(Component.translatable("entity.guhs.guh_slee.locked").withStyle(ChatFormatting.LIGHT_PURPLE));
+                return InteractionResult.SUCCESS;
             }
-            if (!level().isClientSide && !isVehicle()) {
+            if (!level().isClientSide() && !isVehicle()) {
                 pickUp(player);
             }
-            return InteractionResult.sidedSuccess(level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
-        if (!level().isClientSide && canAddPassenger(player)) {
+        if (!level().isClientSide() && canAddPassenger(player)) {
             player.startRiding(this);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     private void pickUp(Player player) {
@@ -347,7 +347,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (level().isClientSide || isRemoved() || isInvulnerableTo(source)) {
+        if (level().isClientSide() || isRemoved() || isInvulnerableTo(source)) {
             return false;
         }
         if (source.getEntity() instanceof Player player && !isLocked() && !isVehicle()) {
@@ -370,8 +370,8 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     @Override
     protected void addPassenger(Entity passenger) {
         super.addPassenger(passenger);
-        if (!level().isClientSide && passenger instanceof Player player) {
-            player.displayClientMessage(Component.translatable("entity.guhs.guh_slee.hint").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        if (!level().isClientSide() && passenger instanceof Player player) {
+            player.sendOverlayMessage(Component.translatable("entity.guhs.guh_slee.hint").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -379,7 +379,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     @Override
     protected void removePassenger(Entity passenger) {
         super.removePassenger(passenger);
-        if (!level().isClientSide && passenger instanceof net.minecraft.world.entity.LivingEntity living
+        if (!level().isClientSide() && passenger instanceof net.minecraft.world.entity.LivingEntity living
                 && level().getBlockState(blockPosition().below(2)).isAir()) {
             living.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 160, 0, false, false));
         }
@@ -425,7 +425,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         if (piece != null) {
-            tag.put("Piece", NbtUtils.writeBlockPos(piece.anchor()));
+            tag.store("Piece", BlockPos.CODEC, piece.anchor());
             tag.putDouble("T", t);
         }
         tag.putBoolean("Forward", isForward());
@@ -436,12 +436,12 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        entityData.set(DATA_FORWARD, !tag.contains("Forward") || tag.getBoolean("Forward"));
-        entityData.set(DATA_RUNNING, tag.getBoolean("Running"));
-        setSpeed(tag.contains("Speed") ? tag.getInt("Speed") : 1);
-        setLocked(tag.getBoolean("Locked"));
-        pendingPiece = NbtUtils.readBlockPos(tag, "Piece").orElse(null);
-        t = tag.getDouble("T");
+        entityData.set(DATA_FORWARD, !tag.contains("Forward") || tag.getBooleanOr("Forward", false));
+        entityData.set(DATA_RUNNING, tag.getBooleanOr("Running", false));
+        setSpeed(tag.contains("Speed") ? tag.getIntOr("Speed", 0) : 1);
+        setLocked(tag.getBooleanOr("Locked", false));
+        pendingPiece = (tag).read("Piece", BlockPos.CODEC).orElse(null);
+        t = tag.getDoubleOr("T", 0.0);
     }
 
     /** The piece from the save, looked up once the chunk around it is there. */
@@ -451,7 +451,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     @Override
     public void onAddedToLevel() {
         super.onAddedToLevel();
-        if (pendingPiece != null && !level().isClientSide) {
+        if (pendingPiece != null && !level().isClientSide()) {
             piece = SleePath.Piece.of(level(), pendingPiece);
             pendingPiece = null;
             sync();
@@ -460,14 +460,14 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
 
     // --- GeckoLib -------------------------------------------------------------------------------------------------
 
-    private static final software.bernie.geckolib.animation.RawAnimation BLINK =
-            software.bernie.geckolib.animation.RawAnimation.begin().thenLoop("animation.guh_slee.knopjes");
+    private static final com.geckolib.animation.RawAnimation BLINK =
+            com.geckolib.animation.RawAnimation.begin().thenLoop("animation.guh_slee.knopjes");
 
     /** The buttons on the dashboard blink while the sled stands still: click them (right-click while riding)! */
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new software.bernie.geckolib.animation.AnimationController<>(this, "knopjes", 0,
-                state -> isRunning() ? software.bernie.geckolib.animation.PlayState.STOP : state.setAndContinue(BLINK)));
+        controllers.add(new com.geckolib.animation.AnimationController<>(this, "knopjes", 0,
+                state -> isRunning() ? com.geckolib.animation.object.PlayState.STOP : state.setAndContinue(BLINK)));
     }
 
     @Override

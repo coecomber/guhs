@@ -36,7 +36,7 @@ public class GoudenKaasknabbelItem extends Item {
                     12, 0.4, 0.3, 0.4, 0.1);
             Evenementen.tameNow(guh, serverPlayer);
         }
-        return InteractionResult.sidedSuccess(player.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

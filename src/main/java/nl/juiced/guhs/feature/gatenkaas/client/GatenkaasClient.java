@@ -5,9 +5,9 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.gatenkaas.GatenkaasFeature;
 import nl.juiced.guhs.feature.gatenkaas.VadswakerEntity;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer;
 
 /**
  * Client side of the gatenkaas caves: the Vadswaker (a big blind Mika: geo/entity/vadswaker.geo.json, with glowing

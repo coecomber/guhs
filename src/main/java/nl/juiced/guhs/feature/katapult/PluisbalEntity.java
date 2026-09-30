@@ -58,7 +58,7 @@ public class PluisbalEntity extends Entity {
 
     public static PluisbalEntity create(ServerLevel level, Vec3 pos, Vec3 velocity, @Nullable UUID npc, Vec3 wind, double lowest) {
         PluisbalEntity ball = new PluisbalEntity(KatapultFeature.PLUISBAL.get(), level);
-        ball.moveTo(pos.x, pos.y, pos.z, 0, 0);
+        ball.snapTo(pos.x, pos.y, pos.z, 0, 0);
         ball.setDeltaMovement(velocity);
         ball.npc = npc;
         ball.wind = wind;
@@ -83,7 +83,7 @@ public class PluisbalEntity extends Entity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             clientTick();
             return;
         }

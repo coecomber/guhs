@@ -25,6 +25,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * 3.0 (Guhverhalen): the story guhs (Baltoguh, Guhtwo, 626-guh), tameable ONCE per player.
  * <ul>
@@ -88,14 +89,14 @@ public final class VerhaalGuhs {
         if (!magTemmen(p, g)) {
             return null;
         }
-        ServerLevel level = p.serverLevel();
-        GuhEntity guh = ModEntities.GUH.get().create(level);
+        ServerLevel level = p.level();
+        GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (guh == null) {
             return null;
         }
         guh.setVariant(g.variant());
         guh.setGuhScale(SCHAAL);
-        guh.moveTo(waar.x, waar.y, waar.z, p.getYRot() + 180f, 0f);
+        guh.snapTo(waar.x, waar.y, waar.z, p.getYRot() + 180f, 0f);
         guh.setPersistenceRequired();
         level.addFreshEntity(guh);
         guh.tame(p);
@@ -109,7 +110,7 @@ public final class VerhaalGuhs {
     }
 
     private static boolean heeft(ServerPlayer p, String key, VerhaalGuh g) {
-        for (Tag t : GuhQuests.saved(p).getList(key, Tag.TAG_STRING)) {
+        for (Tag t : GuhQuests.saved(p).getListOrEmpty(key)) {
             if (t.getAsString().equals(g.id())) {
                 return true;
             }
@@ -122,7 +123,7 @@ public final class VerhaalGuhs {
             return;
         }
         CompoundTag saved = GuhQuests.saved(p);
-        ListTag list = saved.getList(key, Tag.TAG_STRING);
+        ListTag list = saved.getListOrEmpty(key);
         list.add(StringTag.valueOf(g.id()));
         saved.put(key, list);
     }
@@ -130,7 +131,7 @@ public final class VerhaalGuhs {
     /** (tests / ops) forget everything of this player about this story guh. */
     public static void vergeet(ServerPlayer p, VerhaalGuh g) {
         for (String key : new String[]{VRIJ, GETEMD}) {
-            ListTag list = GuhQuests.saved(p).getList(key, Tag.TAG_STRING);
+            ListTag list = GuhQuests.saved(p).getListOrEmpty(key);
             list.removeIf(t -> t.getAsString().equals(g.id()));
             GuhQuests.saved(p).put(key, list);
         }
@@ -142,10 +143,10 @@ public final class VerhaalGuhs {
 
     /** Spawns a story copy of g standing on plek (marked: untameable, stays there). */
     public static GuhEntity maakKopie(ServerLevel level, VerhaalGuh g, BlockPos plek) {
-        GuhEntity guh = ModEntities.GUH.get().create(level);
+        GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         guh.setVariant(g.variant());
         guh.setGuhScale(SCHAAL);
-        guh.moveTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, level.random.nextFloat() * 360f, 0f);
+        guh.snapTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, level.getRandom().nextFloat() * 360f, 0f);
         markeer(guh, g, plek);
         level.addFreshEntity(guh);
         return guh;
@@ -169,7 +170,7 @@ public final class VerhaalGuhs {
 
     @Nullable
     public static VerhaalGuh kopieVan(Entity e) {
-        return isKopie(e) ? VerhaalGuh.byId(e.getPersistentData().getString(KOPIE)) : null;
+        return isKopie(e) ? VerhaalGuh.byId(e.getPersistentData().getStringOr(KOPIE, "")) : null;
     }
 
     /**
@@ -188,7 +189,7 @@ public final class VerhaalGuhs {
 
     /** (GuhEntity.mobInteract, both sides) a click on a story copy: never tames; the owner's Klik, or a friendly word. */
     public static InteractionResult klik(GuhEntity kopie, Player player, InteractionHand hand) {
-        if (kopie.level().isClientSide) {
+        if (kopie.level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         if (!(player instanceof ServerPlayer sp)) {
@@ -223,9 +224,9 @@ public final class VerhaalGuhs {
         if (!guh.getPersistentData().contains(PLEK)) {
             guh.getPersistentData().putLong(PLEK, guh.blockPosition().asLong());
         }
-        BlockPos plek = BlockPos.of(guh.getPersistentData().getLong(PLEK));
+        BlockPos plek = BlockPos.of(guh.getPersistentData().getLongOr(PLEK, 0L));
         double d = guh.position().distanceTo(Vec3.atBottomCenterOf(plek));
-        if (d > STRAAL * 3 || guh.getY() < guh.level().getMinBuildHeight() + 4) {
+        if (d > STRAAL * 3 || guh.getY() < guh.level().getMinY() + 4) {
             guh.teleportTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5);
             guh.getNavigation().stop();
         } else if (d > STRAAL && guh.getNavigation().isDone()) {
@@ -237,7 +238,7 @@ public final class VerhaalGuhs {
     static void opJoin(GuhEntity guh) {
         VerhaalGuh g = kopieVan(guh);
         if (g != null) {
-            BlockPos plek = guh.getPersistentData().contains(PLEK) ? BlockPos.of(guh.getPersistentData().getLong(PLEK)) : guh.blockPosition();
+            BlockPos plek = guh.getPersistentData().contains(PLEK) ? BlockPos.of(guh.getPersistentData().getLongOr(PLEK, 0L)) : guh.blockPosition();
             markeer(guh, g, plek);
         }
     }

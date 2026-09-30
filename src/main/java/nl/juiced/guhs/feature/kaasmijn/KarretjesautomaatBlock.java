@@ -12,8 +12,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.entity.vehicle.Minecart;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
+import net.minecraft.world.entity.vehicle.minecart.Minecart;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseRailBlock;
@@ -61,7 +61,7 @@ public class KarretjesautomaatBlock extends HorizontalDirectionalBlock {
         if (level instanceof ServerLevel server && player instanceof ServerPlayer serverPlayer) {
             dispense(server, pos, serverPlayer);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Puts a cart on the nearest rail within 2 blocks, unless one is already waiting there. True if it made one. */
@@ -93,13 +93,13 @@ public class KarretjesautomaatBlock extends HorizontalDirectionalBlock {
     /** Called every so many ticks: dispenser carts without anyone in them for {@link #IDLE_TICKS} go away. Returns how many. */
     public static int cleanupCarts(ServerLevel level, AABB area, int ticksPassed) {
         int removed = 0;
-        for (AbstractMinecart cart : level.getEntitiesOfClass(AbstractMinecart.class, area, c -> c.getTags().contains(CART_TAG))) {
+        for (AbstractMinecart cart : level.getEntitiesOfClass(AbstractMinecart.class, area, c -> c.entityTags().contains(CART_TAG))) {
             var data = cart.getPersistentData();
             if (cart.isVehicle()) {
                 data.putInt(IDLE_KEY, 0);
                 continue;
             }
-            int idle = data.getInt(IDLE_KEY) + ticksPassed;
+            int idle = data.getIntOr(IDLE_KEY, 0) + ticksPassed;
             data.putInt(IDLE_KEY, idle);
             if (idle >= IDLE_TICKS) {
                 cart.discard();
@@ -111,7 +111,7 @@ public class KarretjesautomaatBlock extends HorizontalDirectionalBlock {
 
     private static void tell(@Nullable ServerPlayer player, String key) {
         if (player != null) {
-            player.displayClientMessage(Component.translatable(key).withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable(key).withStyle(ChatFormatting.GOLD));
         }
     }
 }

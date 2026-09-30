@@ -45,7 +45,7 @@ public class VallendeSterEntity extends Entity implements ItemSupplier {
     }
 
     public Vec3 target() {
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             return serverTarget;
         }
         Vector3f t = this.entityData.get(DATA_TARGET);
@@ -64,11 +64,11 @@ public class VallendeSterEntity extends Entity implements ItemSupplier {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide && this.tickCount % 20 == 0 && !Evenementen.owns(this)) {
+        if (!this.level().isClientSide() && this.tickCount % 20 == 0 && !Evenementen.owns(this)) {
             this.discard(); // a leftover of an event that's over
             return;
         }
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             return; // on the server its event moves it (see serverStep): also where its chunk doesn't tick entities
         }
         Vec3 step = step();

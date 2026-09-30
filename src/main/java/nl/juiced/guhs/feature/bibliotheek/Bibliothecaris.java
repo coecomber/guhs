@@ -57,7 +57,7 @@ public final class Bibliothecaris implements NpcRole {
     // --- the player's library card ----------------------------------------------------------------------------------
 
     public static int books(ServerPlayer player) {
-        return GuhQuests.saved(player).getInt(BOOKS);
+        return GuhQuests.saved(player).getIntOr(BOOKS, 0);
     }
 
     public static boolean has(ServerPlayer player, Guhboek book) {
@@ -74,17 +74,17 @@ public final class Bibliothecaris implements NpcRole {
     }
 
     public static long rightAnswers(ServerPlayer player) {
-        return GuhQuests.saved(player).getLong(RIGHT);
+        return GuhQuests.saved(player).getLongOr(RIGHT, 0L);
     }
 
     static long now(ServerPlayer player) {
-        return player.server.overworld().getGameTime();
+        return player.level().getServer().overworld().getGameTime();
     }
 
     /** Checks the inventory for guh books that aren't in the collection yet (every second, and after getting one). */
     public static void collect(ServerPlayer player) {
         CompoundTag saved = GuhQuests.saved(player);
-        int have = saved.getInt(BOOKS);
+        int have = saved.getIntOr(BOOKS, 0);
         int found = have;
         for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
             Guhboek book = Guhboek.of(player.getInventory().getItem(i));
@@ -104,7 +104,7 @@ public final class Bibliothecaris implements NpcRole {
                         .withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
-        player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1f, 1.1f);
+        player.level().playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1f, 1.1f);
         GuhAdvancements.grant(player, "bieb_eerste_boek");
         if (count >= 6) {
             GuhAdvancements.grant(player, "bieb_zes_boeken");
@@ -121,7 +121,7 @@ public final class Bibliothecaris implements NpcRole {
 
     /** Awards one of our visible advancements that the mod grants itself (their criterion is "done"). */
     static void award(ServerPlayer player, String path) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(path));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(path));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }
@@ -140,7 +140,7 @@ public final class Bibliothecaris implements NpcRole {
         npc.level().playSound(null, npc, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 0.6f, 1.2f);
         CompoundTag saved = GuhQuests.saved(player);
         collect(player);
-        if (!saved.getBoolean(WELCOMED)) {
+        if (!saved.getBooleanOr(WELCOMED, false)) {
             saved.putBoolean(WELCOMED, true);
             GuhQuests.say(player, npc, "quest.guhs.bieb.hello_first");
         } else {
@@ -160,10 +160,10 @@ public final class Bibliothecaris implements NpcRole {
         CompoundTag data = new CompoundTag();
         data.putInt("Books", books(player));
         data.putInt("Read", Leeszaal.read(player));
-        data.putInt("Taken", saved.getInt(Leeszaal.TAKEN));
+        data.putInt("Taken", saved.getIntOr(Leeszaal.TAKEN, 0));
         data.putInt("Bonnen", GuhQuests.count(player, BibliotheekFeature.BOEKENBON.get()));
         data.putInt("Right", Long.bitCount(rightAnswers(player)));
-        long wait = saved.getLong(QUIZ_WAIT) - now(player);
+        long wait = saved.getLongOr(QUIZ_WAIT, 0L) - now(player);
         if (wait > 0) {
             data.putInt("QuizWait", (int) ((wait + 19) / 20));
         } else if (known(player) == 0) {
@@ -171,7 +171,7 @@ public final class Bibliothecaris implements NpcRole {
         } else {
             int question = currentQuestion(player);
             data.putInt("Question", question);
-            data.putInt("Order", saved.getInt(ORDER));
+            data.putInt("Order", saved.getIntOr(ORDER, 0));
         }
         return data;
     }
@@ -179,7 +179,7 @@ public final class Bibliothecaris implements NpcRole {
     /** The question the player is being asked (a new one is picked if there is none). */
     public static int currentQuestion(ServerPlayer player) {
         CompoundTag saved = GuhQuests.saved(player);
-        int current = saved.getInt(QUESTION) - 1;
+        int current = saved.getIntOr(QUESTION, 0) - 1;
         int known = known(player);
         if (current >= 0 && current < Guhboek.questionCount() && (known & Guhboek.bookOfQuestion(current).bit()) != 0) {
             return current;
@@ -226,15 +226,15 @@ public final class Bibliothecaris implements NpcRole {
     /** The player clicked answer button `position` (0..2) for the current question. */
     static void answer(GuhNpcEntity npc, ServerPlayer player, int position) {
         CompoundTag saved = GuhQuests.saved(player);
-        int question = saved.getInt(QUESTION) - 1;
-        if (question < 0 || saved.getLong(QUIZ_WAIT) > now(player)) {
+        int question = saved.getIntOr(QUESTION, 0) - 1;
+        if (question < 0 || saved.getLongOr(QUIZ_WAIT, 0L) > now(player)) {
             return;
         }
-        int[] order = ORDERS[Math.floorMod(saved.getInt(ORDER), ORDERS.length)];
+        int[] order = ORDERS[Math.floorMod(saved.getIntOr(ORDER, 0), ORDERS.length)];
         saved.putInt(QUESTION, 0);
         Guhboek book = Guhboek.bookOfQuestion(question);
         if (order[position] == 0) {
-            long right = saved.getLong(RIGHT);
+            long right = saved.getLongOr(RIGHT, 0L);
             if ((right & (1L << question)) == 0) {
                 saved.putLong(RIGHT, right | (1L << question));
                 give(player, new ItemStack(BibliotheekFeature.BOEKENBON.get()));
@@ -243,17 +243,17 @@ public final class Bibliothecaris implements NpcRole {
                 give(player, new ItemStack(ModItems.KAAS_KNABBELS.get(), 2));
                 GuhQuests.say(player, npc, "quest.guhs.bieb.right_again");
             }
-            player.serverLevel().playSound(null, npc.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 0.5f, 1.6f);
+            player.level().playSound(null, npc.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 0.5f, 1.6f);
             GuhAdvancements.grant(player, "bieb_kwis");
             boolean again = (right & (1L << question)) != 0;
-            if (Long.bitCount(saved.getLong(RIGHT)) >= Guhboek.questionCount() && (right & (1L << question)) == 0) {
+            if (Long.bitCount(saved.getLongOr(RIGHT, 0L)) >= Guhboek.questionCount() && (right & (1L << question)) == 0) {
                 GuhAdvancements.grant(player, "bieb_kwismeester");
                 GuhQuests.say(player, npc, "quest.guhs.bieb.kwismeester");
             }
             saved.putLong(QUIZ_WAIT, now(player) + (again ? WAIT_AGAIN : WAIT_RIGHT));   // (no knabbel farm)
         } else {
             GuhQuests.say(player, npc, "quest.guhs.bieb.wrong", Component.translatable(Guhboek.answerKey(question, 0)), book.title());
-            player.serverLevel().playSound(null, npc.blockPosition(), ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 0.6f, 0.6f);
+            player.level().playSound(null, npc.blockPosition(), ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 0.6f, 0.6f);
             saved.putLong(QUIZ_WAIT, now(player) + WAIT_WRONG);
         }
     }

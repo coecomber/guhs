@@ -68,7 +68,7 @@ public final class KnuffeldalEvents {
         if (GuhHooks.isBewoner(guh) && GuhHooks.thuis(guh) == null) {
             // a resident fresh from the town template: its spot is its home, its name from the template
             GuhHooks.maakBewoner(guh, guh.blockPosition());
-            String naam = guh.getPersistentData().getString(GuhHooks.BEWONER_NAAM);
+            String naam = guh.getPersistentData().getStringOr(GuhHooks.BEWONER_NAAM, "");
             if (!naam.isEmpty()) {
                 guh.setCustomName(Component.translatable("entity.guhs.bewoner." + naam));
             }
@@ -78,7 +78,7 @@ public final class KnuffeldalEvents {
 
     /** Decides (once per guh) whether a new wild guh in the Knuffeldal becomes a Pluisguh. Returns true when it did. */
     public static boolean maybePluisguh(ServerLevel level, GuhEntity guh) {
-        if (guh.getClass() != GuhEntity.class || guh.getPersistentData().getBoolean(CHECKED)) {
+        if (guh.getClass() != GuhEntity.class || guh.getPersistentData().getBooleanOr(CHECKED, false)) {
             return false;
         }
         return decide(guh, level.dimension() == ModDimensions.GUHMENSION && inKnuffeldal(level, guh.blockPosition()));
@@ -87,7 +87,7 @@ public final class KnuffeldalEvents {
     /** The decision itself (once per guh): in the Knuffeldal, a plain wild grown-up guh may become a Pluisguh. */
     public static boolean decide(GuhEntity guh, boolean inKnuffeldal) {
         CompoundTag data = guh.getPersistentData();
-        if (data.getBoolean(CHECKED)) {
+        if (data.getBooleanOr(CHECKED, false)) {
             return false;
         }
         data.putBoolean(CHECKED, true);
@@ -131,7 +131,7 @@ public final class KnuffeldalEvents {
         if (!(event.getEntity() instanceof ServerPlayer player) || player.isSpectator() || player.tickCount % 40 != 7) {
             return;
         }
-        if (player.level().dimension() == ModDimensions.GUHMENSION && PleinSlot.inStadje(player.serverLevel(), player.blockPosition())) {
+        if (player.level().dimension() == ModDimensions.GUHMENSION && PleinSlot.inStadje(player.level(), player.blockPosition())) {
             if (KnusVoortgang.teller(player, KnuffeldalVoortgang.STADJE) == 0) {
                 KnusVoortgang.hoogste(player, KnuffeldalVoortgang.STADJE, 1);
                 player.sendSystemMessage(Component.translatable("gui.guhs.knuffeldal.welkom").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -150,11 +150,11 @@ public final class KnuffeldalEvents {
         if (!stack.isEmpty() && !knabbel) {
             return InteractionResult.PASS;
         }
-        if (guh.level().isClientSide) {
+        if (guh.level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         if (player instanceof ServerPlayer sp) {
-            String naam = guh.getPersistentData().getString(GuhHooks.BEWONER_NAAM);
+            String naam = guh.getPersistentData().getStringOr(GuhHooks.BEWONER_NAAM, "");
             if (knabbel) {
                 stack.consume(1, player);
                 guh.playSound(ModSounds.GUH_EAT.get(), 1f, guh.getVoicePitch());

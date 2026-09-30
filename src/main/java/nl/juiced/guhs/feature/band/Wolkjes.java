@@ -25,6 +25,8 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.huisje.Huisjes;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * 3.0 (Guhverhalen): tamed guhs that died are "In de wolkjes... njeg". Nothing is lost: at the death of a band guh
  * ({@link BandEvents#onDeath}) its whole entity NBT goes into its {@link BandData.Rec} ({@code dood}, {@code doodDag},
@@ -58,8 +60,8 @@ public final class Wolkjes {
         for (int i = recs.size() - 1; i >= 0; i--) {
             BandData.Rec r = recs.get(i);
             if (r.dood) {
-                out.add(new DodeGuh(r.id, eigenaar, r.naam.isEmpty() ? "Guh" : r.naam, r.looks.getString("Variant").isEmpty() ? "normal"
-                        : r.looks.getString("Variant"), r.hartjes, r.niveau(), r.looks.copy(), r.doodDag));
+                out.add(new DodeGuh(r.id, eigenaar, r.naam.isEmpty() ? "Guh" : r.naam, r.looks.getStringOr("Variant", "").isEmpty() ? "normal"
+                        : r.looks.getStringOr("Variant", ""), r.hartjes, r.niveau(), r.looks.copy(), r.doodDag));
             }
         }
         out.sort(Comparator.comparingLong(DodeGuh::doodDag).reversed());
@@ -125,7 +127,7 @@ public final class Wolkjes {
             motion.add(DoubleTag.valueOf(0));
             motion.add(DoubleTag.valueOf(0));
             tag.put("Motion", motion);
-            tag.putUUID("UUID", bandId);
+            tag.store("UUID", UUIDUtil.CODEC, bandId);
             Entity e = EntityType.loadEntityRecursive(tag, level, ent -> {
                 ent.moveTo(pos.x, pos.y, pos.z, ent.getYRot(), 0f);
                 return ent;
@@ -136,21 +138,21 @@ public final class Wolkjes {
             }
             return null;
         }
-        GuhEntity guh = ModEntities.GUH.get().create(level);
+        GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (guh == null) {
             return null;
         }
         guh.setUUID(bandId);
-        guh.setVariant(GuhVariant.byId(r.looks.getString("Variant")));
+        guh.setVariant(GuhVariant.byId(r.looks.getStringOr("Variant", "")));
         if (r.looks.contains("Scale")) {
-            guh.setGuhScale(r.looks.getFloat("Scale"));
+            guh.setGuhScale(r.looks.getFloatOr("Scale", 0.0F));
         }
         guh.setOwnerUUID(eigenaar);
         guh.setTame(true, true);
         if (!r.naam.isEmpty() && !r.naam.equals("Guh")) {
             guh.setCustomName(Component.literal(r.naam));
         }
-        guh.moveTo(pos.x, pos.y, pos.z, 0f, 0f);
+        guh.snapTo(pos.x, pos.y, pos.z, 0f, 0f);
         klaarzetten(guh);
         return guh;
     }

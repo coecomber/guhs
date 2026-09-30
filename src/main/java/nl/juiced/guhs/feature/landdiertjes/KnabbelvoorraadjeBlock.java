@@ -108,9 +108,9 @@ public class KnabbelvoorraadjeBlock extends Block {
                     pos.getZ() + 0.5, 14, 0.25, 0.05, 0.25, 0.08);
             sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, 0.3, 0.2, 0.3, 0);
             sl.playSound(null, pos, SoundEvents.ROOTED_DIRT_BREAK, SoundSource.BLOCKS, 0.8f, 1.2f);
-            sp.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.voorraadje_gevonden", n).withStyle(ChatFormatting.GOLD), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.voorraadje_gevonden", n).withStyle(ChatFormatting.GOLD));
             GidsFeature.grant(sp, "diertjes/landdiertjes_voorraadje");
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 }

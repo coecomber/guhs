@@ -3,14 +3,14 @@ package nl.juiced.guhs.feature.spiesburcht.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.blockentity.BeaconRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -29,15 +29,15 @@ import nl.juiced.guhs.feature.spiesburcht.RookguhEntity;
 import nl.juiced.guhs.feature.spiesburcht.SpiesburchtFeature;
 import nl.juiced.guhs.feature.spiesburcht.VonkMikaEntity;
 import nl.juiced.guhs.registry.ModEntities;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
-import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
-import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
-import software.bernie.geckolib.util.Color;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer;
+import com.geckolib.renderer.layer.builtin.BlockAndItemGeoLayer;
+import com.geckolib.renderer.layer.GeoRenderLayer;
+import com.geckolib.util.Color;
 
 /**
  * The Spiesburcht on the client: the GeckoLib models of the Rookguh (rounder and rosier with every knabbel), the
@@ -80,7 +80,7 @@ public final class SpiesburchtClient {
         EntityRenderer<?> guh = event.getRenderer(ModEntities.GUH.get());
         if (guh instanceof GeoEntityRenderer<?> geo) {
             GeoEntityRenderer<GuhEntity> r = (GeoEntityRenderer<GuhEntity>) geo;
-            ResourceLocation cheeks = Guhs.id("textures/entity/guh_asguh_glowmask.png");
+            Identifier cheeks = Guhs.id("textures/entity/guh_asguh_glowmask.png");
             r.addRenderLayer(new GeoRenderLayer<>(r) {
                 @Override
                 public void render(PoseStack poseStack, GuhEntity animatable, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
@@ -88,7 +88,7 @@ public final class SpiesburchtClient {
                     if (animatable.getVariant() == GuhVariant.ASGUH) {
                         RenderType glow = RenderType.eyes(cheeks);
                         getRenderer().reRender(model, poseStack, buffers, animatable, glow, buffers.getBuffer(glow), partialTick,
-                                LightTexture.FULL_BRIGHT, packedOverlay, 0xFFFFFFFF);
+                                LightCoordsUtil.FULL_BRIGHT, packedOverlay, 0xFFFFFFFF);
                     }
                 }
             });
@@ -133,7 +133,7 @@ public final class SpiesburchtClient {
         RookguhRenderer(net.minecraft.client.renderer.entity.EntityRendererProvider.Context context) {
             super(context, new DefaultedEntityGeoModel<RookguhEntity>(Guhs.id("rookguh")) {
                 @Override
-                public void setCustomAnimations(RookguhEntity guh, long instanceId, AnimationState<RookguhEntity> state) {
+                public void setCustomAnimations(RookguhEntity guh, long instanceId, AnimationTest<RookguhEntity> state) {
                     super.setCustomAnimations(guh, instanceId, state);
                     float p = guh.plumpness();
                     // (absolute values on its own bone: GeckoLib doesn't reset a scale nothing animates, so never multiply)

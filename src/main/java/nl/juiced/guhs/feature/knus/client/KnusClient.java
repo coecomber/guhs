@@ -17,10 +17,10 @@ public final class KnusClient {
     /** guhs:knus_data arrived (the data itself is already in KnusVoortgang.Client). */
     public static void knusData(KnusPayloads.KnusData payload) {
         Minecraft mc = Minecraft.getInstance();
-        for (Tag t : payload.extra().getList("Toasts", Tag.TAG_COMPOUND)) {
+        for (Tag t : payload.extra().getListOrEmpty("Toasts")) {
             CompoundTag m = (CompoundTag) t;
-            String id = m.getString("Id");
-            if (m.getString("Soort").equals("mijlpaal")) {
+            String id = m.getStringOr("Id", "");
+            if (m.getStringOr("Soort", "").equals("mijlpaal")) {
                 KnusVoortgang.Mijlpaal mijlpaal = KnusVoortgang.mijlpaal(id);
                 if (mijlpaal != null) {
                     ItemStack icon = safe(mijlpaal.beloning().get());
@@ -29,8 +29,8 @@ public final class KnusClient {
             } else {
                 KnusVoortgang.Verzameling v = KnusVoortgang.verzameling(id);
                 if (v != null) {
-                    ItemStack icon = safe(v.icoon().apply(m.getString("Item")));
-                    mc.getToasts().addToast(new KnusToast(v.naam(), v.item(m.getString("Item")), icon));
+                    ItemStack icon = safe(v.icoon().apply(m.getStringOr("Item", "")));
+                    mc.getToasts().addToast(new KnusToast(v.naam(), v.item(m.getStringOr("Item", "")), icon));
                 }
             }
         }

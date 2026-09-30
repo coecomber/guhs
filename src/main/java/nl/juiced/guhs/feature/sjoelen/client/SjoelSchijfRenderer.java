@@ -9,18 +9,18 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.sjoelen.SjoelSchijfEntity;
 
 /** A sjoelschijf: a round wooden puck (two crossed boxes) with a little guh face on top, turning as it slides. */
 public class SjoelSchijfRenderer extends EntityRenderer<SjoelSchijfEntity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Guhs.id("sjoelschijf"), "main");
-    private static final ResourceLocation HOUT = Guhs.id("textures/entity/sjoelschijf.png"), ROZE = Guhs.id("textures/entity/sjoelschijf_roze.png");
+    private static final Identifier HOUT = Guhs.id("textures/entity/sjoelschijf.png"), ROZE = Guhs.id("textures/entity/sjoelschijf_roze.png");
     private final ModelPart puck;
 
     public SjoelSchijfRenderer(EntityRendererProvider.Context context) {
@@ -48,7 +48,7 @@ public class SjoelSchijfRenderer extends EntityRenderer<SjoelSchijfEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(SjoelSchijfEntity entity) {
+    public Identifier getTextureLocation(SjoelSchijfEntity entity) {
         return entity.kleur() == 1 ? ROZE : HOUT;
     }
 }

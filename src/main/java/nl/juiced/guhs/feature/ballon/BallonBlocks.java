@@ -40,10 +40,10 @@ public final class BallonBlocks {
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (!level.isClientSide) {
-                player.displayClientMessage(Component.translatable("gui.guhs.ballon.praat_met_wolkje").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            if (!level.isClientSide()) {
+                player.sendOverlayMessage(Component.translatable("gui.guhs.ballon.praat_met_wolkje").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
     }
 

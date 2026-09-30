@@ -38,7 +38,7 @@ public final class OpaGuh implements NpcRole {
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
         npc.level().playSound(null, npc, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 0.7f);
         var saved = GuhQuests.saved(player);
-        int keer = saved.getInt(GESPROKEN);
+        int keer = saved.getIntOr(GESPROKEN, 0);
         if (player.isSecondaryUseActive() && keer > 0) {
             GuhQuests.say(player, npc, "quest.guhs.kamperen.winkel");
             npc.openShop(player);
@@ -67,7 +67,7 @@ public final class OpaGuh implements NpcRole {
         if (Verhalen.luistert(player)) {
             GuhQuests.say(player, npc, "quest.guhs.kamperen.sst");
         } else if (!avond) {
-            int keer = GuhQuests.saved(player).getInt(GESPROKEN);
+            int keer = GuhQuests.saved(player).getIntOr(GESPROKEN, 0);
             GuhQuests.say(player, npc, "quest.guhs.kamperen.tip" + (keer % TIPS));
         } else if (Verhalen.vannachtGehoord(player)) {
             GuhQuests.say(player, npc, "quest.guhs.kamperen.morgen");      // one story per night, also when he's telling one

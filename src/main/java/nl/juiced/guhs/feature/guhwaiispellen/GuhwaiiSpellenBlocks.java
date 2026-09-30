@@ -29,6 +29,8 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * The blocks, items, entity and sounds of the surf beach of Guhwai'i (3.0, guhwaii-spellen): the schelpjesmunt (the coin
  * of surfing and hula), Lilo-guh's loaned surfplankje, the surf board entity, the Tiki decorations of Tikiguh's stall
@@ -109,7 +111,7 @@ public final class GuhwaiiSpellenBlocks {
     // --- the surf board ---------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<SurfPlankEntity>> SURFPLANK = ENTITIES.register("guhwaiispellen_surfplank",
             () -> EntityType.Builder.<SurfPlankEntity>of(SurfPlankEntity::new, MobCategory.MISC).sized(1.1f, 0.3f).clientTrackingRange(10)
-                    .updateInterval(1).noSave().noSummon().build(Guhs.id("guhwaiispellen_surfplank").toString()));
+                    .updateInterval(1).noSave().noSummon().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guhwaiispellen_surfplank"))));
 
     // --- sounds -----------------------------------------------------------------------------------------------------------
     private static final Map<HulaLiedje, DeferredHolder<SoundEvent, SoundEvent>> LIEDJES = new EnumMap<>(HulaLiedje.class);

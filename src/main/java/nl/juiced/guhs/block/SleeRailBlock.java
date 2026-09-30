@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -32,7 +32,7 @@ import nl.juiced.guhs.slee.SleePath;
  */
 public class SleeRailBlock extends BaseEntityBlock {
     public static final MapCodec<SleeRailBlock> CODEC = simpleCodec(SleeRailBlock::new);
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final EnumProperty<SleePath.Shape> SHAPE = EnumProperty.create("shape", SleePath.Shape.class);
 
     public SleeRailBlock(Properties properties) {
@@ -85,7 +85,7 @@ public class SleeRailBlock extends BaseEntityBlock {
     /** However the anchor goes, its parts go too. */
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!newState.is(this) && !level.isClientSide) {
+        if (!newState.is(this) && !level.isClientSide()) {
             for (BlockPos part : new SleePath.Placement(pos, state.getValue(FACING), state.getValue(SHAPE)).blocks()) {
                 BlockState partState = level.getBlockState(part);
                 if (partState.getBlock() instanceof SleeRailPartBlock && SleeRailPartBlock.anchor(partState, part).equals(pos)) {

@@ -155,8 +155,8 @@ public final class SleeEffecten {
                     wit = 40;
                 }
                 for (int i = 0; i < 40; i++) {
-                    level.addParticle(ParticleTypes.SNOWFLAKE, sled.getX() + (level.random.nextFloat() - 0.5) * 3, sled.getY() + level.random.nextFloat() * 2,
-                            sled.getZ() + (level.random.nextFloat() - 0.5) * 3, 0, 0.1, 0);
+                    level.addParticle(ParticleTypes.SNOWFLAKE, sled.getX() + (level.getRandom().nextFloat() - 0.5) * 3, sled.getY() + level.getRandom().nextFloat() * 2,
+                            sled.getZ() + (level.getRandom().nextFloat() - 0.5) * 3, 0, 0.1, 0);
                 }
             }
             case SleeEntity.EV_PLOF -> {
@@ -174,8 +174,8 @@ public final class SleeEffecten {
             }
             case SleeEntity.EV_RUST -> {
                 for (int i = 0; i < 8; i++) {
-                    level.addParticle(ParticleTypes.HEART, sled.getX() + (level.random.nextFloat() - 0.5) * 3, sled.getY() + 1, sled.getZ()
-                            + (level.random.nextFloat() - 0.5) * 3, 0, 0.05, 0);
+                    level.addParticle(ParticleTypes.HEART, sled.getX() + (level.getRandom().nextFloat() - 0.5) * 3, sled.getY() + 1, sled.getZ()
+                            + (level.getRandom().nextFloat() - 0.5) * 3, 0, 0.05, 0);
                 }
             }
             default -> {
@@ -218,7 +218,7 @@ public final class SleeEffecten {
             level.playLocalSound(sled.getX(), sled.getY(), sled.getZ(), BaltoSleeFeature.GLIJDEN.get(), SoundSource.NEUTRAL, Math.min(0.7f, v * 1.5f),
                     0.9f + v * 0.4f, false);
         }
-        if (v > 0.1f && level.random.nextFloat() < v) {
+        if (v > 0.1f && level.getRandom().nextFloat() < v) {
             Vec3 f = Vec3.directionFromRotation(0, sled.getYRot());
             level.addParticle(ParticleTypes.SNOWFLAKE, sled.getX() - f.x * 1.1, sled.getY() + 0.1, sled.getZ() - f.z * 1.1, -f.x * 0.05, 0.06, -f.z * 0.05);
         }

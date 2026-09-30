@@ -10,14 +10,14 @@ import javax.annotation.Nullable;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.guhpolder.GuhpolderFeature;
 import nl.juiced.guhs.feature.guhpolder.Pinguh;
-import software.bernie.geckolib.cache.object.GeoBone;
+import com.geckolib.cache.model.GeoBone;
 
 /**
  * How a Pinguh looks and moves (client only; three small hooks in client.GuhRenderer call this):
@@ -29,9 +29,9 @@ import software.bernie.geckolib.cache.object.GeoBone;
  * It slides when it goes fast over slide ice ({@link GuhpolderFeature#GLIJIJS}); the pose blends in and out smoothly.
  */
 public final class PinguhRender {
-    public static final ResourceLocation KLASSIEK = Guhs.id("textures/entity/guh_pinguh.png");
-    public static final ResourceLocation KEIZER = Guhs.id("textures/entity/guh_pinguh_keizer.png");
-    public static final ResourceLocation PLUIS = Guhs.id("textures/entity/guh_pinguh_pluis.png");
+    public static final Identifier KLASSIEK = Guhs.id("textures/entity/guh_pinguh.png");
+    public static final Identifier KEIZER = Guhs.id("textures/entity/guh_pinguh_keizer.png");
+    public static final Identifier PLUIS = Guhs.id("textures/entity/guh_pinguh_pluis.png");
     /** Faster than this (blocks per tick) on slide ice = a belly-slide. */
     public static final double GLIJ_SNELHEID = 0.09;
 
@@ -43,7 +43,7 @@ public final class PinguhRender {
 
     /** Its texture, or null when it isn't a Pinguh. */
     @Nullable
-    public static ResourceLocation texture(GuhEntity guh) {
+    public static Identifier texture(GuhEntity guh) {
         if (guh.getVariant() != GuhVariant.PINGUH) {
             return null;
         }

@@ -20,10 +20,10 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * A rubber duck. On a slide (a ride's duck): it floats still on its spot until the rider picks it up with the ring (or
@@ -80,7 +80,7 @@ public class BadeendjeEntity extends Entity implements GeoEntity {
     public void tick() {
         super.tick();
         if (vanRit()) {
-            if (!level().isClientSide && (rit == null || !GlijRit.bestaat(rit)) && tickCount > 40) {
+            if (!level().isClientSide() && (rit == null || !GlijRit.bestaat(rit)) && tickCount > 40) {
                 discard();                                    // (its ride is over)
             }
             return;
@@ -91,7 +91,7 @@ public class BadeendjeEntity extends Entity implements GeoEntity {
             double surface = blockPosition().getY() + level().getFluidState(blockPosition()).getHeight(level(), blockPosition());
             double lift = (surface - 0.08 - getY()) * 0.2;
             v = new Vec3(v.x * 0.9, Math.max(-0.05, Math.min(0.06, v.y * 0.6 + lift)), v.z * 0.9);
-            if (!level().isClientSide && random.nextInt(80) == 0) {
+            if (!level().isClientSide() && random.nextInt(80) == 0) {
                 v = v.add((random.nextDouble() - 0.5) * 0.04, 0, (random.nextDouble() - 0.5) * 0.04);
                 setYRot(getYRot() + (random.nextFloat() - 0.5f) * 40);
             }
@@ -109,17 +109,17 @@ public class BadeendjeEntity extends Entity implements GeoEntity {
         if (vanRit()) {
             return InteractionResult.PASS;
         }
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             playSound(KnuffelbadFeature.EENDJE_PIEP.get(), 1f, 0.9f + random.nextFloat() * 0.4f);
             setDeltaMovement(getDeltaMovement().add(0, 0.25, 0));
             ((ServerLevel) level()).sendParticles(KnuffelbadFeature.ZEEPBELLETJE.get(), getX(), getY() + 0.4, getZ(), 4, 0.15, 0.1, 0.15, 0.01);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (level().isClientSide || isRemoved() || vanRit()) {
+        if (level().isClientSide() || isRemoved() || vanRit()) {
             return false;
         }
         if (source.getEntity() instanceof Player player && player.getAbilities().instabuild) {
@@ -152,7 +152,7 @@ public class BadeendjeEntity extends Entity implements GeoEntity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        setSoort(Eendsoort.byIndex(tag.getByte("Soort")));
+        setSoort(Eendsoort.byIndex(tag.getByteOr("Soort", (byte) 0)));
         setRit(null);
     }
 

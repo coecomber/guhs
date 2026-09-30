@@ -5,7 +5,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -20,6 +20,7 @@ import nl.juiced.guhs.network.MaagPayloads;
 import nl.juiced.guhs.quest.GuhDex;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The Guhdex, the all-in-one guide (2.9: icon tabs along the top like the creative inventory's, the name on hover, the
  * same look as the Superkompas; see feature.gids):
@@ -95,7 +96,7 @@ public class GuhDexScreen extends Screen {
         }
 
         public ItemStack icoon() {
-            net.minecraft.world.item.Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.ResourceLocation.parse(icon));
+            net.minecraft.world.item.Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.Identifier.parse(icon));
             return new ItemStack(item == net.minecraft.world.item.Items.AIR ? standIn : item);
         }
     }
@@ -228,8 +229,8 @@ public class GuhDexScreen extends Screen {
     protected void init() {
         left = (width - W) / 2;
         top = (height - H) / 2;
-        preview = ModEntities.GUH.get().create(minecraft.level);
-        character = ModEntities.GUH_NPC.get().create(minecraft.level);
+        preview = ModEntities.GUH.get().create(minecraft.level, EntitySpawnReason.TRIGGERED);
+        character = ModEntities.GUH_NPC.get().create(minecraft.level, EntitySpawnReason.TRIGGERED);
         if (tab != Tab.MIJN_GUHS && nl.juiced.guhs.feature.band.client.MijnGuhsCache.heeftFocus()) {
             tab = Tab.MIJN_GUHS;   // 2.10: the menu's "Dagboekje" opens a guh's page
         }
@@ -276,8 +277,8 @@ public class GuhDexScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFFF7B6CB);
         g.fill(left, top, left + W, top + H, 0xF0FFF4F8);
         // the tab bar: a slightly darker band with the icon tabs, the title (and the tab's name) next to them
@@ -288,7 +289,7 @@ public class GuhDexScreen extends Screen {
                 nl.juiced.guhs.feature.gids.client.GidsTabs.GUHDEX);
         int tx = left + TABS_X + nl.juiced.guhs.feature.gids.client.GidsTabs.breedte(Tab.values().length) + 8;
         Component bold = title.copy().withStyle(ChatFormatting.BOLD);
-        g.drawString(font, bold, tx, top + 9, 0xFF7A2848, false);
+        g.text(font, bold, tx, top + 9, 0xFF7A2848, false);
         scaled(g, Component.literal("· ").append(tab.naam()), tx + font.width(bold) + 4, top + 10, 0.875f, 0xFFB0708A, false);
         switch (tab) {
             case MINIGAMES, KLEDING -> lijst.teken(g, mouseX, mouseY, 0xFFD27A9C, 0x30D27A9C);
@@ -300,17 +301,17 @@ public class GuhDexScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.render(g, mouseX, mouseY, partialTick);
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
         // tooltips last, above everything: the tab names, and the rows of the list tabs
         int hover = nl.juiced.guhs.feature.gids.client.GidsTabs.onder(left + TABS_X, top + TABS_Y, Tab.values().length, mouseX, mouseY);
         if (hover >= 0) {
-            g.renderTooltip(font, Tab.values()[hover].naam(), mouseX, mouseY);
+            g.setTooltipForNextFrame(font, Tab.values()[hover].naam(), mouseX, mouseY);
         } else if (tab == Tab.MINIGAMES || tab == Tab.KLEDING || tab == Tab.MIJN_GUHS || tab == Tab.VERHALEN) {
             List<Component> tip = tab == Tab.MIJN_GUHS ? mijnGuhs.tip(mouseX, mouseY) : tab == Tab.VERHALEN ? verhalen.tip(mouseX, mouseY)
                     : lijst.tip(mouseX, mouseY);
             if (tip != null && !tip.isEmpty()) {
-                g.renderComponentTooltip(font, tip, mouseX, mouseY);
+                g.setComponentTooltipForNextFrame(font, tip, mouseX, mouseY);
             }
         }
     }
@@ -357,9 +358,9 @@ public class GuhDexScreen extends Screen {
         return super.mouseReleased(mouseX, mouseY, button);
     }
 
-    private void renderGuhs(GuiGraphics g, int mouseX, int mouseY) {
+    private void renderGuhs(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         String count = GuhDex.geteldIds(data.seen()) + " / " + GuhDex.TELLEND.size();   // (2.10.1: without bonus pages)
-        g.drawString(font, count, left + W - 8 - font.width(count), top + 9, 0xFF7A2848, false);
+        g.text(font, count, left + W - 8 - font.width(count), top + 9, 0xFF7A2848, false);
         GuhVariant v = current();
         boolean seen = seen(v);
         // the guh itself (a dark silhouette when not seen yet)
@@ -379,7 +380,7 @@ public class GuhDexScreen extends Screen {
                 // 3.0: a page whose creature isn't in the game (yet): a big pink flower instead of a picture
                 scaled(g, Component.literal("✿"), left + 65 - 12, top + (PIC_TOP + PIC_BOTTOM) / 2 - 14, 3f, 0xFFF7A8CC, false);
             } else {
-                g.drawCenteredString(font, "???", left + 65, top + (PIC_TOP + PIC_BOTTOM) / 2 - 4, 0xFF8A6A7A);
+                g.centeredText(font, "???", left + 65, top + (PIC_TOP + PIC_BOTTOM) / 2 - 4, 0xFF8A6A7A);
             }
         }
         int tx = left + TEXT_X, bottom = top + TEXT_BOTTOM;
@@ -403,10 +404,10 @@ public class GuhDexScreen extends Screen {
         } else {
             fitText(g, Component.translatable("gui.guhs.guhdex.unknown"), tx, y, TEXT_W, bottom - y, 0xFF9A8090);
         }
-        g.drawCenteredString(font, (page + 1) + " / " + GuhDex.ENTRIES.size(), left + 65, top + NAV_Y + 3, 0xFF7A2848);
+        g.centeredText(font, (page + 1) + " / " + GuhDex.ENTRIES.size(), left + 65, top + NAV_Y + 3, 0xFF7A2848);
         // milestones
         g.fill(left + 10, top + REWARDS_Y - 4, left + W - 10, top + REWARDS_Y - 3, 0x60F7B6CB);
-        g.drawString(font, Component.translatable("gui.guhs.guhdex.rewards"), left + 10, top + REWARDS_Y, 0xFF7A2848, false);
+        g.text(font, Component.translatable("gui.guhs.guhdex.rewards"), left + 10, top + REWARDS_Y, 0xFF7A2848, false);
         for (int i = 0; i < GuhDex.MILESTONES.size(); i++) {
             GuhDex.Milestone m = GuhDex.MILESTONES.get(i);
             Component text = m.tamed() > 0 ? Component.translatable("gui.guhs.guhdex.milestone_tamed", m.seen(), m.tamed(), m.reward().get().getDescription())
@@ -483,7 +484,7 @@ public class GuhDexScreen extends Screen {
         }
     }
 
-    private void renderKnus(GuiGraphics g, int mouseX, int mouseY) {
+    private void renderKnus(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         if (knusOnderdeel == null) {
             renderKnusOverzicht(g, mouseX, mouseY);
         } else if (knusVerzameling == null) {
@@ -494,7 +495,7 @@ public class GuhDexScreen extends Screen {
     }
 
     /** Every section: its icon, name and a bar (reached milestones + found entries). */
-    private void renderKnusOverzicht(GuiGraphics g, int mouseX, int mouseY) {
+    private void renderKnusOverzicht(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         List<KnusVoortgang.Onderdeel> all = KnusVoortgang.onderdelen();
         int x = left + 10, w = W - 20;
         for (int i = 0; i < all.size(); i++) {
@@ -502,11 +503,11 @@ public class GuhDexScreen extends Screen {
             int y = top + KNUS_TOP + i * KNUS_ROW;
             boolean hover = mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + KNUS_ROW - 1;
             g.fill(x, y, x + w, y + KNUS_ROW - 1, hover ? 0x50F7B6CB : 0x28F7B6CB);
-            g.pose().pushPose();
-            g.pose().translate(x + 1, y, 0);
-            g.pose().scale(0.75f, 0.75f, 1);
-            g.renderItem(o.icoon().get(), 0, 0);
-            g.pose().popPose();
+            g.pose().pushMatrix();
+            g.pose().translate(x + 1, y);
+            g.pose().scale(0.75f, 0.75f);
+            g.item(o.icoon().get(), 0, 0);
+            g.pose().popMatrix();
             int[] p = KnusVoortgang.Client.voortgang(o.id());
             boolean empty = p[1] == 0;
             fitText(g, o.naam(), x + 16, y + 2, 110, 9, 0xFF3A1C30);
@@ -524,15 +525,15 @@ public class GuhDexScreen extends Screen {
     }
 
     /** A section: its milestones (name, bar, claim) and its collection pages (buttons, see initKnus). */
-    private void renderKnusOnderdeel(GuiGraphics g) {
+    private void renderKnusOnderdeel(GuiGraphicsExtractor g) {
         KnusVoortgang.Onderdeel o = KnusVoortgang.onderdelen().stream().filter(x -> x.id().equals(knusOnderdeel)).findFirst().orElse(null);
         if (o == null) {
             return;
         }
-        g.renderItem(o.icoon().get(), left + 58, top + 26);
+        g.item(o.icoon().get(), left + 58, top + 26);
         fitText(g, o.naam().copy().withStyle(ChatFormatting.BOLD), left + 78, top + 30, W - 78 - 70, 10, 0xFF3A1C30);
         List<KnusVoortgang.Mijlpaal> mijlpalen = KnusVoortgang.mijlpalen(knusOnderdeel);
-        g.drawString(font, Component.translatable("gui.guhs.knus.mijlpalen"), left + 10, top + 44, 0xFF7A2848, false);
+        g.text(font, Component.translatable("gui.guhs.knus.mijlpalen"), left + 10, top + 44, 0xFF7A2848, false);
         if (mijlpalen.size() > MIJLPALEN_PER_PAGE) {
             int pages = (mijlpalen.size() + MIJLPALEN_PER_PAGE - 1) / MIJLPALEN_PER_PAGE;
             scaled(g, Component.literal((knusPage + 1) + "/" + pages), left + W - 33, top + 44, 0.75f, 0xFF7A2848, true);
@@ -548,11 +549,11 @@ public class GuhDexScreen extends Screen {
             g.fill(left + 8, y, left + W - 8, y + MIJLPAAL_ROW - 2, reached ? 0x3868D88A : 0x22F7B6CB);
             ItemStack reward = m.beloning().get();
             if (reward != null && !reward.isEmpty()) {
-                g.pose().pushPose();
-                g.pose().translate(left + 10, y + 2, 0);
-                g.pose().scale(0.8f, 0.8f, 1);
-                g.renderItem(reward, 0, 0);
-                g.pose().popPose();
+                g.pose().pushMatrix();
+                g.pose().translate(left + 10, y + 2);
+                g.pose().scale(0.8f, 0.8f);
+                g.item(reward, 0, 0);
+                g.pose().popMatrix();
             }
             fitText(g, (reached ? Component.literal("✔ ") : Component.empty()).copy().append(m.naam()), left + 26, y + 1, W - 26 - 70 - 60, 16,
                     reached ? 0xFF2A7A48 : 0xFF3A1C30);
@@ -563,13 +564,13 @@ public class GuhDexScreen extends Screen {
         }
         List<KnusVoortgang.Verzameling> verzamelingen = KnusVoortgang.verzamelingen(knusOnderdeel);
         if (!verzamelingen.isEmpty()) {
-            g.drawString(font, Component.translatable("gui.guhs.knus.verzamelingen"), left + 10, top + 56 + MIJLPALEN_PER_PAGE * MIJLPAAL_ROW + 5,
+            g.text(font, Component.translatable("gui.guhs.knus.verzamelingen"), left + 10, top + 56 + MIJLPALEN_PER_PAGE * MIJLPAAL_ROW + 5,
                     0xFF7A2848, false);
         }
     }
 
     /** A collection page: a grid of entries (found: icon, else "?"), the chosen entry's name and text underneath. */
-    private void renderKnusVerzameling(GuiGraphics g, int mouseX, int mouseY) {
+    private void renderKnusVerzameling(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         KnusVoortgang.Verzameling v = KnusVoortgang.verzameling(knusVerzameling);
         if (v == null) {
             return;
@@ -591,9 +592,9 @@ public class GuhDexScreen extends Screen {
             boolean chosen = item.equals(knusGekozen);
             g.fill(cx, cy, cx + CELL - 2, cy + CELL - 2, chosen ? 0xFFF7B6CB : has ? 0x40F7B6CB : 0xFF2A1420);
             if (has) {
-                g.renderItem(v.icoon().apply(item), cx + 1, cy + 1);
+                g.item(v.icoon().apply(item), cx + 1, cy + 1);
             } else {
-                g.drawCenteredString(font, "?", cx + (CELL - 2) / 2, cy + 5, 0xFF8A6A7A);
+                g.centeredText(font, "?", cx + (CELL - 2) / 2, cy + 5, 0xFF8A6A7A);
             }
             if (mouseX >= cx && mouseX < cx + CELL - 2 && mouseY >= cy && mouseY < cy + CELL - 2) {
                 hovered = item;
@@ -619,7 +620,7 @@ public class GuhDexScreen extends Screen {
     }
 
     /** A progress bar (0..1), pink on dark. */
-    private static void bar(GuiGraphics g, int x, int y, int w, int h, float frac) {
+    private static void bar(GuiGraphicsExtractor g, int x, int y, int w, int h, float frac) {
         g.fill(x - 1, y - 1, x + w + 1, y + h + 1, 0xFF7A2848);
         g.fill(x, y, x + w, y + h, 0xFF3A1C30);
         int fw = Math.round(w * Math.max(0f, Math.min(1f, frac)));
@@ -703,7 +704,7 @@ public class GuhDexScreen extends Screen {
      * 10 px at scale 1). Returns the height used. If even the smallest scale doesn't fit, the last lines are left out
      * rather than drawn over something else.
      */
-    private int fitText(GuiGraphics g, Component text, int x, int y, int maxWidth, int maxHeight, int colour) {
+    private int fitText(GuiGraphicsExtractor g, Component text, int x, int y, int maxWidth, int maxHeight, int colour) {
         if (maxWidth <= 0 || maxHeight <= 0) {
             return 0;
         }
@@ -720,30 +721,30 @@ public class GuhDexScreen extends Screen {
         }
         float lineH = scale == 1f ? 10f : 9.5f * scale;
         int fits = Math.max(1, (int) ((maxHeight + (lineH - 8 * scale)) / lineH));
-        g.pose().pushPose();
-        g.pose().translate(x, y, 0);
-        g.pose().scale(scale, scale, 1);
+        g.pose().pushMatrix();
+        g.pose().translate(x, y);
+        g.pose().scale(scale, scale);
         int n = Math.min(lines.size(), fits);
         for (int i = 0; i < n; i++) {
-            g.drawString(font, lines.get(i), 0, Math.round(i * lineH / scale), colour, false);
+            g.text(font, lines.get(i), 0, Math.round(i * lineH / scale), colour, false);
         }
-        g.pose().popPose();
+        g.pose().popMatrix();
         return Math.round(n * lineH);
     }
 
     /** Text at (x, y) at a scale; rightAligned: x is where it ends. */
-    private void scaled(GuiGraphics g, Component text, int x, int y, float scale, int colour, boolean rightAligned) {
-        g.pose().pushPose();
-        g.pose().translate(x, y, 0);
-        g.pose().scale(scale, scale, 1);
-        g.drawString(font, text, rightAligned ? -font.width(text) : 0, 0, colour, false);
-        g.pose().popPose();
+    private void scaled(GuiGraphicsExtractor g, Component text, int x, int y, float scale, int colour, boolean rightAligned) {
+        g.pose().pushMatrix();
+        g.pose().translate(x, y);
+        g.pose().scale(scale, scale);
+        g.text(font, text, rightAligned ? -font.width(text) : 0, 0, colour, false);
+        g.pose().popMatrix();
     }
 
     @javax.annotation.Nullable
     private net.minecraft.world.entity.LivingEntity creature(GuhVariant v) {
         return creatures.computeIfAbsent(v, page -> net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE
-                .getOptional(nl.juiced.guhs.Guhs.id(page.id())).map(type -> type.create(minecraft.level))
+                .getOptional(nl.juiced.guhs.Guhs.id(page.id())).map(type -> type.create(minecraft.level, EntitySpawnReason.TRIGGERED))
                 .filter(e -> e instanceof net.minecraft.world.entity.LivingEntity).map(e -> (net.minecraft.world.entity.LivingEntity) e).orElse(null));
     }
 

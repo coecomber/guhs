@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,8 +18,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhPersonality;
@@ -27,12 +25,11 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Guh emotes: once / keep going / stop, getting hurt, not while ridden or for someone else's guh, the favourite (saved),
  * the quests, dancing at a jukebox, wild guhs waving (shy ones hiding their eyes), personalities, and the animations.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class EmotesGameTests {
     private static final String EMPTY = "empty";
     private static final BlockPos POS = new BlockPos(2, 1, 2);
@@ -42,7 +39,7 @@ public class EmotesGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return p;
     }
 
@@ -72,7 +69,7 @@ public class EmotesGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id("quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id("quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -86,7 +83,7 @@ public class EmotesGameTests {
         return EmotePayload.apply(p, new EmotePayload(guh.getId(), action, emote == null ? -1 : emote.ordinal()));
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, timeoutTicks = 200)
     public static void emoteOnceEndsByItself(GameTestHelper helper) {
         ServerPlayer owner = player(helper);
         GuhEntity guh = tamed(helper, owner);
@@ -95,7 +92,7 @@ public class EmotesGameTests {
             helper.assertTrue(guh.emotes.current() == Emote.ZWAAIEN && !guh.emotes.isLooping(), "it waves (once)");
             helper.assertTrue(guh.getEmoteData() != 0, "synced");
             helper.assertTrue(advancement(owner, "emote_gedaan"), "the first-emote quest");
-            helper.assertTrue((GuhQuests.saved(owner).getInt("guhs_emotes_done") & (1 << Emote.ZWAAIEN.ordinal())) != 0, "remembered");
+            helper.assertTrue((GuhQuests.saved(owner).getIntOr("guhs_emotes_done", 0) & (1 << Emote.ZWAAIEN.ordinal())) != 0, "remembered");
         });
         helper.runAfterDelay(5 + Emote.ZWAAIEN.onceTicks + 3, () -> {
             helper.assertTrue(guh.emotes.current() == null, "done waving: " + guh.emotes.current());
@@ -104,7 +101,7 @@ public class EmotesGameTests {
         });
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 300)
+    @GuhTest(template = EMPTY, timeoutTicks = 300)
     public static void loopedEmoteStopsWhenAskedOrHurt(GameTestHelper helper) {
         ServerPlayer owner = player(helper);
         GuhEntity guh = tamed(helper, owner);
@@ -122,7 +119,7 @@ public class EmotesGameTests {
         });
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void noEmoteWhileRiddenOrForSomeoneElse(GameTestHelper helper) {
         ServerPlayer owner = player(helper);
         ServerPlayer other = player(helper);
@@ -146,7 +143,7 @@ public class EmotesGameTests {
         });
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void favouriteEmoteIsSaved(GameTestHelper helper) {
         ServerPlayer owner = player(helper);
         GuhEntity guh = tamed(helper, owner);
@@ -154,8 +151,8 @@ public class EmotesGameTests {
         helper.assertTrue(guh.getFavoriteEmote() == Emote.ROLLEN.ordinal(), "synced");
         helper.assertTrue(advancement(owner, "emote_lievelings"), "the favourite quest");
         CompoundTag tag = guh.saveWithoutId(new CompoundTag());
-        helper.assertTrue("rollen".equals(tag.getString("FavoriteEmote")), "saved: " + tag.getString("FavoriteEmote"));
-        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel());
+        helper.assertTrue("rollen".equals(tag.getStringOr("FavoriteEmote", "")), "saved: " + tag.getStringOr("FavoriteEmote", ""));
+        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         copy.load(tag);
         helper.assertTrue(copy.emotes.favorite() == Emote.ROLLEN, "loaded again");
         helper.assertTrue(ask(owner, guh, EmotePayload.FAVORITE, null) && guh.emotes.favorite() == null, "no favourite");
@@ -163,7 +160,7 @@ public class EmotesGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, timeoutTicks = 200)
     public static void allSevenEmotesGrantTheTalentQuest(GameTestHelper helper) {
         ServerPlayer owner = player(helper);
         GuhEntity guh = tamed(helper, owner);
@@ -194,7 +191,7 @@ public class EmotesGameTests {
         });
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 400)
+    @GuhTest(template = EMPTY, timeoutTicks = 400)
     public static void guhsDanceNearAPlayingJukebox(GameTestHelper helper) {
         ServerPlayer owner = player(helper);
         GuhEntity guh = tamed(helper, owner);
@@ -217,7 +214,7 @@ public class EmotesGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void wildGuhsWaveAndShyOnesHideTheirEyes(GameTestHelper helper) {
         floor(helper);
         ServerPlayer p = player(helper);
@@ -237,7 +234,7 @@ public class EmotesGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void emotesFitThePersonality(GameTestHelper helper) {
         for (GuhPersonality personality : GuhPersonality.values()) {
             helper.assertTrue(!GuhEmotes.personalityEmotes(personality).isEmpty(), "emotes for " + personality);
@@ -252,7 +249,7 @@ public class EmotesGameTests {
     }
 
     /** The seven animations are in the guh animation file (made by tools/features/emotes.py). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void emoteAnimationsExist(GameTestHelper helper) {
         var in = EmotesGameTests.class.getResourceAsStream("/assets/guhs/animations/entity/guh.animation.json");
         helper.assertTrue(in != null, "the animation file");

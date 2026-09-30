@@ -158,7 +158,7 @@ public final class BarbecueBlocks {
 
         @Override
         public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
-            if (level.isClientSide && level.random.nextInt(20) == 0) {
+            if (level.isClientSide() && level.getRandom().nextInt(20) == 0) {
                 level.addParticle(ParticleTypes.FALLING_HONEY, entity.getX(), pos.getY() + 0.1, entity.getZ(), 0, 0, 0);
             }
             super.stepOn(level, pos, state, entity);

@@ -113,7 +113,7 @@ public final class Koortje {
     /** A player hits a bar of the xylofoon at pos (from the xylofoon screen). Returns the song it finished, or null. */
     @Nullable
     public static Liedje noot(ServerPlayer player, BlockPos pos, int noot) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (noot < 0 || noot >= NOTEN || !level.getBlockState(pos).is(WereldlevenFeature.GUH_XYLOFOON.get())
                 || player.distanceToSqr(Vec3.atCenterOf(pos)) > BEREIK * BEREIK) {
             return null;
@@ -162,7 +162,7 @@ public final class Koortje {
 
     /** A whole song was played: the koortje sings, the liedjesboek, the rewards. */
     public static void gespeeld(ServerPlayer player, BlockPos pos, Liedje lied) {
-        int zangers = zing(player.serverLevel(), Vec3.atCenterOf(pos), ZANG_BEREIK);
+        int zangers = zing(player.level(), Vec3.atCenterOf(pos), ZANG_BEREIK);
         for (GuhEntity eigen : nl.juiced.guhs.feature.band.Band.samenGuhs(player, 16)) {   // 2.10: your own guhs heard the song
             nl.juiced.guhs.feature.band.Band.moment(eigen, player, nl.juiced.guhs.feature.band.Moment.LIEDJE, "koortje:" + lied.id());
         }
@@ -171,9 +171,9 @@ public final class Koortje {
         Component naam = Component.translatable("gui.guhs.knus.liedjesboek." + lied.id());
         if (zangers > 0) {
             WereldlevenVoortgang.toon(player, "wereldleven_koortje");
-            player.displayClientMessage(Component.translatable("gui.guhs.wereldleven.koortje", naam, zangers).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.wereldleven.koortje", naam, zangers).withStyle(ChatFormatting.LIGHT_PURPLE));
         } else {
-            player.displayClientMessage(Component.translatable("gui.guhs.wereldleven.koortje_leeg", naam).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.wereldleven.koortje_leeg", naam).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         if (KnusVoortgang.ontdek(player, WereldlevenVoortgang.LIEDJESBOEK, lied.id())) {
             Minigames.give(player, new ItemStack(ModItems.KAAS_KNABBELS.get(), lied.beloning));
@@ -209,19 +209,19 @@ public final class Koortje {
 
     /** Whistles the last song this player played (or the toonladder): the guhs around sing along. */
     public static void fluit(ServerPlayer player) {
-        Liedje lied = Liedje.byId(GuhQuests.saved(player).getString(LAATSTE));
+        Liedje lied = Liedje.byId(GuhQuests.saved(player).getStringOr(LAATSTE, ""));
         if (lied == null) {
             lied = Liedje.TOONLADDER;
         }
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         synchronized (MELODIEEN) {
             MELODIEEN.removeIf(m -> m.speler().equals(player.getUUID()));
             MELODIEEN.add(new Melodie(level, player.getUUID(), lied.noten, new int[] {0}, new long[] {level.getGameTime()}));
         }
         int zangers = zing(level, player.position(), ZANG_BEREIK - 2);
         Component naam = Component.translatable("gui.guhs.knus.liedjesboek." + lied.id());
-        player.displayClientMessage(Component.translatable(zangers > 0 ? "gui.guhs.wereldleven.fluit" : "gui.guhs.wereldleven.fluit_leeg", naam, zangers)
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable(zangers > 0 ? "gui.guhs.wereldleven.fluit" : "gui.guhs.wereldleven.fluit_leeg", naam, zangers)
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         GuhAdvancements.grant(player, "wereldleven_fluitje");
         if (zangers > 0) {
             KnusVoortgang.tel(player, WereldlevenVoortgang.KOORTJES, 1);

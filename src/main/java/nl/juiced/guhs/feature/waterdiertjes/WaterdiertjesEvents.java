@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
@@ -65,7 +65,7 @@ public final class WaterdiertjesEvents {
             return;
         }
         paginas(p);
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         for (GuhxolotlEntity x : level.getEntitiesOfClass(GuhxolotlEntity.class, p.getBoundingBox().inflate(6))) {
             if (x.kleur() == GuhxolotlEntity.Kleur.GOUD) {
                 geef(p, "waterdiertjes_goud");
@@ -85,7 +85,7 @@ public final class WaterdiertjesEvents {
 
     /** The visible "page seen" advancements of the Diertjes tab (the pages themselves are filled in by the GuhDex). */
     static void paginas(ServerPlayer p) {
-        GuhWorldData.PlayerData data = GuhWorldData.get(p.server).player(p.getUUID());
+        GuhWorldData.PlayerData data = GuhWorldData.get(p.level().getServer()).player(p.getUUID());
         int gezien = 0;
         for (GuhVariant v : WaterdiertjesFeature.PAGINAS) {
             if (data.seen.contains(v)) {
@@ -107,11 +107,11 @@ public final class WaterdiertjesEvents {
     /** (GuhxolotlEntity) this player tamed a guhxolotl: remember its colour; all five: the challenge. */
     public static void getemd(ServerPlayer p, GuhxolotlEntity x) {
         CompoundTag saved = GuhQuests.saved(p);
-        int bits = saved.getInt(KLEUREN) | (1 << x.kleur().ordinal());
+        int bits = saved.getIntOr(KLEUREN, 0) | (1 << x.kleur().ordinal());
         saved.putInt(KLEUREN, bits);
         if (bits == (1 << GuhxolotlEntity.Kleur.values().length) - 1) {
             geef(p, "waterdiertjes_alle_kleurtjes");
-            p.displayClientMessage(Component.translatable("gui.guhs.waterdiertjes.alle_kleurtjes").withStyle(ChatFormatting.GOLD), false);
+            p.sendSystemMessage(Component.translatable("gui.guhs.waterdiertjes.alle_kleurtjes").withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -125,7 +125,7 @@ public final class WaterdiertjesEvents {
      * (also in the overworld, wherever you have your tuintjes).
      */
     static void lokLieveheersbeestje(ServerLevel level, ServerPlayer p) {
-        if (!level.isDay() || level.random.nextInt(3) != 0) {
+        if (!level.isDay() || level.getRandom().nextInt(3) != 0) {
             return;
         }
         BlockPos here = p.blockPosition();
@@ -139,16 +139,16 @@ public final class WaterdiertjesEvents {
         if (tuin == null || !level.getEntitiesOfClass(LieveheersbeestjeEntity.class, new AABB(tuin).inflate(24)).isEmpty()) {
             return;
         }
-        LieveheersbeestjeEntity lhb = WaterdiertjesFeature.LIEVEHEERSBEESTJE.get().create(level);
+        LieveheersbeestjeEntity lhb = WaterdiertjesFeature.LIEVEHEERSBEESTJE.get().create(level, EntitySpawnReason.TRIGGERED);
         if (lhb == null) {
             return;
         }
-        Vec3 van = Vec3.atCenterOf(tuin).add(level.random.nextInt(9) - 4, 3 + level.random.nextInt(2), level.random.nextInt(9) - 4);
+        Vec3 van = Vec3.atCenterOf(tuin).add(level.getRandom().nextInt(9) - 4, 3 + level.getRandom().nextInt(2), level.getRandom().nextInt(9) - 4);
         if (!level.getBlockState(BlockPos.containing(van)).isAir()) {
             return;
         }
-        lhb.moveTo(van.x, van.y, van.z, level.random.nextFloat() * 360, 0);
-        lhb.finalizeSpawn(level, level.getCurrentDifficultyAt(tuin), MobSpawnType.EVENT, null);
+        lhb.snapTo(van.x, van.y, van.z, level.getRandom().nextFloat() * 360, 0);
+        lhb.finalizeSpawn(level, level.getCurrentDifficultyAt(tuin), EntitySpawnReason.EVENT, null);
         level.addFreshEntity(lhb);
     }
 
@@ -170,7 +170,7 @@ public final class WaterdiertjesEvents {
 
     /** (Tests) which colours this player tamed. */
     public static List<GuhxolotlEntity.Kleur> getemdeKleuren(ServerPlayer p) {
-        int bits = GuhQuests.saved(p).getInt(KLEUREN);
+        int bits = GuhQuests.saved(p).getIntOr(KLEUREN, 0);
         return java.util.Arrays.stream(GuhxolotlEntity.Kleur.values()).filter(k -> (bits & (1 << k.ordinal())) != 0).toList();
     }
 }

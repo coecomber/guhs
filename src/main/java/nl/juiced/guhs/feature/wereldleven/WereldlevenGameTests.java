@@ -6,7 +6,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -21,8 +21,6 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -48,8 +46,6 @@ import nl.juiced.guhs.registry.ModItems;
  * plushie, and the data (tags, Knus sections, the plein piece and the kermis). Guhs of these tests take part through
  * Dagritme.TEST_MEE (on the GameTest server nobody else lives the guh day), the part of the day through TEST_DAGDEEL.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class WereldlevenGameTests {
     private static final String PLEIN = "wereldleven_test_plein", LEEG = "wereldleven_test_leeg", LANG = "wereldleven_test_lang";
     // template positions (a template block at (x, y, z) is at the helper's (x, y + 1, z))
@@ -62,7 +58,7 @@ public class WereldlevenGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -104,7 +100,7 @@ public class WereldlevenGameTests {
 
     private static int count(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -113,7 +109,7 @@ public class WereldlevenGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -121,18 +117,18 @@ public class WereldlevenGameTests {
     // Dagritme
     // =================================================================================================================
 
-    @GameTest(template = LEEG, timeoutTicks = 800)
+    @GuhTest(template = LEEG, timeoutTicks = 800)
     public static void wereldlevenDagritmeOchtendGapen(GameTestHelper helper) {
         GuhEntity guh = guh(helper, new BlockPos(6, 2, 6), Dagdeel.OCHTEND);
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(guh.getPersistentData().getLong(Dagritme.GAAP_DAG) == Dagritme.ritmeDag(guh.level()) + 1,
+                .thenWaitUntil(() -> helper.assertTrue(guh.getPersistentData().getLongOr(Dagritme.GAAP_DAG, 0L) == Dagritme.ritmeDag(guh.level()) + 1,
                         "a big yawn and a stretch in the morning"))
                 .thenExecute(() -> helper.assertTrue(guh.emotes.current() == Emote.GAPEN, "the GAPEN emote: " + guh.emotes.current()))
                 .thenExecute(() -> vergeet(guh))
                 .thenSucceed();
     }
 
-    @GameTest(template = PLEIN, timeoutTicks = 900, batch = "wereldleven_dutje")   // own batch: no neighbours around the nest
+    @GuhTest(template = PLEIN, timeoutTicks = 900, batch = "wereldleven_dutje")   // own batch: no neighbours around the nest
     public static void wereldlevenDagritmeDutjeInHetNest(GameTestHelper helper) {
         helper.setBlock(NEST, nl.juiced.guhs.feature.vadswoud.VadswoudFeature.GUHNESTJE.get());
         GuhEntity guh = guh(helper, new BlockPos(13, 2, 4), Dagdeel.DUTJE);
@@ -141,7 +137,7 @@ public class WereldlevenGameTests {
         helper.startSequence()
                 .thenWaitUntil(() -> {
                     if (!Dagritme.slaapt(guh) && guh.blockPosition().distSqr(nest) > 4 * 4) {   // (every tick: a stroll of 12+ blocks made it nap on the spot)
-                        guh.moveTo(nest.getX() - 2.5, nest.getY(), nest.getZ() + 0.5);   // (it strolled off before its nap: back)
+                        guh.snapTo(nest.getX() - 2.5, nest.getY(), nest.getZ() + 0.5);   // (it strolled off before its nap: back)
                     }
                     helper.assertTrue(Dagritme.slaapt(guh) && guh.emotes.current() == Emote.SLAPEN, "an afternoon nap: " + guh.emotes.current() + staat(helper, guh));
                 })
@@ -156,14 +152,14 @@ public class WereldlevenGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = LEEG, timeoutTicks = 1200, batch = "wereldleven_dagritme")   // (merge 3.0) own batch: no neighbours' nests around
+    @GuhTest(template = LEEG, timeoutTicks = 1200, batch = "wereldleven_dagritme")   // (merge 3.0) own batch: no neighbours' nests around
     public static void wereldlevenDagritmeOpDePlekEnDeNacht(GameTestHelper helper) {
         GuhEntity guh = guh(helper, new BlockPos(6, 2, 6), Dagdeel.DUTJE);
         helper.startSequence()
                 .thenWaitUntil(() -> helper.assertTrue(Dagritme.slaapt(guh) && (guh.getKnusVlaggen() & Dagritme.DUTJE) != 0,
                         "no nest around: it naps on the spot in a little nestje" + staat(helper, guh)))
                 .thenExecute(() -> Dagritme.TEST_DAGDEEL.put(guh.getUUID(), Dagdeel.NACHT))
-                .thenWaitUntil(() -> helper.assertTrue(guh.getPersistentData().getString(Dagritme.SLAAP).equals("nacht")
+                .thenWaitUntil(() -> helper.assertTrue(guh.getPersistentData().getStringOr(Dagritme.SLAAP, "").equals("nacht")
                         && guh.emotes.current() == Emote.SLAPEN, "the night: zzz"))
                 .thenExecute(() -> Dagritme.TEST_DAGDEEL.put(guh.getUUID(), Dagdeel.OCHTEND))
                 .thenWaitUntil(() -> helper.assertTrue(!Dagritme.slaapt(guh) && (guh.getKnusVlaggen() & Dagritme.DUTJE) == 0
@@ -172,7 +168,7 @@ public class WereldlevenGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = PLEIN, timeoutTicks = 900)
+    @GuhTest(template = PLEIN, timeoutTicks = 900)
     public static void wereldlevenDagritmeKampvuurMarshmallow(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(9, 2, 5));
         helper.setBlock(VUUR, net.minecraft.world.level.block.Blocks.CAMPFIRE.defaultBlockState());
@@ -181,10 +177,10 @@ public class WereldlevenGameTests {
         helper.assertTrue(vuur.equals(Dagritme.kampvuur(guh)) && Dagritme.plekBijVuur(guh, vuur) != null,
                 "it sees the campfire: " + Dagritme.kampvuur(guh) + ", a spot: " + Dagritme.plekBijVuur(guh, vuur));
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(guh.isInSittingPose() && guh.getPersistentData().getBoolean(Dagritme.KAMPVUUR)
+                .thenWaitUntil(() -> helper.assertTrue(guh.isInSittingPose() && guh.getPersistentData().getBooleanOr(Dagritme.KAMPVUUR, false)
                         && guh.position().distanceTo(Vec3.atBottomCenterOf(vuur)) < 4.3, "sits at the campfire in the evening" + staat(helper, guh)))
                 .thenExecute(() -> {
-                    p.moveTo(guh.getX() + 1, guh.getY(), guh.getZ());
+                    p.snapTo(guh.getX() + 1, guh.getY(), guh.getZ());
                     p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(WereldlevenFeature.MARSHMALLOW_KNABBEL.get(), 2));
                     helper.assertTrue(guh.interact(p, InteractionHand.MAIN_HAND).consumesAction(), "it takes the marshmallow");
                     helper.assertTrue(count(p, WereldlevenFeature.MARSHMALLOW_KNABBEL.get()) == 1, "one marshmallow less");
@@ -193,7 +189,7 @@ public class WereldlevenGameTests {
                     helper.assertTrue(new ItemStack(WereldlevenFeature.MARSHMALLOW_KNABBEL.get()).is(KnusTags.MARSHMALLOW), "in #guhs:knus/marshmallow");
                     Dagritme.TEST_DAGDEEL.put(guh.getUUID(), Dagdeel.NACHT);
                 })
-                .thenWaitUntil(() -> helper.assertTrue(!guh.getPersistentData().getBoolean(Dagritme.KAMPVUUR), "bedtime: away from the fire"))
+                .thenWaitUntil(() -> helper.assertTrue(!guh.getPersistentData().getBooleanOr(Dagritme.KAMPVUUR, false), "bedtime: away from the fire"))
                 .thenExecute(() -> {
                     vergeet(guh);
                     leave(helper, p);
@@ -202,7 +198,7 @@ public class WereldlevenGameTests {
     }
 
     /** A seat at the fire that one guh walks to is not picked by another guh (no two guhs in one spot). */
-    @GameTest(template = PLEIN)
+    @GuhTest(template = PLEIN)
     public static void wereldlevenDagritmeKampvuurPlekGereserveerd(GameTestHelper helper) {
         helper.setBlock(VUUR, net.minecraft.world.level.block.Blocks.CAMPFIRE.defaultBlockState());
         GuhEntity a = guh(helper, new BlockPos(9, 2, 8), Dagdeel.DAG);
@@ -226,7 +222,7 @@ public class WereldlevenGameTests {
     }
 
     /** A resident in its house walks all the way down the street to the town's campfire (much further than 16 blocks). */
-    @GameTest(template = LANG, timeoutTicks = 2400)
+    @GuhTest(template = LANG, timeoutTicks = 2400)
     public static void wereldlevenDagritmeBewonerLooptNaarHetKampvuur(GameTestHelper helper) {
         BlockPos vuurRel = new BlockPos(36, 2, 5), huis = new BlockPos(4, 2, 5);
         helper.setBlock(vuurRel, net.minecraft.world.level.block.Blocks.CAMPFIRE.defaultBlockState());
@@ -237,7 +233,7 @@ public class WereldlevenGameTests {
         GuhHooks.maakBewoner(guh, helper.absolutePos(huis));
         helper.assertTrue(vuur.equals(Dagritme.kampvuur(guh)), "a resident sees the town's campfire from its house: " + Dagritme.kampvuur(guh));
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(guh.isInSittingPose() && guh.getPersistentData().getBoolean(Dagritme.KAMPVUUR)
+                .thenWaitUntil(() -> helper.assertTrue(guh.isInSittingPose() && guh.getPersistentData().getBooleanOr(Dagritme.KAMPVUUR, false)
                         && Dagritme.aanHetVuur(guh) && guh.position().distanceTo(Vec3.atBottomCenterOf(vuur)) < 4.3,
                         "walked from its house to the campfire and sits there" + staat(helper, guh)))
                 .thenExecute(() -> {
@@ -245,13 +241,13 @@ public class WereldlevenGameTests {
                     helper.assertTrue(range != null && range.getValue() == range.getBaseValue(), "the long path is only for the walk there");
                     Dagritme.TEST_DAGDEEL.put(guh.getUUID(), Dagdeel.NACHT);
                 })
-                .thenWaitUntil(() -> helper.assertTrue(!guh.getPersistentData().getBoolean(Dagritme.KAMPVUUR), "bedtime: away from the fire"))
+                .thenWaitUntil(() -> helper.assertTrue(!guh.getPersistentData().getBooleanOr(Dagritme.KAMPVUUR, false), "bedtime: away from the fire"))
                 .thenExecute(() -> vergeet(guh))
                 .thenSucceed();
     }
 
     /** The campfire flag doesn't stay behind (a chunk that unloaded while the guh sat at the fire): no marshmallows anywhere. */
-    @GameTest(template = LEEG, timeoutTicks = 200)
+    @GuhTest(template = LEEG, timeoutTicks = 200)
     public static void wereldlevenKampvuurVlagBlijftNietHangen(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(3, 2, 6));
         GuhEntity guh = guh(helper, new BlockPos(6, 2, 6), Dagdeel.DAG);
@@ -260,7 +256,7 @@ public class WereldlevenGameTests {
         helper.assertFalse(guh.interact(p, InteractionHand.MAIN_HAND).consumesAction() && count(p, WereldlevenFeature.MARSHMALLOW_KNABBEL.get()) < 2,
                 "no fire: no marshmallow");
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(!guh.getPersistentData().getBoolean(Dagritme.KAMPVUUR), "the old campfire flag is cleared"))
+                .thenWaitUntil(() -> helper.assertTrue(!guh.getPersistentData().getBooleanOr(Dagritme.KAMPVUUR, false), "the old campfire flag is cleared"))
                 .thenExecute(() -> helper.assertTrue(count(p, WereldlevenFeature.MARSHMALLOW_KNABBEL.get()) == 2, "the marshmallows stay in the bag"))
                 .thenExecute(() -> {
                     vergeet(guh);
@@ -269,7 +265,7 @@ public class WereldlevenGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = LEEG, timeoutTicks = 600)
+    @GuhTest(template = LEEG, timeoutTicks = 600)
     public static void wereldlevenDagritmeZwaaien(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         GuhEntity guh = guh(helper, new BlockPos(9, 2, 9), Dagdeel.DAG);
@@ -278,7 +274,7 @@ public class WereldlevenGameTests {
         guh.setOrderedToSit(false);
         guh.setInSittingPose(false);
         helper.startSequence()
-                .thenExecute(() -> p.moveTo(guh.getX() + 2.5, guh.getY(), guh.getZ()))
+                .thenExecute(() -> p.snapTo(guh.getX() + 2.5, guh.getY(), guh.getZ()))
                 .thenWaitUntil(() -> helper.assertTrue(KnusVoortgang.teller(p, WereldlevenVoortgang.GEZWAAID) >= 1, "a tamed guh waves at you"))
                 .thenExecute(() -> helper.assertTrue(advancement(p, "wereldleven_gezwaaid"), "the quest"))
                 .thenExecute(() -> {
@@ -292,7 +288,7 @@ public class WereldlevenGameTests {
     // kaasijsjes
     // =================================================================================================================
 
-    @GameTest(template = LEEG, timeoutTicks = 200)
+    @GuhTest(template = LEEG, timeoutTicks = 200)
     public static void wereldlevenKaasijsjes(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(2, 2, 2));
         GuhEntity guh = guh(helper, new BlockPos(4, 2, 2), Dagdeel.DAG);
@@ -332,7 +328,7 @@ public class WereldlevenGameTests {
     // IJscoguh Tingeling
     // =================================================================================================================
 
-    @GameTest(template = LEEG, timeoutTicks = 200)
+    @GuhTest(template = LEEG, timeoutTicks = 200)
     public static void wereldlevenIJscoguhWinkelEnBel(GameTestHelper helper) {
         for (Seizoen s : Seizoen.values()) {
             MerchantOffers o = IJscoguhEntity.aanbod(s);
@@ -356,7 +352,7 @@ public class WereldlevenGameTests {
         int bel = ijsco.belTeller();
         ijsco.bel();
         helper.assertTrue(ijsco.belTeller() == bel + 1, "tingeling!");
-        p.moveTo(ijsco.getX() + 1.5, ijsco.getY(), ijsco.getZ());
+        p.snapTo(ijsco.getX() + 1.5, ijsco.getY(), ijsco.getZ());
         helper.assertTrue(ijsco.interact(p, InteractionHand.MAIN_HAND).consumesAction() && ijsco.getTradingPlayer() == p, "his shop opens");
         helper.assertTrue(KnusVoortgang.teller(p, WereldlevenVoortgang.IJSCOGUH) == 1 && advancement(p, "wereldleven_ijscoguh"), "met him");
         p.closeContainer();
@@ -368,7 +364,7 @@ public class WereldlevenGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = LEEG, timeoutTicks = 600)
+    @GuhTest(template = LEEG, timeoutTicks = 600)
     public static void wereldlevenGuhsRennenDeIJscokarAchterna(GameTestHelper helper) {
         // (in the middle of the floor, facing south: the guhs' spot behind the cart is on the floor, whatever side it takes)
         IJscoguhEntity ijsco = helper.spawn(WereldlevenFeature.IJSCOGUH.get(), new BlockPos(6, 2, 7));
@@ -392,7 +388,7 @@ public class WereldlevenGameTests {
     // het koortje
     // =================================================================================================================
 
-    @GameTest(template = EMPTY_TEMPLATE)
+    @GuhTest(template = EMPTY_TEMPLATE)
     public static void wereldlevenLiedjesVerstoppenZichNiet(GameTestHelper helper) {
         for (Koortje.Liedje lied : Koortje.Liedje.values()) {
             Deque<Integer> gespeeld = new ArrayDeque<>();
@@ -416,7 +412,7 @@ public class WereldlevenGameTests {
 
     private static final String EMPTY_TEMPLATE = "empty";
 
-    @GameTest(template = PLEIN, timeoutTicks = 200)
+    @GuhTest(template = PLEIN, timeoutTicks = 200)
     public static void wereldlevenKoortjeOpDeXylofoon(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(10, 2, 13));
         BlockPos xylo = helper.absolutePos(XYLOFOON);
@@ -454,7 +450,7 @@ public class WereldlevenGameTests {
                     // the fluitje: the guhs sing along with that too
                     a.emotes.stop();
                     b.emotes.stop();
-                    p.moveTo(a.getX() + 1, a.getY(), a.getZ());
+                    p.snapTo(a.getX() + 1, a.getY(), a.getZ());
                     Koortje.fluit(p);
                     helper.assertTrue(a.emotes.current() == Emote.ZINGEN && advancement(p, "wereldleven_fluitje"), "they sing with the fluitje");
                 })
@@ -469,7 +465,7 @@ public class WereldlevenGameTests {
     // de grijpmachine
     // =================================================================================================================
 
-    @GameTest(template = PLEIN, timeoutTicks = 200)
+    @GuhTest(template = PLEIN, timeoutTicks = 200)
     public static void wereldlevenGrijpmachine(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(16, 2, 14));
         BlockPos pos = helper.absolutePos(MACHINE);
@@ -534,7 +530,7 @@ public class WereldlevenGameTests {
     // the plushies
     // =================================================================================================================
 
-    @GameTest(template = LEEG, timeoutTicks = 1600)
+    @GuhTest(template = LEEG, timeoutTicks = 1600)
     public static void wereldlevenTammeGuhKnuffeltKnuffel(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(8, 2, 6));
         helper.setBlock(new BlockPos(6, 2, 6), WereldlevenFeature.knuffel("pluisguh").defaultBlockState()
@@ -548,12 +544,12 @@ public class WereldlevenGameTests {
                 .thenWaitUntil(() -> {
                     BlockPos knuffel = helper.absolutePos(new BlockPos(6, 2, 6));
                     if (guh.blockPosition().distSqr(knuffel) > 7 * 7 && guh.getNavigation().isDone()) {
-                        guh.moveTo(knuffel.getX() - 2.5, knuffel.getY(), knuffel.getZ() + 0.5);   // (it strolled off: back to the plushie)
+                        guh.snapTo(knuffel.getX() - 2.5, knuffel.getY(), knuffel.getZ() + 0.5);   // (it strolled off: back to the plushie)
                     }
                     helper.assertTrue(KnusVoortgang.teller(p, WereldlevenVoortgang.KNUFFELS) >= 1, "the tamed guh cuddles the plushie" + staat(helper, guh));
                 })
                 .thenExecute(() -> helper.assertTrue(advancement(p, "wereldleven_knuffel")
-                        && guh.getPersistentData().getLong(Knuffels.KNUFFEL_TOT) > helper.getLevel().getGameTime(), "the quest; a rest before the next hug"))
+                        && guh.getPersistentData().getLongOr(Knuffels.KNUFFEL_TOT, 0L) > helper.getLevel().getGameTime(), "the quest; a rest before the next hug"))
                 .thenExecute(() -> {
                     vergeet(guh);
                     leave(helper, p);
@@ -561,7 +557,7 @@ public class WereldlevenGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = EMPTY_TEMPLATE)
+    @GuhTest(template = EMPTY_TEMPLATE)
     public static void wereldlevenKnuffelkastEnData(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         try {
@@ -591,7 +587,7 @@ public class WereldlevenGameTests {
             helper.assertTrue(KnusVoortgang.verzameling(WereldlevenVoortgang.KNUFFELKAST).items().size() == 22
                     && KnusVoortgang.verzameling(WereldlevenVoortgang.LIEDJESBOEK).items().size() == 6
                     && KnusVoortgang.verzameling(WereldlevenVoortgang.IJSJES_BOEK).items().size() == 7, "the three collections");
-            helper.assertTrue(p.server.getAdvancements().get(Guhs.id("quest/seen_ijscoguh")) != null
+            helper.assertTrue(p.level().getServer().getAdvancements().get(Guhs.id("quest/seen_ijscoguh")) != null
                     && GuhDex.CREATURE_RANGE > 0, "the IJscoguh's Guhdex page advancement");
             // the plein's grijpmachine piece and the kermis
             var templates = helper.getLevel().getStructureManager();

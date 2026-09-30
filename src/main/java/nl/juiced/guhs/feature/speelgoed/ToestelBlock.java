@@ -27,7 +27,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -45,7 +45,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * at a moment in time (the same on server and client, so the ride is smooth).
  */
 public abstract class ToestelBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
     private final Map<Direction, Map<Long, VoxelShape>> vormen = new EnumMap<>(Direction.class);
 
@@ -233,7 +233,7 @@ public abstract class ToestelBlock extends BaseEntityBlock {
 
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && !level.isClientSide) {
+        if (!state.is(newState.getBlock()) && !level.isClientSide()) {
             for (BlockPos p : blokken(pos, state.getValue(FACING))) {
                 if (!p.equals(pos) && level.getBlockState(p).getBlock() instanceof SpeelDeelBlock) {
                     level.setBlock(p, Blocks.AIR.defaultBlockState(), 3);

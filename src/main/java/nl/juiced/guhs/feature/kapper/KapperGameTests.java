@@ -5,7 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -14,8 +14,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.GameType;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -32,14 +30,13 @@ import nl.juiced.guhs.quest.Highscores;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * GameTests of Knip &amp; Vads: the rewards (+1), hair on your own tamed guh (kapsels, dyes, the scissors), a whole
  * kappersshow on a small test salon (kapper_test_salon: Krulletje, the showstoel, a second chair further away, a
  * haarwasbak), the feest round for the Knusfeest, the shop, the role, the tags and the customers that never stay behind.
  * The show is ticked by hand (KappersShow.tick), so a whole show fits in one test tick.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KapperGameTests {
     private static final String EMPTY = "empty", SALON = "kapper_test_salon";
 
@@ -48,7 +45,7 @@ public class KapperGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -59,13 +56,13 @@ public class KapperGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
     private static int count(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -107,7 +104,7 @@ public class KapperGameTests {
 
     // --- rewards: every rule +1 ----------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kapperBeloningenZijnEenMeer(GameTestHelper helper) {
         helper.assertTrue(KappersShow.munten(0) == 0, "nothing for no points");
         for (int score = 1; score <= 600; score++) {
@@ -126,7 +123,7 @@ public class KapperGameTests {
 
     // --- your own tamed guh --------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kapperKapselsEnVervenOpEigenGuh(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(1, 1, 1));
         ServerPlayer other = player(helper, new BlockPos(2, 1, 1));
@@ -177,7 +174,7 @@ public class KapperGameTests {
             KapperHaar.verf(guh, Haarverf.PERZIK);
             net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
             guh.saveWithoutId(tag);
-            GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel());
+            GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
             copy.load(tag);
             helper.assertTrue(copy.getClothes(GuhClothes.Slot.HAAR) == GuhClothes.KAPSEL_MATJE && copy.getHaarkleur() == Haarverf.PERZIK.rgb
                     && KapperHaar.verfVan(copy) == Haarverf.PERZIK, "saved");
@@ -189,7 +186,7 @@ public class KapperGameTests {
 
     // --- a whole kappersshow -------------------------------------------------------------------------------------------------
 
-    @GameTest(template = SALON, timeoutTicks = 200)
+    @GuhTest(template = SALON, timeoutTicks = 200)
     public static void kapperShowScoortEnBeloont(GameTestHelper helper) {
         GuhNpcEntity npc = krulletje(helper);
         ServerPlayer p = player(helper, new BlockPos(6, 2, 9));
@@ -254,7 +251,7 @@ public class KapperGameTests {
                     "krulmunten: " + count(p, KapperFeature.KRULMUNT.get()) + " for " + score);
             helper.assertTrue(KappersShow.best(p) == score && Highscores.remember(p, KappersShow.BOARD, score, false) == false, "the record");
             helper.assertTrue(KnusVoortgang.teller(p, KapperVoortgang.RECORD) == score && advancement(p, "kapper_eerste_show"), "the Knus record");
-            helper.assertTrue(GuhQuests.saved(p).getBoolean("guhs_kapper_first"), "the first show is remembered");
+            helper.assertTrue(GuhQuests.saved(p).getBooleanOr("guhs_kapper_first", false), "the first show is remembered");
         } finally {
             leave(helper, p);
         }
@@ -263,7 +260,7 @@ public class KapperGameTests {
     }
 
     /** The Burgemeester asked for feestkapsels: the feest round gives the feestkapselset (and Knusfeest.gemaakt). */
-    @GameTest(template = SALON, timeoutTicks = 200)
+    @GuhTest(template = SALON, timeoutTicks = 200)
     public static void kapperFeestkapselsVoorHetKnusfeest(GameTestHelper helper) {
         GuhNpcEntity npc = krulletje(helper);
         ServerPlayer p = player(helper, new BlockPos(6, 2, 9));
@@ -292,7 +289,7 @@ public class KapperGameTests {
 
     // --- shop, role, tags, bones, customers --------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kapperWinkelRolEnTags(GameTestHelper helper) {
         helper.assertTrue(Features.role(GuhNpcEntity.Kind.KAPPERGUH) == KapperFeature.role() && KapperFeature.role() != Binnenkort.ROLE, "Krulletje's own role");
         var offers = KapperFeature.shop();
@@ -317,7 +314,7 @@ public class KapperGameTests {
     }
 
     /** A customer without a show goes home by itself; customers can't be hurt. */
-    @GameTest(template = EMPTY, timeoutTicks = 120)
+    @GuhTest(template = EMPTY, timeoutTicks = 120)
     public static void kapperKlantZonderShowGaatNaarHuis(GameTestHelper helper) {
         KapperKlantEntity klant = helper.spawn(KapperFeature.KAPPER_KLANT.get(), new BlockPos(2, 1, 2));
         klant.hurt(helper.getLevel().damageSources().generic(), 5f);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -129,20 +129,20 @@ public class EmotePickerScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, COLOR_BORDER);
         g.fill(left, top, left + W, top + H, COLOR_PANEL);
         g.fill(left + GAP + COL_W + GAP / 2, top + LIST_Y - 2, left + GAP + COL_W + GAP / 2 + 1, top + LIST_Y + ROWS * ROW_H - 1, 0x40F7B6CB);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.emotes.title", guh.getDisplayName()), left + W / 2, top + 8, COLOR_TEXT);
+        g.centeredText(font, Component.translatable("gui.guhs.emotes.title", guh.getDisplayName()), left + W / 2, top + 8, COLOR_TEXT);
         Emote now = guh.emotes.current();
         Component doing = now == null ? Component.literal("-")
                 : now.displayName().copy().append(guh.emotes.isLooping() ? Component.literal(" ∞") : Component.empty());
-        g.drawString(font, Component.translatable("gui.guhs.emotes.doing", doing), left + GAP, top + 24, 0xFFD8B8C8);
+        g.text(font, Component.translatable("gui.guhs.emotes.doing", doing), left + GAP, top + 24, 0xFFD8B8C8);
         Emote fav = guh.emotes.favorite();
         Component favText = Component.translatable("gui.guhs.emotes.favourite",
                 fav == null ? Component.translatable("gui.guhs.emotes.favourite.none") : fav.displayName());
-        g.drawString(font, favText, left + W - GAP - font.width(favText), top + 24, 0xFFFFD27A);
+        g.text(font, favText, left + W - GAP - font.width(favText), top + 24, 0xFFFFD27A);
         Emote[] emotes = Emote.values();
         for (int i = 0; i < emotes.length; i++) {
             Emote emote = emotes[i];
@@ -151,7 +151,7 @@ public class EmotePickerScreen extends Screen {
             Component naam = o ? emote.displayName() : Component.literal("♥ ").withStyle(ChatFormatting.LIGHT_PURPLE).append(emote.displayName());
             int kleur = !o ? COLOR_LOCKED : emote == fav ? 0xFFFFD27A : COLOR_TEXT;
             String tekst = font.plainSubstrByWidth(naam.getString(), NAME_W);
-            g.drawString(font, tekst.length() < naam.getString().length() ? Component.literal(tekst) : naam, x + NAME_X, y + 5, kleur);
+            g.text(font, tekst.length() < naam.getString().length() ? Component.literal(tekst) : naam, x + NAME_X, y + 5, kleur);
             if (mouseX >= x + NAME_X - 2 && mouseX < x + NOW_X - 2 && mouseY >= y && mouseY < y + BUTTON_H) {
                 Component uitleg = o ? emote.description() : emote.description().copy().append("\n").append(opSlot(emote));
                 setTooltipForNextRenderPass(font.split(uitleg, 200));

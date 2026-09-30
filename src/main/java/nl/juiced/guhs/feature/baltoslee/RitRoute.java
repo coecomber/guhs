@@ -53,19 +53,19 @@ public final class RitRoute {
 
     private RitRoute(CompoundTag tag) {
         this.tag = tag;
-        this.benen = new SleeBaan[]{new SleeBaan(floats(tag.getIntArray("Heen"))), new SleeBaan(floats(tag.getIntArray("Terug")))};
+        this.benen = new SleeBaan[]{new SleeBaan(floats(tag.getIntArray("Heen").orElse(new int[0]))), new SleeBaan(floats(tag.getIntArray("Terug").orElse(new int[0])))};
         this.zones = new ArrayList<>();
         for (String key : new String[]{"ZonesHeen", "ZonesTerug"}) {
             List<Zone> list = new ArrayList<>();
-            for (Tag t : tag.getList(key, Tag.TAG_COMPOUND)) {
+            for (Tag t : tag.getListOrEmpty(key)) {
                 CompoundTag z = (CompoundTag) t;
-                list.add(new Zone(Soort.values()[Math.min(Soort.values().length - 1, z.getInt("Soort"))], z.getDouble("S0"), z.getDouble("S1"), z.getInt("Kant")));
+                list.add(new Zone(Soort.values()[Math.min(Soort.values().length - 1, z.getIntOr("Soort", 0))], z.getDoubleOr("S0", 0.0), z.getDoubleOr("S1", 0.0), z.getIntOr("Kant", 0)));
             }
             zones.add(List.copyOf(list));
         }
-        this.ziekenhuis = vec(tag.getIntArray("Ziekenhuis"));
-        this.stal = vec(tag.getIntArray("Stal"));
-        this.tijd = tag.getCompound("Tijd");
+        this.ziekenhuis = vec(tag.getIntArray("Ziekenhuis").orElse(new int[0]));
+        this.stal = vec(tag.getIntArray("Stal").orElse(new int[0]));
+        this.tijd = tag.getCompoundOrEmpty("Tijd");
     }
 
     public static RitRoute lees(CompoundTag tag) {
@@ -101,7 +101,7 @@ public final class RitRoute {
 
     /** The time limit for the way back on this level (ticks). */
     public int tijd(String niveau) {
-        return tijd.contains(niveau) ? tijd.getInt(niveau) : tijd.getInt("makkelijk") > 0 ? tijd.getInt("makkelijk") : 2400;
+        return tijd.contains(niveau) ? tijd.getIntOr(niveau, 0) : tijd.getIntOr("makkelijk", 0) > 0 ? tijd.getIntOr("makkelijk", 0) : 2400;
     }
 
     // --- making it (server) ------------------------------------------------------------------------------------------------

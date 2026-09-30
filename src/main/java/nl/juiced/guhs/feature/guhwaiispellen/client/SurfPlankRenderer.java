@@ -14,9 +14,10 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.guhwaiispellen.SurfPlankEntity;
 import nl.juiced.guhs.feature.guhwaiispellen.SurfSim;
 import nl.juiced.guhs.registry.ModEntities;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The surfplankje (geo/entity/guhwaiispellen_surfplank.geo.json: a long rounded board, pink with a turquoise stripe, a
  * hibiscus and a little guh face on the nose, a fin underneath), turned along the ride and tilted with the face of the
@@ -56,7 +57,7 @@ public class SurfPlankRenderer extends GeoEntityRenderer<SurfPlankEntity> {
             return;
         }
         GuhNpcEntity lilo = lilos.computeIfAbsent(bord, b -> {
-            GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(b.level());
+            GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(b.level(), EntitySpawnReason.TRIGGERED);
             if (npc != null) {
                 npc.setKind(GuhNpcEntity.Kind.LILO_GUH);
                 npc.setCustomNameVisible(false);

@@ -78,7 +78,7 @@ public final class Apotheek implements NpcRole {
     }
 
     static boolean heeftKaasmelk(ServerPlayer player) {
-        for (ItemStack s : player.getInventory().items) {
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (s.is(KnusTags.KAASMELK)) {
                 return true;
             }
@@ -96,7 +96,7 @@ public final class Apotheek implements NpcRole {
     public void tick(GuhNpcEntity npc) {
         if (npc.tickCount % 100 == 37) {
             for (GuhEntity s : snotjes(npc)) {
-                if (s.getPersistentData().getBoolean(SNOTJE) && npc.getRandom().nextInt(3) > 0) {
+                if (s.getPersistentData().getBooleanOr(SNOTJE, false) && npc.getRandom().nextInt(3) > 0) {
                     nies(s, 0.8f);
                 }
             }
@@ -106,7 +106,7 @@ public final class Apotheek implements NpcRole {
     /** Hatsjoe! */
     public static void nies(GuhEntity snotje, float volume) {
         if (snotje.level() instanceof ServerLevel level) {
-            level.playSound(null, snotje, BeroepenFeature.HATSJOE.get(), SoundSource.NEUTRAL, volume, 1.1f + level.random.nextFloat() * 0.2f);
+            level.playSound(null, snotje, BeroepenFeature.HATSJOE.get(), SoundSource.NEUTRAL, volume, 1.1f + level.getRandom().nextFloat() * 0.2f);
             var look = snotje.getLookAngle();
             level.sendParticles(ParticleTypes.SNEEZE, snotje.getX() + look.x * 0.4, snotje.getEyeY() - 0.1, snotje.getZ() + look.z * 0.4, 6,
                     0.1, 0.05, 0.1, 0.02);
@@ -118,19 +118,19 @@ public final class Apotheek implements NpcRole {
      * the job, if it's theirs); without one he just sniffs. Returns true when he drank.
      */
     public static boolean snotje(ServerPlayer player, GuhEntity snotje, ItemStack stack) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (!stack.is(BeroepenFeature.KAASMELKDRANKJE.get())) {
-            if (snotje.getPersistentData().getBoolean(SNOTJE)) {
+            if (snotje.getPersistentData().getBooleanOr(SNOTJE, false)) {
                 nies(snotje, 1.0f);
-                player.displayClientMessage(Component.translatable("gui.guhs.beroepen.snotje.snif").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.snotje.snif").withStyle(ChatFormatting.LIGHT_PURPLE));
             } else {
                 level.sendParticles(ParticleTypes.HEART, snotje.getX(), snotje.getY() + 0.8, snotje.getZ(), 3, 0.2, 0.2, 0.2, 0.02);
-                player.displayClientMessage(Component.translatable("gui.guhs.beroepen.snotje.blij").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.snotje.blij").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             return false;
         }
-        if (!snotje.getPersistentData().getBoolean(SNOTJE)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.beroepen.snotje.al_beter").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        if (!snotje.getPersistentData().getBooleanOr(SNOTJE, false)) {
+            player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.snotje.al_beter").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         if (!player.getAbilities().instabuild) {
@@ -144,9 +144,9 @@ public final class Apotheek implements NpcRole {
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, snotje.getX(), snotje.getY() + 0.5, snotje.getZ(), 12, 0.4, 0.4, 0.4, 0.05);
         if (BeroepenVoortgang.stap(player, BEROEP) == 1) {
             BeroepenVoortgang.zet(player, BEROEP, 2);
-            player.displayClientMessage(Component.translatable("gui.guhs.beroepen.snotje.beter").withStyle(ChatFormatting.GOLD), false);
+            player.sendSystemMessage(Component.translatable("gui.guhs.beroepen.snotje.beter").withStyle(ChatFormatting.GOLD));
         } else {
-            player.displayClientMessage(Component.translatable("gui.guhs.beroepen.snotje.vahoeg").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.snotje.vahoeg").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return true;
     }

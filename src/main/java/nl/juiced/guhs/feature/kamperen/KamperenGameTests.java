@@ -5,7 +5,7 @@ import java.util.Set;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -16,8 +16,6 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -36,8 +34,6 @@ import nl.juiced.guhs.registry.ModItems;
  * night, the guhs come and listen), pyjamas by a burning campfire at night, the slaapzak (a bed that isn't a home,
  * uitgerust), Opa Guh's role and shop and his campfire, the template.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class KamperenGameTests {
     private static final String EMPTY = "empty";
 
@@ -47,7 +43,7 @@ public class KamperenGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return p;
     }
 
@@ -59,7 +55,7 @@ public class KamperenGameTests {
 
     private static int count(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -77,7 +73,7 @@ public class KamperenGameTests {
      * A whole story (sped up): every line, then the verhalenbundel and kaasknabbels; the guh nearby listens; one story
      * per night (also who heard one tonight can't join another); who joins too late listens along but gets nothing.
      */
-    @GameTest(template = EMPTY, timeoutTicks = 400)
+    @GuhTest(template = EMPTY, timeoutTicks = 400)
     public static void kamperenVerhaal(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         ServerPlayer gehoord = player(helper);
@@ -135,7 +131,7 @@ public class KamperenGameTests {
      * Marshmallows at the campfire (#guhs:knus/marshmallow; the tag is filled by another slice, so a stand-in item
      * goes through the roasting itself): one eaten, a bite of food, counted, the guh comes to the fire, Opa is there.
      */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kamperenMarshmallow(GameTestHelper helper) {
         BlockPos vuur = new BlockPos(2, 1, 2);
         helper.setBlock(vuur, Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, true));
@@ -164,7 +160,7 @@ public class KamperenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kamperenVerhalenEnBeloning(GameTestHelper helper) {
         helper.assertTrue(Verhalen.IDS.size() == 12 && new HashSet<>(Verhalen.IDS).size() == 12, "twelve stories");
         var bundel = KnusVoortgang.verzameling(Verhalen.BUNDEL);
@@ -188,7 +184,7 @@ public class KamperenGameTests {
     }
 
     /** Pyjamas: at night, by a burning campfire; not in the daytime, not far off, not by a campfire that's out. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kamperenPyjama(GameTestHelper helper) {
         BlockPos vuur = new BlockPos(2, 1, 2);
         helper.setBlock(vuur, Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, true));
@@ -216,7 +212,7 @@ public class KamperenGameTests {
     }
 
     /** The slaapzak: a bed (occupied, a direction), but not a home; a whole night in it: uitgerust. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kamperenSlaapzak(GameTestHelper helper) {
         BlockPos rel = new BlockPos(2, 1, 2);
         helper.setBlock(rel, KamperenFeature.SLAAPZAK.get().defaultBlockState().setValue(SlaapzakBlock.FACING, Direction.EAST));
@@ -243,7 +239,7 @@ public class KamperenGameTests {
     }
 
     /** The kampeerplekje (and the festival and the sterrenwacht, the same code) can't be broken or built in; creative players may. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kamperenBeschermd(GameTestHelper helper) {
         BlockPos rel = new BlockPos(2, 1, 2);
         helper.setBlock(rel, Blocks.OAK_PLANKS);
@@ -272,7 +268,7 @@ public class KamperenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kamperenOpaEnWinkel(GameTestHelper helper) {
         helper.assertTrue(Features.role(GuhNpcEntity.Kind.OPA_GUH) == OpaGuh.INSTANCE && OpaGuh.INSTANCE != Binnenkort.ROLE, "Opa Guh's own role");
         helper.assertTrue(GuhDex.ENTRIES.contains(GuhVariant.OPA_GUH), "his Guhdex page");

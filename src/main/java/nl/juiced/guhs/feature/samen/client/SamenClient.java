@@ -75,11 +75,11 @@ public final class SamenClient {
         long t = level.getGameTime();
         for (Entity e : level.entitiesForRendering()) {
             if ((t + e.getId()) % 20 != 0 || !isZielsguh(e) || e.distanceToSqr(mc.player) > 48 * 48 || e.isInvisible()
-                    || level.random.nextInt(3) != 0) {
+                    || level.getRandom().nextInt(3) != 0) {
                 continue;
             }
-            level.addParticle(SamenFeature.ZIELSHARTJE.get(), e.getX() + (level.random.nextDouble() - 0.5) * e.getBbWidth(),
-                    e.getY() + e.getBbHeight() + 0.35, e.getZ() + (level.random.nextDouble() - 0.5) * e.getBbWidth(), 0, 0.02, 0);
+            level.addParticle(SamenFeature.ZIELSHARTJE.get(), e.getX() + (level.getRandom().nextDouble() - 0.5) * e.getBbWidth(),
+                    e.getY() + e.getBbHeight() + 0.35, e.getZ() + (level.getRandom().nextDouble() - 0.5) * e.getBbWidth(), 0, 0.02, 0);
         }
     }
 

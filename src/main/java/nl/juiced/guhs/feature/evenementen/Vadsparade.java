@@ -34,6 +34,7 @@ import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 import org.joml.Vector3f;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The Vadsparade: the Tamboerguh (in the parade outfit) drums in front, ten dressed-up guhs march behind it in a line,
  * hopping to the beat, along a winding route over the Guhmension (to the tune of "Vader Jacob"). Walk along with it
@@ -165,9 +166,9 @@ public class Vadsparade extends Evenement {
 
     @Override
     protected void begin() {
-        RandomSource random = level.random;
+        RandomSource random = level.getRandom();
         for (int k = 0; k <= GUHS; k++) {
-            ParadeGuhEntity guh = EvenementenFeature.PARADE_GUH.get().create(level);
+            ParadeGuhEntity guh = EvenementenFeature.PARADE_GUH.get().create(level, EntitySpawnReason.TRIGGERED);
             if (k == 0) {
                 guh.setDrummer(true);
                 guh.setGuhScale(1.25f);
@@ -187,7 +188,7 @@ public class Vadsparade extends Evenement {
             }
             double at = s - k * SPACING;
             Vec3 p = route.at(at);
-            guh.moveTo(p.x, p.y, p.z, route.yawAt(at), 0);
+            guh.snapTo(p.x, p.y, p.z, route.yawAt(at), 0);
             guh.setYHeadRot(guh.getYRot());
             guh.setYBodyRot(guh.getYRot());
             entities.add(guh.getUUID());
@@ -246,7 +247,7 @@ public class Vadsparade extends Evenement {
             trackWalkers();
         }
         if (walkTicks % 80 == 40) {
-            guhs.get(1 + level.random.nextInt(guhs.size() - 1)).triggerAnim("action", "happy");
+            guhs.get(1 + level.getRandom().nextInt(guhs.size() - 1)).triggerAnim("action", "happy");
         }
         walkTicks++;
     }
@@ -263,7 +264,7 @@ public class Vadsparade extends Evenement {
             level.playSound(null, drummer.getX(), drummer.getY(), drummer.getZ(), drum, SoundSource.RECORDS, 2.2f, 1f);
             if ((eighth / 2) % 4 == 0) {
                 level.sendParticles(ParticleTypes.NOTE, drummer.getX(), drummer.getY() + drummer.getBbHeight() + 0.4, drummer.getZ(), 1,
-                        0, 0, 0, level.random.nextDouble());
+                        0, 0, 0, level.getRandom().nextDouble());
             }
         } else {
             level.playSound(null, drummer.getX(), drummer.getY(), drummer.getZ(), SoundEvents.NOTE_BLOCK_HAT.value(), SoundSource.RECORDS, 0.9f, 1.2f);
@@ -325,10 +326,10 @@ public class Vadsparade extends Evenement {
                 }
             }
             level.playSound(null, center.x, center.y, center.z, SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.RECORDS, 2f,
-                    0.9f + level.random.nextFloat() * 0.3f);
+                    0.9f + level.getRandom().nextFloat() * 0.3f);
         }
         if (finale % 10 == 0) {
-            ParadeGuhEntity guh = guhs.get(level.random.nextInt(guhs.size()));
+            ParadeGuhEntity guh = guhs.get(level.getRandom().nextInt(guhs.size()));
             guh.triggerAnim("action", "happy");
             guh.playSound(ModSounds.GUH_HAPPY.get(), 1f, guh.getVoicePitch());
         }
@@ -348,7 +349,7 @@ public class Vadsparade extends Evenement {
             return;
         }
         rewarded.add(player.getUUID());
-        GuhClothes piece = nextPiece(player, level.random);
+        GuhClothes piece = nextPiece(player, level.getRandom());
         player.getInventory().placeItemBackInInventory(new ItemStack(ModItems.clothingItem(piece)));
         player.getInventory().placeItemBackInInventory(new ItemStack(ModItems.KAAS_KNABBELS.get(), 8));
         Component name = Component.translatable("item.guhs." + piece.id());
@@ -366,7 +367,7 @@ public class Vadsparade extends Evenement {
     /** The first piece this player hasn't had yet (sjako, jasje, trommeltje); after that a random one. Remembers it. */
     public static GuhClothes nextPiece(ServerPlayer player, RandomSource random) {
         CompoundTag data = GuhQuests.saved(player);
-        int had = data.getInt(PIECES);
+        int had = data.getIntOr(PIECES, 0);
         for (int i = 0; i < OUTFIT.length; i++) {
             if ((had & (1 << i)) == 0) {
                 data.putInt(PIECES, had | (1 << i));
@@ -377,7 +378,7 @@ public class Vadsparade extends Evenement {
     }
 
     public static boolean hasWholeOutfit(ServerPlayer player) {
-        return GuhQuests.saved(player).getInt(PIECES) == (1 << OUTFIT.length) - 1;
+        return GuhQuests.saved(player).getIntOr(PIECES, 0) == (1 << OUTFIT.length) - 1;
     }
 
     @Override

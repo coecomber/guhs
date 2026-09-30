@@ -75,7 +75,7 @@ public final class KlusGebied {
     }
 
     private static String sleutel(ServerLevel level, BlockPos pos) {
-        return level.dimension().location() + "|" + pos.asLong();
+        return level.dimension().identifier() + "|" + pos.asLong();
     }
 
     /** Every block of this kind in the home base (from the last scan; maybe a few ticks old). */
@@ -190,7 +190,7 @@ public final class KlusGebied {
         List<BlockPos> huisjeBlokken = h.blokken();
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
         int x0 = (int) Math.floor(box.minX), x1 = (int) Math.ceil(box.maxX), z0 = (int) Math.floor(box.minZ), z1 = (int) Math.ceil(box.maxZ);
-        int y0 = Math.max(level.getMinBuildHeight(), (int) Math.floor(box.minY)), y1 = Math.min(level.getMaxBuildHeight() - 3, (int) Math.ceil(box.maxY));
+        int y0 = Math.max(level.getMinY(), (int) Math.floor(box.minY)), y1 = Math.min(level.getMaxY() + 1 - 3, (int) Math.ceil(box.maxY));
         for (int x = x0; x <= x1; x++) {
             for (int z = z0; z <= z1; z++) {
                 p.set(x, y0, z);

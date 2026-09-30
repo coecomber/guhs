@@ -17,8 +17,8 @@ import nl.juiced.guhs.feature.mewtwo.MewtwoFeature;
 import nl.juiced.guhs.feature.mewtwo.MewtwoPayloads;
 import nl.juiced.guhs.feature.mewtwo.MewtwoStand;
 import nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * The kloon-eiland on the client: Mieuwguh's renderer, the kloontank's renderer (your own tank: {@link KloontankRenderer}),

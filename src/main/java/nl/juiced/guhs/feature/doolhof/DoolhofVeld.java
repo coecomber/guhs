@@ -44,7 +44,7 @@ public final class DoolhofVeld {
     @Nullable
     public static Anker anker(GuhNpcEntity npc) {
         if (npc.roleData.contains("DoolhofAnker")) {
-            return Anker.load(npc.roleData.getCompound("DoolhofAnker"), AX, AY, AZ);
+            return Anker.load(npc.roleData.getCompoundOrEmpty("DoolhofAnker"), AX, AY, AZ);
         }
         Anker a = zoek(npc.level(), npc.blockPosition());
         if (a != null) {

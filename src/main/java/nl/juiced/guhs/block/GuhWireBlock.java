@@ -209,7 +209,7 @@ public class GuhWireBlock extends Block {
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         super.onRemove(state, level, pos, newState, movedByPiston);
-        if (!newState.is(this) && !level.isClientSide) {
+        if (!newState.is(this) && !level.isClientSide()) {
             // the wire that was here may have been powering the block below / the rest of the network
             level.updateNeighborsAt(pos.below(), this);
             for (BlockPos next : connections(pos)) {
@@ -221,7 +221,7 @@ public class GuhWireBlock extends Block {
     }
 
     private void updateNetwork(Level level, BlockPos start) {
-        if (level.isClientSide || updating || !level.getBlockState(start).is(this)) {
+        if (level.isClientSide() || updating || !level.getBlockState(start).is(this)) {
             return;
         }
         Set<BlockPos> network = collectNetwork(level, start);

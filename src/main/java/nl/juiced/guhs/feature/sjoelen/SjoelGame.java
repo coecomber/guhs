@@ -15,7 +15,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket;
+import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -177,8 +177,8 @@ public final class SjoelGame {
         data.putString("Player", game.playerName);
         data.putInt("Left", PUCKS - game.thrown);
         data.putInt("Best", best(player));
-        data.putInt("Games", GuhQuests.saved(player).getInt(GAMES_KEY));
-        List<Scorebord.Entry> top = Scorebord.top(player.server, BOARD);
+        data.putInt("Games", GuhQuests.saved(player).getIntOr(GAMES_KEY, 0));
+        List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), BOARD);
         data.putString("RecordName", top.isEmpty() ? "" : top.get(0).name());
         data.putInt("RecordScore", top.isEmpty() ? -1 : top.get(0).score());
         ModNetworking.sendTo(player, new SjoelenPayloads.Open(npc.getId(), data));
@@ -228,7 +228,7 @@ public final class SjoelGame {
             return;
         }
         player = p.getUUID();
-        playerName = p.getGameProfile().getName();
+        playerName = p.getGameProfile().name();
         PLAYERS.put(player, npcId);
         clearPucks(world);
         thrown = 0;
@@ -268,7 +268,7 @@ public final class SjoelGame {
     }
 
     public boolean slideWith(ServerPlayer p, float power, double aim) {
-        ServerLevel world = p.serverLevel();
+        ServerLevel world = p.level();
         if (phase != Phase.PLAYING) {
             flash(p, Component.translatable(phase == Phase.COUNTDOWN ? "gui.guhs.sjoelen.wait_countdown" : "gui.guhs.sjoelen.all_gone")
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -393,8 +393,8 @@ public final class SjoelGame {
         }
         if (isRunning() && npc.tickCount % 10 == 0 && phase != Phase.COUNTDOWN && phase != Phase.TALLY && world.getGameTime() >= quietUntil) {
             int[] c = bak.counts();
-            p.displayClientMessage(Component.translatable("gui.guhs.sjoelen.bar", PUCKS - thrown, c[0], c[1], c[2], c[3], SjoelBak.score(c))
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.sjoelen.bar", PUCKS - thrown, c[0], c[1], c[2], c[3], SjoelBak.score(c))
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -446,7 +446,7 @@ public final class SjoelGame {
         if (best < 0 || score > best) {
             saved.putInt(BEST, score);
         }
-        saved.putInt(GAMES_KEY, saved.getInt(GAMES_KEY) + 1);
+        saved.putInt(GAMES_KEY, saved.getIntOr(GAMES_KEY, 0) + 1);
         int munten = munten(sets, record);
         MutableComponent line = Component.translatable("quest.guhs.sjoelen.count").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
         p.sendSystemMessage(line);
@@ -463,7 +463,7 @@ public final class SjoelGame {
         }
         p.sendSystemMessage(Component.translatable("quest.guhs.sjoelen.munten", munten).withStyle(ChatFormatting.LIGHT_PURPLE));
         Minigames.give(p, new ItemStack(SjoelenFeature.SJOELSCHIJFJE.get(), munten));
-        if (!saved.getBoolean(FIRST)) {                                  // the very first turn: a present from Opoe
+        if (!saved.getBooleanOr(FIRST, false)) {                                  // the very first turn: a present from Opoe
             saved.putBoolean(FIRST, true);
             Minigames.give(p, new ItemStack(ModItems.KAAS_KNABBELS.get(), 16));
             Minigames.give(p, new ItemStack(SjoelenFeature.STAPEL_ITEM.get(), 1));
@@ -547,7 +547,7 @@ public final class SjoelGame {
     public static boolean hasOpoeNearby(ServerPlayer p) {
         UUID npc = PLAYERS.get(p.getUUID());
         SjoelGame game = npc == null ? null : GAMES.get(npc);
-        return game != null && p.serverLevel().getEntity(npc) instanceof GuhNpcEntity && p.serverLevel().getGameTime() - game.lastTick <= STALE_TICKS;
+        return game != null && p.level().getEntity(npc) instanceof GuhNpcEntity && p.level().getGameTime() - game.lastTick <= STALE_TICKS;
     }
 
     // --- the bak ------------------------------------------------------------------------------------------------------------
@@ -597,14 +597,14 @@ public final class SjoelGame {
     }
 
     private void load(CompoundTag data) {
-        CompoundTag tag = data.getCompound("Bak");
+        CompoundTag tag = data.getCompoundOrEmpty("Bak");
         if (!tag.contains("Kop")) {
             return;
         }
-        kop = BlockPos.of(tag.getLong("Kop"));
-        Direction f = Direction.byName(tag.getString("Facing"));
+        kop = BlockPos.of(tag.getLongOr("Kop", 0L));
+        Direction f = Direction.byName(tag.getStringOr("Facing", ""));
         facing = f == null || f.getAxis().isVertical() ? Direction.NORTH : f;
-        home = tag.contains("Home") ? BlockPos.of(tag.getLong("Home")) : null;
+        home = tag.contains("Home") ? BlockPos.of(tag.getLongOr("Home", 0L)) : null;
         scanned = true;
     }
 
@@ -630,7 +630,7 @@ public final class SjoelGame {
 
     public static int best(Player p) {
         CompoundTag saved = GuhQuests.saved(p);
-        return saved.contains(BEST) ? saved.getInt(BEST) : -1;
+        return saved.contains(BEST) ? saved.getIntOr(BEST, 0) : -1;
     }
 
     private static double horizontal(ServerPlayer p, GuhNpcEntity npc) {
@@ -643,15 +643,15 @@ public final class SjoelGame {
         Inventory inv = p.getInventory();
         ItemStack stack = new ItemStack(SjoelenFeature.SCHIJVEN.get(), count);
         if (inv.getSelected().isEmpty()) {
-            inv.setItem(inv.selected, stack);
+            inv.setItem(inv.getSelectedSlot(), stack);
             return;
         }
         for (int i = 0; i < Inventory.getSelectionSize(); i++) {
             if (inv.getItem(i).isEmpty()) {
                 inv.setItem(i, stack);
-                inv.selected = i;
+                inv.setSelectedSlot(i);
                 if (p.connection != null) {
-                    p.connection.send(new ClientboundSetCarriedItemPacket(i));
+                    p.connection.send(new ClientboundSetHeldSlotPacket(i));
                 }
                 return;
             }
@@ -659,7 +659,7 @@ public final class SjoelGame {
         int free = inv.getFreeSlot();
         if (free >= 0) {
             inv.setItem(free, inv.getSelected());
-            inv.setItem(inv.selected, stack);
+            inv.setItem(inv.getSelectedSlot(), stack);
         } else {
             inv.add(stack);
         }
@@ -690,8 +690,8 @@ public final class SjoelGame {
     }
 
     private void flash(ServerPlayer p, Component message) {
-        p.displayClientMessage(message, true);
-        quietUntil = p.serverLevel().getGameTime() + 30;
+        p.sendOverlayMessage(message);
+        quietUntil = p.level().getGameTime() + 30;
     }
 
     private static void title(ServerPlayer p, Component title, Component sub, int in, int stay, int out) {

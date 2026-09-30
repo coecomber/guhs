@@ -20,6 +20,7 @@ import nl.juiced.guhs.feature.piep.PiepMaatje;
 import nl.juiced.guhs.item.PickedUpGuhItem;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * "Waar is mijn guh?" (2.10): the last known place of every band guh and maatje, kept in {@link BandData} so the
  * Guhdex can tell you even when the guh is far away, an item in a chest, running in a Guh Wheel or asleep in its
@@ -58,7 +59,7 @@ public final class GuhVolger {
 
     /** Convenience from a loaded guh or maatje (owner, id, dimension and position from the entity). */
     public static void zet(Entity guhOfMaatje, PlekSoort soort, String detail) {
-        MinecraftServer s = guhOfMaatje.getServer();
+        MinecraftServer s = guhOfMaatje.level().getServer();
         UUID eigenaar = Band.eigenaar(guhOfMaatje);
         if (s == null || eigenaar == null || !(Band.isBandGuh(guhOfMaatje) || guhOfMaatje instanceof PiepMaatje)) {
             return;
@@ -95,7 +96,7 @@ public final class GuhVolger {
 
     /** An item in a player's pockets. */
     public static void inZakken(ItemStack stack, Player holder) {
-        item(stack, PlekSoort.ITEM_SPELER, holder.level().dimension(), holder.blockPosition(), holder.getGameProfile().getName(),
+        item(stack, PlekSoort.ITEM_SPELER, holder.level().dimension(), holder.blockPosition(), holder.getGameProfile().name(),
                 holder.level().getGameTime());
     }
 
@@ -107,10 +108,10 @@ public final class GuhVolger {
         }
         if (stack.is(ModItems.PICKED_UP_GUH.get())) {
             CompoundTag tag = PickedUpGuhItem.guhData(stack);
-            if (!"guhs:guh".equals(tag.getString("id")) || !tag.hasUUID("UUID") || !tag.hasUUID("Owner")) {
+            if (!"guhs:guh".equals(tag.getStringOr("id", "")) || !tag.read("UUID", UUIDUtil.CODEC).isPresent() || !tag.read("Owner", UUIDUtil.CODEC).isPresent()) {
                 return null;   // (a Reisguh, or a wild one)
             }
-            return new Wie(tag.getUUID("Owner"), tag.getUUID("UUID"), true, tag.getString("GuhDisplayName"));
+            return new Wie(tag.read("Owner", UUIDUtil.CODEC).orElseThrow(), tag.read("UUID", UUIDUtil.CODEC).orElseThrow(), true, tag.getStringOr("GuhDisplayName", ""));
         }
         if (stack.getItem() instanceof nl.juiced.guhs.feature.piep.PiepDierItem) {
             CustomData data = stack.get(DataComponents.CUSTOM_DATA);
@@ -118,11 +119,11 @@ public final class GuhVolger {
                 return null;
             }
             CompoundTag tag = data.copyTag();
-            CompoundTag forge = tag.getCompound("NeoForgeData");
-            if (!tag.hasUUID("Owner") || !forge.hasUUID(Band.BAND_ID)) {
+            CompoundTag forge = tag.getCompoundOrEmpty("NeoForgeData");
+            if (!tag.read("Owner", UUIDUtil.CODEC).isPresent() || !forge.read(Band.BAND_ID, UUIDUtil.CODEC).isPresent()) {
                 return null;
             }
-            return new Wie(tag.getUUID("Owner"), forge.getUUID(Band.BAND_ID), false,
+            return new Wie(tag.read("Owner", UUIDUtil.CODEC).orElseThrow(), forge.read(Band.BAND_ID, UUIDUtil.CODEC).orElseThrow(), false,
                     stack.has(DataComponents.CUSTOM_NAME) ? stack.getHoverName().getString() : "");
         }
         return null;
@@ -145,6 +146,6 @@ public final class GuhVolger {
 
     /** A dimension's name (lang gui.guhs.band.dim.&lt;namespace&gt;.&lt;path&gt;). */
     public static Component dimensie(ResourceKey<Level> dim) {
-        return Component.translatable("gui.guhs.band.dim." + dim.location().getNamespace() + "." + dim.location().getPath());
+        return Component.translatable("gui.guhs.band.dim." + dim.identifier().getNamespace() + "." + dim.identifier().getPath());
     }
 }

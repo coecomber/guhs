@@ -158,11 +158,11 @@ public final class Verstoppertje {
             return;
         }
         Vec3 at = inBlok ? new Vec3(plek.getX() + 0.5, plek.getY() + 0.1, plek.getZ() + 0.5) : new Vec3(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5);
-        muis.moveTo(at.x, at.y, at.z, muis.getYRot(), 0);
+        muis.snapTo(at.x, at.y, at.z, muis.getYRot(), 0);
         muis.setVerstopt(true);
         verstoptSinds = muis.level().getGameTime();
         if (muis.getOwner() instanceof ServerPlayer owner) {
-            owner.displayClientMessage(Component.translatable("gui.guhs.piep.verstoppertje", muis.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            owner.sendOverlayMessage(Component.translatable("gui.guhs.piep.verstoppertje", muis.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         muis.playSound(PiepFeature.PIEP.get(), 0.9f, 1.4f);
     }
@@ -184,7 +184,7 @@ public final class Verstoppertje {
         level.sendParticles(ParticleTypes.HEART, muis.getX(), muis.getY() + 0.5, muis.getZ(), 4, 0.25, 0.15, 0.25, 0);
         muis.triggerAnim("actie", "blij");
         level.playSound(null, muis.blockPosition(), PiepFeature.PIEP.get(), SoundSource.NEUTRAL, 1f, 1.5f);
-        player.displayClientMessage(Component.translatable("gui.guhs.piep.gevonden").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.piep.gevonden").withStyle(ChatFormatting.LIGHT_PURPLE));
         PiepVoortgang.tel(player, PiepVoortgang.GEVONDEN, 1);
     }
 
@@ -200,7 +200,7 @@ public final class Verstoppertje {
                     break;
                 }
             }
-            muis.moveTo(naast.getX() + 0.5, naast.getY(), naast.getZ() + 0.5, muis.getYRot(), 0);
+            muis.snapTo(naast.getX() + 0.5, naast.getY(), naast.getZ() + 0.5, muis.getYRot(), 0);
         }
         plek = null;
         volgendeCheck = muis.level().getGameTime() + CHECK * 3;
@@ -214,7 +214,7 @@ public final class Verstoppertje {
         long t = level.getGameTime() - verstoptSinds;
         if (plek == null || t > MAX_VERSTOPT || muis.getOwner() == null) {
             if (muis.getOwner() instanceof ServerPlayer owner && owner.distanceToSqr(muis) < 48 * 48) {
-                owner.displayClientMessage(Component.translatable("gui.guhs.piep.niet_gevonden").withStyle(ChatFormatting.GRAY), true);
+                owner.sendOverlayMessage(Component.translatable("gui.guhs.piep.niet_gevonden").withStyle(ChatFormatting.GRAY));
             }
             uit();
             return;
@@ -235,7 +235,7 @@ public final class Verstoppertje {
 
     void save(CompoundTag tag) {
         if (muis.isVerstopt() && plek != null) {
-            tag.put("VerstopPlek", NbtUtils.writeBlockPos(plek));
+            tag.store("VerstopPlek", BlockPos.CODEC, plek);
             tag.putBoolean("VerstopInBlok", inBlok);
             tag.putLong("VerstoptSinds", verstoptSinds);
         }
@@ -243,9 +243,9 @@ public final class Verstoppertje {
 
     void load(CompoundTag tag) {
         if (tag.contains("VerstopPlek")) {
-            plek = NbtUtils.readBlockPos(tag, "VerstopPlek").orElse(null);
-            inBlok = tag.getBoolean("VerstopInBlok");
-            verstoptSinds = tag.getLong("VerstoptSinds");
+            plek = (tag).read("VerstopPlek", BlockPos.CODEC).orElse(null);
+            inBlok = tag.getBooleanOr("VerstopInBlok", false);
+            verstoptSinds = tag.getLongOr("VerstoptSinds", 0L);
             if (plek != null) {
                 muis.setVerstopt(true);
             }

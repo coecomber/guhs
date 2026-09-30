@@ -160,7 +160,7 @@ public class GlijbaanBlock extends ToestelBlock {
         int u = (int) (level.getGameTime() - zitje.start()) % PERIODE;
         Direction f = state.getValue(FACING);
         if (u < KLIM && u % 6 == 0) {
-            level.playSound(null, rijder.blockPosition(), SpeelgoedFeature.KLIM.get(), SoundSource.NEUTRAL, 0.5f, 1.2f + level.random.nextFloat() * 0.3f);
+            level.playSound(null, rijder.blockPosition(), SpeelgoedFeature.KLIM.get(), SoundSource.NEUTRAL, 0.5f, 1.2f + level.getRandom().nextFloat() * 0.3f);
         }
         if (u == GLIJ_START) {
             level.playSound(null, rijder.blockPosition(), SpeelgoedFeature.WIEEE.get(), SoundSource.NEUTRAL, 1f,
@@ -185,11 +185,11 @@ public class GlijbaanBlock extends ToestelBlock {
             return InteractionResult.PASS;
         }
         if (zitje(level, pos, 0) != null) {
-            player.displayClientMessage(Component.translatable("gui.guhs.speelgoed.glijbaan.bezet").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.speelgoed.glijbaan.bezet").withStyle(ChatFormatting.LIGHT_PURPLE));
             return InteractionResult.CONSUME;
         }
         if (ZitjeEntity.zet(level, pos, 0, player, 0, 1) != null) {
-            player.displayClientMessage(Component.translatable("gui.guhs.speelgoed.glijbaan.klim").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.speelgoed.glijbaan.klim").withStyle(ChatFormatting.LIGHT_PURPLE));
             Spelen.spelerSpeelt(player, speeltje());
         }
         return InteractionResult.CONSUME;

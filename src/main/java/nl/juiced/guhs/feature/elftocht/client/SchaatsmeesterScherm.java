@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.elftocht.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -38,7 +38,7 @@ public class SchaatsmeesterScherm extends Screen {
     protected void init() {
         left = (width - W) / 2;
         top = (height - H) / 2;
-        int bezig = data.getInt("Bezig");
+        int bezig = data.getIntOr("Bezig", 0);
         Button start = Button.builder(Component.translatable("gui.guhs.elftocht.knop.start").withStyle(ChatFormatting.BOLD),
                         b -> send(SchaatsmeesterRole.START))
                 .bounds(left + 20, top + H - 80, W - 40, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.elftocht.knop.start.tooltip"))).build();
@@ -56,34 +56,34 @@ public class SchaatsmeesterScherm extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, 0xFFFF9A2E);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFFFFFFFF);
         g.fill(left, top, left + W, top + H, 0xEE1C3A5C);
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFFFE2B8);
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFFFE2B8);
         int y = top + 26;
         for (var line : font.split(Component.translatable("gui.guhs.elftocht.regels"), W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFD8ECFF);
+            g.centeredText(font, line, width / 2, y, 0xFFD8ECFF);
             y += 10;
         }
         y += 4;
-        int best = data.getInt("Best");
-        Component jij = best >= 0 ? Component.translatable("gui.guhs.elftocht.jouw_best", Highscores.tijd(best), data.getInt("Ritten"))
+        int best = data.getIntOr("Best", 0);
+        Component jij = best >= 0 ? Component.translatable("gui.guhs.elftocht.jouw_best", Highscores.tijd(best), data.getIntOr("Ritten", 0))
                 : Component.translatable("gui.guhs.elftocht.nog_nooit");
         Component record = data.contains("Record")
-                ? Component.translatable("gui.guhs.elftocht.server_best", data.getString("RecordNaam"), Highscores.tijd(data.getInt("Record")))
+                ? Component.translatable("gui.guhs.elftocht.server_best", data.getStringOr("RecordNaam", ""), Highscores.tijd(data.getIntOr("Record", 0)))
                 : Component.translatable("gui.guhs.elftocht.geen_record");
         // (2.9 visual QA: "nog nooit uitgereden..." was wider than the frame; both lines now wrap, above the buttons)
         var jijRegels = font.split(jij, W - 20);
         var recordRegels = font.split(record, W - 20);
         int ry = Math.max(y, top + H - 83 - 10 * (jijRegels.size() + recordRegels.size()));
         for (var line : jijRegels) {
-            g.drawCenteredString(font, line, width / 2, ry, 0xFFB8F0C8);
+            g.centeredText(font, line, width / 2, ry, 0xFFB8F0C8);
             ry += 10;
         }
         for (var line : recordRegels) {
-            g.drawCenteredString(font, line, width / 2, ry, 0xFFFFD27A);
+            g.centeredText(font, line, width / 2, ry, 0xFFFFD27A);
             ry += 10;
         }
     }

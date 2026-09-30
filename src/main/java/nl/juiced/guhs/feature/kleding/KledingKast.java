@@ -96,8 +96,8 @@ public final class KledingKast {
         }
         if (veranderd > 0) {
             blij(guh);
-            player.displayClientMessage(Component.translatable("gui.guhs.kleding.aangekleed", guh.getDisplayName())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.kleding.aangekleed", guh.getDisplayName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return veranderd;
     }
@@ -115,8 +115,8 @@ public final class KledingKast {
         if (u == Uitkomst.OK) {
             return;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.kleding.nee." + u.name().toLowerCase(java.util.Locale.ROOT))
-                .withStyle(ChatFormatting.RED), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.kleding.nee." + u.name().toLowerCase(java.util.Locale.ROOT))
+                .withStyle(ChatFormatting.RED));
         player.level().playSound(null, player.blockPosition(), SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, 0.5f, 1.6f);
     }
 

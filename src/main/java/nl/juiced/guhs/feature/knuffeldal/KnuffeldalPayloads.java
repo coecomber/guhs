@@ -53,7 +53,7 @@ public final class KnuffeldalPayloads {
             if (!(context.player() instanceof ServerPlayer player)) {
                 return;
             }
-            net.minecraft.world.entity.Entity spreker = p.npcId() >= 0 ? player.serverLevel().getEntity(p.npcId()) : null;
+            net.minecraft.world.entity.Entity spreker = p.npcId() >= 0 ? player.level().getEntity(p.npcId()) : null;
             if (spreker instanceof GuhNpcEntity npc && npc.distanceTo(player) <= 10) {
                 if (npc.getKind() == GuhNpcEntity.Kind.COCOTJE) {
                     Cocotje.kies(npc, player, p.action());

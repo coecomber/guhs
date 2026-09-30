@@ -18,7 +18,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -38,14 +38,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * Mika: the evil guh. Same model as a guh but with an evil face and devil tail (assets/guhs/geo/entity/mika.geo.json).
@@ -88,11 +88,11 @@ public class MikaEntity extends Monster implements GeoEntity {
     }
 
     /** Rare natural spawns in Mika's biome, any light level, never more than a few together. */
-    public static boolean checkMikaSpawnRules(EntityType<? extends Monster> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+    public static boolean checkMikaSpawnRules(EntityType<? extends Monster> type, ServerLevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
         if (!Monster.checkAnyLightMonsterSpawnRules(type, level, spawnType, pos, random)) {
             return false;
         }
-        if (MobSpawnType.isSpawner(spawnType) || spawnType == MobSpawnType.STRUCTURE) {
+        if (EntitySpawnReason.isSpawner(spawnType) || spawnType == EntitySpawnReason.STRUCTURE) {
             return true;
         }
         return random.nextInt(25) == 0 && level.getEntitiesOfClass(MikaEntity.class, new AABB(pos).inflate(48)).size() < MAX_NEARBY;
@@ -111,8 +111,8 @@ public class MikaEntity extends Monster implements GeoEntity {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData spawnGroupData) {
-        if (spawnType != MobSpawnType.STRUCTURE) { // structures (e.g. Big Mika) keep their own size
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData spawnGroupData) {
+        if (spawnType != EntitySpawnReason.STRUCTURE) { // structures (e.g. Big Mika) keep their own size
             this.getAttribute(Attributes.SCALE).setBaseValue(0.8 + this.random.nextDouble() * 0.6);
             this.refreshDimensions();
         }
@@ -160,7 +160,7 @@ public class MikaEntity extends Monster implements GeoEntity {
     public void readAdditionalSaveData(CompoundTag tag) {
         boolean hadHealth = tag.contains("Health");
         super.readAdditionalSaveData(tag);
-        if (tag.getBoolean("Boss")) {
+        if (tag.getBooleanOr("Boss", false)) {
             makeBoss();
             if (!hadHealth) {
                 this.setHealth(BOSS_HEALTH);
@@ -236,7 +236,7 @@ public class MikaEntity extends Monster implements GeoEntity {
                 .triggerableAnim("pounce", POUNCE));
     }
 
-    private PlayState mainAnimation(AnimationState<MikaEntity> state) {
+    private PlayState mainAnimation(AnimationTest<MikaEntity> state) {
         return state.setAndContinue(state.isMoving() ? WALK : IDLE);
     }
 

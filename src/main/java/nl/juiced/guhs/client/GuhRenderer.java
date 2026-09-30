@@ -8,17 +8,17 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.item.GuhArmorItem;
 import com.mojang.math.Axis;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import nl.juiced.guhs.entity.GuhVariant;
-import software.bernie.geckolib.animation.AnimationState;
+import com.geckolib.animation.state.AnimationTest;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.renderer.layer.builtin.BlockAndItemGeoLayer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * Renders the guh from assets/guhs/geo/entity/guh.geo.json + textures/entity/guh.png (edit both in Blockbench).
@@ -28,7 +28,7 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity> {
     private static final float BASE_SHADOW = 0.45f;
 
     /** The sleeping textures with closed eyes (textures/entity/guh_slaap/, made by tools/make_sleep_eyes.py); null: none. */
-    private static final java.util.Map<ResourceLocation, java.util.Optional<ResourceLocation>> SLAAP = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final java.util.Map<Identifier, java.util.Optional<Identifier>> SLAAP = new java.util.concurrent.ConcurrentHashMap<>();
 
     /** Asleep: the SLAPEN emote (a nap, the night) or in a guh nest. */
     public static boolean slaapt(GuhEntity guh) {
@@ -37,9 +37,9 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity> {
     }
 
     /** This texture with closed eyes (the texture itself when there's no sleeping one). */
-    public static ResourceLocation slaap(ResourceLocation texture) {
+    public static Identifier slaap(Identifier texture) {
         return SLAAP.computeIfAbsent(texture, t -> {
-            ResourceLocation s = t.withPath(p -> p.replace("textures/entity/", "textures/entity/guh_slaap/"));
+            Identifier s = t.withPath(p -> p.replace("textures/entity/", "textures/entity/guh_slaap/"));
             return net.minecraft.client.Minecraft.getInstance().getResourceManager().getResource(s).map(r -> s);
         }).orElse(texture);
     }
@@ -48,15 +48,15 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity> {
         // true = the bone called "head" follows where the guh is looking
         super(context, new DefaultedEntityGeoModel<>(Guhs.id("guh"), true) {
             @Override
-            public ResourceLocation getTextureResource(GuhEntity guh) {
-                ResourceLocation pinguh = nl.juiced.guhs.feature.guhpolder.client.PinguhRender.texture(guh);   // 2.9: the Pinguh's look
-                ResourceLocation eigen = nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk.texture(guh);   // 3.0: a story variant's look
-                ResourceLocation tex = pinguh != null ? pinguh : eigen != null ? eigen : guh.getVariant().texture(guh.tickCount + guh.getId());
+            public Identifier getTextureResource(GuhEntity guh) {
+                Identifier pinguh = nl.juiced.guhs.feature.guhpolder.client.PinguhRender.texture(guh);   // 2.9: the Pinguh's look
+                Identifier eigen = nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk.texture(guh);   // 3.0: a story variant's look
+                Identifier tex = pinguh != null ? pinguh : eigen != null ? eigen : guh.getVariant().texture(guh.tickCount + guh.getId());
                 return slaapt(guh) ? GuhRenderer.slaap(tex) : tex;
             }
 
             @Override
-            public void setCustomAnimations(GuhEntity guh, long instanceId, AnimationState<GuhEntity> animationState) {
+            public void setCustomAnimations(GuhEntity guh, long instanceId, AnimationTest<GuhEntity> animationState) {
                 super.setCustomAnimations(guh, instanceId, animationState);
                 // the brontosaurus guh's head sits on top of its long neck (the ears follow the head)
                 boolean bronto = guh.getVariant() == GuhVariant.BRONTOSAURUS;
@@ -82,10 +82,10 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity> {
         this.shadowRadius = BASE_SHADOW;
         addRenderLayer(new GuhClothesLayer(this));
         // the starry guh's stars light up in the dark
-        addRenderLayer(new software.bernie.geckolib.renderer.layer.GeoRenderLayer<>(this) {
-            private final ResourceLocation glow = nl.juiced.guhs.Guhs.id("textures/entity/guh_starry_glowmask.png");
-            private final ResourceLocation enderGlow = nl.juiced.guhs.Guhs.id("textures/entity/guh_ender_glowmask.png");
-            private final ResourceLocation vahoegeGlow = nl.juiced.guhs.Guhs.id("textures/entity/guh_vahoege_ender_glowmask.png");
+        addRenderLayer(new com.geckolib.renderer.layer.GeoRenderLayer<>(this) {
+            private final Identifier glow = nl.juiced.guhs.Guhs.id("textures/entity/guh_starry_glowmask.png");
+            private final Identifier enderGlow = nl.juiced.guhs.Guhs.id("textures/entity/guh_ender_glowmask.png");
+            private final Identifier vahoegeGlow = nl.juiced.guhs.Guhs.id("textures/entity/guh_vahoege_ender_glowmask.png");
 
             @Override
             public void render(PoseStack poseStack, GuhEntity guh, BakedGeoModel model, net.minecraft.client.renderer.RenderType renderType,
@@ -99,11 +99,11 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity> {
             }
         });
         // 3.0: a story variant's own glow (feature.verhaal.client.VariantUiterlijk.glow), full bright like the stars
-        addRenderLayer(new software.bernie.geckolib.renderer.layer.GeoRenderLayer<>(this) {
+        addRenderLayer(new com.geckolib.renderer.layer.GeoRenderLayer<>(this) {
             @Override
             public void render(PoseStack poseStack, GuhEntity guh, BakedGeoModel model, net.minecraft.client.renderer.RenderType renderType,
                                MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-                ResourceLocation glow = nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk.glow(guh);
+                Identifier glow = nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk.glow(guh);
                 if (glow != null) {
                     var type = net.minecraft.client.renderer.RenderType.eyes(glow);
                     getRenderer().reRender(model, poseStack, bufferSource, guh, type, bufferSource.getBuffer(type), partialTick,
@@ -204,15 +204,15 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity> {
     }
 
     @Override
-    public net.minecraft.client.renderer.RenderType getRenderType(GuhEntity guh, ResourceLocation texture, @javax.annotation.Nullable MultiBufferSource bufferSource,
+    public net.minecraft.client.renderer.RenderType getRenderType(GuhEntity guh, Identifier texture, @javax.annotation.Nullable MultiBufferSource bufferSource,
                                                                  float partialTick) {
         return guh.getVariant() == GuhVariant.GHOST ? net.minecraft.client.renderer.RenderType.entityTranslucent(texture)
                 : super.getRenderType(guh, texture, bufferSource, partialTick);
     }
 
     @Override
-    public software.bernie.geckolib.util.Color getRenderColor(GuhEntity guh, float partialTick, int packedLight) {
-        return guh.getVariant() == GuhVariant.GHOST ? software.bernie.geckolib.util.Color.ofARGB(0x88, 0xFF, 0xFF, 0xFF)
+    public com.geckolib.util.Color getRenderColor(GuhEntity guh, float partialTick, int packedLight) {
+        return guh.getVariant() == GuhVariant.GHOST ? com.geckolib.util.Color.ofARGB(0x88, 0xFF, 0xFF, 0xFF)
                 : super.getRenderColor(guh, partialTick, packedLight);
     }
 

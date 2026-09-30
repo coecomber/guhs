@@ -30,6 +30,8 @@ import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.feature.sterrenwacht.Buiten;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * Het Ballonfestival (2.8, slice "buiten"): a festival field full of guh-shaped hot-air balloons on the Guhvelden and
  * the Roze pluisjes (the loose structure ballonfestival, tools/features/ballon.py). Kapitein Wolkje
@@ -65,7 +67,7 @@ public final class BallonFeature {
 
     public static final DeferredHolder<EntityType<?>, EntityType<LuchtballonEntity>> LUCHTBALLON = ENTITIES.register("guh_luchtballon",
             () -> EntityType.Builder.<LuchtballonEntity>of(LuchtballonEntity::new, MobCategory.MISC).sized(1.8f, 1.2f)
-                    .clientTrackingRange(16).updateInterval(3).build(Guhs.id("guh_luchtballon").toString()));
+                    .clientTrackingRange(16).updateInterval(3).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_luchtballon"))));
 
     /** A little white cloud puff (around a flying balloon, the Wolkenpoort). */
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> BALLONWOLKJE = PARTICLES.register("ballonwolkje",

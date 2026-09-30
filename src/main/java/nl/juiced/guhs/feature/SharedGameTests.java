@@ -2,7 +2,7 @@ package nl.juiced.guhs.feature;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -20,8 +20,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.entity.GuhClothes;
@@ -38,12 +36,11 @@ import nl.juiced.guhs.quest.VerstopGame;
 import nl.juiced.guhs.registry.ModBlocks;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Tests of what the minigames and guh buildings share: one game at a time, no free healing, loaned items stay loaned,
  * and no fire or floods against a protected building.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class SharedGameTests {
     private static final String EMPTY = "empty";
 
@@ -52,21 +49,21 @@ public class SharedGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return player;
     }
 
     private static GuhNpcEntity npc(GameTestHelper helper, GuhNpcEntity.Kind kind, BlockPos at) {
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(kind);
         BlockPos pos = helper.absolutePos(at);
-        npc.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+        npc.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         helper.getLevel().addFreshEntity(npc);
         return npc;
     }
 
     /** While you seek in the verstopguh house, no other game starts; a seeker who is gone isn't protected any more. */
-    @GameTest(template = "verstopguh_huis", timeoutTicks = 200)
+    @GuhTest(template = "verstopguh_huis", timeoutTicks = 200)
     public static void oneGameAtATimeAndSeekersDropOut(GameTestHelper helper) {
         var npcs = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(100),
                 n -> n.getKind() == GuhNpcEntity.Kind.VERSTOPGUHTJE);
@@ -74,7 +71,7 @@ public class SharedGameTests {
         GuhNpcEntity host = npcs.get(0);
         @SuppressWarnings("removal")
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(host.getX() + 1, host.getY(), host.getZ());
+        player.snapTo(host.getX() + 1, host.getY(), host.getZ());
         VerstopGame.action(host, player, VerstopGame.START);
         helper.assertTrue(VerstopGame.isSeeking(player) && Minigames.VERSTOP.equals(Minigames.playing(player)), "seeking");
         helper.assertTrue(Minigames.busyElsewhere(player, Minigames.SMUL) && !Minigames.busyElsewhere(player, Minigames.VERSTOP),
@@ -105,7 +102,7 @@ public class SharedGameTests {
     }
 
     /** Starting a game doesn't heal or feed you; during the game you just don't get any worse. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void gamesDontHealYouForFree(GameTestHelper helper) {
         ServerPlayer player = survivor(helper);
         player.setHealth(6f);
@@ -131,7 +128,7 @@ public class SharedGameTests {
     }
 
     /** A loaned golf club doesn't go into a guh's backpack, the Bank Guh or an item frame. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void loanedItemsStayLoaned(GameTestHelper helper) {
         ServerPlayer player = survivor(helper);
         ItemStack club = new ItemStack(GolfFeature.GOLFCLUB.get());
@@ -169,7 +166,7 @@ public class SharedGameTests {
     }
 
     /** No fire against a protected building: lighting one next to it is refused, and fire that appears there goes out. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void noFireAgainstAProtectedBuilding(GameTestHelper helper) {
         BlockPos a = helper.absolutePos(new BlockPos(3, 1, 0)), b = helper.absolutePos(new BlockPos(4, 3, 4));
         BoundingBox building = BoundingBox.fromCorners(a, b);
@@ -213,7 +210,7 @@ public class SharedGameTests {
     }
 
     /** Water poured outside doesn't flow into a protected building. */
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void noFloodingAProtectedBuilding(GameTestHelper helper) {
         BoundingBox building = BoundingBox.fromCorners(helper.absolutePos(new BlockPos(3, 1, 2)), helper.absolutePos(new BlockPos(4, 2, 2)));
         BibliotheekProtection.TEST_AREAS.add(building);

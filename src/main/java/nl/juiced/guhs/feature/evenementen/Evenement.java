@@ -248,7 +248,7 @@ public abstract class Evenement {
         if (outside.isEmpty()) {
             return center;
         }
-        return outside.get(level.random.nextInt(outside.size())).position();
+        return outside.get(level.getRandom().nextInt(outside.size())).position();
     }
 
     /** Moves the middle of the event to the middle of its participants. */

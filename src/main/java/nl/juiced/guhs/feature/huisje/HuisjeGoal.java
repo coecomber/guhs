@@ -250,11 +250,11 @@ public class HuisjeGoal extends Goal {
 
     /** Per chore: not before its wait time (shorter when blij). */
     private boolean klaarVoor(Klus k, long nu) {
-        return mob.getPersistentData().getCompound("guhs_huisje_klus").getLong(k.id()) <= nu;
+        return mob.getPersistentData().getCompoundOrEmpty("guhs_huisje_klus").getLongOr(k.id(), 0L) <= nu;
     }
 
     private void geprobeerd(Klus k, long nu) {
-        var tag = mob.getPersistentData().getCompound("guhs_huisje_klus");
+        var tag = mob.getPersistentData().getCompoundOrEmpty("guhs_huisje_klus");
         tag.putLong(k.id(), nu + (long) (k.wacht() / Band.klusSnelheid(mob)));
         mob.getPersistentData().put("guhs_huisje_klus", tag);
     }

@@ -13,7 +13,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -65,35 +64,35 @@ public class KaaskluisBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             open(serverPlayer, pos);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                               InteractionHand hand, BlockHitResult hit) {
         if (hand != InteractionHand.MAIN_HAND) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             open(serverPlayer, pos);
         }
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Pays {@link #PRICE} goudkaas and hands out a treasure; false (and a hint) if the player doesn't have enough. */
     public static boolean open(ServerPlayer player, BlockPos pos) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         int have = GuhQuests.count(player, KaasmijnFeature.GOUDKAAS.get());
         if (have < PRICE) {
-            player.displayClientMessage(Component.translatable("quest.guhs.kaasmijn.kluis_need", PRICE, have).withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.kaasmijn.kluis_need", PRICE, have).withStyle(ChatFormatting.GOLD));
             level.playSound(null, pos, SoundEvents.VAULT_INSERT_ITEM_FAIL, SoundSource.BLOCKS, 1f, 1f);
             return false;
         }
         GuhQuests.take(player, KaasmijnFeature.GOUDKAAS.get(), PRICE);
-        LootTable table = player.server.reloadableRegistries().getLootTable(LOOT);
+        LootTable table = player.level().getServer().reloadableRegistries().getLootTable(LOOT);
         LootParams params = new LootParams.Builder(level).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
                 .withParameter(LootContextParams.THIS_ENTITY, player).withLuck(player.getLuck()).create(LootContextParamSets.CHEST);
         for (ItemStack stack : table.getRandomItems(params)) {

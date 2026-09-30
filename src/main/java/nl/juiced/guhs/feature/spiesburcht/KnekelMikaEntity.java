@@ -21,14 +21,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.registry.ModSounds;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * De Knekel-Mika: the wither skeleton of the Barbecuether. A tall, charred Mika skeleton with a big grill fork, in the
@@ -106,7 +106,7 @@ public class KnekelMikaEntity extends Monster implements GeoEntity {
         controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("stab", STAB));
     }
 
-    private PlayState mainAnimation(AnimationState<KnekelMikaEntity> state) {
+    private PlayState mainAnimation(AnimationTest<KnekelMikaEntity> state) {
         return state.setAndContinue(state.isMoving() ? WALK : IDLE);
     }
 

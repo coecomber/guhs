@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.kapper.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -38,8 +38,8 @@ public class KapperScreen extends Screen {
         left = (width - W) / 2;
         top = (height - H) / 2;
         int half = (W - 44) / 2;
-        boolean feest = data.getBoolean("Feest");
-        boolean running = data.getBoolean("Running");
+        boolean feest = data.getBooleanOr("Feest", false);
+        boolean running = data.getBooleanOr("Running", false);
         int y = top + 112 - (feest ? 22 : 0);
         Button start = Button.builder(Component.translatable("gui.guhs.kapper.start"), b -> send(KappersShow.START))
                 .bounds(left + 20, y, W - 40, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.kapper.start.tooltip"))).build();
@@ -59,8 +59,8 @@ public class KapperScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         long t = System.currentTimeMillis() / 120;
         g.fill(left - 3, top - 3, left + W + 3, top + H + 3, 0xFFFFFFFF);
         for (int i = -H; i < W + H; i += 12) {                     // a barber's pole frame, the stripes run round
@@ -74,20 +74,20 @@ public class KapperScreen extends Screen {
             }
         }
         g.fill(left, top, left + W, top + H, 0xF0301A26);
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFFFE6EE);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.kapper.ondertitel"), width / 2, top + 20, 0xFFF7B6CB);
-        Component text = data.getBoolean("Running") ? Component.translatable("gui.guhs.kapper.bezet", data.getString("Speler"))
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFFFE6EE);
+        g.centeredText(font, Component.translatable("gui.guhs.kapper.ondertitel"), width / 2, top + 20, 0xFFF7B6CB);
+        Component text = data.getBooleanOr("Running", false) ? Component.translatable("gui.guhs.kapper.bezet", data.getStringOr("Speler", ""))
                 : Component.translatable("gui.guhs.kapper.uitleg");
         int y = top + 36;
         for (var line : font.split(text, W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFD8B8E8);
+            g.centeredText(font, line, width / 2, y, 0xFFD8B8E8);
             y += 11;
         }
-        int best = data.getInt("Best");
-        g.drawCenteredString(font, best > 0 ? Component.translatable("gui.guhs.kapper.best", best) : Component.translatable("gui.guhs.kapper.geen_best"),
+        int best = data.getIntOr("Best", 0);
+        g.centeredText(font, best > 0 ? Component.translatable("gui.guhs.kapper.best", best) : Component.translatable("gui.guhs.kapper.geen_best"),
                 width / 2, top + 138, 0xFFFFD27A);
-        g.drawCenteredString(font, Component.translatable(data.getBoolean("Played") ? "gui.guhs.kapper.munten" : "gui.guhs.kapper.eerste",
-                data.getInt("Munten")), width / 2, top + 148, 0xFFFFE6EE);
+        g.centeredText(font, Component.translatable(data.getBooleanOr("Played", false) ? "gui.guhs.kapper.munten" : "gui.guhs.kapper.eerste",
+                data.getIntOr("Munten", 0)), width / 2, top + 148, 0xFFFFE6EE);
     }
 
     @Override

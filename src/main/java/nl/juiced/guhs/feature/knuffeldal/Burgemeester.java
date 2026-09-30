@@ -209,6 +209,6 @@ public final class Burgemeester implements NpcRole {
 
     /** The title of the Grote Knusfeest's finale. */
     public static boolean isKnuffelburgemeester(ServerPlayer player) {
-        return GuhQuests.saved(player).getBoolean(Feestbuffet.TITEL);
+        return GuhQuests.saved(player).getBooleanOr(Feestbuffet.TITEL, false);
     }
 }

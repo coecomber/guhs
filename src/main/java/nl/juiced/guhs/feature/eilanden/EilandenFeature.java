@@ -86,7 +86,7 @@ public final class EilandenFeature {
         if (level.dimension() != ModDimensions.GUHMENSION) {
             return null;
         }
-        Structure structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(ISLANDS);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(ISLANDS);
         if (structure == null) {
             return null;
         }

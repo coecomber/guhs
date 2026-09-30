@@ -18,7 +18,7 @@ public final class ElftochtVoortgang {
 
     /** Grants guhs:grote_guhspelen/&lt;name&gt; (true when it was new). */
     public static boolean grant(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
         if (holder == null || player.getAdvancements().getOrStartProgress(holder).isDone()) {
             return false;
         }
@@ -27,7 +27,7 @@ public final class ElftochtVoortgang {
     }
 
     public static boolean heeft(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
     }
 

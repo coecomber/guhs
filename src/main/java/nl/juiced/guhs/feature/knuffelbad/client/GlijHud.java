@@ -6,7 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -31,16 +31,16 @@ public final class GlijHud {
     static void zet(CompoundTag d) {
         Minecraft mc = Minecraft.getInstance();
         long now = mc.level == null ? 0 : mc.level.getGameTime();
-        if (!d.getBoolean("Actief")) {
+        if (!d.getBooleanOr("Actief", false)) {
             data = null;
             laatstGepakt = 0;
             return;
         }
-        if (data != null && d.getInt("Gepakt") > laatstGepakt) {
+        if (data != null && d.getIntOr("Gepakt", 0) > laatstGepakt) {
             popTot = now + 30;
-            popPunten = d.getInt("Punten");
+            popPunten = d.getIntOr("Punten", 0);
         }
-        laatstGepakt = d.getInt("Gepakt");
+        laatstGepakt = d.getIntOr("Gepakt", 0);
         data = d;
     }
 
@@ -48,13 +48,13 @@ public final class GlijHud {
         data = null;
     }
 
-    static void render(GuiGraphics g, DeltaTracker delta) {
+    static void extractRenderState(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         if (data == null || mc.level == null || mc.options.hideGui) {
             return;
         }
         Font font = mc.font;
-        Glijbaan baan = Glijbaan.byIndex(data.getInt("Baan"));
+        Glijbaan baan = Glijbaan.byIndex(data.getIntOr("Baan", 0));
         long now = mc.level.getGameTime();
         int w = 190, x = (g.guiWidth() - w) / 2, y = 4;
         g.fill(x - 1, y - 1, x + w + 1, y + 55, baan.kleur);
@@ -64,25 +64,25 @@ public final class GlijHud {
             int h = (int) (2 + Math.sin((i + now * 2) * 0.25) * 1.5);
             g.fill(x + i, y, x + i + 5, y + h, baan.licht);
         }
-        g.drawCenteredString(font, baan.naam().copy().withStyle(ChatFormatting.BOLD), x + w / 2, y + 5, baan.licht);
+        g.centeredText(font, baan.naam().copy().withStyle(ChatFormatting.BOLD), x + w / 2, y + 5, baan.licht);
         // the score, big
-        g.pose().pushPose();
-        g.pose().translate(x + w / 2f, y + 16, 0);
-        g.pose().scale(2f, 2f, 1f);
-        String score = String.valueOf(data.getInt("Score"));
-        g.drawString(font, score, -font.width(score) / 2, 0, 0xFFFFFFFF, true);
-        g.pose().popPose();
-        Component eend = Component.translatable("gui.guhs.knuffelbad.hud.eendjes", data.getInt("Gepakt"), data.getInt("Totaal"));
-        g.drawString(font, eend, x + 6, y + 21, 0xFFFFE27A);
-        int combo = data.getInt("Combo");
+        g.pose().pushMatrix();
+        g.pose().translate(x + w / 2f, y + 16);
+        g.pose().scale(2f, 2f);
+        String score = String.valueOf(data.getIntOr("Score", 0));
+        g.text(font, score, -font.width(score) / 2, 0, 0xFFFFFFFF, true);
+        g.pose().popMatrix();
+        Component eend = Component.translatable("gui.guhs.knuffelbad.hud.eendjes", data.getIntOr("Gepakt", 0), data.getIntOr("Totaal", 0));
+        g.text(font, eend, x + 6, y + 21, 0xFFFFE27A);
+        int combo = data.getIntOr("Combo", 0);
         if (combo >= 2) {
             Component c = Component.translatable("gui.guhs.knuffelbad.hud.combo", combo);
             int col = (now / 3) % 2 == 0 ? 0xFFFF8FC8 : 0xFFFFFFFF;
-            g.drawString(font, c, x + w - 6 - font.width(c), y + 21, col);
+            g.text(font, c, x + w - 6 - font.width(c), y + 21, col);
         }
-        int best = data.getInt("Best"), record = data.getInt("Record");
+        int best = data.getIntOr("Best", 0), record = data.getIntOr("Record", 0);
         Component rec = Component.translatable("gui.guhs.knuffelbad.hud.record", best, record);
-        g.drawCenteredString(font, rec, x + w / 2, y + 34, 0xFFB8A8C8);
+        g.centeredText(font, rec, x + w / 2, y + 34, 0xFFB8A8C8);
         // speed and how far down the slide
         ZwembandjeEntity ring = KnuffelbadClient.eigenRing();
         if (ring != null) {
@@ -102,12 +102,12 @@ public final class GlijHud {
         if (now < popTot) {
             float f = (popTot - now) / 30f;
             String pop = "+" + popPunten;
-            g.pose().pushPose();
-            g.pose().translate(g.guiWidth() / 2f + 60, y + 70 + (1 - f) * -12, 0);
-            g.pose().scale(1.6f, 1.6f, 1f);
+            g.pose().pushMatrix();
+            g.pose().translate(g.guiWidth() / 2f + 60, y + 70 + (1 - f) * -12);
+            g.pose().scale(1.6f, 1.6f);
             int a = (int) (Mth.clamp(f * 2, 0, 1) * 255);
-            g.drawString(font, pop, -font.width(pop) / 2, 0, (a << 24) | 0xFFE27A, true);
-            g.pose().popPose();
+            g.text(font, pop, -font.width(pop) / 2, 0, (a << 24) | 0xFFE27A, true);
+            g.pose().popMatrix();
         }
     }
 }

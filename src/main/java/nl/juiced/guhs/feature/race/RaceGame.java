@@ -45,6 +45,7 @@ import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 import org.joml.Vector3f;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * A guhrace on one track (one race at a time per race guh NPC; it belongs to the NPC who lends out the race guh: the
  * Raceguh of the old racebaan, or Coach Vahoegvroem of the Guh-Circuit with its three tracks).
@@ -357,12 +358,12 @@ public final class RaceGame {
             return;
         }
         RaceGame game = new RaceGame(npc, track, player, baan, niveau);
-        RaceGuhEntity guh = RaceFeature.RACE_GUH.get().create(level);
+        RaceGuhEntity guh = RaceFeature.RACE_GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (guh == null) {
             return;
         }
         Vec3 pos = track.startPos();
-        guh.moveTo(pos.x, pos.y, pos.z, track.startYaw(), 0);
+        guh.snapTo(pos.x, pos.y, pos.z, track.startYaw(), 0);
         guh.setYHeadRot(track.startYaw());
         guh.setUpForRace();
         guh.setNiveau(niveau);
@@ -418,12 +419,12 @@ public final class RaceGame {
 
     @Nullable
     private RaceGhostEntity spawnGhost(ServerLevel level, boolean goud, Component name) {
-        RaceGhostEntity ghost = RaceFeature.RACE_GHOST.get().create(level);
+        RaceGhostEntity ghost = RaceFeature.RACE_GHOST.get().create(level, EntitySpawnReason.TRIGGERED);
         if (ghost == null) {
             return null;
         }
         Vec3 pos = track.startPos();
-        ghost.moveTo(pos.x, pos.y, pos.z, track.startYaw(), 0);
+        ghost.snapTo(pos.x, pos.y, pos.z, track.startYaw(), 0);
         ghost.setGuhScale(RaceGuhEntity.SCALE);
         ghost.setVariant(GuhVariant.NORMAL);
         ghost.equipSaddle(new ItemStack(net.minecraft.world.item.Items.SADDLE), null);
@@ -586,7 +587,7 @@ public final class RaceGame {
         if (graced) {
             // (nothing sends it back during the grace)
         } else if (player.getVehicle() == mount && offTrack > offLimit) {
-            player.displayClientMessage(Component.translatable("quest.guhs.race.off_track").withStyle(ChatFormatting.YELLOW), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.race.off_track").withStyle(ChatFormatting.YELLOW));
             backToCheckpoint(level, player, mount);
         } else if (player.getVehicle() == mount && (mount.isInFluidType() || fellOff(now.y) || !track.area.contains(now) || stuckTicks >= STUCK_TICKS)) {
             backToCheckpoint(level, player, mount);
@@ -671,8 +672,8 @@ public final class RaceGame {
             player.playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.7f, 1.4f);
         } else {
             next = (gate + 1) % track.gates.size();
-            player.displayClientMessage(Component.translatable("quest.guhs.race.checkpoint", gate, track.gates.size() - 1).append(deltaText())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.race.checkpoint", gate, track.gates.size() - 1).append(deltaText())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             player.playNotifySound(SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.9f, 1.2f + 0.1f * gate);
         }
         hud(player);
@@ -701,7 +702,7 @@ public final class RaceGame {
             if (game != null) {
                 game.pads++;
             }
-            rider.displayClientMessage(Component.translatable("quest.guhs.race.pad").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD), true);
+            rider.sendOverlayMessage(Component.translatable("quest.guhs.race.pad").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         }
     }
 
@@ -819,7 +820,7 @@ public final class RaceGame {
             resetChats++;
             player.sendSystemMessage(message);
         } else {
-            player.displayClientMessage(message, true);   // (again so soon: just above the hotbar, no chat spam)
+            player.sendOverlayMessage(message);   // (again so soon: just above the hotbar, no chat spam)
         }
         player.playNotifySound(ModSounds.GUH_HURT.get(), SoundSource.PLAYERS, 0.8f, 1.3f);
     }
@@ -979,7 +980,7 @@ public final class RaceGame {
 
     /** Grants a shown advancement (guhs:&lt;path&gt;) that has an impossible criterion "done". */
     public static void grant(ServerPlayer player, String path) {
-        var holder = player.server.getAdvancements().get(nl.juiced.guhs.Guhs.id(path));
+        var holder = player.level().getServer().getAdvancements().get(nl.juiced.guhs.Guhs.id(path));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }
@@ -1030,11 +1031,11 @@ public final class RaceGame {
     public static void playerGone(ServerPlayer player) {
         RaceGame game = RACERS.get(player.getUUID());
         if (game != null) {
-            ServerLevel home = player.server.getLevel(game.dimension);
+            ServerLevel home = player.level().getServer().getLevel(game.dimension);
             if (player.getVehicle() instanceof RaceGuhEntity) {
                 player.stopRiding();
             }
-            game.cleanup(home != null ? home : player.serverLevel(), false);
+            game.cleanup(home != null ? home : player.level(), false);
         }
     }
 
@@ -1047,8 +1048,8 @@ public final class RaceGame {
         if (game == null) {
             return;
         }
-        ServerLevel home = player.server.getLevel(game.dimension);
-        ServerLevel level = home != null ? home : player.serverLevel();
+        ServerLevel home = player.level().getServer().getLevel(game.dimension);
+        ServerLevel level = home != null ? home : player.level();
         if (level.getGameTime() - game.lastTick > 60) {
             game.end(level, Ending.GONE);
         }

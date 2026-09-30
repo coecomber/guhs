@@ -177,7 +177,7 @@ public class SleepInNestGoal extends Goal {
         if (guh.isTame() && guh.getOwner() instanceof ServerPlayer owner) {
             VadsAdvancements.grant(owner, "vadswoud_geslapen");
             VadsAdvancements.award(owner, "guhmension/vadswoud_nestje");
-            owner.displayClientMessage(Component.translatable("gui.guhs.vadswoud.slaapt", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            owner.sendOverlayMessage(Component.translatable("gui.guhs.vadswoud.slaapt", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -199,6 +199,6 @@ public class SleepInNestGoal extends Goal {
     private int sleepers(ServerLevel level, BlockPos nest) {
         long key = nest.asLong();
         return level.getEntitiesOfClass(GuhEntity.class, new AABB(nest).inflate(SEARCH),
-                g -> g != guh && g.getPersistentData().contains(NEST) && g.getPersistentData().getLong(NEST) == key).size();
+                g -> g != guh && g.getPersistentData().contains(NEST) && g.getPersistentData().getLongOr(NEST, 0L) == key).size();
     }
 }

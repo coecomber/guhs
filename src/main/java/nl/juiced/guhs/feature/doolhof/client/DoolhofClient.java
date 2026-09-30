@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.doolhof.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import nl.juiced.guhs.Guhs;
@@ -10,8 +10,8 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.doolhof.DoolhofFeature;
 import nl.juiced.guhs.feature.doolhof.DoolhofMikaEntity;
 import nl.juiced.guhs.feature.doolhof.DoolhofPayloads;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * Client side of Het Guhdoolhof: the Heg-Mika (the Mika's model with twigs and leaves, own texture), Meneer
@@ -23,7 +23,7 @@ public final class DoolhofClient {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> event.registerEntityRenderer(DoolhofFeature.MIKA.get(),
                 context -> new GeoEntityRenderer<DoolhofMikaEntity>(context, new DefaultedEntityGeoModel<DoolhofMikaEntity>(Guhs.id("doolhof_mika"), true) {
                     @Override
-                    public ResourceLocation getAnimationResource(DoolhofMikaEntity mika) {
+                    public Identifier getAnimationResource(DoolhofMikaEntity mika) {
                         return Guhs.id("animations/entity/guh.animation.json");
                     }
                 }) {

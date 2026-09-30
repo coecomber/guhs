@@ -75,7 +75,7 @@ public class KaasmoerasPoelFeature extends Feature<NoneFeatureConfiguration> {
                 }
             }
         }
-        if (high - low > 2 || low <= level.getMinBuildHeight() + 4) {
+        if (high - low > 2 || low <= level.getMinY() + 4) {
             return false;
         }
         int top = low - 1;   // the water (or the bubbling cheese) is level with the lowest ground around

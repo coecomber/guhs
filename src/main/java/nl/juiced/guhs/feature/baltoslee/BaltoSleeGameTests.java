@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,8 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.Minigames;
@@ -24,6 +22,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.quest.Scorebord;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the sled (3.0, balto-slee), on a made-up route over a snowy test field (the real Nomguh route is balto's):
  * the track and the route tag (the same on every side), the medicine ride's moments in order with its pauses (verder, the
@@ -32,8 +31,6 @@ import nl.juiced.guhs.registry.ModEntities;
  * sledesprint (score on the board, sledebelletjes, beating Steele-Mika), Steele-Mika's role and shop, and your own sneeuwslee
  * that only runs on snow.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class BaltoSleeGameTests {
     private static final String BAAN = "baltoslee_test_baan";
     private static final String VELD = "baltoslee_test_veld";
@@ -45,7 +42,7 @@ public class BaltoSleeGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(new BlockPos(2, 2, 2));
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -57,7 +54,7 @@ public class BaltoSleeGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -93,7 +90,7 @@ public class BaltoSleeGameTests {
     // =================================================================================================================
 
     /** The track is smooth and follows its points; the route tag gives every side exactly the same track and zones. */
-    @GameTest(template = BAAN, batch = BATCH)
+    @GuhTest(template = BAAN, batch = BATCH)
     public static void baltosleeBaanEnRouteTag(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         RitRoute r = RitRoute.maak(level, route(helper));
@@ -135,7 +132,7 @@ public class BaltoSleeGameTests {
     // =================================================================================================================
 
     /** START, BERGHUT (waits for verder), DIEPTEPUNT (waits; the storm clears), AANKOMST: in this order, each once. */
-    @GameTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
     public static void baltosleeTochtMomentenOpVolgorde(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper);
@@ -188,7 +185,7 @@ public class BaltoSleeGameTests {
     }
 
     /** Without balto the pauses go on by themselves (and the storm clears at the dieptepunt). */
-    @GameTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
     public static void baltosleePauzeGaatVanzelfVerder(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper);
@@ -214,7 +211,7 @@ public class BaltoSleeGameTests {
     }
 
     /** Too late on the way back: TE_LAAT, off at the stable. "Njeg, nog een keer!" */
-    @GameTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
     public static void baltosleeTeLaat(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper);
@@ -252,7 +249,7 @@ public class BaltoSleeGameTests {
      * Into the avalanche: buried once, the sled goes back before it (a new generation). An old report of the rider's game
      * (the old generation, far past the avalanche) changes nothing; the next time past it (dodging) counts as dodged.
      */
-    @GameTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
     public static void baltosleeResetNooitDubbel(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper);
@@ -297,7 +294,7 @@ public class BaltoSleeGameTests {
     }
 
     /** Stop at a vuurkorf: the dogs rest and warm up (once per rest point per leg). */
-    @GameTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
     public static void baltosleeRustBijVuurkorf(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper);
@@ -331,7 +328,7 @@ public class BaltoSleeGameTests {
     // =================================================================================================================
 
     /** A race on makkelijk flat out: the time on the board, sledebelletjes, Steele-Mika beaten, his sled gone after. */
-    @GameTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = BAAN, batch = BATCH, timeoutTicks = 200)
     public static void baltosleeSprintScore(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper);
@@ -345,7 +342,7 @@ public class BaltoSleeGameTests {
             rijd(rit, level, 600, () -> false);
             helper.assertFalse(rit.bezig(), "finished");
             int tijd = rit.rijTijd();
-            List<Scorebord.Entry> top = Scorebord.top(p.server, SleeRit.bord(Niveau.MAKKELIJK));
+            List<Scorebord.Entry> top = Scorebord.top(p.level().getServer(), SleeRit.bord(Niveau.MAKKELIJK));
             helper.assertTrue(top.stream().anyMatch(e -> e.player().equals(p.getUUID()) && e.score() == tijd), "the time on the board: " + top);
             helper.assertTrue(SleeRit.best(p, Niveau.MAKKELIJK) == tijd, "your own best");
             int bellen = GuhQuests.count(p, BaltoSleeFeature.SLEDEBELLETJE.get());
@@ -365,14 +362,14 @@ public class BaltoSleeGameTests {
     }
 
     /** Steele-Mika at the start line (plek "sledesprint") is ours: the race role, the deco shop for sledebelletjes. */
-    @GameTest(template = BAAN, batch = BATCH)
+    @GuhTest(template = BAAN, batch = BATCH)
     public static void baltosleeSteeleEnWinkel(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level);
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
         npc.setKind(GuhNpcEntity.Kind.STEELE_MIKA);
         npc.roleData.putString(NpcRollen.PLEK, SteeleSprint.PLEK);
         BlockPos at = helper.absolutePos(new BlockPos(1, 2, 3));
-        npc.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        npc.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         level.addFreshEntity(npc);
         try {
             helper.assertTrue(NpcRollen.van(npc) instanceof SteeleSprint, "Steele-Mika of the sledesprint: " + NpcRollen.van(npc));
@@ -402,14 +399,14 @@ public class BaltoSleeGameTests {
     // =================================================================================================================
 
     /** Your own sneeuwslee runs on snow and hardly moves on grass. */
-    @GameTest(template = VELD, batch = BATCH)
+    @GuhTest(template = VELD, batch = BATCH)
     public static void baltosleeEigenSleeAlleenOpSneeuw(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         double[] afstand = new double[2];
         for (int k = 0; k < 2; k++) {
-            SneeuwsleeEntity s = BaltoSleeFeature.SNEEUWSLEE_ENTITY.get().create(level);
+            SneeuwsleeEntity s = BaltoSleeFeature.SNEEUWSLEE_ENTITY.get().create(level, EntitySpawnReason.TRIGGERED);
             BlockPos at = helper.absolutePos(new BlockPos(2, 2, k == 0 ? 3 : 10));
-            s.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, -90f, 0);      // (facing +x, along its strip)
+            s.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, -90f, 0);      // (facing +x, along its strip)
             level.addFreshEntity(s);
             Vec3 start = s.position();
             for (int i = 0; i < 40; i++) {
@@ -425,7 +422,7 @@ public class BaltoSleeGameTests {
     }
 
     /** 3.0 crash fix: the mod's own entity-event ids never collide with a vanilla one (63 = Sniffer cast in the client). */
-    @GameTest(template = BAAN, batch = BATCH)
+    @GuhTest(template = BAAN, batch = BATCH)
     public static void baltosleeEventIdsBotsenNiet(GameTestHelper helper) {
         var botsingen = nl.juiced.guhs.entity.EntiteitEvents.botsingen();
         helper.assertTrue(botsingen.isEmpty(), "custom entity events collide with vanilla: " + botsingen);

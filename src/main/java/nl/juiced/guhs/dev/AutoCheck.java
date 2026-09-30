@@ -38,7 +38,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
@@ -46,9 +46,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelSettings;
@@ -171,7 +171,7 @@ public final class AutoCheck {
         }
     }
 
-    private static boolean structureDone(ResourceLocation id, String dim) {
+    private static boolean structureDone(Identifier id, String dim) {
         String prefix = "structure:" + id + "@" + dim;
         for (String k : done) {
             if (k.equals(prefix) || k.startsWith(prefix + " ")) {
@@ -594,7 +594,7 @@ public final class AutoCheck {
                     }
                     m.appendTail(sb);
                     String c = sb.toString();
-                    String dimId = lastDim.location().toString();
+                    String dimId = lastDim.identifier().toString();
                     queue.addFirst(command("execute in " + dimId + " run " + (c.startsWith("/") ? c.substring(1) : c)));
                     return true;
                 };
@@ -606,7 +606,7 @@ public final class AutoCheck {
                     double r = Double.parseDouble(a[4]);
                     var emote = nl.juiced.guhs.feature.emotes.Emote.valueOf(a[5].toUpperCase(Locale.ROOT));
                     int n = 0;
-                    for (var g : sp.serverLevel().getEntitiesOfClass(nl.juiced.guhs.entity.GuhEntity.class, new net.minecraft.world.phys.AABB(c, c).inflate(r))) {
+                    for (var g : sp.level().getEntitiesOfClass(nl.juiced.guhs.entity.GuhEntity.class, new net.minecraft.world.phys.AABB(c, c).inflate(r))) {
                         // (emotes stop on NoAI guhs: give it its AI back, it's standing on the platform)
                         g.setNoAi(false);
                         g.setOnGround(true);
@@ -756,7 +756,7 @@ public final class AutoCheck {
                 // doolhofstart <makkelijk|medium|lastig>: start a doolhof game at the nearest doolhofguh (within 400 blocks)
                 return server(server -> {
                     ServerPlayer sp = player(server);
-                    for (Entity e : sp.serverLevel().getEntities((Entity) null, sp.getBoundingBox().inflate(400, 200, 400),
+                    for (Entity e : sp.level().getEntities((Entity) null, sp.getBoundingBox().inflate(400, 200, 400),
                             e -> e instanceof nl.juiced.guhs.entity.GuhNpcEntity n && n.getKind().id().equals("doolhofguh"))) {
                         var game = nl.juiced.guhs.feature.doolhof.DoolhofGame.start((nl.juiced.guhs.entity.GuhNpcEntity) e, sp,
                                 nl.juiced.guhs.feature.spelen.Niveau.valueOf(a[1].toUpperCase(Locale.ROOT)));
@@ -774,13 +774,13 @@ public final class AutoCheck {
                 // kart <x> <y> <z> <yaw>: a race guh there, the player steering, the nearest own band guh on the second seat
                 return server(server -> {
                     ServerPlayer sp = player(server);
-                    ServerLevel level = sp.serverLevel();
-                    var race = nl.juiced.guhs.feature.race.RaceFeature.RACE_GUH.get().create(level);
+                    ServerLevel level = sp.level();
+                    var race = nl.juiced.guhs.feature.race.RaceFeature.RACE_GUH.get().create(level, EntitySpawnReason.TRIGGERED);
                     if (race == null) {
                         return "no race guh";
                     }
                     float yaw = Float.parseFloat(a[4]);
-                    race.moveTo(Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3]), yaw, 0);
+                    race.snapTo(Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3]), yaw, 0);
                     race.setYBodyRot(yaw);
                     race.setYHeadRot(yaw);
                     level.addFreshEntity(race);
@@ -814,8 +814,8 @@ public final class AutoCheck {
                 // the Regenboogbaan (size, step height, level, the rainbow jump unless nosprong), the player steering
                 return server(server -> {
                     ServerPlayer sp = player(server);
-                    ServerLevel level = sp.serverLevel();
-                    var race = nl.juiced.guhs.feature.race.RaceFeature.RACE_GUH.get().create(level);
+                    ServerLevel level = sp.level();
+                    var race = nl.juiced.guhs.feature.race.RaceFeature.RACE_GUH.get().create(level, EntitySpawnReason.TRIGGERED);
                     if (race == null) {
                         return "no race guh";
                     }
@@ -823,7 +823,7 @@ public final class AutoCheck {
                     race.setUpForRace();
                     race.setNiveau(nl.juiced.guhs.feature.spelen.Niveau.valueOf(a[5].toUpperCase(Locale.ROOT)));
                     race.setSprongen(!(a.length > 6 && a[6].equalsIgnoreCase("nosprong")));
-                    race.moveTo(Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3]), yaw, 0);
+                    race.snapTo(Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3]), yaw, 0);
                     race.setYBodyRot(yaw);
                     race.setYHeadRot(yaw);
                     level.addFreshEntity(race);
@@ -869,8 +869,8 @@ public final class AutoCheck {
                     queue.addFirst(server(server -> {
                         ServerPlayer sp = player(server);
                         Entity best = null;
-                        for (Entity e : sp.serverLevel().getEntities((Entity) null, sp.getBoundingBox().inflate(200, 100, 200),
-                                e -> e.getTags().contains(a[1]))) {
+                        for (Entity e : sp.level().getEntities((Entity) null, sp.getBoundingBox().inflate(200, 100, 200),
+                                e -> e.entityTags().contains(a[1]))) {
                             if (best == null || e.distanceToSqr(sp) < best.distanceToSqr(sp)) {
                                 best = e;
                             }
@@ -894,7 +894,7 @@ public final class AutoCheck {
                     ServerPlayer sp = player(server);
                     var c = new Vec3(Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3]));
                     int n = 0;
-                    for (var g : sp.serverLevel().getEntitiesOfClass(nl.juiced.guhs.entity.GuhEntity.class,
+                    for (var g : sp.level().getEntitiesOfClass(nl.juiced.guhs.entity.GuhEntity.class,
                             new net.minecraft.world.phys.AABB(c, c).inflate(Double.parseDouble(a[4])))) {
                         nl.juiced.guhs.feature.speelgoed.SpeelGoal.TEST_ALTIJD.add(g.getUUID());
                         n++;
@@ -906,8 +906,8 @@ public final class AutoCheck {
                 return server(server -> {
                     ServerPlayer sp = player(server);
                     Entity best = null;
-                    for (Entity e : sp.serverLevel().getEntities((Entity) null, sp.getBoundingBox().inflate(200, 100, 200),
-                            e -> e.getTags().contains(a[1]))) {
+                    for (Entity e : sp.level().getEntities((Entity) null, sp.getBoundingBox().inflate(200, 100, 200),
+                            e -> e.entityTags().contains(a[1]))) {
                         if (best == null || e.distanceToSqr(sp) < best.distanceToSqr(sp)) {
                             best = e;
                         }
@@ -988,7 +988,7 @@ public final class AutoCheck {
             if (mc.screen instanceof ReceivingLevelScreen || mc.level == null || mc.player == null) {
                 return t[0] > maxTicks * 2;
             }
-            int cx = mc.player.chunkPosition().x, cz = mc.player.chunkPosition().z;
+            int cx = mc.player.chunkPosition().x(), cz = mc.player.chunkPosition().z();
             int r = Math.max(2, Math.min(7, mc.options.getEffectiveRenderDistance() - 2));
             boolean loaded = true;
             for (int x = -r; x <= r && loaded; x++) {
@@ -1138,7 +1138,7 @@ public final class AutoCheck {
     private static Action teleport(ResourceKey<Level> dim, Vec3 pos, float yaw, float pitch) {
         return server(server -> {
             ServerPlayer sp = player(server);
-            ServerLevel level = dim == null ? sp.serverLevel() : server.getLevel(dim);
+            ServerLevel level = dim == null ? sp.level() : server.getLevel(dim);
             sp.teleportTo(level, pos.x, pos.y, pos.z, yaw, pitch);
             return true;
         }, ok -> {
@@ -1151,7 +1151,7 @@ public final class AutoCheck {
     private static Action useBlock(BlockPos pos) {
         return server(server -> {
             ServerPlayer sp = player(server);
-            ServerLevel level = sp.serverLevel();
+            ServerLevel level = sp.level();
             BlockState st = level.getBlockState(pos);
             var hit = new BlockHitResult(Vec3.atCenterOf(pos), net.minecraft.core.Direction.UP, pos, false);
             return st.useWithoutItem(level, sp, hit).toString();
@@ -1389,9 +1389,9 @@ public final class AutoCheck {
                 String which = a.length > 2 ? a[2] : "guhs";
                 String prefix = a.length > 3 ? a[3] : "gui_creative";
                 return mc -> {
-                    List<Map.Entry<ResourceLocation, CreativeModeTab>> tabs = new ArrayList<>();
+                    List<Map.Entry<Identifier, CreativeModeTab>> tabs = new ArrayList<>();
                     for (var e : BuiltInRegistries.CREATIVE_MODE_TAB.entrySet()) {
-                        ResourceLocation id = e.getKey().location();
+                        Identifier id = e.getKey().identifier();
                         if (id.getNamespace().equals(which) || id.toString().equals(which)) {
                             tabs.add(Map.entry(id, e.getValue()));
                         }
@@ -1709,17 +1709,17 @@ public final class AutoCheck {
             opened = true;
             queue.addFirst(server(server -> {
                 ServerPlayer sp = player(server);
-                ServerLevel level = sp.serverLevel();
+                ServerLevel level = sp.level();
                 nl.juiced.guhs.feature.huisje.Huisje h = nl.juiced.guhs.feature.huisje.HuisjeBlock.bouw(level, pos,
                         net.minecraft.core.Direction.SOUTH, nl.juiced.guhs.feature.huisje.HuisjeMaat.GROOT, sp.getUUID());
                 BlockPos d = h.deur();
                 for (int i = 0; i < 3; i++) {
-                    net.minecraft.world.entity.TamableAnimal t = i < 2 ? nl.juiced.guhs.registry.ModEntities.GUH.get().create(level)
-                            : nl.juiced.guhs.feature.piep.PiepFeature.PIEPPIEPMUISJE.get().create(level);
+                    net.minecraft.world.entity.TamableAnimal t = i < 2 ? nl.juiced.guhs.registry.ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED)
+                            : nl.juiced.guhs.feature.piep.PiepFeature.PIEPPIEPMUISJE.get().create(level, EntitySpawnReason.TRIGGERED);
                     if (t == null) {
                         continue;
                     }
-                    t.moveTo(d.getX() + 0.5 + (i - 1) * 1.5, d.getY(), d.getZ() + 2.5, 180, 0);
+                    t.snapTo(d.getX() + 0.5 + (i - 1) * 1.5, d.getY(), d.getZ() + 2.5, 180, 0);
                     t.tame(sp);
                     if (t instanceof nl.juiced.guhs.entity.GuhEntity g && i == 1) {
                         g.setVariant(nl.juiced.guhs.entity.GuhVariant.MINT);
@@ -1741,15 +1741,15 @@ public final class AutoCheck {
     private static Action verhaalguh(String id, BlockPos pos) {
         return server(server -> {
             ServerPlayer sp = player(server);
-            ServerLevel level = sp.serverLevel();
+            ServerLevel level = sp.level();
             nl.juiced.guhs.feature.verhaal.VerhaalGuh g = nl.juiced.guhs.feature.verhaal.VerhaalGuh.byId(id);
             if (g == null) {
                 return "verhaalguh: unknown " + id;
             }
-            nl.juiced.guhs.entity.GuhEntity guh = nl.juiced.guhs.registry.ModEntities.GUH.get().create(level);
+            nl.juiced.guhs.entity.GuhEntity guh = nl.juiced.guhs.registry.ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
             guh.setVariant(g.variant());
             guh.setGuhScale(nl.juiced.guhs.feature.verhaal.VerhaalGuhs.SCHAAL);
-            guh.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 180, 0);
+            guh.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 180, 0);
             level.addFreshEntity(guh);
             guh.tame(sp);
             var gedrag = nl.juiced.guhs.feature.verhaal.VariantGedragen.van(guh);
@@ -1766,11 +1766,11 @@ public final class AutoCheck {
             opened = true;
             queue.addFirst(server(server -> {
                 ServerPlayer sp = player(server);
-                ServerLevel level = sp.serverLevel();
-                nl.juiced.guhs.entity.GuhEntity guh = nl.juiced.guhs.registry.ModEntities.GUH.get().create(level);
+                ServerLevel level = sp.level();
+                nl.juiced.guhs.entity.GuhEntity guh = nl.juiced.guhs.registry.ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
                 guh.setCustomName(net.minecraft.network.chat.Component.literal("Wolkje"));
                 guh.setVariant(nl.juiced.guhs.entity.GuhVariant.SNOW);
-                guh.moveTo(sp.getX() + 2, sp.getY(), sp.getZ(), 0, 0);
+                guh.snapTo(sp.getX() + 2, sp.getY(), sp.getZ(), 0, 0);
                 level.addFreshEntity(guh);
                 guh.tame(sp);
                 guh.kill();
@@ -1785,7 +1785,7 @@ public final class AutoCheck {
     /** A klein Guhhuisje of someone else (owner name naam) at pos: the owner line, and no breaking or changing for you. */
     private static Action huisjeVan(String naam, BlockPos pos) {
         return server(server -> {
-            ServerLevel level = player(server).serverLevel();
+            ServerLevel level = player(server).level();
             java.util.UUID ander = java.util.UUID.nameUUIDFromBytes(("OfflinePlayer:" + naam).getBytes(java.nio.charset.StandardCharsets.UTF_8));
             nl.juiced.guhs.feature.huisje.Huisje h = nl.juiced.guhs.feature.huisje.HuisjeBlock.bouw(level, pos, net.minecraft.core.Direction.SOUTH,
                     nl.juiced.guhs.feature.huisje.HuisjeMaat.KLEIN, ander);
@@ -1800,7 +1800,7 @@ public final class AutoCheck {
             opened = true;
             queue.addFirst(server(server -> {
                 ServerPlayer sp = player(server);
-                nl.juiced.guhs.feature.huisje.Huisje h = nl.juiced.guhs.feature.huisje.Huisjes.van(sp.serverLevel(), pos);
+                nl.juiced.guhs.feature.huisje.Huisje h = nl.juiced.guhs.feature.huisje.Huisjes.van(sp.level(), pos);
                 if (h == null) {
                     return "no huisje at " + pos.toShortString();
                 }
@@ -1828,7 +1828,7 @@ public final class AutoCheck {
     private static Action interactEntityJob(BlockPos pos, @javax.annotation.Nullable String type, String how) {
         return server(server -> {
             ServerPlayer sp = player(server);
-            ServerLevel level = sp.serverLevel();
+            ServerLevel level = sp.level();
             var box = new net.minecraft.world.phys.AABB(pos).inflate(6);
             Entity best = null;
             double bestD = Double.MAX_VALUE;
@@ -1878,7 +1878,7 @@ public final class AutoCheck {
     private static Action goToNpc(String kind, double dist, double dy) {
         return server(server -> {
             ServerPlayer sp = player(server);
-            ServerLevel level = sp.serverLevel();
+            ServerLevel level = sp.level();
             var box = sp.getBoundingBox().inflate(400, 200, 400);
             Entity best = null;
             double bestD = Double.MAX_VALUE;
@@ -1923,7 +1923,7 @@ public final class AutoCheck {
     private static Action interactNpcJob() {
         return server(server -> {
             ServerPlayer sp = player(server);
-            Entity e = sp.serverLevel().getEntity(lastNpc);
+            Entity e = sp.level().getEntity(lastNpc);
             if (e == null) {
                 return "interact npc: no npc";
             }
@@ -2033,28 +2033,28 @@ public final class AutoCheck {
 
     private static void expandTpLocate(Minecraft mc, String dimArg, String structArg) {
         var server = mc.getSingleplayerServer();
-        var reg = server.registryAccess().registryOrThrow(Registries.STRUCTURE);
-        List<ResourceLocation> ids = new ArrayList<>();
+        var reg = server.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+        List<Identifier> ids = new ArrayList<>();
         if (structArg.equals("all")) {
             reg.keySet().stream().filter(id -> id.getNamespace().equals("guhs")).sorted().forEach(ids::add);
         } else {
-            ids.add(ResourceLocation.parse(structArg.contains(":") ? structArg : "guhs:" + structArg));
+            ids.add(Identifier.parse(structArg.contains(":") ? structArg : "guhs:" + structArg));
         }
         List<Action> acts = new ArrayList<>();
         acts.add(mc2 -> {
             note("structures to check: " + ids.size());
             return true;
         });
-        for (ResourceLocation id : ids) {
+        for (Identifier id : ids) {
             // which dimensions can have it
             acts.add(server(s -> {
                 List<String> dims = new ArrayList<>();
-                Holder<Structure> holder = s.registryAccess().registryOrThrow(Registries.STRUCTURE).getHolder(ResourceKey.create(Registries.STRUCTURE, id)).orElse(null);
+                Holder<Structure> holder = s.registryAccess().lookupOrThrow(Registries.STRUCTURE).getHolder(ResourceKey.create(Registries.STRUCTURE, id)).orElse(null);
                 if (holder == null) {
                     return dims;
                 }
                 for (ServerLevel level : s.getAllLevels()) {
-                    String d = level.dimension().location().toString();
+                    String d = level.dimension().identifier().toString();
                     if (!dimArg.equals("auto") && !d.equals(dimArg)) {
                         continue;
                     }
@@ -2087,9 +2087,9 @@ public final class AutoCheck {
         }
     }
 
-    private static List<Action> structureShots(ResourceLocation id, String dim, boolean suffixDim) {
-        String base = "structure_" + id.getPath() + (suffixDim ? "__" + ResourceLocation.parse(dim).getPath() : "");
-        ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(dim));
+    private static List<Action> structureShots(Identifier id, String dim, boolean suffixDim) {
+        String base = "structure_" + id.getPath() + (suffixDim ? "__" + Identifier.parse(dim).getPath() : "");
+        ResourceKey<Level> dimKey = ResourceKey.create(Registries.DIMENSION, Identifier.parse(dim));
         Found[] found = {null};
         String[] okKey = {null};
         List<Action> acts = new ArrayList<>();
@@ -2187,17 +2187,17 @@ public final class AutoCheck {
 
     private static ServerLevel levelOf(String dim) {
         var server = Minecraft.getInstance().getSingleplayerServer();
-        return server == null ? null : server.getLevel(ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(dim)));
+        return server == null ? null : server.getLevel(ResourceKey.create(Registries.DIMENSION, Identifier.parse(dim)));
     }
 
     private static int levelTop(String dim) {
         ServerLevel l = levelOf(dim);
-        return l == null ? Integer.MAX_VALUE : l.getMaxBuildHeight();
+        return l == null ? Integer.MAX_VALUE : l.getMaxY() + 1;
     }
 
     private static int levelBottom(String dim) {
         ServerLevel l = levelOf(dim);
-        return l == null ? Integer.MIN_VALUE : l.getMinBuildHeight();
+        return l == null ? Integer.MIN_VALUE : l.getMinY();
     }
 
     private static void cameraShot(List<Action> sub, ResourceKey<Level> dim, Vec3 cam, Vec3 target, String name) {
@@ -2229,11 +2229,11 @@ public final class AutoCheck {
         sub.add(shot(name, false));
     }
 
-    private static Found locate(net.minecraft.server.MinecraftServer s, ResourceLocation id, ResourceKey<Level> dim) {
+    private static Found locate(net.minecraft.server.MinecraftServer s, Identifier id, ResourceKey<Level> dim) {
         ServerLevel level = s.getLevel(dim);
-        Holder<Structure> holder = s.registryAccess().registryOrThrow(Registries.STRUCTURE).getHolder(ResourceKey.create(Registries.STRUCTURE, id)).orElse(null);
+        Holder<Structure> holder = s.registryAccess().lookupOrThrow(Registries.STRUCTURE).getHolder(ResourceKey.create(Registries.STRUCTURE, id)).orElse(null);
         if (level == null || holder == null) {
-            return new Found(dim.location().toString(), null, null, 0, "", false, "unknown dimension/structure");
+            return new Found(dim.identifier().toString(), null, null, 0, "", false, "unknown dimension/structure");
         }
         BlockPos origin = new BlockPos(0, 64, 0);
         String lastErr = "not found within 100 chunks (like /locate)";
@@ -2285,9 +2285,9 @@ public final class AutoCheck {
                 tplPos = pe.getPosition();
                 tplRot = pe.getRotation();
             }
-            return new Found(dim.location().toString(), pos, b, start.getPieces().size(), terrain.toString(), underground, null, eerste, tplPos, tplRot);
+            return new Found(dim.identifier().toString(), pos, b, start.getPieces().size(), terrain.toString(), underground, null, eerste, tplPos, tplRot);
         }
-        return new Found(dim.location().toString(), null, null, 0, "", false, lastErr);
+        return new Found(dim.identifier().toString(), null, null, 0, "", false, lastErr);
     }
 
     // ------------------------------------------------------------------------------------------------ biomes
@@ -2296,13 +2296,13 @@ public final class AutoCheck {
         var server = mc.getSingleplayerServer();
         List<Action> acts = new ArrayList<>();
         for (ServerLevel level : server.getAllLevels()) {
-            String d = level.dimension().location().toString();
+            String d = level.dimension().identifier().toString();
             if (!dimArg.equals("auto") && !d.equals(dimArg)) {
                 continue;
             }
             var possible = level.getChunkSource().getGenerator().getBiomeSource().possibleBiomes();
             for (Holder<Biome> h : possible) {
-                ResourceLocation id = h.unwrapKey().map(ResourceKey::location).orElse(null);
+                Identifier id = h.unwrapKey().map(ResourceKey::location).orElse(null);
                 if (id == null) {
                     continue;
                 }
@@ -2320,7 +2320,7 @@ public final class AutoCheck {
         }
     }
 
-    private static List<Action> biomeShot(ResourceKey<Level> dim, ResourceLocation biome) {
+    private static List<Action> biomeShot(ResourceKey<Level> dim, Identifier biome) {
         List<Action> acts = new ArrayList<>();
         Vec3[] cam = {null};
         float[] rot = {0, 0};
@@ -2339,7 +2339,7 @@ public final class AutoCheck {
             level.getChunk(p.getX() >> 4, p.getZ() >> 4);
             if (level.dimensionType().hasCeiling()) {
                 // find the biggest cave space in a few columns around it, then look the most open way
-                int minY = level.getMinBuildHeight() + 1, maxY = level.getMinBuildHeight() + level.getLogicalHeight() - 2;
+                int minY = level.getMinY() + 1, maxY = level.getMinY() + level.getLogicalHeight() - 2;
                 int bestLen = -1, bestX = p.getX(), bestZ = p.getZ(), bestFloor = p.getY();
                 for (int dx = -24; dx <= 24; dx += 8) {
                     for (int dz = -24; dz <= 24; dz += 8) {
@@ -2380,7 +2380,7 @@ public final class AutoCheck {
                 return new Vec3[] {camPos, target, new Vec3(bestLen, bestFloor, bestDist)};
             }
             int h = level.getHeight(Heightmap.Types.MOTION_BLOCKING, p.getX(), p.getZ());
-            if (h <= level.getMinBuildHeight() + 1) {
+            if (h <= level.getMinY() + 1) {
                 h = Math.max(p.getY(), 64); // void (guheinde): look around the found height
             } else if (p.getY() < h - 16) {
                 // a cave biome: the camera goes into the rock (spectator x-ray) at the found height
@@ -2391,14 +2391,14 @@ public final class AutoCheck {
                     new Vec3(h, 0, p.getY())};
         }, r -> {
             if (r == null) {
-                problem("BIOME " + biome + " in " + dim.location() + ": not found within 6400 blocks");
+                problem("BIOME " + biome + " in " + dim.identifier() + ": not found within 6400 blocks");
                 return;
             }
             cam[0] = r[0];
             float[] lr = lookAt(r[0], r[1]);
             rot[0] = lr[0];
             rot[1] = Math.min(35, lr[1]);
-            note(String.format("BIOME %s in %s: camera at %s", biome, dim.location(), BlockPos.containing(r[0]).toShortString()));
+            note(String.format("BIOME %s in %s: camera at %s", biome, dim.identifier(), BlockPos.containing(r[0]).toShortString()));
         }));
         acts.add(mc -> {
             if (cam[0] == null) {
@@ -2408,9 +2408,9 @@ public final class AutoCheck {
             sub.add(teleport(dim, cam[0], rot[0], rot[1]));
             sub.add(waitTicks(10));
             sub.add(waitRender(300));
-            sub.add(shot("biome_" + dim.location().getPath() + "_" + biome.getPath(), false));
+            sub.add(shot("biome_" + dim.identifier().getPath() + "_" + biome.getPath(), false));
             sub.add(mc2 -> {
-                markDone("biome:" + dim.location() + ":" + biome);
+                markDone("biome:" + dim.identifier() + ":" + biome);
                 return true;
             });
             for (int i = sub.size() - 1; i >= 0; i--) {
@@ -2454,7 +2454,7 @@ public final class AutoCheck {
             case "entities", "bosses" -> {
                 boolean bosses = group.equals("bosses");
                 for (var e : BuiltInRegistries.ENTITY_TYPE.entrySet()) {
-                    ResourceLocation id = e.getKey().location();
+                    Identifier id = e.getKey().identifier();
                     if (!id.getNamespace().equals("guhs") || id.getPath().equals("guh") || id.getPath().equals("guh_npc")) {
                         continue;
                     }
@@ -2480,7 +2480,7 @@ public final class AutoCheck {
             double[] geo = new double[3]; // centreX, distance, maxHeight
             List<Object[]> placedOnes = new ArrayList<>(); // {id, x, width, height}
             acts.add(server(s -> {
-                ServerLevel level = player(s).serverLevel();
+                ServerLevel level = player(s).level();
                 clearTagged(level, origin, 80);
                 platform(level, origin, 44, 24);
                 List<String> spawned = new ArrayList<>();
@@ -2501,7 +2501,7 @@ public final class AutoCheck {
                     }
                     double w = Math.max(1.6, e.getBbWidth() + 1.4);
                     double ex = x + w / 2;
-                    e.moveTo(ex, origin.getY() + 1, origin.getZ() + 0.5, 0, 0);
+                    e.snapTo(ex, origin.getY() + 1, origin.getZ() + 0.5, 0, 0);
                     e.setYHeadRot(0);
                     if (e instanceof LivingEntity le) {
                         le.yBodyRot = 0;
@@ -2526,7 +2526,7 @@ public final class AutoCheck {
             acts.add(waitTicks(30));
             // which ones removed themselves (discard in their own tick)?
             acts.add(server(s -> {
-                ServerLevel level = player(s).serverLevel();
+                ServerLevel level = player(s).level();
                 List<String> gone = new ArrayList<>();
                 for (Object[] one : placedOnes) {
                     Entity e = level.getEntity((java.util.UUID) one[4]);
@@ -2580,7 +2580,7 @@ public final class AutoCheck {
             });
         }
         acts.add(server(s -> {
-            clearTagged(player(s).serverLevel(), origin, 80);
+            clearTagged(player(s).level(), origin, 80);
             return true;
         }, ok -> markDone("lineup:" + group)));
         for (int i = acts.size() - 1; i >= 0; i--) {
@@ -2601,7 +2601,7 @@ public final class AutoCheck {
         }
         if (finalize && e instanceof Mob mob) {
             try {
-                mob.finalizeSpawn(level, level.getCurrentDifficultyAt(BlockPos.containing(mob.position())), MobSpawnType.COMMAND, null);
+                mob.finalizeSpawn(level, level.getCurrentDifficultyAt(BlockPos.containing(mob.position())), EntitySpawnReason.COMMAND, null);
             } catch (Exception ex) {
                 problem("finalizeSpawn " + type + ": " + ex);
             }
@@ -2614,7 +2614,7 @@ public final class AutoCheck {
     }
 
     private static void clearTagged(ServerLevel level, BlockPos origin, int r) {
-        for (Entity e : level.getEntities((Entity) null, new AABB(origin).inflate(r), en -> en.getTags().contains(TAG))) {
+        for (Entity e : level.getEntities((Entity) null, new AABB(origin).inflate(r), en -> en.entityTags().contains(TAG))) {
             e.discard();
         }
         // also whatever the batch left behind (projectiles, items, xp...)
@@ -2653,7 +2653,7 @@ public final class AutoCheck {
         t.put("transformation", tr);
         Entity e = EntityType.loadEntityRecursive(t, level, en -> en);
         if (e != null) {
-            e.moveTo(x, y, z, 0, 0);
+            e.snapTo(x, y, z, 0, 0);
             e.addTag(TAG);
             level.addFreshEntity(e);
         }
@@ -2682,9 +2682,9 @@ public final class AutoCheck {
         List<Block> blocks = new ArrayList<>();
         List<String> skipped = new ArrayList<>();
         for (var e : BuiltInRegistries.BLOCK.entrySet()) {
-            if (e.getKey().location().getNamespace().equals("guhs")) {
+            if (e.getKey().identifier().getNamespace().equals("guhs")) {
                 if (e.getValue() instanceof LiquidBlock) {
-                    skipped.add(e.getKey().location().getPath() + " (fluid)");
+                    skipped.add(e.getKey().identifier().getPath() + " (fluid)");
                 } else {
                     blocks.add(e.getValue());
                 }
@@ -2700,7 +2700,7 @@ public final class AutoCheck {
             List<Block> part = blocks.subList(first, Math.min(blocks.size(), first + rowsPerShot * cols));
             int partNo = r0 / rowsPerShot + 1;
             acts.add(server(s -> {
-                ServerLevel level = player(s).serverLevel();
+                ServerLevel level = player(s).level();
                 clearTagged(level, o, 40);
                 // clear space, backing wall (z-1), floor
                 for (int x = -3; x < cols * 3 + 3; x++) {
@@ -2769,11 +2769,11 @@ public final class AutoCheck {
     /** Every guhs block state and item: missing model (purple/black cube) or quads with the missing texture? */
     private static void modelCheck(Minecraft mc) {
         var missingModel = mc.getModelManager().getMissingModel();
-        ResourceLocation missingTex = net.minecraft.client.renderer.texture.MissingTextureAtlasSprite.getLocation();
+        Identifier missingTex = net.minecraft.client.renderer.texture.MissingTextureAtlasSprite.getLocation();
         var rnd = net.minecraft.util.RandomSource.create(1);
         int states = 0, items = 0, bad = 0;
         for (var e : BuiltInRegistries.BLOCK.entrySet()) {
-            if (!e.getKey().location().getNamespace().equals("guhs")) {
+            if (!e.getKey().identifier().getNamespace().equals("guhs")) {
                 continue;
             }
             java.util.Set<String> seen = new java.util.TreeSet<>();
@@ -2802,12 +2802,12 @@ public final class AutoCheck {
                 }
                 if (what != null && seen.add(what)) {
                     bad++;
-                    problem("BLOCK " + e.getKey().location() + " " + what + " (e.g. state " + st + ") -> check assets/guhs/blockstates|models");
+                    problem("BLOCK " + e.getKey().identifier() + " " + what + " (e.g. state " + st + ") -> check assets/guhs/blockstates|models");
                 }
             }
         }
         for (var e : BuiltInRegistries.ITEM.entrySet()) {
-            if (!e.getKey().location().getNamespace().equals("guhs")) {
+            if (!e.getKey().identifier().getNamespace().equals("guhs")) {
                 continue;
             }
             items++;
@@ -2829,7 +2829,7 @@ public final class AutoCheck {
             }
             if (what != null) {
                 bad++;
-                problem("ITEM " + e.getKey().location() + " " + what + " -> check assets/guhs/models/item");
+                problem("ITEM " + e.getKey().identifier() + " " + what + " -> check assets/guhs/models/item");
             }
         }
         note("modelcheck: " + states + " block states, " + items + " items checked, " + bad + " with missing model/texture");
@@ -2927,7 +2927,7 @@ public final class AutoCheck {
                 Map<ResourceKey<Level>, List<Object>> map = (Map<ResourceKey<Level>, List<Object>>) field.get(null);
                 List<Object> list = map.get(level.dimension());
                 if (!(list instanceof SafeList)) {
-                    SafeList safe = new SafeList(level.dimension().location().toString());
+                    SafeList safe = new SafeList(level.dimension().identifier().toString());
                     if (list != null) {
                         safe.addAll(list);
                     }

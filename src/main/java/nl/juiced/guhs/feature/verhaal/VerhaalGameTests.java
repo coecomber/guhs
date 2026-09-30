@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -22,8 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -55,6 +53,7 @@ import nl.juiced.guhs.quest.GuhDex;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * Game tests of the 3.0 fundament (feature/verhaal and the core spots of CONTRACT_30 §3/§4): the story guhs (tameable once per
  * player, story copies never tamed, babies normal), the VariantGedrag hooks (tick, travel, ridden speed, climbing, VOEREN x
@@ -62,8 +61,6 @@ import nl.juiced.guhs.registry.ModItems;
  * dead record, Wolkjes.terug), huisje ownership (non-owners can't change or break it), the generic shoulder, the Guhdex pages.
  * Template verhaal_test_wei: 12 x 12 grass at y 0 (things stand on it at helper y 2... the floor is at helper y 1).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class VerhaalGameTests {
     private static final String WEI = "verhaal_test_wei";
     private static final String BATCH = "verhaal";
@@ -74,7 +71,7 @@ public class VerhaalGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -89,7 +86,7 @@ public class VerhaalGameTests {
     // =================================================================================================================
 
     /** A story guh is tameable once per player, only after its questline; another player has a chance of their own. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void verhaalGuhEenKeerPerSpeler(GameTestHelper helper) {
         ServerPlayer a = speler(helper, new BlockPos(2, 1, 2)), b = speler(helper, new BlockPos(9, 1, 9));
         for (ServerPlayer p : List.of(a, b)) {
@@ -105,7 +102,7 @@ public class VerhaalGameTests {
                 && Band.isBandGuh(balto) && balto.isRideable() && !balto.isBaby(), "a's own grown-up, rideable Baltoguh (a band guh)");
         helper.assertTrue(VerhaalGuhs.heeftGetemd(a, VerhaalGuh.BALTOGUH) && !VerhaalGuhs.magTemmen(a, VerhaalGuh.BALTOGUH)
                 && VerhaalGuhs.tem(a, VerhaalGuh.BALTOGUH, plek) == null, "a second time: no");
-        helper.assertTrue(nl.juiced.guhs.world.GuhWorldData.get(a.server).player(a.getUUID()).tamed.contains(GuhVariant.BALTOGUH),
+        helper.assertTrue(nl.juiced.guhs.world.GuhWorldData.get(a.level().getServer()).player(a.getUUID()).tamed.contains(GuhVariant.BALTOGUH),
                 "its Guhdex page is tamed");
         helper.assertTrue(VerhaalGuhs.tem(b, VerhaalGuh.BALTOGUH, plek) == null, "b hasn't done the questline");
         VerhaalGuhs.geefVrij(b, VerhaalGuh.BALTOGUH);
@@ -123,7 +120,7 @@ public class VerhaalGameTests {
     }
 
     /** A story copy (in a structure): kaas knabbels never tame it, and it can't be hurt, pushed or bred. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void verhaalKopieWordtNooitGetemd(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(3, 1, 6));
         ServerLevel level = helper.getLevel();
@@ -149,7 +146,7 @@ public class VerhaalGameTests {
     }
 
     /** The babies of a story guh are normal guhs (a story guh is one of a kind). */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void verhaalBabysZijnGewoon(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(1, 1, 1));
         GuhEntity mama = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 1, 4));
@@ -172,7 +169,7 @@ public class VerhaalGameTests {
     // =================================================================================================================
 
     /** A test behaviour on a variant nobody owns: tick, travel, ridden speed, climbing, VOEREN x2, chores x2 (restored after). */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 200)
     public static void verhaalVariantGedragHooks(GameTestHelper helper) {
         GuhVariant v = GuhVariant.MINT;
         VariantGedrag oud = VariantGedragen.van(v);
@@ -302,7 +299,7 @@ public class VerhaalGameTests {
     // =================================================================================================================
 
     /** A 3.0 character gets the role of its plek (roleData guhs_plek), else the default; the older kinds keep theirs. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void verhaalNpcRollenPerPlek(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         List<String> gezegd = new CopyOnWriteArrayList<>();
@@ -339,7 +336,7 @@ public class VerhaalGameTests {
     }
 
     /** A scene with a sleutel: its listener gets the option (whoever spoke), and -1 when it was read / closed. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void verhaalPraatAntwoorden(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         List<String> gehoord = new CopyOnWriteArrayList<>();
@@ -373,7 +370,7 @@ public class VerhaalGameTests {
     // =================================================================================================================
 
     /** A band guh that dies: a Herinnering star, a dead record ("In de wolkjes"), and Wolkjes.terug brings the same guh back. */
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 300)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 300)
     public static void verhaalWolkjesEnTerug(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(1, 1, 1));
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(6, 1, 6));
@@ -386,13 +383,13 @@ public class VerhaalGameTests {
         UUID id = guh.getUUID();
         int hartjes = Band.hartjes(guh);
         guh.kill();
-        helper.assertTrue(Wolkjes.isDood(p.server, p.getUUID(), id) && Wolkjes.dood(p.server, p.getUUID()).stream().anyMatch(d -> d.bandId().equals(id)
+        helper.assertTrue(Wolkjes.isDood(p.level().getServer(), p.getUUID(), id) && Wolkjes.dood(p.level().getServer(), p.getUUID()).stream().anyMatch(d -> d.bandId().equals(id)
                 && d.naam().equals("Wolkje") && d.variant().equals("choco") && d.hartjes() == hartjes), "in the wolkjes, with its name, look and hearts");
-        helper.assertTrue(GuhVolger.plek(p.server, p.getUUID(), id).soort() == PlekSoort.IN_DE_WOLKJES, "Waar is hij? In de wolkjes... njeg");
+        helper.assertTrue(GuhVolger.plek(p.level().getServer(), p.getUUID(), id).soort() == PlekSoort.IN_DE_WOLKJES, "Waar is hij? In de wolkjes... njeg");
         List<ItemEntity> sterren = helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(helper.absolutePos(new BlockPos(6, 1, 6))).inflate(3),
                 e -> e.getItem().is(HemelFeature.HERINNERING.get()));
-        helper.assertTrue(sterren.size() == 1 && Herinnering.data(sterren.get(0).getItem()).getUUID("Band").equals(id)
-                && Herinnering.data(sterren.get(0).getItem()).getString("Naam").equals("Wolkje"), "one Herinnering star with its name");
+        helper.assertTrue(sterren.size() == 1 && Herinnering.data(sterren.get(0).getItem()).read("Band", UUIDUtil.CODEC).orElseThrow().equals(id)
+                && Herinnering.data(sterren.get(0).getItem()).getStringOr("Naam", "").equals("Wolkje"), "one Herinnering star with its name");
         sterren.forEach(Entity::discard);
         helper.assertTrue(Wolkjes.terug(helper.getLevel(), p, UUID.randomUUID(), p.position()) == null, "not a dead guh: nothing");
         helper.succeedWhen(() -> {
@@ -401,9 +398,9 @@ public class VerhaalGameTests {
             helper.assertTrue(terug != null && terug.getUUID().equals(id) && terug.isAlive() && terug.getHealth() == terug.getMaxHealth()
                     && terug.isOwnedBy(p) && terug.getVariant() == GuhVariant.CHOCO && terug.getClothes(GuhClothes.Slot.NECK) == GuhClothes.RED_BOWTIE
                     && "Wolkje".equals(terug.getCustomName().getString()) && Math.abs(terug.getGuhScale() - 1.4f) < 1e-3, "the very same guh is back");
-            helper.assertTrue(Band.hartjes(terug) == hartjes && !Wolkjes.isDood(p.server, p.getUUID(), id)
-                    && GuhVolger.plek(p.server, p.getUUID(), id).soort() == PlekSoort.WERELD, "with all its hearts, alive again");
-            helper.assertTrue(nl.juiced.guhs.feature.band.Dagboek.heeftEersteKeer(p.server, p.getUUID(), id, "terug_uit_de_wolkjes"),
+            helper.assertTrue(Band.hartjes(terug) == hartjes && !Wolkjes.isDood(p.level().getServer(), p.getUUID(), id)
+                    && GuhVolger.plek(p.level().getServer(), p.getUUID(), id).soort() == PlekSoort.WERELD, "with all its hearts, alive again");
+            helper.assertTrue(nl.juiced.guhs.feature.band.Dagboek.heeftEersteKeer(p.level().getServer(), p.getUUID(), id, "terug_uit_de_wolkjes"),
                     "its dagboek: terug uit de wolkjes");
             helper.assertTrue(Wolkjes.terug(helper.getLevel(), p, id, p.position()) == null, "a second time: it's alive, nothing");
             terug.discard();
@@ -416,7 +413,7 @@ public class VerhaalGameTests {
     // =================================================================================================================
 
     /** Only the owner (or an op) changes or breaks a huisje; the screen data says whose it is. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void verhaalHuisjeAlleenVanDeEigenaar(GameTestHelper helper) {
         ServerPlayer eigenaar = speler(helper, new BlockPos(1, 1, 8)), ander = speler(helper, new BlockPos(2, 1, 8));
         ServerLevel level = helper.getLevel();
@@ -428,8 +425,8 @@ public class VerhaalGameTests {
                 "the owner may, someone else not");
         helper.assertTrue(Huisjes.vanWie(h).getString().contains("Juiced"), "Dit is het huisje van Juiced: " + Huisjes.vanWie(h).getString());
         var data = HuisjePayloads.data(ander, h);
-        helper.assertTrue(data.getUUID("Eigenaar").equals(eigenaar.getUUID()) && !data.getBoolean("MagBewerken")
-                && data.getString("EigenaarNaam").equals("Juiced") && HuisjePayloads.data(eigenaar, h).getBoolean("MagBewerken"), "the screen data");
+        helper.assertTrue(data.read("Eigenaar", UUIDUtil.CODEC).orElseThrow().equals(eigenaar.getUUID()) && !data.getBooleanOr("MagBewerken", false)
+                && data.getStringOr("EigenaarNaam", "").equals("Juiced") && HuisjePayloads.data(eigenaar, h).getBooleanOr("MagBewerken", false), "the screen data");
         HuisjePayloads.doe(ander, new HuisjePayloads.Doe(h.pos(), HuisjePayloads.Actie.NAAM.ordinal(), "", "Mijn huisje nu", false, -1));
         helper.assertTrue(Huisjes.op(level.getServer(), level.dimension(), h.pos()).naam().equals(naam), "someone else can't rename it");
         var state = level.getBlockState(pos);
@@ -452,7 +449,7 @@ public class VerhaalGameTests {
     }
 
     /** Any maatje can sit on your shoulder now (here a Schilly): the tag keeps its type, it hops down as itself. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void verhaalSchouderVoorElkMaatje(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         SchillyEntity schilly = helper.spawn(PiepFeature.SCHILLY.get(), new BlockPos(5, 1, 5));
@@ -461,7 +458,7 @@ public class VerhaalGameTests {
         helper.assertTrue(!schilly.kanOpSchouder() && schilly.schouderSchaal() == 1f && schilly.oppakGeluid() == PiepFeature.SCHILLY_PLOP.get(),
                 "the PiepMaatje defaults");
         Schouder.zet(p, schilly);
-        helper.assertTrue(schilly.isRemoved() && Schouder.heeft(p) && p.getPersistentData().getCompound(Schouder.KEY).getString("id").equals("guhs:schilly"),
+        helper.assertTrue(schilly.isRemoved() && Schouder.heeft(p) && p.getPersistentData().getCompoundOrEmpty(Schouder.KEY).getStringOr("id", "").equals("guhs:schilly"),
                 "on the shoulder, with its type");
         PiepMaatje eraf = Schouder.eraf(p, helper.absoluteVec(new Vec3(3.5, 1, 3.5)));
         helper.assertTrue(eraf instanceof SchillyEntity s && s.isOwnedBy(p) && "Schelpie".equals(s.getCustomName().getString()) && !Schouder.heeft(p),
@@ -472,7 +469,7 @@ public class VerhaalGameTests {
     }
 
     /** The Guhdex: every 3.0 page is in it and counts; the story guhs are tameable pages, the others characters or creatures. */
-    @GameTest(template = WEI, batch = BATCH)
+    @GuhTest(template = WEI, batch = BATCH)
     public static void verhaalGuhdexPaginas(GameTestHelper helper) {
         for (GuhVariant v : GuhVariant.values()) {
             if (v.ordinal() > GuhVariant.ROOKGUH.ordinal()) {
@@ -497,7 +494,7 @@ public class VerhaalGameTests {
             GuhDex.creaturePage(GuhVariant.PLUISVINKJE, () -> EntityType.CHICKEN, 8);
             helper.spawn(EntityType.CHICKEN, new BlockPos(7, 1, 1));
             GuhDex.seeCreatures(p);
-            helper.assertTrue(nl.juiced.guhs.world.GuhWorldData.get(p.server).player(p.getUUID()).seen.contains(GuhVariant.PLUISVINKJE),
+            helper.assertTrue(nl.juiced.guhs.world.GuhWorldData.get(p.level().getServer()).player(p.getUUID()).seen.contains(GuhVariant.PLUISVINKJE),
                     "seen from 6 blocks away (range 8)");
             helper.assertTrue(nl.juiced.guhs.feature.gids.GidsFeature.heeft(p, "diertjes/root"), "the Diertjes tab opens");
             weg(helper, p);

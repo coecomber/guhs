@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * What the beroepen characters share: finding their things around them (a block scan, remembered in roleData), a path
  * over the ground (for the Knabbeldief's paw prints), and a "session" (one helper at a time for the jobs that change the
@@ -65,7 +66,7 @@ final class BeroepenHulp {
 
     static List<BlockPos> posities(CompoundTag tag, String key) {
         List<BlockPos> out = new ArrayList<>();
-        for (long l : tag.getLongArray(key)) {
+        for (long l : tag.getLongArray(key).orElse(new long[0])) {
             out.add(BlockPos.of(l));
         }
         return out;
@@ -145,7 +146,7 @@ final class BeroepenHulp {
 
     @Nullable
     static UUID speler(GuhNpcEntity npc) {
-        return npc.roleData.hasUUID("Speler") ? npc.roleData.getUUID("Speler") : null;
+        return npc.roleData.read("Speler", UUIDUtil.CODEC).isPresent() ? npc.roleData.read("Speler", UUIDUtil.CODEC).orElseThrow() : null;
     }
 
     @Nullable
@@ -156,7 +157,7 @@ final class BeroepenHulp {
 
     static void begin(GuhNpcEntity npc, ServerPlayer player) {
         long now = npc.level().getGameTime();
-        npc.roleData.putUUID("Speler", player.getUUID());
+        npc.roleData.store("Speler", UUIDUtil.CODEC, player.getUUID());
         npc.roleData.putLong("Sinds", now);
         npc.roleData.putLong("Laatst", now);
     }
@@ -183,7 +184,7 @@ final class BeroepenHulp {
         if (p != null && p.level() == npc.level() && p.distanceTo(npc) < VER) {
             npc.roleData.putLong("Laatst", now);
         }
-        return now - npc.roleData.getLong("Laatst") > WEG || now - npc.roleData.getLong("Sinds") > MAX;
+        return now - npc.roleData.getLongOr("Laatst", 0L) > WEG || now - npc.roleData.getLongOr("Sinds", 0L) > MAX;
     }
 
     private BeroepenHulp() {

@@ -32,6 +32,8 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.NpcRole;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * Guhrace: the guh racebaan in the Guhmension. The Raceguh lends you a race guh for 3 laps through the checkpoint rings,
  * with VAHOEG launch pads, a countdown, lap times, your record as a ghost, raceprijsjes and the jockey outfit.
@@ -65,11 +67,11 @@ public final class RaceFeature {
     public static final DeferredHolder<EntityType<?>, EntityType<RaceGuhEntity>> RACE_GUH = ENTITY_TYPES.register("race_guh",
             () -> EntityType.Builder.of(RaceGuhEntity::new, MobCategory.MISC).sized(0.9f, 0.8f).eyeHeight(0.55f)
                     .passengerAttachments(new Vec3(0, 0.6, -0.3)).clientTrackingRange(10).updateInterval(1).noSave().noSummon()
-                    .build(Guhs.id("race_guh").toString()));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("race_guh"))));
     /** The ghost of your best race (never saved). */
     public static final DeferredHolder<EntityType<?>, EntityType<RaceGhostEntity>> RACE_GHOST = ENTITY_TYPES.register("race_ghost",
             () -> EntityType.Builder.of(RaceGhostEntity::new, MobCategory.MISC).sized(0.9f, 0.8f).eyeHeight(0.55f)
-                    .clientTrackingRange(10).updateInterval(1).noSave().noSummon().build(Guhs.id("race_ghost").toString()));
+                    .clientTrackingRange(10).updateInterval(1).noSave().noSummon().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("race_ghost"))));
 
     private static final RaceRole ROLE = new RaceRole();
 

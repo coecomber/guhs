@@ -35,46 +35,46 @@ public final class KapperHaar {
         if (kapsel == null && verf == null && !schaar || guh instanceof KapperKlantEntity) {
             return InteractionResult.PASS;
         }
-        if (guh.level().isClientSide) {
+        if (guh.level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer sp = (ServerPlayer) player;
         if (!guh.isTame() || !player.getUUID().equals(guh.getOwnerUUID())) {
-            player.displayClientMessage(Component.translatable("gui.guhs.kapper.alleen_eigen").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.kapper.alleen_eigen").withStyle(ChatFormatting.LIGHT_PURPLE));
             return InteractionResult.CONSUME;
         }
         if (kapsel != null) {
             geefKapsel(guh, kapsel);
             stack.consume(1, player);
             KapperVoortgang.eigenGuh(sp, kapsel, null);
-            player.displayClientMessage(Component.translatable("gui.guhs.kapper.nieuw_kapsel", guh.getDisplayName(),
-                    Component.translatable("gui.guhs.kapper.kapsel." + kapsel.stijl())).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.kapper.nieuw_kapsel", guh.getDisplayName(),
+                    Component.translatable("gui.guhs.kapper.kapsel." + kapsel.stijl())).withStyle(ChatFormatting.LIGHT_PURPLE));
         } else if (verf != null) {
             if (guh.getClothes(GuhClothes.Slot.HAAR) == null) {
-                player.displayClientMessage(Component.translatable("gui.guhs.kapper.eerst_kapsel").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.kapper.eerst_kapsel").withStyle(ChatFormatting.LIGHT_PURPLE));
                 return InteractionResult.CONSUME;
             }
             verf(guh, verf);
             stack.consume(1, player);
             glitter(guh, 12);
             KapperVoortgang.eigenGuh(sp, null, verf);
-            player.displayClientMessage(Component.translatable("gui.guhs.kapper.geverfd", guh.getDisplayName(),
-                    Component.translatable("gui.guhs.kapper.verf." + verf.kleur())).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.kapper.geverfd", guh.getDisplayName(),
+                    Component.translatable("gui.guhs.kapper.verf." + verf.kleur())).withStyle(ChatFormatting.LIGHT_PURPLE));
         } else if (player.isShiftKeyDown()) {
             if (guh.getClothes(GuhClothes.Slot.HAAR) == null) {
-                player.displayClientMessage(Component.translatable("gui.guhs.kapper.al_kaal").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.kapper.al_kaal").withStyle(ChatFormatting.LIGHT_PURPLE));
                 return InteractionResult.CONSUME;
             }
             knipEraf(guh);
-            player.displayClientMessage(Component.translatable("gui.guhs.kapper.kaal", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.kapper.kaal", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         } else {
             GuhClothes haar = guh.getClothes(GuhClothes.Slot.HAAR);
             Kapsel nu = Kapsel.van(haar);
             Haarverf kleur = verfVan(guh);
-            player.displayClientMessage(nu == null ? Component.translatable("gui.guhs.kapper.geen_kapsel", guh.getDisplayName())
+            player.sendOverlayMessage(nu == null ? Component.translatable("gui.guhs.kapper.geen_kapsel", guh.getDisplayName())
                     : Component.translatable("gui.guhs.kapper.huidig", guh.getDisplayName(), Component.translatable("gui.guhs.kapper.kapsel." + nu.stijl()),
                     Component.translatable(kleur == null ? "gui.guhs.kapper.verf.naturel" : "gui.guhs.kapper.verf." + kleur.kleur()))
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return InteractionResult.CONSUME;
     }
@@ -100,7 +100,7 @@ public final class KapperHaar {
     /** The dye of this guh's hair, or null (natural). */
     @Nullable
     public static Haarverf verfVan(GuhEntity guh) {
-        String id = guh.getPersistentData().getString(VERF);
+        String id = guh.getPersistentData().getStringOr(VERF, "");
         return id.isEmpty() ? null : Haarverf.byId(id);
     }
 
@@ -114,7 +114,7 @@ public final class KapperHaar {
     /** GuhHooks.tick: rainbow hair runs through the colours. */
     public static void tick(GuhEntity guh) {
         if ((guh.tickCount + guh.getId()) % 5 == 0 && guh.getClothes(GuhClothes.Slot.HAAR) != null
-                && Haarverf.REGENBOOG.kleur().equals(guh.getPersistentData().getString(VERF))) {
+                && Haarverf.REGENBOOG.kleur().equals(guh.getPersistentData().getStringOr(VERF, ""))) {
             guh.setHaarkleur(regenboog(guh.level().getGameTime() + guh.getId() * 7L));
         }
     }

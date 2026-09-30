@@ -53,10 +53,10 @@ class ToestelSpel extends SpeelTaak {
             int duur;
             int rondjes = 1;
             if (t instanceof GlijbaanBlock) {
-                rondjes = 1 + level.random.nextInt(3);
+                rondjes = 1 + level.getRandom().nextInt(3);
                 duur = 0;
             } else {
-                duur = 240 + level.random.nextInt(240);
+                duur = 240 + level.getRandom().nextInt(240);
             }
             ZitjeEntity.zet(level, pos, plek, mob, duur, rondjes);
             return false;

@@ -50,7 +50,7 @@ public class DiepzeeWaterFeature extends Feature<DiepzeeWaterFeature.Config> {
         BlockState water = Blocks.WATER.defaultBlockState();
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
         int placed = 0;
-        int bottom = level.getMinBuildHeight();
+        int bottom = level.getMinY();
         for (int dx = 0; dx < 16; dx++) {
             for (int dz = 0; dz < 16; dz++) {
                 int x = chunk.getMinBlockX() + dx, z = chunk.getMinBlockZ() + dz;

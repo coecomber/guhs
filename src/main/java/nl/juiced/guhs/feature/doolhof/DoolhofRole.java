@@ -43,8 +43,8 @@ public class DoolhofRole implements NpcRole {
         } else if (npc.tickCount % (20 * 30) == 0) {
             Player near = world.getNearestPlayer(npc, 10);
             if (near instanceof ServerPlayer p && !DoolhofGame.isPlaying(p) && !p.isSpectator()) {
-                p.displayClientMessage(Component.literal("<").append(npc.getDisplayName()).append("> ")
-                        .append(Component.translatable("quest.guhs.doolhof.invite" + (1 + world.getRandom().nextInt(3)))).withStyle(ChatFormatting.GREEN), true);
+                p.sendOverlayMessage(Component.literal("<").append(npc.getDisplayName()).append("> ")
+                        .append(Component.translatable("quest.guhs.doolhof.invite" + (1 + world.getRandom().nextInt(3)))).withStyle(ChatFormatting.GREEN));
                 npc.playSound(nl.juiced.guhs.registry.ModSounds.GUH_AMBIENT.get(), 1f, 0.9f);
             }
         }

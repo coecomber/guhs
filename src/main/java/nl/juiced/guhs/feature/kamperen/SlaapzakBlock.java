@@ -80,17 +80,17 @@ public class SlaapzakBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.CONSUME;
         }
         if (state.getValue(OCCUPIED)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.kamperen.slaapzak_bezet").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.kamperen.slaapzak_bezet").withStyle(ChatFormatting.LIGHT_PURPLE));
             return InteractionResult.SUCCESS;
         }
         if (player instanceof ServerPlayer serverPlayer) {
             serverPlayer.startSleepInBed(pos).ifLeft(problem -> {
                 if (problem.getMessage() != null) {
-                    player.displayClientMessage(problem.getMessage(), true);
+                    player.sendOverlayMessage(problem.getMessage());
                 }
             });
         }

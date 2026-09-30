@@ -1,7 +1,7 @@
 package nl.juiced.guhs.client.screen;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -35,7 +35,7 @@ public class VerstopScreen extends Screen {
     protected void init() {
         left = (width - W) / 2;
         top = (height - H) / 2;
-        if (data.getBoolean("Running")) {
+        if (data.getBooleanOr("Running", false)) {
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.verstop.join"), b -> send(VerstopGame.JOIN))
                     .bounds(left + 20, top + 70, W - 40, 20).tooltip(GuhScreen.tip("gui.guhs.verstop.join.tooltip")).build());
         } else {
@@ -57,32 +57,32 @@ public class VerstopScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFFF7B6CB);
         g.fill(left, top, left + W, top + H, 0xE8301A26);
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6EE);
-        Component question = data.getBoolean("Running")
-                ? Component.translatable("gui.guhs.verstop.running", Component.translatable("gui.guhs.verstop." + data.getString("Level")),
-                data.getInt("Found"), data.getInt("Total"), data.getInt("Players"))
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6EE);
+        Component question = data.getBooleanOr("Running", false)
+                ? Component.translatable("gui.guhs.verstop.running", Component.translatable("gui.guhs.verstop." + data.getStringOr("Level", "")),
+                data.getIntOr("Found", 0), data.getIntOr("Total", 0), data.getIntOr("Players", 0))
                 : Component.translatable("gui.guhs.verstop.question");
         int y = top + 28;
         for (var line : font.split(question, W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFD8B8C8);
+            g.centeredText(font, line, width / 2, y, 0xFFD8B8C8);
             y += 11;
         }
         // best times (only games played alone count)
         StringBuilder best = new StringBuilder();
         for (VerstopGame.Level level : VerstopGame.Level.values()) {
-            int ticks = data.getInt("Best_" + level.id());
+            int ticks = data.getIntOr("Best_" + level.id(), 0);
             if (best.length() > 0) {
                 best.append("   ");
             }
             best.append(Component.translatable("gui.guhs.verstop." + level.id()).getString()).append(": ")
                     .append(ticks < 0 ? "-" : VerstopGame.time(ticks));
         }
-        g.drawCenteredString(font, Component.translatable("gui.guhs.verstop.best"), width / 2, top + 100, 0xFFFFD27A);
-        g.drawCenteredString(font, best.toString(), width / 2, top + 112, 0xFFFFE6EE);
+        g.centeredText(font, Component.translatable("gui.guhs.verstop.best"), width / 2, top + 100, 0xFFFFD27A);
+        g.centeredText(font, best.toString(), width / 2, top + 112, 0xFFFFE6EE);
     }
 
     @Override

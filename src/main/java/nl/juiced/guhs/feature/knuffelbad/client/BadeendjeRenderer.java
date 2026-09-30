@@ -3,20 +3,20 @@ package nl.juiced.guhs.feature.knuffelbad.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.knuffelbad.BadeendjeEntity;
 import nl.juiced.guhs.feature.knuffelbad.Eendsoort;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.layer.GeoRenderLayer;
 
 /**
  * A rubber duck (geo/entity/badeendje.geo.json), in its kind's colours (textures/entity/badeendje_&lt;kind&gt;.png) with the
@@ -27,7 +27,7 @@ public class BadeendjeRenderer extends GeoEntityRenderer<BadeendjeEntity> {
     public BadeendjeRenderer(EntityRendererProvider.Context context) {
         super(context, new DefaultedEntityGeoModel<BadeendjeEntity>(Guhs.id("badeendje")) {
             @Override
-            public ResourceLocation getTextureResource(BadeendjeEntity duck) {
+            public Identifier getTextureResource(BadeendjeEntity duck) {
                 return Guhs.id("textures/entity/badeendje_" + duck.getSoort().id() + ".png");
             }
         });
@@ -38,7 +38,7 @@ public class BadeendjeRenderer extends GeoEntityRenderer<BadeendjeEntity> {
                                float partialTick, int packedLight, int packedOverlay) {
                 if (duck.getSoort().glimt) {
                     RenderType glow = RenderType.eyes(Guhs.id("textures/entity/badeendje_" + duck.getSoort().id() + "_glow.png"));
-                    getRenderer().reRender(model, pose, buffers, duck, glow, buffers.getBuffer(glow), partialTick, LightTexture.FULL_BRIGHT,
+                    getRenderer().reRender(model, pose, buffers, duck, glow, buffers.getBuffer(glow), partialTick, LightCoordsUtil.FULL_BRIGHT,
                             packedOverlay, 0xFFFFFFFF);
                 }
             }
@@ -51,8 +51,8 @@ public class BadeendjeRenderer extends GeoEntityRenderer<BadeendjeEntity> {
             return;
         }
         // never pitch dark: a duck in the star tunnel should still be found
-        int block = Math.max(LightTexture.block(packedLight), 7);
-        super.render(duck, entityYaw, partialTick, poseStack, bufferSource, LightTexture.pack(block, LightTexture.sky(packedLight)));
+        int block = Math.max(LightCoordsUtil.block(packedLight), 7);
+        super.render(duck, entityYaw, partialTick, poseStack, bufferSource, LightCoordsUtil.pack(block, LightCoordsUtil.sky(packedLight)));
     }
 
     @Override

@@ -169,7 +169,7 @@ public class TunnelBlock extends Block {
         level.playSound(null, pos, SoundEvents.WOOL_HIT, SoundSource.BLOCKS, 1f, 1.4f);
         level.playSound(null, pos, SoundEvents.WOOL_HIT, SoundSource.BLOCKS, 1f, 1.2f);
         if (!TunnelSpel.klop(sl, pos, sp)) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.speelgoed.tunnel.leeg").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.speelgoed.tunnel.leeg").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return InteractionResult.CONSUME;
     }

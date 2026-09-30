@@ -115,11 +115,11 @@ public final class Kaasijsjes {
         if (!(stack.getItem() instanceof KaasijsjeItem ijsje)) {
             return InteractionResult.PASS;
         }
-        if (!guh.level().isClientSide && player instanceof ServerPlayer sp) {
+        if (!guh.level().isClientSide() && player instanceof ServerPlayer sp) {
             geefGuh(guh, ijsje.smaak, sp);
             stack.consume(1, player);
         }
-        return InteractionResult.sidedSuccess(guh.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** A guh eats an ice cream: its hat / blush / float, hearts, a VAHOEG! */
@@ -150,8 +150,8 @@ public final class Kaasijsjes {
         }
         if (from != null) {
             gegeten(from, smaak);
-            from.displayClientMessage(Component.translatable("gui.guhs.wereldleven.ijsje_guh." + smaak.id(), guh.getDisplayName())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            from.sendOverlayMessage(Component.translatable("gui.guhs.wereldleven.ijsje_guh." + smaak.id(), guh.getDisplayName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -204,12 +204,12 @@ public final class Kaasijsjes {
             return;
         }
         long now = guh.level().getGameTime();
-        if ((flags & GuhHooks.IJSHOEDJE) != 0 && guh.getPersistentData().getLong(HOEDJE_TOT) <= now) {
+        if ((flags & GuhHooks.IJSHOEDJE) != 0 && guh.getPersistentData().getLongOr(HOEDJE_TOT, 0L) <= now) {
             GuhHooks.zet(guh, GuhHooks.IJSHOEDJE, false);
             guh.setKnusVlaggen(guh.getKnusVlaggen() & ~SMAAK_MASK);
             guh.getPersistentData().remove(HOEDJE_TOT);
         }
-        if ((flags & GuhHooks.BLOSJES) != 0 && guh.getPersistentData().getLong(BLOSJES_TOT) <= now) {
+        if ((flags & GuhHooks.BLOSJES) != 0 && guh.getPersistentData().getLongOr(BLOSJES_TOT, 0L) <= now) {
             GuhHooks.zet(guh, GuhHooks.BLOSJES, false);
             guh.getPersistentData().remove(BLOSJES_TOT);
         }

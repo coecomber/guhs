@@ -47,7 +47,7 @@ public final class SleeTocht {
         if (bezig(p)) {
             return false;
         }
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         BlockPos anker = Nomguh.anker(level, p.blockPosition());
         if (anker == null && baltoKopie != null) {
             anker = Nomguh.anker(level, baltoKopie.blockPosition());

@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.beauty.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -39,11 +39,11 @@ public class ShowguhScreen extends Screen {
         left = (width - W) / 2;
         top = (height - H) / 2;
         int bw = (W - 44) / 2;
-        if (!data.getBoolean("Running")) {
+        if (!data.getBooleanOr("Running", false)) {
             NiveauKeuze.knoppen(this::addRenderableWidget, "beauty", left + 20, top + H - 80, W - 40);
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.beauty.start"), b -> send(NiveauKeuze.actie("beauty", BeautyShow.START)))
                     .bounds(left + 20, top + H - 56, bw, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.beauty.start.tooltip"))).build());
-            String own = data.getString("OwnGuh");
+            String own = data.getStringOr("OwnGuh", "");
             Button withOwn = Button.builder(own.isEmpty() ? Component.translatable("gui.guhs.beauty.start_own.none")
                                     : Component.translatable("gui.guhs.beauty.start_own", own), b -> send(NiveauKeuze.actie("beauty", BeautyShow.START_OWN)))
                     .bounds(left + 24 + bw, top + H - 56, bw, 20)
@@ -58,25 +58,25 @@ public class ShowguhScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         DressScreen.frame(g, left, top, W, H);
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6EE);
-        Component text = data.getBoolean("Running")
-                ? Component.translatable("gui.guhs.beauty.running", data.getString("Performer"), data.getInt("Round"), BeautyShow.ROUNDS,
-                BeautyShow.themeName(ShowTheme.byId(data.getString("Theme"))))
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 10, 0xFFFFE6EE);
+        Component text = data.getBooleanOr("Running", false)
+                ? Component.translatable("gui.guhs.beauty.running", data.getStringOr("Performer", ""), data.getIntOr("Round", 0), BeautyShow.ROUNDS,
+                BeautyShow.themeName(ShowTheme.byId(data.getStringOr("Theme", ""))))
                 : Component.translatable("gui.guhs.beauty.explain", BeautyShow.ROUNDS);
         int y = top + 28;
         for (var line : font.split(text, W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFD8B8C8);
+            g.centeredText(font, line, width / 2, y, 0xFFD8B8C8);
             y += 11;
         }
-        int shows = data.getInt("Shows");
+        int shows = data.getIntOr("Shows", 0);
         if (shows == 0) {
-            g.drawCenteredString(font, Component.translatable("gui.guhs.beauty.best.none"), width / 2, top + H - 96, 0xFFFFD27A);
+            g.centeredText(font, Component.translatable("gui.guhs.beauty.best.none"), width / 2, top + H - 96, 0xFFFFD27A);
         } else {
             NiveauKeuze.records(g, font, data, width / 2, top + H - 102, s -> s + "/" + BeautyShow.ROUNDS * BeautyShow.MAX_ROUND, 0);
-            g.drawCenteredString(font, Component.translatable("gui.guhs.klassiekers.beauty.shows", shows), width / 2, top + H - 91, 0xFFD8B8C8);
+            g.centeredText(font, Component.translatable("gui.guhs.klassiekers.beauty.shows", shows), width / 2, top + H - 91, 0xFFD8B8C8);
         }
     }
 

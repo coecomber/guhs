@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -58,7 +58,7 @@ public final class KaasmijnProtection {
         if (server.dimension() != ModDimensions.GUHMENSION) {
             return false;
         }
-        Structure mine = server.registryAccess().registryOrThrow(Registries.STRUCTURE).get(MINE);
+        Structure mine = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(MINE);
         return mine != null && server.structureManager().getStructureWithPieceAt(pos, mine).isValid();
     }
 
@@ -72,7 +72,7 @@ public final class KaasmijnProtection {
             return false;
         }
         if (!quiet) {
-            player.displayClientMessage(Component.translatable(key).withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable(key).withStyle(ChatFormatting.GOLD));
         }
         return true;
     }
@@ -103,7 +103,7 @@ public final class KaasmijnProtection {
 
     /** Using an item on a block (buckets, flint and steel, axes stripping logs...): not in the mine. Opening things is fine, and so is putting a cart on the rails. */
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty() || event.getItemStack().getItem() instanceof MinecartItem) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty() || event.getItemStack().getItem() instanceof MinecartItem) {
             return;
         }
         Direction face = event.getFace() == null ? Direction.UP : event.getFace();
@@ -118,7 +118,7 @@ public final class KaasmijnProtection {
 
     /** Buckets are used "in the air" too. */
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition(), "quest.guhs.kaasmijn.no_build")) {
             event.setCanceled(true);
         }
@@ -127,8 +127,8 @@ public final class KaasmijnProtection {
     /** The sitting guh miners are part of the mine: no taming, leashing, name tags or undressing them. */
     public static void onInteractEntity(PlayerInteractEvent.EntityInteract event) {
         if (isMiner(event.getTarget()) && !event.getEntity().getAbilities().instabuild) {
-            if (!event.getLevel().isClientSide) {
-                event.getEntity().displayClientMessage(Component.translatable("quest.guhs.kaasmijn.miner_busy").withStyle(ChatFormatting.GOLD), true);
+            if (!event.getLevel().isClientSide()) {
+                event.getEntity().sendOverlayMessage(Component.translatable("quest.guhs.kaasmijn.miner_busy").withStyle(ChatFormatting.GOLD));
             }
             event.setCancellationResult(InteractionResult.SUCCESS);
             event.setCanceled(true);
@@ -144,7 +144,7 @@ public final class KaasmijnProtection {
 
     /** A decorative guh miner of the mine (tagged in the template). */
     public static boolean isMiner(Entity entity) {
-        return entity.getTags().contains(MINER_TAG);
+        return entity.entityTags().contains(MINER_TAG);
     }
 
     public static void onExplosion(ExplosionEvent.Detonate event) {

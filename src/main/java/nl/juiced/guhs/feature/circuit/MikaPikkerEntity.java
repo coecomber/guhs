@@ -28,13 +28,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.race.RaceGuhEntity;
 import nl.juiced.guhs.registry.ModSounds;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * A Mika-pikker of the Guh-Circuit: a little Mika in a racing bandana that waits beside the track. When a race guh runs
@@ -90,7 +90,7 @@ public class MikaPikkerEntity extends PathfinderMob implements GeoEntity {
     public void setHome(Vec3 pos, float yaw) {
         this.home = pos;
         this.homeYaw = yaw;
-        this.moveTo(pos.x, pos.y, pos.z, yaw, 0);
+        this.snapTo(pos.x, pos.y, pos.z, yaw, 0);
         this.setYHeadRot(yaw);
         this.yBodyRot = yaw;
     }
@@ -126,7 +126,7 @@ public class MikaPikkerEntity extends PathfinderMob implements GeoEntity {
             level.sendParticles(ParticleTypes.WAX_OFF, mount.getX(), mount.getY() + 0.8, mount.getZ(), 12, 0.5, 0.4, 0.5, 0.1);
         }
         if (racer != null) {
-            racer.displayClientMessage(Component.translatable("quest.guhs.circuit.gepikt").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            racer.sendOverlayMessage(Component.translatable("quest.guhs.circuit.gepikt").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -139,7 +139,7 @@ public class MikaPikkerEntity extends PathfinderMob implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             return;
         }
         if (this.tickCount > 40 && !CircuitExtra.isLive(this)) {
@@ -188,12 +188,12 @@ public class MikaPikkerEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (!this.level().isClientSide && hand == InteractionHand.MAIN_HAND) {
+        if (!this.level().isClientSide() && hand == InteractionHand.MAIN_HAND) {
             this.level().playSound(null, this, ModSounds.MIKA_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 1.8f);
-            player.displayClientMessage(Component.translatable(isDuwer() ? "quest.guhs.circuit.duwer.hallo" : "quest.guhs.circuit.pikker.hallo")
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable(isDuwer() ? "quest.guhs.circuit.duwer.hallo" : "quest.guhs.circuit.pikker.hallo")
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
-        return InteractionResult.sidedSuccess(this.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

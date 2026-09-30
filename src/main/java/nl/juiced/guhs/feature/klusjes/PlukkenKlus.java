@@ -50,7 +50,7 @@ public class PlukkenKlus extends BasisKlus {
     }
 
     private static String sleutel(ServerLevel level, BlockPos p) {
-        return level.dimension().location() + "|" + p.asLong();
+        return level.dimension().identifier() + "|" + p.asLong();
     }
 
     static boolean bloemRijp(ServerLevel level, BlockPos p) {
@@ -74,16 +74,16 @@ public class PlukkenKlus extends BasisKlus {
         BlockState s = level.getBlockState(pos);
         if (s.getBlock() instanceof KnabbelbessenstruikBlock && s.getValue(KnabbelbessenstruikBlock.AGE) > 1) {
             int age = s.getValue(KnabbelbessenstruikBlock.AGE);
-            int n = 1 + level.random.nextInt(2) + (age == KnabbelbessenstruikBlock.MAX_AGE ? 1 : 0);
-            level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1f, 1.1f + level.random.nextFloat() * 0.3f);
+            int n = 1 + level.getRandom().nextInt(2) + (age == KnabbelbessenstruikBlock.MAX_AGE ? 1 : 0);
+            level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1f, 1.1f + level.getRandom().nextFloat() * 0.3f);
             BlockState geplukt = s.setValue(KnabbelbessenstruikBlock.AGE, 1);
             level.setBlock(pos, geplukt, Block.UPDATE_CLIENTS);
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(geplukt));
             uit.add(new ItemStack(VadswoudFeature.KNABBELBESSEN.get(), n));
         } else if (s.getBlock() instanceof SweetBerryBushBlock && s.getValue(SweetBerryBushBlock.AGE) > 1) {
             int age = s.getValue(SweetBerryBushBlock.AGE);
-            int n = 1 + level.random.nextInt(2) + (age == SweetBerryBushBlock.MAX_AGE ? 1 : 0);
-            level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1f, 0.8f + level.random.nextFloat() * 0.4f);
+            int n = 1 + level.getRandom().nextInt(2) + (age == SweetBerryBushBlock.MAX_AGE ? 1 : 0);
+            level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1f, 0.8f + level.getRandom().nextFloat() * 0.4f);
             BlockState geplukt = s.setValue(SweetBerryBushBlock.AGE, 1);
             level.setBlock(pos, geplukt, Block.UPDATE_CLIENTS);
             level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(geplukt));

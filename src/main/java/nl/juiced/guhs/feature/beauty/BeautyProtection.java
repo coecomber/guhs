@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -44,7 +44,7 @@ public final class BeautyProtection {
         if (level.dimension() != ModDimensions.GUHMENSION) {
             return false;
         }
-        var structure = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(THEATRE);
+        var structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(THEATRE);
         return structure != null && level.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -56,7 +56,7 @@ public final class BeautyProtection {
         if (player.getAbilities().instabuild || !protectedAt(player.level(), pos)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.beauty.no_build").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.beauty.no_build").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -81,7 +81,7 @@ public final class BeautyProtection {
      */
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide) {
+        if (event.getLevel().isClientSide()) {
             return;
         }
         if (event.getLevel().getBlockState(event.getPos()).getBlock() instanceof net.minecraft.world.level.block.FlowerPotBlock
@@ -102,7 +102,7 @@ public final class BeautyProtection {
     /** Buckets are used "in the air" too. */
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }
@@ -127,27 +127,27 @@ public final class BeautyProtection {
     /** Right-clicking the model opens the wardrobe (for the performer); the jury introduce themselves. Nothing else happens to them. */
     @SubscribeEvent
     public static void onInteract(PlayerInteractEvent.EntityInteract event) {
-        if (event.getLevel().isClientSide || !(event.getTarget() instanceof GuhEntity guh) || !(event.getEntity() instanceof ServerPlayer player)) {
+        if (event.getLevel().isClientSide() || !(event.getTarget() instanceof GuhEntity guh) || !(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-        if (guh.getTags().contains(BeautyShow.MODEL_TAG) || BeautyShow.isModel(guh)) {
+        if (guh.entityTags().contains(BeautyShow.MODEL_TAG) || BeautyShow.isModel(guh)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             BeautyShow show = BeautyShow.of(player);
             if (show != null && show.model() == guh && show.isDressing()) {
                 show.openWardrobe(player);
             } else {
-                player.displayClientMessage(Component.translatable("gui.guhs.beauty.model_hands_off").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.beauty.model_hands_off").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
-        } else if (guh.getTags().contains(BeautyShow.AUDIENCE_TAG)) {
+        } else if (guh.entityTags().contains(BeautyShow.AUDIENCE_TAG)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             GuhQuests.say(player, guh, "quest.guhs.beauty.publiek");
-        } else if (guh.getTags().contains(BeautyShow.JURY_TAG)) {
+        } else if (guh.entityTags().contains(BeautyShow.JURY_TAG)) {
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
             for (int i = 0; i < BeautyJury.JUDGES.size(); i++) {
-                if (guh.getTags().contains(BeautyShow.JURY_TAG + (i + 1))) {
+                if (guh.entityTags().contains(BeautyShow.JURY_TAG + (i + 1))) {
                     GuhQuests.say(player, guh, "quest.guhs.beauty.jury." + BeautyJury.JUDGES.get(i) + ".hello");
                 }
             }
@@ -205,12 +205,12 @@ public final class BeautyProtection {
         }
         Entity entity = event.getEntity();
         if (entity instanceof GuhEntity guh) {
-            if (guh.getTags().contains(BeautyShow.MODEL_TAG) && !BeautyShow.isModel(guh)) {
+            if (guh.entityTags().contains(BeautyShow.MODEL_TAG) && !BeautyShow.isModel(guh)) {
                 event.setCanceled(true);
             } else if (guh.getPersistentData().contains(BeautyShow.LOAN) && !BeautyShow.isModel(guh)) {
                 BeautyShow.giveBack(guh);
             }
-        } else if (entity instanceof Display.TextDisplay && entity.getTags().contains(BeautyShow.SCORE_TAG) && !BeautyShow.isScoreCard(entity)) {
+        } else if (entity instanceof Display.TextDisplay && entity.entityTags().contains(BeautyShow.SCORE_TAG) && !BeautyShow.isScoreCard(entity)) {
             event.setCanceled(true);
         }
     }
@@ -221,8 +221,8 @@ public final class BeautyProtection {
      */
     @SubscribeEvent
     public static void onSpawnCheck(net.neoforged.neoforge.event.entity.living.MobSpawnEvent.PositionCheck event) {
-        if (event.getEntity() instanceof GuhEntity && (event.getSpawnType() == net.minecraft.world.entity.MobSpawnType.NATURAL
-                || event.getSpawnType() == net.minecraft.world.entity.MobSpawnType.CHUNK_GENERATION)
+        if (event.getEntity() instanceof GuhEntity && (event.getSpawnType() == net.minecraft.world.entity.EntitySpawnReason.NATURAL
+                || event.getSpawnType() == net.minecraft.world.entity.EntitySpawnReason.CHUNK_GENERATION)
                 && inTheatre(event.getLevel().getLevel(), event.getEntity().blockPosition())) {
             event.setResult(net.neoforged.neoforge.event.entity.living.MobSpawnEvent.PositionCheck.Result.FAIL);
         }

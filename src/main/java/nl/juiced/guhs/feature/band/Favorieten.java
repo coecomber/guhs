@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -59,8 +59,8 @@ public final class Favorieten {
         switch (soort) {
             case ETEN -> BuiltInRegistries.ITEM.getTagOrEmpty(FAVORIET_ETEN)
                     .forEach(h -> out.add(BuiltInRegistries.ITEM.getKey(h.value()).toString()));
-            case PLEK -> s.registryAccess().registryOrThrow(Registries.BIOME).getTagOrEmpty(FAVORIETE_PLEKKEN)
-                    .forEach(h -> h.unwrapKey().ifPresent(k -> out.add(k.location().toString())));
+            case PLEK -> s.registryAccess().lookupOrThrow(Registries.BIOME).getTagOrEmpty(FAVORIETE_PLEKKEN)
+                    .forEach(h -> h.unwrapKey().ifPresent(k -> out.add(k.identifier().toString())));
             case KNUFFEL -> out.addAll(WereldlevenFeature.KNUFFEL_IDS);
             case LIEDJE -> {
                 for (Koortje.Liedje l : Koortje.Liedje.values()) {
@@ -90,7 +90,7 @@ public final class Favorieten {
         if (r == null) {
             return Map.of();
         }
-        MinecraftServer s = guh.getServer();
+        MinecraftServer s = guh.level().getServer();
         boolean veranderd = false;
         for (FavorietSoort soort : FavorietSoort.values()) {
             if (r.fav.containsKey(soort)) {
@@ -141,7 +141,7 @@ public final class Favorieten {
         }
         van(guh);
         r.ontdekt.add(soort);
-        BandData.get(guh.getServer()).setDirty();
+        BandData.get(guh.level().getServer()).setDirty();
         return true;
     }
 
@@ -154,12 +154,12 @@ public final class Favorieten {
     public static Component naam(FavorietSoort soort, String waarde) {
         switch (soort) {
             case ETEN -> {
-                ResourceLocation id = ResourceLocation.tryParse(waarde);
+                Identifier id = Identifier.tryParse(waarde);
                 Item item = id == null ? null : BuiltInRegistries.ITEM.getOptional(id).orElse(null);
                 return item == null ? Component.literal(waarde) : Component.translatable(item.getDescriptionId());
             }
             case PLEK -> {
-                ResourceLocation id = ResourceLocation.tryParse(waarde);
+                Identifier id = Identifier.tryParse(waarde);
                 return id == null ? Component.literal(waarde) : Component.translatable("biome." + id.getNamespace() + "." + id.getPath());
             }
             case KNUFFEL -> {

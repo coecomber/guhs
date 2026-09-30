@@ -16,7 +16,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket;
+import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -109,7 +109,7 @@ public final class Wedstrijd {
 
         Deelnemer(ServerPlayer p) {
             this.id = p.getUUID();
-            this.naam = p.getGameProfile().getName();
+            this.naam = p.getGameProfile().name();
             java.util.Arrays.fill(score, -1);
         }
 
@@ -203,7 +203,7 @@ public final class Wedstrijd {
         Wedstrijd w = of(npc);
         Adv.grant(player, "knabbelspelen_gevonden");
         boolean mee = w != null && w.deelnemer(player) != null;
-        String key = w == null ? (GuhQuests.saved(player).getBoolean(PLAYED_KEY) ? "quest.guhs.knabbelspelen.hello_again" : "quest.guhs.knabbelspelen.hello")
+        String key = w == null ? (GuhQuests.saved(player).getBooleanOr(PLAYED_KEY, false) ? "quest.guhs.knabbelspelen.hello_again" : "quest.guhs.knabbelspelen.hello")
                 : w.fase == Fase.INSCHRIJVEN ? (mee ? "quest.guhs.knabbelspelen.wacht" : "quest.guhs.knabbelspelen.doe_mee") : "quest.guhs.knabbelspelen.bezig";
         GuhQuests.say(player, npc, key, w == null ? "" : w.programmaNaam());
         npc.playSound(ModSounds.GUH_AMBIENT.get(), 1f, 1.2f);
@@ -292,8 +292,8 @@ public final class Wedstrijd {
         } else if (!isPlaying(player) && !Minigames.refuse(player, npc, Minigames.KNABBELSPELEN) && !player.isSpectator()) {
             voegToe(player);
             for (ServerPlayer p : spelers((ServerLevel) npc.level())) {
-                p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.erbij", player.getDisplayName(), actief(), MAX)
-                        .withStyle(ChatFormatting.AQUA), false);
+                p.sendSystemMessage(Component.translatable("quest.guhs.knabbelspelen.erbij", player.getDisplayName(), actief(), MAX)
+                        .withStyle(ChatFormatting.AQUA));
             }
         }
     }
@@ -368,9 +368,9 @@ public final class Wedstrijd {
     private void uitnodigen(GuhNpcEntity npc, ServerLevel level) {
         for (ServerPlayer p : level.getEntitiesOfClass(ServerPlayer.class, npc.getBoundingBox().inflate(32))) {
             if (deelnemer(p) == null && !p.isSpectator()) {
-                p.displayClientMessage(Component.literal("<").append(npc.getDisplayName()).append("> ")
+                p.sendOverlayMessage(Component.literal("<").append(npc.getDisplayName()).append("> ")
                         .append(Component.translatable("quest.guhs.knabbelspelen.uitnodiging", programmaNaam(), Math.max(1, (INSCHRIJF_TICKS - ticks) / 20)))
-                        .withStyle(ChatFormatting.AQUA), true);
+                        .withStyle(ChatFormatting.AQUA));
             }
         }
     }
@@ -462,14 +462,14 @@ public final class Wedstrijd {
         d.klaar = true;
         d.score[o.ordinal()] = score;
         d.punten[o.ordinal()] = o.zeskamp(score);
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         if (score < 0) {
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.niet_gehaald").withStyle(ChatFormatting.GRAY), false);
+            p.sendSystemMessage(Component.translatable("quest.guhs.knabbelspelen.niet_gehaald").withStyle(ChatFormatting.GRAY));
         } else {
             title(p, Component.translatable(tijdOp ? "quest.guhs.knabbelspelen.title.tijd_op" : "quest.guhs.knabbelspelen.title.klaar")
                     .withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD), uitslagTekst(o, score), 0, 40, 10);
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.jouw_uitslag", o.naam(), uitslagTekst(o, score), d.punten[o.ordinal()])
-                    .withStyle(ChatFormatting.AQUA), false);
+            p.sendSystemMessage(Component.translatable("quest.guhs.knabbelspelen.jouw_uitslag", o.naam(), uitslagTekst(o, score), d.punten[o.ordinal()])
+                    .withStyle(ChatFormatting.AQUA));
             level.playSound(null, p.blockPosition(), KnabbelspelenFeature.JUICH.get(), SoundSource.PLAYERS, 1f, 1f);
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, p.getX(), p.getY() + 1.5, p.getZ(), 10, 0.5, 0.4, 0.5, 0.02);
         }
@@ -518,8 +518,8 @@ public final class Wedstrijd {
         index++;
         if (index < programma.size()) {
             for (ServerPlayer p : spelers(level)) {
-                p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.volgende", onderdeel().naam(), index + 1, programma.size())
-                        .withStyle(ChatFormatting.AQUA), false);
+                p.sendSystemMessage(Component.translatable("quest.guhs.knabbelspelen.volgende", onderdeel().naam(), index + 1, programma.size())
+                        .withStyle(ChatFormatting.AQUA));
             }
             klaarzetten(level);
             return;
@@ -550,7 +550,7 @@ public final class Wedstrijd {
             }
             CompoundTag saved = GuhQuests.saved(p);
             saved.putBoolean(PLAYED_KEY, true);
-            saved.putInt(GAMES_KEY, saved.getInt(GAMES_KEY) + 1);
+            saved.putInt(GAMES_KEY, saved.getIntOr(GAMES_KEY, 0) + 1);
             int lintjes;
             if (zeskamp) {
                 int totaal = d.totaal();
@@ -628,7 +628,7 @@ public final class Wedstrijd {
         if (w != null) {
             Deelnemer d = w.deelnemer(p);
             if (d != null) {
-                w.verlaat(p.serverLevel(), d, p, "quest.guhs.knabbelspelen.gestopt");
+                w.verlaat(p.level(), d, p, "quest.guhs.knabbelspelen.gestopt");
             }
         }
         PLAYERS.remove(p.getUUID());
@@ -677,14 +677,14 @@ public final class Wedstrijd {
     /** Puts a loaned thing in your hand (a free hotbar slot, which becomes the selected one). */
     public static void inHand(ServerPlayer p, ItemStack stack) {
         Inventory inv = p.getInventory();
-        int slot = inv.getItem(inv.selected).isEmpty() ? inv.selected : -1;
+        int slot = inv.getItem(inv.getSelectedSlot()).isEmpty() ? inv.getSelectedSlot() : -1;
         for (int i = 0; i < 9 && slot < 0; i++) {
             if (inv.getItem(i).isEmpty()) {
                 slot = i;
             }
         }
         if (slot < 0) {
-            slot = inv.selected;
+            slot = inv.getSelectedSlot();
             ItemStack oud = inv.getItem(slot);
             inv.setItem(slot, ItemStack.EMPTY);
             if (!inv.add(oud)) {
@@ -692,9 +692,9 @@ public final class Wedstrijd {
             }
         }
         inv.setItem(slot, stack);
-        inv.selected = slot;
+        inv.setSelectedSlot(slot);
         if (!(p instanceof FakePlayer) && p.connection != null) {
-            p.connection.send(new ClientboundSetCarriedItemPacket(slot));
+            p.connection.send(new ClientboundSetHeldSlotPacket(slot));
         }
     }
 
@@ -709,7 +709,7 @@ public final class Wedstrijd {
 
     public static void teleport(ServerPlayer p, ServerLevel world, double x, double y, double z, float yRot) {
         if (p instanceof FakePlayer || p.connection == null) {
-            p.moveTo(x, y, z, yRot, 0);
+            p.snapTo(x, y, z, yRot, 0);
         } else {
             p.teleportTo(world, x, y, z, yRot, 0);
         }
@@ -731,11 +731,11 @@ public final class Wedstrijd {
     /** Your record of an event (points or ticks), -1 when you never did it. */
     public static int best(Player player, Onderdeel o) {
         CompoundTag saved = GuhQuests.saved(player);
-        return saved.contains(BEST_KEY + o.id()) ? saved.getInt(BEST_KEY + o.id()) : -1;
+        return saved.contains(BEST_KEY + o.id()) ? saved.getIntOr(BEST_KEY + o.id(), 0) : -1;
     }
 
     public static int bestZeskamp(Player player) {
-        return GuhQuests.saved(player).getInt(BEST_KEY + "zeskamp");
+        return GuhQuests.saved(player).getIntOr(BEST_KEY + "zeskamp", 0);
     }
 
     /** The floating boards: the zeskamp in the tent (over Juf Vahoegsakee), one per event over its field. */
@@ -790,8 +790,8 @@ public final class Wedstrijd {
             }
             return;
         }
-        if (p.serverLevel().getGameTime() - w.lastTick > 40) {
-            w.eind(p.serverLevel(), false);
+        if (p.level().getGameTime() - w.lastTick > 40) {
+            w.eind(p.level(), false);
             neemTerug(p);
             p.sendSystemMessage(Component.translatable("quest.guhs.knabbelspelen.gestopt").withStyle(ChatFormatting.LIGHT_PURPLE));
         }

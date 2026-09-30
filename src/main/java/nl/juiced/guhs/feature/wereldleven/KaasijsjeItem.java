@@ -21,7 +21,7 @@ public class KaasijsjeItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             Kaasijsjes.eet(entity, smaak);
         }
         return super.finishUsingItem(stack, level, entity);

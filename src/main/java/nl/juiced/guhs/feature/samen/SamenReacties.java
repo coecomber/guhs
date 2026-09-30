@@ -85,7 +85,7 @@ public final class SamenReacties {
     @Nullable
     public static GuhEntity troost(ServerPlayer player) {
         GlobalPos waar = GESTORVEN.remove(player.getUUID());
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         List<GuhEntity> kandidaten = level.getEntitiesOfClass(GuhEntity.class, player.getBoundingBox().inflate(64),
                 g -> Band.isBandGuh(g) && player.getUUID().equals(g.getOwnerUUID()) && SamenMee.vrij(g));
         if (waar != null && waar.dimension() == level.dimension()) {
@@ -102,18 +102,18 @@ public final class SamenReacties {
         }
         level.sendParticles(ParticleTypes.POOF, guh.getX(), guh.getY() + 0.3, guh.getZ(), 6, 0.2, 0.2, 0.2, 0.02);
         guh.getNavigation().stop();
-        guh.moveTo(plek.x, plek.y, plek.z, guh.getYRot(), 0);
+        guh.snapTo(plek.x, plek.y, plek.z, guh.getYRot(), 0);
         guh.setDeltaMovement(Vec3.ZERO);
         guh.resetFallDistance();
         SamenSpel.kijk(guh, player.position());
         knuffel(guh, player);
         level.sendParticles(BandFeature.HARTJE.get(), guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 8, 0.4, 0.2, 0.4, 0.03);
         level.playSound(null, guh.blockPosition(), SamenFeature.BFF.get(), SoundSource.NEUTRAL, 0.7f, 1.1f);
-        player.displayClientMessage(Component.translatable("gui.guhs.samen.troost", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        player.sendSystemMessage(Component.translatable("gui.guhs.samen.troost", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         Band.geefHartjes(guh, player, 3, Reden.OVERIG);
         GuhAdvancements.grant(player, "samen_troost");
         if (Dagboek.eersteKeer(guh, player, "samen_troost")) {
-            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.troost", player.getGameProfile().getName());
+            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.troost", player.getGameProfile().name());
         }
         return guh;
     }
@@ -170,7 +170,7 @@ public final class SamenReacties {
         long nu = guh.level().getGameTime(), ms = System.currentTimeMillis();
         boolean welkom = false;
         if (data.contains(LAATST_TIJD)) {
-            long weg = nu - data.getLong(LAATST_TIJD), wegMs = ms - data.getLong(LAATST_MS);
+            long weg = nu - data.getLongOr(LAATST_TIJD, 0L), wegMs = ms - data.getLongOr(LAATST_MS, 0L);
             if (weg >= WEG_TICKS || (wegMs >= WEG_MS && weg >= 200)) {
                 welkom = welkom(guh, owner);
             }
@@ -192,12 +192,12 @@ public final class SamenReacties {
         level.playSound(null, guh.blockPosition(), SamenFeature.WELKOM.get(), SoundSource.NEUTRAL, 1f, 1f);
         level.playSound(null, guh.blockPosition(), ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 0.8f, guh.getVoicePitch() * 1.2f);
         level.sendParticles(BandFeature.HARTJE.get(), guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 10, 0.5, 0.3, 0.5, 0.04);
-        owner.displayClientMessage(Component.translatable("gui.guhs.samen.welkom", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        owner.sendOverlayMessage(Component.translatable("gui.guhs.samen.welkom", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         Band.geefHartjes(guh, owner, 5, Reden.OVERIG);
         GuhAdvancements.grant(owner, "samen_welkom");
         GidsFeature.grant(owner, "lieve_vadsjes/samen_welkom");
         if (Dagboek.eersteKeer(guh, owner, "samen_welkom")) {
-            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.welkom", owner.getGameProfile().getName());
+            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.welkom", owner.getGameProfile().name());
         }
         return true;
     }
@@ -218,11 +218,11 @@ public final class SamenReacties {
         Long laatst = ONWEER_MELDING.get(owner.getUUID());
         if (laatst == null || nu - laatst > 2400) {
             ONWEER_MELDING.put(owner.getUUID(), nu);
-            owner.displayClientMessage(Component.translatable("gui.guhs.samen.onweer", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            owner.sendOverlayMessage(Component.translatable("gui.guhs.samen.onweer", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
             Band.geefHartjes(guh, owner, 2, Reden.KNUFFELEN);
             GuhAdvancements.grant(owner, "samen_onweer");
             if (Dagboek.eersteKeer(guh, owner, "samen_onweer")) {
-                Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.onweer", owner.getGameProfile().getName());
+                Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.onweer", owner.getGameProfile().name());
             }
         }
     }
@@ -257,11 +257,11 @@ public final class SamenReacties {
             }
         }
         if (eerste != null) {
-            player.displayClientMessage(Component.translatable(n > 1 ? "gui.guhs.samen.welterusten_meer" : "gui.guhs.samen.welterusten",
-                    eerste.getDisplayName(), n - 1).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable(n > 1 ? "gui.guhs.samen.welterusten_meer" : "gui.guhs.samen.welterusten",
+                    eerste.getDisplayName(), n - 1).withStyle(ChatFormatting.LIGHT_PURPLE));
             GuhAdvancements.grant(player, "samen_welterusten");
             if (Dagboek.eersteKeer(eerste, player, "samen_welterusten")) {
-                Dagboek.wistJeDat(eerste, "gui.guhs.wistjedat.samen.welterusten", player.getGameProfile().getName());
+                Dagboek.wistJeDat(eerste, "gui.guhs.wistjedat.samen.welterusten", player.getGameProfile().name());
             }
         }
         return n;
@@ -288,7 +288,7 @@ public final class SamenReacties {
         }
         Vec3 plek = voor(owner, 0.6 + guh.getBbWidth() * 0.5);
         if (guh.distanceTo(owner) > 1.2 + guh.getBbWidth() && vrij(level, guh, plek)) {
-            guh.moveTo(plek.x, plek.y, plek.z, guh.getYRot(), 0);   // a happy hop into your arms
+            guh.snapTo(plek.x, plek.y, plek.z, guh.getYRot(), 0);   // a happy hop into your arms
             level.sendParticles(ParticleTypes.POOF, plek.x, plek.y + 0.2, plek.z, 4, 0.2, 0.1, 0.2, 0.01);
         }
         SamenSpel.kijk(guh, owner.position());
@@ -298,16 +298,16 @@ public final class SamenReacties {
                 ModNetworking.sendTo(p, new SamenPayloads.Bff(guh.getId(), owner.getId()));
             }
         }
-        owner.displayClientMessage(Component.translatable("gui.guhs.samen.bff", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        owner.sendOverlayMessage(Component.translatable("gui.guhs.samen.bff", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         long nu = level.getGameTime();
-        if (guh.getPersistentData().getLong(BFF_TOT) <= nu) {
+        if (guh.getPersistentData().getLongOr(BFF_TOT, 0L) <= nu) {
             guh.getPersistentData().putLong(BFF_TOT, nu + 600);
             Band.geefHartjes(guh, owner, Reden.KNUFFELEN.standaard(), Reden.KNUFFELEN);
             Band.moment(guh, owner, Moment.GEKNUFFELD, "");
         }
         GidsFeature.grant(owner, "lieve_vadsjes/samen_bff_knuffel");
         if (Dagboek.eersteKeer(guh, owner, "samen_bff_knuffel")) {
-            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.bff_knuffel", owner.getGameProfile().getName());
+            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.samen.bff_knuffel", owner.getGameProfile().name());
         }
     }
 
@@ -331,13 +331,13 @@ public final class SamenReacties {
         }
 
         private boolean mag() {
-            return Band.isBandGuh(guh) && !guh.level().isClientSide && !guh.isOrderedToSit() && !guh.isPassenger() && !guh.isLeashed()
+            return Band.isBandGuh(guh) && !guh.level().isClientSide() && !guh.isOrderedToSit() && !guh.isPassenger() && !guh.isLeashed()
                     && !Huisjes.isBinnen(guh) && !GuhHooks.isBezig(guh) && guh.emotes.current() != Emote.SLAPEN;
         }
 
         @Override
         public boolean canUse() {
-            if ((guh.tickCount + guh.getId()) % 20 != 0 || !mag() || guh.getPersistentData().getLong(ONWEER_TOT) > guh.level().getGameTime()
+            if ((guh.tickCount + guh.getId()) % 20 != 0 || !mag() || guh.getPersistentData().getLongOr(ONWEER_TOT, 0L) > guh.level().getGameTime()
                     || !onweer(guh)) {
                 return false;
             }

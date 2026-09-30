@@ -55,7 +55,7 @@ class TunnelSpel extends SpeelTaak {
         }
         punten.add(uit.buiten());
         this.verstopBij = Math.max(1, punten.size() / 2);
-        this.verstopTicks = mob instanceof GuhEntity ? 60 + level.random.nextInt(100) : 20 + level.random.nextInt(30);
+        this.verstopTicks = mob instanceof GuhEntity ? 60 + level.getRandom().nextInt(100) : 20 + level.getRandom().nextInt(30);
     }
 
     Fase fase() {
@@ -122,7 +122,7 @@ class TunnelSpel extends SpeelTaak {
                 }
                 if (ticks % 30 == 0) {
                     level.sendParticles(ParticleTypes.WHITE_ASH, mob.getX(), mob.getY() + 1.0, mob.getZ(), 3, 0.2, 0.05, 0.2, 0);
-                    if (level.random.nextInt(3) == 0) {   // a giggle from inside the tunnel
+                    if (level.getRandom().nextInt(3) == 0) {   // a giggle from inside the tunnel
                         level.playSound(null, mob.blockPosition(), ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 0.35f, 1.7f);
                     }
                 }
@@ -170,7 +170,7 @@ class TunnelSpel extends SpeelTaak {
             level.sendParticles(BandFeature.HARTJE.get(), m.getX(), m.getY() + 0.6, m.getZ(), 3, 0.2, 0.1, 0.2, 0);
         }
         if (vinder instanceof ServerPlayer p) {
-            p.displayClientMessage(Component.translatable("gui.guhs.speelgoed.tunnel.gevonden", mob.getName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.speelgoed.tunnel.gevonden", mob.getName()).withStyle(ChatFormatting.LIGHT_PURPLE));
             if (p.getUUID().equals(Band.eigenaar(mob))) {
                 Band.geefHartjes(mob, p, 2, Reden.SPEELGOED);
             }
@@ -178,8 +178,8 @@ class TunnelSpel extends SpeelTaak {
         } else if (vinder instanceof PieppiepmuisjeEntity) {
             ServerPlayer baas = Band.eigenaarOnline(mob);
             if (baas != null && baas.distanceToSqr(mob) < 32 * 32) {
-                baas.displayClientMessage(Component.translatable("gui.guhs.speelgoed.tunnel.muisje", vinder.getName(), mob.getName())
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                baas.sendOverlayMessage(Component.translatable("gui.guhs.speelgoed.tunnel.muisje", vinder.getName(), mob.getName())
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
     }

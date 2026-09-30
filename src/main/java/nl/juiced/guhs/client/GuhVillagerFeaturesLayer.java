@@ -1,7 +1,7 @@
 package nl.juiced.guhs.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.VillagerModel;
+import net.minecraft.client.model.npc.VillagerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -10,13 +10,13 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.npc.villager.Villager;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.registry.ModVillagers;
 
@@ -26,7 +26,7 @@ import nl.juiced.guhs.registry.ModVillagers;
  */
 public class GuhVillagerFeaturesLayer extends RenderLayer<Villager, VillagerModel<Villager>> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Guhs.id("guh_villager_features"), "main");
-    private static final ResourceLocation TEXTURE = Guhs.id("textures/entity/villager/guh_features.png");
+    private static final Identifier TEXTURE = Guhs.id("textures/entity/villager/guh_features.png");
 
     private final ModelPart ears;
     private final ModelPart tail;

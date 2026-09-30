@@ -14,6 +14,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * A maatje on your shoulder (2.8.1 the muisje; 3.0 any maatje with {@link PiepMaatje#kanOpSchouder}, e.g. the
  * pluiseekhoorntje): it lives in the player's persistent data ({@value #KEY}: the whole maatje as NBT, with its entity type
@@ -25,7 +26,7 @@ public final class Schouder {
     public static final String KEY = "guhs_piep_schouder";
 
     public static boolean heeft(ServerPlayer player) {
-        return player.getPersistentData().contains(KEY, Tag.TAG_COMPOUND);
+        return player.getPersistentData().contains(KEY);
     }
 
     /** The maatje goes onto the player's shoulder (it leaves the world if it was in it). */
@@ -33,7 +34,7 @@ public final class Schouder {
         TamableAnimal dier = maatje.dier();
         if (dier.isTame() && dier.getOwnerUUID() != null) {   // 2.10: "waar is mijn guh": on a shoulder
             nl.juiced.guhs.feature.band.GuhVolger.zet(dier.getOwnerUUID(), nl.juiced.guhs.feature.band.Band.id(dier), new nl.juiced.guhs.feature.band.Plek(nl.juiced.guhs.feature.band.PlekSoort.SCHOUDER,
-                    player.level().dimension(), player.blockPosition(), player.getGameProfile().getName(), player.level().getGameTime()));
+                    player.level().dimension(), player.blockPosition(), player.getGameProfile().name(), player.level().getGameTime()));
         }
         CompoundTag tag = new CompoundTag();
         dier.saveWithoutId(tag);
@@ -44,7 +45,7 @@ public final class Schouder {
         dier.discard();                                       // (it leaves the world, if it was in it)
         player.getPersistentData().put(KEY, tag);
         player.level().playSound(null, player.blockPosition(), maatje.oppakGeluid(), net.minecraft.sounds.SoundSource.NEUTRAL, 0.8f, 1.5f);
-        player.displayClientMessage(Component.translatable("gui.guhs.piep.op_schouder").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.piep.op_schouder").withStyle(ChatFormatting.LIGHT_PURPLE));
         sync(player);
     }
 
@@ -54,15 +55,15 @@ public final class Schouder {
         if (!heeft(player)) {
             return null;
         }
-        CompoundTag tag = player.getPersistentData().getCompound(KEY);
+        CompoundTag tag = player.getPersistentData().getCompoundOrEmpty(KEY);
         player.getPersistentData().remove(KEY);
         sync(player);
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         Entity e = maak(tag, level);
         if (!(e instanceof PiepMaatje maatje) || !(e instanceof TamableAnimal dier)) {
             return null;
         }
-        dier.moveTo(at.x, at.y, at.z, player.getYRot(), 0);
+        dier.snapTo(at.x, at.y, at.z, player.getYRot(), 0);
         dier.setDeltaMovement(Vec3.ZERO);
         dier.setPersistenceRequired();
         level.addFreshEntity(dier);
@@ -76,9 +77,9 @@ public final class Schouder {
     /** The maatje of a shoulder tag (its "id"; older saves without one: a muisje), not yet in the world. */
     @Nullable
     public static Entity maak(CompoundTag tag, net.minecraft.world.level.Level level) {
-        EntityType<?> type = tag.contains("id") ? EntityType.byString(tag.getString("id")).orElse(PiepFeature.PIEPPIEPMUISJE.get())
+        EntityType<?> type = tag.contains("id") ? EntityType.byString(tag.getStringOr("id", "")).orElse(PiepFeature.PIEPPIEPMUISJE.get())
                 : PiepFeature.PIEPPIEPMUISJE.get();
-        Entity e = type.create(level);
+        Entity e = type.create(level, EntitySpawnReason.TRIGGERED);
         if (e != null) {
             CompoundTag copy = tag.copy();
             copy.remove("id");
@@ -93,13 +94,13 @@ public final class Schouder {
     }
 
     static PiepPayloads.SchouderData bericht(ServerPlayer player) {
-        CompoundTag tag = heeft(player) ? player.getPersistentData().getCompound(KEY) : new CompoundTag();
+        CompoundTag tag = heeft(player) ? player.getPersistentData().getCompoundOrEmpty(KEY) : new CompoundTag();
         CompoundTag uiterlijk = new CompoundTag();
         if (tag.contains("CustomName")) {
-            uiterlijk.putString("CustomName", tag.getString("CustomName"));
+            uiterlijk.putString("CustomName", tag.getStringOr("CustomName", ""));
         }
         // 3.0: the type (and its look: the whole maatje minus its inventory-like parts) so the client draws the right one
-        uiterlijk.putString("id", tag.contains("id") ? tag.getString("id") : BuiltInRegistries.ENTITY_TYPE.getKey(PiepFeature.PIEPPIEPMUISJE.get()).toString());
+        uiterlijk.putString("id", tag.contains("id") ? tag.getStringOr("id", "") : BuiltInRegistries.ENTITY_TYPE.getKey(PiepFeature.PIEPPIEPMUISJE.get()).toString());
         CompoundTag look = tag.copy();
         for (String k : new String[]{"Inventory", "Items", "ArmorItems", "HandItems", "Brain", "Attributes", "NeoForgeData", "neoforge:attachments"}) {
             look.remove(k);

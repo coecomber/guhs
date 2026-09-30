@@ -29,13 +29,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * Mieuwguh: a tiny pink floating guhtje with big blue eyes and a long thin tail with a bulb. She giggles at everything, does
@@ -81,11 +81,11 @@ public class MewEntity extends AmbientCreature implements GeoEntity {
         if (!getPersistentData().contains(THUIS)) {
             getPersistentData().putLong(THUIS, blockPosition().asLong());
         }
-        return BlockPos.of(getPersistentData().getLong(THUIS));
+        return BlockPos.of(getPersistentData().getLongOr(THUIS, 0L));
     }
 
     public boolean isWild() {
-        return getPersistentData().getBoolean(WILD);
+        return getPersistentData().getBooleanOr(WILD, false);
     }
 
     // --- never hurt, never falls, not pushed -------------------------------------------------------------------------------
@@ -95,7 +95,7 @@ public class MewEntity extends AmbientCreature implements GeoEntity {
         if (source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             return super.hurt(source, amount);
         }
-        if (!level().isClientSide && source.getEntity() instanceof Player) {
+        if (!level().isClientSide() && source.getEntity() instanceof Player) {
             giechel();   // (she thinks it's a game)
         }
         return false;
@@ -139,7 +139,7 @@ public class MewEntity extends AmbientCreature implements GeoEntity {
     public void tick() {
         super.tick();
         setDeltaMovement(getDeltaMovement().scale(0.9));
-        if (level().isClientSide && random.nextInt(14) == 0) {
+        if (level().isClientSide() && random.nextInt(14) == 0) {
             level().addParticle(ParticleTypes.END_ROD, getX() + (random.nextDouble() - 0.5) * 0.4, getY() + 0.2,
                     getZ() + (random.nextDouble() - 0.5) * 0.4, 0, -0.01, 0);
         }
@@ -256,13 +256,13 @@ public class MewEntity extends AmbientCreature implements GeoEntity {
         if (hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
-        if (!level().isClientSide && player instanceof ServerPlayer sp) {
+        if (!level().isClientSide() && player instanceof ServerPlayer sp) {
             triggerAnim("actie", "zwaai");
             playSound(MewtwoFeature.MEW_GIECHEL.get(), 0.9f, 1.2f);
-            sp.displayClientMessage(Component.translatable("gui.guhs.mewtwo.mew.zwaai"), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.mewtwo.mew.zwaai"));
             nl.juiced.guhs.quest.GuhDex.zie(sp, GuhVariant.MEW);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

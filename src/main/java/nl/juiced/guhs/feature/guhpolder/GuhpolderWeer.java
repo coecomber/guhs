@@ -27,7 +27,7 @@ public final class GuhpolderWeer {
 
     /** Is this biome one the weather leaves alone (the Guhpolder...; by its registry holder, so it works for any Biome instance)? */
     public static boolean isGuhpolder(Level level, Biome biome) {
-        var registry = level.registryAccess().registryOrThrow(Registries.BIOME);
+        var registry = level.registryAccess().lookupOrThrow(Registries.BIOME);
         return registry.getResourceKey(biome).flatMap(registry::getHolder).map(h -> h.is(GEEN_WEER)).orElse(false);
     }
 

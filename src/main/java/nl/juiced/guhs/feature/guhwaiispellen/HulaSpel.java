@@ -131,13 +131,13 @@ public final class HulaSpel {
         boolean mijn = spel.bezig() && player.getUUID().equals(spel.danser);
         CompoundTag saved = GuhwaiiSpellenFeature.data(player);
         GuhQuests.say(player, npc, mijn ? "quest.guhs.guhwaiispellen.hula.bezig" : spel.bezig() ? "quest.guhs.guhwaiispellen.hula.druk"
-                : saved.getBoolean("EersteHula") ? "quest.guhs.guhwaiispellen.hula.hallo" + (1 + player.getRandom().nextInt(4))
+                : saved.getBooleanOr("EersteHula", false) ? "quest.guhs.guhwaiispellen.hula.hallo" + (1 + player.getRandom().nextInt(4))
                 : "quest.guhs.guhwaiispellen.hula.welkom");
         CompoundTag data = GuhwaiiSpellenFeature.scherm(player, "hula");
         data.putBoolean("Mine", mijn);
         data.putBoolean("Running", spel.bezig());
-        ServerPlayer d = spel.danser == null ? null : player.server.getPlayerList().getPlayer(spel.danser);
-        data.putString("Danser", d == null ? "?" : d.getGameProfile().getName());
+        ServerPlayer d = spel.danser == null ? null : player.level().getServer().getPlayerList().getPlayer(spel.danser);
+        data.putString("Danser", d == null ? "?" : d.getGameProfile().name());
         nl.juiced.guhs.network.ModNetworking.sendTo(player, new GuhwaiiSpellenPayloads.Open(npc.getId(), data));
     }
 
@@ -209,7 +209,7 @@ public final class HulaSpel {
                 t.putInt("Npc", npc.getId());
                 t.putInt("Liedje", liedje.ordinal());
                 t.putBoolean("Danser", p == d);
-                t.putInt("Record", GuhwaiiSpellenFeature.data(p).getInt("Hula_" + liedje.niveau.id()));
+                t.putInt("Record", GuhwaiiSpellenFeature.data(p).getIntOr("Hula_" + liedje.niveau.id(), 0));
                 nl.juiced.guhs.network.ModNetworking.sendTo(p, new GuhwaiiSpellenPayloads.HulaStart(t));
             }
         } else {
@@ -377,7 +377,7 @@ public final class HulaSpel {
         p.sendSystemMessage(Component.translatable("quest.guhs.guhwaiispellen.hula.uitslag", score, liedje.naam(), munten,
                 tel(HulaKaart.Oordeel.VAHOEG), tel(HulaKaart.Oordeel.NJEG), tel(HulaKaart.Oordeel.GUH), tel(HulaKaart.Oordeel.MIS), maxCombo)
                 .withStyle(ChatFormatting.GOLD));
-        int oud = data.getInt("Hula_" + niveau.id());
+        int oud = data.getIntOr("Hula_" + niveau.id(), 0);
         if (score > oud) {
             data.putInt("Hula_" + niveau.id(), score);
             p.sendSystemMessage((oud > 0 ? Component.translatable("quest.guhs.guhwaiispellen.record", score, oud)
@@ -400,7 +400,7 @@ public final class HulaSpel {
         } else if (score > 0) {
             GuhQuests.say(p, npc, "quest.guhs.guhwaiispellen.hula.klaar" + (1 + level.getRandom().nextInt(3)));
         }
-        if (!data.getBoolean("EersteHula") && score > 0) {
+        if (!data.getBooleanOr("EersteHula", false) && score > 0) {
             data.putBoolean("EersteHula", true);
             Minigames.give(p, new ItemStack(GuhwaiiSpellenBlocks.SCHELPJESMUNT.get(), EERSTE_MUNTEN));
             Minigames.give(p, new ItemStack(GuhwaiiSpellenBlocks.HULA_BLOEMENMAT.get(), 2));

@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -14,8 +14,6 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -28,13 +26,12 @@ import nl.juiced.guhs.quest.GuhDex;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the Ballonfestival: the four routes (closed loops, smooth, turned with the festival, slow at the
  * viewpoints), a whole flight (sped up) with its stamps and ballonmunten (+1), no jumping out halfway, the next route,
  * Kapitein Wolkje's role, shop and balloon, and the template.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class BallonGameTests {
     private static final String EMPTY = "empty";
 
@@ -44,7 +41,7 @@ public class BallonGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return p;
     }
 
@@ -57,7 +54,7 @@ public class BallonGameTests {
 
     private static int count(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -72,7 +69,7 @@ public class BallonGameTests {
         return b;
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void ballonRoutes(GameTestHelper helper) {
         Vec3 thuis = new Vec3(100.5, 70, -40.5);
         Set<BallonRoute.Uitzicht> gezien = new HashSet<>();
@@ -110,14 +107,14 @@ public class BallonGameTests {
     }
 
     /** A whole flight (a small round, 8x faster): up, round, down onto the steiger; two stamps and ballonmunten; the next route. */
-    @GameTest(template = EMPTY, timeoutTicks = 600)
+    @GuhTest(template = EMPTY, timeoutTicks = 600)
     public static void ballonVlucht(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         // (the test area's own chunk is the one that surely ticks entities: fly a small round in its middle)
         BlockPos o = helper.absolutePos(new BlockPos(0, 2, 0));
         BlockPos midden = new BlockPos((o.getX() >> 4) * 16 + 8, o.getY(), (o.getZ() >> 4) * 16 + 8);
-        LuchtballonEntity b = BallonFeature.LUCHTBALLON.get().create(helper.getLevel());
-        b.moveTo(midden.getX() + 0.5, midden.getY(), midden.getZ() + 0.5, 0, 0);
+        LuchtballonEntity b = BallonFeature.LUCHTBALLON.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
+        b.snapTo(midden.getX() + 0.5, midden.getY(), midden.getZ() + 0.5, 0, 0);
         b.setThuis(midden, 0);
         helper.getLevel().addFreshEntity(b);
         BallonRoute route = BallonVlucht.volgendeRoute(p);
@@ -146,7 +143,7 @@ public class BallonGameTests {
     }
 
     /** No jumping out halfway (sneaking); a flight that's broken off lands at once without stamps. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void ballonNietUitstappen(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         LuchtballonEntity b = ballon(helper, new BlockPos(4, 2, 4));
@@ -168,7 +165,7 @@ public class BallonGameTests {
     }
 
     /** Kapitein Wolkje: his own role and shop; he takes the balloon on his steiger, never a decoration, and fetches one if there's none. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void ballonKapitein(GameTestHelper helper) {
         helper.assertTrue(Features.role(GuhNpcEntity.Kind.BALLONGUH) == BallonRole.INSTANCE && BallonRole.INSTANCE != Binnenkort.ROLE, "his own role");
         helper.assertTrue(GuhDex.ENTRIES.contains(GuhVariant.BALLONGUH), "his Guhdex page");
@@ -204,14 +201,14 @@ public class BallonGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void ballonFestivalTemplate(GameTestHelper helper) {
         var t = helper.getLevel().getStructureManager().get(Guhs.id("ballonfestival"));
         helper.assertTrue(t.isPresent() && t.get().getSize().getX() <= 72 && t.get().getSize().getZ() <= 72 && t.get().getSize().getY() <= 40,
                 "the festival template (72 x 40 x 72 at most)");
         var settings = new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings();
         var jigsaws = t.get().filterBlocks(BlockPos.ZERO, settings, Blocks.JIGSAW, true);
-        helper.assertTrue(jigsaws.size() == 1 && jigsaws.get(0).nbt().getString("name").equals("guhs:ballonfestival_midden"), "its anchor");
+        helper.assertTrue(jigsaws.size() == 1 && jigsaws.get(0).nbt().getStringOr("name", "").equals("guhs:ballonfestival_midden"), "its anchor");
         helper.assertTrue(t.get().filterBlocks(BlockPos.ZERO, settings, BallonFeature.BALLONSTEIGER.get(), true).size() > 30, "steigers");
         helper.succeed();
     }

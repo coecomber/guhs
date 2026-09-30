@@ -2,7 +2,7 @@ package nl.juiced.guhs.feature.golf.client;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
@@ -53,7 +53,7 @@ public final class GolfClient {
         return player.isUsingItem() && player.getUseItem().getItem() instanceof GolfClubItem ? player.getTicksUsingItem() : -1;
     }
 
-    private static void renderPower(GuiGraphics g, DeltaTracker delta) {
+    private static void renderPower(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.options.hideGui) {
             return;
@@ -76,7 +76,7 @@ public final class GolfClient {
         }
         g.fill(x + w - 2, y - 1, x + w - 1, y + h + 1, 0xFFFFFFFF);  // the VAHOEG! mark at 100%
         Component label = Component.translatable("gui.guhs.golf.power", Math.round(power * 100));
-        g.drawCenteredString(mc.font, label, g.guiWidth() / 2, y - 11, power > 0.97f ? 0xFFFFD27A : 0xFFFFE6EE);
+        g.centeredText(mc.font, label, g.guiWidth() / 2, y - 11, power > 0.97f ? 0xFFFFD27A : 0xFFFFE6EE);
     }
 
     /** The aiming line: pink dots from your ball in the direction you look, as far as it would roll on flat felt. */

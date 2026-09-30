@@ -1,6 +1,6 @@
 package nl.juiced.guhs.feature.elftocht;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -14,7 +14,7 @@ import nl.juiced.guhs.Guhs;
  * adds the skater's sway, the blades' hiss and the ice dust (client.SchaatsEffecten).
  */
 public final class ElftochtSchaatsen {
-    public static final ResourceLocation MODIFIER = Guhs.id("elftocht_schaatsen");
+    public static final Identifier MODIFIER = Guhs.id("elftocht_schaatsen");
     /** Extra walking speed on ice (x the base speed): walking ~6.4, sprinting ~8.3 blocks per second on the canal. */
     public static final double SNELHEID = 0.5;
     /** Ticks you keep the skating speed in the air (a jump) after touching ice. */
@@ -39,7 +39,7 @@ public final class ElftochtSchaatsen {
             return true;
         }
         var data = player.getPersistentData();
-        return !player.onGround() && data.contains(LAATST) && player.tickCount - data.getInt(LAATST) <= SPRONG;
+        return !player.onGround() && data.contains(LAATST) && player.tickCount - data.getIntOr(LAATST, 0) <= SPRONG;
     }
 
     public static void tick(Player player) {

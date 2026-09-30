@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -43,13 +43,13 @@ public final class QuestItems {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
             if (player instanceof ServerPlayer serverPlayer) {
                 level.playSound(null, player.blockPosition(), SoundEvents.NOTE_BLOCK_FLUTE.value(), SoundSource.PLAYERS, 1f, 1.6f);
                 MaagManager.whistle(serverPlayer);
             }
             player.getCooldowns().addCooldown(this, 40);
-            return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(hand));
         }
     }
 
@@ -60,11 +60,11 @@ public final class QuestItems {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
             if (player instanceof ServerPlayer serverPlayer) {
                 GuhDex.open(serverPlayer);
             }
-            return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(hand));
         }
     }
 
@@ -77,17 +77,17 @@ public final class QuestItems {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-            if (!level.isClientSide) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
+            if (!level.isClientSide()) {
                 List<GuhEntity> rare = level.getEntitiesOfClass(GuhEntity.class, player.getBoundingBox().inflate(RANGE),
                         g -> g.getVariant() != GuhVariant.NORMAL);
                 rare.forEach(g -> g.addEffect(new MobEffectInstance(MobEffects.GLOWING, 600, 0, false, false)));
-                player.displayClientMessage(Component.translatable("item.guhs.guh_kristal_verrekijker.found", rare.size())
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("item.guhs.guh_kristal_verrekijker.found", rare.size())
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 level.playSound(null, player.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.5f, 1.8f);
             }
             player.getCooldowns().addCooldown(this, 100);
-            return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(hand));
         }
     }
 

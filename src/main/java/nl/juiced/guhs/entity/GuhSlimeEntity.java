@@ -7,7 +7,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -45,7 +45,7 @@ public class GuhSlimeEntity extends Slime {
         return new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(ModItems.GUH_SLIMEBALL.get()));
     }
 
-    public static boolean checkGuhSlimeSpawnRules(EntityType<GuhSlimeEntity> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+    public static boolean checkGuhSlimeSpawnRules(EntityType<GuhSlimeEntity> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
         return level.getBlockState(pos.below()).isSolid() && level.getRawBrightness(pos, 0) > 7;
     }
 }

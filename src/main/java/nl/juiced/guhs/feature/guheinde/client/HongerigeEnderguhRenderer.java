@@ -4,21 +4,21 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.guheinde.HongerigeEnderguhEntity;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.cache.model.BakedGeoModel;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * The starved Enderguh: the guh model with only its ender bones (wings, horns, spikes), textured
  * textures/entity/guh_hongerig_&lt;vahoeg&gt;.png: grey at 0, back to all its Vahoege Enderguh colours at the top.
  */
 public class HongerigeEnderguhRenderer extends GeoEntityRenderer<HongerigeEnderguhEntity> {
-    private static final ResourceLocation[] TEXTURES = new ResourceLocation[HongerigeEnderguhEntity.MAX_VAHOEG + 1];
+    private static final Identifier[] TEXTURES = new Identifier[HongerigeEnderguhEntity.MAX_VAHOEG + 1];
 
     static {
         for (int i = 0; i < TEXTURES.length; i++) {
@@ -29,12 +29,12 @@ public class HongerigeEnderguhRenderer extends GeoEntityRenderer<HongerigeEnderg
     public HongerigeEnderguhRenderer(EntityRendererProvider.Context context) {
         super(context, new DefaultedEntityGeoModel<HongerigeEnderguhEntity>(Guhs.id("guh"), true) {
             @Override
-            public ResourceLocation getTextureResource(HongerigeEnderguhEntity guh) {
+            public Identifier getTextureResource(HongerigeEnderguhEntity guh) {
                 return TEXTURES[Math.max(0, Math.min(TEXTURES.length - 1, guh.getVahoeg()))];
             }
 
             @Override
-            public ResourceLocation getAnimationResource(HongerigeEnderguhEntity guh) {
+            public Identifier getAnimationResource(HongerigeEnderguhEntity guh) {
                 return Guhs.id("animations/entity/guh.animation.json");
             }
         });

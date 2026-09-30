@@ -26,6 +26,7 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The sterrenregen (at night): stars fall around the players. Each one lies glowing where it landed for a while (walk
  * into it for a bit of sterrenstof), and at some of them a starry guh turns up: it can be tamed (more easily than a
@@ -68,7 +69,7 @@ public class Sterrenregen extends Evenement {
             followParticipants();
         }
         if (spontaneous && age >= nextStar && age < duration - TAME_WINDOW) {
-            nextStar = age + EVERY + level.random.nextInt(EVERY_RANDOM);
+            nextStar = age + EVERY + level.getRandom().nextInt(EVERY_RANDOM);
             spawnStar();
         }
         for (VallendeSterEntity star : List.copyOf(stars())) {
@@ -98,7 +99,7 @@ public class Sterrenregen extends Evenement {
     @Nullable
     public VallendeSterEntity spawnStar() {
         Vec3 around = aroundSomeone();
-        double angle = level.random.nextDouble() * Math.PI * 2, dist = minDist + level.random.nextDouble() * (maxDist - minDist);
+        double angle = level.getRandom().nextDouble() * Math.PI * 2, dist = minDist + level.getRandom().nextDouble() * (maxDist - minDist);
         BlockPos ground = Evenementen.ground(level, Mth.floor(around.x + Math.cos(angle) * dist), Mth.floor(around.z + Math.sin(angle) * dist),
                 around.y, true);
         return ground == null ? null : dropStar(ground, FALL_FROM);
@@ -106,13 +107,13 @@ public class Sterrenregen extends Evenement {
 
     /** A star falls onto this spot from this far away (high up, at a slant). */
     public VallendeSterEntity dropStar(BlockPos ground, double from) {
-        VallendeSterEntity star = EvenementenFeature.VALLENDE_STER.get().create(level);
+        VallendeSterEntity star = EvenementenFeature.VALLENDE_STER.get().create(level, EntitySpawnReason.TRIGGERED);
         Vec3 target = new Vec3(ground.getX() + 0.5, ground.getY() + 0.1, ground.getZ() + 0.5);
-        double angle = level.random.nextDouble() * Math.PI * 2;
+        double angle = level.getRandom().nextDouble() * Math.PI * 2;
         Vec3 start = target.add(Math.cos(angle) * from * 0.6, from * 0.8, Math.sin(angle) * from * 0.6);
-        start = new Vec3(start.x, Math.min(start.y, level.getMaxBuildHeight() - 2), start.z);
+        start = new Vec3(start.x, Math.min(start.y, level.getMaxY() + 1 - 2), start.z);
         star.aimAt(target);
-        star.moveTo(start.x, start.y, start.z, 0, 0);
+        star.snapTo(start.x, start.y, start.z, 0, 0);
         entities.add(star.getUUID());
         level.addFreshEntity(star);
         stars.add(star);
@@ -127,7 +128,7 @@ public class Sterrenregen extends Evenement {
         level.sendParticles(ParticleTypes.END_ROD, star.getX(), star.getY() + 0.3, star.getZ(), 15, 0.6, 0.4, 0.6, 0.05);
         level.playSound(null, star.getX(), star.getY(), star.getZ(), SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.AMBIENT, 2f, 1.4f);
         level.playSound(null, star.getX(), star.getY(), star.getZ(), SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.AMBIENT, 1.5f, 1.2f);
-        boolean guh = level.random.nextInt(GUH_CHANCE) == 0 || (guhCount == 0 && landed.size() >= 3);
+        boolean guh = level.getRandom().nextInt(GUH_CHANCE) == 0 || (guhCount == 0 && landed.size() >= 3);
         if (guh) {
             spawnStarGuh(star.position());
         }
@@ -135,11 +136,11 @@ public class Sterrenregen extends Evenement {
 
     /** A starry guh turns up here, tameable for a little while. */
     public GuhEntity spawnStarGuh(Vec3 at) {
-        GuhEntity guh = ModEntities.GUH.get().create(level);
-        guh.moveTo(at.x, at.y, at.z, level.random.nextFloat() * 360, 0);
+        GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
+        guh.snapTo(at.x, at.y, at.z, level.getRandom().nextFloat() * 360, 0);
         guh.setVariant(GuhVariant.STARRY);
-        guh.setPersonality(GuhPersonality.random(level.random));
-        guh.setGuhScale(0.6f + level.random.nextFloat() * 0.6f);
+        guh.setPersonality(GuhPersonality.random(level.getRandom()));
+        guh.setGuhScale(0.6f + level.getRandom().nextFloat() * 0.6f);
         guh.setGlowingTag(true);
         guh.getPersistentData().putLong(Evenementen.STER, level.getGameTime() + TAME_WINDOW);
         entities.add(guh.getUUID());
@@ -148,7 +149,7 @@ public class Sterrenregen extends Evenement {
         guhCount++;
         for (ServerPlayer player : players()) {
             if (player.distanceToSqr(at) < 48 * 48) {
-                player.displayClientMessage(Component.translatable("gui.guhs.evenement.sterrenregen.guh").withStyle(ChatFormatting.AQUA), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.evenement.sterrenregen.guh").withStyle(ChatFormatting.AQUA));
             }
         }
         return guh;
@@ -173,7 +174,7 @@ public class Sterrenregen extends Evenement {
             }
             if (guh.isTame()) {
                 keep(guh);
-            } else if (level.getGameTime() >= guh.getPersistentData().getLong(Evenementen.STER)) {
+            } else if (level.getGameTime() >= guh.getPersistentData().getLongOr(Evenementen.STER, 0L)) {
                 backToTheStars(guh);
             }
         }

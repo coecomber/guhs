@@ -2,7 +2,7 @@ package nl.juiced.guhs.feature.knabbelspelen.client;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
@@ -49,7 +49,7 @@ public final class KnabbelspelenClient {
         blinddoekSinds = System.currentTimeMillis();
     }
 
-    private static void renderBlinddoek(GuiGraphics g, DeltaTracker delta) {
+    private static void renderBlinddoek(GuiGraphicsExtractor g, DeltaTracker delta) {
         Minecraft mc = Minecraft.getInstance();
         if (!blinddoek || mc.player == null) {
             return;
@@ -69,7 +69,7 @@ public final class KnabbelspelenClient {
         g.fill(0, h - 6, w, h, 0xFFE889B4);
         g.fill(w - 34, h / 2 - 14, w - 10, h / 2 + 14, 0xFFD06A9C);
         g.fill(w - 28, h / 2 - 8, w - 16, h / 2 + 8, 0xFFE889B4);
-        g.drawCenteredString(mc.font, Component.translatable("gui.guhs.knabbelspelen.blinddoek"), w / 2, h - 40, 0xFFF6C4DC);
+        g.centeredText(mc.font, Component.translatable("gui.guhs.knabbelspelen.blinddoek"), w / 2, h - 40, 0xFFF6C4DC);
     }
 
     private KnabbelspelenClient() {

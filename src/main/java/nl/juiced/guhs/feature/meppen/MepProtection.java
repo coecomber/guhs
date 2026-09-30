@@ -12,7 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -29,7 +29,7 @@ public final class MepProtection {
 
     /** Is this spot in (or on) a Mika-mephal? */
     public static boolean inHall(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().registryOrThrow(Registries.STRUCTURE).get(HALL);
+        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(HALL);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -41,7 +41,7 @@ public final class MepProtection {
         if (player.getAbilities().instabuild || !protectedAt(player.level(), pos)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.mika_mep.no_build").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.mika_mep.no_build").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -63,7 +63,7 @@ public final class MepProtection {
     /** Using an item on a block (buckets, flint and steel, item frames...): not in the hall. Sitting down is fine. */
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty() || event.getItemStack().is(MeppenFeature.MEP_HAMER.get())) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty() || event.getItemStack().is(MeppenFeature.MEP_HAMER.get())) {
             return;
         }
         if (denied(event.getEntity(), event.getPos()) || denied(event.getEntity(), event.getPos().relative(event.getFace() == null ? Direction.UP : event.getFace()))) {
@@ -74,7 +74,7 @@ public final class MepProtection {
     /** Buckets are used "in the air" too. */
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }

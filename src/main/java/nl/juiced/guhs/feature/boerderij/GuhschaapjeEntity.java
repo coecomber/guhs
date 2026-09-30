@@ -17,6 +17,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Het guhschaapje: a round cloud of pink-white pluiswol with a guh face, guh ears and little legs. When it is content it
  * sheds a tuft of pluiswol (you see it shorn for the rest of the day, then its wool is fluffy again). Bleh!
@@ -77,6 +78,6 @@ public class GuhschaapjeEntity extends BoerderijDier {
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
-        return BoerderijFeature.GUHSCHAAPJE.get().create(level);
+        return BoerderijFeature.GUHSCHAAPJE.get().create(level, EntitySpawnReason.TRIGGERED);
     }
 }

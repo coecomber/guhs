@@ -23,6 +23,8 @@ import nl.juiced.guhs.feature.beroepen.BeroepenVoortgang.Beroep;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Inspecteur Vahoegsma (POLITIEGUH), in the hall of the Politiebureautje: "De Knabbeldief-zaak" (once per player).
  * <ol>
@@ -86,7 +88,7 @@ public final class Politie implements NpcRole {
         // a different hiding place than last time, with a route to it
         List<BlockPos> kandidaten = new ArrayList<>(plekken);
         java.util.Collections.shuffle(kandidaten, new java.util.Random(level.getGameTime() ^ player.getUUID().hashCode()));
-        long vorige = npc.roleData.getLong("Vorige");
+        long vorige = npc.roleData.getLongOr("Vorige", 0L);
         kandidaten.sort((a, b) -> Boolean.compare(a.asLong() == vorige, b.asLong() == vorige));
         BlockPos plek = null;
         List<BlockPos> route = List.of();
@@ -119,7 +121,7 @@ public final class Politie implements NpcRole {
             }
         }
         level.setBlock(plek, BeroepenFeature.KNABBELBUIT.get().defaultBlockState(), 3);
-        KnabbeldiefMikaEntity mika = BeroepenFeature.KNABBELDIEF_MIKA.get().create(level);
+        KnabbeldiefMikaEntity mika = BeroepenFeature.KNABBELDIEF_MIKA.get().create(level, EntitySpawnReason.TRIGGERED);
         if (mika != null) {
             BlockPos bij = plek;
             for (Direction d : Direction.Plane.HORIZONTAL) {
@@ -128,10 +130,10 @@ public final class Politie implements NpcRole {
                     break;
                 }
             }
-            mika.moveTo(bij.getX() + 0.5, bij.getY(), bij.getZ() + 0.5, level.random.nextFloat() * 360, 0);
+            mika.snapTo(bij.getX() + 0.5, bij.getY(), bij.getZ() + 0.5, level.getRandom().nextFloat() * 360, 0);
             mika.buit(plek);
             level.addFreshEntity(mika);
-            npc.roleData.putUUID("Mika", mika.getUUID());
+            npc.roleData.store("Mika", UUIDUtil.CODEC, mika.getUUID());
         }
         npc.roleData.putLongArray("Spoor", BeroepenHulp.longs(spoor));
         npc.roleData.putLong("Buit", plek.asLong());
@@ -153,7 +155,7 @@ public final class Politie implements NpcRole {
             }
             npc.roleData.putLong("Kluis", ps.get(0).asLong());
         }
-        return BlockPos.of(npc.roleData.getLong("Kluis"));
+        return BlockPos.of(npc.roleData.getLongOr("Kluis", 0L));
     }
 
     /** The Knabbeldief's hiding places (found once, remembered; a sack lying there still counts as one). */
@@ -189,16 +191,16 @@ public final class Politie implements NpcRole {
      */
     public static boolean gevonden(ServerLevel level, BlockPos pos, ServerPlayer player) {
         if (BeroepenVoortgang.stap(player, BEROEP) != 1) {
-            player.displayClientMessage(Component.translatable("gui.guhs.beroepen.politie.niet_van_jou").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.politie.niet_van_jou").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         level.setBlock(pos, BeroepenFeature.VERSTOPPLEK.get().defaultBlockState(), 3);
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 12, 0.4, 0.4, 0.4, 0.05);
         level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.8f, 0.8f);
         BeroepenVoortgang.zet(player, BEROEP, 2);
-        player.displayClientMessage(Component.translatable("gui.guhs.beroepen.politie.gevonden").withStyle(ChatFormatting.GOLD), false);
+        player.sendSystemMessage(Component.translatable("gui.guhs.beroepen.politie.gevonden").withStyle(ChatFormatting.GOLD));
         for (GuhNpcEntity npc : level.getEntitiesOfClass(GuhNpcEntity.class, new AABB(pos).inflate(BEREIK + 16),
-                n -> n.getKind() == GuhNpcEntity.Kind.POLITIEGUH && n.roleData.getLong("Buit") == pos.asLong() && n.roleData.contains("Buit"))) {
+                n -> n.getKind() == GuhNpcEntity.Kind.POLITIEGUH && n.roleData.getLongOr("Buit", 0L) == pos.asLong() && n.roleData.contains("Buit"))) {
             veeg(npc);
             KnabbeldiefMikaEntity mika = mika(npc);
             if (mika != null) {
@@ -211,10 +213,10 @@ public final class Politie implements NpcRole {
 
     @Nullable
     static KnabbeldiefMikaEntity mika(GuhNpcEntity npc) {
-        if (!npc.roleData.hasUUID("Mika")) {
+        if (!npc.roleData.read("Mika", UUIDUtil.CODEC).isPresent()) {
             return null;
         }
-        Entity e = ((ServerLevel) npc.level()).getEntity(npc.roleData.getUUID("Mika"));
+        Entity e = ((ServerLevel) npc.level()).getEntity(npc.roleData.read("Mika", UUIDUtil.CODEC).orElseThrow());
         return e instanceof KnabbeldiefMikaEntity m && m.isAlive() ? m : null;
     }
 
@@ -234,7 +236,7 @@ public final class Politie implements NpcRole {
         ServerLevel level = (ServerLevel) npc.level();
         veeg(npc);
         if (npc.roleData.contains("Buit")) {
-            BlockPos buit = BlockPos.of(npc.roleData.getLong("Buit"));
+            BlockPos buit = BlockPos.of(npc.roleData.getLongOr("Buit", 0L));
             BlockState s = level.getBlockState(buit);
             if (s.is(BeroepenFeature.KNABBELBUIT.get())) {
                 level.setBlock(buit, BeroepenFeature.VERSTOPPLEK.get().defaultBlockState(), 3);
@@ -257,6 +259,6 @@ public final class Politie implements NpcRole {
     /** (Tests) where the sack lies now (null: none). */
     @Nullable
     public static BlockPos buit(GuhNpcEntity npc) {
-        return npc.roleData.contains("Buit") ? BlockPos.of(npc.roleData.getLong("Buit")) : null;
+        return npc.roleData.contains("Buit") ? BlockPos.of(npc.roleData.getLongOr("Buit", 0L)) : null;
     }
 }

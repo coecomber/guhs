@@ -63,7 +63,7 @@ public class GuhPortalShape {
 
     @Nullable
     private BlockPos calculateBottomLeft(BlockPos pos) {
-        int minY = Math.max(level.getMinBuildHeight(), pos.getY() - MAX_SIZE);
+        int minY = Math.max(level.getMinY(), pos.getY() - MAX_SIZE);
         while (pos.getY() > minY && isEmpty(level.getBlockState(pos.below()))) {
             pos = pos.below();
         }

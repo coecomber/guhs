@@ -33,8 +33,8 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.klusjes.BasisKlus;
 import nl.juiced.guhs.registry.ModItems;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.RawAnimation;
 
 /**
  * Sjokkel (no guh!): a real Sjokkel in Minecraft style: a round red shell full of cheese holes (like gatenkaas), a yellow
@@ -151,8 +151,8 @@ public class ShuckleEntity extends Landdiertje {
         if (!snack.is(ModItems.KAAS_KNABBELS.get())) {
             bessen = Math.min(BESSEN_MAX, bessen + 1);
             if (player != null && bessen >= BESSEN_PER_SAPJE) {
-                player.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.shuckle_bessen", getDisplayName(), bessen)
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.shuckle_bessen", getDisplayName(), bessen)
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
     }
@@ -189,7 +189,7 @@ public class ShuckleEntity extends Landdiertje {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         if (plekje != null && !isTame() && !hasRestriction()) {
@@ -243,7 +243,7 @@ public class ShuckleEntity extends Landdiertje {
             return false;
         }
         boolean r = super.hurt(source, amount);
-        if (r && isAlive() && !level().isClientSide) {
+        if (r && isAlive() && !level().isClientSide()) {
             inSchelp(SCHELP_TICKS);
         }
         return r;
@@ -295,11 +295,11 @@ public class ShuckleEntity extends Landdiertje {
         }
         if (maakSapje()) {
             rustTot = level().getGameTime() + RUST * 20L;
-            player.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.shuckle_sapje", getDisplayName())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.shuckle_sapje", getDisplayName())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         } else {
-            player.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.shuckle_geen_bessen", getDisplayName(), BESSEN_PER_SAPJE)
-                    .withStyle(ChatFormatting.GRAY), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.shuckle_geen_bessen", getDisplayName(), BESSEN_PER_SAPJE)
+                    .withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -322,10 +322,10 @@ public class ShuckleEntity extends Landdiertje {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        bessen = Mth.clamp(tag.getInt("Bessen"), 0, BESSEN_MAX + BESSEN_PER_SAPJE);
-        entityData.set(DATA_SCHELP, tag.getBoolean("InSchelp"));
-        schelpTijd = tag.getInt("SchelpTijd");
-        plekje = tag.contains("Plekje") ? BlockPos.of(tag.getLong("Plekje")) : null;
+        bessen = Mth.clamp(tag.getIntOr("Bessen", 0), 0, BESSEN_MAX + BESSEN_PER_SAPJE);
+        entityData.set(DATA_SCHELP, tag.getBooleanOr("InSchelp", false));
+        schelpTijd = tag.getIntOr("SchelpTijd", 0);
+        plekje = tag.contains("Plekje") ? BlockPos.of(tag.getLongOr("Plekje", 0L)) : null;
         if (isInSchelp() && schelpTijd <= 0) {
             schelpTijd = 20;
         }
@@ -334,12 +334,12 @@ public class ShuckleEntity extends Landdiertje {
     // --- animation -------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    protected RawAnimation beweging(AnimationState<Landdiertje> state) {
+    protected RawAnimation beweging(AnimationTest<Landdiertje> state) {
         return isInSchelp() ? IN_SCHELP : super.beweging(state);
     }
 
     @Override
-    protected void extraActies(software.bernie.geckolib.animation.AnimationController<Landdiertje> actie) {
+    protected void extraActies(com.geckolib.animation.AnimationController<Landdiertje> actie) {
         actie.triggerableAnim("poets", RawAnimation.begin().thenPlay("poets"));
     }
 

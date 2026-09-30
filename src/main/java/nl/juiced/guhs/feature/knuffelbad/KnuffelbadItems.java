@@ -9,13 +9,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -37,10 +36,10 @@ public final class KnuffelbadItems {
             if (!(target instanceof GuhEntity guh)) {
                 return InteractionResult.PASS;
             }
-            if (!player.level().isClientSide && player instanceof ServerPlayer sp && Wasritueel.inzepen(sp, guh)) {
+            if (!player.level().isClientSide() && player instanceof ServerPlayer sp && Wasritueel.inzepen(sp, guh)) {
                 stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(hand));
             }
-            return InteractionResult.sidedSuccess(player.level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Override
@@ -56,9 +55,9 @@ public final class KnuffelbadItems {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
             player.startUsingItem(hand);
-            return InteractionResultHolder.consume(player.getItemInHand(hand));
+            return InteractionResult.CONSUME.heldItemTransformedTo(player.getItemInHand(hand));
         }
 
         @Override
@@ -67,8 +66,8 @@ public final class KnuffelbadItems {
         }
 
         @Override
-        public UseAnim getUseAnimation(ItemStack stack) {
-            return UseAnim.BRUSH;
+        public ItemUseAnimation getUseAnimation(ItemStack stack) {
+            return ItemUseAnimation.BRUSH;
         }
 
         @Override
@@ -79,7 +78,7 @@ public final class KnuffelbadItems {
             GuhEntity guh = gericht(player, 5.0);
             Vec3 eye = player.getEyePosition();
             Vec3 look = player.getLookAngle();
-            if (level.isClientSide) {
+            if (level.isClientSide()) {
                 // warm air: little puffs blowing where you aim
                 if (remaining % 2 == 0) {
                     Vec3 at = eye.add(look.scale(0.9)).add(0, -0.25, 0);

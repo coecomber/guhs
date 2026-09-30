@@ -43,7 +43,7 @@ public final class BaltoEvents {
 
     // --- the sick babies (GuhHooks.tick) ------------------------------------------------------------------------------------
     static void guhTick(GuhEntity guh) {
-        if ((guh.tickCount + guh.getId()) % 90 != 0 || guh.level().isClientSide || !guh.getPersistentData().getBoolean(ZIEK)) {
+        if ((guh.tickCount + guh.getId()) % 90 != 0 || guh.level().isClientSide() || !guh.getPersistentData().getBooleanOr(ZIEK, false)) {
             return;
         }
         if (guh.getRandom().nextInt(4) == 0 && guh.level() instanceof ServerLevel level && level.getNearestPlayer(guh, 14) != null) {
@@ -57,7 +57,7 @@ public final class BaltoEvents {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer p) || p.tickCount % 100 != 37 || !BaltoVerhaal.isHeld(p)
-                || GuhQuests.saved(p).getBoolean(OUTFITS)) {
+                || GuhQuests.saved(p).getBooleanOr(OUTFITS, false)) {
             return;
         }
         for (GuhClothes c : BaltoFeature.KLEDING) {

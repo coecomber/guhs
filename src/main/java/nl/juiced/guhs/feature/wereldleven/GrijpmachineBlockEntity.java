@@ -49,8 +49,8 @@ public class GrijpmachineBlockEntity extends BlockEntity {
     @Override
     public void onLoad() {
         super.onLoad();
-        if (level != null && !level.isClientSide && !isBoven() && prijzen.size() < Grijpmachine.PRIJZEN) {
-            vul(level.random);
+        if (level != null && !level.isClientSide() && !isBoven() && prijzen.size() < Grijpmachine.PRIJZEN) {
+            vul(level.getRandom());
             setChanged();
         }
     }
@@ -78,10 +78,10 @@ public class GrijpmachineBlockEntity extends BlockEntity {
 
     public static List<Prijs> leesPrijzen(CompoundTag tag) {
         List<Prijs> out = new ArrayList<>();
-        for (Tag t : tag.getList("Prijzen", Tag.TAG_COMPOUND)) {
+        for (Tag t : tag.getListOrEmpty("Prijzen")) {
             CompoundTag c = (CompoundTag) t;
-            if (WereldlevenFeature.knuffel(c.getString("K")) != null) {
-                out.add(new Prijs(c.getString("K"), c.getFloat("X"), c.getFloat("Z")));
+            if (WereldlevenFeature.knuffel(c.getStringOr("K", "")) != null) {
+                out.add(new Prijs(c.getStringOr("K", ""), c.getFloatOr("X", 0.0F), c.getFloatOr("Z", 0.0F)));
             }
         }
         return out;

@@ -8,10 +8,10 @@ import javax.annotation.Nullable;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -25,6 +25,7 @@ import nl.juiced.guhs.feature.baltoslee.SledehondjeEntity;
 import nl.juiced.guhs.registry.ModEntities;
 import org.joml.Matrix4f;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The team in front of a sled (client only, never in the world): the guh-sledehondjes two by two, the lead (Baltoguh on the
  * medicine ride, a lead dog with a golden bell otherwise) and the ropes from the sled to their harnesses; in Steele-Mika's
@@ -32,7 +33,7 @@ import org.joml.Matrix4f;
  * berghut). One Span per sled, kept as long as the sled exists.
  */
 final class Span {
-    private static final ResourceLocation TOUW = Guhs.id("textures/entity/baltoslee_touw.png");
+    private static final Identifier TOUW = Guhs.id("textures/entity/baltoslee_touw.png");
     private static final Map<Entity, Span> SPANNEN = new WeakHashMap<>();
 
     final SledehondjeEntity[] honden;
@@ -56,7 +57,7 @@ final class Span {
             s = new Span(honden);
             Level level = slee.level();
             for (int i = 0; i < honden; i++) {
-                SledehondjeEntity d = BaltoSleeFeature.SLEDEHONDJE.get().create(level);
+                SledehondjeEntity d = BaltoSleeFeature.SLEDEHONDJE.get().create(level, EntitySpawnReason.TRIGGERED);
                 if (d == null) {
                     return s;
                 }
@@ -64,7 +65,7 @@ final class Span {
                 s.honden[i] = d;
             }
             if (baltoguh) {
-                GuhEntity g = ModEntities.GUH.get().create(level);
+                GuhEntity g = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
                 if (g != null) {
                     g.setVariant(GuhVariant.BALTOGUH);
                     g.setGuhScale(0.72f);
@@ -73,7 +74,7 @@ final class Span {
                 }
             }
             if (steeleErin) {
-                GuhNpcEntity n = ModEntities.GUH_NPC.get().create(level);
+                GuhNpcEntity n = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
                 if (n != null) {
                     n.setKind(GuhNpcEntity.Kind.STEELE_MIKA);
                     s.steele = n;

@@ -117,7 +117,7 @@ public class MolentjeBlockEntity extends BlockEntity {
 
     private void changed() {
         setChanged();
-        if (level != null && !level.isClientSide) {
+        if (level != null && !level.isClientSide()) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
         }
     }
@@ -151,16 +151,16 @@ public class MolentjeBlockEntity extends BlockEntity {
         }
         server.sendParticles(BakkerijFeature.MEELSTOFJE.get(), worldPosition.getX() + 0.5, worldPosition.getY() + 0.3, worldPosition.getZ() + 0.5,
                 4, 0.25, 0.1, 0.25, 0.01);
-        server.playSound(null, worldPosition, GuhpolderFeature.MOLENTJE_MAAL.get(), SoundSource.BLOCKS, 0.35f, 0.9f + server.random.nextFloat() * 0.2f);
+        server.playSound(null, worldPosition, GuhpolderFeature.MOLENTJE_MAAL.get(), SoundSource.BLOCKS, 0.35f, 0.9f + server.getRandom().nextFloat() * 0.2f);
         changed();
     }
 
     void clientTick() {
         oHoek = hoek;
         hoek = (hoek + DRAAI[weer(level, worldPosition)]) % 360f;
-        if (!graan.isEmpty() && level.random.nextInt(14) == 0) {
-            level.addParticle(BakkerijFeature.MEELSTOFJE.get(), worldPosition.getX() + 0.3 + level.random.nextDouble() * 0.4,
-                    worldPosition.getY() + 0.15, worldPosition.getZ() + 0.3 + level.random.nextDouble() * 0.4, 0, 0.01, 0);
+        if (!graan.isEmpty() && level.getRandom().nextInt(14) == 0) {
+            level.addParticle(BakkerijFeature.MEELSTOFJE.get(), worldPosition.getX() + 0.3 + level.getRandom().nextDouble() * 0.4,
+                    worldPosition.getY() + 0.15, worldPosition.getZ() + 0.3 + level.getRandom().nextDouble() * 0.4, 0, 0.01, 0);
         }
     }
 
@@ -178,9 +178,9 @@ public class MolentjeBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
-        graan = ItemStack.parseOptional(registries, tag.getCompound("Graan"));
-        meel = ItemStack.parseOptional(registries, tag.getCompound("Meel"));
-        voortgang = tag.getInt("Voortgang");
+        graan = ItemStack.parseOptional(registries, tag.getCompoundOrEmpty("Graan"));
+        meel = ItemStack.parseOptional(registries, tag.getCompoundOrEmpty("Meel"));
+        voortgang = tag.getIntOr("Voortgang", 0);
     }
 
     @Override

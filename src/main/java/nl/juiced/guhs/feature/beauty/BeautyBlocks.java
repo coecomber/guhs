@@ -106,16 +106,16 @@ public final class BeautyBlocks {
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+            if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
                 BeautyShow show = BeautyShow.of(serverPlayer);
                 if (show != null && show.isDressing()) {
                     show.openWardrobe(serverPlayer);
                 } else {
-                    serverPlayer.displayClientMessage(Component.translatable("gui.guhs.beauty.leenkast.closed")
-                            .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                    serverPlayer.sendOverlayMessage(Component.translatable("gui.guhs.beauty.leenkast.closed")
+                            .withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
     }
 

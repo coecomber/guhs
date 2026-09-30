@@ -14,7 +14,7 @@ final class VadsAdvancements {
 
     /** A shown advancement with an "impossible" criterion "done" (for example guhmension/vadswoud_nestje). */
     static void award(ServerPlayer player, String path) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id(path));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id(path));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }

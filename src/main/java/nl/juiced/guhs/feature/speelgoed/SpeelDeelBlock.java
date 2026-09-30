@@ -5,7 +5,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -114,13 +113,13 @@ public class SpeelDeelBlock extends Block {
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         super.onRemove(state, level, pos, newState, movedByPiston);
         BlockPos c = controller(state, pos);
-        if (!newState.is(this) && !level.isClientSide && level.getBlockState(c).getBlock() instanceof ToestelBlock) {
+        if (!newState.is(this) && !level.isClientSide() && level.getBlockState(c).getBlock() instanceof ToestelBlock) {
             level.destroyBlock(c, true);
         }
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                               InteractionHand hand, BlockHitResult hit) {
         BlockPos c = controller(state, pos);
         return level.getBlockState(c).useItemOn(stack, level, player, hand, hit.withPosition(c));

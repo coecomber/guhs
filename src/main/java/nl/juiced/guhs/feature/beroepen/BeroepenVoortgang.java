@@ -67,7 +67,7 @@ public final class BeroepenVoortgang {
         if (!saved.contains(KEY)) {
             saved.put(KEY, new CompoundTag());
         }
-        return saved.getCompound(KEY);
+        return saved.getCompoundOrEmpty(KEY);
     }
 
     private static CompoundTag van(ServerPlayer player, Beroep beroep) {
@@ -75,11 +75,11 @@ public final class BeroepenVoortgang {
         if (!all.contains(beroep.id())) {
             all.put(beroep.id(), new CompoundTag());
         }
-        return all.getCompound(beroep.id());
+        return all.getCompoundOrEmpty(beroep.id());
     }
 
     public static int stap(ServerPlayer player, Beroep beroep) {
-        return van(player, beroep).getInt("Stap");
+        return van(player, beroep).getIntOr("Stap", 0);
     }
 
     public static void zet(ServerPlayer player, Beroep beroep, int stap) {
@@ -87,7 +87,7 @@ public final class BeroepenVoortgang {
     }
 
     public static boolean klaar(ServerPlayer player, Beroep beroep) {
-        return van(player, beroep).getBoolean("Klaar");
+        return van(player, beroep).getBooleanOr("Klaar", false);
     }
 
     /** How many of the four jobs this player has done. */
@@ -107,7 +107,7 @@ public final class BeroepenVoortgang {
      */
     public static boolean rondAf(ServerPlayer player, Beroep beroep, @Nullable Entity npc) {
         CompoundTag d = van(player, beroep);
-        if (d.getBoolean("Klaar")) {
+        if (d.getBooleanOr("Klaar", false)) {
             return false;
         }
         d.putBoolean("Klaar", true);
@@ -121,19 +121,19 @@ public final class BeroepenVoortgang {
             GuhAdvancements.grant(player, "beroepen_alle");
             toon(player, "beroepen_alle");
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.beroepen.geleerd", Component.translatable("gui.guhs.beroepen.naam." + beroep.id()))
-                .withStyle(ChatFormatting.GOLD), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.geleerd", Component.translatable("gui.guhs.beroepen.naam." + beroep.id()))
+                .withStyle(ChatFormatting.GOLD));
         player.level().playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.7f, 1.4f);
         if (npc != null) {
-            player.serverLevel().sendParticles(ParticleTypes.HEART, npc.getX(), npc.getY() + 1.6, npc.getZ(), 8, 0.4, 0.3, 0.4, 0.05);
+            player.level().sendParticles(ParticleTypes.HEART, npc.getX(), npc.getY() + 1.6, npc.getZ(), 8, 0.4, 0.3, 0.4, 0.05);
         }
-        player.serverLevel().sendParticles(ParticleTypes.HAPPY_VILLAGER, player.getX(), player.getY() + 1.0, player.getZ(), 20, 0.6, 0.6, 0.6, 0.1);
+        player.level().sendParticles(ParticleTypes.HAPPY_VILLAGER, player.getX(), player.getY() + 1.0, player.getZ(), 20, 0.6, 0.6, 0.6, 0.1);
         return true;
     }
 
     /** Grants the shown advancement grote_guhspelen/&lt;name&gt;. */
     static void toon(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }

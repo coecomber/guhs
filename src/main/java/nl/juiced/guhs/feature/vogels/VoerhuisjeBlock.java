@@ -21,7 +21,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -83,16 +83,16 @@ public class VoerhuisjeBlock extends HorizontalDirectionalBlock {
 
     // --- filling it ----------------------------------------------------------------------------------------------------
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                               BlockHitResult hit) {
         if (!stack.is(VogelTags.ZAADJES)) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
         if (state.getValue(VOER) >= MAX) {
             if (player instanceof ServerPlayer sp) {
-                sp.displayClientMessage(Component.translatable("gui.guhs.vogels.voerhuisje.vol"), true);
+                sp.sendOverlayMessage(Component.translatable("gui.guhs.vogels.voerhuisje.vol"));
             }
-            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
         if (level instanceof ServerLevel server) {
             vul(server, pos, state);
@@ -101,10 +101,10 @@ public class VoerhuisjeBlock extends HorizontalDirectionalBlock {
             }
             if (player instanceof ServerPlayer sp) {
                 GidsFeature.grant(sp, "diertjes/vogels_voerhuisje");
-                sp.displayClientMessage(Component.translatable("gui.guhs.vogels.voerhuisje.gevuld", state.getValue(VOER) + 1, MAX), true);
+                sp.sendOverlayMessage(Component.translatable("gui.guhs.vogels.voerhuisje.gevuld", state.getValue(VOER) + 1, MAX));
             }
         }
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** One scoop of seeds more (up to {@link #MAX}). */

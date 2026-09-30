@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -64,7 +64,7 @@ public final class KnuffelbadProtection {
                 return true;
             }
         }
-        Structure structure = server.registryAccess().registryOrThrow(Registries.STRUCTURE).get(STRUCTUUR);
+        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(STRUCTUUR);
         return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -73,7 +73,7 @@ public final class KnuffelbadProtection {
         if (player.getAbilities().instabuild || player.isCreative() || !beschermd(player.level(), pos)) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.knuffelbad.niet_bouwen").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.knuffelbad.niet_bouwen").withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 
@@ -91,7 +91,7 @@ public final class KnuffelbadProtection {
     }
 
     private static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty()) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty()) {
             return;
         }
         // (a bucket of water on a wash tub is its shower: that's fine)
@@ -105,14 +105,14 @@ public final class KnuffelbadProtection {
     }
 
     private static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && geweigerd(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }
     }
 
     private static void onExplosion(ExplosionEvent.Detonate event) {
-        if (!event.getLevel().isClientSide) {
+        if (!event.getLevel().isClientSide()) {
             event.getAffectedBlocks().removeIf(pos -> beschermd(event.getLevel(), pos));
         }
     }

@@ -52,7 +52,7 @@ public final class SteeleSprint implements NpcRole {
 
     /** May this player race (the story is done, or an op let them)? */
     public static boolean magRacen(ServerPlayer p) {
-        return Nomguh.verhaalKlaar(p) || SleeRit.data(p).getBoolean("Vrij");
+        return Nomguh.verhaalKlaar(p) || SleeRit.data(p).getBooleanOr("Vrij", false);
     }
 
     @Override
@@ -121,7 +121,7 @@ public final class SteeleSprint implements NpcRole {
     static BlockPos anker(GuhNpcEntity npc) {
         BlockPos a = npc.level() instanceof ServerLevel sl ? Nomguh.anker(sl, npc.blockPosition()) : null;
         if (a == null && npc.roleData.contains(ANKER)) {
-            a = BlockPos.of(npc.roleData.getLong(ANKER));
+            a = BlockPos.of(npc.roleData.getLongOr(ANKER, 0L));
         }
         return a;
     }
@@ -154,6 +154,6 @@ public final class SteeleSprint implements NpcRole {
     }
 
     static void bericht(ServerPlayer p, String key) {
-        p.displayClientMessage(Component.translatable(key).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        p.sendOverlayMessage(Component.translatable(key).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 }

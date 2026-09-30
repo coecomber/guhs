@@ -47,7 +47,7 @@ public class FunderingProcessor extends StructureProcessor {
                 continue;
             }
             BlockPos.MutableBlockPos p = info.pos().mutable().move(0, -1, 0);
-            for (int k = 0; k < DIEPTE && p.getY() > level.getMinBuildHeight(); k++, p.move(0, -1, 0)) {
+            for (int k = 0; k < DIEPTE && p.getY() > level.getMinY(); k++, p.move(0, -1, 0)) {
                 BlockState onder = level.getBlockState(p);
                 if (!onder.isAir() && onder.getFluidState().isEmpty() && !onder.canBeReplaced()) {
                     break;                                       // (the ground)

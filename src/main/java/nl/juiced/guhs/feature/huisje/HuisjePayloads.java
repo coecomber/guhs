@@ -27,6 +27,7 @@ import nl.juiced.guhs.feature.band.BandData;
 import nl.juiced.guhs.feature.piep.PiepMaatje;
 import nl.juiced.guhs.network.ModNetworking;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * The huisje screen's messages: server to client "open (or refresh) the screen of this huisje" ({@code guhs:huisje_open},
  * with its residents, their chores and who could move in), client to server a button ({@code guhs:huisje_actie}: rename,
@@ -86,17 +87,17 @@ public final class HuisjePayloads {
 
     /** What the screen shows. */
     public static CompoundTag data(ServerPlayer player, Huisje h) {
-        ServerLevel level = player.server.getLevel(h.dim());
+        ServerLevel level = player.level().getServer().getLevel(h.dim());
         CompoundTag t = new CompoundTag();
         t.putLong("Pos", h.pos().asLong());
         t.putString("Maat", h.maat().id());
         t.putString("Naam", h.naam());
         t.putInt("Plekken", h.maat().plekken());
         // 3.0: whose it is, and whether the viewer may change it (timmerguh greys the buttons for the others)
-        t.putUUID("Eigenaar", h.eigenaar());
+        t.store("Eigenaar", UUIDUtil.CODEC, h.eigenaar());
         t.putString("EigenaarNaam", h.eigenaarNaam());
         t.putBoolean("MagBewerken", Huisjes.magBewerken(player, h));
-        BandData band = BandData.get(player.server);
+        BandData band = BandData.get(player.level().getServer());
         ListTag bewoners = new ListTag();
         for (UUID id : h.bewoners()) {
             CompoundTag b = new CompoundTag();
@@ -171,26 +172,26 @@ public final class HuisjePayloads {
         if (!(player.level() instanceof ServerLevel level) || player.distanceToSqr(p.pos().getCenter()) > 24 * 24) {
             return;
         }
-        Huisje h = Huisjes.op(player.server, level.dimension(), p.pos());
+        Huisje h = Huisjes.op(player.level().getServer(), level.dimension(), p.pos());
         if (h == null) {
             return;
         }
         if (!Huisjes.magBewerken(player, h)) {   // 3.0: only the owner (or an op) changes a huisje
-            player.displayClientMessage(Huisjes.vanWie(h).copy().withStyle(ChatFormatting.GRAY), true);
+            player.sendOverlayMessage(Huisjes.vanWie(h).copy().withStyle(ChatFormatting.GRAY));
             return;
         }
         Actie actie = Actie.values()[Math.floorMod(p.actie(), Actie.values().length)];
         switch (actie) {
             case NAAM -> {
-                if (!Huisjes.hernoem(player.server, h, p.tekst())) {
-                    player.displayClientMessage(Component.translatable("gui.guhs.huisje.naam_bezet").withStyle(ChatFormatting.GRAY), true);
+                if (!Huisjes.hernoem(player.level().getServer(), h, p.tekst())) {
+                    player.sendOverlayMessage(Component.translatable("gui.guhs.huisje.naam_bezet").withStyle(ChatFormatting.GRAY));
                 }
             }
             case TREK_IN -> {
                 Entity e = level.getEntity(p.entity());
                 if (e == null || e.distanceTo(player) > 24 || !Huisjes.trekIn(h, e)) {
-                    player.displayClientMessage(Component.translatable(h.isVol() ? "gui.guhs.huisje.vol" : "gui.guhs.huisje.niet_jouw_guh", h.naam())
-                            .withStyle(ChatFormatting.GRAY), true);
+                    player.sendOverlayMessage(Component.translatable(h.isVol() ? "gui.guhs.huisje.vol" : "gui.guhs.huisje.niet_jouw_guh", h.naam())
+                            .withStyle(ChatFormatting.GRAY));
                 } else if (e instanceof TamableAnimal t && t.isOrderedToSit()) {
                     t.setOrderedToSit(false);   // (a new resident stands up: it has a home to look after)
                     t.setInSittingPose(false);
@@ -198,7 +199,7 @@ public final class HuisjePayloads {
             }
             case UIT -> {
                 try {
-                    Huisjes.trekUit(player.server, h, UUID.fromString(p.id()));
+                    Huisjes.trekUit(player.level().getServer(), h, UUID.fromString(p.id()));
                 } catch (IllegalArgumentException ignored) {
                     // (not a band id)
                 }

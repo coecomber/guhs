@@ -5,7 +5,7 @@ import java.util.List;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.locale.Language;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -16,8 +16,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.balto.BaltoVerhaal;
 import nl.juiced.guhs.feature.barbecuether.Grillguh;
@@ -38,8 +36,6 @@ import nl.juiced.guhs.world.GuhWorldData;
  * a step in the middle / done; what you need counts what you carry; progress is per player (never per structure); the
  * payload survives the trip over the network.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class VerhalenGameTests {
     private static final String EMPTY = "empty";
 
@@ -49,7 +45,7 @@ public class VerhalenGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return p;
     }
 
@@ -74,7 +70,7 @@ public class VerhalenGameTests {
     }
 
     /** Every questline, step, sleutel and heading has a text (the server's en_us: Dutch, like everything). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void verhalenTekstenBestaan(GameTestHelper helper) {
         Language lang = Language.getInstance();
         helper.assertTrue(lang.has("gui.guhs.guhdex.tab.verhalen"), "the tab name");
@@ -99,7 +95,7 @@ public class VerhalenGameTests {
     }
 
     /** A fresh player: every questline "not started" (with the text of its first step), icons and items exist. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void verhalenNietBegonnen(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         List<VerhaalStand> alle = VerhalenVoortgang.alle(p);
@@ -117,7 +113,7 @@ public class VerhalenGameTests {
     }
 
     /** The 3.0 Guhverhalen: a step in the middle (with what you need, counted) and done. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void verhalenGuhverhalen(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         // Timmerguh: planks and pink wool counted
@@ -180,10 +176,10 @@ public class VerhalenGameTests {
     }
 
     /** The older adventures: a step in the middle and done. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void verhalenEerdereAvonturen(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
-        GuhWorldData.PlayerData d = GuhWorldData.get(p.server).player(p.getUUID());
+        GuhWorldData.PlayerData d = GuhWorldData.get(p.level().getServer()).player(p.getUUID());
         d.maagQuest = 3;
         kijk(helper, p, "vadsig", VerhaalStand.Status.BEZIG, "3");
         helper.assertTrue(VerhalenVoortgang.van(p, "vadsig").nodig().get(1).nodig() == GuhQuests.BALLOONS_WANTED, "3 balloons");
@@ -227,7 +223,7 @@ public class VerhalenGameTests {
     }
 
     /** Progress is per player: one player's step never shows for another (and doesn't depend on which structure). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void verhalenPerSpeler(GameTestHelper helper) {
         ServerPlayer a = speler(helper), b = speler(helper);
         BaltoVerhaal.zet(a, BaltoVerhaal.TERUG);
@@ -242,7 +238,7 @@ public class VerhalenGameTests {
     }
 
     /** The payload survives the network (statuses, counts, texts with arguments). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void verhalenPayload(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         MewtwoVoortgang.zetStap(p, MewtwoVoortgang.NOTITIES);

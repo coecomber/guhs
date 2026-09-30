@@ -22,8 +22,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.gids.GidsFeature;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.RawAnimation;
 
 /**
  * The zeemeeuwtje: a white gull with a cheeky look. It sits on the beach or bobs on the sea. Hold a fish (or bread) near it
@@ -155,7 +155,7 @@ public class ZeemeeuwtjeEntity extends Vogeltje {
         triggerAnim("actie", "roep");
         level().playSound(null, getX(), getY(), getZ(), VogelsFeature.MIJN_MIJN.get(), SoundSource.NEUTRAL, 1.0f, 0.9f + random.nextFloat() * 0.25f);
         if (tegen != null) {
-            tegen.displayClientMessage(Component.translatable("gui.guhs.vogels.mijn_mijn").withStyle(ChatFormatting.WHITE), true);
+            tegen.sendOverlayMessage(Component.translatable("gui.guhs.vogels.mijn_mijn").withStyle(ChatFormatting.WHITE));
             GidsFeature.grant(tegen, "diertjes/vogels_mijn");
         }
     }
@@ -189,7 +189,7 @@ public class ZeemeeuwtjeEntity extends Vogeltje {
     }
 
     @Override
-    protected RawAnimation beweging(AnimationState<Vogeltje> state) {
+    protected RawAnimation beweging(AnimationTest<Vogeltje> state) {
         if (zweeft()) {
             return anim("glide", true);
         }

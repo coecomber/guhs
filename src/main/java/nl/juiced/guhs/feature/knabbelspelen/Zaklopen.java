@@ -52,8 +52,8 @@ public final class Zaklopen implements Wedstrijd.Spel {
             return;
         }
         if (t % 5 == 0) {
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.zak.bar", nl.juiced.guhs.quest.Highscores.tijd(t),
-                    Math.max(0, (int) Math.ceil(Speelvelden.ZAK_FINISH - b[0]))).withStyle(ChatFormatting.AQUA), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.zak.bar", nl.juiced.guhs.quest.Highscores.tijd(t),
+                    Math.max(0, (int) Math.ceil(Speelvelden.ZAK_FINISH - b[0]))).withStyle(ChatFormatting.AQUA));
         }
     }
 
@@ -90,7 +90,7 @@ public final class Zaklopen implements Wedstrijd.Spel {
         Vec3 v = kijk.normalize().scale(HOP);
         p.setDeltaMovement(v.x, Math.max(p.getDeltaMovement().y, 0.42), v.z);
         p.hurtMarked = true;
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         level.playSound(null, p.blockPosition(), KnabbelspelenFeature.HOP.get(), SoundSource.PLAYERS, 0.8f, 0.8f + level.getRandom().nextFloat() * 0.4f);
         level.sendParticles(ParticleTypes.POOF, p.getX(), p.getY() + 0.1, p.getZ(), 3, 0.2, 0.02, 0.2, 0.01);
     }

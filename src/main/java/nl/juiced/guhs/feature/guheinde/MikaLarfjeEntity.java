@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -43,7 +43,7 @@ public class MikaLarfjeEntity extends MikaEntity {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData data) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData data) {
         SpawnGroupData result = super.finalizeSpawn(level, difficulty, spawnType, data);
         this.getAttribute(Attributes.SCALE).setBaseValue(LARFJE_SCALE); // (a Mika gets a random size: a larfje stays tiny)
         this.refreshDimensions();
@@ -54,11 +54,11 @@ public class MikaLarfjeEntity extends MikaEntity {
     public boolean doHurtTarget(Entity target) {
         this.swing(this.getUsedItemHand());
         if (target instanceof ServerPlayer player) {
-            for (ItemStack stack : player.getInventory().items) {
+            for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
                 if (stack.is(ModItems.KAAS_KNABBELS.get())) {
                     stack.shrink(1);
                     gestolen++;
-                    player.displayClientMessage(Component.translatable("gui.guhs.guheinde.larfje.roof").withStyle(ChatFormatting.DARK_PURPLE), true);
+                    player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.larfje.roof").withStyle(ChatFormatting.DARK_PURPLE));
                     break;
                 }
             }
@@ -94,6 +94,6 @@ public class MikaLarfjeEntity extends MikaEntity {
     @Override
     public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        gestolen = tag.getInt("Gestolen");
+        gestolen = tag.getIntOr("Gestolen", 0);
     }
 }

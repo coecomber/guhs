@@ -6,7 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,8 +14,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -57,8 +55,6 @@ import nl.juiced.guhs.registry.ModEntities;
  * friendships (points, becoming friends once, cuddling, the wip together, sleeping together in the huisje).
  * Templates: samen_test_wei (16 x 6 x 16 of air: the floor and the pool are laid in code), guh_racebaan (the race, own batch).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class SamenGameTests {
     private static final String WEI = "samen_test_wei";
     private static final String BATCH = "samen";
@@ -94,7 +90,7 @@ public class SamenGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -114,14 +110,14 @@ public class SamenGameTests {
     }
 
     static void nieuweDag(Mob guh) {
-        BandData.Rec r = BandData.get(guh.getServer()).vind(Band.eigenaar(guh), Band.id(guh));
+        BandData.Rec r = BandData.get(guh.level().getServer()).vind(Band.eigenaar(guh), Band.id(guh));
         if (r != null) {
             r.dag = -1;
         }
     }
 
     static boolean quest(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id("quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id("quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -129,7 +125,7 @@ public class SamenGameTests {
     // cheering and hearts
     // =====================================================================================================================
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void samenJuichtBijGoedEnIsLiefVerdrietigBijMis(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         ServerPlayer ander = speler(helper, new BlockPos(12, 1, 12));
@@ -162,7 +158,7 @@ public class SamenGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void samenSpelenEnReizenGevenHartjes(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
@@ -173,8 +169,8 @@ public class SamenGameTests {
             helper.assertTrue(guh.emotes.current() == Emote.ZWAAIEN, "at the start: a wave, succes!");
             Band.moment(guh, p, Moment.MINIGAME_EINDE, "sjoelen");
             helper.assertTrue(Band.hartjes(guh) == begin + Reden.MINIGAME.standaard(), "playing together: " + Band.hartjes(guh));
-            helper.assertTrue(Dagboek.stat(p.server, p.getUUID(), id, DagboekStat.MINIGAMES_SAMEN) == 1, "the dagboek counts it");
-            helper.assertTrue(Dagboek.heeftEersteKeer(p.server, p.getUUID(), id, "eerste_minigame"), "the first time");
+            helper.assertTrue(Dagboek.stat(p.level().getServer(), p.getUUID(), id, DagboekStat.MINIGAMES_SAMEN) == 1, "the dagboek counts it");
+            helper.assertTrue(Dagboek.heeftEersteKeer(p.level().getServer(), p.getUUID(), id, "eerste_minigame"), "the first time");
             helper.assertTrue(quest(p, "samen_gespeeld") && GidsFeature.heeft(p, "lieve_vadsjes/samen_gespeeld"), "the advancements");
             int voor = Band.hartjes(guh);
             Band.moment(guh, p, Moment.RECORD, "sjoelen");
@@ -199,7 +195,7 @@ public class SamenGameTests {
     // the rewards of the levels and the emote lock
     // =====================================================================================================================
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void samenNiveausOntgrendelenKledingEnEmotes(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
@@ -249,7 +245,7 @@ public class SamenGameTests {
     // really joining in
     // =====================================================================================================================
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void samenKartHeeftEenTweedeZitje(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         ServerPlayer ander = speler(helper, new BlockPos(3, 1, 2));
@@ -279,7 +275,7 @@ public class SamenGameTests {
         });
     }
 
-    @GameTest(template = "guh_racebaan", batch = "samen_kart", timeoutTicks = 200)
+    @GuhTest(template = "guh_racebaan", batch = "samen_kart", timeoutTicks = 200)
     public static void samenRijdtMeeInDeRace(GameTestHelper helper) {
         List<GuhNpcEntity> npcs = helper.getLevel().getEntitiesOfClass(GuhNpcEntity.class, helper.getBounds(),
                 n -> n.getKind() == GuhNpcEntity.Kind.RACEGUH);
@@ -287,11 +283,11 @@ public class SamenGameTests {
         GuhNpcEntity npc = npcs.get(0);
         @SuppressWarnings("removal")
         ServerPlayer p = helper.makeMockServerPlayerInLevel();
-        p.moveTo(npc.getX(), npc.getY(), npc.getZ() - 2);
+        p.snapTo(npc.getX(), npc.getY(), npc.getZ() - 2);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), helper.relativePos(p.blockPosition()));
         guh.tame(p);
         guh.setWandering(false);
-        guh.moveTo(p.getX() + 1, p.getY(), p.getZ());
+        guh.snapTo(p.getX() + 1, p.getY(), p.getZ());
         Vec3 van = guh.position();
         RaceGame.start(npc, p, RaceBaan.RACEBAAN, Niveau.MEDIUM);
         RaceGame game = RaceGame.of(npc);
@@ -308,7 +304,7 @@ public class SamenGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void samenSchaatstMeeOpDeElftocht(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
@@ -334,7 +330,7 @@ public class SamenGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 400)
     public static void samenZwemtMeeInHetKnuffelbad(GameTestHelper helper) {
         bad(helper);
         ServerPlayer p = speler(helper, new BlockPos(8, 1, 8));
@@ -352,7 +348,7 @@ public class SamenGameTests {
     // reactions
     // =====================================================================================================================
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void samenWelkomTerugNaLangWeg(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
@@ -371,7 +367,7 @@ public class SamenGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void samenTroostNaHetDoodgaan(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 12));
         GuhEntity guh = guh(helper, p, new BlockPos(13, 1, 2));
@@ -389,7 +385,7 @@ public class SamenGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 300)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 300)
     public static void samenKnuffeltTegenJeAanBijOnweer(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         GuhEntity guh = guh(helper, p, new BlockPos(10, 1, 10));
@@ -404,7 +400,7 @@ public class SamenGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void samenZwaaitJeWelterusten(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         GuhEntity a = guh(helper, p, new BlockPos(5, 1, 5));
@@ -418,7 +414,7 @@ public class SamenGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void samenBffKnuffelMetEenGrootHart(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         GuhEntity guh = guh(helper, p, new BlockPos(6, 1, 6));
@@ -444,7 +440,7 @@ public class SamenGameTests {
     // friendships
     // =====================================================================================================================
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 200)
     public static void samenGuhsWordenVriendjes(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
         GuhEntity a = guh(helper, p, new BlockPos(5, 1, 5));
@@ -457,7 +453,7 @@ public class SamenGameTests {
             }
         });
         helper.runAfterDelay(50, () -> {
-            var s = p.server;
+            var s = p.level().getServer();
             int punten = Vriendjes.punten(s, Band.id(a), Band.id(b));
             helper.assertTrue(punten >= 1 && punten <= 3, "a point per second together: " + punten);
             helper.assertTrue(Vriendjes.punten(s, Band.id(a), Band.id(ver)) == 0, "not with the one far away");
@@ -479,7 +475,7 @@ public class SamenGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 300)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 300)
     public static void samenVriendjesSpelenOpDeWip(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(1, 1, 1));
         GuhEntity a = guh(helper, p, new BlockPos(5, 1, 5));
@@ -529,7 +525,7 @@ public class SamenGameTests {
         });
     }
 
-    @GameTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void samenVriendjesSlapenSamenInHunHuisje(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(1, 1, 1));
         GuhEntity a = guh(helper, p, new BlockPos(3, 1, 12));
@@ -538,15 +534,15 @@ public class SamenGameTests {
             Huisje h = HuisjeBlock.bouw(helper.getLevel(), helper.absolutePos(new BlockPos(8, 1, 6)), Direction.SOUTH, HuisjeMaat.MEDIUM, p.getUUID());
             helper.assertTrue(Huisjes.trekIn(h, a) && Huisjes.trekIn(h, b), "both live in the huisje");
             Vriendjes.samen(a, b, Vriendjes.VRIENDJES);
-            int voor = Vriendjes.punten(p.server, Band.id(a), Band.id(b));
+            int voor = Vriendjes.punten(p.level().getServer(), Band.id(a), Band.id(b));
             Huisjes.naarBinnen(a, h);
-            helper.assertTrue(Vriendjes.punten(p.server, Band.id(a), Band.id(b)) == voor, "alone inside: nothing yet");
+            helper.assertTrue(Vriendjes.punten(p.level().getServer(), Band.id(a), Band.id(b)) == voor, "alone inside: nothing yet");
             Huisjes.naarBinnen(b, h);
-            helper.assertTrue(Vriendjes.punten(p.server, Band.id(a), Band.id(b)) == voor + SamenVriendjes.SLAAP_PUNTEN,
-                    "friends asleep side by side: " + Vriendjes.punten(p.server, Band.id(a), Band.id(b)));
+            helper.assertTrue(Vriendjes.punten(p.level().getServer(), Band.id(a), Band.id(b)) == voor + SamenVriendjes.SLAAP_PUNTEN,
+                    "friends asleep side by side: " + Vriendjes.punten(p.level().getServer(), Band.id(a), Band.id(b)));
             Huisjes.naarBuiten(b, h, false);
             Huisjes.naarBinnen(b, h);
-            helper.assertTrue(Vriendjes.punten(p.server, Band.id(a), Band.id(b)) == voor + SamenVriendjes.SLAAP_PUNTEN, "once per night");
+            helper.assertTrue(Vriendjes.punten(p.level().getServer(), Band.id(a), Band.id(b)) == voor + SamenVriendjes.SLAAP_PUNTEN, "once per night");
             Huisjes.naarBuiten(a, h, false);
             Huisjes.naarBuiten(b, h, false);
             weg(helper, p);

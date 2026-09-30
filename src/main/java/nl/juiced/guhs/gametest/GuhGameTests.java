@@ -2,9 +2,9 @@ package nl.juiced.guhs.gametest;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -14,10 +14,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RedstoneLampBlock;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.block.GuhWheelBlock;
 import nl.juiced.guhs.block.GuhWireBlock;
@@ -43,8 +41,6 @@ import nl.juiced.guhs.world.ModDimensions;
  * In-game tests. Run all of them headless with:  gradlew runGameTestServer
  * (or in a dev world with  /test runall).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class GuhGameTests {
     private static final String EMPTY = "empty";
     private static final String PORTAL_ROOM = "portal_room";
@@ -53,11 +49,11 @@ public class GuhGameTests {
     private static final String COASTER_ROOM = "coaster_room";
     private static final BlockPos POS = new BlockPos(2, 1, 2);
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void wildGuhHasRandomSizeAndWildHealth(GameTestHelper helper) {
         for (int i = 0; i < 20; i++) {
             GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
-            guh.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(guh.blockPosition()), MobSpawnType.NATURAL, null);
+            guh.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(guh.blockPosition()), EntitySpawnReason.NATURAL, null);
             float scale = guh.getScale();
             helper.assertTrue(scale >= GuhEntity.MIN_SCALE && scale <= GuhEntity.MAX_SCALE, "scale out of range: " + scale);
             helper.assertTrue(Math.abs(guh.getBbWidth() - 0.9f * scale) < 0.01f, "hitbox does not follow scale");
@@ -67,7 +63,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void tamingGivesThousandHealth(GameTestHelper helper) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -78,7 +74,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void gravityToggleSquishesAndStopsJumping(GameTestHelper helper) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
         float height = guh.getBbHeight();
@@ -102,7 +98,7 @@ public class GuhGameTests {
         }
     }
 
-    @GameTest(template = PORTAL_ROOM)
+    @GuhTest(template = PORTAL_ROOM)
     public static void portalOpensWhenFrameIsCompletedAndClosesWhenBroken(GameTestHelper helper) {
         buildFrame(helper);
         for (int x = 2; x <= 3; x++) {
@@ -127,13 +123,13 @@ public class GuhGameTests {
      * Needs the Guhmension to exist. The headless GameTest server (runGameTestServer) only creates a flat overworld,
      * so this test is optional there - run it in a real world with  /test run guhs:guhgametests.portalroundtriptoguhmension
      */
-    @GameTest(template = PORTAL_ROOM, required = false)
+    @GuhTest(template = PORTAL_ROOM, required = false)
     public static void portalRoundTripToGuhmension(GameTestHelper helper) {
         buildFrame(helper);
         BlockPos portalPos = helper.absolutePos(new BlockPos(2, 2, 1));
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 2, 1));
 
-        DimensionTransition there = GuhPortalForcer.getDestination(helper.getLevel(), guh, portalPos);
+        TeleportTransition there = GuhPortalForcer.getDestination(helper.getLevel(), guh, portalPos);
         helper.assertTrue(there != null && there.newLevel().dimension() == ModDimensions.GUHMENSION, "should lead to the Guhmension");
         ServerLevel guhmension = there.newLevel();
         helper.assertTrue(guhmension.getBlockState(BlockPos.containing(there.pos())).is(ModBlocks.GUH_PORTAL.get()),
@@ -145,13 +141,13 @@ public class GuhGameTests {
                 "exit portal should be built on the surface, got y=" + there.pos().y);
 
         // coming back from the Guhmension at the same x/z should find our original portal again
-        DimensionTransition back = GuhPortalForcer.getDestination(guhmension, guh, BlockPos.containing(there.pos()));
+        TeleportTransition back = GuhPortalForcer.getDestination(guhmension, guh, BlockPos.containing(there.pos()));
         helper.assertTrue(back != null && back.newLevel().dimension() == Level.OVERWORLD, "should lead back to the overworld");
         helper.assertTrue(back.pos().distanceTo(Vec3.atBottomCenterOf(portalPos)) < 3, "should come back through the original portal, got " + back.pos());
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kaasknabbelBlocksDropKaasKnabbels(GameTestHelper helper) {
         Block[] ores = {ModBlocks.KAASKNABBEL_STONE.get(), ModBlocks.KAASKNABBEL_DEEPSLATE.get(),
                 ModBlocks.KAASKNABBEL_DIRT.get(), ModBlocks.KAASKNABBEL_COBBLESTONE.get()};
@@ -171,7 +167,7 @@ public class GuhGameTests {
     // Saddles, fried knabbels, Mika
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void ridingNeedsASaddle(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
@@ -189,7 +185,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void friedKnabbelsHealToFull(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
@@ -202,7 +198,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void mikaIsAggressiveButHarmless(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         MikaEntity mika = helper.spawn(ModEntities.MIKA.get(), POS);
@@ -217,7 +213,7 @@ public class GuhGameTests {
     // Frying pan
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void fryingPanFriesUpTo64PerVet(GameTestHelper helper) {
         BlockPos pan = new BlockPos(2, 1, 2);
         helper.setBlock(pan, ModBlocks.FRYING_PAN.get());
@@ -245,7 +241,7 @@ public class GuhGameTests {
     // Guh wheel + guh wire
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhWheelPowersRedstoneWhileAGuhRuns(GameTestHelper helper) {
         BlockPos wheelPos = new BlockPos(2, 1, 2);
         BlockPos lamp = new BlockPos(3, 1, 2);
@@ -270,7 +266,7 @@ public class GuhGameTests {
     }
 
     /** 40 blocks of guh wire: a lamp at the far end still gets full power (redstone dust fades out after 15). */
-    @GameTest(template = WIRE_ROOM, timeoutTicks = 60)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 60)
     public static void guhWireCarriesFullPowerOver40Blocks(GameTestHelper helper) {
         int length = 40;
         for (int x = 0; x <= length + 1; x++) {
@@ -295,7 +291,7 @@ public class GuhGameTests {
     // Structures: the templates load and contain what they should
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = "hamster_house", timeoutTicks = 40)
+    @GuhTest(template = "hamster_house", timeoutTicks = 40)
     public static void hamsterHouseHasGiantGuhAndSpawner(GameTestHelper helper) {
         // (test coordinates are one higher than the template coordinates in tools/make_structures.py)
         helper.assertBlockPresent(ModBlocks.GUH_SPAWNER.get(), new BlockPos(24, 2, 22));
@@ -304,7 +300,7 @@ public class GuhGameTests {
                 "the giant guh (about 10 blocks long) should be there"));
     }
 
-    @GameTest(template = "evil_mika_home", timeoutTicks = 40)
+    @GuhTest(template = "evil_mika_home", timeoutTicks = 40)
     public static void evilMikaHomeHasMikas(GameTestHelper helper) {
         helper.succeedWhen(() -> helper.assertTrue(helper.getEntities(ModEntities.MIKA.get()).size() >= 2, "Mikas should live here"));
     }
@@ -313,7 +309,7 @@ public class GuhGameTests {
     // Picking up guhs, name tags, the Hungry Guh quest, the Bank Guh
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void sneakTapPicksUpAndItemPutsBack(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
@@ -338,7 +334,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void namedGuhsAndMikasShowTheirName(GameTestHelper helper) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
         helper.assertTrue(guh.shouldShowName() && guh.getDisplayName().getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents tr
@@ -352,7 +348,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void hungryGuhTradesTenFriedKnabbelsForABankGuh(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         QuestGuhEntity quest = helper.spawn(ModEntities.QUEST_GUH.get(), POS);
@@ -367,7 +363,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void bankGuhStoresInfinitelyAndKeepsItWhenBroken(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 1, 2);
         helper.setBlock(pos, ModBlocks.BANK_GUH.get());
@@ -392,7 +388,7 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = WIRE_ROOM)
+    @GuhTest(template = WIRE_ROOM)
     public static void guhWireConnectsLikeRedstoneDust(GameTestHelper helper) {
         for (int x = 0; x < 5; x++) {
             helper.setBlock(new BlockPos(x, 0, 1), Blocks.STONE);
@@ -409,7 +405,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "guh_picnic", timeoutTicks = 40)
+    @GuhTest(template = "guh_picnic", timeoutTicks = 40)
     public static void guhPicnicHasTheHungryGuh(GameTestHelper helper) {
         helper.succeedWhen(() -> helper.assertEntityPresent(ModEntities.QUEST_GUH.get()));
     }
@@ -419,7 +415,7 @@ public class GuhGameTests {
     // ------------------------------------------------------------------------------------------------------------
 
     /** Kaas saus spreads as far as water, but 3x slower (water 5 ticks per step, kaas saus 15, lava 30). */
-    @GameTest(template = WIRE_ROOM, timeoutTicks = 200)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 200)
     public static void kaasSausFlowsSlowerThanWater(GameTestHelper helper) {
         var level = helper.getLevel();
         int saus = nl.juiced.guhs.registry.ModFluids.KAAS_SAUS.get().getTickDelay(level);
@@ -437,7 +433,7 @@ public class GuhGameTests {
                 "kaas saus should flow a few blocks"));
     }
 
-    @GameTest(template = WIRE_ROOM, timeoutTicks = 20)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 20)
     public static void bigWheelTakesUpThreeByThree(GameTestHelper helper) {
         for (int x = 0; x < 6; x++) {
             helper.setBlock(new BlockPos(x, 0, 1), Blocks.STONE);
@@ -460,26 +456,26 @@ public class GuhGameTests {
         helper.succeedWhen(() -> helper.assertBlockNotPresent(ModBlocks.GUH_WHEEL.get(), new BlockPos(2, 1, 1)));
     }
 
-    @GameTest(template = "hamster_house_large", timeoutTicks = 60)
+    @GuhTest(template = "hamster_house_large", timeoutTicks = 60)
     public static void largeHamsterHouseHasTheMegaGuh(GameTestHelper helper) {
         helper.succeedWhen(() -> helper.assertTrue(
                 helper.getEntities(ModEntities.GUH.get()).stream().anyMatch(g -> g.getScale() > 9f),
                 "the mega guh (~14 blocks) should be there"));
     }
 
-    @GameTest(template = "hamster_house_medium", timeoutTicks = 60)
+    @GuhTest(template = "hamster_house_medium", timeoutTicks = 60)
     public static void mediumHamsterHouseHasABigGuh(GameTestHelper helper) {
         helper.succeedWhen(() -> helper.assertTrue(
                 helper.getEntities(ModEntities.GUH.get()).stream().anyMatch(g -> g.getScale() > 7f), "big guh"));
     }
 
-    @GameTest(template = "cheese_fountain", timeoutTicks = 40)
+    @GuhTest(template = "cheese_fountain", timeoutTicks = 40)
     public static void cheeseFountainHasKaasSaus(GameTestHelper helper) {
         helper.succeedWhen(() -> helper.assertTrue(helper.getLevel().getFluidState(helper.absolutePos(new BlockPos(8, 2, 5)))
                 .getFluidType() == nl.juiced.guhs.registry.ModFluids.KAAS_SAUS_TYPE.get(), "the basin should be full of kaas saus"));
     }
 
-    @GameTest(template = "guh_caves/central_room", timeoutTicks = 40)
+    @GuhTest(template = "guh_caves/central_room", timeoutTicks = 40)
     public static void guhCaveCentralRoomLoads(GameTestHelper helper) {
         helper.succeedWhen(() -> helper.assertTrue(helper.getEntities(ModEntities.GUH.get()).size() >= 2, "guhs live in the cave"));
     }
@@ -488,7 +484,7 @@ public class GuhGameTests {
     // Guh menu settings: behaviour, sounds, armour
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = WIRE_ROOM, timeoutTicks = 200)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 200)
     public static void aggressiveGuhAttacksMobsInItsRadius(GameTestHelper helper) {
         for (int x = 0; x < 20; x++) {
             for (int z = 0; z < 3; z++) {
@@ -497,7 +493,7 @@ public class GuhGameTests {
         }
         Player player = helper.makeMockServerPlayerInLevel(); // a real (online) owner, so the guh doesn't just sit
         BlockPos near = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(near.getX() + 0.5, near.getY(), near.getZ() + 0.5);
+        player.snapTo(near.getX() + 0.5, near.getY(), near.getZ() + 0.5);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 1));
         guh.tame(player);
         guh.setTeleportEnabled(false);
@@ -508,7 +504,7 @@ public class GuhGameTests {
         helper.succeedWhen(() -> helper.assertTrue(zombie.getHealth() < zombie.getMaxHealth(), "the aggressive guh should attack the husk; target=" + guh.getTarget() + " dist=" + guh.distanceTo(zombie) + " nav=" + guh.getNavigation().isDone()));
     }
 
-    @GameTest(template = WIRE_ROOM, timeoutTicks = 100)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 100)
     public static void passiveGuhLeavesMobsAlone(GameTestHelper helper) {
         for (int x = 0; x < 20; x++) {
             for (int z = 0; z < 3; z++) {
@@ -517,7 +513,7 @@ public class GuhGameTests {
         }
         Player player = helper.makeMockServerPlayerInLevel(); // a real (online) owner, so the guh doesn't just sit
         BlockPos near = helper.absolutePos(new BlockPos(1, 1, 1));
-        player.moveTo(near.getX() + 0.5, near.getY(), near.getZ() + 0.5);
+        player.snapTo(near.getX() + 0.5, near.getY(), near.getZ() + 0.5);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 1));
         guh.tame(player);
         guh.setTeleportEnabled(false);
@@ -530,7 +526,7 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhSoundAndBehaviourSettings(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
@@ -544,14 +540,14 @@ public class GuhGameTests {
         guh.setBehavior(GuhEntity.Behavior.NEUTRAL);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
         guh.saveWithoutId(tag);
-        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         copy.load(tag);
         helper.assertTrue(!copy.areSoundsEnabled() && copy.getBehavior() == GuhEntity.Behavior.NEUTRAL && copy.getSoundFrequency() == 4,
                 "settings should be saved");
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhArmourGivesProtectionAndShowsItsTier(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
@@ -568,7 +564,7 @@ public class GuhGameTests {
     // 1.6: Big Mika, Vahoege Vads, new structures
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void mikaShovesHard(GameTestHelper helper) {
         MikaEntity mika = helper.spawn(ModEntities.MIKA.get(), POS);
         net.minecraft.world.entity.monster.Husk husk = helper.spawn(net.minecraft.world.entity.EntityType.HUSK, POS.east());
@@ -579,7 +575,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void bigMikaReallyHurts(GameTestHelper helper) {
         MikaEntity mika = helper.spawn(ModEntities.MIKA.get(), POS);
         mika.makeBoss();
@@ -592,13 +588,13 @@ public class GuhGameTests {
         // a Big Mika saved and loaded stays Big Mika
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
         mika.saveWithoutId(tag);
-        MikaEntity copy = ModEntities.MIKA.get().create(helper.getLevel());
+        MikaEntity copy = ModEntities.MIKA.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         copy.load(tag);
         helper.assertTrue(copy.isBoss() && copy.getMaxHealth() == MikaEntity.BOSS_HEALTH, "Big Mika should survive a reload");
         helper.succeed();
     }
 
-    @GameTest(template = "challenging_guh_caves/dungeon_hall", timeoutTicks = 40)
+    @GuhTest(template = "challenging_guh_caves/dungeon_hall", timeoutTicks = 40)
     public static void dungeonHallHasBigMikaAndTreasure(GameTestHelper helper) {
         helper.succeedWhen(() -> {
             helper.assertTrue(helper.getEntities(ModEntities.MIKA.get()).stream().anyMatch(MikaEntity::isBoss), "Big Mika guards the hall");
@@ -607,7 +603,7 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = "guh_statue", timeoutTicks = 40)
+    @GuhTest(template = "guh_statue", timeoutTicks = 40)
     public static void guhStatueIsBuilt(GameTestHelper helper) {
         int[] solid = {0};
         BlockPos.betweenClosed(0, 2, 0, 39, 26, 49).forEach(p -> {
@@ -617,7 +613,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void newStructureTemplatesExist(GameTestHelper helper) {
         var manager = helper.getLevel().getStructureManager();
         for (String name : new String[]{"hamster_house_extra_extra_large", "grand_cheese_fountain", "guh_statue",
@@ -630,7 +626,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vadsOreDropsVadsAndVadsGearIsUnbreakable(GameTestHelper helper) {
         helper.setBlock(POS, ModBlocks.COMPRESSED_SUPER_VAHOEGE_VADS.get());
         var drops = Block.getDrops(helper.getBlockState(POS), helper.getLevel(), helper.absolutePos(POS), null, null,
@@ -645,7 +641,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vadsGearIsKeptOnDeath(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.getInventory().setItem(3, new ItemStack(ModItems.VADS_PICKAXE.get()));
@@ -661,7 +657,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vadsPaxelIsPickaxeAxeAndShovel(GameTestHelper helper) {
         ItemStack paxel = new ItemStack(ModItems.VADS_PAXEL.get());
         for (Block block : new Block[]{Blocks.STONE, Blocks.OBSIDIAN, Blocks.OAK_LOG, Blocks.DIRT, Blocks.SAND,
@@ -674,21 +670,21 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WIRE_ROOM, timeoutTicks = 200)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 200)
     public static void secretNoteGuhWalksUpAndHandsOverBork(GameTestHelper helper) {
         Player player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(helper.absoluteVec(new Vec3(3.5, 1, 1.5)));
+        player.snapTo(helper.absoluteVec(new Vec3(3.5, 1, 1.5)));
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(14, 1, 1));
         guh.setSecretNote(true);
         helper.succeedWhen(() -> {
             helper.assertFalse(guh.hasSecretNote(), "the guh should have handed over its note");
-            ItemStack note = player.getInventory().items.stream().filter(s -> s.is(Items.PAPER)).findFirst().orElse(ItemStack.EMPTY);
+            ItemStack note = player.getInventory().getNonEquipmentItems().stream().filter(s -> s.is(Items.PAPER)).findFirst().orElse(ItemStack.EMPTY);
             helper.assertFalse(note.isEmpty(), "the player should get a paper");
             helper.assertTrue(note.get(DataComponents.LORE).lines().get(0).getString().equals("bork"), "the note says bork");
         });
     }
 
-    @GameTest(template = "giant_kaasknabbel", timeoutTicks = 40)
+    @GuhTest(template = "giant_kaasknabbel", timeoutTicks = 40)
     public static void importedKaasknabbelKeepsItsSign(GameTestHelper helper) {
         // the build from the "Guh structures" world: sign at world (-14, -59, 23) -> template (22, 2, 5) -> test (22, 3, 5)
         helper.succeedWhen(() -> {
@@ -707,11 +703,11 @@ public class GuhGameTests {
         return name.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents tr ? tr.getKey() : name.getString();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhsOutsideTheGuhmensionAreNormalAndCalledGuh(GameTestHelper helper) {
         for (int i = 0; i < 400; i++) {
             GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
-            guh.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(guh.blockPosition()), MobSpawnType.NATURAL, null);
+            guh.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(guh.blockPosition()), EntitySpawnReason.NATURAL, null);
             helper.assertTrue(guh.getVariant() == nl.juiced.guhs.entity.GuhVariant.NORMAL, "variants only spawn in the Guhmension");
             helper.assertFalse(guh.hasSecretNote(), "the note guh only spawns in the Guhmension");
             helper.assertTrue(guh.shouldShowName() && nameKey(guh.getDisplayName()).equals("entity.guhs.guh"), "a normal guh is called Guh");
@@ -720,7 +716,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void variantsAreRareAndSurviveSaving(GameTestHelper helper) {
         var random = net.minecraft.util.RandomSource.create(42);
         int normal = 0;
@@ -738,7 +734,7 @@ public class GuhGameTests {
         bronto.setVariant(nl.juiced.guhs.entity.GuhVariant.BRONTOSAURUS);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
         bronto.saveWithoutId(tag);
-        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         copy.load(tag);
         helper.assertTrue(copy.getVariant() == nl.juiced.guhs.entity.GuhVariant.BRONTOSAURUS, "the variant should be saved");
         helper.assertTrue(nameKey(copy.getDisplayName()).equals("entity.guhs.guh.brontosaurus"), "shows its variant name");
@@ -747,7 +743,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void babiesLookLikeAParent(GameTestHelper helper) {
         GuhEntity mum = helper.spawn(ModEntities.GUH.get(), POS);
         GuhEntity dad = helper.spawn(ModEntities.GUH.get(), POS.east());
@@ -766,10 +762,10 @@ public class GuhGameTests {
     // Sitting still & personalities
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = WIRE_ROOM, timeoutTicks = 120)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 120)
     public static void sittingGuhIgnoresKaasKnabbels(GameTestHelper helper) {
         Player player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(helper.absoluteVec(new Vec3(4.5, 1, 1.5)));
+        player.snapTo(helper.absoluteVec(new Vec3(4.5, 1, 1.5)));
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 16));
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(14, 1, 1));
         guh.tame(player);
@@ -786,10 +782,10 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void personalitiesDoSomething(GameTestHelper helper) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
-        guh.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(guh.blockPosition()), MobSpawnType.NATURAL, null);
+        guh.finalizeSpawn(helper.getLevel(), helper.getLevel().getCurrentDifficultyAt(guh.blockPosition()), EntitySpawnReason.NATURAL, null);
         helper.assertTrue(guh.hasPersonality(), "every guh gets a personality");
         guh.setPersonality(nl.juiced.guhs.entity.GuhPersonality.CHATTY);
         int chatty = guh.getAmbientSoundInterval();
@@ -800,13 +796,13 @@ public class GuhGameTests {
         helper.assertTrue(guh.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED) > lazy, "playful guhs are faster than lazy ones");
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
         guh.saveWithoutId(tag);
-        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         copy.load(tag);
         helper.assertTrue(copy.getPersonality() == nl.juiced.guhs.entity.GuhPersonality.PLAYFUL, "the personality is saved");
         helper.succeed();
     }
 
-    @GameTest(template = WIRE_ROOM, timeoutTicks = 200)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 200)
     public static void vadsigGuhEatsKnabbelsOffTheFloor(GameTestHelper helper) {
         for (int x = 0; x < 14; x++) {                  // the wire room has no floor of its own
             for (int z = 0; z < 3; z++) {
@@ -819,7 +815,7 @@ public class GuhGameTests {
         helper.succeedWhen(() -> helper.assertFalse(snack.isAlive(), "the vadsig guh should eat the knabbel"));
     }
 
-    @GameTest(template = "guhramid", timeoutTicks = 60)
+    @GuhTest(template = "guhramid", timeoutTicks = 60)
     public static void guhramidHasItsMummyGoldenGuhAndTreasure(GameTestHelper helper) {
         helper.succeedWhen(() -> {
             var guhs = helper.getEntities(ModEntities.GUH.get());
@@ -843,9 +839,9 @@ public class GuhGameTests {
         return villager;
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhmensionBiomesHaveGuhVillagers(GameTestHelper helper) {
-        var biomes = helper.getLevel().registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.BIOME);
+        var biomes = helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.BIOME);
         for (String b : new String[]{"guh_fields", "kaas_flats", "guh_peaks", "mikas_biome"}) {
             var holder = biomes.getHolderOrThrow(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BIOME, Guhs.id(b)));
             helper.assertTrue(net.minecraft.world.entity.npc.VillagerType.byBiome(holder) == nl.juiced.guhs.registry.ModVillagers.GUH.get(),
@@ -854,7 +850,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhProfessionsHaveTheirTrades(GameTestHelper helper) {
         var temmer = guhVillager(helper, POS, nl.juiced.guhs.registry.ModVillagers.VADS_TEMMER.get());
         helper.assertTrue(temmer.getOffers().stream().anyMatch(o -> o.getResult().is(ModItems.GUH_SPAWN_EGG.get())),
@@ -868,14 +864,14 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void guhVillagersDropVanillaJobs(GameTestHelper helper) {
         var villager = guhVillager(helper, POS, net.minecraft.world.entity.npc.VillagerProfession.LIBRARIAN);
         helper.succeedWhen(() -> helper.assertTrue(villager.getVillagerData().getProfession() == net.minecraft.world.entity.npc.VillagerProfession.NONE,
                 "a guh villager doesn't become a librarian"));
     }
 
-    @GameTest(template = WIRE_ROOM, timeoutTicks = 1200, batch = "guh_villager_baan")   // own batch: other tests' job blocks nearby
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 1200, batch = "guh_villager_baan")   // own batch: other tests' job blocks nearby
     public static void guhVillagerTakesAGuhJob(GameTestHelper helper) {
         // (this room has no floor of its own: the knabbelbak goes on the ground, at y 0)
         helper.setBlock(new BlockPos(6, 0, 1), ModBlocks.KNABBELBAK.get());
@@ -884,7 +880,7 @@ public class GuhGameTests {
                 "the villager should become a vads temmer at the knabbelbak"));
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhsWearClothes(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
@@ -901,7 +897,7 @@ public class GuhGameTests {
         guh.wear(nl.juiced.guhs.entity.GuhClothes.RED_BOWTIE);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
         guh.saveWithoutId(tag);
-        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         copy.load(tag);
         helper.assertTrue(copy.getClothes(nl.juiced.guhs.entity.GuhClothes.Slot.NECK) == nl.juiced.guhs.entity.GuhClothes.RED_BOWTIE, "clothes are saved");
         var off = copy.takeOffClothes();
@@ -910,14 +906,14 @@ public class GuhGameTests {
         net.minecraft.nbt.CompoundTag old = new net.minecraft.nbt.CompoundTag();
         copy.saveWithoutId(old);
         old.putString("Variant", "rain");
-        GuhEntity rain = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity rain = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         rain.load(old);
         helper.assertTrue(rain.getVariant() == nl.juiced.guhs.entity.GuhVariant.NORMAL
                 && rain.getClothes(nl.juiced.guhs.entity.GuhClothes.Slot.BODY) == nl.juiced.guhs.entity.GuhClothes.RAINCOAT, "old rain guhs wear a raincoat");
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void mikaMepperHitsMikasHard(GameTestHelper helper) {
         MikaEntity mika = helper.spawn(ModEntities.MIKA.get(), POS);
         var husk = helper.spawn(net.minecraft.world.entity.EntityType.HUSK, POS.east());
@@ -929,7 +925,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "guh_village/layout_a", timeoutTicks = 60)
+    @GuhTest(template = "guh_village/layout_a", timeoutTicks = 60)
     public static void guhVillageHasGuhVillagers(GameTestHelper helper) {
         helper.succeedWhen(() -> {
             var villagers = helper.getEntities(net.minecraft.world.entity.EntityType.VILLAGER);
@@ -943,7 +939,7 @@ public class GuhGameTests {
     // 2.0: wardrobe + backpack, launching
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void wardrobeBackpackKeepsItsContents(GameTestHelper helper) {
         var player = helper.makeMockServerPlayerInLevel();
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
@@ -965,19 +961,19 @@ public class GuhGameTests {
                 "a backpack with things in it stays on (the rest comes off)");
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
         guh.saveWithoutId(tag);
-        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel());
+        GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         copy.load(tag);
         helper.assertTrue(copy.getBackpack().getItem(3).getCount() == 5 && copy.hasBackpack(), "the backpack contents are saved");
         guh.getBackpack().removeItemNoUpdate(3);
         nl.juiced.guhs.feature.kleding.KledingKast.kleed(player, guh, niets);
         helper.assertTrue(!guh.hasBackpack() && !wardrobe.getSlot(nl.juiced.guhs.menu.GuhWardrobeMenu.PACK_START).mayPlace(new ItemStack(Items.DIAMOND)),
                 "an empty backpack comes off; then nothing goes in");
-        helper.assertTrue(player.getInventory().items.stream().noneMatch(st -> st.getItem() instanceof nl.juiced.guhs.item.GuhClothingItem),
+        helper.assertTrue(player.getInventory().getNonEquipmentItems().stream().noneMatch(st -> st.getItem() instanceof nl.juiced.guhs.item.GuhClothingItem),
                 "nothing comes back as an item");
         helper.succeed();
     }
 
-    @GameTest(template = WIRE_ROOM, timeoutTicks = 400)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 400)
     public static void launchedGuhFliesUntilItHitsAWall(GameTestHelper helper) {
         for (int y = 1; y <= 2; y++) {
             for (int z = 0; z <= 2; z++) {
@@ -989,7 +985,7 @@ public class GuhGameTests {
         guh.setGuhScale(1.5f);
         guh.tame(player);
         guh.equipSaddle(new ItemStack(Items.SADDLE), null);
-        player.moveTo(guh.getX(), guh.getY(), guh.getZ(), -90f, 0f); // looking towards +x, the wall
+        player.snapTo(guh.getX(), guh.getY(), guh.getZ(), -90f, 0f); // looking towards +x, the wall
         player.startRiding(guh, true);
         double startX = guh.getX();
         guh.onLaunchPressed(player);
@@ -1007,14 +1003,14 @@ public class GuhGameTests {
     // 2.0.0: the guh stomach, the questline, the Guhdex and the sled
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void stomachIsBuiltAndPrivateStomachsStayClosed(GameTestHelper helper) {
         net.minecraft.server.level.ServerPlayer owner = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayerInLevel();
         net.minecraft.server.level.ServerPlayer visitor = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayerInLevel();
         // (the headless test server has no datapack dimensions; in a real world the stomach gets built too)
         ServerLevel maagLevel = nl.juiced.guhs.world.MaagManager.level(helper.getLevel().getServer());
         nl.juiced.guhs.world.GuhWorldData.Maag maag = maagLevel != null ? nl.juiced.guhs.world.MaagManager.ensureMaag(maagLevel, owner)
-                : nl.juiced.guhs.world.GuhWorldData.get(owner.server).createMaag(owner.getUUID(), "owner");
+                : nl.juiced.guhs.world.GuhWorldData.get(owner.level().getServer()).createMaag(owner.getUUID(), "owner");
         if (maagLevel != null) {
             BlockPos c = nl.juiced.guhs.world.MaagManager.center(maag.index);
             helper.assertTrue(maagLevel.getBlockState(c.offset(-3, 0, 0)).is(ModBlocks.MAAG_PORTAL.get()), "the 'to the mouth' portal is there");
@@ -1038,12 +1034,12 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vadsThreeTimesInARowFreesGuhbert(GameTestHelper helper) {
         net.minecraft.server.level.ServerPlayer player = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayerInLevel();
-        player.moveTo(helper.absoluteVec(new Vec3(2.5, 1, 2.5)));
+        player.snapTo(helper.absoluteVec(new Vec3(2.5, 1, 2.5)));
         nl.juiced.guhs.entity.MikaBaasEntity mika = helper.spawn(ModEntities.MIKA_BAAS.get(), POS);
-        var p = nl.juiced.guhs.world.GuhWorldData.get(player.server).player(player.getUUID());
+        var p = nl.juiced.guhs.world.GuhWorldData.get(player.level().getServer()).player(player.getUUID());
         p.maagQuest = 1;
         nl.juiced.guhs.quest.GuhQuests.playRps(player, mika, nl.juiced.guhs.quest.GuhQuests.Rps.VADS);
         nl.juiced.guhs.quest.GuhQuests.playRps(player, mika, nl.juiced.guhs.quest.GuhQuests.Rps.STEEN);
@@ -1060,10 +1056,10 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhdexMilestoneGivesItsRewardOnce(GameTestHelper helper) {
         net.minecraft.server.level.ServerPlayer player = (net.minecraft.server.level.ServerPlayer) helper.makeMockServerPlayerInLevel();
-        var p = nl.juiced.guhs.world.GuhWorldData.get(player.server).player(player.getUUID());
+        var p = nl.juiced.guhs.world.GuhWorldData.get(player.level().getServer()).player(player.getUUID());
         nl.juiced.guhs.quest.GuhDex.claim(player, 0);
         helper.assertTrue(player.getInventory().isEmpty(), "not enough guhs seen yet");
         for (int i = 0; i < 5; i++) {
@@ -1119,15 +1115,15 @@ public class GuhGameTests {
     }
 
     private static nl.juiced.guhs.entity.GuhSleeEntity sledOn(GameTestHelper helper, nl.juiced.guhs.slee.SleePath.Piece piece) {
-        nl.juiced.guhs.entity.GuhSleeEntity sled = ModEntities.GUH_SLEE.get().create(helper.getLevel());
+        nl.juiced.guhs.entity.GuhSleeEntity sled = ModEntities.GUH_SLEE.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         Vec3 start = piece.at(0.05).pos();
-        sled.moveTo(start);
+        sled.snapTo(start);
         sled.putOn(piece, start, piece.at(0).heading());
         helper.getLevel().addFreshEntity(sled);
         return sled;
     }
 
-    @GameTest(template = SLED_ROOM, timeoutTicks = 200)
+    @GuhTest(template = SLED_ROOM, timeoutTicks = 200)
     public static void sledFollowsTheTrackAroundACurveAndStopsAtTheEnd(GameTestHelper helper) {
         var s = nl.juiced.guhs.slee.SleePath.Shape.STRAIGHT;
         var pieces = track(helper, new BlockPos(4, 1, 20), s, nl.juiced.guhs.slee.SleePath.Shape.CURVE_RIGHT, s, s);
@@ -1142,7 +1138,7 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = SLED_ROOM, timeoutTicks = 200)
+    @GuhTest(template = SLED_ROOM, timeoutTicks = 200)
     public static void sledGoesUpAndDownSlopes(GameTestHelper helper) {
         var s = nl.juiced.guhs.slee.SleePath.Shape.STRAIGHT;
         var pieces = track(helper, new BlockPos(6, 1, 23), s, nl.juiced.guhs.slee.SleePath.Shape.SLOPE, "down", s);
@@ -1168,7 +1164,7 @@ public class GuhGameTests {
             nl.juiced.guhs.slee.SleePath.Shape.STRAIGHT, "down_DROP", nl.juiced.guhs.slee.SleePath.Shape.JUMP,
             nl.juiced.guhs.slee.SleePath.Shape.STRAIGHT};
 
-    @GameTest(template = COASTER_ROOM)
+    @GuhTest(template = COASTER_ROOM)
     public static void coasterPiecesJoinUpBothWays(GameTestHelper helper) {
         var pieces = track(helper, new BlockPos(8, 1, 48), COASTER);
         // forwards from the first piece to the last, and back again, over the jump's gap too
@@ -1193,7 +1189,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = COASTER_ROOM, timeoutTicks = 400)
+    @GuhTest(template = COASTER_ROOM, timeoutTicks = 400)
     public static void sledRidesTheWholeCoaster(GameTestHelper helper) {
         var pieces = track(helper, new BlockPos(8, 1, 48), COASTER);
         nl.juiced.guhs.entity.GuhSleeEntity sled = sledOn(helper, pieces.get(0));
@@ -1218,7 +1214,7 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = COASTER_ROOM, timeoutTicks = 600)
+    @GuhTest(template = COASTER_ROOM, timeoutTicks = 600)
     public static void kermisLapGivesAKermisbon(GameTestHelper helper) {
         var s = nl.juiced.guhs.slee.SleePath.Shape.STRAIGHT;
         var c = nl.juiced.guhs.slee.SleePath.Shape.CURVE_RIGHT;
@@ -1227,7 +1223,7 @@ public class GuhGameTests {
         ((nl.juiced.guhs.block.entity.SleeRailBlockEntity) helper.getLevel().getBlockEntity(pieces.get(0).anchor())).setFinish(true);
         nl.juiced.guhs.entity.GuhSleeEntity sled = sledOn(helper, pieces.get(1));
         net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(sled.position());
+        player.snapTo(sled.position());
         player.startRiding(sled, true);
         sled.setSpeed(3);
         sled.setRunning(true);
@@ -1239,7 +1235,7 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void enderGuhFliesAndLovesFriedKnabbels(GameTestHelper helper) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 2, 2));
         guh.setVariant(nl.juiced.guhs.entity.GuhVariant.ENDER);
@@ -1255,7 +1251,7 @@ public class GuhGameTests {
 
     // --- 2.3.0: the guh castle -------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void emptyRoyalThroneGetsANewKing(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 1, 2);
         helper.setBlock(pos, ModBlocks.KONINGSTROON.get().defaultBlockState().setValue(nl.juiced.guhs.block.KoningsTroonBlock.ROYAL, true));
@@ -1278,7 +1274,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void gateGuardsOnlyLetFriendsIn(GameTestHelper helper) {
         var level = helper.getLevel();
         nl.juiced.guhs.entity.GuhNpcEntity[] guards = new nl.juiced.guhs.entity.GuhNpcEntity[2];
@@ -1286,16 +1282,16 @@ public class GuhGameTests {
         java.util.Set<net.minecraft.world.level.ChunkPos> forced = new java.util.HashSet<>();
         for (int i = 0; i < 2; i++) {
             net.minecraft.world.level.ChunkPos c = new net.minecraft.world.level.ChunkPos(helper.absolutePos(new BlockPos(1 + i * 6, 2, 8)));
-            if (level.setChunkForced(c.x, c.z, true)) {
+            if (level.setChunkForced(c.x(), c.z(), true)) {
                 forced.add(c);
             }
-            level.getChunk(c.x, c.z);
+            level.getChunk(c.x(), c.z());
         }
         for (int i = 0; i < 2; i++) {
-            guards[i] = ModEntities.GUH_NPC.get().create(level);
+            guards[i] = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
             guards[i].setKind(nl.juiced.guhs.entity.GuhNpcEntity.Kind.POORTWACHTER);
             BlockPos p = helper.absolutePos(new BlockPos(1 + i * 6, 2, 8));
-            guards[i].moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, 0f, 0f);    // looking out (+z): the castle is behind them (-z)
+            guards[i].snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, 0f, 0f);    // looking out (+z): the castle is behind them (-z)
             level.addFreshEntity(guards[i]);
         }
         net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
@@ -1318,17 +1314,17 @@ public class GuhGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhPileIsANineByNinePainting(GameTestHelper helper) {
         var level = helper.getLevel();
-        var variant = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.PAINTING_VARIANT)
+        var variant = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.PAINTING_VARIANT)
                 .getHolder(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.PAINTING_VARIANT, nl.juiced.guhs.Guhs.id("guh_stapel")));
         helper.assertTrue(variant.isPresent() && variant.get().value().width() == 9 && variant.get().value().height() == 9, "the guh pile is 9x9");
         helper.succeed();
     }
 
     /** Reisguhs (only in the Guhmension, so this runs on a real server: /test runall). */
-    @GameTest(template = EMPTY, required = false, timeoutTicks = 200)
+    @GuhTest(template = EMPTY, required = false, timeoutTicks = 200)
     public static void reisguhsDiscoverRenameAndTravel(GameTestHelper helper) {
         ServerLevel guhmension = helper.getLevel().getServer().getLevel(ModDimensions.GUHMENSION);
         helper.assertTrue(guhmension != null, "the Guhmension exists");
@@ -1345,9 +1341,9 @@ public class GuhGameTests {
         var rb = nl.juiced.guhs.quest.Reisguh.place(guhmension, b, 0, "B");
         net.minecraft.server.level.ServerPlayer player = net.neoforged.neoforge.common.util.FakePlayerFactory.get(guhmension,
                 new com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "reiziger"));
-        player.moveTo(a.getX() + 1.5, a.getY(), a.getZ() + 0.5);
+        player.snapTo(a.getX() + 1.5, a.getY(), a.getZ() + 0.5);
         nl.juiced.guhs.quest.Reisguh.talk(ra, player);
-        player.moveTo(b.getX() + 1.5, b.getY(), b.getZ() + 0.5);
+        player.snapTo(b.getX() + 1.5, b.getY(), b.getZ() + 0.5);
         nl.juiced.guhs.quest.Reisguh.talk(rb, player);
         helper.assertTrue(nl.juiced.guhs.quest.Reisguh.discovered(player, ra.getUUID()) && nl.juiced.guhs.quest.Reisguh.discovered(player, rb.getUUID()),
                 "right-clicking discovers them");
@@ -1368,7 +1364,7 @@ public class GuhGameTests {
     }
 
     /** Every structure in the super compass: the compass finds the same one as /locate (dev server: /test runall). */
-    @GameTest(template = EMPTY, required = false, timeoutTicks = 2400)
+    @GuhTest(template = EMPTY, required = false, timeoutTicks = 2400)
     public static void superkompasMatchesLocate(GameTestHelper helper) {
         ServerLevel guhmension = helper.getLevel().getServer().getLevel(ModDimensions.GUHMENSION);
         helper.assertTrue(guhmension != null, "the Guhmension exists");
@@ -1378,7 +1374,7 @@ public class GuhGameTests {
             for (String id : category.structures()) {
                 var key = net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.STRUCTURE, nl.juiced.guhs.Guhs.id(id));
                 BlockPos ours = nl.juiced.guhs.item.GuhCompassItem.findCenter(guhmension, key, from);
-                var holder = guhmension.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getHolderOrThrow(key);
+                var holder = guhmension.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getHolderOrThrow(key);
                 var vanilla = guhmension.getChunkSource().getGenerator().findNearestMapStructure(guhmension,
                         net.minecraft.core.HolderSet.direct(holder), from, 100, false);
                 if (ours == null && vanilla == null) {
@@ -1401,20 +1397,20 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 60)
+    @GuhTest(template = EMPTY, timeoutTicks = 60)
     public static void twoReisguhsOnOneSpotBecomeOne(GameTestHelper helper) {
         BlockPos at = helper.absolutePos(new BlockPos(2, 2, 2));
         for (int i = 0; i < 2; i++) {
-            var npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+            var npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
             npc.setKind(nl.juiced.guhs.entity.GuhNpcEntity.Kind.REISGUH);
-            npc.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+            npc.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
             helper.getLevel().addFreshEntity(npc);
         }
         helper.succeedWhen(() -> helper.assertTrue(helper.getLevel().getEntitiesOfClass(nl.juiced.guhs.entity.GuhNpcEntity.class,
                 new net.minecraft.world.phys.AABB(at).inflate(2), n -> !n.isRemoved()).size() == 1, "one of the two goes"));
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void superkompasLooksForWhatYouChoose(GameTestHelper helper) {
         ItemStack stack = new ItemStack(ModItems.SUPERKOMPAS.get());
         helper.assertTrue(nl.juiced.guhs.item.SuperkompasItem.chosen(stack) == null, "a new super compass looks for nothing yet");
@@ -1426,7 +1422,7 @@ public class GuhGameTests {
                 "nor the fountains and the statue");
         nl.juiced.guhs.item.SuperkompasItem.choose(stack, "guh_picnic");
         helper.assertTrue("guh_picnic".equals(nl.juiced.guhs.item.SuperkompasItem.chosen(stack)), "it remembers the choice");
-        var registry = helper.getLevel().registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
+        var registry = helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
         for (var category : nl.juiced.guhs.item.SuperkompasItem.CATEGORIES) {
             for (String id : category.structures()) {
                 helper.assertTrue(registry.containsKey(nl.juiced.guhs.Guhs.id(id)), "every structure in the menu exists: " + id);
@@ -1435,14 +1431,14 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhdexHasTheReisguhAndTheGateGuard(GameTestHelper helper) {
         net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
         BlockPos at = helper.absolutePos(new BlockPos(2, 2, 2));
-        player.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
-        var npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        player.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        var npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(nl.juiced.guhs.entity.GuhNpcEntity.Kind.REISGUH);
-        npc.moveTo(at.getX() + 1.2, at.getY(), at.getZ() + 0.5);
+        npc.snapTo(at.getX() + 1.2, at.getY(), at.getZ() + 0.5);
         helper.getLevel().addFreshEntity(npc);
         var data = nl.juiced.guhs.world.GuhWorldData.get(helper.getLevel().getServer());
         nl.juiced.guhs.quest.GuhDex.onPlayerTick(player, data);
@@ -1458,7 +1454,7 @@ public class GuhGameTests {
                 g -> g.getVariant() == nl.juiced.guhs.entity.GuhVariant.KONING);
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void koningguhIsTamedWithKnabbelsAndKeepsHisOutfit(GameTestHelper helper) {
         GuhEntity king = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 2, 2));
         nl.juiced.guhs.block.KoningsTroonBlock.makeKing(king);
@@ -1491,11 +1487,11 @@ public class GuhGameTests {
                 g -> npc.equals(g.getHiddenBy()));
     }
 
-    @GameTest(template = "verstopguh_huis", timeoutTicks = 200)
+    @GuhTest(template = "verstopguh_huis", timeoutTicks = 200)
     public static void verstopguhFindThemAllForTickets(GameTestHelper helper) {
         var npc = verstopguhtje(helper);
         net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX() + 1, npc.getY(), npc.getZ());
+        player.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         nl.juiced.guhs.quest.VerstopGame.action(npc, player, nl.juiced.guhs.quest.VerstopGame.START); // makkelijk
         helper.assertTrue(npc.verstop.isRunning() && npc.verstop.isPlaying(player), "the game is on");
         var guhs = hiddenGuhs(helper);
@@ -1524,11 +1520,11 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = "verstopguh_huis", timeoutTicks = 200)
+    @GuhTest(template = "verstopguh_huis", timeoutTicks = 200)
     public static void verstopguhWalkingOutEndsTheGame(GameTestHelper helper) {
         var npc = verstopguhtje(helper);
         net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX() + 1, npc.getY(), npc.getZ());
+        player.snapTo(npc.getX() + 1, npc.getY(), npc.getZ());
         nl.juiced.guhs.quest.VerstopGame.action(npc, player, nl.juiced.guhs.quest.VerstopGame.START + 2); // moeilijk
         var guhs = hiddenGuhs(helper);
         helper.assertTrue(guhs.size() == 12, "12 tiny guhs on hard: " + guhs.size());
@@ -1553,7 +1549,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void oneWayGlassHoldsYouUp(GameTestHelper helper) {
         helper.setBlock(new BlockPos(2, 1, 2), ModBlocks.EENRICHTINGSGLAS.get());
         var state = helper.getBlockState(new BlockPos(2, 1, 2));
@@ -1562,7 +1558,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kermisGuhSellsTheOutfitForBonnen(GameTestHelper helper) {
         nl.juiced.guhs.entity.GuhNpcEntity npc = helper.spawn(ModEntities.GUH_NPC.get(), new BlockPos(2, 2, 2));
         npc.setKind(nl.juiced.guhs.entity.GuhNpcEntity.Kind.KERMIS_GUH);
@@ -1576,7 +1572,7 @@ public class GuhGameTests {
     }
 
     /** The real guh kermis: its station sleds find the rails, and a whole lap round the coaster gives kermisbonnen. */
-    @GameTest(template = "guh_kermis", timeoutTicks = 1200)
+    @GuhTest(template = "guh_kermis", timeoutTicks = 1200)
     public static void kermisCoasterGoesAllTheWayRound(GameTestHelper helper) {
         net.minecraft.server.level.ServerPlayer player = helper.makeMockServerPlayerInLevel();
         nl.juiced.guhs.entity.GuhSleeEntity[] sled = {null};
@@ -1586,7 +1582,7 @@ public class GuhGameTests {
             helper.assertTrue(sleds.size() == 2 && sleds.stream().allMatch(sl -> sl.getPiece() != null), "both station sleds are on the rails: "
                     + sleds.size() + " " + sleds.stream().map(sl -> sl.getPiece() != null).toList());
             sled[0] = sleds.get(0);
-            player.moveTo(sled[0].position());
+            player.snapTo(sled[0].position());
             player.startRiding(sled[0], true);
             sled[0].setSpeed(3);
             sled[0].setRunning(true);
@@ -1598,19 +1594,19 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void kermisStructureHasItsCoasterStallAndSleds(GameTestHelper helper) {
         var template = helper.getLevel().getStructureManager().get(nl.juiced.guhs.Guhs.id("guh_kermis")).orElseThrow();
         var tag = template.save(new net.minecraft.nbt.CompoundTag());
-        String entities = tag.getList("entities", 10).toString();
+        String entities = tag.getListOrEmpty("entities").toString();
         helper.assertTrue(entities.contains("kermis_guh"), "the Kermis-guh is there");
         helper.assertTrue(entities.split("guhs:guh_slee").length - 1 == 2, "two sleds at the station");
-        String blocks = tag.getList("blocks", 10).toString();
+        String blocks = tag.getListOrEmpty("blocks").toString();
         helper.assertTrue(blocks.contains("Finish"), "the station is the finish line");
         helper.succeed();
     }
 
-    @GameTest(template = SLED_ROOM)
+    @GuhTest(template = SLED_ROOM)
     public static void breakingAnyPartBreaksTheWholeRailPiece(GameTestHelper helper) {
         var piece = track(helper, new BlockPos(6, 1, 10), nl.juiced.guhs.slee.SleePath.Shape.SLOPE).get(0);
         var blocks = new nl.juiced.guhs.slee.SleePath.Placement(piece.anchor(), piece.facing(), piece.shape()).blocks();
@@ -1626,7 +1622,7 @@ public class GuhGameTests {
     // 2.0.0: bees, slimes, Nether Mikas, crystals, food and furniture
     // ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhBeesNeverGetAngry(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         nl.juiced.guhs.entity.GuhBeeEntity bee = helper.spawn(ModEntities.GUH_BEE.get(), new BlockPos(2, 2, 2));
@@ -1637,30 +1633,30 @@ public class GuhGameTests {
     }
 
     /** Far from the world's middle, a compass finds the same nearest structure as /locate (and not one near 0,0). */
-    @GameTest(template = EMPTY, timeoutTicks = 400, required = false)
+    @GuhTest(template = EMPTY, timeoutTicks = 400, required = false)
     public static void compassFindsNearestStructureFarAway(GameTestHelper helper) {
         ServerLevel guhmension = helper.getLevel().getServer().getLevel(ModDimensions.GUHMENSION);
         helper.assertTrue(guhmension != null, "the Guhmension exists");
         for (var key : java.util.List.of(nl.juiced.guhs.item.GuhCompassItem.MIKA_KAMP, nl.juiced.guhs.item.GuhCompassItem.GUH_CAVES)) {
             BlockPos from = new BlockPos(24000, 64, -17000);
             BlockPos ours = nl.juiced.guhs.item.GuhCompassItem.findCenter(guhmension, key, from);
-            var holder = guhmension.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getHolderOrThrow(key);
+            var holder = guhmension.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getHolderOrThrow(key);
             var vanilla = guhmension.getChunkSource().getGenerator().findNearestMapStructure(guhmension,
                     net.minecraft.core.HolderSet.direct(holder), from, 100, false);
-            helper.assertTrue(ours != null && vanilla != null, key.location() + " is found far from 0,0");
+            helper.assertTrue(ours != null && vanilla != null, key.identifier() + " is found far from 0,0");
             double dOurs = Math.hypot(ours.getX() - from.getX(), ours.getZ() - from.getZ());
             double dVanilla = Math.hypot(vanilla.getFirst().getX() - from.getX(), vanilla.getFirst().getZ() - from.getZ());
-            helper.assertTrue(dOurs <= dVanilla + 96, key.location() + " compass: " + (int) dOurs + " blocks, /locate: " + (int) dVanilla);
+            helper.assertTrue(dOurs <= dVanilla + 96, key.identifier() + " compass: " + (int) dOurs + " blocks, /locate: " + (int) dVanilla);
         }
         helper.succeed();
     }
 
     /** Guh bees spawn with new chunks on a worldgen thread: they must not touch the world's random there. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhBeeMadeOffThreadGetsGoalsLater(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         nl.juiced.guhs.entity.GuhBeeEntity[] made = new nl.juiced.guhs.entity.GuhBeeEntity[1];
-        Thread worker = new Thread(() -> made[0] = ModEntities.GUH_BEE.get().create(level));
+        Thread worker = new Thread(() -> made[0] = ModEntities.GUH_BEE.get().create(level, EntitySpawnReason.TRIGGERED));
         worker.start();
         try {
             worker.join();
@@ -1670,7 +1666,7 @@ public class GuhGameTests {
         nl.juiced.guhs.entity.GuhBeeEntity bee = made[0];
         helper.assertTrue(bee != null && bee.goalSelector.getAvailableGoals().isEmpty(), "no goals yet off the server thread");
         BlockPos abs = helper.absolutePos(new BlockPos(2, 2, 2));
-        bee.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        bee.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         level.addFreshEntity(bee);
         helper.runAfterDelay(3, () -> {
             helper.assertTrue(!bee.goalSelector.getAvailableGoals().isEmpty(), "the bee gets its goals on its first tick");
@@ -1678,7 +1674,7 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void fullKnabbelkorfGivesKnabbelsAndKaashoning(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 1, 2);
         helper.setBlock(pos, ModBlocks.KNABBELKORF.get().defaultBlockState()
@@ -1700,10 +1696,10 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void guhSlimesArePeaceful(GameTestHelper helper) {
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.moveTo(helper.absoluteVec(new Vec3(2.5, 1, 2.5)));
+        player.snapTo(helper.absoluteVec(new Vec3(2.5, 1, 2.5)));
         nl.juiced.guhs.entity.GuhSlimeEntity slime = helper.spawn(ModEntities.GUH_SLIME.get(), new BlockPos(2, 1, 3));
         slime.setSize(4, true);
         helper.runAfterDelay(80, () -> {
@@ -1713,7 +1709,7 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void pinkSlimeBlockIsStickyAndNetherMikasDontBurn(GameTestHelper helper) {
         var state = ModBlocks.ROZE_SLIJMBLOK.get().defaultBlockState();
         helper.assertTrue(state.isStickyBlock() && state.isSlimeBlock(), "sticky for pistons, bouncy like slime");
@@ -1722,7 +1718,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhCrystalsDropCrystalsAndFishFryInThePan(GameTestHelper helper) {
         var drops = net.minecraft.world.level.block.Block.getDrops(ModBlocks.GUH_KRISTAL_CLUSTER.get().defaultBlockState(), helper.getLevel(),
                 helper.absolutePos(POS), null);
@@ -1739,12 +1735,12 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void youCanSitOnAGuhChair(GameTestHelper helper) {
         helper.setBlock(POS, ModBlocks.GUH_STOEL.get());
         Player player = helper.makeMockServerPlayerInLevel();
         BlockPos abs = helper.absolutePos(POS);
-        player.moveTo(abs.getX() + 0.5, abs.getY() + 1, abs.getZ() + 1.5);
+        player.snapTo(abs.getX() + 0.5, abs.getY() + 1, abs.getZ() + 1.5);
         helper.getLevel().getBlockState(abs).useWithoutItem(helper.getLevel(), player,
                 new net.minecraft.world.phys.BlockHitResult(Vec3.atCenterOf(abs), net.minecraft.core.Direction.UP, abs, false));
         helper.assertTrue(player.getVehicle() instanceof nl.juiced.guhs.entity.GuhSeatEntity, "sitting on the chair");
@@ -1758,7 +1754,7 @@ public class GuhGameTests {
         });
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhCakeHasSevenBitesAndMilkshakeClearsEffects(GameTestHelper helper) {
         helper.setBlock(POS, ModBlocks.GUH_TAART.get());
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
@@ -1779,7 +1775,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void ripeKaasknabbelPlantsGiveKnabbelsAndFlowersFitInPots(GameTestHelper helper) {
         var ripe = ModBlocks.KAASKNABBELPLANT.get().defaultBlockState().setValue(net.minecraft.world.level.block.CropBlock.AGE, 7);
         var drops = net.minecraft.world.level.block.Block.getDrops(ripe, helper.getLevel(), helper.absolutePos(POS), null);
@@ -1793,7 +1789,7 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = SLED_ROOM)
+    @GuhTest(template = SLED_ROOM)
     public static void guhBlossomSaplingStandsOnPinkWool(GameTestHelper helper) {
         for (int x = 8; x <= 16; x++) {
             for (int z = 8; z <= 16; z++) {
@@ -1805,12 +1801,12 @@ public class GuhGameTests {
         helper.assertTrue(helper.getBlockState(pos).canSurvive(helper.getLevel(), helper.absolutePos(pos)), "it can stand on pink wool");
         // (the tree itself is too big for a test room: it's checked in a real world with /place feature guhs:guhbloesem)
         var key = net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.CONFIGURED_FEATURE, Guhs.id("guhbloesem"));
-        helper.assertTrue(helper.getLevel().registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.CONFIGURED_FEATURE)
+        helper.assertTrue(helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.CONFIGURED_FEATURE)
                 .getHolder(key).isPresent(), "the guh blossom tree feature is loaded");
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void ftbQuestsChapterInstallsOnceAndMergesTheTexts(GameTestHelper helper) {
         try {
             java.nio.file.Path quests = java.nio.file.Files.createTempDirectory("guhs-ftbquests");
@@ -1843,7 +1839,7 @@ public class GuhGameTests {
     }
 
     /** Our old single chapter goes (it has the version marker); chapters a pack maker edited (no marker) stay as they are. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void ftbQuestsReplacesOurOldChapterButKeepsPackEdits(GameTestHelper helper) {
         try {
             java.nio.file.Path quests = java.nio.file.Files.createTempDirectory("guhs-ftbquests");
@@ -1900,7 +1896,7 @@ public class GuhGameTests {
     }
 
     /** Every quest is in exactly one chapter, links point to our quests, the pictures exist, only the stomach sizes are locked. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void ftbQuestsChaptersAreComplete(GameTestHelper helper) {
         ftbQuestsTellsAResaveFromAnEdit(helper);
         try {
@@ -1949,7 +1945,7 @@ public class GuhGameTests {
     }
 
     /** The minigame scoreboards keep each player's best once, sorted, 3 places; the floating board shows up (and only once). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void scorebordKeepsTheTop3(GameTestHelper helper) {
         net.minecraft.server.level.ServerLevel level = helper.getLevel();
         String board = "test_" + helper.absolutePos(BlockPos.ZERO).asLong();
@@ -1976,7 +1972,7 @@ public class GuhGameTests {
     }
 
     /** The guh record is a jukebox record; the picnic's jukebox holds it and starts playing it (only at the picnic). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void picnicJukeboxPlaysTheGuhRecord(GameTestHelper helper) {
         var disc = new net.minecraft.world.item.ItemStack(ModItems.MUSIC_DISC_ZE_HANGEN.get());
         helper.assertTrue(net.minecraft.world.item.JukeboxSong.fromStack(helper.getLevel().registryAccess(), disc).isPresent(), "a jukebox song");

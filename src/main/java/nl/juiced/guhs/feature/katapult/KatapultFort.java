@@ -61,21 +61,21 @@ public final class KatapultFort {
         }
         CompoundTag tag = template.get().save(new CompoundTag());
         HolderGetter<Block> blocks = level.holderLookup(Registries.BLOCK);
-        ListTag palette = tag.getList("palette", Tag.TAG_COMPOUND);
+        ListTag palette = tag.getListOrEmpty("palette");
         List<BlockState> states = new ArrayList<>();
         for (int i = 0; i < palette.size(); i++) {
-            states.add(NbtUtils.readBlockState(blocks, palette.getCompound(i)));
+            states.add(NbtUtils.readBlockState(blocks, palette.getCompoundOrEmpty(i)));
         }
         List<Stuk> list = new ArrayList<>();
-        ListTag entries = tag.getList("blocks", Tag.TAG_COMPOUND);
+        ListTag entries = tag.getListOrEmpty("blocks");
         for (int i = 0; i < entries.size(); i++) {
-            CompoundTag e = entries.getCompound(i);
-            ListTag pos = e.getList("pos", Tag.TAG_INT);
-            int s = e.getInt("state");
+            CompoundTag e = entries.getCompoundOrEmpty(i);
+            ListTag pos = e.getListOrEmpty("pos");
+            int s = e.getIntOr("state", 0);
             if (s < 0 || s >= states.size() || states.get(s).isAir()) {
                 continue;
             }
-            list.add(new Stuk(new BlockPos(pos.getInt(0), pos.getInt(1), pos.getInt(2)), states.get(s)));
+            list.add(new Stuk(new BlockPos(pos.getIntOr(0, 0), pos.getIntOr(1, 0), pos.getIntOr(2, 0)), states.get(s)));
         }
         return List.copyOf(list);
     }

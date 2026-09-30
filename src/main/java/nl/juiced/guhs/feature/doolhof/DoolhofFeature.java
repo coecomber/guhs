@@ -34,6 +34,8 @@ import nl.juiced.guhs.feature.Protected;
 import nl.juiced.guhs.feature.kleding.KledingBronnen;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * Het Guhdoolhof (2.9, De Grote Guhspelen; structure guhdoolhof in the Guhvelden): a big hedge maze with guh-ear
  * topiary and a guh-shaped lookout tower in the middle, reached over a bridge. Meneer Vadskronkel (DOOLHOFGUH,
@@ -82,7 +84,7 @@ public final class DoolhofFeature {
     // --- the Heg-Mika --------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<DoolhofMikaEntity>> MIKA = ENTITY_TYPES.register("doolhof_mika",
             () -> EntityType.Builder.of(DoolhofMikaEntity::new, MobCategory.MISC).sized(0.8f, 0.75f).eyeHeight(0.5f).clientTrackingRange(8)
-                    .build("guhs:doolhof_mika"));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.parse("guhs:doolhof_mika"))));
 
     // --- sounds --------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<SoundEvent, SoundEvent> GIECHEL = sound("doolhof.giechel");

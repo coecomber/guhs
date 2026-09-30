@@ -20,7 +20,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -42,6 +42,7 @@ import nl.juiced.guhs.feature.band.PlekSoort;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.piep.PiepMaatje;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * All Guhhuisjes of the world (2.10; SavedData {@code guhs_huisjes} in the overworld, keyed by dimension + controller
  * block) and the resident rules: a resident is a band guh or a tamed maatje (muisje, Schilly, Poepschilly) of the
@@ -84,7 +85,7 @@ public final class Huisjes extends SavedData {
     }
 
     private static String sleutel(ResourceKey<Level> dim, BlockPos pos) {
-        return dim.location() + "|" + pos.asLong();
+        return dim.identifier() + "|" + pos.asLong();
     }
 
     // =====================================================================================================================
@@ -111,14 +112,14 @@ public final class Huisjes extends SavedData {
     /** The huisje this resident lives in (checked against the huisje's list), or null. */
     @Nullable
     public static Huisje thuisVan(Entity bewoner) {
-        MinecraftServer s = bewoner.getServer();
+        MinecraftServer s = bewoner.level().getServer();
         CompoundTag data = bewoner.getPersistentData();
         if (s == null || !data.contains(THUIS)) {
             return null;
         }
-        ResourceLocation dim = ResourceLocation.tryParse(data.getString(DIM));
-        Huisje h = get(s).huisjes.get(sleutel(ResourceKey.create(Registries.DIMENSION, dim == null ? Level.OVERWORLD.location() : dim),
-                BlockPos.of(data.getLong(THUIS))));
+        Identifier dim = Identifier.tryParse(data.getStringOr(DIM, ""));
+        Huisje h = get(s).huisjes.get(sleutel(ResourceKey.create(Registries.DIMENSION, dim == null ? Level.OVERWORLD.identifier() : dim),
+                BlockPos.of(data.getLongOr(THUIS, 0L))));
         return h != null && h.bewoners.contains(Band.id(bewoner)) ? h : null;
     }
 
@@ -129,7 +130,7 @@ public final class Huisjes extends SavedData {
 
     /** Asleep inside its huisje. */
     public static boolean isBinnen(Entity e) {
-        return e.getPersistentData().getBoolean(BINNEN) || BandVlaggen.heeft(e, BandVlaggen.HUISJE_BINNEN);
+        return e.getPersistentData().getBooleanOr(BINNEN, false) || BandVlaggen.heeft(e, BandVlaggen.HUISJE_BINNEN);
     }
 
     public static List<Huisje> vanEigenaar(MinecraftServer s, UUID eigenaar) {
@@ -203,7 +204,7 @@ public final class Huisjes extends SavedData {
     static String naamVan(MinecraftServer s, UUID id) {
         ServerPlayer p = s.getPlayerList().getPlayer(id);
         if (p != null) {
-            return p.getGameProfile().getName();
+            return p.getGameProfile().name();
         }
         var cache = s.getProfileCache();
         return cache == null ? "" : cache.get(id).map(com.mojang.authlib.GameProfile::getName).orElse("");
@@ -217,8 +218,8 @@ public final class Huisjes extends SavedData {
 
     /** (login) keeps the owner's name of this player's huisjes up to date. */
     static void naamBijwerken(ServerPlayer player) {
-        Huisjes data = get(player.server);
-        String naam = player.getGameProfile().getName();
+        Huisjes data = get(player.level().getServer());
+        String naam = player.getGameProfile().name();
         for (Huisje h : data.huisjes.values()) {
             if (h.eigenaar().equals(player.getUUID()) && !naam.equals(h.eigenaarNaam)) {
                 h.eigenaarNaam = naam;
@@ -287,7 +288,7 @@ public final class Huisjes extends SavedData {
      * another huisje moves (out there, in here).
      */
     public static boolean trekIn(Huisje h, Entity bewoner) {
-        MinecraftServer s = bewoner.getServer();
+        MinecraftServer s = bewoner.level().getServer();
         if (s == null || !kanBewoner(bewoner) || !h.eigenaar.equals(Band.eigenaar(bewoner))) {
             return false;
         }
@@ -309,7 +310,7 @@ public final class Huisjes extends SavedData {
         data.setDirty();
         CompoundTag p = bewoner.getPersistentData();
         p.putLong(THUIS, h.pos.asLong());
-        p.putString(DIM, h.dim.location().toString());
+        p.putString(DIM, h.dim.identifier().toString());
         p.remove(BINNEN);
         if (bewoner instanceof PathfinderMob mob) {
             Vec3 m = h.midden();
@@ -323,8 +324,8 @@ public final class Huisjes extends SavedData {
             Band.moment(mob, owner, Moment.HUISJE_IN, h.naam);
         }
         if (owner != null) {
-            owner.displayClientMessage(Component.translatable("gui.guhs.huisje.trekt_in", bewoner.getDisplayName(), h.naam)
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            owner.sendOverlayMessage(Component.translatable("gui.guhs.huisje.trekt_in", bewoner.getDisplayName(), h.naam)
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             nl.juiced.guhs.quest.GuhAdvancements.grant(owner, "huisje_bewoner");
             if (h.isVol()) {
                 GidsFeature.grant(owner, "lieve_vadsjes/huisje_vol");
@@ -342,7 +343,7 @@ public final class Huisjes extends SavedData {
             h.soorten.remove(id);
             h.namen.remove(id);
             h.klussen.remove(id);
-            get(bewoner.getServer()).setDirty();
+            get(bewoner.level().getServer()).setDirty();
         }
         ontruim(bewoner, h);
     }
@@ -387,7 +388,7 @@ public final class Huisjes extends SavedData {
             return e;
         }
         for (Entity m : level.getEntitiesOfClass(TamableAnimal.class, h.gebied().inflate(48), x -> x instanceof PiepMaatje)) {
-            if (m.getPersistentData().hasUUID(Band.BAND_ID) && m.getPersistentData().getUUID(Band.BAND_ID).equals(id)) {
+            if (m.getPersistentData().read(Band.BAND_ID, UUIDUtil.CODEC).isPresent() && m.getPersistentData().read(Band.BAND_ID, UUIDUtil.CODEC).orElseThrow().equals(id)) {
                 return m;
             }
         }
@@ -406,14 +407,14 @@ public final class Huisjes extends SavedData {
             mob.getNavigation().stop();
         }
         Vec3 m = h.midden();
-        e.moveTo(m.x, h.pos.getY() + 0.1, m.z, e.getYRot(), e.getXRot());
+        e.snapTo(m.x, h.pos.getY() + 0.1, m.z, e.getYRot(), e.getXRot());
         houdBinnen(e);
         e.level().playSound(null, h.deur(), HuisjeFeature.DEUR_GELUID.get(), SoundSource.NEUTRAL, 0.7f, 1f);
         GuhVolger.zet(e, PlekSoort.SLAAPT_IN_HUISJE, h.naam);
         if (e instanceof Mob mob) {
             Band.moment(mob, null, Moment.SLAAP, "");
         }
-        ServerPlayer owner = e.getServer() == null ? null : e.getServer().getPlayerList().getPlayer(h.eigenaar);
+        ServerPlayer owner = e.level().getServer() == null ? null : e.level().getServer().getPlayerList().getPlayer(h.eigenaar);
         if (owner != null) {
             nl.juiced.guhs.quest.GuhAdvancements.grant(owner, "huisje_slapen");
         }
@@ -441,15 +442,15 @@ public final class Huisjes extends SavedData {
         e.setInvisible(false);
         if (h != null) {
             BlockPos d = h.deur();
-            e.moveTo(d.getX() + 0.5, d.getY(), d.getZ() + 0.5, h.facing.toYRot(), 0);
+            e.snapTo(d.getX() + 0.5, d.getY(), d.getZ() + 0.5, h.facing.toYRot(), 0);
             e.level().playSound(null, d, HuisjeFeature.DEUR_GELUID.get(), SoundSource.NEUTRAL, 0.7f, 1.1f);
             GuhVolger.zet(e, PlekSoort.HUISJE, h.naam);
         } else {
             BlockPos p = e.blockPosition();
-            while (!e.level().getBlockState(p).isAir() && p.getY() < e.level().getMaxBuildHeight()) {
+            while (!e.level().getBlockState(p).isAir() && p.getY() < e.level().getMaxY() + 1) {
                 p = p.above();
             }
-            e.moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, e.getYRot(), 0);
+            e.snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, e.getYRot(), 0);
         }
         if (gapen && e instanceof GuhEntity guh) {
             guh.emotes.start(nl.juiced.guhs.feature.emotes.Emote.GAPEN, false, nl.juiced.guhs.feature.emotes.GuhEmotes.Source.SELF);
@@ -473,9 +474,9 @@ public final class Huisjes extends SavedData {
 
     public static Huisjes load(CompoundTag tag, HolderLookup.Provider registries) {
         Huisjes d = new Huisjes();
-        ListTag list = tag.getList("Huisjes", Tag.TAG_COMPOUND);
+        ListTag list = tag.getListOrEmpty("Huisjes");
         for (int i = 0; i < list.size(); i++) {
-            Huisje h = Huisje.load(list.getCompound(i));
+            Huisje h = Huisje.load(list.getCompoundOrEmpty(i));
             if (h != null) {
                 d.huisjes.put(sleutel(h.dim, h.pos), h);
             }

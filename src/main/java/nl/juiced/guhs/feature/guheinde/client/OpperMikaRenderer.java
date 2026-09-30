@@ -4,25 +4,25 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
 import nl.juiced.guhs.feature.guheinde.OpperMikaEntity;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.layer.builtin.BlockAndItemGeoLayer;
 
 /** Opper-Mika: the Mika model in his own dark colours, with the Knabbelkroon (its 3D item model) on his head. */
 public class OpperMikaRenderer extends GeoEntityRenderer<OpperMikaEntity> {
-    private static final ResourceLocation TEXTURE = Guhs.id("textures/entity/opper_mika.png");
+    private static final Identifier TEXTURE = Guhs.id("textures/entity/opper_mika.png");
 
     public OpperMikaRenderer(EntityRendererProvider.Context context) {
         super(context, new DefaultedEntityGeoModel<OpperMikaEntity>(Guhs.id("mika"), true) {
             @Override
-            public ResourceLocation getTextureResource(OpperMikaEntity mika) {
+            public Identifier getTextureResource(OpperMikaEntity mika) {
                 return TEXTURE;
             }
         }.withAltAnimations(Guhs.id("guh")));

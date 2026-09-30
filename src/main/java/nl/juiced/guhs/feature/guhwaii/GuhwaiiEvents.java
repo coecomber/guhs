@@ -43,13 +43,13 @@ public final class GuhwaiiEvents {
         if (!(event.getEntity() instanceof ServerPlayer p) || (p.tickCount + p.getId()) % 40 != 0) {
             return;
         }
-        if (p.serverLevel().dimension() == ModDimensions.GUHMENSION && in(p.serverLevel(), p.blockPosition(), GuhwaiiFeature.CAPSULE)) {
+        if (p.level().dimension() == ModDimensions.GUHMENSION && in(p.level(), p.blockPosition(), GuhwaiiFeature.CAPSULE)) {
             Ohana.inCapsule(p);
         }
     }
 
     static boolean in(ServerLevel level, BlockPos pos, ResourceKey<Structure> key) {
-        Structure s = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).get(key);
+        Structure s = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).get(key);
         return s != null && level.structureManager().getStructureWithPieceAt(pos, s).isValid();
     }
 
@@ -70,7 +70,7 @@ public final class GuhwaiiEvents {
         if (player == null || player.getAbilities().instabuild || !beschermd(level, pos)) {
             return true;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.guhwaii.beschermd").withStyle(ChatFormatting.AQUA), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.guhwaii.beschermd").withStyle(ChatFormatting.AQUA));
         return false;
     }
 

@@ -27,6 +27,7 @@ import nl.juiced.guhs.network.ModNetworking;
 import nl.juiced.guhs.registry.ModEntities;
 import org.slf4j.Logger;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * De hartjesmeter (2.10 "Lieve vadsjes van elkaar"): every tamed guh has hearts with its owner, and hearts NEVER go
  * down. Three levels ({@link BandNiveau}): "lieve vadsjes van elkaar", "mega lieve vadsjes van elkaar", "zielsguh bff
@@ -72,10 +73,10 @@ public final class Band {
             return e.getUUID();
         }
         CompoundTag data = e.getPersistentData();
-        if (!data.hasUUID(BAND_ID)) {
-            data.putUUID(BAND_ID, e.getUUID());
+        if (!data.read(BAND_ID, UUIDUtil.CODEC).isPresent()) {
+            data.store(BAND_ID, UUIDUtil.CODEC, e.getUUID());
         }
-        return data.getUUID(BAND_ID);
+        return data.read(BAND_ID, UUIDUtil.CODEC).orElseThrow();
     }
 
     @Nullable
@@ -85,7 +86,7 @@ public final class Band {
 
     /** The player's own loaded band guhs within r blocks (not the ones asleep inside a huisje). */
     public static List<GuhEntity> samenGuhs(ServerPlayer p, double r) {
-        return p.serverLevel().getEntitiesOfClass(GuhEntity.class, p.getBoundingBox().inflate(r),
+        return p.level().getEntitiesOfClass(GuhEntity.class, p.getBoundingBox().inflate(r),
                 g -> isBandGuh(g) && p.getUUID().equals(g.getOwnerUUID()) && !Huisjes.isBinnen(g) && g.distanceTo(p) <= r);
     }
 
@@ -93,7 +94,7 @@ public final class Band {
     @Nullable
     public static ServerPlayer eigenaarOnline(Entity e) {
         UUID owner = eigenaar(e);
-        MinecraftServer s = e.getServer();
+        MinecraftServer s = e.level().getServer();
         return owner == null || s == null ? null : s.getPlayerList().getPlayer(owner);
     }
 
@@ -118,10 +119,10 @@ public final class Band {
 
     @Nullable
     static BandData.Rec rec(Entity guh) {
-        if (!isBandGuh(guh) || guh.getServer() == null) {
+        if (!isBandGuh(guh) || guh.level().getServer() == null) {
             return null;
         }
-        return BandData.get(guh.getServer()).rec(eigenaar(guh), id(guh));
+        return BandData.get(guh.level().getServer()).rec(eigenaar(guh), id(guh));
     }
 
     /** The record of a band guh, made and filled in when needed (name, looks, the day it became yours). */
@@ -132,7 +133,7 @@ public final class Band {
             r.naam = g.getName().getString();
             r.looks = looks(g);
             if (r.sindsDag < 0) {
-                r.sindsDag = dag(g.getServer());
+                r.sindsDag = dag(g.level().getServer());
             }
         }
         return r;
@@ -249,14 +250,14 @@ public final class Band {
             BandNiveau volgende = r.niveau().volgende();
             Component voortgang = volgende == null ? Component.translatable("gui.guhs.band.hartjes_max", r.hartjes)
                     : Component.translatable("gui.guhs.band.hartjes_voortgang", r.hartjes, volgende.drempel());
-            eigenaar.displayClientMessage(Component.translatable("gui.guhs.band.hartjes_erbij", n, guh.getDisplayName(), voortgang)
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            eigenaar.sendOverlayMessage(Component.translatable("gui.guhs.band.hartjes_erbij", n, guh.getDisplayName(), voortgang)
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
     /** The guh reached one or more new levels: announce each (now, or at the owner's next login). */
     private static void niveauOmhoog(Mob guh, BandData.Rec r) {
-        MinecraftServer s = guh.getServer();
+        MinecraftServer s = guh.level().getServer();
         BandData data = BandData.get(s);
         ServerPlayer eigenaar = s.getPlayerList().getPlayer(eigenaar(guh));
         BandNiveau nu = r.niveau();
@@ -280,11 +281,11 @@ public final class Band {
         if (niveau == BandNiveau.GEEN) {
             return;
         }
-        BandData.Rec r = BandData.get(eigenaar.server).vind(eigenaar.getUUID(), bandId);
+        BandData.Rec r = BandData.get(eigenaar.level().getServer()).vind(eigenaar.getUUID(), bandId);
         Component naam = guh != null ? guh.getDisplayName() : Component.literal(r == null || r.naam.isEmpty() ? "Guh" : r.naam);
         eigenaar.sendSystemMessage(Component.translatable("gui.guhs.band.niveau_omhoog", naam, niveau.naam().copy()
                 .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE));
-        eigenaar.displayClientMessage(Component.translatable("gui.guhs.band.niveau_titel", niveau.naam()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        eigenaar.sendOverlayMessage(Component.translatable("gui.guhs.band.niveau_titel", niveau.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
         eigenaar.level().playSound(null, guh != null ? guh.blockPosition() : eigenaar.blockPosition(), BandFeature.NIVEAU_GELUID.get(),
                 SoundSource.NEUTRAL, 1f, 1f);
         if (guh != null && guh.level() instanceof ServerLevel level) {
@@ -299,11 +300,11 @@ public final class Band {
         String eerste = "eerste_" + niveau.id();
         if (guh != null) {
             Dagboek.eersteKeer(guh, eigenaar, eerste);
-            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.band.niveau_" + niveau.id(), eigenaar.getGameProfile().getName());
+            Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.band.niveau_" + niveau.id(), eigenaar.getGameProfile().name());
         } else {
-            Dagboek.eersteKeer(eigenaar.server, eigenaar.getUUID(), bandId, eerste);
-            Dagboek.wistJeDat(eigenaar.server, eigenaar.getUUID(), bandId, "gui.guhs.wistjedat.band.niveau_" + niveau.id(),
-                    eigenaar.getGameProfile().getName());
+            Dagboek.eersteKeer(eigenaar.level().getServer(), eigenaar.getUUID(), bandId, eerste);
+            Dagboek.wistJeDat(eigenaar.level().getServer(), eigenaar.getUUID(), bandId, "gui.guhs.wistjedat.band.niveau_" + niveau.id(),
+                    eigenaar.getGameProfile().name());
         }
         GidsFeature.grant(eigenaar, "lieve_vadsjes/band_" + niveau.id());
         for (NiveauLuisteraar l : NIVEAU) {
@@ -317,7 +318,7 @@ public final class Band {
 
     /** At login: the level-ups that happened while the owner was away. */
     static void meldAchterstallig(ServerPlayer eigenaar) {
-        BandData data = BandData.get(eigenaar.server);
+        BandData data = BandData.get(eigenaar.level().getServer());
         for (BandData.Rec r : data.guhsVan(eigenaar.getUUID())) {
             if (r.teMelden.isEmpty()) {
                 continue;
@@ -325,7 +326,7 @@ public final class Band {
             List<Integer> te = new ArrayList<>(r.teMelden);
             r.teMelden.clear();
             data.setDirty();
-            Mob guh = zoekGeladen(eigenaar.server, r.id);
+            Mob guh = zoekGeladen(eigenaar.level().getServer(), r.id);
             for (int i : te) {
                 meld(eigenaar, guh, r.id, BandNiveau.byIndex(i));
             }
@@ -344,10 +345,10 @@ public final class Band {
     }
 
     public static int hartjes(Mob guh) {
-        if (!isBandGuh(guh) || guh.getServer() == null) {
+        if (!isBandGuh(guh) || guh.level().getServer() == null) {
             return 0;
         }
-        BandData.Rec r = BandData.get(guh.getServer()).vind(eigenaar(guh), id(guh));
+        BandData.Rec r = BandData.get(guh.level().getServer()).vind(eigenaar(guh), id(guh));
         return r == null ? 0 : r.hartjes;
     }
 
@@ -375,7 +376,7 @@ public final class Band {
 
     /** Something happened to a band guh: fundament's own bookkeeping, then every listener. No-op for other mobs. */
     public static void moment(Mob guh, @Nullable ServerPlayer speler, Moment m, String waarde) {
-        if (!isBandGuh(guh) || guh.level().isClientSide || guh.getServer() == null) {
+        if (!isBandGuh(guh) || guh.level().isClientSide() || guh.level().getServer() == null) {
             return;
         }
         try {
@@ -402,10 +403,10 @@ public final class Band {
             case GETEMD -> {
                 BandData.Rec r = bijwerken(guh);
                 if (r != null) {
-                    BandData.get(guh.getServer()).setDirty();
+                    BandData.get(guh.level().getServer()).setDirty();
                 }
                 if (Dagboek.eersteKeer(guh, speler, "getemd")) {
-                    Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.band.getemd", speler != null ? speler.getGameProfile().getName() : "?");
+                    Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.band.getemd", speler != null ? speler.getGameProfile().name() : "?");
                 }
                 if (speler != null) {
                     GidsFeature.grant(speler, "lieve_vadsjes/root");
@@ -441,15 +442,15 @@ public final class Band {
     // =====================================================================================================================
 
     public static boolean isBlij(Mob guh) {
-        return guh.getPersistentData().getLong(BLIJ_TOT) > guh.level().getGameTime();
+        return guh.getPersistentData().getLongOr(BLIJ_TOT, 0L) > guh.level().getGameTime();
     }
 
     /** Happy for (at least) this many more ticks: sets {@link BandVlaggen#BLIJ} (fundament shows subtle sparkles). */
     public static void maakBlij(Mob guh, int ticks) {
-        if (ticks <= 0 || guh.level().isClientSide) {
+        if (ticks <= 0 || guh.level().isClientSide()) {
             return;
         }
-        long tot = Math.max(guh.getPersistentData().getLong(BLIJ_TOT), guh.level().getGameTime() + ticks);
+        long tot = Math.max(guh.getPersistentData().getLongOr(BLIJ_TOT, 0L), guh.level().getGameTime() + ticks);
         guh.getPersistentData().putLong(BLIJ_TOT, tot);
         BandVlaggen.zet(guh, BandVlaggen.BLIJ, true);
     }

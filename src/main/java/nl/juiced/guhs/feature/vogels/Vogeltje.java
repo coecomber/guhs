@@ -35,13 +35,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.gids.GidsFeature;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * A little bird of the Guhmensie (3.0 vogels). Common behaviour of the four birds:
@@ -217,7 +217,7 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide && vliegt() && random.nextInt(6) == 0 && this instanceof PluisvinkjeEntity) {
+        if (level().isClientSide() && vliegt() && random.nextInt(6) == 0 && this instanceof PluisvinkjeEntity) {
             level().addParticle(VogelsFeature.VEERTJE.get(), getX(), getY() + 0.2, getZ(), 0, -0.01, 0);
         }
     }
@@ -343,7 +343,7 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
 
     /** Can it sit on the block below this (air) spot? Solid tops and leaves; no water (the gull says otherwise). */
     public boolean magLanden(BlockPos plek) {
-        if (!level().isLoaded(plek) || plek.getY() <= level().getMinBuildHeight() + 1) {
+        if (!level().isLoaded(plek) || plek.getY() <= level().getMinY() + 1) {
             return false;
         }
         BlockState onder = level().getBlockState(plek.below());
@@ -496,7 +496,7 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
                 GidsFeature.grant(sp, "diertjes/vogels_voeren");
                 gevoerd(sp, stack);
             }
-            return InteractionResult.sidedSuccess(level().isClientSide);
+            return InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, hand);
     }
@@ -504,7 +504,7 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean hurt = super.hurt(source, amount);
-        if (hurt && !level().isClientSide && isAlive()) {
+        if (hurt && !level().isClientSide() && isAlive()) {
             vertrouwen = 0;
             Entity by = source.getEntity();
             schrik(by != null ? by.position() : position());
@@ -580,7 +580,7 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         if (thuis != null) {
-            tag.put("VogelThuis", NbtUtils.writeBlockPos(thuis));
+            tag.store("VogelThuis", BlockPos.CODEC, thuis);
         }
         tag.putBoolean("VogelVliegt", vliegt());
         tag.putInt("VogelHouding", houding());
@@ -589,9 +589,9 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        NbtUtils.readBlockPos(tag, "VogelThuis").ifPresent(p -> thuis = p);
-        entityData.set(VLIEGT, tag.getBoolean("VogelVliegt"));
-        entityData.set(HOUDING, tag.getInt("VogelHouding"));
+        (tag).read("VogelThuis", BlockPos.CODEC).ifPresent(p -> thuis = p);
+        entityData.set(VLIEGT, tag.getBooleanOr("VogelVliegt", false));
+        entityData.set(HOUDING, tag.getIntOr("VogelHouding", 0));
         setNoGravity(vliegt() || houding() == HANGT);
     }
 
@@ -608,7 +608,7 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
     }
 
     /** The looping animation for the current state (the subclasses add their own poses). */
-    protected RawAnimation beweging(software.bernie.geckolib.animation.AnimationState<Vogeltje> state) {
+    protected RawAnimation beweging(com.geckolib.animation.state.AnimationTest<Vogeltje> state) {
         if (vliegt()) {
             return anim("fly", true);
         }

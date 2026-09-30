@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.LeavesBlock;
-import net.minecraft.world.level.block.SnowyDirtBlock;
+import net.minecraft.world.level.block.SnowyBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -53,7 +53,7 @@ public final class GuhpolderBlocks {
      * Rijpgras: frosted guh grass, white-blue with a glitter of rime. With snow on top it shows its snowy sides (like a
      * grass block). Bone meal: rijpsprietjes and now and then a guh-ijsbloempje around it.
      */
-    public static class Rijpgras extends SnowyDirtBlock implements BonemealableBlock {
+    public static class Rijpgras extends SnowyBlock implements BonemealableBlock {
         public static final MapCodec<Rijpgras> CODEC = simpleCodec(Rijpgras::new);
 
         public Rijpgras(Properties properties) {
@@ -61,7 +61,7 @@ public final class GuhpolderBlocks {
         }
 
         @Override
-        protected MapCodec<? extends SnowyDirtBlock> codec() {
+        protected MapCodec<? extends SnowyBlock> codec() {
             return CODEC;
         }
 

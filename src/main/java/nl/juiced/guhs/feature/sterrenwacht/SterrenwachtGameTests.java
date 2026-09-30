@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -17,8 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -39,8 +37,6 @@ import nl.juiced.guhs.registry.ModItems;
  * wenssterren: every reward one more), the rare ones only during a sterrenregen, the Knusfeest's sterrenlantaarns,
  * wishes, Professor Sterretje's role and shop, the blocks and the template.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class SterrenwachtGameTests {
     private static final String EMPTY = "empty";
 
@@ -50,7 +46,7 @@ public class SterrenwachtGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos at = helper.absolutePos(new BlockPos(1, 1, 1));
-        p.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         return p;
     }
 
@@ -63,7 +59,7 @@ public class SterrenwachtGameTests {
 
     private static int count(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -72,7 +68,7 @@ public class SterrenwachtGameTests {
     }
 
     private static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -85,7 +81,7 @@ public class SterrenwachtGameTests {
         return out;
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void sterrenwachtSterrenbeelden(GameTestHelper helper) {
         helper.assertTrue(Sterrenbeeld.values().length == 15 && Sterrenbeeld.gewoon().size() == 12 && Sterrenbeeld.zeldzame().size() == 3,
                 "12 + 3 constellations");
@@ -111,7 +107,7 @@ public class SterrenwachtGameTests {
     }
 
     /** Wrong lines don't count; the right ones do (in any order): the atlas, wenssterren (+1), the counters, the game ends. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void sterrenwachtVerbinden(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         try {
@@ -149,7 +145,7 @@ public class SterrenwachtGameTests {
     }
 
     /** The rare ones only during a sterrenregen (and then first); otherwise a new one first. */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void sterrenwachtZeldzaamAlleenBijSterrenregen(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         try {
@@ -177,7 +173,7 @@ public class SterrenwachtGameTests {
     }
 
     /** While the Knusfeest task "sterrenlantaarns" is open, a constellation gives three sterrenlantaarns (tag guhs:knus/sterrenlantaarns). */
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void sterrenwachtKnusfeestLantaarns(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         try {
@@ -215,7 +211,7 @@ public class SterrenwachtGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void sterrenwachtWensster(GameTestHelper helper) {
         ServerPlayer p = player(helper);
         try {
@@ -232,7 +228,7 @@ public class SterrenwachtGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void sterrenwachtProfessorEnWinkel(GameTestHelper helper) {
         helper.assertTrue(Features.role(GuhNpcEntity.Kind.STERRENKIJKERGUH) == SterrenwachtRole.INSTANCE
                 && Features.role(GuhNpcEntity.Kind.STERRENKIJKERGUH) != Binnenkort.ROLE, "Professor Sterretje's own role");
@@ -261,7 +257,7 @@ public class SterrenwachtGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void sterrenwachtBlokkenEnGebouw(GameTestHelper helper) {
         BlockPos at = new BlockPos(2, 1, 2);
         helper.setBlock(at, SterrenwachtFeature.STERRENLANTAARN.get());
@@ -275,7 +271,7 @@ public class SterrenwachtGameTests {
                 "the observatory template (48 x H x 48)");
         var jigsaws = t.get().filterBlocks(BlockPos.ZERO, new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(),
                 Blocks.JIGSAW, true);
-        helper.assertTrue(jigsaws.size() == 1 && jigsaws.get(0).nbt().getString("name").equals("guhs:guh_sterrenwacht_midden"), "its anchor");
+        helper.assertTrue(jigsaws.size() == 1 && jigsaws.get(0).nbt().getStringOr("name", "").equals("guhs:guh_sterrenwacht_midden"), "its anchor");
         var telescopen = t.get().filterBlocks(BlockPos.ZERO, new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(),
                 SterrenwachtFeature.TELESCOOP.get(), true);
         helper.assertTrue(telescopen.size() >= 5, "telescopes in it: " + telescopen.size());

@@ -34,8 +34,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.klusjes.BasisKlus;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.RawAnimation;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.RawAnimation;
 
 /**
  * The pluisegeltje: a little hedgehog with soft, fluffy pink-cream spikes (they never prick: "pluisstekeltjes"), a guh face
@@ -186,7 +186,7 @@ public class PluisegeltjeEntity extends Landdiertje {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         if ((tickCount + getId()) % 5 == 0 && entityData.get(DATA_ROL) != 2 && schrikt()) {
@@ -236,7 +236,7 @@ public class PluisegeltjeEntity extends Landdiertje {
             return false;                                         // a fluffy ball: nothing gets through
         }
         boolean r = super.hurt(source, amount);
-        if (r && isAlive() && !level().isClientSide) {
+        if (r && isAlive() && !level().isClientSide()) {
             rolOp();
         }
         return r;
@@ -264,8 +264,8 @@ public class PluisegeltjeEntity extends Landdiertje {
     @Override
     public void speciaal(ServerPlayer player) {
         rolRondje(player.position());
-        player.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.egeltje_rondje", getDisplayName())
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.egeltje_rondje", getDisplayName())
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         GidsFeature.grant(player, "diertjes/landdiertjes_rondje");
     }
 
@@ -281,8 +281,8 @@ public class PluisegeltjeEntity extends Landdiertje {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        entityData.set(DATA_ROL, Mth.clamp(tag.getInt("Opgerold"), 0, 1));
-        rolTijd = tag.getInt("RolTijd");
+        entityData.set(DATA_ROL, Mth.clamp(tag.getIntOr("Opgerold", 0), 0, 1));
+        rolTijd = tag.getIntOr("RolTijd", 0);
         if (isOpgerold() && rolTijd <= 0) {
             rolTijd = 20;
         }
@@ -291,7 +291,7 @@ public class PluisegeltjeEntity extends Landdiertje {
     // --- animation ----------------------------------------------------------------------------------------------------------------
 
     @Override
-    protected RawAnimation beweging(AnimationState<Landdiertje> state) {
+    protected RawAnimation beweging(AnimationTest<Landdiertje> state) {
         int rol = entityData.get(DATA_ROL);
         if (rol == 2) {
             return ROLT;

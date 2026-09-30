@@ -6,7 +6,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,12 +25,12 @@ import net.minecraft.world.phys.AABB;
  * </ul>
  */
 public final class VogelSpawns {
-    public static boolean check(EntityType<? extends Vogeltje> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        if (MobSpawnType.isSpawner(spawnType) || spawnType == MobSpawnType.STRUCTURE || spawnType == MobSpawnType.SPAWN_EGG
-                || spawnType == MobSpawnType.COMMAND || spawnType == MobSpawnType.BUCKET) {
+    public static boolean check(EntityType<? extends Vogeltje> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
+        if (EntitySpawnReason.isSpawner(spawnType) || spawnType == EntitySpawnReason.STRUCTURE || spawnType == EntitySpawnReason.SPAWN_ITEM_USE
+                || spawnType == EntitySpawnReason.COMMAND || spawnType == EntitySpawnReason.BUCKET) {
             return true;
         }
-        if (spawnType == MobSpawnType.NATURAL && isNacht(level) != (type == VogelsFeature.GUH_UILTJE.get())) {
+        if (spawnType == EntitySpawnReason.NATURAL && isNacht(level) != (type == VogelsFeature.GUH_UILTJE.get())) {
             return false;
         }
         return plekOk(type, level, pos) && level.getEntitiesOfClass(Vogeltje.class, new AABB(pos).inflate(32), v -> v.getType() == type).size() < max(type);
@@ -87,7 +87,7 @@ public final class VogelSpawns {
      */
     public static java.util.List<Vogeltje> aanvullen(net.minecraft.server.level.ServerPlayer player, RandomSource random) {
         java.util.List<Vogeltje> nieuw = new java.util.ArrayList<>();
-        net.minecraft.server.level.ServerLevel level = player.serverLevel();
+        net.minecraft.server.level.ServerLevel level = player.level();
         if (level.getEntitiesOfClass(Vogeltje.class, player.getBoundingBox().inflate(64)).size() >= VOL) {
             return nieuw;
         }
@@ -115,7 +115,7 @@ public final class VogelSpawns {
         }
         @SuppressWarnings("unchecked")
         EntityType<? extends Vogeltje> type = (EntityType<? extends Vogeltje>) gekozen.type;
-        if (!check(type, level, MobSpawnType.NATURAL, pos, random)) {
+        if (!check(type, level, EntitySpawnReason.NATURAL, pos, random)) {
             return nieuw;
         }
         int n = gekozen.minCount + random.nextInt(Math.max(1, gekozen.maxCount - gekozen.minCount + 1));
@@ -125,12 +125,12 @@ public final class VogelSpawns {
             if (!plekOk(type, level, p)) {
                 continue;
             }
-            Vogeltje v = type.create(level);
+            Vogeltje v = type.create(level, EntitySpawnReason.TRIGGERED);
             if (v == null) {
                 continue;
             }
-            v.moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, random.nextFloat() * 360f, 0);
-            v.finalizeSpawn(level, level.getCurrentDifficultyAt(p), MobSpawnType.NATURAL, null);
+            v.snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, random.nextFloat() * 360f, 0);
+            v.finalizeSpawn(level, level.getCurrentDifficultyAt(p), EntitySpawnReason.NATURAL, null);
             v.zetThuis(p);
             level.addFreshEntity(v);
             nieuw.add(v);

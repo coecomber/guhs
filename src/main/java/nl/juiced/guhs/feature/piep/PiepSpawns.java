@@ -6,10 +6,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.world.ModDimensions;
@@ -58,9 +58,9 @@ public final class PiepSpawns {
         if (!level.isLoaded(pos)) {
             return true;                                       // (no structure data to ask: the guh was placed by a lief template)
         }
-        var registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        var registry = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
         for (Structure s : level.structureManager().getAllStructuresAt(pos).keySet()) {
-            ResourceLocation id = registry.getKey(s);
+            Identifier id = registry.getKey(s);
             if (id != null && id.getNamespace().equals(Guhs.MODID) && NIET_HIER.contains(id.getPath())) {
                 return false;
             }
@@ -71,7 +71,7 @@ public final class PiepSpawns {
     /** A wild muisje next to this spot (on the floor, where there is room). */
     @Nullable
     public static PieppiepmuisjeEntity spawnMuisje(ServerLevel level, BlockPos pos, RandomSource random) {
-        PieppiepmuisjeEntity muis = PiepFeature.PIEPPIEPMUISJE.get().create(level);
+        PieppiepmuisjeEntity muis = PiepFeature.PIEPPIEPMUISJE.get().create(level, EntitySpawnReason.TRIGGERED);
         if (muis == null) {
             return null;
         }
@@ -83,8 +83,8 @@ public final class PiepSpawns {
                 break;
             }
         }
-        muis.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, random.nextFloat() * 360, 0);
-        muis.finalizeSpawn(level, level.getCurrentDifficultyAt(at), MobSpawnType.STRUCTURE, null);
+        muis.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5, random.nextFloat() * 360, 0);
+        muis.finalizeSpawn(level, level.getCurrentDifficultyAt(at), EntitySpawnReason.STRUCTURE, null);
         muis.setPersistenceRequired();
         level.addFreshEntity(muis);
         return muis;

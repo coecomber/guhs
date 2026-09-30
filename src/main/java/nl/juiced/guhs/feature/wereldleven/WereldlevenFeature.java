@@ -46,6 +46,8 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.quest.GuhDex;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * Het guhleven (2.8, slice wereldleven): the world feels alive. tools/features/wereldleven.py makes the resources.
  * <ul>
@@ -133,7 +135,7 @@ public final class WereldlevenFeature {
     // --- IJscoguh Tingeling ------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<IJscoguhEntity>> IJSCOGUH = ENTITY_TYPES.register("ijscoguh",
             () -> EntityType.Builder.of(IJscoguhEntity::new, MobCategory.CREATURE).sized(1.2f, 2.1f).eyeHeight(1.75f).clientTrackingRange(10)
-                    .build("guhs:ijscoguh"));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.parse("guhs:ijscoguh"))));
     public static final DeferredItem<DeferredSpawnEggItem> IJSCOGUH_SPAWN_EGG = ITEMS.registerItem("ijscoguh_spawn_egg",
             p -> new DeferredSpawnEggItem(IJSCOGUH, 0xFFF4F8, 0xF08CB8, p));
 

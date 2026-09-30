@@ -117,7 +117,7 @@ public class SleeRailPartBlock extends Block {
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         super.onRemove(state, level, pos, newState, movedByPiston);
         BlockPos anchor = anchor(state, pos);
-        if (!newState.is(this) && !level.isClientSide && level.getBlockState(anchor).getBlock() instanceof SleeRailBlock) {
+        if (!newState.is(this) && !level.isClientSide() && level.getBlockState(anchor).getBlock() instanceof SleeRailBlock) {
             level.destroyBlock(anchor, true);
         }
     }

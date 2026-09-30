@@ -57,10 +57,10 @@ public class KippennestjeBlock extends Block {
         if (n <= 0) {
             return InteractionResult.PASS;
         }
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             neem(level, pos, (ServerPlayer) player);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** The player takes the eggs out: returns how many. */

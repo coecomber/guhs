@@ -77,8 +77,8 @@ public final class BallonVlucht {
     /** Take-off: Kapitein Wolkje says where we go. */
     static void vertrek(ServerPlayer player, LuchtballonEntity ballon) {
         Buiten.zeg(player, kapitein(), "quest.guhs.ballon.vertrek." + ballon.route().id());
-        player.displayClientMessage(Component.translatable("gui.guhs.ballon.route", Component.translatable("gui.guhs.ballon.route." + ballon.route().id()))
-                .withStyle(net.minecraft.ChatFormatting.AQUA), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.ballon.route", Component.translatable("gui.guhs.ballon.route." + ballon.route().id()))
+                .withStyle(net.minecraft.ChatFormatting.AQUA));
         ballon.level().playSound(null, ballon, BallonFeature.BRANDER.get(), SoundSource.NEUTRAL, 1f, 1f);
     }
 
@@ -117,8 +117,8 @@ public final class BallonVlucht {
         alle(ballon, "quest.guhs.ballon.uitzicht." + u.id());
         for (Entity e : ballon.getPassengers()) {
             if (e instanceof ServerPlayer player) {
-                player.displayClientMessage(Component.translatable("gui.guhs.ballon.stempel_onderweg",
-                        Component.translatable("gui.guhs.knus." + STEMPELS + "." + u.id())).withStyle(net.minecraft.ChatFormatting.GOLD), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.ballon.stempel_onderweg",
+                        Component.translatable("gui.guhs.knus." + STEMPELS + "." + u.id())).withStyle(net.minecraft.ChatFormatting.GOLD));
             }
         }
         if (!(ballon.level() instanceof ServerLevel level)) {
@@ -210,6 +210,6 @@ public final class BallonVlucht {
         if (!saved.contains(KEY)) {
             saved.put(KEY, new net.minecraft.nbt.CompoundTag());
         }
-        return saved.getCompound(KEY);
+        return saved.getCompoundOrEmpty(KEY);
     }
 }

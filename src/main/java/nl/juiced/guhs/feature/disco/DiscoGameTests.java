@@ -3,13 +3,11 @@ package nl.juiced.guhs.feature.disco;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -21,8 +19,6 @@ import nl.juiced.guhs.registry.ModItems;
  * GameTests of the Guhdisco: on a small test floor (disco_testvloer: the four 4x4 tile fields and the DJ-guh) and on
  * the real guh_disco. The game is ticked by hand (DiscoGame.tick), so a whole game fits in one test tick.
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class DiscoGameTests {
     private static final String FLOOR = "disco_testvloer";
     /** Where the club sits in the guh_disco grounds (tools/features/disco.py: OX, OZ). */
@@ -38,7 +34,7 @@ public class DiscoGameTests {
     @SuppressWarnings("removal")
     private static ServerPlayer player(GameTestHelper helper, GuhNpcEntity npc) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
-        player.moveTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
+        player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
         player.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);   // (mock players start in creative: no damage anyway)
         return player;
     }
@@ -59,7 +55,7 @@ public class DiscoGameTests {
     /** Back to the golden middle of the floor, then the whole sequence right. */
     private static void danceRound(GameTestHelper helper, GuhNpcEntity npc, DiscoGame game, ServerPlayer player) {
         BlockPos c = game.centre();
-        player.moveTo(c.getX() + 0.5, c.getY(), c.getZ() + 0.5);
+        player.snapTo(c.getX() + 0.5, c.getY(), c.getZ() + 0.5);
         tickUntil(helper, npc, game, DiscoGame.Phase.INPUT);
         for (int colour : game.sequence()) {
             game.press(npc, helper.getLevel(), player, colour);
@@ -79,7 +75,7 @@ public class DiscoGameTests {
         return false;
     }
 
-    @GameTest(template = FLOOR, timeoutTicks = 100)
+    @GuhTest(template = FLOOR, timeoutTicks = 100)
     public static void discoGameWithoutItemsScoresAndRewards(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         DiscoGame game = DiscoGame.of(npc);
@@ -107,7 +103,7 @@ public class DiscoGameTests {
         helper.assertTrue(player.getFoodData().getFoodLevel() == 20, "and never hungry");
         helper.assertTrue(game.sequence().size() == 1, "round 1: one colour");
         BlockPos tile = game.tilesOf(game.sequence().get(0)).get(5);
-        player.moveTo(tile.getX() + 0.5, tile.getY() + 1, tile.getZ() + 0.5);
+        player.snapTo(tile.getX() + 0.5, tile.getY() + 1, tile.getZ() + 0.5);
         player.setOnGround(true);
         game.tick(npc);
         helper.assertTrue(game.phase() == DiscoGame.Phase.PAUSE && game.score() == 1, "stepping on the right tile scores: " + game.phase());
@@ -122,7 +118,7 @@ public class DiscoGameTests {
         }
         helper.assertTrue(game.liedje() == DiscoLiedje.DISCO70 && game.stap() == 1, "the standard song, one colour per beat (no speeding up)");
         // round 4: a wrong step ends it
-        player.moveTo(game.centre().getX() + 0.5, game.centre().getY(), game.centre().getZ() + 0.5);
+        player.snapTo(game.centre().getX() + 0.5, game.centre().getY(), game.centre().getZ() + 0.5);
         tickUntil(helper, npc, game, DiscoGame.Phase.INPUT);
         game.press(npc, helper.getLevel(), player, (game.sequence().get(0) + 1) % 4);
         helper.assertTrue(game.phase() == DiscoGame.Phase.OVER, "a wrong step: game over");
@@ -138,7 +134,7 @@ public class DiscoGameTests {
         DiscoGame.showScores(npc);
         net.minecraft.world.phys.Vec3 at = DiscoGame.scorebordPos(npc);
         var boards = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class,
-                new net.minecraft.world.phys.AABB(at, at).inflate(1.5), d -> d.getTags().contains(nl.juiced.guhs.quest.Scorebord.TAG));
+                new net.minecraft.world.phys.AABB(at, at).inflate(1.5), d -> d.entityTags().contains(nl.juiced.guhs.quest.Scorebord.TAG));
         helper.assertTrue(boards.size() == 1, "one floating top 3 above the stage: " + boards.size());
         // a second game: worse, so the record stays and there's no second welcome present
         DiscoGame.action(npc, player, DiscoGame.START);
@@ -154,7 +150,7 @@ public class DiscoGameTests {
     }
 
     /** One wrong step and it's over: no second chances, even deep into a long sequence. */
-    @GameTest(template = FLOOR, timeoutTicks = 100)
+    @GuhTest(template = FLOOR, timeoutTicks = 100)
     public static void discoOneWrongStepIsGameOver(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         DiscoGame game = DiscoGame.of(npc);
@@ -162,7 +158,7 @@ public class DiscoGameTests {
         helper.assertTrue(game.start(npc, player), "started");
         danceRound(helper, npc, game, player);
         danceRound(helper, npc, game, player);
-        player.moveTo(game.centre().getX() + 0.5, game.centre().getY(), game.centre().getZ() + 0.5);
+        player.snapTo(game.centre().getX() + 0.5, game.centre().getY(), game.centre().getZ() + 0.5);
         tickUntil(helper, npc, game, DiscoGame.Phase.INPUT);
         List<Integer> seq = game.sequence();
         game.press(npc, helper.getLevel(), player, seq.get(0));
@@ -176,7 +172,7 @@ public class DiscoGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = FLOOR, timeoutTicks = 100)
+    @GuhTest(template = FLOOR, timeoutTicks = 100)
     public static void discoTooSlowEndsTheGame(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         DiscoGame game = DiscoGame.of(npc);
@@ -194,7 +190,7 @@ public class DiscoGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = FLOOR, timeoutTicks = 100)
+    @GuhTest(template = FLOOR, timeoutTicks = 100)
     public static void discoOneDancerAtATime(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         DiscoGame game = DiscoGame.of(npc);
@@ -210,14 +206,14 @@ public class DiscoGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = FLOOR, timeoutTicks = 100)
+    @GuhTest(template = FLOOR, timeoutTicks = 100)
     public static void discoWalkingOffOrLeavingEndsTheGame(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         DiscoGame game = DiscoGame.of(npc);
         ServerPlayer walker = player(helper, npc);
         game.start(npc, walker);
         tickUntil(helper, npc, game, DiscoGame.Phase.SHOW);
-        walker.moveTo(walker.getX() + 30, walker.getY(), walker.getZ());
+        walker.snapTo(walker.getX() + 30, walker.getY(), walker.getZ());
         game.tick(npc);
         helper.assertTrue(!game.isRunning() && !DiscoGame.isDancing(walker), "walked off the floor: over");
         ServerPlayer quitter = player(helper, npc);
@@ -239,7 +235,7 @@ public class DiscoGameTests {
     }
 
     /** Nobody breaks or builds in the Guhdisco (only in the Guhmension's real disco), except in creative mode. */
-    @GameTest(template = FLOOR)
+    @GuhTest(template = FLOOR)
     public static void discoIsProtectedExceptInCreative(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         ServerPlayer player = player(helper, npc);
@@ -252,14 +248,14 @@ public class DiscoGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = FLOOR, timeoutTicks = 100)
+    @GuhTest(template = FLOOR, timeoutTicks = 100)
     public static void discoTilesSingOutsideAGame(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         DiscoGame game = DiscoGame.of(npc);
         ServerPlayer player = player(helper, npc);
         game.scan(npc, helper.getLevel());
         BlockPos tile = game.tilesOf(2).get(0);
-        player.moveTo(tile.getX() + 0.5, tile.getY() + 1, tile.getZ() + 0.5);
+        player.snapTo(tile.getX() + 0.5, tile.getY() + 1, tile.getZ() + 0.5);
         player.setOnGround(true);
         for (int i = 0; i < 4; i++) {
             game.tick(npc);
@@ -273,7 +269,7 @@ public class DiscoGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = FLOOR)
+    @GuhTest(template = FLOOR)
     public static void djGuhSellsTheDiscoOutfitForDiscomunten(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         var results = npc.getOffers().stream().map(o -> o.getResult().getItem()).toList();
@@ -293,7 +289,7 @@ public class DiscoGameTests {
     }
 
     /** The real Guhdisco: the DJ-guh sits in the mouth of the booth and finds his dance floor. */
-    @GameTest(template = "guh_disco", timeoutTicks = 100)
+    @GuhTest(template = "guh_disco", timeoutTicks = 100)
     public static void guhDiscoHasAWorkingDanceFloor(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         DiscoGame game = DiscoGame.of(npc);
@@ -324,7 +320,7 @@ public class DiscoGameTests {
     private static void danceUntil(GameTestHelper helper, GuhNpcEntity npc, DiscoGame game, ServerPlayer player, int length) {
         for (int k = 0; k < 30 && game.score() < length; k++) {
             BlockPos c = game.centre();
-            player.moveTo(c.getX() + 0.5, c.getY(), c.getZ() + 0.5);
+            player.snapTo(c.getX() + 0.5, c.getY(), c.getZ() + 0.5);
             tickUntil(helper, npc, game, DiscoGame.Phase.INPUT);
             assertOnTheBeat(helper, game);
             for (int colour : game.sequence()) {
@@ -349,14 +345,14 @@ public class DiscoGameTests {
         }
     }
 
-    @GameTest(template = FLOOR, timeoutTicks = 200)
+    @GuhTest(template = FLOOR, timeoutTicks = 200)
     public static void discoColoursFlashExactlyOnTheSongsBeat(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         DiscoGame game = DiscoGame.of(npc);
         ServerPlayer player = player(helper, npc);
         helper.assertTrue(Math.abs(DiscoLiedje.DISCO70.ticksPerBeat() - 1200.0 / 110) < 1e-9, "110 BPM = 10.909 ticks per beat");
         for (DiscoLiedje l : DiscoLiedje.values()) {
-            player.moveTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
+            player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
             DiscoGame.action(npc, player, DiscoGame.START_LIED + l.ordinal());
             helper.assertTrue(game.isRunning() && game.liedje() == l, "dancing to " + l);
             tickUntil(helper, npc, game, DiscoGame.Phase.INPUT);
@@ -380,7 +376,7 @@ public class DiscoGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = FLOOR, timeoutTicks = 200)
+    @GuhTest(template = FLOOR, timeoutTicks = 200)
     public static void discoSongIsTheLevelWithItsOwnBoardAndCoins(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         DiscoGame game = DiscoGame.of(npc);
@@ -411,7 +407,7 @@ public class DiscoGameTests {
                 "the Mika-Mambo advancement, not yet all songs");
         // the other three songs, 3 colours each: all four danced
         for (DiscoLiedje l : List.of(DiscoLiedje.TANGO, DiscoLiedje.DISCO70, DiscoLiedje.BOOGIE)) {
-            player.moveTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
+            player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 1.5);
             DiscoGame.action(npc, player, DiscoGame.START_LIED + l.ordinal());
             danceUntil(helper, npc, game, player, DiscoGame.GEDANST);
             DiscoGame.action(npc, player, DiscoGame.STOP);
@@ -436,7 +432,7 @@ public class DiscoGameTests {
         return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
-    @GameTest(template = FLOOR, timeoutTicks = 200)
+    @GuhTest(template = FLOOR, timeoutTicks = 200)
     public static void discoMusicPlaysInTheClubAndStopsWithTheGame(GameTestHelper helper) {
         GuhNpcEntity npc = dj(helper);
         DiscoGame game = DiscoGame.of(npc);
@@ -469,7 +465,7 @@ public class DiscoGameTests {
             }
             DiscoMuziek.Luisteraar again = game.muziek().luistert(player.getUUID());
             helper.assertTrue(again != null && again.liedje() == DiscoLiedje.DISCO70, "then the remix again: " + again);
-            player.moveTo(player.getX() + 60, player.getY(), player.getZ());      // walking out of the club
+            player.snapTo(player.getX() + 60, player.getY(), player.getZ());      // walking out of the club
             for (int i = 0; i < 6; i++) {
                 game.tick(npc);
             }
@@ -479,7 +475,7 @@ public class DiscoGameTests {
         });
     }
 
-    @GameTest(template = FLOOR, timeoutTicks = 100)
+    @GuhTest(template = FLOOR, timeoutTicks = 100)
     public static void discoSongsAreRealTracks(GameTestHelper helper) {
         var sounds = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT;
         for (DiscoLiedje l : DiscoLiedje.values()) {

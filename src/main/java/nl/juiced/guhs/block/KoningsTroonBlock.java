@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -60,7 +60,7 @@ public class KoningsTroonBlock extends GuhFurnitureBlock implements EntityBlock 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide || !state.getValue(ROYAL) || type != ModBlockEntities.KONINGSTROON.get() ? null
+        return level.isClientSide() || !state.getValue(ROYAL) || type != ModBlockEntities.KONINGSTROON.get() ? null
                 : (lvl, pos, st, be) -> ((Entity) be).tick((ServerLevel) lvl, pos, st);
     }
 
@@ -100,7 +100,7 @@ public class KoningsTroonBlock extends GuhFurnitureBlock implements EntityBlock 
         @Override
         protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
             super.loadAdditional(tag, registries);
-            lastKing = tag.contains("LastKing") ? tag.getLong("LastKing") : Long.MIN_VALUE;
+            lastKing = tag.contains("LastKing") ? tag.getLongOr("LastKing", 0L) : Long.MIN_VALUE;
         }
 
         @Override
@@ -112,13 +112,13 @@ public class KoningsTroonBlock extends GuhFurnitureBlock implements EntityBlock 
 
     /** A new Koningguh sits down on the throne, in his royal outfit. */
     public static void crown(ServerLevel level, BlockPos pos, BlockState state) {
-        GuhEntity king = ModEntities.GUH.get().create(level);
+        GuhEntity king = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (king == null) {
             return;
         }
         float yaw = state.getValue(FACING).toYRot();
-        king.moveTo(pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5, yaw, 0);
-        king.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), MobSpawnType.EVENT, null);
+        king.snapTo(pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5, yaw, 0);
+        king.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.EVENT, null);
         makeKing(king);
         king.setYHeadRot(yaw);
         king.setYBodyRot(yaw);

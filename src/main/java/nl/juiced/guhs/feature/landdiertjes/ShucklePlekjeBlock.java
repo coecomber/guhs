@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -74,12 +74,12 @@ public class ShucklePlekjeBlock extends Block {
         if (!spelers.isEmpty()) {
             return null;
         }
-        ShuckleEntity shuckle = LanddiertjesFeature.SHUCKLE.get().create(level);
+        ShuckleEntity shuckle = LanddiertjesFeature.SHUCKLE.get().create(level, EntitySpawnReason.TRIGGERED);
         if (shuckle == null) {
             return null;
         }
-        shuckle.moveTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, random.nextFloat() * 360f, 0);
-        shuckle.finalizeSpawn(level, level.getCurrentDifficultyAt(plek), MobSpawnType.STRUCTURE, null);
+        shuckle.snapTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, random.nextFloat() * 360f, 0);
+        shuckle.finalizeSpawn(level, level.getCurrentDifficultyAt(plek), EntitySpawnReason.STRUCTURE, null);
         shuckle.thuisBij(pos);
         shuckle.setPersistenceRequired();
         level.addFreshEntity(shuckle);

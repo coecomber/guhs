@@ -31,11 +31,11 @@ public final class Leeszaal {
     }
 
     public static int read(ServerPlayer player) {
-        return GuhQuests.saved(player).getInt(READ);
+        return GuhQuests.saved(player).getIntOr(READ, 0);
     }
 
     public static boolean taken(ServerPlayer player, Guhboek book) {
-        return (GuhQuests.saved(player).getInt(TAKEN) & book.bit()) != 0;
+        return (GuhQuests.saved(player).getIntOr(TAKEN, 0) & book.bit()) != 0;
     }
 
     /** Which guh book lies here for reading: a library lectern with a guh book on it, or the secret book stand. */
@@ -53,8 +53,8 @@ public final class Leeszaal {
     /** Opens the book on this lectern for the player (and remembers they have read it). */
     public static void open(ServerPlayer player, BlockPos pos, Guhboek book) {
         CompoundTag saved = GuhQuests.saved(player);
-        saved.putInt(READ, saved.getInt(READ) | book.bit());
-        player.serverLevel().playSound(null, pos, SoundEvents.BOOK_PAGE_TURN, SoundSource.BLOCKS, 1f, 1f);
+        saved.putInt(READ, saved.getIntOr(READ, 0) | book.bit());
+        player.level().playSound(null, pos, SoundEvents.BOOK_PAGE_TURN, SoundSource.BLOCKS, 1f, 1f);
         nl.juiced.guhs.network.ModNetworking.sendTo(player, new BibliotheekPayloads.OpenBook(pos, book.ordinal(), !taken(player, book)));
     }
 
@@ -68,21 +68,21 @@ public final class Leeszaal {
             return;
         }
         if (taken(player, book)) {
-            player.displayClientMessage(Component.translatable("quest.guhs.bieb.taken_already", book.title())
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.bieb.taken_already", book.title())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         CompoundTag saved = GuhQuests.saved(player);
-        saved.putInt(TAKEN, saved.getInt(TAKEN) | book.bit());
-        saved.putInt(READ, saved.getInt(READ) | book.bit());
+        saved.putInt(TAKEN, saved.getIntOr(TAKEN, 0) | book.bit());
+        saved.putInt(READ, saved.getIntOr(READ, 0) | book.bit());
         Bibliothecaris.give(player, book.stack());
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         if (book.secret()) {
             player.sendSystemMessage(Component.translatable("quest.guhs.bieb.altar").withStyle(ChatFormatting.LIGHT_PURPLE));
             level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1f, 1.2f);
             level.sendParticles(ParticleTypes.ENCHANT, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 40, 0.4, 0.4, 0.4, 0.6);
         } else {
-            player.displayClientMessage(Component.translatable("quest.guhs.bieb.taken", book.title()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.bieb.taken", book.title()).withStyle(ChatFormatting.LIGHT_PURPLE));
             level.playSound(null, pos, SoundEvents.BOOK_PAGE_TURN, SoundSource.BLOCKS, 1f, 0.8f);
         }
         Bibliothecaris.collect(player);

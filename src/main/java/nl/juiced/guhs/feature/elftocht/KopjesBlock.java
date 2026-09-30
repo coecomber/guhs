@@ -81,7 +81,7 @@ public class KopjesBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         pak((ServerPlayer) player, state.getValue(SOORT), pos);
@@ -92,14 +92,14 @@ public class KopjesBlock extends HorizontalDirectionalBlock {
     public static boolean pak(ServerPlayer player, Soort soort, BlockPos pos) {
         Item drankje = soort.drankje();
         if (player.getCooldowns().isOnCooldown(drankje)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.elftocht.kopjes.wacht_" + soort.getSerializedName())
-                    .withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.elftocht.kopjes.wacht_" + soort.getSerializedName())
+                    .withStyle(ChatFormatting.GOLD));
             return false;
         }
         player.getCooldowns().addCooldown(drankje, WACHT);
         Minigames.give(player, new ItemStack(drankje));
-        player.displayClientMessage(Component.translatable("gui.guhs.elftocht.kopjes.pak_" + soort.getSerializedName())
-                .withStyle(ChatFormatting.YELLOW), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.elftocht.kopjes.pak_" + soort.getSerializedName())
+                .withStyle(ChatFormatting.YELLOW));
         player.level().playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 0.7f, 1.3f);
         return true;
     }

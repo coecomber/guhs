@@ -23,7 +23,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowParentGoal;
@@ -41,13 +41,13 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.feature.knus.KnusVoortgang;
 import nl.juiced.guhs.feature.knus.Seizoen;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * A farm animal of the Guhboerderij: always lief and passive (it never attacks, it only runs off a bit when hurt).
@@ -87,11 +87,11 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
     }
 
     /** The farm animals spawn on grassy or fluffy ground in the light (and anywhere a structure or egg puts them). */
-    public static boolean checkDierSpawnRules(LevelAccessor level, MobSpawnType spawnType, BlockPos pos) {
+    public static boolean checkDierSpawnRules(LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos) {
         BlockState below = level.getBlockState(pos.below());
         boolean ground = below.is(BlockTags.ANIMALS_SPAWNABLE_ON) || below.is(BlockTags.DIRT) || below.is(BlockTags.WOOL)
                 || below.isFaceSturdy(level, pos.below(), net.minecraft.core.Direction.UP) && !below.is(BlockTags.LEAVES);
-        return ground && (MobSpawnType.ignoresLightRequirements(spawnType) || level.getRawBrightness(pos, 0) > 8);
+        return ground && (EntitySpawnReason.ignoresLightRequirements(spawnType) || level.getRawBrightness(pos, 0) > 8);
     }
 
     // --- the animal's own parts --------------------------------------------------------------------------------------------
@@ -173,9 +173,9 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        entityData.set(DATA_ZORG, tag.getInt("Zorg"));
-        zorgDag = tag.contains("ZorgDag") ? tag.getLong("ZorgDag") : -1;
-        setProductGegeven(tag.getBoolean("ProductGegeven"));
+        entityData.set(DATA_ZORG, tag.getIntOr("Zorg", 0));
+        zorgDag = tag.contains("ZorgDag") ? tag.getLongOr("ZorgDag", 0L) : -1;
+        setProductGegeven(tag.getBooleanOr("ProductGegeven", false));
     }
 
     // --- care ------------------------------------------------------------------------------------------------------------
@@ -210,7 +210,7 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, getX(), getY() + getBbHeight() + 0.3, getZ(), 10, 0.4, 0.3, 0.4, 0.0);
             if (player != null) {
                 BoerderijVoortgang.blij(player);
-                player.displayClientMessage(Component.translatable("gui.guhs.boerderij.blij." + soort()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.boerderij.blij." + soort()).withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
         if (isBlij() && !productGegeven() && !productOpAfroep() && !isBaby()) {
@@ -226,7 +226,7 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
         boolean leeg = stack.isEmpty();
         boolean borstel = stack.is(BoerderijFeature.GUHBORSTEL.get());
         boolean voer = stack.is(BoerderijFeature.KNABBELVOER.get());
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return leeg || borstel || voer && !heeftZorg(Zorg.VOEREN) ? InteractionResult.SUCCESS : super.mobInteract(player, hand);
         }
         ServerPlayer sp = (ServerPlayer) player;
@@ -262,7 +262,7 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (!level().isClientSide && (tickCount + getId()) % 40 == 0) {
+        if (!level().isClientSide() && (tickCount + getId()) % 40 == 0) {
             nieuweDag();
         }
     }
@@ -372,7 +372,7 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
     @Override
     public void playAmbientSound() {
         super.playAmbientSound();
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             triggerAnim("actie", "geluid");
         }
     }

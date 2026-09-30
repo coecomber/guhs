@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.FenceBlock;
-import net.minecraft.world.level.block.FungusBlock;
+import net.minecraft.world.level.block.NetherFungusBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -146,11 +146,11 @@ public final class BarbecuetherFeature {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SATE_GEKWEEKT = ResourceKey.create(Registries.CONFIGURED_FEATURE, Guhs.id("sate_spies_gekweekt"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> WORST_GEKWEEKT = ResourceKey.create(Registries.CONFIGURED_FEATURE, Guhs.id("braadworst_gekweekt"));
     /** Little saté skewer sprout: bone meal on pindasaus nylium grows a giant saté skewer. */
-    public static final DeferredBlock<FungusBlock> SATE_ZWAMMETJE = BLOCKS.registerBlock("sate_zwammetje",
-            p -> new FungusBlock(SATE_GEKWEEKT, PINDASAUS_NYLIUM.get(), p), BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS));
+    public static final DeferredBlock<NetherFungusBlock> SATE_ZWAMMETJE = BLOCKS.registerBlock("sate_zwammetje",
+            p -> new NetherFungusBlock(SATE_GEKWEEKT, PINDASAUS_NYLIUM.get(), p), BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS));
     /** Little sausage sprout: bone meal on mosterd nylium grows a giant sausage. */
-    public static final DeferredBlock<FungusBlock> WORST_ZWAMMETJE = BLOCKS.registerBlock("worst_zwammetje",
-            p -> new FungusBlock(WORST_GEKWEEKT, MOSTERD_NYLIUM.get(), p), BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS));
+    public static final DeferredBlock<NetherFungusBlock> WORST_ZWAMMETJE = BLOCKS.registerBlock("worst_zwammetje",
+            p -> new NetherFungusBlock(WORST_GEKWEEKT, MOSTERD_NYLIUM.get(), p), BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS));
     public static final DeferredBlock<Block> SMEULKOOLTJES = BLOCKS.registerBlock("smeulkooltjes", BarbecueBlocks.Smeulkooltjes::new,
             BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_ROOTS).mapColor(MapColor.COLOR_ORANGE).lightLevel(s -> 7));
     public static final DeferredBlock<Block> PINDASAUSPLASJE = BLOCKS.registerBlock("pindasausplasje", BarbecueBlocks.Pindasausplasje::new,

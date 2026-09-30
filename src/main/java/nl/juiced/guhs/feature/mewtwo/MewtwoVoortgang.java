@@ -29,7 +29,7 @@ public final class MewtwoVoortgang {
     }
 
     public static int stap(Player p) {
-        return d(p).getInt(STAP);
+        return d(p).getIntOr(STAP, 0);
     }
 
     public static void zetStap(ServerPlayer p, int stap) {
@@ -38,7 +38,7 @@ public final class MewtwoVoortgang {
     }
 
     public static int notities(Player p) {
-        return d(p).getInt(NOTITIES_KEY);
+        return d(p).getIntOr(NOTITIES_KEY, 0);
     }
 
     public static boolean heeftNotitie(Player p, int n) {
@@ -60,7 +60,7 @@ public final class MewtwoVoortgang {
     }
 
     public static int onderdelen(Player p) {
-        return d(p).getInt(ONDERDELEN_KEY);
+        return d(p).getIntOr(ONDERDELEN_KEY, 0);
     }
 
     public static boolean heeftOnderdeel(Player p, int n) {
@@ -77,7 +77,7 @@ public final class MewtwoVoortgang {
     }
 
     public static int ingebouwd(Player p) {
-        return d(p).getInt(INGEBOUWD);
+        return d(p).getIntOr(INGEBOUWD, 0);
     }
 
     public static boolean isIngebouwd(Player p, int n) {
@@ -99,11 +99,11 @@ public final class MewtwoVoortgang {
     }
 
     public static int knabbels(Player p) {
-        return d(p).getInt(KNABBELS);
+        return d(p).getIntOr(KNABBELS, 0);
     }
 
     public static int snacks(Player p) {
-        return d(p).getInt(SNACKS);
+        return d(p).getIntOr(SNACKS, 0);
     }
 
     public static void zetSchaal(ServerPlayer p, int knabbels, int snacks) {

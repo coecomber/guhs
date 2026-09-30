@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.block.MaagPortalBlock;
@@ -31,6 +31,7 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.registry.ModBlocks;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * The guh stomachs (guhmaag dimension): one shared dimension. The mouth (public lobby) sits at 0,0; every player's
  * stomach is a plot of its own, {@link #PLOT_SPACING} blocks apart, walled in by stomach walls and invisible barriers.
@@ -99,9 +100,9 @@ public final class MaagManager {
 
     /** Whistle / key: from anywhere to your own stomach; from inside the stomachs, back out to the world. */
     public static void whistle(ServerPlayer player) {
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         if (!data.player(player.getUUID()).maagUnlocked()) {
-            player.displayClientMessage(Component.translatable("gui.guhs.maag.locked").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.maag.locked").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         if (isGuhmaag(player.level())) {
@@ -112,11 +113,11 @@ public final class MaagManager {
     }
 
     public static void goToOwnMaag(ServerPlayer player) {
-        ServerLevel maagLevel = level(player.server);
+        ServerLevel maagLevel = level(player.level().getServer());
         if (maagLevel == null) {
             return;
         }
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.Maag maag = ensureMaag(maagLevel, player);
         rememberReturn(player, data);
         Vec3 to = entryPoint(maag.index);
@@ -126,7 +127,7 @@ public final class MaagManager {
 
     public static GuhWorldData.Maag ensureMaag(ServerLevel maagLevel, Player owner) {
         GuhWorldData data = GuhWorldData.get(maagLevel.getServer());
-        GuhWorldData.Maag maag = data.createMaag(owner.getUUID(), owner.getGameProfile().getName());
+        GuhWorldData.Maag maag = data.createMaag(owner.getUUID(), owner.getGameProfile().name());
         if (!data.isLobbyBuilt()) {
             buildLobby(maagLevel);
             data.setLobbyBuilt();
@@ -153,15 +154,15 @@ public final class MaagManager {
 
     /** Back to where you came from in the world ("to the intestines"). */
     public static void goBack(ServerPlayer player) {
-        DimensionTransition back = backTransition(player);
+        TeleportTransition back = backTransition(player);
         if (back != null) {
             player.changeDimension(back);
         }
     }
 
     @Nullable
-    private static DimensionTransition backTransition(Entity entity) {
-        net.minecraft.server.MinecraftServer server = entity.getServer();
+    private static TeleportTransition backTransition(Entity entity) {
+        net.minecraft.server.MinecraftServer server = entity.level().getServer();
         if (server == null) {
             return null;
         }
@@ -173,13 +174,13 @@ public final class MaagManager {
             BlockPos spawn = target.getSharedSpawnPos();
             pos = new Vec3(spawn.getX() + 0.5, spawn.getY(), spawn.getZ() + 0.5);
         }
-        return new DimensionTransition(target, pos, Vec3.ZERO, p.returnYaw, 0f, false,
+        return new TeleportTransition(target, pos, Vec3.ZERO, p.returnYaw, 0f, false,
                 e -> e.level().playSound(null, e.blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.PLAYERS, 1.5f, 0.6f));
     }
 
     /** Where a stomach portal takes you. */
     @Nullable
-    public static DimensionTransition portalDestination(ServerLevel level, Entity entity, BlockPos pos, MaagPortalBlock.Kind kind) {
+    public static TeleportTransition portalDestination(ServerLevel level, Entity entity, BlockPos pos, MaagPortalBlock.Kind kind) {
         ServerLevel maagLevel = level(level.getServer());
         if (maagLevel == null) {
             return null;
@@ -187,7 +188,7 @@ public final class MaagManager {
         switch (kind) {
             case MOND -> {
                 Vec3 to = lobbySpawn();
-                return new DimensionTransition(maagLevel, to, Vec3.ZERO, 180f, 0f, false, DimensionTransition.DO_NOTHING);
+                return new TeleportTransition(maagLevel, to, Vec3.ZERO, 180f, 0f, false, TeleportTransition.DO_NOTHING);
             }
             case DARM, EXIT -> {
                 return backTransition(entity);
@@ -201,13 +202,13 @@ public final class MaagManager {
                 }
                 if (!maag.mayVisit(entity.getUUID())) {
                     if (entity instanceof Player player && level.getGameTime() % 40 == 0) {
-                        player.displayClientMessage(Component.translatable("gui.guhs.maag.private", maag.ownerName)
-                                .withStyle(ChatFormatting.RED), true);
+                        player.sendOverlayMessage(Component.translatable("gui.guhs.maag.private", maag.ownerName)
+                                .withStyle(ChatFormatting.RED));
                     }
                     return null;
                 }
                 Vec3 to = entryPoint(maag.index);
-                return new DimensionTransition(maagLevel, to, Vec3.ZERO, 180f, 0f, false, DimensionTransition.DO_NOTHING);
+                return new TeleportTransition(maagLevel, to, Vec3.ZERO, 180f, 0f, false, TeleportTransition.DO_NOTHING);
             }
             default -> {
                 return null;
@@ -289,11 +290,11 @@ public final class MaagManager {
         acidPool(level, c.offset(13, 0, -13), 2.6);
         acidPool(level, c.offset(-12, 0, 13), 2.2);
         // the Maagenzym-guh: the stomach's settings
-        GuhNpcEntity enzyme = ModEntities.GUH_NPC.get().create(level);
+        GuhNpcEntity enzyme = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
         if (enzyme != null) {
             enzyme.setKind(GuhNpcEntity.Kind.MAAGENZYM);
             enzyme.setMaagOwner(maag.owner);
-            enzyme.moveTo(c.getX() + 5.5, FLOOR_Y, c.getZ() + 3.5, 180f, 0f);
+            enzyme.snapTo(c.getX() + 5.5, FLOOR_Y, c.getZ() + 3.5, 180f, 0f);
             level.addFreshEntity(enzyme);
         }
     }
@@ -433,10 +434,10 @@ public final class MaagManager {
         }
         // the way back to the world, and the Tandarts-guh
         buildPortal(level, new BlockPos(-1, FLOOR_Y, h - 3), MaagPortalBlock.Kind.EXIT, Component.translatable("sign.guhs.maag.to_world"));
-        GuhNpcEntity dentist = ModEntities.GUH_NPC.get().create(level);
+        GuhNpcEntity dentist = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
         if (dentist != null) {
             dentist.setKind(GuhNpcEntity.Kind.TANDARTS);
-            dentist.moveTo(4.5, FLOOR_Y, h - 7.5, 180f, 0f);
+            dentist.snapTo(4.5, FLOOR_Y, h - 7.5, 180f, 0f);
             level.addFreshEntity(dentist);
         }
         sign(level, new BlockPos(0, FLOOR_Y, h - 9), Component.translatable("sign.guhs.maag.lobby1"), Component.translatable("sign.guhs.maag.lobby2"));
@@ -453,7 +454,7 @@ public final class MaagManager {
     }
 
     public static boolean isOwner(Player player, int plot) {
-        GuhWorldData.Maag maag = GuhWorldData.get(player.getServer()).maagByIndex(plot);
+        GuhWorldData.Maag maag = GuhWorldData.get(player.level().getServer()).maagByIndex(plot);
         return maag != null && maag.owner.equals(player.getUUID());
     }
 
@@ -468,10 +469,10 @@ public final class MaagManager {
         if (player.hasPermissions(2) && player.isCreative()) {
             return true;
         }
-        if (player.getServer() == null) {
+        if (player.level().getServer() == null) {
             return true;
         }
-        GuhWorldData.Maag maag = maagAt(player.getServer(), pos);
+        GuhWorldData.Maag maag = maagAt(player.level().getServer(), pos);
         return maag != null && maag.mayBuild(player.getUUID());
     }
 

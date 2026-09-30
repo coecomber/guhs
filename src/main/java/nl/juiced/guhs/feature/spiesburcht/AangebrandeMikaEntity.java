@@ -28,7 +28,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
@@ -37,14 +37,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.registry.ModSounds;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * De Aangebrande Mika: the wither of the Barbecuether, a huge charred three-headed Mika. Called up (in any dimension)
@@ -152,7 +152,7 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
     @Override
     public void aiStep() {
         Vec3 v = this.getDeltaMovement().scale(0.82);
-        if (!this.level().isClientSide && spawningTicks() <= 0) {
+        if (!this.level().isClientSide() && spawningTicks() <= 0) {
             Vec3 wanted = wantedPosition();
             if (wanted != null) {
                 Vec3 to = wanted.subtract(position());
@@ -169,7 +169,7 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
         }
         this.setDeltaMovement(v);
         super.aiStep();
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             clientParticles();
         }
     }
@@ -298,10 +298,10 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
         say(level, "quest.guhs.aangebrande_mika.doorgebakken", ChatFormatting.RED, 48);
         level.playSound(null, blockPosition(), SoundEvents.WITHER_AMBIENT, SoundSource.HOSTILE, 1.5f, 1.4f);
         for (int i = 0; i < 2; i++) {
-            VonkMikaEntity helper = SpiesburchtFeature.VONK_MIKA.get().create(level);
+            VonkMikaEntity helper = SpiesburchtFeature.VONK_MIKA.get().create(level, EntitySpawnReason.TRIGGERED);
             if (helper != null) {
-                helper.moveTo(getX() + (i == 0 ? -2 : 2), getY(), getZ(), getYRot(), 0);
-                helper.finalizeSpawn(level, level.getCurrentDifficultyAt(blockPosition()), MobSpawnType.MOB_SUMMONED, null);
+                helper.snapTo(getX() + (i == 0 ? -2 : 2), getY(), getZ(), getYRot(), 0);
+                helper.finalizeSpawn(level, level.getCurrentDifficultyAt(blockPosition()), EntitySpawnReason.MOB_SUMMONED, null);
                 helper.setTarget(getTarget());
                 level.addFreshEntity(helper);
                 level.sendParticles(ParticleTypes.FLAME, helper.getX(), helper.getY(0.5), helper.getZ(), 20, 0.4, 0.6, 0.4, 0.05);
@@ -455,10 +455,10 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.entityData.set(DATA_SPAWNING, tag.getInt("Spawning"));
-        doorgebakken = tag.getBoolean("Doorgebakken");
-        volleys = tag.getInt("Volleys");
-        home = tag.contains("Home") ? BlockPos.of(tag.getLong("Home")) : null;
+        this.entityData.set(DATA_SPAWNING, tag.getIntOr("Spawning", 0));
+        doorgebakken = tag.getBooleanOr("Doorgebakken", false);
+        volleys = tag.getIntOr("Volleys", 0);
+        home = tag.contains("Home") ? BlockPos.of(tag.getLongOr("Home", 0L)) : null;
         if (hasCustomName()) {
             bossEvent.setName(getDisplayName());
         }
@@ -497,7 +497,7 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
         controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("shoot", SHOOT));
     }
 
-    private PlayState mainAnimation(AnimationState<AangebrandeMikaEntity> state) {
+    private PlayState mainAnimation(AnimationTest<AangebrandeMikaEntity> state) {
         if (spawningTicks() > 0) {
             return state.setAndContinue(SPAWN);
         }

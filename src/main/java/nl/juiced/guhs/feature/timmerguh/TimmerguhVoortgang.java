@@ -21,7 +21,7 @@ public final class TimmerguhVoortgang {
     public static final int NIEUW = 0, MATERIAAL = 1, DAK = 2, BEWONER = 3, KLAAR = 4, KNUS = 5;
 
     public static int stap(Player p) {
-        return GuhQuests.saved(p).getInt(STAP);
+        return GuhQuests.saved(p).getIntOr(STAP, 0);
     }
 
     public static void zet(Player p, int stap) {

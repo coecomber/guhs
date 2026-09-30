@@ -73,7 +73,7 @@ public class GolfBallEntity extends Entity {
 
     public static GolfBallEntity create(ServerLevel level, Vec3 pos, @Nullable UUID owner, @Nullable UUID npc) {
         GolfBallEntity ball = new GolfBallEntity(GolfFeature.BALL.get(), level);
-        ball.moveTo(pos.x, pos.y, pos.z, 0, 0);
+        ball.snapTo(pos.x, pos.y, pos.z, 0, 0);
         ball.entityData.set(OWNER, Optional.ofNullable(owner));
         ball.npc = npc;
         ball.startY = pos.y;
@@ -155,7 +155,7 @@ public class GolfBallEntity extends Entity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             clientTick();
             return;
         }

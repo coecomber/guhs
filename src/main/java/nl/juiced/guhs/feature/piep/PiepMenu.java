@@ -75,8 +75,8 @@ public final class PiepMenu {
                 }
                 boolean nu = !maatje.aan(instelling);
                 maatje.zet(instelling, nu);
-                player.displayClientMessage(Component.translatable(instelling.key() + (nu ? ".aan" : ".uit"), maatje.dier().getDisplayName())
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable(instelling.key() + (nu ? ".aan" : ".uit"), maatje.dier().getDisplayName())
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 return true;
             }
             case NAAM -> {

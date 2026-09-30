@@ -89,7 +89,7 @@ public class SchillyEntity extends PoepschillyEntity {
         addEffect(new MobEffectInstance(PiepFeature.BESTIES, BESTIES_TICKS, 0));
         rust(BESTIE_RUST);
         if (player != null) {
-            player.displayClientMessage(Component.translatable("gui.guhs.piep.bestie_moment", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.piep.bestie_moment", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
             PiepVoortgang.tel(player, PiepVoortgang.BESTIES, 1, "piep_schilly_bestie");
         }
     }
@@ -107,7 +107,7 @@ public class SchillyEntity extends PoepschillyEntity {
         level.sendParticles(ParticleTypes.ANGRY_VILLAGER, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 2, 0.2, 0.1, 0.2, 0);
         level.playSound(null, blockPosition(), SoundEvents.TURTLE_HURT, SoundSource.NEUTRAL, 0.6f, 1.6f);
         for (ServerPlayer p : spelersBij(level)) {
-            p.displayClientMessage(Component.translatable("gui.guhs.piep.beef", guh.getDisplayName()).withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.piep.beef", guh.getDisplayName()).withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -119,7 +119,7 @@ public class SchillyEntity extends PoepschillyEntity {
         level.sendParticles(ParticleTypes.HEART, getX(), getY() + 0.5, getZ(), 3, 0.3, 0.2, 0.3, 0);
         level.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.2, guh.getZ(), 3, 0.3, 0.2, 0.3, 0);
         for (ServerPlayer p : spelersBij(level)) {
-            p.displayClientMessage(Component.translatable("gui.guhs.piep.beef_bijgelegd").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.piep.beef_bijgelegd").withStyle(ChatFormatting.LIGHT_PURPLE));
             PiepVoortgang.tel(p, PiepVoortgang.BEEF, 1, "piep_schilly_beef");
             PiepVoortgang.pagina(p, soort());
         }

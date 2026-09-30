@@ -1,8 +1,8 @@
 package nl.juiced.guhs.feature.knus.client;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.toasts.Toast;
-import net.minecraft.client.gui.components.toasts.ToastComponent;
+import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -20,17 +20,17 @@ public class KnusToast implements Toast {
     }
 
     @Override
-    public Visibility render(GuiGraphics g, ToastComponent toasts, long timeSinceLastVisible) {
+    public Visibility render(GuiGraphicsExtractor g, ToastManager toasts, long timeSinceLastVisible) {
         int w = width(), h = height();
         g.fill(0, 0, w, h, 0xF0301A26);
         g.fill(0, 0, w, 1, 0xFFF7B6CB);
         g.fill(0, h - 1, w, h, 0xFFF7B6CB);
         g.fill(0, 0, 1, h, 0xFFF7B6CB);
         g.fill(w - 1, 0, w, h, 0xFFF7B6CB);
-        g.renderItem(icon, 8, 8);
+        g.item(icon, 8, 8);
         var font = toasts.getMinecraft().font;
-        g.drawString(font, title, 30, 7, 0xFFFFB6D8, false);
-        g.drawString(font, font.plainSubstrByWidth(text.getString(), w - 34), 30, 18, 0xFFFFE6EE, false);
+        g.text(font, title, 30, 7, 0xFFFFB6D8, false);
+        g.text(font, font.plainSubstrByWidth(text.getString(), w - 34), 30, 18, 0xFFFFE6EE, false);
         return timeSinceLastVisible >= SHOW_MS * toasts.getNotificationDisplayTimeMultiplier() ? Visibility.HIDE : Visibility.SHOW;
     }
 }

@@ -6,7 +6,7 @@ import net.minecraft.client.particle.CherryParticle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.renderer.FogRenderer;
+import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.FogType;
 import net.neoforged.bus.api.IEventBus;

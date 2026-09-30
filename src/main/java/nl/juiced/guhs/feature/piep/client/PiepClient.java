@@ -25,10 +25,11 @@ import nl.juiced.guhs.feature.piep.PiepFeature;
 import nl.juiced.guhs.feature.piep.PiepPayloads;
 import nl.juiced.guhs.feature.piep.PieppiepmuisjeEntity;
 import nl.juiced.guhs.feature.piep.PoepschillyEntity;
-import software.bernie.geckolib.event.GeoRenderEvent;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.event.GeoRenderEvent;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Client side of Piep: the GeckoLib renderers (the exported models in assets/guhs/geo/entity: pieppiepmuisje, poepschilly,
  * boze_kaasknabbel, boze_oppernabbel), the muisje on a player's shoulder (a render layer on every player), the guh that
@@ -129,7 +130,7 @@ public final class PiepClient {
             return;
         }
         net.minecraft.nbt.CompoundTag data = PiepPayloads.CLIENT_SCHOUDERS.get(player.getId());
-        String type = data == null || !data.contains("id") ? "guhs:pieppiepmuisje" : data.getString("id");
+        String type = data == null || !data.contains("id") ? "guhs:pieppiepmuisje" : data.getStringOr("id", "");
         net.minecraft.world.entity.Entity e = SCHOUDER_MUISJES.compute(player.getId(), (id, m) -> m != null && m.level() == level
                 && net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()).toString().equals(type) ? m
                 : maak(data, level));
@@ -163,15 +164,15 @@ public final class PiepClient {
     @javax.annotation.Nullable
     private static net.minecraft.world.entity.Entity maak(@javax.annotation.Nullable net.minecraft.nbt.CompoundTag data, ClientLevel level) {
         if (data == null || !data.contains("id")) {
-            return PiepFeature.PIEPPIEPMUISJE.get().create(level);
+            return PiepFeature.PIEPPIEPMUISJE.get().create(level, EntitySpawnReason.TRIGGERED);
         }
-        net.minecraft.world.entity.Entity e = net.minecraft.world.entity.EntityType.byString(data.getString("id"))
-                .map(t -> (net.minecraft.world.entity.Entity) t.create(level)).orElse(null);
+        net.minecraft.world.entity.Entity e = net.minecraft.world.entity.EntityType.byString(data.getStringOr("id", ""))
+                .map(t -> (net.minecraft.world.entity.Entity) t.create(level, EntitySpawnReason.TRIGGERED)).orElse(null);
         if (e == null) {
-            return PiepFeature.PIEPPIEPMUISJE.get().create(level);
+            return PiepFeature.PIEPPIEPMUISJE.get().create(level, EntitySpawnReason.TRIGGERED);
         }
         try {
-            e.load(data.getCompound("Uiterlijk"));
+            e.load(data.getCompoundOrEmpty("Uiterlijk"));
         } catch (RuntimeException ignored) {
             // (a look that doesn't load: the plain maatje)
         }

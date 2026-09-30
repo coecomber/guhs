@@ -114,7 +114,7 @@ public final class Evenementen {
         if (Minigames.playing(player) != null) {
             return Component.translatable("gui.guhs.evenement.busy");
         }
-        if (!outdoors(player.serverLevel(), player.blockPosition())) {
+        if (!outdoors(player.level(), player.blockPosition())) {
             return Component.translatable("gui.guhs.evenement.indoors");
         }
         return null;
@@ -126,12 +126,12 @@ public final class Evenementen {
      */
     @Nullable
     public static Evenement start(EvenementType type, ServerPlayer anchor) {
-        ServerLevel level = anchor.serverLevel();
+        ServerLevel level = anchor.level();
         Evenement event = switch (type) {
             case KAASREGEN -> new Kaasregen(level, anchor.position());
             case STERRENREGEN -> new Sterrenregen(level, anchor.position());
             case PARADE -> {
-                ParadeRoute route = Vadsparade.planNear(level, anchor.position(), level.random);
+                ParadeRoute route = Vadsparade.planNear(level, anchor.position(), level.getRandom());
                 yield route == null ? null : new Vadsparade(level, route);
             }
             case KNUSFEEST -> nl.juiced.guhs.feature.knuffeldal.KnusfeestEvenement.maak(level, anchor);
@@ -158,7 +158,7 @@ public final class Evenementen {
         data.putInt(WAITED, 0);
         data.putInt(NEXT, nextDelay(player.getRandom(), false));
         data.putInt(LAST, event.type.ordinal() + 1);
-        int seen = data.getInt(SEEN) | (1 << event.type.ordinal());
+        int seen = data.getIntOr(SEEN, 0) | (1 << event.type.ordinal());
         data.putInt(SEEN, seen);
         GuhAdvancements.grant(player, "evenement_eerste");
         int all = 0;
@@ -214,13 +214,13 @@ public final class Evenementen {
         if (!data.contains(NEXT)) {
             data.putInt(NEXT, nextDelay(player.getRandom(), true));
         }
-        int next = data.getInt(NEXT);
-        int waited = Math.min(next, data.getInt(WAITED) + ticks);
+        int next = data.getIntOr(NEXT, 0);
+        int waited = Math.min(next, data.getIntOr(WAITED, 0) + ticks);
         data.putInt(WAITED, waited);
         if (waited < next) {
             return null;
         }
-        Evenement nearby = near(player.serverLevel(), player.position(), Evenement.JOIN_RANGE);
+        Evenement nearby = near(player.level(), player.position(), Evenement.JOIN_RANGE);
         if (nearby != null && nearby.autoJoin) {
             nearby.join(player);
             return nearby;
@@ -228,7 +228,7 @@ public final class Evenementen {
         if (whyNot(player) != null) {
             return null; // not now: try again in a moment
         }
-        int last = data.getInt(LAST) - 1;
+        int last = data.getIntOr(LAST, 0) - 1;
         EvenementType type = EvenementType.choose(player.getRandom(), player.level().isNight(),
                 last >= 0 && last < EvenementType.values().length ? EvenementType.values()[last] : null);
         Evenement started = start(type, player);
@@ -241,7 +241,7 @@ public final class Evenementen {
     /** How long this player still has to wait for their next event (in ticks of Guhmension time). */
     public static int waitLeft(ServerPlayer player) {
         CompoundTag data = GuhQuests.saved(player);
-        return data.contains(NEXT) ? Math.max(0, data.getInt(NEXT) - data.getInt(WAITED)) : -1;
+        return data.contains(NEXT) ? Math.max(0, data.getIntOr(NEXT, 0) - data.getIntOr(WAITED, 0)) : -1;
     }
 
     // --- where events can happen -------------------------------------------------------------------------------------------
@@ -266,7 +266,7 @@ public final class Evenementen {
             return null;
         }
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-        if (y <= level.getMinBuildHeight() || Math.abs(y - nearY) > 10) {
+        if (y <= level.getMinY() || Math.abs(y - nearY) > 10) {
             return null;
         }
         BlockPos feet = new BlockPos(x, y, z);
@@ -294,18 +294,18 @@ public final class Evenementen {
     /** It ate a knabbel from the kaasregen: happy (and easy to tame) for this long. */
     public static void makeHappy(GuhEntity guh, int ticks) {
         long until = guh.level().getGameTime() + ticks;
-        guh.getPersistentData().putLong(BLIJ, Math.max(until, guh.getPersistentData().getLong(BLIJ)));
+        guh.getPersistentData().putLong(BLIJ, Math.max(until, guh.getPersistentData().getLongOr(BLIJ, 0L)));
     }
 
     /** Happy from the kaasregen, or a starry guh fresh from the sky: easier to tame right now. */
     public static boolean boosted(GuhEntity guh) {
         long now = guh.level().getGameTime();
-        return guh.getPersistentData().getLong(BLIJ) > now || guh.getPersistentData().getLong(STER) > now;
+        return guh.getPersistentData().getLongOr(BLIJ, 0L) > now || guh.getPersistentData().getLongOr(STER, 0L) > now;
     }
 
     /** Feeding a boosted guh a kaas knabbel: now and then it's tamed at once (otherwise its own chance still follows). */
     public static void onInteract(PlayerInteractEvent.EntityInteract event) {
-        if (event.getLevel().isClientSide || !(event.getTarget() instanceof GuhEntity guh) || !wild(guh) || !boosted(guh)
+        if (event.getLevel().isClientSide() || !(event.getTarget() instanceof GuhEntity guh) || !wild(guh) || !boosted(guh)
                 || !event.getItemStack().is(ModItems.KAAS_KNABBELS.get()) || !(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
@@ -365,7 +365,7 @@ public final class Evenementen {
 
     /** A starry guh from a sterrenregen that's long over (saved while its chunk was unloaded): back to the stars. */
     public static void onJoinLevel(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide || !(event.getEntity() instanceof GuhEntity guh) || !guh.getPersistentData().contains(STER)) {
+        if (event.getLevel().isClientSide() || !(event.getEntity() instanceof GuhEntity guh) || !guh.getPersistentData().contains(STER)) {
             return;
         }
         if (guh.isTame()) {
@@ -422,7 +422,7 @@ public final class Evenementen {
         }
         event.end(false);
         ACTIVE.remove(event);
-        player.serverLevel().sendParticles(ParticleTypes.POOF, player.getX(), player.getY() + 1, player.getZ(), 10, 0.5, 0.5, 0.5, 0.02);
+        player.level().sendParticles(ParticleTypes.POOF, player.getX(), player.getY() + 1, player.getZ(), 10, 0.5, 0.5, 0.5, 0.02);
         source.sendSuccess(() -> Component.translatable("gui.guhs.evenement.command.stopped", event.type.displayName())
                 .withStyle(ChatFormatting.GRAY), true);
         return 1;

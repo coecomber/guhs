@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +28,7 @@ public class ReceptItem extends Item {
 
     /** Does this player know the recipe? */
     public static boolean kent(ServerPlayer player) {
-        return PiepVoortgang.data(player).getBoolean(GELEERD);
+        return PiepVoortgang.data(player).getBooleanOr(GELEERD, false);
     }
 
     /** Learns the recipe; false when the player already knew it. */
@@ -43,21 +43,21 @@ public class ReceptItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (level.isClientSide) {
-            return InteractionResultHolder.success(stack);
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
         }
         ServerPlayer sp = (ServerPlayer) player;
         if (!leer(sp)) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.piep.recept_al").withStyle(ChatFormatting.GRAY), true);
-            return InteractionResultHolder.fail(stack);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.piep.recept_al").withStyle(ChatFormatting.GRAY));
+            return InteractionResult.FAIL;
         }
         level.playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1f, 1.2f);
         level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.6f, 1.5f);
         sp.sendSystemMessage(Component.translatable("gui.guhs.piep.recept_geleerd").withStyle(ChatFormatting.LIGHT_PURPLE));
         stack.consume(1, player);
-        return InteractionResultHolder.consume(stack);
+        return InteractionResult.CONSUME.heldItemTransformedTo(stack);
     }
 
     @Override

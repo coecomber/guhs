@@ -10,11 +10,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerData;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.npc.villager.VillagerData;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.item.trading.VillagerTrades;
+import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
@@ -139,7 +139,7 @@ public final class ModVillagers {
 
     /** Guh villagers only take guh jobs: a guh villager that grabbed a vanilla workstation (and never traded) lets go of it. */
     public static void onVillagerTick(EntityTickEvent.Post event) {
-        if (!(event.getEntity() instanceof Villager villager) || villager.level().isClientSide || villager.tickCount % 40 != 0) {
+        if (!(event.getEntity() instanceof Villager villager) || villager.level().isClientSide() || villager.tickCount % 40 != 0) {
             return;
         }
         VillagerData data = villager.getVillagerData();

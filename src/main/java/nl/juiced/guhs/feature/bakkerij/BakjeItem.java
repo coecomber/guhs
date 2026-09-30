@@ -13,7 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -55,13 +55,13 @@ public class BakjeItem extends Item {
 
     public static boolean isSpel(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        return data != null && data.copyTag().getBoolean(SPEL);
+        return data != null && data.copyTag().getBooleanOr(SPEL, false);
     }
 
     @Nullable
     public static Recept.Kwaliteit kwaliteit(ItemStack stack) {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        return data == null || !data.copyTag().contains(KWALITEIT) ? null : Recept.Kwaliteit.byIndex(data.copyTag().getInt(KWALITEIT));
+        return data == null || !data.copyTag().contains(KWALITEIT) ? null : Recept.Kwaliteit.byIndex(data.copyTag().getIntOr(KWALITEIT, 0));
     }
 
     @Nullable
@@ -73,13 +73,13 @@ public class BakjeItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (isSpel(stack)) {
-            if (!level.isClientSide) {
-                player.displayClientMessage(Component.translatable("gui.guhs.bakkerij.voor_klant").withStyle(ChatFormatting.GOLD), true);
+            if (!level.isClientSide()) {
+                player.sendOverlayMessage(Component.translatable("gui.guhs.bakkerij.voor_klant").withStyle(ChatFormatting.GOLD));
             }
-            return InteractionResultHolder.fail(stack);
+            return InteractionResult.FAIL;
         }
         return super.use(level, player, hand);
     }
@@ -92,7 +92,7 @@ public class BakjeItem extends Item {
                     6, 0.3, 0.2, 0.3, 0.01);
             server.playSound(null, eater.blockPosition(), nl.juiced.guhs.registry.ModSounds.GUH_HAPPY.get(), SoundSource.PLAYERS, 0.5f, 1.4f);
             if (eater instanceof ServerPlayer p) {
-                p.displayClientMessage(Component.translatable("item.guhs." + recept.id() + ".njam").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                p.sendOverlayMessage(Component.translatable("item.guhs." + recept.id() + ".njam").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
         }
         return super.finishUsingItem(stack, level, eater);
@@ -100,14 +100,14 @@ public class BakjeItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && isSpel(stack) && (!(entity instanceof ServerPlayer player) || !BakkerijGame.isPlaying(player))) {
+        if (!level.isClientSide() && isSpel(stack) && (!(entity instanceof ServerPlayer player) || !BakkerijGame.isPlaying(player))) {
             stack.setCount(0);
         }
     }
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.level().isClientSide && isSpel(stack)) {
+        if (!entity.level().isClientSide() && isSpel(stack)) {
             entity.discard();
             return true;
         }

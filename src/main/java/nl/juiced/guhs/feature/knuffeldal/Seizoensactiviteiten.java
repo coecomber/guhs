@@ -96,7 +96,7 @@ public final class Seizoensactiviteiten {
             return false;
         }
         if (stack.getCount() < cost) {
-            player.displayClientMessage(Component.translatable("gui.guhs.seizoen.meer_nodig", cost, stack.getHoverName()).withStyle(ChatFormatting.GOLD), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.seizoen.meer_nodig", cost, stack.getHoverName()).withStyle(ChatFormatting.GOLD));
             return true;
         }
         stack.consume(cost, player);
@@ -104,7 +104,7 @@ public final class Seizoensactiviteiten {
         level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1f, 1.3f);
         level.sendParticles(seizoen == Seizoen.WINTER ? KnuffeldalFeature.SNEEUWVLOKJE.get() : seizoen == Seizoen.LENTE
                 ? KnuffeldalFeature.BLOESEMBLAADJE.get() : ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 14, 0.4, 0.3, 0.4, 0.02);
-        player.displayClientMessage(Component.translatable("gui.guhs.seizoen.gemaakt", result.getHoverName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.seizoen.gemaakt", result.getHoverName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         if (entry != null) {
             plakboek(player, entry);
         }
@@ -113,7 +113,7 @@ public final class Seizoensactiviteiten {
 
     /** Right-clicked with an empty hand (or the wrong thing): what you can make here this season. */
     public static void bloembakTip(ServerPlayer player, Seizoen seizoen) {
-        player.displayClientMessage(Component.translatable("gui.guhs.seizoen.tip." + seizoen.id()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.seizoen.tip." + seizoen.id()).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     /** Someone jumped into a full bladerhoopje: leaves everywhere! For a player: it counts, and their tamed guhs jump in too. */
@@ -147,7 +147,7 @@ public final class Seizoensactiviteiten {
         if (Seizoen.huidig(level) == Seizoen.WINTER) {
             plakboek(player, "winter_sneeuwpop");
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.seizoen.sneeuwpop").withStyle(ChatFormatting.AQUA), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.seizoen.sneeuwpop").withStyle(ChatFormatting.AQUA));
     }
 
     /** Every 5 seconds, per tamed guh: wearing the season's piece in its season counts for its owner (who must be near). */

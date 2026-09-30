@@ -46,6 +46,8 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * 3.0 (Guhverhalen), slice baltoslee: De sneeuwslee (DESIGN_30 §2).
  * <ul>
@@ -103,14 +105,14 @@ public final class BaltoSleeFeature {
     // --- entities ------------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<SleeEntity>> SLEE = ENTITY_TYPES.register("baltoslee_slee",
             () -> EntityType.Builder.<SleeEntity>of(SleeEntity::new, MobCategory.MISC).sized(1.2f, 0.9f).clientTrackingRange(10)
-                    .updateInterval(1).noSave().noSummon().build(Guhs.id("baltoslee_slee").toString()));
+                    .updateInterval(1).noSave().noSummon().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("baltoslee_slee"))));
     public static final DeferredHolder<EntityType<?>, EntityType<SneeuwsleeEntity>> SNEEUWSLEE_ENTITY = ENTITY_TYPES.register("sneeuwslee",
             () -> EntityType.Builder.<SneeuwsleeEntity>of(SneeuwsleeEntity::new, MobCategory.MISC).sized(1.2f, 0.8f).clientTrackingRange(10)
-                    .updateInterval(2).build(Guhs.id("sneeuwslee").toString()));
+                    .updateInterval(2).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("sneeuwslee"))));
     /** Only drawn in front of the sleds (never in the world). */
     public static final DeferredHolder<EntityType<?>, EntityType<SledehondjeEntity>> SLEDEHONDJE = ENTITY_TYPES.register("baltoslee_sledehondje",
             () -> EntityType.Builder.<SledehondjeEntity>of(SledehondjeEntity::new, MobCategory.MISC).sized(0.5f, 0.6f).clientTrackingRange(4)
-                    .noSave().noSummon().build(Guhs.id("baltoslee_sledehondje").toString()));
+                    .noSave().noSummon().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("baltoslee_sledehondje"))));
 
     // --- sounds, particles ------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<SoundEvent, SoundEvent> GLIJDEN = sound("baltoslee.glijden");
@@ -138,7 +140,7 @@ public final class BaltoSleeFeature {
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
             level.playSound(player, pos, BELLEN.get(), SoundSource.BLOCKS, 0.8f, 0.9f + level.getRandom().nextFloat() * 0.3f);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
     }
 
@@ -175,7 +177,7 @@ public final class BaltoSleeFeature {
         });
         // a Baltoguh copy hidden by a ride that never ended (the server stopped): it comes back
         NeoForge.EVENT_BUS.addListener((EntityJoinLevelEvent event) -> {
-            if (!event.getLevel().isClientSide && event.getEntity() instanceof GuhEntity guh && guh.getPersistentData().getBoolean(SleeRit.VERSTOPT)
+            if (!event.getLevel().isClientSide() && event.getEntity() instanceof GuhEntity guh && guh.getPersistentData().getBooleanOr(SleeRit.VERSTOPT, false)
                     && !SleeRit.trektNog(guh.getUUID())) {
                 SleeRit.verstop(guh, false);
             }

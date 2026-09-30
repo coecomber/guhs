@@ -26,7 +26,7 @@ public final class RaceRecords {
 
     public static int best(Player player, String suffix) {
         CompoundTag data = GuhQuests.saved(player);
-        return data.contains(BEST + suffix) ? data.getInt(BEST + suffix) : -1;
+        return data.contains(BEST + suffix) ? data.getIntOr(BEST + suffix, 0) : -1;
     }
 
     public static int bestLap(Player player) {
@@ -35,7 +35,7 @@ public final class RaceRecords {
 
     public static int bestLap(Player player, String suffix) {
         CompoundTag data = GuhQuests.saved(player);
-        return data.contains(BEST_LAP + suffix) ? data.getInt(BEST_LAP + suffix) : -1;
+        return data.contains(BEST_LAP + suffix) ? data.getIntOr(BEST_LAP + suffix, 0) : -1;
     }
 
     public static int races(Player player) {
@@ -43,7 +43,7 @@ public final class RaceRecords {
     }
 
     public static int races(Player player, String suffix) {
-        return GuhQuests.saved(player).getInt(RACES + suffix);
+        return GuhQuests.saved(player).getIntOr(RACES + suffix, 0);
     }
 
     /** The recorded positions of the best race (x, y, z in 1/16 blocks in the track's frame, every RaceGame.SAMPLE ticks). */
@@ -52,7 +52,7 @@ public final class RaceRecords {
     }
 
     public static int[] ghost(Player player, String suffix) {
-        return GuhQuests.saved(player).getIntArray(GHOST + suffix);
+        return GuhQuests.saved(player).getIntArray(GHOST + suffix).orElse(new int[0]);
     }
 
     /** The race time at every checkpoint of the best race. */
@@ -61,26 +61,26 @@ public final class RaceRecords {
     }
 
     public static int[] splits(Player player, String suffix) {
-        return GuhQuests.saved(player).getIntArray(SPLITS + suffix);
+        return GuhQuests.saved(player).getIntArray(SPLITS + suffix).orElse(new int[0]);
     }
 
     public static boolean ghostOn(Player player) {
-        return !GuhQuests.saved(player).getBoolean(GHOST_OFF);
+        return !GuhQuests.saved(player).getBooleanOr(GHOST_OFF, false);
     }
 
     public static void toggleGhost(Player player) {
         CompoundTag data = GuhQuests.saved(player);
-        data.putBoolean(GHOST_OFF, !data.getBoolean(GHOST_OFF));
+        data.putBoolean(GHOST_OFF, !data.getBooleanOr(GHOST_OFF, false));
     }
 
     /** Does the golden ghost (the track record, someone else's) race along? On unless switched off. */
     public static boolean goudOn(Player player) {
-        return !GuhQuests.saved(player).getBoolean(GOUD_OFF);
+        return !GuhQuests.saved(player).getBooleanOr(GOUD_OFF, false);
     }
 
     public static void toggleGoud(Player player) {
         CompoundTag data = GuhQuests.saved(player);
-        data.putBoolean(GOUD_OFF, !data.getBoolean(GOUD_OFF));
+        data.putBoolean(GOUD_OFF, !data.getBooleanOr(GOUD_OFF, false));
     }
 
     /** Saves a finished race; returns true when it's a new personal best (the ghost and splits are only kept then). */
@@ -90,7 +90,7 @@ public final class RaceRecords {
 
     static boolean save(Player player, String suffix, int total, int bestLapOfRace, int[] splits, int[] ghost) {
         CompoundTag data = GuhQuests.saved(player);
-        data.putInt(RACES + suffix, data.getInt(RACES + suffix) + 1);
+        data.putInt(RACES + suffix, data.getIntOr(RACES + suffix, 0) + 1);
         int lap = bestLap(player, suffix);
         if (lap < 0 || bestLapOfRace < lap) {
             data.putInt(BEST_LAP + suffix, bestLapOfRace);
@@ -113,7 +113,7 @@ public final class RaceRecords {
     /** First finished race ever on this track (key suffix e.g. "_regenboog")? (Then it's marked as done.) */
     static boolean firstFinish(Player player, String baanSuffix) {
         CompoundTag data = GuhQuests.saved(player);
-        if (data.getBoolean(FIRST + baanSuffix)) {
+        if (data.getBooleanOr(FIRST + baanSuffix, false)) {
             return false;
         }
         data.putBoolean(FIRST + baanSuffix, true);
@@ -122,7 +122,7 @@ public final class RaceRecords {
 
     /** Has this player ever finished a race on this track (a circuit track id)? */
     public static boolean finishedOnce(Player player, String baanId) {
-        return GuhQuests.saved(player).getBoolean(FIRST + "_" + baanId);
+        return GuhQuests.saved(player).getBooleanOr(FIRST + "_" + baanId, false);
     }
 
     /** Race time as m:ss.hh (a tick is 5 hundredths). */

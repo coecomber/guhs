@@ -26,15 +26,15 @@ public final class PicknickMuziek {
         if (!(event.getEntity() instanceof ServerPlayer player) || player.tickCount % EVERY != 0 || player.isSpectator()) {
             return;
         }
-        ServerLevel level = player.serverLevel();
-        Structure picnic = level.registryAccess().registryOrThrow(Registries.STRUCTURE).get(PICNIC);
+        ServerLevel level = player.level();
+        Structure picnic = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(PICNIC);
         if (picnic == null) {
             return;
         }
         ChunkPos here = player.chunkPosition();
         for (int dx = -CHUNKS; dx <= CHUNKS; dx++) {
             for (int dz = -CHUNKS; dz <= CHUNKS; dz++) {
-                if (!(level.getChunkSource().getChunkNow(here.x + dx, here.z + dz) instanceof LevelChunk chunk)) {
+                if (!(level.getChunkSource().getChunkNow(here.x() + dx, here.z() + dz) instanceof LevelChunk chunk)) {
                     continue;
                 }
                 for (BlockEntity be : chunk.getBlockEntities().values()) {

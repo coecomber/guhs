@@ -7,12 +7,12 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import nl.juiced.guhs.feature.gids.VerhaalStand;
@@ -94,7 +94,7 @@ public final class GidsVerhalenTab {
     // drawing / input
     // =====================================================================================================================
 
-    public void teken(GuiGraphics g, int mouseX, int mouseY) {
+    public void teken(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         VerhaalStand v = open == null ? null : VerhalenCache.van(open);
         if (v == null) {
             List<VerhaalStand> alle = VerhalenCache.verhalen();
@@ -172,7 +172,7 @@ public final class GidsVerhalenTab {
             }
 
             @Override
-            public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+            public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
                 GidsTekst.passend(g, tekst.copy().withStyle(ChatFormatting.BOLD), x + 2, y + 4, w - 4, 0.875f, ROZE, false);
                 g.fill(x + 2, y + KOP - 2, x + w - 2, y + KOP - 1, 0x60D27A9C);
             }
@@ -195,9 +195,9 @@ public final class GidsVerhalenTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
             g.fill(x + 1, y + 1, x + w - 1, y + RIJ - 1, hover ? 0x40F7B6CB : 0x18F7B6CB);
-            g.renderItem(icoon, x + 5, y + 6);
+            g.item(icoon, x + 5, y + 6);
             if (v.klaar()) {
                 GidsTekst.schaal(g, Component.literal("✔"), x + 16, y + 17, 0.75f, GROEN, false);
             }
@@ -288,7 +288,7 @@ public final class GidsVerhalenTab {
             }
 
             @Override
-            public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+            public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
                 GidsTekst.alinea(g, c, x + in, y + 2, w - in - 4, scale, kleur);
             }
         };
@@ -310,9 +310,9 @@ public final class GidsVerhalenTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
             g.fill(x + 1, y + 1, x + w - 1, y + 23, 0x20F7B6CB);
-            g.renderItem(icoon, x + 4, y + 4);
+            g.item(icoon, x + 4, y + 4);
             int tx = x + 26, bar = 60;
             GidsTekst.passend(g, statusRegel(v), tx, y + 5, w - 26 - bar - 12, 0.875f, kleur(v), false);
             GidsTekst.passend(g, Component.translatable("gui.guhs.verhalen.stappen_telling", v.stap(), v.stappen()), tx, y + 15, w - 26 - bar - 12, 0.625f, LICHT, false);
@@ -339,8 +339,8 @@ public final class GidsVerhalenTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
-            g.renderItem(icoon, x + 6, y + 1);
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
+            g.item(icoon, x + 6, y + 1);
             int rw = Math.round(GidsTekst.font().width(rechts) * 0.75f);
             GidsTekst.passend(g, naam, x + 26, y + 5, w - 26 - rw - 12, 0.875f, ok ? TEKST : DONKER, false);
             GidsTekst.schaal(g, rechts, x + w - 6, y + 6, 0.75f, ok ? GROEN : ROZE, true);
@@ -353,7 +353,7 @@ public final class GidsVerhalenTab {
     }
 
     static ItemStack stack(String id) {
-        var item = BuiltInRegistries.ITEM.get(ResourceLocation.tryParse(id) == null ? ResourceLocation.withDefaultNamespace("book") : ResourceLocation.tryParse(id));
+        var item = BuiltInRegistries.ITEM.get(Identifier.tryParse(id) == null ? Identifier.withDefaultNamespace("book") : Identifier.tryParse(id));
         return new ItemStack(item == Items.AIR ? Items.BOOK : item);
     }
 }

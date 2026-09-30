@@ -9,11 +9,11 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.speelgoed.KnabbelbalEntity;
@@ -25,8 +25,8 @@ import nl.juiced.guhs.feature.speelgoed.KnabbelbalEntity;
  */
 public class KnabbelbalRenderer extends EntityRenderer<KnabbelbalEntity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Guhs.id("knabbelbal"), "main");
-    private static final ResourceLocation VOL = Guhs.id("textures/entity/knabbelbal.png");
-    private static final ResourceLocation LEEG = Guhs.id("textures/entity/knabbelbal_leeg.png");
+    private static final Identifier VOL = Guhs.id("textures/entity/knabbelbal.png");
+    private static final Identifier LEEG = Guhs.id("textures/entity/knabbelbal_leeg.png");
     private final ModelPart bal;
 
     public KnabbelbalRenderer(EntityRendererProvider.Context context) {
@@ -63,7 +63,7 @@ public class KnabbelbalRenderer extends EntityRenderer<KnabbelbalEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(KnabbelbalEntity entity) {
+    public Identifier getTextureLocation(KnabbelbalEntity entity) {
         return entity.isVol() ? VOL : LEEG;
     }
 }

@@ -26,6 +26,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.band.BandVlaggen;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * The invisible seat of a toy (glijbaantje, wip, schommel): one per seat, with a guh or a player on it. Where it is comes
  * from the toy ({@link ToestelBlock#zitPlekWereld}) at every tick, on server and client alike (so the ride is smooth
@@ -69,7 +70,7 @@ public class ZitjeEntity extends Entity {
         if (p == null) {
             return null;
         }
-        z.moveTo(p.x, p.y, p.z, t.kijkYaw(level, toestel, state, z, level.getGameTime()), 0);
+        z.snapTo(p.x, p.y, p.z, t.kijkYaw(level, toestel, state, z, level.getGameTime()), 0);
         level.addFreshEntity(z);
         rijder.stopRiding();
         if (!rijder.startRiding(z, true)) {
@@ -134,7 +135,7 @@ public class ZitjeEntity extends Entity {
         super.tick();
         BlockState state = level().getBlockState(toestel());
         if (!(state.getBlock() instanceof ToestelBlock t)) {
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 klaar(false);
             }
             return;
@@ -142,7 +143,7 @@ public class ZitjeEntity extends Entity {
         long nu = level().getGameTime();
         Vec3 p = t.zitPlekWereld(level(), toestel(), state, this, nu);
         if (p == null) {
-            if (!level().isClientSide) {
+            if (!level().isClientSide()) {
                 klaar(true);
             }
             return;
@@ -170,7 +171,7 @@ public class ZitjeEntity extends Entity {
 
     /** The ride is over: a guh gets its hearts (when it rode to the end), everyone gets off, the seat goes. */
     public void klaar(boolean beloon) {
-        if (klaar || level().isClientSide) {
+        if (klaar || level().isClientSide()) {
             return;
         }
         klaar = true;
@@ -193,7 +194,7 @@ public class ZitjeEntity extends Entity {
     @Override
     protected void removePassenger(Entity passenger) {
         super.removePassenger(passenger);
-        if (!level().isClientSide && getPassengers().isEmpty()) {
+        if (!level().isClientSide() && getPassengers().isEmpty()) {
             if (passenger instanceof GuhEntity g) {
                 BandVlaggen.zet(g, BandVlaggen.SPEELT, false);
             }
@@ -266,25 +267,25 @@ public class ZitjeEntity extends Entity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        NbtUtils.readBlockPos(tag, "Toestel").ifPresent(p -> entityData.set(TOESTEL, p));
-        entityData.set(PLEK, tag.getInt("Plek"));
-        entityData.set(START, tag.getInt("Start"));
-        entityData.set(RONDJES, Math.max(1, tag.getInt("Rondjes")));
-        eind = tag.getLong("Eind");
-        if (tag.hasUUID("Duwer")) {
-            duwer = tag.getUUID("Duwer");
+        (tag).read("Toestel", BlockPos.CODEC).ifPresent(p -> entityData.set(TOESTEL, p));
+        entityData.set(PLEK, tag.getIntOr("Plek", 0));
+        entityData.set(START, tag.getIntOr("Start", 0));
+        entityData.set(RONDJES, Math.max(1, tag.getIntOr("Rondjes", 0)));
+        eind = tag.getLongOr("Eind", 0L);
+        if (tag.read("Duwer", UUIDUtil.CODEC).isPresent()) {
+            duwer = tag.read("Duwer", UUIDUtil.CODEC).orElseThrow();
         }
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
-        tag.put("Toestel", NbtUtils.writeBlockPos(toestel()));
+        tag.store("Toestel", BlockPos.CODEC, toestel());
         tag.putInt("Plek", plek());
         tag.putInt("Start", start());
         tag.putInt("Rondjes", rondjes());
         tag.putLong("Eind", eind);
         if (duwer != null) {
-            tag.putUUID("Duwer", duwer);
+            tag.store("Duwer", UUIDUtil.CODEC, duwer);
         }
     }
 }

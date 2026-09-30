@@ -9,7 +9,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import nl.juiced.guhs.quest.GuhAdvancements;
 
@@ -34,7 +34,7 @@ public class GuhdrankjeItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             for (MobEffectInstance effect : brouwsel.effects()) {
                 entity.addEffect(new MobEffectInstance(effect));
             }
@@ -43,7 +43,7 @@ public class GuhdrankjeItem extends Item {
                 player.awardStat(Stats.ITEM_USED.get(this));
                 GuhAdvancements.grant(player, "guhdrankje_gedronken");
                 if (brouwsel == Brouwsel.VAHOEGHEID) {
-                    player.displayClientMessage(Component.translatable("quest.guhs.spiesburcht.drank_vahoeg").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                    player.sendOverlayMessage(Component.translatable("quest.guhs.spiesburcht.drank_vahoeg").withStyle(ChatFormatting.LIGHT_PURPLE));
                 }
             }
         }
@@ -60,12 +60,12 @@ public class GuhdrankjeItem extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
+    public ItemUseAnimation getUseAnimation(ItemStack stack) {
+        return ItemUseAnimation.DRINK;
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         return ItemUtils.startUsingInstantly(level, player, hand);
     }
 

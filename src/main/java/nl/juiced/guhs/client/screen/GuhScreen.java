@@ -6,7 +6,7 @@ import java.util.Locale;
 import java.util.function.Function;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -258,22 +258,22 @@ public class GuhScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + PANEL_W + 1, top + PANEL_H + 1, COLOR_BORDER);
         g.fill(left, top, left + PANEL_W, top + PANEL_H, COLOR_PANEL);
 
         Component size = Component.translatable("gui.guhs.menu.size", String.format(Locale.ROOT, "%.1f", guh.getGuhScale() * guh.getAgeScale() * 1.45f));
         int sw = font.width(size);
-        g.drawString(font, size, left + PANEL_W - 10 - sw, top + 8, COLOR_BORDER);
+        g.text(font, size, left + PANEL_W - 10 - sw, top + 8, COLOR_BORDER);
         fitted(g, guh.getDisplayName(), left + 10, top + 8, PANEL_W - 30 - sw, COLOR_TEXT, mouseX, mouseY);
         Component personality = Component.translatable("gui.guhs.menu.personality", guh.getPersonality().displayName());
         int pw = font.width(personality);
         int pxp = left + PANEL_W - 10 - pw;
-        g.drawString(font, personality, pxp, top + 20, 0xFFFFD27A);
+        g.text(font, personality, pxp, top + 20, 0xFFFFD27A);
         fitted(g, rideableText(), left + 10, top + 20, PANEL_W - 30 - pw, 0xFFD8B8C8, mouseX, mouseY);
         if (mouseX >= pxp && mouseX <= pxp + pw && mouseY >= top + 18 && mouseY <= top + 30) {
-            g.renderTooltip(font, personalityTooltip(), mouseX, mouseY);
+            g.setTooltipForNextFrame(font, personalityTooltip(), mouseX, mouseY);
         }
 
         float hp = guh.getHealth();
@@ -283,7 +283,7 @@ public class GuhScreen extends Screen {
         int barW = PANEL_W - 20;
         g.fill(barX, barY, barX + barW, barY + 12, COLOR_HP_BG);
         g.fill(barX, barY, barX + (int) (barW * Mth.clamp(hp / max, 0f, 1f)), barY + 12, COLOR_HP);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.menu.hp", Mth.ceil(hp), Mth.ceil(max)), barX + barW / 2, barY + 2, 0xFFFFFFFF);
+        g.centeredText(font, Component.translatable("gui.guhs.menu.hp", Mth.ceil(hp), Mth.ceil(max)), barX + barW / 2, barY + 2, 0xFFFFFFFF);
 
         int px = left + 8;
         int py = top + 58;
@@ -292,15 +292,15 @@ public class GuhScreen extends Screen {
     }
 
     /** Text that stops ("...") before `maxWidth`; hover it to read all of it. */
-    private void fitted(GuiGraphics g, Component text, int x, int y, int maxWidth, int colour, int mouseX, int mouseY) {
+    private void fitted(GuiGraphicsExtractor g, Component text, int x, int y, int maxWidth, int colour, int mouseX, int mouseY) {
         if (font.width(text) <= maxWidth) {
-            g.drawString(font, text, x, y, colour);
+            g.text(font, text, x, y, colour);
             return;
         }
         String cut = font.plainSubstrByWidth(text.getString(), maxWidth - font.width("...")) + "...";
-        g.drawString(font, cut, x, y, colour);
+        g.text(font, cut, x, y, colour);
         if (mouseX >= x && mouseX <= x + maxWidth && mouseY >= y - 2 && mouseY <= y + 10) {
-            g.renderTooltip(font, font.split(text, 240), mouseX, mouseY);
+            g.setTooltipForNextFrame(font, font.split(text, 240), mouseX, mouseY);
         }
     }
 
@@ -381,13 +381,13 @@ public class GuhScreen extends Screen {
         }
 
         @Override
-        public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-            super.renderBackground(g, mouseX, mouseY, partialTick);
+        public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+            super.extractBackground(g, mouseX, mouseY, partialTick);
             int x = (width - 220) / 2;
             int y = (height - 100) / 2 - 10;
             g.fill(x - 1, y - 1, x + 221, y + 121, COLOR_BORDER);
             g.fill(x, y, x + 220, y + 120, COLOR_PANEL);
-            g.drawCenteredString(font, Component.translatable("gui.guhs.menu.sounds.title", guh.getDisplayName()), width / 2, y + 10, COLOR_TEXT);
+            g.centeredText(font, Component.translatable("gui.guhs.menu.sounds.title", guh.getDisplayName()), width / 2, y + 10, COLOR_TEXT);
         }
 
         @Override

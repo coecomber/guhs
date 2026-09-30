@@ -21,7 +21,7 @@ public final class KamperenEvents {
     public static void onSetSpawn(PlayerSetSpawnEvent event) {
         if (event.getNewSpawn() != null && !event.isForced() && event.getEntity().level().getBlockState(event.getNewSpawn()).getBlock() instanceof SlaapzakBlock) {
             event.setCanceled(true);
-            event.getEntity().displayClientMessage(Component.translatable("gui.guhs.kamperen.geen_thuis").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            event.getEntity().sendOverlayMessage(Component.translatable("gui.guhs.kamperen.geen_thuis").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -40,7 +40,7 @@ public final class KamperenEvents {
     /** A whole night in a slaapzak: uitgerust, the counter, the advancement. */
     public static void uitgeslapen(ServerPlayer player) {
         player.addEffect(new MobEffectInstance(KamperenFeature.UITGERUST, UITGERUST_TICKS, 0));
-        player.displayClientMessage(Component.translatable("gui.guhs.kamperen.uitgerust").withStyle(ChatFormatting.LIGHT_PURPLE), false);
+        player.sendSystemMessage(Component.translatable("gui.guhs.kamperen.uitgerust").withStyle(ChatFormatting.LIGHT_PURPLE));
         KnusVoortgang.tel(player, Verhalen.UITGESLAPEN, 1);
         GuhAdvancements.grant(player, "kamperen_slaapzak");
         Buiten.toon(player, "kamperen_slaapzak");

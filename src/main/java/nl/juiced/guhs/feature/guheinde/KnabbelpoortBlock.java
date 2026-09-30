@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.Portal;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -68,7 +68,7 @@ public class KnabbelpoortBlock extends BaseEntityBlock implements Portal {
 
     @Nullable
     @Override
-    public DimensionTransition getPortalDestination(ServerLevel level, net.minecraft.world.entity.Entity entity, BlockPos pos) {
+    public TeleportTransition getPortalDestination(ServerLevel level, net.minecraft.world.entity.Entity entity, BlockPos pos) {
         return level.getBlockEntity(pos) instanceof Entity poort ? GuheindeReis.poortDestination(level, entity, pos, poort) : null;
     }
 
@@ -115,7 +115,7 @@ public class KnabbelpoortBlock extends BaseEntityBlock implements Portal {
         protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
             super.saveAdditional(tag, registries);
             if (exit != null) {
-                tag.put("exit_portal", NbtUtils.writeBlockPos(exit));
+                tag.store("exit_portal", BlockPos.CODEC, exit);
             }
             tag.putBoolean("ExactTeleport", exact);
             if (terug) {
@@ -126,9 +126,9 @@ public class KnabbelpoortBlock extends BaseEntityBlock implements Portal {
         @Override
         protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
             super.loadAdditional(tag, registries);
-            exit = NbtUtils.readBlockPos(tag, "exit_portal").orElse(null);
-            exact = tag.getBoolean("ExactTeleport");
-            terug = tag.getBoolean("Terug");
+            exit = (tag).read("exit_portal", BlockPos.CODEC).orElse(null);
+            exact = tag.getBooleanOr("ExactTeleport", false);
+            terug = tag.getBooleanOr("Terug", false);
         }
     }
 }

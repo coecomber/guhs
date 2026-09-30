@@ -19,7 +19,7 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket;
+import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -235,10 +235,10 @@ public final class KatapultGame {
         data.putBoolean("Mine", game.isPlayedBy(player));
         data.putString("Player", game.playerName);
         data.putInt("Fort", game.fort + 1);
-        data.putInt("Runs", GuhQuests.saved(player).getInt(RUNS));
+        data.putInt("Runs", GuhQuests.saved(player).getIntOr(RUNS, 0));
         for (Niveau n : Niveau.values()) {
             data.putInt("Best_" + n.id(), best(player, n));
-            List<Scorebord.Entry> top = Scorebord.top(player.server, board(n));
+            List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), board(n));
             data.putString("RecordName_" + n.id(), top.isEmpty() ? "" : top.get(0).name());
             data.putInt("RecordScore_" + n.id(), top.isEmpty() ? -1 : top.get(0).score());
         }
@@ -289,7 +289,7 @@ public final class KatapultGame {
             return;
         }
         player = p.getUUID();
-        playerName = p.getGameProfile().getName();
+        playerName = p.getGameProfile().name();
         PLAYERS.put(player, npcId);
         niveau = level;
         fort = 0;
@@ -405,7 +405,7 @@ public final class KatapultGame {
     }
 
     public boolean fireWith(ServerPlayer p, float power, Vec3 look) {
-        ServerLevel world = p.serverLevel();
+        ServerLevel world = p.level();
         if (phase != Phase.AIM || ballsLeft <= 0) {
             flash(p, Component.translatable(phase == Phase.FLYING || phase == Phase.SETTLE ? "gui.guhs.katapult.wait_ball"
                     : "gui.guhs.katapult.wait_fort").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -703,7 +703,7 @@ public final class KatapultGame {
         }
         if (isRunning() && npc.tickCount % 10 == 0 && (phase == Phase.AIM || phase == Phase.FLYING || phase == Phase.SETTLE)
                 && world.getGameTime() >= quietUntil) {
-            p.displayClientMessage(status(), true);
+            p.sendOverlayMessage(status());
         }
     }
 
@@ -773,7 +773,7 @@ public final class KatapultGame {
         if (best < 0 || runScore > best) {
             saved.putInt(BEST + niveau.id(), runScore);
         }
-        saved.putInt(RUNS, saved.getInt(RUNS) + 1);
+        saved.putInt(RUNS, saved.getIntOr(RUNS, 0) + 1);
         int munten = munten(niveau, runStars, record);
         p.sendSystemMessage(Component.translatable("quest.guhs.katapult.run_klaar", niveau.naam()).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         StringBuilder line = new StringBuilder();
@@ -797,7 +797,7 @@ public final class KatapultGame {
             Minigames.give(p, new ItemStack(ModItems.KAAS_KNABBELS.get(), knabbels));
             p.sendSystemMessage(Component.translatable("quest.guhs.katapult.knabbels", knabbels).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
-        if (!saved.getBoolean(FIRST)) {
+        if (!saved.getBooleanOr(FIRST, false)) {
             saved.putBoolean(FIRST, true);
             Minigames.give(p, new ItemStack(ModItems.GEFRITUURDE_KAASKNABBELS.get(), 4));
             p.sendSystemMessage(Component.translatable("quest.guhs.katapult.first").withStyle(ChatFormatting.GOLD));
@@ -854,7 +854,7 @@ public final class KatapultGame {
     public static boolean hasKapiteinNearby(ServerPlayer p) {
         UUID npc = PLAYERS.get(p.getUUID());
         KatapultGame game = npc == null ? null : GAMES.get(npc);
-        return game != null && p.serverLevel().getEntity(npc) instanceof GuhNpcEntity && p.serverLevel().getGameTime() - game.lastTick <= STALE_TICKS;
+        return game != null && p.level().getEntity(npc) instanceof GuhNpcEntity && p.level().getGameTime() - game.lastTick <= STALE_TICKS;
     }
 
     // --- the catapult and the plot -------------------------------------------------------------------------------------------------
@@ -902,13 +902,13 @@ public final class KatapultGame {
     }
 
     private void load(CompoundTag data) {
-        CompoundTag tag = data.getCompound("Katapult");
+        CompoundTag tag = data.getCompoundOrEmpty("Katapult");
         if (!tag.contains("Werper") || !tag.contains("Plek")) {
             return;
         }
-        werper = BlockPos.of(tag.getLong("Werper"));
-        plek = BlockPos.of(tag.getLong("Plek"));
-        Direction w = Direction.byName(tag.getString("WerperFacing")), f = Direction.byName(tag.getString("PlekFacing"));
+        werper = BlockPos.of(tag.getLongOr("Werper", 0L));
+        plek = BlockPos.of(tag.getLongOr("Plek", 0L));
+        Direction w = Direction.byName(tag.getStringOr("WerperFacing", "")), f = Direction.byName(tag.getStringOr("PlekFacing", ""));
         werperFacing = w == null || w.getAxis().isVertical() ? Direction.NORTH : w;
         plekFacing = f == null || f.getAxis().isVertical() ? Direction.SOUTH : f;
         scanned = true;
@@ -941,7 +941,7 @@ public final class KatapultGame {
 
     public static int best(Player p, Niveau niveau) {
         CompoundTag saved = GuhQuests.saved(p);
-        return saved.contains(BEST + niveau.id()) ? saved.getInt(BEST + niveau.id()) : -1;
+        return saved.contains(BEST + niveau.id()) ? saved.getIntOr(BEST + niveau.id(), 0) : -1;
     }
 
     /** The wind as the player sees it from the catapult: arrows (→ pushes to the right) and a force 1-3. */
@@ -979,15 +979,15 @@ public final class KatapultGame {
         Inventory inv = p.getInventory();
         ItemStack stack = PluisballenItem.stack(count, niveau == Niveau.MAKKELIJK);
         if (inv.getSelected().isEmpty()) {
-            inv.setItem(inv.selected, stack);
+            inv.setItem(inv.getSelectedSlot(), stack);
             return;
         }
         for (int i = 0; i < Inventory.getSelectionSize(); i++) {
             if (inv.getItem(i).isEmpty()) {
                 inv.setItem(i, stack);
-                inv.selected = i;
+                inv.setSelectedSlot(i);
                 if (p.connection != null) {
-                    p.connection.send(new ClientboundSetCarriedItemPacket(i));
+                    p.connection.send(new ClientboundSetHeldSlotPacket(i));
                 }
                 return;
             }
@@ -995,7 +995,7 @@ public final class KatapultGame {
         int free = inv.getFreeSlot();
         if (free >= 0) {
             inv.setItem(free, inv.getSelected());
-            inv.setItem(inv.selected, stack);
+            inv.setItem(inv.getSelectedSlot(), stack);
         } else {
             inv.add(stack);
         }
@@ -1024,8 +1024,8 @@ public final class KatapultGame {
     }
 
     private void flash(ServerPlayer p, Component message) {
-        p.displayClientMessage(message, true);
-        quietUntil = p.serverLevel().getGameTime() + 30;
+        p.sendOverlayMessage(message);
+        quietUntil = p.level().getGameTime() + 30;
     }
 
     private static void title(ServerPlayer p, Component title, Component sub, int in, int stay, int out) {

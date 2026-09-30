@@ -15,6 +15,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Knabbelhappen: two kaasknabbels per lane swing on strings from the beam, towards you and away again. Stand on your
  * mat and bite (hit or right-click) them when they swing close: a normal one is 1 point, a golden one 3. A bitten
@@ -49,7 +50,7 @@ public final class Knabbelhappen implements Wedstrijd.Spel {
         Staat s = staat(d);
         w.naarStart(d, p, level, Speelvelden.HAP_MAT);
         for (int i = 0; i < 2; i++) {
-            SpelDing ding = KnabbelspelenFeature.DING.get().create(level);
+            SpelDing ding = KnabbelspelenFeature.DING.get().create(level, EntitySpawnReason.TRIGGERED);
             if (ding == null) {
                 continue;
             }
@@ -61,7 +62,7 @@ public final class Knabbelhappen implements Wedstrijd.Spel {
             ding.as = w.anker.vector(0, Speelvelden.veld(Onderdeel.KNABBELHAPPEN).richting()).normalize();
             nieuw(ding, level.getRandom(), 0f, i == 1);
             Vec3 at = ding.slinger(0);
-            ding.moveTo(at.x, at.y, at.z, 0, 0);
+            ding.snapTo(at.x, at.y, at.z, 0, 0);
             level.addFreshEntity(ding);
             s.dingen.add(ding);
         }
@@ -87,8 +88,8 @@ public final class Knabbelhappen implements Wedstrijd.Spel {
         opMat(w, d, p, level);
         Staat s = staat(d);
         if (t % 5 == 0) {
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.hap.bar", s.punten,
-                    (Onderdeel.KNABBELHAPPEN.maxTicks - t + 19) / 20).withStyle(ChatFormatting.AQUA), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.hap.bar", s.punten,
+                    (Onderdeel.KNABBELHAPPEN.maxTicks - t + 19) / 20).withStyle(ChatFormatting.AQUA));
         }
     }
 
@@ -98,7 +99,7 @@ public final class Knabbelhappen implements Wedstrijd.Spel {
         if (Math.abs(b[0] - Speelvelden.HAP_MAT) > 1.3 || Math.abs(b[1]) > 1.6) {
             Vec3 m = Speelvelden.punt(w.anker, Onderdeel.KNABBELHAPPEN, d.baan, Speelvelden.HAP_MAT, 0, Speelvelden.G + 1);
             Wedstrijd.teleport(p, level, m.x, m.y, m.z, p.getYRot());
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.hap.mat").withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.hap.mat").withStyle(ChatFormatting.GOLD));
         }
     }
 
@@ -113,7 +114,7 @@ public final class Knabbelhappen implements Wedstrijd.Spel {
             return;
         }
         if (p.getEyePosition().distanceTo(ding.position()) > BIJT) {
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.hap.te_ver").withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.hap.te_ver").withStyle(ChatFormatting.GRAY));
             return;
         }
         hapRaak(w, d, p, ding);
@@ -122,7 +123,7 @@ public final class Knabbelhappen implements Wedstrijd.Spel {
     /** (Also for the tests) the bite counts. */
     static void hapRaak(Wedstrijd w, Wedstrijd.Deelnemer d, ServerPlayer p, SpelDing ding) {
         Staat s = staat(d);
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         boolean goud = ding.goud();
         s.punten += goud ? 3 : 1;
         if (goud) {
@@ -132,7 +133,7 @@ public final class Knabbelhappen implements Wedstrijd.Spel {
         level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, ding.stack()), ding.getX(), ding.getY() + 0.2, ding.getZ(), 10, 0.15, 0.15, 0.15, 0.08);
         if (goud) {
             level.sendParticles(ParticleTypes.WAX_ON, ding.getX(), ding.getY() + 0.2, ding.getZ(), 8, 0.3, 0.3, 0.3, 0.05);
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.hap.goud", s.punten).withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.hap.goud", s.punten).withStyle(ChatFormatting.GOLD));
         }
         nieuw(ding, level.getRandom(), Math.min(1f, w.ticks / (float) Onderdeel.KNABBELHAPPEN.maxTicks), level.getRandom().nextBoolean());
     }

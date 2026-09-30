@@ -15,10 +15,10 @@ import nl.juiced.guhs.client.SittingGuhRenderers;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.boerderij.BoerderijDier;
 import nl.juiced.guhs.feature.boerderij.BoerderijFeature;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.cache.model.GeoBone;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * Client side of the Guhboerderij: the GeckoLib renderers of the three animals (babies smaller; a shorn guhschaapje shows
@@ -47,7 +47,7 @@ public final class BoerderijClient {
         public DierRenderer(EntityRendererProvider.Context context, String naam, float schaduw) {
             super(context, new DefaultedEntityGeoModel<T>(Guhs.id(naam), true) {
                 @Override
-                public void setCustomAnimations(T dier, long instanceId, AnimationState<T> state) {
+                public void setCustomAnimations(T dier, long instanceId, AnimationTest<T> state) {
                     super.setCustomAnimations(dier, instanceId, state);
                     GeoBone wol = getAnimationProcessor().getBone("wol");
                     GeoBone kaal = getAnimationProcessor().getBone("kaal");

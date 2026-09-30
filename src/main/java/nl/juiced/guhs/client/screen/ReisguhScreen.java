@@ -1,7 +1,7 @@
 package nl.juiced.guhs.client.screen;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -13,6 +13,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.network.MaagPayloads;
 import nl.juiced.guhs.quest.Reisguh;
 
+import net.minecraft.core.UUIDUtil;
 /** A Reisguh's menu: its name (rename it) and every other Reisguh you've discovered (click to travel there). */
 public class ReisguhScreen extends Screen {
     private static final int W = 280, H = 236, PER_PAGE = 7;
@@ -38,18 +39,18 @@ public class ReisguhScreen extends Screen {
         top = (height - H) / 2;
         name = new EditBox(font, left + 12, top + 26, W - 90, 18, Component.translatable("gui.guhs.reis.name"));
         name.setMaxLength(Reisguh.MAX_NAME);
-        name.setValue(data.getString("Name"));
+        name.setValue(data.getStringOr("Name", ""));
         addRenderableWidget(name);
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.menu.rename"),
                         b -> PacketDistributor.sendToServer(new MaagPayloads.ReisAction(npcId, Reisguh.RENAME, name.getValue())))
                 .bounds(left + W - 74, top + 25, 62, 20).tooltip(GuhScreen.tip("gui.guhs.reis.rename.tooltip")).build());
-        ListTag points = data.getList("Points", Tag.TAG_COMPOUND);
+        ListTag points = data.getListOrEmpty("Points");
         int pages = Math.max(1, (points.size() + PER_PAGE - 1) / PER_PAGE);
         page = Math.min(page, pages - 1);
         for (int i = 0; i < PER_PAGE && page * PER_PAGE + i < points.size(); i++) {
-            CompoundTag p = points.getCompound(page * PER_PAGE + i);
-            String id = p.getUUID("Id").toString();
-            addRenderableWidget(Button.builder(Component.translatable("gui.guhs.reis.to", p.getString("Name"), p.getInt("Distance")),
+            CompoundTag p = points.getCompoundOrEmpty(page * PER_PAGE + i);
+            String id = p.read("Id", UUIDUtil.CODEC).orElseThrow().toString();
+            addRenderableWidget(Button.builder(Component.translatable("gui.guhs.reis.to", p.getStringOr("Name", ""), p.getIntOr("Distance", 0)),
                             b -> {
                                 PacketDistributor.sendToServer(new MaagPayloads.ReisAction(npcId, Reisguh.TRAVEL, id));
                                 onClose();
@@ -79,15 +80,15 @@ public class ReisguhScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFF8FD3F5);
         g.fill(left, top, left + W, top + H, 0xE81A2638);
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFE6F6FF);
-        g.drawString(font, Component.translatable("gui.guhs.reis.where"), left + 12, top + 53, 0xFF9FD8F0);
-        if (data.getList("Points", Tag.TAG_COMPOUND).isEmpty()) {
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFE6F6FF);
+        g.text(font, Component.translatable("gui.guhs.reis.where"), left + 12, top + 53, 0xFF9FD8F0);
+        if (data.getListOrEmpty("Points").isEmpty()) {
             for (var line : font.split(Component.translatable("gui.guhs.reis.none"), W - 24)) {
-                g.drawString(font, line, left + 12, top + 70, 0xFFB0C8D8);
+                g.text(font, line, left + 12, top + 70, 0xFFB0C8D8);
                 break;
             }
         }

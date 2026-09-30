@@ -34,7 +34,7 @@ public class KnabbelkristalEntity extends EndCrystal {
         if (isInvulnerableTo(source) || source.getEntity() instanceof OpperMikaEntity || source.getEntity() instanceof HongerigeEnderguhEntity) {
             return false;
         }
-        if (!isRemoved() && !level().isClientSide) {
+        if (!isRemoved() && !level().isClientSide()) {
             smash(source);
         }
         return true;
@@ -42,7 +42,7 @@ public class KnabbelkristalEntity extends EndCrystal {
 
     @Override
     public void kill() {
-        if (!level().isClientSide && !isRemoved()) {
+        if (!level().isClientSide() && !isRemoved()) {
             smash(damageSources().generic());
         }
     }

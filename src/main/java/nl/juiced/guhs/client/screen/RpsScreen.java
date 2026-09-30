@@ -1,7 +1,7 @@
 package nl.juiced.guhs.client.screen;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -48,20 +48,20 @@ public class RpsScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFF8C1428);
         g.fill(left, top, left + W, top + H, 0xF0241018);
-        g.drawCenteredString(font, title, width / 2, top + 10, 0xFFFFD0D8);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.rps.rules"), width / 2, top + 26, 0xFFB08090);
+        g.centeredText(font, title, width / 2, top + 10, 0xFFFFD0D8);
+        g.centeredText(font, Component.translatable("gui.guhs.rps.rules"), width / 2, top + 26, 0xFFB08090);
         StringBuilder stars = new StringBuilder();
         for (int i = 0; i < GuhQuests.RPS_WINS_NEEDED; i++) {
             stars.append(i < state.streak() ? "★ " : "☆ ");
         }
-        g.drawCenteredString(font, Component.literal(stars.toString().trim()).withStyle(ChatFormatting.GOLD), width / 2, top + 48, 0xFFFFD27A);
+        g.centeredText(font, Component.literal(stars.toString().trim()).withStyle(ChatFormatting.GOLD), width / 2, top + 48, 0xFFFFD27A);
         if (state.mikaChoice() >= 0) {
             Component mika = Component.translatable("gui.guhs.rps." + GuhQuests.Rps.values()[state.mikaChoice()].name().toLowerCase(java.util.Locale.ROOT));
-            g.drawCenteredString(font, state.won() ? Component.translatable("gui.guhs.rps.win") : Component.translatable("gui.guhs.rps.lose", mika),
+            g.centeredText(font, state.won() ? Component.translatable("gui.guhs.rps.win") : Component.translatable("gui.guhs.rps.lose", mika),
                     width / 2, top + 72, state.won() ? 0xFF7CFF8A : 0xFFFF7C7C);
         }
     }

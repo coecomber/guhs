@@ -15,7 +15,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -95,33 +94,33 @@ public class ReuzenschelpBlock extends HorizontalDirectionalBlock implements Sim
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             take(serverPlayer, pos);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
                                               InteractionHand hand, BlockHitResult hit) {
         if (hand != InteractionHand.MAIN_HAND) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
-        if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             take(serverPlayer, pos);
         }
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Takes the pearl out of the shell at pos (it closes); false (and a hint) when the shell is still closed. */
     public static boolean take(ServerPlayer player, BlockPos pos) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         BlockState state = level.getBlockState(pos);
         if (!(state.getBlock() instanceof ReuzenschelpBlock)) {
             return false;
         }
         if (!state.getValue(PAREL)) {
-            player.displayClientMessage(Component.translatable("quest.guhs.onderwater.shell_closed").withStyle(ChatFormatting.AQUA), true);
+            player.sendOverlayMessage(Component.translatable("quest.guhs.onderwater.shell_closed").withStyle(ChatFormatting.AQUA));
             level.playSound(null, pos, SoundEvents.BONE_BLOCK_HIT, SoundSource.BLOCKS, 0.8f, 1.2f);
             return false;
         }
@@ -133,7 +132,7 @@ public class ReuzenschelpBlock extends HorizontalDirectionalBlock implements Sim
         level.sendParticles(ParticleTypes.END_ROD, pos.getX() + 0.5, pos.getY() + 0.6, pos.getZ() + 0.5, 10, 0.25, 0.2, 0.25, 0.03);
         level.playSound(null, pos, SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.BLOCKS, 0.8f, 1.4f);
         level.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.6f, 1.2f);
-        player.displayClientMessage(Component.translatable("quest.guhs.onderwater.shell_pearl").withStyle(ChatFormatting.AQUA), true);
+        player.sendOverlayMessage(Component.translatable("quest.guhs.onderwater.shell_pearl").withStyle(ChatFormatting.AQUA));
         return true;
     }
 

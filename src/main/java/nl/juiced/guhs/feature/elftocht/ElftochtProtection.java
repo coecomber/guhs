@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -25,7 +25,7 @@ public final class ElftochtProtection {
 
     /** Is this spot part of an Elf-Guhjestocht? */
     public static boolean inTocht(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().registryOrThrow(Registries.STRUCTURE).get(ElftochtFeature.STRUCTURE);
+        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(ElftochtFeature.STRUCTURE);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 
@@ -42,7 +42,7 @@ public final class ElftochtProtection {
         if (!protectedSpot || player.getAbilities().instabuild) {
             return false;
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.elftocht.no_build").withStyle(ChatFormatting.AQUA), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.elftocht.no_build").withStyle(ChatFormatting.AQUA));
         return true;
     }
 
@@ -64,7 +64,7 @@ public final class ElftochtProtection {
     /** Using an item on a block (buckets, flint and steel, axes...): not on the tour. Drinks and food are fine. */
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide || event.getItemStack().isEmpty() || event.getItemStack().has(net.minecraft.core.component.DataComponents.FOOD)) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty() || event.getItemStack().has(net.minecraft.core.component.DataComponents.FOOD)) {
             return;
         }
         if (denied(event.getEntity(), event.getPos()) || denied(event.getEntity(), event.getPos().relative(event.getFace() == null ? net.minecraft.core.Direction.UP : event.getFace()))) {
@@ -74,7 +74,7 @@ public final class ElftochtProtection {
 
     @SubscribeEvent
     public static void onUseItem(PlayerInteractEvent.RightClickItem event) {
-        if (!event.getLevel().isClientSide && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
+        if (!event.getLevel().isClientSide() && event.getItemStack().getItem() instanceof net.minecraft.world.item.BucketItem
                 && denied(event.getEntity(), event.getEntity().blockPosition())) {
             event.setCanceled(true);
         }

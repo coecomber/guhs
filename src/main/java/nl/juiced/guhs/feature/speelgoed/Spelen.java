@@ -65,8 +65,8 @@ public final class Spelen {
         Dagboek.tel(wie, DagboekStat.SPEELTJES, 1);
         if (Dagboek.eersteKeer(wie, baas, "eerste_speeltje")) {
             Dagboek.wistJeDat(wie, "gui.guhs.wistjedat.speelgoed.eerste_" + speeltje);
-        } else if (level.random.nextInt(4) == 0) {
-            Dagboek.wistJeDat(wie, "gui.guhs.wistjedat.speelgoed." + speeltje + "_" + (1 + level.random.nextInt(2)));
+        } else if (level.getRandom().nextInt(4) == 0) {
+            Dagboek.wistJeDat(wie, "gui.guhs.wistjedat.speelgoed." + speeltje + "_" + (1 + level.getRandom().nextInt(2)));
         }
         if (baas != null) {
             GidsFeature.grant(baas, "lieve_vadsjes/speelgoed_eerste");
@@ -79,7 +79,7 @@ public final class Spelen {
     /** Remembers that the player's guhs played with this kind; true when all four kinds are done. */
     static boolean soort(ServerPlayer player, String speeltje) {
         CompoundTag saved = GuhQuests.saved(player);
-        ListTag lijst = saved.getList(KEY, Tag.TAG_STRING);
+        ListTag lijst = saved.getListOrEmpty(KEY);
         boolean nieuw = lijst.stream().noneMatch(t -> t.getAsString().equals(speeltje));
         if (nieuw) {
             lijst.add(StringTag.valueOf(speeltje));
@@ -90,7 +90,7 @@ public final class Spelen {
 
     /** Which kinds this player's guhs played with (tests, the Guhdex). */
     public static List<String> soorten(Player player) {
-        return GuhQuests.saved(player).getList(KEY, Tag.TAG_STRING).stream().map(Tag::getAsString).toList();
+        return GuhQuests.saved(player).getListOrEmpty(KEY).stream().map(Tag::getAsString).toList();
     }
 
     /** A player plays on a toy themselves (glijbaantje, schommel, wip). */
@@ -110,7 +110,7 @@ public final class Spelen {
     public static void geschopt(ServerPlayer player, KnabbelbalEntity bal) {
         GidsFeature.grant(player, "lieve_vadsjes/speelgoed_schop");
         long tot = player.level().getGameTime() + 60;
-        for (GuhEntity g : player.serverLevel().getEntitiesOfClass(GuhEntity.class, player.getBoundingBox().inflate(12),
+        for (GuhEntity g : player.level().getEntitiesOfClass(GuhEntity.class, player.getBoundingBox().inflate(12),
                 g -> g.getType() == ModEntities.GUH.get() && g.isTame() && player.getUUID().equals(g.getOwnerUUID()) && !g.isOrderedToSit())) {
             g.getPersistentData().putInt(BAL, bal.getId());
             g.getPersistentData().putLong(BAL_TOT, tot);
@@ -119,7 +119,7 @@ public final class Spelen {
 
     /** (GuhHooks.tick) The happy VAHOEG after playing, as soon as the guh stands on its feet again. */
     static void tick(GuhEntity guh) {
-        long juich = guh.getPersistentData().getLong(JUICH);
+        long juich = guh.getPersistentData().getLongOr(JUICH, 0L);
         if (juich == 0 || guh.level().getGameTime() < juich) {
             return;
         }

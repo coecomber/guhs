@@ -9,10 +9,10 @@ import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
-import software.bernie.geckolib.cache.object.GeoBone;
+import com.geckolib.cache.model.GeoBone;
 
 /**
  * 3.0 (Guhverhalen), client only: the look of one guh variant, hooked into GuhRenderer so the owner slice never edits it.
@@ -29,12 +29,12 @@ import software.bernie.geckolib.cache.object.GeoBone;
 public final class VariantUiterlijk {
     public interface Uiterlijk {
         @Nullable
-        default ResourceLocation texture(GuhEntity guh) {
+        default Identifier texture(GuhEntity guh) {
             return null;
         }
 
         @Nullable
-        default ResourceLocation glow(GuhEntity guh) {
+        default Identifier glow(GuhEntity guh) {
             return null;
         }
 
@@ -59,13 +59,13 @@ public final class VariantUiterlijk {
     // --- called by GuhRenderer ---------------------------------------------------------------------------------------
 
     @Nullable
-    public static ResourceLocation texture(GuhEntity guh) {
+    public static Identifier texture(GuhEntity guh) {
         Uiterlijk u = UITERLIJK.get(guh.getVariant());
         return u == null ? null : u.texture(guh);
     }
 
     @Nullable
-    public static ResourceLocation glow(GuhEntity guh) {
+    public static Identifier glow(GuhEntity guh) {
         Uiterlijk u = UITERLIJK.get(guh.getVariant());
         return u == null ? null : u.glow(guh);
     }

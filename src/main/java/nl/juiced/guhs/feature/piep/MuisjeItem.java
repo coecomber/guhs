@@ -7,7 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -46,22 +46,22 @@ public class MuisjeItem extends PiepDierItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (level.isClientSide) {
-            return InteractionResultHolder.success(stack);
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
         }
         ServerPlayer sp = (ServerPlayer) player;
         if (Schouder.heeft(sp)) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.piep.schouder_vol").withStyle(ChatFormatting.GRAY), true);
-            return InteractionResultHolder.fail(stack);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.piep.schouder_vol").withStyle(ChatFormatting.GRAY));
+            return InteractionResult.FAIL;
         }
         PieppiepmuisjeEntity muis = naarMuis(stack, level);
         if (muis == null) {
-            return InteractionResultHolder.fail(stack);
+            return InteractionResult.FAIL;
         }
         Schouder.zet(sp, muis);
         stack.shrink(1);
-        return InteractionResultHolder.consume(stack);
+        return InteractionResult.CONSUME.heldItemTransformedTo(stack);
     }
 }

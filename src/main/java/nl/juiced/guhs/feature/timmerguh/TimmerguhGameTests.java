@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.FrontAndTop;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,8 +23,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.JigsawBlock;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -50,8 +48,6 @@ import nl.juiced.guhs.registry.ModItems;
  * (and changing it is refused), and the bouwplaats jigsaw in every Knuffeldal town (templates and pools).
  * Templates: timmerguh_test_bouw (grass + a little stone roof with six ghost tiles), huisje_test_tuin (24 x 24 grass).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class TimmerguhGameTests {
     private static final String BOUW = "timmerguh_test_bouw";
     private static final String TUIN = "huisje_test_tuin";
@@ -63,7 +59,7 @@ public class TimmerguhGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         TimmerguhVoortgang.zet(p, TimmerguhVoortgang.NIEUW);
         return p;
     }
@@ -83,7 +79,7 @@ public class TimmerguhGameTests {
 
     static int count(ServerPlayer p, Item item) {
         int n = 0;
-        for (ItemStack s : p.getInventory().items) {
+        for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
             if (s.is(item)) {
                 n += s.getCount();
             }
@@ -92,7 +88,7 @@ public class TimmerguhGameTests {
     }
 
     static boolean advancement(ServerPlayer p, String name) {
-        var holder = p.server.getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
+        var holder = p.level().getServer().getAdvancements().get(Guhs.id(name.contains("/") ? name : "quest/" + name));
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
@@ -101,7 +97,7 @@ public class TimmerguhGameTests {
         for (BlockPos pos : Timmerguh.plekken(npc)) {
             if (level.getBlockState(pos).is(TimmerguhFeature.DAKPLEK.get())) {
                 ItemStack stack = ItemStack.EMPTY;
-                for (ItemStack s : p.getInventory().items) {
+                for (ItemStack s : p.getInventory().getNonEquipmentItems()) {
                     if (s.is(TimmerguhFeature.DAKPLUISJE.get())) {
                         stack = s;
                         break;
@@ -116,7 +112,7 @@ public class TimmerguhGameTests {
     // the questline
     // =====================================================================================================================
 
-    @GameTest(template = BOUW, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = BOUW, batch = BATCH, timeoutTicks = 200)
     public static void timmerguhSamenEenHuisjeBouwen(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
@@ -143,7 +139,7 @@ public class TimmerguhGameTests {
                     "step 2: 16 planks and 8 wool taken, six dakpluisjes loaned");
             // a dakpluisje only fits on a ghost tile
             BlockPos steen = helper.absolutePos(new BlockPos(1, 1, 1));
-            ItemStack pluisjes = p.getInventory().items.stream().filter(s -> s.is(TimmerguhFeature.DAKPLUISJE.get())).findFirst().orElseThrow();
+            ItemStack pluisjes = p.getInventory().getNonEquipmentItems().stream().filter(s -> s.is(TimmerguhFeature.DAKPLUISJE.get())).findFirst().orElseThrow();
             helper.assertTrue(!DakpluisjeItem.leg(level, steen, p, pluisjes) && count(p, TimmerguhFeature.DAKPLUISJE.get()) == 6,
                     "not on the grass");
             // step 2: lay them: each ghost tile becomes its roof part; the last one puts the flag up
@@ -199,7 +195,7 @@ public class TimmerguhGameTests {
     }
 
     /** A finished roof starts over (all ghost tiles again, the flag down) when the next player hands in the materials. */
-    @GameTest(template = BOUW, batch = BATCH)
+    @GuhTest(template = BOUW, batch = BATCH)
     public static void timmerguhNieuwDakVoorDeVolgende(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer a = speler(helper, new BlockPos(2, 2, 2)), b = speler(helper, new BlockPos(3, 2, 2));
@@ -241,7 +237,7 @@ public class TimmerguhGameTests {
         return CraftingInput.of(3, 3, grid);
     }
 
-    @GameTest(template = TUIN, batch = BATCH)
+    @GuhTest(template = TUIN, batch = BATCH)
     public static void timmerguhReceptenNaHetBouwboekje(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         var recepten = level.getRecipeManager();
@@ -260,7 +256,7 @@ public class TimmerguhGameTests {
     }
 
     /** A huisje placed without the quest (an old one) still works: residents move in, its screen data, the owner renames it. */
-    @GameTest(template = TUIN, batch = BATCH)
+    @GuhTest(template = TUIN, batch = BATCH)
     public static void timmerguhOudeHuisjesWerkenGewoon(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(12, 2, 12));
@@ -271,7 +267,7 @@ public class TimmerguhGameTests {
             guh.tame(p);
             helper.assertTrue(Huisjes.trekIn(h, guh) && h.bewoners().size() == 1, "a guh moves in");
             helper.assertTrue(HuisjeBlock.bekijk(level, h.pos(), p) == h && HuisjeBlock.bewerk(level, h.pos(), p) == h
-                    && HuisjePayloads.data(p, h).getBoolean("MagBewerken"), "its owner uses it as always");
+                    && HuisjePayloads.data(p, h).getBooleanOr("MagBewerken", false), "its owner uses it as always");
             HuisjePayloads.doe(p, new HuisjePayloads.Doe(h.pos(), HuisjePayloads.Actie.NAAM.ordinal(), "", "Oud Maar Knus", false, -1));
             helper.assertTrue(Huisjes.op(level.getServer(), level.dimension(), h.pos()).naam().equals("Oud Maar Knus"), "renamed");
         } finally {
@@ -284,7 +280,7 @@ public class TimmerguhGameTests {
     // multiplayer: someone else's huisje is read-only
     // =====================================================================================================================
 
-    @GameTest(template = TUIN, batch = BATCH)
+    @GuhTest(template = TUIN, batch = BATCH)
     public static void timmerguhAnderMagAlleenKijken(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer eigenaar = speler(helper, new BlockPos(12, 2, 12)), ander = speler(helper, new BlockPos(13, 2, 12));
@@ -295,7 +291,7 @@ public class TimmerguhGameTests {
             // the other one may look (the screen opens) but not change it
             helper.assertTrue(HuisjeBlock.bekijk(level, h.pos(), ander) == h, "someone else opens the screen");
             var data = HuisjePayloads.data(ander, h);
-            helper.assertTrue(!data.getBoolean("MagBewerken") && data.getString("EigenaarNaam").equals("Juiced"), "read-only, and whose it is");
+            helper.assertTrue(!data.getBooleanOr("MagBewerken", false) && data.getStringOr("EigenaarNaam", "").equals("Juiced"), "read-only, and whose it is");
             helper.assertTrue(HuisjeBlock.bewerk(level, h.pos(), ander) == null, "no guhs or maatjes in with an item");
             HuisjePayloads.doe(ander, new HuisjePayloads.Doe(h.pos(), HuisjePayloads.Actie.NAAM.ordinal(), "", "Van Mij", false, -1));
             GuhEntity zijnGuh = helper.spawn(ModEntities.GUH.get(), new BlockPos(12, 2, 10));
@@ -310,7 +306,7 @@ public class TimmerguhGameTests {
                     "renaming, moving in and moving out are all refused for someone else: " + nu.bewoners());
             helper.assertTrue(Huisjes.vanWie(h).getString().contains("Juiced"), "Dit is het huisje van Juiced");
             // the owner may
-            helper.assertTrue(HuisjePayloads.data(eigenaar, h).getBoolean("MagBewerken") && HuisjeBlock.bewerk(level, h.pos(), eigenaar) == h, "the owner edits");
+            helper.assertTrue(HuisjePayloads.data(eigenaar, h).getBooleanOr("MagBewerken", false) && HuisjeBlock.bewerk(level, h.pos(), eigenaar) == h, "the owner edits");
         } finally {
             weg(helper, eigenaar, ander);
         }
@@ -321,29 +317,29 @@ public class TimmerguhGameTests {
     // the bouwplaats in every town (templates and pools)
     // =====================================================================================================================
 
-    @GameTest(template = TUIN, batch = BATCH)
+    @GuhTest(template = TUIN, batch = BATCH)
     public static void timmerguhBouwplaatsInElkStadje(GameTestHelper helper) {
         var templates = helper.getLevel().getStructureManager();
-        var pools = helper.getLevel().registryAccess().registryOrThrow(Registries.TEMPLATE_POOL);
+        var pools = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL);
         // the plein always hangs hoek_noordwest on one of its corners (its pool has only that one), and that corner's street
         // ends in the bouwplaats jigsaw
         var hoekPool = pools.get(Guhs.id("knuffeldal_stadje/hoek_noordwest"));
         helper.assertTrue(hoekPool != null && hoekPool.size() == 1, "one hoek_noordwest element");
         var plein = templates.get(Guhs.id("knuffeldal_stadje/plein")).orElseThrow();
         long naarNoordwest = plein.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW, true).stream()
-                .filter(j -> j.nbt().getString("pool").equals("guhs:knuffeldal_stadje/hoek_noordwest")).count();
+                .filter(j -> j.nbt().getStringOr("pool", "").equals("guhs:knuffeldal_stadje/hoek_noordwest")).count();
         helper.assertTrue(naarNoordwest == 1, "the plein has the noordwest corner once");
         StructureTemplate hoek = templates.get(Guhs.id("knuffeldal_stadje/hoek_noordwest")).orElseThrow();
         var bp = hoek.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW, true).stream()
-                .filter(j -> j.nbt().getString("name").equals("guhs:knuffeldal_bouwplaats")).toList();
+                .filter(j -> j.nbt().getStringOr("name", "").equals("guhs:knuffeldal_bouwplaats")).toList();
         helper.assertTrue(bp.size() == 1 && bp.get(0).pos().equals(new BlockPos(0, 4, 23))
-                && bp.get(0).nbt().getString("target").equals("guhs:bouwplaats_ingang")
-                && bp.get(0).nbt().getString("pool").equals("guhs:knuffeldal_stadje/bouwplaats")
+                && bp.get(0).nbt().getStringOr("target", "").equals("guhs:bouwplaats_ingang")
+                && bp.get(0).nbt().getStringOr("pool", "").equals("guhs:knuffeldal_stadje/bouwplaats")
                 && bp.get(0).state().getValue(JigsawBlock.ORIENTATION) == FrontAndTop.WEST_UP, "the bouwplaats jigsaw: " + bp);
         for (String ander : List.of("noordoost", "zuidoost", "zuidwest")) {
             long n = templates.get(Guhs.id("knuffeldal_stadje/hoek_" + ander)).orElseThrow()
                     .filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW, true).stream()
-                    .filter(j -> j.nbt().getString("name").equals("guhs:knuffeldal_bouwplaats")).count();
+                    .filter(j -> j.nbt().getStringOr("name", "").equals("guhs:knuffeldal_bouwplaats")).count();
             helper.assertTrue(n == 0, "only one bouwplaats per town, not in " + ander);
         }
         var pool = pools.get(Guhs.id("knuffeldal_stadje/bouwplaats"));
@@ -353,7 +349,7 @@ public class TimmerguhGameTests {
         StructureTemplate plaats = templates.get(Guhs.id("knuffeldal_stadje/bouwplaats")).orElseThrow();
         helper.assertTrue(plaats.getSize().equals(new net.minecraft.core.Vec3i(22, 26, 33)), "the bouwplaats: 22 x 26 x 33");
         var js = plaats.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW, true);
-        helper.assertTrue(js.size() == 1 && js.get(0).pos().equals(new BlockPos(21, 4, 16)) && js.get(0).nbt().getString("name").equals("guhs:bouwplaats_ingang")
+        helper.assertTrue(js.size() == 1 && js.get(0).pos().equals(new BlockPos(21, 4, 16)) && js.get(0).nbt().getStringOr("name", "").equals("guhs:bouwplaats_ingang")
                 && js.get(0).state().getValue(JigsawBlock.ORIENTATION) == FrontAndTop.EAST_UP, "its own jigsaw: " + js);
         var ghosts = plaats.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), TimmerguhFeature.DAKPLEK.get(), true);
         Map<DakplekBlock.Deel, Long> delen = new java.util.EnumMap<>(DakplekBlock.Deel.class);

@@ -97,7 +97,7 @@ public final class BakkerijGame {
     private BakkerijGame(UUID npcId, ServerPlayer player, Winkel winkel, boolean feest, long now) {
         this.npcId = npcId;
         this.player = player.getUUID();
-        this.playerName = player.getGameProfile().getName();
+        this.playerName = player.getGameProfile().name();
         this.winkel = winkel;
         this.feest = feest;
         this.lastTick = now;
@@ -176,8 +176,8 @@ public final class BakkerijGame {
             data.putInt("Score", game.score);
         }
         data.putInt("Best", best(player));
-        data.putInt("Games", GuhQuests.saved(player).getInt(GAMES_KEY));
-        data.putBoolean("First", !GuhQuests.saved(player).getBoolean(PLAYED_KEY));
+        data.putInt("Games", GuhQuests.saved(player).getIntOr(GAMES_KEY, 0));
+        data.putBoolean("First", !GuhQuests.saved(player).getBooleanOr(PLAYED_KEY, false));
         data.putBoolean("Feest", feest);
         data.putInt("FeestMin", FEEST_MIN);
         data.putInt("Recepten", KnusVoortgang.ontdekt(player, BakkerijVoortgang.RECEPTENBOEK).size());
@@ -279,8 +279,8 @@ public final class BakkerijGame {
             world.playSound(null, p.blockPosition(), SoundEvents.NOTE_BLOCK_HAT.value(), SoundSource.PLAYERS, 1f, 1.6f);
         }
         if (t % 10 == 0) {
-            p.displayClientMessage(Component.translatable("quest.guhs.bakkerij.bar", score, (left + 19) / 20, combo(streak), geholpen)
-                    .withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.bakkerij.bar", score, (left + 19) / 20, combo(streak), geholpen)
+                    .withStyle(ChatFormatting.GOLD));
         }
         if (t >= GAME_TICKS) {
             finish(npc, p);
@@ -345,23 +345,23 @@ public final class BakkerijGame {
         }
         ItemStack stack = BakjeItem.voorKlant(recept, k);
         Inventory inv = p.getInventory();
-        if (inv.getItem(inv.selected).isEmpty()) {
-            inv.setItem(inv.selected, stack);
+        if (inv.getItem(inv.getSelectedSlot()).isEmpty()) {
+            inv.setItem(inv.getSelectedSlot(), stack);
         } else if (!inv.add(stack)) {
-            p.displayClientMessage(Component.translatable("quest.guhs.bakkerij.vol").withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.bakkerij.vol").withStyle(ChatFormatting.GOLD));
             return;
         }
-        p.displayClientMessage(Component.translatable("quest.guhs.bakkerij.gebakken", recept.naam(), k.naam())
-                .withStyle(k == Recept.Kwaliteit.PERFECT ? ChatFormatting.YELLOW : ChatFormatting.LIGHT_PURPLE), true);
+        p.sendOverlayMessage(Component.translatable("quest.guhs.bakkerij.gebakken", recept.naam(), k.naam())
+                .withStyle(k == Recept.Kwaliteit.PERFECT ? ChatFormatting.YELLOW : ChatFormatting.LIGHT_PURPLE));
     }
 
     /** The combo is broken (a wrong or burnt pastry, a customer who left). */
     private void breek(ServerPlayer p, String key) {
         if (streak >= 3) {
-            p.displayClientMessage(Component.translatable("quest.guhs.bakkerij.combo_weg").withStyle(ChatFormatting.GRAY), false);
+            p.sendSystemMessage(Component.translatable("quest.guhs.bakkerij.combo_weg").withStyle(ChatFormatting.GRAY));
         }
         streak = 0;
-        p.displayClientMessage(Component.translatable(key).withStyle(ChatFormatting.GRAY), true);
+        p.sendOverlayMessage(Component.translatable(key).withStyle(ChatFormatting.GRAY));
     }
 
     /** The combo multiplier: one more for every 3 happy customers in a row, up to x4. */
@@ -383,7 +383,7 @@ public final class BakkerijGame {
     public static boolean serveer(ServerPlayer p, BakkerijKlant klant) {
         BakkerijGame game = gameOf(p);
         if (game == null || !game.npcId.equals(klant.spel())) {
-            p.displayClientMessage(Component.translatable("quest.guhs.bakkerij.klant.niet_jij").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.bakkerij.klant.niet_jij").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
         return game.serveer(p, klant, (ServerLevel) p.level());
@@ -433,7 +433,7 @@ public final class BakkerijGame {
         world.playSound(null, klant.blockPosition(), ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1.3f);
         world.playSound(null, p.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.6f, 0.8f + Math.min(streak, 12) * 0.06f);
         world.sendParticles(ParticleTypes.HEART, klant.getX(), klant.getY() + klant.getBbHeight() + 0.3, klant.getZ(), 5, 0.3, 0.2, 0.3, 0);
-        p.displayClientMessage(Component.translatable("quest.guhs.bakkerij.geserveerd", gained, score, combo(streak)).withStyle(ChatFormatting.GOLD), true);
+        p.sendOverlayMessage(Component.translatable("quest.guhs.bakkerij.geserveerd", gained, score, combo(streak)).withStyle(ChatFormatting.GOLD));
         GuhQuests.say(p, klant, "quest.guhs.bakkerij.klant.blij" + (1 + world.getRandom().nextInt(4)), wil.naam());
         if (streak == 3 || streak == 6 || streak == 9) {
             title(p, Component.empty(), Component.translatable("quest.guhs.bakkerij.combo", combo(streak)).withStyle(ChatFormatting.LIGHT_PURPLE), 0, 20, 8);
@@ -489,8 +489,8 @@ public final class BakkerijGame {
         }
         Player near = world.getNearestPlayer(npc, 10);
         if (near instanceof ServerPlayer p && !isPlaying(p) && !p.isSpectator()) {
-            p.displayClientMessage(Component.literal("<").append(npc.getDisplayName()).append("> ")
-                    .append(Component.translatable("quest.guhs.bakkerij.invite" + (1 + world.getRandom().nextInt(3)))).withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.literal("<").append(npc.getDisplayName()).append("> ")
+                    .append(Component.translatable("quest.guhs.bakkerij.invite" + (1 + world.getRandom().nextInt(3)))).withStyle(ChatFormatting.GOLD));
             npc.playSound(ModSounds.GUH_AMBIENT.get(), 1f, 1.2f);
             world.sendParticles(BakkerijFeature.MEELSTOFJE.get(), npc.getX(), npc.getY() + npc.getBbHeight() + 0.3, npc.getZ(), 4, 0.3, 0.2, 0.3, 0.01);
         }
@@ -529,9 +529,9 @@ public final class BakkerijGame {
         end(npc, p);
         CompoundTag saved = GuhQuests.saved(p);
         int munten = munten(score);
-        boolean first = !saved.getBoolean(PLAYED_KEY);
+        boolean first = !saved.getBooleanOr(PLAYED_KEY, false);
         saved.putBoolean(PLAYED_KEY, true);
-        saved.putInt(GAMES_KEY, saved.getInt(GAMES_KEY) + 1);
+        saved.putInt(GAMES_KEY, saved.getIntOr(GAMES_KEY, 0) + 1);
         int best = best(p);
         boolean record = score > best;
         if (record) {
@@ -641,7 +641,7 @@ public final class BakkerijGame {
         }
         UUID npc = PLAYERS.get(p.getUUID());
         BakkerijGame game = npc == null ? null : GAMES.get(npc);
-        if (game == null || p.serverLevel().getGameTime() - game.lastTick > 40) {
+        if (game == null || p.level().getGameTime() - game.lastTick > 40) {
             if (game != null) {
                 GAMES.remove(npc, game);
             }
@@ -659,8 +659,8 @@ public final class BakkerijGame {
     static void stopFor(ServerPlayer p) {
         UUID npcId = PLAYERS.get(p.getUUID());
         BakkerijGame game = npcId == null ? null : GAMES.get(npcId);
-        if (game != null && p.server != null) {
-            for (ServerLevel level : p.server.getAllLevels()) {
+        if (game != null && p.level().getServer() != null) {
+            for (ServerLevel level : p.level().getServer().getAllLevels()) {
                 if (level.getEntity(npcId) instanceof GuhNpcEntity npc) {
                     game.stop(npc, p);
                     return;
@@ -678,7 +678,7 @@ public final class BakkerijGame {
     public static Winkel winkel(GuhNpcEntity npc) {
         CompoundTag data = npc.roleData;
         if (data.contains("BakIngang")) {
-            return new Winkel(posities(data.getLongArray("BakPlekken")), BlockPos.of(data.getLong("BakIngang")), posities(data.getLongArray("BakOvens")));
+            return new Winkel(posities(data.getLongArray("BakPlekken").orElse(new long[0])), BlockPos.of(data.getLongOr("BakIngang", 0L)), posities(data.getLongArray("BakOvens").orElse(new long[0])));
         }
         Winkel winkel = zoek(npc);
         if (winkel != null) {
@@ -731,12 +731,12 @@ public final class BakkerijGame {
     }
 
     public static int best(Player player) {
-        return GuhQuests.saved(player).getInt(BEST_KEY);
+        return GuhQuests.saved(player).getIntOr(BEST_KEY, 0);
     }
 
     static void teleport(ServerPlayer p, ServerLevel world, double x, double y, double z, float yRot) {
         if (p instanceof FakePlayer || p.connection == null) {
-            p.moveTo(x, y, z, yRot, 0);
+            p.snapTo(x, y, z, yRot, 0);
         } else {
             p.teleportTo(world, x, y, z, yRot, 0);
         }

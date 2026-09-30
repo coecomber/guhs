@@ -27,7 +27,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
-import software.bernie.geckolib.animation.RawAnimation;
+import com.geckolib.animation.RawAnimation;
 
 /**
  * The emotes of one guh (lives in {@link GuhEntity#emotes}). The emote it is doing is synced as one int
@@ -136,7 +136,7 @@ public final class GuhEmotes {
 
     /** Starts an emote (server): once, or looping until stopped. Returns false if it can't right now. */
     public boolean start(Emote emote, boolean loop, Source source) {
-        if (guh.level().isClientSide || !canStart(guh)) {
+        if (guh.level().isClientSide() || !canStart(guh)) {
             return false;
         }
         this.source = source;
@@ -171,7 +171,7 @@ public final class GuhEmotes {
     // ------------------------------------------------------------------------------------------------------------
 
     public void tick() {
-        if (guh.level().isClientSide) {
+        if (guh.level().isClientSide()) {
             clientTick();
             return;
         }
@@ -490,8 +490,8 @@ public final class GuhEmotes {
     }
 
     public void load(CompoundTag tag) {
-        setFavorite(Emote.byId(tag.getString("FavoriteEmote")));
-        Emote loop = Emote.byId(tag.getString("LoopEmote"));
+        setFavorite(Emote.byId(tag.getStringOr("FavoriteEmote", "")));
+        Emote loop = Emote.byId(tag.getStringOr("LoopEmote", ""));
         if (loop != null) {
             source = Source.OWNER;
             ticksLeft = -1;
@@ -518,7 +518,7 @@ public final class GuhEmotes {
     static void countForPlayer(ServerPlayer player, Emote emote) {
         GuhAdvancements.grant(player, "emote_gedaan");
         CompoundTag saved = GuhQuests.saved(player);
-        int done = saved.getInt("guhs_emotes_done") | (1 << emote.ordinal());
+        int done = saved.getIntOr("guhs_emotes_done", 0) | (1 << emote.ordinal());
         saved.putInt("guhs_emotes_done", done);
         int alle = alleNietBand();
         if ((done & alle) == alle) {             // (2.10: the three hartjes emotes don't count: they're unlocks, see samen)

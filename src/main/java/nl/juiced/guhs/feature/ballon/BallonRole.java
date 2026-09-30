@@ -24,6 +24,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Kapitein Wolkje (BALLONGUH), at his kiosk by the ballonsteiger of the Ballonfestival. Talk to him and you're off: he
  * steps into the balloon with you and flies the next round (the first one with a viewpoint you haven't stamped yet).
@@ -43,7 +44,7 @@ public final class BallonRole implements NpcRole {
             return;
         }
         var saved = GuhQuests.saved(player);
-        int keer = saved.getInt(GESPROKEN);
+        int keer = saved.getIntOr(GESPROKEN, 0);
         if (player.isSecondaryUseActive() && keer > 0) {
             GuhQuests.say(player, npc, "quest.guhs.ballon.winkel");
             npc.openShop(player);
@@ -93,13 +94,13 @@ public final class BallonRole implements NpcRole {
         if (steiger == null) {
             return null;
         }
-        LuchtballonEntity nieuw = BallonFeature.LUCHTBALLON.get().create(level);
+        LuchtballonEntity nieuw = BallonFeature.LUCHTBALLON.get().create(level, EntitySpawnReason.TRIGGERED);
         if (nieuw == null) {
             return null;
         }
-        nieuw.moveTo(steiger.getX() + 0.5, steiger.getY() + 1, steiger.getZ() + 0.5, 0, 0);
+        nieuw.snapTo(steiger.getX() + 0.5, steiger.getY() + 1, steiger.getZ() + 0.5, 0, 0);
         nieuw.setThuis(steiger.above(), 0);
-        nieuw.setKleur(level.random.nextInt(LuchtballonEntity.KLEUREN));
+        nieuw.setKleur(level.getRandom().nextInt(LuchtballonEntity.KLEUREN));
         level.addFreshEntity(nieuw);
         return nieuw;
     }

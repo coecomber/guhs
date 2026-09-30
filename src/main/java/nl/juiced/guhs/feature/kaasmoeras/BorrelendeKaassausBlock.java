@@ -76,7 +76,7 @@ public class BorrelendeKaassausBlock extends Block {
     public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
         if (!entity.isSteppingCarefully()) {
             bounce(entity);
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 blub(level, pos, entity);
             }
         }
@@ -95,7 +95,7 @@ public class BorrelendeKaassausBlock extends Block {
     }
 
     private static void blub(Level level, BlockPos pos, Entity entity) {
-        level.playSound(null, pos, SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.BLOCKS, 1.0f, 0.6f + level.random.nextFloat() * 0.3f);
+        level.playSound(null, pos, SoundEvents.BUBBLE_COLUMN_BUBBLE_POP, SoundSource.BLOCKS, 1.0f, 0.6f + level.getRandom().nextFloat() * 0.3f);
         level.playSound(null, pos, SoundEvents.SLIME_JUMP_SMALL, SoundSource.BLOCKS, 0.6f, 0.8f);
         if (level instanceof ServerLevel server) {
             server.sendParticles(CHEESE_DUST, entity.getX(), pos.getY() + 0.8, entity.getZ(), 10, 0.3, 0.1, 0.3, 0.02);

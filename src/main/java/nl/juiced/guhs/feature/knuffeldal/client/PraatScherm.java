@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -48,7 +48,7 @@ public class PraatScherm extends Screen {
 
     /** 3.0: a new screen from the server (a new scene starts on its first page). */
     public void update(int newNpcId, CompoundTag newData) {
-        boolean nieuweScene = newData.contains("Paginas") || !newData.getString("Sleutel").equals(data.getString("Sleutel"));
+        boolean nieuweScene = newData.contains("Paginas") || !newData.getStringOr("Sleutel", "").equals(data.getStringOr("Sleutel", ""));
         this.npcId = newNpcId;
         this.data = newData;
         if (nieuweScene) {
@@ -59,7 +59,7 @@ public class PraatScherm extends Screen {
     }
 
     private int paginas() {
-        return data.getList("Paginas", Tag.TAG_COMPOUND).size();
+        return data.getListOrEmpty("Paginas").size();
     }
 
     private boolean laatstePagina() {
@@ -68,8 +68,8 @@ public class PraatScherm extends Screen {
 
     /** The page shown now (a scene), or the screen's own data. */
     private CompoundTag nu() {
-        var list = data.getList("Paginas", Tag.TAG_COMPOUND);
-        return list.isEmpty() ? data : list.getCompound(Math.min(pagina, list.size() - 1));
+        var list = data.getListOrEmpty("Paginas");
+        return list.isEmpty() ? data : list.getCompoundOrEmpty(Math.min(pagina, list.size() - 1));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class PraatScherm extends Screen {
         top = (height - H) / 2;
         List<CompoundTag> opties = new ArrayList<>();
         if (laatstePagina()) {
-            for (Tag t : data.getList("Opties", Tag.TAG_COMPOUND)) {
+            for (Tag t : data.getListOrEmpty("Opties")) {
                 opties.add((CompoundTag) t);
             }
         } else {
@@ -88,20 +88,20 @@ public class PraatScherm extends Screen {
                 rebuildWidgets();
             }).bounds(left + W - 10 - 96 - 4 - 96, top + H - 26, 96, 20).build());
         }
-        boolean burgemeester = data.getString("Scherm").equals("burgemeester");
+        boolean burgemeester = data.getStringOr("Scherm", "").equals("burgemeester");
         int y = top + H - 26 - (burgemeester ? 0 : opties.size() * 22);
         int x = left + 10, w = W - 20;
         if (burgemeester) {
             // the list's "Geven" next to "Doei!"
             for (CompoundTag o : opties) {
-                int id = o.getInt("Id");
-                addRenderableWidget(Button.builder(Component.translatable(o.getString("Tekst")), b -> send(id))
+                int id = o.getIntOr("Id", 0);
+                addRenderableWidget(Button.builder(Component.translatable(o.getStringOr("Tekst", "")), b -> send(id))
                         .bounds(left + W - 10 - 96 - 4 - 96, top + H - 26, 96, 20).build());
             }
         } else {
             for (CompoundTag o : opties) {
-                int id = o.getInt("Id");
-                addRenderableWidget(Button.builder(Component.literal("» ").append(Component.translatable(o.getString("Tekst"))), b -> send(id))
+                int id = o.getIntOr("Id", 0);
+                addRenderableWidget(Button.builder(Component.literal("» ").append(Component.translatable(o.getStringOr("Tekst", ""))), b -> send(id))
                         .bounds(x, y, w, 20).build());
                 y += 22;
             }
@@ -126,19 +126,19 @@ public class PraatScherm extends Screen {
 
     /** The speaker of the page shown now (a scene page's own speaker, else the screen's). */
     private Entity spreker() {
-        int id = nu().contains("Spreker") ? nu().getInt("Spreker") : npcId;
+        int id = nu().contains("Spreker") ? nu().getIntOr("Spreker", 0) : npcId;
         return minecraft.level == null || id < 0 ? null : minecraft.level.getEntity(id);
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, BORDER);
         g.fill(left, top, left + W, top + H, PANEL);
         Entity npc = spreker();
-        String naamKey = nu().getString("Naam");
+        String naamKey = nu().getStringOr("Naam", "");
         Component name = !naamKey.isEmpty() ? Component.translatable(naamKey) : npc == null ? title : npc.getDisplayName();
-        g.drawString(font, name.copy().withStyle(ChatFormatting.BOLD), left + 10, top + 8, 0xFFFFB6D8, false);
+        g.text(font, name.copy().withStyle(ChatFormatting.BOLD), left + 10, top + 8, 0xFFFFB6D8, false);
         // the character
         g.fill(left + 10, top + 22, left + 10 + PIC, top + 22 + PIC, 0x30F7B6CB);
         if (npc instanceof LivingEntity living) {
@@ -150,43 +150,43 @@ public class PraatScherm extends Screen {
         g.fill(bx, by, bx + bw, by + PIC, 0xFFFFF4F8);
         g.fill(bx - 4, by + 12, bx, by + 18, 0xFFFFF4F8);
         List<Object> args = new ArrayList<>();
-        for (Tag t : nu().getList("Args", Tag.TAG_STRING)) {
+        for (Tag t : nu().getListOrEmpty("Args")) {
             args.add(t.getAsString());
         }
-        Component tekst = Component.translatable(nu().getString("Tekst"), args.toArray());
+        Component tekst = Component.translatable(nu().getStringOr("Tekst", ""), args.toArray());
         List<FormattedCharSequence> lines = font.split(tekst, bw - 10);
         for (int i = 0; i < lines.size() && i < 6; i++) {
-            g.drawString(font, lines.get(i), bx + 5, by + 5 + i * 10, 0xFF3A1C30, false);
+            g.text(font, lines.get(i), bx + 5, by + 5 + i * 10, 0xFF3A1C30, false);
         }
         if (paginas() > 1) {
             String n = (Math.min(pagina, paginas() - 1) + 1) + "/" + paginas();
-            g.drawString(font, n, bx + bw - 5 - font.width(n), by + PIC - 11, 0xFFB08AA0, false);
+            g.text(font, n, bx + bw - 5 - font.width(n), by + PIC - 11, 0xFFB08AA0, false);
         }
-        if (data.getString("Scherm").equals("burgemeester")) {
+        if (data.getStringOr("Scherm", "").equals("burgemeester")) {
             renderLijst(g, top + 22 + PIC + 8);
         }
     }
 
     /** The Knusfeest list: a line per task, with its step and (when you carry it) a little "!" to hand it in. */
-    private void renderLijst(GuiGraphics g, int y) {
-        var taken = data.getList("Taken", Tag.TAG_COMPOUND);
-        Component kop = Component.translatable(data.getLong("Ronde") == 0 ? "gui.guhs.knusfeest.lijst_kop" : "gui.guhs.knusfeest.lijst_kop_seizoen");
-        g.drawString(font, kop, left + 10, y, 0xFFFFB6D8, false);
+    private void renderLijst(GuiGraphicsExtractor g, int y) {
+        var taken = data.getListOrEmpty("Taken");
+        Component kop = Component.translatable(data.getLongOr("Ronde", 0L) == 0 ? "gui.guhs.knusfeest.lijst_kop" : "gui.guhs.knusfeest.lijst_kop_seizoen");
+        g.text(font, kop, left + 10, y, 0xFFFFB6D8, false);
         y += 11;
         for (int i = 0; i < taken.size(); i++) {
-            CompoundTag t = taken.getCompound(i);
-            String stap = t.getString("Stap");
+            CompoundTag t = taken.getCompoundOrEmpty(i);
+            String stap = t.getStringOr("Stap", "");
             boolean done = stap.equals("gebracht");
             int col = i % 2, row = i / 2;
             int x = left + 10 + col * ((W - 20) / 2), yy = y + row * 11;
-            String mark = done ? "✔" : t.getBoolean("Bij") ? "!" : stap.equals("gestolen") ? "?" : "•";
-            int colour = done ? 0xFF68D88A : t.getBoolean("Bij") ? 0xFFFFD27A : stap.equals("gestolen") ? 0xFFF7A060 : TEXT;
-            Component line = Component.literal(mark + " ").append(Component.translatable("gui.guhs.knusfeest.taak." + t.getString("Id")));
-            g.drawString(font, font.plainSubstrByWidth(line.getString(), (W - 20) / 2 - 4), x, yy, colour, false);
+            String mark = done ? "✔" : t.getBooleanOr("Bij", false) ? "!" : stap.equals("gestolen") ? "?" : "•";
+            int colour = done ? 0xFF68D88A : t.getBooleanOr("Bij", false) ? 0xFFFFD27A : stap.equals("gestolen") ? 0xFFF7A060 : TEXT;
+            Component line = Component.literal(mark + " ").append(Component.translatable("gui.guhs.knusfeest.taak." + t.getStringOr("Id", "")));
+            g.text(font, font.plainSubstrByWidth(line.getString(), (W - 20) / 2 - 4), x, yy, colour, false);
         }
         int hintY = y + ((taken.size() + 1) / 2) * 11 + 2;
         if (hintY < top + H - 30) {
-            g.drawString(font, Component.translatable("gui.guhs.knusfeest.hint").withStyle(ChatFormatting.ITALIC), left + 10, hintY, 0xFFB8A0B0, false);
+            g.text(font, Component.translatable("gui.guhs.knusfeest.hint").withStyle(ChatFormatting.ITALIC), left + 10, hintY, 0xFFB8A0B0, false);
         }
     }
 

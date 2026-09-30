@@ -40,7 +40,7 @@ public final class KledingUnlocks {
         if (ids(player).contains(c.id())) {
             return false;
         }
-        ListTag list = GuhQuests.saved(player).getList(KEY, Tag.TAG_STRING);
+        ListTag list = GuhQuests.saved(player).getListOrEmpty(KEY);
         list.add(StringTag.valueOf(c.id()));
         GuhQuests.saved(player).put(KEY, list);
         sync(player);
@@ -88,7 +88,7 @@ public final class KledingUnlocks {
     /** (Tests) adds an unlock to any player's saved data, without messages or syncing. */
     public static void voegToe(Player player, GuhClothes c) {
         if (!ids(player).contains(c.id())) {
-            ListTag list = GuhQuests.saved(player).getList(KEY, Tag.TAG_STRING);
+            ListTag list = GuhQuests.saved(player).getListOrEmpty(KEY);
             list.add(StringTag.valueOf(c.id()));
             GuhQuests.saved(player).put(KEY, list);
         }
@@ -101,10 +101,10 @@ public final class KledingUnlocks {
     }
 
     private static List<String> ids(Player player) {
-        ListTag list = GuhQuests.saved(player).getList(KEY, Tag.TAG_STRING);
+        ListTag list = GuhQuests.saved(player).getListOrEmpty(KEY);
         List<String> out = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            out.add(list.getString(i));
+            out.add(list.getStringOr(i, ""));
         }
         return out;
     }

@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import nl.juiced.guhs.entity.GuhClothes;
@@ -89,7 +89,7 @@ public final class GidsKledingTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             List<GuhClothes> alle = GidsData.ontgrendelbare();
             long heb = alle.stream().filter(GidsKledingIcoon::heeft).count();
             GidsTekst.passend(g, Component.translatable("gui.guhs.gids.kleding.telling", heb, alle.size()).withStyle(ChatFormatting.BOLD), x + 2, y + 2,
@@ -107,7 +107,7 @@ public final class GidsKledingTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             int tw = GidsTekst.passend(g, naam.copy().withStyle(ChatFormatting.BOLD), x + 2, y + 4, w - 20, 0.75f, 0xFF5A1838, false);
             g.fill(x + tw + 7, y + 7, x + w - 2, y + 8, 0x80D27A9C);
         }
@@ -121,7 +121,7 @@ public final class GidsKledingTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             long heb = kapper ? stukken.size() : stukken.stream().filter(GidsKledingIcoon::heeft).count();
             boolean vol = heb == stukken.size();
             g.fill(x + 2, y + 1, x + w, y + 20, hover ? 0x60F7B6CB : open ? 0x48F7B6CB : 0x26F7B6CB);
@@ -137,7 +137,7 @@ public final class GidsKledingTab {
             if (icoon.isEmpty() && !stukken.isEmpty()) {
                 icoon = GidsKledingIcoon.item(stukken.get(0));
             }
-            g.renderItem(icoon, x + 14, y + 3);
+            g.item(icoon, x + 14, y + 3);
             int rechts = 86;
             GidsTekst.passend(g, naam.copy().withStyle(ChatFormatting.BOLD), x + 34, y + 7, w - 34 - rechts, 1f, DONKER, false);
             if (kapper) {
@@ -171,7 +171,7 @@ public final class GidsKledingTab {
         }
 
         @Override
-        public void teken(GuiGraphics g, int x, int y, int w, int mx, int my, boolean hover) {
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             g.fill(x + 2, y, x + 4, y + hoogte() - 2, 0x60F7B6CB);
             int per = perRij(260);
             for (int i = 0; i < stukken.size(); i++) {

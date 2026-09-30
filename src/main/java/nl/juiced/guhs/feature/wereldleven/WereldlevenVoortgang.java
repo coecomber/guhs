@@ -61,7 +61,7 @@ public final class WereldlevenVoortgang {
     /** Grants a shown advancement of the Knuffeldal tab (guhs:knuffeldal/&lt;name&gt;) and the hidden quest one of the same name. */
     public static void toon(ServerPlayer player, String name) {
         GuhAdvancements.grant(player, name);
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("knuffeldal/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("knuffeldal/" + name));
         if (holder == null) {
             return;
         }

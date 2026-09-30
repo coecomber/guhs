@@ -17,7 +17,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -159,7 +158,7 @@ public abstract class TuinBlock extends HorizontalDirectionalBlock {
         int grew = 0;
         for (BlockPos p : BlockPos.betweenClosed(pos.offset(-radius, -2, -radius), pos.offset(radius, 2, radius))) {
             if (groeit(level.getBlockState(p))) {
-                level.sendParticles(ParticleTypes.NOTE, p.getX() + 0.5, p.getY() + 1.2, p.getZ() + 0.5, 1, 0.2, 0.1, 0.2, level.random.nextDouble());
+                level.sendParticles(ParticleTypes.NOTE, p.getX() + 0.5, p.getY() + 1.2, p.getZ() + 0.5, 1, 0.2, 0.1, 0.2, level.getRandom().nextDouble());
                 long key = p.asLong();
                 if (stappen.containsKey(key)) {
                     long last = stappen.get(key);
@@ -167,7 +166,7 @@ public abstract class TuinBlock extends HorizontalDirectionalBlock {
                         continue;                                  // (it just grew from a song: it rests a while)
                     }
                 }
-                if (level.random.nextFloat() < kans) {
+                if (level.getRandom().nextFloat() < kans) {
                     groei(level, p.immutable());
                     stappen.put(key, now);
                     grew++;
@@ -188,20 +187,20 @@ public abstract class TuinBlock extends HorizontalDirectionalBlock {
     // --- planting and harvesting ------------------------------------------------------------------------------------------
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                               BlockHitResult hit) {
         if (stack.getItem() instanceof GuhGieterItem) {
-            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;       // (the gieter does its own thing)
+            return InteractionResult.PASS;       // (the gieter does its own thing)
         }
         TuinPlant plant = TuinPlant.vanZaadje(stack);
         if (plant == null || state.getValue(PLANT) != TuinPlant.LEEG) {
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             plant(level, pos, plant, (ServerPlayer) player);
             stack.consume(1, player);
         }
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Plants seeds (a new page in the tuinboek). */
@@ -220,10 +219,10 @@ public abstract class TuinBlock extends HorizontalDirectionalBlock {
         if (!rijp(state)) {
             return InteractionResult.PASS;
         }
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             oogst(level, pos, (ServerPlayer) player);
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Harvests a ripe plant into the player's pockets (what doesn't fit drops in front of them); returns how many. */
@@ -234,11 +233,11 @@ public abstract class TuinBlock extends HorizontalDirectionalBlock {
         }
         TuinPlant plant = state.getValue(PLANT);
         Item oogst = plant.oogst();
-        int n = 2 + level.random.nextInt(2);
+        int n = 2 + level.getRandom().nextInt(2);
         level.setBlock(pos, state.setValue(GROEI, 0).setValue(GEWATERD, false), Block.UPDATE_ALL);
         level.playSound(null, pos, TuintjesFeature.OOGST_GELUID.get(), SoundSource.BLOCKS, 1f, 1f);
         ItemStack stack = new ItemStack(oogst, n);
-        ItemStack zaad = level.random.nextFloat() < 0.3f ? new ItemStack(plant.zaadje()) : ItemStack.EMPTY;
+        ItemStack zaad = level.getRandom().nextFloat() < 0.3f ? new ItemStack(plant.zaadje()) : ItemStack.EMPTY;
         if (player != null) {
             Minigames.give(player, stack);
             Minigames.give(player, zaad);

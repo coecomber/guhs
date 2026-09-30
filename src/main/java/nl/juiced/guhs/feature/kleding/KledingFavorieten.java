@@ -25,10 +25,10 @@ public final class KledingFavorieten {
 
     /** The favourites as strings (always {@value #AANTAL}). */
     public static List<String> alle(ServerPlayer player) {
-        ListTag list = GuhQuests.saved(player).getList(KEY, Tag.TAG_STRING);
+        ListTag list = GuhQuests.saved(player).getListOrEmpty(KEY);
         List<String> out = new ArrayList<>();
         for (int i = 0; i < AANTAL; i++) {
-            out.add(i < list.size() ? list.getString(i) : "");
+            out.add(i < list.size() ? list.getStringOr(i, "") : "");
         }
         return out;
     }

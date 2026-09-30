@@ -14,7 +14,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -22,7 +21,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -80,7 +79,7 @@ public final class GuhwaiiItems {
             if (plant == null || !plant.canSurvive(level, plek)) {
                 return InteractionResult.PASS;   // (then it's eaten: Item.use)
             }
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 level.setBlock(plek, plant, Block.UPDATE_ALL);
                 level.playSound(null, plek, SoundEvents.WOOD_PLACE, SoundSource.BLOCKS, 0.8f, 1.2f);
                 level.gameEvent(context.getPlayer(), GameEvent.BLOCK_PLACE, plek);
@@ -91,12 +90,12 @@ public final class GuhwaiiItems {
                     GuhwaiiFeature.advancement(sp, "kiemplant");
                 }
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Override
         public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-            if (!level.isClientSide && entity instanceof ServerPlayer sp) {
+            if (!level.isClientSide() && entity instanceof ServerPlayer sp) {
                 GuhwaiiFeature.advancement(sp, "kokosnoot");
             }
             return super.finishUsingItem(stack, level, entity);
@@ -120,8 +119,8 @@ public final class GuhwaiiItems {
         }
 
         @Override
-        public UseAnim getUseAnimation(ItemStack stack) {
-            return UseAnim.DRINK;
+        public ItemUseAnimation getUseAnimation(ItemStack stack) {
+            return ItemUseAnimation.DRINK;
         }
 
         @Override
@@ -171,10 +170,10 @@ public final class GuhwaiiItems {
         }
 
         @Override
-        public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
             ItemStack stack = player.getItemInHand(hand);
-            if (!level.isClientSide && level instanceof ServerLevel server) {
-                tokkel(server, player.getX(), player.getEyeY() - 0.5, player.getZ(), server.random.nextInt(AKKOORDEN.length));
+            if (!level.isClientSide() && level instanceof ServerLevel server) {
+                tokkel(server, player.getX(), player.getEyeY() - 0.5, player.getZ(), server.getRandom().nextInt(AKKOORDEN.length));
                 for (GuhEntity guh : server.getEntitiesOfClass(GuhEntity.class, player.getBoundingBox().inflate(8))) {
                     if (guh.emotes.current() == null && GuhEmotes.canStart(guh)) {
                         guh.emotes.start(guh.getVariant() == GuhVariant.STITCH626 ? Emote.UKELELE : Emote.DANSEN, false, GuhEmotes.Source.SELF);
@@ -185,7 +184,7 @@ public final class GuhwaiiItems {
                 }
             }
             player.getCooldowns().addCooldown(this, 16);
-            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
         }
 
         /** One strum: three notes of a chord (guitar-ish note block) and a few music notes. */
@@ -194,7 +193,7 @@ public final class GuhwaiiItems {
             for (float pitch : a) {
                 level.playSound(null, x, y, z, SoundEvents.NOTE_BLOCK_GUITAR.value(), SoundSource.PLAYERS, 0.6f, pitch);
             }
-            level.sendParticles(ParticleTypes.NOTE, x, y + 0.6, z, 3, 0.4, 0.2, 0.4, level.random.nextDouble());
+            level.sendParticles(ParticleTypes.NOTE, x, y + 0.6, z, 3, 0.4, 0.2, 0.4, level.getRandom().nextDouble());
         }
 
         @Override

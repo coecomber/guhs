@@ -48,6 +48,7 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.quest.GuhDex;
 
+import net.minecraft.resources.Identifier;
 /**
  * Het Knuffeldal (2.8, phase 1): a small, soft pink valley in the Guhmensie with exactly one town in its middle, and the
  * Grote Knusfeest. tools/features/knuffeldal.py (+ knuffeldal_*.py) makes the resources.
@@ -152,7 +153,7 @@ public final class KnuffeldalFeature {
     // --- the Kruimel-Mika --------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<KruimelMikaEntity>> KRUIMEL_MIKA = ENTITY_TYPES.register("kruimel_mika",
             () -> EntityType.Builder.of(KruimelMikaEntity::new, MobCategory.CREATURE).sized(0.9f, 0.8f).eyeHeight(0.55f).clientTrackingRange(10)
-                    .build("guhs:kruimel_mika"));
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.parse("guhs:kruimel_mika"))));
     public static final DeferredItem<DeferredSpawnEggItem> KRUIMEL_MIKA_SPAWN_EGG = ITEMS.registerItem("kruimel_mika_spawn_egg",
             p -> new DeferredSpawnEggItem(KRUIMEL_MIKA, 0xE9B478, 0x9A3A5A, p));
 

@@ -77,10 +77,10 @@ public class GeheimeKastBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             setOpen((ServerLevel) level, pos, !state.getValue(OPEN));
         }
-        return InteractionResult.sidedSuccess(level.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     /** Opens (or closes) this secret bookcase and the ones touching it. */

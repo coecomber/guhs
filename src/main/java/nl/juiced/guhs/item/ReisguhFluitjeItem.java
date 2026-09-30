@@ -29,7 +29,7 @@ public class ReisguhFluitjeItem extends Item {
         }
         if (level.dimension() != ModDimensions.GUHMENSION) {
             if (player != null) {
-                player.displayClientMessage(Component.translatable("quest.guhs.reis.only_guhmension").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("quest.guhs.reis.only_guhmension").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             return InteractionResult.FAIL;
         }

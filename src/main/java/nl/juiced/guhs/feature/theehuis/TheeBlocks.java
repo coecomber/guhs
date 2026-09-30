@@ -18,7 +18,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -29,7 +28,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -123,24 +122,24 @@ public final class TheeBlocks {
         }
 
         @Override
-        protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+        protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
                                                   BlockHitResult hit) {
             Soort soort = thee(stack);
             if (soort == null) {
-                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+                return InteractionResult.TRY_WITH_EMPTY_HAND;
             }
-            if (!level.isClientSide && player instanceof ServerPlayer sp) {
+            if (!level.isClientSide() && player instanceof ServerPlayer sp) {
                 zet(sp, (ServerLevel) level, pos, stack, soort);
             }
-            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (!level.isClientSide) {
-                player.displayClientMessage(Component.translatable("gui.guhs.theehuis.theepotje.leeg").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            if (!level.isClientSide()) {
+                player.sendOverlayMessage(Component.translatable("gui.guhs.theehuis.theepotje.leeg").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
 
         @Override
@@ -183,8 +182,8 @@ public final class TheeBlocks {
         KnusVoortgang.hoogste(player, TheehuisVoortgang.SOORTEN, KnusVoortgang.ontdekt(player, TheehuisVoortgang.THEESOORTEN).size());
         KnusVoortgang.tel(player, TheehuisVoortgang.GEZET, Theepotje.KOPJES);
         GuhAdvancements.grant(player, "theehuis_thee_gezet");
-        player.displayClientMessage(Component.translatable("gui.guhs.theehuis.gezet", Theepotje.KOPJES,
-                Component.translatable("item.guhs." + soort.id())).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.theehuis.gezet", Theepotje.KOPJES,
+                Component.translatable("item.guhs." + soort.id())).withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     /** A cup of tea: you drink it (a little food, and each kind does something knus). */
@@ -197,8 +196,8 @@ public final class TheeBlocks {
         }
 
         @Override
-        public UseAnim getUseAnimation(ItemStack stack) {
-            return UseAnim.DRINK;
+        public ItemUseAnimation getUseAnimation(ItemStack stack) {
+            return ItemUseAnimation.DRINK;
         }
 
         @Override
@@ -213,7 +212,7 @@ public final class TheeBlocks {
 
         @Override
         public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-            if (!level.isClientSide) {
+            if (!level.isClientSide()) {
                 switch (soort) {
                     case KNABBELTHEE -> entity.addEffect(new MobEffectInstance(TheehuisFeature.GEZELLIG, 20 * 30));
                     case KAASMELKTHEE -> entity.getActiveEffects().stream().filter(e -> !e.getEffect().value().isBeneficial()).map(MobEffectInstance::getEffect)

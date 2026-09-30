@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
@@ -148,15 +148,15 @@ public class PiepMenuScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 2, top - 2, left + W + 2, top + hoogte + 2, KLEUR_RAND);
         g.fill(left, top, left + W, top + hoogte, KLEUR_PANEEL);
         // title: the name, and what it is
         Component titel = Component.literal("♥ ").append(dier.getDisplayName()).append(" ♥");
-        g.drawString(font, font.plainSubstrByWidth(titel.getString(), W - 16), left + 8, top + 7, KLEUR_TITEL, false);
+        g.text(font, font.plainSubstrByWidth(titel.getString(), W - 16), left + 8, top + 7, KLEUR_TITEL, false);
         Component sub = Component.translatable("gui.guhs.piep.menu.sub." + maatje.soort());
-        g.drawString(font, font.plainSubstrByWidth(sub.getString(), W - 16), left + 8, top + 18, KLEUR_SUB, false);
+        g.text(font, font.plainSubstrByWidth(sub.getString(), W - 16), left + 8, top + 18, KLEUR_SUB, false);
         // the creature itself (it looks at the mouse)
         int px = left + 6, py = top + 30, pw = PREVIEW, ph = hoogte - 38;
         g.fill(px, py, px + pw, py + ph, KLEUR_VAKJE);

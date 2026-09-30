@@ -17,7 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket;
+import net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -266,9 +266,9 @@ public final class GolfGame {
         for (Niveau n : Niveau.values()) {                             // (2.10: the par of every level on this course)
             data.putIntArray("Par_" + n.id(), game.scanned ? game.parsFor((ServerLevel) npc.level(), n) : GolfBanen.PARS[n.ordinal()]);
         }
-        data.putInt("Rounds", GuhQuests.saved(player).getInt(ROUNDS));
-        data.putInt("Aces", GuhQuests.saved(player).getInt(ACES));
-        List<Scorebord.Entry> top = Scorebord.top(player.server, BOARD);
+        data.putInt("Rounds", GuhQuests.saved(player).getIntOr(ROUNDS, 0));
+        data.putInt("Aces", GuhQuests.saved(player).getIntOr(ACES, 0));
+        List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), BOARD);
         data.putString("RecordName", top.isEmpty() ? "" : top.get(0).name());
         data.putInt("RecordScore", top.isEmpty() ? -1 : top.get(0).score());
         ModNetworking.sendTo(player, new GolfPayloads.Open(npc.getId(), data));
@@ -319,7 +319,7 @@ public final class GolfGame {
             return;
         }
         player = p.getUUID();
-        playerName = p.getGameProfile().getName();
+        playerName = p.getGameProfile().name();
         niveau = level;
         System.arraycopy(parsFor(world, level), 0, pars, 0, HOLES);
         GOLFERS.put(player, npcId);
@@ -438,7 +438,7 @@ public final class GolfGame {
     }
 
     private void doSwing(ServerPlayer p, float power) {
-        ServerLevel world = p.serverLevel();
+        ServerLevel world = p.level();
         GolfBallEntity b = ball(world);
         if (phase != Phase.AIM || b == null || b.isMoving()) {
             flash(p, Component.translatable(phase == Phase.COUNTDOWN ? "gui.guhs.golf.wait_countdown" : "gui.guhs.golf.wait_ball")
@@ -562,7 +562,7 @@ public final class GolfGame {
         p.playNotifySound(sound, SoundSource.PLAYERS, 0.9f, 1.2f);
         npc.playSound(ModSounds.GUH_HAPPY.get(), 1f, diff < 0 ? 1.4f : 1.0f);
         if (score == 1 && holed) {
-            GuhQuests.saved(p).putInt(ACES, GuhQuests.saved(p).getInt(ACES) + 1);
+            GuhQuests.saved(p).putInt(ACES, GuhQuests.saved(p).getIntOr(ACES, 0) + 1);
             GuhAdvancements.grant(p, "golf_hole_in_one");
         }
         phase = Phase.HOLED;
@@ -607,7 +607,7 @@ public final class GolfGame {
         if (record) {
             saved.putInt(Klassiekers.sleutel(BEST, niveau), total);
         }
-        saved.putInt(ROUNDS, saved.getInt(ROUNDS) + 1);
+        saved.putInt(ROUNDS, saved.getIntOr(ROUNDS, 0) + 1);
         p.sendSystemMessage(Component.translatable("quest.guhs.golf.card").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         p.sendSystemMessage(cardLine("gui.guhs.golf.card_par", pars, null));
         p.sendSystemMessage(cardLine("gui.guhs.golf.card_you", scores, pars));
@@ -619,7 +619,7 @@ public final class GolfGame {
             p.sendSystemMessage(Component.translatable("quest.guhs.golf.no_record", best).withStyle(ChatFormatting.GRAY));
         }
         give(p, new ItemStack(GolfFeature.GOLFBALLETJE.get(), bonus));
-        if (!saved.getBoolean(FIRST)) {                                  // the very first round: a welcome present
+        if (!saved.getBooleanOr(FIRST, false)) {                                  // the very first round: a welcome present
             saved.putBoolean(FIRST, true);
             give(p, new ItemStack(GolfFeature.GOLFBALLETJE.get(), FIRST_BALLS));
             give(p, new ItemStack(ModItems.KAAS_KNABBELS.get(), 16));
@@ -699,7 +699,7 @@ public final class GolfGame {
     public static boolean hasGolfguhNearby(ServerPlayer p) {
         UUID npc = GOLFERS.get(p.getUUID());
         GolfGame game = npc == null ? null : GAMES.get(npc);
-        return game != null && p.serverLevel().getEntity(npc) instanceof GuhNpcEntity && p.serverLevel().getGameTime() - game.lastTick <= STALE_TICKS;
+        return game != null && p.level().getEntity(npc) instanceof GuhNpcEntity && p.level().getGameTime() - game.lastTick <= STALE_TICKS;
     }
 
     /** Every tick of the Golfguh: the windmill, the countdown, the timers, and golfers who wandered off. */
@@ -797,7 +797,7 @@ public final class GolfGame {
             int left = b == null || cups[hole] == null ? 0 : (int) Math.round(Math.hypot(b.getX() - cups[hole].getX() - 0.5, b.getZ() - cups[hole].getZ() - 0.5));
             Component bar = Component.translatable("gui.guhs.golf.bar", hole + 1, holeName(hole), pars[hole], strokes, maxSlagen(),
                     left, rel(done - par)).withStyle(ChatFormatting.LIGHT_PURPLE);
-            p.displayClientMessage(bar, true);
+            p.sendOverlayMessage(bar);
         }
     }
 
@@ -935,12 +935,12 @@ public final class GolfGame {
 
     private void load(CompoundTag data) {
         bumpers.clear();
-        for (long l : data.getLongArray("LastigBumpers")) {
+        for (long l : data.getLongArray("LastigBumpers").orElse(new long[0])) {
             bumpers.add(BlockPos.of(l));                               // (still on the course from a round before a restart)
         }
-        CompoundTag tag = data.getCompound("Course");
-        long[] t = tag.getLongArray("Tees"), c = tag.getLongArray("Cups");
-        if (t.length != HOLES || c.length != HOLES || tag.getInt("Versie") < COURSE_VERSION) {
+        CompoundTag tag = data.getCompoundOrEmpty("Course");
+        long[] t = tag.getLongArray("Tees").orElse(new long[0]), c = tag.getLongArray("Cups").orElse(new long[0]);
+        if (t.length != HOLES || c.length != HOLES || tag.getIntOr("Versie", 0) < COURSE_VERSION) {
             return;                                                    // (saved before 2.10: look again, for the new tees)
         }
         for (int i = 0; i < HOLES; i++) {
@@ -948,16 +948,16 @@ public final class GolfGame {
             cups[i] = BlockPos.of(c[i]);
         }
         for (Niveau n : new Niveau[]{Niveau.MAKKELIJK, Niveau.LASTIG}) {
-            long[] l = tag.getLongArray("Tees_" + n.id());
+            long[] l = tag.getLongArray("Tees_" + n.id()).orElse(new long[0]);
             for (int i = 0; i < HOLES; i++) {
                 tees[n.ordinal()][i] = i < l.length && l[i] != Long.MIN_VALUE ? BlockPos.of(l[i]) : null;
             }
         }
         hubs.clear();
-        for (long l : tag.getLongArray("Hubs")) {
+        for (long l : tag.getLongArray("Hubs").orElse(new long[0])) {
             hubs.add(BlockPos.of(l));
         }
-        home = tag.contains("Home") ? BlockPos.of(tag.getLong("Home")) : null;
+        home = tag.contains("Home") ? BlockPos.of(tag.getLongOr("Home", 0L)) : null;
         scanned = true;
     }
 
@@ -975,14 +975,14 @@ public final class GolfGame {
     /** Your best round on medium (the old record), -1 when you never played a whole round. */
     public static int best(Player p) {
         CompoundTag saved = GuhQuests.saved(p);
-        return saved.contains(BEST) ? saved.getInt(BEST) : -1;
+        return saved.contains(BEST) ? saved.getIntOr(BEST, 0) : -1;
     }
 
     /** Your best round on this level, -1 when none yet. */
     public static int best(Player p, Niveau niveau) {
         CompoundTag saved = GuhQuests.saved(p);
         String key = Klassiekers.sleutel(BEST, niveau);
-        return saved.contains(key) ? saved.getInt(key) : -1;
+        return saved.contains(key) ? saved.getIntOr(key, 0) : -1;
     }
 
     public static Component holeName(int hole) {
@@ -1010,15 +1010,15 @@ public final class GolfGame {
         Inventory inv = p.getInventory();
         ItemStack club = new ItemStack(GolfFeature.GOLFCLUB.get());
         if (inv.getSelected().isEmpty()) {
-            inv.setItem(inv.selected, club);
+            inv.setItem(inv.getSelectedSlot(), club);
             return;
         }
         for (int i = 0; i < Inventory.getSelectionSize(); i++) {
             if (inv.getItem(i).isEmpty()) {
                 inv.setItem(i, club);
-                inv.selected = i;
+                inv.setSelectedSlot(i);
                 if (p.connection != null) {
-                    p.connection.send(new ClientboundSetCarriedItemPacket(i));
+                    p.connection.send(new ClientboundSetHeldSlotPacket(i));
                 }
                 return;
             }
@@ -1026,7 +1026,7 @@ public final class GolfGame {
         int free = inv.getFreeSlot();                                  // (hotbar full: your own item moves to the backpack)
         if (free >= 0) {
             inv.setItem(free, inv.getSelected());
-            inv.setItem(inv.selected, club);
+            inv.setItem(inv.getSelectedSlot(), club);
         } else {
             inv.add(club);
         }
@@ -1046,8 +1046,8 @@ public final class GolfGame {
 
     /** A short message on the action bar (the status bar keeps quiet for a moment). */
     private void flash(ServerPlayer p, Component message) {
-        p.displayClientMessage(message, true);
-        quietUntil = p.serverLevel().getGameTime() + 30;
+        p.sendOverlayMessage(message);
+        quietUntil = p.level().getGameTime() + 30;
     }
 
     /** Someone left-clicked their ball: tell them how it works. */

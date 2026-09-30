@@ -150,7 +150,7 @@ public final class GuhwaiiSpellenFeature {
         if (!saved.contains(DATA)) {
             saved.put(DATA, new CompoundTag());
         }
-        return saved.getCompound(DATA);
+        return saved.getCompoundOrEmpty(DATA);
     }
 
     /** The data of Lilo-guh's screen: the game (surf / hula), your record and the world's best per level, your coins. */
@@ -160,11 +160,11 @@ public final class GuhwaiiSpellenFeature {
         data.putString("Modus", modus);
         for (Niveau n : Niveau.values()) {
             String rij = (modus.equals("surf") ? "surfen_" : "hula_") + n.id();
-            data.putInt("Best_" + n.id(), mijn.getInt((modus.equals("surf") ? "Surf_" : "Hula_") + n.id()));
-            List<Scorebord.Entry> top = Scorebord.top(player.server, rij);
+            data.putInt("Best_" + n.id(), mijn.getIntOr((modus.equals("surf") ? "Surf_" : "Hula_") + n.id(), 0));
+            List<Scorebord.Entry> top = Scorebord.top(player.level().getServer(), rij);
             data.putString("Top_" + n.id(), top.isEmpty() ? "" : top.get(0).name() + " (" + top.get(0).score() + ")");
         }
-        data.putBoolean("Played", mijn.getBoolean(modus.equals("surf") ? "EersteSurf" : "EersteHula"));
+        data.putBoolean("Played", mijn.getBooleanOr(modus.equals("surf") ? "EersteSurf" : "EersteHula", false));
         data.putInt("Munten", GuhQuests.count(player, GuhwaiiSpellenBlocks.SCHELPJESMUNT.get()));
         return data;
     }
@@ -178,7 +178,7 @@ public final class GuhwaiiSpellenFeature {
     /** A Highscores row was played (for "all six"): remembered, and the advancement once all six are there. */
     public static void gespeeld(ServerPlayer player, String rij) {
         CompoundTag d = data(player);
-        ListTag list = d.getList("Rijen", Tag.TAG_STRING);
+        ListTag list = d.getListOrEmpty("Rijen");
         List<String> rijen = new ArrayList<>();
         list.forEach(t -> rijen.add(t.getAsString()));
         if (!rijen.contains(rij)) {

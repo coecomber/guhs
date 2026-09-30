@@ -11,7 +11,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -47,12 +46,12 @@ public class GuhGieterItem extends Item {
         ItemStack stack = context.getItemInHand();
         Player player = context.getPlayer();
         if (water(stack) <= 0) {
-            if (player != null && !level.isClientSide) {
-                player.displayClientMessage(Component.translatable("gui.guhs.tuintjes.gieter_leeg").withStyle(ChatFormatting.AQUA), true);
+            if (player != null && !level.isClientSide()) {
+                player.sendOverlayMessage(Component.translatable("gui.guhs.tuintjes.gieter_leeg").withStyle(ChatFormatting.AQUA));
             }
             return InteractionResult.CONSUME;
         }
-        if (level.isClientSide) {
+        if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         int gegoten = giet(level, pos, stack);
@@ -79,21 +78,21 @@ public class GuhGieterItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         BlockHitResult hit = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
         if (hit.getType() != HitResult.Type.BLOCK || !level.getFluidState(hit.getBlockPos()).is(FluidTags.WATER)) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         }
         if (stack.getDamageValue() == 0) {
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         }
         stack.setDamageValue(0);
         level.playSound(player, player.blockPosition(), SoundEvents.BUCKET_FILL, SoundSource.PLAYERS, 1f, 1.3f);
-        if (!level.isClientSide) {
-            player.displayClientMessage(Component.translatable("gui.guhs.tuintjes.gieter_vol").withStyle(ChatFormatting.AQUA), true);
+        if (!level.isClientSide()) {
+            player.sendOverlayMessage(Component.translatable("gui.guhs.tuintjes.gieter_vol").withStyle(ChatFormatting.AQUA));
         }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     @Override

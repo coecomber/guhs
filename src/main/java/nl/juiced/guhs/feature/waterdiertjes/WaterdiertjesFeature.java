@@ -24,6 +24,8 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.quest.GuhDex;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
 /**
  * 3.0 (Guhverhalen), slice waterdiertjes: the water and insect critters of the Guhmensie (DESIGN_30 §6). All lief, all
  * guh-inspired, none of them a guh:
@@ -46,19 +48,19 @@ public final class WaterdiertjesFeature {
     // --- entities ---------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<GuhxolotlEntity>> GUHXOLOTL = ENTITY_TYPES.register("guhxolotl",
             () -> EntityType.Builder.of(GuhxolotlEntity::new, MobCategory.AXOLOTLS).sized(0.75f, 0.42f).eyeHeight(0.25f)
-                    .clientTrackingRange(10).build(Guhs.id("guhxolotl").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guhxolotl"))));
     public static final DeferredHolder<EntityType<?>, EntityType<GuhEendjeEntity>> GUH_EENDJE = ENTITY_TYPES.register("guh_eendje",
             () -> EntityType.Builder.of(GuhEendjeEntity::new, MobCategory.CREATURE).sized(0.5f, 0.65f).eyeHeight(0.55f)
-                    .clientTrackingRange(10).build(Guhs.id("guh_eendje").toString()));
+                    .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_eendje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<KnabbelvlindertjeEntity>> KNABBELVLINDERTJE = ENTITY_TYPES.register("knabbelvlindertje",
             () -> EntityType.Builder.of(KnabbelvlindertjeEntity::new, MobCategory.AMBIENT).sized(0.4f, 0.3f).eyeHeight(0.15f)
-                    .clientTrackingRange(6).build(Guhs.id("knabbelvlindertje").toString()));
+                    .clientTrackingRange(6).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("knabbelvlindertje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<GlimguhtjeEntity>> GLIMGUHTJE = ENTITY_TYPES.register("glimguhtje",
             () -> EntityType.Builder.of(GlimguhtjeEntity::new, MobCategory.AMBIENT).sized(0.25f, 0.25f).eyeHeight(0.15f)
-                    .clientTrackingRange(8).build(Guhs.id("glimguhtje").toString()));
+                    .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("glimguhtje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<LieveheersbeestjeEntity>> LIEVEHEERSBEESTJE = ENTITY_TYPES.register("lieveheersbeestje",
             () -> EntityType.Builder.of(LieveheersbeestjeEntity::new, MobCategory.AMBIENT).sized(0.25f, 0.2f).eyeHeight(0.1f)
-                    .clientTrackingRange(6).build(Guhs.id("lieveheersbeestje").toString()));
+                    .clientTrackingRange(6).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("lieveheersbeestje"))));
 
     // --- items ------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<GuhxolotlEmmertje> GUHXOLOTL_EMMERTJE = ITEMS.registerItem("guhxolotl_emmertje",

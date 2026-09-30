@@ -31,7 +31,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.TamableAnimal;
@@ -66,13 +66,13 @@ import nl.juiced.guhs.feature.piep.PiepInstelling;
 import nl.juiced.guhs.feature.piep.PiepMaatje;
 import nl.juiced.guhs.feature.piep.PiepMenu;
 import nl.juiced.guhs.registry.ModItems;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * De guhxolotl (3.0, DESIGN_30 §6): a guh that is an axolotl. It behaves like a vanilla axolotl, but lief:
@@ -168,8 +168,8 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
      * Spawns in shallow water: the pools and edges of the Guhzee and the Kaasmoeras (water here, land or the bottom close
      * by, near the sea level). Spawn eggs and commands: anywhere.
      */
-    public static boolean checkSpawn(EntityType<GuhxolotlEntity> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
-        if (spawnType != MobSpawnType.NATURAL && spawnType != MobSpawnType.CHUNK_GENERATION) {
+    public static boolean checkSpawn(EntityType<GuhxolotlEntity> type, LevelAccessor level, EntitySpawnReason spawnType, BlockPos pos, RandomSource random) {
+        if (spawnType != EntitySpawnReason.NATURAL && spawnType != EntitySpawnReason.CHUNK_GENERATION) {
             return true;
         }
         if (!level.getFluidState(pos).is(FluidTags.WATER)) {
@@ -234,8 +234,8 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData data) {
-        if (spawnType != MobSpawnType.BREEDING && spawnType != MobSpawnType.BUCKET) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData data) {
+        if (spawnType != EntitySpawnReason.BREEDING && spawnType != EntitySpawnReason.BUCKET) {
             setKleur(Kleur.rol(level.getRandom()));
         }
         return super.finalizeSpawn(level, difficulty, spawnType, data);
@@ -253,10 +253,10 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        setKleur(Kleur.van(tag.getString("Kleur")));
-        setUitVlaggen(tag.getInt("PiepUit"));
-        droogTicks = tag.getInt("Droog");
-        rustTot = tag.getLong("BlubRust");
+        setKleur(Kleur.van(tag.getStringOr("Kleur", "")));
+        setUitVlaggen(tag.getIntOr("PiepUit", 0));
+        droogTicks = tag.getIntOr("Droog", 0);
+        rustTot = tag.getLongOr("BlubRust", 0L);
     }
 
     // --- moving: like an axolotl (smooth swimming, slow crawling) ---------------------------------------------------------
@@ -326,7 +326,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
         int air = getAirSupply();
         super.baseTick();
         setAirSupply(air);                                         // (it never drowns or suffocates in water: it has gills)
-        if (level().isClientSide || !isAlive()) {
+        if (level().isClientSide() || !isAlive()) {
             return;
         }
         boolean nat = isInWaterRainOrBubble() || Huisjes.isBewoner(this) || isPassenger();
@@ -335,8 +335,8 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
         if (droog != isDroog()) {
             entityData.set(DATA_DROOG, droog);
             if (droog && isTame() && getOwner() instanceof ServerPlayer owner && distanceToSqr(owner) < 32 * 32) {
-                owner.displayClientMessage(Component.translatable("gui.guhs.waterdiertjes.droog", getDisplayName())
-                        .withStyle(ChatFormatting.AQUA), true);
+                owner.sendOverlayMessage(Component.translatable("gui.guhs.waterdiertjes.droog", getDisplayName())
+                        .withStyle(ChatFormatting.AQUA));
             }
         }
         if (droog && tickCount % 40 == 0 && level() instanceof ServerLevel sl) {
@@ -356,7 +356,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
     @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean hurt = super.hurt(source, amount);
-        if (hurt && !level().isClientSide && isAlive() && !isPlat() && random.nextInt(3) > 0) {
+        if (hurt && !level().isClientSide() && isAlive() && !isPlat() && random.nextInt(3) > 0) {
             speelPlat();
         }
         return hurt;
@@ -506,7 +506,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
         if (!voer && !leeg) {
             return super.mobInteract(player, hand);
         }
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer sp = (ServerPlayer) player;
@@ -540,7 +540,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
         if (isTame() && isOwnedBy(player)) {
             PiepMenu.open(sp, this);
         } else if (isTame() && player.isSecondaryUseActive()) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.piep.niet_jouw_maatje").withStyle(ChatFormatting.GRAY), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.piep.niet_jouw_maatje").withStyle(ChatFormatting.GRAY));
         }
         return InteractionResult.SUCCESS;
     }
@@ -558,12 +558,12 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
 
     /** A water bucket: scoop it up (a wild one, or your own tamed one) into a guhxolotl-emmertje. */
     private InteractionResult schep(Player player, InteractionHand hand, ItemStack bucket) {
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         ServerPlayer sp = (ServerPlayer) player;
         if (isTame() && !isOwnedBy(player)) {
-            sp.displayClientMessage(Component.translatable("gui.guhs.piep.niet_jouw_maatje").withStyle(ChatFormatting.GRAY), true);
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.piep.niet_jouw_maatje").withStyle(ChatFormatting.GRAY));
             return InteractionResult.CONSUME;
         }
         if (isBezig()) {
@@ -584,7 +584,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
                 player.drop(emmer, false);
             }
         }
-        sp.displayClientMessage(Component.translatable("gui.guhs.piep.opgepakt.guhxolotl", getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        sp.sendOverlayMessage(Component.translatable("gui.guhs.piep.opgepakt.guhxolotl", getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         discard();
         return InteractionResult.SUCCESS;
     }
@@ -594,7 +594,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
         getNavigation().stop();
         level().broadcastEntityEvent(this, (byte) 7);
         triggerAnim("actie", "blij");
-        player.displayClientMessage(Component.translatable("gui.guhs.waterdiertjes.getemd", getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.waterdiertjes.getemd", getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         WaterdiertjesEvents.getemd(player, this);
     }
 
@@ -606,7 +606,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
     @Nullable
     @Override
     public AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other) {
-        GuhxolotlEntity baby = WaterdiertjesFeature.GUHXOLOTL.get().create(level);
+        GuhxolotlEntity baby = WaterdiertjesFeature.GUHXOLOTL.get().create(level, EntitySpawnReason.TRIGGERED);
         if (baby == null) {
             return null;
         }
@@ -656,7 +656,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
     @Override
     public void playAmbientSound() {
         super.playAmbientSound();
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             triggerAnim("actie", "blub");
             if (level() instanceof ServerLevel sl) {
                 sl.sendParticles(ParticleTypes.BUBBLE, getX(), getY() + 0.4, getZ(), 4, 0.1, 0.1, 0.1, 0.02);
@@ -738,8 +738,8 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
         long now = level().getGameTime();
         if (now < rustTot) {
             long sec = (rustTot - now) / 20;
-            player.displayClientMessage(Component.translatable("gui.guhs.waterdiertjes.blub_rust", sec / 60, String.format(Locale.ROOT, "%02d", sec % 60))
-                    .withStyle(ChatFormatting.GRAY), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.waterdiertjes.blub_rust", sec / 60, String.format(Locale.ROOT, "%02d", sec % 60))
+                    .withStyle(ChatFormatting.GRAY));
             return;
         }
         rustTot = now + BLUB_RUST;
@@ -750,7 +750,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
             sl.sendParticles(ParticleTypes.BUBBLE_POP, player.getX(), player.getY() + 1.2, player.getZ(), 30, 0.5, 0.6, 0.5, 0.02);
             sl.sendParticles(ParticleTypes.HEART, getX(), getY() + 0.5, getZ(), 2, 0.2, 0.1, 0.2, 0);
         }
-        player.displayClientMessage(Component.translatable("gui.guhs.waterdiertjes.blubbeltjes", getDisplayName()).withStyle(ChatFormatting.AQUA), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.waterdiertjes.blubbeltjes", getDisplayName()).withStyle(ChatFormatting.AQUA));
         nl.juiced.guhs.quest.GuhAdvancements.grant(player, "waterdiertjes_blubbeltjes");
     }
 

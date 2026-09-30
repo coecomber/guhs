@@ -121,11 +121,11 @@ public final class GuhDex {
         }
         GuhAdvancements.grant(player, "seen_" + v.id());
         nl.juiced.guhs.feature.verhaal.VerhaalFeature.paginaGezien(player, v);   // 3.0: the Diertjes tab
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         if (data.player(player.getUUID()).seen.add(v)) {
             data.setDirty();
-            player.displayClientMessage(Component.translatable("gui.guhs.guhdex.new", Component.translatable("entity.guhs." + v.id()))
-                    .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.guhdex.new", Component.translatable("entity.guhs." + v.id()))
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
 
@@ -149,15 +149,15 @@ public final class GuhDex {
         if (near.isEmpty()) {
             return;
         }
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.PlayerData p = data.player(player.getUUID());
         for (GuhVariant v : near) {
             GuhAdvancements.grant(player, "seen_" + v.id());
             nl.juiced.guhs.feature.verhaal.VerhaalFeature.paginaGezien(player, v);   // 3.0: the Diertjes tab
             if (p.seen.add(v)) {
                 data.setDirty();
-                player.displayClientMessage(Component.translatable("gui.guhs.guhdex.new", Component.translatable("entity.guhs." + v.id()))
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.guhdex.new", Component.translatable("entity.guhs." + v.id()))
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 player.level().playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1f, 1.2f);
             }
         }
@@ -172,8 +172,8 @@ public final class GuhDex {
                 GuhAdvancements.grant(player, "seen_" + v.id());
                 if (p.seen.add(v)) {
                     data.setDirty();
-                    player.displayClientMessage(Component.translatable("gui.guhs.guhdex.new", Component.translatable("entity.guhs.guh_npc." + v.id()))
-                            .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                    player.sendOverlayMessage(Component.translatable("gui.guhs.guhdex.new", Component.translatable("entity.guhs.guh_npc." + v.id()))
+                            .withStyle(ChatFormatting.LIGHT_PURPLE));
                     player.level().playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1f, 1.2f);
                 }
             }
@@ -185,8 +185,8 @@ public final class GuhDex {
             }
             if (ENTRIES.contains(v) && p.seen.add(v)) {
                 data.setDirty();
-                player.displayClientMessage(Component.translatable("gui.guhs.guhdex.new", guh.getVariant().displayName())
-                        .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                player.sendOverlayMessage(Component.translatable("gui.guhs.guhdex.new", guh.getVariant().displayName())
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
                 player.level().playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1f, 1.2f);
             }
         }
@@ -204,9 +204,9 @@ public final class GuhDex {
 
     /**
      * Stepping into the Guhmensie through a portal (from the Overworld, the Barbecuether or the Guheinde, not by command or
-     * respawn): hangs after the portal's own arrival steps (DimensionTransition.then) and gives a Guhdex.
+     * respawn): hangs after the portal's own arrival steps (TeleportTransition.then) and gives a Guhdex.
      */
-    public static final net.minecraft.world.level.portal.DimensionTransition.PostDimensionTransition GIVE_ON_ARRIVAL = entity -> {
+    public static final net.minecraft.world.level.portal.TeleportTransition.PostDimensionTransition GIVE_ON_ARRIVAL = entity -> {
         if (entity instanceof ServerPlayer player) {
             giveOnArrival(player);
         }
@@ -224,7 +224,7 @@ public final class GuhDex {
     }
 
     public static void onTamed(ServerPlayer player, GuhEntity guh) {
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.PlayerData p = data.player(player.getUUID());
         p.seen.add(guh.getVariant());
         if (p.tamed.add(guh.getVariant())) {
@@ -239,11 +239,11 @@ public final class GuhDex {
         nl.juiced.guhs.feature.kleding.KledingUnlocks.sync(player); // (2.9: the Kleding tab's unlocks)
         nl.juiced.guhs.feature.band.BandPayloads.sync(player);      // (2.10: the Mijn guhs tab)
         nl.juiced.guhs.feature.gids.VerhalenPayloads.sync(player);  // (the Verhalen tab: every questline's step)
-        nl.juiced.guhs.network.ModNetworking.sendTo(player, MaagPayloads.GuhDexData.of(GuhWorldData.get(player.server).player(player.getUUID())));
+        nl.juiced.guhs.network.ModNetworking.sendTo(player, MaagPayloads.GuhDexData.of(GuhWorldData.get(player.level().getServer()).player(player.getUUID())));
     }
 
     public static void claim(ServerPlayer player, int milestone) {
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.PlayerData p = data.player(player.getUUID());
         if (milestone < 0 || milestone >= MILESTONES.size() || p.rewards.contains(milestone)) {
             return;

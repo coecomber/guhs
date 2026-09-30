@@ -9,7 +9,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.NoiseColumn;
@@ -42,7 +42,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 public class BurchtStructure extends Structure implements nl.juiced.guhs.world.BouwRuimte.Ruimte {
     public static final MapCodec<BurchtStructure> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             settingsCodec(i),
-            ResourceLocation.CODEC.fieldOf("templates").forGetter(s -> s.templates),
+            Identifier.CODEC.fieldOf("templates").forGetter(s -> s.templates),
             Codec.INT.fieldOf("tiles_x").forGetter(s -> s.tilesX),
             Codec.INT.fieldOf("tiles_z").forGetter(s -> s.tilesZ),
             Codec.INT.fieldOf("tile_size").forGetter(s -> s.tileSize),
@@ -55,7 +55,7 @@ public class BurchtStructure extends Structure implements nl.juiced.guhs.world.B
             Codec.INT.optionalFieldOf("voorrang").forGetter(s -> s.voorrang)
     ).apply(i, BurchtStructure::new));
 
-    private final ResourceLocation templates;
+    private final Identifier templates;
     private final int tilesX, tilesZ, tileSize;
     private final BlockPos anchor;
     private final String placement;
@@ -66,7 +66,7 @@ public class BurchtStructure extends Structure implements nl.juiced.guhs.world.B
     private final int keepClear;
     private final Optional<Integer> voorrang;
 
-    public BurchtStructure(StructureSettings settings, ResourceLocation templates, int tilesX, int tilesZ, int tileSize, BlockPos anchor,
+    public BurchtStructure(StructureSettings settings, Identifier templates, int tilesX, int tilesZ, int tileSize, BlockPos anchor,
                            String placement, int minY, int maxY, int reach, int keepClear, Optional<Integer> voorrang) {
         super(settings);
         this.templates = templates;
@@ -92,7 +92,7 @@ public class BurchtStructure extends Structure implements nl.juiced.guhs.world.B
         return voorrang.orElse(keepClear);
     }
 
-    public ResourceLocation tile(int i, int j) {
+    public Identifier tile(int i, int j) {
         return templates.withPath(templates.getPath() + "/stuk_" + i + "_" + j);
     }
 
@@ -110,7 +110,7 @@ public class BurchtStructure extends Structure implements nl.juiced.guhs.world.B
         List<Piece> pieces = new ArrayList<>();
         for (int i = 0; i < tilesX; i++) {
             for (int j = 0; j < tilesZ; j++) {
-                ResourceLocation id = tile(i, j);
+                Identifier id = tile(i, j);
                 if (manager.get(id).isEmpty()) {
                     continue;
                 }
@@ -183,13 +183,13 @@ public class BurchtStructure extends Structure implements nl.juiced.guhs.world.B
 
     /** One tile of the build. */
     public static class Piece extends TemplateStructurePiece {
-        public Piece(StructureTemplateManager manager, ResourceLocation id, BlockPos position, Rotation rotation, BlockPos pivot) {
+        public Piece(StructureTemplateManager manager, Identifier id, BlockPos position, Rotation rotation, BlockPos pivot) {
             super(SpiesburchtFeature.BURCHT_PIECE.get(), 0, manager, id, id.toString(), settings(rotation, pivot), position);
         }
 
         public Piece(StructureTemplateManager manager, CompoundTag tag) {
             super(SpiesburchtFeature.BURCHT_PIECE.get(), tag, manager,
-                    id -> settings(Rotation.valueOf(tag.getString("Rot")), BlockPos.of(tag.getLong("Pivot"))));
+                    id -> settings(Rotation.valueOf(tag.getStringOr("Rot", "")), BlockPos.of(tag.getLongOr("Pivot", 0L))));
         }
 
         static StructurePlaceSettings settings(Rotation rotation, BlockPos pivot) {

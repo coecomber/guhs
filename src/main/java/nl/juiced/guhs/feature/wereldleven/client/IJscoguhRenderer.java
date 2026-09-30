@@ -6,9 +6,9 @@ import java.util.WeakHashMap;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.wereldleven.IJscoguhEntity;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.animation.state.AnimationTest;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * IJscoguh Tingeling on his ice-cream bike (geo/entity/ijscoguh.geo.json, tools/features/wereldleven.py): the wheels
@@ -21,7 +21,7 @@ public class IJscoguhRenderer extends GeoEntityRenderer<IJscoguhEntity> {
     public IJscoguhRenderer(EntityRendererProvider.Context context) {
         super(context, new DefaultedEntityGeoModel<>(Guhs.id("ijscoguh"), true) {
             @Override
-            public void setCustomAnimations(IJscoguhEntity ijsco, long instanceId, AnimationState<IJscoguhEntity> state) {
+            public void setCustomAnimations(IJscoguhEntity ijsco, long instanceId, AnimationTest<IJscoguhEntity> state) {
                 super.setCustomAnimations(ijsco, instanceId, state);
                 float swing = state.getLimbSwing();
                 float wheel = swing * 1.6f;

@@ -13,7 +13,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.projectile.Snowball;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.Snowball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -113,8 +113,8 @@ public final class Blikgooien implements Wedstrijd.Spel {
             return;
         }
         if (t % 5 == 0) {
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.blik.bar", s.punten, BALLEN - s.gegooid)
-                    .withStyle(ChatFormatting.AQUA), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.blik.bar", s.punten, BALLEN - s.gegooid)
+                    .withStyle(ChatFormatting.AQUA));
         }
     }
 
@@ -123,14 +123,14 @@ public final class Blikgooien implements Wedstrijd.Spel {
         if (b[0] > Speelvelden.BLIK_MAT + 1.6 || b[0] < -1.5 || Math.abs(b[1]) > 1.8) {
             Vec3 m = Speelvelden.punt(w.anker, Onderdeel.BLIKGOOIEN, d.baan, Speelvelden.BLIK_MAT, 0, Speelvelden.G + 1);
             Wedstrijd.teleport(p, level, m.x, m.y, m.z, p.getYRot());
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.blik.streep").withStyle(ChatFormatting.GOLD), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.blik.streep").withStyle(ChatFormatting.GOLD));
         }
     }
 
     /** Right-click with a pluisbal: throw it (only while playing blikgooien). */
     static boolean gooi(ServerPlayer p, InteractionHand hand) {
         if (!Wedstrijd.speelt(p, Onderdeel.BLIKGOOIEN)) {
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.blik.nog_niet").withStyle(ChatFormatting.GRAY), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.blik.nog_niet").withStyle(ChatFormatting.GRAY));
             return false;
         }
         Wedstrijd w = Wedstrijd.van(p);
@@ -142,7 +142,7 @@ public final class Blikgooien implements Wedstrijd.Spel {
         if (s.gegooid >= BALLEN) {
             return false;
         }
-        ServerLevel level = p.serverLevel();
+        ServerLevel level = p.level();
         Snowball bal = new Snowball(level, p);
         bal.setItem(new ItemStack(KnabbelspelenFeature.BLIK_PLUISBAL.get()));
         bal.shootFromRotation(p, p.getXRot(), p.getYRot(), 0f, 1.5f, 0.6f);
@@ -157,7 +157,7 @@ public final class Blikgooien implements Wedstrijd.Spel {
 
     /** A pluisbal lands: a tin of your own pyramid goes down (and the ones resting on it). It never hurts anyone. */
     public static void onImpact(ProjectileImpactEvent event) {
-        if (!event.getProjectile().getTags().contains(TAG) || !(event.getProjectile().level() instanceof ServerLevel level)) {
+        if (!event.getProjectile().entityTags().contains(TAG) || !(event.getProjectile().level() instanceof ServerLevel level)) {
             return;
         }
         if (event.getRayTraceResult() instanceof EntityHitResult) {
@@ -215,7 +215,7 @@ public final class Blikgooien implements Wedstrijd.Spel {
                     .withStyle(ChatFormatting.GOLD), 0, 30, 8);
             level.playSound(null, p.blockPosition(), KnabbelspelenFeature.JUICH.get(), SoundSource.PLAYERS, 1f, 1.2f);
         } else {
-            p.displayClientMessage(Component.translatable("quest.guhs.knabbelspelen.blik.raak", weg, s.punten).withStyle(ChatFormatting.YELLOW), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.blik.raak", weg, s.punten).withStyle(ChatFormatting.YELLOW));
         }
     }
 

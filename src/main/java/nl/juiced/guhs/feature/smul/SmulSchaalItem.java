@@ -23,14 +23,14 @@ public class SmulSchaalItem extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide && (!(entity instanceof ServerPlayer player) || !SmulGame.isPlaying(player))) {
+        if (!level.isClientSide() && (!(entity instanceof ServerPlayer player) || !SmulGame.isPlaying(player))) {
             stack.setCount(0);
         }
     }
 
     @Override
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
-        if (!entity.level().isClientSide) {
+        if (!entity.level().isClientSide()) {
             entity.discard();
         }
         return true;

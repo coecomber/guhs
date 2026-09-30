@@ -67,12 +67,12 @@ public class ParadeGuhEntity extends GuhEntity {
     /** Right-click: a happy little VAHOEG hop (a high five with the parade), nothing else. */
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (hand == InteractionHand.MAIN_HAND && !this.level().isClientSide) {
+        if (hand == InteractionHand.MAIN_HAND && !this.level().isClientSide()) {
             this.triggerAnim("action", "happy");
             this.playSound(ModSounds.GUH_HAPPY.get(), 0.8f, this.getVoicePitch());
             ((ServerLevel) this.level()).sendParticles(ParticleTypes.NOTE, getX(), getY() + getBbHeight() + 0.3, getZ(), 1, 0.2, 0.1, 0.2, 0.5);
         }
-        return InteractionResult.sidedSuccess(this.level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ParadeGuhEntity extends GuhEntity {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide && this.tickCount > 40 && this.tickCount % 20 == 0 && !Evenementen.owns(this)) {
+        if (!this.level().isClientSide() && this.tickCount > 40 && this.tickCount % 20 == 0 && !Evenementen.owns(this)) {
             this.discard(); // a leftover of a parade that's over (or never was)
         }
     }

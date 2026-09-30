@@ -6,8 +6,8 @@ import java.util.Map;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.criterion.InventoryChangeTrigger;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +45,7 @@ public final class KledingOntgrendel {
 
     /** "Deze heb je al, njeg! Geef hem aan een vriend." */
     public static void alGehad(ServerPlayer player, GuhClothes c) {
-        player.displayClientMessage(Component.translatable("gui.guhs.kleding.al_gehad", naam(c)).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.kleding.al_gehad", naam(c)).withStyle(ChatFormatting.LIGHT_PURPLE));
         player.level().playSound(null, player.blockPosition(), SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, 0.5f, 1.6f);
     }
 
@@ -55,7 +55,7 @@ public final class KledingOntgrendel {
     }
 
     private static void feest(ServerPlayer player, GuhClothes c) {
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         level.playSound(null, player.blockPosition(), SoundEvents.CHICKEN_EGG, SoundSource.PLAYERS, 1f, 1.4f);            // plop!
         level.playSound(null, player.blockPosition(), KledingFeature.ONTGRENDEL_SOUND.get(), SoundSource.PLAYERS, 1f, 1f);
         level.sendParticles(KledingFeature.CONFETTI.get(), player.getX(), player.getY() + 1.6, player.getZ(), 40, 0.5, 0.3, 0.5, 0.15);
@@ -93,7 +93,7 @@ public final class KledingOntgrendel {
 
     /** Grants a visible advancement of the Grote Guhspelen tab (grote_guhspelen/&lt;name&gt;, criterion "done"). */
     public static void grant(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("grote_guhspelen/" + name));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }
@@ -105,7 +105,7 @@ public final class KledingOntgrendel {
      * criterion counts as met when each of its items is a piece you unlocked (or have in your inventory).
      */
     public static void setAdvancements(ServerPlayer player) {
-        for (AdvancementHolder holder : player.server.getAdvancements().getAllAdvancements()) {
+        for (AdvancementHolder holder : player.level().getServer().getAdvancements().getAllAdvancements()) {
             if (player.getAdvancements().getOrStartProgress(holder).isDone()) {
                 continue;
             }
@@ -131,7 +131,7 @@ public final class KledingOntgrendel {
                 }
             }
             if (!ok) {
-                for (ItemStack stack : player.getInventory().items) {
+                for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
                     if (!stack.isEmpty() && predicate.test(stack)) {
                         ok = true;
                         break;

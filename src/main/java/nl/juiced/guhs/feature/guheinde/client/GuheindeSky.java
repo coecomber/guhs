@@ -12,14 +12,14 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import org.joml.Matrix4f;
 
 /** The Guheinde sky: like the End's, but a slow purple-pink swirl of knabbel crumbs (textures/environment/guheinde_sky.png). */
 public class GuheindeSky extends DimensionSpecialEffects {
-    private static final ResourceLocation SKY = Guhs.id("textures/environment/guheinde_sky.png");
+    private static final Identifier SKY = Guhs.id("textures/environment/guheinde_sky.png");
 
     public GuheindeSky() {
         super(Float.NaN, false, SkyType.END, true, false);

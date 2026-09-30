@@ -139,7 +139,7 @@ public class PluiseekhoorntjeEntity extends Landdiertje {
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide && volgendeVondst < 0) {
+        if (!level().isClientSide() && volgendeVondst < 0) {
             volgendeVondst = level().getGameTime() + (isTame() ? CADEAU_MIN : VONDST_MIN / 2) + random.nextInt(VONDST_WILLEKEURIG);
         }
     }
@@ -154,12 +154,12 @@ public class PluiseekhoorntjeEntity extends Landdiertje {
     /** Onto this player's shoulder (if there is room), with its own message. */
     static boolean opSchouder(ServerPlayer player, PluiseekhoorntjeEntity eekhoorn) {
         if (Schouder.heeft(player)) {
-            player.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.schouder_vol").withStyle(ChatFormatting.GRAY), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.schouder_vol").withStyle(ChatFormatting.GRAY));
             return false;
         }
         Component naam = eekhoorn.getDisplayName();
         Schouder.zet(player, eekhoorn);
-        player.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.op_schouder", naam).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.op_schouder", naam).withStyle(ChatFormatting.LIGHT_PURPLE));
         GidsFeature.grant(player, "diertjes/landdiertjes_schouder");
         return true;
     }
@@ -252,8 +252,8 @@ public class PluiseekhoorntjeEntity extends Landdiertje {
                 if (KnabbelvoorraadjeBlock.verstop(sl, plek, knabbels)) {
                     playSound(geluid(), 0.7f, 1.4f);
                     if (cadeauVoor != null) {
-                        cadeauVoor.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.voorraadje_cadeau", getDisplayName())
-                                .withStyle(ChatFormatting.GOLD), true);
+                        cadeauVoor.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.voorraadje_cadeau", getDisplayName())
+                                .withStyle(ChatFormatting.GOLD));
                         sl.sendParticles(ParticleTypes.HEART, getX(), getY() + 0.6, getZ(), 3, 0.2, 0.2, 0.2, 0);
                     }
                     wangen = 0;
@@ -305,8 +305,8 @@ public class PluiseekhoorntjeEntity extends Landdiertje {
     // --- save / animations ------------------------------------------------------------------------------------------------------------
 
     @Override
-    protected void extraActies(software.bernie.geckolib.animation.AnimationController<Landdiertje> actie) {
-        actie.triggerableAnim("graaf", software.bernie.geckolib.animation.RawAnimation.begin().thenPlay("graaf"));
+    protected void extraActies(com.geckolib.animation.AnimationController<Landdiertje> actie) {
+        actie.triggerableAnim("graaf", com.geckolib.animation.RawAnimation.begin().thenPlay("graaf"));
     }
 
     @Override
@@ -319,8 +319,8 @@ public class PluiseekhoorntjeEntity extends Landdiertje {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        wangen = Math.min(WANGEN_MAX, tag.getInt("Wangen"));
-        long over = tag.contains("VondstOver") ? tag.getLong("VondstOver") : -1;
+        wangen = Math.min(WANGEN_MAX, tag.getIntOr("Wangen", 0));
+        long over = tag.contains("VondstOver") ? tag.getLongOr("VondstOver", 0L) : -1;
         volgendeVondst = over < 0 ? -1 : level().getGameTime() + over;
     }
 

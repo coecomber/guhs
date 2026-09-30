@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.Fallable;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.DripstoneThickness;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.Vec3;
@@ -37,7 +37,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public class KaasStalactietBlock extends Block implements Fallable {
     public static final MapCodec<KaasStalactietBlock> CODEC = simpleCodec(KaasStalactietBlock::new);
-    public static final DirectionProperty TIP_DIRECTION = BlockStateProperties.VERTICAL_DIRECTION;
+    public static final EnumProperty<Direction> TIP_DIRECTION = BlockStateProperties.VERTICAL_DIRECTION;
     public static final EnumProperty<DripstoneThickness> THICKNESS = BlockStateProperties.DRIPSTONE_THICKNESS;
 
     private static final VoxelShape TIP_UP = Block.box(5, 0, 5, 11, 11, 11);

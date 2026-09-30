@@ -5,7 +5,7 @@ import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -17,8 +17,6 @@ import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.band.Band;
@@ -42,8 +40,6 @@ import nl.juiced.guhs.world.GuhWorldData;
  * the rooms are built in the test level ({@link Guhkamer#TEST_PLEK}).
  * (Template guhkamer_test_kamer: 30 x 30 smooth stone at y 0, the room's floor at y 4.)
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class GuhkamerGameTests {
     private static final String KAMER = "guhkamer_test_kamer";
     private static final String BATCH = "guhkamer";
@@ -62,7 +58,7 @@ public class GuhkamerGameTests {
         ServerPlayer p = helper.makeMockServerPlayerInLevel();
         p.setGameMode(GameType.SURVIVAL);
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return p;
     }
 
@@ -81,7 +77,7 @@ public class GuhkamerGameTests {
 
     /** Raises a guh to zielsguh bff 5evr (hearts only go up: a few "days" of discovered favourites). */
     static void maakZielsguh(GuhEntity guh, ServerPlayer owner) {
-        MinecraftServer s = guh.getServer();
+        MinecraftServer s = guh.level().getServer();
         for (int i = 0; i < 8 && Band.niveau(guh) != BandNiveau.ZIELSGUH; i++) {
             BandData.Rec r = BandData.get(s).vind(owner.getUUID(), guh.getUUID());
             if (r != null) {
@@ -100,7 +96,7 @@ public class GuhkamerGameTests {
 
     // =====================================================================================================================
 
-    @GameTest(template = KAMER, batch = BATCH)
+    @GuhTest(template = KAMER, batch = BATCH)
     public static void guhkamerGroeitMetZielsguhs(GameTestHelper helper) {
         helper.assertTrue(Guhkamer.breedte(0) == 16 && Guhkamer.breedte(1) == 20 && Guhkamer.breedte(8) == 48 && Guhkamer.breedte(30) == 48,
                 "16, 4 more per zielsguh, at most 48");
@@ -117,7 +113,7 @@ public class GuhkamerGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = KAMER, batch = BATCH)
+    @GuhTest(template = KAMER, batch = BATCH)
     public static void guhkamerWordtGebouwdEnGroeit(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(1, 2, 1));
@@ -152,7 +148,7 @@ public class GuhkamerGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = KAMER, batch = BATCH, timeoutTicks = 300)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 300)
     public static void guhkamerGuhbelStuurtEnRoept(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(1, 2, 1));
@@ -197,7 +193,7 @@ public class GuhkamerGameTests {
      * Guhkamer" (it goes there like with the Guhbel); a guest in the room shows "Uit de logeerkamer" (the synced flag
      * tells the client) and comes to you, just your guh again. Someone else's guh can't; a wild guh has no button.
      */
-    @GameTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
     public static void guhkamerViaHetGuhMenu(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(1, 2, 1));
@@ -245,7 +241,7 @@ public class GuhkamerGameTests {
         });
     }
 
-    @GameTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
     public static void guhkamerOpgepakteGastIsGeenGastMeer(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(1, 2, 1));
@@ -276,7 +272,7 @@ public class GuhkamerGameTests {
         });
     }
 
-    @GameTest(template = KAMER, batch = BATCH)
+    @GuhTest(template = KAMER, batch = BATCH)
     public static void guhkamerVolIsVol(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(1, 2, 1));
         kamer(helper, p);
@@ -293,7 +289,7 @@ public class GuhkamerGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
     public static void guhkamerDeurenEnBezoek(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(1, 2, 1));
@@ -324,7 +320,7 @@ public class GuhkamerGameTests {
         });
     }
 
-    @GameTest(template = KAMER, batch = BATCH)
+    @GuhTest(template = KAMER, batch = BATCH)
     public static void guhkamerDeurInDeMaag(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos c = helper.absolutePos(new BlockPos(15, 2, 15));

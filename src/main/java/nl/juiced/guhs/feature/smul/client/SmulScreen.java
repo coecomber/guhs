@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.smul.client;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -36,13 +36,13 @@ public class SmulScreen extends Screen {
     protected void init() {
         left = (width - W) / 2;
         top = (height - H) / 2;
-        if (!data.getBoolean("Running")) {
+        if (!data.getBooleanOr("Running", false)) {
             NiveauKeuze.knoppen(this::addRenderableWidget, "smul", left + 20, top + H - 78, W - 40);
         }
         Button play = Button.builder(Component.translatable("gui.guhs.smul.play").withStyle(ChatFormatting.BOLD),
                         b -> send(NiveauKeuze.actie("smul", SmulGame.START)))
                 .bounds(left + 20, top + H - 56, W - 40, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.smul.play.tooltip"))).build();
-        play.active = !data.getBoolean("Running");
+        play.active = !data.getBooleanOr("Running", false);
         addRenderableWidget(play);
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.smul.shop"), b -> send(SmulGame.SHOP))
                 .bounds(left + 20, top + H - 30, (W - 44) / 2, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.smul.shop.tooltip"))).build());
@@ -51,27 +51,27 @@ public class SmulScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(g, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, 0xFFFFD27A);
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, 0xFFF7B6CB);
         g.fill(left, top, left + W, top + H, 0xEA3A1A2A);
-        g.drawCenteredString(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFFFE6EE);
+        g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 9, 0xFFFFE6EE);
         int y = top + 26;
         for (var line : font.split(Component.translatable("gui.guhs.smul.rules"), W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, 0xFFE8C8D8);
+            g.centeredText(font, line, width / 2, y, 0xFFE8C8D8);
             y += 10;
         }
         y += 4;
-        Component status = data.getBoolean("Running")
-                ? Component.translatable("gui.guhs.smul.busy", data.getString("Player"), data.getInt("Left"), data.getInt("Score"))
-                : data.getBoolean("First") ? Component.translatable("gui.guhs.smul.first") : Component.translatable("gui.guhs.smul.free");
+        Component status = data.getBooleanOr("Running", false)
+                ? Component.translatable("gui.guhs.smul.busy", data.getStringOr("Player", ""), data.getIntOr("Left", 0), data.getIntOr("Score", 0))
+                : data.getBooleanOr("First", false) ? Component.translatable("gui.guhs.smul.first") : Component.translatable("gui.guhs.smul.free");
         for (var line : font.split(status, W - 30)) {
-            g.drawCenteredString(font, line, width / 2, y, data.getBoolean("Running") ? 0xFFFFA0A0 : 0xFFB8F0C8);
+            g.centeredText(font, line, width / 2, y, data.getBooleanOr("Running", false) ? 0xFFFFA0A0 : 0xFFB8F0C8);
             y += 10;
         }
         NiveauKeuze.records(g, font, data, width / 2, top + H - 106, s -> s + " pt", 0);
-        g.drawCenteredString(font, Component.translatable("gui.guhs.klassiekers.gespeeld", data.getInt("Games")), width / 2, top + H - 94, 0xFFE8C8D8);
+        g.centeredText(font, Component.translatable("gui.guhs.klassiekers.gespeeld", data.getIntOr("Games", 0)), width / 2, top + H - 94, 0xFFE8C8D8);
     }
 
     @Override

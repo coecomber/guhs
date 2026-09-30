@@ -24,12 +24,12 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * A customer guh of Bakker Korstje's order game (a prop: no Guhdex page, never saved). It comes in at the door, walks to
@@ -85,7 +85,7 @@ public class BakkerijKlant extends PathfinderMob implements GeoEntity {
         k.entityData.set(GEDULD, 1000);
         k.entityData.set(UITERLIJK, recept == Recept.FEESTTAART ? UITERLIJKEN : level.getRandom().nextInt(UITERLIJKEN));
         k.entityData.set(STAAT, Staat.KOMT.ordinal());
-        k.moveTo(ingang.getX() + 0.5, ingang.getY(), ingang.getZ() + 0.5, level.getRandom().nextFloat() * 360f, 0);
+        k.snapTo(ingang.getX() + 0.5, ingang.getY(), ingang.getZ() + 0.5, level.getRandom().nextFloat() * 360f, 0);
         k.setCustomName(Component.translatable(recept == Recept.FEESTTAART ? "entity.guhs.bakkerij_klant.feest" : "entity.guhs.bakkerij_klant"));
         level.addFreshEntity(k);
         level.sendParticles(BakkerijFeature.MEELSTOFJE.get(), k.getX(), k.getY() + 0.5, k.getZ(), 6, 0.3, 0.3, 0.3, 0.01);
@@ -108,19 +108,19 @@ public class BakkerijKlant extends PathfinderMob implements GeoEntity {
     @Override
     public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        Recept r = Recept.byId(tag.getString("Recept"));
+        Recept r = Recept.byId(tag.getStringOr("Recept", ""));
         if (r != null) {
             entityData.set(RECEPT, r.ordinal());
             entityData.set(UITERLIJK, r == Recept.FEESTTAART ? UITERLIJKEN : getRandom().nextInt(UITERLIJKEN));
         }
         if (tag.contains("Geduld")) {
-            geduldMax = geduldOver = Math.max(1, tag.getInt("Geduld"));
+            geduldMax = geduldOver = Math.max(1, tag.getIntOr("Geduld", 0));
         }
         if (tag.contains("GeduldOver")) {
-            geduldOver = Math.max(1, Math.min(geduldMax, tag.getInt("GeduldOver")));
+            geduldOver = Math.max(1, Math.min(geduldMax, tag.getIntOr("GeduldOver", 0)));
         }
         entityData.set(GEDULD, Math.max(0, geduldOver * 1000 / geduldMax));
-        if (tag.getBoolean("Wacht")) {
+        if (tag.getBooleanOr("Wacht", false)) {
             entityData.set(STAAT, Staat.WACHT.ordinal());
         }
     }
@@ -303,7 +303,7 @@ public class BakkerijKlant extends PathfinderMob implements GeoEntity {
         if (player instanceof ServerPlayer p) {
             BakkerijGame.serveer(p, this);
         }
-        return InteractionResult.sidedSuccess(level().isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     @Override

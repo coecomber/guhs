@@ -8,7 +8,7 @@ import java.util.function.Consumer;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.nbt.CompoundTag;
@@ -63,16 +63,16 @@ public final class NiveauKeuze {
     }
 
     /** "Jouw records: Makkelijk 120 · Medium 300 · Lastig -" centred at y (the screen's data has Best_&lt;niveau&gt;). */
-    public static void records(GuiGraphics g, Font font, CompoundTag data, int centreX, int y, java.util.function.IntFunction<String> format,
+    public static void records(GuiGraphicsExtractor g, Font font, CompoundTag data, int centreX, int y, java.util.function.IntFunction<String> format,
                                int none) {
         MutableComponent line = Component.translatable("gui.guhs.klassiekers.records").withStyle(ChatFormatting.GOLD);
         for (Niveau n : Niveau.values()) {
-            int best = data.getInt("Best_" + n.id());
+            int best = data.getIntOr("Best_" + n.id(), 0);
             line.append(Component.literal(n == Niveau.MAKKELIJK ? " " : "  ·  ").withStyle(ChatFormatting.DARK_GRAY))
                     .append(n.naam().copy().withStyle(Klassiekers.kleur(n)))
                     .append(Component.literal(" " + (best == none ? "-" : format.apply(best))).withStyle(ChatFormatting.WHITE));
         }
-        g.drawCenteredString(font, line, centreX, y, 0xFFFFD27A);
+        g.centeredText(font, line, centreX, y, 0xFFFFD27A);
     }
 
     private NiveauKeuze() {

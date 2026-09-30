@@ -19,7 +19,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -93,7 +93,7 @@ public class GuhKonijntjeEntity extends Landdiertje {
 
     @Nullable
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType, @Nullable SpawnGroupData data) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnType, @Nullable SpawnGroupData data) {
         if (level.getBiome(blockPosition()).is(VerhaalFeature.SNEEUWGUHTOENDRA)) {
             setKleur(Kleur.WIT);
         } else {
@@ -144,7 +144,7 @@ public class GuhKonijntjeEntity extends Landdiertje {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return;
         }
         if (hopWacht > 0) {
@@ -181,14 +181,14 @@ public class GuhKonijntjeEntity extends Landdiertje {
             sl.sendParticles(ParticleTypes.HEART, getX(), getY() + 0.6, getZ(), 5, 0.3, 0.3, 0.3, 0);
         }
         player.addEffect(new MobEffectInstance(MobEffects.JUMP, SPRONG_TICKS, 1, false, true, true));
-        player.displayClientMessage(Component.translatable("gui.guhs.landdiertjes.hophop", getDisplayName())
-                .withStyle(ChatFormatting.LIGHT_PURPLE), true);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.hophop", getDisplayName())
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         GidsFeature.grant(player, "diertjes/landdiertjes_hophop");
     }
 
     @Override
-    protected void extraActies(software.bernie.geckolib.animation.AnimationController<Landdiertje> actie) {
-        actie.triggerableAnim("binky", software.bernie.geckolib.animation.RawAnimation.begin().thenPlay("binky"));
+    protected void extraActies(com.geckolib.animation.AnimationController<Landdiertje> actie) {
+        actie.triggerableAnim("binky", com.geckolib.animation.RawAnimation.begin().thenPlay("binky"));
     }
 
     // --- save ----------------------------------------------------------------------------------------------------------------------------
@@ -203,12 +203,12 @@ public class GuhKonijntjeEntity extends Landdiertje {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        String k = tag.getString("Kleur");
+        String k = tag.getStringOr("Kleur", "");
         for (Kleur kl : Kleur.values()) {
             if (kl.id().equals(k)) {
                 setKleur(kl);
             }
         }
-        rustTot = level().getGameTime() + Mth.clamp(tag.getLong("HophopRust"), 0, RUST * 20L);
+        rustTot = level().getGameTime() + Mth.clamp(tag.getLongOr("HophopRust", 0L), 0, RUST * 20L);
     }
 }

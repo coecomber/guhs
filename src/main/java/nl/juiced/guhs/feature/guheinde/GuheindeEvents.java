@@ -51,7 +51,7 @@ public final class GuheindeEvents {
 
     /** Grants one of the Guheinde advancements (tab guheinde, all granted from code). */
     public static void advancement(ServerPlayer player, String name) {
-        AdvancementHolder holder = player.server.getAdvancements().get(Guhs.id("guheinde/" + name));
+        AdvancementHolder holder = player.level().getServer().getAdvancements().get(Guhs.id("guheinde/" + name));
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }
@@ -60,7 +60,7 @@ public final class GuheindeEvents {
     // --- Mika-tranen ---------------------------------------------------------------------------------------------------
 
     private static void onDrops(LivingDropsEvent event) {
-        if (!(event.getEntity() instanceof MikaEntity mika) || mika instanceof MikaLarfjeEntity || mika.level().isClientSide) {
+        if (!(event.getEntity() instanceof MikaEntity mika) || mika instanceof MikaLarfjeEntity || mika.level().isClientSide()) {
             return;
         }
         int count;
@@ -86,7 +86,7 @@ public final class GuheindeEvents {
         if (!player.getInventory().add(tears)) {
             player.drop(tears, false);
         }
-        player.displayClientMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guheinde.mika_huilt").withStyle(ChatFormatting.DARK_PURPLE), true);
+        player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guheinde.mika_huilt").withStyle(ChatFormatting.DARK_PURPLE));
     }
 
     // --- the Koningguh and the magere guhs ----------------------------------------------------------------------------
@@ -102,7 +102,7 @@ public final class GuheindeEvents {
                 hand.consume(1, player);
                 feedMager(player, guh);
             } else {
-                player.displayClientMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guheinde.mager.honger").withStyle(ChatFormatting.GRAY), true);
+                player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guheinde.mager.honger").withStyle(ChatFormatting.GRAY));
             }
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
@@ -120,7 +120,7 @@ public final class GuheindeEvents {
     public static void feedMager(ServerPlayer player, GuhEntity guh) {
         GuhVariant now = GuhVariant.roll(guh.getRandom());
         guh.setVariant(now);
-        ServerLevel level = player.serverLevel();
+        ServerLevel level = player.level();
         level.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.3, guh.getZ(), 8, 0.4, 0.3, 0.4, 0);
         level.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.55f, 0.75f), 1.5f), guh.getX(), guh.getY() + 0.5, guh.getZ(), 30, 0.5, 0.5, 0.5, 0.1);
         level.playSound(null, guh, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1.2f, 1.2f);
@@ -130,13 +130,13 @@ public final class GuheindeEvents {
         guh.hurtMarked = true;
         GuhQuests.say(player, guh, "gui.guhs.guheinde.mager.vahoeg");
         // the Guhdex: the page of the magere guh, with its star for saving one
-        GuhWorldData data = GuhWorldData.get(player.server);
+        GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.PlayerData p = data.player(player.getUUID());
         p.seen.add(GuhVariant.MAGER);
         p.tamed.add(GuhVariant.MAGER);
         data.setDirty();
         CompoundTag saved = GuhQuests.saved(player);
-        int gered = saved.getInt(GERED) + 1;
+        int gered = saved.getIntOr(GERED, 0) + 1;
         saved.putInt(GERED, gered);
         advancement(player, "guheinde_gered");
         if (gered >= BEVRIJDER) {
@@ -150,8 +150,8 @@ public final class GuheindeEvents {
      */
     public static void talkToKoning(ServerPlayer player, GuhEntity koning) {
         CompoundTag saved = GuhQuests.saved(player);
-        int state = saved.getInt(KONING);
-        int wins = saved.getInt(GuheindeGevecht.WINS);
+        int state = saved.getIntOr(KONING, 0);
+        int wins = saved.getIntOr(GuheindeGevecht.WINS, 0);
         koning.playSound(ModSounds.GUH_AMBIENT.get(), 1f, 0.7f);
         if (state == 0) {
             for (int i = 1; i <= 4; i++) {
@@ -163,8 +163,8 @@ public final class GuheindeEvents {
         } else if (wins > 0 && state < 2) {
             GuhQuests.say(player, koning, "gui.guhs.guheinde.koning.ridder1");
             GuhQuests.say(player, koning, "gui.guhs.guheinde.koning.ridder2");
-            player.serverLevel().sendParticles(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY() + 1, player.getZ(), 60, 0.6, 1, 0.6, 0.3);
-            player.serverLevel().playSound(null, player, net.minecraft.sounds.SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1f, 0.8f);
+            player.level().sendParticles(ParticleTypes.TOTEM_OF_UNDYING, player.getX(), player.getY() + 1, player.getZ(), 60, 0.6, 1, 0.6, 0.3);
+            player.level().playSound(null, player, net.minecraft.sounds.SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1f, 0.8f);
             GuhQuests.give(player, ModItems.GEFRITUURDE_KAASKNABBELS.get());
             saved.putInt(KONING, 2);
             advancement(player, "guheinde_ridder");

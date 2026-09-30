@@ -247,3 +247,13 @@ tasks.named('jar', Jar).configure {
 tasks.matching { it.name == 'runServer' }.configureEach {
     standardInput = System.in
 }
+
+// port 26.1.2 helper: `gradlew writeCompileClasspath` writes build/compile-classpath.txt (for running javac directly)
+tasks.register('writeCompileClasspath') {
+    def cp = sourceSets.main.compileClasspath
+    def out = layout.buildDirectory.file('compile-classpath.txt')
+    outputs.file out
+    doLast {
+        out.get().asFile.text = cp.files.collect { it.absolutePath }.join(File.pathSeparator)
+    }
+}

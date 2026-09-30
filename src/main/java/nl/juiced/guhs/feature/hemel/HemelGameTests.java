@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -21,8 +21,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -41,14 +39,13 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.core.UUIDUtil;
 /**
  * Game tests of the hemel slice (DESIGN_30 §4): the wolkenhoeder's three things wake the Knuffelhart (outfits once), the
  * revive brings a guh back with everything (and not a living one, not for someone else, not from far away), a Herinnering
  * star at the heart, the heart can't be broken, the chapel template (one heart, the wolkenhoeder, the lifts), the protection.
  * Template hemel_test_wolk: 12 x 12 floor at template y 0 (= helper y 1: things stand at helper y 2).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class HemelGameTests {
     private static final String WOLK = "hemel_test_wolk";
     private static final String BATCH = "hemel";
@@ -60,7 +57,7 @@ public class HemelGameTests {
         p.setGameMode(mode);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         HemelQuest.vergeet(p);
         Praat.vergeet(p);
         return p;
@@ -82,7 +79,7 @@ public class HemelGameTests {
     }
 
     /** The three things (in any order, over several visits) wake the heart; the outfits come once; the screen only after that. */
-    @GameTest(template = WOLK, batch = BATCH)
+    @GuhTest(template = WOLK, batch = BATCH)
     public static void hemelDrieDingenMakenHetHartWakker(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(6, 2, 7), GameType.SURVIVAL);
         BlockPos hart = hart(helper);
@@ -119,7 +116,7 @@ public class HemelGameTests {
     }
 
     /** The heart brings a guh back with everything, free and as often as needed; never a living one, never from far away. */
-    @GameTest(template = WOLK, batch = BATCH, timeoutTicks = 300)
+    @GuhTest(template = WOLK, batch = BATCH, timeoutTicks = 300)
     public static void hemelTerugUitDeWolkjes(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(6, 2, 7), GameType.SURVIVAL);
         ServerPlayer ander = speler(helper, new BlockPos(5, 2, 7), GameType.SURVIVAL);
@@ -137,18 +134,18 @@ public class HemelGameTests {
         guh.kill();
         helper.assertTrue(Hemel.lijst(p).stream().anyMatch(d -> d.bandId().equals(id) && d.naam().equals("Wolkje")), "in the list of the screen");
         CompoundTag data = Hemel.data(p, hart, null);
-        helper.assertTrue(data.getList("Guhs", Tag.TAG_COMPOUND).size() == 1
-                && data.getList("Guhs", Tag.TAG_COMPOUND).getCompound(0).getString("Naam").equals("Wolkje"), "the screen data");
+        helper.assertTrue(data.getListOrEmpty("Guhs").size() == 1
+                && data.getListOrEmpty("Guhs").getCompoundOrEmpty(0).getStringOr("Naam", "").equals("Wolkje"), "the screen data");
         helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(hart).inflate(12)).forEach(Entity::discard);
         helper.succeedWhen(() -> {
             helper.assertTrue(helper.getLevel().getEntity(id) == null, "(the body is gone first)");
             helper.assertTrue(Hemel.terug(ander, hart, id) == null, "someone else can't (their heart sleeps, and it isn't theirs)");
             HemelQuest.wakker(ander);
-            helper.assertTrue(Hemel.terug(ander, hart, id) == null && Wolkjes.isDood(p.server, p.getUUID(), id), "not someone else's guh");
+            helper.assertTrue(Hemel.terug(ander, hart, id) == null && Wolkjes.isDood(p.level().getServer(), p.getUUID(), id), "not someone else's guh");
             Vec3 was = p.position();
-            p.moveTo(was.x + 30, was.y, was.z);
+            p.snapTo(was.x + 30, was.y, was.z);
             helper.assertTrue(Hemel.terug(p, hart, id) == null, "not from far away");
-            p.moveTo(was.x, was.y, was.z);
+            p.snapTo(was.x, was.y, was.z);
             GuhEntity terug = Hemel.terug(p, hart, id);
             helper.assertTrue(terug != null && terug.getUUID().equals(id) && terug.isOwnedBy(p) && terug.getVariant() == GuhVariant.CHOCO
                     && "Wolkje".equals(terug.getCustomName().getString()) && terug.getClothes(GuhClothes.Slot.HEAD) == GuhClothes.HEMEL_AUREOOLTJE
@@ -163,7 +160,7 @@ public class HemelGameTests {
     }
 
     /** A Herinnering star at the heart brings exactly its guh back; a star of a living guh stays a keepsake. */
-    @GameTest(template = WOLK, batch = BATCH, timeoutTicks = 300)
+    @GuhTest(template = WOLK, batch = BATCH, timeoutTicks = 300)
     public static void hemelSterretjeBijHetHart(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(6, 2, 7), GameType.SURVIVAL);
         BlockPos hart = hart(helper);
@@ -177,7 +174,7 @@ public class HemelGameTests {
         helper.assertTrue(sterren.size() == 1, "one star");
         ItemStack ster = sterren.get(0).getItem().copy();
         sterren.forEach(Entity::discard);
-        helper.assertTrue(Herinnering.data(ster).getUUID("Band").equals(id), "its star");
+        helper.assertTrue(Herinnering.data(ster).read("Band", UUIDUtil.CODEC).orElseThrow().equals(id), "its star");
         helper.succeedWhen(() -> {
             helper.assertTrue(helper.getLevel().getEntity(id) == null, "(the body is gone first)");
             helper.assertTrue(!Hemel.ster(p, hart, ster) && ster.getCount() == 1, "the heart sleeps: nothing, the star stays");
@@ -193,7 +190,7 @@ public class HemelGameTests {
     }
 
     /** The Knuffelhart can't be broken (survival), nor blown up; creative players may. */
-    @GameTest(template = WOLK, batch = BATCH)
+    @GuhTest(template = WOLK, batch = BATCH)
     public static void hemelHartIsOnbreekbaar(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(6, 2, 5), GameType.SURVIVAL);
         BlockPos hart = hart(helper);
@@ -211,7 +208,7 @@ public class HemelGameTests {
     }
 
     /** The chapel's template: exactly one Knuffelhart, the wolkenhoeder, both wolkenliften, the hemelkist. */
-    @GameTest(template = WOLK, batch = BATCH)
+    @GuhTest(template = WOLK, batch = BATCH)
     public static void hemelKapelletjeTemplate(GameTestHelper helper) {
         StructureTemplate t = helper.getLevel().getStructureManager().get(Guhs.id("hemelkapelletje")).orElse(null);
         helper.assertTrue(t != null, "the template exists");
@@ -221,15 +218,15 @@ public class HemelGameTests {
         helper.assertTrue(liften.size() == 18, "two wolkenliften of 3x3: " + liften.size());
         helper.assertTrue(t.filterBlocks(BlockPos.ZERO, instellingen, Blocks.CHEST).size() == 1, "the hemelkist");
         CompoundTag nbt = t.save(new CompoundTag());
-        long hoeders = nbt.getList("entities", Tag.TAG_COMPOUND).stream()
-                .filter(e -> "wolkenhoeder".equals(((CompoundTag) e).getCompound("nbt").getString("Kind"))).count();
+        long hoeders = nbt.getListOrEmpty("entities").stream()
+                .filter(e -> "wolkenhoeder".equals(((CompoundTag) e).getCompoundOrEmpty("nbt").getStringOr("Kind", ""))).count();
         helper.assertTrue(hoeders == 1, "one wolkenhoeder: " + hoeders);
         helper.assertTrue(t.getSize().getY() < 128 && t.getSize().getY() > HemelProtection.SKY_FROM + 20, "tall: the islet floats high");
         helper.succeed();
     }
 
     /** Inside the chapel nothing is broken or built (survival); the Herinnering may still be used on the heart. */
-    @GameTest(template = WOLK, batch = BATCH)
+    @GuhTest(template = WOLK, batch = BATCH)
     public static void hemelBescherming(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2), GameType.SURVIVAL);
         BlockPos steen = helper.absolutePos(new BlockPos(3, 2, 9));

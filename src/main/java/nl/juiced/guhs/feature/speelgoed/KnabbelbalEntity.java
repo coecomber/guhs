@@ -54,7 +54,7 @@ public class KnabbelbalEntity extends Entity {
 
     public static KnabbelbalEntity maak(ServerLevel level, Vec3 pos, boolean vol) {
         KnabbelbalEntity bal = new KnabbelbalEntity(SpeelgoedFeature.KNABBELBAL.get(), level);
-        bal.moveTo(pos.x, pos.y, pos.z, level.random.nextFloat() * 360, 0);
+        bal.snapTo(pos.x, pos.y, pos.z, level.getRandom().nextFloat() * 360, 0);
         bal.setVol(vol);
         level.addFreshEntity(bal);
         return bal;
@@ -97,7 +97,7 @@ public class KnabbelbalEntity extends Entity {
         hasImpulse = true;
         duwRust = 6;
         level().playSound(null, blockPosition(), SpeelgoedFeature.BAL.get(), SoundSource.NEUTRAL, 0.7f, 1.1f + random.nextFloat() * 0.3f);
-        if (isVol() && wie != null && !level().isClientSide) {
+        if (isVol() && wie != null && !level().isClientSide()) {
             duwtjes++;
             int kans = wie instanceof Player ? 5 : Math.max(1, 5 - duwtjes);
             if (random.nextInt(kans) == 0) {
@@ -143,14 +143,14 @@ public class KnabbelbalEntity extends Entity {
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             return InteractionResult.SUCCESS;
         }
         if (stack.is(ModItems.KAAS_KNABBELS.get()) && !isVol()) {
             stack.consume(1, player);
             setVol(true);
             level().playSound(null, blockPosition(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.NEUTRAL, 1f, 1.3f);
-            player.displayClientMessage(Component.translatable("gui.guhs.speelgoed.bal.gevuld").withStyle(ChatFormatting.LIGHT_PURPLE), true);
+            player.sendOverlayMessage(Component.translatable("gui.guhs.speelgoed.bal.gevuld").withStyle(ChatFormatting.LIGHT_PURPLE));
             return InteractionResult.CONSUME;
         }
         if (player.isShiftKeyDown() && stack.isEmpty()) {
@@ -169,7 +169,7 @@ public class KnabbelbalEntity extends Entity {
     /** Walking into it rolls it along. */
     @Override
     public void push(Entity other) {
-        if (level().isClientSide || duwRust > 0 || !(other instanceof LivingEntity) || other.isPassenger()) {
+        if (level().isClientSide() || duwRust > 0 || !(other instanceof LivingEntity) || other.isPassenger()) {
             return;
         }
         Vec3 weg = position().subtract(other.position());
@@ -184,7 +184,7 @@ public class KnabbelbalEntity extends Entity {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide) {
+        if (level().isClientSide()) {
             clientTick();
             return;
         }
@@ -225,7 +225,7 @@ public class KnabbelbalEntity extends Entity {
             }
             setDeltaMovement(vx, vy, vz);
         }
-        if (getY() < level().getMinBuildHeight() - 16) {
+        if (getY() < level().getMinY() - 16) {
             discard();
         }
     }
@@ -312,8 +312,8 @@ public class KnabbelbalEntity extends Entity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        entityData.set(VOL, !tag.contains("Vol") || tag.getBoolean("Vol"));
-        duwtjes = tag.getInt("Duwtjes");
+        entityData.set(VOL, !tag.contains("Vol") || tag.getBooleanOr("Vol", false));
+        duwtjes = tag.getIntOr("Duwtjes", 0);
     }
 
     @Override

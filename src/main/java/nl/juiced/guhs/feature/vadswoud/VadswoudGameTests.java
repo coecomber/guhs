@@ -14,7 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.QuartPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
@@ -38,8 +38,6 @@ import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -51,14 +49,13 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the Vadswoud: the wood set and the bark faces, the bush that never pricks, taming babies, guh families
  * (forming, the line behind the parent), sleeping in nests, the two shops, the giant guh tree (worldgen and saplings),
  * the tree-house village template, and the biome's share of the Guhmension (worked out from the dimension's own
  * biome source and noise, so it also runs on the GameTest server, which has no Guhmension).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class VadswoudGameTests {
     private static final String EMPTY = "empty";
     private static final String WEIDE = "vadswoud_weide";
@@ -70,7 +67,7 @@ public class VadswoudGameTests {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         player.setGameMode(GameType.SURVIVAL);
         BlockPos abs = helper.absolutePos(at);
-        player.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        player.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         return player;
     }
 
@@ -86,7 +83,7 @@ public class VadswoudGameTests {
 
     // --- blocks ------------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void vadshoutStripsAndFacesChangeTheirMood(GameTestHelper helper) {
         ServerPlayer player = player(helper, new BlockPos(1, 1, 1));
         try {
@@ -116,7 +113,7 @@ public class VadswoudGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void knabbelbessenNeverPrickAndGrowBack(GameTestHelper helper) {
         ServerPlayer player = player(helper, new BlockPos(2, 1, 2));
         try {
@@ -145,7 +142,7 @@ public class VadswoudGameTests {
 
     // --- taming babies ------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY, timeoutTicks = 100)
+    @GuhTest(template = EMPTY, timeoutTicks = 100)
     public static void babiesLoveKnabbelbessenGrownUpsDont(GameTestHelper helper) {
         ServerPlayer player = player(helper, new BlockPos(1, 1, 1));
         try {
@@ -198,15 +195,15 @@ public class VadswoudGameTests {
 
     // --- families -----------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void guhsThatSpawnTogetherBecomeAFamily(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         List<GuhEntity> guhs = new ArrayList<>();
         try {
             for (int i = 0; i < 4; i++) {
-                GuhEntity g = ModEntities.GUH.get().create(level);
+                GuhEntity g = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
                 BlockPos at = helper.absolutePos(new BlockPos(1 + i, 1, 2));
-                g.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+                g.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
                 g.setVariant(i == 0 ? GuhVariant.CHOCO : GuhVariant.MINT);
                 GuhGezin.join(level, g, 2, 2);                // (a family of two parents and two babies)
                 guhs.add(g);
@@ -223,9 +220,9 @@ public class VadswoudGameTests {
                     "every baby has its own place in the line");
 
             // a guh that spawns alone: it gets babies of its own after its spawn tick
-            GuhEntity alone = ModEntities.GUH.get().create(level);
+            GuhEntity alone = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
             BlockPos far = helper.absolutePos(new BlockPos(2, 1, 2)).offset(12, 0, 0);
-            alone.moveTo(far.getX() + 0.5, far.getY(), far.getZ() + 0.5);
+            alone.snapTo(far.getX() + 0.5, far.getY(), far.getZ() + 0.5);
             alone.setVariant(GuhVariant.SNOW);
             alone.setPersistenceRequired();
             GuhGezin.join(level, alone, 1, 2);
@@ -243,7 +240,7 @@ public class VadswoudGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = WEIDE, timeoutTicks = 800)
+    @GuhTest(template = WEIDE, timeoutTicks = 800)
     public static void babiesWalkInALineBehindTheirParent(GameTestHelper helper) {
         GuhEntity parent = guh(helper, new BlockPos(3, 1, 4));
         parent.setNoAi(true);
@@ -258,7 +255,7 @@ public class VadswoudGameTests {
             babies.add(baby);
         }
         BlockPos end = helper.absolutePos(new BlockPos(22, 1, 4));
-        helper.runAfterDelay(10, () -> parent.moveTo(end.getX() + 0.5, end.getY(), end.getZ() + 0.5));
+        helper.runAfterDelay(10, () -> parent.snapTo(end.getX() + 0.5, end.getY(), end.getZ() + 0.5));
         helper.succeedWhen(() -> {
             GuhEntity ahead = parent;
             for (GuhEntity baby : babies) {
@@ -271,7 +268,7 @@ public class VadswoudGameTests {
         });
     }
 
-    @GameTest(template = WEIDE, timeoutTicks = 900)
+    @GuhTest(template = WEIDE, timeoutTicks = 900)
     public static void guhsSleepInANestAtNight(GameTestHelper helper) {
         BlockPos nest = new BlockPos(20, 1, 4);
         helper.setBlock(nest, VadswoudFeature.GUHNESTJE.get());
@@ -290,7 +287,7 @@ public class VadswoudGameTests {
                 .thenSucceed();
     }
 
-    @GameTest(template = WEIDE, timeoutTicks = 900)
+    @GuhTest(template = WEIDE, timeoutTicks = 900)
     public static void tameGuhsOnlyGoToBedWhileYoureNear(GameTestHelper helper) {
         BlockPos nest = new BlockPos(20, 1, 4);
         helper.setBlock(nest, VadswoudFeature.GUHNESTJE.get());
@@ -302,7 +299,7 @@ public class VadswoudGameTests {
         helper.startSequence()
                 .thenExecute(() -> SleepInNestGoal.TEST_NIGHT.add(guh.getUUID()))
                 .thenWaitUntil(() -> helper.assertTrue(SleepInNestGoal.isAsleep(guh), "your guh sleeps in the nest while you're around"))
-                .thenExecute(() -> owner.moveTo(owner.getX() + 60, owner.getY(), owner.getZ()))
+                .thenExecute(() -> owner.snapTo(owner.getX() + 60, owner.getY(), owner.getZ()))
                 .thenWaitUntil(() -> helper.assertTrue(!SleepInNestGoal.isAsleep(guh), "you walk away: it wakes up and comes along"))
                 .thenExecute(() -> {
                     SleepInNestGoal.TEST_NIGHT.remove(guh.getUUID());
@@ -314,15 +311,15 @@ public class VadswoudGameTests {
     // --- the two characters ----------------------------------------------------------------------------------------------------
 
     private static GuhNpcEntity npc(GameTestHelper helper, GuhNpcEntity.Kind kind) {
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(kind);
         BlockPos at = helper.absolutePos(new BlockPos(3, 1, 3));
-        npc.moveTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
+        npc.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         helper.getLevel().addFreshEntity(npc);
         return npc;
     }
 
-    @GameTest(template = EMPTY)
+    @GuhTest(template = EMPTY)
     public static void theBoswachterguhAndTheKnabbelplukkerTrade(GameTestHelper helper) {
         ServerPlayer player = player(helper, new BlockPos(1, 1, 1));
         GuhNpcEntity boswachter = npc(helper, GuhNpcEntity.Kind.BOSWACHTERGUH);
@@ -346,7 +343,7 @@ public class VadswoudGameTests {
             player.closeContainer();
             VadswoudFeature.knabbelplukker().talk(plukker, player);
             player.closeContainer();
-            helper.assertTrue(GuhQuests.saved(player).getBoolean(Boswachterguh.MET_KEY) && GuhQuests.saved(player).getBoolean(Knabbelplukker.MET_KEY),
+            helper.assertTrue(GuhQuests.saved(player).getBooleanOr(Boswachterguh.MET_KEY, false) && GuhQuests.saved(player).getBooleanOr(Knabbelplukker.MET_KEY, false),
                     "they remember you");
             helper.assertTrue(GuhVariant.ofCharacter(GuhNpcEntity.Kind.BOSWACHTERGUH) == GuhVariant.BOSWACHTERGUH
                     && GuhDex.ENTRIES.contains(GuhVariant.BOSWACHTERGUH) && GuhDex.ENTRIES.contains(GuhVariant.KNABBELPLUKKER)
@@ -375,7 +372,7 @@ public class VadswoudGameTests {
         }
     }
 
-    @GameTest(template = BOOMGROND, timeoutTicks = 100)
+    @GuhTest(template = BOOMGROND, timeoutTicks = 100)
     public static void aGiantGuhTreeWithFacesThatDoesNotWilt(GameTestHelper helper) {
         floor(helper);
         BlockPos origin = helper.absolutePos(new BlockPos(15, 1, 15));
@@ -397,7 +394,7 @@ public class VadswoudGameTests {
         helper.succeed();
     }
 
-    @GameTest(template = BOOMGROND, timeoutTicks = 100)
+    @GuhTest(template = BOOMGROND, timeoutTicks = 100)
     public static void fourSaplingsGrowAGiantGuhTree(GameTestHelper helper) {
         floor(helper);
         for (BlockPos p : List.of(new BlockPos(15, 1, 15), new BlockPos(16, 1, 15), new BlockPos(15, 1, 16), new BlockPos(16, 1, 16))) {
@@ -418,7 +415,7 @@ public class VadswoudGameTests {
 
     // --- the tree-house village ------------------------------------------------------------------------------------------------------
 
-    @GameTest(template = "boomhutdorp", timeoutTicks = 100)
+    @GuhTest(template = "boomhutdorp", timeoutTicks = 100)
     public static void theTreeHouseVillageIsComplete(GameTestHelper helper) {
         AABB area = helper.getBounds().inflate(1);
         ServerLevel level = helper.getLevel();
@@ -453,7 +450,7 @@ public class VadswoudGameTests {
      * Samples the Guhmension's surface biomes with and without the Vadswoud (from the dimension JSON and its noise
      * settings, three seeds): the Vadswoud gets a fair share and every other surface biome keeps most of its own.
      */
-    @GameTest(template = EMPTY, timeoutTicks = 400)
+    @GuhTest(template = EMPTY, timeoutTicks = 400)
     public static void theVadswoudTakesItsShareAndLeavesTheRest(GameTestHelper helper) {
         var server = helper.getLevel().getServer();
         var access = server.registryAccess();
@@ -474,7 +471,7 @@ public class VadswoudGameTests {
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
         BiomeSource with = BiomeSource.CODEC.parse(ops, source).getOrThrow();
         BiomeSource before = BiomeSource.CODEC.parse(ops, without).getOrThrow();
-        NoiseGeneratorSettings settings = access.registryOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
         Map<String, Integer> now = new HashMap<>(), then = new HashMap<>();
         int samples = 0;
         for (long seed : new long[]{1L, 20270501L, -778899L}) {
@@ -482,8 +479,8 @@ public class VadswoudGameTests {
             for (int x = -3000; x < 3000; x += 40) {
                 for (int z = -3000; z < 3000; z += 40) {
                     int qx = QuartPos.fromBlock(x), qy = QuartPos.fromBlock(100), qz = QuartPos.fromBlock(z);
-                    now.merge(with.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().location().getPath(), 1, Integer::sum);
-                    then.merge(before.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().location().getPath(), 1, Integer::sum);
+                    now.merge(with.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().identifier().getPath(), 1, Integer::sum);
+                    then.merge(before.getNoiseBiome(qx, qy, qz, sampler).unwrapKey().orElseThrow().identifier().getPath(), 1, Integer::sum);
                     samples++;
                 }
             }

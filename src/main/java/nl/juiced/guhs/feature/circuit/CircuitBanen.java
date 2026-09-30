@@ -83,8 +83,8 @@ public final class CircuitBanen {
     @Nullable
     public static Frame frame(ServerLevel level, GuhNpcEntity npc) {
         if (npc.roleData.contains("CircuitFrame")) {
-            CompoundTag tag = npc.roleData.getCompound("CircuitFrame");
-            return new Frame(BlockPos.of(tag.getLong("Marker")), Direction.from2DDataValue(tag.getInt("Facing")));
+            CompoundTag tag = npc.roleData.getCompoundOrEmpty("CircuitFrame");
+            return new Frame(BlockPos.of(tag.getLongOr("Marker", 0L)), Direction.from2DDataValue(tag.getIntOr("Facing", 0)));
         }
         BlockPos at = npc.blockPosition();
         if (!level.hasChunksAt(at.getX() - NEAR, at.getZ() - NEAR, at.getX() + NEAR, at.getZ() + NEAR)) {

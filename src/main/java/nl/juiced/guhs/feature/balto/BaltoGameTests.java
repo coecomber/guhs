@@ -6,7 +6,7 @@ import java.util.Set;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTest;
+import nl.juiced.guhs.gametest.GuhTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -23,8 +23,6 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.gametest.GameTestHolder;
-import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity;
@@ -43,6 +41,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.entity.EntitySpawnReason;
 /**
  * Game tests of the balto slice: the Nomguh route file on the template (every point a track block with room for the sled,
  * markers all along it, the special places), the questline step by step with a fake medicine ride (SleeTocht moments), the
@@ -50,8 +49,6 @@ import nl.juiced.guhs.registry.ModItems;
  * TE_LAAT, the Baltoguh fast in the snow and sniffing the way home, the beeldje, the title in the player list.
  * Template balto_test_sneeuw: 20 x 6 x 12, snow for x &lt; 10, stone for the rest (the floor at helper y 1).
  */
-@GameTestHolder(Guhs.MODID)
-@PrefixGameTestTemplate(false)
 public class BaltoGameTests {
     private static final String SNEEUW = "balto_test_sneeuw";
     private static final String BATCH = "balto";
@@ -62,7 +59,7 @@ public class BaltoGameTests {
         p.setGameMode(GameType.SURVIVAL);
         p.getInventory().clearContent();
         BlockPos abs = helper.absolutePos(at);
-        p.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+        p.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
         BaltoVerhaal.wis(p);
         return p;
     }
@@ -75,10 +72,10 @@ public class BaltoGameTests {
     }
 
     static GuhNpcEntity npc(GameTestHelper helper, GuhNpcEntity.Kind kind, BlockPos at) {
-        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel());
+        GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         npc.setKind(kind);
         BlockPos abs = helper.absolutePos(at);
-        npc.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5, 0, 0);
+        npc.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5, 0, 0);
         helper.getLevel().addFreshEntity(npc);
         return npc;
     }
@@ -102,7 +99,7 @@ public class BaltoGameTests {
      * track block (sled-track snow, or ice on the bridge) with air above it; a route marker at least every 20 blocks (the
      * bridge has its posts); the rest points, the bridge, the avalanche, the dieptepunt and the three places are in range.
      */
-    @GameTest(template = SNEEUW, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = SNEEUW, batch = BATCH, timeoutTicks = 400)
     public static void baltoRouteOpHetSjabloon(GameTestHelper helper) {
         NomguhRoute r = NomguhRoute.laad();
         List<Vec3> heen = r.heen();
@@ -155,7 +152,7 @@ public class BaltoGameTests {
     // =================================================================================================================
 
     /** The whole questline with a fake medicine ride: meet Baltoguh, Rosy, Boris, the ride's moments, the rewards. */
-    @GameTest(template = SNEEUW, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = SNEEUW, batch = BATCH, timeoutTicks = 400)
     public static void baltoVerhaalStapVoorStap(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(5, 2, 5));
         GuhEntity balto = VerhaalGuhs.maakKopie(helper.getLevel(), VerhaalGuh.BALTOGUH, helper.absolutePos(new BlockPos(3, 2, 3)));
@@ -192,7 +189,7 @@ public class BaltoGameTests {
                 n -> n.getKind() == GuhNpcEntity.Kind.WITTE_WOLFGUH);
         helper.assertTrue(wolven.size() == 1, "the white wolf-guh appeared: " + wolven.size());
         antwoord(p, "balto_wolf", 1);
-        helper.assertTrue(wolven.get(0).roleData.getLong(BaltoVerhaal.WOLF_TOT) <= helper.getLevel().getGameTime() + 60, "she fades after the howl");
+        helper.assertTrue(wolven.get(0).roleData.getLongOr(BaltoVerhaal.WOLF_TOT, 0L) <= helper.getLevel().getGameTime() + 60, "she fades after the howl");
         BaltoVerhaal.opMoment(p, SleeTocht.Moment.AANKOMST);
         helper.assertTrue(BaltoVerhaal.stap(p) == BaltoVerhaal.AANGEKOMEN, "back in time");
         helper.assertTrue(!Nomguh.verhaalKlaar(p), "not done before Rosy has her medicine");
@@ -217,7 +214,7 @@ public class BaltoGameTests {
     }
 
     /** Too late (or stopped): "Njeg, nog een keer!" - back to the start, the kist gone; a new ride works again. */
-    @GameTest(template = SNEEUW, batch = BATCH)
+    @GuhTest(template = SNEEUW, batch = BATCH)
     public static void baltoTeLaatNogEenKeer(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(5, 2, 5));
         BaltoVerhaal.zet(p, BaltoVerhaal.KLAAR_VOOR_TOCHT);
@@ -239,7 +236,7 @@ public class BaltoGameTests {
     }
 
     /** After the questline Baltoguh comes home with you once; a second time no; another player not before his own story. */
-    @GameTest(template = SNEEUW, batch = BATCH)
+    @GuhTest(template = SNEEUW, batch = BATCH)
     public static void baltoEenKeerMee(GameTestHelper helper) {
         ServerPlayer a = speler(helper, new BlockPos(5, 2, 5)), b = speler(helper, new BlockPos(12, 2, 5));
         GuhEntity kopie = VerhaalGuhs.maakKopie(helper.getLevel(), VerhaalGuh.BALTOGUH, helper.absolutePos(new BlockPos(3, 2, 3)));
@@ -264,7 +261,7 @@ public class BaltoGameTests {
     // =================================================================================================================
 
     /** Fast in the snow: on snow the speed modifier (and ridden x1.3), on stone not. */
-    @GameTest(template = SNEEUW, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = SNEEUW, batch = BATCH, timeoutTicks = 200)
     public static void baltoSnelInDeSneeuw(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(10, 2, 10));
         GuhEntity sneeuw = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 2, 5));
@@ -289,7 +286,7 @@ public class BaltoGameTests {
     }
 
     /** Snuffel!: the guh-menu button; he smells your bed (your spawn point), shows the pose, lays a trail. */
-    @GameTest(template = SNEEUW, batch = BATCH)
+    @GuhTest(template = SNEEUW, batch = BATCH)
     public static void baltoSnuffelDeWegNaarHuis(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(5, 2, 5));
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(6, 2, 6));
@@ -315,7 +312,7 @@ public class BaltoGameTests {
     // =================================================================================================================
 
     /** The Baltoguh-beeldje: a block that faces you, with a lore line; the title "Held van Nomguh" in the player list. */
-    @GameTest(template = SNEEUW, batch = BATCH)
+    @GuhTest(template = SNEEUW, batch = BATCH)
     public static void baltoBeeldjeEnTitel(GameTestHelper helper) {
         BlockPos at = new BlockPos(4, 2, 4);
         helper.setBlock(at, BaltoFeature.BALTOGUH_BEELDJE.get().defaultBlockState().setValue(HorizontalDirectionalBlock.FACING, Direction.EAST));
