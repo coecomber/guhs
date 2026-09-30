@@ -1,0 +1,138 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "zand": "minecraft:block/sand",
+    "emmer": "minecraft:block/red_terracotta",
+    "particle": "minecraft:block/sand"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        9,
+        1,
+        9
+      ],
+      "faces": {
+        "down": {
+          "texture": "#zand"
+        },
+        "up": {
+          "texture": "#zand"
+        },
+        "north": {
+          "texture": "#zand"
+        },
+        "south": {
+          "texture": "#zand"
+        },
+        "west": {
+          "texture": "#zand"
+        },
+        "east": {
+          "texture": "#zand"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        1,
+        3
+      ],
+      "to": [
+        7,
+        2,
+        7
+      ],
+      "faces": {
+        "down": {
+          "texture": "#zand"
+        },
+        "up": {
+          "texture": "#zand"
+        },
+        "north": {
+          "texture": "#zand"
+        },
+        "south": {
+          "texture": "#zand"
+        },
+        "west": {
+          "texture": "#zand"
+        },
+        "east": {
+          "texture": "#zand"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        0,
+        7
+      ],
+      "to": [
+        13,
+        4,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#emmer"
+        },
+        "up": {
+          "texture": "#emmer"
+        },
+        "north": {
+          "texture": "#emmer"
+        },
+        "south": {
+          "texture": "#emmer"
+        },
+        "west": {
+          "texture": "#emmer"
+        },
+        "east": {
+          "texture": "#emmer"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        4,
+        8
+      ],
+      "to": [
+        12,
+        5,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#emmer"
+        },
+        "up": {
+          "texture": "#emmer"
+        },
+        "north": {
+          "texture": "#emmer"
+        },
+        "south": {
+          "texture": "#emmer"
+        },
+        "west": {
+          "texture": "#emmer"
+        },
+        "east": {
+          "texture": "#emmer"
+        }
+      }
+    }
+  ]
+}

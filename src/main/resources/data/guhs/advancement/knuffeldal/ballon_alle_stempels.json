@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/ballon_eerste_vlucht",
+  "display": {
+    "icon": {
+      "id": "guhs:ballonpet"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.ballon_alle_stempels.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.ballon_alle_stempels.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

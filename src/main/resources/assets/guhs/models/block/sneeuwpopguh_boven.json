@@ -1,0 +1,128 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/sneeuwpopguh",
+    "sneeuw": "guhs:block/sneeuwpopguh",
+    "gezicht": "guhs:block/sneeuwpopguh_gezicht",
+    "sjaal": "minecraft:block/pink_wool",
+    "oor": "minecraft:block/pink_wool"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        10,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#sneeuw"
+        },
+        "up": {
+          "texture": "#sneeuw"
+        },
+        "south": {
+          "texture": "#sneeuw"
+        },
+        "west": {
+          "texture": "#sneeuw"
+        },
+        "east": {
+          "texture": "#sneeuw"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        10,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#gezicht",
+          "uv": [
+            0,
+            2,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        7,
+        6.5
+      ],
+      "to": [
+        4.5,
+        11,
+        8
+      ],
+      "faces": {
+        "down": {
+          "texture": "#oor"
+        },
+        "up": {
+          "texture": "#oor"
+        },
+        "north": {
+          "texture": "#oor"
+        },
+        "south": {
+          "texture": "#oor"
+        },
+        "west": {
+          "texture": "#oor"
+        },
+        "east": {
+          "texture": "#oor"
+        }
+      }
+    },
+    {
+      "from": [
+        11.5,
+        7,
+        6.5
+      ],
+      "to": [
+        14.5,
+        11,
+        8
+      ],
+      "faces": {
+        "down": {
+          "texture": "#oor"
+        },
+        "up": {
+          "texture": "#oor"
+        },
+        "north": {
+          "texture": "#oor"
+        },
+        "south": {
+          "texture": "#oor"
+        },
+        "west": {
+          "texture": "#oor"
+        },
+        "east": {
+          "texture": "#oor"
+        }
+      }
+    }
+  ]
+}

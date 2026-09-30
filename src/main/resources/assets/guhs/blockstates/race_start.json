@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "baan=0,facing=north": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=1,facing=north": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=2,facing=north": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=3,facing=north": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=0,facing=east": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=1,facing=east": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=2,facing=east": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=3,facing=east": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=0,facing=south": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=1,facing=south": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=2,facing=south": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=3,facing=south": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=0,facing=west": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=1,facing=west": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=2,facing=west": {
+      "model": "guhs:block/race_start"
+    },
+    "baan=3,facing=west": {
+      "model": "guhs:block/race_start"
+    }
+  }
+}

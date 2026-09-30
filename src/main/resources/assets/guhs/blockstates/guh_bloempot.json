@@ -1,0 +1,190 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north",
+        "gewaterd": "false"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bloempot"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "gewaterd": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bloempot_nat"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "gewaterd": "false"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bloempot",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "gewaterd": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bloempot_nat",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "gewaterd": "false"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bloempot",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "gewaterd": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bloempot_nat",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "gewaterd": "false"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bloempot",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "gewaterd": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bloempot_nat",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "plant": "knabbelplantje",
+        "groei": "0"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_knabbelplantje_0"
+      }
+    },
+    {
+      "when": {
+        "plant": "knabbelplantje",
+        "groei": "1"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_knabbelplantje_1"
+      }
+    },
+    {
+      "when": {
+        "plant": "knabbelplantje",
+        "groei": "2"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_knabbelplantje_2"
+      }
+    },
+    {
+      "when": {
+        "plant": "knabbelplantje",
+        "groei": "3"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_knabbelplantje_3"
+      }
+    },
+    {
+      "when": {
+        "plant": "theekruid",
+        "groei": "0"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_theekruid_0"
+      }
+    },
+    {
+      "when": {
+        "plant": "theekruid",
+        "groei": "1"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_theekruid_1"
+      }
+    },
+    {
+      "when": {
+        "plant": "theekruid",
+        "groei": "2"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_theekruid_2"
+      }
+    },
+    {
+      "when": {
+        "plant": "theekruid",
+        "groei": "3"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_theekruid_3"
+      }
+    },
+    {
+      "when": {
+        "plant": "guhbloem",
+        "groei": "0"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_guhbloem_0"
+      }
+    },
+    {
+      "when": {
+        "plant": "guhbloem",
+        "groei": "1"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_guhbloem_1"
+      }
+    },
+    {
+      "when": {
+        "plant": "guhbloem",
+        "groei": "2"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_guhbloem_2"
+      }
+    },
+    {
+      "when": {
+        "plant": "guhbloem",
+        "groei": "3"
+      },
+      "apply": {
+        "model": "guhs:block/tuin_pot_guhbloem_3"
+      }
+    }
+  ]
+}

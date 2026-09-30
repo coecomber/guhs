@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P P",
+    "PKP",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "K": {
+      "item": "minecraft:pink_dye"
+    }
+  },
+  "result": {
+    "id": "guhs:guh_wastobbe",
+    "count": 1
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:knuffeldal/root",
+  "display": {
+    "icon": {
+      "id": "guhs:knuffelbad_badeendje"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.knuffelbad_gevonden.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.knuffelbad_gevonden.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": "guhs:knuffelbad"
+          }
+        }
+      }
+    }
+  }
+}

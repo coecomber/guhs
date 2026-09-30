@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/sneeuwguhspar_gezicht"
+    },
+    "facing=east": {
+      "model": "guhs:block/sneeuwguhspar_gezicht",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/sneeuwguhspar_gezicht",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/sneeuwguhspar_gezicht",
+      "y": 270
+    }
+  }
+}

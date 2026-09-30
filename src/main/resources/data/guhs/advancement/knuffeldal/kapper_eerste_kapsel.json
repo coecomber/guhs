@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/stadje",
+  "display": {
+    "icon": {
+      "id": "guhs:kapsel_krullen"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.kapper_eerste_kapsel.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.kapper_eerste_kapsel.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

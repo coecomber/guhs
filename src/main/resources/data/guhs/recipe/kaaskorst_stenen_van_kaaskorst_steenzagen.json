@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "guhs:kaaskorst"
+  },
+  "result": {
+    "id": "guhs:kaaskorst_stenen",
+    "count": 1
+  }
+}

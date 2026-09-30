@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "spot=model": {
+      "model": "guhs:block/beauty_plek"
+    },
+    "spot=einde": {
+      "model": "guhs:block/beauty_plek"
+    }
+  }
+}

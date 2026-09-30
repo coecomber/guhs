@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "T",
+    "R"
+  ],
+  "key": {
+    "T": {
+      "item": "guhs:roosterijzer_tralies"
+    },
+    "R": {
+      "item": "guhs:gloeikool"
+    }
+  },
+  "result": {
+    "id": "guhs:rookgat",
+    "count": 1
+  }
+}

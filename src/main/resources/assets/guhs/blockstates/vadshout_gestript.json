@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/vadshout_gestript"
+    },
+    "axis=z": {
+      "model": "guhs:block/vadshout_gestript_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "guhs:block/vadshout_gestript_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

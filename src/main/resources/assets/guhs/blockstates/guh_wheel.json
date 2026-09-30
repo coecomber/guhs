@@ -1,0 +1,9 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "guhs:block/guh_wheel"
+      }
+    }
+  ]
+}

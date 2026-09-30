@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/mosterd_nylium",
+    "bottom": "guhs:block/houtskoolsteen",
+    "side": "guhs:block/mosterd_nylium_side"
+  }
+}

@@ -1,0 +1,401 @@
+# 2.9 visual QA, part 1: screens and creatures on a platform (no structures). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/grote_guhspelen_gui.txt
+# (commands: see autocheck.txt; the 2.9 QA commands interact/wardrobe/guhmenu/piepmenu/ontgrendel/mouse/click/drag/scroll/
+#  type/press/useitem/widgets/npc/camrel/lookrel/relcmd are described in dev/AutoCheck.java)
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule doMobLoot false
+/tp @s 2004 205 2000
+/forceload add 1984 1984 2063 2063
+wait 80
+/fill 1984 199 1984 2040 199 2040 minecraft:smooth_quartz
+/fill 1984 200 1984 2040 207 2040 minecraft:air
+/fill 1984 208 1984 2040 215 2040 minecraft:air
+
+section OREN pieces with hats and hair (rows: strikje, oorwarmers, koptelefoontje, oorbelletjes; columns: none, sjoelen_petje, schaatsmuts, witch_hat, kapsel_knotjes, disco_afro, royal_crown)
+/gamemode spectator
+/summon guhs:guh 1990.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"oorstrikje_roze"}
+/summon guhs:guh 1992.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"oorstrikje_roze",ClothesHead:"sjoelen_petje"}
+/summon guhs:guh 1994.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"oorstrikje_roze",ClothesHead:"elftocht_schaatsmuts"}
+/summon guhs:guh 1996.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"oorstrikje_roze",ClothesHead:"witch_hat"}
+/summon guhs:guh 1998.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"oorstrikje_roze",ClothesHaar:"kapsel_knotjes"}
+/summon guhs:guh 2000.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"oorstrikje_roze",ClothesHead:"disco_afro"}
+/summon guhs:guh 2002.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"oorstrikje_roze",ClothesHead:"royal_crown"}
+/summon guhs:guh 1990.5 200 1994.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"elftocht_oorwarmers"}
+/summon guhs:guh 1992.5 200 1994.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"elftocht_oorwarmers",ClothesHead:"sjoelen_petje"}
+/summon guhs:guh 1994.5 200 1994.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"elftocht_oorwarmers",ClothesHead:"elftocht_schaatsmuts"}
+/summon guhs:guh 1996.5 200 1994.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"elftocht_oorwarmers",ClothesHead:"witch_hat"}
+/summon guhs:guh 1998.5 200 1994.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"elftocht_oorwarmers",ClothesHaar:"kapsel_knotjes"}
+/summon guhs:guh 2000.5 200 1994.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"elftocht_oorwarmers",ClothesHead:"disco_afro"}
+/summon guhs:guh 2002.5 200 1994.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"elftocht_oorwarmers",ClothesHead:"royal_crown"}
+/summon guhs:guh 1990.5 200 1998.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"disco_koptelefoontje"}
+/summon guhs:guh 1992.5 200 1998.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"disco_koptelefoontje",ClothesHead:"sjoelen_petje"}
+/summon guhs:guh 1994.5 200 1998.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"disco_koptelefoontje",ClothesHead:"elftocht_schaatsmuts"}
+/summon guhs:guh 1996.5 200 1998.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"disco_koptelefoontje",ClothesHead:"witch_hat"}
+/summon guhs:guh 1998.5 200 1998.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"disco_koptelefoontje",ClothesHaar:"kapsel_knotjes"}
+/summon guhs:guh 2000.5 200 1998.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"disco_koptelefoontje",ClothesHead:"disco_afro"}
+/summon guhs:guh 2002.5 200 1998.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"disco_koptelefoontje",ClothesHead:"royal_crown"}
+/summon guhs:guh 1990.5 200 2002.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"katapult_oorbelletjes"}
+/summon guhs:guh 1992.5 200 2002.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"katapult_oorbelletjes",ClothesHead:"sjoelen_petje"}
+/summon guhs:guh 1994.5 200 2002.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"katapult_oorbelletjes",ClothesHead:"elftocht_schaatsmuts"}
+/summon guhs:guh 1996.5 200 2002.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"katapult_oorbelletjes",ClothesHead:"witch_hat"}
+/summon guhs:guh 1998.5 200 2002.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"katapult_oorbelletjes",ClothesHaar:"kapsel_knotjes"}
+/summon guhs:guh 2000.5 200 2002.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"katapult_oorbelletjes",ClothesHead:"disco_afro"}
+/summon guhs:guh 2002.5 200 2002.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],ClothesOren:"katapult_oorbelletjes",ClothesHead:"royal_crown"}
+wait 20
+camera 1996.5 202.4 2008 180 20
+waitrender 200
+shot 29_oren_overzicht
+camera 1996.5 200.9 1994.2 180 8
+wait 10
+shot 29_oren_rij1_strikje
+camera 1996.5 200.9 1998.2 180 8
+wait 5
+shot 29_oren_rij2_oorwarmers
+camera 1996.5 200.9 2002.2 180 8
+wait 5
+shot 29_oren_rij3_koptelefoon
+camera 1996.5 200.9 2006.2 180 8
+wait 5
+shot 29_oren_rij4_oorbelletjes
+camera 2006 201 1996.5 90 10
+wait 5
+shot 29_oren_zij
+camera 1996.5 201.5 1985 0 14
+wait 5
+shot 29_oren_achter
+camera 1994.5 200.75 2004.3 180 10
+wait 5
+shot 29_oren_dichtbij_oorbel_muts
+camera 1994.5 200.75 1996.3 180 10
+wait 5
+shot 29_oren_dichtbij_oorwarmer_muts
+/kill @e[type=guhs:guh,x=1996,y=200,z=1996,distance=..12]
+
+section Pinguh looks (klassiek, keizer, pluis, baby) awake and asleep, plus a Pinguh with clothes
+/summon guhs:guh 2010.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],Variant:"pinguh",UUID:[I;4660,1,22136,1]}
+/summon guhs:guh 2013.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],Variant:"pinguh",UUID:[I;4660,3,22136,3]}
+/summon guhs:guh 2016.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],Variant:"pinguh",UUID:[I;4660,9,22136,9]}
+/summon guhs:guh 2019.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],Variant:"pinguh",Age:-2000000,UUID:[I;4660,1,22136,11]}
+/summon guhs:guh 2010.5 200 1995.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],Variant:"pinguh",KnusVlaggen:4096,UUID:[I;4660,2,22136,2]}
+/summon guhs:guh 2013.5 200 1995.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],Variant:"pinguh",KnusVlaggen:4096,UUID:[I;4660,5,22136,5]}
+/summon guhs:guh 2016.5 200 1995.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],Variant:"pinguh",KnusVlaggen:4096,UUID:[I;4660,15,22136,15]}
+/summon guhs:guh 2019.5 200 1995.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],Variant:"pinguh",KnusVlaggen:4096,Age:-2000000,UUID:[I;4660,1,22136,13]}
+/summon guhs:guh 2022.5 200 1990.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],Variant:"pinguh",UUID:[I;4660,4,22136,4],ClothesHead:"elftocht_schaatsmuts",ClothesNeck:"elftocht_sjaal",ClothesOren:"elftocht_oorwarmers",ClothesBody:"elftocht_truitje"}
+/summon guhs:guh 2022.5 200 1995.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f],Variant:"normal",KnusVlaggen:4096}
+wait 10
+emote 2010.5 200 1995.5 0.6 SLAPEN
+emote 2013.5 200 1995.5 0.6 SLAPEN
+emote 2016.5 200 1995.5 0.6 SLAPEN
+emote 2019.5 200 1995.5 0.6 SLAPEN
+emote 2022.5 200 1995.5 0.6 SLAPEN
+wait 20
+camera 2016.5 202.2 2001 180 18
+waitrender 200
+shot 29_pinguh_overzicht
+camera 2011.9 200.8 1993.6 180 6
+wait 5
+shot 29_pinguh_klassiek_keizer
+camera 2017.9 200.8 1993.6 180 6
+wait 5
+shot 29_pinguh_pluis_baby
+camera 2011.9 200.8 1998.6 180 6
+wait 5
+shot 29_pinguh_slaap_klassiek_keizer
+camera 2017.9 200.8 1998.6 180 6
+wait 5
+shot 29_pinguh_slaap_pluis_baby
+camera 2022.5 201.1 1993.4 180 10
+wait 5
+shot 29_pinguh_kleding
+camera 2014 200.8 1988 -45 8
+wait 5
+shot 29_pinguh_zij
+camera 2016.5 201.5 1986 0 12
+wait 5
+shot 29_pinguh_achter
+/kill @e[type=guhs:guh,x=2016,y=200,z=1993,distance=..10]
+
+section the 2.9 NPCs (front, side, back)
+/summon guhs:guh_npc 1990.5 200 2014.5 {Kind:"sjoelguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 1993.5 200 2014.5 {Kind:"doolhofguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 1996.5 200 2014.5 {Kind:"katapultguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 1999.5 200 2014.5 {Kind:"spelleiderguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 2002.5 200 2014.5 {Kind:"schaatsmeesterguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 2005.5 200 2014.5 {Kind:"stempelguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 1990.5 200 2019.5 {Kind:"circuitguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 1993.5 200 2019.5 {Kind:"brandweerguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 1996.5 200 2019.5 {Kind:"politieguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 1999.5 200 2019.5 {Kind:"apothekerguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 2002.5 200 2019.5 {Kind:"bouwvakkerguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh_npc 2005.5 200 2019.5 {Kind:"djguh",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+wait 20
+camera 1998 202.8 2027 180 16
+waitrender 200
+shot 29_npcs_overzicht
+camera 1995 201.4 2018.3 180 10
+wait 5
+shot 29_npcs_rij1_links
+camera 2002 201.4 2018.3 180 10
+wait 5
+shot 29_npcs_rij1_rechts
+camera 1995 201.4 2023.3 180 10
+wait 5
+shot 29_npcs_rij2_links
+camera 2002 201.4 2023.3 180 10
+wait 5
+shot 29_npcs_rij2_rechts
+camera 2011 201.5 2017 90 8
+wait 5
+shot 29_npcs_zij
+camera 1998 202 2008 0 12
+wait 5
+shot 29_npcs_achter
+
+section the 2.9 game screens that open anywhere (DJ-guh: disco, the 2.4 NPC screens with the level buttons)
+/gamemode creative
+/summon guhs:guh_npc 2030.5 200 2030.5 {Kind:"showguh",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh_npc 2034.5 200 2030.5 {Kind:"mepguh",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh_npc 2038.5 200 2030.5 {Kind:"golfguh",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh_npc 2030.5 200 2036.5 {Kind:"smulguh",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh_npc 2034.5 200 2036.5 {Kind:"visguh",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh_npc 2038.5 200 2036.5 {Kind:"raceguh",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/tp @s 2034.5 200 2027.5 0 0
+wait 20
+interact 2005.5 200 2019.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_disco gui
+gui close
+interact 2030.5 200 2030.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_beauty gui
+gui close
+interact 2034.5 200 2030.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_meppen gui
+gui close
+interact 2038.5 200 2030.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_golf gui
+gui close
+interact 2030.5 200 2036.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_smul gui
+gui close
+interact 2034.5 200 2036.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_vissen gui
+gui close
+interact 2038.5 200 2036.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_race gui
+gui close
+interact 1990.5 200 2014.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_sjoelen gui
+gui close
+interact 1993.5 200 2014.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_doolhof gui
+gui close
+interact 1996.5 200 2014.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_katapult gui
+press Lastig
+wait 5
+widgets
+mouse 2 2
+shot 29_scherm_katapult_lastig gui
+gui close
+interact 1999.5 200 2014.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_spelleider gui
+gui close
+interact 2002.5 200 2014.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_schaatsmeester gui
+gui close
+interact 1990.5 200 2019.5 guhs:guh_npc
+wait 15
+widgets
+mouse 2 2
+shot 29_scherm_circuit gui
+gui close
+interact 1993.5 200 2019.5 guhs:guh_npc
+wait 15
+mouse 2 2
+shot 29_scherm_brandweer gui
+gui close
+/kill @e[type=guhs:guh_npc]
+
+section consuming a clothing item (hold right-click): first time "Ontgrendeld", second time "Deze heb je al"
+/summon guhs:guh 2010.5 200 2010.5 {NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f],ClothesHead:"party_hat",ClothesOren:"oorstrikje_mint"}
+/gamemode survival
+/item replace entity @s weapon.mainhand with guhs:katapult_oorbelletjes
+/tp @s 2010.5 200 2006.5 0 20
+wait 10
+useitem 45
+wait 2
+shot 29_kleding_eten_klaar gui
+wait 40
+/item replace entity @s weapon.mainhand with guhs:katapult_oorbelletjes
+wait 5
+useitem 45
+wait 2
+shot 29_kleding_al_heb gui
+/item replace entity @s weapon.mainhand with minecraft:air
+/gamemode creative
+
+section Guhdex Kleding tab with only a few unlocks (grey = locked, green = yours) + hover tooltips
+ontgrendel oorstrikje_roze elftocht_oorwarmers sjoelen_petje striped_sweater
+wait 5
+gui dexopen kleding open
+wait 5
+mouse 2 2
+shot 29_gids_kleding_slot_01 gui
+mouse 358 266
+wait 3
+shot 29_gids_kleding_slot_hover_a gui
+mouse 378 266
+wait 3
+shot 29_gids_kleding_slot_hover_b gui
+scroll 480 300 -20
+wait 3
+mouse 2 2
+shot 29_gids_kleding_slot_02 gui
+gui close
+
+section wardrobe: few unlocks, then everything; per-slot lists, 3D preview, try-on, dice, filter, search, favourites, rugzak tab
+wardrobe 2010.5 200 2010.5
+wait 15
+widgets
+mouse 2 2
+shot 29_kast_weinig gui
+gui close
+ontgrendel all
+wait 5
+wardrobe 2010.5 200 2010.5
+wait 15
+widgets
+mouse 2 2
+shot 29_kast_hoofd gui
+mouse 538 268
+wait 3
+shot 29_kast_hover gui
+click 538 268
+wait 3
+mouse 2 2
+shot 29_kast_passen gui
+click 619 180
+wait 3
+mouse 2 2
+shot 29_kast_oren gui
+click 538 268
+wait 3
+mouse 2 2
+shot 29_kast_oren_passen gui
+drag 379 260 440 250
+wait 3
+mouse 2 2
+shot 29_kast_gedraaid gui
+press Dobbel!
+wait 5
+mouse 2 2
+shot 29_kast_dobbel gui
+press Dobbel!
+wait 5
+mouse 2 2
+shot 29_kast_dobbel2 gui
+click 459 180
+click 480 210
+type muts
+wait 3
+mouse 2 2
+shot 29_kast_zoek gui
+click 480 210
+click 594 210
+wait 3
+mouse 2 2
+shot 29_kast_filter gui
+scroll 538 280 -4
+wait 3
+mouse 2 2
+shot 29_kast_gescrold gui
+mouse 470 373
+wait 3
+shot 29_kast_favoriet_hover gui
+press Rugzak & harnas
+wait 5
+widgets
+mouse 2 2
+shot 29_kast_rugzak gui
+gui close
+
+section piep menus (muisje, Poepschilly, Schilly)
+/summon guhs:pieppiepmuisje 2014.5 200 2010.5 {NoAI:1b,PersistenceRequired:1b}
+/summon guhs:poepschilly 2016.5 200 2010.5 {NoAI:1b,PersistenceRequired:1b}
+/summon guhs:schilly 2018.5 200 2010.5 {NoAI:1b,PersistenceRequired:1b}
+wait 10
+piepmenu 2014.5 200 2010.5
+wait 15
+widgets
+mouse 2 2
+shot 29_piepmenu_muisje gui
+gui close
+piepmenu 2016.5 200 2010.5
+wait 15
+widgets
+mouse 2 2
+shot 29_piepmenu_poepschilly gui
+gui close
+piepmenu 2018.5 200 2010.5
+wait 15
+widgets
+mouse 2 2
+shot 29_piepmenu_schilly gui
+gui close
+guhmenu 2010.5 200 2010.5
+wait 10
+widgets
+mouse 2 2
+shot 29_guhmenu gui
+gui close
+
+section Guhdex + Superkompas
+gui minigames 29_gids_minigames
+gui kleding 29_gids_kleding
+gui knus 29_gids_knus
+gui superkompas 29_gids_superkompas
+gui guhdex 29_guhdex
+
+quit

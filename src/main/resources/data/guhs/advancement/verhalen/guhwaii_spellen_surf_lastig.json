@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:trident"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.guhwaii_spellen_surf_lastig.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.guhwaii_spellen_surf_lastig.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/guhwaii_spellen_tube"
+}

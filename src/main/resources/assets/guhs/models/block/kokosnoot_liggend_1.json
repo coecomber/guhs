@@ -1,0 +1,48 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "voor": "guhs:block/kokosnoot_half",
+    "vacht": "guhs:block/kokosnoot_half_vacht",
+    "particle": "guhs:block/kokosnoot_half_vacht"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        6,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor",
+          "uv": [
+            3,
+            4,
+            13,
+            14
+          ]
+        },
+        "south": {
+          "texture": "#vacht"
+        },
+        "east": {
+          "texture": "#vacht"
+        },
+        "west": {
+          "texture": "#vacht"
+        },
+        "up": {
+          "texture": "#vacht"
+        },
+        "down": {
+          "texture": "#vacht"
+        }
+      }
+    }
+  ]
+}

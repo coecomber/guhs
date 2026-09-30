@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,soort=1": {
+      "model": "guhs:block/mewtwo_onderdelenkist_1"
+    },
+    "facing=north,soort=2": {
+      "model": "guhs:block/mewtwo_onderdelenkist_2"
+    },
+    "facing=north,soort=3": {
+      "model": "guhs:block/mewtwo_onderdelenkist_3"
+    },
+    "facing=north,soort=4": {
+      "model": "guhs:block/mewtwo_onderdelenkist_4"
+    },
+    "facing=east,soort=1": {
+      "model": "guhs:block/mewtwo_onderdelenkist_1",
+      "y": 90
+    },
+    "facing=east,soort=2": {
+      "model": "guhs:block/mewtwo_onderdelenkist_2",
+      "y": 90
+    },
+    "facing=east,soort=3": {
+      "model": "guhs:block/mewtwo_onderdelenkist_3",
+      "y": 90
+    },
+    "facing=east,soort=4": {
+      "model": "guhs:block/mewtwo_onderdelenkist_4",
+      "y": 90
+    },
+    "facing=south,soort=1": {
+      "model": "guhs:block/mewtwo_onderdelenkist_1",
+      "y": 180
+    },
+    "facing=south,soort=2": {
+      "model": "guhs:block/mewtwo_onderdelenkist_2",
+      "y": 180
+    },
+    "facing=south,soort=3": {
+      "model": "guhs:block/mewtwo_onderdelenkist_3",
+      "y": 180
+    },
+    "facing=south,soort=4": {
+      "model": "guhs:block/mewtwo_onderdelenkist_4",
+      "y": 180
+    },
+    "facing=west,soort=1": {
+      "model": "guhs:block/mewtwo_onderdelenkist_1",
+      "y": 270
+    },
+    "facing=west,soort=2": {
+      "model": "guhs:block/mewtwo_onderdelenkist_2",
+      "y": 270
+    },
+    "facing=west,soort=3": {
+      "model": "guhs:block/mewtwo_onderdelenkist_3",
+      "y": 270
+    },
+    "facing=west,soort=4": {
+      "model": "guhs:block/mewtwo_onderdelenkist_4",
+      "y": 270
+    }
+  }
+}

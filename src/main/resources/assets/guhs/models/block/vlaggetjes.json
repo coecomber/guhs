@@ -1,0 +1,156 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/vlaggetjes",
+    "flags": "guhs:block/vlaggetjes"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        14.5,
+        7.9
+      ],
+      "to": [
+        16,
+        15,
+        8.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#flags",
+          "uv": [
+            0,
+            8,
+            16,
+            9
+          ]
+        },
+        "south": {
+          "texture": "#flags",
+          "uv": [
+            0,
+            8,
+            16,
+            9
+          ]
+        },
+        "up": {
+          "texture": "#flags",
+          "uv": [
+            0,
+            8,
+            16,
+            9
+          ]
+        },
+        "down": {
+          "texture": "#flags",
+          "uv": [
+            0,
+            8,
+            16,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        10.5,
+        8
+      ],
+      "to": [
+        5,
+        14.5,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#flags",
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#flags",
+          "uv": [
+            0,
+            0,
+            4,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        10.5,
+        8
+      ],
+      "to": [
+        10,
+        14.5,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#flags",
+          "uv": [
+            4,
+            0,
+            8,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#flags",
+          "uv": [
+            4,
+            0,
+            8,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        10.5,
+        8
+      ],
+      "to": [
+        15,
+        14.5,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#flags",
+          "uv": [
+            8,
+            0,
+            12,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#flags",
+          "uv": [
+            8,
+            0,
+            12,
+            4
+          ]
+        }
+      }
+    }
+  ]
+}

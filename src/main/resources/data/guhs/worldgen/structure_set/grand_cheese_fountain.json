@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:grand_cheese_fountain",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 40,
+    "separation": 14,
+    "salt": 19191919
+  }
+}

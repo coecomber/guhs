@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:herinnering"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.hemel_terug.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.hemel_terug.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/hemel_hart"
+}

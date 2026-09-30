@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/wereldleven_grijpmachine",
+  "display": {
+    "icon": {
+      "id": "guhs:knuffel_glitter"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.wereldleven_knuffelkast_vol.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.wereldleven_knuffelkast_vol.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "parent": "guhs:grote_guhspelen/knabbelspelen_gespeeld",
+  "display": {
+    "icon": {
+      "id": "guhs:spelen_zweetbandje"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.knabbelspelen_kleding.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.knabbelspelen_kleding.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "spelen_zweetbandje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:spelen_zweetbandje"
+          }
+        ]
+      }
+    },
+    "spelen_sportshirtje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:spelen_sportshirtje"
+          }
+        ]
+      }
+    },
+    "spelen_fluitje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:spelen_fluitje"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "parent": "guhs:block/motknabbel_roze",
+  "overrides": [
+    {
+      "predicate": {
+        "guhs:kleur": 0.5
+      },
+      "model": "guhs:block/motknabbel_mint"
+    },
+    {
+      "predicate": {
+        "guhs:kleur": 1.0
+      },
+      "model": "guhs:block/motknabbel_geel"
+    }
+  ]
+}

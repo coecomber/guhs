@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:baltoguh_beeldje"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.balto_held.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.balto_held.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/balto_aankomst"
+}

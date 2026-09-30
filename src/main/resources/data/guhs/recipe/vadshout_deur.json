@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "vadshout_door",
+  "key": {
+    "#": {
+      "item": "guhs:vadshout_planken"
+    }
+  },
+  "pattern": [
+    "##",
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": 3,
+    "id": "guhs:vadshout_deur"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:kapperscape"
+          }
+        ]
+      }
+    }
+  }
+}

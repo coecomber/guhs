@@ -1,0 +1,16 @@
+{
+  "type": "neoforge:add_table",
+  "table": "guhs:gameplay/guh_vis_fishing",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:gameplay/fishing/fish"
+    },
+    {
+      "condition": "minecraft:location_check",
+      "predicate": {
+        "dimension": "guhs:guhmension"
+      }
+    }
+  ]
+}

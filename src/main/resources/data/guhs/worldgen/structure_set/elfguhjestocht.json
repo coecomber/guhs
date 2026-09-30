@@ -1,0 +1,22 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:elfguhjestocht",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:elftocht_piek",
+    "salt": 20290601,
+    "spacing": 32,
+    "noise": "guhs:guhmension_polder",
+    "vlak": {
+      "flat_value": 0.63,
+      "sea_noise": "guhs:guhmension_zee",
+      "sea_max": 0.28,
+      "knuffel_noise": "guhs:guhmension_knuffel",
+      "knuffel_max": 0.4,
+      "min_flat": 40
+    }
+  }
+}

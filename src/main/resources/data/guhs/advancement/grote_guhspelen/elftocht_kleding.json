@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:grote_guhspelen/elftocht_eerste_rit",
+  "display": {
+    "icon": {
+      "id": "guhs:elftocht_schaatsmuts"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.elftocht_kleding.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.elftocht_kleding.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/theehuis_gezellig",
+  "display": {
+    "icon": {
+      "id": "guhs:guhbloementhee"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.theehuis_theesoorten.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.theehuis_theesoorten.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

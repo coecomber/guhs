@@ -1,0 +1,102 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/sneeuwpopguh",
+    "sneeuw": "guhs:block/sneeuwpopguh",
+    "gezicht": "guhs:block/sneeuwpopguh_gezicht",
+    "sjaal": "minecraft:block/pink_wool",
+    "oor": "minecraft:block/pink_wool"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#sneeuw"
+        },
+        "up": {
+          "texture": "#sneeuw"
+        },
+        "north": {
+          "texture": "#sneeuw"
+        },
+        "south": {
+          "texture": "#sneeuw"
+        },
+        "west": {
+          "texture": "#sneeuw"
+        },
+        "east": {
+          "texture": "#sneeuw"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        14,
+        3
+      ],
+      "to": [
+        13,
+        16,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#sneeuw"
+        },
+        "up": {
+          "texture": "#sneeuw"
+        },
+        "north": {
+          "texture": "#sneeuw"
+        },
+        "south": {
+          "texture": "#sneeuw"
+        },
+        "west": {
+          "texture": "#sneeuw"
+        },
+        "east": {
+          "texture": "#sneeuw"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        14,
+        2.5
+      ],
+      "to": [
+        13.5,
+        16,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sjaal"
+        },
+        "south": {
+          "texture": "#sjaal"
+        },
+        "west": {
+          "texture": "#sjaal"
+        },
+        "east": {
+          "texture": "#sjaal"
+        }
+      }
+    }
+  ]
+}

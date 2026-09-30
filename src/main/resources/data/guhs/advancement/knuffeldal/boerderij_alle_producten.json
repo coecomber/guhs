@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/boerderij_verzorgd",
+  "display": {
+    "icon": {
+      "id": "guhs:kaasmelk"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.boerderij_alle_producten.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.boerderij_alle_producten.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

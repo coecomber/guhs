@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/sjoelen_kop_pijl",
+    "side": "guhs:block/sjoelen_rand",
+    "bottom": "guhs:block/sjoelen_bakplank"
+  }
+}

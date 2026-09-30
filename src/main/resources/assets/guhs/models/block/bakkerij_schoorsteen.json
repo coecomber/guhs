@@ -1,0 +1,138 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/bakkerij_schoorsteen_zijkant",
+    "zij": "guhs:block/bakkerij_schoorsteen_zijkant",
+    "boven": "guhs:block/bakkerij_schoorsteen_boven"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        11,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            5,
+            12,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "south": {
+          "uv": [
+            4,
+            5,
+            12,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "east": {
+          "uv": [
+            4,
+            5,
+            12,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "west": {
+          "uv": [
+            4,
+            5,
+            12,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "down": {
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ],
+          "texture": "#boven",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        11,
+        3
+      ],
+      "to": [
+        13,
+        14,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            2,
+            13,
+            5
+          ],
+          "texture": "#zij"
+        },
+        "south": {
+          "uv": [
+            3,
+            2,
+            13,
+            5
+          ],
+          "texture": "#zij"
+        },
+        "east": {
+          "uv": [
+            3,
+            2,
+            13,
+            5
+          ],
+          "texture": "#zij"
+        },
+        "west": {
+          "uv": [
+            3,
+            2,
+            13,
+            5
+          ],
+          "texture": "#zij"
+        },
+        "up": {
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ],
+          "texture": "#boven"
+        },
+        "down": {
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ],
+          "texture": "#boven"
+        }
+      }
+    }
+  ]
+}

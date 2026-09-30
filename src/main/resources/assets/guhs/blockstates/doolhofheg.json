@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/doolhofheg"
+      },
+      {
+        "model": "guhs:block/doolhofheg_b"
+      },
+      {
+        "model": "guhs:block/doolhofheg",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/doolhofheg_b",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/doolhofheg",
+        "x": 180
+      }
+    ]
+  }
+}

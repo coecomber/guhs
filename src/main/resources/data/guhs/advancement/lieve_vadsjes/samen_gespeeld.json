@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:lieve_vadsjes/samen_juichen",
+  "display": {
+    "icon": {
+      "id": "minecraft:target"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_gespeeld.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_gespeeld.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

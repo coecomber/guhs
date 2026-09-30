@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/knabbelsokkel_top",
+    "bottom": "guhs:block/knabbelsokkel_side",
+    "side": "guhs:block/knabbelsokkel_side"
+  }
+}

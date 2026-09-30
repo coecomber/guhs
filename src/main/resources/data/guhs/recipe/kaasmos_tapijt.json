@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MM"
+  ],
+  "key": {
+    "M": {
+      "item": "guhs:kaasmos"
+    }
+  },
+  "result": {
+    "id": "guhs:kaasmos_tapijt",
+    "count": 3
+  }
+}

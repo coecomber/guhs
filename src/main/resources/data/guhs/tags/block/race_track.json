@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cherry_planks",
+    "minecraft:cherry_slab",
+    "minecraft:smooth_quartz",
+    "minecraft:smooth_quartz_slab",
+    "minecraft:purpur_block",
+    "minecraft:purpur_slab",
+    "minecraft:black_concrete",
+    "minecraft:white_concrete",
+    "guhs:tong",
+    "guhs:race_vahoegpad",
+    "guhs:race_checkpoint",
+    "guhs:circuit_regenboogweg",
+    "guhs:circuit_regenboogweg_plaat",
+    "guhs:circuit_kaasweg",
+    "guhs:circuit_kaasweg_plaat",
+    "guhs:circuit_kaassaus",
+    "guhs:circuit_bergijs",
+    "guhs:circuit_stuiterpaddenstoel",
+    "minecraft:smooth_sandstone",
+    "minecraft:smooth_sandstone_slab",
+    "minecraft:cut_red_sandstone",
+    "minecraft:cut_red_sandstone_slab"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    }
+  ],
+  "result": {
+    "id": "guhs:sneeuwguhkopje",
+    "count": 1
+  }
+}

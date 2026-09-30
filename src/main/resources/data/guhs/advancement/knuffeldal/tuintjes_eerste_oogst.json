@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/root",
+  "display": {
+    "icon": {
+      "id": "guhs:knabbelgraan"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.tuintjes_eerste_oogst.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.tuintjes_eerste_oogst.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

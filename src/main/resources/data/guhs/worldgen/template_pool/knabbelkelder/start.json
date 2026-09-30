@@ -1,0 +1,114 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:knabbelkelder",
+        "projection": "rigid",
+        "processors": {
+          "processors": [
+            {
+              "processor_type": "minecraft:rule",
+              "rules": [
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:random_blockstate_match",
+                    "block_state": {
+                      "Name": "guhs:knabbelportaalframe",
+                      "Properties": {
+                        "facing": "north",
+                        "oog": "false"
+                      }
+                    },
+                    "probability": 0.1
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "output_state": {
+                    "Name": "guhs:knabbelportaalframe",
+                    "Properties": {
+                      "facing": "north",
+                      "oog": "true"
+                    }
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:random_blockstate_match",
+                    "block_state": {
+                      "Name": "guhs:knabbelportaalframe",
+                      "Properties": {
+                        "facing": "east",
+                        "oog": "false"
+                      }
+                    },
+                    "probability": 0.1
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "output_state": {
+                    "Name": "guhs:knabbelportaalframe",
+                    "Properties": {
+                      "facing": "east",
+                      "oog": "true"
+                    }
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:random_blockstate_match",
+                    "block_state": {
+                      "Name": "guhs:knabbelportaalframe",
+                      "Properties": {
+                        "facing": "south",
+                        "oog": "false"
+                      }
+                    },
+                    "probability": 0.1
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "output_state": {
+                    "Name": "guhs:knabbelportaalframe",
+                    "Properties": {
+                      "facing": "south",
+                      "oog": "true"
+                    }
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:random_blockstate_match",
+                    "block_state": {
+                      "Name": "guhs:knabbelportaalframe",
+                      "Properties": {
+                        "facing": "west",
+                        "oog": "false"
+                      }
+                    },
+                    "probability": 0.1
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "output_state": {
+                    "Name": "guhs:knabbelportaalframe",
+                    "Properties": {
+                      "facing": "west",
+                      "oog": "true"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

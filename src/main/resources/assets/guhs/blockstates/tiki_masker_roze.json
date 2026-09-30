@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/tiki_masker_roze"
+    },
+    "facing=east": {
+      "model": "guhs:block/tiki_masker_roze",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/tiki_masker_roze",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/tiki_masker_roze",
+      "y": 270
+    }
+  }
+}

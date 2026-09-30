@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "VV",
+    "PP"
+  ],
+  "key": {
+    "V": {
+      "item": "guhs:vahoege_vads"
+    },
+    "P": {
+      "item": "minecraft:pink_terracotta"
+    }
+  },
+  "result": {
+    "id": "guhs:vadsaambeeld",
+    "count": 1
+  }
+}

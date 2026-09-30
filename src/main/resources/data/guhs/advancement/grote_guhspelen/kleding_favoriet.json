@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/kleding_eerste",
+  "display": {
+    "icon": {
+      "id": "guhs:guh_backpack"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.kleding_favoriet.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.kleding_favoriet.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

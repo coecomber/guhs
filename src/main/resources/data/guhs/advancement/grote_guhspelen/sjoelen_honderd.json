@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/sjoelen_zestig",
+  "display": {
+    "icon": {
+      "id": "guhs:sjoelen_stapel"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.sjoelen_honderd.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.sjoelen_honderd.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

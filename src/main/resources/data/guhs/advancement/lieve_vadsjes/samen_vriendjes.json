@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:lieve_vadsjes/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:poppy"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_vriendjes.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_vriendjes.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

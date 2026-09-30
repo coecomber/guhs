@@ -1,0 +1,6 @@
+{
+  "parent": "guhs:block/disco_milkshake_base",
+  "textures": {
+    "all": "guhs:block/disco_milkshake_kaas"
+  }
+}

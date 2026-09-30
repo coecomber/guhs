@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:guhmension/find_guhbibliotheek",
+  "display": {
+    "icon": {
+      "id": "minecraft:written_book"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.bieb_boekenwurm.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.bieb_boekenwurm.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

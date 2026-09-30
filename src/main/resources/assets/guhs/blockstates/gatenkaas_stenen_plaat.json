@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/gatenkaas_stenen_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/gatenkaas_stenen"
+    },
+    "type=top": {
+      "model": "guhs:block/gatenkaas_stenen_plaat_top"
+    }
+  }
+}

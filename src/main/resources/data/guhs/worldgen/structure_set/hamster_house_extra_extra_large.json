@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:hamster_house_extra_extra_large",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 64,
+    "separation": 24,
+    "salt": 64646464
+  }
+}

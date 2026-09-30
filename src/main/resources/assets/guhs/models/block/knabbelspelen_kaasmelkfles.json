@@ -1,0 +1,148 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/knabbelspelen_kaasmelkfles",
+    "fles": "guhs:block/knabbelspelen_kaasmelkfles",
+    "hals": "guhs:block/knabbelspelen_kaasmelkfles_hals",
+    "kop": "guhs:block/knabbelspelen_spijkerkop"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        10,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#fles",
+          "uv": [
+            2,
+            6,
+            14,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#fles",
+          "uv": [
+            2,
+            6,
+            14,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#fles",
+          "uv": [
+            2,
+            6,
+            14,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#fles",
+          "uv": [
+            2,
+            6,
+            14,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#fles",
+          "uv": [
+            2,
+            6,
+            14,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#fles",
+          "uv": [
+            2,
+            6,
+            14,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        10,
+        5
+      ],
+      "to": [
+        11,
+        14,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#hals",
+          "uv": [
+            5,
+            0,
+            11,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#hals",
+          "uv": [
+            5,
+            0,
+            11,
+            4
+          ]
+        },
+        "north": {
+          "texture": "#hals",
+          "uv": [
+            5,
+            0,
+            11,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#hals",
+          "uv": [
+            5,
+            0,
+            11,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#hals",
+          "uv": [
+            5,
+            0,
+            11,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#hals",
+          "uv": [
+            5,
+            0,
+            11,
+            4
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:gatenkaas_stenen"
+    }
+  },
+  "result": {
+    "id": "guhs:gatenkaas_stenen_muur",
+    "count": 6
+  }
+}

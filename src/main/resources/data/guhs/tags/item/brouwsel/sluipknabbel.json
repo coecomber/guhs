@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "guhs:moeraskaas",
+      "required": false
+    },
+    "guhs:mika_vet"
+  ]
+}

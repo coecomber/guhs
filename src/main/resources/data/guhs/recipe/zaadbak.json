@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "PCP"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:kaasknabbelzaadjes"
+    },
+    "P": {
+      "item": "minecraft:pink_wool"
+    },
+    "C": {
+      "item": "minecraft:composter"
+    }
+  },
+  "result": {
+    "id": "guhs:zaadbak",
+    "count": 1
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:knuffelgras"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.bezocht.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.bezocht.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:knuffeldal"
+          }
+        }
+      }
+    }
+  },
+  "parent": "guhs:knuffeldal/root"
+}

@@ -1,0 +1,18 @@
+{
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:guhxolotl"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

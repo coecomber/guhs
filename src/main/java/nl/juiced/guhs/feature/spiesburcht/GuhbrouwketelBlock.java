@@ -1,0 +1,158 @@
+package nl.juiced.guhs.feature.spiesburcht;
+
+import javax.annotation.Nullable;
+
+import com.mojang.serialization.MapCodec;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3f;
+
+/**
+ * De Guhbrouwketel: a big pan on a little barbecue (the brewing stand of the Barbecuether). Everything happens with
+ * right-clicks ({@link GuhbrouwketelBlockEntity#use}):
+ * <ol>
+ *   <li>stoke the barbecue with grillspiespoeder (every pinch is good for {@link GuhbrouwketelBlockEntity#BREWS_PER_POWDER} brews);</li>
+ *   <li>pour in a bucket of kaassaus (three portions of kaasbouillon);</li>
+ *   <li>stir in one ingredient: it bubbles for a while and becomes a Guhdrankje ({@link Brouwsel});</li>
+ *   <li>fill glass bottles from it (three).</li>
+ * </ol>
+ */
+public class GuhbrouwketelBlock extends BaseEntityBlock {
+    public static final MapCodec<GuhbrouwketelBlock> CODEC = simpleCodec(GuhbrouwketelBlock::new);
+    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final BooleanProperty LIT = BooleanProperty.create("lit");
+    public static final BooleanProperty BORRELT = BooleanProperty.create("borrelt");
+    /** Portions in the pan: 0 (empty) to 3. */
+    public static final IntegerProperty VULLING = IntegerProperty.create("vulling", 0, 3);
+    /** What's in the pan ({@link Brouwsel} ordinal). */
+    public static final IntegerProperty BROUWSEL = IntegerProperty.create("brouwsel", 0, Brouwsel.values().length - 1);
+    private static final VoxelShape SHAPE = Shapes.or(Block.box(1, 0, 1, 15, 8, 15), Block.box(0, 8, 0, 16, 14, 16));
+
+    public GuhbrouwketelBlock(Properties properties) {
+        super(properties);
+        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false).setValue(BORRELT, false)
+                .setValue(VULLING, 0).setValue(BROUWSEL, 0));
+    }
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, LIT, BORRELT, VULLING, BROUWSEL);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    protected RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new GuhbrouwketelBlockEntity(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return level.isClientSide ? null : createTickerHelper(type, SpiesburchtFeature.GUHBROUWKETEL_BE.get(), GuhbrouwketelBlockEntity::serverTick);
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+                                              BlockHitResult hit) {
+        if (stack.isEmpty()) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        if (level.isClientSide) {
+            return ItemInteractionResult.SUCCESS;
+        }
+        if (level.getBlockEntity(pos) instanceof GuhbrouwketelBlockEntity ketel && player instanceof ServerPlayer sp) {
+            return ketel.use(sp, hand) ? ItemInteractionResult.CONSUME : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+        if (!level.isClientSide && level.getBlockEntity(pos) instanceof GuhbrouwketelBlockEntity ketel && player instanceof ServerPlayer sp) {
+            ketel.status(sp);
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    /** Flames under the pan, and bubbles (in the colour of the brew) while it cooks. */
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        double x = pos.getX() + 0.5, y = pos.getY(), z = pos.getZ() + 0.5;
+        if (state.getValue(LIT)) {
+            if (random.nextInt(3) == 0) {
+                level.addParticle(ParticleTypes.FLAME, x + (random.nextDouble() - 0.5) * 0.5, y + 0.3, z + (random.nextDouble() - 0.5) * 0.5, 0, 0.01, 0);
+            }
+            if (random.nextInt(4) == 0) {
+                level.addParticle(ParticleTypes.SMOKE, x + (random.nextDouble() - 0.5) * 0.6, y + 0.4, z + (random.nextDouble() - 0.5) * 0.6, 0, 0.02, 0);
+            }
+        }
+        if (state.getValue(VULLING) > 0) {
+            int c = Brouwsel.byIndex(state.getValue(BROUWSEL)).colour;
+            var dust = new DustParticleOptions(new Vector3f(((c >> 16) & 255) / 255f, ((c >> 8) & 255) / 255f, (c & 255) / 255f), 1.0f);
+            int chance = state.getValue(BORRELT) ? 1 : 5;
+            if (random.nextInt(chance) == 0) {
+                level.addParticle(dust, x + (random.nextDouble() - 0.5) * 0.7, y + 0.8 + state.getValue(VULLING) * 0.05, z + (random.nextDouble() - 0.5) * 0.7,
+                        0, 0.05, 0);
+            }
+            if (state.getValue(BORRELT) && random.nextInt(3) == 0) {
+                level.addParticle(ParticleTypes.BUBBLE_POP, x + (random.nextDouble() - 0.5) * 0.6, y + 0.85, z + (random.nextDouble() - 0.5) * 0.6, 0, 0.04, 0);
+            }
+        }
+    }
+
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof GuhbrouwketelBlockEntity ketel) {
+            ketel.dropFuel();
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+}

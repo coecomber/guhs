@@ -1,0 +1,79 @@
+{
+  "variants": {
+    "facing=north,voer=0": {
+      "model": "guhs:block/vogels_voerhuisje_0"
+    },
+    "facing=north,voer=1": {
+      "model": "guhs:block/vogels_voerhuisje_1"
+    },
+    "facing=north,voer=2": {
+      "model": "guhs:block/vogels_voerhuisje_2"
+    },
+    "facing=north,voer=3": {
+      "model": "guhs:block/vogels_voerhuisje_3"
+    },
+    "facing=north,voer=4": {
+      "model": "guhs:block/vogels_voerhuisje_4"
+    },
+    "facing=east,voer=0": {
+      "model": "guhs:block/vogels_voerhuisje_0",
+      "y": 90
+    },
+    "facing=east,voer=1": {
+      "model": "guhs:block/vogels_voerhuisje_1",
+      "y": 90
+    },
+    "facing=east,voer=2": {
+      "model": "guhs:block/vogels_voerhuisje_2",
+      "y": 90
+    },
+    "facing=east,voer=3": {
+      "model": "guhs:block/vogels_voerhuisje_3",
+      "y": 90
+    },
+    "facing=east,voer=4": {
+      "model": "guhs:block/vogels_voerhuisje_4",
+      "y": 90
+    },
+    "facing=south,voer=0": {
+      "model": "guhs:block/vogels_voerhuisje_0",
+      "y": 180
+    },
+    "facing=south,voer=1": {
+      "model": "guhs:block/vogels_voerhuisje_1",
+      "y": 180
+    },
+    "facing=south,voer=2": {
+      "model": "guhs:block/vogels_voerhuisje_2",
+      "y": 180
+    },
+    "facing=south,voer=3": {
+      "model": "guhs:block/vogels_voerhuisje_3",
+      "y": 180
+    },
+    "facing=south,voer=4": {
+      "model": "guhs:block/vogels_voerhuisje_4",
+      "y": 180
+    },
+    "facing=west,voer=0": {
+      "model": "guhs:block/vogels_voerhuisje_0",
+      "y": 270
+    },
+    "facing=west,voer=1": {
+      "model": "guhs:block/vogels_voerhuisje_1",
+      "y": 270
+    },
+    "facing=west,voer=2": {
+      "model": "guhs:block/vogels_voerhuisje_2",
+      "y": 270
+    },
+    "facing=west,voer=3": {
+      "model": "guhs:block/vogels_voerhuisje_3",
+      "y": 270
+    },
+    "facing=west,voer=4": {
+      "model": "guhs:block/vogels_voerhuisje_4",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/bakkerij_eerste_bestelling",
+  "display": {
+    "icon": {
+      "id": "guhs:knabbeloven"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.bakkerij_receptenboek_vol.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.bakkerij_receptenboek_vol.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

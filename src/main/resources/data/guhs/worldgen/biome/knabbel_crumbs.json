@@ -1,0 +1,73 @@
+{
+  "has_precipitation": false,
+  "temperature": 0.8,
+  "downfall": 0.0,
+  "creature_spawn_probability": 0.25,
+  "effects": {
+    "sky_color": 16761502,
+    "fog_color": 16769218,
+    "water_color": 16230600,
+    "water_fog_color": 14708890,
+    "grass_color": 16234187,
+    "foliage_color": 16234187,
+    "mood_sound": {
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000,
+      "block_search_extent": 8,
+      "offset": 2.0
+    }
+  },
+  "spawners": {
+    "monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": [],
+    "creature": [
+      {
+        "type": "guhs:guh",
+        "weight": 100,
+        "minCount": 3,
+        "maxCount": 6
+      },
+      {
+        "type": "guhs:guh_bee",
+        "weight": 12,
+        "minCount": 1,
+        "maxCount": 3
+      },
+      {
+        "type": "guhs:guh_slime",
+        "weight": 8,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": []
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "guhs:guhmension_kaasknabbel_veins_rich",
+      "guhs:vahoege_vads_ore"
+    ],
+    [],
+    [],
+    [
+      "guhs:guhbloesem_rare",
+      "guhs:guh_flowers",
+      "guhs:roze_gras"
+    ],
+    []
+  ]
+}

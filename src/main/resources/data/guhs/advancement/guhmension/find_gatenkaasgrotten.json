@@ -1,0 +1,31 @@
+{
+  "parent": "guhs:guhmension/enter_guhmension",
+  "display": {
+    "icon": {
+      "id": "guhs:gatenkaas"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.find_gatenkaasgrotten.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.find_gatenkaasgrotten.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": [
+              "guhs:gatenkaasgrotten"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

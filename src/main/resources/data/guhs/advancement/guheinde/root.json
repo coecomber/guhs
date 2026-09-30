@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:oog_van_vadsig"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.root.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "guhs:textures/block/kaaskorst.png"
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:mika_traan"
+          }
+        ]
+      }
+    }
+  }
+}

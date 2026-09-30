@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I I",
+    "III",
+    "TST"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "T": {
+      "item": "guhs:roosterijzer_tralies"
+    },
+    "S": {
+      "item": "guhs:grillspies"
+    }
+  },
+  "result": {
+    "id": "guhs:guhbrouwketel",
+    "count": 1
+  }
+}

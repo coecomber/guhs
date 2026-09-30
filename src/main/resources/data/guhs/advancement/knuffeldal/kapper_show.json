@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/kapper_eerste_kapsel",
+  "display": {
+    "icon": {
+      "id": "guhs:kappersschaar"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.kapper_show.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.kapper_show.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

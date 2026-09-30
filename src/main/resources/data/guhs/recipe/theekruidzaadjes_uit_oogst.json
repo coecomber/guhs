@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:theekruid"
+    }
+  ],
+  "result": {
+    "id": "guhs:theekruidzaadjes",
+    "count": 2
+  }
+}

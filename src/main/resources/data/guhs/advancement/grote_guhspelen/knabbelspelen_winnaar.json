@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/knabbelspelen_zeskamp",
+  "display": {
+    "icon": {
+      "id": "guhs:spelenlintje"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.knabbelspelen_winnaar.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.knabbelspelen_winnaar.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

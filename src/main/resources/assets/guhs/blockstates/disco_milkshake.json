@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "smaak=aardbei": {
+      "model": "guhs:block/disco_milkshake_aardbei"
+    },
+    "smaak=munt": {
+      "model": "guhs:block/disco_milkshake_munt"
+    },
+    "smaak=choco": {
+      "model": "guhs:block/disco_milkshake_choco"
+    },
+    "smaak=kaas": {
+      "model": "guhs:block/disco_milkshake_kaas"
+    }
+  }
+}

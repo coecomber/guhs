@@ -1,0 +1,55 @@
+{
+  "values": {
+    "guhs:guh_fields": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:knabbel_crumbs": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:pink_puffs": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:mikas_biome": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:kaas_flats": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:guh_meadows": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:guh_peaks": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:vads_cliffs": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:guh_sea": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:guh_kristalmijn": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:gatenkaasgrotten": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:vadswoud": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:diepe_guhzee": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:knuffeldal": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:guhpolder": {
+      "villager_type": "minecraft:snow"
+    },
+    "guhs:sneeuwguhtoendra": {
+      "villager_type": "guhs:guh"
+    },
+    "guhs:guhwaii": {
+      "villager_type": "guhs:guh"
+    }
+  }
+}

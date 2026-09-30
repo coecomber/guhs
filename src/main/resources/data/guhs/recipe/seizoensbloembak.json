@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S S",
+    "SDS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:knuffelsteen"
+    },
+    "D": {
+      "item": "minecraft:dirt"
+    }
+  },
+  "result": {
+    "id": "guhs:seizoensbloembak",
+    "count": 1
+  }
+}

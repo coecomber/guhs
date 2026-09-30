@@ -1,0 +1,250 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/glijbaan_start_paal",
+    "paal": "guhs:block/glijbaan_start_paal",
+    "bord": "guhs:block/glijbaan_start_glimtunnel",
+    "gezicht": "guhs:block/glijbaan_start_gezicht"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        5
+      ],
+      "to": [
+        3,
+        16,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#paal"
+        },
+        "up": {
+          "texture": "#paal"
+        },
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        0,
+        5
+      ],
+      "to": [
+        16,
+        16,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#paal"
+        },
+        "up": {
+          "texture": "#paal"
+        },
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        13,
+        5
+      ],
+      "to": [
+        16,
+        16,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#paal"
+        },
+        "up": {
+          "texture": "#paal"
+        },
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        13,
+        4.9
+      ],
+      "to": [
+        10,
+        16,
+        4.9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#gezicht",
+          "uv": [
+            2,
+            4,
+            14,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        13,
+        11.1
+      ],
+      "to": [
+        10,
+        16,
+        11.1
+      ],
+      "faces": {
+        "south": {
+          "texture": "#gezicht",
+          "uv": [
+            2,
+            4,
+            14,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        16,
+        7
+      ],
+      "to": [
+        14,
+        26,
+        9
+      ],
+      "faces": {
+        "down": {
+          "texture": "#bord"
+        },
+        "up": {
+          "texture": "#bord"
+        },
+        "north": {
+          "texture": "#bord"
+        },
+        "south": {
+          "texture": "#bord"
+        },
+        "west": {
+          "texture": "#bord"
+        },
+        "east": {
+          "texture": "#bord"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        16,
+        6.5
+      ],
+      "to": [
+        2,
+        25,
+        9.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#paal"
+        },
+        "up": {
+          "texture": "#paal"
+        },
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        16,
+        6.5
+      ],
+      "to": [
+        15,
+        25,
+        9.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#paal"
+        },
+        "up": {
+          "texture": "#paal"
+        },
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        }
+      }
+    }
+  ]
+}

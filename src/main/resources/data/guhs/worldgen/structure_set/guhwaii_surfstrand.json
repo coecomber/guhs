@@ -1,0 +1,44 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guhwaii_surfstrand",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:regio_piek",
+    "salt": 20300203,
+    "plek": {
+      "regio": {
+        "noise": "guhs:guhwaii",
+        "masks": [
+          {
+            "noise": "guhs:guhmension_zee",
+            "min": -0.09,
+            "max": 0.355
+          },
+          {
+            "noise": "guhs:guhmension_knuffel",
+            "max": 0.43000000000000005
+          },
+          {
+            "noise": "guhs:guhmension_polder",
+            "max": 0.53
+          },
+          {
+            "noise": "guhs:sneeuwguhtoendra",
+            "max": 0.48
+          }
+        ],
+        "min_value": 0.64,
+        "dal_value": 0.39,
+        "buurt": 2
+      },
+      "cell": 16,
+      "soort": "kust",
+      "hoek": 180.0,
+      "afstand": 0,
+      "kust_value": 0.5650000000000001
+    }
+  }
+}

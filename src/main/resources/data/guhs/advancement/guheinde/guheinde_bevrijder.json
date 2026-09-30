@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:gefrituurde_kaasknabbels"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.guheinde_bevrijder.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.guheinde_bevrijder.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:guheinde/guheinde_gered"
+}

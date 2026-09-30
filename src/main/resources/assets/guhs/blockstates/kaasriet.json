@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "guhs:block/kaasriet_bottom"
+    },
+    "half=upper": {
+      "model": "guhs:block/kaasriet_top"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:kaas_knabbels"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.guheinde_gered.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.guheinde_gered.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:guheinde/find_knabbelkelder"
+}

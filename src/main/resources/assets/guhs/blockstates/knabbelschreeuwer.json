@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "can_summon=false,shrieking=false": {
+      "model": "guhs:block/knabbelschreeuwer"
+    },
+    "can_summon=false,shrieking=true": {
+      "model": "guhs:block/knabbelschreeuwer"
+    },
+    "can_summon=true,shrieking=false": {
+      "model": "guhs:block/knabbelschreeuwer_can_summon"
+    },
+    "can_summon=true,shrieking=true": {
+      "model": "guhs:block/knabbelschreeuwer_can_summon"
+    }
+  }
+}

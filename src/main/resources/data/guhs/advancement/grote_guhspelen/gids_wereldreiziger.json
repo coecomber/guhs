@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/gids_ontdekker",
+  "display": {
+    "icon": {
+      "id": "guhs:guhdex"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.gids_wereldreiziger.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.gids_wereldreiziger.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

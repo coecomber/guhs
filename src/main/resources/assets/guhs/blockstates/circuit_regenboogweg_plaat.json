@@ -1,0 +1,67 @@
+{
+  "variants": {
+    "kleur=0,type=bottom": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_0"
+    },
+    "kleur=0,type=top": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_0_top"
+    },
+    "kleur=0,type=double": {
+      "model": "guhs:block/circuit_regenboogweg_0"
+    },
+    "kleur=1,type=bottom": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_1"
+    },
+    "kleur=1,type=top": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_1_top"
+    },
+    "kleur=1,type=double": {
+      "model": "guhs:block/circuit_regenboogweg_1"
+    },
+    "kleur=2,type=bottom": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_2"
+    },
+    "kleur=2,type=top": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_2_top"
+    },
+    "kleur=2,type=double": {
+      "model": "guhs:block/circuit_regenboogweg_2"
+    },
+    "kleur=3,type=bottom": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_3"
+    },
+    "kleur=3,type=top": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_3_top"
+    },
+    "kleur=3,type=double": {
+      "model": "guhs:block/circuit_regenboogweg_3"
+    },
+    "kleur=4,type=bottom": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_4"
+    },
+    "kleur=4,type=top": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_4_top"
+    },
+    "kleur=4,type=double": {
+      "model": "guhs:block/circuit_regenboogweg_4"
+    },
+    "kleur=5,type=bottom": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_5"
+    },
+    "kleur=5,type=top": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_5_top"
+    },
+    "kleur=5,type=double": {
+      "model": "guhs:block/circuit_regenboogweg_5"
+    },
+    "kleur=6,type=bottom": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_6"
+    },
+    "kleur=6,type=top": {
+      "model": "guhs:block/circuit_regenboogweg_plaat_6_top"
+    },
+    "kleur=6,type=double": {
+      "model": "guhs:block/circuit_regenboogweg_6"
+    }
+  }
+}

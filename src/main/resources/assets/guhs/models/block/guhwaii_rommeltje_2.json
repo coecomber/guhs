@@ -1,0 +1,140 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "schil": "guhs:block/kokosnoot_bruin",
+    "binnen": "minecraft:block/white_concrete",
+    "particle": "guhs:block/kokosnoot_bruin"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        7,
+        3,
+        7
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schil"
+        },
+        "up": {
+          "texture": "#schil"
+        },
+        "north": {
+          "texture": "#schil"
+        },
+        "south": {
+          "texture": "#schil"
+        },
+        "west": {
+          "texture": "#schil"
+        },
+        "east": {
+          "texture": "#schil"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        3
+      ],
+      "to": [
+        6,
+        3.1,
+        6
+      ],
+      "faces": {
+        "up": {
+          "texture": "#binnen"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        0,
+        8
+      ],
+      "to": [
+        14,
+        3,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schil"
+        },
+        "up": {
+          "texture": "#schil"
+        },
+        "north": {
+          "texture": "#schil"
+        },
+        "south": {
+          "texture": "#schil"
+        },
+        "west": {
+          "texture": "#schil"
+        },
+        "east": {
+          "texture": "#schil"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        3,
+        9
+      ],
+      "to": [
+        13,
+        3.1,
+        12
+      ],
+      "faces": {
+        "up": {
+          "texture": "#binnen"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        0,
+        11
+      ],
+      "to": [
+        8,
+        1,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#schil"
+        },
+        "up": {
+          "texture": "#schil"
+        },
+        "north": {
+          "texture": "#schil"
+        },
+        "south": {
+          "texture": "#schil"
+        },
+        "west": {
+          "texture": "#schil"
+        },
+        "east": {
+          "texture": "#schil"
+        }
+      }
+    }
+  ]
+}

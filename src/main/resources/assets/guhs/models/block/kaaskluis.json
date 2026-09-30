@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "guhs:block/kaaskluis_front",
+    "side": "guhs:block/kaaskluis_side",
+    "top": "guhs:block/kaaskluis_top"
+  }
+}

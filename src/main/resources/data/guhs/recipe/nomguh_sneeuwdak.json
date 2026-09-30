@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SS",
+    "TT"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:snow_block"
+    },
+    "T": {
+      "tag": "minecraft:terracotta"
+    }
+  },
+  "result": {
+    "id": "guhs:nomguh_sneeuwdak",
+    "count": 4
+  }
+}

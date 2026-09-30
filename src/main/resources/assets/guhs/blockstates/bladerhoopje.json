@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "vol=true": [
+      {
+        "model": "guhs:block/bladerhoopje_vol",
+        "y": 0
+      },
+      {
+        "model": "guhs:block/bladerhoopje_vol",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/bladerhoopje_vol",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/bladerhoopje_vol",
+        "y": 270
+      }
+    ],
+    "vol=false": [
+      {
+        "model": "guhs:block/bladerhoopje_laag",
+        "y": 0
+      },
+      {
+        "model": "guhs:block/bladerhoopje_laag",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/bladerhoopje_laag",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/bladerhoopje_laag",
+        "y": 270
+      }
+    ]
+  }
+}

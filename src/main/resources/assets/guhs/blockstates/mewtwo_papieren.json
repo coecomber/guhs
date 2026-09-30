@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/mewtwo_papieren"
+    },
+    "facing=east": {
+      "model": "guhs:block/mewtwo_papieren",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/mewtwo_papieren",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/mewtwo_papieren",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:knusfeestlijstje"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.burgemeester.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.burgemeester.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knuffeldal/stadje"
+}

@@ -1,0 +1,48 @@
+{
+  "type": "guhs:regio_jigsaw",
+  "biomes": "#guhs:has_structure/nomguh",
+  "step": "fluid_springs",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "ambient": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "terrain_adaptation": "beard_box",
+  "start_pool": "guhs:nomguh/start",
+  "start_jigsaw_name": "guhs:nomguh_midden",
+  "plek": {
+    "regio": {
+      "noise": "guhs:sneeuwguhtoendra",
+      "masks": [
+        {
+          "noise": "guhs:guhmension_zee",
+          "max": 0.29000000000000004
+        },
+        {
+          "noise": "guhs:guhmension_knuffel",
+          "max": 0.43000000000000005
+        },
+        {
+          "noise": "guhs:guhmension_polder",
+          "max": 0.53
+        }
+      ],
+      "min_value": 0.7,
+      "dal_value": 0.46,
+      "buurt": 3
+    },
+    "cell": 16,
+    "soort": "piek",
+    "hoek": 0.0,
+    "afstand": 0
+  },
+  "keep_clear": 121,
+  "grond_y": 20,
+  "reach": 118,
+  "voorrang": 850
+}

@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/seizoensslinger_lente",
+    "vlag": "guhs:block/seizoensslinger_lente"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        4,
+        8
+      ],
+      "to": [
+        16,
+        16,
+        8
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "texture": "#vlag",
+          "uv": [
+            0,
+            0,
+            16,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#vlag",
+          "uv": [
+            0,
+            0,
+            16,
+            12
+          ]
+        }
+      }
+    }
+  ]
+}

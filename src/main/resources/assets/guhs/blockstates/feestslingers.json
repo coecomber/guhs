@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "guhs:block/feestslingers"
+    },
+    "axis=z": {
+      "model": "guhs:block/feestslingers",
+      "y": 90
+    }
+  }
+}

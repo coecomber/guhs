@@ -1,0 +1,31 @@
+{
+  "parent": "guhs:guhmension/find_cheese_fountain",
+  "display": {
+    "icon": {
+      "id": "guhs:compressed_super_vahoege_vads"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.find_grand_cheese_fountain.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.find_grand_cheese_fountain.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": [
+              "guhs:grand_cheese_fountain"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

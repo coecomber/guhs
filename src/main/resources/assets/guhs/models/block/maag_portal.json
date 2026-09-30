@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/nether_portal_ns",
+  "textures": {
+    "particle": "guhs:block/maag_portal",
+    "portal": "guhs:block/maag_portal"
+  }
+}

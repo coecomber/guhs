@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:guhmension/enter_guhmension",
+  "display": {
+    "icon": {
+      "id": "minecraft:snow_block"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.find_sneeuwguhtoendra.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.find_sneeuwguhtoendra.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:sneeuwguhtoendra"
+          }
+        }
+      }
+    }
+  }
+}

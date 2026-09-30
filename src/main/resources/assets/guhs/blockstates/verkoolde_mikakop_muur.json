@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/verkoolde_mikakop_muur"
+    },
+    "facing=east": {
+      "model": "guhs:block/verkoolde_mikakop_muur",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/verkoolde_mikakop_muur",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/verkoolde_mikakop_muur",
+      "y": 270
+    }
+  }
+}

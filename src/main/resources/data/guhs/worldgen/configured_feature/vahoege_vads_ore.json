@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:ore",
+  "config": {
+    "size": 5,
+    "discard_chance_on_air_exposure": 1.0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:pink_wool"
+        },
+        "state": {
+          "Name": "guhs:compressed_super_vahoege_vads"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:magenta_wool"
+        },
+        "state": {
+          "Name": "guhs:compressed_super_vahoege_vads"
+        }
+      }
+    ]
+  }
+}

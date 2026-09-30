@@ -1,0 +1,6 @@
+{
+  "parent": "guhs:block/zitzak",
+  "textures": {
+    "wool": "minecraft:block/magenta_wool"
+  }
+}

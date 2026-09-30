@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:guh_kristal"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    },
+    {
+      "item": "guhs:mika_traan"
+    }
+  ],
+  "result": {
+    "id": "guhs:oog_van_vadsig",
+    "count": 1
+  }
+}

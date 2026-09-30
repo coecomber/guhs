@@ -1,0 +1,30 @@
+{
+  "parent": "guhs:guhmension/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:saddle"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.ride.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.ride.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "rode_guh": {
+      "trigger": "minecraft:started_riding",
+      "conditions": {
+        "player": {
+          "vehicle": {
+            "type": "guhs:guh",
+            "nbt": "{Saddle:1b}"
+          }
+        }
+      }
+    }
+  }
+}

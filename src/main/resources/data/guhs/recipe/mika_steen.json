@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:kaaskorst"
+    },
+    {
+      "item": "guhs:kaaskorst"
+    },
+    {
+      "item": "guhs:kaaskorst"
+    },
+    {
+      "item": "guhs:kaaskorst"
+    },
+    {
+      "item": "guhs:mika_vet"
+    }
+  ],
+  "result": {
+    "id": "guhs:mika_steen",
+    "count": 4
+  }
+}

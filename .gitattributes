@@ -1,0 +1,50 @@
+# Normalise line endings: text files are stored with LF in the repository.
+* text=auto eol=lf
+
+# Windows scripts need CRLF to run properly
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+*.ps1   text eol=crlf
+
+# Source and data (explicit, so git never guesses wrong)
+*.java      text eol=lf
+*.gradle    text eol=lf
+*.properties text eol=lf
+*.py        text eol=lf
+*.json      text eol=lf
+*.mcmeta    text eol=lf
+*.toml      text eol=lf
+*.snbt      text eol=lf
+*.md        text eol=lf
+*.txt       text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.html      text eol=lf
+*.css       text eol=lf
+*.js        text eol=lf
+*.cfg       text eol=lf
+gradlew     text eol=lf
+
+# Datagen output always uses LF
+src/generated/**/.cache/* text eol=lf
+src/generated/**/*.json   text eol=lf
+
+# Binaries: never touch
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.webp    binary
+*.ico     binary
+*.ogg     binary
+*.wav     binary
+*.mp3     binary
+*.nbt     binary
+*.mca     binary
+*.jar     binary
+*.zip     binary
+*.mrpack  binary
+*.pdf     binary
+*.ttf     binary
+*.otf     binary
+*.bbmodel binary

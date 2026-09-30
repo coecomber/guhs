@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "fase=0": {
+      "model": "guhs:block/disco_dansvloer_0"
+    },
+    "fase=1": {
+      "model": "guhs:block/disco_dansvloer_1"
+    },
+    "fase=2": {
+      "model": "guhs:block/disco_dansvloer_2"
+    },
+    "fase=3": {
+      "model": "guhs:block/disco_dansvloer_3"
+    }
+  }
+}

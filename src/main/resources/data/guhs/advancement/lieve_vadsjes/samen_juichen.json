@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:lieve_vadsjes/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:firework_rocket"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_juichen.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_juichen.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

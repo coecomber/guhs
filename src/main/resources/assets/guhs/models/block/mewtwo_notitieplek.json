@@ -1,0 +1,217 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/mewtwo_papier",
+    "p": "guhs:block/mewtwo_papier",
+    "l": "guhs:block/mewtwo_potlood",
+    "c": "guhs:block/mewtwo_paperclip"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        0.6,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#p"
+        },
+        "up": {
+          "texture": "#p"
+        },
+        "north": {
+          "texture": "#p"
+        },
+        "south": {
+          "texture": "#p"
+        },
+        "west": {
+          "texture": "#p"
+        },
+        "east": {
+          "texture": "#p"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "y",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        4,
+        0.6,
+        2.5
+      ],
+      "to": [
+        13,
+        1.2,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#p"
+        },
+        "up": {
+          "texture": "#p"
+        },
+        "north": {
+          "texture": "#p"
+        },
+        "south": {
+          "texture": "#p"
+        },
+        "west": {
+          "texture": "#p"
+        },
+        "east": {
+          "texture": "#p"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "y",
+        "angle": -22.5
+      }
+    },
+    {
+      "from": [
+        3.5,
+        1.2,
+        3.5
+      ],
+      "to": [
+        12.5,
+        1.8,
+        12.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#p"
+        },
+        "up": {
+          "texture": "#p"
+        },
+        "north": {
+          "texture": "#p"
+        },
+        "south": {
+          "texture": "#p"
+        },
+        "west": {
+          "texture": "#p"
+        },
+        "east": {
+          "texture": "#p"
+        }
+      }
+    },
+    {
+      "from": [
+        9.5,
+        1.8,
+        3.2
+      ],
+      "to": [
+        11,
+        2.1,
+        5.2
+      ],
+      "faces": {
+        "down": {
+          "texture": "#c"
+        },
+        "up": {
+          "texture": "#c"
+        },
+        "north": {
+          "texture": "#c"
+        },
+        "south": {
+          "texture": "#c"
+        },
+        "west": {
+          "texture": "#c"
+        },
+        "east": {
+          "texture": "#c"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        1.8,
+        10
+      ],
+      "to": [
+        13,
+        2.6,
+        10.8
+      ],
+      "faces": {
+        "down": {
+          "texture": "#l"
+        },
+        "up": {
+          "texture": "#l"
+        },
+        "north": {
+          "texture": "#l"
+        },
+        "south": {
+          "texture": "#l"
+        },
+        "west": {
+          "texture": "#l"
+        },
+        "east": {
+          "texture": "#l"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          2,
+          10
+        ],
+        "axis": "y",
+        "angle": 22.5
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:guhmension/find_stille_voorraadkelder",
+  "display": {
+    "icon": {
+      "id": "guhs:knabbelschreeuwer"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.vadswaker_gewekt.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.vadswaker_gewekt.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "variants": {
+    "soort=0": [
+      {
+        "model": "guhs:block/guhwaii_rommeltje_0"
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_0",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_0",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_0",
+        "y": 270
+      }
+    ],
+    "soort=1": [
+      {
+        "model": "guhs:block/guhwaii_rommeltje_1"
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_1",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_1",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_1",
+        "y": 270
+      }
+    ],
+    "soort=2": [
+      {
+        "model": "guhs:block/guhwaii_rommeltje_2"
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_2",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_2",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_2",
+        "y": 270
+      }
+    ],
+    "soort=3": [
+      {
+        "model": "guhs:block/guhwaii_rommeltje_3"
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_3",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_3",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/guhwaii_rommeltje_3",
+        "y": 270
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:note_block"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.favorietjes_liedje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.favorietjes_liedje.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:lieve_vadsjes/favorietjes_eerste"
+}

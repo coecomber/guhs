@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "PPP",
+    "PKP",
+    "IRI"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:pink_concrete"
+    },
+    "K": {
+      "item": "guhs:kaas_knabbels"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "id": "guhs:guh_wheel",
+    "count": 1
+  }
+}

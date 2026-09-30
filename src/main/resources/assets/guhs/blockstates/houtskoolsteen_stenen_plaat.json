@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/houtskoolsteen_stenen_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/houtskoolsteen_stenen_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/houtskoolsteen_stenen"
+    }
+  }
+}

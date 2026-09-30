@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:red_dye"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.band_mega.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.band_mega.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:lieve_vadsjes/band_lief"
+}

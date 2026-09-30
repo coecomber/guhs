@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:bladerhoopje"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.seizoen_alle.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.seizoen_alle.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knuffeldal/root"
+}

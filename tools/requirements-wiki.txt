@@ -1,0 +1,11 @@
+# Python packages for the wiki tools (tools/make_wiki_site.py, tools/make_wiki.py, tools/wiki_renders.py).
+# Used by .github/workflows/pages.yml (Python 3.10). Install locally with:
+#     pip install -r tools/requirements-wiki.txt
+#
+# The wiki tools import tools/features/* and make_v2.py, which need numpy and Pillow at import time.
+# Versions pinned to what the project was built with.
+numpy==1.26.4
+Pillow==11.3.0
+
+# NOT needed for the wiki, only for the sound/music generators (make_sounds.py, *_geluid.py, remix/):
+#   soundfile==0.14.0  scipy==1.15.3  av==14.2.0

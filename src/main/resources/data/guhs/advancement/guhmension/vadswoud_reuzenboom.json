@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:guhmension/vadswoud_bezocht",
+  "display": {
+    "icon": {
+      "id": "guhs:vadshout_gezicht"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.vadswoud_reuzenboom.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.vadswoud_reuzenboom.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

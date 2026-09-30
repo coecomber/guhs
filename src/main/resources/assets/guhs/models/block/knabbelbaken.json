@@ -1,0 +1,107 @@
+{
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "particle": "guhs:block/knabbelbaken_glas",
+    "glas": "guhs:block/knabbelbaken_glas",
+    "kern": "guhs:block/knabbelbaken_kern",
+    "voet": "guhs:block/grillkool"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0.1,
+        2
+      ],
+      "to": [
+        14,
+        3,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        3,
+        3
+      ],
+      "to": [
+        13,
+        13,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kern"
+        },
+        "south": {
+          "texture": "#kern"
+        },
+        "east": {
+          "texture": "#kern"
+        },
+        "west": {
+          "texture": "#kern"
+        },
+        "up": {
+          "texture": "#kern"
+        },
+        "down": {
+          "texture": "#kern"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#glas"
+        },
+        "south": {
+          "texture": "#glas"
+        },
+        "east": {
+          "texture": "#glas"
+        },
+        "west": {
+          "texture": "#glas"
+        },
+        "up": {
+          "texture": "#glas"
+        },
+        "down": {
+          "texture": "#glas"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:guh_ijsbloempje"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.guhpolder_ijsbloempje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.guhpolder_ijsbloempje.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:guh_ijsbloempje"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:grote_guhspelen/guhpolder_polder"
+}

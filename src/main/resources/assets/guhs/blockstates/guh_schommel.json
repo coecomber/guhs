@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guh_schommel"
+    },
+    "facing=east": {
+      "model": "guhs:block/guh_schommel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guh_schommel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guh_schommel",
+      "y": 270
+    }
+  }
+}

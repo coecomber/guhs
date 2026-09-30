@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/knabbelbak"
+    },
+    "facing=east": {
+      "model": "guhs:block/knabbelbak",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/knabbelbak",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/knabbelbak",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/modderig_kaasgras"
+      },
+      {
+        "model": "guhs:block/modderig_kaasgras",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/modderig_kaasgras",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/modderig_kaasgras",
+        "y": 270
+      }
+    ]
+  }
+}

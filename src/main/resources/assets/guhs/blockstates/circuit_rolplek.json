@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "facing=north,vanaf=0": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=north,vanaf=1": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=north,vanaf=2": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=east,vanaf=0": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=east,vanaf=1": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=east,vanaf=2": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=south,vanaf=0": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=south,vanaf=1": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=south,vanaf=2": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=west,vanaf=0": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=west,vanaf=1": {
+      "model": "guhs:block/circuit_marker"
+    },
+    "facing=west,vanaf=2": {
+      "model": "guhs:block/circuit_marker"
+    }
+  }
+}

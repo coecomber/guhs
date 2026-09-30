@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S  ",
+    "SS ",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:belegen_kaas_stenen"
+    }
+  },
+  "result": {
+    "id": "guhs:belegen_kaas_trap",
+    "count": 4
+  }
+}

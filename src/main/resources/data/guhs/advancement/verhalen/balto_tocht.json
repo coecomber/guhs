@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:nomguh_routepaal"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.balto_tocht.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.balto_tocht.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/balto_boris"
+}

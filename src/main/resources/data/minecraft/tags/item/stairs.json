@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:kaaskorst_stenen_trap",
+    "guhs:mika_steen_trap",
+    "guhs:gatenkaas_stenen_trap",
+    "guhs:belegen_kaas_trap",
+    "guhs:houtskoolsteen_stenen_trap",
+    "guhs:knuffelsteen_trap",
+    "guhs:pluisdak_trap",
+    "guhs:nomguh_sneeuwdak_trap",
+    "guhs:tiki_rietdak_trap"
+  ]
+}

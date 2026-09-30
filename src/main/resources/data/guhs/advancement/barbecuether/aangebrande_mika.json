@@ -1,0 +1,28 @@
+{
+  "parent": "guhs:barbecuether/mikakop",
+  "display": {
+    "icon": {
+      "id": "guhs:as_blok"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.aangebrande_mika.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.aangebrande_mika.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:summoned_entity",
+      "conditions": {
+        "entity": {
+          "type": "guhs:aangebrande_mika"
+        }
+      }
+    }
+  }
+}

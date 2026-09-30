@@ -1,0 +1,15 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "guhs:grond_single_pool_element",
+        "location": "guhs:knuffeldal_stadje/plein",
+        "projection": "rigid",
+        "processors": "minecraft:empty",
+        "ground_level_delta": 5
+      }
+    }
+  ]
+}

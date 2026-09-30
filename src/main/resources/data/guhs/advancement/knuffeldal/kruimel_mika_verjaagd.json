@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:kaas_knabbels"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.kruimel_mika_verjaagd.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.kruimel_mika_verjaagd.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knuffeldal/burgemeester"
+}

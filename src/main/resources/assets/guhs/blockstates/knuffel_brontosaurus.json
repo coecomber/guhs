@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/knuffel_brontosaurus"
+    },
+    "facing=east": {
+      "model": "guhs:block/knuffel_brontosaurus",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/knuffel_brontosaurus",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/knuffel_brontosaurus",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "stage=0": {
+      "model": "guhs:block/guhwaii_palm_kiemplant"
+    },
+    "stage=1": {
+      "model": "guhs:block/guhwaii_palm_kiemplant"
+    }
+  }
+}

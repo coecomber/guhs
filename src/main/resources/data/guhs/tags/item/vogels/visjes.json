@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:fishes",
+    "guhs:guh_vis",
+    "guhs:gebakken_guh_vis",
+    "minecraft:bread"
+  ]
+}

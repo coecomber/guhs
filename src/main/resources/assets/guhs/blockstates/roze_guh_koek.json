@@ -1,0 +1,94 @@
+{
+  "variants": {
+    "facing=north,koeken=1": {
+      "model": "guhs:block/roze_guh_koek_1"
+    },
+    "facing=north,koeken=2": {
+      "model": "guhs:block/roze_guh_koek_2"
+    },
+    "facing=north,koeken=3": {
+      "model": "guhs:block/roze_guh_koek_3"
+    },
+    "facing=north,koeken=4": {
+      "model": "guhs:block/roze_guh_koek_4"
+    },
+    "facing=north,koeken=5": {
+      "model": "guhs:block/roze_guh_koek_5"
+    },
+    "facing=north,koeken=6": {
+      "model": "guhs:block/roze_guh_koek_6"
+    },
+    "facing=east,koeken=1": {
+      "model": "guhs:block/roze_guh_koek_1",
+      "y": 90
+    },
+    "facing=east,koeken=2": {
+      "model": "guhs:block/roze_guh_koek_2",
+      "y": 90
+    },
+    "facing=east,koeken=3": {
+      "model": "guhs:block/roze_guh_koek_3",
+      "y": 90
+    },
+    "facing=east,koeken=4": {
+      "model": "guhs:block/roze_guh_koek_4",
+      "y": 90
+    },
+    "facing=east,koeken=5": {
+      "model": "guhs:block/roze_guh_koek_5",
+      "y": 90
+    },
+    "facing=east,koeken=6": {
+      "model": "guhs:block/roze_guh_koek_6",
+      "y": 90
+    },
+    "facing=south,koeken=1": {
+      "model": "guhs:block/roze_guh_koek_1",
+      "y": 180
+    },
+    "facing=south,koeken=2": {
+      "model": "guhs:block/roze_guh_koek_2",
+      "y": 180
+    },
+    "facing=south,koeken=3": {
+      "model": "guhs:block/roze_guh_koek_3",
+      "y": 180
+    },
+    "facing=south,koeken=4": {
+      "model": "guhs:block/roze_guh_koek_4",
+      "y": 180
+    },
+    "facing=south,koeken=5": {
+      "model": "guhs:block/roze_guh_koek_5",
+      "y": 180
+    },
+    "facing=south,koeken=6": {
+      "model": "guhs:block/roze_guh_koek_6",
+      "y": 180
+    },
+    "facing=west,koeken=1": {
+      "model": "guhs:block/roze_guh_koek_1",
+      "y": 270
+    },
+    "facing=west,koeken=2": {
+      "model": "guhs:block/roze_guh_koek_2",
+      "y": 270
+    },
+    "facing=west,koeken=3": {
+      "model": "guhs:block/roze_guh_koek_3",
+      "y": 270
+    },
+    "facing=west,koeken=4": {
+      "model": "guhs:block/roze_guh_koek_4",
+      "y": 270
+    },
+    "facing=west,koeken=5": {
+      "model": "guhs:block/roze_guh_koek_5",
+      "y": 270
+    },
+    "facing=west,koeken=6": {
+      "model": "guhs:block/roze_guh_koek_6",
+      "y": 270
+    }
+  }
+}

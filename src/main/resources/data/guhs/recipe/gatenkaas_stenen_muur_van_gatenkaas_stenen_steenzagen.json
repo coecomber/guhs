@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "guhs:gatenkaas_stenen"
+  },
+  "result": {
+    "id": "guhs:gatenkaas_stenen_muur",
+    "count": 1
+  }
+}

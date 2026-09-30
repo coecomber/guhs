@@ -1,0 +1,107 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/guh_moestuinbak_zijkant",
+    "kant": "guhs:block/guh_moestuinbak_zijkant",
+    "voor": "guhs:block/guh_moestuinbak_voorkant",
+    "aarde": "guhs:block/tuin_aarde_nat"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        10,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor",
+          "uv": [
+            0,
+            3,
+            16,
+            13
+          ]
+        },
+        "south": {
+          "texture": "#kant"
+        },
+        "west": {
+          "texture": "#kant"
+        },
+        "east": {
+          "texture": "#kant"
+        },
+        "down": {
+          "texture": "#kant"
+        },
+        "up": {
+          "texture": "#aarde"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        10,
+        0
+      ],
+      "to": [
+        16,
+        11,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kant"
+        },
+        "south": {
+          "texture": "#kant"
+        },
+        "up": {
+          "texture": "#kant"
+        },
+        "west": {
+          "texture": "#kant"
+        },
+        "east": {
+          "texture": "#kant"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        10,
+        14.5
+      ],
+      "to": [
+        16,
+        11,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kant"
+        },
+        "south": {
+          "texture": "#kant"
+        },
+        "up": {
+          "texture": "#kant"
+        },
+        "west": {
+          "texture": "#kant"
+        },
+        "east": {
+          "texture": "#kant"
+        }
+      }
+    }
+  ]
+}

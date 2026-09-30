@@ -1,0 +1,266 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/kappersstoel_kussen",
+    "kussen": "guhs:block/kappersstoel_kussen",
+    "chroom": "guhs:block/kappersstoel_chroom"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        1,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#chroom"
+        },
+        "south": {
+          "texture": "#chroom"
+        },
+        "east": {
+          "texture": "#chroom"
+        },
+        "west": {
+          "texture": "#chroom"
+        },
+        "up": {
+          "texture": "#chroom"
+        },
+        "down": {
+          "texture": "#chroom"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        1,
+        6
+      ],
+      "to": [
+        10,
+        4,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#chroom"
+        },
+        "south": {
+          "texture": "#chroom"
+        },
+        "east": {
+          "texture": "#chroom"
+        },
+        "west": {
+          "texture": "#chroom"
+        },
+        "up": {
+          "texture": "#chroom"
+        },
+        "down": {
+          "texture": "#chroom"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        4,
+        2
+      ],
+      "to": [
+        14,
+        8,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kussen"
+        },
+        "south": {
+          "texture": "#kussen"
+        },
+        "east": {
+          "texture": "#kussen"
+        },
+        "west": {
+          "texture": "#kussen"
+        },
+        "up": {
+          "texture": "#kussen"
+        },
+        "down": {
+          "texture": "#kussen"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        8,
+        11
+      ],
+      "to": [
+        14,
+        19,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kussen"
+        },
+        "south": {
+          "texture": "#kussen"
+        },
+        "east": {
+          "texture": "#kussen"
+        },
+        "west": {
+          "texture": "#kussen"
+        },
+        "up": {
+          "texture": "#kussen"
+        },
+        "down": {
+          "texture": "#kussen"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        19,
+        11.5
+      ],
+      "to": [
+        11,
+        22,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kussen"
+        },
+        "south": {
+          "texture": "#kussen"
+        },
+        "east": {
+          "texture": "#kussen"
+        },
+        "west": {
+          "texture": "#kussen"
+        },
+        "up": {
+          "texture": "#kussen"
+        },
+        "down": {
+          "texture": "#kussen"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        8,
+        3
+      ],
+      "to": [
+        3,
+        11,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#chroom"
+        },
+        "south": {
+          "texture": "#chroom"
+        },
+        "east": {
+          "texture": "#chroom"
+        },
+        "west": {
+          "texture": "#chroom"
+        },
+        "up": {
+          "texture": "#chroom"
+        },
+        "down": {
+          "texture": "#chroom"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        8,
+        3
+      ],
+      "to": [
+        15,
+        11,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#chroom"
+        },
+        "south": {
+          "texture": "#chroom"
+        },
+        "east": {
+          "texture": "#chroom"
+        },
+        "west": {
+          "texture": "#chroom"
+        },
+        "up": {
+          "texture": "#chroom"
+        },
+        "down": {
+          "texture": "#chroom"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        1,
+        0
+      ],
+      "to": [
+        12,
+        2,
+        3
+      ],
+      "faces": {
+        "north": {
+          "texture": "#chroom"
+        },
+        "south": {
+          "texture": "#chroom"
+        },
+        "east": {
+          "texture": "#chroom"
+        },
+        "west": {
+          "texture": "#chroom"
+        },
+        "up": {
+          "texture": "#chroom"
+        },
+        "down": {
+          "texture": "#chroom"
+        }
+      }
+    }
+  ]
+}

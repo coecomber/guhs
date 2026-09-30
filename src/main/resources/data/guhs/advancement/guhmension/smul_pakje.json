@@ -1,0 +1,49 @@
+{
+  "parent": "guhs:guhmension/find_vadsig_eetfestijn",
+  "display": {
+    "icon": {
+      "id": "guhs:smul_bakkersmuts"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.smul_pakje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.smul_pakje.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "slabbetje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:smul_slabbetje"
+          }
+        ]
+      }
+    },
+    "bakkersmuts": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:smul_bakkersmuts"
+          }
+        ]
+      }
+    },
+    "schort": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:smul_schort"
+          }
+        ]
+      }
+    }
+  }
+}

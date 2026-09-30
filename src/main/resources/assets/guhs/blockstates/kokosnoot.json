@@ -1,0 +1,106 @@
+{
+  "variants": {
+    "hangend=true,rijp=0": [
+      {
+        "model": "guhs:block/kokosnoot_hangend_0"
+      },
+      {
+        "model": "guhs:block/kokosnoot_hangend_0",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/kokosnoot_hangend_0",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/kokosnoot_hangend_0",
+        "y": 270
+      }
+    ],
+    "hangend=false,rijp=0": [
+      {
+        "model": "guhs:block/kokosnoot_liggend_0"
+      },
+      {
+        "model": "guhs:block/kokosnoot_liggend_0",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/kokosnoot_liggend_0",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/kokosnoot_liggend_0",
+        "y": 270
+      }
+    ],
+    "hangend=true,rijp=1": [
+      {
+        "model": "guhs:block/kokosnoot_hangend_1"
+      },
+      {
+        "model": "guhs:block/kokosnoot_hangend_1",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/kokosnoot_hangend_1",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/kokosnoot_hangend_1",
+        "y": 270
+      }
+    ],
+    "hangend=false,rijp=1": [
+      {
+        "model": "guhs:block/kokosnoot_liggend_1"
+      },
+      {
+        "model": "guhs:block/kokosnoot_liggend_1",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/kokosnoot_liggend_1",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/kokosnoot_liggend_1",
+        "y": 270
+      }
+    ],
+    "hangend=true,rijp=2": [
+      {
+        "model": "guhs:block/kokosnoot_hangend_2"
+      },
+      {
+        "model": "guhs:block/kokosnoot_hangend_2",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/kokosnoot_hangend_2",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/kokosnoot_hangend_2",
+        "y": 270
+      }
+    ],
+    "hangend=false,rijp=2": [
+      {
+        "model": "guhs:block/kokosnoot_liggend_2"
+      },
+      {
+        "model": "guhs:block/kokosnoot_liggend_2",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/kokosnoot_liggend_2",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/kokosnoot_liggend_2",
+        "y": 270
+      }
+    ]
+  }
+}

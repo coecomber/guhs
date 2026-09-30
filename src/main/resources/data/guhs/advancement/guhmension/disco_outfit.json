@@ -1,0 +1,35 @@
+{
+  "parent": "guhs:guhmension/find_guh_disco",
+  "display": {
+    "icon": {
+      "id": "guhs:disco_afro"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.disco_outfit.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.disco_outfit.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:disco_glitterpak"
+          },
+          {
+            "items": "guhs:disco_afro"
+          },
+          {
+            "items": "guhs:disco_bril"
+          }
+        ]
+      }
+    }
+  }
+}

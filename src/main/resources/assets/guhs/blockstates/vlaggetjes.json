@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "guhs:block/vlaggetjes"
+    },
+    "axis=z": {
+      "model": "guhs:block/vlaggetjes",
+      "y": 90
+    }
+  }
+}

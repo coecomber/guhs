@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "guhs:ore_kaasknabbel",
+    "guhs:ore_kaasknabbel_dirt",
+    "guhs:ore_kaasknabbel_cobblestone"
+  ],
+  "step": "underground_ores"
+}

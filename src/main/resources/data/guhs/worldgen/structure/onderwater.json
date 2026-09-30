@@ -1,0 +1,41 @@
+{
+  "type": "guhs:guhbubbel",
+  "biomes": "#guhs:has_structure/onderwater",
+  "step": "fluid_springs",
+  "spawn_overrides": {
+    "creature": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "ambient": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "underground_water_creature": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "axolotls": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:onderwater/start",
+  "start_jigsaw_name": "guhs:onderwater_midden",
+  "sea_noise": "guhs:guhmension_zee",
+  "cell_chunks": 4,
+  "neighbourhood": 8,
+  "min_value": 0.51,
+  "sea_value": 0.427,
+  "water_level": 63,
+  "centre_depth": 25,
+  "min_depth": 12,
+  "check_radius": 62,
+  "keep_clear": 129,
+  "voorrang": 900
+}

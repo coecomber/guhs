@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/katapult_lastig",
+  "display": {
+    "icon": {
+      "id": "guhs:katapult_mika"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.katapult_alle_sterren.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.katapult_alle_sterren.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

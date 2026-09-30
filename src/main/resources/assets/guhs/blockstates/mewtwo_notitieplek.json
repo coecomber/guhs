@@ -1,0 +1,94 @@
+{
+  "variants": {
+    "facing=north,nummer=1": {
+      "model": "guhs:block/mewtwo_notitieplek"
+    },
+    "facing=north,nummer=2": {
+      "model": "guhs:block/mewtwo_notitieplek"
+    },
+    "facing=north,nummer=3": {
+      "model": "guhs:block/mewtwo_notitieplek"
+    },
+    "facing=north,nummer=4": {
+      "model": "guhs:block/mewtwo_notitieplek"
+    },
+    "facing=north,nummer=5": {
+      "model": "guhs:block/mewtwo_notitieplek"
+    },
+    "facing=north,nummer=6": {
+      "model": "guhs:block/mewtwo_notitieplek"
+    },
+    "facing=east,nummer=1": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 90
+    },
+    "facing=east,nummer=2": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 90
+    },
+    "facing=east,nummer=3": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 90
+    },
+    "facing=east,nummer=4": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 90
+    },
+    "facing=east,nummer=5": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 90
+    },
+    "facing=east,nummer=6": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 90
+    },
+    "facing=south,nummer=1": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 180
+    },
+    "facing=south,nummer=2": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 180
+    },
+    "facing=south,nummer=3": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 180
+    },
+    "facing=south,nummer=4": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 180
+    },
+    "facing=south,nummer=5": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 180
+    },
+    "facing=south,nummer=6": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 180
+    },
+    "facing=west,nummer=1": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 270
+    },
+    "facing=west,nummer=2": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 270
+    },
+    "facing=west,nummer=3": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 270
+    },
+    "facing=west,nummer=4": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 270
+    },
+    "facing=west,nummer=5": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 270
+    },
+    "facing=west,nummer=6": {
+      "model": "guhs:block/mewtwo_notitieplek",
+      "y": 270
+    }
+  }
+}

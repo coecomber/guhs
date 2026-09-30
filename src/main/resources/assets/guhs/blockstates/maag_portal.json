@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "kind=mond": {
+      "model": "guhs:block/maag_portal"
+    },
+    "kind=darm": {
+      "model": "guhs:block/maag_portal"
+    },
+    "kind=maag": {
+      "model": "guhs:block/maag_portal"
+    },
+    "kind=exit": {
+      "model": "guhs:block/maag_portal"
+    }
+  }
+}

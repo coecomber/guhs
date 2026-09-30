@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "nl.juiced.guhs.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "FlowingFluidMixin",
+    "GameTestRegistryMixin",
+    "ServerLevelMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "client.LevelRendererMixin"
+  ]
+}

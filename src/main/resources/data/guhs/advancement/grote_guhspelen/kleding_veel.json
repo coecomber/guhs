@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/kleding_set",
+  "display": {
+    "icon": {
+      "id": "guhs:striped_sweater"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.kleding_veel.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.kleding_veel.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

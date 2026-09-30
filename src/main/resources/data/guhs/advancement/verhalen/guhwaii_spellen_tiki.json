@@ -1,0 +1,44 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:tiki_fakkel"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.guhwaii_spellen_tiki.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.guhwaii_spellen_tiki.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "guhs:tiki_fakkel",
+              "guhs:tiki_masker",
+              "guhs:tiki_masker_roze",
+              "guhs:tiki_beeld",
+              "guhs:tiki_rietdak",
+              "guhs:tiki_rietdak_trap",
+              "guhs:tiki_rietdak_plaat",
+              "guhs:tiki_bloemenslinger",
+              "guhs:tiki_schelpjeslampion",
+              "guhs:tiki_surfplankrek",
+              "guhs:tiki_bloemenmat",
+              "guhs:tiki_kruk",
+              "guhs:tiki_radiootje"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:verhalen/guhwaii_spellen_strand"
+}

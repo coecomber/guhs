@@ -1,0 +1,53 @@
+{
+  "type": "guhs:regio_jigsaw",
+  "biomes": "#guhs:has_structure/guhwaii_capsule",
+  "step": "fluid_springs",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "ambient": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "terrain_adaptation": "beard_box",
+  "start_pool": "guhs:guhwaii_capsule/start",
+  "start_jigsaw_name": "guhs:guhwaii_capsule_midden",
+  "plek": {
+    "regio": {
+      "noise": "guhs:guhwaii",
+      "masks": [
+        {
+          "noise": "guhs:guhmension_zee",
+          "min": -0.09,
+          "max": 0.355
+        },
+        {
+          "noise": "guhs:guhmension_knuffel",
+          "max": 0.43000000000000005
+        },
+        {
+          "noise": "guhs:guhmension_polder",
+          "max": 0.53
+        },
+        {
+          "noise": "guhs:sneeuwguhtoendra",
+          "max": 0.48
+        }
+      ],
+      "min_value": 0.64,
+      "dal_value": 0.39,
+      "buurt": 2
+    },
+    "cell": 16,
+    "soort": "piek",
+    "hoek": 0.0,
+    "afstand": 0
+  },
+  "keep_clear": 37,
+  "grond_y": 4,
+  "reach": 30,
+  "voorrang": 810
+}

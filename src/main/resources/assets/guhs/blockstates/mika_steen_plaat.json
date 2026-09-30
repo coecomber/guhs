@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/mika_steen_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/mika_steen_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/mika_steen"
+    }
+  }
+}

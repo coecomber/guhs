@@ -1,0 +1,65 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "guhs:guh_vis",
+          "weight": 40
+        },
+        {
+          "type": "minecraft:item",
+          "name": "guhs:kaasvis",
+          "weight": 18
+        },
+        {
+          "type": "minecraft:item",
+          "name": "guhs:vadsbaars",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "guhs:guhpuffer",
+          "weight": 6
+        },
+        {
+          "type": "minecraft:item",
+          "name": "guhs:njegforel",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "guhs:klusjes_schelpje",
+          "weight": 25,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.02
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "guhs:gouden_guhvis"
+        }
+      ]
+    }
+  ]
+}

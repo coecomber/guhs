@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/klassiekers_medium",
+  "display": {
+    "icon": {
+      "id": "guhs:guh_taart"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.klassiekers_kampioen.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.klassiekers_kampioen.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "guhs:kaas_knabbels"
+    }
+  },
+  "result": {
+    "id": "guhs:block_of_kaasknabbels",
+    "count": 1
+  }
+}

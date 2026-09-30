@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/vadshout_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/vadshout_planken"
+    },
+    "type=top": {
+      "model": "guhs:block/vadshout_plaat_top"
+    }
+  }
+}

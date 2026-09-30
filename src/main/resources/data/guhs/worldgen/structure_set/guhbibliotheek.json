@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guhbibliotheek",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 90,
+    "separation": 30,
+    "salt": 20240199
+  }
+}

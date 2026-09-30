@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:block_of_kaasknabbels"
+    }
+  ],
+  "result": {
+    "id": "guhs:kaas_knabbels",
+    "count": 9
+  }
+}

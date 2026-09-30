@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:tiki_radiootje"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.guhwaii_spellen_radiootje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.guhwaii_spellen_radiootje.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:tiki_radiootje"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:verhalen/guhwaii_spellen_tiki"
+}

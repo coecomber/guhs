@@ -1,0 +1,80 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "guhs:block/frying_pan",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "guhs:block/frying_pan",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "guhs:block/frying_pan",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "guhs:block/frying_pan",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "filled": "true"
+      },
+      "apply": {
+        "model": "guhs:block/frying_pan_oil",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "filled": "true"
+      },
+      "apply": {
+        "model": "guhs:block/frying_pan_oil",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "filled": "true"
+      },
+      "apply": {
+        "model": "guhs:block/frying_pan_oil",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "filled": "true"
+      },
+      "apply": {
+        "model": "guhs:block/frying_pan_oil",
+        "y": 270
+      }
+    }
+  ]
+}

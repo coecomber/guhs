@@ -1,0 +1,34 @@
+# 2.10.1 visual QA: guh-sneeuw in the Guhpolder (sparse soft flakes + a few pink guh heads; no vanilla snow curtain). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/guhsneeuw.txt
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/gamerule doMobSpawning false
+
+section guhsneeuw (Guhpolder, Guhmension)
+tpbiome guhs:guhmension guhs:guhpolder
+waitrender 300
+/weather rain
+wait 240
+shot 2101_guhsneeuw_landschap
+/execute at @s positioned over motion_blocking run tp @s ~ ~1.6 ~
+look 30 -8
+wait 160
+shot 2101_guhsneeuw_ooghoogte
+look 120 -12
+wait 160
+shot 2101_guhsneeuw_oost
+look 200 -25
+wait 120
+shot 2101_guhsneeuw_lucht
+/time set 13000
+wait 120
+shot 2101_guhsneeuw_avond
+/time set noon
+/weather clear
+wait 100
+shot 2101_guhsneeuw_droog
+quit

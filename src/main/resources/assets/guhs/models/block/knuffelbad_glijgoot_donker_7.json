@@ -1,0 +1,86 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/knuffelbad_glijgoot_donker_zijkant",
+    "top": "guhs:block/knuffelbad_glijgoot_donker",
+    "zij": "guhs:block/knuffelbad_glijgoot_donker_zijkant"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#zij",
+          "cullface": "down"
+        },
+        "north": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            2,
+            16,
+            16
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            2,
+            16,
+            16
+          ],
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            2,
+            16,
+            16
+          ],
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            2,
+            16,
+            16
+          ],
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        14,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "parent": "guhs:guhmension/find_guhbibliotheek",
+  "display": {
+    "icon": {
+      "id": "guhs:bieb_hoed"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.bieb_outfit.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.bieb_outfit.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "bieb_leesbril": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:bieb_leesbril"
+          }
+        ]
+      }
+    },
+    "bieb_vest": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:bieb_vest"
+          }
+        ]
+      }
+    },
+    "bieb_hoed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:bieb_hoed"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:knuffelsteen"
+    }
+  },
+  "result": {
+    "id": "guhs:knuffelsteen_plaat",
+    "count": 6
+  }
+}

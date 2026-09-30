@@ -1,0 +1,49 @@
+{
+  "parent": "guhs:grote_guhspelen/doolhof_gespeeld",
+  "display": {
+    "icon": {
+      "id": "guhs:doolhof_hoedje"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.doolhof_kleding.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.doolhof_kleding.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "doolhof_hoedje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:doolhof_hoedje"
+          }
+        ]
+      }
+    },
+    "doolhof_rugzakje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:doolhof_rugzakje"
+          }
+        ]
+      }
+    },
+    "doolhof_kompas": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:doolhof_kompas"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "guhs:guhmension/golf_gespeeld",
+  "display": {
+    "icon": {
+      "id": "guhs:golf_pet"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.golf_outfit.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.golf_outfit.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:golf_pet"
+          },
+          {
+            "items": "guhs:golf_zonneklep"
+          },
+          {
+            "items": "guhs:golf_trui"
+          }
+        ]
+      }
+    }
+  }
+}

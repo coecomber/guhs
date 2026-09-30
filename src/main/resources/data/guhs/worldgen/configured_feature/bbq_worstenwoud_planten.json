@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:nether_forest_vegetation",
+  "config": {
+    "state_provider": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 85,
+          "data": {
+            "Name": "guhs:mosterdscheutjes"
+          }
+        },
+        {
+          "weight": 13,
+          "data": {
+            "Name": "guhs:worst_zwammetje"
+          }
+        }
+      ]
+    },
+    "spread_width": 8,
+    "spread_height": 4
+  }
+}

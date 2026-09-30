@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:circuit_mikaplek",
+    "guhs:circuit_rolplek",
+    "guhs:circuit_looping"
+  ]
+}

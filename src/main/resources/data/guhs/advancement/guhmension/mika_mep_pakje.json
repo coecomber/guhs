@@ -1,0 +1,35 @@
+{
+  "parent": "guhs:guhmension/mika_meppen",
+  "display": {
+    "icon": {
+      "id": "guhs:mikajager_hoed"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.mika_mep_pakje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.mika_mep_pakje.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:mikajager_hoed"
+          },
+          {
+            "items": "guhs:mikajager_vest"
+          },
+          {
+            "items": "guhs:mikamepper_medaille"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/knabbelspelen_gespeeld",
+  "display": {
+    "icon": {
+      "id": "guhs:blik_pluisbal"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.knabbelspelen_samen.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.knabbelspelen_samen.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

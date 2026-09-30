@@ -1,0 +1,110 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "guhs:sleerail_bocht",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "guhs:slee_rail",
+                  "properties": {
+                    "shape": "curve_left"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "guhs:sleerail_bocht",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "guhs:slee_rail",
+                  "properties": {
+                    "shape": "curve_right"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "guhs:sleerail_helling",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "guhs:slee_rail",
+                  "properties": {
+                    "shape": "slope"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "guhs:sleerail_drop",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "guhs:slee_rail",
+                  "properties": {
+                    "shape": "drop"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "guhs:sleerail_kurkentrekker",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "guhs:slee_rail",
+                  "properties": {
+                    "shape": "spiral_left"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "guhs:sleerail_kurkentrekker",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "guhs:slee_rail",
+                  "properties": {
+                    "shape": "spiral_right"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "guhs:sleerail_schans",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "guhs:slee_rail",
+                  "properties": {
+                    "shape": "jump"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "guhs:sleerail_recht"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

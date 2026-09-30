@@ -1,0 +1,118 @@
+{
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "vacht": "guhs:block/speelgoed_vacht",
+    "vacht_licht": "guhs:block/speelgoed_vacht_licht",
+    "pluis": "guhs:block/speelgoed_pluis",
+    "binnen": "guhs:block/speelgoed_binnen",
+    "vloer": "guhs:block/speelgoed_vloer",
+    "oor": "guhs:block/speelgoed_oor",
+    "gezicht": "guhs:block/speelgoed_gezicht",
+    "tunnel_gezicht": "guhs:block/speelgoed_tunnel_gezicht",
+    "hout": "guhs:block/speelgoed_hout",
+    "glij": "guhs:block/speelgoed_glij",
+    "sport": "guhs:block/speelgoed_sport",
+    "touw": "guhs:block/speelgoed_touw",
+    "kussen": "guhs:block/speelgoed_kussen",
+    "particle": "guhs:block/speelgoed_pluis"
+  },
+  "elements": [
+    {
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        16.0,
+        13.0,
+        1.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pluis"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pluis"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#pluis"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        0.0,
+        1.49
+      ],
+      "to": [
+        16.0,
+        13.0,
+        1.5
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#binnen"
+        }
+      }
+    },
+    {
+      "from": [
+        0.0,
+        10.5,
+        1.5
+      ],
+      "to": [
+        16.0,
+        13.0,
+        3.0
+      ],
+      "faces": {
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#binnen"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#binnen"
+        }
+      }
+    }
+  ]
+}

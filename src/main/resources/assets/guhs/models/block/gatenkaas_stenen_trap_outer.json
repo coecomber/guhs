@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "guhs:block/gatenkaas_stenen",
+    "side": "guhs:block/gatenkaas_stenen",
+    "top": "guhs:block/gatenkaas_stenen"
+  }
+}

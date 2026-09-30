@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/circuit_eerste",
+  "display": {
+    "icon": {
+      "id": "guhs:circuit_kaassaus"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.circuit_vads.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.circuit_vads.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

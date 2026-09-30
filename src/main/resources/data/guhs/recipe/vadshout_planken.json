@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "guhs:vadshout_stammen"
+    }
+  ],
+  "result": {
+    "id": "guhs:vadshout_planken",
+    "count": 4
+  }
+}

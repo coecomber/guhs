@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W W",
+    "WWW"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:magenta_wool"
+    }
+  },
+  "result": {
+    "id": "guhs:magenta_zitzak",
+    "count": 1
+  }
+}

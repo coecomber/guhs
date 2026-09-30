@@ -1,0 +1,44 @@
+# 2.10 visual QA: only the kart ride-along (a guh on the second seat of your race guh)
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/execute in minecraft:overworld run tp @s 3100 150 3000
+/forceload add 3080 2980 3120 3024
+/fill 3085 139 2985 3115 139 3020 minecraft:grass_block
+/fill 3085 140 2985 3115 150 3020 minecraft:air
+wait 40
+/summon guhs:guh 3100.5 140 3012.5 {Variant:"mint",PersistenceRequired:1b,Rotation:[180f,0f]}
+/tp @s 3100.5 140 3015.5 180 15
+wait 10
+guhmenu 3100 140 3012
+gui close
+wait 20
+section kart
+kart 3100.5 140 3009.5 180
+wait 10
+kartinfo
+look 180 20
+perspective back
+wait 20
+kartinfo
+clearchat
+shot kart_achter gui
+look 180 70
+wait 10
+clearchat
+shot kart_boven gui
+look 90 20
+wait 20
+kartinfo
+clearchat
+shot kart_zij gui
+perspective front
+look 180 10
+wait 20
+clearchat
+shot kart_voor gui
+perspective first
+quit

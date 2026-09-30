@@ -1,0 +1,107 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/katapult_knabbelkist",
+    "kist": "guhs:block/katapult_knabbelkist",
+    "knabbel": "guhs:block/block_of_kaasknabbels"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        11,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#kist"
+        },
+        "up": {
+          "texture": "#kist"
+        },
+        "north": {
+          "texture": "#kist"
+        },
+        "south": {
+          "texture": "#kist"
+        },
+        "west": {
+          "texture": "#kist"
+        },
+        "east": {
+          "texture": "#kist"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        11,
+        3
+      ],
+      "to": [
+        13,
+        13,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#knabbel"
+        },
+        "up": {
+          "texture": "#knabbel"
+        },
+        "north": {
+          "texture": "#knabbel"
+        },
+        "south": {
+          "texture": "#knabbel"
+        },
+        "west": {
+          "texture": "#knabbel"
+        },
+        "east": {
+          "texture": "#knabbel"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        13,
+        5
+      ],
+      "to": [
+        11,
+        14,
+        10
+      ],
+      "faces": {
+        "down": {
+          "texture": "#knabbel"
+        },
+        "up": {
+          "texture": "#knabbel"
+        },
+        "north": {
+          "texture": "#knabbel"
+        },
+        "south": {
+          "texture": "#knabbel"
+        },
+        "west": {
+          "texture": "#knabbel"
+        },
+        "east": {
+          "texture": "#knabbel"
+        }
+      }
+    }
+  ]
+}

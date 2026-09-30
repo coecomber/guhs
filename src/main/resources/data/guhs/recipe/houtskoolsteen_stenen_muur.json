@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:houtskoolsteen_stenen"
+    }
+  },
+  "result": {
+    "id": "guhs:houtskoolsteen_stenen_muur",
+    "count": 6
+  }
+}

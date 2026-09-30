@@ -1,0 +1,259 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/knabbeloven_zijkant",
+    "voor": "guhs:block/knabbeloven_voor",
+    "zij": "guhs:block/knabbeloven_zijkant",
+    "boven": "guhs:block/knabbeloven_boven",
+    "pijp": "guhs:block/knabbeloven_pijp",
+    "oor": "guhs:block/knabbeloven_oor"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        13,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            3,
+            15,
+            16
+          ],
+          "texture": "#voor"
+        },
+        "south": {
+          "uv": [
+            1,
+            3,
+            15,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "east": {
+          "uv": [
+            1,
+            3,
+            15,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "west": {
+          "uv": [
+            1,
+            3,
+            15,
+            16
+          ],
+          "texture": "#zij"
+        },
+        "up": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#boven"
+        },
+        "down": {
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "texture": "#boven",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        13,
+        10
+      ],
+      "to": [
+        13,
+        16,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ],
+          "texture": "#pijp"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ],
+          "texture": "#pijp"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ],
+          "texture": "#pijp"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ],
+          "texture": "#pijp"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            3,
+            3
+          ],
+          "texture": "#pijp"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        13,
+        3
+      ],
+      "to": [
+        5,
+        15,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            4,
+            7,
+            6
+          ],
+          "texture": "#oor"
+        },
+        "south": {
+          "uv": [
+            4,
+            4,
+            7,
+            6
+          ],
+          "texture": "#oor"
+        },
+        "east": {
+          "uv": [
+            4,
+            4,
+            7,
+            6
+          ],
+          "texture": "#oor"
+        },
+        "west": {
+          "uv": [
+            4,
+            4,
+            7,
+            6
+          ],
+          "texture": "#oor"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            7,
+            6
+          ],
+          "texture": "#oor"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        13,
+        3
+      ],
+      "to": [
+        14,
+        15,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            4,
+            7,
+            6
+          ],
+          "texture": "#oor"
+        },
+        "south": {
+          "uv": [
+            4,
+            4,
+            7,
+            6
+          ],
+          "texture": "#oor"
+        },
+        "east": {
+          "uv": [
+            4,
+            4,
+            7,
+            6
+          ],
+          "texture": "#oor"
+        },
+        "west": {
+          "uv": [
+            4,
+            4,
+            7,
+            6
+          ],
+          "texture": "#oor"
+        },
+        "up": {
+          "uv": [
+            4,
+            4,
+            7,
+            6
+          ],
+          "texture": "#oor"
+        }
+      }
+    }
+  ]
+}

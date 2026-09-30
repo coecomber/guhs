@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/nomguh_sneeuwspoor"
+      },
+      {
+        "model": "guhs:block/nomguh_sneeuwspoor",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/nomguh_sneeuwspoor",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/nomguh_sneeuwspoor",
+        "y": 270
+      }
+    ]
+  }
+}

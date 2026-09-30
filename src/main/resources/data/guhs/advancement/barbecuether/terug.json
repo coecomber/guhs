@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:houtskoolsteen"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.terug.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.terug.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "from": "guhs:barbecuether",
+        "to": "guhs:guhmension"
+      }
+    }
+  },
+  "parent": "guhs:barbecuether/binnen"
+}

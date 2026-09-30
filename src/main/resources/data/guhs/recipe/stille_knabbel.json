@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:kaaskorrel"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    },
+    {
+      "item": "guhs:kaasmos"
+    }
+  ],
+  "result": {
+    "id": "guhs:stille_knabbel",
+    "count": 2
+  }
+}

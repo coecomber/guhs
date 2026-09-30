@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "kleur=roze": {
+      "model": "guhs:block/motknabbel_roze"
+    },
+    "kleur=mint": {
+      "model": "guhs:block/motknabbel_mint"
+    },
+    "kleur=geel": {
+      "model": "guhs:block/motknabbel_geel"
+    }
+  }
+}

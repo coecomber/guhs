@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "guhs:block/lampion_mint"
+    },
+    "hanging=true": {
+      "model": "guhs:block/lampion_mint_hanging"
+    }
+  }
+}

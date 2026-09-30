@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/elf_guhjeskruisje",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "guhs:block/elf_guhjeskruisje",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "guhs:block/elf_guhjeskruisje",
+      "y": 0
+    },
+    "facing=west": {
+      "model": "guhs:block/elf_guhjeskruisje",
+      "y": 90
+    }
+  }
+}

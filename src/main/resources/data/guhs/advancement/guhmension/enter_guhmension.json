@@ -1,0 +1,25 @@
+{
+  "parent": "guhs:guhmension/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:pink_wool"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.enter.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.enter.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "entered_guhmension": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "guhs:guhmension"
+      }
+    }
+  }
+}

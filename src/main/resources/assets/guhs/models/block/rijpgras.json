@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/rijpgras_top",
+    "bottom": "minecraft:block/pink_wool",
+    "side": "guhs:block/rijpgras_side"
+  }
+}

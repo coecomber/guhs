@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "vuur=0": {
+      "model": "guhs:block/beroepen_marshmallowvuur_uit"
+    },
+    "vuur=1": {
+      "model": "guhs:block/beroepen_marshmallowvuur_1"
+    },
+    "vuur=2": {
+      "model": "guhs:block/beroepen_marshmallowvuur_2"
+    },
+    "vuur=3": {
+      "model": "guhs:block/beroepen_marshmallowvuur_3"
+    }
+  }
+}

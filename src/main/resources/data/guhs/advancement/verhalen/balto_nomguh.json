@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:nomguh_routepaal"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.balto_nomguh.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.balto_nomguh.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": "guhs:nomguh"
+          }
+        }
+      }
+    }
+  },
+  "parent": "guhs:verhalen/verhaal_toendra"
+}

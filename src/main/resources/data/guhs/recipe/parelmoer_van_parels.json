@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PP",
+    "PP"
+  ],
+  "key": {
+    "P": {
+      "item": "guhs:parel"
+    }
+  },
+  "result": {
+    "id": "guhs:parelmoer",
+    "count": 4
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/mika_mep_trofee"
+    },
+    "facing=east": {
+      "model": "guhs:block/mika_mep_trofee",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/mika_mep_trofee",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/mika_mep_trofee",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/dragon_egg",
+  "textures": {
+    "particle": "guhs:block/enderguh_ei_1",
+    "all": "guhs:block/enderguh_ei_1"
+  }
+}

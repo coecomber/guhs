@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:grote_guhspelen/elftocht_uitgereden",
+  "display": {
+    "icon": {
+      "id": "guhs:elfstempel"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.elftocht_snel.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.elftocht_snel.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

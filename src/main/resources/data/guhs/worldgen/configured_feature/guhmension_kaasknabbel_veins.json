@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:ore",
+  "config": {
+    "size": 20,
+    "discard_chance_on_air_exposure": 0.0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:pink_wool"
+        },
+        "state": {
+          "Name": "guhs:block_of_kaasknabbels"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:pink_terracotta"
+        },
+        "state": {
+          "Name": "guhs:block_of_kaasknabbels"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:magenta_wool"
+        },
+        "state": {
+          "Name": "guhs:block_of_kaasknabbels"
+        }
+      }
+    ]
+  }
+}

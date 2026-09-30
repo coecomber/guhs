@@ -1,0 +1,87 @@
+{
+  "has_precipitation": true,
+  "temperature": 0.95,
+  "downfall": 0.8,
+  "creature_spawn_probability": 0.3,
+  "effects": {
+    "sky_color": 9425919,
+    "fog_color": 16771286,
+    "water_color": 4182232,
+    "water_fog_color": 2068392,
+    "grass_color": 8380538,
+    "foliage_color": 6213738,
+    "mood_sound": {
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000,
+      "block_search_extent": 8,
+      "offset": 2.0
+    },
+    "music": {
+      "sound": "minecraft:music.overworld.jungle",
+      "min_delay": 12000,
+      "max_delay": 24000,
+      "replace_current_music": false
+    },
+    "particle": {
+      "options": {
+        "type": "minecraft:cherry_leaves"
+      },
+      "probability": 0.0015
+    }
+  },
+  "spawners": {
+    "monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [
+      {
+        "type": "guhs:guh_vis",
+        "weight": 25,
+        "minCount": 3,
+        "maxCount": 6
+      }
+    ],
+    "misc": [],
+    "creature": [
+      {
+        "type": "guhs:guh",
+        "weight": 80,
+        "minCount": 2,
+        "maxCount": 4
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": []
+  },
+  "features": [
+    [],
+    [
+      "guhs:guhwaii_water"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "guhs:guhmension_kaasknabbel_veins",
+      "guhs:vahoege_vads_ore"
+    ],
+    [],
+    [],
+    [
+      "guhs:guhwaii_rif",
+      "guhs:guhwaii_kaaskoraal",
+      "guhs:guhwaii_zeegras",
+      "guhs:guhwaii_palm",
+      "guhs:guhwaii_bloemen",
+      "guhs:guhwaii_varens",
+      "minecraft:patch_sugar_cane",
+      "guhs:guhwaii_nestje"
+    ],
+    []
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:roze_hibiscus"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.guhwaii_aloha.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.guhwaii_aloha.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/verhaal_guhwaii"
+}

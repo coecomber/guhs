@@ -1,0 +1,94 @@
+{
+  "variants": {
+    "bonk=false,facing=north,kop=mika": {
+      "model": "guhs:block/mika_mep_kop_mika"
+    },
+    "bonk=false,facing=east,kop=mika": {
+      "model": "guhs:block/mika_mep_kop_mika",
+      "y": 90
+    },
+    "bonk=false,facing=south,kop=mika": {
+      "model": "guhs:block/mika_mep_kop_mika",
+      "y": 180
+    },
+    "bonk=false,facing=west,kop=mika": {
+      "model": "guhs:block/mika_mep_kop_mika",
+      "y": 270
+    },
+    "bonk=true,facing=north,kop=mika": {
+      "model": "guhs:block/mika_mep_kop_mika_bonk"
+    },
+    "bonk=true,facing=east,kop=mika": {
+      "model": "guhs:block/mika_mep_kop_mika_bonk",
+      "y": 90
+    },
+    "bonk=true,facing=south,kop=mika": {
+      "model": "guhs:block/mika_mep_kop_mika_bonk",
+      "y": 180
+    },
+    "bonk=true,facing=west,kop=mika": {
+      "model": "guhs:block/mika_mep_kop_mika_bonk",
+      "y": 270
+    },
+    "bonk=false,facing=north,kop=goud": {
+      "model": "guhs:block/mika_mep_kop_goud"
+    },
+    "bonk=false,facing=east,kop=goud": {
+      "model": "guhs:block/mika_mep_kop_goud",
+      "y": 90
+    },
+    "bonk=false,facing=south,kop=goud": {
+      "model": "guhs:block/mika_mep_kop_goud",
+      "y": 180
+    },
+    "bonk=false,facing=west,kop=goud": {
+      "model": "guhs:block/mika_mep_kop_goud",
+      "y": 270
+    },
+    "bonk=true,facing=north,kop=goud": {
+      "model": "guhs:block/mika_mep_kop_goud_bonk"
+    },
+    "bonk=true,facing=east,kop=goud": {
+      "model": "guhs:block/mika_mep_kop_goud_bonk",
+      "y": 90
+    },
+    "bonk=true,facing=south,kop=goud": {
+      "model": "guhs:block/mika_mep_kop_goud_bonk",
+      "y": 180
+    },
+    "bonk=true,facing=west,kop=goud": {
+      "model": "guhs:block/mika_mep_kop_goud_bonk",
+      "y": 270
+    },
+    "bonk=false,facing=north,kop=guh": {
+      "model": "guhs:block/mika_mep_kop_guh"
+    },
+    "bonk=false,facing=east,kop=guh": {
+      "model": "guhs:block/mika_mep_kop_guh",
+      "y": 90
+    },
+    "bonk=false,facing=south,kop=guh": {
+      "model": "guhs:block/mika_mep_kop_guh",
+      "y": 180
+    },
+    "bonk=false,facing=west,kop=guh": {
+      "model": "guhs:block/mika_mep_kop_guh",
+      "y": 270
+    },
+    "bonk=true,facing=north,kop=guh": {
+      "model": "guhs:block/mika_mep_kop_guh_bonk"
+    },
+    "bonk=true,facing=east,kop=guh": {
+      "model": "guhs:block/mika_mep_kop_guh_bonk",
+      "y": 90
+    },
+    "bonk=true,facing=south,kop=guh": {
+      "model": "guhs:block/mika_mep_kop_guh_bonk",
+      "y": 180
+    },
+    "bonk=true,facing=west,kop=guh": {
+      "model": "guhs:block/mika_mep_kop_guh_bonk",
+      "y": 270
+    }
+  }
+}

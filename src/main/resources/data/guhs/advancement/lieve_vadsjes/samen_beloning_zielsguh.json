@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:lieve_vadsjes/band_zielsguh",
+  "display": {
+    "icon": {
+      "id": "guhs:samen_zielskroontje"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_beloning_zielsguh.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_beloning_zielsguh.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

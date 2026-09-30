@@ -1,0 +1,79 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "guhs:block/pluizige_tunnel_dak"
+      }
+    },
+    {
+      "when": {
+        "north": "dicht"
+      },
+      "apply": {
+        "model": "guhs:block/pluizige_tunnel_wand"
+      }
+    },
+    {
+      "when": {
+        "north": "ingang"
+      },
+      "apply": {
+        "model": "guhs:block/pluizige_tunnel_ingang"
+      }
+    },
+    {
+      "when": {
+        "east": "dicht"
+      },
+      "apply": {
+        "model": "guhs:block/pluizige_tunnel_wand",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "east": "ingang"
+      },
+      "apply": {
+        "model": "guhs:block/pluizige_tunnel_ingang",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "dicht"
+      },
+      "apply": {
+        "model": "guhs:block/pluizige_tunnel_wand",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "south": "ingang"
+      },
+      "apply": {
+        "model": "guhs:block/pluizige_tunnel_ingang",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "dicht"
+      },
+      "apply": {
+        "model": "guhs:block/pluizige_tunnel_wand",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "ingang"
+      },
+      "apply": {
+        "model": "guhs:block/pluizige_tunnel_ingang",
+        "y": 270
+      }
+    }
+  ]
+}

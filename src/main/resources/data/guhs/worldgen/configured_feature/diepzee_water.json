@@ -1,0 +1,8 @@
+{
+  "type": "guhs:diepzee_water",
+  "config": {
+    "noise": "guhs:guhmension_zee",
+    "min_value": 0.427,
+    "water_level": 63
+  }
+}

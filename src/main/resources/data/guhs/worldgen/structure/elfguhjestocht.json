@@ -1,0 +1,37 @@
+{
+  "type": "guhs:elfguhjestocht",
+  "biomes": "#guhs:has_structure/elfguhjestocht",
+  "step": "fluid_springs",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "ambient": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "terrain_adaptation": "beard_box",
+  "start_pool": "guhs:elfguhjestocht/start",
+  "start_jigsaw_name": "guhs:elfguhjestocht_midden",
+  "polder_noise": "guhs:guhmension_polder",
+  "cell": 32,
+  "cell_chunks": 1,
+  "min_value": 0.66,
+  "dal_value": 0.61,
+  "flat_value": 0.63,
+  "flat_radius": 0,
+  "max_distance_from_center": 128,
+  "keep_clear": 145,
+  "voorrang": 900,
+  "vlak": {
+    "flat_value": 0.63,
+    "sea_noise": "guhs:guhmension_zee",
+    "sea_max": 0.28,
+    "knuffel_noise": "guhs:guhmension_knuffel",
+    "knuffel_max": 0.4,
+    "min_flat": 40
+  },
+  "max_ongelijk": 2
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:ore",
+  "config": {
+    "size": 14,
+    "discard_chance_on_air_exposure": 0.0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "guhs:gatenkaas"
+        },
+        "state": {
+          "Name": "guhs:block_of_kaasknabbels"
+        }
+      }
+    ]
+  }
+}

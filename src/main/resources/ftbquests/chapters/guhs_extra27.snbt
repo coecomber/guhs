@@ -1,0 +1,1328 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: "circle"
+	filename: "guhs_extra27"
+	group: "475548DB0F6F37EB"
+	guhs_chapter_version: 19
+	icon: {
+		components: {
+			"ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_extra27.png"
+		}
+		id: "ftbquests:custom_icon"
+	}
+	id: "47554886C6FA7C81"
+	images: [
+		{
+			height: 3.0d
+			id: "47554843E524A927"
+			image: "guhs:textures/ftbquests/guhs_extra27/title.png"
+			rotation: 0.0d
+			width: 12.0d
+			x: 10.25d
+			y: -2.4d
+		}
+		{
+			height: 3.0d
+			id: "475548933F17B4A8"
+			image: "guhs:textures/ftbquests/guhs_extra27/welkom.png"
+			rotation: 0.0d
+			width: 6.0d
+			x: 12.15d
+			y: 1.5d
+		}
+		{
+			height: 1.5625d
+			id: "4755489565D6BDD7"
+			image: "guhs:textures/ftbquests/guhs_extra27/kop_gatenkaas.png"
+			rotation: 0.0d
+			width: 10.0d
+			x: 4.5d
+			y: 4.78125d
+			hover: ["Komt na: Welkom in de Guhmensie! (De Guhmensie)"]
+		}
+		{
+			height: 1.5625d
+			id: "4755482ED51EA578"
+			image: "guhs:textures/ftbquests/guhs_extra27/kop_kaasmoeras.png"
+			rotation: 0.0d
+			width: 10.0d
+			x: 16.0d
+			y: 4.78125d
+			hover: ["Komt na: Welkom in de Guhmensie! (De Guhmensie)"]
+		}
+		{
+			height: 1.5625d
+			id: "47554860E4FF0A4A"
+			image: "guhs:textures/ftbquests/guhs_extra27/kop_moerasheks.png"
+			rotation: 0.0d
+			width: 10.0d
+			x: 4.5d
+			y: 10.24375d
+			hover: ["Komt na: Het Kaasmoeras"]
+		}
+		{
+			height: 1.5625d
+			id: "475548F79385CADD"
+			image: "guhs:textures/ftbquests/guhs_extra27/kop_vadswoud.png"
+			rotation: 0.0d
+			width: 10.0d
+			x: 16.0d
+			y: 10.24375d
+			hover: ["Komt na: Welkom in de Guhmensie! (De Guhmensie)"]
+		}
+		{
+			height: 1.5625d
+			id: "475548D704C2104A"
+			image: "guhs:textures/ftbquests/guhs_extra27/kop_families.png"
+			rotation: 0.0d
+			width: 10.0d
+			x: 4.5d
+			y: 15.70625d
+			hover: ["Komt na: Het Vadswoud"]
+		}
+	]
+	order_index: 7
+	progression_mode: "flexible"
+	quest_links: [
+		{
+			id: "4755486159EBBEC1"
+			linked_quest: "4755486E9E523698"
+			shape: "hexagon"
+			x: 0.0d
+			y: 1.5d
+		}
+	]
+	quests: [
+		{
+			id: "4755486B4E6BCAF7"
+			icon: {
+				components: {
+					"ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_extra27.png"
+				}
+				id: "ftbquests:custom_icon"
+			}
+			tasks: [
+				{
+					type: "checkmark"
+					id: "47554821CE985492"
+				}
+			]
+			rewards: [
+				{
+					id: "475548D97CB14B5B"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 4
+				}
+			]
+			x: 2.0d
+			y: 1.5d
+			dependencies: ["4755486E9E523698"]
+			size: 1.3d
+			shape: "gear"
+		}
+		{
+			id: "47554882C7FA8DDE"
+			icon: {
+				id: "guhs:gatenkaas"
+			}
+			tasks: [
+				{
+					type: "biome"
+					biome: "guhs:gatenkaasgrotten"
+					id: "4755484B200112AC"
+				}
+			]
+			rewards: [
+				{
+					id: "47554834213E656B"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 16
+				}
+				{
+					id: "47554839D6D05048"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 0.0d
+			y: 6.5625d
+			dependencies: ["4755486B4E6BCAF7"]
+			hide_dependency_lines: true
+			shape: "hexagon"
+		}
+		{
+			id: "475548BDB1268F37"
+			icon: {
+				id: "guhs:kaasmos"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaasmos"
+					}
+					count: 8L
+					id: "475548241EB464C6"
+				}
+			]
+			rewards: [
+				{
+					id: "475548E00E5A75BC"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 1.5d
+			y: 6.5625d
+			dependencies: ["47554882C7FA8DDE"]
+		}
+		{
+			id: "4755486C27EED7D7"
+			icon: {
+				id: "guhs:kaaskorrel"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaaskorrel"
+					}
+					count: 3L
+					id: "47554825714DBAC7"
+				}
+			]
+			rewards: [
+				{
+					id: "4755488677141A86"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:gefrituurde_kaasknabbels"
+					}
+					count: 4
+				}
+			]
+			x: 3.0d
+			y: 6.5625d
+			dependencies: ["475548BDB1268F37"]
+		}
+		{
+			id: "475548D16B0420F9"
+			icon: {
+				id: "guhs:stille_knabbel"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:guhmension/gatenkaas_stille_knabbel"
+					id: "475548E0F5819479"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554800F7FAB29F"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 4.5d
+			y: 6.5625d
+			dependencies: ["4755486C27EED7D7"]
+		}
+		{
+			id: "47554833A41E871D"
+			icon: {
+				id: "minecraft:chest_minecart"
+			}
+			tasks: [
+				{
+					type: "structure"
+					structure: "guhs:gatenkaas_mijnschacht"
+					id: "47554820BC22E489"
+				}
+			]
+			rewards: [
+				{
+					id: "4755489333F7C4A5"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaasbrok"
+					}
+					count: 8
+				}
+			]
+			x: 6.0d
+			y: 6.5625d
+			dependencies: ["475548D16B0420F9"]
+		}
+		{
+			id: "475548B1A1335FC5"
+			icon: {
+				id: "guhs:knabbelsensor"
+			}
+			tasks: [
+				{
+					type: "structure"
+					structure: "guhs:stille_voorraadkelder"
+					id: "475548F4B073C59B"
+				}
+			]
+			rewards: [
+				{
+					id: "475548F771B62120"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:stille_knabbel"
+					}
+					count: 2
+				}
+				{
+					id: "475548A20AD7CF37"
+					type: "xp"
+					xp: 200
+				}
+			]
+			x: 7.5d
+			y: 6.5625d
+			dependencies: ["47554833A41E871D"]
+			shape: "octagon"
+		}
+		{
+			id: "475548DA54F61F26"
+			icon: {
+				id: "minecraft:written_book"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:guhmension/gatenkaas_voorraadboek"
+					id: "475548F20827D858"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548B36B4AB764"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:goudkaas"
+					}
+				}
+				{
+					id: "47554835818B8D83"
+					type: "xp"
+					xp: 200
+				}
+			]
+			x: 9.0d
+			y: 6.5625d
+			dependencies: ["475548B1A1335FC5"]
+			shape: "diamond"
+		}
+		{
+			id: "475548EBCF21ED38"
+			icon: {
+				id: "guhs:vadswaker_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/found_vadswaker"
+					id: "47554857F07BDA7F"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548E25EBBC92E"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:gefrituurde_kaasknabbels"
+					}
+					count: 6
+				}
+				{
+					id: "475548C2D5E0DC8C"
+					type: "xp"
+					xp: 150
+				}
+			]
+			x: 9.0d
+			y: 8.0625d
+			dependencies: ["475548DA54F61F26"]
+		}
+		{
+			id: "4755483017D15B15"
+			icon: {
+				id: "minecraft:netherite_sword"
+			}
+			tasks: [
+				{
+					type: "kill"
+					entity: "guhs:vadswaker"
+					value: 1L
+					id: "4755481FA5B664E9"
+				}
+			]
+			rewards: [
+				{
+					id: "475548E7072D6170"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:vahoege_vads_ingot"
+					}
+					count: 2
+				}
+				{
+					id: "4755488D194C9D5E"
+					type: "xp"
+					xp: 500
+				}
+			]
+			x: 7.5d
+			y: 8.0625d
+			dependencies: ["475548EBCF21ED38"]
+			shape: "gear"
+		}
+		{
+			id: "475548BB714ECD15"
+			icon: {
+				id: "guhs:modderig_kaasgras"
+			}
+			tasks: [
+				{
+					type: "biome"
+					biome: "guhs:kaasmoeras"
+					id: "475548EE4F0760EF"
+				}
+			]
+			rewards: [
+				{
+					id: "4755484EAF2259E4"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 16
+				}
+				{
+					id: "475548D4FB58EB79"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 11.5d
+			y: 6.5625d
+			dependencies: ["4755486B4E6BCAF7"]
+			hide_dependency_lines: true
+			shape: "octagon"
+		}
+		{
+			id: "475548087C391F07"
+			icon: {
+				id: "guhs:borrelende_kaassaus"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/kaasmoeras_stuiter"
+					id: "4755484189F74DAC"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755481846DAB078"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 13.0d
+			y: 6.5625d
+			dependencies: ["475548BB714ECD15"]
+		}
+		{
+			id: "47554862A9A9F35D"
+			icon: {
+				id: "minecraft:barrel"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/kaasmoeras_vlotje"
+					id: "475548A61EDB7231"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548E8ADFED9E4"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:gefrituurde_kaasknabbels"
+					}
+					count: 4
+				}
+				{
+					id: "47554802F1557C86"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 14.5d
+			y: 6.5625d
+			dependencies: ["475548087C391F07"]
+		}
+		{
+			id: "4755484301565311"
+			icon: {
+				id: "guhs:kikkerguh_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_kikkerguh"
+					id: "47554849DA01D7D4"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554873078FE26C"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 16.0d
+			y: 6.5625d
+			dependencies: ["47554862A9A9F35D"]
+		}
+		{
+			id: "475548CAAA7670FD"
+			icon: {
+				id: "guhs:kaasmot_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_kaasmot"
+					id: "47554876B70E00CC"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755482F218563E3"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 17.5d
+			y: 6.5625d
+			dependencies: ["4755484301565311"]
+		}
+		{
+			id: "475548774374C1E6"
+			icon: {
+				id: "guhs:motknabbel"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:motknabbel"
+					}
+					id: "475548FD16D54868"
+				}
+			]
+			rewards: [
+				{
+					id: "47554856A4DDA69E"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 16
+				}
+			]
+			x: 19.0d
+			y: 6.5625d
+			dependencies: ["475548CAAA7670FD"]
+		}
+		{
+			id: "4755488288C45FFD"
+			icon: {
+				id: "minecraft:ochre_froglight"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/kaasmoeras_motknabbels"
+					id: "475548F2B62EC4AA"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554888CB200134"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:guh_kristal"
+					}
+					count: 8
+				}
+				{
+					id: "4755486CAC4B720A"
+					type: "xp"
+					xp: 200
+				}
+			]
+			x: 20.5d
+			y: 6.5625d
+			dependencies: ["475548774374C1E6"]
+			shape: "gear"
+		}
+		{
+			id: "47554884A4D88DE4"
+			icon: {
+				id: "guhs:guhdex"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/tamed_kaasmoerasguh"
+					id: "47554839D210B712"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755489F5DEC6B0D"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:gefrituurde_kaasknabbels"
+					}
+					count: 8
+				}
+				{
+					id: "4755481D63108D5A"
+					type: "xp"
+					xp: 200
+				}
+			]
+			x: 20.5d
+			y: 8.0625d
+			dependencies: ["4755488288C45FFD"]
+			shape: "rsquare"
+		}
+		{
+			id: "4755480BF232E809"
+			icon: {
+				id: "guhs:kaasmodder"
+			}
+			tasks: [
+				{
+					type: "structure"
+					structure: "guhs:moerasheks_hut"
+					id: "475548B6B3D73A8C"
+				}
+			]
+			rewards: [
+				{
+					id: "4755483BC4CA8ACE"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 16
+				}
+				{
+					id: "4755488043964B78"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 0.0d
+			y: 12.025d
+			dependencies: ["475548BB714ECD15"]
+			hide_dependency_lines: true
+			shape: "hexagon"
+		}
+		{
+			id: "47554874776259C0"
+			icon: {
+				id: "guhs:vadsverdrijvend_drankje"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/kaasmoeras_onvahoeg"
+					id: "475548470BC3225F"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554856005F0529"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 1.5d
+			y: 12.025d
+			dependencies: ["4755480BF232E809"]
+		}
+		{
+			id: "4755483E4F64A315"
+			icon: {
+				id: "guhs:vadsverdrijvend_drankje"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/moerasheks_verslagen"
+					id: "475548D25F2DAAB3"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548ACB0659F6F"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:gefrituurde_kaasknabbels"
+					}
+					count: 8
+				}
+				{
+					id: "475548F89473D86B"
+					type: "xp"
+					xp: 200
+				}
+			]
+			x: 3.0d
+			y: 12.025d
+			dependencies: ["47554874776259C0"]
+		}
+		{
+			id: "4755489E35B813D9"
+			icon: {
+				id: "guhs:moeraskaas"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:moeraskaas"
+					}
+					count: 3L
+					id: "4755480C91136C3D"
+				}
+			]
+			rewards: [
+				{
+					id: "475548D6ABA215CA"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:vahoege_vads_ingot"
+					}
+				}
+			]
+			x: 4.5d
+			y: 12.025d
+			dependencies: ["4755483E4F64A315"]
+		}
+		{
+			id: "4755487322B1BF6E"
+			icon: {
+				id: "guhs:guhdex"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_moerasheks_mika"
+					id: "475548D255FAFEE9"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548E3D2648F51"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 6.0d
+			y: 12.025d
+			dependencies: ["4755489E35B813D9"]
+		}
+		{
+			id: "4755482EDC0E46F3"
+			icon: {
+				id: "guhs:vadshout_zaailing"
+			}
+			tasks: [
+				{
+					type: "biome"
+					biome: "guhs:vadswoud"
+					id: "475548AE39BBA54C"
+				}
+			]
+			rewards: [
+				{
+					id: "4755488F9D50500D"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+				{
+					id: "475548353343AD7C"
+					type: "xp"
+					xp: 50
+				}
+			]
+			x: 11.5d
+			y: 12.025d
+			dependencies: ["4755486B4E6BCAF7"]
+			hide_dependency_lines: true
+			shape: "circle"
+		}
+		{
+			id: "4755482A2FA8AAF9"
+			icon: {
+				id: "guhs:vadstouw"
+			}
+			tasks: [
+				{
+					type: "structure"
+					structure: "guhs:boomhutdorp"
+					id: "4755487BD528C542"
+				}
+			]
+			rewards: [
+				{
+					id: "47554844347A67CF"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:gefrituurde_kaasknabbels"
+					}
+					count: 4
+				}
+				{
+					id: "475548E11DE2B5E4"
+					type: "xp"
+					xp: 150
+				}
+			]
+			x: 13.0d
+			y: 12.025d
+			dependencies: ["4755482EDC0E46F3"]
+			shape: "gear"
+		}
+		{
+			id: "47554850E161BDC9"
+			icon: {
+				id: "guhs:guhdex"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_boswachterguh"
+					id: "47554824541379E3"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554803B432DDEF"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 16
+				}
+				{
+					id: "4755481DA9E6A916"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 14.5d
+			y: 12.025d
+			dependencies: ["4755482A2FA8AAF9"]
+		}
+		{
+			id: "47554899AB0F03C8"
+			icon: {
+				id: "guhs:guhdex"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_knabbelplukker"
+					id: "47554846B93315E7"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548CAB3268A5F"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:knabbelbessen"
+					}
+					count: 8
+				}
+				{
+					id: "47554851AF0CF074"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 16.0d
+			y: 12.025d
+			dependencies: ["47554850E161BDC9"]
+		}
+		{
+			id: "4755489CC8161A33"
+			icon: {
+				id: "guhs:knabbelbessen"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:knabbelbessen"
+					}
+					count: 32L
+					id: "4755481DDB11919F"
+				}
+			]
+			rewards: [
+				{
+					id: "47554860DD13F058"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:knabbelbessentaartje"
+					}
+					count: 2
+				}
+				{
+					id: "475548B40BD1E1C2"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 17.5d
+			y: 12.025d
+			dependencies: ["47554899AB0F03C8"]
+		}
+		{
+			id: "475548A69A6C5ACC"
+			icon: {
+				id: "guhs:knabbelbessentaartje"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:knabbelbessentaartje"
+					}
+					id: "475548A3059ECC96"
+				}
+			]
+			rewards: [
+				{
+					id: "4755487C7D309C4E"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 12
+				}
+				{
+					id: "4755484CDE09EEDF"
+					type: "xp"
+					xp: 50
+				}
+			]
+			x: 19.0d
+			y: 12.025d
+			dependencies: ["4755489CC8161A33"]
+		}
+		{
+			id: "4755483AF996ED33"
+			icon: {
+				id: "guhs:vadshout_planken"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:vadshout_planken"
+					}
+					count: 32L
+					id: "47554887E0FBC869"
+				}
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:vadshout_deur"
+					}
+					id: "475548A66BCD10B9"
+				}
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:vadshout_hek"
+					}
+					count: 4L
+					id: "475548B8698573BB"
+				}
+			]
+			rewards: [
+				{
+					id: "4755487DCF03EA66"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:vadshout_zaailing"
+					}
+					count: 4
+				}
+				{
+					id: "47554897D05A8E58"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 20.5d
+			y: 12.025d
+			dependencies: ["475548A69A6C5ACC"]
+		}
+		{
+			id: "475548DD60221923"
+			icon: {
+				id: "guhs:vadshout_gezicht"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/vadswoud_reuzenboom"
+					id: "4755483A4602C0CC"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548843B4303EF"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:vahoege_vads_ingot"
+					}
+				}
+				{
+					id: "475548DC5C7850CB"
+					type: "xp"
+					xp: 250
+				}
+			]
+			x: 20.5d
+			y: 13.525d
+			dependencies: ["4755483AF996ED33"]
+			shape: "gear"
+		}
+		{
+			id: "47554801DE28443D"
+			icon: {
+				id: "guhs:guh_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/vadswoud_gezin"
+					id: "4755483459FB9440"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755489A932B6ADB"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 16
+				}
+				{
+					id: "475548AC206D566C"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 0.0d
+			y: 17.4875d
+			dependencies: ["4755482EDC0E46F3"]
+			hide_dependency_lines: true
+			shape: "circle"
+		}
+		{
+			id: "475548362DCDB875"
+			icon: {
+				id: "guhs:knabbelbessen"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/vadswoud_baby_getemd"
+					id: "4755486FBDBE1CC7"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548129E2C6FD4"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:knabbelbessen"
+					}
+					count: 16
+				}
+				{
+					id: "475548BAA6EB66D1"
+					type: "xp"
+					xp: 150
+				}
+			]
+			x: 1.5d
+			y: 17.4875d
+			dependencies: ["47554801DE28443D"]
+		}
+		{
+			id: "4755489F338F2956"
+			icon: {
+				id: "guhs:guhnestje"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:guhnestje"
+					}
+					id: "475548C2147670C8"
+				}
+			]
+			rewards: [
+				{
+					id: "47554836DC3EA356"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+				{
+					id: "475548E079243FC7"
+					type: "xp"
+					xp: 50
+				}
+			]
+			x: 3.0d
+			y: 17.4875d
+			dependencies: ["475548362DCDB875"]
+		}
+		{
+			id: "475548B416E3723B"
+			icon: {
+				id: "minecraft:clock"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/vadswoud_geslapen"
+					id: "475548F3729C8530"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548FEE2643D62"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:gefrituurde_kaasknabbels"
+					}
+					count: 4
+				}
+				{
+					id: "475548604A48E8D8"
+					type: "xp"
+					xp: 150
+				}
+			]
+			x: 4.5d
+			y: 17.4875d
+			dependencies: ["4755489F338F2956"]
+		}
+		{
+			id: "47554823813278AE"
+			icon: {
+				id: "guhs:boswachtershoed"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:boswachtershoed"
+					}
+					id: "47554865DF2B3853"
+				}
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:boswachtersjas"
+					}
+					id: "475548898B3CC076"
+				}
+			]
+			rewards: [
+				{
+					id: "475548A633F95655"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:vadshout_zaailing"
+					}
+					count: 4
+				}
+				{
+					id: "475548031839C8AA"
+					type: "xp"
+					xp: 150
+				}
+			]
+			x: 6.0d
+			y: 17.4875d
+			dependencies: ["475548B416E3723B"]
+			shape: "rsquare"
+		}
+		{
+			id: "47554892B8E217FF"
+			icon: {
+				id: "guhs:plukmandje"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:plukmuts"
+					}
+					id: "475548B09D1432EB"
+				}
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:plukmandje"
+					}
+					id: "475548877F83FA14"
+				}
+			]
+			rewards: [
+				{
+					id: "475548B85AF54F48"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:knabbelbessentaartje"
+					}
+					count: 4
+				}
+				{
+					id: "475548D11DECBCF0"
+					type: "xp"
+					xp: 150
+				}
+			]
+			x: 7.5d
+			y: 17.4875d
+			dependencies: ["47554823813278AE"]
+			shape: "rsquare"
+		}
+	]
+}

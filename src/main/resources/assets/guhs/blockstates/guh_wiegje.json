@@ -1,0 +1,157 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "baby": "wakker"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_baby_wakker"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "baby": "ingestopt"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_baby_ingestopt"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "baby": "wakker"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_baby_wakker",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "baby": "ingestopt"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_baby_ingestopt",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "baby": "wakker"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_baby_wakker",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "baby": "ingestopt"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_baby_ingestopt",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "baby": "wakker"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_baby_wakker",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "baby": "ingestopt"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_baby_ingestopt",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "wens": "knutselen"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_wens_knutselen"
+      }
+    },
+    {
+      "when": {
+        "wens": "honger"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_wens_honger"
+      }
+    },
+    {
+      "when": {
+        "wens": "luier"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_wens_luier"
+      }
+    },
+    {
+      "when": {
+        "wens": "slaap"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_wens_slaap"
+      }
+    },
+    {
+      "when": {
+        "wens": "liedje"
+      },
+      "apply": {
+        "model": "guhs:block/guh_wiegje_wens_liedje"
+      }
+    }
+  ]
+}

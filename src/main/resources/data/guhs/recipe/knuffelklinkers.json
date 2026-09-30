@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PW",
+    "WP"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:pink_terracotta"
+    },
+    "W": {
+      "item": "minecraft:white_terracotta"
+    }
+  },
+  "result": {
+    "id": "guhs:knuffelklinkers",
+    "count": 4
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:pluisveertje"
+    },
+    "title": {
+      "translate": "advancements.guhs.diertjes.vogels_pluisveertje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.diertjes.vogels_pluisveertje.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:pluisveertje"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:diertjes/vogels_pluisvinkje"
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:nether_forest_vegetation",
+  "config": {
+    "state_provider": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 87,
+          "data": {
+            "Name": "guhs:pindascheutjes"
+          }
+        },
+        {
+          "weight": 11,
+          "data": {
+            "Name": "guhs:sate_zwammetje"
+          }
+        },
+        {
+          "weight": 6,
+          "data": {
+            "Name": "guhs:smeulkooltjes"
+          }
+        }
+      ]
+    },
+    "spread_width": 8,
+    "spread_height": 4
+  }
+}

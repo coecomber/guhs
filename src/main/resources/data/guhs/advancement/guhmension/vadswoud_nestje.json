@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:guhmension/vadswoud_babyguh",
+  "display": {
+    "icon": {
+      "id": "guhs:guhnestje"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.vadswoud_nestje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.vadswoud_nestje.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/belegen_kaas_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/belegen_kaas_stenen"
+    },
+    "type=top": {
+      "model": "guhs:block/belegen_kaas_plaat_top"
+    }
+  }
+}

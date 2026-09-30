@@ -1,0 +1,1244 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: "circle"
+	filename: "guhs_diertjes"
+	group: "475548DB0F6F37EB"
+	guhs_chapter_version: 19
+	icon: {
+		components: {
+			"ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_diertjes.png"
+		}
+		id: "ftbquests:custom_icon"
+	}
+	id: "4755488AC3632FEB"
+	images: [
+		{
+			height: 3.0d
+			id: "475548BA7D05BE5B"
+			image: "guhs:textures/ftbquests/guhs_diertjes/title.png"
+			rotation: 0.0d
+			width: 12.0d
+			x: 10.25d
+			y: -2.4d
+		}
+		{
+			height: 3.0d
+			id: "4755488CE079871E"
+			image: "guhs:textures/ftbquests/guhs_diertjes/welkom.png"
+			rotation: 0.0d
+			width: 6.0d
+			x: 12.15d
+			y: 1.5d
+		}
+		{
+			height: 1.5625d
+			id: "475548FAF32E5092"
+			image: "guhs:textures/ftbquests/guhs_diertjes/kop_vogels.png"
+			rotation: 0.0d
+			width: 10.0d
+			x: 4.5d
+			y: 4.78125d
+			hover: ["Komt na: Welkom in de Guhmensie! (De Guhmensie)"]
+		}
+		{
+			height: 1.5625d
+			id: "4755483DFC0A534C"
+			image: "guhs:textures/ftbquests/guhs_diertjes/kop_waterdiertjes.png"
+			rotation: 0.0d
+			width: 10.0d
+			x: 16.0d
+			y: 4.78125d
+			hover: ["Komt na: Welkom in de Guhmensie! (De Guhmensie)"]
+		}
+		{
+			height: 1.5625d
+			id: "475548792D6F7B61"
+			image: "guhs:textures/ftbquests/guhs_diertjes/kop_landdiertjes.png"
+			rotation: 0.0d
+			width: 10.0d
+			x: 4.5d
+			y: 10.24375d
+			hover: ["Komt na: Welkom in de Guhmensie! (De Guhmensie)"]
+		}
+	]
+	order_index: 12
+	progression_mode: "flexible"
+	quest_links: [
+		{
+			id: "475548EF41777058"
+			linked_quest: "4755486E9E523698"
+			shape: "hexagon"
+			x: 0.0d
+			y: 1.5d
+		}
+	]
+	quests: [
+		{
+			id: "4755482B9953E643"
+			icon: {
+				components: {
+					"ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_diertjes.png"
+				}
+				id: "ftbquests:custom_icon"
+			}
+			tasks: [
+				{
+					type: "checkmark"
+					id: "475548955DF02C9E"
+				}
+			]
+			rewards: [
+				{
+					id: "4755483CEF10DC14"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 4
+				}
+			]
+			x: 2.0d
+			y: 1.5d
+			dependencies: ["4755486E9E523698"]
+			size: 1.3d
+			shape: "gear"
+		}
+		{
+			id: "4755486000F0FB50"
+			icon: {
+				id: "guhs:pluisvinkje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_pluisvinkje"
+					id: "475548C9392E7813"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548F4A4FB718F"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 0.0d
+			y: 6.5625d
+			dependencies: ["4755482B9953E643"]
+			hide_dependency_lines: true
+		}
+		{
+			id: "47554864A6B3F545"
+			icon: {
+				id: "guhs:pluisveertje"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:pluisveertje"
+					}
+					id: "47554818691EEA11"
+				}
+			]
+			rewards: [
+				{
+					id: "47554871DF62F08F"
+					type: "item"
+					item: {
+						count: 1
+						id: "minecraft:wheat_seeds"
+					}
+					count: 16
+				}
+			]
+			x: 1.5d
+			y: 6.5625d
+			dependencies: ["4755486000F0FB50"]
+		}
+		{
+			id: "4755480637E945D3"
+			icon: {
+				id: "guhs:kaasmeesje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_kaasmeesje"
+					id: "47554850779AC553"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548CF1B81C70C"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 3.0d
+			y: 6.5625d
+			dependencies: ["47554864A6B3F545"]
+		}
+		{
+			id: "47554845D02AC532"
+			icon: {
+				id: "minecraft:oak_leaves"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/vogels_ondersteboven"
+					id: "475548B49A2BDD78"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554862B85095E0"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:knabbelbessen"
+					}
+					count: 6
+				}
+			]
+			x: 4.5d
+			y: 6.5625d
+			dependencies: ["4755480637E945D3"]
+		}
+		{
+			id: "4755482EE8C9B393"
+			icon: {
+				id: "guhs:guh_uiltje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_guh_uiltje"
+					id: "475548C4AD9C5CD9"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554888B1D497A0"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 6.0d
+			y: 6.5625d
+			dependencies: ["47554845D02AC532"]
+		}
+		{
+			id: "475548AD759E8B46"
+			icon: {
+				id: "minecraft:clock"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/vogels_oehoe"
+					id: "475548BD7B57B965"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548D68EAD5371"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 12
+				}
+			]
+			x: 7.5d
+			y: 6.5625d
+			dependencies: ["4755482EE8C9B393"]
+		}
+		{
+			id: "47554876EC3E8068"
+			icon: {
+				id: "guhs:zeemeeuwtje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_zeemeeuwtje"
+					id: "4755488DCF41D9F2"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548917046FCB2"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 9.0d
+			y: 6.5625d
+			dependencies: ["475548AD759E8B46"]
+		}
+		{
+			id: "4755489273EDF5BF"
+			icon: {
+				id: "minecraft:cod"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/vogels_mijn"
+					id: "475548B0D0A67227"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554822C45BD260"
+					type: "item"
+					item: {
+						count: 1
+						id: "minecraft:cod"
+					}
+					count: 4
+				}
+			]
+			x: 9.0d
+			y: 8.0625d
+			dependencies: ["47554876EC3E8068"]
+		}
+		{
+			id: "475548C2D4E2B345"
+			icon: {
+				id: "guhs:vogels_voerhuisje"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/vogels_voerhuisje"
+					id: "475548BCBD6448A8"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755486E0F89422A"
+					type: "item"
+					item: {
+						count: 1
+						id: "minecraft:wheat_seeds"
+					}
+					count: 16
+				}
+			]
+			x: 7.5d
+			y: 8.0625d
+			dependencies: ["4755489273EDF5BF"]
+		}
+		{
+			id: "475548301A2D31BB"
+			icon: {
+				id: "minecraft:leather_boots"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/vogels_sluipen"
+					id: "475548785A6311B7"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755485C0F3A8325"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 6.0d
+			y: 8.0625d
+			dependencies: ["475548C2D4E2B345"]
+		}
+		{
+			id: "475548AA4AEB5BBD"
+			icon: {
+				id: "minecraft:spyglass"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/vogels_alle"
+					id: "475548B17B991ACE"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548EBCC2A5904"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 32
+				}
+			]
+			x: 4.5d
+			y: 8.0625d
+			dependencies: ["475548301A2D31BB"]
+			shape: "gear"
+		}
+		{
+			id: "475548D84BDD1ABF"
+			icon: {
+				id: "guhs:guhxolotl_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_guhxolotl"
+					id: "47554849E92904FF"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755489A09BB7928"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:guh_vis"
+					}
+					count: 4
+				}
+			]
+			x: 11.5d
+			y: 6.5625d
+			dependencies: ["4755482B9953E643"]
+			hide_dependency_lines: true
+		}
+		{
+			id: "4755480064D05D7B"
+			icon: {
+				id: "guhs:guh_vis"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/waterdiertjes_getemd"
+					id: "475548CB1299395E"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554802C8A00F95"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 16
+				}
+			]
+			x: 13.0d
+			y: 6.5625d
+			dependencies: ["475548D84BDD1ABF"]
+		}
+		{
+			id: "4755481EBC6249B3"
+			icon: {
+				id: "guhs:guhxolotl_emmertje"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/waterdiertjes_emmertje"
+					id: "4755485FEE292B5D"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755481556A6FB53"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 14.5d
+			y: 6.5625d
+			dependencies: ["4755480064D05D7B"]
+		}
+		{
+			id: "475548BC9E8C34E5"
+			icon: {
+				id: "minecraft:heart_of_the_sea"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/waterdiertjes_blubbeltjes"
+					id: "475548D5C3CF5769"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548E7F52A7D5E"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:guh_vis"
+					}
+					count: 8
+				}
+			]
+			x: 16.0d
+			y: 6.5625d
+			dependencies: ["4755481EBC6249B3"]
+		}
+		{
+			id: "475548895F3664A4"
+			icon: {
+				id: "minecraft:gold_nugget"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/waterdiertjes_goud"
+					id: "475548A2E8B19451"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554822023E7F0C"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:gouden_kaasknabbel"
+					}
+				}
+				{
+					id: "475548F749BE2B70"
+					type: "xp"
+					xp: 200
+				}
+			]
+			x: 17.5d
+			y: 6.5625d
+			dependencies: ["475548BC9E8C34E5"]
+			shape: "gear"
+		}
+		{
+			id: "4755480D2FDB1691"
+			icon: {
+				id: "minecraft:axolotl_bucket"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/waterdiertjes_alle_kleurtjes"
+					id: "475548B8A4ED481A"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755489B55147AEE"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:guh_kristal"
+					}
+					count: 8
+				}
+				{
+					id: "475548183C2EF90D"
+					type: "xp"
+					xp: 300
+				}
+			]
+			x: 19.0d
+			y: 6.5625d
+			dependencies: ["475548895F3664A4"]
+			shape: "gear"
+		}
+		{
+			id: "47554817120B5DC8"
+			icon: {
+				id: "guhs:guh_eendje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_guh_eendje"
+					id: "4755487C2AD92018"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755481FF8964D45"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 20.5d
+			y: 6.5625d
+			dependencies: ["4755480D2FDB1691"]
+		}
+		{
+			id: "475548515437EC81"
+			icon: {
+				id: "minecraft:feather"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/waterdiertjes_rijtje"
+					id: "475548A038BC21DE"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548614522D7C0"
+					type: "item"
+					item: {
+						count: 1
+						id: "minecraft:bread"
+					}
+					count: 4
+				}
+			]
+			x: 20.5d
+			y: 8.0625d
+			dependencies: ["47554817120B5DC8"]
+		}
+		{
+			id: "47554860BE2ED71E"
+			icon: {
+				id: "guhs:knabbelvlindertje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_knabbelvlindertje"
+					id: "475548ADA09D31E7"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554891A0951B57"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 19.0d
+			y: 8.0625d
+			dependencies: ["475548515437EC81"]
+		}
+		{
+			id: "4755487220926D12"
+			icon: {
+				id: "guhs:glimguhtje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_glimguhtje"
+					id: "475548BDFD13327E"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755487B00F71588"
+					type: "item"
+					item: {
+						count: 1
+						id: "minecraft:glow_berries"
+					}
+					count: 4
+				}
+			]
+			x: 17.5d
+			y: 8.0625d
+			dependencies: ["47554860BE2ED71E"]
+		}
+		{
+			id: "47554859A4CE6A13"
+			icon: {
+				id: "guhs:lieveheersbeestje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_lieveheersbeestje"
+					id: "4755488C829C8BE5"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755485B1E485D48"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+			]
+			x: 16.0d
+			y: 8.0625d
+			dependencies: ["4755487220926D12"]
+		}
+		{
+			id: "4755488D03CD09AE"
+			icon: {
+				id: "guhs:guh_bloempot"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/waterdiertjes_tuinhulp"
+					id: "475548B1F13C5AA2"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554823A775D563"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:knabbelzaadjes"
+					}
+					count: 8
+				}
+			]
+			x: 14.5d
+			y: 8.0625d
+			dependencies: ["47554859A4CE6A13"]
+		}
+		{
+			id: "4755488377F25CF2"
+			icon: {
+				id: "guhs:pluisegeltje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_pluisegeltje"
+					id: "4755487BB35C212E"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548953EEB06D6"
+					type: "item"
+					item: {
+						count: 1
+						id: "minecraft:sweet_berries"
+					}
+					count: 8
+				}
+				{
+					id: "475548B25EFE1A8E"
+					type: "xp"
+					xp: 50
+				}
+			]
+			x: 0.0d
+			y: 12.025d
+			dependencies: ["4755482B9953E643"]
+			hide_dependency_lines: true
+			shape: "gear"
+		}
+		{
+			id: "475548CF6678C210"
+			icon: {
+				id: "minecraft:sweet_berries"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/landdiertjes_egeltje_tam"
+					id: "4755487A71EF0B81"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755484CBA6CCAA4"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 12
+				}
+				{
+					id: "47554837DEDF1CCD"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 1.5d
+			y: 12.025d
+			dependencies: ["4755488377F25CF2"]
+		}
+		{
+			id: "475548B8B562CFAB"
+			icon: {
+				id: "guhs:guh_konijntje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_guh_konijntje"
+					id: "4755486032D3B209"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755480E99C24623"
+					type: "item"
+					item: {
+						count: 1
+						id: "minecraft:carrot"
+					}
+					count: 8
+				}
+				{
+					id: "4755488C765CBC10"
+					type: "xp"
+					xp: 50
+				}
+			]
+			x: 3.0d
+			y: 12.025d
+			dependencies: ["475548CF6678C210"]
+		}
+		{
+			id: "4755489DF6BE86B7"
+			icon: {
+				id: "minecraft:carrot"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/landdiertjes_konijntje_tam"
+					id: "475548E29EE7AC1E"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548856FBA7005"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 12
+				}
+				{
+					id: "475548E892E82282"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 4.5d
+			y: 12.025d
+			dependencies: ["475548B8B562CFAB"]
+		}
+		{
+			id: "475548EFC02D2539"
+			icon: {
+				id: "guhs:pluiseekhoorntje_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_pluiseekhoorntje"
+					id: "475548F671674C5E"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554804B1E1D010"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+				{
+					id: "475548C1A564326E"
+					type: "xp"
+					xp: 50
+				}
+			]
+			x: 6.0d
+			y: 12.025d
+			dependencies: ["4755489DF6BE86B7"]
+		}
+		{
+			id: "4755486F6952FBD8"
+			icon: {
+				id: "guhs:kaas_knabbels"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/landdiertjes_eekhoorntje_tam"
+					id: "475548BD4F84A2A7"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548A338F165C7"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 12
+				}
+				{
+					id: "47554890B990BECF"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 7.5d
+			y: 12.025d
+			dependencies: ["475548EFC02D2539"]
+		}
+		{
+			id: "475548611E66F011"
+			icon: {
+				id: "guhs:pluiseekhoorntje_item"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/landdiertjes_schouder"
+					id: "4755487D8DCBE78F"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548A098763B58"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 8
+				}
+				{
+					id: "4755485E050FEF6B"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 9.0d
+			y: 12.025d
+			dependencies: ["4755486F6952FBD8"]
+		}
+		{
+			id: "475548C0DE88AF15"
+			icon: {
+				id: "minecraft:rooted_dirt"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/landdiertjes_voorraadje"
+					id: "475548FCB982A99D"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755481C522BD96A"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:gefrituurde_kaasknabbels"
+					}
+					count: 2
+				}
+				{
+					id: "475548D63CD25032"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 9.0d
+			y: 13.525d
+			dependencies: ["475548611E66F011"]
+		}
+		{
+			id: "47554839B7E6CC4B"
+			icon: {
+				id: "guhs:shuckle_spawn_egg"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:quest/seen_shuckle"
+					id: "475548330A18C0D1"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755487CB9EEEF2B"
+					type: "item"
+					item: {
+						count: 1
+						id: "minecraft:sweet_berries"
+					}
+					count: 8
+				}
+				{
+					id: "47554807D7F37C1C"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 7.5d
+			y: 13.525d
+			dependencies: ["475548C0DE88AF15"]
+			shape: "circle"
+		}
+		{
+			id: "47554820A8DACCCA"
+			icon: {
+				id: "minecraft:glow_berries"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/landdiertjes_shuckle_tam"
+					id: "475548148C76860A"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "4755482DB7B449F8"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 16
+				}
+				{
+					id: "475548EFC37ACFB6"
+					type: "xp"
+					xp: 150
+				}
+			]
+			x: 6.0d
+			y: 13.525d
+			dependencies: ["47554839B7E6CC4B"]
+		}
+		{
+			id: "475548C36E32D5EC"
+			icon: {
+				id: "guhs:landdiertjes_bessensapje"
+			}
+			tasks: [
+				{
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:landdiertjes_bessensapje"
+					}
+					id: "4755483A1E77AB2D"
+				}
+			]
+			rewards: [
+				{
+					id: "47554831EAD27D83"
+					type: "item"
+					item: {
+						count: 1
+						id: "minecraft:sweet_berries"
+					}
+					count: 12
+				}
+				{
+					id: "4755480C64B08B93"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 4.5d
+			y: 13.525d
+			dependencies: ["47554820A8DACCCA"]
+		}
+		{
+			id: "47554841F37BCBF6"
+			icon: {
+				id: "guhs:landdiertjes_guhsteentje"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/landdiertjes_polijsten"
+					id: "4755484B98965F9D"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554846FF514B67"
+					type: "item"
+					item: {
+						count: 1
+						id: "minecraft:cobblestone"
+					}
+					count: 32
+				}
+				{
+					id: "475548905C42B6AA"
+					type: "xp"
+					xp: 150
+				}
+			]
+			x: 3.0d
+			y: 13.525d
+			dependencies: ["475548C36E32D5EC"]
+		}
+		{
+			id: "47554815372DBB2C"
+			icon: {
+				id: "guhs:guhhuisje_klein"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/landdiertjes_huisje"
+					id: "475548CB6FABF49C"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "475548B1631AE344"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 12
+				}
+				{
+					id: "475548C72E5603C6"
+					type: "xp"
+					xp: 100
+				}
+			]
+			x: 1.5d
+			y: 13.525d
+			dependencies: ["47554841F37BCBF6"]
+		}
+		{
+			id: "47554864F89787A7"
+			icon: {
+				id: "minecraft:cake"
+			}
+			tasks: [
+				{
+					type: "advancement"
+					advancement: "guhs:diertjes/landdiertjes_alle"
+					id: "47554890D1F931B0"
+					criterion: ""
+				}
+			]
+			rewards: [
+				{
+					id: "47554894D1CA31B0"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:gouden_kaasknabbel"
+					}
+				}
+				{
+					id: "475548ACF97B0753"
+					type: "item"
+					item: {
+						count: 1
+						id: "guhs:kaas_knabbels"
+					}
+					count: 24
+				}
+				{
+					id: "47554892A9339F79"
+					type: "xp"
+					xp: 300
+				}
+			]
+			x: 0.0d
+			y: 13.525d
+			dependencies: ["47554815372DBB2C"]
+			shape: "gear"
+		}
+	]
+}

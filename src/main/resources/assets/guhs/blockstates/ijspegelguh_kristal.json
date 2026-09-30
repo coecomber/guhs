@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "guhs:block/ijspegelguh_kristal"
+    },
+    "facing=down": {
+      "model": "guhs:block/ijspegelguh_kristal",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "guhs:block/ijspegelguh_kristal",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/ijspegelguh_kristal",
+      "x": 90,
+      "y": 180
+    },
+    "facing=east": {
+      "model": "guhs:block/ijspegelguh_kristal",
+      "x": 90,
+      "y": 90
+    },
+    "facing=west": {
+      "model": "guhs:block/ijspegelguh_kristal",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,half=lower": {
+      "model": "guhs:block/sneeuwpopguh_onder"
+    },
+    "facing=north,half=upper": {
+      "model": "guhs:block/sneeuwpopguh_boven"
+    },
+    "facing=east,half=lower": {
+      "model": "guhs:block/sneeuwpopguh_onder",
+      "y": 90
+    },
+    "facing=east,half=upper": {
+      "model": "guhs:block/sneeuwpopguh_boven",
+      "y": 90
+    },
+    "facing=south,half=lower": {
+      "model": "guhs:block/sneeuwpopguh_onder",
+      "y": 180
+    },
+    "facing=south,half=upper": {
+      "model": "guhs:block/sneeuwpopguh_boven",
+      "y": 180
+    },
+    "facing=west,half=lower": {
+      "model": "guhs:block/sneeuwpopguh_onder",
+      "y": 270
+    },
+    "facing=west,half=upper": {
+      "model": "guhs:block/sneeuwpopguh_boven",
+      "y": 270
+    }
+  }
+}

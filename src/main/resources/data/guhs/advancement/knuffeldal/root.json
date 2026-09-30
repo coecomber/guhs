@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:knuffelsteen_gezicht"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.root.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "background": "minecraft:block/pink_concrete_powder"
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "guhs:guhmension"
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "guhs:guhmension/find_guh_kasteel",
+  "display": {
+    "icon": {
+      "id": "guhs:koning_kroon"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.koning_pakje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.koning_pakje.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:koning_kroon"
+          },
+          {
+            "items": "guhs:koning_mantel"
+          },
+          {
+            "items": "guhs:koning_ketting"
+          }
+        ]
+      }
+    }
+  }
+}

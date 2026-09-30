@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "eieren=0": {
+      "model": "guhs:block/kippennestje_0"
+    },
+    "eieren=1": {
+      "model": "guhs:block/kippennestje_1"
+    },
+    "eieren=2": {
+      "model": "guhs:block/kippennestje_2"
+    },
+    "eieren=3": {
+      "model": "guhs:block/kippennestje_3"
+    }
+  }
+}

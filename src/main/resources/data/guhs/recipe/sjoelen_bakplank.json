@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SB",
+    "BS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:birch_slab"
+    },
+    "B": {
+      "item": "minecraft:honeycomb"
+    }
+  },
+  "result": {
+    "id": "guhs:sjoelen_bakplank",
+    "count": 4
+  }
+}

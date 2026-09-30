@@ -1,0 +1,30 @@
+{
+  "parent": "guhs:barbecuether/binnen",
+  "display": {
+    "icon": {
+      "id": "guhs:block_of_kaasknabbels"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.grillpaleis.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.grillpaleis.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": "guhs:mika_grillpaleis"
+          }
+        }
+      }
+    }
+  }
+}

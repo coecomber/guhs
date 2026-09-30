@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:ore",
+  "config": {
+    "size": 3,
+    "discard_chance_on_air_exposure": 0.0,
+    "targets": [
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:pink_wool"
+        },
+        "state": {
+          "Name": "minecraft:crying_obsidian"
+        }
+      },
+      {
+        "target": {
+          "predicate_type": "minecraft:block_match",
+          "block": "minecraft:magenta_wool"
+        },
+        "state": {
+          "Name": "minecraft:crying_obsidian"
+        }
+      }
+    ]
+  }
+}

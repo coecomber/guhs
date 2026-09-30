@@ -1,0 +1,35 @@
+{
+  "parent": "guhs:guhmension/kaasmijn_goud",
+  "display": {
+    "icon": {
+      "id": "guhs:kaasmijn_helm"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.kaasmijn_mijnwerker.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.kaasmijn_mijnwerker.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:kaasmijn_helm"
+          },
+          {
+            "items": "guhs:kaasmijn_overall"
+          },
+          {
+            "items": "guhs:kaasmijn_zakdoek"
+          }
+        ]
+      }
+    }
+  }
+}

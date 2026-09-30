@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:guhhuisje_medium"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.huisje_vol.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.huisje_vol.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:lieve_vadsjes/huisje_gebouwd"
+}

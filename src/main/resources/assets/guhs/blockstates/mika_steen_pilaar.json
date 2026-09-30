@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/mika_steen_pilaar"
+    },
+    "axis=x": {
+      "model": "guhs:block/mika_steen_pilaar_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=z": {
+      "model": "guhs:block/mika_steen_pilaar_horizontal",
+      "x": 90
+    }
+  }
+}

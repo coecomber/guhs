@@ -1,0 +1,31 @@
+{
+  "variants": {
+    "hole=1": {
+      "model": "guhs:block/golfbaan_hole_1"
+    },
+    "hole=2": {
+      "model": "guhs:block/golfbaan_hole_2"
+    },
+    "hole=3": {
+      "model": "guhs:block/golfbaan_hole_3"
+    },
+    "hole=4": {
+      "model": "guhs:block/golfbaan_hole_4"
+    },
+    "hole=5": {
+      "model": "guhs:block/golfbaan_hole_5"
+    },
+    "hole=6": {
+      "model": "guhs:block/golfbaan_hole_6"
+    },
+    "hole=7": {
+      "model": "guhs:block/golfbaan_hole_7"
+    },
+    "hole=8": {
+      "model": "guhs:block/golfbaan_hole_8"
+    },
+    "hole=9": {
+      "model": "guhs:block/golfbaan_hole_9"
+    }
+  }
+}

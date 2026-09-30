@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/knuffelgras",
+        "y": 0
+      },
+      {
+        "model": "guhs:block/knuffelgras",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/knuffelgras",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/knuffelgras",
+        "y": 270
+      }
+    ]
+  }
+}

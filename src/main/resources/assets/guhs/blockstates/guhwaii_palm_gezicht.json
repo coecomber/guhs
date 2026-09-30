@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,knipoog=false": {
+      "model": "guhs:block/guhwaii_palm_gezicht"
+    },
+    "facing=north,knipoog=true": {
+      "model": "guhs:block/guhwaii_palm_gezicht_knipoog"
+    },
+    "facing=east,knipoog=false": {
+      "model": "guhs:block/guhwaii_palm_gezicht",
+      "y": 90
+    },
+    "facing=east,knipoog=true": {
+      "model": "guhs:block/guhwaii_palm_gezicht_knipoog",
+      "y": 90
+    },
+    "facing=south,knipoog=false": {
+      "model": "guhs:block/guhwaii_palm_gezicht",
+      "y": 180
+    },
+    "facing=south,knipoog=true": {
+      "model": "guhs:block/guhwaii_palm_gezicht_knipoog",
+      "y": 180
+    },
+    "facing=west,knipoog=false": {
+      "model": "guhs:block/guhwaii_palm_gezicht",
+      "y": 270
+    },
+    "facing=west,knipoog=true": {
+      "model": "guhs:block/guhwaii_palm_gezicht_knipoog",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "hatch=0": {
+      "model": "guhs:block/enderguh_ei_0"
+    },
+    "hatch=1": {
+      "model": "guhs:block/enderguh_ei_1"
+    },
+    "hatch=2": {
+      "model": "guhs:block/enderguh_ei_2"
+    }
+  }
+}

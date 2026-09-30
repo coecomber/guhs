@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/guhwaii_palm_blad"
+      },
+      {
+        "model": "guhs:block/guhwaii_palm_blad",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/guhwaii_palm_blad",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/guhwaii_palm_blad",
+        "y": 270
+      }
+    ]
+  }
+}

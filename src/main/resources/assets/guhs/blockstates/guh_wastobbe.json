@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,vulling=leeg": {
+      "model": "guhs:block/guh_wastobbe"
+    },
+    "facing=north,vulling=water": {
+      "model": "guhs:block/guh_wastobbe_water"
+    },
+    "facing=north,vulling=schuim": {
+      "model": "guhs:block/guh_wastobbe_schuim"
+    },
+    "facing=east,vulling=leeg": {
+      "model": "guhs:block/guh_wastobbe",
+      "y": 90
+    },
+    "facing=east,vulling=water": {
+      "model": "guhs:block/guh_wastobbe_water",
+      "y": 90
+    },
+    "facing=east,vulling=schuim": {
+      "model": "guhs:block/guh_wastobbe_schuim",
+      "y": 90
+    },
+    "facing=south,vulling=leeg": {
+      "model": "guhs:block/guh_wastobbe",
+      "y": 180
+    },
+    "facing=south,vulling=water": {
+      "model": "guhs:block/guh_wastobbe_water",
+      "y": 180
+    },
+    "facing=south,vulling=schuim": {
+      "model": "guhs:block/guh_wastobbe_schuim",
+      "y": 180
+    },
+    "facing=west,vulling=leeg": {
+      "model": "guhs:block/guh_wastobbe",
+      "y": 270
+    },
+    "facing=west,vulling=water": {
+      "model": "guhs:block/guh_wastobbe_water",
+      "y": 270
+    },
+    "facing=west,vulling=schuim": {
+      "model": "guhs:block/guh_wastobbe_schuim",
+      "y": 270
+    }
+  }
+}

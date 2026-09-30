@@ -1,0 +1,16 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:guh_sea",
+    "guhs:diepe_guhzee",
+    "guhs:guhwaii"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:zeemeeuwtje",
+      "weight": 12,
+      "minCount": 2,
+      "maxCount": 4
+    }
+  ]
+}

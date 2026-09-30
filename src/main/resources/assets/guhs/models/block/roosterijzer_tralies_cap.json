@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/iron_bars_cap",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "particle": "guhs:block/roosterijzer_tralies",
+    "bars": "guhs:block/roosterijzer_tralies",
+    "edge": "guhs:block/roosterijzer_tralies"
+  }
+}

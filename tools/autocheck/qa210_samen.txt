@@ -1,0 +1,102 @@
+# 2.10 visual QA: only the samen section (see qa210.txt)
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+# <samen>
+section samen (2.10): the hartjes clothes, the emote picker (two columns, the hartjes emotes on slot / open), the zielsguh heart by the name, the bff-knuffel
+/gamemode creative
+/execute in minecraft:overworld run tp @s 3100 150 3000
+/forceload add 3080 2980 3120 3024
+/kill @e[type=guhs:guh]
+/kill @e[type=guhs:pieppiepmuisje]
+/kill @e[type=minecraft:item]
+/fill 3085 139 2985 3115 139 3020 minecraft:grass_block
+/fill 3085 140 2985 3115 150 3020 minecraft:air
+/time set noon
+/weather clear
+/summon guhs:guh 3095.5 140 3000.5 {Variant:"normal",ClothesOren:"samen_hartjesspeldje",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh 3098.5 140 3000.5 {Variant:"mint",ClothesBody:"samen_knuffeltruitje",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh 3101.5 140 3000.5 {Variant:"golden",ClothesHead:"samen_zielskroontje",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh 3104.5 140 3000.5 {Variant:"choco",ClothesNeck:"gouden_hartjeshalsbandje",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh 3107.5 140 3000.5 {Variant:"normal",ClothesOren:"samen_hartjesspeldje",ClothesBody:"samen_knuffeltruitje",ClothesHead:"samen_zielskroontje",ClothesNeck:"gouden_hartjeshalsbandje",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/gamemode spectator
+wait 20
+camera 3101.5 142.5 3005.5 180 18
+waitrender 300
+shot samen_kleding
+camera 3101.5 144 2995.5 0 35
+wait 5
+shot samen_kleding_achter
+camera 3107.5 139.8 3003.0 180 22
+wait 5
+shot samen_kleding_dichtbij
+/gamemode creative
+/summon guhs:guh 3100.5 140 3012.5 {Variant:"normal",PersistenceRequired:1b,Rotation:[180f,0f]}
+/tp @s 3100.5 140 3015.5 180 15
+wait 10
+guhmenu 3100 140 3012
+wait 10
+press Emotes
+wait 10
+widgets
+shot gui_samen_emotes_opslot gui
+gui close
+/guhs samen hartjes zielsguh
+wait 10
+guhmenu 3100 140 3012
+wait 10
+press Emotes
+wait 10
+widgets
+shot gui_samen_emotes gui
+gui close
+/tp @s 3100.5 140 3016.5 180 12
+wait 30
+clearchat
+shot samen_zielsguh_naam gui
+/guhs samen bff
+wait 12
+clearchat
+shot samen_bff_knuffel gui
+/summon guhs:guh 3098.5 140 3012.5 {Variant:"mint",PersistenceRequired:1b,Rotation:[180f,0f]}
+guhmenu 3098 140 3012
+gui close
+/tp @s 3099.5 140 3016.5 180 15
+wait 60
+samenspel goed sjoelen
+wait 6
+clearchat
+shot samen_juichen gui
+wait 60
+samenspel mis sjoelen
+wait 8
+clearchat
+shot samen_verdrietje gui
+wait 60
+samenspel record sjoelen
+wait 10
+clearchat
+shot samen_record_dans gui
+wait 60
+kart 3100.5 140 3009.5 180
+wait 5
+perspective front
+look 0 15
+wait 10
+clearchat
+shot samen_kart_voor gui
+perspective back
+look 135 25
+wait 10
+clearchat
+shot samen_kart_achter gui
+perspective first
+/ride @s dismount
+/kill @e[type=guhs:race_guh]
+/gamemode spectator
+/forceload remove 3080 2980 3120 3024
+# </samen>
+quit

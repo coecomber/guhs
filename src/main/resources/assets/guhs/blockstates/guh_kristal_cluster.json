@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "guhs:block/guh_kristal_cluster"
+    },
+    "facing=down": {
+      "model": "guhs:block/guh_kristal_cluster",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "guhs:block/guh_kristal_cluster",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guh_kristal_cluster",
+      "x": 90,
+      "y": 180
+    },
+    "facing=east": {
+      "model": "guhs:block/guh_kristal_cluster",
+      "x": 90,
+      "y": 90
+    },
+    "facing=west": {
+      "model": "guhs:block/guh_kristal_cluster",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

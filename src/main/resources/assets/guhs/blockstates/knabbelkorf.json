@@ -1,0 +1,94 @@
+{
+  "variants": {
+    "facing=north,honey_level=0": {
+      "model": "guhs:block/knabbelkorf"
+    },
+    "facing=north,honey_level=1": {
+      "model": "guhs:block/knabbelkorf"
+    },
+    "facing=north,honey_level=2": {
+      "model": "guhs:block/knabbelkorf"
+    },
+    "facing=north,honey_level=3": {
+      "model": "guhs:block/knabbelkorf"
+    },
+    "facing=north,honey_level=4": {
+      "model": "guhs:block/knabbelkorf"
+    },
+    "facing=north,honey_level=5": {
+      "model": "guhs:block/knabbelkorf_honey"
+    },
+    "facing=east,honey_level=0": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 90
+    },
+    "facing=east,honey_level=1": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 90
+    },
+    "facing=east,honey_level=2": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 90
+    },
+    "facing=east,honey_level=3": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 90
+    },
+    "facing=east,honey_level=4": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 90
+    },
+    "facing=east,honey_level=5": {
+      "model": "guhs:block/knabbelkorf_honey",
+      "y": 90
+    },
+    "facing=south,honey_level=0": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 180
+    },
+    "facing=south,honey_level=1": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 180
+    },
+    "facing=south,honey_level=2": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 180
+    },
+    "facing=south,honey_level=3": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 180
+    },
+    "facing=south,honey_level=4": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 180
+    },
+    "facing=south,honey_level=5": {
+      "model": "guhs:block/knabbelkorf_honey",
+      "y": 180
+    },
+    "facing=west,honey_level=0": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 270
+    },
+    "facing=west,honey_level=1": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 270
+    },
+    "facing=west,honey_level=2": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 270
+    },
+    "facing=west,honey_level=3": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 270
+    },
+    "facing=west,honey_level=4": {
+      "model": "guhs:block/knabbelkorf",
+      "y": 270
+    },
+    "facing=west,honey_level=5": {
+      "model": "guhs:block/knabbelkorf_honey",
+      "y": 270
+    }
+  }
+}

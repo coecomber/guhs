@@ -1,0 +1,30 @@
+{
+  "parent": "guhs:barbecuether/aangebrande_mika",
+  "display": {
+    "icon": {
+      "id": "guhs:gloeister"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.gloeister.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.gloeister.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:gloeister"
+          }
+        ]
+      }
+    }
+  }
+}

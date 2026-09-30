@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:houtskoolsteen",
+    "guhs:as_blok",
+    "guhs:as_aarde",
+    "guhs:roosterijzer",
+    "guhs:roosterijzer_pilaar",
+    "guhs:pindasaus_nylium",
+    "guhs:mosterd_nylium",
+    "guhs:sate_vlees",
+    "guhs:mosterd_blok",
+    "guhs:houtskoolsteen_kaasknabbelerts",
+    "guhs:gloeikool",
+    "minecraft:gravel"
+  ]
+}

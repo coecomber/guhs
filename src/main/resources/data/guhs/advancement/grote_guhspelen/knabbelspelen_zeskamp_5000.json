@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/knabbelspelen_zeskamp",
+  "display": {
+    "icon": {
+      "id": "guhs:knabbelspelen_kaasmelkfles"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.knabbelspelen_zeskamp_5000.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.knabbelspelen_zeskamp_5000.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

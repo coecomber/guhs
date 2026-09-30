@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:kaasfrituursaus_bucket"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.emmer.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.emmer.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:kaasfrituursaus_bucket"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:barbecuether/binnen"
+}

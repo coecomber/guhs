@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/knabbelspelen_blik_zij",
+    "voor": "guhs:block/knabbelspelen_blik_voor",
+    "zij": "guhs:block/knabbelspelen_blik_zij",
+    "boven": "guhs:block/knabbelspelen_blik_boven"
+  },
+  "elements": [
+    {
+      "from": [
+        -5,
+        0,
+        3
+      ],
+      "to": [
+        5,
+        14,
+        13
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            3,
+            1,
+            13,
+            15
+          ],
+          "texture": "#voor"
+        },
+        "south": {
+          "uv": [
+            3,
+            1,
+            13,
+            15
+          ],
+          "texture": "#zij"
+        },
+        "east": {
+          "uv": [
+            3,
+            1,
+            13,
+            15
+          ],
+          "texture": "#zij"
+        },
+        "west": {
+          "uv": [
+            3,
+            1,
+            13,
+            15
+          ],
+          "texture": "#zij"
+        },
+        "up": {
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ],
+          "texture": "#boven"
+        },
+        "down": {
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ],
+          "texture": "#boven"
+        }
+      }
+    }
+  ]
+}

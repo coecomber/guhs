@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/fishing_rod",
+  "textures": {
+    "layer0": "guhs:item/guhvis_hengel_cast"
+  }
+}

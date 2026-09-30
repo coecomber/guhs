@@ -1,0 +1,32 @@
+{
+  "parent": "guhs:guhmension/boomhutdorp_gevonden",
+  "display": {
+    "icon": {
+      "id": "guhs:plukmandje"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.vadswoud_plukker.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.vadswoud_plukker.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:knabbelbessen",
+            "count": {
+              "min": 64
+            }
+          }
+        ]
+      }
+    }
+  }
+}

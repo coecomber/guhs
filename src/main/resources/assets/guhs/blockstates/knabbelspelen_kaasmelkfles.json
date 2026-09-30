@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "vol=false": {
+      "model": "guhs:block/knabbelspelen_kaasmelkfles"
+    },
+    "vol=true": {
+      "model": "guhs:block/knabbelspelen_kaasmelkfles_vol"
+    }
+  }
+}

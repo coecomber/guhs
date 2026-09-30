@@ -1,0 +1,262 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "#all"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        9,
+        11
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            6,
+            9
+          ],
+          "texture": "#all"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            6,
+            9
+          ],
+          "texture": "#all"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            6,
+            9
+          ],
+          "texture": "#all"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            6,
+            9
+          ],
+          "texture": "#all"
+        },
+        "down": {
+          "uv": [
+            0,
+            10,
+            6,
+            16
+          ],
+          "texture": "#all"
+        },
+        "up": {
+          "uv": [
+            0,
+            10,
+            6,
+            16
+          ],
+          "texture": "#all"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        9,
+        4.5
+      ],
+      "to": [
+        11.5,
+        11,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6,
+            0,
+            13,
+            2
+          ],
+          "texture": "#all"
+        },
+        "south": {
+          "uv": [
+            6,
+            0,
+            13,
+            2
+          ],
+          "texture": "#all"
+        },
+        "east": {
+          "uv": [
+            6,
+            0,
+            13,
+            2
+          ],
+          "texture": "#all"
+        },
+        "west": {
+          "uv": [
+            6,
+            0,
+            13,
+            2
+          ],
+          "texture": "#all"
+        },
+        "up": {
+          "uv": [
+            6,
+            3,
+            13,
+            10
+          ],
+          "texture": "#all"
+        },
+        "down": {
+          "uv": [
+            6,
+            3,
+            13,
+            10
+          ],
+          "texture": "#all"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        11,
+        7.5
+      ],
+      "to": [
+        8.5,
+        12,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            0,
+            15,
+            1
+          ],
+          "texture": "#all"
+        },
+        "south": {
+          "uv": [
+            14,
+            0,
+            15,
+            1
+          ],
+          "texture": "#all"
+        },
+        "east": {
+          "uv": [
+            14,
+            0,
+            15,
+            1
+          ],
+          "texture": "#all"
+        },
+        "west": {
+          "uv": [
+            14,
+            0,
+            15,
+            1
+          ],
+          "texture": "#all"
+        },
+        "up": {
+          "uv": [
+            14,
+            0,
+            15,
+            1
+          ],
+          "texture": "#all"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        10,
+        7.5
+      ],
+      "to": [
+        10,
+        15,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            14,
+            2,
+            15,
+            7
+          ],
+          "texture": "#all"
+        },
+        "south": {
+          "uv": [
+            14,
+            2,
+            15,
+            7
+          ],
+          "texture": "#all"
+        },
+        "east": {
+          "uv": [
+            14,
+            2,
+            15,
+            7
+          ],
+          "texture": "#all"
+        },
+        "west": {
+          "uv": [
+            14,
+            2,
+            15,
+            7
+          ],
+          "texture": "#all"
+        },
+        "up": {
+          "uv": [
+            14,
+            2,
+            15,
+            3
+          ],
+          "texture": "#all"
+        }
+      }
+    }
+  ]
+}

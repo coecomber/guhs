@@ -1,0 +1,95 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "pot": "minecraft:block/flower_pot",
+    "aarde": "minecraft:block/dirt",
+    "bloem": "guhs:block/roze_hibiscus",
+    "particle": "minecraft:block/flower_pot"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        5
+      ],
+      "to": [
+        10,
+        5,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        0,
+        4
+      ],
+      "to": [
+        15,
+        1,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#aarde"
+        },
+        "up": {
+          "texture": "#aarde"
+        },
+        "north": {
+          "texture": "#aarde"
+        },
+        "south": {
+          "texture": "#aarde"
+        },
+        "west": {
+          "texture": "#aarde"
+        },
+        "east": {
+          "texture": "#aarde"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        1,
+        6
+      ],
+      "to": [
+        16,
+        6,
+        6.01
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bloem"
+        },
+        "south": {
+          "texture": "#bloem"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "has_precipitation": false,
+  "temperature": 0.8,
+  "downfall": 0.0,
+  "creature_spawn_probability": 0.45,
+  "effects": {
+    "sky_color": 16177546,
+    "fog_color": 15253600,
+    "water_color": 15911244,
+    "water_fog_color": 13146672,
+    "grass_color": 16234187,
+    "foliage_color": 16234187,
+    "mood_sound": {
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 3000,
+      "block_search_extent": 8,
+      "offset": 2.0
+    },
+    "ambient_sound": "minecraft:ambient.cave",
+    "particle": {
+      "options": {
+        "type": "minecraft:dust",
+        "color": [
+          1.0,
+          0.82,
+          0.3
+        ],
+        "scale": 0.7
+      },
+      "probability": 0.004
+    }
+  },
+  "spawners": {
+    "monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": [],
+    "creature": []
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": []
+  },
+  "features": [
+    [
+      "guhs:gatenkaas_holte"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "guhs:guhmension_kaasknabbel_veins",
+      "guhs:vahoege_vads_ore",
+      "guhs:gatenkaas_kaaskorrelerts",
+      "guhs:gatenkaas_knabbeladers",
+      "guhs:gatenkaas_vadserts"
+    ],
+    [],
+    [],
+    [],
+    []
+  ]
+}

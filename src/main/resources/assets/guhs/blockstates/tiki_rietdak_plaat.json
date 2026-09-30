@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/tiki_rietdak_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/tiki_rietdak_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/tiki_rietdak"
+    }
+  }
+}

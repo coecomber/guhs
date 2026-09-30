@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/knuffelbad_glijbaan",
+  "display": {
+    "icon": {
+      "id": "guhs:glijbaan_start"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.knuffelbad_alle_glijbanen.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.knuffelbad_alle_glijbanen.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

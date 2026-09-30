@@ -1,0 +1,144 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/guh_wiegje_hout",
+    "hout": "guhs:block/guh_wiegje_hout",
+    "laken": "guhs:block/guh_wiegje_laken",
+    "hoofdbord": "guhs:block/guh_wiegje_hoofdbord",
+    "baby": "guhs:block/guh_wiegje_baby",
+    "slaapt": "guhs:block/guh_wiegje_baby_slaapt",
+    "vacht": "minecraft:block/pink_wool",
+    "dekentje": "guhs:block/guh_wiegje_dekentje"
+  },
+  "elements": [
+    {
+      "from": [
+        4.5,
+        4.5,
+        7.5
+      ],
+      "to": [
+        11.5,
+        10.5,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#baby"
+        },
+        "south": {
+          "texture": "#vacht"
+        },
+        "up": {
+          "texture": "#vacht"
+        },
+        "west": {
+          "texture": "#vacht"
+        },
+        "east": {
+          "texture": "#vacht"
+        },
+        "down": {
+          "texture": "#vacht"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        10,
+        10
+      ],
+      "to": [
+        6,
+        13,
+        11.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#vacht"
+        },
+        "up": {
+          "texture": "#vacht"
+        },
+        "north": {
+          "texture": "#vacht"
+        },
+        "south": {
+          "texture": "#vacht"
+        },
+        "west": {
+          "texture": "#vacht"
+        },
+        "east": {
+          "texture": "#vacht"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        10,
+        10
+      ],
+      "to": [
+        12,
+        13,
+        11.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#vacht"
+        },
+        "up": {
+          "texture": "#vacht"
+        },
+        "north": {
+          "texture": "#vacht"
+        },
+        "south": {
+          "texture": "#vacht"
+        },
+        "west": {
+          "texture": "#vacht"
+        },
+        "east": {
+          "texture": "#vacht"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        4.5,
+        4.5
+      ],
+      "to": [
+        10.5,
+        7.5,
+        7.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#vacht"
+        },
+        "up": {
+          "texture": "#vacht"
+        },
+        "north": {
+          "texture": "#vacht"
+        },
+        "south": {
+          "texture": "#vacht"
+        },
+        "west": {
+          "texture": "#vacht"
+        },
+        "east": {
+          "texture": "#vacht"
+        }
+      }
+    }
+  ]
+}

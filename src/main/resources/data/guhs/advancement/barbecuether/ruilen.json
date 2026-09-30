@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:barbecuether/grillpaleis",
+  "display": {
+    "icon": {
+      "id": "guhs:vahoege_vads_ingot"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.ruilen.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.ruilen.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

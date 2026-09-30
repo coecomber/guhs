@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/mewtwo_tankonderdeel_1"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "custom_model_data": 1
+      },
+      "model": "guhs:item/mewtwo_tankonderdeel_1"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 2
+      },
+      "model": "guhs:item/mewtwo_tankonderdeel_2"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 3
+      },
+      "model": "guhs:item/mewtwo_tankonderdeel_3"
+    },
+    {
+      "predicate": {
+        "custom_model_data": 4
+      },
+      "model": "guhs:item/mewtwo_tankonderdeel_4"
+    }
+  ]
+}

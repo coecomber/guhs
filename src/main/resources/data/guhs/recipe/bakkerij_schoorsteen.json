@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "B B",
+    "BKB"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:brick"
+    },
+    "K": {
+      "item": "guhs:kaas_knabbels"
+    }
+  },
+  "result": {
+    "id": "guhs:bakkerij_schoorsteen",
+    "count": 1
+  }
+}

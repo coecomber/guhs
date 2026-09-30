@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/mikatrofee"
+    },
+    "facing=east": {
+      "model": "guhs:block/mikatrofee",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/mikatrofee",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/mikatrofee",
+      "y": 270
+    }
+  }
+}

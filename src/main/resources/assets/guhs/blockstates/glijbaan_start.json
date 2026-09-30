@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,glijbaan=roze_trechter": {
+      "model": "guhs:block/glijbaan_start_roze_trechter"
+    },
+    "facing=east,glijbaan=roze_trechter": {
+      "model": "guhs:block/glijbaan_start_roze_trechter",
+      "y": 90
+    },
+    "facing=south,glijbaan=roze_trechter": {
+      "model": "guhs:block/glijbaan_start_roze_trechter",
+      "y": 180
+    },
+    "facing=west,glijbaan=roze_trechter": {
+      "model": "guhs:block/glijbaan_start_roze_trechter",
+      "y": 270
+    },
+    "facing=north,glijbaan=glimtunnel": {
+      "model": "guhs:block/glijbaan_start_glimtunnel"
+    },
+    "facing=east,glijbaan=glimtunnel": {
+      "model": "guhs:block/glijbaan_start_glimtunnel",
+      "y": 90
+    },
+    "facing=south,glijbaan=glimtunnel": {
+      "model": "guhs:block/glijbaan_start_glimtunnel",
+      "y": 180
+    },
+    "facing=west,glijbaan=glimtunnel": {
+      "model": "guhs:block/glijbaan_start_glimtunnel",
+      "y": 270
+    },
+    "facing=north,glijbaan=grote_plons": {
+      "model": "guhs:block/glijbaan_start_grote_plons"
+    },
+    "facing=east,glijbaan=grote_plons": {
+      "model": "guhs:block/glijbaan_start_grote_plons",
+      "y": 90
+    },
+    "facing=south,glijbaan=grote_plons": {
+      "model": "guhs:block/glijbaan_start_grote_plons",
+      "y": 180
+    },
+    "facing=west,glijbaan=grote_plons": {
+      "model": "guhs:block/glijbaan_start_grote_plons",
+      "y": 270
+    }
+  }
+}

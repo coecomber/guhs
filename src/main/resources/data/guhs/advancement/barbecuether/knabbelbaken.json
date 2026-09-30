@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:barbecuether/gloeister",
+  "display": {
+    "icon": {
+      "id": "guhs:knabbelbaken"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.knabbelbaken.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.knabbelbaken.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "variants": {
+    "axis=y": [
+      {
+        "model": "guhs:block/guhbloesem_log",
+        "weight": 4
+      },
+      {
+        "model": "guhs:block/guhbloesem_log",
+        "y": 90,
+        "weight": 4
+      },
+      {
+        "model": "guhs:block/guhbloesem_log_gezicht",
+        "weight": 1
+      },
+      {
+        "model": "guhs:block/guhbloesem_log_gezicht",
+        "y": 180,
+        "weight": 1
+      }
+    ],
+    "axis=z": {
+      "model": "guhs:block/guhbloesem_log_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "guhs:block/guhbloesem_log_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

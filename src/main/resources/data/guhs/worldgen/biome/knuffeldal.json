@@ -1,0 +1,82 @@
+{
+  "has_precipitation": false,
+  "temperature": 0.7,
+  "downfall": 0.4,
+  "creature_spawn_probability": 0.35,
+  "effects": {
+    "sky_color": 16234200,
+    "fog_color": 16770289,
+    "water_color": 16227019,
+    "water_fog_color": 14117542,
+    "grass_color": 16230604,
+    "foliage_color": 16365782,
+    "mood_sound": {
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000,
+      "block_search_extent": 8,
+      "offset": 2.0
+    },
+    "music": {
+      "sound": "minecraft:music.overworld.cherry_grove",
+      "min_delay": 12000,
+      "max_delay": 24000,
+      "replace_current_music": false
+    },
+    "particle": {
+      "options": {
+        "type": "guhs:pluisje"
+      },
+      "probability": 0.006
+    }
+  },
+  "spawners": {
+    "monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": [],
+    "creature": [
+      {
+        "type": "guhs:guh",
+        "weight": 100,
+        "minCount": 3,
+        "maxCount": 5
+      },
+      {
+        "type": "guhs:guh_bee",
+        "weight": 12,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": []
+  },
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "guhs:guhmension_kaasknabbel_veins",
+      "guhs:vahoege_vads_ore"
+    ],
+    [],
+    [],
+    [
+      "guhs:pluizenboom",
+      "guhs:reuze_guhpaddenstoel",
+      "guhs:pluisgras",
+      "guhs:guhpaddenstoeltjes",
+      "guhs:knuffeldal_bloemen",
+      "guhs:knuffeldal_bladerhoopjes"
+    ],
+    []
+  ]
+}

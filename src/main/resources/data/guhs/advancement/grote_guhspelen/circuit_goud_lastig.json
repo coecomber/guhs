@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/circuit_lastig",
+  "display": {
+    "icon": {
+      "id": "minecraft:gold_block"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.circuit_goud_lastig.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.circuit_goud_lastig.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

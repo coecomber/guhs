@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:knuffeldal/root",
+  "display": {
+    "icon": {
+      "id": "guhs:guh_telescoop"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.sterrenwacht_gevonden.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.sterrenwacht_gevonden.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": "guhs:guh_sterrenwacht"
+          }
+        }
+      }
+    }
+  }
+}

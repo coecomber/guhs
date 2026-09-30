@@ -1,0 +1,27 @@
+{
+  "parent": "guhs:guhmension/vadswaker_gewekt",
+  "display": {
+    "icon": {
+      "id": "guhs:vadswaker_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.vadswaker_verslagen.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.vadswaker_verslagen.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "guhs:vadswaker"
+        }
+      }
+    }
+  }
+}

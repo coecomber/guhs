@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:lieve_vadsjes/band_lief",
+  "display": {
+    "icon": {
+      "id": "guhs:samen_hartjesspeldje"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_beloning_lief.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_beloning_lief.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

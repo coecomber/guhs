@@ -1,0 +1,15 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:guh_sea",
+    "guhs:kaasmoeras"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:guhxolotl",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 3
+    }
+  ]
+}

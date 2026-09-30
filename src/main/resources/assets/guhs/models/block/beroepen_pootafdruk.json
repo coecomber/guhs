@@ -1,0 +1,26 @@
+{
+  "textures": {
+    "poot": "guhs:block/beroepen_pootafdruk",
+    "particle": "guhs:block/beroepen_pootafdruk"
+  },
+  "render_type": "minecraft:cutout",
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        0.25,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#poot"
+        }
+      }
+    }
+  ]
+}

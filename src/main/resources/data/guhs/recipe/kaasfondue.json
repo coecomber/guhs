@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:bowl"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    },
+    {
+      "item": "minecraft:milk_bucket"
+    }
+  ],
+  "result": {
+    "id": "guhs:kaasfondue",
+    "count": 1
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/nether_portal_ns",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "particle": "guhs:block/barbecuether_portaal",
+    "portal": "guhs:block/barbecuether_portaal"
+  }
+}

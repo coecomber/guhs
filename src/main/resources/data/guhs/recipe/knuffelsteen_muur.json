@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:knuffelsteen"
+    }
+  },
+  "result": {
+    "id": "guhs:knuffelsteen_muur",
+    "count": 6
+  }
+}

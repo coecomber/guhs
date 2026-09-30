@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W W",
+    "WWW"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:pink_wool"
+    }
+  },
+  "result": {
+    "id": "guhs:pink_zitzak",
+    "count": 1
+  }
+}

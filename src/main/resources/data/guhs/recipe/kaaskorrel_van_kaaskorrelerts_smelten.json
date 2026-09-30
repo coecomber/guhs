@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "blocks",
+  "ingredient": {
+    "item": "guhs:kaaskorrelerts"
+  },
+  "result": {
+    "id": "guhs:kaaskorrel"
+  },
+  "experience": 0.7,
+  "cookingtime": 200
+}

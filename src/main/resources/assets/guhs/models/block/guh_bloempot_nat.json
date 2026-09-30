@@ -1,0 +1,126 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/guh_bloempot_zijkant",
+    "kant": "guhs:block/guh_bloempot_zijkant",
+    "voor": "guhs:block/guh_bloempot_voorkant",
+    "aarde": "guhs:block/tuin_aarde_nat"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        6,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor",
+          "uv": [
+            3,
+            6,
+            13,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#kant"
+        },
+        "west": {
+          "texture": "#kant"
+        },
+        "east": {
+          "texture": "#kant"
+        },
+        "down": {
+          "texture": "#kant"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        6,
+        2.5
+      ],
+      "to": [
+        13.5,
+        8,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kant"
+        },
+        "south": {
+          "texture": "#kant"
+        },
+        "west": {
+          "texture": "#kant"
+        },
+        "east": {
+          "texture": "#kant"
+        },
+        "down": {
+          "texture": "#kant"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        8,
+        2.5
+      ],
+      "to": [
+        13.5,
+        8,
+        3.5
+      ],
+      "faces": {
+        "up": {
+          "texture": "#kant"
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        8,
+        12.5
+      ],
+      "to": [
+        13.5,
+        8,
+        13.5
+      ],
+      "faces": {
+        "up": {
+          "texture": "#kant"
+        }
+      }
+    },
+    {
+      "from": [
+        3.5,
+        7.5,
+        3.5
+      ],
+      "to": [
+        12.5,
+        7.5,
+        12.5
+      ],
+      "faces": {
+        "up": {
+          "texture": "#aarde"
+        }
+      }
+    }
+  ]
+}

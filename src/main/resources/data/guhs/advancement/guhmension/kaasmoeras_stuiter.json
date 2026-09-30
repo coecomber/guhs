@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:guhmension/find_kaasmoeras",
+  "display": {
+    "icon": {
+      "id": "guhs:borrelende_kaassaus"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.kaasmoeras_stuiter.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.kaasmoeras_stuiter.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

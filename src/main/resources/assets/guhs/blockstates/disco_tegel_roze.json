@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "guhs:block/disco_tegel_roze"
+    },
+    "lit=true": {
+      "model": "guhs:block/disco_tegel_roze_lit"
+    }
+  }
+}

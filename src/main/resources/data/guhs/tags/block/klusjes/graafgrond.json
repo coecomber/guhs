@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:grass_block",
+    "minecraft:dirt",
+    "minecraft:coarse_dirt",
+    "minecraft:podzol",
+    "minecraft:rooted_dirt",
+    "minecraft:mycelium",
+    "minecraft:sand",
+    "minecraft:red_sand",
+    "minecraft:moss_block",
+    "guhs:kaasknabbel_dirt",
+    "guhs:knuffelgras",
+    "guhs:modderig_kaasgras",
+    "guhs:rijpgras"
+  ]
+}

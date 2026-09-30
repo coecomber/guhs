@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "PWP"
+  ],
+  "key": {
+    "P": {
+      "tag": "guhs:knus/pluiswol"
+    },
+    "W": {
+      "item": "minecraft:pink_wool"
+    }
+  },
+  "result": {
+    "id": "guhs:knuffeldekentje",
+    "count": 1
+  }
+}

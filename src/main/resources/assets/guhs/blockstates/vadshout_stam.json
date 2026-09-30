@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/vadshout_stam"
+    },
+    "axis=z": {
+      "model": "guhs:block/vadshout_stam_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "guhs:block/vadshout_stam_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

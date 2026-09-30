@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S  ",
+    "SS ",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:gatenkaas_stenen"
+    }
+  },
+  "result": {
+    "id": "guhs:gatenkaas_stenen_trap",
+    "count": 4
+  }
+}

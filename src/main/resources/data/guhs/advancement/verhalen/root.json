@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:baltoguh_beeldje"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.root.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/pink_wool.png"
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "guhs:guhmension"
+      }
+    }
+  }
+}

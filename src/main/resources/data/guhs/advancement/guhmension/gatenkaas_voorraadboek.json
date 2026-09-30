@@ -1,0 +1,32 @@
+{
+  "parent": "guhs:guhmension/find_stille_voorraadkelder",
+  "display": {
+    "icon": {
+      "id": "minecraft:written_book"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.gatenkaas_voorraadboek.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.gatenkaas_voorraadboek.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:written_book",
+            "predicates": {
+              "minecraft:custom_data": "{GuhsBoek:\"voorraadkelder\"}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

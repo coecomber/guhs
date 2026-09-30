@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "tag": "guhs:knus/kaasmelk"
+    }
+  ],
+  "result": {
+    "id": "guhs:babyflesje",
+    "count": 1
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:kaaskorst_stenen"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.find_knabbelkelder.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.find_knabbelkelder.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": [
+              "guhs:knabbelkelder"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "parent": "guhs:guheinde/guheinde_oog"
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W W",
+    "WWW"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:yellow_wool"
+    }
+  },
+  "result": {
+    "id": "guhs:yellow_zitzak",
+    "count": 1
+  }
+}

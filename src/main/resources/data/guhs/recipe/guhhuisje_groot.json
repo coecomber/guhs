@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TGW",
+    "WHW",
+    "PBP"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:pink_wool"
+    },
+    "G": {
+      "item": "guhs:guh_kristal"
+    },
+    "H": {
+      "item": "guhs:guhhuisje_medium"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "B": {
+      "item": "guhs:block_of_kaasknabbels"
+    },
+    "T": {
+      "item": "guhs:timmerguh_bouwboekje"
+    }
+  },
+  "result": {
+    "id": "guhs:guhhuisje_groot",
+    "count": 1
+  }
+}

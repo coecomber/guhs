@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=south,oog=false": {
+      "model": "guhs:block/knabbelportaalframe"
+    },
+    "facing=south,oog=true": {
+      "model": "guhs:block/knabbelportaalframe_oog"
+    },
+    "facing=west,oog=false": {
+      "model": "guhs:block/knabbelportaalframe",
+      "y": 90
+    },
+    "facing=west,oog=true": {
+      "model": "guhs:block/knabbelportaalframe_oog",
+      "y": 90
+    },
+    "facing=north,oog=false": {
+      "model": "guhs:block/knabbelportaalframe",
+      "y": 180
+    },
+    "facing=north,oog=true": {
+      "model": "guhs:block/knabbelportaalframe_oog",
+      "y": 180
+    },
+    "facing=east,oog=false": {
+      "model": "guhs:block/knabbelportaalframe",
+      "y": 270
+    },
+    "facing=east,oog=true": {
+      "model": "guhs:block/knabbelportaalframe_oog",
+      "y": 270
+    }
+  }
+}

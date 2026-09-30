@@ -1,0 +1,29 @@
+{
+  "values": [
+    "guhs:guh_fields",
+    "guhs:knabbel_crumbs",
+    "guhs:pink_puffs",
+    "guhs:kaas_flats",
+    "guhs:guh_meadows",
+    "minecraft:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:meadow",
+    "minecraft:flower_forest",
+    "minecraft:forest",
+    "minecraft:birch_forest",
+    "minecraft:cherry_grove",
+    "minecraft:dark_forest",
+    "minecraft:taiga",
+    "minecraft:snowy_plains",
+    "minecraft:savanna",
+    "minecraft:desert",
+    "minecraft:old_growth_birch_forest",
+    "minecraft:grove",
+    "minecraft:windswept_hills",
+    "minecraft:jungle",
+    "minecraft:sparse_jungle",
+    "minecraft:badlands",
+    "minecraft:mushroom_fields",
+    "minecraft:snowy_taiga"
+  ]
+}

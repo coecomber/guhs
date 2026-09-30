@@ -1,0 +1,266 @@
+{
+  "textures": {
+    "zij": "guhs:block/beroepen_mengketel",
+    "voor": "guhs:block/beroepen_mengketel_voor",
+    "top": "guhs:block/beroepen_mengketel_top",
+    "poot": "minecraft:block/pink_terracotta",
+    "lepel": "minecraft:block/stripped_oak_log",
+    "particle": "guhs:block/beroepen_mengketel"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        2,
+        2
+      ],
+      "to": [
+        14,
+        13,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        11,
+        1
+      ],
+      "to": [
+        15,
+        13,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            13,
+            16,
+            15
+          ]
+        },
+        "south": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            13,
+            16,
+            15
+          ]
+        },
+        "east": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            13,
+            16,
+            15
+          ]
+        },
+        "west": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            13,
+            16,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        5,
+        2,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#poot"
+        },
+        "south": {
+          "texture": "#poot"
+        },
+        "east": {
+          "texture": "#poot"
+        },
+        "west": {
+          "texture": "#poot"
+        },
+        "up": {
+          "texture": "#poot"
+        },
+        "down": {
+          "texture": "#poot"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        2,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#poot"
+        },
+        "south": {
+          "texture": "#poot"
+        },
+        "east": {
+          "texture": "#poot"
+        },
+        "west": {
+          "texture": "#poot"
+        },
+        "up": {
+          "texture": "#poot"
+        },
+        "down": {
+          "texture": "#poot"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        0,
+        11
+      ],
+      "to": [
+        5,
+        2,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#poot"
+        },
+        "south": {
+          "texture": "#poot"
+        },
+        "east": {
+          "texture": "#poot"
+        },
+        "west": {
+          "texture": "#poot"
+        },
+        "up": {
+          "texture": "#poot"
+        },
+        "down": {
+          "texture": "#poot"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        0,
+        11
+      ],
+      "to": [
+        13,
+        2,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#poot"
+        },
+        "south": {
+          "texture": "#poot"
+        },
+        "east": {
+          "texture": "#poot"
+        },
+        "west": {
+          "texture": "#poot"
+        },
+        "up": {
+          "texture": "#poot"
+        },
+        "down": {
+          "texture": "#poot"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        10,
+        9
+      ],
+      "to": [
+        11,
+        18,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lepel"
+        },
+        "south": {
+          "texture": "#lepel"
+        },
+        "east": {
+          "texture": "#lepel"
+        },
+        "west": {
+          "texture": "#lepel"
+        },
+        "up": {
+          "texture": "#lepel"
+        },
+        "down": {
+          "texture": "#lepel"
+        }
+      },
+      "rotation": {
+        "origin": [
+          10,
+          10,
+          9
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    }
+  ]
+}

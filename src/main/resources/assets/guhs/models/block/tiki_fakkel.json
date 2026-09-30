@@ -1,0 +1,159 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "guhs:block/tiki_bamboe",
+    "bamboe": "guhs:block/tiki_bamboe",
+    "kom": "guhs:block/tiki_hout_donker",
+    "vlam": "guhs:block/tiki_vlam"
+  },
+  "elements": [
+    {
+      "from": [
+        6.5,
+        0,
+        6.5
+      ],
+      "to": [
+        9.5,
+        13,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bamboe"
+        },
+        "south": {
+          "texture": "#bamboe"
+        },
+        "east": {
+          "texture": "#bamboe"
+        },
+        "west": {
+          "texture": "#bamboe"
+        },
+        "up": {
+          "texture": "#bamboe"
+        },
+        "down": {
+          "texture": "#bamboe"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        12,
+        5
+      ],
+      "to": [
+        11,
+        15,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kom"
+        },
+        "south": {
+          "texture": "#kom"
+        },
+        "east": {
+          "texture": "#kom"
+        },
+        "west": {
+          "texture": "#kom"
+        },
+        "up": {
+          "texture": "#kom"
+        },
+        "down": {
+          "texture": "#kom"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        14.5,
+        8
+      ],
+      "to": [
+        10.5,
+        21,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#vlam",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#vlam",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      },
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      }
+    },
+    {
+      "from": [
+        8,
+        14.5,
+        5.5
+      ],
+      "to": [
+        8,
+        21,
+        10.5
+      ],
+      "faces": {
+        "east": {
+          "texture": "#vlam",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#vlam",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      },
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          8,
+          8,
+          8
+        ]
+      }
+    }
+  ]
+}

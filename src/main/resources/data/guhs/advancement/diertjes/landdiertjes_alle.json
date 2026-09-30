@@ -1,0 +1,76 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:cake"
+    },
+    "title": {
+      "translate": "advancements.guhs.diertjes.landdiertjes_alle.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.diertjes.landdiertjes_alle.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "pluisegeltje": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:pluisegeltje"
+            }
+          }
+        ]
+      }
+    },
+    "guh_konijntje": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:guh_konijntje"
+            }
+          }
+        ]
+      }
+    },
+    "pluiseekhoorntje": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:pluiseekhoorntje"
+            }
+          }
+        ]
+      }
+    },
+    "shuckle": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:shuckle"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:diertjes/landdiertjes_huisje"
+}

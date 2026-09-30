@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/guhxolotl_emmertje_roze"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "guhs:kleur": 0.25
+      },
+      "model": "guhs:item/guhxolotl_emmertje_mint"
+    },
+    {
+      "predicate": {
+        "guhs:kleur": 0.5
+      },
+      "model": "guhs:item/guhxolotl_emmertje_choco"
+    },
+    {
+      "predicate": {
+        "guhs:kleur": 0.75
+      },
+      "model": "guhs:item/guhxolotl_emmertje_wit"
+    },
+    {
+      "predicate": {
+        "guhs:kleur": 1.0
+      },
+      "model": "guhs:item/guhxolotl_emmertje_goud"
+    }
+  ]
+}

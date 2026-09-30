@@ -1,0 +1,145 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/seizoensbloembak_zijkant",
+    "bak": "guhs:block/seizoensbloembak_zijkant",
+    "aarde": "guhs:block/seizoensbloembak_aarde",
+    "plant": "guhs:block/seizoensbloembak_lente",
+    "sneeuw": "guhs:block/seizoensbloembak_sneeuw"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        8,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#bak"
+        },
+        "north": {
+          "texture": "#bak"
+        },
+        "south": {
+          "texture": "#bak"
+        },
+        "west": {
+          "texture": "#bak"
+        },
+        "east": {
+          "texture": "#bak"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        7.5,
+        1
+      ],
+      "to": [
+        15,
+        7.5,
+        15
+      ],
+      "faces": {
+        "up": {
+          "texture": "#aarde"
+        }
+      }
+    },
+    {
+      "from": [
+        0.8,
+        7.5,
+        8
+      ],
+      "to": [
+        15.2,
+        23.5,
+        8
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": 45,
+        "rescale": true
+      },
+      "shade": false,
+      "faces": {
+        "north": {
+          "texture": "#plant",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#plant",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        7.5,
+        0.8
+      ],
+      "to": [
+        8,
+        23.5,
+        15.2
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          8,
+          8
+        ],
+        "axis": "y",
+        "angle": 45,
+        "rescale": true
+      },
+      "shade": false,
+      "faces": {
+        "west": {
+          "texture": "#plant",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#plant",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

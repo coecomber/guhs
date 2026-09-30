@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:guhmension/vadswoud_bezocht",
+  "display": {
+    "icon": {
+      "id": "guhs:vadstouw"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.boomhutdorp_gevonden.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.boomhutdorp_gevonden.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": "guhs:boomhutdorp"
+          }
+        }
+      }
+    }
+  }
+}

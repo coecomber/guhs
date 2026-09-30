@@ -1,0 +1,779 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 3,
+        "max": 6
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:paper",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 8
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:book",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:feather",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:ink_sac",
+          "weight": 2,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "guhs:kaas_knabbels",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 4,
+                "max": 12
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "guhs:boekenbon",
+          "weight": 2
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 1",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.eerste_guh.0\"}",
+                "{\"translate\": \"book.guhs.bieb.eerste_guh.1\"}",
+                "{\"translate\": \"book.guhs.bieb.eerste_guh.2\"}",
+                "{\"translate\": \"book.guhs.bieb.eerste_guh.3\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.eerste_guh.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "1",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"eerste_guh\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 2",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.moeder_vadsig.0\"}",
+                "{\"translate\": \"book.guhs.bieb.moeder_vadsig.1\"}",
+                "{\"translate\": \"book.guhs.bieb.moeder_vadsig.2\"}",
+                "{\"translate\": \"book.guhs.bieb.moeder_vadsig.3\"}",
+                "{\"translate\": \"book.guhs.bieb.moeder_vadsig.4\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.moeder_vadsig.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "2",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"moeder_vadsig\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 3",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.kaasknabbels.0\"}",
+                "{\"translate\": \"book.guhs.bieb.kaasknabbels.1\"}",
+                "{\"translate\": \"book.guhs.bieb.kaasknabbels.2\"}",
+                "{\"translate\": \"book.guhs.bieb.kaasknabbels.3\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.kaasknabbels.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "3",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"kaasknabbels\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 4",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.guhmensie.0\"}",
+                "{\"translate\": \"book.guhs.bieb.guhmensie.1\"}",
+                "{\"translate\": \"book.guhs.bieb.guhmensie.2\"}",
+                "{\"translate\": \"book.guhs.bieb.guhmensie.3\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.guhmensie.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "4",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"guhmensie\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 5",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.mika_oorlog.0\"}",
+                "{\"translate\": \"book.guhs.bieb.mika_oorlog.1\"}",
+                "{\"translate\": \"book.guhs.bieb.mika_oorlog.2\"}",
+                "{\"translate\": \"book.guhs.bieb.mika_oorlog.3\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.mika_oorlog.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "5",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"mika_oorlog\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 6",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.koningskroon.0\"}",
+                "{\"translate\": \"book.guhs.bieb.koningskroon.1\"}",
+                "{\"translate\": \"book.guhs.bieb.koningskroon.2\"}",
+                "{\"translate\": \"book.guhs.bieb.koningskroon.3\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.koningskroon.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "6",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"koningskroon\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 7",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.vahoeg.0\"}",
+                "{\"translate\": \"book.guhs.bieb.vahoeg.1\"}",
+                "{\"translate\": \"book.guhs.bieb.vahoeg.2\"}",
+                "{\"translate\": \"book.guhs.bieb.vahoeg.3\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.vahoeg.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "7",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"vahoeg\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 8",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.roze_maan.0\"}",
+                "{\"translate\": \"book.guhs.bieb.roze_maan.1\"}",
+                "{\"translate\": \"book.guhs.bieb.roze_maan.2\"}",
+                "{\"translate\": \"book.guhs.bieb.roze_maan.3\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.roze_maan.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "8",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"roze_maan\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 9",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.gouden_guh.0\"}",
+                "{\"translate\": \"book.guhs.bieb.gouden_guh.1\"}",
+                "{\"translate\": \"book.guhs.bieb.gouden_guh.2\"}",
+                "{\"translate\": \"book.guhs.bieb.gouden_guh.3\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.gouden_guh.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "9",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"gouden_guh\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 10",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.guhmaag.0\"}",
+                "{\"translate\": \"book.guhs.bieb.guhmaag.1\"}",
+                "{\"translate\": \"book.guhs.bieb.guhmaag.2\"}",
+                "{\"translate\": \"book.guhs.bieb.guhmaag.3\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.guhmaag.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "10",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"guhmaag\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 11",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.slee_kermis.0\"}",
+                "{\"translate\": \"book.guhs.bieb.slee_kermis.1\"}",
+                "{\"translate\": \"book.guhs.bieb.slee_kermis.2\"}",
+                "{\"translate\": \"book.guhs.bieb.slee_kermis.3\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.slee_kermis.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "11",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"slee_kermis\"}"
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:written_book",
+          "functions": [
+            {
+              "function": "minecraft:set_book_cover",
+              "title": "Guhboek 13",
+              "author": "De Bibliothecaris",
+              "generation": 0
+            },
+            {
+              "function": "minecraft:set_written_book_pages",
+              "mode": "replace_all",
+              "pages": [
+                "{\"translate\": \"book.guhs.bieb.guheinde.0\"}",
+                "{\"translate\": \"book.guhs.bieb.guheinde.1\"}",
+                "{\"translate\": \"book.guhs.bieb.guheinde.2\"}",
+                "{\"translate\": \"book.guhs.bieb.guheinde.3\"}",
+                "{\"translate\": \"book.guhs.bieb.guheinde.4\"}"
+              ]
+            },
+            {
+              "function": "minecraft:set_name",
+              "target": "custom_name",
+              "name": {
+                "translate": "book.guhs.bieb.guheinde.title",
+                "italic": false,
+                "color": "#F7B6CB"
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "mode": "replace_all",
+              "lore": [
+                {
+                  "translate": "item.guhs.bieb_boek.lore",
+                  "with": [
+                    "13",
+                    "14"
+                  ],
+                  "color": "gray",
+                  "italic": false
+                }
+              ]
+            },
+            {
+              "function": "minecraft:set_components",
+              "components": {
+                "minecraft:enchantment_glint_override": false
+              }
+            },
+            {
+              "function": "minecraft:set_custom_data",
+              "tag": "{GuhsBoek:\"guheinde\"}"
+            }
+          ]
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.6
+        }
+      ]
+    }
+  ]
+}

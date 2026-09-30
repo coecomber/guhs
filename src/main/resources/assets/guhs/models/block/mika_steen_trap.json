@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "guhs:block/mika_steen",
+    "top": "guhs:block/mika_steen",
+    "side": "guhs:block/mika_steen"
+  }
+}

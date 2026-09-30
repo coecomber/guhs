@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "LWW",
+    "LPS",
+    "L S"
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:ladder"
+    },
+    "W": {
+      "item": "minecraft:pink_wool"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "S": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "result": {
+    "id": "guhs:guh_glijbaantje",
+    "count": 1
+  }
+}

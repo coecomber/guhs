@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "sneeuw=false": {
+      "model": "guhs:block/sneeuwguhspar_naalden"
+    },
+    "sneeuw=true": {
+      "model": "guhs:block/sneeuwguhspar_naalden_sneeuw"
+    }
+  }
+}

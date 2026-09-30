@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:golden_shovel"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.klusjes_alle.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.klusjes_alle.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:lieve_vadsjes/klusjes_oppas"
+}

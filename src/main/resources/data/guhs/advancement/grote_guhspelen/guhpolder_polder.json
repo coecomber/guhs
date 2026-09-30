@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:rijpgras"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.guhpolder_polder.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.guhpolder_polder.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "biomes": "guhs:guhpolder"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:grote_guhspelen/root"
+}

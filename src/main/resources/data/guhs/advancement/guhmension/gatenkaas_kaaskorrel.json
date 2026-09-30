@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:guhmension/find_gatenkaasgrotten",
+  "display": {
+    "icon": {
+      "id": "guhs:kaaskorrel"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.gatenkaas_kaaskorrel.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.gatenkaas_kaaskorrel.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:kaaskorrel"
+          }
+        ]
+      }
+    }
+  }
+}

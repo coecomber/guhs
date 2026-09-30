@@ -1,0 +1,112 @@
+{
+  "has_precipitation": true,
+  "temperature": 0.8,
+  "downfall": 0.9,
+  "creature_spawn_probability": 0.2,
+  "effects": {
+    "sky_color": 13359260,
+    "fog_color": 14278054,
+    "water_color": 10135622,
+    "water_fog_color": 7043628,
+    "grass_color": 10727498,
+    "foliage_color": 9413180,
+    "particle": {
+      "options": {
+        "type": "minecraft:dust",
+        "color": [
+          0.86,
+          0.94,
+          0.36
+        ],
+        "scale": 0.7
+      },
+      "probability": 0.0035
+    },
+    "mood_sound": {
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000,
+      "block_search_extent": 8,
+      "offset": 2.0
+    },
+    "music": {
+      "sound": "minecraft:music.overworld.swamp",
+      "min_delay": 12000,
+      "max_delay": 24000,
+      "replace_current_music": false
+    }
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "guhs:moerasheks_mika",
+        "weight": 2,
+        "minCount": 1,
+        "maxCount": 1
+      }
+    ],
+    "creature": [
+      {
+        "type": "guhs:guh",
+        "weight": 70,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "guhs:kikkerguh",
+        "weight": 45,
+        "minCount": 2,
+        "maxCount": 4
+      }
+    ],
+    "ambient": [
+      {
+        "type": "guhs:kaasmot",
+        "weight": 30,
+        "minCount": 2,
+        "maxCount": 4
+      }
+    ],
+    "water_ambient": [
+      {
+        "type": "guhs:guh_vis",
+        "weight": 6,
+        "minCount": 1,
+        "maxCount": 3
+      }
+    ],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": []
+  },
+  "features": [
+    [],
+    [
+      "guhs:kaasmoeras_poel"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [
+      "guhs:guhmension_kaasknabbel_veins",
+      "guhs:vahoege_vads_ore"
+    ],
+    [],
+    [],
+    [
+      "minecraft:trees_swamp",
+      "guhs:kaasmoeras_kaasriet",
+      "guhs:kaasmoeras_moerasgras",
+      "guhs:kaasmoeras_borrelplekje",
+      "minecraft:patch_waterlily",
+      "minecraft:brown_mushroom_swamp",
+      "minecraft:red_mushroom_swamp"
+    ],
+    []
+  ]
+}

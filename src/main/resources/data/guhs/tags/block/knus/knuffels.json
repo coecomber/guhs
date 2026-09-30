@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:knuffel_normal",
+    "guhs:knuffel_mint",
+    "guhs:knuffel_choco",
+    "guhs:knuffel_snow",
+    "guhs:knuffel_brontosaurus",
+    "guhs:knuffel_golden",
+    "guhs:knuffel_rainbow",
+    "guhs:knuffel_starry",
+    "guhs:knuffel_ghost",
+    "guhs:knuffel_teckel",
+    "guhs:knuffel_brococolief",
+    "guhs:knuffel_ender",
+    "guhs:knuffel_koning",
+    "guhs:knuffel_wolk",
+    "guhs:knuffel_zeemeerguh",
+    "guhs:knuffel_mager",
+    "guhs:knuffel_vahoege_ender",
+    "guhs:knuffel_kaasmoerasguh",
+    "guhs:knuffel_asguh",
+    "guhs:knuffel_pluisguh",
+    "guhs:knuffel_glitter",
+    "guhs:knuffel_pinguh"
+  ]
+}

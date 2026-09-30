@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "ingredient": {
+    "item": "guhs:kaasknabbelsate"
+  },
+  "result": {
+    "id": "guhs:gegrilde_kaasknabbelsate"
+  },
+  "experience": 0.35,
+  "cookingtime": 600
+}

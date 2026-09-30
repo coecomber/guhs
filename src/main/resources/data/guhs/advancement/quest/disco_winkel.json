@@ -1,0 +1,52 @@
+{
+  "criteria": {
+    "disco_glitterpak": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:disco_glitterpak"
+          }
+        ]
+      }
+    },
+    "disco_afro": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:disco_afro"
+          }
+        ]
+      }
+    },
+    "disco_bril": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:disco_bril"
+          }
+        ]
+      }
+    },
+    "disco_koptelefoontje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:disco_koptelefoontje"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "disco_glitterpak",
+      "disco_afro",
+      "disco_bril",
+      "disco_koptelefoontje"
+    ]
+  ]
+}

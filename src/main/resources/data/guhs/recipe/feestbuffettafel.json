@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CCC",
+    "PPP",
+    "P P"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:pink_carpet"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "id": "guhs:feestbuffettafel",
+    "count": 2
+  }
+}

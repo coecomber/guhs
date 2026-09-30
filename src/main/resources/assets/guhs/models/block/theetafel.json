@@ -1,0 +1,181 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/theetafel_kleed",
+    "kleed": "guhs:block/theetafel_kleed",
+    "rand": "guhs:block/theetafel_rand",
+    "poot": "minecraft:block/cherry_planks",
+    "kopje": "minecraft:block/white_terracotta",
+    "pot": "guhs:block/theepotje",
+    "taart": "minecraft:block/cake_side",
+    "taart_top": "minecraft:block/cake_top",
+    "goud": "minecraft:block/gold_block"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        13,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#kleed"
+        },
+        "down": {
+          "texture": "#kleed"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        8,
+        -0.01
+      ],
+      "to": [
+        16,
+        16,
+        -0.01
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        8,
+        16.01
+      ],
+      "to": [
+        16,
+        16,
+        16.01
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        -0.01,
+        8,
+        0
+      ],
+      "to": [
+        -0.01,
+        16,
+        16
+      ],
+      "faces": {
+        "west": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        16.01,
+        8,
+        0
+      ],
+      "to": [
+        16.01,
+        16,
+        16
+      ],
+      "faces": {
+        "west": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        0,
+        6.5
+      ],
+      "to": [
+        9.5,
+        13,
+        9.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#poot"
+        },
+        "up": {
+          "texture": "#poot"
+        },
+        "north": {
+          "texture": "#poot"
+        },
+        "south": {
+          "texture": "#poot"
+        },
+        "west": {
+          "texture": "#poot"
+        },
+        "east": {
+          "texture": "#poot"
+        }
+      }
+    },
+    {
+      "from": [
+        3.5,
+        0,
+        3.5
+      ],
+      "to": [
+        12.5,
+        1.5,
+        12.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#poot"
+        },
+        "up": {
+          "texture": "#poot"
+        },
+        "north": {
+          "texture": "#poot"
+        },
+        "south": {
+          "texture": "#poot"
+        },
+        "west": {
+          "texture": "#poot"
+        },
+        "east": {
+          "texture": "#poot"
+        }
+      }
+    }
+  ]
+}

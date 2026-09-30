@@ -1,0 +1,480 @@
+# 2.10 visual QA (one round): only the 2.10 things. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/qa210.txt -PautocheckTimeout=90
+# (commands: see autocheck.txt; 2.10 extras: samenspel, kart, guhkamer, doolhofstart)
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+
+section 2.10
+# <fundament>
+section fundament (2.10): the Guhdex tab Mijn guhs (example dagboekjes) and a groot Guhhuisje with residents, its screen and the dome
+/gamemode creative
+gui mijnguhs list
+wait 10
+shot gui_mijnguhs_lijst gui
+gui mijnguhs 2
+wait 10
+shot gui_mijnguhs_pagina gui
+gui mijnguhs 3
+wait 10
+shot gui_mijnguhs_baby gui
+scroll 320 250 -6
+wait 5
+shot gui_mijnguhs_baby_scroll gui
+gui mijnguhs 0
+wait 10
+shot gui_mijnguhs_pagina0 gui
+gui mijnguhs 1
+wait 10
+shot gui_mijnguhs_pagina1 gui
+scroll 320 250 -6
+wait 5
+shot gui_mijnguhs_pagina1_scroll gui
+scroll 320 250 -30
+wait 5
+shot gui_mijnguhs_pagina1_eind gui
+gui close
+/execute in minecraft:overworld run tp @s 3000 150 3000
+/forceload add 2960 2960 3040 3040
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/fill 2970 140 2970 3030 147 3030 minecraft:air
+/time set noon
+/setblock 2992 140 3000 guhs:guhhuisje_klein[facing=south]
+/setblock 2998 140 3000 guhs:guhhuisje_medium[facing=south]
+wait 5
+huisje 3008 140 3000
+wait 40
+mouse 1 1
+widgets
+shot gui_huisje_scherm gui
+gui close
+/gamemode spectator
+camera 3002 144 3016 180 10
+waitrender 300
+shot huisjes_voor
+camera 2992.5 141.6 3005 180 10
+wait 10
+shot huisje_klein
+camera 2998.5 142.2 3006.5 180 10
+wait 10
+shot huisje_medium
+camera 3008.5 143.5 3010 180 10
+wait 10
+shot huisje_groot
+camera 3016 150 2992 110 30
+wait 10
+shot huisjes_koepel
+/time set 18000
+wait 200
+shot huisjes_nacht
+camera 3008.5 143.5 3008 180 20
+wait 10
+shot huisje_groot_nacht
+/time set noon
+/forceload remove 2960 2960 3040 3040
+# </fundament>
+
+# <klusjes>
+section klusjes (2.10): a groot Guhhuisje with everything for the ten chores around it: the huisje screen with the chore tips, the yard by day, the guhlampjes in the evening
+/gamemode creative
+/execute in minecraft:overworld run tp @s 3100 150 3000
+/forceload add 3060 2960 3140 3040
+/fill 3080 139 2980 3130 139 3020 minecraft:grass_block
+/fill 3080 140 2980 3130 150 3020 minecraft:air
+/time set 3000
+/setblock 3110 140 3001 minecraft:chest[facing=south]
+/setblock 3112 140 2998 guhs:bank_guh
+/fill 3100 139 3004 3103 139 3005 minecraft:farmland[moisture=7]
+/fill 3100 139 3006 3103 139 3006 minecraft:water
+/fill 3100 140 3004 3103 140 3005 minecraft:wheat[age=7]
+/setblock 3105 140 3004 guhs:guh_moestuinbak[plant=knabbelplantje,groei=3]
+/setblock 3106 140 3004 guhs:guh_moestuinbak[plant=theekruid,groei=1]
+/fill 3113 139 3004 3116 139 3006 minecraft:water
+/setblock 3096 140 2996 guhs:guh_molentje[facing=east]
+/setblock 3096 140 2998 guhs:knabbeloven[facing=east]
+/setblock 3098 140 3008 guhs:knabbelbessenstruik[age=3]
+/setblock 3099 140 3008 minecraft:sweet_berry_bush[age=3]
+/setblock 3101 140 3009 guhs:kaasbloem
+/setblock 3102 140 3009 guhs:roze_guhbloem
+/setblock 3118 140 2996 guhs:kippennestje[eieren=2]
+/setblock 3118 140 2999 guhs:knabbelkorf[facing=west,honey_level=5]
+/setblock 3104 140 3010 guhs:klusjes_guhlampje[facing=south,lit=false]
+/setblock 3112 140 3010 guhs:klusjes_guhlampje[facing=south,lit=false]
+/setblock 3108 140 3012 guhs:klusjes_guhlampje[facing=south,lit=true]
+/summon guhs:guhschaapje 3116 140 3002
+/summon guhs:guhkoe 3114 140 2994
+wait 5
+huisje 3108 140 3000
+wait 40
+mouse 1 1
+widgets
+shot gui_huisje_klusjes gui
+press Klus-area: aan
+wait 5
+shot gui_huisje_koepel_uit gui
+gui close
+/gamemode spectator
+camera 3108 146 3018 180 20
+waitrender 300
+shot klusjes_erf
+wait 400
+shot klusjes_erf_bezig
+camera 3100 143 3012 200 15
+wait 10
+shot klusjes_lampjes_dag
+/time set 12000
+wait 300
+shot klusjes_lampjes_avond
+/time set noon
+/forceload remove 3060 2960 3140 3040
+# </klusjes>
+
+# <speelgoed>
+section speelgoed (2.10): the toys (glijbaantje, wip, schommel, pluizige tunnel, knabbelbal) with tamed guhs playing, the Guhkamer door and the Guhbel screen
+/gamemode creative
+/execute in minecraft:overworld run tp @s 3100 150 3000
+/forceload add 3080 2980 3120 3020
+/fill 3084 139 2984 3116 139 3016 minecraft:grass_block
+/fill 3084 140 2984 3116 150 3016 minecraft:air
+# (not noon: 6000-8000 is the guhs' daily nap, dutje)
+/time set 3000
+/setblock 3092 140 3000 guhs:guh_glijbaantje[facing=south]
+/setblock 3098 140 3000 guhs:guh_wip[facing=east]
+/setblock 3105 140 3000 guhs:guh_schommel[facing=south]
+/setblock 3092 140 3008 guhs:pluizige_tunnel[axis=x,west=ingang,east=open,north=dicht,south=dicht]
+/setblock 3093 140 3008 guhs:pluizige_tunnel[axis=x,west=open,east=open,north=dicht,south=dicht]
+/setblock 3094 140 3008 guhs:pluizige_tunnel[axis=x,west=open,east=dicht,north=dicht,south=open]
+/setblock 3094 140 3009 guhs:pluizige_tunnel[axis=z,north=open,south=ingang,east=dicht,west=dicht]
+/setblock 3110 140 3008 guhs:guhkamer_deur[facing=south,half=lower,kant=maag]
+/setblock 3110 141 3008 guhs:guhkamer_deur[facing=south,half=upper,kant=maag]
+/summon guhs:knabbelbal 3100.5 140 3008.5
+/summon guhs:guh 3096 140 3005 {NoAI:0b}
+/summon guhs:guh 3100 140 3004 {NoAI:0b}
+/summon guhs:guh 3104 140 3005 {NoAI:0b}
+guhmenu 3096 140 3005
+gui close
+guhmenu 3100 140 3004
+gui close
+guhmenu 3104 140 3005
+gui close
+/tp @s 3100 141 3012
+/gamemode spectator
+camera 3100 146 3018 180 20
+waitrender 300
+shot speelgoed_speeltuin
+# (guhs only play when a player - not a spectator - is close by and only now and then: stand on the grass in creative,
+#  and let them pick a toy right away like the speelgoed gametests do)
+/gamemode creative
+speelaltijd 3100 140 3004 8
+camera 3100.5 140 3014.5 180 12
+wait 200
+shot speelgoed_spelen
+wait 200
+shot speelgoed_spelen2
+wait 200
+shot speelgoed_spelen3
+/gamemode spectator
+camera 3095 144 3013 200 40
+wait 10
+shot speelgoed_tunnel
+camera 3110 142 3013 180 5
+wait 10
+shot guhkamer_deur
+/gamemode creative
+/item replace entity @s weapon.mainhand with guhs:guhbel
+useitem 2
+wait 10
+mouse 1 1
+widgets
+shot gui_guhbel gui
+gui close
+/gamemode creative
+/tp @s 3100 141 3006
+wait 5
+guhkamer stuur 2
+wait 20
+guhkamer binnen
+wait 60
+waitrender 300
+look 180 15
+wait 20
+shot guhkamer_binnen
+look 0 20
+wait 10
+shot guhkamer_binnen_deur
+/item replace entity @s weapon.mainhand with guhs:guhbel
+useitem 2
+wait 10
+mouse 1 1
+widgets
+shot gui_guhbel_kamer gui
+gui close
+/execute in minecraft:overworld run tp @s 3100 141 3012
+wait 40
+/forceload remove 3080 2980 3120 3020
+# </speelgoed>
+
+# <samen>
+section samen (2.10): the hartjes clothes, the emote picker (two columns, the hartjes emotes on slot / open), the zielsguh heart by the name, the bff-knuffel
+/gamemode creative
+/execute in minecraft:overworld run tp @s 3100 150 3000
+/forceload add 3080 2980 3120 3024
+/kill @e[type=guhs:guh]
+/kill @e[type=guhs:pieppiepmuisje]
+/kill @e[type=minecraft:item]
+/fill 3085 139 2985 3115 139 3020 minecraft:grass_block
+/fill 3085 140 2985 3115 150 3020 minecraft:air
+/time set noon
+/weather clear
+/summon guhs:guh 3095.5 140 3000.5 {Variant:"normal",ClothesOren:"samen_hartjesspeldje",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh 3098.5 140 3000.5 {Variant:"mint",ClothesBody:"samen_knuffeltruitje",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh 3101.5 140 3000.5 {Variant:"golden",ClothesHead:"samen_zielskroontje",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh 3104.5 140 3000.5 {Variant:"choco",ClothesNeck:"gouden_hartjeshalsbandje",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/summon guhs:guh 3107.5 140 3000.5 {Variant:"normal",ClothesOren:"samen_hartjesspeldje",ClothesBody:"samen_knuffeltruitje",ClothesHead:"samen_zielskroontje",ClothesNeck:"gouden_hartjeshalsbandje",NoAI:1b,PersistenceRequired:1b,Rotation:[0f,0f]}
+/gamemode spectator
+wait 20
+camera 3101.5 142.5 3005.5 180 18
+waitrender 300
+shot samen_kleding
+camera 3101.5 144 2995.5 0 35
+wait 5
+shot samen_kleding_achter
+camera 3107.5 139.8 3003.0 180 22
+wait 5
+shot samen_kleding_dichtbij
+/gamemode creative
+/summon guhs:guh 3100.5 140 3012.5 {Variant:"normal",PersistenceRequired:1b,Rotation:[180f,0f]}
+/tp @s 3100.5 140 3015.5 180 15
+wait 10
+guhmenu 3100 140 3012
+wait 10
+press Emotes
+wait 10
+widgets
+shot gui_samen_emotes_opslot gui
+gui close
+/guhs samen hartjes zielsguh
+wait 10
+guhmenu 3100 140 3012
+wait 10
+press Emotes
+wait 10
+widgets
+shot gui_samen_emotes gui
+gui close
+/tp @s 3100.5 140 3016.5 180 12
+wait 30
+clearchat
+shot samen_zielsguh_naam gui
+/guhs samen bff
+wait 12
+clearchat
+shot samen_bff_knuffel gui
+/summon guhs:guh 3098.5 140 3012.5 {Variant:"mint",PersistenceRequired:1b,Rotation:[180f,0f]}
+guhmenu 3098 140 3012
+gui close
+/tp @s 3099.5 140 3016.5 180 15
+wait 60
+samenspel goed sjoelen
+wait 6
+clearchat
+shot samen_juichen gui
+wait 60
+samenspel mis sjoelen
+wait 8
+clearchat
+shot samen_verdrietje gui
+wait 60
+samenspel record sjoelen
+wait 10
+clearchat
+shot samen_record_dans gui
+wait 60
+kart 3100.5 140 3009.5 180
+wait 5
+perspective front
+look 0 15
+wait 10
+clearchat
+shot samen_kart_voor gui
+perspective back
+look 135 25
+wait 10
+clearchat
+shot samen_kart_achter gui
+perspective first
+/ride @s dismount
+/kill @e[type=guhs:race_guh]
+/gamemode spectator
+/forceload remove 3080 2980 3120 3024
+# </samen>
+
+# <favorietjes>
+section favorietjes (2.10): the big heart explosion of a discovered favourite, a curious guh (warm hint) and a sniffing one (cold hint)
+/gamemode spectator
+/execute in minecraft:overworld run tp @s 3100 150 3100
+/forceload add 3080 3080 3120 3120
+/fill 3090 139 3090 3110 139 3110 minecraft:grass_block
+/fill 3090 140 3090 3110 150 3110 minecraft:air
+/time set noon
+/summon guhs:guh 3100 140 3100 {NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:guh 3104 140 3100 {NoAI:1b,Rotation:[180f,0f],Variant:"mint"}
+wait 20
+camera 3102 142 3094 0 15
+waitrender 200
+/particle guhs:favorietjes_explosie 3100 140.8 3100
+wait 4
+shot favorietjes_explosie
+wait 12
+shot favorietjes_explosie_later
+/particle guhs:favorietjes_vraagje 3104 141.6 3100
+/particle guhs:favorietjes_snuffel 3100 140.6 3099.4 0.08 0.05 0.08 0.01 6
+wait 8
+shot favorietjes_hints
+/kill @e[type=guhs:guh,x=3102,y=140,z=3100,distance=..6]
+/forceload remove 3080 3080 3120 3120
+# </favorietjes>
+
+
+
+section namen (2.10): Schilly, Poepschilly and the muisje show their names
+/gamemode creative
+/execute in minecraft:overworld run tp @s 3200 150 3200
+/forceload add 3184 3184 3216 3216
+/fill 3190 139 3190 3210 139 3210 minecraft:grass_block
+/fill 3190 140 3190 3210 150 3210 minecraft:air
+/summon guhs:schilly 3198.5 140 3200.5 {NoAI:1b,Rotation:[0f,0f],PersistenceRequired:1b}
+/summon guhs:poepschilly 3200.5 140 3200.5 {NoAI:1b,Rotation:[0f,0f],PersistenceRequired:1b}
+/summon guhs:pieppiepmuisje 3202.5 140 3200.5 {NoAI:1b,Rotation:[0f,0f],PersistenceRequired:1b}
+/gamemode spectator
+camera 3200.5 140.8 3204.5 180 12
+wait 20
+waitrender 200
+clearchat
+shot namen_piep gui
+/forceload remove 3184 3184 3216 3216
+
+section golf (2.10): three tee mats per hole (template in the overworld sky)
+/execute in minecraft:overworld run tp @s 7048 200 7048
+/forceload add 7000 7000 7095 7095
+wait 40
+/place template guhs:guh_golfbaan 7000 150 7000
+wait 60
+camera 7048 230 7048 0 89
+waitrender 300
+shot golf_bovenaf
+camera 7046 157 7084.5 90 30
+wait 10
+waitrender 200
+shot golf_hole1_tees
+camera 7035.5 155 7084.5 90 50
+wait 10
+shot golf_hole1_mat_dichtbij
+camera 7036 162 7045 90 45
+wait 10
+shot golf_hole3_tees
+camera 7090 157 7002 30 40
+wait 10
+shot golf_hole5_tees
+camera 7093 158 7084 110 35
+wait 10
+shot golf_hole8_9_tees
+/forceload remove 7000 7000 7095 7095
+
+section doolhof (2.10, worldgen): floating sparkling knabbels + the makkelijk counter
+tplocate auto guhs:guhdoolhof
+npc doolhofguh 3.2 0.6
+wait 10
+/gamemode creative
+doolhofstart makkelijk
+wait 160
+look 180 -10
+wait 10
+clearchat
+shot doolhof_start_hud gui
+# (in the maze on the ground: look at the nearest hidden knabbel, it floats and sparkles just above the hedges;
+#  leaving the field or climbing ends / resets the game, so these shots stay down in the maze)
+kijknaar guhs_doolhof
+wait 20
+clearchat
+shot doolhof_knabbel_zweeft gui
+wait 30
+shot doolhof_knabbel_zweeft2
+/gamemode spectator
+camrel 60 38 92 180 45
+wait 10
+waitrender 200
+shot doolhof_overzicht
+camrel 60 50 60 0 89
+wait 10
+shot doolhof_bovenaf
+
+section Elf-Guhjestocht (2.10): template in the overworld sky, overview + villages + relief/ditches
+/execute in minecraft:overworld run tp @s 4128 210 4128
+/forceload add 4000 4000 4255 4255
+wait 40
+/place template guhs:elfguhjestocht 4000 150 4000
+wait 60
+renderdistance 16
+camera 4128 300 4128 0 89
+waitrender 400
+shot elftocht_bovenaf
+camera 4128 205 4285 180 28
+waitrender 300
+shot elftocht_overzicht_zuid
+camera 3970 205 4128 270 28
+wait 10
+waitrender 300
+shot elftocht_overzicht_west
+camera 4050 164 4053 180 14
+waitrender 200
+shot elftocht_dorp01_guhwarden
+camera 4058 172 4068 200 28
+wait 10
+shot elftocht_startboog
+camera 4210 164 4122 270 14
+wait 10
+waitrender 200
+shot elftocht_dorp03_ijlguh
+camera 4080 164 4210 0 14
+wait 10
+waitrender 200
+shot elftocht_dorp05_vadsvoren
+camera 4150 164 4203 180 14
+wait 10
+waitrender 200
+shot elftocht_dorp08_knabbelsward
+camera 4043 164 4086 180 14
+wait 10
+waitrender 200
+shot elftocht_dorp11_dokguh
+camera 4100 162 4170 45 12
+wait 10
+waitrender 200
+shot elftocht_relief_sloten1
+camera 4200 162 4180 225 12
+wait 10
+waitrender 200
+shot elftocht_relief_sloten2
+camera 4150 175 4100 135 30
+wait 10
+waitrender 200
+shot elftocht_kanaal_bocht
+renderdistance 8
+/forceload remove 4000 4000 4255 4255
+
+section grond (2.10): the land right next to a few sunk buildings (no moat)
+mist off
+tplocate auto guhs:sjoelhuisje
+tplocate auto guhs:guhboerderij
+tplocate auto guhs:knabbelkatapult
+tplocate auto guhs:guh_sterrenwacht
+tplocate auto guhs:kaasknabbel_nest
+mist on
+
+quit

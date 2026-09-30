@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/sjoelen_stapel"
+    },
+    "facing=east": {
+      "model": "guhs:block/sjoelen_stapel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/sjoelen_stapel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/sjoelen_stapel",
+      "y": 270
+    }
+  }
+}

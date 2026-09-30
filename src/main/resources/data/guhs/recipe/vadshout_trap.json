@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "vadshout_stairs",
+  "key": {
+    "#": {
+      "item": "guhs:vadshout_planken"
+    }
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "guhs:vadshout_trap"
+  }
+}

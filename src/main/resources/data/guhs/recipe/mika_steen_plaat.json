@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KKK"
+  ],
+  "key": {
+    "K": {
+      "item": "guhs:mika_steen"
+    }
+  },
+  "result": {
+    "id": "guhs:mika_steen_plaat",
+    "count": 6
+  }
+}

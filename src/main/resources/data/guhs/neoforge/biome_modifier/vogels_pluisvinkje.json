@@ -1,0 +1,16 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:guh_fields",
+    "guhs:pink_puffs",
+    "guhs:guh_meadows"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:pluisvinkje",
+      "weight": 14,
+      "minCount": 3,
+      "maxCount": 6
+    }
+  ]
+}

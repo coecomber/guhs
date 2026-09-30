@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/knuffelbad_gevonden",
+  "display": {
+    "icon": {
+      "id": "guhs:guhshampoo"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.knuffelbad_gewassen.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.knuffelbad_gewassen.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

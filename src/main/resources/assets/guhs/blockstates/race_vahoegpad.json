@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,lastig=true": {
+      "model": "guhs:block/race_vahoegpad"
+    },
+    "facing=north,lastig=false": {
+      "model": "guhs:block/race_vahoegpad_zilver"
+    },
+    "facing=east,lastig=true": {
+      "model": "guhs:block/race_vahoegpad",
+      "y": 90
+    },
+    "facing=east,lastig=false": {
+      "model": "guhs:block/race_vahoegpad_zilver",
+      "y": 90
+    },
+    "facing=south,lastig=true": {
+      "model": "guhs:block/race_vahoegpad",
+      "y": 180
+    },
+    "facing=south,lastig=false": {
+      "model": "guhs:block/race_vahoegpad_zilver",
+      "y": 180
+    },
+    "facing=west,lastig=true": {
+      "model": "guhs:block/race_vahoegpad",
+      "y": 270
+    },
+    "facing=west,lastig=false": {
+      "model": "guhs:block/race_vahoegpad_zilver",
+      "y": 270
+    }
+  }
+}

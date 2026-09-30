@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TT",
+    "TS"
+  ],
+  "key": {
+    "T": {
+      "item": "guhs:trechtertegel"
+    },
+    "S": {
+      "item": "minecraft:slime_ball"
+    }
+  },
+  "result": {
+    "id": "guhs:knuffelbad_glijgoot",
+    "count": 4
+  }
+}

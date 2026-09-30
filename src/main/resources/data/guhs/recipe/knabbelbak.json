@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KKK",
+    "PBP",
+    "PPP"
+  ],
+  "key": {
+    "K": {
+      "item": "guhs:kaas_knabbels"
+    },
+    "P": {
+      "item": "minecraft:pink_wool"
+    },
+    "B": {
+      "item": "minecraft:composter"
+    }
+  },
+  "result": {
+    "id": "guhs:knabbelbak",
+    "count": 1
+  }
+}

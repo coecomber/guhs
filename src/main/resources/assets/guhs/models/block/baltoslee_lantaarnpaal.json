@@ -1,0 +1,205 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/baltoslee_hout",
+    "hout": "guhs:block/baltoslee_hout",
+    "lint": "guhs:block/baltoslee_lint",
+    "frame": "guhs:block/baltoslee_ijzer",
+    "glas": "guhs:block/baltoslee_glas",
+    "sneeuw": "guhs:block/baltoslee_sneeuw"
+  },
+  "elements": [
+    {
+      "from": [
+        6.5,
+        0,
+        6.5
+      ],
+      "to": [
+        9.5,
+        11,
+        9.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#hout"
+        },
+        "up": {
+          "texture": "#hout"
+        },
+        "north": {
+          "texture": "#hout"
+        },
+        "south": {
+          "texture": "#hout"
+        },
+        "west": {
+          "texture": "#hout"
+        },
+        "east": {
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        6.3,
+        7,
+        6.3
+      ],
+      "to": [
+        9.7,
+        8,
+        9.7
+      ],
+      "faces": {
+        "down": {
+          "texture": "#lint"
+        },
+        "up": {
+          "texture": "#lint"
+        },
+        "north": {
+          "texture": "#lint"
+        },
+        "south": {
+          "texture": "#lint"
+        },
+        "west": {
+          "texture": "#lint"
+        },
+        "east": {
+          "texture": "#lint"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        11,
+        5
+      ],
+      "to": [
+        11,
+        11.8,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#frame"
+        },
+        "up": {
+          "texture": "#frame"
+        },
+        "north": {
+          "texture": "#frame"
+        },
+        "south": {
+          "texture": "#frame"
+        },
+        "west": {
+          "texture": "#frame"
+        },
+        "east": {
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "from": [
+        5.4,
+        11.8,
+        5.4
+      ],
+      "to": [
+        10.6,
+        15,
+        10.6
+      ],
+      "faces": {
+        "down": {
+          "texture": "#glas"
+        },
+        "up": {
+          "texture": "#glas"
+        },
+        "north": {
+          "texture": "#glas"
+        },
+        "south": {
+          "texture": "#glas"
+        },
+        "west": {
+          "texture": "#glas"
+        },
+        "east": {
+          "texture": "#glas"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        15,
+        5
+      ],
+      "to": [
+        11,
+        15.8,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#frame"
+        },
+        "up": {
+          "texture": "#frame"
+        },
+        "north": {
+          "texture": "#frame"
+        },
+        "south": {
+          "texture": "#frame"
+        },
+        "west": {
+          "texture": "#frame"
+        },
+        "east": {
+          "texture": "#frame"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        15.8,
+        5.5
+      ],
+      "to": [
+        10.5,
+        16,
+        10.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#sneeuw"
+        },
+        "up": {
+          "texture": "#sneeuw"
+        },
+        "north": {
+          "texture": "#sneeuw"
+        },
+        "south": {
+          "texture": "#sneeuw"
+        },
+        "west": {
+          "texture": "#sneeuw"
+        },
+        "east": {
+          "texture": "#sneeuw"
+        }
+      }
+    }
+  ]
+}

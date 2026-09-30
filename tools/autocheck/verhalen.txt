@@ -1,0 +1,72 @@
+# The Guhdex tab Verhalen (visual QA). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/verhalen.txt
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+
+section verhalen (fresh player): the list
+gui verhalen list
+wait 20
+shot gui_verhalen_lijst_nieuw gui
+gui verhalenscroll 1
+wait 5
+shot gui_verhalen_lijst_nieuw_2 gui
+gui close
+
+section verhalen (in the middle of several questlines)
+verhalenstand
+wait 10
+gui verhalen list
+wait 20
+shot gui_verhalen_lijst gui
+gui verhalenscroll 1
+wait 5
+shot gui_verhalen_lijst_2 gui
+gui verhalenscroll 2
+wait 5
+shot gui_verhalen_lijst_3 gui
+gui close
+gui verhalen timmerguh
+wait 20
+shot gui_verhalen_timmerguh gui
+gui verhalenscroll 1
+wait 5
+shot gui_verhalen_timmerguh_2 gui
+gui close
+gui verhalen mewtwo
+wait 20
+shot gui_verhalen_mewtwo gui
+gui close
+gui verhalen guhwaii
+wait 20
+shot gui_verhalen_guhwaii gui
+gui close
+gui verhalen balto
+wait 20
+shot gui_verhalen_balto gui
+gui verhalenscroll 1
+wait 5
+shot gui_verhalen_balto_2 gui
+gui close
+gui verhalen knusfeest
+wait 20
+shot gui_verhalen_knusfeest gui
+gui verhalenscroll 1
+wait 5
+shot gui_verhalen_knusfeest_2 gui
+gui close
+gui verhalen hemel
+wait 20
+shot gui_verhalen_hemel gui
+gui close
+gui verhalen guheinde
+wait 20
+shot gui_verhalen_guheinde gui
+gui close
+gui dexopen guhs
+wait 10
+shot gui_verhalen_tabbalk gui
+gui close

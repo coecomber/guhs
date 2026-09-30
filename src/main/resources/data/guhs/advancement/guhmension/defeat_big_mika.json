@@ -1,0 +1,28 @@
+{
+  "parent": "guhs:guhmension/find_challenging_guh_caves",
+  "display": {
+    "icon": {
+      "id": "guhs:mika_vet"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.defeat_big_mika.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.defeat_big_mika.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "guhs:mika",
+          "nbt": "{Boss:1b}"
+        }
+      }
+    }
+  }
+}

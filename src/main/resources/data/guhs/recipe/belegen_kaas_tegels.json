@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BB",
+    "BB"
+  ],
+  "key": {
+    "B": {
+      "item": "guhs:belegen_kaas_stenen"
+    }
+  },
+  "result": {
+    "id": "guhs:belegen_kaas_tegels",
+    "count": 4
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/glimtegel",
+    "tegel": "guhs:block/glimtegel",
+    "laag": "guhs:block/glimtegel_sterren"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#tegel",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#tegel",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#tegel",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#tegel",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#tegel",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#tegel",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#laag",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#laag",
+          "cullface": "up"
+        },
+        "north": {
+          "texture": "#laag",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#laag",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#laag",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#laag",
+          "cullface": "east"
+        }
+      },
+      "neoforge_data": {
+        "block_light": 15,
+        "sky_light": 15,
+        "ambient_occlusion": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:guh_sea",
+    "guhs:diepe_guhzee",
+    "guhs:kaasmoeras",
+    "guhs:guh_meadows",
+    "guhs:guh_fields",
+    "guhs:knuffeldal"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:guh_eendje",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

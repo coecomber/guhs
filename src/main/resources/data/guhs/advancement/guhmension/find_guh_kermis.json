@@ -1,0 +1,31 @@
+{
+  "parent": "guhs:guhmension/enter_guhmension",
+  "display": {
+    "icon": {
+      "id": "guhs:guhmensie_superkompas"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.find_guh_kermis.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.find_guh_kermis.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": [
+              "guhs:guh_kermis"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

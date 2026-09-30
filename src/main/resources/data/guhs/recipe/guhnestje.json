@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S S",
+    "WKW",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "tag": "minecraft:wool"
+    },
+    "K": {
+      "item": "guhs:kaas_knabbels"
+    }
+  },
+  "result": {
+    "id": "guhs:guhnestje",
+    "count": 1
+  }
+}

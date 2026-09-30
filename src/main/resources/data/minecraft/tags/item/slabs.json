@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:kaaskorst_stenen_plaat",
+    "guhs:mika_steen_plaat",
+    "guhs:gatenkaas_stenen_plaat",
+    "guhs:belegen_kaas_plaat",
+    "guhs:houtskoolsteen_stenen_plaat",
+    "guhs:knuffelsteen_plaat",
+    "guhs:pluisdak_plaat",
+    "guhs:nomguh_sneeuwdak_plaat",
+    "guhs:tiki_rietdak_plaat"
+  ]
+}

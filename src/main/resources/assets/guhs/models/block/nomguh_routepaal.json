@@ -1,0 +1,282 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/nomguh_routepaal",
+    "paal": "guhs:block/nomguh_routepaal"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        12.5,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paal",
+          "uv": [
+            0,
+            0,
+            2,
+            12.5
+          ]
+        },
+        "south": {
+          "texture": "#paal",
+          "uv": [
+            0,
+            0,
+            2,
+            12.5
+          ]
+        },
+        "east": {
+          "texture": "#paal",
+          "uv": [
+            0,
+            0,
+            2,
+            12.5
+          ]
+        },
+        "west": {
+          "texture": "#paal",
+          "uv": [
+            0,
+            0,
+            2,
+            12.5
+          ]
+        },
+        "up": {
+          "texture": "#paal",
+          "uv": [
+            0,
+            0,
+            2,
+            12.5
+          ]
+        },
+        "down": {
+          "texture": "#paal",
+          "uv": [
+            0,
+            0,
+            2,
+            12.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        12.5,
+        6.5
+      ],
+      "to": [
+        9.5,
+        13.5,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            10,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            10,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            10,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            10,
+            16,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            10,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            10,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        13.5,
+        7.2
+      ],
+      "to": [
+        9.5,
+        16,
+        8.8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            0,
+            16,
+            9
+          ]
+        },
+        "south": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            0,
+            16,
+            9
+          ]
+        },
+        "east": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            0,
+            16,
+            9
+          ]
+        },
+        "west": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            0,
+            16,
+            9
+          ]
+        },
+        "up": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            0,
+            16,
+            9
+          ]
+        },
+        "down": {
+          "texture": "#paal",
+          "uv": [
+            6,
+            0,
+            16,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7.2,
+        13.5,
+        6.5
+      ],
+      "to": [
+        8.8,
+        15.4,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paal",
+          "uv": [
+            7,
+            1,
+            15,
+            8
+          ]
+        },
+        "south": {
+          "texture": "#paal",
+          "uv": [
+            7,
+            1,
+            15,
+            8
+          ]
+        },
+        "east": {
+          "texture": "#paal",
+          "uv": [
+            7,
+            1,
+            15,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#paal",
+          "uv": [
+            7,
+            1,
+            15,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#paal",
+          "uv": [
+            7,
+            1,
+            15,
+            8
+          ]
+        },
+        "down": {
+          "texture": "#paal",
+          "uv": [
+            7,
+            1,
+            15,
+            8
+          ]
+        }
+      }
+    }
+  ]
+}

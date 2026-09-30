@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "guhs:block/opper_mikatrofee_top",
+    "front": "guhs:block/opper_mikatrofee_front",
+    "side": "guhs:block/opper_mikatrofee_side"
+  }
+}

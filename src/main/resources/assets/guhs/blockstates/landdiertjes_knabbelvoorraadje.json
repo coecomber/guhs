@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "knabbels=1": {
+      "model": "guhs:block/landdiertjes_knabbelvoorraadje"
+    },
+    "knabbels=2": {
+      "model": "guhs:block/landdiertjes_knabbelvoorraadje"
+    },
+    "knabbels=3": {
+      "model": "guhs:block/landdiertjes_knabbelvoorraadje"
+    },
+    "knabbels=4": {
+      "model": "guhs:block/landdiertjes_knabbelvoorraadje"
+    },
+    "knabbels=5": {
+      "model": "guhs:block/landdiertjes_knabbelvoorraadje_groot"
+    },
+    "knabbels=6": {
+      "model": "guhs:block/landdiertjes_knabbelvoorraadje_groot"
+    },
+    "knabbels=7": {
+      "model": "guhs:block/landdiertjes_knabbelvoorraadje_groot"
+    },
+    "knabbels=8": {
+      "model": "guhs:block/landdiertjes_knabbelvoorraadje_groot"
+    }
+  }
+}

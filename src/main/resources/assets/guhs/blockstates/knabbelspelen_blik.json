@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,schuif=geen": {
+      "model": "guhs:block/knabbelspelen_blik_geen"
+    },
+    "facing=north,schuif=rechts": {
+      "model": "guhs:block/knabbelspelen_blik_rechts"
+    },
+    "facing=north,schuif=links": {
+      "model": "guhs:block/knabbelspelen_blik_links"
+    },
+    "facing=east,schuif=geen": {
+      "model": "guhs:block/knabbelspelen_blik_geen",
+      "y": 90
+    },
+    "facing=east,schuif=rechts": {
+      "model": "guhs:block/knabbelspelen_blik_rechts",
+      "y": 90
+    },
+    "facing=east,schuif=links": {
+      "model": "guhs:block/knabbelspelen_blik_links",
+      "y": 90
+    },
+    "facing=south,schuif=geen": {
+      "model": "guhs:block/knabbelspelen_blik_geen",
+      "y": 180
+    },
+    "facing=south,schuif=rechts": {
+      "model": "guhs:block/knabbelspelen_blik_rechts",
+      "y": 180
+    },
+    "facing=south,schuif=links": {
+      "model": "guhs:block/knabbelspelen_blik_links",
+      "y": 180
+    },
+    "facing=west,schuif=geen": {
+      "model": "guhs:block/knabbelspelen_blik_geen",
+      "y": 270
+    },
+    "facing=west,schuif=rechts": {
+      "model": "guhs:block/knabbelspelen_blik_rechts",
+      "y": 270
+    },
+    "facing=west,schuif=links": {
+      "model": "guhs:block/knabbelspelen_blik_links",
+      "y": 270
+    }
+  }
+}

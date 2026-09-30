@@ -1,0 +1,31 @@
+{
+  "parent": "guhs:guhmension/find_hamster_house",
+  "display": {
+    "icon": {
+      "id": "guhs:guh_wheel"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.find_guhland.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.find_guhland.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": [
+              "guhs:hamster_house_extra_extra_large"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:aangevreten_kaaskorst_stenen"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.guheinde_larfje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.guheinde_larfje.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:mika_larfje"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:guheinde/find_knabbelkelder"
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/beauty_leenkast"
+    },
+    "facing=east": {
+      "model": "guhs:block/beauty_leenkast",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/beauty_leenkast",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/beauty_leenkast",
+      "y": 270
+    }
+  }
+}

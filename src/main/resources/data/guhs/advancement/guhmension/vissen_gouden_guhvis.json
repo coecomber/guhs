@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:guhmension/find_guhvis_vijver",
+  "display": {
+    "icon": {
+      "id": "guhs:gouden_guhvis"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.vissen_gouden_guhvis.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.vissen_gouden_guhvis.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:gouden_guhvis"
+          }
+        ]
+      }
+    }
+  }
+}

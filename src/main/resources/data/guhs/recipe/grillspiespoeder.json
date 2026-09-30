@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:grillspies"
+    }
+  ],
+  "result": {
+    "id": "guhs:grillspiespoeder",
+    "count": 2
+  }
+}

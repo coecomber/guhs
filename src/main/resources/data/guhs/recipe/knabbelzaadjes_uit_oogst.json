@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:knabbelgraan"
+    }
+  ],
+  "result": {
+    "id": "guhs:knabbelzaadjes",
+    "count": 2
+  }
+}

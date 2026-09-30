@@ -1,0 +1,31 @@
+{
+  "parent": "guhs:guhmension/enter_guhmension",
+  "display": {
+    "icon": {
+      "id": "guhs:mika_mep_trofee"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.find_mika_mep_hal.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.find_mika_mep_hal.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": [
+              "guhs:mika_mep_hal"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

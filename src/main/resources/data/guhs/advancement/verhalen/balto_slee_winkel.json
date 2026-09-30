@@ -1,0 +1,90 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:baltoslee_sneeuwguh"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.balto_slee_winkel.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.balto_slee_winkel.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "k0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:baltoslee_sneeuwguh"
+          }
+        ]
+      }
+    },
+    "k1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:baltoslee_minislee"
+          }
+        ]
+      }
+    },
+    "k2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:baltoslee_sledebellen"
+          }
+        ]
+      }
+    },
+    "k3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:baltoslee_beker"
+          }
+        ]
+      }
+    },
+    "k4": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:baltoslee_hondenmand"
+          }
+        ]
+      }
+    },
+    "k5": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:baltoslee_lantaarnpaal"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:verhalen/balto_slee_sprint",
+  "requirements": [
+    [
+      "k0",
+      "k1",
+      "k2",
+      "k3",
+      "k4",
+      "k5"
+    ]
+  ]
+}

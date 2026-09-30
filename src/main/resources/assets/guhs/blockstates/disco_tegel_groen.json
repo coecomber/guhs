@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "guhs:block/disco_tegel_groen"
+    },
+    "lit=true": {
+      "model": "guhs:block/disco_tegel_groen_lit"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:feestbuffettafel"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.knusfeest_klaar.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.knusfeest_klaar.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knuffeldal/burgemeester"
+}

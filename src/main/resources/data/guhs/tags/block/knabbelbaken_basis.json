@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:block_of_kaasknabbels",
+    "guhs:compressed_super_vahoege_vads",
+    {
+      "id": "guhs:gatenkaas",
+      "required": false
+    }
+  ]
+}

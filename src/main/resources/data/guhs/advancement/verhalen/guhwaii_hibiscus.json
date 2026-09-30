@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:roze_hibiscus"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.guhwaii_hibiscus.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.guhwaii_hibiscus.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:roze_hibiscus"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:verhalen/verhaal_guhwaii"
+}

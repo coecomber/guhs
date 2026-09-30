@@ -1,0 +1,49 @@
+{
+  "parent": "guhs:guhmension/find_guh_beauty_theater",
+  "display": {
+    "icon": {
+      "id": "guhs:showster_tiara"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.beauty_showster.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.beauty_showster.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "showster_tiara": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:showster_tiara"
+          }
+        ]
+      }
+    },
+    "showster_sjerp": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:showster_sjerp"
+          }
+        ]
+      }
+    },
+    "showster_strik": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:showster_strik"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/polderijs"
+      },
+      {
+        "model": "guhs:block/polderijs",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/polderijs",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/polderijs",
+        "y": 270
+      }
+    ]
+  }
+}

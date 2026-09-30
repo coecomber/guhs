@@ -1,0 +1,14 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "guhs:block/guhhuisje_klein_model"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "guhs:item/guhhuisje_klein"
+      }
+    }
+  }
+}

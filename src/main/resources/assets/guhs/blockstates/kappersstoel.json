@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/kappersstoel"
+    },
+    "facing=east": {
+      "model": "guhs:block/kappersstoel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/kappersstoel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/kappersstoel",
+      "y": 270
+    }
+  }
+}

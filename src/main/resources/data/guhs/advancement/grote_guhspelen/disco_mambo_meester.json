@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/disco_mambo",
+  "display": {
+    "icon": {
+      "id": "guhs:disco_bal"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.disco_mambo_meester.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.disco_mambo_meester.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

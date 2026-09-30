@@ -1,0 +1,142 @@
+package nl.juiced.guhs.item;
+
+import java.util.List;
+import java.util.Locale;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import nl.juiced.guhs.entity.GuhEntity;
+import nl.juiced.guhs.registry.ModDataComponents;
+import nl.juiced.guhs.registry.ModItems;
+import nl.juiced.guhs.registry.ModSounds;
+
+/**
+ * A tamed guh you picked up (sneak + right-click it). Right-click a block to put it down again, or right-click a
+ * Guh Wheel with it to let it run. Keeps everything: name, size, health, saddle, owner...
+ */
+public class PickedUpGuhItem extends Item {
+    public PickedUpGuhItem(Properties properties) {
+        super(properties);
+    }
+
+    /** Takes the guh out of the world and returns it as an item. */
+    public static ItemStack pickUp(GuhEntity guh) {
+        CompoundTag tag = new CompoundTag();
+        guh.saveWithoutId(tag);
+        tag.putString("id", EntityType.getKey(guh.getType()).toString());
+        tag.putBoolean("Sitting", false);
+        if (guh.hasCustomName()) {
+            tag.putString("GuhDisplayName", guh.getName().getString());
+        }
+        guh.discard();
+        ItemStack stack = of(tag);
+        if (!guh.level().isClientSide) {   // 2.10: "waar is mijn guh": in its owner's pockets now
+            nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.ITEM_SPELER, guh.level().dimension(), guh.blockPosition(),
+                    guh.getOwner() instanceof net.minecraft.world.entity.player.Player owner ? owner.getGameProfile().getName() : "", guh.level().getGameTime());
+        }
+        return stack;
+    }
+
+    /** 2.10: "waar is mijn guh": in someone's pockets (checked every 5 seconds). */
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        if (!level.isClientSide && entity instanceof net.minecraft.world.entity.player.Player holder && (level.getGameTime() + slot) % 100 == 0) {
+            nl.juiced.guhs.feature.band.GuhVolger.inZakken(stack, holder);
+        }
+    }
+
+    /** 2.10: "waar is mijn guh": dropped on the ground. */
+    @Override
+    public boolean onEntityItemUpdate(ItemStack stack, net.minecraft.world.entity.item.ItemEntity entity) {
+        if (!entity.level().isClientSide && entity.tickCount % 100 == 1) {
+            nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.ITEM_GROND, entity.level().dimension(), entity.blockPosition(), "", entity.level().getGameTime());
+        }
+        return false;
+    }
+
+    public static ItemStack of(CompoundTag guhData) {
+        ItemStack stack = new ItemStack(ModItems.PICKED_UP_GUH.get());
+        stack.set(ModDataComponents.GUH_DATA.get(), CustomData.of(guhData));
+        return stack;
+    }
+
+    public static CompoundTag guhData(ItemStack stack) {
+        return stack.getOrDefault(ModDataComponents.GUH_DATA.get(), CustomData.EMPTY).copyTag();
+    }
+
+    /** Puts the guh back into the world at the given spot. Returns the entity, or null if the item was empty. */
+    public static Entity release(Level level, CompoundTag data, double x, double y, double z, float yaw) {
+        if (data.isEmpty()) {
+            return null;
+        }
+        Entity entity = EntityType.loadEntityRecursive(data, level, e -> {
+            e.moveTo(x, y, z, yaw, 0);
+            return e;
+        });
+        if (entity != null) {
+            level.addFreshEntity(entity);
+        }
+        return entity;
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        Level level = context.getLevel();
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
+        }
+        BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
+        Entity guh = release(level, guhData(context.getItemInHand()), pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5,
+                context.getRotation() + 180f);
+        if (guh != null) {
+            level.playSound(null, pos, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1f);
+            context.getItemInHand().shrink(1);
+        }
+        return InteractionResult.CONSUME;
+    }
+
+    @Override
+    public Component getName(ItemStack stack) {
+        CompoundTag data = guhData(stack);
+        if (data.contains("GuhDisplayName")) {
+            return Component.translatable("item.guhs.picked_up_guh.named", data.getString("GuhDisplayName"));
+        }
+        return super.getName(stack);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        CompoundTag data = guhData(stack);
+        double scale = 1.0;
+        double maxHealth = 25;
+        ListTag attributes = data.getList("attributes", Tag.TAG_COMPOUND);
+        for (int i = 0; i < attributes.size(); i++) {
+            CompoundTag attribute = attributes.getCompound(i);
+            if (attribute.getString("id").endsWith("scale")) {
+                scale = attribute.getDouble("base");
+            } else if (attribute.getString("id").endsWith("max_health")) {
+                maxHealth = attribute.getDouble("base");
+            }
+        }
+        tooltip.add(Component.translatable("gui.guhs.menu.size", String.format(Locale.ROOT, "%.1f", scale * 1.45)).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("gui.guhs.menu.hp", (int) Math.ceil(data.getFloat("Health")), (int) maxHealth).withStyle(ChatFormatting.GRAY));
+        if (data.getBoolean("Saddle")) {
+            tooltip.add(Component.translatable("item.minecraft.saddle").withStyle(ChatFormatting.GRAY));
+        }
+        tooltip.add(Component.translatable("item.guhs.picked_up_guh.hint").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+    }
+}

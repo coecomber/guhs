@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:guh_fields",
+    "guhs:knabbel_crumbs",
+    "guhs:pink_puffs",
+    "guhs:kaas_flats",
+    "guhs:guh_meadows",
+    "guhs:guh_peaks",
+    "guhs:vads_cliffs",
+    "guhs:vadswoud",
+    "guhs:guhpolder",
+    "guhs:knuffeldal",
+    "minecraft:flower_forest",
+    "minecraft:cherry_grove",
+    "minecraft:meadow",
+    "minecraft:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:beach",
+    "guhs:sneeuwguhtoendra",
+    "guhs:guhwaii"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "GOG",
+    "GTG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "O": {
+      "item": "guhs:oog_van_vadsig"
+    },
+    "T": {
+      "item": "guhs:mika_traan"
+    }
+  },
+  "result": {
+    "id": "guhs:knabbelkristal",
+    "count": 1
+  }
+}

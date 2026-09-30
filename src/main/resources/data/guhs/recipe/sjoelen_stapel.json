@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S",
+    "S",
+    "S"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:sjoelschijfje"
+    }
+  },
+  "result": {
+    "id": "guhs:sjoelen_stapel",
+    "count": 1
+  }
+}

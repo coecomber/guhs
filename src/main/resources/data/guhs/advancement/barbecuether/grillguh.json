@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:grillguh_recept"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.grillguh.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.grillguh.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:grillguh_recept"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:barbecuether/grillkool"
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/root",
+  "display": {
+    "icon": {
+      "id": "guhs:safety_vest"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.beroepen_alle.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.beroepen_alle.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

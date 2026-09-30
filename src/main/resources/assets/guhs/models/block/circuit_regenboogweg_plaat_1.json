@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "guhs:block/circuit_regenboogweg_1",
+    "top": "guhs:block/circuit_regenboogweg_1",
+    "side": "guhs:block/circuit_regenboogweg_1"
+  }
+}

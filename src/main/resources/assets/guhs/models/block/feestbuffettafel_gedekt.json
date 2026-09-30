@@ -1,0 +1,496 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/feestbuffettafel_top",
+    "kleed": "guhs:block/feestbuffettafel_top",
+    "rand": "guhs:block/feestbuffettafel_rand",
+    "poot": "minecraft:block/cherry_planks",
+    "hapjes": "guhs:block/feestbuffettafel_hapjes",
+    "taart": "minecraft:block/cake_side",
+    "taart_top": "minecraft:block/cake_top",
+    "pot": "minecraft:block/white_terracotta",
+    "knabbel": "guhs:block/block_of_kaasknabbels"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        12,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#kleed"
+        },
+        "down": {
+          "texture": "#kleed"
+        }
+      }
+    },
+    {
+      "from": [
+        0.01,
+        16,
+        0.01
+      ],
+      "to": [
+        15.99,
+        16.01,
+        15.99
+      ],
+      "faces": {
+        "up": {
+          "texture": "#hapjes"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        9,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        9,
+        15.5
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        9,
+        0.5
+      ],
+      "to": [
+        0.5,
+        16,
+        15.5
+      ],
+      "faces": {
+        "west": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        15.5,
+        9,
+        0.5
+      ],
+      "to": [
+        16,
+        16,
+        15.5
+      ],
+      "faces": {
+        "west": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        0,
+        1.5
+      ],
+      "to": [
+        3.5,
+        12,
+        3.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#poot"
+        },
+        "up": {
+          "texture": "#poot"
+        },
+        "north": {
+          "texture": "#poot"
+        },
+        "south": {
+          "texture": "#poot"
+        },
+        "west": {
+          "texture": "#poot"
+        },
+        "east": {
+          "texture": "#poot"
+        }
+      }
+    },
+    {
+      "from": [
+        12.5,
+        0,
+        1.5
+      ],
+      "to": [
+        14.5,
+        12,
+        3.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#poot"
+        },
+        "up": {
+          "texture": "#poot"
+        },
+        "north": {
+          "texture": "#poot"
+        },
+        "south": {
+          "texture": "#poot"
+        },
+        "west": {
+          "texture": "#poot"
+        },
+        "east": {
+          "texture": "#poot"
+        }
+      }
+    },
+    {
+      "from": [
+        1.5,
+        0,
+        12.5
+      ],
+      "to": [
+        3.5,
+        12,
+        14.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#poot"
+        },
+        "up": {
+          "texture": "#poot"
+        },
+        "north": {
+          "texture": "#poot"
+        },
+        "south": {
+          "texture": "#poot"
+        },
+        "west": {
+          "texture": "#poot"
+        },
+        "east": {
+          "texture": "#poot"
+        }
+      }
+    },
+    {
+      "from": [
+        12.5,
+        0,
+        12.5
+      ],
+      "to": [
+        14.5,
+        12,
+        14.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#poot"
+        },
+        "up": {
+          "texture": "#poot"
+        },
+        "north": {
+          "texture": "#poot"
+        },
+        "south": {
+          "texture": "#poot"
+        },
+        "west": {
+          "texture": "#poot"
+        },
+        "east": {
+          "texture": "#poot"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        16,
+        2
+      ],
+      "to": [
+        7,
+        19,
+        7
+      ],
+      "faces": {
+        "north": {
+          "texture": "#taart"
+        },
+        "south": {
+          "texture": "#taart"
+        },
+        "west": {
+          "texture": "#taart"
+        },
+        "east": {
+          "texture": "#taart"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        19,
+        2
+      ],
+      "to": [
+        7,
+        19,
+        7
+      ],
+      "faces": {
+        "up": {
+          "texture": "#taart_top"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        16,
+        3
+      ],
+      "to": [
+        13,
+        20,
+        6
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        18,
+        4
+      ],
+      "to": [
+        14.5,
+        19,
+        5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        20,
+        4
+      ],
+      "to": [
+        14,
+        20.5,
+        5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        16,
+        10
+      ],
+      "to": [
+        5,
+        17.5,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        16,
+        11
+      ],
+      "to": [
+        8,
+        17.5,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        16,
+        10
+      ],
+      "to": [
+        14,
+        17,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#knabbel"
+        },
+        "up": {
+          "texture": "#knabbel"
+        },
+        "north": {
+          "texture": "#knabbel"
+        },
+        "south": {
+          "texture": "#knabbel"
+        },
+        "west": {
+          "texture": "#knabbel"
+        },
+        "east": {
+          "texture": "#knabbel"
+        }
+      }
+    }
+  ]
+}

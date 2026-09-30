@@ -1,0 +1,7 @@
+{
+  "parent": "guhs:block/kaasknabbel_ore_base",
+  "textures": {
+    "base": "minecraft:block/stone",
+    "overlay": "guhs:block/kaasknabbel_overlay"
+  }
+}

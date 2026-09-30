@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/end_portal_frame_filled",
+  "textures": {
+    "particle": "guhs:block/knabbelportaalframe_side",
+    "bottom": "guhs:block/kaaskorst",
+    "top": "guhs:block/knabbelportaalframe_top",
+    "side": "guhs:block/knabbelportaalframe_side",
+    "eye": "guhs:block/knabbelportaalframe_oog"
+  }
+}

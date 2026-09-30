@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/wereldleven_ijsje",
+  "display": {
+    "icon": {
+      "id": "guhs:grijpmachine"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.wereldleven_grijpmachine.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.wereldleven_grijpmachine.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

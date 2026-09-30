@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "guhs:block/barbecuether_portaal_ns"
+    },
+    "axis=z": {
+      "model": "guhs:block/barbecuether_portaal_ew"
+    }
+  }
+}

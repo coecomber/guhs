@@ -1,0 +1,43 @@
+package nl.juiced.guhs.feature.guhkamer;
+
+import java.util.List;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+
+/**
+ * De Guhbel: a little golden bell with a pink bow and guh ears. Ring it (right-click) and its screen opens: send one of
+ * your guhs nearby to the Guhkamer in your maag ("ga maar lekker logeren!"), or call a guest back to you, wherever you
+ * are. Tingeling!
+ */
+public class GuhbelItem extends Item {
+    public GuhbelItem(Properties properties) {
+        super(properties);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        level.playSound(player, player.blockPosition(), GuhkamerFeature.BEL.get(), SoundSource.PLAYERS, 1f, 1f);
+        if (player instanceof ServerPlayer sp) {
+            GuhkamerPayloads.open(sp);
+        }
+        player.getCooldowns().addCooldown(this, 10);
+        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("item.guhs.guhbel.lore").withStyle(ChatFormatting.LIGHT_PURPLE));
+        tooltip.add(Component.translatable("item.guhs.guhbel.uitleg").withStyle(ChatFormatting.GRAY));
+    }
+}

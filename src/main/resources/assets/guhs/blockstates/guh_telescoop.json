@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guh_telescoop"
+    },
+    "facing=east": {
+      "model": "guhs:block/guh_telescoop",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guh_telescoop",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guh_telescoop",
+      "y": 270
+    }
+  }
+}

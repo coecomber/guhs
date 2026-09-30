@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "D  ",
+    "DD ",
+    "DDD"
+  ],
+  "key": {
+    "D": {
+      "item": "guhs:nomguh_sneeuwdak"
+    }
+  },
+  "result": {
+    "id": "guhs:nomguh_sneeuwdak_trap",
+    "count": 4
+  }
+}

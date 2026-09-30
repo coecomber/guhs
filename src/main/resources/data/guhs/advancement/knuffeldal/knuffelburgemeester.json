@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:knus_oorkonde"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.knuffelburgemeester.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.knuffelburgemeester.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knuffeldal/knusfeest_klaar"
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "guhs:guhmension/find_onderwater",
+  "display": {
+    "icon": {
+      "id": "guhs:guh_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.onderwater_zeemeer.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.onderwater_zeemeer.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:guh",
+              "nbt": "{Variant:\"zeemeerguh\"}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

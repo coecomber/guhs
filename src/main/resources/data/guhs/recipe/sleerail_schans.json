@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "  K",
+    " BW",
+    "ISS"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "W": {
+      "item": "minecraft:pink_wool"
+    },
+    "B": {
+      "item": "guhs:sleebouwersboek"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "K": {
+      "item": "guhs:guh_kristal"
+    }
+  },
+  "result": {
+    "id": "guhs:sleerail_schans",
+    "count": 1
+  }
+}

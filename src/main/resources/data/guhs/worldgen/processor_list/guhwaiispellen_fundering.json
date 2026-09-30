@@ -1,0 +1,7 @@
+{
+  "processors": [
+    {
+      "processor_type": "guhs:guhwaiispellen_fundering"
+    }
+  ]
+}

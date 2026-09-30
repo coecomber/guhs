@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "guhs:block/tiki_bloemenslinger",
+    "s": "guhs:block/tiki_bloemenslinger"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        4,
+        15
+      ],
+      "to": [
+        16,
+        16,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#s",
+          "uv": [
+            0,
+            2,
+            16,
+            14
+          ]
+        },
+        "south": {
+          "texture": "#s",
+          "uv": [
+            16,
+            2,
+            0,
+            14
+          ]
+        }
+      }
+    }
+  ]
+}

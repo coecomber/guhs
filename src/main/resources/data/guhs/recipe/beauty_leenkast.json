@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PGP",
+    "PKP",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "guhs:guhbloesem_planks"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "K": {
+      "item": "guhs:guh_kast"
+    }
+  },
+  "result": {
+    "id": "guhs:beauty_leenkast",
+    "count": 1
+  }
+}

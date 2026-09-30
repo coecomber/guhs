@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/boerderij_gevonden",
+  "display": {
+    "icon": {
+      "id": "guhs:guhborstel"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.boerderij_verzorgd.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.boerderij_verzorgd.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

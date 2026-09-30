@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:moeraskaas"
+    },
+    {
+      "item": "guhs:guh_slimeball"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    },
+    {
+      "item": "minecraft:mud"
+    }
+  ],
+  "result": {
+    "id": "guhs:borrelende_kaassaus",
+    "count": 2
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:gefrituurde_kaasknabbels",
+    "guhs:guh_cupcake",
+    "guhs:kaasknabbel_milkshake",
+    "guhs:macaron_roze",
+    "guhs:macaron_mint",
+    "guhs:knabbelbessentaartje",
+    "guhs:marshmallow_knabbel",
+    "guhs:wolkensuikerspin",
+    "guhs:kaasijsje_roze",
+    "guhs:kaasijsje_mint",
+    "guhs:knabbelbroodje",
+    "guhs:vadsvlaai",
+    "guhs:guhwafel",
+    "guhs:vadsdonut",
+    "guhs:gegrilde_kaasknabbelsate",
+    "minecraft:sweet_berries",
+    "minecraft:cookie",
+    "minecraft:melon_slice"
+  ]
+}

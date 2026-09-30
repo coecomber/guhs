@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:guhbloemetje"
+    }
+  ],
+  "result": {
+    "id": "guhs:guhbloemzaadjes",
+    "count": 2
+  }
+}

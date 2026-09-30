@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/knuffel_wolk"
+    },
+    "facing=east": {
+      "model": "guhs:block/knuffel_wolk",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/knuffel_wolk",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/knuffel_wolk",
+      "y": 270
+    }
+  }
+}

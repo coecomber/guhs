@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "GKG",
+    "PRP"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "K": {
+      "item": "minecraft:chain"
+    },
+    "P": {
+      "item": "minecraft:pink_concrete"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "id": "guhs:grijpmachine",
+    "count": 1
+  }
+}

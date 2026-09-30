@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guh_circuit",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 42,
+    "separation": 14,
+    "salt": 20290501
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "aarde": "minecraft:block/rooted_dirt",
+    "grof": "minecraft:block/coarse_dirt",
+    "blad": "minecraft:block/azalea_leaves",
+    "knabbel": "guhs:block/block_of_kaasknabbels",
+    "particle": "minecraft:block/rooted_dirt"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        2,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#aarde"
+        },
+        "south": {
+          "texture": "#aarde"
+        },
+        "east": {
+          "texture": "#aarde"
+        },
+        "west": {
+          "texture": "#aarde"
+        },
+        "up": {
+          "texture": "#aarde"
+        },
+        "down": {
+          "texture": "#aarde"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        2,
+        5
+      ],
+      "to": [
+        11,
+        3.5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#grof"
+        },
+        "south": {
+          "texture": "#grof"
+        },
+        "east": {
+          "texture": "#grof"
+        },
+        "west": {
+          "texture": "#grof"
+        },
+        "up": {
+          "texture": "#grof"
+        },
+        "down": {
+          "texture": "#grof"
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        2.5,
+        6
+      ],
+      "to": [
+        11.5,
+        5,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#knabbel"
+        },
+        "south": {
+          "texture": "#knabbel"
+        },
+        "east": {
+          "texture": "#knabbel"
+        },
+        "west": {
+          "texture": "#knabbel"
+        },
+        "up": {
+          "texture": "#knabbel"
+        },
+        "down": {
+          "texture": "#knabbel"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        2,
+        9
+      ],
+      "to": [
+        7,
+        2.6,
+        12
+      ],
+      "faces": {
+        "up": {
+          "texture": "#blad"
+        },
+        "down": {
+          "texture": "#blad"
+        },
+        "north": {
+          "texture": "#blad"
+        },
+        "south": {
+          "texture": "#blad"
+        },
+        "east": {
+          "texture": "#blad"
+        },
+        "west": {
+          "texture": "#blad"
+        }
+      }
+    }
+  ],
+  "render_type": "minecraft:cutout"
+}

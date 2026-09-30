@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:kaas_knabbels"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.mewtwo_x2.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.mewtwo_x2.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/mewtwo_getemd"
+}

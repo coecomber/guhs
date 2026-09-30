@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RRR",
+    "RRR"
+  ],
+  "key": {
+    "R": {
+      "item": "guhs:gepolijst_roosterijzer"
+    }
+  },
+  "result": {
+    "id": "guhs:roosterijzer_tralies",
+    "count": 16
+  }
+}

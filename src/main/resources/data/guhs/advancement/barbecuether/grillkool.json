@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:grillkool"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.grillkool.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.grillkool.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:grillkool"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:barbecuether/barbecueput"
+}

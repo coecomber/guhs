@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:guhmension/kaasmoeras_motknabbel",
+  "display": {
+    "icon": {
+      "id": "minecraft:ochre_froglight"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.kaasmoeras_regenboog.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.kaasmoeras_regenboog.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

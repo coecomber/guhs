@@ -1,0 +1,299 @@
+# 3.0 visual QA round 2 (dev only): the new structures from inside.
+#   gradle runAutocheckClient -PautocheckScript=tools/autocheck/qa30_binnen.txt
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/gamerule doMobSpawning false
+mist off
+
+
+section qa30 round 2: close-ups of the fixed models (scanner uvs, Knuffelhart dome, tiki torch, Baltoguh statue) and Muk & Luk
+/execute in minecraft:overworld run tp @s 3500 150 3700
+/forceload add 3480 3680 3520 3720
+/fill 3485 139 3685 3515 139 3715 minecraft:smooth_stone
+/time set noon
+/setblock 3496 140 3700 guhs:vadsigheid_scanner[facing=south]
+/setblock 3499 140 3700 guhs:knuffelhart
+/setblock 3502 140 3700 guhs:tiki_fakkel
+/setblock 3505 140 3700 guhs:baltoguh_beeldje[facing=south]
+/setblock 3508 140 3700 guhs:vadsigheid_poster[facing=south]
+/summon guhs:guh_npc 3496 140 3708 {Kind:"muk",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh_npc 3500 140 3708 {Kind:"luk",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+wait 40
+camera 3502 142.5 3705 180 20
+waitrender 200
+shot 30_qa_modellen_closeup
+camera 3498 142.5 3713 180 12
+wait 200
+shot 30_qa_muk_luk_na_10s
+/kill @e[type=guhs:guh_npc,x=3500,y=140,z=3700,distance=..20]
+/forceload remove 3480 3680 3520 3720
+
+# <balto>
+section balto (3.0): Nomguh (the town, the stable and start line, the hospital, the boat, the igloo, the trek route), the characters, the wolf moment, the Baltoguh
+#   (op commands of the slice: /guhs balto stap <speler> [n], /guhs balto moment <speler> <moment>, /guhs balto wis <speler>, /guhs balto nomguh)
+/time set noon
+/weather clear
+mist off
+tplocate auto nomguh
+looktpl 112 40 150 112 12 100
+waitrender
+shot balto_nomguh_plein
+looktpl 60 30 60 90 12 86
+waitrender
+shot balto_nomguh_stal_start
+looktpl 30 22 90 52 11 104
+waitrender
+shot balto_nomguh_boot
+looktpl 176 30 118 145 12 110
+waitrender
+shot balto_nomguh_ziekenhuisje
+looktpl 150 28 44 150 8 16
+waitrender
+shot balto_nomguh_ijsbrug
+looktpl 118 16 6 118 30 30
+waitrender
+shot balto_nomguh_lawineberg
+looktpl 80 40 70 40 30 56
+waitrender
+shot balto_nomguh_berghut
+looktpl 112 90 150 112 10 60
+waitrender
+shot balto_nomguh_overzicht
+npc boris 3 0.6
+shot balto_boris
+npc steele_mika 3 0.6
+shot balto_steele_mika
+npc rosy 2.4 0.4
+shot balto_rosy
+npc muk 4 1
+shot balto_muk_luk
+/guhs balto wis @s
+npc boris 3 0.6
+interact npc
+wait 10
+shot gui_balto_boris gui
+gui close
+/guhs balto stap @s 5
+/guhs balto moment @s dieptepunt
+wait 20
+shot gui_balto_wolfmoment gui
+gui close
+/guhs balto moment @s aankomst
+wait 10
+gui close
+/guhs balto wis @s
+/weather thunder
+tpbiome auto guhs:sneeuwguhtoendra
+wait 60
+shot balto_toendra_sneeuwstorm
+/weather clear
+/execute in minecraft:overworld run tp @s 3300 150 3300
+/forceload add 3260 3260 3340 3340
+/fill 3270 139 3270 3330 139 3330 minecraft:snow_block
+/fill 3270 140 3270 3330 147 3330 minecraft:air
+wait 5
+verhaalguh baltoguh 3300 140 3300
+wait 40
+camera 3300 142 3305 180 10
+wait 10
+shot balto_baltoguh
+/setblock 3303 140 3300 guhs:baltoguh_beeldje[facing=south]
+/setblock 3297 140 3300 guhs:nomguh_routepaal
+camera 3300 142 3304 180 20
+wait 10
+shot balto_beeldje_routepaal
+/kill @e[type=guhs:guh,x=3300,y=140,z=3300,distance=..16]
+/forceload remove 3260 3260 3340 3340
+# </balto>
+
+# <balto-slee>
+section balto-slee (3.0): the sled on a test route over snow (/guhs baltoslee proef: the panel, the team, Steele-Mika's sled, the storm), your own sneeuwslee, Steele-Mika's deco
+#   (the real route is in Nomguh: tplocate the nomguh structure and use /guhs baltoslee sprint <niveau> there)
+/execute in minecraft:overworld run tp @s 3200 150 3400
+/forceload add 3160 3380 3340 3420
+/fill 3165 139 3385 3335 139 3415 minecraft:snow_block
+/fill 3165 140 3385 3250 150 3415 minecraft:air
+/fill 3251 140 3385 3335 150 3415 minecraft:air
+/time set noon
+/gamemode creative
+/tp @s 3170 140 3400 -90 0
+wait 20
+/guhs baltoslee proef makkelijk
+wait 70
+clearchat
+shot gui_baltoslee_sprint_start gui
+wait 60
+shot gui_baltoslee_sprint_onderweg gui
+look -60 20
+wait 5
+shot baltoslee_sprint_steele_naast_je
+unlock
+/guhs baltoslee stop
+wait 10
+/tp @s 3170 140 3400 -90 0
+/guhs baltoslee proef tocht
+wait 140
+clearchat
+shot gui_baltoslee_tocht_storm gui
+/guhs baltoslee stop
+wait 10
+/tp @s 3200 140 3395 0 0
+/guhs baltoslee toon
+wait 20
+camera 3196 142 3402 -120 20
+wait 10
+shot baltoslee_eigen_sneeuwslee
+/setblock 3210 140 3390 guhs:baltoslee_sneeuwguh[facing=south]
+/setblock 3212 140 3390 guhs:baltoslee_minislee[facing=south]
+/setblock 3214 140 3390 guhs:baltoslee_sledebellen[facing=south]
+/setblock 3216 140 3390 guhs:baltoslee_beker[facing=south]
+/setblock 3218 140 3390 guhs:baltoslee_hondenmand[facing=south]
+/setblock 3220 140 3390 guhs:baltoslee_lantaarnpaal[facing=south]
+camera 3215 142 3396 180 15
+wait 10
+shot baltoslee_deco
+/tp @s 3230 140 3398 0 0
+/guhs baltoslee steele 3170 140 3400
+wait 10
+npc steele_mika 3 0
+interact npc
+wait 10
+shot gui_baltoslee_steele gui
+gui close
+/kill @e[type=guhs:guh_npc,x=3230,y=140,z=3398,distance=..6]
+/kill @e[type=guhs:sneeuwslee]
+/gamemode spectator
+/forceload remove 3160 3380 3340 3420
+# </balto-slee>
+
+# <hemel>
+section hemel (3.0): het Hemelkapelletje op zijn wolkeneilandje, het Knuffelhart en het terughaal-scherm
+/gamemode spectator
+tplocate guhs:guhmension hemelkapelletje
+waitrender 300
+shot hemel_kapelletje
+/guhs hemel klopt true
+wolkjes
+wait 20
+gui close
+gui keep
+/gamemode creative
+camtpl 20.5 47 13.5 180 10
+wait 10
+/guhs hemel scherm
+wait 40
+widgets
+shot gui_hemel_scherm gui
+gui close
+/guhs hemel klopt false
+# </hemel>
+
+# <guhwaii>
+section guhwaii (3.0): Guhwai'i - Lilo and Nani's stilt house, 626's capsule with the scanner, the palms, the 626-guh strumming
+tplocate auto guhs:guhwaii_ohana
+tplocate auto guhs:guhwaii_capsule
+tpbiome auto guhs:guhwaii
+wait 40
+shot guhwaii_bioom
+/execute in minecraft:overworld run tp @s 3400 150 3400
+/forceload add 3360 3360 3440 3440
+/fill 3370 138 3370 3430 138 3430 minecraft:sandstone
+/fill 3370 139 3370 3430 139 3430 minecraft:sand
+/fill 3370 140 3370 3430 147 3430 minecraft:air
+/time set noon
+/setblock 3400 140 3400 guhs:vadsigheid_scanner[facing=south]
+/setblock 3404 140 3398 guhs:schilly_eitjes[eitjes=4,rijp=2]
+/setblock 3396 140 3398 guhs:roze_hibiscus
+/setblock 3395 140 3398 guhs:guhwaii_plumeria
+/setblock 3394 140 3398 guhs:guhwaii_paradijsbloem
+/setblock 3393 140 3398 guhs:guhwaii_orchidee
+/place feature guhs:guhwaii_palm 3390 140 3406
+/place feature guhs:guhwaii_palm 3410 140 3406
+verhaalguh stitch626 3400 140.2 3400
+wait 40
+camera 3400 143 3412 180 15
+wait 10
+shot guhwaii_scanner_palmen_626
+/gamemode creative
+/tp @s 3400 140 3402 180 20
+use 3400 140 3400
+wait 40
+shot gui_guhwaii_scanner_meter gui
+wait 30
+shot gui_guhwaii_scanner_onberekenbaar gui
+gui close
+guhmenu 3400 140 3400
+wait 10
+shot gui_guhwaii_626_menu gui
+gui close
+/kill @e[type=guhs:guh,x=3400,y=140,z=3400,distance=..16]
+/forceload remove 3360 3360 3440 3440
+# </guhwaii>
+
+# <guhwaii-spellen>
+section guhwaii-spellen (3.0): the surf beach of Guhwai'i: the podium under its hale, the surf shack, Tikiguh's stall, the screens, surfing and the hula
+#   (op commands: /guhs guhwaiispellen surf|hula <makkelijk|medium|lastig>, stop, munten <n>)
+/gamemode spectator
+/time set noon
+tplocate auto guhwaii_surfstrand
+/gamemode creative
+npc lilo_guh
+interact npc
+wait 10
+shot gui_guhwaiispellen_lilo gui
+widgets
+gui close
+npc tikiguh
+interact npc
+wait 10
+shot gui_guhwaiispellen_tikiwinkel gui
+gui close
+/gamemode spectator
+
+section binnen: Nomguh (the berghut, the hospital, the stable)
+opnieuw
+tplocate auto nomguh
+camtpl 43.5 38.6 56.5 90 12
+waitrender
+shot 30_nomguh_berghut_binnen
+camtpl 153.5 22.6 115.5 135 12
+waitrender
+shot 30_nomguh_ziekenhuisje_binnen
+camtpl 95.5 23 90.5 120 15
+waitrender
+shot 30_nomguh_stal_binnen
+
+section binnen: Guhwai'i (Lilo's room, Nani's kitchen, the capsule)
+opnieuw
+tplocate auto guhs:guhwaii_ohana
+camtpl 24.2 11.5 31.2 140 15
+waitrender
+shot 30_guhwaii_ohana_lilo_kamer
+camtpl 26.8 11.5 31.2 -140 15
+waitrender
+shot 30_guhwaii_ohana_keuken
+tplocate auto guhs:guhwaii_capsule
+camtpl 20.5 6.6 20.5 140 20
+waitrender
+shot 30_guhwaii_capsule_binnen
+camtpl 17.5 6.2 17.5 90 5
+wait 10
+shot 30_guhwaii_capsule_poster
+
+section binnen: the Hemelkapelletje (the aisle, the altar with the Knuffelhart)
+opnieuw
+tplocate guhs:guhmension hemelkapelletje
+camtpl 20.5 47.6 21.5 180 8
+waitrender
+shot 30_hemel_kapel_binnen
+camtpl 20.5 47.6 13.5 180 25
+wait 10
+shot 30_hemel_kapel_altaar
+
+
+quit

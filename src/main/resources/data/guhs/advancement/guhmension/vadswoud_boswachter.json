@@ -1,0 +1,47 @@
+{
+  "parent": "guhs:guhmension/boomhutdorp_gevonden",
+  "display": {
+    "icon": {
+      "id": "guhs:boswachtershoed"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.vadswoud_boswachter.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.vadswoud_boswachter.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "boswachtershoed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:boswachtershoed"
+          }
+        ]
+      }
+    },
+    "boswachtersjas": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:boswachtersjas"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "boswachtershoed"
+    ],
+    [
+      "boswachtersjas"
+    ]
+  ]
+}

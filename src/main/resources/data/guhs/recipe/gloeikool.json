@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GG",
+    "GG"
+  ],
+  "key": {
+    "G": {
+      "item": "guhs:gloeikoolgruis"
+    }
+  },
+  "result": {
+    "id": "guhs:gloeikool",
+    "count": 1
+  }
+}

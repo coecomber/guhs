@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPI",
+    " R ",
+    " P "
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:pink_concrete"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "id": "guhs:guh_fohn",
+    "count": 1
+  }
+}

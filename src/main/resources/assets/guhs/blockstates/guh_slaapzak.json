@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,occupied=false": {
+      "model": "guhs:block/guh_slaapzak"
+    },
+    "facing=north,occupied=true": {
+      "model": "guhs:block/guh_slaapzak"
+    },
+    "facing=east,occupied=false": {
+      "model": "guhs:block/guh_slaapzak",
+      "y": 90
+    },
+    "facing=east,occupied=true": {
+      "model": "guhs:block/guh_slaapzak",
+      "y": 90
+    },
+    "facing=south,occupied=false": {
+      "model": "guhs:block/guh_slaapzak",
+      "y": 180
+    },
+    "facing=south,occupied=true": {
+      "model": "guhs:block/guh_slaapzak",
+      "y": 180
+    },
+    "facing=west,occupied=false": {
+      "model": "guhs:block/guh_slaapzak",
+      "y": 270
+    },
+    "facing=west,occupied=true": {
+      "model": "guhs:block/guh_slaapzak",
+      "y": 270
+    }
+  }
+}

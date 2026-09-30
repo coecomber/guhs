@@ -1,0 +1,32 @@
+{
+  "parent": "guhs:guhmension/wolkguh_getemd",
+  "display": {
+    "icon": {
+      "id": "guhs:wolkenkraag"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.wolkenpakje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.wolkenpakje.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:wolkenmuts"
+          },
+          {
+            "items": "guhs:wolkenkraag"
+          }
+        ]
+      }
+    }
+  }
+}

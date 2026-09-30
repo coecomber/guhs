@@ -1,0 +1,35 @@
+{
+  "parent": "guhs:guhmension/verstop_gewonnen",
+  "display": {
+    "icon": {
+      "id": "guhs:detective_pet"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.verstop_detective.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.verstop_detective.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:detective_pet"
+          },
+          {
+            "items": "guhs:detective_vergrootglas"
+          },
+          {
+            "items": "guhs:detective_jas"
+          }
+        ]
+      }
+    }
+  }
+}

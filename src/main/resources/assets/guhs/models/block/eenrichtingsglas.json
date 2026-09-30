@@ -1,0 +1,48 @@
+{
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "particle": "guhs:block/eenrichtingsglas",
+    "glass": "guhs:block/eenrichtingsglas",
+    "ceiling": "guhs:block/eenrichtingsglas_onder"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#glass",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#glass",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#glass",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#glass",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#glass",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#ceiling",
+          "cullface": "down"
+        }
+      }
+    }
+  ]
+}

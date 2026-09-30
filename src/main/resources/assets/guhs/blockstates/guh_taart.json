@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "bites=0": {
+      "model": "guhs:block/guh_taart"
+    },
+    "bites=1": {
+      "model": "guhs:block/guh_taart_slice1"
+    },
+    "bites=2": {
+      "model": "guhs:block/guh_taart_slice2"
+    },
+    "bites=3": {
+      "model": "guhs:block/guh_taart_slice3"
+    },
+    "bites=4": {
+      "model": "guhs:block/guh_taart_slice4"
+    },
+    "bites=5": {
+      "model": "guhs:block/guh_taart_slice5"
+    },
+    "bites=6": {
+      "model": "guhs:block/guh_taart_slice6"
+    }
+  }
+}

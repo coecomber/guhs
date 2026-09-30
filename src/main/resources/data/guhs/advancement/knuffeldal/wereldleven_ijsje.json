@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/root",
+  "display": {
+    "icon": {
+      "id": "guhs:kaasijsje_roze"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.wereldleven_ijsje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.wereldleven_ijsje.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

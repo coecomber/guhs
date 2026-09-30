@@ -1,0 +1,217 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_aan"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_uit"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_aan",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_uit",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_aan",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_uit",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_aan",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_uit",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "vulling": "1",
+        "brouwsel": "0"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_bouillon_1"
+      }
+    },
+    {
+      "when": {
+        "vulling": "2",
+        "brouwsel": "0"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_bouillon_2"
+      }
+    },
+    {
+      "when": {
+        "vulling": "3",
+        "brouwsel": "0"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_bouillon_3"
+      }
+    },
+    {
+      "when": {
+        "vulling": "1",
+        "brouwsel": "1"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_vahoegheid_1"
+      }
+    },
+    {
+      "when": {
+        "vulling": "2",
+        "brouwsel": "1"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_vahoegheid_2"
+      }
+    },
+    {
+      "when": {
+        "vulling": "3",
+        "brouwsel": "1"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_vahoegheid_3"
+      }
+    },
+    {
+      "when": {
+        "vulling": "1",
+        "brouwsel": "2"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_rookloop_1"
+      }
+    },
+    {
+      "when": {
+        "vulling": "2",
+        "brouwsel": "2"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_rookloop_2"
+      }
+    },
+    {
+      "when": {
+        "vulling": "3",
+        "brouwsel": "2"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_rookloop_3"
+      }
+    },
+    {
+      "when": {
+        "vulling": "1",
+        "brouwsel": "3"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_sluipknabbel_1"
+      }
+    },
+    {
+      "when": {
+        "vulling": "2",
+        "brouwsel": "3"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_sluipknabbel_2"
+      }
+    },
+    {
+      "when": {
+        "vulling": "3",
+        "brouwsel": "3"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_sluipknabbel_3"
+      }
+    },
+    {
+      "when": {
+        "vulling": "1",
+        "brouwsel": "4"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_guhsprong_1"
+      }
+    },
+    {
+      "when": {
+        "vulling": "2",
+        "brouwsel": "4"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_guhsprong_2"
+      }
+    },
+    {
+      "when": {
+        "vulling": "3",
+        "brouwsel": "4"
+      },
+      "apply": {
+        "model": "guhs:block/guhbrouwketel_guhsprong_3"
+      }
+    }
+  ]
+}

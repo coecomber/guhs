@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/doolhof_anker"
+    },
+    "facing=east": {
+      "model": "guhs:block/doolhof_anker"
+    },
+    "facing=south": {
+      "model": "guhs:block/doolhof_anker"
+    },
+    "facing=west": {
+      "model": "guhs:block/doolhof_anker"
+    }
+  }
+}

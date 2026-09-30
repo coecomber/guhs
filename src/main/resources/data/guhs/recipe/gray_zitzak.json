@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W W",
+    "WWW"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:gray_wool"
+    }
+  },
+  "result": {
+    "id": "guhs:gray_zitzak",
+    "count": 1
+  }
+}

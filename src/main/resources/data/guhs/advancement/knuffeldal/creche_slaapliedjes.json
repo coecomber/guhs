@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/creche_ingestopt",
+  "display": {
+    "icon": {
+      "id": "guhs:knuffeldekentje"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.creche_slaapliedjes.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.creche_slaapliedjes.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

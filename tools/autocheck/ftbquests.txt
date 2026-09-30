@@ -1,0 +1,12 @@
+# Guhs AutoCheck: only the FTB quest book (the Guhs chapter group). Run with:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/ftbquests.txt
+# Output: run/screenshots/autocheck/gui_ftb_<chapter>_*.png + report.txt (the links of every chapter and where they point).
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+wait 40
+
+section FTB quest book (every Guhs chapter: overview, top to bottom, the Hoe kom je hier? quest)
+gui ftbquests gui_ftb
+quit

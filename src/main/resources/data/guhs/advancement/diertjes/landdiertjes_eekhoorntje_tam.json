@@ -1,0 +1,34 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:kaas_knabbels"
+    },
+    "title": {
+      "translate": "advancements.guhs.diertjes.landdiertjes_eekhoorntje_tam.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.diertjes.landdiertjes_eekhoorntje_tam.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:pluiseekhoorntje"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:diertjes/landdiertjes_eekhoorntje"
+}

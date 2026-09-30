@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guhhuisje_medium"
+    },
+    "facing=east": {
+      "model": "guhs:block/guhhuisje_medium"
+    },
+    "facing=south": {
+      "model": "guhs:block/guhhuisje_medium"
+    },
+    "facing=west": {
+      "model": "guhs:block/guhhuisje_medium"
+    }
+  }
+}

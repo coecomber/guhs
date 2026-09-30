@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W W",
+    "GTG",
+    " K "
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:pink_wool"
+    },
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "T": {
+      "item": "minecraft:torch"
+    },
+    "K": {
+      "item": "guhs:kaas_knabbels"
+    }
+  },
+  "result": {
+    "id": "guhs:klusjes_guhlampje",
+    "count": 2
+  }
+}

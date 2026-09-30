@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KKK"
+  ],
+  "key": {
+    "K": {
+      "item": "guhs:kaaskorst_stenen"
+    }
+  },
+  "result": {
+    "id": "guhs:kaaskorst_stenen_plaat",
+    "count": 6
+  }
+}

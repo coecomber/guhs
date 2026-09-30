@@ -1,0 +1,124 @@
+{
+  "variants": {
+    "kleur=roze,lagen=1": {
+      "model": "guhs:block/knuffelbad_glijgoot_roze_1"
+    },
+    "kleur=roze,lagen=2": {
+      "model": "guhs:block/knuffelbad_glijgoot_roze_2"
+    },
+    "kleur=roze,lagen=3": {
+      "model": "guhs:block/knuffelbad_glijgoot_roze_3"
+    },
+    "kleur=roze,lagen=4": {
+      "model": "guhs:block/knuffelbad_glijgoot_roze_4"
+    },
+    "kleur=roze,lagen=5": {
+      "model": "guhs:block/knuffelbad_glijgoot_roze_5"
+    },
+    "kleur=roze,lagen=6": {
+      "model": "guhs:block/knuffelbad_glijgoot_roze_6"
+    },
+    "kleur=roze,lagen=7": {
+      "model": "guhs:block/knuffelbad_glijgoot_roze_7"
+    },
+    "kleur=roze,lagen=8": {
+      "model": "guhs:block/knuffelbad_glijgoot_roze_8"
+    },
+    "kleur=wit,lagen=1": {
+      "model": "guhs:block/knuffelbad_glijgoot_wit_1"
+    },
+    "kleur=wit,lagen=2": {
+      "model": "guhs:block/knuffelbad_glijgoot_wit_2"
+    },
+    "kleur=wit,lagen=3": {
+      "model": "guhs:block/knuffelbad_glijgoot_wit_3"
+    },
+    "kleur=wit,lagen=4": {
+      "model": "guhs:block/knuffelbad_glijgoot_wit_4"
+    },
+    "kleur=wit,lagen=5": {
+      "model": "guhs:block/knuffelbad_glijgoot_wit_5"
+    },
+    "kleur=wit,lagen=6": {
+      "model": "guhs:block/knuffelbad_glijgoot_wit_6"
+    },
+    "kleur=wit,lagen=7": {
+      "model": "guhs:block/knuffelbad_glijgoot_wit_7"
+    },
+    "kleur=wit,lagen=8": {
+      "model": "guhs:block/knuffelbad_glijgoot_wit_8"
+    },
+    "kleur=blos,lagen=1": {
+      "model": "guhs:block/knuffelbad_glijgoot_blos_1"
+    },
+    "kleur=blos,lagen=2": {
+      "model": "guhs:block/knuffelbad_glijgoot_blos_2"
+    },
+    "kleur=blos,lagen=3": {
+      "model": "guhs:block/knuffelbad_glijgoot_blos_3"
+    },
+    "kleur=blos,lagen=4": {
+      "model": "guhs:block/knuffelbad_glijgoot_blos_4"
+    },
+    "kleur=blos,lagen=5": {
+      "model": "guhs:block/knuffelbad_glijgoot_blos_5"
+    },
+    "kleur=blos,lagen=6": {
+      "model": "guhs:block/knuffelbad_glijgoot_blos_6"
+    },
+    "kleur=blos,lagen=7": {
+      "model": "guhs:block/knuffelbad_glijgoot_blos_7"
+    },
+    "kleur=blos,lagen=8": {
+      "model": "guhs:block/knuffelbad_glijgoot_blos_8"
+    },
+    "kleur=donker,lagen=1": {
+      "model": "guhs:block/knuffelbad_glijgoot_donker_1"
+    },
+    "kleur=donker,lagen=2": {
+      "model": "guhs:block/knuffelbad_glijgoot_donker_2"
+    },
+    "kleur=donker,lagen=3": {
+      "model": "guhs:block/knuffelbad_glijgoot_donker_3"
+    },
+    "kleur=donker,lagen=4": {
+      "model": "guhs:block/knuffelbad_glijgoot_donker_4"
+    },
+    "kleur=donker,lagen=5": {
+      "model": "guhs:block/knuffelbad_glijgoot_donker_5"
+    },
+    "kleur=donker,lagen=6": {
+      "model": "guhs:block/knuffelbad_glijgoot_donker_6"
+    },
+    "kleur=donker,lagen=7": {
+      "model": "guhs:block/knuffelbad_glijgoot_donker_7"
+    },
+    "kleur=donker,lagen=8": {
+      "model": "guhs:block/knuffelbad_glijgoot_donker_8"
+    },
+    "kleur=glim,lagen=1": {
+      "model": "guhs:block/knuffelbad_glijgoot_glim_1"
+    },
+    "kleur=glim,lagen=2": {
+      "model": "guhs:block/knuffelbad_glijgoot_glim_2"
+    },
+    "kleur=glim,lagen=3": {
+      "model": "guhs:block/knuffelbad_glijgoot_glim_3"
+    },
+    "kleur=glim,lagen=4": {
+      "model": "guhs:block/knuffelbad_glijgoot_glim_4"
+    },
+    "kleur=glim,lagen=5": {
+      "model": "guhs:block/knuffelbad_glijgoot_glim_5"
+    },
+    "kleur=glim,lagen=6": {
+      "model": "guhs:block/knuffelbad_glijgoot_glim_6"
+    },
+    "kleur=glim,lagen=7": {
+      "model": "guhs:block/knuffelbad_glijgoot_glim_7"
+    },
+    "kleur=glim,lagen=8": {
+      "model": "guhs:block/knuffelbad_glijgoot_glim_8"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "vadshout_slab",
+  "key": {
+    "#": {
+      "item": "guhs:vadshout_planken"
+    }
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "guhs:vadshout_plaat"
+  }
+}

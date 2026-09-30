@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "stage=0": {
+      "model": "guhs:block/sneeuwguhspar_zaailing"
+    },
+    "stage=1": {
+      "model": "guhs:block/sneeuwguhspar_zaailing"
+    }
+  }
+}

@@ -1,0 +1,121 @@
+package nl.juiced.guhs.feature.klusjes.client;
+
+import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import nl.juiced.guhs.feature.band.BandVlaggen;
+import nl.juiced.guhs.feature.klusjes.KlusjesFeature;
+import nl.juiced.guhs.feature.klusjes.StappenTaak;
+import nl.juiced.guhs.feature.knus.client.GuhRenderHooks;
+
+/**
+ * Client side of klusjes (2.10): the sparkle and the "!" particles, and the little icon over a working guh's head (its
+ * tool while it works, what it carries on the way to the chest: the display copy in its hand, flag KLUSJE).
+ */
+public final class KlusjesClient {
+    public static void init(IEventBus modBus) {
+        modBus.addListener((RegisterParticleProvidersEvent event) -> {
+            event.registerSpriteSet(KlusjesFeature.STERRETJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Sterretje(level, x, y, z, sprites));
+            event.registerSpriteSet(KlusjesFeature.UITROEP.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Uitroep(level, x, y, z, sprites));
+        });
+        GuhRenderHooks.laag((renderer, pose, guh, model, buffers, partialTick, light, overlay) -> {
+            if (!BandVlaggen.heeft(guh, BandVlaggen.KLUSJE)) {
+                return;
+            }
+            ItemStack stack = guh.getMainHandItem();
+            if (!StappenTaak.isToon(stack)) {
+                return;
+            }
+            float t = guh.tickCount + partialTick;
+            pose.translate(0, guh.getBbHeight() / Math.max(0.2f, guh.getScale()) + 0.3 + Math.sin(t * 0.15) * 0.04, 0);
+            pose.mulPose(Axis.YP.rotationDegrees((float) Math.sin(t * 0.05) * 25f));
+            pose.scale(0.55f, 0.55f, 0.55f);
+            Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, light, OverlayTexture.NO_OVERLAY, pose, buffers,
+                    guh.level(), guh.getId());
+        });
+    }
+
+    /** A little yellow star: pops up, twinkles and fades. */
+    static class Sterretje extends TextureSheetParticle {
+        Sterretje(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
+            super(level, x, y, z);
+            pickSprite(sprites);
+            lifetime = 16 + random.nextInt(12);
+            quadSize = 0.07f + random.nextFloat() * 0.05f;
+            gravity = -0.01f;
+            xd = (random.nextDouble() - 0.5) * 0.04;
+            yd = 0.03 + random.nextDouble() * 0.03;
+            zd = (random.nextDouble() - 0.5) * 0.04;
+            hasPhysics = false;
+        }
+
+        @Override
+        public void tick() {
+            super.tick();
+            xd *= 0.9;
+            zd *= 0.9;
+            alpha = (age / 3) % 2 == 0 ? 1f : 0.55f;
+            if (age > lifetime - 6) {
+                alpha *= (lifetime - age) / 6f;
+            }
+        }
+
+        @Override
+        public int getLightColor(float partialTick) {
+            return 0xF000F0;
+        }
+
+        @Override
+        public ParticleRenderType getRenderType() {
+            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        }
+    }
+
+    /** A pink "!" that bounces up over a guh that peeps a warning, then fades. */
+    static class Uitroep extends TextureSheetParticle {
+        private final double basisY;
+
+        Uitroep(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
+            super(level, x, y, z);
+            pickSprite(sprites);
+            basisY = y;
+            lifetime = 30;
+            quadSize = 0.25f;
+            gravity = 0f;
+            xd = yd = zd = 0;
+            hasPhysics = false;
+        }
+
+        @Override
+        public void tick() {
+            super.tick();
+            yd = 0;
+            y = basisY + Math.abs(Math.sin(age * 0.35)) * 0.15 * Math.max(0, 1 - age / 20.0);
+            yo = y;
+            if (age > lifetime - 8) {
+                alpha = (lifetime - age) / 8f;
+            }
+        }
+
+        @Override
+        public int getLightColor(float partialTick) {
+            return 0xF000F0;
+        }
+
+        @Override
+        public ParticleRenderType getRenderType() {
+            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        }
+    }
+
+    private KlusjesClient() {
+    }
+}

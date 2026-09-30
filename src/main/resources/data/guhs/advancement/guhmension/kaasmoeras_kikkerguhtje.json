@@ -1,0 +1,33 @@
+{
+  "parent": "guhs:guhmension/kaasmoeras_motknabbel",
+  "display": {
+    "icon": {
+      "id": "guhs:kikkerguh_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.kaasmoeras_kikkerguhtje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.kaasmoeras_kikkerguhtje.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:bred_animals",
+      "conditions": {
+        "child": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:kikkerguh"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:knabbelkelder",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:concentric_rings",
+    "distance": 12,
+    "spread": 4,
+    "count": 4,
+    "preferred_biomes": "#guhs:has_structure/knabbelkelder",
+    "salt": 20260925
+  }
+}

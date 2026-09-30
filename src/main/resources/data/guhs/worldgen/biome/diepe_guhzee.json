@@ -1,0 +1,69 @@
+{
+  "has_precipitation": false,
+  "temperature": 0.8,
+  "downfall": 0.0,
+  "creature_spawn_probability": 0.45,
+  "effects": {
+    "sky_color": 16038108,
+    "fog_color": 16766186,
+    "water_color": 15231672,
+    "water_fog_color": 9321094,
+    "grass_color": 16234187,
+    "foliage_color": 16234187,
+    "mood_sound": {
+      "sound": "minecraft:ambient.cave",
+      "tick_delay": 6000,
+      "block_search_extent": 8,
+      "offset": 2.0
+    }
+  },
+  "spawners": {
+    "monster": [],
+    "ambient": [],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [
+      {
+        "type": "guhs:guh_vis",
+        "weight": 25,
+        "minCount": 3,
+        "maxCount": 6
+      }
+    ],
+    "misc": [],
+    "creature": [
+      {
+        "type": "guhs:guh",
+        "weight": 60,
+        "minCount": 2,
+        "maxCount": 4
+      }
+    ]
+  },
+  "spawn_costs": {},
+  "carvers": {
+    "air": []
+  },
+  "features": [
+    [],
+    [
+      "guhs:diepzee_water"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "guhs:diepzee_koraal",
+      "guhs:diepzee_zeegras",
+      "guhs:diepzee_kelp",
+      "guhs:diepzee_zeeaugurken",
+      "guhs:diepzee_kaaskoraal"
+    ],
+    []
+  ]
+}

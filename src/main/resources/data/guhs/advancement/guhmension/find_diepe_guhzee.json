@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:guhmension/enter_guhmension",
+  "display": {
+    "icon": {
+      "id": "guhs:guh_vis_bucket"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.find_diepe_guhzee.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.find_diepe_guhzee.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:diepe_guhzee"
+          }
+        }
+      }
+    }
+  }
+}

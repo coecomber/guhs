@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/red_zitzak"
+    },
+    "facing=east": {
+      "model": "guhs:block/red_zitzak",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/red_zitzak",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/red_zitzak",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:mewtwo_trainerpetje"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.mewtwo_trainer.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.mewtwo_trainer.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "mewtwo_trainerpetje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:mewtwo_trainerpetje"
+          }
+        ]
+      }
+    },
+    "mewtwo_trainerpakje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:mewtwo_trainerpakje"
+          }
+        ]
+      }
+    },
+    "mewtwo_staartje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:mewtwo_staartje"
+          }
+        ]
+      }
+    },
+    "mew_ballonnetje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:mew_ballonnetje"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:verhalen/mewtwo_maaltijd"
+}

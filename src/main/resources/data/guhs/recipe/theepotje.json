@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "TKT",
+    "TTT"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:white_terracotta"
+    },
+    "K": {
+      "item": "guhs:kaas_knabbels"
+    }
+  },
+  "result": {
+    "id": "guhs:theepotje",
+    "count": 1
+  }
+}

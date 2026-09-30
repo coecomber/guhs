@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/bieb_guhfauteuil"
+    },
+    "facing=east": {
+      "model": "guhs:block/bieb_guhfauteuil",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/bieb_guhfauteuil",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/bieb_guhfauteuil",
+      "y": 270
+    }
+  }
+}

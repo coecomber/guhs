@@ -1,0 +1,38 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:nomguh",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:regio_piek",
+    "salt": 20300101,
+    "plek": {
+      "regio": {
+        "noise": "guhs:sneeuwguhtoendra",
+        "masks": [
+          {
+            "noise": "guhs:guhmension_zee",
+            "max": 0.29000000000000004
+          },
+          {
+            "noise": "guhs:guhmension_knuffel",
+            "max": 0.43000000000000005
+          },
+          {
+            "noise": "guhs:guhmension_polder",
+            "max": 0.53
+          }
+        ],
+        "min_value": 0.7,
+        "dal_value": 0.46,
+        "buurt": 3
+      },
+      "cell": 16,
+      "soort": "piek",
+      "hoek": 0.0,
+      "afstand": 0
+    }
+  }
+}

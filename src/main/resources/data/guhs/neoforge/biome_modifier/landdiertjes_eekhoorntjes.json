@@ -1,0 +1,16 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:vadswoud",
+    "guhs:pink_puffs",
+    "guhs:guh_fields"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:pluiseekhoorntje",
+      "weight": 10,
+      "minCount": 1,
+      "maxCount": 3
+    }
+  ]
+}

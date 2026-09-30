@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WFW",
+    "WKW",
+    "WWW"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:white_wool"
+    },
+    "F": {
+      "item": "minecraft:feather"
+    },
+    "K": {
+      "item": "guhs:guh_kristal"
+    }
+  },
+  "result": {
+    "id": "guhs:wolkenlift",
+    "count": 2
+  }
+}

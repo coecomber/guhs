@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/knabbelspelen_anker"
+    },
+    "facing=east": {
+      "model": "guhs:block/knabbelspelen_anker"
+    },
+    "facing=south": {
+      "model": "guhs:block/knabbelspelen_anker"
+    },
+    "facing=west": {
+      "model": "guhs:block/knabbelspelen_anker"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:barbecuether/rookguh",
+  "display": {
+    "icon": {
+      "id": "guhs:gefrituurde_kaasknabbels"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.rookguh_redder.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.rookguh_redder.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

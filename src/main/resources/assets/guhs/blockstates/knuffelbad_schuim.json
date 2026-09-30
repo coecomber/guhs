@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/knuffelbad_schuim",
+        "y": 0
+      },
+      {
+        "model": "guhs:block/knuffelbad_schuim",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/knuffelbad_schuim",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/knuffelbad_schuim",
+        "y": 270
+      }
+    ]
+  }
+}

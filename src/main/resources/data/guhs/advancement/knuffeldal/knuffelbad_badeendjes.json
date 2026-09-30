@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/knuffelbad_glijbaan",
+  "display": {
+    "icon": {
+      "id": "guhs:knuffelbad_badeendje"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.knuffelbad_badeendjes.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.knuffelbad_badeendjes.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

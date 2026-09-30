@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:tiki_bloemenslinger"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.guhwaii_spellen_hula_foutloos.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.guhwaii_spellen_hula_foutloos.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/guhwaii_spellen_hula"
+}

@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:baltoslee_beker"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.balto_slee_lastig.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.balto_slee_lastig.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/balto_slee_steele"
+}

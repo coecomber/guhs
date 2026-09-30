@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/cake_slice6",
+  "textures": {
+    "particle": "guhs:block/guh_taart_side",
+    "bottom": "guhs:block/guh_taart_bottom",
+    "top": "guhs:block/guh_taart_top",
+    "side": "guhs:block/guh_taart_side",
+    "inside": "guhs:block/guh_taart_inner"
+  }
+}

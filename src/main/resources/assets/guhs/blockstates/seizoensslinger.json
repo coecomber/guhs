@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "axis=x,seizoen=lente": {
+      "model": "guhs:block/seizoensslinger_lente"
+    },
+    "axis=x,seizoen=zomer": {
+      "model": "guhs:block/seizoensslinger_zomer"
+    },
+    "axis=x,seizoen=herfst": {
+      "model": "guhs:block/seizoensslinger_herfst"
+    },
+    "axis=x,seizoen=winter": {
+      "model": "guhs:block/seizoensslinger_winter"
+    },
+    "axis=z,seizoen=lente": {
+      "model": "guhs:block/seizoensslinger_lente",
+      "y": 90
+    },
+    "axis=z,seizoen=zomer": {
+      "model": "guhs:block/seizoensslinger_zomer",
+      "y": 90
+    },
+    "axis=z,seizoen=herfst": {
+      "model": "guhs:block/seizoensslinger_herfst",
+      "y": 90
+    },
+    "axis=z,seizoen=winter": {
+      "model": "guhs:block/seizoensslinger_winter",
+      "y": 90
+    }
+  }
+}

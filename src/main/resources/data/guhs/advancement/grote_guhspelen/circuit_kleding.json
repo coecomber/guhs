@@ -1,0 +1,44 @@
+{
+  "parent": "guhs:grote_guhspelen/circuit_gevonden",
+  "display": {
+    "icon": {
+      "id": "guhs:circuit_helmpje"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.circuit_kleding.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.circuit_kleding.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "items": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:circuit_helmpje"
+          },
+          {
+            "items": "guhs:circuit_racepak"
+          },
+          {
+            "items": "guhs:circuit_vlagcape"
+          }
+        ]
+      }
+    },
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "items",
+      "done"
+    ]
+  ]
+}

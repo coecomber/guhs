@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/sjoelen_gespeeld",
+  "display": {
+    "icon": {
+      "id": "guhs:sjoelen_bakplank"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.sjoelen_zestig.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.sjoelen_zestig.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

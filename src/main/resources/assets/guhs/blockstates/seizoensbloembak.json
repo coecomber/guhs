@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "seizoen=lente": {
+      "model": "guhs:block/seizoensbloembak_lente"
+    },
+    "seizoen=zomer": {
+      "model": "guhs:block/seizoensbloembak_zomer"
+    },
+    "seizoen=herfst": {
+      "model": "guhs:block/seizoensbloembak_herfst"
+    },
+    "seizoen=winter": {
+      "model": "guhs:block/seizoensbloembak_winter"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "guhs:guhmension/kermis_rit",
+  "display": {
+    "icon": {
+      "id": "guhs:kermis_hoed"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.kermis_outfit.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.kermis_outfit.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:kermis_hoed"
+          },
+          {
+            "items": "guhs:kermis_jasje"
+          },
+          {
+            "items": "guhs:kermis_strik"
+          }
+        ]
+      }
+    }
+  }
+}

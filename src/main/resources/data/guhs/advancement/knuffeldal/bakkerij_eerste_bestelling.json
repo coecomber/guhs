@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/stadje",
+  "display": {
+    "icon": {
+      "id": "guhs:bakmunt"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.bakkerij_eerste_bestelling.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.bakkerij_eerste_bestelling.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

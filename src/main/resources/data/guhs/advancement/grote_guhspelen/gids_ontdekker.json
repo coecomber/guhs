@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/root",
+  "display": {
+    "icon": {
+      "id": "guhs:guhmensie_superkompas"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.gids_ontdekker.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.gids_ontdekker.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

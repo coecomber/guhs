@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "active=false": {
+      "model": "guhs:block/knabbelsensor"
+    },
+    "active=true": {
+      "model": "guhs:block/knabbelsensor_active"
+    }
+  }
+}

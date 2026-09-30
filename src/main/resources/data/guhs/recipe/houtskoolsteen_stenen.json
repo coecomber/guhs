@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "HH",
+    "HH"
+  ],
+  "key": {
+    "H": {
+      "item": "guhs:houtskoolsteen"
+    }
+  },
+  "result": {
+    "id": "guhs:houtskoolsteen_stenen",
+    "count": 4
+  }
+}

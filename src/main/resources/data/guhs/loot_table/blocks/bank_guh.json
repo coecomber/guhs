@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "guhs:bank_guh",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "source": "block_entity",
+              "include": [
+                "guhs:bank_contents"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "guhs:blocks/bank_guh"
+}

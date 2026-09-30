@@ -1,0 +1,44 @@
+{
+  "parent": "guhs:grote_guhspelen/sjoelen_gespeeld",
+  "display": {
+    "icon": {
+      "id": "guhs:sjoelen_vestje"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.sjoelen_kleding.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.sjoelen_kleding.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "items": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:sjoelen_petje"
+          },
+          {
+            "items": "guhs:sjoelen_vestje"
+          },
+          {
+            "items": "guhs:sjoelen_broche"
+          }
+        ]
+      }
+    },
+    "code": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "items",
+      "code"
+    ]
+  ]
+}

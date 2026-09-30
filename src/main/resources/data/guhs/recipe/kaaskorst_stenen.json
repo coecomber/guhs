@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "KK",
+    "KK"
+  ],
+  "key": {
+    "K": {
+      "item": "guhs:kaaskorst"
+    }
+  },
+  "result": {
+    "id": "guhs:kaaskorst_stenen",
+    "count": 4
+  }
+}

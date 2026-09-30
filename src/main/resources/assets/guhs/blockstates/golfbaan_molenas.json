@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/golfbaan_molenas"
+    },
+    "facing=east": {
+      "model": "guhs:block/golfbaan_molenas",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/golfbaan_molenas",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/golfbaan_molenas",
+      "y": 270
+    }
+  }
+}

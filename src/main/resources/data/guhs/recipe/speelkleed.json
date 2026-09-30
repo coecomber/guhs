@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PB"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:pink_carpet"
+    },
+    "B": {
+      "item": "minecraft:light_blue_carpet"
+    }
+  },
+  "result": {
+    "id": "guhs:speelkleed",
+    "count": 2
+  }
+}

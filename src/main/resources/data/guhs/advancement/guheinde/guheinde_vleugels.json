@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:guhvleugels"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.guheinde_vleugels.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.guheinde_vleugels.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:guhvleugels"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:guheinde/guheinde_vesting"
+}

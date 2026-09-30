@@ -1,0 +1,35 @@
+{
+  "parent": "guhs:guhmension/find_guhvis_vijver",
+  "display": {
+    "icon": {
+      "id": "guhs:vissershoedje"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.vissen_outfit.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.vissen_outfit.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:vissershoedje"
+          },
+          {
+            "items": "guhs:visvest"
+          },
+          {
+            "items": "guhs:vis_aan_de_haak"
+          }
+        ]
+      }
+    }
+  }
+}

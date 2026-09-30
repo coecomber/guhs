@@ -1,0 +1,37 @@
+{
+  "textures": {
+    "particle": "guhs:block/guhbrouwketel_rookloop",
+    "saus": "guhs:block/guhbrouwketel_rookloop"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        8,
+        1
+      ],
+      "to": [
+        15,
+        9.9,
+        15
+      ],
+      "faces": {
+        "up": {
+          "texture": "#saus"
+        },
+        "north": {
+          "texture": "#saus"
+        },
+        "south": {
+          "texture": "#saus"
+        },
+        "east": {
+          "texture": "#saus"
+        },
+        "west": {
+          "texture": "#saus"
+        }
+      }
+    }
+  ]
+}

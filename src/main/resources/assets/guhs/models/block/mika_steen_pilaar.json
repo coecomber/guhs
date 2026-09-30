@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "guhs:block/mika_steen_pilaar_top",
+    "side": "guhs:block/mika_steen_pilaar"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:tiki_beeld"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.guhwaii_spellen_alle_niveaus.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.guhwaii_spellen_alle_niveaus.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/guhwaii_spellen_hula"
+}

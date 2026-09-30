@@ -1,0 +1,44 @@
+{
+  "parent": "guhs:grote_guhspelen/katapult_gespeeld",
+  "display": {
+    "icon": {
+      "id": "guhs:katapult_helmpje"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.katapult_kleding.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.katapult_kleding.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "items": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:katapult_helmpje"
+          },
+          {
+            "items": "guhs:katapult_riem"
+          },
+          {
+            "items": "guhs:katapult_oorbelletjes"
+          }
+        ]
+      }
+    },
+    "code": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "items",
+      "code"
+    ]
+  ]
+}

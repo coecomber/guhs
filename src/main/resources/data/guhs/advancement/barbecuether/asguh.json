@@ -1,0 +1,35 @@
+{
+  "parent": "guhs:barbecuether/binnen",
+  "display": {
+    "icon": {
+      "id": "guhs:as_blok"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.asguh.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.asguh.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:tame_animal",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:guh",
+              "nbt": "{Variant:\"asguh\"}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

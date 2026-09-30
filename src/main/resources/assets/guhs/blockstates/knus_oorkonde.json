@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/knus_oorkonde"
+    },
+    "facing=east": {
+      "model": "guhs:block/knus_oorkonde",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/knus_oorkonde",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/knus_oorkonde",
+      "y": 270
+    }
+  }
+}

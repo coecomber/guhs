@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:block_of_kaasknabbels",
+    "guhs:borrelende_kaassaus",
+    "guhs:motknabbel",
+    "guhs:lampion_geel",
+    "guhs:lampion_roze",
+    "guhs:lampion_mint",
+    "guhs:kaasknabbelplant",
+    "minecraft:lantern",
+    "minecraft:ochre_froglight",
+    "minecraft:pearlescent_froglight",
+    "minecraft:verdant_froglight",
+    "minecraft:shroomlight"
+  ]
+}

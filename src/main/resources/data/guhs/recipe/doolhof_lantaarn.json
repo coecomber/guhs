@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " I ",
+    "ITI",
+    " I "
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:pink_dye"
+    },
+    "T": {
+      "item": "minecraft:lantern"
+    }
+  },
+  "result": {
+    "id": "guhs:doolhof_lantaarn",
+    "count": 2
+  }
+}

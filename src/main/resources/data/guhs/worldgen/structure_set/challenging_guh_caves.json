@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:challenging_guh_caves",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 18,
+    "separation": 7,
+    "salt": 31313131
+  }
+}

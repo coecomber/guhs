@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:guhmension/find_guh_golfbaan",
+  "display": {
+    "icon": {
+      "id": "guhs:golfballetje"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.golf_gespeeld.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.golf_gespeeld.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:golfballetje"
+          }
+        ]
+      }
+    }
+  }
+}

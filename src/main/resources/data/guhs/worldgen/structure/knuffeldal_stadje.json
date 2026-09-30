@@ -1,0 +1,29 @@
+{
+  "type": "guhs:knuffeldal_stadje",
+  "biomes": "#guhs:has_structure/knuffeldal_stadje",
+  "step": "fluid_springs",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "ambient": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "terrain_adaptation": "beard_box",
+  "start_pool": "guhs:knuffeldal_stadje/start",
+  "start_jigsaw_name": "guhs:knuffeldal_midden",
+  "knuffel_noise": "guhs:guhmension_knuffel",
+  "cell_chunks": 4,
+  "neighbourhood": 12,
+  "min_value": 0.585,
+  "dal_value": 0.47,
+  "flat_value": 0.54,
+  "flat_radius": 40,
+  "size": 2,
+  "max_distance_from_center": 80,
+  "keep_clear": 143,
+  "voorrang": 800
+}

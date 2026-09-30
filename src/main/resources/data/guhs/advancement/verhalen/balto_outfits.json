@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:balto_sneeuwmuts"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.balto_outfits.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.balto_outfits.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/balto_held"
+}

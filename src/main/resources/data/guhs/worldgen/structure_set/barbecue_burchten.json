@@ -1,0 +1,22 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:spiesburcht",
+      "weight": 2
+    },
+    {
+      "structure": "guhs:mika_grillpaleis",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 5,
+    "salt": 27020027,
+    "exclusion_zone": {
+      "other_set": "guhs:barbecueput",
+      "chunk_count": 3
+    }
+  }
+}

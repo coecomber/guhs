@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/naaitafel"
+    },
+    "facing=east": {
+      "model": "guhs:block/naaitafel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/naaitafel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/naaitafel",
+      "y": 270
+    }
+  }
+}

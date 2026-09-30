@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WW",
+    "WW"
+  ],
+  "key": {
+    "W": {
+      "item": "guhs:pluiswol"
+    }
+  },
+  "result": {
+    "id": "guhs:pluiswolblok",
+    "count": 1
+  }
+}

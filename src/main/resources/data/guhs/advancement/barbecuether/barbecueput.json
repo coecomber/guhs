@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:gebeitelde_houtskoolsteen_stenen"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.barbecueput.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.barbecueput.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": "guhs:barbecueput"
+          }
+        }
+      }
+    }
+  },
+  "parent": "guhs:barbecuether/root"
+}

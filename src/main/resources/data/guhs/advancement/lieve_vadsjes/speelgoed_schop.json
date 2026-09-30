@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:knabbelbal"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.speelgoed_schop.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.speelgoed_schop.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:lieve_vadsjes/speelgoed_eerste"
+}

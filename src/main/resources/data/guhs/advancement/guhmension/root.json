@@ -1,0 +1,52 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:block_of_kaasknabbels"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.root.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.root.description"
+    },
+    "background": "minecraft:textures/block/pink_wool.png",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "has_kaasknabbel_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:block_of_kaasknabbels"
+          }
+        ]
+      }
+    },
+    "entered_guhmension": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "guhs:guhmension"
+      }
+    },
+    "rode_guh": {
+      "trigger": "minecraft:started_riding",
+      "conditions": {
+        "player": {
+          "vehicle": {
+            "type": "guhs:guh",
+            "nbt": "{Saddle:1b}"
+          }
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_kaasknabbel_block",
+      "entered_guhmension",
+      "rode_guh"
+    ]
+  ]
+}

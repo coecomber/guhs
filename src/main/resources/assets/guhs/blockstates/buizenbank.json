@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/buizenbank"
+    },
+    "facing=east": {
+      "model": "guhs:block/buizenbank",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/buizenbank",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/buizenbank",
+      "y": 270
+    }
+  }
+}

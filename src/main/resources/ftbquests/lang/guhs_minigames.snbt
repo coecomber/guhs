@@ -1,0 +1,294 @@
+{
+	chapter.475548EA09F4D736.title: "&6Minigames \\& bijzondere plekken"
+	chapter.475548EA09F4D736.chapter_subtitle: ["3. Spelen, winnen en vadsig verkleden"]
+	quest.47554867D43B4C54.title: "Hoe kom je hier?"
+	quest.47554867D43B4C54.quest_desc: ["Dit hoofdstuk komt na &6Het superkompas&r in &dDe Guhmensie&r.", "", "Alle minigamegebouwen en de zeldzame plekken (verstophuis, bibliotheek, kaasmijn, zwevende eilandjes, kermis...) vind je met het superkompas (Minigames of Wonderen). Elk rijtje hieronder begint bij zo'n gebouw.", "", "Speel ze in elke volgorde die je wilt. Njeg, wat een keuze! Niks zit op slot: de lijntjes laten alleen zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!"]
+	quest.4755480AD7564B03.title: "Showtijd!"
+	quest.4755480AD7564B03.quest_desc: ["Zoek het &dGuh Beauty Theater&r (superkompas: Minigames). Je herkent het aan de gevel: een reuzenguh, en de deur is zijn mond!"]
+	quest.47554809997CE611.title: "Op de catwalk"
+	quest.47554809997CE611.quest_desc: ["Praat met de &dShowguh&r op het podium en doe mee aan de Vads-wedstrijd. Je hoeft zelf niks mee te nemen: model en kleertjes krijg je te leen (of neem je eigen tamme guh mee)! De jury houdt bordjes met punten omhoog, en boven de Showguh zweeft de &6top 3&r van de wereld."]
+	quest.475548BE4AF124F4.title: "Vahoege stylist"
+	quest.475548BE4AF124F4.quest_desc: ["Haal in één show minstens &665 van de 90&r punten. Tip: Juf Vadsma wil het thema, Meneer Glitterguh een complete look (hoofd, ogen, nek én lijf)."]
+	quest.475548CDA367444A.title: "De jury in extase"
+	quest.475548CDA367444A.quest_desc: ["Haal in één ronde &628 punten of meer&r. De jury staat op haar kussens te klappen!"]
+	quest.4755484C3824C902.title: "Mijn guh is een ster"
+	quest.4755484C3824C902.quest_desc: ["Laat je &deigen tamme guh&r de catwalk op lopen (kies 'Met ...' bij de Showguh). Na de show krijgt hij zijn eigen kleertjes terug."]
+	quest.475548964A1CF7F7.title: "Rozettenverzamelaar"
+	quest.475548964A1CF7F7.quest_desc: ["Spaar 16 showrozetten: genoeg voor de Showster-tiara!"]
+	quest.475548134B4D81D6.title: "Glitter!"
+	quest.475548134B4D81D6.quest_desc: ["Koop de &dglitterstrik&r bij de Showguh (showrozetten)."]
+	quest.4755485E61E6B92E.title: "Miss Vadsig"
+	quest.4755485E61E6B92E.quest_desc: ["Koop het hele Showster-pakje: de glitterstrik, de Miss Vadsig-sjerp en de Showster-tiara."]
+	quest.475548C77E559F04.title: "Op je plaatsen, vads!"
+	quest.475548C77E559F04.quest_desc: ["Vind de &dguhracebaan&r (superkompas: Minigames > Guhracebaan). In de pitstop wacht de Raceguh met een huur-renguh voor je."]
+	quest.475548C70D03D857.title: "VROEM VROEM!"
+	quest.475548C70D03D857.quest_desc: ["Rij je eerste guhrace: 3 rondes door alle lichtgevende ringen. Je hoeft niks mee te nemen: de Raceguh leent je een renguh."]
+	quest.47554884FAF99C6F.title: "Brons!"
+	quest.47554884FAF99C6F.quest_desc: ["Rij de race binnen 1:45. Tip: de &6VAHOEG-pads&r geven je een flinke zet!"]
+	quest.475548C547DDEABC.title: "GOUD! VAHOEG!"
+	quest.475548C547DDEABC.quest_desc: ["Rij de race binnen 1:12. Neem de binnenbochten en mis geen enkele pad!"]
+	quest.475548414C185225.title: "Spookrijder"
+	quest.475548414C185225.quest_desc: ["Verbeter je eigen record terwijl je doorzichtige &bgeest&r meerijdt. Wie is er sneller: jij of jij?"]
+	quest.47554882BC287843.title: "Prijzenkast"
+	quest.47554882BC287843.quest_desc: ["Spaar 10 raceprijsjes."]
+	quest.47554808EED9E448.title: "Vahoege racebril"
+	quest.47554808EED9E448.quest_desc: ["Koop een &dvahoege racebril&r voor je guh bij de Raceguh (raceprijsjes)."]
+	quest.4755488D62BDFC72.title: "Racen op lastig"
+	quest.4755488D62BDFC72.quest_desc: ["De guhracebaan heeft nu &amakkelijk&r, &emedium&r en &clastig&r. Rij hem uit op lastig: een supersnelle maar eigenwijze renguh, Mika-pikkers langs de baan, en de zilveren VAHOEG-pads doen het niet!"]
+	quest.4755486EA41E47D7.title: "Vroem vroem, guh!"
+	quest.4755486EA41E47D7.quest_desc: ["Koop het hele jockeypakje: jockeypetje, gestreept zijden jockeyjasje en racebril. Alleen bij de Raceguh!"]
+	quest.475548A1A68FC9C9.title: "Wie plopt daar op?"
+	quest.475548A1A68FC9C9.quest_desc: ["Zoek de zeldzame &dMika-mephal&r (superkompas: Minigames > Mika-mephal). Achter de gevel met het reuzenguhgezicht woont de Mepguh."]
+	quest.475548858F8683C1.title: "MEP!"
+	quest.475548858F8683C1.quest_desc: ["Praat met de Mepguh en speel een potje &dMika meppen&r: 60 seconden Mika's terugmeppen met de geleende mephamer. Niet de guh meppen!"]
+	quest.47554887DD3CD755.title: "Gouden mep"
+	quest.47554887DD3CD755.quest_desc: ["Mep een &6gouden Mika&r: 50 punten keer je combo!"]
+	quest.475548A275EF2BFD.title: "Mepper"
+	quest.475548A275EF2BFD.quest_desc: ["Haal 500 punten in een potje Mika meppen. Tip: 5 op rij = hogere combo."]
+	quest.475548794B077971.title: "Mika-meester"
+	quest.475548794B077971.quest_desc: ["Haal 1500 punten in een potje Mika meppen. Laat geen Mika ontsnappen!"]
+	quest.4755485EDC3F9C64.title: "VAHOEGE MEPPER"
+	quest.4755485EDC3F9C64.quest_desc: ["2500 punten! Zo snel heeft de Mepguh nog nooit iemand zien meppen. Sta jij al in de &6top 3&r op de scorebordmuur? VAHOEG!"]
+	quest.4755486273D32EB2.title: "Mika-mepper-medaille"
+	quest.4755486273D32EB2.quest_desc: ["Koop de Mika-mepper-medaille bij de Mepguh (4 mepmunten). Wat staat hij je guh goed!"]
+	quest.4755481AFEA42383.title: "Mika-jager"
+	quest.4755481AFEA42383.quest_desc: ["Koop het hele Mika-jagerpakje voor je guh: de jagershoed, het mepvest met zakjes en de medaille. Alleen te koop bij de Mepguh!"]
+	quest.47554831B31C88BD.title: "Guhkoorts op zaterdagavond"
+	quest.47554831B31C88BD.quest_desc: ["Zoek de &dGuhdisco&r in de Guhmensie (superkompas: Minigames > Guhdisco). Volg de beat naar de roze club met een guhgezicht!"]
+	quest.475548D170EB50FA.title: "Eerste dansje"
+	quest.475548D170EB50FA.quest_desc: ["Praat met de &5DJ-guh&r in de mond van de grote guhkop en dans je eerste 'Simon zegt'. Je hebt niks nodig: gewoon je dansbeentjes!"]
+	quest.475548B401E1CFDD.title: "Dansbeentjes"
+	quest.475548B401E1CFDD.quest_desc: ["Dans een rij van &e5 kleuren&r foutloos na."]
+	quest.475548DE11721740.title: "Discoguh"
+	quest.475548DE11721740.quest_desc: ["Dans een rij van &e10 kleuren&r foutloos na. Luister naar de tonen, dat helpt!"]
+	quest.47554813D09D8206.title: "Vahoege dansmachine"
+	quest.47554813D09D8206.quest_desc: ["Dans een rij van &e15 kleuren&r foutloos na. Alleen de allervadsigste dansers halen dit! Wie het verst komt, staat met naam en toenaam in de &etop 3&r boven het podium."]
+	quest.475548B99F404A30.title: "Glitter!"
+	quest.475548B99F404A30.quest_desc: ["Koop een stuk van het discopakje bij de DJ-guh (met discomunten)."]
+	quest.4755488ADCA90DB9.title: "Blijf vads, blijf swingen"
+	quest.4755488ADCA90DB9.quest_desc: ["Het hele discopakje: glittervadspak, vahoege afropruik en sterren-discobril. Trek het je guh aan en swing!"]
+	quest.47554814388B3357.title: "Mika-Mambo-meester"
+	quest.47554814388B3357.quest_desc: ["Kies bij de &5DJ-guh&r het lastigste liedje, de &cMika-Mambo&r, en dans &e10 kleuren&r achter elkaar goed. Pas op: al gauw komen de kleuren op dubbele tellen!"]
+	quest.4755489B7E01E06D.title: "De hele plaat rond"
+	quest.4755489B7E01E06D.quest_desc: ["Dans op alle vier de liedjes van de DJ-guh minstens &e3 kleuren&r goed: de &eVadsige Tango&r, &dZe hangen aan me vet&r, de &cMika-Mambo&r en de &bNjeg-Njeg Boogie&r."]
+	quest.4755488D45FC94DF.title: "Beats op je oren"
+	quest.4755488D45FC94DF.quest_desc: ["Koop het &ddiscokoptelefoontje&r bij de DJ-guh en zet het je guh op de oren. Nu hoort hij de beat overal!"]
+	quest.47554801DC55D50B.title: "Fore, guh!"
+	quest.47554801DC55D50B.quest_desc: ["Zoek de zeldzame &dguhgolfbaan&r (superkompas: Minigames > Guhgolfbaan). In het clubhuis met het guhgezicht woont de &aGolfguh&r."]
+	quest.4755482D2C782B35.title: "Negen holes vol vads"
+	quest.4755482D2C782B35.quest_desc: ["Speel een heel rondje guhgolf: de Golfguh leent je een club. Houd rechtsklik ingedrukt om de krachtbalk op te laden, kijk waar de bal heen moet en laat los! Met een goed rondje zweef jij in de top 3 boven de Golfguh."]
+	quest.475548D8550E6CED.title: "Par-guh"
+	quest.475548D8550E6CED.quest_desc: ["Speel een rondje op medium (par 27) of lastig (par 36) in par of minder. Tip: de kaassaus kost je een strafslag!"]
+	quest.475548F79B78331F.title: "VAHOEG! Hole-in-one!"
+	quest.475548F79B78331F.quest_desc: ["Sla een bal in één keer in de hole. Het Guhpaadje is lang, maar wie weet..."]
+	quest.4755488CFB09D297.title: "Balletjesvadser"
+	quest.4755488CFB09D297.quest_desc: ["Spaar 20 golfballetjes (hoe minder slagen, hoe meer balletjes)."]
+	quest.4755480683244EED.title: "Petje op!"
+	quest.4755480683244EED.quest_desc: ["Koop de vadsige golfpet bij de Golfguh (10 golfballetjes)."]
+	quest.4755488568F1A1B6.title: "Guh op de green"
+	quest.4755488568F1A1B6.quest_desc: ["Koop het hele golfpakje: de vadsige golfpet, de guhzonneklep en de ruitjesvadstrui."]
+	quest.475548D451A39DEE.title: "Van het rode matje"
+	quest.475548D451A39DEE.quest_desc: ["Speel een rondje op &clastig&r in par (36) of minder: vanaf de rode afslagmatjes helemaal achteraan, langs de extra slijmbumpers en onder de turbo-guhmolen door. Dat is pas vahoeg golfen, njeg!"]
+	quest.4755483F8C9960F8.title: "Het Vadsig eetfestijn"
+	quest.4755483F8C9960F8.quest_desc: ["Zoek het &dVadsig eetfestijn&r (superkompas: Minigames > Vadsig eetfestijn): een reuzentent met een guhgezicht, vol eten. Binnen wacht de &dSmulguh&r."]
+	quest.475548F79EE534C8.title: "Smullen maar!"
+	quest.475548F79EE534C8.quest_desc: ["Praat met de Smulguh en speel een potje: één minuut lang eten vangen met haar geleende smulschaal. Je hoeft niks mee te nemen!"]
+	quest.4755482346B33A76.title: "Goud waard"
+	quest.4755482346B33A76.quest_desc: ["Vang een &6gouden smulknabbel&r: 10 punten en een tijdje dubbele punten. VAHOEG!"]
+	quest.47554825DBAE8AC2.title: "Vadsige vangst"
+	quest.47554825DBAE8AC2.quest_desc: ["Haal 100 punten in één potje. Tip: vijf op rij is combo x2, tien op rij x3. En blijf weg van het Mika-vet!"]
+	quest.4755484DF22E88D8.title: "Smulkampioen"
+	quest.4755484DF22E88D8.quest_desc: ["Haal 200 punten in één potje. De Smulguh heeft nog nooit iets zo vadsigs gezien! Kom je in de &6top 3&r van de wereld? Die zweeft boven haar hoofd. VAHOEG!"]
+	quest.47554886DD856496.title: "Eerst een slabbetje"
+	quest.47554886DD856496.quest_desc: ["Koop het smulslabbetje voor je guh bij de Smulguh (smulmunten). Knoeien mag!"]
+	quest.475548FC391BB9C3.title: "Helemaal smulklaar"
+	quest.475548FC391BB9C3.quest_desc: ["Koop het hele smulpakje: het slabbetje, de vadsige bakkersmuts en het roze smulschort. Alleen te koop op het eetfestijn!"]
+	quest.475548C8AE2C49A8.title: "Er zwemt iets vads"
+	quest.475548C8AE2C49A8.quest_desc: ["Zoek de &bguhvisvijver&r (superkompas: Minigames > Guhvisvijver). Een vijver met een steiger in de vorm van een guhgezicht: daar woont de &bVisguh&r."]
+	quest.475548EA1E272B40.title: "Beet!"
+	quest.475548EA1E272B40.quest_desc: ["Doe mee aan een Guhvis-wedstrijd bij de Visguh. Je krijgt een hengel te leen: drie minuten vissen en alle vissen mag je houden!"]
+	quest.475548733B9F6D96.title: "Vadse vangst"
+	quest.475548733B9F6D96.quest_desc: ["Haal 300 punten in een wedstrijd. Tip: zware vissen en zeldzame njegforellen leveren het meest op, de Mika-meerval kost punten!"]
+	quest.475548C3A4654C21.title: "Het visboek"
+	quest.475548C3A4654C21.quest_desc: ["Vang elke soort uit de guhvisvijver een keer: kaasvis, vadsbaars, guhpuffer, roze njegforel, Mika-meerval en de Gouden Guhvis."]
+	quest.475548FE596B266C.title: "Puur goud"
+	quest.475548FE596B266C.quest_desc: ["Vang een &6Gouden Guhvis&r: legendarisch zeldzaam. Hij is van jou: elke gouden vis krijgt jouw naam, zijn gewicht en een nummer. Een echt verzamelstuk!"]
+	quest.475548BC4DD0D389.title: "Een vadsig hoedje"
+	quest.475548BC4DD0D389.quest_desc: ["Koop het vadsige vissershoedje bij het kraampje van de Visguh, voor visbonnen."]
+	quest.4755482DE66BB2E8.title: "Meester-visguh"
+	quest.4755482DE66BB2E8.quest_desc: ["Koop het hele vispakje voor je guh: het vissershoedje, het guhvisvest en de vis-aan-de-haak."]
+	quest.475548FFE82FCC33.title: "Wie verstopt zich daar?"
+	quest.475548FFE82FCC33.quest_desc: ["Zoek het zeldzame &dverstopguhhuis&r (superkompas: Minigames > Verstopguhhuis). Op het glazen dak woont Verstopguhtje."]
+	quest.475548E1558765BB.title: "Verstopguh: Makkelijk"
+	quest.475548E1558765BB.quest_desc: ["Vind alle 5 verstopte guhs op makkelijk. Rechtermuisklik op een guh als je hem vindt; luister naar hun zachte geluidjes!"]
+	quest.475548B620B532CB.title: "Verstopguh: Medium"
+	quest.475548B620B532CB.quest_desc: ["Vind alle 8 verstopte guhs op medium. Rechtermuisklik op een guh als je hem vindt; luister naar hun zachte geluidjes!"]
+	quest.4755482E4B3CD864.title: "Verstopguh: Moeilijk"
+	quest.4755482E4B3CD864.quest_desc: ["Vind alle 12 verstopte guhs op moeilijk. Rechtermuisklik op een guh als je hem vindt; luister naar hun zachte geluidjes!"]
+	quest.475548DD93693B17.title: "Guhlock Holmes"
+	quest.475548DD93693B17.quest_desc: ["Koop de Guhlock-pet, het Vergroot-vadsglas en de detectivejas bij Verstopguhtje (verstopguhtickets)."]
+	quest.4755481BEE683328.title: "Kermis!"
+	quest.4755481BEE683328.quest_desc: ["Ergens in de Guhmensie staat de zeldzame &dGuhkermis&r met een echte achtbaan. Het &6Guhmensie-superkompas&r (Minigames > Guhkermis) wijst de weg."]
+	quest.475548B01243317A.title: "WIEEEEE!"
+	quest.475548B01243317A.quest_desc: ["Stap in een slee op het station, klik op de knopjes en start. Elk rondje over de finish = een &6kermisbon&r. Je eerste rondje geeft een prijzenzakje!"]
+	quest.475548CBC79ACBDC.title: "Bonnenvadser"
+	quest.475548CBC79ACBDC.quest_desc: ["Spaar 12 kermisbonnen (rondjes rijden!)."]
+	quest.475548E71950231C.title: "Vahoeg op de kermis"
+	quest.475548E71950231C.quest_desc: ["Koop bij de Kermis-guh de kermishoed, het kermisjasje en de kermisstrik voor je guh."]
+	quest.475548C05F697ED8.title: "Ssssst!"
+	quest.475548C05F697ED8.quest_desc: ["Ergens in de Guhmensie staat de zeer zeldzame &dguhbibliotheek&r: drie verdiepingen vol boeken onder een glazen koepel met guhoren. Het &6Guhmensie-superkompas&r (Wonderen > Guhbibliotheek) wijst de weg."]
+	quest.47554826548264E3.title: "Lezen is vadsig"
+	quest.47554826548264E3.quest_desc: ["Alle guhboeken liggen open op de &dlessenaars&r in de leeszaal: lees ze meteen! Van elk boek mag je &6één keer&r een exemplaar meenemen (knop &eExemplaar meenemen&r). Neem je eerste guhboek mee."]
+	quest.475548E140372C86.title: "Halve boekenkast"
+	quest.475548E140372C86.quest_desc: ["Verzamel 6 verschillende guhboeken van de lessenaars. Ook in de archiefkisten boven liggen er soms een paar!"]
+	quest.4755480051F584D6.title: "Achter de boekenkast"
+	quest.4755480051F584D6.quest_desc: ["Ergens op de eerste verdieping steekt een roze boek een beetje uit een boekenkast... Vind de geheime kamer en het &5Geheime Guhboek&r."]
+	quest.4755488731A53619.title: "Boekenwurmguh"
+	quest.4755488731A53619.quest_desc: ["Verzamel alle 14 guhboeken, het geheime ook (en het dagboek uit de Stille Voorraadkelder). VAHOEG!"]
+	quest.4755483923BA6B04.title: "Guhkwis"
+	quest.4755483923BA6B04.quest_desc: ["Beantwoord een kwisvraag van de Bibliothecaris goed. Hij vraagt alleen over boeken die jij gelezen of verzameld hebt, dus lees ze goed! Elk goed antwoord (de eerste keer) = een &6boekenbon&r."]
+	quest.47554881E62C2B2D.title: "Guhkwismeester"
+	quest.47554881E62C2B2D.quest_desc: ["Beantwoord alle 28 kwisvragen goed."]
+	quest.4755484A4F087146.title: "Professor Guh"
+	quest.4755484A4F087146.quest_desc: ["Koop het geleerdenpakje voor je guh bij de Bibliothecaris (alleen daar te koop!): het geleerdenbrilletje, het boekenwurmvest en de geleerdenbaret, met boekenbonnen."]
+	quest.475548F69974F1D7.title: "Pas op je hoofd!"
+	quest.475548F69974F1D7.quest_desc: ["Ergens diep in de Guhmensie staat een reuzenguhhoofd met een gele bouwhelm op. Loop door zijn mond naar binnen: daar is de &6kaasmijn&r! Heel zeldzaam: gebruik het superkompas (Avontuur)."]
+	quest.475548121F90D993.title: "Een houweel te leen"
+	quest.475548121F90D993.quest_desc: ["Praat met de &dMijnguh&r in het hoofd. Hij leent je een houweel, zodat je niks hoeft mee te nemen. Njeg, wel teruggeven hoor!"]
+	quest.475548720CC0F282.title: "Kaas uit de rotsen"
+	quest.475548720CC0F282.quest_desc: ["Hak op de gele &6kaasaders&r in de kaasgangen: die vind je nergens anders dan hier in de kaasmijn! Uitgemijnde aders groeien vanzelf weer aan."]
+	quest.475548C779F6C560.title: "De Kaasexpress"
+	quest.475548C779F6C560.quest_desc: ["Druk op een karretjesautomaat, stap in en rij een halve minuut rondjes door de kaasgangen. VAHOEG!"]
+	quest.475548E1FFF8F502.title: "Goudse goudkaas"
+	quest.475548E1FFF8F502.quest_desc: ["Diep in de mijn, in het donkere diepsteen, glinstert soms een &6gouden kaasader&r. Neem de VAHOEG-sprong naar beneden!"]
+	quest.475548FEA8FD3A8E.title: "Klik-klak, de kaaskluis"
+	quest.475548FEA8FD3A8E.quest_desc: ["In de schatkamer zit de kaaskluis in de mond van een gouden guh. Voor 2 goudkaas gaat hij open..."]
+	quest.4755485F616FBA04.title: "Een echte mijnguh"
+	quest.4755485F616FBA04.quest_desc: ["Koop de mijnguhhelm (met lampje!), de kaasmijnoverall en de stoffige zakdoek bij de Mijnguh (alleen hij verkoopt ze) en trek ze je guh aan. VAHOEG, wat een vakguh!"]
+	quest.475548F2C3072206.title: "Zwevende guh-eilandjes"
+	quest.475548F2C3072206.quest_desc: ["Heel hoog in de lucht van de Guhmensie zweven de &bzwevende guh-eilandjes&r. Heel zeldzaam! Het &dGuhmensie-superkompas&r (Wonderen > Zwevende guh-eilandjes) wijst de weg."]
+	quest.47554840008A6FF3.title: "VAHOEG, de lucht in!"
+	quest.47554840008A6FF3.quest_desc: ["Onder de eilandjes ligt een plein met een guhgezicht. Ga op de &bwolkenlift&r (de neus!) staan: hij blaast je omhoog. Naar beneden zweef je met de blauwe wolkenlift aan het eind van de loopplank."]
+	quest.475548D052D4B8AB.title: "Wat een wolkje!"
+	quest.475548D052D4B8AB.quest_desc: ["Op het grote eiland, in een nest van wol, woont de &bWolkguh&r: de enige in de hele Guhmensie. Ga naast hem staan voor zijn Guhdex-pagina."]
+	quest.4755485C556227A0.title: "Vadsig wolkje"
+	quest.4755485C556227A0.quest_desc: ["De Wolkguh vertrouwt je pas als hij vads genoeg is: voer hem minstens &68 kaasknabbels&r."]
+	quest.4755482436815DDB.title: "Op wolkje negen"
+	quest.4755482436815DDB.quest_desc: ["Blijf de Wolkguh voeren tot hij van jou is. Een getemde Wolkguh vangt je op als je valt!"]
+	quest.475548C77995F676.title: "Met je hoofd in de wolken"
+	quest.475548C77995F676.quest_desc: ["Kleed je getemde Wolkguh uit in zijn kledingkast: de &bwolkenmuts&r en de &bwolkenkraag&r zijn nu van jou (en van je andere guhs)."]
+	quest.475548D0F3606F95.title: "Zacht geland"
+	quest.475548D0F3606F95.quest_desc: ["Spring ergens vanaf (minstens 6 blokken) terwijl je getemde Wolkguh in de buurt is. Poef: hij vangt je op!"]
+	quest.475548D9B78F7425.title: "Wolkensuikerspin"
+	quest.475548D9B78F7425.quest_desc: ["In de mond van de Guhrots (het reuzenguhhoofd dat kaassaus kwijlt) en op het hoogste wolkje staat een schatkist. Zoek een &bwolkensuikerspin&r: daarmee zweef je overal zachtjes naar beneden."]
+	quest.475548980F989F11.title: "Makkelijk, medium of lastig?"
+	quest.475548980F989F11.quest_desc: ["Bij de &dVads-wedstrijd&r, &dMika meppen&r, &dguhgolf&r, het &dVadsig eetfestijn&r en de &dGuhvis-wedstrijd&r kies je nu zelf hoe moeilijk het is: drie knopjes boven de speelknop. &aMakkelijk&r is lekker rustig, &emedium&r is zoals altijd en &clastig&r... dat is echt lastig, maar je krijgt wel de helft meer beloning! Elk niveau heeft zijn eigen scorebord."]
+	quest.4755480F6DE2695F.title: "Streng maar vadsig"
+	quest.4755480F6DE2695F.quest_desc: ["Loop een hele show op &clastig&r: maar 30 seconden om je model aan te kleden, en een strenge jury. Tip: kies stukken die echt bij het thema passen, en liefst een setje!"]
+	quest.475548ADF917CFA5.title: "Bliksemmepper"
+	quest.475548ADF917CFA5.quest_desc: ["Speel Mika meppen op &clastig&r: de Mika's zijn bliksemsnel en er zitten veel guhs tussen. Niet de guhs meppen, hè!"]
+	quest.475548E2A93DF110.title: "Van het rode matje"
+	quest.475548E2A93DF110.quest_desc: ["Speel alle 9 holes op &clastig&r: 6 slagen per hole en strafslagen, vanaf de rode afslagmatjes helemaal achteraan, langs extra slijmbumpers en onder een turbo-guhmolen door."]
+	quest.47554898DEA11A70.title: "Vet vadsig"
+	quest.47554898DEA11A70.quest_desc: ["Haal punten op het eetfestijn op &clastig&r: het eten valt als een raket en het regent Mika-vet. Wordt jouw guh toch vahoeg?"]
+	quest.475548438842EB9D.title: "Snelle hengel"
+	quest.475548438842EB9D.quest_desc: ["Vis een hele wedstrijd op &clastig&r: bij beet heb je maar een halve seconde, en zware vissen spartelen soms van je haakje."]
+	quest.475548688C77BE65.title: "Klassiekers-kampioen"
+	quest.475548688C77BE65.quest_desc: ["Speel alle vijf de klassiekers op &clastig&r. Dan ben jij de vahoegste guh van de Guhmensie! VAHOEG!"]
+	quest.47554896A47CFE51.title: "Het Sjoelhuisje"
+	quest.47554896A47CFE51.quest_desc: ["In de &dGuhweides&r staat soms een houten huisje met een reuzensjoelbak als dak en een guhgezicht op de gevel: het &6Sjoelhuisje&r (superkompas: Minigames). Binnen woont &6Opoe Njegschuif&r."]
+	quest.475548520EDD79D2.title: "Twintig schijfjes"
+	quest.475548520EDD79D2.quest_desc: ["Praat met Opoe Njegschuif en sjoel een hele beurt. Houd rechtsklik ingedrukt: de krachtbalk gaat op en neer, tussen Opoe's twee streepjes is het goed. Kijk waar het schijfje heen moet en laat los!"]
+	quest.47554867E7BBADAD.title: "Opoe is trots"
+	quest.47554867E7BBADAD.quest_desc: ["Sjoel 60 punten of meer. Tip: probeer in elk poortje evenveel schijfjes te krijgen, want elk setje (2-3-4-1) is twintig punten!"]
+	quest.475548FBBC98B405.title: "Honderd! VAHOEG!"
+	quest.475548FBBC98B405.quest_desc: ["De volle 100 punten: vijf schijfjes in elk poortje. Opoe Njegschuif heeft dat maar één keer eerder gezien..."]
+	quest.47554809D3FF4C66.title: "Petje op!"
+	quest.47554809D3FF4C66.quest_desc: ["Koop het sjoelpetje bij Opoe Njegschuif (4 sjoelschijfjes): een plat petje, net een sjoelschijf."]
+	quest.4755488DCA9CB4D9.title: "Gebreid door Opoe"
+	quest.4755488DCA9CB4D9.quest_desc: ["Verzamel het hele sjoelpakje: het sjoelpetje, het warme sjoelvestje en de sjoelbroche."]
+	quest.475548480C804919.title: "Een kopje thee bij Opoe"
+	quest.475548480C804919.quest_desc: ["Zet Opoe Njegschuif in je Guhdex (kom dichtbij genoeg)."]
+	quest.47554825ECEE7473.title: "Het Guhdoolhof"
+	quest.47554825ECEE7473.quest_desc: ["In de &dGuhvelden&r staat een reusachtig heggendoolhof met een uitkijkguh in het midden. Het superkompas (Minigames) wijst de weg. Zeg hallo tegen &aMeneer Vadskronkel&r bij zijn kiosk op het plein."]
+	quest.47554836B1695B5F.title: "Een klein doolhofje"
+	quest.47554836B1695B5F.quest_desc: ["Kies &amakkelijk&r: Meneer Vadskronkel laat een nieuw doolhof groeien. Vind de acht gestolen kaasknabbels (ze zweven glinsterend boven de heggen, en onderin zie je hoeveel er nog verstopt zijn) en ren naar de uitgang in het noorden. Pas op voor de trage Heg-Mika!"]
+	quest.4755485630613F2B.title: "Twaalf knabbels"
+	quest.4755485630613F2B.quest_desc: ["Haal het &emedium&r doolhof: twaalf knabbels en twee Heg-Mika's die er één terugpikken als ze je aantikken."]
+	quest.4755485AFDCE02D4.title: "Doolhofmeester"
+	quest.4755485AFDCE02D4.quest_desc: ["Het &clastige&r doolhof: het hele heggenveld, zestien knabbels, drie snelle Mika's en nepknabbels in de doodlopende gangetjes (die kosten tijd!). Echte knabbels glinsteren een beetje..."]
+	quest.47554843C2A6AE40.title: "Niet te pakken!"
+	quest.47554843C2A6AE40.quest_desc: ["Haal een medium of lastig doolhof zonder dat een Mika ook maar één knabbel pikt."]
+	quest.4755484C80F1DA28.title: "Op ontdekkingsreis"
+	quest.4755484C80F1DA28.quest_desc: ["Koop het ontdekkingshoedje, het doolhofkompasje en het ontdekkingsrugzakje bij Meneer Vadskronkel (doolhofknabbels) en ontgrendel ze voor je guhs."]
+	quest.475548A68B4F7834.title: "De Knabbelkatapult"
+	quest.475548A68B4F7834.quest_desc: ["Op de &dVadskliffen&r staat soms een vrolijk guhkasteel met een katapult op de muur, tegenover een scheef Mika-fort (superkompas: Minigames). Op de muur staat &6Kapitein Floepguh&r."]
+	quest.47554855AD08DBA4.title: "Twaalf forten"
+	quest.47554855AD08DBA4.quest_desc: ["Kies een niveau bij de Kapitein en schiet twaalf Mika-forten plat. Kijk, houd rechtsklik ingedrukt en laat los: FLOEP! Mika's rennen giechelend weg (ze doen niemand pijn) en de gestolen kaasknabbels zijn weer vrij."]
+	quest.47554832B053900E.title: "Drie sterren!"
+	quest.47554832B053900E.quest_desc: ["Haal drie sterren bij één fort: alle Mika's weg, alle knabbelkisten open, en nog een pluisbal over. Tip: raak de dunne paaltjes onderaan!"]
+	quest.475548D077B2AF10.title: "Tegen de wind in"
+	quest.475548D077B2AF10.quest_desc: ["Speel een hele ronde op &clastig&r: drie pluisballen per fort, en het waait. Let op de windpijltjes onderin je scherm!"]
+	quest.475548504EE48A0E.title: "Zesendertig sterren"
+	quest.475548504EE48A0E.quest_desc: ["Haal in één ronde alle 36 sterren. Dan is Kapitein Floepguh helemaal sprakeloos."]
+	quest.475548C8CF61517D.title: "Klaar om te floepen"
+	quest.475548C8CF61517D.quest_desc: ["Verzamel het hele katapultpakje bij de Kapitein: het katapulthelmpje, de katapultriem en de pluisbal-oorbelletjes."]
+	quest.475548DF92FE2A41.title: "Ahoi, Kapitein!"
+	quest.475548DF92FE2A41.quest_desc: ["Zet Kapitein Floepguh in je Guhdex (kom dichtbij genoeg)."]
+	quest.475548A8968EEAD5.title: "Hooggeëerd publiek!"
+	quest.475548A8968EEAD5.quest_desc: ["In de &dGuhweides&r en de &dRoze pluisjes&r staat soms een grote circustent met twee guhoren als tentpunten: &6De Knabbelspelen&r. Zeg hallo tegen &aJuf Vahoegsakee&r midden in de piste."]
+	quest.4755489903674232.title: "Op je plaatsen..."
+	quest.4755489903674232.quest_desc: ["Kies een onderdeel bij Juf Vahoegsakee en doe mee. Neem vriendjes mee: tot vier guhs spelen tegelijk, ieder in een eigen baan!"]
+	quest.4755484E1C6CEE78.title: "Precies op z'n kontje!"
+	quest.4755484E1C6CEE78.quest_desc: ["Guhguhtje prik: blinddoek om, drie keer rond, en dan het staartje op de goede plek. Haal 950 punten of meer!"]
+	quest.4755488B1D88004B.title: "Samen VAHOEG"
+	quest.4755488B1D88004B.quest_desc: ["Speel De Knabbelspelen met minstens één vriend tegelijk. Wie opent, wacht even op de anderen."]
+	quest.47554850E5891FAD.title: "De Grote Zeskamp"
+	quest.47554850E5891FAD.quest_desc: ["Alle zes onderdelen achter elkaar: knabbelhappen, zaklopen, Mika-blikgooien, eierlopen, spijkerpoepen en guhguhtje prik. Elk onderdeel 0 tot 1000 punten!"]
+	quest.4755488C4566D5E9.title: "Vahoegste van de Zeskamp"
+	quest.4755488C4566D5E9.quest_desc: ["Haal 5000 punten of meer in de Grote Zeskamp. De scoretabel bij Juf Vahoegsakee vertelt hoe het telt."]
+	quest.475548E9294953E1.title: "Sportief gekleed"
+	quest.475548E9294953E1.quest_desc: ["Koop het sportzweetbandje, het scheidsrechtersfluitje en het sportshirtje bij Juf Vahoegsakee (spelenlintjes) en ontgrendel ze voor je guhs."]
+	quest.4755485ED0EC891E.title: "Een bevroren kanaal"
+	quest.4755485ED0EC891E.quest_desc: ["Ergens in een ijskoude &bGuhpolder&r ligt een bevroren kanaal langs elf dorpjes: de &6Elf-Guhjestocht&r! Het Superkompas (tabblad minigames) wijst je de weg."]
+	quest.475548B8E9048CAF.title: "It giet oan!"
+	quest.475548B8E9048CAF.quest_desc: ["Praat in Guhwarden met &6Schaatsmeester Guhglij&r en start de tocht. Houd de guh-schaatsen vast: op het ijs glij je supervahoeg!"]
+	quest.4755489FFC48ABFE.title: "Elf-Guhjeskruisje"
+	quest.4755489FFC48ABFE.quest_desc: ["Haal bij elke &6Stempelguh&r een stempel, in de goede volgorde (Snuh eerst, Guhwarden laatst), en schaats zo de hele tocht uit. Elke tocht geeft &612 elfstempels&r (tot 8 extra als je snel bent), en je eerste keer krijg je het &6Elf-Guhjeskruisje&r en 5 elfstempels extra!"]
+	quest.4755482190718286.title: "Supervahoeg"
+	quest.4755482190718286.quest_desc: ["Rij de Elf-Guhjestocht in minder dan 3:40. Tip: warme chocovet en snert geven een boost, en sprinten op het ijs gaat het hardst! Zo snel krijg je 8 elfstempels extra."]
+	quest.4755488F88435451.title: "Warm ingepakt"
+	quest.4755488F88435451.quest_desc: ["Koop bij Schaatsmeester Guhglij de schaatsmuts, het schaatstruitje, de sjaal en de oorwarmers, en ontgrendel ze voor je guhs."]
+	quest.4755485C0B23A2AC.title: "Welkom op het circuit!"
+	quest.4755485C0B23A2AC.quest_desc: ["Vind &dhet Guh-Circuit&r in de Guhvelden of de Kaasvlakte (superkompas: Minigames > Guh-Circuit). In het Pitpaleis wacht Coach Vahoegvroem met een huur-renguh voor je."]
+	quest.475548BBF4BDE6D4.title: "Brrrm, VAHOEG!"
+	quest.475548BBF4BDE6D4.quest_desc: ["Rij je eerste race op het Guh-Circuit. Kies een baan en een niveau bij Coach Vahoegvroem: je hoeft niks mee te nemen."]
+	quest.4755487BE18E6E5A.title: "Boven de wolken"
+	quest.4755487BE18E6E5A.quest_desc: ["Rij de &dRegenboogbaan&r uit. Rij door de regenboogringen voor een VAHOEG-zet en spring over de gaten in de weg!"]
+	quest.4755489CBED89ABD.title: "Wieeee, de looping!"
+	quest.4755489CBED89ABD.quest_desc: ["Rij de &6Vadsbaan&r uit: glibberige kaassaus, stuiterpaddenstoelen en de Vadslooping. Gewoon doorrennen!"]
+	quest.475548AE4014FB23.title: "Bovenop de Kaasberg"
+	quest.475548AE4014FB23.quest_desc: ["Rij de &bKaasbergbaan&r uit. Ontwijk de rollende kaasknabbels van de Mika's op de Knabbelhelling!"]
+	quest.475548BD11AF5B98.title: "Circuitkampioen"
+	quest.475548BD11AF5B98.quest_desc: ["Rij alle drie de banen van het Guh-Circuit uit."]
+	quest.4755481B1D6B040E.title: "Eigenwijze renguh"
+	quest.4755481B1D6B040E.quest_desc: ["Rij een race op &clastig&r: een supersnelle maar eigenwijze renguh, veel Mika-pikkers, en de zilveren VAHOEG-pads doen het niet."]
+	quest.4755482A459EBE73.title: "Sneller dan de legende"
+	quest.4755482A459EBE73.quest_desc: ["Versla de &6gouden geest&r: het baanrecord van de wereld rijdt met je mee. Ben jij sneller?"]
+	quest.47554876D1608B59.title: "Echte coureur"
+	quest.47554876D1608B59.quest_desc: ["Koop het hele circuitpakje bij Coach Vahoegvroem: circuithelmpje, vahoeg-racepak en geblokte vlagcape. Alleen daar!"]
+	quest.475548CB65F2E24D.title: "Op ontdekkingstocht!"
+	quest.475548CB65F2E24D.quest_desc: ["Zes gloednieuwe gebouwen vol spelletjes: het &6Sjoelhuisje&r, het &2Guhdoolhof&r, de &cKnabbelkatapult&r, de &9Knabbelspelen&r, de &bElf-Guhjestocht&r en het &dGuh-Circuit&r. Kies ze in je superkompas (tab Minigames) en loop er eens binnen. In je Guhdex (tab Minigames) zie je welke je al gevonden hebt!"]
+	quest.475548E0CAC848B5.title: "Vahoege wereldreiziger"
+	quest.475548E0CAC848B5.quest_desc: ["Een echte guh-toerist bezoekt ALLE minigame-gebouwen: de klassiekers, Knuffeldal en De Grote Guhspelen. De Guhdex (tab Minigames) laat met een vinkje zien waar je al was. Nog eentje missen? Njeg! Het superkompas helpt je."]
+	quest.475548E006EB2DD7.title: "De Guhpolder"
+	quest.475548E006EB2DD7.quest_desc: ["Ergens in de Guhmensie ligt een ijskoude, platte &bGuhpolder&r: rijpgras, knotwilgen, bevroren sloten en sneeuwguhtjes. Hier wordt de &bElf-Guhjestocht&r geschaatst! Neem een warme sjaal mee, njeg."]
+	quest.47554817273F1C11.title: "Een vadsige Pinguh"
+	quest.47554817273F1C11.quest_desc: ["De helft van de wilde guhs in de polder is een &bPinguh&r: klassiek, keizer of een grijs pluizig kuikentje. Tem er een met kaasknabbels. Hij glijdt op zijn buik over het ijs, en tijdens de Elf-Guhjestocht glijdt hij met je mee!"]
+	quest.475548AF7C757117.title: "IJsbloempjes"
+	quest.475548AF7C757117.quest_desc: ["Pluk drie &bguh-ijsbloempjes&r: doorzichtige blauwe bloempjes met een piepklein guhgezichtje. Er komt lichtblauwe kleurstof uit!"]
+	quest.475548321705AC6B.title: "Een guh-molentje"
+	quest.475548321705AC6B.quest_desc: ["Vind een &bguh-molentje&r in de polder of maak er zelf een (wol, stokjes, een kaasknabbel en planken). Zijn wieken draaien de hele dag, en nog sneller als het sneeuwt!"]
+	quest.475548FCF35677EC.title: "Vers gemalen"
+	quest.475548FCF35677EC.quest_desc: ["Stop knabbelgraan in een guh-molentje (rechtsklik) en haal er &eknabbelmeel&r uit. In de knabbeloven van de bakker bak je met knabbelmeel dubbel zoveel. VAHOEG!"]
+}

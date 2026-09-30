@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:knabbelportaalframe"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.guheinde_portaal.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.guheinde_portaal.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:guheinde/find_knabbelkelder"
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/circuit_kaasweg_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/circuit_kaasweg_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/circuit_kaasweg"
+    }
+  }
+}

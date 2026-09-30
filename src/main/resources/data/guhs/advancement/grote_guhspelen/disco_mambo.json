@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/disco_disco70",
+  "display": {
+    "icon": {
+      "id": "guhs:disco_tegel_groen"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.disco_mambo.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.disco_mambo.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

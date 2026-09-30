@@ -1,0 +1,50 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:grill_koksmuts"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.pakje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.pakje.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "grill_koksmuts": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:grill_koksmuts"
+          }
+        ]
+      }
+    },
+    "grill_schort": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:grill_schort"
+          }
+        ]
+      }
+    },
+    "grill_halsdoek": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:grill_halsdoek"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:barbecuether/grillguh"
+}

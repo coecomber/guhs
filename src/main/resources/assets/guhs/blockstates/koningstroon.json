@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,royal=false": {
+      "model": "guhs:block/koningstroon"
+    },
+    "facing=north,royal=true": {
+      "model": "guhs:block/koningstroon"
+    },
+    "facing=east,royal=false": {
+      "model": "guhs:block/koningstroon",
+      "y": 90
+    },
+    "facing=east,royal=true": {
+      "model": "guhs:block/koningstroon",
+      "y": 90
+    },
+    "facing=south,royal=false": {
+      "model": "guhs:block/koningstroon",
+      "y": 180
+    },
+    "facing=south,royal=true": {
+      "model": "guhs:block/koningstroon",
+      "y": 180
+    },
+    "facing=west,royal=false": {
+      "model": "guhs:block/koningstroon",
+      "y": 270
+    },
+    "facing=west,royal=true": {
+      "model": "guhs:block/koningstroon",
+      "y": 270
+    }
+  }
+}

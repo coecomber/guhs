@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/katapult_knabbelkist"
+    },
+    "facing=east": {
+      "model": "guhs:block/katapult_knabbelkist",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/katapult_knabbelkist",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/katapult_knabbelkist",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:nomguh_medicijnkist"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.balto_berghut.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.balto_berghut.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/balto_tocht"
+}

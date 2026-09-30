@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "item": "minecraft:snowball"
+    },
+    {
+      "item": "minecraft:pink_dye"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    }
+  ],
+  "result": {
+    "id": "guhs:knuffelbad_schuim",
+    "count": 4
+  }
+}

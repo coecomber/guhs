@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "  I",
+    "WWW",
+    "IBI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "W": {
+      "item": "minecraft:pink_wool"
+    },
+    "B": {
+      "item": "guhs:sleebouwersboek"
+    }
+  },
+  "result": {
+    "id": "guhs:guh_slee",
+    "count": 1
+  }
+}

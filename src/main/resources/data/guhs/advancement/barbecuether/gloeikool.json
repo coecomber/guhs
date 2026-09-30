@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:gloeikool"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.gloeikool.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.gloeikool.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:gloeikool"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:barbecuether/binnen"
+}

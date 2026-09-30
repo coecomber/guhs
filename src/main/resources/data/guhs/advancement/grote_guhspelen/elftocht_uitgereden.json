@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:grote_guhspelen/elftocht_eerste_rit",
+  "display": {
+    "icon": {
+      "id": "guhs:elf_guhjeskruisje"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.elftocht_uitgereden.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.elftocht_uitgereden.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

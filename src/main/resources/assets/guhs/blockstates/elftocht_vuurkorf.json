@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "guhs:block/elftocht_vuurkorf_uit"
+    },
+    "lit=true": {
+      "model": "guhs:block/elftocht_vuurkorf_aan"
+    }
+  }
+}

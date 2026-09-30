@@ -1,0 +1,29 @@
+{
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "particle": "guhs:block/guh_portal",
+    "top": "guhs:block/guh_portal"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        1,
+        16
+      ],
+      "faces": {
+        "up": {
+          "texture": "#top"
+        },
+        "down": {
+          "texture": "#top"
+        }
+      }
+    }
+  ]
+}

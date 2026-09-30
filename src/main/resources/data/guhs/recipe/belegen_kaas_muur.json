@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:belegen_kaas_stenen"
+    }
+  },
+  "result": {
+    "id": "guhs:belegen_kaas_muur",
+    "count": 6
+  }
+}

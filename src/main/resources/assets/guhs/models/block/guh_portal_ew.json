@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/nether_portal_ew",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "particle": "guhs:block/guh_portal",
+    "portal": "guhs:block/guh_portal"
+  }
+}

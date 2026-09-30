@@ -1,0 +1,31 @@
+{
+  "parent": "guhs:guhmension/enter_guhmension",
+  "display": {
+    "icon": {
+      "id": "minecraft:pink_glazed_terracotta"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.find_guhramid.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.find_guhramid.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": [
+              "guhs:guhramid"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

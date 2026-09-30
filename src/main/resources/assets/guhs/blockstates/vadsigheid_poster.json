@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/vadsigheid_poster"
+    },
+    "facing=east": {
+      "model": "guhs:block/vadsigheid_poster",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/vadsigheid_poster",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/vadsigheid_poster",
+      "y": 270
+    }
+  }
+}

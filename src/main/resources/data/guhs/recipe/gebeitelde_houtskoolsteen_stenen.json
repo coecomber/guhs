@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P",
+    "P"
+  ],
+  "key": {
+    "P": {
+      "item": "guhs:houtskoolsteen_stenen_plaat"
+    }
+  },
+  "result": {
+    "id": "guhs:gebeitelde_houtskoolsteen_stenen",
+    "count": 1
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/mewtwo_computer_kast",
+    "k": "guhs:block/mewtwo_computer_kast",
+    "s": "guhs:block/mewtwo_computer_scherm",
+    "t": "guhs:block/mewtwo_computer_toetsen"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        3,
+        5
+      ],
+      "to": [
+        13,
+        12,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k"
+        },
+        "up": {
+          "texture": "#k"
+        },
+        "north": {
+          "texture": "#k",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#k"
+        },
+        "west": {
+          "texture": "#k"
+        },
+        "east": {
+          "texture": "#k"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        4,
+        4.8
+      ],
+      "to": [
+        12,
+        11,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#s",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        0,
+        7
+      ],
+      "to": [
+        10,
+        3,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#k"
+        },
+        "up": {
+          "texture": "#k"
+        },
+        "north": {
+          "texture": "#k"
+        },
+        "south": {
+          "texture": "#k"
+        },
+        "west": {
+          "texture": "#k"
+        },
+        "east": {
+          "texture": "#k"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        0,
+        0.5
+      ],
+      "to": [
+        13,
+        1,
+        4.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#t"
+        },
+        "up": {
+          "texture": "#t",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "north": {
+          "texture": "#t"
+        },
+        "south": {
+          "texture": "#t"
+        },
+        "west": {
+          "texture": "#t"
+        },
+        "east": {
+          "texture": "#t"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        30,
+        225,
+        0
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    }
+  }
+}

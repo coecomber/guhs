@@ -1,0 +1,70 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:sate_stam"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.alle_biomen.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.alle_biomen.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "houtskoolvlakte": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:houtskoolvlakte"
+          }
+        }
+      }
+    },
+    "satebos": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:satebos"
+          }
+        }
+      }
+    },
+    "worstenwoud": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:worstenwoud"
+          }
+        }
+      }
+    },
+    "asdal": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:asdal"
+          }
+        }
+      }
+    },
+    "rookdelta": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:rookdelta"
+          }
+        }
+      }
+    }
+  },
+  "parent": "guhs:barbecuether/binnen"
+}

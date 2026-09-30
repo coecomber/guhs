@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "V V",
+    "VVV",
+    "VVV"
+  ],
+  "key": {
+    "V": {
+      "item": "guhs:vahoege_vads_ingot"
+    }
+  },
+  "result": {
+    "id": "guhs:vahoege_vads_chestplate",
+    "count": 1
+  }
+}

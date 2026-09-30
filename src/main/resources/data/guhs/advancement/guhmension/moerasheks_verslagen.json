@@ -1,0 +1,33 @@
+{
+  "parent": "guhs:guhmension/find_moerasheks_hut",
+  "display": {
+    "icon": {
+      "id": "guhs:vadsverdrijvend_drankje"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.moerasheks_verslagen.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.moerasheks_verslagen.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "guhs:moerasheks_mika"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

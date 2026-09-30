@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PW",
+    "WP"
+  ],
+  "key": {
+    "P": {
+      "item": "minecraft:pink_concrete"
+    },
+    "W": {
+      "item": "minecraft:white_concrete"
+    }
+  },
+  "result": {
+    "id": "guhs:trechtertegel",
+    "count": 4
+  }
+}

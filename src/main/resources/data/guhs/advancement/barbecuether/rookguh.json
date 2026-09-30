@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:barbecuether/binnen",
+  "display": {
+    "icon": {
+      "id": "guhs:kaas_knabbels"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.rookguh.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.rookguh.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

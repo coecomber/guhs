@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:pluisdak"
+    }
+  },
+  "result": {
+    "id": "guhs:pluisdak_plaat",
+    "count": 6
+  }
+}

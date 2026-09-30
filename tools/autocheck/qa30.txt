@@ -1,0 +1,553 @@
+# 3.0 visual QA round (dev only):  gradle runAutocheckClient -PautocheckScript=tools/autocheck/qa30.txt -PautocheckTimeout=120
+# The 3.0 section of autocheck.txt, plus the 3.0 characters/critters in line-ups, new outfits on guhs, the Guhdex pages
+# and the 2.10.1 bits (Guhkamer button + Dagboekje in the guh menu, guh-sneeuw in the Guhpolder).
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/gamerule doMobSpawning false
+
+section 3.0
+# <fundament>
+section fundament (3.0): the two new biomes, the story guhs with their specials, a guh in the wolkjes (Mijn guhs), someone else's huisje
+#   (commands of 3.0: verhaalguh <baltoguh|mewtwo|stitch626> x y z, wolkjes, huisjevan <naam> x y z)
+tpbiome auto guhs:sneeuwguhtoendra
+tpbiome auto guhs:guhwaii
+/execute in minecraft:overworld run tp @s 3200 150 3200
+/forceload add 3160 3160 3240 3240
+/fill 3170 139 3170 3230 139 3230 minecraft:grass_block
+/fill 3170 140 3170 3230 147 3230 minecraft:air
+/time set noon
+wait 5
+verhaalguh baltoguh 3196 140 3200
+verhaalguh mewtwo 3200 140 3200
+verhaalguh stitch626 3204 140 3200
+wait 40
+camera 3200 143 3208 180 15
+wait 10
+shot verhaal_verhaalguhs
+huisjevan Timmerguh 3210 140 3190
+wait 20
+camera 3212 143 3200 180 15
+wait 10
+shot verhaal_huisje_van_iemand_anders
+wolkjes
+wait 20
+shot gui_verhaal_wolkjes gui
+gui close
+gui superkompas gui_verhaal_superkompas
+/kill @e[type=guhs:guh,x=3200,y=140,z=3200,distance=..16]
+/forceload remove 3160 3160 3240 3240
+# </fundament>
+
+# <timmerguh>
+section timmerguh (3.0): the bouwplaats in a Knuffeldal town, the Timmerguh and his talking screen, the oortjesdak, the outfit,
+#   someone else's huisje read-only (command of 3.0 timmerguh: huisjekijk x y z)
+tplocate auto guhs:knuffeldal_stadje
+npc timmerguh 3.2 0.6
+wait 10
+shot timmerguh_npc
+interact npc
+wait 15
+shot gui_timmerguh_praat gui
+gui close
+npc timmerguh 16 6
+wait 20
+shot timmerguh_bouwplaats
+/time set noon
+/execute in minecraft:overworld run tp @s 3300 150 3300
+/forceload add 3280 3280 3320 3320
+/fill 3285 139 3285 3315 139 3315 minecraft:grass_block
+/fill 3285 140 3285 3315 147 3315 minecraft:air
+wait 5
+huisjevan Timmerguh 3300 140 3296
+wait 20
+huisjekijk 3300 140 3296
+wait 15
+shot gui_timmerguh_huisje_alleen_kijken gui
+widgets
+gui close
+/summon guhs:guh 3296 140 3303 {ClothesHead:"timmer_helmpje",ClothesBody:"timmer_gereedschapsriem",PersistenceRequired:1b,Rotation:[200f,0f]}
+wait 20
+camera 3297 141.5 3306 195 10
+wait 10
+shot timmerguh_outfit
+/kill @e[type=guhs:guh,x=3300,y=140,z=3300,distance=..16]
+/forceload remove 3280 3280 3320 3320
+# </timmerguh>
+
+# <balto>
+section balto (3.0): Nomguh (the town, the stable and start line, the hospital, the boat, the igloo, the trek route), the characters, the wolf moment, the Baltoguh
+#   (op commands of the slice: /guhs balto stap <speler> [n], /guhs balto moment <speler> <moment>, /guhs balto wis <speler>, /guhs balto nomguh)
+/time set noon
+/weather clear
+mist off
+tplocate auto nomguh
+lookrel 112 40 150 112 12 100
+waitrender
+shot balto_nomguh_plein
+lookrel 60 30 60 90 12 86
+waitrender
+shot balto_nomguh_stal_start
+lookrel 30 22 90 52 11 104
+waitrender
+shot balto_nomguh_boot
+lookrel 176 30 118 145 12 110
+waitrender
+shot balto_nomguh_ziekenhuisje
+lookrel 150 28 44 150 8 16
+waitrender
+shot balto_nomguh_ijsbrug
+lookrel 118 16 6 118 30 30
+waitrender
+shot balto_nomguh_lawineberg
+lookrel 80 40 70 40 30 56
+waitrender
+shot balto_nomguh_berghut
+lookrel 112 90 150 112 10 60
+waitrender
+shot balto_nomguh_overzicht
+npc boris 3 0.6
+shot balto_boris
+npc steele_mika 3 0.6
+shot balto_steele_mika
+npc rosy 2.4 0.4
+shot balto_rosy
+npc muk 4 1
+shot balto_muk_luk
+/guhs balto wis @s
+npc boris 3 0.6
+interact npc
+wait 10
+shot gui_balto_boris gui
+gui close
+/guhs balto stap @s 5
+/guhs balto moment @s dieptepunt
+wait 20
+shot gui_balto_wolfmoment gui
+gui close
+/guhs balto moment @s aankomst
+wait 10
+gui close
+/guhs balto wis @s
+/weather thunder
+tpbiome auto guhs:sneeuwguhtoendra
+wait 60
+shot balto_toendra_sneeuwstorm
+/weather clear
+/execute in minecraft:overworld run tp @s 3300 150 3300
+/forceload add 3260 3260 3340 3340
+/fill 3270 139 3270 3330 139 3330 minecraft:snow_block
+/fill 3270 140 3270 3330 147 3330 minecraft:air
+wait 5
+verhaalguh baltoguh 3300 140 3300
+wait 40
+camera 3300 142 3305 180 10
+wait 10
+shot balto_baltoguh
+/setblock 3303 140 3300 guhs:baltoguh_beeldje[facing=south]
+/setblock 3297 140 3300 guhs:nomguh_routepaal
+camera 3300 142 3304 180 20
+wait 10
+shot balto_beeldje_routepaal
+/kill @e[type=guhs:guh,x=3300,y=140,z=3300,distance=..16]
+/forceload remove 3260 3260 3340 3340
+# </balto>
+
+# <balto-slee>
+section balto-slee (3.0): the sled on a test route over snow (/guhs baltoslee proef: the panel, the team, Steele-Mika's sled, the storm), your own sneeuwslee, Steele-Mika's deco
+#   (the real route is in Nomguh: tplocate the nomguh structure and use /guhs baltoslee sprint <niveau> there)
+/execute in minecraft:overworld run tp @s 3200 150 3400
+/forceload add 3160 3380 3340 3420
+/fill 3165 139 3385 3335 139 3415 minecraft:snow_block
+/fill 3165 140 3385 3335 150 3415 minecraft:air
+/time set noon
+/gamemode creative
+/tp @s 3170 140 3400 -90 0
+wait 20
+/guhs baltoslee proef makkelijk
+wait 70
+clearchat
+shot gui_baltoslee_sprint_start gui
+wait 60
+shot gui_baltoslee_sprint_onderweg gui
+look -60 20
+wait 5
+shot baltoslee_sprint_steele_naast_je
+unlock
+/guhs baltoslee stop
+wait 10
+/tp @s 3170 140 3400 -90 0
+/guhs baltoslee proef tocht
+wait 140
+clearchat
+shot gui_baltoslee_tocht_storm gui
+/guhs baltoslee stop
+wait 10
+/tp @s 3200 140 3395 0 0
+/guhs baltoslee toon
+wait 20
+camera 3196 142 3402 -120 20
+wait 10
+shot baltoslee_eigen_sneeuwslee
+/setblock 3210 140 3390 guhs:baltoslee_sneeuwguh[facing=south]
+/setblock 3212 140 3390 guhs:baltoslee_minislee[facing=south]
+/setblock 3214 140 3390 guhs:baltoslee_sledebellen[facing=south]
+/setblock 3216 140 3390 guhs:baltoslee_beker[facing=south]
+/setblock 3218 140 3390 guhs:baltoslee_hondenmand[facing=south]
+/setblock 3220 140 3390 guhs:baltoslee_lantaarnpaal[facing=south]
+camera 3215 142 3396 180 15
+wait 10
+shot baltoslee_deco
+/tp @s 3230 140 3398 0 0
+/guhs baltoslee steele 3170 140 3400
+wait 10
+npc steele_mika 3 0
+interact npc
+wait 10
+shot gui_baltoslee_steele gui
+gui close
+/kill @e[type=guhs:guh_npc,x=3230,y=140,z=3398,distance=..6]
+/kill @e[type=guhs:sneeuwslee]
+/gamemode spectator
+/forceload remove 3160 3380 3340 3420
+# </balto-slee>
+
+# <mewtwo>
+section mewtwo (3.0): het kloon-eiland: the island, the koepelhal with the cracked / repaired kloontank, the office of Professor Knabbelkloon, the arena on the tower, Mieuwguh
+#   (camrel = template coords of kloon_eiland: the island's middle at x/z 40, template y 0 = world y 33, the plateau at y 37)
+tplocate auto guhs:kloon_eiland
+/guhs mewtwo stap 0
+waitrender 200
+camrel 78 58 88 142 24
+wait 20
+shot mewtwo_eiland_overzicht
+camrel 2 44 2 -45 12
+wait 20
+shot mewtwo_eiland_arena_west
+camrel 40 40 54 180 12
+wait 20
+shot mewtwo_koepelhal_kapot
+/guhs mewtwo stap 3
+wait 20
+shot mewtwo_koepelhal_heel
+camrel 61 40 49 140 18
+wait 10
+shot mewtwo_kantoortje
+npc knabbelkloon 3 0
+wait 5
+interact npc
+wait 10
+shot gui_mewtwo_professor gui
+gui close
+camrel 21 68 58 180 38
+wait 10
+shot mewtwo_arena
+camrel 40 66 72 180 20
+/guhs mewtwo stap 4
+wait 120
+shot mewtwo_mew_rond_het_eiland
+camrel 40 38 76 180 8
+wait 10
+shot mewtwo_steiger
+/guhs mewtwo wis
+# </mewtwo>
+
+# <hemel>
+section hemel (3.0): het Hemelkapelletje op zijn wolkeneilandje, het Knuffelhart en het terughaal-scherm
+/gamemode spectator
+tplocate guhs:guhmension hemelkapelletje
+waitrender 300
+shot hemel_kapelletje
+/guhs hemel klopt true
+wolkjes
+wait 20
+gui close
+/gamemode creative
+/guhs hemel scherm
+wait 40
+widgets
+shot gui_hemel_scherm gui
+gui close
+/guhs hemel klopt false
+# </hemel>
+
+# <guhwaii>
+section guhwaii (3.0): Guhwai'i - Lilo and Nani's stilt house, 626's capsule with the scanner, the palms, the 626-guh strumming
+tplocate auto guhs:guhwaii_ohana
+tplocate auto guhs:guhwaii_capsule
+tpbiome auto guhs:guhwaii
+wait 40
+shot guhwaii_bioom
+/execute in minecraft:overworld run tp @s 3400 150 3400
+/forceload add 3360 3360 3440 3440
+/fill 3370 139 3370 3430 139 3430 minecraft:sand
+/fill 3370 140 3370 3430 147 3430 minecraft:air
+/time set noon
+/setblock 3400 140 3400 guhs:vadsigheid_scanner[facing=south]
+/setblock 3404 140 3398 guhs:schilly_eitjes[eitjes=4,rijp=2]
+/setblock 3396 140 3398 guhs:roze_hibiscus
+/setblock 3395 140 3398 guhs:guhwaii_plumeria
+/setblock 3394 140 3398 guhs:guhwaii_paradijsbloem
+/setblock 3393 140 3398 guhs:guhwaii_orchidee
+/place feature guhs:guhwaii_palm 3390 140 3406
+/place feature guhs:guhwaii_palm 3410 140 3406
+verhaalguh stitch626 3402 140 3404
+wait 40
+camera 3400 143 3412 180 15
+wait 10
+shot guhwaii_scanner_palmen_626
+/gamemode creative
+/tp @s 3400 140 3402 180 20
+use 3400 140 3400
+wait 40
+shot gui_guhwaii_scanner_meter gui
+wait 30
+shot gui_guhwaii_scanner_onberekenbaar gui
+gui close
+guhmenu 3402 140 3404
+wait 10
+shot gui_guhwaii_626_menu gui
+gui close
+/kill @e[type=guhs:guh,x=3400,y=140,z=3400,distance=..16]
+/forceload remove 3360 3360 3440 3440
+# </guhwaii>
+
+# <guhwaii-spellen>
+section guhwaii-spellen (3.0): the surf beach of Guhwai'i: the podium under its hale, the surf shack, Tikiguh's stall, the screens, surfing and the hula
+#   (op commands: /guhs guhwaiispellen surf|hula <makkelijk|medium|lastig>, stop, munten <n>)
+/gamemode spectator
+/time set noon
+tplocate auto guhwaii_surfstrand
+/gamemode creative
+npc lilo_guh
+interact npc
+wait 10
+shot gui_guhwaiispellen_lilo gui
+widgets
+gui close
+npc tikiguh
+interact npc
+wait 10
+shot gui_guhwaiispellen_tikiwinkel gui
+gui close
+/guhs guhwaiispellen munten 12
+/guhs guhwaiispellen hula medium
+wait 120
+shot guhwaiispellen_hula gui
+wait 100
+shot guhwaiispellen_hula2 gui
+/guhs guhwaiispellen stop
+wait 20
+/guhs guhwaiispellen surf lastig
+wait 160
+shot guhwaiispellen_surfen gui
+wait 220
+shot guhwaiispellen_surfen2 gui
+/guhs guhwaiispellen stop
+wait 20
+/gamemode spectator
+# </guhwaii-spellen>
+
+# <vogels>
+section vogels (3.0): the four birds (pluisvinkjes, a kaasmeesje hanging under leaves, the guh-uiltje by day and by night, a zeemeeuwtje) and the vogelvoerhuisje
+/execute in minecraft:overworld run tp @s 3300 150 3300
+/forceload add 3280 3280 3320 3320
+/fill 3288 139 3288 3312 139 3312 minecraft:grass_block
+/fill 3288 140 3288 3312 147 3312 minecraft:air
+/fill 3296 139 3300 3298 139 3302 minecraft:sand
+/fill 3303 144 3299 3305 144 3301 minecraft:oak_leaves[persistent=true]
+/setblock 3301 140 3298 guhs:vogels_voerhuisje[voer=4]
+/time set noon
+wait 5
+/summon guhs:pluisvinkje 3300 140 3300 {NoAI:1b,Rotation:[160f,0f]}
+/summon guhs:pluisvinkje 3299 140 3299 {NoAI:1b,Rotation:[200f,0f]}
+/summon guhs:pluisvinkje 3301.5 140.625 3298.5 {NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:kaasmeesje 3304 143.5 3300 {NoAI:1b,NoGravity:1b,VogelHouding:1,Rotation:[180f,0f]}
+/summon guhs:guh_uiltje 3302 140 3302 {NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:zeemeeuwtje 3297 140 3301 {NoAI:1b,Rotation:[200f,0f]}
+wait 40
+camera 3300 142 3307 180 15
+wait 10
+shot vogels_overdag
+/time set midnight
+wait 40
+shot vogels_nacht
+/time set noon
+/kill @e[type=guhs:pluisvinkje,x=3300,y=140,z=3300,distance=..20]
+/kill @e[type=guhs:kaasmeesje,x=3300,y=140,z=3300,distance=..20]
+/kill @e[type=guhs:guh_uiltje,x=3300,y=140,z=3300,distance=..20]
+/kill @e[type=guhs:zeemeeuwtje,x=3300,y=140,z=3300,distance=..20]
+/forceload remove 3280 3280 3320 3320
+# </vogels>
+
+# <waterdiertjes>
+section waterdiertjes (3.0): the guhxolotl in five colours (and an emmertje), a mama guh-eendje with her rijtje, knabbelvlindertjes, lieveheersbeestjes; at night the glimguhtjes
+/execute in minecraft:overworld run tp @s 3300 150 3300
+/forceload add 3280 3280 3320 3320
+/fill 3284 139 3284 3316 139 3316 minecraft:grass_block
+/fill 3284 140 3284 3316 147 3316 minecraft:air
+/fill 3290 139 3297 3310 139 3303 minecraft:water
+/time set noon
+wait 5
+/summon guhs:guhxolotl 3292.5 139 3300.5 {Kleur:"roze",NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:guhxolotl 3296.5 139 3300.5 {Kleur:"mint",NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:guhxolotl 3300.5 139 3300.5 {Kleur:"choco",NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:guhxolotl 3304.5 139 3300.5 {Kleur:"wit",NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:guhxolotl 3308.5 139 3300.5 {Kleur:"goud",NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:guh_eendje 3292.5 140 3306.5 {UUID:[I;3014,1,2,3],NoAI:1b,Rotation:[270f,0f]}
+/summon guhs:guh_eendje 3291.3 140 3306.5 {Age:-72000,Mama:[I;3014,1,2,3],NoAI:1b,Rotation:[270f,0f]}
+/summon guhs:guh_eendje 3290.3 140 3306.5 {Age:-72000,Mama:[I;3014,1,2,3],NoAI:1b,Rotation:[270f,0f]}
+/summon guhs:guh_eendje 3289.3 140 3306.5 {Age:-72000,Mama:[I;3014,1,2,3],NoAI:1b,Rotation:[270f,0f]}
+/setblock 3302 140 3307 minecraft:poppy
+/setblock 3304 140 3307 minecraft:oxeye_daisy
+/setblock 3306 140 3307 guhs:guh_bloempot[plant=knabbelplantje]
+/summon guhs:knabbelvlindertje 3302.5 141.2 3307.5 {Kleur:"kaasgeel",NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:knabbelvlindertje 3304.5 141.5 3306.5 {Kleur:"lila",NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:lieveheersbeestje 3306.5 140.6 3307.5 {NoAI:1b,Rotation:[180f,0f]}
+wait 40
+camera 3300.5 142.5 3292.5 0 20
+wait 10
+shot waterdiertjes_guhxolotls
+camera 3298 142 3314 180 25
+wait 10
+shot waterdiertjes_eendjes_en_insectjes
+/give @s guhs:guhxolotl_emmertje
+/time set midnight
+/summon guhs:glimguhtje 3298.5 141.5 3304.5 {NoAI:1b}
+/summon guhs:glimguhtje 3301.5 142 3305.5 {NoAI:1b}
+/summon guhs:glimguhtje 3303.5 141 3303.5 {NoAI:1b}
+wait 20
+camera 3300.5 142.5 3296.5 0 15
+wait 10
+shot waterdiertjes_glimguhtjes_nacht
+/time set noon
+/kill @e[type=guhs:guhxolotl,x=3300,y=140,z=3300,distance=..24]
+/kill @e[type=guhs:guh_eendje,x=3300,y=140,z=3300,distance=..24]
+/kill @e[type=guhs:knabbelvlindertje,x=3300,y=140,z=3300,distance=..24]
+/kill @e[type=guhs:glimguhtje,x=3300,y=140,z=3300,distance=..24]
+/kill @e[type=guhs:lieveheersbeestje,x=3300,y=140,z=3300,distance=..24]
+/forceload remove 3280 3280 3320 3320
+# </waterdiertjes>
+
+# <landdiertjes>
+section landdiertjes (3.0): the four critters (a bunny of every fur), two knabbel stashes, the eekhoorntje on your shoulder
+#   (op commands: /guhs landdiertjes rij <pos> | schouder | voorraadje <pos> | plekje <pos> <keer>)
+/execute in minecraft:overworld run tp @s 3300 150 3200
+/forceload add 3270 3170 3330 3230
+/fill 3280 139 3185 3320 139 3215 minecraft:grass_block
+/fill 3280 140 3185 3320 147 3215 minecraft:air
+/time set noon
+wait 5
+/guhs landdiertjes rij 3295 140 3200
+wait 40
+camera 3299.5 141.6 3204.5 180 12
+wait 10
+shot landdiertjes_rij
+camera 3299.5 141.6 3195.5 0 12
+wait 10
+shot landdiertjes_rij_achter
+/guhs landdiertjes voorraadje 3296 140 3203
+/guhs landdiertjes voorraadje 3298 140 3203
+/setblock 3298 140 3203 guhs:landdiertjes_knabbelvoorraadje[knabbels=6]
+wait 5
+camera 3297 141.5 3205.5 180 30
+wait 10
+shot landdiertjes_voorraadje
+/tp @s 3302 140 3208 180 10
+/gamemode survival
+/guhs landdiertjes schouder
+wait 20
+perspective front
+look 180 10
+wait 10
+clearchat
+shot landdiertjes_schouder gui
+perspective first
+/gamemode spectator
+/kill @e[type=guhs:pluisegeltje,x=3300,y=140,z=3200,distance=..16]
+/kill @e[type=guhs:guh_konijntje,x=3300,y=140,z=3200,distance=..16]
+/kill @e[type=guhs:pluiseekhoorntje,x=3300,y=140,z=3200,distance=..16]
+/kill @e[type=guhs:shuckle,x=3300,y=140,z=3200,distance=..16]
+/fill 3280 140 3185 3320 147 3215 minecraft:air
+/forceload remove 3270 3170 3330 3230
+# </landdiertjes>
+
+section qa30: line-ups (every NPC, every creature, every variant)
+/execute in minecraft:overworld run tp @s 2000 170 2000
+wait 40
+camera 2000 170 2000 0 0
+waitrender 300
+lineup npcs 2000 160 2000
+lineup entities 2000 160 2000
+lineup variants 2000 160 2000
+
+section qa30: the new outfits on guhs
+/execute in minecraft:overworld run tp @s 3500 150 3500
+/forceload add 3480 3480 3520 3520
+/fill 3485 139 3485 3515 139 3515 minecraft:grass_block
+/fill 3485 140 3485 3515 147 3515 minecraft:air
+/time set noon
+wait 5
+/summon guhs:guh 3494 140 3500 {ClothesHead:"timmer_helmpje",ClothesBody:"timmer_gereedschapsriem",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh 3497 140 3500 {ClothesHead:"balto_sneeuwmuts",ClothesNeck:"balto_sjaaltje",ClothesBody:"balto_wantjes",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh 3500 140 3500 {ClothesOren:"balto_wolfsoortjes",ClothesNeck:"balto_sjaaltje",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh 3503 140 3500 {ClothesHead:"mewtwo_trainerpetje",ClothesBody:"mewtwo_trainerpakje",ClothesBack:"mew_ballonnetje",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh 3506 140 3500 {ClothesNeck:"mewtwo_staartje",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh 3494 140 3506 {ClothesHead:"hemel_aureooltje",ClothesBack:"hemel_wolkenvleugeltjes",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh 3497 140 3506 {ClothesBody:"guhwaii_hularokje",ClothesNeck:"guhwaii_bloemenkrans",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+/summon guhs:guh 3500 140 3506 {ClothesOren:"guhwaii_stitchoren",ClothesBack:"guhwaii_surfplankje",NoAI:1b,PersistenceRequired:1b,Rotation:[180f,0f]}
+wait 40
+camera 3500 142.5 3496 0 18
+waitrender 200
+shot qa30_outfits_rij1_voor
+camera 3500 142.5 3504 180 18
+wait 10
+shot qa30_outfits_rij1_achter
+camera 3497 142.5 3511 180 15
+wait 10
+shot qa30_outfits_rij2_voor
+camera 3497 142.5 3501.5 0 15
+wait 10
+shot qa30_outfits_rij2_achter
+/kill @e[type=guhs:guh,x=3500,y=140,z=3500,distance=..20]
+/forceload remove 3480 3480 3520 3520
+
+section qa30: 2.10.1 - the Guhkamer button and the Dagboekje in the guh menu
+/execute in minecraft:overworld run tp @s 3600 150 3600
+/forceload add 3580 3580 3620 3620
+/fill 3585 139 3585 3615 139 3615 minecraft:grass_block
+/fill 3585 140 3585 3615 147 3615 minecraft:air
+/summon guhs:guh 3600 140 3603 {PersistenceRequired:1b,Rotation:[180f,0f]}
+/gamemode creative
+/tp @s 3600 140 3600 0 10
+wait 20
+guhmenu 3600 140 3603
+wait 10
+widgets
+shot qa30_gui_guhmenu_guhkamer gui
+press Dagboekje
+wait 15
+shot qa30_gui_guhmenu_dagboekje gui
+gui close
+/kill @e[type=guhs:guh,x=3600,y=140,z=3600,distance=..20]
+/forceload remove 3580 3580 3620 3620
+/gamemode spectator
+
+section qa30: the Guhdex pages
+/gamemode creative
+gui guhdex qa30_dex
+/gamemode spectator
+
+section qa30: 2.10.1 guh-sneeuw (Guhpolder, Guhmension)
+tpbiome guhs:guhmension guhs:guhpolder
+waitrender 300
+/weather rain
+wait 240
+shot qa30_guhsneeuw_landschap
+/weather clear
+
+quit

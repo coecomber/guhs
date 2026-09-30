@@ -1,0 +1,11 @@
+{
+  "type": "guhs:guheinde",
+  "generator": {
+    "type": "minecraft:noise",
+    "settings": "guhs:guheinde",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "guhs:guheinde"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/doolhof_gevonden",
+  "display": {
+    "icon": {
+      "id": "guhs:gestolen_knabbel"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.doolhof_gespeeld.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.doolhof_gespeeld.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

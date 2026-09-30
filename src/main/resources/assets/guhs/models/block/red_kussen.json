@@ -1,0 +1,6 @@
+{
+  "parent": "guhs:block/kussen",
+  "textures": {
+    "wool": "minecraft:block/red_wool"
+  }
+}

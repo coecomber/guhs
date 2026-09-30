@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S  ",
+    "SS ",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:pluisdak"
+    }
+  },
+  "result": {
+    "id": "guhs:pluisdak_trap",
+    "count": 4
+  }
+}

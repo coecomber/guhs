@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "bakkersmutsje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:bakkersmutsje"
+          }
+        ]
+      }
+    },
+    "bakkersschortje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:bakkersschortje"
+          }
+        ]
+      }
+    },
+    "meelstrikje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:meelstrikje"
+          }
+        ]
+      }
+    }
+  }
+}

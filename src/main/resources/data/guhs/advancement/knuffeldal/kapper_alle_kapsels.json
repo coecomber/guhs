@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/kapper_show",
+  "display": {
+    "icon": {
+      "id": "guhs:haarverf_regenboog"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.kapper_alle_kapsels.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.kapper_alle_kapsels.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

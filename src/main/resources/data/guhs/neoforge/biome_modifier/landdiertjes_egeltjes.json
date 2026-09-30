@@ -1,0 +1,14 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:vadswoud"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:pluisegeltje",
+      "weight": 12,
+      "minCount": 1,
+      "maxCount": 3
+    }
+  ]
+}

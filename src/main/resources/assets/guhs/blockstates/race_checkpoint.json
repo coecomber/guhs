@@ -1,0 +1,196 @@
+{
+  "variants": {
+    "baan=0,nummer=0": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=0": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=0": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=0": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=1": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=1": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=1": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=1": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=2": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=2": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=2": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=2": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=3": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=3": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=3": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=3": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=4": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=4": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=4": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=4": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=5": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=5": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=5": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=5": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=6": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=6": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=6": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=6": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=7": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=7": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=7": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=7": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=8": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=8": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=8": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=8": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=9": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=9": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=9": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=9": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=10": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=10": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=10": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=10": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=11": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=11": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=11": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=11": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=12": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=12": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=12": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=12": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=13": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=13": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=13": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=13": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=14": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=14": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=14": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=14": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=0,nummer=15": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=1,nummer=15": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=2,nummer=15": {
+      "model": "guhs:block/race_checkpoint"
+    },
+    "baan=3,nummer=15": {
+      "model": "guhs:block/race_checkpoint"
+    }
+  }
+}

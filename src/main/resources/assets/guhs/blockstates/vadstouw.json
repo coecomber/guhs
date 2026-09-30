@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "guhs:block/vadstouw",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "guhs:block/vadstouw"
+    },
+    "axis=z": {
+      "model": "guhs:block/vadstouw",
+      "x": 90
+    }
+  }
+}

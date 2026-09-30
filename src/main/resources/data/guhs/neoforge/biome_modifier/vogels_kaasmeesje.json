@@ -1,0 +1,15 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:vadswoud",
+    "guhs:kaas_flats"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:kaasmeesje",
+      "weight": 12,
+      "minCount": 1,
+      "maxCount": 3
+    }
+  ]
+}

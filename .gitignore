@@ -1,0 +1,67 @@
+### Gradle ###
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/**/build/
+
+### Minecraft dev runs: NEVER commit these (worlds, logs, crash reports, configs, screenshots) ###
+run/
+run-*/
+!**/src/**/run/
+logs/
+crash-reports/
+*.log
+gt.log
+
+### Generated / local output ###
+# maven-publish test repository (build.gradle publishes to ./repo)
+/repo/
+!**/src/**/repo/
+# datagen cache
+**/src/generated/**/.cache/
+# the GitHub Pages wiki is built by CI (.github/workflows/pages.yml) from tools/ + docs/wiki/img
+docs/site/
+# the PDF wikis are ~85 MB each: too big for git history; attach them to a GitHub Release instead
+docs/*.pdf
+# the old one-page wiki (tools/make_wiki.py) still has the internal 'New in 2.x' history; the public wiki is docs/site
+docs/wiki/index.html
+
+### Python (tools/) ###
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/**/out/
+.run/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.eclipse/
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
+!**/src/**/bin/
+
+### VS Code ###
+.vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+desktop.ini
+
+### Claude / agent scratch ###
+.claude/
+
+# Kept on purpose (do not ignore): blockbench/ (model sources), tools/ (generators), docs/wiki/ + docs/screenshots/ (wiki sources)

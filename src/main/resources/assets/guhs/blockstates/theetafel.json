@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "gedekt=false": {
+      "model": "guhs:block/theetafel"
+    },
+    "gedekt=true": {
+      "model": "guhs:block/theetafel_gedekt"
+    }
+  }
+}

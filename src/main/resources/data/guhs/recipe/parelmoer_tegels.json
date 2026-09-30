@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PP",
+    "PP"
+  ],
+  "key": {
+    "P": {
+      "item": "guhs:parelmoer"
+    }
+  },
+  "result": {
+    "id": "guhs:parelmoer_tegels",
+    "count": 4
+  }
+}

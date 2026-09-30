@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guh_kasteel",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 120,
+    "separation": 40,
+    "salt": 20600001
+  }
+}

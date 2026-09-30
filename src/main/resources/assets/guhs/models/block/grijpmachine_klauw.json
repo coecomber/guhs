@@ -1,0 +1,237 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/grijpmachine_klauw",
+    "klauw": "guhs:block/grijpmachine_klauw"
+  },
+  "elements": [
+    {
+      "from": [
+        7.6,
+        12,
+        7.6
+      ],
+      "to": [
+        8.4,
+        16,
+        8.4
+      ],
+      "faces": {
+        "down": {
+          "texture": "#klauw"
+        },
+        "up": {
+          "texture": "#klauw"
+        },
+        "north": {
+          "texture": "#klauw"
+        },
+        "south": {
+          "texture": "#klauw"
+        },
+        "west": {
+          "texture": "#klauw"
+        },
+        "east": {
+          "texture": "#klauw"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        10.5,
+        6.5
+      ],
+      "to": [
+        9.5,
+        12,
+        9.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#klauw"
+        },
+        "up": {
+          "texture": "#klauw"
+        },
+        "north": {
+          "texture": "#klauw"
+        },
+        "south": {
+          "texture": "#klauw"
+        },
+        "west": {
+          "texture": "#klauw"
+        },
+        "east": {
+          "texture": "#klauw"
+        }
+      }
+    },
+    {
+      "from": [
+        6.2,
+        8,
+        7.5
+      ],
+      "to": [
+        7.2,
+        10.8,
+        8.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#klauw"
+        },
+        "up": {
+          "texture": "#klauw"
+        },
+        "north": {
+          "texture": "#klauw"
+        },
+        "south": {
+          "texture": "#klauw"
+        },
+        "west": {
+          "texture": "#klauw"
+        },
+        "east": {
+          "texture": "#klauw"
+        }
+      },
+      "rotation": {
+        "origin": [
+          6.7,
+          10.5,
+          8
+        ],
+        "axis": "z",
+        "angle": -22.5
+      }
+    },
+    {
+      "from": [
+        8.8,
+        8,
+        7.5
+      ],
+      "to": [
+        9.8,
+        10.8,
+        8.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#klauw"
+        },
+        "up": {
+          "texture": "#klauw"
+        },
+        "north": {
+          "texture": "#klauw"
+        },
+        "south": {
+          "texture": "#klauw"
+        },
+        "west": {
+          "texture": "#klauw"
+        },
+        "east": {
+          "texture": "#klauw"
+        }
+      },
+      "rotation": {
+        "origin": [
+          9.3,
+          10.5,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        7.5,
+        8,
+        8.8
+      ],
+      "to": [
+        8.5,
+        10.8,
+        9.8
+      ],
+      "faces": {
+        "down": {
+          "texture": "#klauw"
+        },
+        "up": {
+          "texture": "#klauw"
+        },
+        "north": {
+          "texture": "#klauw"
+        },
+        "south": {
+          "texture": "#klauw"
+        },
+        "west": {
+          "texture": "#klauw"
+        },
+        "east": {
+          "texture": "#klauw"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          10.5,
+          9.3
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        7.5,
+        8,
+        6.2
+      ],
+      "to": [
+        8.5,
+        10.8,
+        7.2
+      ],
+      "faces": {
+        "down": {
+          "texture": "#klauw"
+        },
+        "up": {
+          "texture": "#klauw"
+        },
+        "north": {
+          "texture": "#klauw"
+        },
+        "south": {
+          "texture": "#klauw"
+        },
+        "west": {
+          "texture": "#klauw"
+        },
+        "east": {
+          "texture": "#klauw"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          10.5,
+          6.7
+        ],
+        "axis": "x",
+        "angle": -22.5
+      }
+    }
+  ]
+}

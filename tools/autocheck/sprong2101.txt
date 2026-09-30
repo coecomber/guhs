@@ -1,0 +1,113 @@
+# 2.10.1: the Regenboogbaan's jumps in the real client. The circuit template is placed at 5000 150 5000 (template x/y/z +
+# 5000/150/5000); both gaps are on template z 20, driving west: gap 1 edge x 141 (road y 168 -> 167), gap 2 edge x 58
+# (167 -> 166). A race guh as in a race (racekart), W held (drive on), shots in third person during the jump, kartpos notes.
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/effect give @s minecraft:night_vision infinite 0 true
+/forceload add 5000 5000 5191 5191
+/execute in minecraft:overworld run tp @s 5100 215 5040
+wait 60
+/place template guhs:guh_circuit 5000 150 5000
+wait 40
+/tp @s 5151.5 169 5020.5 90 10
+wait 40
+waitrender 400
+
+section gap 1, medium (10 blocks run-up, over the VAHOEG pad)
+racekart 5151.5 168.2 5020.5 90 medium
+look 90 12
+perspective back
+wait 30
+kartpos start
+shot sprong1_0_start gui
+drive on
+wait 10
+kartpos t10
+shot sprong1_1 gui
+wait 4
+kartpos t14
+shot sprong1_2 gui
+wait 4
+kartpos t18
+shot sprong1_3 gui
+wait 4
+kartpos t22
+shot sprong1_4 gui
+wait 4
+kartpos t26
+shot sprong1_5 gui
+wait 6
+kartpos t32
+shot sprong1_6 gui
+wait 8
+kartpos t40
+shot sprong1_7_geland gui
+drive off
+wait 20
+kartpos stil
+
+section gap 1, makkelijk
+racekart 5151.5 168.2 5020.5 90 makkelijk
+wait 30
+drive on
+wait 20
+kartpos t20
+shot sprong1_mak_a gui
+wait 6
+kartpos t26
+shot sprong1_mak_b gui
+wait 24
+kartpos t50
+drive off
+wait 10
+
+section gap 1, lastig
+racekart 5151.5 168.2 5020.5 90 lastig
+wait 30
+drive on
+wait 18
+kartpos t18
+shot sprong1_las_a gui
+wait 30
+kartpos t48
+drive off
+wait 10
+
+section gap 2, medium (road y 167 -> 166)
+/tp @s 5068.5 168 5020.5 90 10
+wait 20
+waitrender 200
+racekart 5068.5 167.2 5020.5 90 medium
+wait 30
+kartpos start
+drive on
+wait 14
+kartpos t14
+shot sprong2_1 gui
+wait 5
+kartpos t19
+shot sprong2_2 gui
+wait 5
+kartpos t24
+shot sprong2_3 gui
+wait 20
+kartpos t44
+shot sprong2_4_geland gui
+drive off
+wait 10
+
+section gap 2, medium WITHOUT the rainbow jump (control: the old physics)
+racekart 5068.5 167.2 5020.5 90 medium nosprong
+wait 30
+drive on
+wait 24
+kartpos t24
+shot sprong2_zonder gui
+wait 20
+kartpos t44
+drive off
+quit

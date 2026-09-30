@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/pluisdak_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/pluisdak_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/pluisdak"
+    }
+  }
+}

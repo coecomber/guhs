@@ -1,0 +1,1774 @@
+{
+  "entity.guh.ambient": {
+    "sounds": [
+      "guhs:guh_ambient1",
+      "guhs:guh_ambient2",
+      "guhs:guh_ambient3",
+      "guhs:guh_ambient4",
+      "guhs:guh_ambient5",
+      "guhs:guh_ambient6",
+      "guhs:guh_ambient7",
+      "guhs:guh_ambient8",
+      "guhs:guh_ambient9",
+      "guhs:guh_ambient10",
+      "guhs:guh_ambient11",
+      "guhs:guh_ambient12",
+      "guhs:guh_ambient13",
+      "guhs:guh_ambient14",
+      "guhs:guh_ambient15",
+      "guhs:guh_ambient16"
+    ],
+    "subtitle": "subtitles.guhs.entity.guh.ambient"
+  },
+  "entity.guh.hurt": {
+    "sounds": [
+      "guhs:guh_hurt1",
+      "guhs:guh_hurt2"
+    ],
+    "subtitle": "subtitles.guhs.entity.guh.hurt"
+  },
+  "entity.guh.death": {
+    "sounds": [
+      "guhs:guh_death"
+    ],
+    "subtitle": "subtitles.guhs.entity.guh.death"
+  },
+  "entity.guh.eat": {
+    "sounds": [
+      "guhs:guh_eat"
+    ],
+    "subtitle": "subtitles.guhs.entity.guh.eat"
+  },
+  "entity.guh.happy": {
+    "sounds": [
+      "guhs:guh_ambient1",
+      "guhs:guh_ambient2",
+      "guhs:guh_ambient3",
+      "guhs:guh_ambient4",
+      "guhs:guh_ambient5",
+      "guhs:guh_ambient6",
+      "guhs:guh_ambient7",
+      "guhs:guh_ambient8",
+      "guhs:guh_ambient9",
+      "guhs:guh_ambient10",
+      "guhs:guh_ambient11",
+      "guhs:guh_ambient12",
+      "guhs:guh_ambient13",
+      "guhs:guh_ambient14",
+      "guhs:guh_ambient15",
+      "guhs:guh_ambient16"
+    ],
+    "subtitle": "subtitles.guhs.entity.guh.happy"
+  },
+  "entity.mika.ambient": {
+    "sounds": [
+      "guhs:mika_ambient1",
+      "guhs:mika_ambient2",
+      "guhs:mika_ambient3",
+      "guhs:mika_ambient4",
+      "guhs:mika_ambient5",
+      "guhs:mika_ambient6",
+      "guhs:mika_ambient7",
+      "guhs:mika_ambient8",
+      "guhs:mika_ambient9",
+      "guhs:mika_ambient10",
+      "guhs:mika_ambient11",
+      "guhs:mika_ambient12",
+      "guhs:mika_ambient13",
+      "guhs:mika_ambient14",
+      "guhs:mika_ambient15",
+      "guhs:mika_ambient16"
+    ],
+    "subtitle": "subtitles.guhs.entity.mika.ambient"
+  },
+  "entity.mika.hurt": {
+    "sounds": [
+      "guhs:mika_hurt1",
+      "guhs:mika_hurt2"
+    ],
+    "subtitle": "subtitles.guhs.entity.mika.hurt"
+  },
+  "entity.mika.death": {
+    "sounds": [
+      "guhs:mika_death"
+    ],
+    "subtitle": "subtitles.guhs.entity.mika.death"
+  },
+  "music_disc.ze_hangen": {
+    "sounds": [
+      {
+        "name": "guhs:music_disc_ze_hangen",
+        "stream": true
+      }
+    ]
+  },
+  "block.guh_kristal.sing": {
+    "subtitle": "subtitles.guhs.block.guh_kristal.sing",
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient1",
+        "pitch": 1.1,
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:guh_ambient2",
+        "pitch": 1.1,
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:guh_ambient3",
+        "pitch": 1.1,
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:guh_ambient4",
+        "pitch": 1.1,
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:guh_ambient5",
+        "pitch": 1.1,
+        "volume": 0.6
+      },
+      {
+        "name": "guhs:guh_ambient6",
+        "pitch": 1.1,
+        "volume": 0.6
+      }
+    ]
+  },
+  "reisguh.tuut": {
+    "subtitle": "subtitles.guhs.reisguh.tuut",
+    "sounds": [
+      {
+        "name": "guhs:reisguh_tuut",
+        "volume": 0.8
+      }
+    ]
+  },
+  "disco.vadsige_tango": {
+    "sounds": [
+      {
+        "name": "guhs:disco/vadsige_tango",
+        "stream": true,
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.guhs.disco.vadsige_tango"
+  },
+  "disco.ze_hangen_disco70": {
+    "sounds": [
+      {
+        "name": "guhs:disco/ze_hangen_disco70",
+        "stream": true,
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.guhs.disco.ze_hangen_disco70"
+  },
+  "disco.mika_mambo": {
+    "sounds": [
+      {
+        "name": "guhs:disco/mika_mambo",
+        "stream": true,
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.guhs.disco.mika_mambo"
+  },
+  "disco.njeg_njeg_boogie": {
+    "sounds": [
+      {
+        "name": "guhs:disco/njeg_njeg_boogie",
+        "stream": true,
+        "attenuation_distance": 40
+      }
+    ],
+    "subtitle": "subtitles.guhs.disco.njeg_njeg_boogie"
+  },
+  "knuffeldal.kruimel_giechel": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.ambient",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.knuffeldal.kruimel_giechel"
+  },
+  "knuffeldal.feestbel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.knuffeldal.feestbel"
+  },
+  "knuffeldal.seizoen": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.knuffeldal.seizoen"
+  },
+  "bakkerij.oven_ding": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.bakkerij.oven_ding"
+  },
+  "bakkerij.bestelling": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.bakkerij.bestelling"
+  },
+  "creche.slaapliedje": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 0.9,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.creche.slaapliedje"
+  },
+  "creche.babygiechel": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.ambient",
+        "type": "event",
+        "pitch": 1.9,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.creche.babygiechel"
+  },
+  "theehuis.inschenken": {
+    "sounds": [
+      {
+        "name": "minecraft:item.bottle.empty",
+        "type": "event",
+        "pitch": 0.9
+      },
+      {
+        "name": "minecraft:block.bubble_column.upwards_ambient",
+        "type": "event",
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.theehuis.inschenken"
+  },
+  "theehuis.kopjes_klink": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.hit",
+        "type": "event",
+        "pitch": 1.6
+      },
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.8,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.theehuis.kopjes_klink"
+  },
+  "kapper.knip": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.sheep.shear",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.kapper.knip"
+  },
+  "kapper.fohn": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.breeze.whirl",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.kapper.fohn"
+  },
+  "boerderij.schaapje_bleh": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.sheep.ambient",
+        "type": "event",
+        "pitch": 1.45,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.boerderij.schaapje_bleh"
+  },
+  "boerderij.kippetje_tok": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.chicken.ambient",
+        "type": "event",
+        "pitch": 1.35,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.boerderij.kippetje_tok"
+  },
+  "boerderij.koe_moeh": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.cow.ambient",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.boerderij.koe_moeh"
+  },
+  "tuintjes.gieter": {
+    "sounds": [
+      {
+        "name": "minecraft:item.bucket.empty",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block.pointed_dripstone.drip_water",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.tuintjes.gieter"
+  },
+  "tuintjes.oogst": {
+    "sounds": [
+      {
+        "name": "minecraft:block.sweet_berry_bush.pick_berries",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.tuintjes.oogst"
+  },
+  "sterrenwacht.ster_klik": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.sterrenwacht.ster_klik"
+  },
+  "sterrenwacht.sterrenbeeld": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:block.amethyst_block.resonate",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.sterrenwacht.sterrenbeeld"
+  },
+  "ballon.brander": {
+    "sounds": [
+      {
+        "name": "minecraft:item.firecharge.use",
+        "type": "event",
+        "pitch": 0.6,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:block.fire.ambient",
+        "type": "event",
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.ballon.brander"
+  },
+  "ballon.wind": {
+    "sounds": [
+      {
+        "name": "minecraft:item.elytra.flying",
+        "type": "event",
+        "volume": 0.25,
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.ballon.wind"
+  },
+  "kamperen.opa_verhaal": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.ambient",
+        "type": "event",
+        "pitch": 0.62,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.kamperen.opa_verhaal"
+  },
+  "knuffelbad.plons": {
+    "sounds": [
+      "guhs:knuffelbad/plons1",
+      "guhs:knuffelbad/plons2"
+    ],
+    "subtitle": "subtitles.guhs.knuffelbad.plons"
+  },
+  "knuffelbad.spetter": {
+    "sounds": [
+      "guhs:knuffelbad/spetter1",
+      "guhs:knuffelbad/spetter2"
+    ],
+    "subtitle": "subtitles.guhs.knuffelbad.spetter"
+  },
+  "knuffelbad.glijden": {
+    "sounds": [
+      "guhs:knuffelbad/glijden"
+    ],
+    "subtitle": "subtitles.guhs.knuffelbad.glijden"
+  },
+  "knuffelbad.eendje_piep": {
+    "sounds": [
+      "guhs:knuffelbad/piep1",
+      "guhs:knuffelbad/piep2",
+      "guhs:knuffelbad/piep3"
+    ],
+    "subtitle": "subtitles.guhs.knuffelbad.eendje_piep"
+  },
+  "knuffelbad.schuim": {
+    "sounds": [
+      "guhs:knuffelbad/schuim1",
+      "guhs:knuffelbad/schuim2"
+    ],
+    "subtitle": "subtitles.guhs.knuffelbad.schuim"
+  },
+  "knuffelbad.fohn": {
+    "sounds": [
+      "guhs:knuffelbad/fohn"
+    ],
+    "subtitle": "subtitles.guhs.knuffelbad.fohn"
+  },
+  "knuffelbad.fluit": {
+    "sounds": [
+      "guhs:knuffelbad/fluit"
+    ],
+    "subtitle": "subtitles.guhs.knuffelbad.fluit"
+  },
+  "wereldleven.ijscobel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.5
+      },
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.wereldleven.ijscobel"
+  },
+  "wereldleven.xylofoon": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.xylophone",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.wereldleven.xylofoon"
+  },
+  "wereldleven.fluitje": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.flute",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.wereldleven.fluitje"
+  },
+  "wereldleven.grijpklauw": {
+    "sounds": [
+      {
+        "name": "minecraft:block.chain.place",
+        "type": "event"
+      },
+      {
+        "name": "minecraft:block.piston.contract",
+        "type": "event",
+        "volume": 0.4,
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.wereldleven.grijpklauw"
+  },
+  "entity.pieppiepmuisje.ambient": {
+    "sounds": [
+      "guhs:piep_ambient1",
+      "guhs:piep_ambient2",
+      "guhs:piep_ambient3",
+      "guhs:piep_ambient4",
+      "guhs:piep_ambient5"
+    ],
+    "subtitle": "subtitles.guhs.entity.pieppiepmuisje.ambient"
+  },
+  "entity.pieppiepmuisje.hurt": {
+    "sounds": [
+      "guhs:piep_hurt"
+    ],
+    "subtitle": "subtitles.guhs.entity.pieppiepmuisje.hurt"
+  },
+  "entity.poepschilly.poets": {
+    "sounds": [
+      {
+        "name": "minecraft:block.bubble_column.whirlpool_inside",
+        "type": "event"
+      },
+      {
+        "name": "guhs:piep_ambient2",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.entity.poepschilly.poets"
+  },
+  "entity.poepschilly.plop": {
+    "sounds": [
+      {
+        "name": "minecraft:block.bubble_column.bubble_pop",
+        "type": "event"
+      },
+      {
+        "name": "minecraft:entity.chicken.egg",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.entity.poepschilly.plop"
+  },
+  "entity.boze_kaasknabbel.ambient": {
+    "sounds": [
+      {
+        "name": "guhs:piep_ambient1",
+        "pitch": 0.55
+      },
+      {
+        "name": "guhs:piep_ambient4",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity.slime.squish_small",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.entity.boze_kaasknabbel.ambient"
+  },
+  "entity.boze_kaasknabbel.zieli": {
+    "sounds": [
+      {
+        "name": "guhs:piep_ambient3",
+        "pitch": 0.5
+      },
+      {
+        "name": "guhs:piep_ambient5",
+        "pitch": 0.55
+      }
+    ],
+    "subtitle": "subtitles.guhs.entity.boze_kaasknabbel.zieli"
+  },
+  "kleding.ontgrendel": {
+    "sounds": [
+      {
+        "name": "guhs:kleding/ontgrendel",
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.kleding.ontgrendel"
+  },
+  "doolhof.giechel": {
+    "sounds": [
+      {
+        "name": "guhs:entity.mika.ambient",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.doolhof.giechel"
+  },
+  "doolhof.knabbel": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.item.pickup",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.doolhof.knabbel"
+  },
+  "doolhof.groei": {
+    "sounds": [
+      {
+        "name": "minecraft:block.azalea_leaves.place",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.doolhof.groei"
+  },
+  "knabbelspelen.fluit": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.flute",
+        "type": "event",
+        "pitch": 2.0,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.knabbelspelen.fluit"
+  },
+  "knabbelspelen.juich": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.happy",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.knabbelspelen.juich"
+  },
+  "knabbelspelen.hap": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.eat",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.knabbelspelen.hap"
+  },
+  "knabbelspelen.hop": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wool.step",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.knabbelspelen.hop"
+  },
+  "knabbelspelen.blik": {
+    "sounds": [
+      {
+        "name": "minecraft:block.chain.break",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.knabbelspelen.blik"
+  },
+  "knabbelspelen.ei_kapot": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.turtle.egg_crack",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.knabbelspelen.ei_kapot"
+  },
+  "knabbelspelen.plonk": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.knabbelspelen.plonk"
+  },
+  "guhpolder.molentje_maal": {
+    "sounds": [
+      {
+        "name": "minecraft:block.grindstone.use",
+        "type": "event",
+        "volume": 0.5,
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhpolder.molentje_maal"
+  },
+  "guhpolder.pinguh_glij": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.ambient",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhpolder.pinguh_glij"
+  },
+  "elftocht.glij": {
+    "sounds": [
+      {
+        "name": "guhs:elftocht/glij"
+      }
+    ],
+    "subtitle": "subtitles.guhs.elftocht.glij"
+  },
+  "elftocht.kras": {
+    "sounds": [
+      {
+        "name": "guhs:elftocht/kras1"
+      },
+      {
+        "name": "guhs:elftocht/kras2"
+      },
+      {
+        "name": "guhs:elftocht/kras3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.elftocht.kras"
+  },
+  "elftocht.plof": {
+    "sounds": [
+      {
+        "name": "guhs:elftocht/plof1"
+      },
+      {
+        "name": "guhs:elftocht/plof2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.elftocht.plof"
+  },
+  "elftocht.fluit": {
+    "sounds": [
+      {
+        "name": "guhs:elftocht/fluit"
+      }
+    ],
+    "subtitle": "subtitles.guhs.elftocht.fluit"
+  },
+  "elftocht.juich": {
+    "sounds": [
+      {
+        "name": "guhs:elftocht/juich1"
+      },
+      {
+        "name": "guhs:elftocht/juich2"
+      },
+      {
+        "name": "guhs:elftocht/juich3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.elftocht.juich"
+  },
+  "elftocht.finish": {
+    "sounds": [
+      {
+        "name": "guhs:elftocht/finish"
+      }
+    ],
+    "subtitle": "subtitles.guhs.elftocht.finish"
+  },
+  "beroepen.sirene": {
+    "subtitle": "subtitles.guhs.beroepen.sirene",
+    "sounds": [
+      "guhs:beroepen/sirene"
+    ]
+  },
+  "beroepen.spuiten": {
+    "subtitle": "subtitles.guhs.beroepen.spuiten",
+    "sounds": [
+      "guhs:beroepen/spuiten"
+    ]
+  },
+  "beroepen.sissen": {
+    "subtitle": "subtitles.guhs.beroepen.sissen",
+    "sounds": [
+      "guhs:beroepen/sissen"
+    ]
+  },
+  "beroepen.hatsjoe": {
+    "subtitle": "subtitles.guhs.beroepen.hatsjoe",
+    "sounds": [
+      "guhs:beroepen/hatsjoe1",
+      "guhs:beroepen/hatsjoe2"
+    ]
+  },
+  "beroepen.hamer": {
+    "subtitle": "subtitles.guhs.beroepen.hamer",
+    "sounds": [
+      "guhs:beroepen/hamer1",
+      "guhs:beroepen/hamer2"
+    ]
+  },
+  "beroepen.bubbel": {
+    "subtitle": "subtitles.guhs.beroepen.bubbel",
+    "sounds": [
+      "guhs:beroepen/bubbel"
+    ]
+  },
+  "band.hartjes": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:entity.cat.purr",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.band.hartjes"
+  },
+  "band.niveau": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.levelup",
+        "type": "event",
+        "pitch": 1.35,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.band.niveau"
+  },
+  "huisje.deur": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wooden_door.open",
+        "type": "event",
+        "pitch": 1.45,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.huisje.deur"
+  },
+  "huisje.snurk": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.sleep",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:entity.cat.purr",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.huisje.snurk"
+  },
+  "klusjes.graaf": {
+    "sounds": [
+      {
+        "name": "minecraft:item.brush.brushing.gravel",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:block.rooted_dirt.hit",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.klusjes.graaf"
+  },
+  "klusjes.piep": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient3",
+        "pitch": 1.5
+      },
+      {
+        "name": "guhs:guh_ambient7",
+        "pitch": 1.6
+      },
+      {
+        "name": "guhs:guh_ambient11",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.klusjes.piep"
+  },
+  "klusjes.klaar": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.klusjes.klaar"
+  },
+  "klusjes.lampje": {
+    "sounds": [
+      {
+        "name": "minecraft:block.lever.click",
+        "type": "event",
+        "pitch": 1.8,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.klusjes.lampje"
+  },
+  "klusjes.duw": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.slime.squish_small",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:block.wool.hit",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.klusjes.duw"
+  },
+  "klusjes.plons": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fishing_bobber.splash",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.klusjes.plons"
+  },
+  "klusjes.schelpje": {
+    "sounds": [
+      {
+        "name": "minecraft:block.conduit.ambient.short",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:ambient.underwater.loop.additions",
+        "type": "event",
+        "pitch": 1.0,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.klusjes.schelpje"
+  },
+  "speelgoed.wieee": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient5",
+        "pitch": 1.5
+      },
+      {
+        "name": "guhs:guh_ambient9",
+        "pitch": 1.6
+      },
+      {
+        "name": "guhs:guh_ambient12",
+        "pitch": 1.45
+      }
+    ],
+    "subtitle": "subtitles.guhs.speelgoed.wieee"
+  },
+  "speelgoed.duw": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wool.place",
+        "type": "event",
+        "pitch": 0.9
+      },
+      {
+        "name": "minecraft:entity.item_frame.rotate_item",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.speelgoed.duw"
+  },
+  "speelgoed.bal": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wool.step",
+        "type": "event",
+        "pitch": 1.3
+      },
+      {
+        "name": "minecraft:entity.slime.jump_small",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.speelgoed.bal"
+  },
+  "speelgoed.plop": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.chicken.egg",
+        "type": "event",
+        "pitch": 1.4
+      },
+      {
+        "name": "minecraft:block.bubble_column.bubble_pop",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.speelgoed.plop"
+  },
+  "speelgoed.gevonden": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient3",
+        "pitch": 1.45
+      },
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.speelgoed.gevonden"
+  },
+  "speelgoed.klim": {
+    "sounds": [
+      {
+        "name": "minecraft:block.ladder.step",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.speelgoed.klim"
+  },
+  "guhkamer.bel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.6
+      },
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkamer.bel"
+  },
+  "guhkamer.weg": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.teleport",
+        "type": "event",
+        "pitch": 1.5
+      },
+      {
+        "name": "guhs:guh_ambient7",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkamer.weg"
+  },
+  "guhkamer.terug": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.teleport",
+        "type": "event",
+        "pitch": 1.2
+      },
+      {
+        "name": "guhs:guh_ambient2",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkamer.terug"
+  },
+  "guhkamer.deur": {
+    "sounds": [
+      {
+        "name": "minecraft:item.armor.equip_leather",
+        "type": "event",
+        "pitch": 1.3
+      },
+      {
+        "name": "minecraft:block.wool.step",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkamer.deur"
+  },
+  "guhkamer.groei": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.levelup",
+        "type": "event",
+        "pitch": 1.4
+      },
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkamer.groei"
+  },
+  "samen.juich": {
+    "sounds": [
+      {
+        "name": "guhs:samen/juich",
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.samen.juich"
+  },
+  "samen.ooh": {
+    "sounds": [
+      {
+        "name": "guhs:samen/ooh",
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.samen.ooh"
+  },
+  "samen.welkom": {
+    "sounds": [
+      {
+        "name": "guhs:samen/welkom",
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.samen.welkom"
+  },
+  "samen.bff": {
+    "sounds": [
+      {
+        "name": "guhs:samen/bff",
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.samen.bff"
+  },
+  "favorietjes.ontdekt": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.levelup",
+        "type": "event",
+        "pitch": 1.8,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:block.amethyst_block.resonate",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.favorietjes.ontdekt"
+  },
+  "favorietjes.snuffel": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.sniff",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.9
+      },
+      {
+        "name": "minecraft:entity.fox.sniff",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.favorietjes.snuffel"
+  },
+  "favorietjes.nieuwsgierig": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.allay.ambient_without_item",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.6
+      },
+      {
+        "name": "minecraft:entity.fox.sniff",
+        "type": "event",
+        "pitch": 1.9,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.favorietjes.nieuwsgierig"
+  },
+  "balto.huil": {
+    "sounds": [
+      {
+        "name": "guhs:balto/huil1"
+      },
+      {
+        "name": "guhs:balto/huil2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.balto.huil"
+  },
+  "balto.gak": {
+    "sounds": [
+      {
+        "name": "guhs:balto/gak1"
+      },
+      {
+        "name": "guhs:balto/gak2"
+      },
+      {
+        "name": "guhs:balto/gak3"
+      }
+    ],
+    "subtitle": "subtitles.guhs.balto.gak"
+  },
+  "balto.belletjes": {
+    "sounds": [
+      {
+        "name": "guhs:balto/belletjes"
+      }
+    ],
+    "subtitle": "subtitles.guhs.balto.belletjes"
+  },
+  "balto.hatsjoe": {
+    "sounds": [
+      {
+        "name": "guhs:balto/hatsjoe1"
+      },
+      {
+        "name": "guhs:balto/hatsjoe2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.balto.hatsjoe"
+  },
+  "balto.snuffel": {
+    "sounds": [
+      {
+        "name": "guhs:balto/snuffel"
+      }
+    ],
+    "subtitle": "subtitles.guhs.balto.snuffel"
+  },
+  "balto.wind": {
+    "sounds": [
+      {
+        "name": "guhs:balto/wind1"
+      },
+      {
+        "name": "guhs:balto/wind2"
+      }
+    ],
+    "subtitle": "subtitles.guhs.balto.wind"
+  },
+  "baltoslee.glijden": {
+    "sounds": [
+      "guhs:baltoslee/glijden1",
+      "guhs:baltoslee/glijden2"
+    ],
+    "subtitle": "subtitles.guhs.baltoslee.glijden"
+  },
+  "baltoslee.bellen": {
+    "sounds": [
+      "guhs:baltoslee/bellen1",
+      "guhs:baltoslee/bellen2",
+      "guhs:baltoslee/bellen3"
+    ],
+    "subtitle": "subtitles.guhs.baltoslee.bellen"
+  },
+  "baltoslee.woef": {
+    "sounds": [
+      "guhs:baltoslee/woef1",
+      "guhs:baltoslee/woef2",
+      "guhs:baltoslee/woef3"
+    ],
+    "subtitle": "subtitles.guhs.baltoslee.woef"
+  },
+  "baltoslee.windvlaag": {
+    "sounds": [
+      "guhs:baltoslee/windvlaag1",
+      "guhs:baltoslee/windvlaag2"
+    ],
+    "subtitle": "subtitles.guhs.baltoslee.windvlaag"
+  },
+  "baltoslee.lawine": {
+    "sounds": [
+      "guhs:baltoslee/lawine"
+    ],
+    "subtitle": "subtitles.guhs.baltoslee.lawine"
+  },
+  "baltoslee.plof": {
+    "sounds": [
+      "guhs:baltoslee/plof1",
+      "guhs:baltoslee/plof2"
+    ],
+    "subtitle": "subtitles.guhs.baltoslee.plof"
+  },
+  "baltoslee.ijs": {
+    "sounds": [
+      "guhs:baltoslee/ijs1",
+      "guhs:baltoslee/ijs2"
+    ],
+    "subtitle": "subtitles.guhs.baltoslee.ijs"
+  },
+  "baltoslee.vuurkorf": {
+    "sounds": [
+      "guhs:baltoslee/vuurkorf"
+    ],
+    "subtitle": "subtitles.guhs.baltoslee.vuurkorf"
+  },
+  "baltoslee.fanfare": {
+    "sounds": [
+      "guhs:baltoslee/fanfare"
+    ],
+    "subtitle": "subtitles.guhs.baltoslee.fanfare"
+  },
+  "mewtwo.mew_giechel": {
+    "sounds": [
+      {
+        "name": "guhs:creche.babygiechel",
+        "type": "event",
+        "pitch": 1.45,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.mewtwo.mew_giechel"
+  },
+  "mewtwo.tank_borrel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.bubble_column.upwards_ambient",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.mewtwo.tank_borrel"
+  },
+  "mewtwo.tank_klik": {
+    "sounds": [
+      {
+        "name": "minecraft:block.smithing_table.use",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.mewtwo.tank_klik"
+  },
+  "mewtwo.tank_heel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.activate",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.mewtwo.tank_heel"
+  },
+  "mewtwo.telekinese": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.mewtwo.telekinese"
+  },
+  "mewtwo.x2": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.eat",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.mewtwo.x2"
+  },
+  "mewtwo.notitie": {
+    "sounds": [
+      {
+        "name": "minecraft:item.book.page_turn",
+        "type": "event",
+        "pitch": 1.1,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.mewtwo.notitie"
+  },
+  "hemel.muziek": {
+    "sounds": [
+      {
+        "name": "guhs:hemel/muziek",
+        "stream": true,
+        "volume": 0.55
+      }
+    ],
+    "subtitle": "subtitles.guhs.hemel.muziek"
+  },
+  "hemel.hartklop": {
+    "sounds": [
+      {
+        "name": "guhs:hemel/hartklop",
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.hemel.hartklop"
+  },
+  "hemel.terug": {
+    "sounds": [
+      {
+        "name": "guhs:hemel/terug",
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.hemel.terug"
+  },
+  "hemel.ster": {
+    "sounds": [
+      {
+        "name": "guhs:hemel/ster",
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.hemel.ster"
+  },
+  "guhwaiispellen.hula_aloha_njeg": {
+    "sounds": [
+      {
+        "name": "guhs:guhwaiispellen/aloha_njeg",
+        "stream": true,
+        "attenuation_distance": 48
+      }
+    ]
+  },
+  "guhwaiispellen.hula_guhla_hula_rock": {
+    "sounds": [
+      {
+        "name": "guhs:guhwaiispellen/guhla_hula_rock",
+        "stream": true,
+        "attenuation_distance": 48
+      }
+    ]
+  },
+  "guhwaiispellen.hula_vahoeg_hula_hop": {
+    "sounds": [
+      {
+        "name": "guhs:guhwaiispellen/vahoeg_hula_hop",
+        "stream": true,
+        "attenuation_distance": 48
+      }
+    ]
+  },
+  "guhwaiispellen.ukelele_tokkel": {
+    "sounds": [
+      {
+        "name": "guhs:guhwaiispellen/ukelele_tokkel",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhwaiispellen.ukelele_tokkel"
+  },
+  "guhwaiispellen.golf_breekt": {
+    "sounds": [
+      {
+        "name": "guhs:guhwaiispellen/golf_breekt",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhwaiispellen.golf_breekt"
+  },
+  "guhwaiispellen.schelpje": {
+    "sounds": [
+      {
+        "name": "guhs:guhwaiispellen/schelpje",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhwaiispellen.schelpje"
+  },
+  "guhwaiispellen.aloha": {
+    "sounds": [
+      {
+        "name": "guhs:guhwaiispellen/aloha",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhwaiispellen.aloha"
+  },
+  "guhwaiispellen.plons": {
+    "sounds": [
+      {
+        "name": "guhs:guhwaiispellen/plons",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhwaiispellen.plons"
+  },
+  "vogels.pluisvinkje": {
+    "sounds": [
+      "guhs:vogels/pluisvinkje1",
+      "guhs:vogels/pluisvinkje2",
+      "guhs:vogels/pluisvinkje3"
+    ],
+    "subtitle": "subtitles.guhs.vogels.pluisvinkje"
+  },
+  "vogels.kaasmeesje": {
+    "sounds": [
+      "guhs:vogels/kaasmeesje1",
+      "guhs:vogels/kaasmeesje2"
+    ],
+    "subtitle": "subtitles.guhs.vogels.kaasmeesje"
+  },
+  "vogels.guh_uiltje": {
+    "sounds": [
+      "guhs:vogels/guh_uiltje1",
+      "guhs:vogels/guh_uiltje2"
+    ],
+    "subtitle": "subtitles.guhs.vogels.guh_uiltje"
+  },
+  "vogels.zeemeeuwtje": {
+    "sounds": [
+      "guhs:vogels/zeemeeuwtje1",
+      "guhs:vogels/zeemeeuwtje2"
+    ],
+    "subtitle": "subtitles.guhs.vogels.zeemeeuwtje"
+  },
+  "vogels.mijn_mijn": {
+    "sounds": [
+      "guhs:vogels/mijn_mijn1",
+      "guhs:vogels/mijn_mijn2"
+    ],
+    "subtitle": "subtitles.guhs.vogels.mijn_mijn"
+  },
+  "vogels.fladder": {
+    "sounds": [
+      "guhs:vogels/fladder1",
+      "guhs:vogels/fladder2"
+    ],
+    "subtitle": "subtitles.guhs.vogels.fladder"
+  },
+  "waterdiertjes.guhxolotl_blub": {
+    "sounds": [
+      "guhs:waterdiertjes/blub1",
+      "guhs:waterdiertjes/blub2",
+      "guhs:waterdiertjes/blub3"
+    ],
+    "subtitle": "subtitles.guhs.waterdiertjes.guhxolotl_blub"
+  },
+  "waterdiertjes.eendje_kwak": {
+    "sounds": [
+      "guhs:waterdiertjes/kwak1",
+      "guhs:waterdiertjes/kwak2",
+      "guhs:waterdiertjes/kwak3"
+    ],
+    "subtitle": "subtitles.guhs.waterdiertjes.eendje_kwak"
+  },
+  "waterdiertjes.kuiken_piep": {
+    "sounds": [
+      "guhs:waterdiertjes/piep1",
+      "guhs:waterdiertjes/piep2",
+      "guhs:waterdiertjes/piep3"
+    ],
+    "subtitle": "subtitles.guhs.waterdiertjes.kuiken_piep"
+  },
+  "waterdiertjes.glimguhtje_ting": {
+    "sounds": [
+      "guhs:waterdiertjes/ting1",
+      "guhs:waterdiertjes/ting2"
+    ],
+    "subtitle": "subtitles.guhs.waterdiertjes.glimguhtje_ting"
+  },
+  "waterdiertjes.lieveheersbeestje_zoem": {
+    "sounds": [
+      "guhs:waterdiertjes/zoem"
+    ],
+    "subtitle": "subtitles.guhs.waterdiertjes.lieveheersbeestje_zoem"
+  },
+  "landdiertjes.egeltje": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.sniff",
+        "type": "event",
+        "pitch": 1.6
+      },
+      {
+        "name": "minecraft:entity.rabbit.ambient",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.landdiertjes.egeltje"
+  },
+  "landdiertjes.egeltje.rol": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wool.place",
+        "type": "event",
+        "pitch": 1.4
+      },
+      {
+        "name": "minecraft:entity.armadillo.roll",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.landdiertjes.egeltje.rol"
+  },
+  "landdiertjes.konijntje": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.rabbit.ambient",
+        "type": "event",
+        "pitch": 1.25
+      }
+    ],
+    "subtitle": "subtitles.guhs.landdiertjes.konijntje"
+  },
+  "landdiertjes.eekhoorntje": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.ambient",
+        "type": "event",
+        "pitch": 1.8
+      },
+      {
+        "name": "minecraft:entity.parrot.ambient",
+        "type": "event",
+        "pitch": 1.9,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.landdiertjes.eekhoorntje"
+  },
+  "landdiertjes.shuckle": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.turtle.ambient_land",
+        "type": "event",
+        "pitch": 1.3
+      },
+      {
+        "name": "minecraft:entity.frog.ambient",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.landdiertjes.shuckle"
+  },
+  "landdiertjes.shuckle.dicht": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.shulker.close",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.landdiertjes.shuckle.dicht"
+  },
+  "landdiertjes.shuckle.open": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.shulker.open",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.landdiertjes.shuckle.open"
+  },
+  "landdiertjes.shuckle.tik": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.hit",
+        "type": "event",
+        "pitch": 1.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.landdiertjes.shuckle.tik"
+  },
+  "landdiertjes.polijsten": {
+    "sounds": [
+      {
+        "name": "minecraft:block.grindstone.use",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.4
+      },
+      {
+        "name": "minecraft:block.amethyst_cluster.hit",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.landdiertjes.polijsten"
+  }
+}

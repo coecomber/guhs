@@ -1,0 +1,37 @@
+# 2.10 visual QA: only the doolhof knabbels (see qa210.txt)
+section setup
+/gamemode spectator
+/time set 3000
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+mist off
+section doolhof (2.10, worldgen): floating sparkling knabbels + the makkelijk counter
+tplocate auto guhs:guhdoolhof
+npc doolhofguh 3.2 0.6
+wait 10
+/gamemode creative
+doolhofstart makkelijk
+wait 160
+look 180 -10
+wait 10
+clearchat
+shot doolhof_start_hud gui
+# (in the maze on the ground: look at the nearest hidden knabbel, it floats and sparkles just above the hedges;
+#  leaving the field or climbing ends / resets the game, so these shots stay down in the maze)
+kijknaar guhs_doolhof
+wait 20
+clearchat
+shot doolhof_knabbel_zweeft gui
+wait 30
+shot doolhof_knabbel_zweeft2
+/gamemode spectator
+camrel 60 38 92 180 45
+wait 10
+waitrender 200
+shot doolhof_overzicht
+camrel 60 50 60 0 89
+wait 10
+shot doolhof_bovenaf
+
+quit

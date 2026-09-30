@@ -1,0 +1,333 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/theepotje",
+    "pot": "guhs:block/theepotje",
+    "deksel": "guhs:block/theepotje_deksel",
+    "gezicht": "guhs:block/theepotje_gezicht",
+    "goud": "minecraft:block/gold_block"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        6,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        6,
+        5
+      ],
+      "to": [
+        11,
+        9,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#gezicht"
+        },
+        "south": {
+          "texture": "#deksel"
+        },
+        "west": {
+          "texture": "#deksel"
+        },
+        "east": {
+          "texture": "#deksel"
+        },
+        "up": {
+          "texture": "#deksel"
+        },
+        "down": {
+          "texture": "#deksel"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        9,
+        6.5
+      ],
+      "to": [
+        6.5,
+        11,
+        8
+      ],
+      "faces": {
+        "down": {
+          "texture": "#deksel"
+        },
+        "up": {
+          "texture": "#deksel"
+        },
+        "north": {
+          "texture": "#deksel"
+        },
+        "south": {
+          "texture": "#deksel"
+        },
+        "west": {
+          "texture": "#deksel"
+        },
+        "east": {
+          "texture": "#deksel"
+        }
+      }
+    },
+    {
+      "from": [
+        9.5,
+        9,
+        6.5
+      ],
+      "to": [
+        11,
+        11,
+        8
+      ],
+      "faces": {
+        "down": {
+          "texture": "#deksel"
+        },
+        "up": {
+          "texture": "#deksel"
+        },
+        "north": {
+          "texture": "#deksel"
+        },
+        "south": {
+          "texture": "#deksel"
+        },
+        "west": {
+          "texture": "#deksel"
+        },
+        "east": {
+          "texture": "#deksel"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        9,
+        7.5
+      ],
+      "to": [
+        8.5,
+        10,
+        8.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#goud"
+        },
+        "up": {
+          "texture": "#goud"
+        },
+        "north": {
+          "texture": "#goud"
+        },
+        "south": {
+          "texture": "#goud"
+        },
+        "west": {
+          "texture": "#goud"
+        },
+        "east": {
+          "texture": "#goud"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        2,
+        2
+      ],
+      "to": [
+        9,
+        4.5,
+        4
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        3.5,
+        0.5
+      ],
+      "to": [
+        9,
+        5.5,
+        2
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        1.5,
+        12
+      ],
+      "to": [
+        9,
+        2.5,
+        14.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        4.5,
+        12
+      ],
+      "to": [
+        9,
+        5.5,
+        14.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        1.5,
+        13.5
+      ],
+      "to": [
+        9,
+        5.5,
+        14.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    }
+  ]
+}

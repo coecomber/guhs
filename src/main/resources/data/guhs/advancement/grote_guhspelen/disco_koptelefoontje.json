@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:grote_guhspelen/disco_disco70",
+  "display": {
+    "icon": {
+      "id": "guhs:disco_koptelefoontje"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.disco_koptelefoontje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.disco_koptelefoontje.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:disco_koptelefoontje"
+          }
+        ]
+      }
+    }
+  }
+}

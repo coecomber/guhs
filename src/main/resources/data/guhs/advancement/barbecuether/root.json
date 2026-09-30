@@ -1,0 +1,53 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:grillkool"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.root.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "guhs:textures/block/houtskoolsteen_stenen.png"
+  },
+  "criteria": {
+    "grillkool": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:grillkool"
+          }
+        ]
+      }
+    },
+    "blokje": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:aanmaakblokje"
+          }
+        ]
+      }
+    },
+    "binnen": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "guhs:barbecuether"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "grillkool",
+      "blokje",
+      "binnen"
+    ]
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,gedekt=false": {
+      "model": "guhs:block/feestbuffettafel"
+    },
+    "facing=north,gedekt=true": {
+      "model": "guhs:block/feestbuffettafel_gedekt"
+    },
+    "facing=east,gedekt=false": {
+      "model": "guhs:block/feestbuffettafel",
+      "y": 90
+    },
+    "facing=east,gedekt=true": {
+      "model": "guhs:block/feestbuffettafel_gedekt",
+      "y": 90
+    },
+    "facing=south,gedekt=false": {
+      "model": "guhs:block/feestbuffettafel",
+      "y": 180
+    },
+    "facing=south,gedekt=true": {
+      "model": "guhs:block/feestbuffettafel_gedekt",
+      "y": 180
+    },
+    "facing=west,gedekt=false": {
+      "model": "guhs:block/feestbuffettafel",
+      "y": 270
+    },
+    "facing=west,gedekt=true": {
+      "model": "guhs:block/feestbuffettafel_gedekt",
+      "y": 270
+    }
+  }
+}

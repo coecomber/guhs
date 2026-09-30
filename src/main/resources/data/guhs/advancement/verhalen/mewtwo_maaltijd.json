@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:mewtwo_knabbelschaal"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.mewtwo_maaltijd.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.mewtwo_maaltijd.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/mewtwo_mew"
+}

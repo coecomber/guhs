@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:timmerguh_bouwboekje"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.timmerguh_klaar.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.timmerguh_klaar.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/timmerguh_bewoner"
+}

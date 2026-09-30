@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/mika_mep_gat_top",
+    "side": "guhs:block/mika_mep_gat_side",
+    "bottom": "guhs:block/mika_mep_gat_side"
+  }
+}

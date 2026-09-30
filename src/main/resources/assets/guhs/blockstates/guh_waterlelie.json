@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/guh_waterlelie"
+      },
+      {
+        "model": "guhs:block/guh_waterlelie",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/guh_waterlelie",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/guh_waterlelie",
+        "y": 270
+      }
+    ]
+  }
+}

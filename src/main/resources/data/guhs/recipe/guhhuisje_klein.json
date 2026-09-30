@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WTW",
+    "WKW",
+    "PDP"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:pink_wool"
+    },
+    "K": {
+      "item": "guhs:kaas_knabbels"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "D": {
+      "tag": "minecraft:wooden_doors"
+    },
+    "T": {
+      "item": "guhs:timmerguh_bouwboekje"
+    }
+  },
+  "result": {
+    "id": "guhs:guhhuisje_klein",
+    "count": 1
+  }
+}

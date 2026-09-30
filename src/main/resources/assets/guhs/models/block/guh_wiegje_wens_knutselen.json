@@ -1,0 +1,94 @@
+{
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "guhs:block/guh_wiegje_wens_knutselen",
+    "wens": "guhs:block/guh_wiegje_wens_knutselen"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        15,
+        8
+      ],
+      "to": [
+        13,
+        25,
+        8
+      ],
+      "shade": false,
+      "rotation": {
+        "origin": [
+          8,
+          20,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "texture": "#wens",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#wens",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        15,
+        8
+      ],
+      "to": [
+        13,
+        25,
+        8
+      ],
+      "shade": false,
+      "rotation": {
+        "origin": [
+          8,
+          20,
+          8
+        ],
+        "axis": "y",
+        "angle": -45
+      },
+      "faces": {
+        "north": {
+          "texture": "#wens",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#wens",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

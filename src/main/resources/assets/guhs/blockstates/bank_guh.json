@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/bank_guh"
+    },
+    "facing=east": {
+      "model": "guhs:block/bank_guh"
+    },
+    "facing=south": {
+      "model": "guhs:block/bank_guh"
+    },
+    "facing=west": {
+      "model": "guhs:block/bank_guh"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "loader": "neoforge:separate_transforms",
+  "base": {
+    "parent": "guhs:block/guh_wip"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "minecraft:item/generated",
+      "textures": {
+        "layer0": "guhs:item/guh_wip"
+      }
+    }
+  }
+}

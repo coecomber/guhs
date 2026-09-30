@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,stemming=0": {
+      "model": "guhs:block/vadshout_gezicht_0"
+    },
+    "facing=north,stemming=1": {
+      "model": "guhs:block/vadshout_gezicht_1"
+    },
+    "facing=north,stemming=2": {
+      "model": "guhs:block/vadshout_gezicht_2"
+    },
+    "facing=north,stemming=3": {
+      "model": "guhs:block/vadshout_gezicht_3"
+    },
+    "facing=east,stemming=0": {
+      "model": "guhs:block/vadshout_gezicht_0",
+      "y": 90
+    },
+    "facing=east,stemming=1": {
+      "model": "guhs:block/vadshout_gezicht_1",
+      "y": 90
+    },
+    "facing=east,stemming=2": {
+      "model": "guhs:block/vadshout_gezicht_2",
+      "y": 90
+    },
+    "facing=east,stemming=3": {
+      "model": "guhs:block/vadshout_gezicht_3",
+      "y": 90
+    },
+    "facing=south,stemming=0": {
+      "model": "guhs:block/vadshout_gezicht_0",
+      "y": 180
+    },
+    "facing=south,stemming=1": {
+      "model": "guhs:block/vadshout_gezicht_1",
+      "y": 180
+    },
+    "facing=south,stemming=2": {
+      "model": "guhs:block/vadshout_gezicht_2",
+      "y": 180
+    },
+    "facing=south,stemming=3": {
+      "model": "guhs:block/vadshout_gezicht_3",
+      "y": 180
+    },
+    "facing=west,stemming=0": {
+      "model": "guhs:block/vadshout_gezicht_0",
+      "y": 270
+    },
+    "facing=west,stemming=1": {
+      "model": "guhs:block/vadshout_gezicht_1",
+      "y": 270
+    },
+    "facing=west,stemming=2": {
+      "model": "guhs:block/vadshout_gezicht_2",
+      "y": 270
+    },
+    "facing=west,stemming=3": {
+      "model": "guhs:block/vadshout_gezicht_3",
+      "y": 270
+    }
+  }
+}

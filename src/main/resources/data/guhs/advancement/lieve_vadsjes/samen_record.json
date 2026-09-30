@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:lieve_vadsjes/samen_gespeeld",
+  "display": {
+    "icon": {
+      "id": "minecraft:jukebox"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_record.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_record.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

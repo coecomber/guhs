@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:guhwaii_palm_gezicht"
+    }
+  ],
+  "result": {
+    "id": "guhs:guhwaii_palm_planken",
+    "count": 4
+  }
+}

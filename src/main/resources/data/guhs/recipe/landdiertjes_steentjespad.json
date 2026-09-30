@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SS",
+    "SS"
+  ],
+  "key": {
+    "S": {
+      "item": "guhs:landdiertjes_guhsteentje"
+    }
+  },
+  "result": {
+    "id": "guhs:landdiertjes_steentjespad",
+    "count": 3
+  }
+}

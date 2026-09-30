@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "fel=false": {
+      "model": "guhs:block/glimtegel"
+    },
+    "fel=true": {
+      "model": "guhs:block/glimtegel_fel"
+    }
+  }
+}

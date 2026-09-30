@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "guhs:block/doolhof_lantaarn"
+    },
+    "lit=true": {
+      "model": "guhs:block/doolhof_lantaarn_aan"
+    }
+  }
+}

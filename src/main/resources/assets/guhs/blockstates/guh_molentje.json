@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guh_molentje"
+    },
+    "facing=east": {
+      "model": "guhs:block/guh_molentje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guh_molentje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guh_molentje",
+      "y": 270
+    }
+  }
+}

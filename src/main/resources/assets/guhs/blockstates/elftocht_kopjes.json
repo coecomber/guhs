@@ -1,0 +1,36 @@
+{
+  "variants": {
+    "facing=north,soort=chocovet": {
+      "model": "guhs:block/elftocht_kopjes_chocovet",
+      "y": 180
+    },
+    "facing=north,soort=snert": {
+      "model": "guhs:block/elftocht_kopjes_snert",
+      "y": 180
+    },
+    "facing=east,soort=chocovet": {
+      "model": "guhs:block/elftocht_kopjes_chocovet",
+      "y": 270
+    },
+    "facing=east,soort=snert": {
+      "model": "guhs:block/elftocht_kopjes_snert",
+      "y": 270
+    },
+    "facing=south,soort=chocovet": {
+      "model": "guhs:block/elftocht_kopjes_chocovet",
+      "y": 0
+    },
+    "facing=south,soort=snert": {
+      "model": "guhs:block/elftocht_kopjes_snert",
+      "y": 0
+    },
+    "facing=west,soort=chocovet": {
+      "model": "guhs:block/elftocht_kopjes_chocovet",
+      "y": 90
+    },
+    "facing=west,soort=snert": {
+      "model": "guhs:block/elftocht_kopjes_snert",
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,137 @@
+# 3.0 visual QA round 3: the Knuffelhart screen, the scanner scene, the Lilo screen and the insides (camtpl)
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+/gamerule doMobSpawning false
+mist off
+
+
+section hemel (3.0): het Hemelkapelletje op zijn wolkeneilandje, het Knuffelhart en het terughaal-scherm
+/gamemode spectator
+tplocate guhs:guhmension hemelkapelletje
+waitrender 300
+shot hemel_kapelletje
+/guhs hemel klopt true
+wolkjes
+wait 20
+gui close
+gui keep
+/gamemode creative
+camtpl 20.5 47 13.5 180 10
+wait 10
+/guhs hemel scherm
+wait 40
+widgets
+shot gui_hemel_scherm gui
+gui close
+/guhs hemel klopt false
+# </hemel>
+
+# <guhwaii>
+section guhwaii (3.0): Guhwai'i - Lilo and Nani's stilt house, 626's capsule with the scanner, the palms, the 626-guh strumming
+tplocate auto guhs:guhwaii_ohana
+tplocate auto guhs:guhwaii_capsule
+tpbiome auto guhs:guhwaii
+wait 40
+shot guhwaii_bioom
+/execute in minecraft:overworld run tp @s 3400 150 3400
+/forceload add 3360 3360 3440 3440
+/fill 3370 138 3370 3430 138 3430 minecraft:sandstone
+/fill 3370 139 3370 3430 139 3430 minecraft:sand
+/fill 3370 140 3370 3430 147 3430 minecraft:air
+/time set noon
+/setblock 3400 140 3400 guhs:vadsigheid_scanner[facing=south]
+/setblock 3404 140 3398 guhs:schilly_eitjes[eitjes=4,rijp=2]
+/setblock 3396 140 3398 guhs:roze_hibiscus
+/setblock 3395 140 3398 guhs:guhwaii_plumeria
+/setblock 3394 140 3398 guhs:guhwaii_paradijsbloem
+/setblock 3393 140 3398 guhs:guhwaii_orchidee
+/place feature guhs:guhwaii_palm 3390 140 3406
+/place feature guhs:guhwaii_palm 3410 140 3406
+verhaalguh stitch626 3400 140.2 3400
+wait 40
+camera 3400 143 3412 180 15
+wait 10
+shot guhwaii_scanner_palmen_626
+/gamemode creative
+/tp @s 3400 140 3402 180 20
+use 3400 140 3400
+wait 40
+shot gui_guhwaii_scanner_meter gui
+wait 30
+shot gui_guhwaii_scanner_onberekenbaar gui
+gui close
+guhmenu 3400 140 3400
+wait 10
+shot gui_guhwaii_626_menu gui
+gui close
+/kill @e[type=guhs:guh,x=3400,y=140,z=3400,distance=..16]
+/forceload remove 3360 3360 3440 3440
+# </guhwaii>
+
+# <guhwaii-spellen>
+section guhwaii-spellen (3.0): the surf beach of Guhwai'i: the podium under its hale, the surf shack, Tikiguh's stall, the screens, surfing and the hula
+#   (op commands: /guhs guhwaiispellen surf|hula <makkelijk|medium|lastig>, stop, munten <n>)
+/gamemode spectator
+/time set noon
+tplocate auto guhwaii_surfstrand
+/gamemode creative
+npc lilo_guh
+interact npc
+wait 10
+shot gui_guhwaiispellen_lilo gui
+widgets
+gui close
+npc tikiguh
+interact npc
+wait 10
+shot gui_guhwaiispellen_tikiwinkel gui
+gui close
+/gamemode spectator
+
+section binnen: Nomguh (the berghut, the hospital, the stable)
+opnieuw
+tplocate auto nomguh
+camtpl 43.5 38.6 56.5 90 12
+waitrender
+shot 30_nomguh_berghut_binnen
+camtpl 153.5 22.6 115.5 135 12
+waitrender
+shot 30_nomguh_ziekenhuisje_binnen
+camtpl 95.5 23 90.5 120 15
+waitrender
+shot 30_nomguh_stal_binnen
+
+section binnen: Guhwai'i (Lilo's room, Nani's kitchen, the capsule)
+opnieuw
+tplocate auto guhs:guhwaii_ohana
+camtpl 24.2 11.5 31.2 140 15
+waitrender
+shot 30_guhwaii_ohana_lilo_kamer
+camtpl 26.8 11.5 31.2 -140 15
+waitrender
+shot 30_guhwaii_ohana_keuken
+tplocate auto guhs:guhwaii_capsule
+camtpl 20.5 6.6 20.5 140 20
+waitrender
+shot 30_guhwaii_capsule_binnen
+camtpl 17.5 6.2 17.5 90 5
+wait 10
+shot 30_guhwaii_capsule_poster
+
+section binnen: the Hemelkapelletje (the aisle, the altar with the Knuffelhart)
+opnieuw
+tplocate guhs:guhmension hemelkapelletje
+camtpl 20.5 47.6 21.5 180 8
+waitrender
+shot 30_hemel_kapel_binnen
+camtpl 20.5 47.6 13.5 180 25
+wait 10
+shot 30_hemel_kapel_altaar
+
+
+quit

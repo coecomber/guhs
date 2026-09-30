@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:guhwaii_paradijsbloem"
+    }
+  ],
+  "result": {
+    "id": "minecraft:orange_dye",
+    "count": 2
+  }
+}

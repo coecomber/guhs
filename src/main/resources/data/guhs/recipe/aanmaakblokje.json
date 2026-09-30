@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:grillguh_recept"
+    },
+    {
+      "item": "minecraft:charcoal"
+    },
+    {
+      "item": "minecraft:flint"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    }
+  ],
+  "result": {
+    "id": "guhs:aanmaakblokje",
+    "count": 1
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/circuit_stuiterpaddenstoel_top",
+    "side": "guhs:block/circuit_stuiterpaddenstoel_side",
+    "bottom": "guhs:block/circuit_stuiterpaddenstoel_side"
+  }
+}

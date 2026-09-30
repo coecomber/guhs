@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:hemel_wolkenvleugeltjes"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.hemel_engeltje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.hemel_engeltje.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/hemel_hart"
+}

@@ -1,0 +1,307 @@
+# 2.9 visual QA, part 2: the new buildings (real worldgen via tplocate + NPC close-ups + their screens in place),
+# the Elf-Guhjestocht villages (template placed in the sky of the overworld), the Beroepenstraat and guh_village layout_c.
+# Run: gradlew runAutocheckClient -PautocheckScript=tools/autocheck/grote_guhspelen_bouw.txt -PautocheckTimeout=75
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+mist off
+
+section sjoelhuisje (worldgen) + sjoelguh
+tplocate auto guhs:sjoelhuisje
+npc sjoelguh 3.2 0.6
+wait 20
+waitrender 200
+shot 29_npc_sjoelguh_in_gebouw
+npc sjoelguh 9 3
+wait 10
+waitrender 200
+shot 29_npc_sjoelguh_omgeving
+npc sjoelguh 3.2 0.6
+wait 5
+/gamemode creative
+interact npc
+wait 15
+mouse 2 2
+widgets
+shot 29_scherm_sjoelguh_in_gebouw gui
+gui close
+/gamemode spectator
+
+section guhdoolhof (worldgen) + doolhofguh
+tplocate auto guhs:guhdoolhof
+npc doolhofguh 3.2 0.6
+wait 20
+waitrender 200
+shot 29_npc_doolhofguh_in_gebouw
+npc doolhofguh 9 3
+wait 10
+waitrender 200
+shot 29_npc_doolhofguh_omgeving
+npc doolhofguh 3.2 0.6
+wait 5
+/gamemode creative
+interact npc
+wait 15
+mouse 2 2
+widgets
+shot 29_scherm_doolhofguh_in_gebouw gui
+gui close
+/gamemode spectator
+
+section knabbelkatapult (worldgen) + katapultguh
+tplocate auto guhs:knabbelkatapult
+npc katapultguh 3.2 0.6
+wait 20
+waitrender 200
+shot 29_npc_katapultguh_in_gebouw
+npc katapultguh 9 3
+wait 10
+waitrender 200
+shot 29_npc_katapultguh_omgeving
+npc katapultguh 3.2 0.6
+wait 5
+/gamemode creative
+interact npc
+wait 15
+mouse 2 2
+widgets
+shot 29_scherm_katapultguh_in_gebouw gui
+gui close
+/gamemode spectator
+
+section knabbelspelen (worldgen) + spelleiderguh
+tplocate auto guhs:knabbelspelen
+npc spelleiderguh 3.2 0.6
+wait 20
+waitrender 200
+shot 29_npc_spelleiderguh_in_gebouw
+npc spelleiderguh 9 3
+wait 10
+waitrender 200
+shot 29_npc_spelleiderguh_omgeving
+npc spelleiderguh 3.2 0.6
+wait 5
+/gamemode creative
+interact npc
+wait 15
+mouse 2 2
+widgets
+shot 29_scherm_spelleiderguh_in_gebouw gui
+gui close
+/gamemode spectator
+
+section guh_circuit (worldgen) + circuitguh
+tplocate auto guhs:guh_circuit
+npc circuitguh 3.2 0.6
+wait 20
+waitrender 200
+shot 29_npc_circuitguh_in_gebouw
+npc circuitguh 9 3
+wait 10
+waitrender 200
+shot 29_npc_circuitguh_omgeving
+npc circuitguh 3.2 0.6
+wait 5
+/gamemode creative
+interact npc
+wait 15
+mouse 2 2
+widgets
+shot 29_scherm_circuitguh_in_gebouw gui
+gui close
+/gamemode spectator
+
+section elfguhjestocht (worldgen) + schaatsmeesterguh
+tplocate auto guhs:elfguhjestocht
+npc schaatsmeesterguh 3.2 0.6
+wait 20
+waitrender 200
+shot 29_npc_schaatsmeesterguh_in_gebouw
+npc schaatsmeesterguh 9 3
+wait 10
+waitrender 200
+shot 29_npc_schaatsmeesterguh_omgeving
+npc schaatsmeesterguh 3.2 0.6
+wait 5
+/gamemode creative
+interact npc
+wait 15
+mouse 2 2
+widgets
+shot 29_scherm_schaatsmeesterguh_in_gebouw gui
+gui close
+/gamemode spectator
+
+section knuffeldal_stadje (worldgen) + brandweerguh
+tplocate auto guhs:knuffeldal_stadje
+npc brandweerguh 3.2 0.6
+wait 20
+waitrender 200
+shot 29_npc_brandweerguh_in_gebouw
+npc brandweerguh 9 3
+wait 10
+waitrender 200
+shot 29_npc_brandweerguh_omgeving
+npc politieguh 3.2 0.6
+wait 20
+waitrender 200
+shot 29_npc_politieguh_in_gebouw
+npc politieguh 9 3
+wait 10
+waitrender 200
+shot 29_npc_politieguh_omgeving
+npc apothekerguh 3.2 0.6
+wait 20
+waitrender 200
+shot 29_npc_apothekerguh_in_gebouw
+npc apothekerguh 9 3
+wait 10
+waitrender 200
+shot 29_npc_apothekerguh_omgeving
+
+section Elf-Guhjestocht villages (the template in the sky of the overworld, north of the ice: every village from the canal)
+/execute in minecraft:overworld run tp @s 4128 210 4128
+/forceload add 4000 4000 4255 4255
+wait 40
+/place template guhs:elfguhjestocht 4000 150 4000
+wait 60
+camera 4128 260 4330 180 32
+waitrender 400
+shot 29_elftocht_overzicht_zuid
+camera 4128 300 4128 0 89
+waitrender 300
+shot 29_elftocht_bovenaf
+camera 4050 164 4053 180 14
+waitrender 200
+shot 29_elftocht_dorp01_guhwarden
+camera 4052 158 4046 180 8
+wait 10
+shot 29_elftocht_startboog
+camera 4172 164 4052 180 14
+wait 10
+waitrender 200
+shot 29_elftocht_dorp02_snuh
+camera 4210 164 4122 270 14
+wait 10
+waitrender 200
+shot 29_elftocht_dorp03_ijlguh
+camera 4185 164 4210 0 14
+wait 10
+waitrender 200
+shot 29_elftocht_dorp04_knabbelsloten
+camera 4080 164 4210 0 14
+wait 10
+waitrender 200
+shot 29_elftocht_dorp05_vadsvoren
+camera 4045 164 4155 90 14
+wait 10
+waitrender 200
+shot 29_elftocht_dorp06_guhdeloopen
+camera 4093 164 4125 180 14
+wait 10
+waitrender 200
+shot 29_elftocht_dorp07_vadskum
+camera 4150 164 4203 180 14
+wait 10
+waitrender 200
+shot 29_elftocht_dorp08_knabbelsward
+camera 4203 164 4120 90 14
+wait 10
+waitrender 200
+shot 29_elftocht_dorp09_guhlingen
+camera 4135 164 4053 0 14
+wait 10
+waitrender 200
+shot 29_elftocht_dorp10_franeguh
+camera 4043 164 4086 180 14
+wait 10
+waitrender 200
+shot 29_elftocht_dorp11_dokguh
+npc stempelguh 3 0.5
+wait 10
+shot 29_npc_stempelguh_dorp
+npc schaatsmeesterguh 3 0.5
+wait 10
+shot 29_npc_schaatsmeester_template
+/forceload remove 4000 4000 4255 4255
+
+section Beroepenstraat (template) and guh_village layout_c (template)
+/execute in minecraft:overworld run tp @s 5010 200 5060
+/forceload add 5000 5000 5031 5143
+wait 40
+/place template guhs:knuffeldal_stadje/beroepenstraat 5000 150 5000
+wait 40
+camera 5045 175 5066 90 22
+waitrender 300
+shot 29_beroepenstraat_oost
+camera 4975 175 5066 270 22
+wait 10
+shot 29_beroepenstraat_west
+camera 5011 200 5066 0 89
+wait 10
+shot 29_beroepenstraat_boven
+camera 5034 160 5028 90 12
+wait 10
+shot 29_beroepenstraat_achter_kazerne
+camera 5034 160 5061 90 12
+wait 10
+shot 29_beroepenstraat_achter_politie
+camera 5034 160 5092 90 12
+wait 10
+shot 29_beroepenstraat_achter_apotheek
+camera 5033 166 5053 135 25
+wait 10
+shot 29_beroepenstraat_hoek_kazerne
+camera 5033 166 5068 45 25
+wait 10
+shot 29_beroepenstraat_hoek_apotheek_noord
+camera 5033 166 5086 135 25
+wait 10
+shot 29_beroepenstraat_hoek_politie_zuid
+camera 5033 166 5116 135 25
+wait 10
+shot 29_beroepenstraat_hoek_apotheek_zuid
+camera 5033 166 5010 45 25
+wait 10
+shot 29_beroepenstraat_hoek_kazerne_noord
+npc brandweerguh 3.2 0.6
+wait 10
+shot 29_npc_brandweerguh_template
+npc politieguh 3.2 0.6
+wait 10
+shot 29_npc_politieguh_template
+npc apothekerguh 3.2 0.6
+wait 10
+shot 29_npc_apothekerguh_template
+/forceload remove 5000 5000 5031 5143
+/execute in minecraft:overworld run tp @s 6030 200 6030
+/forceload add 6000 6000 6063 6063
+wait 40
+/place template guhs:guh_village/layout_c 6000 150 6000
+wait 40
+camera 6032 185 6100 180 30
+waitrender 300
+shot 29_guhdorp_layout_c_zuid
+camera 6032 185 5964 0 30
+wait 10
+shot 29_guhdorp_layout_c_noord
+camera 6032 215 6032 0 89
+wait 10
+shot 29_guhdorp_layout_c_boven
+npc bouwvakkerguh 3.2 0.6
+wait 10
+shot 29_npc_bouwvakkerguh_template
+npc bouwvakkerguh 10 5
+wait 10
+shot 29_bouwplaats_layout_c
+/forceload remove 6000 6000 6063 6063
+
+section Guhpolder (the biome)
+tpbiome auto guhs:guhpolder
+mist on
+quit

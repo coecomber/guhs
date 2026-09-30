@@ -1,0 +1,27 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": [
+    "guhs:guh_meadows",
+    "guhs:kaas_flats"
+  ],
+  "spawners": [
+    {
+      "type": "guhs:guhschaapje",
+      "weight": 2,
+      "minCount": 2,
+      "maxCount": 3
+    },
+    {
+      "type": "guhs:knabbelkippetje",
+      "weight": 2,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "guhs:guhkoe",
+      "weight": 1,
+      "minCount": 1,
+      "maxCount": 2
+    }
+  ]
+}

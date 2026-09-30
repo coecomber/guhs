@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "guhs:block/beauty_leenkast_front",
+    "side": "guhs:block/beauty_leenkast_side",
+    "top": "guhs:block/beauty_leenkast_top",
+    "particle": "guhs:block/beauty_leenkast_side"
+  }
+}

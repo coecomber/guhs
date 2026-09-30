@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "guhs:block/guh_portal_ns"
+    },
+    "axis=z": {
+      "model": "guhs:block/guh_portal_ew"
+    }
+  }
+}

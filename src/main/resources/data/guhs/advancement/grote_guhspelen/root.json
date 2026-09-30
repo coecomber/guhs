@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:oak_pressure_plate"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.root.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "background": "minecraft:textures/block/pink_wool.png"
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "guhs:guhmension"
+      }
+    }
+  }
+}

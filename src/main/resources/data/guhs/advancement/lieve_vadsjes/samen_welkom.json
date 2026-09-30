@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:lieve_vadsjes/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:cake"
+    },
+    "title": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_welkom.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.lieve_vadsjes.samen_welkom.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

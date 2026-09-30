@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/katapult_gevonden",
+  "display": {
+    "icon": {
+      "id": "guhs:katapultster"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.katapult_gespeeld.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.katapult_gespeeld.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:oak_leaves"
+    },
+    "title": {
+      "translate": "advancements.guhs.diertjes.vogels_ondersteboven.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.diertjes.vogels_ondersteboven.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:diertjes/vogels_kaasmeesje"
+}

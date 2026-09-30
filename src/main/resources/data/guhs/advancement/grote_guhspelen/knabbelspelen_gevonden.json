@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:grote_guhspelen/root",
+  "display": {
+    "icon": {
+      "id": "guhs:spelenlintje"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.knabbelspelen_gevonden.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.knabbelspelen_gevonden.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "gevonden": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": "guhs:knabbelspelen"
+          }
+        }
+      }
+    }
+  }
+}

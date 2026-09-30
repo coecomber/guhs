@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "kleur=0": {
+      "model": "guhs:block/circuit_regenboogweg_0"
+    },
+    "kleur=1": {
+      "model": "guhs:block/circuit_regenboogweg_1"
+    },
+    "kleur=2": {
+      "model": "guhs:block/circuit_regenboogweg_2"
+    },
+    "kleur=3": {
+      "model": "guhs:block/circuit_regenboogweg_3"
+    },
+    "kleur=4": {
+      "model": "guhs:block/circuit_regenboogweg_4"
+    },
+    "kleur=5": {
+      "model": "guhs:block/circuit_regenboogweg_5"
+    },
+    "kleur=6": {
+      "model": "guhs:block/circuit_regenboogweg_6"
+    }
+  }
+}

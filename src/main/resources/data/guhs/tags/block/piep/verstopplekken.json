@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:flower_pots",
+    "minecraft:decorated_pot",
+    "minecraft:barrel",
+    "minecraft:composter",
+    "minecraft:cauldron",
+    "minecraft:hay_block",
+    "guhs:guh_bloempot",
+    "guhs:potted_roze_guhbloem",
+    "guhs:potted_guhoortjes",
+    "guhs:potted_kaasbloem",
+    "guhs:guh_wastobbe",
+    "guhs:guhnestje",
+    "guhs:kippennestje",
+    "guhs:bladerhoopje",
+    "guhs:guh_voerbak",
+    "guhs:seizoensbloembak"
+  ]
+}

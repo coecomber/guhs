@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:knabbelkroon"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.guheinde_winst.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.guheinde_winst.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:guheinde/guheinde_voeren"
+}

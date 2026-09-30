@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "guhs:block/houtskoolsteen_stenen",
+    "top": "guhs:block/houtskoolsteen_stenen",
+    "side": "guhs:block/houtskoolsteen_stenen"
+  }
+}

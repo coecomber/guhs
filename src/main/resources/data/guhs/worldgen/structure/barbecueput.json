@@ -1,0 +1,13 @@
+{
+  "type": "guhs:barbecueput",
+  "biomes": "#guhs:has_structure/barbecueput",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "guhs:barbecueput/start",
+  "start_jigsaw_name": "guhs:barbecueput_midden",
+  "check_radius": 20,
+  "max_height_difference": 12,
+  "headroom": 10,
+  "keep_clear": 19
+}

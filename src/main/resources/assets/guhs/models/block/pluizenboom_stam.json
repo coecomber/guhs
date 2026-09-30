@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "guhs:block/pluizenboom_stam_top",
+    "side": "guhs:block/pluizenboom_stam"
+  }
+}

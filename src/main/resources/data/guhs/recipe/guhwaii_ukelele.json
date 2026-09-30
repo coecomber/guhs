@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "  S",
+    "PS ",
+    "PP "
+  ],
+  "key": {
+    "P": {
+      "item": "guhs:guhwaii_palm_planken"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "result": {
+    "id": "guhs:guhwaii_ukelele",
+    "count": 1
+  }
+}

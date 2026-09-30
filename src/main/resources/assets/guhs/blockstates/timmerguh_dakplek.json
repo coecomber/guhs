@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "deel=dak": {
+      "model": "guhs:block/timmerguh_dakplek_dak"
+    },
+    "deel=oor": {
+      "model": "guhs:block/timmerguh_dakplek_oor"
+    },
+    "deel=binnenoor": {
+      "model": "guhs:block/timmerguh_dakplek_binnenoor"
+    }
+  }
+}

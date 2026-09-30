@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/tiki_radiootje"
+    },
+    "facing=east": {
+      "model": "guhs:block/tiki_radiootje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/tiki_radiootje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/tiki_radiootje",
+      "y": 270
+    }
+  }
+}

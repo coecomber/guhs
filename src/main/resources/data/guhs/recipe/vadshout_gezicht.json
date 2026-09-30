@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "guhs:vadshout_stam"
+    },
+    {
+      "item": "guhs:kaas_knabbels"
+    }
+  ],
+  "result": {
+    "id": "guhs:vadshout_gezicht",
+    "count": 1
+  }
+}

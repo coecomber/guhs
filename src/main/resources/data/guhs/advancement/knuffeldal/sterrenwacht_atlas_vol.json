@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/sterrenwacht_sterrenbeeld",
+  "display": {
+    "icon": {
+      "id": "guhs:sterrenlantaarn"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.sterrenwacht_atlas_vol.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.sterrenwacht_atlas_vol.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

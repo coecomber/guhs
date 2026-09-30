@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:knuffeldal/kamperen_gevonden",
+  "display": {
+    "icon": {
+      "id": "minecraft:book"
+    },
+    "title": {
+      "translate": "advancements.guhs.knuffeldal.kamperen_eerste_verhaal.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knuffeldal.kamperen_eerste_verhaal.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:grote_guhspelen/doolhof_lastig",
+  "display": {
+    "icon": {
+      "id": "guhs:doolhofknabbel"
+    },
+    "title": {
+      "translate": "advancements.guhs.grote_guhspelen.doolhof_ongepikt.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.grote_guhspelen.doolhof_ongepikt.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
