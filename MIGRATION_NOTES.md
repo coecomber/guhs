@@ -125,6 +125,39 @@ Registrar design (`gametest/GuhsGameTests.java`, B):
    `fail(String)` still there, `assertValueEqual(v, expected, String)` still there, `startSequence()`, `runAfterDelay`, `succeed*`,
    `onEachTick` unchanged. `assertEntityProperty/assertBlockProperty` take `Component`.
 
+**B: the registrar is done** (`gametest/GuhsGameTests.java`, called from the `Guhs` constructor):
+* Write tests exactly as in 1.0.0: `@GuhTest(template = "x", timeoutTicks = .., batch = "..", required = ..)` on a
+  `public static void name(GameTestHelper helper)` in any class of the mod (a `throws Exception` is fine). No holder
+  annotation, no class list: FML's scan data finds every `@GuhTest` method.
+* Only registered when NeoForge has gametests on (`GameTestHooks.isGametestEnabled()`: dev runs, `runGameTestServer`); a normal
+  game registers nothing.
+* **Test ids keep the 1.0.0 names**: `guhs:<class>.<method>` in lower case, e.g. `/test run guhs:guhgametests.portalroundtriptoguhmension`
+  (not `class/method` as planned above). The test function ids are the same ids in `Registries.TEST_FUNCTION`.
+* Batches -> environments `guhs:batch/<batch>` (`defaultBatch` -> `guhs:batch/default`); templates `"empty"` -> `guhs:empty`
+  (a template with a namespace is used as is).
+* `-Pgt=KnusGameTests,grond` works as before (class simple name or batch prefix, `GametestFilter`); the log says
+  `Guhs gametests: N test methods found (-Dguhs.gametests filter: M skipped)`.
+* Assertion failures reach the framework unchanged (the `InvocationTargetException` is unwrapped).
+* `gametest/PortGameTests` tests the registrar itself, the 1.0.0 saved data move, the day clock, owners and entity NBT (batch `port`).
+
+Test body fixes seen in B's test files (script `port26/scripts/b_fixes.py <files>` does the mechanical ones, idempotent):
+
+| 1.21.1 | 26.1.2 |
+|---|---|
+| `(X) helper.getBlockEntity(p)` | `helper.getBlockEntity(p, X.class)` |
+| `entity.saveWithoutId(tag)` / `entity.load(tag)` (CompoundTag) | `nl.juiced.guhs.storage.Nbt.saveWithoutId(entity, tag)` / `Nbt.load(entity, tag)` |
+| `player.startRiding(e, true)` | `player.startRiding(e, true, true)` (`startRiding(e)` unchanged) |
+| `mob.interact(player, hand)` | `mob.interact(player, hand, mob.position())` |
+| `mika.doHurtTarget(target)` | `mika.doHurtTarget(helper.getLevel(), target)` |
+| `transition.pos()` (TeleportTransition) | `transition.position()` |
+| `new ChunkPos(blockPos)` / `new ChunkPos(long)` / `c.toLong()` | `ChunkPos.containing(blockPos)` / `ChunkPos.unpack(l)` / `c.pack()` |
+| `registry.getHolder(key)` / `getHolderOrThrow(key)` / `holders()` | `registry.get(key)` / `getOrThrow(key)` / `listElements()` |
+| `level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)`, `r.getResultItem(access)`, `r.getIngredients()` | `level.recipeAccess().getRecipes()` (filter `instanceof ShapedRecipe/ShapelessRecipe`), `r.assemble(CraftingInput.EMPTY)` (those two ignore the input), `r.placementInfo().ingredients()` |
+| `JukeboxSong.fromStack(registries, stack)` | `JukeboxSong.fromStack(stack)` |
+| Villagers: `setType(t).setProfession(p)`, `getProfession() == X`, `VillagerProfession.LIBRARIAN` (a value) | `data.withType(access, ModVillagers.GUH.getKey()).withProfession(access, key)`, `data.profession().is(key)`, `data.type().is(ModVillagers.GUH.getKey())`; `VillagerProfession.X` are `ResourceKey`s; classes live in `world.entity.npc.villager` |
+| `net.minecraft.world.entity.monster.Husk` | `net.minecraft.world.entity.monster.zombie.Husk` |
+| `StringBuilder.append(cond ? null : x)` "ambiguous" | `append((Object) (cond ? null : x))` |
+
 ## 4. API cheat sheet (area by area, PORT_PLAN section 4)
 
 ### 4.3 Registration and items
@@ -299,6 +332,81 @@ public void playSound(@Nullable Entity except, double x, double y, double z, Hol
 * Attributes: `Attributes.X` are `Holder<Attribute>` (unchanged since 1.21); `MOVEMENT_SPEED` is still `Attributes.MOVEMENT_SPEED` - the
   missing `MOVEMENT_SPEED` symbol errors were `MobEffects` (done).
 
+**B: entity patterns established in `entity/` (all compile against 26.1.2; copy them):**
+
+| 1.21.1 | 26.1.2 |
+|---|---|
+| `guh.getOwnerUUID()` / `setOwnerUUID(uuid)` on **GuhEntity** | unchanged: `GuhEntity` keeps both (they wrap `getOwnerReference()` / `setOwnerReference(..)`) |
+| `pet.getOwnerUUID()` on any other `TamableAnimal` / `OwnableEntity` | `nl.juiced.guhs.entity.Owners.uuid(pet)`; `Owners.isOwner(pet, player.getUUID())`; `pet.setOwnerReference(Owners.ref(uuid))`; copy an owner: `baby.setOwnerReference(this.getOwnerReference())` |
+| `boolean hurt(DamageSource, float)` override | `boolean hurtServer(ServerLevel level, DamageSource source, float amount)` (server only; `hurt` is final). Plain `Entity` subclasses **must** implement it (`return false` = 1.21.1's default) |
+| calling `target.hurt(src, dmg)` | `target.hurtServer(serverLevel, src, dmg)` on the server, or `target.hurtOrSimulate(src, dmg)` |
+| `isInvulnerableTo(DamageSource)` override | LivingEntity: `isInvulnerableTo(ServerLevel level, DamageSource source)`; plain Entity: test `isInvulnerableToBase(source)` |
+| `doHurtTarget(Entity)` | `doHurtTarget(ServerLevel level, Entity target)` |
+| `customServerAiStep()` | `customServerAiStep(ServerLevel level)` |
+| `dropEquipment()`, `spawnAtLocation(stack)` | `dropEquipment(ServerLevel level)`; `spawnAtLocation(ServerLevel level, ItemStack or ItemLike)` |
+| `interact(Player, InteractionHand)` (Entity) | `interact(Player player, InteractionHand hand, Vec3 location)`; `mobInteract(Player, hand)` unchanged |
+| `canBeCollidedWith()` | `canBeCollidedWith(@Nullable Entity other)` |
+| `causeFallDamage(float, float, DamageSource)` | `causeFallDamage(double fallDistance, float multiplier, DamageSource source)` |
+| `lerpTo(x, y, z, yRot, xRot, steps)` override (ignore server positions) | gone; override `getInterpolation()` and return an `InterpolationHandler` whose `interpolateTo(Vec3, yRot, xRot)` decides (see `GuhSleeEntity`: 0 steps, sets pos/rot directly = 1.21.1's plain `Entity#lerpTo`) |
+| `new NearestAttackableTargetGoal<>(mob, Cls, 10, true, false, target -> ..)` | the selector gets the level: `(target, serverLevel) -> ..` (`TargetingConditions.Selector`) |
+| `walkAnimation.update(speed, factor)` | `walkAnimation.update(speed, factor, 1f)` (position scale) |
+| `Saddleable` (`isSaddleable/equipSaddle/isSaddled`) | interface gone (the saddle is an equipment slot now). `GuhEntity` keeps `isSaddleable()`, `equipSaddle(stack, source)`, `isSaddled()` (own synced flag, same "Saddle" NBT) **without `@Override`**, and takes a vanilla saddle itself in `mobInteract` (what SaddleItem did). Subclasses (Parade/Kapper/Race guhs): drop `@Override` on `isSaddleable` |
+| `isBodyArmorItem(stack)` override | gone; `GuhEntity#isBodyArmorItem` stays as a plain method; `setBodyArmorItem` / `getBodyArmorItem` unchanged |
+| `shouldDespawnInPeaceful()` override | gone: peaceful is per entity type, `EntityType.Builder#notInPeaceful()` (A: ModEntities). Keep the method without `@Override` if a test calls it |
+| `Merchant` implementers | must implement `boolean stillValid(Player)` (1.21.1's MerchantMenu used `getTradingPlayer() == player`) |
+| `new ServerBossEvent(name, color, overlay)` | `new ServerBossEvent(Mth.createInsecureUUID(this.random), name, color, overlay)` |
+| Bee anger `setRemainingPersistentAngerTime(int)` | `setPersistentAngerEndTime(long)` (-1 = not angry) |
+| `new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(x))` | `new ItemParticleOption(ParticleTypes.ITEM, x)` (an `Item`) |
+| `new DustParticleOptions(new Vector3f(r, g, b), size)` | `new DustParticleOptions(0xRRGGBB, size)` (e.g. `(1f, 0.55f, 0.8f)` -> `0xFF8CCC`) |
+| `SoundEvents.X` passed as a `SoundEvent` (`playSound(null, pos, SoundEvents.SHIELD_BLOCK, ..)`) | many are `Holder.Reference<SoundEvent>` now: add `.value()` |
+| `level.isDay()` / `isNight()` | `level.isBrightOutside()` / `isDarkOutside()` (identical code) |
+| `flyingNav.setCanPassDoors(true)` | gone from the navigation (passing doors is the node evaluator's default: true) |
+
+**EntitySpawnReason** (1.21.2): `MobSpawnType` -> `EntitySpawnReason` (same constants, `SPAWN_EGG` -> `SPAWN_ITEM_USE`).
+`finalizeSpawn(ServerLevelAccessor, DifficultyInstance, EntitySpawnReason, @Nullable SpawnGroupData)`; spawn rules
+`checkXSpawnRules(EntityType<T>, ServerLevelAccessor|LevelAccessor, EntitySpawnReason, BlockPos, RandomSource)`;
+`type.create(level, EntitySpawnReason.X)` (26.1.2 ignores the reason there);
+`EntityType.loadEntityRecursive(tag, level, EntitySpawnReason.LOAD, e -> {..})` (1.21.1 had no reason argument; LOAD is what it used).
+
+**Teleports (B)**:
+```java
+// 1.21.1 ServerPlayer#teleportTo(ServerLevel, x, y, z, yaw, pitch)  (left the vehicle, reset the camera, changed dimension if needed)
+player.teleportTo(level, x, y, z, java.util.Set.of(), yaw, pitch, true);   // true = reset camera; same or other dimension
+// entity.changeDimension(transition)             -> entity.teleport(transition)   (the entity in the new level, or null)
+// TeleportTransition.PostDimensionTransition     -> PostTeleportTransition;  t.postDimensionTransition() -> t.postTeleportTransition();  t.pos() -> t.position()
+// new TeleportTransition(level, pos, speed, yRot, xRot, false, post)   (the boolean was missingRespawnBlock)
+//                                                 -> new TeleportTransition(level, pos, speed, yRot, xRot, post)
+// serverLevel.getSharedSpawnPos()                -> serverLevel.getRespawnData().pos()   (LevelData.RespawnData(GlobalPos, yaw, pitch))
+```
+26.1's `ServerPlayer#teleport(TeleportTransition)` also wakes a sleeping player.
+
+**Day / time (B): use `nl.juiced.guhs.world.GuhTime`** (PORT_PLAN 7.2). In 1.21.1 every dimension read the overworld's day time
+(DerivedLevelData), so the overworld clock is the exact replacement, in every dimension, on both sides:
+
+| 1.21.1 | 26.1.2 |
+|---|---|
+| `level.getDayTime()` | `GuhTime.dayTime(level)` (= `level.getOverworldClockTime()`) |
+| `level.getDayTime() % 24000` / `Math.floorMod(level.getDayTime(), 24000L)` | `GuhTime.timeOfDay(level)` |
+| `Math.floorDiv(level.getDayTime(), 24000L)` | `GuhTime.day(level)` |
+| `serverLevel.setDayTime(t)` (tests, commands) | `GuhTime.setDayTime(serverLevel, t)` (`clockManager().setTotalTicks(overworld clock, t)`; all dimensions, like 1.21.1) |
+| `level.getMoonPhase()` | `GuhTime.moonPhase(level)` (same formula) |
+| `level.getTimeOfDay(pt)` | `GuhTime.celestialAngle(level)` (same formula; 26.1 has no `fixed_time` value any more) |
+| `level.isDay()` / `isNight()` | `level.isBrightOutside()` / `isDarkOutside()` |
+
+The dimension types of the Guhmension etc. should keep following the overworld clock (D: `"default_clock": "minecraft:overworld"`
+where a dimension has day and night).
+
+**Ticket types (B)**: `TicketType.create(name, comparator)` is gone; ticket types are registry entries: see `world/BouwCheck.TICKET_TYPES`
+(`new TicketType(TicketType.NO_TIMEOUT, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION)`), then
+`chunkSource.addTicketWithRadius(type, chunkPos, radius)` / `removeTicketWithRadius(..)` (no value argument).
+
+**Structures (B)**: `structure.generate(holder, level.dimension(), registryAccess, generator, biomeSource, randomState, templates, seed, chunkPos, refs, heightAccessor, biomePredicate)`
+(holder + dimension first); `getShuffledJigsawBlocks(..)` returns `StructureTemplate.JigsawBlockInfo` (`.name()`, `.info().pos()`, `.pool()`, `.target()`);
+`new Beardifier(List<Rigid>, List<JigsawJunction>, BoundingBox affectedBox)` (a null box makes it return 0 everywhere: use the pieces' box
+`inflatedBy(24)` like vanilla). `level.structureManager().getStructureAt(pos, structure)` needs a `Structure`: `registry.getValue(key)`
+(was `registry.get(key)`).
+
+
 ### 4.5 NBT / persistence / networking
 
 **ValueInput / ValueOutput** (`net.minecraft.world.level.storage`; NeoForge adds `ValueInputExtension` / `ValueOutputExtension`):
@@ -366,6 +474,30 @@ client->server: `ClientPacketDistributor.sendToServer(payload)` (done); server->
 `sendToPlayersTrackingEntity(AndSelf)`, `sendToAllPlayers`, `sendToPlayersInDimension`, `sendToPlayersNear` unchanged. Client-side
 handlers can be registered separately with `RegisterClientPayloadHandlersEvent` (register the payload with `playToClient(type, codec)`
 without a handler on the common side) - the old single-registration style still works.
+
+**B: saved data and entity tags: use core's helpers in `storage/` (owner A)**: `nl.juiced.guhs.storage.GuhSavedData`
+(`tagType("path", T::new, T::load, t -> t.save(new CompoundTag()))` + `GuhSavedData.get(serverLevel, TYPE, "guhs_old_name")`,
+which moves the 1.0.0 file once) and `nl.juiced.guhs.storage.Nbt` (`saveWithoutId(entity[, tag])`, `load(entity, tag)`,
+`toTag(valueInput)`, `saveStack/parseStack`). B's classes use them (GuhWorldData `guhs:world`, Scorebord `guhs:scoreborden`,
+Reisguh `guhs:reisguhs`); their old `load(tag, provider)` / `save(tag, provider)` get `null` as provider (it was never used).
+`PortGameTests#portOudeSavedDataVerhuist` checks the move.
+
+Bridging a 1.21.1 helper that writes/reads a CompoundTag inside `addAdditionalSaveData(ValueOutput)` / `readAdditionalSaveData(ValueInput)`:
+```java
+CompoundTag t = new CompoundTag(); emotes.save(t); out.store(t);     // NeoForge ValueOutput#store(CompoundTag): keys at the top level, like 1.0.0
+emotes.load(Nbt.toTag(in));                                          // the whole input as a tag
+out.store("Verstop", CompoundTag.CODEC, verstop.save());            // was tag.put("Verstop", sub)
+in.read("Verstop", CompoundTag.CODEC).orElseGet(CompoundTag::new);   // was tag.getCompoundOrEmpty("Verstop")
+ContainerHelper.saveAllItems(out.child("Backpack"), items);          // was tag.put("Backpack", saveAllItems(new CompoundTag(), items, regs)); same layout
+ContainerHelper.loadAllItems(in.childOrEmpty("Backpack"), items);
+```
+* A `ListTag` element: `t.getAsString()` -> `t.asString().orElse("")`.
+* Text in entity NBT (text displays, custom names) is a **component in NBT** now, not a JSON string:
+  `ComponentSerialization.CODEC.encodeStart(registryAccess.createSerializationContext(NbtOps.INSTANCE), text).getOrThrow()` and
+  `tag.put("text", encoded)` (see `quest/Scorebord#show`). `Component.Serializer.toJson` is gone.
+* `NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag)` -> `NbtUtils.readBlockState(BuiltInRegistries.BLOCK, tag)`.
+* `CompoundTag#contains(key, TAG_COMPOUND)` for a sub-compound -> `tag.getCompound(key).isPresent()`.
+
 
 ### 4.6 Rendering, GUI, client
 
@@ -530,3 +662,19 @@ use `geckolib:geckolib` special model. Custom numeric/select properties: `Regist
 * L: Spawn eggs lose their two tint colours in 26.1 (vanilla eggs are plain textures now); D/A need textures or tinted item models.
 * L (to verify by B): SavedData files move from `data/<name>.dat` to `data/<namespace>/<path>.dat`; without a migration step, data
   of 1.0.0 worlds (bank, highscores, nests, band, huisjes, ...) would not be found after the update.
+* B: A guh gets its saddle by right-clicking it with a vanilla saddle, now handled in `GuhEntity#mobInteract` (26.1 has no
+  `Saddleable`; vanilla's saddle is an equipment slot now). Same conditions (tamed, rideable size, alive, not saddled yet), same
+  sound, the saddle is used up; the "Saddle" NBT flag and the drop on death are unchanged. The saddle is not in the vanilla SADDLE
+  slot, so vanilla's saddle logic (`#can_equip_saddle`, shears) does not apply; Guhs draws its own saddle bone as before.
+* B: `/test` ids are `guhs:<class>.<method>` (the same names as 1.0.0); batches are test environments `guhs:batch/<batch>`.
+* B: Guh sled (`GuhSleeEntity`): "ignore server positions while on a rail" moved from `lerpTo` to a custom interpolation
+  handler; without a rail it sets position/rotation at once like 1.21.1's `Entity#lerpTo` (no smoothing, as before).
+* B: `/guhs bouwcheck` uses a registered ticket type `guhs:bouwcheck` (loading + simulation, no timeout) instead of an
+  unregistered `TicketType.create`.
+* B: Players teleported by Guhs (guhmaag, Reisguh, verstoppertje, kasteelpoort) are woken up first if they sleep (26.1 `ServerPlayer#teleportTo`).
+* B: `QuestGuhEntity` / `MikaBaasEntity` / `GuhNpcEntity` invulnerability is only asked on the server now (`isInvulnerableTo(ServerLevel, ..)`);
+  the client may show a hurt flash that 1.21.1 did not (cosmetic).
+* B: `GuhTime.moonPhase/celestialAngle` ignore the old `fixed_time` value of fixed-time dimensions (26.1 dimension types only
+  have `has_fixed_time`); nothing in Guhs asks for them in a fixed-time dimension.
+* B: SavedData files get new ids (`guhs:world`, `guhs:scoreborden`, `guhs:reisguhs`, ...): the 1.0.0 file is moved to
+  `<world>/dimensions/minecraft/overworld/data/guhs/<path>.dat` the first time it is needed (a 1.1.0 world can't go back to 1.0.0 anyway).
