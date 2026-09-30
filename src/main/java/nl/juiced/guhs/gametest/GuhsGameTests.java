@@ -171,12 +171,20 @@ public final class GuhsGameTests {
             .set(net.minecraft.world.level.gamerules.GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER, 0)
             .build();
 
+    /**
+     * Every batch starts in the day (data/guhs/function/gametest/batch_start.mcfunction: {@code time set 3000}, Dagdeel DAG). All batches of
+     * a run share one running world clock, and tests that sleep, nap or wake up assumed a day like the start of a 1.21.1
+     * test run; without this they depended on how long the batches before them took and what time those left behind.
+     */
+    private static final Identifier BATCH_START = Guhs.id("gametest/batch_start");
+
     private static void onRegisterTests(RegisterGameTestsEvent event) {
         Map<Identifier, Holder<TestEnvironmentDefinition<?>>> environments = new HashMap<>();
         for (Entry e : ENTRIES) {
             GuhTest t = e.test();
             Holder<TestEnvironmentDefinition<?>> env = environments.computeIfAbsent(batchId(t.batch()),
-                    id -> event.registerEnvironment(id, new TestEnvironmentDefinition.SetGameRules(OLD_TEST_RULES)));
+                    id -> event.registerEnvironment(id, new TestEnvironmentDefinition.SetGameRules(OLD_TEST_RULES),
+                            new TestEnvironmentDefinition.Functions(java.util.Optional.of(BATCH_START), java.util.Optional.empty())));
             TestData<Holder<TestEnvironmentDefinition<?>>> data = new TestData<>(env, structureId(t.template()), Math.max(1, t.timeoutTicks()),
                     (int) t.setupTicks(), t.required(), Rotation.values()[t.rotationSteps() & 3], t.manualOnly(), Math.max(1, t.attempts()),
                     Math.max(1, t.requiredSuccesses()), t.skyAccess(), 0);

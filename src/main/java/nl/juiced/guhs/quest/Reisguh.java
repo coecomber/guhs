@@ -130,6 +130,11 @@ public final class Reisguh {
                 return;
             }
         }
+        register(npc, level, data);
+    }
+
+    /** Puts (or updates) a Guhmension Reisguh on the list. */
+    private static void register(GuhNpcEntity npc, ServerLevel level, Data data) {
         if (level.dimension() != ModDimensions.GUHMENSION) {
             return;
         }
@@ -310,6 +315,10 @@ public final class Reisguh {
         npc.setYBodyRot(yaw);
         level.addFreshEntity(npc);
         tick(npc);
+        // 1.1.0: on the list right away. In 1.21.1 a second nearPortal() saw the new Reisguh as an entity; in 26.1 the
+        // entities of a chunk that is still loading are not visible yet, so without this a second portal check (building a
+        // portal and arriving both ask) put down a second Reisguh.
+        register(npc, level, Data.get(level.getServer()));
         return npc;
     }
 
@@ -341,6 +350,12 @@ public final class Reisguh {
         level.setBlockAndUpdate(at, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
         level.setBlockAndUpdate(at.above(), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
         place(level, at, 0, Component.translatable("quest.guhs.reis.portal_name", at.getX(), at.getZ()).getString());
+    }
+
+    /** For tests: the Reisguhs on the list within {@code range} of {@code pos} (1.1.0: entities in a chunk that was only
+     *  loaded by the test are not visible to entity queries in 26.1, the list is). */
+    public static java.util.List<Point> pointsNear(net.minecraft.server.MinecraftServer server, BlockPos pos, double range) {
+        return Data.get(server).points.values().stream().filter(p -> p.pos().closerThan(pos, range)).toList();
     }
 
     /** For tests: has this player discovered that Reisguh? */

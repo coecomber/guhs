@@ -1355,12 +1355,16 @@ public class GuhGameTests {
         helper.assertTrue(arrive != null && arrive.distSqr(ra.blockPosition()) < 16, "travelling lands you right next to the Reisguh: " + arrive);
         nl.juiced.guhs.quest.Reisguh.nearPortal(guhmension, portal);
         nl.juiced.guhs.quest.Reisguh.nearPortal(guhmension, portal);      // (building a portal and arriving both ask)
-        helper.assertTrue(guhmension.getEntitiesOfClass(nl.juiced.guhs.entity.GuhNpcEntity.class, new net.minecraft.world.phys.AABB(portal).inflate(8),
-                n -> n.getKind() == nl.juiced.guhs.entity.GuhNpcEntity.Kind.REISGUH).size() == 1, "just one Reisguh by a portal");
-        helper.assertTrue(!guhmension.getEntitiesOfClass(nl.juiced.guhs.entity.GuhNpcEntity.class, new net.minecraft.world.phys.AABB(portal).inflate(5),
-                n -> n.getKind() == nl.juiced.guhs.entity.GuhNpcEntity.Kind.REISGUH).isEmpty(), "a Reisguh within 5 blocks of a new portal");
-        for (var n : guhmension.getEntitiesOfClass(nl.juiced.guhs.entity.GuhNpcEntity.class, new net.minecraft.world.phys.AABB(a).inflate(300))) {
-            n.discard();
+        // (1.1.0: counted on the Reisguh list - 26.1 does not show entities of a chunk that only this test loaded)
+        var byPortal = nl.juiced.guhs.quest.Reisguh.pointsNear(guhmension.getServer(), portal, 8);
+        helper.assertTrue(byPortal.size() == 1, "just one Reisguh by a portal: " + byPortal);
+        helper.assertTrue(byPortal.get(0).pos().closerThan(portal, 5), "a Reisguh within 5 blocks of a new portal");
+        for (BlockPos p : java.util.List.of(a, b, portal)) {
+            for (var point : nl.juiced.guhs.quest.Reisguh.pointsNear(guhmension.getServer(), p, 8)) {
+                if (guhmension.getEntity(point.id()) instanceof net.minecraft.world.entity.Entity n) {
+                    n.discard();
+                }
+            }
         }
         helper.succeed();
     }
