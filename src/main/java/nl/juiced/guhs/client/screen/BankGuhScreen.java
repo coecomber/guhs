@@ -1,5 +1,9 @@
 package nl.juiced.guhs.client.screen;
 
+import net.minecraft.client.input.KeyEvent;
+
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -55,9 +59,7 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
     private String lastQuery = "";
 
     public BankGuhScreen(BankGuhMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title);
-        this.imageWidth = 195;
-        this.imageHeight = 262;
+        super(menu, inventory, title, 195, 262);
         this.inventoryLabelX = BankGuhMenu.INV_X - 1;
         this.inventoryLabelY = BankGuhMenu.INV_Y - 11;
         this.titleLabelX = 8;
@@ -177,12 +179,12 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
         refresh(false);
         super.extractRenderState(g, mouseX, mouseY, partialTick);
-        renderGridTooltip(g, mouseX, mouseY);
-        renderTooltip(g, mouseX, mouseY);
+        renderGridTooltip(g, mouseX, mouseY);   // (the slot tooltips: super.extractRenderState does them now)
     }
 
     @Override
-    protected void renderBg(GuiGraphicsExtractor g, float partialTick, int mouseX, int mouseY) {
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         int x = leftPos, y = topPos;
         g.fill(x - 1, y - 1, x + imageWidth + 1, y + imageHeight + 1, BG);
         g.fill(x, y, x + imageWidth, y + imageHeight, PANEL);
@@ -290,17 +292,19 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         int index = gridIndexAt(mouseX, mouseY);
         if (index != -1 && (button == 0 || button == 1)) {
             if (!menu.getCarried().isEmpty()) {
                 send(BankGuhMenu.Action.DEPOSIT_CARRIED, ItemStack.EMPTY, button, false);
             } else if (index >= 0) {
-                send(BankGuhMenu.Action.TAKE, visible.get(index).item(), button, Screen.hasShiftDown());
+                send(BankGuhMenu.Action.TAKE, visible.get(index).item(), button, net.minecraft.client.Minecraft.getInstance().hasShiftDown());
             }
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override
@@ -313,12 +317,13 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
+        int keyCode = event.key(), scanCode = event.scancode(), modifiers = event.modifiers();
         if (search.isFocused() && keyCode != InputConstants.KEY_ESCAPE) {
-            search.keyPressed(keyCode, scanCode, modifiers);
+            search.keyPressed(event);
             return true; // don't let "E" close the screen while typing
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 
     private void send(BankGuhMenu.Action action, ItemStack item, int button, boolean shift) {

@@ -1,5 +1,7 @@
 package nl.juiced.guhs.client.screen;
 
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,7 +148,9 @@ public class SuperkompasScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         int hit = GidsTabs.onder(tabsX(), top + TABS_Y, SuperkompasItem.CATEGORIES.size(), mouseX, mouseY);
         if (hit >= 0 && button == 0) {
             if (hit != tab) {
@@ -156,7 +160,7 @@ public class SuperkompasScreen extends Screen {
             }
             return true;
         }
-        if (super.mouseClicked(mouseX, mouseY, button)) {
+        if (super.mouseClicked(event, doubleClick)) {
             return true;
         }
         return lijst.klik(mouseX, mouseY, button);
@@ -168,14 +172,18 @@ public class SuperkompasScreen extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-        return lijst.sleep(mouseY) || super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
+        return lijst.sleep(mouseY) || super.mouseDragged(event, dragX, dragY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(MouseButtonEvent event) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         lijst.los();
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(event);
     }
 
     @Override

@@ -12,6 +12,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -241,12 +242,12 @@ public class GuhScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (nameBox.isFocused() && (keyCode == 257 || keyCode == 335)) { // enter
+    public boolean keyPressed(KeyEvent event) {
+        if (nameBox.isFocused() && event.isConfirmation()) { // enter
             rename();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override
@@ -289,7 +290,7 @@ public class GuhScreen extends Screen {
         int px = left + 8;
         int py = top + 58;
         g.fill(px, py, px + PREVIEW_W, py + 150, 0x40FFFFFF);
-        InventoryScreen.renderEntityInInventoryFollowsMouse(g, px, py, px + PREVIEW_W, py + 150, 36, 0.0625f, mouseX, mouseY, guh);
+        InventoryScreen.extractEntityInInventoryFollowsMouse(g, px, py, px + PREVIEW_W, py + 150, 36, 0.0625f, mouseX, mouseY, guh);
     }
 
     /** Text that stops ("...") before `maxWidth`; hover it to read all of it. */
