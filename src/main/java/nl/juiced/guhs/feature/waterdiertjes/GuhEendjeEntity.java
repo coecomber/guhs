@@ -138,6 +138,9 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
                 kuiken.snapTo(getX() + achter.x, getY(), getZ() + achter.z, getYRot(), 0);
                 kuiken.setAge(KUIKEN_TIJD);
                 kuiken.mama = getUUID();
+                if (entityTags().contains(nl.juiced.guhs.world.WildeDieren.KOM_EN_GA)) {
+                    nl.juiced.guhs.world.WildeDieren.markeer(kuiken);   // 1.1.2: a come-and-go mama's rijtje comes and goes with her
+                }
                 level.addFreshEntity(kuiken);
             }
         }

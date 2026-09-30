@@ -62,6 +62,7 @@ public class Guhs {
         modBus.addListener(ModEntities::registerSpawnPlacements);
         modBus.addListener(ModNetworking::register);
         NeoForge.EVENT_BUS.addListener(GuhmensionSpawner::onLevelTick);
+        NeoForge.EVENT_BUS.register(nl.juiced.guhs.world.WildeDieren.class);   // 1.1.2: wild animals/critters/Mikas don't pile up
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.world.BouwCheck::registerCommands);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.world.BouwCheck::onServerTick);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.world.BouwRuimte::onLevelLoad);

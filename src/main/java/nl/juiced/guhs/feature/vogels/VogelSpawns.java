@@ -79,16 +79,24 @@ public final class VogelSpawns {
     public static final int AANVUL_TIJD = 600;
     /** No top-up when this many birds are already within 64 blocks of the player. */
     public static final int VOL = 20;
+    /**
+     * 1.1.2: nor when this many birds are within 128 blocks (the despawn distance). Top-up birds fly off beyond 64 blocks
+     * but stay loaded, so only counting 64 let them pile up (2,901 zeemeeuwtjes and 2,495 pluisvinkjes on the official server).
+     */
+    public static final int VOL_WIJD = 40;
+    public static final double WIJD = 128;
 
     /**
      * Lets a new little flock fly in 24 to 48 blocks from the player, in the biome's own birds (the biome modifiers), when
      * there are few around: vanilla only spawns animals with the world (and the guhs' spawn weights stay untouched this way).
+     * These birds come and go (1.1.2, {@link nl.juiced.guhs.world.WildeDieren}): never saved, gone again when you are far.
      * Returns the birds that came (tests).
      */
     public static java.util.List<Vogeltje> aanvullen(net.minecraft.server.level.ServerPlayer player, RandomSource random) {
         java.util.List<Vogeltje> nieuw = new java.util.ArrayList<>();
         net.minecraft.server.level.ServerLevel level = player.level();
-        if (level.getEntitiesOfClass(Vogeltje.class, player.getBoundingBox().inflate(64)).size() >= VOL) {
+        if (level.getEntitiesOfClass(Vogeltje.class, player.getBoundingBox().inflate(64)).size() >= VOL
+                || level.getEntitiesOfClass(Vogeltje.class, player.getBoundingBox().inflate(WIJD)).size() >= VOL_WIJD) {
             return nieuw;
         }
         double a = random.nextDouble() * Math.PI * 2, d = 24 + random.nextInt(25);
@@ -132,6 +140,7 @@ public final class VogelSpawns {
             v.snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, random.nextFloat() * 360f, 0);
             v.finalizeSpawn(level, level.getCurrentDifficultyAt(p), EntitySpawnReason.NATURAL, null);
             v.zetThuis(p);
+            nl.juiced.guhs.world.WildeDieren.markeer(v);   // 1.1.2: a top-up bird comes and goes (not saved, despawns when far)
             level.addFreshEntity(v);
             nieuw.add(v);
         }
