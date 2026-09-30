@@ -91,7 +91,7 @@ public class ScannerScherm extends Screen {
         g.fill(px, py, px + PIC, py + PIC, 0xFF0A1226);
         Entity e = minecraft.level == null ? null : minecraft.level.getEntity(scan.guhId());
         if (e instanceof LivingEntity living) {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(g, px, py, px + PIC, py + PIC, 30, 0.0625f, mouseX, mouseY, living);
+            InventoryScreen.extractEntityInInventoryFollowsMouse(g, px, py, px + PIC, py + PIC, 30, 0.0625f, mouseX, mouseY, living);
         }
         if (!kapot) {
             int beam = py + (int) ((Math.sin(nu * 0.22) * 0.5 + 0.5) * (PIC - 4));

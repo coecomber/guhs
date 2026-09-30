@@ -152,7 +152,7 @@ public class BoerderijGameTests {
             helper.assertTrue(count(p, BoerderijFeature.KAASMELK.get()) == 1 && count(p, Items.GLASS_BOTTLE) == 1, "a bottle of kaasmelk");
             helper.assertTrue(!koe.melk(p, InteractionHand.MAIN_HAND), "once a day");
             ItemStack melk = new ItemStack(BoerderijFeature.KAASMELK.get());
-            helper.assertTrue(melk.getCraftingRemainingItem().is(Items.GLASS_BOTTLE), "the bottle stays (recipes)");
+            helper.assertTrue(melk.getItem().getCraftingRemainder(melk) != null && melk.getItem().getCraftingRemainder(melk).create().is(Items.GLASS_BOTTLE), "the bottle stays (recipes)");
         } finally {
             leave(helper, p);
         }
@@ -165,12 +165,11 @@ public class BoerderijGameTests {
         ServerPlayer p = player(helper);
         GuhkoeEntity koe = dier(helper, BoerderijFeature.GUHKOE.get(), 6, 6);
         try {
-            net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-            koe.addAdditionalSaveData(tag);
+            net.minecraft.nbt.CompoundTag tag = nl.juiced.guhs.storage.Nbt.write(helper.getLevel().registryAccess(), koe::addAdditionalSaveData);
             tag.putLong("ZorgDag", nl.juiced.guhs.feature.knus.Seizoen.dag(helper.getLevel()) - 1);
             tag.putBoolean("ProductGegeven", true);
             tag.putInt("Zorg", 3);
-            koe.readAdditionalSaveData(tag);
+            koe.readAdditionalSaveData(nl.juiced.guhs.storage.Nbt.input(helper.getLevel().registryAccess(), tag));
             helper.assertTrue(koe.isBlij() && koe.productGegeven(), "yesterday: content and milked");
             p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.GLASS_BOTTLE, 2));
             helper.assertTrue(!koe.melk(p, InteractionHand.MAIN_HAND), "a new day: yesterday's care doesn't count");
@@ -310,8 +309,8 @@ public class BoerderijGameTests {
             helper.assertTrue(GuhDex.ENTRIES.contains(page), "a Guhdex page: " + page);
         }
         var types = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE;
-        helper.assertTrue(types.get(Guhs.id("guhschaapje")) == BoerderijFeature.GUHSCHAAPJE.get()
-                && types.get(Guhs.id("guhkoe")) == BoerderijFeature.GUHKOE.get(), "the page id is the entity id");
+        helper.assertTrue(types.getValue(Guhs.id("guhschaapje")) == BoerderijFeature.GUHSCHAAPJE.get()
+                && types.getValue(Guhs.id("guhkoe")) == BoerderijFeature.GUHKOE.get(), "the page id is the entity id");
         // the passive animals never attack
         GuhkoeEntity koe = dier(helper, BoerderijFeature.GUHKOE.get(), 6, 6);
         helper.assertTrue(koe.getTarget() == null && !(koe instanceof net.minecraft.world.entity.monster.Enemy), "a lief animal");

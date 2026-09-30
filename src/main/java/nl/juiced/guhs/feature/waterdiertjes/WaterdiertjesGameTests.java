@@ -97,9 +97,9 @@ public class WaterdiertjesGameTests {
         }
         GuhxolotlEntity x = xolotl(helper, new BlockPos(3, 2, 3), GuhxolotlEntity.Kleur.GOUD);
         net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-        x.saveWithoutId(tag);
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(x, tag);
         GuhxolotlEntity kopie = WaterdiertjesFeature.GUHXOLOTL.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        kopie.load(tag);
+        nl.juiced.guhs.storage.Nbt.load(kopie, tag);
         helper.assertTrue(kopie.kleur() == GuhxolotlEntity.Kleur.GOUD && "goud".equals(tag.getStringOr("Kleur", "")), "saved and loaded by name");
         // a spawn egg / natural spawn rolls a colour; babies take a parent's colour (or, now and then, gold)
         GuhxolotlEntity a = xolotl(helper, new BlockPos(5, 2, 5), GuhxolotlEntity.Kleur.MINT);
@@ -274,7 +274,7 @@ public class WaterdiertjesGameTests {
             helper.assertTrue(GuhDex.isCreaturePage(v) && GuhDex.TELLEND.contains(v) && v.isCharacter() && !GuhDex.TAMEABLE.contains(v),
                     v + ": a counting creature page");
             helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.containsKey(Guhs.id(v.id())), v + ": its entity exists (" + v.id() + ")");
-            helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.get(Guhs.id(v.id())).getCategory().isFriendly(), v + ": friendly");
+            helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.getValue(Guhs.id(v.id())).getCategory().isFriendly(), v + ": friendly");
         }
         helper.succeed();
     }
@@ -292,7 +292,7 @@ public class WaterdiertjesGameTests {
         helper.assertTrue(!GuhxolotlEntity.checkSpawn(WaterdiertjesFeature.GUHXOLOTL.get(), level, EntitySpawnReason.NATURAL, water.above(3), r),
                 "not in the air");
         helper.assertTrue(GuhEendjeEntity.checkSpawn(WaterdiertjesFeature.GUH_EENDJE.get(), level, EntitySpawnReason.SPAWN_ITEM_USE, water.above(), r), "egg");
-        boolean dag = level.isDay();
+        boolean dag = level.isBrightOutside();
         BlockPos lucht = helper.absolutePos(new BlockPos(7, 3, 7));
         helper.assertTrue(GlimguhtjeEntity.checkSpawn(WaterdiertjesFeature.GLIMGUHTJE.get(), level, EntitySpawnReason.NATURAL, lucht, r) == (!dag
                 && GlimguhtjeEntity.checkSpawn(WaterdiertjesFeature.GLIMGUHTJE.get(), level, EntitySpawnReason.NATURAL, lucht, r)), "glimguhtjes never by day");

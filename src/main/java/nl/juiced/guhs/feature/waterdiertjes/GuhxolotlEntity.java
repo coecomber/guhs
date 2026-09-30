@@ -314,7 +314,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
             super.travel(Vec3.ZERO);
             return;
         }
-        if (isControlledByLocalInstance() && isInWater()) {
+        if (isLocalInstanceAuthoritative() && isInWater()) {
             moveRelative(getSpeed(), input);
             move(MoverType.SELF, getDeltaMovement());
             setDeltaMovement(getDeltaMovement().scale(0.9));
@@ -331,7 +331,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
         if (level().isClientSide() || !isAlive()) {
             return;
         }
-        boolean nat = isInWaterRainOrBubble() || Huisjes.isBewoner(this) || isPassenger();
+        boolean nat = isInWaterOrRain() || Huisjes.isBewoner(this) || isPassenger();
         droogTicks = nat ? 0 : droogTicks + 1;
         boolean droog = droogTicks >= DROOG_NA;
         if (droog != isDroog()) {
@@ -356,9 +356,9 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
     // --- playing dead ------------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        boolean hurt = super.hurt(source, amount);
-        if (hurt && !level().isClientSide() && isAlive() && !isPlat() && random.nextInt(3) > 0) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        boolean hurt = super.hurtServer(level, source, amount);
+        if (hurt && isAlive() && !isPlat() && random.nextInt(3) > 0) {
             speelPlat();
         }
         return hurt;
@@ -474,7 +474,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
                     BlockPos p = at.offset(random.nextInt(5) - 2, 0, random.nextInt(5) - 2);
                     if (level().getBlockState(p).getCollisionShape(level(), p).isEmpty()
                             && (!level().getBlockState(p.below()).getCollisionShape(level(), p.below()).isEmpty() || level().getFluidState(p).is(FluidTags.WATER))) {
-                        moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, getYRot(), getXRot());
+                        snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, getYRot(), getXRot());
                         getNavigation().stop();
                         return;
                     }
@@ -615,8 +615,8 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
         Kleur k = random.nextInt(GOUD_KANS_KLEINTJE) == 0 ? Kleur.GOUD
                 : (random.nextBoolean() || !(other instanceof GuhxolotlEntity x) ? kleur() : x.kleur());
         baby.setKleur(k);
-        if (isTame() && getOwnerUUID() != null) {
-            baby.setOwnerUUID(getOwnerUUID());
+        if (isTame() && getOwnerReference() != null) {
+            baby.setOwnerReference(getOwnerReference());
             baby.setTame(true, true);
         }
         return baby;

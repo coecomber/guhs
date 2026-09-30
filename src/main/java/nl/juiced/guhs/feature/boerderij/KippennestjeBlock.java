@@ -110,7 +110,7 @@ public class KippennestjeBlock extends Block {
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, net.minecraft.core.Direction direction) {
         return state.getValue(EIEREN) * 5;
     }
 }

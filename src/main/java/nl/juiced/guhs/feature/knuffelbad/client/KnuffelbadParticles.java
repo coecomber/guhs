@@ -1,21 +1,19 @@
 package nl.juiced.guhs.feature.knuffelbad.client;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.Mth;
 
 /** The Knuffelbad's particles. */
 final class KnuffelbadParticles {
     /** A soap bubble: floats up slowly, wobbling, shimmers, then pops. */
-    static class Zeepbelletje extends TextureSheetParticle {
+    static class Zeepbelletje extends SingleQuadParticle {
         private final float wob;
 
         Zeepbelletje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.get(level.getRandom()));
             lifetime = 30 + random.nextInt(50);
             quadSize = 0.06f + random.nextFloat() * 0.09f;
             gravity = -0.006f;
@@ -41,16 +39,15 @@ final class KnuffelbadParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A flake of pink foam: drifts about and slowly sinks. */
-    static class Schuimvlokje extends TextureSheetParticle {
+    static class Schuimvlokje extends SingleQuadParticle {
         Schuimvlokje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z, dx, dy, dz);
-            pickSprite(sprites);
+            super(level, x, y, z, dx, dy, dz, sprites.get(level.getRandom()));
             lifetime = 40 + random.nextInt(40);
             quadSize = 0.08f + random.nextFloat() * 0.1f;
             gravity = 0.02f;
@@ -67,18 +64,17 @@ final class KnuffelbadParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A sparkle: a little star that twinkles (grows and shrinks) and glows in the dark. */
-    static class Glinstering extends TextureSheetParticle {
+    static class Glinstering extends SingleQuadParticle {
         private final float basis;
 
         Glinstering(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z, dx, dy, dz);
-            pickSprite(sprites);
+            super(level, x, y, z, dx, dy, dz, sprites.get(level.getRandom()));
             lifetime = 18 + random.nextInt(22);
             basis = 0.05f + random.nextFloat() * 0.07f;
             quadSize = basis;
@@ -97,21 +93,20 @@ final class KnuffelbadParticles {
         }
 
         @Override
-        protected int getLightColor(float partialTick) {
+        protected int getLightCoords(float partialTick) {
             return LightCoordsUtil.FULL_BRIGHT;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A splash drop: flies off and falls back (a PLONS is a fountain of them). */
-    static class Plons extends TextureSheetParticle {
+    static class Plons extends SingleQuadParticle {
         Plons(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z, dx, dy, dz);
-            pickSprite(sprites);
+            super(level, x, y, z, dx, dy, dz, sprites.get(level.getRandom()));
             lifetime = 16 + random.nextInt(16);
             quadSize = 0.06f + random.nextFloat() * 0.08f;
             gravity = 0.7f;
@@ -131,8 +126,8 @@ final class KnuffelbadParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

@@ -109,7 +109,7 @@ public abstract class FladderDiertje extends AmbientCreature implements GeoEntit
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false;
     }
 
@@ -133,8 +133,8 @@ public abstract class FladderDiertje extends AmbientCreature implements GeoEntit
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(net.minecraft.server.level.ServerLevel level) {
+        super.customServerAiStep(level);
         if (zit()) {
             if (landplek == null || --zitTicks <= 0 || !goedeLandplek(landplek) || schrikt()) {
                 opstijgen();
@@ -233,7 +233,7 @@ public abstract class FladderDiertje extends AmbientCreature implements GeoEntit
     @Override
     public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.keySet().contains("Landplek")) {
+        if (tag.getLong("Landplek").isPresent()) {
             landplek = BlockPos.of(tag.getLongOr("Landplek", 0L));
             zitTicks = tag.getIntOr("ZitTicks", 0);
             setZit(tag.getBooleanOr("Zit", false));

@@ -225,7 +225,7 @@ public final class CrecheGame {
         feest = Knusfeest.open(player, Feesttaak.FEESTSLINGERS);
         liedje = volgendLiedje(player, level);
         List<BlockPos> kies = new ArrayList<>(wiegjes);
-        net.minecraft.Util.shuffle(kies, level.getRandom());
+        net.minecraft.util.Util.shuffle(kies, level.getRandom());
         Wens eerste = stappen(feest).get(0);
         for (BlockPos pos : kies.subList(0, VERZORG_BABYS)) {
             zorg.put(pos, 0);
@@ -295,7 +295,7 @@ public final class CrecheGame {
                 level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 8, 0.3, 0.2, 0.3, 0.02);
             }
             case HONGER -> {
-                level.playSound(null, pos, SoundEvents.GENERIC_DRINK, SoundSource.BLOCKS, 0.8f, 1.6f);
+                level.playSound(null, pos, SoundEvents.GENERIC_DRINK.value(), SoundSource.BLOCKS, 0.8f, 1.6f);
                 level.sendParticles(ParticleTypes.HEART, x, y, z, 3, 0.2, 0.1, 0.2, 0.01);
             }
             case LUIER -> {
@@ -482,8 +482,8 @@ public final class CrecheGame {
         }
         if (ticks % 10 == 0) {
             int s = (timer + 19) / 20;
-            p.displayClientMessage(Component.translatable("gui.guhs.creche.bar", terug, punten, s, reeks)
-                    .withStyle(s <= 10 ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE), true);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.creche.bar", terug, punten, s, reeks)
+                    .withStyle(s <= 10 ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE));
         }
     }
 

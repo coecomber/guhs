@@ -1,5 +1,9 @@
 package nl.juiced.guhs.feature.creche.client;
 
+import net.minecraft.client.input.KeyEvent;
+
+import net.minecraft.client.input.MouseButtonEvent;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -89,21 +93,24 @@ public class SlaapliedjeScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int key, int scan, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
+        int key = event.key(), scan = event.scancode(), modifiers = event.modifiers();
         if (key == GLFW.GLFW_KEY_SPACE) {
             tik();
             return true;
         }
-        return super.keyPressed(key, scan, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override
-    public boolean mouseClicked(double x, double y, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double x = event.x(), y = event.y();
+        int button = event.button();
         if (button == 0) {
             tik();
             return true;
         }
-        return super.mouseClicked(x, y, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override

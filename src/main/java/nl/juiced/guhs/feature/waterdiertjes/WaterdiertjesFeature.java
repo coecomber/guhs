@@ -12,7 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -21,6 +21,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.quest.GuhDex;
 
@@ -65,16 +66,11 @@ public final class WaterdiertjesFeature {
     // --- items ------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<GuhxolotlEmmertje> GUHXOLOTL_EMMERTJE = ITEMS.registerItem("guhxolotl_emmertje",
             GuhxolotlEmmertje::new, () -> new Item.Properties().stacksTo(1));
-    public static final DeferredItem<DeferredSpawnEggItem> GUHXOLOTL_SPAWN_EGG = ITEMS.registerItem("guhxolotl_spawn_egg",
-            p -> new DeferredSpawnEggItem(GUHXOLOTL, 0xF8B2D0, 0xD63A84, p));
-    public static final DeferredItem<DeferredSpawnEggItem> GUH_EENDJE_SPAWN_EGG = ITEMS.registerItem("guh_eendje_spawn_egg",
-            p -> new DeferredSpawnEggItem(GUH_EENDJE, 0xFFF8EC, 0xFA963C, p));
-    public static final DeferredItem<DeferredSpawnEggItem> KNABBELVLINDERTJE_SPAWN_EGG = ITEMS.registerItem("knabbelvlindertje_spawn_egg",
-            p -> new DeferredSpawnEggItem(KNABBELVLINDERTJE, 0xFCD656, 0xC4A8F0, p));
-    public static final DeferredItem<DeferredSpawnEggItem> GLIMGUHTJE_SPAWN_EGG = ITEMS.registerItem("glimguhtje_spawn_egg",
-            p -> new DeferredSpawnEggItem(GLIMGUHTJE, 0xFAE2EC, 0xD8F070, p));
-    public static final DeferredItem<DeferredSpawnEggItem> LIEVEHEERSBEESTJE_SPAWN_EGG = ITEMS.registerItem("lieveheersbeestje_spawn_egg",
-            p -> new DeferredSpawnEggItem(LIEVEHEERSBEESTJE, 0xDE2834, 0x1E1822, p));
+    public static final DeferredItem<SpawnEggItem> GUHXOLOTL_SPAWN_EGG = ModItems.spawnEgg(ITEMS, "guhxolotl_spawn_egg", GUHXOLOTL);
+    public static final DeferredItem<SpawnEggItem> GUH_EENDJE_SPAWN_EGG = ModItems.spawnEgg(ITEMS, "guh_eendje_spawn_egg", GUH_EENDJE);
+    public static final DeferredItem<SpawnEggItem> KNABBELVLINDERTJE_SPAWN_EGG = ModItems.spawnEgg(ITEMS, "knabbelvlindertje_spawn_egg", KNABBELVLINDERTJE);
+    public static final DeferredItem<SpawnEggItem> GLIMGUHTJE_SPAWN_EGG = ModItems.spawnEgg(ITEMS, "glimguhtje_spawn_egg", GLIMGUHTJE);
+    public static final DeferredItem<SpawnEggItem> LIEVEHEERSBEESTJE_SPAWN_EGG = ModItems.spawnEgg(ITEMS, "lieveheersbeestje_spawn_egg", LIEVEHEERSBEESTJE);
 
     // --- sounds (tools/features/waterdiertjes_geluid.py) ------------------------------------------------------------------
     public static final DeferredHolder<SoundEvent, SoundEvent> BLUB = geluid("waterdiertjes.guhxolotl_blub");

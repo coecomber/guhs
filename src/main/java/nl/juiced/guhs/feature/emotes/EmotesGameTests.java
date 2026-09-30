@@ -131,7 +131,7 @@ public class EmotesGameTests {
             helper.assertTrue(!ask(other, guh, EmotePayload.FAVORITE, Emote.VAHOEG) && guh.emotes.favorite() == null, "no favourite either");
             helper.assertTrue(!ask(owner, guh, EmotePayload.NOW, null), "a bad emote number is refused");
             helper.assertTrue(ask(owner, guh, EmotePayload.LOOP, Emote.ROLLEN), "rolling");
-            owner.startRiding(guh, true);
+            owner.startRiding(guh, true, true);
         });
         helper.runAfterDelay(7, () -> {
             helper.assertTrue(guh.isVehicle(), "ridden");
@@ -150,10 +150,10 @@ public class EmotesGameTests {
         helper.assertTrue(ask(owner, guh, EmotePayload.FAVORITE, Emote.ROLLEN) && guh.emotes.favorite() == Emote.ROLLEN, "favourite set");
         helper.assertTrue(guh.getFavoriteEmote() == Emote.ROLLEN.ordinal(), "synced");
         helper.assertTrue(advancement(owner, "emote_lievelings"), "the favourite quest");
-        CompoundTag tag = guh.saveWithoutId(new CompoundTag());
+        CompoundTag tag = nl.juiced.guhs.storage.Nbt.saveWithoutId(guh);
         helper.assertTrue("rollen".equals(tag.getStringOr("FavoriteEmote", "")), "saved: " + tag.getStringOr("FavoriteEmote", ""));
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        copy.load(tag);
+        nl.juiced.guhs.storage.Nbt.load(copy, tag);
         helper.assertTrue(copy.emotes.favorite() == Emote.ROLLEN, "loaded again");
         helper.assertTrue(ask(owner, guh, EmotePayload.FAVORITE, null) && guh.emotes.favorite() == null, "no favourite");
         leave(helper, owner);
@@ -197,7 +197,7 @@ public class EmotesGameTests {
         GuhEntity guh = tamed(helper, owner);
         BlockPos pos = new BlockPos(0, 1, 4);
         helper.setBlock(pos, Blocks.JUKEBOX);
-        JukeboxBlockEntity jukebox = (JukeboxBlockEntity) helper.getBlockEntity(pos);
+        JukeboxBlockEntity jukebox = helper.getBlockEntity(pos, JukeboxBlockEntity.class);
         jukebox.setSongItemWithoutPlaying(new ItemStack(Items.MUSIC_DISC_CAT));
         jukebox.getSongPlayer().stop(helper.getLevel(), jukebox.getBlockState());
         helper.assertTrue(GuhEmotes.playingJukebox(helper.getLevel(), guh.blockPosition(), GuhEmotes.JUKEBOX_RANGE) == null, "quiet");
@@ -251,7 +251,7 @@ public class EmotesGameTests {
     /** The seven animations are in the guh animation file (made by tools/features/emotes.py). */
     @GuhTest(template = EMPTY)
     public static void emoteAnimationsExist(GameTestHelper helper) {
-        var in = EmotesGameTests.class.getResourceAsStream("/assets/guhs/animations/entity/guh.animation.json");
+        var in = EmotesGameTests.class.getResourceAsStream("/assets/guhs/geckolib/animations/entity/guh.animation.json");
         helper.assertTrue(in != null, "the animation file");
         JsonObject animations = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject()
                 .getAsJsonObject("animations");

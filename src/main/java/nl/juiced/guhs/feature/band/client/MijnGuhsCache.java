@@ -164,8 +164,16 @@ public final class MijnGuhsCache {
 
     private static Component tekst(String json, HolderLookup.Provider reg) {
         try {
-            Component c = Component.Serializer.fromJson(json, reg);
-            return c == null ? Component.empty() : c;
+            if (json.isEmpty()) {
+                return Component.empty();
+            }
+            // 1.1.0 (MC 26.1): Component.Serializer is gone; the component codec reads the same JSON
+            com.google.gson.JsonElement el = com.google.gson.JsonParser.parseString(json);
+            if (el.isJsonNull()) {
+                return Component.empty();
+            }
+            return net.minecraft.network.chat.ComponentSerialization.CODEC
+                    .parse(reg.createSerializationContext(com.mojang.serialization.JsonOps.INSTANCE), el).getOrThrow();
         } catch (RuntimeException e) {
             return Component.literal(json);
         }

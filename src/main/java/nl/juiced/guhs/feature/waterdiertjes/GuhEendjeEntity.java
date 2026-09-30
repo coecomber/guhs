@@ -231,7 +231,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
                 }
             }
             if (distanceToSqr(voor) > 20 * 20) {
-                moveTo(voor.getX(), voor.getY(), voor.getZ(), getYRot(), getXRot());   // (lost: hop back in line)
+                snapTo(voor.getX(), voor.getY(), voor.getZ(), getYRot(), getXRot());   // (lost: hop back in line)
             }
         }
 
@@ -314,7 +314,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
     }
 
     @Override
-    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double distance, float multiplier, DamageSource source) {
         return false;                                          // (it flaps its little wings)
     }
 
@@ -331,7 +331,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
     @Override
     public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        mama = tag.read("Mama", UUIDUtil.CODEC).isPresent() ? tag.read("Mama", UUIDUtil.CODEC).orElseThrow() : null;
+        mama = tag.read("Mama", UUIDUtil.CODEC).orElse(null);
     }
 
     // --- sounds --------------------------------------------------------------------------------------------------------------
@@ -361,7 +361,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.CHICKEN_DEATH;
+        return SoundEvents.CHICKEN_SOUNDS.get(net.minecraft.world.entity.animal.chicken.ChickenSoundVariants.SoundSet.CLASSIC).adultSounds().deathSound().value();
     }
 
     @Override

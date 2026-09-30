@@ -105,7 +105,7 @@ public final class GlijCamera {
             return;
         }
         float f = Mth.lerp((float) event.getPartialTick(), fovExtraO, fovExtra);
-        event.setFOV(event.getFOV() * (1.0 + f));
+        event.setFOV(event.getFOV() * (1.0f + f));
     }
 
     /** A PLONS (or a bump): the camera shakes for a moment. */

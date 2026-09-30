@@ -107,7 +107,7 @@ public class BadeendjeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, net.minecraft.world.phys.Vec3 location) {
         if (vanRit()) {
             return InteractionResult.PASS;
         }
@@ -120,8 +120,8 @@ public class BadeendjeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (level().isClientSide() || isRemoved() || vanRit()) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        if (isRemoved() || vanRit()) {
             return false;
         }
         if (source.getEntity() instanceof Player player && player.getAbilities().instabuild) {
@@ -138,7 +138,7 @@ public class BadeendjeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean canBeCollidedWith(@javax.annotation.Nullable Entity other) {
         return false;
     }
 

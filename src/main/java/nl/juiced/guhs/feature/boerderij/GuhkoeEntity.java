@@ -112,12 +112,12 @@ public class GuhkoeEntity extends BoerderijDier {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.COW_HURT;
+        return SoundEvents.COW_SOUNDS.get(net.minecraft.world.entity.animal.cow.CowSoundVariants.SoundSet.CLASSIC).hurtSound().value();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.COW_DEATH;
+        return SoundEvents.COW_SOUNDS.get(net.minecraft.world.entity.animal.cow.CowSoundVariants.SoundSet.CLASSIC).deathSound().value();
     }
 
     @Override

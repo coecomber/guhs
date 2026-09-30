@@ -42,6 +42,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * The blocks of Guhwai'i (see {@link GuhwaiiFeature}): the guh-palm (trunk, a trunk block with a guh face, fronds, the
  * sprouting coconut), the kokosnoot, the tropical flowers, the Schilly-eitjes, the vadsigheid-scanner and its poster, and
@@ -125,8 +126,20 @@ public final class GuhwaiiBlokken {
 
     /** Palm fronds (leaves: they decay without a trunk nearby); now and then a coconut grows under them. */
     public static class PalmBlad extends LeavesBlock {
+        public static final com.mojang.serialization.MapCodec<PalmBlad> CODEC = simpleCodec(PalmBlad::new);
+
         public PalmBlad(Properties properties) {
-            super(properties);
+            // 26.1: LeavesBlock has falling-leaf particles; palm fronds had none in 1.0.0 (chance 0, no particle)
+            super(0f, properties);
+        }
+
+        @Override
+        public com.mojang.serialization.MapCodec<PalmBlad> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
         }
 
         @Override
@@ -168,7 +181,7 @@ public final class GuhwaiiBlokken {
         }
 
         @Override
-        public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
             return new ItemStack(GuhwaiiFeature.KOKOSNOOT_ITEM.get());
         }
     }
@@ -216,10 +229,10 @@ public final class GuhwaiiBlokken {
         }
 
         @Override
-        protected BlockState updateShape(BlockState state, Direction dir, BlockState other, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
+        protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction dir, BlockPos otherPos, BlockState other, RandomSource random) {
             if (!canSurvive(state, level, pos)) {
                 if (state.getValue(HANGEND) && state.getValue(RIJP) == 2) {
-                    level.scheduleTick(pos, this, 1);   // (it falls in its tick instead of vanishing)
+                    ticks.scheduleTick(pos, this, 1);   // (it falls in its tick instead of vanishing)
                     return state;
                 }
                 return Blocks.AIR.defaultBlockState();
@@ -284,7 +297,7 @@ public final class GuhwaiiBlokken {
         }
 
         @Override
-        public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+        public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
             return new ItemStack(GuhwaiiFeature.KOKOSNOOT_ITEM.get());
         }
 
@@ -371,7 +384,7 @@ public final class GuhwaiiBlokken {
         }
 
         @Override
-        protected BlockState updateShape(BlockState state, Direction dir, BlockState other, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
+        protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction dir, BlockPos otherPos, BlockState other, RandomSource random) {
             return canSurvive(state, level, pos) ? state : Blocks.AIR.defaultBlockState();
         }
 
@@ -459,7 +472,7 @@ public final class GuhwaiiBlokken {
         }
 
         @Override
-        protected BlockState updateShape(BlockState state, Direction dir, BlockState other, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
+        protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction dir, BlockPos otherPos, BlockState other, RandomSource random) {
             return dir == state.getValue(FACING).getOpposite() && !canSurvive(state, level, pos) ? Blocks.AIR.defaultBlockState() : state;
         }
     }

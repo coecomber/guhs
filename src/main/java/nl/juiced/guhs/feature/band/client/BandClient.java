@@ -2,9 +2,8 @@ package nl.juiced.guhs.feature.band.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -18,8 +17,8 @@ import nl.juiced.guhs.feature.band.BandPayloads;
 public final class BandClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((RegisterParticleProvidersEvent event) -> {
-            event.registerSpriteSet(BandFeature.HARTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Hartje(level, x, y, z, dx, dy, dz, sprites, false));
-            event.registerSpriteSet(BandFeature.GROOT_HARTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Hartje(level, x, y, z, dx, dy, dz, sprites, true));
+            event.registerSpriteSet(BandFeature.HARTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Hartje(level, x, y, z, dx, dy, dz, sprites, false));
+            event.registerSpriteSet(BandFeature.GROOT_HARTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Hartje(level, x, y, z, dx, dy, dz, sprites, true));
         });
         // (2.10.1: right away when we're already on the game thread, so the data with the "Dagboekje" focus is there before
         // the Guhdex screen opens, which the next payload does right away; Minecraft.execute would queue it after that)
@@ -60,13 +59,12 @@ public final class BandClient {
     }
 
     /** A pink heart that floats up, wobbles a little and fades; the big one grows and pulses. */
-    static class Hartje extends TextureSheetParticle {
+    static class Hartje extends SingleQuadParticle {
         private final boolean groot;
 
         Hartje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites, boolean groot) {
-            super(level, x, y, z);
+            super(level, x, y, z, sprites.get(level.getRandom()));
             this.groot = groot;
-            pickSprite(sprites);
             lifetime = groot ? 40 : 22 + random.nextInt(14);
             quadSize = groot ? 0.6f : 0.08f + random.nextFloat() * 0.06f;
             gravity = groot ? 0f : -0.02f;
@@ -91,13 +89,13 @@ public final class BandClient {
         }
 
         @Override
-        public int getLightColor(float partialTick) {
+        public int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

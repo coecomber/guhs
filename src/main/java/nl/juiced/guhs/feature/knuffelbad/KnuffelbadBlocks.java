@@ -38,6 +38,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 /** The Knuffelbad's blocks. */
 public final class KnuffelbadBlocks {
     public static final EnumProperty<Glijbaan> GLIJBAAN = EnumProperty.create("glijbaan", Glijbaan.class);
@@ -321,7 +322,7 @@ public final class KnuffelbadBlocks {
         }
 
         @Override
-        protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
             if (entity instanceof LivingEntity || entity instanceof net.minecraft.world.entity.item.ItemEntity) {
                 entity.makeStuckInBlock(state, new Vec3(0.85, 0.55, 0.85));
                 entity.resetFallDistance();
@@ -333,7 +334,7 @@ public final class KnuffelbadBlocks {
         }
 
         @Override
-        public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
             entity.resetFallDistance();
         }
 

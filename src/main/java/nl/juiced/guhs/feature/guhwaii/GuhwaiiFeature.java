@@ -9,6 +9,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -113,20 +117,24 @@ public final class GuhwaiiFeature {
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(2.5f, 6f).sound(SoundType.METAL).noOcclusion()
                     .lightLevel(s -> 7));
     public static final DeferredBlock<GuhwaiiBlokken.Poster> VADSIGHEID_POSTER = BLOCKS.registerBlock("vadsigheid_poster", GuhwaiiBlokken.Poster::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(0.3f).sound(SoundType.WOOL).noOcclusion()
-                    .noCollission().pushReaction(PushReaction.DESTROY));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(0.3f).sound(SoundType.WOOL).noOcclusion()
+                    .noCollision().pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<GuhwaiiBlokken.Rommeltje> ROMMELTJE = BLOCKS.registerBlock("guhwaii_rommeltje", GuhwaiiBlokken.Rommeltje::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.SAND).instabreak().sound(SoundType.WOOL).noOcclusion().noCollission()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.SAND).instabreak().sound(SoundType.WOOL).noOcclusion().noCollision()
                     .pushReaction(PushReaction.DESTROY));
 
     // --- items -------------------------------------------------------------------------------------------------------------------
     public static final FoodProperties KOKOS_ETEN = new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f).build();
-    public static final FoodProperties KOKOSMELK_ETEN = new FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).alwaysEdible()
-            .effect(() -> new net.minecraft.world.effect.MobEffectInstance(MobEffects.REGENERATION, 100, 0), 1f).build();
+    public static final FoodProperties KOKOSMELK_ETEN = new FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).alwaysEdible().build();
+    /** 1.1.0 (26.1: sounds and effects live in the Consumable): the kokosnoot is eaten with a slurp (the drink sound). */
+    public static final Consumable KOKOS_CONSUMABLE = Consumables.defaultFood().sound(SoundEvents.GENERIC_DRINK).build();
+    /** Kokosmelk: drunk (1.6 s like before) with the honey sound, a little regeneration. */
+    public static final Consumable KOKOSMELK_CONSUMABLE = Consumables.defaultDrink().consumeSeconds(1.6f).sound(SoundEvents.HONEY_DRINK)
+            .onConsume(new ApplyStatusEffectsConsumeEffect(new net.minecraft.world.effect.MobEffectInstance(MobEffects.REGENERATION, 100, 0), 1f)).build();
     public static final DeferredItem<GuhwaiiItems.KokosnootItem> KOKOSNOOT_ITEM = ITEMS.registerItem("kokosnoot", GuhwaiiItems.KokosnootItem::new,
-            () -> new Item.Properties().food(KOKOS_ETEN));
+            () -> new Item.Properties().food(KOKOS_ETEN, KOKOS_CONSUMABLE));
     public static final DeferredItem<GuhwaiiItems.KokosmelkItem> KOKOSMELK = ITEMS.registerItem("kokosmelk", GuhwaiiItems.KokosmelkItem::new,
-            () -> new Item.Properties().food(KOKOSMELK_ETEN).stacksTo(16).craftRemainder(net.minecraft.world.item.Items.GLASS_BOTTLE));
+            () -> new Item.Properties().food(KOKOSMELK_ETEN, KOKOSMELK_CONSUMABLE).stacksTo(16).craftRemainder(net.minecraft.world.item.Items.GLASS_BOTTLE));
     public static final DeferredItem<GuhwaiiItems.UkeleleItem> UKELELE = ITEMS.registerItem("guhwaii_ukelele", GuhwaiiItems.UkeleleItem::new,
             () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 

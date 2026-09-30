@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -24,6 +23,8 @@ import net.minecraft.core.UUIDUtil;
  */
 public class GuhkamerData extends SavedData {
     public static final String NAAM = "guhs_guhkamer";
+    public static final net.minecraft.world.level.saveddata.SavedDataType<GuhkamerData> TYPE =
+            nl.juiced.guhs.storage.GuhSavedData.tagType("guhkamer", GuhkamerData::new, GuhkamerData::load, d -> d.save(new CompoundTag()));
 
     /** One player's room. */
     public static final class Kamer {
@@ -127,7 +128,7 @@ public class GuhkamerData extends SavedData {
     private final Map<UUID, Kamer> kamers = new LinkedHashMap<>();
 
     public static GuhkamerData get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(new SavedData.Factory<>(GuhkamerData::new, GuhkamerData::load, null), NAAM);
+        return nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), TYPE, NAAM);
     }
 
     /** This player's room (made when needed). */
@@ -155,15 +156,14 @@ public class GuhkamerData extends SavedData {
         return null;
     }
 
-    @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public CompoundTag save(CompoundTag tag) {
         ListTag list = new ListTag();
         kamers.values().forEach(k -> list.add(k.save()));
         tag.put("Kamers", list);
         return tag;
     }
 
-    public static GuhkamerData load(CompoundTag tag, HolderLookup.Provider registries) {
+    public static GuhkamerData load(CompoundTag tag) {
         GuhkamerData d = new GuhkamerData();
         ListTag list = tag.getListOrEmpty("Kamers");
         for (int i = 0; i < list.size(); i++) {

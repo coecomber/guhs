@@ -26,7 +26,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -35,6 +35,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.quest.GuhDex;
@@ -79,8 +80,10 @@ public final class BoerderijFeature {
     public static final DeferredItem<BoerderijItems.Lore> KNABBELEI = ITEMS.registerItem("knabbelei", BoerderijItems.Lore::new,
             () -> new Item.Properties().stacksTo(16).food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build()));
     public static final DeferredItem<BoerderijItems.Kaasmelk> KAASMELK = ITEMS.registerItem("kaasmelk", BoerderijItems.Kaasmelk::new,
-            new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)
-                    .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f).alwaysEdible().usingConvertsTo(Items.GLASS_BOTTLE).build()));
+            () -> new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)
+                    .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f).alwaysEdible().build(),
+                            net.minecraft.world.item.component.Consumables.defaultDrink().build())   // (1.1.0: drunk, the drink sound)
+                    .usingConvertsTo(Items.GLASS_BOTTLE));
     public static final DeferredItem<BoerderijItems.Lore> GUHBORSTEL = ITEMS.registerItem("guhborstel", BoerderijItems.Lore::new,
             () -> new Item.Properties().durability(96));
     public static final DeferredItem<BoerderijItems.Lore> KNABBELVOER = ITEMS.registerItem("knabbelvoer", BoerderijItems.Lore::new, () -> new Item.Properties());
@@ -102,12 +105,11 @@ public final class BoerderijFeature {
             () -> EntityType.Builder.of(GuhkoeEntity::new, MobCategory.CREATURE).sized(1.0f, 1.35f).eyeHeight(1.15f)
                     .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guhkoe"))));
 
-    public static final DeferredItem<DeferredSpawnEggItem> GUHSCHAAPJE_SPAWN_EGG = ITEMS.registerItem("guhschaapje_spawn_egg",
-            p -> new DeferredSpawnEggItem(GUHSCHAAPJE, 0xFFF0F6, 0xF08CB4, p));
-    public static final DeferredItem<DeferredSpawnEggItem> KNABBELKIPPETJE_SPAWN_EGG = ITEMS.registerItem("knabbelkippetje_spawn_egg",
-            p -> new DeferredSpawnEggItem(KNABBELKIPPETJE, 0xF7C83C, 0xF08CB4, p));
-    public static final DeferredItem<DeferredSpawnEggItem> GUHKOE_SPAWN_EGG = ITEMS.registerItem("guhkoe_spawn_egg",
-            p -> new DeferredSpawnEggItem(GUHKOE, 0xFFF4DC, 0xE8A93A, p));
+    // (1.1.0: spawn eggs have no tint colours any more; the textures come from the resources, old colours FFF0F6/F08CB4,
+    // F7C83C/F08CB4, FFF4DC/E8A93A)
+    public static final DeferredItem<SpawnEggItem> GUHSCHAAPJE_SPAWN_EGG = ModItems.spawnEgg(ITEMS, "guhschaapje_spawn_egg", GUHSCHAAPJE);
+    public static final DeferredItem<SpawnEggItem> KNABBELKIPPETJE_SPAWN_EGG = ModItems.spawnEgg(ITEMS, "knabbelkippetje_spawn_egg", KNABBELKIPPETJE);
+    public static final DeferredItem<SpawnEggItem> GUHKOE_SPAWN_EGG = ModItems.spawnEgg(ITEMS, "guhkoe_spawn_egg", GUHKOE);
 
     // --- particles and sounds --------------------------------------------------------------------------------------------
     /** A little tuft of pluiswol (brushing a guhschaapje). */

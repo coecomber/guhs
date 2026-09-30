@@ -44,8 +44,8 @@ public final class GuhkamerFeature {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
 
     public static final DeferredBlock<GuhkamerDeurBlock> DEUR = BLOCKS.registerBlock("guhkamer_deur", GuhkamerDeurBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).sound(SoundType.WOOL).noOcclusion()
-                    .noCollission().noLootTable().pushReaction(PushReaction.BLOCK).lightLevel(s -> 6));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).sound(SoundType.WOOL).noOcclusion()
+                    .noCollision().noLootTable().pushReaction(PushReaction.BLOCK).lightLevel(s -> 6));
     public static final DeferredItem<GuhbelItem> GUHBEL = ITEMS.registerItem("guhbel", GuhbelItem::new,
             () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 

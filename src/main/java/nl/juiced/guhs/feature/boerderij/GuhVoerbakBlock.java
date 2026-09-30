@@ -104,7 +104,7 @@ public class GuhVoerbakBlock extends HorizontalDirectionalBlock {
             return false;
         }
         level.setBlock(pos, state.setValue(VOER, state.getValue(VOER) - 1), Block.UPDATE_ALL);
-        level.playSound(null, pos, SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 0.8f, 1.2f);
+        level.playSound(null, pos, SoundEvents.GENERIC_EAT.value(), SoundSource.NEUTRAL, 0.8f, 1.2f);
         if (level instanceof ServerLevel server) {
             server.sendParticles(net.minecraft.core.particles.ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 0.6, pos.getZ() + 0.5,
                     4, 0.3, 0.1, 0.3, 0.0);
@@ -135,7 +135,7 @@ public class GuhVoerbakBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, net.minecraft.core.Direction direction) {
         return state.getValue(VOER) * 3;
     }
 }

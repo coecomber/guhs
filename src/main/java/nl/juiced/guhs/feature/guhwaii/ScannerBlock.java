@@ -96,7 +96,7 @@ public class ScannerBlock extends HorizontalDirectionalBlock {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (random.nextInt(4) == 0) {
-            level.addParticle(new DustParticleOptions(new Vector3f(0.45f, 0.85f, 1f), 0.6f), pos.getX() + 0.2 + random.nextDouble() * 0.6,
+            level.addParticle(new DustParticleOptions(0x73D9FF /* 0.45, 0.85, 1 */, 0.6f), pos.getX() + 0.2 + random.nextDouble() * 0.6,
                     pos.getY() + 0.25, pos.getZ() + 0.2 + random.nextDouble() * 0.6, 0, 0.02, 0);
         }
     }

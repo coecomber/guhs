@@ -218,12 +218,25 @@ public class ZwembandjeEntity extends Entity implements GeoEntity {
         }
     }
 
-    /** The rider's client moves the ring itself: the server's position packets would only make it shake. */
-    @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
-        if (!eigen) {
-            super.lerpTo(x, y, z, yRot, xRot, steps);
+    /**
+     * The rider's client moves the ring itself: the server's position packets would only make it shake.
+     * 1.1.0 (26.1: lerpTo is gone, position packets go through the interpolation handler): otherwise position and rotation
+     * are set at once, like 1.21.1's Entity#lerpTo.
+     */
+    private final net.minecraft.world.entity.InterpolationHandler interpolation = new net.minecraft.world.entity.InterpolationHandler(this, 0) {
+        @Override
+        public void interpolateTo(Vec3 position, float yRot, float xRot) {
+            if (!eigen) {
+                setPos(position);
+                setYRot(yRot % 360.0F);
+                setXRot(xRot % 360.0F);
+            }
         }
+    };
+
+    @Override
+    public net.minecraft.world.entity.InterpolationHandler getInterpolation() {
+        return interpolation;
     }
 
     // --- riding ----------------------------------------------------------------------------------------------------------
@@ -255,7 +268,7 @@ public class ZwembandjeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean canBeCollidedWith(@javax.annotation.Nullable Entity other) {
         return false;
     }
 
@@ -265,7 +278,7 @@ public class ZwembandjeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 

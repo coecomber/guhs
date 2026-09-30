@@ -1,14 +1,14 @@
 package nl.juiced.guhs.feature.emotes.client;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.state.level.QuadParticleRenderState;
+import net.minecraft.util.ARGB;
 
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import nl.juiced.guhs.feature.emotes.EmotesFeature;
@@ -16,11 +16,11 @@ import nl.juiced.guhs.feature.emotes.EmotesFeature;
 /** The emote particles: a "z" drifting up from a sleeping guh, and a wide "VAHOEG!" popping up above a jumping one. */
 public final class EmoteParticles {
     /** A z that drifts up and sideways, grows (small, medium, big z) and fades. */
-    static class Zzz extends TextureSheetParticle {
+    static class Zzz extends SingleQuadParticle {
         private final SpriteSet sprites;
 
         Zzz(ClientLevel level, double x, double y, double z, double dx, double dy, SpriteSet sprites) {
-            super(level, x, y, z);
+            super(level, x, y, z, sprites.first());
             this.sprites = sprites;
             this.xd = dx;
             this.yd = dy;
@@ -44,15 +44,15 @@ public final class EmoteParticles {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** "VAHOEG!": pops up (a bit of a bounce in its size), floats up and fades; four times as wide as it is high. */
-    static class Vahoeg extends TextureSheetParticle {
+    static class Vahoeg extends SingleQuadParticle {
         Vahoeg(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
+            super(level, x, y, z, sprites.get(level.getRandom()));
             this.xd = 0;
             this.yd = 0.035;
             this.zd = 0;
@@ -60,7 +60,6 @@ public final class EmoteParticles {
             this.hasPhysics = false;
             this.lifetime = 34;
             this.quadSize = 0.3f;
-            pickSprite(sprites);
         }
 
         @Override
@@ -76,43 +75,41 @@ public final class EmoteParticles {
             this.alpha = 1f - Mth.clamp((this.age - 22) / 12f, 0f, 1f);
         }
 
+        /**
+         * 1.1.0 (MC 26.1): particle quads are square in the new particle render state, so the 4:1 "VAHOEG!" is extracted as four
+         * squares side by side, each with its quarter of the texture (same corners and uv as the old single wide quad).
+         */
         @Override
-        protected void renderRotatedQuad(VertexConsumer buffer, Quaternionf quaternion, float x, float y, float z, float partialTicks) {
+        protected void extractRotatedQuad(QuadParticleRenderState state, Quaternionf quaternion, float x, float y, float z, float partialTicks) {
             float size = getQuadSize(partialTicks);
-            int light = getLightColor(partialTicks);
-            vertex(buffer, quaternion, x, y, z, 4f, -1f, size, getU1(), getV1(), light);
-            vertex(buffer, quaternion, x, y, z, 4f, 1f, size, getU1(), getV0(), light);
-            vertex(buffer, quaternion, x, y, z, -4f, 1f, size, getU0(), getV0(), light);
-            vertex(buffer, quaternion, x, y, z, -4f, -1f, size, getU0(), getV1(), light);
-        }
-
-        private void vertex(VertexConsumer buffer, Quaternionf q, float x, float y, float z, float dx, float dy, float size,
-                            float u, float v, int light) {
-            Vector3f p = new Vector3f(dx, dy, 0f).rotate(q).mul(size).add(x, y, z);
-            buffer.addVertex(p.x(), p.y(), p.z()).setUv(u, v).setColor(this.rCol, this.gCol, this.bCol, this.alpha).setLight(light);
-        }
-
-        @Override
-        public net.minecraft.world.phys.AABB getRenderBoundingBox(float partialTicks) {
-            return super.getRenderBoundingBox(partialTicks).inflate(getQuadSize(partialTicks) * 4);
+            int light = getLightCoords(partialTicks);
+            int colour = ARGB.colorFromFloat(this.alpha, this.rCol, this.gCol, this.bCol);
+            float u0 = getU0();
+            float du = (getU1() - u0) / 4f;
+            for (int i = 0; i < 4; i++) {
+                float c = -3f + 2f * i; // centre of this square in the old quad (-4..4)
+                Vector3f p = new Vector3f(c, 0f, 0f).rotate(quaternion).mul(size).add(x, y, z);
+                state.add(getLayer(), p.x(), p.y(), p.z(), quaternion.x, quaternion.y, quaternion.z, quaternion.w, size,
+                        u0 + du * i, u0 + du * (i + 1), getV0(), getV1(), colour, light);
+            }
         }
 
         @Override
-        protected int getLightColor(float partialTick) {
+        protected int getLightCoords(float partialTick) {
             return 0xF000F0; // always bright
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     static void register(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(EmotesFeature.GUH_ZZZ.get(),
-                sprites -> (type, level, x, y, z, dx, dy, dz) -> new Zzz(level, x, y, z, dx, dy, sprites));
+                sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Zzz(level, x, y, z, dx, dy, sprites));
         event.registerSpriteSet(EmotesFeature.GUH_VAHOEG.get(),
-                sprites -> (type, level, x, y, z, dx, dy, dz) -> new Vahoeg(level, x, y, z, sprites));
+                sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Vahoeg(level, x, y, z, sprites));
     }
 
     private EmoteParticles() {

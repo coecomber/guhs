@@ -17,6 +17,8 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** The farm's items with a line of lore (lang key: the item's own key + ".lore"). */
 public final class BoerderijItems {
     /** An item with lore. */
@@ -26,8 +28,8 @@ public final class BoerderijItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -38,8 +40,8 @@ public final class BoerderijItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -52,16 +54,6 @@ public final class BoerderijItems {
         @Override
         public ItemUseAnimation getUseAnimation(ItemStack stack) {
             return ItemUseAnimation.DRINK;
-        }
-
-        @Override
-        public SoundEvent getDrinkingSound() {
-            return SoundEvents.GENERIC_DRINK;
-        }
-
-        @Override
-        public SoundEvent getEatingSound() {
-            return SoundEvents.GENERIC_DRINK;
         }
 
         @Override

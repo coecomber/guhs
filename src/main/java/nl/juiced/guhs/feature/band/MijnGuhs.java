@@ -131,7 +131,9 @@ public final class MijnGuhs {
     }
 
     private static String json(Component c, net.minecraft.core.HolderLookup.Provider registries) {
-        return Component.Serializer.toJson(c, registries);
+        // 1.1.0 (MC 26.1): Component.Serializer is gone; same compact JSON through the component codec
+        return net.minecraft.network.chat.ComponentSerialization.CODEC
+                .encodeStart(registries.createSerializationContext(com.mojang.serialization.JsonOps.INSTANCE), c).getOrThrow().toString();
     }
 
     /** The favourite kinds this owner's guh has discovered (tests). */

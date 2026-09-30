@@ -155,7 +155,7 @@ public class EmotePickerScreen extends Screen {
             g.text(font, tekst.length() < naam.getString().length() ? Component.literal(tekst) : naam, x + NAME_X, y + 5, kleur);
             if (mouseX >= x + NAME_X - 2 && mouseX < x + NOW_X - 2 && mouseY >= y && mouseY < y + BUTTON_H) {
                 Component uitleg = o ? emote.description() : emote.description().copy().append("\n").append(opSlot(emote));
-                setTooltipForNextRenderPass(font.split(uitleg, 200));
+                g.setTooltipForNextFrame(font.split(uitleg, 200), mouseX, mouseY);
             }
         }
     }
