@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import nl.juiced.guhs.registry.ModBlocks;
 
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * Invisible filler that makes the big Guh Wheel really take up 3x3 blocks. Remembers where it sits relative to the
  * wheel (the wheel block is the bottom middle), passes clicks on to it, and breaking it breaks the whole wheel.
@@ -67,8 +69,7 @@ public class GuhWheelPartBlock extends Block {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                     net.minecraft.world.level.LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         return canSurvive(state, level, pos) ? state : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
     }
 
@@ -83,10 +84,10 @@ public class GuhWheelPartBlock extends Block {
 
     /** However a part disappears (explosion, piston, command...), the whole wheel goes with it. */
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        super.onRemove(state, level, pos, newState, movedByPiston);
+    protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
         BlockPos wheel = wheelPos(state, pos);
-        if (!newState.is(this) && !level.isClientSide() && level.getBlockState(wheel).is(ModBlocks.GUH_WHEEL.get())) {
+        if (level.getBlockState(wheel).is(ModBlocks.GUH_WHEEL.get())) {
             level.destroyBlock(wheel, true);
         }
     }
@@ -105,7 +106,7 @@ public class GuhWheelPartBlock extends Block {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return new ItemStack(ModBlocks.GUH_WHEEL.get());
     }
 
@@ -115,7 +116,7 @@ public class GuhWheelPartBlock extends Block {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 }

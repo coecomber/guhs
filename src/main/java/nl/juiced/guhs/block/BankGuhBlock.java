@@ -63,7 +63,7 @@ public class BankGuhBlock extends BaseEntityBlock {
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED; // drawn by GeckoLib (BankGuhRenderer)
+        return RenderShape.INVISIBLE; // drawn by GeckoLib (BankGuhRenderer)
     }
 
     @Nullable

@@ -18,7 +18,7 @@ public record BankContents(List<Entry> entries) {
 
     public record Entry(ItemStack item, long count) {
         public static final Codec<Entry> CODEC = RecordCodecBuilder.create(i -> i.group(
-                ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(Entry::item),
+                ItemStack.CODEC.fieldOf("item")   /* 26.1: SINGLE_ITEM_CODEC is gone; CODEC reads the old {id, components} (count defaults to 1) */.forGetter(Entry::item),
                 Codec.LONG.fieldOf("count").forGetter(Entry::count)
         ).apply(i, Entry::new));
 

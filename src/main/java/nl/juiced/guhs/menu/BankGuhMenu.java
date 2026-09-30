@@ -183,8 +183,8 @@ public class BankGuhMenu extends AbstractContainerMenu {
             CraftingInput input = craftGrid.asCraftInput();
             ItemStack result = ItemStack.EMPTY;
             Optional<RecipeHolder<CraftingRecipe>> recipe = level.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, level);
-            if (recipe.isPresent() && craftResult.setRecipeUsed(level, serverPlayer, recipe.get())) {
-                ItemStack crafted = recipe.get().value().assemble(input, level.registryAccess());
+            if (recipe.isPresent() && craftResult.setRecipeUsed(serverPlayer, recipe.get())) {
+                ItemStack crafted = recipe.get().value().assemble(input);
                 if (crafted.isItemEnabled(level.enabledFeatures())) {
                     result = crafted;
                 }
@@ -211,7 +211,7 @@ public class BankGuhMenu extends AbstractContainerMenu {
         ItemStack stack = slot.getItem();
         if (index == RESULT_SLOT) {
             ItemStack copy = stack.copy();
-            stack.getItem().onCraftedBy(stack, player.level(), player);
+            stack.getItem().onCraftedBy(stack, player);
             if (!moveItemStackTo(stack, INV_START, INV_END, true)) {
                 return ItemStack.EMPTY;
             }

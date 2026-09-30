@@ -114,10 +114,10 @@ public class SleeRailPartBlock extends Block {
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        super.onRemove(state, level, pos, newState, movedByPiston);
+    protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
         BlockPos anchor = anchor(state, pos);
-        if (!newState.is(this) && !level.isClientSide() && level.getBlockState(anchor).getBlock() instanceof SleeRailBlock) {
+        if (level.getBlockState(anchor).getBlock() instanceof SleeRailBlock) {
             level.destroyBlock(anchor, true);
         }
     }
@@ -135,7 +135,7 @@ public class SleeRailPartBlock extends Block {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         BlockState anchor = level.getBlockState(anchor(state, pos));
         return anchor.getBlock() instanceof SleeRailBlock ? new ItemStack(SleeRailBlock.itemFor(anchor.getValue(SleeRailBlock.SHAPE))) : ItemStack.EMPTY;
     }
@@ -146,7 +146,7 @@ public class SleeRailPartBlock extends Block {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 }

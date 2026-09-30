@@ -81,7 +81,7 @@ public class GuhWheelBlockEntity extends BlockEntity {
         GuhEntity guh = be.getDisplayGuh();
         if (guh != null) {
             guh.tickCount++; // drives the GeckoLib animation clock
-            guh.walkAnimation.update(1.0f, 0.4f); // "moving" -> walk animation
+            guh.walkAnimation.update(1.0f, 0.4f, guh.isBaby() ? 3.0f : 1.0f); // "moving" -> walk animation
         }
     }
 
@@ -92,7 +92,7 @@ public class GuhWheelBlockEntity extends BlockEntity {
     @Nullable
     public GuhEntity getDisplayGuh() {
         if (displayGuh == null && guhData != null && level != null) {
-            displayGuh = EntityType.create(guhData, level).filter(e -> e instanceof GuhEntity).map(e -> (GuhEntity) e).orElse(null);
+            displayGuh = EntityType.create(nl.juiced.guhs.storage.Nbt.input(level.registryAccess(), guhData), level, net.minecraft.world.entity.EntitySpawnReason.LOAD).filter(e -> e instanceof GuhEntity).map(e -> (GuhEntity) e).orElse(null);
             if (displayGuh != null) {
                 displayGuh.setInSittingPose(false);
                 displayGuh.setRunningInWheel(true);
@@ -106,7 +106,7 @@ public class GuhWheelBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);
-        CompoundTag newData = tag.keySet().contains("Guh") ? tag.getCompoundOrEmpty("Guh") : null;
+        CompoundTag newData = tag.read("Guh", CompoundTag.CODEC).orElse(null);
         if (newData == null || !newData.equals(guhData)) {
             displayGuh = null;
         }
@@ -120,7 +120,32 @@ public class GuhWheelBlockEntity extends BlockEntity {
         // showing a guh that was already taken out
         tag.putBoolean("HasGuh", guhData != null);
         if (guhData != null) {
-            tag.put("Guh", guhData);
+            tag.store("Guh", CompoundTag.CODEC, guhData);
+        }
+    }
+
+    /**
+     * Breaking the wheel (however it goes) drops the guh that was in it (as a picked-up guh item) and removes the
+     * wheel's other parts. 26.1: was GuhWheelBlock#onRemove.
+     */
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        if (level == null || level.isClientSide()) {
+            return;
+        }
+        CompoundTag guh = takeOut();
+        if (guh != null) {
+            net.minecraft.world.item.ItemStack item = nl.juiced.guhs.item.PickedUpGuhItem.of(guh);
+            nl.juiced.guhs.feature.band.GuhVolger.item(item, nl.juiced.guhs.feature.band.PlekSoort.ITEM_GROND, level.dimension(), pos, "",
+                    level.getGameTime());   // 2.10: "waar is mijn guh": the wheel broke, it lies on the ground
+            net.minecraft.world.level.block.Block.popResource(level, pos, item);
+        }
+        if (state.hasProperty(nl.juiced.guhs.block.GuhWheelBlock.FACING)) {
+            for (BlockPos part : nl.juiced.guhs.block.GuhWheelBlock.partPositions(pos, state.getValue(nl.juiced.guhs.block.GuhWheelBlock.FACING))) {
+                if (level.getBlockState(part).is(nl.juiced.guhs.registry.ModBlocks.GUH_WHEEL_PART.get())) {
+                    level.setBlock(part, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+                }
+            }
         }
     }
 

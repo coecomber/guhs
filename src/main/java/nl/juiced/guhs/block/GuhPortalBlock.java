@@ -31,6 +31,8 @@ import nl.juiced.guhs.world.GuhPortalForcer;
 import nl.juiced.guhs.world.GuhPortalShape;
 import org.joml.Vector3f;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.level.ScheduledTickAccess;
 /** The swirly pink portal inside a Block-of-Kaasknabbels frame. Overworld (or anywhere) <-> Guhmension. */
 public class GuhPortalBlock extends Block implements Portal {
     public static final MapCodec<GuhPortalBlock> CODEC = simpleCodec(GuhPortalBlock::new);
@@ -40,8 +42,8 @@ public class GuhPortalBlock extends Block implements Portal {
 
     private static final VoxelShape X_AXIS_AABB = Block.box(0, 0, 6, 16, 16, 10);
     private static final VoxelShape Z_AXIS_AABB = Block.box(6, 0, 0, 10, 16, 16);
-    private static final DustParticleOptions PINK = new DustParticleOptions(new Vector3f(1.0f, 0.6f, 0.75f), 1.0f);
-    private static final DustParticleOptions CHEESE = new DustParticleOptions(new Vector3f(1.0f, 0.62f, 0.15f), 1.0f);
+    private static final DustParticleOptions PINK = new DustParticleOptions(0xFF99BF /* 1.0, 0.6, 0.75 */, 1.0f);
+    private static final DustParticleOptions CHEESE = new DustParticleOptions(0xFF9E26 /* 1.0, 0.62, 0.15 */, 1.0f);
 
     public GuhPortalBlock(Properties properties) {
         super(properties);
@@ -65,17 +67,17 @@ public class GuhPortalBlock extends Block implements Portal {
 
     /** Breaks (chain reaction) as soon as the frame is no longer complete. */
     @Override
-    protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction facing, BlockPos facingPos, BlockState facingState, RandomSource random) {
         Direction.Axis portalAxis = state.getValue(AXIS);
         boolean sideways = facing.getAxis() != portalAxis && facing.getAxis().isHorizontal();
-        if (!sideways && !facingState.is(this) && !new GuhPortalShape(level, pos, portalAxis).isComplete()) {
+        if (!sideways && !facingState.is(this) && level instanceof net.minecraft.world.level.LevelAccessor accessor && !new GuhPortalShape(accessor, pos, portalAxis).isComplete()) {
             return Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(state, facing, facingState, level, pos, facingPos);
+        return super.updateShape(state, level, ticks, pos, facing, facingPos, facingState, random);
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
         if (entity.canUsePortal(false)) {
             entity.setAsInsidePortal(this, pos);
         }
@@ -112,7 +114,7 @@ public class GuhPortalBlock extends Block implements Portal {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return ItemStack.EMPTY;
     }
 }

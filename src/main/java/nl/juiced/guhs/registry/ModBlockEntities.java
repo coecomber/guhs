@@ -17,7 +17,7 @@ public final class ModBlockEntities {
             () -> new BlockEntityType<>(FryingPanBlockEntity::new, ModBlocks.FRYING_PAN.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GuhSpawnerBlockEntity>> GUH_SPAWNER = BLOCK_ENTITIES.register("guh_spawner",
-            () -> new BlockEntityType<>(GuhSpawnerBlockEntity::new, ModBlocks.GUH_SPAWNER.get()));
+            () -> new BlockEntityType<>(GuhSpawnerBlockEntity::new, true, ModBlocks.GUH_SPAWNER.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GuhWheelBlockEntity>> GUH_WHEEL = BLOCK_ENTITIES.register("guh_wheel",
             () -> new BlockEntityType<>(GuhWheelBlockEntity::new, ModBlocks.GUH_WHEEL.get()));

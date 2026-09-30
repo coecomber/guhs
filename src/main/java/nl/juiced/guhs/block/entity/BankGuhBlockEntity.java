@@ -58,22 +58,17 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
     @Override
     protected void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);
-        if (tag.keySet().contains("Stomach")) {
-            BankContents.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("Stomach"))
-                    .resultOrPartial(err -> { })
-                    .ifPresent(storage::load);
-        }
+        tag.read("Stomach", BankContents.CODEC).ifPresent(storage::load);
     }
 
     @Override
     protected void saveAdditional(ValueOutput tag) {
         super.saveAdditional(tag);
-        BankContents.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), storage.snapshot())
-                .ifSuccess(t -> tag.put("Stomach", t));
+        tag.store("Stomach", BankContents.CODEC, storage.snapshot());
     }
 
     @Override
-    protected void applyImplicitComponents(BlockEntity.DataComponentInput input) {
+    protected void applyImplicitComponents(net.minecraft.core.component.DataComponentGetter input) {
         super.applyImplicitComponents(input);
         storage.load(input.getOrDefault(ModDataComponents.BANK_CONTENTS.get(), BankContents.EMPTY));
     }
@@ -88,8 +83,8 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
     }
 
     @Override
-    public void removeComponentsFromTag(CompoundTag tag) {
-        tag.remove("Stomach");
+    public void removeComponentsFromTag(ValueOutput tag) {
+        tag.discard("Stomach");
     }
 
     // --- GeckoLib ---

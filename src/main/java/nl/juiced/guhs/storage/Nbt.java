@@ -66,6 +66,25 @@ public final class Nbt {
         return in.read(MapCodec.assumeMapUnsafe(CompoundTag.CODEC)).orElseGet(CompoundTag::new);
     }
 
+    /** 1.21.1 {@code stack.save(registries)} (non-empty stack; an empty stack gives an empty tag). Same format as 1.21.1. */
+    public static CompoundTag saveStack(HolderLookup.Provider registries, net.minecraft.world.item.ItemStack stack) {
+        if (stack.isEmpty()) {
+            return new CompoundTag();
+        }
+        return (CompoundTag) net.minecraft.world.item.ItemStack.CODEC.encodeStart(registries.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), stack)
+                .getOrThrow();
+    }
+
+    /** 1.21.1 {@code ItemStack.parseOptional(registries, tag)}: EMPTY for an empty/broken tag. */
+    public static net.minecraft.world.item.ItemStack parseStack(HolderLookup.Provider registries, CompoundTag tag) {
+        if (tag.isEmpty()) {
+            return net.minecraft.world.item.ItemStack.EMPTY;
+        }
+        return net.minecraft.world.item.ItemStack.OPTIONAL_CODEC.parse(registries.createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), tag)
+                .resultOrPartial(err -> { })
+                .orElse(net.minecraft.world.item.ItemStack.EMPTY);
+    }
+
     /** 1.21.1 {@code blockEntity.saveWithoutMetadata(registries)} stays available; this is the load side. */
     public static void loadBlockEntity(BlockEntity be, HolderLookup.Provider registries, CompoundTag tag) {
         be.loadWithComponents(input(registries, tag));
