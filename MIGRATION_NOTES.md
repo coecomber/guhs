@@ -1224,3 +1224,24 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
   `makeMockServerPlayerInLevel` (follows `setGameMode`, starts on the test origin instead of 0,0,0), `MockConnectionMixin` drops modded
   payloads to mock players (NeoForge 26.1 throws). 26.1 runs tests in id order, so a few tests that were disturbed by their new
   neighbours got their own batch (meppen searches stay inside the own test area).
+* R (phase 6, visual check): Barbecuether fog: 1.0.0's "foggy everywhere" (isFoggyAt, start 5 % / end half of the render distance, max 192)
+  is now applied in `BarbecuetherClient#fog` from the render distance (the dimension type's nether-like 10..96 alone was thinner at 8
+  chunks); Rookdelta 40 / Asdal 64 on top as before. Same look as 1.0.0 (compared side by side).
+* R (phase 6): glow textures (guh glows, Guhtwo floating glow, badeendjes, vogels) use `GuhRenderTypes.eyes` = 1.21.1's additive eyes
+  (26.1's `RenderTypes.eyes` blends by alpha and drew black texels) -> same look as 1.0.0.
+* R (phase 6): 3 block models (theetafel/feestbuffettafel gedekt, elftocht vuurkorf aan) got explicit uv for faces above y 16 (26.1 refuses
+  automatic UVs outside the texture); the few texels on those faces come from the top row of the texture instead of outside the sprite.
+* R (phase 6): Guhs creative tab skips stacks that a feature adds a second time (26.1 throws); the tab shows each item once like 1.0.0.
+* R (phase 6): NOT 1:1 yet - FTB Quests 26.1 reads only JSON5 (see REQUESTS: A/D must switch the installer and generator); until then the
+  quest book in 1.1.0 has no Guhs chapters.
+* R (phase 6): GUI entity previews/items are lit a little brighter and hover tooltips follow 26.1's style (vanilla 26.1 GUI lighting); night
+  sky of the Guhmension is a shade more purple near the zenith (26.1 sky gradient); both vanilla-side, not changed.
+
+### 4.6c R phase 6 lessons (for anyone touching client code)
+* `ViewportEvent.RenderFog#getType()` is `FogType.ATMOSPHERIC` in air; `NONE` never arrives (FogRenderer maps it). Check ATMOSPHERIC.
+* `Screen#minecraft` is final and set in the constructor: `minecraft != null` no longer means "initialised". A screen that rebuilds on a
+  data update before its first `init` must check `width > 0` (else the widgets of that early build stay next to the real ones).
+* Renderers are constructed during the resource reload before item components are bound: never `new ItemStack(..)` in a renderer/layer
+  constructor or field (NPE "Components not bound yet" -> the whole reload fails and the client hangs on a white window).
+* `RenderTypes.eyes` is alpha-blended in 26.1; for 1.21.1-style additive glow use `GuhRenderTypes.eyes`.
+* The integrated client handles packets before `Minecraft#execute` tasks of the same tick.
