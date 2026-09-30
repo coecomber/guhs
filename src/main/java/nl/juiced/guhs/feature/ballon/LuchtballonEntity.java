@@ -38,6 +38,8 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The guh_luchtballon: a hot-air balloon shaped like a big guh head (ears, eyes, blush and all) with a wicker basket.
  * It waits on its ballonsteiger ("home"); Kapitein Wolkje takes you on a round flight ({@link #stijgOp}): a fixed
@@ -412,7 +414,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
     // --- saving -------------------------------------------------------------------------------------------------------------
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
         tag.putInt("Kleur", kleur());
         tag.putBoolean("Deco", deco);
         if (heeftThuis) {
@@ -423,7 +425,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
         setKleur(tag.getIntOr("Kleur", 0));
         deco = tag.getBooleanOr("Deco", false);
         (tag).read("Thuis", BlockPos.CODEC).ifPresent(pos -> setThuis(pos, tag.getFloatOr("RouteYaw", 0.0F)));

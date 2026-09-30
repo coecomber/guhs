@@ -25,6 +25,8 @@ import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The Nomguh sled (guhs:baltoslee_slee): a wooden sled with a red blanket, the handlebar with sled bells, a lantern, and -
  * after the berghut - the medicine chest. You stand on its runners and steer it over the marked route through the storm;
@@ -418,11 +420,11 @@ public class SleeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 
     @Override

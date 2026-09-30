@@ -74,6 +74,8 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * De guhxolotl (3.0, DESIGN_30 §6): a guh that is an axolotl. It behaves like a vanilla axolotl, but lief:
  * <ul>
@@ -242,7 +244,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putString("Kleur", kleur().getSerializedName());
         tag.putInt("PiepUit", uitVlaggen());
@@ -251,7 +253,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         setKleur(Kleur.van(tag.getStringOr("Kleur", "")));
         setUitVlaggen(tag.getIntOr("PiepUit", 0));

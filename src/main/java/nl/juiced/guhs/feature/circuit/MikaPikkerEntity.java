@@ -36,6 +36,7 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
 /**
  * A Mika-pikker of the Guh-Circuit: a little Mika in a racing bandana that waits beside the track. When a race guh runs
  * past too close, it pinches the guh's VAHOEG (the boost, and a bit of speed: RaceGuhEntity.SCHOK_PIK), giggles and hops
@@ -235,7 +236,7 @@ public class MikaPikkerEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("Duwer", isDuwer());
     }

@@ -17,6 +17,8 @@ import nl.juiced.guhs.feature.band.Vriendjes;
 import nl.juiced.guhs.feature.emotes.EmotesFeature;
 
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The controller of a Guhhuisje: drawn big by the client's HuisjeRenderer. Server side it breathes: while residents
  * sleep inside, zzz float out of the eye windows (and little hearts when friends sleep together), with a soft snore now
@@ -49,16 +51,16 @@ public class HuisjeBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(net.minecraft.nbt.CompoundTag tag, net.minecraft.core.HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         if (eigenaar != null) {
             tag.store("Eigenaar", UUIDUtil.CODEC, eigenaar);
         }
     }
 
     @Override
-    protected void loadAdditional(net.minecraft.nbt.CompoundTag tag, net.minecraft.core.HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
         eigenaar = tag.read("Eigenaar", UUIDUtil.CODEC).isPresent() ? tag.read("Eigenaar", UUIDUtil.CODEC).orElseThrow() : null;
     }
 

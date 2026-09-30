@@ -18,6 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.race.RaceGuhEntity;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A big rolling kaasknabbel on the Kaasberg's Knabbelhelling: the Mika's push them down the hill (CircuitExtra), they roll
  * down faster and faster, and a race guh that runs into one gets a bump (it stops and hops: RaceGuhEntity.SCHOK_BOTS).
@@ -129,10 +131,10 @@ public class RolknabbelEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 }

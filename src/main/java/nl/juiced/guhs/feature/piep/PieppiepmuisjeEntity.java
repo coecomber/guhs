@@ -49,6 +49,8 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The pieppiepmuisje: a tiny plush mouse (dark purple-black, a fluffy cream band, a pink nose). Always lief.
  * <ul>
@@ -315,14 +317,14 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
     // --- save ----------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         verstop().save(tag);
         tag.putInt("PiepUit", uitVlaggen());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         verstop().load(tag);
         setUitVlaggen(tag.getIntOr("PiepUit", 0));

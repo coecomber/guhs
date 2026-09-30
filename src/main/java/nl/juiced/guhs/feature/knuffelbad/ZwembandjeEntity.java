@@ -26,6 +26,8 @@ import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The zwembandje: the pink swim ring (with a little guh head) you ride a water slide in. It follows the slide's path
  * ({@link GlijPad}) at the ride's time tau (ticks since the start) and your lateral (-1 left .. 1 right, you steer it).
@@ -273,11 +275,11 @@ public class ZwembandjeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 
     @Override

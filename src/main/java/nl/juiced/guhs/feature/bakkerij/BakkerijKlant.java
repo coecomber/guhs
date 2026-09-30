@@ -31,6 +31,7 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A customer guh of Bakker Korstje's order game (a prop: no Guhdex page, never saved). It comes in at the door, walks to
  * a spot at the counter and waits there with an order bubble over its head (the pastry it wants and a patience bar;
@@ -106,17 +107,17 @@ public class BakkerijKlant extends PathfinderMob implements GeoEntity {
      * right where it's summoned with its order bubble and patience bar, without a game (it's never saved, so this is only read on /summon).
      */
     @Override
-    public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         Recept r = Recept.byId(tag.getStringOr("Recept", ""));
         if (r != null) {
             entityData.set(RECEPT, r.ordinal());
             entityData.set(UITERLIJK, r == Recept.FEESTTAART ? UITERLIJKEN : getRandom().nextInt(UITERLIJKEN));
         }
-        if (tag.contains("Geduld")) {
+        if (tag.keySet().contains("Geduld")) {
             geduldMax = geduldOver = Math.max(1, tag.getIntOr("Geduld", 0));
         }
-        if (tag.contains("GeduldOver")) {
+        if (tag.keySet().contains("GeduldOver")) {
             geduldOver = Math.max(1, Math.min(geduldMax, tag.getIntOr("GeduldOver", 0)));
         }
         entityData.set(GEDULD, Math.max(0, geduldOver * 1000 / geduldMax));

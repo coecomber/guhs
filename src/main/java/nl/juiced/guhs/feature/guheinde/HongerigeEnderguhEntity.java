@@ -39,6 +39,8 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The starved Enderguh that Opper-Mika rides: a huge Enderguh, grey and thin because the Mika's never give it a single
  * kaasknabbel. It can't be hurt (you don't hit a guh!). Every knabbelkristal you smash makes it a bit more vahoeg (its
@@ -350,7 +352,7 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Vahoeg", getVahoeg());
         tag.putString("Toestand", getToestand().name());
@@ -359,7 +361,7 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         setVahoeg(tag.getIntOr("Vahoeg", 0));
         try {

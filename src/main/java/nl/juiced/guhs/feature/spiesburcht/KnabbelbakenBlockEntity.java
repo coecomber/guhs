@@ -24,6 +24,8 @@ import net.minecraft.world.phys.AABB;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.quest.GuhAdvancements;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The Knabbelbaken's pyramid check (every 4 seconds, like a beacon) and the effect it gives to players and tamed guhs
  * in range. The beam is drawn by the client (feature/spiesburcht/client).
@@ -225,15 +227,15 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         tag.putString("Gunst", gunst.id());
         tag.putInt("Levels", levels);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
         levels = tag.getIntOr("Levels", 0);
         for (Gunst g : Gunst.values()) {
             if (g.id().equals(tag.getStringOr("Gunst", ""))) {

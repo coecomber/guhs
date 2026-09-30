@@ -46,6 +46,8 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * De Aangebrande Mika: the wither of the Barbecuether, a huge charred three-headed Mika. Called up (in any dimension)
  * with a T of four as_blok and three verkoolde mikakoppen on top ({@link MikakopBlock#checkSpawn}).
@@ -442,7 +444,7 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Spawning", spawningTicks());
         tag.putBoolean("Doorgebakken", doorgebakken);
@@ -453,12 +455,12 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         this.entityData.set(DATA_SPAWNING, tag.getIntOr("Spawning", 0));
         doorgebakken = tag.getBooleanOr("Doorgebakken", false);
         volleys = tag.getIntOr("Volleys", 0);
-        home = tag.contains("Home") ? BlockPos.of(tag.getLongOr("Home", 0L)) : null;
+        home = tag.keySet().contains("Home") ? BlockPos.of(tag.getLongOr("Home", 0L)) : null;
         if (hasCustomName()) {
             bossEvent.setName(getDisplayName());
         }

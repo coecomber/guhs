@@ -35,6 +35,8 @@ import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.verhaal.VerhaalFeature;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The guh-konijntje: a round little bunny with long, soft HANGING ears (hangoortjes, round at the tips like guh ears), a guh
  * face with big glossy eyes and a twitchy snoetje, and a pompon tail. Lives in the Guhweides (and white ones in the
@@ -194,14 +196,14 @@ public class GuhKonijntjeEntity extends Landdiertje {
     // --- save ----------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putString("Kleur", kleur().id());
         tag.putLong("HophopRust", Math.max(0, rustTot - level().getGameTime()));
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         String k = tag.getStringOr("Kleur", "");
         for (Kleur kl : Kleur.values()) {

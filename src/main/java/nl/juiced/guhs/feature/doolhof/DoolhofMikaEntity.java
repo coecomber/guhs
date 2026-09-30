@@ -31,6 +31,8 @@ import com.geckolib.util.GeckoLibUtil;
 
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A Heg-Mika of Het Guhdoolhof: a Mika with twigs and leaves on its head, sneaking through the hedges. It never hurts
  * anyone and can't be hurt. It wanders the maze; when it sees the player it comes after them, and when it touches
@@ -208,7 +210,7 @@ public class DoolhofMikaEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         if (spel != null) {
             tag.store("Spel", UUIDUtil.CODEC, spel);
@@ -216,7 +218,7 @@ public class DoolhofMikaEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         spel = tag.read("Spel", UUIDUtil.CODEC).isPresent() ? tag.read("Spel", UUIDUtil.CODEC).orElseThrow() : null;
     }

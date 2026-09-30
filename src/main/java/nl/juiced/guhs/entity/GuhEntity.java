@@ -64,6 +64,8 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * De Guh: a chubby pink plush mouse.
  * <ul>
@@ -1351,7 +1353,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     // ------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("TeleportToOwner", isTeleportEnabled());
         tag.putBoolean("Wander", isWandering());
@@ -1387,12 +1389,12 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains("Wander")) {
+        if (tag.keySet().contains("Wander")) {
             setWandering(tag.getBooleanOr("Wander", false));
         }
-        if (tag.contains("TeleportToOwner")) {
+        if (tag.keySet().contains("TeleportToOwner")) {
             setTeleportEnabled(tag.getBooleanOr("TeleportToOwner", false));
         }
         setGravityEnabled(tag.getBooleanOr("Gravity", false));
@@ -1419,12 +1421,12 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
         }
         oldOutfit.forEach(this::wear);
         backpack.clearContent();
-        if (tag.contains("Backpack")) {
+        if (tag.keySet().contains("Backpack")) {
             net.minecraft.world.ContainerHelper.loadAllItems(tag.getCompoundOrEmpty("Backpack"), backpack.getItems(), this.registryAccess());
         }
         // guhs from before personalities existed (or placed by structures) get one now
         setPersonality(personality != null ? personality : GuhPersonality.random(this.random));
-        if (tag.contains("AmbientSounds")) {
+        if (tag.keySet().contains("AmbientSounds")) {
             setSoundsEnabled(tag.getBooleanOr("AmbientSounds", false));
             setSoundFrequency(tag.getIntOr("SoundFrequency", 0));
             setAttackRadius(tag.getIntOr("AttackRadius", 0));
@@ -1436,7 +1438,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
         }
         emotes.load(tag);
         setKnusVlaggen(tag.getIntOr("KnusVlaggen", 0));
-        setHaarkleur(tag.contains("Haarkleur") ? tag.getIntOr("Haarkleur", 0) : -1);
+        setHaarkleur(tag.keySet().contains("Haarkleur") ? tag.getIntOr("Haarkleur", 0) : -1);
     }
 
     // ------------------------------------------------------------------------------------------------------------

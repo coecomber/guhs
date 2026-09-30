@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.level.storage.ValueOutput;
 /**
  * A guh of the Vadsparade: the Tamboerguh in front (in the parade outfit) or one of the dressed-up guhs behind it. The
  * parade moves it along its route ({@link Vadsparade}); by itself it does nothing. It isn't anybody's: it can't be tamed,
@@ -142,7 +143,7 @@ public class ParadeGuhEntity extends GuhEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("ParadeGuh", true);
     }

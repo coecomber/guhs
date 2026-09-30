@@ -37,6 +37,7 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
 /**
  * Mieuwguh: a tiny pink floating guhtje with big blue eyes and a long thin tail with a bulb. She giggles at everything, does
  * little somersaults in the air, floats around the kloon-eiland (her {@link #THUIS home}: the island's middle) and around the
@@ -281,7 +282,7 @@ public class MewEntity extends AmbientCreature implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
     }
 

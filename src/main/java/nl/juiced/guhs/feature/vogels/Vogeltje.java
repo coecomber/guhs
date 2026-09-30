@@ -43,6 +43,8 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A little bird of the Guhmensie (3.0 vogels). Common behaviour of the four birds:
  * <ul>
@@ -577,7 +579,7 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
 
     // --- saving ------------------------------------------------------------------------------------------------------
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         if (thuis != null) {
             tag.store("VogelThuis", BlockPos.CODEC, thuis);
@@ -587,7 +589,7 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         (tag).read("VogelThuis", BlockPos.CODEC).ifPresent(p -> thuis = p);
         entityData.set(VLIEGT, tag.getBooleanOr("VogelVliegt", false));

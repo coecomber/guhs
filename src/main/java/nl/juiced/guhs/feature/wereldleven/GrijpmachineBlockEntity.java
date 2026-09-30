@@ -16,6 +16,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /** The plushies inside a grijpmachine (their spots on the floor of the glass case), synced to the clients for the renderer. */
 public class GrijpmachineBlockEntity extends BlockEntity {
     /** A plushie on the floor of the case: its id, and x/z in 0..1 (x left to right, z back to front, seen from the front). */
@@ -88,14 +90,14 @@ public class GrijpmachineBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         tag.merge(prijzenTag());
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
         prijzen.clear();
         prijzen.addAll(leesPrijzen(tag));
     }

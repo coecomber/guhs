@@ -57,6 +57,8 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * Het guh-eendje (3.0, DESIGN_30 §6): a round, cream-white mama duck with a guh face and round guh ears, paddling on the
  * ponds and the Guhzee with a <b>rijtje kuikentjes</b> behind her: fluffy yellow ducklings (her babies) that each follow the
@@ -319,7 +321,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
     // --- save ---------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         if (mama != null) {
             tag.store("Mama", UUIDUtil.CODEC, mama);
@@ -327,7 +329,7 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         mama = tag.read("Mama", UUIDUtil.CODEC).isPresent() ? tag.read("Mama", UUIDUtil.CODEC).orElseThrow() : null;
     }

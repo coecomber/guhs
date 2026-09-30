@@ -33,6 +33,8 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The sitting guh characters of the quests (same model as the Hungry Guh): Moeder Vadsig (huge, in her shrine), the
  * Tandarts-guh (in the mouth), the Maagenzym-guh (in every stomach) and the Slee-guh (in the sled hut).
@@ -224,7 +226,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putString("Kind", getKind().id());
         if (maagOwner != null) {
@@ -242,7 +244,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         for (Kind kind : Kind.values()) {
             if (kind.id().equals(tag.getStringOr("Kind", ""))) {

@@ -21,6 +21,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A thing of De Knabbelspelen that the game moves around: a kaasknabbel swinging on its string (Knabbelhappen; bite it
  * by hitting or right-clicking it), the knabbelspijker dangling behind your guh belt (Spijkerpoepen) or a pinned tail
@@ -170,11 +172,11 @@ public class SpelDing extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 
     @Override

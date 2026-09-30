@@ -49,6 +49,8 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A little land critter of the Guhmensie (3.0, DESIGN_30 §6): the {@link PluisegeltjeEntity pluisegeltje}, the
  * {@link GuhKonijntjeEntity guh-konijntje}, the {@link PluiseekhoorntjeEntity pluiseekhoorntje} and {@link ShuckleEntity
@@ -110,13 +112,13 @@ public abstract class Landdiertje extends TamableAnimal implements GeoEntity, Pi
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("PiepUit", uitVlaggen());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         setUitVlaggen(tag.getIntOr("PiepUit", 0));
     }

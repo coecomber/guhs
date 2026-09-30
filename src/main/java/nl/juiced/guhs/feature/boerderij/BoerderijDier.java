@@ -49,6 +49,8 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A farm animal of the Guhboerderij: always lief and passive (it never attacks, it only runs off a bit when hurt).
  * <p>
@@ -163,7 +165,7 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Zorg", zorg());
         tag.putLong("ZorgDag", zorgDag);
@@ -171,10 +173,10 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         entityData.set(DATA_ZORG, tag.getIntOr("Zorg", 0));
-        zorgDag = tag.contains("ZorgDag") ? tag.getLongOr("ZorgDag", 0L) : -1;
+        zorgDag = tag.keySet().contains("ZorgDag") ? tag.getLongOr("ZorgDag", 0L) : -1;
         setProductGegeven(tag.getBooleanOr("ProductGegeven", false));
     }
 

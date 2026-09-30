@@ -10,6 +10,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.block.GuhFurnitureBlock;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /** The invisible thing you sit on when you sit on guh furniture. Gone as soon as you get up (or the seat is broken). */
 public class GuhSeatEntity extends Entity {
     public GuhSeatEntity(EntityType<?> type, Level level) {
@@ -47,10 +49,10 @@ public class GuhSeatEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 }

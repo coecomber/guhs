@@ -33,6 +33,8 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The Knabbeldief (Inspecteur Vahoegsma's case): a small Mika with a burglar's mask, a striped shirt and a loot sack on
  * its back. It sits by the stolen knabbel stock, munching and giggling; when someone comes within {@link #SCHRIK} blocks
@@ -170,7 +172,7 @@ public class KnabbeldiefMikaEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("Vlucht", vlucht);
         tag.putInt("Leeftijd", leeftijd);
@@ -180,11 +182,11 @@ public class KnabbeldiefMikaEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         vlucht = tag.getBooleanOr("Vlucht", false);
         leeftijd = tag.getIntOr("Leeftijd", 0);
-        buit = tag.contains("Buit") ? BlockPos.of(tag.getLongOr("Buit", 0L)) : null;
+        buit = tag.keySet().contains("Buit") ? BlockPos.of(tag.getLongOr("Buit", 0L)) : null;
     }
 
     @Override

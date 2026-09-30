@@ -30,6 +30,8 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A brokje: a block knocked out of a Mika fort (or one that lost its hold), tumbling through the air. It falls with
  * gravity, bounces off what it lands on, and when it lands hard on another block of the fort it can knock that one out
@@ -164,10 +166,10 @@ public class KatapultBrokjeEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 }

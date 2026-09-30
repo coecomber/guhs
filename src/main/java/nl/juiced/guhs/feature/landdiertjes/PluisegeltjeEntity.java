@@ -37,6 +37,8 @@ import nl.juiced.guhs.feature.klusjes.BasisKlus;
 import com.geckolib.animation.state.AnimationTest;
 import com.geckolib.animation.RawAnimation;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The pluisegeltje: a little hedgehog with soft, fluffy pink-cream spikes (they never prick: "pluisstekeltjes"), a guh face
  * with big glossy eyes and a pointy snoetje. Lives in the Vadswoud.
@@ -272,14 +274,14 @@ public class PluisegeltjeEntity extends Landdiertje {
     // --- save ---------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Opgerold", isRollend() ? 0 : entityData.get(DATA_ROL));
         tag.putInt("RolTijd", rolTijd);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         entityData.set(DATA_ROL, Mth.clamp(tag.getIntOr("Opgerold", 0), 0, 1));
         rolTijd = tag.getIntOr("RolTijd", 0);

@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.registry.ModBlockEntities;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /** A vanilla-style mob spawner that always spawns guhs. */
 public class GuhSpawnerBlockEntity extends BlockEntity {
     private final BaseSpawner spawner = new BaseSpawner() {
@@ -61,14 +63,14 @@ public class GuhSpawnerBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
         spawner.load(level, worldPosition, tag);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         spawner.save(tag);
     }
 

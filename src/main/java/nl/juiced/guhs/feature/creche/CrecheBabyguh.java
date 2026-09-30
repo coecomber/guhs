@@ -32,6 +32,7 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
 /**
  * guhs:creche_babyguh (a prop, no Guhdex page): a tiny baby guh with a pacifier that crawls out of its crib during Juf
  * Knuffel's minigame ({@link CrecheGame}). Right-click it to pick it up (it sits in your arms, wiggling), then put it back
@@ -204,7 +205,7 @@ public class CrecheBabyguh extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
     }
 

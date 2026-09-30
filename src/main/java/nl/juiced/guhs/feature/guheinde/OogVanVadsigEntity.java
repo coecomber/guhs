@@ -27,6 +27,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A thrown Oog van Vadsig: flies up and towards the Knabbelkelder (the eye of ender's flight), then drops back as an item
  * (4 in 5) or breaks with a "njeg!" (1 in 5).
@@ -175,13 +177,13 @@ public class OogVanVadsigEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
         tag.put("Item", getItem().save(registryAccess()));
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        setItem(tag.contains("Item") ? ItemStack.parse(registryAccess(), tag.getCompoundOrEmpty("Item")).orElse(defaultItem()) : defaultItem());
+    protected void readAdditionalSaveData(ValueInput tag) {
+        setItem(tag.keySet().contains("Item") ? ItemStack.parse(registryAccess(), tag.getCompoundOrEmpty("Item")).orElse(defaultItem()) : defaultItem());
     }
 
     @Override

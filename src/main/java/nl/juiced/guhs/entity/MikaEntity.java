@@ -47,6 +47,8 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * Mika: the evil guh. Same model as a guh but with an evil face and devil tail (assets/guhs/geo/entity/mika.geo.json).
  * Hostile and chases you, but its "attacks" only shove you hard. 50 HP, drops Mika's vet.
@@ -151,14 +153,14 @@ public class MikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("Boss", boss);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-        boolean hadHealth = tag.contains("Health");
+    public void readAdditionalSaveData(ValueInput tag) {
+        boolean hadHealth = tag.keySet().contains("Health");
         super.readAdditionalSaveData(tag);
         if (tag.getBooleanOr("Boss", false)) {
             makeBoss();

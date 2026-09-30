@@ -20,6 +20,8 @@ import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A surfplankje on the waves of Guhwai'i (3.0): Lilo-guh's loaned board that you stand on (or Lilo-guh's own, with her
  * standing on it: {@link #isLilo}). Not a living thing and never saved: the server's {@link SurfSpel} puts it where the
@@ -180,11 +182,11 @@ public class SurfPlankEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 
     @Override

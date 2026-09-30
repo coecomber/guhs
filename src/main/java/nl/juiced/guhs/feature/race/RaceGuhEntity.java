@@ -26,6 +26,7 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.spelen.Niveau;
 
+import net.minecraft.world.level.storage.ValueOutput;
 /**
  * The rental race guh: a big, fast guh with a saddle that the Raceguh lends you for one race (it is never yours, never
  * saved and poofs away when the race is over). W runs (it picks up speed), S brakes, the mouse steers, shift = get off.
@@ -580,7 +581,7 @@ public class RaceGuhEntity extends GuhEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("RaceGuh", true);
     }

@@ -19,6 +19,8 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import nl.juiced.guhs.entity.MikaEntity;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A Mika-larfje: a tiny Mika (the silverfish of the Knabbelkelder) that lives in aangevreten kaaskorststenen. It doesn't
  * hurt, it steals: every time it gets you, a kaasknabbel is gone (it gives them back when you squash it).
@@ -86,13 +88,13 @@ public class MikaLarfjeEntity extends MikaEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Gestolen", gestolen);
     }
 
     @Override
-    public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         gestolen = tag.getIntOr("Gestolen", 0);
     }

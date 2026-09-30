@@ -36,6 +36,8 @@ import nl.juiced.guhs.registry.ModItems;
 import com.geckolib.animation.state.AnimationTest;
 import com.geckolib.animation.RawAnimation;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * Sjokkel (no guh!): a real Sjokkel in Minecraft style: a round red shell full of cheese holes (like gatenkaas), a yellow
  * little head with bead eyes and yellow feet that poke out of the holes. Very, very slow; very, very lief.
@@ -306,7 +308,7 @@ public class ShuckleEntity extends Landdiertje {
     // --- save --------------------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Bessen", bessen);
         tag.putBoolean("InSchelp", isInSchelp() && sapjeTijd <= 0);
@@ -320,12 +322,12 @@ public class ShuckleEntity extends Landdiertje {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         bessen = Mth.clamp(tag.getIntOr("Bessen", 0), 0, BESSEN_MAX + BESSEN_PER_SAPJE);
         entityData.set(DATA_SCHELP, tag.getBooleanOr("InSchelp", false));
         schelpTijd = tag.getIntOr("SchelpTijd", 0);
-        plekje = tag.contains("Plekje") ? BlockPos.of(tag.getLongOr("Plekje", 0L)) : null;
+        plekje = tag.keySet().contains("Plekje") ? BlockPos.of(tag.getLongOr("Plekje", 0L)) : null;
         if (isInSchelp() && schelpTijd <= 0) {
             schelpTijd = 20;
         }

@@ -25,6 +25,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A pluisbal: a big soft ball of pink guh fluff, shot by the Knabbelkatapult. It flies with gravity, a little air drag and
  * (on lastig) the wind; when it hits a block of the Mika fort it knocks blocks out ({@link KatapultGame#impact}), bounces
@@ -218,10 +220,10 @@ public class PluisbalEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 }

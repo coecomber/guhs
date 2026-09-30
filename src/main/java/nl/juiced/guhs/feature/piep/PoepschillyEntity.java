@@ -66,6 +66,8 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * Poepschilly: a green sea turtle plush from the guhzee coasts of the Guhmensie. It swims well and crawls on land. Always lief.
  * <p>
@@ -836,7 +838,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putLong("RustTot", rustTot);
         tag.putInt("PiepUit", uitVlaggen());
@@ -855,7 +857,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         rustTot = tag.getLongOr("RustTot", 0L);
         setUitVlaggen(tag.getIntOr("PiepUit", 0));
@@ -865,7 +867,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         poetsSpeler = null;
         zoekTicks = 0;
         faseTick = 0;
-        if (tag.contains("Poets", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
+        if (tag.keySet().contains("Poets", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
             CompoundTag poets = tag.getCompoundOrEmpty("Poets");
             try {
                 fase = Fase.valueOf(poets.getStringOr("Fase", ""));

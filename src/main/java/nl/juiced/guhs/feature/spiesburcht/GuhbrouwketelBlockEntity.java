@@ -21,6 +21,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /** The pan of a {@link GuhbrouwketelBlock}: the fire (fuel), what's in the pan and how long it still has to bubble. */
 public class GuhbrouwketelBlockEntity extends BlockEntity {
     public static final int BREWS_PER_POWDER = 4;
@@ -183,16 +185,16 @@ public class GuhbrouwketelBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         tag.putInt("Fuel", fuel);
         tag.putInt("Brewing", brewing);
         tag.putString("Next", next.id());
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
         fuel = tag.getIntOr("Fuel", 0);
         brewing = tag.getIntOr("Brewing", 0);
         next = Brouwsel.BOUILLON;

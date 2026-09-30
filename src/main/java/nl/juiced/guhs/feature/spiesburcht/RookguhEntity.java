@@ -56,6 +56,8 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * De Rookguh: a sad, skinny cloud of smoke with a guh face, drifting through the Rookdelta and the Houtskoolvlakte
  * (the ghast of the Barbecuether). The Mikas took all its kaasknabbels... It is ALWAYS peaceful: nothing you do makes
@@ -275,7 +277,7 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
     // --- saving ----------------------------------------------------------------------------------------------------------
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Fed", fed());
         ListTag list = new ListTag();
@@ -284,7 +286,7 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         this.entityData.set(DATA_FED, Math.min(NEEDED - 1, tag.getIntOr("Fed", 0)));
         feeders.clear();

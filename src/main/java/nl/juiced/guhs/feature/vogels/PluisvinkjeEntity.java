@@ -16,6 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The pluisvinkje: a round pink-white finch that lives in little flocks (the one with the lowest id near it leads: the
  * others take off with it, fly in a loose cloud around it and land near it). Now and then it drops a
@@ -179,16 +181,16 @@ public class PluisvinkjeEntity extends Vogeltje {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("VeertjeTijd", veertjeTijd);
         tag.putInt("VoerVeertje", voerVeertje);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains("VeertjeTijd")) {
+        if (tag.keySet().contains("VeertjeTijd")) {
             veertjeTijd = tag.getIntOr("VeertjeTijd", 0);
         }
         voerVeertje = tag.getIntOr("VoerVeertje", 0);

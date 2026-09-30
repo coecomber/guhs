@@ -31,6 +31,8 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModBlocks;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The guh golf ball: a little pink guh rolled up into a ball. Simple physics, all on the server: it rolls with
  * friction, bounces off walls (and extra hard off pink slime bumpers), steps up slabs and stairs (losing speed) and rolls
@@ -437,10 +439,10 @@ public class GolfBallEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 }

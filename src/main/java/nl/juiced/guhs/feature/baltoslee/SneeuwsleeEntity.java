@@ -42,6 +42,8 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.util.GeckoLibUtil;
 
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * Your own sneeuwslee (guhs:sneeuwslee, from the item {@link SneeuwsleeItem}): a pink-and-blue sled pulled by four
  * guh-sledehondjes, to ride through the snowy biomes after the Nomguh story. You stand on the runners: W = "Hup, hup!",
@@ -340,14 +342,14 @@ public class SneeuwsleeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
         if (tag.read("Eigenaar", UUIDUtil.CODEC).isPresent()) {
             zetEigenaar(tag.read("Eigenaar", UUIDUtil.CODEC).orElseThrow());
         }
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
         UUID e = eigenaar();
         if (e != null) {
             tag.store("Eigenaar", UUIDUtil.CODEC, e);

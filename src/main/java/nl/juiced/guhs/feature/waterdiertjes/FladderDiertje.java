@@ -23,6 +23,8 @@ import com.geckolib.animatable.GeoEntity;
 import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The little flying critters of the waterdiertjes slice (knabbelvlindertje, glimguhtje, lieveheersbeestje): an ambient
  * creature that flutters like the kaasmot (steered velocity, no pathfinding, no fall damage, not pushable) and can
@@ -219,7 +221,7 @@ public abstract class FladderDiertje extends AmbientCreature implements GeoEntit
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("Zit", zit());
         if (landplek != null) {
@@ -229,9 +231,9 @@ public abstract class FladderDiertje extends AmbientCreature implements GeoEntit
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains("Landplek")) {
+        if (tag.keySet().contains("Landplek")) {
             landplek = BlockPos.of(tag.getLongOr("Landplek", 0L));
             zitTicks = tag.getIntOr("ZitTicks", 0);
             setZit(tag.getBooleanOr("Zit", false));

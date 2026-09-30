@@ -27,6 +27,8 @@ import nl.juiced.guhs.feature.band.BandVlaggen;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The invisible seat of a toy (glijbaantje, wip, schommel): one per seat, with a guh or a player on it. Where it is comes
  * from the toy ({@link ToestelBlock#zitPlekWereld}) at every tick, on server and client alike (so the ride is smooth
@@ -266,7 +268,7 @@ public class ZitjeEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
         (tag).read("Toestel", BlockPos.CODEC).ifPresent(p -> entityData.set(TOESTEL, p));
         entityData.set(PLEK, tag.getIntOr("Plek", 0));
         entityData.set(START, tag.getIntOr("Start", 0));
@@ -278,7 +280,7 @@ public class ZitjeEntity extends Entity {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
         tag.store("Toestel", BlockPos.CODEC, toestel());
         tag.putInt("Plek", plek());
         tag.putInt("Start", start());

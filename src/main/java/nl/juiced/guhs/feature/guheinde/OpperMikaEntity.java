@@ -52,6 +52,8 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * Opper-Mika: the boss of all Mika's, who stole every kaasknabbel of the guh kingdom. 150 HP, "pittig maar vergevend".
  * <ul>
@@ -338,14 +340,14 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Buit", buit);
         tag.putInt("Hulpjes", hulpjes);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         buit = tag.getIntOr("Buit", 0);
         hulpjes = tag.getIntOr("Hulpjes", 0);

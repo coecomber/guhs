@@ -14,6 +14,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A falling star of the sterrenregen: it shoots down in a straight line (with a sparkly tail) to the spot it was aimed
  * at, and then lies there glowing as a bit of sterrenstof you can pick up by walking into it (see {@link Sterrenregen}).
@@ -128,10 +130,10 @@ public class VallendeSterEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 }

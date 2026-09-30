@@ -20,6 +20,8 @@ import net.neoforged.neoforge.items.IItemHandler;
 import nl.juiced.guhs.feature.bakkerij.BakkerijFeature;
 import nl.juiced.guhs.feature.knus.KnusTags;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The guh-molentje's inside: a hopper of knabbelgraan and a little sack of knabbelmeel (at most {@link #MAX} each). One
  * graan becomes one meel every {@link #maalTijd} ticks: {@link #MAAL_TICKS} in calm weather, faster when it snows or
@@ -176,16 +178,16 @@ public class MolentjeBlockEntity extends BlockEntity {
     // --- saving and syncing ---------------------------------------------------------------------------------------------------
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
         graan = ItemStack.parseOptional(registries, tag.getCompoundOrEmpty("Graan"));
         meel = ItemStack.parseOptional(registries, tag.getCompoundOrEmpty("Meel"));
         voortgang = tag.getIntOr("Voortgang", 0);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         if (!graan.isEmpty()) {
             tag.put("Graan", graan.save(registries));
         }

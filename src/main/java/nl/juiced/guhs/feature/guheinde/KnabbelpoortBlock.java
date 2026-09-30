@@ -27,6 +27,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A Knabbelpoort (the end gateway of the Guheinde): one appears around the island after every win over Opper-Mika. It
  * throws you far out to the outer islands (where the Mika-vestingen are); there a poort back is made. The block entity
@@ -112,8 +114,8 @@ public class KnabbelpoortBlock extends BaseEntityBlock implements Portal {
         }
 
         @Override
-        protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-            super.saveAdditional(tag, registries);
+        protected void saveAdditional(ValueOutput tag) {
+            super.saveAdditional(tag);
             if (exit != null) {
                 tag.store("exit_portal", BlockPos.CODEC, exit);
             }
@@ -124,8 +126,8 @@ public class KnabbelpoortBlock extends BaseEntityBlock implements Portal {
         }
 
         @Override
-        protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-            super.loadAdditional(tag, registries);
+        protected void loadAdditional(ValueInput tag) {
+            super.loadAdditional(tag);
             exit = (tag).read("exit_portal", BlockPos.CODEC).orElse(null);
             exact = tag.getBooleanOr("ExactTeleport", false);
             terug = tag.getBooleanOr("Terug", false);

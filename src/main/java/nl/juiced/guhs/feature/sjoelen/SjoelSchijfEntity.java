@@ -14,6 +14,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A sjoelschijf: a round wooden puck with a guh face on top. It has no physics of its own: the {@link SjoelGame} of Opoe
  * Njegschuif slides it over the bak ({@link SjoelBak}) and moves it every tick; the client glides along smoothly and
@@ -148,10 +150,10 @@ public class SjoelSchijfEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 }

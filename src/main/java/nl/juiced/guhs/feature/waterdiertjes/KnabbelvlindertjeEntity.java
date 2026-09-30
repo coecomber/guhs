@@ -27,6 +27,8 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * Het knabbelvlindertje (3.0, DESIGN_30 §6): a butterfly with a tiny guh head and big wings with knabbel dots and a
  * guh-head spot, in four colours ({@link Kleur}). By day it flutters from flower to flower (it lands on them and slowly
@@ -137,13 +139,13 @@ public class KnabbelvlindertjeEntity extends FladderDiertje {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putString("Kleur", kleur().id());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         for (Kleur k : Kleur.values()) {
             if (k.id().equals(tag.getStringOr("Kleur", ""))) {

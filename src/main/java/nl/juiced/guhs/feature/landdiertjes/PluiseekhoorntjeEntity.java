@@ -31,6 +31,8 @@ import nl.juiced.guhs.feature.piep.PiepInstelling;
 import nl.juiced.guhs.feature.piep.Schouder;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The pluiseekhoorntje: a little squirrel with an enormous fluffy curled tail, tufted round ears and a guh face. Lives in the
  * guhbloesembomen and the Vadswoud; it can scramble up tree trunks.
@@ -310,17 +312,17 @@ public class PluiseekhoorntjeEntity extends Landdiertje {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Wangen", wangen);
         tag.putLong("VondstOver", volgendeVondst < 0 ? -1 : Math.max(0, volgendeVondst - level().getGameTime()));
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         wangen = Math.min(WANGEN_MAX, tag.getIntOr("Wangen", 0));
-        long over = tag.contains("VondstOver") ? tag.getLongOr("VondstOver", 0L) : -1;
+        long over = tag.keySet().contains("VondstOver") ? tag.getLongOr("VondstOver", 0L) : -1;
         volgendeVondst = over < 0 ? -1 : level().getGameTime() + over;
     }
 

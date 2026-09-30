@@ -47,6 +47,8 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * De Vadswaker: a huge, blind Mika who guards the Stille Voorraadkelder (the Warden of the Guhmension). He sleeps under
  * the floor of the larder with his belly full of stolen knabbels; the knabbelschreeuwers wake him. He can't see a thing,
@@ -401,14 +403,14 @@ public class VadswakerEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Life", life);
         tag.putInt("Calm", calmTicks);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         life = tag.getIntOr("Life", 0);
         calmTicks = tag.getIntOr("Calm", 0);

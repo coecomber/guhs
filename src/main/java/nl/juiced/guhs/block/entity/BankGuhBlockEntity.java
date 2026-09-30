@@ -24,6 +24,8 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /** The Bank Guh: a sitting guh that keeps an infinite amount of items in its stomach. */
 public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, MenuProvider {
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.guh_sitting.idle");
@@ -54,9 +56,9 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
     // --- saving (the storage is also copied onto the item when the block is broken) ---
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
-        if (tag.contains("Stomach")) {
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
+        if (tag.keySet().contains("Stomach")) {
             BankContents.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("Stomach"))
                     .resultOrPartial(err -> { })
                     .ifPresent(storage::load);
@@ -64,8 +66,8 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         BankContents.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), storage.snapshot())
                 .ifSuccess(t -> tag.put("Stomach", t));
     }

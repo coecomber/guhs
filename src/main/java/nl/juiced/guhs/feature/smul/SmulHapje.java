@@ -25,6 +25,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A bit of food falling into the eetfestijn arena (only during a {@link SmulGame}): it drops slowly, lies on the floor
  * for a moment and then goes splat. The game catches it when its player walks into it. On the client it marks the spot
@@ -243,10 +245,10 @@ public class SmulHapje extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 }

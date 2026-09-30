@@ -28,6 +28,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * De Knabbelbal: a fluffy pink ball with guh ears, a little guh face and a kaasknabbel inside (you can see it through the
  * round window in its tummy). It rolls, bounces off walls, floats in water. Guhs nudge it around ({@link KnabbelbalSpel})
@@ -311,13 +313,13 @@ public class KnabbelbalEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        entityData.set(VOL, !tag.contains("Vol") || tag.getBooleanOr("Vol", false));
+    protected void readAdditionalSaveData(ValueInput tag) {
+        entityData.set(VOL, !tag.keySet().contains("Vol") || tag.getBooleanOr("Vol", false));
         duwtjes = tag.getIntOr("Duwtjes", 0);
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
         tag.putBoolean("Vol", isVol());
         tag.putInt("Duwtjes", duwtjes);
     }

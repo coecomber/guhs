@@ -49,6 +49,8 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * De kikkerguh: "een guh die een kikker is" (2.8: the real guh head with its round ears, glossy guh eyes, snoet and
  * blush on a frog's body, legs and throat pouch; tools/features/kaasmoeras.py), in three colours ({@link MotknabbelBlock.Kleur}: roze,
@@ -102,13 +104,13 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putString("Kleur", getKleur().getSerializedName());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         for (MotknabbelBlock.Kleur k : MotknabbelBlock.Kleur.values()) {
             if (k.getSerializedName().equals(tag.getStringOr("Kleur", ""))) {

@@ -56,6 +56,8 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * IJscoguh Tingeling (2.8, wereldleven): a guh on his ice-cream bike (a box full of kaasijsjes, a parasol, a bell). Like
  * a wandering trader he turns up near players in the Guhmensie (IJscoguhSpawner), also on the Knuffeldal plein, rings
@@ -371,7 +373,7 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
     // --- saving ---------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Blijft", blijft);
         if (doel != null) {
@@ -380,9 +382,9 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        if (tag.contains("Blijft")) {
+        if (tag.keySet().contains("Blijft")) {
             blijft = tag.getIntOr("Blijft", 0);
         }
         doel = (tag).read("Doel", BlockPos.CODEC).orElse(null);

@@ -30,6 +30,8 @@ import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The guh sled: rides along sled rails ({@link SleePath}), forwards or backwards, at 3 speeds. The rider controls it
  * with a little panel (right-click while riding). At the end of the line it stops and turns around.
@@ -423,7 +425,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     // --- saving ---------------------------------------------------------------------------------------------------
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
         if (piece != null) {
             tag.store("Piece", BlockPos.CODEC, piece.anchor());
             tag.putDouble("T", t);
@@ -435,10 +437,10 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        entityData.set(DATA_FORWARD, !tag.contains("Forward") || tag.getBooleanOr("Forward", false));
+    protected void readAdditionalSaveData(ValueInput tag) {
+        entityData.set(DATA_FORWARD, !tag.keySet().contains("Forward") || tag.getBooleanOr("Forward", false));
         entityData.set(DATA_RUNNING, tag.getBooleanOr("Running", false));
-        setSpeed(tag.contains("Speed") ? tag.getIntOr("Speed", 0) : 1);
+        setSpeed(tag.keySet().contains("Speed") ? tag.getIntOr("Speed", 0) : 1);
         setLocked(tag.getBooleanOr("Locked", false));
         pendingPiece = (tag).read("Piece", BlockPos.CODEC).orElse(null);
         t = tag.getDoubleOr("T", 0.0);

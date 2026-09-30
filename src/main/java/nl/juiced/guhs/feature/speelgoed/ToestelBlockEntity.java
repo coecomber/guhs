@@ -12,6 +12,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The swinging of a wip or schommel: an angle that swings like a pendulum, {@code hoek(t) = A(t) * sin(omega * t)},
  * where the amplitude A dies down slowly after the last push ({@code A(t) = amp * exp(-(t - sinds) / verval)}). The same
@@ -83,15 +85,15 @@ public class ToestelBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    protected void saveAdditional(ValueOutput tag) {
+        super.saveAdditional(tag);
         tag.putFloat("Amp", amp);
         tag.putLong("Sinds", sinds);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    protected void loadAdditional(ValueInput tag) {
+        super.loadAdditional(tag);
         amp = tag.getFloatOr("Amp", 0.0F);
         sinds = tag.getLongOr("Sinds", 0L);
     }

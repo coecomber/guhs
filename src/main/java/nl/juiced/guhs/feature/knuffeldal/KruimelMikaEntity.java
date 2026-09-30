@@ -53,6 +53,8 @@ import com.geckolib.util.GeckoLibUtil;
 
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A Kruimel-Mika (2.8, Grote Knusfeest): a small, sandy-coloured Mika with crumbs all over its face. It never fights:
  * it can't be hurt and it doesn't hurt anyone. It only steals.
@@ -434,7 +436,7 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
     // =================================================================================================================
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putString("Toestand", toestand.name());
         if (eigenaar != null) {
@@ -454,7 +456,7 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         try {
             toestand = Toestand.valueOf(tag.getStringOr("Toestand", ""));
@@ -463,7 +465,7 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
         }
         eigenaar = tag.read("Eigenaar", UUIDUtil.CODEC).isPresent() ? tag.read("Eigenaar", UUIDUtil.CODEC).orElseThrow() : null;
         taak = Feesttaak.byId(tag.getStringOr("Taak", ""));
-        buit = tag.contains("Buit") ? ItemStack.parse(registryAccess(), tag.getCompoundOrEmpty("Buit")).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
+        buit = tag.keySet().contains("Buit") ? ItemStack.parse(registryAccess(), tag.getCompoundOrEmpty("Buit")).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
         spoor.clear();
         for (Tag t : tag.getListOrEmpty("Spoor")) {
             spoor.add(net.minecraft.world.phys.Vec3.atBottomCenterOf(BlockPos.of(((LongTag) t).getAsLong())));

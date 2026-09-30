@@ -25,6 +25,8 @@ import com.geckolib.animatable.instance.AnimatableInstanceCache;
 import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A rubber duck. On a slide (a ride's duck): it floats still on its spot until the rider picks it up with the ring (or
  * the ride is over); never saved. As decoration (in the Knuffelbad's pools, "Deco"): it bobs on the water, drifts a
@@ -151,13 +153,13 @@ public class BadeendjeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
         setSoort(Eendsoort.byIndex(tag.getByteOr("Soort", (byte) 0)));
         setRit(null);
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
         tag.putByte("Soort", (byte) getSoort().ordinal());
         tag.putBoolean("Deco", true);
     }

@@ -15,6 +15,8 @@ import net.minecraft.world.level.Level;
 import nl.juiced.guhs.registry.ModItems;
 import org.joml.Vector3f;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * A kaasknabbel of the kaasregen (drawn like a thrown item): it falls straight down to the ground it was aimed at, lies
  * there for a while and is caught by walking into it (or eaten by a wild guh), see {@link Kaasregen}. It's never saved:
@@ -111,10 +113,10 @@ public class VallendeKnabbelEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
+    protected void readAdditionalSaveData(ValueInput tag) {
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
+    protected void addAdditionalSaveData(ValueOutput tag) {
     }
 }

@@ -25,6 +25,8 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.registry.ModBlockEntities;
 import nl.juiced.guhs.registry.ModEntities;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * The royal guh throne (Koninklijke guhtroon): a seat with a guh head for a backrest. The one in the guh castle is
  * "royal": when its Koningguh has been gone (tamed and taken home) for a few days, a new Koningguh takes the throne.
@@ -98,14 +100,14 @@ public class KoningsTroonBlock extends GuhFurnitureBlock implements EntityBlock 
         }
 
         @Override
-        protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-            super.loadAdditional(tag, registries);
-            lastKing = tag.contains("LastKing") ? tag.getLongOr("LastKing", 0L) : Long.MIN_VALUE;
+        protected void loadAdditional(ValueInput tag) {
+            super.loadAdditional(tag);
+            lastKing = tag.keySet().contains("LastKing") ? tag.getLongOr("LastKing", 0L) : Long.MIN_VALUE;
         }
 
         @Override
-        protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-            super.saveAdditional(tag, registries);
+        protected void saveAdditional(ValueOutput tag) {
+            super.saveAdditional(tag);
             tag.putLong("LastKing", lastKing);
         }
     }

@@ -23,6 +23,7 @@ import net.minecraft.world.level.Level;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.level.storage.ValueOutput;
 /**
  * A customer of the kappersshow (kapper_klant, no Guhdex page): a guh that comes in, sits down in the kappersstoel and
  * shows you the picture of the hairstyle it wants. It isn't anybody's: it can't be tamed, fed, dressed, hurt, pushed or
@@ -148,7 +149,7 @@ public class KapperKlantEntity extends GuhEntity {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("KapperKlant", true);
     }

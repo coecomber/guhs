@@ -25,6 +25,8 @@ import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.object.PlayState;
 import com.geckolib.animation.RawAnimation;
 
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.ValueInput;
 /**
  * Het lieveheersbeestje (3.0, DESIGN_30 §6): a ladybird whose black spots are little guh heads. By day it flies to growing
  * guhtuintjes (TuinBlock: a guh-bloempot or guh-moestuinbak with something growing) and flowers, and lands on them. On a
@@ -157,13 +159,13 @@ public class LieveheersbeestjeEntity extends FladderDiertje {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
+    public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putLong("HulpRust", hulpRust);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
+    public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         hulpRust = tag.getLongOr("HulpRust", 0L);
     }
