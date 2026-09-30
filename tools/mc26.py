@@ -769,6 +769,28 @@ def item_definitions():
 
 
 # ---------------------------------------------------------------------------------------------------------------------
+# Lang: block items (1.21.2+ BlockItems made without useBlockDescriptionPrefix() are called item.guhs.<name>)
+# ---------------------------------------------------------------------------------------------------------------------
+
+def lang_block_items():
+    """In 1.21.1 every BlockItem took its block's name; 26.1 only does that for items registered with
+    useBlockDescriptionPrefix(). Give every block that has an item an item.guhs.<name> with the same text, so the name is
+    right either way."""
+    items = {os.path.basename(p)[:-5] for p in glob.glob(os.path.join(A, "items", "*.json"))}
+    for path in glob.glob(os.path.join(A, "lang", "*.json")):
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+        out = {}
+        for k, v in data.items():
+            out[k] = v
+            if k.startswith("block.guhs.") and k.count(".") == 2:
+                name = k[len("block.guhs."):]
+                if name in items and f"item.guhs.{name}" not in data:
+                    out[f"item.guhs.{name}"] = v
+        w(path, out)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
 # Equipment assets (1.21.2): humanoid armour textures
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -857,6 +879,7 @@ def run():
     models()
     spawn_eggs()
     item_definitions()
+    lang_block_items()
     equipment()
     print(f"mc26: {len(changed)} files written for Minecraft 26.1.2")
 

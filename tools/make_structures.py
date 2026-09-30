@@ -18,7 +18,10 @@ import math
 import os
 import struct
 
-DATA_VERSION = 3955  # Minecraft 1.21.1
+# Minecraft 1.21.1, on purpose also for Guhs 1.1.0 (26.1.2): the templates are written in 1.21.1's formats (block names such
+# as minecraft:chain, sign texts and item components in block entities as 1.21.1 had them), and 26.1.2's DataFixer upgrades
+# every template with an older DataVersion when it loads it. Raise this only together with writing the 26.1 formats.
+DATA_VERSION = 3955
 OUT = os.path.join("src", "main", "resources", "data", "guhs", "structure")
 
 
