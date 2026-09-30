@@ -142,7 +142,7 @@ public class SharedGameTests {
 
         BlockPos pos = new BlockPos(1, 1, 3);
         helper.setBlock(pos, ModBlocks.BANK_GUH.get());
-        BankGuhBlockEntity bank = (BankGuhBlockEntity) helper.getBlockEntity(pos);
+        BankGuhBlockEntity bank = helper.getBlockEntity(pos, BankGuhBlockEntity.class);
         BankGuhMenu menu = new BankGuhMenu(1, player.getInventory(), bank);
         menu.setCarried(club.copy());
         bankAction(menu, BankGuhMenu.Action.DEPOSIT_CARRIED);

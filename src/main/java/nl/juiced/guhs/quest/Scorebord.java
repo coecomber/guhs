@@ -123,7 +123,10 @@ public final class Scorebord {
      * now and then (e.g. every few seconds from the minigame guh's tick); id tells boards in the same spot apart.
      */
     public static void show(ServerLevel level, Vec3 pos, String id, Component text) {
-        String json = Component.Serializer.toJson(text, level.registryAccess());
+        // 26.1: entity NBT keeps text components as NBT (no JSON string any more)
+        net.minecraft.nbt.Tag encoded = net.minecraft.network.chat.ComponentSerialization.CODEC
+                .encodeStart(level.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), text).getOrThrow();
+        String json = encoded.toString();
         String stamp = TAG + ":" + id + ":" + Integer.toHexString(json.hashCode());
         List<Display.TextDisplay> here = level.getEntitiesOfClass(Display.TextDisplay.class, new AABB(pos, pos).inflate(1.5),
                 d -> d.entityTags().contains(TAG) && d.entityTags().stream().anyMatch(t -> t.startsWith(TAG + ":" + id + ":")));
@@ -140,7 +143,7 @@ public final class Scorebord {
         }
         CompoundTag tag = new CompoundTag();
         tag.putString("id", "minecraft:text_display");
-        tag.putString("text", json);
+        tag.put("text", encoded);
         tag.putString("billboard", "vertical");
         tag.putString("alignment", "center");
         tag.putInt("line_width", 220);
@@ -149,8 +152,8 @@ public final class Scorebord {
         tags.add(net.minecraft.nbt.StringTag.valueOf(TAG));
         tags.add(net.minecraft.nbt.StringTag.valueOf(stamp));
         tag.put("Tags", tags);
-        Entity display = EntityType.loadEntityRecursive(tag, level, e -> {
-            e.moveTo(pos.x, pos.y, pos.z, 0, 0);
+        Entity display = EntityType.loadEntityRecursive(tag, level, net.minecraft.world.entity.EntitySpawnReason.LOAD, e -> {
+            e.snapTo(pos.x, pos.y, pos.z, 0, 0);
             return e;
         });
         if (display != null) {
@@ -163,10 +166,12 @@ public final class Scorebord {
         final Map<String, List<Entry>> boards = new HashMap<>();
 
         public static Data get(MinecraftServer server) {
-            return server.overworld().getDataStorage().computeIfAbsent(new SavedData.Factory<>(Data::new, Data::load, null), "guhs_scoreborden");
+            return nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), Data.TYPE, "guhs_scoreborden");
         }
 
-        @Override
+        static final net.minecraft.world.level.saveddata.SavedDataType<Data> TYPE = nl.juiced.guhs.storage.GuhSavedData.tagType("scoreborden",
+                Data::new, t -> Data.load(t, null), d -> d.save(new CompoundTag(), null));   // (the registries were never used)
+
         public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
             CompoundTag all = new CompoundTag();
             boards.forEach((board, list) -> {

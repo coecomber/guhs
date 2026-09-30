@@ -9,7 +9,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import nl.juiced.guhs.client.GuhsClient;
 import nl.juiced.guhs.network.ModNetworking;
 import nl.juiced.guhs.event.KeepOnDeathHandler;
-import nl.juiced.guhs.registry.ModArmorMaterials;
 import nl.juiced.guhs.registry.ModBlockEntities;
 import nl.juiced.guhs.registry.ModBlocks;
 import nl.juiced.guhs.registry.ModFeatures;
@@ -35,7 +34,7 @@ public class Guhs {
         ModFluids.FLUID_TYPES.register(modBus);
         ModFluids.FLUIDS.register(modBus);
         ModBlocks.BLOCKS.register(modBus);
-        ModArmorMaterials.ARMOR_MATERIALS.register(modBus);
+        // (26.1: armour materials are no registry any more - ModArmorMaterials.ARMOR_MATERIALS is gone)
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITY_TYPES.register(modBus);
         ModFeatures.FEATURES.register(modBus);
@@ -51,7 +50,9 @@ public class Guhs {
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);
         ModMenuTypes.MENUS.register(modBus);
         ModDataComponents.COMPONENTS.register(modBus);
+        nl.juiced.guhs.world.BouwCheck.TICKET_TYPES.register(modBus);   // 26.1: ticket types are a registry
         nl.juiced.guhs.feature.Features.register(modBus);   // the 2.4 minigames and rare structures
+        nl.juiced.guhs.gametest.GuhsGameTests.register(modBus);   // 26.1: our @GuhTest registrar (only when gametests are enabled)
 
         modBus.addListener(ModEntities::registerAttributes);
         modBus.addListener(ModPoiTypes::addHiveBlocks);
@@ -66,7 +67,7 @@ public class Guhs {
         NeoForge.EVENT_BUS.addListener(KeepOnDeathHandler::onDeath);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.PicknickMuziek::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(KeepOnDeathHandler::onRespawnCopy);
-        NeoForge.EVENT_BUS.addListener(ModVillagers::onTrades);
+        // (26.1: VillagerTradesEvent is gone; guh villager trades come from mixin/VillagerMixin, owner A)
         NeoForge.EVENT_BUS.addListener(ModVillagers::onVillagerTick);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.GuhQuests::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.GuhQuests::onBigMikaKilled);
@@ -80,7 +81,7 @@ public class Guhs {
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.VerstopGame::onServerStopped);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.KasteelPoort::onChat);
 
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
             GuhsClient.init(modBus);
         }
     }

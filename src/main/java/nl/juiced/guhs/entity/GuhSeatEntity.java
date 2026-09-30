@@ -23,6 +23,12 @@ public class GuhSeatEntity extends Entity {
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
     }
 
+    /** 26.1: hurtServer is abstract in Entity; a seat can't be hurt (1.21.1's Entity#hurt did nothing either). */
+    @Override
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, net.minecraft.world.damagesource.DamageSource source, float amount) {
+        return false;
+    }
+
     @Override
     public void tick() {
         super.tick();

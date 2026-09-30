@@ -78,7 +78,11 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
  * The report goes to the chat (short) and to &lt;world&gt;/bouwcheck/&lt;dimension&gt;.txt (long).
  */
 public final class BouwCheck {
-    private static final TicketType<ChunkPos> TICKET = TicketType.create("guhs_bouwcheck", Comparator.comparingLong(ChunkPos::toLong));
+    /** 26.1: ticket types are registry entries (was TicketType.create). Loads + ticks the chunks, no timeout, not saved. */
+    public static final net.neoforged.neoforge.registries.DeferredRegister<TicketType> TICKET_TYPES =
+            net.neoforged.neoforge.registries.DeferredRegister.create(net.minecraft.core.registries.Registries.TICKET_TYPE, nl.juiced.guhs.Guhs.MODID);
+    private static final net.neoforged.neoforge.registries.DeferredHolder<TicketType, TicketType> TICKET = TICKET_TYPES.register("bouwcheck",
+            () -> new TicketType(TicketType.NO_TIMEOUT, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION));
     private static final int PARALLEL = 3;
     private static final int TIMEOUT_TICKS = 20 * 180;
 
@@ -237,7 +241,7 @@ public final class BouwCheck {
                     Structure structure = entry.structure().value();
                     StructureStart start;
                     try {
-                        start = structure.generate(access, generator, generator.getBiomeSource(), random, templates, seed, c, 0, level,
+                        start = structure.generate(entry.structure(), level.dimension(), access, generator, generator.getBiomeSource(), random, templates, seed, c, 0, level,
                                 structure.biomes()::contains);
                     } catch (RuntimeException e) {
                         start = StructureStart.INVALID_START;
@@ -424,7 +428,7 @@ public final class BouwCheck {
             int x0 = b.minX() >> 4, x1 = b.maxX() >> 4, z0 = b.minZ() >> 4, z1 = b.maxZ() >> 4;
             ChunkPos centre = new ChunkPos((x0 + x1) >> 1, (z0 + z1) >> 1);
             int radius = Math.max(Math.max(centre.x() - x0, x1 - centre.x()), Math.max(centre.z() - z0, z1 - centre.z())) + 2;
-            chunks.addRegionTicket(TICKET, centre, radius, centre);
+            chunks.addTicketWithRadius(TICKET.get(), centre, radius);
             j.busy.add(new Object[]{s, centre, radius, 0});
         }
         long until = System.nanoTime() + 30_000_000L;
@@ -452,7 +456,7 @@ public final class BouwCheck {
                 r.timeout = true;
             }
             j.results.add(r);
-            chunks.removeRegionTicket(TICKET, (ChunkPos) b[1], (int) b[2], (ChunkPos) b[1]);
+            chunks.removeTicketWithRadius(TICKET.get(), (ChunkPos) b[1], (int) b[2]);
             j.busy.remove(i--);
             if (j.results.size() % 25 == 0) {
                 int done = j.results.size();

@@ -24,7 +24,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.Saddleable;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -75,7 +74,7 @@ import net.minecraft.world.level.storage.ValueInput;
  *     <li>Menu toggles: teleport-to-owner, gravity (heavy + squished + no jumping), sit.</li>
  * </ul>
  */
-public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
+public class GuhEntity extends TamableAnimal implements GeoEntity {
     public static final float WILD_HEALTH = 25f;
     public static final float TAMED_HEALTH = 1000f;
     /** Size range. At scale 1.0 a guh is ~1.45 blocks long (incl. paws, excl. tail). */
@@ -249,7 +248,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
             }
         }.setAlertOthers(GuhEntity.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false,
-                target -> getBehavior() == Behavior.AGGRESSIVE && isTame() && wantsToFight(target)
+                (target, serverLevel) -> getBehavior() == Behavior.AGGRESSIVE && isTame() && wantsToFight(target)
                         && distanceTo(target) <= getAttackRadius()));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new nl.juiced.guhs.feature.emotes.EmoteGoal(this)); // stands still while doing an emote
@@ -310,7 +309,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
                     setSecretNote(true); // shhh...
                 } else {
                     GuhVariant variant = GuhVariant.roll(this.random);
-                    if (variant == GuhVariant.GHOST && level.getLevel().isDay()) {
+                    if (variant == GuhVariant.GHOST && level.getLevel().isBrightOutside()) {
                         variant = GuhVariant.NORMAL; // ghosts only come out at night
                     }
                     if (level.getBiome(this.blockPosition()).is(GUH_PEAKS) && this.random.nextInt(ENDER_CHANCE) == 0) {
@@ -400,16 +399,27 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
         if (target instanceof GuhEntity || target instanceof QuestGuhEntity || target instanceof Player) {
             return false;
         }
-        return !(target instanceof TamableAnimal pet && pet.isTame() && pet.getOwnerUUID() != null
-                && pet.getOwnerUUID().equals(this.getOwnerUUID()));
+        return !(target instanceof TamableAnimal pet && pet.isTame() && Owners.uuid(pet) != null
+                && Owners.uuid(pet).equals(this.getOwnerUUID()));
+    }
+
+    /** 26.1: vanilla dropped getOwnerUUID (owners are an EntityReference now); kept for Guhs' many callers. */
+    @Nullable
+    public java.util.UUID getOwnerUUID() {
+        return Owners.uuid(this);
+    }
+
+    /** 26.1: vanilla dropped setOwnerUUID; kept for Guhs' callers (null = no owner). */
+    public void setOwnerUUID(@Nullable java.util.UUID owner) {
+        this.setOwnerReference(Owners.ref(owner));
     }
 
     /** Bigger guhs hit harder (3 damage at normal size). */
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+    public boolean doHurtTarget(ServerLevel serverLevel, net.minecraft.world.entity.Entity target) {
         float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * Mth.clamp(getGuhScale(), 0.5f, 4f)
                 * (getPersonality() == GuhPersonality.BRAVE ? 1.5f : 1f);
-        boolean hit = target.hurt(this.damageSources().mobAttack(this), damage);
+        boolean hit = target.hurtServer(serverLevel, this.damageSources().mobAttack(this), damage);
         if (hit) {
             this.triggerAnim("action", "happy");
         }
@@ -450,7 +460,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
 
     // --- armour (iron / diamond / netherite guh armour in the body slot) ---
 
-    @Override
+    /** 26.1: no vanilla isBodyArmorItem any more; guh armour goes on through mobInteract. */
     public boolean isBodyArmorItem(ItemStack stack) {
         return stack.getItem() instanceof nl.juiced.guhs.item.GuhArmorItem;
     }
@@ -465,17 +475,17 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     }
 
     // --- saddle (right-click a rideable guh with a vanilla saddle; riding needs one) ---
+    // 26.1: the Saddleable interface is gone (vanilla saddles are an equipment slot now); the guh keeps its own saddle flag
+    // and takes the saddle in mobInteract (1.21.1: SaddleItem called equipSaddle).
 
-    @Override
     public boolean isSaddleable() {
         return this.isAlive() && isRideable();
     }
 
-    @Override
     public void equipSaddle(ItemStack stack, @Nullable SoundSource soundSource) {
         this.entityData.set(DATA_SADDLED, true);
         if (soundSource != null) {
-            this.level().playSound(null, this, SoundEvents.HORSE_SADDLE, soundSource, 0.6f, 1.2f);
+            this.level().playSound(null, this, SoundEvents.HORSE_SADDLE.value(), soundSource, 0.6f, 1.2f);
         }
     }
 
@@ -485,18 +495,18 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     }
 
     @Override
-    protected void dropEquipment() {
+    protected void dropEquipment(ServerLevel serverLevel) {
         if (nl.juiced.guhs.feature.band.Band.isBandGuh(this)) {
             return;   // 3.0: a tamed guh takes its saddle, armour and backpack along to the wolkjes (band.Wolkjes: nothing is lost)
         }
-        super.dropEquipment();
+        super.dropEquipment(serverLevel);
         if (this.isSaddled()) {
-            this.spawnAtLocation(Items.SADDLE);
+            this.spawnAtLocation(serverLevel, Items.SADDLE);
         }
         // 2.9: clothes are unlocks now, so a guh never drops them (wild, structure or tamed); only what is IN its backpack falls out
         for (int i = 0; i < backpack.getContainerSize(); i++) {
             if (!backpack.getItem(i).isEmpty()) {
-                this.spawnAtLocation(backpack.removeItemNoUpdate(i));
+                this.spawnAtLocation(serverLevel, backpack.removeItemNoUpdate(i));
             }
         }
     }
@@ -602,7 +612,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
             var nav = new net.minecraft.world.entity.ai.navigation.FlyingPathNavigation(this, this.level());
             nav.setCanOpenDoors(false);
             nav.setCanFloat(true);
-            nav.setCanPassDoors(true);
+            // (26.1: passing doors is the node evaluator's default)
             this.navigation = nav;
         } else if (!isEnder() && flying && walkControl != null) {
             this.moveControl = walkControl;
@@ -718,6 +728,14 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
             }
             return InteractionResult.SUCCESS;
         }
+        if (stack.is(Items.SADDLE) && isSaddleable() && !isSaddled()) {
+            // 26.1: what vanilla's SaddleItem did for a Saddleable in 1.21.1
+            if (!this.level().isClientSide()) {
+                equipSaddle(stack.copyWithCount(1), SoundSource.NEUTRAL);
+                stack.consume(1, player);
+            }
+            return InteractionResult.SUCCESS;
+        }
         if (!isFood(stack)) {
             // Empty-hand interaction by the owner is handled through the tap/hold packets (GuhActionPayload).
             return super.mobInteract(player, hand);
@@ -824,8 +842,8 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
             int roll = this.random.nextInt(10);
             baby.setPersonality(roll < 4 ? getPersonality() : roll < 8 && otherParent instanceof GuhEntity other ? other.getPersonality()
                     : GuhPersonality.random(this.random));
-            if (this.isTame() && this.getOwnerUUID() != null) {
-                baby.setOwnerUUID(this.getOwnerUUID());
+            if (this.isTame() && this.getOwnerReference() != null) {
+                baby.setOwnerReference(this.getOwnerReference());
                 baby.setTame(true, true);
                 nl.juiced.guhs.feature.band.BandEvents.geboren(baby);   // 2.10: a tamed baby joins the band once it is in the world
             }
@@ -963,7 +981,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
         this.setDeltaMovement(Vec3.ZERO);
         this.launchCooldown = LAUNCH_COOLDOWN;
         server.sendParticles(net.minecraft.core.particles.ParticleTypes.POOF, getX(), getY() + getBbHeight() / 2, getZ(), 40, 0.8, 0.6, 0.8, 0.08);
-        server.sendParticles(new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(1f, 0.55f, 0.75f), 2f),
+        server.sendParticles(new net.minecraft.core.particles.DustParticleOptions(0xFF8CBF, 2f),
                 getX(), getY() + getBbHeight() / 2, getZ(), 30, 1, 0.6, 1, 0.1);
         this.playSound(SoundEvents.WIND_CHARGE_BURST.value(), 1.5f, 1.2f);
         this.playSound(ModSounds.GUH_HURT.get(), 1f, this.getVoicePitch() * 1.2f);
@@ -1210,7 +1228,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false; // it's a plushie
     }
 
@@ -1249,7 +1267,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
         }
         // wild ghost guhs fade away when the sun comes up
         if (!this.level().isClientSide() && getVariant() == GuhVariant.GHOST && !this.isTame() && this.tickCount % 100 == 0
-                && this.level().isDay() && !this.isPersistenceRequired()) {
+                && this.level().isBrightOutside() && !this.isPersistenceRequired()) {
             ((ServerLevel) this.level()).sendParticles(net.minecraft.core.particles.ParticleTypes.POOF, getX(), getY() + 0.4, getZ(), 12, 0.3, 0.3, 0.3, 0.02);
             this.discard();
             return;
@@ -1377,9 +1395,11 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
         }
         if (!backpack.isEmpty()) {
             // with slot numbers, so everything comes back in the same place
-            tag.put("Backpack", net.minecraft.world.ContainerHelper.saveAllItems(new CompoundTag(), backpack.getItems(), this.registryAccess()));
+            net.minecraft.world.ContainerHelper.saveAllItems(tag.child("Backpack"), backpack.getItems());   // same layout as 1.0.0
         }
-        emotes.save(tag);
+        CompoundTag emoteTag = new CompoundTag();
+        emotes.save(emoteTag);
+        tag.store(emoteTag);   // (NeoForge: copies the keys to the top level, like 1.0.0)
         if (getKnusVlaggen() != 0) {
             tag.putInt("KnusVlaggen", getKnusVlaggen());
         }
@@ -1422,7 +1442,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
         oldOutfit.forEach(this::wear);
         backpack.clearContent();
         if (tag.keySet().contains("Backpack")) {
-            net.minecraft.world.ContainerHelper.loadAllItems(tag.getCompoundOrEmpty("Backpack"), backpack.getItems(), this.registryAccess());
+            net.minecraft.world.ContainerHelper.loadAllItems(tag.childOrEmpty("Backpack"), backpack.getItems());
         }
         // guhs from before personalities existed (or placed by structures) get one now
         setPersonality(personality != null ? personality : GuhPersonality.random(this.random));
@@ -1436,7 +1456,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
                 // unknown value: keep the default
             }
         }
-        emotes.load(tag);
+        emotes.load(nl.juiced.guhs.storage.Nbt.toTag(tag));
         setKnusVlaggen(tag.getIntOr("KnusVlaggen", 0));
         setHaarkleur(tag.keySet().contains("Haarkleur") ? tag.getIntOr("Haarkleur", 0) : -1);
     }
@@ -1472,7 +1492,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
 
     private PlayState mainAnimation(AnimationTest<GuhEntity> state) {
         if (runningInWheel) {
-            state.getController().setAnimationSpeed(1.6);
+            state.setControllerSpeed(1.6f);
             return state.setAndContinue(WALK);
         }
         if (getLaunchState() == LAUNCH_CHARGING) {
