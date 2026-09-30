@@ -404,9 +404,9 @@ public class VerhaalWereldGameTests {
             helper.assertTrue(types.has(b) && types.getAsJsonObject(b).get("villager_type").getAsString().equals("guhs:guh"), "guh villagers in " + b);
         }
         var biomes = helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME);
-        helper.assertTrue(biomes.getHolderOrThrow(ResourceKey.create(Registries.BIOME, Guhs.id("guhpolder"))).is(nl.juiced.guhs.feature.guhpolder.GuhpolderWeer.GEEN_WEER)
-                && !biomes.getHolderOrThrow(VerhaalFeature.SNEEUWGUHTOENDRA).is(nl.juiced.guhs.feature.guhpolder.GuhpolderWeer.GEEN_WEER)
-                && biomes.getHolderOrThrow(VerhaalFeature.SNEEUWGUHTOENDRA).value().hasPrecipitation(), "the weather: polder calm, tundra snowy");
+        helper.assertTrue(biomes.getOrThrow(ResourceKey.create(Registries.BIOME, Guhs.id("guhpolder"))).is(nl.juiced.guhs.feature.guhpolder.GuhpolderWeer.GEEN_WEER)
+                && !biomes.getOrThrow(VerhaalFeature.SNEEUWGUHTOENDRA).is(nl.juiced.guhs.feature.guhpolder.GuhpolderWeer.GEEN_WEER)
+                && biomes.getOrThrow(VerhaalFeature.SNEEUWGUHTOENDRA).value().hasPrecipitation(), "the weather: polder calm, tundra snowy");
         helper.succeed();
     }
 }

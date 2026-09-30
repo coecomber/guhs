@@ -244,7 +244,7 @@ public class KnusGameTests {
         guh.setHaarkleur(0xFF88CC);
         guh.wear(GuhClothes.WINTER_SCARF);
         CompoundTag tag = new CompoundTag();
-        guh.saveWithoutId(tag);
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(guh, tag);
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         copy.load(tag);
         helper.assertTrue(copy.getHaarkleur() == 0xFF88CC && GuhHooks.heeft(copy, GuhHooks.GLANZEND) && GuhHooks.isBewoner(copy),

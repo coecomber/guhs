@@ -30,6 +30,7 @@ import nl.juiced.guhs.feature.knus.GuhHooks;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.component.TooltipDisplay;
 /**
  * Het speelgoed (2.10 "Lieve vadsjes van elkaar", slice speelgoed): four toys in guh style that guhs play with when a
  * player is near ({@link SpeelGoal}) and that the residents of a Guhhuisje sometimes use at random (the four
@@ -136,11 +137,11 @@ public final class SpeelgoedFeature {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, Item.TooltipContext context, java.util.List<net.minecraft.network.chat.Component> tooltip,
+        public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip,
                                     net.minecraft.world.item.TooltipFlag flag) {
             String key = getBlock().getDescriptionId();
-            tooltip.add(net.minecraft.network.chat.Component.translatable(key + ".lore").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
-            tooltip.add(net.minecraft.network.chat.Component.translatable(key + ".uitleg").withStyle(net.minecraft.ChatFormatting.GRAY));
+            tooltip.accept(net.minecraft.network.chat.Component.translatable(key + ".lore").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+            tooltip.accept(net.minecraft.network.chat.Component.translatable(key + ".uitleg").withStyle(net.minecraft.ChatFormatting.GRAY));
         }
     }
 

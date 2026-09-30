@@ -31,6 +31,8 @@ import nl.juiced.guhs.Guhs;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The blocks, items, entity and sounds of the surf beach of Guhwai'i (3.0, guhwaii-spellen): the schelpjesmunt (the coin
  * of surfing and hula), Lilo-guh's loaned surfplankje, the surf board entity, the Tiki decorations of Tikiguh's stall
@@ -103,8 +105,8 @@ public final class GuhwaiiSpellenBlocks {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
     }
 

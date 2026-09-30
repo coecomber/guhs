@@ -147,7 +147,7 @@ public final class DoolhofBlocks {
         }
 
         @Override
-        protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        protected boolean propagatesSkylightDown(BlockState state) {
             return true;
         }
     }

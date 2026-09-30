@@ -19,6 +19,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A fish of the Guhvis-wedstrijd: a trophy you keep, and you can eat it (raw!). The Guhpuffer puffs you up into the
  * air, the Mika-meerval tastes like Mika (bah) and the Gouden Guhvis makes you feel golden.
@@ -75,16 +77,16 @@ public class VisItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.guhs.vissen.fish_info", Component.translatable("gui.guhs.vissen.rarity." + soort.id()),
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.vissen.fish_info", Component.translatable("gui.guhs.vissen.rarity." + soort.id()),
                 soort.isBad() ? String.valueOf(soort.base) : "+" + soort.base).withStyle(soort.colour));
         CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (tag.contains("GuhvisVanger")) {
-            tooltip.add(Component.translatable("item.guhs.vissen.golden_caught", tag.getStringOr("GuhvisVanger", ""),
+            tooltip.accept(Component.translatable("item.guhs.vissen.golden_caught", tag.getStringOr("GuhvisVanger", ""),
                     VisSoort.kg(tag.getIntOr("GuhvisGram", 0)), tag.getIntOr("GuhvisNr", 0)).withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
         } else if (soort == VisSoort.GOUDEN_GUHVIS) {
-            tooltip.add(Component.translatable("item.guhs.vissen.golden_collect").withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
+            tooltip.accept(Component.translatable("item.guhs.vissen.golden_collect").withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
         }
     }
 }

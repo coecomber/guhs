@@ -19,6 +19,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * The invisible filler that makes a Guhhuisje really take up its whole guh head (2x2x2, 3x3x3 or 4x4x4). Remembers
  * where the controller ({@link HuisjeBlock}) is (DX/DZ: -3..3 stored +3, DY: 0..3 down), passes clicks on to it, and
@@ -66,8 +68,7 @@ public class HuisjeDeelBlock extends Block {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos,
-                                     BlockPos neighborPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         return canSurvive(state, level, pos) ? state : Blocks.AIR.defaultBlockState();
     }
 
@@ -110,7 +111,7 @@ public class HuisjeDeelBlock extends Block {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         BlockState c = level.getBlockState(controller(state, pos));
         return c.getBlock() instanceof HuisjeBlock ? new ItemStack(c.getBlock()) : ItemStack.EMPTY;
     }
@@ -121,7 +122,7 @@ public class HuisjeDeelBlock extends Block {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 }

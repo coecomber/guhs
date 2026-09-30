@@ -163,7 +163,7 @@ public final class SurfSpel {
         player.stopRiding();
         Vec3 p = bord.position();
         player.teleportTo(level, p.x, p.y + SurfPlankEntity.STAAN, p.z, spot.strandYaw(), 10);
-        player.startRiding(bord, true);
+        player.startRiding(bord, true, true);
         Minigames.startKeeping(player);
         if (GuhQuests.count(player, GuhwaiiSpellenBlocks.SURFPLANKJE_LEEN.get()) == 0) {
             player.getInventory().add(new ItemStack(GuhwaiiSpellenBlocks.SURFPLANKJE_LEEN.get()));

@@ -8,6 +8,7 @@ import net.neoforged.bus.api.IEventBus;
  */
 public final class VerhaalClient {
     public static void init(IEventBus modBus) {
+        VariantUiterlijk.hook();
     }
 
     private VerhaalClient() {

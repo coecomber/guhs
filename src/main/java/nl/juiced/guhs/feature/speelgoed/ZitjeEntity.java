@@ -75,7 +75,7 @@ public class ZitjeEntity extends Entity {
         z.snapTo(p.x, p.y, p.z, t.kijkYaw(level, toestel, state, z, level.getGameTime()), 0);
         level.addFreshEntity(z);
         rijder.stopRiding();
-        if (!rijder.startRiding(z, true)) {
+        if (!rijder.startRiding(z, true, true)) {
             z.discard();
             return null;
         }

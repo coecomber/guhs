@@ -22,6 +22,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * The invisible filler blocks of a glijbaantje, wip or schommel ({@link ToestelBlock}): remembers where the controller
  * is (DX/DZ: -1..1 stored +1, DY: 0..1 down), takes its piece of the toy's shape, passes clicks on and breaking any
@@ -95,8 +97,7 @@ public class SpeelDeelBlock extends Block {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos,
-                                     BlockPos neighborPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         return canSurvive(state, level, pos) ? state : Blocks.AIR.defaultBlockState();
     }
 
@@ -132,7 +133,7 @@ public class SpeelDeelBlock extends Block {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         BlockState c = level.getBlockState(controller(state, pos));
         return c.getBlock() instanceof ToestelBlock ? new ItemStack(c.getBlock()) : ItemStack.EMPTY;
     }
@@ -143,7 +144,7 @@ public class SpeelDeelBlock extends Block {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 }
