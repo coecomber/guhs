@@ -11,7 +11,7 @@ import com.geckolib.renderer.GeoEntityRenderer;
 import com.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer;
 
 /**
- * Client side of the gatenkaas caves: the Vadswaker (a big blind Mika: geo/entity/vadswaker.geo.json, with glowing
+ * Client side of the gatenkaas caves: the Vadswaker (a big blind Mika: geckolib/models/entity/vadswaker.geo.json, with glowing
  * cheese holes in its fur from vadswaker_glowmask.png). The blocks only need their models (render types in the JSON).
  */
 public final class GatenkaasClient {

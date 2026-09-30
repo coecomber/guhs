@@ -224,7 +224,7 @@ public final class GuheindeReis {
         if (GuheindeFeature.isGuheinde(level)) {
             return arrival(level);
         }
-        BlockPos spawn = level.getSharedSpawnPos();
+        BlockPos spawn = level.getRespawnData().pos();
         return Vec3.atBottomCenterOf(level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, spawn));
     }
 
@@ -289,7 +289,7 @@ public final class GuheindeReis {
         KEPT.put(player.getUUID(), kept);
         ListTag list = new ListTag();
         for (ItemStack stack : kept) {
-            list.add(stack.save(player.registryAccess()));
+            list.add(nl.juiced.guhs.storage.Nbt.saveStack(player.registryAccess(), stack));
         }
         GuhQuests.saved(player).put(BEWAARD, list);
     }
@@ -303,7 +303,12 @@ public final class GuheindeReis {
         if (kept == null && saved.contains(BEWAARD)) {
             kept = new ArrayList<>();
             for (Tag t : saved.getListOrEmpty(BEWAARD)) {
-                ItemStack.parse(player.registryAccess(), t).ifPresent(kept::add);
+                if (t instanceof CompoundTag c) {
+                    ItemStack stack = nl.juiced.guhs.storage.Nbt.parseStack(player.registryAccess(), c);
+                    if (!stack.isEmpty()) {
+                        kept.add(stack);
+                    }
+                }
             }
         }
         saved.remove(BEWAARD);

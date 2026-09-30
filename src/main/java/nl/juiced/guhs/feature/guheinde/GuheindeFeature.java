@@ -13,7 +13,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -36,7 +36,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -70,7 +69,6 @@ public final class GuheindeFeature {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Guhs.MODID);
-    public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS = DeferredRegister.create(Registries.ARMOR_MATERIAL, Guhs.MODID);
     public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(Registries.STRUCTURE_TYPE, Guhs.MODID);
 
     public static final ResourceKey<Level> GUHEINDE = ResourceKey.create(Registries.DIMENSION, Guhs.id("guheinde"));
@@ -135,19 +133,19 @@ public final class GuheindeFeature {
             nl.juiced.guhs.block.GuhWorkstationBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(2.5f).sound(SoundType.METAL).noOcclusion());
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KnabbelpoortBlock.Entity>> KNABBELPOORT_BE = BLOCK_ENTITY_TYPES.register("knabbelpoort",
-            () -> BlockEntityType.Builder.of(KnabbelpoortBlock.Entity::new, KNABBELPOORT.get()).build(null));
+            () -> new BlockEntityType<>(KnabbelpoortBlock.Entity::new, KNABBELPOORT.get()));
 
     // --- the Knabbelkroon: a helmet with the protection of vahoege vads ------------------------------------------------
-    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> KROON_MATERIAL = ARMOR_MATERIALS.register("knabbelkroon", () -> {
-        java.util.EnumMap<ArmorItem.Type, Integer> defense = new java.util.EnumMap<>(ArmorItem.Type.class);
-        defense.put(ArmorItem.Type.HELMET, 4);
-        defense.put(ArmorItem.Type.CHESTPLATE, 9);
-        defense.put(ArmorItem.Type.LEGGINGS, 7);
-        defense.put(ArmorItem.Type.BOOTS, 4);
-        defense.put(ArmorItem.Type.BODY, 11);
-        return new ArmorMaterial(defense, 25, SoundEvents.ARMOR_EQUIP_GOLD, () -> Ingredient.of(ModItems.VAHOEGE_VADS_INGOT.get()),
-                List.of(new ArmorMaterial.Layer(Guhs.id("knabbelkroon"))), 3.0f, 0.1f);
-    });
+    /** 1.1.0: the crown on your head is the equipment asset guhs:knabbelkroon (assets/guhs/equipment/knabbelkroon.json). */
+    public static final ResourceKey<net.minecraft.world.item.equipment.EquipmentAsset> KROON_ASSET =
+            ResourceKey.create(net.minecraft.world.item.equipment.EquipmentAssets.ROOT_ID, Guhs.id("knabbelkroon"));
+    /** 1.1.0: the Guhvleugels on your back (equipment asset guhs:guhvleugels with a "wings" layer). */
+    public static final ResourceKey<net.minecraft.world.item.equipment.EquipmentAsset> VLEUGELS_ASSET =
+            ResourceKey.create(net.minecraft.world.item.equipment.EquipmentAssets.ROOT_ID, Guhs.id("guhvleugels"));
+    /** Same numbers as 1.0.0's armour material (helmet 4, toughness 3, knockback resistance 0.1, durability x45, enchantability 25). */
+    public static final ArmorMaterial KROON_MATERIAL = new ArmorMaterial(45, java.util.Map.of(
+            ArmorType.HELMET, 4, ArmorType.CHESTPLATE, 9, ArmorType.LEGGINGS, 7, ArmorType.BOOTS, 4, ArmorType.BODY, 11),
+            25, SoundEvents.ARMOR_EQUIP_GOLD, 3.0f, 0.1f, nl.juiced.guhs.registry.ModArmorMaterials.VADS_REPAIR, KROON_ASSET);
 
     // --- items -----------------------------------------------------------------------------------------------------------
     public static final DeferredItem<Item> MIKA_TRAAN = ITEMS.registerSimpleItem("mika_traan", () -> new Item.Properties().rarity(Rarity.UNCOMMON));
@@ -156,10 +154,15 @@ public final class GuheindeFeature {
     public static final DeferredItem<KnabbelkristalItem> KNABBELKRISTAL = ITEMS.registerItem("knabbelkristal", KnabbelkristalItem::new,
             () -> new Item.Properties().rarity(Rarity.RARE));
     public static final DeferredItem<KnabbelkroonItem> KNABBELKROON = ITEMS.registerItem("knabbelkroon",
-            p -> new KnabbelkroonItem(KROON_MATERIAL, p), new Item.Properties().rarity(Rarity.EPIC).fireResistant()
-                    .durability(ArmorItem.Type.HELMET.getDurability(45)));
+            KnabbelkroonItem::new, () -> new Item.Properties().rarity(Rarity.EPIC).fireResistant()
+                    .humanoidArmor(KROON_MATERIAL, ArmorType.HELMET).repairable(ModItems.VAHOEGE_VADS_INGOT.get()));
     public static final DeferredItem<GuhvleugelsItem> GUHVLEUGELS = ITEMS.registerItem("guhvleugels", GuhvleugelsItem::new,
-            () -> new Item.Properties().durability(540).rarity(Rarity.EPIC));
+            () -> new Item.Properties().durability(540).rarity(Rarity.EPIC)
+                    .component(net.minecraft.core.component.DataComponents.GLIDER, net.minecraft.util.Unit.INSTANCE)
+                    .component(net.minecraft.core.component.DataComponents.EQUIPPABLE,
+                            net.minecraft.world.item.equipment.Equippable.builder(net.minecraft.world.entity.EquipmentSlot.CHEST)
+                                    .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(VLEUGELS_ASSET).setDamageOnHurt(false).build())
+                    .repairable(ModItems.MIKA_VET.get()));
 
     static {
         for (DeferredBlock<?> block : List.of(KAASKORST, KAASKORST_STENEN, GEBARSTEN_KAASKORST_STENEN, KAASKORST_STENEN_TRAP, KAASKORST_STENEN_PLAAT,
@@ -173,7 +176,7 @@ public final class GuheindeFeature {
 
     // --- entities ----------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<OpperMikaEntity>> OPPER_MIKA = ENTITY_TYPES.register("opper_mika",
-            () -> EntityType.Builder.of(OpperMikaEntity::new, MobCategory.MONSTER).sized(0.9f, 0.8f).eyeHeight(0.55f).fireImmune()
+            () -> EntityType.Builder.of(OpperMikaEntity::new, MobCategory.MONSTER).sized(0.9f, 0.8f).eyeHeight(0.55f).fireImmune().notInPeaceful()
                     .clientTrackingRange(16).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("opper_mika"))));
     public static final DeferredHolder<EntityType<?>, EntityType<HongerigeEnderguhEntity>> HONGERIGE_ENDERGUH = ENTITY_TYPES.register("hongerige_enderguh",
             () -> EntityType.Builder.of(HongerigeEnderguhEntity::new, MobCategory.MISC).sized(1.1f, 0.9f).eyeHeight(0.55f).fireImmune()
@@ -182,7 +185,7 @@ public final class GuheindeFeature {
             () -> EntityType.Builder.<KnabbelkristalEntity>of(KnabbelkristalEntity::new, MobCategory.MISC).sized(2f, 2f).fireImmune()
                     .clientTrackingRange(16).updateInterval(Integer.MAX_VALUE).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("knabbelkristal"))));
     public static final DeferredHolder<EntityType<?>, EntityType<MikaLarfjeEntity>> MIKA_LARFJE = ENTITY_TYPES.register("mika_larfje",
-            () -> EntityType.Builder.of(MikaLarfjeEntity::new, MobCategory.MONSTER).sized(0.4f, 0.35f).eyeHeight(0.22f)
+            () -> EntityType.Builder.of(MikaLarfjeEntity::new, MobCategory.MONSTER).sized(0.4f, 0.35f).eyeHeight(0.22f).notInPeaceful()
                     .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("mika_larfje"))));
     public static final DeferredHolder<EntityType<?>, EntityType<OogVanVadsigEntity>> OOG_ENTITY = ENTITY_TYPES.register("oog_van_vadsig",
             () -> EntityType.Builder.<OogVanVadsigEntity>of(OogVanVadsigEntity::new, MobCategory.MISC).sized(0.25f, 0.25f)
@@ -191,8 +194,7 @@ public final class GuheindeFeature {
             () -> EntityType.Builder.<MikaVetbalEntity>of(MikaVetbalEntity::new, MobCategory.MISC).sized(0.5f, 0.5f)
                     .clientTrackingRange(8).updateInterval(2).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("mika_vetbal"))));
 
-    public static final DeferredItem<DeferredSpawnEggItem> MIKA_LARFJE_SPAWN_EGG = ITEMS.registerItem("mika_larfje_spawn_egg",
-            p -> new DeferredSpawnEggItem(MIKA_LARFJE, 0xE8C25A, 0x8C1428, p));
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> MIKA_LARFJE_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "mika_larfje_spawn_egg", MIKA_LARFJE);   // 1.0.0 colours 0xE8C25A / 0x8C1428 (26.1: no tint)
 
     // --- the structure type of the outer islands (the Mika-vestingen) -------------------------------------------------
     public static final DeferredHolder<StructureType<?>, StructureType<GuheindeEilandStructure>> EILAND_STRUCTURE = STRUCTURE_TYPES.register("guheinde_eiland",
@@ -203,7 +205,6 @@ public final class GuheindeFeature {
         ITEMS.register(modBus);
         ENTITY_TYPES.register(modBus);
         BLOCK_ENTITY_TYPES.register(modBus);
-        ARMOR_MATERIALS.register(modBus);
         STRUCTURE_TYPES.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent event) -> {
             event.put(OPPER_MIKA.get(), OpperMikaEntity.createAttributes().build());

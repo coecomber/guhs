@@ -29,6 +29,7 @@ import org.joml.Vector3f;
 
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 /**
  * A Knabbelpoort (the end gateway of the Guheinde): one appears around the island after every win over Opper-Mika. It
  * throws you far out to the outer islands (where the Mika-vestingen are); there a poort back is made. The block entity
@@ -62,7 +63,7 @@ public class KnabbelpoortBlock extends BaseEntityBlock implements Portal {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, net.minecraft.world.entity.Entity entity) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, net.minecraft.world.entity.Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
         if (entity.canUsePortal(false)) {
             entity.setAsInsidePortal(this, pos);
         }
@@ -77,13 +78,13 @@ public class KnabbelpoortBlock extends BaseEntityBlock implements Portal {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         for (int i = 0; i < 2; i++) {
-            level.addParticle(new DustParticleOptions(new Vector3f(1f, 0.5f, 0.8f), 1.5f), pos.getX() + random.nextDouble(),
+            level.addParticle(new DustParticleOptions(0xFF80CC /* 1, 0.5, 0.8 */, 1.5f), pos.getX() + random.nextDouble(),
                     pos.getY() + random.nextDouble(), pos.getZ() + random.nextDouble(), 0, 0, 0);
         }
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return ItemStack.EMPTY;
     }
 

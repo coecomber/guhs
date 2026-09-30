@@ -23,6 +23,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 /**
  * The Guheinde portal: in the Knabbelkelder it takes you to the Guheinde, in the Guheinde (the terugportaal on the
  * Knabbelberg, only open after Opper-Mika is beaten) back to the Guhmension. See {@link GuheindeReis}.
@@ -51,7 +52,7 @@ public class GuheindePortaalBlock extends Block implements Portal {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
         if (entity.canUsePortal(false) && Shapes.joinIsNotEmpty(Shapes.create(entity.getBoundingBox().move(-pos.getX(), -pos.getY(), -pos.getZ())),
                 state.getShape(level, pos), BooleanOp.AND)) {
             entity.setAsInsidePortal(this, pos);
@@ -66,12 +67,12 @@ public class GuheindePortaalBlock extends Block implements Portal {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        level.addParticle(new DustParticleOptions(new Vector3f(1f, 0.55f + random.nextFloat() * 0.3f, 0.75f), 1.2f),
+        level.addParticle(new DustParticleOptions(net.minecraft.util.ARGB.colorFromFloat(1f, 1f, 0.55f + random.nextFloat() * 0.3f, 0.75f), 1.2f),
                 pos.getX() + random.nextDouble(), pos.getY() + 0.8, pos.getZ() + random.nextDouble(), 0, 0.02, 0);
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return ItemStack.EMPTY;
     }
 

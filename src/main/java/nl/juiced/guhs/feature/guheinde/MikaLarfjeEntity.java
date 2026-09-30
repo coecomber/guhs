@@ -1,5 +1,6 @@
 package nl.juiced.guhs.feature.guheinde;
 
+import net.minecraft.server.level.ServerLevel;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
@@ -53,7 +54,7 @@ public class MikaLarfjeEntity extends MikaEntity {
     }
 
     @Override
-    public boolean doHurtTarget(Entity target) {
+    public boolean doHurtTarget(ServerLevel serverLevel, Entity target) {
         this.swing(this.getUsedItemHand());
         if (target instanceof ServerPlayer player) {
             for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
@@ -78,7 +79,7 @@ public class MikaLarfjeEntity extends MikaEntity {
     protected void dropCustomDeathLoot(net.minecraft.server.level.ServerLevel level, net.minecraft.world.damagesource.DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
         if (gestolen > 0) {
-            this.spawnAtLocation(new ItemStack(ModItems.KAAS_KNABBELS.get(), gestolen));
+            this.spawnAtLocation(level, new ItemStack(ModItems.KAAS_KNABBELS.get(), gestolen));
         }
     }
 

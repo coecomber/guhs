@@ -27,6 +27,8 @@ import net.minecraft.world.phys.HitResult;
 import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * Het Oog van Vadsig (guhkristal + kaasknabbel + Mika-traan): throw it in the Guhmension and it flies towards the nearest
  * Knabbelkelder, like an eye of ender (and sometimes goes "njeg" and breaks). Put twelve in the knabbelportaalframes
@@ -105,7 +107,7 @@ public class OogVanVadsigItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.oog_van_vadsig.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.oog_van_vadsig.lore").withStyle(ChatFormatting.GRAY));
     }
 }

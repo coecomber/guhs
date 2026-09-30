@@ -15,6 +15,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A knabbelkristal to put on a knabbelsokkel: four of them on the four sokkels around the terugportaal on the
  * Knabbelberg call Opper-Mika back for another fight (see {@link GuheindeGevecht#tryRespawn}).
@@ -59,7 +61,7 @@ public class KnabbelkristalItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.knabbelkristal.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.knabbelkristal.lore").withStyle(ChatFormatting.GRAY));
     }
 }
