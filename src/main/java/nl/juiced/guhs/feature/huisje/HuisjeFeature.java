@@ -50,21 +50,21 @@ public final class HuisjeFeature {
                 .pushReaction(PushReaction.BLOCK).ignitedByLava();
     }
 
-    public static final DeferredBlock<HuisjeBlock> KLEIN = BLOCKS.register("guhhuisje_klein", () -> new HuisjeBlock(HuisjeMaat.KLEIN, props()));
-    public static final DeferredBlock<HuisjeBlock> MEDIUM = BLOCKS.register("guhhuisje_medium", () -> new HuisjeBlock(HuisjeMaat.MEDIUM, props()));
-    public static final DeferredBlock<HuisjeBlock> GROOT = BLOCKS.register("guhhuisje_groot", () -> new HuisjeBlock(HuisjeMaat.GROOT, props()));
+    public static final DeferredBlock<HuisjeBlock> KLEIN = BLOCKS.registerBlock("guhhuisje_klein", p -> new HuisjeBlock(HuisjeMaat.KLEIN, p), () -> props());
+    public static final DeferredBlock<HuisjeBlock> MEDIUM = BLOCKS.registerBlock("guhhuisje_medium", p -> new HuisjeBlock(HuisjeMaat.MEDIUM, p), () -> props());
+    public static final DeferredBlock<HuisjeBlock> GROOT = BLOCKS.registerBlock("guhhuisje_groot", p -> new HuisjeBlock(HuisjeMaat.GROOT, p), () -> props());
     /** The invisible parts of every huisje (no item, no drops: breaking it breaks the huisje). */
     public static final DeferredBlock<HuisjeDeelBlock> DEEL = BLOCKS.registerBlock("guhhuisje_deel", HuisjeDeelBlock::new,
             () -> props().noLootTable());
 
     static {
-        ITEMS.registerItem("guhhuisje_klein", p -> new BlockItem(KLEIN.get(), p), () -> new Item.Properties());
-        ITEMS.registerItem("guhhuisje_medium", p -> new BlockItem(MEDIUM.get(), p), () -> new Item.Properties());
-        ITEMS.registerItem("guhhuisje_groot", p -> new BlockItem(GROOT.get(), p), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+        ITEMS.registerItem("guhhuisje_klein", p -> new BlockItem(KLEIN.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
+        ITEMS.registerItem("guhhuisje_medium", p -> new BlockItem(MEDIUM.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
+        ITEMS.registerItem("guhhuisje_groot", p -> new BlockItem(GROOT.get(), p), () -> new Item.Properties().rarity(Rarity.UNCOMMON).useBlockDescriptionPrefix());
     }
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HuisjeBlockEntity>> HUISJE_BE = BLOCK_ENTITIES.register("guhhuisje",
-            () -> BlockEntityType.Builder.of(HuisjeBlockEntity::new, KLEIN.get(), MEDIUM.get(), GROOT.get()).build(null));
+            () -> new BlockEntityType<>(HuisjeBlockEntity::new, KLEIN.get(), MEDIUM.get(), GROOT.get()));
 
     public static final DeferredHolder<PoiType, PoiType> POI = POI_TYPES.register("guhhuisje", () -> new PoiType(ImmutableSet.<net.minecraft.world.level.block.state.BlockState>builder()
             .addAll(KLEIN.get().getStateDefinition().getPossibleStates()).addAll(MEDIUM.get().getStateDefinition().getPossibleStates())
@@ -103,7 +103,7 @@ public final class HuisjeFeature {
                     Huisje h = Huisjes.thuisVan(mob);
                     if (h != null) {
                         Vec3 m = h.midden();
-                        mob.restrictTo(net.minecraft.core.BlockPos.containing(m), Huisjes.BEREIK);
+                        mob.setHomeTo(net.minecraft.core.BlockPos.containing(m), Huisjes.BEREIK);
                     }
                 }
             }

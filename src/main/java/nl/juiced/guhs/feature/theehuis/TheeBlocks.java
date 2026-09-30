@@ -171,7 +171,8 @@ public final class TheeBlocks {
     /** Makes tea: one ingredient in, two cups out (the kind goes into the theesoorten collection). */
     public static void zet(ServerPlayer player, ServerLevel level, BlockPos pos, ItemStack stack, Soort soort) {
         if (!player.getAbilities().instabuild) {
-            ItemStack rest = stack.getCraftingRemainingItem();
+            net.minecraft.world.item.ItemStackTemplate remainder = stack.getCraftingRemainder();
+            ItemStack rest = remainder == null ? ItemStack.EMPTY : remainder.create();
             stack.shrink(1);
             if (!rest.isEmpty()) {
                 Minigames.give(player, rest);          // (the empty bottle of the kaasmelk)
@@ -193,23 +194,14 @@ public final class TheeBlocks {
         public final Soort soort;
 
         public Thee(Soort soort, Properties properties) {
-            super(properties.food(new FoodProperties.Builder().nutrition(soort == Soort.KNABBELTHEE ? 3 : 2).saturationModifier(0.5f).alwaysEdible().build()));
+            super(properties.food(new FoodProperties.Builder().nutrition(soort == Soort.KNABBELTHEE ? 3 : 2).saturationModifier(0.5f).alwaysEdible().build(),
+                    net.minecraft.world.item.component.Consumables.defaultDrink().build()));   // (1.1.0: drinking sound + animation)
             this.soort = soort;
         }
 
         @Override
         public ItemUseAnimation getUseAnimation(ItemStack stack) {
             return ItemUseAnimation.DRINK;
-        }
-
-        @Override
-        public SoundEvent getDrinkingSound() {
-            return SoundEvents.GENERIC_DRINK;
-        }
-
-        @Override
-        public SoundEvent getEatingSound() {
-            return SoundEvents.GENERIC_DRINK;
         }
 
         @Override
@@ -275,7 +267,7 @@ public final class TheeBlocks {
         }
 
         @Override
-        public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+        public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity entity, int amplifier) {
             if (entity.getHealth() < entity.getMaxHealth()) {
                 entity.heal(1.0f + amplifier);
             }

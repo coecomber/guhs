@@ -300,7 +300,7 @@ public final class VisWedstrijd {
         if (niveau != Niveau.MEDIUM) {
             player.sendSystemMessage(Component.translatable("gui.guhs.klassiekers.vissen.niveau", Klassiekers.naam(niveau)).withStyle(ChatFormatting.AQUA));
         }
-        ServerBossEvent bar = new ServerBossEvent(Component.translatable("entity.guhs.guh_npc.visguh"), BossEvent.BossBarColor.PINK,
+        ServerBossEvent bar = new ServerBossEvent(net.minecraft.util.Mth.createInsecureUUID(player.getRandom()), Component.translatable("entity.guhs.guh_npc.visguh"), BossEvent.BossBarColor.PINK,
                 BossEvent.BossBarOverlay.NOTCHED_10);
         bar.addPlayer(player);
         bars.put(player.getUUID(), bar);
@@ -785,7 +785,7 @@ public final class VisWedstrijd {
         }
         ItemStack rod = new ItemStack(VissenFeature.GUHVIS_HENGEL.get());
         Inventory inv = player.getInventory();
-        if (inv.getSelected().isEmpty()) {
+        if (inv.getSelectedItem().isEmpty()) {
             inv.setItem(inv.getSelectedSlot(), rod);
             return true;
         }
@@ -794,14 +794,14 @@ public final class VisWedstrijd {
                 inv.setItem(i, rod);
                 inv.setSelectedSlot(i);
                 if (player.connection != null) {
-                    player.connection.send(new net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket(i));
+                    player.connection.send(new net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket(i));
                 }
                 return true;
             }
         }
         int free = inv.getFreeSlot();                                    // hotbar full: your own item moves to the backpack
         if (free >= 0) {
-            inv.setItem(free, inv.getSelected());
+            inv.setItem(free, inv.getSelectedItem());
             inv.setItem(inv.getSelectedSlot(), rod);
             return true;
         }

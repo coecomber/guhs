@@ -180,7 +180,7 @@ public final class GuhwaiiSpellenFeature {
         CompoundTag d = data(player);
         ListTag list = d.getListOrEmpty("Rijen");
         List<String> rijen = new ArrayList<>();
-        list.forEach(t -> rijen.add(t.getAsString()));
+        list.forEach(t -> rijen.add(t.asString().orElse("")));
         if (!rijen.contains(rij)) {
             list.add(StringTag.valueOf(rij));
             d.put("Rijen", list);

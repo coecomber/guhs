@@ -88,11 +88,12 @@ public class HuisjeDeelBlock extends Block {
         return super.playerWillDestroy(level, pos, state, player);
     }
 
+    /** 1.1.0 (onRemove is gone): a part is gone, so the huisje goes (only for changes with neighbour updates). */
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        super.onRemove(state, level, pos, newState, movedByPiston);
+    protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
         BlockPos c = controller(state, pos);
-        if (!newState.is(this) && !level.isClientSide() && level.getBlockState(c).getBlock() instanceof HuisjeBlock) {
+        if (!level.getBlockState(pos).is(this) && level.getBlockState(c).getBlock() instanceof HuisjeBlock) {
             level.destroyBlock(c, true);
         }
     }

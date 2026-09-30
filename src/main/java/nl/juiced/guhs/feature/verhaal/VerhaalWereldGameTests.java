@@ -122,7 +122,7 @@ public class VerhaalWereldGameTests {
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
         BiomeSource with = BiomeSource.CODEC.parse(ops, source).getOrThrow();
         MultiNoiseBiomeSource before = (MultiNoiseBiomeSource) BiomeSource.CODEC.parse(ops, without).getOrThrow();
-        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).getValue(Guhs.id("guhmension"));
         Map<String, Integer> now = new HashMap<>(), then = new HashMap<>();
         final int step = 32, half = 6400, n = 2 * half / step;
         int samples = 0, anders = 0, zeeen = 0, toendras = 0, groteToendras = 0, breedsteToendra = 0;
@@ -251,7 +251,7 @@ public class VerhaalWereldGameTests {
     public static void verhaalWereldEenPerRegio(GameTestHelper helper) {
         var access = helper.getLevel().registryAccess();
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
-        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).getValue(Guhs.id("guhmension"));
         BiomeSource with = BiomeSource.CODEC.parse(ops, json(helper, "dimension/guhmension.json").getAsJsonObject("generator")
                 .getAsJsonObject("biome_source")).getOrThrow();
         // the placements load and the structures are of our type
@@ -259,9 +259,9 @@ public class VerhaalWereldGameTests {
         var structures = access.lookupOrThrow(Registries.STRUCTURE);
         Map<String, RegioPlek> plekken = new HashMap<>();
         for (String name : List.of("nomguh", "guhwaii_capsule", "guhwaii_ohana", "guhwaii_surfstrand", "kloon_eiland")) {
-            var set = sets.get(Guhs.id(name));
+            var set = sets.getValue(Guhs.id(name));
             helper.assertTrue(set != null && set.placement() instanceof RegioPiekPlacement, name + ": a regio_piek placement");
-            helper.assertTrue(structures.get(Guhs.id(name)) instanceof RegioJigsawStructure, name + ": a regio_jigsaw structure");
+            helper.assertTrue(structures.getValue(Guhs.id(name)) instanceof RegioJigsawStructure, name + ": a regio_jigsaw structure");
             plekken.put(name, ((RegioPiekPlacement) set.placement()).plek());
         }
         StringBuilder report = new StringBuilder();

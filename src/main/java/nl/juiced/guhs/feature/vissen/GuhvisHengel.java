@@ -97,11 +97,6 @@ public class GuhvisHengel extends FishingRodItem {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public boolean isFoil(ItemStack stack) {
         return true;
     }

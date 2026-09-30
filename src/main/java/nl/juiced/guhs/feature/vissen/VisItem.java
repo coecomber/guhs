@@ -13,6 +13,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -29,7 +32,7 @@ public class VisItem extends Item {
     public final VisSoort soort;
 
     public VisItem(VisSoort soort, Properties properties) {
-        super(properties.rarity(soort.rarity).food(food(soort)));
+        super(properties.rarity(soort.rarity).food(food(soort), consumable(soort)));
         this.soort = soort;
     }
 
@@ -39,12 +42,21 @@ public class VisItem extends Item {
             case VADSBAARS -> new FoodProperties.Builder().nutrition(6).saturationModifier(0.5f).build();
             case GUHPUFFER -> new FoodProperties.Builder().nutrition(2).saturationModifier(0.2f).alwaysEdible().build();
             case NJEGFOREL -> new FoodProperties.Builder().nutrition(5).saturationModifier(0.8f).build();
-            case MIKA_MEERVAL -> new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f)
-                    .effect(() -> new MobEffectInstance(MobEffects.NAUSEA, 20 * 8), 1f)
-                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 20 * 15), 1f).build();
-            case GOUDEN_GUHVIS -> new FoodProperties.Builder().nutrition(8).saturationModifier(1.2f).alwaysEdible()
-                    .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 1), 1f)
-                    .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 20 * 120, 1), 1f).build();
+            case MIKA_MEERVAL -> new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).build();
+            case GOUDEN_GUHVIS -> new FoodProperties.Builder().nutrition(8).saturationModifier(1.2f).alwaysEdible().build();
+        };
+    }
+
+    /** 1.1.0: the effects of eating moved from FoodProperties to the Consumable (same effects, chance 1). */
+    private static Consumable consumable(VisSoort soort) {
+        return switch (soort) {
+            case MIKA_MEERVAL -> Consumables.defaultFood()
+                    .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.NAUSEA, 20 * 8), 1f))
+                    .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 15), 1f)).build();
+            case GOUDEN_GUHVIS -> Consumables.defaultFood()
+                    .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 1), 1f))
+                    .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.ABSORPTION, 20 * 120, 1), 1f)).build();
+            default -> Consumables.DEFAULT_FOOD;
         };
     }
 

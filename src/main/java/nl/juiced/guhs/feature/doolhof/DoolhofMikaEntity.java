@@ -87,8 +87,8 @@ public class DoolhofMikaEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         DoolhofGame game = DoolhofGame.byNpc(spel);
         if (game == null || !game.bezig()) {
             if (++zonderSpel > 40) {
@@ -160,22 +160,22 @@ public class DoolhofMikaEntity extends PathfinderMob implements GeoEntity {
     // --- never hurt, never hurting -------------------------------------------------------------------------------------
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(ServerLevel serverLevel, DamageSource source) {
         return !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (!level().isClientSide() && source.getEntity() instanceof ServerPlayer player && isInvulnerableTo(source)) {
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
+        if (source.getEntity() instanceof ServerPlayer player && isInvulnerableTo(serverLevel, source)) {
             giechel();
             player.sendOverlayMessage(Component.translatable("gui.guhs.doolhof.niet_meppen"));
             return false;
         }
-        return super.hurt(source, amount);
+        return super.hurtServer(serverLevel, source, amount);
     }
 
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+    public boolean doHurtTarget(ServerLevel serverLevel, net.minecraft.world.entity.Entity target) {
         return false;                                           // (a Mika only pinches knabbels)
     }
 

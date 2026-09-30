@@ -32,7 +32,7 @@ public final class VissenProtection {
 
     /** Is this spot in a guhvis pond (the structure)? */
     public static boolean inVijver(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(VIJVER);
+        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(VIJVER);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 

@@ -111,7 +111,7 @@ public final class VerhaalGuhs {
 
     private static boolean heeft(ServerPlayer p, String key, VerhaalGuh g) {
         for (Tag t : GuhQuests.saved(p).getListOrEmpty(key)) {
-            if (t.getAsString().equals(g.id())) {
+            if (t.asString().orElse("").equals(g.id())) {
                 return true;
             }
         }
@@ -132,7 +132,7 @@ public final class VerhaalGuhs {
     public static void vergeet(ServerPlayer p, VerhaalGuh g) {
         for (String key : new String[]{VRIJ, GETEMD}) {
             ListTag list = GuhQuests.saved(p).getListOrEmpty(key);
-            list.removeIf(t -> t.getAsString().equals(g.id()));
+            list.removeIf(t -> t.asString().orElse("").equals(g.id()));
             GuhQuests.saved(p).put(key, list);
         }
     }

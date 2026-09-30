@@ -43,7 +43,8 @@ public final class HuisjeOpslag {
             }
         }
         for (BlockPos pos : containers(level, h, 4)) {
-            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, pos, null);
+            var resources = level.getCapability(Capabilities.Item.BLOCK, pos, null);   // (1.1.0: the transfer API, wrapped like 1.0.0)
+            IItemHandler handler = resources == null ? null : IItemHandler.of(resources);
             if (handler != null) {
                 rest = ItemHandlerHelper.insertItemStacked(handler, rest, false);
                 if (rest.isEmpty()) {
@@ -105,7 +106,7 @@ public final class HuisjeOpslag {
         for (BlockEntity be : blockEntities(level, box.inflate(max))) {
             BlockPos p = be.getBlockPos();
             if (be instanceof BankGuhBlockEntity || be instanceof HuisjeBlockEntity || blokken.contains(p)
-                    || level.getCapability(Capabilities.ItemHandler.BLOCK, p, null) == null) {
+                    || level.getCapability(Capabilities.Item.BLOCK, p, null) == null) {
                 continue;
             }
             int afstand = afstand(blokken, p);

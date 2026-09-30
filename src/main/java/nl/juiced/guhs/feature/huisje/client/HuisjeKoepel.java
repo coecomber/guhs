@@ -48,8 +48,9 @@ public final class HuisjeKoepel {
         }
     }
 
-    static void teken(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS || AAN.isEmpty()) {
+    /** 1.1.0: listens to the AfterTranslucentBlocks stage (was Stage.AFTER_TRANSLUCENT_BLOCKS); same immediate drawing. */
+    static void teken(RenderLevelStageEvent.AfterTranslucentBlocks event) {
+        if (AAN.isEmpty()) {
             return;
         }
         Minecraft mc = Minecraft.getInstance();
@@ -57,7 +58,7 @@ public final class HuisjeKoepel {
             return;
         }
         String dim = mc.level.dimension().identifier() + "|";
-        Vec3 cam = event.getCamera().getPosition();
+        Vec3 cam = event.getLevelRenderState().cameraRenderState.pos;
         MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
         PoseStack pose = event.getPoseStack();
         boolean iets = false;
@@ -76,7 +77,7 @@ public final class HuisjeKoepel {
             }
             pose.pushPose();
             pose.translate(m.x - cam.x, m.y - cam.y + 0.02, m.z - cam.z);
-            koepel(pose.last().pose(), buffers.getBuffer(RenderTypes.debugQuads()), Huisjes.BEREIK, mc.level.getGameTime() + event.getPartialTick().getGameTimeDeltaPartialTick(false));
+            koepel(pose.last().pose(), buffers.getBuffer(RenderTypes.debugQuads()), Huisjes.BEREIK, mc.level.getGameTime() + mc.getDeltaTracker().getGameTimeDeltaPartialTick(false));
             pose.popPose();
             iets = true;
         }

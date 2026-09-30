@@ -121,7 +121,7 @@ public final class SpelGroepen {
     /** An icon by registry id (guhs:&lt;id&gt;), or the stand-in while that item doesn't exist (yet). */
     public static Supplier<ItemStack> icoon(String id, Item standIn) {
         return () -> {
-            Item item = BuiltInRegistries.ITEM.get(Guhs.id(id));
+            Item item = BuiltInRegistries.ITEM.getValue(Guhs.id(id));
             return new ItemStack(item == Items.AIR ? standIn : item);
         };
     }
@@ -183,7 +183,7 @@ public final class SpelGroepen {
             if (g.structuur() == null || al.contains(g.id())) {
                 continue;
             }
-            Structure structure = structures.get(Guhs.id(g.structuur()));
+            Structure structure = structures.getValue(Guhs.id(g.structuur()));
             if (structure != null && level.structureManager().getStructureWithPieceAt(player.blockPosition(), structure).isValid()) {
                 if (bezoek(player, g.id())) {
                     nieuw.add(g.id());

@@ -33,7 +33,7 @@ public class GuhwaiiWaterFeature extends Feature<GuhwaiiWaterFeature.Config> {
 
     @Override
     public boolean place(FeaturePlaceContext<Config> context) {
-        return fill(context.level(), context.level().getSeed(), new ChunkPos(context.origin()), context.config()) > 0;
+        return fill(context.level(), context.level().getSeed(), ChunkPos.containing(context.origin()), context.config()) > 0;
     }
 
     /** Fills the region's columns of this chunk; returns how many water blocks were placed. */

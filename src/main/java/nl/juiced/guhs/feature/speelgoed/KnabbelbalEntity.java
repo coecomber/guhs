@@ -96,7 +96,7 @@ public class KnabbelbalEntity extends Entity {
         }
         r = r.normalize().scale(kracht);
         setDeltaMovement(r.x, Math.max(getDeltaMovement().y, 0.12 + kracht * 0.2), r.z);
-        hasImpulse = true;
+        needsSync = true;
         duwRust = 6;
         level().playSound(null, blockPosition(), SpeelgoedFeature.BAL.get(), SoundSource.NEUTRAL, 0.7f, 1.1f + random.nextFloat() * 0.3f);
         if (isVol() && wie != null && !level().isClientSide()) {
@@ -121,7 +121,7 @@ public class KnabbelbalEntity extends Entity {
         knabbel.setPickUpDelay(20);
         sl.addFreshEntity(knabbel);
         sl.playSound(null, blockPosition(), SpeelgoedFeature.PLOP.get(), SoundSource.NEUTRAL, 1f, 1.2f);
-        sl.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(ModItems.KAAS_KNABBELS.get())), getX(), getY() + 0.3, getZ(),
+        sl.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, ModItems.KAAS_KNABBELS.get()), getX(), getY() + 0.3, getZ(),
                 8, 0.15, 0.1, 0.15, 0.08);
         return knabbel;
     }
@@ -143,7 +143,7 @@ public class KnabbelbalEntity extends Entity {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         ItemStack stack = player.getItemInHand(hand);
         if (level().isClientSide()) {
             return InteractionResult.SUCCESS;
@@ -232,27 +232,23 @@ public class KnabbelbalEntity extends Entity {
         }
     }
 
-    @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
-        lerpX = x;
-        lerpY = y;
-        lerpZ = z;
-        lerpSteps = steps;
-    }
+    /**
+     * 1.1.0: server positions arrive through an InterpolationHandler (was lerpTo); like 1.0.0 the ball glides there
+     * itself in {@link #clientTick} (vanilla's 3 steps), the handler only keeps the target.
+     */
+    private final net.minecraft.world.entity.InterpolationHandler interpolation = new net.minecraft.world.entity.InterpolationHandler(this, 0) {
+        @Override
+        public void interpolateTo(Vec3 position, float yRot, float xRot) {
+            lerpX = position.x;
+            lerpY = position.y;
+            lerpZ = position.z;
+            lerpSteps = net.minecraft.world.entity.InterpolationHandler.DEFAULT_INTERPOLATION_STEPS;
+        }
+    };
 
     @Override
-    public double lerpTargetX() {
-        return lerpSteps > 0 ? lerpX : getX();
-    }
-
-    @Override
-    public double lerpTargetY() {
-        return lerpSteps > 0 ? lerpY : getY();
-    }
-
-    @Override
-    public double lerpTargetZ() {
-        return lerpSteps > 0 ? lerpZ : getZ();
+    public net.minecraft.world.entity.InterpolationHandler getInterpolation() {
+        return interpolation;
     }
 
     private void clientTick() {
@@ -283,12 +279,12 @@ public class KnabbelbalEntity extends Entity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean canBeCollidedWith(@Nullable Entity other) {
         return false;
     }
 

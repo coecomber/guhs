@@ -124,17 +124,17 @@ public class HuisjeBlock extends BaseEntityBlock {
         return Huisjes.registreer(level, pos, facing, maat, eigenaar);
     }
 
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level instanceof ServerLevel sl) {
-            Huisjes.verwijder(sl, pos);
-            for (BlockPos p : Huisje.blokken(pos, state.getValue(FACING), maat)) {
-                if (!p.equals(pos) && level.getBlockState(p).getBlock() instanceof HuisjeDeelBlock) {
-                    level.setBlock(p, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
-                }
+    /**
+     * The huisje is gone (1.0.0: onRemove): forget it and remove its invisible parts. 1.1.0: called from
+     * {@link HuisjeBlockEntity#preRemoveSideEffects} (server, whenever the block really changes).
+     */
+    void verwijderd(ServerLevel level, BlockPos pos, BlockState state) {
+        Huisjes.verwijder(level, pos);
+        for (BlockPos p : Huisje.blokken(pos, state.getValue(FACING), maat)) {
+            if (!p.equals(pos) && level.getBlockState(p).getBlock() instanceof HuisjeDeelBlock) {
+                level.setBlock(p, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
             }
         }
-        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     /** 3.0: only the owner (or an op) can break a huisje: for anyone else it doesn't even crack (BreakEvent is cancelled too). */

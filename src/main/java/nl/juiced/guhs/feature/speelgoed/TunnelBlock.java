@@ -216,7 +216,7 @@ public class TunnelBlock extends Block {
             BlockState s = level.getBlockState(p);
             if (s.getBlock() instanceof TunnelBlock) {
                 for (Direction d : Direction.Plane.HORIZONTAL) {
-                    if (kant(s, d) == Kant.INGANG && !level.getBlockState(p.relative(d)).isSolidRender(level, p.relative(d))) {
+                    if (kant(s, d) == Kant.INGANG && !level.getBlockState(p.relative(d)).isSolidRender()) {
                         out.add(new Ingang(p, d));
                     }
                 }

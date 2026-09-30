@@ -3,14 +3,13 @@ package nl.juiced.guhs.feature.huisje.client;
 import net.minecraft.client.Minecraft;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
+import nl.juiced.guhs.client.GuhRenderer;
 import net.neoforged.neoforge.common.NeoForge;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.band.BandVlaggen;
 import nl.juiced.guhs.feature.huisje.HuisjeFeature;
-import nl.juiced.guhs.feature.huisje.HuisjeMaat;
 import nl.juiced.guhs.feature.huisje.HuisjePayloads;
 
 /**
@@ -21,11 +20,7 @@ public final class HuisjeClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) ->
                 event.registerBlockEntityRenderer(HuisjeFeature.HUISJE_BE.get(), HuisjeRenderer::new));
-        modBus.addListener((ModelEvent.RegisterAdditional event) -> {
-            for (HuisjeMaat maat : HuisjeMaat.values()) {
-                event.register(HuisjeRenderer.model(maat));
-            }
-        });
+        modBus.addListener(HuisjeRenderer::registerModels);
         HuisjePayloads.opener = p -> Minecraft.getInstance().execute(() -> {
             Minecraft mc = Minecraft.getInstance();
             if (mc.screen instanceof HuisjeScreen s && s.pos().asLong() == p.data().getLongOr("Pos", 0L)) {
@@ -35,11 +30,20 @@ public final class HuisjeClient {
             }
         });
         NeoForge.EVENT_BUS.addListener(HuisjeKoepel::teken);
-        NeoForge.EVENT_BUS.addListener((RenderLivingEvent.Pre<?, ?> event) -> {
-            if (event.getEntity() instanceof GuhEntity guh && BandVlaggen.heeft(guh, BandVlaggen.HUISJE_BINNEN)) {
-                event.setCanceled(true);   // (asleep inside its huisje)
-            }
-        });
+        // (asleep inside its huisje: no model, no name, no shadow; 1.1.0: the guh renderer is a GeckoLib renderer, so this is a
+        // render state modifier instead of cancelling RenderLivingEvent.Pre)
+        modBus.addListener((RegisterRenderStateModifiersEvent event) -> event.<GuhEntity, LivingEntityRenderState>registerEntityModifier(GuhRenderer.class,
+                (guh, state) -> {
+                    if (BandVlaggen.heeft(guh, BandVlaggen.HUISJE_BINNEN)) {
+                        state.isInvisible = true;
+                        state.isInvisibleToPlayer = true;
+                        state.nameTag = null;
+                        state.scoreText = null;
+                        state.shadowPieces.clear();
+                        state.displayFireAnimation = false;
+                        state.outlineColor = 0;
+                    }
+                }));
     }
 
     private HuisjeClient() {

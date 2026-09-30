@@ -185,7 +185,7 @@ public class SpelenGameTests {
         helper.assertTrue(tag.getStringOr("ClothesNeck", "").equals("winter_scarf") && !tag.contains("ClothesOren"), "saved per slot");
         tag.putString("ClothesOren", "winter_scarf");   // a piece of another slot is never worn on the ears
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        copy.load(tag);
+        nl.juiced.guhs.storage.Nbt.load(copy, tag);
         helper.assertTrue(copy.getClothes(GuhClothes.Slot.NECK) == GuhClothes.WINTER_SCARF && copy.getClothes(GuhClothes.Slot.OREN) == null, "loaded");
         helper.succeed();
     }

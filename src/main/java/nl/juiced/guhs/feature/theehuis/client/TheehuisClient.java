@@ -4,9 +4,9 @@ import com.mojang.math.Axis;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +14,7 @@ import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.client.GuhRenderer;
 import nl.juiced.guhs.client.SittingGuhRenderers;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.knus.client.GuhRenderHooks;
@@ -32,30 +33,32 @@ public final class TheehuisClient {
         modBus.addListener(TheehuisClient::particles);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(
                 (net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingOut event) -> TheehuisPayloads.clientVergeet());
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.THEEGUH, Guhs.id("geo/entity/guh_npc_theeguh.geo.json"));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.THEEGUH, Guhs.id("entity/guh_npc_theeguh"));
         // she stirs her tea: the spoon rocks a little
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.THEEGUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.12f;
-            bot.apply("theeguh_lepel").ifPresent(b -> b.setRotZ((float) Math.sin(t) * 0.25f));   // (not animated: absolute)
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.THEEGUH, (npc, tick) -> {
+            float t = (float) tick * 0.12f;
+            return bones -> bones.ifPresent("theeguh_lepel", b -> b.setRotZ((float) Math.sin(t) * 0.25f));   // (not animated: absolute)
         });
-        GuhRenderHooks.laag((renderer, pose, guh, model, buffers, partialTick, light, overlay) -> {
+        GuhRenderHooks.laag((guh, partialTick, frame) -> {
             Integer wens = TheehuisPayloads.CLIENT_WENSEN.get(guh.getId());
             if (wens == null || wens == Theekransje.Wens.GEEN.ordinal()) {
                 return;
             }
             ItemStack icon = wens == Theekransje.Wens.THEE.ordinal() ? new ItemStack(TheehuisFeature.thee(TheeBlocks.Soort.KNABBELTHEE)) : new ItemStack(Items.CAKE);
+            ItemStackRenderState item = GuhRenderer.itemState(icon, ItemDisplayContext.GROUND, guh);
             float t = guh.tickCount + partialTick;
-            pose.translate(0, 1.55 + Math.sin(t * 0.12) * 0.05, 0);
-            pose.mulPose(Axis.YP.rotationDegrees(t * 3f));
-            pose.scale(0.9f, 0.9f, 0.9f);
-            Minecraft.getInstance().getItemRenderer().renderStatic(icon, ItemDisplayContext.GROUND, 0xF000F0, OverlayTexture.NO_OVERLAY, pose, buffers,
-                    guh.level(), guh.getId());
+            frame.layerExtra((pose, collector, light) -> {
+                pose.translate(0, 1.55 + Math.sin(t * 0.12) * 0.05, 0);
+                pose.mulPose(Axis.YP.rotationDegrees(t * 3f));
+                pose.scale(0.9f, 0.9f, 0.9f);
+                item.submit(pose, collector, 0xF000F0, OverlayTexture.NO_OVERLAY, 0);
+            });
         });
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(TheehuisFeature.THEESTOOM.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Stoom(level, x, y, z, sprites));
-        event.registerSpriteSet(TheehuisFeature.GEZELLIG_HARTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Hartje(level, x, y, z, sprites));
+        event.registerSpriteSet(TheehuisFeature.THEESTOOM.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Stoom(level, x, y, z, sprites.get(random)));
+        event.registerSpriteSet(TheehuisFeature.GEZELLIG_HARTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Hartje(level, x, y, z, sprites.get(random)));
     }
 
     /** guhs:theehuis_open: Mevrouw Theelepel's screen. */
@@ -64,10 +67,9 @@ public final class TheehuisClient {
     }
 
     /** A wisp of steam: curls up, grows and fades. */
-    static class Stoom extends TextureSheetParticle {
-        Stoom(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+    static class Stoom extends SingleQuadParticle {
+        Stoom(ClientLevel level, double x, double y, double z, TextureAtlasSprite sprite) {
+            super(level, x, y, z, sprite);
             lifetime = 30 + random.nextInt(20);
             quadSize = 0.08f + random.nextFloat() * 0.05f;
             gravity = -0.01f;
@@ -88,16 +90,15 @@ public final class TheehuisClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A little pink heart that floats up and wobbles. */
-    static class Hartje extends TextureSheetParticle {
-        Hartje(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+    static class Hartje extends SingleQuadParticle {
+        Hartje(ClientLevel level, double x, double y, double z, TextureAtlasSprite sprite) {
+            super(level, x, y, z, sprite);
             lifetime = 30 + random.nextInt(15);
             quadSize = 0.1f + random.nextFloat() * 0.05f;
             gravity = -0.01f;
@@ -116,12 +117,12 @@ public final class TheehuisClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
 
         @Override
-        protected int getLightColor(float partialTick) {
+        protected int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
     }

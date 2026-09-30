@@ -88,13 +88,13 @@ public enum Seizoen implements net.minecraft.util.StringRepresentable {
     /** The day number: overworld dayTime / 24000 plus the offset (server and client). */
     public static long dag(Level level) {
         if (level.isClientSide()) {
-            return Math.floorDiv(level.getDayTime(), 24000L) + clientOffset;
+            return nl.juiced.guhs.world.GuhTime.day(level) + clientOffset;
         }
         MinecraftServer server = level.getServer();
         if (server == null) {
-            return Math.floorDiv(level.getDayTime(), 24000L);
+            return nl.juiced.guhs.world.GuhTime.day(level);
         }
-        return Math.floorDiv(server.overworld().getDayTime(), 24000L) + Data.get(server).offset;
+        return nl.juiced.guhs.world.GuhTime.day(server.overworld()) + Data.get(server).offset;
     }
 
     /** Seasons since day 0 (dag / 7): use it as the key of "once per season" things. */
@@ -125,7 +125,7 @@ public enum Seizoen implements net.minecraft.util.StringRepresentable {
      */
     public static void zet(MinecraftServer server, Seizoen seizoen) {
         Data data = Data.get(server);
-        long raw = Math.floorDiv(server.overworld().getDayTime(), 24000L);
+        long raw = nl.juiced.guhs.world.GuhTime.day(server.overworld());
         long cycle = (long) DAGEN * values().length;
         long now = raw + data.offset;
         long want = seizoen.ordinal() * (long) DAGEN;
@@ -193,11 +193,14 @@ public enum Seizoen implements net.minecraft.util.StringRepresentable {
 
     /** The saved offset (overworld data storage, "guhs_knus"). */
     static final class Data extends SavedData {
+        /** 1.1.0: saved data type guhs:knus (the 1.0.0 file guhs_knus.dat is moved once). */
+        static final net.minecraft.world.level.saveddata.SavedDataType<Data> TYPE = nl.juiced.guhs.storage.GuhSavedData.tagType("knus",
+                Data::new, t -> load(t, null), d -> d.save(new CompoundTag(), null));
         long offset;
 
         static Data get(MinecraftServer server) {
             ServerLevel overworld = server.overworld();
-            return overworld.getDataStorage().computeIfAbsent(new SavedData.Factory<>(Data::new, Data::load, null), "guhs_knus");
+            return nl.juiced.guhs.storage.GuhSavedData.get(overworld, TYPE, "guhs_knus");
         }
 
         static Data load(CompoundTag tag, HolderLookup.Provider registries) {
@@ -206,7 +209,6 @@ public enum Seizoen implements net.minecraft.util.StringRepresentable {
             return d;
         }
 
-        @Override
         public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
             tag.putLong("SeizoenOffset", offset);
             return tag;

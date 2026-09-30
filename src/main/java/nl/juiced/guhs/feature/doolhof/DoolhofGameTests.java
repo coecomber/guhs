@@ -172,12 +172,12 @@ public class DoolhofGameTests {
         p.setGameMode(GameType.CREATIVE);
         helper.assertTrue(!DoolhofProtection.denied(p, true), "creative may");
         ServerLevel level = helper.getLevel();
-        long oud = level.getDayTime();
-        level.setDayTime(6000);
+        long oud = nl.juiced.guhs.world.GuhTime.dayTime(level);
+        nl.juiced.guhs.world.GuhTime.setDayTime(level, 6000);
         boolean dag = DoolhofBlocks.Lantaarn.donker(level);
-        level.setDayTime(18000);
+        nl.juiced.guhs.world.GuhTime.setDayTime(level, 18000);
         boolean nacht = DoolhofBlocks.Lantaarn.donker(level);
-        level.setDayTime(oud);
+        nl.juiced.guhs.world.GuhTime.setDayTime(level, oud);
         helper.assertTrue(!dag && nacht, "the lanterns are on at night only");
         helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
         helper.succeed();
@@ -344,7 +344,7 @@ public class DoolhofGameTests {
         helper.assertTrue(game.knabbels.size() == inMaze + 1, "and hidden again in the maze");
         helper.assertTrue(!mika.kanPikken(), "the Mika runs off (it can't pinch again at once)");
         helper.assertTrue(p.getHealth() == hp, "nobody got hurt");
-        helper.assertTrue(!mika.doHurtTarget(p), "a Mika never attacks");
+        helper.assertTrue(!mika.doHurtTarget(level, p), "a Mika never attacks");
         mika.hurt(level.damageSources().playerAttack(p), 10f);
         helper.assertTrue(mika.isAlive() && mika.getHealth() == mika.getMaxHealth(), "and it can't be hurt either");
         // with an empty bag it only sticks out its tongue

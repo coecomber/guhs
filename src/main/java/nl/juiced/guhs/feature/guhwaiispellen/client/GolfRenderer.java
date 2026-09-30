@@ -76,7 +76,7 @@ public final class GolfRenderer {
             pose.pushPose();
             pose.translate(-cam.x, -cam.y, -cam.z);
             VertexConsumer vc = buffers.getBuffer(type);
-            int light = LevelRenderer.getLightColor(level, spot.origin().above());
+            int light = LevelRenderer.getLightCoords(level, spot.origin().above());
             for (int k = 0; k < golven.golven().size(); k++) {
                 if (golven.actief(k, step)) {
                     golf(vc, pose.last().pose(), pose.last(), level, golven, spot, k, step, light);

@@ -139,7 +139,7 @@ public class VerhaalGameTests {
         GuhEntity wild = helper.spawn(ModEntities.GUH.get(), new BlockPos(9, 1, 9));
         wild.setVariant(GuhVariant.BALTOGUH);
         helper.assertTrue(net.neoforged.neoforge.event.EventHooks.onAnimalTame(wild, p), "a story variant is never tamed the normal way");
-        helper.assertTrue(!kopie.canMate(wild) && !kopie.hurt(level.damageSources().generic(), 5f), "no breeding, no harm");
+        helper.assertTrue(!kopie.canMate(wild) && !kopie.hurtServer(level, level.damageSources().generic(), 5f), "no breeding, no harm");
         kopie.discard();
         weg(helper, p);
         helper.succeed();
@@ -382,7 +382,7 @@ public class VerhaalGameTests {
         Band.geefHartjes(guh, p, 150, Reden.OVERIG);
         UUID id = guh.getUUID();
         int hartjes = Band.hartjes(guh);
-        guh.kill();
+        guh.kill(helper.getLevel());
         helper.assertTrue(Wolkjes.isDood(p.level().getServer(), p.getUUID(), id) && Wolkjes.dood(p.level().getServer(), p.getUUID()).stream().anyMatch(d -> d.bandId().equals(id)
                 && d.naam().equals("Wolkje") && d.variant().equals("choco") && d.hartjes() == hartjes), "in the wolkjes, with its name, look and hearts");
         helper.assertTrue(GuhVolger.plek(p.level().getServer(), p.getUUID(), id).soort() == PlekSoort.IN_DE_WOLKJES, "Waar is hij? In de wolkjes... njeg");

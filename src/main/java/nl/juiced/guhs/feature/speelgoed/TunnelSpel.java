@@ -143,7 +143,7 @@ class TunnelSpel extends SpeelTaak {
             return;
         }
         List<PieppiepmuisjeEntity> muisjes = level.getEntitiesOfClass(PieppiepmuisjeEntity.class, g.getBoundingBox().inflate(12),
-                m -> m.isTame() && g.getOwnerUUID().equals(m.getOwnerUUID()) && !m.isOrderedToSit() && !m.isBezig() && !m.isVerstopt());
+                m -> m.isTame() && g.getOwnerUUID().equals(nl.juiced.guhs.entity.Owners.uuid(m)) && !m.isOrderedToSit() && !m.isBezig() && !m.isVerstopt());
         if (muisjes.isEmpty()) {
             return;
         }

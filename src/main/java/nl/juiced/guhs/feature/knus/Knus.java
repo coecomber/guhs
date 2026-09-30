@@ -65,7 +65,7 @@ public final class Knus {
     /** An icon by registry id (guhs:&lt;id&gt;), or the stand-in while that item doesn't exist. */
     public static Supplier<ItemStack> icoon(String id, Item standIn) {
         return () -> {
-            Item item = BuiltInRegistries.ITEM.get(Guhs.id(id));
+            Item item = BuiltInRegistries.ITEM.getValue(Guhs.id(id));
             return new ItemStack(item == Items.AIR ? standIn : item);
         };
     }

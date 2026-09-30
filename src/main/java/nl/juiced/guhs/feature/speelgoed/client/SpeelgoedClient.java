@@ -3,7 +3,6 @@ package nl.juiced.guhs.feature.speelgoed.client;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent;
 import nl.juiced.guhs.feature.speelgoed.SpeelgoedFeature;
 
 /**
@@ -19,10 +18,7 @@ public final class SpeelgoedClient {
         });
         modBus.addListener((EntityRenderersEvent.RegisterLayerDefinitions event) ->
                 event.registerLayerDefinition(KnabbelbalRenderer.LAYER, KnabbelbalRenderer::createLayer));
-        modBus.addListener((ModelEvent.RegisterAdditional event) -> {
-            event.register(ToestelRenderer.PLANK);
-            event.register(ToestelRenderer.ZITJE);
-        });
+        modBus.addListener(ToestelRenderer::registerModels);
     }
 
     private SpeelgoedClient() {

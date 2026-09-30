@@ -34,7 +34,7 @@ public enum Dagdeel {
     }
 
     public static Dagdeel huidig(Level level) {
-        return van(level.getDayTime());
+        return van(nl.juiced.guhs.world.GuhTime.dayTime(level));
     }
 
     public String id() {

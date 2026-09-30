@@ -225,7 +225,7 @@ public final class KnusVoortgang {
         }
         ListTag list = strings(compound(data(player), "Verzamelingen"), verzameling);
         for (Tag t : list) {
-            if (t.getAsString().equals(item)) {
+            if (t.asString().orElse("").equals(item)) {
                 return false;
             }
         }
@@ -247,7 +247,7 @@ public final class KnusVoortgang {
         Set<String> out = new LinkedHashSet<>();
         CompoundTag all = data(player).getCompoundOrEmpty("Verzamelingen");
         for (Tag t : all.getListOrEmpty(verzameling)) {
-            out.add(t.getAsString());
+            out.add(t.asString().orElse(""));
         }
         return out;
     }
@@ -259,7 +259,7 @@ public final class KnusVoortgang {
 
     public static boolean geclaimd(ServerPlayer player, String mijlpaal) {
         for (Tag t : data(player).getListOrEmpty("Geclaimd")) {
-            if (t.getAsString().equals(mijlpaal)) {
+            if (t.asString().orElse("").equals(mijlpaal)) {
                 return true;
             }
         }
@@ -347,7 +347,7 @@ public final class KnusVoortgang {
 
         public static boolean geclaimd(String mijlpaal) {
             for (Tag t : data.getListOrEmpty("Geclaimd")) {
-                if (t.getAsString().equals(mijlpaal)) {
+                if (t.asString().orElse("").equals(mijlpaal)) {
                     return true;
                 }
             }
@@ -357,7 +357,7 @@ public final class KnusVoortgang {
         public static Set<String> ontdekt(String verzameling) {
             Set<String> out = new LinkedHashSet<>();
             for (Tag t : data.getCompoundOrEmpty("Verzamelingen").getListOrEmpty(verzameling)) {
-                out.add(t.getAsString());
+                out.add(t.asString().orElse(""));
             }
             return out;
         }

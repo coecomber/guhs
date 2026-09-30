@@ -47,7 +47,7 @@ public class HuisjeBlockEntity extends BlockEntity {
 
     /** May this player break it (client and server: the owner, or an op; unknown owner: yes)? */
     public boolean magBreken(net.minecraft.world.entity.player.Player p) {
-        return eigenaar == null || eigenaar.equals(p.getUUID()) || p.hasPermissions(2);
+        return eigenaar == null || eigenaar.equals(p.getUUID()) || p.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
     }
 
     @Override
@@ -125,5 +125,14 @@ public class HuisjeBlockEntity extends BlockEntity {
             }
         }
         return false;
+    }
+
+    /** 1.1.0 (onRemove is gone): the huisje was broken or replaced: forget it, remove its parts. */
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level instanceof ServerLevel sl && state.getBlock() instanceof HuisjeBlock blok) {
+            blok.verwijderd(sl, pos, state);
+        }
     }
 }

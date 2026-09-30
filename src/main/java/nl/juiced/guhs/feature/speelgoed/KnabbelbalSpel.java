@@ -88,7 +88,7 @@ class KnabbelbalSpel extends SpeelTaak {
         if (loopNaar(knabbel.position(), 1.25, 0.9 + mob.getBbWidth() * 0.5)) {
             knabbel.discard();
             level.playSound(null, mob.blockPosition(), ModSounds.GUH_EAT.get(), SoundSource.NEUTRAL, 1f, 1f);
-            level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, knabbel.getItem()), mob.getX(), mob.getY() + mob.getBbHeight() * 0.7,
+            level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, net.minecraft.world.item.ItemStackTemplate.fromNonEmptyStack(knabbel.getItem())), mob.getX(), mob.getY() + mob.getBbHeight() * 0.7,
                     mob.getZ(), 8, 0.2, 0.1, 0.2, 0.05);
             mob.heal(10);
             if (mob instanceof GuhEntity g) {
