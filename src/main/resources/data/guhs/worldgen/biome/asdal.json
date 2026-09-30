@@ -1,35 +1,47 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "minecraft:ambient.soul_sand_valley.loop",
+      "mood": {
+        "sound": "minecraft:ambient.soul_sand_valley.mood",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      },
+      "additions": {
+        "sound": "minecraft:ambient.soul_sand_valley.additions",
+        "tick_chance": 0.0111
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.nether.soul_sand_valley",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:ash"
+        },
+        "probability": 0.0625
+      }
+    ],
+    "minecraft:visual/fog_color": "#3a3533",
+    "minecraft:visual/sky_color": "#4a4442",
+    "minecraft:visual/water_fog_color": "#050533"
+  },
   "has_precipitation": false,
   "temperature": 2.0,
   "downfall": 0.0,
   "effects": {
-    "fog_color": 3814707,
-    "sky_color": 4867138,
-    "water_color": 4159204,
-    "water_fog_color": 329011,
-    "particle": {
-      "options": {
-        "type": "minecraft:ash"
-      },
-      "probability": 0.0625
-    },
-    "ambient_sound": "minecraft:ambient.soul_sand_valley.loop",
-    "additions_sound": {
-      "sound": "minecraft:ambient.soul_sand_valley.additions",
-      "tick_chance": 0.0111
-    },
-    "mood_sound": {
-      "sound": "minecraft:ambient.soul_sand_valley.mood",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    },
-    "music": {
-      "sound": "minecraft:music.nether.soul_sand_valley",
-      "min_delay": 12000,
-      "max_delay": 24000,
-      "replace_current_music": false
-    }
+    "water_color": "#3f76e4"
   },
   "spawners": {
     "monster": [
@@ -68,11 +80,9 @@
     "misc": []
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": [
-      "guhs:barbecuegrot"
-    ]
-  },
+  "carvers": [
+    "guhs:barbecuegrot"
+  ],
   "features": [
     [],
     [],

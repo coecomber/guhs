@@ -6,12 +6,9 @@
     "KK"
   ],
   "key": {
-    "K": {
-      "item": "guhs:kaaskoraal"
-    }
+    "K": "guhs:kaaskoraal"
   },
   "result": {
-    "id": "guhs:kaaskoraalblok",
-    "count": 1
+    "id": "guhs:kaaskoraalblok"
   }
 }

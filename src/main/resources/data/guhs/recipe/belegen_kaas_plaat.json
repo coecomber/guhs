@@ -5,9 +5,7 @@
     "SSS"
   ],
   "key": {
-    "S": {
-      "item": "guhs:belegen_kaas_stenen"
-    }
+    "S": "guhs:belegen_kaas_stenen"
   },
   "result": {
     "id": "guhs:belegen_kaas_plaat",

@@ -6,12 +6,9 @@
     "GG"
   ],
   "key": {
-    "G": {
-      "item": "guhs:gloeikoolgruis"
-    }
+    "G": "guhs:gloeikoolgruis"
   },
   "result": {
-    "id": "guhs:gloeikool",
-    "count": 1
+    "id": "guhs:gloeikool"
   }
 }

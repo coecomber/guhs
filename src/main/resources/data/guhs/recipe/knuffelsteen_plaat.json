@@ -5,9 +5,7 @@
     "SSS"
   ],
   "key": {
-    "S": {
-      "item": "guhs:knuffelsteen"
-    }
+    "S": "guhs:knuffelsteen"
   },
   "result": {
     "id": "guhs:knuffelsteen_plaat",

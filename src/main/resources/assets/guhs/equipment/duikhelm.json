@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "guhs:duikhelm"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "guhs:duikhelm"
+      }
+    ]
+  }
+}

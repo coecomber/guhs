@@ -106,7 +106,7 @@ def selfcheck(h):
             problems.append(f"lore: {key}")
     A = h.A
     for g in ("baltoslee_slee", "baltoslee_sledehondje"):
-        if not os.path.exists(f"{A}/geo/entity/{g}.geo.json"):
+        if not os.path.exists(f"{A}/geckolib/models/entity/{g}.geo.json"):
             problems.append(f"geo {g}")
     for t in ("baltoslee_slee", "baltoslee_slee_steele", "sneeuwslee", "baltoslee_sledehondje", "baltoslee_sledehondje_steele", "baltoslee_touw"):
         if not os.path.exists(f"{A}/textures/entity/{t}.png"):
@@ -126,12 +126,12 @@ def selfcheck(h):
                 problems.append(f"sound {f} (run python tools/features/balto_slee_geluid.py)")
     # every bone the Java moves exists
     import json
-    slee = json.load(open(f"{A}/geo/entity/baltoslee_slee.geo.json", encoding="utf-8"))
+    slee = json.load(open(f"{A}/geckolib/models/entity/baltoslee_slee.geo.json", encoding="utf-8"))
     namen = {b["name"] for b in slee["minecraft:geometry"][0]["bones"]}
     for b in ("kist", "bellen", "lantaarn"):
         if b not in namen:
             problems.append(f"sled bone {b}")
-    hond = json.load(open(f"{A}/geo/entity/baltoslee_sledehondje.geo.json", encoding="utf-8"))
+    hond = json.load(open(f"{A}/geckolib/models/entity/baltoslee_sledehondje.geo.json", encoding="utf-8"))
     namen = {b["name"] for b in hond["minecraft:geometry"][0]["bones"]}
     for b in ("lijf", "kop", "oor_l", "oor_r", "staart", "tong", "belletje", "been_lv", "been_rv", "been_la", "been_ra"):
         if b not in namen:

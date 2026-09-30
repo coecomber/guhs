@@ -7,18 +7,11 @@
     "PPP"
   ],
   "key": {
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    },
-    "P": {
-      "item": "minecraft:pink_wool"
-    },
-    "B": {
-      "item": "minecraft:composter"
-    }
+    "K": "guhs:kaas_knabbels",
+    "P": "minecraft:pink_wool",
+    "B": "minecraft:composter"
   },
   "result": {
-    "id": "guhs:knabbelbak",
-    "count": 1
+    "id": "guhs:knabbelbak"
   }
 }

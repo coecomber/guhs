@@ -7,18 +7,11 @@
     " V "
   ],
   "key": {
-    "K": {
-      "item": "guhs:guh_kristal"
-    },
-    "C": {
-      "item": "minecraft:compass"
-    },
-    "V": {
-      "item": "guhs:vahoege_vads_ingot"
-    }
+    "K": "guhs:guh_kristal",
+    "C": "minecraft:compass",
+    "V": "guhs:vahoege_vads_ingot"
   },
   "result": {
-    "id": "guhs:guhmensie_superkompas",
-    "count": 1
+    "id": "guhs:guhmensie_superkompas"
   }
 }

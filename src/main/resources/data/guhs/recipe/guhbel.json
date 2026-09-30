@@ -7,18 +7,11 @@
     "G G"
   ],
   "key": {
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "G": {
-      "item": "minecraft:gold_ingot"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    }
+    "W": "minecraft:pink_wool",
+    "G": "minecraft:gold_ingot",
+    "K": "guhs:kaas_knabbels"
   },
   "result": {
-    "id": "guhs:guhbel",
-    "count": 1
+    "id": "guhs:guhbel"
   }
 }

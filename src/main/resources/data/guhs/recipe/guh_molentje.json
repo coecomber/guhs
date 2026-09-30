@@ -7,21 +7,12 @@
     "PPP"
   ],
   "key": {
-    "W": {
-      "item": "minecraft:white_wool"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    }
+    "W": "minecraft:white_wool",
+    "S": "minecraft:stick",
+    "K": "guhs:kaas_knabbels",
+    "P": "#minecraft:planks"
   },
   "result": {
-    "id": "guhs:guh_molentje",
-    "count": 1
+    "id": "guhs:guh_molentje"
   }
 }

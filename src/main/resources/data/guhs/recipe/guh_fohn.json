@@ -7,18 +7,11 @@
     " P "
   ],
   "key": {
-    "P": {
-      "item": "minecraft:pink_concrete"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    }
+    "P": "minecraft:pink_concrete",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone"
   },
   "result": {
-    "id": "guhs:guh_fohn",
-    "count": 1
+    "id": "guhs:guh_fohn"
   }
 }

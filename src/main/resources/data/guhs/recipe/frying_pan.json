@@ -6,15 +6,10 @@
     "IIS"
   ],
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:stick"
   },
   "result": {
-    "id": "guhs:frying_pan",
-    "count": 1
+    "id": "guhs:frying_pan"
   }
 }

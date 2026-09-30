@@ -6,12 +6,9 @@
     "WWW"
   ],
   "key": {
-    "W": {
-      "item": "minecraft:purple_wool"
-    }
+    "W": "minecraft:purple_wool"
   },
   "result": {
-    "id": "guhs:purple_zitzak",
-    "count": 1
+    "id": "guhs:purple_zitzak"
   }
 }

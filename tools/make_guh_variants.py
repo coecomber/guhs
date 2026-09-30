@@ -23,7 +23,7 @@ import numpy as np
 from PIL import Image
 
 ASSETS = os.path.join("src", "main", "resources", "assets", "guhs")
-GEO = os.path.join(ASSETS, "geo", "entity", "guh.geo.json")
+GEO = os.path.join(ASSETS, "geckolib", "models", "entity", "guh.geo.json")
 TEXTURES = os.path.join(ASSETS, "textures", "entity")
 UV = 128
 FUR = (195, 160, 205)
@@ -412,7 +412,7 @@ def clothes(rng):
 
 def add_animations():
     """The launch move: sucking in air (the guh puffs up and leans its head back), and flying (paws stretched out)."""
-    path = os.path.join(ASSETS, "animations", "entity", "guh.animation.json")
+    path = os.path.join(ASSETS, "geckolib", "animations", "entity", "guh.animation.json")
     anim = json.load(open(path, encoding="utf-8"))
     anim["animations"]["animation.guh.suck"] = {"loop": "hold_on_last_frame", "animation_length": 4.0, "bones": {
         "body": {"scale": {"0.0": [1, 1, 1], "1.0": [1.1, 1.08, 1.1], "2.0": [1.2, 1.16, 1.2], "3.0": [1.3, 1.22, 1.3],

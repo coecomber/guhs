@@ -92,7 +92,7 @@ for lang in ("en_us", "nl_nl"):
 for e in entities:
     if e in ("guh_seat", "guh", "mika", "guh_npc", "mika_baas", "quest_guh", "nether_mika", "guh_slime"):
         continue
-    if not os.path.exists(f"{A}/geo/entity/{e}.geo.json"):
+    if not os.path.exists(f"{A}/geckolib/models/entity/{e}.geo.json"):
         problems.append(f"entity {e}: no geo model")
     if not os.path.exists(f"{A}/textures/entity/{e}.png"):
         problems.append(f"entity {e}: no texture")

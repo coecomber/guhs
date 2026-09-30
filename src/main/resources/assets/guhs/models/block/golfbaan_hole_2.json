@@ -7,7 +7,6 @@
     "pole": "guhs:block/golfbaan_vlag_stok",
     "flag": "guhs:block/golfbaan_vlag_2"
   },
-  "render_type": "minecraft:cutout",
   "elements": [
     {
       "from": [

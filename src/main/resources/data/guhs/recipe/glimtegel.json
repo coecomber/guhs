@@ -7,12 +7,8 @@
     "TTT"
   ],
   "key": {
-    "T": {
-      "item": "guhs:knuffelbad_badtegel"
-    },
-    "G": {
-      "item": "minecraft:glow_ink_sac"
-    }
+    "T": "guhs:knuffelbad_badtegel",
+    "G": "minecraft:glow_ink_sac"
   },
   "result": {
     "id": "guhs:glimtegel",

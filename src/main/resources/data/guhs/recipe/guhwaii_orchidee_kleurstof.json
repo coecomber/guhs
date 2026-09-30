@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:guhwaii_orchidee"
-    }
+    "guhs:guhwaii_orchidee"
   ],
   "result": {
     "id": "minecraft:purple_dye",

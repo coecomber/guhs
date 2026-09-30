@@ -5,8 +5,8 @@ kaasknabbel and the Boze Oppernabbel, the roze guh koek block models, and an edi
 
 The Blockbench projects belong to the user now (hand-tweaked): by default this script writes NOTHING (see build()); the
 game files come from Blockbench exports (or tools/features/piep_bbexport.py).
-To bring a hand edit into the game: in Blockbench File > Export > Bedrock Geometry (-> assets/guhs/geo/entity/<name>.geo.json),
-Animation > Export Animations (-> assets/guhs/animations/entity/<name>.animation.json) and save the texture.
+To bring a hand edit into the game: in Blockbench File > Export > Bedrock Geometry (-> assets/guhs/geckolib/models/entity/<name>.geo.json),
+Animation > Export Animations (-> assets/guhs/geckolib/animations/entity/<name>.animation.json) and save the texture.
 
 Bone names the Java code uses (keep them when editing; see PIEP_NOTES.md):
   pieppiepmuisje : root, body, head, ear_left, ear_right, foot_front_left/right, foot_back_left/right
@@ -932,8 +932,8 @@ def build(h):
         g = maker(atlas)
         an = anims()
         img = Image.fromarray(atlas.img)
-        h.w(f"{A}/geo/entity/{name}.geo.json", g)
-        h.w(f"{A}/animations/entity/{name}.animation.json", an)
+        h.w(f"{A}/geckolib/models/entity/{name}.geo.json", g)
+        h.w(f"{A}/geckolib/animations/entity/{name}.animation.json", an)
         h.save(img, "entity", f"{name}.png")
         if bbmodels:
             os.makedirs(BB_DIR, exist_ok=True)
@@ -960,7 +960,7 @@ def koek_block(h, bbmodels=False):
 def check(h):
     problems = []
     for name, *_ in ENTITIES:
-        gp = f"{h.A}/geo/entity/{name}.geo.json"
+        gp = f"{h.A}/geckolib/models/entity/{name}.geo.json"
         if not os.path.exists(gp):
             problems.append(f"piep: missing {gp}")
             continue
@@ -969,7 +969,7 @@ def check(h):
         for b in g["bones"]:
             if b.get("parent") and b["parent"] not in names:
                 problems.append(f"{name}: bone {b['name']} has a missing parent {b['parent']}")
-        anims = json.load(open(f"{h.A}/animations/entity/{name}.animation.json", encoding="utf-8"))["animations"]
+        anims = json.load(open(f"{h.A}/geckolib/animations/entity/{name}.animation.json", encoding="utf-8"))["animations"]
         for an, a in anims.items():
             for bn in a.get("bones", {}):
                 if bn not in names:
@@ -990,7 +990,7 @@ def preview():
     os.makedirs(out, exist_ok=True)
     views = (("front", 180 + 25, -18), ("side", 90, -10), ("back", 25, -25), ("top", 200, -65))
     for name, *_ in ([] if os.environ.get("PIEP_PREVIEW") == "koek" else ENTITIES):
-        quads = wr.geo_quads(os.path.join(wr.ASSETS, "geo", "entity", f"{name}.geo.json"), f"guhs:entity/{name}")
+        quads = wr.geo_quads(os.path.join(wr.ASSETS, "geckolib", "models", "entity", f"{name}.geo.json"), f"guhs:entity/{name}")
         imgs = [wr.render(quads, yaw=y, pitch=p, size=360) for _, y, p in views]
         sheet = Image.new("RGBA", (360 * len(imgs), 360), (200, 214, 226, 255))
         for i, im in enumerate(imgs):

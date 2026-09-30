@@ -6,12 +6,9 @@
     "WWW"
   ],
   "key": {
-    "W": {
-      "item": "minecraft:wheat"
-    }
+    "W": "minecraft:wheat"
   },
   "result": {
-    "id": "guhs:kippennestje",
-    "count": 1
+    "id": "guhs:kippennestje"
   }
 }

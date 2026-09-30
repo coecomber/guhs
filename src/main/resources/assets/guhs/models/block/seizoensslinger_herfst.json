@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/seizoensslinger_herfst",
     "vlag": "guhs:block/seizoensslinger_herfst"

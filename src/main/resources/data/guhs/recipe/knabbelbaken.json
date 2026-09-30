@@ -7,18 +7,11 @@
     "KKK"
   ],
   "key": {
-    "G": {
-      "item": "minecraft:glass"
-    },
-    "S": {
-      "item": "guhs:gloeister"
-    },
-    "K": {
-      "item": "guhs:grillkool"
-    }
+    "G": "minecraft:glass",
+    "S": "guhs:gloeister",
+    "K": "guhs:grillkool"
   },
   "result": {
-    "id": "guhs:knabbelbaken",
-    "count": 1
+    "id": "guhs:knabbelbaken"
   }
 }

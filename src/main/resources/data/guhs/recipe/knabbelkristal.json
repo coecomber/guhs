@@ -7,18 +7,11 @@
     "GTG"
   ],
   "key": {
-    "G": {
-      "item": "minecraft:glass"
-    },
-    "O": {
-      "item": "guhs:oog_van_vadsig"
-    },
-    "T": {
-      "item": "guhs:mika_traan"
-    }
+    "G": "minecraft:glass",
+    "O": "guhs:oog_van_vadsig",
+    "T": "guhs:mika_traan"
   },
   "result": {
-    "id": "guhs:knabbelkristal",
-    "count": 1
+    "id": "guhs:knabbelkristal"
   }
 }

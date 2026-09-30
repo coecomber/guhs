@@ -310,9 +310,10 @@ def entity_textures(h):
         px[x, 0] = px[x, 7] = GOLD + (255,)
     for y in range(8):
         px[8, y] = px[15, y] = GOLD + (255,)
-    os.makedirs(os.path.join(TEX, "models", "armor"), exist_ok=True)
-    armor.save(os.path.join(TEX, "models", "armor", "knabbelkroon_layer_1.png"))
-    armor.save(os.path.join(TEX, "models", "armor", "knabbelkroon_layer_2.png"))
+    # 26.1 equipment asset guhs:knabbelkroon (tools/mc26.py writes assets/guhs/equipment/knabbelkroon.json)
+    for layer in ("humanoid", "humanoid_leggings"):
+        os.makedirs(os.path.join(TEX, "entity", "equipment", layer), exist_ok=True)
+        armor.save(os.path.join(TEX, "entity", "equipment", layer, "knabbelkroon.png"))
     # the sky: slow swirls of knabbel crumbs
     sky = h.vanilla("environment/end_sky")
     a = np.asarray(sky).astype(np.float32)
@@ -688,7 +689,7 @@ def selfcheck(h):
         if not os.path.exists(f"{A}/models/item/{i}.json"):
             missing.append(f"item model {i}")
     for t in ["entity/opper_mika", "entity/knabbelkristal", "entity/guhvleugels", "entity/guh_mager", "entity/guh_vahoege_ender",
-              "entity/guh_vahoege_ender_glowmask", "environment/guheinde_sky", "models/armor/knabbelkroon_layer_1"] + \
+              "entity/guh_vahoege_ender_glowmask", "environment/guheinde_sky", "entity/equipment/humanoid/knabbelkroon"] + \
              [f"entity/guh_hongerig_{i}" for i in range(9)]:
         if not os.path.exists(os.path.join(h.TEX, t + ".png")):
             missing.append(f"texture {t}")

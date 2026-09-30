@@ -191,7 +191,7 @@ GUH_OFFSET = (0, 9, 10)          # the sitting guh on the saddle, behind the ice
 def ijscoguh(h):
     import make_guh_variants as mgv
     A = h.A
-    src = json.load(open(f"{A}/geo/entity/guh_sitting.geo.json", encoding="utf-8"))
+    src = json.load(open(f"{A}/geckolib/models/entity/guh_sitting.geo.json", encoding="utf-8"))
     geo = copy.deepcopy(src["minecraft:geometry"][0])
     ox, oy, oz = GUH_OFFSET
     for bone in geo["bones"]:
@@ -264,7 +264,7 @@ def ijscoguh(h):
     ])
     geo["description"] = {"identifier": "geometry.ijscoguh", "texture_width": 128, "texture_height": 128,
                           "visible_bounds_width": 4, "visible_bounds_height": 4, "visible_bounds_offset": [0, 1.5, 0]}
-    h.w(f"{A}/geo/entity/ijscoguh.geo.json", {"format_version": src.get("format_version", "1.12.0"), "minecraft:geometry": [geo]})
+    h.w(f"{A}/geckolib/models/entity/ijscoguh.geo.json", {"format_version": src.get("format_version", "1.12.0"), "minecraft:geometry": [geo]})
     # the texture: the sitting guh's, with the swatches painted in
     base = np.asarray(Image.open(f"{A}/textures/entity/guh_sitting.png").convert("RGBA")).copy()
     rng = random.Random(28808)
@@ -272,9 +272,9 @@ def ijscoguh(h):
         base[v * 4:(v + 8) * 4, u * 4:(u + 8) * 4] = tex.bike_swatch(name, rng)
     Image.fromarray(base).save(f"{A}/textures/entity/ijscoguh.png")
     # the animation: breathing and a little head sway (the wheels, feet and bell are turned in IJscoguhRenderer)
-    anim = json.load(open(f"{A}/animations/entity/guh_sitting.animation.json", encoding="utf-8"))
+    anim = json.load(open(f"{A}/geckolib/animations/entity/guh_sitting.animation.json", encoding="utf-8"))
     idle = next(iter(anim["animations"].values()))
-    h.w(f"{A}/animations/entity/ijscoguh.animation.json", {"format_version": anim.get("format_version", "1.8.0"),
+    h.w(f"{A}/geckolib/animations/entity/ijscoguh.animation.json", {"format_version": anim.get("format_version", "1.8.0"),
                                                            "animations": {"animation.ijscoguh.idle": idle}})
     return swatches
 

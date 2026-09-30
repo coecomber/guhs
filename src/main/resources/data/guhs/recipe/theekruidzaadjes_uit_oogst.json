@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:theekruid"
-    }
+    "guhs:theekruid"
   ],
   "result": {
     "id": "guhs:theekruidzaadjes",

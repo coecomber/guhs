@@ -111,7 +111,7 @@ def bone(name, parent, pivot, cubes=(), rotation=None):
 
 
 def write_geo(h, name, atlas, bones, width, height):
-    h.w(f"{h.A}/geo/entity/{name}.geo.json", {"format_version": "1.12.0", "minecraft:geometry": [{
+    h.w(f"{h.A}/geckolib/models/entity/{name}.geo.json", {"format_version": "1.12.0", "minecraft:geometry": [{
         "description": {"identifier": f"geometry.{name}", "texture_width": atlas.W, "texture_height": atlas.H,
                         "visible_bounds_width": width, "visible_bounds_height": height, "visible_bounds_offset": [0, height / 2, 0]},
         "bones": bones}]})
@@ -592,7 +592,7 @@ def animations(h, name, extra=None, flap_len=0.24):
             "tail": {"rotation": kf([(0, (0, 0, 0)), (0.1, (-14, 0, 0)), (0.45, (0, 0, 0))])}}),
     }
     common.update(extra or {})
-    h.w(f"{h.A}/animations/entity/{name}.animation.json", {"format_version": "1.8.0", "animations": {
+    h.w(f"{h.A}/geckolib/animations/entity/{name}.animation.json", {"format_version": "1.8.0", "animations": {
         f"animation.{name}.{k}": v for k, v in common.items()}})
     return set(common)
 
@@ -673,7 +673,7 @@ def check(h, bones, anims):
         top = max(c["origin"][1] + c["size"][1] for b in bs for c in b["cubes"])
         if top > 16:
             p.append(f"{name}: {top} units tall")
-        with open(os.path.join(h.A, "animations", "entity", f"{name}.animation.json"), encoding="utf-8") as f:
+        with open(os.path.join(h.A, "geckolib", "animations", "entity", f"{name}.animation.json"), encoding="utf-8") as f:
             data = json.load(f)["animations"]
         for an, a in data.items():
             for bn in a["bones"]:

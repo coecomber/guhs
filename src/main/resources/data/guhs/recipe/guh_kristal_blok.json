@@ -6,12 +6,9 @@
     "KK"
   ],
   "key": {
-    "K": {
-      "item": "guhs:guh_kristal"
-    }
+    "K": "guhs:guh_kristal"
   },
   "result": {
-    "id": "guhs:guh_kristal_blok",
-    "count": 1
+    "id": "guhs:guh_kristal_blok"
   }
 }

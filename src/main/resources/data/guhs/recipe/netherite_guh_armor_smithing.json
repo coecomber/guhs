@@ -1,16 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
-  },
-  "base": {
-    "item": "guhs:diamond_guh_armor"
-  },
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
+  "template": "minecraft:netherite_upgrade_smithing_template",
+  "base": "guhs:diamond_guh_armor",
+  "addition": "minecraft:netherite_ingot",
   "result": {
-    "id": "guhs:netherite_guh_armor",
-    "count": 1
+    "id": "guhs:netherite_guh_armor"
   }
 }

@@ -6,18 +6,11 @@
     " F "
   ],
   "key": {
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "S": {
-      "tag": "minecraft:wooden_slabs"
-    },
-    "F": {
-      "tag": "minecraft:wooden_fences"
-    }
+    "W": "minecraft:pink_wool",
+    "S": "#minecraft:wooden_slabs",
+    "F": "#minecraft:wooden_fences"
   },
   "result": {
-    "id": "guhs:guh_wip",
-    "count": 1
+    "id": "guhs:guh_wip"
   }
 }

@@ -6,9 +6,7 @@
     "RRR"
   ],
   "key": {
-    "R": {
-      "item": "guhs:gepolijst_roosterijzer"
-    }
+    "R": "guhs:gepolijst_roosterijzer"
   },
   "result": {
     "id": "guhs:roosterijzer_tralies",

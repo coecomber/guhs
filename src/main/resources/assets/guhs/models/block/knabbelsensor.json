@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/knabbelsensor_side",
     "side": "guhs:block/knabbelsensor_side",

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:guhbloesem_log"
-    }
+    "guhs:guhbloesem_log"
   ],
   "result": {
     "id": "guhs:guhbloesem_planks",

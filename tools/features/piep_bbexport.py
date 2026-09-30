@@ -4,7 +4,7 @@ Blockbench's own File > Export (Bedrock geometry + animations + the texture), wi
 
   (the user's own turtles: Poepschilly = blockbench/PoepSchilly.bbmodel, Schilly = blockbench/Schilly.bbmodel; both read-only)
   pieppiepmuisje / poepschilly / boze_kaasknabbel / boze_oppernabbel (bedrock entity projects):
-      assets/guhs/geo/entity/<name>.geo.json, assets/guhs/animations/entity/<name>.animation.json,
+      assets/guhs/geckolib/models/entity/<name>.geo.json, assets/guhs/geckolib/animations/entity/<name>.animation.json,
       assets/guhs/textures/entity/<name>.png
   roze_guh_koek (java block project, the full tray of 6): assets/guhs/models/block/roze_guh_koek_6.json and its textures
       (the 1-5 models are made from it: the first n koeken, in element order, the tray elements first)
@@ -141,8 +141,8 @@ def main(names):
                 img.save(os.path.join(A, "textures", "block", f"roze_guh_koek_{k}.png"))
         else:
             geo, anims, img = export_entity(name)
-            w(os.path.join(A, "geo", "entity", f"{name}.geo.json"), geo)
-            w(os.path.join(A, "animations", "entity", f"{name}.animation.json"), anims)
+            w(os.path.join(A, "geckolib", "models", "entity", f"{name}.geo.json"), geo)
+            w(os.path.join(A, "geckolib", "animations", "entity", f"{name}.animation.json"), anims)
             img.save(os.path.join(A, "textures", "entity", f"{name}.png"))
         print("exported", name)
 
@@ -151,7 +151,7 @@ def newer():
     out = []
     for name in ENTITIES + ("roze_guh_koek",):
         src = bron(name)
-        dst = os.path.join(A, "models", "block", "roze_guh_koek_6.json") if name == "roze_guh_koek" else os.path.join(A, "geo", "entity", f"{name}.geo.json")
+        dst = os.path.join(A, "models", "block", "roze_guh_koek_6.json") if name == "roze_guh_koek" else os.path.join(A, "geckolib", "models", "entity", f"{name}.geo.json")
         if os.path.exists(src) and (not os.path.exists(dst) or os.path.getmtime(src) > os.path.getmtime(dst)):
             out.append(name)
     return out

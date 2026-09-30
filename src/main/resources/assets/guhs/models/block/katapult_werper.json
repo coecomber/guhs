@@ -1,6 +1,5 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "guhs:block/katapult_werper_hout",
     "hout": "guhs:block/katapult_werper_hout",

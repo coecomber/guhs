@@ -7,15 +7,9 @@
     "NGN"
   ],
   "key": {
-    "N": {
-      "item": "minecraft:iron_nugget"
-    },
-    "G": {
-      "item": "minecraft:glass"
-    },
-    "K": {
-      "item": "guhs:guh_kristal"
-    }
+    "N": "minecraft:iron_nugget",
+    "G": "minecraft:glass",
+    "K": "guhs:guh_kristal"
   },
   "result": {
     "id": "guhs:guh_kristal_lamp",

@@ -1010,7 +1010,7 @@ def grand_cheese_fountain():
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Guh statue: the guh model (assets/guhs/geo/entity/guh.geo.json) built out of blocks, coloured from its texture
+# Guh statue: the guh model (assets/guhs/geckolib/models/entity/guh.geo.json) built out of blocks, coloured from its texture
 # ---------------------------------------------------------------------------------------------------------------------
 STATUE_BONES = ("body", "tail", "leg_back_left", "leg_back_right", "head", "ear_left", "ear_right",
                 "leg_front_left", "leg_front_right")
@@ -1041,7 +1041,7 @@ def voxel_guh(s, ox, oy, oz, scale=1.5, bones=STATUE_BONES, texture="guh.png", f
     from PIL import Image
     here = os.path.dirname(os.path.abspath(__file__))
     res = os.path.join(here, "..", "src", "main", "resources", "assets", "guhs")
-    geo = json.load(open(os.path.join(res, "geo", "entity", "guh.geo.json")))["minecraft:geometry"][0]
+    geo = json.load(open(os.path.join(res, "geckolib", "models", "entity", "guh.geo.json")))["minecraft:geometry"][0]
     tex = Image.open(os.path.join(res, "textures", "entity", texture)).convert("RGBA")
     cubes = [c for b in geo["bones"] if b["name"] in bones for c in b.get("cubes", [])]
     frame = [c for b in geo["bones"] if b["name"] in (bounds_bones or bones) for c in b.get("cubes", [])]

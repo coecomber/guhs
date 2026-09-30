@@ -1,9 +1,7 @@
 {
   "type": "minecraft:campfire_cooking",
   "category": "food",
-  "ingredient": {
-    "item": "guhs:guh_vis"
-  },
+  "ingredient": "guhs:guh_vis",
   "result": {
     "id": "guhs:gebakken_guh_vis"
   },

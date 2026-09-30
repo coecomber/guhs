@@ -278,7 +278,7 @@ def fur(h):
     """The wolf look on guh_baltoguh.png (made grey by make_guh_variants, with the ear and tail swatches): a light belly,
     chest, chin and paws, a darker saddle on the back, a little darker ear tips; then its sleeping eyes again."""
     from features import guhpolder_tex as gt
-    geo = json.load(open(os.path.join(h.A, "geo", "entity", "guh.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
+    geo = json.load(open(os.path.join(h.A, "geckolib", "models", "entity", "guh.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
     base = np.asarray(Image.open(os.path.join(h.TEX, "entity", "guh.png")).convert("RGBA")).astype(np.int32)
     doel = Image.open(os.path.join(h.TEX, "entity", "guh_baltoguh.png")).convert("RGBA")
     a = np.asarray(doel).astype(np.int32).copy()
@@ -361,7 +361,7 @@ def selfcheck(h, route):
         if f"block.guhs.{b}" not in h.NL:
             problems.append(f"block {b}: no name")
     for kind in ("boris", "steele_mika", "muk", "luk", "rosy", "witte_wolfguh"):
-        for p in (f"{h.A}/geo/entity/guh_npc_{kind}.geo.json", f"{h.TEX}/entity/npc_{kind}.png"):
+        for p in (f"{h.A}/geckolib/models/entity/guh_npc_{kind}.geo.json", f"{h.TEX}/entity/npc_{kind}.png"):
             if not os.path.exists(p):
                 problems.append(f"missing {p}")
     for snd in ("huil1", "gak1", "belletjes", "hatsjoe1", "snuffel", "wind1"):

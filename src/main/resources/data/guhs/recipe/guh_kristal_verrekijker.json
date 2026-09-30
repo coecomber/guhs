@@ -6,15 +6,10 @@
     "S"
   ],
   "key": {
-    "C": {
-      "item": "guhs:guh_kristal"
-    },
-    "S": {
-      "item": "minecraft:spyglass"
-    }
+    "C": "guhs:guh_kristal",
+    "S": "minecraft:spyglass"
   },
   "result": {
-    "id": "guhs:guh_kristal_verrekijker",
-    "count": 1
+    "id": "guhs:guh_kristal_verrekijker"
   }
 }

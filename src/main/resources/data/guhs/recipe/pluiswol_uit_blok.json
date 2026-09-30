@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:pluiswolblok"
-    }
+    "guhs:pluiswolblok"
   ],
   "result": {
     "id": "guhs:pluiswol",

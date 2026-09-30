@@ -2,18 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:glass_bottle"
-    },
-    {
-      "item": "minecraft:light_blue_dye"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    }
+    "minecraft:glass_bottle",
+    "minecraft:light_blue_dye",
+    "guhs:kaas_knabbels"
   ],
   "result": {
-    "id": "guhs:haarverf_hemelsblauw",
-    "count": 1
+    "id": "guhs:haarverf_hemelsblauw"
   }
 }

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:sneeuwguhspar_gezicht"
-    }
+    "guhs:sneeuwguhspar_gezicht"
   ],
   "result": {
     "id": "minecraft:spruce_planks",

@@ -480,7 +480,7 @@ def selfcheck(h):
     for t in ("entity/npc_bakkerguh", "entity/bakkerij_bubbel", "gui/bakkerij_knoppen", "particle/knabbelwolkje_0", "particle/meelstofje_0"):
         if not os.path.exists(f"{A}/textures/{t}.png"):
             missing.append(f"texture {t}")
-    if not os.path.exists(f"{A}/geo/entity/guh_npc_bakkerguh.geo.json"):
+    if not os.path.exists(f"{A}/geckolib/models/entity/guh_npc_bakkerguh.geo.json"):
         missing.append("geo guh_npc_bakkerguh")
     if missing:
         raise SystemExit(f"bakkerij assets missing: {missing}")

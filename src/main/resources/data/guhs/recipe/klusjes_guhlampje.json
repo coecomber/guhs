@@ -7,18 +7,10 @@
     " K "
   ],
   "key": {
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "G": {
-      "item": "minecraft:glass_pane"
-    },
-    "T": {
-      "item": "minecraft:torch"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    }
+    "W": "minecraft:pink_wool",
+    "G": "minecraft:glass_pane",
+    "T": "minecraft:torch",
+    "K": "guhs:kaas_knabbels"
   },
   "result": {
     "id": "guhs:klusjes_guhlampje",

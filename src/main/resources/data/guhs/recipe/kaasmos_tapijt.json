@@ -5,9 +5,7 @@
     "MM"
   ],
   "key": {
-    "M": {
-      "item": "guhs:kaasmos"
-    }
+    "M": "guhs:kaasmos"
   },
   "result": {
     "id": "guhs:kaasmos_tapijt",

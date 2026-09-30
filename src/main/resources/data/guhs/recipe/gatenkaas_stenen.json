@@ -6,9 +6,7 @@
     "GG"
   ],
   "key": {
-    "G": {
-      "item": "guhs:gatenkaas"
-    }
+    "G": "guhs:gatenkaas"
   },
   "result": {
     "id": "guhs:gatenkaas_stenen",

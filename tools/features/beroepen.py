@@ -298,10 +298,10 @@ def selfcheck(h):
     A = h.A
     missing = []
     for kind in KINDS:
-        for f in (f"{A}/geo/entity/guh_npc_{kind}.geo.json", f"{A}/textures/entity/npc_{kind}.png"):
+        for f in (f"{A}/geckolib/models/entity/guh_npc_{kind}.geo.json", f"{A}/textures/entity/npc_{kind}.png"):
             if not os.path.exists(f):
                 missing.append(f)
-    for f in (f"{A}/geo/entity/knabbeldief_mika.geo.json", f"{A}/textures/entity/knabbeldief_mika.png"):
+    for f in (f"{A}/geckolib/models/entity/knabbeldief_mika.geo.json", f"{A}/textures/entity/knabbeldief_mika.png"):
         if not os.path.exists(f):
             missing.append(f)
     for files in SOUNDS.values():

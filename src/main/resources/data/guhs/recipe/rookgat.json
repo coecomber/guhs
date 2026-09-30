@@ -6,15 +6,10 @@
     "R"
   ],
   "key": {
-    "T": {
-      "item": "guhs:roosterijzer_tralies"
-    },
-    "R": {
-      "item": "guhs:gloeikool"
-    }
+    "T": "guhs:roosterijzer_tralies",
+    "R": "guhs:gloeikool"
   },
   "result": {
-    "id": "guhs:rookgat",
-    "count": 1
+    "id": "guhs:rookgat"
   }
 }

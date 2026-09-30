@@ -1,10 +1,7 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "guhs:belegen_kaas_stenen"
-  },
+  "ingredient": "guhs:belegen_kaas_stenen",
   "result": {
-    "id": "guhs:belegen_kaas_trap",
-    "count": 1
+    "id": "guhs:belegen_kaas_trap"
   }
 }

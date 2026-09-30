@@ -455,7 +455,7 @@ def render_structure(struct, guh_sprites, px=10, max_size=1100, cutaway=False, g
 # ---------------------------------------------------------------------------------------------------------------------
 def main(out):
     os.makedirs(out, exist_ok=True)
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name):
         img.save(os.path.join(out, name + ".png"))
@@ -639,7 +639,7 @@ def rail_quads(pieces):
 
 
 def main_v2(out):
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name):
         img.save(os.path.join(out, name + ".png"))
@@ -839,7 +839,7 @@ def main_v21(out):
     """2.1.0: the ender guh, the Kermis-guh, the kermis outfit, the coaster pieces, the guh kermis, the new guh tree."""
     import re
     import slee_track as st
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name):
         img.save(os.path.join(out, name + ".png"))
@@ -930,7 +930,7 @@ def main_v21(out):
 def main_v22(out):
     """2.2.0: verstopguh: the house (outside and floor 1 inside), Verstopguhtje, the detective outfit, icons."""
     import re
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name):
         img.save(os.path.join(out, name + ".png"))
@@ -974,7 +974,7 @@ def main_v22(out):
 
 def main_v23(out):
     """2.3.0: the guh castle, the Koningguh (with and without his outfit), the throne, icons."""
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name):
         img.save(os.path.join(out, name + ".png"))
@@ -1049,7 +1049,7 @@ def main_v24(out, base_items=None):
     """2.4.0: the 7 minigames and 3 rare places: their buildings, guh characters, outfits, the Wolkguh and item icons."""
     import re
     import types
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name):
         img.save(os.path.join(out, name + ".png"))
@@ -1125,7 +1125,7 @@ def main_v24(out, base_items=None):
 def main_v26(out, captured):
     """2.6.0: the Guheinde: the Knabbelkelder, the Knabbelberg, the Mika-vesting with the vetschip, Opper-Mika, his starved
     Enderguh, the magere guh and the Vahoege Enderguh (the item icons come from main_v24's loop)."""
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name):
         img.save(os.path.join(out, name + ".png"))
@@ -1190,7 +1190,7 @@ def rookguh_quads():
     """The Rookguh (2.8, a ghast with a guh face) posed like in its float animation: the tentacles trail back a bit,
     each at its own angle; the cheeks (they come when it has eaten) hidden."""
     import tempfile
-    g = json.load(open(os.path.join(ASSETS, "geo", "entity", "rookguh.geo.json")))
+    g = json.load(open(os.path.join(ASSETS, "geckolib", "models", "entity", "rookguh.geo.json")))
     for b in g["minecraft:geometry"][0]["bones"]:
         if b["name"].startswith("tentacle_"):
             b["rotation"] = [round(-20 + 11 * math.sin(int(b["name"][9:])), 2), 0, 0]
@@ -1208,7 +1208,7 @@ def main_v27(out, captured=None):
     import re
     import types
     import make_structures as ms
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name):
         img.save(os.path.join(out, name + ".png"))
@@ -1410,7 +1410,7 @@ def main_v27_zee(out, captured=None):
     import random
     import types
     import make_structures as ms
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name):
         img.save(os.path.join(out, name + ".png"))
@@ -1572,7 +1572,7 @@ def main_v28(out, captured=None):
     import re
     import types
     import make_structures as ms
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name, crop=False):
         if crop:        # (the pictures of a row of things: without the empty space above and below)
@@ -1792,7 +1792,7 @@ def main_v281(out, captured=None):
     the Boze Oppernabbel, the roze guh koek tray (1-6 koeken), the kaasknabbel-nest (outside and cut open), the new item
     icons, and a few in-game screenshots. captured = main_v24's structures (else the nest is built on its own)."""
     import types
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name, crop=False):
         if crop:
@@ -1886,7 +1886,7 @@ def main_v25(out, base_items=None):
     """2.5.0: the Guhbubbel (without its water, to see the dome), the Zeemeerguh, the diving and parade outfits, new icons."""
     import re
     import types
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name):
         img.save(os.path.join(out, name + ".png"))
@@ -2044,7 +2044,7 @@ def main_v29(out, captured=None):
     import re
     sys.path.insert(0, "tools")
     import make_structures as ms
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(img, name, crop=False):
         if crop:
@@ -2314,7 +2314,7 @@ def main_v210(out, captured=None):
     import re
     sys.path.insert(0, "tools")
     import make_structures as ms
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(im, name, crop=False):
         if crop:
@@ -2581,7 +2581,7 @@ def main_v30(out, captured=None):
     sys.path.insert(0, "tools")
     import make_structures as ms
     os.makedirs(out, exist_ok=True)
-    geo = lambda n: os.path.join(ASSETS, "geo", "entity", n + ".geo.json")
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
 
     def save(im, name, crop=False):
         if crop:

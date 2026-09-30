@@ -7,30 +7,15 @@
     "S S"
   ],
   "key": {
-    "R": {
-      "item": "minecraft:red_dye"
-    },
-    "Y": {
-      "item": "minecraft:yellow_dye"
-    },
-    "G": {
-      "item": "minecraft:lime_dye"
-    },
-    "B": {
-      "item": "minecraft:light_blue_dye"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    },
-    "L": {
-      "item": "minecraft:purple_dye"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "R": "minecraft:red_dye",
+    "Y": "minecraft:yellow_dye",
+    "G": "minecraft:lime_dye",
+    "B": "minecraft:light_blue_dye",
+    "P": "#minecraft:planks",
+    "L": "minecraft:purple_dye",
+    "S": "minecraft:stick"
   },
   "result": {
-    "id": "guhs:guh_xylofoon",
-    "count": 1
+    "id": "guhs:guh_xylofoon"
   }
 }

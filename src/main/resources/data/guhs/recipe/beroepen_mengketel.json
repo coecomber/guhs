@@ -7,15 +7,10 @@
     " P "
   ],
   "key": {
-    "P": {
-      "item": "minecraft:pink_terracotta"
-    },
-    "C": {
-      "item": "minecraft:cauldron"
-    }
+    "P": "minecraft:pink_terracotta",
+    "C": "minecraft:cauldron"
   },
   "result": {
-    "id": "guhs:beroepen_mengketel",
-    "count": 1
+    "id": "guhs:beroepen_mengketel"
   }
 }

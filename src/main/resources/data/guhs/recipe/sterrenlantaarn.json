@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:lantern"
-    },
-    {
-      "item": "guhs:wensster"
-    }
+    "minecraft:lantern",
+    "guhs:wensster"
   ],
   "result": {
     "id": "guhs:sterrenlantaarn",

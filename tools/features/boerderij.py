@@ -329,13 +329,13 @@ def selfcheck_assets(h):
         if not os.path.exists(f"{A}/models/item/{i}.json") and i not in CLOTHES or f"item.guhs.{i}" not in h.NL:
             missing.append(f"item {i}")
     for a in ANIMALS:
-        for p in (f"{A}/geo/entity/{a}.geo.json", f"{A}/animations/entity/{a}.animation.json", os.path.join(h.TEX, "entity", f"{a}.png")):
+        for p in (f"{A}/geckolib/models/entity/{a}.geo.json", f"{A}/geckolib/animations/entity/{a}.animation.json", os.path.join(h.TEX, "entity", f"{a}.png")):
             if not os.path.exists(p):
                 missing.append(p)
         for k in (f"entity.guhs.{a}", f"gui.guhs.guhdex.rarity.{a}", f"gui.guhs.guhdex.info.{a}"):
             if k not in h.NL:
                 missing.append(k)
-    for p in (f"{A}/geo/entity/guh_npc_boerinneguh.geo.json", os.path.join(h.TEX, "entity", "npc_boerinneguh.png")):
+    for p in (f"{A}/geckolib/models/entity/guh_npc_boerinneguh.geo.json", os.path.join(h.TEX, "entity", "npc_boerinneguh.png")):
         if not os.path.exists(p):
             missing.append(p)
     for f in os.listdir(f"{A}/models/block"):

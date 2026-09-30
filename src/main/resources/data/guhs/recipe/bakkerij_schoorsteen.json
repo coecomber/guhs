@@ -6,15 +6,10 @@
     "BKB"
   ],
   "key": {
-    "B": {
-      "item": "minecraft:brick"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    }
+    "B": "minecraft:brick",
+    "K": "guhs:kaas_knabbels"
   },
   "result": {
-    "id": "guhs:bakkerij_schoorsteen",
-    "count": 1
+    "id": "guhs:bakkerij_schoorsteen"
   }
 }

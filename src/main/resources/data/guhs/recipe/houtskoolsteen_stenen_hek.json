@@ -6,12 +6,8 @@
     "SHS"
   ],
   "key": {
-    "S": {
-      "item": "guhs:houtskoolsteen_stenen"
-    },
-    "H": {
-      "item": "guhs:houtskoolsteen"
-    }
+    "S": "guhs:houtskoolsteen_stenen",
+    "H": "guhs:houtskoolsteen"
   },
   "result": {
     "id": "guhs:houtskoolsteen_stenen_hek",

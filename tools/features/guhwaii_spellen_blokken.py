@@ -462,8 +462,8 @@ def surfplank(h):
     geo = {"format_version": "1.12.0", "minecraft:geometry": [{
         "description": {"identifier": "geometry.guhwaiispellen_surfplank", "texture_width": 64, "texture_height": 32, "visible_bounds_width": 3,
                         "visible_bounds_height": 1.5, "visible_bounds_offset": [0, 0.3, 0]}, "bones": bones}]}
-    h.w(os.path.join(h.A, "geo", "entity", "guhwaiispellen_surfplank.geo.json"), geo)
-    h.w(os.path.join(h.A, "animations", "entity", "guhwaiispellen_surfplank.animation.json"), {"format_version": "1.8.0", "animations": {}})
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "guhwaiispellen_surfplank.geo.json"), geo)
+    h.w(os.path.join(h.A, "geckolib", "animations", "entity", "guhwaiispellen_surfplank.animation.json"), {"format_version": "1.8.0", "animations": {}})
 
 
 # =====================================================================================================================

@@ -324,7 +324,7 @@ EAR_INNER = (244, 150, 180)
 
 def vadswaker_model(h):
     A = h.A
-    geo = json.load(open(f"{A}/geo/entity/mika.geo.json", encoding="utf-8"))
+    geo = json.load(open(f"{A}/geckolib/models/entity/mika.geo.json", encoding="utf-8"))
     g = geo["minecraft:geometry"][0]
     g["description"]["identifier"] = "geometry.vadswaker"
     g["description"]["visible_bounds_width"] = 4
@@ -346,7 +346,7 @@ def vadswaker_model(h):
     }
     for bone in g["bones"]:
         bone.setdefault("cubes", []).extend(extra.get(bone["name"], []))
-    h.w(f"{A}/geo/entity/vadswaker.geo.json", geo)
+    h.w(f"{A}/geckolib/models/entity/vadswaker.geo.json", geo)
 
     # --- the texture: the Mika, gone the colour of old cheese from all the stolen knabbels, with holes in its fur ---
     src = Image.open(os.path.join(h.TEX, "entity", "mika.png")).convert("RGBA")
@@ -382,7 +382,7 @@ def vadswaker_model(h):
     h.save(g2, "entity", "vadswaker_glowmask.png")
 
     # --- animations: the guh idle/walk, plus climbing out of / into the ground, roaring, sniffing and a paw swipe ---
-    guh = json.load(open(f"{A}/animations/entity/guh.animation.json", encoding="utf-8"))["animations"]
+    guh = json.load(open(f"{A}/geckolib/animations/entity/guh.animation.json", encoding="utf-8"))["animations"]
     anims = {"animation.vadswaker.idle": guh["animation.guh.idle"], "animation.vadswaker.walk": json.loads(json.dumps(guh["animation.guh.walk"]))}
     anims["animation.vadswaker.walk"]["animation_length"] = 0.9
     for bone in anims["animation.vadswaker.walk"]["bones"].values():      # (a slower, heavier walk)
@@ -415,7 +415,7 @@ def vadswaker_model(h):
         "head": {"rotation": {"0.0": [0, 0, 0], "0.15": [-20, 0, 0], "0.3": [25, 0, 0], "0.6": [0, 0, 0]}},
         "leg_front_left": {"rotation": {"0.0": [0, 0, 0], "0.15": [-70, 0, 0], "0.3": [20, 0, 0], "0.6": [0, 0, 0]}},
         "leg_front_right": {"rotation": {"0.0": [0, 0, 0], "0.15": [-70, 0, 0], "0.3": [20, 0, 0], "0.6": [0, 0, 0]}}}}
-    h.w(f"{A}/animations/entity/vadswaker.animation.json", {"format_version": "1.8.0", "animations": anims})
+    h.w(f"{A}/geckolib/animations/entity/vadswaker.animation.json", {"format_version": "1.8.0", "animations": anims})
     h.w(f"{A}/models/item/vadswaker_spawn_egg.json", {"parent": "minecraft:item/template_spawn_egg"})
     h.w(f"{h.D}/loot_table/entities/vadswaker.json", {"type": "minecraft:entity", "pools": [
         {"rolls": 1, "entries": [{"type": "minecraft:item", "name": "guhs:kaaskorrel", "functions": h.count_fn(6, 10) + [
@@ -1716,7 +1716,7 @@ def selfcheck_assets(h):
     for i in ITEMS:
         if not os.path.exists(f"{A}/models/item/{i}.json") or f"item.guhs.{i}" not in h.NL:
             missing.append(f"item {i}")
-    for p in (f"{A}/geo/entity/vadswaker.geo.json", f"{A}/animations/entity/vadswaker.animation.json", f"{A}/textures/entity/vadswaker.png",
+    for p in (f"{A}/geckolib/models/entity/vadswaker.geo.json", f"{A}/geckolib/animations/entity/vadswaker.animation.json", f"{A}/textures/entity/vadswaker.png",
               f"{A}/textures/entity/vadswaker_glowmask.png", f"{A}/textures/mob_effect/stil.png"):
         if not os.path.exists(p):
             missing.append(p)

@@ -7,24 +7,13 @@
     "PBP"
   ],
   "key": {
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "H": {
-      "item": "guhs:guhhuisje_klein"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    },
-    "B": {
-      "item": "guhs:block_of_kaasknabbels"
-    },
-    "T": {
-      "item": "guhs:timmerguh_bouwboekje"
-    }
+    "W": "minecraft:pink_wool",
+    "H": "guhs:guhhuisje_klein",
+    "P": "#minecraft:planks",
+    "B": "guhs:block_of_kaasknabbels",
+    "T": "guhs:timmerguh_bouwboekje"
   },
   "result": {
-    "id": "guhs:guhhuisje_medium",
-    "count": 1
+    "id": "guhs:guhhuisje_medium"
   }
 }

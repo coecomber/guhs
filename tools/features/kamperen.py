@@ -269,7 +269,7 @@ def selfcheck(h):
     missing = []
     if len(verhalen.VERHALEN) != 12 or any(len(r) != 7 for (_, r, _) in verhalen.VERHALEN.values()):
         missing.append("12 stories of 7 lines")
-    for f in ("blockstates/guh_slaapzak.json", "geo/entity/guh_npc_opa_guh.geo.json", "textures/mob_effect/uitgerust.png"):
+    for f in ("blockstates/guh_slaapzak.json", "geckolib/models/entity/guh_npc_opa_guh.geo.json", "textures/mob_effect/uitgerust.png"):
         if not os.path.exists(f"{h.A}/{f}"):
             missing.append(f)
     if missing:

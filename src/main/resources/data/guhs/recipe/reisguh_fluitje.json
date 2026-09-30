@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:ender_pearl"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    },
-    {
-      "item": "minecraft:light_blue_dye"
-    }
+    "minecraft:ender_pearl",
+    "guhs:kaas_knabbels",
+    "minecraft:light_blue_dye"
   ],
   "result": {
     "id": "guhs:reisguh_fluitje",

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:klusjes_schelpje"
-    }
+    "guhs:klusjes_schelpje"
   ],
   "result": {
     "id": "minecraft:bone_meal",

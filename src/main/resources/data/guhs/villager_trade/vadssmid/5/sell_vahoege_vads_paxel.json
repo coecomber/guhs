@@ -1,0 +1,12 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 64
+  },
+  "gives": {
+    "id": "guhs:vahoege_vads_paxel"
+  },
+  "max_uses": 2,
+  "xp": 30,
+  "reputation_discount": 0.05
+}

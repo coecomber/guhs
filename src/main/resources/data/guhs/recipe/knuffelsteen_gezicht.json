@@ -2,15 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:knuffelsteen"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    }
+    "guhs:knuffelsteen",
+    "guhs:kaas_knabbels"
   ],
   "result": {
-    "id": "guhs:knuffelsteen_gezicht",
-    "count": 1
+    "id": "guhs:knuffelsteen_gezicht"
   }
 }

@@ -1,0 +1,12 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 10
+  },
+  "gives": {
+    "id": "guhs:guhmensie_superkompas"
+  },
+  "max_uses": 3,
+  "xp": 10,
+  "reputation_discount": 0.05
+}

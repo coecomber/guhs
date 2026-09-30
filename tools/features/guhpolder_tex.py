@@ -573,7 +573,7 @@ def pinguh(base, geo, look):
 
 
 def pinguh_textures(h):
-    geo = json.load(open(os.path.join(h.A, "geo", "entity", "guh.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
+    geo = json.load(open(os.path.join(h.A, "geckolib", "models", "entity", "guh.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
     base = Image.open(os.path.join(h.TEX, "entity", "guh.png")).convert("RGBA")
     for look, name in (("klassiek", "guh_pinguh.png"), ("keizer", "guh_pinguh_keizer.png"), ("pluis", "guh_pinguh_pluis.png")):
         h.save(pinguh(base, geo, look), "entity", name)

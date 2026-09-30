@@ -7,9 +7,7 @@
     "KKK"
   ],
   "key": {
-    "K": {
-      "item": "guhs:mika_steen"
-    }
+    "K": "guhs:mika_steen"
   },
   "result": {
     "id": "guhs:mika_steen_trap",

@@ -460,7 +460,7 @@ def _paint(arr, swatch, colour, rng, var=8, pattern=None):
 
 
 def boerin(h):
-    geo_file = json.load(open(os.path.join(h.A, "geo", "entity", "guh_sitting.geo.json"), encoding="utf-8"))
+    geo_file = json.load(open(os.path.join(h.A, "geckolib", "models", "entity", "guh_sitting.geo.json"), encoding="utf-8"))
     g = geo_file["minecraft:geometry"][0]
     g["description"]["identifier"] = "geometry.guh_npc_boerinneguh"
     sw = _swatches(g, ["stro", "stro_donker", "band", "schort", "zak"])
@@ -475,7 +475,7 @@ def boerin(h):
         _cube([-3.8, 2.4, -4.65], [7.6, 8.4, 0.5], sw["schort"]),
         _cube([-2.2, 4.0, -4.9], [4.4, 2.6, 0.3], sw["zak"]),
         _cube([-3.8, 10.8, -4.6], [1.0, 1.6, 0.4], sw["schort"]), _cube([2.8, 10.8, -4.6], [1.0, 1.6, 0.4], sw["schort"])]})
-    h.w(os.path.join(h.A, "geo", "entity", "guh_npc_boerinneguh.geo.json"), geo_file)
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "guh_npc_boerinneguh.geo.json"), geo_file)
     src = Image.open(os.path.join(h.TEX, "entity", "guh_sitting.png")).convert("RGBA")
     img = h.recolour(src, hue=0.07, sat=0.62, val=1.03, only=h.pinkish).convert("RGBA")
     a = np.asarray(img).copy()
@@ -513,8 +513,8 @@ def build(h):
     for name, maker, anims, seed in (("guhschaapje", schaapje, schaapje_anims, 2851), ("knabbelkippetje", kippetje, kippetje_anims, 2852),
                                      ("guhkoe", koe, koe_anims, 2853)):
         atlas = Atlas(seed)
-        h.w(f"{A}/geo/entity/{name}.geo.json", maker(atlas))
-        h.w(f"{A}/animations/entity/{name}.animation.json", anims())
+        h.w(f"{A}/geckolib/models/entity/{name}.geo.json", maker(atlas))
+        h.w(f"{A}/geckolib/animations/entity/{name}.animation.json", anims())
         h.save(Image.fromarray(atlas.img), "entity", f"{name}.png")
     boerin(h)
 
@@ -524,21 +524,21 @@ def check(h):
     A = h.A
     problems = []
     for name in ("guhschaapje", "knabbelkippetje", "guhkoe"):
-        g = json.load(open(f"{A}/geo/entity/{name}.geo.json", encoding="utf-8"))["minecraft:geometry"][0]
+        g = json.load(open(f"{A}/geckolib/models/entity/{name}.geo.json", encoding="utf-8"))["minecraft:geometry"][0]
         names = {b["name"] for b in g["bones"]}
         for b in g["bones"]:
             if b.get("parent") and b["parent"] not in names:
                 problems.append(f"{name}: bone {b['name']} has a missing parent {b['parent']}")
         if "head" not in names:
             problems.append(f"{name}: no head bone")
-        anims = json.load(open(f"{A}/animations/entity/{name}.animation.json", encoding="utf-8"))["animations"]
+        anims = json.load(open(f"{A}/geckolib/animations/entity/{name}.animation.json", encoding="utf-8"))["animations"]
         for an in ("idle", "walk", "blij", "eet", "geluid"):
             if an not in anims:
                 problems.append(f"{name}: no animation {an}")
             for bn in anims.get(an, {}).get("bones", {}):
                 if bn not in names:
                     problems.append(f"{name}: animation {an} moves a missing bone {bn}")
-    g = json.load(open(f"{A}/geo/entity/guhschaapje.geo.json", encoding="utf-8"))["minecraft:geometry"][0]
+    g = json.load(open(f"{A}/geckolib/models/entity/guhschaapje.geo.json", encoding="utf-8"))["minecraft:geometry"][0]
     if not {"wol", "kaal"} <= {b["name"] for b in g["bones"]}:
         problems.append("guhschaapje: needs the bones wol and kaal")
     return problems

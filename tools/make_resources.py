@@ -1504,3 +1504,7 @@ print("resources written")
 # the 2.0.0 resources add to the lang files and loot tables written above
 import runpy  # noqa: E402
 runpy.run_path(os.path.join("tools", "make_v2.py"), run_name="__main__")
+# Minecraft 26.1.2 formats (items/ definitions, GeckoLib folders, recipes, biomes, dimension types, ...): see tools/mc26.py
+sys.path.insert(0, os.path.join("tools"))
+import mc26  # noqa: E402
+mc26.run()

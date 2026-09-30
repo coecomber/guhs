@@ -1,9 +1,7 @@
 {
   "type": "minecraft:smelting",
   "category": "blocks",
-  "ingredient": {
-    "item": "guhs:houtskoolsteen_stenen"
-  },
+  "ingredient": "guhs:houtskoolsteen_stenen",
   "result": {
     "id": "guhs:gebarsten_houtskoolsteen_stenen"
   },

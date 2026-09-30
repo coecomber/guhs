@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:stick"
-    },
-    {
-      "item": "minecraft:sugar"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    }
+    "minecraft:stick",
+    "minecraft:sugar",
+    "guhs:kaas_knabbels"
   ],
   "result": {
     "id": "guhs:marshmallow_knabbel",

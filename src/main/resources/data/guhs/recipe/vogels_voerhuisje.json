@@ -7,21 +7,12 @@
     " T "
   ],
   "key": {
-    "D": {
-      "item": "minecraft:pink_dye"
-    },
-    "P": {
-      "tag": "minecraft:planks"
-    },
-    "S": {
-      "item": "minecraft:wheat_seeds"
-    },
-    "T": {
-      "item": "minecraft:stick"
-    }
+    "D": "minecraft:pink_dye",
+    "P": "#minecraft:planks",
+    "S": "minecraft:wheat_seeds",
+    "T": "minecraft:stick"
   },
   "result": {
-    "id": "guhs:vogels_voerhuisje",
-    "count": 1
+    "id": "guhs:vogels_voerhuisje"
   }
 }

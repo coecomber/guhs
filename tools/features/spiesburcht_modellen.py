@@ -27,7 +27,7 @@ SW = 8               # swatch size in units
 # geo helpers
 # =====================================================================================================================
 def load_geo(h, name):
-    with open(os.path.join(h.A, "geo", "entity", f"{name}.geo.json"), encoding="utf-8") as f:
+    with open(os.path.join(h.A, "geckolib", "models", "entity", f"{name}.geo.json"), encoding="utf-8") as f:
         return {b["name"]: b for b in json.load(f)["minecraft:geometry"][0]["bones"]}
 
 
@@ -120,11 +120,11 @@ def write_geo(h, name, bones, width, height):
         "description": {"identifier": f"geometry.{name}", "texture_width": UNITS, "texture_height": UNITS,
                         "visible_bounds_width": width, "visible_bounds_height": height, "visible_bounds_offset": [0, height / 2, 0]},
         "bones": bones}]}
-    h.w(f"{h.A}/geo/entity/{name}.geo.json", geo)
+    h.w(f"{h.A}/geckolib/models/entity/{name}.geo.json", geo)
 
 
 def write_anims(h, name, anims):
-    h.w(f"{h.A}/animations/entity/{name}.animation.json", {"format_version": "1.8.0", "animations": {
+    h.w(f"{h.A}/geckolib/animations/entity/{name}.animation.json", {"format_version": "1.8.0", "animations": {
         f"animation.{name}.{k}": v for k, v in anims.items()}})
 
 
@@ -321,7 +321,7 @@ def rookguh(h):
         {"origin": [3.5, cy - 0.75, -8.15], "size": [3, 1.5, 0.1], "uv": wang_uv},
         {"origin": [-6.5, cy - 0.75, -8.15], "size": [3, 1.5, 0.1], "uv": wang_uv}])
     bones = [bone("root", None, [0, 0, 0]), rook, body] + tentacles + [cheeks]
-    h.w(f"{h.A}/geo/entity/rookguh.geo.json", {"format_version": "1.12.0", "minecraft:geometry": [{
+    h.w(f"{h.A}/geckolib/models/entity/rookguh.geo.json", {"format_version": "1.12.0", "minecraft:geometry": [{
         "description": {"identifier": "geometry.rookguh", "texture_width": U, "texture_height": U,
                         "visible_bounds_width": 2, "visible_bounds_height": 3, "visible_bounds_offset": [0, 0.5, 0]},
         "bones": bones}]})
@@ -583,7 +583,7 @@ def build(h):
         for need in ("root",):
             if need not in names:
                 problems.append(f"{name}: no {need} bone")
-        anims = json.load(open(f"{h.A}/animations/entity/{name}.animation.json", encoding="utf-8"))["animations"]
+        anims = json.load(open(f"{h.A}/geckolib/animations/entity/{name}.animation.json", encoding="utf-8"))["animations"]
         for anim in anims.values():
             for b in anim["bones"]:
                 if b not in names:

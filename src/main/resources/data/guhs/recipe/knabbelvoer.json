@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:wheat_seeds"
-    },
-    {
-      "item": "minecraft:wheat_seeds"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    }
+    "minecraft:wheat_seeds",
+    "minecraft:wheat_seeds",
+    "guhs:kaas_knabbels"
   ],
   "result": {
     "id": "guhs:knabbelvoer",

@@ -1,0 +1,12 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 48
+  },
+  "gives": {
+    "id": "guhs:netherite_guh_armor"
+  },
+  "max_uses": 2,
+  "xp": 30,
+  "reputation_discount": 0.05
+}

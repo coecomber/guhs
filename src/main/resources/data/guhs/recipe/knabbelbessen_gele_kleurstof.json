@@ -2,12 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:knabbelbessen"
-    }
+    "guhs:knabbelbessen"
   ],
   "result": {
-    "id": "minecraft:yellow_dye",
-    "count": 1
+    "id": "minecraft:yellow_dye"
   }
 }

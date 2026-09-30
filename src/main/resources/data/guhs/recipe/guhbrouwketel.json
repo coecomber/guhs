@@ -7,18 +7,11 @@
     "TST"
   ],
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "T": {
-      "item": "guhs:roosterijzer_tralies"
-    },
-    "S": {
-      "item": "guhs:grillspies"
-    }
+    "I": "minecraft:iron_ingot",
+    "T": "guhs:roosterijzer_tralies",
+    "S": "guhs:grillspies"
   },
   "result": {
-    "id": "guhs:guhbrouwketel",
-    "count": 1
+    "id": "guhs:guhbrouwketel"
   }
 }

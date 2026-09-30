@@ -301,7 +301,7 @@ def selfcheck_assets(h):
     for i in TEAS + ["feest_theeservies"]:
         if not os.path.exists(f"{A}/textures/item/{i}.png") or f"item.guhs.{i}" not in h.NL:
             missing.append(f"item {i}")
-    for f in ("geo/entity/guh_npc_theeguh.geo.json", "textures/entity/npc_theeguh.png", "textures/mob_effect/gezellig.png"):
+    for f in ("geckolib/models/entity/guh_npc_theeguh.geo.json", "textures/entity/npc_theeguh.png", "textures/mob_effect/gezellig.png"):
         if not os.path.exists(f"{A}/{f}"):
             missing.append(f)
     if missing:

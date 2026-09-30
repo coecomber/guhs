@@ -399,7 +399,7 @@ def advancements(h):
 def asguh_glow(h):
     """The glowmask of the Asguh: the swatch its cheek bone samples on the guh texture (made by make_guh_variants.py)."""
     from PIL import Image
-    geo = json.load(open(os.path.join(h.A, "geo", "entity", "guh.geo.json"), encoding="utf-8"))
+    geo = json.load(open(os.path.join(h.A, "geckolib", "models", "entity", "guh.geo.json"), encoding="utf-8"))
     bones = {b["name"]: b for b in geo["minecraft:geometry"][0]["bones"]}
     img = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
     if "asguh_wangen" not in bones:
@@ -454,7 +454,7 @@ def selfcheck_assets(h):
         if i in ITEMS and f"item.guhs.{i}" not in h.NL:
             missing.append(f"lang item.guhs.{i}")
     for e in ENTITIES:
-        for path in (f"{A}/geo/entity/{e}.geo.json", f"{A}/animations/entity/{e}.animation.json", f"{A}/textures/entity/{e}.png"):
+        for path in (f"{A}/geckolib/models/entity/{e}.geo.json", f"{A}/geckolib/animations/entity/{e}.animation.json", f"{A}/textures/entity/{e}.png"):
             if not os.path.exists(path):
                 missing.append(path)
         if f"entity.guhs.{e}" not in h.NL:

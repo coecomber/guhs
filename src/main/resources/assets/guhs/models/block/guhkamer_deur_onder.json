@@ -1,5 +1,4 @@
 {
-  "render_type": "minecraft:cutout",
   "ambientocclusion": false,
   "textures": {
     "hout": "guhs:block/guhkamer_hout",

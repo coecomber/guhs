@@ -142,7 +142,7 @@ def _cube(origin, size, swatch, inflate=0.0):
 
 
 def krulletje(h):
-    geo_file = json.load(open(os.path.join(h.A, "geo", "entity", "guh_sitting.geo.json"), encoding="utf-8"))
+    geo_file = json.load(open(os.path.join(h.A, "geckolib", "models", "entity", "guh_sitting.geo.json"), encoding="utf-8"))
     geo = geo_file["minecraft:geometry"][0]
     geo["description"]["identifier"] = "geometry.guh_npc_kapperguh"
     geo["description"]["visible_bounds_height"] = 2.5
@@ -163,7 +163,7 @@ def krulletje(h):
         _cube([-3.5, 9.8, -7.4], [0.7, 5.2, 0.4], sw["schaar"])]})
     geo["bones"].append({"name": "kapper_schaar_blad_b", "parent": "kapper_schaar", "pivot": [-3.0, 9.8, -7.1], "cubes": [
         _cube([-2.8, 9.8, -7.0], [0.7, 5.2, 0.4], sw["schaar"])]})
-    h.w(os.path.join(h.A, "geo", "entity", "guh_npc_kapperguh.geo.json"), geo_file)
+    h.w(os.path.join(h.A, "geckolib", "models", "entity", "guh_npc_kapperguh.geo.json"), geo_file)
     src = Image.open(os.path.join(h.TEX, "entity", "guh_sitting.png")).convert("RGBA")
     img = h.recolour(src, hue=0.76, sat=0.5, val=1.0, only=h.pinkish).convert("RGBA")
     a = np.asarray(img).copy()

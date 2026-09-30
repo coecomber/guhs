@@ -1,40 +1,52 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.overworld.swamp",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:dust",
+          "color": [
+            0.86,
+            0.94,
+            0.36
+          ],
+          "scale": 0.7
+        },
+        "probability": 0.0035
+      }
+    ],
+    "minecraft:visual/fog_color": "#d9dda6",
+    "minecraft:visual/sky_color": "#cbd89c",
+    "minecraft:visual/water_fog_color": "#6b7a2c"
+  },
   "has_precipitation": true,
   "temperature": 0.8,
   "downfall": 0.9,
-  "creature_spawn_probability": 0.2,
   "effects": {
-    "sky_color": 13359260,
-    "fog_color": 14278054,
-    "water_color": 10135622,
-    "water_fog_color": 7043628,
-    "grass_color": 10727498,
-    "foliage_color": 9413180,
-    "particle": {
-      "options": {
-        "type": "minecraft:dust",
-        "color": [
-          0.86,
-          0.94,
-          0.36
-        ],
-        "scale": 0.7
-      },
-      "probability": 0.0035
-    },
-    "mood_sound": {
-      "sound": "minecraft:ambient.cave",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    },
-    "music": {
-      "sound": "minecraft:music.overworld.swamp",
-      "min_delay": 12000,
-      "max_delay": 24000,
-      "replace_current_music": false
-    }
+    "water_color": "#9aa846",
+    "foliage_color": "#8fa23c",
+    "grass_color": "#a3b04a"
   },
+  "creature_spawn_probability": 0.2,
   "spawners": {
     "monster": [
       {
@@ -80,9 +92,7 @@
     "misc": []
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": []
-  },
+  "carvers": [],
   "features": [
     [],
     [

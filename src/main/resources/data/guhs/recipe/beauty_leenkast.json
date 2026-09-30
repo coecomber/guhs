@@ -7,18 +7,11 @@
     "PPP"
   ],
   "key": {
-    "P": {
-      "item": "guhs:guhbloesem_planks"
-    },
-    "G": {
-      "item": "minecraft:glass_pane"
-    },
-    "K": {
-      "item": "guhs:guh_kast"
-    }
+    "P": "guhs:guhbloesem_planks",
+    "G": "minecraft:glass_pane",
+    "K": "guhs:guh_kast"
   },
   "result": {
-    "id": "guhs:beauty_leenkast",
-    "count": 1
+    "id": "guhs:beauty_leenkast"
   }
 }

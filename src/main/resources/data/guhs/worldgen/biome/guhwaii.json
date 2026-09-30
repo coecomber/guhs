@@ -1,34 +1,46 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.overworld.jungle",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:cherry_leaves"
+        },
+        "probability": 0.0015
+      }
+    ],
+    "minecraft:visual/fog_color": "#ffe8d6",
+    "minecraft:visual/sky_color": "#8fd3ff",
+    "minecraft:visual/water_fog_color": "#1f8fa8"
+  },
   "has_precipitation": true,
   "temperature": 0.95,
   "downfall": 0.8,
-  "creature_spawn_probability": 0.3,
   "effects": {
-    "sky_color": 9425919,
-    "fog_color": 16771286,
-    "water_color": 4182232,
-    "water_fog_color": 2068392,
-    "grass_color": 8380538,
-    "foliage_color": 6213738,
-    "mood_sound": {
-      "sound": "minecraft:ambient.cave",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    },
-    "music": {
-      "sound": "minecraft:music.overworld.jungle",
-      "min_delay": 12000,
-      "max_delay": 24000,
-      "replace_current_music": false
-    },
-    "particle": {
-      "options": {
-        "type": "minecraft:cherry_leaves"
-      },
-      "probability": 0.0015
-    }
+    "water_color": "#3fd0d8",
+    "foliage_color": "#5ed06a",
+    "grass_color": "#7fe07a"
   },
+  "creature_spawn_probability": 0.3,
   "spawners": {
     "monster": [],
     "ambient": [],
@@ -54,9 +66,7 @@
     ]
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": []
-  },
+  "carvers": [],
   "features": [
     [],
     [

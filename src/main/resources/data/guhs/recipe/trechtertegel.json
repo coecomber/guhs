@@ -6,12 +6,8 @@
     "WP"
   ],
   "key": {
-    "P": {
-      "item": "minecraft:pink_concrete"
-    },
-    "W": {
-      "item": "minecraft:white_concrete"
-    }
+    "P": "minecraft:pink_concrete",
+    "W": "minecraft:white_concrete"
   },
   "result": {
     "id": "guhs:trechtertegel",

@@ -17,6 +17,52 @@
     },
     {
       "type": "guhs:buiten_gebouwen"
+    },
+    {
+      "type": "minecraft:count",
+      "count": 6
+    },
+    {
+      "type": "minecraft:random_offset",
+      "xz_spread": {
+        "type": "minecraft:trapezoid",
+        "min": -2,
+        "max": 2,
+        "plateau": 0
+      },
+      "y_spread": 0
+    },
+    {
+      "type": "minecraft:random_offset",
+      "xz_spread": 0,
+      "y_spread": -1
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_blocks",
+            "blocks": [
+              "guhs:modderig_kaasgras",
+              "guhs:kaasmodder"
+            ]
+          },
+          {
+            "type": "minecraft:matching_blocks",
+            "offset": [
+              0,
+              1,
+              0
+            ],
+            "blocks": "minecraft:air"
+          }
+        ]
+      }
+    },
+    {
+      "type": "guhs:buiten_gebouwen"
     }
   ]
 }

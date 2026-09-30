@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:pluizenboom_stam"
-    }
+    "guhs:pluizenboom_stam"
   ],
   "result": {
     "id": "minecraft:cherry_planks",

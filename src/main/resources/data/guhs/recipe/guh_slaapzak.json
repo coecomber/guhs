@@ -6,15 +6,10 @@
     "PPP"
   ],
   "key": {
-    "W": {
-      "tag": "guhs:knus/pluiswol"
-    },
-    "P": {
-      "tag": "minecraft:wool"
-    }
+    "W": "#guhs:knus/pluiswol",
+    "P": "#minecraft:wool"
   },
   "result": {
-    "id": "guhs:guh_slaapzak",
-    "count": 1
+    "id": "guhs:guh_slaapzak"
   }
 }

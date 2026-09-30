@@ -7,24 +7,13 @@
     "WPW"
   ],
   "key": {
-    "M": {
-      "item": "minecraft:milk_bucket"
-    },
-    "S": {
-      "item": "minecraft:sugar"
-    },
-    "K": {
-      "item": "guhs:kaas_knabbels"
-    },
-    "W": {
-      "item": "minecraft:wheat"
-    },
-    "P": {
-      "item": "minecraft:pink_dye"
-    }
+    "M": "minecraft:milk_bucket",
+    "S": "minecraft:sugar",
+    "K": "guhs:kaas_knabbels",
+    "W": "minecraft:wheat",
+    "P": "minecraft:pink_dye"
   },
   "result": {
-    "id": "guhs:guh_taart",
-    "count": 1
+    "id": "guhs:guh_taart"
   }
 }

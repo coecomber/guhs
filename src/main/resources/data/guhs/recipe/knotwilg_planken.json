@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:knotwilg_stam"
-    }
+    "guhs:knotwilg_stam"
   ],
   "result": {
     "id": "minecraft:spruce_planks",

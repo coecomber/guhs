@@ -6,9 +6,7 @@
     "LL"
   ],
   "key": {
-    "L": {
-      "tag": "minecraft:leaves"
-    }
+    "L": "#minecraft:leaves"
   },
   "result": {
     "id": "guhs:doolhofheg",

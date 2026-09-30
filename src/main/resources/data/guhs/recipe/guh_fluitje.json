@@ -7,18 +7,11 @@
     " I "
   ],
   "key": {
-    "I": {
-      "item": "minecraft:iron_nugget"
-    },
-    "S": {
-      "item": "minecraft:string"
-    },
-    "P": {
-      "item": "minecraft:pink_dye"
-    }
+    "I": "minecraft:iron_nugget",
+    "S": "minecraft:string",
+    "P": "minecraft:pink_dye"
   },
   "result": {
-    "id": "guhs:guh_fluitje",
-    "count": 1
+    "id": "guhs:guh_fluitje"
   }
 }

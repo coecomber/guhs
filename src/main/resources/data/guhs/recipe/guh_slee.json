@@ -7,18 +7,11 @@
     "IBI"
   ],
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "B": {
-      "item": "guhs:sleebouwersboek"
-    }
+    "I": "minecraft:iron_ingot",
+    "W": "minecraft:pink_wool",
+    "B": "guhs:sleebouwersboek"
   },
   "result": {
-    "id": "guhs:guh_slee",
-    "count": 1
+    "id": "guhs:guh_slee"
   }
 }

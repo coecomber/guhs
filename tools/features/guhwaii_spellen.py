@@ -332,7 +332,7 @@ def build(h):
 
 
 def selfcheck(h):
-    missing = [f for f in ("geo/entity/guh_npc_tikiguh.geo.json", "geo/entity/guhwaiispellen_surfplank.geo.json", "textures/entity/npc_tikiguh.png",
+    missing = [f for f in ("geckolib/models/entity/guh_npc_tikiguh.geo.json", "geckolib/models/entity/guhwaiispellen_surfplank.geo.json", "textures/entity/npc_tikiguh.png",
                            "textures/entity/guhwaiispellen_surfplank.png", "textures/misc/guhwaiispellen_golf.png", "textures/item/schelpjesmunt.png")
                if not os.path.exists(f"{h.A}/{f}")]
     for n in blokken.TIKI:

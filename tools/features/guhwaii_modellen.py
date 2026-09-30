@@ -52,7 +52,7 @@ def variant_painters(rng, v):
 
 def stitch_look(h):
     """guh_stitch626.png (painted over the guh fur like the Pinguh); make_guh_variants' swatches stay."""
-    geo = json.load(open(os.path.join(h.A, "geo", "entity", "guh.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
+    geo = json.load(open(os.path.join(h.A, "geckolib", "models", "entity", "guh.geo.json"), encoding="utf-8"))["minecraft:geometry"][0]
     base = Image.open(os.path.join(h.TEX, "entity", "guh.png")).convert("RGBA")
     pad = os.path.join(h.TEX, "entity", "guh_stitch626.png")
     oud = np.asarray(Image.open(pad).convert("RGBA")) if os.path.exists(pad) else None

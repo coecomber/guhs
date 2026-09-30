@@ -1,0 +1,47 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "guhs:guhxolotl_kleur",
+    "cases": [
+      {
+        "when": "roze",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhxolotl_emmertje"
+        }
+      },
+      {
+        "when": "mint",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhxolotl_emmertje_mint"
+        }
+      },
+      {
+        "when": "choco",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhxolotl_emmertje_choco"
+        }
+      },
+      {
+        "when": "wit",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhxolotl_emmertje_wit"
+        }
+      },
+      {
+        "when": "goud",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhxolotl_emmertje_goud"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "guhs:item/guhxolotl_emmertje"
+    }
+  }
+}

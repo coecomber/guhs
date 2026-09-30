@@ -1,0 +1,13 @@
+{
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 7
+  },
+  "gives": {
+    "id": "guhs:guh_wire",
+    "count": 24
+  },
+  "max_uses": 8,
+  "xp": 20,
+  "reputation_discount": 0.05
+}

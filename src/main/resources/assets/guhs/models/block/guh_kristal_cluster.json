@@ -1,10 +1,18 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": "guhs:block/guh_kristal_gem",
-    "gem": "guhs:block/guh_kristal_gem",
-    "face": "guhs:block/guh_kristal_gem_face"
+    "particle": {
+      "sprite": "guhs:block/guh_kristal_gem",
+      "force_translucent": true
+    },
+    "gem": {
+      "sprite": "guhs:block/guh_kristal_gem",
+      "force_translucent": true
+    },
+    "face": {
+      "sprite": "guhs:block/guh_kristal_gem_face",
+      "force_translucent": true
+    }
   },
   "elements": [
     {

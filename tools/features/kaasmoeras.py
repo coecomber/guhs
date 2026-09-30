@@ -653,8 +653,8 @@ def kikkerguh(h):
             bone("tail", "body", [0, 3, 5.5], [c("vacht", [-0.75, 2.5, 5.5], [1.5, 1.5, 1.5])]),
         ]
         sheet.save(h, f"kikkerguh_{kleur}")
-    h.w(f"{A}/geo/entity/kikkerguh.geo.json", geo("kikkerguh", 128, 128, bones, 1.2, 1.2))
-    h.w(f"{A}/animations/entity/kikkerguh.animation.json", {"format_version": "1.8.0", "animations": {
+    h.w(f"{A}/geckolib/models/entity/kikkerguh.geo.json", geo("kikkerguh", 128, 128, bones, 1.2, 1.2))
+    h.w(f"{A}/geckolib/animations/entity/kikkerguh.animation.json", {"format_version": "1.8.0", "animations": {
         "animation.kikkerguh.idle": {"loop": True, "animation_length": 3.0, "bones": {
             "throat": {"scale": {"0.0": [1, 1, 1], "0.75": [1.08, 1.3, 1.08], "1.5": [1, 1, 1], "2.25": [1.08, 1.3, 1.08], "3.0": [1, 1, 1]}},
             "body": {"scale": {"0.0": [1, 1, 1], "1.5": [1.02, 0.98, 1.02], "3.0": [1, 1, 1]}},
@@ -736,7 +736,7 @@ def kaasmot(h):
         bone("tail", "body", [0, 3.5, 4], [cube([-0.25, 3.2, 4.2], [0.5, 0.5, 1.8], {"*": sw(3, 2)}),
                                            cube([-0.6, 3.1, 5.9], [1.2, 0.7, 0.8], {"*": sw(3, 2)})]),
     ]
-    h.w(f"{A}/geo/entity/kaasmot.geo.json", geo("kaasmot", 32, 32, bones, 1.0, 0.8))
+    h.w(f"{A}/geckolib/models/entity/kaasmot.geo.json", geo("kaasmot", 32, 32, bones, 1.0, 0.8))
     rng = random.Random(47)
     img = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
     swatches(img, {0: (86, 50, 92), 2: (236, 150, 186), 3: (170, 30, 50)}, rng)
@@ -757,7 +757,7 @@ def kaasmot(h):
     px[FACE[0] + 2, FACE[1]] = (230, 30, 40, 255)
     px[FACE[0] + 1, FACE[1]] = (236, 150, 186, 255)
     h.save(img, "entity", "kaasmot.png")
-    h.w(f"{A}/animations/entity/kaasmot.animation.json", {"format_version": "1.8.0", "animations": {
+    h.w(f"{A}/geckolib/animations/entity/kaasmot.animation.json", {"format_version": "1.8.0", "animations": {
         "animation.kaasmot.fly": {"loop": True, "animation_length": 0.24, "bones": {
             "wing_left": {"rotation": {"0.0": [0, 0, 20], "0.12": [0, 0, -55], "0.24": [0, 0, 20]}},
             "wing_right": {"rotation": {"0.0": [0, 0, -20], "0.12": [0, 0, 55], "0.24": [0, 0, -20]}},
@@ -768,7 +768,7 @@ def kaasmot(h):
 # --- the Moerasheks-Mika ----------------------------------------------------------------------------------------------------
 def moerasheks(h):
     A = h.A
-    src = json.load(open(f"{A}/geo/entity/mika.geo.json", encoding="utf-8"))
+    src = json.load(open(f"{A}/geckolib/models/entity/mika.geo.json", encoding="utf-8"))
     g = json.loads(json.dumps(src))
     geom = g["minecraft:geometry"][0]
     geom["description"]["identifier"] = "geometry.moerasheks_mika"
@@ -799,7 +799,7 @@ def moerasheks(h):
         {"name": "shawl", "parent": "body", "pivot": [0, 5, 5], "cubes": [
             {"origin": [-7.2, 0.6, -2.8], "size": [14.4, 9.8, 1.8], "uv": m("shawl"), "inflate": 0.1}]},
     ]
-    h.w(f"{A}/geo/entity/moerasheks_mika.geo.json", g)
+    h.w(f"{A}/geckolib/models/entity/moerasheks_mika.geo.json", g)
 
     tex = Image.open(os.path.join(h.TEX, "entity", "mika.png")).convert("RGBA")
     # the pink Mika fur turns swampy green (not the red eyes, not the dark lines)
@@ -821,7 +821,7 @@ def moerasheks(h):
     # warts on the green cheeks (a few darker spots on the fur)
     tex.save(os.path.join(h.TEX, "entity", "moerasheks_mika.png"))
 
-    anims = json.load(open(f"{A}/animations/entity/guh.animation.json", encoding="utf-8"))["animations"]
+    anims = json.load(open(f"{A}/geckolib/animations/entity/guh.animation.json", encoding="utf-8"))["animations"]
     idle = json.loads(json.dumps(anims["animation.guh.idle"]))
     walk = json.loads(json.dumps(anims["animation.guh.walk"]))
     idle.setdefault("bones", {})["hat_tip"] = {"rotation": {"0.0": [0, 0, 0], "1.0": [0, 0, 6], "2.0": [0, 0, 0]}}
@@ -829,7 +829,7 @@ def moerasheks(h):
     if "animation_length" not in idle:
         idle["animation_length"] = 2.0
     walk.setdefault("bones", {})["hat_tip"] = {"rotation": {"0.0": [0, 0, -6], "0.25": [0, 0, 6], "0.5": [0, 0, -6]}}
-    h.w(f"{A}/animations/entity/moerasheks_mika.animation.json", {"format_version": "1.8.0", "animations": {
+    h.w(f"{A}/geckolib/animations/entity/moerasheks_mika.animation.json", {"format_version": "1.8.0", "animations": {
         "animation.moerasheks_mika.idle": idle,
         "animation.moerasheks_mika.walk": walk,
         "animation.moerasheks_mika.throw": {"loop": False, "animation_length": 0.6, "bones": {
@@ -1063,7 +1063,7 @@ def selfcheck_assets(h):
         if not os.path.exists(f"{A}/models/item/{i}.json") or f"item.guhs.{i}" not in h.NL:
             missing.append(f"item {i}")
     for e, textures in (("kikkerguh", [f"kikkerguh_{k}" for k in KIKKER]), ("kaasmot", ["kaasmot"]), ("moerasheks_mika", ["moerasheks_mika"])):
-        for p in [f"{A}/geo/entity/{e}.geo.json", f"{A}/animations/entity/{e}.animation.json"] + \
+        for p in [f"{A}/geckolib/models/entity/{e}.geo.json", f"{A}/geckolib/animations/entity/{e}.animation.json"] + \
                  [os.path.join(h.TEX, "entity", f"{t}.png") for t in textures]:
             if not os.path.exists(p):
                 missing.append(p)
@@ -1081,7 +1081,7 @@ def selfcheck_assets(h):
     # the GeckoLib animations the entities play exist
     for e, names in (("kikkerguh", ["idle", "hop", "swim", "croak", "tongue"]), ("kaasmot", ["fly"]),
                      ("moerasheks_mika", ["idle", "walk", "throw", "nibble"])):
-        anims = json.load(open(f"{A}/animations/entity/{e}.animation.json", encoding="utf-8"))["animations"]
+        anims = json.load(open(f"{A}/geckolib/animations/entity/{e}.animation.json", encoding="utf-8"))["animations"]
         for n in names:
             if f"animation.{e}.{n}" not in anims:
                 missing.append(f"animation.{e}.{n}")

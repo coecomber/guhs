@@ -2,12 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "guhs:roze_guhbloem"
-    }
+    "guhs:roze_guhbloem"
   ],
   "result": {
-    "id": "minecraft:magenta_dye",
-    "count": 1
+    "id": "minecraft:magenta_dye"
   }
 }

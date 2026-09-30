@@ -17,6 +17,49 @@
     },
     {
       "type": "guhs:buiten_gebouwen"
+    },
+    {
+      "type": "minecraft:count",
+      "count": 28
+    },
+    {
+      "type": "minecraft:random_offset",
+      "xz_spread": {
+        "type": "minecraft:trapezoid",
+        "min": -5,
+        "max": 5,
+        "plateau": 0
+      },
+      "y_spread": {
+        "type": "minecraft:trapezoid",
+        "min": -1,
+        "max": 1,
+        "plateau": 0
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_blocks",
+            "blocks": "minecraft:air"
+          },
+          {
+            "type": "minecraft:would_survive",
+            "state": {
+              "Name": "guhs:knabbelbessenstruik",
+              "Properties": {
+                "age": "0"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "guhs:buiten_gebouwen"
     }
   ]
 }

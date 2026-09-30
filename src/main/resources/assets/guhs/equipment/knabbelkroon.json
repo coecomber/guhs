@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "guhs:knabbelkroon"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "guhs:knabbelkroon"
+      }
+    ]
+  }
+}

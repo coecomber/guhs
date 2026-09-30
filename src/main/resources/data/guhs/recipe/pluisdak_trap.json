@@ -7,9 +7,7 @@
     "SSS"
   ],
   "key": {
-    "S": {
-      "item": "guhs:pluisdak"
-    }
+    "S": "guhs:pluisdak"
   },
   "result": {
     "id": "guhs:pluisdak_trap",

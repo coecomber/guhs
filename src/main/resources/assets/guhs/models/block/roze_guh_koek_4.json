@@ -1,11 +1,22 @@
 {
   "parent": "minecraft:block/block",
-  "render_type": "minecraft:translucent",
   "textures": {
-    "particle": "guhs:block/roze_guh_koek_top",
-    "top": "guhs:block/roze_guh_koek_top",
-    "side": "guhs:block/roze_guh_koek_side",
-    "bakje": "guhs:block/roze_guh_koek_bakje"
+    "particle": {
+      "sprite": "guhs:block/roze_guh_koek_top",
+      "force_translucent": true
+    },
+    "top": {
+      "sprite": "guhs:block/roze_guh_koek_top",
+      "force_translucent": true
+    },
+    "side": {
+      "sprite": "guhs:block/roze_guh_koek_side",
+      "force_translucent": true
+    },
+    "bakje": {
+      "sprite": "guhs:block/roze_guh_koek_bakje",
+      "force_translucent": true
+    }
   },
   "elements": [
     {

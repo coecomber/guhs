@@ -7,15 +7,10 @@
     "PP "
   ],
   "key": {
-    "P": {
-      "item": "guhs:guhwaii_palm_planken"
-    },
-    "S": {
-      "item": "minecraft:string"
-    }
+    "P": "guhs:guhwaii_palm_planken",
+    "S": "minecraft:string"
   },
   "result": {
-    "id": "guhs:guhwaii_ukelele",
-    "count": 1
+    "id": "guhs:guhwaii_ukelele"
   }
 }

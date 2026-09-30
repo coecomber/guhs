@@ -260,7 +260,7 @@ def build(h):
 
 def selfcheck(h):
     problems = []
-    for p in (f"{h.A}/sounds/elftocht/glij.ogg", f"{h.A}/sounds/elftocht/plof1.ogg", f"{h.A}/geo/entity/guh_npc_stempelguh.geo.json",
+    for p in (f"{h.A}/sounds/elftocht/glij.ogg", f"{h.A}/sounds/elftocht/plof1.ogg", f"{h.A}/geckolib/models/entity/guh_npc_stempelguh.geo.json",
               f"{h.D}/structure/{NAME}.nbt", f"{h.D}/structure/elftocht_test_baan.nbt"):
         if not os.path.exists(p):
             problems.append(f"missing {p}")

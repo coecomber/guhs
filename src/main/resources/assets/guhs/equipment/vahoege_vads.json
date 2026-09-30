@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "guhs:vahoege_vads"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "guhs:vahoege_vads"
+      }
+    ]
+  }
+}

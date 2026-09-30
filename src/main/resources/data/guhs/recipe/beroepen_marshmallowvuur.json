@@ -2,18 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:campfire"
-    },
-    {
-      "item": "minecraft:white_wool"
-    },
-    {
-      "item": "minecraft:stick"
-    }
+    "minecraft:campfire",
+    "minecraft:white_wool",
+    "minecraft:stick"
   ],
   "result": {
-    "id": "guhs:beroepen_marshmallowvuur",
-    "count": 1
+    "id": "guhs:beroepen_marshmallowvuur"
   }
 }

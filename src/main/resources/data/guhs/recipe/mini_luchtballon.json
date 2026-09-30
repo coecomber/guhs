@@ -7,18 +7,11 @@
     " S "
   ],
   "key": {
-    "W": {
-      "tag": "minecraft:wool"
-    },
-    "P": {
-      "item": "minecraft:paper"
-    },
-    "S": {
-      "item": "minecraft:string"
-    }
+    "W": "#minecraft:wool",
+    "P": "minecraft:paper",
+    "S": "minecraft:string"
   },
   "result": {
-    "id": "guhs:mini_luchtballon",
-    "count": 1
+    "id": "guhs:mini_luchtballon"
   }
 }

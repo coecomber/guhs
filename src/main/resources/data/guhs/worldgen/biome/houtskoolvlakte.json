@@ -1,41 +1,53 @@
 {
+  "attributes": {
+    "minecraft:audio/ambient_sounds": {
+      "loop": "minecraft:ambient.nether_wastes.loop",
+      "mood": {
+        "sound": "minecraft:ambient.nether_wastes.mood",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      },
+      "additions": {
+        "sound": "minecraft:ambient.nether_wastes.additions",
+        "tick_chance": 0.0111
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "minecraft:music.nether.nether_wastes",
+        "min_delay": 12000,
+        "max_delay": 24000
+      },
+      "creative": {
+        "sound": "minecraft:music.creative",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    },
+    "minecraft:visual/ambient_particles": [
+      {
+        "particle": {
+          "type": "minecraft:dust",
+          "color": [
+            1.0,
+            0.45,
+            0.1
+          ],
+          "scale": 0.6
+        },
+        "probability": 0.005
+      }
+    ],
+    "minecraft:visual/fog_color": "#4a1e0e",
+    "minecraft:visual/sky_color": "#6e3a1a",
+    "minecraft:visual/water_fog_color": "#050533"
+  },
   "has_precipitation": false,
   "temperature": 2.0,
   "downfall": 0.0,
   "effects": {
-    "fog_color": 4857358,
-    "sky_color": 7223834,
-    "water_color": 4159204,
-    "water_fog_color": 329011,
-    "particle": {
-      "options": {
-        "type": "minecraft:dust",
-        "color": [
-          1.0,
-          0.45,
-          0.1
-        ],
-        "scale": 0.6
-      },
-      "probability": 0.005
-    },
-    "ambient_sound": "minecraft:ambient.nether_wastes.loop",
-    "additions_sound": {
-      "sound": "minecraft:ambient.nether_wastes.additions",
-      "tick_chance": 0.0111
-    },
-    "mood_sound": {
-      "sound": "minecraft:ambient.nether_wastes.mood",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2.0
-    },
-    "music": {
-      "sound": "minecraft:music.nether.nether_wastes",
-      "min_delay": 12000,
-      "max_delay": 24000,
-      "replace_current_music": false
-    }
+    "water_color": "#3f76e4"
   },
   "spawners": {
     "monster": [
@@ -68,11 +80,9 @@
     "misc": []
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": [
-      "guhs:barbecuegrot"
-    ]
-  },
+  "carvers": [
+    "guhs:barbecuegrot"
+  ],
   "features": [
     [],
     [],

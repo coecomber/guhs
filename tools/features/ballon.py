@@ -366,7 +366,7 @@ def selfcheck(h):
     for b in ("ballonsteiger", "mini_luchtballon"):
         if not os.path.exists(f"{h.A}/blockstates/{b}.json") or f"block.guhs.{b}" not in h.NL:
             missing.append(b)
-    for f in ("geo/entity/guh_luchtballon.geo.json", "animations/entity/guh_luchtballon.animation.json", "geo/entity/guh_npc_ballonguh.geo.json"):
+    for f in ("geckolib/models/entity/guh_luchtballon.geo.json", "geckolib/animations/entity/guh_luchtballon.animation.json", "geckolib/models/entity/guh_npc_ballonguh.geo.json"):
         if not os.path.exists(f"{h.A}/{f}"):
             missing.append(f)
     for k in model.KLEUREN:

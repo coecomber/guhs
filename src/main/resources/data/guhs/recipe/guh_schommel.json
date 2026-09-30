@@ -7,21 +7,12 @@
     "FCF"
   ],
   "key": {
-    "F": {
-      "tag": "minecraft:wooden_fences"
-    },
-    "W": {
-      "item": "minecraft:pink_wool"
-    },
-    "S": {
-      "item": "minecraft:string"
-    },
-    "C": {
-      "item": "minecraft:pink_carpet"
-    }
+    "F": "#minecraft:wooden_fences",
+    "W": "minecraft:pink_wool",
+    "S": "minecraft:string",
+    "C": "minecraft:pink_carpet"
   },
   "result": {
-    "id": "guhs:guh_schommel",
-    "count": 1
+    "id": "guhs:guh_schommel"
   }
 }

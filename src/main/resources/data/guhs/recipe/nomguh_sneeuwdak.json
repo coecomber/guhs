@@ -6,12 +6,8 @@
     "TT"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:snow_block"
-    },
-    "T": {
-      "tag": "minecraft:terracotta"
-    }
+    "S": "minecraft:snow_block",
+    "T": "#minecraft:terracotta"
   },
   "result": {
     "id": "guhs:nomguh_sneeuwdak",

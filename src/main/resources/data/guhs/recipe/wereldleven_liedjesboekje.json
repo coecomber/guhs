@@ -2,18 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "minecraft:book"
-    },
-    {
-      "item": "minecraft:note_block"
-    },
-    {
-      "item": "guhs:kaas_knabbels"
-    }
+    "minecraft:book",
+    "minecraft:note_block",
+    "guhs:kaas_knabbels"
   ],
   "result": {
-    "id": "guhs:wereldleven_liedjesboekje",
-    "count": 1
+    "id": "guhs:wereldleven_liedjesboekje"
   }
 }
