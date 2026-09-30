@@ -8,7 +8,7 @@
 NeoForge 1.21.1 · requires GeckoLib 4.8+ · version 1.0.0<br>
 <a href="https://www.curseforge.com/minecraft/mc-mods/guhs">CurseForge</a> ·
 <a href="https://modrinth.com/mod/guhs">Modrinth</a> ·
-<a href="https://coecomber.github.io/guhs/">Wiki</a> ·
+<a href="https://guhs.nl/wiki/">Wiki</a> ·
 <a href="CHANGELOG.md">Changelog</a>
 </p>
 
@@ -21,7 +21,7 @@ through a portal into the **Guhmension**, a whole pink world full of guhs, chees
 Guhs are always friendly. Nothing in the mod makes them hurt you, and the one grumpy guh (Mika) only shoves.
 
 > **Language:** all in-game names and texts are in **Dutch** (also when your game is set to English), with a lot of
-> guh puns. The [wiki](https://coecomber.github.io/guhs/) is in English and Dutch.
+> guh puns. The [wiki](https://guhs.nl/wiki/) is in English and Dutch.
 
 ## Features
 
@@ -55,7 +55,7 @@ Guhs are always friendly. Nothing in the mod makes them hurt you, and the one gr
 - **FTB Quests support.** If FTB Quests is installed, a *Guhs* chapter group (13 chapters, 700+ quests, nothing
   locked) installs itself.
 
-Everything is explained, with pictures, in the **[Guhs wiki](https://coecomber.github.io/guhs/)**.
+Everything is explained, with pictures, in the **[Guhs wiki](https://guhs.nl/wiki/)**.
 
 ## Requirements
 
@@ -138,4 +138,4 @@ opnieuw uploaden mag niet. Zie [LICENSE](LICENSE).
 
 **Met dank aan:** Lieke voor het guh-model. Al het andere (code, geluidjes, muziek, gebouwen, verhalen): Juiced.
 
-Alles staat met plaatjes in de **[Guhs-wiki](https://coecomber.github.io/guhs/)**.
+Alles staat met plaatjes in de **[Guhs-wiki](https://guhs.nl/wiki/)**.

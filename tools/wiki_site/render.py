@@ -312,7 +312,7 @@ class Renderer:
             here = ' class="here"' if page.cat == cat and not page.data.get("guide") else ""
             cur = ' aria-current="page"' if page.id == f"{cat}/index" else ""
             items.append(f'<li><a href="@@{cat}/index@@"{here}{cur}>{img}{t(d[2], d[1])}<span class="n">{counts[cat]}</span></a></li>')
-        start = [("index", "Home", "Home"), ("systemen/aan-de-slag", "&#9733; Getting started", "&#9733; Aan de slag"), ("systemen/temmen", "Your first guh", "Je eerste guh"), ("dimensies/guhmension", "The Guhmension", "De Guhmensie"),
+        start = [("index", "Home", "Home"), ("systemen/aan-de-slag", "&#9733; Getting started", "&#9733; Aan de slag"), ("systemen/officiele-server", "&#9679; Official server", "&#9679; Officiële server"), ("systemen/temmen", "Your first guh", "Je eerste guh"), ("dimensies/guhmension", "The Guhmension", "De Guhmensie"),
                  ("systemen/superkompas", "The super compass", "Het superkompas"), ("systemen/ftb-quests", "FTB quests", "FTB-quests")]
         cur_attr = ' aria-current="page"'
         first = "".join(f'<li><a href="@@{pid}@@"{cur_attr if page.id == pid else ""}>{t(en, nl)}</a></li>' for pid, en, nl in start)
@@ -342,7 +342,8 @@ class Renderer:
                   f'aria-controls="side">&#9776;</button><a class="brand" href="@@index@@"><img src="{root}favicon-64.png" alt="" width="32" height="32">'
                   f'<span class="word">Guhs Wiki</span></a><span class="ver" title="Versie">v{SITE_VERSION}</span>{search}{tools}</div></header>')
         footer = (f'<footer class="site"><div class="in">{t("The Guhs wiki, for Guhs " + SITE_VERSION + " (Minecraft 1.21.1, NeoForge). Every picture is rendered from the mod&#39;s own models and textures. Model by Lieke.", "De Guhs-wiki, voor Guhs " + SITE_VERSION + " (Minecraft 1.21.1, NeoForge). Alle plaatjes zijn gerenderd uit de modellen en textures van de mod zelf. Model door Lieke.")}'
-                  f' &middot; <a href="@@systemen/commandos@@">{t("Commands", "Commando&#39;s")}</a></div></footer>')
+                  f' &middot; <a href="@@systemen/commandos@@">{t("Commands", "Commando&#39;s")}</a>'
+                  f' &middot; <a href="https://guhs.nl/">{t("guhs.nl: the official server", "guhs.nl: de officiële server")}</a></div></footer>')
         return f"""<!doctype html>
 <html lang="nl" data-lang="nl">
 <head>
@@ -486,6 +487,10 @@ class Renderer:
                f'<span class="cta-txt"><small>{t("New here? Start here!", "Nieuw hier? Begin hier!")}</small><b>{t("Getting started", "Aan de slag")}</b>'
                f'<span>{t("The step-by-step guide: kaasknabbels, your first guh, the portal, the Reisguh, the super compass and your first goals.", "De stap-voor-stapgids: kaasknabbels, je eerste guh, het portaal, de Reisguh, het superkompas en je eerste doelen.")}</span></span>'
                f'<span class="go">{t("Read the guide", "Lees de gids")} &rarr;</span></a>')
+        srv = (f'<a class="start-cta srv-cta" href="@@systemen/officiele-server@@"><span class="cta-art">{self.b.img("guh_outfit_evenementen", "") if self.im.has("guh_outfit_evenementen") else ""}</span>'
+               f'<span class="cta-txt"><small>{t("Play together, 24/7", "Samen spelen, dag en nacht")}</small><b>{t("Play on the official server", "Speel op de officiële server")}</b>'
+               f'<span>{t("Join guhs.nl with Prism Launcher in a few minutes: step by step, the rules and help with problems.", "Join guhs.nl in een paar minuten met Prism Launcher: stap voor stap, de regels en hulp bij problemen.")}</span></span>'
+               f'<span class="go">{t("To the server", "Naar de server")} &rarr;</span></a>')
         first = ("<ol>"
                  f'<li>{t("Find a guh and feed it kaasknabbels until it is tame.", "Zoek een guh en voer hem kaasknabbels tot hij tam is.")} '
                  f'<a href="@@systemen/temmen@@">{t("Taming", "Temmen")}</a></li>'
@@ -498,7 +503,7 @@ class Renderer:
         return (f'<section class="hero"><div><h1>{t("Welcome to the <em>Guhs</em> wiki", "Welkom op de <em>Guhs</em>-wiki")}</h1>'
                 f'<p class="tagline">{t("Everything about the lieve vadsige guhs, for Minecraft 1.21.1.", "Alles over de lieve vadsige guhs, voor Minecraft 1.21.1.")}</p>'
                 f'{stats}</div><div class="hero-art">{hero_img}</div></section>'
-                f'{cta}'
+                f'{cta}{srv}'
                 f'<div class="box" id="wat"><h2>{t("What is Guhs?", "Wat is Guhs?")}</h2>{what}{intro}</div>'
                 f'<h2>{t("Browse the wiki", "Blader door de wiki")}</h2><div class="tiles">{"".join(tiles)}</div>'
                 f'<div class="box" id="start"><h2>{t("In short", "In het kort")}</h2>{first}'
