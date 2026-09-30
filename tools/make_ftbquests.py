@@ -1,6 +1,6 @@
 """
 Builds the "Guhs" chapter group for FTB Quests (all in Dutch): nine themed chapters in src/main/resources/ftbquests/
-(chapters/<file>.snbt, lang/<file>.snbt, guhs_lang.snbt with all texts, index.txt for the installer), plus their pictures
+(chapters/<file>.json5, lang/<file>.json5, index.txt for the installer), plus their pictures
 (textures/ftbquests, drawn by tools/make_ftbquests_art.py). The mod copies them into config/ftbquests/quests when FTB Quests
 is installed (see compat/FtbQuestsChapter.java). Bump CHAPTER_VERSION when you change the chapters, so packs get them.
 
@@ -20,7 +20,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 19
+CHAPTER_VERSION = 20   # 20 = 1.1.0: JSON5 for FTB Quests 26.1
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -246,6 +246,7 @@ for i, (key, title, desc, icon, tasks) in enumerate(EXTRAS):
 
 
 # --- the 2.4+ features add their own quests (tools/features/*.py) -----------------------------------------------------------
+import json  # noqa: E402
 import math  # noqa: E402
 import re  # noqa: E402
 import sys  # noqa: E402
@@ -722,6 +723,31 @@ def snbt(v, indent=1):
     return '"' + str(v).replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
+_JSON5_KEY = re.compile(r"[A-Za-z_$][A-Za-z0-9_$]*")
+
+
+def json5(v, indent=0):
+    """JSON5 like FTB Quests 26.1 writes it itself: two-space indent, bare keys where possible, a comma after every entry.
+    (FTB Quests 26.1 reads only JSON5, no SNBT any more; numbers have no d/L suffixes.)"""
+    pad = "  " * (indent + 1)
+    if isinstance(v, dict):
+        if not v:
+            return "{}"
+        return "{\n" + "".join(f"{pad}{k if _JSON5_KEY.fullmatch(k) else json.dumps(k, ensure_ascii=False)}: {json5(x, indent + 1)},\n"
+                               for k, x in v.items()) + "  " * indent + "}"
+    if isinstance(v, list):
+        if not v:
+            return "[]"
+        return "[\n" + "".join(f"{pad}{json5(x, indent + 1)},\n" for x in v) + "  " * indent + "]"
+    if isinstance(v, bool):
+        return "true" if v else "false"
+    if isinstance(v, float):
+        return repr(v)
+    if isinstance(v, int):
+        return str(int(v))
+    return json.dumps(str(v), ensure_ascii=False)
+
+
 def quest_nbt(key, icon, tasks, rewards, xp):
     task_list = []
     for n, t in enumerate(tasks):
@@ -817,15 +843,14 @@ def build(force_art=False):
     # the chapters, their texts and the installer's index
     os.makedirs(os.path.join(OUT, "chapters"), exist_ok=True)
     os.makedirs(os.path.join(OUT, "lang"), exist_ok=True)
-    if os.path.exists(os.path.join(OUT, "guhs.snbt")):       # (the old single chapter, before 2.8)
-        os.remove(os.path.join(OUT, "guhs.snbt"))
-    for f in os.listdir(os.path.join(OUT, "chapters")) + os.listdir(os.path.join(OUT, "lang")):
-        if f[:-5] not in CHAPTERS:
-            for d in ("chapters", "lang"):
-                if os.path.exists(os.path.join(OUT, d, f)):
-                    os.remove(os.path.join(OUT, d, f))
+    for old in ("guhs.snbt", "guhs_lang.snbt"):     # (the old single chapter before 2.8; the SNBT texts before 1.1.0)
+        if os.path.exists(os.path.join(OUT, old)):
+            os.remove(os.path.join(OUT, old))
+    for d in ("chapters", "lang"):                  # chapters that are gone, and the SNBT files before 1.1.0
+        for f in os.listdir(os.path.join(OUT, d)):
+            if not f.endswith(".json5") or f[:-6] not in CHAPTERS:
+                os.remove(os.path.join(OUT, d, f))
     group_lang = {f"chapter_group.{group_id}.title": GROUP_TITLE}
-    all_lang = dict(group_lang)
     index = [f"version {CHAPTER_VERSION}", f"group {group_id}"]
     total = 0
     for order, (c, ch) in enumerate(chapters.items()):
@@ -866,17 +891,14 @@ def build(force_art=False):
                    "icon": {"components": {"ftbquests:icon": f"guhs:textures/ftbquests/icon_{c}.png"}, "id": "ftbquests:custom_icon"},
                    "id": cid, "images": images, "order_index": order, "progression_mode": "flexible", "quest_links": links,
                    "quests": quests}
-        with open(os.path.join(OUT, "chapters", c + ".snbt"), "w", encoding="utf-8") as f:
-            f.write(snbt(chapter) + "\n")
-        with open(os.path.join(OUT, "lang", c + ".snbt"), "w", encoding="utf-8") as f:
-            f.write(snbt((group_lang if order == 0 else {}) | lang) + "\n")
-        all_lang.update(lang)
+        with open(os.path.join(OUT, "chapters", c + ".json5"), "w", encoding="utf-8", newline="\n") as f:
+            f.write(json5(chapter) + "\n")
+        with open(os.path.join(OUT, "lang", c + ".json5"), "w", encoding="utf-8", newline="\n") as f:
+            f.write(json5((group_lang if order == 0 else {}) | lang) + "\n")
         index.append(f"chapter {c}")
         total += len(quests)
         print(f"  {c}: {len(quests)} quests in {len(ch['sections'])} sections, {len(ch['drawn'])} lines drawn, "
               f"{len(ch['hidden'])} quests with their lines hidden")
-    with open(os.path.join(OUT, "guhs_lang.snbt"), "w", encoding="utf-8") as f:
-        f.write(snbt(all_lang) + "\n")
     with open(os.path.join(OUT, "index.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(index) + "\n")
     assert total == len(QUESTS) == len({x[0] for x in QUESTS}), (total, len(QUESTS))

@@ -401,12 +401,11 @@ public class PiepGameTests {
     public static void piepFtbHoofdstuk(GameTestHelper helper) {
         try {
             java.nio.file.Path quests = java.nio.file.Files.createTempDirectory("guhs-ftbpiep");
-            java.nio.file.Path lang = quests.resolve("lang").resolve("en_us.snbt");
-            java.nio.file.Files.createDirectories(lang.getParent());
-            java.nio.file.Files.writeString(lang, "{\n}\n");
+            // 1.1.0: JSON5 (FTB Quests 26.1); a chapter's texts in lang/en_us/chapters/<chapter>.json5
+            java.nio.file.Path langDir = quests.resolve("lang").resolve("en_us").resolve("chapters");
             helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.installInto(quests), "installs");
-            String piep = java.nio.file.Files.readString(quests.resolve("chapters").resolve("guhs_piep.snbt"));
-            String onderwater = java.nio.file.Files.readString(quests.resolve("chapters").resolve("guhs_onderwater.snbt"));
+            String piep = java.nio.file.Files.readString(quests.resolve("chapters").resolve("guhs_piep.json5"));
+            String onderwater = java.nio.file.Files.readString(quests.resolve("chapters").resolve("guhs_onderwater.json5"));
             java.util.regex.Matcher versie = java.util.regex.Pattern.compile("guhs_chapter_version: (\\d+)").matcher(piep);
             helper.assertTrue(versie.find() && Integer.parseInt(versie.group(1)) >= 15 && onderwater.contains(versie.group(0)),
                     "the Piep chapter has the current chapter version");
@@ -418,8 +417,9 @@ public class PiepGameTests {
                 helper.assertTrue(piep.contains("guhs:quest/" + q + "\"") && !onderwater.contains("guhs:quest/" + q + "\""), q + " stays in Piep!");
             }
             helper.assertTrue(piep.contains("progression_mode: \"flexible\"") && !piep.contains("linear"), "nothing is locked");
-            String text = java.nio.file.Files.readString(lang);
-            helper.assertTrue(text.contains("Piep!") && text.contains("&dGuhs\""), "the Piep chapter's texts are in the lang file");
+            String text = java.nio.file.Files.readString(langDir.resolve("guhs_piep.json5"));
+            String basis = java.nio.file.Files.readString(langDir.resolve("guhs_basis.json5"));
+            helper.assertTrue(text.contains("Piep!") && basis.contains("&dGuhs\""), "the Piep chapter's texts are in the lang files");
         } catch (java.io.IOException e) {
             helper.fail(e.toString());
         }

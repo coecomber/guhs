@@ -1039,8 +1039,10 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
   `trade_set`/`villager_trade` data is shipped.
 * D: **GeckoLib 5** refuses animation files without animations in a dev environment: the five "empty" ones (sled, sled dog,
   surfboard, swim ring, rubber duck) got one empty looping animation `animation.guhs.leeg` (nothing plays it).
-* D: FTB Quests SNBT needs no changes for FTB Quests 26.1.2.8 (same task/reward types, `ftbquests:custom_icon` +
-  `ftbquests:icon` component still exist); verify the quest book in the dev client.
+* D (corrected by L finish): FTB Quests 26.1.2.8 reads **only JSON5** (no SNBT code left, no migration): `data.json5`,
+  `chapter_groups.json5`, `chapters/<file>.json5`, texts from every `*.json5` under `lang/<locale>/` (flat keys; FTB itself saves a
+  chapter's texts to `lang/<locale>/chapters/<file>.json5`). Task/reward types, `ftbquests:custom_icon` + `ftbquests:icon` are unchanged.
+  `tools/make_ftbquests.py` now writes JSON5 (CHAPTER_VERSION 20) and `compat/FtbQuestsChapter` installs it in FTB's own layout.
 * S3: Guhvis-hengel "cast" look: the code-side `ItemProperties.register(.., "cast")` is gone; the client item definition (D) uses vanilla's
   `minecraft:fishing_rod/cast` condition (same rule: line out + rod in the fishing hand; NeoForge checks `FISHING_ROD_CAST`, our rod is a `FishingRodItem`).
 * S3: Hula dance "stand still": 26.1 `ClientInput` has no settable impulses; while you dance the player gets a plain `ClientInput` (never moves,
@@ -1234,6 +1236,12 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
 * R (phase 6): Guhs creative tab skips stacks that a feature adds a second time (26.1 throws); the tab shows each item once like 1.0.0.
 * R (phase 6): NOT 1:1 yet - FTB Quests 26.1 reads only JSON5 (see REQUESTS: A/D must switch the installer and generator); until then the
   quest book in 1.1.0 has no Guhs chapters.
+* L (finish): fixed - the Guhs chapters are JSON5 now (same 13 chapters, 734 quests, pictures and Dutch texts; checked in the dev client and
+  on a dedicated server: "Loaded 2 chapter groups, 13 chapters, 734 quests"). Texts go to `lang/en_us/chapters/<chapter>.json5` (and
+  `lang/nl_nl/chapters/` when a pack has that folder) instead of being merged into one lang file. Chapter files of 1.0.x (`.snbt`) are
+  ignored by FTB Quests 26.1 and left alone by the installer; a pack that edited its Guhs chapters in 1.0.x gets fresh JSON5 ones.
+* L (finish): merged branch server-join (1.0.1 work): on the first start of the client the official server "Guhs Server" (guhs.nl) is added
+  once to the top of the multiplayer list (client config `addOfficialServer`); the wiki moves to https://guhs.nl/wiki/.
 * R (phase 6): GUI entity previews/items are lit a little brighter and hover tooltips follow 26.1's style (vanilla 26.1 GUI lighting); night
   sky of the Guhmension is a shade more purple near the zenith (26.1 sky gradient); both vanilla-side, not changed.
 

@@ -1,0 +1,730 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_guheinde",
+  group: "475548DB0F6F37EB",
+  guhs_chapter_version: 20,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guheinde.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "4755484EAFF30E44",
+  images: [
+    {
+      height: 3.0,
+      id: "4755481DF72C0291",
+      image: "guhs:textures/ftbquests/guhs_guheinde/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 4.5,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "47554853B55EBD22",
+      image: "guhs:textures/ftbquests/guhs_guheinde/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 6.3,
+      y: 1.5,
+    },
+    {
+      height: 1.5625,
+      id: "47554831D88CDB20",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_opweg.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755488EE2555B72",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_oppermika.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 8.74375,
+      hover: [
+        "Komt na: Het Guheinde",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "47554813ECA2A0B2",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_buiteneilanden.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 12.70625,
+      hover: [
+        "Komt na: OPPER-GEVADST!",
+      ],
+    },
+  ],
+  order_index: 5,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "475548099C82074C",
+      linked_quest: "475548BF9CE78C33",
+      shape: "hexagon",
+      x: 0.0,
+      y: 0.75,
+    },
+    {
+      id: "475548164AAB3CB1",
+      linked_quest: "4755482D2E52EC6D",
+      shape: "hexagon",
+      x: 0.0,
+      y: 2.25,
+    },
+  ],
+  quests: [
+    {
+      id: "4755482CDD9DBAAA",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guheinde.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "4755481AB5264153",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484A05AA9445",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      dependencies: [
+        "475548BF9CE78C33",
+        "4755482D2E52EC6D",
+      ],
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "475548F95D32C0F4",
+      icon: {
+        id: "guhs:mika_traan",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:mika_traan",
+          },
+          id: "4755486C4C78016D",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A664506C10",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+      dependencies: [
+        "4755482CDD9DBAAA",
+      ],
+      hide_dependency_lines: true,
+      shape: "hexagon",
+    },
+    {
+      id: "4755484A511D2B07",
+      icon: {
+        id: "guhs:guh_kristal",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/guheinde_opdracht",
+          id: "475548231AAFD8F7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481AE6FA8611",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+      dependencies: [
+        "475548F95D32C0F4",
+      ],
+    },
+    {
+      id: "4755480BF2E8ECFD",
+      icon: {
+        id: "guhs:oog_van_vadsig",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:oog_van_vadsig",
+          },
+          count: 12,
+          id: "475548F90D1FE11B",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554844EC078258",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 6,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+      dependencies: [
+        "4755484A511D2B07",
+      ],
+    },
+    {
+      id: "475548E52AC6A515",
+      icon: {
+        id: "guhs:kaaskorst_stenen",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:knabbelkelder",
+          id: "4755480212322FCF",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483EA6F7C9CF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548B4645C7EA8",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+      dependencies: [
+        "4755480BF2E8ECFD",
+      ],
+      shape: "octagon",
+    },
+    {
+      id: "4755482A87ECB0FE",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/guheinde_bevrijder",
+          id: "475548F50543545B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554837D2B9C413",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B848DAB76B",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+      dependencies: [
+        "475548E52AC6A515",
+      ],
+    },
+    {
+      id: "47554894C6AA450A",
+      icon: {
+        id: "guhs:knabbelportaalframe",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/guheinde_portaal",
+          id: "475548710A94C520",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CA142DD0E3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+      dependencies: [
+        "4755482A87ECB0FE",
+      ],
+    },
+    {
+      id: "475548048B20D10A",
+      icon: {
+        id: "guhs:kaaskorst",
+      },
+      tasks: [
+        {
+          type: "dimension",
+          dimension: "guhs:guheinde",
+          id: "475548EC42F66B66",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489D11B9ACAA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 4,
+        },
+        {
+          id: "47554873A569F0E4",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+      dependencies: [
+        "47554894C6AA450A",
+      ],
+      shape: "octagon",
+    },
+    {
+      id: "4755486B3BEC166E",
+      icon: {
+        id: "guhs:knabbelkristal",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/guheinde_kristal",
+          id: "47554815115C9202",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554890E1DD6F0D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 10.525,
+      dependencies: [
+        "475548048B20D10A",
+      ],
+      hide_dependency_lines: true,
+    },
+    {
+      id: "475548BB4CB92BB5",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/guheinde_voeren",
+          id: "47554884C0E1E197",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554870ECF79D3C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 10.525,
+      dependencies: [
+        "4755486B3BEC166E",
+      ],
+    },
+    {
+      id: "4755488B952685DE",
+      icon: {
+        id: "guhs:knabbelkroon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/guheinde_winst",
+          id: "47554813B59D478B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554889A78CDAF2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554809916E2917",
+          type: "xp",
+          xp: 1000,
+        },
+      ],
+      x: 3.0,
+      y: 10.525,
+      dependencies: [
+        "475548BB4CB92BB5",
+      ],
+      shape: "gear",
+    },
+    {
+      id: "4755481C395DF146",
+      icon: {
+        id: "guhs:guhdex",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_vahoege_ender",
+          id: "475548043D2C09A0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554850E36F9A83",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548E53A5DB850",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 4.5,
+      y: 10.525,
+      dependencies: [
+        "4755488B952685DE",
+      ],
+    },
+    {
+      id: "4755485F779FAD61",
+      icon: {
+        id: "guhs:vahoege_vads_sword",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/guheinde_ridder",
+          id: "4755489626ABEDD9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C619EB06C5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 8,
+        },
+        {
+          id: "4755480C2A3D6124",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 6.0,
+      y: 10.525,
+      dependencies: [
+        "4755481C395DF146",
+      ],
+    },
+    {
+      id: "47554812E1FEE001",
+      icon: {
+        id: "guhs:block_of_kaasknabbels",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:block_of_kaasknabbels",
+          },
+          count: 4,
+          id: "47554898E4C04556",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C8AC1183DD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 10.525,
+      dependencies: [
+        "4755485F779FAD61",
+      ],
+    },
+    {
+      id: "4755489D1C3345E2",
+      icon: {
+        id: "guhs:mika_steen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/guheinde_poort",
+          id: "4755485432C080D3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554822199A7CCC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 14.4875,
+      dependencies: [
+        "4755488B952685DE",
+      ],
+      hide_dependency_lines: true,
+    },
+    {
+      id: "4755480846A343A2",
+      icon: {
+        id: "guhs:mika_steen_pilaar",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:mika_vesting",
+          id: "475548B6C1040A53",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548480A7EAB9D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755482C9E113E34",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 1.5,
+      y: 14.4875,
+      dependencies: [
+        "4755489D1C3345E2",
+      ],
+      shape: "octagon",
+    },
+    {
+      id: "47554832292EA215",
+      icon: {
+        id: "guhs:guhvleugels",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhvleugels",
+          },
+          id: "475548902161B34E",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548561549A75F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548000FE8EE00",
+          type: "xp",
+          xp: 500,
+        },
+      ],
+      x: 3.0,
+      y: 14.4875,
+      dependencies: [
+        "4755480846A343A2",
+      ],
+      shape: "gear",
+    },
+    {
+      id: "47554821BCBB035E",
+      icon: {
+        id: "guhs:mika_steen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/guheinde_terugpoort",
+          id: "475548AE05C03F71",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548642D8B66B3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755487ABCDC249B",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 14.4875,
+      dependencies: [
+        "47554832292EA215",
+      ],
+    },
+    {
+      id: "47554806041E9EFE",
+      icon: {
+        id: "guhs:enderguh_ei",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guheinde/guheinde_nog_eens",
+          id: "47554851D25AE2C6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554864FB0092C7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:mika_traan",
+          },
+          count: 4,
+        },
+        {
+          id: "475548BF57F3085B",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 6.0,
+      y: 14.4875,
+      dependencies: [
+        "47554821BCBB035E",
+      ],
+    },
+  ],
+}

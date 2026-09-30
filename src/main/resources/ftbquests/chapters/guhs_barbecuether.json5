@@ -1,0 +1,1361 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_barbecuether",
+  group: "475548DB0F6F37EB",
+  guhs_chapter_version: 20,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_barbecuether.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "475548F3FBADFB6E",
+  images: [
+    {
+      height: 3.0,
+      id: "47554879367E13F2",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 10.25,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "4755480E46A2F5FA",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 12.15,
+      y: 1.5,
+    },
+    {
+      height: 1.5625,
+      id: "47554844145BDAEE",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_barbecueput.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755488F57AD23FD",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_dimensie.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 4.78125,
+      hover: [
+        "Komt na: VAHOEG, hij brandt weer!",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755484AD3994C27",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_spiesburcht.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 10.24375,
+      hover: [
+        "Komt na: Het is hier heet, njeg!",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755485BA9745803",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_rookdelta.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 10.24375,
+      hover: [
+        "Komt na: Rookdelta",
+      ],
+    },
+  ],
+  order_index: 6,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "475548247AD83F89",
+      linked_quest: "4755486E9E523698",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "475548E99A05234B",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_barbecuether.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "475548DF3FC65485",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C988A7AC24",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      dependencies: [
+        "4755486E9E523698",
+      ],
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "475548903D2CC46B",
+      icon: {
+        id: "guhs:gebeitelde_houtskoolsteen_stenen",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:barbecueput",
+          id: "475548019C6B2CDE",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D13963E4CE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548E2080EDEC1",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+      dependencies: [
+        "475548E99A05234B",
+      ],
+      hide_dependency_lines: true,
+      shape: "hexagon",
+    },
+    {
+      id: "475548109CF14ED4",
+      icon: {
+        id: "guhs:grill_koksmuts",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/grill_gevonden",
+          id: "475548BB600FDF5B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554881C890A6AE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+      dependencies: [
+        "475548903D2CC46B",
+      ],
+    },
+    {
+      id: "475548617D7DEE71",
+      icon: {
+        id: "guhs:grillkool",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:grillkool",
+          },
+          count: 4,
+          id: "47554856FE69BE53",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554860AE3C2214",
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:coal_block",
+          },
+          count: 2,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+      dependencies: [
+        "475548109CF14ED4",
+      ],
+    },
+    {
+      id: "4755486661FEB05F",
+      icon: {
+        id: "guhs:grillkool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/grill_frame",
+          id: "475548AFAF7A3C81",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482895B45F48",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+      dependencies: [
+        "475548617D7DEE71",
+      ],
+    },
+    {
+      id: "475548D75B55D4F7",
+      icon: {
+        id: "guhs:aanmaakblokje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/grill_blokjes",
+          id: "475548CB38F56862",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548272AA15DB7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+      dependencies: [
+        "4755486661FEB05F",
+      ],
+    },
+    {
+      id: "475548854F353678",
+      icon: {
+        id: "guhs:grillguh_recept",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/grill_aangestoken",
+          id: "475548708BB220C6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481EB3F9B7CC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gegrilde_kaasknabbelsate",
+          },
+          count: 4,
+        },
+        {
+          id: "47554883791CC59D",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+      dependencies: [
+        "475548D75B55D4F7",
+      ],
+      shape: "gear",
+    },
+    {
+      id: "4755489650471B98",
+      icon: {
+        id: "guhs:grill_schort",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:grill_koksmuts",
+          },
+          id: "475548F385719C0C",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:grill_schort",
+          },
+          id: "475548C7B5CA4E57",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:grill_halsdoek",
+          },
+          id: "4755485D5AF4B4A3",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481C9B925807",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhbraadworst",
+          },
+          count: 6,
+        },
+        {
+          id: "475548D0DF0C52E7",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+      dependencies: [
+        "475548854F353678",
+      ],
+      shape: "rsquare",
+    },
+    {
+      id: "47554878051705A4",
+      icon: {
+        id: "guhs:guhdex",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_grillguh",
+          id: "47554886D4DBFAF9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D5576903B9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 9.0,
+      y: 8.0625,
+      dependencies: [
+        "4755489650471B98",
+      ],
+    },
+    {
+      id: "475548DC058D6F1D",
+      icon: {
+        id: "guhs:aanmaakblokje",
+      },
+      tasks: [
+        {
+          type: "dimension",
+          dimension: "guhs:barbecuether",
+          id: "475548FC4F522E08",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BEE66F6D5F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gegrilde_kaasknabbelsate",
+          },
+          count: 4,
+        },
+        {
+          id: "4755489DCFE56113",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 11.5,
+      y: 6.5625,
+      dependencies: [
+        "475548854F353678",
+      ],
+      hide_dependency_lines: true,
+      shape: "octagon",
+    },
+    {
+      id: "475548252EBF83A7",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:houtskoolvlakte",
+          id: "475548392E06D148",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554889ED54367D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 13.0,
+      y: 6.5625,
+      dependencies: [
+        "475548DC058D6F1D",
+      ],
+      shape: "circle",
+    },
+    {
+      id: "475548C0D817235B",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:satebos",
+          id: "475548C35E504DF9",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548133901B2FA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 14.5,
+      y: 6.5625,
+      dependencies: [
+        "475548252EBF83A7",
+      ],
+      shape: "circle",
+    },
+    {
+      id: "47554844A84A0EAC",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:worstenwoud",
+          id: "475548430ADB06F6",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489010CCBAF3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+      dependencies: [
+        "475548C0D817235B",
+      ],
+      shape: "circle",
+    },
+    {
+      id: "475548D57BAAA244",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:asdal",
+          id: "475548E58D1AA6A2",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AA08F34231",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 17.5,
+      y: 6.5625,
+      dependencies: [
+        "47554844A84A0EAC",
+      ],
+      shape: "circle",
+    },
+    {
+      id: "475548C208FE09FF",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:rookdelta",
+          id: "4755488803CE507E",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E744003152",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 19.0,
+      y: 6.5625,
+      dependencies: [
+        "475548D57BAAA244",
+      ],
+      shape: "circle",
+    },
+    {
+      id: "475548A0B5993233",
+      icon: {
+        id: "guhs:kaasfrituursaus_bucket",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaasfrituursaus_bucket",
+          },
+          id: "47554820479F8549",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488E97373CAB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 6.5625,
+      dependencies: [
+        "475548C208FE09FF",
+      ],
+    },
+    {
+      id: "475548E8E057443F",
+      icon: {
+        id: "guhs:gloeikool",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gloeikool",
+          },
+          id: "475548952F005B5A",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E2D79444E2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 8.0625,
+      dependencies: [
+        "475548A0B5993233",
+      ],
+    },
+    {
+      id: "4755482B1A2684B8",
+      icon: {
+        id: "minecraft:red_bed",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/te_warm",
+          id: "475548A3D33C3011",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548963882D41A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 8.0625,
+      dependencies: [
+        "475548E8E057443F",
+      ],
+      shape: "diamond",
+    },
+    {
+      id: "4755482C2809F860",
+      icon: {
+        id: "guhs:roosterijzer_tralies",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:houtskoolsteen_stenen",
+          },
+          count: 16,
+          id: "475548630BD342A6",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:roosterijzer_tralies",
+          },
+          count: 4,
+          id: "475548DB2F4159BC",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:rookgat",
+          },
+          id: "475548E2EC8D1DED",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F880F49F22",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 17.5,
+      y: 8.0625,
+      dependencies: [
+        "4755482B1A2684B8",
+      ],
+      shape: "diamond",
+    },
+    {
+      id: "4755480991155DDC",
+      icon: {
+        id: "guhs:gebeitelde_houtskoolsteen_stenen",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:spiesburcht",
+          id: "475548AEEDAA6313",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F4EC0B8FB3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gegrilde_kaasknabbelsate",
+          },
+          count: 4,
+        },
+        {
+          id: "4755485E0B7E5E96",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 0.0,
+      y: 12.025,
+      dependencies: [
+        "475548DC058D6F1D",
+      ],
+      hide_dependency_lines: true,
+      shape: "hexagon",
+    },
+    {
+      id: "4755483F45BF1559",
+      icon: {
+        id: "guhs:grillspies",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:grillspies",
+          },
+          id: "47554824D6CF3A2F",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482DEDCFD921",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gloeikoolgruis",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 12.025,
+      dependencies: [
+        "4755480991155DDC",
+      ],
+    },
+    {
+      id: "4755482BC240D32B",
+      icon: {
+        id: "guhs:verkoold_guhbot",
+      },
+      tasks: [
+        {
+          type: "kill",
+          entity: "guhs:knekel_mika",
+          value: 5,
+          id: "4755488FFC9032DF",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485E3B2E3B08",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 3.0,
+      y: 12.025,
+      dependencies: [
+        "4755483F45BF1559",
+      ],
+    },
+    {
+      id: "475548270CB71A9A",
+      icon: {
+        id: "guhs:guhbrouwketel",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhbrouwketel",
+          },
+          id: "475548654644FC79",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481EA3DEB677",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 12.025,
+      dependencies: [
+        "4755482BC240D32B",
+      ],
+    },
+    {
+      id: "475548C0720DC8CC",
+      icon: {
+        id: "guhs:drankje_van_vahoegheid",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhdrankje_gebrouwen",
+          id: "475548EC9A25B687",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489A1DAEE853",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:grillspiespoeder",
+          },
+          count: 4,
+        },
+        {
+          id: "475548712F11B88C",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 6.0,
+      y: 12.025,
+      dependencies: [
+        "475548270CB71A9A",
+      ],
+      shape: "gear",
+    },
+    {
+      id: "4755485659A76DFD",
+      icon: {
+        id: "guhs:guhsprongdrankje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:drankje_van_vahoegheid",
+          },
+          id: "4755482CB153E7EB",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:rookloopdrankje",
+          },
+          id: "475548C0688E4C8B",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:sluipknabbeldrankje",
+          },
+          id: "475548825F500321",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhsprongdrankje",
+          },
+          id: "4755480B9E454C83",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554884CD0B8131",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 24,
+        },
+        {
+          id: "475548F85AB86787",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 7.5,
+      y: 12.025,
+      dependencies: [
+        "475548C0720DC8CC",
+      ],
+      shape: "rsquare",
+    },
+    {
+      id: "4755480ED23B2480",
+      icon: {
+        id: "guhs:verkoolde_mikakop",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:verkoolde_mikakop",
+          },
+          count: 3,
+          id: "4755480F59B07B0D",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B4EDDFA647",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548468D147A0F",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 9.0,
+      y: 12.025,
+      dependencies: [
+        "4755485659A76DFD",
+      ],
+      shape: "diamond",
+    },
+    {
+      id: "4755480E84F66AAD",
+      icon: {
+        id: "guhs:gloeister",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/aangebrande_mika_verslagen",
+          id: "475548F763A5D781",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AE9EFFCD6B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoege_vads_ingot",
+          },
+          count: 4,
+        },
+        {
+          id: "4755481EE5B6B4F9",
+          type: "xp",
+          xp: 500,
+        },
+      ],
+      x: 9.0,
+      y: 13.525,
+      dependencies: [
+        "4755480ED23B2480",
+      ],
+      shape: "octagon",
+    },
+    {
+      id: "47554814EA49F152",
+      icon: {
+        id: "guhs:knabbelbaken",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/knabbelbaken_aan",
+          id: "4755484B61EA5717",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F62047B7E2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:block_of_kaasknabbels",
+          },
+          count: 2,
+        },
+        {
+          id: "475548ACB5372F68",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 7.5,
+      y: 13.525,
+      dependencies: [
+        "4755480E84F66AAD",
+      ],
+      shape: "gear",
+    },
+    {
+      id: "47554893F38A1AE3",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/rookguh_gered",
+          id: "475548AC7F0B3175",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BE2B51A661",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 4,
+        },
+        {
+          id: "47554881D3D38E56",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 11.5,
+      y: 12.025,
+      dependencies: [
+        "475548C208FE09FF",
+      ],
+      hide_dependency_lines: true,
+      shape: "hexagon",
+    },
+    {
+      id: "475548624E51A122",
+      icon: {
+        id: "guhs:gefrituurde_kaasknabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/rookguh_redder",
+          id: "4755485602000C41",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554836CAB27F45",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoege_vads_ingot",
+          },
+          count: 2,
+        },
+        {
+          id: "47554822CB7102A0",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 13.0,
+      y: 12.025,
+      dependencies: [
+        "47554893F38A1AE3",
+      ],
+      shape: "octagon",
+    },
+    {
+      id: "47554804C59A212D",
+      icon: {
+        id: "guhs:block_of_kaasknabbels",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:mika_grillpaleis",
+          id: "475548F250264FE9",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554867F8825EEB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755483DECB2AE77",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 14.5,
+      y: 12.025,
+      dependencies: [
+        "475548624E51A122",
+      ],
+      shape: "hexagon",
+    },
+    {
+      id: "47554896CDEC0CA4",
+      icon: {
+        id: "guhs:vahoege_vads_ingot",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/nether_mika_ruil",
+          id: "47554870D16F23E8",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548556479FAF1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:rookloopdrankje",
+          },
+        },
+      ],
+      x: 16.0,
+      y: 12.025,
+      dependencies: [
+        "47554804C59A212D",
+      ],
+    },
+    {
+      id: "475548FF71E8F8E7",
+      icon: {
+        id: "guhs:as_blok",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_asguh",
+          id: "475548C5289D5385",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548214BA8B1AA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548619CBB99BE",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 17.5,
+      y: 12.025,
+      dependencies: [
+        "47554896CDEC0CA4",
+      ],
+      shape: "gear",
+    },
+    {
+      id: "475548A195F9CEA0",
+      icon: {
+        id: "guhs:guhdex",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/found_rookguh",
+          id: "475548D68453730C",
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/found_vonk_mika",
+          id: "475548C33C5DF032",
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/found_knekel_mika",
+          id: "4755480DFD93D39F",
+          criterion: "",
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_asguh",
+          id: "4755484C0B48B30C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482CA32EBD3B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 19.0,
+      y: 12.025,
+      dependencies: [
+        "475548FF71E8F8E7",
+      ],
+    },
+    {
+      id: "475548D9FEBA099D",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/asguh_gevoerd",
+          id: "4755480B214CB224",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486C28F33CD7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 12.025,
+      dependencies: [
+        "475548A195F9CEA0",
+      ],
+      shape: "diamond",
+    },
+    {
+      id: "475548D585541FDC",
+      icon: {
+        id: "guhs:sluipknabbeldrankje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhdrankje_gedronken",
+          id: "475548EB2EC70542",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D9656CB906",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 13.525,
+      dependencies: [
+        "475548D9FEBA099D",
+      ],
+      shape: "diamond",
+    },
+  ],
+}

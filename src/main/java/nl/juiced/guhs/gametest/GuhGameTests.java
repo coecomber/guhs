@@ -1816,28 +1816,39 @@ public class GuhGameTests {
     public static void ftbQuestsChapterInstallsOnceAndMergesTheTexts(GameTestHelper helper) {
         try {
             java.nio.file.Path quests = java.nio.file.Files.createTempDirectory("guhs-ftbquests");
-            java.nio.file.Path lang = quests.resolve("lang").resolve("en_us.snbt");
-            java.nio.file.Files.createDirectories(lang.getParent());
-            java.nio.file.Files.writeString(lang, "{\n\tchapter.0123456789ABCDEF.title: \"Other\"\n}\n");
-            java.nio.file.Path groups = quests.resolve("chapter_groups.snbt");
-            java.nio.file.Files.writeString(groups, "{\n\tchapter_groups: [\n\t\t{ id: \"0123456789ABCDEF\" }\n\t]\n}\n");
+            // 1.1.0: FTB Quests 26.1 reads JSON5 only; a chapter's texts live in lang/<locale>/chapters/<chapter>.json5
+            java.nio.file.Path packLang = quests.resolve("lang").resolve("en_us").resolve("chapters").resolve("pack.json5");
+            java.nio.file.Files.createDirectories(packLang.getParent());
+            java.nio.file.Files.writeString(packLang, "{\n  \"chapter.0123456789ABCDEF.title\": \"Other\",\n}\n");
+            java.nio.file.Files.createDirectories(quests.resolve("lang").resolve("nl_nl"));
+            java.nio.file.Path groups = quests.resolve("chapter_groups.json5");
+            java.nio.file.Files.writeString(groups, "{\n  chapter_groups: [\n    {\n      id: \"0123456789ABCDEF\",\n      icon: [1, 2],\n    }\n  ],\n}\n");
             helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.installInto(quests), "installs the first time");
             java.util.List<String> names = nl.juiced.guhs.compat.FtbQuestsChapter.chapters();
             helper.assertTrue(names.equals(java.util.List.of("guhs_basis", "guhs_guhmensie", "guhs_minigames", "guhs_onderwater", "guhs_maag",
                     "guhs_guheinde", "guhs_barbecuether", "guhs_extra27", "guhs_knuffeldal", "guhs_piep", "guhs_band", "guhs_verhalen", "guhs_diertjes")),
                     "the thirteen chapters (3.0: Guhverhalen, Diertjes van de Guhmensie), in reading order: " + names);
             for (String name : names) {
-                helper.assertTrue(java.nio.file.Files.exists(quests.resolve("chapters").resolve(name + ".snbt")), "chapter " + name + " is there");
+                helper.assertTrue(java.nio.file.Files.exists(quests.resolve("chapters").resolve(name + ".json5")), "chapter " + name + " is there");
+                for (String locale : java.util.List.of("en_us", "nl_nl")) {
+                    helper.assertTrue(java.nio.file.Files.readString(quests.resolve("lang").resolve(locale).resolve("chapters").resolve(name + ".json5"))
+                            .contains("Hoe kom je hier?"), "the texts of " + name + " in " + locale);
+                }
             }
+            helper.assertTrue(!java.nio.file.Files.exists(quests.resolve("lang").resolve("de_de")), "no lang folder the pack doesn't have");
             String g = java.nio.file.Files.readString(groups);
-            helper.assertTrue(g.contains("0123456789ABCDEF") && java.util.regex.Pattern.compile("id: \"475548[0-9A-F]{10}\"").matcher(g).find(),
-                    "our group is added next to the pack's own: " + g);
-            String text = java.nio.file.Files.readString(lang);
-            helper.assertTrue(text.contains("Other") && text.contains("&dGuhs") && text.contains("Hoe kom je hier?") && text.trim().endsWith("}"),
-                    "texts merged into the lang file");
+            helper.assertTrue(g.contains("0123456789ABCDEF") && java.util.regex.Pattern.compile("id: \"475548[0-9A-F]{10}\"").matcher(g).find()
+                    && g.indexOf("475548") > g.indexOf("icon: [1, 2]") && g.trim().endsWith("}") && g.contains("},\n    {"),
+                    "our group is added after the pack's own: " + g);
+            String basis = java.nio.file.Files.readString(quests.resolve("lang").resolve("en_us").resolve("chapters").resolve("guhs_basis.json5"));
+            helper.assertTrue(basis.contains("&dGuhs") && java.nio.file.Files.readString(packLang).contains("Other"), "group title with the first chapter, the pack's texts stay");
             helper.assertTrue(!nl.juiced.guhs.compat.FtbQuestsChapter.installInto(quests), "not again when it's already there");
-            helper.assertTrue(java.nio.file.Files.readString(lang).equals(text), "the lang file isn't touched again");
             helper.assertTrue(java.nio.file.Files.readString(groups).equals(g), "the group isn't added twice");
+            // a fresh quests folder: chapter_groups.json5 is made
+            java.nio.file.Path fresh = java.nio.file.Files.createTempDirectory("guhs-ftbquests");
+            helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.installInto(fresh)
+                    && java.nio.file.Files.readString(fresh.resolve("chapter_groups.json5")).contains("chapter_groups: [\n    {\n      id: \"475548"),
+                    "a new chapter_groups.json5 with our group");
         } catch (java.io.IOException e) {
             helper.fail(e.toString());
         }
@@ -1851,21 +1862,24 @@ public class GuhGameTests {
             java.nio.file.Path quests = java.nio.file.Files.createTempDirectory("guhs-ftbquests");
             java.nio.file.Path chapters = quests.resolve("chapters");
             java.nio.file.Files.createDirectories(chapters);
-            java.nio.file.Files.writeString(chapters.resolve("guhs.snbt"), "{\n\tguhs_chapter_version: 13\n\tfilename: \"guhs\"\n}\n");
-            java.nio.file.Files.writeString(chapters.resolve("guhs_maag.snbt"), "{\n\tfilename: \"guhs_maag\"\n\tpack: \"edited\"\n}\n");
-            java.nio.file.Files.writeString(chapters.resolve("guhs_basis.snbt"), "{\n\tguhs_chapter_version: 3\n}\n");
+            java.nio.file.Files.writeString(chapters.resolve("guhs.json5"), "{\n  guhs_chapter_version: 13,\n  filename: \"guhs\",\n}\n");
+            java.nio.file.Files.writeString(chapters.resolve("guhs_maag.json5"), "{\n  filename: \"guhs_maag\",\n  pack: \"edited\",\n}\n");
+            java.nio.file.Files.writeString(chapters.resolve("guhs_basis.json5"), "{\n  guhs_chapter_version: 3,\n}\n");
+            java.nio.file.Files.writeString(chapters.resolve("guhs_band.snbt"), "{\n\tfilename: \"guhs_band\"\n}\n");
             helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.installInto(quests), "installs");
-            helper.assertTrue(!java.nio.file.Files.exists(chapters.resolve("guhs.snbt")), "our old single chapter is gone");
-            helper.assertTrue(java.nio.file.Files.readString(chapters.resolve("guhs_maag.snbt")).contains("edited"), "the pack's edit stays");
-            helper.assertTrue(java.nio.file.Files.readString(chapters.resolve("guhs_basis.snbt")).contains("quests: ["), "an older chapter of ours is updated");
-            helper.assertTrue(java.nio.file.Files.exists(chapters.resolve("guhs_knuffeldal.snbt")), "the other chapters are installed");
+            helper.assertTrue(!java.nio.file.Files.exists(chapters.resolve("guhs.json5")), "our old single chapter is gone");
+            helper.assertTrue(java.nio.file.Files.readString(chapters.resolve("guhs_maag.json5")).contains("edited"), "the pack's edit stays");
+            helper.assertTrue(java.nio.file.Files.readString(chapters.resolve("guhs_basis.json5")).contains("quests: ["), "an older chapter of ours is updated");
+            helper.assertTrue(java.nio.file.Files.exists(chapters.resolve("guhs_knuffeldal.json5")), "the other chapters are installed");
+            helper.assertTrue(java.nio.file.Files.exists(chapters.resolve("guhs_band.json5")) && java.nio.file.Files.exists(chapters.resolve("guhs_band.snbt")),
+                    "a 1.0.x SNBT chapter (not read by FTB Quests 26.1) doesn't stop the JSON5 one and is left alone");
             // an old single chapter the pack edited (no marker): nothing is installed next to it (same quest ids)
             java.nio.file.Path other = java.nio.file.Files.createTempDirectory("guhs-ftbquests");
             java.nio.file.Files.createDirectories(other.resolve("chapters"));
-            java.nio.file.Files.writeString(other.resolve("chapters").resolve("guhs.snbt"), "{\n\tfilename: \"guhs\"\n}\n");
+            java.nio.file.Files.writeString(other.resolve("chapters").resolve("guhs.json5"), "{\n  filename: \"guhs\",\n}\n");
             helper.assertTrue(!nl.juiced.guhs.compat.FtbQuestsChapter.installInto(other), "leaves an edited old chapter alone");
-            helper.assertTrue(java.nio.file.Files.exists(other.resolve("chapters").resolve("guhs.snbt"))
-                    && !java.nio.file.Files.exists(other.resolve("chapters").resolve("guhs_basis.snbt")), "and adds nothing");
+            helper.assertTrue(java.nio.file.Files.exists(other.resolve("chapters").resolve("guhs.json5"))
+                    && !java.nio.file.Files.exists(other.resolve("chapters").resolve("guhs_basis.json5")), "and adds nothing");
         } catch (java.io.IOException e) {
             helper.fail(e.toString());
         }
@@ -1875,27 +1889,26 @@ public class GuhGameTests {
     /** FTB Quests re-saves our chapters without the marker: then the fingerprint tells an untouched chapter from a pack's edit. */
     private static void ftbQuestsTellsAResaveFromAnEdit(GameTestHelper helper) {
         try {
-            String ours = ftbResource("ftbquests/chapters/guhs_basis.snbt");
-            String resaved = ours.replaceAll("(?m)^[\\t ]*guhs_chapter_version: \\d+\\R", "");
+            String ours = ftbResource("ftbquests/chapters/guhs_basis.json5");
+            int current = nl.juiced.guhs.compat.FtbQuestsChapter.version(ours);
+            helper.assertTrue(current >= 20, "a JSON5 chapter (version 20+) with our marker: " + current);
+            // (FTB Quests 26.1 re-saves with its own key order, a count in item icons, and without our marker)
+            String resaved = ours.replaceAll("(?m)^[\\t ]*guhs_chapter_version: \\d+,?\\R", "")
+                    .replace("id: \"ftbquests:custom_icon\",", "id: \"ftbquests:custom_icon\",\n      count: 1,");
             String fp = nl.juiced.guhs.compat.FtbQuestsChapter.fingerprint(ours);
             helper.assertTrue(!resaved.contains("guhs_chapter_version") && nl.juiced.guhs.compat.FtbQuestsChapter.fingerprint(resaved).equals(fp),
                     "the same ids and positions without the marker");
             helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.shouldReplace(resaved, new String[] {"13", fp}, 14), "an older, untouched chapter is updated");
             helper.assertTrue(!nl.juiced.guhs.compat.FtbQuestsChapter.shouldReplace(resaved, new String[] {"14", fp}, 14), "the same version is left alone");
-            String moved = resaved.replaceFirst("(?m)^(\\s*)x: ([-0-9.]+)d$", "$1x: 99.5d");
+            String moved = resaved.replaceFirst("(?m)^(\\s*)x: ([-0-9.]+),$", "$1x: 99.5,");
+            helper.assertTrue(!moved.equals(resaved), "a quest was moved");
             helper.assertTrue(!nl.juiced.guhs.compat.FtbQuestsChapter.shouldReplace(moved, new String[] {"13", fp}, 14), "a moved quest is a pack's edit");
             helper.assertTrue(!nl.juiced.guhs.compat.FtbQuestsChapter.shouldReplace(resaved, null, 14), "without a record: not ours to replace");
-            helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.shouldReplace(ours.replace("guhs_chapter_version: 19", "guhs_chapter_version: 3"), null, 19),
+            helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.shouldReplace(ours.replace("guhs_chapter_version: " + current, "guhs_chapter_version: 3"), null, current),
                     "an older chapter with our marker is updated");
-            helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.oldChapterIsOurs("{\n\tid: \"4755487A3E56DBF4\"\n\tfilename: \"guhs\"\n}\n")
-                    && !nl.juiced.guhs.compat.FtbQuestsChapter.oldChapterIsOurs("{\n\tid: \"4755487A3E56DBF4\"\n\tquests: [{ id: \"0123456789ABCDEF\" }]\n}\n"),
+            helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.oldChapterIsOurs("{\n  id: \"4755487A3E56DBF4\",\n  filename: \"guhs\",\n}\n")
+                    && !nl.juiced.guhs.compat.FtbQuestsChapter.oldChapterIsOurs("{\n  id: \"4755487A3E56DBF4\",\n  quests: [{ id: \"0123456789ABCDEF\" }],\n}\n"),
                     "the old single chapter is ours unless the pack added its own quests");
-            // FTB Quests saves text lists over several lines: our old entries go completely, the pack's stay
-            String saved = "{\n\tchapter.0123456789ABCDEF.title: \"Other\"\n\tquest.475548AAAAAAAAAA.quest_desc: [\n\t\t\"a\"\n\t\t\"\"\n\t\t\"b ]\"\n\t]\n"
-                    + "\tquest.475548AAAAAAAAAA.title: \"T\"\n\tquest.475548BBBBBBBBBB.quest_desc: [\"one\"]\n\tquest.0123456789ABCDEF.quest_desc: [\n\t\t\"keep\"\n\t]\n}\n";
-            String stripped = nl.juiced.guhs.compat.FtbQuestsChapter.stripOurLang(saved);
-            helper.assertTrue(stripped.equals("{\n\tchapter.0123456789ABCDEF.title: \"Other\"\n\tquest.0123456789ABCDEF.quest_desc: [\n\t\t\"keep\"\n\t]\n}\n"),
-                    "our multi-line texts are removed whole: " + stripped);
         } catch (java.io.IOException e) {
             helper.fail(e.toString());
         }
@@ -1909,10 +1922,10 @@ public class GuhGameTests {
             java.util.Set<String> quests = new java.util.HashSet<>();
             java.util.List<String> links = new java.util.ArrayList<>();
             int linear = 0;
-            java.util.regex.Pattern title = java.util.regex.Pattern.compile("quest\\.(475548[0-9A-F]{10})\\.title: ");
+            java.util.regex.Pattern title = java.util.regex.Pattern.compile("\"quest\\.(475548[0-9A-F]{10})\\.title\": ");
             for (String name : nl.juiced.guhs.compat.FtbQuestsChapter.chapters()) {
-                String chapter = ftbResource("ftbquests/chapters/" + name + ".snbt");
-                String lang = ftbResource("ftbquests/lang/" + name + ".snbt");
+                String chapter = ftbResource("ftbquests/chapters/" + name + ".json5");
+                String lang = ftbResource("ftbquests/lang/" + name + ".json5");
                 helper.assertTrue(chapter != null && lang != null, name + " is there");
                 helper.assertTrue(chapter.contains("progression_mode: \"flexible\"") && chapter.contains("group: \"475548")
                         && chapter.contains("filename: \"" + name + "\""), name + ": flexible, in the Guhs group");

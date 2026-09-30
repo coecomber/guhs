@@ -17,9 +17,14 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 
 /**
- * If FTB Quests is installed, puts the "Guhs" chapter group (nine themed chapters, their Dutch texts and the group) into
- * config/ftbquests/quests, so it shows up in the pack's quest book. The chapters are made by tools/make_ftbquests.py;
- * ftbquests/index.txt lists them (and the group id).
+ * If FTB Quests is installed, puts the "Guhs" chapter group (thirteen themed chapters, their Dutch texts and the group)
+ * into config/ftbquests/quests, so it shows up in the pack's quest book. The chapters are made by
+ * tools/make_ftbquests.py; ftbquests/index.txt lists them (and the group id).
+ * <p>
+ * 1.1.0 (Minecraft 26.1.2): FTB Quests 26.1 reads only JSON5 (1.0.x wrote SNBT, which it ignores now). Everything goes
+ * where FTB Quests saves it itself: chapters/&lt;name&gt;.json5, the texts in lang/en_us/chapters/&lt;name&gt;.json5 (every
+ * .json5 under lang/&lt;locale&gt;/ is read and merged; our texts also go into lang/nl_nl/ when the pack has that folder),
+ * and the group in chapter_groups.json5.
  * <p>
  * Pack makers' own edits are left alone. FTB Quests re-saves the chapter files (and drops our "guhs_chapter_version"
  * marker when it does), so what we installed is remembered in quests/guhs_chapters.txt: per chapter the version and a
@@ -29,18 +34,19 @@ import net.neoforged.fml.loading.FMLPaths;
  * <li>it still has our marker with an older version; or</li>
  * <li>we installed an older version and the file still has the same ids and positions (FTB Quests only re-saved it).</li>
  * </ul>
- * The old single chapter (chapters/guhs.snbt, before 2.8) is removed when it is ours: it has the marker, or every id in
+ * The old single chapter (chapters/guhs.json5, before 2.8) is removed when it is ours: it has the marker, or every id in
  * it is one of ours (they all start with 475548, "GUH" in hex). If a pack added its own quests to it, it stays, and then
  * nothing is installed at all (the new chapters use the same quest ids).
  */
 public final class FtbQuestsChapter {
     private static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
-    private static final Pattern VERSION = Pattern.compile("guhs_chapter_version: (\\d+)");
+    private static final Pattern VERSION = Pattern.compile("\"?guhs_chapter_version\"?\\s*:\\s*(\\d+)");
     private static final Pattern ID = Pattern.compile("\"([0-9A-F]{16})\"");
-    private static final Pattern POSITION = Pattern.compile("(?m)^\\s*(x|y): (-?[0-9.]+)d?\\s*$");
-    /** Lang lines of ours (all our ids start with 475548, "GUH" in hex). */
-    private static final Pattern OUR_LANG_ENTRY = Pattern.compile("^\\s*[a-z_]+\\.475548[0-9A-F]{10}\\.[a-z_]+: (.*)$");
+    private static final Pattern POSITION = Pattern.compile("(?m)^\\s*\"?(x|y)\"?\\s*:\\s*(-?[0-9.]+(?:[eE][-+]?[0-9]+)?)[dD]?\\s*,?\\s*$");
     static final String INSTALLED = "guhs_chapters.txt";
+    static final String EXT = ".json5";
+    /** The locales whose lang folder gets our texts: en_us always (FTB Quests' fallback), nl_nl when the pack has it. */
+    private static final List<String> LOCALES = List.of("en_us", "nl_nl");
 
     public static void install() {
         if (ModList.get().isLoaded("ftbquests")) {
@@ -66,8 +72,7 @@ public final class FtbQuestsChapter {
     public static boolean installInto(Path quests) {
         try {
             String index = resource("ftbquests/index.txt");
-            String lang = resource("ftbquests/guhs_lang.snbt");
-            if (index == null || lang == null) {
+            if (index == null) {
                 return false;
             }
             String group = null;
@@ -77,37 +82,44 @@ public final class FtbQuestsChapter {
                 }
             }
             Path chapters = quests.resolve("chapters");
-            Path split = quests.resolve("lang").resolve("en_us").resolve("chapters");
+            Path lang = quests.resolve("lang");
             // the old single chapter (before 2.8)
-            Path old = chapters.resolve("guhs.snbt");
+            Path old = chapters.resolve("guhs" + EXT);
             if (Files.exists(old)) {
                 if (!oldChapterIsOurs(Files.readString(old))) {
-                    LOGGER.info("config/ftbquests/quests/chapters/guhs.snbt has the pack's own quests: the Guhs chapters are left alone");
+                    LOGGER.info("config/ftbquests/quests/chapters/guhs.json5 has the pack's own quests: the Guhs chapters are left alone");
                     return false;
                 }
                 Files.delete(old);
-                Files.deleteIfExists(split.resolve("guhs.snbt"));
+                for (String locale : LOCALES) {
+                    Files.deleteIfExists(lang.resolve(locale).resolve("chapters").resolve("guhs" + EXT));
+                }
             }
             Map<String, String[]> installed = readInstalled(quests.resolve(INSTALLED));
             boolean wrote = false;
             for (String name : chapters()) {
-                String chapter = resource("ftbquests/chapters/" + name + ".snbt");
+                String chapter = resource("ftbquests/chapters/" + name + EXT);
                 if (chapter == null) {
                     continue;
                 }
                 int version = version(chapter);
-                Path file = chapters.resolve(name + ".snbt");
+                Path file = chapters.resolve(name + EXT);
                 if (Files.exists(file) && !shouldReplace(Files.readString(file), installed.get(name), version)) {
                     continue;
                 }
                 Files.createDirectories(chapters);
                 Files.writeString(file, chapter, StandardCharsets.UTF_8);
                 installed.put(name, new String[] {String.valueOf(version), fingerprint(chapter)});
-                // packs that split their lang files get the chapter's texts next to their own
-                String chapterLang = resource("ftbquests/lang/" + name + ".snbt");
-                if (chapterLang != null && Files.isDirectory(quests.resolve("lang").resolve("en_us"))) {
-                    Files.createDirectories(split);
-                    Files.writeString(split.resolve(name + ".snbt"), chapterLang, StandardCharsets.UTF_8);
+                // the chapter's texts (Dutch in every language), in the file where FTB Quests keeps a chapter's texts itself
+                String chapterLang = resource("ftbquests/lang/" + name + EXT);
+                if (chapterLang != null) {
+                    for (String locale : LOCALES) {
+                        if (locale.equals("en_us") || Files.isDirectory(lang.resolve(locale))) {
+                            Path dir = lang.resolve(locale).resolve("chapters");
+                            Files.createDirectories(dir);
+                            Files.writeString(dir.resolve(name + EXT), chapterLang, StandardCharsets.UTF_8);
+                        }
+                    }
                 }
                 wrote = true;
             }
@@ -116,37 +128,7 @@ public final class FtbQuestsChapter {
             }
             writeInstalled(quests.resolve(INSTALLED), installed);
             if (group != null) {
-                addGroup(quests.resolve("chapter_groups.snbt"), group);
-            }
-            // our texts are Dutch in every language: also into the Dutch lang file when the pack has one (else FTB Quests
-            // falls back to en_us by itself)
-            Path nl = quests.resolve("lang").resolve("nl_nl.snbt");
-            if (Files.exists(nl)) {
-                String text = stripOurLang(Files.readString(nl));
-                int end = text.lastIndexOf('}');
-                Files.writeString(nl, text.substring(0, end) + lang.substring(lang.indexOf('{') + 1, lang.lastIndexOf('}')) + "}\n", StandardCharsets.UTF_8);
-            }
-            if (Files.isDirectory(quests.resolve("lang").resolve("nl_nl"))) {
-                for (String name : chapters()) {
-                    String chapterLang = resource("ftbquests/lang/" + name + ".snbt");
-                    if (chapterLang != null) {
-                        Path dir = quests.resolve("lang").resolve("nl_nl").resolve("chapters");
-                        Files.createDirectories(dir);
-                        Files.writeString(dir.resolve(name + ".snbt"), chapterLang, StandardCharsets.UTF_8);
-                    }
-                }
-            }
-            // all texts into the main lang file (our old lines out first)
-            Path main = quests.resolve("lang").resolve("en_us.snbt");
-            String entries = lang.substring(lang.indexOf('{') + 1, lang.lastIndexOf('}'));
-            if (Files.exists(main)) {
-                String text = stripOurLang(Files.readString(main));
-                int end = text.lastIndexOf('}');
-                text = text.substring(0, end) + entries + "}\n";
-                Files.writeString(main, text, StandardCharsets.UTF_8);
-            } else {
-                Files.createDirectories(main.getParent());
-                Files.writeString(main, lang, StandardCharsets.UTF_8);
+                addGroup(quests.resolve("chapter_groups" + EXT), group);
             }
             LOGGER.info("Installed the Guhs chapters for FTB Quests");
             return true;
@@ -154,29 +136,6 @@ public final class FtbQuestsChapter {
             LOGGER.warn("Could not install the Guhs FTB Quests chapters", e);
             return false;
         }
-    }
-
-    /**
-     * The lang file without our entries. FTB Quests writes a text list over several lines when it saves
-     * (key: [ newline "..." newline ... ]), so a list of ours is left out up to its closing bracket.
-     */
-    public static String stripOurLang(String text) {
-        StringBuilder out = new StringBuilder();
-        boolean inList = false;
-        for (String line : text.split("\n", -1)) {
-            if (inList) {
-                inList = !line.trim().equals("]");
-                continue;
-            }
-            Matcher m = OUR_LANG_ENTRY.matcher(line);
-            if (m.matches()) {
-                String value = m.group(1).trim();
-                inList = value.startsWith("[") && !value.endsWith("]");
-                continue;
-            }
-            out.append(line).append('\n');
-        }
-        return out.substring(0, Math.max(0, out.length() - 1));
     }
 
     /** Should the chapter file on disk be replaced by ours of this version? (installed: {version, fingerprint} or null) */
@@ -192,11 +151,11 @@ public final class FtbQuestsChapter {
     }
 
     /** The old single chapter is ours when it has our marker, or when every id in it is one of ours. */
-    public static boolean oldChapterIsOurs(String snbt) {
-        if (version(snbt) > 0) {
+    public static boolean oldChapterIsOurs(String chapter) {
+        if (version(chapter) > 0) {
             return true;
         }
-        Matcher m = ID.matcher(snbt);
+        Matcher m = ID.matcher(chapter);
         boolean any = false;
         while (m.find()) {
             if (!m.group(1).startsWith("475548")) {
@@ -208,14 +167,14 @@ public final class FtbQuestsChapter {
     }
 
     /** What a pack maker would change: the ids (quests, tasks, rewards, links, pictures, dependencies) and the positions. */
-    public static String fingerprint(String snbt) {
+    public static String fingerprint(String chapter) {
         List<String> ids = new ArrayList<>();
-        Matcher m = ID.matcher(snbt);
+        Matcher m = ID.matcher(chapter);
         while (m.find()) {
             ids.add(m.group(1));
         }
         List<String> pos = new ArrayList<>();
-        Matcher p = POSITION.matcher(snbt);
+        Matcher p = POSITION.matcher(chapter);
         while (p.find()) {
             pos.add(p.group(1) + Math.round(Double.parseDouble(p.group(2)) * 1000));
         }
@@ -245,31 +204,61 @@ public final class FtbQuestsChapter {
         Files.writeString(file, sb.toString(), StandardCharsets.UTF_8);
     }
 
-    /** Puts { id: "group" } into chapter_groups.snbt (made when it isn't there), unless it is in there already. */
+    /** Puts { id: "group" } into chapter_groups.json5 (made when it isn't there), unless it is in there already. */
     static void addGroup(Path file, String group) throws IOException {
-        String entry = "{ id: \"" + group + "\" }";
+        String entry = "{\n      id: \"" + group + "\",\n    },";
         if (!Files.exists(file)) {
             Files.createDirectories(file.getParent());
-            Files.writeString(file, "{\n\tchapter_groups: [\n\t\t" + entry + "\n\t]\n}\n", StandardCharsets.UTF_8);
+            Files.writeString(file, "{\n  chapter_groups: [\n    " + entry + "\n  ],\n}\n", StandardCharsets.UTF_8);
             return;
         }
         String text = Files.readString(file);
         if (text.contains(group)) {
             return;
         }
-        Matcher m = Pattern.compile("chapter_groups\\s*:\\s*\\[").matcher(text);
+        Matcher m = Pattern.compile("\"?chapter_groups\"?\\s*:\\s*\\[").matcher(text);
         if (m.find()) {
-            int close = text.indexOf(']', m.end());
-            text = text.substring(0, close).stripTrailing() + "\n\t\t" + entry + "\n\t" + text.substring(close);
+            int close = closingBracket(text, m.end());
+            String before = text.substring(0, close).stripTrailing();
+            String comma = before.endsWith("[") || before.endsWith(",") ? "" : ",";
+            text = before + comma + "\n    " + entry + "\n  " + text.substring(close);
         } else {
-            int end = text.lastIndexOf('}');
-            text = text.substring(0, Mth.clamp(end, 0, text.length())) + "\tchapter_groups: [\n\t\t" + entry + "\n\t]\n}\n";
+            int end = Mth.clamp(text.lastIndexOf('}'), 0, text.length());
+            String before = text.substring(0, end).stripTrailing();
+            String comma = before.endsWith("{") || before.endsWith(",") ? "" : ",";
+            text = before + comma + "\n  chapter_groups: [\n    " + entry + "\n  ],\n}\n";
         }
         Files.writeString(file, text, StandardCharsets.UTF_8);
     }
 
-    static int version(String snbt) {
-        Matcher m = VERSION.matcher(snbt);
+    /** The index of the ']' that closes the list opened just before {@code from} (skips nested lists/objects and strings). */
+    static int closingBracket(String text, int from) {
+        int depth = 0;
+        char quote = 0;
+        for (int i = from; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (quote != 0) {
+                if (c == '\\') {
+                    i++;
+                } else if (c == quote) {
+                    quote = 0;
+                }
+            } else if (c == '"' || c == '\'') {
+                quote = c;
+            } else if (c == '[' || c == '{') {
+                depth++;
+            } else if (c == ']' || c == '}') {
+                if (depth == 0) {
+                    return i;
+                }
+                depth--;
+            }
+        }
+        return text.length();
+    }
+
+    public static int version(String chapter) {
+        Matcher m = VERSION.matcher(chapter);
         return m.find() ? Integer.parseInt(m.group(1)) : 0;
     }
 
