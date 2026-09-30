@@ -232,15 +232,6 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
-    // port 26.1.2: show every compile error, not just the first 100
-    options.compilerArgs += ['-Xmaxerrs', '100000']
-    // port 26.1.2: Gradle's in-process compile listeners (incremental-compile constants analyser) crash with an NPE on
-    // TypeElement while the tree has thousands of errors, which cuts the error list short. Compile with the forked
-    // command-line javac instead (no listeners) until the tree compiles again; then remove these two lines.
-    options.incremental = false
-    options.fork = true
-    options.forkOptions.executable = javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(25) }
-            .get().executablePath.asFile.absolutePath
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

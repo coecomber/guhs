@@ -14,7 +14,6 @@ import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
-import net.neoforged.bus.api.IEventBus;
 import nl.juiced.guhs.Guhs;
 
 /**
@@ -43,17 +42,6 @@ public final class ModArmorMaterials {
     /** Tool material: diamond stats (mining level, speed, damage, enchantability). */
     public static final ToolMaterial VADS_TIER = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1561, 8.0f, 3.0f, 10, VADS_REPAIR);
 
-    /**
-     * 26.1: there is no armour material registry any more. Kept as a no-op so {@code Guhs} keeps compiling until its
-     * {@code ARMOR_MATERIALS.register(modBus)} line is removed (request to B).
-     */
-    @Deprecated
-    public static final NoRegistry ARMOR_MATERIALS = new NoRegistry();
-
-    public static final class NoRegistry {
-        public void register(IEventBus bus) {
-        }
-    }
 
     private ModArmorMaterials() {
     }

@@ -38,6 +38,7 @@ public final class ModEntities {
                     .sized(0.9f, 0.8f)
                     .eyeHeight(0.55f)
                     .clientTrackingRange(8)
+                    .notInPeaceful()
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("mika"))));
 
     /** The Hungry Guh (quest NPC at guh picnics). Sits up, so it's taller than a normal guh. */
@@ -78,7 +79,7 @@ public final class ModEntities {
                     .sized(0.52f, 0.52f).eyeHeight(0.325f).spawnDimensionsScale(4f).clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_slime"))));
     /** Nether Mikas: scorched, fire-proof Mikas in the Nether. */
     public static final DeferredHolder<EntityType<?>, EntityType<MikaEntity>> NETHER_MIKA = ENTITY_TYPES.register("nether_mika",
-            () -> EntityType.Builder.<MikaEntity>of(MikaEntity::new, MobCategory.MONSTER).fireImmune()
+            () -> EntityType.Builder.<MikaEntity>of(MikaEntity::new, MobCategory.MONSTER).fireImmune().notInPeaceful()
                     .sized(0.9f, 0.8f).eyeHeight(0.55f).clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("nether_mika"))));
 
     /** What you sit on when sitting on guh furniture (invisible, never saved). */

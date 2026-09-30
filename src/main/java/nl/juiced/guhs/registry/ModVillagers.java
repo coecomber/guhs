@@ -22,7 +22,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -199,14 +198,6 @@ public final class ModVillagers {
         villager.setOffers(null);
         villager.getBrain().eraseMemory(MemoryModuleType.JOB_SITE);
         villager.getBrain().eraseMemory(MemoryModuleType.POTENTIAL_JOB_SITE);
-    }
-
-    /**
-     * 1.21.1 VillagerTradesEvent listener. 26.1 has no such event (trades are datapack trade sets); our trades come in
-     * through VillagerMixin now. A harmless no-op until Guhs stops registering it (request to B).
-     */
-    @Deprecated
-    public static void onTrades(ServerStoppedEvent event) {
     }
 
     private ModVillagers() {

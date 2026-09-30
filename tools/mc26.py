@@ -817,6 +817,23 @@ def equipment():
         parent = os.path.dirname(old)
         if not os.listdir(parent):
             os.rmdir(parent)
+    # Guhvleugels (guheinde): drawn by vanilla's WingsLayer through an equipment asset (1.0.0 had its own layer);
+    # no use_player_texture: 1.0.0 always showed our texture.
+    for name in WINGS:
+        src = os.path.join(A, "textures", "entity", f"{name}.png")
+        dst = os.path.join(A, "textures", "entity", "equipment", "wings", f"{name}.png")
+        if os.path.exists(src):
+            with open(src, "rb") as f:
+                data = f.read()
+            if not os.path.exists(dst) or open(dst, "rb").read() != data:
+                os.makedirs(os.path.dirname(dst), exist_ok=True)
+                with open(dst, "wb") as f:
+                    f.write(data)
+                changed.append(dst)
+        w(os.path.join(A, "equipment", f"{name}.json"), {"layers": {"wings": [{"texture": f"guhs:{name}"}]}})
+
+
+WINGS = ["guhvleugels"]
 
 
 # ---------------------------------------------------------------------------------------------------------------------
