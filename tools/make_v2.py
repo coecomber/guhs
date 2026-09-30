@@ -442,6 +442,7 @@ def phase2_lang():
         lang(f"gui.guhs.guhdex.info.{v}", ien, inl)
     for key, en, nl in [
         ("key.categories.guhs", "Guhs", "Guhs"),
+        ("key.category.guhs.guhs", "Guhs", "Guhs"),  # 1.1.0 (26.1): KeyMapping.Category guhs:guhs
         ("key.guhs.maag", "Guh stomach (there and back)", "Guhmaag (heen en terug)"),
         # stomach
         ("gui.guhs.maag.locked", "You don't have a guh stomach yet... (Mother Vadsig's quest)",

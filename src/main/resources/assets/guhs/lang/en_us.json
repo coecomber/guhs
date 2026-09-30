@@ -349,6 +349,7 @@
   "gui.guhs.guhdex.rarity.brococolief": "Zeldzaamheid: Uniek",
   "gui.guhs.guhdex.info.brococolief": "De guh van het guhdorp. Draagt natuurlijk roze.",
   "key.categories.guhs": "Guhs",
+  "key.category.guhs.guhs": "Guhs",
   "key.guhs.maag": "Guhmaag (heen en terug)",
   "gui.guhs.maag.locked": "Je hebt nog geen guhmaag... (quest van Moeder Vadsig)",
   "gui.guhs.maag.private": "De maag van %s is privé",

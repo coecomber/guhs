@@ -18,8 +18,8 @@ What it does (see MIGRATION_NOTES.md "Behaviour changes" for the parts that are 
   * biomes: "effects" colours/sounds/music/particles -> environment attributes (1.21.11), carvers as a list
   * dimension types: attributes, skybox, cardinal light, timelines and clocks (1.21.11 / 26.1)
   * random_patch configured features (removed in 26.1) -> the inner feature + count/random_offset/filter placements
-  * renamed vanilla tags
-  * villager trades as data (26.1 trade_set / villager_trade registries)
+  * renamed vanilla tags and ids (minecraft:chain -> iron_chain)
+  (villager trades stay in code: ModVillagers + mixin/VillagerMixin, see MIGRATION_NOTES)
 """
 import copy
 import glob
@@ -798,106 +798,6 @@ def equipment():
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Villager trades (26.1: data-driven; the professions in ModVillagers point at guhs:<profession>/level_<n>)
-# ---------------------------------------------------------------------------------------------------------------------
-
-def sell(item, count, emeralds, max_uses, xp):
-    return {"wants": {"id": "minecraft:emerald", "count": emeralds}, "gives": {"id": item, "count": count},
-            "max_uses": max_uses, "xp": xp, "reputation_discount": 0.05}
-
-
-def buy(item, count, emeralds, max_uses, xp):
-    return {"wants": {"id": item, "count": count}, "gives": {"id": "minecraft:emerald", "count": emeralds},
-            "max_uses": max_uses, "xp": xp, "reputation_discount": 0.05}
-
-
-# KledingBronLijst prices
-PRIJS_STRIK, PRIJS_ZONNEBRIL, PRIJS_REGENHOED, PRIJS_OORSTRIKJE, PRIJS_TRUI, PRIJS_REGENJAS = 4, 5, 6, 4, 10, 10
-
-TRADES = {  # 1.0.0 ModVillagers.onTrades, level -> [(name, trade)]
-    "vads_temmer": {
-        1: [("buy_kaas_knabbels", buy("guhs:kaas_knabbels", 16, 1, 16, 2)), ("sell_guh_spawn_egg", sell("guhs:guh_spawn_egg", 1, 8, 6, 5))],
-        2: [("sell_saddle", sell("minecraft:saddle", 1, 6, 6, 10)), ("buy_block_of_kaasknabbels", buy("guhs:block_of_kaasknabbels", 2, 1, 12, 10)),
-            ("sell_heiligdom_kompas", sell("guhs:heiligdom_kompas", 1, 12, 3, 10)),
-            ("sell_guhmensie_superkompas", sell("guhs:guhmensie_superkompas", 1, 10, 3, 10))],
-        3: [("sell_iron_guh_armor", sell("guhs:iron_guh_armor", 1, 12, 3, 15)),
-            ("sell_gefrituurde_kaasknabbels", sell("guhs:gefrituurde_kaasknabbels", 4, 3, 12, 10))],
-        4: [("sell_diamond_guh_armor", sell("guhs:diamond_guh_armor", 1, 28, 3, 20)), ("sell_guh_spawn_eggs", sell("guhs:guh_spawn_egg", 3, 20, 4, 20))],
-        5: [("sell_netherite_guh_armor", sell("guhs:netherite_guh_armor", 1, 48, 2, 30))],
-    },
-    # 2.9: the kleermaker's everyday set (ModVillagers.kleermakerAanbod; KledingKleermaker keeps his full offer)
-    "guh_kleermaker": {
-        1: [("sell_red_bowtie", sell("guhs:red_bowtie", 1, PRIJS_STRIK, 12, 5)),
-            ("sell_black_bowtie", sell("guhs:black_bowtie", 1, PRIJS_STRIK, 12, 5)),
-            ("sell_sunglasses", sell("guhs:sunglasses", 1, PRIJS_ZONNEBRIL, 12, 5)),
-            ("sell_rain_hat", sell("guhs:rain_hat", 1, PRIJS_REGENHOED, 12, 10)),
-            ("sell_striped_sweater", sell("guhs:striped_sweater", 1, PRIJS_TRUI, 12, 15)),
-            ("sell_raincoat", sell("guhs:raincoat", 1, PRIJS_REGENJAS, 12, 15)),
-            ("sell_oorstrikje_roze", sell("guhs:oorstrikje_roze", 1, PRIJS_OORSTRIKJE, 12, 5)),
-            ("sell_oorstrikje_mint", sell("guhs:oorstrikje_mint", 1, PRIJS_OORSTRIKJE, 12, 5)),
-            ("sell_oorstrikje_geel", sell("guhs:oorstrikje_geel", 1, PRIJS_OORSTRIKJE, 12, 5)),
-            ("sell_roze_lint", sell("guhs:roze_lint", 1, 3, 12, 5)),
-            ("buy_pink_wool", buy("minecraft:pink_wool", 12, 1, 16, 2)),
-            ("buy_string", buy("minecraft:string", 14, 1, 16, 2))],
-    },
-    "vadssmid": {
-        1: [("buy_vahoege_vads", buy("guhs:vahoege_vads", 2, 3, 12, 5)), ("sell_vahoege_vads_ingot", sell("guhs:vahoege_vads_ingot", 1, 12, 6, 5))],
-        2: [("sell_vahoege_vads_shovel", sell("guhs:vahoege_vads_shovel", 1, 18, 3, 10)),
-            ("sell_vahoege_vads_hoe", sell("guhs:vahoege_vads_hoe", 1, 18, 3, 10))],
-        3: [("sell_vahoege_vads_pickaxe", sell("guhs:vahoege_vads_pickaxe", 1, 36, 3, 15)),
-            ("sell_vahoege_vads_axe", sell("guhs:vahoege_vads_axe", 1, 36, 3, 15)),
-            ("sell_vahoege_vads_boots", sell("guhs:vahoege_vads_boots", 1, 30, 3, 15))],
-        4: [("sell_vahoege_vads_sword", sell("guhs:vahoege_vads_sword", 1, 30, 3, 20)),
-            ("sell_vahoege_vads_helmet", sell("guhs:vahoege_vads_helmet", 1, 36, 3, 20)),
-            ("sell_vahoege_vads_leggings", sell("guhs:vahoege_vads_leggings", 1, 48, 3, 20))],
-        5: [("sell_vahoege_vads_chestplate", sell("guhs:vahoege_vads_chestplate", 1, 58, 2, 30)),
-            ("sell_vahoege_vads_paxel", sell("guhs:vahoege_vads_paxel", 1, 64, 2, 30))],
-    },
-    "hamsterbouwer": {
-        1: [("buy_yellow_dye", buy("minecraft:yellow_dye", 12, 1, 16, 2)), ("sell_yellow_stained_glass", sell("minecraft:yellow_stained_glass", 8, 1, 16, 2))],
-        2: [("sell_guh_wire", sell("guhs:guh_wire", 8, 3, 12, 10)), ("buy_redstone", buy("minecraft:redstone", 12, 1, 16, 10))],
-        3: [("sell_guh_wheel", sell("guhs:guh_wheel", 1, 10, 4, 15)), ("sell_pink_stained_glass", sell("minecraft:pink_stained_glass", 8, 1, 16, 10))],
-        4: [("sell_guh_wire_bundle", sell("guhs:guh_wire", 24, 7, 8, 20)), ("sell_frying_pan", sell("guhs:frying_pan", 1, 8, 4, 20))],
-        5: [("sell_guh_spawner", sell("guhs:guh_spawner", 1, 60, 1, 30))],
-    },
-    "knabbelboer": {
-        1: [("buy_kaas_knabbels", buy("guhs:kaas_knabbels", 20, 1, 16, 2)), ("sell_kaasknabbelzaadjes", sell("guhs:kaasknabbelzaadjes", 4, 1, 16, 2))],
-        2: [("sell_guh_cupcake", sell("guhs:guh_cupcake", 3, 2, 12, 10)), ("buy_sugar", buy("minecraft:sugar", 16, 1, 16, 10)),
-            ("sell_macaron_roze", sell("guhs:macaron_roze", 4, 2, 12, 10)), ("sell_macaron_mint", sell("guhs:macaron_mint", 4, 2, 12, 10))],
-        3: [("sell_kaasknabbel_milkshake", sell("guhs:kaasknabbel_milkshake", 1, 3, 8, 15)),
-            ("sell_macaron_citroen", sell("guhs:macaron_citroen", 4, 2, 12, 15)), ("sell_macaron_choco", sell("guhs:macaron_choco", 4, 2, 12, 15))],
-        4: [("sell_kaasfondue", sell("guhs:kaasfondue", 1, 5, 6, 20)), ("sell_knabbelkorf", sell("guhs:knabbelkorf", 1, 8, 4, 20))],
-        5: [("sell_guh_taart", sell("guhs:guh_taart", 1, 12, 4, 30)), ("sell_kaashoning", sell("guhs:kaashoning", 2, 6, 6, 30))],
-    },
-    "mika_jager": {
-        1: [("buy_mika_vet", buy("guhs:mika_vet", 2, 1, 16, 2)), ("sell_arrow", sell("minecraft:arrow", 16, 1, 12, 2))],
-        2: [("sell_mika_mepper", sell("guhs:mika_mepper", 1, 12, 3, 10)), ("sell_shield", sell("minecraft:shield", 1, 5, 6, 10))],
-        3: [("sell_guhmensie_superkompas", sell("guhs:guhmensie_superkompas", 1, 12, 3, 15)), ("buy_mika_vet_single", buy("guhs:mika_vet", 1, 1, 16, 10))],
-        4: [("sell_golden_apple", sell("minecraft:golden_apple", 1, 8, 4, 20))],
-        5: [("sell_totem_of_undying", sell("minecraft:totem_of_undying", 1, 40, 1, 30))],
-    },
-}
-
-
-def villager_trades():
-    for prof, levels in TRADES.items():
-        for level in range(1, 6):
-            trades = levels.get(level, [])
-            ids = []
-            for name, trade in trades:
-                t = copy.deepcopy(trade)
-                for side in ("wants", "gives"):
-                    if t[side].get("count") == 1:
-                        del t[side]["count"]
-                w(os.path.join(D, "villager_trade", prof, str(level), name + ".json"), t)
-                ids.append(f"guhs:{prof}/{level}/{name}")
-            w(os.path.join(D, "tags", "villager_trade", prof, f"level_{level}.json"), {"values": ids})
-            # 1.21.1: the villager picked 2 different offers of the level's list (VillagerTrades#addOffersFromItemListings)
-            w(os.path.join(D, "trade_set", prof, f"level_{level}.json"),
-              {"trades": f"#guhs:{prof}/level_{level}", "amount": 2, "random_sequence": f"guhs:trade_set/{prof}/level_{level}"})
-
-
-# ---------------------------------------------------------------------------------------------------------------------
 # The data files, per folder
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -954,7 +854,6 @@ def run():
     data_files()
     vanilla_renames()
     tags()
-    villager_trades()
     models()
     spawn_eggs()
     item_definitions()
