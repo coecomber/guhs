@@ -203,6 +203,56 @@ table.list td.sum{color:var(--muted);font-size:14px;min-width:220px}
 .fact{font-style:italic}
 footer.site{border-top:1px solid var(--line);color:var(--muted);font-size:14px}
 footer.site .in{max-width:1320px;margin:0 auto;padding:18px 16px 40px}
+/* --- the "Aan de slag" guide --- */
+.article.guide{grid-template-columns:minmax(0,1fr)}
+.ghero{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:20px;align-items:center;background:linear-gradient(135deg,var(--rasp-soft),var(--cheese-soft));
+  border:1px solid var(--line);border-radius:22px;padding:14px 24px 18px;margin:8px 0 6px}
+.ghero p{font-size:18px;max-width:70ch}
+.ghero .muted{font-size:15px;margin-bottom:6px}
+.ghero-art{display:flex;justify-content:center}
+.ghero-art img{max-height:190px;width:auto;filter:drop-shadow(0 12px 12px rgba(80,20,50,.16))}
+.gtoc{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
+.gtoc a{display:inline-flex;align-items:center;gap:7px;padding:5px 12px 5px 5px;border-radius:999px;background:var(--card);border:1px solid var(--line2);
+  text-decoration:none;color:var(--ink);font-weight:700;font-size:14px}
+.gtoc a:hover{border-color:var(--rasp);color:var(--rasp-ink)}
+.gtoc b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--rasp);color:#fff;font:700 13px/1 var(--display)}
+.gstep{display:grid;grid-template-columns:46px minmax(0,1fr);gap:16px;align-items:start;background:var(--card);border:1px solid var(--line);
+  border-radius:20px;padding:16px 22px 10px 16px;box-shadow:var(--shadow);margin:18px 0;scroll-margin-top:76px}
+.gstep.has-pic{grid-template-columns:46px minmax(0,1fr) 200px}
+.gstep h2{margin:6px 0 8px}
+.gstep h3{font:600 18px var(--display);margin:16px 0 4px}
+.gnum{width:44px;height:44px;border-radius:50%;background:var(--rasp);color:#fff;font:700 22px/44px var(--display);text-align:center;box-shadow:0 3px 0 var(--rasp-ink)}
+.gpic{min-height:170px;padding:10px;position:sticky;top:84px}
+.gpic img{max-height:170px;width:auto}
+.gtip{border-left:4px solid var(--rasp);background:var(--rasp-soft);padding:8px 14px;border-radius:0 12px 12px 0;margin:12px 0;font-size:15.5px;max-width:78ch}
+.gtip>b{color:var(--rasp-ink);margin-right:4px}
+.goals{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin:10px 0 8px}
+.goal{border:1px solid var(--line);border-radius:14px;padding:10px 14px;background:var(--paper)}
+.goal h3{margin:2px 0 4px;display:flex;align-items:center;gap:8px;font:600 17px/1.25 var(--display)}
+.goal p{font-size:15px;margin:0 0 6px}
+.goal .px,.gicon{width:32px;height:32px;object-fit:contain;flex:none}
+.gend{text-align:center;background:var(--card);border:1px dashed var(--line2);border-radius:20px;padding:10px 20px 16px;margin:22px 0}
+.gend p{margin-left:auto;margin-right:auto}
+.gbtn{display:inline-flex;align-items:center;border-radius:14px;padding:9px 16px;font:700 15px var(--body);text-decoration:none;background:var(--rasp);color:#fff;margin:4px}
+.gbtn:hover{color:#fff;filter:brightness(1.05)}
+.gbtn.alt{background:var(--card);color:var(--rasp-ink);border:1.5px solid var(--line2)}
+.start-cta{display:grid;grid-template-columns:130px minmax(0,1fr) auto;gap:20px;align-items:center;text-decoration:none;color:#fff;
+  background:linear-gradient(120deg,var(--rasp) 0%,#e8739f 60%,var(--cheese) 140%);border-radius:24px;padding:16px 26px;margin:16px 0 8px;
+  box-shadow:var(--shadow);transition:transform .15s}
+.start-cta:hover{color:#fff;transform:translateY(-2px)}
+.cta-art{display:flex;justify-content:center;background:rgba(255,255,255,.22);border-radius:18px;padding:6px}
+.cta-art img{max-height:110px;width:auto}
+.cta-txt{display:flex;flex-direction:column;gap:2px}
+.cta-txt small{font:700 13px var(--body);text-transform:uppercase;letter-spacing:.08em;opacity:.9}
+.cta-txt b{font:700 clamp(28px,4vw,40px)/1.05 var(--display)}
+.cta-txt>span{font-size:16px;opacity:.95;max-width:62ch}
+.start-cta .go{background:#fff;color:var(--rasp-ink);border-radius:999px;padding:10px 18px;font-weight:700;white-space:nowrap}
+.side a[href$="aan-de-slag.html"]{font-weight:700;color:var(--rasp-ink)}
+@media (max-width:860px){.gstep,.gstep.has-pic{grid-template-columns:36px minmax(0,1fr);padding:14px 14px 8px 12px;gap:10px}
+  .gnum{width:34px;height:34px;font-size:18px;line-height:34px}.gpic{grid-column:2;grid-row:1;position:static;min-height:0}.gpic img{max-height:120px}
+  .gstep.has-pic .gbody{grid-row:2;grid-column:1/-1}
+  .ghero{grid-template-columns:minmax(0,1fr);padding:12px 16px}.ghero-art{display:none}
+  .start-cta{grid-template-columns:72px minmax(0,1fr);padding:14px 16px;gap:14px}.cta-art img{max-height:64px}.start-cta .go{grid-column:1/-1;justify-self:start}}
 /* --- small screens --- */
 @media (max-width:1060px){.article{grid-template-columns:minmax(0,1fr)}.infobox{position:static;order:-1;max-width:520px}}
 @media (max-width:860px){

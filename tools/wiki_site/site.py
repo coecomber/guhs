@@ -116,6 +116,7 @@ class Page:
         self.data = {}                  # anything the builders want to keep
         self.parent = None              # (page id) for the breadcrumb
         self.no_autolink = False
+        self.path_override = None       # a page outside the category folders (the "Aan de slag" guide)
 
     @property
     def dir(self):
@@ -125,6 +126,8 @@ class Page:
     def path(self):
         if self.cat == "home":
             return "index.html"
+        if self.path_override:
+            return self.path_override
         return f"{self.dir}/{public_slug(self.id.split('/', 1)[1])}.html"
 
     def add_section(self, key, h_en, h_nl, body):

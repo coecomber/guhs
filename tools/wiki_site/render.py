@@ -229,6 +229,8 @@ class Renderer:
 
     # --- one page -----------------------------------------------------------------------------------------------------------------
     def content_html(self, page):
+        if page.data.get("guide_html"):
+            return page.data["guide_html"]
         linked = set()
         parts = []
         en = "" if page.data.get("lead_en_kb") else page.lead_en
@@ -262,7 +264,7 @@ class Renderer:
         return "".join(parts)
 
     def infobox_html(self, page):
-        if page.cat == "home" or page.id.endswith("/index"):
+        if page.cat == "home" or page.id.endswith("/index") or page.data.get("guide"):
             return ""
         pic = page.images[0] if page.images else page.thumb
         img = self.b.img(pic, page.title, "shot" if pic and pic.startswith("shot") else "") if pic else ""
@@ -307,10 +309,10 @@ class Renderer:
             d = CATEGORIES[cat]
             icon = CAT_ICON.get(cat)
             img = f'<img src="@thumb:{icon}@" alt="">' if icon and self.im.has(icon) else ""
-            here = ' class="here"' if page.cat == cat else ""
+            here = ' class="here"' if page.cat == cat and not page.data.get("guide") else ""
             cur = ' aria-current="page"' if page.id == f"{cat}/index" else ""
             items.append(f'<li><a href="@@{cat}/index@@"{here}{cur}>{img}{t(d[2], d[1])}<span class="n">{counts[cat]}</span></a></li>')
-        start = [("index", "Home", "Home"), ("systemen/temmen", "Your first guh", "Je eerste guh"), ("dimensies/guhmension", "The Guhmension", "De Guhmensie"),
+        start = [("index", "Home", "Home"), ("systemen/aan-de-slag", "&#9733; Getting started", "&#9733; Aan de slag"), ("systemen/temmen", "Your first guh", "Je eerste guh"), ("dimensies/guhmension", "The Guhmension", "De Guhmensie"),
                  ("systemen/superkompas", "The super compass", "Het superkompas"), ("systemen/ftb-quests", "FTB quests", "FTB-quests")]
         cur_attr = ' aria-current="page"'
         first = "".join(f'<li><a href="@@{pid}@@"{cur_attr if page.id == pid else ""}>{t(en, nl)}</a></li>' for pid, en, nl in start)
@@ -321,7 +323,7 @@ class Renderer:
         if page.cat == "home":
             return ""
         parts = [f'<a href="@@index@@">Home</a>']
-        if not page.id.endswith("/index"):
+        if not page.id.endswith("/index") and not page.data.get("guide"):
             d = CATEGORIES[page.cat]
             parts.append(f'<a href="@@{page.cat}/index@@">{t(d[4], d[3])}</a>')
         parts.append(f'<span aria-current="page">{t(esc(page.title_en), esc(page.title))}</span>')
@@ -379,7 +381,8 @@ class Renderer:
         body = page.data["content"]
         info = self.infobox_html(page)
         rel = self.related_html(page, backlinks)
-        return f'{self.crumbs(page)}{kind}{h1}<div class="article"><div class="content">{body}{rel}</div>{info}</div>'
+        cls = "article guide" if page.data.get("guide") else "article"
+        return f'{self.crumbs(page)}{kind}{h1}<div class="{cls}"><div class="content">{body}{rel}</div>{info}</div>'
 
     # --- tokens -> relative paths -------------------------------------------------------------------------------------------------------
     def finalize(self, page_path, h, owner):
@@ -479,6 +482,10 @@ class Renderer:
                  "Guhs is een Minecraft-mod vol <b>lieve vadsige guhs</b>: mollige roze knuffelmuisjes die je kunt temmen, aankleden, berijden en knuffelen. "
                  "Stap door een portaal van blokken kaasknabbels de <b>Guhmensie</b> in: een roze wereld van wol en kaassaus met guhdorpen, "
                  "een guhpretpark, minigames, verhalen, diertjes, een heel hete barbecuedimensie en een eindspel tegen Opper-Mika.")
+        cta = (f'<a class="start-cta" href="@@systemen/aan-de-slag@@"><span class="cta-art">{self.b.img("npc_reisguh", "") if self.im.has("npc_reisguh") else ""}</span>'
+               f'<span class="cta-txt"><small>{t("New here? Start here!", "Nieuw hier? Begin hier!")}</small><b>{t("Getting started", "Aan de slag")}</b>'
+               f'<span>{t("The step-by-step guide: kaasknabbels, your first guh, the portal, the Reisguh, the super compass and your first goals.", "De stap-voor-stapgids: kaasknabbels, je eerste guh, het portaal, de Reisguh, het superkompas en je eerste doelen.")}</span></span>'
+               f'<span class="go">{t("Read the guide", "Lees de gids")} &rarr;</span></a>')
         first = ("<ol>"
                  f'<li>{t("Find a guh and feed it kaasknabbels until it is tame.", "Zoek een guh en voer hem kaasknabbels tot hij tam is.")} '
                  f'<a href="@@systemen/temmen@@">{t("Taming", "Temmen")}</a></li>'
@@ -491,9 +498,11 @@ class Renderer:
         return (f'<section class="hero"><div><h1>{t("Welcome to the <em>Guhs</em> wiki", "Welkom op de <em>Guhs</em>-wiki")}</h1>'
                 f'<p class="tagline">{t("Everything about the lieve vadsige guhs, for Minecraft 1.21.1.", "Alles over de lieve vadsige guhs, voor Minecraft 1.21.1.")}</p>'
                 f'{stats}</div><div class="hero-art">{hero_img}</div></section>'
+                f'{cta}'
                 f'<div class="box" id="wat"><h2>{t("What is Guhs?", "Wat is Guhs?")}</h2>{what}{intro}</div>'
                 f'<h2>{t("Browse the wiki", "Blader door de wiki")}</h2><div class="tiles">{"".join(tiles)}</div>'
-                f'<div class="box" id="start"><h2>{t("Getting started", "Aan de slag")}</h2>{first}</div>'
+                f'<div class="box" id="start"><h2>{t("In short", "In het kort")}</h2>{first}'
+                f'<p><a href="@@systemen/aan-de-slag@@">{t("The whole guide, step by step", "De hele gids, stap voor stap")} &rarr;</a></p></div>'
                 f'<div class="box" id="installeren"><h2>{t("Install", "Installeren")}</h2>{install}</div>'
                 f'<div class="box" id="download"><h2>{t("Download", "Downloaden")}</h2>'
                 f'<p>{t("Guhs " + SITE_VERSION + " will be available on these sites:", "Guhs " + SITE_VERSION + " komt op deze sites:")}</p>{dl}</div>'
@@ -574,7 +583,10 @@ class Renderer:
             al = sorted(a for a in pg.aliases if a != pg.title)
             if al:
                 e["k"] = " ".join(al)
-            if pg.id.endswith("/index"):
+            if pg.data.get("guide"):
+                e["p"] = 40
+                e["c"], e["ce"] = "Gids", "Guide"
+            elif pg.id.endswith("/index"):
                 e["p"] = 30
             elif pg.cat in ("guhs", "npcs", "minigames", "verhalen", "systemen", "dimensies", "bouwwerken", "biomen", "wezens", "diertjes"):
                 e["p"] = 10

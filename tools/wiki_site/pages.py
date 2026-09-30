@@ -170,6 +170,8 @@ class Builder:
         self.stories()
         self.ftb_chapters()
         self.systems()
+        from .guide import Guide          # (here: guide.py uses this module's helpers)
+        self.add(Guide(self).build())
         self.site.index_claims()
         self.assign_chunks()
         self.table_rows()
