@@ -3,7 +3,14 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
-## Unreleased (1.1.0)
+## 1.1.0 — Minecraft 26.1.2
+
+Minecraft **26.1.2** · NeoForge **26.1.2.71+** (built on 26.1.2.112) · GeckoLib **5.5.2+** · Java **25**. All in-game texts
+are in Dutch. Guhs 1.1.x is the 26.1.2 line; **1.0.x stays on Minecraft 1.21.1** (NeoForge 21.1, GeckoLib 4.8+, Java 21)
+for packs that stay there.
+
+The same mod as 1.0.0 (all guhs, dimensions, minigames, stories, quests and the Guhdex), ported to Minecraft 26.1.2.
+Make a backup before you open a 1.0.0 world with 1.1.0: a world that was opened in 26.1.2 can't go back to 1.21.1.
 
 ### Official server
 
@@ -15,6 +22,50 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 - **Wiki:** a new page *Play on the official server* (Prism Launcher step by step, rules, commands, common problems).
 - **guhs.nl:** the site moves to [guhs.nl](https://guhs.nl/): a new landing page (server address, live status, live
   map, how to join) and the wiki at [guhs.nl/wiki/](https://guhs.nl/wiki/). Old wiki links are sent on to the new place.
+
+### Updating from 1.0.0
+
+- **Worlds:** Guhs' saved data (Bank Guh, top-3 boards, Reisguhs, nests, band, huisjes, Guheinde fight, race ghosts, ...)
+  is moved to Minecraft 26.1's new place in the world folder the first time it is needed.
+- **FTB Quests:** FTB Quests for 26.1 only reads JSON5 files, so the *Guhs* chapter group (13 chapters, 734 quests) is now
+  installed as `config/ftbquests/quests/chapters/guhs_*.json5`, with its texts in `lang/en_us/chapters/` (and in
+  `lang/nl_nl/chapters/` when your pack has that folder). The old `.snbt` files of 1.0.x are not read by FTB Quests 26.1
+  and are left alone; delete them if you like. Chapters you edit in the quest book are still never overwritten.
+- **Spawn eggs** look the same, but are plain textures now (Minecraft 26.1 has no tinted spawn eggs).
+
+### Small differences (Minecraft 26.1 works differently)
+
+- **Fog**: the Vadswoud mist, the Kaasmoeras mist, the Sneeuwstorm blizzard and the Barbecuether smoke use Minecraft 26.1's
+  fog (same distances and fade), which has no round or cylinder shapes any more: looking down from high up can be a
+  little hazier than in 1.0.0.
+- **Skies**: the Guhmension sun, pink moon and pink stars follow 26.1's sky (same day cycle); the night sky is a shade more
+  purple near the top. The Guheinde swirl and the Guhpolder guh-snow look the same.
+- **Blocks**: cutout textures with half-transparent pixels may render a little more see-through (26.1 picks the render
+  layer from the texture). Three models (set tea table, set party buffet, lit Elftocht fire basket) got fixed texture
+  coordinates so they load in 26.1.
+- **Food and drinks** (kaasmelk, kokosmelk, kaashoning, tea, bakery pastries, warme chocovet, snert, stille knabbel,
+  medicine drinks) use 26.1's drinking/eating system: same sounds, times and effects, vanilla's crumbs and timing.
+  The Kaasmelkdrankje clears all effects before it heals (26.1 has no "milk-curable" list).
+- **Armour and tools** (guh armour, Vads set, Kaashouweel, Leenhouweel, Duikhelm, Knabbelkroon, Guhvleugels) are
+  26.1 component items with the same numbers. The Guhvleugels now also show on armour stands and other humanoids.
+- **Saddling a guh** still works by right-clicking it with a saddle, but uses Guhs' own saddle (not 26.1's saddle slot),
+  so shears don't take it off.
+- **Guh villager trades** still come from Guhs itself (two random offers per level, like 1.0.0).
+- **Knabbelkristallen** in the Guheinde are their own entity now (same look, beam and fight).
+- The **VAHOEG!** emote text disappears when its centre leaves the screen; a few NPCs may show a hurt flash when hit
+  (they still take no damage). GUI entity previews and item icons are lit a little brighter (26.1).
+- Players are woken up before Guhs teleports them (Guhmaag, Reisguh, verstoppertje, castle gate).
+
+### Fixes
+
+- The katapult advancements *Katapult gevonden*, *Drie sterren* and *Alle sterren* (and their quests) never loaded in
+  1.0.0 (their icon had no item); they work now.
+- Giant and scaled guhs and Mikas in structures have their proper size again.
+
+### For modpack makers and server owners
+
+- Needs Java 25 (Minecraft 26.1 does too). Install Guhs and GeckoLib on the server **and** every client.
+- `/test` ids are `guhs:<class>.<method>` as before; the headless test run is `./gradlew runGameTestServer`.
 
 ## 1.0.0 — first public release
 

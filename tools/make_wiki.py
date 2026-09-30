@@ -10,7 +10,7 @@ import html
 import os
 import sys
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 
 
 def quest_count():
@@ -947,6 +947,8 @@ def recipe_card(rid, en=None, nl=None):
 
     def name(ing):
         ing = ing[0] if isinstance(ing, list) else ing
+        if isinstance(ing, str):          # 1.1.0 (26.1 recipes): "ns:item" or "#ns:tag"
+            ing = {"tag": ing[1:]} if ing.startswith("#") else {"item": ing}
         if "tag" in ing:
             return TAGS.get(ing["tag"], ing["tag"].split("/")[-1].split(":")[-1])
         return ing["item"].split(":")[1]
@@ -3570,14 +3572,14 @@ def build():
 
     # --- getting started ------------------------------------------------------------------------------------------
     S.append(section("start", "Getting started", "Aan de slag", f"""
-{p("Guhs is a NeoForge mod for <b>Minecraft 1.21.1</b> that fills the world with chubby pink plush mice: the guhs. "
-   "It needs <b>GeckoLib</b> (4.8 or newer) for the animated models.",
-   "Guhs is een NeoForge-mod voor <b>Minecraft 1.21.1</b> die de wereld vult met mollige roze knuffelmuisjes: de guhs. "
-   "Hij heeft <b>GeckoLib</b> (4.8 of nieuwer) nodig voor de geanimeerde modellen.")}
-{ul([("Put <code>guhs-" + VERSION + ".jar</code> in the <code>mods</code> folder of a NeoForge 1.21.1 instance (in Prism: right-click the instance, <i>Folder</i>).",
-      "Zet <code>guhs-" + VERSION + ".jar</code> in de map <code>mods</code> van een NeoForge 1.21.1-instantie (in Prism: rechtsklik op de instantie, <i>Map</i>)."),
-     ("Also add GeckoLib for NeoForge 1.21.1 (Prism: <i>Edit</i> &rarr; <i>Mods</i> &rarr; <i>Download mods</i>).",
-      "Voeg ook GeckoLib voor NeoForge 1.21.1 toe (Prism: <i>Bewerken</i> &rarr; <i>Mods</i> &rarr; <i>Mods downloaden</i>)."),
+{p("Guhs is a NeoForge mod for <b>Minecraft 26.1.2</b> (Guhs 1.1.x; Guhs 1.0.x is for Minecraft 1.21.1) that fills the world with chubby pink plush mice: the guhs. "
+   "It needs <b>GeckoLib</b> (5.5.2 or newer; 4.8+ on 1.21.1) for the animated models.",
+   "Guhs is een NeoForge-mod voor <b>Minecraft 26.1.2</b> (Guhs 1.1.x; Guhs 1.0.x is voor Minecraft 1.21.1) die de wereld vult met mollige roze knuffelmuisjes: de guhs. "
+   "Hij heeft <b>GeckoLib</b> (5.5.2 of nieuwer; 4.8+ op 1.21.1) nodig voor de geanimeerde modellen.")}
+{ul([("Put <code>guhs-" + VERSION + ".jar</code> in the <code>mods</code> folder of a NeoForge 26.1.2 instance (in Prism: right-click the instance, <i>Folder</i>).",
+      "Zet <code>guhs-" + VERSION + ".jar</code> in de map <code>mods</code> van een NeoForge 26.1.2-instantie (in Prism: rechtsklik op de instantie, <i>Map</i>)."),
+     ("Also add GeckoLib for NeoForge 26.1.2 (Prism: <i>Edit</i> &rarr; <i>Mods</i> &rarr; <i>Download mods</i>).",
+      "Voeg ook GeckoLib voor NeoForge 26.1.2 toe (Prism: <i>Bewerken</i> &rarr; <i>Mods</i> &rarr; <i>Mods downloaden</i>)."),
      ("Multiplayer: the server and every player need the mod.",
       "Multiplayer: de server en alle spelers hebben de mod nodig."),
      ("Everything is in the creative tab <b>Guhs</b>.", "Alles staat in het creatieve tabblad <b>Guhs</b>."),
@@ -4939,7 +4941,7 @@ def build():
     <h1>{t("Meet the <em>guhs</em>", "Maak kennis met de <em>guhs</em>")}</h1>
     <p class="tagline">{t("Add lieve vadsige guhs to Minecraft! Chubby plush mice, a pink wool dimension, cheese sauce, hamster playsets, a whole guh theme park, a very hot barbecue dimension &mdash; and now the Knuffeldal: a cosy pink valley with a little guh town, a bakery, a tea house, a hairdresser, a farm and water slides. Piep piep: pieppiepmuisjes, two turtles and a nest of boze kaasknabbels! And now De Grote Guhspelen: sjoelen, a hedge maze, a catapult, a circus zeskamp, a skating tour through the ice-cold Guhpolder and a race circuit. And now Lieve vadsjes van elkaar: hearts with your own guh, a Guhhuisje shaped like a guh head, little chores, toys, guh friends and a dagboekje. And now Guhverhalen: a Baltoguh racing through a snowstorm, a Guhtwo who eats everything twice, a Knuffelhart on the clouds, the 626-guh on the tropical island Guhwai'i, surfing, hula, a Timmerguh and thirteen little critters. VAHOEG!",
                           "Voeg lieve vadsige guhs toe aan Minecraft! Mollige knuffelmuisjes, een dimensie van roze wol, kaassaus, hamsterspeelsets, een heel guhpretpark, een heel hete barbecuedimensie &mdash; en nu het Knuffeldal: een knus roze dal met een guhstadje, een bakkerij, een theehuisje, een kapper, een boerderij en glijbanen. Piep piep: pieppiepmuisjes, twee schildpadden en een nest boze kaasknabbels! En nu De Grote Guhspelen: sjoelen, een heggendoolhof, een katapult, een zeskamp in een circustent, een schaatstocht door de ijskoude Guhpolder en een racecircuit. En nu Lieve vadsjes van elkaar: hartjes met je eigen guh, een Guhhuisje in de vorm van een guhhoofd, klusjes, speelgoed, guh-vriendjes en een dagboekje. En nu Guhverhalen: een Baltoguh die door een sneeuwstorm racet, een Guhtwo die alles dubbel eet, een Knuffelhart op de wolken, de 626-guh op het tropische eiland Guhwai'i, surfen, hula, een Timmerguh en dertien kleine diertjes. VAHOEG!")}</p>
-    <ul class="chips"><li>{t("Version", "Versie")} <b>{VERSION}</b></li><li>Minecraft <b>1.21.1</b></li><li>NeoForge</li><li>GeckoLib <b>4.8+</b></li></ul>
+    <ul class="chips"><li>{t("Version", "Versie")} <b>{VERSION}</b></li><li>Minecraft <b>26.1.2</b></li><li>NeoForge</li><li>GeckoLib <b>5.5.2+</b></li></ul>
   </div>
   <div class="hero-art">{img("guh", "A guh")}{img("block_of_kaasknabbels", "", "puff")}</div>
 </section>

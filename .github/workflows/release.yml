@@ -9,6 +9,12 @@
 #
 # The tag must match mod_version in gradle.properties (tag v1.0.0 <-> mod_version=1.0.0), otherwise the job stops.
 # The release notes are the section "## <version>" of CHANGELOG.md.
+#
+# Two lines, one workflow: the Minecraft version (minecraft_version in gradle.properties) and the Java version
+# (JavaLanguageVersion.of(..) in build.gradle) are read from the TAGGED commit, so
+#   a tag on main  (v1.0.x) publishes a Minecraft 1.21.1 file (Java 21, GeckoLib 4 for 1.21.1), and
+#   a tag on mc26  (v1.1.x) publishes a Minecraft 26.1.2 file (Java 25, GeckoLib 5 for 26.1.2).
+# (A tag runs the workflow file of its own commit: main keeps its own copy of this file.)
 name: Release
 
 on:
@@ -44,8 +50,17 @@ jobs:
             echo "::error::Tag $TAG does not match mod_version=$MOD_VERSION in gradle.properties"
             exit 1
           fi
+          MC="$(grep -E '^minecraft_version=' gradle.properties | cut -d= -f2 | tr -d '[:space:]')"
+          JAVA="$(grep -oE 'JavaLanguageVersion\.of\([0-9]+\)' build.gradle | grep -oE '[0-9]+' | head -1)"
+          if [ -z "$MC" ] || [ -z "$JAVA" ]; then
+            echo "::error::Could not read minecraft_version ($MC) from gradle.properties or the Java version ($JAVA) from build.gradle"
+            exit 1
+          fi
+          echo "Minecraft $MC, Java $JAVA"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "mc=$MC" >> "$GITHUB_OUTPUT"
+          echo "java=$JAVA" >> "$GITHUB_OUTPUT"
 
       - name: Release notes from CHANGELOG.md
         run: |
@@ -59,11 +74,11 @@ jobs:
           fi
           cat build/release-notes.md
 
-      - name: Set up Java 21
+      - name: Set up Java ${{ steps.version.outputs.java }}
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: ${{ steps.version.outputs.java }}
 
       - name: Set up Gradle (with cache)
         uses: gradle/actions/setup-gradle@v4
@@ -94,14 +109,16 @@ jobs:
           modrinth-featured: true
 
           files: build/libs/guhs-${{ steps.version.outputs.version }}.jar
-          name: Guhs ${{ steps.version.outputs.version }}
+          name: Guhs ${{ steps.version.outputs.version }} (Minecraft ${{ steps.version.outputs.mc }})
           version: ${{ steps.version.outputs.version }}
           version-type: release
           changelog-file: build/release-notes.md
 
           loaders: neoforge
-          game-versions: 1.21.1
-          java: 21
+          game-versions: ${{ steps.version.outputs.mc }}
+          java: ${{ steps.version.outputs.java }}
+          # the same GeckoLib project for both lines (its 26.1.2 files are GeckoLib 5.x, its 1.21.1 files 4.x);
+          # CurseForge/Modrinth pick the file that matches the game version
           dependencies: |
             geckolib(required){modrinth:8BmcQJ2H}{curseforge:388172}
 

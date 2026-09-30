@@ -5,7 +5,7 @@
 <p align="center"><i>Add lieve vadsige guhs to Minecraft!</i></p>
 
 <p align="center">
-NeoForge 1.21.1 · requires GeckoLib 4.8+ · version 1.0.0<br>
+Minecraft 26.1.2 (Guhs 1.1.x) and 1.21.1 (Guhs 1.0.x) · NeoForge · requires GeckoLib<br>
 <a href="https://www.curseforge.com/minecraft/mc-mods/guhs">CurseForge</a> ·
 <a href="https://modrinth.com/mod/guhs">Modrinth</a> ·
 <a href="https://guhs.nl/">guhs.nl</a> ·
@@ -63,21 +63,30 @@ Everything is explained, with pictures, in the **[Guhs wiki](https://guhs.nl/wik
 
 ## Requirements
 
+Guhs comes in two lines with the same content. Pick the one that matches your Minecraft version:
+
+| | **Guhs 1.1.x** (new) | **Guhs 1.0.x** |
+|---|---|---|
+| Minecraft | **26.1.2** | **1.21.1** |
+| Loader | **NeoForge** 26.1.2.71 or newer | **NeoForge** 21.1.0 or newer |
+| Required | **[GeckoLib](https://modrinth.com/mod/geckolib)** 5.5.2 or newer | **[GeckoLib](https://modrinth.com/mod/geckolib)** 4.8 or newer |
+| Java | 25 | 21 |
+| Git branch | `mc26` | `main` |
+
 | | |
 |---|---|
-| Minecraft | **1.21.1** |
-| Loader | **NeoForge** 21.1.0 or newer |
-| Required | **[GeckoLib](https://modrinth.com/mod/geckolib)** 4.8 or newer |
 | Optional | FTB Quests (adds the Guhs quest chapters), JEI, Jade |
 | Recommended for servers | **[Lootr](https://modrinth.com/mod/lootr)**: every player gets their own loot from structure chests |
 
-Install Guhs on **both** the server and every client.
+Install Guhs on **both** the server and every client. A world opened with 1.1.x (Minecraft 26.1.2) can't go back to
+1.0.x, so make a backup first.
 
 ## Installing
 
-1. Install NeoForge for Minecraft 1.21.1 (or make a NeoForge 1.21.1 instance in Prism Launcher, the CurseForge app
-   or the Modrinth app).
-2. Put `guhs-1.0.0.jar` and GeckoLib in the `mods` folder (launchers can download both for you).
+1. Install NeoForge for Minecraft 26.1.2 (or make a NeoForge 26.1.2 instance in Prism Launcher, the CurseForge app
+   or the Modrinth app). On Minecraft 1.21.1, use Guhs 1.0.x instead.
+2. Put `guhs-1.1.0.jar` (or `guhs-1.0.x.jar` on 1.21.1) and the matching GeckoLib in the `mods` folder (launchers can
+   download both for you).
 3. Start the game and make a **new world**. Find a guh, give it kaas knabbels, and enjoy.
 
 Want everything ready to go? Try the **Guhs Pack** modpack (Guhs + GeckoLib, JEI, Jade, JourneyMap, AppleSkin,
@@ -93,7 +102,8 @@ list. Making a pack with its own server list? Set `addOfficialServer = false` in
 
 ## Building from source
 
-You need a **JDK 21**.
+Branch `mc26` (Guhs 1.1.x, Minecraft 26.1.2) needs a **JDK 25** (Gradle downloads it for the build if it is missing);
+branch `main` (Guhs 1.0.x, Minecraft 1.21.1) needs a **JDK 21**.
 
 ```sh
 ./gradlew build              # -> build/libs/guhs-<version>.jar
@@ -137,7 +147,8 @@ hem aan, rij op hem, knuffel hem tot jullie *zielsguh bff 5evr <3* zijn, en volg
 - **FTB Quests**: is het geïnstalleerd, dan komt er vanzelf een Guhs-hoofdstukkengroep bij (13 hoofdstukken, 700+ quests).
 - De **officiële Guhs-server** `guhs.nl` (dag en nacht aan): Guhs zet *Guhs Server* één keer in je serverlijst (uitzetten: `addOfficialServer = false` in `config/guhs-client.toml`). Zo speel je mee: [Speel op de officiële server](https://guhs.nl/wiki/server.html).
 
-**Nodig:** Minecraft 1.21.1, NeoForge 21.1.0+, GeckoLib 4.8+. Installeer Guhs op de server én bij elke speler.
+**Nodig:** Guhs 1.1.x: Minecraft 26.1.2, NeoForge 26.1.2.71+, GeckoLib 5.5.2+ (Java 25). Guhs 1.0.x: Minecraft 1.21.1,
+NeoForge 21.1.0+, GeckoLib 4.8+. Installeer Guhs op de server én bij elke speler.
 Alle teksten in het spel zijn Nederlands. **Aanrader voor servers:** Lootr, zodat elke speler zijn eigen buit uit
 kisten krijgt.
 

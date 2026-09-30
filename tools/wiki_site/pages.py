@@ -9,7 +9,10 @@ from . import topics as T
 from .kb import plain, split_t
 from .site import CATEGORIES, CAT_ICON, Page, Site, esc, fold, p, slug, t
 
-SITE_VERSION = "1.0.0"
+SITE_VERSION = "1.1.0"
+# the Minecraft/GeckoLib line of this branch (mc26 = Guhs 1.1.x; main = 1.0.x for Minecraft 1.21.1 / GeckoLib 4.8+)
+SITE_MC = "26.1.2"
+SITE_GECKOLIB = "5.5.2+"
 
 SLOTS = {"head": ("Head", "Hoofd"), "eyes": ("Eyes", "Ogen"), "body": ("Body", "Lijf"), "neck": ("Neck", "Nek"), "back": ("Back", "Rug"),
          "haar": ("Hair", "Haar"), "oren": ("Ears", "Oren")}

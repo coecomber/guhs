@@ -15,7 +15,7 @@ from PIL import Image
 from . import assets
 from . import topics as T
 from .kb import plain, split_t
-from .pages import SITE_VERSION, clean_title, first_sentences
+from .pages import SITE_GECKOLIB, SITE_MC, SITE_VERSION, clean_title, first_sentences
 from .site import CAT_ICON, CAT_ORDER, CATEGORIES, esc, fold, p, t
 
 SECTION_ORDER = ["start", "mobs", "care", "personalities", "maag", "sled", "guhdex", "food", "items", "vads", "redstone", "guhmension",
@@ -341,7 +341,7 @@ class Renderer:
         header = (f'<header class="top"><div class="in"><button class="icon-btn menu-btn" id="menu" type="button" aria-label="Menu" aria-expanded="false" '
                   f'aria-controls="side">&#9776;</button><a class="brand" href="@@index@@"><img src="{root}favicon-64.png" alt="" width="32" height="32">'
                   f'<span class="word">Guhs Wiki</span></a><span class="ver" title="Versie">v{SITE_VERSION}</span>{search}{tools}</div></header>')
-        footer = (f'<footer class="site"><div class="in">{t("The Guhs wiki, for Guhs " + SITE_VERSION + " (Minecraft 1.21.1, NeoForge). Every picture is rendered from the mod&#39;s own models and textures. Model by Lieke.", "De Guhs-wiki, voor Guhs " + SITE_VERSION + " (Minecraft 1.21.1, NeoForge). Alle plaatjes zijn gerenderd uit de modellen en textures van de mod zelf. Model door Lieke.")}'
+        footer = (f'<footer class="site"><div class="in">{t("The Guhs wiki, for Guhs " + SITE_VERSION + " (Minecraft " + SITE_MC + ", NeoForge; Guhs 1.0.x for Minecraft 1.21.1). Every picture is rendered from the mod&#39;s own models and textures. Model by Lieke.", "De Guhs-wiki, voor Guhs " + SITE_VERSION + " (Minecraft " + SITE_MC + ", NeoForge; Guhs 1.0.x voor Minecraft 1.21.1). Alle plaatjes zijn gerenderd uit de modellen en textures van de mod zelf. Model door Lieke.")}'
                   f' &middot; <a href="@@systemen/commandos@@">{t("Commands", "Commando&#39;s")}</a>'
                   f' &middot; <a href="https://guhs.nl/">{t("guhs.nl: the official server", "guhs.nl: de officiële server")}</a></div></footer>')
         return f"""<!doctype html>
@@ -474,8 +474,8 @@ class Renderer:
               '<a class="btn" href="https://modrinth.com/mod/guhs" rel="noopener">Modrinth</a>'
               f'<a class="btn" href="https://github.com/coecomber/guhs/releases" rel="noopener">GitHub &middot; {t("releases", "downloads")}</a></div>')
         hero_img = self.b.img("guh", "Een guh") if self.im.has("guh") else ""
-        stats = (f'<ul class="pills"><li>{t("Version", "Versie")} <b>{SITE_VERSION}</b></li><li>Minecraft <b>1.21.1</b></li><li>NeoForge</li>'
-                 f'<li>GeckoLib <b>4.8+</b></li><li><b>{counts["guhs"]}</b> {t("kinds of guh", "guhsoorten")}</li>'
+        stats = (f'<ul class="pills"><li>{t("Version", "Versie")} <b>{SITE_VERSION}</b></li><li>Minecraft <b>{SITE_MC}</b></li><li>NeoForge</li>'
+                 f'<li>GeckoLib <b>{SITE_GECKOLIB}</b></li><li><b>{counts["guhs"]}</b> {t("kinds of guh", "guhsoorten")}</li>'
                  f'<li><b>{counts["bouwwerken"]}</b> {t("structures", "bouwwerken")}</li><li><b>{counts["minigames"]}</b> minigames</li></ul>')
         what = p("Guhs is a Minecraft mod full of <b>lieve vadsige guhs</b>: chubby pink plush mice you can tame, dress up, ride and cuddle. "
                  "Walk through a portal of blocks of kaasknabbels into the <b>Guhmension</b>: a pink world of wool and cheese sauce with guh villages, "
@@ -501,7 +501,7 @@ class Renderer:
                  f'<li>{t("Play the minigames, follow the stories and collect clothes for your guh.", "Speel de minigames, volg de verhalen en verzamel kleding voor je guh.")} '
                  f'<a href="@@minigames/index@@">Minigames</a> &middot; <a href="@@verhalen/index@@">{t("Stories", "Verhalen")}</a></li></ol>')
         return (f'<section class="hero"><div><h1>{t("Welcome to the <em>Guhs</em> wiki", "Welkom op de <em>Guhs</em>-wiki")}</h1>'
-                f'<p class="tagline">{t("Everything about the lieve vadsige guhs, for Minecraft 1.21.1.", "Alles over de lieve vadsige guhs, voor Minecraft 1.21.1.")}</p>'
+                f'<p class="tagline">{t("Everything about the lieve vadsige guhs, for Minecraft " + SITE_MC + " (and 1.21.1).", "Alles over de lieve vadsige guhs, voor Minecraft " + SITE_MC + " (en 1.21.1).")}</p>'
                 f'{stats}</div><div class="hero-art">{hero_img}</div></section>'
                 f'{cta}{srv}'
                 f'<div class="box" id="wat"><h2>{t("What is Guhs?", "Wat is Guhs?")}</h2>{what}{intro}</div>'

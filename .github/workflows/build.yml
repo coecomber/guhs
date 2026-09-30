@@ -4,7 +4,7 @@ name: Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, mc26 ]
     paths-ignore:
       - 'docs/**'
       - '**.md'
@@ -26,17 +26,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Java 21
+      - name: Java version of this branch (build.gradle toolchain, 21 on main and 25 on mc26)
+        id: java
+        run: echo "version=$(grep -oE 'JavaLanguageVersion\.of\([0-9]+\)' build.gradle | grep -oE '[0-9]+' | head -1)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Java ${{ steps.java.outputs.version }}
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '21'
+          java-version: ${{ steps.java.outputs.version }}
 
       - name: Set up Gradle (with cache)
         uses: gradle/actions/setup-gradle@v4
         with:
-          # only the main branch writes the cache; PRs read it
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+          # only the main and mc26 branches write the cache; PRs read it
+          cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/mc26' }}
 
       - name: Make gradlew executable
         run: chmod +x gradlew
