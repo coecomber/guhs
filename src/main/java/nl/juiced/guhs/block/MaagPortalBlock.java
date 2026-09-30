@@ -25,6 +25,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.world.MaagManager;
 import org.joml.Vector3f;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 /**
  * The fleshy portals in the guh stomachs: "to the mouth" and "to the intestines" in every stomach, a portal per
  * stomach in the mouth, and the way back to the world in the mouth. Where they lead: {@link MaagManager}.
@@ -50,7 +51,7 @@ public class MaagPortalBlock extends Block implements Portal {
 
     public static final EnumProperty<Kind> KIND = EnumProperty.create("kind", Kind.class);
     private static final VoxelShape SHAPE = Block.box(0, 0, 6, 16, 16, 10);
-    private static final DustParticleOptions FLESH = new DustParticleOptions(new Vector3f(0.95f, 0.35f, 0.5f), 1.0f);
+    private static final DustParticleOptions FLESH = new DustParticleOptions(0xF25980 /* 0.95, 0.35, 0.5 */, 1.0f);
 
     public MaagPortalBlock(Properties properties) {
         super(properties);
@@ -73,7 +74,7 @@ public class MaagPortalBlock extends Block implements Portal {
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
         if (entity instanceof Player && entity.canUsePortal(false)) {
             entity.setAsInsidePortal(this, pos);
         }
@@ -103,7 +104,7 @@ public class MaagPortalBlock extends Block implements Portal {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return ItemStack.EMPTY;
     }
 }

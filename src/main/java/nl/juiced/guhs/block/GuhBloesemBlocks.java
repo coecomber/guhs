@@ -24,20 +24,21 @@ public final class GuhBloesemBlocks {
 
     /** Guh blossom: now and then a tiny guh floats down from it. */
     public static class Leaves extends LeavesBlock {
+        public static final com.mojang.serialization.MapCodec<Leaves> CODEC = simpleCodec(Leaves::new);
+
         public Leaves(Properties properties) {
-            super(properties);
+            // 26.1: the falling-leaves particle is LeavesBlock's own now; 0.1 = the old 1-in-10 per animateTick
+            super(0.1f, properties);
         }
 
         @Override
-        public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-            super.animateTick(state, level, pos, random);
-            if (random.nextInt(10) == 0) {
-                BlockPos below = pos.below();
-                BlockState under = level.getBlockState(below);
-                if (!isFaceFull(under.getCollisionShape(level, below), Direction.UP)) {
-                    ParticleUtils.spawnParticleBelow(level, pos, random, ModParticles.GUH_BLAADJE.get());
-                }
-            }
+        public com.mojang.serialization.MapCodec<Leaves> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
+            ParticleUtils.spawnParticleBelow(level, pos, random, ModParticles.GUH_BLAADJE.get());
         }
     }
 

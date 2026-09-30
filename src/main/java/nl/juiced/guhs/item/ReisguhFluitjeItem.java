@@ -15,6 +15,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import nl.juiced.guhs.quest.Reisguh;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** Blow it on a spot in the Guhmension and a Reisguh sits down there: a waypoint of your own. */
 public class ReisguhFluitjeItem extends Item {
     public ReisguhFluitjeItem(Properties properties) {
@@ -48,7 +50,7 @@ public class ReisguhFluitjeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.reisguh_fluitje.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.reisguh_fluitje.lore").withStyle(ChatFormatting.GRAY));
     }
 }

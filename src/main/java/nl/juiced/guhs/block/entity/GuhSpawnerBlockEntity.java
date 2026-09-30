@@ -91,8 +91,5 @@ public class GuhSpawnerBlockEntity extends BlockEntity {
         return spawner.onEventTriggered(level, id) || super.triggerEvent(id, type);
     }
 
-    @Override
-    public boolean onlyOpCanSetNbt() {
-        return true;
-    }
+    // 26.1: "only ops can set its NBT" is a flag of the BlockEntityType now (ModBlockEntities.GUH_SPAWNER)
 }

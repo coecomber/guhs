@@ -52,7 +52,7 @@ public class SleeRailBlock extends BaseEntityBlock {
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED; // the block entity renderer draws the rails
+        return RenderShape.INVISIBLE; // the block entity renderer draws the rails
     }
 
     @Nullable
@@ -82,10 +82,9 @@ public class SleeRailBlock extends BaseEntityBlock {
         return state;
     }
 
-    /** However the anchor goes, its parts go too. */
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!newState.is(this) && !level.isClientSide()) {
+    /** However the anchor goes, its parts go too (26.1: called from SleeRailBlockEntity#preRemoveSideEffects, was onRemove). */
+    public static void removeParts(Level level, BlockPos pos, BlockState state) {
+        if (!level.isClientSide() && state.getBlock() instanceof SleeRailBlock) {
             for (BlockPos part : new SleePath.Placement(pos, state.getValue(FACING), state.getValue(SHAPE)).blocks()) {
                 BlockState partState = level.getBlockState(part);
                 if (partState.getBlock() instanceof SleeRailPartBlock && SleeRailPartBlock.anchor(partState, part).equals(pos)) {
@@ -93,11 +92,10 @@ public class SleeRailBlock extends BaseEntityBlock {
                 }
             }
         }
-        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return new ItemStack(itemFor(state.getValue(SHAPE)));
     }
 
@@ -118,7 +116,7 @@ public class SleeRailBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 }

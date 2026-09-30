@@ -14,6 +14,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 /** The blocks of the verstopguh house (hide-and-seek): one-way glass, the hidden spot markers and the way out. */
 public final class VerstopBlocks {
 
@@ -50,7 +51,7 @@ public final class VerstopBlocks {
         }
 
         @Override
-        protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        protected boolean propagatesSkylightDown(BlockState state) {
             return true;
         }
     }
@@ -82,7 +83,7 @@ public final class VerstopBlocks {
         }
 
         @Override
-        protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        protected boolean propagatesSkylightDown(BlockState state) {
             return true;
         }
     }
@@ -112,7 +113,7 @@ public final class VerstopBlocks {
         }
 
         @Override
-        protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
             if (!level.isClientSide() && entity instanceof ServerPlayer player && !player.isPassenger()) {
                 nl.juiced.guhs.quest.VerstopGame.walkOut(player, pos);
             }

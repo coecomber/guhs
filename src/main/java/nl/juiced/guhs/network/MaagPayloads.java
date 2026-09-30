@@ -111,10 +111,10 @@ public final class MaagPayloads {
                 }
                 case ADD -> {
                     String name = p.text().strip();
-                    var profile = player.level().getServer().getProfileCache() == null ? java.util.Optional.<com.mojang.authlib.GameProfile>empty()
-                            : player.level().getServer().getProfileCache().get(name);
+                    // 26.1: the profile cache is the server's name -> id resolver (services().nameToIdCache())
+                    var profile = player.level().getServer().services().nameToIdCache().get(name);
                     ServerPlayer online = player.level().getServer().getPlayerList().getPlayerByName(name);
-                    UUID id = online != null ? online.getUUID() : profile.map(com.mojang.authlib.GameProfile::getId).orElse(null);
+                    UUID id = online != null ? online.getUUID() : profile.map(net.minecraft.server.players.NameAndId::id).orElse(null);
                     if (id == null || id.equals(player.getUUID())) {
                         player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.maag.unknown_player", name));
                         return;

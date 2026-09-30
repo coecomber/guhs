@@ -21,6 +21,8 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.quest.GuhDex;
 import nl.juiced.guhs.world.MaagManager;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** Small items with a special right-click: the stomach whistle, the Guhdex and the crystal spyglass. */
 public final class QuestItems {
 
@@ -31,8 +33,8 @@ public final class QuestItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -48,7 +50,7 @@ public final class QuestItems {
                 level.playSound(null, player.blockPosition(), SoundEvents.NOTE_BLOCK_FLUTE.value(), SoundSource.PLAYERS, 1f, 1.6f);
                 MaagManager.whistle(serverPlayer);
             }
-            player.getCooldowns().addCooldown(this, 40);
+            player.getCooldowns().addCooldown(player.getItemInHand(hand), 40);
             return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(hand));
         }
     }
@@ -86,7 +88,7 @@ public final class QuestItems {
                         .withStyle(ChatFormatting.LIGHT_PURPLE));
                 level.playSound(null, player.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.5f, 1.8f);
             }
-            player.getCooldowns().addCooldown(this, 100);
+            player.getCooldowns().addCooldown(player.getItemInHand(hand), 100);
             return InteractionResult.SUCCESS.heldItemTransformedTo(player.getItemInHand(hand));
         }
     }
