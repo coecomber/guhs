@@ -22,7 +22,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.screens.ReceivingLevelScreen;
+import net.minecraft.client.gui.screens.LevelLoadingScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.commands.CommandSource;
@@ -218,12 +218,11 @@ public final class AutoCheck {
     private static boolean mistOff;
 
     private static void onFog(net.neoforged.neoforge.client.event.ViewportEvent.RenderFog event) {
-        if (mistOff && event.getMode() == net.minecraft.client.renderer.FogRenderer.FogMode.FOG_TERRAIN
-                && event.getType() == net.minecraft.world.level.material.FogType.NONE) {
-            float far = Minecraft.getInstance().gameRenderer.getRenderDistance();
+        // (1.1.0: RenderFog has no terrain/sky mode and cannot be cancelled any more; its distances are the terrain fog)
+        if (mistOff && event.getType() == net.minecraft.world.level.material.FogType.NONE) {
+            float far = Minecraft.getInstance().options.getEffectiveRenderDistance() * 16f;
             event.setFarPlaneDistance(far);
             event.setNearPlaneDistance(far - Math.max(4, Math.min(64, far / 10)));
-            event.setCanceled(true);
         }
     }
 
@@ -280,13 +279,14 @@ public final class AutoCheck {
             }
             case CREATING, JOINING -> {
                 if (mc.player != null && mc.level != null && mc.getSingleplayerServer() != null
-                        && !(mc.screen instanceof ReceivingLevelScreen)) {
+                        && !(mc.screen instanceof LevelLoadingScreen)) {
                     if (state == State.CREATING) {
                         state(State.JOINING);
                         note("World joined after " + (System.currentTimeMillis() - startMillis) / 1000 + " s");
                     }
                     closeForeignScreen(mc);
                     if (stateTicks > 60) {
+                        applyRules(mc.getSingleplayerServer());
                         state(State.RUNNING);
                     }
                 } else if (stateTicks > 20 * 180) {
@@ -353,13 +353,13 @@ public final class AutoCheck {
         mc.getTutorial().setStep(net.minecraft.client.tutorial.TutorialSteps.NONE);
         o.narrator().set(net.minecraft.client.NarratorStatus.OFF);
         o.guiScale().set(Integer.getInteger("guhs.autocheck.guiScale", 2));
-        mc.resizeDisplay();
+        mc.resizeGui();
     }
 
     /** A screen we didn't open (a mod's welcome screen, the pause menu...) is closed so the round never gets stuck. */
     private static void closeForeignScreen(Minecraft mc) {
         Screen s = mc.screen;
-        if (s != null && !(s instanceof ReceivingLevelScreen) && !opened) {
+        if (s != null && !(s instanceof LevelLoadingScreen) && !opened) {
             note("closed unexpected screen " + s.getClass().getName() + " (" + s.getTitle().getString() + ")");
             mc.setScreen(null);
         }
@@ -387,20 +387,28 @@ public final class AutoCheck {
         } catch (IOException e) {
             problem("Could not delete old world " + WORLD + ": " + e);
         }
-        GameRules rules = new GameRules();
-        rules.set(GameRules.ADVANCE_TIME, false, null);
-        rules.set(GameRules.ADVANCE_WEATHER, false, null);
-        rules.set(GameRules.SPAWN_MOBS, false, null);
-        rules.set(GameRules.SHOW_ADVANCEMENT_MESSAGES, false, null);
-        rules.set(GameRules.SEND_COMMAND_FEEDBACK, false, null);
-        rules.set(GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER, 0, null);
-        rules.set(GameRules.MOB_GRIEFING, false, null);
-        rules.set(GameRules.SPAWN_PATROLS, false, null);
-        rules.set(GameRules.SPAWN_WANDERING_TRADERS, false, null);
-        LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, false, Difficulty.NORMAL, true, rules, WorldDataConfiguration.DEFAULT);
+        // (1.1.0: LevelSettings has no game rules any more; they are set in applyRules() once the world runs)
+        LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, new LevelSettings.DifficultySettings(Difficulty.NORMAL, false, false),
+                true, WorldDataConfiguration.DEFAULT);
         WorldOptions options = new WorldOptions(seed, true, false);
         mc.createWorldOpenFlows().createFreshLevel(WORLD, settings, options, WorldPresets::createNormalWorldDimensions,
                 new net.minecraft.client.gui.screens.TitleScreen());
+    }
+
+    /** The game rules of the check world (1.0.0 put them in LevelSettings). */
+    private static void applyRules(net.minecraft.server.MinecraftServer server) {
+        server.execute(() -> {
+            GameRules rules = server.getGameRules();
+            rules.set(GameRules.ADVANCE_TIME, false, server);
+            rules.set(GameRules.ADVANCE_WEATHER, false, server);
+            rules.set(GameRules.SPAWN_MOBS, false, server);
+            rules.set(GameRules.SHOW_ADVANCEMENT_MESSAGES, false, server);
+            rules.set(GameRules.SEND_COMMAND_FEEDBACK, false, server);
+            rules.set(GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER, 0, server);
+            rules.set(GameRules.MOB_GRIEFING, false, server);
+            rules.set(GameRules.SPAWN_PATROLS, false, server);
+            rules.set(GameRules.SPAWN_WANDERING_TRADERS, false, server);
+        });
     }
 
     // ------------------------------------------------------------------------------------------------ script
@@ -662,7 +670,7 @@ public final class AutoCheck {
                 // mouse <guiX> <guiY>: move the cursor (gui coordinates) for hover tooltips
                 return mc2 -> {
                     double s = mc2.getWindow().getGuiScale();
-                    org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc2.getWindow().getWindow(), Double.parseDouble(a[1]) * s, Double.parseDouble(a[2]) * s);
+                    org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc2.getWindow().handle(), Double.parseDouble(a[1]) * s, Double.parseDouble(a[2]) * s);
                     return true;
                 };
             case "click":
@@ -674,8 +682,9 @@ public final class AutoCheck {
                     }
                     double x = Double.parseDouble(a[1]), y = Double.parseDouble(a[2]);
                     int b = a.length > 3 ? Integer.parseInt(a[3]) : 0;
-                    mc2.screen.mouseClicked(x, y, b);
-                    mc2.screen.mouseReleased(x, y, b);
+                    var ev = new net.minecraft.client.input.MouseButtonEvent(x, y, new net.minecraft.client.input.MouseButtonInfo(b, 0));
+                    mc2.screen.mouseClicked(ev, false);
+                    mc2.screen.mouseReleased(ev);
                     return true;
                 };
             case "drag":
@@ -683,9 +692,11 @@ public final class AutoCheck {
                 return mc2 -> {
                     if (mc2.screen != null) {
                         double x1 = Double.parseDouble(a[1]), y1 = Double.parseDouble(a[2]), x2 = Double.parseDouble(a[3]), y2 = Double.parseDouble(a[4]);
-                        mc2.screen.mouseClicked(x1, y1, 0);
-                        mc2.screen.mouseDragged(x2, y2, 0, x2 - x1, y2 - y1);
-                        mc2.screen.mouseReleased(x2, y2, 0);
+                        var down = new net.minecraft.client.input.MouseButtonEvent(x1, y1, new net.minecraft.client.input.MouseButtonInfo(0, 0));
+                        var up = new net.minecraft.client.input.MouseButtonEvent(x2, y2, new net.minecraft.client.input.MouseButtonInfo(0, 0));
+                        mc2.screen.mouseClicked(down, false);
+                        mc2.screen.mouseDragged(up, x2 - x1, y2 - y1);
+                        mc2.screen.mouseReleased(up);
                     }
                     return true;
                 };
@@ -702,7 +713,7 @@ public final class AutoCheck {
                 return mc2 -> {
                     if (mc2.screen != null) {
                         for (char ch : rest.toCharArray()) {
-                            mc2.screen.charTyped(ch, 0);
+                            mc2.screen.charTyped(new net.minecraft.client.input.CharacterEvent(ch));
                         }
                     }
                     return true;
@@ -784,13 +795,13 @@ public final class AutoCheck {
                     race.setYBodyRot(yaw);
                     race.setYHeadRot(yaw);
                     level.addFreshEntity(race);
-                    sp.startRiding(race, true);
+                    sp.startRiding(race, true, true);
                     var guhs = nl.juiced.guhs.feature.band.Band.samenGuhs(sp, 24);
                     if (guhs.isEmpty()) {
                         return "kart: no own guh close by";
                     }
                     guhs.sort(java.util.Comparator.comparingDouble(g -> g.distanceToSqr(sp)));
-                    boolean mee = guhs.get(0).startRiding(race, true);
+                    boolean mee = guhs.get(0).startRiding(race, true, true);
                     try {
                         // (as if a race had put it there: otherwise a guh left in a kart without a race hops off by itself)
                         var m = nl.juiced.guhs.feature.samen.SamenMee.class.getDeclaredMethod("testKart", ServerPlayer.class,
@@ -827,7 +838,7 @@ public final class AutoCheck {
                     race.setYBodyRot(yaw);
                     race.setYHeadRot(yaw);
                     level.addFreshEntity(race);
-                    sp.startRiding(race, true);
+                    sp.startRiding(race, true, true);
                     return "racekart " + a[5] + " sprongen " + race.sprongen() + ": riding " + (sp.getVehicle() == race);
                 }, r -> note("  " + r));
             case "kartpos":
@@ -985,7 +996,7 @@ public final class AutoCheck {
         int[] last = {-1};
         return mc -> {
             t[0]++;
-            if (mc.screen instanceof ReceivingLevelScreen || mc.level == null || mc.player == null) {
+            if (mc.screen instanceof LevelLoadingScreen || mc.level == null || mc.player == null) {
                 return t[0] > maxTicks * 2;
             }
             int cx = mc.player.chunkPosition().x(), cz = mc.player.chunkPosition().z();
@@ -1026,7 +1037,7 @@ public final class AutoCheck {
             if (t[0] == 1) {
                 hidBefore[0] = mc.options.hideGui;
                 mc.options.hideGui = !withGui;
-                mc.getToasts().clear();
+                mc.getToastManager().clear();
                 return false;
             }
             if (t[0] < 4) {
@@ -1034,7 +1045,7 @@ public final class AutoCheck {
             }
             if (t[0] == 4) {
                 String file = "autocheck/" + name.replaceAll("[^A-Za-z0-9_.\\-]", "_") + ".png";
-                Screenshot.grab(mc.gameDirectory, file, mc.getMainRenderTarget(), msg -> {
+                Screenshot.grab(mc.gameDirectory, file, mc.getMainRenderTarget(), 1, msg -> {
                 });
                 shots++;
                 note("  shot " + file + (mc.screen != null ? " [screen " + mc.screen.getClass().getSimpleName() + "]" : ""));
@@ -1082,7 +1093,7 @@ public final class AutoCheck {
                             return false;
                         }
                     };
-                    CommandSourceStack src = sp.createCommandSourceStack().withSource(capture).withPermission(4)
+                    CommandSourceStack src = sp.createCommandSourceStack().withSource(capture).withPermission(net.minecraft.server.permissions.LevelBasedPermissionSet.OWNER)
                             .withCallback((ok, result) -> {
                                 if (!ok) {
                                     failed[0] = true;
@@ -1139,7 +1150,7 @@ public final class AutoCheck {
         return server(server -> {
             ServerPlayer sp = player(server);
             ServerLevel level = dim == null ? sp.level() : server.getLevel(dim);
-            sp.teleportTo(level, pos.x, pos.y, pos.z, yaw, pitch);
+            sp.teleportTo(level, pos.x, pos.y, pos.z, java.util.Set.of(), yaw, pitch, true);
             return true;
         }, ok -> {
             lockYaw = yaw;
@@ -1494,7 +1505,7 @@ public final class AutoCheck {
                                 } catch (Exception e) {
                                     problem("ftbquests: cannot open the chapter list: " + e);
                                 }
-                                org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc2.getWindow().getWindow(), 12, mc2.getWindow().getScreenHeight() / 2.0);
+                                org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc2.getWindow().handle(), 12, mc2.getWindow().getScreenHeight() / 2.0);
                                 return true;
                             });
                             acts.add(waitTicks(15));
@@ -1773,7 +1784,7 @@ public final class AutoCheck {
                 guh.snapTo(sp.getX() + 2, sp.getY(), sp.getZ(), 0, 0);
                 level.addFreshEntity(guh);
                 guh.tame(sp);
-                guh.kill();
+                guh.kill(level);
                 nl.juiced.guhs.feature.band.MijnGuhs.stuur(sp, guh.getUUID());
                 nl.juiced.guhs.quest.GuhDex.open(sp);
                 return "wolkjes: " + nl.juiced.guhs.feature.band.Wolkjes.dood(server, sp.getUUID()).size() + " in de wolkjes";
@@ -1864,7 +1875,7 @@ public final class AutoCheck {
                 }
                 case "piepmenu" -> nl.juiced.guhs.feature.piep.PiepMenu.open(sp, (nl.juiced.guhs.feature.piep.PiepMaatje) best);
                 default -> {
-                    var r = sp.interactOn(best, net.minecraft.world.InteractionHand.MAIN_HAND);
+                    var r = sp.interactOn(best, net.minecraft.world.InteractionHand.MAIN_HAND, best.getBoundingBox().getCenter().subtract(best.position()));
                     return how + " " + best.getName().getString() + " -> " + r;
                 }
             }
@@ -1927,7 +1938,7 @@ public final class AutoCheck {
             if (e == null) {
                 return "interact npc: no npc";
             }
-            return "interact " + e.getName().getString() + " -> " + sp.interactOn(e, net.minecraft.world.InteractionHand.MAIN_HAND);
+            return "interact " + e.getName().getString() + " -> " + sp.interactOn(e, net.minecraft.world.InteractionHand.MAIN_HAND, e.getBoundingBox().getCenter().subtract(e.position()));
         }, r -> {
             opened = true;
             note("  " + r);
@@ -2005,7 +2016,7 @@ public final class AutoCheck {
 
     private static void parkMouse(Minecraft mc) {
         mc.mouseHandler.releaseMouse();
-        org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc.getWindow().getWindow(), mc.getWindow().getScreenWidth() / 2.0, 3);
+        org.lwjgl.glfw.GLFW.glfwSetCursorPos(mc.getWindow().handle(), mc.getWindow().getScreenWidth() / 2.0, 3);
     }
 
     private static void pressButton(Screen screen, String label) {
@@ -2015,7 +2026,7 @@ public final class AutoCheck {
         }
         for (var child : screen.children()) {
             if (child instanceof Button b && b.getMessage().getString().equals(label)) {
-                b.onPress();
+                b.onPress(new net.minecraft.client.input.KeyEvent(org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER, 0, 0));
                 return;
             }
         }
@@ -2049,7 +2060,7 @@ public final class AutoCheck {
             // which dimensions can have it
             acts.add(server(s -> {
                 List<String> dims = new ArrayList<>();
-                Holder<Structure> holder = s.registryAccess().lookupOrThrow(Registries.STRUCTURE).getHolder(ResourceKey.create(Registries.STRUCTURE, id)).orElse(null);
+                Holder<Structure> holder = s.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(ResourceKey.create(Registries.STRUCTURE, id)).orElse(null);
                 if (holder == null) {
                     return dims;
                 }
@@ -2231,7 +2242,7 @@ public final class AutoCheck {
 
     private static Found locate(net.minecraft.server.MinecraftServer s, Identifier id, ResourceKey<Level> dim) {
         ServerLevel level = s.getLevel(dim);
-        Holder<Structure> holder = s.registryAccess().lookupOrThrow(Registries.STRUCTURE).getHolder(ResourceKey.create(Registries.STRUCTURE, id)).orElse(null);
+        Holder<Structure> holder = s.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(ResourceKey.create(Registries.STRUCTURE, id)).orElse(null);
         if (level == null || holder == null) {
             return new Found(dim.identifier().toString(), null, null, 0, "", false, "unknown dimension/structure");
         }
@@ -2302,7 +2313,7 @@ public final class AutoCheck {
             }
             var possible = level.getChunkSource().getGenerator().getBiomeSource().possibleBiomes();
             for (Holder<Biome> h : possible) {
-                Identifier id = h.unwrapKey().map(ResourceKey::location).orElse(null);
+                Identifier id = h.unwrapKey().map(ResourceKey::identifier).orElse(null);
                 if (id == null) {
                     continue;
                 }
@@ -2595,7 +2606,7 @@ public final class AutoCheck {
         t.putBoolean("PersistenceRequired", true);
         t.putBoolean("Silent", true);
         t.putBoolean("Invulnerable", true);
-        Entity e = EntityType.loadEntityRecursive(t, level, en -> en);
+        Entity e = EntityType.loadEntityRecursive(t, level, EntitySpawnReason.LOAD, en -> en);
         if (e == null) {
             return null;
         }
@@ -2641,7 +2652,9 @@ public final class AutoCheck {
     private static void label(ServerLevel level, double x, double y, double z, String text, float scale) {
         CompoundTag t = new CompoundTag();
         t.putString("id", "minecraft:text_display");
-        t.putString("text", Component.Serializer.toJson(Component.literal(text), level.registryAccess()));
+        // (1.1.0: text components are stored as NBT, not as a JSON string)
+        t.store("text", net.minecraft.network.chat.ComponentSerialization.CODEC,
+                level.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), Component.literal(text));
         t.putString("billboard", "center");
         t.putString("alignment", "center");
         t.putInt("background", 0x90000000);
@@ -2651,7 +2664,7 @@ public final class AutoCheck {
         tr.put("translation", floats(0, 0, 0));
         tr.put("scale", floats(scale, scale, scale));
         t.put("transformation", tr);
-        Entity e = EntityType.loadEntityRecursive(t, level, en -> en);
+        Entity e = EntityType.loadEntityRecursive(t, level, EntitySpawnReason.LOAD, en -> en);
         if (e != null) {
             e.snapTo(x, y, z, 0, 0);
             e.addTag(TAG);
@@ -2768,7 +2781,10 @@ public final class AutoCheck {
 
     /** Every guhs block state and item: missing model (purple/black cube) or quads with the missing texture? */
     private static void modelCheck(Minecraft mc) {
-        var missingModel = mc.getModelManager().getMissingModel();
+        // (1.1.0: block state models come from ModelManager#getBlockStateModelSet, items from their client item definition)
+        var blockModels = mc.getModelManager().getBlockStateModelSet();
+        var missingModel = blockModels.missingModel();
+        var missingItem = mc.getModelManager().getItemModel(Identifier.fromNamespaceAndPath("guhs", "autocheck_surely_missing"));
         Identifier missingTex = net.minecraft.client.renderer.texture.MissingTextureAtlasSprite.getLocation();
         var rnd = net.minecraft.util.RandomSource.create(1);
         int states = 0, items = 0, bad = 0;
@@ -2782,19 +2798,24 @@ public final class AutoCheck {
                 if (st.getRenderShape() != net.minecraft.world.level.block.RenderShape.MODEL) {
                     continue;
                 }
-                var model = mc.getBlockRenderer().getBlockModel(st);
+                var model = blockModels.get(st);
                 String what = null;
                 if (model == missingModel) {
                     what = "MISSING MODEL";
-                } else if (model.getParticleIcon().contents().name().equals(missingTex)) {
+                } else if (model.particleMaterial().sprite().contents().name().equals(missingTex)) {
                     what = "missing particle texture";
                 } else {
-                    List<net.minecraft.client.renderer.block.model.BakedQuad> quads = new ArrayList<>(model.getQuads(st, null, rnd));
-                    for (var dir : net.minecraft.core.Direction.values()) {
-                        quads.addAll(model.getQuads(st, dir, rnd));
+                    List<net.minecraft.client.renderer.block.dispatch.BlockStateModelPart> parts = new ArrayList<>();
+                    model.collectParts(rnd, parts);
+                    List<net.minecraft.client.resources.model.geometry.BakedQuad> quads = new ArrayList<>();
+                    for (var part : parts) {
+                        quads.addAll(part.getQuads(null));
+                        for (var dir : net.minecraft.core.Direction.values()) {
+                            quads.addAll(part.getQuads(dir));
+                        }
                     }
                     for (var q : quads) {
-                        if (q.getSprite().contents().name().equals(missingTex)) {
+                        if (q.materialInfo().sprite().contents().name().equals(missingTex)) {
                             what = "MISSING TEXTURE on a face";
                             break;
                         }
@@ -2812,24 +2833,21 @@ public final class AutoCheck {
             }
             items++;
             var stack = new net.minecraft.world.item.ItemStack(e.getValue());
-            var model = mc.getItemRenderer().getModel(stack, mc.level, mc.player, 0);
+            Identifier modelId = stack.get(net.minecraft.core.component.DataComponents.ITEM_MODEL);
             String what = null;
-            if (model == missingModel) {
+            if (modelId == null || mc.getModelManager().getItemModel(modelId) == missingItem) {
                 what = "MISSING MODEL";
-            } else if (!model.isCustomRenderer()) {
-                if (model.getParticleIcon().contents().name().equals(missingTex)) {
-                    what = "missing texture (particle)";
-                }
-                for (var q : model.getQuads(null, null, rnd)) {
-                    if (q.getSprite().contents().name().equals(missingTex)) {
-                        what = "MISSING TEXTURE";
-                        break;
-                    }
+            } else {
+                var state = new net.minecraft.client.renderer.item.ItemStackRenderState();
+                mc.getItemModelResolver().updateForTopItem(state, stack, net.minecraft.world.item.ItemDisplayContext.GUI, mc.level, mc.player, 0);
+                var particle = state.pickParticleMaterial(rnd);
+                if (particle != null && particle.sprite().contents().name().equals(missingTex)) {
+                    what = "MISSING TEXTURE";
                 }
             }
             if (what != null) {
                 bad++;
-                problem("ITEM " + e.getKey().identifier() + " " + what + " -> check assets/guhs/models/item");
+                problem("ITEM " + e.getKey().identifier() + " " + what + " -> check assets/guhs/items + models/item");
             }
         }
         note("modelcheck: " + states + " block states, " + items + " items checked, " + bad + " with missing model/texture");
@@ -2862,9 +2880,9 @@ public final class AutoCheck {
         writeReport(true);
         try {
             if (mc.level != null) {
-                mc.level.disconnect();
+                mc.level.disconnect(Component.literal("AutoCheck"));
             }
-            mc.disconnect(new net.minecraft.client.gui.screens.GenericMessageScreen(Component.literal("AutoCheck: saving...")));
+            mc.disconnect(new net.minecraft.client.gui.screens.GenericMessageScreen(Component.literal("AutoCheck: saving...")), false);
         } catch (Exception e) {
             LOG.error("AutoCheck disconnect", e);
         }

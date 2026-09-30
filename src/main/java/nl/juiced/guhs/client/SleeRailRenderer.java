@@ -1,28 +1,39 @@
 package nl.juiced.guhs.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.block.SleeRailBlock;
 import nl.juiced.guhs.block.entity.SleeRailBlockEntity;
 import nl.juiced.guhs.slee.SleePath;
 
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * Draws a whole sled rail piece along its path: two pink-and-white candy-stripe rails on little wooden sleepers.
  * The path is the same one the sled follows, so the sled always sits right on top of the rails.
+ * <p>
+ * 1.1.0: the boxes (with the light at each segment, which needs the level) are worked out at extract time; submit
+ * draws them as custom geometry ({@code submitCustomGeometry}, the replacement for {@code buffer.getBuffer(type)}).
  */
-public class SleeRailRenderer implements BlockEntityRenderer<SleeRailBlockEntity> {
+public class SleeRailRenderer implements BlockEntityRenderer<SleeRailBlockEntity, SleeRailRenderer.State> {
     public static final Identifier TEXTURE = Guhs.id("textures/block/slee_rail.png");
     /** Rails: sideways from the middle, thickness and height (the top is where the sled rides). */
     public static final double RAIL_OFFSET = 0.55, RAIL_HALF_WIDTH = 0.07, SLEEPER_HEIGHT = 0.08;
@@ -31,11 +42,27 @@ public class SleeRailRenderer implements BlockEntityRenderer<SleeRailBlockEntity
     // texture swatches (u0, v0, u1, v1): pink, white, wood, dark wood
     private static final float[] PINK = {0, 0, 0.5f, 0.5f}, WHITE = {0.5f, 0, 1, 0.5f}, WOOD = {0, 0.5f, 0.5f, 1};
 
+    /** One box to draw: from a to b (middle of its bottom face), halfWidth to both sides, height up. */
+    private record Box(Vec3 a, Vec3 b, Vec3 side, Vec3 up, double halfWidth, double height, float[] tex, int light) {
+    }
+
+    public static class State extends BlockEntityRenderState {
+        final List<Box> boxes = new ArrayList<>();
+    }
+
     public SleeRailRenderer(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
-    public void render(SleeRailBlockEntity rail, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public State createRenderState() {
+        return new State();
+    }
+
+    @Override
+    public void extractRenderState(SleeRailBlockEntity rail, State out, float partialTick, Vec3 camera,
+                                   @Nullable ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+        BlockEntityRenderer.super.extractRenderState(rail, out, partialTick, camera, breakProgress);
+        out.boxes.clear();
         BlockState state = rail.getBlockState();
         if (!(state.getBlock() instanceof SleeRailBlock) || rail.getLevel() == null) {
             return;
@@ -43,8 +70,6 @@ public class SleeRailRenderer implements BlockEntityRenderer<SleeRailBlockEntity
         BlockPos anchor = rail.getBlockPos();
         SleePath.Shape shape = state.getValue(SleeRailBlock.SHAPE);
         SleePath.Piece piece = new SleePath.Piece(anchor, state.getValue(SleeRailBlock.FACING), shape);
-        VertexConsumer vc = buffer.getBuffer(RenderTypes.entityCutout(TEXTURE));
-        PoseStack.Pose pose = poseStack.last();
         Vec3 origin = Vec3.atLowerCornerOf(anchor).add(0, SleePath.RIDE_HEIGHT, 0);
 
         double end = SleePath.railEnd(shape);
@@ -53,7 +78,7 @@ public class SleeRailRenderer implements BlockEntityRenderer<SleeRailBlockEntity
         for (int i = 0; i < segments; i++) {
             SleePath.Point a = piece.at(end * i / segments), b = piece.at(end * (i + 1) / segments);
             Vec3 pa = a.pos().subtract(origin), pb = b.pos().subtract(origin);
-            int light = LevelRenderer.getLightColor(rail.getLevel(), BlockPos.containing(a.pos().add(0, 0.5, 0)));
+            int light = LevelRenderer.getLightCoords(rail.getLevel(), BlockPos.containing(a.pos().add(0, 0.5, 0)));
             Vec3 heading = pb.subtract(pa).normalize();
             Vec3 side = new Vec3(-heading.z, 0, heading.x).normalize();
             Vec3 up = side.cross(heading);
@@ -63,7 +88,7 @@ public class SleeRailRenderer implements BlockEntityRenderer<SleeRailBlockEntity
             }
             for (int s = -1; s <= 1; s += 2) {
                 Vec3 off = side.scale(s * RAIL_OFFSET).add(up.scale(SLEEPER_HEIGHT));
-                box(vc, pose, pa.add(off), pb.add(off), side, up, RAIL_HALF_WIDTH, SleePath.RIDE_HEIGHT - SLEEPER_HEIGHT, tex, light);
+                out.boxes.add(new Box(pa.add(off), pb.add(off), side, up, RAIL_HALF_WIDTH, SleePath.RIDE_HEIGHT - SLEEPER_HEIGHT, tex, light));
             }
         }
         // sleepers
@@ -74,10 +99,23 @@ public class SleeRailRenderer implements BlockEntityRenderer<SleeRailBlockEntity
             Vec3 side = new Vec3(-heading.z, 0, heading.x).normalize();
             Vec3 up = side.cross(heading);
             Vec3 c = p.pos().subtract(origin);
-            int light = LevelRenderer.getLightColor(rail.getLevel(), BlockPos.containing(p.pos().add(0, 0.5, 0)));
-            box(vc, pose, c.subtract(heading.scale(SLEEPER_HALF_LENGTH)), c.add(heading.scale(SLEEPER_HALF_LENGTH)), side, up,
-                    SLEEPER_HALF_WIDTH, SLEEPER_HEIGHT, WOOD, light);
+            int light = LevelRenderer.getLightCoords(rail.getLevel(), BlockPos.containing(p.pos().add(0, 0.5, 0)));
+            out.boxes.add(new Box(c.subtract(heading.scale(SLEEPER_HALF_LENGTH)), c.add(heading.scale(SLEEPER_HALF_LENGTH)), side, up,
+                    SLEEPER_HALF_WIDTH, SLEEPER_HEIGHT, WOOD, light));
         }
+    }
+
+    @Override
+    public void submit(State state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+        if (state.boxes.isEmpty()) {
+            return;
+        }
+        List<Box> boxes = List.copyOf(state.boxes);
+        collector.submitCustomGeometry(poseStack, RenderTypes.entityCutout(TEXTURE), (pose, vc) -> {
+            for (Box b : boxes) {
+                box(vc, pose, b.a(), b.b(), b.side(), b.up(), b.halfWidth(), b.height(), b.tex(), b.light());
+            }
+        });
     }
 
     /**
@@ -110,12 +148,12 @@ public class SleeRailRenderer implements BlockEntityRenderer<SleeRailBlockEntity
     }
 
     @Override
-    public net.minecraft.world.phys.AABB getRenderBoundingBox(SleeRailBlockEntity rail) {
-        return new net.minecraft.world.phys.AABB(rail.getBlockPos()).inflate(4, 9, 4);
+    public AABB getRenderBoundingBox(SleeRailBlockEntity rail) {
+        return new AABB(rail.getBlockPos()).inflate(4, 9, 4);
     }
 
     @Override
-    public boolean shouldRenderOffScreen(SleeRailBlockEntity rail) {
+    public boolean shouldRenderOffScreen() {
         return true;
     }
 
