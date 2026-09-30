@@ -170,13 +170,14 @@ public class BaltoGedrag implements VariantGedrag {
         if (thuis != null) {
             return new Object[]{thuis.midden(), "huisje"};
         }
-        ResourceKey<Level> dim = owner.getRespawnDimension();
-        BlockPos spawn = owner.getRespawnPosition();
+        ServerPlayer.RespawnConfig respawn = owner.getRespawnConfig();
+        ResourceKey<Level> dim = respawn == null ? Level.OVERWORLD : respawn.respawnData().dimension();
+        BlockPos spawn = respawn == null ? null : respawn.respawnData().pos();
         if (spawn != null && dim == level.dimension()) {
             return new Object[]{Vec3.atBottomCenterOf(spawn), "spawn"};
         }
         if (level.dimension() == Level.OVERWORLD) {
-            return new Object[]{Vec3.atBottomCenterOf(level.getSharedSpawnPos()), "spawn"};
+            return new Object[]{Vec3.atBottomCenterOf(level.getRespawnData().pos()), "spawn"};
         }
         return new Object[]{null, "andere_wereld"};
     }
@@ -249,7 +250,7 @@ public class BaltoGedrag implements VariantGedrag {
             double zij = ((k + j) % 2 == 0 ? 0.35 : -0.35);
             double x = van.x + dir.x * afstand - dir.z * zij, z = van.z + dir.z * afstand + dir.x * zij;
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(x), Mth.floor(z));
-            level.sendParticles(owner, BaltoFeature.SNUFFEL.get(), true, x, y + 0.08, z, 1, 0, 0, 0, 0);
+            level.sendParticles(owner, BaltoFeature.SNUFFEL.get(), true, false, x, y + 0.08, z, 1, 0, 0, 0, 0);
         }
     }
 

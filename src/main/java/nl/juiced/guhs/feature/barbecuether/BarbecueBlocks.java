@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,8 +52,8 @@ public final class BarbecueBlocks {
         private static boolean canStay(BlockState state, LevelReader level, BlockPos pos) {
             BlockPos above = pos.above();
             BlockState up = level.getBlockState(above);
-            int light = LightEngine.getLightBlockInto(level, state, pos, up, above, Direction.UP, up.getLightBlock(level, above));
-            return light < level.getMaxLightLevel();
+            int light = LightEngine.getLightBlockInto(state, up, Direction.UP, up.getLightDampening());
+            return light < 15;
         }
 
         @Override
@@ -93,7 +93,7 @@ public final class BarbecueBlocks {
     }
 
     /** Little plants that grow on nylium, houtskoolsteen and ash (pindascheutjes, mosterdscheutjes, smeulkooltjes). */
-    public static class GrillPlant extends BushBlock {
+    public static class GrillPlant extends VegetationBlock {
         public static final MapCodec<GrillPlant> CODEC = simpleCodec(GrillPlant::new);
         private static final VoxelShape SHAPE = Block.box(2, 0, 2, 14, 13, 14);
 
@@ -102,7 +102,7 @@ public final class BarbecueBlocks {
         }
 
         @Override
-        protected MapCodec<? extends BushBlock> codec() {
+        protected MapCodec<? extends VegetationBlock> codec() {
             return CODEC;
         }
 
@@ -120,7 +120,7 @@ public final class BarbecueBlocks {
 
     /** Smeulkooltjes: little glowing embers on the ground; they spark now and then. */
     public static class Smeulkooltjes extends GrillPlant {
-        private static final DustParticleOptions EMBER = new DustParticleOptions(new Vector3f(1.0f, 0.45f, 0.08f), 0.7f);
+        private static final DustParticleOptions EMBER = new DustParticleOptions(0xFF7314 /* 1.0, 0.45, 0.08 */, 0.7f);
 
         public Smeulkooltjes(Properties properties) {
             super(properties);

@@ -147,10 +147,12 @@ public final class BarbecuetherFeature {
     public static final ResourceKey<ConfiguredFeature<?, ?>> WORST_GEKWEEKT = ResourceKey.create(Registries.CONFIGURED_FEATURE, Guhs.id("braadworst_gekweekt"));
     /** Little saté skewer sprout: bone meal on pindasaus nylium grows a giant saté skewer. */
     public static final DeferredBlock<NetherFungusBlock> SATE_ZWAMMETJE = BLOCKS.registerBlock("sate_zwammetje",
-            p -> new NetherFungusBlock(SATE_GEKWEEKT, PINDASAUS_NYLIUM.get(), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS));
+            p -> new NetherFungusBlock(SATE_GEKWEEKT, PINDASAUS_NYLIUM.get(), net.minecraft.tags.BlockTags.SUPPORTS_CRIMSON_FUNGUS, p),
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS));
     /** Little sausage sprout: bone meal on mosterd nylium grows a giant sausage. */
     public static final DeferredBlock<NetherFungusBlock> WORST_ZWAMMETJE = BLOCKS.registerBlock("worst_zwammetje",
-            p -> new NetherFungusBlock(WORST_GEKWEEKT, MOSTERD_NYLIUM.get(), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS));
+            p -> new NetherFungusBlock(WORST_GEKWEEKT, MOSTERD_NYLIUM.get(), net.minecraft.tags.BlockTags.SUPPORTS_WARPED_FUNGUS, p),
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS));
     public static final DeferredBlock<Block> SMEULKOOLTJES = BLOCKS.registerBlock("smeulkooltjes", BarbecueBlocks.Smeulkooltjes::new,
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_ROOTS).mapColor(MapColor.COLOR_ORANGE).lightLevel(s -> 7));
     public static final DeferredBlock<Block> PINDASAUSPLASJE = BLOCKS.registerBlock("pindasausplasje", BarbecueBlocks.Pindasausplasje::new,
@@ -168,7 +170,7 @@ public final class BarbecuetherFeature {
     public static final DeferredBlock<Block> GRILLKOOL = BLOCKS.registerSimpleBlock("grillkool",
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OBSIDIAN).mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM));
     public static final DeferredBlock<GrillPortalBlock> BARBECUETHER_PORTAAL = BLOCKS.registerBlock("barbecuether_portaal", GrillPortalBlock::new,
-            BlockBehaviour.Properties.of().noCollission().strength(-1.0f).sound(SoundType.GLASS).lightLevel(s -> 12)
+            () -> BlockBehaviour.Properties.of().noCollision().strength(-1.0f).sound(SoundType.GLASS).lightLevel(s -> 12)
                     .pushReaction(PushReaction.BLOCK).noLootTable().mapColor(MapColor.COLOR_ORANGE));
     public static final DeferredHolder<PoiType, PoiType> PORTAAL_POI = POI_TYPES.register("barbecuether_portaal",
             () -> new PoiType(ImmutableSet.copyOf(BARBECUETHER_PORTAAL.get().getStateDefinition().getPossibleStates()), 0, 1));
@@ -184,8 +186,9 @@ public final class BarbecuetherFeature {
     public static final DeferredItem<Item> GEGRILDE_KAASKNABBELSATE = ITEMS.registerSimpleItem("gegrilde_kaasknabbelsate",
             () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.8f).build()));
     public static final DeferredItem<Item> GUHBRAADWORST = ITEMS.registerSimpleItem("guhbraadworst",
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(7).saturationModifier(0.7f)
-                    .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 200, 0), 0.5f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(7).saturationModifier(0.7f).build(),
+                    net.minecraft.world.item.component.Consumables.defaultFood().onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(
+                            new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 200, 0), 0.5f)).build()));
     public static final DeferredItem<BlockItem> GRILLKOOL_ITEM;
 
     /** Every block that has an item (in creative-tab order). */

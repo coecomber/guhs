@@ -57,7 +57,8 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
     private static final EntityDataAccessor<Float> DATA_AFSTAND = SynchedEntityData.defineId(LuchtballonEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<BlockPos> DATA_THUIS = SynchedEntityData.defineId(LuchtballonEntity.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Float> DATA_YAW = SynchedEntityData.defineId(LuchtballonEntity.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<CompoundTag> DATA_LIFT = SynchedEntityData.defineId(LuchtballonEntity.class, EntityDataSerializers.COMPOUND_TAG);
+    /** The lifts of this flight as SNBT (1.1.0: 26.1 has no CompoundTag entity data serializer). */
+    private static final EntityDataAccessor<String> DATA_LIFT = SynchedEntityData.defineId(LuchtballonEntity.class, EntityDataSerializers.STRING);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean heeftThuis;
@@ -87,7 +88,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
         builder.define(DATA_AFSTAND, 0f);
         builder.define(DATA_THUIS, BlockPos.ZERO);
         builder.define(DATA_YAW, 0f);
-        builder.define(DATA_LIFT, new CompoundTag());
+        builder.define(DATA_LIFT, "");
     }
 
     // --- state ------------------------------------------------------------------------------------------------------------
@@ -146,7 +147,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
     }
 
     private float[] lifts() {
-        ListTag list = entityData.get(DATA_LIFT).getListOrEmpty("L");
+        ListTag list = snbt(entityData.get(DATA_LIFT)).getListOrEmpty("L");
         float[] out = new float[list.size()];
         for (int i = 0; i < out.length; i++) {
             out[i] = list.getFloatOr(i, 0.0F);
@@ -185,7 +186,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
         }
         CompoundTag tag = new CompoundTag();
         tag.put("L", list);
-        entityData.set(DATA_LIFT, tag);
+        entityData.set(DATA_LIFT, tag.toString());
         entityData.set(DATA_ROUTE, route.ordinal());
         afstand = 0;
         entityData.set(DATA_AFSTAND, 0f);
@@ -196,7 +197,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
             kapitein = kapiteinNpc.getUUID();
             kapiteinNpc.setInvisible(true);
         }
-        player.startRiding(this, true);
+        player.startRiding(this, true, true);
         BallonVlucht.vertrek(player, this);
         return true;
     }
@@ -319,17 +320,38 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
         }
     }
 
-    @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
-        if (!vliegt()) {
-            super.lerpTo(x, y, z, yRot, xRot, steps);
+    private static CompoundTag snbt(String s) {
+        if (s.isEmpty()) {
+            return new CompoundTag();
         }
+        try {
+            return net.minecraft.nbt.TagParser.parseCompoundFully(s);
+        } catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) {
+            return new CompoundTag();
+        }
+    }
+
+    /** While it flies the client ignores the server's positions (1.0.0: lerpTo); otherwise it snaps like a plain entity. */
+    private final net.minecraft.world.entity.InterpolationHandler interpolation = new net.minecraft.world.entity.InterpolationHandler(this, 0) {
+        @Override
+        public void interpolateTo(Vec3 position, float yRot, float xRot) {
+            if (!vliegt()) {
+                setPos(position);
+                setYRot(yRot % 360.0F);
+                setXRot(xRot % 360.0F);
+            }
+        }
+    };
+
+    @Override
+    public net.minecraft.world.entity.InterpolationHandler getInterpolation() {
+        return interpolation;
     }
 
     // --- riding -------------------------------------------------------------------------------------------------------------
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         if (!level().isClientSide() && !vliegt() && player instanceof ServerPlayer sp) {
             sp.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.ballon.praat_met_wolkje")
                     .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
@@ -338,7 +360,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         if (source.getEntity() instanceof Player player && player.getAbilities().instabuild && !vliegt() && player.isShiftKeyDown()) {
             kapiteinTerug();
             discard();              // (creative: sneak-hit removes it)
@@ -353,7 +375,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean canBeCollidedWith(@Nullable Entity other) {
         return false;
     }
 
@@ -400,8 +422,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
         return false;
     }
 
-    /** It's big (the guh head floats high above the basket): don't cull it as soon as the basket is off-screen. */
-    @Override
+    /** It's big (the guh head floats high above the basket): don't cull it as soon as the basket is off-screen (used by its renderer). */
     public AABB getBoundingBoxForCulling() {
         return getBoundingBox().inflate(3, 0, 3).expandTowards(0, 9, 0);
     }

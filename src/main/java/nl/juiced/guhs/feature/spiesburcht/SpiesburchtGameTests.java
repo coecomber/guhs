@@ -23,7 +23,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Equipable;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
@@ -100,12 +100,12 @@ public class SpiesburchtGameTests {
         RookguhEntity guh = helper.spawn(SpiesburchtFeature.ROOKGUH.get(), new BlockPos(8, 3, 8));
         int before = SpiesburchtStats.rookguhs(player);
         // it can't be hurt: you feed a Rookguh, you don't hit it
-        helper.assertFalse(guh.hurt(helper.getLevel().damageSources().playerAttack(player), 10f), "a Rookguh can't be hurt");
+        helper.assertFalse(guh.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(player), 10f), "a Rookguh can't be hurt");
         helper.assertTrue(guh.getHealth() == guh.getMaxHealth(), "not a scratch");
         for (int i = 0; i < RookguhEntity.NEEDED; i++) {
             helper.assertFalse(guh.isVahoeg(), "not vahoeg yet after " + i);
             player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 2));
-            guh.interact(player, InteractionHand.MAIN_HAND);
+            guh.interact(player, InteractionHand.MAIN_HAND, guh.position());
             helper.assertTrue(guh.fed() == i + 1, "fed " + (i + 1) + ": " + guh.fed());
             helper.assertTrue(player.getMainHandItem().getCount() == 1, "the knabbel is eaten");
         }
@@ -129,7 +129,7 @@ public class SpiesburchtGameTests {
         helper.assertTrue(GuhDex.ENTRIES.contains(page) && page.isCharacter() && page.npcKind() == null && !GuhDex.TAMEABLE.contains(page),
                 "a creature page in the Guhdex");
         helper.assertTrue(GuhDex.ENTRIES.indexOf(page) == GuhDex.ENTRIES.indexOf(GuhVariant.ASGUH) + 1, "next to the Asguh (Barbecuether)");
-        helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.get(Guhs.id(page.id())) == SpiesburchtFeature.ROOKGUH.get(), "its id is the Rookguh's entity id");
+        helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.getValue(Guhs.id(page.id())) == SpiesburchtFeature.ROOKGUH.get(), "its id is the Rookguh's entity id");
         helper.assertTrue(GuhVariant.values()[GuhVariant.BALTOGUH.ordinal() - 1] == page, "added at the end of 2.10.1 (saved ordinals stay; 3.0 goes after it)");
         var lang = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/assets/guhs/lang/nl_nl.json");
         for (String key : List.of("entity.guhs.rookguh", "gui.guhs.guhdex.rarity.rookguh", "gui.guhs.guhdex.info.rookguh", "gui.guhs.guhdex.rookguhs")) {
@@ -187,14 +187,14 @@ public class SpiesburchtGameTests {
         helper.assertTrue(Math.abs(guh.getBbWidth() - 3.0f) < 0.01f && Math.abs(guh.getBbHeight() - 3.0f) < 0.01f,
                 "3/4 of a ghast: " + guh.getBbWidth() + " x " + guh.getBbHeight());
         helper.assertTrue(guh.getEyeHeight() > 1.8f && guh.getEyeHeight() < 2.6f, "its eyes on its face: " + guh.getEyeHeight());
-        helper.assertFalse(guh.hurt(helper.getLevel().damageSources().generic(), 5f), "still can't be hurt");
-        var geo = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/assets/guhs/geo/entity/rookguh.geo.json");
+        helper.assertFalse(guh.hurtServer(helper.getLevel(), helper.getLevel().damageSources().generic(), 5f), "still can't be hurt");
+        var geo = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/assets/guhs/geckolib/models/entity/rookguh.geo.json");
         helper.assertTrue(geo != null, "the model");
         var bones = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.bones(geo);
         long tentacles = bones.entrySet().stream().filter(e -> e.getKey().startsWith("tentacle_") && e.getValue().equals("body")).count();
         helper.assertTrue(tentacles == 9, "nine tentacles on the body: " + tentacles);
         helper.assertTrue(bones.containsKey("cheeks") && bones.containsKey("body") && !bones.containsKey("ear_left"), "a ghast (no guh ears), with cheeks");
-        var anims = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/assets/guhs/animations/entity/rookguh.animation.json");
+        var anims = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/assets/guhs/geckolib/animations/entity/rookguh.animation.json");
         helper.assertTrue(anims != null, "the animations");
         for (String a : new String[]{"float", "eat", "vahoeg"}) {
             helper.assertTrue(anims.getAsJsonObject("animations").has("animation.rookguh." + a), "animation " + a);
@@ -247,7 +247,7 @@ public class SpiesburchtGameTests {
         helper.assertTrue(NetherMikaRuil.wearsVads(player) && !NetherMikaRuil.isHostileTo(mika, player), "vads helmet: calm");
         mika.setTarget(player);
         helper.assertTrue(mika.getTarget() == null, "it won't even target a vads wearer");
-        mika.hurt(helper.getLevel().damageSources().playerAttack(player), 1f);
+        mika.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(player), 1f);
         helper.assertTrue(NetherMikaRuil.isAngryAt(mika, player) && NetherMikaRuil.isAngryAt(friend, player), "hit one and they're all angry");
         helper.assertTrue(NetherMikaRuil.isHostileTo(friend, player), "vads or no vads");
         helper.assertFalse(NetherMikaRuil.offer(mika, player, new ItemStack(ModItems.VAHOEGE_VADS_INGOT.get())), "and no trading with you");
@@ -291,7 +291,7 @@ public class SpiesburchtGameTests {
 
     private static GuhbrouwketelBlockEntity ketel(GameTestHelper helper, BlockPos at) {
         helper.setBlock(at, SpiesburchtFeature.GUHBROUWKETEL.get());
-        return (GuhbrouwketelBlockEntity) helper.getBlockEntity(at);
+        return helper.getBlockEntity(at, GuhbrouwketelBlockEntity.class);
     }
 
     private static void use(ServerPlayer player, GuhbrouwketelBlockEntity ketel, ItemStack stack) {
@@ -320,7 +320,7 @@ public class SpiesburchtGameTests {
         use(player, ketel, new ItemStack(Items.GLASS_BOTTLE));
         helper.assertTrue(player.getMainHandItem().getCount() == 1, "not before it's done");
         helper.succeedWhen(() -> {
-            GuhbrouwketelBlockEntity now = (GuhbrouwketelBlockEntity) helper.getBlockEntity(at);
+            GuhbrouwketelBlockEntity now = helper.getBlockEntity(at, GuhbrouwketelBlockEntity.class);
             helper.assertTrue(!now.isBrewing() && now.contents() == Brouwsel.VAHOEGHEID, "done: Vahoegheid (brewing " + now.isBrewing()
                     + ", " + now.contents() + ", same " + (now == ketel) + ", state " + helper.getBlockState(at) + ")");
             int drankjes = 0;
@@ -345,12 +345,12 @@ public class SpiesburchtGameTests {
         helper.assertTrue(Brouwsel.forIngredient(new ItemStack(ModItems.KAAS_KNABBELS.get())) == Brouwsel.VAHOEGHEID, "knabbels: Vahoegheid");
         helper.assertTrue(Brouwsel.forIngredient(new ItemStack(BarbecuetherFeature.GLOEIKOOLGRUIS.get())) == Brouwsel.ROOKLOOP, "gloeikoolgruis: Rookloop");
         helper.assertTrue(Brouwsel.forIngredient(new ItemStack(ModItems.MIKA_VET.get())) == Brouwsel.SLUIPKNABBEL, "Mika's vet: Sluipknabbel");
-        helper.assertTrue(Brouwsel.forIngredient(new ItemStack(BuiltInRegistries.ITEM.get(Guhs.id("guh_slimeball")))) == Brouwsel.GUHSPRONG, "guh slime: Guhsprong");
+        helper.assertTrue(Brouwsel.forIngredient(new ItemStack(BuiltInRegistries.ITEM.getValue(Guhs.id("guh_slimeball")))) == Brouwsel.GUHSPRONG, "guh slime: Guhsprong");
         helper.assertTrue(Brouwsel.forIngredient(new ItemStack(Items.DIRT)) == null, "dirt brews nothing");
         // guhs:moeraskaas (Kaasmoeras) is an optional ingredient: when it's there it brews Sluipknabbel too
         Identifier moeraskaas = Guhs.id("moeraskaas");
         if (BuiltInRegistries.ITEM.containsKey(moeraskaas)) {
-            helper.assertTrue(Brouwsel.forIngredient(new ItemStack(BuiltInRegistries.ITEM.get(moeraskaas))) == Brouwsel.SLUIPKNABBEL, "moeraskaas: Sluipknabbel");
+            helper.assertTrue(Brouwsel.forIngredient(new ItemStack(BuiltInRegistries.ITEM.getValue(moeraskaas))) == Brouwsel.SLUIPKNABBEL, "moeraskaas: Sluipknabbel");
         }
         // guhs:stil (the Stille Voorraadkelder) or, without it, invisibility
         var effects = Brouwsel.SLUIPKNABBEL.effects();
@@ -363,8 +363,8 @@ public class SpiesburchtGameTests {
         for (Brouwsel b : Brouwsel.values()) {
             helper.assertTrue(b == Brouwsel.BOUILLON || (!b.drankje().isEmpty() && !b.effects().isEmpty()), "a drankje for " + b.id());
         }
-        helper.assertTrue(helper.getLevel().getRecipeManager().byKey(Guhs.id("grillspiespoeder")).isPresent()
-                && helper.getLevel().getRecipeManager().byKey(Guhs.id("guhbrouwketel")).isPresent(), "powder and ketel recipes");
+        helper.assertTrue(helper.getLevel().recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, Guhs.id("grillspiespoeder"))).isPresent()
+                && helper.getLevel().recipeAccess().byKey(ResourceKey.create(Registries.RECIPE, Guhs.id("guhbrouwketel"))).isPresent(), "powder and ketel recipes");
         helper.succeed();
     }
 
@@ -395,17 +395,17 @@ public class SpiesburchtGameTests {
         helper.assertBlockNotPresent(BarbecuetherFeature.AS_BLOK.get(), base);
         helper.assertBlockNotPresent(SpiesburchtFeature.VERKOOLDE_MIKAKOP.get(), base.offset(0, 2, 0));
         helper.assertTrue(boss.spawningTicks() > 0, "he bakes up first");
-        helper.assertFalse(boss.hurt(helper.getLevel().damageSources().playerAttack(player), 20f), "and can't be hurt then");
+        helper.assertFalse(boss.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(player), 20f), "and can't be hurt then");
         boss.finishSpawning();
         helper.runAfterDelay(5, () -> {
             helper.assertTrue(boss.spawningTicks() == 0, "awake");
             float hp = boss.getHealth();
-            helper.assertTrue(boss.hurt(helper.getLevel().damageSources().playerAttack(player), 20f) && boss.getHealth() < hp, "now he can be hurt");
+            helper.assertTrue(boss.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(player), 20f) && boss.getHealth() < hp, "now he can be hurt");
             boss.invulnerableTime = 0;
-            boss.hurt(helper.getLevel().damageSources().playerAttack(player), boss.getHealth() * 0.6f);
+            boss.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(player), boss.getHealth() * 0.6f);
             helper.assertTrue(boss.isDoorgebakken() || boss.getHealth() <= boss.getMaxHealth() / 2f, "half way: doorgebakken");
             boss.invulnerableTime = 0;
-            boss.hurt(helper.getLevel().damageSources().playerAttack(player), 1000f);
+            boss.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(player), 1000f);
         });
         helper.succeedWhen(() -> {
             helper.assertTrue(boss.isDeadOrDying(), "down");
@@ -463,7 +463,7 @@ public class SpiesburchtGameTests {
             }
         }
         helper.setBlock(baken, SpiesburchtFeature.KNABBELBAKEN.get());
-        KnabbelbakenBlockEntity be = (KnabbelbakenBlockEntity) helper.getBlockEntity(baken);
+        KnabbelbakenBlockEntity be = helper.getBlockEntity(baken, KnabbelbakenBlockEntity.class);
         GuhEntity tame = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 1, 8));
         tame.tame(player);
         GuhEntity wild = helper.spawn(ModEntities.GUH.get(), new BlockPos(12, 1, 8));
@@ -503,8 +503,8 @@ public class SpiesburchtGameTests {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(8, 1, 8));
         guh.setVariant(GuhVariant.ASGUH);
         float hp = guh.getHealth();
-        guh.hurt(helper.getLevel().damageSources().lava(), 4f);
-        guh.hurt(helper.getLevel().damageSources().inFire(), 4f);
+        guh.hurtServer(helper.getLevel(), helper.getLevel().damageSources().lava(), 4f);
+        guh.hurtServer(helper.getLevel(), helper.getLevel().damageSources().inFire(), 4f);
         helper.assertTrue(guh.getHealth() == hp, "fire doesn't hurt an Asguh");
         guh.igniteForSeconds(5f);
         helper.assertTrue(GuhDex.ENTRIES.contains(GuhVariant.ASGUH) && !GuhVariant.ASGUH.isCharacter() && GuhDex.TAMEABLE.contains(GuhVariant.ASGUH),
@@ -512,7 +512,7 @@ public class SpiesburchtGameTests {
         helper.assertTrue(GuhVariant.ASGUH.shows("asguh_wangen") && !GuhVariant.NORMAL.shows("asguh_wangen"), "only it has the glowing cheeks");
         GuhEntity normal = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 1, 4));
         float nhp = normal.getHealth();
-        normal.hurt(helper.getLevel().damageSources().inFire(), 2f);
+        normal.hurtServer(helper.getLevel(), helper.getLevel().damageSources().inFire(), 2f);
         helper.assertTrue(normal.getHealth() < nhp, "(a normal guh does feel it)");
         helper.succeedWhen(() -> {
             helper.assertFalse(guh.isOnFire(), "the flames go right out");
@@ -553,8 +553,8 @@ public class SpiesburchtGameTests {
         helper.assertTrue(koppen > 5 && koppen < 200, "a verkoolde mikakop now and then: " + koppen);
         helper.assertTrue(roll(helper, "entities/aangebrande_mika", boss, player).stream().anyMatch(s -> s.is(SpiesburchtFeature.GLOEISTER.get())),
                 "the gloeister, always");
-        var equip = Equipable.get(new ItemStack(SpiesburchtFeature.VERKOOLDE_MIKAKOP_ITEM.get()));
-        helper.assertTrue(equip != null && equip.getEquipmentSlot() == EquipmentSlot.HEAD, "you can wear a mikakop");
+        var equip = new ItemStack(SpiesburchtFeature.VERKOOLDE_MIKAKOP_ITEM.get()).get(net.minecraft.core.component.DataComponents.EQUIPPABLE);
+        helper.assertTrue(equip != null && equip.slot() == EquipmentSlot.HEAD, "you can wear a mikakop");
         vonk.discard();
         knekel.discard();
         remove(helper, player);
@@ -581,7 +581,7 @@ public class SpiesburchtGameTests {
         ServerLevel level = helper.getLevel();
         var structures = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
         for (String s : new String[]{"spiesburcht", "mika_grillpaleis"}) {
-            helper.assertTrue(structures.get(Guhs.id(s)) instanceof BurchtStructure, "structure " + s);
+            helper.assertTrue(structures.getValue(Guhs.id(s)) instanceof BurchtStructure, "structure " + s);
             helper.assertTrue(SuperkompasItem.allowed(s), "the super compass finds " + s);
         }
         helper.assertTrue(level.registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).containsKey(Guhs.id("barbecue_burchten")), "their structure set");
@@ -613,15 +613,15 @@ public class SpiesburchtGameTests {
         helper.assertTrue(knabbels >= 60, "a mountain of stolen knabbels: " + knabbels);
         // spawns per biome
         var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
-        MobSpawnSettings asdal = biomes.get(SpiesburchtFeature.ASDAL).getMobSettings();
-        helper.assertTrue(asdal.getMobs(net.minecraft.world.entity.MobCategory.MONSTER).unwrap().stream().anyMatch(d -> d.type == SpiesburchtFeature.KNEKEL_MIKA.get()),
+        MobSpawnSettings asdal = biomes.getValue(SpiesburchtFeature.ASDAL).getMobSettings();
+        helper.assertTrue(asdal.getMobs(net.minecraft.world.entity.MobCategory.MONSTER).unwrap().stream().anyMatch(d -> d.value().type() == SpiesburchtFeature.KNEKEL_MIKA.get()),
                 "Knekel-Mika's in the Asdal");
-        helper.assertTrue(asdal.getMobs(net.minecraft.world.entity.MobCategory.CREATURE).unwrap().stream().anyMatch(d -> d.type == ModEntities.GUH.get()),
+        helper.assertTrue(asdal.getMobs(net.minecraft.world.entity.MobCategory.CREATURE).unwrap().stream().anyMatch(d -> d.value().type() == ModEntities.GUH.get()),
                 "(Asguhs) in the Asdal");
-        MobSpawnSettings delta = biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("rookdelta"))).getMobSettings();
-        helper.assertTrue(delta.getMobs(net.minecraft.world.entity.MobCategory.CREATURE).unwrap().stream().anyMatch(d -> d.type == SpiesburchtFeature.ROOKGUH.get()),
+        MobSpawnSettings delta = biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("rookdelta"))).getMobSettings();
+        helper.assertTrue(delta.getMobs(net.minecraft.world.entity.MobCategory.CREATURE).unwrap().stream().anyMatch(d -> d.value().type() == SpiesburchtFeature.ROOKGUH.get()),
                 "Rookguhs in the Rookdelta");
-        helper.assertTrue(level.registryAccess().lookupOrThrow(Registries.BLOCK).getTag(SpiesburchtFeature.BAKEN_BASIS).isPresent(), "the baken's base tag");
+        helper.assertTrue(level.registryAccess().lookupOrThrow(Registries.BLOCK).get(SpiesburchtFeature.BAKEN_BASIS).isPresent(), "the baken's base tag");
         helper.assertTrue(EntityType.getKey(SpiesburchtFeature.AANGEBRANDE_MIKA.get()).equals(Guhs.id("aangebrande_mika")), "the boss's id");
         helper.succeed();
     }

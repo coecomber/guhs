@@ -46,7 +46,7 @@ public class VonkMikaEntity extends Monster implements GeoEntity {
     private static final EntityDataAccessor<Boolean> DATA_CHARGED = SynchedEntityData.defineId(VonkMikaEntity.class, EntityDataSerializers.BOOLEAN);
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.vonk_mika.idle");
     private static final RawAnimation SHOOT = RawAnimation.begin().thenPlay("animation.vonk_mika.shoot");
-    private static final DustParticleOptions SPARK = new DustParticleOptions(new Vector3f(1.0f, 0.55f, 0.1f), 0.9f);
+    private static final DustParticleOptions SPARK = new DustParticleOptions(0xFF8C1A /* 1.0, 0.55, 0.1 */, 0.9f);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private float allowedHeightOffset = 0.5f;
@@ -57,8 +57,8 @@ public class VonkMikaEntity extends Monster implements GeoEntity {
         this.xpReward = 10;
         this.setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.WATER, -1.0f);
         this.setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.LAVA, 8.0f);
-        this.setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.DANGER_FIRE, 0.0f);
-        this.setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.DAMAGE_FIRE, 0.0f);
+        this.setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.FIRE_IN_NEIGHBOR, 0.0f);
+        this.setPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.FIRE, 0.0f);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -113,7 +113,7 @@ public class VonkMikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    protected void customServerAiStep() {
+    protected void customServerAiStep(net.minecraft.server.level.ServerLevel level) {
         if (--this.nextHeightOffsetChangeTick <= 0) {
             this.nextHeightOffsetChangeTick = 100;
             this.allowedHeightOffset = (float) this.random.triangle(0.5, 6.891);
@@ -122,9 +122,9 @@ public class VonkMikaEntity extends Monster implements GeoEntity {
         if (target != null && target.getEyeY() > this.getEyeY() + this.allowedHeightOffset && this.canAttack(target)) {
             Vec3 v = this.getDeltaMovement();
             this.setDeltaMovement(v.add(0.0, (0.3 - v.y) * 0.3, 0.0));
-            this.hasImpulse = true;
+            this.needsSync = true;
         }
-        super.customServerAiStep();
+        super.customServerAiStep(level);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class VonkMikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double distance, float multiplier, DamageSource source) {
         return false;
     }
 
@@ -232,7 +232,7 @@ public class VonkMikaEntity extends Monster implements GeoEntity {
                 }
                 if (this.attackTime <= 0) {
                     this.attackTime = 20;
-                    mika.doHurtTarget(target);
+                    mika.doHurtTarget((net.minecraft.server.level.ServerLevel) mika.level(), target);
                 }
                 mika.getMoveControl().setWantedPosition(target.getX(), target.getY(), target.getZ(), 1.0);
             } else if (dist < 40 * 40 && see) {

@@ -26,13 +26,13 @@ public class ModderigKaasgrasBlock extends Block {
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         BlockState above = level.getBlockState(pos.above());
-        if (above.isSolidRender(level, pos.above())) {
+        if (above.isSolidRender()) {
             level.setBlockAndUpdate(pos, KaasmoerasFeature.KAASMODDER.get().defaultBlockState());
             return;
         }
         if (level.getMaxLocalRawBrightness(pos.above()) >= 9) {
             BlockPos next = pos.offset(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1);
-            if (level.getBlockState(next).is(KaasmoerasFeature.KAASMODDER.get()) && !level.getBlockState(next.above()).isSolidRender(level, next.above())) {
+            if (level.getBlockState(next).is(KaasmoerasFeature.KAASMODDER.get()) && !level.getBlockState(next.above()).isSolidRender()) {
                 level.setBlockAndUpdate(next, defaultBlockState());
             }
         }

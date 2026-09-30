@@ -37,14 +37,14 @@ public final class Nomguh {
         StructureStart start = level.structureManager().getStructureAt(near, s);
         if (start == null || !start.isValid()) {
             start = null;
-            var holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getHolder(BaltoFeature.NOMGUH).orElse(null);
+            var holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(BaltoFeature.NOMGUH).orElse(null);
             if (holder == null) {
                 return null;
             }
             Pair<BlockPos, Holder<Structure>> found = level.getChunkSource().getGenerator().findNearestMapStructure(level, HolderSet.direct(holder),
                     near, ZOEK / 16 + 1, false);
             if (found != null) {
-                ChunkPos cp = new ChunkPos(found.getFirst());
+                ChunkPos cp = ChunkPos.containing(found.getFirst());
                 ChunkAccess chunk = level.getChunk(cp.x(), cp.z(), ChunkStatus.STRUCTURE_STARTS);
                 start = level.structureManager().getStartForStructure(SectionPos.bottomOf(chunk), s, chunk);
             }
@@ -76,7 +76,7 @@ public final class Nomguh {
 
     @Nullable
     static Structure structure(ServerLevel level) {
-        return level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(BaltoFeature.NOMGUH);
+        return level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(BaltoFeature.NOMGUH);
     }
 
     /** Is p's Nomguh questline done (the Steele-Mika race and the own sneeuwslee unlocked)? */

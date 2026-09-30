@@ -268,7 +268,7 @@ public final class Timmerguh implements NpcRole {
                 longs[i] = ps.get(i).asLong();
             }
             npc.roleData.putLongArray("Plekken", longs);
-            npc.roleData.putIntArray("Delen", delen);
+            npc.roleData.putIntArray("Delen", delen.stream().mapToInt(Integer::intValue).toArray());
         }
         List<BlockPos> out = new ArrayList<>();
         for (long l : npc.roleData.getLongArray("Plekken").orElse(new long[0])) {

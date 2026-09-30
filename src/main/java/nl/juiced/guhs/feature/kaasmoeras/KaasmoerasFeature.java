@@ -30,7 +30,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -86,9 +85,10 @@ public final class KaasmoerasFeature {
 
     // --- items ----------------------------------------------------------------------------------------------------------
     /** Stinky, runny swamp cheese: the Moerasheks-Mika's treasure and a brewing ingredient (the guhbrouwketel). */
-    public static final DeferredItem<Item> MOERASKAAS = ITEMS.registerSimpleItem("moeraskaas", new Item.Properties().rarity(Rarity.UNCOMMON)
-            .food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.6f)
-                    .effect(() -> new MobEffectInstance(MobEffects.NAUSEA, 100, 0), 0.3f).build()));
+    public static final DeferredItem<Item> MOERASKAAS = ITEMS.registerSimpleItem("moeraskaas", () -> new Item.Properties().rarity(Rarity.UNCOMMON)
+            .food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.6f).build(),
+                    net.minecraft.world.item.component.Consumables.defaultFood().onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(
+                            new MobEffectInstance(MobEffects.NAUSEA, 100, 0), 0.3f)).build()));
     public static final DeferredItem<VadsverdrijvendDrankjeItem> VADSVERDRIJVEND_DRANKJE = ITEMS.registerItem("vadsverdrijvend_drankje",
             VadsverdrijvendDrankjeItem::new, () -> new Item.Properties().stacksTo(16));
 
@@ -103,18 +103,15 @@ public final class KaasmoerasFeature {
             () -> EntityType.Builder.of(KaasmotEntity::new, MobCategory.AMBIENT).sized(0.4f, 0.35f).eyeHeight(0.2f)
                     .clientTrackingRange(6).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("kaasmot"))));
     public static final DeferredHolder<EntityType<?>, EntityType<MoerasheksMikaEntity>> MOERASHEKS_MIKA = ENTITY_TYPES.register("moerasheks_mika",
-            () -> EntityType.Builder.of(MoerasheksMikaEntity::new, MobCategory.MONSTER).sized(0.9f, 1.3f).eyeHeight(0.8f)
+            () -> EntityType.Builder.of(MoerasheksMikaEntity::new, MobCategory.MONSTER).sized(0.9f, 1.3f).eyeHeight(0.8f).notInPeaceful()
                     .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("moerasheks_mika"))));
     public static final DeferredHolder<EntityType<?>, EntityType<VadsverdrijvendDrankjeEntity>> DRANKJE = ENTITY_TYPES.register("vadsverdrijvend_drankje",
             () -> EntityType.Builder.<VadsverdrijvendDrankjeEntity>of(VadsverdrijvendDrankjeEntity::new, MobCategory.MISC).sized(0.25f, 0.25f)
                     .clientTrackingRange(4).updateInterval(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vadsverdrijvend_drankje"))));
 
-    public static final DeferredItem<DeferredSpawnEggItem> KIKKERGUH_SPAWN_EGG = ITEMS.registerItem("kikkerguh_spawn_egg",
-            p -> new DeferredSpawnEggItem(KIKKERGUH, 0xF08CB4, 0x9CC84A, p));
-    public static final DeferredItem<DeferredSpawnEggItem> KAASMOT_SPAWN_EGG = ITEMS.registerItem("kaasmot_spawn_egg",
-            p -> new DeferredSpawnEggItem(KAASMOT, 0x4A2A48, 0xF7C83C, p));
-    public static final DeferredItem<DeferredSpawnEggItem> MOERASHEKS_MIKA_SPAWN_EGG = ITEMS.registerItem("moerasheks_mika_spawn_egg",
-            p -> new DeferredSpawnEggItem(MOERASHEKS_MIKA, 0x7FA046, 0x4B2A6A, p));
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> KIKKERGUH_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "kikkerguh_spawn_egg", KIKKERGUH);
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> KAASMOT_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "kaasmot_spawn_egg", KAASMOT);
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> MOERASHEKS_MIKA_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "moerasheks_mika_spawn_egg", MOERASHEKS_MIKA);
 
     // --- worldgen -------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<Feature<?>, KaasmoerasPoelFeature> POEL = FEATURES.register("kaasmoeras_poel",

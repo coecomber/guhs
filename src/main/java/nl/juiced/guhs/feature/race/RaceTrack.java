@@ -137,7 +137,7 @@ public final class RaceTrack {
     /** The racebaan's own box if the Raceguh stands in one, otherwise the template's box around her start marker. */
     @Nullable
     static BoundingBox searchBox(ServerLevel level, BlockPos npc) {
-        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(STRUCTURE);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(STRUCTURE);
         if (structure != null) {
             var start = level.structureManager().getStructureAt(npc, structure);
             if (start.isValid()) {

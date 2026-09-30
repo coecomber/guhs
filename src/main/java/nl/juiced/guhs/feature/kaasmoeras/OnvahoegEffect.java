@@ -22,7 +22,7 @@ public class OnvahoegEffect extends MobEffect {
     }
 
     @Override
-    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(net.minecraft.server.level.ServerLevel level, LivingEntity entity, int amplifier) {
         if (entity instanceof Player player) {
             player.causeFoodExhaustion(EXHAUSTION * (amplifier + 1));
         }

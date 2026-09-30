@@ -94,17 +94,17 @@ public class RaceGhostEntity extends GuhEntity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean canBeCollidedWith(@javax.annotation.Nullable net.minecraft.world.entity.Entity other) {
         return false;
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(net.minecraft.server.level.ServerLevel level, DamageSource source) {
         return !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     @Override
-    protected void dropEquipment() {
+    protected void dropEquipment(net.minecraft.server.level.ServerLevel level) {
     }
 
     @Override

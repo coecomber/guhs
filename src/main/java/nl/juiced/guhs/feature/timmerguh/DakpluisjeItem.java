@@ -20,6 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.feature.beroepen.BeroepenFeature;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A dakpluisje, loaned by the Timmerguh: right-click a see-through ghost tile of his roof ({@link DakplekBlock}) and that bit
  * of the oortjesdak is on (tik tik, pluf!). It is no block item, so the Knuffeldal town protection lets it through; anywhere
@@ -66,7 +68,7 @@ public class DakpluisjeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.timmerguh_dakpluisje.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.timmerguh_dakpluisje.lore").withStyle(ChatFormatting.GRAY));
     }
 }

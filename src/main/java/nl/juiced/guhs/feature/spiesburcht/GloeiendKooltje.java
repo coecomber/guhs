@@ -51,7 +51,7 @@ public class GloeiendKooltje extends Fireball {
             int fire = target.getRemainingFireTicks();
             target.igniteForSeconds(isBig() ? 3.0f : 2.0f);
             DamageSource source = damageSources().fireball(this, owner);
-            if (!target.hurt(source, damage())) {
+            if (!target.hurtServer((ServerLevel) this.level(), source, damage())) {
                 target.setRemainingFireTicks(fire);
             }
         }
@@ -68,7 +68,7 @@ public class GloeiendKooltje extends Fireball {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 

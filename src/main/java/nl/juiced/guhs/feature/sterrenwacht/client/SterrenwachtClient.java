@@ -2,9 +2,8 @@ package nl.juiced.guhs.feature.sterrenwacht.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import nl.juiced.guhs.Guhs;
@@ -21,19 +20,21 @@ import nl.juiced.guhs.feature.sterrenwacht.SterrenwachtPayloads;
 public final class SterrenwachtClient {
     public static void init(IEventBus modBus) {
         modBus.addListener(SterrenwachtClient::particles);
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.STERRENKIJKERGUH, Guhs.id("geo/entity/guh_npc_sterrenkijkerguh.geo.json"));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.STERRENKIJKERGUH, Guhs.id("entity/guh_npc_sterrenkijkerguh"));
         // the star on the tip of his hat wobbles, and he peers through his little spyglass now and then
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.STERRENKIJKERGUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.05f;
-            bot.apply("sterretje_hoedpunt").ifPresent(b -> b.setRotZ((float) Math.sin(t * 1.3f) * 0.12f));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.STERRENKIJKERGUH, (npc, tick) -> {
+            float t = (float) tick * 0.05f;
             float kijk = (float) Math.max(0, Math.sin(t * 0.35f));
-            bot.apply("sterretje_kijker").ifPresent(b -> b.setRotX(-kijk * 0.9f));
+            return bones -> {
+                bones.ifPresent("sterretje_hoedpunt", b -> b.setRotZ((float) Math.sin(t * 1.3f) * 0.12f));
+                bones.ifPresent("sterretje_kijker", b -> b.setRotX(-kijk * 0.9f));
+            };
         });
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(SterrenwachtFeature.WENSSTER_DEELTJE.get(),
-                sprites -> (type, level, x, y, z, dx, dy, dz) -> new Sterretje(level, x, y, z, dx, dy, dz, sprites));
+                sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Sterretje(level, x, y, z, dx, dy, dz, sprites));
     }
 
     /** guhs:sterrenwacht_open: look through the telescope. */
@@ -45,12 +46,12 @@ public final class SterrenwachtClient {
     }
 
     /** A little star: twinkles (grows and shrinks), drifts up slowly, glows in the dark. */
-    static class Sterretje extends TextureSheetParticle {
+    static class Sterretje extends SingleQuadParticle {
         private final SpriteSet sprites;
         private final float basis;
 
         Sterretje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z, dx, dy, dz);
+            super(level, x, y, z, dx, dy, dz, sprites.first());
             this.sprites = sprites;
             setSpriteFromAge(sprites);
             lifetime = 24 + random.nextInt(24);
@@ -73,13 +74,13 @@ public final class SterrenwachtClient {
         }
 
         @Override
-        protected int getLightColor(float partialTick) {
+        protected int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        public SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

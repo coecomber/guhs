@@ -64,8 +64,8 @@ public final class RaceBlocks {
     public static class VahoegPad extends HorizontalDirectionalBlock {
         public static final MapCodec<VahoegPad> CODEC = simpleCodec(VahoegPad::new);
         private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 1, 16);
-        private static final DustParticleOptions SPARK = new DustParticleOptions(new Vector3f(1f, 0.85f, 0.3f), 0.8f);
-        private static final DustParticleOptions SILVER = new DustParticleOptions(new Vector3f(0.85f, 0.88f, 0.95f), 0.8f);
+        private static final DustParticleOptions SPARK = new DustParticleOptions(0xFFD94C /* 1, 0.85, 0.3 */, 0.8f);
+        private static final DustParticleOptions SILVER = new DustParticleOptions(0xD9E0F2 /* 0.85, 0.88, 0.95 */, 0.8f);
 
         public VahoegPad(Properties properties) {
             super(properties);
@@ -130,7 +130,7 @@ public final class RaceBlocks {
         }
 
         @Override
-        protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        protected boolean propagatesSkylightDown(BlockState state) {
             return true;
         }
     }

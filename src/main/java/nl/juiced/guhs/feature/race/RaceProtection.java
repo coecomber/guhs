@@ -83,7 +83,7 @@ public final class RaceProtection {
             return null;
         }
         for (var entry : STRUCTURES.entrySet()) {
-            Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(entry.getKey());
+            Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(entry.getKey());
             if (structure != null && server.structureManager().getStructureAt(pos, structure).isValid()) {
                 return entry.getValue();
             }

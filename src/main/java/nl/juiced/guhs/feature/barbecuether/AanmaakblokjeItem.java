@@ -17,6 +17,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The Aanmaakblokje: a barbecue firelighter. Click it on (the inside of) a grillkool frame in the Guhmensie or the
  * Barbecuether and the barbecue portal flares up. Anywhere else it's just a lighter, like flint and steel.
@@ -42,7 +44,7 @@ public class AanmaakblokjeItem extends FlintAndSteelItem {
                 light(level, shape.get(), inside, context.getPlayer() instanceof ServerPlayer p ? p : null);
                 ItemStack stack = context.getItemInHand();
                 if (context.getPlayer() != null) {
-                    stack.hurtAndBreak(1, context.getPlayer(), LivingEntity.getSlotForHand(context.getHand()));
+                    stack.hurtAndBreak(1, context.getPlayer(), context.getHand().asEquipmentSlot());
                 }
             }
             return InteractionResult.SUCCESS;
@@ -61,7 +63,7 @@ public class AanmaakblokjeItem extends FlintAndSteelItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.aanmaakblokje.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.aanmaakblokje.lore").withStyle(ChatFormatting.GRAY));
     }
 }

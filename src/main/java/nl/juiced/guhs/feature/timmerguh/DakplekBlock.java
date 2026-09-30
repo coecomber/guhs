@@ -34,7 +34,7 @@ public class DakplekBlock extends Block {
         /** The block that is laid here. */
         public BlockState gelegd() {
             return switch (this) {
-                case DAK -> net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(nl.juiced.guhs.Guhs.id("pluisdak")).defaultBlockState();
+                case DAK -> net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(nl.juiced.guhs.Guhs.id("pluisdak")).defaultBlockState();
                 case OOR -> Blocks.PINK_WOOL.defaultBlockState();
                 case BINNENOOR -> Blocks.MAGENTA_WOOL.defaultBlockState();
             };
@@ -67,7 +67,7 @@ public class DakplekBlock extends Block {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 }

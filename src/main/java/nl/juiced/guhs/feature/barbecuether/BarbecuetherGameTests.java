@@ -165,11 +165,17 @@ public class BarbecuetherGameTests {
 
     private static void portalLinks(GameTestHelper helper) {
         var types = helper.getLevel().registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE);
-        var bbq = types.get(Guhs.id("barbecuether"));
-        var guh = types.get(Guhs.id("guhmension"));
+        var bbq = types.getValue(Guhs.id("barbecuether"));
+        var guh = types.getValue(Guhs.id("guhmension"));
         helper.assertTrue(bbq != null && guh != null, "both dimension types are there");
-        helper.assertTrue(bbq.coordinateScale() == 8.0 && bbq.hasCeiling() && bbq.ultraWarm() && !bbq.hasSkyLight() && bbq.height() == 128
-                && !bbq.bedWorks(), "the Barbecuether is a Nether: scale 8, a ceiling, hot, 128 high, no beds");
+        // (1.1.0: "hot" = the Nether's fast lava / water evaporates attributes, "no beds" = the bed rule attribute)
+        helper.assertTrue(bbq.coordinateScale() == 8.0 && bbq.hasCeiling()
+                && bbq.attributes().applyModifier(net.minecraft.world.attribute.EnvironmentAttributes.FAST_LAVA, false)
+                && bbq.attributes().applyModifier(net.minecraft.world.attribute.EnvironmentAttributes.WATER_EVAPORATES, false)
+                && !bbq.hasSkyLight() && bbq.height() == 128
+                && bbq.attributes().applyModifier(net.minecraft.world.attribute.EnvironmentAttributes.BED_RULE,
+                        net.minecraft.world.attribute.BedRule.CAN_SLEEP_WHEN_DARK).explodes(),
+                "the Barbecuether is a Nether: scale 8, a ceiling, hot, 128 high, no beds");
         var border = helper.getLevel().getWorldBorder();
         BlockPos in = GrillPortalForcer.scaledTarget(guh, bbq, border, 800.5, 70, -1608.5);
         helper.assertTrue(in.getX() == 100 && in.getZ() == -202, "8 blocks in the Guhmensie are 1 in the Barbecuether: " + in);
@@ -199,22 +205,22 @@ public class BarbecuetherGameTests {
         walker.snapTo(base.getX() + 0.5, base.getY(), base.getZ() + 0.5);
         var there = GrillPortalForcer.getDestination(guhmensie, walker, base);
         helper.assertTrue(there != null && there.newLevel() == ether, "it leads to the Barbecuether");
-        BlockPos arrive = BlockPos.containing(there.pos());
+        BlockPos arrive = BlockPos.containing(there.position());
         helper.assertTrue(Math.abs(arrive.getX() - 5000) <= 20 && Math.abs(arrive.getZ() - 5000) <= 20, "at 1/8: " + arrive);
         helper.assertTrue(ether.getBlockState(arrive).is(BarbecuetherFeature.BARBECUETHER_PORTAAL.get())
                 || ether.getBlockState(arrive.above()).is(BarbecuetherFeature.BARBECUETHER_PORTAAL.get()), "a return portal was built there");
         // and back: the same portal in the Guhmensie again (not a new one)
         ArmorStand back = new ArmorStand(EntityType.ARMOR_STAND, ether);
-        back.moveTo(there.pos().x, there.pos().y, there.pos().z);
+        back.snapTo(there.position().x, there.position().y, there.position().z);
         BlockPos exitPortal = ether.getBlockState(arrive).is(BarbecuetherFeature.BARBECUETHER_PORTAAL.get()) ? arrive : arrive.above();
         var home = GrillPortalForcer.getDestination(ether, back, exitPortal);
         helper.assertTrue(home != null && home.newLevel() == guhmensie, "back to the Guhmensie");
-        helper.assertTrue(BlockPos.containing(home.pos()).distManhattan(base) <= 4, "through the portal you came from: " + home.pos() + " vs " + base);
+        helper.assertTrue(BlockPos.containing(home.position()).distManhattan(base) <= 4, "through the portal you came from: " + home.position() + " vs " + base);
         // a second trip from the Guhmensie uses the portal that is already there
         var again = GrillPortalForcer.getDestination(guhmensie, walker, base);
-        helper.assertTrue(again != null && BlockPos.containing(again.pos()).distManhattan(arrive) <= 3, "the same return portal again");
+        helper.assertTrue(again != null && BlockPos.containing(again.position()).distManhattan(arrive) <= 3, "the same return portal again");
         org.slf4j.LoggerFactory.getLogger("guhs").info("portalLinksBothWays: Guhmensie {} -> Barbecuether {} -> back {}", base, arrive,
-                BlockPos.containing(home.pos()));
+                BlockPos.containing(home.position()));
         helper.succeed();
     }
 
@@ -359,14 +365,14 @@ public class BarbecuetherGameTests {
         // with the recipe the Aanmaakblokje can be crafted, and the recipe stays
         var input = CraftingInput.of(2, 2, List.of(new ItemStack(BarbecuetherFeature.GRILLGUH_RECEPT.get()), new ItemStack(Items.CHARCOAL),
                 new ItemStack(Items.FLINT), new ItemStack(ModItems.KAAS_KNABBELS.get())));
-        var recipe = helper.getLevel().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, input, helper.getLevel());
-        helper.assertTrue(recipe.isPresent() && recipe.get().value().assemble(input, helper.getLevel().registryAccess()).is(BarbecuetherFeature.AANMAAKBLOKJE.get()),
+        var recipe = helper.getLevel().recipeAccess().getRecipeFor(RecipeType.CRAFTING, input, helper.getLevel());
+        helper.assertTrue(recipe.isPresent() && recipe.get().value().assemble(input).is(BarbecuetherFeature.AANMAAKBLOKJE.get()),
                 "recipe + charcoal + flint + kaasknabbel = Aanmaakblokje");
         NonNullList<ItemStack> left = recipe.get().value().getRemainingItems(input);
         helper.assertTrue(left.stream().anyMatch(s -> s.is(BarbecuetherFeature.GRILLGUH_RECEPT.get())), "the recipe stays in the grid");
         var noRecipe = CraftingInput.of(2, 2, List.of(new ItemStack(Items.PAPER), new ItemStack(Items.CHARCOAL),
                 new ItemStack(Items.FLINT), new ItemStack(ModItems.KAAS_KNABBELS.get())));
-        helper.assertTrue(helper.getLevel().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, noRecipe, helper.getLevel()).isEmpty(),
+        helper.assertTrue(helper.getLevel().recipeAccess().getRecipeFor(RecipeType.CRAFTING, noRecipe, helper.getLevel()).isEmpty(),
                 "without his recipe: no Aanmaakblokje");
         // lost the recipe? he gives another
         GuhQuests.take(player, BarbecuetherFeature.GRILLGUH_RECEPT.get(), 1);
@@ -463,7 +469,7 @@ public class BarbecuetherGameTests {
             helper.assertTrue(access.lookupOrThrow(Registries.BIOME).containsKey(Guhs.id(b)), "biome " + b);
         }
         helper.assertTrue(access.lookupOrThrow(Registries.STRUCTURE).containsKey(Guhs.id("barbecueput")), "the barbecueput structure");
-        Structure put = access.lookupOrThrow(Registries.STRUCTURE).get(Guhs.id("barbecueput"));
+        Structure put = access.lookupOrThrow(Registries.STRUCTURE).getValue(Guhs.id("barbecueput"));
         helper.assertTrue(put instanceof BarbecuePutStructure, "of its own type");
         helper.assertTrue(access.lookupOrThrow(Registries.CONFIGURED_FEATURE).containsKey(BarbecuetherFeature.SATE_GEKWEEKT.identifier())
                 && access.lookupOrThrow(Registries.CONFIGURED_FEATURE).containsKey(BarbecuetherFeature.WORST_GEKWEEKT.identifier()), "the grown features");

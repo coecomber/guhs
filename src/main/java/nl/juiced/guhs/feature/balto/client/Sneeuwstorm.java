@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.fog.FogRenderer;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -124,7 +124,7 @@ public final class Sneeuwstorm {
         if (!cam.isInitialized()) {
             return;
         }
-        Vec3 c = cam.getPosition();
+        Vec3 c = cam.position();
         RandomSource r = level.getRandom();
         long tijd = level.getGameTime();
         float vlaag = 1f + 0.55f * Mth.sin(tijd * 0.045f) + 0.3f * Mth.sin(tijd * 0.17f + 1.3f);     // gusts
@@ -155,7 +155,9 @@ public final class Sneeuwstorm {
     }
 
     private static void onFog(ViewportEvent.RenderFog event) {
-        if (event.getMode() != FogRenderer.FogMode.FOG_TERRAIN || event.getType() != FogType.NONE) {
+        // (1.1.0: one fog event for everything; the environmental fog is the old terrain fog. The old sphere shape and the
+        // cancel that applied it are gone: the new values are simply used)
+        if (event.getType() != FogType.NONE) {
             return;
         }
         float m = Mth.lerp((float) event.getPartialTick(), oudZicht, zicht);
@@ -170,8 +172,6 @@ public final class Sneeuwstorm {
         m = m * m * (3 - 2 * m);
         event.setFarPlaneDistance(Mth.lerp(m, far, doel));
         event.setNearPlaneDistance(Mth.lerp(m, event.getNearPlaneDistance(), 0f));
-        event.setFogShape(com.mojang.blaze3d.shaders.FogShape.SPHERE);
-        event.setCanceled(true);
     }
 
     /** The fog turns snow-white in the storm. */

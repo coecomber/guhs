@@ -34,6 +34,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * The blocks of Nomguh and the Sneeuwguhtoendra (resources: tools/features/balto.py + balto_tex.py):
  * <ul>
@@ -65,8 +69,8 @@ public final class BaltoBlocks {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -217,9 +221,20 @@ public final class BaltoBlocks {
 
     /** Spruce-like needles; the top ones carry a snow cap ({@link #SNEEUW}) like the knotwilg twigs. */
     public static class SparNaalden extends LeavesBlock {
+        public static final com.mojang.serialization.MapCodec<SparNaalden> CODEC = simpleCodec(SparNaalden::new);
+
         public SparNaalden(Properties properties) {
-            super(properties);
+            super(0.0f, properties);       // (1.1.0: like 1.0.0's plain LeavesBlock: no falling leaf particles)
             registerDefaultState(defaultBlockState().setValue(SNEEUW, false));
+        }
+
+        @Override
+        public com.mojang.serialization.MapCodec<? extends LeavesBlock> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void spawnFallingLeavesParticle(net.minecraft.world.level.Level level, BlockPos pos, RandomSource random) {
         }
 
         @Override
@@ -229,8 +244,8 @@ public final class BaltoBlocks {
         }
 
         @Override
-        protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbor, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-            BlockState out = super.updateShape(state, direction, neighbor, level, pos, neighborPos);
+        protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighbor, RandomSource random) {
+            BlockState out = super.updateShape(state, level, ticks, pos, direction, neighborPos, neighbor, random);
             if (direction == Direction.UP && out.is(this)) {
                 if (neighbor.is(BlockTags.SNOW)) {
                     out = out.setValue(SNEEUW, true);

@@ -31,7 +31,6 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -79,13 +78,13 @@ public final class SpiesburchtFeature {
             () -> EntityType.Builder.of(RookguhEntity::new, MobCategory.CREATURE).sized(3.0f, 3.0f).eyeHeight(2.2f).fireImmune()
                     .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("rookguh"))));
     public static final DeferredHolder<EntityType<?>, EntityType<VonkMikaEntity>> VONK_MIKA = ENTITY_TYPES.register("vonk_mika",
-            () -> EntityType.Builder.of(VonkMikaEntity::new, MobCategory.MONSTER).sized(0.8f, 1.8f).eyeHeight(1.35f).fireImmune()
+            () -> EntityType.Builder.of(VonkMikaEntity::new, MobCategory.MONSTER).sized(0.8f, 1.8f).eyeHeight(1.35f).fireImmune().notInPeaceful()
                     .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vonk_mika"))));
     public static final DeferredHolder<EntityType<?>, EntityType<KnekelMikaEntity>> KNEKEL_MIKA = ENTITY_TYPES.register("knekel_mika",
-            () -> EntityType.Builder.of(KnekelMikaEntity::new, MobCategory.MONSTER).sized(0.7f, 2.4f).eyeHeight(2.1f).fireImmune()
+            () -> EntityType.Builder.of(KnekelMikaEntity::new, MobCategory.MONSTER).sized(0.7f, 2.4f).eyeHeight(2.1f).fireImmune().notInPeaceful()
                     .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("knekel_mika"))));
     public static final DeferredHolder<EntityType<?>, EntityType<AangebrandeMikaEntity>> AANGEBRANDE_MIKA = ENTITY_TYPES.register("aangebrande_mika",
-            () -> EntityType.Builder.of(AangebrandeMikaEntity::new, MobCategory.MONSTER).sized(1.6f, 3.0f).eyeHeight(2.5f).fireImmune()
+            () -> EntityType.Builder.of(AangebrandeMikaEntity::new, MobCategory.MONSTER).sized(1.6f, 3.0f).eyeHeight(2.5f).fireImmune().notInPeaceful()
                     .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("aangebrande_mika"))));
     /** The Vonk-Mika's glowing ember. */
     public static final DeferredHolder<EntityType<?>, EntityType<GloeiendKooltje>> GLOEIEND_KOOLTJE = ENTITY_TYPES.register("gloeiend_kooltje",
@@ -101,7 +100,7 @@ public final class SpiesburchtFeature {
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(1.0f).sound(SoundType.BONE_BLOCK)
                     .instrument(NoteBlockInstrument.WITHER_SKELETON).pushReaction(PushReaction.DESTROY).noOcclusion());
     public static final DeferredBlock<MikakopBlock.Wall> VERKOOLDE_MIKAKOP_MUUR = BLOCKS.registerBlock("verkoolde_mikakop_muur", MikakopBlock.Wall::new,
-            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(1.0f).sound(SoundType.BONE_BLOCK)
+            () -> BlockBehaviour.Properties.of().overrideDescription("block.guhs.verkoolde_mikakop").mapColor(MapColor.COLOR_BLACK).strength(1.0f).sound(SoundType.BONE_BLOCK)
                     .instrument(NoteBlockInstrument.WITHER_SKELETON).pushReaction(PushReaction.DESTROY).noOcclusion());
     public static final DeferredBlock<GuhbrouwketelBlock> GUHBROUWKETEL = BLOCKS.registerBlock("guhbrouwketel", GuhbrouwketelBlock::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(2.5f).requiresCorrectToolForDrops().sound(SoundType.METAL)
@@ -111,14 +110,14 @@ public final class SpiesburchtFeature {
                     .noOcclusion().isRedstoneConductor((s, l, p) -> false).instrument(NoteBlockInstrument.HAT));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GuhbrouwketelBlockEntity>> GUHBROUWKETEL_BE =
-            BLOCK_ENTITY_TYPES.register("guhbrouwketel", () -> BlockEntityType.Builder.of(GuhbrouwketelBlockEntity::new, GUHBROUWKETEL.get()).build(null));
+            BLOCK_ENTITY_TYPES.register("guhbrouwketel", () -> new BlockEntityType<>(GuhbrouwketelBlockEntity::new, GUHBROUWKETEL.get()));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KnabbelbakenBlockEntity>> KNABBELBAKEN_BE =
-            BLOCK_ENTITY_TYPES.register("knabbelbaken", () -> BlockEntityType.Builder.of(KnabbelbakenBlockEntity::new, KNABBELBAKEN.get()).build(null));
+            BLOCK_ENTITY_TYPES.register("knabbelbaken", () -> new BlockEntityType<>(KnabbelbakenBlockEntity::new, KNABBELBAKEN.get()));
 
     // --- items -----------------------------------------------------------------------------------------------------------
     public static final DeferredItem<StandingAndWallBlockItem> VERKOOLDE_MIKAKOP_ITEM = ITEMS.registerItem("verkoolde_mikakop",
-            p -> new StandingAndWallBlockItem(VERKOOLDE_MIKAKOP.get(), VERKOOLDE_MIKAKOP_MUUR.get(), p, Direction.DOWN),
-            () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+            p -> new StandingAndWallBlockItem(VERKOOLDE_MIKAKOP.get(), VERKOOLDE_MIKAKOP_MUUR.get(), Direction.DOWN, p),
+            () -> new Item.Properties().rarity(Rarity.UNCOMMON).equippableUnswappable(net.minecraft.world.entity.EquipmentSlot.HEAD));
     public static final DeferredItem<BlockItem> GUHBROUWKETEL_ITEM = ITEMS.registerSimpleBlockItem(GUHBROUWKETEL);
     public static final DeferredItem<BlockItem> KNABBELBAKEN_ITEM = ITEMS.registerSimpleBlockItem(KNABBELBAKEN, () -> new Item.Properties().rarity(Rarity.RARE));
     /** The Vonk-Mika's skewer (the blaze rod). */
@@ -138,14 +137,10 @@ public final class SpiesburchtFeature {
             p -> new GuhdrankjeItem(Brouwsel.SLUIPKNABBEL, p), () -> new Item.Properties().stacksTo(16));
     public static final DeferredItem<GuhdrankjeItem> GUHSPRONGDRANKJE = ITEMS.registerItem("guhsprongdrankje",
             p -> new GuhdrankjeItem(Brouwsel.GUHSPRONG, p), () -> new Item.Properties().stacksTo(16));
-    public static final DeferredItem<DeferredSpawnEggItem> ROOKGUH_SPAWN_EGG = ITEMS.registerItem("rookguh_spawn_egg",
-            p -> new DeferredSpawnEggItem(ROOKGUH, 0xF2F0F4, 0xF08CB4, p));
-    public static final DeferredItem<DeferredSpawnEggItem> VONK_MIKA_SPAWN_EGG = ITEMS.registerItem("vonk_mika_spawn_egg",
-            p -> new DeferredSpawnEggItem(VONK_MIKA, 0xE8742A, 0x5A2A1E, p));
-    public static final DeferredItem<DeferredSpawnEggItem> KNEKEL_MIKA_SPAWN_EGG = ITEMS.registerItem("knekel_mika_spawn_egg",
-            p -> new DeferredSpawnEggItem(KNEKEL_MIKA, 0x2A2426, 0xD23C3C, p));
-    public static final DeferredItem<DeferredSpawnEggItem> AANGEBRANDE_MIKA_SPAWN_EGG = ITEMS.registerItem("aangebrande_mika_spawn_egg",
-            p -> new DeferredSpawnEggItem(AANGEBRANDE_MIKA, 0x1C1718, 0xFF8A2A, p));
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> ROOKGUH_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "rookguh_spawn_egg", ROOKGUH);
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> VONK_MIKA_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "vonk_mika_spawn_egg", VONK_MIKA);
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> KNEKEL_MIKA_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "knekel_mika_spawn_egg", KNEKEL_MIKA);
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> AANGEBRANDE_MIKA_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "aangebrande_mika_spawn_egg", AANGEBRANDE_MIKA);
 
     public static final List<DeferredItem<? extends Item>> CREATIVE = List.of(VERKOOLDE_MIKAKOP_ITEM, GUHBROUWKETEL_ITEM, KNABBELBAKEN_ITEM,
             GRILLSPIES, GRILLSPIESPOEDER, GLOEISTER, DRANKJE_VAN_VAHOEGHEID, ROOKLOOPDRANKJE, SLUIPKNABBELDRANKJE, GUHSPRONGDRANKJE,

@@ -103,7 +103,7 @@ public class KaasmotEntity extends AmbientCreature implements GeoEntity {
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false;
     }
 
@@ -126,8 +126,8 @@ public class KaasmotEntity extends AmbientCreature implements GeoEntity {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         if (--lureCheck <= 0) {
             lureCheck = 40 + random.nextInt(40);
             snack = findSnack();

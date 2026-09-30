@@ -81,7 +81,7 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
     private static final RawAnimation SHOOT = RawAnimation.begin().thenPlay("animation.aangebrande_mika.shoot");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private final ServerBossEvent bossEvent = new ServerBossEvent(Component.translatable("entity.guhs.aangebrande_mika"),
+    private final ServerBossEvent bossEvent = new ServerBossEvent(net.minecraft.util.Mth.createInsecureUUID(this.random), Component.translatable("entity.guhs.aangebrande_mika"),
             BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_10);
 
     /** Ticks until the next volley starts charging (and the step within a volley). */
@@ -199,9 +199,8 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
-        ServerLevel level = (ServerLevel) level();
+    protected void customServerAiStep(net.minecraft.server.level.ServerLevel level) {
+        super.customServerAiStep(level);
         int spawning = spawningTicks();
         if (spawning > 0) {
             int left = spawning - 1;
@@ -358,8 +357,8 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
     // --- damage ------------------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (this.isInvulnerableTo(source)) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+        if (this.isInvulnerableTo(level, source)) {
             return false;
         }
         if (spawningTicks() > 0 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
@@ -371,7 +370,7 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
         if (isResting()) {
             amount *= REST_DAMAGE_BONUS;
         }
-        return super.hurt(source, amount);
+        return super.hurtServer(level, source, amount);
     }
 
     @Override
@@ -396,7 +395,7 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
 
     @Override
     public void checkDespawn() {
-        if (this.level().getDifficulty() == Difficulty.PEACEFUL && this.shouldDespawnInPeaceful()) {
+        if (this.level().getDifficulty() == Difficulty.PEACEFUL && !this.getType().isAllowedInPeaceful()) {
             this.discard();
         } else {
             this.noActionTime = 0;
@@ -404,7 +403,7 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double distance, float multiplier, DamageSource source) {
         return false;
     }
 

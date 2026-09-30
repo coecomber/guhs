@@ -82,7 +82,7 @@ public enum Brouwsel {
 
     /** The effect guhs:stil, when it is there (another slice registers it). */
     public static Optional<Holder.Reference<MobEffect>> stil() {
-        return BuiltInRegistries.MOB_EFFECT.getHolder(ResourceKey.create(Registries.MOB_EFFECT, STIL));
+        return BuiltInRegistries.MOB_EFFECT.get(ResourceKey.create(Registries.MOB_EFFECT, STIL));
     }
 
     /** The effects of the drankje (3 minutes of fun, like a vanilla potion). */

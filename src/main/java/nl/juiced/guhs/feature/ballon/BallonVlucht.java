@@ -139,8 +139,7 @@ public final class BallonVlucht {
             case REGENBOOGBOCHT -> {
                 int[] kleuren = {0xFF6A7A, 0xFFB45A, 0xFFE86A, 0x7AE89A, 0x6AB8FF, 0xB88AFF};
                 for (int k = 0; k < kleuren.length; k++) {
-                    ParticleOptions dust = new DustParticleOptions(new Vector3f(((kleuren[k] >> 16) & 255) / 255f, ((kleuren[k] >> 8) & 255) / 255f,
-                            (kleuren[k] & 255) / 255f), 2.5f);
+                    ParticleOptions dust = new DustParticleOptions(kleuren[k], 2.5f);
                     double r = 9 - k * 0.7;
                     for (int s = 0; s <= 24; s++) {
                         double h = Math.PI * s / 24;

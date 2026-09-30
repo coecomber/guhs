@@ -15,7 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.Equipable;
+
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -38,7 +38,8 @@ import net.minecraft.world.entity.EntitySpawnReason;
  * De verkoolde mikakop: the charred head of a Knekel-Mika (a skull, standing or on a wall; you can wear it). Three of
  * them on a T of four as_blok wake up the Aangebrande Mika, in any dimension ({@link #checkSpawn}).
  */
-public class MikakopBlock extends HorizontalDirectionalBlock implements Equipable {
+/* 1.1.0: wearing it (1.21.1 Equipable) is the item's equippable component now (SpiesburchtFeature: equippableUnswappable(HEAD), like a skull). */
+public class MikakopBlock extends HorizontalDirectionalBlock {
     public static final MapCodec<MikakopBlock> CODEC = simpleCodec(MikakopBlock::new);
     protected static final VoxelShape SHAPE = Block.box(4.0, 0.0, 4.0, 12.0, 8.0, 12.0);
     @Nullable
@@ -79,10 +80,6 @@ public class MikakopBlock extends HorizontalDirectionalBlock implements Equipabl
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
-    @Override
-    public EquipmentSlot getEquipmentSlot() {
-        return EquipmentSlot.HEAD;
-    }
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
@@ -167,10 +164,6 @@ public class MikakopBlock extends HorizontalDirectionalBlock implements Equipabl
             return WALL_CODEC;
         }
 
-        @Override
-        public String getDescriptionId() {
-            return SpiesburchtFeature.VERKOOLDE_MIKAKOP.get().getDescriptionId();
-        }
 
         @Override
         protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {

@@ -143,8 +143,8 @@ public final class RaceGame {
     private static final Map<UUID, RaceGame> RACERS = new ConcurrentHashMap<>();      // by racer
     private static final String[] GUH_NAMES = {"Bliksemvads", "Turbo Njeg", "Vahoeg 3000", "Roze Donder", "Kaasknabbel Express", "Vadsraket",
             "Snelle Gerrit", "Pluizige Pijl", "Knabbelknaller", "Wervelguh"};
-    private static final DustParticleOptions PINK = new DustParticleOptions(new Vector3f(1f, 0.55f, 0.8f), 1.4f);
-    private static final DustParticleOptions GOLD = new DustParticleOptions(new Vector3f(1f, 0.85f, 0.3f), 1.4f);
+    private static final DustParticleOptions PINK = new DustParticleOptions(0xFF8CCC /* 1, 0.55, 0.8 */, 1.4f);
+    private static final DustParticleOptions GOLD = new DustParticleOptions(0xFFD94C /* 1, 0.85, 0.3 */, 1.4f);
 
     private final UUID npcId;
     private final Vec3 npcPos;
@@ -379,8 +379,8 @@ public final class RaceGame {
 
         player.stopRiding();
         player.closeContainer();
-        player.teleportTo(level, pos.x, pos.y, pos.z, track.startYaw(), 0);
-        player.startRiding(guh, true);
+        player.teleportTo(level, pos.x, pos.y, pos.z, java.util.Set.of(), track.startYaw(), 0, true);
+        player.startRiding(guh, true, true);
         nl.juiced.guhs.feature.Minigames.startKeeping(player);
 
         // your best race drives along as a ghost
@@ -599,7 +599,7 @@ public final class RaceGame {
 
     private void tickCountdown(ServerLevel level, ServerPlayer player, RaceGuhEntity mount) {
         if (player.getVehicle() != mount) {
-            player.startRiding(mount, true); // (no getting off before the start)
+            player.startRiding(mount, true, true); // (no getting off before the start)
         }
         Vec3 start = track.startPos();
         if (horizontalDistSqr(mount.position(), start) > 0.25) {
@@ -611,13 +611,13 @@ public final class RaceGame {
             int n = 3 - countdown / 20;
             title(player, Component.literal(String.valueOf(n)).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
                     Component.translatable("quest.guhs.race.ready"), 0, 18, 2);
-            player.playNotifySound(SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1f, 1f);
+            notifySound(player, SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1f, 1f);
         }
         if (++countdown >= COUNTDOWN) {
             racing = true;
             mount.setFrozen(false);
             title(player, Component.translatable("quest.guhs.race.vahoeg").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD), null, 0, 20, 10);
-            player.playNotifySound(SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1f, 2f);
+            notifySound(player, SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1f, 2f);
             level.playSound(null, mount.blockPosition(), ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1.2f, 1.3f);
             level.sendParticles(ParticleTypes.CLOUD, mount.getX(), mount.getY() + 0.3, mount.getZ(), 20, 0.6, 0.2, 0.6, 0.05);
             hud(player);
@@ -630,7 +630,7 @@ public final class RaceGame {
             if (gate != lastGate && missedCooldown == 0) {
                 missedCooldown = 40;
                 player.sendSystemMessage(Component.translatable("quest.guhs.race.missed", gateName(next)).withStyle(ChatFormatting.RED));
-                player.playNotifySound(SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1f, 0.6f);
+                notifySound(player, SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 1f, 0.6f);
                 title(player, Component.empty(), Component.translatable("quest.guhs.race.missed.short", gateName(next)).withStyle(ChatFormatting.RED), 0, 30, 10);
             }
             return;
@@ -669,12 +669,12 @@ public final class RaceGame {
             boolean last = lap == laps() - 1;
             title(player, Component.translatable(last ? "quest.guhs.race.last_lap" : "quest.guhs.race.lap", lap + 1, laps()).withStyle(ChatFormatting.GOLD),
                     Component.translatable("quest.guhs.race.lap_time", RaceRecords.time(lapTime)).append(deltaText()), 0, 30, 10);
-            player.playNotifySound(SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.7f, 1.4f);
+            notifySound(player, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.7f, 1.4f);
         } else {
             next = (gate + 1) % track.gates.size();
             player.sendOverlayMessage(Component.translatable("quest.guhs.race.checkpoint", gate, track.gates.size() - 1).append(deltaText())
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
-            player.playNotifySound(SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.9f, 1.2f + 0.1f * gate);
+            notifySound(player, SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.9f, 1.2f + 0.1f * gate);
         }
         hud(player);
     }
@@ -802,13 +802,13 @@ public final class RaceGame {
         mount.teleportTo(to.x, to.y + 0.1, to.z);
         mount.setYRot(yaw);
         mount.setYHeadRot(yaw);
-        player.teleportTo(level, to.x, to.y + 0.1, to.z, yaw, 0);
-        player.startRiding(mount, true);
+        player.teleportTo(level, to.x, to.y + 0.1, to.z, java.util.Set.of(), yaw, 0, true);
+        player.startRiding(mount, true, true);
         // the rider's game moves the race guh (like a boat): tell it where its guh is now, or it keeps sending the old spot
         // (down in the gap) and the guh falls "again" at once
         if (player.connection != null) {
             player.connection.send(new ClientboundSetEntityMotionPacket(mount));
-            player.connection.send(new ClientboundMoveVehiclePacket(mount));
+            player.connection.send(ClientboundMoveVehiclePacket.fromEntity(mount));
         }
         lastPos = stuckFrom = mount.position();
         insideGate = lastGate;
@@ -822,7 +822,7 @@ public final class RaceGame {
         } else {
             player.sendOverlayMessage(message);   // (again so soon: just above the hotbar, no chat spam)
         }
-        player.playNotifySound(ModSounds.GUH_HURT.get(), SoundSource.PLAYERS, 0.8f, 1.3f);
+        notifySound(player, ModSounds.GUH_HURT.get(), SoundSource.PLAYERS, 0.8f, 1.3f);
     }
 
     /**
@@ -965,7 +965,7 @@ public final class RaceGame {
         if (level.getEntity(npcId) instanceof GuhNpcEntity npc && npc.getKind() == GuhNpcEntity.Kind.RACEGUH) {
             RaceRole.showScores(npc);
         }
-        player.playNotifySound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.8f, 1.1f);
+        notifySound(player, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.8f, 1.1f);
         Vec3 c = track.centre(0);
         level.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, c.x, c.y, c.z, 80, 2, 1.5, 2, 0.4);
         level.sendParticles(GOLD, c.x, c.y + 1, c.z, 60, 3, 2, 3, 0.05);
@@ -1020,7 +1020,7 @@ public final class RaceGame {
             hudOff(player);
             if (backToNpc && home != null && player.level() == home && player.isAlive() && home.getEntity(npcId) instanceof GuhNpcEntity npc) {
                 Vec3 look = Vec3.directionFromRotation(0, npc.getYRot());
-                player.teleportTo(home, npc.getX() + look.x * 2.5, npc.getY(), npc.getZ() + look.z * 2.5, npc.getYRot() + 180, 0);
+                player.teleportTo(home, npc.getX() + look.x * 2.5, npc.getY(), npc.getZ() + look.z * 2.5, java.util.Set.of(), npc.getYRot() + 180, 0, true);
             }
         }
     }
@@ -1150,5 +1150,19 @@ public final class RaceGame {
     /** Pretends the race guh last drove {@code ticks} ticks ago. */
     void stallForTest(int ticks) {
         lastTick -= ticks;
+    }
+
+    /** A sound only this player hears (1.1.0: ServerPlayer#playNotifySound is gone; the same packet by hand). */
+    private static void notifySound(net.minecraft.server.level.ServerPlayer p, net.minecraft.sounds.SoundEvent sound,
+                                    net.minecraft.sounds.SoundSource source, float volume, float pitch) {
+        notifySound(p, net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), source, volume, pitch);
+    }
+
+    private static void notifySound(net.minecraft.server.level.ServerPlayer p, net.minecraft.core.Holder<net.minecraft.sounds.SoundEvent> sound,
+                                    net.minecraft.sounds.SoundSource source, float volume, float pitch) {
+        if (p.connection != null) {
+            p.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(sound, source, p.getX(), p.getY(), p.getZ(),
+                    volume, pitch, p.getRandom().nextLong()));
+        }
     }
 }

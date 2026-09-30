@@ -14,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** A vadsverdrijvend drankje: throw it like a splash potion (it makes whoever it hits a little onvahoeg). */
 public class VadsverdrijvendDrankjeItem extends Item {
     public VadsverdrijvendDrankjeItem(Properties properties) {
@@ -36,7 +38,7 @@ public class VadsverdrijvendDrankjeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.vadsverdrijvend_drankje.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.vadsverdrijvend_drankje.lore").withStyle(ChatFormatting.GRAY));
     }
 }

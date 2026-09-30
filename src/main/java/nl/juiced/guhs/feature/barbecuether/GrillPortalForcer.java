@@ -65,7 +65,7 @@ public final class GrillPortalForcer {
 
         Optional<BlockPos> existing = findClosestPortalPosition(target, exitPos, toBarbecue, border);
         BlockUtil.FoundRectangle rect;
-        TeleportTransition.PostDimensionTransition post;
+        TeleportTransition.PostTeleportTransition post;
         if (existing.isPresent()) {
             BlockPos found = existing.get();
             BlockState state = target.getBlockState(found);
@@ -99,7 +99,7 @@ public final class GrillPortalForcer {
     }
 
     private static TeleportTransition transition(Entity entity, BlockPos pos, BlockUtil.FoundRectangle rect, ServerLevel level,
-                                                  TeleportTransition.PostDimensionTransition post) {
+                                                  TeleportTransition.PostTeleportTransition post) {
         BlockState here = entity.level().getBlockState(pos);
         Direction.Axis axis;
         Vec3 offset;
