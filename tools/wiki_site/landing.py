@@ -17,6 +17,9 @@ DOMAIN = "guhs.nl"
 ADDRESS = "guhs.nl"
 MAP_URL = "https://map.guhs.nl/"
 STATUS_API = "https://api.mcsrvstat.us/3/" + ADDRESS
+# Is the server open? False = "binnenkort" state (address with a "coming soon" pill, no live status call, a badge on the
+# map tile, and a banner on the wiki's server page). Keep this name: the 1.0.0 site on main has False, the 1.1.0 build True.
+SERVER_OPEN = True
 GUHS_VERSION = "1.1.0"
 MC_VERSION = "26.1.2"
 LINKS = [
@@ -78,6 +81,9 @@ img{max-width:100%;height:auto}
 .dot{width:11px;height:11px;border-radius:50%;background:var(--muted);flex:none}
 .status.on .dot{background:#3cc47c;box-shadow:0 0 0 0 rgba(60,196,124,.6);animation:ping 1.8s infinite}
 .status.off .dot{background:#e0625b}
+.status.soon{background:var(--cheese-soft);border-color:var(--cheese);color:var(--ink)}.status.soon .dot{background:var(--cheese)}
+.badge{position:absolute;top:12px;right:12px;z-index:2;background:var(--cheese);color:#3a1c30;font:700 12px/1 var(--body);letter-spacing:.06em;
+  text-transform:uppercase;border-radius:999px;padding:6px 10px;transform:rotate(4deg);box-shadow:0 2px 0 rgba(0,0,0,.15)}
 @keyframes ping{70%{box-shadow:0 0 0 9px rgba(60,196,124,0)}100%{box-shadow:0 0 0 0 rgba(60,196,124,0)}}
 .small{font-size:14px;color:var(--muted);margin:14px 0 0}
 .art{position:relative;display:flex;justify-content:center;align-items:flex-end;min-height:280px}
@@ -147,7 +153,7 @@ JS = r"""
   });}
   // live status (mcsrvstat.us); stays "unknown" when it can't be reached
   var st=document.getElementById('status');
-  if(st&&window.fetch){
+  if(st&&st.getAttribute('data-api')&&window.fetch){
     var ctl=window.AbortController?new AbortController():null,timer=setTimeout(function(){if(ctl)ctl.abort();},7000);
     fetch(st.getAttribute('data-api'),ctl?{signal:ctl.signal}:{}).then(function(r){return r.json();}).then(function(d){
       clearTimeout(timer);
@@ -197,7 +203,7 @@ class Landing:
         wiki_img = self.first("icon_guhdex", "guh_sitting", "guh")
         icon = f'{w}favicon-64.png'
         tiles = [
-            ("t-map", MAP_URL, 1, map_img, True, "Live kaart", "Live map",
+            ("t-map", MAP_URL, 1, map_img, True, "Live kaart" if SERVER_OPEN else "Live kaart|soon", "Live map",
              "Vlieg over de wereld van de server, in de Overworld én de Guhmensie. Kijk wat iedereen heeft gebouwd!",
              "Fly over the server's world, in the Overworld and the Guhmension. See what everyone has built!",
              "Open de kaart", "Open the map"),
@@ -212,9 +218,11 @@ class Landing:
         ]
         tile_html = ""
         for cls, href, num, pic, photo, h_nl, h_en, d_nl, d_en, go_nl, go_en in tiles:
+            h_nl, soon = h_nl.split("|")[0], h_nl.endswith("|soon")
+            badge = f'<span class="badge">{_t("binnenkort", "soon")}</span>' if soon else ""
             ext = ' rel="noopener"' if href.startswith("http") else ""
             pic_html = self.img(pic, "") if pic else ""
-            tile_html += (f'<a class="tile {cls}" href="{href}"{ext}><span class="num" aria-hidden="true">{num}</span>'
+            tile_html += (f'<a class="tile {cls}" href="{href}"{ext}><span class="num" aria-hidden="true">{num}</span>{badge}'
                           f'<span class="pic{" photo" if photo else ""}">{pic_html}</span>'
                           f'<span class="txt"><b>{_t(h_nl, h_en)}</b><span class="d">{_t(d_nl, d_en)}</span>'
                           f'<span class="go">{_t(go_nl, go_en)} &rarr;</span></span></a>')
@@ -223,6 +231,14 @@ class Landing:
                  ("Mods werken zichzelf bij", "Mods update themselves")]
         facts_html = "".join(f"<li>{_t(nl, en)}</li>" for nl, en in facts)
         links = "".join(f'<a href="{u}" rel="noopener">{n}</a>' for n, u in LINKS)
+        if SERVER_OPEN:
+            status = (f'<span class="status" id="status" data-api="{STATUS_API}" role="status"><span class="dot" aria-hidden="true"></span>'
+                      f'{_t("Status ophalen...", "Checking status...")}</span>')
+            small = _t(f"Minecraft {MC_VERSION} met Guhs {GUHS_VERSION}. Nieuw? Begin bij", f"Minecraft {MC_VERSION} with Guhs {GUHS_VERSION}. New? Start with")
+        else:
+            status = f'<span class="status soon"><span class="dot" aria-hidden="true"></span>{_t("Binnenkort open!", "Opening soon!")}</span>'
+            small = _t(f"De server opent binnenkort met Guhs {GUHS_VERSION} (Minecraft {MC_VERSION}). Alvast lezen hoe het werkt:",
+                       f"The server opens soon with Guhs {GUHS_VERSION} (Minecraft {MC_VERSION}). Read how it works already:")
         head_desc = "De officiële Guhs-server: lieve vadsige guhs, dag en nacht online op guhs.nl. Live kaart, uitleg om mee te spelen en de Guhs-wiki."
         return f"""<!doctype html>
 <html lang="nl" data-lang="nl">
@@ -258,9 +274,9 @@ class Landing:
                      "Tame your own guh, step through the kaasknabbel portal into the Guhmension together and play minigames with other guh friends. Njeg!")}</p>
 <div class="join">
 <span class="addr"><code id="addr">{ADDRESS}</code><button id="copy" type="button" data-addr="{ADDRESS}">{_t("Kopieer", "Copy")}</button></span>
-<span class="status" id="status" data-api="{STATUS_API}" role="status"><span class="dot" aria-hidden="true"></span>{_t("Status ophalen...", "Checking status...")}</span>
+{status}
 </div>
-<p class="small">{_t(f"Minecraft {MC_VERSION} met Guhs {GUHS_VERSION}. Nieuw? Begin bij", f"Minecraft {MC_VERSION} with Guhs {GUHS_VERSION}. New? Start with")} <a href="{w}server.html">{_t("Hoe speel ik mee?", "How do I join?")}</a></p>
+<p class="small">{small} <a href="{w}server.html">{_t("Hoe speel ik mee?", "How do I join?")}</a></p>
 </div>
 <div class="art">{self.img(hero_img, "Een guh") if hero_img else ""}<span class="bubble" aria-hidden="true">njeg!</span></div>
 </section>

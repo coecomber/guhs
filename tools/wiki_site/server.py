@@ -6,6 +6,7 @@ server facts (address, versions, rules, restart times, the pack) are hand-kept: 
 change them here. The pack itself lives in https://github.com/coecomber/guhs-pack (packwiz).
 """
 from .guide import Guide, _p, _tip, _ul
+from .landing import SERVER_OPEN
 from .pages import L
 from .site import Page, t
 
@@ -86,7 +87,11 @@ class ServerPage(Guide):
         hero = (f'<div class="ghero"><div>{lead}'
                 f'<p class="muted">{t("Already have Prism? Jump to step 4. Otherwise:", "Heb je Prism al? Ga naar stap 4. Anders:")}</p>{toc}</div>'
                 f'<div class="ghero-art">{self.pic("guh_outfit_evenementen", "Een feestguh")}</div></div>')
-        return hero + "".join([
+        soon = "" if SERVER_OPEN else _tip(
+            f"De officiële server opent binnenkort met Guhs {GUHS} (Minecraft {MC}). Deze instructies gelden vanaf dan.",
+            f"The official server opens soon with Guhs {GUHS} (Minecraft {MC}). These instructions apply from then on.",
+            "Binnenkort!", "Coming soon!")
+        return soon + hero + "".join([
             self.s_wat(), self.s_prism(), self.s_account(), self.s_import(), self.s_join(), self.s_handmatig(),
             self.s_regels(), self.s_commandos(), self.s_problemen(), self.s_links()]) + self.outro()
 
