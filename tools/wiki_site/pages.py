@@ -172,6 +172,8 @@ class Builder:
         self.systems()
         from .guide import Guide          # (here: guide.py uses this module's helpers)
         self.add(Guide(self).build())
+        from .server import ServerPage
+        self.add(ServerPage(self).build())
         self.site.index_claims()
         self.assign_chunks()
         self.table_rows()

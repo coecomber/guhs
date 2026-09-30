@@ -30,7 +30,7 @@ import nl.juiced.guhs.world.GuhmensionSpawner;
 public class Guhs {
     public static final String MODID = "guhs";
 
-    public Guhs(IEventBus modBus) {
+    public Guhs(IEventBus modBus, net.neoforged.fml.ModContainer container) {
         ModFluids.FLUID_TYPES.register(modBus);
         ModFluids.FLUIDS.register(modBus);
         ModBlocks.BLOCKS.register(modBus);
@@ -83,7 +83,7 @@ public class Guhs {
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.KasteelPoort::onChat);
 
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
-            GuhsClient.init(modBus);
+            GuhsClient.init(modBus, container);
         }
     }
 

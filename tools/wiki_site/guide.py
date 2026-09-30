@@ -75,7 +75,9 @@ class Guide:
         toc = '<ol class="gtoc">' + "".join(
             f'<li><a href="#{k}"><b>{i}</b>{t(en, nl)}</a></li>' for i, (k, nl, en) in enumerate(steps, 1)) + "</ol>"
         hero = (f'<div class="ghero"><div>{_p(self.lead_nl(), self.lead_en())}'
-                f'<p class="muted">{t("In a hurry? Jump straight to a step:", "Haast? Spring meteen naar een stap:")}</p>{toc}</div>'
+                f'<p class="muted">{t("In a hurry? Jump straight to a step:", "Haast? Spring meteen naar een stap:")}</p>{toc}'
+                f'<p class="muted">{t("Want to play together? Everything here works on the ", "Samen spelen? Alles hier werkt ook op de ")}'
+                f'{L("systemen/officiele-server", t("official Guhs server", "officiële Guhs-server"))} (guhs.nl).</p></div>'
                 f'<div class="ghero-art">{self.pic("guh_sitting", "Een guh")}</div></div>')
         return hero + "".join([
             self.s_voorbereiding(), self.s_kaasknabbels(), self.s_temmen(), self.s_portaal(), self.s_reisguh(),
@@ -292,9 +294,11 @@ class Guide:
                       f"Got {L('systemen/ftb-quests', 'FTB Quests')} in your pack? Then a <b>Guhs</b> group with thirteen chapters is in your quest book automatically. "
                       "Nothing is locked, and every chapter starts with <i>Hoe kom je hier?</i>."),
             self.goal("icon_guh_ballon", "Samen spelen op een server?", "Playing together on a server?",
-                      "Installeer Guhs op de server en bij iedereen. Tip: zet er <b>Lootr</b> bij, dan krijgt elke speler zijn eigen buit uit de kisten "
+                      f"Speel op de {L('systemen/officiele-server', 'officiële Guhs-server')} (<b>guhs.nl</b>, dag en nacht aan): met Prism Launcher sta je er in een paar minuten. "
+                      "Een eigen server? Installeer Guhs op de server en bij iedereen, en zet er <b>Lootr</b> bij: dan krijgt elke speler zijn eigen buit uit de kisten "
                       "van de bouwwerken. Geen ruzie om de schatkist!",
-                      "Install Guhs on the server and for every player. Tip: add <b>Lootr</b>, so every player gets their own loot from the structure "
+                      f"Play on the {L('systemen/officiele-server', 'official Guhs server')} (<b>guhs.nl</b>, up day and night): with Prism Launcher you're in within minutes. "
+                      "Your own server? Install Guhs on the server and for every player, and add <b>Lootr</b>: every player gets their own loot from the structure "
                       "chests. No fighting over the treasure chest!"),
         ]
         body = _p("Je bent binnen, je hebt een Reisguh en een kompas. En nu? Kies maar wat je leuk lijkt, er is geen verkeerde volgorde:",

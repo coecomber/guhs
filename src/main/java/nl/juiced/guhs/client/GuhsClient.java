@@ -37,7 +37,12 @@ import nl.juiced.guhs.registry.ModMenuTypes;
 
 /** Client-only setup. Only called on the physical client (see Guhs constructor). */
 public final class GuhsClient {
-    public static void init(IEventBus modBus) {
+    public static void init(IEventBus modBus, net.neoforged.fml.ModContainer container) {
+        // 1.0.1: the client config (addOfficialServer) with a config screen in the mod list, and the official server in the server list
+        container.registerConfig(net.neoforged.fml.config.ModConfig.Type.CLIENT, GuhsClientConfig.SPEC);
+        container.registerExtensionPoint(net.neoforged.neoforge.client.gui.IConfigScreenFactory.class,
+                net.neoforged.neoforge.client.gui.ConfigurationScreen::new);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(OfficialServerEntry::onScreenInit);
         nl.juiced.guhs.feature.FeaturesClient.init(modBus);
         modBus.addListener(GuhsClient::registerRenderers);
         modBus.addListener(GuhsClient::registerLayerDefinitions);

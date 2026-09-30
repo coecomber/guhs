@@ -1,4 +1,13 @@
-# Builds the Guhs wiki site and publishes it on GitHub Pages.
+# Builds the site of https://guhs.nl/ and publishes it on GitHub Pages:
+#   docs/site/           the landing page (index.html), 404.html (sends old wiki links /<page>.html on to /wiki/<page>.html),
+#                        CNAME (guhs.nl), robots.txt, sitemap.xml   <- tools/wiki_site/landing.py
+#   docs/site/wiki/      the Guhs wiki                               <- the rest of tools/wiki_site/
+# Both come out of one run of tools/make_wiki_site.py, which also checks every link (landing -> wiki too).
+#
+# Custom domain: with "GitHub Actions" as the Pages source the CNAME file in the artifact is not what sets the domain;
+# set it once in Settings -> Pages -> Custom domain (guhs.nl) and turn on "Enforce HTTPS". The CNAME file is kept as a
+# record (and for a branch-based setup). Once guhs.nl is set, GitHub sends coecomber.github.io/guhs/<x> to guhs.nl/<x>,
+# and the root 404.html sends that on to guhs.nl/wiki/<x>.
 #
 # Decision: CI does NOT re-render images. tools/wiki_renders.py (thousands of 3D renders, minutes of CPU) is run
 # locally, and its output docs/wiki/img/ is committed. This workflow only runs tools/make_wiki_site.py, which turns
@@ -46,12 +55,15 @@ jobs:
       - name: Install wiki dependencies
         run: pip install -r tools/requirements-wiki.txt
 
-      - name: Build the wiki site (uses the committed images, no re-render)
-        run: python tools/make_wiki_site.py --base-url https://coecomber.github.io/guhs/
+      - name: Build the landing page + wiki (uses the committed images, no re-render)
+        run: python tools/make_wiki_site.py --base-url https://guhs.nl/wiki/ --landing docs/site --out docs/site/wiki
 
       - name: Check the site exists
         run: |
-          test -f docs/site/index.html || { echo "docs/site/index.html is missing"; exit 1; }
+          for f in index.html 404.html CNAME wiki/index.html wiki/server.html wiki/aan-de-slag.html; do
+            test -f "docs/site/$f" || { echo "docs/site/$f is missing"; exit 1; }
+          done
+          grep -qx 'guhs.nl' docs/site/CNAME || { echo "docs/site/CNAME must say guhs.nl"; exit 1; }
           touch docs/site/.nojekyll
           du -sh docs/site
 
