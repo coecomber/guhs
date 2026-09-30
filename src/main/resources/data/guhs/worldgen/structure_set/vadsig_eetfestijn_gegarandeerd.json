@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:vadsig_eetfestijn",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 20240162,
+    "min_afstand": 700,
+    "max_afstand": 1500,
+    "sector": 6,
+    "sectoren": 17
+  }
+}

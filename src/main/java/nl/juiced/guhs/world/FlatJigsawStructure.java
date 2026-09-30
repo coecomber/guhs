@@ -58,23 +58,33 @@ public class FlatJigsawStructure extends Structure implements BouwRuimte.Ruimte 
 
     @Override
     protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
-        ChunkPos chunk = context.chunkPos();
-        int x0 = chunk.getMiddleBlockX(), z0 = chunk.getMiddleBlockZ();
-        if (checkRadius > 0) {
-            int low = Integer.MAX_VALUE, high = Integer.MIN_VALUE;
-            for (int i = -2; i <= 2; i++) {
-                for (int j = -2; j <= 2; j++) {
-                    int h = context.chunkGenerator().getBaseHeight(x0 + i * checkRadius / 2, z0 + j * checkRadius / 2,
-                            Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor(), context.randomState());
-                    low = Math.min(low, h);
-                    high = Math.max(high, h);
-                    if (high - low > maxHeightDifference) {
-                        return Optional.empty();
-                    }
+        // (1.1.2: a guaranteed copy that found no flat enough spot on its whole ring may take a hillier one, see GegarandeerdPlacement)
+        if (!vlakGenoeg(context.chunkGenerator(), context.randomState(), context.heightAccessor(), context.chunkPos(),
+                checkRadius > 0 ? BouwRuimte.vlakFactor(context, this) : 1)) {
+            return Optional.empty();
+        }
+        return BouwRuimte.claim(context, this, jigsaw.findValidGenerationPoint(context));
+    }
+
+    /** Is the ground around this chunk flat enough (the surface on a 5x5 grid differs at most max_height_difference x factor)? */
+    public boolean vlakGenoeg(net.minecraft.world.level.chunk.ChunkGenerator generator, net.minecraft.world.level.levelgen.RandomState random,
+                              net.minecraft.world.level.LevelHeightAccessor height, ChunkPos chunk, int factor) {
+        if (checkRadius <= 0) {
+            return true;
+        }
+        int x0 = chunk.getMiddleBlockX(), z0 = chunk.getMiddleBlockZ(), max = maxHeightDifference * Math.max(1, factor);
+        int low = Integer.MAX_VALUE, high = Integer.MIN_VALUE;
+        for (int i = -2; i <= 2; i++) {
+            for (int j = -2; j <= 2; j++) {
+                int h = generator.getBaseHeight(x0 + i * checkRadius / 2, z0 + j * checkRadius / 2, Heightmap.Types.WORLD_SURFACE_WG, height, random);
+                low = Math.min(low, h);
+                high = Math.max(high, h);
+                if (high - low > max) {
+                    return false;
                 }
             }
         }
-        return BouwRuimte.claim(context, this, jigsaw.findValidGenerationPoint(context));
+        return true;
     }
 
     @Override

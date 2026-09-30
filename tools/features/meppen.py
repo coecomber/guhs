@@ -937,7 +937,7 @@ def build(h):
     h.TEMPLATE_SIZES[HALL] = 100
     h.FLATNESS[HALL] = 34
     none = {"bounding_box": "full", "spawns": []}
-    h.structure(HALL, h.GUHMENSION_LAND, spacing=44, separation=16, salt=SALT,          # (as rare as the kermis)
+    h.structure(HALL, h.GUHMENSION_LAND, spacing=32, separation=12, salt=SALT,          # (as rare as the kermis)
                 spawn_overrides={"creature": none, "monster": none, "ambient": none})
     s = hall(h)
     problems, walkable = check(s, NPC, (CX, 2, CZ), Z1)

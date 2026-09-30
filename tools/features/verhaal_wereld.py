@@ -311,7 +311,8 @@ def regio(noise):
 
 
 # per noise: the cell of the placement (chunks) and the biomes a start may stand in
-REGIO_CEL = {TOENDRA_NOISE: 16, GUHWAII_NOISE: 16, SEA_NOISE: 16}
+# (1.1.2: the tundra 24, not 16: about one Nomguh per Sneeuwguhtoendra, no second one a few hundred blocks away)
+REGIO_CEL = {TOENDRA_NOISE: 24, GUHWAII_NOISE: 16, SEA_NOISE: 16}
 # 1.0.0: the story structures only in the bigger regions (the region's peak at least this high; the biomes themselves stay):
 # about half as many as in 3.0 (VerhaalWereldGameTests.verhaalWereldEenPerRegio counts them). 3.0 used the regio() minimum
 # (tundra 0.57, Guhwai'i 0.59, the sea dz.PEAK_MIN).

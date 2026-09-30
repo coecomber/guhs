@@ -439,8 +439,8 @@ structure("guh_statue", HAMSTER_BIOMES + ["mikas_biome"], spacing=36, separation
 # Builds copied from the "Guh structures" world by tools/import_world_builds.py. Each sits one block into the ground
 # (its bottom layer replaces the top block of the terrain), just like in the world they were built in.
 IMPORTED = [  # name, biomes, spacing, separation (in chunks)
-    ("mini_picnic", HAMSTER_BIOMES, 16, 6),
-    ("quartz_statue", HAMSTER_BIOMES, 18, 6),
+    ("mini_picnic", HAMSTER_BIOMES, 22, 8),     # (1.1.2: was 16/6, about half as many)
+    ("quartz_statue", HAMSTER_BIOMES, 24, 9),   # (1.1.2: was 18/6, about half as many)
     ("block_guh", HAMSTER_BIOMES, 20, 7),
     ("guh_fossil", HAMSTER_BIOMES + STEEP_BIOMES + ["mikas_biome"], 20, 7),
     ("giant_kaasknabbel", HAMSTER_BIOMES, 26, 9),
@@ -511,8 +511,9 @@ pool("guh_caves/tubes", [("guh_caves/tube_straight", 8), ("guh_caves/tube_juncti
 pool("guh_caves/ends", [("guh_caves/tube_end", 1)])
 w(f"{D}/worldgen/structure_set/guh_caves.json", {
     "structures": [{"structure": "guhs:guh_caves", "weight": 1}],
-    # (spacing 7, not 9: about a quarter of the networks give way to other buildings now, see BouwRuimte.java)
-    "placement": {"type": "minecraft:random_spread", "spacing": 7, "separation": 3, "salt": 27272727}})
+    # (spacing 7, not 9: about a quarter of the networks give way to other buildings now, see BouwRuimte.java;
+    # 1.1.2: 10/4, about half as many: they were by far the most common building of the Guhmension)
+    "placement": {"type": "minecraft:random_spread", "spacing": 10, "separation": 4, "salt": 27272727}})
 w(f"{D}/tags/worldgen/biome/has_structure/guh_caves.json",
   {"values": [f"guhs:{b}" for b in HAMSTER_BIOMES + STEEP_BIOMES]})
 
@@ -534,8 +535,8 @@ pool("challenging_guh_caves/tubes", [("challenging_guh_caves/tube_straight", 6),
 pool("challenging_guh_caves/ends", [("challenging_guh_caves/tube_end", 1)])
 w(f"{D}/worldgen/structure_set/challenging_guh_caves.json", {
     "structures": [{"structure": "guhs:challenging_guh_caves", "weight": 1}],
-    # (spacing 18, not 20: some give way to other buildings now, see BouwRuimte.java)
-    "placement": {"type": "minecraft:random_spread", "spacing": 18, "separation": 7, "salt": 31313131}})
+    # (spacing 18, not 20: some give way to other buildings now, see BouwRuimte.java; 1.1.2: 24/9, about half as many)
+    "placement": {"type": "minecraft:random_spread", "spacing": 24, "separation": 9, "salt": 31313131}})
 w(f"{D}/tags/worldgen/biome/has_structure/challenging_guh_caves.json",
   {"values": [f"guhs:{b}" for b in HAMSTER_BIOMES + STEEP_BIOMES + ["mikas_biome"]]})
 

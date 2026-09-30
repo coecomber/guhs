@@ -290,7 +290,7 @@ def structure(h):
     h.TEMPLATE_SIZES[NAME] = bouw.W
     h.FLATNESS[NAME] = 48                    # (sampled 192 wide: the fields roll a bit; the template is sunk and cleared)
     none = {"bounding_box": "piece", "spawns": []}
-    h.structure(NAME, BIOMES, spacing=42, separation=14, salt=SALT, start_y=-(bouw.G - 1), reach=100, centre=bouw.ANCHOR,
+    h.structure(NAME, BIOMES, spacing=32, separation=12, salt=SALT, start_y=-(bouw.G - 1), reach=100, centre=bouw.ANCHOR,
                 spawn_overrides={"creature": none, "monster": none, "ambient": none})
     s.save(NAME)
 

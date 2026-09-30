@@ -41,6 +41,7 @@ public class Guhs {
         nl.juiced.guhs.registry.ModParticles.PARTICLES.register(modBus);
         nl.juiced.guhs.registry.ModStructureTypes.STRUCTURE_TYPES.register(modBus);
         nl.juiced.guhs.registry.ModStructureTypes.PLACEMENT_MODIFIERS.register(modBus);
+        nl.juiced.guhs.registry.ModStructureTypes.PLACEMENT_TYPES.register(modBus);   // 1.1.2: guhs:gegarandeerd
         nl.juiced.guhs.registry.ModStructureTypes.POOL_ELEMENT_TYPES.register(modBus);   // 2.10: guhs:grond_single_pool_element
         ModSounds.SOUND_EVENTS.register(modBus);
         ModCreativeTabs.TABS.register(modBus);

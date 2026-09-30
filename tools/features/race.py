@@ -958,7 +958,7 @@ def structure(h):
     h.TEMPLATE_SIZES[NAME] = W
     h.FLATNESS[NAME] = 24                  # (sampled 100 blocks around the start: the track is sunk 3 and cleared 30 up)
     none = {"bounding_box": "full", "spawns": []}
-    h.structure(NAME, h.GUHMENSION_LAND, spacing=44, separation=16, salt=20240110 + 1,
+    h.structure(NAME, h.GUHMENSION_LAND, spacing=32, separation=12, salt=20240110 + 1,
                 spawn_overrides={"creature": none, "monster": none, "ambient": none}, start_y=-(G - 1))
     s, cols = build_structure(h)
     problems = check(s, cols)

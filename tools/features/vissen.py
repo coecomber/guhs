@@ -797,7 +797,7 @@ def build(h):
     h.TEMPLATE_SIZES[STRUCTURE] = 96
     h.FLATNESS[STRUCTURE] = 30
     none = {"bounding_box": "full", "spawns": []}
-    h.structure(STRUCTURE, h.GUHMENSION_LAND, spacing=44, separation=16, salt=20240166, start_y=-G,
+    h.structure(STRUCTURE, h.GUHMENSION_LAND, spacing=32, separation=12, salt=20240166, start_y=-G,
                 spawn_overrides={"creature": none, "monster": none, "ambient": none})
     vijver_structure(h)
     self_check(h)

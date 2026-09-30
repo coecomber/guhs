@@ -25,7 +25,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'verhaal', 'timmerguh', 'balto', 'balto_slee', 'mewtwo', 'hemel', 'guhwaii', 'guhwaii_spellen', 'vogels',
             'waterdiertjes', 'landdiertjes',
             # 3.0.x: the Guhdex tab Verhalen
-            'gids_verhalen']
+            'gids_verhalen',
+            # 1.1.2: the Guhmension placement rebalance (guaranteed minigames/landmarks, story tag): after everything else
+            'plaatsing']
 
 
 def modules():

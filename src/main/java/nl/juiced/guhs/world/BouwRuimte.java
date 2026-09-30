@@ -48,12 +48,22 @@ import net.neoforged.neoforge.event.level.LevelEvent;
  * <p>
  * A structure that takes part also only starts where all of it fits in the world: above the bottom layer (nothing can
  * be built there) and below the top.
+ * <p>
+ * 1.1.2: the guaranteed copies ({@link GegarandeerdPlacement}) go before every normal set ({@link #GEGARANDEERD_VOORRANG} +
+ * their own voorrang; the region/story structures and the Knabbelkelders, 800+, still go first), and the story structures
+ * (structure tag {@code guhs:verhaal}) never start within {@link #VERHAAL_AFSTAND} blocks of 0,0.
  */
 public final class BouwRuimte {
     /** Blocks of room kept between two buildings. */
     public static final int MARGIN = 4;
     /** How far the pieces of someone else's structure may reach (a jigsaw may go 128 from its start, plus a piece). */
     private static final int FOREIGN_REACH = 128 + 24;
+    /** 1.1.2: the voorrang a guaranteed copy gets on top of its own (above every normal set, below the story ones: 800+). */
+    public static final int GEGARANDEERD_VOORRANG = 500;
+    /** 1.1.2: no story structure (tag guhs:verhaal) nearer to 0,0 than this (blocks: the nearest point of its pieces and start chunk). */
+    public static final int VERHAAL_AFSTAND = 600;
+    public static final net.minecraft.tags.TagKey<Structure> VERHAAL = net.minecraft.tags.TagKey.create(Registries.STRUCTURE,
+            nl.juiced.guhs.Guhs.id("verhaal"));
 
     /** A structure that claims room. */
     public interface Ruimte {
@@ -77,13 +87,16 @@ public final class BouwRuimte {
     public static void onLevelLoad(LevelEvent.Load event) {
         if (event.getLevel() instanceof ServerLevel level) {
             remember(level.getChunkSource().randomState(), level.getChunkSource().getGeneratorState());
+            GegarandeerdPlacement.onthoud(level, level.getChunkSource().getGeneratorState(), level.getSeed());
+            GegarandeerdPlacement.vooruit(level);
         }
     }
 
     private record SetInfo(Holder<StructureSet> set, String name, int voorrang, int reach) {
     }
 
-    private record Index(Registry<StructureSet> registry, List<SetInfo> sets, Map<Structure, SetInfo> byStructure) {
+    private record Index(Registry<StructureSet> registry, List<SetInfo> sets, Map<Structure, SetInfo> byStructure,
+                         Map<Structure, List<SetInfo>> gegarandeerd, java.util.Set<Structure> verhaal) {
     }
 
     private static volatile Index index;
@@ -98,6 +111,7 @@ public final class BouwRuimte {
         }
         List<SetInfo> sets = new ArrayList<>();
         Map<Structure, SetInfo> by = new HashMap<>();
+        Map<Structure, List<SetInfo>> guaranteed = new HashMap<>();
         for (Holder.Reference<StructureSet> set : registry.listElements().toList()) {
             int voorrang = Integer.MIN_VALUE, reach = 0;
             for (StructureSet.StructureSelectionEntry entry : set.value().structures()) {
@@ -107,17 +121,30 @@ public final class BouwRuimte {
                 }
             }
             if (reach > 0) {
-                SetInfo info = new SetInfo(set, set.key().identifier().toString(), voorrang, reach);
+                boolean g = set.value().placement() instanceof GegarandeerdPlacement;
+                SetInfo info = new SetInfo(set, set.key().identifier().toString(), g ? GEGARANDEERD_VOORRANG + voorrang : voorrang, reach);
                 sets.add(info);
                 for (StructureSet.StructureSelectionEntry entry : set.value().structures()) {
-                    by.putIfAbsent(entry.structure().value(), info);
+                    if (g) {
+                        guaranteed.computeIfAbsent(entry.structure().value(), k -> new ArrayList<>()).add(info);
+                    } else {
+                        by.putIfAbsent(entry.structure().value(), info);
+                    }
                 }
             } else {
                 // someone else's structures (vanilla villages, other mods): those always go first
                 sets.add(new SetInfo(set, set.key().identifier().toString(), Integer.MAX_VALUE, FOREIGN_REACH));
             }
         }
-        i = new Index(registry, List.copyOf(sets), Map.copyOf(by));
+        // (a structure that only has a guaranteed set: that set is its own)
+        guaranteed.forEach((structure, list) -> by.putIfAbsent(structure, list.get(0)));
+        java.util.Set<Structure> verhaal = new java.util.HashSet<>();
+        for (Holder.Reference<Structure> structure : access.lookupOrThrow(Registries.STRUCTURE).listElements().toList()) {
+            if (structure.is(VERHAAL)) {
+                verhaal.add(structure.value());
+            }
+        }
+        i = new Index(registry, List.copyOf(sets), Map.copyOf(by), Map.copyOf(guaranteed), java.util.Set.copyOf(verhaal));
         index = i;
         STARTS.clear();
         return i;
@@ -128,7 +155,13 @@ public final class BouwRuimte {
      * pieces are built here once and handed on, so the game doesn't build them again.
      */
     public static Optional<Structure.GenerationStub> claim(Structure.GenerationContext context, Structure me, Optional<Structure.GenerationStub> stub) {
-        if (stub.isEmpty() || !(me instanceof Ruimte r) || r.keepClear() <= 0) {
+        if (stub.isEmpty()) {
+            return stub;
+        }
+        if (index(context.registryAccess()).verhaal.contains(me) && nearOrigin(context.chunkPos(), stub.get())) {
+            return Optional.empty();   // (1.1.2: no story structure near spawn)
+        }
+        if (!(me instanceof Ruimte r) || r.keepClear() <= 0) {
             return stub;
         }
         var pos = stub.get().position();
@@ -243,6 +276,65 @@ public final class BouwRuimte {
         return false;
     }
 
+    /**
+     * 1.1.2: does this start (its pieces and its start chunk) come within {@link #VERHAAL_AFSTAND} blocks of 0,0? (The stub's
+     * pieces are built here once; the builder keeps them for claim and the game.)
+     */
+    private static boolean nearOrigin(ChunkPos chunk, Structure.GenerationStub stub) {
+        int minX = chunk.getMinBlockX(), maxX = chunk.getMaxBlockX(), minZ = chunk.getMinBlockZ(), maxZ = chunk.getMaxBlockZ();
+        // (far away: no need to build the pieces for this; a structure reaches at most 8 chunks from its start chunk)
+        long far = VERHAAL_AFSTAND + 9 * 16;
+        long cx = Math.max(0, Math.max(minX, -maxX)), cz = Math.max(0, Math.max(minZ, -maxZ));
+        if (cx * cx + cz * cz > far * far) {
+            return false;
+        }
+        StructurePiecesBuilder builder = stub.getPiecesBuilder();
+        if (!builder.isEmpty()) {
+            BoundingBox box = builder.getBoundingBox();
+            minX = Math.min(minX, box.minX());
+            maxX = Math.max(maxX, box.maxX());
+            minZ = Math.min(minZ, box.minZ());
+            maxZ = Math.max(maxZ, box.maxZ());
+        }
+        long dx = Math.max(0, Math.max(minX, -maxX)), dz = Math.max(0, Math.max(minZ, -maxZ));
+        return dx * dx + dz * dz < (long) VERHAAL_AFSTAND * VERHAAL_AFSTAND;
+    }
+
+    /**
+     * 1.1.2: the set this start belongs to: the guaranteed set of this structure when its search is trying this chunk or this is
+     * its chunk, else the structure's normal set.
+     */
+    private static SetInfo eigenSet(Index i, Structure.GenerationContext context, Structure me) {
+        for (SetInfo g : i.gegarandeerd.getOrDefault(me, List.of())) {
+            GegarandeerdPlacement p = (GegarandeerdPlacement) g.set.value().placement();
+            if (p.zoekt()) {
+                if (p.probeert(context.chunkPos())) {
+                    return g;
+                }
+                continue;
+            }
+            if (p.plek(STATES.get(context.randomState()), context.seed()).filter(context.chunkPos()::equals).isPresent()) {
+                return g;
+            }
+        }
+        return i.byStructure.get(me);
+    }
+
+    /**
+     * 1.1.2: the flatness factor for a start of this structure in this chunk: more than 1 only for a guaranteed copy that found
+     * no flat enough spot on its ring (see {@link GegarandeerdPlacement}).
+     */
+    public static int vlakFactor(Structure.GenerationContext context, Structure me) {
+        List<SetInfo> list = index(context.registryAccess()).gegarandeerd.getOrDefault(me, List.of());
+        for (SetInfo g : list) {
+            int f = ((GegarandeerdPlacement) g.set.value().placement()).vlakFactor(STATES.get(context.randomState()), context.seed(), context.chunkPos());
+            if (f > 0) {
+                return f;
+            }
+        }
+        return 1;
+    }
+
     private static List<BoundingBox> boxes(StructurePiecesBuilder builder) {
         List<BoundingBox> out = new ArrayList<>();
         builder.build().pieces().forEach(piece -> out.add(piece.getBoundingBox()));
@@ -251,7 +343,7 @@ public final class BouwRuimte {
 
     private static boolean givesWay(Structure.GenerationContext context, Structure me, int myReach, BoundingBox box, List<BoundingBox> mine2) {
         Index i = index(context.registryAccess());
-        SetInfo mine = i.byStructure.get(me);
+        SetInfo mine = eigenSet(i, context, me);
         if (mine == null) {
             return false;
         }
@@ -262,6 +354,9 @@ public final class BouwRuimte {
             boolean same = other == mine;
             if (!same && (other.voorrang < mine.voorrang || (other.voorrang == mine.voorrang && other.name.compareTo(mine.name) > 0))) {
                 continue; // this one goes first
+            }
+            if (same && other.set.value().placement() instanceof GegarandeerdPlacement) {
+                continue; // (a guaranteed set has only this one start)
             }
             if (!possible.computeIfAbsent(other, o -> canBeIn(o, context.biomeSource()))) {
                 continue;

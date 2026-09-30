@@ -1102,7 +1102,7 @@ def build(h):
     h.TEMPLATE_SIZES["guh_golfbaan"] = W
     h.FLATNESS["guh_golfbaan"] = 30
     none = {"bounding_box": "full", "spawns": []}
-    h.structure("guh_golfbaan", h.GUHMENSION_LAND, spacing=44, separation=16, salt=20240144,
+    h.structure("guh_golfbaan", h.GUHMENSION_LAND, spacing=32, separation=12, salt=20240144,
                 spawn_overrides={"creature": none, "monster": none, "ambient": none})
     S = golf_structure(h)
     problems = check(S)

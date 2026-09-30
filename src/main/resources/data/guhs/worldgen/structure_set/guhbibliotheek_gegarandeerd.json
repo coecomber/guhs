@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guhbibliotheek",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 20240206,
+    "min_afstand": 1500,
+    "max_afstand": 2500,
+    "sector": 2,
+    "sectoren": 6
+  }
+}

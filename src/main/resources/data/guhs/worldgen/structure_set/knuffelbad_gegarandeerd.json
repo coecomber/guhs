@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:knuffelbad",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 20280708,
+    "min_afstand": 700,
+    "max_afstand": 1500,
+    "sector": 16,
+    "sectoren": 17
+  }
+}

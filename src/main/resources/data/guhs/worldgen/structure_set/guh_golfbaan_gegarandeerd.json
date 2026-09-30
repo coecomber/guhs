@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guh_golfbaan",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 20240151,
+    "min_afstand": 700,
+    "max_afstand": 1500,
+    "sector": 2,
+    "sectoren": 17
+  }
+}

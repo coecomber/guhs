@@ -318,7 +318,7 @@ def build(h):
     none = {"bounding_box": "piece", "spawns": []}
     h.TEMPLATE_SIZES[NAME] = 48
     h.FLATNESS[NAME] = 14
-    h.structure(NAME, ["guh_meadows", "pink_puffs"], spacing=44, separation=16, salt=20290401, start_y=-bouw.G, reach=80, centre=bouw.ANCHOR,
+    h.structure(NAME, ["guh_meadows", "pink_puffs"], spacing=32, separation=12, salt=20290401, start_y=-bouw.G, reach=80, centre=bouw.ANCHOR,
                 spawn_overrides={"monster": none, "ambient": none})
     b.s.save(NAME)
     doolhof.selfcheck(h, "knabbelspelen", BLOKKEN + ["knabbelspelen_anker"], ITEMS + BLOKKEN, CLOTHES,

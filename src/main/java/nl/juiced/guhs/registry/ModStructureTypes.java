@@ -14,6 +14,14 @@ public final class ModStructureTypes {
     public static final DeferredHolder<StructureType<?>, StructureType<FlatJigsawStructure>> FLAT_JIGSAW =
             STRUCTURE_TYPES.register("flat_jigsaw", () -> () -> FlatJigsawStructure.CODEC);
 
+    /** 1.1.2: placement guhs:gegarandeerd (one guaranteed copy in a ring around spawn, see GegarandeerdPlacement). */
+    public static final DeferredRegister<net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType<?>> PLACEMENT_TYPES =
+            DeferredRegister.create(Registries.STRUCTURE_PLACEMENT, Guhs.MODID);
+
+    public static final DeferredHolder<net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType<?>,
+            net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType<nl.juiced.guhs.world.GegarandeerdPlacement>> GEGARANDEERD =
+            PLACEMENT_TYPES.register("gegarandeerd", () -> () -> nl.juiced.guhs.world.GegarandeerdPlacement.CODEC);
+
     /** Placement filter guhs:buiten_gebouwen (no plants on roofs). */
     public static final DeferredRegister<net.minecraft.world.level.levelgen.placement.PlacementModifierType<?>> PLACEMENT_MODIFIERS =
             DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, Guhs.MODID);

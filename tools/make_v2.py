@@ -2314,7 +2314,7 @@ def kermis():
 
     # --- the structure ---
     TEMPLATE_SIZES["guh_kermis"] = 44
-    structure("guh_kermis", GUHMENSION_LAND, spacing=44, separation=16, salt=20400001)
+    structure("guh_kermis", GUHMENSION_LAND, spacing=32, separation=12, salt=20400001)
     kermis_structure(st)
     Structure((24, 14, 52)).save("coaster_room")  # for the GameTests
 
@@ -2580,7 +2580,7 @@ def verstop():
     TEMPLATE_SIZES["verstopguh_huis"] = 80
     FLATNESS["verstopguh_huis"] = 30
     none = {"bounding_box": "full", "spawns": []}
-    structure("verstopguh_huis", GUHMENSION_LAND, spacing=48, separation=18, salt=20500001,
+    structure("verstopguh_huis", GUHMENSION_LAND, spacing=32, separation=12, salt=20500001,
               spawn_overrides={"creature": none, "monster": none, "ambient": none})
     verstop_structure()
 

@@ -159,6 +159,7 @@ public final class BouwCheck {
             }
             StringBuilder report = new StringBuilder();
             List<String> chat = overlapReport(found, radius, report, level.getMinY(), level.getMaxY() + 1);
+            chat.addAll(plaatsingReport(found, level, report));
             write(server, level, "overlap", report.toString());
             chat.forEach(line -> source.sendSuccess(() -> Component.literal(line), false));
             if (complete) {
@@ -196,6 +197,7 @@ public final class BouwCheck {
         }
         state.ensureStructuresGenerated();
         BouwRuimte.remember(random, state);
+        GegarandeerdPlacement.onthoud(level, state, seed);   // (1.1.2: the guaranteed copies search in this seed's world)
         StructureTemplateManager templates = level.getStructureManager();
         var structures = access.lookupOrThrow(Registries.STRUCTURE);
         int lo = SectionPos.blockToSectionCoord(-radius), hi = SectionPos.blockToSectionCoord(radius);
@@ -357,6 +359,49 @@ public final class BouwCheck {
         head.append(String.format("%nDetails:%n"));
         report.insert(0, head);
         chat.add(0, "Bouwcheck overlap: " + total + " guhs-gebouwen, " + overlapping + " met overlap, " + pairs.size() + " soorten paren.");
+        return chat;
+    }
+
+    /**
+     * 1.1.2: per seed, the guaranteed copies (sets *_gegarandeerd: how many, the farthest locate spot) and the story structure
+     * (tag guhs:verhaal) nearest to 0,0 (the nearest point of its pieces and start chunk).
+     */
+    private static List<String> plaatsingReport(Map<Long, List<Start>> found, ServerLevel level, StringBuilder report) {
+        var structures = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
+        java.util.Set<String> verhaal = new java.util.HashSet<>();
+        structures.listElements().filter(h -> h.is(BouwRuimte.VERHAAL)).forEach(h -> verhaal.add(h.key().identifier().toString()));
+        int sets = 0;
+        for (Holder<StructureSet> set : level.getChunkSource().getGeneratorState().possibleStructureSets()) {
+            sets += set.value().placement() instanceof GegarandeerdPlacement ? 1 : 0;
+        }
+        List<String> chat = new ArrayList<>();
+        StringBuilder out = new StringBuilder(String.format("%nPlaatsing (1.1.2): %d gegarandeerde sets in deze dimensie%n", sets));
+        for (var entry : found.entrySet()) {
+            int n = 0, far = 0;
+            String nearest = "-";
+            long best = Long.MAX_VALUE;
+            for (Start st : entry.getValue()) {
+                if (st.set.endsWith("_gegarandeerd")) {
+                    n++;
+                    int d = (int) Math.round(Math.hypot(st.chunk.getMinBlockX(), st.chunk.getMinBlockZ()));
+                    far = Math.max(far, d);
+                    out.append(String.format("  seed %d gegarandeerd %-32s chunk %s, %d blokken%n", entry.getKey(), st.id, st.chunk, d));
+                }
+                if (verhaal.contains(st.id)) {
+                    long dx = Math.max(0, Math.max(Math.min(st.box.minX(), st.chunk.getMinBlockX()), -Math.max(st.box.maxX(), st.chunk.getMaxBlockX())));
+                    long dz = Math.max(0, Math.max(Math.min(st.box.minZ(), st.chunk.getMinBlockZ()), -Math.max(st.box.maxZ(), st.chunk.getMaxBlockZ())));
+                    if (dx * dx + dz * dz < best) {
+                        best = dx * dx + dz * dz;
+                        nearest = st.id + " @" + st.box.getCenter().toShortString();
+                    }
+                }
+            }
+            String line = String.format("Plaatsing seed %d: %d/%d gegarandeerd (verste %d blokken); verhaal het dichtst bij 0,0: %s (%d blokken)",
+                    entry.getKey(), n, sets, far, nearest, best == Long.MAX_VALUE ? -1 : (int) Math.sqrt(best));
+            out.append("  ").append(line).append(String.format("%n"));
+            chat.add(line);
+        }
+        report.append(out);
         return chat;
     }
 

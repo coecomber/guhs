@@ -1066,7 +1066,7 @@ def build(h):
     h.TEMPLATE_SIZES["guh_disco"] = GW
     h.FLATNESS["guh_disco"] = 30
     none = {"bounding_box": "full", "spawns": []}
-    h.structure("guh_disco", h.GUHMENSION_LAND, spacing=44, separation=16, salt=20240133,
+    h.structure("guh_disco", h.GUHMENSION_LAND, spacing=32, separation=12, salt=20240133,
                 spawn_overrides={"creature": none, "monster": none, "ambient": none})
     disco_structure(h)
     test_floor(h)

@@ -1689,7 +1689,7 @@ def build(h):
     patch_worldgen(h)
 
     # --- the structures: the abandoned mine shaft (common in the caves) and the larder (rare) ---
-    underground_structure(h, "gatenkaas_mijnschacht", spacing=10, separation=4, salt=20270301,
+    underground_structure(h, "gatenkaas_mijnschacht", spacing=14, separation=5, salt=20270301,
                           height={"type": "minecraft:uniform", "min_inclusive": {"absolute": 10}, "max_inclusive": {"absolute": 26}},
                           anchor="guhs:gatenkaas_mijnschacht_midden")
     # (y 8: the larder's floor; the cave dome reaches up to y ~30. TODO(merge): exclusion_zone from the Knabbelkelders)

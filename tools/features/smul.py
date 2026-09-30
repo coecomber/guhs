@@ -118,7 +118,7 @@ def build(h):
     h.TEMPLATE_SIZES["vadsig_eetfestijn"] = 96
     h.FLATNESS["vadsig_eetfestijn"] = 30
     none = {"bounding_box": "full", "spawns": []}
-    h.structure("vadsig_eetfestijn", h.GUHMENSION_LAND, spacing=44, separation=16, salt=20240155,
+    h.structure("vadsig_eetfestijn", h.GUHMENSION_LAND, spacing=32, separation=12, salt=20240155,
                 spawn_overrides={"creature": none, "monster": none, "ambient": none})
     s = festijn(h)
     problems = check_festijn(h, s)

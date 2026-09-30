@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guh_kasteel",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 20600008,
+    "min_afstand": 1500,
+    "max_afstand": 2500,
+    "sector": 0,
+    "sectoren": 6
+  }
+}

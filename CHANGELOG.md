@@ -3,6 +3,31 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.1.2 — Minecraft 26.1.2
+
+A new balance of the buildings in the Guhmension, after a look at the official server (1,399 buildings in 6 x 6 km:
+caves everywhere, the minigames kilometres away). Same requirements as 1.1.1. Only the Guhmension changes (the
+overworld stays as it was); in an existing world the new rules apply to land you haven't visited yet.
+
+### Guhmension
+
+- **Every minigame near spawn.** Each minigame now has one guaranteed building **700 to 1500 blocks from 0,0**: the
+  Guhcircuit, the Guhdoolhof, the golf course, the race track, the Knabbelspelen, the Mika-Mephal, the Vadsig-Eetfestijn,
+  the Beauty-theater, the disco, the kermis, the Verstopguh-huis, the Guhvis-vijver, the sjoelhuisje, the Knabbelkatapult,
+  the sterrenwacht, the ballonfestival and the Knuffelbad. They lie spread around spawn, each on a spot where it fits
+  (the right biome, flat ground, room), and they go before the ordinary buildings. The ordinary minigame buildings are also
+  more common than before (every 32 chunks instead of every 44).
+- **Landmarks within reach.** One guaranteed Guhkasteel, Guhdorp, Guhbibliotheek, Kaasmijn, Hemelkapelletje and set of
+  Zwevende Eilanden **1500 to 2500 blocks from spawn**; the other copies stay where they were.
+- **Story places further out.** The places of the stories (Nomguh, the sleehut, Guhwai'i, the kloon-eiland, the
+  Hemelkapelletje, the Vadsig-heiligdom and Mika-kamp, the Knuffeldal town, the Elf-Guhjestocht, the Guhbubbel, Piep's
+  nest, the Evil Mika home, the kampeerplekjes, the Guhkasteel and the barbecueput) never lie within **600 blocks** of
+  spawn any more, so they feel like a journey. Nomguh is also rarer: about one per Sneeuwguhtoendra, no second one a
+  few hundred blocks away.
+- **Fewer of the most common buildings.** About half as many guh caves, gatenkaas mine shafts, challenging guh caves,
+  mini picnics and quartz statues.
+- `/guhs bouwcheck` also reports the guaranteed buildings (how many, how far) and the story building nearest to spawn.
+
 ## 1.1.1 — Minecraft 26.1.2
 
 A bugfix for servers. Same requirements as 1.1.0 (Minecraft 26.1.2, NeoForge 26.1.2.71+, GeckoLib 5.5.2+, Java 25).

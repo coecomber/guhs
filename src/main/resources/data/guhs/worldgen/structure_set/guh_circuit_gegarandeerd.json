@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guh_circuit",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 20290508,
+    "min_afstand": 700,
+    "max_afstand": 1500,
+    "sector": 0,
+    "sectoren": 17
+  }
+}

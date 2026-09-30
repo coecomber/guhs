@@ -964,7 +964,7 @@ def build(h):
     h.TEMPLATE_SIZES[STRUCT] = D
     h.FLATNESS[STRUCT] = 30
     none = {"bounding_box": "full", "spawns": []}
-    h.structure(STRUCT, h.GUHMENSION_LAND, spacing=44, separation=16, salt=20240101,
+    h.structure(STRUCT, h.GUHMENSION_LAND, spacing=32, separation=12, salt=20240101,
                 spawn_overrides={"creature": none, "monster": none, "ambient": none})
     s = theater(h)
     npcs = [(SHOWGUH[0], STAGE + 1.0, SHOWGUH[1], "the Showguh")] + [(36.5 + 4 * i, 2.25, JURY_Z + 0.5, f"jury guh {i + 1}") for i in range(3)]

@@ -1,0 +1,16 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:hemelkapelletje",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 20300408,
+    "min_afstand": 1500,
+    "max_afstand": 2500,
+    "sector": 4,
+    "sectoren": 6
+  }
+}

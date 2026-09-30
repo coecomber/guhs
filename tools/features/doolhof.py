@@ -346,7 +346,7 @@ def build(h):
     none = {"bounding_box": "piece", "spawns": []}
     h.TEMPLATE_SIZES[NAME] = 48
     h.FLATNESS[NAME] = 14
-    h.structure(NAME, ["guh_fields"], spacing=44, separation=16, salt=20290201, start_y=-bouw.G, reach=80, centre=bouw.ANCHOR,
+    h.structure(NAME, ["guh_fields"], spacing=32, separation=12, salt=20290201, start_y=-bouw.G, reach=80, centre=bouw.ANCHOR,
                 spawn_overrides={"monster": none, "ambient": none})
     b.s.save(NAME)
     selfcheck(h, "doolhof", BLOKKEN + ["doolhof_anker"], ITEMS + BLOKKEN, CLOTHES,
