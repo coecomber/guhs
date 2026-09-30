@@ -138,8 +138,8 @@ public class GuheindeGameTests {
         ServerPlayer player = player(helper);
         KnabbelkristalEntity crystal = spawn(helper, GuheindeFeature.KNABBELKRISTAL_ENTITY.get(), 2.5, 1, 2.5);
         OpperMikaEntity mika = spawn(helper, GuheindeFeature.OPPER_MIKA.get(), 4.5, 1, 4.5);
-        helper.assertTrue(!crystal.hurt(helper.getLevel().damageSources().mobAttack(mika), 5f) && !crystal.isRemoved(), "not by Opper-Mika");
-        crystal.hurt(helper.getLevel().damageSources().playerAttack(player), 1f);
+        helper.assertTrue(!crystal.hurtOrSimulate(helper.getLevel().damageSources().mobAttack(mika), 5f) && !crystal.isRemoved(), "not by Opper-Mika");
+        crystal.hurtOrSimulate(helper.getLevel().damageSources().playerAttack(player), 1f);
         helper.assertTrue(crystal.isRemoved(), "smashed");
         long knabbels = helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(crystal.blockPosition()).inflate(4),
                 i -> i.getItem().is(ModItems.KAAS_KNABBELS.get())).size();
@@ -155,12 +155,12 @@ public class GuheindeGameTests {
         HongerigeEnderguhEntity mount = spawn(helper, GuheindeFeature.HONGERIGE_ENDERGUH.get(), 2.5, 3, 2.5);
         mount.setNoAi(true);
         OpperMikaEntity mika = spawn(helper, GuheindeFeature.OPPER_MIKA.get(), 2.5, 5, 2.5);
-        helper.assertTrue(mika.startRiding(mount, true) && mika.isRiding(), "he rides");
-        mika.hurt(helper.getLevel().damageSources().playerAttack(player), 120f);
+        helper.assertTrue(mika.startRiding(mount, true, true) && mika.isRiding(), "he rides");
+        mika.hurtOrSimulate(helper.getLevel().damageSources().playerAttack(player), 120f);
         helper.assertTrue(mika.getHealth() == OpperMikaEntity.RIDING_FLOOR, "floor while riding, got " + mika.getHealth());
         mika.stopRiding();
         mika.invulnerableTime = 0;
-        mika.hurt(helper.getLevel().damageSources().playerAttack(player), 20f);
+        mika.hurtOrSimulate(helper.getLevel().damageSources().playerAttack(player), 20f);
         helper.assertTrue(mika.getHealth() < OpperMikaEntity.RIDING_FLOOR, "on foot it goes down");
         mount.discard();
         mika.discard();
@@ -174,16 +174,16 @@ public class GuheindeGameTests {
         HongerigeEnderguhEntity mount = spawn(helper, GuheindeFeature.HONGERIGE_ENDERGUH.get(), 2.5, 1, 2.5);
         mount.setNoAi(true);
         OpperMikaEntity mika = spawn(helper, GuheindeFeature.OPPER_MIKA.get(), 2.5, 3, 2.5);
-        mika.startRiding(mount, true);
+        mika.startRiding(mount, true, true);
         helper.assertTrue(mount.getBbWidth() > 3f && mount.getBbHeight() > 2.5f, "a hitbox as big as its model, got " + mount.getBbWidth() + "x" + mount.getBbHeight());
-        helper.assertTrue(!mount.hurt(helper.getLevel().damageSources().playerAttack(player), 50f), "no hitting the guh");
+        helper.assertTrue(!mount.hurtOrSimulate(helper.getLevel().damageSources().playerAttack(player), 50f), "no hitting the guh");
         mount.addVahoeg();
         helper.assertTrue(mount.getVahoeg() == 1, "a bit of colour back per crystal");
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 3));
-        mount.interact(player, InteractionHand.MAIN_HAND);
+        mount.interact(player, InteractionHand.MAIN_HAND, mount.position());
         helper.assertTrue(player.getMainHandItem().getCount() == 3 && mika.isPassenger(), "too scared while there are crystals");
         mount.exhaust();
-        mount.interact(player, InteractionHand.MAIN_HAND);
+        mount.interact(player, InteractionHand.MAIN_HAND, mount.position());
         helper.assertTrue(player.getMainHandItem().getCount() == 2, "it ate a knabbel");
         helper.assertTrue(mount.getToestand() == HongerigeEnderguhEntity.Toestand.VRIJ && mount.getVahoeg() == HongerigeEnderguhEntity.MAX_VAHOEG, "VAHOEG");
         helper.assertTrue(!mika.isPassenger(), "Opper-Mika is thrown off");
@@ -220,8 +220,8 @@ public class GuheindeGameTests {
         helper.assertTrue(larfjes.size() == 1, "a larfje crawls out");
         MikaLarfjeEntity larfje = larfjes.get(0);
         helper.assertTrue(larfje.getScale() < 0.5f, "tiny");
-        larfje.doHurtTarget(player);
-        larfje.doHurtTarget(player);
+        larfje.doHurtTarget(helper.getLevel(), player);
+        larfje.doHurtTarget(helper.getLevel(), player);
         helper.assertTrue(GuhQuests.count(player, ModItems.KAAS_KNABBELS.get()) == 3 && larfje.gestolen() == 2, "two knabbels gone");
         larfje.discard();
         done(helper, player);
@@ -236,7 +236,7 @@ public class GuheindeGameTests {
         GuhEntity guh = spawn(helper, ModEntities.GUH.get(), 3.5, 1, 3.5);
         guh.setVariant(GuhVariant.MAGER);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 2));
-        player.interactOn(guh, InteractionHand.MAIN_HAND);
+        player.interactOn(guh, InteractionHand.MAIN_HAND, guh.position());
         helper.assertTrue(guh.getVariant() != GuhVariant.MAGER, "no longer grey");
         helper.assertTrue(player.getMainHandItem().getCount() == 1, "it ate the knabbel");
         helper.assertTrue(!guh.isTame(), "it runs off, it isn't yours");
@@ -253,17 +253,17 @@ public class GuheindeGameTests {
         ServerPlayer player = player(helper);
         GuhEntity koning = spawn(helper, ModEntities.GUH.get(), 3.5, 1, 3.5);
         koning.setVariant(GuhVariant.KONING);
-        player.interactOn(koning, InteractionHand.MAIN_HAND);
+        player.interactOn(koning, InteractionHand.MAIN_HAND, koning.position());
         helper.assertTrue(GuhQuests.saved(player).getIntOr(GuheindeEvents.KONING, 0) == 1, "story told");
         boolean book = false;
         for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
             book |= Guhboek.of(stack) == Guhboek.GUHEINDE;
         }
         helper.assertTrue(book, "the Guheinde book");
-        player.interactOn(koning, InteractionHand.MAIN_HAND);
+        player.interactOn(koning, InteractionHand.MAIN_HAND, koning.position());
         helper.assertTrue(GuhQuests.saved(player).getIntOr(GuheindeEvents.KONING, 0) == 1, "no knighthood before a win");
         GuhQuests.saved(player).putInt(GuheindeGevecht.WINS, 1);
-        player.interactOn(koning, InteractionHand.MAIN_HAND);
+        player.interactOn(koning, InteractionHand.MAIN_HAND, koning.position());
         helper.assertTrue(GuhQuests.saved(player).getIntOr(GuheindeEvents.KONING, 0) == 2, "Ridder van het Guheinde");
         koning.discard();
         done(helper, player);
@@ -295,9 +295,9 @@ public class GuheindeGameTests {
         ServerPlayer player = player(helper);
         MikaEntity plain = spawn(helper, ModEntities.MIKA.get(), 3.5, 1, 1.5);
         MikaEntity crowned = spawn(helper, ModEntities.MIKA.get(), 3.5, 1, 3.5);
-        plain.hurt(helper.getLevel().damageSources().playerAttack(player), 10f);
+        plain.hurtOrSimulate(helper.getLevel().damageSources().playerAttack(player), 10f);
         player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(GuheindeFeature.KNABBELKROON.get()));
-        crowned.hurt(helper.getLevel().damageSources().playerAttack(player), 10f);
+        crowned.hurtOrSimulate(helper.getLevel().damageSources().playerAttack(player), 10f);
         float a = MikaEntity.HEALTH - plain.getHealth(), b = MikaEntity.HEALTH - crowned.getHealth();
         helper.assertTrue(Math.abs(b - a * KnabbelkroonItem.MIKA_DAMAGE) < 0.01f, "1.5x: " + a + " vs " + b);
         plain.discard();
@@ -327,10 +327,10 @@ public class GuheindeGameTests {
     public static void guhvleugelsGlide(GameTestHelper helper) {
         ServerPlayer player = player(helper);
         ItemStack wings = new ItemStack(GuheindeFeature.GUHVLEUGELS.get());
-        helper.assertTrue(wings.canElytraFly(player), "can glide");
-        helper.assertTrue(wings.getItem().isValidRepairItem(wings, new ItemStack(ModItems.MIKA_VET.get())), "mend with Mika's vet");
+        helper.assertTrue(net.minecraft.world.entity.LivingEntity.canGlideUsing(wings, EquipmentSlot.CHEST), "can glide");
+        helper.assertTrue(wings.isValidRepairItem(new ItemStack(ModItems.MIKA_VET.get())), "mend with Mika's vet");
         wings.setDamageValue(wings.getMaxDamage() - 1);
-        helper.assertTrue(!wings.canElytraFly(player), "broken wings don't glide");
+        helper.assertTrue(!net.minecraft.world.entity.LivingEntity.canGlideUsing(wings, EquipmentSlot.CHEST), "broken wings don't glide");
         done(helper, player);
     }
 
@@ -340,7 +340,7 @@ public class GuheindeGameTests {
         ServerPlayer player = player(helper);
         MikaEntity mika = spawn(helper, ModEntities.MIKA.get(), 3.5, 1, 3.5);
         mika.makeBoss();
-        mika.hurt(helper.getLevel().damageSources().playerAttack(player), 10000f);
+        mika.hurtOrSimulate(helper.getLevel().damageSources().playerAttack(player), 10000f);
         helper.runAfterDelay(2, () -> {
             int tears = helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(helper.absolutePos(new BlockPos(3, 1, 3))).inflate(4),
                     i -> i.getItem().is(GuheindeFeature.MIKA_TRAAN.get())).stream().mapToInt(i -> i.getItem().getCount()).sum();
@@ -352,9 +352,9 @@ public class GuheindeGameTests {
     /** The recipes: the eye, the crystal; and the Knabbelkelder library chest holds the Guheinde book. */
     @GuhTest(template = EMPTY)
     public static void recipesAndTheLibraryBook(GameTestHelper helper) {
-        var recipes = helper.getLevel().getRecipeManager();
-        helper.assertTrue(recipes.byKey(Guhs.id("oog_van_vadsig")).isPresent(), "the eye recipe");
-        helper.assertTrue(recipes.byKey(Guhs.id("knabbelkristal")).isPresent(), "the crystal recipe");
+        var recipes = helper.getLevel().recipeAccess();
+        helper.assertTrue(recipes.byKey(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, Guhs.id("oog_van_vadsig"))).isPresent(), "the eye recipe");
+        helper.assertTrue(recipes.byKey(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, Guhs.id("knabbelkristal"))).isPresent(), "the crystal recipe");
         var table = helper.getLevel().getServer().reloadableRegistries().getLootTable(
                 net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE, Guhs.id("chests/knabbelkelder_bieb")));
         var params = new net.minecraft.world.level.storage.loot.LootParams.Builder(helper.getLevel())
@@ -429,7 +429,7 @@ public class GuheindeGameTests {
     @GuhTest(template = EMPTY)
     public static void guheindeVestingIsHalfShips(GameTestHelper helper) {
         var pool = helper.getLevel().registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.TEMPLATE_POOL)
-                .get(Guhs.id("mika_vesting/start"));
+                .getValue(Guhs.id("mika_vesting/start"));
         helper.assertTrue(pool != null, "the vesting's start pool");
         int ship = 0, tower = 0;
         for (var element : pool.getShuffledTemplates(net.minecraft.util.RandomSource.create(1))) {
@@ -465,7 +465,7 @@ public class GuheindeGameTests {
             var be = net.minecraft.world.level.block.entity.BlockEntity.loadStatic(info.pos(), info.state(), info.nbt(), level.registryAccess());
             helper.assertTrue(be instanceof KnabbelpoortBlock.Entity poort && poort.terug, "every poort block leads back: " + info.nbt());
         }
-        var structure = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).get(Guhs.id("guheinde_terugpoort"));
+        var structure = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getValue(Guhs.id("guheinde_terugpoort"));
         helper.assertTrue(structure instanceof GuheindeEilandStructure, "only on the outer islands: " + structure);
         var set = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/data/guhs/worldgen/structure_set/guheinde_terugpoort.json");
         helper.assertTrue(set != null, "the structure set");
@@ -501,7 +501,7 @@ public class GuheindeGameTests {
             someone.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
             var transition = GuheindeFeature.KNABBELPOORT.get().getPortalDestination(level, someone, at);
             helper.assertTrue(transition != null && transition.newLevel() == level, "it leads somewhere in the Guheinde");
-            Vec3 p = transition.pos();
+            Vec3 p = transition.position();
             helper.assertTrue(p.x * p.x + p.z * p.z < 150 * 150, "on the main island: " + p);
             BlockPos stand = BlockPos.containing(p);
             helper.assertTrue(p.y > level.getMinY() + 20, "not in the void: " + p);

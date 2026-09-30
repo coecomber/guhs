@@ -5,11 +5,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.player.AvatarRenderer;
-import net.minecraft.world.entity.player.PlayerSkin;
+import net.minecraft.client.entity.ClientAvatarEntity;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.world.entity.Avatar;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.PlayerModelType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.renderstate.AvatarRenderStateModifier;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.client.SittingGuhRenderers;
@@ -29,33 +36,38 @@ public final class ElftochtClient {
     public static final int PLOF_TICKS = 14;
 
     public static void init(IEventBus modBus) {
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.SCHAATSMEESTERGUH, Guhs.id("geo/entity/guh_npc_schaatsmeesterguh.geo.json"));
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.STEMPELGUH, Guhs.id("geo/entity/guh_npc_stempelguh.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.SCHAATSMEESTERGUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.12f;
-            bot.apply("schaatsmeester_pompon").ifPresent(b -> {
-                b.setRotZ((float) Math.sin(t) * 0.25f);
-                b.setRotX((float) Math.cos(t * 0.7f) * 0.15f);
-            });
-            bot.apply("schaatsmeester_schaatsen").ifPresent(b -> b.setRotZ((float) Math.sin(t * 0.5f) * 0.08f));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.SCHAATSMEESTERGUH, Guhs.id("entity/guh_npc_schaatsmeesterguh"));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.STEMPELGUH, Guhs.id("entity/guh_npc_stempelguh"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.SCHAATSMEESTERGUH, (npc, tick) -> {
+            float t = (float) tick * 0.12f;
+            return bot -> {
+                bot.ifPresent("schaatsmeester_pompon", b -> {
+                    b.setRotZ((float) Math.sin(t) * 0.25f);
+                    b.setRotX((float) Math.cos(t * 0.7f) * 0.15f);
+                });
+                bot.ifPresent("schaatsmeester_schaatsen", b -> b.setRotZ((float) Math.sin(t * 0.5f) * 0.08f));
+            };
         });
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.STEMPELGUH, (npc, state, bot) -> {
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.STEMPELGUH, (npc, tick) -> {
             int dorp = dorp(npc);
-            for (int n = 1; n <= 11; n++) {
-                int m = n;
-                bot.apply("stempel_hoed_" + n).ifPresent(b -> b.setHidden(m != dorp));
-                bot.apply("stempel_sjaal_" + n).ifPresent(b -> b.setHidden(m != dorp));
-            }
             Long start = PLOFFEN.get(npc.getId());
-            float p = start == null || npc.level() == null ? 1f
-                    : ((npc.level().getGameTime() - start) + Minecraft.getInstance().getTimer().getGameTimeDeltaPartialTick(false)) / PLOF_TICKS;
+            float partial = (float) (tick - npc.tickCount);
+            float p = start == null || npc.level() == null ? 1f : ((npc.level().getGameTime() - start) + partial) / PLOF_TICKS;
             float rot = plofHoek(p);
-            bot.apply("arm_right").ifPresent(b -> b.setRotX(b.getInitialSnapshot().getRotX() + rot));
-            bot.apply("stempel_stempel").ifPresent(b -> b.setRotX(-rot * 0.3f));
             if (p >= 1f && start != null) {
                 PLOFFEN.remove(npc.getId());
             }
+            return bot -> {
+                for (int n = 1; n <= 11; n++) {
+                    boolean weg = n != dorp;
+                    bot.ifPresent("stempel_hoed_" + n, b -> b.skipRender(weg).skipChildrenRender(weg));
+                    bot.ifPresent("stempel_sjaal_" + n, b -> b.skipRender(weg).skipChildrenRender(weg));
+                }
+                bot.ifPresent("arm_right", b -> b.setRotX(rot));
+                bot.ifPresent("stempel_stempel", b -> b.setRotX(-rot * 0.3f));
+            };
         });
+        modBus.addListener(ElftochtClient::renderStates);
         modBus.addListener(ElftochtClient::layers);
         NeoForge.EVENT_BUS.register(SchaatsEffecten.class);
     }
@@ -90,11 +102,25 @@ public final class ElftochtClient {
     }
 
     private static void layers(EntityRenderersEvent.AddLayers event) {
-        for (PlayerSkin.Model skin : event.getSkins()) {
-            if (event.getSkin(skin) instanceof AvatarRenderer renderer) {
+        for (PlayerModelType skin : event.getSkins()) {
+            AvatarRenderer<AbstractClientPlayer> renderer = event.getPlayerRenderer(skin);
+            if (renderer != null) {
                 renderer.addLayer(new SchaatsLaag(renderer));
             }
         }
+    }
+
+    /** Copies what the skates and the skater's sway need from the player into its render state (1.1.0). */
+    private static void renderStates(RegisterRenderStateModifiersEvent event) {
+        event.registerAvatarEntityModifier(new AvatarRenderStateModifier() {
+            @Override
+            public <T extends Avatar & ClientAvatarEntity> void accept(T avatar, AvatarRenderState state) {
+                if (avatar instanceof Player player) {
+                    SchaatsLaag.extract(player, state);
+                    SchaatsEffecten.extract(player, state);
+                }
+            }
+        });
     }
 
     /** guhs:elftocht_open */

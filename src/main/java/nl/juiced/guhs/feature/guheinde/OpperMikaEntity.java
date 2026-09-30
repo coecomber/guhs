@@ -70,7 +70,7 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
     public static final float RIDING_FLOOR = 75f;
     public static final int VETBAL_COOLDOWN = 70, VETPLAS_COOLDOWN = 160, PLOF_COOLDOWN = 140;
 
-    private final ServerBossEvent bossBar = new ServerBossEvent(Component.translatable("entity.guhs.opper_mika"),
+    private final ServerBossEvent bossBar = new ServerBossEvent(net.minecraft.util.Mth.createInsecureUUID(this.random), Component.translatable("entity.guhs.opper_mika"),
             BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_10);
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.guh.idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.guh.walk");
@@ -123,11 +123,11 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
         if (source.getEntity() instanceof MikaEntity || source.getEntity() instanceof HongerigeEnderguhEntity || source.getDirectEntity() instanceof MikaVetbalEntity) {
             return false;
         }
-        boolean hurt = super.hurt(source, amount);
+        boolean hurt = super.hurtServer(serverLevel, source, amount);
         if (hurt && isRiding() && this.getHealth() < RIDING_FLOOR) {
             this.setHealth(RIDING_FLOOR);
             if (shoutCooldown <= 0) {
@@ -152,8 +152,8 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         bossBar.setProgress(this.getHealth() / this.getMaxHealth());
         if (shoutCooldown > 0) {
             shoutCooldown--;
@@ -227,7 +227,7 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
         cloud.setRadiusPerTick(-0.01f);
         cloud.setDuration(120);
         cloud.setWaitTime(0);
-        cloud.setParticle(new DustParticleOptions(new Vector3f(0.85f, 0.7f, 0.25f), 1.5f));
+        cloud.setCustomParticle(new DustParticleOptions(0xD9B240 /* 0.85, 0.7, 0.25 */, 1.5f));
         cloud.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 2));
         this.level().addFreshEntity(cloud);
     }
@@ -238,11 +238,11 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
             return;
         }
         level.sendParticles(ParticleTypes.EXPLOSION, getX(), getY() + 0.5, getZ(), 3, 1.5, 0.2, 1.5, 0);
-        level.sendParticles(new DustParticleOptions(new Vector3f(0.45f, 0.2f, 0.45f), 2.5f), getX(), getY() + 0.3, getZ(), 40, 2.5, 0.2, 2.5, 0.1);
+        level.sendParticles(new DustParticleOptions(0x733373 /* 0.45, 0.2, 0.45 */, 2.5f), getX(), getY() + 0.3, getZ(), 40, 2.5, 0.2, 2.5, 0.1);
         this.playSound(SoundEvents.GENERIC_EXPLODE.value(), 1f, 1.4f);
         for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(4, 1.5, 4),
                 e -> e != this && !(e instanceof MikaEntity) && !(e instanceof HongerigeEnderguhEntity))) {
-            e.hurt(this.damageSources().mobAttack(this), 4f);
+            e.hurtOrSimulate(this.damageSources().mobAttack(this), 4f);
             Vec3 away = e.position().subtract(this.position()).normalize();
             e.knockback(1.4, -away.x, -away.z);
             e.hurtMarked = true;
@@ -264,9 +264,9 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
 
     /** His hits steal kaasknabbels: NJEG, those are his now (until you beat him). */
     @Override
-    public boolean doHurtTarget(Entity target) {
+    public boolean doHurtTarget(ServerLevel serverLevel, Entity target) {
         this.triggerAnim("action", "pounce");
-        boolean hurt = super.doHurtTarget(target);
+        boolean hurt = super.doHurtTarget(serverLevel, target);
         if (hurt && target instanceof ServerPlayer player) {
             steal(player);
         }
@@ -325,7 +325,7 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false;
     }
 

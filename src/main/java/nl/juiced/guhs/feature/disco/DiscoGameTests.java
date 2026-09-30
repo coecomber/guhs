@@ -91,7 +91,7 @@ public class DiscoGameTests {
         helper.assertTrue(player.blockPosition().equals(game.centre()), "the dancer went to the middle of the floor");
         // no hunger, no damage
         player.getFoodData().setFoodLevel(2);
-        player.hurt(helper.getLevel().damageSources().fall(), 5f);
+        player.hurtOrSimulate(helper.getLevel().damageSources().fall(), 5f);
         helper.assertTrue(player.getHealth() == player.getMaxHealth(), "dancers can't get hurt");
         // round 1: the DJ lights the colour, then you step on it (for real: stand on a tile of that colour)
         boolean litDuringShow = false;
@@ -480,7 +480,7 @@ public class DiscoGameTests {
         var sounds = net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT;
         for (DiscoLiedje l : DiscoLiedje.values()) {
             helper.assertTrue(sounds.containsKey(nl.juiced.guhs.Guhs.id("disco." + l.id)), "sound event guhs:disco." + l.id);
-            helper.assertTrue(DiscoMuziek.LIEDJES.get(l).get().getLocation().equals(nl.juiced.guhs.Guhs.id("disco." + l.id)), "registered " + l);
+            helper.assertTrue(DiscoMuziek.LIEDJES.get(l).get().location().equals(nl.juiced.guhs.Guhs.id("disco." + l.id)), "registered " + l);
             double loop = l.loopBeats * 60.0 / l.bpm;
             helper.assertTrue(loop <= l.seconds && l.seconds - loop < 5 && l.loopBeats % 4 == 0, l + ": the loop point is inside the track, on a bar");
             helper.assertTrue(l.seconds > 80 && l.seconds < 120, l + " is about 1:30 - 1:52: " + l.seconds);

@@ -143,7 +143,7 @@ public class PraatScherm extends Screen {
         // the character
         g.fill(left + 10, top + 22, left + 10 + PIC, top + 22 + PIC, 0x30F7B6CB);
         if (npc instanceof LivingEntity living) {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(g, left + 10, top + 22, left + 10 + PIC, top + 22 + PIC, 26, 0.0625f,
+            InventoryScreen.extractEntityInInventoryFollowsMouse(g, left + 10, top + 22, left + 10 + PIC, top + 22 + PIC, 26, 0.0625f,
                     mouseX, mouseY, living);
         }
         // the speech balloon
@@ -152,7 +152,7 @@ public class PraatScherm extends Screen {
         g.fill(bx - 4, by + 12, bx, by + 18, 0xFFFFF4F8);
         List<Object> args = new ArrayList<>();
         for (Tag t : nu().getListOrEmpty("Args")) {
-            args.add(t.getAsString());
+            args.add(t.asString().orElse(""));
         }
         Component tekst = Component.translatable(nu().getStringOr("Tekst", ""), args.toArray());
         List<FormattedCharSequence> lines = font.split(tekst, bw - 10);

@@ -35,7 +35,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -105,7 +104,7 @@ public final class KnuffeldalFeature {
     public static final DeferredBlock<KnuffeldalBlocks.Zaailing> PLUIZENBOOM_ZAAILING = BLOCKS.registerBlock("pluizenboom_zaailing",
             KnuffeldalBlocks.Zaailing::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_SAPLING).mapColor(MapColor.COLOR_PINK));
     public static final DeferredBlock<KnuffeldalBlocks.Guhpaddenstoel> GUHPADDENSTOEL = BLOCKS.registerBlock("guhpaddenstoel",
-            KnuffeldalBlocks.Guhpaddenstoel::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollission().instabreak()
+            KnuffeldalBlocks.Guhpaddenstoel::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollision().instabreak()
                     .sound(SoundType.GRASS).lightLevel(s -> 3).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<HugeMushroomBlock> GUHPADDENSTOEL_HOED = BLOCKS.registerBlock("guhpaddenstoel_hoed", HugeMushroomBlock::new,
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM_BLOCK).mapColor(MapColor.COLOR_PINK).lightLevel(s -> 6));
@@ -136,11 +135,11 @@ public final class KnuffeldalFeature {
     public static final DeferredBlock<KnuffeldalBlocks.SeizoensBloembak> SEIZOENSBLOEMBAK = BLOCKS.registerBlock("seizoensbloembak",
             KnuffeldalBlocks.SeizoensBloembak::new, () -> steen().noOcclusion().randomTicks());
     public static final DeferredBlock<KnuffeldalBlocks.SeizoensSlinger> SEIZOENSSLINGER = BLOCKS.registerBlock("seizoensslinger",
-            KnuffeldalBlocks.SeizoensSlinger::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2f).sound(SoundType.WOOL)
-                    .noCollission().noOcclusion().randomTicks().lightLevel(s -> s.getValue(KnuffeldalBlocks.SEIZOEN) == nl.juiced.guhs.feature.knus.Seizoen.WINTER ? 7 : 0));
+            KnuffeldalBlocks.SeizoensSlinger::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2f).sound(SoundType.WOOL)
+                    .noCollision().noOcclusion().randomTicks().lightLevel(s -> s.getValue(KnuffeldalBlocks.SEIZOEN) == nl.juiced.guhs.feature.knus.Seizoen.WINTER ? 7 : 0));
     public static final DeferredBlock<KnuffeldalBlocks.Bladerhoopje> BLADERHOOPJE = BLOCKS.registerBlock("bladerhoopje",
-            KnuffeldalBlocks.Bladerhoopje::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(0.2f).sound(SoundType.GRASS)
-                    .noCollission().noOcclusion().randomTicks().pushReaction(PushReaction.DESTROY).ignitedByLava());
+            KnuffeldalBlocks.Bladerhoopje::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(0.2f).sound(SoundType.GRASS)
+                    .noCollision().noOcclusion().randomTicks().pushReaction(PushReaction.DESTROY).ignitedByLava());
     public static final DeferredBlock<KnuffeldalBlocks.Sneeuwpopguh> SNEEUWPOPGUH = BLOCKS.registerBlock("sneeuwpopguh",
             KnuffeldalBlocks.Sneeuwpopguh::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SNOW_BLOCK).noOcclusion().pushReaction(PushReaction.DESTROY));
 
@@ -154,8 +153,7 @@ public final class KnuffeldalFeature {
     public static final DeferredHolder<EntityType<?>, EntityType<KruimelMikaEntity>> KRUIMEL_MIKA = ENTITY_TYPES.register("kruimel_mika",
             () -> EntityType.Builder.of(KruimelMikaEntity::new, MobCategory.CREATURE).sized(0.9f, 0.8f).eyeHeight(0.55f).clientTrackingRange(10)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.parse("guhs:kruimel_mika"))));
-    public static final DeferredItem<DeferredSpawnEggItem> KRUIMEL_MIKA_SPAWN_EGG = ITEMS.registerItem("kruimel_mika_spawn_egg",
-            p -> new DeferredSpawnEggItem(KRUIMEL_MIKA, 0xE9B478, 0x9A3A5A, p));
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> KRUIMEL_MIKA_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "kruimel_mika_spawn_egg", KRUIMEL_MIKA);   // 1.0.0 colours 0xE9B478 / 0x9A3A5A (26.1: no tint)
 
     static {
         for (DeferredBlock<?> block : List.of(KNUFFELGRAS, PLUIZENBOOM_STAM, PLUIZENBOOM_BLADEREN, GUHPADDENSTOEL_HOED, GUHPADDENSTOEL_STEEL,

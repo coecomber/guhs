@@ -130,7 +130,7 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
     public void addVahoeg() {
         setVahoeg(getVahoeg() + 1);
         if (this.level() instanceof ServerLevel level) {
-            level.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.55f, 0.75f), 2f), getX(), getY() + getBbHeight() / 2, getZ(), 40,
+            level.sendParticles(new DustParticleOptions(0xFF8CBF /* 1, 0.55, 0.75 */, 2f), getX(), getY() + getBbHeight() / 2, getZ(), 40,
                     getBbWidth() / 2, getBbHeight() / 2, getBbWidth() / 2, 0.1);
             this.playSound(ModSounds.GUH_HAPPY.get(), 2f, 0.6f);
         }
@@ -164,8 +164,8 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         stateTicks++;
         double top = center.getY() + 22;
         switch (getToestand()) {
@@ -241,7 +241,7 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
     private void bodySlam() {
         for (LivingEntity e : this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(2),
                 e -> e instanceof Player p && !p.isCreative() && !p.isSpectator())) {
-            e.hurt(this.damageSources().mobAttack(this), 3f);
+            e.hurtOrSimulate(this.damageSources().mobAttack(this), 3f);
             Vec3 away = e.position().subtract(this.position()).normalize();
             e.knockback(2.0, -away.x, -away.z);
             e.setDeltaMovement(e.getDeltaMovement().add(0, 0.5, 0));
@@ -260,7 +260,7 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
     // ------------------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
         if (source.getEntity() instanceof ServerPlayer player && messageCooldown <= 0) {
             messageCooldown = 60;
             player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.enderguh.niet_meppen").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -269,7 +269,7 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(ServerLevel serverLevel, DamageSource source) {
         return !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
@@ -303,7 +303,7 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
         setToestand(Toestand.VRIJ);
         ServerLevel level = (ServerLevel) this.level();
         level.sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight(), getZ(), 20, 2, 1, 2, 0);
-        level.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.55f, 0.75f), 3f), getX(), getY() + 1, getZ(), 80, 2, 1.5, 2, 0.2);
+        level.sendParticles(new DustParticleOptions(0xFF8CBF /* 1, 0.55, 0.75 */, 3f), getX(), getY() + 1, getZ(), 80, 2, 1.5, 2, 0.2);
         this.playSound(ModSounds.GUH_HAPPY.get(), 3f, 0.7f);
         this.playSound(SoundEvents.PLAYER_LEVELUP, 2f, 0.8f);
         Entity rider = this.getFirstPassenger();
@@ -342,7 +342,7 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false;
     }
 

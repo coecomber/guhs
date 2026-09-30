@@ -103,7 +103,8 @@ public class OogVanVadsigEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    public void lerpMotion(double x, double y, double z) {
+    public void lerpMotion(Vec3 movement) {
+        double x = movement.x, y = movement.y, z = movement.z;
         setDeltaMovement(x, y, z);
         if (xRotO == 0 && yRotO == 0) {
             setYRot((float) (Mth.atan2(x, z) * 180 / Math.PI));
@@ -136,7 +137,7 @@ public class OogVanVadsigEntity extends Entity implements ItemSupplier {
             setDeltaMovement(v);
         }
         // a trail of pink and cheese-yellow sparkles
-        level().addParticle(new DustParticleOptions(random.nextBoolean() ? new Vector3f(1f, 0.55f, 0.75f) : new Vector3f(1f, 0.82f, 0.3f), 1f),
+        level().addParticle(new DustParticleOptions(random.nextBoolean() ? 0xFF8CBF /* 1, 0.55, 0.75 */ : 0xFFD14C /* 1, 0.82, 0.3 */, 1f),
                 nx - v.x * 0.25 + random.nextDouble() * 0.6 - 0.3, ny - v.y * 0.25 - 0.3, nz - v.z * 0.25 + random.nextDouble() * 0.6 - 0.3, 0, 0, 0);
         if (!level().isClientSide()) {
             setPos(nx, ny, nz);
@@ -158,7 +159,7 @@ public class OogVanVadsigEntity extends Entity implements ItemSupplier {
         playSound(SoundEvents.GLASS_BREAK, 1f, 1.4f);
         if (level() instanceof ServerLevel server) {
             server.sendParticles(ParticleTypes.POOF, getX(), getY(), getZ(), 12, 0.2, 0.2, 0.2, 0.02);
-            server.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.82f, 0.3f), 1.5f), getX(), getY(), getZ(), 20, 0.3, 0.3, 0.3, 0.05);
+            server.sendParticles(new DustParticleOptions(0xFFD14C /* 1, 0.82, 0.3 */, 1.5f), getX(), getY(), getZ(), 20, 0.3, 0.3, 0.3, 0.05);
             if (owner != null && server.getPlayerByUUID(owner) instanceof ServerPlayer player && player.distanceToSqr(this) < 64 * 64) {
                 player.sendOverlayMessage(Component.translatable("gui.guhs.guheinde.oog_kapot").withStyle(ChatFormatting.LIGHT_PURPLE));
             }
@@ -176,14 +177,20 @@ public class OogVanVadsigEntity extends Entity implements ItemSupplier {
         return Mth.lerp(0.2f, from, to);
     }
 
+    /** 1.1.0: plain entities must say how they take damage; like 1.0.0's Entity#hurt default: not at all. */
+    @Override
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, net.minecraft.world.damagesource.DamageSource source, float damage) {
+        return false;
+    }
+
     @Override
     protected void addAdditionalSaveData(ValueOutput tag) {
-        tag.put("Item", getItem().save(registryAccess()));
+        tag.store("Item", ItemStack.CODEC, getItem());
     }
 
     @Override
     protected void readAdditionalSaveData(ValueInput tag) {
-        setItem(tag.keySet().contains("Item") ? ItemStack.parse(registryAccess(), tag.getCompoundOrEmpty("Item")).orElse(defaultItem()) : defaultItem());
+        setItem(tag.read("Item", ItemStack.CODEC).orElse(defaultItem()));
     }
 
     @Override

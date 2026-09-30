@@ -390,20 +390,20 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
     // =================================================================================================================
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(ServerLevel serverLevel, DamageSource source) {
         return !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (!level().isClientSide() && source.getEntity() instanceof ServerPlayer player && isInvulnerableTo(source)) {
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
+        if (!level().isClientSide() && source.getEntity() instanceof ServerPlayer player && isInvulnerableTo(serverLevel, source)) {
             giechel();
             player.sendOverlayMessage(Component.translatable("gui.guhs.kruimel_mika.niet_meppen").withStyle(ChatFormatting.LIGHT_PURPLE));
             if (toestand != Toestand.WEG) {
                 vlucht(player.position(), 6);
             }
         }
-        return super.hurt(source, amount);
+        return super.hurtServer(serverLevel, source, amount);
     }
 
     @Override
@@ -446,13 +446,12 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
             tag.putString("Taak", taak.id());
         }
         if (!buit.isEmpty()) {
-            tag.put("Buit", buit.save(registryAccess()));
+            tag.store("Buit", ItemStack.CODEC, buit);
         }
-        ListTag list = new ListTag();
+        var list = tag.list("Spoor", com.mojang.serialization.Codec.LONG);
         for (Vec3 p : spoor) {
-            list.add(LongTag.valueOf(BlockPos.containing(p).asLong()));
+            list.add(BlockPos.containing(p).asLong());
         }
-        tag.put("Spoor", list);
     }
 
     @Override
@@ -465,10 +464,10 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
         }
         eigenaar = tag.read("Eigenaar", UUIDUtil.CODEC).isPresent() ? tag.read("Eigenaar", UUIDUtil.CODEC).orElseThrow() : null;
         taak = Feesttaak.byId(tag.getStringOr("Taak", ""));
-        buit = tag.keySet().contains("Buit") ? ItemStack.parse(registryAccess(), tag.getCompoundOrEmpty("Buit")).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
+        buit = tag.read("Buit", ItemStack.CODEC).orElse(ItemStack.EMPTY);
         spoor.clear();
-        for (Tag t : tag.getListOrEmpty("Spoor")) {
-            spoor.add(net.minecraft.world.phys.Vec3.atBottomCenterOf(BlockPos.of(((LongTag) t).getAsLong())));
+        for (long l : tag.listOrEmpty("Spoor", com.mojang.serialization.Codec.LONG)) {
+            spoor.add(net.minecraft.world.phys.Vec3.atBottomCenterOf(BlockPos.of(l)));
         }
     }
 

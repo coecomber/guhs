@@ -70,7 +70,7 @@ public class DiscoMilkshakeBlock extends Block {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        level.playSound(player, pos, SoundEvents.GENERIC_DRINK, SoundSource.BLOCKS, 0.6f, 1.4f);
+        level.playSound(player, pos, SoundEvents.GENERIC_DRINK.value(), SoundSource.BLOCKS, 0.6f, 1.4f);
         if (!level.isClientSide()) {
             player.sendOverlayMessage(Component.translatable("block.guhs.disco_milkshake.slurp").withStyle(ChatFormatting.LIGHT_PURPLE));
         }

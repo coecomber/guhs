@@ -3,7 +3,6 @@ package nl.juiced.guhs.feature.guheinde;
 import java.util.List;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -12,8 +11,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -21,17 +19,20 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.MikaEntity;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * De Knabbelkroon: Opper-Mika's crown, yours after your first win. A helmet as strong as vahoege vads, with the
  * vahoeg-aura: you never get really hungry, guhs around you now and then go VAHOEG! (hearts), and Mika's can't stand it:
  * they come for you first, and you hit them harder ({@link #MIKA_DAMAGE}, see GuheindeEvents).
+ * (1.1.0: a plain item; the helmet part comes from {@code Item.Properties#humanoidArmor}, see GuheindeFeature.)
  */
-public class KnabbelkroonItem extends ArmorItem {
+public class KnabbelkroonItem extends Item {
     public static final float MIKA_DAMAGE = 1.5f;
     public static final int AURA_RANGE = 8;
 
-    public KnabbelkroonItem(Holder<ArmorMaterial> material, Properties properties) {
-        super(material, Type.HELMET, properties);
+    public KnabbelkroonItem(Properties properties) {
+        super(properties);
     }
 
     public static boolean wears(net.minecraft.world.entity.LivingEntity entity) {
@@ -39,8 +40,8 @@ public class KnabbelkroonItem extends ArmorItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (level.isClientSide() || !(entity instanceof Player player) || player.getItemBySlot(EquipmentSlot.HEAD) != stack) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
+        if (!(entity instanceof Player player) || player.getItemBySlot(EquipmentSlot.HEAD) != stack) {
             return;
         }
         if (player.tickCount % 100 == 0) {
@@ -63,8 +64,8 @@ public class KnabbelkroonItem extends ArmorItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.knabbelkroon.lore").withStyle(ChatFormatting.GOLD));
-        tooltip.add(Component.translatable("item.guhs.knabbelkroon.lore2").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.knabbelkroon.lore").withStyle(ChatFormatting.GOLD));
+        tooltip.accept(Component.translatable("item.guhs.knabbelkroon.lore2").withStyle(ChatFormatting.GRAY));
     }
 }

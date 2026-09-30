@@ -122,7 +122,7 @@ public final class GuheindeEvents {
         guh.setVariant(now);
         ServerLevel level = player.level();
         level.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.3, guh.getZ(), 8, 0.4, 0.3, 0.4, 0);
-        level.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.55f, 0.75f), 1.5f), guh.getX(), guh.getY() + 0.5, guh.getZ(), 30, 0.5, 0.5, 0.5, 0.1);
+        level.sendParticles(new DustParticleOptions(0xFF8CBF /* 1, 0.55, 0.75 */, 1.5f), guh.getX(), guh.getY() + 0.5, guh.getZ(), 30, 0.5, 0.5, 0.5, 0.1);
         level.playSound(null, guh, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1.2f, 1.2f);
         guh.addEffect(new MobEffectInstance(MobEffects.SPEED, 600, 2));
         Vec3 away = guh.position().subtract(player.position()).normalize();

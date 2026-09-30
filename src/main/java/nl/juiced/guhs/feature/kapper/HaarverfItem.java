@@ -8,6 +8,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** A bottle of hair dye: right-click your own tamed guh (with a hairstyle) to dye its hair (see {@link KapperHaar}). */
 public class HaarverfItem extends Item {
     public final Haarverf verf;
@@ -18,7 +20,7 @@ public class HaarverfItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.haarverf.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.haarverf.lore").withStyle(ChatFormatting.GRAY));
     }
 }

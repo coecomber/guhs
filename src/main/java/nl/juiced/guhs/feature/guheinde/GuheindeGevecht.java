@@ -65,6 +65,9 @@ import net.minecraft.world.entity.EntitySpawnReason;
  */
 public class GuheindeGevecht extends SavedData {
     public static final String NAME = "guhs_guheinde";
+    /** 1.1.0: saved as guhs:guheinde (the 1.0.0 file guhs_guheinde.dat of the Guheinde is moved once, see GuhSavedData). */
+    public static final net.minecraft.world.level.saveddata.SavedDataType<GuheindeGevecht> TYPE = nl.juiced.guhs.storage.GuhSavedData.tagType(
+            "guheinde", GuheindeGevecht::new, t -> load(t, null), f -> f.save(new CompoundTag(), null));
     /** The Knabbelberg template (see guheinde_bouw.py): size, its middle and ground, and the plateau height. */
     public static final int BERG_SIZE_X = 49, BERG_SIZE_Y = 48, BERG_SIZE_Z = 49, BERG_CX = 24, BERG_CZ = 24, BERG_G = 12, BERG_TOP = 32;
     public static final int PILLARS = 8, PILLAR_RING = 42;
@@ -108,7 +111,7 @@ public class GuheindeGevecht extends SavedData {
         if (!(level instanceof ServerLevel server) || !GuheindeFeature.isGuheinde(server)) {
             return null;
         }
-        return server.getDataStorage().computeIfAbsent(new SavedData.Factory<>(GuheindeGevecht::new, GuheindeGevecht::load, null), NAME);
+        return nl.juiced.guhs.storage.GuhSavedData.get(server, TYPE, NAME);
     }
 
     // ------------------------------------------------------------------------------------------------------------
@@ -333,7 +336,7 @@ public class GuheindeGevecht extends SavedData {
                     for (int y = 1; y <= 4; y++) {
                         BlockPos p = top.offset(x, y, z);
                         BlockState s = level.getBlockState(p);
-                        level.setBlock(p, s.updateShape(net.minecraft.core.Direction.UP, s, level, p, p), 3);
+                        level.setBlock(p, s.updateShape(level, level, p, net.minecraft.core.Direction.UP, p, s, level.getRandom()), 3);
                     }
                 }
             }
@@ -382,7 +385,7 @@ public class GuheindeGevecht extends SavedData {
         boss.snapTo(mount.getX(), mount.getY() + 2, mount.getZ(), 0f, 0f);
         level.addFreshEntity(boss);
         if (mount.getToestand() != HongerigeEnderguhEntity.Toestand.VRIJ) {
-            boss.startRiding(mount, true);
+            boss.startRiding(mount, true, true);
         }
         bossId = boss.getUUID();
         mountId = mount.getUUID();
@@ -533,7 +536,7 @@ public class GuheindeGevecht extends SavedData {
             knabbel.setDeltaMovement(0, -0.3, 0);
             level.addFreshEntity(knabbel);
             if (level.getRandom().nextInt(4) == 0) {
-                level.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.82f, 0.3f), 2f), x, player.getY() + 16, z, 6, 1, 0.5, 1, 0);
+                level.sendParticles(new DustParticleOptions(0xFFD14C /* 1, 0.82, 0.3 */, 2f), x, player.getY() + 16, z, 6, 1, 0.5, 1, 0);
             }
         }
     }
@@ -665,8 +668,7 @@ public class GuheindeGevecht extends SavedData {
                 List.of(Component.translatable("gui.guhs.guheinde.scorebord.snelst")), s -> (s / 60) + ":" + String.format("%02d", s % 60));
     }
 
-    @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public CompoundTag save(CompoundTag tag, HolderLookup.@org.jspecify.annotations.Nullable Provider registries) {
         tag.putBoolean("IslandBuilt", islandBuilt);
         tag.putInt("GroundY", groundY);
         tag.putBoolean("EverWon", everWon);
@@ -691,7 +693,7 @@ public class GuheindeGevecht extends SavedData {
         return tag;
     }
 
-    public static GuheindeGevecht load(CompoundTag tag, HolderLookup.Provider registries) {
+    public static GuheindeGevecht load(CompoundTag tag, HolderLookup.@org.jspecify.annotations.Nullable Provider registries) {
         GuheindeGevecht f = new GuheindeGevecht();
         f.islandBuilt = tag.getBooleanOr("IslandBuilt", false);
         f.groundY = tag.contains("GroundY") ? tag.getIntOr("GroundY", 0) : 64;

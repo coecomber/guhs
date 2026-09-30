@@ -7,8 +7,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +14,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * Warme chocovet and a kommetje snert (from the koek-en-zopie stalls, {@link KopjesBlock}): drink it (quick) and you're
  * warm inside: a short speed boost (Speed II for {@link #BOOST_TICKS} ticks) and a little cloud of warmth. VAHOEG!
@@ -34,16 +34,6 @@ public class WarmDrankjeItem extends Item {
     }
 
     @Override
-    public SoundEvent getDrinkingSound() {
-        return SoundEvents.HONEY_DRINK;
-    }
-
-    @Override
-    public SoundEvent getEatingSound() {
-        return SoundEvents.HONEY_DRINK;
-    }
-
-    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         ItemStack rest = super.finishUsingItem(stack, level, entity);
         if (level instanceof ServerLevel server && entity instanceof ServerPlayer player) {
@@ -55,7 +45,7 @@ public class WarmDrankjeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
     }
 }

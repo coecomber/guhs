@@ -173,9 +173,9 @@ public class KapperGameTests {
             guh.wear(GuhClothes.KAPSEL_MATJE);
             KapperHaar.verf(guh, Haarverf.PERZIK);
             net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
-            guh.saveWithoutId(tag);
+            nl.juiced.guhs.storage.Nbt.saveWithoutId(guh, tag);
             GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-            copy.load(tag);
+            nl.juiced.guhs.storage.Nbt.load(copy, tag);
             helper.assertTrue(copy.getClothes(GuhClothes.Slot.HAAR) == GuhClothes.KAPSEL_MATJE && copy.getHaarkleur() == Haarverf.PERZIK.rgb
                     && KapperHaar.verfVan(copy) == Haarverf.PERZIK, "saved");
         } finally {
@@ -207,7 +207,7 @@ public class KapperGameTests {
             BlockPos near = stoelen.stream().min((a, b) -> Double.compare(a.distToCenterSqr(npc.position()), b.distToCenterSqr(npc.position()))).orElseThrow();
             helper.assertTrue(show.stoel().equals(near), "the showstoel is the nearest chair");
             // no hunger, no damage
-            p.hurt(helper.getLevel().damageSources().fall(), 5f);
+            p.hurtOrSimulate(helper.getLevel().damageSources().fall(), 5f);
             helper.assertTrue(p.getHealth() == p.getMaxHealth(), "no damage in the salon");
             // customer 1: cut before washing doesn't work; then perfect
             tickUntil(helper, npc, show, KappersShow.Fase.KLANT);
@@ -317,7 +317,7 @@ public class KapperGameTests {
     @GuhTest(template = EMPTY, timeoutTicks = 120)
     public static void kapperKlantZonderShowGaatNaarHuis(GameTestHelper helper) {
         KapperKlantEntity klant = helper.spawn(KapperFeature.KAPPER_KLANT.get(), new BlockPos(2, 1, 2));
-        klant.hurt(helper.getLevel().damageSources().generic(), 5f);
+        klant.hurtOrSimulate(helper.getLevel().damageSources().generic(), 5f);
         helper.assertTrue(klant.getHealth() == klant.getMaxHealth() && !klant.isFood(new ItemStack(ModItems.KAAS_KNABBELS.get())), "lief and untouchable");
         helper.succeedWhen(() -> helper.assertTrue(klant.isRemoved(), "went home"));
     }

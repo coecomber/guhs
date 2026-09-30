@@ -695,8 +695,8 @@ public final class KappersShow {
     /** The actionbar: customer, patience, score. */
     private void bar(ServerPlayer p) {
         int s = (timer + 19) / 20;
-        p.displayClientMessage(Component.translatable("quest.guhs.kapper.bar.klant", nr + 1, aantal, s, score)
-                .withStyle(s <= 5 ? ChatFormatting.RED : ChatFormatting.LIGHT_PURPLE), true);
+        p.sendOverlayMessage(Component.translatable("quest.guhs.kapper.bar.klant", nr + 1, aantal, s, score)
+                .withStyle(s <= 5 ? ChatFormatting.RED : ChatFormatting.LIGHT_PURPLE));
     }
 
     /** The floating top 3 above the showstoel. */

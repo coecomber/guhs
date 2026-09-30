@@ -1,84 +1,68 @@
 package nl.juiced.guhs.feature.guheinde.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.model.object.crystal.EndCrystalModel;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.entity.EndCrystalRenderer;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.EndCrystalRenderer;
+import net.minecraft.client.renderer.entity.state.EndCrystalRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.guheinde.KnabbelkristalEntity;
-import org.joml.Quaternionf;
 
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-/** A knabbelkristal: the end crystal model (spinning cubes on a base) with a cheese-and-knabbel texture, and its beam. */
-public class KnabbelkristalRenderer extends EntityRenderer<KnabbelkristalEntity> {
+/**
+ * A knabbelkristal: the end crystal model (spinning cubes on a base) with a cheese-and-knabbel texture, and its beam.
+ * (1.1.0: vanilla's 26.1 EndCrystalRenderer with our texture; the entity is no EndCrystal any more, see KnabbelkristalEntity.)
+ */
+public class KnabbelkristalRenderer extends EntityRenderer<KnabbelkristalEntity, EndCrystalRenderState> {
     private static final Identifier TEXTURE = Guhs.id("textures/entity/knabbelkristal.png");
-    private static final RenderType RENDER_TYPE = RenderTypes.entityCutout(TEXTURE);
-    private static final float SIN_45 = (float) Math.sin(Math.PI / 4);
-    private final ModelPart cube, glass, base;
+    private final EndCrystalModel model;
 
     public KnabbelkristalRenderer(EntityRendererProvider.Context context) {
         super(context);
         this.shadowRadius = 0.5f;
-        ModelPart part = context.bakeLayer(ModelLayers.END_CRYSTAL);
-        this.glass = part.getChild("glass");
-        this.cube = part.getChild("cube");
-        this.base = part.getChild("base");
+        this.model = new EndCrystalModel(context.bakeLayer(ModelLayers.END_CRYSTAL));
     }
 
     @Override
-    public void render(KnabbelkristalEntity entity, float yaw, float partialTicks, PoseStack pose, MultiBufferSource buffer, int light) {
-        pose.pushPose();
-        float bob = EndCrystalRenderer.getY(entity, partialTicks);
-        float spin = (entity.time + partialTicks) * 3f;
-        VertexConsumer vc = buffer.getBuffer(RENDER_TYPE);
+    public EndCrystalRenderState createRenderState() {
+        return new EndCrystalRenderState();
+    }
+
+    @Override
+    public void extractRenderState(KnabbelkristalEntity entity, EndCrystalRenderState state, float partialTicks) {
+        super.extractRenderState(entity, state, partialTicks);
+        state.ageInTicks = entity.time + partialTicks;
+        state.showsBottom = entity.showsBottom();
+        BlockPos target = entity.getBeamTarget();
+        state.beamOffset = target == null ? null : Vec3.atCenterOf(target).subtract(entity.getPosition(partialTicks));
+    }
+
+    @Override
+    public void submit(EndCrystalRenderState state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
         pose.pushPose();
         pose.scale(2f, 2f, 2f);
         pose.translate(0f, -0.5f, 0f);
-        int overlay = OverlayTexture.NO_OVERLAY;
-        if (entity.showsBottom()) {
-            base.render(pose, vc, light, overlay);
-        }
-        pose.mulPose(Axis.YP.rotationDegrees(spin));
-        pose.translate(0f, 1.5f + bob / 2f, 0f);
-        pose.mulPose(new Quaternionf().setAngleAxis((float) (Math.PI / 3), SIN_45, 0f, SIN_45));
-        glass.render(pose, vc, light, overlay);
-        pose.scale(0.875f, 0.875f, 0.875f);
-        pose.mulPose(new Quaternionf().setAngleAxis((float) (Math.PI / 3), SIN_45, 0f, SIN_45));
-        pose.mulPose(Axis.YP.rotationDegrees(spin));
-        glass.render(pose, vc, light, overlay);
-        pose.scale(0.875f, 0.875f, 0.875f);
-        pose.mulPose(new Quaternionf().setAngleAxis((float) (Math.PI / 3), SIN_45, 0f, SIN_45));
-        pose.mulPose(Axis.YP.rotationDegrees(spin));
-        cube.render(pose, vc, light, overlay);
+        collector.submitModel(model, state, pose, TEXTURE, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
         pose.popPose();
-        pose.popPose();
-        BlockPos target = entity.getBeamTarget();
-        if (target != null) {
-            float dx = (float) (target.getX() + 0.5 - entity.getX());
-            float dy = (float) (target.getY() + 0.5 - entity.getY());
-            float dz = (float) (target.getZ() + 0.5 - entity.getZ());
+        Vec3 beam = state.beamOffset;
+        if (beam != null) {
+            float bob = EndCrystalRenderer.getY(state.ageInTicks);
             pose.pushPose();
-            pose.translate(dx, dy, dz);
-            EnderDragonRenderer.renderCrystalBeams(-dx, -dy + bob, -dz, partialTicks, entity.time, pose, buffer, light);
+            pose.translate(beam);
+            EnderDragonRenderer.submitCrystalBeams(-(float) beam.x, -(float) beam.y + bob, -(float) beam.z, state.ageInTicks, pose, collector,
+                    state.lightCoords);
             pose.popPose();
         }
-        super.render(entity, yaw, partialTicks, pose, buffer, light);
-    }
-
-    @Override
-    public Identifier getTextureLocation(KnabbelkristalEntity entity) {
-        return TEXTURE;
+        super.submit(state, pose, collector, camera);
     }
 
     @Override

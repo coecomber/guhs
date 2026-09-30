@@ -27,7 +27,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SaplingBlock;
@@ -45,6 +45,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.feature.knus.Seizoen;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * The special blocks of the Knuffeldal (2.8): the fluffy biome (knuffelgras, pluisgras, the pluizenboom, the
  * guh-paddenstoel), the guh faces in knuffelsteen, and the blocks of the town, the seasons and the Knusfeest
@@ -95,7 +97,7 @@ public final class KnuffeldalBlocks {
     }
 
     /** Pluisgras: a tuft of pink fluff (like short grass); now and then a pluisje floats off. */
-    public static class Pluisgras extends BushBlock {
+    public static class Pluisgras extends VegetationBlock {
         public static final MapCodec<Pluisgras> CODEC = simpleCodec(Pluisgras::new);
         private static final VoxelShape SHAPE = Block.box(2, 0, 2, 14, 12, 14);
 
@@ -104,7 +106,7 @@ public final class KnuffeldalBlocks {
         }
 
         @Override
-        protected MapCodec<? extends BushBlock> codec() {
+        protected MapCodec<? extends VegetationBlock> codec() {
             return CODEC;
         }
 
@@ -128,7 +130,7 @@ public final class KnuffeldalBlocks {
     }
 
     /** A little guh-paddenstoel (a pink cap with white dots and a tiny guh face). Bone meal: a huge one grows. */
-    public static class Guhpaddenstoel extends BushBlock implements BonemealableBlock {
+    public static class Guhpaddenstoel extends VegetationBlock implements BonemealableBlock {
         public static final MapCodec<Guhpaddenstoel> CODEC = simpleCodec(Guhpaddenstoel::new);
         private static final VoxelShape SHAPE = Block.box(4, 0, 4, 12, 8, 12);
 
@@ -137,7 +139,7 @@ public final class KnuffeldalBlocks {
         }
 
         @Override
-        protected MapCodec<? extends BushBlock> codec() {
+        protected MapCodec<? extends VegetationBlock> codec() {
             return CODEC;
         }
 
@@ -164,7 +166,7 @@ public final class KnuffeldalBlocks {
         @Override
         public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
             var feature = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.CONFIGURED_FEATURE)
-                    .getHolder(KnuffeldalFeature.REUZE_GUHPADDENSTOEL);
+                    .get(KnuffeldalFeature.REUZE_GUHPADDENSTOEL);
             if (feature.isEmpty()) {
                 return;
             }
@@ -177,8 +179,20 @@ public final class KnuffeldalBlocks {
 
     /** Pluizenboom leaves: fluffy pink, and now and then a pluisje drifts down. */
     public static class Bladeren extends LeavesBlock {
+        public static final MapCodec<Bladeren> CODEC = simpleCodec(Bladeren::new);
+
+        /** 1.1.0: no vanilla falling-leaf particles (chance 0), like 1.0.0's plain leaves; the pluisjes come from animateTick. */
         public Bladeren(Properties properties) {
-            super(properties);
+            super(0.0f, properties);
+        }
+
+        @Override
+        public MapCodec<Bladeren> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
         }
 
         @Override
@@ -425,9 +439,9 @@ public final class KnuffeldalBlocks {
         }
 
         @Override
-        protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+        protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighbourPos, BlockState neighbour, RandomSource random) {
             return direction == Direction.DOWN && !canSurvive(state, level, pos) ? net.minecraft.world.level.block.Blocks.AIR.defaultBlockState()
-                    : super.updateShape(state, direction, neighbour, level, pos, neighbourPos);
+                    : super.updateShape(state, level, ticks, pos, direction, neighbourPos, neighbour, random);
         }
 
         @Override
@@ -444,7 +458,7 @@ public final class KnuffeldalBlocks {
         }
 
         @Override
-        protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
             if (state.getValue(VOL)) {
                 if (entity.fallDistance >= Seizoensactiviteiten.SPRONG) {
                     if (!level.isClientSide()) {
@@ -457,7 +471,7 @@ public final class KnuffeldalBlocks {
         }
 
         @Override
-        public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
             entity.causeFallDamage(fallDistance, 0f, level.damageSources().fall());   // (never hurts)
         }
     }
@@ -492,13 +506,13 @@ public final class KnuffeldalBlocks {
         }
 
         @Override
-        protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+        protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighbourPos, BlockState neighbour, RandomSource random) {
             DoubleBlockHalf half = state.getValue(HALF);
             if (direction.getAxis() == Direction.Axis.Y && (half == DoubleBlockHalf.LOWER) == (direction == Direction.UP)
                     && !neighbour.is(this)) {
                 return net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();   // the other half is gone
             }
-            return super.updateShape(state, direction, neighbour, level, pos, neighbourPos);
+            return super.updateShape(state, level, ticks, pos, direction, neighbourPos, neighbour, random);
         }
 
         @Override

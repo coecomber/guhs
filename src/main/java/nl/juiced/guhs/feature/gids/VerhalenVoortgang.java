@@ -210,7 +210,7 @@ public final class VerhalenVoortgang {
         if (stap == 1) {
             for (HemelQuest.Ding d : HemelQuest.Ding.values()) {
                 int heb = HemelQuest.heeft(p, d) ? 1 : Math.min(1, GuhQuests.count(p, d.item()));
-                nodig.add(new VerhaalStand.Nodig(itemId(d.item()), d.item().getDescription(), heb, 1));
+                nodig.add(new VerhaalStand.Nodig(itemId(d.item()), Component.translatable(d.item().getDescriptionId()), heb, 1));
             }
         }
         List<VerhaalStand.Beloning> bel = List.of(
@@ -237,7 +237,7 @@ public final class VerhalenVoortgang {
         List<VerhaalStand.Beloning> bel = List.of(
                 beloning("guhs:vadsigheid_poster", klaar),
                 // (the ukelele's own model draws nothing in a GUI slot: a coconut shows it)
-                new VerhaalStand.Beloning("guhs:kokosnoot", item("guhs:guhwaii_ukelele").getDescription(), klaar),
+                new VerhaalStand.Beloning("guhs:kokosnoot", Component.translatable(item("guhs:guhwaii_ukelele").getDescriptionId()), klaar),
                 new VerhaalStand.Beloning(kleding(GuhClothes.GUHWAII_HULAROKJE), Component.translatable("gui.guhs.verhalen.beloning.kleertjes", "4"), klaar),
                 getemd(p, VerhaalGuh.STITCH626));
         return stand("guhwaii", "guhs:kokosnoot", stap, stap > 0, sleutel, nodig, bel);
@@ -403,7 +403,7 @@ public final class VerhalenVoortgang {
     }
 
     static Item item(String id) {
-        return BuiltInRegistries.ITEM.get(Identifier.parse(id));
+        return BuiltInRegistries.ITEM.getValue(Identifier.parse(id));
     }
 
     static String itemId(Item item) {
@@ -415,7 +415,7 @@ public final class VerhalenVoortgang {
     }
 
     private static VerhaalStand.Nodig nodig(String id, int heb, int n) {
-        return new VerhaalStand.Nodig(id, item(id).getDescription(), Math.min(heb, n), n);
+        return new VerhaalStand.Nodig(id, Component.translatable(item(id).getDescriptionId()), Math.min(heb, n), n);
     }
 
     private static VerhaalStand.Nodig gave(ServerPlayer p, String id, int gaven, int bit, int n) {
@@ -424,7 +424,7 @@ public final class VerhalenVoortgang {
     }
 
     private static VerhaalStand.Beloning beloning(String id, boolean binnen) {
-        return new VerhaalStand.Beloning(id, item(id).getDescription(), binnen);
+        return new VerhaalStand.Beloning(id, Component.translatable(item(id).getDescriptionId()), binnen);
     }
 
     private static VerhaalStand.Beloning getemd(ServerPlayer p, VerhaalGuh g) {
@@ -444,7 +444,7 @@ public final class VerhalenVoortgang {
     }
 
     private static Item eerste(TagKey<Item> tag, Item anders) {
-        return BuiltInRegistries.ITEM.getTag(tag).flatMap(t -> t.stream().findFirst()).map(h -> h.value()).orElse(anders);
+        return BuiltInRegistries.ITEM.get(tag).flatMap(t -> t.stream().findFirst()).map(h -> h.value()).orElse(anders);
     }
 
     /** All ids, in display order. */

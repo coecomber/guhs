@@ -3,9 +3,8 @@ package nl.juiced.guhs.feature.kapper.client;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -31,15 +30,17 @@ public final class KapperClient {
         modBus.addListener(KapperClient::renderers);
         modBus.addListener(KapperClient::particles);
         NeoForge.EVENT_BUS.addListener(KapperClient::tooltip);
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.KAPPERGUH, Guhs.id("geo/entity/guh_npc_kapperguh.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.KAPPERGUH, (npc, state, bot) -> {
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.KAPPERGUH, Guhs.id("entity/guh_npc_kapperguh"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.KAPPERGUH, (npc, tick) -> {
             // snip snip: every few seconds the scissors open and close a few times
-            float t = (float) state.getAnimationTick();
+            float t = (float) tick;
             float phase = t % 70f;
             float open = phase < 16f ? (float) Math.abs(Math.sin(phase * 0.6f)) * 0.45f : 0f;
-            bot.apply("kapper_schaar_blad_a").ifPresent(b -> b.setRotZ(open));
-            bot.apply("kapper_schaar_blad_b").ifPresent(b -> b.setRotZ(-open));
-            bot.apply("kapper_krullen").ifPresent(b -> b.setRotY((float) Math.sin(t * 0.05f) * 0.03f));
+            return bot -> {
+                bot.ifPresent("kapper_schaar_blad_a", b -> b.setRotZ(open));
+                bot.ifPresent("kapper_schaar_blad_b", b -> b.setRotZ(-open));
+                bot.ifPresent("kapper_krullen", b -> b.setRotY((float) Math.sin(t * 0.05f) * 0.03f));
+            };
         });
     }
 
@@ -48,8 +49,8 @@ public final class KapperClient {
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(KapperFeature.HAARPLUKJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Plukje(level, x, y, z, dx, dy, dz, sprites));
-        event.registerSpriteSet(KapperFeature.KRULGLITTER.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Glitter(level, x, y, z, sprites));
+        event.registerSpriteSet(KapperFeature.HAARPLUKJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Plukje(level, x, y, z, dx, dy, dz, sprites));
+        event.registerSpriteSet(KapperFeature.KRULGLITTER.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Glitter(level, x, y, z, sprites));
     }
 
     /** The kapsel items: permanent hair, not clothes. */
@@ -83,12 +84,11 @@ public final class KapperClient {
     }
 
     /** A little tuft of cut hair: twirls down and lies still a moment. */
-    static class Plukje extends TextureSheetParticle {
+    static class Plukje extends SingleQuadParticle {
         private final float spin;
 
         Plukje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z, dx, dy, dz);
-            pickSprite(sprites);
+            super(level, x, y, z, dx, dy, dz, sprites.get(level.getRandom()));
             lifetime = 30 + random.nextInt(25);
             quadSize = 0.06f + random.nextFloat() * 0.05f;
             gravity = 0.25f;
@@ -111,17 +111,17 @@ public final class KapperClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A glittery curl: floats up, twinkles and fades. */
-    static class Glitter extends TextureSheetParticle {
+    static class Glitter extends SingleQuadParticle {
         private final SpriteSet sprites;
 
         Glitter(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
+            super(level, x, y, z, sprites.first());
             this.sprites = sprites;
             setSpriteFromAge(sprites);
             lifetime = 20 + random.nextInt(20);
@@ -141,13 +141,13 @@ public final class KapperClient {
         }
 
         @Override
-        protected int getLightColor(float partialTick) {
+        protected int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

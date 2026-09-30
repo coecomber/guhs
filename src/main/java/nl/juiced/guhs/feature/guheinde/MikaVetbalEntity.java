@@ -1,5 +1,6 @@
 package nl.juiced.guhs.feature.guheinde;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +21,7 @@ public class MikaVetbalEntity extends ThrowableItemProjectile {
     }
 
     public MikaVetbalEntity(Level level, LivingEntity thrower) {
-        super(GuheindeFeature.MIKA_VETBAL.get(), thrower, level);
+        super(GuheindeFeature.MIKA_VETBAL.get(), thrower, level, new net.minecraft.world.item.ItemStack(ModItems.MIKA_VET.get()));
     }
 
     @Override
@@ -34,7 +35,7 @@ public class MikaVetbalEntity extends ThrowableItemProjectile {
         if (result.getEntity() instanceof OpperMikaEntity || result.getEntity() instanceof HongerigeEnderguhEntity) {
             return;
         }
-        result.getEntity().hurt(this.damageSources().thrown(this, this.getOwner()), DAMAGE);
+        result.getEntity().hurtOrSimulate(this.damageSources().thrown(this, this.getOwner()), DAMAGE);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class MikaVetbalEntity extends ThrowableItemProjectile {
             if (this.getOwner() instanceof OpperMikaEntity mika) {
                 mika.vetplas(result.getLocation());
             }
-            ((net.minecraft.server.level.ServerLevel) this.level()).sendParticles(new DustParticleOptions(new Vector3f(0.85f, 0.7f, 0.25f), 2f),
+            ((net.minecraft.server.level.ServerLevel) this.level()).sendParticles(new DustParticleOptions(0xD9B240 /* 0.85, 0.7, 0.25 */, 2f),
                     getX(), getY(), getZ(), 20, 0.4, 0.4, 0.4, 0.05);
             this.discard();
         }

@@ -63,7 +63,7 @@ public class KnabbelsensorBlock extends Block {
         level.setBlock(pos, state.setValue(ACTIVE, true), 3);
         level.scheduleTick(pos, state.getBlock(), ACTIVE_TICKS);
         level.playSound(null, pos, SoundEvents.SCULK_CLICKING, SoundSource.BLOCKS, 1f, 1.35f);
-        level.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.82f, 0.3f), 1f), pos.getX() + 0.5, pos.getY() + 0.8,
+        level.sendParticles(new DustParticleOptions(0xFFD14C /* 1, 0.82, 0.3 */, 1f), pos.getX() + 0.5, pos.getY() + 0.8,
                 pos.getZ() + 0.5, 8, 0.3, 0.2, 0.3, 0.01);
         return true;
     }
@@ -79,7 +79,7 @@ public class KnabbelsensorBlock extends Block {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (state.getValue(ACTIVE) && random.nextInt(3) == 0) {
-            level.addParticle(new DustParticleOptions(new Vector3f(1f, 0.85f, 0.35f), 0.8f), pos.getX() + 0.2 + random.nextDouble() * 0.6,
+            level.addParticle(new DustParticleOptions(0xFFD959 /* 1, 0.85, 0.35 */, 0.8f), pos.getX() + 0.2 + random.nextDouble() * 0.6,
                     pos.getY() + 0.9, pos.getZ() + 0.2 + random.nextDouble() * 0.6, 0, 0.02, 0);
         }
     }
