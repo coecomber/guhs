@@ -30,6 +30,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * Keeps the beauty theatre and its shows safe (the verstopguh approach): nobody breaks, builds, spills or blows up
  * anything in the theatre (creative players may); the model and the jury can't be fed, leashed, named or dressed by
@@ -61,7 +62,7 @@ public final class BeautyProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

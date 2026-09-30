@@ -30,6 +30,7 @@ import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The kaasmijn can't be broken (like the verstopguh house): no breaking, building, buckets or explosions, and mobs
  * don't grief it. The one thing you may break is a cheese vein, with a pickaxe: that's what the mine is for. A mined
@@ -78,7 +79,7 @@ public final class KaasmijnProtection {
     }
 
     /** Only cheese veins, and only with the right tool (a pickaxe), so no vein is ever wasted. */
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         Player player = event.getPlayer();
         BlockState state = event.getState();
         if (state.getBlock() instanceof KaasaderBlock) {

@@ -25,6 +25,7 @@ import nl.juiced.guhs.menu.BankGuhMenu;
 import nl.juiced.guhs.network.BankActionPayload;
 import nl.juiced.guhs.storage.BankContents;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Bank Guh's stomach: search box, sorting, category filter, a scrollable grid of everything stored,
  * a 3x3 crafting grid and your inventory.
@@ -321,6 +322,6 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
     }
 
     private void send(BankGuhMenu.Action action, ItemStack item, int button, boolean shift) {
-        PacketDistributor.sendToServer(new BankActionPayload(menu.containerId, action, item, button, shift));
+        ClientPacketDistributor.sendToServer(new BankActionPayload(menu.containerId, action, item, button, shift));
     }
 }

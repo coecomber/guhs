@@ -466,7 +466,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     /** The buttons on the dashboard blink while the sled stands still: click them (right-click while riding)! */
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new com.geckolib.animation.AnimationController<>(this, "knopjes", 0,
+        controllers.add(new com.geckolib.animation.AnimationController<>("knopjes", 0,
                 state -> isRunning() ? com.geckolib.animation.object.PlayState.STOP : state.setAndContinue(BLINK)));
     }
 

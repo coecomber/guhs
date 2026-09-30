@@ -20,6 +20,7 @@ import net.minecraft.world.entity.npc.villager.Villager;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.registry.ModVillagers;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * Guh villagers are real villagers, dressed as guhs: the villager type texture (textures/entity/villager/type/guh.png)
  * gives them pink fur and big guh eyes, and this layer adds round guh ears on the head and a little tail.
@@ -57,7 +58,7 @@ public class GuhVillagerFeaturesLayer extends RenderLayer<Villager, VillagerMode
         if (villager.isInvisible() || villager.getVillagerData().getType() != ModVillagers.GUH.get()) {
             return;
         }
-        var buffer = buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
+        var buffer = buffers.getBuffer(RenderTypes.entityCutout(TEXTURE));
         poseStack.pushPose();
         getParentModel().getHead().translateAndRotate(poseStack);
         ears.render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY);

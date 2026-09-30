@@ -90,7 +90,7 @@ public final class GuhwaiiSpellenBlocks {
 
     private static <B extends Block> DeferredBlock<B> tiki(String id, java.util.function.Function<BlockBehaviour.Properties, B> maker,
                                                            BlockBehaviour.Properties props) {
-        DeferredBlock<B> block = BLOCKS.registerBlock(id, maker, props);
+        DeferredBlock<B> block = BLOCKS.registerBlock(id, maker, () -> props);
         ITEMS.register(id, () -> new TikiBlockItem(block.get(), new Item.Properties()));
         TIKI.add(block);
         return block;

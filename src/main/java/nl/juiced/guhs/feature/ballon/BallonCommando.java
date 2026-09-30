@@ -22,7 +22,7 @@ public final class BallonCommando {
     }
 
     static void register(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("ballonvlucht").requires(s -> s.hasPermission(2))
+        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("ballonvlucht").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .executes(ctx -> vlieg(ctx.getSource()))
                 .then(Commands.literal("stop").executes(ctx -> stop(ctx.getSource())))));
     }

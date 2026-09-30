@@ -22,6 +22,7 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * Game tests of the kaasmijn: the loaner pickaxe (you need nothing of your own), mining veins and their regrowth, the
  * protection, the kaaskluis, the cart dispenser and the Mijnguh's shop, and the mine template itself.
@@ -161,7 +162,7 @@ public class KaasmijnGameTests {
     }
 
     private static boolean breakCanceled(GameTestHelper helper, BlockPos pos, ServerPlayer player) {
-        var event = new BlockEvent.BreakEvent(helper.getLevel(), pos, helper.getLevel().getBlockState(pos), player);
+        var event = new BreakBlockEvent(helper.getLevel(), pos, helper.getLevel().getBlockState(pos), player);
         NeoForge.EVENT_BUS.post(event);
         return event.isCanceled();
     }

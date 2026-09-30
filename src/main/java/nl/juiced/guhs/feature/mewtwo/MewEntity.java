@@ -294,8 +294,8 @@ public class MewEntity extends AmbientCreature implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "zweef", 4, state -> state.setAndContinue(ZWEEF)));
-        controllers.add(new AnimationController<>(this, "actie", 0, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("zweef", 4, state -> state.setAndContinue(ZWEEF)));
+        controllers.add(new AnimationController<>("actie", 0, state -> PlayState.STOP)
                 .triggerableAnim("giechel", GIECHEL).triggerableAnim("zwaai", ZWAAI));
     }
 

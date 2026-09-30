@@ -25,6 +25,7 @@ import nl.juiced.guhs.feature.guhwaiispellen.SurfSim;
 import nl.juiced.guhs.feature.guhwaiispellen.Surfplek;
 import org.joml.Matrix4f;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * The waves of a surf game, drawn over the water (3.0): every wave of the set ({@link SurfGolven}, the same on every side)
  * as a ribbon along the beach with the wave's profile: a gentle back, a steep turquoise face that gets lighter towards
@@ -61,7 +62,7 @@ public final class GolfRenderer {
         float pt = event.getPartialTick().getGameTimeDeltaPartialTick(false);
         Vec3 cam = event.getCamera().getPosition();
         MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
-        RenderType type = RenderType.entityTranslucent(TEXTUUR);
+        RenderType type = RenderTypes.entityTranslucent(TEXTUUR);
         boolean iets = false;
         for (Entity e : level.entitiesForRendering()) {
             if (!(e instanceof SurfPlankEntity bord) || bord.isLilo() || bord.distanceToSqr(cam) > 160 * 160) {

@@ -72,7 +72,7 @@ public final class BaltoEvents {
     // --- /guhs balto ... (ops) ---------------------------------------------------------------------------------------------------
     @SubscribeEvent
     public static void onCommands(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("balto").requires(s -> s.hasPermission(2))
+        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("balto").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("stap").then(Commands.argument("speler", EntityArgument.player())
                         .executes(c -> {
                             ServerPlayer p = EntityArgument.getPlayer(c, "speler");

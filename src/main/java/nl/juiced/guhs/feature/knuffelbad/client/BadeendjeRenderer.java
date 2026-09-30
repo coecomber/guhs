@@ -18,6 +18,7 @@ import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
 import com.geckolib.renderer.layer.GeoRenderLayer;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * A rubber duck (geo/entity/badeendje.geo.json), in its kind's colours (textures/entity/badeendje_&lt;kind&gt;.png) with the
  * kind's little extras (a cap, a snorkel, guh ears...). It bobs and turns slowly; the glowing kinds shine in the dark
@@ -37,7 +38,7 @@ public class BadeendjeRenderer extends GeoEntityRenderer<BadeendjeEntity> {
             public void render(PoseStack pose, BadeendjeEntity duck, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers, VertexConsumer buffer,
                                float partialTick, int packedLight, int packedOverlay) {
                 if (duck.getSoort().glimt) {
-                    RenderType glow = RenderType.eyes(Guhs.id("textures/entity/badeendje_" + duck.getSoort().id() + "_glow.png"));
+                    RenderType glow = RenderTypes.eyes(Guhs.id("textures/entity/badeendje_" + duck.getSoort().id() + "_glow.png"));
                     getRenderer().reRender(model, pose, buffers, duck, glow, buffers.getBuffer(glow), partialTick, LightCoordsUtil.FULL_BRIGHT,
                             packedOverlay, 0xFFFFFFFF);
                 }

@@ -12,6 +12,7 @@ import com.geckolib.cache.model.GeoBone;
 import com.geckolib.renderer.base.GeoRenderer;
 import com.geckolib.renderer.layer.GeoRenderLayer;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * Draws the clothes a guh wears (from the Guh kleermaker): for each worn piece, the model again with only that piece's
  * bones visible and the piece's own texture, so clothes look the same on every guh variant.
@@ -37,7 +38,7 @@ public class GuhClothesLayer extends GeoRenderLayer<GuhEntity> {
             for (GeoBone bone : model.topLevelBones()) {
                 onlyShow(bone, worn, kruin);
             }
-            RenderType type = RenderType.entityCutoutNoCull(worn.texture());
+            RenderType type = RenderTypes.entityCutout(worn.texture());
             // (2.8: hair is tinted with the guh's hair colour, -1 = its own colours)
             int colour = slot == GuhClothes.Slot.HAAR && guh.getHaarkleur() >= 0 ? 0xFF000000 | guh.getHaarkleur() : 0xFFFFFFFF;
             getRenderer().reRender(model, poseStack, bufferSource, guh, type, bufferSource.getBuffer(type), partialTick, packedLight,

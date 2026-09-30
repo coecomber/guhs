@@ -51,7 +51,7 @@ public final class Eierlopen implements Wedstrijd.Spel {
         s.vorige = p.position();
         s.vorigeYaw = p.getYRot();
         Wedstrijd.inHand(p, new ItemStack(KnabbelspelenFeature.KNABBELEI_LEPEL.get()));
-        Wedstrijd.effect(p, MobEffects.MOVEMENT_SLOWDOWN, Onderdeel.EIERLOPEN.maxTicks + Wedstrijd.AFTEL_TICKS + 40, 1);
+        Wedstrijd.effect(p, MobEffects.SLOWNESS, Onderdeel.EIERLOPEN.maxTicks + Wedstrijd.AFTEL_TICKS + 40, 1);
     }
 
     @Override
@@ -148,7 +148,7 @@ public final class Eierlopen implements Wedstrijd.Spel {
     @Override
     public void einde(Wedstrijd w, Wedstrijd.Deelnemer d, @Nullable ServerPlayer p, ServerLevel level) {
         if (p != null) {
-            p.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            p.removeEffect(MobEffects.SLOWNESS);
         }
     }
 

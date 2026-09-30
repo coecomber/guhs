@@ -21,6 +21,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * Guhwai'i's game events: the ohana questline notices when a player walks into 626's capsule, the scanner's measurements
  * tick, and Lilo and Nani's stilt house and the capsule can't be broken or built in (only the rommeltjes can be cleaned
@@ -75,7 +76,7 @@ public final class GuhwaiiEvents {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (event.getState().is(GuhwaiiFeature.ROMMELTJE.get())) {
             return;   // (626's mess may always be cleaned up)
         }

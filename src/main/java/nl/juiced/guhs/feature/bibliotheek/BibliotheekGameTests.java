@@ -40,6 +40,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * GameTests of the guh library: the books, the lecterns of the reading room (read right away, one copy per book per
  * player), the Bibliothecaris (first visit, the quiz, the shop), the secret bookcase, the book stand, the protection,
@@ -325,14 +326,14 @@ public class BibliotheekGameTests {
             ServerPlayer player = helper.makeMockServerPlayerInLevel();
             player.setGameMode(GameType.SURVIVAL);
             BlockState state = helper.getLevel().getBlockState(pos);
-            helper.assertTrue(NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(helper.getLevel(), pos, state, player)).isCanceled(),
+            helper.assertTrue(NeoForge.EVENT_BUS.post(new BreakBlockEvent(helper.getLevel(), pos, state, player)).isCanceled(),
                     "no breaking in the library");
             var place = new BlockEvent.EntityPlaceEvent(BlockSnapshot.create(helper.getLevel().dimension(), helper.getLevel(), pos.above()),
                     Blocks.BOOKSHELF.defaultBlockState(), player);
             helper.assertTrue(NeoForge.EVENT_BUS.post(place).isCanceled(), "no building in the library");
             helper.assertTrue(!BibliotheekProtection.inLibrary(helper.getLevel(), pos.offset(20, 0, 0)), "outside is fine");
             player.setGameMode(GameType.CREATIVE);
-            helper.assertTrue(!NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(helper.getLevel(), pos, state, player)).isCanceled(),
+            helper.assertTrue(!NeoForge.EVENT_BUS.post(new BreakBlockEvent(helper.getLevel(), pos, state, player)).isCanceled(),
                     "creative players may change it");
             leave(helper, player);
         } finally {

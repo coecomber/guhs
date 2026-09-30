@@ -21,6 +21,7 @@ import nl.juiced.guhs.quest.GuhDex;
 import nl.juiced.guhs.registry.ModEntities;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Guhdex, the all-in-one guide (2.9: icon tabs along the top like the creative inventory's, the name on hover, the
  * same look as the Superkompas; see feature.gids):
@@ -266,7 +267,7 @@ public class GuhDexScreen extends Screen {
             boolean claimed = data.claimed().contains(i);
             boolean reached = GuhDex.geteldIds(data.seen()) >= m.seen() && data.tamed().size() >= m.tamed();
             Button b = Button.builder(Component.translatable(claimed ? "gui.guhs.guhdex.claimed" : "gui.guhs.guhdex.claim"),
-                    btn -> PacketDistributor.sendToServer(new MaagPayloads.GuhDexClaim(index))).bounds(left + W - 70, top + MILESTONE_Y + i * 12, 60, 11).build();
+                    btn -> ClientPacketDistributor.sendToServer(new MaagPayloads.GuhDexClaim(index))).bounds(left + W - 70, top + MILESTONE_Y + i * 12, 60, 11).build();
             b.active = reached && !claimed;
             addRenderableWidget(b);
         }
@@ -451,7 +452,7 @@ public class GuhDexScreen extends Screen {
             ItemStack reward = m.beloning().get();
             boolean nothing = reward == null || reward.isEmpty();
             Button b = Button.builder(Component.translatable(claimed || reached && nothing ? "gui.guhs.guhdex.claimed" : "gui.guhs.guhdex.claim"),
-                    btn -> PacketDistributor.sendToServer(new KnusPayloads.KnusClaim(m.id()))).bounds(left + W - 58, y + 3, 50, 12).build();
+                    btn -> ClientPacketDistributor.sendToServer(new KnusPayloads.KnusClaim(m.id()))).bounds(left + W - 58, y + 3, 50, 12).build();
             b.active = reached && !claimed;
             addRenderableWidget(b);
             y += MIJLPAAL_ROW;

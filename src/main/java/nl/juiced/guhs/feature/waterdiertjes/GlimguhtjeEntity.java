@@ -141,7 +141,7 @@ public class GlimguhtjeEntity extends FladderDiertje {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "vleugels", 0, state -> state.setAndContinue(FLY)));
-        controllers.add(new AnimationController<>(this, "glim", 0, state -> state.setAndContinue(GLIM)));
+        controllers.add(new AnimationController<>("vleugels", 0, state -> state.setAndContinue(FLY)));
+        controllers.add(new AnimationController<>("glim", 0, state -> state.setAndContinue(GLIM)));
     }
 }

@@ -17,6 +17,7 @@ import nl.juiced.guhs.feature.klassiekers.Klassiekers;
 import nl.juiced.guhs.feature.klassiekers.client.NiveauKeuze;
 import nl.juiced.guhs.feature.spelen.Niveau;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Visguh's screen: start a Guhvis-wedstrijd (or join / stop the one that's running), your own records, the pond's
  * record board and her stall.
@@ -36,7 +37,7 @@ public class VissenScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new VissenPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new VissenPayloads.Action(npcId, action));
         onClose();
     }
 

@@ -29,6 +29,7 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.piep.PiepMaatje;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * Het Guhhuisje (2.10 "Lieve vadsjes van elkaar", fundament): a little house shaped like a guh HEAD in three sizes
  * (klein 3, medium 5, groot 8 residents), the home base of your guhs, muisjes, Schilly and Poepschilly. Residents sleep
@@ -54,12 +55,12 @@ public final class HuisjeFeature {
     public static final DeferredBlock<HuisjeBlock> GROOT = BLOCKS.register("guhhuisje_groot", () -> new HuisjeBlock(HuisjeMaat.GROOT, props()));
     /** The invisible parts of every huisje (no item, no drops: breaking it breaks the huisje). */
     public static final DeferredBlock<HuisjeDeelBlock> DEEL = BLOCKS.registerBlock("guhhuisje_deel", HuisjeDeelBlock::new,
-            props().noLootTable());
+            () -> props().noLootTable());
 
     static {
-        ITEMS.registerItem("guhhuisje_klein", p -> new BlockItem(KLEIN.get(), p), new Item.Properties());
-        ITEMS.registerItem("guhhuisje_medium", p -> new BlockItem(MEDIUM.get(), p), new Item.Properties());
-        ITEMS.registerItem("guhhuisje_groot", p -> new BlockItem(GROOT.get(), p), new Item.Properties().rarity(Rarity.UNCOMMON));
+        ITEMS.registerItem("guhhuisje_klein", p -> new BlockItem(KLEIN.get(), p), () -> new Item.Properties());
+        ITEMS.registerItem("guhhuisje_medium", p -> new BlockItem(MEDIUM.get(), p), () -> new Item.Properties());
+        ITEMS.registerItem("guhhuisje_groot", p -> new BlockItem(GROOT.get(), p), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     }
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HuisjeBlockEntity>> HUISJE_BE = BLOCK_ENTITIES.register("guhhuisje",
@@ -108,7 +109,7 @@ public final class HuisjeFeature {
             }
         });
         // 3.0: only the owner (or an op) breaks a huisje; the owner's name stays up to date
-        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.level.BlockEvent.BreakEvent event) -> {
+        NeoForge.EVENT_BUS.addListener((BreakBlockEvent event) -> {
             if (event.getLevel() instanceof net.minecraft.server.level.ServerLevel sl && (event.getState().getBlock() instanceof HuisjeBlock
                     || event.getState().getBlock() instanceof HuisjeDeelBlock)) {
                 net.minecraft.core.BlockPos c = event.getState().getBlock() instanceof HuisjeDeelBlock ? HuisjeDeelBlock.controller(event.getState(), event.getPos())

@@ -76,13 +76,13 @@ public final class PiepFeature {
 
     // --- the roze guh koek -------------------------------------------------------------------------------------------------
     public static final DeferredBlock<RozeGuhKoekBlock> ROZE_GUH_KOEK = BLOCKS.registerBlock("roze_guh_koek", RozeGuhKoekBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.5f).sound(SoundType.WOOL).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.5f).sound(SoundType.WOOL).noOcclusion()
                     .instrument(NoteBlockInstrument.BELL).pushReaction(PushReaction.DESTROY));
     public static final FoodProperties KOEK_ETEN = new FoodProperties.Builder().nutrition(6).saturationModifier(0.7f).alwaysEdible().build();
     public static final DeferredItem<RozeGuhKoekBlock.KoekItem> ROZE_GUH_KOEK_ITEM = ITEMS.registerItem("roze_guh_koek",
-            p -> new RozeGuhKoekBlock.KoekItem(ROZE_GUH_KOEK.get(), p), new Item.Properties().stacksTo(16).food(KOEK_ETEN).rarity(Rarity.UNCOMMON));
+            p -> new RozeGuhKoekBlock.KoekItem(ROZE_GUH_KOEK.get(), p), () -> new Item.Properties().stacksTo(16).food(KOEK_ETEN).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<ReceptItem> ROZE_GUH_KOEK_RECEPT = ITEMS.registerItem("roze_guh_koek_recept", ReceptItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
 
     // --- the creatures -------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<PieppiepmuisjeEntity>> PIEPPIEPMUISJE = ENTITY_TYPES.register("pieppiepmuisje",
@@ -103,12 +103,12 @@ public final class PiepFeature {
                     .clientTrackingRange(12).fireImmune().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("boze_oppernabbel"))));
 
     public static final DeferredItem<MuisjeItem> PIEPPIEPMUISJE_ITEM = ITEMS.registerItem("pieppiepmuisje_item", MuisjeItem::new,
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     /** A picked-up Poepschilly / Schilly (the whole turtle in the item; right-click a block to put it down). */
     public static final DeferredItem<PiepDierItem> POEPSCHILLY_ITEM = ITEMS.registerItem("poepschilly_item",
-            p -> new PiepDierItem(() -> POEPSCHILLY.get(), p), new Item.Properties().stacksTo(1));
+            p -> new PiepDierItem(() -> POEPSCHILLY.get(), p), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<PiepDierItem> SCHILLY_ITEM = ITEMS.registerItem("schilly_item",
-            p -> new PiepDierItem(() -> SCHILLY.get(), p), new Item.Properties().stacksTo(1));
+            p -> new PiepDierItem(() -> SCHILLY.get(), p), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<DeferredSpawnEggItem> PIEPPIEPMUISJE_SPAWN_EGG = ITEMS.registerItem("pieppiepmuisje_spawn_egg",
             p -> new DeferredSpawnEggItem(PIEPPIEPMUISJE, 0x2A2233, 0xECE4D0, p));
     public static final DeferredItem<DeferredSpawnEggItem> POEPSCHILLY_SPAWN_EGG = ITEMS.registerItem("poepschilly_spawn_egg",

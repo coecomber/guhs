@@ -196,7 +196,7 @@ public class KnabbelspelenGameTests {
         Wedstrijd w = begin(helper, npc, p, Onderdeel.ZAKLOPEN);
         Wedstrijd.Deelnemer d = w.deelnemer(p);
         helper.assertTrue(p.getMainHandItem().is(KnabbelspelenFeature.GUH_ZAK.get()), "a sack in your hands");
-        helper.assertTrue(p.hasEffect(MobEffects.MOVEMENT_SLOWDOWN), "walking in a sack is slow");
+        helper.assertTrue(p.hasEffect(MobEffects.SLOWNESS), "walking in a sack is slow");
         p.setYRot(Speelvelden.yaw(w.anker, Onderdeel.ZAKLOPEN));
         p.setXRot(0);
         Zaklopen.hop(p);

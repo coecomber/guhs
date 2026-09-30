@@ -888,9 +888,9 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "beweeg", 4, state -> state.setAndContinue(
+        controllers.add(new AnimationController<>("beweeg", 4, state -> state.setAndContinue(
                 isInWater() ? SWIM : state.isMoving() ? WALK : IDLE)));
-        controllers.add(new AnimationController<>(this, "actie", 1, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("actie", 1, state -> PlayState.STOP)
                 .triggerableAnim("blij", RawAnimation.begin().thenPlay("blij"))
                 .triggerableAnim("kruip", RawAnimation.begin().thenPlay("kruip")));
     }

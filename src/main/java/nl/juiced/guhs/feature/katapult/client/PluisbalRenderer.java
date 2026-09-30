@@ -18,6 +18,7 @@ import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.katapult.PluisbalEntity;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /** The pluisbal: a big fluffy pink ball (a cube with fluff tufts on every side and two little guh ears), tumbling as it flies. */
 public class PluisbalRenderer extends EntityRenderer<PluisbalEntity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Guhs.id("pluisbal"), "main");
@@ -50,7 +51,7 @@ public class PluisbalRenderer extends EntityRenderer<PluisbalEntity> {
         pose.mulPose(Axis.YP.rotationDegrees(entity.getId() * 37 % 360));
         pose.mulPose(Axis.XP.rotation(spin));
         pose.scale(-1, -1, 1);
-        ball.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, OverlayTexture.NO_OVERLAY);
+        ball.render(pose, buffers.getBuffer(RenderTypes.entityCutout(TEXTURE)), light, OverlayTexture.NO_OVERLAY);
         pose.popPose();
         super.render(entity, entityYaw, partialTick, pose, buffers, light);
     }

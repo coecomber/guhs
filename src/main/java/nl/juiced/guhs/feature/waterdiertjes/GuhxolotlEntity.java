@@ -758,7 +758,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "beweeg", 4, state -> {
+        controllers.add(new AnimationController<>("beweeg", 4, state -> {
             if (isPlat()) {
                 return state.setAndContinue(PLAT);
             }
@@ -770,7 +770,7 @@ public class GuhxolotlEntity extends TamableAnimal implements GeoEntity, PiepMaa
             }
             return state.setAndContinue(isDroog() ? DROOG : IDLE);
         }));
-        controllers.add(new AnimationController<>(this, "actie", 1, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("actie", 1, state -> PlayState.STOP)
                 .triggerableAnim("blij", RawAnimation.begin().thenPlay("blij"))
                 .triggerableAnim("eet", RawAnimation.begin().thenPlay("eet"))
                 .triggerableAnim("blub", RawAnimation.begin().thenPlay("blub")));

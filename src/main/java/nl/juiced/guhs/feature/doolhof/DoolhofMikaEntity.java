@@ -225,7 +225,7 @@ public class DoolhofMikaEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 3, state -> state.setAndContinue(state.isMoving() ? WALK : IDLE)));
+        controllers.add(new AnimationController<>("main", 3, state -> state.setAndContinue(state.isMoving() ? WALK : IDLE)));
     }
 
     @Override

@@ -359,7 +359,7 @@ public final class SmulGame {
             mikas++;
             score = Math.max(0, score - MIKA_PENALTY);
             streak = 0;
-            p.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, MIKA_SLOW_TICKS, 2, false, true));
+            p.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, MIKA_SLOW_TICKS, 2, false, true));
             world.sendParticles(ParticleTypes.LARGE_SMOKE, hapje.getX(), hapje.getY() + 0.3, hapje.getZ(), 12, 0.3, 0.3, 0.3, 0.02);
             world.playSound(null, p.blockPosition(), ModSounds.MIKA_HURT.get(), SoundSource.PLAYERS, 0.9f, 1.3f);
             p.sendOverlayMessage(Component.translatable("quest.guhs.smul.mika", MIKA_PENALTY).withStyle(ChatFormatting.DARK_GRAY));
@@ -546,9 +546,9 @@ public final class SmulGame {
         if (p.containerMenu.getCarried().is(SmulFeature.SMULSCHAAL.get())) {
             p.containerMenu.setCarried(ItemStack.EMPTY);
         }
-        MobEffectInstance slow = p.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        MobEffectInstance slow = p.getEffect(MobEffects.SLOWNESS);
         if (slow != null && slow.getDuration() <= MIKA_SLOW_TICKS && slow.getAmplifier() == 2) {
-            p.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            p.removeEffect(MobEffects.SLOWNESS);
         }
     }
 

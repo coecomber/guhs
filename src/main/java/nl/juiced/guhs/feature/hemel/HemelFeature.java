@@ -64,11 +64,11 @@ public final class HemelFeature {
      * {@link Herinnering#maak}).
      */
     public static final DeferredItem<Item> HERINNERING = ITEMS.registerItem("herinnering", Herinnering::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).fireResistant());
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).fireResistant());
 
     /** The Knuffelhart: unbreakable (like bedrock), explosion proof, can't be pushed, glows, no loot, no item. */
     public static final DeferredBlock<KnuffelhartBlock> KNUFFELHART = BLOCKS.registerBlock("knuffelhart", KnuffelhartBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).noLootTable().noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).noLootTable().noOcclusion()
                     .lightLevel(s -> 13).sound(SoundType.AMETHYST).pushReaction(PushReaction.BLOCK).isValidSpawn((s, l, p, e) -> false)
                     .isRedstoneConductor((s, l, p) -> false).isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KnuffelhartBlockEntity>> KNUFFELHART_BE = BLOCK_ENTITY_TYPES.register(

@@ -78,25 +78,25 @@ public final class MewtwoFeature {
 
     // --- blocks ------------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<KloontankBlock> KLOONTANK = BLOCKS.registerBlock("mewtwo_kloontank", KloontankBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).strength(-1f, 3600000f).sound(SoundType.GLASS).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).strength(-1f, 3600000f).sound(SoundType.GLASS).noOcclusion()
                     .lightLevel(s -> 10).pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<MewtwoBlokken.Tankwand> TANKWAND = BLOCKS.registerBlock("mewtwo_tankwand", MewtwoBlokken.Tankwand::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).sound(SoundType.GLASS).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).sound(SoundType.GLASS).noOcclusion()
                     .lightLevel(s -> 7).pushReaction(PushReaction.BLOCK).isViewBlocking((s, l, p) -> false).isSuffocating((s, l, p) -> false));
     public static final DeferredBlock<MewtwoBlokken.Notitieplek> NOTITIEPLEK = BLOCKS.registerBlock("mewtwo_notitieplek", MewtwoBlokken.Notitieplek::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(-1f, 3600000f).sound(SoundType.WOOL).noOcclusion().noCollission()
                     .pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<MewtwoBlokken.Onderdelenkist> ONDERDELENKIST = BLOCKS.registerBlock("mewtwo_onderdelenkist",
-            MewtwoBlokken.Onderdelenkist::new, BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(-1f, 3600000f).sound(SoundType.WOOD)
+            MewtwoBlokken.Onderdelenkist::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(-1f, 3600000f).sound(SoundType.WOOD)
                     .noOcclusion().pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<MewtwoBlokken.Knabbelschaal> KNABBELSCHAAL = BLOCKS.registerBlock("mewtwo_knabbelschaal",
-            MewtwoBlokken.Knabbelschaal::new, BlockBehaviour.Properties.of().mapColor(MapColor.QUARTZ).strength(1.5f, 6f).sound(SoundType.STONE)
+            MewtwoBlokken.Knabbelschaal::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.QUARTZ).strength(1.5f, 6f).sound(SoundType.STONE)
                     .noOcclusion());
     public static final DeferredBlock<MewtwoBlokken.Deco> COMPUTER = BLOCKS.registerBlock("mewtwo_computer",
-            p -> new MewtwoBlokken.Deco(p, MewtwoBlokken.COMPUTER_VORM), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE)
+            p -> new MewtwoBlokken.Deco(p, MewtwoBlokken.COMPUTER_VORM), () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE)
                     .strength(1.2f).sound(SoundType.METAL).noOcclusion().lightLevel(s -> 6));
     public static final DeferredBlock<MewtwoBlokken.Deco> REAGEERBUISJES = BLOCKS.registerBlock("mewtwo_reageerbuisjes",
-            p -> new MewtwoBlokken.Deco(p, MewtwoBlokken.BUISJES_VORM), BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK)
+            p -> new MewtwoBlokken.Deco(p, MewtwoBlokken.BUISJES_VORM), () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK)
                     .strength(0.6f).sound(SoundType.GLASS).noOcclusion().lightLevel(s -> 4));
     public static final DeferredBlock<MewtwoBlokken.Papieren> PAPIEREN = BLOCKS.registerBlock("mewtwo_papieren", MewtwoBlokken.Papieren::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(0.1f).sound(SoundType.WOOL).noOcclusion().noCollission()
@@ -106,9 +106,9 @@ public final class MewtwoFeature {
 
     // --- items -------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<LabnotitieItem> LABNOTITIE = ITEMS.registerItem("mewtwo_labnotitie", LabnotitieItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<TankonderdeelItem> TANKONDERDEEL = ITEMS.registerItem("mewtwo_tankonderdeel", TankonderdeelItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     // --- Mieuwguh -----------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<MewEntity>> MEW = ENTITY_TYPES.register("mew",

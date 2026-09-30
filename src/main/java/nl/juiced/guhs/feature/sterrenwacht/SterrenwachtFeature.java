@@ -57,19 +57,19 @@ public final class SterrenwachtFeature {
     public static final Buiten.Bescherming BESCHERMING = new Buiten.Bescherming("guh_sterrenwacht", "gui.guhs.sterrenwacht.beschermd");
 
     public static final DeferredBlock<TelescoopBlock> TELESCOOP = BLOCKS.registerBlock("guh_telescoop", TelescoopBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.5f).sound(SoundType.COPPER).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(1.5f).sound(SoundType.COPPER).noOcclusion()
                     .pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<SterrenlantaarnBlock> STERRENLANTAARN = BLOCKS.registerBlock("sterrenlantaarn", SterrenlantaarnBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.8f).sound(SoundType.LANTERN).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.8f).sound(SoundType.LANTERN).noOcclusion()
                     .lightLevel(s -> 15).pushReaction(PushReaction.DESTROY));
 
     public static final DeferredItem<Buiten.LoreBlockItem> TELESCOOP_ITEM = ITEMS.registerItem("guh_telescoop",
-            p -> new Buiten.LoreBlockItem(TELESCOOP.get(), p), new Item.Properties().rarity(Rarity.UNCOMMON));
+            p -> new Buiten.LoreBlockItem(TELESCOOP.get(), p), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final DeferredItem<Buiten.LoreBlockItem> STERRENLANTAARN_ITEM = ITEMS.registerItem("sterrenlantaarn",
-            p -> new Buiten.LoreBlockItem(STERRENLANTAARN.get(), p), new Item.Properties());
+            p -> new Buiten.LoreBlockItem(STERRENLANTAARN.get(), p), () -> new Item.Properties());
     /** The reward of a constellation: make a wish, or pay the Professor with it. */
     public static final DeferredItem<WenssterItem> WENSSTER = ITEMS.registerItem("wensster", WenssterItem::new,
-            new Item.Properties().rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 
     /** A twinkling little star (the telescope, wishes, the sterrenlantaarn). */
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> WENSSTER_DEELTJE = PARTICLES.register("wensster",

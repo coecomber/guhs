@@ -15,6 +15,7 @@ import nl.juiced.guhs.feature.knabbelspelen.Onderdeel;
 import nl.juiced.guhs.feature.knabbelspelen.Wedstrijd;
 import nl.juiced.guhs.quest.Highscores;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Juf Vahoegsakee's screen: the six events (each on its own) and the Grote Zeskamp, who's playing now and "Doe mee!",
  * "Start nu!" for the one who opened the round, the score table of the zeskamp, your records, and her shop.
@@ -33,7 +34,7 @@ public class SpelleiderScherm extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new KnabbelspelenPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new KnabbelspelenPayloads.Action(npcId, action));
         onClose();
     }
 

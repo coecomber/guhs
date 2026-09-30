@@ -53,33 +53,33 @@ public final class KaasmijnFeature {
     // --- the cheese veins and what's left of them ---------------------------------------------------------------------
     public static final DeferredBlock<KaasaderBlock> KAASADER = BLOCKS.registerBlock("kaasader",
             p -> new KaasaderBlock(UniformInt.of(0, 2), () -> KaasmijnFeature.UITGEMIJNDE_KAASADER.get(), p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).mapColor(MapColor.GOLD));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).mapColor(MapColor.GOLD));
     public static final DeferredBlock<KaasaderBlock> DIEPE_KAASADER = BLOCKS.registerBlock("diepe_kaasader",
             p -> new KaasaderBlock(UniformInt.of(1, 3), () -> KaasmijnFeature.UITGEMIJNDE_DIEPE_KAASADER.get(), p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE).mapColor(MapColor.GOLD));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE).mapColor(MapColor.GOLD));
     public static final DeferredBlock<KaasaderBlock> GOUDEN_KAASADER = BLOCKS.registerBlock("gouden_kaasader",
             p -> new KaasaderBlock(UniformInt.of(3, 7), () -> KaasmijnFeature.UITGEMIJNDE_GOUDEN_KAASADER.get(), p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE).mapColor(MapColor.GOLD).lightLevel(s -> 4));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE).mapColor(MapColor.GOLD).lightLevel(s -> 4));
     public static final DeferredBlock<KaasaderBlock.MinedOut> UITGEMIJNDE_KAASADER = BLOCKS.registerBlock("uitgemijnde_kaasader",
             p -> new KaasaderBlock.MinedOut(() -> KaasmijnFeature.KAASADER.get(), 1, p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).randomTicks().noLootTable());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).randomTicks().noLootTable());
     public static final DeferredBlock<KaasaderBlock.MinedOut> UITGEMIJNDE_DIEPE_KAASADER = BLOCKS.registerBlock("uitgemijnde_diepe_kaasader",
             p -> new KaasaderBlock.MinedOut(() -> KaasmijnFeature.DIEPE_KAASADER.get(), 1, p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE).randomTicks().noLootTable());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE).randomTicks().noLootTable());
     /** Gold cheese is slow: it takes about three times as long to grow back. */
     public static final DeferredBlock<KaasaderBlock.MinedOut> UITGEMIJNDE_GOUDEN_KAASADER = BLOCKS.registerBlock("uitgemijnde_gouden_kaasader",
             p -> new KaasaderBlock.MinedOut(() -> KaasmijnFeature.GOUDEN_KAASADER.get(), 3, p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE).randomTicks().noLootTable());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE).randomTicks().noLootTable());
 
     // --- the vault in the treasure room, the cart dispensers of the Kaasexpress -----------------------------------------
     public static final DeferredBlock<KaaskluisBlock> KAASKLUIS = BLOCKS.registerBlock("kaaskluis", KaaskluisBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(5f, 1200f).requiresCorrectToolForDrops().sound(SoundType.METAL));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(5f, 1200f).requiresCorrectToolForDrops().sound(SoundType.METAL));
     public static final DeferredBlock<KarretjesautomaatBlock> KARRETJESAUTOMAAT = BLOCKS.registerBlock("karretjesautomaat",
-            KarretjesautomaatBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS));
+            KarretjesautomaatBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS));
 
     // --- items ------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<Item> KAASBROK = ITEMS.registerSimpleItem("kaasbrok",
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build()));
     public static final DeferredItem<LoreItem> GOUDKAAS = ITEMS.registerItem("goudkaas", LoreItem::new, new Item.Properties().rarity(Rarity.UNCOMMON)
             .food(new FoodProperties.Builder().nutrition(6).saturationModifier(1.2f).alwaysEdible()
                     .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 100, 1), 1f)
@@ -89,7 +89,7 @@ public final class KaasmijnFeature {
             new Item.Properties().component(DataComponents.UNBREAKABLE, new Unbreakable(true)).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<KaashouweelItem> KAASHOUWEEL = ITEMS.registerItem("kaashouweel",
             p -> new KaashouweelItem(p.attributes(PickaxeItem.createAttributes(KaashouweelItem.TIER, 1.0f, -2.8f))),
-            new Item.Properties().rarity(Rarity.RARE));
+            () -> new Item.Properties().rarity(Rarity.RARE));
 
     static {
         for (DeferredBlock<?> block : java.util.List.of(KAASADER, DIEPE_KAASADER, GOUDEN_KAASADER, UITGEMIJNDE_KAASADER,

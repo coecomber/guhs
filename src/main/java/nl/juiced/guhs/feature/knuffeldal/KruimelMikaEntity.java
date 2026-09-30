@@ -476,7 +476,7 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 4, state -> {
+        controllers.add(new AnimationController<>("main", 4, state -> {
             if (state.isMoving()) {
                 return state.setAndContinue(WALK);
             }

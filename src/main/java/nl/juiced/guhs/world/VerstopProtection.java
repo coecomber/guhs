@@ -16,6 +16,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.quest.VerstopGame;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The verstopguh house can't be broken: no breaking, building, emptying buckets, lighting fires or blowing it up, and
  * mobs don't grief it either. You can still open the barrels and cupboards. Players in creative mode may change it.
@@ -35,7 +36,7 @@ public final class VerstopProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

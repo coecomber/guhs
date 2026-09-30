@@ -59,25 +59,25 @@ public final class KatapultFeature {
 
     /** The catapult's bucket (FACING = where it shoots). */
     public static final DeferredBlock<KatapultBlocks.Gericht> WERPER = BLOCKS.registerBlock("katapult_werper", KatapultBlocks::werper,
-            castleOnly(Blocks.SPRUCE_PLANKS).noOcclusion());
+            () -> castleOnly(Blocks.SPRUCE_PLANKS).noOcclusion());
     /** The foundation of the Mika fort (FACING = towards the catapult). */
     public static final DeferredBlock<KatapultBlocks.Gericht> FORTPLEK = BLOCKS.registerBlock("katapult_fortplek", KatapultBlocks.Gericht::new,
-            castleOnly(Blocks.POLISHED_BLACKSTONE));
+            () -> castleOnly(Blocks.POLISHED_BLACKSTONE));
     /** A Mika figure in a fort. */
     public static final DeferredBlock<KatapultBlocks.Gericht> MIKA = BLOCKS.registerBlock("katapult_mika", KatapultBlocks::mika,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL).strength(-1f, 3600000f).noLootTable().noOcclusion());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL).strength(-1f, 3600000f).noLootTable().noOcclusion());
     /** A crate of stolen kaasknabbels. */
     public static final DeferredBlock<KatapultBlocks.Gericht> KNABBELKIST = BLOCKS.registerBlock("katapult_knabbelkist", KatapultBlocks::kist,
-            castleOnly(Blocks.BARREL).noOcclusion());
+            () -> castleOnly(Blocks.BARREL).noOcclusion());
     /** The Mika's crooked building planks (a nice purple wood for building). */
-    public static final DeferredBlock<Block> MIKAPLANK = BLOCKS.registerSimpleBlock("katapult_mikaplank", BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_PLANKS));
+    public static final DeferredBlock<Block> MIKAPLANK = BLOCKS.registerSimpleBlock("katapult_mikaplank", () -> BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_PLANKS));
 
     public static final DeferredItem<BlockItem> MIKAPLANK_ITEM = ITEMS.registerSimpleBlockItem(MIKAPLANK);
     /** The katapult currency: stars for a run of forts, spent in the Kapitein's shop. */
-    public static final DeferredItem<Item> KATAPULTSTER = ITEMS.registerSimpleItem("katapultster", new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> KATAPULTSTER = ITEMS.registerSimpleItem("katapultster", () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     /** The loaned pluisballen (only while you play). */
     public static final DeferredItem<PluisballenItem> PLUISBALLEN = ITEMS.registerItem("katapult_pluisballen", PluisballenItem::new,
-            new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON));
 
     public static final DeferredHolder<EntityType<?>, EntityType<PluisbalEntity>> PLUISBAL = ENTITIES.register("pluisbal",
             () -> EntityType.Builder.<PluisbalEntity>of(PluisbalEntity::new, MobCategory.MISC)

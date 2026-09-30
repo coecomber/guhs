@@ -17,6 +17,7 @@ import nl.juiced.guhs.block.SleeRailBlock;
 import nl.juiced.guhs.block.entity.SleeRailBlockEntity;
 import nl.juiced.guhs.slee.SleePath;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * Draws a whole sled rail piece along its path: two pink-and-white candy-stripe rails on little wooden sleepers.
  * The path is the same one the sled follows, so the sled always sits right on top of the rails.
@@ -42,7 +43,7 @@ public class SleeRailRenderer implements BlockEntityRenderer<SleeRailBlockEntity
         BlockPos anchor = rail.getBlockPos();
         SleePath.Shape shape = state.getValue(SleeRailBlock.SHAPE);
         SleePath.Piece piece = new SleePath.Piece(anchor, state.getValue(SleeRailBlock.FACING), shape);
-        VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
+        VertexConsumer vc = buffer.getBuffer(RenderTypes.entityCutout(TEXTURE));
         PoseStack.Pose pose = poseStack.last();
         Vec3 origin = Vec3.atLowerCornerOf(anchor).add(0, SleePath.RIDE_HEIGHT, 0);
 

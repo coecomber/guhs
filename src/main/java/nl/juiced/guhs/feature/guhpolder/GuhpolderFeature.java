@@ -75,30 +75,30 @@ public final class GuhpolderFeature {
 
     // --- the biome's blocks ---------------------------------------------------------------------------------------------
     public static final DeferredBlock<GuhpolderBlocks.Rijpgras> RIJPGRAS = BLOCKS.registerBlock("rijpgras", GuhpolderBlocks.Rijpgras::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.GRASS_BLOCK).mapColor(MapColor.SNOW).sound(SoundType.GRASS));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GRASS_BLOCK).mapColor(MapColor.SNOW).sound(SoundType.GRASS));
     public static final DeferredBlock<GuhpolderBlocks.Rijpsprietjes> RIJPSPRIETJES = BLOCKS.registerBlock("rijpsprietjes",
-            GuhpolderBlocks.Rijpsprietjes::new, BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS).mapColor(MapColor.SNOW));
+            GuhpolderBlocks.Rijpsprietjes::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS).mapColor(MapColor.SNOW));
     public static final DeferredBlock<GuhpolderBlocks.IJsbloempje> GUH_IJSBLOEMPJE = BLOCKS.registerBlock("guh_ijsbloempje",
             p -> new GuhpolderBlocks.IJsbloempje(MobEffects.NIGHT_VISION, 5f, p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CORNFLOWER).mapColor(MapColor.ICE).lightLevel(s -> 3).sound(SoundType.AMETHYST_CLUSTER)
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CORNFLOWER).mapColor(MapColor.ICE).lightLevel(s -> 3).sound(SoundType.AMETHYST_CLUSTER)
                     .noOcclusion());
     public static final DeferredBlock<GuhpolderBlocks.Polderijs> POLDERIJS = BLOCKS.registerBlock("polderijs", GuhpolderBlocks.Polderijs::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.PACKED_ICE).mapColor(MapColor.ICE).strength(0.8f));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PACKED_ICE).mapColor(MapColor.ICE).strength(0.8f));
     public static final DeferredBlock<RotatedPillarBlock> KNOTWILG_STAM = BLOCKS.registerBlock("knotwilg_stam", RotatedPillarBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LOG).mapColor(MapColor.TERRACOTTA_BROWN));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LOG).mapColor(MapColor.TERRACOTTA_BROWN));
     public static final DeferredBlock<GuhpolderBlocks.KnotwilgBladeren> KNOTWILG_BLADEREN = BLOCKS.registerBlock("knotwilg_bladeren",
-            GuhpolderBlocks.KnotwilgBladeren::new, BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LEAVES).mapColor(MapColor.TERRACOTTA_BROWN)
+            GuhpolderBlocks.KnotwilgBladeren::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LEAVES).mapColor(MapColor.TERRACOTTA_BROWN)
                     .sound(SoundType.AZALEA_LEAVES));
     public static final DeferredBlock<GuhpolderBlocks.IJspegelKristal> IJSPEGELGUH_KRISTAL = BLOCKS.registerBlock("ijspegelguh_kristal",
-            GuhpolderBlocks.IJspegelKristal::new, BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_CLUSTER).mapColor(MapColor.ICE)
+            GuhpolderBlocks.IJspegelKristal::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_CLUSTER).mapColor(MapColor.ICE)
                     .lightLevel(s -> 11).sound(SoundType.AMETHYST_CLUSTER).noOcclusion().pushReaction(PushReaction.DESTROY));
 
     // --- the guh-molentje --------------------------------------------------------------------------------------------------
     public static final DeferredBlock<MolentjeBlock> GUH_MOLENTJE = BLOCKS.registerBlock("guh_molentje", MolentjeBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(1.2f).sound(SoundType.WOOD).noOcclusion());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(1.2f).sound(SoundType.WOOD).noOcclusion());
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MolentjeBlockEntity>> GUH_MOLENTJE_BE = BLOCK_ENTITY_TYPES.register(
             "guh_molentje", () -> BlockEntityType.Builder.of(MolentjeBlockEntity::new, GUH_MOLENTJE.get()).build(null));
-    public static final DeferredItem<Item> KNABBELMEEL = ITEMS.registerItem("knabbelmeel", GuhpolderItems.Lore::new, new Item.Properties());
+    public static final DeferredItem<Item> KNABBELMEEL = ITEMS.registerItem("knabbelmeel", GuhpolderItems.Lore::new, () -> new Item.Properties());
 
     static {
         for (DeferredBlock<?> block : List.of(RIJPGRAS, POLDERIJS, KNOTWILG_STAM, KNOTWILG_BLADEREN)) {
@@ -107,7 +107,7 @@ public final class GuhpolderFeature {
         for (DeferredBlock<?> block : List.of(RIJPSPRIETJES, GUH_IJSBLOEMPJE, IJSPEGELGUH_KRISTAL)) {
             ITEMS.registerItem(block.getId().getPath(), p -> new GuhpolderItems.LoreBlock(block.get(), p));
         }
-        ITEMS.registerItem("guh_molentje", p -> new GuhpolderItems.LoreBlock(GUH_MOLENTJE.get(), p), new Item.Properties().rarity(Rarity.UNCOMMON));
+        ITEMS.registerItem("guh_molentje", p -> new GuhpolderItems.LoreBlock(GUH_MOLENTJE.get(), p), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     }
 
     // --- worldgen ----------------------------------------------------------------------------------------------------------

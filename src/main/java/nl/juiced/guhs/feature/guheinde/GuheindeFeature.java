@@ -96,43 +96,43 @@ public final class GuheindeFeature {
         return BlockBehaviour.Properties.of().strength(-1f, 3600000f).noLootTable().isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK);
     }
 
-    public static final DeferredBlock<net.minecraft.world.level.block.Block> KAASKORST = BLOCKS.registerSimpleBlock("kaaskorst", korst());
+    public static final DeferredBlock<net.minecraft.world.level.block.Block> KAASKORST = BLOCKS.registerSimpleBlock("kaaskorst", () -> korst());
     public static final DeferredBlock<net.minecraft.world.level.block.Block> KAASKORST_STENEN = BLOCKS.registerSimpleBlock("kaaskorst_stenen",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS).mapColor(MapColor.COLOR_YELLOW));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS).mapColor(MapColor.COLOR_YELLOW));
     public static final DeferredBlock<net.minecraft.world.level.block.Block> GEBARSTEN_KAASKORST_STENEN = BLOCKS.registerSimpleBlock("gebarsten_kaaskorst_stenen",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS).mapColor(MapColor.COLOR_YELLOW));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS).mapColor(MapColor.COLOR_YELLOW));
     public static final DeferredBlock<StairBlock> KAASKORST_STENEN_TRAP = BLOCKS.registerBlock("kaaskorst_stenen_trap",
-            p -> new StairBlock(KAASKORST_STENEN.get().defaultBlockState(), p), BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICK_STAIRS));
+            p -> new StairBlock(KAASKORST_STENEN.get().defaultBlockState(), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICK_STAIRS));
     public static final DeferredBlock<SlabBlock> KAASKORST_STENEN_PLAAT = BLOCKS.registerBlock("kaaskorst_stenen_plaat", SlabBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICK_SLAB));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICK_SLAB));
     public static final DeferredBlock<WallBlock> KAASKORST_STENEN_MUUR = BLOCKS.registerBlock("kaaskorst_stenen_muur", WallBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICK_WALL));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICK_WALL));
     /** Kaaskorststenen with bites in them: a Mika-larfje lives inside. */
     public static final DeferredBlock<LarfjeBlock> AANGEVRETEN_KAASKORST_STENEN = BLOCKS.registerBlock("aangevreten_kaaskorst_stenen", LarfjeBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS).mapColor(MapColor.COLOR_YELLOW).destroyTime(0.4f).explosionResistance(0.75f));
-    public static final DeferredBlock<net.minecraft.world.level.block.Block> MIKA_STEEN = BLOCKS.registerSimpleBlock("mika_steen", mikaSteen());
-    public static final DeferredBlock<RotatedPillarBlock> MIKA_STEEN_PILAAR = BLOCKS.registerBlock("mika_steen_pilaar", RotatedPillarBlock::new, mikaSteen());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE_BRICKS).mapColor(MapColor.COLOR_YELLOW).destroyTime(0.4f).explosionResistance(0.75f));
+    public static final DeferredBlock<net.minecraft.world.level.block.Block> MIKA_STEEN = BLOCKS.registerSimpleBlock("mika_steen", () -> mikaSteen());
+    public static final DeferredBlock<RotatedPillarBlock> MIKA_STEEN_PILAAR = BLOCKS.registerBlock("mika_steen_pilaar", RotatedPillarBlock::new, () -> mikaSteen());
     public static final DeferredBlock<StairBlock> MIKA_STEEN_TRAP = BLOCKS.registerBlock("mika_steen_trap",
-            p -> new StairBlock(MIKA_STEEN.get().defaultBlockState(), p), mikaSteen());
-    public static final DeferredBlock<SlabBlock> MIKA_STEEN_PLAAT = BLOCKS.registerBlock("mika_steen_plaat", SlabBlock::new, mikaSteen());
+            p -> new StairBlock(MIKA_STEEN.get().defaultBlockState(), p), () -> mikaSteen());
+    public static final DeferredBlock<SlabBlock> MIKA_STEEN_PLAAT = BLOCKS.registerBlock("mika_steen_plaat", SlabBlock::new, () -> mikaSteen());
 
     public static final DeferredBlock<KnabbelportaalframeBlock> KNABBELPORTAALFRAME = BLOCKS.registerBlock("knabbelportaalframe",
-            KnabbelportaalframeBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.END_PORTAL_FRAME).mapColor(MapColor.COLOR_YELLOW).lightLevel(s -> 3));
+            KnabbelportaalframeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.END_PORTAL_FRAME).mapColor(MapColor.COLOR_YELLOW).lightLevel(s -> 3));
     public static final DeferredBlock<GuheindePortaalBlock> GUHEINDE_PORTAAL = BLOCKS.registerBlock("guheinde_portaal", GuheindePortaalBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.END_PORTAL).mapColor(MapColor.COLOR_PINK).lightLevel(s -> 15));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.END_PORTAL).mapColor(MapColor.COLOR_PINK).lightLevel(s -> 15));
     /** Where you put a knabbelkristal to call Opper-Mika back (four around the terugportaal on the Knabbelberg). */
     public static final DeferredBlock<net.minecraft.world.level.block.Block> KNABBELSOKKEL = BLOCKS.registerSimpleBlock("knabbelsokkel",
-            unbreakable().mapColor(MapColor.GOLD).lightLevel(s -> 7).sound(SoundType.STONE));
+            () -> unbreakable().mapColor(MapColor.GOLD).lightLevel(s -> 7).sound(SoundType.STONE));
     /** The door of Opper-Mika's knabbelschat: gone after the first win. */
     public static final DeferredBlock<net.minecraft.world.level.block.Block> KNABBELSLOT = BLOCKS.registerSimpleBlock("knabbelslot",
-            unbreakable().mapColor(MapColor.COLOR_ORANGE).sound(SoundType.METAL));
+            () -> unbreakable().mapColor(MapColor.COLOR_ORANGE).sound(SoundType.METAL));
     public static final DeferredBlock<KnabbelpoortBlock> KNABBELPOORT = BLOCKS.registerBlock("knabbelpoort", KnabbelpoortBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.END_GATEWAY).mapColor(MapColor.COLOR_PINK).lightLevel(s -> 15));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.END_GATEWAY).mapColor(MapColor.COLOR_PINK).lightLevel(s -> 15));
     public static final DeferredBlock<EnderguhEiBlock> ENDERGUH_EI = BLOCKS.registerBlock("enderguh_ei", EnderguhEiBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).strength(3f, 9f).lightLevel(s -> 3).noOcclusion().randomTicks()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).strength(3f, 9f).lightLevel(s -> 3).noOcclusion().randomTicks()
                     .pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<nl.juiced.guhs.block.GuhWorkstationBlock> OPPER_MIKATROFEE = BLOCKS.registerBlock("opper_mikatrofee",
-            nl.juiced.guhs.block.GuhWorkstationBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(2.5f).sound(SoundType.METAL).noOcclusion());
+            nl.juiced.guhs.block.GuhWorkstationBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(2.5f).sound(SoundType.METAL).noOcclusion());
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KnabbelpoortBlock.Entity>> KNABBELPOORT_BE = BLOCK_ENTITY_TYPES.register("knabbelpoort",
             () -> BlockEntityType.Builder.of(KnabbelpoortBlock.Entity::new, KNABBELPOORT.get()).build(null));
@@ -150,16 +150,16 @@ public final class GuheindeFeature {
     });
 
     // --- items -----------------------------------------------------------------------------------------------------------
-    public static final DeferredItem<Item> MIKA_TRAAN = ITEMS.registerSimpleItem("mika_traan", new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> MIKA_TRAAN = ITEMS.registerSimpleItem("mika_traan", () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final DeferredItem<OogVanVadsigItem> OOG_VAN_VADSIG = ITEMS.registerItem("oog_van_vadsig", OogVanVadsigItem::new,
-            new Item.Properties().rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final DeferredItem<KnabbelkristalItem> KNABBELKRISTAL = ITEMS.registerItem("knabbelkristal", KnabbelkristalItem::new,
-            new Item.Properties().rarity(Rarity.RARE));
+            () -> new Item.Properties().rarity(Rarity.RARE));
     public static final DeferredItem<KnabbelkroonItem> KNABBELKROON = ITEMS.registerItem("knabbelkroon",
             p -> new KnabbelkroonItem(KROON_MATERIAL, p), new Item.Properties().rarity(Rarity.EPIC).fireResistant()
                     .durability(ArmorItem.Type.HELMET.getDurability(45)));
     public static final DeferredItem<GuhvleugelsItem> GUHVLEUGELS = ITEMS.registerItem("guhvleugels", GuhvleugelsItem::new,
-            new Item.Properties().durability(540).rarity(Rarity.EPIC));
+            () -> new Item.Properties().durability(540).rarity(Rarity.EPIC));
 
     static {
         for (DeferredBlock<?> block : List.of(KAASKORST, KAASKORST_STENEN, GEBARSTEN_KAASKORST_STENEN, KAASKORST_STENEN_TRAP, KAASKORST_STENEN_PLAAT,
@@ -167,8 +167,8 @@ public final class GuheindeFeature {
                 KNABBELPORTAALFRAME, KNABBELSOKKEL, KNABBELSLOT)) {
             ITEMS.registerSimpleBlockItem(block);
         }
-        ITEMS.registerItem("enderguh_ei", p -> new BlockItem(ENDERGUH_EI.get(), p), new Item.Properties().rarity(Rarity.EPIC));
-        ITEMS.registerItem("opper_mikatrofee", p -> new BlockItem(OPPER_MIKATROFEE.get(), p), new Item.Properties().rarity(Rarity.EPIC));
+        ITEMS.registerItem("enderguh_ei", p -> new BlockItem(ENDERGUH_EI.get(), p), () -> new Item.Properties().rarity(Rarity.EPIC));
+        ITEMS.registerItem("opper_mikatrofee", p -> new BlockItem(OPPER_MIKATROFEE.get(), p), () -> new Item.Properties().rarity(Rarity.EPIC));
     }
 
     // --- entities ----------------------------------------------------------------------------------------------------

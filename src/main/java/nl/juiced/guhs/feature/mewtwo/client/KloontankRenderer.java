@@ -19,6 +19,7 @@ import nl.juiced.guhs.feature.mewtwo.KloontankBlockEntity;
 import nl.juiced.guhs.feature.mewtwo.MewtwoFeature;
 import nl.juiced.guhs.feature.mewtwo.MewtwoStand;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * Draws the kloontank round its block (the middle of its floor): an eight-sided glass tube (3 blocks wide, almost 3 high)
  * with metal rings, the pink knabbelsap inside (it glows), and as long as YOUR questline hasn't repaired it (the client's
@@ -42,7 +43,7 @@ public class KloontankRenderer implements BlockEntityRenderer<KloontankBlockEnti
         float tijd = (tank.getLevel() == null ? 0 : tank.getLevel().getGameTime()) + partialTick;
         pose.pushPose();
         pose.translate(0.5, 0, 0.5);
-        VertexConsumer vc = buffers.getBuffer(RenderType.entityTranslucent(TextureAtlas.LOCATION_BLOCKS));
+        VertexConsumer vc = buffers.getBuffer(RenderTypes.entityTranslucent(TextureAtlas.LOCATION_BLOCKS));
         PoseStack.Pose last = pose.last();
         // the liquid: a glowing pink column (full and wavy when whole, a puddle when cracked)
         TextureAtlasSprite vloei = sprite("mewtwo_kloonvloeistof");

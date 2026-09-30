@@ -180,7 +180,7 @@ public class GuhKonijntjeEntity extends Landdiertje {
         if (level() instanceof ServerLevel sl) {
             sl.sendParticles(ParticleTypes.HEART, getX(), getY() + 0.6, getZ(), 5, 0.3, 0.3, 0.3, 0);
         }
-        player.addEffect(new MobEffectInstance(MobEffects.JUMP, SPRONG_TICKS, 1, false, true, true));
+        player.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, SPRONG_TICKS, 1, false, true, true));
         player.sendOverlayMessage(Component.translatable("gui.guhs.landdiertjes.hophop", getDisplayName())
                 .withStyle(ChatFormatting.LIGHT_PURPLE));
         GidsFeature.grant(player, "diertjes/landdiertjes_hophop");

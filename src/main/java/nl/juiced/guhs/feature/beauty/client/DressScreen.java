@@ -24,6 +24,7 @@ import nl.juiced.guhs.feature.beauty.BeautyShow;
 import nl.juiced.guhs.feature.beauty.ShowTheme;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The loaner wardrobe: the model on the left (turn it with the mouse), the theme and the clock on top, and every piece
  * you may borrow per slot (hat, eyes, neck, body). Click a piece to put it on the model, click the worn one to take it
@@ -69,7 +70,7 @@ public class DressScreen extends Screen {
     }
 
     private void send(int action, int value) {
-        PacketDistributor.sendToServer(new BeautyPayloads.Action(npcId, action, value));
+        ClientPacketDistributor.sendToServer(new BeautyPayloads.Action(npcId, action, value));
     }
 
     @Nullable

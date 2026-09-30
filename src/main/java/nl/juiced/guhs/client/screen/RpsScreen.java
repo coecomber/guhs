@@ -9,6 +9,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.network.MaagPayloads;
 import nl.juiced.guhs.quest.GuhQuests;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /** Rock-paper-scissors-VADS against the Mika-baas: win three times in a row. */
 public class RpsScreen extends Screen {
     private static final int W = 240, H = 150;
@@ -42,7 +43,7 @@ public class RpsScreen extends Screen {
             GuhQuests.Rps choice = choices[i];
             Component label = Component.translatable("gui.guhs.rps." + choice.name().toLowerCase(java.util.Locale.ROOT));
             addRenderableWidget(Button.builder(choice == GuhQuests.Rps.VADS ? label.copy().withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD) : label,
-                    b -> PacketDistributor.sendToServer(new MaagPayloads.RpsChoice(state.mikaId(), choice.ordinal())))
+                    b -> ClientPacketDistributor.sendToServer(new MaagPayloads.RpsChoice(state.mikaId(), choice.ordinal())))
                     .bounds(left + 10 + i * (bw + 4), top + H - 36, bw, 20).build());
         }
     }

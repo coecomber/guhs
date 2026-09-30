@@ -40,7 +40,7 @@ public final class Zaklopen implements Wedstrijd.Spel {
         staat(d);
         w.naarStart(d, p, level, 0);
         Wedstrijd.inHand(p, new ItemStack(KnabbelspelenFeature.GUH_ZAK.get()));
-        Wedstrijd.effect(p, MobEffects.MOVEMENT_SLOWDOWN, Onderdeel.ZAKLOPEN.maxTicks + Wedstrijd.AFTEL_TICKS + 40, 4);
+        Wedstrijd.effect(p, MobEffects.SLOWNESS, Onderdeel.ZAKLOPEN.maxTicks + Wedstrijd.AFTEL_TICKS + 40, 4);
     }
 
     @Override
@@ -98,7 +98,7 @@ public final class Zaklopen implements Wedstrijd.Spel {
     @Override
     public void einde(Wedstrijd w, Wedstrijd.Deelnemer d, @Nullable ServerPlayer p, ServerLevel level) {
         if (p != null) {
-            p.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            p.removeEffect(MobEffects.SLOWNESS);
         }
     }
 

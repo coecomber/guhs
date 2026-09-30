@@ -18,6 +18,7 @@ import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.golf.GolfBallEntity;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /** The guh golf ball: a little pink guh curled up into a ball (with ears and a face), rolling as it goes. */
 public class GolfBallRenderer extends EntityRenderer<GolfBallEntity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Guhs.id("guh_golfbal"), "main");
@@ -46,7 +47,7 @@ public class GolfBallRenderer extends EntityRenderer<GolfBallEntity> {
         pose.mulPose(Axis.YP.rotation(entity.rollYaw));
         pose.mulPose(Axis.XP.rotation(Mth.lerp(partialTick, entity.oRoll, entity.roll)));
         pose.scale(-1, -1, 1);
-        ball.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(TEXTURE)), light, OverlayTexture.NO_OVERLAY);
+        ball.render(pose, buffers.getBuffer(RenderTypes.entityCutout(TEXTURE)), light, OverlayTexture.NO_OVERLAY);
         pose.popPose();
         super.render(entity, entityYaw, partialTick, pose, buffers, light);
     }

@@ -11,6 +11,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
 import com.geckolib.util.Color;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /** The ghost of your best race: a guh in the pale ghost-guh fur, half see-through, that always runs (the golden one: gold). */
 public class RaceGhostRenderer extends GuhRenderer {
     private static final Identifier TEXTURE = GuhVariant.GHOST.texture();
@@ -22,7 +23,7 @@ public class RaceGhostRenderer extends GuhRenderer {
 
     @Override
     public RenderType getRenderType(GuhEntity guh, Identifier texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityTranslucent(TEXTURE);
+        return RenderTypes.entityTranslucent(TEXTURE);
     }
 
     /** Your own ghost is pale blue; the golden ghost (2.9: the world's track record) shines gold. */

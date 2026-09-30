@@ -12,6 +12,7 @@ import nl.juiced.guhs.feature.smul.SmulGame;
 import nl.juiced.guhs.feature.klassiekers.client.NiveauKeuze;
 import nl.juiced.guhs.feature.smul.SmulPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Smulguh's screen: how the eetfestijn game works, "Smullen!" (when the arena is free), your record, and her shop.
  */
@@ -28,7 +29,7 @@ public class SmulScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new SmulPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new SmulPayloads.Action(npcId, action));
         onClose();
     }
 

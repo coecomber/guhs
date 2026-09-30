@@ -94,7 +94,7 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 0, state -> state.setAndContinue(IDLE)));
+        controllers.add(new AnimationController<>("main", 0, state -> state.setAndContinue(IDLE)));
     }
 
     @Override

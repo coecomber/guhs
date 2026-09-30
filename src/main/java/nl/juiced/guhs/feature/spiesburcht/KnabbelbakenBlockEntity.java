@@ -58,10 +58,10 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
         public List<MobEffectInstance> effects(int levels) {
             int duration = PULSE + 9 * 20 + levels * 40;
             return switch (this) {
-                case VAHOEG -> List.of(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration, levels >= 4 ? 1 : 0, true, true),
+                case VAHOEG -> List.of(new MobEffectInstance(MobEffects.SPEED, duration, levels >= 4 ? 1 : 0, true, true),
                         new MobEffectInstance(MobEffects.SATURATION, 1, 0, true, false));
-                case GUHSPRONG -> List.of(new MobEffectInstance(MobEffects.JUMP, duration, levels >= 4 ? 1 : 0, true, true));
-                case VADSSCHILD -> List.of(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, duration, 0, true, true));
+                case GUHSPRONG -> List.of(new MobEffectInstance(MobEffects.JUMP_BOOST, duration, levels >= 4 ? 1 : 0, true, true));
+                case VADSSCHILD -> List.of(new MobEffectInstance(MobEffects.RESISTANCE, duration, 0, true, true));
                 case KNABBELHERSTEL -> List.of(new MobEffectInstance(MobEffects.REGENERATION, duration, 0, true, true));
             };
         }

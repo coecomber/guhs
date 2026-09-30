@@ -32,72 +32,72 @@ public final class ModItems {
 
     /** A guh music disc: "Ze hangen aan me veh" (in the jukebox at the guh picnic, see quest/PicknickMuziek). */
     public static final DeferredItem<net.minecraft.world.item.Item> MUSIC_DISC_ZE_HANGEN = ITEMS.registerSimpleItem("music_disc_ze_hangen",
-            new net.minecraft.world.item.Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE)
+            () -> new net.minecraft.world.item.Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE)
                     .jukeboxPlayable(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.JUKEBOX_SONG, Guhs.id("ze_hangen"))));
     public static final DeferredItem<DeferredSpawnEggItem> GUH_SPAWN_EGG = ITEMS.registerItem("guh_spawn_egg",
             props -> new DeferredSpawnEggItem(ModEntities.GUH, 0xF7CCDA, 0x78C4EB, props));
 
     /** Fat dropped by Mika. Charges the frying pan (+64 fries). */
-    public static final DeferredItem<Item> MIKA_VET = ITEMS.registerSimpleItem("mika_vet", new Item.Properties());
+    public static final DeferredItem<Item> MIKA_VET = ITEMS.registerSimpleItem("mika_vet", () -> new Item.Properties());
 
     /** Fried kaas knabbels: instantly heal a tamed guh to full health. Also a proper meal for players. */
     public static final DeferredItem<Item> GEFRITUURDE_KAASKNABBELS = ITEMS.registerSimpleItem("gefrituurde_kaasknabbels",
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.7f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.7f).build()));
 
     public static final DeferredItem<DeferredSpawnEggItem> MIKA_SPAWN_EGG = ITEMS.registerItem("mika_spawn_egg",
             props -> new DeferredSpawnEggItem(ModEntities.MIKA, 0xE2AABE, 0x8C1428, props));
 
     /** A tamed guh you picked up (sneak + right-click). */
     public static final DeferredItem<PickedUpGuhItem> PICKED_UP_GUH = ITEMS.registerItem("picked_up_guh",
-            PickedUpGuhItem::new, new Item.Properties().stacksTo(1));
+            PickedUpGuhItem::new, () -> new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<BankGuhItem> BANK_GUH = ITEMS.registerItem("bank_guh",
-            props -> new BankGuhItem(ModBlocks.BANK_GUH.get(), props), new Item.Properties().stacksTo(1));
+            props -> new BankGuhItem(ModBlocks.BANK_GUH.get(), props), () -> new Item.Properties().stacksTo(1));
 
     public static final DeferredItem<BucketItem> KAAS_SAUS_BUCKET = ITEMS.registerItem("kaas_saus_bucket",
-            props -> new BucketItem(ModFluids.KAAS_SAUS.get(), props), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1));
+            props -> new BucketItem(ModFluids.KAAS_SAUS.get(), props), () -> new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1));
 
     /** Guh armour: right-click your tamed guh with it. */
     public static final DeferredItem<GuhArmorItem> IRON_GUH_ARMOR = ITEMS.registerItem("iron_guh_armor",
-            props -> new GuhArmorItem(ArmorMaterials.IRON, GuhArmorItem.Tier.IRON, props), new Item.Properties().stacksTo(1));
+            props -> new GuhArmorItem(ArmorMaterials.IRON, GuhArmorItem.Tier.IRON, props), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<GuhArmorItem> DIAMOND_GUH_ARMOR = ITEMS.registerItem("diamond_guh_armor",
-            props -> new GuhArmorItem(ArmorMaterials.DIAMOND, GuhArmorItem.Tier.DIAMOND, props), new Item.Properties().stacksTo(1));
+            props -> new GuhArmorItem(ArmorMaterials.DIAMOND, GuhArmorItem.Tier.DIAMOND, props), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<GuhArmorItem> NETHERITE_GUH_ARMOR = ITEMS.registerItem("netherite_guh_armor",
             props -> new GuhArmorItem(ArmorMaterials.NETHERITE, GuhArmorItem.Tier.NETHERITE, props),
-            new Item.Properties().stacksTo(1).fireResistant());
+            () -> new Item.Properties().stacksTo(1).fireResistant());
 
     // --- Vahoege Vads: diamond-tier, unbreakable, kept on death ---------------------------------------------------
-    public static final DeferredItem<Item> VAHOEGE_VADS = ITEMS.registerSimpleItem("vahoege_vads", new Item.Properties());
-    public static final DeferredItem<Item> VAHOEGE_VADS_INGOT = ITEMS.registerSimpleItem("vahoege_vads_ingot", new Item.Properties());
+    public static final DeferredItem<Item> VAHOEGE_VADS = ITEMS.registerSimpleItem("vahoege_vads", () -> new Item.Properties());
+    public static final DeferredItem<Item> VAHOEGE_VADS_INGOT = ITEMS.registerSimpleItem("vahoege_vads_ingot", () -> new Item.Properties());
 
     private static Item.Properties unbreakable() {
         return new Item.Properties().component(DataComponents.UNBREAKABLE, new Unbreakable(true));
     }
 
     public static final DeferredItem<SwordItem> VADS_SWORD = ITEMS.registerItem("vahoege_vads_sword",
-            props -> new SwordItem(ModArmorMaterials.VADS_TIER, props.attributes(SwordItem.createAttributes(ModArmorMaterials.VADS_TIER, 3, -2.4f))), unbreakable());
+            props -> new SwordItem(ModArmorMaterials.VADS_TIER, props.attributes(SwordItem.createAttributes(ModArmorMaterials.VADS_TIER, 3, -2.4f))), () -> unbreakable());
     public static final DeferredItem<PickaxeItem> VADS_PICKAXE = ITEMS.registerItem("vahoege_vads_pickaxe",
-            props -> new PickaxeItem(ModArmorMaterials.VADS_TIER, props.attributes(PickaxeItem.createAttributes(ModArmorMaterials.VADS_TIER, 1.0f, -2.8f))), unbreakable());
+            props -> new PickaxeItem(ModArmorMaterials.VADS_TIER, props.attributes(PickaxeItem.createAttributes(ModArmorMaterials.VADS_TIER, 1.0f, -2.8f))), () -> unbreakable());
     public static final DeferredItem<AxeItem> VADS_AXE = ITEMS.registerItem("vahoege_vads_axe",
-            props -> new AxeItem(ModArmorMaterials.VADS_TIER, props.attributes(AxeItem.createAttributes(ModArmorMaterials.VADS_TIER, 5.0f, -3.0f))), unbreakable());
+            props -> new AxeItem(ModArmorMaterials.VADS_TIER, props.attributes(AxeItem.createAttributes(ModArmorMaterials.VADS_TIER, 5.0f, -3.0f))), () -> unbreakable());
     public static final DeferredItem<ShovelItem> VADS_SHOVEL = ITEMS.registerItem("vahoege_vads_shovel",
-            props -> new ShovelItem(ModArmorMaterials.VADS_TIER, props.attributes(ShovelItem.createAttributes(ModArmorMaterials.VADS_TIER, 1.5f, -3.0f))), unbreakable());
+            props -> new ShovelItem(ModArmorMaterials.VADS_TIER, props.attributes(ShovelItem.createAttributes(ModArmorMaterials.VADS_TIER, 1.5f, -3.0f))), () -> unbreakable());
     public static final DeferredItem<HoeItem> VADS_HOE = ITEMS.registerItem("vahoege_vads_hoe",
-            props -> new HoeItem(ModArmorMaterials.VADS_TIER, props.attributes(HoeItem.createAttributes(ModArmorMaterials.VADS_TIER, -3.0f, 0.0f))), unbreakable());
+            props -> new HoeItem(ModArmorMaterials.VADS_TIER, props.attributes(HoeItem.createAttributes(ModArmorMaterials.VADS_TIER, -3.0f, 0.0f))), () -> unbreakable());
 
     /** Pickaxe + axe + shovel in one. */
     public static final DeferredItem<nl.juiced.guhs.item.PaxelItem> VADS_PAXEL = ITEMS.registerItem("vahoege_vads_paxel",
             props -> new nl.juiced.guhs.item.PaxelItem(ModArmorMaterials.VADS_TIER, props.attributes(
-                    net.minecraft.world.item.DiggerItem.createAttributes(ModArmorMaterials.VADS_TIER, 4.0f, -2.9f))), unbreakable());
+                    net.minecraft.world.item.DiggerItem.createAttributes(ModArmorMaterials.VADS_TIER, 4.0f, -2.9f))), () -> unbreakable());
 
     public static final DeferredItem<ArmorItem> VADS_HELMET = ITEMS.registerItem("vahoege_vads_helmet",
-            props -> new ArmorItem(ModArmorMaterials.VAHOEGE_VADS, ArmorItem.Type.HELMET, props.durability(ArmorItem.Type.HELMET.getDurability(33))), unbreakable());
+            props -> new ArmorItem(ModArmorMaterials.VAHOEGE_VADS, ArmorItem.Type.HELMET, props.durability(ArmorItem.Type.HELMET.getDurability(33))), () -> unbreakable());
     public static final DeferredItem<ArmorItem> VADS_CHESTPLATE = ITEMS.registerItem("vahoege_vads_chestplate",
-            props -> new ArmorItem(ModArmorMaterials.VAHOEGE_VADS, ArmorItem.Type.CHESTPLATE, props.durability(ArmorItem.Type.CHESTPLATE.getDurability(33))), unbreakable());
+            props -> new ArmorItem(ModArmorMaterials.VAHOEGE_VADS, ArmorItem.Type.CHESTPLATE, props.durability(ArmorItem.Type.CHESTPLATE.getDurability(33))), () -> unbreakable());
     public static final DeferredItem<ArmorItem> VADS_LEGGINGS = ITEMS.registerItem("vahoege_vads_leggings",
-            props -> new ArmorItem(ModArmorMaterials.VAHOEGE_VADS, ArmorItem.Type.LEGGINGS, props.durability(ArmorItem.Type.LEGGINGS.getDurability(33))), unbreakable());
+            props -> new ArmorItem(ModArmorMaterials.VAHOEGE_VADS, ArmorItem.Type.LEGGINGS, props.durability(ArmorItem.Type.LEGGINGS.getDurability(33))), () -> unbreakable());
     public static final DeferredItem<ArmorItem> VADS_BOOTS = ITEMS.registerItem("vahoege_vads_boots",
-            props -> new ArmorItem(ModArmorMaterials.VAHOEGE_VADS, ArmorItem.Type.BOOTS, props.durability(ArmorItem.Type.BOOTS.getDurability(33))), unbreakable());
+            props -> new ArmorItem(ModArmorMaterials.VAHOEGE_VADS, ArmorItem.Type.BOOTS, props.durability(ArmorItem.Type.BOOTS.getDurability(33))), () -> unbreakable());
 
     // --- guh clothes: one item per GuhClothes (the kleermaker, structure loot); the Mika-jager's swatter ------------
     public static final java.util.Map<nl.juiced.guhs.entity.GuhClothes, DeferredItem<nl.juiced.guhs.item.GuhClothingItem>> CLOTHES =
@@ -105,7 +105,7 @@ public final class ModItems {
 
     private static DeferredItem<nl.juiced.guhs.item.GuhClothingItem> clothing(nl.juiced.guhs.entity.GuhClothes clothes) {
         return CLOTHES.computeIfAbsent(clothes, c -> ITEMS.registerItem(c.id(),
-                props -> new nl.juiced.guhs.item.GuhClothingItem(c, props), new Item.Properties().stacksTo(1)));
+                props -> new nl.juiced.guhs.item.GuhClothingItem(c, props), () -> new Item.Properties().stacksTo(1)));
     }
 
     public static final DeferredItem<nl.juiced.guhs.item.GuhClothingItem> PINK_ONESIE = clothing(nl.juiced.guhs.entity.GuhClothes.PINK_ONESIE);
@@ -128,7 +128,7 @@ public final class ModItems {
     /** Iron sword stats, never breaks, five times the damage on Mikas (Big Mika too). */
     public static final DeferredItem<nl.juiced.guhs.item.MikaMepperItem> MIKA_MEPPER = ITEMS.registerItem("mika_mepper",
             props -> new nl.juiced.guhs.item.MikaMepperItem(net.minecraft.world.item.Tiers.IRON,
-                    props.attributes(SwordItem.createAttributes(net.minecraft.world.item.Tiers.IRON, 3, -2.4f))), unbreakable());
+                    props.attributes(SwordItem.createAttributes(net.minecraft.world.item.Tiers.IRON, 3, -2.4f))), () -> unbreakable());
 
     /** The clothing item for a piece of guh clothing. */
     public static Item clothingItem(nl.juiced.guhs.entity.GuhClothes clothes) {
@@ -137,26 +137,26 @@ public final class ModItems {
 
     // --- the quests: the lost guh (-> your own stomach), the broken sled, the Guhdex ------------------------------------
     public static final DeferredItem<Item> GUH_BUIKFLUITJE = ITEMS.registerItem("guh_buikfluitje",
-            nl.juiced.guhs.item.QuestItems.Whistle::new, new Item.Properties().stacksTo(1));
+            nl.juiced.guhs.item.QuestItems.Whistle::new, () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<GuhCompassItem> MIKA_SPOORKOMPAS = ITEMS.registerItem("mika_spoorkompas",
-            props -> new GuhCompassItem(GuhCompassItem.MIKA_KAMP, props), new Item.Properties().stacksTo(1));
+            props -> new GuhCompassItem(GuhCompassItem.MIKA_KAMP, props), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<GuhCompassItem> TAARTKRUIMELS = ITEMS.registerItem("taartkruimels",
-            props -> new GuhCompassItem(nl.juiced.guhs.quest.GuhQuests.GUH_PICNIC, props), new Item.Properties().stacksTo(1));
+            props -> new GuhCompassItem(nl.juiced.guhs.quest.GuhQuests.GUH_PICNIC, props), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> VERLOREN_GUH_TAART = ITEMS.registerItem("verloren_guh_taart",
-            nl.juiced.guhs.item.QuestItems.Described::new, new Item.Properties().stacksTo(1));
+            nl.juiced.guhs.item.QuestItems.Described::new, () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> GUH_BALLON = ITEMS.registerItem("guh_ballon",
-            nl.juiced.guhs.item.QuestItems.Described::new, new Item.Properties().stacksTo(16));
-    public static final DeferredItem<Item> GUH_KRISTAL = ITEMS.registerSimpleItem("guh_kristal", new Item.Properties());
+            nl.juiced.guhs.item.QuestItems.Described::new, () -> new Item.Properties().stacksTo(16));
+    public static final DeferredItem<Item> GUH_KRISTAL = ITEMS.registerSimpleItem("guh_kristal", () -> new Item.Properties());
     public static final DeferredItem<Item> GUH_KRISTAL_VERREKIJKER = ITEMS.registerItem("guh_kristal_verrekijker",
-            nl.juiced.guhs.item.QuestItems.Spyglass::new, new Item.Properties().stacksTo(1));
+            nl.juiced.guhs.item.QuestItems.Spyglass::new, () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> GUHDEX = ITEMS.registerItem("guhdex",
-            nl.juiced.guhs.item.QuestItems.Dex::new, new Item.Properties().stacksTo(1));
+            nl.juiced.guhs.item.QuestItems.Dex::new, () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> SLEEGLIJDER = ITEMS.registerItem("sleeglijder",
-            nl.juiced.guhs.item.QuestItems.Described::new, new Item.Properties().stacksTo(1));
+            nl.juiced.guhs.item.QuestItems.Described::new, () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> GUH_BELLETJE = ITEMS.registerItem("guh_belletje",
-            nl.juiced.guhs.item.QuestItems.Described::new, new Item.Properties().stacksTo(1));
+            nl.juiced.guhs.item.QuestItems.Described::new, () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> ROZE_LINT = ITEMS.registerItem("roze_lint",
-            nl.juiced.guhs.item.QuestItems.Described::new, new Item.Properties().stacksTo(1));
+            nl.juiced.guhs.item.QuestItems.Described::new, () -> new Item.Properties().stacksTo(1));
     /** Needed (not used up) to craft sled rails; the Slee-guh's reward. */
     public static final DeferredItem<Item> SLEEBOUWERSBOEK = ITEMS.registerItem("sleebouwersboek",
             props -> new nl.juiced.guhs.item.QuestItems.Described(props) {
@@ -169,74 +169,74 @@ public final class ModItems {
                 public boolean hasCraftingRemainingItem(ItemStack stack) {
                     return true;
                 }
-            }, new Item.Properties().stacksTo(1));
+            }, () -> new Item.Properties().stacksTo(1));
     // --- the guh sled and its rails ---------------------------------------------------------------------------------
-    public static final DeferredItem<Item> GUH_SLEE = ITEMS.registerItem("guh_slee", nl.juiced.guhs.item.SledItem::new, new Item.Properties().stacksTo(1));
+    public static final DeferredItem<Item> GUH_SLEE = ITEMS.registerItem("guh_slee", nl.juiced.guhs.item.SledItem::new, () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> SLEERAIL_RECHT = ITEMS.registerItem("sleerail_recht",
-            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.STRAIGHT, props), new Item.Properties());
+            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.STRAIGHT, props), () -> new Item.Properties());
     public static final DeferredItem<Item> SLEERAIL_BOCHT = ITEMS.registerItem("sleerail_bocht",
-            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.CURVE, props), new Item.Properties());
+            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.CURVE, props), () -> new Item.Properties());
     public static final DeferredItem<Item> SLEERAIL_HELLING = ITEMS.registerItem("sleerail_helling",
-            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.SLOPE, props), new Item.Properties());
+            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.SLOPE, props), () -> new Item.Properties());
     // the coaster pieces (the guh kermis)
     public static final DeferredItem<Item> SLEERAIL_DROP = ITEMS.registerItem("sleerail_drop",
-            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.DROP, props), new Item.Properties());
+            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.DROP, props), () -> new Item.Properties());
     public static final DeferredItem<Item> SLEERAIL_KURKENTREKKER = ITEMS.registerItem("sleerail_kurkentrekker",
-            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.SPIRAL, props), new Item.Properties());
+            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.SPIRAL, props), () -> new Item.Properties());
     public static final DeferredItem<Item> SLEERAIL_SCHANS = ITEMS.registerItem("sleerail_schans",
-            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.JUMP, props), new Item.Properties());
+            props -> new nl.juiced.guhs.item.SleeRailItem(nl.juiced.guhs.item.SleeRailItem.Kind.JUMP, props), () -> new Item.Properties());
     /** One for every lap of the guh kermis coaster; the Kermis-guh sells the kermis outfit for them. */
-    public static final DeferredItem<Item> KERMISBON = ITEMS.registerSimpleItem("kermisbon", new Item.Properties());
+    public static final DeferredItem<Item> KERMISBON = ITEMS.registerSimpleItem("kermisbon", () -> new Item.Properties());
     /** For finding all hidden guhs in the verstopguh house; Verstopguhtje sells the detective outfit for them. */
-    public static final DeferredItem<Item> VERSTOPGUHTICKET = ITEMS.registerSimpleItem("verstopguhticket", new Item.Properties());
+    public static final DeferredItem<Item> VERSTOPGUHTICKET = ITEMS.registerSimpleItem("verstopguhticket", () -> new Item.Properties());
     /** Points to the verstopguh house; sold by the vads temmer. */
     public static final DeferredItem<GuhCompassItem> VERSTOPKOMPAS = ITEMS.registerItem("verstopkompas",
-            props -> new GuhCompassItem(GuhCompassItem.VERSTOPGUH_HUIS, props), new Item.Properties().stacksTo(1));
+            props -> new GuhCompassItem(GuhCompassItem.VERSTOPGUH_HUIS, props), () -> new Item.Properties().stacksTo(1));
     /** Looks for whatever you choose (right-click): replaces the single-purpose guh compasses. */
     public static final DeferredItem<nl.juiced.guhs.item.SuperkompasItem> SUPERKOMPAS = ITEMS.registerItem("guhmensie_superkompas",
-            nl.juiced.guhs.item.SuperkompasItem::new, new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE));
+            nl.juiced.guhs.item.SuperkompasItem::new, () -> new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE));
     /** Puts down a Reisguh (a waypoint) wherever you like in the Guhmension. */
     public static final DeferredItem<nl.juiced.guhs.item.ReisguhFluitjeItem> REISGUH_FLUITJE = ITEMS.registerItem("reisguh_fluitje",
-            nl.juiced.guhs.item.ReisguhFluitjeItem::new, new Item.Properties().stacksTo(16));
+            nl.juiced.guhs.item.ReisguhFluitjeItem::new, () -> new Item.Properties().stacksTo(16));
     /** Points to the (legendary rare) guh castle; sold by a master vads temmer. */
     public static final DeferredItem<GuhCompassItem> KONINGSKOMPAS = ITEMS.registerItem("koningskompas",
-            props -> new GuhCompassItem(GuhCompassItem.GUH_KASTEEL, props), new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.EPIC));
+            props -> new GuhCompassItem(GuhCompassItem.GUH_KASTEEL, props), () -> new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.EPIC));
     /** Points to the guh kermis; sold by the vads temmer. */
     public static final DeferredItem<GuhCompassItem> KERMISKOMPAS = ITEMS.registerItem("kermiskompas",
-            props -> new GuhCompassItem(GuhCompassItem.GUH_KERMIS, props), new Item.Properties().stacksTo(1));
+            props -> new GuhCompassItem(GuhCompassItem.GUH_KERMIS, props), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<BucketItem> MAAGZUUR_BUCKET = ITEMS.registerItem("maagzuur_bucket",
-            props -> new BucketItem(ModFluids.MAAGZUUR.get(), props), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1));
+            props -> new BucketItem(ModFluids.MAAGZUUR.get(), props), () -> new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1));
 
     // --- guh compasses (found in guh structure chests; work in the Guhmension) -----------------------------------
     public static final DeferredItem<GuhCompassItem> GUH_CAVE_COMPASS = ITEMS.registerItem("guh_cave_compass",
-            props -> new GuhCompassItem(GuhCompassItem.GUH_CAVES, props), new Item.Properties().stacksTo(1));
+            props -> new GuhCompassItem(GuhCompassItem.GUH_CAVES, props), () -> new Item.Properties().stacksTo(1));
     /** Points to Moeder Vadsig's very rare shrine (the start of the guh stomach quest); sold by the vads temmer. */
     public static final DeferredItem<GuhCompassItem> HEILIGDOM_KOMPAS = ITEMS.registerItem("heiligdom_kompas",
-            props -> new GuhCompassItem(GuhCompassItem.VADSIG_HEILIGDOM, props), new Item.Properties().stacksTo(1));
+            props -> new GuhCompassItem(GuhCompassItem.VADSIG_HEILIGDOM, props), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<GuhCompassItem> CHALLENGE_COMPASS = ITEMS.registerItem("challenge_compass",
-            props -> new GuhCompassItem(GuhCompassItem.CHALLENGING_GUH_CAVES, props), new Item.Properties().stacksTo(1));
+            props -> new GuhCompassItem(GuhCompassItem.CHALLENGING_GUH_CAVES, props), () -> new Item.Properties().stacksTo(1));
 
     // --- the guh sea: guh fish ------------------------------------------------------------------------------------
     public static final DeferredItem<Item> GUH_VIS = ITEMS.registerSimpleItem("guh_vis",
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).build()));
     public static final DeferredItem<Item> GEBAKKEN_GUH_VIS = ITEMS.registerSimpleItem("gebakken_guh_vis",
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.8f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.8f).build()));
     public static final DeferredItem<net.minecraft.world.item.MobBucketItem> GUH_VIS_BUCKET = ITEMS.registerItem("guh_vis_bucket",
             props -> new net.minecraft.world.item.MobBucketItem(ModEntities.GUH_VIS.get(), net.minecraft.world.level.material.Fluids.WATER,
                     net.minecraft.sounds.SoundEvents.BUCKET_EMPTY_FISH, props),
-            new Item.Properties().stacksTo(1).component(net.minecraft.core.component.DataComponents.BUCKET_ENTITY_DATA,
+            () -> new Item.Properties().stacksTo(1).component(net.minecraft.core.component.DataComponents.BUCKET_ENTITY_DATA,
                     net.minecraft.world.item.component.CustomData.EMPTY));
     public static final DeferredItem<DeferredSpawnEggItem> GUH_VIS_SPAWN_EGG = ITEMS.registerItem("guh_vis_spawn_egg",
             props -> new DeferredSpawnEggItem(ModEntities.GUH_VIS, 0xF7A8C8, 0x78C4EB, props));
     public static final DeferredItem<net.minecraft.world.item.PlaceOnWaterBlockItem> GUH_WATERLELIE = ITEMS.registerItem("guh_waterlelie",
-            props -> new net.minecraft.world.item.PlaceOnWaterBlockItem(ModBlocks.GUH_WATERLELIE.get(), props), new Item.Properties());
+            props -> new net.minecraft.world.item.PlaceOnWaterBlockItem(ModBlocks.GUH_WATERLELIE.get(), props), () -> new Item.Properties());
 
     // --- guh bees, guh slimes, Nether Mikas ------------------------------------------------------------------------
     /** Cheese honey from a full knabbelkorf: like honey, clears poison. */
     public static final DeferredItem<Item> KAASHONING = ITEMS.registerItem("kaashoning", net.minecraft.world.item.HoneyBottleItem::new,
             new Item.Properties().craftRemainder(Items.GLASS_BOTTLE).stacksTo(16)
                     .food(new FoodProperties.Builder().nutrition(7).saturationModifier(0.2f).build()));
-    public static final DeferredItem<Item> GUH_SLIMEBALL = ITEMS.registerSimpleItem("guh_slimeball", new Item.Properties());
+    public static final DeferredItem<Item> GUH_SLIMEBALL = ITEMS.registerSimpleItem("guh_slimeball", () -> new Item.Properties());
     public static final DeferredItem<DeferredSpawnEggItem> GUH_BEE_SPAWN_EGG = ITEMS.registerItem("guh_bee_spawn_egg",
             props -> new DeferredSpawnEggItem(ModEntities.GUH_BEE, 0xF7B6CB, 0xFFD24A, props));
     public static final DeferredItem<DeferredSpawnEggItem> GUH_SLIME_SPAWN_EGG = ITEMS.registerItem("guh_slime_spawn_egg",
@@ -246,16 +246,16 @@ public final class ModItems {
 
     // --- food (2.0.0) ------------------------------------------------------------------------------------------------
     public static final DeferredItem<net.minecraft.world.item.BlockItem> GUH_TAART = ITEMS.registerItem("guh_taart",
-            props -> new net.minecraft.world.item.BlockItem(ModBlocks.GUH_TAART.get(), props), new Item.Properties().stacksTo(1));
+            props -> new net.minecraft.world.item.BlockItem(ModBlocks.GUH_TAART.get(), props), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> GUH_CUPCAKE = ITEMS.registerSimpleItem("guh_cupcake",
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4f).build()));
     public static final java.util.Map<String, DeferredItem<Item>> MACARONS = new java.util.LinkedHashMap<>();
     public static final DeferredItem<Item> KAASFONDUE = ITEMS.registerSimpleItem("kaasfondue", new Item.Properties().stacksTo(1)
             .food(new FoodProperties.Builder().nutrition(9).saturationModifier(0.8f).usingConvertsTo(Items.BOWL).build()));
     public static final DeferredItem<Item> KAASKNABBEL_MILKSHAKE = ITEMS.registerItem("kaasknabbel_milkshake", nl.juiced.guhs.item.MilkshakeItem::new,
-            new Item.Properties().stacksTo(16).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3f).alwaysEdible().build()));
+            () -> new Item.Properties().stacksTo(16).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3f).alwaysEdible().build()));
     public static final DeferredItem<net.minecraft.world.item.ItemNameBlockItem> KAASKNABBELZAADJES = ITEMS.registerItem("kaasknabbelzaadjes",
-            props -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.KAASKNABBELPLANT.get(), props), new Item.Properties());
+            props -> new net.minecraft.world.item.ItemNameBlockItem(ModBlocks.KAASKNABBELPLANT.get(), props), () -> new Item.Properties());
 
     static {
         for (String colour : new String[]{"roze", "mint", "citroen", "choco"}) {

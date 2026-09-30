@@ -66,7 +66,7 @@ public final class KlusjesFeature {
     public static final TagKey<Item> ZELDZAAM = TagKey.create(Registries.ITEM, Guhs.id("klusjes/zeldzaam"));
 
     public static final DeferredBlock<GuhlampjeBlock> GUHLAMPJE = BLOCKS.registerBlock("klusjes_guhlampje", GuhlampjeBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.6f).sound(SoundType.LANTERN).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.6f).sound(SoundType.LANTERN).noOcclusion()
                     .lightLevel(s -> s.getValue(GuhlampjeBlock.LIT) ? 15 : 0));
     public static final DeferredItem<BlockItem> GUHLAMPJE_ITEM = ITEMS.registerItem("klusjes_guhlampje",
             p -> new BlockItem(GUHLAMPJE.get(), p) {
@@ -75,7 +75,7 @@ public final class KlusjesFeature {
                     tooltip.add(Component.translatable("block.guhs.klusjes_guhlampje.lore").withStyle(ChatFormatting.GRAY));
                 }
             }, new Item.Properties());
-    public static final DeferredItem<SchelpjeItem> SCHELPJE = ITEMS.registerItem("klusjes_schelpje", SchelpjeItem::new, new Item.Properties());
+    public static final DeferredItem<SchelpjeItem> SCHELPJE = ITEMS.registerItem("klusjes_schelpje", SchelpjeItem::new, () -> new Item.Properties());
 
     public static final DeferredHolder<SoundEvent, SoundEvent> GRAAF = sound("klusjes.graaf");
     public static final DeferredHolder<SoundEvent, SoundEvent> PIEP = sound("klusjes.piep");

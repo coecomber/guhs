@@ -45,7 +45,7 @@ public final class EilandenFeature {
 
     /** The lift pad: makes a wolkenstroom column above it (up, or down when placed sneaking). */
     public static final DeferredBlock<WolkenliftBlock> WOLKENLIFT = BLOCKS.registerBlock("wolkenlift", WolkenliftBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(0.8f).sound(SoundType.WOOL).lightLevel(s -> 10)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(0.8f).sound(SoundType.WOOL).lightLevel(s -> 10)
                     .pushReaction(PushReaction.BLOCK));
     /** The invisible cloud stream of a wolkenlift (like a bubble column). */
     public static final DeferredBlock<WolkenstroomBlock> WOLKENSTROOM = BLOCKS.registerBlock("wolkenstroom", WolkenstroomBlock::new,

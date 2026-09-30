@@ -27,6 +27,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The Hemelkapelletje can't be broken or built in (like the floating guh islands): the whole sky part (the islet, the
  * chapel, the clouds, the lift columns) and the cloud plaza on the ground. Doors, the hemelkist, benches and the Knuffelhart
@@ -100,7 +101,7 @@ public final class HemelProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

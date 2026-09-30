@@ -17,6 +17,7 @@ import nl.juiced.guhs.feature.huisje.HuisjeBlock;
 import nl.juiced.guhs.feature.huisje.Huisjes;
 import org.joml.Matrix4f;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * "Laat klus-area zien" (2.10): a translucent blue dome over the home base of a Guhhuisje (radius
  * {@link Huisjes#BEREIK}), with a brighter ring on the ground: where the residents wander, do their chores and play. On/off
@@ -75,12 +76,12 @@ public final class HuisjeKoepel {
             }
             pose.pushPose();
             pose.translate(m.x - cam.x, m.y - cam.y + 0.02, m.z - cam.z);
-            koepel(pose.last().pose(), buffers.getBuffer(RenderType.debugQuads()), Huisjes.BEREIK, mc.level.getGameTime() + event.getPartialTick().getGameTimeDeltaPartialTick(false));
+            koepel(pose.last().pose(), buffers.getBuffer(RenderTypes.debugQuads()), Huisjes.BEREIK, mc.level.getGameTime() + event.getPartialTick().getGameTimeDeltaPartialTick(false));
             pose.popPose();
             iets = true;
         }
         if (iets) {
-            buffers.endBatch(RenderType.debugQuads());
+            buffers.endBatch(RenderTypes.debugQuads());
         }
     }
 

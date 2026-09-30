@@ -73,7 +73,7 @@ public final class BaltoSleeFeature {
     public static final DeferredItem<Item> SNEEUWSLEE = ITEMS.register("sneeuwslee",
             () -> new SneeuwsleeItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
     /** The coin of the sledesprint: a little golden sled bell with a red ribbon. */
-    public static final DeferredItem<Item> SLEDEBELLETJE = ITEMS.registerSimpleItem("sledebelletje", new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> SLEDEBELLETJE = ITEMS.registerSimpleItem("sledebelletje", () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 
     // --- Steele-Mika's winter deco (for sledebelletjes) -----------------------------------------------------------------------
     private static BlockBehaviour.Properties deco(MapColor kleur, SoundType geluid) {
@@ -82,23 +82,23 @@ public final class BaltoSleeFeature {
 
     public static final DeferredBlock<GuhFurnitureBlock> SNEEUWGUH = BLOCKS.registerBlock("baltoslee_sneeuwguh",
             p -> new GuhFurnitureBlock(p, -1, new double[]{2.5, 0, 2.5, 13.5, 9, 13.5}, new double[]{4, 9, 4, 12, 16, 12}),
-            deco(MapColor.SNOW, SoundType.SNOW));
+            () -> deco(MapColor.SNOW, SoundType.SNOW));
     public static final DeferredBlock<GuhFurnitureBlock> MINISLEE = BLOCKS.registerBlock("baltoslee_minislee",
-            p -> new GuhFurnitureBlock(p, 0.32, new double[]{1, 0, 0, 15, 6, 16}), deco(MapColor.WOOD, SoundType.WOOD));
+            p -> new GuhFurnitureBlock(p, 0.32, new double[]{1, 0, 0, 15, 6, 16}), () -> deco(MapColor.WOOD, SoundType.WOOD));
     public static final DeferredBlock<Sledebellen> SLEDEBELLEN = BLOCKS.registerBlock("baltoslee_sledebellen",
-            p -> new Sledebellen(p, new double[]{1, 0, 6, 15, 15, 10}), deco(MapColor.GOLD, SoundType.WOOD));
+            p -> new Sledebellen(p, new double[]{1, 0, 6, 15, 15, 10}), () -> deco(MapColor.GOLD, SoundType.WOOD));
     public static final DeferredBlock<GuhFurnitureBlock> BEKER = BLOCKS.registerBlock("baltoslee_beker",
-            p -> new GuhFurnitureBlock(p, -1, new double[]{4, 0, 4, 12, 13, 12}), deco(MapColor.GOLD, SoundType.METAL).lightLevel(s -> 4));
+            p -> new GuhFurnitureBlock(p, -1, new double[]{4, 0, 4, 12, 13, 12}), () -> deco(MapColor.GOLD, SoundType.METAL).lightLevel(s -> 4));
     public static final DeferredBlock<GuhFurnitureBlock> HONDENMAND = BLOCKS.registerBlock("baltoslee_hondenmand",
-            p -> new GuhFurnitureBlock(p, -1, new double[]{1, 0, 1, 15, 6, 15}), deco(MapColor.COLOR_RED, SoundType.WOOL));
+            p -> new GuhFurnitureBlock(p, -1, new double[]{1, 0, 1, 15, 6, 15}), () -> deco(MapColor.COLOR_RED, SoundType.WOOL));
     public static final DeferredBlock<GuhFurnitureBlock> LANTAARNPAAL = BLOCKS.registerBlock("baltoslee_lantaarnpaal",
             p -> new GuhFurnitureBlock(p, -1, new double[]{6.5, 0, 6.5, 9.5, 11, 9.5}, new double[]{4.5, 11, 4.5, 11.5, 16, 11.5}),
-            deco(MapColor.WOOD, SoundType.LANTERN).lightLevel(s -> 14));
+            () -> deco(MapColor.WOOD, SoundType.LANTERN).lightLevel(s -> 14));
 
     public static final DeferredItem<BlockItem> SNEEUWGUH_ITEM = ITEMS.registerSimpleBlockItem(SNEEUWGUH);
     public static final DeferredItem<BlockItem> MINISLEE_ITEM = ITEMS.registerSimpleBlockItem(MINISLEE);
     public static final DeferredItem<BlockItem> SLEDEBELLEN_ITEM = ITEMS.registerSimpleBlockItem(SLEDEBELLEN);
-    public static final DeferredItem<BlockItem> BEKER_ITEM = ITEMS.registerSimpleBlockItem("baltoslee_beker", BEKER, new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<BlockItem> BEKER_ITEM = ITEMS.registerSimpleBlockItem("baltoslee_beker", BEKER, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final DeferredItem<BlockItem> HONDENMAND_ITEM = ITEMS.registerSimpleBlockItem(HONDENMAND);
     public static final DeferredItem<BlockItem> LANTAARNPAAL_ITEM = ITEMS.registerSimpleBlockItem(LANTAARNPAAL);
 

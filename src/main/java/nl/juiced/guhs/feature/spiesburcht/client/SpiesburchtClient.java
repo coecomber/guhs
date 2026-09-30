@@ -39,6 +39,7 @@ import com.geckolib.renderer.layer.builtin.BlockAndItemGeoLayer;
 import com.geckolib.renderer.layer.GeoRenderLayer;
 import com.geckolib.util.Color;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * The Spiesburcht on the client: the GeckoLib models of the Rookguh (rounder and rosier with every knabbel), the
  * Vonk-Mika, the Knekel-Mika and the Aangebrande Mika (glowing embers), the kooltjes, the Knabbelbaken's beam, the
@@ -86,7 +87,7 @@ public final class SpiesburchtClient {
                 public void render(PoseStack poseStack, GuhEntity animatable, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
                                    VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
                     if (animatable.getVariant() == GuhVariant.ASGUH) {
-                        RenderType glow = RenderType.eyes(cheeks);
+                        RenderType glow = RenderTypes.eyes(cheeks);
                         getRenderer().reRender(model, poseStack, buffers, animatable, glow, buffers.getBuffer(glow), partialTick,
                                 LightCoordsUtil.FULL_BRIGHT, packedOverlay, 0xFFFFFFFF);
                     }

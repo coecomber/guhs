@@ -15,6 +15,7 @@ import nl.juiced.guhs.feature.knus.GuhHooks;
 import com.geckolib.cache.model.BakedGeoModel;
 import com.geckolib.renderer.base.GeoRenderer;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * A freshly washed guh (GuhHooks.GLANZEND, for a day after the Knuffelbad's washing ritual): soft pink-and-white glints
  * glide over its fluffy fur (the model drawn again with a moving shimmer), and little sparkles twinkle around it.
@@ -31,7 +32,7 @@ final class GlansLaag {
             return;
         }
         float t = (guh.tickCount + partialTick) * 0.006f;
-        RenderType type = RenderType.energySwirl(GLANS, t % 1f, (t * 0.6f) % 1f);
+        RenderType type = RenderTypes.energySwirl(GLANS, t % 1f, (t * 0.6f) % 1f);
         renderer.reRender(model, pose, buffers, guh, type, buffers.getBuffer(type), partialTick, light, OverlayTexture.NO_OVERLAY, 0xFFD9C4D2);
     }
 

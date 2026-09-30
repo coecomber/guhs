@@ -38,15 +38,15 @@ public final class BibliotheekFeature {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
 
     public static final DeferredBlock<GeheimeKastBlock> GEHEIME_KAST = BLOCKS.registerBlock("bieb_geheime_kast", GeheimeKastBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.BOOKSHELF).noOcclusion());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BOOKSHELF).noOcclusion());
     /** The stand in the secret room: can't be broken or crafted (it would hand out the secret book anywhere). */
     public static final DeferredBlock<BoekaltaarBlock> BOEKALTAAR = BLOCKS.registerBlock("bieb_boekaltaar", BoekaltaarBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(-1f, 3600000f).sound(SoundType.METAL).noOcclusion().lightLevel(s -> 7));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(-1f, 3600000f).sound(SoundType.METAL).noOcclusion().lightLevel(s -> 7));
     /** A guh-shaped reading armchair: sit in it (right-click with an empty hand). */
     public static final DeferredBlock<GuhFurnitureBlock> GUHFAUTEUIL = BLOCKS.registerBlock("bieb_guhfauteuil",
             p -> new GuhFurnitureBlock(p, 0.5, new double[]{1, 0, 1, 15, 8, 15}, new double[]{1, 3, 12, 15, 22, 16},
                     new double[]{0, 3, 1, 3, 12, 12}, new double[]{13, 3, 1, 16, 12, 12}),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL).strength(0.8f).noOcclusion());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL).strength(0.8f).noOcclusion());
 
     public static final DeferredItem<Item> BOEKENBON = ITEMS.registerItem("boekenbon", p -> new Item(p) {
         @Override

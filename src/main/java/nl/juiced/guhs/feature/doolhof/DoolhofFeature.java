@@ -53,15 +53,15 @@ public final class DoolhofFeature {
     // --- blocks --------------------------------------------------------------------------------------------------------
     /** The maze hedge: dense, trimmed, green with little pink guh-flowers (you can't see through it). */
     public static final DeferredBlock<net.minecraft.world.level.block.Block> HEG = BLOCKS.registerSimpleBlock("doolhofheg",
-            BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.6f, 3f).sound(SoundType.AZALEA_LEAVES)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.6f, 3f).sound(SoundType.AZALEA_LEAVES)
                     .isValidSpawn((s, l, p, e) -> false).isSuffocating((s, l, p) -> false));
     /** The hedge with a trimmed guh face (topiary). */
     public static final DeferredBlock<DoolhofBlocks.HegGezicht> HEG_GEZICHT = BLOCKS.registerBlock("doolhofheg_gezicht", DoolhofBlocks.HegGezicht::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.6f, 3f).sound(SoundType.AZALEA_LEAVES)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).strength(0.6f, 3f).sound(SoundType.AZALEA_LEAVES)
                     .isValidSpawn((s, l, p, e) -> false).isSuffocating((s, l, p) -> false));
     /** A little guh-ear lantern that lights up by itself at night. */
     public static final DeferredBlock<DoolhofBlocks.Lantaarn> LANTAARN = BLOCKS.registerBlock("doolhof_lantaarn", DoolhofBlocks.Lantaarn::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).mapColor(MapColor.COLOR_PINK).noOcclusion()
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).mapColor(MapColor.COLOR_PINK).noOcclusion()
                     .lightLevel(s -> s.getValue(DoolhofBlocks.Lantaarn.LIT) ? 13 : 2));
     /** The invisible anchor under Meneer Vadskronkel. */
     public static final DeferredBlock<DoolhofBlocks.AnkerBlock> ANKER = BLOCKS.registerBlock("doolhof_anker", DoolhofBlocks.AnkerBlock::new,
@@ -69,7 +69,7 @@ public final class DoolhofFeature {
 
     // --- items ---------------------------------------------------------------------------------------------------------
     /** The coin of the maze: a little kaasknabbel wrapped in a hedge leaf. */
-    public static final DeferredItem<Item> DOOLHOFKNABBEL = ITEMS.registerSimpleItem("doolhofknabbel", new Item.Properties());
+    public static final DeferredItem<Item> DOOLHOFKNABBEL = ITEMS.registerSimpleItem("doolhofknabbel", () -> new Item.Properties());
     /** A kaasknabbel the Mika's stole (found in the maze; Meneer Vadskronkel takes them back afterwards). */
     public static final DeferredItem<Item> GESTOLEN_KNABBEL = ITEMS.registerItem("gestolen_knabbel", p -> new Item(p) {
         @Override

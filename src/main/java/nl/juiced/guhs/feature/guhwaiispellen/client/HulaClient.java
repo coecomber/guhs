@@ -27,6 +27,7 @@ import nl.juiced.guhs.feature.guhwaiispellen.HulaLiedje;
 import nl.juiced.guhs.feature.spelen.Niveau;
 import org.lwjgl.glfw.GLFW;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The hula dance in your game (3.0): the steps slide in from the right towards the hibiscus on the left, and when one
  * reaches it you press its key on the beat (A hips left, D hips right, W arms up, S down the knees, space VAHOEG!). Your
@@ -154,7 +155,7 @@ public final class HulaClient {
         }
         HulaKaart.Oordeel oordeel = HulaKaart.oordeel(liedje, nu - liedje.ms(best.beat()));
         oordeel(best, oordeel);
-        PacketDistributor.sendToServer(new GuhwaiiSpellenPayloads.HulaTik(npc, best.index(), (int) Math.round(nu), pas.ordinal()));
+        ClientPacketDistributor.sendToServer(new GuhwaiiSpellenPayloads.HulaTik(npc, best.index(), (int) Math.round(nu), pas.ordinal()));
     }
 
     private static boolean matcht(KeyMapping m, int key, int scan) {

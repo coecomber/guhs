@@ -16,6 +16,7 @@ import nl.juiced.guhs.feature.spelen.Niveau;
 import nl.juiced.guhs.feature.golf.GolfPayloads;
 import nl.juiced.guhs.feature.klassiekers.client.NiveauKeuze;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Golfguh's screen: play a round of 9 holes (or stop yours, or see who's playing), your records and the club record,
  * the par of every hole, and her little shop.
@@ -33,7 +34,7 @@ public class GolfScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new GolfPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new GolfPayloads.Action(npcId, action));
         onClose();
     }
 

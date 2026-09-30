@@ -65,7 +65,7 @@ public final class BeroepenFeature {
 
     // --- blocks --------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<MarshmallowvuurBlock> MARSHMALLOWVUUR = BLOCKS.registerBlock("beroepen_marshmallowvuur", MarshmallowvuurBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.0f).sound(SoundType.STONE).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(2.0f).sound(SoundType.STONE).noOcclusion()
                     .lightLevel(s -> s.getValue(MarshmallowvuurBlock.VUUR) * 5));
     public static final DeferredBlock<VerstopBlocks.Marker> GUHTJEPLEK = marker("beroepen_guhtjeplek");
     public static final DeferredBlock<VerstopBlocks.Marker> KLUISPLEK = marker("beroepen_kluisplek");
@@ -74,20 +74,20 @@ public final class BeroepenFeature {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollission().instabreak().noLootTable().sound(SoundType.WOOL)
                     .pushReaction(PushReaction.DESTROY).replaceable());
     public static final DeferredBlock<KnabbelbuitBlock> KNABBELBUIT = BLOCKS.registerBlock("beroepen_knabbelbuit", KnabbelbuitBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.8f).sound(SoundType.WOOL).noOcclusion().noLootTable());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(0.8f).sound(SoundType.WOOL).noOcclusion().noLootTable());
     public static final DeferredBlock<SnotkruidBlock> SNOTKRUID = BLOCKS.registerBlock("beroepen_snotkruid", SnotkruidBlock::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).noCollission().instabreak().randomTicks().sound(SoundType.CROP)
                     .pushReaction(PushReaction.DESTROY).noLootTable());
     public static final DeferredBlock<MengketelBlock> MENGKETEL = BLOCKS.registerBlock("beroepen_mengketel", MengketelBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(2.0f).sound(SoundType.COPPER).noOcclusion());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(2.0f).sound(SoundType.COPPER).noOcclusion());
     /** A see-through tile on Bob's roof where a dakpan still has to go (can't be broken in survival). */
     public static final DeferredBlock<DakplekBlock> DAKPLEK = BLOCKS.registerBlock("beroepen_dakplek", DakplekBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(-1.0f, 3600000.0f).noLootTable().noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(-1.0f, 3600000.0f).noLootTable().noOcclusion()
                     .sound(SoundType.WOOD).isValidSpawn((s, l, p, e) -> false).isRedstoneConductor((s, l, p) -> false)
                     .isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false));
     /** A dakpan laid on Bob's roof (stays put: only Bob takes them off, when the Mika's have "borrowed" them). */
     public static final DeferredBlock<net.minecraft.world.level.block.Block> DAKPAN = BLOCKS.registerSimpleBlock("beroepen_dakpan",
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DECORATED_POT));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DECORATED_POT));
 
     private static DeferredBlock<VerstopBlocks.Marker> marker(String name) {
         return BLOCKS.registerBlock(name, VerstopBlocks.Marker::new, BlockBehaviour.Properties.of().noCollission().noLootTable()
@@ -96,19 +96,19 @@ public final class BeroepenFeature {
 
     // --- items ---------------------------------------------------------------------------------------------------------
     public static final DeferredItem<BrandslangItem> GUH_BRANDSLANG = ITEMS.registerItem("guh_brandslang", BrandslangItem::new,
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<BeroepenItems.Drankje> KAASMELKDRANKJE = ITEMS.registerItem("kaasmelkdrankje", BeroepenItems.Drankje::new,
-            new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE));
+            () -> new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE));
     public static final DeferredItem<BeroepenItems.Snotkruidje> SNOTKRUIDJE = ITEMS.registerItem("snotkruidje", BeroepenItems.Snotkruidje::new,
-            new Item.Properties());
+            () -> new Item.Properties());
     public static final DeferredItem<DakpanItem> DAKPAN_ITEM = ITEMS.registerItem("beroepen_dakpan", p -> new DakpanItem(DAKPAN.get(), p),
-            new Item.Properties());
+            () -> new Item.Properties());
     public static final DeferredItem<BlockItem> MARSHMALLOWVUUR_ITEM = ITEMS.registerItem("beroepen_marshmallowvuur",
-            p -> new BeroepenItems.LoreBlock(MARSHMALLOWVUUR.get(), p), new Item.Properties());
+            p -> new BeroepenItems.LoreBlock(MARSHMALLOWVUUR.get(), p), () -> new Item.Properties());
     public static final DeferredItem<BlockItem> MENGKETEL_ITEM = ITEMS.registerItem("beroepen_mengketel",
-            p -> new BeroepenItems.LoreBlock(MENGKETEL.get(), p), new Item.Properties());
+            p -> new BeroepenItems.LoreBlock(MENGKETEL.get(), p), () -> new Item.Properties());
     public static final DeferredItem<BlockItem> KNABBELBUIT_ITEM = ITEMS.registerItem("beroepen_knabbelbuit",
-            p -> new BeroepenItems.LoreBlock(KNABBELBUIT.get(), p), new Item.Properties());
+            p -> new BeroepenItems.LoreBlock(KNABBELBUIT.get(), p), () -> new Item.Properties());
 
     // --- the Knabbeldief -----------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<KnabbeldiefMikaEntity>> KNABBELDIEF_MIKA = ENTITY_TYPES.register("knabbeldief_mika",

@@ -19,6 +19,7 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.knabbelspelen.SpelDing;
 import nl.juiced.guhs.feature.knabbelspelen.Spijkerpoepen;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * Draws the Knabbelspelen's moving things: the item (a kaasknabbel - golden or not -, the knabbelspijker, the tail)
  * and a thin string: from a swinging knabbel up to the beam, from the spijker up to its player's guh belt.
@@ -83,7 +84,7 @@ public class DingRenderer extends EntityRenderer<SpelDing> {
 
     /** A thin string (a little square tube) from a to b (relative to the entity). */
     static void touw(PoseStack pose, MultiBufferSource buffers, Vec3 a, Vec3 b, int argb, int light) {
-        VertexConsumer vc = buffers.getBuffer(RenderType.entityCutoutNoCull(TOUW));
+        VertexConsumer vc = buffers.getBuffer(RenderTypes.entityCutout(TOUW));
         PoseStack.Pose last = pose.last();
         Vec3 dir = b.subtract(a);
         if (dir.lengthSqr() < 1e-6) {

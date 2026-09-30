@@ -66,7 +66,7 @@ public class GuhVisEntity extends AbstractSchoolingFish implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "swim", 4, state -> state.setAndContinue(SWIM)));
+        controllers.add(new AnimationController<>("swim", 4, state -> state.setAndContinue(SWIM)));
     }
 
     @Override

@@ -15,6 +15,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * Nomguh can't be broken (like the other big guh buildings): no breaking, building, emptying buckets, lighting fires or
  * blowing it up inside the town's square (the houses, the hospital, the stable and the whole marked trek route), and mobs
@@ -40,7 +41,7 @@ public final class NomguhProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

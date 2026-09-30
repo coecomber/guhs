@@ -37,6 +37,7 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * Game tests of the Guhboerderij: care makes the animals content and they give their products (pluiswol, a knabbelei in
  * the nest, kaasmelk with a bottle), the voerbak feeds them by itself, Boerin Hooibaal's chores and shop, the Knus
@@ -360,7 +361,7 @@ public class BoerderijGameTests {
             // survival: no breaking
             BlockPos grondAbs = helper.absolutePos(grond);
             helper.assertTrue(!p.gameMode.destroyBlock(grondAbs) && helper.getBlockState(grond).is(Blocks.GRASS_BLOCK), "survival: can't break the farm");
-            helper.assertTrue(NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, grondAbs, level.getBlockState(grondAbs), p)).isCanceled(),
+            helper.assertTrue(NeoForge.EVENT_BUS.post(new BreakBlockEvent(level, grondAbs, level.getBlockState(grondAbs), p)).isCanceled(),
                     "the BreakEvent is cancelled");
             // no building
             var place = new BlockEvent.EntityPlaceEvent(BlockSnapshot.create(level.dimension(), level, grondAbs.above()), Blocks.DIRT.defaultBlockState(), p);

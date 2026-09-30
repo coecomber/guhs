@@ -21,6 +21,7 @@ import nl.juiced.guhs.feature.spelen.SpelGroepen;
 import nl.juiced.guhs.item.SuperkompasItem;
 import nl.juiced.guhs.network.MaagPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The super compass menu (2.9, the gids slice): a row of icon tabs on top (one per category, like the creative
  * inventory; the name on hover), under it the chosen category's name and what it's about, and a scrolling list of its
@@ -102,7 +103,7 @@ public class SuperkompasScreen extends Screen {
     }
 
     private void kies(String id) {
-        PacketDistributor.sendToServer(new MaagPayloads.SuperkompasChoice(hand == InteractionHand.MAIN_HAND, id));
+        ClientPacketDistributor.sendToServer(new MaagPayloads.SuperkompasChoice(hand == InteractionHand.MAIN_HAND, id));
         minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
                 net.minecraft.sounds.SoundEvents.LODESTONE_COMPASS_LOCK, 1.2f));
         onClose();

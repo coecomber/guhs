@@ -82,17 +82,17 @@ public final class GuhwaiiFeature {
 
     // --- the guh-palm ---------------------------------------------------------------------------------------------------
     public static final DeferredBlock<RotatedPillarBlock> PALM_STAM = BLOCKS.registerBlock("guhwaii_palm_stam", RotatedPillarBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LOG).mapColor(MapColor.WOOD));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LOG).mapColor(MapColor.WOOD));
     public static final DeferredBlock<GuhwaiiBlokken.PalmGezicht> PALM_GEZICHT = BLOCKS.registerBlock("guhwaii_palm_gezicht",
-            GuhwaiiBlokken.PalmGezicht::new, BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LOG).mapColor(MapColor.WOOD));
+            GuhwaiiBlokken.PalmGezicht::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LOG).mapColor(MapColor.WOOD));
     public static final DeferredBlock<GuhwaiiBlokken.PalmBlad> PALM_BLAD = BLOCKS.registerBlock("guhwaii_palm_blad", GuhwaiiBlokken.PalmBlad::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LEAVES).mapColor(MapColor.PLANT).sound(SoundType.AZALEA_LEAVES));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LEAVES).mapColor(MapColor.PLANT).sound(SoundType.AZALEA_LEAVES));
     public static final DeferredBlock<GuhwaiiBlokken.Kiemplant> PALM_KIEMPLANT = BLOCKS.registerBlock("guhwaii_palm_kiemplant",
-            GuhwaiiBlokken.Kiemplant::new, BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_SAPLING).mapColor(MapColor.WOOD));
+            GuhwaiiBlokken.Kiemplant::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_SAPLING).mapColor(MapColor.WOOD));
     public static final DeferredBlock<Block> PALM_PLANKEN = BLOCKS.registerSimpleBlock("guhwaii_palm_planken",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.BAMBOO_PLANKS).mapColor(MapColor.SAND));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BAMBOO_PLANKS).mapColor(MapColor.SAND));
     public static final DeferredBlock<GuhwaiiBlokken.Kokosnoot> KOKOSNOOT = BLOCKS.registerBlock("kokosnoot", GuhwaiiBlokken.Kokosnoot::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.4f).sound(SoundType.WOOD).noOcclusion().randomTicks()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.4f).sound(SoundType.WOOD).noOcclusion().randomTicks()
                     .pushReaction(PushReaction.DESTROY));
 
     // --- flowers ------------------------------------------------------------------------------------------------------------
@@ -108,9 +108,9 @@ public final class GuhwaiiFeature {
 
     // --- the beach, the capsule, the house -------------------------------------------------------------------------------------
     public static final DeferredBlock<SchillyEitjesBlock> SCHILLY_EITJES = BLOCKS.registerBlock("schilly_eitjes", SchillyEitjesBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.TURTLE_EGG).mapColor(MapColor.COLOR_LIGHT_GREEN).randomTicks().noOcclusion());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.TURTLE_EGG).mapColor(MapColor.COLOR_LIGHT_GREEN).randomTicks().noOcclusion());
     public static final DeferredBlock<ScannerBlock> VADSIGHEID_SCANNER = BLOCKS.registerBlock("vadsigheid_scanner", ScannerBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(2.5f, 6f).sound(SoundType.METAL).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(2.5f, 6f).sound(SoundType.METAL).noOcclusion()
                     .lightLevel(s -> 7));
     public static final DeferredBlock<GuhwaiiBlokken.Poster> VADSIGHEID_POSTER = BLOCKS.registerBlock("vadsigheid_poster", GuhwaiiBlokken.Poster::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(0.3f).sound(SoundType.WOOL).noOcclusion()
@@ -124,11 +124,11 @@ public final class GuhwaiiFeature {
     public static final FoodProperties KOKOSMELK_ETEN = new FoodProperties.Builder().nutrition(3).saturationModifier(0.5f).alwaysEdible()
             .effect(() -> new net.minecraft.world.effect.MobEffectInstance(MobEffects.REGENERATION, 100, 0), 1f).build();
     public static final DeferredItem<GuhwaiiItems.KokosnootItem> KOKOSNOOT_ITEM = ITEMS.registerItem("kokosnoot", GuhwaiiItems.KokosnootItem::new,
-            new Item.Properties().food(KOKOS_ETEN));
+            () -> new Item.Properties().food(KOKOS_ETEN));
     public static final DeferredItem<GuhwaiiItems.KokosmelkItem> KOKOSMELK = ITEMS.registerItem("kokosmelk", GuhwaiiItems.KokosmelkItem::new,
-            new Item.Properties().food(KOKOSMELK_ETEN).stacksTo(16).craftRemainder(net.minecraft.world.item.Items.GLASS_BOTTLE));
+            () -> new Item.Properties().food(KOKOSMELK_ETEN).stacksTo(16).craftRemainder(net.minecraft.world.item.Items.GLASS_BOTTLE));
     public static final DeferredItem<GuhwaiiItems.UkeleleItem> UKELELE = ITEMS.registerItem("guhwaii_ukelele", GuhwaiiItems.UkeleleItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     static {
         for (DeferredBlock<?> block : List.of(PALM_STAM, PALM_PLANKEN)) {
@@ -138,9 +138,9 @@ public final class GuhwaiiFeature {
             ITEMS.registerItem(block.getId().getPath(), p -> new GuhwaiiItems.LoreBlockItem(block.get(), p));
         }
         ITEMS.registerItem("vadsigheid_scanner", p -> new GuhwaiiItems.LoreBlockItem(VADSIGHEID_SCANNER.get(), p),
-                new Item.Properties().rarity(Rarity.RARE));
+                () -> new Item.Properties().rarity(Rarity.RARE));
         ITEMS.registerItem("vadsigheid_poster", p -> new GuhwaiiItems.LoreBlockItem(VADSIGHEID_POSTER.get(), p),
-                new Item.Properties().rarity(Rarity.UNCOMMON));
+                () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     }
 
     // --- worldgen ------------------------------------------------------------------------------------------------------------------
@@ -153,12 +153,12 @@ public final class GuhwaiiFeature {
 
     private static DeferredBlock<GuhwaiiBlokken.TropischeBloem> bloem(String id, MapColor colour) {
         return BLOCKS.registerBlock(id, p -> new GuhwaiiBlokken.TropischeBloem(MobEffects.REGENERATION, 4f, p),
-                BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY).mapColor(colour).noOcclusion());
+                () -> BlockBehaviour.Properties.ofFullCopy(Blocks.POPPY).mapColor(colour).noOcclusion());
     }
 
     private static DeferredBlock<FlowerPotBlock> pot(DeferredBlock<GuhwaiiBlokken.TropischeBloem> bloem) {
         return BLOCKS.registerBlock("potted_" + bloem.getId().getPath(), p -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, bloem, p),
-                BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_POPPY));
+                () -> BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_POPPY));
     }
 
     public static void register(IEventBus modBus) {

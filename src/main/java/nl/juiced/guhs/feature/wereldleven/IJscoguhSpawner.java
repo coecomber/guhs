@@ -60,7 +60,7 @@ public final class IJscoguhSpawner {
             return;
         }
         ServerLevel level = server.getLevel(ModDimensions.GUHMENSION);
-        if (level == null || !level.getGameRules().getBoolean(GameRules.RULE_DO_TRADER_SPAWNING)) {
+        if (level == null || !level.getGameRules().get(GameRules.SPAWN_WANDERING_TRADERS)) {
             return;
         }
         long now = level.getGameTime();
@@ -148,7 +148,7 @@ public final class IJscoguhSpawner {
     }
 
     private static void commands(RegisterCommandsEvent event) {
-        LiteralArgumentBuilder<CommandSourceStack> cmd = Commands.literal("ijscoguh").requires(s -> s.hasPermission(2)).executes(c -> {
+        LiteralArgumentBuilder<CommandSourceStack> cmd = Commands.literal("ijscoguh").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(c -> {
             ServerPlayer player = c.getSource().getPlayerOrException();
             IJscoguhEntity ijsco = spawnBij(player.level(), player, player.getRandom());
             if (ijsco == null) {

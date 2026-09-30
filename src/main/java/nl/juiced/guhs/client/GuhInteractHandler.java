@@ -18,6 +18,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.network.GuhActionPayload;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Right-clicking your own guh:
  * <ul>
@@ -54,7 +55,7 @@ public final class GuhInteractHandler {
                 && mc.player.getMainHandItem().isEmpty() && event.getHand() == InteractionHand.MAIN_HAND) {
             event.setCanceled(true);
             event.setSwingHand(false);
-            PacketDistributor.sendToServer(new GuhActionPayload(mount.getId(), GuhActionPayload.Action.LAUNCH));
+            ClientPacketDistributor.sendToServer(new GuhActionPayload(mount.getId(), GuhActionPayload.Action.LAUNCH));
             return;
         }
         GuhEntity guh = ownGuhUnderCrosshair(mc);
@@ -88,7 +89,7 @@ public final class GuhInteractHandler {
             }
         } else {
             trackedGuhId = -1;
-            PacketDistributor.sendToServer(new GuhActionPayload(guh.getId(), GuhActionPayload.Action.TAP));
+            ClientPacketDistributor.sendToServer(new GuhActionPayload(guh.getId(), GuhActionPayload.Action.TAP));
         }
     }
 

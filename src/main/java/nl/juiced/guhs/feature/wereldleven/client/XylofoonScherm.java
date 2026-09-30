@@ -22,6 +22,7 @@ import nl.juiced.guhs.feature.wereldleven.WereldlevenPayloads;
 import nl.juiced.guhs.feature.wereldleven.WereldlevenVoortgang;
 import org.lwjgl.glfw.GLFW;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The guh-xylofoon (and, without a xylofoon, the liedjesboekje to practise): eight coloured bars to click (or the keys
  * 1-8 / A S D F G H J K), and the liedjesboekje next to it with the six songs as coloured dots. Pick a song and the
@@ -89,7 +90,7 @@ public class XylofoonScherm extends Screen {
             gespeeld.removeFirst();
         }
         if (pos != null) {
-            PacketDistributor.sendToServer(new WereldlevenPayloads.Noot(pos, noot));
+            ClientPacketDistributor.sendToServer(new WereldlevenPayloads.Noot(pos, noot));
         }
         Koortje.Liedje af = Koortje.herken(gespeeld);
         if (af != null) {

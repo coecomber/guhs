@@ -75,34 +75,34 @@ public final class ElftochtFeature {
     // --- blocks --------------------------------------------------------------------------------------------------------
     /** The Elf-Guhjeskruisje: the medal of the tour (the first time you finish), a deco block. */
     public static final DeferredBlock<KruisjeBlock> KRUISJE = BLOCKS.registerBlock("elf_guhjeskruisje", KruisjeBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(0.8f).sound(SoundType.METAL).noOcclusion().lightLevel(s -> 4));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(0.8f).sound(SoundType.METAL).noOcclusion().lightLevel(s -> 4));
     /** A paper lampion that lights up at night (along the canal, in the villages). */
     public static final DeferredBlock<NachtlichtBlock.Lampion> LAMPION = BLOCKS.registerBlock("elftocht_lampion", NachtlichtBlock.Lampion::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).sound(SoundType.WOOL).mapColor(MapColor.COLOR_ORANGE)
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN).sound(SoundType.WOOL).mapColor(MapColor.COLOR_ORANGE)
                     .lightLevel(s -> s.getValue(NachtlichtBlock.LIT) ? 15 : 0).randomTicks());
     /** A vuurkorf (fire basket) that burns at night: warm and cosy, it never hurts anyone. */
     public static final DeferredBlock<NachtlichtBlock.Vuurkorf> VUURKORF = BLOCKS.registerBlock("elftocht_vuurkorf", NachtlichtBlock.Vuurkorf::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.5f, 6f).sound(SoundType.CHAIN).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(1.5f, 6f).sound(SoundType.CHAIN).noOcclusion()
                     .lightLevel(s -> s.getValue(NachtlichtBlock.LIT) ? 15 : 0).randomTicks());
     /** A tray of steaming cups at a koek-en-zopie stall: grab a warme chocovet or a kommetje snert. */
     public static final DeferredBlock<KopjesBlock> KOPJES = BLOCKS.registerBlock("elftocht_kopjes", KopjesBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.6f).sound(SoundType.WOOD).noOcclusion());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.6f).sound(SoundType.WOOD).noOcclusion());
 
     // --- items ---------------------------------------------------------------------------------------------------------
     /** The coin of the tour. */
-    public static final DeferredItem<Item> ELFSTEMPEL = ITEMS.registerSimpleItem("elfstempel", new Item.Properties());
+    public static final DeferredItem<Item> ELFSTEMPEL = ITEMS.registerSimpleItem("elfstempel", () -> new Item.Properties());
     /** The loaned skates (tag guhs:loaned). */
     public static final DeferredItem<SchaatsenItem> SCHAATSEN = ITEMS.registerItem("guh_schaatsen", SchaatsenItem::new,
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     /** The loaned stamp card of your tour (tag guhs:loaned). */
     public static final DeferredItem<StempelkaartItem> STEMPELKAART = ITEMS.registerItem("stempelkaart", StempelkaartItem::new,
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<WarmDrankjeItem> WARME_CHOCOVET = ITEMS.registerItem("warme_chocovet", WarmDrankjeItem::new,
-            new Item.Properties().stacksTo(16).food(drankje(3)));
+            () -> new Item.Properties().stacksTo(16).food(drankje(3)));
     public static final DeferredItem<WarmDrankjeItem> SNERT_KOMMETJE = ITEMS.registerItem("snert_kommetje", WarmDrankjeItem::new,
-            new Item.Properties().stacksTo(16).food(drankje(5)));
+            () -> new Item.Properties().stacksTo(16).food(drankje(5)));
     public static final DeferredItem<BlockItem> KRUISJE_ITEM = ITEMS.registerItem("elf_guhjeskruisje", p -> new BlockItem(KRUISJE.get(), p),
-            new Item.Properties().rarity(Rarity.EPIC).stacksTo(16));
+            () -> new Item.Properties().rarity(Rarity.EPIC).stacksTo(16));
     public static final DeferredItem<BlockItem> LAMPION_ITEM = ITEMS.registerSimpleBlockItem(LAMPION);
     public static final DeferredItem<BlockItem> VUURKORF_ITEM = ITEMS.registerSimpleBlockItem(VUURKORF);
     public static final DeferredItem<BlockItem> KOPJES_ITEM = ITEMS.registerSimpleBlockItem(KOPJES);
@@ -110,7 +110,7 @@ public final class ElftochtFeature {
     /** A warm drink: a little food, and while it warms you (the boost) you skate and walk faster. */
     static FoodProperties drankje(int nutrition) {
         return new FoodProperties.Builder().nutrition(nutrition).saturationModifier(0.5f).alwaysEdible().fast()
-                .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, WarmDrankjeItem.BOOST_TICKS, 1), 1f).build();
+                .effect(() -> new MobEffectInstance(MobEffects.SPEED, WarmDrankjeItem.BOOST_TICKS, 1), 1f).build();
     }
 
     // --- sounds --------------------------------------------------------------------------------------------------------

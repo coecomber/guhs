@@ -68,36 +68,36 @@ public final class KnuffelbadFeature {
 
     // --- blocks ------------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<KnuffelbadBlocks.Wastobbe> GUH_WASTOBBE = BLOCKS.registerBlock("guh_wastobbe", KnuffelbadBlocks.Wastobbe::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.5f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.5f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
     public static final DeferredBlock<KnuffelbadBlocks.GlijbaanStart> GLIJBAAN_START = BLOCKS.registerBlock("glijbaan_start",
-            KnuffelbadBlocks.GlijbaanStart::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).noLootTable()
+            KnuffelbadBlocks.GlijbaanStart::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).noLootTable()
                     .lightLevel(s -> 10).noOcclusion().sound(SoundType.AMETHYST).isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<KnuffelbadBlocks.Glimtegel> GLIMTEGEL = BLOCKS.registerBlock("glimtegel", KnuffelbadBlocks.Glimtegel::new,
-            tegel(MapColor.COLOR_BLUE).lightLevel(s -> s.getValue(KnuffelbadBlocks.FEL) ? 12 : 4).sound(SoundType.AMETHYST)
+            () -> tegel(MapColor.COLOR_BLUE).lightLevel(s -> s.getValue(KnuffelbadBlocks.FEL) ? 12 : 4).sound(SoundType.AMETHYST)
                     .isValidSpawn((s, l, p, e) -> false));
-    public static final DeferredBlock<Block> TRECHTERTEGEL = BLOCKS.registerSimpleBlock("trechtertegel", tegel(MapColor.COLOR_PINK));
+    public static final DeferredBlock<Block> TRECHTERTEGEL = BLOCKS.registerSimpleBlock("trechtertegel", () -> tegel(MapColor.COLOR_PINK));
     public static final DeferredBlock<KnuffelbadBlocks.Glijgoot> GLIJGOOT = BLOCKS.registerBlock("knuffelbad_glijgoot", KnuffelbadBlocks.Glijgoot::new,
-            tegel(MapColor.COLOR_PINK).friction(0.9f).lightLevel(s -> s.getValue(KnuffelbadBlocks.KLEUR) == KnuffelbadBlocks.Kleur.GLIM ? 3 : 0)
+            () -> tegel(MapColor.COLOR_PINK).friction(0.9f).lightLevel(s -> s.getValue(KnuffelbadBlocks.KLEUR) == KnuffelbadBlocks.Kleur.GLIM ? 3 : 0)
                     .isValidSpawn((s, l, p, e) -> false));
     public static final DeferredBlock<KnuffelbadBlocks.Schuim> SCHUIM_BLOK = BLOCKS.registerBlock("knuffelbad_schuim", KnuffelbadBlocks.Schuim::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2f).sound(SoundType.WOOL).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2f).sound(SoundType.WOOL).noOcclusion()
                     .isValidSpawn((s, l, p, e) -> false).isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false)
                     .pushReaction(PushReaction.DESTROY));
-    public static final DeferredBlock<Block> BADTEGEL = BLOCKS.registerSimpleBlock("knuffelbad_badtegel", tegel(MapColor.SNOW));
+    public static final DeferredBlock<Block> BADTEGEL = BLOCKS.registerSimpleBlock("knuffelbad_badtegel", () -> tegel(MapColor.SNOW));
 
     // --- items -------------------------------------------------------------------------------------------------------------
     /** The Knuffelbad's money: earned on the slides and by washing, spent at Badmeester Bubbel's. */
-    public static final DeferredItem<Item> EENDJESMUNT = ITEMS.registerSimpleItem("eendjesmunt", new Item.Properties());
+    public static final DeferredItem<Item> EENDJESMUNT = ITEMS.registerSimpleItem("eendjesmunt", () -> new Item.Properties());
     public static final DeferredItem<KnuffelbadItems.Guhshampoo> GUHSHAMPOO = ITEMS.registerItem("guhshampoo", KnuffelbadItems.Guhshampoo::new,
-            new Item.Properties().durability(16));
+            () -> new Item.Properties().durability(16));
     public static final DeferredItem<KnuffelbadItems.GuhFohn> GUH_FOHN = ITEMS.registerItem("guh_fohn", KnuffelbadItems.GuhFohn::new,
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     /** A rubber duck to put in your own pond (it floats and squeaks). */
     public static final DeferredItem<BadeendjeItem> BADEENDJE_ITEM = ITEMS.registerItem("knuffelbad_badeendje", BadeendjeItem::new,
-            new Item.Properties().stacksTo(16));
+            () -> new Item.Properties().stacksTo(16));
     public static final DeferredItem<BlockItem> GUH_WASTOBBE_ITEM = ITEMS.registerSimpleBlockItem(GUH_WASTOBBE);
     public static final DeferredItem<BlockItem> GLIJBAAN_START_ITEM = ITEMS.registerSimpleBlockItem("glijbaan_start", GLIJBAAN_START,
-            new Item.Properties().rarity(Rarity.EPIC));
+            () -> new Item.Properties().rarity(Rarity.EPIC));
     public static final DeferredItem<BlockItem> GLIMTEGEL_ITEM = ITEMS.registerSimpleBlockItem(GLIMTEGEL);
     public static final DeferredItem<BlockItem> TRECHTERTEGEL_ITEM = ITEMS.registerSimpleBlockItem(TRECHTERTEGEL);
     public static final DeferredItem<BlockItem> GLIJGOOT_ITEM = ITEMS.registerSimpleBlockItem(GLIJGOOT);

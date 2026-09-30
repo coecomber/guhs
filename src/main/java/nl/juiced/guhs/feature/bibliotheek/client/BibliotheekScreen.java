@@ -12,6 +12,7 @@ import nl.juiced.guhs.feature.bibliotheek.BibliotheekPayloads;
 import nl.juiced.guhs.feature.bibliotheek.Bibliothecaris;
 import nl.juiced.guhs.feature.bibliotheek.Guhboek;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Bibliothecaris' screen: your guh books as a row of book spines on a shelf (coloured: in your collection; an outline
  * in its colour: read on a lectern; grey: not read yet), the shop, and the Guhkwis: a question with three answer buttons.
@@ -35,7 +36,7 @@ public class BibliotheekScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new BibliotheekPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new BibliotheekPayloads.Action(npcId, action));
     }
 
     private boolean has(Guhboek book) {

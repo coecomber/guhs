@@ -21,6 +21,7 @@ import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The guhvis pond can't be broken (like the verstopguh house): no breaking, building, scooping up or pouring water,
  * lighting fires or blowing it up, and mobs don't grief it. Opening barrels and sitting on the benches is fine.
@@ -48,7 +49,7 @@ public final class VissenProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

@@ -53,10 +53,10 @@ public final class KamperenFeature {
     public static final Buiten.Bescherming BESCHERMING = new Buiten.Bescherming("kampeerplekje", "gui.guhs.kamperen.beschermd");
 
     public static final DeferredBlock<SlaapzakBlock> SLAAPZAK = BLOCKS.registerBlock("guh_slaapzak", SlaapzakBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.3f).sound(SoundType.WOOL).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.3f).sound(SoundType.WOOL).noOcclusion()
                     .pushReaction(PushReaction.DESTROY).ignitedByLava());
     public static final DeferredItem<Buiten.LoreBlockItem> SLAAPZAK_ITEM = ITEMS.registerItem("guh_slaapzak",
-            p -> new Buiten.LoreBlockItem(SLAAPZAK.get(), p), new Item.Properties().stacksTo(16));
+            p -> new Buiten.LoreBlockItem(SLAAPZAK.get(), p), () -> new Item.Properties().stacksTo(16));
 
     public static final DeferredHolder<MobEffect, UitgerustEffect> UITGERUST = EFFECTS.register("uitgerust", UitgerustEffect::new);
 

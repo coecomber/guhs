@@ -27,6 +27,7 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The Guhbubbel can't be broken: one broken pane and the whole dome would fill with water. No breaking, building,
  * buckets or explosions anywhere in the structure (its piece of the sea, the island, the Duikpost), and mobs don't grief it.
@@ -79,7 +80,7 @@ public final class OnderwaterProtection {
         return true;
     }
 
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos(), false)) {
             event.setCanceled(true);
         }

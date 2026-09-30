@@ -86,45 +86,45 @@ public final class VadswoudFeature {
 
     // --- the wood set ---------------------------------------------------------------------------------------------------
     public static final DeferredBlock<RotatedPillarBlock> VADSHOUT_GESTRIPT = BLOCKS.registerBlock("vadshout_gestript", RotatedPillarBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.STRIPPED_DARK_OAK_LOG).mapColor(MapColor.COLOR_PINK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.STRIPPED_DARK_OAK_LOG).mapColor(MapColor.COLOR_PINK));
     public static final DeferredBlock<VadshoutBlocks.Log> VADSHOUT_STAM = BLOCKS.registerBlock("vadshout_stam",
             p -> new VadshoutBlocks.Log(() -> VADSHOUT_GESTRIPT.get(), p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_LOG).mapColor(MapColor.TERRACOTTA_PINK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_LOG).mapColor(MapColor.TERRACOTTA_PINK));
     public static final DeferredBlock<VadshoutBlocks.Gezicht> VADSHOUT_GEZICHT = BLOCKS.registerBlock("vadshout_gezicht", VadshoutBlocks.Gezicht::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_LOG).mapColor(MapColor.TERRACOTTA_PINK));
-    public static final DeferredBlock<Block> VADSHOUT_PLANKEN = BLOCKS.registerSimpleBlock("vadshout_planken", wood());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_LOG).mapColor(MapColor.TERRACOTTA_PINK));
+    public static final DeferredBlock<Block> VADSHOUT_PLANKEN = BLOCKS.registerSimpleBlock("vadshout_planken", () -> wood());
     public static final DeferredBlock<StairBlock> VADSHOUT_TRAP = BLOCKS.registerBlock("vadshout_trap",
-            p -> new StairBlock(VADSHOUT_PLANKEN.get().defaultBlockState(), p), wood());
-    public static final DeferredBlock<SlabBlock> VADSHOUT_PLAAT = BLOCKS.registerBlock("vadshout_plaat", SlabBlock::new, wood());
-    public static final DeferredBlock<FenceBlock> VADSHOUT_HEK = BLOCKS.registerBlock("vadshout_hek", FenceBlock::new, wood());
+            p -> new StairBlock(VADSHOUT_PLANKEN.get().defaultBlockState(), p), () -> wood());
+    public static final DeferredBlock<SlabBlock> VADSHOUT_PLAAT = BLOCKS.registerBlock("vadshout_plaat", SlabBlock::new, () -> wood());
+    public static final DeferredBlock<FenceBlock> VADSHOUT_HEK = BLOCKS.registerBlock("vadshout_hek", FenceBlock::new, () -> wood());
     public static final DeferredBlock<FenceGateBlock> VADSHOUT_POORT = BLOCKS.registerBlock("vadshout_poort",
-            p -> new FenceGateBlock(VADSHOUT_WOOD, p), wood().forceSolidOn());
+            p -> new FenceGateBlock(VADSHOUT_WOOD, p), () -> wood().forceSolidOn());
     public static final DeferredBlock<DoorBlock> VADSHOUT_DEUR = BLOCKS.registerBlock("vadshout_deur",
-            p -> new DoorBlock(VADSHOUT_SET, p), wood().strength(3f).noOcclusion().pushReaction(PushReaction.DESTROY));
+            p -> new DoorBlock(VADSHOUT_SET, p), () -> wood().strength(3f).noOcclusion().pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<TrapDoorBlock> VADSHOUT_LUIK = BLOCKS.registerBlock("vadshout_luik",
-            p -> new TrapDoorBlock(VADSHOUT_SET, p), wood().strength(3f).noOcclusion().isValidSpawn((s, l, pos, e) -> false));
+            p -> new TrapDoorBlock(VADSHOUT_SET, p), () -> wood().strength(3f).noOcclusion().isValidSpawn((s, l, pos, e) -> false));
     public static final DeferredBlock<VadshoutBlocks.Leaves> VADSHOUT_BLADEREN = BLOCKS.registerBlock("vadshout_bladeren", VadshoutBlocks.Leaves::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.AZALEA_LEAVES).mapColor(MapColor.COLOR_LIGHT_GREEN));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.AZALEA_LEAVES).mapColor(MapColor.COLOR_LIGHT_GREEN));
     public static final DeferredBlock<VadshoutBlocks.Sapling> VADSHOUT_ZAAILING = BLOCKS.registerBlock("vadshout_zaailing", VadshoutBlocks.Sapling::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_SAPLING).mapColor(MapColor.COLOR_LIGHT_GREEN));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.DARK_OAK_SAPLING).mapColor(MapColor.COLOR_LIGHT_GREEN));
 
     // --- the forest floor, the nest, the bush, the rope -----------------------------------------------------------------
     public static final DeferredBlock<Block> VADSMOS = BLOCKS.registerSimpleBlock("vadsmos",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.MOSS_BLOCK).mapColor(MapColor.COLOR_LIGHT_GREEN));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MOSS_BLOCK).mapColor(MapColor.COLOR_LIGHT_GREEN));
     public static final DeferredBlock<GuhnestjeBlock> GUHNESTJE = BLOCKS.registerBlock("guhnestje", GuhnestjeBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.6f).sound(SoundType.GRASS).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.6f).sound(SoundType.GRASS).noOcclusion()
                     .ignitedByLava());
     public static final DeferredBlock<KnabbelbessenstruikBlock> KNABBELBESSENSTRUIK = BLOCKS.registerBlock("knabbelbessenstruik",
-            KnabbelbessenstruikBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.SWEET_BERRY_BUSH).mapColor(MapColor.COLOR_LIGHT_GREEN));
+            KnabbelbessenstruikBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SWEET_BERRY_BUSH).mapColor(MapColor.COLOR_LIGHT_GREEN));
     public static final DeferredBlock<ChainBlock> VADSTOUW = BLOCKS.registerBlock("vadstouw", ChainBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.8f).sound(SoundType.WOOL).noOcclusion().ignitedByLava());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.8f).sound(SoundType.WOOL).noOcclusion().ignitedByLava());
 
     // --- items ----------------------------------------------------------------------------------------------------------
     public static final DeferredItem<VadsItems.Bessen> KNABBELBESSEN = ITEMS.registerItem("knabbelbessen",
             p -> new VadsItems.Bessen(KNABBELBESSENSTRUIK.get(), p),
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2f).build()));
     public static final DeferredItem<Item> KNABBELBESSENTAARTJE = ITEMS.registerSimpleItem("knabbelbessentaartje",
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.6f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.6f).build()));
 
     static {
         for (DeferredBlock<?> block : List.of(VADSHOUT_STAM, VADSHOUT_GESTRIPT, VADSHOUT_PLANKEN, VADSHOUT_TRAP, VADSHOUT_PLAAT, VADSHOUT_HEK,

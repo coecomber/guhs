@@ -98,16 +98,16 @@ public final class SpiesburchtFeature {
 
     // --- blocks ----------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<MikakopBlock> VERKOOLDE_MIKAKOP = BLOCKS.registerBlock("verkoolde_mikakop", MikakopBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(1.0f).sound(SoundType.BONE_BLOCK)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(1.0f).sound(SoundType.BONE_BLOCK)
                     .instrument(NoteBlockInstrument.WITHER_SKELETON).pushReaction(PushReaction.DESTROY).noOcclusion());
     public static final DeferredBlock<MikakopBlock.Wall> VERKOOLDE_MIKAKOP_MUUR = BLOCKS.registerBlock("verkoolde_mikakop_muur", MikakopBlock.Wall::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(1.0f).sound(SoundType.BONE_BLOCK)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(1.0f).sound(SoundType.BONE_BLOCK)
                     .instrument(NoteBlockInstrument.WITHER_SKELETON).pushReaction(PushReaction.DESTROY).noOcclusion());
     public static final DeferredBlock<GuhbrouwketelBlock> GUHBROUWKETEL = BLOCKS.registerBlock("guhbrouwketel", GuhbrouwketelBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(2.5f).requiresCorrectToolForDrops().sound(SoundType.METAL)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(2.5f).requiresCorrectToolForDrops().sound(SoundType.METAL)
                     .noOcclusion().lightLevel(s -> s.getValue(GuhbrouwketelBlock.LIT) ? 11 : 1));
     public static final DeferredBlock<KnabbelbakenBlock> KNABBELBAKEN = BLOCKS.registerBlock("knabbelbaken", KnabbelbakenBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(3.0f).sound(SoundType.GLASS).lightLevel(s -> 15)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(3.0f).sound(SoundType.GLASS).lightLevel(s -> 15)
                     .noOcclusion().isRedstoneConductor((s, l, p) -> false).instrument(NoteBlockInstrument.HAT));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GuhbrouwketelBlockEntity>> GUHBROUWKETEL_BE =
@@ -118,26 +118,26 @@ public final class SpiesburchtFeature {
     // --- items -----------------------------------------------------------------------------------------------------------
     public static final DeferredItem<StandingAndWallBlockItem> VERKOOLDE_MIKAKOP_ITEM = ITEMS.registerItem("verkoolde_mikakop",
             p -> new StandingAndWallBlockItem(VERKOOLDE_MIKAKOP.get(), VERKOOLDE_MIKAKOP_MUUR.get(), p, Direction.DOWN),
-            new Item.Properties().rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final DeferredItem<BlockItem> GUHBROUWKETEL_ITEM = ITEMS.registerSimpleBlockItem(GUHBROUWKETEL);
-    public static final DeferredItem<BlockItem> KNABBELBAKEN_ITEM = ITEMS.registerSimpleBlockItem(KNABBELBAKEN, new Item.Properties().rarity(Rarity.RARE));
+    public static final DeferredItem<BlockItem> KNABBELBAKEN_ITEM = ITEMS.registerSimpleBlockItem(KNABBELBAKEN, () -> new Item.Properties().rarity(Rarity.RARE));
     /** The Vonk-Mika's skewer (the blaze rod). */
     public static final DeferredItem<Item> GRILLSPIES = ITEMS.registerSimpleItem("grillspies");
     /** Ground skewer (the blaze powder): the fuel of the Guhbrouwketel. */
     public static final DeferredItem<Item> GRILLSPIESPOEDER = ITEMS.registerSimpleItem("grillspiespoeder");
     /** The Aangebrande Mika's star (the nether star): the heart of a Knabbelbaken. */
     public static final DeferredItem<Item> GLOEISTER = ITEMS.registerSimpleItem("gloeister",
-            new Item.Properties().rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+            () -> new Item.Properties().rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     /** (What a flying glowing ember looks like.) */
     public static final DeferredItem<Item> GLOEIEND_KOOLTJE_ITEM = ITEMS.registerSimpleItem("gloeiend_kooltje");
     public static final DeferredItem<GuhdrankjeItem> DRANKJE_VAN_VAHOEGHEID = ITEMS.registerItem("drankje_van_vahoegheid",
-            p -> new GuhdrankjeItem(Brouwsel.VAHOEGHEID, p), new Item.Properties().stacksTo(16));
+            p -> new GuhdrankjeItem(Brouwsel.VAHOEGHEID, p), () -> new Item.Properties().stacksTo(16));
     public static final DeferredItem<GuhdrankjeItem> ROOKLOOPDRANKJE = ITEMS.registerItem("rookloopdrankje",
-            p -> new GuhdrankjeItem(Brouwsel.ROOKLOOP, p), new Item.Properties().stacksTo(16));
+            p -> new GuhdrankjeItem(Brouwsel.ROOKLOOP, p), () -> new Item.Properties().stacksTo(16));
     public static final DeferredItem<GuhdrankjeItem> SLUIPKNABBELDRANKJE = ITEMS.registerItem("sluipknabbeldrankje",
-            p -> new GuhdrankjeItem(Brouwsel.SLUIPKNABBEL, p), new Item.Properties().stacksTo(16));
+            p -> new GuhdrankjeItem(Brouwsel.SLUIPKNABBEL, p), () -> new Item.Properties().stacksTo(16));
     public static final DeferredItem<GuhdrankjeItem> GUHSPRONGDRANKJE = ITEMS.registerItem("guhsprongdrankje",
-            p -> new GuhdrankjeItem(Brouwsel.GUHSPRONG, p), new Item.Properties().stacksTo(16));
+            p -> new GuhdrankjeItem(Brouwsel.GUHSPRONG, p), () -> new Item.Properties().stacksTo(16));
     public static final DeferredItem<DeferredSpawnEggItem> ROOKGUH_SPAWN_EGG = ITEMS.registerItem("rookguh_spawn_egg",
             p -> new DeferredSpawnEggItem(ROOKGUH, 0xF2F0F4, 0xF08CB4, p));
     public static final DeferredItem<DeferredSpawnEggItem> VONK_MIKA_SPAWN_EGG = ITEMS.registerItem("vonk_mika_spawn_egg",

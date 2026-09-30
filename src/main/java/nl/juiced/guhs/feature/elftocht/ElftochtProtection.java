@@ -16,6 +16,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The Elf-Guhjestocht can't be broken (like the Guhdisco): no breaking, building, emptying buckets, lighting fires or
  * blowing it up inside the tour's square, and mobs don't grief it either. The ice stays smooth for everyone.
@@ -47,7 +48,7 @@ public final class ElftochtProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

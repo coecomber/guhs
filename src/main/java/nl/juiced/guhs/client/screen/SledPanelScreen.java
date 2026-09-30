@@ -8,6 +8,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.entity.GuhSleeEntity;
 import nl.juiced.guhs.network.SledControlPayload;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /** The sled's control panel: start/stop, 3 speeds, and turn around. */
 public class SledPanelScreen extends Screen {
     private static final int W = 220, H = 96;
@@ -38,7 +39,7 @@ public class SledPanelScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new SledControlPayload(action));
+        ClientPacketDistributor.sendToServer(new SledControlPayload(action));
     }
 
     @Override

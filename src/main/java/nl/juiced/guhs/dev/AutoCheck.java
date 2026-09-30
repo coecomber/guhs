@@ -388,15 +388,15 @@ public final class AutoCheck {
             problem("Could not delete old world " + WORLD + ": " + e);
         }
         GameRules rules = new GameRules();
-        rules.getRule(GameRules.RULE_DAYLIGHT).set(false, null);
-        rules.getRule(GameRules.RULE_WEATHER_CYCLE).set(false, null);
-        rules.getRule(GameRules.RULE_DOMOBSPAWNING).set(false, null);
-        rules.getRule(GameRules.RULE_ANNOUNCE_ADVANCEMENTS).set(false, null);
-        rules.getRule(GameRules.RULE_SENDCOMMANDFEEDBACK).set(false, null);
-        rules.getRule(GameRules.RULE_DOFIRETICK).set(false, null);
-        rules.getRule(GameRules.RULE_MOBGRIEFING).set(false, null);
-        rules.getRule(GameRules.RULE_DO_PATROL_SPAWNING).set(false, null);
-        rules.getRule(GameRules.RULE_DO_TRADER_SPAWNING).set(false, null);
+        rules.set(GameRules.ADVANCE_TIME, false, null);
+        rules.set(GameRules.ADVANCE_WEATHER, false, null);
+        rules.set(GameRules.SPAWN_MOBS, false, null);
+        rules.set(GameRules.SHOW_ADVANCEMENT_MESSAGES, false, null);
+        rules.set(GameRules.SEND_COMMAND_FEEDBACK, false, null);
+        rules.set(GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER, 0, null);
+        rules.set(GameRules.MOB_GRIEFING, false, null);
+        rules.set(GameRules.SPAWN_PATROLS, false, null);
+        rules.set(GameRules.SPAWN_WANDERING_TRADERS, false, null);
         LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, false, Difficulty.NORMAL, true, rules, WorldDataConfiguration.DEFAULT);
         WorldOptions options = new WorldOptions(seed, true, false);
         mc.createWorldOpenFlows().createFreshLevel(WORLD, settings, options, WorldPresets::createNormalWorldDimensions,

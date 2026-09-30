@@ -11,6 +11,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Knuffelbad's messages: Badmeester Bubbel's screen (knuffelbad_open / knuffelbad_action), the rider's game telling
  * the server where it is on the slide (knuffelbad_stuur, every tick) and the ride panel (knuffelbad_hud).
@@ -32,7 +33,7 @@ public final class KnuffelbadPayloads {
 
     /** (Client) where the rider's own ride is now. */
     static void stuur(int ring, float tau, float lat) {
-        net.neoforged.neoforge.network.PacketDistributor.sendToServer(new Stuur(ring, tau, lat));
+        net.neoforged.neoforge.client.network.ClientPacketDistributor.sendToServer(new Stuur(ring, tau, lat));
     }
 
     /** Server -> client: open Badmeester Bubbel's screen. */

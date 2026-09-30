@@ -19,6 +19,7 @@ import nl.juiced.guhs.feature.race.RaceGame;
 import nl.juiced.guhs.feature.race.RaceRecords;
 import nl.juiced.guhs.feature.spelen.Niveau;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Coach Vahoegvroem's screen, the "kiesscherm" of the Guh-Circuit: pick a track (three big coloured buttons) and a level,
  * see what the track has, your records, the track record and the medal times of that level, then RACE (or wait: someone
@@ -45,7 +46,7 @@ public class CircuitScreen extends Screen {
     }
 
     private void send(int action, boolean close) {
-        PacketDistributor.sendToServer(new CircuitPayloads.Action(npcId, action, baan().id, gekozenNiveau));
+        ClientPacketDistributor.sendToServer(new CircuitPayloads.Action(npcId, action, baan().id, gekozenNiveau));
         if (close) {
             onClose();
         }

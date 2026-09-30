@@ -455,8 +455,8 @@ public class VadswakerEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 4, this::mainAnimation));
-        controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("attack", ATTACK));
+        controllers.add(new AnimationController<>("main", 4, this::mainAnimation));
+        controllers.add(new AnimationController<>("action", 0, state -> PlayState.STOP).triggerableAnim("attack", ATTACK));
     }
 
     private PlayState mainAnimation(AnimationTest<VadswakerEntity> state) {

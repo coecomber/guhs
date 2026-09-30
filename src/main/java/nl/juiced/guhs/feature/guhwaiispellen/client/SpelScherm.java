@@ -17,6 +17,7 @@ import nl.juiced.guhs.feature.guhwaiispellen.HulaSpel;
 import nl.juiced.guhs.feature.guhwaiispellen.SurfSpel;
 import nl.juiced.guhs.feature.spelen.Niveau;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Lilo-guh's screen at the surf beach (3.0): surfing (at the surf shack) or the hula (on the podium). How it works, the
  * three levels (makkelijk / medium / lastig, for the hula: the three songs) with your record and the beach's best on each,
@@ -39,7 +40,7 @@ public class SpelScherm extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new GuhwaiiSpellenPayloads.Actie(npcId, action));
+        ClientPacketDistributor.sendToServer(new GuhwaiiSpellenPayloads.Actie(npcId, action));
         onClose();
     }
 

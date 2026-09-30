@@ -30,6 +30,7 @@ import nl.juiced.guhs.feature.gids.client.GidsTekst;
 import nl.juiced.guhs.feature.huisje.HuisjePayloads;
 import nl.juiced.guhs.feature.huisje.Huisjes;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The screen of a Guhhuisje (2.10, owner only): its name (renamable), the residents (a little picture, name, hearts level)
  * with "Uit huis", per resident the chores it can do as on/off toggles with a tip what each chore needs nearby,
@@ -102,7 +103,7 @@ public class HuisjeScreen extends Screen {
     }
 
     private void stuur(HuisjePayloads.Actie actie, String id, String tekst, boolean aan, int entity) {
-        PacketDistributor.sendToServer(new HuisjePayloads.Doe(pos, actie.ordinal(), id, tekst, aan, entity));
+        ClientPacketDistributor.sendToServer(new HuisjePayloads.Doe(pos, actie.ordinal(), id, tekst, aan, entity));
     }
 
     @Override

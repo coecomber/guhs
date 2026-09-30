@@ -44,16 +44,16 @@ public final class TimmerguhFeature {
 
     /** A see-through ghost tile of the Timmerguh's roof (deel: dak / oor / binnenoor); can't be broken in survival. */
     public static final DeferredBlock<DakplekBlock> DAKPLEK = BLOCKS.registerBlock("timmerguh_dakplek", DakplekBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1.0f, 3600000.0f).noLootTable().noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1.0f, 3600000.0f).noLootTable().noOcclusion()
                     .sound(SoundType.WOOL).pushReaction(PushReaction.BLOCK).isValidSpawn((s, l, p, e) -> false)
                     .isRedstoneConductor((s, l, p) -> false).isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false));
 
     /** The Timmerguh's bouwboekje: the key of the three guhhuisje recipes (stays in the crafting grid). */
     public static final DeferredItem<BouwboekjeItem> BOUWBOEKJE = ITEMS.registerItem("timmerguh_bouwboekje", BouwboekjeItem::new,
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     /** A dakpluisje (loaned by the Timmerguh): only fits on a ghost tile of his roof. */
     public static final DeferredItem<DakpluisjeItem> DAKPLUISJE = ITEMS.registerItem("timmerguh_dakpluisje", DakpluisjeItem::new,
-            new Item.Properties().stacksTo(64));
+            () -> new Item.Properties().stacksTo(64));
 
     public static void register(IEventBus modBus) {
         BLOCKS.register(modBus);

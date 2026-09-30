@@ -12,6 +12,7 @@ import nl.juiced.guhs.feature.knuffelbad.Badmeester;
 import nl.juiced.guhs.feature.knuffelbad.Glijbaan;
 import nl.juiced.guhs.feature.knuffelbad.KnuffelbadPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Badmeester Bubbel's screen: the three slides (your record, how often you went down, the world record), your
  * eendjesmunten, how many guhs you washed and special ducks you found; his shop, a tip, and how washing works.
@@ -29,7 +30,7 @@ public class KnuffelbadScherm extends Screen {
     }
 
     private void send(int actie) {
-        PacketDistributor.sendToServer(new KnuffelbadPayloads.Actie(npcId, actie));
+        ClientPacketDistributor.sendToServer(new KnuffelbadPayloads.Actie(npcId, actie));
         onClose();
     }
 

@@ -153,7 +153,7 @@ public final class Zeemeerguh {
     /** Now and then a wild Zeemeerguh in the water of the guh seas, near a player (never more than MAX_WILD around). */
     public static void onLevelTick(LevelTickEvent.Post event) {
         if (!(event.getLevel() instanceof ServerLevel level) || level.dimension() != ModDimensions.GUHMENSION
-                || level.getGameTime() % SPAWN_EVERY != 0 || !level.getGameRules().getBoolean(GameRules.RULE_DOMOBSPAWNING)) {
+                || level.getGameTime() % SPAWN_EVERY != 0 || !level.getGameRules().get(GameRules.SPAWN_MOBS)) {
             return;
         }
         RandomSource random = level.getRandom();

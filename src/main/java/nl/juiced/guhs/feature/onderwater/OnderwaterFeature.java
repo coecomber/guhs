@@ -86,13 +86,13 @@ public final class OnderwaterFeature {
             BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).noCollission().instabreak().sound(SoundType.WET_GRASS)
                     .lightLevel(s -> 10).pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<net.minecraft.world.level.block.Block> KAASKORAALBLOK = BLOCKS.registerSimpleBlock("kaaskoraalblok",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.BRAIN_CORAL_BLOCK).mapColor(MapColor.GOLD).lightLevel(s -> 3));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BRAIN_CORAL_BLOCK).mapColor(MapColor.GOLD).lightLevel(s -> 3));
     public static final DeferredBlock<net.minecraft.world.level.block.Block> PARELMOER = BLOCKS.registerSimpleBlock("parelmoer",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE).mapColor(MapColor.QUARTZ).strength(1.2f, 6f));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE).mapColor(MapColor.QUARTZ).strength(1.2f, 6f));
     public static final DeferredBlock<net.minecraft.world.level.block.Block> PARELMOER_TEGELS = BLOCKS.registerSimpleBlock("parelmoer_tegels",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE).mapColor(MapColor.QUARTZ).strength(1.2f, 6f));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CALCITE).mapColor(MapColor.QUARTZ).strength(1.2f, 6f));
     public static final DeferredBlock<ReuzenschelpBlock> REUZENSCHELP = BLOCKS.registerBlock("reuzenschelp", ReuzenschelpBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.5f, 6f).sound(SoundType.BONE_BLOCK).randomTicks()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.5f, 6f).sound(SoundType.BONE_BLOCK).randomTicks()
                     .noOcclusion().pushReaction(PushReaction.BLOCK));
 
     // --- items -------------------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ public final class OnderwaterFeature {
         return new ArmorMaterial(defense, 12, SoundEvents.ARMOR_EQUIP_TURTLE, () -> Ingredient.of(OnderwaterFeature.PAREL.get()),
                 List.of(new ArmorMaterial.Layer(Guhs.id("duikhelm"))), 0f, 0f);
     });
-    public static final DeferredItem<Item> PAREL = ITEMS.registerItem("parel", LoreItem::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> PAREL = ITEMS.registerItem("parel", LoreItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final DeferredItem<DuikhelmItem> DUIKHELM = ITEMS.registerItem("duikhelm", p -> new DuikhelmItem(DUIK, p),
             new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(20)).rarity(Rarity.UNCOMMON));
 

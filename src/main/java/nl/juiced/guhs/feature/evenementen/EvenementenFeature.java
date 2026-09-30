@@ -37,11 +37,11 @@ public final class EvenementenFeature {
 
     /** Only from the kaasregen: tames a wild guh at once. */
     public static final DeferredItem<GoudenKaasknabbelItem> GOUDEN_KAASKNABBEL = ITEMS.registerItem("gouden_kaasknabbel", GoudenKaasknabbelItem::new,
-            new Item.Properties().stacksTo(16).rarity(Rarity.RARE)
+            () -> new Item.Properties().stacksTo(16).rarity(Rarity.RARE)
                     .food(new FoodProperties.Builder().nutrition(6).saturationModifier(1.2f).build()));
     /** Left behind by a falling star. */
     public static final DeferredItem<SterrenstofItem> STERRENSTOF = ITEMS.registerItem("sterrenstof", SterrenstofItem::new,
-            new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
 
     /** The guhs of the Vadsparade (never saved). */
     public static final DeferredHolder<EntityType<?>, EntityType<ParadeGuhEntity>> PARADE_GUH = ENTITY_TYPES.register("parade_guh",

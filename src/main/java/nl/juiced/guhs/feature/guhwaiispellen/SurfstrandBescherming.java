@@ -16,6 +16,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The surf beach of Guhwai'i can't be broken (like the other guh buildings): no breaking, building, emptying buckets or
  * blowing it up, and mobs don't grief it. Players in creative mode may change it. (The sea around it is free.)
@@ -40,7 +41,7 @@ public final class SurfstrandBescherming {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (nee(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

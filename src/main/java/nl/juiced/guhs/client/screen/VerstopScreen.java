@@ -10,6 +10,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.network.MaagPayloads;
 import nl.juiced.guhs.quest.VerstopGame;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Verstopguhtje's screen: play verstopguh on makkelijk / medium / moeilijk (or join the game that's already running),
  * your best times, and her little shop.
@@ -27,7 +28,7 @@ public class VerstopScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new MaagPayloads.VerstopAction(npcId, action));
+        ClientPacketDistributor.sendToServer(new MaagPayloads.VerstopAction(npcId, action));
         onClose();
     }
 

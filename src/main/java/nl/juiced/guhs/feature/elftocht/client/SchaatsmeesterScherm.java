@@ -12,6 +12,7 @@ import nl.juiced.guhs.feature.elftocht.ElftochtPayloads;
 import nl.juiced.guhs.feature.elftocht.SchaatsmeesterRole;
 import nl.juiced.guhs.quest.Highscores;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Schaatsmeester Guhglij's screen: how the Elf-Guhjestocht works, your best time and the record, and the buttons
  * "Start de Elf-Guhjestocht!", "Vrij schaatsen", "Stoppen" (while you skate) and his shop. Winter colours: ice blue with
@@ -30,7 +31,7 @@ public class SchaatsmeesterScherm extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new ElftochtPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new ElftochtPayloads.Action(npcId, action));
         onClose();
     }
 

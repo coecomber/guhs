@@ -89,11 +89,11 @@ public enum Brouwsel {
     public List<MobEffectInstance> effects() {
         return switch (this) {
             case BOUILLON -> List.of();
-            case VAHOEGHEID -> List.of(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 3600, 1), new MobEffectInstance(MobEffects.SATURATION, 4, 1));
+            case VAHOEGHEID -> List.of(new MobEffectInstance(MobEffects.SPEED, 3600, 1), new MobEffectInstance(MobEffects.SATURATION, 4, 1));
             case ROOKLOOP -> List.of(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3600, 0));
             case SLUIPKNABBEL -> List.of(stil().<MobEffectInstance>map(h -> new MobEffectInstance(h, 2400, 0))
                     .orElseGet(() -> new MobEffectInstance(MobEffects.INVISIBILITY, 1800, 0)));
-            case GUHSPRONG -> List.of(new MobEffectInstance(MobEffects.JUMP, 1800, 1), new MobEffectInstance(MobEffects.SLOW_FALLING, 1800, 0));
+            case GUHSPRONG -> List.of(new MobEffectInstance(MobEffects.JUMP_BOOST, 1800, 1), new MobEffectInstance(MobEffects.SLOW_FALLING, 1800, 0));
         };
     }
 }

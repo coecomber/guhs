@@ -37,6 +37,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The guh's wardrobe (2.9). Tab "Kleding": a big 3D preview of your guh (drag to turn it around) that tries on
  * everything you click, per slot a scrollable list of the pieces YOU unlocked (plus "niets"), search and a filter per
@@ -329,7 +330,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
         if (hasShiftDown()) {
             List<GuhClothes> outfit = new ArrayList<>();
             SLOTS.forEach(s -> outfit.add(preview.get(s)));
-            PacketDistributor.sendToServer(new KledingPayloads.Bewaar(index, KledingPayloads.ids(outfit)));
+            ClientPacketDistributor.sendToServer(new KledingPayloads.Bewaar(index, KledingPayloads.ids(outfit)));
             KledingFavorieten.Client.set(bewaardLokaal(index, outfit));
             meld(Component.translatable("gui.guhs.kleding.favoriet.bewaard", index + 1).withStyle(ChatFormatting.YELLOW));
             minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.NOTE_BLOCK_CHIME.value(), 1.5f));
@@ -364,7 +365,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
     private void aantrekken() {
         List<GuhClothes> outfit = new ArrayList<>();
         SLOTS.forEach(s -> outfit.add(preview.get(s)));
-        PacketDistributor.sendToServer(new KledingPayloads.Kleed(menu.getGuhId(), KledingPayloads.ids(outfit)));
+        ClientPacketDistributor.sendToServer(new KledingPayloads.Kleed(menu.getGuhId(), KledingPayloads.ids(outfit)));
         minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.ARMOR_EQUIP_LEATHER.value(), 1.2f));
     }
 

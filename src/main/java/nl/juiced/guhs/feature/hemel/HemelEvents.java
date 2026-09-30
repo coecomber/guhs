@@ -18,6 +18,7 @@ import nl.juiced.guhs.feature.kleding.KledingUnlocks;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.verhaal.VerhaalVlaggen;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The hemel slice's game events: the client learns at login whether the Knuffelhart beats for it, nobody breaks a
  * Knuffelhart (not even outside a chapel, except in creative mode), the "Een echt hemelguhtje" advancement, a comforting
@@ -40,7 +41,7 @@ public final class HemelEvents {
 
     /** The Knuffelhart is made of hugs: it can't be broken (creative players may). */
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (event.getState().is(HemelFeature.KNUFFELHART.get()) && !event.getPlayer().getAbilities().instabuild) {
             event.setCanceled(true);
             event.getPlayer().sendOverlayMessage(Component.translatable("gui.guhs.hemel.hart_heel").withStyle(ChatFormatting.LIGHT_PURPLE));

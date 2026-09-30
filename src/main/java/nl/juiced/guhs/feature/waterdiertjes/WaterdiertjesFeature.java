@@ -64,7 +64,7 @@ public final class WaterdiertjesFeature {
 
     // --- items ------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<GuhxolotlEmmertje> GUHXOLOTL_EMMERTJE = ITEMS.registerItem("guhxolotl_emmertje",
-            GuhxolotlEmmertje::new, new Item.Properties().stacksTo(1));
+            GuhxolotlEmmertje::new, () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<DeferredSpawnEggItem> GUHXOLOTL_SPAWN_EGG = ITEMS.registerItem("guhxolotl_spawn_egg",
             p -> new DeferredSpawnEggItem(GUHXOLOTL, 0xF8B2D0, 0xD63A84, p));
     public static final DeferredItem<DeferredSpawnEggItem> GUH_EENDJE_SPAWN_EGG = ITEMS.registerItem("guh_eendje_spawn_egg",

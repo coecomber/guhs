@@ -26,6 +26,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The Sjoelhuisje can't be broken or built in: no breaking, no placing blocks, no buckets, no explosions, no griefing
  * mobs. Doors, chests and chairs still work. Creative players may change it.
@@ -62,7 +63,7 @@ public final class SjoelenProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos(), false)) {
             event.setCanceled(true);
         }

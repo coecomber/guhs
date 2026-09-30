@@ -10,6 +10,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.entity.MikaBaasEntity;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * In the guh stomachs only the owner (and whoever the owner allows in the Maagenzym-guh's settings) may build, break
  * and use things. Visitors can look around. In the mouth nobody builds (except operators in creative).
@@ -27,7 +28,7 @@ public final class MaagProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

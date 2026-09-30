@@ -14,6 +14,7 @@ import nl.juiced.guhs.network.MaagPayloads;
 import nl.juiced.guhs.quest.Reisguh;
 
 import net.minecraft.core.UUIDUtil;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /** A Reisguh's menu: its name (rename it) and every other Reisguh you've discovered (click to travel there). */
 public class ReisguhScreen extends Screen {
     private static final int W = 280, H = 236, PER_PAGE = 7;
@@ -42,7 +43,7 @@ public class ReisguhScreen extends Screen {
         name.setValue(data.getStringOr("Name", ""));
         addRenderableWidget(name);
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.menu.rename"),
-                        b -> PacketDistributor.sendToServer(new MaagPayloads.ReisAction(npcId, Reisguh.RENAME, name.getValue())))
+                        b -> ClientPacketDistributor.sendToServer(new MaagPayloads.ReisAction(npcId, Reisguh.RENAME, name.getValue())))
                 .bounds(left + W - 74, top + 25, 62, 20).tooltip(GuhScreen.tip("gui.guhs.reis.rename.tooltip")).build());
         ListTag points = data.getListOrEmpty("Points");
         int pages = Math.max(1, (points.size() + PER_PAGE - 1) / PER_PAGE);
@@ -52,7 +53,7 @@ public class ReisguhScreen extends Screen {
             String id = p.read("Id", UUIDUtil.CODEC).orElseThrow().toString();
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.reis.to", p.getStringOr("Name", ""), p.getIntOr("Distance", 0)),
                             b -> {
-                                PacketDistributor.sendToServer(new MaagPayloads.ReisAction(npcId, Reisguh.TRAVEL, id));
+                                ClientPacketDistributor.sendToServer(new MaagPayloads.ReisAction(npcId, Reisguh.TRAVEL, id));
                                 onClose();
                             })
                     .bounds(left + 12, top + 66 + i * 22, W - 24, 20).tooltip(GuhScreen.tip("gui.guhs.reis.to.tooltip")).build());
@@ -73,7 +74,7 @@ public class ReisguhScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (name.isFocused() && (keyCode == 257 || keyCode == 335)) {
-            PacketDistributor.sendToServer(new MaagPayloads.ReisAction(npcId, Reisguh.RENAME, name.getValue()));
+            ClientPacketDistributor.sendToServer(new MaagPayloads.ReisAction(npcId, Reisguh.RENAME, name.getValue()));
             return true;
         }
         return super.keyPressed(keyCode, scanCode, modifiers);

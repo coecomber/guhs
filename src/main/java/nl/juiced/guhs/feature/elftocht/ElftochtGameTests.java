@@ -296,7 +296,7 @@ public class ElftochtGameTests {
         helper.assertTrue(KopjesBlock.pak(p, KopjesBlock.Soort.SNERT, kopjes), "snert is another pot");
         ItemStack cup = new ItemStack(ElftochtFeature.WARME_CHOCOVET.get());
         cup.finishUsingItem(helper.getLevel(), p);
-        helper.assertTrue(p.hasEffect(MobEffects.MOVEMENT_SPEED), "warm inside: the boost");
+        helper.assertTrue(p.hasEffect(MobEffects.SPEED), "warm inside: the boost");
         weg(helper, p);
         helper.succeed();
     }

@@ -55,28 +55,28 @@ public final class KnabbelspelenFeature {
     // --- blocks --------------------------------------------------------------------------------------------------------
     /** A tin with a Mika face (Mika-blikgooien; also a fun deco block). */
     public static final DeferredBlock<KnabbelspelenBlocks.Blik> BLIK = BLOCKS.registerBlock("knabbelspelen_blik", KnabbelspelenBlocks.Blik::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(0.4f, 2f).sound(SoundType.LANTERN).noOcclusion());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(0.4f, 2f).sound(SoundType.LANTERN).noOcclusion());
     /** A big kaasmelk bottle (Spijkerpoepen). */
     public static final DeferredBlock<KnabbelspelenBlocks.KaasmelkFles> KAASMELKFLES = BLOCKS.registerBlock("knabbelspelen_kaasmelkfles",
-            KnabbelspelenBlocks.KaasmelkFles::new, BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(0.4f, 2f).sound(SoundType.GLASS).noOcclusion());
+            KnabbelspelenBlocks.KaasmelkFles::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(0.4f, 2f).sound(SoundType.GLASS).noOcclusion());
     /** The invisible anchor under Juf Vahoegsakee. */
     public static final DeferredBlock<DoolhofBlocks.AnkerBlock> ANKER = BLOCKS.registerBlock("knabbelspelen_anker", DoolhofBlocks.AnkerBlock::new,
             BlockBehaviour.Properties.of().noCollission().noLootTable().strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false));
 
     // --- items ---------------------------------------------------------------------------------------------------------
     /** The coin of the Knabbelspelen: a pink ribbon with a golden guh medal. */
-    public static final DeferredItem<Item> SPELENLINTJE = ITEMS.registerSimpleItem("spelenlintje", new Item.Properties());
+    public static final DeferredItem<Item> SPELENLINTJE = ITEMS.registerSimpleItem("spelenlintje", () -> new Item.Properties());
     /** The loaned things (tag guhs:loaned; Juf Vahoegsakee takes them back after every event). */
     public static final DeferredItem<Item> GUH_ZAK = ITEMS.registerItem("guh_zak", p -> new Geleend(p, "item.guhs.guh_zak.lore"),
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> KNABBELEI_LEPEL = ITEMS.registerItem("knabbelei_lepel", p -> new Geleend(p, "item.guhs.knabbelei_lepel.lore"),
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<Item> KNABBELSPIJKER = ITEMS.registerItem("knabbelspijker", p -> new Geleend(p, "item.guhs.knabbelspijker.lore"),
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<KnabbelspelenBlocks.Staartje> GUHGUHTJE_STAARTJE = ITEMS.registerItem("guhguhtje_staartje",
-            KnabbelspelenBlocks.Staartje::new, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            KnabbelspelenBlocks.Staartje::new, () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<KnabbelspelenBlocks.Pluisbal> BLIK_PLUISBAL = ITEMS.registerItem("blik_pluisbal", KnabbelspelenBlocks.Pluisbal::new,
-            new Item.Properties().stacksTo(16));
+            () -> new Item.Properties().stacksTo(16));
     public static final DeferredItem<BlockItem> BLIK_ITEM = ITEMS.registerSimpleBlockItem(BLIK);
     public static final DeferredItem<BlockItem> KAASMELKFLES_ITEM = ITEMS.registerSimpleBlockItem(KAASMELKFLES);
 

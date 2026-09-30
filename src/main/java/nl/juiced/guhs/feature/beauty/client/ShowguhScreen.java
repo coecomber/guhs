@@ -13,6 +13,7 @@ import nl.juiced.guhs.feature.beauty.BeautyShow;
 import nl.juiced.guhs.feature.beauty.ShowTheme;
 import nl.juiced.guhs.feature.klassiekers.client.NiveauKeuze;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Showguh's screen: how the beauty contest works, your record, start a show (with a new model or your own guh), or
  * the Showster shop. While someone else is performing: watch from the benches (and shop).
@@ -30,7 +31,7 @@ public class ShowguhScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new BeautyPayloads.Action(npcId, action, 0));
+        ClientPacketDistributor.sendToServer(new BeautyPayloads.Action(npcId, action, 0));
         onClose();
     }
 

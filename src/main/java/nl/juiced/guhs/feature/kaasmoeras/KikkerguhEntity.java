@@ -298,13 +298,13 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "move", 3, state -> {
+        controllers.add(new AnimationController<>("move", 3, state -> {
             if (isInWater()) {
                 return state.setAndContinue(SWIM);
             }
             return state.setAndContinue(state.isMoving() ? HOP : IDLE);
         }));
-        controllers.add(new AnimationController<>(this, "action", 1, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("action", 1, state -> PlayState.STOP)
                 .triggerableAnim("croak", CROAK).triggerableAnim("tongue", TONGUE));
     }
 

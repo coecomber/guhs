@@ -17,6 +17,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.feature.theehuis.TheehuisPayloads;
 import nl.juiced.guhs.feature.theehuis.Theekransje;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Mevrouw Theelepel's screen: she explains the theekransje (and how to make tea in a theepotje), how many of your tamed
  * guhs are around to come along, a button to start (or stop) a kransje, and during one the gezelligheid so far.
@@ -35,7 +36,7 @@ public class TheehuisScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new TheehuisPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new TheehuisPayloads.Action(npcId, action));
         onClose();
     }
 

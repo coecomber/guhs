@@ -13,6 +13,7 @@ import nl.juiced.guhs.feature.creche.CrechePayloads;
 import nl.juiced.guhs.feature.creche.Slaapliedje;
 import org.lwjgl.glfw.GLFW;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The lullaby: little stars float towards the moon; tap (space or a click) when a star is in the moon and its note
  * sounds. The babyguhtje's eyes close a bit with every note you hit. At the end the server hears how many you hit
@@ -122,7 +123,7 @@ public class SlaapliedjeScreen extends Screen {
             klaarOp = t;
             if (!verstuurd) {
                 verstuurd = true;
-                PacketDistributor.sendToServer(new CrechePayloads.LiedjeKlaar(npcId, pos, liedje.ordinal(), hits));
+                ClientPacketDistributor.sendToServer(new CrechePayloads.LiedjeKlaar(npcId, pos, liedje.ordinal(), hits));
             }
         }
         if (klaarOp >= 0 && t - klaarOp > 1800) {

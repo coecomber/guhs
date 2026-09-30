@@ -244,8 +244,8 @@ public class MikaPikkerEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 5, state -> state.setAndContinue(state.isMoving() ? WALK : IDLE)));
-        controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("giechel", GIECHEL));
+        controllers.add(new AnimationController<>("main", 5, state -> state.setAndContinue(state.isMoving() ? WALK : IDLE)));
+        controllers.add(new AnimationController<>("action", 0, state -> PlayState.STOP).triggerableAnim("giechel", GIECHEL));
     }
 
     @Override

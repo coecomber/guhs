@@ -44,10 +44,10 @@ public final class BeautyFeature {
             BlockBehaviour.Properties.of().noCollission().noLootTable().strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false));
     /** The loaner wardrobe: opens the dressing screen during your show. */
     public static final DeferredBlock<BeautyBlocks.Leenkast> LEENKAST = BLOCKS.registerBlock("beauty_leenkast", BeautyBlocks.Leenkast::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(2f).sound(SoundType.CHERRY_WOOD));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(2f).sound(SoundType.CHERRY_WOOD));
     public static final DeferredItem<BlockItem> LEENKAST_ITEM = ITEMS.registerSimpleBlockItem(LEENKAST);
     /** Showrozetten: won on the catwalk, spent on the Showster outfit. */
-    public static final DeferredItem<Rozet> SHOWROZET = ITEMS.registerItem("showrozet", Rozet::new, new Item.Properties());
+    public static final DeferredItem<Rozet> SHOWROZET = ITEMS.registerItem("showrozet", Rozet::new, () -> new Item.Properties());
 
     /** Prices in the Showguh's shop (showrozetten). */
     public static final int PRICE_STRIK = 6, PRICE_SJERP = 10, PRICE_TIARA = 16;

@@ -29,6 +29,7 @@ import nl.juiced.guhs.quest.Scorebord;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * De Knabbelkatapult: the 12 forts (they load, stand by themselves, have Mika's), the support rule, the levels, stars and
  * katapultsterren (+1 per rule), the shop and clothing sources, the loaned pluisballen, the protection, and a whole run of
@@ -148,7 +149,7 @@ public class KatapultGameTests {
         ServerPlayer p = player(helper);
         try {
             helper.assertTrue(Protected.at(helper.getLevel(), abs), "the Knabbelkatapult is protected");
-            helper.assertTrue(NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(helper.getLevel(), abs, helper.getLevel().getBlockState(abs), p)).isCanceled(),
+            helper.assertTrue(NeoForge.EVENT_BUS.post(new BreakBlockEvent(helper.getLevel(), abs, helper.getLevel().getBlockState(abs), p)).isCanceled(),
                     "survival players can't break it");
             helper.assertTrue(!KatapultProtection.inKasteel(helper.getLevel(), abs.offset(20, 0, 0)), "outside it isn't");
         } finally {

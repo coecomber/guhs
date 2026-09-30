@@ -21,6 +21,7 @@ import com.geckolib.cache.model.BakedGeoModel;
 import com.geckolib.cache.model.GeoBone;
 import com.geckolib.renderer.base.GeoRenderer;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * The wereldleven layers on every guh (via GuhRenderHooks): the ice-cream hat (a waffle cone upside down on its head, the
  * scoop in the flavour's colour, a cherry), blushing cheeks, and the little straw nestje under a guh napping on the spot.
@@ -70,7 +71,7 @@ public final class WereldlevenLagen {
         for (GeoBone bone : model.topLevelBones()) {
             alleen(bone, bones);
         }
-        RenderType type = RenderType.entityCutoutNoCull(texture);
+        RenderType type = RenderTypes.entityCutout(texture);
         renderer.reRender(model, pose, buffers, guh, type, buffers.getBuffer(type), partialTick, light, OverlayTexture.NO_OVERLAY, colour);
     }
 

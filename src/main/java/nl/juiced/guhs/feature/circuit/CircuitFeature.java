@@ -58,29 +58,29 @@ public final class CircuitFeature {
 
     /** The rainbow road (7 colours), its slab. */
     public static final DeferredBlock<CircuitBlocks.Regenboogweg> REGENBOOGWEG = BLOCKS.registerBlock("circuit_regenboogweg",
-            CircuitBlocks.Regenboogweg::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.5f, 6f).lightLevel(s -> 7)
+            CircuitBlocks.Regenboogweg::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.5f, 6f).lightLevel(s -> 7)
                     .sound(SoundType.AMETHYST).isValidSpawn((s, l, p, e) -> false));
     public static final DeferredBlock<RegenboogPlaat> REGENBOOGWEG_PLAAT = BLOCKS.registerBlock("circuit_regenboogweg_plaat",
-            RegenboogPlaat::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.5f, 6f).lightLevel(s -> 7)
+            RegenboogPlaat::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.5f, 6f).lightLevel(s -> 7)
                     .sound(SoundType.AMETHYST).isValidSpawn((s, l, p, e) -> false));
     /** The cheese road of the Vadsbaan and the Kaasberg, its slab. */
     public static final DeferredBlock<Block> KAASWEG = BLOCKS.registerSimpleBlock("circuit_kaasweg",
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(1.5f, 6f).sound(SoundType.MUD_BRICKS));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(1.5f, 6f).sound(SoundType.MUD_BRICKS));
     public static final DeferredBlock<SlabBlock> KAASWEG_PLAAT = BLOCKS.registerBlock("circuit_kaasweg_plaat", SlabBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(1.5f, 6f).sound(SoundType.MUD_BRICKS));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(1.5f, 6f).sound(SoundType.MUD_BRICKS));
     /** Slippery kaassaus on the road (a race guh slides: the Vadsbaan's hairpins). */
     public static final DeferredBlock<Block> KAASSAUS = BLOCKS.registerSimpleBlock("circuit_kaassaus",
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1f).friction(0.989f).sound(SoundType.HONEY_BLOCK));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1f).friction(0.989f).sound(SoundType.HONEY_BLOCK));
     /** Glittering ice on the top of the Kaasberg (slippery too; it never melts). */
     public static final DeferredBlock<Block> BERGIJS = BLOCKS.registerSimpleBlock("circuit_bergijs",
-            BlockBehaviour.Properties.of().mapColor(MapColor.ICE).strength(1f).friction(0.98f).lightLevel(s -> 4).sound(SoundType.GLASS));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.ICE).strength(1f).friction(0.98f).lightLevel(s -> 4).sound(SoundType.GLASS));
     /** The shimmering skin of a rainbow boost ring (run through it: VAHOEG!). */
     public static final DeferredBlock<CircuitBlocks.Boostring> BOOSTRING = BLOCKS.registerBlock("circuit_boostring", CircuitBlocks.Boostring::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).noCollission().noOcclusion().strength(-1f, 3600000f).noLootTable()
                     .lightLevel(s -> 13).sound(SoundType.AMETHYST).isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK));
     /** The bouncy guh mushroom cap. */
     public static final DeferredBlock<CircuitBlocks.Stuiterpaddenstoel> STUITERPADDENSTOEL = BLOCKS.registerBlock("circuit_stuiterpaddenstoel",
-            CircuitBlocks.Stuiterpaddenstoel::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.8f)
+            CircuitBlocks.Stuiterpaddenstoel::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.8f)
                     .sound(SoundType.SLIME_BLOCK).isValidSpawn((s, l, p, e) -> false));
     /** The invisible markers: Mika-pikker spots, rolling-knabbel spots, the looping's entrance. */
     public static final DeferredBlock<CircuitBlocks.Marker> MIKAPLEK = marker("circuit_mikaplek");
@@ -88,7 +88,7 @@ public final class CircuitFeature {
     public static final DeferredBlock<CircuitBlocks.Marker> LOOPING = marker("circuit_looping");
 
     /** The circuit's own money: won by racing, spent on the circuit outfit. */
-    public static final DeferredItem<Item> CIRCUITBEKER = ITEMS.registerSimpleItem("circuitbeker", new Item.Properties());
+    public static final DeferredItem<Item> CIRCUITBEKER = ITEMS.registerSimpleItem("circuitbeker", () -> new Item.Properties());
     public static final DeferredItem<BlockItem> REGENBOOGWEG_ITEM = ITEMS.registerSimpleBlockItem(REGENBOOGWEG);
     public static final DeferredItem<BlockItem> REGENBOOGWEG_PLAAT_ITEM = ITEMS.registerSimpleBlockItem(REGENBOOGWEG_PLAAT);
     public static final DeferredItem<BlockItem> KAASWEG_ITEM = ITEMS.registerSimpleBlockItem(KAASWEG);

@@ -26,6 +26,7 @@ import nl.juiced.guhs.feature.guhwaiispellen.SurfSim;
 import nl.juiced.guhs.feature.guhwaiispellen.Surfplek;
 import nl.juiced.guhs.feature.spelen.Niveau;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Your own surf ride (3.0): your game runs the same {@link SurfSim} as the server, with your keys, the moment you press
  * them (so the board follows you at once), puts your board there and sends the keys of every step to the server (which
@@ -131,7 +132,7 @@ public final class SurfClient {
         bord.eigen = true;
         int bits = mc.screen != null ? 0 : invoer(p);
         List<SurfSim.Gebeurtenis> events = sim.stap(bits);
-        PacketDistributor.sendToServer(new GuhwaiiSpellenPayloads.SurfStuur(bordId, sim.step(), bits));
+        ClientPacketDistributor.sendToServer(new GuhwaiiSpellenPayloads.SurfStuur(bordId, sim.step(), bits));
         // the board goes where the ride is (and you with it, this very tick)
         Vec3 w = spot.wereld(sim.u(), sim.v(), sim.hoogte());
         bord.setPos(w.x, w.y, w.z);

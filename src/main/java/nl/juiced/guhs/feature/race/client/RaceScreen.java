@@ -13,6 +13,7 @@ import nl.juiced.guhs.feature.race.RaceRecords;
 import nl.juiced.guhs.feature.race.RaceRole;
 import nl.juiced.guhs.feature.spelen.Niveau;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Raceguh's screen: race on makkelijk, medium or lastig (or wait: someone is racing), your records and the track
  * record per level, your ghost and the golden record ghost on/off, and her shop with the jockey outfit.
@@ -32,7 +33,7 @@ public class RaceScreen extends Screen {
     }
 
     private void send(int action, boolean close) {
-        PacketDistributor.sendToServer(new RacePayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new RacePayloads.Action(npcId, action));
         if (close) {
             onClose();
         }

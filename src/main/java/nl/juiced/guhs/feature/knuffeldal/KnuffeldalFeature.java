@@ -95,46 +95,46 @@ public final class KnuffeldalFeature {
 
     // --- the biome ----------------------------------------------------------------------------------------------------
     public static final DeferredBlock<KnuffeldalBlocks.Knuffelgras> KNUFFELGRAS = BLOCKS.registerBlock("knuffelgras", KnuffeldalBlocks.Knuffelgras::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.6f).sound(SoundType.WOOL));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.6f).sound(SoundType.WOOL));
     public static final DeferredBlock<KnuffeldalBlocks.Pluisgras> PLUISGRAS = BLOCKS.registerBlock("pluisgras", KnuffeldalBlocks.Pluisgras::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS).mapColor(MapColor.COLOR_PINK).sound(SoundType.WOOL));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS).mapColor(MapColor.COLOR_PINK).sound(SoundType.WOOL));
     public static final DeferredBlock<RotatedPillarBlock> PLUIZENBOOM_STAM = BLOCKS.registerBlock("pluizenboom_stam", RotatedPillarBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LOG).mapColor(MapColor.TERRACOTTA_WHITE));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LOG).mapColor(MapColor.TERRACOTTA_WHITE));
     public static final DeferredBlock<KnuffeldalBlocks.Bladeren> PLUIZENBOOM_BLADEREN = BLOCKS.registerBlock("pluizenboom_bladeren",
-            KnuffeldalBlocks.Bladeren::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LEAVES).mapColor(MapColor.COLOR_PINK).sound(SoundType.WOOL));
+            KnuffeldalBlocks.Bladeren::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_LEAVES).mapColor(MapColor.COLOR_PINK).sound(SoundType.WOOL));
     public static final DeferredBlock<KnuffeldalBlocks.Zaailing> PLUIZENBOOM_ZAAILING = BLOCKS.registerBlock("pluizenboom_zaailing",
-            KnuffeldalBlocks.Zaailing::new, BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_SAPLING).mapColor(MapColor.COLOR_PINK));
+            KnuffeldalBlocks.Zaailing::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_SAPLING).mapColor(MapColor.COLOR_PINK));
     public static final DeferredBlock<KnuffeldalBlocks.Guhpaddenstoel> GUHPADDENSTOEL = BLOCKS.registerBlock("guhpaddenstoel",
             KnuffeldalBlocks.Guhpaddenstoel::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollission().instabreak()
                     .sound(SoundType.GRASS).lightLevel(s -> 3).offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<HugeMushroomBlock> GUHPADDENSTOEL_HOED = BLOCKS.registerBlock("guhpaddenstoel_hoed", HugeMushroomBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM_BLOCK).mapColor(MapColor.COLOR_PINK).lightLevel(s -> 6));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.RED_MUSHROOM_BLOCK).mapColor(MapColor.COLOR_PINK).lightLevel(s -> 6));
     public static final DeferredBlock<HugeMushroomBlock> GUHPADDENSTOEL_STEEL = BLOCKS.registerBlock("guhpaddenstoel_steel", HugeMushroomBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.MUSHROOM_STEM).mapColor(MapColor.TERRACOTTA_WHITE));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MUSHROOM_STEM).mapColor(MapColor.TERRACOTTA_WHITE));
 
     // --- the building palette (for every 2.8 building) ---------------------------------------------------------------------
-    public static final DeferredBlock<Block> KNUFFELSTEEN = BLOCKS.registerSimpleBlock("knuffelsteen", steen());
+    public static final DeferredBlock<Block> KNUFFELSTEEN = BLOCKS.registerSimpleBlock("knuffelsteen", () -> steen());
     public static final DeferredBlock<StairBlock> KNUFFELSTEEN_TRAP = BLOCKS.registerBlock("knuffelsteen_trap",
-            p -> new StairBlock(KNUFFELSTEEN.get().defaultBlockState(), p), steen());
-    public static final DeferredBlock<SlabBlock> KNUFFELSTEEN_PLAAT = BLOCKS.registerBlock("knuffelsteen_plaat", SlabBlock::new, steen());
-    public static final DeferredBlock<WallBlock> KNUFFELSTEEN_MUUR = BLOCKS.registerBlock("knuffelsteen_muur", WallBlock::new, steen().forceSolidOn());
+            p -> new StairBlock(KNUFFELSTEEN.get().defaultBlockState(), p), () -> steen());
+    public static final DeferredBlock<SlabBlock> KNUFFELSTEEN_PLAAT = BLOCKS.registerBlock("knuffelsteen_plaat", SlabBlock::new, () -> steen());
+    public static final DeferredBlock<WallBlock> KNUFFELSTEEN_MUUR = BLOCKS.registerBlock("knuffelsteen_muur", WallBlock::new, () -> steen().forceSolidOn());
     public static final DeferredBlock<KnuffeldalBlocks.Gezicht> KNUFFELSTEEN_GEZICHT = BLOCKS.registerBlock("knuffelsteen_gezicht",
-            KnuffeldalBlocks.Gezicht::new, steen());
-    public static final DeferredBlock<Block> PLUISDAK = BLOCKS.registerSimpleBlock("pluisdak", dak());
+            KnuffeldalBlocks.Gezicht::new, () -> steen());
+    public static final DeferredBlock<Block> PLUISDAK = BLOCKS.registerSimpleBlock("pluisdak", () -> dak());
     public static final DeferredBlock<StairBlock> PLUISDAK_TRAP = BLOCKS.registerBlock("pluisdak_trap",
-            p -> new StairBlock(PLUISDAK.get().defaultBlockState(), p), dak());
-    public static final DeferredBlock<SlabBlock> PLUISDAK_PLAAT = BLOCKS.registerBlock("pluisdak_plaat", SlabBlock::new, dak());
+            p -> new StairBlock(PLUISDAK.get().defaultBlockState(), p), () -> dak());
+    public static final DeferredBlock<SlabBlock> PLUISDAK_PLAAT = BLOCKS.registerBlock("pluisdak_plaat", SlabBlock::new, () -> dak());
     public static final DeferredBlock<Block> KNUFFELKLINKERS = BLOCKS.registerSimpleBlock("knuffelklinkers",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.BRICKS).mapColor(MapColor.COLOR_PINK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BRICKS).mapColor(MapColor.COLOR_PINK));
 
     // --- the town, the seasons, the Knusfeest --------------------------------------------------------------------------------
     public static final DeferredBlock<KnuffeldalBlocks.Feestbuffettafel> FEESTBUFFETTAFEL = BLOCKS.registerBlock("feestbuffettafel",
-            KnuffeldalBlocks.Feestbuffettafel::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.WOOD)
+            KnuffeldalBlocks.Feestbuffettafel::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.WOOD)
                     .noOcclusion().ignitedByLava());
     public static final DeferredBlock<KnuffeldalBlocks.KnusOorkonde> KNUS_OORKONDE = BLOCKS.registerBlock("knus_oorkonde",
-            KnuffeldalBlocks.KnusOorkonde::new, BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(1.0f).sound(SoundType.WOOD).noOcclusion());
+            KnuffeldalBlocks.KnusOorkonde::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(1.0f).sound(SoundType.WOOD).noOcclusion());
     public static final DeferredBlock<KnuffeldalBlocks.SeizoensBloembak> SEIZOENSBLOEMBAK = BLOCKS.registerBlock("seizoensbloembak",
-            KnuffeldalBlocks.SeizoensBloembak::new, steen().noOcclusion().randomTicks());
+            KnuffeldalBlocks.SeizoensBloembak::new, () -> steen().noOcclusion().randomTicks());
     public static final DeferredBlock<KnuffeldalBlocks.SeizoensSlinger> SEIZOENSSLINGER = BLOCKS.registerBlock("seizoensslinger",
             KnuffeldalBlocks.SeizoensSlinger::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2f).sound(SoundType.WOOL)
                     .noCollission().noOcclusion().randomTicks().lightLevel(s -> s.getValue(KnuffeldalBlocks.SEIZOEN) == nl.juiced.guhs.feature.knus.Seizoen.WINTER ? 7 : 0));
@@ -142,13 +142,13 @@ public final class KnuffeldalFeature {
             KnuffeldalBlocks.Bladerhoopje::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(0.2f).sound(SoundType.GRASS)
                     .noCollission().noOcclusion().randomTicks().pushReaction(PushReaction.DESTROY).ignitedByLava());
     public static final DeferredBlock<KnuffeldalBlocks.Sneeuwpopguh> SNEEUWPOPGUH = BLOCKS.registerBlock("sneeuwpopguh",
-            KnuffeldalBlocks.Sneeuwpopguh::new, BlockBehaviour.Properties.ofFullCopy(Blocks.SNOW_BLOCK).noOcclusion().pushReaction(PushReaction.DESTROY));
+            KnuffeldalBlocks.Sneeuwpopguh::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SNOW_BLOCK).noOcclusion().pushReaction(PushReaction.DESTROY));
 
     // --- items -------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<KnuffeldalItems.Knusfeestlijstje> KNUSFEESTLIJSTJE = ITEMS.registerItem("knusfeestlijstje",
-            KnuffeldalItems.Knusfeestlijstje::new, new Item.Properties().rarity(Rarity.UNCOMMON));
+            KnuffeldalItems.Knusfeestlijstje::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     public static final DeferredItem<KnuffeldalItems.Sneeuwguhkopje> SNEEUWGUHKOPJE = ITEMS.registerItem("sneeuwguhkopje",
-            KnuffeldalItems.Sneeuwguhkopje::new, new Item.Properties().stacksTo(16));
+            KnuffeldalItems.Sneeuwguhkopje::new, () -> new Item.Properties().stacksTo(16));
 
     // --- the Kruimel-Mika --------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<KruimelMikaEntity>> KRUIMEL_MIKA = ENTITY_TYPES.register("kruimel_mika",
@@ -167,7 +167,7 @@ public final class KnuffeldalFeature {
                 SEIZOENSBLOEMBAK, BLADERHOOPJE, SNEEUWPOPGUH)) {
             ITEMS.registerItem(block.getId().getPath(), p -> new KnuffeldalItems.LoreBlock(block.get(), p));
         }
-        ITEMS.registerItem("knus_oorkonde", p -> new KnuffeldalItems.LoreBlock(KNUS_OORKONDE.get(), p), new Item.Properties().rarity(Rarity.EPIC).stacksTo(1));
+        ITEMS.registerItem("knus_oorkonde", p -> new KnuffeldalItems.LoreBlock(KNUS_OORKONDE.get(), p), () -> new Item.Properties().rarity(Rarity.EPIC).stacksTo(1));
     }
 
     // --- particles and sounds -------------------------------------------------------------------------------------------------

@@ -42,22 +42,22 @@ public final class GolfFeature {
     }
 
     /** Pink golf felt: the floor of the lanes (also a nice building block, 4 from 4 pink wool). */
-    public static final DeferredBlock<Block> VILT = BLOCKS.registerSimpleBlock("golfbaan_vilt", BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL));
+    public static final DeferredBlock<Block> VILT = BLOCKS.registerSimpleBlock("golfbaan_vilt", () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_WOOL));
     public static final DeferredBlock<GolfBlocks.Afslag> AFSLAG = BLOCKS.registerBlock("golfbaan_afslag", GolfBlocks.Afslag::new,
-            courseOnly(Blocks.PINK_WOOL));
+            () -> courseOnly(Blocks.PINK_WOOL));
     public static final DeferredBlock<GolfBlocks.Hole> HOLE = BLOCKS.registerBlock("golfbaan_hole", GolfBlocks.Hole::new,
-            courseOnly(Blocks.PINK_WOOL).noOcclusion());
+            () -> courseOnly(Blocks.PINK_WOOL).noOcclusion());
     public static final DeferredBlock<GolfBlocks.Molenas> MOLENAS = BLOCKS.registerBlock("golfbaan_molenas", GolfBlocks.Molenas::new,
-            courseOnly(Blocks.WHITE_WOOL));
+            () -> courseOnly(Blocks.WHITE_WOOL));
     /** A sail of the guh windmill (placed and taken away by the Golfguh as the sails turn). */
-    public static final DeferredBlock<Block> WIEK = BLOCKS.registerSimpleBlock("golfbaan_wiek", courseOnly(Blocks.WHITE_WOOL));
+    public static final DeferredBlock<Block> WIEK = BLOCKS.registerSimpleBlock("golfbaan_wiek", () -> courseOnly(Blocks.WHITE_WOOL));
 
     public static final DeferredItem<BlockItem> VILT_ITEM = ITEMS.registerSimpleBlockItem(VILT);
     /** The golf currency: earned per hole, spent in the Golfguh's shop. */
-    public static final DeferredItem<Item> GOLFBALLETJE = ITEMS.registerSimpleItem("golfballetje", new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> GOLFBALLETJE = ITEMS.registerSimpleItem("golfballetje", () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     /** The loaned club: only exists while you play (see GolfClubItem). */
     public static final DeferredItem<GolfClubItem> GOLFCLUB = ITEMS.registerItem("guhgolfclub", GolfClubItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     public static final DeferredHolder<EntityType<?>, EntityType<GolfBallEntity>> BALL = ENTITIES.register("guh_golfbal",
             () -> EntityType.Builder.<GolfBallEntity>of(GolfBallEntity::new, MobCategory.MISC)

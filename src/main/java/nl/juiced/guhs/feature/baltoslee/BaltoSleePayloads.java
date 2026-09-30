@@ -9,6 +9,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import nl.juiced.guhs.Guhs;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The sled's messages: the rider's game telling the server where its sled is (baltoslee_stuur, every tick while riding).
  * Everything else the rider sees comes with the sled's synced data and entity events.
@@ -20,7 +21,7 @@ public final class BaltoSleePayloads {
 
     /** (Client) where the rider's own sled is now. */
     static void stuur(int slee, int gen, int been, float s, float lat, float v, float latV) {
-        net.neoforged.neoforge.network.PacketDistributor.sendToServer(new Stuur(slee, gen, been, s, lat, v, latV));
+        net.neoforged.neoforge.client.network.ClientPacketDistributor.sendToServer(new Stuur(slee, gen, been, s, lat, v, latV));
     }
 
     /** Client -> server: sled slee (in generation gen of its resets) is on leg been at s, lat, going v (and sliding latV). */

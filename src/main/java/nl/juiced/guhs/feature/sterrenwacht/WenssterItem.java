@@ -76,7 +76,7 @@ public class WenssterItem extends Item {
             what = "lantaarn";
         } else if (roll < 96) {
             player.addEffect(new MobEffectInstance(MobEffects.LUCK, 20 * 60 * 5, 0));
-            player.addEffect(new MobEffectInstance(MobEffects.JUMP, 20 * 60, 1));
+            player.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 20 * 60, 1));
             player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 20 * 60 * 3, 0));
             what = "geluk";
         } else {

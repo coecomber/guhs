@@ -362,8 +362,8 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "beweeg", 4, state -> state.setAndContinue(state.isMoving() ? WALK : IDLE)));
-        controllers.add(new AnimationController<>(this, "actie", 2, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("beweeg", 4, state -> state.setAndContinue(state.isMoving() ? WALK : IDLE)));
+        controllers.add(new AnimationController<>("actie", 2, state -> PlayState.STOP)
                 .triggerableAnim("blij", RawAnimation.begin().thenPlay("blij"))
                 .triggerableAnim("eet", RawAnimation.begin().thenPlay("eet"))
                 .triggerableAnim("geluid", RawAnimation.begin().thenPlay("geluid")));

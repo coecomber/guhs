@@ -93,7 +93,7 @@ public final class Knus {
             return 1;
         });
         for (Seizoen s : Seizoen.values()) {
-            seizoen.then(Commands.literal(s.id()).requires(source -> source.hasPermission(2)).executes(c -> {
+            seizoen.then(Commands.literal(s.id()).requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(c -> {
                 Seizoen.zet(c.getSource().getServer(), s);
                 c.getSource().sendSuccess(() -> Component.translatable("gui.guhs.seizoen.gezet", s.naam()).withStyle(ChatFormatting.LIGHT_PURPLE), true);
                 return 1;

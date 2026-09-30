@@ -10,6 +10,7 @@ import nl.juiced.guhs.client.screen.GuhDexScreen;
 import nl.juiced.guhs.feature.gids.VerhaalStand;
 import nl.juiced.guhs.feature.gids.VerhalenPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /** Client cache of the Guhdex tab "Verhalen" (from {@code guhs:gids_verhalen}). */
 public final class VerhalenCache {
     private static List<VerhaalStand> verhalen = List.of();
@@ -45,7 +46,7 @@ public final class VerhalenCache {
     /** Asks the server for fresh data. */
     public static void vraag() {
         if (Minecraft.getInstance().getConnection() != null) {
-            PacketDistributor.sendToServer(new VerhalenPayloads.Vraag());
+            ClientPacketDistributor.sendToServer(new VerhalenPayloads.Vraag());
         }
     }
 

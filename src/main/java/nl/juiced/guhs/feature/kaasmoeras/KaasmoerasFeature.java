@@ -70,27 +70,27 @@ public final class KaasmoerasFeature {
 
     // --- blocks --------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<BorrelendeKaassausBlock> BORRELENDE_KAASSAUS = BLOCKS.registerBlock("borrelende_kaassaus",
-            BorrelendeKaassausBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(0.6f).sound(SoundType.HONEY_BLOCK)
+            BorrelendeKaassausBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(0.6f).sound(SoundType.HONEY_BLOCK)
                     .lightLevel(s -> 6).speedFactor(0.8f).isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.NORMAL));
     public static final DeferredBlock<MudBlock> KAASMODDER = BLOCKS.registerBlock("kaasmodder", MudBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.MUD).mapColor(MapColor.TERRACOTTA_YELLOW));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.MUD).mapColor(MapColor.TERRACOTTA_YELLOW));
     public static final DeferredBlock<ModderigKaasgrasBlock> MODDERIG_KAASGRAS = BLOCKS.registerBlock("modderig_kaasgras",
-            ModderigKaasgrasBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.GRASS_BLOCK).mapColor(MapColor.COLOR_YELLOW).randomTicks());
+            ModderigKaasgrasBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GRASS_BLOCK).mapColor(MapColor.COLOR_YELLOW).randomTicks());
     public static final DeferredBlock<DoublePlantBlock> KAASRIET = BLOCKS.registerBlock("kaasriet", DoublePlantBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.TALL_GRASS).mapColor(MapColor.COLOR_YELLOW));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.TALL_GRASS).mapColor(MapColor.COLOR_YELLOW));
     public static final DeferredBlock<MoerasgrasBlock> MOERASGRAS = BLOCKS.registerBlock("moerasgras", MoerasgrasBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS).mapColor(MapColor.COLOR_YELLOW));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SHORT_GRASS).mapColor(MapColor.COLOR_YELLOW));
     /** The froglight of the kaasmoeras: one block, three colours (the colour of the kikkerguh that made it). */
     public static final DeferredBlock<MotknabbelBlock> MOTKNABBEL = BLOCKS.registerBlock("motknabbel", MotknabbelBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.OCHRE_FROGLIGHT).mapColor(MapColor.COLOR_YELLOW));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OCHRE_FROGLIGHT).mapColor(MapColor.COLOR_YELLOW));
 
     // --- items ----------------------------------------------------------------------------------------------------------
     /** Stinky, runny swamp cheese: the Moerasheks-Mika's treasure and a brewing ingredient (the guhbrouwketel). */
     public static final DeferredItem<Item> MOERASKAAS = ITEMS.registerSimpleItem("moeraskaas", new Item.Properties().rarity(Rarity.UNCOMMON)
             .food(new FoodProperties.Builder().nutrition(5).saturationModifier(0.6f)
-                    .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 100, 0), 0.3f).build()));
+                    .effect(() -> new MobEffectInstance(MobEffects.NAUSEA, 100, 0), 0.3f).build()));
     public static final DeferredItem<VadsverdrijvendDrankjeItem> VADSVERDRIJVEND_DRANKJE = ITEMS.registerItem("vadsverdrijvend_drankje",
-            VadsverdrijvendDrankjeItem::new, new Item.Properties().stacksTo(16));
+            VadsverdrijvendDrankjeItem::new, () -> new Item.Properties().stacksTo(16));
 
     // --- the mob effect of the drankje ----------------------------------------------------------------------------------
     public static final DeferredHolder<MobEffect, OnvahoegEffect> ONVAHOEG = EFFECTS.register("onvahoeg", OnvahoegEffect::new);

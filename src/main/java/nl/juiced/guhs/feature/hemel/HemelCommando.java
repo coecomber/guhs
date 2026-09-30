@@ -18,7 +18,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 public final class HemelCommando {
     @SubscribeEvent
     public static void onCommands(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("hemel").requires(s -> s.hasPermission(2))
+        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("hemel").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("klopt").then(Commands.argument("ja", BoolArgumentType.bool())
                         .executes(ctx -> klopt(ctx.getSource(), BoolArgumentType.getBool(ctx, "ja")))))
                 .then(Commands.literal("scherm").executes(ctx -> scherm(ctx.getSource())))));

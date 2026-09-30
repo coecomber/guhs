@@ -41,14 +41,14 @@ public final class SmulFeature {
     public static final DeferredBlock<VerstopBlocks.Marker> SMUL_TRECHTER = marker("smul_trechter");
 
     /** The currency of the eetfestijn: earned by playing, spent at the Smulguh's shop. */
-    public static final DeferredItem<Item> SMULMUNT = ITEMS.registerSimpleItem("smulmunt", new Item.Properties());
+    public static final DeferredItem<Item> SMULMUNT = ITEMS.registerSimpleItem("smulmunt", () -> new Item.Properties());
     /** The big bowl you catch with: only ever borrowed during a game (see {@link SmulSchaalItem}). */
     public static final DeferredItem<SmulSchaalItem> SMULSCHAAL = ITEMS.registerItem("smulschaal", SmulSchaalItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     /** The golden kaasknabbel: a bonus in the game, and a (shop) treat that makes you quick. */
     public static final DeferredItem<Item> GOUDEN_SMULKNABBEL = ITEMS.registerSimpleItem("gouden_smulknabbel", new Item.Properties()
             .rarity(Rarity.RARE).food(new FoodProperties.Builder().nutrition(6).saturationModifier(1.2f).alwaysEdible()
-                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 20 * 30, 1), 1f)
+                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SPEED, 20 * 30, 1), 1f)
                     .effect(() -> new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.ABSORPTION, 20 * 60, 0), 1f)
                     .build()));
 

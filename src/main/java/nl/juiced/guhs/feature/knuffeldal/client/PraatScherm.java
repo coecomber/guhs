@@ -17,6 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.feature.knuffeldal.KnuffeldalPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Knuffeldal's talking screen: the character (drawn, looking at you), what they say, and underneath either the
  * answers you can give (Cocotje) or the Knusfeest list with a "Geven" button (Burgemeester Vadsema). Always a "Doei!"
@@ -111,7 +112,7 @@ public class PraatScherm extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new KnuffeldalPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new KnuffeldalPayloads.Action(npcId, action));
     }
 
     /** 3.0: closing a screen with a sleutel tells the server (-1: read to the end / closed). */

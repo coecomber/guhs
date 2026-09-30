@@ -26,7 +26,7 @@ public final class KeepOnDeathHandler {
 
     public static void onDeath(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof Player player) || player.level().isClientSide()
-                || player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+                || player.level().getGameRules().get(GameRules.KEEP_INVENTORY)) {
             return;
         }
         Inventory inventory = player.getInventory();

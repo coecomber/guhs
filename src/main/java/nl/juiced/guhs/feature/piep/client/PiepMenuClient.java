@@ -14,6 +14,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.piep.PiepMaatje;
 import nl.juiced.guhs.feature.piep.PiepPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Client side of the piep-maatje menus: opens {@link PiepMenuScreen} when the server says so (guhs:piep_menu), and sends the
  * poetsbeurt / bestie-moment click on a guh (guhs:piep_op_guh).
@@ -74,6 +75,6 @@ public final class PiepMenuClient {
         event.setCanceled(true);
         event.setSwingHand(true);
         PiepPayloads.CLIENT_KLAAR.clear();
-        PacketDistributor.sendToServer(new PiepPayloads.OpGuh(guh.getId()));
+        ClientPacketDistributor.sendToServer(new PiepPayloads.OpGuh(guh.getId()));
     }
 }

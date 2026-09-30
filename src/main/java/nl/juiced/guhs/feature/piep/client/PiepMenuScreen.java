@@ -18,6 +18,7 @@ import nl.juiced.guhs.feature.piep.PiepMaatje;
 import nl.juiced.guhs.feature.piep.PiepMenu;
 import nl.juiced.guhs.feature.piep.PiepPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The little menu of a pieppiepmuisje, Poepschilly or Schilly (much smaller than the guh menu): the creature on the left, on
  * the right its name (rename like a guh), its settings as aan/uit buttons, its big button (Op je schouder! / Kontje poetsen! /
@@ -44,7 +45,7 @@ public class PiepMenuScreen extends Screen {
     }
 
     private void stuur(PiepMenu.Actie actie, int waarde, String tekst) {
-        PacketDistributor.sendToServer(new PiepPayloads.MenuActie(dier.getId(), actie.ordinal(), waarde, tekst));
+        ClientPacketDistributor.sendToServer(new PiepPayloads.MenuActie(dier.getId(), actie.ordinal(), waarde, tekst));
     }
 
     private static Component aanUit(boolean aan) {

@@ -47,7 +47,7 @@ public final class GuhkamerFeature {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).sound(SoundType.WOOL).noOcclusion()
                     .noCollission().noLootTable().pushReaction(PushReaction.BLOCK).lightLevel(s -> 6));
     public static final DeferredItem<GuhbelItem> GUHBEL = ITEMS.registerItem("guhbel", GuhbelItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     public static final DeferredHolder<SoundEvent, SoundEvent> BEL = geluid("guhkamer.bel");
     public static final DeferredHolder<SoundEvent, SoundEvent> WEG = geluid("guhkamer.weg");

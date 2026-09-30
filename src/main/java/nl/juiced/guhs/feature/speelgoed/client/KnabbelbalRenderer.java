@@ -18,6 +18,7 @@ import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.speelgoed.KnabbelbalEntity;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * The knabbelbal: a round fluffy pink guh ball (a core with three rounded-out slabs), two little guh ears, a guh face on
  * the front and a round window on its tummy with the kaasknabbel inside (textures knabbelbal / knabbelbal_leeg, made by
@@ -57,7 +58,7 @@ public class KnabbelbalRenderer extends EntityRenderer<KnabbelbalEntity> {
         pose.scale(-1, -1, 1);
         float s = KnabbelbalEntity.SIZE / 0.5625f;
         pose.scale(s, s, s);
-        bal.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(entity))), light, OverlayTexture.NO_OVERLAY);
+        bal.render(pose, buffers.getBuffer(RenderTypes.entityCutout(getTextureLocation(entity))), light, OverlayTexture.NO_OVERLAY);
         pose.popPose();
         super.render(entity, entityYaw, partialTick, pose, buffers, light);
     }

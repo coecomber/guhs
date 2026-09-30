@@ -28,6 +28,7 @@ import nl.juiced.guhs.feature.band.FavorietSoort;
 import nl.juiced.guhs.feature.gids.client.GidsLijst;
 import nl.juiced.guhs.feature.gids.client.GidsTekst;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Guhdex tab "Mijn guhs" (2.10): the list of all your tamed guhs (a little picture, name, variant, hearts level and a
  * bar), and per guh its dagboekje: a 3D preview you turn by dragging, name / variant / personality, level and progress, and
@@ -98,7 +99,7 @@ public final class MijnGuhsTab {
     /** Asks the server for fresh data. */
     public static void vraag() {
         if (Minecraft.getInstance().getConnection() != null) {
-            PacketDistributor.sendToServer(new BandPayloads.Vraag(""));
+            ClientPacketDistributor.sendToServer(new BandPayloads.Vraag(""));
         }
     }
 

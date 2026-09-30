@@ -15,6 +15,7 @@ import nl.juiced.guhs.feature.disco.DiscoGame;
 import nl.juiced.guhs.feature.disco.DiscoLiedje;
 import nl.juiced.guhs.feature.disco.DiscoPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The DJ-guh's screen (2.9): how Guhdisco works, pick a song (the song is the level: Vadsige Tango, the Ze-hangen
  * remix, Mika-Mambo, or the bonus Njeg-Njeg Boogie) with your record on each, or stop dancing, and his shop. The frame
@@ -34,7 +35,7 @@ public class DiscoScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new DiscoPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new DiscoPayloads.Action(npcId, action));
         onClose();
     }
 

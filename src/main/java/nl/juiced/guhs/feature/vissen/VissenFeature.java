@@ -27,17 +27,17 @@ public final class VissenFeature {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
 
     /** The currency: earned in contests, spent at the Visguh's stall. */
-    public static final DeferredItem<Item> VISBON = ITEMS.registerSimpleItem("visbon", new Item.Properties());
+    public static final DeferredItem<Item> VISBON = ITEMS.registerSimpleItem("visbon", () -> new Item.Properties());
     /** The loaned contest rod (never kept). */
     public static final DeferredItem<GuhvisHengel> GUHVIS_HENGEL = ITEMS.registerItem("guhvis_hengel", GuhvisHengel::new,
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     /** The special fish, one item per species. */
     public static final Map<VisSoort, DeferredItem<VisItem>> VISSEN = new EnumMap<>(VisSoort.class);
 
     static {
         for (VisSoort soort : VisSoort.values()) {
             VISSEN.put(soort, ITEMS.registerItem(soort.id(), props -> new VisItem(soort, props),
-                    new Item.Properties().stacksTo(soort == VisSoort.GOUDEN_GUHVIS ? 16 : 64)));
+                    () -> new Item.Properties().stacksTo(soort == VisSoort.GOUDEN_GUHVIS ? 16 : 64)));
         }
     }
 

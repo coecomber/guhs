@@ -25,6 +25,7 @@ import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
 import com.geckolib.renderer.layer.GeoRenderLayer;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * The birds' renderers (3.0 vogels): their own GeckoLib models (tools/features/vogels_modellen.py) with a turning head, eyes
  * that blink now and then and stay shut while the owl sleeps (the &lt;name&gt;_dicht.png texture), the kaasmeesje turned upside
@@ -69,7 +70,7 @@ public final class VogelsClient {
                     public void render(PoseStack poseStack, T vogel, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
                                        VertexConsumer buffer, float partialTick, int light, int overlay) {
                         if (vogel instanceof GuhUiltjeEntity uil && uil.nacht() && !ogenDicht(vogel)) {
-                            RenderType type = RenderType.eyes(glow);
+                            RenderType type = RenderTypes.eyes(glow);
                             getRenderer().reRender(model, poseStack, buffers, vogel, type, buffers.getBuffer(type), partialTick,
                                     LightCoordsUtil.FULL_BRIGHT, overlay, 0xFFFFFFFF);
                         }

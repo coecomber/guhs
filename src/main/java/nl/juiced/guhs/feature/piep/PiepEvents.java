@@ -24,6 +24,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.minecraft.commands.Commands;
 /** Piep's game events: the muisje spawn hook, verstoppertje clicks, the shoulder, the nest fights, tidying up. */
 public final class PiepEvents {
     /** Tag of the floating "zieli..." texts (removed if one is ever loaded from disk). */
@@ -169,7 +170,7 @@ public final class PiepEvents {
      */
     @SubscribeEvent
     public static void onCommands(net.neoforged.neoforge.event.RegisterCommandsEvent event) {
-        var piep = net.minecraft.commands.Commands.literal("piep").requires(s -> s.hasPermission(2))
+        var piep = net.minecraft.commands.Commands.literal("piep").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(net.minecraft.commands.Commands.literal("schouder").executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     PieppiepmuisjeEntity muis = PiepFeature.PIEPPIEPMUISJE.get().create(p.level(), EntitySpawnReason.TRIGGERED);

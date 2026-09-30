@@ -14,6 +14,7 @@ import nl.juiced.guhs.feature.doolhof.DoolhofPayloads;
 import nl.juiced.guhs.feature.spelen.Niveau;
 import nl.juiced.guhs.quest.Highscores;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Meneer Vadskronkel's screen: how the maze works, three level buttons (makkelijk / medium / lastig, each with its
  * knabbels, Mika's and your best time), who is in the maze right now, and his shop.
@@ -31,7 +32,7 @@ public class DoolhofScherm extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new DoolhofPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new DoolhofPayloads.Action(npcId, action));
         onClose();
     }
 

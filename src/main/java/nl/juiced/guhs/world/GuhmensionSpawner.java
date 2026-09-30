@@ -23,7 +23,7 @@ public final class GuhmensionSpawner {
 
     public static void onLevelTick(LevelTickEvent.Post event) {
         if (!(event.getLevel() instanceof ServerLevel level) || level.dimension() != ModDimensions.GUHMENSION
-                || level.getGameTime() % CHECK_EVERY_TICKS != 0 || !level.getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_DOMOBSPAWNING)) {
+                || level.getGameTime() % CHECK_EVERY_TICKS != 0 || !level.getGameRules().get(net.minecraft.world.level.gamerules.GameRules.SPAWN_MOBS)) {
             return;
         }
         for (ServerPlayer player : level.players()) {

@@ -32,6 +32,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import nl.juiced.guhs.quest.GuhQuests;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The noises of the Stille Voorraadkelder. A player who walks (not sneaking), chews or digs makes a noise:
  * <ul>
@@ -109,7 +110,7 @@ public final class Knabbelgeluid {
         }
     }
 
-    private static void onBreak(BlockEvent.BreakEvent event) {
+    private static void onBreak(BreakBlockEvent event) {
         if (event.getPlayer() instanceof ServerPlayer player) {
             noise(player, event.getPos(), Noise.HAKKEN);
         }

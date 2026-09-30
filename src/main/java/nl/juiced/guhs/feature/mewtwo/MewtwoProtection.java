@@ -26,6 +26,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The kloon-eiland can't be broken or built in (the lab, the tower, the arena, the pier and the rocks of the island): no
  * breaking, no placing blocks, no buckets, no explosions, no griefing mobs. Doors, barrels, the quest spots and the tank
@@ -63,7 +64,7 @@ public final class MewtwoProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos(), false)) {
             event.setCanceled(true);
         }

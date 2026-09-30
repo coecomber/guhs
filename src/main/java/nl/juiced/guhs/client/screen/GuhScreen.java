@@ -18,6 +18,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.network.GuhActionPayload;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Guh menu (hold right-click on your own guh): HP, size, rideable status, sit / teleport / gravity toggles,
  * behaviour (+ attack radius), a Sounds submenu, renaming and the wardrobe. Every button explains itself on hover.
@@ -76,7 +77,7 @@ public class GuhScreen extends Screen {
     }
 
     static void send(GuhEntity guh, GuhActionPayload.Action action, int value, String text) {
-        PacketDistributor.sendToServer(new GuhActionPayload(guh.getId(), action, value, text));
+        ClientPacketDistributor.sendToServer(new GuhActionPayload(guh.getId(), action, value, text));
     }
 
     @Override

@@ -173,8 +173,8 @@ public class VonkMikaEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 5, state -> state.setAndContinue(IDLE)));
-        controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("shoot", SHOOT));
+        controllers.add(new AnimationController<>("main", 5, state -> state.setAndContinue(IDLE)));
+        controllers.add(new AnimationController<>("action", 0, state -> PlayState.STOP).triggerableAnim("shoot", SHOOT));
     }
 
     @Override

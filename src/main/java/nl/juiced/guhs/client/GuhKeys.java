@@ -13,6 +13,7 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.network.MaagPayloads;
 import org.lwjgl.glfw.GLFW;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /** The key to your own guh stomach (G by default; change it in Options > Controls > Guhs). */
 @EventBusSubscriber(modid = Guhs.MODID, value = Dist.CLIENT)
 public final class GuhKeys {
@@ -26,7 +27,7 @@ public final class GuhKeys {
     public static void onClientTick(ClientTickEvent.Post event) {
         while (MAAG.consumeClick()) {
             if (Minecraft.getInstance().player != null && Minecraft.getInstance().screen == null) {
-                PacketDistributor.sendToServer(new MaagPayloads.MaagKey());
+                ClientPacketDistributor.sendToServer(new MaagPayloads.MaagKey());
             }
         }
     }

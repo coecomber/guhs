@@ -195,8 +195,8 @@ public class LieveheersbeestjeEntity extends FladderDiertje {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "beweeg", 2, state -> state.setAndContinue(zit() ? ZIT : FLY)));
-        controllers.add(new AnimationController<>(this, "actie", 1, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("beweeg", 2, state -> state.setAndContinue(zit() ? ZIT : FLY)));
+        controllers.add(new AnimationController<>("actie", 1, state -> PlayState.STOP)
                 .triggerableAnim("helpen", RawAnimation.begin().thenPlay("helpen")));
     }
 }

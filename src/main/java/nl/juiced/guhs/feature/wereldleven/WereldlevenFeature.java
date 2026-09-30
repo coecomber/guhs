@@ -91,9 +91,9 @@ public final class WereldlevenFeature {
 
     // --- blocks ---------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<XylofoonBlock> GUH_XYLOFOON = BLOCKS.registerBlock("guh_xylofoon", XylofoonBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
     public static final DeferredBlock<GrijpmachineBlock> GRIJPMACHINE = BLOCKS.registerBlock("grijpmachine", GrijpmachineBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(2.0f, 6f).sound(SoundType.METAL).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(2.0f, 6f).sound(SoundType.METAL).noOcclusion()
                     .pushReaction(PushReaction.BLOCK).lightLevel(s -> 7));
     /** knuffel_&lt;id&gt; for every id of {@link #KNUFFEL_IDS}. */
     public static final Map<String, DeferredBlock<KnuffelBlock>> KNUFFELS = new LinkedHashMap<>();
@@ -101,7 +101,7 @@ public final class WereldlevenFeature {
     static {
         for (String id : KNUFFEL_IDS) {
             boolean glitter = id.equals(GLITTER);
-            KNUFFELS.put(id, BLOCKS.registerBlock("knuffel_" + id, KnuffelBlock::new, BlockBehaviour.Properties.of()
+            KNUFFELS.put(id, BLOCKS.registerBlock("knuffel_" + id, KnuffelBlock::new, () -> BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_PINK).strength(0.4f).sound(SoundType.WOOL).noOcclusion().ignitedByLava()
                     .pushReaction(PushReaction.DESTROY).lightLevel(s -> glitter ? 5 : 0)));
         }
@@ -109,11 +109,11 @@ public final class WereldlevenFeature {
 
     // --- items -----------------------------------------------------------------------------------------------------------
     public static final DeferredItem<FluitjeItem> GUH_FLUITJE = ITEMS.registerItem("guh_fluitje", FluitjeItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<Item> MARSHMALLOW_KNABBEL = ITEMS.registerSimpleItem("marshmallow_knabbel",
             new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).fast().build()));
     public static final DeferredItem<LiedjesboekjeItem> LIEDJESBOEKJE = ITEMS.registerItem("wereldleven_liedjesboekje", LiedjesboekjeItem::new,
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     public static final Map<Kaasijsjes.Smaak, DeferredItem<KaasijsjeItem>> KAASIJSJES = new EnumMap<>(Kaasijsjes.Smaak.class);
 
     static {
@@ -128,7 +128,7 @@ public final class WereldlevenFeature {
             DeferredBlock<KnuffelBlock> block = e.getValue();
             boolean glitter = e.getKey().equals(GLITTER);
             ITEMS.registerItem("knuffel_" + e.getKey(), p -> new BlockItem(block.get(), p),
-                    new Item.Properties().rarity(glitter ? Rarity.EPIC : Rarity.COMMON));
+                    () -> new Item.Properties().rarity(glitter ? Rarity.EPIC : Rarity.COMMON));
         }
     }
 

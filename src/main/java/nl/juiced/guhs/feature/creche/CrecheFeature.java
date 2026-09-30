@@ -73,9 +73,9 @@ public final class CrecheFeature {
 
     // --- blocks -------------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<WiegjeBlock> GUH_WIEGJE = BLOCKS.registerBlock("guh_wiegje", WiegjeBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.8f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.8f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
     public static final DeferredBlock<CrecheBlocks.Speelkleed> SPEELKLEED = BLOCKS.registerBlock("speelkleed", CrecheBlocks.Speelkleed::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.1f).sound(SoundType.WOOL).ignitedByLava());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.1f).sound(SoundType.WOOL).ignitedByLava());
     public static final DeferredBlock<CrecheBlocks.Feestslingers> FEESTSLINGERS = BLOCKS.registerBlock("feestslingers", CrecheBlocks.Feestslingers::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2f).sound(SoundType.WOOL).noCollission().noOcclusion()
                     .pushReaction(PushReaction.DESTROY).ignitedByLava());
@@ -84,14 +84,14 @@ public final class CrecheFeature {
             p -> new CrecheBlocks.LoreBlock(GUH_WIEGJE.get(), p));
     public static final DeferredItem<BlockItem> SPEELKLEED_ITEM = ITEMS.registerItem("speelkleed", p -> new CrecheBlocks.LoreBlock(SPEELKLEED.get(), p));
     public static final DeferredItem<BlockItem> FEESTSLINGERS_ITEM = ITEMS.registerItem("feestslingers",
-            p -> new CrecheBlocks.LoreBlock(FEESTSLINGERS.get(), p), new Item.Properties().rarity(Rarity.UNCOMMON));
+            p -> new CrecheBlocks.LoreBlock(FEESTSLINGERS.get(), p), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 
     // --- items --------------------------------------------------------------------------------------------------------------
     /** The Knuffelcreche's coin: earned by bringing babies back (and by the care round); spent at Juf Knuffel. */
-    public static final DeferredItem<Item> SPEENMUNT = ITEMS.registerItem("speenmunt", CrecheBlocks.Lore::new, new Item.Properties());
-    public static final DeferredItem<Item> BABYFLESJE = ITEMS.registerItem("babyflesje", CrecheBlocks.Lore::new, new Item.Properties().stacksTo(16));
-    public static final DeferredItem<Item> SCHONE_LUIER = ITEMS.registerItem("schone_luier", CrecheBlocks.Lore::new, new Item.Properties().stacksTo(16));
-    public static final DeferredItem<Item> KNUFFELDEKENTJE = ITEMS.registerItem("knuffeldekentje", CrecheBlocks.Lore::new, new Item.Properties().stacksTo(1));
+    public static final DeferredItem<Item> SPEENMUNT = ITEMS.registerItem("speenmunt", CrecheBlocks.Lore::new, () -> new Item.Properties());
+    public static final DeferredItem<Item> BABYFLESJE = ITEMS.registerItem("babyflesje", CrecheBlocks.Lore::new, () -> new Item.Properties().stacksTo(16));
+    public static final DeferredItem<Item> SCHONE_LUIER = ITEMS.registerItem("schone_luier", CrecheBlocks.Lore::new, () -> new Item.Properties().stacksTo(16));
+    public static final DeferredItem<Item> KNUFFELDEKENTJE = ITEMS.registerItem("knuffeldekentje", CrecheBlocks.Lore::new, () -> new Item.Properties().stacksTo(1));
 
     // --- the babies ---------------------------------------------------------------------------------------------------------
     public static final DeferredHolder<EntityType<?>, EntityType<CrecheBabyguh>> BABYGUH = ENTITY_TYPES.register("creche_babyguh",

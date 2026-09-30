@@ -25,6 +25,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The Guhboerderij can't be broken or built in: no breaking, no placing blocks, no buckets or bone meal on it, no
  * explosions, no griefing mobs. Everything of the farm still works: doors, gates, the chest, the voerbakken and
@@ -70,7 +71,7 @@ public final class BoerderijProtection {
         return true;
     }
 
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos(), false)) {
             event.setCanceled(true);
         }

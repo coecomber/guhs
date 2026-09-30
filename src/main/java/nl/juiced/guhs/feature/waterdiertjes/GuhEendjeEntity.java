@@ -382,13 +382,13 @@ public class GuhEendjeEntity extends Animal implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "beweeg", 3, state -> {
+        controllers.add(new AnimationController<>("beweeg", 3, state -> {
             if (isInWater()) {
                 return state.setAndContinue(ZWEM);
             }
             return state.setAndContinue(state.isMoving() ? WALK : IDLE);
         }));
-        controllers.add(new AnimationController<>(this, "actie", 1, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("actie", 1, state -> PlayState.STOP)
                 .triggerableAnim("kwak", RawAnimation.begin().thenPlay("kwak"))
                 .triggerableAnim("eet", RawAnimation.begin().thenPlay("eet"))
                 .triggerableAnim("blij", RawAnimation.begin().thenPlay("blij")));

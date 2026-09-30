@@ -16,6 +16,7 @@ import nl.juiced.guhs.network.DrinkKaasSausPayload;
 import nl.juiced.guhs.registry.ModFluids;
 import org.joml.Vector3f;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /** Kaas saus on the client: how it looks (thick like lava, but cheese: guhs:block/kaas_saus_still/flow) and "drinking" it. */
 @EventBusSubscriber(modid = Guhs.MODID, value = Dist.CLIENT)
 public final class KaasSausClient {
@@ -80,7 +81,7 @@ public final class KaasSausClient {
             return;
         }
         if (DrinkKaasSausPayload.lookedAtSaus(mc.player) != null) {
-            PacketDistributor.sendToServer(DrinkKaasSausPayload.INSTANCE);
+            ClientPacketDistributor.sendToServer(DrinkKaasSausPayload.INSTANCE);
             event.setSwingHand(true);
             event.setCanceled(true);
         }

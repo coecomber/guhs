@@ -99,7 +99,7 @@ public final class Kaasfrituursaus {
 
     /** What lava does, for our sauce: faster in the heat, sets things on fire, pops and bubbles. */
     private static void lavaRandomTick(Level level, BlockPos pos) {
-        if (!level.getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
+        if (!(level.getGameRules().get(GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER) != 0)) {
             return;
         }
         RandomSource random = level.getRandom();

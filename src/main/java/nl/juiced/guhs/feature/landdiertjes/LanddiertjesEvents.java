@@ -47,7 +47,7 @@ public final class LanddiertjesEvents {
      */
     @SubscribeEvent
     public static void onCommands(RegisterCommandsEvent event) {
-        var dier = Commands.literal("landdiertjes").requires(s -> s.hasPermission(2))
+        var dier = Commands.literal("landdiertjes").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("rij").then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     BlockPos pos = BlockPosArgument.getLoadedBlockPos(c, "pos");

@@ -124,7 +124,7 @@ public final class GuheindeEvents {
         level.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.3, guh.getZ(), 8, 0.4, 0.3, 0.4, 0);
         level.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.55f, 0.75f), 1.5f), guh.getX(), guh.getY() + 0.5, guh.getZ(), 30, 0.5, 0.5, 0.5, 0.1);
         level.playSound(null, guh, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1.2f, 1.2f);
-        guh.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 600, 2));
+        guh.addEffect(new MobEffectInstance(MobEffects.SPEED, 600, 2));
         Vec3 away = guh.position().subtract(player.position()).normalize();
         guh.setDeltaMovement(away.x * 0.6, 0.5, away.z * 0.6);
         guh.hurtMarked = true;

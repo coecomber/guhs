@@ -333,7 +333,7 @@ public class SpiesburchtGameTests {
             helper.assertTrue(drankjes == 3 && ketel.portions() == 0 && ketel.contents() == Brouwsel.BOUILLON, "three drankjes, an empty pan: " + drankjes);
             ItemStack drankje = new ItemStack(SpiesburchtFeature.DRANKJE_VAN_VAHOEGHEID.get());
             ItemStack left = drankje.finishUsingItem(helper.getLevel(), player);
-            helper.assertTrue(player.hasEffect(MobEffects.MOVEMENT_SPEED) && left.is(Items.GLASS_BOTTLE), "VAHOEG! (and the bottle stays)");
+            helper.assertTrue(player.hasEffect(MobEffects.SPEED) && left.is(Items.GLASS_BOTTLE), "VAHOEG! (and the bottle stays)");
             player.getInventory().clearContent();
             remove(helper, player);
         });
@@ -472,9 +472,9 @@ public class SpiesburchtGameTests {
         be.cycle(player);
         helper.assertTrue(be.gunst() == KnabbelbakenBlockEntity.Gunst.VAHOEG, "one layer only has VAHOEG");
         be.pulse();
-        helper.assertTrue(player.hasEffect(MobEffects.MOVEMENT_SPEED), "you get VAHOEG");
-        helper.assertTrue(tame.hasEffect(MobEffects.MOVEMENT_SPEED), "your guh too");
-        helper.assertFalse(wild.hasEffect(MobEffects.MOVEMENT_SPEED), "not a wild guh");
+        helper.assertTrue(player.hasEffect(MobEffects.SPEED), "you get VAHOEG");
+        helper.assertTrue(tame.hasEffect(MobEffects.SPEED), "your guh too");
+        helper.assertFalse(wild.hasEffect(MobEffects.SPEED), "not a wild guh");
         // a second layer (5x5 of vads and knabbels) under the first
         for (int dx = -2; dx <= 2; dx++) {
             for (int dz = -2; dz <= 2; dz++) {
@@ -484,7 +484,7 @@ public class SpiesburchtGameTests {
         be.cycle(player);
         helper.assertTrue(be.levels() == 2 && be.gunst() == KnabbelbakenBlockEntity.Gunst.GUHSPRONG, "two layers: Guhsprong");
         be.pulse();
-        helper.assertTrue(player.hasEffect(MobEffects.JUMP) && tame.hasEffect(MobEffects.JUMP), "jump boost for both");
+        helper.assertTrue(player.hasEffect(MobEffects.JUMP_BOOST) && tame.hasEffect(MobEffects.JUMP_BOOST), "jump boost for both");
         helper.setBlock(baken.offset(1, -1, 1), Blocks.DIRT);
         be.refresh();
         helper.assertTrue(be.levels() == 0, "a hole in the pyramid: off");

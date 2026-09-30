@@ -77,35 +77,35 @@ public final class BaltoFeature {
 
     // --- blocks ---------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<BaltoBlocks.Beeldje> BALTOGUH_BEELDJE = BLOCKS.registerBlock("baltoguh_beeldje", BaltoBlocks.Beeldje::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK).mapColor(MapColor.COLOR_GRAY).strength(2f, 6f).noOcclusion()
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK).mapColor(MapColor.COLOR_GRAY).strength(2f, 6f).noOcclusion()
                     .pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<BaltoBlocks.Routepaal> ROUTEPAAL = BLOCKS.registerBlock("nomguh_routepaal", BaltoBlocks.Routepaal::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(1f).sound(SoundType.WOOD).noOcclusion().lightLevel(s -> 10));
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_RED).strength(1f).sound(SoundType.WOOD).noOcclusion().lightLevel(s -> 10));
     public static final DeferredBlock<Block> SNEEUWSPOOR = BLOCKS.registerSimpleBlock("nomguh_sneeuwspoor",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SNOW_BLOCK).mapColor(MapColor.SNOW).strength(0.3f));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SNOW_BLOCK).mapColor(MapColor.SNOW).strength(0.3f));
     public static final DeferredBlock<Block> SNEEUWDAK = BLOCKS.registerSimpleBlock("nomguh_sneeuwdak",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).mapColor(MapColor.SNOW).sound(SoundType.SNOW).strength(1.5f));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).mapColor(MapColor.SNOW).sound(SoundType.SNOW).strength(1.5f));
     public static final DeferredBlock<StairBlock> SNEEUWDAK_TRAP = BLOCKS.registerBlock("nomguh_sneeuwdak_trap",
-            p -> new StairBlock(SNEEUWDAK.get().defaultBlockState(), p), BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_STAIRS)
+            p -> new StairBlock(SNEEUWDAK.get().defaultBlockState(), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_STAIRS)
                     .mapColor(MapColor.SNOW).sound(SoundType.SNOW).strength(1.5f));
     public static final DeferredBlock<SlabBlock> SNEEUWDAK_PLAAT = BLOCKS.registerBlock("nomguh_sneeuwdak_plaat", SlabBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_SLAB).mapColor(MapColor.SNOW).sound(SoundType.SNOW).strength(1.5f));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_SLAB).mapColor(MapColor.SNOW).sound(SoundType.SNOW).strength(1.5f));
     public static final DeferredBlock<BaltoBlocks.Medicijnkist> MEDICIJNKIST = BLOCKS.registerBlock("nomguh_medicijnkist", BaltoBlocks.Medicijnkist::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).strength(1f).noOcclusion());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).strength(1f).noOcclusion());
     public static final DeferredBlock<RotatedPillarBlock> SPAR_STAM = BLOCKS.registerBlock("sneeuwguhspar_stam", RotatedPillarBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LOG).mapColor(MapColor.PODZOL));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LOG).mapColor(MapColor.PODZOL));
     public static final DeferredBlock<BaltoBlocks.SparGezicht> SPAR_GEZICHT = BLOCKS.registerBlock("sneeuwguhspar_gezicht", BaltoBlocks.SparGezicht::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LOG).mapColor(MapColor.PODZOL));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LOG).mapColor(MapColor.PODZOL));
     public static final DeferredBlock<BaltoBlocks.SparNaalden> SPAR_NAALDEN = BLOCKS.registerBlock("sneeuwguhspar_naalden", BaltoBlocks.SparNaalden::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LEAVES).mapColor(MapColor.COLOR_CYAN));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LEAVES).mapColor(MapColor.COLOR_CYAN));
     public static final DeferredBlock<BaltoBlocks.SparZaailing> SPAR_ZAAILING = BLOCKS.registerBlock("sneeuwguhspar_zaailing", BaltoBlocks.SparZaailing::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_SAPLING));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_SAPLING));
 
     // --- items ------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<BaltoBlocks.LoreBlock> BALTOGUH_BEELDJE_ITEM = ITEMS.registerItem("baltoguh_beeldje",
-            p -> new BaltoBlocks.LoreBlock(BALTOGUH_BEELDJE.get(), p), new Item.Properties().rarity(Rarity.RARE));
+            p -> new BaltoBlocks.LoreBlock(BALTOGUH_BEELDJE.get(), p), () -> new Item.Properties().rarity(Rarity.RARE));
     public static final DeferredItem<BaltoBlocks.LoreBlock> MEDICIJNKIST_ITEM = ITEMS.registerItem("nomguh_medicijnkist",
-            p -> new BaltoBlocks.LoreBlock(MEDICIJNKIST.get(), p), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            p -> new BaltoBlocks.LoreBlock(MEDICIJNKIST.get(), p), () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     static {
         for (DeferredBlock<?> b : List.of(SNEEUWSPOOR, SNEEUWDAK, SNEEUWDAK_TRAP, SNEEUWDAK_PLAAT, SPAR_STAM, SPAR_GEZICHT, SPAR_NAALDEN)) {

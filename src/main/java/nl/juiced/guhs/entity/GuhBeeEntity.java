@@ -101,7 +101,7 @@ public class GuhBeeEntity extends Bee implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "fly", 0, state -> state.setAndContinue(FLY)));
+        controllers.add(new AnimationController<>("fly", 0, state -> state.setAndContinue(FLY)));
     }
 
     @Override

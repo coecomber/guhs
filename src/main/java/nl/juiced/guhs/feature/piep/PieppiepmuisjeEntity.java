@@ -463,9 +463,9 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "beweeg", 3, state -> state.setAndContinue(
+        controllers.add(new AnimationController<>("beweeg", 3, state -> state.setAndContinue(
                 opSchouder || isInSittingPose() ? ZIT : state.isMoving() ? WALK : IDLE)));
-        controllers.add(new AnimationController<>(this, "actie", 1, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("actie", 1, state -> PlayState.STOP)
                 .triggerableAnim("blij", RawAnimation.begin().thenPlay("blij"))
                 .triggerableAnim("eet", RawAnimation.begin().thenPlay("eet"))
                 .triggerableAnim("piep", RawAnimation.begin().thenPlay("piep")));

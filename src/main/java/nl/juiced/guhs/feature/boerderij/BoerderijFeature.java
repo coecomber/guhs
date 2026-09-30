@@ -68,22 +68,22 @@ public final class BoerderijFeature {
 
     // --- blocks ------------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<net.minecraft.world.level.block.Block> PLUISWOLBLOK = BLOCKS.registerSimpleBlock("pluiswolblok",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).mapColor(MapColor.COLOR_PINK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WHITE_WOOL).mapColor(MapColor.COLOR_PINK));
     public static final DeferredBlock<GuhVoerbakBlock> GUH_VOERBAK = BLOCKS.registerBlock("guh_voerbak", GuhVoerbakBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.2f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.2f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
     public static final DeferredBlock<KippennestjeBlock> KIPPENNESTJE = BLOCKS.registerBlock("kippennestje", KippennestjeBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.5f).sound(SoundType.GRASS).noOcclusion().ignitedByLava());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.5f).sound(SoundType.GRASS).noOcclusion().ignitedByLava());
 
     // --- items -------------------------------------------------------------------------------------------------------------
-    public static final DeferredItem<BoerderijItems.Lore> PLUISWOL = ITEMS.registerItem("pluiswol", BoerderijItems.Lore::new, new Item.Properties());
+    public static final DeferredItem<BoerderijItems.Lore> PLUISWOL = ITEMS.registerItem("pluiswol", BoerderijItems.Lore::new, () -> new Item.Properties());
     public static final DeferredItem<BoerderijItems.Lore> KNABBELEI = ITEMS.registerItem("knabbelei", BoerderijItems.Lore::new,
-            new Item.Properties().stacksTo(16).food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build()));
+            () -> new Item.Properties().stacksTo(16).food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build()));
     public static final DeferredItem<BoerderijItems.Kaasmelk> KAASMELK = ITEMS.registerItem("kaasmelk", BoerderijItems.Kaasmelk::new,
             new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE)
                     .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f).alwaysEdible().usingConvertsTo(Items.GLASS_BOTTLE).build()));
     public static final DeferredItem<BoerderijItems.Lore> GUHBORSTEL = ITEMS.registerItem("guhborstel", BoerderijItems.Lore::new,
-            new Item.Properties().durability(96));
-    public static final DeferredItem<BoerderijItems.Lore> KNABBELVOER = ITEMS.registerItem("knabbelvoer", BoerderijItems.Lore::new, new Item.Properties());
+            () -> new Item.Properties().durability(96));
+    public static final DeferredItem<BoerderijItems.Lore> KNABBELVOER = ITEMS.registerItem("knabbelvoer", BoerderijItems.Lore::new, () -> new Item.Properties());
 
     static {
         ITEMS.registerSimpleBlockItem(PLUISWOLBLOK);

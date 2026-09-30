@@ -11,6 +11,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.feature.sjoelen.SjoelGame;
 import nl.juiced.guhs.feature.sjoelen.SjoelenPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Opoe Njegschuif's screen: play a turn of 20 pucks (or stop yours, or see who's playing), the rules of the gates, your
  * record and the house record, and her little shop.
@@ -28,7 +29,7 @@ public class SjoelenScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new SjoelenPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new SjoelenPayloads.Action(npcId, action));
         onClose();
     }
 

@@ -435,7 +435,7 @@ public class LuchtballonEntity extends Entity implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "zweven", 0, state -> state.setAndContinue(ZWEVEN)));
+        controllers.add(new AnimationController<>("zweven", 0, state -> state.setAndContinue(ZWEVEN)));
     }
 
     @Override

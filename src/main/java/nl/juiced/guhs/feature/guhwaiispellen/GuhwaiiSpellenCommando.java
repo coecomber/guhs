@@ -26,7 +26,7 @@ public final class GuhwaiiSpellenCommando {
     public static final double BEREIK = 96;
 
     static void register(RegisterCommandsEvent event) {
-        var root = Commands.literal("guhwaiispellen").requires(s -> s.hasPermission(2));
+        var root = Commands.literal("guhwaiispellen").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS));
         for (Niveau n : Niveau.values()) {
             root.then(Commands.literal("surf").then(Commands.literal(n.id()).executes(ctx -> surf(ctx.getSource(), n))));
             root.then(Commands.literal("hula").then(Commands.literal(n.id()).executes(ctx -> hula(ctx.getSource(), n))));

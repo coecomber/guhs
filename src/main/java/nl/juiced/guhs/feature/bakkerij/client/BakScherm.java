@@ -23,6 +23,7 @@ import nl.juiced.guhs.feature.bakkerij.BakkerijFeature;
 import nl.juiced.guhs.feature.bakkerij.BakkerijPayloads;
 import nl.juiced.guhs.feature.bakkerij.Recept;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The baking screen of a knabbeloven: pick a dough, a shape and a topping (the screen says what it'll become), slide it
  * in, and take it out when the pointer is in the golden part of the bar (space or "Eruit!"). In Korstje's game the
@@ -129,14 +130,14 @@ public class BakScherm extends Screen {
             eruit();
         } else {
             melding = Component.empty();
-            PacketDistributor.sendToServer(new BakkerijPayloads.Bak(oven, BakkerijPayloads.IN_DE_OVEN, deeg, vorm, topping, 0));
+            ClientPacketDistributor.sendToServer(new BakkerijPayloads.Bak(oven, BakkerijPayloads.IN_DE_OVEN, deeg, vorm, topping, 0));
         }
     }
 
     private void eruit() {
         if (bakt >= 0 && !eruitGestuurd) {
             eruitGestuurd = true;
-            PacketDistributor.sendToServer(new BakkerijPayloads.Bak(oven, BakkerijPayloads.ERUIT, 0, 0, 0, Math.max(0, tick - bakStart)));
+            ClientPacketDistributor.sendToServer(new BakkerijPayloads.Bak(oven, BakkerijPayloads.ERUIT, 0, 0, 0, Math.max(0, tick - bakStart)));
             verversKnoppen();
         }
     }

@@ -51,19 +51,19 @@ public final class BallonFeature {
 
     /** The launch platform: the balloon waits on it, and lands on it again. */
     public static final DeferredBlock<BallonBlocks.Ballonsteiger> BALLONSTEIGER = BLOCKS.registerBlock("ballonsteiger", BallonBlocks.Ballonsteiger::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).mapColor(MapColor.WOOD));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS).mapColor(MapColor.WOOD));
     /** A little guh balloon to put anywhere (it glows a little: its tiny burner). */
     public static final DeferredBlock<BallonBlocks.MiniLuchtballon> MINI_LUCHTBALLON = BLOCKS.registerBlock("mini_luchtballon",
-            BallonBlocks.MiniLuchtballon::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.4f).sound(SoundType.WOOL)
+            BallonBlocks.MiniLuchtballon::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.4f).sound(SoundType.WOOL)
                     .noOcclusion().lightLevel(s -> 8));
 
     public static final DeferredItem<Buiten.LoreBlockItem> BALLONSTEIGER_ITEM = ITEMS.registerItem("ballonsteiger",
-            p -> new Buiten.LoreBlockItem(BALLONSTEIGER.get(), p), new Item.Properties());
+            p -> new Buiten.LoreBlockItem(BALLONSTEIGER.get(), p), () -> new Item.Properties());
     public static final DeferredItem<Buiten.LoreBlockItem> MINI_LUCHTBALLON_ITEM = ITEMS.registerItem("mini_luchtballon",
-            p -> new Buiten.LoreBlockItem(MINI_LUCHTBALLON.get(), p), new Item.Properties());
+            p -> new Buiten.LoreBlockItem(MINI_LUCHTBALLON.get(), p), () -> new Item.Properties());
     /** The festival's coin: for every flight (and every new stamp), spent in Kapitein Wolkje's shop. */
     public static final DeferredItem<Buiten.LoreItem> BALLONMUNT = ITEMS.registerItem("ballonmunt", Buiten.LoreItem::new,
-            new Item.Properties().rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().rarity(Rarity.UNCOMMON));
 
     public static final DeferredHolder<EntityType<?>, EntityType<LuchtballonEntity>> LUCHTBALLON = ENTITIES.register("guh_luchtballon",
             () -> EntityType.Builder.<LuchtballonEntity>of(LuchtballonEntity::new, MobCategory.MISC).sized(1.8f, 1.2f)

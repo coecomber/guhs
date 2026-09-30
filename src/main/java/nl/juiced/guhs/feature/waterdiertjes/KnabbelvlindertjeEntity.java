@@ -179,6 +179,6 @@ public class KnabbelvlindertjeEntity extends FladderDiertje {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "fladder", 2, state -> state.setAndContinue(zit() ? ZIT : FLY)));
+        controllers.add(new AnimationController<>("fladder", 2, state -> state.setAndContinue(zit() ? ZIT : FLY)));
     }
 }

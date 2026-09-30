@@ -26,6 +26,7 @@ import nl.juiced.guhs.registry.ModEntities;
 import org.joml.Matrix4f;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * The team in front of a sled (client only, never in the world): the guh-sledehondjes two by two, the lead (Baltoguh on the
  * medicine ride, a lead dog with a golden bell otherwise) and the ropes from the sled to their harnesses; in Steele-Mika's
@@ -158,7 +159,7 @@ final class Span {
 
     /** A rope from a to b (world spots; drawn relative to origin), sagging a little. */
     static void touw(Vec3 a, Vec3 b, Vec3 origin, PoseStack pose, MultiBufferSource buffers, int light) {
-        VertexConsumer vc = buffers.getBuffer(RenderType.entityCutoutNoCull(TOUW));
+        VertexConsumer vc = buffers.getBuffer(RenderTypes.entityCutout(TOUW));
         PoseStack.Pose last = pose.last();
         Matrix4f m = last.pose();
         Vec3 d = b.subtract(a);

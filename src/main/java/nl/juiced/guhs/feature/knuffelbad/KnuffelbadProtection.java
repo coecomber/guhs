@@ -22,6 +22,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.Guhs;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The Knuffelbad can't be broken (like the other guh buildings): no breaking, building, buckets, fire or explosions, and
  * mobs don't grief it. Using things is fine: the start gates, the wash tubs (their shower), Badmeester Bubbel. Players
@@ -77,7 +78,7 @@ public final class KnuffelbadProtection {
         return true;
     }
 
-    private static void onBreak(BlockEvent.BreakEvent event) {
+    private static void onBreak(BreakBlockEvent event) {
         if (geweigerd(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

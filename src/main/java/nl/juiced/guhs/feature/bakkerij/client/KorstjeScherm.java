@@ -11,6 +11,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.feature.bakkerij.BakkerijGame;
 import nl.juiced.guhs.feature.bakkerij.BakkerijPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Bakker Korstje's screen: how his order game works, "Bakken!" (when the bakery is free), your record, the
  * receptenboek count, the Knusfeest's feesttaart (when the Burgemeester asked for it), and his shop.
@@ -28,7 +29,7 @@ public class KorstjeScherm extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new BakkerijPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new BakkerijPayloads.Action(npcId, action));
         onClose();
     }
 

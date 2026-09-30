@@ -23,6 +23,7 @@ import nl.juiced.guhs.feature.gids.client.GidsTekst;
 import nl.juiced.guhs.feature.hemel.HemelPayloads;
 
 import net.minecraft.core.UUIDUtil;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Knuffelhart's screen: every tamed guh of yours that is in the wolkjes (name, variant, hearts level, how long, and a
  * little stand-in with its clothes, turnable by dragging). Pick one and "Haal ... terug ♥": free, as often as you like.
@@ -113,7 +114,7 @@ public class HemelScherm extends Screen {
         if (guhs.isEmpty()) {
             return;
         }
-        PacketDistributor.sendToServer(new HemelPayloads.Terug(data.getLongOr("Pos", 0L), guhs.get(gekozen).id()));
+        ClientPacketDistributor.sendToServer(new HemelPayloads.Terug(data.getLongOr("Pos", 0L), guhs.get(gekozen).id()));
     }
 
     // --- input ---------------------------------------------------------------------------------------------------------

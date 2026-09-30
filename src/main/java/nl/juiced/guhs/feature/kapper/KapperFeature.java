@@ -63,29 +63,29 @@ public final class KapperFeature {
     public static final DeferredBlock<GuhFurnitureBlock> KAPPERSSTOEL = BLOCKS.registerBlock("kappersstoel",
             p -> new GuhFurnitureBlock(p, 0.5, new double[]{6, 0, 6, 10, 4, 10}, new double[]{3, 0, 3, 13, 1, 13}, new double[]{2, 4, 2, 14, 8, 14},
                     new double[]{2, 8, 11, 14, 19, 14}, new double[]{1, 8, 3, 3, 11, 11}, new double[]{13, 8, 3, 15, 11, 11}),
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.METAL).noOcclusion());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.METAL).noOcclusion());
     /** The haarwasbak: a pink basin with a golden tap (right-click: foam!). */
     public static final DeferredBlock<HaarwasbakBlock> HAARWASBAK = BLOCKS.registerBlock("haarwasbak", HaarwasbakBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.QUARTZ).strength(1.0f).sound(SoundType.STONE).noOcclusion());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.QUARTZ).strength(1.0f).sound(SoundType.STONE).noOcclusion());
     public static final DeferredItem<BlockItem> KAPPERSSTOEL_ITEM = ITEMS.registerSimpleBlockItem(KAPPERSSTOEL);
     public static final DeferredItem<BlockItem> HAARWASBAK_ITEM = ITEMS.registerSimpleBlockItem(HAARWASBAK);
 
     // --- items -------------------------------------------------------------------------------------------------------------
     /** The kapper's coin: earned in the kappersshow, spent at Kapper Krulletje (and one go at the grijpmachine). */
-    public static final DeferredItem<Item> KRULMUNT = ITEMS.registerSimpleItem("krulmunt", new Item.Properties());
+    public static final DeferredItem<Item> KRULMUNT = ITEMS.registerSimpleItem("krulmunt", () -> new Item.Properties());
     /** The Knusfeest task FEESTKAPSELS: a box with clips, ribbons and glitter spray for the party hairdos. */
     public static final DeferredItem<Item> FEESTKAPSELSET = ITEMS.registerItem("feestkapselset", FeestkapselsetItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     /** The kappersschaar (lent: tag guhs:loaned). */
     public static final DeferredItem<KappersschaarItem> KAPPERSSCHAAR = ITEMS.registerItem("kappersschaar", KappersschaarItem::new,
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
     /** haarverf_roze ... haarverf_regenboog. */
     public static final Map<Haarverf, DeferredItem<HaarverfItem>> HAARVERF = new EnumMap<>(Haarverf.class);
 
     static {
         for (Haarverf verf : Haarverf.values()) {
             HAARVERF.put(verf, ITEMS.registerItem(verf.id(), p -> new HaarverfItem(verf, p),
-                    new Item.Properties().stacksTo(16).rarity(verf == Haarverf.REGENBOOG ? Rarity.RARE : Rarity.COMMON)));
+                    () -> new Item.Properties().stacksTo(16).rarity(verf == Haarverf.REGENBOOG ? Rarity.RARE : Rarity.COMMON)));
         }
     }
 

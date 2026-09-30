@@ -84,7 +84,7 @@ public class GrillPortalBlock extends Block implements Portal {
     public int getPortalTransitionTime(ServerLevel level, Entity entity) {
         return entity instanceof Player player
                 ? Math.max(1, level.getGameRules().getInt(player.getAbilities().invulnerable
-                ? GameRules.RULE_PLAYERS_NETHER_PORTAL_CREATIVE_DELAY : GameRules.RULE_PLAYERS_NETHER_PORTAL_DEFAULT_DELAY))
+                ? GameRules.PLAYERS_NETHER_PORTAL_CREATIVE_DELAY : GameRules.PLAYERS_NETHER_PORTAL_DEFAULT_DELAY))
                 : 0;
     }
 

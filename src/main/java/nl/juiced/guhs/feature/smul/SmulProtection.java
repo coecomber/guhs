@@ -24,6 +24,7 @@ import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The Vadsig eetfestijn can't be broken (like the verstopguh house): no breaking, building, emptying buckets, lighting fires
  * or blowing it up, and mobs don't grief it either. Sitting on the benches and trading still work. Creative players may change it.
@@ -54,7 +55,7 @@ public final class SmulProtection {
         return true;
     }
 
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

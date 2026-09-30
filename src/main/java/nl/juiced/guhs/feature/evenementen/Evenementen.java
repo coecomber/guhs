@@ -387,7 +387,7 @@ public final class Evenementen {
     // --- /guhs evenement ---------------------------------------------------------------------------------------------------
 
     public static void registerCommands(RegisterCommandsEvent event) {
-        LiteralArgumentBuilder<CommandSourceStack> evenement = Commands.literal("evenement").requires(source -> source.hasPermission(2));
+        LiteralArgumentBuilder<CommandSourceStack> evenement = Commands.literal("evenement").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS));
         for (EvenementType type : EvenementType.values()) {
             evenement.then(Commands.literal(type.id()).executes(c -> commandStart(c.getSource(), type)));
         }

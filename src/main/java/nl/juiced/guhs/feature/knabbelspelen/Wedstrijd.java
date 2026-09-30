@@ -647,7 +647,7 @@ public final class Wedstrijd {
             p.containerMenu.setCarried(ItemStack.EMPTY);
         }
         GuhguhtjePrik.blinddoek(p, false);
-        for (var effect : List.of(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, net.minecraft.world.effect.MobEffects.BLINDNESS,
+        for (var effect : List.of(net.minecraft.world.effect.MobEffects.SLOWNESS, net.minecraft.world.effect.MobEffects.BLINDNESS,
                 net.minecraft.world.effect.MobEffects.DARKNESS)) {
             MobEffectInstance e = p.getEffect(effect);
             if (e != null && e.getDuration() <= 20 * 200 && !e.isVisible()) {

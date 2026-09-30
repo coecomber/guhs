@@ -28,6 +28,7 @@ import nl.juiced.guhs.feature.kapper.Kapsel;
 import nl.juiced.guhs.registry.ModItems;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The knip screen of the kappersshow: left the customer's picture ("zo wil ik het!": a guh with the wished hairstyle and
  * colour; from the 4th customer on it's put away after a few seconds), in the middle the customer in the chair (live:
@@ -74,7 +75,7 @@ public class KnipScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new KapperPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new KapperPayloads.Action(npcId, action));
     }
 
     private boolean klant() {

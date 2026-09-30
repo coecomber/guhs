@@ -178,9 +178,9 @@ public class BozeKaasknabbelEntity extends PathfinderMob implements Enemy, GeoEn
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "beweeg", 3, state -> state.setAndContinue(
+        controllers.add(new AnimationController<>("beweeg", 3, state -> state.setAndContinue(
                 isDeadOrDying() ? ZIELI : state.isMoving() ? WALK : IDLE)));
-        controllers.add(new AnimationController<>(this, "actie", 1, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("actie", 1, state -> PlayState.STOP)
                 .triggerableAnim("aanval", RawAnimation.begin().thenPlay("aanval"))
                 .triggerableAnim("stamp", RawAnimation.begin().thenPlay("stamp")));
     }

@@ -22,6 +22,7 @@ import nl.juiced.guhs.feature.verhaal.VerhaalVlaggen;
 import nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk;
 import com.geckolib.cache.model.GeoBone;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * The Guhtwo's look on the client: it floats (the flag ZWEEFT lifts the whole model a little, bobbing; less when it
  * sits, hardly when you ride it), a soft purple glow on the ground under it, glowing purple eyes and tail bulb (the glow
@@ -100,7 +101,7 @@ public final class MewtwoUiterlijk implements VariantUiterlijk.Uiterlijk {
         float r = 0.55f * guh.getScale() * guh.getAgeScale() * (1f + Mth.sin((guh.tickCount + pt) * 0.08f) * 0.06f);
         int a = (int) (150 + 40 * Mth.sin((guh.tickCount + pt) * 0.08f));
         int kleur = (a << 24) | 0xFFFFFF;
-        VertexConsumer vc = buffers.getBuffer(RenderType.eyes(ZWEEFGLOED));
+        VertexConsumer vc = buffers.getBuffer(RenderTypes.eyes(ZWEEFGLOED));
         PoseStack.Pose p = pose.last();
         float y = 0.03f;
         vc.addVertex(p, -r, y, -r).setColor(kleur).setUv(0, 0).setOverlay(OverlayTexture.NO_OVERLAY).setLight(LightCoordsUtil.FULL_BRIGHT).setNormal(p, 0, 1, 0);

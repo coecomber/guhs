@@ -493,8 +493,8 @@ public class AangebrandeMikaEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 6, this::mainAnimation));
-        controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("shoot", SHOOT));
+        controllers.add(new AnimationController<>("main", 6, this::mainAnimation));
+        controllers.add(new AnimationController<>("action", 0, state -> PlayState.STOP).triggerableAnim("shoot", SHOOT));
     }
 
     private PlayState mainAnimation(AnimationTest<AangebrandeMikaEntity> state) {

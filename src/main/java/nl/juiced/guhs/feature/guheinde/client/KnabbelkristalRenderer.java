@@ -19,10 +19,11 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.guheinde.KnabbelkristalEntity;
 import org.joml.Quaternionf;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /** A knabbelkristal: the end crystal model (spinning cubes on a base) with a cheese-and-knabbel texture, and its beam. */
 public class KnabbelkristalRenderer extends EntityRenderer<KnabbelkristalEntity> {
     private static final Identifier TEXTURE = Guhs.id("textures/entity/knabbelkristal.png");
-    private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(TEXTURE);
+    private static final RenderType RENDER_TYPE = RenderTypes.entityCutout(TEXTURE);
     private static final float SIN_45 = (float) Math.sin(Math.PI / 4);
     private final ModelPart cube, glass, base;
 

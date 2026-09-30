@@ -81,92 +81,92 @@ public final class BarbecuetherFeature {
     public static final DeferredHolder<Fluid, FlowingFluid> FLOWING_KAASFRITUURSAUS = FLUIDS.register("flowing_kaasfrituursaus", Kaasfrituursaus.Flowing::new);
     public static final DeferredBlock<LiquidBlock> KAASFRITUURSAUS_BLOCK = BLOCKS.registerBlock("kaasfrituursaus",
             p -> new Kaasfrituursaus.SausBlock(KAASFRITUURSAUS.get(), p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.LAVA).mapColor(MapColor.COLOR_ORANGE).lightLevel(s -> 15));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LAVA).mapColor(MapColor.COLOR_ORANGE).lightLevel(s -> 15));
     public static final DeferredItem<BucketItem> KAASFRITUURSAUS_BUCKET = ITEMS.registerItem("kaasfrituursaus_bucket",
-            p -> new BucketItem(KAASFRITUURSAUS.get(), p), new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1));
+            p -> new BucketItem(KAASFRITUURSAUS.get(), p), () -> new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1));
 
     // --- stone: houtskoolsteen (netherrack) and its bricks (nether bricks) ------------------------------------------------
     public static final DeferredBlock<Block> HOUTSKOOLSTEEN = BLOCKS.registerBlock("houtskoolsteen", BarbecueBlocks.Houtskoolsteen::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERRACK).mapColor(MapColor.COLOR_BLACK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERRACK).mapColor(MapColor.COLOR_BLACK));
     public static final DeferredBlock<Block> HOUTSKOOLSTEEN_STENEN = BLOCKS.registerSimpleBlock("houtskoolsteen_stenen",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICKS).mapColor(MapColor.COLOR_BLACK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICKS).mapColor(MapColor.COLOR_BLACK));
     public static final DeferredBlock<StairBlock> HOUTSKOOLSTEEN_STENEN_TRAP = BLOCKS.registerBlock("houtskoolsteen_stenen_trap",
-            p -> new StairBlock(HOUTSKOOLSTEEN_STENEN.get().defaultBlockState(), p), BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICK_STAIRS).mapColor(MapColor.COLOR_BLACK));
+            p -> new StairBlock(HOUTSKOOLSTEEN_STENEN.get().defaultBlockState(), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICK_STAIRS).mapColor(MapColor.COLOR_BLACK));
     public static final DeferredBlock<SlabBlock> HOUTSKOOLSTEEN_STENEN_PLAAT = BLOCKS.registerBlock("houtskoolsteen_stenen_plaat", SlabBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICK_SLAB).mapColor(MapColor.COLOR_BLACK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICK_SLAB).mapColor(MapColor.COLOR_BLACK));
     public static final DeferredBlock<WallBlock> HOUTSKOOLSTEEN_STENEN_MUUR = BLOCKS.registerBlock("houtskoolsteen_stenen_muur", WallBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICK_WALL).mapColor(MapColor.COLOR_BLACK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICK_WALL).mapColor(MapColor.COLOR_BLACK));
     /** The fence: a stone fence like the nether brick fence (not wooden: it doesn't burn and doesn't join wooden fences). */
     public static final DeferredBlock<FenceBlock> HOUTSKOOLSTEEN_STENEN_HEK = BLOCKS.registerBlock("houtskoolsteen_stenen_hek", FenceBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICK_FENCE).mapColor(MapColor.COLOR_BLACK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_BRICK_FENCE).mapColor(MapColor.COLOR_BLACK));
     public static final DeferredBlock<Block> GEBARSTEN_HOUTSKOOLSTEEN_STENEN = BLOCKS.registerSimpleBlock("gebarsten_houtskoolsteen_stenen",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_NETHER_BRICKS).mapColor(MapColor.COLOR_BLACK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRACKED_NETHER_BRICKS).mapColor(MapColor.COLOR_BLACK));
     /** Chiseled houtskoolsteen bricks with a guh face (for the pits and the other slices' buildings). */
     public static final DeferredBlock<Block> GEBEITELDE_HOUTSKOOLSTEEN_STENEN = BLOCKS.registerSimpleBlock("gebeitelde_houtskoolsteen_stenen",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_NETHER_BRICKS).mapColor(MapColor.COLOR_BLACK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHISELED_NETHER_BRICKS).mapColor(MapColor.COLOR_BLACK));
 
     // --- grill iron: roosterijzer (blackstone / basalt) ------------------------------------------------------------------
     public static final DeferredBlock<Block> ROOSTERIJZER = BLOCKS.registerSimpleBlock("roosterijzer",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE));
     public static final DeferredBlock<RotatedPillarBlock> ROOSTERIJZER_PILAAR = BLOCKS.registerBlock("roosterijzer_pilaar", RotatedPillarBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.BASALT));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BASALT));
     public static final DeferredBlock<Block> GEPOLIJST_ROOSTERIJZER = BLOCKS.registerSimpleBlock("gepolijst_roosterijzer",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.POLISHED_BLACKSTONE));
     public static final DeferredBlock<IronBarsBlock> ROOSTERIJZER_TRALIES = BLOCKS.registerBlock("roosterijzer_tralies", IronBarsBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).mapColor(MapColor.COLOR_BLACK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BARS).mapColor(MapColor.COLOR_BLACK));
 
     // --- glow, ash --------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<Block> GLOEIKOOL = BLOCKS.registerSimpleBlock("gloeikool",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.GLOWSTONE).mapColor(MapColor.COLOR_ORANGE));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.GLOWSTONE).mapColor(MapColor.COLOR_ORANGE));
     /** Grey ash: slows you down like soul sand (and blue ash fire burns on it). */
     public static final DeferredBlock<SoulSandBlock> AS_BLOK = BLOCKS.registerBlock("as_blok", SoulSandBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_SAND).mapColor(MapColor.COLOR_LIGHT_GRAY));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_SAND).mapColor(MapColor.COLOR_LIGHT_GRAY));
     public static final DeferredBlock<Block> AS_AARDE = BLOCKS.registerSimpleBlock("as_aarde",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_SOIL).mapColor(MapColor.COLOR_GRAY));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_SOIL).mapColor(MapColor.COLOR_GRAY));
 
     // --- the forests: saté (crimson) and sausage (warped) ------------------------------------------------------------------
     public static final DeferredBlock<RotatedPillarBlock> SATE_STAM = BLOCKS.registerBlock("sate_stam", RotatedPillarBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_STEM).mapColor(MapColor.WOOD));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_STEM).mapColor(MapColor.WOOD));
     public static final DeferredBlock<Block> PINDASAUS_NYLIUM = BLOCKS.registerBlock("pindasaus_nylium", p -> new BarbecueBlocks.GrillNylium(false, p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_NYLIUM).mapColor(MapColor.COLOR_ORANGE));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_NYLIUM).mapColor(MapColor.COLOR_ORANGE));
     public static final DeferredBlock<RotatedPillarBlock> WORST_STAM = BLOCKS.registerBlock("worst_stam", RotatedPillarBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_STEM).mapColor(MapColor.COLOR_BROWN));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_STEM).mapColor(MapColor.COLOR_BROWN));
     public static final DeferredBlock<Block> MOSTERD_NYLIUM = BLOCKS.registerBlock("mosterd_nylium", p -> new BarbecueBlocks.GrillNylium(true, p),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_NYLIUM).mapColor(MapColor.COLOR_YELLOW));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_NYLIUM).mapColor(MapColor.COLOR_YELLOW));
     public static final DeferredBlock<Block> SATE_VLEES = BLOCKS.registerSimpleBlock("sate_vlees",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_WART_BLOCK).mapColor(MapColor.COLOR_BROWN));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_WART_BLOCK).mapColor(MapColor.COLOR_BROWN));
     public static final DeferredBlock<Block> MOSTERD_BLOK = BLOCKS.registerSimpleBlock("mosterd_blok",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_WART_BLOCK).mapColor(MapColor.COLOR_YELLOW));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_WART_BLOCK).mapColor(MapColor.COLOR_YELLOW));
     public static final DeferredBlock<Block> UIENLICHT = BLOCKS.registerSimpleBlock("uienlicht",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SHROOMLIGHT).mapColor(MapColor.SAND));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.SHROOMLIGHT).mapColor(MapColor.SAND));
     public static final DeferredBlock<Block> PINDASCHEUTJES = BLOCKS.registerBlock("pindascheutjes", BarbecueBlocks.GrillPlant::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_ROOTS).mapColor(MapColor.COLOR_ORANGE));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_ROOTS).mapColor(MapColor.COLOR_ORANGE));
     public static final DeferredBlock<Block> MOSTERDSCHEUTJES = BLOCKS.registerBlock("mosterdscheutjes", BarbecueBlocks.GrillPlant::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_ROOTS).mapColor(MapColor.COLOR_YELLOW));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_ROOTS).mapColor(MapColor.COLOR_YELLOW));
     public static final ResourceKey<ConfiguredFeature<?, ?>> SATE_GEKWEEKT = ResourceKey.create(Registries.CONFIGURED_FEATURE, Guhs.id("sate_spies_gekweekt"));
     public static final ResourceKey<ConfiguredFeature<?, ?>> WORST_GEKWEEKT = ResourceKey.create(Registries.CONFIGURED_FEATURE, Guhs.id("braadworst_gekweekt"));
     /** Little saté skewer sprout: bone meal on pindasaus nylium grows a giant saté skewer. */
     public static final DeferredBlock<NetherFungusBlock> SATE_ZWAMMETJE = BLOCKS.registerBlock("sate_zwammetje",
-            p -> new NetherFungusBlock(SATE_GEKWEEKT, PINDASAUS_NYLIUM.get(), p), BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS));
+            p -> new NetherFungusBlock(SATE_GEKWEEKT, PINDASAUS_NYLIUM.get(), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_FUNGUS));
     /** Little sausage sprout: bone meal on mosterd nylium grows a giant sausage. */
     public static final DeferredBlock<NetherFungusBlock> WORST_ZWAMMETJE = BLOCKS.registerBlock("worst_zwammetje",
-            p -> new NetherFungusBlock(WORST_GEKWEEKT, MOSTERD_NYLIUM.get(), p), BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS));
+            p -> new NetherFungusBlock(WORST_GEKWEEKT, MOSTERD_NYLIUM.get(), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WARPED_FUNGUS));
     public static final DeferredBlock<Block> SMEULKOOLTJES = BLOCKS.registerBlock("smeulkooltjes", BarbecueBlocks.Smeulkooltjes::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_ROOTS).mapColor(MapColor.COLOR_ORANGE).lightLevel(s -> 7));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CRIMSON_ROOTS).mapColor(MapColor.COLOR_ORANGE).lightLevel(s -> 7));
     public static final DeferredBlock<Block> PINDASAUSPLASJE = BLOCKS.registerBlock("pindasausplasje", BarbecueBlocks.Pindasausplasje::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(0.1f).sound(SoundType.HONEY_BLOCK).speedFactor(0.4f)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(0.1f).sound(SoundType.HONEY_BLOCK).speedFactor(0.4f)
                     .jumpFactor(0.5f).noOcclusion().pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<Block> ROOKGAT = BLOCKS.registerBlock("rookgat", BarbecueBlocks.Rookgat::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE).noOcclusion().lightLevel(s -> 5));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BLACKSTONE).noOcclusion().lightLevel(s -> 5));
     public static final DeferredBlock<RotatedPillarBlock> VERKOOLD_GUHBOT = BLOCKS.registerBlock("verkoold_guhbot", RotatedPillarBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.BONE_BLOCK).mapColor(MapColor.COLOR_BLACK));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BONE_BLOCK).mapColor(MapColor.COLOR_BLACK));
     /** Houtskoolsteen with kaasknabbels baked into it (the nether gold ore): drops kaasknabbels. */
     public static final DeferredBlock<DropExperienceBlock> HOUTSKOOLSTEEN_KAASKNABBELERTS = BLOCKS.registerBlock("houtskoolsteen_kaasknabbelerts",
-            p -> new DropExperienceBlock(UniformInt.of(0, 1), p), BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_GOLD_ORE).mapColor(MapColor.COLOR_BLACK));
+            p -> new DropExperienceBlock(UniformInt.of(0, 1), p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_GOLD_ORE).mapColor(MapColor.COLOR_BLACK));
 
     // --- the portal -------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<Block> GRILLKOOL = BLOCKS.registerSimpleBlock("grillkool",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.OBSIDIAN).mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM));
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OBSIDIAN).mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM));
     public static final DeferredBlock<GrillPortalBlock> BARBECUETHER_PORTAAL = BLOCKS.registerBlock("barbecuether_portaal", GrillPortalBlock::new,
             BlockBehaviour.Properties.of().noCollission().strength(-1.0f).sound(SoundType.GLASS).lightLevel(s -> 12)
                     .pushReaction(PushReaction.BLOCK).noLootTable().mapColor(MapColor.COLOR_ORANGE));
@@ -175,14 +175,14 @@ public final class BarbecuetherFeature {
 
     // --- items ------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<AanmaakblokjeItem> AANMAAKBLOKJE = ITEMS.registerItem("aanmaakblokje", AanmaakblokjeItem::new,
-            new Item.Properties().durability(64));
+            () -> new Item.Properties().durability(64));
     public static final DeferredItem<Item> GLOEIKOOLGRUIS = ITEMS.registerSimpleItem("gloeikoolgruis");
     public static final DeferredItem<GrillReceptItem> GRILLGUH_RECEPT = ITEMS.registerItem("grillguh_recept", GrillReceptItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<Item> KAASKNABBELSATE = ITEMS.registerSimpleItem("kaasknabbelsate",
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.3f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.3f).build()));
     public static final DeferredItem<Item> GEGRILDE_KAASKNABBELSATE = ITEMS.registerSimpleItem("gegrilde_kaasknabbelsate",
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.8f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.8f).build()));
     public static final DeferredItem<Item> GUHBRAADWORST = ITEMS.registerSimpleItem("guhbraadworst",
             new Item.Properties().food(new FoodProperties.Builder().nutrition(7).saturationModifier(0.7f)
                     .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 200, 0), 0.5f).build()));

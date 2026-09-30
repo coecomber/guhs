@@ -84,7 +84,7 @@ public final class VogelsFeature {
 
     // --- the bird feeder -------------------------------------------------------------------------------------------------
     public static final DeferredBlock<VoerhuisjeBlock> VOERHUISJE = BLOCKS.registerBlock("vogels_voerhuisje", VoerhuisjeBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.WOOD).noOcclusion().randomTicks());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.WOOD).noOcclusion().randomTicks());
 
     static {
         ITEMS.registerItem("vogels_voerhuisje", p -> new VoerhuisjeBlock.Item(VOERHUISJE.get(), p));

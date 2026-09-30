@@ -11,6 +11,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.feature.kapper.KappersShow;
 import nl.juiced.guhs.feature.kapper.KapperPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Kapper Krulletje's screen: how the kappersshow works, your record and krulmunten, start a show (or the feest round
  * when the Burgemeester asked for feestkapsels), and his shop. The frame is a striped barber's pole.
@@ -29,7 +30,7 @@ public class KapperScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new KapperPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new KapperPayloads.Action(npcId, action));
         onClose();
     }
 

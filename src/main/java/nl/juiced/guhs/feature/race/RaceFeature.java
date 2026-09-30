@@ -47,11 +47,11 @@ public final class RaceFeature {
 
     /** A checkpoint ring block (glowing, can't be broken). */
     public static final DeferredBlock<RaceBlocks.Checkpoint> RACE_CHECKPOINT = BLOCKS.registerBlock("race_checkpoint", RaceBlocks.Checkpoint::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).noLootTable().lightLevel(s -> 15)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).noLootTable().lightLevel(s -> 15)
                     .sound(SoundType.AMETHYST).isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK));
     /** The VAHOEG launch pad. */
     public static final DeferredBlock<RaceBlocks.VahoegPad> RACE_PAD = BLOCKS.registerBlock("race_vahoegpad", RaceBlocks.VahoegPad::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(-1f, 3600000f).noLootTable().lightLevel(s -> 10)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(-1f, 3600000f).noLootTable().lightLevel(s -> 10)
                     .sound(SoundType.AMETHYST).noOcclusion().isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK));
     /** The invisible start marker. */
     public static final DeferredBlock<RaceBlocks.Start> RACE_START = BLOCKS.registerBlock("race_start", RaceBlocks.Start::new,
@@ -59,7 +59,7 @@ public final class RaceFeature {
                     .isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK));
 
     /** The guhrace's own money: won by racing, spent on the jockey outfit. */
-    public static final DeferredItem<Item> RACEPRIJSJE = ITEMS.registerSimpleItem("raceprijsje", new Item.Properties());
+    public static final DeferredItem<Item> RACEPRIJSJE = ITEMS.registerSimpleItem("raceprijsje", () -> new Item.Properties());
     public static final DeferredItem<BlockItem> RACE_CHECKPOINT_ITEM = ITEMS.registerSimpleBlockItem(RACE_CHECKPOINT);
     public static final DeferredItem<BlockItem> RACE_PAD_ITEM = ITEMS.registerSimpleBlockItem(RACE_PAD);
 

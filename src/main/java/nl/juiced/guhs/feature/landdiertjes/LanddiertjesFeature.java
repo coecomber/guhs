@@ -101,13 +101,13 @@ public final class LanddiertjesFeature {
 
     // --- picked up (the whole critter in the item) -------------------------------------------------------------------------------
     public static final DeferredItem<PiepDierItem> PLUISEGELTJE_ITEM = ITEMS.registerItem("pluisegeltje_item",
-            p -> new PiepDierItem(() -> PLUISEGELTJE.get(), p), new Item.Properties().stacksTo(1));
+            p -> new PiepDierItem(() -> PLUISEGELTJE.get(), p), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<PiepDierItem> GUH_KONIJNTJE_ITEM = ITEMS.registerItem("guh_konijntje_item",
-            p -> new PiepDierItem(() -> GUH_KONIJNTJE.get(), p), new Item.Properties().stacksTo(1));
+            p -> new PiepDierItem(() -> GUH_KONIJNTJE.get(), p), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<LanddierItems.EekhoorntjeItem> PLUISEEKHOORNTJE_ITEM = ITEMS.registerItem("pluiseekhoorntje_item",
-            LanddierItems.EekhoorntjeItem::new, new Item.Properties().stacksTo(1));
+            LanddierItems.EekhoorntjeItem::new, () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<PiepDierItem> SHUCKLE_ITEM = ITEMS.registerItem("shuckle_item",
-            p -> new PiepDierItem(() -> SHUCKLE.get(), p), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            p -> new PiepDierItem(() -> SHUCKLE.get(), p), () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     public static final DeferredItem<DeferredSpawnEggItem> PLUISEGELTJE_SPAWN_EGG = ITEMS.registerItem("pluisegeltje_spawn_egg",
             p -> new DeferredSpawnEggItem(PLUISEGELTJE, 0xF2D2C4, 0xB77A6A, p));
@@ -122,9 +122,9 @@ public final class LanddiertjesFeature {
     public static final FoodProperties SAPJE = new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f).alwaysEdible()
             .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 8, 0), 1f).build();
     public static final DeferredItem<LanddierItems.BessensapjeItem> BESSENSAPJE = ITEMS.registerItem("landdiertjes_bessensapje",
-            LanddierItems.BessensapjeItem::new, new Item.Properties().stacksTo(16).food(SAPJE).rarity(Rarity.UNCOMMON));
+            LanddierItems.BessensapjeItem::new, () -> new Item.Properties().stacksTo(16).food(SAPJE).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<LanddierItems.LoreItem> GUHSTEENTJE = ITEMS.registerItem("landdiertjes_guhsteentje",
-            LanddierItems.LoreItem::new, new Item.Properties());
+            LanddierItems.LoreItem::new, () -> new Item.Properties());
 
     // --- sounds (vanilla sounds, pitched, in sounds.json) -----------------------------------------------------------------------------
     public static final DeferredHolder<SoundEvent, SoundEvent> EGELTJE_SNUF = sound("landdiertjes.egeltje");

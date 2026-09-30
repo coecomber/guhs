@@ -223,8 +223,8 @@ public class MoerasheksMikaEntity extends Monster implements RangedAttackMob, Ge
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "move", 4, state -> state.setAndContinue(state.isMoving() ? WALK : IDLE)));
-        controllers.add(new AnimationController<>(this, "action", 2, state -> com.geckolib.animation.object.PlayState.STOP)
+        controllers.add(new AnimationController<>("move", 4, state -> state.setAndContinue(state.isMoving() ? WALK : IDLE)));
+        controllers.add(new AnimationController<>("action", 2, state -> com.geckolib.animation.object.PlayState.STOP)
                 .triggerableAnim("throw", THROW).triggerableAnim("nibble", NIBBLE));
     }
 

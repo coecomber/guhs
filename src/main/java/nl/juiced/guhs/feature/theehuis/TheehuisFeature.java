@@ -55,21 +55,21 @@ public final class TheehuisFeature {
 
     // --- blocks -------------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<TheeBlocks.Theetafel> THEETAFEL = BLOCKS.registerBlock("theetafel", TheeBlocks.Theetafel::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
     public static final DeferredBlock<TheeBlocks.Theepotje> THEEPOTJE = BLOCKS.registerBlock("theepotje", TheeBlocks.Theepotje::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).strength(0.6f).sound(SoundType.DECORATED_POT).noOcclusion());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).strength(0.6f).sound(SoundType.DECORATED_POT).noOcclusion());
     public static final DeferredItem<BlockItem> THEETAFEL_ITEM = ITEMS.registerItem("theetafel", p -> new TheeBlocks.LoreBlock(THEETAFEL.get(), p));
     public static final DeferredItem<BlockItem> THEEPOTJE_ITEM = ITEMS.registerItem("theepotje", p -> new TheeBlocks.LoreBlock(THEEPOTJE.get(), p));
 
     // --- items --------------------------------------------------------------------------------------------------------------
     /** Mevrouw Theelepel's best tea set: lent for the Grote Knusfeest (tag guhs:knus/theeservies). */
     public static final DeferredItem<Item> FEEST_THEESERVIES = ITEMS.registerItem("feest_theeservies", TheeBlocks.Lore::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final Map<TheeBlocks.Soort, DeferredItem<TheeBlocks.Thee>> THEE = new EnumMap<>(TheeBlocks.Soort.class);
 
     static {
         for (TheeBlocks.Soort soort : TheeBlocks.Soort.values()) {
-            THEE.put(soort, ITEMS.registerItem(soort.id(), p -> new TheeBlocks.Thee(soort, p), new Item.Properties().stacksTo(16)));
+            THEE.put(soort, ITEMS.registerItem(soort.id(), p -> new TheeBlocks.Thee(soort, p), () -> new Item.Properties().stacksTo(16)));
         }
     }
 

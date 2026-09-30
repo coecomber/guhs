@@ -1445,16 +1445,16 @@ public class GuhEntity extends TamableAnimal implements GeoEntity, Saddleable {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 5, this::mainAnimation));
-        controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("main", 5, this::mainAnimation));
+        controllers.add(new AnimationController<>("action", 0, state -> PlayState.STOP)
                 .triggerableAnim("happy", HAPPY));
         // the ender guh's wings: flapping in the air, folded on the ground
-        controllers.add(new AnimationController<>(this, "wings", 4, state -> !isEnder() ? PlayState.STOP
+        controllers.add(new AnimationController<>("wings", 4, state -> !isEnder() ? PlayState.STOP
                 : state.setAndContinue(this.onGround() || this.isInSittingPose() ? ENDER_REST : ENDER_FLAP)));
         // the Zeemeerguh's fish tail swishes
-        controllers.add(new AnimationController<>(this, "zeemeer", 4, state -> !isZeemeer() ? PlayState.STOP : state.setAndContinue(ZEEMEER_SWIM)));
+        controllers.add(new AnimationController<>("zeemeer", 4, state -> !isZeemeer() ? PlayState.STOP : state.setAndContinue(ZEEMEER_SWIM)));
         // 3.0: a story variant's own loop (the Guhtwo's hover...): feature.verhaal.VariantGedrag.animatie
-        controllers.add(new AnimationController<>(this, "variant", 4, state -> {
+        controllers.add(new AnimationController<>("variant", 4, state -> {
             nl.juiced.guhs.feature.verhaal.VariantGedrag gedrag = nl.juiced.guhs.feature.verhaal.VariantGedragen.van(this);
             RawAnimation anim = gedrag == null ? null : gedrag.animatie(this);
             return anim == null ? PlayState.STOP : state.setAndContinue(anim);

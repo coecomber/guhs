@@ -45,7 +45,7 @@ public final class BaltoSleeCommando {
                 .suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("makkelijk", "medium", "lastig"), b));
         var proef = Commands.argument("soort", StringArgumentType.word())
                 .suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("tocht", "makkelijk", "medium", "lastig"), b));
-        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("baltoslee").requires(s -> s.hasPermission(2))
+        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("baltoslee").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("vrij").executes(c -> vrij(c.getSource(), List.of(c.getSource().getPlayerOrException())))
                         .then(Commands.argument("spelers", EntityArgument.players()).executes(c -> vrij(c.getSource(), new ArrayList<>(EntityArgument.getPlayers(c, "spelers"))))))
                 .then(Commands.literal("tocht").executes(c -> tocht(c.getSource(), null))

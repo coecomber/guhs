@@ -19,6 +19,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.feature.knus.PleinSlot;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The Knuffeldal towns can't be broken or built in (every piece: the plein, the houses and the building slots of the
  * other 2.8 features): no breaking, no placing blocks, no buckets, no explosions, no griefing mobs. Doors, chests, the
@@ -49,7 +50,7 @@ public final class KnuffeldalProtection {
         return true;
     }
 
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos(), false)) {
             event.setCanceled(true);
         }

@@ -38,7 +38,7 @@ public class VisItem extends Item {
             case GUHPUFFER -> new FoodProperties.Builder().nutrition(2).saturationModifier(0.2f).alwaysEdible().build();
             case NJEGFOREL -> new FoodProperties.Builder().nutrition(5).saturationModifier(0.8f).build();
             case MIKA_MEERVAL -> new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f)
-                    .effect(() -> new MobEffectInstance(MobEffects.CONFUSION, 20 * 8), 1f)
+                    .effect(() -> new MobEffectInstance(MobEffects.NAUSEA, 20 * 8), 1f)
                     .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 20 * 15), 1f).build();
             case GOUDEN_GUHVIS -> new FoodProperties.Builder().nutrition(8).saturationModifier(1.2f).alwaysEdible()
                     .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 1), 1f)

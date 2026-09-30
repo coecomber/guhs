@@ -29,7 +29,7 @@ public final class VogelsEvents {
         }
         controleer(player);
         if ((player.tickCount + player.getId()) % VogelSpawns.AANVUL_TIJD == 0 && !player.isSpectator()
-                && player.level().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_DOMOBSPAWNING)) {
+                && player.level().getGameRules().get(net.minecraft.world.level.gamerules.GameRules.SPAWN_MOBS)) {
             VogelSpawns.aanvullen(player, player.getRandom());
         }
     }

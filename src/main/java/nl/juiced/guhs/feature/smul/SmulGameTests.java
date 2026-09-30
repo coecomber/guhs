@@ -120,7 +120,7 @@ public class SmulGameTests {
                     }
                     helper.assertTrue(game.score() == 6 && game.streak() == 5, "4x1 + the fifth at combo x2 = 6: " + game.score());
                     game.catchHapje(npc, p, game.spawnAt(world, SmulHapje.Soort.MIKA_VET, far, 0.1f));
-                    helper.assertTrue(game.score() == 1 && game.streak() == 0 && p.hasEffect(MobEffects.MOVEMENT_SLOWDOWN),
+                    helper.assertTrue(game.score() == 1 && game.streak() == 0 && p.hasEffect(MobEffects.SLOWNESS),
                             "Mika-vet: -5, the combo is broken and you're slow");
                     game.catchHapje(npc, p, game.spawnAt(world, SmulHapje.Soort.GOUD, far, 0.1f));
                     helper.assertTrue(game.score() == 11 && game.goldMode(), "golden: +10 and double points for a while");

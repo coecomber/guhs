@@ -47,7 +47,7 @@ public final class MewtwoEvents {
      */
     @SubscribeEvent
     public static void onCommands(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("mewtwo").requires(s -> s.hasPermission(2))
+        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("mewtwo").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("stap").then(Commands.argument("stap", IntegerArgumentType.integer(0, MewtwoVoortgang.KLAAR))
                         .executes(ctx -> stap(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "stap")))))
                 .then(Commands.literal("wis").executes(ctx -> {

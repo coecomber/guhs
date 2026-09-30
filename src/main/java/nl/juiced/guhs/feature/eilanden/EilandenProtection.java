@@ -17,6 +17,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The floating guh islands can't be broken (like the verstopguh house): no breaking, building, buckets, fire or
  * explosions on the islands and on the wolkenlift square below them (the ordinary ground under the islands is free).
@@ -55,7 +56,7 @@ public final class EilandenProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

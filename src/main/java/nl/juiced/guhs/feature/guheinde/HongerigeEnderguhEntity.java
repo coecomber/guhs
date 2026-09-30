@@ -395,8 +395,8 @@ public class HongerigeEnderguhEntity extends PathfinderMob implements GeoEntity 
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 5, state -> state.setAndContinue(isFlying() ? FLY : IDLE)));
-        controllers.add(new AnimationController<>(this, "wings", 4, state -> state.setAndContinue(isFlying() ? FLAP : REST)));
+        controllers.add(new AnimationController<>("main", 5, state -> state.setAndContinue(isFlying() ? FLY : IDLE)));
+        controllers.add(new AnimationController<>("wings", 4, state -> state.setAndContinue(isFlying() ? FLAP : REST)));
     }
 
     @Override

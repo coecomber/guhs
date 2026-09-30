@@ -226,7 +226,7 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
         cloud.setDuration(120);
         cloud.setWaitTime(0);
         cloud.setParticle(new DustParticleOptions(new Vector3f(0.85f, 0.7f, 0.25f), 1.5f));
-        cloud.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
+        cloud.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 2));
         this.level().addFreshEntity(cloud);
     }
 
@@ -383,8 +383,8 @@ public class OpperMikaEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 5, state -> state.setAndContinue(state.isMoving() && !isRiding() ? WALK : IDLE)));
-        controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("pounce", POUNCE));
+        controllers.add(new AnimationController<>("main", 5, state -> state.setAndContinue(state.isMoving() && !isRiding() ? WALK : IDLE)));
+        controllers.add(new AnimationController<>("action", 0, state -> PlayState.STOP).triggerableAnim("pounce", POUNCE));
     }
 
     @Override

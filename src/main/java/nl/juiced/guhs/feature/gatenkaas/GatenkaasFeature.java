@@ -73,48 +73,48 @@ public final class GatenkaasFeature {
                 .sound(SoundType.DEEPSLATE_BRICKS);
     }
 
-    public static final DeferredBlock<Block> GATENKAAS = BLOCKS.registerSimpleBlock("gatenkaas", cheese());
+    public static final DeferredBlock<Block> GATENKAAS = BLOCKS.registerSimpleBlock("gatenkaas", () -> cheese());
     public static final DeferredBlock<Block> GATENKAAS_STENEN = BLOCKS.registerSimpleBlock("gatenkaas_stenen",
-            cheese().sound(SoundType.TUFF_BRICKS));
+            () -> cheese().sound(SoundType.TUFF_BRICKS));
     public static final DeferredBlock<StairBlock> GATENKAAS_STENEN_TRAP = BLOCKS.registerBlock("gatenkaas_stenen_trap",
-            p -> new StairBlock(GATENKAAS_STENEN.get().defaultBlockState(), p), cheese().sound(SoundType.TUFF_BRICKS));
+            p -> new StairBlock(GATENKAAS_STENEN.get().defaultBlockState(), p), () -> cheese().sound(SoundType.TUFF_BRICKS));
     public static final DeferredBlock<SlabBlock> GATENKAAS_STENEN_PLAAT = BLOCKS.registerBlock("gatenkaas_stenen_plaat",
-            SlabBlock::new, cheese().sound(SoundType.TUFF_BRICKS));
+            SlabBlock::new, () -> cheese().sound(SoundType.TUFF_BRICKS));
     public static final DeferredBlock<WallBlock> GATENKAAS_STENEN_MUUR = BLOCKS.registerBlock("gatenkaas_stenen_muur",
-            WallBlock::new, cheese().sound(SoundType.TUFF_BRICKS).forceSolidOn());
+            WallBlock::new, () -> cheese().sound(SoundType.TUFF_BRICKS).forceSolidOn());
     /** Old, dark, aged cheese: the building stone of the Stille Voorraadkelder (smelt gatenkaas bricks). */
     public static final DeferredBlock<Block> BELEGEN_KAAS_STENEN = BLOCKS.registerSimpleBlock("belegen_kaas_stenen",
-            aged());
+            () -> aged());
     public static final DeferredBlock<Block> BELEGEN_KAAS_TEGELS = BLOCKS.registerSimpleBlock("belegen_kaas_tegels",
-            aged().sound(SoundType.DEEPSLATE_TILES));
+            () -> aged().sound(SoundType.DEEPSLATE_TILES));
     public static final DeferredBlock<StairBlock> BELEGEN_KAAS_TRAP = BLOCKS.registerBlock("belegen_kaas_trap",
-            p -> new StairBlock(BELEGEN_KAAS_STENEN.get().defaultBlockState(), p), aged());
+            p -> new StairBlock(BELEGEN_KAAS_STENEN.get().defaultBlockState(), p), () -> aged());
     public static final DeferredBlock<SlabBlock> BELEGEN_KAAS_PLAAT = BLOCKS.registerBlock("belegen_kaas_plaat",
-            SlabBlock::new, aged());
+            SlabBlock::new, () -> aged());
     public static final DeferredBlock<WallBlock> BELEGEN_KAAS_MUUR = BLOCKS.registerBlock("belegen_kaas_muur",
-            WallBlock::new, aged().forceSolidOn());
+            WallBlock::new, () -> aged().forceSolidOn());
 
     // --- decoration: stalactites, glowing moss, the ore -----------------------------------------------------------------
     public static final DeferredBlock<KaasStalactietBlock> KAAS_STALACTIET = BLOCKS.registerBlock("kaas_stalactiet", KaasStalactietBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).forceSolidOn().noOcclusion().sound(SoundType.POINTED_DRIPSTONE)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).forceSolidOn().noOcclusion().sound(SoundType.POINTED_DRIPSTONE)
                     .randomTicks().strength(1.2f, 3f).dynamicShape().offsetType(BlockBehaviour.OffsetType.XZ).pushReaction(PushReaction.DESTROY)
                     .isRedstoneConductor((s, l, p) -> false));
     public static final DeferredBlock<Block> KAASMOS = BLOCKS.registerSimpleBlock("kaasmos",
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.1f).sound(SoundType.MOSS).lightLevel(s -> 9)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.1f).sound(SoundType.MOSS).lightLevel(s -> 9)
                     .pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<CarpetBlock> KAASMOS_TAPIJT = BLOCKS.registerBlock("kaasmos_tapijt", CarpetBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.1f).sound(SoundType.MOSS_CARPET).lightLevel(s -> 6)
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.1f).sound(SoundType.MOSS_CARPET).lightLevel(s -> 6)
                     .pushReaction(PushReaction.DESTROY));
     public static final DeferredBlock<DropExperienceBlock> KAASKORRELERTS = BLOCKS.registerBlock("kaaskorrelerts",
             p -> new DropExperienceBlock(UniformInt.of(2, 5), p),
-            cheese().strength(2.5f, 4f).lightLevel(s -> 3));
+            () -> cheese().strength(2.5f, 4f).lightLevel(s -> 3));
 
     // --- de Stille Voorraadkelder --------------------------------------------------------------------------------------
     public static final DeferredBlock<KnabbelsensorBlock> KNABBELSENSOR = BLOCKS.registerBlock("knabbelsensor", KnabbelsensorBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1.5f).sound(SoundType.SCULK_SENSOR).noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1.5f).sound(SoundType.SCULK_SENSOR).noOcclusion()
                     .lightLevel(s -> s.getValue(KnabbelsensorBlock.ACTIVE) ? 8 : 2).isRedstoneConductor((s, l, p) -> false));
     public static final DeferredBlock<KnabbelschreeuwerBlock> KNABBELSCHREEUWER = BLOCKS.registerBlock("knabbelschreeuwer",
-            KnabbelschreeuwerBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(3f, 3f)
+            KnabbelschreeuwerBlock::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).strength(3f, 3f)
                     .sound(SoundType.SCULK_SHRIEKER).noOcclusion().lightLevel(s -> s.getValue(KnabbelschreeuwerBlock.SHRIEKING) ? 10 : 0)
                     .isRedstoneConductor((s, l, p) -> false));
 
@@ -122,7 +122,7 @@ public final class GatenkaasFeature {
     public static final DeferredHolder<MobEffect, MobEffect> STIL = MOB_EFFECTS.register("stil", StilEffect::new);
 
     /** The crunchy crystal from old cheese (like the crunchy bits in old Gouda). Rare: only in the gatenkaas. */
-    public static final DeferredItem<Item> KAASKORREL = ITEMS.registerSimpleItem("kaaskorrel", new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> KAASKORREL = ITEMS.registerSimpleItem("kaaskorrel", () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     /** A knabbel you nibble very, very quietly: a while guhs:stil. */
     public static final DeferredItem<Item> STILLE_KNABBEL = ITEMS.registerSimpleItem("stille_knabbel", new Item.Properties().rarity(Rarity.UNCOMMON)
             .food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).alwaysEdible()

@@ -95,7 +95,7 @@ public final class BouwCheck {
     // --- command --------------------------------------------------------------------------------------------------------
 
     public static void registerCommands(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("bouwcheck").requires(s -> s.hasPermission(2))
+        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("bouwcheck").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("stop").executes(c -> stop(c.getSource())))
                 .then(Commands.argument("dimensie", DimensionArgument.dimension())
                         .then(Commands.argument("straal", IntegerArgumentType.integer(16, 30000))

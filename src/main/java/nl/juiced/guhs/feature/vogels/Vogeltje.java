@@ -625,11 +625,11 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        AnimationController<Vogeltje> beweging = new AnimationController<>(this, "beweging", 4, state -> {
+        AnimationController<Vogeltje> beweging = new AnimationController<>("beweging", 4, state -> {
             state.setAnimation(beweging(state));
             return PlayState.CONTINUE;
         });
-        AnimationController<Vogeltje> actie = new AnimationController<>(this, "actie", 2, state -> PlayState.STOP);
+        AnimationController<Vogeltje> actie = new AnimationController<>("actie", 2, state -> PlayState.STOP);
         actie.triggerableAnim("peck", anim("peck", false));
         for (String a : extraActies()) {
             actie.triggerableAnim(a, anim(a, false));

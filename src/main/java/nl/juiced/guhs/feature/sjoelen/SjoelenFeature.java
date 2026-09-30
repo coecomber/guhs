@@ -57,26 +57,26 @@ public final class SjoelenFeature {
     }
 
     /** The waxed sjoelbak wood (also a nice building block). */
-    public static final DeferredBlock<Block> BAKPLANK = BLOCKS.registerSimpleBlock("sjoelen_bakplank", BlockBehaviour.Properties.ofFullCopy(Blocks.BIRCH_PLANKS));
+    public static final DeferredBlock<Block> BAKPLANK = BLOCKS.registerSimpleBlock("sjoelen_bakplank", () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BIRCH_PLANKS));
     /** The head of the sjoelbak: you slide from here (Opoe finds the bak by it). */
-    public static final DeferredBlock<SjoelenBlocks.Deel> KOP = BLOCKS.registerBlock("sjoelen_kop", SjoelenBlocks.Deel::new, bakOnly(Blocks.BIRCH_PLANKS));
+    public static final DeferredBlock<SjoelenBlocks.Deel> KOP = BLOCKS.registerBlock("sjoelen_kop", SjoelenBlocks.Deel::new, () -> bakOnly(Blocks.BIRCH_PLANKS));
     /** The gate bar with its four openings 2-3-4-1. */
     public static final DeferredBlock<SjoelenBlocks.Deel> POORT = BLOCKS.registerBlock("sjoelen_poort", SjoelenBlocks.Deel::new,
-            bakOnly(Blocks.BIRCH_PLANKS).noOcclusion());
+            () -> bakOnly(Blocks.BIRCH_PLANKS).noOcclusion());
     /** The lanes behind the gates, with their dividers. */
     public static final DeferredBlock<SjoelenBlocks.Deel> VAK = BLOCKS.registerBlock("sjoelen_vak", SjoelenBlocks.Deel::new,
-            bakOnly(Blocks.BIRCH_PLANKS).noOcclusion());
+            () -> bakOnly(Blocks.BIRCH_PLANKS).noOcclusion());
     /** A stack of sjoelschijven (decoration). */
     public static final DeferredBlock<SjoelenBlocks.Stapel> STAPEL = BLOCKS.registerBlock("sjoelen_stapel", SjoelenBlocks.Stapel::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).noOcclusion());
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.OAK_PLANKS).noOcclusion());
 
     public static final DeferredItem<BlockItem> BAKPLANK_ITEM = ITEMS.registerSimpleBlockItem(BAKPLANK);
     public static final DeferredItem<BlockItem> STAPEL_ITEM = ITEMS.registerSimpleBlockItem(STAPEL);
     /** The sjoel currency: earned per turn, spent in Opoe's shop. */
-    public static final DeferredItem<Item> SJOELSCHIJFJE = ITEMS.registerSimpleItem("sjoelschijfje", new Item.Properties().rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<Item> SJOELSCHIJFJE = ITEMS.registerSimpleItem("sjoelschijfje", () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     /** The 20 loaned pucks (only while you play). */
     public static final DeferredItem<SjoelSchijvenItem> SCHIJVEN = ITEMS.registerItem("sjoelen_schijven", SjoelSchijvenItem::new,
-            new Item.Properties().stacksTo(SjoelGame.PUCKS).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(SjoelGame.PUCKS).rarity(Rarity.UNCOMMON));
 
     public static final DeferredHolder<EntityType<?>, EntityType<SjoelSchijfEntity>> SCHIJF = ENTITIES.register("sjoelschijf",
             () -> EntityType.Builder.<SjoelSchijfEntity>of(SjoelSchijfEntity::new, MobCategory.MISC)

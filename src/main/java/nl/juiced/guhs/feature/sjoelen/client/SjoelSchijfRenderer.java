@@ -17,6 +17,7 @@ import net.minecraft.resources.Identifier;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.sjoelen.SjoelSchijfEntity;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /** A sjoelschijf: a round wooden puck (two crossed boxes) with a little guh face on top, turning as it slides. */
 public class SjoelSchijfRenderer extends EntityRenderer<SjoelSchijfEntity> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Guhs.id("sjoelschijf"), "main");
@@ -42,7 +43,7 @@ public class SjoelSchijfRenderer extends EntityRenderer<SjoelSchijfEntity> {
         pose.pushPose();
         pose.mulPose(Axis.YP.rotation(entity.draai()));
         pose.scale(-1, -1, 1);
-        puck.render(pose, buffers.getBuffer(RenderType.entityCutoutNoCull(getTextureLocation(entity))), light, OverlayTexture.NO_OVERLAY);
+        puck.render(pose, buffers.getBuffer(RenderTypes.entityCutout(getTextureLocation(entity))), light, OverlayTexture.NO_OVERLAY);
         pose.popPose();
         super.render(entity, entityYaw, partialTick, pose, buffers, light);
     }

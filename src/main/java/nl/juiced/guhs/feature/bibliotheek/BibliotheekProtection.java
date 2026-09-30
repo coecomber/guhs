@@ -33,6 +33,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.Guhs;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The guh library can't be broken (like the verstopguh house): no breaking, building, emptying buckets, lighting fires
  * or blowing it up, mobs don't grief it, and the decorations stay put (no taking books out of the chiseled bookshelves,
@@ -77,7 +78,7 @@ public final class BibliotheekProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

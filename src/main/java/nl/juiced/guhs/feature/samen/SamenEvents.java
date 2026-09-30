@@ -67,7 +67,7 @@ public final class SamenEvents {
 
     @SubscribeEvent
     public static void onCommands(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("samen").requires(s -> s.hasPermission(2))
+        event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("samen").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("hartjes").then(Commands.argument("niveau", StringArgumentType.word())
                         .suggests((ctx, b) -> net.minecraft.commands.SharedSuggestionProvider.suggest(new String[]{"lief", "mega", "zielsguh"}, b))
                         .executes(ctx -> hartjes(ctx.getSource(), StringArgumentType.getString(ctx, "niveau")))))

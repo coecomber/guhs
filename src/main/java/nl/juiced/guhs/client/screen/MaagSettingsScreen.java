@@ -17,6 +17,7 @@ import nl.juiced.guhs.network.MaagPayloads;
 import nl.juiced.guhs.world.GuhWorldData;
 
 import net.minecraft.core.UUIDUtil;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /** The Maagenzym-guh's menu: who may come into your stomach (and build), and how big it is / can get. */
 public class MaagSettingsScreen extends Screen {
     private static final int W = 260, H = 230;
@@ -38,7 +39,7 @@ public class MaagSettingsScreen extends Screen {
     }
 
     private static void send(int action, String text) {
-        PacketDistributor.sendToServer(new MaagPayloads.MaagSettingsAction(action, text));
+        ClientPacketDistributor.sendToServer(new MaagPayloads.MaagSettingsAction(action, text));
     }
 
     @Override

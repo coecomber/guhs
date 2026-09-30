@@ -231,8 +231,8 @@ public class MikaEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 5, this::mainAnimation));
-        controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>("main", 5, this::mainAnimation));
+        controllers.add(new AnimationController<>("action", 0, state -> PlayState.STOP)
                 .triggerableAnim("pounce", POUNCE));
     }
 

@@ -20,6 +20,7 @@ import com.geckolib.renderer.layer.builtin.BlockAndItemGeoLayer;
 import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * Renders the guh from assets/guhs/geo/entity/guh.geo.json + textures/entity/guh.png (edit both in Blockbench).
  * GeckoLib already applies the SCALE attribute (random guh size); here we add baby size and the "gravity" squish.
@@ -91,7 +92,7 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity> {
             public void render(PoseStack poseStack, GuhEntity guh, BakedGeoModel model, net.minecraft.client.renderer.RenderType renderType,
                                MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
                 if (guh.getVariant() == GuhVariant.STARRY || guh.getVariant() == GuhVariant.ENDER || guh.getVariant() == GuhVariant.VAHOEGE_ENDER) {
-                    var type = net.minecraft.client.renderer.RenderType.eyes(guh.getVariant() == GuhVariant.ENDER ? (slaapt(guh) ? slaap(enderGlow) : enderGlow)
+                    var type = net.minecraft.client.renderer.rendertype.RenderTypes.eyes(guh.getVariant() == GuhVariant.ENDER ? (slaapt(guh) ? slaap(enderGlow) : enderGlow)
                             : guh.getVariant() == GuhVariant.VAHOEGE_ENDER ? vahoegeGlow : glow);
                     getRenderer().reRender(model, poseStack, bufferSource, guh, type, bufferSource.getBuffer(type), partialTick,
                             net.minecraft.client.renderer.LightTexture.FULL_BRIGHT, packedOverlay, 0xFFFFFFFF);
@@ -105,7 +106,7 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity> {
                                MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
                 Identifier glow = nl.juiced.guhs.feature.verhaal.client.VariantUiterlijk.glow(guh);
                 if (glow != null) {
-                    var type = net.minecraft.client.renderer.RenderType.eyes(glow);
+                    var type = net.minecraft.client.renderer.rendertype.RenderTypes.eyes(glow);
                     getRenderer().reRender(model, poseStack, bufferSource, guh, type, bufferSource.getBuffer(type), partialTick,
                             net.minecraft.client.renderer.LightTexture.FULL_BRIGHT, packedOverlay, 0xFFFFFFFF);
                 }
@@ -206,7 +207,7 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity> {
     @Override
     public net.minecraft.client.renderer.RenderType getRenderType(GuhEntity guh, Identifier texture, @javax.annotation.Nullable MultiBufferSource bufferSource,
                                                                  float partialTick) {
-        return guh.getVariant() == GuhVariant.GHOST ? net.minecraft.client.renderer.RenderType.entityTranslucent(texture)
+        return guh.getVariant() == GuhVariant.GHOST ? net.minecraft.client.renderer.rendertype.RenderTypes.entityTranslucent(texture)
                 : super.getRenderType(guh, texture, bufferSource, partialTick);
     }
 

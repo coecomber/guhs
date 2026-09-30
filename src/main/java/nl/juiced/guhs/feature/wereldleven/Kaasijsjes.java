@@ -159,7 +159,7 @@ public final class Kaasijsjes {
     public static void eet(LivingEntity entity, Smaak smaak) {
         switch (smaak) {
             case ROZE -> entity.addEffect(new MobEffectInstance(WereldlevenFeature.BLOSJES, 20 * 60, 0));
-            case MINT -> entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20 * 45, 0));
+            case MINT -> entity.addEffect(new MobEffectInstance(MobEffects.SPEED, 20 * 45, 0));
             case CHOCO -> entity.addEffect(new MobEffectInstance(WereldlevenFeature.ZWEVERIG, 20 * 30, 0));
             case BLOESEM -> {
                 entity.addEffect(new MobEffectInstance(WereldlevenFeature.BLOSJES, 20 * 90, 0));
@@ -167,7 +167,7 @@ public final class Kaasijsjes {
             }
             case ZONNETJE -> {
                 entity.addEffect(new MobEffectInstance(WereldlevenFeature.ZWEVERIG, 20 * 40, 0));
-                entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20 * 40, 0));
+                entity.addEffect(new MobEffectInstance(MobEffects.SPEED, 20 * 40, 0));
             }
             case APPELTAART -> {
                 entity.addEffect(new MobEffectInstance(WereldlevenFeature.BLOSJES, 20 * 60, 0));

@@ -16,6 +16,7 @@ import nl.juiced.guhs.feature.emotes.Emote;
 import nl.juiced.guhs.feature.emotes.EmotePayload;
 import nl.juiced.guhs.feature.samen.SamenBeloning;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The emote picker (Guh menu &gt; Emotes): per emote a star (favourite), "Nu" (once) and "Blijf" (keep doing it until
  * Stop), plus Stop, "no favourite" and Back. Labels follow the guh's synced state.
@@ -44,7 +45,7 @@ public class EmotePickerScreen extends Screen {
     }
 
     private void send(int action, int emote) {
-        PacketDistributor.sendToServer(new EmotePayload(guh.getId(), action, emote));
+        ClientPacketDistributor.sendToServer(new EmotePayload(guh.getId(), action, emote));
     }
 
     /** May the player pick this emote (hartjes emotes: only once unlocked)? */

@@ -21,6 +21,7 @@ import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.world.ModDimensions;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * The guh golf course can't be broken (like the verstopguh house): no breaking, building, buckets, fire or explosions,
  * and mobs don't grief it. Opening things is fine. Players in creative mode may change it.
@@ -47,7 +48,7 @@ public final class GolfProtection {
     }
 
     @SubscribeEvent
-    public static void onBreak(BlockEvent.BreakEvent event) {
+    public static void onBreak(BreakBlockEvent event) {
         if (denied(event.getPlayer(), event.getPos())) {
             event.setCanceled(true);
         }

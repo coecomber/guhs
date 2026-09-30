@@ -21,6 +21,7 @@ import nl.juiced.guhs.feature.sterrenwacht.SterrenwachtFeature;
 import nl.juiced.guhs.feature.sterrenwacht.SterrenwachtPayloads;
 import nl.juiced.guhs.feature.sterrenwacht.Sterrenkijken;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Looking through a guh telescope: a round piece of night sky (with the pink Guhmensie moon) full of stars, and
  * somewhere among them one guh constellation. The card on the right shows its shape; click a star and then the next
@@ -153,7 +154,7 @@ public class TelescoopScherm extends Screen {
         feestTijd = 0;
         gekozen = -1;
         verstuurd = true;
-        PacketDistributor.sendToServer(new SterrenwachtPayloads.Klaar(beeld.ordinal(), List.copyOf(volgorde), fouten));
+        ClientPacketDistributor.sendToServer(new SterrenwachtPayloads.Klaar(beeld.ordinal(), List.copyOf(volgorde), fouten));
         if (minecraft != null) {
             minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SterrenwachtFeature.STERRENBEELD_GELUID.get(), 1.2f, 0.8f));
         }
@@ -203,7 +204,7 @@ public class TelescoopScherm extends Screen {
         if (!verstuurd) {
             verstuurd = true;
             if (minecraft != null && minecraft.getConnection() != null) {
-                PacketDistributor.sendToServer(new SterrenwachtPayloads.Stop());
+                ClientPacketDistributor.sendToServer(new SterrenwachtPayloads.Stop());
             }
         }
         super.removed();

@@ -12,6 +12,7 @@ import nl.juiced.guhs.feature.meppen.MepGame;
 import nl.juiced.guhs.feature.meppen.MepPayloads;
 import nl.juiced.guhs.feature.klassiekers.client.NiveauKeuze;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Mepguh's screen: start a game of Mika meppen (or stop yours / watch someone else's), how it works, your record and
  * the hall's, and the shop. Makkelijk, medium or lastig: three level buttons above the play button.
@@ -29,7 +30,7 @@ public class MepScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new MepPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new MepPayloads.Action(npcId, action));
         onClose();
     }
 

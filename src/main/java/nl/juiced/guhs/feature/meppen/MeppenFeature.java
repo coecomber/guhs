@@ -36,20 +36,20 @@ public final class MeppenFeature {
 
     /** A hole of the whack-a-Mika board. */
     public static final DeferredBlock<net.minecraft.world.level.block.Block> MEP_GAT = BLOCKS.registerSimpleBlock("mika_mep_gat",
-            unbreakable(MapColor.COLOR_PINK, SoundType.WOOD));
+            () -> unbreakable(MapColor.COLOR_PINK, SoundType.WOOD));
     /** A head popped up out of a hole (only the game places these). */
     public static final DeferredBlock<MepBlocks.MepKop> MEP_KOP = BLOCKS.registerBlock("mika_mep_kop", MepBlocks.MepKop::new,
-            unbreakable(MapColor.COLOR_PINK, SoundType.WOOL).noOcclusion());
+            () -> unbreakable(MapColor.COLOR_PINK, SoundType.WOOL).noOcclusion());
     public static final DeferredBlock<MepBlocks.MikaTrofee> TROFEE = BLOCKS.registerBlock("mika_mep_trofee", MepBlocks.MikaTrofee::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(0.8f).sound(SoundType.WOOL).noOcclusion());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.GOLD).strength(0.8f).sound(SoundType.WOOL).noOcclusion());
 
     public static final DeferredItem<net.minecraft.world.item.BlockItem> MEP_GAT_ITEM = ITEMS.registerSimpleBlockItem(MEP_GAT);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> TROFEE_ITEM = ITEMS.registerSimpleBlockItem(TROFEE);
     /** The currency of the Mepguh's shop: earned by playing (more for a better score). */
-    public static final DeferredItem<Item> MEPMUNT = ITEMS.registerSimpleItem("mepmunt", new Item.Properties());
+    public static final DeferredItem<Item> MEPMUNT = ITEMS.registerSimpleItem("mepmunt", () -> new Item.Properties());
     /** The loaned mallet (taken back after the game). */
     public static final DeferredItem<MepHamerItem> MEP_HAMER = ITEMS.registerItem("mika_mep_hamer", MepHamerItem::new,
-            new Item.Properties().stacksTo(1));
+            () -> new Item.Properties().stacksTo(1));
 
     private static final MeppenRole ROLE = new MeppenRole();
 

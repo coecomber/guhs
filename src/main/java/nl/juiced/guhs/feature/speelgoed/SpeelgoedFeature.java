@@ -64,16 +64,16 @@ public final class SpeelgoedFeature {
     public static final DeferredBlock<SchommelBlock> SCHOMMEL = BLOCKS.register("guh_schommel", () -> new SchommelBlock(props()));
     public static final DeferredBlock<TunnelBlock> TUNNEL = BLOCKS.register("pluizige_tunnel", () -> new TunnelBlock(props().strength(0.6f, 2f)));
     /** The invisible parts of the glijbaantje, the wip and the schommel (no item: breaking one breaks the toy). */
-    public static final DeferredBlock<SpeelDeelBlock> DEEL = BLOCKS.registerBlock("speelgoed_deel", SpeelDeelBlock::new, props().noLootTable());
+    public static final DeferredBlock<SpeelDeelBlock> DEEL = BLOCKS.registerBlock("speelgoed_deel", SpeelDeelBlock::new, () -> props().noLootTable());
 
     public static final DeferredItem<KnabbelbalItem> KNABBELBAL_ITEM = ITEMS.registerItem("knabbelbal", KnabbelbalItem::new,
-            new Item.Properties().stacksTo(16));
+            () -> new Item.Properties().stacksTo(16));
 
     static {
-        ITEMS.registerItem("guh_glijbaantje", p -> new SpeelgoedBlockItem(GLIJBAANTJE.get(), p), new Item.Properties());
-        ITEMS.registerItem("guh_wip", p -> new SpeelgoedBlockItem(WIP.get(), p), new Item.Properties());
-        ITEMS.registerItem("guh_schommel", p -> new SpeelgoedBlockItem(SCHOMMEL.get(), p), new Item.Properties());
-        ITEMS.registerItem("pluizige_tunnel", p -> new SpeelgoedBlockItem(TUNNEL.get(), p), new Item.Properties());
+        ITEMS.registerItem("guh_glijbaantje", p -> new SpeelgoedBlockItem(GLIJBAANTJE.get(), p), () -> new Item.Properties());
+        ITEMS.registerItem("guh_wip", p -> new SpeelgoedBlockItem(WIP.get(), p), () -> new Item.Properties());
+        ITEMS.registerItem("guh_schommel", p -> new SpeelgoedBlockItem(SCHOMMEL.get(), p), () -> new Item.Properties());
+        ITEMS.registerItem("pluizige_tunnel", p -> new SpeelgoedBlockItem(TUNNEL.get(), p), () -> new Item.Properties());
     }
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ToestelBlockEntity>> TOESTEL_BE = BLOCK_ENTITIES.register("speelgoed_toestel",

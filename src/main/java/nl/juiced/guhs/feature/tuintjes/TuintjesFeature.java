@@ -53,9 +53,9 @@ public final class TuintjesFeature {
 
     // --- blocks ------------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<GuhBloempotBlock> GUH_BLOEMPOT = BLOCKS.registerBlock("guh_bloempot", GuhBloempotBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.8f).sound(SoundType.DECORATED_POT).noOcclusion().randomTicks());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.8f).sound(SoundType.DECORATED_POT).noOcclusion().randomTicks());
     public static final DeferredBlock<GuhMoestuinbakBlock> GUH_MOESTUINBAK = BLOCKS.registerBlock("guh_moestuinbak", GuhMoestuinbakBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.5f).sound(SoundType.WOOD).noOcclusion().randomTicks().ignitedByLava());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(1.5f).sound(SoundType.WOOD).noOcclusion().randomTicks().ignitedByLava());
 
     static {
         ITEMS.registerItem("guh_bloempot", p -> new BoerderijItems.LoreBlock(GUH_BLOEMPOT.get(), p));
@@ -63,15 +63,15 @@ public final class TuintjesFeature {
     }
 
     // --- items -------------------------------------------------------------------------------------------------------------
-    public static final DeferredItem<GuhGieterItem> GUH_GIETER = ITEMS.registerItem("guh_gieter", GuhGieterItem::new, new Item.Properties());
-    public static final DeferredItem<BoerderijItems.Lore> KNABBELZAADJES = ITEMS.registerItem("knabbelzaadjes", BoerderijItems.Lore::new, new Item.Properties());
-    public static final DeferredItem<BoerderijItems.Lore> THEEKRUIDZAADJES = ITEMS.registerItem("theekruidzaadjes", BoerderijItems.Lore::new, new Item.Properties());
-    public static final DeferredItem<BoerderijItems.Lore> GUHBLOEMZAADJES = ITEMS.registerItem("guhbloemzaadjes", BoerderijItems.Lore::new, new Item.Properties());
-    public static final DeferredItem<BoerderijItems.Lore> KNABBELGRAAN = ITEMS.registerItem("knabbelgraan", BoerderijItems.Lore::new, new Item.Properties());
-    public static final DeferredItem<BoerderijItems.Lore> THEEKRUID = ITEMS.registerItem("theekruid", BoerderijItems.Lore::new, new Item.Properties());
-    public static final DeferredItem<BoerderijItems.Lore> GUHBLOEMETJE = ITEMS.registerItem("guhbloemetje", BoerderijItems.Lore::new, new Item.Properties());
+    public static final DeferredItem<GuhGieterItem> GUH_GIETER = ITEMS.registerItem("guh_gieter", GuhGieterItem::new, () -> new Item.Properties());
+    public static final DeferredItem<BoerderijItems.Lore> KNABBELZAADJES = ITEMS.registerItem("knabbelzaadjes", BoerderijItems.Lore::new, () -> new Item.Properties());
+    public static final DeferredItem<BoerderijItems.Lore> THEEKRUIDZAADJES = ITEMS.registerItem("theekruidzaadjes", BoerderijItems.Lore::new, () -> new Item.Properties());
+    public static final DeferredItem<BoerderijItems.Lore> GUHBLOEMZAADJES = ITEMS.registerItem("guhbloemzaadjes", BoerderijItems.Lore::new, () -> new Item.Properties());
+    public static final DeferredItem<BoerderijItems.Lore> KNABBELGRAAN = ITEMS.registerItem("knabbelgraan", BoerderijItems.Lore::new, () -> new Item.Properties());
+    public static final DeferredItem<BoerderijItems.Lore> THEEKRUID = ITEMS.registerItem("theekruid", BoerderijItems.Lore::new, () -> new Item.Properties());
+    public static final DeferredItem<BoerderijItems.Lore> GUHBLOEMETJE = ITEMS.registerItem("guhbloemetje", BoerderijItems.Lore::new, () -> new Item.Properties());
     public static final DeferredItem<BoerderijItems.Lore> FEESTBOEKET = ITEMS.registerItem("feestboeket", BoerderijItems.Lore::new,
-            new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
+            () -> new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
 
     // --- particles and sounds --------------------------------------------------------------------------------------------
     /** A drop from the gieter (or from a guh that waters). */

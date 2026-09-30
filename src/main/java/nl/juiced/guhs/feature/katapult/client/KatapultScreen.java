@@ -17,6 +17,7 @@ import nl.juiced.guhs.feature.katapult.KatapultPayloads;
 import nl.juiced.guhs.feature.klassiekers.Klassiekers;
 import nl.juiced.guhs.feature.spelen.Niveau;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Kapitein Floepguh's screen: pick a level (makkelijk 5 pluisballen per fort and an aiming line, medium 4, lastig 3 and
  * wind) and start with the play button, or stop your run, your record and the castle record per level, and his little
@@ -37,7 +38,7 @@ public class KatapultScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new KatapultPayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new KatapultPayloads.Action(npcId, action));
         onClose();
     }
 

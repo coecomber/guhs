@@ -32,6 +32,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.Guhs;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 /**
  * What the three "buiten" features of 2.8 (sterrenwacht, ballon, kamperen) share: a line said by a named character,
  * the shown advancements of the Knuffeldal tab, a block item with a lore line, and the protection of a loose structure
@@ -154,7 +155,7 @@ public final class Buiten {
             return true;
         }
 
-        private void onBreak(BlockEvent.BreakEvent event) {
+        private void onBreak(BreakBlockEvent event) {
             if (denied(event.getPlayer(), event.getPos(), false)) {
                 event.setCanceled(true);
             }

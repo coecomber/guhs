@@ -25,6 +25,7 @@ import com.geckolib.cache.model.GeoBone;
 import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * A customer guh: the guh model (without clothes or variant extras) in one of a few fur colours - the feestklant is a
  * golden guh - with its order bubble over its head: a white speech bubble with the pastry it wants and a patience bar
@@ -86,7 +87,7 @@ public class KlantRenderer extends GeoEntityRenderer<BakkerijKlant> {
             pose.mulPose(Axis.ZP.rotationDegrees(Mth.sin((klant.neeTimer() - partialTick) * 1.4f) * 14f));
         }
         int light = LightCoordsUtil.FULL_BRIGHT;
-        VertexConsumer bubbel = buffers.getBuffer(RenderType.entityTranslucent(BUBBEL));
+        VertexConsumer bubbel = buffers.getBuffer(RenderTypes.entityTranslucent(BUBBEL));
         // the bubble: 24 x 24 of the 32 x 32 texture, its little tail pointing down to the guh
         quad(bubbel, pose, -0.36f, -0.3f, 0.36f, 0.42f, 0, 0, 24 / 32f, 24 / 32f, 0xFFFFFFFF, light, 0f);
         // the patience bar under the pastry (the white corner of the texture, tinted)
@@ -98,7 +99,7 @@ public class KlantRenderer extends GeoEntityRenderer<BakkerijKlant> {
         // the pastry itself: its item sprite, flat in the bubble
         ItemStack stack = new ItemStack(BakkerijFeature.bakje(recept));
         TextureAtlasSprite sprite = Minecraft.getInstance().getItemRenderer().getModel(stack, klant.level(), null, 0).getParticleIcon();
-        VertexConsumer item = buffers.getBuffer(RenderType.entityCutoutNoCull(TextureAtlas.LOCATION_BLOCKS));
+        VertexConsumer item = buffers.getBuffer(RenderTypes.entityCutout(TextureAtlas.LOCATION_BLOCKS));
         quad(item, pose, -0.2f, -0.08f, 0.2f, 0.32f, sprite.getU0(), sprite.getV0(), sprite.getU1(), sprite.getV1(), 0xFFFFFFFF, light, 0.03f);
         pose.popPose();
     }

@@ -25,6 +25,7 @@ import nl.juiced.guhs.feature.wereldleven.WereldlevenFeature;
 import nl.juiced.guhs.feature.wereldleven.WereldlevenPayloads;
 import org.lwjgl.glfw.GLFW;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The grijpmachine's claw screen: the glass case seen from the front (the plushies on its floor, further back is higher
  * and smaller), a map of the floor seen from above, and the claw. Steer it with WASD or the arrow keys, drop it with the
@@ -103,7 +104,7 @@ public class GrijpmachineScherm extends Screen {
         grijpKnop = addRenderableWidget(Button.builder(Component.translatable("gui.guhs.wereldleven.grijp_knop"), b -> laatZakken())
                 .bounds(left + 234, top + 124, 86, 20).build());
         opnieuwKnop = addRenderableWidget(Button.builder(Component.translatable("gui.guhs.wereldleven.grijp_opnieuw"),
-                b -> PacketDistributor.sendToServer(new WereldlevenPayloads.GrijpOpnieuw(pos))).bounds(left + 234, top + 148, 86, 20).build());
+                b -> ClientPacketDistributor.sendToServer(new WereldlevenPayloads.GrijpOpnieuw(pos))).bounds(left + 234, top + 148, 86, 20).build());
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.knuffeldal.doei"), b -> onClose())
                 .bounds(left + 234, top + H - 26, 86, 20).build());
         knoppen();
@@ -140,7 +141,7 @@ public class GrijpmachineScherm extends Screen {
     private void verstuur() {
         if (!verstuurd) {
             verstuurd = true;
-            PacketDistributor.sendToServer(new WereldlevenPayloads.Grijp(pos, klauwX, klauwZ));
+            ClientPacketDistributor.sendToServer(new WereldlevenPayloads.Grijp(pos, klauwX, klauwZ));
         }
     }
 

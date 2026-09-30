@@ -24,6 +24,7 @@ import nl.juiced.guhs.feature.gids.client.GidsLijst;
 import nl.juiced.guhs.feature.gids.client.GidsTekst;
 import nl.juiced.guhs.feature.guhkamer.GuhkamerPayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * The Guhbel's screen (2.10): on the left your own guhs nearby ("Bij jou": click one to send it to the Guhkamer), on the
  * right the guests of your Guhkamer ("In de Guhkamer": click one to call it to you), and how big your room is (it grows
@@ -54,7 +55,7 @@ public class GuhbelScreen extends Screen {
     }
 
     private void stuur(GuhkamerPayloads.Actie actie, String id) {
-        PacketDistributor.sendToServer(new GuhkamerPayloads.Doe(actie.ordinal(), id));
+        ClientPacketDistributor.sendToServer(new GuhkamerPayloads.Doe(actie.ordinal(), id));
     }
 
     @Override

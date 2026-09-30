@@ -59,11 +59,11 @@ public final class BakkerijFeature {
     // --- blocks --------------------------------------------------------------------------------------------------------
     /** The guh oven: bake the twelve recipes from ingredients (and Korstje's game uses the ones in his bakery). */
     public static final DeferredBlock<KnabbelovenBlock> KNABBELOVEN = BLOCKS.registerBlock("knabbeloven", KnabbelovenBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.BRICKS).mapColor(MapColor.COLOR_PINK).strength(2.0f, 6f).noOcclusion()
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BRICKS).mapColor(MapColor.COLOR_PINK).strength(2.0f, 6f).noOcclusion()
                     .lightLevel(s -> s.getValue(KnabbelovenBlock.LIT) ? 11 : 0));
     /** A little chimney pot that puffs knabbelwolkjes (the bakery's chimney; also a deco block). */
     public static final DeferredBlock<SchoorsteenBlock> SCHOORSTEEN = BLOCKS.registerBlock("bakkerij_schoorsteen", SchoorsteenBlock::new,
-            BlockBehaviour.Properties.ofFullCopy(Blocks.BRICKS).mapColor(MapColor.COLOR_ORANGE).strength(1.5f, 6f).noOcclusion()
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BRICKS).mapColor(MapColor.COLOR_ORANGE).strength(1.5f, 6f).noOcclusion()
                     .sound(SoundType.STONE));
     /** Invisible markers in the bakery: where customers stand at the counter, and where they come in. */
     public static final DeferredBlock<VerstopBlocks.Marker> KLANTPLEK = marker("bakkerij_klantplek");
@@ -76,10 +76,10 @@ public final class BakkerijFeature {
 
     // --- items ---------------------------------------------------------------------------------------------------------
     /** The coin of the bakery: earned in Korstje's game, spent in his shop (and one play at the grijpmachine). */
-    public static final DeferredItem<Item> BAKMUNT = ITEMS.registerSimpleItem("bakmunt", new Item.Properties());
+    public static final DeferredItem<Item> BAKMUNT = ITEMS.registerSimpleItem("bakmunt", () -> new Item.Properties());
     /** The Grote Knusfeest's cake, in a pink box with a bow (for the Burgemeester, not for eating on the way!). */
     public static final DeferredItem<FeesttaartItem> FEESTTAART = ITEMS.registerItem("feesttaart", FeesttaartItem::new,
-            new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+            () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
     public static final DeferredItem<BlockItem> KNABBELOVEN_ITEM = ITEMS.registerSimpleBlockItem(KNABBELOVEN);
     public static final DeferredItem<BlockItem> SCHOORSTEEN_ITEM = ITEMS.registerSimpleBlockItem(SCHOORSTEEN);
     /** The twelve pastries (the receptenboek). */
@@ -87,7 +87,7 @@ public final class BakkerijFeature {
 
     static {
         for (Recept r : Recept.BOEK) {
-            BAKJES.put(r, ITEMS.registerItem(r.id(), p -> new BakjeItem(r, p), new Item.Properties().food(eten(r))));
+            BAKJES.put(r, ITEMS.registerItem(r.id(), p -> new BakjeItem(r, p), () -> new Item.Properties().food(eten(r))));
         }
     }
 
@@ -95,16 +95,16 @@ public final class BakkerijFeature {
     static FoodProperties eten(Recept r) {
         FoodProperties.Builder f = new FoodProperties.Builder();
         switch (r) {
-            case KNABBELBROODJE -> f.nutrition(6).saturationModifier(0.7f).effect(() -> effect(MobEffects.MOVEMENT_SPEED, 30, 0), 1f);
-            case KAASKRAKELING -> f.nutrition(5).saturationModifier(0.6f).effect(() -> effect(MobEffects.DIG_SPEED, 60, 0), 1f);
+            case KNABBELBROODJE -> f.nutrition(6).saturationModifier(0.7f).effect(() -> effect(MobEffects.SPEED, 30, 0), 1f);
+            case KAASKRAKELING -> f.nutrition(5).saturationModifier(0.6f).effect(() -> effect(MobEffects.HASTE, 60, 0), 1f);
             case VADSVLAAI -> f.nutrition(8).saturationModifier(0.8f).effect(() -> effect(MobEffects.ABSORPTION, 60, 0), 1f);
-            case GUHCROISSANT -> f.nutrition(5).saturationModifier(0.6f).effect(() -> effect(MobEffects.JUMP, 40, 0), 1f);
-            case KNABBELKOEKJE -> f.nutrition(3).saturationModifier(0.4f).fast().effect(() -> effect(MobEffects.MOVEMENT_SPEED, 15, 1), 1f);
+            case GUHCROISSANT -> f.nutrition(5).saturationModifier(0.6f).effect(() -> effect(MobEffects.JUMP_BOOST, 40, 0), 1f);
+            case KNABBELKOEKJE -> f.nutrition(3).saturationModifier(0.4f).fast().effect(() -> effect(MobEffects.SPEED, 15, 1), 1f);
             case KAASBOLLETJE -> f.nutrition(6).saturationModifier(0.7f).effect(() -> effect(MobEffects.REGENERATION, 8, 0), 1f);
             case PLUISMUFFIN -> f.nutrition(5).saturationModifier(0.5f).effect(() -> effect(MobEffects.SLOW_FALLING, 30, 0), 1f);
             case THEETAARTJE -> f.nutrition(4).saturationModifier(0.6f).effect(() -> effect(MobEffects.LUCK, 120, 0), 1f);
-            case KNABBELTOMPOUCE -> f.nutrition(6).saturationModifier(0.6f).effect(() -> effect(MobEffects.DAMAGE_RESISTANCE, 30, 0), 1f);
-            case VADSDONUT -> f.nutrition(5).saturationModifier(0.5f).effect(() -> effect(MobEffects.JUMP, 20, 1), 1f);
+            case KNABBELTOMPOUCE -> f.nutrition(6).saturationModifier(0.6f).effect(() -> effect(MobEffects.RESISTANCE, 30, 0), 1f);
+            case VADSDONUT -> f.nutrition(5).saturationModifier(0.5f).effect(() -> effect(MobEffects.JUMP_BOOST, 20, 1), 1f);
             case GUHWAFEL -> f.nutrition(5).saturationModifier(0.6f).effect(() -> effect(MobEffects.WATER_BREATHING, 60, 0), 1f);
             case STERRENKOEKJE -> f.nutrition(3).saturationModifier(0.4f).fast().effect(() -> effect(MobEffects.NIGHT_VISION, 90, 0), 1f);
             default -> f.nutrition(4).saturationModifier(0.5f);

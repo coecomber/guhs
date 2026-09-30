@@ -20,6 +20,7 @@ import nl.juiced.guhs.feature.knus.GuhHooks;
 import nl.juiced.guhs.feature.knus.client.GuhRenderHooks;
 import com.geckolib.cache.model.GeoBone;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * Client side of the kampeerplekjes: the pyjamas (a guh with the PYJAMA flag is drawn in the pyjama_pakje and the
  * slaapmutsje, over whatever isn't covered by its own clothes), the campfire sparks, and Opa Guh's own model
@@ -51,7 +52,7 @@ public final class KamperenClient {
                     for (GeoBone bone : model.topLevelBones()) {
                         alleen(bone, stuk);
                     }
-                    RenderType type = RenderType.entityCutoutNoCull(stuk.texture());
+                    RenderType type = RenderTypes.entityCutout(stuk.texture());
                     renderer.reRender(model, pose, buffers, guh, type, buffers.getBuffer(type), partialTick, light, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
                 }
             } finally {

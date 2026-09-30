@@ -17,6 +17,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.feature.creche.CrecheGame;
 import nl.juiced.guhs.feature.creche.CrechePayloads;
 
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Juf Knuffel's screen: she (drawn, looking at you) explains the care round and the minigame; buttons to start either
  * (or stop yours), her shop, and your record and speenmunten. The frame is pastel, with little sleepy stars.
@@ -35,7 +36,7 @@ public class CrecheScreen extends Screen {
     }
 
     private void send(int action) {
-        PacketDistributor.sendToServer(new CrechePayloads.Action(npcId, action));
+        ClientPacketDistributor.sendToServer(new CrechePayloads.Action(npcId, action));
         onClose();
     }
 

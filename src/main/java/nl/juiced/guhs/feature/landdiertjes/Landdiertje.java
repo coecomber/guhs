@@ -448,8 +448,8 @@ public abstract class Landdiertje extends TamableAnimal implements GeoEntity, Pi
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<Landdiertje>(this, "beweeg", 3, state -> state.setAndContinue(beweging(state))));
-        AnimationController<Landdiertje> actie = new AnimationController<Landdiertje>(this, "actie", 1, state -> PlayState.STOP)
+        controllers.add(new AnimationController<Landdiertje>("beweeg", 3, state -> state.setAndContinue(beweging(state))));
+        AnimationController<Landdiertje> actie = new AnimationController<Landdiertje>("actie", 1, state -> PlayState.STOP)
                 .triggerableAnim("blij", RawAnimation.begin().thenPlay("blij"))
                 .triggerableAnim("eet", RawAnimation.begin().thenPlay("eet"));
         extraActies(actie);
