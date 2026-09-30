@@ -145,7 +145,7 @@ public class PluisvinkjeEntity extends Vogeltje {
         if (!(level() instanceof ServerLevel server)) {
             return null;
         }
-        ItemEntity item = spawnAtLocation(new ItemStack(VogelsFeature.PLUISVEERTJE.get()), 0.2f);
+        ItemEntity item = spawnAtLocation(server, new ItemStack(VogelsFeature.PLUISVEERTJE.get()), 0.2f);
         if (item != null) {
             item.setDeltaMovement((random.nextDouble() - 0.5) * 0.05, 0.1, (random.nextDouble() - 0.5) * 0.05);
         }

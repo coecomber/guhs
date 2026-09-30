@@ -98,27 +98,27 @@ public final class VogelSpawns {
         }
         BlockPos pos = new BlockPos(x, level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, x, z), z);
         var spawners = level.getBiome(pos).value().getMobSettings().getMobs(net.minecraft.world.entity.MobCategory.CREATURE).unwrap().stream()
-                .filter(sd -> sd.type == VogelsFeature.PLUISVINKJE.get() || sd.type == VogelsFeature.KAASMEESJE.get()
-                        || sd.type == VogelsFeature.GUH_UILTJE.get() || sd.type == VogelsFeature.ZEEMEEUWTJE.get()).toList();
+                .filter(sd -> sd.value().type() == VogelsFeature.PLUISVINKJE.get() || sd.value().type() == VogelsFeature.KAASMEESJE.get()
+                        || sd.value().type() == VogelsFeature.GUH_UILTJE.get() || sd.value().type() == VogelsFeature.ZEEMEEUWTJE.get()).toList();
         if (spawners.isEmpty()) {
             return nieuw;
         }
-        int total = spawners.stream().mapToInt(sd -> sd.getWeight().asInt()).sum();
+        int total = spawners.stream().mapToInt(sd -> sd.weight()).sum();
         int pick = random.nextInt(Math.max(1, total));
         var gekozen = spawners.get(0);
         for (var sd : spawners) {
-            pick -= sd.getWeight().asInt();
+            pick -= sd.weight();
             if (pick < 0) {
                 gekozen = sd;
                 break;
             }
         }
         @SuppressWarnings("unchecked")
-        EntityType<? extends Vogeltje> type = (EntityType<? extends Vogeltje>) gekozen.type;
+        EntityType<? extends Vogeltje> type = (EntityType<? extends Vogeltje>) gekozen.value().type();
         if (!check(type, level, EntitySpawnReason.NATURAL, pos, random)) {
             return nieuw;
         }
-        int n = gekozen.minCount + random.nextInt(Math.max(1, gekozen.maxCount - gekozen.minCount + 1));
+        int n = gekozen.value().minCount() + random.nextInt(Math.max(1, gekozen.value().maxCount() - gekozen.value().minCount() + 1));
         for (int i = 0; i < n; i++) {
             int px = x + random.nextInt(5) - 2, pz = z + random.nextInt(5) - 2;
             BlockPos p = new BlockPos(px, level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, px, pz), pz);

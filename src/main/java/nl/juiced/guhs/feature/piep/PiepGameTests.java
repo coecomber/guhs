@@ -358,7 +358,7 @@ public class PiepGameTests {
     @GuhTest(template = WEI, timeoutTicks = 40)
     public static void piepKnabbelsLatenKnabbelsVallen(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        var table = level.getServer().reloadableRegistries().getLootTable(PiepFeature.BOZE_KAASKNABBEL.get().getDefaultLootTable());
+        var table = level.getServer().reloadableRegistries().getLootTable(PiepFeature.BOZE_KAASKNABBEL.get().getDefaultLootTable().orElseThrow());
         BozeKaasknabbelEntity k = helper.spawn(PiepFeature.BOZE_KAASKNABBEL.get(), new BlockPos(4, 2, 4));
         var params = new net.minecraft.world.level.storage.loot.LootParams.Builder(level)
                 .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.THIS_ENTITY, k)
@@ -367,7 +367,7 @@ public class PiepGameTests {
                 .create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.ENTITY);
         var drops = table.getRandomItems(params);
         helper.assertTrue(!drops.isEmpty() && drops.stream().allMatch(s -> s.is(ModItems.KAAS_KNABBELS.get())), "normal kaasknabbels: " + drops);
-        helper.assertTrue(!k.shouldDespawnInPeaceful(), "they stay in peaceful (the nest must stay doable)");
+        helper.assertTrue(!k.shouldDespawnInPeaceful() && k.getType().isAllowedInPeaceful(), "they stay in peaceful (the nest must stay doable)");
         k.discard();
         helper.succeed();
     }

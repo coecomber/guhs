@@ -178,14 +178,13 @@ public class VoerhuisjeBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
-        if (!state.is(newState.getBlock()) && level instanceof ServerLevel server) {
-            Set<BlockPos> set = BEKEND.get(server.dimension());
-            if (set != null) {
-                set.remove(pos);
-            }
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean moved) {
+        // 1.1.0: was onRemove (only when the block really changed; that is the only time this runs now)
+        Set<BlockPos> set = BEKEND.get(level.dimension());
+        if (set != null) {
+            set.remove(pos);
         }
-        super.onRemove(state, level, pos, newState, moved);
+        super.affectNeighborsAfterRemoval(state, level, pos, moved);
     }
 
     /** The item: a line of lore. */

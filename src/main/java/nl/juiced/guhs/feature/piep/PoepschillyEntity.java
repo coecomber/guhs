@@ -230,7 +230,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
 
     @Override
     public void travel(Vec3 input) {
-        if (isControlledByLocalInstance() && isInWater()) {
+        if (isLocalInstanceAuthoritative() && isInWater()) {
             moveRelative(getSpeed(), input);
             move(net.minecraft.world.entity.MoverType.SELF, getDeltaMovement());
             setDeltaMovement(getDeltaMovement().scale(0.9));
@@ -283,7 +283,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
                     BlockPos p = at.offset(random.nextInt(5) - 2, 0, random.nextInt(5) - 2);
                     if (level().getBlockState(p).getCollisionShape(level(), p).isEmpty()
                             && (!level().getBlockState(p.below()).getCollisionShape(level(), p.below()).isEmpty() || level().getFluidState(p).is(FluidTags.WATER))) {
-                        moveTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, getYRot(), getXRot());
+                        snapTo(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, getYRot(), getXRot());
                         getNavigation().stop();
                         return;
                     }
@@ -578,7 +578,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         boolean daar = dx * dx + dz * dz < 0.45 * 0.45 && Math.abs(doel.y - getY()) < 1.0;
         if (!daar && (faseTick >= LOOP_TICKS || distanceToSqr(guh) > 20 * 20)) {
             level.sendParticles(ParticleTypes.POOF, getX(), getY() + 0.2, getZ(), 4, 0.15, 0.1, 0.15, 0.01);
-            moveTo(doel.x, guh.getY(), doel.z, getYRot(), 0);
+            snapTo(doel.x, guh.getY(), doel.z, getYRot(), 0);
             daar = true;
         }
         if (daar) {
@@ -600,7 +600,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         float t = Mth.clamp(faseTick / (float) KRUIP_TICKS, 0f, 1f);
         Vec3 nu = achter(guh, 0.45).lerp(achter(guh, -0.05), t);
         float yaw = guh.yBodyRot;                                  // (facing the same way as the guh: nose into the kontje)
-        moveTo(nu.x, guh.getY() + guh.getBbHeight() * 0.25 * t, nu.z, yaw, 0);
+        snapTo(nu.x, guh.getY() + guh.getBbHeight() * 0.25 * t, nu.z, yaw, 0);
         setYBodyRot(yaw);
         setYHeadRot(yaw);
         setDeltaMovement(Vec3.ZERO);
@@ -627,7 +627,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
 
     /** Inside: it rides along with the guh; the guh wiggles and giggles, bubbles, sparkles and poetspluisjes pop out. */
     private void binnen(ServerLevel level, GuhEntity guh) {
-        moveTo(guh.getX(), guh.getY() + 0.2, guh.getZ(), guh.getYRot(), 0);
+        snapTo(guh.getX(), guh.getY() + 0.2, guh.getZ(), guh.getYRot(), 0);
         setDeltaMovement(Vec3.ZERO);
         Vec3 kont = achter(guh, 0.05);
         double hoog = guh.getY() + guh.getBbHeight() * 0.35;
@@ -661,7 +661,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         setBinnen(false);
         setKrimp(0.25f);
         Vec3 plek = veiligePlek(achter(guh, 0.35), guh.position());
-        moveTo(plek.x, plek.y, plek.z, guh.yBodyRot + 180f, 0);
+        snapTo(plek.x, plek.y, plek.z, guh.yBodyRot + 180f, 0);
         Vec3 weg = new Vec3(plek.x - guh.getX(), 0, plek.z - guh.getZ());
         setDeltaMovement((weg.lengthSqr() > 1e-4 ? weg.normalize().scale(0.12) : Vec3.ZERO).add(0, 0.25, 0));
         level.playSound(null, blockPosition(), PiepFeature.SCHILLY_PLOP.get(), SoundSource.NEUTRAL, 1.1f, 1.2f);
@@ -734,7 +734,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
             if (wasBinnen) {
                 Vec3 plek = guh != null && guh.isAlive() && guh.level() == level ? veiligePlek(achter(guh, 0.35), guh.position())
                         : veiligePlek(position(), position());
-                moveTo(plek.x, plek.y, plek.z, getYRot(), 0);
+                snapTo(plek.x, plek.y, plek.z, getYRot(), 0);
                 setDeltaMovement(Vec3.ZERO);
                 level.playSound(null, blockPosition(), PiepFeature.SCHILLY_PLOP.get(), SoundSource.NEUTRAL, 1f, 1.2f);
                 level.sendParticles(ParticleTypes.BUBBLE_POP, getX(), getY() + 0.3, getZ(), 6, 0.25, 0.2, 0.25, 0.05);
@@ -852,7 +852,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
             if (poetsSpeler != null) {
                 poets.store("Speler", UUIDUtil.CODEC, poetsSpeler);
             }
-            tag.put("Poets", poets);
+            tag.store("Poets", CompoundTag.CODEC, poets);
         }
     }
 
@@ -867,8 +867,8 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
         poetsSpeler = null;
         zoekTicks = 0;
         faseTick = 0;
-        if (tag.keySet().contains("Poets", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
-            CompoundTag poets = tag.getCompoundOrEmpty("Poets");
+        CompoundTag poets = tag.read("Poets", CompoundTag.CODEC).orElse(null);
+        if (poets != null) {
             try {
                 fase = Fase.valueOf(poets.getStringOr("Fase", ""));
             } catch (IllegalArgumentException e) {

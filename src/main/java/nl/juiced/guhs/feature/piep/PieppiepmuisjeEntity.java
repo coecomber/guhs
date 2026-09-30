@@ -319,14 +319,16 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
     @Override
     public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
-        verstop().save(tag);
+        CompoundTag verstopTag = new CompoundTag();
+        verstop().save(verstopTag);
+        tag.store(verstopTag);                                   // (1.1.0: the old keys, at the top level like 1.0.0)
         tag.putInt("PiepUit", uitVlaggen());
     }
 
     @Override
     public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        verstop().load(tag);
+        verstop().load(nl.juiced.guhs.storage.Nbt.toTag(tag));
         setUitVlaggen(tag.getIntOr("PiepUit", 0));
     }
 

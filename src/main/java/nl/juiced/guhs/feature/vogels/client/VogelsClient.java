@@ -1,17 +1,25 @@
 package nl.juiced.guhs.feature.vogels.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import javax.annotation.Nullable;
 
+import com.geckolib.constant.DefaultAnimations;
+import com.geckolib.constant.dataticket.DataTicket;
+import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.base.BoneSnapshots;
+import com.geckolib.renderer.base.GeoRenderState;
+import com.geckolib.renderer.base.RenderPassInfo;
+import com.geckolib.renderer.layer.GeoRenderLayer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.util.LightCoordsUtil;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.particle.SingleQuadParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -20,12 +28,7 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.vogels.GuhUiltjeEntity;
 import nl.juiced.guhs.feature.vogels.Vogeltje;
 import nl.juiced.guhs.feature.vogels.VogelsFeature;
-import com.geckolib.cache.model.BakedGeoModel;
-import com.geckolib.model.DefaultedEntityGeoModel;
-import com.geckolib.renderer.GeoEntityRenderer;
-import com.geckolib.renderer.layer.GeoRenderLayer;
 
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 /**
  * The birds' renderers (3.0 vogels): their own GeckoLib models (tools/features/vogels_modellen.py) with a turning head, eyes
  * that blink now and then and stay shut while the owl sleeps (the &lt;name&gt;_dicht.png texture), the kaasmeesje turned upside
@@ -50,29 +53,31 @@ public final class VogelsClient {
         return v.houding() == Vogeltje.SLAAPT || (v.tickCount + v.getId() * 37) % 83 < 3;
     }
 
-    public static class VogelRenderer<T extends Vogeltje> extends GeoEntityRenderer<T> {
+    /** Render state tickets (1.1.0): eyes shut, hanging upside down, the owl's glowing eyes. */
+    static final DataTicket<Boolean> DICHT = DataTicket.create("guhs_vogel_dicht", Boolean.class);
+    static final DataTicket<Boolean> HANGT = DataTicket.create("guhs_vogel_hangt", Boolean.class);
+    static final DataTicket<Boolean> GLOEIT = DataTicket.create("guhs_vogel_gloeit", Boolean.class);
+
+    public static class VogelRenderer<T extends Vogeltje> extends GeoEntityRenderer<T, LivingEntityRenderState> {
         public VogelRenderer(EntityRendererProvider.Context context, String naam, float schaduw) {
-            super(context, new DefaultedEntityGeoModel<T>(Guhs.id(naam), true) {
+            super(context, new DefaultedEntityGeoModel<T>(Guhs.id(naam)) {
                 private final Identifier open = Guhs.id("textures/entity/" + naam + ".png");
                 private final Identifier dicht = Guhs.id("textures/entity/" + naam + "_dicht.png");
 
                 @Override
-                public Identifier getTextureResource(T vogel) {
-                    return ogenDicht(vogel) ? dicht : open;
+                public Identifier getTextureResource(GeoRenderState state) {
+                    return Boolean.TRUE.equals(state.getGeckolibData(DICHT)) ? dicht : open;
                 }
             });
             this.shadowRadius = schaduw;
             if (naam.equals("guh_uiltje")) {
-                addRenderLayer(new GeoRenderLayer<>(this) {
+                withRenderLayer(new GeoRenderLayer<T, Void, LivingEntityRenderState>(this) {
                     private final Identifier glow = Guhs.id("textures/entity/guh_uiltje_glowmask.png");
 
                     @Override
-                    public void render(PoseStack poseStack, T vogel, BakedGeoModel model, RenderType renderType, MultiBufferSource buffers,
-                                       VertexConsumer buffer, float partialTick, int light, int overlay) {
-                        if (vogel instanceof GuhUiltjeEntity uil && uil.nacht() && !ogenDicht(vogel)) {
-                            RenderType type = RenderTypes.eyes(glow);
-                            getRenderer().reRender(model, poseStack, buffers, vogel, type, buffers.getBuffer(type), partialTick,
-                                    LightCoordsUtil.FULL_BRIGHT, overlay, 0xFFFFFFFF);
+                    public void submitRenderTask(RenderPassInfo<LivingEntityRenderState> info, SubmitNodeCollector collector) {
+                        if (Boolean.TRUE.equals(info.getGeckolibData(GLOEIT)) && info.willRender()) {
+                            getRenderer().submitRenderTasks(info, collector.order(1), RenderTypes.eyes(glow));
                         }
                     }
                 });
@@ -80,28 +85,41 @@ public final class VogelsClient {
         }
 
         @Override
-        protected void applyRotations(T vogel, PoseStack pose, float ageInTicks, float rotationYaw, float partialTick, float nativeScale) {
-            super.applyRotations(vogel, pose, ageInTicks, rotationYaw, partialTick, nativeScale);
-            if (!vogel.vliegt() && vogel.houding() == Vogeltje.HANGT) {
+        public void addRenderData(T vogel, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
+            boolean dicht = ogenDicht(vogel);
+            state.addGeckolibData(DICHT, dicht);
+            state.addGeckolibData(HANGT, !vogel.vliegt() && vogel.houding() == Vogeltje.HANGT);
+            state.addGeckolibData(GLOEIT, vogel instanceof GuhUiltjeEntity uil && uil.nacht() && !dicht);
+        }
+
+        @Override
+        public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
+            DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
+        }
+
+        @Override
+        protected void applyRotations(RenderPassInfo<LivingEntityRenderState> info, PoseStack pose, float nativeScale) {
+            super.applyRotations(info, pose, nativeScale);
+            if (Boolean.TRUE.equals(info.getGeckolibData(HANGT))) {
                 // upside down under its leaf: turned over around its middle
-                pose.translate(0, vogel.getBbHeight() / 2, 0);
+                float h = info.renderState().boundingBoxHeight;
+                pose.translate(0, h / 2, 0);
                 pose.mulPose(Axis.ZP.rotationDegrees(180));
-                pose.translate(0, -vogel.getBbHeight() / 2, 0);
+                pose.translate(0, -h / 2, 0);
             }
         }
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(VogelsFeature.VEERTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Veertje(level, x, y, z, dx, dy, dz, sprites));
+        event.registerSpriteSet(VogelsFeature.VEERTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Veertje(level, x, y, z, dx, dy, dz, sprites.get(random)));
     }
 
     /** A little pink feather: pops out, then sways down slowly. */
-    static class Veertje extends TextureSheetParticle {
+    static class Veertje extends SingleQuadParticle {
         private final float spin;
 
-        Veertje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+        Veertje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, TextureAtlasSprite sprite) {
+            super(level, x, y, z, sprite);
             lifetime = 50 + random.nextInt(40);
             quadSize = 0.07f + random.nextFloat() * 0.05f;
             gravity = 0.015f;
@@ -123,8 +141,8 @@ public final class VogelsClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

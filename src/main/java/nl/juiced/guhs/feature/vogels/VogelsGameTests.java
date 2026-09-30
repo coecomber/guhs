@@ -68,7 +68,7 @@ public class VogelsGameTests {
     }
 
     static void tijd(ServerLevel level, long t) {
-        level.setDayTime(t);
+        nl.juiced.guhs.world.GuhTime.setDayTime(level, t);
         level.updateSkyBrightness();
     }
 
@@ -156,7 +156,7 @@ public class VogelsGameTests {
     @GuhTest(template = WEI, batch = BATCH)
     public static void vogelsSpawnRegels(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        long was = level.getDayTime();
+        long was = nl.juiced.guhs.world.GuhTime.dayTime(level);
         RandomSource r = RandomSource.create(1);
         BlockPos gras = helper.absolutePos(new BlockPos(6, 2, 6));
         BlockPos binnen = helper.absolutePos(new BlockPos(6, 1, 6));
@@ -190,16 +190,16 @@ public class VogelsGameTests {
         veel.forEach(Entity::discard);
         // the biome modifiers (applied to the biome registry at server start)
         var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
-        helper.assertTrue(spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("guh_fields"))), vink), "vinkjes in the Guhvelden");
-        helper.assertTrue(spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("pink_puffs"))), vink), "vinkjes in the Roze pluisjes");
-        helper.assertTrue(spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("vadswoud"))), VogelsFeature.KAASMEESJE.get())
-                && spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("kaas_flats"))), VogelsFeature.KAASMEESJE.get()), "meesjes");
-        helper.assertTrue(spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("guh_peaks"))), uil)
-                && spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("vadswoud"))), uil), "owls");
-        helper.assertTrue(spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("guh_sea"))), meeuw)
-                && spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("guhwaii"))), meeuw), "gulls at the sea and on Guhwai'i");
-        helper.assertTrue(!spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("guh_fields"))), uil)
-                && !spawnt(biomes.get(ResourceKey.create(Registries.BIOME, Guhs.id("vadswoud"))), meeuw), "not where they don't belong");
+        helper.assertTrue(spawnt(biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("guh_fields"))), vink), "vinkjes in the Guhvelden");
+        helper.assertTrue(spawnt(biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("pink_puffs"))), vink), "vinkjes in the Roze pluisjes");
+        helper.assertTrue(spawnt(biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("vadswoud"))), VogelsFeature.KAASMEESJE.get())
+                && spawnt(biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("kaas_flats"))), VogelsFeature.KAASMEESJE.get()), "meesjes");
+        helper.assertTrue(spawnt(biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("guh_peaks"))), uil)
+                && spawnt(biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("vadswoud"))), uil), "owls");
+        helper.assertTrue(spawnt(biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("guh_sea"))), meeuw)
+                && spawnt(biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("guhwaii"))), meeuw), "gulls at the sea and on Guhwai'i");
+        helper.assertTrue(!spawnt(biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("guh_fields"))), uil)
+                && !spawnt(biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id("vadswoud"))), meeuw), "not where they don't belong");
         // the top-up only brings a biome's own birds: none in the game test's plains
         ServerPlayer p = speler(helper, new BlockPos(6, 2, 6));
         for (int i = 0; i < 20; i++) {
@@ -210,7 +210,7 @@ public class VogelsGameTests {
     }
 
     static boolean spawnt(Biome biome, EntityType<?> type) {
-        return biome != null && biome.getMobSettings().getMobs(MobCategory.CREATURE).unwrap().stream().anyMatch(d -> d.type == type);
+        return biome != null && biome.getMobSettings().getMobs(MobCategory.CREATURE).unwrap().stream().anyMatch(d -> d.value().type() == type);
     }
 
     /** The kaasmeesje finds the underside of the leaves, hangs there upside down (no gravity) and lets go when the leaf is gone. */
@@ -250,7 +250,7 @@ public class VogelsGameTests {
     @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 120)
     public static void vogelsUiltjeSlaaptOverdag(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        long was = level.getDayTime();
+        long was = nl.juiced.guhs.world.GuhTime.dayTime(level);
         tijd(level, 6000);
         ServerPlayer p = speler(helper, new BlockPos(9, 2, 9));
         p.setShiftKeyDown(true);

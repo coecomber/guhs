@@ -289,7 +289,7 @@ public class PiepMenuGameTests {
         CompoundTag tag = new CompoundTag();
         nl.juiced.guhs.storage.Nbt.saveWithoutId(muis, tag);
         PieppiepmuisjeEntity kopie = PiepFeature.PIEPPIEPMUISJE.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        kopie.load(tag);
+        nl.juiced.guhs.storage.Nbt.load(kopie, tag);
         helper.assertTrue(!kopie.aan(PiepInstelling.PIEPJES) && !kopie.aan(PiepInstelling.VERSTOPPEN) && kopie.aan(PiepInstelling.VOLGEN),
                 "the settings are saved");
         // the big button: onto the shoulder
@@ -404,9 +404,9 @@ public class PiepMenuGameTests {
             if (geladen[0] == null && s.isBinnen()) {
                 // a chunk unload / server restart in the middle: saved, gone, loaded again
                 CompoundTag tag = new CompoundTag();
-                helper.assertTrue(s.save(tag), "saved");
+                helper.assertTrue(nl.juiced.guhs.storage.Nbt.save(s, tag), "saved");
                 s.discard();
-                Entity e = EntityType.create(tag, level).orElse(null);
+                Entity e = EntityType.create(nl.juiced.guhs.storage.Nbt.input(level.registryAccess(), tag), level, EntitySpawnReason.LOAD).orElse(null);
                 helper.assertTrue(e instanceof PoepschillyEntity, "loaded");
                 geladen[0] = (PoepschillyEntity) e;
                 helper.assertTrue(geladen[0].isBinnen() && geladen[0].isInvisible() && geladen[0].isAanHetPoetsen(), "still inside after loading");
@@ -436,10 +436,10 @@ public class PiepMenuGameTests {
         helper.onEachTick(() -> {
             if (geladen[0] == null && s.isBinnen()) {
                 CompoundTag tag = new CompoundTag();
-                s.save(tag);
+                nl.juiced.guhs.storage.Nbt.save(s, tag);
                 s.discard();
                 guh.discard();                                   // (the guh never comes back)
-                geladen[0] = (PoepschillyEntity) EntityType.create(tag, level).orElseThrow();
+                geladen[0] = (PoepschillyEntity) EntityType.create(nl.juiced.guhs.storage.Nbt.input(level.registryAccess(), tag), level, EntitySpawnReason.LOAD).orElseThrow();
                 level.addFreshEntity(geladen[0]);
             }
         });

@@ -964,3 +964,21 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
   is picked from texture alpha now (PORT_PLAN 7.9).
 * R: dev AutoCheck: the check world's game rules are set right after joining (26.1 `LevelSettings` has no game rules); "mist off" can no longer
   cancel the fog event, it only pushes the terrain fog out to the render distance.
+* S1: 13 S1 spawn eggs (pluisegeltje, guh_konijntje, pluiseekhoorntje, shuckle, pieppiepmuisje, poepschilly, schilly, boze_kaasknabbel,
+  boze_oppernabbel, pluisvinkje, kaasmeesje, guh_uiltje, zeemeeuwtje) are `ModItems.spawnEgg` eggs without tint colours (textures requested from D).
+* S1: Piep/landdiertjes "waar is mijn guh" pocket check (`PiepDierItem#inventoryTick`) runs every 100 game ticks for every carried critter
+  (was spread over the slots with `gameTime + slot`; 26.1 has no slot index), like A's `PickedUpGuhItem`.
+* S1: Item "crumb" particles (`ItemParticleOption`) are made from the item only (26.1 takes an `Item`/`ItemStackTemplate`); stack components
+  no longer change the particle look (none of the S1 items relied on that).
+* S1: Voerhuisje: forgetting a removed voerhuisje moved from `onRemove` to `affectNeighborsAfterRemoval` (only on removals with neighbour
+  updates; the list is only a spawn hint).
+* S1: Leenhouweel (loaner pickaxe) is an `Item` with `pickaxe(IRON, 1, -2.8)` + `UNBREAKABLE`; "not enchantable" is now
+  `isPrimaryItemFor`/`supportsEnchantment` = false (no table offers, no books on the anvil) instead of `isEnchantable`. Kaashouweel is an
+  `Item` with its own `ToolMaterial` (same numbers as the old SimpleTier) and `repairable(kaasbrok)`.
+* S1: Guh wiggle while Poepschilly is inside: the clock is copied at extract time (GeckoLib `CompileEntityRenderStateEvent`) and the pose is
+  moved in `GeoEntityPreRenderEvent` (same place in the pose stack as 1.0.0's `GeoRenderEvent.Entity.Pre`).
+* S1: Muisje/maatje on a player's shoulder: drawn from `RenderPlayerEvent.Post` by extracting the copy's render state and submitting it
+  with the player's pose (no shadow, as before; its name tag follows the vanilla rules of the copy).
+* S1: Pyjamas by the campfire (kamperen) and the klusje icon over a working guh (klusjes) are `GuhRenderer.hook`s now (`frame.pass` /
+  `frame.layerExtra`) instead of `GuhRenderHooks.laag` layers; same bones, textures and pose.
+* S1: Kaasknabbel nests: SavedData `guhs:piep_nesten` (1.0.0 file `guhs_piep_nesten.dat` moved once by `GuhSavedData.get`).

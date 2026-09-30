@@ -114,7 +114,7 @@ public class PiepDierItem extends Item {
         }
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         if (data != null) {
-            dier.load(data.copyTag());
+            nl.juiced.guhs.storage.Nbt.load(dier, data.copyTag());
         }
         if (stack.has(DataComponents.CUSTOM_NAME)) {
             dier.setCustomName(stack.getHoverName());
@@ -170,7 +170,7 @@ public class PiepDierItem extends Item {
     /** 2.10: "waar is mijn guh": in someone's pockets (checked every 5 seconds). */
     @Override
     public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
-        if (!level.isClientSide() && entity instanceof Player holder && (level.getGameTime() + slot) % 100 == 0) {
+        if (entity instanceof Player holder && level.getGameTime() % 100 == 0) {    // (1.1.0: no slot index any more, see MIGRATION_NOTES)
             nl.juiced.guhs.feature.band.GuhVolger.inZakken(stack, holder);
         }
     }

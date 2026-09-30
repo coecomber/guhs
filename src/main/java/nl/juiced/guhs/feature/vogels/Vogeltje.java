@@ -247,7 +247,7 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
                 Vec3 to = landDoel(landplek);
                 double d = to.distanceTo(position());
                 if (d < 0.45 || (d < 1.2 && vast > 40)) {
-                    moveTo(to.x, to.y, to.z, getYRot(), getXRot());
+                    snapTo(to.x, to.y, to.z, getYRot(), getXRot());
                     land();
                     geland(landplek);
                     return;
