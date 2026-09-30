@@ -54,7 +54,7 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> GUH_PORTAL = BLOCKS.registerBlock("guh_portal",
             GuhPortalBlock::new,
-            BlockBehaviour.Properties.of().noCollission().strength(-1f).sound(SoundType.GLASS).lightLevel(s -> 11)
+            () -> BlockBehaviour.Properties.of().noCollision().strength(-1f).sound(SoundType.GLASS).lightLevel(s -> 11)
                     .pushReaction(PushReaction.BLOCK).noLootTable().mapColor(MapColor.COLOR_PINK));
 
     /** Guh-coloured ore deep in the Guhmension. Needs an iron pickaxe; drops Vahoege Vads. */
@@ -105,7 +105,7 @@ public final class ModBlocks {
     /** Redstone wire that never loses strength. */
     public static final DeferredBlock<Block> GUH_WIRE = BLOCKS.registerBlock("guh_wire",
             GuhWireBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollission().instabreak()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollision().instabreak()
                     .pushReaction(PushReaction.DESTROY));
 
     /** Bank Guh: infinite storage in a vadsige guh's stomach (reward of the Hungry Guh quest). */
@@ -117,9 +117,9 @@ public final class ModBlocks {
     /** The kaas saus fluid block (flows like a slow, thick water). */
     public static final DeferredBlock<LiquidBlock> KAAS_SAUS = BLOCKS.registerBlock("kaas_saus",
             props -> new LiquidBlock(ModFluids.KAAS_SAUS.get(), props),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).mapColor(MapColor.COLOR_ORANGE)
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).mapColor(MapColor.COLOR_ORANGE)
                     // placed by a structure (fountains): tick once when the chunk is finished, so the saus starts flowing
-                    .hasPostProcess((state, level, pos) -> true));
+                    .postProcess((state, level, pos) -> pos));
 
     // --- the guh stomachs (guhmaag dimension): walls you can't break, portals, stomach acid ----------------------------
     private static BlockBehaviour.Properties unbreakable(MapColor color, SoundType sound) {
@@ -136,7 +136,7 @@ public final class ModBlocks {
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.6f).sound(SoundType.SLIME_BLOCK));
     public static final DeferredBlock<nl.juiced.guhs.block.MaagPortalBlock> MAAG_PORTAL = BLOCKS.registerBlock("maag_portal",
             nl.juiced.guhs.block.MaagPortalBlock::new,
-            BlockBehaviour.Properties.of().noCollission().strength(-1f).sound(SoundType.SLIME_BLOCK).lightLevel(s -> 9)
+            () -> BlockBehaviour.Properties.of().noCollision().strength(-1f).sound(SoundType.SLIME_BLOCK).lightLevel(s -> 9)
                     .pushReaction(PushReaction.BLOCK).noLootTable().mapColor(MapColor.COLOR_RED));
     /** Guh stomach acid: just for the atmosphere (it doesn't hurt). */
     public static final DeferredBlock<LiquidBlock> MAAGZUUR = BLOCKS.registerBlock("maagzuur",
@@ -166,8 +166,8 @@ public final class ModBlocks {
     public static final DeferredBlock<Block> GUH_KRISTALSTEEN = BLOCKS.registerSimpleBlock("guh_kristalsteen",
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_PINK).strength(1.2f).sound(SoundType.CALCITE)
                     .requiresCorrectToolForDrops());
-    public static final DeferredBlock<net.minecraft.world.level.block.WaterlilyBlock> GUH_WATERLELIE = BLOCKS.registerBlock("guh_waterlelie",
-            net.minecraft.world.level.block.WaterlilyBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.LILY_PAD).mapColor(MapColor.COLOR_PINK));
+    public static final DeferredBlock<net.minecraft.world.level.block.LilyPadBlock> GUH_WATERLELIE = BLOCKS.registerBlock("guh_waterlelie",
+            net.minecraft.world.level.block.LilyPadBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.LILY_PAD).mapColor(MapColor.COLOR_PINK));
 
     // --- guh bees and guh slimes -----------------------------------------------------------------------------------
     public static final DeferredBlock<nl.juiced.guhs.block.KnabbelkorfBlock> KNABBELKORF = BLOCKS.registerBlock("knabbelkorf",
@@ -224,7 +224,7 @@ public final class ModBlocks {
 
     public static final DeferredBlock<nl.juiced.guhs.block.GuhDecoBlocks.Vlaggetjes> VLAGGETJES = BLOCKS.registerBlock("vlaggetjes",
             nl.juiced.guhs.block.GuhDecoBlocks.Vlaggetjes::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollission().instabreak().sound(SoundType.WOOL).noOcclusion());
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollision().instabreak().sound(SoundType.WOOL).noOcclusion());
 
     // guh flowers (+ in a pot)
     private static DeferredBlock<nl.juiced.guhs.block.GuhDecoBlocks.GuhBloem> flower(String name, net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> effect) {
@@ -265,13 +265,13 @@ public final class ModBlocks {
     public static final DeferredBlock<nl.juiced.guhs.block.VerstopBlocks.Eenrichtingsglas> EENRICHTINGSGLAS = BLOCKS.registerBlock("eenrichtingsglas",
             nl.juiced.guhs.block.VerstopBlocks.Eenrichtingsglas::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.PINK_STAINED_GLASS));
     public static final DeferredBlock<nl.juiced.guhs.block.VerstopBlocks.Marker> VERSTOPPLEK = BLOCKS.registerBlock("verstopplek",
-            nl.juiced.guhs.block.VerstopBlocks.Marker::new, BlockBehaviour.Properties.of().noCollission().noLootTable().strength(-1f, 3600000f)
+            nl.juiced.guhs.block.VerstopBlocks.Marker::new, () -> BlockBehaviour.Properties.of().noCollision().noLootTable().strength(-1f, 3600000f)
                     .noOcclusion().isValidSpawn((s, l, p, e) -> false));
     public static final DeferredBlock<nl.juiced.guhs.block.VerstopBlocks.Marker> VERSTOPSTART = BLOCKS.registerBlock("verstopstart",
-            nl.juiced.guhs.block.VerstopBlocks.Marker::new, BlockBehaviour.Properties.of().noCollission().noLootTable().strength(-1f, 3600000f)
+            nl.juiced.guhs.block.VerstopBlocks.Marker::new, () -> BlockBehaviour.Properties.of().noCollision().noLootTable().strength(-1f, 3600000f)
                     .noOcclusion().isValidSpawn((s, l, p, e) -> false));
     public static final DeferredBlock<nl.juiced.guhs.block.VerstopBlocks.Uitgang> VERSTOPUITGANG = BLOCKS.registerBlock("verstopuitgang",
-            nl.juiced.guhs.block.VerstopBlocks.Uitgang::new, BlockBehaviour.Properties.of().noCollission().noLootTable().strength(-1f, 3600000f)
+            nl.juiced.guhs.block.VerstopBlocks.Uitgang::new, () -> BlockBehaviour.Properties.of().noCollision().noLootTable().strength(-1f, 3600000f)
                     .lightLevel(s -> 11).noOcclusion());
     public static final DeferredBlock<Block> GUHBLOESEM_PLANKS = BLOCKS.registerSimpleBlock("guhbloesem_planks",
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHERRY_PLANKS));

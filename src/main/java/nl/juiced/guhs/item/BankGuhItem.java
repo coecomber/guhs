@@ -11,6 +11,8 @@ import net.minecraft.world.level.block.Block;
 import nl.juiced.guhs.registry.ModDataComponents;
 import nl.juiced.guhs.storage.BankContents;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** The Bank Guh item: lore + how much is inside its stomach. */
 public class BankGuhItem extends BlockItem {
     public BankGuhItem(Block block, Properties properties) {
@@ -18,11 +20,11 @@ public class BankGuhItem extends BlockItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("block.guhs.bank_guh.lore").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("block.guhs.bank_guh.lore").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC));
         BankContents contents = stack.getOrDefault(ModDataComponents.BANK_CONTENTS.get(), BankContents.EMPTY);
         if (!contents.isEmpty()) {
-            tooltip.add(Component.translatable("block.guhs.bank_guh.contents", contents.totalItems(), contents.entries().size())
+            tooltip.accept(Component.translatable("block.guhs.bank_guh.contents", contents.totalItems(), contents.entries().size())
                     .withStyle(ChatFormatting.GRAY));
         }
     }

@@ -21,6 +21,8 @@ import nl.juiced.guhs.feature.kleding.KledingBronnen;
 import nl.juiced.guhs.feature.kleding.KledingOntgrendel;
 import nl.juiced.guhs.feature.kleding.KledingUnlocks;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A piece of guh clothing. 2.9: a one-time UNLOCK. Hold right-click (~1.5 s, like eating) to use it up: from then on the
  * piece is in the wardrobe of all your tamed guhs (feature.kleding). A piece you already have can't be used up ("Deze heb
@@ -74,9 +76,16 @@ public class GuhClothingItem extends Item {
         return isOntgrendelbaar() ? ItemUseAnimation.EAT : ItemUseAnimation.NONE;   // (the crumbs look like confetti of the piece)
     }
 
-    @Override
-    public SoundEvent getEatingSound() {
-        return SoundEvents.ARMOR_EQUIP_LEATHER.value();
+    /**
+     * 26.1: the eating sound + crumbs while unlocking come from a CONSUMABLE component (Item#getEatingSound is gone).
+     * Only its sounds/particles are used: use() and finishUsingItem() stay ours.
+     */
+    public static Properties properties(GuhClothes clothes, Properties props) {
+        if (clothes.slot == GuhClothes.Slot.HAAR) {
+            return props;
+        }
+        return props.component(net.minecraft.core.component.DataComponents.CONSUMABLE, net.minecraft.world.item.component.Consumable.builder()
+                .consumeSeconds(ONTGRENDEL_TICKS / 20.0f).animation(ItemUseAnimation.EAT).sound(SoundEvents.ARMOR_EQUIP_LEATHER).build());
     }
 
     @Override
@@ -90,21 +99,21 @@ public class GuhClothingItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         if (!isOntgrendelbaar()) {
-            tooltip.add(Component.translatable("item.guhs.guh_clothes.lore").withStyle(ChatFormatting.GRAY));
+            tooltip.accept(Component.translatable("item.guhs.guh_clothes.lore").withStyle(ChatFormatting.GRAY));
             return;
         }
         if (KledingUnlocks.Client.heeft(clothes)) {
-            tooltip.add(Component.translatable("item.guhs.guh_clothes.al_ontgrendeld").withStyle(ChatFormatting.GREEN));
+            tooltip.accept(Component.translatable("item.guhs.guh_clothes.al_ontgrendeld").withStyle(ChatFormatting.GREEN));
         } else {
-            tooltip.add(Component.translatable("item.guhs.guh_clothes.ontgrendel").withStyle(ChatFormatting.GRAY));
+            tooltip.accept(Component.translatable("item.guhs.guh_clothes.ontgrendel").withStyle(ChatFormatting.GRAY));
         }
-        tooltip.add(Component.translatable("gui.guhs.menu.clothes." + clothes.slot.name().toLowerCase(java.util.Locale.ROOT))
+        tooltip.accept(Component.translatable("gui.guhs.menu.clothes." + clothes.slot.name().toLowerCase(java.util.Locale.ROOT))
                 .withStyle(ChatFormatting.DARK_PURPLE));
         String bron = KledingBronnen.bron(clothes);
         if (bron != null) {
-            tooltip.add(Component.translatable("item.guhs.guh_clothes.bron", Component.translatable("gui.guhs.kledingbron." + bron))
+            tooltip.accept(Component.translatable("item.guhs.guh_clothes.bron", Component.translatable("gui.guhs.kledingbron." + bron))
                     .withStyle(ChatFormatting.DARK_GRAY));
         }
     }

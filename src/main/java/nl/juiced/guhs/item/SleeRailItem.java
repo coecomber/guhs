@@ -21,6 +21,8 @@ import nl.juiced.guhs.block.SleeRailPartBlock;
 import nl.juiced.guhs.registry.ModBlocks;
 import nl.juiced.guhs.slee.SleePath;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A piece of sled rail. Click an existing piece to add the new one to its nearest end; click anywhere else to start a
  * new track in the direction you're looking. Sneak for the other kind: a left curve, a slope or drop going down, a
@@ -93,10 +95,10 @@ public class SleeRailItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.sleerail.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.sleerail.lore").withStyle(ChatFormatting.GRAY));
         if (kind != Kind.STRAIGHT) {
-            tooltip.add(Component.translatable("item.guhs.sleerail." + switch (kind) {
+            tooltip.accept(Component.translatable("item.guhs.sleerail." + switch (kind) {
                 case CURVE -> "curve";
                 case DROP -> "drop";
                 case SPIRAL -> "spiral";

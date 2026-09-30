@@ -19,6 +19,8 @@ import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.slee.SleePath;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** The guh sled as an item: put it on a sled rail. */
 public class SledItem extends Item {
     public SledItem(Properties properties) {
@@ -54,7 +56,7 @@ public class SledItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.guh_slee.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.guh_slee.lore").withStyle(ChatFormatting.GRAY));
     }
 }
