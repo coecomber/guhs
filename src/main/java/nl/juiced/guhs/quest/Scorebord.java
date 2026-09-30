@@ -163,10 +163,12 @@ public final class Scorebord {
         final Map<String, List<Entry>> boards = new HashMap<>();
 
         public static Data get(MinecraftServer server) {
-            return server.overworld().getDataStorage().computeIfAbsent(new SavedData.Factory<>(Data::new, Data::load, null), "guhs_scoreborden");
+            return nl.juiced.guhs.world.GuhSavedData.get(server.overworld(), Data.TYPE);
         }
 
-        @Override
+        static final net.minecraft.world.level.saveddata.SavedDataType<Data> TYPE = nl.juiced.guhs.world.GuhSavedData.type("guhs_scoreborden",
+                Data::new, Data::load, (d, r) -> d.save(new CompoundTag(), r));
+
         public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
             CompoundTag all = new CompoundTag();
             boards.forEach((board, list) -> {

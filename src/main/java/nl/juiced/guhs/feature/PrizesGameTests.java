@@ -123,9 +123,9 @@ public class PrizesGameTests {
         ServerLevel overworld = helper.getLevel();
         TeleportTransition in = GuhPortalForcer.getDestination(overworld, p, p.blockPosition());
         helper.assertTrue(in != null && in.newLevel().dimension() == ModDimensions.GUHMENSION, "the guh portal leads into the Guhmensie (no Guhmension dimension? run this on the dev server)");
-        in.postDimensionTransition().onTransition(p);
+        in.postTeleportTransition().onTransition(p);
         helper.assertTrue(GuhQuests.count(p, ModItems.GUHDEX.get()) == 1, "a Guhdex on arrival");
-        in.postDimensionTransition().onTransition(p);
+        in.postTeleportTransition().onTransition(p);
         helper.assertTrue(GuhQuests.count(p, ModItems.GUHDEX.get()) == 1, "and not a second one");
         p.getInventory().clearContent();
         ServerLevel guheinde = overworld.getServer().getLevel(GuheindeFeature.GUHEINDE);
@@ -137,7 +137,7 @@ public class PrizesGameTests {
             GuhQuests.saved(p).put(GuheindeReis.TERUG, back);
             TeleportTransition home = GuheindeReis.portalDestination(guheinde, p, BlockPos.ZERO);
             helper.assertTrue(home != null && home.newLevel().dimension() == ModDimensions.GUHMENSION, "the Guheinde portal leads back");
-            home.postDimensionTransition().onTransition(p);
+            home.postTeleportTransition().onTransition(p);
             helper.assertTrue(GuhQuests.count(p, ModItems.GUHDEX.get()) == 1, "back from the Guheinde: a Guhdex too");
             GuhQuests.saved(p).remove(GuheindeReis.TERUG);
         }

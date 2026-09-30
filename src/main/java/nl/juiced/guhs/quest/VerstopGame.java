@@ -224,7 +224,7 @@ public final class VerstopGame {
         if (players.size() > 1) {
             together = true; // searching together: fun, but no records
         }
-        player.teleportTo((ServerLevel) npc.level(), start.getX() + 0.5, start.getY(), start.getZ() + 0.5, player.getYRot(), 0);
+        player.teleportTo((ServerLevel) npc.level(), start.getX() + 0.5, start.getY(), start.getZ() + 0.5, java.util.Set.of(), player.getYRot(), 0, true);
         player.sendSystemMessage(Component.translatable("quest.guhs.verstop.go", level.guhs - found, Component.translatable(
                 "gui.guhs.verstop." + level.id())).withStyle(ChatFormatting.LIGHT_PURPLE));
         if (players.size() > 1) {
@@ -622,7 +622,7 @@ public final class VerstopGame {
 
     private static void backToRoof(GuhNpcEntity npc, ServerPlayer player) {
         net.minecraft.world.phys.Vec3 look = net.minecraft.world.phys.Vec3.directionFromRotation(0, npc.getYRot());
-        player.teleportTo((ServerLevel) npc.level(), npc.getX() + look.x * 2.5, npc.getY(), npc.getZ() + look.z * 2.5, npc.getYRot() + 180, 0);
+        player.teleportTo((ServerLevel) npc.level(), npc.getX() + look.x * 2.5, npc.getY(), npc.getZ() + look.z * 2.5, java.util.Set.of(), npc.getYRot() + 180, 0, true);
     }
 
     private void findMarkers(GuhNpcEntity npc) {

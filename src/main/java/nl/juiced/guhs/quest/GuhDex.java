@@ -206,7 +206,7 @@ public final class GuhDex {
      * Stepping into the Guhmensie through a portal (from the Overworld, the Barbecuether or the Guheinde, not by command or
      * respawn): hangs after the portal's own arrival steps (TeleportTransition.then) and gives a Guhdex.
      */
-    public static final net.minecraft.world.level.portal.TeleportTransition.PostDimensionTransition GIVE_ON_ARRIVAL = entity -> {
+    public static final net.minecraft.world.level.portal.TeleportTransition.PostTeleportTransition GIVE_ON_ARRIVAL = entity -> {
         if (entity instanceof ServerPlayer player) {
             giveOnArrival(player);
         }

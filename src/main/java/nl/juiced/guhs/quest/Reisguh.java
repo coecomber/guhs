@@ -64,10 +64,12 @@ public final class Reisguh {
         final Map<UUID, Set<UUID>> discovered = new java.util.HashMap<>();
 
         public static Data get(MinecraftServer server) {
-            return server.overworld().getDataStorage().computeIfAbsent(new SavedData.Factory<>(Data::new, Data::load, null), "guhs_reisguhs");
+            return nl.juiced.guhs.world.GuhSavedData.get(server.overworld(), Data.TYPE);
         }
 
-        @Override
+        static final net.minecraft.world.level.saveddata.SavedDataType<Data> TYPE = nl.juiced.guhs.world.GuhSavedData.type("guhs_reisguhs",
+                Data::new, Data::load, (d, r) -> d.save(new CompoundTag(), r));
+
         public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
             ListTag list = new ListTag();
             for (Point p : points.values()) {
@@ -246,7 +248,7 @@ public final class Reisguh {
         ServerLevel level = player.level();
         level.sendParticles(ParticleTypes.PORTAL, player.getX(), player.getY() + 1, player.getZ(), 40, 0.4, 0.8, 0.4, 0.3);
         BlockPos spot = arrival(level, p);
-        player.teleportTo(level, spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, p.yaw() + 180, 0);
+        player.teleportTo(level, spot.getX() + 0.5, spot.getY(), spot.getZ() + 0.5, java.util.Set.of(), p.yaw() + 180, 0, true);
         level.playSound(null, spot, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 0.7f, 1.3f);
         level.sendParticles(ParticleTypes.PORTAL, spot.getX() + 0.5, spot.getY() + 1, spot.getZ() + 0.5, 40, 0.4, 0.8, 0.4, 0.3);
         player.sendOverlayMessage(Component.translatable("quest.guhs.reis.arrived", p.name()).withStyle(ChatFormatting.LIGHT_PURPLE));

@@ -51,6 +51,7 @@ public class Guhs {
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);
         ModMenuTypes.MENUS.register(modBus);
         ModDataComponents.COMPONENTS.register(modBus);
+        nl.juiced.guhs.world.BouwCheck.TICKET_TYPES.register(modBus);   // 26.1: ticket types are a registry
         nl.juiced.guhs.feature.Features.register(modBus);   // the 2.4 minigames and rare structures
 
         modBus.addListener(ModEntities::registerAttributes);
@@ -80,7 +81,7 @@ public class Guhs {
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.VerstopGame::onServerStopped);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.KasteelPoort::onChat);
 
-        if (FMLEnvironment.dist == Dist.CLIENT) {
+        if (FMLEnvironment.getDist() == Dist.CLIENT) {
             GuhsClient.init(modBus);
         }
     }
