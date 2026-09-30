@@ -964,3 +964,32 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
   is picked from texture alpha now (PORT_PLAN 7.9).
 * R: dev AutoCheck: the check world's game rules are set right after joining (26.1 `LevelSettings` has no game rules); "mist off" can no longer
   cancel the fog event, it only pushes the terrain fog out to the render distance.
+* S7: Luchtballon lifts (`DATA_LIFT`) and the race guh's scripted ride (`DATA_RIT`) are synced as SNBT strings (`EntityDataSerializers.STRING`
+  + `TagParser.parseCompoundFully`): 26.1 has no `COMPOUND_TAG` entity data serializer. Same data, no gameplay change. The golf ball's owner is
+  synced as `OPTIONAL_LIVING_ENTITY_REFERENCE` (no `OPTIONAL_UUID` any more; same UUID).
+* S7: Fog (Sneeuwstorm blizzard, kaasmoeras mist, Barbecuether Rookdelta/Asdal smoke, kaasfrituursaus): 26.1 fires one `ViewportEvent.RenderFog`
+  (no FOG_TERRAIN/FOG_SKY mode, no fog shape, not cancellable); the same near/far values now go into the environmental fog. The old sphere
+  (blizzard) / cylinder (mist) shape is gone and the sky fog is left alone -> the look may differ slightly (phase 6 check). In the sauce the
+  fluid extension sets environmental/sky/cloud end like vanilla lava.
+* S7: Barbecuether sky: `BarbecuetherSky` (DimensionSpecialEffects, SkyType.NONE, foggy everywhere) is deleted; the look is D's dimension type
+  (`skybox: none`, nether-like `fog_start/end_distance` 10/96, fast_lava, water_evaporates, bed rule "explodes"). The kaasfrituursaus is fast
+  (tick delay 10, slope 4, drop-off 1, faster push) where `minecraft:gameplay/fast_lava` is true (was `DimensionType#ultraWarm`).
+* S7: Rookguh: 26.1 has no `FlyingMob`; `RookguhEntity extends Mob` with 1.21.1 FlyingMob's travel/no fall damage/no climbing copied in. The
+  walk animation value is only computed on the client now (vanilla 26.1 aiStep).
+* S7: Verkoolde mikakop: wearable through the item's `equippableUnswappable(HEAD)` (like 26.1 skulls; 1.21.1 `Equipable` on the block is gone).
+  The wall variant gets its name through `overrideDescription("block.guhs.verkoolde_mikakop")`.
+* S7: Guhbrouwketel: the leftover grillspiespoeder drop on removal moved to `GuhbrouwketelBlockEntity#preRemoveSideEffects` (no `onRemove`).
+* S7: Sneeuwguhspar needles (`SparNaalden`) are a 26.1 `LeavesBlock` with falling-leaf chance 0 and no particle (1.21.1 plain leaves had none).
+  Grill plants and moerasgras extend `VegetationBlock` (26.1's `BushBlock` is a new bonemealable bush). Saté/worst zwammetjes use the vanilla
+  `SUPPORTS_CRIMSON_FUNGUS` / `SUPPORTS_WARPED_FUNGUS` tags (same blocks as 1.21.1's nylium/mycelium/soul soil/dirt rule).
+* S7: Moerasheks-Mika, Vonk-Mika, Knekel-Mika and the Aangebrande Mika are `notInPeaceful()` types (1.21.1 Monsters despawned in peaceful); the
+  Aangebrande Mika's own `checkDespawn` asks `getType().isAllowedInPeaceful()`.
+* S7: Baltoguh sniffing pose and the Asguh's glowing cheeks are `GuhRenderer.hook`s (glow = `frame.glow`, eyes render type as before); the
+  Baltoguh no longer goes through `VariantUiterlijk`. Nether-Mika's held ingot: a GeoRenderLayer added in `AddLayers` (per-bone item on "head").
+* S7: Race ghost: colour as ARGB int (same values); its 1.0.0 `shadowRadius = 0.2f` was overwritten by GuhRenderer every frame, so it keeps the
+  normal guh shadow (unchanged look).
+* S7: Knabbelbaken beam: `BeaconRenderer.submitBeaconBeam` with the old fixed radii 0.2/0.25 (no 26.1 distance scaling), same colour/height.
+* S7: Vadsverdrijvend drankje: the `effect` burst is a white `SpellParticleOption` (EFFECT takes a colour in 26.1; white = the 1.21.1 look); item
+  particles use the stack's `ItemStackTemplate`.
+* S7: Race ghosts SavedData: `guhs:race_geesten` via `GuhSavedData` (1.0.0 file `guhs_race_geesten.dat` is moved once).
+* S7: Kaasmoeras test "rumbling tummy": FoodData has no exhaustion getter any more; the test reads `foodExhaustionLevel` from the player's save data.
