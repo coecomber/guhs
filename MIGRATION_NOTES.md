@@ -964,3 +964,28 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
   is picked from texture alpha now (PORT_PLAN 7.9).
 * R: dev AutoCheck: the check world's game rules are set right after joining (26.1 `LevelSettings` has no game rules); "mist off" can no longer
   cancel the fog event, it only pushes the terrain fog out to the render distance.
+* S5: Band (`guhs_band.dat`) and Guhkamer (`guhs_guhkamer.dat`) saved data are `GuhSavedData.tagType("band"/"guhkamer", ..)`: the 1.0.0 file
+  is moved to `<world>/dimensions/minecraft/overworld/data/guhs/band.dat` / `guhkamer.dat` the first time it is read (content unchanged).
+* S5: Spawn eggs of the farm animals (guhschaapje, knabbelkippetje, guhkoe) and the waterdiertjes (guhxolotl, guh_eendje,
+  knabbelvlindertje, glimguhtje, lieveheersbeestje) are plain `SpawnEggItem`s (`ModItems.spawnEgg`); their look comes from D's baked
+  textures instead of the two tint colours.
+* S5: Kaasmelk, kokosnoot and kokosmelk: sounds/animation/effect moved from item overrides and `FoodProperties.effect` to a `Consumable`
+  (kaasmelk: drink, generic drink sound, bottle back via `usingConvertsTo`; kokosnoot: eaten with the drink slurp; kokosmelk: drink,
+  honey sound, 1.6 s, Regeneration 5 s at 100 %). Same sounds, times and effect as 1.0.0; vanilla's consume particles/timing apply.
+* S5: Guhxolotl "dry" check: `isInWaterRainOrBubble()` is gone -> `isInWaterOrRain()` (a bubble column is water, so it still counts).
+* S5: Zwembandje steering reads the raw left/right keys (26.1 `ClientInput` has no `leftImpulse`; 1.0.0 was the same +-1, sneaking can't
+  happen on the ring).
+* S5: Emote "VAHOEG!" particle (4:1 wide): 26.1 particle quads are square, so it is extracted as four squares side by side with the same
+  corners/uv; 26.1 culls particles by their centre point, so it disappears when its centre leaves the screen (1.0.0 used a widened box).
+* S5: Knuffelbad shine (freshly washed guh): the energy-swirl model pass is a `GuhRenderer` hook pass on the bones the guh's own pass
+  shows, worked out by bone name (saddle, armour tier, variant bones under clothes, like `GuhRenderer#applyVisibility`); bones that another
+  feature's hook hides would still shimmer (1.0.0 re-rendered exactly the visible bones). R may add a "same bones as the main pass" pass.
+* S5: Farm animals, guhxolotl and eendje renderers: baby size via `scaleModelForRender` (same 0.6 / 0.55 / 0.5), baby shadow halved like
+  1.21.1's entity render dispatcher did, head turning via `DefaultAnimations.hardcodedHeadRotation` (was `DefaultedEntityGeoModel(id, true)`).
+* S5: Badeendje: "picked up in my own game" hides it through `shouldRender` (was an early return in `render`); minimum block light 7 is set
+  on the render state; the glow of the glowing kinds is the eyes render type (full bright) on the same bones.
+* S5: Guhdex "Mijn guhs" guh preview (`band/client/GuhPop`) and the creche screen draw entities picture-in-picture (centred in their
+  box; the old 8 % lower centre is kept through the translation).
+* S5: Guhxolotl emmertje icon: item property `guhs:kleur` (ordinal / 4, model overrides) -> select property `guhs:guhxolotl_kleur`
+  (roze/mint/choco/wit/goud) for D's client item definition.
+* S5: Palm fronds (`PalmBlad`, a `LeavesBlock`): 26.1 leaves have a falling-leaf particle chance; set to 0 with no particle, as in 1.0.0.
