@@ -232,6 +232,9 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
 
         @Override
         public void tick() {
+            if (target == null) {
+                return;                                        // (1.1.1: snapped already: ticked once more before it stops)
+            }
             getLookControl().setLookAt(target, 60f, 60f);
             target.pullTowards(KikkerguhEntity.this);
             if (++aimTicks >= 8 && target.isAlive()) {

@@ -3,6 +3,28 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.1.1 — Minecraft 26.1.2
+
+A bugfix for servers. Same requirements as 1.1.0 (Minecraft 26.1.2, NeoForge 26.1.2.71+, GeckoLib 5.5.2+, Java 25).
+
+### Fixes
+
+- **Server freeze in the Guhmension.** Wild guhs in the Guhmension come and go (they despawn when you walk away), but
+  the ones in chunks that unloaded before they despawned were saved with the chunk and piled up over time: on the
+  official server there were 70,000 entities (58,000 guhs) loaded in the Guhmension, and every step a player took made
+  the server walk all of them, until one tick took more than 60 seconds and the watchdog stopped the server.
+  Now these wild come-and-go guhs are never written to disk (tamed, named, kept or story guhs are, as before), the
+  Guhmension spawner also waits when there are 150 guhs within 128 blocks of you, and a safety net tidies away wild
+  guhs far from every player when there are more than 300 (+150 per player) in the Guhmension. Worlds that already
+  have too many clean themselves up.
+- **Riding loops are impossible.** Nothing can ride itself or something that already rides it any more, also not by a
+  forced ride from Guhs or another mod (Minecraft itself doesn't check "rides itself"). A riding loop would freeze the
+  server the same way.
+- **Server crash from an eekhoorntje.** A pluiseekhoorntje (tamed and following you, or wild) that has just dug a
+  knabbel stash crashed the server (`NullPointerException` in its stash goal, "Ticking entity"): the goal was ticked once more after
+  the stash was done. Fixed, and the same slip is guarded in the Kikkerguh's tongue, the vadsige guh's snack hunt and
+  the huisje/Guhkamer chores.
+
 ## 1.1.0 — Minecraft 26.1.2
 
 Minecraft **26.1.2** · NeoForge **26.1.2.71+** (built on 26.1.2.112) · GeckoLib **5.5.2+** · Java **25**. All in-game texts

@@ -221,7 +221,9 @@ public class PluiseekhoorntjeEntity extends Landdiertje {
         public void start() {
             ticks = 0;
             graaf = 0;
-            getNavigation().moveTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, 1.15);
+            if (plek != null) {
+                getNavigation().moveTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, 1.15);
+            }
         }
 
         @Override
@@ -231,8 +233,12 @@ public class PluiseekhoorntjeEntity extends Landdiertje {
 
         @Override
         public void tick() {
+            // 1.1.1: once the stash is dug plek is null, and a goal that ticks every tick is ticked once more before
+            // canContinueToUse is asked again (26.1: every other tick): that crashed the server (NullPointerException)
+            if (plek == null || !(level() instanceof ServerLevel sl)) {
+                return;
+            }
             ticks++;
-            ServerLevel sl = (ServerLevel) level();
             double d = distanceToSqr(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5);
             if (d > 1.6 * 1.6) {
                 if (ticks % 20 == 0) {

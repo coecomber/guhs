@@ -158,6 +158,9 @@ public final class PersonalityGoals {
 
         @Override
         public void tick() {
+            if (snack == null) {
+                return;                                        // (1.1.1: eaten already)
+            }
             guh.getLookControl().setLookAt(snack, 30f, 30f);
             if (guh.distanceTo(snack) > 1.2 + guh.getBbWidth() / 2) {
                 guh.getNavigation().moveTo(snack, 1.2);

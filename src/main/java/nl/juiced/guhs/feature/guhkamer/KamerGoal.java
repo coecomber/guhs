@@ -81,15 +81,16 @@ public class KamerGoal extends Goal {
             guh.teleportTo(m.x, m.y, m.z);
             return;
         }
-        if (taak != null) {
+        KlusTaak lopend = taak;   // (1.1.1: a local copy: the task may end the goal while it ticks)
+        if (lopend != null) {
             GuhHooks.bezig(guh, 40);
             boolean verder;
             try {
-                verder = taak.tick();
+                verder = lopend.tick();
             } catch (RuntimeException e) {
                 verder = false;
             }
-            if (!verder || ++taakTicks > taak.maxTicks()) {
+            if (!verder || ++taakTicks > lopend.maxTicks()) {
                 stopTaak();
             }
             return;

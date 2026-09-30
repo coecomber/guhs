@@ -164,18 +164,19 @@ public class HuisjeGoal extends Goal {
         if (mob instanceof GuhEntity g && Dagritme.slaapt(g)) {
             Dagritme.wakker(g, false);
         }
-        if (taak != null) {
+        KlusTaak lopend = taak;   // (1.1.1: a local copy: the task may end the goal while it ticks)
+        if (lopend != null) {
             if (mob instanceof GuhEntity g) {
                 GuhHooks.bezig(g, 40);
             }
             boolean verder;
             try {
-                verder = taak.tick();
+                verder = lopend.tick();
             } catch (RuntimeException e) {
                 com.mojang.logging.LogUtils.getLogger().warn("Huisje taak failed", e);
                 verder = false;
             }
-            if (!verder || ++taakTicks > taak.maxTicks()) {
+            if (!verder || ++taakTicks > lopend.maxTicks()) {
                 stopTaak();
             }
             return;

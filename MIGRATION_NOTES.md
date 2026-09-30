@@ -1253,3 +1253,7 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
   constructor or field (NPE "Components not bound yet" -> the whole reload fails and the client hangs on a white window).
 * `RenderTypes.eyes` is alpha-blended in 26.1; for 1.21.1-style additive glow use `GuhRenderTypes.eyes`.
 * The integrated client handles packets before `Minecraft#execute` tasks of the same tick.
+* 1.1.1: on the server nothing can ride a player (26.1 `startRiding` refuses vehicles whose type isn't saved; players never are),
+  and vanilla doesn't refuse `rider == vehicle`: `mixin/EntityRidingMixin` + `entity/RijGuard` refuse every riding loop.
+* 1.1.1: a goal with `requiresUpdateEveryTick()` is ticked on the odd ticks WITHOUT `canContinueToUse` first: a field the goal
+  itself cleared in `tick()` must be null-checked at the top of `tick()` (the eekhoorntje stash goal crashed the live server).

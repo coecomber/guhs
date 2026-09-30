@@ -1074,6 +1074,23 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
                 && !nl.juiced.guhs.feature.verhaal.VerhaalGuhs.isKopie(this);   // (3.0: a story copy stays)
     }
 
+    /**
+     * 1.1.1: a wild guh of the Guhmension that comes and goes (see {@link #removeWhenFarAway}): nobody's, not named, not
+     * kept on purpose. Such a guh is never written to disk: when its chunk unloads it is simply gone, just like when you
+     * walk away from it (the GuhmensionSpawner brings new ones around you). Before, they piled up in the saved chunks
+     * (70,000 entities on the official server, which froze it: the entity tracker walks every entity for every step
+     * a player takes).
+     */
+    public boolean isKomEnGaGuh() {
+        return this.getType() == ModEntities.GUH.get() && !this.isTame() && !this.isPersistenceRequired() && !this.requiresCustomPersistence()
+                && !this.hasCustomName() && this.removeWhenFarAway(0);
+    }
+
+    @Override
+    public boolean shouldBeSaved() {
+        return super.shouldBeSaved() && !isKomEnGaGuh();
+    }
+
     /** Named with a name tag -> the name is always shown above its head. */
     @Override
     public boolean shouldShowName() {

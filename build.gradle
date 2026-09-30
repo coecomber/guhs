@@ -93,6 +93,10 @@ neoForge {
         server {
             server()
             programArgument '--nogui'
+            // 1.1.1: `gradlew runServer -PserverDir=<dir>` runs the dedicated server in another folder (a scratch smoke run)
+            if (project.findProperty('serverDir')) {
+                gameDirectory = file(project.findProperty('serverDir').toString())
+            }
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 

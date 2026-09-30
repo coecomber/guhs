@@ -85,7 +85,7 @@ Install Guhs on **both** the server and every client. A world opened with 1.1.x 
 
 1. Install NeoForge for Minecraft 26.1.2 (or make a NeoForge 26.1.2 instance in Prism Launcher, the CurseForge app
    or the Modrinth app). On Minecraft 1.21.1, use Guhs 1.0.x instead.
-2. Put `guhs-1.1.0.jar` (or `guhs-1.0.x.jar` on 1.21.1) and the matching GeckoLib in the `mods` folder (launchers can
+2. Put `guhs-1.1.1.jar` (or `guhs-1.0.x.jar` on 1.21.1) and the matching GeckoLib in the `mods` folder (launchers can
    download both for you).
 3. Start the game and make a **new world**. Find a guh, give it kaas knabbels, and enjoy.
 

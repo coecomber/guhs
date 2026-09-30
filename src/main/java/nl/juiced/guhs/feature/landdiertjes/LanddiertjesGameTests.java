@@ -348,6 +348,50 @@ public class LanddiertjesGameTests {
         });
     }
 
+    /**
+     * 1.1.1 (server crash): a tamed eekhoorntje that follows you digs a stash; the stash goal ticks every tick and was
+     * ticked once more after the stash was done (its spot already cleared): NullPointerException, server down. Now: the
+     * finished goal ticks harmlessly, and the eekhoorntje keeps following and digs a second stash.
+     */
+    @GuhTest(template = TUIN, batch = "landdiertjes_voorraadje", timeoutTicks = 1200)
+    public static void landdiertjesVoorraadjeGoalNaAfloopVeilig(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = speler(helper, new BlockPos(12, 2, 12));
+        PluiseekhoorntjeEntity e = helper.spawn(LanddiertjesFeature.PLUISEEKHOORNTJE.get(), new BlockPos(9, 2, 9));
+        e.tame(p);
+        PluiseekhoorntjeEntity.VerstopGoal los = e.new VerstopGoal();
+        los.tick();                                                   // (no spot: nothing happens, no crash)
+        los.start();
+        los.tick();
+        helper.assertTrue(!los.canContinueToUse(), "without a spot the goal doesn't go on");
+        int[] stashes = {0};
+        long[] tweede = {-1};
+        helper.runAfterDelay(5, e::vondstNu);
+        helper.onEachTick(() -> {
+            if (tweede[0] >= 0 && helper.getTick() >= tweede[0]) {
+                tweede[0] = -2;
+                e.vondstNu();                                         // (it kept ticking fine: find another one)
+            }
+            int n = 0;
+            for (BlockPos b : BlockPos.betweenClosed(helper.absolutePos(new BlockPos(1, 1, 1)), helper.absolutePos(new BlockPos(22, 4, 22)))) {
+                if (level.getBlockState(b).getBlock() instanceof KnabbelvoorraadjeBlock) {
+                    n += level.getBlockState(b).getValue(KnabbelvoorraadjeBlock.KNABBELS);
+                }
+            }
+            if (n > stashes[0] && stashes[0] > 0) {
+                stashes[0] = -n;                                      // (the second stash: done)
+            } else if (n > 0 && stashes[0] == 0) {
+                stashes[0] = n;
+                tweede[0] = helper.getTick() + 40;
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(stashes[0] < 0, "two stashes dug, no crash in between");
+            helper.assertTrue(e.isAlive() && !e.isRemoved(), "the eekhoorntje is fine");
+            weg(helper, p);
+        });
+    }
+
     @GuhTest(template = WEI, batch = "landdiertjes")
     public static void landdiertjesGuhdexPaginas(GameTestHelper helper) {
         for (GuhVariant v : List.of(GuhVariant.PLUISEGELTJE, GuhVariant.GUH_KONIJNTJE, GuhVariant.PLUISEEKHOORNTJE, GuhVariant.SHUCKLE)) {
