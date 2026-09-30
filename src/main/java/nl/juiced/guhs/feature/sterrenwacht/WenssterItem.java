@@ -24,6 +24,8 @@ import nl.juiced.guhs.feature.knus.KnusVoortgang;
 import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A wensster: what a guh constellation gives you. Hold it up (right-click) and make a wish: the star flies off with a
  * sparkle and you get a little present ({@link #wens}). Or pay Professor Sterretje with it.
@@ -39,8 +41,8 @@ public class WenssterItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.wensster.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.wensster.lore").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
@@ -49,7 +51,7 @@ public class WenssterItem extends Item {
         if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             wens(serverPlayer, level.getRandom());
             stack.consume(1, player);
-            player.getCooldowns().addCooldown(this, 20);
+            player.getCooldowns().addCooldown(stack, 20);
         }
         return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }

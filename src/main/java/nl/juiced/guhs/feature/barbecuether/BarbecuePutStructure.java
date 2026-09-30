@@ -122,7 +122,8 @@ public class BarbecuePutStructure extends Structure implements nl.juiced.guhs.wo
         // ground layer (the jigsaw's layer) ends up in the top block of the floor
         // (max depth 1, not 0: with 0 vanilla's jigsaw placement never adds even the start piece)
         return nl.juiced.guhs.world.BouwRuimte.claim(context, this, JigsawPlacement.addPieces(context, startPool, Optional.of(startJigsawName), 1, new BlockPos(x, y, z), false,
-                Optional.empty(), 64, PoolAliasLookup.EMPTY, DimensionPadding.ZERO, LiquidSettings.IGNORE_WATERLOGGING));
+                Optional.empty(), new net.minecraft.world.level.levelgen.structure.structures.JigsawStructure.MaxDistance(64), PoolAliasLookup.EMPTY,
+                DimensionPadding.ZERO, LiquidSettings.IGNORE_WATERLOGGING));
     }
 
     /** The highest cave floor (first free y above solid ground) in this column with room above and no fluid, or MIN_VALUE. */

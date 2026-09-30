@@ -275,7 +275,7 @@ public class SterrenwachtGameTests {
         var telescopen = t.get().filterBlocks(BlockPos.ZERO, new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings(),
                 SterrenwachtFeature.TELESCOOP.get(), true);
         helper.assertTrue(telescopen.size() >= 5, "telescopes in it: " + telescopen.size());
-        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.STRUCTURE_TYPE.get(Guhs.id("sterrenwacht_hoog")) == SterrenwachtFeature.HOGE_JIGSAW.get(),
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.STRUCTURE_TYPE.getValue(Guhs.id("sterrenwacht_hoog")) == SterrenwachtFeature.HOGE_JIGSAW.get(),
                 "the 'only high up' structure type");
         helper.succeed();
     }

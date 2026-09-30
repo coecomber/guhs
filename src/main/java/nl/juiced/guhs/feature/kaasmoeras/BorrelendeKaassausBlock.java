@@ -31,7 +31,7 @@ public class BorrelendeKaassausBlock extends Block {
     /** Upward speed of a bounce (a normal jump is 0.42): about 4 blocks high. */
     public static final double BOUNCE = 0.95;
     private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 12, 16);
-    static final DustParticleOptions CHEESE_DUST = new DustParticleOptions(new Vector3f(1.0f, 0.82f, 0.25f), 1.0f);
+    static final DustParticleOptions CHEESE_DUST = new DustParticleOptions(0xFFD140 /* 1.0, 0.82, 0.25 */, 1.0f);
 
     public BorrelendeKaassausBlock(Properties properties) {
         super(properties);
@@ -59,14 +59,14 @@ public class BorrelendeKaassausBlock extends Block {
 
     /** No fall damage on bubbling cheese: it's like landing in a warm pudding. */
     @Override
-    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
         entity.resetFallDistance();
     }
 
     @Override
-    public void updateEntityAfterFallOn(BlockGetter level, Entity entity) {
+    public void updateEntityMovementAfterFallOn(BlockGetter level, Entity entity) {
         if (entity.isSuppressingBounce()) {
-            super.updateEntityAfterFallOn(level, entity);
+            super.updateEntityMovementAfterFallOn(level, entity);
         } else {
             bounce(entity);
         }
@@ -89,7 +89,7 @@ public class BorrelendeKaassausBlock extends Block {
         double up = entity instanceof LivingEntity ? BOUNCE : BOUNCE * 0.6;
         if (v.y < up) {
             entity.setDeltaMovement(v.x * 0.9, up, v.z * 0.9);
-            entity.hasImpulse = true;
+            entity.needsSync = true;
         }
         entity.resetFallDistance();
     }

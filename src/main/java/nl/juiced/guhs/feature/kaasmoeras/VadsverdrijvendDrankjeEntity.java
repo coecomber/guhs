@@ -30,7 +30,7 @@ public class VadsverdrijvendDrankjeEntity extends ThrowableItemProjectile {
     }
 
     public VadsverdrijvendDrankjeEntity(Level level, LivingEntity thrower) {
-        super(KaasmoerasFeature.DRANKJE.get(), thrower, level);
+        super(KaasmoerasFeature.DRANKJE.get(), thrower, level, new net.minecraft.world.item.ItemStack(KaasmoerasFeature.VADSVERDRIJVEND_DRANKJE.get()));
     }
 
     @Override
@@ -69,8 +69,10 @@ public class VadsverdrijvendDrankjeEntity extends ThrowableItemProjectile {
                         .withStyle(net.minecraft.ChatFormatting.DARK_GREEN));
             }
         }
-        server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, getItem()), getX(), getY(), getZ(), 8, 0.1, 0.1, 0.1, 0.1);
-        server.sendParticles(ParticleTypes.EFFECT, getX(), getY() + 0.3, getZ(), 30, 1.2, 0.4, 1.2, 0.05);
+        server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, net.minecraft.world.item.ItemStackTemplate.fromNonEmptyStack(getItem())),
+                getX(), getY(), getZ(), 8, 0.1, 0.1, 0.1, 0.1);
+        server.sendParticles(net.minecraft.core.particles.SpellParticleOption.create(ParticleTypes.EFFECT, -1, 1.0f), getX(), getY() + 0.3, getZ(),
+                30, 1.2, 0.4, 1.2, 0.05);
         server.sendParticles(BorrelendeKaassausBlock.CHEESE_DUST, getX(), getY() + 0.3, getZ(), 20, 1.2, 0.4, 1.2, 0.02);
         server.playSound(null, getX(), getY(), getZ(), SoundEvents.SPLASH_POTION_BREAK, SoundSource.NEUTRAL, 1f, 0.9f + random.nextFloat() * 0.2f);
         return hit;

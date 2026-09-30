@@ -170,7 +170,7 @@ public class KaasmoerasPoelFeature extends Feature<NoneFeatureConfiguration> {
         level.setBlock(mast.offset(-1, 2, 0), Blocks.WHITE_WOOL.defaultBlockState(), 2);
         // a yellow lampion on a post, the barrel with the loot and a pile of stolen kaasknabbels
         level.setBlock(centre.offset(1, 1, 1), Blocks.SPRUCE_FENCE.defaultBlockState(), 2);
-        BlockState lampion = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(nl.juiced.guhs.Guhs.id("lampion_geel")).defaultBlockState();
+        BlockState lampion = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(nl.juiced.guhs.Guhs.id("lampion_geel")).defaultBlockState();
         level.setBlock(centre.offset(1, 2, 1), lampion, 2);
         BlockPos barrel = centre.offset(-2, 1, -1);
         level.setBlock(barrel, Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, Direction.UP), 2);

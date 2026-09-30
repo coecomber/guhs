@@ -66,9 +66,9 @@ public class KnekelMikaEntity extends Monster implements GeoEntity {
 
     /** The grill fork is hot: a stab singes you a little. */
     @Override
-    public boolean doHurtTarget(Entity target) {
+    public boolean doHurtTarget(net.minecraft.server.level.ServerLevel level, Entity target) {
         this.triggerAnim("action", "stab");
-        boolean hit = super.doHurtTarget(target);
+        boolean hit = super.doHurtTarget(level, target);
         if (hit) {
             target.igniteForSeconds(2.0f);
         }

@@ -31,7 +31,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.FlyingMob;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -67,7 +67,7 @@ import net.minecraft.world.level.storage.ValueInput;
  * knabbel it gets rounder and rosier; with the last one it shouts VAHOEG! and floats up home, and everyone who fed it
  * gets a saved Rookguh on their count ({@link SpiesburchtStats}).
  */
-public class RookguhEntity extends FlyingMob implements GeoEntity {
+public class RookguhEntity extends Mob implements GeoEntity {
     public static final int NEEDED = 6;
     /** Ticks of floating up (through the ceiling) before it's home. */
     public static final int HOMEWARD_TICKS = 70;
@@ -89,7 +89,7 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return FlyingMob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0).add(Attributes.FOLLOW_RANGE, 24.0)
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0).add(Attributes.FOLLOW_RANGE, 24.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.1).add(Attributes.FLYING_SPEED, 0.1);
     }
 
@@ -100,6 +100,40 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
         }
         return random.nextInt(6) == 0 && level.getBlockState(pos).isAir() && level.getBlockState(pos.above()).isAir()
                 && level.getEntitiesOfClass(RookguhEntity.class, new AABB(pos).inflate(40)).size() < 3;
+    }
+
+    // --- what 1.21.1's FlyingMob did (26.1 has no FlyingMob) ------------------------------------------------------------
+
+    @Override
+    protected void checkFallDamage(double y, boolean onGround, net.minecraft.world.level.block.state.BlockState state, BlockPos pos) {
+    }
+
+    @Override
+    public void travel(net.minecraft.world.phys.Vec3 travelVector) {
+        if (this.isInWater()) {
+            this.moveRelative(0.02F, travelVector);
+            this.move(net.minecraft.world.entity.MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.8F));
+        } else if (this.isInLava()) {
+            this.moveRelative(0.02F, travelVector);
+            this.move(net.minecraft.world.entity.MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.5));
+        } else {
+            BlockPos ground = getBlockPosBelowThatAffectsMyMovement();
+            float f = 0.91F;
+            if (this.onGround()) {
+                f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
+            }
+            float f1 = 0.16277137F / (f * f * f);
+            this.moveRelative(this.onGround() ? 0.1F * f1 : 0.02F, travelVector);
+            this.move(net.minecraft.world.entity.MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale((double) f));
+        }
+    }
+
+    @Override
+    public boolean onClimbable() {
+        return false;
     }
 
     @Override
@@ -228,9 +262,9 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
 
     /** You feed a Rookguh, you don't hit it: nothing hurts it (only /kill and the void). */
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            return super.hurt(source, amount);
+            return super.hurtServer(level, source, amount);
         }
         if (source.getEntity() instanceof ServerPlayer player && !level().isClientSide()) {
             player.sendOverlayMessage(Component.translatable("quest.guhs.rookguh.niet_slaan").withStyle(ChatFormatting.GRAY));
@@ -245,7 +279,7 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
     }
 
     @Override
-    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double distance, float multiplier, DamageSource source) {
         return false;
     }
 
@@ -280,9 +314,8 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
     public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Fed", fed());
-        ListTag list = new ListTag();
-        feeders.forEach(id -> list.add(new net.minecraft.nbt.IntArrayTag(UUIDUtil.uuidToIntArray(id))));
-        tag.put("Feeders", list);
+        var list = tag.list("Feeders", UUIDUtil.CODEC);          // (same int arrays as 1.0.0)
+        feeders.forEach(list::add);
     }
 
     @Override
@@ -290,9 +323,7 @@ public class RookguhEntity extends FlyingMob implements GeoEntity {
         super.readAdditionalSaveData(tag);
         this.entityData.set(DATA_FED, Math.min(NEEDED - 1, tag.getIntOr("Fed", 0)));
         feeders.clear();
-        for (Tag t : tag.getListOrEmpty("Feeders")) {
-            feeders.add(UUIDUtil.uuidFromIntArray(((net.minecraft.nbt.IntArrayTag) t).getAsIntArray()));
-        }
+        tag.listOrEmpty("Feeders", UUIDUtil.CODEC).forEach(feeders::add);
     }
 
     // --- GeckoLib --------------------------------------------------------------------------------------------------------

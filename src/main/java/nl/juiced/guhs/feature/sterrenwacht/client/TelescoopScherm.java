@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.sterrenwacht.client;
 
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -110,8 +112,10 @@ public class TelescoopScherm extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (super.mouseClicked(mouseX, mouseY, button)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
+        if (super.mouseClicked(event, doubleClick)) {
             return true;
         }
         if (button != 0 || feestTijd >= 0) {

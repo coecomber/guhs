@@ -295,7 +295,7 @@ public class BaltoGameTests {
         var gedrag = VariantGedragen.van(GuhVariant.BALTOGUH);
         helper.assertTrue(gedrag != null && "gui.guhs.balto.snuffel".equals(gedrag.speciaalKnop()), "a Snuffel! button");
         BlockPos bed = helper.absolutePos(new BlockPos(5, 2, 5)).offset(300, 0, -120);
-        p.setRespawnPosition(Level.OVERWORLD, bed, 0, true, false);
+        p.setRespawnPosition(new ServerPlayer.RespawnConfig(net.minecraft.world.level.storage.LevelData.RespawnData.of(Level.OVERWORLD, bed, 0, 0), true), false);
         Vec3 doel = BaltoGedrag.snuffel(guh, p);
         boolean overworld = helper.getLevel().dimension() == Level.OVERWORLD;
         helper.assertTrue(!overworld || doel != null && doel.distanceTo(Vec3.atBottomCenterOf(bed)) < 1, "he smells the bed: " + doel);

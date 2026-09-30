@@ -33,6 +33,8 @@ import net.neoforged.neoforge.event.level.ExplosionEvent;
 import nl.juiced.guhs.Guhs;
 
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * What the three "buiten" features of 2.8 (sterrenwacht, ballon, kamperen) share: a line said by a named character,
  * the shown advancements of the Knuffeldal tab, a block item with a lore line, and the protection of a loose structure
@@ -74,8 +76,8 @@ public final class Buiten {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -86,8 +88,8 @@ public final class Buiten {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -141,7 +143,7 @@ public final class Buiten {
                     return true;
                 }
             }
-            Structure s = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(structuur);
+            Structure s = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(structuur);
             return s != null && server.structureManager().getStructureWithPieceAt(pos, s).isValid();
         }
 

@@ -15,16 +15,16 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /** Moerasgras: short swamp grass with little cheese seeds. Bone meal turns it into kaasriet. */
-public class MoerasgrasBlock extends BushBlock implements BonemealableBlock {
+public class MoerasgrasBlock extends net.minecraft.world.level.block.VegetationBlock implements BonemealableBlock {
     public static final MapCodec<MoerasgrasBlock> CODEC = simpleCodec(MoerasgrasBlock::new);
-    private static final VoxelShape SHAPE = BushBlock.box(2, 0, 2, 14, 12, 14);
+    private static final VoxelShape SHAPE = net.minecraft.world.level.block.Block.box(2, 0, 2, 14, 12, 14);
 
     public MoerasgrasBlock(Properties properties) {
         super(properties);
     }
 
     @Override
-    protected MapCodec<? extends BushBlock> codec() {
+    protected MapCodec<? extends net.minecraft.world.level.block.VegetationBlock> codec() {
         return CODEC;
     }
 

@@ -31,6 +31,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.level.ScheduledTickAccess;
 /** The barbecue portal: flickering flames inside a grillkool frame. Guhmensie <-> Barbecuether, 1:8 like the Nether. */
 public class GrillPortalBlock extends Block implements Portal {
     public static final MapCodec<GrillPortalBlock> CODEC = simpleCodec(GrillPortalBlock::new);
@@ -38,8 +40,8 @@ public class GrillPortalBlock extends Block implements Portal {
 
     private static final VoxelShape X_AXIS_AABB = Block.box(0, 0, 6, 16, 16, 10);
     private static final VoxelShape Z_AXIS_AABB = Block.box(6, 0, 0, 10, 16, 16);
-    private static final DustParticleOptions EMBER = new DustParticleOptions(new Vector3f(1.0f, 0.5f, 0.1f), 1.0f);
-    private static final DustParticleOptions CHEESE = new DustParticleOptions(new Vector3f(1.0f, 0.82f, 0.25f), 0.9f);
+    private static final DustParticleOptions EMBER = new DustParticleOptions(0xFF801A /* 1.0, 0.5, 0.1 */, 1.0f);
+    private static final DustParticleOptions CHEESE = new DustParticleOptions(0xFFD140 /* 1.0, 0.82, 0.25 */, 0.9f);
 
     public GrillPortalBlock(Properties properties) {
         super(properties);
@@ -63,17 +65,17 @@ public class GrillPortalBlock extends Block implements Portal {
 
     /** Goes out (chain reaction) as soon as the frame isn't whole any more. */
     @Override
-    protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction facing, BlockPos facingPos, BlockState facingState, RandomSource random) {
         Direction.Axis portalAxis = state.getValue(AXIS);
         boolean sideways = facing.getAxis() != portalAxis && facing.getAxis().isHorizontal();
-        if (!sideways && !facingState.is(this) && !new GrillPortalShape(level, pos, portalAxis).isComplete()) {
+        if (!sideways && !facingState.is(this) && level instanceof LevelAccessor la && !new GrillPortalShape(la, pos, portalAxis).isComplete()) {
             return Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(state, facing, facingState, level, pos, facingPos);
+        return super.updateShape(state, level, ticks, pos, facing, facingPos, facingState, random);
     }
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
         if (entity.canUsePortal(false)) {
             entity.setAsInsidePortal(this, pos);
         }
@@ -83,7 +85,7 @@ public class GrillPortalBlock extends Block implements Portal {
     @Override
     public int getPortalTransitionTime(ServerLevel level, Entity entity) {
         return entity instanceof Player player
-                ? Math.max(1, level.getGameRules().getInt(player.getAbilities().invulnerable
+                ? Math.max(1, level.getGameRules().get(player.getAbilities().invulnerable
                 ? GameRules.PLAYERS_NETHER_PORTAL_CREATIVE_DELAY : GameRules.PLAYERS_NETHER_PORTAL_DEFAULT_DELAY))
                 : 0;
     }
@@ -121,7 +123,7 @@ public class GrillPortalBlock extends Block implements Portal {
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return ItemStack.EMPTY;
     }
 }

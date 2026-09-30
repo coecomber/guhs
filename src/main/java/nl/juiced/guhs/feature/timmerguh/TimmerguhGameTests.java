@@ -150,7 +150,7 @@ public class TimmerguhGameTests {
             for (BlockPos pos : ps) {
                 oor |= level.getBlockState(pos).is(Blocks.PINK_WOOL);
                 binnen |= level.getBlockState(pos).is(Blocks.MAGENTA_WOOL);
-                dak |= level.getBlockState(pos).getBlock() == net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(Guhs.id("pluisdak"));
+                dak |= level.getBlockState(pos).getBlock() == net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(Guhs.id("pluisdak"));
             }
             helper.assertTrue(oor && binnen && dak, "dak -> pluisdak, oor -> pink wool, binnenoor -> magenta wool");
             BlockPos vlag = Timmerguh.vlagPlek(npc);
@@ -240,16 +240,16 @@ public class TimmerguhGameTests {
     @GuhTest(template = TUIN, batch = BATCH)
     public static void timmerguhReceptenNaHetBouwboekje(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        var recepten = level.getRecipeManager();
+        var recepten = level.recipeAccess();
         helper.assertTrue(recepten.getRecipeFor(RecipeType.CRAFTING, klein(false), level).isEmpty(), "no small huisje without the bouwboekje");
         var recept = recepten.getRecipeFor(RecipeType.CRAFTING, klein(true), level);
-        helper.assertTrue(recept.isPresent() && recept.get().value().assemble(klein(true), level.registryAccess()).is(HuisjeFeature.KLEIN.get().asItem()),
+        helper.assertTrue(recept.isPresent() && recept.get().value().assemble(klein(true)).is(HuisjeFeature.KLEIN.get().asItem()),
                 "with the bouwboekje: a small huisje");
         var rest = recept.get().value().getRemainingItems(klein(true));
         helper.assertTrue(rest.stream().anyMatch(s -> s.is(TimmerguhFeature.BOUWBOEKJE.get())), "the bouwboekje stays in the grid");
         for (String maat : List.of("guhhuisje_klein", "guhhuisje_medium", "guhhuisje_groot")) {
-            var r = recepten.byKey(Guhs.id(maat));
-            helper.assertTrue(r.isPresent() && r.get().value().getIngredients().stream().anyMatch(i -> i.test(new ItemStack(TimmerguhFeature.BOUWBOEKJE.get()))),
+            var r = recepten.byKey(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, Guhs.id(maat)));
+            helper.assertTrue(r.isPresent() && r.get().value().placementInfo().ingredients().stream().anyMatch(i -> i.test(new ItemStack(TimmerguhFeature.BOUWBOEKJE.get()))),
                     maat + " needs the bouwboekje");
         }
         helper.succeed();
@@ -323,7 +323,7 @@ public class TimmerguhGameTests {
         var pools = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL);
         // the plein always hangs hoek_noordwest on one of its corners (its pool has only that one), and that corner's street
         // ends in the bouwplaats jigsaw
-        var hoekPool = pools.get(Guhs.id("knuffeldal_stadje/hoek_noordwest"));
+        var hoekPool = pools.getValue(Guhs.id("knuffeldal_stadje/hoek_noordwest"));
         helper.assertTrue(hoekPool != null && hoekPool.size() == 1, "one hoek_noordwest element");
         var plein = templates.get(Guhs.id("knuffeldal_stadje/plein")).orElseThrow();
         long naarNoordwest = plein.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW, true).stream()
@@ -342,7 +342,7 @@ public class TimmerguhGameTests {
                     .filter(j -> j.nbt().getStringOr("name", "").equals("guhs:knuffeldal_bouwplaats")).count();
             helper.assertTrue(n == 0, "only one bouwplaats per town, not in " + ander);
         }
-        var pool = pools.get(Guhs.id("knuffeldal_stadje/bouwplaats"));
+        var pool = pools.getValue(Guhs.id("knuffeldal_stadje/bouwplaats"));
         helper.assertTrue(pool != null && pool.size() == 1
                 && pool.getShuffledTemplates(net.minecraft.util.RandomSource.create(1)).get(0).toString().contains("knuffeldal_stadje/bouwplaats"),
                 "the bouwplaats pool");

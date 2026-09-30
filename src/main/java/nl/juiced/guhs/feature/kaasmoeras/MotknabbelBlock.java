@@ -19,6 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The motknabbel: a glowing lump of kaasmot-cheese that a kikkerguh spits out after snapping up a kaasmot (the
  * froglight of the kaasmoeras). It keeps the colour of the kikkerguh: roze, mint or geel (the block state {@link #KLEUR};
@@ -71,7 +73,7 @@ public class MotknabbelBlock extends Block {
 
     /** Pick block: the motknabbel of this colour. */
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return stack(state.getValue(KLEUR), 1);
     }
 
@@ -87,8 +89,8 @@ public class MotknabbelBlock extends Block {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("block.guhs.motknabbel.lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("block.guhs.motknabbel.lore").withStyle(ChatFormatting.GRAY));
         }
     }
 }

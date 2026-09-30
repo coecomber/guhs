@@ -186,9 +186,9 @@ public class BallonGameTests {
         nieuw.discard();
         LuchtballonEntity deco = ballon(helper, new BlockPos(6, 2, 3));
         var tag = new net.minecraft.nbt.CompoundTag();
-        deco.saveWithoutId(tag);
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(deco, tag);
         tag.putBoolean("Deco", true);
-        deco.load(tag);
+        nl.juiced.guhs.storage.Nbt.load(deco, tag);
         helper.assertTrue(deco.isDeco() && BallonRole.ballon(npc) != deco, "never a decoration balloon");
         ServerPlayer p = player(helper);
         helper.assertTrue(!deco.stijgOp(p, BallonRoute.HOGE_VADS, null) && p.getVehicle() == null, "a decoration balloon doesn't fly");

@@ -120,7 +120,7 @@ public final class NetherMikaRuil {
         }
         MikaEntity mika = (MikaEntity) event.getEntity();
         mika.targetSelector.removeAllGoals(g -> g instanceof NearestAttackableTargetGoal<?>);
-        mika.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(mika, Player.class, 10, true, false, p -> isHostileTo(mika, (Player) p)));
+        mika.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(mika, Player.class, 10, true, false, (p, level) -> isHostileTo(mika, (Player) p)));
         mika.goalSelector.addGoal(1, new AdmireGoal(mika));
         mika.goalSelector.addGoal(3, new FetchIngotGoal(mika));
         mika.setDropChance(EquipmentSlot.MAINHAND, 1.0f);
@@ -267,8 +267,8 @@ public final class NetherMikaRuil {
             mika.setXRot(35f);
             if (mika.level() instanceof ServerLevel level) {
                 if (mika.tickCount % 6 == 0) {
-                    level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, mika.getMainHandItem().isEmpty()
-                            ? new ItemStack(ModItems.VAHOEGE_VADS_INGOT.get()) : mika.getMainHandItem()),
+                    level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, net.minecraft.world.item.ItemStackTemplate.fromNonEmptyStack(mika.getMainHandItem().isEmpty()
+                            ? new ItemStack(ModItems.VAHOEGE_VADS_INGOT.get()) : mika.getMainHandItem())),
                             mika.getX(), mika.getY() + mika.getBbHeight() + 0.2, mika.getZ(), 2, 0.15, 0.1, 0.15, 0.02);
                 }
                 if (mika.getPersistentData().getLongOr(ADMIRE_UNTIL, 0L) <= level.getGameTime()) {

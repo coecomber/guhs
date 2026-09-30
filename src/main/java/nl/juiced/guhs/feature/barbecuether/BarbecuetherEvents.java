@@ -81,7 +81,7 @@ public final class BarbecuetherEvents {
                 return true;
             }
         }
-        var structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(MIKA_KAMP);
+        var structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(MIKA_KAMP);
         return structure != null && level.structureManager().getStructureAt(pos, structure).isValid();
     }
 

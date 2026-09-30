@@ -107,7 +107,7 @@ public final class GolfClient {
         float power = GolfClubItem.power(ticks);
         double speed = GolfGame.MIN_SPEED + (GolfGame.MAX_SPEED - GolfGame.MIN_SPEED) * Math.pow(power, 1.5);
         double reach = Math.min(12, speed * GolfBallEntity.FRICTION / (1 - GolfBallEntity.FRICTION));
-        DustParticleOptions dust = new DustParticleOptions(new org.joml.Vector3f(1f, 0.45f + power * 0.35f, 0.75f - power * 0.4f), 0.7f);
+        DustParticleOptions dust = new DustParticleOptions(net.minecraft.util.ARGB.colorFromFloat(1f, 1f, 0.45f + power * 0.35f, 0.75f - power * 0.4f) & 0xFFFFFF, 0.7f);
         for (double d = 0.6; d <= reach; d += 0.6) {
             mc.level.addParticle(dust, ball.getX() + dir.x * d, ball.getY() + 0.12, ball.getZ() + dir.z * d, 0, 0, 0);
         }

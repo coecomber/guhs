@@ -23,6 +23,8 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import nl.juiced.guhs.quest.GuhAdvancements;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** A Guhdrankje from the Guhbrouwketel: drink it like a potion; the bottle stays. */
 public class GuhdrankjeItem extends Item {
     public final Brouwsel brouwsel;
@@ -38,7 +40,7 @@ public class GuhdrankjeItem extends Item {
             for (MobEffectInstance effect : brouwsel.effects()) {
                 entity.addEffect(new MobEffectInstance(effect));
             }
-            level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 1f, 1.2f);
+            level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_DRINK.value(), SoundSource.PLAYERS, 1f, 1.2f);
             if (entity instanceof ServerPlayer player) {
                 player.awardStat(Stats.ITEM_USED.get(this));
                 GuhAdvancements.grant(player, "guhdrankje_gedronken");
@@ -70,19 +72,19 @@ public class GuhdrankjeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         for (MobEffectInstance effect : brouwsel.effects()) {
             if (effect.getDuration() < 20) {
-                tooltip.add(Component.translatable("item.guhs.guhdrankje.verzadiging").withStyle(ChatFormatting.BLUE));
+                tooltip.accept(Component.translatable("item.guhs.guhdrankje.verzadiging").withStyle(ChatFormatting.BLUE));
                 continue;
             }
             Component name = Component.translatable(effect.getDescriptionId());
             if (effect.getAmplifier() > 0) {
                 name = Component.translatable("potion.withAmplifier", name, Component.translatable("potion.potency." + effect.getAmplifier()));
             }
-            tooltip.add(Component.translatable("potion.withDuration", name, MobEffectUtil.formatDuration(effect, 1.0f, context.tickRate()))
+            tooltip.accept(Component.translatable("potion.withDuration", name, MobEffectUtil.formatDuration(effect, 1.0f, context.tickRate()))
                     .withStyle(ChatFormatting.BLUE));
         }
-        tooltip.add(Component.translatable("item.guhs.guhdrankje." + brouwsel.id() + ".lore").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        tooltip.accept(Component.translatable("item.guhs.guhdrankje." + brouwsel.id() + ".lore").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
     }
 }

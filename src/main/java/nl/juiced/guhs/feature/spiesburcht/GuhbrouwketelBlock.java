@@ -135,7 +135,7 @@ public class GuhbrouwketelBlock extends BaseEntityBlock {
         }
         if (state.getValue(VULLING) > 0) {
             int c = Brouwsel.byIndex(state.getValue(BROUWSEL)).colour;
-            var dust = new DustParticleOptions(new Vector3f(((c >> 16) & 255) / 255f, ((c >> 8) & 255) / 255f, (c & 255) / 255f), 1.0f);
+            var dust = new DustParticleOptions(c & 0xFFFFFF, 1.0f);
             int chance = state.getValue(BORRELT) ? 1 : 5;
             if (random.nextInt(chance) == 0) {
                 level.addParticle(dust, x + (random.nextDouble() - 0.5) * 0.7, y + 0.8 + state.getValue(VULLING) * 0.05, z + (random.nextDouble() - 0.5) * 0.7,
@@ -147,11 +147,5 @@ public class GuhbrouwketelBlock extends BaseEntityBlock {
         }
     }
 
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof GuhbrouwketelBlockEntity ketel) {
-            ketel.dropFuel();
-        }
-        super.onRemove(state, level, pos, newState, movedByPiston);
-    }
+    // (1.1.0: the fuel drop on removal moved to GuhbrouwketelBlockEntity#preRemoveSideEffects; 26.1 has no Block#onRemove)
 }

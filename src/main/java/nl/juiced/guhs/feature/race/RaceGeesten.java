@@ -23,10 +23,13 @@ public final class RaceGeesten extends SavedData {
     public record Geest(UUID player, String name, int ticks, int[] samples) {
     }
 
+    static final net.minecraft.world.level.saveddata.SavedDataType<RaceGeesten> TYPE = nl.juiced.guhs.storage.GuhSavedData.tagType("race_geesten",
+            RaceGeesten::new, t -> load(t, null), d -> d.save(new CompoundTag(), null));   // (the registries were never used)
+
     private final Map<String, Geest> geesten = new HashMap<>();
 
     public static RaceGeesten get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(new SavedData.Factory<>(RaceGeesten::new, RaceGeesten::load, null), "guhs_race_geesten");
+        return nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), TYPE, "guhs_race_geesten");
     }
 
     /** The golden ghost of a board, or null. */
@@ -55,7 +58,6 @@ public final class RaceGeesten extends SavedData {
         }
     }
 
-    @Override
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
         CompoundTag all = new CompoundTag();
         geesten.forEach((board, g) -> {

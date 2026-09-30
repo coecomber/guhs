@@ -1,6 +1,7 @@
 package nl.juiced.guhs.feature.barbecuether;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -28,6 +29,7 @@ import net.neoforged.neoforge.fluids.FluidInteractionRegistry;
 import net.neoforged.neoforge.fluids.FluidType;
 import nl.juiced.guhs.registry.ModFluids;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 /**
  * Kaasfrituursaus: boiling cheese frying sauce, the lava of the Barbecuether. It glows, burns you like lava, sets things
  * on fire, flows faster in the heat of the Barbecuether (like lava in the Nether) and fills the big "lava seas".
@@ -56,7 +58,7 @@ public final class Kaasfrituursaus {
                 .temperature(1300)) {
             @Override
             public double motionScale(Entity entity) {
-                return entity.level().dimensionType().ultraWarm() ? 0.007D : 0.0023333333333333335D;
+                return fast(entity.level()) ? 0.007D : 0.0023333333333333335D;
             }
 
             @Override
@@ -89,6 +91,11 @@ public final class Kaasfrituursaus {
         };
     }
 
+    /** 1.1.0: the dimension's "fast lava" (26.1 environment attribute; was DimensionType#ultraWarm, the nether). */
+    static boolean fast(LevelReader level) {
+        return level.environmentAttributes().getDimensionValue(net.minecraft.world.attribute.EnvironmentAttributes.FAST_LAVA);
+    }
+
     static BaseFlowingFluid.Properties properties() {
         return new BaseFlowingFluid.Properties(BarbecuetherFeature.KAASFRITUURSAUS_TYPE, BarbecuetherFeature.KAASFRITUURSAUS,
                 BarbecuetherFeature.FLOWING_KAASFRITUURSAUS)
@@ -98,7 +105,7 @@ public final class Kaasfrituursaus {
     }
 
     /** What lava does, for our sauce: faster in the heat, sets things on fire, pops and bubbles. */
-    private static void lavaRandomTick(Level level, BlockPos pos) {
+    private static void lavaRandomTick(ServerLevel level, BlockPos pos) {
         if (!(level.getGameRules().get(GameRules.FIRE_SPREAD_RADIUS_AROUND_PLAYER) != 0)) {
             return;
         }
@@ -145,7 +152,7 @@ public final class Kaasfrituursaus {
 
     private static void lavaAnimateTick(Level level, BlockPos pos, RandomSource random) {
         BlockPos above = pos.above();
-        if (level.getBlockState(above).isAir() && !level.getBlockState(above).isSolidRender(level, above)) {
+        if (level.getBlockState(above).isAir() && !level.getBlockState(above).isSolidRender()) {
             if (random.nextInt(100) == 0) {
                 double x = pos.getX() + random.nextDouble(), y = pos.getY() + 1.0, z = pos.getZ() + random.nextDouble();
                 level.addParticle(ParticleTypes.LAVA, x, y, z, 0, 0, 0);
@@ -173,17 +180,17 @@ public final class Kaasfrituursaus {
 
         @Override
         public int getTickDelay(LevelReader level) {
-            return level.dimensionType().ultraWarm() ? 10 : 30;
+            return fast(level) ? 10 : 30;
         }
 
         @Override
         protected int getSlopeFindDistance(LevelReader level) {
-            return level.dimensionType().ultraWarm() ? 4 : 2;
+            return fast(level) ? 4 : 2;
         }
 
         @Override
         protected int getDropOff(LevelReader level) {
-            return level.dimensionType().ultraWarm() ? 1 : 2;
+            return fast(level) ? 1 : 2;
         }
 
         @Override
@@ -192,7 +199,7 @@ public final class Kaasfrituursaus {
         }
 
         @Override
-        protected void randomTick(Level level, BlockPos pos, FluidState state, RandomSource random) {
+        protected void randomTick(ServerLevel level, BlockPos pos, FluidState state, RandomSource random) {
             lavaRandomTick(level, pos);
         }
 
@@ -222,17 +229,17 @@ public final class Kaasfrituursaus {
 
         @Override
         public int getTickDelay(LevelReader level) {
-            return level.dimensionType().ultraWarm() ? 10 : 30;
+            return fast(level) ? 10 : 30;
         }
 
         @Override
         protected int getSlopeFindDistance(LevelReader level) {
-            return level.dimensionType().ultraWarm() ? 4 : 2;
+            return fast(level) ? 4 : 2;
         }
 
         @Override
         protected int getDropOff(LevelReader level) {
-            return level.dimensionType().ultraWarm() ? 1 : 2;
+            return fast(level) ? 1 : 2;
         }
 
         @Override
@@ -241,7 +248,7 @@ public final class Kaasfrituursaus {
         }
 
         @Override
-        protected void randomTick(Level level, BlockPos pos, FluidState state, RandomSource random) {
+        protected void randomTick(ServerLevel level, BlockPos pos, FluidState state, RandomSource random) {
             lavaRandomTick(level, pos);
         }
 
@@ -283,11 +290,11 @@ public final class Kaasfrituursaus {
         }
 
         @Override
-        protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+        protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
             if (!level.isClientSide() && entity.getBoundingBox().minY < pos.getY() + state.getFluidState().getHeight(level, pos)) {
                 burn(entity);
             }
-            super.entityInside(state, level, pos, entity);
+            super.entityInside(state, level, pos, entity, effectApplier, isPrecise);
         }
     }
 
@@ -295,7 +302,7 @@ public final class Kaasfrituursaus {
     public static void burn(Entity entity) {
         if (entity instanceof ItemEntity item) {
             if (!item.fireImmune() && item.tickCount % 10 == 0) {
-                item.hurt(item.damageSources().lava(), 4f);
+                item.hurtOrSimulate(item.damageSources().lava(), 4f);
             }
             return;
         }

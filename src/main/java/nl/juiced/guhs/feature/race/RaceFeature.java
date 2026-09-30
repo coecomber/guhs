@@ -55,7 +55,7 @@ public final class RaceFeature {
                     .sound(SoundType.AMETHYST).noOcclusion().isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK));
     /** The invisible start marker. */
     public static final DeferredBlock<RaceBlocks.Start> RACE_START = BLOCKS.registerBlock("race_start", RaceBlocks.Start::new,
-            BlockBehaviour.Properties.of().noCollission().noLootTable().strength(-1f, 3600000f).noOcclusion()
+            () -> BlockBehaviour.Properties.of().noCollision().noLootTable().strength(-1f, 3600000f).noOcclusion()
                     .isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK));
 
     /** The guhrace's own money: won by racing, spent on the jockey outfit. */

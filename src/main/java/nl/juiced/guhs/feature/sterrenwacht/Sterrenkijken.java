@@ -84,13 +84,13 @@ public final class Sterrenkijken {
 
     /** Is it dark enough for stars here (a sky, and the sun gone)? */
     public static boolean donker(Level level) {
-        long t = Math.floorMod(level.getDayTime(), 24000L);
+        long t = nl.juiced.guhs.world.GuhTime.timeOfDay(level);
         return level.dimensionType().hasSkyLight() && t >= 12600 && t < 23400;
     }
 
     /** The night number (a night runs from noon to noon, so it doesn't change at midnight). */
     public static long nacht(Level level) {
-        return Math.floorDiv(level.getDayTime() + 12000L, 24000L);
+        return Math.floorDiv(nl.juiced.guhs.world.GuhTime.dayTime(level) + 12000L, 24000L);
     }
 
     /** Is there a sterrenregen going on for this player? */

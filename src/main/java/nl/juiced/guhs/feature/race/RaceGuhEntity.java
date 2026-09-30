@@ -44,7 +44,8 @@ public class RaceGuhEntity extends GuhEntity {
     private static final EntityDataAccessor<Boolean> DATA_FROZEN = SynchedEntityData.defineId(RaceGuhEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_NIVEAU = SynchedEntityData.defineId(RaceGuhEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_SCHOK = SynchedEntityData.defineId(RaceGuhEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<CompoundTag> DATA_RIT = SynchedEntityData.defineId(RaceGuhEntity.class, EntityDataSerializers.COMPOUND_TAG);
+    /** The scripted ride as SNBT (1.1.0: 26.1 has no CompoundTag entity data serializer). */
+    private static final EntityDataAccessor<String> DATA_RIT = SynchedEntityData.defineId(RaceGuhEntity.class, EntityDataSerializers.STRING);
     /** 2.10.1: a track with jumps (the Regenboogbaan): the rainbow jump over a gap (see {@link #setSprongen}). */
     private static final EntityDataAccessor<Boolean> DATA_SPRONGEN = SynchedEntityData.defineId(RaceGuhEntity.class, EntityDataSerializers.BOOLEAN);
     /** Size of a race guh (big enough to ride, small enough for the tunnel). */
@@ -93,7 +94,7 @@ public class RaceGuhEntity extends GuhEntity {
         builder.define(DATA_FROZEN, false);
         builder.define(DATA_NIVEAU, Niveau.MEDIUM.ordinal());
         builder.define(DATA_SCHOK, 0);
-        builder.define(DATA_RIT, new CompoundTag());
+        builder.define(DATA_RIT, "");
         builder.define(DATA_SPRONGEN, false);
     }
 
@@ -159,7 +160,7 @@ public class RaceGuhEntity extends GuhEntity {
 
     /** Server: start a scripted ride (the looping). */
     public void startRit(RaceRit ride) {
-        this.entityData.set(DATA_RIT, ride.save());
+        this.entityData.set(DATA_RIT, ride.save().toString());
     }
 
     /** In a scripted ride right now? */
@@ -182,7 +183,7 @@ public class RaceGuhEntity extends GuhEntity {
                 feel(value & 7);
             }
         } else if (DATA_RIT.equals(key)) {
-            RaceRit ride = RaceRit.load(this.entityData.get(DATA_RIT));
+            RaceRit ride = RaceRit.load(snbt(this.entityData.get(DATA_RIT)));
             if (ride != null) {
                 rit = ride;
                 ritTick = 0;
@@ -300,7 +301,7 @@ public class RaceGuhEntity extends GuhEntity {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (hand == InteractionHand.MAIN_HAND && !this.isVehicle() && !player.isPassenger()) {
             if (!this.level().isClientSide() && player instanceof ServerPlayer racer && RaceGame.isRacerOf(racer, this)) {
-                racer.startRiding(this, true);
+                racer.startRiding(this, true, true);
             }
             return InteractionResult.SUCCESS;
         }
@@ -415,7 +416,7 @@ public class RaceGuhEntity extends GuhEntity {
         }
         double forward = Math.max(SPRONG_MIN, Math.sqrt(v.x * v.x + v.z * v.z));
         this.setDeltaMovement(dir.x * forward, Mth.clamp(SPRONG_LIFT / forward, SPRONG_VY_MIN, SPRONG_VY_MAX), dir.z * forward);
-        this.hasImpulse = true;
+        this.needsSync = true;
         zweeft = true;
         gesprongen = true;
         this.resetFallDistance();
@@ -505,9 +506,9 @@ public class RaceGuhEntity extends GuhEntity {
             if (ritTick >= rit.ticks()) {
                 endRit();
                 if (!this.level().isClientSide()) {
-                    this.entityData.set(DATA_RIT, new CompoundTag());
+                    this.entityData.set(DATA_RIT, "");
                 }
-            } else if (!this.level().isClientSide() || !this.isControlledByLocalInstance()) {
+            } else if (!this.level().isClientSide() || !this.isLocalInstanceAuthoritative()) {
                 Vec3 p = rit.at(ritTick);
                 this.setDeltaMovement(Vec3.ZERO);
                 this.setPos(p.x, p.y, p.z);
@@ -532,14 +533,24 @@ public class RaceGuhEntity extends GuhEntity {
         }
     }
 
+    private static CompoundTag snbt(String s) {
+        if (s.isEmpty()) {
+            return new CompoundTag();
+        }
+        try {
+            return net.minecraft.nbt.TagParser.parseCompoundFully(s);
+        } catch (com.mojang.brigadier.exceptions.CommandSyntaxException e) {
+            return new CompoundTag();
+        }
+    }
+
     private static final int[] GLITTER = {0xFF4B5C, 0xFF9F3B, 0xFFE14B, 0x6BE36B, 0x5BC8FF, 0x6B72FF, 0xC06BFF};
 
     /** Client: rainbow sparkles under a gliding race guh. */
     private void regenboogGlitter() {
         for (int i = 0; i < 3; i++) {
             int rgb = GLITTER[(this.tickCount * 3 + i) % GLITTER.length];
-            var dust = new net.minecraft.core.particles.DustParticleOptions(
-                    new org.joml.Vector3f((rgb >> 16 & 255) / 255f, (rgb >> 8 & 255) / 255f, (rgb & 255) / 255f), 1.4f);
+            var dust = new net.minecraft.core.particles.DustParticleOptions(rgb, 1.4f);
             this.level().addParticle(dust, getX() + (random.nextDouble() - 0.5) * 1.4, getY() + random.nextDouble() * 0.4,
                     getZ() + (random.nextDouble() - 0.5) * 1.4, 0, -0.05, 0);
         }
@@ -551,12 +562,12 @@ public class RaceGuhEntity extends GuhEntity {
     // --- never yours, never hurt, never saved ---------------------------------------------------------------------------
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(net.minecraft.server.level.ServerLevel level, DamageSource source) {
         return !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     @Override
-    protected void dropEquipment() {
+    protected void dropEquipment(net.minecraft.server.level.ServerLevel level) {
         // the saddle and the clothes belong to the Raceguh
     }
 

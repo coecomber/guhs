@@ -1,17 +1,12 @@
 package nl.juiced.guhs.feature.kaasmoeras.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.fog.FogRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.FogType;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ViewportEvent;
@@ -22,9 +17,15 @@ import nl.juiced.guhs.feature.kaasmoeras.KaasmoerasFeature;
 import nl.juiced.guhs.feature.kaasmoeras.KaasmotEntity;
 import nl.juiced.guhs.feature.kaasmoeras.KikkerguhEntity;
 import nl.juiced.guhs.feature.kaasmoeras.MoerasheksMikaEntity;
-import nl.juiced.guhs.feature.kaasmoeras.MotknabbelBlock;
 import com.geckolib.model.DefaultedEntityGeoModel;
 import com.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.constant.DefaultAnimations;
+import com.geckolib.constant.dataticket.DataTicket;
+import com.geckolib.renderer.base.BoneSnapshots;
+import com.geckolib.renderer.base.GeoRenderState;
+import com.geckolib.renderer.base.RenderPassInfo;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import javax.annotation.Nullable;
 
 /**
  * Client side of the kaasmoeras: the GeckoLib renderers of the kikkerguh (a texture per colour, babies half size), the
@@ -42,17 +43,23 @@ public final class KaasmoerasClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> {
             event.registerEntityRenderer(KaasmoerasFeature.KIKKERGUH.get(), KikkerguhRenderer::new);
-            event.registerEntityRenderer(KaasmoerasFeature.KAASMOT.get(), context -> new GeoEntityRenderer<>(context,
+            event.registerEntityRenderer(KaasmoerasFeature.KAASMOT.get(), context -> new GeoEntityRenderer<KaasmotEntity, LivingEntityRenderState>(context,
                     new DefaultedEntityGeoModel<KaasmotEntity>(Guhs.id("kaasmot"))));
             event.registerEntityRenderer(KaasmoerasFeature.MOERASHEKS_MIKA.get(), context -> {
-                var renderer = new GeoEntityRenderer<>(context, new DefaultedEntityGeoModel<MoerasheksMikaEntity>(Guhs.id("moerasheks_mika"), true));
+                var renderer = new GeoEntityRenderer<MoerasheksMikaEntity, LivingEntityRenderState>(context,
+                        new DefaultedEntityGeoModel<MoerasheksMikaEntity>(Guhs.id("moerasheks_mika"))) {
+                    /** The "head" bone follows where she looks (GeckoLib 4: DefaultedEntityGeoModel(id, true)). */
+                    @Override
+                    public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
+                        DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
+                    }
+                };
                 renderer.withScale(1.1f);
                 return renderer;
             });
             event.registerEntityRenderer(KaasmoerasFeature.DRANKJE.get(), ThrownItemRenderer::new);
         });
-        modBus.addListener((FMLClientSetupEvent event) -> event.enqueueWork(() -> ItemProperties.register(KaasmoerasFeature.MOTKNABBEL_ITEM.get(),
-                Guhs.id("kleur"), (stack, level, entity, seed) -> MotknabbelBlock.kleur(stack).ordinal() / 2f)));
+        // (1.1.0: the motknabbel item's colour is the client item definition's minecraft:block_state select on "kleur")
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> tickMist());
         NeoForge.EVENT_BUS.addListener(KaasmoerasClient::onFog);
     }
@@ -64,8 +71,9 @@ public final class KaasmoerasClient {
         mist = Mth.clamp(mist + (in ? MIST_SPEED : -MIST_SPEED), 0f, 1f);
     }
 
+    /** (1.1.0: one fog event now; the environmental fog is the old terrain fog. The old cylinder shape is gone.) */
     private static void onFog(ViewportEvent.RenderFog event) {
-        if (event.getMode() != FogRenderer.FogMode.FOG_TERRAIN || event.getType() != FogType.NONE) {
+        if (event.getType() != FogType.NONE) {
             return;
         }
         float m = Mth.lerp((float) event.getPartialTick(), lastMist, mist);
@@ -79,28 +87,36 @@ public final class KaasmoerasClient {
         m = m * m * (3 - 2 * m);   // smoothstep
         event.setFarPlaneDistance(Mth.lerp(m, far, MIST_FAR));
         event.setNearPlaneDistance(Mth.lerp(m, event.getNearPlaneDistance(), MIST_NEAR));
-        event.setFogShape(com.mojang.blaze3d.shaders.FogShape.CYLINDER);   // only the horizontal distance counts
-        event.setCanceled(true);
     }
 
     /** The kikkerguh: one model, a texture per colour, babies at half size. */
-    public static class KikkerguhRenderer extends GeoEntityRenderer<KikkerguhEntity> {
+    public static class KikkerguhRenderer extends GeoEntityRenderer<KikkerguhEntity, LivingEntityRenderState> {
+        private static final DataTicket<String> KLEUR = DataTicket.create("guhs_kikkerguh_kleur", String.class);
+
         public KikkerguhRenderer(EntityRendererProvider.Context context) {
-            super(context, new DefaultedEntityGeoModel<KikkerguhEntity>(Guhs.id("kikkerguh"), true) {
+            super(context, new DefaultedEntityGeoModel<KikkerguhEntity>(Guhs.id("kikkerguh")) {
                 @Override
-                public Identifier getTextureResource(KikkerguhEntity kikker) {
-                    return Guhs.id("textures/entity/kikkerguh_" + kikker.getKleur().getSerializedName() + ".png");
+                public Identifier getTextureResource(GeoRenderState state) {
+                    return Guhs.id("textures/entity/kikkerguh_" + state.getOrDefaultGeckolibData(KLEUR, "roze") + ".png");
                 }
             });
             this.shadowRadius = 0.35f;
         }
 
         @Override
-        public void render(KikkerguhEntity kikker, float yaw, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
-            float scale = kikker.isBaby() ? 0.55f : 1f;
-            this.scaleWidth = scale;
-            this.scaleHeight = scale;
-            super.render(kikker, yaw, partialTick, pose, buffers, light);
+        public void addRenderData(KikkerguhEntity kikker, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
+            state.addGeckolibData(KLEUR, kikker.getKleur().getSerializedName());
+        }
+
+        @Override
+        public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
+            DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
+        }
+
+        @Override
+        public void scaleModelForRender(RenderPassInfo<LivingEntityRenderState> info, float widthScale, float heightScale) {
+            float scale = info.renderState().isBaby ? 0.55f : 1f;
+            super.scaleModelForRender(info, widthScale * scale, heightScale * scale);
         }
     }
 

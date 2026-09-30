@@ -184,6 +184,13 @@ public class GuhbrouwketelBlockEntity extends BlockEntity {
         }
     }
 
+    /** 1.1.0: was GuhbrouwketelBlock#onRemove (the block really changed; 26.1 calls this before the block entity goes). */
+    @Override
+    public void preRemoveSideEffects(net.minecraft.core.BlockPos pos, net.minecraft.world.level.block.state.BlockState state) {
+        dropFuel();
+        super.preRemoveSideEffects(pos, state);
+    }
+
     @Override
     protected void saveAdditional(ValueOutput tag) {
         super.saveAdditional(tag);

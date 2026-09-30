@@ -82,7 +82,7 @@ public class RaceGameTests {
         helper.assertTrue(game.track().gates.size() == 6, "6 rings on the racebaan: " + game.track().gates.size());
         helper.assertTrue(game.track().gates.get(0).contains(game.track().startPos()) == false, "the start is past the finish ring");
         player.getFoodData().setFoodLevel(3);
-        player.hurt(helper.getLevel().damageSources().fall(), 6f);
+        player.hurtServer(helper.getLevel(), helper.getLevel().damageSources().fall(), 6f);
         helper.assertTrue(player.getHealth() == player.getMaxHealth(), "racers can't get hurt");
 
         // one at a time: somebody else has to wait

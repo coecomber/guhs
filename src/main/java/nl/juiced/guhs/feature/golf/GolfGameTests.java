@@ -169,7 +169,7 @@ public class GolfGameTests {
         GolfBallEntity b = game.ball(helper.getLevel());
         helper.assertTrue(b != null && b.blockPosition().equals(tee.above()), "and so is your ball");
         player.getFoodData().setFoodLevel(3);
-        player.hurt(helper.getLevel().damageSources().fall(), 6f);
+        player.hurtServer(helper.getLevel(), helper.getLevel().damageSources().fall(), 6f);
         helper.assertTrue(player.getHealth() == player.getMaxHealth(), "golfers can't get hurt");
         ServerPlayer other = helper.makeMockServerPlayerInLevel();
         other.snapTo(npc.getX() + 1, npc.getY(), npc.getZ() + 1);

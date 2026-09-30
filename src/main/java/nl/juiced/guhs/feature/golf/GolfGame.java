@@ -353,8 +353,7 @@ public final class GolfGame {
             tee = tees[Niveau.MEDIUM.ordinal()][hole];                  // (that level's tee is gone: the medium one)
         }
         Direction facing = world.getBlockState(tee).getOptionalValue(GolfBlocks.Afslag.FACING).orElse(Direction.NORTH);
-        p.teleportTo(world, tee.getX() + 0.5 - facing.getStepX() * 2, tee.getY() + 1, tee.getZ() + 0.5 - facing.getStepZ() * 2,
-                facing.toYRot(), 35f);
+        p.teleportTo(world, tee.getX() + 0.5 - facing.getStepX() * 2, tee.getY() + 1, tee.getZ() + 0.5 - facing.getStepZ() * 2, java.util.Set.of(), facing.toYRot(), 35f, true);
         GolfBallEntity old = ball(world);
         if (old != null) {
             old.discard();
@@ -376,7 +375,7 @@ public final class GolfGame {
         phase = Phase.AIM;
         title(p, Component.translatable("gui.guhs.golf.hole_title", hole + 1).withStyle(ChatFormatting.LIGHT_PURPLE),
                 Component.translatable("gui.guhs.golf.hole_sub", holeName(hole), pars[hole]).withStyle(ChatFormatting.WHITE), 5, 40, 10);
-        p.playNotifySound(SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 0.8f, 1.2f);
+        notifySound(p, SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 0.8f, 1.2f);
     }
 
     // --- 2.10: the extra slime bumpers of a lastig round -----------------------------------------------------------------
@@ -512,7 +511,7 @@ public final class GolfGame {
                     holeOver(npc, p, maxSlagen(), false);
                 } else {
                     phase = Phase.AIM;
-                    p.playNotifySound(SoundEvents.NOTE_BLOCK_HAT.value(), SoundSource.PLAYERS, 0.5f, 1.2f);
+                    notifySound(p, SoundEvents.NOTE_BLOCK_HAT.value(), SoundSource.PLAYERS, 0.5f, 1.2f);
                 }
             }
             case SAUS, OUT -> penalty(p, event == GolfBallEntity.BallEvent.SAUS ? "saus" : "out");
@@ -530,7 +529,7 @@ public final class GolfGame {
         title(p, Component.translatable("gui.guhs.golf." + what).withStyle(ChatFormatting.GOLD),
                 Component.translatable(strafslag(niveau) ? "gui.guhs.golf.penalty" : "gui.guhs.klassiekers.golf.geen_strafslag")
                         .withStyle(ChatFormatting.WHITE), 3, 30, 8);
-        p.playNotifySound(SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), SoundSource.PLAYERS, 0.8f, 0.8f);
+        notifySound(p, SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(), SoundSource.PLAYERS, 0.8f, 0.8f);
     }
 
     /** A hole is done: golfballetjes by the result against par. */
@@ -559,7 +558,7 @@ public final class GolfGame {
         }
         SoundEvent sound = score == 1 && holed ? SoundEvents.UI_TOAST_CHALLENGE_COMPLETE : diff < 0 && holed ? SoundEvents.PLAYER_LEVELUP
                 : SoundEvents.NOTE_BLOCK_CHIME.value();
-        p.playNotifySound(sound, SoundSource.PLAYERS, 0.9f, 1.2f);
+        notifySound(p, sound, SoundSource.PLAYERS, 0.9f, 1.2f);
         npc.playSound(ModSounds.GUH_HAPPY.get(), 1f, diff < 0 ? 1.4f : 1.0f);
         if (score == 1 && holed) {
             GuhQuests.saved(p).putInt(ACES, GuhQuests.saved(p).getIntOr(ACES, 0) + 1);
@@ -640,7 +639,7 @@ public final class GolfGame {
         showScores(npc);
         title(p, Component.translatable("gui.guhs.golf.done_title").withStyle(ChatFormatting.GOLD),
                 Component.translatable("gui.guhs.golf.done_sub", total, rel(diff)).withStyle(ChatFormatting.WHITE), 5, 60, 20);
-        p.playNotifySound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.8f, 1.1f);
+        notifySound(p, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.8f, 1.1f);
         end(npc, p, null, true);
     }
 
@@ -666,7 +665,7 @@ public final class GolfGame {
                 p.sendSystemMessage(Component.translatable(message).withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             if (backHome && home != null && p.level() == world && p.isAlive()) {
-                p.teleportTo(world, home.getX() + 0.5, home.getY(), home.getZ() + 0.5, p.getYRot(), 0);
+                p.teleportTo(world, home.getX() + 0.5, home.getY(), home.getZ() + 0.5, java.util.Set.of(), p.getYRot(), 0, true);
             }
         }
         GolfBallEntity b = ball(world);
@@ -751,13 +750,13 @@ public final class GolfGame {
                 if (timer == 60 || timer == 40 || timer == 20) {
                     title(p, Component.literal(String.valueOf(timer / 20)).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
                             Component.translatable("gui.guhs.golf.hole_sub", holeName(0), pars[0]), 0, 22, 0);
-                    p.playNotifySound(SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 0.9f, 1.0f);
+                    notifySound(p, SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 0.9f, 1.0f);
                 }
                 if (timer <= 0) {
                     phase = Phase.AIM;
                     title(p, Component.translatable("gui.guhs.golf.go").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
                             Component.translatable("gui.guhs.golf.go_sub"), 0, 30, 10);
-                    p.playNotifySound(SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1f, 2.0f);
+                    notifySound(p, SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1f, 2.0f);
                     npc.playSound(ModSounds.GUH_HAPPY.get(), 1f, 1.2f);
                 }
             }
@@ -1009,7 +1008,7 @@ public final class GolfGame {
     private static void giveClub(ServerPlayer p) {
         Inventory inv = p.getInventory();
         ItemStack club = new ItemStack(GolfFeature.GOLFCLUB.get());
-        if (inv.getSelected().isEmpty()) {
+        if (inv.getSelectedItem().isEmpty()) {
             inv.setItem(inv.getSelectedSlot(), club);
             return;
         }
@@ -1025,7 +1024,7 @@ public final class GolfGame {
         }
         int free = inv.getFreeSlot();                                  // (hotbar full: your own item moves to the backpack)
         if (free >= 0) {
-            inv.setItem(free, inv.getSelected());
+            inv.setItem(free, inv.getSelectedItem());
             inv.setItem(inv.getSelectedSlot(), club);
         } else {
             inv.add(club);
@@ -1085,5 +1084,19 @@ public final class GolfGame {
         phase = Phase.ROLLING;
         holeOver(npc, p, score, true);
         nextHole(npc, p);
+    }
+
+    /** A sound only this player hears (1.1.0: ServerPlayer#playNotifySound is gone; the same packet by hand). */
+    private static void notifySound(net.minecraft.server.level.ServerPlayer p, net.minecraft.sounds.SoundEvent sound,
+                                    net.minecraft.sounds.SoundSource source, float volume, float pitch) {
+        notifySound(p, net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), source, volume, pitch);
+    }
+
+    private static void notifySound(net.minecraft.server.level.ServerPlayer p, net.minecraft.core.Holder<net.minecraft.sounds.SoundEvent> sound,
+                                    net.minecraft.sounds.SoundSource source, float volume, float pitch) {
+        if (p.connection != null) {
+            p.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(sound, source, p.getX(), p.getY(), p.getZ(),
+                    volume, pitch, p.getRandom().nextLong()));
+        }
     }
 }

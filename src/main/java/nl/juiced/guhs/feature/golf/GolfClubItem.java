@@ -17,6 +17,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * The guh golf club, lent by the Golfguh for one round. Hold right-click (near your ball) to charge the swing: the power
  * bar fills up to 100% (and stays there), the ball goes the way you look, and letting go hits it. It can't be dropped or
@@ -52,16 +56,17 @@ public class GolfClubItem extends Item {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (!level.isClientSide() && entity instanceof ServerPlayer player) {
             GolfGame.swing(player, power(getUseDuration(stack, entity) - timeLeft));
         }
+        return false;
     }
 
     /** Only golfers keep their club. */
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide() && (!(entity instanceof Player player) || !GolfGame.isGolfing(player))) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
+        if (!(entity instanceof Player player) || !GolfGame.isGolfing(player)) {
             stack.setCount(0);
         }
     }
@@ -85,8 +90,8 @@ public class GolfClubItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.guhgolfclub.lore").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.guhs.guhgolfclub.loan").withStyle(ChatFormatting.LIGHT_PURPLE));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.guhgolfclub.lore").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.guhgolfclub.loan").withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 }

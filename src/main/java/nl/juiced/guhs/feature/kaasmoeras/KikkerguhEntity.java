@@ -287,7 +287,7 @@ public class KikkerguhEntity extends Animal implements GeoEntity {
     }
 
     @Override
-    protected int calculateFallDamage(float fallDistance, float damageMultiplier) {
+    protected int calculateFallDamage(double fallDistance, float damageMultiplier) {
         return super.calculateFallDamage(fallDistance, damageMultiplier) - 5;
     }
 

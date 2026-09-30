@@ -53,7 +53,9 @@ public class GolfBallEntity extends Entity {
 
     public enum BallEvent { STOPPED, HOLED, SAUS, OUT, LIP }
 
-    private static final EntityDataAccessor<Optional<UUID>> OWNER = SynchedEntityData.defineId(GolfBallEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+    /** The golfer (1.1.0: 26.1 has no OPTIONAL_UUID serializer; an entity reference holds the same UUID). */
+    private static final EntityDataAccessor<Optional<net.minecraft.world.entity.EntityReference<net.minecraft.world.entity.LivingEntity>>> OWNER =
+            SynchedEntityData.defineId(GolfBallEntity.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
 
     /** The Golfguh whose game this ball belongs to (null: a free ball, only in tests). */
     @Nullable
@@ -65,8 +67,8 @@ public class GolfBallEntity extends Entity {
     private BallEvent lastEvent;
 
     // client: smooth movement and rolling
-    private int lerpSteps;
-    private double lerpX, lerpY, lerpZ;
+    /** Client: smooth movement between the server's positions (1.0.0: its own lerpTo, 1/steps per tick). */
+    private final net.minecraft.world.entity.InterpolationHandler interpolation = new net.minecraft.world.entity.InterpolationHandler(this);
     public float roll, oRoll, rollYaw;
 
     public GolfBallEntity(EntityType<? extends GolfBallEntity> type, Level level) {
@@ -76,7 +78,7 @@ public class GolfBallEntity extends Entity {
     public static GolfBallEntity create(ServerLevel level, Vec3 pos, @Nullable UUID owner, @Nullable UUID npc) {
         GolfBallEntity ball = new GolfBallEntity(GolfFeature.BALL.get(), level);
         ball.snapTo(pos.x, pos.y, pos.z, 0, 0);
-        ball.entityData.set(OWNER, Optional.ofNullable(owner));
+        ball.entityData.set(OWNER, Optional.ofNullable(owner).map(net.minecraft.world.entity.EntityReference::of));
         ball.npc = npc;
         ball.startY = pos.y;
         level.addFreshEntity(ball);
@@ -90,7 +92,7 @@ public class GolfBallEntity extends Entity {
 
     @Nullable
     public UUID getOwner() {
-        return entityData.get(OWNER).orElse(null);
+        return entityData.get(OWNER).map(net.minecraft.world.entity.EntityReference::getUUID).orElse(null);
     }
 
     @Nullable
@@ -118,7 +120,7 @@ public class GolfBallEntity extends Entity {
         moving = true;
         movingTicks = 0;
         setDeltaMovement(velocity);
-        hasImpulse = true;
+        needsSync = true;
     }
 
     /** Back on this spot, lying still (a new hole, or after the kaassaus / out of bounds). */
@@ -172,7 +174,7 @@ public class GolfBallEntity extends Entity {
             move(MoverType.SELF, new Vec3(0, -0.04, 0));          // still lying on something?
             if (onGround()) {
                 if (tickCount % 12 == 0 && level() instanceof ServerLevel server) {   // a little sparkle so you can find it
-                    server.sendParticles(new DustParticleOptions(new org.joml.Vector3f(1f, 0.6f, 0.85f), 0.8f), getX(), getY() + 0.45, getZ(), 2, 0.08, 0.05, 0.08, 0);
+                    server.sendParticles(new DustParticleOptions(0xFF99D9 /* 1, 0.6, 0.85 */, 0.8f), getX(), getY() + 0.45, getZ(), 2, 0.08, 0.05, 0.08, 0);
                 }
                 return;
             }
@@ -351,34 +353,12 @@ public class GolfBallEntity extends Entity {
     // --- client: smooth movement, and the rolling for the renderer ----------------------------------------------------
 
     @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
-        lerpX = x;
-        lerpY = y;
-        lerpZ = z;
-        lerpSteps = steps;
-    }
-
-    @Override
-    public double lerpTargetX() {
-        return lerpSteps > 0 ? lerpX : getX();
-    }
-
-    @Override
-    public double lerpTargetY() {
-        return lerpSteps > 0 ? lerpY : getY();
-    }
-
-    @Override
-    public double lerpTargetZ() {
-        return lerpSteps > 0 ? lerpZ : getZ();
+    public net.minecraft.world.entity.InterpolationHandler getInterpolation() {
+        return interpolation;
     }
 
     private void clientTick() {
-        if (lerpSteps > 0) {
-            double d = 1.0 / lerpSteps;
-            setPos(getX() + (lerpX - getX()) * d, getY() + (lerpY - getY()) * d, getZ() + (lerpZ - getZ()) * d);
-            lerpSteps--;
-        }
+        interpolation.interpolate();
         oRoll = roll;
         double dx = getX() - xo, dz = getZ() - zo;
         double dist = Math.sqrt(dx * dx + dz * dz);
@@ -404,12 +384,12 @@ public class GolfBallEntity extends Entity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         return InteractionResult.PASS;   // (so right-clicking the ball with the club starts the swing)
     }
 

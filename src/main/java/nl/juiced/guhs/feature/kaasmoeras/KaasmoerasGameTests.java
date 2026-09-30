@@ -167,14 +167,14 @@ public class KaasmoerasGameTests {
         KikkerguhEntity kikker = helper.spawn(KaasmoerasFeature.KIKKERGUH.get(), new BlockPos(1, 1, 1));
         helper.assertTrue(kikker.getBbHeight() >= 0.75f && kikker.getBbWidth() <= 0.7f, "its hitbox: " + kikker.getBbWidth() + " x " + kikker.getBbHeight());
         helper.assertTrue(kikker.getTarget() == null, "friendly");
-        var geo = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/assets/guhs/geo/entity/kikkerguh.geo.json");
+        var geo = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/assets/guhs/geckolib/models/entity/kikkerguh.geo.json");
         helper.assertTrue(geo != null, "the model");
         var bones = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.bones(geo);
         helper.assertTrue("head".equals(bones.get("ear_left")) && "head".equals(bones.get("ear_right")), "the round guh ears on its head");
         for (String b : new String[]{"body", "head", "throat", "tongue", "leg_front_left", "leg_front_right", "leg_back_left", "leg_back_right", "tail"}) {
             helper.assertTrue(bones.containsKey(b), "frog part " + b);
         }
-        var anims = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/assets/guhs/animations/entity/kikkerguh.animation.json");
+        var anims = nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/assets/guhs/geckolib/animations/entity/kikkerguh.animation.json");
         for (String a : new String[]{"idle", "hop", "swim", "croak", "tongue"}) {
             helper.assertTrue(anims != null && anims.getAsJsonObject("animations").has("animation.kikkerguh." + a), "animation " + a);
         }
@@ -228,9 +228,10 @@ public class KaasmoerasGameTests {
             helper.assertTrue(!heks.hasEffect(KaasmoerasFeature.ONVAHOEG), "a Mika is immune to her own recipe");
             double slower = player.getAttributeValue(Attributes.MOVEMENT_SPEED);
             helper.assertTrue(slower < speed && slower > speed * 0.8, "a bit slower, not much: " + speed + " -> " + slower);
-            float exhaustion = player.getFoodData().getExhaustionLevel();
-            KaasmoerasFeature.ONVAHOEG.value().applyEffectTick(player, 0);
-            helper.assertTrue(player.getFoodData().getExhaustionLevel() > exhaustion, "and a rumbling tummy");
+            // (1.1.0: FoodData has no exhaustion getter any more: read it from the player's save data)
+            float exhaustion = nl.juiced.guhs.storage.Nbt.saveWithoutId(player).getFloatOr("foodExhaustionLevel", 0f);
+            KaasmoerasFeature.ONVAHOEG.value().applyEffectTick(level, player, 0);
+            helper.assertTrue(nl.juiced.guhs.storage.Nbt.saveWithoutId(player).getFloatOr("foodExhaustionLevel", 0f) > exhaustion, "and a rumbling tummy");
             helper.assertTrue(player.getHealth() == player.getMaxHealth(), "it never hurts");
             drankje.discard();
 
@@ -238,7 +239,7 @@ public class KaasmoerasGameTests {
             helper.assertTrue(heks.nibble() && heks.hasEffect(MobEffects.REGENERATION), "hurt: she nibbles her moeraskaas");
             helper.assertTrue(!heks.nibble(), "but not again right away");
 
-            heks.hurt(level.damageSources().playerAttack(player), 1000f);
+            heks.hurtServer(level, level.damageSources().playerAttack(player), 1000f);
             List<ItemEntity> drops = level.getEntitiesOfClass(ItemEntity.class, area, i -> i.getItem().is(KaasmoerasFeature.MOERASKAAS.get()));
             helper.assertTrue(!heks.isAlive() && !drops.isEmpty(), "she drops moeraskaas");
             level.getEntitiesOfClass(ItemEntity.class, area).forEach(Entity::discard);
@@ -290,7 +291,7 @@ public class KaasmoerasGameTests {
         for (GuhVariant v : List.of(GuhVariant.KIKKERGUH, GuhVariant.KAASMOT, GuhVariant.MOERASHEKS_MIKA)) {
             helper.assertTrue(v.isCharacter() && v.npcKind() == null, v + ": a creature page (not a guh character)");
             helper.assertTrue(GuhDex.ENTRIES.contains(v) && !GuhDex.TAMEABLE.contains(v), v + ": in the Guhdex, can't be tamed");
-            helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.get(Guhs.id(v.id())) == KaasmoerasEvents.creaturePages().get(v),
+            helper.assertTrue(BuiltInRegistries.ENTITY_TYPE.getValue(Guhs.id(v.id())) == KaasmoerasEvents.creaturePages().get(v),
                     v + ": the page's id is the entity id");
         }
         helper.assertTrue(GuhVariant.MIJNGUH.npcKind() == GuhNpcEntity.Kind.MIJNGUH, "the guh characters still have their kind");
