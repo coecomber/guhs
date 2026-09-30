@@ -67,7 +67,7 @@ public class Guhs {
         NeoForge.EVENT_BUS.addListener(KeepOnDeathHandler::onDeath);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.PicknickMuziek::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(KeepOnDeathHandler::onRespawnCopy);
-        NeoForge.EVENT_BUS.addListener(ModVillagers::onTrades);
+        // (26.1: VillagerTradesEvent is gone; guh villager trades come from mixin/VillagerMixin, owner A)
         NeoForge.EVENT_BUS.addListener(ModVillagers::onVillagerTick);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.GuhQuests::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.GuhQuests::onBigMikaKilled);
