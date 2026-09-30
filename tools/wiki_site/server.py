@@ -14,17 +14,28 @@ PID = "systemen/officiele-server"
 ADDRESS = "guhs.nl"
 HOST = "play.guhs.nl"
 IP = "2.28.142.15"
-MC = "1.21.1"
-NEOFORGE = "21.1.251"
+MC = "26.1.2"
+NEOFORGE = "26.1.2.112"
+JAVA = "25"
+GUHS = "1.1.0"
+MAP_URL = "https://map.guhs.nl/"
 PACK_REPO = "https://github.com/coecomber/guhs-pack"
 PACK_TOML = "https://coecomber.github.io/guhs-pack/pack.toml"
 PRISM_ZIP = "https://coecomber.github.io/guhs-pack/prism/guhs-server-instance.zip"
 PRISM_SITE = "https://prismlauncher.org/"
 NEOFORGE_SITE = "https://neoforged.net/"
 
-MODS = ["Guhs", "GeckoLib", "JEI (+ MezzConfig)", "Jade", "JourneyMap", "AppleSkin", "Lootr", "Architectury",
-        "FTB Library", "FTB Teams", "FTB Filter System", "FTB Quests", "FTB Essentials", "ModernFix", "FerriteCore", "spark"]
-CLIENT_MODS = ["Sodium", "Mouse Tweaks"]
+# (name, version) of the pack; "" = whatever version the pack has (see the pack repo)
+MODS = [("Guhs", GUHS), ("GeckoLib", "5.5.2"), ("JEI", "29.34.0.90"), ("Jade", "26.1.10"), ("JourneyMap", "26.1.2-6.0.9"),
+        ("AppleSkin", "3.0.9+mc26.1"), ("Lootr", "1.23.38.123"), ("Architectury", "20.1.16"), ("FTB Library", "26.1.2.9"),
+        ("FTB Teams", "26.1.2.4"), ("FTB Filter System", "26.1.2.2"), ("FTB Quests", "26.1.2.8"), ("FTB Essentials", "26.1.2.4"),
+        ("ModernFix", ""), ("FerriteCore", ""), ("spark", "")]
+CLIENT_MODS = [("Sodium", "0.9.2"), ("Mouse Tweaks", "26.1-2.31")]
+SERVER_MODS = ["Chunky", "BlueMap"]
+
+
+def _modlist(mods):
+    return '<ul class="modlist">' + "".join(f"<li>{n}{f' <code>{v}</code>' if v else ''}</li>" for n, v in mods) + "</ul>"
 
 
 def _code(s):
@@ -81,7 +92,6 @@ class ServerPage(Guide):
 
     # 1 ------------------------------------------------------------------------------------------------------------------------
     def s_wat(self):
-        mods = ", ".join(MODS)
         body = _p("Een gewone Minecraft-wereld met Guhs erin, plus een paar handige mods. Je bouwt, temt, speelt minigames en gaat samen de "
                   f"{L('dimensies/guhmension', 'Guhmensie')} in. Zo staat hij ingesteld:",
                   "A normal Minecraft world with Guhs in it, plus a few handy mods. You build, tame, play minigames and go into the "
@@ -93,15 +103,20 @@ class ServerPage(Guide):
              "<b>Normal difficulty</b>, <b>no PvP</b> (players can't hurt each other) and <b>open</b>: no whitelist, anyone can join."),
             ("<b>Geen claims</b>: je kunt je land niet op slot zetten. We vertrouwen op elkaar (zie de regels).",
              "<b>No claims</b>: you can't lock your land. We trust each other (see the rules)."),
-            ("Elke nacht om <b>04:30</b> een <b>back-up</b> en om <b>05:00</b> een korte <b>herstart</b>. Ben je dan online? Even wachten en opnieuw verbinden.",
-             "Every night at <b>04:30</b> a <b>backup</b> and at <b>05:00</b> a short <b>restart</b>. Online at that moment? Wait a bit and reconnect."),
-            (f"<b>Mods:</b> {mods}. Alleen bij jou (niet op de server): {', '.join(CLIENT_MODS)}.",
-             f"<b>Mods:</b> {mods}. Only on your side (not on the server): {', '.join(CLIENT_MODS)}."),
+            ("Elke nacht om <b>04:30</b> een <b>back-up</b> en om <b>05:00</b> een korte <b>herstart</b> (Nederlandse tijd). Ben je dan online? Even wachten en opnieuw verbinden.",
+             "Every night at <b>04:30</b> a <b>backup</b> and at <b>05:00</b> a short <b>restart</b> (Dutch time, CET/CEST). Online at that moment? Wait a bit and reconnect."),
+            (f"<b>Live kaart:</b> op {_ext(MAP_URL, 'map.guhs.nl')} zie je de hele wereld van de server, de Overworld én de Guhmensie. Kijk alvast rond!",
+             f"<b>Live map:</b> on {_ext(MAP_URL, 'map.guhs.nl')} you can see the whole server world, the Overworld and the Guhmension. Have a look around!"),
             (f"Dankzij <b>Lootr</b> krijgt iedereen zijn eigen buit uit de kisten van de bouwwerken, en met {L('systemen/ftb-quests', 'FTB Quests')} "
              "heb je het hele Guhs-questboek. Vahoeg!",
              f"Thanks to <b>Lootr</b> everyone gets their own loot from the structure chests, and with {L('systemen/ftb-quests', 'FTB Quests')} "
              "you have the whole Guhs quest book. Vahoeg!"),
-        ]) + _tip("Nieuw in Guhs? Lees ook even de gids " + L("systemen/aan-de-slag", "Aan de slag") + ": die werkt op de server precies hetzelfde.",
+        ]) + f'<h3>{t("The mods", "De mods")}</h3>' + _p(
+            f"Deze mods zitten in de instance (versies van Guhs {GUHS}); de server heeft precies dezelfde:",
+            f"These mods are in the instance (versions of Guhs {GUHS}); the server has exactly the same:") + _modlist(MODS) + _p(
+            "Alleen bij jou, niet op de server (niet verplicht):", "Only on your side, not on the server (optional):") + _modlist(CLIENT_MODS) + _p(
+            f"Alleen op de server (daar merk je niks van, behalve de live kaart): {', '.join(SERVER_MODS)}.",
+            f"Only on the server (you won't notice them, except for the live map): {', '.join(SERVER_MODS)}.") + _tip("Nieuw in Guhs? Lees ook even de gids " + L("systemen/aan-de-slag", "Aan de slag") + ": die werkt op de server precies hetzelfde.",
                   "New to Guhs? Also have a look at the " + L("systemen/aan-de-slag", "Getting started") + " guide: it works exactly the same on the server.")
         return self.step("wat", 1, "Wat is de officiële server?", "What is the official server?", body)
 
@@ -114,9 +129,9 @@ class ServerPage(Guide):
             (f"Download Prism Launcher van {_ext(PRISM_SITE, 'prismlauncher.org')} (Windows, macOS en Linux) en installeer hem.",
              f"Download Prism Launcher from {_ext(PRISM_SITE, 'prismlauncher.org')} (Windows, macOS and Linux) and install it."),
             ("Start hem. Vraagt hij bij de eerste start naar <b>Java</b>? Kies dan de aanbevolen instelling: Prism haalt zelf de juiste Java "
-             "(Java 21 voor Minecraft 1.21.1). Zelf Java installeren hoeft dus niet.",
+             f"(Java {JAVA} voor Minecraft {MC}). Zelf Java installeren hoeft dus niet.",
              "Start it. Does it ask about <b>Java</b> on first start? Pick the recommended option: Prism fetches the right Java itself "
-             "(Java 21 for Minecraft 1.21.1). So no need to install Java yourself."),
+             f"(Java {JAVA} for Minecraft {MC}). So no need to install Java yourself."),
             ("Zet in de instellingen (Settings &rarr; Java) het <b>geheugen</b> op 4 tot 6 GB (4096 tot 6144 MB). Minder is te krap, meer helpt niet.",
              "In the settings (Settings &rarr; Java) set the <b>memory</b> to 4 to 6 GB (4096 to 6144 MB). Less is too tight, more doesn't help."),
         ])
@@ -158,10 +173,12 @@ class ServerPage(Guide):
              "Double-click the instance (or pick <b>Launch</b>). The <b>first time</b> takes a while: a little window downloads the mods. "
              "Be patient, a guh doesn't get vadsig in one bite either."),
             ("Minecraft start. Kies <b>Multiplayer</b>.", "Minecraft starts. Pick <b>Multiplayer</b>."),
-            ("Klik op <b>Guhs Server</b> en dan <b>Join Server</b>. Vahoeg, je bent binnen!",
-             "Click <b>Guhs Server</b> and then <b>Join Server</b>. Vahoeg, you're in!"),
-            (f"Staat hij er niet? Klik <b>Add Server</b>, vul als adres {_code(ADDRESS)} in en klik <b>Done</b>.",
-             f"Not there? Click <b>Add Server</b>, type {_code(ADDRESS)} as the address and click <b>Done</b>."),
+            (f"<b>Guhs Server</b> staat al bovenaan je lijst: de instance brengt hem mee, en Guhs {GUHS} zet hem er zelf ook in. Klik erop en dan "
+             "<b>Join Server</b>. Vahoeg, je bent binnen!",
+             f"<b>Guhs Server</b> is already at the top of your list: the instance brings it along, and Guhs {GUHS} adds it too. Click it and then "
+             "<b>Join Server</b>. Vahoeg, you're in!"),
+            (f"Zelf weggehaald? Klik <b>Add Server</b>, vul als adres {_code(ADDRESS)} in en klik <b>Done</b>.",
+             f"Removed it yourself? Click <b>Add Server</b>, type {_code(ADDRESS)} as the address and click <b>Done</b>."),
         ]) + _tip(f"Bij je eerste bezoek sta je bij de spawn. Zet meteen een thuis neer met {_code('/sethome')}, dan kom je altijd terug met {_code('/home')}.",
                   f"On your first visit you stand at spawn. Set a home right away with {_code('/sethome')}, then {_code('/home')} always brings you back.")
         return self.step("joinen", 5, "Starten en joinen", "Start and join", body)
@@ -244,10 +261,10 @@ class ServerPage(Guide):
              "Usually it's memory. Right-click the instance &rarr; <b>Edit</b> &rarr; <b>Settings</b> &rarr; <b>Java</b>, tick memory and set the "
              "maximum to <b>4096 to 6144 MB</b> (4 to 6 GB). Only 8 GB in your computer? Take 4 GB. Also close heavy programs."),
             ("Java-fout bij het starten ('wrong Java version')", "Java error on start ('wrong Java version')",
-             "Minecraft 1.21.1 wil <b>Java 21</b>. In Prism: Settings &rarr; Java &rarr; <b>Auto-detect</b> of <b>Download Java</b> en kies Java 21. "
-             "Handmatig spelen? Installeer een Java 21 (bijvoorbeeld van Adoptium).",
-             "Minecraft 1.21.1 wants <b>Java 21</b>. In Prism: Settings &rarr; Java &rarr; <b>Auto-detect</b> or <b>Download Java</b> and pick Java 21. "
-             "Playing by hand? Install a Java 21 (from Adoptium, for example)."),
+             f"Minecraft {MC} wil <b>Java {JAVA}</b>. Normaal haalt Prism die vanzelf. Toch een fout? In Prism: Settings &rarr; Java &rarr; <b>Download Java</b> en kies Java {JAVA} "
+             f"(of <b>Auto-detect</b> als je hem al hebt). Handmatig spelen? Installeer een Java {JAVA} (bijvoorbeeld van Adoptium).",
+             f"Minecraft {MC} wants <b>Java {JAVA}</b>. Normally Prism fetches it by itself. Still an error? In Prism: Settings &rarr; Java &rarr; <b>Download Java</b> and pick Java {JAVA} "
+             f"(or <b>Auto-detect</b> if you already have it). Playing by hand? Install a Java {JAVA} (from Adoptium, for example)."),
             ("'Unknown host' of 'Can't connect to server'", "'Unknown host' or 'Can't connect to server'",
              f"Probeer het adres {_code(IP)} of {_code(HOST)}. Werkt niets? Misschien is het net 05:00 (herstart) of is de server even in onderhoud: "
              "wacht een paar minuten.",
@@ -271,6 +288,8 @@ class ServerPage(Guide):
     # 10 -----------------------------------------------------------------------------------------------------------------------
     def s_links(self):
         body = _ul([
+            (f"Live kaart (Overworld en Guhmensie): {_ext(MAP_URL)}", f"Live map (Overworld and Guhmension): {_ext(MAP_URL)}"),
+            (f"De startpagina van de server: {_ext('https://guhs.nl/', 'guhs.nl')}", f"The server's home page: {_ext('https://guhs.nl/', 'guhs.nl')}"),
             (f"Prism-import-URL: {_code(PRISM_ZIP)}", f"Prism import URL: {_code(PRISM_ZIP)}"),
             (f"Het pack (packwiz): {_ext(PACK_TOML)}", f"The pack (packwiz): {_ext(PACK_TOML)}"),
             (f"De pack-repo, met de modlijst: {_ext(PACK_REPO)}", f"The pack repo, with the mod list: {_ext(PACK_REPO)}"),

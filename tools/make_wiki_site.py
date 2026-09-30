@@ -1,9 +1,12 @@
 """
-Builds the Guhs wiki as a multi-page static site (for GitHub Pages) in docs/site/.
+Builds the site of https://guhs.nl/ (GitHub Pages) in docs/site/: the landing page at the root (tools/wiki_site/landing.py,
+with 404.html that sends old wiki links on, CNAME, robots.txt and sitemap.xml) and the Guhs wiki as a multi-page static
+site in docs/site/wiki/.
 
 Usage (from the project root):
     python tools/wiki_renders.py docs/wiki/img      (only when the renders need to be redrawn)
-    python tools/make_wiki_site.py [--out docs/site] [--base-url https://<name>.github.io/guhs/]
+    python tools/make_wiki_site.py [--base-url https://guhs.nl/wiki/] [--landing docs/site] [--out docs/site/wiki]
+    python tools/make_wiki_site.py --no-landing --out docs/site --base-url https://<name>.github.io/guhs/   (only the wiki)
 
 Everything comes from the project itself: the names, lists and numbers from the game data (lang, Java enums, worldgen,
 loot tables, recipes, advancements, FTB quests), the texts from the one-page wiki (tools/make_wiki.py), the pictures from
@@ -31,14 +34,19 @@ from wiki_site.site import CAT_ORDER, CATEGORIES  # noqa: E402
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--root", default=os.path.dirname(HERE), help="the project root (default: the folder above tools/)")
-    ap.add_argument("--out", default=None, help="output folder (default: <root>/docs/site)")
+    ap.add_argument("--out", default=None, help="the wiki's output folder (default: <landing>/wiki, or <root>/docs/site with --no-landing)")
+    ap.add_argument("--landing", default=None, help="the site root with the landing page (default: <root>/docs/site)")
+    ap.add_argument("--no-landing", action="store_true", help="only build the wiki (no landing page, CNAME or root 404)")
+    ap.add_argument("--site-url", default=None, help="the public address of the site root (default: --base-url without its last folder)")
     ap.add_argument("--img", default=None, help="the renders of tools/wiki_renders.py (default: <root>/docs/wiki/img)")
-    ap.add_argument("--base-url", default=os.environ.get("GUHS_WIKI_URL", "https://coecomber.github.io/guhs/"),
+    ap.add_argument("--base-url", default=os.environ.get("GUHS_WIKI_URL", "https://guhs.nl/wiki/"),
                     help="the public address of the site, for sitemap.xml (or set GUHS_WIKI_URL)")
     ap.add_argument("--verbose", action="store_true", help="list the knowledge-base chunks without a page and the leftover version numbers")
     args = ap.parse_args()
     root = os.path.abspath(args.root)
-    out = os.path.abspath(args.out or os.path.join(root, "docs", "site"))
+    landing_dir = None if args.no_landing else os.path.abspath(args.landing or os.path.join(root, "docs", "site"))
+    out = os.path.abspath(args.out or (os.path.join(landing_dir, "wiki") if landing_dir else os.path.join(root, "docs", "site")))
+    site_url = args.site_url or (args.base_url.rstrip("/").rsplit("/", 1)[0] + "/")
     img_src = os.path.abspath(args.img or os.path.join(root, "docs", "wiki", "img"))
     t0 = time.time()
 
@@ -50,6 +58,9 @@ def main():
     os.makedirs(out, exist_ok=True)
     renderer = Renderer(site, builder, images, game, out, args.base_url)
     written = set(renderer.render_all())
+    if landing_dir:
+        from wiki_site.landing import Landing
+        Landing(builder, images, site_url, os.path.relpath(out, landing_dir).replace("\\", "/")).write(landing_dir)
     n_img = images.write()
     # pages that no longer exist
     stale = 0
@@ -60,10 +71,12 @@ def main():
                 os.remove(os.path.join(d, f))
                 stale += 1
 
-    res = check.check(out)
+    res = check.check(landing_dir or out, index_dir=out)
     size = sum(os.path.getsize(os.path.join(d, f)) for d, _, fs in os.walk(out) for f in fs)
     counts = collections.Counter(p.cat for p in site.pages.values() if not p.id.endswith("/index") and p.cat != "home")
     print(f"Guhs wiki site -> {out}  ({time.time() - t0:.0f} s)")
+    if landing_dir:
+        print(f"  landing page -> {landing_dir} ({site_url}); wiki at {args.base_url}")
     print(f"  pages: {res['pages']} html files ({len(site.pages)} wiki pages + 404)")
     for cat in CAT_ORDER:
         print(f"    {CATEGORIES[cat][1]:<12} {counts[cat]:>4}")

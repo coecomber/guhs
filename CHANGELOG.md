@@ -3,7 +3,9 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
-## 1.0.1 — not released yet
+## Unreleased (1.1.0)
+
+### Official server
 
 - **The official Guhs server in your server list.** The first time the title screen opens, *Guhs Server*
   (`guhs.nl`, online 24/7) is added once to the top of the multiplayer server list. It happens only once per
@@ -11,6 +13,8 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
   added when `guhs.nl`, `play.guhs.nl` or `2.28.142.15` is already in the list. Modpack makers can turn it off
   with `addOfficialServer = false` in `config/guhs-client.toml` (also in the mod list's Config screen).
 - **Wiki:** a new page *Play on the official server* (Prism Launcher step by step, rules, commands, common problems).
+- **guhs.nl:** the site moves to [guhs.nl](https://guhs.nl/): a new landing page (server address, live status, live
+  map, how to join) and the wiki at [guhs.nl/wiki/](https://guhs.nl/wiki/). Old wiki links are sent on to the new place.
 
 ## 1.0.0 — first public release
 

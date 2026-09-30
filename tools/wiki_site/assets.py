@@ -249,6 +249,7 @@ footer.site .in{max-width:1320px;margin:0 auto;padding:18px 16px 40px}
 .start-cta .go{background:#fff;color:var(--rasp-ink);border-radius:999px;padding:10px 18px;font-weight:700;white-space:nowrap}
 .side a[href$="aan-de-slag.html"]{font-weight:700;color:var(--rasp-ink)}
 .side a[href$="server.html"]{font-weight:700;color:var(--rasp-ink)}
+.modlist{columns:2 230px;column-gap:24px;padding-left:20px;margin:6px 0 10px}.modlist li{break-inside:avoid}
 .start-cta.srv-cta{background:linear-gradient(120deg,#7a5bd6 0%,#b06fd0 55%,var(--rasp) 130%);margin-top:10px}
 .gbody code{font-size:.92em;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
 @media (max-width:860px){.gstep,.gstep.has-pic{grid-template-columns:36px minmax(0,1fr);padding:14px 14px 8px 12px;gap:10px}

@@ -342,7 +342,8 @@ class Renderer:
                   f'aria-controls="side">&#9776;</button><a class="brand" href="@@index@@"><img src="{root}favicon-64.png" alt="" width="32" height="32">'
                   f'<span class="word">Guhs Wiki</span></a><span class="ver" title="Versie">v{SITE_VERSION}</span>{search}{tools}</div></header>')
         footer = (f'<footer class="site"><div class="in">{t("The Guhs wiki, for Guhs " + SITE_VERSION + " (Minecraft 1.21.1, NeoForge). Every picture is rendered from the mod&#39;s own models and textures. Model by Lieke.", "De Guhs-wiki, voor Guhs " + SITE_VERSION + " (Minecraft 1.21.1, NeoForge). Alle plaatjes zijn gerenderd uit de modellen en textures van de mod zelf. Model door Lieke.")}'
-                  f' &middot; <a href="@@systemen/commandos@@">{t("Commands", "Commando&#39;s")}</a></div></footer>')
+                  f' &middot; <a href="@@systemen/commandos@@">{t("Commands", "Commando&#39;s")}</a>'
+                  f' &middot; <a href="https://guhs.nl/">{t("guhs.nl: the official server", "guhs.nl: de officiële server")}</a></div></footer>')
         return f"""<!doctype html>
 <html lang="nl" data-lang="nl">
 <head>

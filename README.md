@@ -8,7 +8,8 @@
 NeoForge 1.21.1 · requires GeckoLib 4.8+ · version 1.0.0<br>
 <a href="https://www.curseforge.com/minecraft/mc-mods/guhs">CurseForge</a> ·
 <a href="https://modrinth.com/mod/guhs">Modrinth</a> ·
-<a href="https://coecomber.github.io/guhs/">Wiki</a> ·
+<a href="https://guhs.nl/">guhs.nl</a> ·
+<a href="https://guhs.nl/wiki/">Wiki</a> ·
 <a href="CHANGELOG.md">Changelog</a>
 </p>
 
@@ -21,7 +22,7 @@ through a portal into the **Guhmension**, a whole pink world full of guhs, chees
 Guhs are always friendly. Nothing in the mod makes them hurt you, and the one grumpy guh (Mika) only shoves.
 
 > **Language:** all in-game names and texts are in **Dutch** (also when your game is set to English), with a lot of
-> guh puns. The [wiki](https://coecomber.github.io/guhs/) is in English and Dutch.
+> guh puns. The [wiki](https://guhs.nl/wiki/) is in English and Dutch.
 
 ## Features
 
@@ -56,9 +57,9 @@ Guhs are always friendly. Nothing in the mod makes them hurt you, and the one gr
   locked) installs itself.
 - **The official Guhs server.** Play together on `guhs.nl` (24/7, open to everyone): Guhs adds *Guhs Server* to
   your multiplayer list once (turn it off with `addOfficialServer = false` in `config/guhs-client.toml`). How to
-  join: [Play on the official server](https://coecomber.github.io/guhs/server.html).
+  join: [Play on the official server](https://guhs.nl/wiki/server.html).
 
-Everything is explained, with pictures, in the **[Guhs wiki](https://coecomber.github.io/guhs/)**.
+Everything is explained, with pictures, in the **[Guhs wiki](https://guhs.nl/wiki/)**.
 
 ## Requirements
 
@@ -134,7 +135,7 @@ hem aan, rij op hem, knuffel hem tot jullie *zielsguh bff 5evr <3* zijn, en volg
 - Diertjes: pieppiepmuisjes, knuffelschildpadjes, vogeltjes, eendjes, konijntjes, egeltjes en meer.
 - Handige blokken: de **Bankguh** (oneindige opslag), het guhwiel en guhdraad, de frituurpan, sledebanen en meubels.
 - **FTB Quests**: is het geïnstalleerd, dan komt er vanzelf een Guhs-hoofdstukkengroep bij (13 hoofdstukken, 700+ quests).
-- De **officiële Guhs-server** `guhs.nl` (dag en nacht aan): Guhs zet *Guhs Server* één keer in je serverlijst (uitzetten: `addOfficialServer = false` in `config/guhs-client.toml`). Zo speel je mee: [Speel op de officiële server](https://coecomber.github.io/guhs/server.html).
+- De **officiële Guhs-server** `guhs.nl` (dag en nacht aan): Guhs zet *Guhs Server* één keer in je serverlijst (uitzetten: `addOfficialServer = false` in `config/guhs-client.toml`). Zo speel je mee: [Speel op de officiële server](https://guhs.nl/wiki/server.html).
 
 **Nodig:** Minecraft 1.21.1, NeoForge 21.1.0+, GeckoLib 4.8+. Installeer Guhs op de server én bij elke speler.
 Alle teksten in het spel zijn Nederlands. **Aanrader voor servers:** Lootr, zodat elke speler zijn eigen buit uit
@@ -145,4 +146,4 @@ opnieuw uploaden mag niet. Zie [LICENSE](LICENSE).
 
 **Met dank aan:** Lieke voor het guh-model. Al het andere (code, geluidjes, muziek, gebouwen, verhalen): Juiced.
 
-Alles staat met plaatjes in de **[Guhs-wiki](https://coecomber.github.io/guhs/)**.
+Alles staat met plaatjes in de **[Guhs-wiki](https://guhs.nl/wiki/)**.
