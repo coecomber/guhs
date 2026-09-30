@@ -109,8 +109,8 @@ public class KnusGameTests {
         var node = root == null ? null : root.getChild("seizoen");
         helper.assertTrue(node != null && node.getChild("lente") != null && node.getChild("winter") != null, "/guhs seizoen <lente|...|winter>");
         var source = server.createCommandSourceStack();
-        helper.assertTrue(node.canUse(source.withPermission(0)) && !node.getChild("lente").canUse(source.withPermission(0))
-                && node.getChild("lente").canUse(source.withPermission(2)), "asking is for everyone, setting for ops");
+        helper.assertTrue(node.canUse(source.withPermission(net.minecraft.server.permissions.LevelBasedPermissionSet.forLevel(net.minecraft.server.permissions.PermissionLevel.byId(0)))) && !node.getChild("lente").canUse(source.withPermission(net.minecraft.server.permissions.LevelBasedPermissionSet.forLevel(net.minecraft.server.permissions.PermissionLevel.byId(0))))
+                && node.getChild("lente").canUse(source.withPermission(net.minecraft.server.permissions.LevelBasedPermissionSet.forLevel(net.minecraft.server.permissions.PermissionLevel.byId(2)))), "asking is for everyone, setting for ops");
         helper.succeed();
     }
 
@@ -244,9 +244,9 @@ public class KnusGameTests {
         guh.setHaarkleur(0xFF88CC);
         guh.wear(GuhClothes.WINTER_SCARF);
         CompoundTag tag = new CompoundTag();
-        guh.saveWithoutId(tag);
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(guh, tag);
         GuhEntity copy = ModEntities.GUH.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
-        copy.load(tag);
+        nl.juiced.guhs.storage.Nbt.load(copy, tag);
         helper.assertTrue(copy.getHaarkleur() == 0xFF88CC && GuhHooks.heeft(copy, GuhHooks.GLANZEND) && GuhHooks.isBewoner(copy),
                 "hair colour, flags and residents survive saving");
         guh.setHaarkleur(-1);
@@ -340,7 +340,7 @@ public class KnusGameTests {
         helper.assertTrue(KnusTags.FEESTTAART.equals(Feesttaak.FEESTTAART.tag()) && KnusTags.STERRENLANTAARNS.equals(Feesttaak.STERRENLANTAARNS.tag()),
                 "the Knusfeest tags");
         for (var tag : List.of(KnusTags.KAASMELK, KnusTags.OOGST, KnusTags.GEBAK, KnusTags.THEE, KnusTags.MARSHMALLOW, KnusTags.PLUISWOL)) {
-            helper.assertTrue(BuiltInRegistries.ITEM.getTag(tag).isPresent(), "the tag exists: " + tag.location());
+            helper.assertTrue(BuiltInRegistries.ITEM.get(tag).isPresent(), "the tag exists: " + tag.location());
         }
         // the superkompas: category knus with the six cosy places, all real structures
         var knus = SuperkompasItem.CATEGORIES.stream().filter(c -> c.id().equals("knus")).findFirst().orElse(null);

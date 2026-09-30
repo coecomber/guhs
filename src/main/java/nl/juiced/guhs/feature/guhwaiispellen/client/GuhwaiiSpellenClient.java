@@ -30,17 +30,13 @@ public final class GuhwaiiSpellenClient {
             event.registerAboveAll(Guhs.id("guhwaiispellen_surf"), SurfClient::hud);
             event.registerAboveAll(Guhs.id("guhwaiispellen_hula"), HulaClient::hud);
         });
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.TIKIGUH, Guhs.id("geo/entity/guh_npc_tikiguh.geo.json"));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.TIKIGUH, Guhs.id("entity/guh_npc_tikiguh"));
         HulaClient.liloDanst();
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> {
             SurfClient.tick();
             HulaClient.tick();
         });
-        NeoForge.EVENT_BUS.addListener((RenderLevelStageEvent event) -> {
-            if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
-                GolfRenderer.render(event);
-            }
-        });
+        NeoForge.EVENT_BUS.addListener((RenderLevelStageEvent.AfterTranslucentBlocks event) -> GolfRenderer.render(event));
         NeoForge.EVENT_BUS.addListener((InputEvent.Key event) -> HulaClient.toets(event.getKey(), event.getScanCode(), event.getAction()));
         NeoForge.EVENT_BUS.addListener((MovementInputUpdateEvent event) -> HulaClient.stilStaan(event));
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> {

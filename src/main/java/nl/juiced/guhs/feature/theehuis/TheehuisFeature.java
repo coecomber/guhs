@@ -58,8 +58,10 @@ public final class TheehuisFeature {
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(1.0f).sound(SoundType.WOOD).noOcclusion().ignitedByLava());
     public static final DeferredBlock<TheeBlocks.Theepotje> THEEPOTJE = BLOCKS.registerBlock("theepotje", TheeBlocks.Theepotje::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).strength(0.6f).sound(SoundType.DECORATED_POT).noOcclusion());
-    public static final DeferredItem<BlockItem> THEETAFEL_ITEM = ITEMS.registerItem("theetafel", p -> new TheeBlocks.LoreBlock(THEETAFEL.get(), p));
-    public static final DeferredItem<BlockItem> THEEPOTJE_ITEM = ITEMS.registerItem("theepotje", p -> new TheeBlocks.LoreBlock(THEEPOTJE.get(), p));
+    public static final DeferredItem<BlockItem> THEETAFEL_ITEM = ITEMS.registerItem("theetafel", p -> new TheeBlocks.LoreBlock(THEETAFEL.get(), p),
+            () -> new Item.Properties().useBlockDescriptionPrefix());
+    public static final DeferredItem<BlockItem> THEEPOTJE_ITEM = ITEMS.registerItem("theepotje", p -> new TheeBlocks.LoreBlock(THEEPOTJE.get(), p),
+            () -> new Item.Properties().useBlockDescriptionPrefix());
 
     // --- items --------------------------------------------------------------------------------------------------------------
     /** Mevrouw Theelepel's best tea set: lent for the Grote Knusfeest (tag guhs:knus/theeservies). */

@@ -198,7 +198,7 @@ public class VissenGameTests {
 
         ItemStack kept = new ItemStack(VissenFeature.GUHVIS_HENGEL.get());   // a rod somehow left over (a chest, a restart...)
         player.getInventory().add(kept);
-        kept.inventoryTick(helper.getLevel(), player, 0, false);
+        kept.inventoryTick(helper.getLevel(), player, null);
         helper.assertTrue(kept.isEmpty(), "outside a contest a rod swims back by itself");
         ItemEntity lying = new ItemEntity(helper.getLevel(), player.getX(), player.getY(), player.getZ(), new ItemStack(VissenFeature.GUHVIS_HENGEL.get()));
         helper.getLevel().addFreshEntity(lying);
@@ -309,13 +309,13 @@ public class VissenGameTests {
         var boards = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class,
                 new net.minecraft.world.phys.AABB(sign).inflate(1, 4, 1), d -> d.entityTags().contains(Scorebord.TAG));
         helper.assertTrue(boards.size() == 1, "one floating top 3 above the record board: " + boards.size());
-        var saved = boards.get(0).saveWithoutId(new net.minecraft.nbt.CompoundTag());
-        helper.assertTrue(saved.getStringOr("text", "").contains("99999"), "the top 3 shows the champion: " + saved.getStringOr("text", ""));
+        var saved = nl.juiced.guhs.storage.Nbt.saveWithoutId(boards.get(0));   // (1.1.0: the text is a component in NBT)
+        helper.assertTrue(String.valueOf(saved.get("text")).contains("99999"), "the top 3 shows the champion: " + saved.get("text"));
         leave(helper, champ);
         var shown = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.Display.ItemDisplay.class, helper.getBounds());
         helper.assertTrue(shown.size() == 11 && shown.stream().allMatch(d -> !d.getSlot(0).get().isEmpty()), "the fish on show: " + shown.size());
         helper.assertTrue(shown.stream().anyMatch(d -> d.getSlot(0).get().is(VissenFeature.vis(VisSoort.GOUDEN_GUHVIS))), "the golden guhfish trophy");
-        helper.assertTrue(helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.vehicle.Boat.class, helper.getBounds()).size() == 2, "two boats");
+        helper.assertTrue(helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.vehicle.boat.AbstractBoat.class, helper.getBounds()).size() == 2, "two boats");
         helper.succeed();
     }
 

@@ -57,7 +57,7 @@ public enum PleinSlot {
     /** The town (structure start) around pos, or null. */
     @Nullable
     public static StructureStart stadje(ServerLevel level, BlockPos pos) {
-        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(STADJE);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(STADJE);
         if (structure == null) {
             return null;
         }
@@ -124,7 +124,7 @@ public enum PleinSlot {
                 return true;
             }
         }
-        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(STADJE);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(STADJE);
         return structure != null && level.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 

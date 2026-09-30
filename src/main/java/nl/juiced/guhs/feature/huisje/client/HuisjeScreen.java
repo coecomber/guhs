@@ -1,5 +1,9 @@
 package nl.juiced.guhs.feature.huisje.client;
 
+import net.minecraft.client.input.KeyEvent;
+
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -227,8 +231,10 @@ public class HuisjeScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mx, double my, int button) {
-        if (super.mouseClicked(mx, my, button)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mx = event.x(), my = event.y();
+        int button = event.button();
+        if (super.mouseClicked(event, doubleClick)) {
             return true;
         }
         return bewoners.klik(mx, my, button) || rechts.klik(mx, my, button);
@@ -240,24 +246,29 @@ public class HuisjeScreen extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
-        return bewoners.sleep(my) || rechts.sleep(my) || super.mouseDragged(mx, my, button, dx, dy);
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        double mx = event.x(), my = event.y();
+        int button = event.button();
+        return bewoners.sleep(my) || rechts.sleep(my) || super.mouseDragged(event, dx, dy);
     }
 
     @Override
-    public boolean mouseReleased(double mx, double my, int button) {
+    public boolean mouseReleased(MouseButtonEvent event) {
+        double mx = event.x(), my = event.y();
+        int button = event.button();
         bewoners.los();
         rechts.los();
-        return super.mouseReleased(mx, my, button);
+        return super.mouseReleased(event);
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
+        int keyCode = event.key(), scanCode = event.scancode(), modifiers = event.modifiers();
         if (naam != null && naam.isFocused() && mag() && (keyCode == 257 || keyCode == 335)) {
             stuur(HuisjePayloads.Actie.NAAM, "", naam.getValue(), false, 0);
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override
@@ -364,7 +375,7 @@ public class HuisjeScreen extends Screen {
 
     private static ItemStack icoon(String id) {
         Identifier rl = Identifier.tryParse(id);
-        return rl == null ? ItemStack.EMPTY : new ItemStack(BuiltInRegistries.ITEM.get(rl));
+        return rl == null ? ItemStack.EMPTY : new ItemStack(BuiltInRegistries.ITEM.getValue(rl));
     }
 
     /** One chore: [icon] name [on/off], its tip below. */

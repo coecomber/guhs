@@ -42,6 +42,8 @@ import nl.juiced.guhs.feature.piep.PiepDierItem;
 import nl.juiced.guhs.item.PickedUpGuhItem;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A Guhhuisje (2.10): a little house shaped like a guh HEAD (the fluffy ears are the roof, the windows are its eyes, the
  * snoet is the door), in three sizes ({@link HuisjeMaat}). This is the controller block (front row, middle); the rest of
@@ -122,17 +124,17 @@ public class HuisjeBlock extends BaseEntityBlock {
         return Huisjes.registreer(level, pos, facing, maat, eigenaar);
     }
 
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level instanceof ServerLevel sl) {
-            Huisjes.verwijder(sl, pos);
-            for (BlockPos p : Huisje.blokken(pos, state.getValue(FACING), maat)) {
-                if (!p.equals(pos) && level.getBlockState(p).getBlock() instanceof HuisjeDeelBlock) {
-                    level.setBlock(p, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
-                }
+    /**
+     * The huisje is gone (1.0.0: onRemove): forget it and remove its invisible parts. 1.1.0: called from
+     * {@link HuisjeBlockEntity#preRemoveSideEffects} (server, whenever the block really changes).
+     */
+    void verwijderd(ServerLevel level, BlockPos pos, BlockState state) {
+        Huisjes.verwijder(level, pos);
+        for (BlockPos p : Huisje.blokken(pos, state.getValue(FACING), maat)) {
+            if (!p.equals(pos) && level.getBlockState(p).getBlock() instanceof HuisjeDeelBlock) {
+                level.setBlock(p, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
             }
         }
-        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     /** 3.0: only the owner (or an op) can break a huisje: for anyone else it doesn't even crack (BreakEvent is cancelled too). */
@@ -144,7 +146,7 @@ public class HuisjeBlock extends BaseEntityBlock {
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;   // (the whole head is drawn big by HuisjeRenderer)
+        return RenderShape.INVISIBLE;   // (the whole head is drawn big by HuisjeRenderer)
     }
 
     @Override
@@ -153,7 +155,7 @@ public class HuisjeBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 
@@ -265,10 +267,10 @@ public class HuisjeBlock extends BaseEntityBlock {
         return state.getBlock() instanceof HuisjeBlock b ? b.eigen(level, h.pos(), state, player) : null;
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("block.guhs.guhhuisje.lore", maat.plekken()).withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("block.guhs." + maat.blokId() + ".lore").withStyle(ChatFormatting.LIGHT_PURPLE));
+    /** The lore lines of the huisje item (1.1.0: blocks have no hover text any more; {@code HuisjeFeature.HuisjeItem} asks here). */
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("block.guhs.guhhuisje.lore", maat.plekken()).withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("block.guhs." + maat.blokId() + ".lore").withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     /** (tests) whether a placed band guh / maatje can move in here right now. */

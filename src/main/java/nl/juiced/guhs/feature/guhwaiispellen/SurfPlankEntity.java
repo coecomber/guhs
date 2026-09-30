@@ -139,11 +139,21 @@ public class SurfPlankEntity extends Entity implements GeoEntity {
         }
     }
 
-    @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
-        if (!eigen) {
-            super.lerpTo(x, y, z, yRot, xRot, steps);
+    /** 1.1.0 (was a lerpTo override): your own board ignores the server's positions; others jump there at once like 1.0.0. */
+    private final net.minecraft.world.entity.InterpolationHandler interpolation = new net.minecraft.world.entity.InterpolationHandler(this, 0) {
+        @Override
+        public void interpolateTo(Vec3 position, float yRot, float xRot) {
+            if (!eigen) {
+                setPos(position);
+                setYRot(yRot % 360.0F);
+                setXRot(xRot % 360.0F);
+            }
         }
+    };
+
+    @Override
+    public net.minecraft.world.entity.InterpolationHandler getInterpolation() {
+        return interpolation;
     }
 
     @Override
@@ -172,7 +182,7 @@ public class SurfPlankEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 

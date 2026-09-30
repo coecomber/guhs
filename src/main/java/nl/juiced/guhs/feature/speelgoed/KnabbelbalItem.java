@@ -17,6 +17,8 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** The Knabbelbal as an item: use it on the ground to put the ball down (full, unless it was picked up empty). */
 public class KnabbelbalItem extends Item {
     public KnabbelbalItem(Properties properties) {
@@ -56,8 +58,8 @@ public class KnabbelbalItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(isVol(stack) ? "item.guhs.knabbelbal.vol" : "item.guhs.knabbelbal.leeg").withStyle(ChatFormatting.LIGHT_PURPLE));
-        tooltip.add(Component.translatable("item.guhs.knabbelbal.uitleg").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable(isVol(stack) ? "item.guhs.knabbelbal.vol" : "item.guhs.knabbelbal.leeg").withStyle(ChatFormatting.LIGHT_PURPLE));
+        tooltip.accept(Component.translatable("item.guhs.knabbelbal.uitleg").withStyle(ChatFormatting.GRAY));
     }
 }

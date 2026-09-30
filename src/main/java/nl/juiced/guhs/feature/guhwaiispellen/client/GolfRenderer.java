@@ -49,7 +49,8 @@ public final class GolfRenderer {
         return GOLVEN.computeIfAbsent(key, k -> new SurfGolven(bord.niveau(), bord.seed()));
     }
 
-    public static void render(RenderLevelStageEvent event) {
+    /** 1.1.0: from the AfterTranslucentBlocks stage (was Stage.AFTER_TRANSLUCENT_BLOCKS), same immediate drawing. */
+    public static void render(RenderLevelStageEvent.AfterTranslucentBlocks event) {
         Minecraft mc = Minecraft.getInstance();
         ClientLevel level = mc.level;
         if (level == null) {
@@ -59,8 +60,8 @@ public final class GolfRenderer {
             WATER.clear();
             waterLevelKey = level.hashCode();
         }
-        float pt = event.getPartialTick().getGameTimeDeltaPartialTick(false);
-        Vec3 cam = event.getCamera().getPosition();
+        float pt = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        Vec3 cam = event.getLevelRenderState().cameraRenderState.pos;
         MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
         RenderType type = RenderTypes.entityTranslucent(TEXTUUR);
         boolean iets = false;
@@ -76,7 +77,7 @@ public final class GolfRenderer {
             pose.pushPose();
             pose.translate(-cam.x, -cam.y, -cam.z);
             VertexConsumer vc = buffers.getBuffer(type);
-            int light = LevelRenderer.getLightColor(level, spot.origin().above());
+            int light = LevelRenderer.getLightCoords(level, spot.origin().above());
             for (int k = 0; k < golven.golven().size(); k++) {
                 if (golven.actief(k, step)) {
                     golf(vc, pose.last().pose(), pose.last(), level, golven, spot, k, step, light);

@@ -464,8 +464,8 @@ public final class DoolhofGame {
      */
     private static void glinster(ServerLevel world, ServerPlayer p, ItemEntity item) {
         world.sendParticles(ParticleTypes.WAX_ON, item.getX(), item.getY() + 0.3, item.getZ(), 2, 0.2, 0.2, 0.2, 0.01);
-        world.sendParticles(p, ParticleTypes.END_ROD, true, item.getX(), item.getY() + 0.35, item.getZ(), 2, 0.18, 0.25, 0.18, 0.004);
-        world.sendParticles(p, ParticleTypes.WAX_ON, true, item.getX(), item.getY() + 0.3, item.getZ(), 1, 0.15, 0.15, 0.15, 0.01);
+        world.sendParticles(p, ParticleTypes.END_ROD, true, true, item.getX(), item.getY() + 0.35, item.getZ(), 2, 0.18, 0.25, 0.18, 0.004);
+        world.sendParticles(p, ParticleTypes.WAX_ON, true, true, item.getX(), item.getY() + 0.3, item.getZ(), 1, 0.15, 0.15, 0.15, 0.01);
     }
 
     /** A knabbel picked up: a real one into your bag, a fake one costs time. */
@@ -752,7 +752,7 @@ public final class DoolhofGame {
         if (p instanceof FakePlayer || p.connection == null) {
             p.snapTo(x, y, z, yRot, 0);
         } else {
-            p.teleportTo(world, x, y, z, yRot, 0);
+            p.teleportTo(world, x, y, z, java.util.Set.of(), yRot, 0, true);
         }
     }
 

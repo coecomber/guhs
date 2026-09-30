@@ -29,7 +29,7 @@ public final class DoolhofProtection {
 
     /** Is this spot part of a Guhdoolhof? */
     public static boolean inDoolhof(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(DOOLHOF);
+        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(DOOLHOF);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 

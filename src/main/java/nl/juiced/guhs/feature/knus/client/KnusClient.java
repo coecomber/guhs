@@ -24,13 +24,13 @@ public final class KnusClient {
                 KnusVoortgang.Mijlpaal mijlpaal = KnusVoortgang.mijlpaal(id);
                 if (mijlpaal != null) {
                     ItemStack icon = safe(mijlpaal.beloning().get());
-                    mc.getToasts().addToast(new KnusToast(Component.translatable("gui.guhs.knus.toast.mijlpaal"), mijlpaal.naam(), icon));
+                    mc.getToastManager().addToast(new KnusToast(Component.translatable("gui.guhs.knus.toast.mijlpaal"), mijlpaal.naam(), icon));
                 }
             } else {
                 KnusVoortgang.Verzameling v = KnusVoortgang.verzameling(id);
                 if (v != null) {
                     ItemStack icon = safe(v.icoon().apply(m.getStringOr("Item", "")));
-                    mc.getToasts().addToast(new KnusToast(v.naam(), v.item(m.getStringOr("Item", "")), icon));
+                    mc.getToastManager().addToast(new KnusToast(v.naam(), v.item(m.getStringOr("Item", "")), icon));
                 }
             }
         }

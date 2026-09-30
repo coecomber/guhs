@@ -64,12 +64,16 @@ public final class Huisjes extends SavedData {
             "Pootjeshuis", "Zoete Knabbelstee", "Villa Vahoeg", "Het Dikke Kussentje", "Huize Pluisoor", "Knabbelkoepeltje",
             "Snurkhuisje", "Het Lieve Vadsje", "Slaapsnoetje", "Njegnestje", "Knusse Kaaskamer", "Guhtje Thuis");
 
+    /** 1.1.0: saved data type guhs:huisjes (the 1.0.0 file guhs_huisjes.dat is moved once). */
+    static final net.minecraft.world.level.saveddata.SavedDataType<Huisjes> TYPE = nl.juiced.guhs.storage.GuhSavedData.tagType("huisjes",
+            Huisjes::new, t -> load(t, null), h -> h.save(new CompoundTag(), null));
+
     private final Map<String, Huisje> huisjes = new LinkedHashMap<>();
     @Nullable
     private static Huisjes laatste;
 
     static Huisjes get(MinecraftServer server) {
-        Huisjes h = server.overworld().getDataStorage().computeIfAbsent(new SavedData.Factory<>(Huisjes::new, Huisjes::load, null), NAAM);
+        Huisjes h = nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), TYPE, NAAM);
         laatste = h;
         return h;
     }
@@ -191,7 +195,7 @@ public final class Huisjes extends SavedData {
 
     /** May this player change this huisje (move guhs in/out, chores, the name) or break it: its owner, or an op (level 2). */
     public static boolean magBewerken(net.minecraft.world.entity.player.Player p, Huisje h) {
-        return h.eigenaar().equals(p.getUUID()) || p.hasPermissions(2);
+        return h.eigenaar().equals(p.getUUID()) || p.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
     }
 
     /** "Dit is het huisje van X" (gui.guhs.huisje.van_wie). */
@@ -206,8 +210,7 @@ public final class Huisjes extends SavedData {
         if (p != null) {
             return p.getGameProfile().name();
         }
-        var cache = s.getProfileCache();
-        return cache == null ? "" : cache.get(id).map(com.mojang.authlib.GameProfile::getName).orElse("");
+        return s.services().nameToIdCache().get(id).map(net.minecraft.server.players.NameAndId::name).orElse("");
     }
 
     /** (tests, AutoCheck) sets the owner's name shown for a huisje. */
@@ -280,7 +283,7 @@ public final class Huisjes extends SavedData {
 
     /** Can this entity live in huisjes at all (a band guh or a tamed maatje)? */
     public static boolean kanBewoner(Entity e) {
-        return Band.isBandGuh(e) || (e instanceof PiepMaatje && e instanceof TamableAnimal a && a.isTame() && a.getOwnerUUID() != null);
+        return Band.isBandGuh(e) || (e instanceof PiepMaatje && e instanceof TamableAnimal a && a.isTame() && nl.juiced.guhs.entity.Owners.uuid(a) != null);
     }
 
     /**
@@ -314,7 +317,7 @@ public final class Huisjes extends SavedData {
         p.remove(BINNEN);
         if (bewoner instanceof PathfinderMob mob) {
             Vec3 m = h.midden();
-            mob.restrictTo(BlockPos.containing(m), BEREIK);
+            mob.setHomeTo(BlockPos.containing(m), BEREIK);
             HuisjeGoal.zorgVoor(mob);
         }
         GuhVolger.zet(bewoner, PlekSoort.HUISJE, h.naam);
@@ -373,7 +376,7 @@ public final class Huisjes extends SavedData {
         p.remove(DIM);
         p.remove(BINNEN);
         if (e instanceof PathfinderMob mob) {
-            mob.clearRestriction();
+            mob.clearHome();
         }
         if (Band.isBandGuh(e) || e instanceof PiepMaatje) {
             GuhVolger.zet(e, PlekSoort.WERELD, "");
@@ -464,7 +467,6 @@ public final class Huisjes extends SavedData {
     // saving
     // =====================================================================================================================
 
-    @Override
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
         ListTag list = new ListTag();
         huisjes.values().forEach(h -> list.add(h.save()));

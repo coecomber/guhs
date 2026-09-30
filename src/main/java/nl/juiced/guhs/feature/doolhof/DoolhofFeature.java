@@ -36,6 +36,7 @@ import nl.juiced.guhs.world.ModDimensions;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.component.TooltipDisplay;
 /**
  * Het Guhdoolhof (2.9, De Grote Guhspelen; structure guhdoolhof in the Guhvelden): a big hedge maze with guh-ear
  * topiary and a guh-shaped lookout tower in the middle, reached over a bridge. Meneer Vadskronkel (DOOLHOFGUH,
@@ -65,7 +66,7 @@ public final class DoolhofFeature {
                     .lightLevel(s -> s.getValue(DoolhofBlocks.Lantaarn.LIT) ? 13 : 2));
     /** The invisible anchor under Meneer Vadskronkel. */
     public static final DeferredBlock<DoolhofBlocks.AnkerBlock> ANKER = BLOCKS.registerBlock("doolhof_anker", DoolhofBlocks.AnkerBlock::new,
-            BlockBehaviour.Properties.of().noCollission().noLootTable().strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false));
+            () -> BlockBehaviour.Properties.of().noCollision().noLootTable().strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false));
 
     // --- items ---------------------------------------------------------------------------------------------------------
     /** The coin of the maze: a little kaasknabbel wrapped in a hedge leaf. */
@@ -73,10 +74,10 @@ public final class DoolhofFeature {
     /** A kaasknabbel the Mika's stole (found in the maze; Meneer Vadskronkel takes them back afterwards). */
     public static final DeferredItem<Item> GESTOLEN_KNABBEL = ITEMS.registerItem("gestolen_knabbel", p -> new Item(p) {
         @Override
-        public void appendHoverText(ItemStack stack, Item.TooltipContext context, java.util.List<Component> lines, TooltipFlag flag) {
-            lines.add(Component.translatable("item.guhs.gestolen_knabbel.lore").withStyle(net.minecraft.ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> lines, TooltipFlag flag) {
+            lines.accept(Component.translatable("item.guhs.gestolen_knabbel.lore").withStyle(net.minecraft.ChatFormatting.GRAY));
         }
-    }, new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
+    }, () -> new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<BlockItem> HEG_ITEM = ITEMS.registerSimpleBlockItem(HEG);
     public static final DeferredItem<BlockItem> HEG_GEZICHT_ITEM = ITEMS.registerSimpleBlockItem(HEG_GEZICHT);
     public static final DeferredItem<BlockItem> LANTAARN_ITEM = ITEMS.registerSimpleBlockItem(LANTAARN);

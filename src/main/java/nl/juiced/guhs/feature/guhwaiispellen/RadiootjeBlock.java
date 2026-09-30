@@ -72,15 +72,14 @@ public class RadiootjeBlock extends TikiBlock {
         }
     }
 
+    /** 1.1.0 (onRemove is gone): the radio is gone, its song stops (block changes with neighbour updates, i.e. breaking). */
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && level instanceof ServerLevel server) {
-            Integer nu = SPEELT.remove(GlobalPos.of(server.dimension(), pos.immutable()));
-            if (nu != null) {
-                stop(server, pos, nu);
-            }
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel server, BlockPos pos, boolean movedByPiston) {
+        super.affectNeighborsAfterRemoval(state, server, pos, movedByPiston);
+        Integer nu = SPEELT.remove(GlobalPos.of(server.dimension(), pos.immutable()));
+        if (nu != null) {
+            stop(server, pos, nu);
         }
-        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 
     /** Little notes float up from a playing radio (the client can't know it plays: a note now and then always). */

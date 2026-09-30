@@ -2,17 +2,14 @@ package nl.juiced.guhs.feature.verhaal.client;
 
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.Identifier;
+import nl.juiced.guhs.client.GuhRenderFrame;
+import nl.juiced.guhs.client.GuhRenderer;
 import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
-import com.geckolib.cache.model.GeoBone;
 
 /**
  * 3.0 (Guhverhalen), client only: the look of one guh variant, hooked into GuhRenderer so the owner slice never edits it.
@@ -25,6 +22,12 @@ import com.geckolib.cache.model.GeoBone;
  *   <li>{@link Uiterlijk#extra}: draw extra things after the guh (entity space, feet at 0,0,0; not scaled), e.g. the 626's
  *       extra arms holding things, particles.</li>
  * </ul>
+ * 1.1.0 (GeckoLib 5): every method runs at <b>extract</b> time (the guh is there, the model is not). {@code botten} and
+ * {@code extra} read the guh, compute their values and hand the render-time work to the frame:
+ * {@code frame.bones(bones -> bones.ifPresent("tail", b -> b.setRotY(b.getRotY() + sway)))} (was {@code bot.apply("tail")}) and
+ * {@code frame.extra((pose, collector, light) -> item.submit(pose, collector, light, OverlayTexture.NO_OVERLAY, 0))}
+ * (was drawing with the pose and buffers; make item states now with {@code GuhRenderer.itemState}). Never capture the guh
+ * itself in those lambdas. Bone rotations are relative to the model's own rotation (see MIGRATION_NOTES 4.6b).
  */
 public final class VariantUiterlijk {
     public interface Uiterlijk {
@@ -38,17 +41,24 @@ public final class VariantUiterlijk {
             return null;
         }
 
-        default void botten(GuhEntity guh, Function<String, Optional<GeoBone>> bot, float partialTick) {
+        /** Bone moves for this frame: call {@code frame.bones(..)} with values computed now. */
+        default void botten(GuhEntity guh, GuhRenderFrame frame, float partialTick) {
         }
 
-        default void extra(GuhEntity guh, PoseStack pose, MultiBufferSource buffers, int light, float partialTick) {
+        /** Extra things for this frame: call {@code frame.extra(..)} (entity space, feet at 0,0,0, not rotated/scaled). */
+        default void extra(GuhEntity guh, GuhRenderFrame frame, float partialTick) {
         }
     }
 
+    /** Priority of a story variant's texture in the {@link GuhRenderFrame} (the Pinguh's own look wins with 20). */
+    public static final int TEXTURE_PRIORITY = 10;
+
     private static final Map<GuhVariant, Uiterlijk> UITERLIJK = java.util.Collections.synchronizedMap(new EnumMap<>(GuhVariant.class));
+    private static boolean hooked;
 
     public static void zet(GuhVariant v, Uiterlijk u) {
         UITERLIJK.put(v, u);
+        hook();
     }
 
     @Nullable
@@ -56,34 +66,32 @@ public final class VariantUiterlijk {
         return UITERLIJK.get(v);
     }
 
-    // --- called by GuhRenderer ---------------------------------------------------------------------------------------
-
-    @Nullable
-    public static Identifier texture(GuhEntity guh) {
-        Uiterlijk u = UITERLIJK.get(guh.getVariant());
-        return u == null ? null : u.texture(guh);
-    }
-
-    @Nullable
-    public static Identifier glow(GuhEntity guh) {
-        Uiterlijk u = UITERLIJK.get(guh.getVariant());
-        return u == null ? null : u.glow(guh);
-    }
-
-    public static void botten(GuhEntity guh, Function<String, Optional<GeoBone>> bot, float partialTick) {
-        Uiterlijk u = UITERLIJK.get(guh.getVariant());
-        if (u != null) {
-            u.botten(guh, bot, partialTick);
+    /** Hooks the looks into the GuhRenderer (once; also called from {@link VerhaalClient#init}). */
+    static synchronized void hook() {
+        if (hooked) {
+            return;
         }
+        hooked = true;
+        GuhRenderer.hook(VariantUiterlijk::extract);
     }
 
-    public static void extra(GuhEntity guh, PoseStack pose, MultiBufferSource buffers, int light, float partialTick) {
-        Uiterlijk u = UITERLIJK.get(guh.getVariant());
-        if (u != null) {
-            pose.pushPose();
-            u.extra(guh, pose, buffers, light, partialTick);
-            pose.popPose();
+    // --- called by GuhRenderer (extract time) ------------------------------------------------------------------------
+
+    private static void extract(GuhEntity guh, float partialTick, GuhRenderFrame frame) {
+        Uiterlijk u = UITERLIJK.get(frame.variant);
+        if (u == null) {
+            return;
         }
+        Identifier tex = u.texture(guh);
+        if (tex != null) {
+            frame.texture(tex, TEXTURE_PRIORITY);
+        }
+        Identifier glow = u.glow(guh);
+        if (glow != null) {
+            frame.glow(glow);
+        }
+        u.botten(guh, frame, partialTick);
+        u.extra(guh, frame, partialTick);
     }
 
     private VariantUiterlijk() {

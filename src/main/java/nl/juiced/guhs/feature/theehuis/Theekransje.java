@@ -296,8 +296,8 @@ public final class Theekransje {
                 level.sendParticles(TheehuisFeature.THEESTOOM.get(), t.getX() + 0.5, t.getY() + 1.2, t.getZ() + 0.5, 1, 0.15, 0.05, 0.15, 0.005);
             }
             int s = (timer + 19) / 20;
-            host.displayClientMessage(Component.translatable("gui.guhs.theehuis.bar", gezelligheid, DOEL, s)
-                    .withStyle(s <= 20 ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE), true);
+            host.sendOverlayMessage(Component.translatable("gui.guhs.theehuis.bar", gezelligheid, DOEL, s)
+                    .withStyle(s <= 20 ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE));
         }
         if (veranderd || ticks % 100 == 0) {
             sync(level);
@@ -444,7 +444,7 @@ public final class Theekransje {
                 zelfgebakken++;
                 KnusVoortgang.tel(host, TheehuisVoortgang.ZELFGEBAKKEN, 1);
             }
-            level.playSound(null, guh, SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 0.8f, 1.3f);
+            level.playSound(null, guh, SoundEvents.GENERIC_EAT.value(), SoundSource.NEUTRAL, 0.8f, 1.3f);
         }
         if (!host.getAbilities().instabuild) {
             stack.shrink(1);

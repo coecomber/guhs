@@ -39,6 +39,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * De Pluizige tunnel: pink fur tunnel pieces that join up by themselves (straight, bends, crossings). Every side is
  * closed (fur wall), open (the next piece) or an entrance ("ingang": a round hole with a guh face around it: ears on top,
@@ -127,8 +130,7 @@ public class TunnelBlock extends Block {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos,
-                                     BlockPos neighborPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         return direction.getAxis().isHorizontal() ? vorm(state, level, pos) : state;
     }
 
@@ -156,7 +158,7 @@ public class TunnelBlock extends Block {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 
@@ -214,7 +216,7 @@ public class TunnelBlock extends Block {
             BlockState s = level.getBlockState(p);
             if (s.getBlock() instanceof TunnelBlock) {
                 for (Direction d : Direction.Plane.HORIZONTAL) {
-                    if (kant(s, d) == Kant.INGANG && !level.getBlockState(p.relative(d)).isSolidRender(level, p.relative(d))) {
+                    if (kant(s, d) == Kant.INGANG && !level.getBlockState(p.relative(d)).isSolidRender()) {
                         out.add(new Ingang(p, d));
                     }
                 }

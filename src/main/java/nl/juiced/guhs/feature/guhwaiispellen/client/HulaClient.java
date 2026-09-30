@@ -159,7 +159,7 @@ public final class HulaClient {
     }
 
     private static boolean matcht(KeyMapping m, int key, int scan) {
-        return m.matches(key, scan);
+        return m.matches(new net.minecraft.client.input.KeyEvent(key, scan, 0));
     }
 
     private static void oordeel(HulaKaart.Noot n, HulaKaart.Oordeel o) {
@@ -183,17 +183,26 @@ public final class HulaClient {
         }
     }
 
-    /** While dancing your movement keys are the dance: you stay on the mat. */
+    /**
+     * While dancing your movement keys are the dance: you stay on the mat. 1.1.0: the input's move vector can't be set
+     * any more, so while you dance the player gets an input that never moves (no keys, no jump, no sneak) and gets its
+     * keyboard input back afterwards.
+     */
     public static void stilStaan(MovementInputUpdateEvent event) {
-        if (!danst()) {
+        if (!(event.getEntity() instanceof net.minecraft.client.player.LocalPlayer p)) {
             return;
         }
-        var in = event.getInput();
-        in.forwardImpulse = 0;
-        in.leftImpulse = 0;
-        in.jumping = false;
-        in.shiftKeyDown = false;
-        in.up = in.down = in.left = in.right = false;
+        if (danst()) {
+            if (!(p.input instanceof StilInput)) {
+                p.input = new StilInput();
+            }
+        } else if (p.input instanceof StilInput) {
+            p.input = new net.minecraft.client.player.KeyboardInput(Minecraft.getInstance().options);
+        }
+    }
+
+    /** An input that stands still (the base ClientInput never reads the keys). */
+    private static final class StilInput extends net.minecraft.client.player.ClientInput {
     }
 
     private static long laatsteTick;
@@ -224,26 +233,29 @@ public final class HulaClient {
     /** Lilo-guh on the podium sways her hips, ears and head on the beat while her song plays (on top of her own animator). */
     public static void liloDanst() {
         SittingGuhRenderers.NpcAnimator eigen = SittingGuhRenderers.NPC_ANIMATORS.get(GuhNpcEntity.Kind.LILO_GUH);
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.LILO_GUH, (n, state, bot) -> {
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.LILO_GUH, (n, tick) -> {
             SittingGuhRenderers.NpcAnimator al = eigen;
-            if (al != null) {
-                al.animeer(n, state, bot);
-            }
+            nl.juiced.guhs.client.GuhRenderFrame.BoneMove eigenBeweging = al == null ? null : al.animeer(n, tick);
             Dans d = DANSEN.get(n.getId());
             if (d == null) {
-                return;
+                return eigenBeweging;
             }
             double beat = (Util.getMillis() - d.start) / d.liedje.msPerBeat();
             float sway = (float) Math.sin(beat * Math.PI);
             float bob = (float) Math.abs(Math.sin(beat * Math.PI));
-            // (from the bones' rest pose, so nothing adds up from frame to frame)
-            bot.apply("body").ifPresent(b -> {
-                b.setRotZ(b.getInitialSnapshot().getRotZ() + sway * 0.22f);
-                b.setPosY(b.getInitialSnapshot().getOffsetY() + bob * 0.6f);
-            });
-            bot.apply("head").ifPresent(b -> b.setRotZ(b.getInitialSnapshot().getRotZ() - sway * 0.15f));
-            bot.apply("ear_left").ifPresent(b -> b.setRotZ(b.getInitialSnapshot().getRotZ() + sway * 0.3f));
-            bot.apply("ear_right").ifPresent(b -> b.setRotZ(b.getInitialSnapshot().getRotZ() + sway * 0.3f));
+            // (from the bones' rest pose: GeckoLib 5 snapshots are relative to it and fresh every frame)
+            return bones -> {
+                if (eigenBeweging != null) {
+                    eigenBeweging.apply(bones);
+                }
+                bones.ifPresent("body", b -> {
+                    b.setRotZ(sway * 0.22f);
+                    b.setTranslateY(bob * 0.6f);
+                });
+                bones.ifPresent("head", b -> b.setRotZ(-sway * 0.15f));
+                bones.ifPresent("ear_left", b -> b.setRotZ(sway * 0.3f));
+                bones.ifPresent("ear_right", b -> b.setRotZ(sway * 0.3f));
+            };
         });
     }
 

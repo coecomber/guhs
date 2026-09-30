@@ -8,6 +8,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * An item with a little text under its name (lang &lt;item&gt;.lore, and &lt;item&gt;.loan for a loaned one): the
  * schelpjesmunt and Lilo's loaned surfplankje.
@@ -21,10 +23,10 @@ public class LoreItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         if (geleend) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".loan").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC));
+            tooltip.accept(Component.translatable(getDescriptionId() + ".loan").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC));
         }
     }
 }

@@ -1,7 +1,7 @@
 package nl.juiced.guhs.feature.doolhof.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.Identifier;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import nl.juiced.guhs.Guhs;
@@ -10,7 +10,10 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.doolhof.DoolhofFeature;
 import nl.juiced.guhs.feature.doolhof.DoolhofMikaEntity;
 import nl.juiced.guhs.feature.doolhof.DoolhofPayloads;
+import com.geckolib.constant.DefaultAnimations;
 import com.geckolib.model.DefaultedEntityGeoModel;
+import com.geckolib.renderer.base.BoneSnapshots;
+import com.geckolib.renderer.base.RenderPassInfo;
 import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
@@ -21,21 +24,25 @@ import com.geckolib.renderer.GeoEntityRenderer;
 public final class DoolhofClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> event.registerEntityRenderer(DoolhofFeature.MIKA.get(),
-                context -> new GeoEntityRenderer<DoolhofMikaEntity>(context, new DefaultedEntityGeoModel<DoolhofMikaEntity>(Guhs.id("doolhof_mika"), true) {
-                    @Override
-                    public Identifier getAnimationResource(DoolhofMikaEntity mika) {
-                        return Guhs.id("animations/entity/guh.animation.json");
-                    }
-                }) {
+                context -> new GeoEntityRenderer<DoolhofMikaEntity, LivingEntityRenderState>(context,
+                        new DefaultedEntityGeoModel<DoolhofMikaEntity>(Guhs.id("doolhof_mika")).withAltAnimations(Guhs.id("guh"))) {
                     {
                         this.shadowRadius = 0.35f;
                     }
+
+                    /** The "head" bone follows where the Mika looks (GeckoLib 4: DefaultedEntityGeoModel(id, true)). */
+                    @Override
+                    public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
+                        DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
+                    }
                 }));
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.DOOLHOFGUH, Guhs.id("geo/entity/guh_npc_doolhofguh.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.DOOLHOFGUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.09f;
-            bot.apply("vadskronkel_snor").ifPresent(b -> b.setRotZ((float) Math.sin(t) * 0.05f));
-            bot.apply("vadskronkel_takje").ifPresent(b -> b.setRotX((float) Math.sin(t * 0.7f) * 0.08f));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.DOOLHOFGUH, Guhs.id("entity/guh_npc_doolhofguh"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.DOOLHOFGUH, (npc, tick) -> {
+            float t = (float) tick * 0.09f;
+            return bones -> {
+                bones.ifPresent("vadskronkel_snor", b -> b.setRotZ((float) Math.sin(t) * 0.05f));
+                bones.ifPresent("vadskronkel_takje", b -> b.setRotX((float) Math.sin(t * 0.7f) * 0.08f));
+            };
         });
     }
 

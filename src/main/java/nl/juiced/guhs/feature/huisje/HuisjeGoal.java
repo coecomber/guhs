@@ -125,7 +125,7 @@ public class HuisjeGoal extends Goal {
         if (test != null) {
             return test;
         }
-        return Dagdeel.van(level.getServer().overworld().getDayTime());
+        return Dagdeel.van(nl.juiced.guhs.world.GuhTime.dayTime(level.getServer().overworld()));
     }
 
     @Override

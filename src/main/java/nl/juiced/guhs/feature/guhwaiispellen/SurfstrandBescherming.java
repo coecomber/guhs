@@ -24,7 +24,7 @@ import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 public final class SurfstrandBescherming {
     /** Is this spot part of a surf beach? */
     public static boolean inSurfstrand(ServerLevel level, BlockPos pos) {
-        var structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(Surfplek.SURFSTRAND);
+        var structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(Surfplek.SURFSTRAND);
         return structure != null && level.structureManager().getStructureWithPieceAt(pos, structure).isValid();
     }
 

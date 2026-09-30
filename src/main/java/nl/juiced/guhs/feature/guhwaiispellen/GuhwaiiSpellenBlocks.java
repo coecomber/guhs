@@ -31,6 +31,8 @@ import nl.juiced.guhs.Guhs;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The blocks, items, entity and sounds of the surf beach of Guhwai'i (3.0, guhwaii-spellen): the schelpjesmunt (the coin
  * of surfing and hula), Lilo-guh's loaned surfplankje, the surf board entity, the Tiki decorations of Tikiguh's stall
@@ -45,11 +47,11 @@ public final class GuhwaiiSpellenBlocks {
 
     // --- items ---------------------------------------------------------------------------------------------------------
     /** The schelpjesmunt: a pink-and-cream shell coin with a tiny guh face, earned by surfing and dancing the hula. */
-    public static final DeferredItem<Item> SCHELPJESMUNT = ITEMS.register("schelpjesmunt",
-            () -> new LoreItem(new Item.Properties().rarity(Rarity.UNCOMMON), false));
+    public static final DeferredItem<Item> SCHELPJESMUNT = ITEMS.registerItem("schelpjesmunt",
+            p -> new LoreItem(p, false), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     /** Lilo-guh's surfplankje that she lends you for a game (loaned: it goes back to her afterwards). */
-    public static final DeferredItem<Item> SURFPLANKJE_LEEN = ITEMS.register("surfplankje_leen",
-            () -> new LoreItem(new Item.Properties().stacksTo(1), true));
+    public static final DeferredItem<Item> SURFPLANKJE_LEEN = ITEMS.registerItem("surfplankje_leen",
+            p -> new LoreItem(p, true), () -> new Item.Properties().stacksTo(1));
 
     // --- the Tiki decorations ---------------------------------------------------------------------------------------------
     /** All the Tiki blocks in the order of the shop and the creative tab. */
@@ -76,7 +78,7 @@ public final class GuhwaiiSpellenBlocks {
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.6f).sound(SoundType.GRASS));
     public static final DeferredBlock<TikiBlock> HIBISCUS_SLINGER = tiki("tiki_bloemenslinger",
             p -> new TikiBlock(p, new double[][]{{0, 6, 14, 16, 14, 16}}, true),
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2f).sound(SoundType.AZALEA_LEAVES).noOcclusion().noCollission());
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.2f).sound(SoundType.AZALEA_LEAVES).noOcclusion().noCollision());
     public static final DeferredBlock<TikiBlock> SCHELPJES_LAMPION = tiki("tiki_schelpjeslampion",
             p -> new TikiBlock(p, new double[][]{{5, 2, 5, 11, 12, 11}, {7.5, 12, 7.5, 8.5, 16, 8.5}}, false),
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(0.3f).sound(SoundType.BAMBOO_WOOD).noOcclusion().lightLevel(s -> 13));
@@ -91,7 +93,7 @@ public final class GuhwaiiSpellenBlocks {
     private static <B extends Block> DeferredBlock<B> tiki(String id, java.util.function.Function<BlockBehaviour.Properties, B> maker,
                                                            BlockBehaviour.Properties props) {
         DeferredBlock<B> block = BLOCKS.registerBlock(id, maker, () -> props);
-        ITEMS.register(id, () -> new TikiBlockItem(block.get(), new Item.Properties()));
+        ITEMS.registerItem(id, p -> new TikiBlockItem(block.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
         TIKI.add(block);
         return block;
     }
@@ -103,8 +105,8 @@ public final class GuhwaiiSpellenBlocks {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
     }
 

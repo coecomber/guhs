@@ -75,7 +75,7 @@ public class ZitjeEntity extends Entity {
         z.snapTo(p.x, p.y, p.z, t.kijkYaw(level, toestel, state, z, level.getGameTime()), 0);
         level.addFreshEntity(z);
         rijder.stopRiding();
-        if (!rijder.startRiding(z, true)) {
+        if (!rijder.startRiding(z, true, true)) {
             z.discard();
             return null;
         }
@@ -243,12 +243,20 @@ public class ZitjeEntity extends Entity {
     }
 
     // the client computes the position itself (see tick): the server's position packets are not needed
+    // (1.1.0: was an empty lerpTo override; a handler that ignores the target does the same)
+    private final net.minecraft.world.entity.InterpolationHandler interpolation = new net.minecraft.world.entity.InterpolationHandler(this, 0) {
+        @Override
+        public void interpolateTo(net.minecraft.world.phys.Vec3 position, float yRot, float xRot) {
+        }
+    };
+
     @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
+    public net.minecraft.world.entity.InterpolationHandler getInterpolation() {
+        return interpolation;
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 

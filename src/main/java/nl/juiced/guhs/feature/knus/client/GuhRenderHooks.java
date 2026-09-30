@@ -1,54 +1,21 @@
 package nl.juiced.guhs.feature.knus.client;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import nl.juiced.guhs.entity.GuhEntity;
-import com.geckolib.cache.model.BakedGeoModel;
-import com.geckolib.renderer.base.GeoRenderer;
-import com.geckolib.renderer.layer.GeoRenderLayer;
+import nl.juiced.guhs.client.GuhRenderer;
 
 /**
- * Extra render passes on every guh (2.8, client only), so features never edit the GuhRenderer: register a {@link Laag}
- * from your client init. They are called from one GeoRenderLayer that the GuhRenderer adds last (after the clothes),
- * e.g. to draw a sparkle, pyjamas, an ice-cream hat or blushing cheeks when a {@code GuhHooks} flag is set.
- * A layer that hides or shows bones must put them back as it found them (see GuhClothesLayer).
+ * Extra render passes on every guh (2.8, client only), so features never edit the GuhRenderer: register a layer
+ * from your client init, e.g. to draw a sparkle, pyjamas, an ice-cream hat or blushing cheeks when a {@code GuhHooks} flag is set.
+ * <p>
+ * 1.1.0 (GeckoLib 5): a layer is a {@link GuhRenderer.Hook}. It runs at extract time (the guh is there) and puts what has to
+ * be drawn into the {@link nl.juiced.guhs.client.GuhRenderFrame}: the model again with only some bones and another texture
+ * ({@code frame.pass(texture, colour, bone -> shows)}, was a reRender with hidden bones), items or other things in the old
+ * layer pose ({@code frame.layerExtra((pose, collector, light) -> ..)}: entity origin, not rotated, baby size/squish scale).
+ * The hook passes are drawn after the clothes, like the 1.0.0 layer. {@link #laag} is the same as {@link GuhRenderer#hook}.
  */
 public final class GuhRenderHooks {
-    @FunctionalInterface
-    public interface Laag {
-        void render(GeoRenderer<GuhEntity> renderer, PoseStack pose, GuhEntity guh, BakedGeoModel model, MultiBufferSource buffers,
-                    float partialTick, int light, int overlay);
-    }
-
-    private static final List<Laag> LAGEN = new CopyOnWriteArrayList<>();
-
-    public static void laag(Laag laag) {
-        LAGEN.add(laag);
-    }
-
-    /** The one layer the GuhRenderer adds: runs every registered {@link Laag}. */
-    public static class HookLayer extends GeoRenderLayer<GuhEntity> {
-        public HookLayer(GeoRenderer<GuhEntity> renderer) {
-            super(renderer);
-        }
-
-        @Override
-        public void render(PoseStack poseStack, GuhEntity guh, BakedGeoModel model, RenderType renderType, MultiBufferSource bufferSource,
-                           VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-            for (Laag laag : LAGEN) {
-                poseStack.pushPose();
-                try {
-                    laag.render(getRenderer(), poseStack, guh, model, bufferSource, partialTick, packedLight, packedOverlay);
-                } finally {
-                    poseStack.popPose();
-                }
-            }
-        }
+    /** Add a render layer for every guh (see the class comment). */
+    public static void laag(GuhRenderer.Hook laag) {
+        GuhRenderer.hook(laag);
     }
 
     private GuhRenderHooks() {

@@ -80,17 +80,17 @@ public final class Spelen {
     static boolean soort(ServerPlayer player, String speeltje) {
         CompoundTag saved = GuhQuests.saved(player);
         ListTag lijst = saved.getListOrEmpty(KEY);
-        boolean nieuw = lijst.stream().noneMatch(t -> t.getAsString().equals(speeltje));
+        boolean nieuw = lijst.stream().noneMatch(t -> t.asString().orElse("").equals(speeltje));
         if (nieuw) {
             lijst.add(StringTag.valueOf(speeltje));
             saved.put(KEY, lijst);
         }
-        return SPEELTJES.stream().allMatch(s -> lijst.stream().anyMatch(t -> t.getAsString().equals(s)));
+        return SPEELTJES.stream().allMatch(s -> lijst.stream().anyMatch(t -> t.asString().orElse("").equals(s)));
     }
 
     /** Which kinds this player's guhs played with (tests, the Guhdex). */
     public static List<String> soorten(Player player) {
-        return GuhQuests.saved(player).getListOrEmpty(KEY).stream().map(Tag::getAsString).toList();
+        return GuhQuests.saved(player).getListOrEmpty(KEY).stream().map(t -> t.asString().orElse("")).toList();
     }
 
     /** A player plays on a toy themselves (glijbaantje, schommel, wip). */

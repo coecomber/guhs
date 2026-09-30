@@ -23,7 +23,7 @@ public class TheehuisKruisGameTests {
     private static final String THEEKAMER = "theehuis_test_kamer";
 
     private static ItemStack stack(String id) {
-        return new ItemStack(BuiltInRegistries.ITEM.get(Guhs.id(id)));
+        return new ItemStack(BuiltInRegistries.ITEM.getValue(Guhs.id(id)));
     }
 
     @SuppressWarnings("removal")

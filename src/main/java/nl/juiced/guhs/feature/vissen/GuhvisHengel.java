@@ -20,6 +20,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * The Guhvis-hengel: the Visguh lends it to you for a contest (you never need your own rod). It bites fast (like Lure
  * III), never breaks, and it only exists during your contest: it can't be dropped, and outside a contest (after the
@@ -64,7 +68,7 @@ public class GuhvisHengel extends FishingRodItem {
 
     /** Outside a contest the rod goes back (so it's never kept: not after the game, not after taking it out of a chest). */
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
         if (!level.isClientSide() && entity instanceof ServerPlayer player && !VisWedstrijd.isFishing(player)) {
             stack.setCount(0);
         }
@@ -93,17 +97,12 @@ public class GuhvisHengel extends FishingRodItem {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public boolean isFoil(ItemStack stack) {
         return true;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.guhvis_hengel.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.guhvis_hengel.lore").withStyle(ChatFormatting.GRAY));
     }
 }

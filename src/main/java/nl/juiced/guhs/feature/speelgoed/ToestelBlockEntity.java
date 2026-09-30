@@ -103,6 +103,15 @@ public class ToestelBlockEntity extends BlockEntity {
         return saveWithoutMetadata(registries);
     }
 
+    /** 1.1.0 (onRemove is gone): the toy was broken or replaced: remove its parts, riders off. */
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        super.preRemoveSideEffects(pos, state);
+        if (level != null && !level.isClientSide() && state.getBlock() instanceof ToestelBlock toestel) {
+            toestel.verwijderd(level, pos, state);
+        }
+    }
+
     @Nullable
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {

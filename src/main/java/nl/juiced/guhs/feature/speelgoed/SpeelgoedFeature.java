@@ -30,6 +30,7 @@ import nl.juiced.guhs.feature.knus.GuhHooks;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.component.TooltipDisplay;
 /**
  * Het speelgoed (2.10 "Lieve vadsjes van elkaar", slice speelgoed): four toys in guh style that guhs play with when a
  * player is near ({@link SpeelGoal}) and that the residents of a Guhhuisje sometimes use at random (the four
@@ -59,10 +60,10 @@ public final class SpeelgoedFeature {
                 .pushReaction(PushReaction.BLOCK).ignitedByLava();
     }
 
-    public static final DeferredBlock<GlijbaanBlock> GLIJBAANTJE = BLOCKS.register("guh_glijbaantje", () -> new GlijbaanBlock(props()));
-    public static final DeferredBlock<WipBlock> WIP = BLOCKS.register("guh_wip", () -> new WipBlock(props()));
-    public static final DeferredBlock<SchommelBlock> SCHOMMEL = BLOCKS.register("guh_schommel", () -> new SchommelBlock(props()));
-    public static final DeferredBlock<TunnelBlock> TUNNEL = BLOCKS.register("pluizige_tunnel", () -> new TunnelBlock(props().strength(0.6f, 2f)));
+    public static final DeferredBlock<GlijbaanBlock> GLIJBAANTJE = BLOCKS.registerBlock("guh_glijbaantje", GlijbaanBlock::new, () -> props());
+    public static final DeferredBlock<WipBlock> WIP = BLOCKS.registerBlock("guh_wip", WipBlock::new, () -> props());
+    public static final DeferredBlock<SchommelBlock> SCHOMMEL = BLOCKS.registerBlock("guh_schommel", SchommelBlock::new, () -> props());
+    public static final DeferredBlock<TunnelBlock> TUNNEL = BLOCKS.registerBlock("pluizige_tunnel", TunnelBlock::new, () -> props().strength(0.6f, 2f));
     /** The invisible parts of the glijbaantje, the wip and the schommel (no item: breaking one breaks the toy). */
     public static final DeferredBlock<SpeelDeelBlock> DEEL = BLOCKS.registerBlock("speelgoed_deel", SpeelDeelBlock::new, () -> props().noLootTable());
 
@@ -70,14 +71,14 @@ public final class SpeelgoedFeature {
             () -> new Item.Properties().stacksTo(16));
 
     static {
-        ITEMS.registerItem("guh_glijbaantje", p -> new SpeelgoedBlockItem(GLIJBAANTJE.get(), p), () -> new Item.Properties());
-        ITEMS.registerItem("guh_wip", p -> new SpeelgoedBlockItem(WIP.get(), p), () -> new Item.Properties());
-        ITEMS.registerItem("guh_schommel", p -> new SpeelgoedBlockItem(SCHOMMEL.get(), p), () -> new Item.Properties());
-        ITEMS.registerItem("pluizige_tunnel", p -> new SpeelgoedBlockItem(TUNNEL.get(), p), () -> new Item.Properties());
+        ITEMS.registerItem("guh_glijbaantje", p -> new SpeelgoedBlockItem(GLIJBAANTJE.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
+        ITEMS.registerItem("guh_wip", p -> new SpeelgoedBlockItem(WIP.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
+        ITEMS.registerItem("guh_schommel", p -> new SpeelgoedBlockItem(SCHOMMEL.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
+        ITEMS.registerItem("pluizige_tunnel", p -> new SpeelgoedBlockItem(TUNNEL.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
     }
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ToestelBlockEntity>> TOESTEL_BE = BLOCK_ENTITIES.register("speelgoed_toestel",
-            () -> BlockEntityType.Builder.of(ToestelBlockEntity::new, GLIJBAANTJE.get(), WIP.get(), SCHOMMEL.get()).build(null));
+            () -> new BlockEntityType<>(ToestelBlockEntity::new, GLIJBAANTJE.get(), WIP.get(), SCHOMMEL.get()));
 
     public static final DeferredHolder<EntityType<?>, EntityType<KnabbelbalEntity>> KNABBELBAL = ENTITIES.register("knabbelbal",
             () -> EntityType.Builder.<KnabbelbalEntity>of(KnabbelbalEntity::new, MobCategory.MISC)
@@ -136,11 +137,11 @@ public final class SpeelgoedFeature {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, Item.TooltipContext context, java.util.List<net.minecraft.network.chat.Component> tooltip,
+        public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<net.minecraft.network.chat.Component> tooltip,
                                     net.minecraft.world.item.TooltipFlag flag) {
             String key = getBlock().getDescriptionId();
-            tooltip.add(net.minecraft.network.chat.Component.translatable(key + ".lore").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
-            tooltip.add(net.minecraft.network.chat.Component.translatable(key + ".uitleg").withStyle(net.minecraft.ChatFormatting.GRAY));
+            tooltip.accept(net.minecraft.network.chat.Component.translatable(key + ".lore").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+            tooltip.accept(net.minecraft.network.chat.Component.translatable(key + ".uitleg").withStyle(net.minecraft.ChatFormatting.GRAY));
         }
     }
 

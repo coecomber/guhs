@@ -231,19 +231,19 @@ public abstract class ToestelBlock extends BaseEntityBlock {
         blok.zetDelen(level, pos, state);
     }
 
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && !level.isClientSide()) {
-            for (BlockPos p : blokken(pos, state.getValue(FACING))) {
-                if (!p.equals(pos) && level.getBlockState(p).getBlock() instanceof SpeelDeelBlock) {
-                    level.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
-                }
-            }
-            for (ZitjeEntity z : level.getEntitiesOfClass(ZitjeEntity.class, new AABB(pos).inflate(3), z -> z.toestel().equals(pos))) {
-                z.klaar(false);
+    /**
+     * The toy is gone (1.0.0: onRemove): its invisible parts go too and the riders get off. 1.1.0: called from
+     * {@link ToestelBlockEntity#preRemoveSideEffects} (server, whenever the block really changes).
+     */
+    void verwijderd(Level level, BlockPos pos, BlockState state) {
+        for (BlockPos p : blokken(pos, state.getValue(FACING))) {
+            if (!p.equals(pos) && level.getBlockState(p).getBlock() instanceof SpeelDeelBlock) {
+                level.setBlock(p, Blocks.AIR.defaultBlockState(), 3);
             }
         }
-        super.onRemove(state, level, pos, newState, movedByPiston);
+        for (ZitjeEntity z : level.getEntitiesOfClass(ZitjeEntity.class, new AABB(pos).inflate(3), z -> z.toestel().equals(pos))) {
+            z.klaar(false);
+        }
     }
 
     @Override
@@ -267,7 +267,7 @@ public abstract class ToestelBlock extends BaseEntityBlock {
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 

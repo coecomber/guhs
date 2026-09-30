@@ -13,12 +13,17 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A fish of the Guhvis-wedstrijd: a trophy you keep, and you can eat it (raw!). The Guhpuffer puffs you up into the
  * air, the Mika-meerval tastes like Mika (bah) and the Gouden Guhvis makes you feel golden.
@@ -27,7 +32,7 @@ public class VisItem extends Item {
     public final VisSoort soort;
 
     public VisItem(VisSoort soort, Properties properties) {
-        super(properties.rarity(soort.rarity).food(food(soort)));
+        super(properties.rarity(soort.rarity).food(food(soort), consumable(soort)));
         this.soort = soort;
     }
 
@@ -37,12 +42,21 @@ public class VisItem extends Item {
             case VADSBAARS -> new FoodProperties.Builder().nutrition(6).saturationModifier(0.5f).build();
             case GUHPUFFER -> new FoodProperties.Builder().nutrition(2).saturationModifier(0.2f).alwaysEdible().build();
             case NJEGFOREL -> new FoodProperties.Builder().nutrition(5).saturationModifier(0.8f).build();
-            case MIKA_MEERVAL -> new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f)
-                    .effect(() -> new MobEffectInstance(MobEffects.NAUSEA, 20 * 8), 1f)
-                    .effect(() -> new MobEffectInstance(MobEffects.HUNGER, 20 * 15), 1f).build();
-            case GOUDEN_GUHVIS -> new FoodProperties.Builder().nutrition(8).saturationModifier(1.2f).alwaysEdible()
-                    .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 1), 1f)
-                    .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 20 * 120, 1), 1f).build();
+            case MIKA_MEERVAL -> new FoodProperties.Builder().nutrition(2).saturationModifier(0.1f).build();
+            case GOUDEN_GUHVIS -> new FoodProperties.Builder().nutrition(8).saturationModifier(1.2f).alwaysEdible().build();
+        };
+    }
+
+    /** 1.1.0: the effects of eating moved from FoodProperties to the Consumable (same effects, chance 1). */
+    private static Consumable consumable(VisSoort soort) {
+        return switch (soort) {
+            case MIKA_MEERVAL -> Consumables.defaultFood()
+                    .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.NAUSEA, 20 * 8), 1f))
+                    .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.HUNGER, 20 * 15), 1f)).build();
+            case GOUDEN_GUHVIS -> Consumables.defaultFood()
+                    .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 10, 1), 1f))
+                    .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.ABSORPTION, 20 * 120, 1), 1f)).build();
+            default -> Consumables.DEFAULT_FOOD;
         };
     }
 
@@ -75,16 +89,16 @@ public class VisItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.guhs.vissen.fish_info", Component.translatable("gui.guhs.vissen.rarity." + soort.id()),
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.vissen.fish_info", Component.translatable("gui.guhs.vissen.rarity." + soort.id()),
                 soort.isBad() ? String.valueOf(soort.base) : "+" + soort.base).withStyle(soort.colour));
         CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         if (tag.contains("GuhvisVanger")) {
-            tooltip.add(Component.translatable("item.guhs.vissen.golden_caught", tag.getStringOr("GuhvisVanger", ""),
+            tooltip.accept(Component.translatable("item.guhs.vissen.golden_caught", tag.getStringOr("GuhvisVanger", ""),
                     VisSoort.kg(tag.getIntOr("GuhvisGram", 0)), tag.getIntOr("GuhvisNr", 0)).withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
         } else if (soort == VisSoort.GOUDEN_GUHVIS) {
-            tooltip.add(Component.translatable("item.guhs.vissen.golden_collect").withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
+            tooltip.accept(Component.translatable("item.guhs.vissen.golden_collect").withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
         }
     }
 }

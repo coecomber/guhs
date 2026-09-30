@@ -71,7 +71,7 @@ public class TheehuisScreen extends Screen {
         Entity npc = minecraft.level == null ? null : minecraft.level.getEntity(npcId);
         g.fill(left + 12, top + 22, left + 12 + PIC, top + 22 + PIC, 0x30F2D7A6);
         if (npc instanceof LivingEntity living) {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(g, left + 12, top + 22, left + 12 + PIC, top + 22 + PIC, 24, 0.0625f,
+            InventoryScreen.extractEntityInInventoryFollowsMouse(g, left + 12, top + 22, left + 12 + PIC, top + 22 + PIC, 24, 0.0625f,
                     mouseX, mouseY, living);
         }
         int bx = left + 12 + PIC + 8, by = top + 22, bw = W - (bx - left) - 12;

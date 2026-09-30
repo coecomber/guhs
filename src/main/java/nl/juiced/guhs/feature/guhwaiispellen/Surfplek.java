@@ -68,7 +68,7 @@ public final class Surfplek {
         if (!(p.level() instanceof ServerLevel level)) {
             return false;
         }
-        var holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getHolder(SURFSTRAND);
+        var holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(SURFSTRAND);
         if (holder.isEmpty()) {
             return false;
         }

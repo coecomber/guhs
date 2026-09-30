@@ -1041,3 +1041,27 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
   surfboard, swim ring, rubber duck) got one empty looping animation `animation.guhs.leeg` (nothing plays it).
 * D: FTB Quests SNBT needs no changes for FTB Quests 26.1.2.8 (same task/reward types, `ftbquests:custom_icon` +
   `ftbquests:icon` component still exist); verify the quest book in the dev client.
+* S3: Guhvis-hengel "cast" look: the code-side `ItemProperties.register(.., "cast")` is gone; the client item definition (D) uses vanilla's
+  `minecraft:fishing_rod/cast` condition (same rule: line out + rod in the fishing hand; NeoForge checks `FISHING_ROD_CAST`, our rod is a `FishingRodItem`).
+* S3: Hula dance "stand still": 26.1 `ClientInput` has no settable impulses; while you dance the player gets a plain `ClientInput` (never moves,
+  no jump/sneak/sprint) and its `KeyboardInput` back afterwards (checked every input tick). The dance keys themselves still come from `InputEvent.Key`.
+* S3: Guhs asleep inside a huisje: 1.0.0 cancelled `RenderLivingEvent.Pre` (never fired for the GeckoLib guh renderer); now a NeoForge render state
+  modifier on `GuhRenderer` makes them invisible + no name/shadow/fire/outline (the guh is also invisible on the server, as before).
+* S3: `onRemove` is gone: speeltoestel (wip/schommel/glijbaan) and huisje clean up their parts/riders/registration in their block entity's
+  `preRemoveSideEffects` (same triggers); the invisible parts (`SpeelDeelBlock`, `HuisjeDeelBlock`) and the tiki radiootje use
+  `affectNeighborsAfterRemoval`, which only runs for block changes with neighbour updates (flag 1) or pistons (breaking, explosions: yes).
+* S3: SavedData ids: `guhs:knus` (season offset, was `guhs_knus.dat`) and `guhs:huisjes` (was `guhs_huisjes.dat`); the 1.0.0 files are moved once by `GuhSavedData.get`.
+* S3: Theehuis tea is drunk through a `Consumable` (`Consumables.defaultDrink()`: drink animation + generic drink sound, 1.6 s, no crumbs) instead of the
+  removed `getDrinkingSound/getEatingSound` overrides; Mika-meerval / Gouden guhvis effects are `ApplyStatusEffectsConsumeEffect`s (chance 1, same effects).
+* S3: Doolhof knabbel sparkles for the player (`sendParticles(player, .., longDistance, ..)`): 26.1 splits the old flag into overrideLimiter + alwaysShow; both set (1.21.1's "force").
+* S3: Knabbelbal client glide (was `lerpTo` + `lerpTarget*`): an `InterpolationHandler` that only keeps the target, the ball glides there itself in 3 steps like before;
+  zitje ignores server positions (empty handler); surf board: your own board ignores them, others jump there at once (as 1.21.1's plain `Entity#lerpTo`).
+* S3: Huisje dome and surf waves are still drawn immediately (buffer source + `endBatch`) at `RenderLevelStageEvent.AfterTranslucentBlocks`
+  (was `Stage.AFTER_TRANSLUCENT_BLOCKS`); camera from `getLevelRenderState().cameraRenderState.pos`, partial tick from `Minecraft#getDeltaTracker()`.
+* S3: Huisje/wip/schommel extra models are NeoForge standalone models (`ModelEvent.RegisterStandalone`), drawn with `submitBlockModel` + cutout sheet
+  (was `renderModel` with `RenderType.cutout()` and the crumbling overlay; now `NO_OVERLAY`, like R's guh wheel).
+* S3: BlockItems registered with `registerItem(.., p -> new BlockItem(..), ..)` (huisjes, speelgoed, theetafel/theepotje, tiki blocks) get
+  `useBlockDescriptionPrefix()` so their names stay `block.guhs.<id>` (26.1 BlockItems default to `item.guhs.<id>`). The huisje lore moved from
+  `Block#appendHoverText` (gone) to `HuisjeFeature.HuisjeItem`.
+* S3: `VariantUiterlijk.Uiterlijk#botten/extra` and `GuhRenderHooks.laag` run at extract time and hand bone moves / extra submits to the `GuhRenderFrame`
+  (see 4.6b); story-variant textures have priority 10 (the Pinguh's 20 wins, as in 1.0.0 where PinguhRender was asked first).

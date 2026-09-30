@@ -112,7 +112,7 @@ public final class DoolhofBlocks {
 
         /** Night (or a dark, rainy evening in the Guhmension): the lanterns go on. */
         public static boolean donker(Level level) {
-            long t = Math.floorMod(level.getDayTime(), 24000L);
+            long t = nl.juiced.guhs.world.GuhTime.timeOfDay(level);
             return t >= 12500 && t <= 23500;
         }
     }
@@ -147,7 +147,7 @@ public final class DoolhofBlocks {
         }
 
         @Override
-        protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        protected boolean propagatesSkylightDown(BlockState state) {
             return true;
         }
     }

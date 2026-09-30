@@ -130,10 +130,10 @@ public class RegioJigsawStructure extends Structure implements BouwRuimte.Ruimte
             return Optional.empty();
         }
         BlockPos jig = null;
-        List<StructureTemplate.StructureBlockInfo> jigsaws = element.getShuffledJigsawBlocks(manager, pos, Rotation.NONE, context.random());
-        for (StructureTemplate.StructureBlockInfo info : jigsaws) {
-            if (info.nbt() != null && startJigsawName.equals(Identifier.tryParse(info.nbt().getStringOr("name", "")))) {
-                jig = info.pos();
+        List<StructureTemplate.JigsawBlockInfo> jigsaws = element.getShuffledJigsawBlocks(manager, pos, Rotation.NONE, context.random());
+        for (StructureTemplate.JigsawBlockInfo info : jigsaws) {
+            if (startJigsawName.equals(info.name())) {
+                jig = info.info().pos();
                 break;
             }
         }
