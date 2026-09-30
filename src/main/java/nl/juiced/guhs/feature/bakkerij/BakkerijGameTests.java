@@ -110,7 +110,7 @@ public class BakkerijGameTests {
                 return pos.immutable();
             }
         }
-        throw new net.minecraft.gametest.framework.GameTestAssertException("no knabbeloven");
+        throw helper.assertionException(net.minecraft.network.chat.Component.literal("no knabbeloven"));
     }
 
     private static int count(ServerPlayer p, Item item) {
@@ -186,7 +186,7 @@ public class BakkerijGameTests {
                     helper.assertTrue(KnusVoortgang.heeft(p, BakkerijVoortgang.RECEPTENBOEK, "pluismuffin")
                             && KnusVoortgang.teller(p, BakkerijVoortgang.ZELF_GEBAKKEN) == 3, "in the receptenboek, and counted");
                     ItemStack muffin = p.getInventory().getItem(p.getInventory().findSlotMatchingItem(new ItemStack(BakkerijFeature.bakje(Recept.PLUISMUFFIN))));
-                    helper.assertTrue(!BakjeItem.isSpel(muffin) && muffin.getFoodProperties(p) != null, "your own pastry is food");
+                    helper.assertTrue(!BakjeItem.isSpel(muffin) && muffin.get(net.minecraft.core.component.DataComponents.FOOD) != null, "your own pastry is food");
                 })
                 .thenExecute(() -> {
                     helper.assertTrue(Bakken.start(p, oven, Recept.Deeg.KNABBELDEEG, Recept.Vorm.STERRETJE, Recept.Topping.GLAZUUR) != null,
@@ -259,7 +259,7 @@ public class BakkerijGameTests {
                     game.gebakken(p, Recept.KAASBOLLETJE, Recept.Kwaliteit.PERFECT);
                     helper.assertTrue(BakjeItem.isSpel(p.getMainHandItem()) && BakjeItem.recept(p.getMainHandItem()) == Recept.KAASBOLLETJE,
                             "the pastry is in your hand, for the customer");
-                    helper.assertTrue(p.getMainHandItem().getItem().use(world, p, InteractionHand.MAIN_HAND).getResult() == net.minecraft.world.InteractionResult.FAIL,
+                    helper.assertTrue(p.getMainHandItem().getItem().use(world, p, InteractionHand.MAIN_HAND) == net.minecraft.world.InteractionResult.FAIL,
                             "a customer's pastry can't be eaten");
                     helper.assertTrue(BakkerijGame.serveer(p, klant[0]), "served");
                     helper.assertTrue(game.score() >= 24 && game.score() <= 25 && game.streak() == 1, "perfect and quick: 25 points: " + game.score());
@@ -360,8 +360,8 @@ public class BakkerijGameTests {
         tag.putBoolean("Wacht", true);
         helper.setBlock(new BlockPos(1, 0, 1), net.minecraft.world.level.block.Blocks.STONE);
         Vec3 at = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(1, 1, 1)));
-        Entity e = net.minecraft.world.entity.EntityType.loadEntityRecursive(tag, helper.getLevel(), en -> {
-            en.moveTo(at.x, at.y, at.z, 0, 0);
+        Entity e = net.minecraft.world.entity.EntityType.loadEntityRecursive(tag, helper.getLevel(), net.minecraft.world.entity.EntitySpawnReason.LOAD, en -> {
+            en.snapTo(at.x, at.y, at.z, 0, 0);
             return en;
         });
         helper.assertTrue(e instanceof BakkerijKlant && helper.getLevel().addFreshEntity(e), "summoned");

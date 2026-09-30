@@ -39,10 +39,10 @@ public final class SjoelenClient {
                 SjoelSchijfRenderer::createLayer));
         modBus.addListener(SjoelenClient::registerGui);
         NeoForge.EVENT_BUS.addListener(SjoelenClient::onClientTick);
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.SJOELGUH, Guhs.id("geo/entity/guh_npc_sjoelguh.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.SJOELGUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.05f;
-            bot.apply("opoe_knot").ifPresent(b -> b.setRotZ((float) Math.sin(t) * 0.05f));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.SJOELGUH, Guhs.id("entity/guh_npc_sjoelguh"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.SJOELGUH, (npc, tick) -> {
+            float t = (float) tick * 0.05f;
+            return bones -> bones.ifPresent("opoe_knot", b -> b.setRotZ((float) Math.sin(t) * 0.05f));
         });
     }
 
@@ -132,7 +132,7 @@ public final class SjoelenClient {
         double a = SjoelBak.angle(Math.atan2(side, along));
         float power = SjoelSchijvenItem.power(ticks);
         boolean good = power >= SjoelSchijvenItem.GOED_VAN && power <= SjoelSchijvenItem.GOED_TOT;
-        DustParticleOptions dust = new DustParticleOptions(good ? new org.joml.Vector3f(0.45f, 0.9f, 0.5f) : new org.joml.Vector3f(1f, 0.75f, 0.45f), 0.6f);
+        DustParticleOptions dust = new DustParticleOptions(good ? 0x73E680 : 0xFFBF73, 0.6f);   // (0.45, 0.9, 0.5) / (1, 0.75, 0.45)
         for (double d = 0.5; d <= 4.5; d += 0.5) {
             double u = SjoelBak.START_U + Math.cos(a) * d, vv = v + Math.sin(a) * d;
             if (vv < 0 || vv > SjoelBak.WIDTH) {

@@ -31,7 +31,7 @@ public class OutsideStructureFilter extends PlacementFilter {
         if (!(context.getLevel() instanceof WorldGenRegion region)) {
             return true;
         }
-        Structure target = region.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(structure);
+        Structure target = region.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(structure);
         if (target == null) {
             return true;
         }

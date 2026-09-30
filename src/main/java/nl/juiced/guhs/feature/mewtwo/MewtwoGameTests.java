@@ -278,7 +278,7 @@ public class MewtwoGameTests {
             helper.assertTrue(mew != null && mew.isWild() && mew.thuis().equals(midden), "after the story: Mieuwguh near the island");
             helper.assertTrue(MewSpawner.kijk(p) == null, "just one");
             helper.assertTrue(MewSpawner.welkom(mew), "she stays while you're there");
-            helper.assertTrue(!mew.hurt(helper.getLevel().damageSources().playerAttack(p), 5f) && mew.isAlive(), "never hurt");
+            helper.assertTrue(!mew.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(p), 5f) && mew.isAlive(), "never hurt");
             helper.assertTrue(GuhDex.isCreaturePage(GuhVariant.MEW), "her Guhdex page");
             MewtwoVoortgang.zetStap(p, MewtwoVoortgang.NOTITIES);
             helper.assertTrue(!MewSpawner.welkom(mew), "nobody who knows her: she floats off");

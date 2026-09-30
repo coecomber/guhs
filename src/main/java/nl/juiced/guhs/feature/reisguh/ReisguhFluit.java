@@ -29,7 +29,7 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
  * notes and puffs of steam, and on the clients the whistle goes up to his mouth ({@link Fluit}, client:
  * ReisguhFluitClient). Registers itself (sound, message) on the mod bus.
  */
-@EventBusSubscriber(modid = Guhs.MODID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Guhs.MODID)
 public final class ReisguhFluit {
     /** "Tuut tuut!" (sounds.json reisguh.tuut, sounds/reisguh_tuut.ogg). */
     public static final SoundEvent TUUT = SoundEvent.createVariableRangeEvent(Guhs.id("reisguh.tuut"));

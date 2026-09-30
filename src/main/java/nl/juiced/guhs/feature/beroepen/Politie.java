@@ -112,7 +112,7 @@ public final class Politie implements NpcRole {
             BlockPos p = route.get(i);
             if (level.getBlockState(p).isAir()) {
                 BlockPos next = route.get(i + 1);
-                Direction d = Direction.getNearest(next.getX() - p.getX(), 0, next.getZ() - p.getZ());
+                Direction d = Direction.getApproximateNearest(next.getX() - p.getX(), 0, next.getZ() - p.getZ());
                 if (d.getAxis().isVertical()) {
                     d = Direction.NORTH;
                 }

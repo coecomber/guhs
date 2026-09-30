@@ -44,7 +44,7 @@ public final class MewSpawner {
         if (level.dimension() != ModDimensions.GUHMENSION) {
             return null;
         }
-        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(MewtwoFeature.KLOON_EILAND);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(MewtwoFeature.KLOON_EILAND);
         if (structure == null) {
             return null;
         }

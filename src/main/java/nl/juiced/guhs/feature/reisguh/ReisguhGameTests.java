@@ -40,7 +40,7 @@ public class ReisguhGameTests {
 
     @GuhTest(template = EMPTY)
     public static void reisguhIsAConductorWithAWhistle(GameTestHelper helper) {
-        JsonObject geo = json("/assets/guhs/geo/entity/guh_npc_reisguh.geo.json");
+        JsonObject geo = json("/assets/guhs/geckolib/models/entity/guh_npc_reisguh.geo.json");
         helper.assertTrue(geo != null, "the Reisguh's own model");
         Map<String, String> bones = bones(geo);
         helper.assertTrue("head".equals(bones.get("reis_pet")), "the conductor's cap sits on his head: " + bones.get("reis_pet"));

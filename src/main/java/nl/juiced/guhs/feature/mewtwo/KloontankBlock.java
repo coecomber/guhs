@@ -67,7 +67,7 @@ public class KloontankBlock extends HorizontalDirectionalBlock implements Entity
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 
@@ -104,7 +104,7 @@ public class KloontankBlock extends HorizontalDirectionalBlock implements Entity
             }
         } else if (random.nextInt(4) == 0) {
             double a = random.nextDouble() * Math.PI * 2;
-            level.addParticle(new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(0.96f, 0.5f, 0.78f), 0.8f),
+            level.addParticle(new net.minecraft.core.particles.DustParticleOptions(0xF580C7 /* 0.96, 0.5, 0.78 */, 0.8f),
                     pos.getX() + 0.5 + Math.cos(a) * 1.4, pos.getY() + 0.2 + random.nextDouble() * 1.6, pos.getZ() + 0.5 + Math.sin(a) * 1.4, 0, -0.05, 0);
         }
     }

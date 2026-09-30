@@ -13,6 +13,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.InterpolationHandler;
+import net.minecraft.world.phys.Vec3;
 
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.ValueInput;
@@ -89,27 +92,39 @@ public class SjoelSchijfEntity extends Entity {
         }
     }
 
-    @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
-        lerpX = x;
-        lerpY = y;
-        lerpZ = z;
-        lerpSteps = steps;
-    }
+    /** 26.1: server positions arrive through an interpolation handler (was lerpTo); only the position glides, like 1.0.0. */
+    private final InterpolationHandler interpolation = new InterpolationHandler(this) {
+        @Override
+        public void interpolateTo(Vec3 position, float yRot, float xRot) {
+            lerpX = position.x;
+            lerpY = position.y;
+            lerpZ = position.z;
+            lerpSteps = InterpolationHandler.DEFAULT_INTERPOLATION_STEPS;
+        }
+
+        @Override
+        public Vec3 position() {
+            return lerpSteps > 0 ? new Vec3(lerpX, lerpY, lerpZ) : SjoelSchijfEntity.this.position();
+        }
+
+        @Override
+        public boolean hasActiveInterpolation() {
+            return lerpSteps > 0;
+        }
+
+        @Override
+        public void interpolate() {
+        }
+
+        @Override
+        public void cancel() {
+            lerpSteps = 0;
+        }
+    };
 
     @Override
-    public double lerpTargetX() {
-        return lerpSteps > 0 ? lerpX : getX();
-    }
-
-    @Override
-    public double lerpTargetY() {
-        return lerpSteps > 0 ? lerpY : getY();
-    }
-
-    @Override
-    public double lerpTargetZ() {
-        return lerpSteps > 0 ? lerpZ : getZ();
+    public InterpolationHandler getInterpolation() {
+        return interpolation;
     }
 
     // --- not a normal entity -----------------------------------------------------------------------------------------
@@ -120,12 +135,12 @@ public class SjoelSchijfEntity extends Entity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         return InteractionResult.PASS;
     }
 

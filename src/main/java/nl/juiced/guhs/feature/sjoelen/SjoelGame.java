@@ -239,7 +239,7 @@ public final class SjoelGame {
         Minigames.startKeeping(p);
         p.clearFire();
         Vec3 spot = world(-1.6, SjoelBak.WIDTH / 2);
-        p.teleportTo(world, spot.x, spot.y - 1.0, spot.z, facing.toYRot(), 12f);
+        p.teleportTo(world, spot.x, spot.y - 1.0, spot.z, java.util.Set.of(), facing.toYRot(), 12f, true);
         phase = Phase.COUNTDOWN;
         timer = COUNTDOWN;
         GuhQuests.say(p, npc, "quest.guhs.sjoelen.start");
@@ -358,13 +358,13 @@ public final class SjoelGame {
                 if (timer == 60 || timer == 40 || timer == 20) {
                     title(p, Component.literal(String.valueOf(timer / 20)).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
                             Component.translatable("gui.guhs.sjoelen.countdown_sub"), 0, 22, 0);
-                    p.playNotifySound(SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 0.9f, 1.0f);
+                    notifySound(p,SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 0.9f, 1.0f);
                 }
                 if (timer <= 0) {
                     phase = Phase.PLAYING;
                     title(p, Component.translatable("gui.guhs.sjoelen.go").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
                             Component.translatable("gui.guhs.sjoelen.go_sub"), 0, 30, 10);
-                    p.playNotifySound(SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1f, 2.0f);
+                    notifySound(p,SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 1f, 2.0f);
                     npc.playSound(ModSounds.GUH_HAPPY.get(), 1f, 0.9f);
                 }
             }
@@ -483,7 +483,7 @@ public final class SjoelGame {
         String titleKey = score >= 100 ? "gui.guhs.sjoelen.done_100" : score >= 60 ? "gui.guhs.sjoelen.done_good" : "gui.guhs.sjoelen.done";
         title(p, Component.translatable(titleKey, score).withStyle(ChatFormatting.GOLD),
                 Component.translatable("gui.guhs.sjoelen.done_sub", sets, munten), 5, 60, 15);
-        p.playNotifySound(score >= 60 ? SoundEvents.UI_TOAST_CHALLENGE_COMPLETE : SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 1.1f);
+        notifySound(p,score >= 60 ? SoundEvents.UI_TOAST_CHALLENGE_COMPLETE : SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 1.1f);
         npc.playSound(ModSounds.GUH_HAPPY.get(), 1f, score >= 60 ? 1.3f : 1.0f);
         Vec3 gates = world(SjoelBak.BAR + 1.5, SjoelBak.WIDTH / 2);
         world.sendParticles(score >= 60 ? ParticleTypes.TOTEM_OF_UNDYING : ParticleTypes.HAPPY_VILLAGER, gates.x, gates.y + 1, gates.z, 30, 1.5, 0.6, 1, 0.1);
@@ -507,7 +507,7 @@ public final class SjoelGame {
                 p.sendSystemMessage(Component.translatable(message).withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             if (backHome && home != null && p.level() == world && p.isAlive()) {
-                p.teleportTo(world, home.getX() + 0.5, home.getY(), home.getZ() + 0.5, p.getYRot(), 0);
+                p.teleportTo(world, home.getX() + 0.5, home.getY(), home.getZ() + 0.5, java.util.Set.of(), p.getYRot(), 0, true);
             }
         }
         clearPucks(world);
@@ -642,7 +642,7 @@ public final class SjoelGame {
         removeStacks(p);
         Inventory inv = p.getInventory();
         ItemStack stack = new ItemStack(SjoelenFeature.SCHIJVEN.get(), count);
-        if (inv.getSelected().isEmpty()) {
+        if (inv.getSelectedItem().isEmpty()) {
             inv.setItem(inv.getSelectedSlot(), stack);
             return;
         }
@@ -658,7 +658,7 @@ public final class SjoelGame {
         }
         int free = inv.getFreeSlot();
         if (free >= 0) {
-            inv.setItem(free, inv.getSelected());
+            inv.setItem(free, inv.getSelectedItem());
             inv.setItem(inv.getSelectedSlot(), stack);
         } else {
             inv.add(stack);
@@ -732,5 +732,13 @@ public final class SjoelGame {
     /** The entities of the pucks on the bak now. */
     public List<SjoelSchijfEntity> testEntities(ServerLevel world) {
         return entities.values().stream().map(world::getEntity).filter(e -> e instanceof SjoelSchijfEntity).map(e -> (SjoelSchijfEntity) e).toList();
+    }
+    /** 26.1: ServerPlayer#playNotifySound is gone (same packet as 1.21.1's). */
+    private static void notifySound(net.minecraft.server.level.ServerPlayer p, net.minecraft.sounds.SoundEvent sound, net.minecraft.sounds.SoundSource source, float volume, float pitch) {
+        notifySound(p, net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), source, volume, pitch);
+    }
+
+    private static void notifySound(net.minecraft.server.level.ServerPlayer p, net.minecraft.core.Holder<net.minecraft.sounds.SoundEvent> sound, net.minecraft.sounds.SoundSource source, float volume, float pitch) {
+        p.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(sound, source, p.getX(), p.getY(), p.getZ(), volume, pitch, p.getRandom().nextLong()));
     }
 }

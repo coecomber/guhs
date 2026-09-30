@@ -305,7 +305,7 @@ public final class MewtwoVerhaal {
         MewtwoVoortgang.zetSchaal(p, knabbels, snacks);
         ServerLevel level = p.level();
         if (iets) {
-            level.playSound(null, schaal, SoundEvents.GENERIC_EAT, SoundSource.BLOCKS, 0.6f, 1.3f);
+            level.playSound(null, schaal, SoundEvents.GENERIC_EAT.value(), SoundSource.BLOCKS, 0.6f, 1.3f);
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, schaal.getX() + 0.5, schaal.getY() + 0.9, schaal.getZ() + 0.5, 6, 0.3, 0.1, 0.3, 0.0);
         }
         if (knabbels >= MewtwoFeature.PORTIE_KNABBELS && snacks >= MewtwoFeature.PORTIE_SNACKS) {

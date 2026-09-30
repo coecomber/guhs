@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -30,7 +30,7 @@ import nl.juiced.guhs.feature.knuffeldal.KnuffeldalFeature;
  * Snotkruid (the Apotheek's kruidentuin): a pale green herb with dewy droplets, good against snotneuzen. Grown
  * ({@link #AGE} 3) you pick a snotkruidje with a right-click; it grows back by itself.
  */
-public class SnotkruidBlock extends BushBlock {
+public class SnotkruidBlock extends VegetationBlock {   // 1.21.1 BushBlock (26.1 BushBlock is a concrete bonemealable bush)
     public static final MapCodec<SnotkruidBlock> CODEC = simpleCodec(SnotkruidBlock::new);
     public static final int MAX = 3;
     public static final IntegerProperty AGE = IntegerProperty.create("age", 0, MAX);
@@ -41,7 +41,7 @@ public class SnotkruidBlock extends BushBlock {
     }
 
     @Override
-    protected MapCodec<? extends BushBlock> codec() {
+    protected MapCodec<? extends VegetationBlock> codec() {
         return CODEC;
     }
 

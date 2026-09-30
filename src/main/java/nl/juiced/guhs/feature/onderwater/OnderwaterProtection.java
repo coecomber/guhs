@@ -65,7 +65,7 @@ public final class OnderwaterProtection {
         if (server.dimension() != ModDimensions.GUHMENSION) {
             return false;
         }
-        Structure bubble = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(BUBBLE);
+        Structure bubble = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(BUBBLE);
         return bubble != null && server.structureManager().getStructureWithPieceAt(pos, bubble).isValid();
     }
 

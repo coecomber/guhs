@@ -48,7 +48,7 @@ public final class SjoelenProtection {
         if (server.dimension() != ModDimensions.GUHMENSION) {
             return false;
         }
-        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(SjoelenFeature.SJOELHUISJE);
+        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(SjoelenFeature.SJOELHUISJE);
         return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
     }
 

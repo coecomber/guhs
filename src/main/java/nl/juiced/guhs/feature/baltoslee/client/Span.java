@@ -7,8 +7,9 @@ import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
@@ -94,7 +95,7 @@ final class Span {
         laatsteTik = tick;
         if (leider != null) {
             leider.tickCount++;
-            leider.walkAnimation.update(Math.min(1f, snelheid * 3f), 0.4f);
+            leider.walkAnimation.update(Math.min(1f, snelheid * 3f), 0.4f, 1f);
         }
         if (steele != null) {
             steele.tickCount++;
@@ -115,12 +116,19 @@ final class Span {
         return p;
     }
 
-    /** Draws a dog (loop 0..1, fase = where its legs are, zit 0..1) at world spot at, relative to the drawn sled at origin. */
-    void hond(int i, Vec3 at, Vec3 origin, float loop, float fase, float zit, boolean blij, EntityRenderDispatcher dispatcher, float partialTick,
-              PoseStack pose, MultiBufferSource buffers, int light) {
+    /** One team member of this frame: its extracted render state and where it stands (relative to the drawn sled). */
+    record Lid(EntityRenderState state, Vec3 at) {
+    }
+
+    /**
+     * A dog (loop 0..1, fase = where its legs are, zit 0..1) at world spot at, relative to the drawn sled at origin.
+     * 1.1.0: extracted now (render state), submitted with the sled.
+     */
+    @Nullable
+    Lid hond(int i, Vec3 at, Vec3 origin, float loop, float fase, float zit, boolean blij, EntityRenderDispatcher dispatcher, float partialTick, int light) {
         SledehondjeEntity d = honden[i];
         if (d == null) {
-            return;
+            return null;
         }
         d.setYRot(yaw[i]);
         d.yRotO = yaw[i];
@@ -128,39 +136,62 @@ final class Span {
         d.fase = fase + (i % 2) * 0.35f + (i / 2) * 1.3f;
         d.zit = zit;
         d.blij = blij ? 1 : 0;
-        Vec3 r = at.subtract(origin);
-        dispatcher.render(d, r.x, r.y, r.z, yaw[i], partialTick, pose, buffers, light);
+        return lid(d, at, origin, dispatcher, partialTick, light);
     }
 
-    /** Draws the lead (Baltoguh). */
-    void leider(Vec3 at, Vec3 origin, EntityRenderDispatcher dispatcher, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
+    /** The lead (Baltoguh). */
+    @Nullable
+    Lid leider(Vec3 at, Vec3 origin, EntityRenderDispatcher dispatcher, float partialTick, int light) {
         if (leider == null) {
-            return;
+            return null;
         }
         float y = yaw[4];
         leider.setYRot(y);
         leider.yRotO = y;
         leider.yBodyRot = leider.yBodyRotO = leider.yHeadRot = leider.yHeadRotO = y;
-        Vec3 r = at.subtract(origin);
-        dispatcher.render(leider, r.x, r.y, r.z, y, partialTick, pose, buffers, light);
+        return lid(leider, at, origin, dispatcher, partialTick, light);
     }
 
-    /** Draws Steele-Mika sitting in his sled (at is his seat, world). */
-    void steele(Vec3 at, Vec3 origin, float y, EntityRenderDispatcher dispatcher, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
+    /** Steele-Mika sitting in his sled (at is his seat, world). */
+    @Nullable
+    Lid steele(Vec3 at, Vec3 origin, float y, EntityRenderDispatcher dispatcher, float partialTick, int light) {
         if (steele == null) {
-            return;
+            return null;
         }
         steele.setYRot(y);
         steele.yRotO = y;
         steele.yBodyRot = steele.yBodyRotO = steele.yHeadRot = steele.yHeadRotO = y;
-        Vec3 r = at.subtract(origin);
-        dispatcher.render(steele, r.x, r.y, r.z, y, partialTick, pose, buffers, light);
+        return lid(steele, at, origin, dispatcher, partialTick, light);
     }
 
-    /** A rope from a to b (world spots; drawn relative to origin), sagging a little. */
-    static void touw(Vec3 a, Vec3 b, Vec3 origin, PoseStack pose, MultiBufferSource buffers, int light) {
-        VertexConsumer vc = buffers.getBuffer(RenderTypes.entityCutout(TOUW));
-        PoseStack.Pose last = pose.last();
+    private static Lid lid(Entity e, Vec3 at, Vec3 origin, EntityRenderDispatcher dispatcher, float partialTick, int light) {
+        EntityRenderState state = dispatcher.extractEntity(e, partialTick);
+        state.lightCoords = light;                     // (like 1.21.1: drawn with the sled's light)
+        state.shadowPieces.clear();                    // (it stands nowhere: no shadow of its own)
+        return new Lid(state, at.subtract(origin));
+    }
+
+    /** Submits the team members of this frame. */
+    static void submit(java.util.List<Lid> leden, EntityRenderDispatcher dispatcher, CameraRenderState camera, PoseStack pose, SubmitNodeCollector collector) {
+        for (Lid l : leden) {
+            dispatcher.submit(l.state(), camera, l.at().x, l.at().y, l.at().z, pose, collector);
+        }
+    }
+
+    /** Ropes from a to b (world spots, drawn relative to origin): the segments are worked out at extract time, drawn at submit. */
+    static void touwen(java.util.List<Vec3[]> touwen, int light, PoseStack pose, SubmitNodeCollector collector) {
+        if (touwen.isEmpty()) {
+            return;
+        }
+        collector.submitCustomGeometry(pose, RenderTypes.entityCutout(TOUW), (last, vc) -> {
+            for (Vec3[] t : touwen) {
+                touw(t[0], t[1], vc, last, light);
+            }
+        });
+    }
+
+    /** A rope from a to b (relative to the drawn sled), sagging a little. */
+    private static void touw(Vec3 a, Vec3 b, VertexConsumer vc, PoseStack.Pose last, int light) {
         Matrix4f m = last.pose();
         Vec3 d = b.subtract(a);
         double len = d.length();
@@ -173,8 +204,8 @@ final class Span {
         int n = 8;
         for (int k = 0; k < n; k++) {
             double f0 = (double) k / n, f1 = (double) (k + 1) / n;
-            Vec3 p0 = a.add(d.scale(f0)).subtract(0, Math.sin(f0 * Math.PI) * 0.12 * Math.min(1, len / 2), 0).subtract(origin);
-            Vec3 p1 = a.add(d.scale(f1)).subtract(0, Math.sin(f1 * Math.PI) * 0.12 * Math.min(1, len / 2), 0).subtract(origin);
+            Vec3 p0 = a.add(d.scale(f0)).subtract(0, Math.sin(f0 * Math.PI) * 0.12 * Math.min(1, len / 2), 0);
+            Vec3 p1 = a.add(d.scale(f1)).subtract(0, Math.sin(f1 * Math.PI) * 0.12 * Math.min(1, len / 2), 0);
             quad(vc, m, last, p0.add(side), p0.subtract(side), p1.subtract(side), p1.add(side), (float) f0, (float) f1, light);
             quad(vc, m, last, p0.add(up), p0.subtract(up), p1.subtract(up), p1.add(up), (float) f0, (float) f1, light);
         }

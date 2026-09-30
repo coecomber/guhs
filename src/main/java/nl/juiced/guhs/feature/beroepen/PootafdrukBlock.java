@@ -19,6 +19,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3f;
 
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * Vadsige pink Mika paw prints on the ground (the Knabbeldief's trail): flat, walk-through, turned the way it walked,
  * with a little pink sparkle now and then so you can spot the trail.
@@ -26,7 +27,7 @@ import org.joml.Vector3f;
 public class PootafdrukBlock extends HorizontalDirectionalBlock {
     public static final MapCodec<PootafdrukBlock> CODEC = simpleCodec(PootafdrukBlock::new);
     private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 0.5, 16);
-    private static final DustParticleOptions ROZE = new DustParticleOptions(new Vector3f(0.93f, 0.42f, 0.63f), 0.8f);
+    private static final DustParticleOptions ROZE = new DustParticleOptions(0xED6BA1 /* 0.93, 0.42, 0.63 */, 0.8f);
 
     public PootafdrukBlock(Properties properties) {
         super(properties);
@@ -59,7 +60,7 @@ public class PootafdrukBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction dir, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction dir, BlockPos neighbourPos, BlockState neighbour, RandomSource random) {
         return dir == Direction.DOWN && !canSurvive(state, level, pos) ? Blocks.AIR.defaultBlockState() : state;
     }
 

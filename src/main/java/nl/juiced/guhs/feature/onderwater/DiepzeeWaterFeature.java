@@ -42,7 +42,7 @@ public class DiepzeeWaterFeature extends Feature<DiepzeeWaterFeature.Config> {
         WorldGenLevel level = context.level();
         ServerLevel server = level.getLevel();
         NormalNoise noise = server.getChunkSource().randomState().getOrCreateNoise(context.config().noise());
-        return fill(level, noise, new ChunkPos(context.origin()), context.config().minValue(), context.config().waterLevel()) > 0;
+        return fill(level, noise, ChunkPos.containing(context.origin()), context.config().minValue(), context.config().waterLevel()) > 0;
     }
 
     /** Fills the sea columns of this chunk; returns how many water blocks were placed. */

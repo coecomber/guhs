@@ -17,6 +17,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * Opoe Njegschuif's sjoelschijven, lent for one turn (the stack shows how many you have left). Stand at the head of the
  * sjoelbak, hold right-click: the power bar goes up and down (Opoe's two little marks show the good part), look where
@@ -57,15 +61,17 @@ public class SjoelSchijvenItem extends Item {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (!level.isClientSide() && entity instanceof ServerPlayer player) {
             SjoelGame.slide(player, power(getUseDuration(stack, entity) - timeLeft));
+            return true;
         }
+        return false;
     }
 
     /** Only players at the sjoelbak keep their pucks. */
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
         if (!level.isClientSide() && (!(entity instanceof Player player) || !SjoelGame.isPlaying(player))) {
             stack.setCount(0);
         }
@@ -90,8 +96,8 @@ public class SjoelSchijvenItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.sjoelen_schijven.lore").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.guhs.sjoelen_schijven.loan").withStyle(ChatFormatting.LIGHT_PURPLE));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.sjoelen_schijven.lore").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.sjoelen_schijven.loan").withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 }

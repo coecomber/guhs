@@ -20,7 +20,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -84,7 +84,7 @@ public final class MewtwoFeature {
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).sound(SoundType.GLASS).noOcclusion()
                     .lightLevel(s -> 7).pushReaction(PushReaction.BLOCK).isViewBlocking((s, l, p) -> false).isSuffocating((s, l, p) -> false));
     public static final DeferredBlock<MewtwoBlokken.Notitieplek> NOTITIEPLEK = BLOCKS.registerBlock("mewtwo_notitieplek", MewtwoBlokken.Notitieplek::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(-1f, 3600000f).sound(SoundType.WOOL).noOcclusion().noCollission()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(-1f, 3600000f).sound(SoundType.WOOL).noOcclusion().noCollision()
                     .pushReaction(PushReaction.BLOCK));
     public static final DeferredBlock<MewtwoBlokken.Onderdelenkist> ONDERDELENKIST = BLOCKS.registerBlock("mewtwo_onderdelenkist",
             MewtwoBlokken.Onderdelenkist::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(-1f, 3600000f).sound(SoundType.WOOD)
@@ -99,10 +99,10 @@ public final class MewtwoFeature {
             p -> new MewtwoBlokken.Deco(p, MewtwoBlokken.BUISJES_VORM), () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK)
                     .strength(0.6f).sound(SoundType.GLASS).noOcclusion().lightLevel(s -> 4));
     public static final DeferredBlock<MewtwoBlokken.Papieren> PAPIEREN = BLOCKS.registerBlock("mewtwo_papieren", MewtwoBlokken.Papieren::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(0.1f).sound(SoundType.WOOL).noOcclusion().noCollission()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(0.1f).sound(SoundType.WOOL).noOcclusion().noCollision()
                     .pushReaction(PushReaction.DESTROY));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KloontankBlockEntity>> KLOONTANK_BE = BLOCK_ENTITY_TYPES.register(
-            "mewtwo_kloontank", () -> BlockEntityType.Builder.of(KloontankBlockEntity::new, KLOONTANK.get()).build(null));
+            "mewtwo_kloontank", () -> new BlockEntityType<>(KloontankBlockEntity::new, KLOONTANK.get()));
 
     // --- items -------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<LabnotitieItem> LABNOTITIE = ITEMS.registerItem("mewtwo_labnotitie", LabnotitieItem::new,
@@ -114,8 +114,7 @@ public final class MewtwoFeature {
     public static final DeferredHolder<EntityType<?>, EntityType<MewEntity>> MEW = ENTITY_TYPES.register("mew",
             () -> EntityType.Builder.of(MewEntity::new, MobCategory.AMBIENT).sized(0.5f, 0.6f).eyeHeight(0.45f)
                     .clientTrackingRange(10).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("mew"))));
-    public static final DeferredItem<DeferredSpawnEggItem> MEW_SPAWN_EGG = ITEMS.registerItem("mew_spawn_egg",
-            p -> new DeferredSpawnEggItem(MEW, 0xFAB2D2, 0x4682DE, p));
+    public static final DeferredItem<SpawnEggItem> MEW_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "mew_spawn_egg", MEW);   // (26.1: no tint colours; was FAB2D2/4682DE)
 
     // --- particles and sounds ----------------------------------------------------------------------------------------------
     /** A purple sparkle (the Guhtwo's glow, telekinesis trails). */

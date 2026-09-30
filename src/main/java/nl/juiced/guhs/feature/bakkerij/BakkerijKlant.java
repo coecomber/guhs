@@ -284,7 +284,7 @@ public class BakkerijKlant extends PathfinderMob implements GeoEntity {
             if (!dichtbij) {
                 geholpen++;
             }
-            moveTo(target.x, target.y, target.z, getYRot(), 0);     // (the last little step, or helped along when stuck)
+            snapTo(target.x, target.y, target.z, getYRot(), 0);     // (the last little step, or helped along when stuck)
             getNavigation().stop();
             return true;
         }
@@ -308,7 +308,7 @@ public class BakkerijKlant extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(ServerLevel level, DamageSource source) {
         return !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 

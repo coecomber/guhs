@@ -1097,3 +1097,27 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
   showed; the port simply draws the model (same look).
 * S2: Knabbelkatapult notification sounds (countdown, fort done, run done) are sent as a `ClientboundSoundPacket` to the
   player (26.1 removed `ServerPlayer#playNotifySound`, which sent the same packet).
+* S4: Kaasmelkdrankje (beroepen) clears **all** effects before giving Regeneration (NeoForge 26.1 has no effect cures;
+  1.21.1 removed the milk-curable ones, which were practically all). Its drinking sound now comes from a `CONSUMABLE`
+  component (`Consumables.defaultDrink()`, same sound and 1.6 s).
+* S4: Bakkerij pastries: the small effect and the 0.8 s eating time of the fast ones come from the `CONSUMABLE` component
+  (`ApplyStatusEffectsConsumeEffect`, chance 1 like before); nutrition/saturation unchanged.
+* S4: Duikhelm is a plain `Item` with `humanoidArmor(DUIK, HELMET)` (2 armour, 220 durability, enchantability 12, turtle
+  equip sound, repaired with a parel); its worn texture is the equipment asset `guhs:duikhelm` (D). Water breathing /
+  night vision logic unchanged.
+* S4: Mieuwguh spawn egg has no tint colours any more (was FAB2D2/4682DE; needs an item texture, D).
+* S4: Sneeuwslee owner is synced as an entity reference (26.1 has no OPTIONAL_UUID serializer) - same UUID, no visible change.
+  The Baltoslee sled route is synced with our own data serializer `guhs:baltoslee_compound_tag` (vanilla's COMPOUND_TAG is gone).
+* S4: Sled teams (Baltoslee sled, sneeuwslee): dogs, Baltoguh and Steele-Mika are extracted with the sled and submitted
+  after it (26.1 submit pipeline); they get the sled's light like before and no shadow of their own. The sledehondjes' ear/tail
+  clock is the level's game time (GeckoLib 4 used its own render clock; same speed).
+* S4: Sneeuwslee steering reads the movement keys directly (26.1's move vector is normalised; 1.21.1's impulses were plain
+  +-1), so steering diagonally is as strong as before.
+* S4: Server position updates of the sjoelschijf, the Baltoslee sled (ignored) and the sneeuwslee (own 10-step glide) go
+  through a custom `InterpolationHandler` (26.1 replacement of `lerpTo`); same behaviour.
+* S4: Bakkerij customer bubble: the pastry is drawn with the item model's particle sprite (was the baked model's particle
+  icon; same texture).
+* S4: Zielsguh heart next to the name uses `RenderNameTagEvent.CanRender` (26.1 split the event); only added when the guh
+  has a name tag text at all.
+* S4: Knabbeldief-Mika / bakkerij customers / Mieuwguh invulnerability is asked on the server only (`isInvulnerableTo(ServerLevel, ..)`,
+  `hurtServer`); the client may show a hurt flash (cosmetic), like B's NPC note.

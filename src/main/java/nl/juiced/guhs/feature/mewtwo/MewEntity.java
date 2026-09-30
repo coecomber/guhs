@@ -92,9 +92,9 @@ public class MewEntity extends AmbientCreature implements GeoEntity {
     // --- never hurt, never falls, not pushed -------------------------------------------------------------------------------
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         if (source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            return super.hurt(source, amount);
+            return super.hurtServer(level, source, amount);
         }
         if (!level().isClientSide() && source.getEntity() instanceof Player) {
             giechel();   // (she thinks it's a game)
@@ -116,7 +116,7 @@ public class MewEntity extends AmbientCreature implements GeoEntity {
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false;
     }
 
@@ -147,8 +147,8 @@ public class MewEntity extends AmbientCreature implements GeoEntity {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         if (tickCount % 200 == 0 && isWild() && !MewSpawner.welkom(this)) {
             poef();
             return;

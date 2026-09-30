@@ -24,6 +24,9 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * A pastry of the Knabbelbakkerij (one of the twelve {@link Recept#BOEK} recipes): food with a cute little effect, and
  * a burst of hearts and knabbelwolkjes when you eat it.
@@ -99,7 +102,7 @@ public class BakjeItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
         if (!level.isClientSide() && isSpel(stack) && (!(entity instanceof ServerPlayer player) || !BakkerijGame.isPlaying(player))) {
             stack.setCount(0);
         }
@@ -120,17 +123,17 @@ public class BakjeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         if (isSpel(stack)) {
             Recept.Kwaliteit k = kwaliteit(stack);
-            tooltip.add(Component.translatable("gui.guhs.bakkerij.voor_klant.tooltip").withStyle(ChatFormatting.GOLD));
+            tooltip.accept(Component.translatable("gui.guhs.bakkerij.voor_klant.tooltip").withStyle(ChatFormatting.GOLD));
             if (k != null) {
-                tooltip.add(k.naam().copy().withStyle(k == Recept.Kwaliteit.PERFECT ? ChatFormatting.YELLOW : ChatFormatting.GRAY));
+                tooltip.accept(k.naam().copy().withStyle(k == Recept.Kwaliteit.PERFECT ? ChatFormatting.YELLOW : ChatFormatting.GRAY));
             }
         } else {
-            tooltip.add(Component.translatable("item.guhs." + recept.id() + ".lore").withStyle(ChatFormatting.GRAY));
+            tooltip.accept(Component.translatable("item.guhs." + recept.id() + ".lore").withStyle(ChatFormatting.GRAY));
         }
-        tooltip.add(Component.translatable("gui.guhs.bakkerij.recept.regel", recept.deeg.naam(), recept.vorm.naam(), recept.topping.naam())
+        tooltip.accept(Component.translatable("gui.guhs.bakkerij.recept.regel", recept.deeg.naam(), recept.vorm.naam(), recept.topping.naam())
                 .withStyle(ChatFormatting.DARK_GRAY));
     }
 }

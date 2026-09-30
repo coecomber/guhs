@@ -111,7 +111,7 @@ public class MewtwoGedrag implements VariantGedrag {
                 double speed = Math.min(0.32, 0.12 + len * 0.03);
                 item.setDeltaMovement(d.scale(speed / Math.max(len, 1e-3)).add(0, 0.045, 0));
             }
-            item.hasImpulse = true;
+            item.needsSync = true;
             if (!item.getPersistentData().getBooleanOr(ZWEEFT_ITEM, false)) {
                 item.getPersistentData().putBoolean(ZWEEFT_ITEM, true);
                 level.playSound(null, item.getX(), item.getY(), item.getZ(), MewtwoFeature.TELEKINESE.get(), SoundSource.NEUTRAL, 0.6f,

@@ -160,8 +160,8 @@ public class BeroepenGameTests {
             helper.assertTrue(mika != null && mika.distanceToSqr(Vec3.atCenterOf(buit)) < 4, "the Knabbeldief sits by the sack");
             // it never does anything but giggle and run
             float health = p.getHealth();
-            helper.assertTrue(!mika.doHurtTarget(p) && p.getHealth() == health, "a Mika never hurts");
-            helper.assertTrue(!mika.hurt(p.damageSources().playerAttack(p), 5f), "and can't be hurt");
+            helper.assertTrue(!mika.doHurtTarget(helper.getLevel(), p) && p.getHealth() == health, "a Mika never hurts");
+            helper.assertTrue(!mika.hurtServer(helper.getLevel(), p.damageSources().playerAttack(p), 5f), "and can't be hurt");
             mika.schrik(p);
             helper.assertTrue(mika.isGevlucht(), "caught: it runs");
             // someone else can't take the sack; the detective can
@@ -320,13 +320,13 @@ public class BeroepenGameTests {
         helper.assertTrue(blocks(s, BeroepenFeature.MARSHMALLOWVUUR.get()) == 5 && blocks(s, BeroepenFeature.GUHTJEPLEK.get()) == 1
                 && blocks(s, BeroepenFeature.KLUISPLEK.get()) == 1 && blocks(s, BeroepenFeature.VERSTOPPLEK.get()) == 6
                 && blocks(s, BeroepenFeature.MENGKETEL.get()) == 1 && blocks(s, BeroepenFeature.SNOTKRUID.get()) >= 12, "the jobs' things are there");
-        var pool = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id("knuffeldal_stadje/vrij"));
+        var pool = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).getValue(Guhs.id("knuffeldal_stadje/vrij"));
         helper.assertTrue(pool != null && pool.size() == 1
                 && pool.getShuffledTemplates(net.minecraft.util.RandomSource.create(1)).get(0).toString().contains("beroepenstraat"),
                 "the town's free street pool holds the Beroepenstraat");
         var dorp = templates.get(Guhs.id("guh_village/layout_c"));
         helper.assertTrue(dorp.isPresent() && blocks(dorp.get(), BeroepenFeature.DAKPLEK.get()) == 16, "Bob's roof: 16 ghost tiles");
-        var dorpen = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id("guh_village/start"));
+        var dorpen = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).getValue(Guhs.id("guh_village/start"));
         helper.assertTrue(dorpen != null && dorpen.size() == 3, "three village layouts");
         helper.succeed();
     }

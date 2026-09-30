@@ -185,7 +185,7 @@ public class MeppenGameTests {
         Display.TextDisplay spot = marker.stream().min(java.util.Comparator.comparingDouble(d -> d.distanceToSqr(npc))).get();
         var top = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, spot.getBoundingBox().inflate(1.5),
                 d -> d.entityTags().contains(Scorebord.TAG));
-        helper.assertTrue(top.size() == 1 && top.get(0).saveWithoutId(new net.minecraft.nbt.CompoundTag()).getStringOr("text", "")
+        helper.assertTrue(top.size() == 1 && nl.juiced.guhs.storage.Nbt.saveWithoutId(top.get(0), new net.minecraft.nbt.CompoundTag()).get("text").toString()
                 .contains(player.getGameProfile().name() + "  " + MepGame.points(score)), "the top 3 floats at the scoreboard wall with the score");
         // a second, worse game: no bonus, the record stays
         game = play(helper, npc, player);
@@ -266,7 +266,7 @@ public class MeppenGameTests {
         ServerPlayer other = player(helper, npc);
         ItemStack stolen = new ItemStack(MeppenFeature.MEP_HAMER.get());
         other.getInventory().setItem(0, stolen);
-        stolen.inventoryTick(helper.getLevel(), other, 0, true);
+        stolen.inventoryTick(helper.getLevel(), other, net.minecraft.world.entity.EquipmentSlot.MAINHAND);
         helper.assertTrue(count(other, MeppenFeature.MEP_HAMER.get()) == 0, "not playing: no mallet");
         ItemEntity dropped = new ItemEntity(helper.getLevel(), other.getX(), other.getY(), other.getZ(), new ItemStack(MeppenFeature.MEP_HAMER.get()));
         helper.getLevel().addFreshEntity(dropped);
@@ -373,8 +373,8 @@ public class MeppenGameTests {
         // the floating board has all three levels
         var spot = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(16),
                 d -> d.entityTags().contains(MepGame.TAG_TOP)).stream().min(java.util.Comparator.comparingDouble(d -> d.distanceToSqr(npc))).orElseThrow();
-        String text = helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, spot.getBoundingBox().inflate(1.5), d -> d.entityTags().contains(Scorebord.TAG))
-                .get(0).saveWithoutId(new net.minecraft.nbt.CompoundTag()).getStringOr("text", "");
+        String text = nl.juiced.guhs.storage.Nbt.saveWithoutId(helper.getLevel().getEntitiesOfClass(Display.TextDisplay.class, spot.getBoundingBox().inflate(1.5),
+                d -> d.entityTags().contains(Scorebord.TAG)).get(0)).get("text").toString();
         helper.assertTrue(text.contains("gui.guhs.niveau.makkelijk") && text.contains("gui.guhs.niveau.medium") && text.contains("gui.guhs.niveau.lastig")
                 && text.contains(player.getGameProfile().name() + "  " + MepGame.points(score)), "one board, three levels: " + text);
         done(helper, npc, player);
