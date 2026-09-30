@@ -45,10 +45,10 @@ public final class KatapultClient {
                 PluisbalRenderer::createLayer));
         modBus.addListener(KatapultClient::registerGui);
         NeoForge.EVENT_BUS.addListener(KatapultClient::onClientTick);
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.KATAPULTGUH, Guhs.id("geo/entity/guh_npc_katapultguh.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.KATAPULTGUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.09f;
-            bot.apply("kapitein_veer").ifPresent(b -> b.setRotX((float) Math.sin(t) * 0.12f));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.KATAPULTGUH, Guhs.id("entity/guh_npc_katapultguh"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.KATAPULTGUH, (npc, tick) -> {
+            float t = (float) tick * 0.09f;
+            return bones -> bones.ifPresent("kapitein_veer", b -> b.setRotX((float) Math.sin(t) * 0.12f));
         });
     }
 
@@ -132,7 +132,7 @@ public final class KatapultClient {
         double speed = KatapultGame.MIN_SPEED + (KatapultGame.MAX_SPEED - KatapultGame.MIN_SPEED) * power;
         Vec3 pos = KatapultGame.launchPoint(werper, facing);
         Vec3 v = mc.player.getLookAngle().normalize().scale(speed);
-        DustParticleOptions dust = new DustParticleOptions(new org.joml.Vector3f(1f, 0.55f + power * 0.3f, 0.8f - power * 0.3f), 0.8f);
+        DustParticleOptions dust = new DustParticleOptions(net.minecraft.util.ARGB.colorFromFloat(1f, 1f, 0.55f + power * 0.3f, 0.8f - power * 0.3f) & 0xFFFFFF, 0.8f);
         for (int t = 0; t < 90; t++) {
             v = v.add(0, -PluisbalEntity.GRAVITY, 0).scale(PluisbalEntity.DRAG);
             Vec3 next = pos.add(v);

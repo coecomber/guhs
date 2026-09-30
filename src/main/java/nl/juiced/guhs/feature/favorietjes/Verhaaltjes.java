@@ -240,13 +240,13 @@ public final class Verhaaltjes {
                 eerste(guh, eigenaar, "favorietjes_onweer");
                 wist(guh, "onweer", 1, "");
             }
-        } else if (level.isRaining() && level.getBiome(boven).value().getPrecipitationAt(boven) == Biome.Precipitation.SNOW) {
+        } else if (level.isRaining() && level.getBiome(boven).value().getPrecipitationAt(boven, level.getSeaLevel()) == Biome.Precipitation.SNOW) {
             eerste(guh, eigenaar, "favorietjes_sneeuwvlokjes");
             wist(guh, "sneeuwvlokjes", 1, "");
-        } else if (level.dimensionType().hasSkyLight() && !level.dimensionType().hasFixedTime() && level.isNight()) {
+        } else if (level.dimensionType().hasSkyLight() && !level.dimensionType().hasFixedTime() && level.isDarkOutside()) {
             eerste(guh, eigenaar, "favorietjes_sterrennacht");
             wist(guh, "nacht", 3, "");
-            if (level.getMoonPhase() == 0) {
+            if (nl.juiced.guhs.world.GuhTime.moonPhase(level) == 0) {
                 eerste(guh, eigenaar, "favorietjes_volle_maan");
                 wist(guh, "volle_maan", 1, "");
             }
@@ -308,8 +308,7 @@ public final class Verhaaltjes {
         if (p != null) {
             return p.getGameProfile().name();
         }
-        return s.getProfileCache() == null ? "mijn baasje"
-                : s.getProfileCache().get(eigenaar).map(com.mojang.authlib.GameProfile::getName).orElse("mijn baasje");
+        return s.services().nameToIdCache().get(eigenaar).map(net.minecraft.server.players.NameAndId::name).orElse("mijn baasje");
     }
 
     static String guhNaam(@Nullable MinecraftServer s, String bandId) {

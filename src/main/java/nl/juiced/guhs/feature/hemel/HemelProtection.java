@@ -84,7 +84,7 @@ public final class HemelProtection {
         if (level.dimension() != ModDimensions.GUHMENSION) {
             return null;
         }
-        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(HemelFeature.KAPELLETJE);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(HemelFeature.KAPELLETJE);
         if (structure == null) {
             return null;
         }

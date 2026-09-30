@@ -33,7 +33,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -111,24 +110,24 @@ public final class WereldlevenFeature {
     public static final DeferredItem<FluitjeItem> GUH_FLUITJE = ITEMS.registerItem("guh_fluitje", FluitjeItem::new,
             () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<Item> MARSHMALLOW_KNABBEL = ITEMS.registerSimpleItem("marshmallow_knabbel",
-            new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).fast().build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build(), nl.juiced.guhs.registry.ModItems.FAST_FOOD));
     public static final DeferredItem<LiedjesboekjeItem> LIEDJESBOEKJE = ITEMS.registerItem("wereldleven_liedjesboekje", LiedjesboekjeItem::new,
             () -> new Item.Properties().stacksTo(1));
     public static final Map<Kaasijsjes.Smaak, DeferredItem<KaasijsjeItem>> KAASIJSJES = new EnumMap<>(Kaasijsjes.Smaak.class);
 
     static {
         for (Kaasijsjes.Smaak smaak : Kaasijsjes.Smaak.values()) {
-            KAASIJSJES.put(smaak, ITEMS.registerItem(smaak.itemId(), p -> new KaasijsjeItem(smaak, p), new Item.Properties().stacksTo(16)
+            KAASIJSJES.put(smaak, ITEMS.registerItem(smaak.itemId(), p -> new KaasijsjeItem(smaak, p), () -> new Item.Properties().stacksTo(16)
                     .rarity(smaak.seizoen == null ? Rarity.COMMON : Rarity.UNCOMMON)
-                    .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3f).alwaysEdible().fast().build())));
+                    .food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3f).alwaysEdible().build(), nl.juiced.guhs.registry.ModItems.FAST_FOOD)));
         }
-        ITEMS.registerItem("guh_xylofoon", p -> new BlockItem(GUH_XYLOFOON.get(), p));
-        ITEMS.registerItem("grijpmachine", p -> new DoubleHighBlockItem(GRIJPMACHINE.get(), p));
+        ITEMS.registerItem("guh_xylofoon", p -> new BlockItem(GUH_XYLOFOON.get(), p), p -> p.useBlockDescriptionPrefix());
+        ITEMS.registerItem("grijpmachine", p -> new DoubleHighBlockItem(GRIJPMACHINE.get(), p), p -> p.useBlockDescriptionPrefix());
         for (var e : KNUFFELS.entrySet()) {
             DeferredBlock<KnuffelBlock> block = e.getValue();
             boolean glitter = e.getKey().equals(GLITTER);
             ITEMS.registerItem("knuffel_" + e.getKey(), p -> new BlockItem(block.get(), p),
-                    () -> new Item.Properties().rarity(glitter ? Rarity.EPIC : Rarity.COMMON));
+                    () -> new Item.Properties().rarity(glitter ? Rarity.EPIC : Rarity.COMMON).useBlockDescriptionPrefix());
         }
     }
 
@@ -136,13 +135,12 @@ public final class WereldlevenFeature {
     public static final DeferredHolder<EntityType<?>, EntityType<IJscoguhEntity>> IJSCOGUH = ENTITY_TYPES.register("ijscoguh",
             () -> EntityType.Builder.of(IJscoguhEntity::new, MobCategory.CREATURE).sized(1.2f, 2.1f).eyeHeight(1.75f).clientTrackingRange(10)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Identifier.parse("guhs:ijscoguh"))));
-    public static final DeferredItem<DeferredSpawnEggItem> IJSCOGUH_SPAWN_EGG = ITEMS.registerItem("ijscoguh_spawn_egg",
-            p -> new DeferredSpawnEggItem(IJSCOGUH, 0xFFF4F8, 0xF08CB8, p));
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> IJSCOGUH_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "ijscoguh_spawn_egg", IJSCOGUH);
 
     // --- block entity, effects, particles, sounds, the plushies' point of interest ------------------------------------------
     @SuppressWarnings("DataFlowIssue")
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GrijpmachineBlockEntity>> GRIJPMACHINE_BE =
-            BLOCK_ENTITY_TYPES.register("grijpmachine", () -> BlockEntityType.Builder.of(GrijpmachineBlockEntity::new, GRIJPMACHINE.get()).build(null));
+            BLOCK_ENTITY_TYPES.register("grijpmachine", () -> new BlockEntityType<>(GrijpmachineBlockEntity::new, GRIJPMACHINE.get()));
 
     /** Blushing cheeks: hearts float up now and then, and a tiny bit of healing (from the roze / bloesem / appeltaart ijsjes). */
     public static final DeferredHolder<MobEffect, MobEffect> BLOSJES = MOB_EFFECTS.register("blosjes", WereldlevenEffects.Blosjes::new);

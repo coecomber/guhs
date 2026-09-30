@@ -4,7 +4,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.NoRenderParticle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.util.Mth;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -19,13 +19,13 @@ import nl.juiced.guhs.feature.favorietjes.FavorietjesFeature;
 public final class FavorietjesClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((RegisterParticleProvidersEvent event) -> {
-            event.registerSpecial(FavorietjesFeature.EXPLOSIE.get(), (type, level, x, y, z, dx, dy, dz) -> new Explosie(level, x, y, z));
+            event.registerSpecial(FavorietjesFeature.EXPLOSIE.get(), (type, level, x, y, z, dx, dy, dz, random) -> new Explosie(level, x, y, z));
             event.registerSpriteSet(FavorietjesFeature.GLINSTER.get(),
-                    sprites -> (type, level, x, y, z, dx, dy, dz) -> new Glinster(level, x, y, z, dx, dy, dz, sprites));
+                    sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Glinster(level, x, y, z, dx, dy, dz, sprites));
             event.registerSpriteSet(FavorietjesFeature.VRAAGJE.get(),
-                    sprites -> (type, level, x, y, z, dx, dy, dz) -> new Vraagje(level, x, y, z, sprites));
+                    sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Vraagje(level, x, y, z, sprites));
             event.registerSpriteSet(FavorietjesFeature.SNUFFEL.get(),
-                    sprites -> (type, level, x, y, z, dx, dy, dz) -> new Snuffel(level, x, y, z, dx, dy, dz, sprites));
+                    sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Snuffel(level, x, y, z, dx, dy, dz, sprites));
         });
     }
 
@@ -63,12 +63,12 @@ public final class FavorietjesClient {
     }
 
     /** A twinkling little star: grows and shrinks, fades out. */
-    static class Glinster extends TextureSheetParticle {
+    static class Glinster extends SingleQuadParticle {
         private final float basis;
 
         Glinster(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.first());
+            setSprite(sprites.get(random));
             lifetime = 16 + random.nextInt(12);
             basis = 0.07f + random.nextFloat() * 0.06f;
             quadSize = basis;
@@ -88,21 +88,21 @@ public final class FavorietjesClient {
         }
 
         @Override
-        public int getLightColor(float partialTick) {
+        public int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A pink question mark that pops up above a curious guh and bobs a little. */
-    static class Vraagje extends TextureSheetParticle {
+    static class Vraagje extends SingleQuadParticle {
         Vraagje(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.first());
+            setSprite(sprites.get(random));
             lifetime = 34;
             quadSize = 0.02f;
             gravity = 0f;
@@ -119,21 +119,21 @@ public final class FavorietjesClient {
         }
 
         @Override
-        public int getLightColor(float partialTick) {
+        public int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A little sniff puff: out of the snoet, drifts and fades. */
-    static class Snuffel extends TextureSheetParticle {
+    static class Snuffel extends SingleQuadParticle {
         Snuffel(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.first());
+            setSprite(sprites.get(random));
             lifetime = 12 + random.nextInt(8);
             quadSize = 0.05f + random.nextFloat() * 0.04f;
             xd = dx + (random.nextDouble() - 0.5) * 0.03;
@@ -152,8 +152,8 @@ public final class FavorietjesClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

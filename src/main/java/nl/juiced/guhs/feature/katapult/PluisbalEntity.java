@@ -114,7 +114,7 @@ public class PluisbalEntity extends Entity {
             level().playSound(null, pos, SoundEvents.WOOL_HIT, SoundSource.PLAYERS, 1f, 0.9f);
             level().playSound(null, pos, SoundEvents.SLIME_BLOCK_HIT, SoundSource.PLAYERS, 0.6f, 1.3f);
             if (level() instanceof ServerLevel server) {
-                server.sendParticles(new DustParticleOptions(new org.joml.Vector3f(1f, 0.7f, 0.85f), 1.4f), at.x, at.y, at.z, 10, 0.25, 0.25, 0.25, 0.05);
+                server.sendParticles(new DustParticleOptions(0xFFB2D9 /* 1, 0.7, 0.85 */, 1.4f), at.x, at.y, at.z, 10, 0.25, 0.25, 0.25, 0.05);
             }
             if (bounces >= MAX_BOUNCES || bounced.length() < DONE_SPEED) {
                 poof();
@@ -124,7 +124,7 @@ public class PluisbalEntity extends Entity {
         setPos(to.x, to.y, to.z);
         setDeltaMovement(v);
         if (level() instanceof ServerLevel server && tickCount % 2 == 0) {
-            server.sendParticles(new DustParticleOptions(new org.joml.Vector3f(1f, 0.75f, 0.9f), 0.9f), getX(), getY() + SIZE / 2, getZ(), 1, 0.05, 0.05, 0.05, 0);
+            server.sendParticles(new DustParticleOptions(0xFFBFE6 /* 1, 0.75, 0.9 */, 0.9f), getX(), getY() + SIZE / 2, getZ(), 1, 0.05, 0.05, 0.05, 0);
         }
         if (tickCount > MAX_AGE || getY() < lowest) {
             poof();
@@ -138,7 +138,7 @@ public class PluisbalEntity extends Entity {
         }
         done = true;
         if (level() instanceof ServerLevel server) {
-            server.sendParticles(new DustParticleOptions(new org.joml.Vector3f(1f, 0.72f, 0.88f), 1.6f), getX(), getY() + 0.25, getZ(), 24, 0.35, 0.3, 0.35, 0.02);
+            server.sendParticles(new DustParticleOptions(0xFFB8E0 /* 1, 0.72, 0.88 */, 1.6f), getX(), getY() + 0.25, getZ(), 24, 0.35, 0.3, 0.35, 0.02);
             server.sendParticles(ParticleTypes.CLOUD, getX(), getY() + 0.25, getZ(), 6, 0.2, 0.2, 0.2, 0.02);
             level().playSound(null, blockPosition(), SoundEvents.WOOL_BREAK, SoundSource.PLAYERS, 0.8f, 1.4f);
         }
@@ -148,27 +148,20 @@ public class PluisbalEntity extends Entity {
 
     // --- client -----------------------------------------------------------------------------------------------------------
 
-    @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
-        lerpX = x;
-        lerpY = y;
-        lerpZ = z;
-        lerpSteps = steps;
-    }
+    /** 1.1.0: server positions arrive through an interpolation handler (was lerpTo); only the position, over 3 ticks as before. */
+    private final net.minecraft.world.entity.InterpolationHandler interpolation = new net.minecraft.world.entity.InterpolationHandler(this) {
+        @Override
+        public void interpolateTo(Vec3 position, float yRot, float xRot) {
+            lerpX = position.x;
+            lerpY = position.y;
+            lerpZ = position.z;
+            lerpSteps = net.minecraft.world.entity.InterpolationHandler.DEFAULT_INTERPOLATION_STEPS;
+        }
+    };
 
     @Override
-    public double lerpTargetX() {
-        return lerpSteps > 0 ? lerpX : getX();
-    }
-
-    @Override
-    public double lerpTargetY() {
-        return lerpSteps > 0 ? lerpY : getY();
-    }
-
-    @Override
-    public double lerpTargetZ() {
-        return lerpSteps > 0 ? lerpZ : getZ();
+    public net.minecraft.world.entity.InterpolationHandler getInterpolation() {
+        return interpolation;
     }
 
     private void clientTick() {
@@ -190,12 +183,12 @@ public class PluisbalEntity extends Entity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel serverLevel, DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, net.minecraft.world.phys.Vec3 location) {
         return InteractionResult.PASS;
     }
 

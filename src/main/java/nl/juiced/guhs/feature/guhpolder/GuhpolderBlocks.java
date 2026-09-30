@@ -15,7 +15,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SnowyBlock;
@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.level.ScheduledTickAccess;
 /** The blocks of the Guhpolder (see {@link GuhpolderFeature}). */
 public final class GuhpolderBlocks {
     /** A snow cap on the knotwilg's twigs (set by the worldgen on the top twigs; snow on top keeps it, a solid block takes it off). */
@@ -95,7 +96,7 @@ public final class GuhpolderBlocks {
     }
 
     /** Rijpsprietjes: a tuft of frosted grass sprigs with little ice needles. */
-    public static class Rijpsprietjes extends BushBlock {
+    public static class Rijpsprietjes extends VegetationBlock {
         public static final MapCodec<Rijpsprietjes> CODEC = simpleCodec(Rijpsprietjes::new);
         private static final VoxelShape SHAPE = Block.box(2, 0, 2, 14, 11, 14);
 
@@ -104,7 +105,7 @@ public final class GuhpolderBlocks {
         }
 
         @Override
-        protected MapCodec<? extends BushBlock> codec() {
+        protected MapCodec<? extends VegetationBlock> codec() {
             return CODEC;
         }
 
@@ -156,8 +157,20 @@ public final class GuhpolderBlocks {
      * snow cap ({@link #SNEEUW}); snow landing on top gives them one too, a solid block on top takes it off.
      */
     public static class KnotwilgBladeren extends LeavesBlock {
+        // 26.1: LeavesBlock is abstract (falling-leaf particles); 1.0.0's leaves had none -> chance 0, nothing spawned
+        public static final com.mojang.serialization.MapCodec<KnotwilgBladeren> CODEC = simpleCodec(KnotwilgBladeren::new);
+
+        @Override
+        public com.mojang.serialization.MapCodec<KnotwilgBladeren> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
+        }
+
         public KnotwilgBladeren(Properties properties) {
-            super(properties);
+            super(0f, properties);
             registerDefaultState(defaultBlockState().setValue(SNEEUW, false));
         }
 
@@ -168,8 +181,8 @@ public final class GuhpolderBlocks {
         }
 
         @Override
-        protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbor, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-            BlockState out = super.updateShape(state, direction, neighbor, level, pos, neighborPos);
+        protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighbor, RandomSource random) {
+            BlockState out = super.updateShape(state, level, ticks, pos, direction, neighborPos, neighbor, random);
             if (direction == Direction.UP && out.is(this)) {
                 if (neighbor.is(BlockTags.SNOW)) {
                     out = out.setValue(SNEEUW, true);

@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
@@ -35,27 +35,45 @@ public final class HemelClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) ->
                 event.registerBlockEntityRenderer(HemelFeature.KNUFFELHART_BE.get(), KnuffelhartRenderer::new));
-        modBus.addListener((ModelEvent.RegisterAdditional event) -> {
-            event.register(KnuffelhartRenderer.HART);
-            event.register(KnuffelhartRenderer.GLOED);
-        });
+        modBus.addListener(KnuffelhartRenderer::registerModels);
         modBus.addListener((RegisterParticleProvidersEvent event) -> event.registerSpriteSet(HemelFeature.STERRETJE.get(),
-                sprites -> (type, level, x, y, z, dx, dy, dz) -> new Sterretje(level, x, y, z, dx, dy, dz, sprites)));
+                sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Sterretje(level, x, y, z, dx, dy, dz, sprites)));
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> {
             klopt = false;
             muziek = null;
         });
         // the wolkenhoeder: its own model (tools/features/hemel_npc.py); its little cloud bobs, the halo turns slowly
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.WOLKENHOEDER, Guhs.id("geo/entity/guh_npc_wolkenhoeder.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.WOLKENHOEDER, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.07f;
-            // (absolute values: these bones have no animation of their own, nothing resets them)
-            bot.apply("hoeder_wolkje").ifPresent(b -> b.setPosY((float) Math.sin(t) * 0.35f));
-            bot.apply("hoeder_aureool").ifPresent(b -> {
-                b.setPosY((float) Math.sin(t + 1.1f) * 0.25f);
-                b.setRotY((t * 0.3f) % ((float) Math.PI * 2f));
-            });
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.WOLKENHOEDER, Guhs.id("entity/guh_npc_wolkenhoeder"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.WOLKENHOEDER, (npc, tick) -> {
+            float t = (float) tick * 0.07f;
+            // (these bones have no animation and no base rotation of their own)
+            return bones -> {
+                bones.ifPresent("hoeder_wolkje", b -> b.setTranslateY((float) Math.sin(t) * 0.35f));
+                bones.ifPresent("hoeder_aureool", b -> {
+                    b.setTranslateY((float) Math.sin(t + 1.1f) * 0.25f);
+                    b.setRotY((t * 0.3f) % ((float) Math.PI * 2f));
+                });
+            };
         });
+        NeoForge.EVENT_BUS.addListener(HemelClient::herinneringGlinstert);
+    }
+
+    /**
+     * A Herinnering held in the main hand sparkles now and then (1.0.0 did this in the item's client-side inventoryTick;
+     * 26.1 only ticks inventories on the server - same chance, same spot, for every player the client sees).
+     */
+    private static void herinneringGlinstert(net.neoforged.neoforge.client.event.ClientTickEvent.Post event) {
+        Minecraft mc = Minecraft.getInstance();
+        ClientLevel level = mc.level;
+        if (level == null || mc.isPaused()) {
+            return;
+        }
+        for (net.minecraft.world.entity.player.Player p : level.players()) {
+            if (p.getMainHandItem().getItem() instanceof nl.juiced.guhs.feature.hemel.Herinnering && level.getRandom().nextInt(10) == 0) {
+                level.addParticle(HemelFeature.STERRETJE.get(), p.getX() + (level.getRandom().nextDouble() - 0.5) * 1.2,
+                        p.getY() + 0.6 + level.getRandom().nextDouble() * 1.2, p.getZ() + (level.getRandom().nextDouble() - 0.5) * 1.2, 0, 0.02, 0);
+            }
+        }
     }
 
     public static boolean klopt() {
@@ -96,11 +114,11 @@ public final class HemelClient {
     }
 
     /** A tiny four-pointed twinkle: floats a little, twinkles, fades. */
-    static class Sterretje extends TextureSheetParticle {
+    static class Sterretje extends SingleQuadParticle {
         private final SpriteSet sprites;
 
         Sterretje(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z);
+            super(level, x, y, z, sprites.first());
             this.sprites = sprites;
             this.lifetime = 18 + random.nextInt(14);
             this.quadSize = 0.06f + random.nextFloat() * 0.05f;
@@ -126,13 +144,13 @@ public final class HemelClient {
         }
 
         @Override
-        protected int getLightColor(float partialTick) {
+        protected int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

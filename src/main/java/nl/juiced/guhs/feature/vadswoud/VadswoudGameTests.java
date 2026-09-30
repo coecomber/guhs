@@ -104,7 +104,7 @@ public class VadswoudGameTests {
             var recipes = helper.getLevel().getServer().getRecipeManager();
             for (String r : List.of("vadshout_planken", "vadshout_trap", "vadshout_plaat", "vadshout_hek", "vadshout_poort", "vadshout_deur",
                     "vadshout_luik", "guhnestje", "knabbelbessentaartje", "vadstouw", "vadshout_gezicht")) {
-                helper.assertTrue(recipes.byKey(Guhs.id(r)).isPresent(), "a recipe for " + r);
+                helper.assertTrue(recipes.byKey(net.minecraft.resources.ResourceKey.create(Registries.RECIPE, Guhs.id(r))).isPresent(), "a recipe for " + r);
             }
             helper.assertTrue(helper.getLevel().getBlockState(abs).is(net.minecraft.tags.BlockTags.LOGS_THAT_BURN), "vadshout burns like wood");
         } finally {
@@ -124,7 +124,7 @@ public class VadswoudGameTests {
             float health = player.getHealth();
             for (int i = 0; i < 20; i++) {
                 player.xOld = player.getX() - 0.3;          // walking through it
-                helper.getBlockState(bush).entityInside(helper.getLevel(), abs, player);
+                helper.getBlockState(bush).entityInside(helper.getLevel(), abs, player, net.minecraft.world.entity.InsideBlockEffectApplier.NOOP, true);
             }
             helper.assertTrue(player.getHealth() == health, "no pricking: " + player.getHealth());
             helper.getBlockState(bush).useWithoutItem(helper.getLevel(), player, new BlockHitResult(Vec3.atCenterOf(abs), Direction.UP, abs, false));
@@ -151,7 +151,7 @@ public class VadswoudGameTests {
                 GuhEntity baby = guh(helper, new BlockPos(3, 1, 3));
                 baby.setBaby(true);
                 player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(VadswoudFeature.KNABBELBESSEN.get(), 1));
-                player.interactOn(baby, InteractionHand.MAIN_HAND);
+                player.interactOn(baby, InteractionHand.MAIN_HAND, baby.position());
                 helper.assertTrue(player.getMainHandItem().isEmpty(), "the baby eats the knabbelbes");
                 if (baby.isTame()) {
                     tamed++;
@@ -163,7 +163,7 @@ public class VadswoudGameTests {
             for (int i = 0; i < 10; i++) {
                 GuhEntity grownUp = guh(helper, new BlockPos(3, 1, 3));
                 player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(VadswoudFeature.KNABBELBESSEN.get(), 1));
-                player.interactOn(grownUp, InteractionHand.MAIN_HAND);
+                player.interactOn(grownUp, InteractionHand.MAIN_HAND, grownUp.position());
                 helper.assertTrue(!grownUp.isTame() && player.getMainHandItem().getCount() == 1, "a grown-up guh wants kaasknabbels");
                 grownUp.discard();
             }
@@ -175,7 +175,7 @@ public class VadswoudGameTests {
                     g.setBaby(isBaby);
                     g.setPersonality(nl.juiced.guhs.entity.GuhPersonality.SHY);   // (the hardest to tame: 1 in 5)
                     player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 1));
-                    player.interactOn(g, InteractionHand.MAIN_HAND);
+                    player.interactOn(g, InteractionHand.MAIN_HAND, g.position());
                     if (g.isTame()) {
                         if (isBaby) {
                             babies++;
@@ -471,7 +471,7 @@ public class VadswoudGameTests {
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
         BiomeSource with = BiomeSource.CODEC.parse(ops, source).getOrThrow();
         BiomeSource before = BiomeSource.CODEC.parse(ops, without).getOrThrow();
-        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).getValue(Guhs.id("guhmension"));
         Map<String, Integer> now = new HashMap<>(), then = new HashMap<>();
         int samples = 0;
         for (long seed : new long[]{1L, 20270501L, -778899L}) {

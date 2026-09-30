@@ -105,7 +105,7 @@ public class GuhpolderGameTests {
         BlockState ijs = GuhpolderFeature.POLDERIJS.get().defaultBlockState();
         helper.assertTrue(!ijs.isRandomlyTicking() && ijs.getBlock().getFriction() >= 0.97f, "polderijs never melts and is slippery");
         helper.assertTrue(ijs.is(GuhpolderFeature.GLIJIJS) && Blocks.ICE.defaultBlockState().is(GuhpolderFeature.GLIJIJS), "glijijs tag");
-        helper.assertTrue(ijs.is(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON), "no snow settles on the canal");
+        helper.assertTrue(ijs.is(BlockTags.CANNOT_SUPPORT_SNOW_LAYER), "no snow settles on the canal");
         // polderijs next to a campfire, in the light: still ice after a random tick storm
         BlockPos p = new BlockPos(10, 1, 4);
         helper.setBlock(p.above(), Blocks.CAMPFIRE);
@@ -127,21 +127,23 @@ public class GuhpolderGameTests {
         helper.assertTrue(GuhpolderFeature.IJSPEGELGUH_KRISTAL.get().defaultBlockState().getLightEmission() >= 10, "the crystal glows");
         helper.assertTrue(new ItemStack(GuhpolderFeature.KNABBELMEEL.get()).is(GuhpolderFeature.KNABBELMEEL_TAG)
                 && new ItemStack(GuhpolderFeature.KNABBELMEEL.get()).is(Bakken.KNABBELMEEL), "#guhs:knus/knabbelmeel");
-        var recipe = level.getRecipeManager().byKey(Guhs.id("guh_ijsbloempje_kleurstof"));
-        helper.assertTrue(recipe.isPresent() && recipe.get().value().getResultItem(level.registryAccess()).is(Items.LIGHT_BLUE_DYE),
+        var recipe = level.recipeAccess().byKey(net.minecraft.resources.ResourceKey.create(Registries.RECIPE, Guhs.id("guh_ijsbloempje_kleurstof")));
+        helper.assertTrue(recipe.isPresent() && recipe.get().value() instanceof net.minecraft.world.item.crafting.CraftingRecipe craft
+                && craft.assemble(net.minecraft.world.item.crafting.CraftingInput.EMPTY).is(Items.LIGHT_BLUE_DYE),
                 "the ijsbloempje gives light blue dye");
-        helper.assertTrue(level.getRecipeManager().byKey(Guhs.id("guh_molentje")).isPresent(), "the molentje can be crafted");
+        helper.assertTrue(level.recipeAccess().byKey(net.minecraft.resources.ResourceKey.create(Registries.RECIPE, Guhs.id("guh_molentje"))).isPresent(), "the molentje can be crafted");
         // the knabbelkelder may lie under the polder; the biome: guhs yes, Mika's never
-        var biome = level.registryAccess().lookupOrThrow(Registries.BIOME).get(GuhpolderFeature.GUHPOLDER);
-        helper.assertTrue(biome != null && biome.hasPrecipitation() && biome.coldEnoughToSnow(helper.absolutePos(g)), "a snowy biome");
+        var biome = level.registryAccess().lookupOrThrow(Registries.BIOME).getValue(GuhpolderFeature.GUHPOLDER);
+        helper.assertTrue(biome != null && biome.hasPrecipitation() && biome.coldEnoughToSnow(helper.absolutePos(g), level.getSeaLevel()), "a snowy biome");
         var creatures = biome.getMobSettings().getMobs(net.minecraft.world.entity.MobCategory.CREATURE).unwrap();
-        helper.assertTrue(creatures.stream().allMatch(s -> s.type == ModEntities.GUH.get()) && !creatures.isEmpty(), "only guhs spawn");
+        helper.assertTrue(creatures.stream().allMatch(s -> s.value().type() == ModEntities.GUH.get()) && !creatures.isEmpty(), "only guhs spawn");
         for (var cat : net.minecraft.world.entity.MobCategory.values()) {
-            for (MobSpawnSettings.SpawnerData s : biome.getMobSettings().getMobs(cat).unwrap()) {
-                helper.assertTrue(!s.type.builtInRegistryHolder().key().identifier().getPath().contains("mika"), "no Mika's in the polder");
+            for (var weighted : biome.getMobSettings().getMobs(cat).unwrap()) {
+                MobSpawnSettings.SpawnerData s = weighted.value();
+                helper.assertTrue(!s.type().builtInRegistryHolder().key().identifier().getPath().contains("mika"), "no Mika's in the polder");
             }
         }
-        var kelder = level.registryAccess().lookupOrThrow(Registries.BIOME).getTag(
+        var kelder = level.registryAccess().lookupOrThrow(Registries.BIOME).get(
                 net.minecraft.tags.TagKey.create(Registries.BIOME, Guhs.id("has_structure/knabbelkelder")));
         helper.assertTrue(kelder.isPresent() && kelder.get().stream().anyMatch(h -> h.is(GuhpolderFeature.GUHPOLDER)), "knabbelkelder tag");
         helper.succeed();
@@ -188,7 +190,7 @@ public class GuhpolderGameTests {
     public static void guhpolderMolentjeMaalt(GameTestHelper helper) {
         BlockPos m = new BlockPos(3, 2, 3);
         helper.setBlock(m, GuhpolderFeature.GUH_MOLENTJE.get());
-        MolentjeBlockEntity molen = (MolentjeBlockEntity) helper.getBlockEntity(m);
+        MolentjeBlockEntity molen = helper.getBlockEntity(m, MolentjeBlockEntity.class);
         helper.assertTrue(MolentjeBlockEntity.maalTijd(2) < MolentjeBlockEntity.maalTijd(1) && MolentjeBlockEntity.maalTijd(1) < MolentjeBlockEntity.maalTijd(0),
                 "faster in snow, fastest in a storm");
         ServerPlayer p = player(helper, new BlockPos(3, 2, 5));
@@ -204,7 +206,7 @@ public class GuhpolderGameTests {
         var side = molen.handler(Direction.NORTH);
         var below = molen.handler(Direction.DOWN);
         ItemStack more = new ItemStack(nl.juiced.guhs.feature.tuintjes.TuintjesFeature.KNABBELGRAAN.get(), 2);
-        helper.assertTrue(below.insertItem(0, more, false).getCount() == 2 && side.insertItem(0, more, false).isEmpty(), "hopper in from the side");
+        helper.assertTrue(insert(below, more) == 0 && insert(side, more) == 2, "hopper in from the side");
         helper.assertTrue(molen.graan().getCount() == 7, "7 graan now");
         long start = helper.getLevel().getGameTime();
         helper.startSequence()
@@ -215,8 +217,8 @@ public class GuhpolderGameTests {
                     helper.assertTrue(molen.graan().getCount() == 6, "one graan used");
                     molen.maal(helper.getLevel());
                     molen.maal(helper.getLevel());
-                    helper.assertTrue(below.extractItem(1, 1, false).is(GuhpolderFeature.KNABBELMEEL.get()), "a hopper below takes meel out");
-                    helper.assertTrue(below.extractItem(0, 1, false).isEmpty(), "but never the graan");
+                    helper.assertTrue(extract(below, 1, GuhpolderFeature.KNABBELMEEL.get()) == 1, "a hopper below takes meel out");
+                    helper.assertTrue(extract(below, 0, nl.juiced.guhs.feature.tuintjes.TuintjesFeature.KNABBELGRAAN.get()) == 0, "but never the graan");
                     // right-click with an empty hand: the meel
                     p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
                     helper.useBlock(m, p);
@@ -430,7 +432,7 @@ public class GuhpolderGameTests {
         BiomeSource with = BiomeSource.CODEC.parse(ops, source).getOrThrow();
         net.minecraft.world.level.biome.MultiNoiseBiomeSource before =
                 (net.minecraft.world.level.biome.MultiNoiseBiomeSource) BiomeSource.CODEC.parse(ops, without).getOrThrow();
-        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).getValue(Guhs.id("guhmension"));
         var zeeKey = net.minecraft.resources.ResourceKey.create(Registries.NOISE, Guhs.id("guhmension_zee"));
         var knuffelKey = net.minecraft.resources.ResourceKey.create(Registries.NOISE, Guhs.id("guhmension_knuffel"));
         Map<String, Integer> now = new HashMap<>(), then = new HashMap<>();
@@ -578,7 +580,7 @@ public class GuhpolderGameTests {
                 var chunk = level.getChunk(cx, cz);
                 chunk.fillBiomesFromNoise((x, y, z, sampler) -> Math.abs(x - qx) <= 2 && Math.abs(z - qz) <= 2 ? biome : chunk.getNoiseBiome(x, y, z),
                         level.getChunkSource().randomState().sampler());
-                chunk.setUnsaved(true);
+                chunk.markUnsaved();
             }
         }
         return oud;
@@ -592,8 +594,8 @@ public class GuhpolderGameTests {
     public static void guhpolderWeerLaatDePolderMetRust(GameTestHelper helper) {
         var level = helper.getLevel();
         var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
-        var polder = biomes.getHolderOrThrow(GuhpolderFeature.GUHPOLDER);
-        var sneeuwvlakte = biomes.getHolderOrThrow(net.minecraft.world.level.biome.Biomes.SNOWY_PLAINS);
+        var polder = biomes.getOrThrow(GuhpolderFeature.GUHPOLDER);
+        var sneeuwvlakte = biomes.getOrThrow(net.minecraft.world.level.biome.Biomes.SNOWY_PLAINS);
         var hoogte = net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING;
         BlockPos kolomWater = new BlockPos(1, 1, 1), kolomSteen = new BlockPos(3, 1, 1);
         // (the weather works on the top of a column, and the test area has a roof: water and stone go on top of it)
@@ -601,13 +603,13 @@ public class GuhpolderGameTests {
         BlockPos steen = level.getHeightmapPos(hoogte, helper.absolutePos(kolomSteen));
         var oud = biome(helper, kolomWater, polder);
         biome(helper, kolomSteen, polder);
-        boolean regen = level.getLevelData().isRaining();
+        boolean regen = level.getServer().getWeatherData().isRaining();
         float regenNu = level.getRainLevel(1f);
         try {
             level.setBlockAndUpdate(water, Blocks.WATER.defaultBlockState());
             level.setBlockAndUpdate(steen, Blocks.STONE.defaultBlockState());
             helper.assertTrue(level.getBiome(water).is(GuhpolderFeature.GUHPOLDER), "the spot is polder now");
-            level.setWeatherParameters(0, 200, true, false);
+            level.getServer().setWeatherParameters(0, 200, true, false);
             level.setRainLevel(1f);                             // (it snows right now, not after the fade-in)
             helper.assertTrue(level.isRaining(), "it snows");
             for (int i = 0; i < 4; i++) {
@@ -624,7 +626,7 @@ public class GuhpolderGameTests {
             helper.assertTrue(level.getBlockState(water).is(Blocks.ICE), "vanilla snowy plains still freeze: " + level.getBlockState(water));
             helper.assertTrue(level.getBlockState(steen.above()).is(Blocks.SNOW), "and still get snow: " + level.getBlockState(steen.above()));
         } finally {
-            level.setWeatherParameters(regen ? 0 : 6000, regen ? 6000 : 0, regen, false);
+            level.getServer().setWeatherParameters(regen ? 0 : 6000, regen ? 6000 : 0, regen, false);
             level.setRainLevel(regenNu);
             for (BlockPos p : new BlockPos[]{water, steen, steen.above()}) {
                 level.setBlockAndUpdate(p, Blocks.AIR.defaultBlockState());
@@ -633,5 +635,24 @@ public class GuhpolderGameTests {
             biome(helper, kolomSteen, oud);
         }
         helper.succeed();
+    }
+
+    /** A hopper-style insert into a molentje side (1.1.0: transactional item handlers); returns how many went in. */
+    private static int insert(net.neoforged.neoforge.transfer.ResourceHandler<net.neoforged.neoforge.transfer.item.ItemResource> h, ItemStack stack) {
+        try (var tx = net.neoforged.neoforge.transfer.transaction.Transaction.openRoot()) {
+            int n = h.insert(0, net.neoforged.neoforge.transfer.item.ItemResource.of(stack), stack.getCount(), tx);
+            tx.commit();
+            return n;
+        }
+    }
+
+    /** Takes one item of this kind out of a slot of a molentje side; returns how many came out. */
+    private static int extract(net.neoforged.neoforge.transfer.ResourceHandler<net.neoforged.neoforge.transfer.item.ItemResource> h, int slot,
+            net.minecraft.world.item.Item item) {
+        try (var tx = net.neoforged.neoforge.transfer.transaction.Transaction.openRoot()) {
+            int n = h.extract(slot, net.neoforged.neoforge.transfer.item.ItemResource.of(item), 1, tx);
+            tx.commit();
+            return n;
+        }
     }
 }

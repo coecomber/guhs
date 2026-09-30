@@ -8,22 +8,32 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.katapult.PluisbalEntity;
 
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-/** The pluisbal: a big fluffy pink ball (a cube with fluff tufts on every side and two little guh ears), tumbling as it flies. */
-public class PluisbalRenderer extends EntityRenderer<PluisbalEntity> {
+/**
+ * The pluisbal: a big fluffy pink ball (a cube with fluff tufts on every side and two little guh ears), tumbling as it flies.
+ * <p>
+ * 1.1.0: render state + submit ({@code submitModelPart}); {@code RenderTypes.entityCutout} is 1.0.0's no-cull cutout.
+ */
+public class PluisbalRenderer extends EntityRenderer<PluisbalEntity, PluisbalRenderer.State> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Guhs.id("pluisbal"), "main");
     private static final Identifier TEXTURE = Guhs.id("textures/entity/pluisbal.png");
     private final ModelPart ball;
+
+    public static class State extends EntityRenderState {
+        float spin;
+        int id;
+    }
 
     public PluisbalRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -44,20 +54,26 @@ public class PluisbalRenderer extends EntityRenderer<PluisbalEntity> {
     }
 
     @Override
-    public void render(PluisbalEntity entity, float entityYaw, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
-        pose.pushPose();
-        pose.translate(0, PluisbalEntity.SIZE / 2, 0);
-        float spin = Mth.lerp(partialTick, entity.oSpin, entity.spin);
-        pose.mulPose(Axis.YP.rotationDegrees(entity.getId() * 37 % 360));
-        pose.mulPose(Axis.XP.rotation(spin));
-        pose.scale(-1, -1, 1);
-        ball.render(pose, buffers.getBuffer(RenderTypes.entityCutout(TEXTURE)), light, OverlayTexture.NO_OVERLAY);
-        pose.popPose();
-        super.render(entity, entityYaw, partialTick, pose, buffers, light);
+    public State createRenderState() {
+        return new State();
     }
 
     @Override
-    public Identifier getTextureLocation(PluisbalEntity entity) {
-        return TEXTURE;
+    public void extractRenderState(PluisbalEntity entity, State state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.spin = Mth.lerp(partialTick, entity.oSpin, entity.spin);
+        state.id = entity.getId();
+    }
+
+    @Override
+    public void submit(State state, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
+        pose.pushPose();
+        pose.translate(0, PluisbalEntity.SIZE / 2, 0);
+        pose.mulPose(Axis.YP.rotationDegrees(state.id * 37 % 360));
+        pose.mulPose(Axis.XP.rotation(state.spin));
+        pose.scale(-1, -1, 1);
+        collector.submitModelPart(ball, pose, RenderTypes.entityCutout(TEXTURE), state.lightCoords, OverlayTexture.NO_OVERLAY, null);
+        pose.popPose();
+        super.submit(state, pose, collector, camera);
     }
 }

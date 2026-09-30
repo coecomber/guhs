@@ -300,7 +300,7 @@ public final class KatapultGame {
         Minigames.startKeeping(p);
         p.clearFire();
         Vec3 spot = behindCatapult();
-        p.teleportTo(world, spot.x, spot.y, spot.z, werperFacing.toYRot(), -10f);
+        p.teleportTo(world, spot.x, spot.y, spot.z, java.util.Set.of(), werperFacing.toYRot(), -10f, true);
         phase = Phase.COUNTDOWN;
         timer = COUNTDOWN;
         GuhQuests.say(p, npc, "quest.guhs.katapult.start", niveau.naam());
@@ -654,7 +654,7 @@ public final class KatapultGame {
                 if (timer == 60 || timer == 40 || timer == 20) {
                     title(p, Component.literal(String.valueOf(timer / 20)).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
                             Component.translatable("gui.guhs.katapult.countdown_sub", niveau.naam()), 0, 22, 0);
-                    p.playNotifySound(SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 0.9f, 1.0f);
+                    notifySound(p, SoundEvents.NOTE_BLOCK_PLING.value(), SoundSource.PLAYERS, 0.9f, 1.0f);
                 }
                 if (timer <= 0) {
                     startFort(world);
@@ -749,7 +749,7 @@ public final class KatapultGame {
                 Component.translatable(cleared ? "gui.guhs.katapult.fort_gevallen" : "gui.guhs.katapult.fort_staat", fortScore), 5, 45, 10);
         p.sendSystemMessage(Component.translatable("quest.guhs.katapult.fort_klaar", fort + 1, Component.translatable("gui.guhs.katapult.fort." + (fort + 1)),
                 sterren, fortScore, mikasOut, fortMikas, kistenFree, fortKisten, bonus).withStyle(cleared ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY));
-        p.playNotifySound(stars == 3 ? SoundEvents.PLAYER_LEVELUP : cleared ? SoundEvents.NOTE_BLOCK_CHIME.value() : SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(),
+        notifySound(p, stars == 3 ? SoundEvents.PLAYER_LEVELUP : cleared ? SoundEvents.NOTE_BLOCK_CHIME.value() : SoundEvents.NOTE_BLOCK_DIDGERIDOO.value(),
                 SoundSource.PLAYERS, 0.9f, 1.2f);
         if (cleared) {
             BlockPos mid = KatapultFort.world(plek, plekFacing, KatapultFort.MIDDEN, 2, 3);
@@ -815,7 +815,7 @@ public final class KatapultGame {
         showScores(npc);
         title(p, Component.translatable("gui.guhs.katapult.run_title", runStars).withStyle(ChatFormatting.GOLD),
                 Component.translatable("gui.guhs.katapult.run_sub", runScore, munten), 5, 70, 20);
-        p.playNotifySound(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.8f, 1.1f);
+        notifySound(p, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.8f, 1.1f);
         GuhQuests.say(p, npc, "quest.guhs.katapult.einde_" + (runStars >= 30 ? "top" : runStars >= 15 ? "goed" : "oefenen"));
         end(npc, p, null);
     }
@@ -978,7 +978,7 @@ public final class KatapultGame {
         }
         Inventory inv = p.getInventory();
         ItemStack stack = PluisballenItem.stack(count, niveau == Niveau.MAKKELIJK);
-        if (inv.getSelected().isEmpty()) {
+        if (inv.getSelectedItem().isEmpty()) {
             inv.setItem(inv.getSelectedSlot(), stack);
             return;
         }
@@ -994,7 +994,7 @@ public final class KatapultGame {
         }
         int free = inv.getFreeSlot();
         if (free >= 0) {
-            inv.setItem(free, inv.getSelected());
+            inv.setItem(free, inv.getSelectedItem());
             inv.setItem(inv.getSelectedSlot(), stack);
         } else {
             inv.add(stack);
@@ -1089,5 +1089,15 @@ public final class KatapultGame {
 
     public int[] fortStars() {
         return fortStars;
+    }
+
+    /** 1.1.0: ServerPlayer#playNotifySound is gone - the same packet: a sound only this player hears, at the player. */
+    private static void notifySound(ServerPlayer p, net.minecraft.sounds.SoundEvent sound, SoundSource source, float volume, float pitch) {
+        if (p.connection == null) {
+            return;
+        }
+        p.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(
+                net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(sound), source, p.getX(), p.getY(), p.getZ(),
+                volume, pitch, p.getRandom().nextLong()));
     }
 }

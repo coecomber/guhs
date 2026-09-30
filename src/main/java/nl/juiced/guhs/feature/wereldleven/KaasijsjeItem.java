@@ -10,6 +10,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** A kaasijsje (IJscoguh Tingeling): eat it yourself, or right-click a guh with it (Kaasijsjes). */
 public class KaasijsjeItem extends Item {
     public final Kaasijsjes.Smaak smaak;
@@ -28,11 +30,11 @@ public class KaasijsjeItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs." + smaak.itemId() + ".tooltip").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs." + smaak.itemId() + ".tooltip").withStyle(ChatFormatting.GRAY));
         if (smaak.seizoen != null) {
-            tooltip.add(Component.translatable("gui.guhs.wereldleven.seizoensijsje", smaak.seizoen.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
+            tooltip.accept(Component.translatable("gui.guhs.wereldleven.seizoensijsje", smaak.seizoen.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
-        tooltip.add(Component.translatable("gui.guhs.wereldleven.ijsje_tip").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+        tooltip.accept(Component.translatable("gui.guhs.wereldleven.ijsje_tip").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 }

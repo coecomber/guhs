@@ -114,7 +114,7 @@ public class KatapultBrokjeEntity extends Entity {
                 server.sendParticles(ParticleTypes.NOTE, getX(), getY() + 1.2, getZ(), 3, 0.4, 0.2, 0.4, 1);
                 server.playSound(null, blockPosition(), ModSounds.MIKA_AMBIENT.get(), SoundSource.NEUTRAL, 0.7f, 1.7f);
             } else if (KatapultFort.isKist(state)) {
-                server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(ModItems.KAAS_KNABBELS.get())), getX(), getY() + 0.6, getZ(),
+                server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, ModItems.KAAS_KNABBELS.get()), getX(), getY() + 0.6, getZ(),
                         14, 0.3, 0.3, 0.3, 0.15);
                 server.sendParticles(ParticleTypes.HAPPY_VILLAGER, getX(), getY() + 0.8, getZ(), 6, 0.4, 0.3, 0.4, 0);
                 server.playSound(null, blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 0.8f, 1.5f);
@@ -136,12 +136,12 @@ public class KatapultBrokjeEntity extends Entity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel serverLevel, DamageSource source, float amount) {
         return false;
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, net.minecraft.world.phys.Vec3 location) {
         return InteractionResult.PASS;
     }
 

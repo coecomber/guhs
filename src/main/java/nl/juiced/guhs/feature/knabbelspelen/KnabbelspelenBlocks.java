@@ -128,7 +128,7 @@ public final class KnabbelspelenBlocks {
                 return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
             }
             if (player instanceof ServerPlayer p && Blikgooien.gooi(p, hand)) {
-                p.getCooldowns().addCooldown(this, 8);
+                p.getCooldowns().addCooldown(stack, 8);
                 return InteractionResult.CONSUME.heldItemTransformedTo(stack);
             }
             return InteractionResult.FAIL;

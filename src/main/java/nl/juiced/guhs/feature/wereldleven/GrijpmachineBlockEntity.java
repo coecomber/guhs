@@ -92,14 +92,14 @@ public class GrijpmachineBlockEntity extends BlockEntity {
     @Override
     protected void saveAdditional(ValueOutput tag) {
         super.saveAdditional(tag);
-        tag.merge(prijzenTag());
+        tag.store(prijzenTag());                      // (NeoForge: the keys at the top level, like 1.0.0)
     }
 
     @Override
     protected void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);
         prijzen.clear();
-        prijzen.addAll(leesPrijzen(tag));
+        prijzen.addAll(leesPrijzen(nl.juiced.guhs.storage.Nbt.toTag(tag)));
     }
 
     @Override

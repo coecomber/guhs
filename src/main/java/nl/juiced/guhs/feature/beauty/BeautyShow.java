@@ -657,9 +657,9 @@ public final class BeautyShow {
 
     private void dress(@Nullable ServerPlayer p, GuhEntity m) {
         if (timer % 20 == 0 && p != null) {
-            p.displayClientMessage(Component.translatable("quest.guhs.beauty.bar", round + 1, ROUNDS, themeName(theme()), time(timer),
+            p.sendOverlayMessage(Component.translatable("quest.guhs.beauty.bar", round + 1, ROUNDS, themeName(theme()), time(timer),
                     worn().size()).withStyle(timer <= 200 ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE)
-                    .append("  ").append(Klassiekers.naam(niveau)), true);
+                    .append("  ").append(Klassiekers.naam(niveau)));
             if (timer <= 100 && timer > 0) {
                 sound(m.position(), SoundEvents.NOTE_BLOCK_HAT.value(), 1f, 1.4f);
             }
@@ -961,7 +961,7 @@ public final class BeautyShow {
     }
 
     private static ParticleOptions sparkle() {
-        return new DustParticleOptions(new org.joml.Vector3f(1f, 0.6f, 0.85f), 1.0f);
+        return new DustParticleOptions(0xFF99D9 /* 1, 0.6, 0.85 */, 1.0f);
     }
 
     private void sound(Vec3 at, SoundEvent sound, float volume, float pitch) {
@@ -994,8 +994,9 @@ public final class BeautyShow {
         }
         ChatFormatting colour = score >= 8 ? ChatFormatting.DARK_PURPLE : score >= 5 ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.DARK_GRAY;
         CompoundTag tag = new CompoundTag();
-        tag.putString("text", Component.Serializer.toJson(Component.literal(" " + score + " ").withStyle(colour, ChatFormatting.BOLD),
-                level.registryAccess()));
+        tag.put("text", net.minecraft.network.chat.ComponentSerialization.CODEC.encodeStart(
+                level.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
+                Component.literal(" " + score + " ").withStyle(colour, ChatFormatting.BOLD)).getOrThrow());
         tag.putString("billboard", "center");
         tag.putInt("background", 0xF2FFF4F8);
         CompoundTag transform = new CompoundTag();
@@ -1004,7 +1005,7 @@ public final class BeautyShow {
         transform.put("scale", floats(2.2f, 2.2f, 2.2f));
         transform.put("right_rotation", floats(0, 0, 0, 1));
         tag.put("transformation", transform);
-        card.load(tag);
+        nl.juiced.guhs.storage.Nbt.load(card, tag);
         card.snapTo(at.x, at.y, at.z, 0, 0);
         card.addTag(SCORE_TAG);
         displays.add(card.getUUID());

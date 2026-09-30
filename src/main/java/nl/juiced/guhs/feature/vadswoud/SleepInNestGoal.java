@@ -62,7 +62,7 @@ public class SleepInNestGoal extends Goal {
         if (level.dimensionType().hasFixedTime()) {
             return false;
         }
-        long t = level.getDayTime() % 24000L;
+        long t = nl.juiced.guhs.world.GuhTime.timeOfDay(level);
         return t >= 12600 && t < 23300;
     }
 

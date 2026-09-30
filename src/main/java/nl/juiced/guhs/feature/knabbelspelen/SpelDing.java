@@ -33,7 +33,7 @@ public class SpelDing extends Entity {
     public static final int HANGKNABBEL = 0, SPIJKER = 1, STAARTJE = 2;
     private static final EntityDataAccessor<Integer> SOORT = SynchedEntityData.defineId(SpelDing.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> GOUD = SynchedEntityData.defineId(SpelDing.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Vector3f> TOUW = SynchedEntityData.defineId(SpelDing.class, EntityDataSerializers.VECTOR3);
+    private static final EntityDataAccessor<org.joml.Vector3fc> TOUW = SynchedEntityData.defineId(SpelDing.class, EntityDataSerializers.VECTOR3);
     private static final EntityDataAccessor<Integer> EIGENAAR = SynchedEntityData.defineId(SpelDing.class, EntityDataSerializers.INT);
 
     @Nullable
@@ -76,7 +76,7 @@ public class SpelDing extends Entity {
 
     /** Where its string is tied (the beam; for the spijker: unused, the client uses the owner's belt). */
     public Vec3 touw() {
-        Vector3f v = entityData.get(TOUW);
+        org.joml.Vector3fc v = entityData.get(TOUW);
         return new Vec3(v.x(), v.y(), v.z());
     }
 
@@ -138,7 +138,7 @@ public class SpelDing extends Entity {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, net.minecraft.world.phys.Vec3 location) {
         if (soort() != HANGKNABBEL) {
             return InteractionResult.PASS;
         }
@@ -149,7 +149,7 @@ public class SpelDing extends Entity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel serverLevel, DamageSource source, float amount) {
         return false;
     }
 
@@ -159,7 +159,7 @@ public class SpelDing extends Entity {
         return switch (soort()) {
             case SPIJKER -> new ItemStack(KnabbelspelenFeature.KNABBELSPIJKER.get());
             case STAARTJE -> new ItemStack(KnabbelspelenFeature.GUHGUHTJE_STAARTJE.get());
-            default -> new ItemStack(goud() ? net.minecraft.core.registries.BuiltInRegistries.ITEM.get(nl.juiced.guhs.Guhs.id("gouden_kaasknabbel"))
+            default -> new ItemStack(goud() ? net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(nl.juiced.guhs.Guhs.id("gouden_kaasknabbel"))
                     : nl.juiced.guhs.registry.ModItems.KAAS_KNABBELS.get());
         };
     }

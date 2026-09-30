@@ -20,6 +20,10 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * Kapitein Floepguh's pluisballen, lent for one fort at a time (the stack shows how many you have left). Stand at the
  * Knabbelkatapult, look where the ball should fly, hold right-click to pull the elastic back (the longer, the harder, up
@@ -72,15 +76,16 @@ public class PluisballenItem extends Item {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (!level.isClientSide() && entity instanceof ServerPlayer player) {
             KatapultGame.fire(player, power(getUseDuration(stack, entity) - timeLeft));
         }
+        return false;
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide() && (!(entity instanceof Player player) || !KatapultGame.isPlaying(player))) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
+        if ((!(entity instanceof Player player) || !KatapultGame.isPlaying(player))) {
             stack.setCount(0);
         }
     }
@@ -104,8 +109,8 @@ public class PluisballenItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.katapult_pluisballen.lore").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.guhs.katapult_pluisballen.loan").withStyle(ChatFormatting.LIGHT_PURPLE));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.katapult_pluisballen.lore").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.katapult_pluisballen.loan").withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 }

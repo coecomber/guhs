@@ -132,13 +132,4 @@ public class MolentjeBlock extends HorizontalDirectionalBlock implements EntityB
         }
         return InteractionResult.SUCCESS;
     }
-
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof MolentjeBlockEntity molen) {
-            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), molen.graan().copy());
-            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), molen.meel().copy());
-        }
-        super.onRemove(state, level, pos, newState, moved);
-    }
 }

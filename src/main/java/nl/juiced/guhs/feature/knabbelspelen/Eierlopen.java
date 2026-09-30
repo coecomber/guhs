@@ -124,7 +124,7 @@ public final class Eierlopen implements Wedstrijd.Spel {
         s.gevallen++;
         s.wiebel = 0;
         level.playSound(null, p.blockPosition(), KnabbelspelenFeature.EI_KAPOT.get(), SoundSource.PLAYERS, 1f, 1f);
-        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(net.minecraft.world.item.Items.EGG)), p.getX(), p.getY() + 0.8, p.getZ(),
+        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, net.minecraft.world.item.Items.EGG), p.getX(), p.getY() + 0.8, p.getZ(),
                 14, 0.2, 0.2, 0.2, 0.1);
         Vec3 terug = Speelvelden.punt(w.anker, Onderdeel.EIERLOPEN, d.baan, s.herstartU, s.herstartS * 0.5, Speelvelden.G + 1);
         Wedstrijd.teleport(p, level, terug.x, terug.y, terug.z, Speelvelden.yaw(w.anker, Onderdeel.EIERLOPEN));

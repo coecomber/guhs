@@ -22,8 +22,8 @@ public final class WereldlevenEffects {
         }
 
         @Override
-        public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-            if (entity.level() instanceof ServerLevel level) {
+        public boolean applyEffectTick(ServerLevel level, LivingEntity entity, int amplifier) {
+            {
                 level.sendParticles(WereldlevenFeature.IJSJESHARTJE.get(), entity.getX(), entity.getY() + entity.getBbHeight() * 0.9, entity.getZ(),
                         2, entity.getBbWidth() * 0.4, 0.1, entity.getBbWidth() * 0.4, 0.01);
                 if (entity.getHealth() < entity.getMaxHealth() && entity.getRandom().nextInt(3) == 0) {

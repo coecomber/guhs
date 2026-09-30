@@ -101,7 +101,7 @@ public final class GuhguhtjePrik implements Wedstrijd.Spel {
         if (p instanceof FakePlayer || p.connection == null) {
             p.snapTo(m.x, m.y, m.z, yaw, p.getXRot());
         } else {
-            p.connection.teleport(m.x, m.y, m.z, yaw, 0f, Set.of(Relative.X_ROT));
+            p.connection.teleport(new net.minecraft.world.entity.PositionMoveRotation(new net.minecraft.world.phys.Vec3(m.x, m.y, m.z), net.minecraft.world.phys.Vec3.ZERO, yaw, 0f), Set.of(Relative.X_ROT));
         }
     }
 

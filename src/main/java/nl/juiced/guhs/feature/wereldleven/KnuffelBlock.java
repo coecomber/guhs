@@ -67,7 +67,7 @@ public class KnuffelBlock extends HorizontalDirectionalBlock {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (this == WereldlevenFeature.knuffel(WereldlevenFeature.GLITTER) && random.nextInt(3) == 0) {
-            level.addParticle(new DustParticleOptions(new Vector3f(1f, 0.85f, 0.3f), 0.6f), pos.getX() + 0.2 + random.nextDouble() * 0.6,
+            level.addParticle(new DustParticleOptions(0xFFD94C /* 1, 0.85, 0.3 */, 0.6f), pos.getX() + 0.2 + random.nextDouble() * 0.6,
                     pos.getY() + 0.1 + random.nextDouble() * 0.8, pos.getZ() + 0.2 + random.nextDouble() * 0.6, 0, 0.01, 0);
         }
     }

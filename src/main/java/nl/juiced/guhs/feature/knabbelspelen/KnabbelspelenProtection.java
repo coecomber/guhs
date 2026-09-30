@@ -29,7 +29,7 @@ public final class KnabbelspelenProtection {
 
     /** Is this spot part of a Knabbelspelen? */
     public static boolean inSpelen(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(SPELEN);
+        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(SPELEN);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 

@@ -45,7 +45,7 @@ public final class BeautyProtection {
         if (level.dimension() != ModDimensions.GUHMENSION) {
             return false;
         }
-        var structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(THEATRE);
+        var structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(THEATRE);
         return structure != null && level.structureManager().getStructureAt(pos, structure).isValid();
     }
 

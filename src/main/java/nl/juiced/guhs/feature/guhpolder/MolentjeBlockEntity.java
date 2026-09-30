@@ -16,7 +16,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import nl.juiced.guhs.feature.bakkerij.BakkerijFeature;
 import nl.juiced.guhs.feature.knus.KnusTags;
 
@@ -175,13 +178,22 @@ public class MolentjeBlockEntity extends BlockEntity {
         return oHoek + d * partialTick;
     }
 
+    /** Broken: the graan and the meel fall out (1.0.0: MolentjeBlock#onRemove). */
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        if (level != null) {
+            net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), graan.copy());
+            net.minecraft.world.Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), meel.copy());
+        }
+    }
+
     // --- saving and syncing ---------------------------------------------------------------------------------------------------
 
     @Override
     protected void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);
-        graan = ItemStack.parseOptional(registries, tag.getCompoundOrEmpty("Graan"));
-        meel = ItemStack.parseOptional(registries, tag.getCompoundOrEmpty("Meel"));
+        graan = tag.read("Graan", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
+        meel = tag.read("Meel", ItemStack.OPTIONAL_CODEC).orElse(ItemStack.EMPTY);
         voortgang = tag.getIntOr("Voortgang", 0);
     }
 
@@ -189,10 +201,10 @@ public class MolentjeBlockEntity extends BlockEntity {
     protected void saveAdditional(ValueOutput tag) {
         super.saveAdditional(tag);
         if (!graan.isEmpty()) {
-            tag.put("Graan", graan.save(registries));
+            tag.store("Graan", ItemStack.CODEC, graan);
         }
         if (!meel.isEmpty()) {
-            tag.put("Meel", meel.save(registries));
+            tag.store("Meel", ItemStack.CODEC, meel);
         }
         tag.putInt("Voortgang", voortgang);
     }
@@ -210,63 +222,92 @@ public class MolentjeBlockEntity extends BlockEntity {
 
     // --- hoppers ----------------------------------------------------------------------------------------------------------------
 
-    /** Slot 0 = the graan (in only, not from below), slot 1 = the meel (out only). */
-    public IItemHandler handler(@Nullable Direction side) {
-        return new IItemHandler() {
+    /**
+     * Slot 0 = the graan (in only, not from below), slot 1 = the meel (out only).
+     * <p>1.1.0: NeoForge 26.1 item capability = a transactional {@link ResourceHandler}; the journal puts graan and meel
+     * back when a hopper's transaction is aborted, and sends the update once it is committed.
+     */
+    public ResourceHandler<ItemResource> handler(@Nullable Direction side) {
+        return new ResourceHandler<>() {
             @Override
-            public int getSlots() {
+            public int size() {
                 return 2;
             }
 
             @Override
-            public ItemStack getStackInSlot(int slot) {
-                return slot == 0 ? graan : slot == 1 ? meel : ItemStack.EMPTY;
+            public ItemResource getResource(int index) {
+                return ItemResource.of(index == 0 ? graan : index == 1 ? meel : ItemStack.EMPTY);
             }
 
             @Override
-            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-                if (slot != 0 || side == Direction.DOWN || !isItemValid(slot, stack)) {
-                    return stack;
-                }
-                if (!graan.isEmpty() && !ItemStack.isSameItemSameComponents(graan, stack)) {
-                    return stack;
-                }
-                int n = Math.min(stack.getCount(), MAX - graan.getCount());
-                if (n <= 0) {
-                    return stack;
-                }
-                if (!simulate) {
-                    stort(stack.copyWithCount(n));
-                }
-                return stack.copyWithCount(stack.getCount() - n);
+            public long getAmountAsLong(int index) {
+                return index == 0 ? graan.getCount() : index == 1 ? meel.getCount() : 0;
             }
 
             @Override
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                if (slot != 1 || meel.isEmpty() || amount <= 0) {
-                    return ItemStack.EMPTY;
-                }
-                int n = Math.min(amount, meel.getCount());
-                ItemStack out = meel.copyWithCount(n);
-                if (!simulate) {
-                    meel.shrink(n);
-                    if (meel.isEmpty()) {
-                        meel = ItemStack.EMPTY;
-                    }
-                    changed();
-                }
-                return out;
-            }
-
-            @Override
-            public int getSlotLimit(int slot) {
+            public long getCapacityAsLong(int index, ItemResource resource) {
                 return MAX;
             }
 
             @Override
-            public boolean isItemValid(int slot, ItemStack stack) {
-                return slot == 0 && stack.is(KnusTags.KNABBELGRAAN);
+            public boolean isValid(int index, ItemResource resource) {
+                return index == 0 && resource.test(s -> s.is(KnusTags.KNABBELGRAAN));
+            }
+
+            @Override
+            public int insert(int index, ItemResource resource, int amount, TransactionContext transaction) {
+                if (index != 0 || side == Direction.DOWN || resource.isEmpty() || amount <= 0 || !isValid(index, resource)) {
+                    return 0;
+                }
+                if (!graan.isEmpty() && !resource.matches(graan)) {
+                    return 0;
+                }
+                int n = Math.min(amount, MAX - graan.getCount());
+                if (n <= 0) {
+                    return 0;
+                }
+                journal.updateSnapshots(transaction);
+                if (graan.isEmpty()) {
+                    graan = resource.toStack(n);
+                } else {
+                    graan.grow(n);
+                }
+                return n;
+            }
+
+            @Override
+            public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
+                if (index != 1 || meel.isEmpty() || amount <= 0 || !resource.matches(meel)) {
+                    return 0;
+                }
+                int n = Math.min(amount, meel.getCount());
+                journal.updateSnapshots(transaction);
+                meel.shrink(n);
+                if (meel.isEmpty()) {
+                    meel = ItemStack.EMPTY;
+                }
+                return n;
             }
         };
+    }
+
+    private final Journal journal = new Journal();
+
+    private final class Journal extends SnapshotJournal<ItemStack[]> {
+        @Override
+        protected ItemStack[] createSnapshot() {
+            return new ItemStack[] {graan.copy(), meel.copy()};
+        }
+
+        @Override
+        protected void revertToSnapshot(ItemStack[] snapshot) {
+            graan = snapshot[0];
+            meel = snapshot[1];
+        }
+
+        @Override
+        protected void onRootCommit(ItemStack[] originalState) {
+            changed();
+        }
     }
 }

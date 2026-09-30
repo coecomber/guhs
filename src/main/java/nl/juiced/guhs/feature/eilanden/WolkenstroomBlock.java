@@ -35,6 +35,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * The invisible stream above a {@link WolkenliftBlock} (think bubble column, but made of cloud puffs). Only the stream
  * block at an entity's feet pushes it, so standing in two blocks at once never counts double:
@@ -78,7 +80,7 @@ public class WolkenstroomBlock extends HorizontalDirectionalBlock implements Liq
     }
 
     @Override
-    protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+    protected boolean propagatesSkylightDown(BlockState state) {
         return true;
     }
 
@@ -88,7 +90,7 @@ public class WolkenstroomBlock extends HorizontalDirectionalBlock implements Liq
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return new ItemStack(EilandenFeature.WOLKENLIFT_ITEM.get());
     }
 
@@ -101,9 +103,9 @@ public class WolkenstroomBlock extends HorizontalDirectionalBlock implements Liq
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighbourPos, BlockState neighbour, RandomSource random) {
         if (direction == Direction.DOWN && !canSurvive(state, level, pos)) {
-            level.scheduleTick(pos, this, 1); // one block per tick: no huge chain of updates
+            ticks.scheduleTick(pos, this, 1); // one block per tick: no huge chain of updates
         }
         return state;
     }
@@ -123,7 +125,7 @@ public class WolkenstroomBlock extends HorizontalDirectionalBlock implements Liq
     }
 
     @Override
-    public boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
+    public boolean canPlaceLiquid(@Nullable net.minecraft.world.entity.LivingEntity player, BlockGetter level, BlockPos pos, BlockState state, Fluid fluid) {
         return false;
     }
 
@@ -140,7 +142,7 @@ public class WolkenstroomBlock extends HorizontalDirectionalBlock implements Liq
     // --- the ride --------------------------------------------------------------------------------------------------
 
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
         if (!(entity instanceof LivingEntity || entity instanceof ItemEntity) || entity.isPassenger()
                 || entity instanceof Player player && player.getAbilities().flying) {
             return;

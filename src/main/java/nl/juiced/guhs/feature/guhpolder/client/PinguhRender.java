@@ -1,9 +1,7 @@
 package nl.juiced.guhs.feature.guhpolder.client;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.WeakHashMap;
-import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
@@ -17,10 +15,12 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.guhpolder.GuhpolderFeature;
 import nl.juiced.guhs.feature.guhpolder.Pinguh;
-import com.geckolib.cache.model.GeoBone;
+import com.geckolib.renderer.base.BoneSnapshots;
+import nl.juiced.guhs.client.GuhRenderFrame;
+import nl.juiced.guhs.client.GuhRenderer;
 
 /**
- * How a Pinguh looks and moves (client only; three small hooks in client.GuhRenderer call this):
+ * How a Pinguh looks and moves (client only; one {@link GuhRenderer} hook, see {@link #hook}):
  * <ul>
  *   <li>{@link #texture}: its look ({@link Pinguh.Look}: klassiek, keizer, or the grey fluffy chick);</li>
  *   <li>{@link #pose}: the waddle (a side-to-side roll while it walks) and the belly-slide (low on the ice, head up);</li>
@@ -68,46 +68,56 @@ public final class PinguhRender {
         return Mth.lerp(partialTick, g[1], g[0]);
     }
 
-    /** After the body's rotation: the waddle and the slide (in world units, scaled with the guh). */
-    public static void pose(GuhEntity guh, PoseStack pose, float partialTick) {
-        if (guh.getVariant() != GuhVariant.PINGUH) {
+    /**
+     * 1.1.0 (GeckoLib 5): the one {@link GuhRenderer.Hook} of the Pinguh (registered by {@link GuhpolderClient#init}):
+     * texture (priority 20), the waddle/slide pose and the paws/flippers, all computed now from the guh and applied later.
+     */
+    public static void hook(GuhEntity guh, float partialTick, GuhRenderFrame frame) {
+        Identifier tex = texture(guh);
+        if (tex == null) {
             return;
         }
+        frame.texture(tex, 20);
         float glij = glij(guh, partialTick);
         float size = guh.getScale() * guh.getAgeScale();
         float walk = Math.min(1f, guh.walkAnimation.speed(partialTick) * 2.2f) * (1f - glij);
+        float walkPos = guh.walkAnimation.position(partialTick);
+        float tijd = guh.tickCount + partialTick;
+        frame.pose(pose -> pose(pose, glij, size, walk, walkPos, tijd));
+        frame.bones(bones -> animate(bones, glij, walk, walkPos));
+    }
+
+    /** After the body's rotation: the waddle and the slide (in world units, scaled with the guh). */
+    private static void pose(PoseStack pose, float glij, float size, float walk, float t, float tijd) {
         if (walk > 0.01f) {
-            float t = guh.walkAnimation.position(partialTick);
             pose.mulPose(Axis.ZP.rotationDegrees(Mth.sin(t * 0.9f) * 11f * walk));   // waddle waddle
             pose.mulPose(Axis.YP.rotationDegrees(Mth.sin(t * 0.9f) * 4f * walk));
         }
         if (glij > 0.01f) {
             pose.translate(0, -0.11f * size * glij, 0);                                  // on its belly
             pose.mulPose(Axis.XP.rotationDegrees(5f * glij));                            // head up, VAHOEG
-            pose.mulPose(Axis.ZP.rotationDegrees(Mth.sin((guh.tickCount + partialTick) * 0.25f) * 2.5f * glij));   // a little wobble
+            pose.mulPose(Axis.ZP.rotationDegrees(Mth.sin(tijd * 0.25f) * 2.5f * glij));   // a little wobble
         }
     }
 
-    /** After the animations: paws and flippers for the slide, flapping flippers for the waddle. */
-    public static void animate(GuhEntity guh, Function<String, Optional<GeoBone>> bones, float partialTick) {
-        if (guh.getVariant() != GuhVariant.PINGUH) {
-            return;
-        }
-        float glij = glij(guh, partialTick);
+    /**
+     * After the animations: paws and flippers for the slide, flapping flippers for the waddle. (1.1.0: snapshot rotations
+     * are relative to the bone's base rotation; these bones have none, and the flippers' old "+ initial rotZ" is gone.)
+     */
+    private static void animate(BoneSnapshots bones, float glij, float walk, float walkPos) {
         if (glij > 0.01f) {
             float voor = (float) Math.toRadians(75), achter = (float) Math.toRadians(-75);
             for (String leg : new String[]{"leg_front_left", "leg_front_right"}) {
-                bones.apply(leg).ifPresent(b -> b.setRotX(Mth.lerp(glij, b.getRotX(), voor)));
+                bones.ifPresent(leg, b -> b.setRotX(Mth.lerp(glij, b.getRotX(), voor)));
             }
             for (String leg : new String[]{"leg_back_left", "leg_back_right"}) {
-                bones.apply(leg).ifPresent(b -> b.setRotX(Mth.lerp(glij, b.getRotX(), achter)));
+                bones.ifPresent(leg, b -> b.setRotX(Mth.lerp(glij, b.getRotX(), achter)));
             }
         }
-        float walk = Math.min(1f, guh.walkAnimation.speed(partialTick) * 2.2f) * (1f - glij);
-        float flap = walk * Mth.sin(guh.walkAnimation.position(partialTick) * 1.8f) * 0.35f + glij * 1.05f;
+        float flap = walk * Mth.sin(walkPos * 1.8f) * 0.35f + glij * 1.05f;
         for (String vleugel : new String[]{"pinguh_vleugel_links", "pinguh_vleugel_rechts"}) {
             // (outward is towards the side the flipper sits on, whatever way the model is mirrored)
-            bones.apply(vleugel).ifPresent(b -> b.setRotZ(Math.signum(b.getPivotX()) * Math.abs(flap) + b.getInitialSnapshot().getRotZ()));
+            bones.ifPresent(vleugel, b -> b.setRotZ(Math.signum(b.getBone().pivotX()) * Math.abs(flap)));
         }
     }
 }

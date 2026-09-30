@@ -100,8 +100,20 @@ public final class VadshoutBlocks {
 
     /** Vadshout leaves: now and then a little mint leaf floats down. */
     public static class Leaves extends LeavesBlock {
+        // 26.1: LeavesBlock is abstract (falling-leaf particles); 1.0.0's leaves had none -> chance 0, nothing spawned
+        public static final com.mojang.serialization.MapCodec<Leaves> CODEC = simpleCodec(Leaves::new);
+
+        @Override
+        public com.mojang.serialization.MapCodec<Leaves> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
+        }
+
         public Leaves(Properties properties) {
-            super(properties);
+            super(0f, properties);
         }
 
         @Override

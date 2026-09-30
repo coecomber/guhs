@@ -57,13 +57,13 @@ public class EilandenGameTests {
 
     private static void feedUntilTame(GameTestHelper helper, GuhEntity guh, ServerPlayer player) {
         for (int i = 1; i < EilandenEvents.KNABBELS_NEEDED; i++) {
-            player.interactOn(guh, InteractionHand.MAIN_HAND);
+            player.interactOn(guh, InteractionHand.MAIN_HAND, guh.position());
             helper.assertTrue(!guh.isTame(), "not tame after " + i + " knabbels");
         }
         helper.assertTrue(EilandenEvents.knabbelsFed(guh) == EilandenEvents.KNABBELS_NEEDED - 1, "every knabbel counts");
         helper.assertTrue(player.getMainHandItem().getCount() == 64 - (EilandenEvents.KNABBELS_NEEDED - 1), "and gets eaten");
         for (int i = 0; i < 50 && !guh.isTame(); i++) {
-            player.interactOn(guh, InteractionHand.MAIN_HAND);
+            player.interactOn(guh, InteractionHand.MAIN_HAND, guh.position());
         }
         helper.assertTrue(guh.isTame() && player.getUUID().equals(guh.getOwnerUUID()), "vads enough: tamed in the end");
         helper.assertTrue(GuhWorldData.get(player.level().getServer()).player(player.getUUID()).tamed.contains(GuhVariant.WOLK), "a Guhdex star");
@@ -77,7 +77,7 @@ public class EilandenGameTests {
         helper.assertTrue(!GuhVariant.SNOW.shows(bone) && !GuhVariant.NORMAL.shows(bone), "only the Wolkguh has a head cloud");
         helper.assertTrue(GuhClothes.slotBones(GuhClothes.Slot.HEAD).stream().noneMatch(bone::startsWith),
                 "a hat must not hide the head cloud");
-        try (var in = Guhs.class.getResourceAsStream("/assets/guhs/geo/entity/guh.geo.json")) {
+        try (var in = Guhs.class.getResourceAsStream("/assets/guhs/geckolib/models/entity/guh.geo.json")) {
             helper.assertTrue(in != null && new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8)
                     .contains("\"" + bone + "\""), "the guh model should have the head cloud bone");
         } catch (java.io.IOException e) {
@@ -190,9 +190,9 @@ public class EilandenGameTests {
             guh.snapTo(owner.position());
             other.snapTo(owner.position());
             helper.assertTrue(EilandenEvents.ownWolkguhs(owner).size() == 1 && EilandenEvents.ownWolkguhs(other).isEmpty(), "only the owner's");
-            helper.assertTrue(CommonHooks.onLivingFall(owner, 12, 1)[1] == 0, "the owner is caught: no fall damage");
-            helper.assertTrue(CommonHooks.onLivingFall(other, 12, 1)[1] == 1, "someone else does get hurt");
-            helper.assertTrue(CommonHooks.onLivingFall(owner, 2, 1)[1] == 1, "(a tiny hop isn't a fall)");
+            helper.assertTrue(CommonHooks.onLivingFall(owner, 12, 1).getDamageMultiplier() == 0, "the owner is caught: no fall damage");
+            helper.assertTrue(CommonHooks.onLivingFall(other, 12, 1).getDamageMultiplier() == 1, "someone else does get hurt");
+            helper.assertTrue(CommonHooks.onLivingFall(owner, 2, 1).getDamageMultiplier() == 1, "(a tiny hop isn't a fall)");
             // the clouds of the islands: slow falling
             other.fallDistance = 8;
             EilandenEvents.catchFalling(other);

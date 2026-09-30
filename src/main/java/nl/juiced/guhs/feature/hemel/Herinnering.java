@@ -21,6 +21,9 @@ import net.minecraft.world.level.Level;
 import nl.juiced.guhs.entity.GuhEntity;
 
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * 3.0: the glowing star "Herinnering aan &lt;naam&gt;" that a tamed guh leaves behind when it goes to the wolkjes
  * (CONTRACT_30 §4.6; dropped by nl.juiced.guhs.feature.band.Wolkjes). Custom data {@value #TAG} = {Band: UUID, Naam, Variant}.
@@ -64,16 +67,16 @@ public class Herinnering extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         CompoundTag d = data(stack);
         if (!d.getStringOr("Variant", "").isEmpty()) {
-            tooltip.add(Component.translatable("item.guhs.herinnering.variant", Component.translatable("entity.guhs.guh." + d.getStringOr("Variant", "")))
+            tooltip.accept(Component.translatable("item.guhs.herinnering.variant", Component.translatable("entity.guhs.guh." + d.getStringOr("Variant", "")))
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
-        tooltip.add(Component.translatable("item.guhs.herinnering.lore").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.guhs.herinnering.naar_het_hart").withStyle(ChatFormatting.LIGHT_PURPLE));
-        tooltip.add(Component.translatable("item.guhs.herinnering.ook_zonder").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
-        tooltip.add(Component.translatable("item.guhs.herinnering.knuffel").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.accept(Component.translatable("item.guhs.herinnering.lore").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.herinnering.naar_het_hart").withStyle(ChatFormatting.LIGHT_PURPLE));
+        tooltip.accept(Component.translatable("item.guhs.herinnering.ook_zonder").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+        tooltip.accept(Component.translatable("item.guhs.herinnering.knuffel").withStyle(ChatFormatting.DARK_GRAY));
     }
 
     /** Hugging the memory: hearts, a twinkle and a sweet line (a little cooldown so it stays special). */
@@ -88,16 +91,13 @@ public class Herinnering extends Item {
             server.sendParticles(HemelFeature.STERRETJE.get(), player.getX(), player.getY() + 1.2, player.getZ(), 14, 0.5, 0.5, 0.5, 0.03);
             server.playSound(null, player, HemelFeature.STER.get(), SoundSource.PLAYERS, 0.8f, 1f);
         }
-        player.getCooldowns().addCooldown(this, 40);
+        player.getCooldowns().addCooldown(stack, 40);
         return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     /** (client) a few little stars around you while you hold it. */
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (level.isClientSide() && selected && level.getRandom().nextInt(10) == 0) {
-            level.addParticle(HemelFeature.STERRETJE.get(), entity.getX() + (level.getRandom().nextDouble() - 0.5) * 1.2,
-                    entity.getY() + 0.6 + level.getRandom().nextDouble() * 1.2, entity.getZ() + (level.getRandom().nextDouble() - 0.5) * 1.2, 0, 0.02, 0);
-        }
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
+        // (1.1.0: the held-star sparkles moved to HemelClient - inventoryTick only runs on the server now)
     }
 }

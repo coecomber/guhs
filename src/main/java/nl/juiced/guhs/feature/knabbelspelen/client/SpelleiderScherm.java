@@ -121,7 +121,7 @@ public class SpelleiderScherm extends Screen {
         } else if (data.getBooleanOr("Running", false)) {
             StringBuilder namen = new StringBuilder();
             for (Tag t : data.getListOrEmpty("Namen")) {
-                namen.append(namen.isEmpty() ? "" : ", ").append(t.getAsString());
+                namen.append(namen.isEmpty() ? "" : ", ").append(t.asString().orElse(""));
             }
             Component wat = data.getBooleanOr("Zeskamp", false) ? Component.translatable("gui.guhs.knabbelspelen.zeskamp") : Onderdeel.of(data.getIntOr("Onderdeel", 0)).naam();
             status = data.getIntOr("Fase", 0) == Wedstrijd.Fase.INSCHRIJVEN.ordinal()

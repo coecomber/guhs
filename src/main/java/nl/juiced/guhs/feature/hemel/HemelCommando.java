@@ -42,7 +42,7 @@ public final class HemelCommando {
             source.sendFailure(Component.literal("Geen Knuffelhart in de buurt"));
             return 0;
         }
-        p.teleportTo(p.level(), hart.getX() + 0.5, hart.getY() - 1, hart.getZ() + 3.5, 180f, 10f);
+        p.teleportTo(p.level(), hart.getX() + 0.5, hart.getY() - 1, hart.getZ() + 3.5, java.util.Set.of(), 180f, 10f, true);
         Hemel.openScherm(p, hart);
         return 1;
     }
