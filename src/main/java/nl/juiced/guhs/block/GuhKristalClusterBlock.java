@@ -17,7 +17,7 @@ import org.joml.Vector3f;
  */
 public class GuhKristalClusterBlock extends AmethystClusterBlock {
     private static final double SING_RANGE = 8;
-    private static final DustParticleOptions SPARKLE = new DustParticleOptions(new Vector3f(1f, 0.6f, 0.85f), 0.6f);
+    private static final DustParticleOptions SPARKLE = new DustParticleOptions(0xFF99D9 /* 1, 0.6, 0.85 */, 0.6f);
 
     public GuhKristalClusterBlock(Properties properties) {
         super(7f, 3f, properties);

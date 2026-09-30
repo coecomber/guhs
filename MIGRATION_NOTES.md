@@ -125,6 +125,39 @@ Registrar design (`gametest/GuhsGameTests.java`, B):
    `fail(String)` still there, `assertValueEqual(v, expected, String)` still there, `startSequence()`, `runAfterDelay`, `succeed*`,
    `onEachTick` unchanged. `assertEntityProperty/assertBlockProperty` take `Component`.
 
+**B: the registrar is done** (`gametest/GuhsGameTests.java`, called from the `Guhs` constructor):
+* Write tests exactly as in 1.0.0: `@GuhTest(template = "x", timeoutTicks = .., batch = "..", required = ..)` on a
+  `public static void name(GameTestHelper helper)` in any class of the mod (a `throws Exception` is fine). No holder
+  annotation, no class list: FML's scan data finds every `@GuhTest` method.
+* Only registered when NeoForge has gametests on (`GameTestHooks.isGametestEnabled()`: dev runs, `runGameTestServer`); a normal
+  game registers nothing.
+* **Test ids keep the 1.0.0 names**: `guhs:<class>.<method>` in lower case, e.g. `/test run guhs:guhgametests.portalroundtriptoguhmension`
+  (not `class/method` as planned above). The test function ids are the same ids in `Registries.TEST_FUNCTION`.
+* Batches -> environments `guhs:batch/<batch>` (`defaultBatch` -> `guhs:batch/default`); templates `"empty"` -> `guhs:empty`
+  (a template with a namespace is used as is).
+* `-Pgt=KnusGameTests,grond` works as before (class simple name or batch prefix, `GametestFilter`); the log says
+  `Guhs gametests: N test methods found (-Dguhs.gametests filter: M skipped)`.
+* Assertion failures reach the framework unchanged (the `InvocationTargetException` is unwrapped).
+* `gametest/PortGameTests` tests the registrar itself, the 1.0.0 saved data move, the day clock, owners and entity NBT (batch `port`).
+
+Test body fixes seen in B's test files (script `port26/scripts/b_fixes.py <files>` does the mechanical ones, idempotent):
+
+| 1.21.1 | 26.1.2 |
+|---|---|
+| `(X) helper.getBlockEntity(p)` | `helper.getBlockEntity(p, X.class)` |
+| `entity.saveWithoutId(tag)` / `entity.load(tag)` (CompoundTag) | `nl.juiced.guhs.storage.Nbt.saveWithoutId(entity, tag)` / `Nbt.load(entity, tag)` |
+| `player.startRiding(e, true)` | `player.startRiding(e, true, true)` (`startRiding(e)` unchanged) |
+| `mob.interact(player, hand)` | `mob.interact(player, hand, mob.position())` |
+| `mika.doHurtTarget(target)` | `mika.doHurtTarget(helper.getLevel(), target)` |
+| `transition.pos()` (TeleportTransition) | `transition.position()` |
+| `new ChunkPos(blockPos)` / `new ChunkPos(long)` / `c.toLong()` | `ChunkPos.containing(blockPos)` / `ChunkPos.unpack(l)` / `c.pack()` |
+| `registry.getHolder(key)` / `getHolderOrThrow(key)` / `holders()` | `registry.get(key)` / `getOrThrow(key)` / `listElements()` |
+| `level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)`, `r.getResultItem(access)`, `r.getIngredients()` | `level.recipeAccess().getRecipes()` (filter `instanceof ShapedRecipe/ShapelessRecipe`), `r.assemble(CraftingInput.EMPTY)` (those two ignore the input), `r.placementInfo().ingredients()` |
+| `JukeboxSong.fromStack(registries, stack)` | `JukeboxSong.fromStack(stack)` |
+| Villagers: `setType(t).setProfession(p)`, `getProfession() == X`, `VillagerProfession.LIBRARIAN` (a value) | `data.withType(access, ModVillagers.GUH.getKey()).withProfession(access, key)`, `data.profession().is(key)`, `data.type().is(ModVillagers.GUH.getKey())`; `VillagerProfession.X` are `ResourceKey`s; classes live in `world.entity.npc.villager` |
+| `net.minecraft.world.entity.monster.Husk` | `net.minecraft.world.entity.monster.zombie.Husk` |
+| `StringBuilder.append(cond ? null : x)` "ambiguous" | `append((Object) (cond ? null : x))` |
+
 ## 4. API cheat sheet (area by area, PORT_PLAN section 4)
 
 ### 4.3 Registration and items
@@ -248,6 +281,67 @@ use `getValue(key)` or `getOrThrow(key).value()`). `BuiltInRegistries.ITEM.get(i
 **Chunk tickets**: `TicketType` is a non-generic record now; use `serverLevel.getChunkSource().addTicketWithRadius(TicketType.X, chunkPos, radius)` or
 `serverLevel.setChunkForced(x, z, true)`.
 
+**A (core-1) patterns, established in `registry/` + `item/` + `block/` (commits on `mc26-a`):**
+
+* **Tools** (`ModItems`, `ModArmorMaterials`): tier = `ToolMaterial` record; `SwordItem`/`PickaxeItem` -> plain `Item::new` with
+  `p -> p.sword(MAT, 3.0f, -2.4f)` / `p.pickaxe(MAT, 1.0f, -2.8f)` (same numbers as the old `createAttributes(tier, dmg, speed)`).
+  `AxeItem`/`ShovelItem`/`HoeItem` still exist (right-click actions): `new AxeItem(MAT, 5.0f, -3.0f, props)`.
+  A custom digger (our Paxel) = `Item` + `props.tool(MAT, TagKey<Block> minesEfficiently, dmg, speed, 0.0f)`; its `canPerformAction(ItemInstance, ItemAbility)`
+  (first parameter is `ItemInstance` now). A sword subclass with extra behaviour (Mika-mepper) = `extends Item` + `.sword(..)` in the properties.
+  **Sword sweep** is `stack.is(ItemTags.SWORDS)` now (NeoForge default) - our swords must be in `#minecraft:swords` (they are).
+  `ToolMaterial`/`ArmorMaterial` need a `TagKey<Item>` for repairs; we keep repair-by-ingot by calling `.repairable(ModItems.X.get())` after
+  `.sword/.humanoidArmor` (later `repairable` wins), so no tag file is needed.
+* **Armour**: `ArmorMaterial` is a record (no registry, no `Holder`): `new ArmorMaterial(durabilityMultiplier, Map<ArmorType,Integer>, enchant, equipSound,
+  toughness, knockbackRes, repairTag, ResourceKey<EquipmentAsset>)` with `ResourceKey.create(EquipmentAssets.ROOT_ID, Guhs.id("vahoege_vads"))`;
+  items: `Item::new, () -> props.humanoidArmor(MAT, ArmorType.HELMET)` (sets durability/attributes/enchantable/EQUIPPABLE/repairable).
+  Unbreakable: `.component(DataComponents.UNBREAKABLE, Unit.INSTANCE)` (was `new Unbreakable(true)`).
+  **Guh body armour** (`GuhArmorItem`, was `AnimalArmorItem`): plain `Item` subclass (keeps `getTier()`), properties
+  `attributes(ArmorMaterials.X.createAttributes(ArmorType.BODY))` + `delayedComponent(EQUIPPABLE, ctx -> Equippable.builder(EquipmentSlot.BODY)
+  .setAllowedEntities(HolderSet.direct(ModEntities.GUH.get().builtInRegistryHolder())).setDamageOnHurt(false).build())` (see `ModItems#guhArmor`).
+  `delayedComponent` is the way to reference entity types/holders from item properties (entity types register after items).
+* **Spawn eggs**: `ModItems.spawnEgg("x_spawn_egg", ModEntities.X)` or, for a feature's own register, `ModItems.spawnEgg(ITEMS, "x_spawn_egg", X_TYPE)`
+  (returns `DeferredItem<SpawnEggItem>`; puts `TypedEntityData.of(type, new CompoundTag())` into `ENTITY_DATA` via `delayedComponent`).
+  Replace `DeferredItem<DeferredSpawnEggItem> X = ITEMS.registerItem(n, p -> new DeferredSpawnEggItem(TYPE, c1, c2, p))` by it (colours are dropped, see Behaviour changes).
+* **Food**: `fast()` -> `food(fp, ModItems.FAST_FOOD)` (`Consumables.defaultFood().consumeSeconds(0.8f).build()`); `usingConvertsTo(Items.BOWL)` moved from the
+  FoodProperties builder to `Item.Properties#usingConvertsTo`. Drinks: `food(fp, Consumables.defaultDrink().build())`. `HoneyBottleItem` is gone: honey-like =
+  `food(fp.alwaysEdible(), Consumables.HONEY_BOTTLE).usingConvertsTo(Items.GLASS_BOTTLE)`. `ItemNameBlockItem` is gone: `new BlockItem(block, props)` with
+  `props.useItemDescriptionPrefix()` (keeps the `item.guhs.x` name). Registration helpers need `() -> new Item.Properties()...` (never a bare `new Item.Properties()`).
+* **Item overrides**: `appendHoverText(stack, ctx, TooltipDisplay display, Consumer<Component> tooltip, flag)` + `tooltip.accept(..)` -> script
+  `python port26/scripts/a_hovertext.py <dir>`. `inventoryTick(ItemStack, ServerLevel, Entity, @Nullable EquipmentSlot slot)` is **server only**; old `isSelected`
+  == `slot == EquipmentSlot.MAINHAND`, the old int slot index is gone -> script `python port26/scripts/a_inventorytick.py <dir>` (prints what it cannot fix).
+  `getEatingSound/getDrinkingSound` are gone: sounds + crumbs come from a `CONSUMABLE` component (see `GuhClothingItem.properties`: a Consumable is only
+  used for its sound/particles when `use`/`finishUsingItem` stay overridden). `player.getCooldowns().addCooldown(ItemStack, ticks)` (was `(Item, ticks)`).
+  `getCraftingRemainingItem/hasCraftingRemainingItem` -> `ItemStackTemplate getCraftingRemainder(ItemInstance)` (or `props.craftRemainder(item)`).
+  `BuiltInRegistries.ITEM.get(id)` -> `getValue(id)`; `lookup.getHolder(key)` -> `lookup.get(key)` (Optional<Holder.Reference>).
+  `Item#onCraftedBy(stack, player)` (no level). Recipes: `recipe.assemble(input)`, `resultContainer.setRecipeUsed(serverPlayer, holder)`.
+* **Block properties**: `noCollission()` -> `noCollision()`; `hasPostProcess(pred)` -> `postProcess((state, level, pos) -> pos)`; `WaterlilyBlock` -> `LilyPadBlock`;
+  `LeavesBlock(float leafParticleChance, props)` is abstract (`codec()` + `spawnFallingLeavesParticle(level, pos, random)`; cherry-style = chance 0.1).
+  `DustParticleOptions(int rgb, float scale)` (was `Vector3f`): `new Vector3f(1f, 0.6f, 0.85f)` -> `0xFF99D9` (script `python port26/scripts/a_dust.py <dir>`).
+* **Block overrides** - script `python port26/scripts/a_blocks.py <dir>`: `updateShape` (new order + `ScheduledTickAccess ticks`, `LevelReader level`:
+  cast to `LevelAccessor` only via `instanceof` if a helper needs it), `entityInside(+ InsideBlockEffectApplier, boolean)`, `getCloneItemStack(+ boolean includeData)`,
+  `neighborChanged(.., @Nullable Orientation, boolean)` (old `fromPos` is gone - printed), `fallOn(.., double)`, `propagatesSkylightDown(BlockState)`,
+  `RenderShape.ENTITYBLOCK_ANIMATED` -> `INVISIBLE` (the BER still draws). **`onRemove` is gone** (script only reports it):
+  - drops / cleanup that needs the block entity -> `@Override public void preRemoveSideEffects(BlockPos pos, BlockState state)` in the **block entity**
+    (server, whenever the block really changes, before the BE is removed; e.g. `GuhWheelBlockEntity`, `SleeRailBlockEntity`);
+  - neighbour/multiblock cleanup without BE -> `protected void affectNeighborsAfterRemoval(BlockState, ServerLevel, BlockPos, boolean movedByPiston)` on the
+    block (e.g. `GuhWheelPartBlock`, `SleeRailPartBlock`, `GuhWireBlock`). The new state is not passed: it is only called when the block really changed.
+    Careful: it only runs for `setBlock` with `Block.UPDATE_NEIGHBORS` (flag 1, e.g. 3) or pistons.
+* **Block entities**: `BlockEntityType.Builder.of(F::new, blocks).build(null)` -> `new BlockEntityType<>(F::new, blocks...)`; `onlyOpCanSetNbt()` override ->
+  `new BlockEntityType<>(F::new, true, block)`. Components: `applyImplicitComponents(DataComponentGetter)`, `removeComponentsFromTag(ValueOutput out)` -> `out.discard(k)`.
+* **Villagers** (`ModVillagers`): `new VillagerType()`; `new VillagerProfession(Component name, held, acquirable, ImmutableSet<Item>, ImmutableSet<Block>, SoundEvent,
+  Int2ObjectMap<ResourceKey<TradeSet>>)` (our name keeps the 1.21.1 key `entity.minecraft.villager.guhs.<name>`). `VillagerData` holds holders:
+  `data.profession()/type()/level()`, `withProfession(registryAccess, KEY)`, `withType(..)`; compare with `ModVillagers.is(villager, ModVillagers.VADSSMID)`,
+  `ModVillagers.isGuhVillager(villager)`, `holder.is(VillagerProfession.NONE)`. `VillagerType.byBiome(holder)` returns a `ResourceKey<VillagerType>`.
+  Trades: `VillagerTradesEvent`, `BasicItemListing`, `VillagerTrades.ItemListing` are gone. Our professions keep their trade lists in code
+  (`ModVillagers.trades(profession)`, record `ModVillagers.Trade` with `offer()` -> `MerchantOffer`); `mixin/VillagerMixin` (TAIL of `Villager#updateTrades`) adds two
+  random ones per level like 1.21.1. `ModVillagers.kleermakerAanbod()` returns `List<Trade>` now: `offers.add(trade.offer())` (no random/entity needed).
+  Own NPC shops: `new MerchantOffer(new ItemCost(item, count), resultStack, maxUses, xp, 0.05f)` is unchanged.
+* **Misc**: creative painting stacks: `stack.set(DataComponents.PAINTING_VARIANT, holder)`. Server profile lookup: `server.services().nameToIdCache().get(name)`
+  -> `Optional<NameAndId>` (`.id()`, `.name()`). `level.getGameRules()` exists only on `ServerLevel` (cast). `SoundEvents.GENERIC_DRINK` etc. are Holders: `.value()` for
+  the `SoundEvent` overloads. `WalkAnimationState.update(speed, factor, positionScale)` (vanilla passes `isBaby() ? 3 : 1`). `Direction.getNearest(double..)` -> `getApproximateNearest`.
+  Fire: A chose the **access transformer** for `FireBlock#setFlammable` (keeps the 23 call sites 1:1; D creates `META-INF/accesstransformer.cfg`, then regenerate
+  the patched Minecraft jar in your worktree: `gradle_slot.sh createMinecraftArtifacts` / `writeCompileClasspath`).
+
 ### 4.4 Entities and AI
 
 ```java
@@ -298,6 +392,81 @@ public void playSound(@Nullable Entity except, double x, double y, double z, Hol
   ```
 * Attributes: `Attributes.X` are `Holder<Attribute>` (unchanged since 1.21); `MOVEMENT_SPEED` is still `Attributes.MOVEMENT_SPEED` - the
   missing `MOVEMENT_SPEED` symbol errors were `MobEffects` (done).
+
+**B: entity patterns established in `entity/` (all compile against 26.1.2; copy them):**
+
+| 1.21.1 | 26.1.2 |
+|---|---|
+| `guh.getOwnerUUID()` / `setOwnerUUID(uuid)` on **GuhEntity** | unchanged: `GuhEntity` keeps both (they wrap `getOwnerReference()` / `setOwnerReference(..)`) |
+| `pet.getOwnerUUID()` on any other `TamableAnimal` / `OwnableEntity` | `nl.juiced.guhs.entity.Owners.uuid(pet)`; `Owners.isOwner(pet, player.getUUID())`; `pet.setOwnerReference(Owners.ref(uuid))`; copy an owner: `baby.setOwnerReference(this.getOwnerReference())` |
+| `boolean hurt(DamageSource, float)` override | `boolean hurtServer(ServerLevel level, DamageSource source, float amount)` (server only; `hurt` is final). Plain `Entity` subclasses **must** implement it (`return false` = 1.21.1's default) |
+| calling `target.hurt(src, dmg)` | `target.hurtServer(serverLevel, src, dmg)` on the server, or `target.hurtOrSimulate(src, dmg)` |
+| `isInvulnerableTo(DamageSource)` override | LivingEntity: `isInvulnerableTo(ServerLevel level, DamageSource source)`; plain Entity: test `isInvulnerableToBase(source)` |
+| `doHurtTarget(Entity)` | `doHurtTarget(ServerLevel level, Entity target)` |
+| `customServerAiStep()` | `customServerAiStep(ServerLevel level)` |
+| `dropEquipment()`, `spawnAtLocation(stack)` | `dropEquipment(ServerLevel level)`; `spawnAtLocation(ServerLevel level, ItemStack or ItemLike)` |
+| `interact(Player, InteractionHand)` (Entity) | `interact(Player player, InteractionHand hand, Vec3 location)`; `mobInteract(Player, hand)` unchanged |
+| `canBeCollidedWith()` | `canBeCollidedWith(@Nullable Entity other)` |
+| `causeFallDamage(float, float, DamageSource)` | `causeFallDamage(double fallDistance, float multiplier, DamageSource source)` |
+| `lerpTo(x, y, z, yRot, xRot, steps)` override (ignore server positions) | gone; override `getInterpolation()` and return an `InterpolationHandler` whose `interpolateTo(Vec3, yRot, xRot)` decides (see `GuhSleeEntity`: 0 steps, sets pos/rot directly = 1.21.1's plain `Entity#lerpTo`) |
+| `new NearestAttackableTargetGoal<>(mob, Cls, 10, true, false, target -> ..)` | the selector gets the level: `(target, serverLevel) -> ..` (`TargetingConditions.Selector`) |
+| `walkAnimation.update(speed, factor)` | `walkAnimation.update(speed, factor, 1f)` (position scale) |
+| `Saddleable` (`isSaddleable/equipSaddle/isSaddled`) | interface gone (the saddle is an equipment slot now). `GuhEntity` keeps `isSaddleable()`, `equipSaddle(stack, source)`, `isSaddled()` (own synced flag, same "Saddle" NBT) **without `@Override`**, and takes a vanilla saddle itself in `mobInteract` (what SaddleItem did). Subclasses of GuhEntity (Parade/Kapper/Race guhs) keep their `@Override` (it overrides GuhEntity's method now) |
+| `isBodyArmorItem(stack)` override | gone; `GuhEntity#isBodyArmorItem` stays as a plain method; `setBodyArmorItem` / `getBodyArmorItem` unchanged |
+| `shouldDespawnInPeaceful()` override | gone: peaceful is per entity type, `EntityType.Builder#notInPeaceful()` (A: ModEntities). Keep the method without `@Override` if a test calls it |
+| `Merchant` implementers | must implement `boolean stillValid(Player)` (1.21.1's MerchantMenu used `getTradingPlayer() == player`) |
+| `new ServerBossEvent(name, color, overlay)` | `new ServerBossEvent(Mth.createInsecureUUID(this.random), name, color, overlay)` |
+| Bee anger `setRemainingPersistentAngerTime(int)` | `setPersistentAngerEndTime(long)` (-1 = not angry) |
+| `new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(x))` | `new ItemParticleOption(ParticleTypes.ITEM, x)` (an `Item`) |
+| `new DustParticleOptions(new Vector3f(r, g, b), size)` | `new DustParticleOptions(0xRRGGBB, size)` (e.g. `(1f, 0.55f, 0.8f)` -> `0xFF8CCC`) |
+| `SoundEvents.X` passed as a `SoundEvent` (`playSound(null, pos, SoundEvents.SHIELD_BLOCK, ..)`) | many are `Holder.Reference<SoundEvent>` now: add `.value()` |
+| `level.isDay()` / `isNight()` | `level.isBrightOutside()` / `isDarkOutside()` (identical code) |
+| `flyingNav.setCanPassDoors(true)` | gone from the navigation (passing doors is the node evaluator's default: true) |
+
+**EntitySpawnReason** (1.21.2): `MobSpawnType` -> `EntitySpawnReason` (same constants, `SPAWN_EGG` -> `SPAWN_ITEM_USE`).
+`finalizeSpawn(ServerLevelAccessor, DifficultyInstance, EntitySpawnReason, @Nullable SpawnGroupData)`; spawn rules
+`checkXSpawnRules(EntityType<T>, ServerLevelAccessor|LevelAccessor, EntitySpawnReason, BlockPos, RandomSource)`;
+`type.create(level, EntitySpawnReason.X)` (26.1.2 ignores the reason there);
+`EntityType.loadEntityRecursive(tag, level, EntitySpawnReason.LOAD, e -> {..})` (1.21.1 had no reason argument; LOAD is what it used).
+
+**Teleports (B)**:
+```java
+// 1.21.1 ServerPlayer#teleportTo(ServerLevel, x, y, z, yaw, pitch)  (left the vehicle, reset the camera, changed dimension if needed)
+player.teleportTo(level, x, y, z, java.util.Set.of(), yaw, pitch, true);   // true = reset camera; same or other dimension
+// entity.changeDimension(transition)             -> entity.teleport(transition)   (the entity in the new level, or null)
+// TeleportTransition.PostDimensionTransition     -> PostTeleportTransition;  t.postDimensionTransition() -> t.postTeleportTransition();  t.pos() -> t.position()
+// new TeleportTransition(level, pos, speed, yRot, xRot, false, post)   (the boolean was missingRespawnBlock)
+//                                                 -> new TeleportTransition(level, pos, speed, yRot, xRot, post)
+// serverLevel.getSharedSpawnPos()                -> serverLevel.getRespawnData().pos()   (LevelData.RespawnData(GlobalPos, yaw, pitch))
+```
+26.1's `ServerPlayer#teleport(TeleportTransition)` also wakes a sleeping player.
+
+**Day / time (B): use `nl.juiced.guhs.world.GuhTime`** (PORT_PLAN 7.2). In 1.21.1 every dimension read the overworld's day time
+(DerivedLevelData), so the overworld clock is the exact replacement, in every dimension, on both sides:
+
+| 1.21.1 | 26.1.2 |
+|---|---|
+| `level.getDayTime()` | `GuhTime.dayTime(level)` (= `level.getOverworldClockTime()`) |
+| `level.getDayTime() % 24000` / `Math.floorMod(level.getDayTime(), 24000L)` | `GuhTime.timeOfDay(level)` |
+| `Math.floorDiv(level.getDayTime(), 24000L)` | `GuhTime.day(level)` |
+| `serverLevel.setDayTime(t)` (tests, commands) | `GuhTime.setDayTime(serverLevel, t)` (`clockManager().setTotalTicks(overworld clock, t)`; all dimensions, like 1.21.1) |
+| `level.getMoonPhase()` | `GuhTime.moonPhase(level)` (same formula) |
+| `level.getTimeOfDay(pt)` | `GuhTime.celestialAngle(level)` (same formula; 26.1 has no `fixed_time` value any more) |
+| `level.isDay()` / `isNight()` | `level.isBrightOutside()` / `isDarkOutside()` |
+
+The dimension types of the Guhmension etc. should keep following the overworld clock (D: `"default_clock": "minecraft:overworld"`
+where a dimension has day and night).
+
+**Ticket types (B)**: `TicketType.create(name, comparator)` is gone; ticket types are registry entries: see `world/BouwCheck.TICKET_TYPES`
+(`new TicketType(TicketType.NO_TIMEOUT, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION)`), then
+`chunkSource.addTicketWithRadius(type, chunkPos, radius)` / `removeTicketWithRadius(..)` (no value argument).
+
+**Structures (B)**: `structure.generate(holder, level.dimension(), registryAccess, generator, biomeSource, randomState, templates, seed, chunkPos, refs, heightAccessor, biomePredicate)`
+(holder + dimension first); `getShuffledJigsawBlocks(..)` returns `StructureTemplate.JigsawBlockInfo` (`.name()`, `.info().pos()`, `.pool()`, `.target()`);
+`new Beardifier(List<Rigid>, List<JigsawJunction>, BoundingBox affectedBox)` (a null box makes it return 0 everywhere: use the pieces' box
+`inflatedBy(24)` like vanilla). `level.structureManager().getStructureAt(pos, structure)` needs a `Structure`: `registry.getValue(key)`
+(was `registry.get(key)`).
+
 
 ### 4.5 NBT / persistence / networking
 
@@ -366,6 +535,49 @@ client->server: `ClientPacketDistributor.sendToServer(payload)` (done); server->
 `sendToPlayersTrackingEntity(AndSelf)`, `sendToAllPlayers`, `sendToPlayersInDimension`, `sendToPlayersNear` unchanged. Client-side
 handlers can be registered separately with `RegisterClientPayloadHandlersEvent` (register the payload with `playToClient(type, codec)`
 without a handler on the common side) - the old single-registration style still works.
+
+**B: saved data and entity tags: use core's helpers in `storage/` (owner A)**: `nl.juiced.guhs.storage.GuhSavedData`
+(`tagType("path", T::new, T::load, t -> t.save(new CompoundTag()))` + `GuhSavedData.get(serverLevel, TYPE, "guhs_old_name")`,
+which moves the 1.0.0 file once) and `nl.juiced.guhs.storage.Nbt` (`saveWithoutId(entity[, tag])`, `load(entity, tag)`,
+`toTag(valueInput)`, `saveStack/parseStack`). B's classes use them (GuhWorldData `guhs:world`, Scorebord `guhs:scoreborden`,
+Reisguh `guhs:reisguhs`); their old `load(tag, provider)` / `save(tag, provider)` get `null` as provider (it was never used).
+`PortGameTests#portOudeSavedDataVerhuist` checks the move.
+
+Bridging a 1.21.1 helper that writes/reads a CompoundTag inside `addAdditionalSaveData(ValueOutput)` / `readAdditionalSaveData(ValueInput)`:
+```java
+CompoundTag t = new CompoundTag(); emotes.save(t); out.store(t);     // NeoForge ValueOutput#store(CompoundTag): keys at the top level, like 1.0.0
+emotes.load(Nbt.toTag(in));                                          // the whole input as a tag
+out.store("Verstop", CompoundTag.CODEC, verstop.save());            // was tag.put("Verstop", sub)
+in.read("Verstop", CompoundTag.CODEC).orElseGet(CompoundTag::new);   // was tag.getCompoundOrEmpty("Verstop")
+ContainerHelper.saveAllItems(out.child("Backpack"), items);          // was tag.put("Backpack", saveAllItems(new CompoundTag(), items, regs)); same layout
+ContainerHelper.loadAllItems(in.childOrEmpty("Backpack"), items);
+```
+* A `ListTag` element: `t.getAsString()` -> `t.asString().orElse("")`.
+* Text in entity NBT (text displays, custom names) is a **component in NBT** now, not a JSON string:
+  `ComponentSerialization.CODEC.encodeStart(registryAccess.createSerializationContext(NbtOps.INSTANCE), text).getOrThrow()` and
+  `tag.put("text", encoded)` (see `quest/Scorebord#show`). `Component.Serializer.toJson` is gone.
+* `NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), tag)` -> `NbtUtils.readBlockState(BuiltInRegistries.BLOCK, tag)`.
+* `CompoundTag#contains(key, TAG_COMPOUND)` for a sub-compound -> `tag.getCompound(key).isPresent()`.
+
+**A (core-1): old-style tags <-> ValueInput/ValueOutput** - `nl.juiced.guhs.storage.Nbt` (registry context always from the entity/level):
+`Nbt.saveWithoutId(entity)` (was `entity.saveWithoutId(new CompoundTag())`), `Nbt.saveWithoutId(entity, tag)`, `Nbt.save(entity, tag)` (with id),
+`Nbt.load(entity, tag)`, `Nbt.input(registries, tag)` (a `ValueInput` over a tag, e.g. `EntityType.create(Nbt.input(level.registryAccess(), tag), level, EntitySpawnReason.LOAD)`,
+`EntityType.loadEntityRecursive(tag, level, EntitySpawnReason.LOAD, e -> {..})`), `Nbt.write(registries, out -> ...)` -> CompoundTag, `Nbt.toTag(valueInput)`,
+`Nbt.saveStack(registries, stack)` / `Nbt.parseStack(registries, tag)` (1.21.1 `stack.save(registries)` / `ItemStack.parseOptional(registries, tag)`, same format).
+In BE/entity save/load bodies: a nested CompoundTag -> `out.store("K", CompoundTag.CODEC, tag)` / `in.read("K", CompoundTag.CODEC).orElse(null)`; a codec-backed value ->
+`out.store("K", CODEC, v)` / `in.read("K", CODEC).ifPresent(..)` (no `registries.createSerializationContext(..)` needed - the ops carry the registries).
+`ItemStack.SINGLE_ITEM_CODEC` is gone: `ItemStack.CODEC` reads the old `{id, components}` (count defaults to 1).
+
+**A (core-1): SavedData** - `nl.juiced.guhs.storage.GuhSavedData`:
+```java
+public static final SavedDataType<Scorebord> TYPE = GuhSavedData.tagType("scorebord", Scorebord::new, Scorebord::load, s -> s.save(new CompoundTag()));
+Scorebord data = GuhSavedData.get(server.overworld(), TYPE, "guhs_scorebord");   // 1.21.1: getDataStorage().computeIfAbsent(new SavedData.Factory<>(..), "guhs_scorebord")
+```
+(`load(CompoundTag)` / `save(CompoundTag)` lose the `HolderLookup.Provider` parameter; item stacks inside via `Nbt.saveStack/parseStack` with
+`server.registryAccess()` or a real codec with `GuhSavedData.type(path, ctor, codec)`). `GuhSavedData.get` first moves the 1.0.0 file
+(`<world>/data/<legacy>.dat` for the overworld, `<dim>/data/<legacy>.dat` otherwise) to the 26.1 place `<world>/dimensions/<ns>/<dim>/data/guhs/<path>.dat`
+if that does not exist yet - this is the migration L asked B for; B only has to use it with the old file name. The file content (`{"data": ..., DataVersion}`)
+is unchanged. Vanilla's own file fixer does not touch mod files (checked `DimensionStorageFileFix`).
 
 ### 4.6 Rendering, GUI, client
 
@@ -503,6 +715,175 @@ definitions `assets/guhs/items/<id>.json` (`minecraft:model`, `select`, `range_d
 use `geckolib:geckolib` special model. Custom numeric/select properties: `RegisterRangeSelectItemModelPropertyEvent` /
 `RegisterSelectItemModelPropertyEvent` / `RegisterConditionalItemModelPropertyEvent` (NeoForge client events).
 
+### 4.6b R (render): how to port a renderer / screen / GeoBone code (reference code on branch `mc26-r`)
+
+Reference files (all compile against 26.1.2 + GeckoLib 5.5.2): `client/GuhRenderer.java` + `client/GuhRenderFrame.java` (GeckoLib entity,
+layers, bone updaters, hooks for features), `client/SittingGuhRenderers.java` (NPC models per kind, block GeoBlockRenderer),
+`client/GuhSleeRenderer.java` (non-living GeoEntity + drawing other entities), `client/GuhSpawnerRenderer.java` / `GuhWheelRenderer.java` /
+`SleeRailRenderer.java` (block-entity renderers), `client/GuhVillagerFeaturesLayer.java` (vanilla RenderLayer), `client/particle/GuhBlaadjeParticle.java`,
+`client/screen/*` (screens), `client/GuhmensionSky.java` + `client/SkyDraw.java` + `feature/guheinde/client/GuheindeSky.java` (skies),
+`mixin/client/LevelRendererMixin.java` (Guhpolder snow), `client/KaasSausClient.java` (fluid looks), `client/GuhsClient.java` (registrations).
+
+**0. Build prerequisite (REQUESTS: R -> L).** GeckoLib 5 adds `GeoRenderState` to `EntityRenderState`/`BlockEntityRenderState` by mixin
++ interface injection. MDG must be told (`neoForge { interfaceInjectionData { from(file('gradle/geckolib_interface_injections.json')) } }`,
+json = `META-INF/interface_injections.json` from the GeckoLib jar), then `gradle_slot.sh createMinecraftArtifacts` + `writeCompileClasspath`
+in your worktree (and point `build/compile-classpath.txt` at your own worktree's `build/moddev/artifacts/minecraft-patched-*.jar`).
+Without it every `state.addGeckolibData(..)` and `GeoEntityRenderer<T, LivingEntityRenderState>` fails to compile.
+
+#### A. GeckoLib 5 entity renderer (was `GeoEntityRenderer<T>`)
+
+```java
+public class XRenderer extends GeoEntityRenderer<XEntity, LivingEntityRenderState> {   // EntityRenderState for non-living entities
+    static final DataTicket<Float> WOBBLE = DataTicket.create("guhs_x_wobble", Float.class);       // one static ticket per value
+    public XRenderer(EntityRendererProvider.Context ctx) {
+        super(ctx, new DefaultedEntityGeoModel<>(Guhs.id("x")));   // bare id: geckolib/models/entity/x.geo.json, textures/entity/x.png
+        this.shadowRadius = 0.5f;
+        withRenderLayer(new MyLayer(this));                        // was addRenderLayer
+    }
+    @Override public void addRenderData(XEntity e, @Nullable Void v, LivingEntityRenderState s, float pt) {   // EXTRACT: entity is here
+        s.addGeckolibData(WOBBLE, e.getWobble(pt));                // copy everything the render needs; never keep the entity
+    }
+    @Override public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {   // SUBMIT
+        DefaultAnimations.hardcodedHeadRotation(info, bones, "head");     // was DefaultedEntityGeoModel(id, true) ("turnsHead")
+        float w = info.getOrDefaultGeckolibData(WOBBLE, 0f);
+        bones.ifPresent("tail", b -> b.setRotY(w));
+    }
+    @Override protected float getShadowRadius(LivingEntityRenderState s) { return 0.5f * s.scale * s.ageScale; }  // was set in render()
+    @Override public int getRenderColor(XEntity e, @Nullable Void v, float pt) { return 0x88FFFFFF; }          // ARGB int, no Color class
+    @Override public @Nullable RenderType getRenderType(LivingEntityRenderState s, Identifier tex) { return RenderTypes.entityTranslucent(tex); }
+}
+```
+| GeckoLib 4 | GeckoLib 5 |
+|---|---|
+| `getTextureResource(T)` / `getModelResource(T)` in the GeoModel | `(GeoRenderState state)`: put what you need in a ticket first (`GeoModel#addAdditionalStateData(animatable, related, state)` or the renderer's `addRenderData`), read it back (`SittingGuhRenderers.NpcRenderer`: kind -> model/texture). `getAnimationResource(T)` still gets the animatable. |
+| `setCustomAnimations(T, id, state)` + `getBone(..)` | renderer `adjustModelBonesForRender(info, bones)` (runs after the animations) or `info.addBoneUpdater((info, bones) -> ..)` |
+| `preRender(..)` changing bone visibility | same place (`adjustModelBonesForRender`); snapshots are fresh every frame, nothing to "put back" |
+| `render(entity, yaw, pt, pose, buffers, light)` extra code | before: `addRenderData`; after: override `submit(state, pose, collector, camera)` and call super first (`GuhSleeRenderer`) |
+| `applyRotations(T, pose, age, yaw, pt, nativeScale)` | `applyRotations(RenderPassInfo<R>, PoseStack, float nativeScale)`; the yaw comes from ticket `DataTickets.ENTITY_BODY_YAW` (set it in `addRenderData` for non-living entities) |
+| `scaleModelForRender(w, h, pose, T, model, reRender, pt, light, overlay)` | `scaleModelForRender(RenderPassInfo<R>, float w, float h)` -> call super with the new factors |
+| `getMotionAnimThreshold(T)` | unchanged |
+| `reRender(model, pose, buffers, T, type, buffer, ...)` (a layer drawing the model again) | `renderer.submitRenderTasks(info, collector.order(1), renderType)` (same bones) or `GuhRenderer.submitPass(info, collector, type, light, colour, boneName -> visible)` (other bones visible, e.g. clothes) |
+| `BlockAndItemGeoLayer#getStackForBone/renderStackForBone` | a `GeoRenderLayer` with `addRenderData` (make an `ItemStackRenderState`: `GuhRenderer.itemState(stack, ctx, entity)`) + `addPerBoneRender(info, consumer)` -> `consumer.accept(bone, (pass, bone, collector) -> { pose tweaks; item.submit(pass.poseStack(), collector, pass.packedLight(), OverlayTexture.NO_OVERLAY, pass.renderState().outlineColor); })` (`GuhRenderer.PaperLayer`) |
+| `GeoRenderLayer#render(pose, T, model, type, buffers, buffer, pt, light, overlay)` | `GeoRenderLayer<T, Void, R>`: `addRenderData(..)` (extract) + `submitRenderTask(RenderPassInfo<R> info, SubmitNodeCollector c)`; pose = `info.poseStack()` (model pose, already rotated+scaled), `info.getPreRenderMatrixPose()` = entity origin |
+| `GeoBlockRenderer<T>(GeoModel)` | `GeoBlockRenderer<T, BlockEntityRenderState>(BlockEntityRendererProvider.Context, GeoModel)` |
+| `new GeoEntityRenderer<>(ctx, model)` inline | `new GeoEntityRenderer<XEntity, LivingEntityRenderState>(ctx, model)` (type args needed) |
+
+**GeoBone -> BoneSnapshot** (`bones.ifPresent("name", b -> ..)`, `bones.get(geoBone)`):
+
+| GeckoLib 4 (`GeoBone`) | GeckoLib 5 (`BoneSnapshot`) |
+|---|---|
+| `setHidden(true)` (hid the bone *and* its children) | `skipRender(true).skipChildrenRender(true)` |
+| `setHidden(h); setChildrenHidden(false)` | `skipRender(h)` (children decide for themselves) |
+| `setPosX/Y/Z(v)` | `setTranslateX/Y/Z(v)` (same pixel units) |
+| `setRotX/Y/Z(r)` (radians) | `setRotX/Y/Z(r)`: **relative to the model's own (base) rotation**; for bones without a base rotation this is the same number. Old `x + bone.getInitialSnapshot().getRotZ()` -> `x`; `bone.getRotZ()` = this frame's animated value (relative) |
+| `setScaleX/Y/Z` | same names |
+| `getName()`, `getChildBones()`, `getPivotX()` | `bone.name()`, `bone.children()`, `bone.pivotX()` on the `GeoBone` (`snapshot.getBone()`) |
+| `model.topLevelBones()` loop | `info.model().boneLookup().get().values()` (all bones) |
+
+**Guh features (GuhRenderer hooks).** Features never touch `GuhRenderer`; they register a hook in their client init:
+```java
+GuhRenderer.hook((guh, partialTick, frame) -> {          // extract time, guh available
+    if (guh.getVariant() != GuhVariant.PINGUH) return;
+    frame.texture(PinguhRender.texture(guh), 20);          // fur texture, highest priority wins (Pinguh 20, story variants 10)
+    float glij = PinguhRender.glij(guh, partialTick);      // compute now ...
+    frame.pose(pose -> pose.translate(0, -0.11f * glij, 0));                                   // after the body rotation
+    frame.bones(bones -> bones.ifPresent("leg_front_left", b -> b.setRotX(Mth.lerp(glij, b.getRotX(), 1.3f))));   // ... use later
+    frame.glow(GLOW_TEXTURE);                                                                 // extra full-bright pass
+    frame.pass(GuhClothes.PYJAMA_PAKJE.texture(), 0xFFFFFFFF, GuhClothes.PYJAMA_PAKJE::shows);  // model again, only these bones
+    ItemStackRenderState item = GuhRenderer.itemState(stack, ItemDisplayContext.GROUND, guh);
+    frame.layerExtra((pose, collector, light) -> { pose.translate(0, 1.5, 0); item.submit(pose, collector, light, OverlayTexture.NO_OVERLAY, 0); });
+});
+```
+Porting table for the 1.0.0 hook APIs (owners: guhpolder S2, verhaal + knus S3, users of `GuhRenderHooks.laag` S1/S2/S3/S5):
+`PinguhRender.texture/pose/animate` -> one hook (`frame.texture(.., 20)`, `frame.pose(..)`, `frame.bones(..)`);
+`VariantUiterlijk.Uiterlijk#texture/glow/botten/extra` -> `frame.texture(.., 10)`, `frame.glow(..)`, `frame.bones(..)`, `frame.extra(..)`
+(entity space, unscaled, as before) - simplest: `VariantUiterlijk` registers ONE `GuhRenderer.hook` that looks up the variant's `Uiterlijk`
+and the `Uiterlijk` methods get a `GuhRenderFrame` parameter; `GuhRenderHooks.Laag` -> `GuhRenderer.Hook` (`laag(..)` can simply call
+`GuhRenderer.hook`), re-render with hidden bones -> `frame.pass(..)`, item renders -> `frame.layerExtra(..)` (same pose as the old layers:
+entity origin, not rotated, scaled with baby size/squish). `GuhRenderer.slaapt(guh)` / `slaap(texture)` are unchanged.
+`SittingGuhRenderers.NPC_ANIMATORS`: `(npc, state, bot) -> { float t = (float) state.getAnimationTick() * k; bot.apply("x").ifPresent(b -> b.setRotZ(..)); }`
+becomes `(npc, tick) -> { float t = (float) tick * k; return bones -> bones.ifPresent("x", b -> b.setRotZ(..)); }` (compute npc data outside the returned lambda).
+NPC model/animation ids in `NPC_MODELEN`/`NPC_ANIMATIES` are bare ids now: `Guhs.id("entity/guh_npc_x")`.
+Subclasses of `GuhRenderer` (race ghost): override `getRenderType(LivingEntityRenderState, Identifier)` and `int getRenderColor(GuhEntity, Void, float)`
+(e.g. `ARGB.colorFromFloat(0.6f, 1f, 0.82f, 0.25f)`); the variant etc. is in `GuhRenderer.frame(state)`.
+
+**Drawing another entity from a renderer** (sled pullers, guh in the wheel, spawner): at extract time
+`EntityRenderState s = dispatcher.extractEntity(entity, pt); s.lightCoords = myState.lightCoords; s.shadowPieces.clear();` (was `setRenderShadow(false)`),
+at submit time `dispatcher.submit(s, camera, x, y, z, poseStack, collector)`. `context.getEntityRenderDispatcher()` (entity) / `context.entityRenderer()` (BER).
+
+#### B. Vanilla entity renderers / layers
+`EntityRenderer<T, S extends EntityRenderState>`: `S createRenderState()`, `extractRenderState(T, S, float pt)` (call super), `submit(S, PoseStack,
+SubmitNodeCollector, CameraRenderState)`. Model parts: `collector.submitModelPart(part, pose, renderType, light, overlay, null)`; whole models
+`collector.submitModel(model, state, pose, renderType, light, overlay, outline, null)`; hand-made quads `collector.submitCustomGeometry(pose, renderType,
+(poseEntry, vertexConsumer) -> { .. })` (vertex code unchanged). Layers: `RenderLayer<S, M>` with `submit(PoseStack, SubmitNodeCollector, int light, S state,
+float yRot, float xRot)`; `LivingEntityRenderer.getOverlayCoords(state, 0f)`. Villager example: `GuhVillagerFeaturesLayer` (`state.villagerData.type().value()`).
+Texture override of a vanilla renderer: `getTextureLocation(SlimeRenderState)` (the state, not the entity).
+
+#### C. Block-entity renderers (`GuhSpawnerRenderer`, `GuhWheelRenderer`, `SleeRailRenderer`)
+```java
+public class XRenderer implements BlockEntityRenderer<XBlockEntity, XRenderer.State> {
+    public static class State extends BlockEntityRenderState { float spin; }
+    public State createRenderState() { return new State(); }
+    public void extractRenderState(XBlockEntity be, State s, float pt, Vec3 cam, @Nullable ModelFeatureRenderer.CrumblingOverlay crumble) {
+        BlockEntityRenderer.super.extractRenderState(be, s, pt, cam, crumble);   // pos, type, lightCoords
+        s.spin = be.getSpin(pt);                                               // anything that needs the level: HERE (e.g. LevelRenderer.getLightCoords)
+    }
+    public void submit(State s, PoseStack pose, SubmitNodeCollector c, CameraRenderState camera) { .. }
+    public boolean shouldRenderOffScreen() { .. }                              // no parameter any more; getRenderBoundingBox(T) unchanged
+}
+```
+Extra block models (was `ModelEvent.RegisterAdditional` + `ModelResourceLocation` + `BakedModel`): `StandaloneModelKey<BlockStateModelPart> KEY =
+new StandaloneModelKey<>(() -> "guhs:block/x")`, register in `ModelEvent.RegisterStandalone`: `event.register(KEY, SimpleUnbakedStandaloneModel.simpleModelWrapper(Guhs.id("block/x")))`,
+draw: `c.submitBlockModel(pose, Sheets.cutoutBlockSheet(), List.of(Minecraft.getInstance().getModelManager().getStandaloneModel(KEY)), BlockModelRenderState.EMPTY_TINTS, light, OverlayTexture.NO_OVERLAY, 0)`.
+`LevelRenderer.getLightColor(level, pos)` -> `LevelRenderer.getLightCoords(level, pos)`.
+
+#### D. Screens / HUD (`client/screen/*`)
+Script: `python port26/scripts/r_gui_input.py <files>` (idempotent) converts input overrides and super calls (`mouseClicked(MouseButtonEvent, boolean)`,
+`mouseReleased(MouseButtonEvent)`, `mouseDragged(MouseButtonEvent, dx, dy)`, `keyPressed(KeyEvent)`, `charTyped(CharacterEvent)` with the old local
+variables recreated), `Screen.hasShiftDown()` -> `Minecraft.getInstance().hasShiftDown()`, `renderEntityInInventoryFollowsMouse` ->
+`extractEntityInInventoryFollowsMouse`, container `this.imageWidth/Height = ..` -> `super(menu, inv, title, w, h)` (fields are final),
+`renderBg(g, pt, mx, my)` -> `extractBackground(g, mx, my, pt)` + `super.extractBackground(..)` first. By hand:
+* `renderTooltip(g, mx, my)` in a container screen: delete it, `AbstractContainerScreen#extractRenderState` already calls `extractTooltip`; to suppress the
+  slot tooltips override `extractTooltip` (`GuhWardrobeScreen`).
+* enter key: `event.isConfirmation()`; escape `event.isEscape()`; `editBox.keyPressed(event)`; press a button from code: `button.onPress(new KeyEvent(GLFW.GLFW_KEY_ENTER, 0, 0))`.
+* Entity preview with custom angles (was `InventoryScreen.renderEntityInInventory(g, x, y, scale, translation, pose, camera, entity)`):
+  `EntityRenderState s = minecraft.getEntityRenderDispatcher().extractEntity(e, 1f); s.shadowPieces.clear(); s.outlineColor = 0;
+  g.entity(s, scale, translation, pose, camera, x0, y0, x1, y1)` - drawn picture-in-picture, centred in the rectangle (`GuhWardrobeScreen#renderPop`).
+* Colours: every `text/centeredText/fill` colour must be ARGB (`0xFFrrggbb`); all R screens already were (checked: no 6-digit literals, no
+  `getColor()` results). `(alpha << 24) | 0xRRGGBB` computed colours are fine. Old `renderBackground` inside `render` must go (framework calls
+  `extractBackground`); a screen without blur overrides `extractBackground` without calling super (`SledPanelScreen`).
+* `BuiltInRegistries.ITEM.get(id)` -> `getValue(id)`; `item.getDescription()` -> `Component.translatable(item.getDescriptionId())`.
+* HUD layers: `RegisterGuiLayersEvent#registerAbove/Below/AboveAll(id, GuiLayer)`; `GuiLayer` is still `render(GuiGraphicsExtractor, DeltaTracker)`.
+  **Trap:** the phase-1 pass renamed every `render(GuiGraphicsExtractor ..)` method to `extractRenderState`, also in plain HUD helper classes, so
+  method references like `SleeHud::render` no longer resolve -> use `SleeHud::extractRenderState` (or rename the method back).
+* Key mappings: `new KeyMapping(name, InputConstants.Type.KEYSYM, key, GuhKeys.CATEGORY)` - use the shared `GuhKeys.CATEGORY` (registered once in
+  `GuhKeys.register`; its label is lang key `key.category.guhs.guhs`).
+
+#### E. Particles (`GuhBlaadjeParticle`)
+`TextureSheetParticle` -> `SingleQuadParticle` (sprite in the constructor: `sprites.get(random)`), `getRenderType()` -> `SingleQuadParticle.Layer getLayer()`
+(`Layer.TRANSLUCENT` = old PARTICLE_SHEET_TRANSLUCENT, `Layer.OPAQUE` = PARTICLE_SHEET_OPAQUE). Providers get a `RandomSource` as 9th argument:
+`event.registerSpriteSet(TYPE, sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new P(level, x, y, z, sprites.get(random)))`.
+`CherryParticle` -> `FallingLeavesParticle(level, x, y, z, sprite, 0.25F, 2.0F, false, true, 1.0F, 0.0F)`. `pickSprite(sprites)` in a constructor ->
+pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
+
+#### F. Skies, weather, fluids, block tints
+* Sky: `CustomSkyboxRenderer#renderSky(LevelRenderState, SkyRenderState, Matrix4fc modelView, Runnable setupFog)` registered in
+  `RegisterCustomEnvironmentEffectRendererEvent#registerSkyboxRenderer(id, r)` (`GuhmensionSky.register` registers guhs:guhmension and guhs:guheinde),
+  selected by the dimension type/biome attribute `"neoforge:custom_skybox": "guhs:<id>"` (and `"skybox"` must not be `none`, else no sky pass runs).
+  No immediate mode: `SkyDraw.drawNow(label, pipeline, meshData, texture, colourModulator, modelView)` / `SkyDraw.draw(.., GpuBuffer ..)`
+  (RenderPass + RenderPipeline like vanilla `SkyRenderer`); own pipelines must be registered in `RegisterRenderPipelinesEvent` (`SkyDraw.registerPipelines`).
+  Sky colour/angles/star brightness come from `SkyRenderState` (environment attributes); `new SkyRenderer(textureManager, atlasManager)` gives
+  vanilla's `renderSkyDisc(colour)` / `renderSunriseAndSunset(pose, sunAngle, colour)`. Barbecuether (S7): its old `SkyType.NONE` + fog is pure
+  data now (`"skybox": "none"` + fog attributes); no renderer needed.
+* Guhpolder snow: `@ModifyReturnValue` on the private `WeatherEffectRenderer#getPrecipitationAt(Level, BlockPos)` (SNOW -> NONE in polder biomes).
+* Fluids: textures/tint moved from `IClientFluidTypeExtensions` to `RegisterFluidModelsEvent#register(new FluidModel.Unbaked(new Material(still),
+  new Material(flow), overlayOrNull, FluidTintSources.constant(argb) | null), stillFluid, flowingFluid)`; fog colour stays in the extension as
+  `modifyFogColor(.., Vector4f fluidFogColor)` (mutate it).
+* Block tints: `RegisterColorHandlersEvent.BlockTintSources#register(List.of(BlockTintSource), blocks)`; `BlockTintSource#color(BlockState)` returns ARGB
+  and `relevantProperties()` lists the properties that change the colour (else no re-tint on state change).
+* Item properties (compass needle etc.): `ItemProperties.register` is gone -> client item definition JSON (D), e.g. `range_dispatch` with
+  `"property": "minecraft:compass", "target": "lodestone"`.
+
 ### 4.7 Mixins
 
 | Mixin | 26.1.2 target |
@@ -511,6 +892,9 @@ use `geckolib:geckolib` special model. Custom numeric/select properties: `Regist
 | `ServerLevelMixin` (`tickPrecipitation(BlockPos)`) | still `public void tickPrecipitation(BlockPos pos)` in `ServerLevel` - unchanged |
 | `client.LevelRendererMixin` (`renderSnowAndRain`, gone) | `WeatherEffectRenderer#getPrecipitationAt(Level, BlockPos)` (private, used by `extractRenderState` and `tickRainParticles`) or the NeoForge `custom_weather_effects` attribute (4.6) |
 | `GameTestRegistryMixin` | deleted (filter lives in the registrar) |
+
+* A: `FlowingFluidMixin` retargeted to `canMaybePassThrough(BlockGetter, BlockPos, BlockState, Direction, BlockPos, BlockState, FluidState)` (no `Fluid` parameter);
+  `ServerLevelMixin` unchanged; new `VillagerMixin` (`Villager#updateTrades(ServerLevel)`, TAIL) for the guh trades - needs `"VillagerMixin"` in `guhs.mixins.json` (requested).
 
 ### 4.8 Data / resources (owner D; code owners only need the ids)
 
@@ -530,3 +914,53 @@ use `geckolib:geckolib` special model. Custom numeric/select properties: `Regist
 * L: Spawn eggs lose their two tint colours in 26.1 (vanilla eggs are plain textures now); D/A need textures or tinted item models.
 * L (to verify by B): SavedData files move from `data/<name>.dat` to `data/<namespace>/<path>.dat`; without a migration step, data
   of 1.0.0 worlds (bank, highscores, nests, band, huisjes, ...) would not be found after the update.
+* B: A guh gets its saddle by right-clicking it with a vanilla saddle, now handled in `GuhEntity#mobInteract` (26.1 has no
+  `Saddleable`; vanilla's saddle is an equipment slot now). Same conditions (tamed, rideable size, alive, not saddled yet), same
+  sound, the saddle is used up; the "Saddle" NBT flag and the drop on death are unchanged. The saddle is not in the vanilla SADDLE
+  slot, so vanilla's saddle logic (`#can_equip_saddle`, shears) does not apply; Guhs draws its own saddle bone as before.
+* B: `/test` ids are `guhs:<class>.<method>` (the same names as 1.0.0); batches are test environments `guhs:batch/<batch>`.
+* B: Guh sled (`GuhSleeEntity`): "ignore server positions while on a rail" moved from `lerpTo` to a custom interpolation
+  handler; without a rail it sets position/rotation at once like 1.21.1's `Entity#lerpTo` (no smoothing, as before).
+* B: `/guhs bouwcheck` uses a registered ticket type `guhs:bouwcheck` (loading + simulation, no timeout) instead of an
+  unregistered `TicketType.create`.
+* B: Players teleported by Guhs (guhmaag, Reisguh, verstoppertje, kasteelpoort) are woken up first if they sleep (26.1 `ServerPlayer#teleportTo`).
+* B: `QuestGuhEntity` / `MikaBaasEntity` / `GuhNpcEntity` invulnerability is only asked on the server now (`isInvulnerableTo(ServerLevel, ..)`);
+  the client may show a hurt flash that 1.21.1 did not (cosmetic).
+* B: `GuhTime.moonPhase/celestialAngle` ignore the old `fixed_time` value of fixed-time dimensions (26.1 dimension types only
+  have `has_fixed_time`); nothing in Guhs asks for them in a fixed-time dimension.
+* B: SavedData files get new ids (`guhs:world`, `guhs:scoreborden`, `guhs:reisguhs`, ...): the 1.0.0 file is moved to
+  `<world>/dimensions/minecraft/overworld/data/guhs/<path>.dat` the first time it is needed (a 1.1.0 world can't go back to 1.0.0 anyway).
+* A: Spawn eggs are `SpawnEggItem` with the type in `ENTITY_DATA` (no `DeferredSpawnEggItem`); tint colours are gone (needs D textures).
+* A: Guh villager trades are no longer data driven by NeoForge's `VillagerTradesEvent` (removed); the same lists live in `ModVillagers` and are added by
+  `VillagerMixin` after vanilla's trade update (two random per level, like 1.21.1). Datapacks can not change them (1.0.0 could only via the event either).
+* A: Guh armour is a plain `Item` with body-slot attribute modifiers + an `EQUIPPABLE` component limited to guhs (was `AnimalArmorItem`, `BodyType.CANINE`);
+  armour value/toughness are the same (from the vanilla material); the guh still only gets it by our right-click / the wardrobe.
+* A: Vads tools/armour: `ToolMaterial`/`ArmorMaterial` records; stats identical. Anvil repair with the ingot is set per item (`repairable(ingot)`).
+  Paxel/axe right-click and mining as before; old `DiggerItem` extra durability damage on hit is irrelevant (unbreakable).
+* A: Kaashoning (was `HoneyBottleItem`) uses vanilla honey's 26.1 consumable (2 s drink, clears poison, bottle back; always drinkable as before).
+* A: Clothing unlock ("eat" a clothing item, 1.5 s): sound/crumbs come from a `CONSUMABLE` component (same leather sound; timing of the crumbs is vanilla's).
+* A: `PickedUpGuhItem` "waar is mijn guh" pocket check: 26.1 `inventoryTick` has no slot index; the check runs every 100 ticks for every picked-up guh
+  (was spread over slots with `gameTime + slot`).
+* A: Block removal side effects (`onRemove` gone): Guh wheel (drops the guh + removes parts) and sled rail anchor (removes parts) moved to the block entity's
+  `preRemoveSideEffects` (same triggers as before); wheel parts, rail parts and guh wire use `affectNeighborsAfterRemoval`, which only runs for block changes with
+  neighbour updates (flag 1) or pistons: removing a part with `setBlock(.., 2)` no longer breaks the rest of the multiblock.
+* A: Guh blossom leaves use 26.1 `LeavesBlock` falling-leaf logic (chance 0.1 per animate tick, same as the old 1 in 10).
+* A: `FlowingFluidMixin` now also stops the fluid's slope search at protected buildings (same outcome: no flow into them).
+* R: Guhmension sky: sun, pink moon and pink stars now follow vanilla 26.1's separate sun/moon/star angle attributes (by default the same
+  day cycle as before, moon opposite the sun); the sky disc and sunrise glow are vanilla's drawn with the attribute colours (sky/fog colours must
+  be set in the dimension/biome `attributes`, D). The old "skip the sky when foggy" check is gone (vanilla itself skips the sky under lava/powder snow).
+  Moon size 26, full moon, 1800 pink/lilac/white stars with the same seed and the same twinkle - look should match.
+* R: Guheinde sky: same six-sided purple swirl (uv 0..8, drift 0.0004/tick, colour 0xFF6A3A64); needs `"skybox": "end"` +
+  `"neoforge:custom_skybox": "guhs:guheinde"` and fog colour (0.24, 0.12, 0.2) as attribute (D).
+* R: Guhpolder snow: same result (no vanilla snow columns in polder biomes); the mixin now targets `WeatherEffectRenderer#getPrecipitationAt`
+  with require = 1 (a broken target now fails loudly instead of silently drawing both kinds of snow).
+* R: Guh compasses (9 items): the needle is a client item definition (`minecraft:compass` / `lodestone` target, D) instead of code; same behaviour.
+* R: Guh key category lang key is now `key.category.guhs.guhs` (was `key.categories.guhs`; D adds it to en_us/nl_nl, text "Guhs").
+* R: Ghost guh: alpha 0x88 as before, but when the guh is also invisible-to-you the (lower) invisibility alpha wins instead of 0x88.
+* R: Guh render hooks (features): extra model passes/items are submitted after the clothes like before; hook items drawn with `layerExtra` get the
+  1.0.0 layer pose (entity origin, not rotated, baby size/squish scale). Visual check in phase 6.
+* R: Guh wheel stand/ring are drawn with the cutout block sheet (was `RenderType.cutout()`); same look.
+* R: Kaas saus / maagzuur: fluid textures/tint via `FluidModel` (same textures, maagzuur tint 0xFFB8E03A over water textures); the render layer
+  is picked from texture alpha now (PORT_PLAN 7.9).
+* R: dev AutoCheck: the check world's game rules are set right after joining (26.1 `LevelSettings` has no game rules); "mist off" can no longer
+  cancel the fog event, it only pushes the terrain fog out to the render distance.

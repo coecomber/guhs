@@ -26,7 +26,7 @@ public final class KeepOnDeathHandler {
 
     public static void onDeath(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof Player player) || player.level().isClientSide()
-                || player.level().getGameRules().get(GameRules.KEEP_INVENTORY)) {
+                || ((net.minecraft.server.level.ServerLevel) player.level()).getGameRules().get(GameRules.KEEP_INVENTORY)) {
             return;
         }
         Inventory inventory = player.getInventory();
@@ -36,7 +36,7 @@ public final class KeepOnDeathHandler {
             if (!stack.isEmpty() && stack.is(KEEP_ON_DEATH)) {
                 CompoundTag entry = new CompoundTag();
                 entry.putInt("Slot", slot);
-                entry.put("Item", stack.save(player.registryAccess()));
+                entry.put("Item", nl.juiced.guhs.storage.Nbt.saveStack(player.registryAccess(), stack));
                 kept.add(entry);
                 inventory.setItem(slot, ItemStack.EMPTY);
             }
@@ -58,7 +58,7 @@ public final class KeepOnDeathHandler {
         ListTag kept = old.getListOrEmpty(KEY);
         for (int i = 0; i < kept.size(); i++) {
             CompoundTag entry = kept.getCompoundOrEmpty(i);
-            ItemStack stack = ItemStack.parseOptional(player.registryAccess(), entry.getCompoundOrEmpty("Item"));
+            ItemStack stack = nl.juiced.guhs.storage.Nbt.parseStack(player.registryAccess(), entry.getCompoundOrEmpty("Item"));
             int slot = entry.getIntOr("Slot", 0);
             if (player.getInventory().getItem(slot).isEmpty()) {
                 player.getInventory().setItem(slot, stack);

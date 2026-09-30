@@ -98,7 +98,7 @@ public final class BouwRuimte {
         }
         List<SetInfo> sets = new ArrayList<>();
         Map<Structure, SetInfo> by = new HashMap<>();
-        for (Holder.Reference<StructureSet> set : registry.holders().toList()) {
+        for (Holder.Reference<StructureSet> set : registry.listElements().toList()) {
             int voorrang = Integer.MIN_VALUE, reach = 0;
             for (StructureSet.StructureSelectionEntry entry : set.value().structures()) {
                 if (entry.structure().value() instanceof Ruimte r && r.keepClear() > 0) {
@@ -192,7 +192,7 @@ public final class BouwRuimte {
         }
         for (var entry : chunk.getAllReferences().entrySet()) {
             for (long ref : entry.getValue()) {
-                ChunkPos at = new ChunkPos(ref);
+                ChunkPos at = ChunkPos.unpack(ref);
                 if (centre.getChessboardDistance(at) > 8 || !region.hasChunk(at.x(), at.z())) {
                     continue;
                 }
@@ -339,7 +339,7 @@ public final class BouwRuimte {
 
     /** The pieces (boxes) of what this set really starts in chunk c (like ChunkGenerator.createStructures), if anything. */
     private static List<BoundingBox> startPieces(Structure.GenerationContext context, SetInfo set, ChunkPos c) {
-        String key = System.identityHashCode(context.randomState()) + "@" + context.seed() + "@" + set.name + "@" + c.toLong();
+        String key = System.identityHashCode(context.randomState()) + "@" + context.seed() + "@" + set.name + "@" + c.pack();
         List<BoundingBox> known = STARTS.get(key);
         if (known != null) {
             return known;

@@ -175,7 +175,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
         if (level().isClientSide()) {
             for (GuhEntity guh : pullers) { // keep them walking (their animations run on their own tick count)
                 guh.tickCount++;
-                guh.walkAnimation.update(isRunning() && piece != null ? Math.min(1f, SPEEDS[getSpeed() - 1] * 2.5f) : 0f, 0.4f);
+                guh.walkAnimation.update(isRunning() && piece != null ? Math.min(1f, SPEEDS[getSpeed() - 1] * 2.5f) : 0f, 0.4f, 1f);
             }
         }
         if (piece != null && SleePath.Piece.of(level(), piece.anchor()) == null) {
@@ -308,18 +308,29 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
         }
     }
 
-    /** The client moves the sled itself; position packets from the server would only make it shake. */
-    @Override
-    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
-        if (piece == null) {
-            super.lerpTo(x, y, z, yRot, xRot, steps);
+    /** The client moves the sled itself; position packets from the server would only make it shake.
+     *  26.1: lerpTo is gone; position packets go through the interpolation handler (moveOrInterpolateTo). Without a rail
+     *  piece it does what 1.21.1's Entity#lerpTo did (set position and rotation at once). */
+    private final net.minecraft.world.entity.InterpolationHandler interpolation = new net.minecraft.world.entity.InterpolationHandler(this, 0) {
+        @Override
+        public void interpolateTo(Vec3 position, float yRot, float xRot) {
+            if (piece == null) {
+                setPos(position);
+                setYRot(yRot % 360.0F);
+                setXRot(xRot % 360.0F);
+            }
         }
+    };
+
+    @Override
+    public net.minecraft.world.entity.InterpolationHandler getInterpolation() {
+        return interpolation;
     }
 
     // --- riding ---------------------------------------------------------------------------------------------------
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         if (player.isSecondaryUseActive()) {
             if (isLocked()) {
                 player.sendOverlayMessage(Component.translatable("entity.guhs.guh_slee.locked").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -340,7 +351,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
         if (!player.getAbilities().instabuild) {
             ItemStack stack = new ItemStack(ModItems.GUH_SLEE.get());
             if (!player.addItem(stack)) {
-                spawnAtLocation(stack);
+                spawnAtLocation((net.minecraft.server.level.ServerLevel) level(), stack);
             }
         }
         playSound(SoundEvents.WOOD_BREAK, 1f, 1.2f);
@@ -348,8 +359,8 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (level().isClientSide() || isRemoved() || isInvulnerableTo(source)) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel serverLevel, DamageSource source, float amount) {
+        if (isRemoved() || isInvulnerableToBase(source)) {
             return false;
         }
         if (source.getEntity() instanceof Player player && !isLocked() && !isVehicle()) {
@@ -365,7 +376,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
+    public boolean canBeCollidedWith(@javax.annotation.Nullable Entity other) {
         return false;
     }
 

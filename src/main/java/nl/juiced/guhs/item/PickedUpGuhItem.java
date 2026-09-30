@@ -24,6 +24,8 @@ import nl.juiced.guhs.registry.ModDataComponents;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * A tamed guh you picked up (sneak + right-click it). Right-click a block to put it down again, or right-click a
  * Guh Wheel with it to let it run. Keeps everything: name, size, health, saddle, owner...
@@ -35,8 +37,7 @@ public class PickedUpGuhItem extends Item {
 
     /** Takes the guh out of the world and returns it as an item. */
     public static ItemStack pickUp(GuhEntity guh) {
-        CompoundTag tag = new CompoundTag();
-        guh.saveWithoutId(tag);
+        CompoundTag tag = nl.juiced.guhs.storage.Nbt.saveWithoutId(guh);
         tag.putString("id", EntityType.getKey(guh.getType()).toString());
         tag.putBoolean("Sitting", false);
         if (guh.hasCustomName()) {
@@ -53,8 +54,9 @@ public class PickedUpGuhItem extends Item {
 
     /** 2.10: "waar is mijn guh": in someone's pockets (checked every 5 seconds). */
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide() && entity instanceof net.minecraft.world.entity.player.Player holder && (level.getGameTime() + slot) % 100 == 0) {
+    public void inventoryTick(ItemStack stack, net.minecraft.server.level.ServerLevel level, Entity entity, @javax.annotation.Nullable net.minecraft.world.entity.EquipmentSlot slot) {
+        // 26.1: server only, no slot index any more (1.21.1 spread the checks over the slots with gameTime + slot)
+        if (entity instanceof net.minecraft.world.entity.player.Player holder && level.getGameTime() % 100 == 0) {
             nl.juiced.guhs.feature.band.GuhVolger.inZakken(stack, holder);
         }
     }
@@ -83,8 +85,8 @@ public class PickedUpGuhItem extends Item {
         if (data.isEmpty()) {
             return null;
         }
-        Entity entity = EntityType.loadEntityRecursive(data, level, e -> {
-            e.moveTo(x, y, z, yaw, 0);
+        Entity entity = EntityType.loadEntityRecursive(data, level, net.minecraft.world.entity.EntitySpawnReason.LOAD, e -> {
+            e.snapTo(x, y, z, yaw, 0);
             return e;
         });
         if (entity != null) {
@@ -119,7 +121,7 @@ public class PickedUpGuhItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         CompoundTag data = guhData(stack);
         double scale = 1.0;
         double maxHealth = 25;
@@ -132,11 +134,11 @@ public class PickedUpGuhItem extends Item {
                 maxHealth = attribute.getDoubleOr("base", 0.0);
             }
         }
-        tooltip.add(Component.translatable("gui.guhs.menu.size", String.format(Locale.ROOT, "%.1f", scale * 1.45)).withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("gui.guhs.menu.hp", (int) Math.ceil(data.getFloatOr("Health", 0.0F)), (int) maxHealth).withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("gui.guhs.menu.size", String.format(Locale.ROOT, "%.1f", scale * 1.45)).withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("gui.guhs.menu.hp", (int) Math.ceil(data.getFloatOr("Health", 0.0F)), (int) maxHealth).withStyle(ChatFormatting.GRAY));
         if (data.getBooleanOr("Saddle", false)) {
-            tooltip.add(Component.translatable("item.minecraft.saddle").withStyle(ChatFormatting.GRAY));
+            tooltip.accept(Component.translatable("item.minecraft.saddle").withStyle(ChatFormatting.GRAY));
         }
-        tooltip.add(Component.translatable("item.guhs.picked_up_guh.hint").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+        tooltip.accept(Component.translatable("item.guhs.picked_up_guh.hint").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 }

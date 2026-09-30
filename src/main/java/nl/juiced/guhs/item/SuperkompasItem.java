@@ -20,6 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import nl.juiced.guhs.Guhs;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The Guhmension super compass: right-click it to choose what to look for (from a list of structures, by category);
  * then it points to the nearest one, like the old guh compasses it replaces.
@@ -56,7 +58,7 @@ public class SuperkompasItem extends GuhCompassItem {
 
         /** The tab's icon. */
         public ItemStack icoon() {
-            net.minecraft.world.item.Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(Identifier.parse(icon));
+            net.minecraft.world.item.Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(Identifier.parse(icon));
             return new ItemStack(item == net.minecraft.world.item.Items.AIR ? standIn : item);
         }
 
@@ -155,9 +157,9 @@ public class SuperkompasItem extends GuhCompassItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.guhmensie_superkompas.lore").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.guhs.guh_compass.how").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.guhmensie_superkompas.lore").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.guh_compass.how").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 
     public static Identifier key(String structure) {

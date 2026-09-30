@@ -288,7 +288,7 @@ public final class SleePath {
             }
         }
         // riding backwards off a landing: the jump's ramp is 12 blocks back, across the gap
-        Direction facing = Direction.getNearest(-flat.x, 0, -flat.z);
+        Direction facing = Direction.getApproximateNearest(-flat.x, 0, -flat.z);
         BlockPos ramp = blockAt(end.pos().subtract(0, RIDE_HEIGHT, 0).subtract(rotate(raw(Shape.JUMP, 1).pos(), facing)));
         Piece jump = Piece.of(level, ramp);
         if (jump != null && jump.shape() == Shape.JUMP && !jump.anchor().equals(piece.anchor()) && jump.at(1).pos().distanceToSqr(end.pos()) < 0.2) {
@@ -323,7 +323,7 @@ public final class SleePath {
         boolean far = piece.at(1).pos().distanceToSqr(near) < piece.at(0).pos().distanceToSqr(near);
         Point end = piece.at(far ? 1 : 0);
         Vec3 h = far ? end.heading() : end.heading().reverse();
-        return attach(end.pos().subtract(0, RIDE_HEIGHT, 0), Direction.getNearest(h.x, 0, h.z), shape, down);
+        return attach(end.pos().subtract(0, RIDE_HEIGHT, 0), Direction.getApproximateNearest(h.x, 0, h.z), shape, down);
     }
 
     private static BlockPos blockAt(Vec3 bottomCentre) {

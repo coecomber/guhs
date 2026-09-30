@@ -26,6 +26,9 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import nl.juiced.guhs.Guhs;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * A guh compass: points to the middle of the nearest structure of its kind (the central room of a guh cave, a Mika
  * camp, a guh picnic...) in the dimension you're in. Uses the vanilla compass needle (lodestone target).
@@ -70,7 +73,7 @@ public class GuhCompassItem extends Item {
      * you walk), and while you hold it, it tells you about how far away that is. Spins where there are none.
      */
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
         if (!(level instanceof ServerLevel server) || server.getGameTime() % 20 != 0) {
             return;
         }
@@ -128,7 +131,7 @@ public class GuhCompassItem extends Item {
      * by distance and the first one that really has the structure wins.)
      */
     public static BlockPos findCenter(ServerLevel level, ResourceKey<Structure> key, BlockPos from) {
-        Optional<Holder.Reference<Structure>> holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getHolder(key);
+        Optional<Holder.Reference<Structure>> holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(key);
         if (holder.isEmpty()) {
             return null;
         }
@@ -182,11 +185,11 @@ public class GuhCompassItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         if (isOld()) {
-            tooltip.add(Component.translatable("item.guhs.guh_compass.old").withStyle(ChatFormatting.GOLD));
+            tooltip.accept(Component.translatable("item.guhs.guh_compass.old").withStyle(ChatFormatting.GOLD));
         }
-        tooltip.add(Component.translatable("item.guhs.guh_compass.how").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+        tooltip.accept(Component.translatable("item.guhs.guh_compass.how").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 }

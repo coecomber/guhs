@@ -48,7 +48,7 @@ public record DrinkKaasSausPayload() implements CustomPacketPayload {
             return;
         }
         player.getFoodData().eat(20, 0.6f);
-        player.level().playSound(null, player.blockPosition(), SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 1f, 0.9f);
+        player.level().playSound(null, player.blockPosition(), SoundEvents.GENERIC_DRINK.value(), SoundSource.PLAYERS, 1f, 0.9f);
         player.level().playSound(null, player.blockPosition(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.6f, 1.2f);
         if (player.level() instanceof ServerLevel server) {
             server.sendParticles(net.minecraft.core.particles.ParticleTypes.HAPPY_VILLAGER,

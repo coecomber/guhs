@@ -57,7 +57,7 @@ public final class GuhPortalForcer {
         Vec3 pos = axis == Direction.Axis.X
                 ? new Vec3(corner.getX() + along, corner.getY(), corner.getZ() + 0.5)
                 : new Vec3(corner.getX() + 0.5, corner.getY(), corner.getZ() + along);
-        TeleportTransition.PostDimensionTransition post = TeleportTransition.PLAY_PORTAL_SOUND.then(TeleportTransition.PLACE_PORTAL_TICKET);
+        TeleportTransition.PostTeleportTransition post = TeleportTransition.PLAY_PORTAL_SOUND.then(TeleportTransition.PLACE_PORTAL_TICKET);
         if (targetKey == ModDimensions.GUHMENSION) {
             post = post.then(nl.juiced.guhs.quest.GuhDex.GIVE_ON_ARRIVAL);     // a Guhdex for everyone who comes in without one
         }

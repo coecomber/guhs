@@ -150,7 +150,7 @@ public final class Highscores {
 
     /** An icon by registry lookup (a 2.8 coin that another feature registers). */
     private static Supplier<Item> coin(String id) {
-        return () -> net.minecraft.core.registries.BuiltInRegistries.ITEM.get(nl.juiced.guhs.Guhs.id(id));
+        return () -> net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(nl.juiced.guhs.Guhs.id(id));
     }
 
     @Nullable

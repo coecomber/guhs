@@ -1,5 +1,7 @@
 package nl.juiced.guhs.client.screen;
 
+import net.minecraft.client.input.KeyEvent;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
@@ -72,12 +74,13 @@ public class ReisguhScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
+        int keyCode = event.key(), scanCode = event.scancode(), modifiers = event.modifiers();
         if (name.isFocused() && (keyCode == 257 || keyCode == 335)) {
             ClientPacketDistributor.sendToServer(new MaagPayloads.ReisAction(npcId, Reisguh.RENAME, name.getValue()));
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override

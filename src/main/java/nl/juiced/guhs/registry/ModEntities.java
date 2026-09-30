@@ -87,10 +87,10 @@ public final class ModEntities {
                     .sized(0.01f, 0.01f).noSave().noSummon().clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("guh_seat"))));
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
-        event.put(GUH_BEE.get(), net.minecraft.world.entity.animal.Bee.createAttributes().build());
+        event.put(GUH_BEE.get(), net.minecraft.world.entity.animal.bee.Bee.createAttributes().build());
         event.put(GUH_SLIME.get(), net.minecraft.world.entity.monster.Monster.createMonsterAttributes().build());
         event.put(NETHER_MIKA.get(), MikaEntity.createAttributes().build());
-        event.put(GUH_VIS.get(), net.minecraft.world.entity.animal.AbstractFish.createAttributes().build());
+        event.put(GUH_VIS.get(), net.minecraft.world.entity.animal.fish.AbstractFish.createAttributes().build());
         event.put(GUH_NPC.get(), nl.juiced.guhs.entity.GuhNpcEntity.createAttributes().build());
         event.put(MIKA_BAAS.get(), nl.juiced.guhs.entity.MikaBaasEntity.createAttributes().build());
         event.put(QUEST_GUH.get(), QuestGuhEntity.createAttributes().build());

@@ -41,7 +41,7 @@ public class GrondGameTests {
     private static final String EMPTY = "empty";
 
     private static StructureTemplatePool pool(GameTestHelper helper, String id) {
-        StructureTemplatePool pool = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id(id));
+        StructureTemplatePool pool = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).getValue(Guhs.id(id));
         helper.assertTrue(pool != null, "pool " + id);
         return pool;
     }
@@ -57,7 +57,7 @@ public class GrondGameTests {
     public static void grondPoolElementCodec(GameTestHelper helper) {
         var access = helper.getLevel().registryAccess();
         Holder<net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList> empty =
-                access.lookupOrThrow(Registries.PROCESSOR_LIST).getHolderOrThrow(
+                access.lookupOrThrow(Registries.PROCESSOR_LIST).getOrThrow(
                         net.minecraft.resources.ResourceKey.create(Registries.PROCESSOR_LIST, net.minecraft.resources.Identifier.withDefaultNamespace("empty")));
         GrondPoolElement element = new GrondPoolElement(Either.left(Guhs.id("sjoelhuisje")), empty, StructureTemplatePool.Projection.RIGID,
                 Optional.empty(), 13);
@@ -95,16 +95,16 @@ public class GrondGameTests {
         for (String[] custom : new String[][]{{"knuffeldal_stadje", "guhs:knuffeldal_midden"}, {"elfguhjestocht", "guhs:elfguhjestocht_midden"}}) {
             StructurePoolElement e = start(helper, custom[0]);
             int anchorY = Integer.MIN_VALUE;
-            for (StructureTemplate.StructureBlockInfo info : e.getShuffledJigsawBlocks(templates, BlockPos.ZERO, Rotation.NONE, RandomSource.create(0L))) {
-                if (custom[1].equals(info.nbt() == null ? null : info.nbt().getStringOr("name", ""))) {
-                    anchorY = info.pos().getY();
+            for (StructureTemplate.JigsawBlockInfo jigsaw : e.getShuffledJigsawBlocks(templates, BlockPos.ZERO, Rotation.NONE, RandomSource.create(0L))) {
+                if (custom[1].equals(String.valueOf(jigsaw.name()))) {
+                    anchorY = jigsaw.info().pos().getY();
                 }
             }
             helper.assertTrue(anchorY != Integer.MIN_VALUE, custom[0] + ": its anchor");
             helper.assertTrue(e instanceof GrondPoolElement && e.getGroundLevelDelta() == anchorY + 1,
                     custom[0] + ": ground = anchor " + anchorY + " + 1, got " + e.getGroundLevelDelta());
             // the anchor still lands on the top block of the ground: vanilla sinks the piece by its delta
-            var holder = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).getHolderOrThrow(
+            var holder = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).getOrThrow(
                     net.minecraft.resources.ResourceKey.create(Registries.TEMPLATE_POOL, Guhs.id(custom[0] + "/start")));
             helper.assertTrue(Grond.startY(holder, 70) - e.getGroundLevelDelta() == 69, custom[0] + ": anchor on the top block (69)");
         }
@@ -148,8 +148,8 @@ public class GrondGameTests {
     }
 
     private static double beard(BoundingBox box, int delta, int x, int y, int z) {
-        Beardifier b = new Beardifier(ObjectArrayList.of(new Beardifier.Rigid(box, TerrainAdjustment.BEARD_BOX, delta)).iterator(),
-                new ObjectArrayList<JigsawJunction>().iterator());
+        Beardifier b = new Beardifier(java.util.List.of(new Beardifier.Rigid(box, TerrainAdjustment.BEARD_BOX, delta)),
+                java.util.List.<JigsawJunction>of(), box.inflatedBy(24));   // 26.1: affected box like forStructuresInChunk
         return b.compute(new DensityFunction.SinglePointContext(x, y, z));
     }
 

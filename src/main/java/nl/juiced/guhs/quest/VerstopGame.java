@@ -224,7 +224,7 @@ public final class VerstopGame {
         if (players.size() > 1) {
             together = true; // searching together: fun, but no records
         }
-        player.teleportTo((ServerLevel) npc.level(), start.getX() + 0.5, start.getY(), start.getZ() + 0.5, player.getYRot(), 0);
+        player.teleportTo((ServerLevel) npc.level(), start.getX() + 0.5, start.getY(), start.getZ() + 0.5, java.util.Set.of(), player.getYRot(), 0, true);
         player.sendSystemMessage(Component.translatable("quest.guhs.verstop.go", level.guhs - found, Component.translatable(
                 "gui.guhs.verstop." + level.id())).withStyle(ChatFormatting.LIGHT_PURPLE));
         if (players.size() > 1) {
@@ -242,7 +242,7 @@ public final class VerstopGame {
             player.sendOverlayMessage(Component.translatable("quest.guhs.verstop.not_playing").withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
-        world.sendParticles(new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(1f, 0.55f, 0.8f), 1.2f),
+        world.sendParticles(new net.minecraft.core.particles.DustParticleOptions(0xFF8CCC, 1.2f),
                 guh.getX(), guh.getY() + 0.3, guh.getZ(), 30, 0.3, 0.3, 0.3, 0.05);
         soundForSeekers(guh, ModSounds.GUH_HAPPY.get(), 1f, 1.4f);
         guh.discard();
@@ -622,7 +622,7 @@ public final class VerstopGame {
 
     private static void backToRoof(GuhNpcEntity npc, ServerPlayer player) {
         net.minecraft.world.phys.Vec3 look = net.minecraft.world.phys.Vec3.directionFromRotation(0, npc.getYRot());
-        player.teleportTo((ServerLevel) npc.level(), npc.getX() + look.x * 2.5, npc.getY(), npc.getZ() + look.z * 2.5, npc.getYRot() + 180, 0);
+        player.teleportTo((ServerLevel) npc.level(), npc.getX() + look.x * 2.5, npc.getY(), npc.getZ() + look.z * 2.5, java.util.Set.of(), npc.getYRot() + 180, 0, true);
     }
 
     private void findMarkers(GuhNpcEntity npc) {
@@ -744,7 +744,7 @@ public final class VerstopGame {
         for (Tag t : tag.getListOrEmpty("LampsOff")) {
             CompoundTag l = (CompoundTag) t;
             lampsOff.put(BlockPos.of(l.getLongOr("Pos", 0L)), NbtUtils.readBlockState(
-                    net.minecraft.core.registries.BuiltInRegistries.BLOCK.asLookup(), l.getCompoundOrEmpty("State")));
+                    net.minecraft.core.registries.BuiltInRegistries.BLOCK, l.getCompoundOrEmpty("State")));
         }
         if (tag.contains("Lamps") && tag.contains("Glass")) {
             lamps = new ArrayList<>();
@@ -772,7 +772,7 @@ public final class VerstopGame {
 
     /** No wild guhs pop up in (or on) the house: they'd get mixed up with the hidden ones. */
     public static boolean inHouse(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).get(HOUSE);
+        var structure = world.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE).getValue(HOUSE);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 }

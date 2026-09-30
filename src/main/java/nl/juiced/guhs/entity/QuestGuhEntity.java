@@ -89,7 +89,7 @@ public class QuestGuhEntity extends PathfinderMob implements GeoEntity {
     // --- a quest giver: can't be hurt, pushed or leashed, never despawns ---
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(net.minecraft.server.level.ServerLevel serverLevel, DamageSource source) {
         return !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 

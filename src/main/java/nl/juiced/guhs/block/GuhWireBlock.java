@@ -28,6 +28,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.redstone.Orientation;
 /**
  * Guh Wire: pink "redstone dust" that never loses strength. Every piece of a connected wire network outputs a full
  * 15 as soon as any piece is powered, no matter how long the network is (like redstone dust without the fading).
@@ -48,7 +50,7 @@ public class GuhWireBlock extends Block {
     /** Tint colours (used by the colour handler in GuhsClient, on top of the vanilla dust textures). */
     public static final int COLOR_OFF = 0x7A2E4A;
     public static final int COLOR_ON = 0xFF5CB8;
-    private static final DustParticleOptions SPARKLE = new DustParticleOptions(new Vector3f(1.0f, 0.45f, 0.75f), 0.8f);
+    private static final DustParticleOptions SPARKLE = new DustParticleOptions(0xFF73BF /* 1.0, 0.45, 0.75 */, 0.8f);
     /** Safety limit for one connected network. */
     public static final int MAX_NETWORK_SIZE = 8192;
     private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 1, 16);
@@ -88,7 +90,7 @@ public class GuhWireBlock extends Block {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
         if (direction == Direction.DOWN && !canSurvive(state, level, pos)) {
             return Blocks.AIR.defaultBlockState();
         }
@@ -202,14 +204,14 @@ public class GuhWireBlock extends Block {
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @org.jspecify.annotations.Nullable Orientation orientation, boolean movedByPiston) {
         updateNetwork(level, pos);
     }
 
     @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        super.onRemove(state, level, pos, newState, movedByPiston);
-        if (!newState.is(this) && !level.isClientSide()) {
+    protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
+        {   // 26.1: was onRemove (only called when the block really changed, on the server)
             // the wire that was here may have been powering the block below / the rest of the network
             level.updateNeighborsAt(pos.below(), this);
             for (BlockPos next : connections(pos)) {

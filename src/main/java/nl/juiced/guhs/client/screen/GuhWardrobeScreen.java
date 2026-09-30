@@ -1,5 +1,9 @@
 package nl.juiced.guhs.client.screen;
 
+import net.minecraft.client.input.KeyEvent;
+
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -80,9 +84,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
     private final List<Button> favorieten = new ArrayList<>();
 
     public GuhWardrobeScreen(GuhWardrobeMenu menu, Inventory inventory, Component title) {
-        super(menu, inventory, title);
-        this.imageWidth = W;
-        this.imageHeight = H;
+        super(menu, inventory, title, W, H);
         this.inventoryLabelX = GuhWardrobeMenu.INV_X;
         this.inventoryLabelY = GuhWardrobeMenu.INV_Y - 11;
         GuhEntity guh = menu.guh();
@@ -111,7 +113,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             scroll = 0;
             vulLijst();
         });
-        bronKnop = addRenderableWidget(Button.builder(Component.empty(), b -> volgendeBron(hasShiftDown() ? -1 : 1))
+        bronKnop = addRenderableWidget(Button.builder(Component.empty(), b -> volgendeBron(net.minecraft.client.Minecraft.getInstance().hasShiftDown() ? -1 : 1))
                 .bounds(x + LIST_X + 100, y + 57, LIST_W - 100 + 6, 18).build());
         dobbel = addRenderableWidget(Button.builder(Component.translatable("gui.guhs.kleding.dobbel"), b -> dobbel())
                 .bounds(x + PREVIEW_X, y + PREVIEW_Y + PREVIEW_H + 4, 56, 20)
@@ -161,7 +163,12 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             return;
         }
         try {
-            copy.load(guh.saveWithoutId(new CompoundTag()));
+            // (1.1.0: entities save to ValueOutput now; round-trip through a tag like /data does)
+            net.minecraft.world.level.storage.TagValueOutput out = net.minecraft.world.level.storage.TagValueOutput.createWithContext(
+                    net.minecraft.util.ProblemReporter.DISCARDING, minecraft.level.registryAccess());
+            guh.saveWithoutId(out);
+            copy.load(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING,
+                    minecraft.level.registryAccess(), out.buildResult()));
         } catch (RuntimeException e) {
             copy.setVariant(guh.getVariant());
         }
@@ -327,7 +334,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
     }
 
     private void favoriet(int index) {
-        if (hasShiftDown()) {
+        if (net.minecraft.client.Minecraft.getInstance().hasShiftDown()) {
             List<GuhClothes> outfit = new ArrayList<>();
             SLOTS.forEach(s -> outfit.add(preview.get(s)));
             ClientPacketDistributor.sendToServer(new KledingPayloads.Bewaar(index, KledingPayloads.ids(outfit)));
@@ -399,7 +406,8 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
     // ---------------------------------------------------------------------------------------------------------------
 
     @Override
-    protected void renderBg(GuiGraphicsExtractor g, float partialTick, int mouseX, int mouseY) {
+    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
         int x = leftPos, y = topPos;
         g.fill(x - 2, y - 2, x + W + 2, y + H + 2, GOLD);
         g.fill(x - 1, y - 1, x + W + 1, y + H + 1, BORDER);
@@ -515,7 +523,7 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
             // (2.9 visual QA: no name tag over the little guh; client-side only, restored right after)
             boolean naam = guh.hideName;
             guh.hideName = true;
-            InventoryScreen.renderEntityInInventoryFollowsMouse(g, x + 8, y + 30, x + GuhWardrobeMenu.OFFSET_X - 6, y + 140, 30, 0.0625f,
+            InventoryScreen.extractEntityInInventoryFollowsMouse(g, x + 8, y + 30, x + GuhWardrobeMenu.OFFSET_X - 6, y + 140, 30, 0.0625f,
                     mouseX, mouseY, guh);
             guh.hideName = naam;
         }
@@ -566,7 +574,11 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
         e.setXRot(0);
         e.yHeadRot = e.getYRot();
         e.yHeadRotO = e.getYRot();
-        InventoryScreen.renderEntityInInventory(g, cx, cy, schaal, new Vector3f(0, 0.42f * groot, 0), pose, camera, e);
+        // (1.1.0: entities in a GUI are drawn picture-in-picture, centred in the rectangle; +6 px down as before)
+        net.minecraft.client.renderer.entity.state.EntityRenderState state = minecraft.getEntityRenderDispatcher().extractEntity(e, 1.0F);
+        state.shadowPieces.clear();
+        state.outlineColor = 0;
+        g.entity(state, schaal, new Vector3f(0, 0.42f * groot + 6f / schaal, 0), pose, camera, x1, y1, x2, y2);
         e.yBodyRot = bodyRot;
         e.yBodyRotO = bodyO;
         e.setYRot(yRot);
@@ -590,8 +602,14 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
         super.extractRenderState(g, mouseX, mouseY, partialTick);
         if (kledingTab) {
             tooltips(g, mouseX, mouseY);
-        } else {
-            renderTooltip(g, mouseX, mouseY);
+        }
+    }
+
+    /** The vanilla slot tooltips only on the inventory tab (the clothes tab has its own, see tooltips()). */
+    @Override
+    protected void extractTooltip(GuiGraphicsExtractor g, int mouseX, int mouseY) {
+        if (!kledingTab) {
+            super.extractTooltip(g, mouseX, mouseY);
         }
     }
 
@@ -649,7 +667,9 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
     // ---------------------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         if (kledingTab) {
             int x = leftPos, y = topPos;
             for (int i = 0; i < SLOTS.size(); i++) {
@@ -675,26 +695,30 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
                 zoek.setFocused(false);
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         if (draaien) {
             yaw -= (float) dragX * 2.2f;
             pitch = Mth.clamp(pitch + (float) dragY * 0.8f, -25, 35);
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(event, dragX, dragY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(MouseButtonEvent event) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         if (draaien) {
             draaien = false;
             return true;
         }
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(event);
     }
 
     @Override
@@ -712,12 +736,13 @@ public class GuhWardrobeScreen extends AbstractContainerScreen<GuhWardrobeMenu> 
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
+        int keyCode = event.key(), scanCode = event.scancode(), modifiers = event.modifiers();
         if (kledingTab && zoek.isFocused() && keyCode != InputConstants.KEY_ESCAPE) {
-            zoek.keyPressed(keyCode, scanCode, modifiers);
+            zoek.keyPressed(event);
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override

@@ -121,7 +121,7 @@ public final class MaagManager {
         GuhWorldData.Maag maag = ensureMaag(maagLevel, player);
         rememberReturn(player, data);
         Vec3 to = entryPoint(maag.index);
-        player.teleportTo(maagLevel, to.x, to.y, to.z, 180f, 0f);
+        player.teleportTo(maagLevel, to.x, to.y, to.z, java.util.Set.of(), 180f, 0f, true);
         maagLevel.playSound(null, to.x, to.y, to.z, SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 1f, 0.8f);
     }
 
@@ -156,7 +156,7 @@ public final class MaagManager {
     public static void goBack(ServerPlayer player) {
         TeleportTransition back = backTransition(player);
         if (back != null) {
-            player.changeDimension(back);
+            player.teleport(back);
         }
     }
 
@@ -171,10 +171,10 @@ public final class MaagManager {
         Vec3 pos = p.returnPos;
         if (target == null) {
             target = server.overworld();
-            BlockPos spawn = target.getSharedSpawnPos();
+            BlockPos spawn = target.getRespawnData().pos();
             pos = new Vec3(spawn.getX() + 0.5, spawn.getY(), spawn.getZ() + 0.5);
         }
-        return new TeleportTransition(target, pos, Vec3.ZERO, p.returnYaw, 0f, false,
+        return new TeleportTransition(target, pos, Vec3.ZERO, p.returnYaw, 0f,
                 e -> e.level().playSound(null, e.blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.PLAYERS, 1.5f, 0.6f));
     }
 
@@ -188,7 +188,7 @@ public final class MaagManager {
         switch (kind) {
             case MOND -> {
                 Vec3 to = lobbySpawn();
-                return new TeleportTransition(maagLevel, to, Vec3.ZERO, 180f, 0f, false, TeleportTransition.DO_NOTHING);
+                return new TeleportTransition(maagLevel, to, Vec3.ZERO, 180f, 0f, TeleportTransition.DO_NOTHING);
             }
             case DARM, EXIT -> {
                 return backTransition(entity);
@@ -208,7 +208,7 @@ public final class MaagManager {
                     return null;
                 }
                 Vec3 to = entryPoint(maag.index);
-                return new TeleportTransition(maagLevel, to, Vec3.ZERO, 180f, 0f, false, TeleportTransition.DO_NOTHING);
+                return new TeleportTransition(maagLevel, to, Vec3.ZERO, 180f, 0f, TeleportTransition.DO_NOTHING);
             }
             default -> {
                 return null;
@@ -466,7 +466,7 @@ public final class MaagManager {
 
     /** May this player build / break / use things here? */
     public static boolean mayBuild(Player player, BlockPos pos) {
-        if (player.hasPermissions(2) && player.isCreative()) {
+        if (player.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER) && player.isCreative()) {
             return true;
         }
         if (player.level().getServer() == null) {

@@ -1,5 +1,7 @@
 package nl.juiced.guhs.client.screen;
 
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -97,7 +99,7 @@ public class GuhDexScreen extends Screen {
         }
 
         public ItemStack icoon() {
-            net.minecraft.world.item.Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.get(net.minecraft.resources.Identifier.parse(icon));
+            net.minecraft.world.item.Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse(icon));
             return new ItemStack(item == net.minecraft.world.item.Items.AIR ? standIn : item);
         }
     }
@@ -337,7 +339,9 @@ public class GuhDexScreen extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         if ((tab == Tab.MINIGAMES || tab == Tab.KLEDING) && lijst.sleep(mouseY)) {
             SCROLL.put(tab, lijst.scroll());
             return true;
@@ -348,15 +352,17 @@ public class GuhDexScreen extends Screen {
         if (tab == Tab.VERHALEN && verhalen.sleep(mouseY)) {
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(event, dragX, dragY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(MouseButtonEvent event) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         lijst.los();
         mijnGuhs.los();
         verhalen.los();
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(event);
     }
 
     private void renderGuhs(GuiGraphicsExtractor g, int mouseX, int mouseY) {
@@ -376,7 +382,7 @@ public class GuhDexScreen extends Screen {
                 shown = character;
             }
             if (seen && shown != null) {
-                InventoryScreen.renderEntityInInventoryFollowsMouse(g, left + 10, top + PIC_TOP, left + 120, top + PIC_BOTTOM, 32, 0.0625f, mouseX, mouseY, shown);
+                InventoryScreen.extractEntityInInventoryFollowsMouse(g, left + 10, top + PIC_TOP, left + 120, top + PIC_BOTTOM, 32, 0.0625f, mouseX, mouseY, shown);
             } else if (seen) {
                 // 3.0: a page whose creature isn't in the game (yet): a big pink flower instead of a picture
                 scaled(g, Component.literal("✿"), left + 65 - 12, top + (PIC_TOP + PIC_BOTTOM) / 2 - 14, 3f, 0xFFF7A8CC, false);
@@ -411,8 +417,8 @@ public class GuhDexScreen extends Screen {
         g.text(font, Component.translatable("gui.guhs.guhdex.rewards"), left + 10, top + REWARDS_Y, 0xFF7A2848, false);
         for (int i = 0; i < GuhDex.MILESTONES.size(); i++) {
             GuhDex.Milestone m = GuhDex.MILESTONES.get(i);
-            Component text = m.tamed() > 0 ? Component.translatable("gui.guhs.guhdex.milestone_tamed", m.seen(), m.tamed(), m.reward().get().getDescription())
-                    : Component.translatable("gui.guhs.guhdex.milestone", m.seen(), m.reward().get().getDescription());
+            Component text = m.tamed() > 0 ? Component.translatable("gui.guhs.guhdex.milestone_tamed", m.seen(), m.tamed(), Component.translatable(m.reward().get().getDescriptionId()))
+                    : Component.translatable("gui.guhs.guhdex.milestone", m.seen(), Component.translatable(m.reward().get().getDescriptionId()));
             fitText(g, text, left + 10, top + MILESTONE_Y + 2 + i * 12, W - 84, 10, 0xFF5A3A4A);
         }
     }
@@ -632,7 +638,9 @@ public class GuhDexScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         int hit = nl.juiced.guhs.feature.gids.client.GidsTabs.onder(left + TABS_X, top + TABS_Y, Tab.values().length, mouseX, mouseY);
         if (hit >= 0 && button == 0) {
             if (Tab.values()[hit] != tab) {
@@ -642,7 +650,7 @@ public class GuhDexScreen extends Screen {
             }
             return true;
         }
-        if (super.mouseClicked(mouseX, mouseY, button)) {
+        if (super.mouseClicked(event, doubleClick)) {
             return true;
         }
         if ((tab == Tab.MINIGAMES || tab == Tab.KLEDING) && lijst.klik(mouseX, mouseY, button)) {

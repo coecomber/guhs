@@ -29,6 +29,14 @@ public class SleeRailBlockEntity extends BlockEntity {
         setChanged();
     }
 
+    /** However the anchor goes, its parts go too (26.1: was SleeRailBlock#onRemove). */
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        if (level != null) {
+            nl.juiced.guhs.block.SleeRailBlock.removeParts(level, pos, state);
+        }
+    }
+
     @Override
     protected void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);

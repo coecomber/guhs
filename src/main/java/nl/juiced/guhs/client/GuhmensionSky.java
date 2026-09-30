@@ -1,198 +1,158 @@
 package nl.juiced.guhs.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
+import javax.annotation.Nullable;
+
+import com.mojang.blaze3d.buffers.GpuBuffer;
 import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.MeshData;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.DimensionSpecialEffects;
-import net.minecraft.client.renderer.fog.FogRenderer;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.SkyRenderer;
+import net.minecraft.client.renderer.state.level.LevelRenderState;
+import net.minecraft.client.renderer.state.level.SkyRenderState;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.material.FogType;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
+import net.neoforged.neoforge.client.CustomSkyboxRenderer;
+import net.neoforged.neoforge.client.event.RegisterCustomEnvironmentEffectRendererEvent;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.feature.guheinde.client.GuheindeSky;
 import org.joml.Matrix4f;
+import org.joml.Matrix4fc;
+import org.joml.Vector4f;
 
 /**
  * The Guhmension sky: like the overworld, but with a big pink moon and pink, twinkly stars.
- * (The dimension type points its "effects" at guhs:guhmension.)
+ * <p>
+ * 1.1.0 (MC 26.1): {@code DimensionSpecialEffects} is gone. The dimension type (or biome) sets the environment attribute
+ * {@code "neoforge:custom_skybox": "guhs:guhmension"} and keeps {@code "skybox": "overworld"}; NeoForge then calls
+ * {@link #renderSky} instead of the vanilla sky. Sky colour, sun/moon/star angles, star brightness and the sunrise colour
+ * come from the {@link SkyRenderState} vanilla already extracted from the environment attributes. Fog colour and cloud
+ * height are plain attributes in the JSON now (they were the overworld defaults anyway).
  */
-public class GuhmensionSky extends DimensionSpecialEffects {
-    private static final Identifier SUN = Identifier.withDefaultNamespace("textures/environment/sun.png");
+public class GuhmensionSky implements CustomSkyboxRenderer {
+    private static final Identifier SUN = Identifier.withDefaultNamespace("textures/environment/celestial/sun.png");
     private static final Identifier MOON = Guhs.id("textures/environment/pink_moon.png");
+    private static final float SUN_SIZE = 30f;
+    private static final float MOON_SIZE = 26f;   // a bit bigger than the overworld's (20)
 
-    private VertexBuffer skyBuffer;
-    private VertexBuffer starBuffer;
+    /** Vanilla's helper for the sky disc and the sunrise fan (its own buffers; nothing of it depends on resource packs). */
+    @Nullable
+    private SkyRenderer vanilla;
+    @Nullable
+    private GpuBuffer stars;
+    private int starIndices;
 
-    public GuhmensionSky() {
-        super(192f, true, SkyType.NORMAL, false, false);
-    }
-
-    public static void register(RegisterDimensionSpecialEffectsEvent event) {
-        event.register(Guhs.id("guhmension"), new GuhmensionSky());
-    }
-
-    @Override
-    public Vec3 getBrightnessDependentFogColor(Vec3 fogColor, float brightness) {
-        return fogColor.multiply(brightness * 0.94f + 0.06f, brightness * 0.94f + 0.06f, brightness * 0.91f + 0.09f);
-    }
-
-    @Override
-    public boolean isFoggyAt(int x, int y) {
-        return false;
+    /** Mod bus (client): the Guhmension and Guheinde skies. */
+    public static void register(RegisterCustomEnvironmentEffectRendererEvent event) {
+        event.registerSkyboxRenderer(Guhs.id("guhmension"), new GuhmensionSky());
+        event.registerSkyboxRenderer(Guhs.id("guheinde"), new GuheindeSky());
     }
 
     @Override
-    public boolean renderSky(ClientLevel level, int ticks, float partialTick, Matrix4f modelViewMatrix, Camera camera,
-                             Matrix4f projectionMatrix, boolean isFoggy, Runnable setupFog) {
+    public boolean renderSky(LevelRenderState level, SkyRenderState sky, Matrix4fc modelView, Runnable setupFog) {
         setupFog.run();
-        FogType fog = camera.getFluidInCamera();
-        if (isFoggy || fog == FogType.POWDER_SNOW || fog == FogType.LAVA) {
-            return true;
+        Minecraft mc = Minecraft.getInstance();
+        if (vanilla == null) {
+            vanilla = new SkyRenderer(mc.getTextureManager(), mc.getAtlasManager());
+            buildStars();
         }
-        if (skyBuffer == null) {
-            buildBuffers();
-        }
+        float partialTick = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+
+        // the sky colour and the sunrise/sunset glow: as in the overworld
+        vanilla.renderSkyDisc(sky.skyColor);
         PoseStack pose = new PoseStack();
-        pose.mulPose(modelViewMatrix);
-        Tesselator tesselator = Tesselator.getInstance();
-
-        // the sky colour
-        Vec3 sky = level.getSkyColor(Minecraft.getInstance().gameRenderer.getMainCamera().getPosition(), partialTick);
-        FogRenderer.levelFogColor();
-        RenderSystem.depthMask(false);
-        RenderSystem.setShaderColor((float) sky.x, (float) sky.y, (float) sky.z, 1f);
-        var shader = RenderSystem.getShader();
-        skyBuffer.bind();
-        skyBuffer.drawWithShader(pose.last().pose(), projectionMatrix, shader);
-        VertexBuffer.unbind();
-        RenderSystem.enableBlend();
-
-        // sunrise/sunset glow
-        float[] sunrise = getSunriseColor(level.getTimeOfDay(partialTick), partialTick);
-        if (sunrise != null) {
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-            pose.pushPose();
-            pose.mulPose(Axis.XP.rotationDegrees(90f));
-            pose.mulPose(Axis.ZP.rotationDegrees(Mth.sin(level.getSunAngle(partialTick)) < 0 ? 180f : 0f));
-            pose.mulPose(Axis.ZP.rotationDegrees(90f));
-            Matrix4f m = pose.last().pose();
-            BufferBuilder fan = tesselator.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
-            fan.addVertex(m, 0f, 100f, 0f).setColor(sunrise[0], sunrise[1], sunrise[2], sunrise[3]);
-            for (int j = 0; j <= 16; j++) {
-                float a = j * Mth.TWO_PI / 16f;
-                fan.addVertex(m, Mth.sin(a) * 120f, Mth.cos(a) * 120f, -Mth.cos(a) * 40f * sunrise[3])
-                        .setColor(sunrise[0], sunrise[1], sunrise[2], 0f);
-            }
-            BufferUploader.drawWithShader(fan.buildOrThrow());
-            pose.popPose();
-        }
+        vanilla.renderSunriseAndSunset(pose, sky.sunAngle, sky.sunriseAndSunsetColor);
 
         // sun, pink moon, pink stars
-        RenderSystem.blendFuncSeparate(com.mojang.blaze3d.platform.GlStateManager.SourceFactor.SRC_ALPHA,
-                com.mojang.blaze3d.platform.GlStateManager.DestFactor.ONE,
-                com.mojang.blaze3d.platform.GlStateManager.SourceFactor.ONE,
-                com.mojang.blaze3d.platform.GlStateManager.DestFactor.ZERO);
+        float clear = sky.rainBrightness;
         pose.pushPose();
-        float clear = 1f - level.getRainLevel(partialTick);
-        RenderSystem.setShaderColor(1f, 1f, 1f, clear);
         pose.mulPose(Axis.YP.rotationDegrees(-90f));
-        pose.mulPose(Axis.XP.rotationDegrees(level.getTimeOfDay(partialTick) * 360f));
-        Matrix4f m = pose.last().pose();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, SUN);
-        quad(tesselator, m, 30f, 100f, 0, 0, 1, 1);
-        // the moon: always full, and a bit bigger than the overworld's; drawn normally so its pink shows
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderTexture(0, MOON);
-        quad(tesselator, m, 26f, -100f, 0, 0, 1, 1);
-        RenderSystem.blendFuncSeparate(com.mojang.blaze3d.platform.GlStateManager.SourceFactor.SRC_ALPHA,
-                com.mojang.blaze3d.platform.GlStateManager.DestFactor.ONE,
-                com.mojang.blaze3d.platform.GlStateManager.SourceFactor.ONE,
-                com.mojang.blaze3d.platform.GlStateManager.DestFactor.ZERO);
-        float stars = level.getStarBrightness(partialTick) * clear;
-        if (stars > 0f) {
-            // twinkle: the whole field breathes a little
-            float twinkle = 0.85f + 0.15f * Mth.sin((ticks + partialTick) * 0.05f);
-            RenderSystem.setShaderColor(stars * twinkle, stars * twinkle, stars * twinkle, stars);
-            FogRenderer.setupNoFog();
-            starBuffer.bind();
-            starBuffer.drawWithShader(pose.last().pose(), projectionMatrix, GameRenderer.getPositionColorShader());
-            VertexBuffer.unbind();
-            setupFog.run();
-        }
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        RenderSystem.disableBlend();
-        RenderSystem.defaultBlendFunc();
+
+        pose.pushPose();
+        pose.mulPose(Axis.XP.rotation(sky.sunAngle));
+        SkyDraw.drawNow("Guhmension sun", RenderPipelines.CELESTIAL, quad(SUN_SIZE, false), SkyDraw.texture(SUN), SkyDraw.white(clear),
+                matrix(modelView, pose));
         pose.popPose();
-        RenderSystem.depthMask(true);
+
+        // the moon: always full, drawn with normal blending so its pink shows
+        pose.pushPose();
+        pose.mulPose(Axis.XP.rotation(sky.moonAngle));
+        SkyDraw.drawNow("Guhmension pink moon", SkyDraw.CELESTIAL_TRANSLUCENT, quad(MOON_SIZE, true), SkyDraw.texture(MOON),
+                SkyDraw.white(clear), matrix(modelView, pose));
+        pose.popPose();
+
+        float brightness = sky.starBrightness * clear;
+        if (brightness > 0f && stars != null) {
+            // twinkle: the whole field breathes a little
+            float twinkle = 0.85f + 0.15f * Mth.sin((level.gameTime + partialTick) * 0.05f);
+            float b = brightness * twinkle;
+            pose.pushPose();
+            pose.mulPose(Axis.XP.rotation(sky.starAngle));
+            SkyDraw.draw("Guhmension pink stars", SkyDraw.COLOURED_STARS, stars, VertexFormat.Mode.QUADS, starIndices, null,
+                    new Vector4f(b, b, b, brightness), matrix(modelView, pose));
+            pose.popPose();
+        }
+        pose.popPose();
         return true;
     }
 
-    /** The moon is drawn facing down (at y = -100 in the rotated frame), the sun facing up. */
-    private static void quad(Tesselator tesselator, Matrix4f m, float size, float y, float u0, float v0, float u1, float v1) {
-        BufferBuilder b = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        if (y > 0) {
-            b.addVertex(m, -size, y, -size).setUv(u0, v0);
-            b.addVertex(m, size, y, -size).setUv(u1, v0);
-            b.addVertex(m, size, y, size).setUv(u1, v1);
-            b.addVertex(m, -size, y, size).setUv(u0, v1);
-        } else {
-            b.addVertex(m, -size, y, size).setUv(u1, v1);
-            b.addVertex(m, size, y, size).setUv(u0, v1);
-            b.addVertex(m, size, y, -size).setUv(u0, v0);
-            b.addVertex(m, -size, y, -size).setUv(u1, v0);
-        }
-        BufferUploader.drawWithShader(b.buildOrThrow());
+    private static Matrix4f matrix(Matrix4fc modelView, PoseStack pose) {
+        return new Matrix4f(modelView).mul(pose.last().pose());
     }
 
-    private void buildBuffers() {
-        Tesselator tesselator = Tesselator.getInstance();
-        // sky disc (as in the overworld)
-        BufferBuilder disc = tesselator.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION);
-        disc.addVertex(0f, 16f, 0f);
-        for (int i = -180; i <= 180; i += 45) {
-            disc.addVertex(512f * Mth.cos(i * Mth.DEG_TO_RAD), 16f, 512f * Mth.sin(i * Mth.DEG_TO_RAD));
+    /** A celestial quad at y = 100 facing down to the player (the moon's texture turned like vanilla's moon). */
+    private static MeshData quad(float size, boolean moon) {
+        BufferBuilder b = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        float y = 100f;
+        if (moon) {
+            b.addVertex(-size, y, -size).setUv(1, 1);
+            b.addVertex(size, y, -size).setUv(0, 1);
+            b.addVertex(size, y, size).setUv(0, 0);
+            b.addVertex(-size, y, size).setUv(1, 0);
+        } else {
+            b.addVertex(-size, y, -size).setUv(0, 0);
+            b.addVertex(size, y, -size).setUv(1, 0);
+            b.addVertex(size, y, size).setUv(1, 1);
+            b.addVertex(-size, y, size).setUv(0, 1);
         }
-        skyBuffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
-        skyBuffer.bind();
-        skyBuffer.upload(disc.buildOrThrow());
-        // pink stars: 1800 little quads in pinks, lilacs and a few white ones
+        return b.buildOrThrow();
+    }
+
+    /** Pink stars: 1800 little quads in pinks, lilacs and a few white ones (same seed and colours as 1.0.0). */
+    private void buildStars() {
         RandomSource random = RandomSource.create(10842L);
-        BufferBuilder stars = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        for (int i = 0; i < 1800; i++) {
-            float x = random.nextFloat() * 2f - 1f, y = random.nextFloat() * 2f - 1f, z = random.nextFloat() * 2f - 1f;
-            float size = 0.15f + random.nextFloat() * 0.12f;
-            float len = x * x + y * y + z * z;
-            if (len <= 0.010f || len >= 1f) {
-                continue;
+        try (ByteBufferBuilder bytes = new ByteBufferBuilder(1800 * 4 * DefaultVertexFormat.POSITION_COLOR.getVertexSize())) {
+            BufferBuilder b = new BufferBuilder(bytes, VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+            for (int i = 0; i < 1800; i++) {
+                float x = random.nextFloat() * 2f - 1f, y = random.nextFloat() * 2f - 1f, z = random.nextFloat() * 2f - 1f;
+                float size = 0.15f + random.nextFloat() * 0.12f;
+                float len = x * x + y * y + z * z;
+                if (len <= 0.010f || len >= 1f) {
+                    continue;
+                }
+                org.joml.Vector3f dir = new org.joml.Vector3f(x, y, z).normalize(100f);
+                float spin = (float) (random.nextDouble() * Math.PI * 2);
+                org.joml.Quaternionf rot = new org.joml.Quaternionf().rotateTo(new org.joml.Vector3f(0, 0, -1), dir).rotateZ(spin);
+                int kind = random.nextInt(10);
+                float r = 1f, g = kind < 6 ? 0.55f + random.nextFloat() * 0.2f : kind < 9 ? 0.7f : 1f, bl = kind < 6 ? 0.8f : 1f;
+                int colour = ARGB.colorFromFloat(1f, r, g, bl);
+                float[][] corners = {{size, -size}, {size, size}, {-size, size}, {-size, -size}};
+                for (float[] c : corners) {
+                    org.joml.Vector3f v = new org.joml.Vector3f(c[0], c[1], 0).rotate(rot).add(dir);
+                    b.addVertex(v.x, v.y, v.z).setColor(colour);
+                }
             }
-            org.joml.Vector3f dir = new org.joml.Vector3f(x, y, z).normalize(100f);
-            float spin = (float) (random.nextDouble() * Math.PI * 2);
-            org.joml.Quaternionf rot = new org.joml.Quaternionf().rotateTo(new org.joml.Vector3f(0, 0, -1), dir).rotateZ(spin);
-            int kind = random.nextInt(10);
-            float r = 1f, g = kind < 6 ? 0.55f + random.nextFloat() * 0.2f : kind < 9 ? 0.7f : 1f, b = kind < 6 ? 0.8f : kind < 9 ? 1f : 1f;
-            float[][] corners = {{size, -size}, {size, size}, {-size, size}, {-size, -size}};
-            for (float[] c : corners) {
-                org.joml.Vector3f v = new org.joml.Vector3f(c[0], c[1], 0).rotate(rot).add(dir);
-                stars.addVertex(v.x, v.y, v.z).setColor(r, g, b, 1f);
-            }
+            MeshData mesh = b.buildOrThrow();
+            starIndices = mesh.drawState().indexCount();
+            stars = SkyDraw.upload("Guhmension pink stars", mesh);
         }
-        starBuffer = new VertexBuffer(VertexBuffer.Usage.STATIC);
-        starBuffer.bind();
-        starBuffer.upload(stars.buildOrThrow());
-        VertexBuffer.unbind();
     }
 }

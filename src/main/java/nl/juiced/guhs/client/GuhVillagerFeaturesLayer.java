@@ -9,14 +9,14 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.state.VillagerRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.npc.villager.Villager;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.registry.ModVillagers;
 
@@ -25,14 +25,14 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
  * Guh villagers are real villagers, dressed as guhs: the villager type texture (textures/entity/villager/type/guh.png)
  * gives them pink fur and big guh eyes, and this layer adds round guh ears on the head and a little tail.
  */
-public class GuhVillagerFeaturesLayer extends RenderLayer<Villager, VillagerModel<Villager>> {
+public class GuhVillagerFeaturesLayer extends RenderLayer<VillagerRenderState, VillagerModel> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(Guhs.id("guh_villager_features"), "main");
     private static final Identifier TEXTURE = Guhs.id("textures/entity/villager/guh_features.png");
 
     private final ModelPart ears;
     private final ModelPart tail;
 
-    public GuhVillagerFeaturesLayer(RenderLayerParent<Villager, VillagerModel<Villager>> parent, ModelPart root) {
+    public GuhVillagerFeaturesLayer(RenderLayerParent<VillagerRenderState, VillagerModel> parent, ModelPart root) {
         super(parent);
         this.ears = root.getChild("ears");
         this.tail = root.getChild("tail");
@@ -53,19 +53,18 @@ public class GuhVillagerFeaturesLayer extends RenderLayer<Villager, VillagerMode
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource buffers, int light, Villager villager, float limbSwing, float limbSwingAmount,
-                       float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (villager.isInvisible() || villager.getVillagerData().getType() != ModVillagers.GUH.get()) {
+    public void submit(PoseStack poseStack, SubmitNodeCollector collector, int light, VillagerRenderState state, float yRot, float xRot) {
+        if (state.isInvisible || state.villagerData == null || state.villagerData.type().value() != ModVillagers.GUH.get()) {
             return;
         }
-        var buffer = buffers.getBuffer(RenderTypes.entityCutout(TEXTURE));
+        RenderType type = RenderTypes.entityCutout(TEXTURE);
         poseStack.pushPose();
         getParentModel().getHead().translateAndRotate(poseStack);
-        ears.render(poseStack, buffer, light, OverlayTexture.NO_OVERLAY);
+        collector.submitModelPart(ears, poseStack, type, light, OverlayTexture.NO_OVERLAY, null);
         poseStack.popPose();
         poseStack.pushPose();
         getParentModel().root().getChild("body").translateAndRotate(poseStack);
-        tail.render(poseStack, buffer, light, LivingEntityRenderer.getOverlayCoords(villager, 0f));
+        collector.submitModelPart(tail, poseStack, type, light, LivingEntityRenderer.getOverlayCoords(state, 0f), null);
         poseStack.popPose();
     }
 }

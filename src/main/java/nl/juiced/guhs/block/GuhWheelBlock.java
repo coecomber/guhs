@@ -111,7 +111,7 @@ public class GuhWheelBlock extends BaseEntityBlock {
 
     @Override
     protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED; // drawn (big) by GuhWheelRenderer
+        return RenderShape.INVISIBLE; // drawn (big) by GuhWheelRenderer
     }
 
     @Nullable
@@ -173,25 +173,7 @@ public class GuhWheelBlock extends BaseEntityBlock {
         return InteractionResult.SUCCESS;
     }
 
-    /** Breaking the wheel drops the guh that was in it (as a picked-up guh item). */
-    @Override
-    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
-        if (!state.is(newState.getBlock()) && !level.isClientSide() && level.getBlockEntity(pos) instanceof GuhWheelBlockEntity wheel) {
-            CompoundTag guh = wheel.takeOut();
-            if (guh != null) {
-                ItemStack item = PickedUpGuhItem.of(guh);
-                nl.juiced.guhs.feature.band.GuhVolger.item(item, nl.juiced.guhs.feature.band.PlekSoort.ITEM_GROND, level.dimension(), pos, "",
-                        level.getGameTime());   // 2.10: "waar is mijn guh": the wheel broke, it lies on the ground
-                Block.popResource(level, pos, item);
-            }
-            for (BlockPos part : partPositions(pos, state.getValue(FACING))) {
-                if (level.getBlockState(part).is(ModBlocks.GUH_WHEEL_PART.get())) {
-                    level.setBlock(part, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
-                }
-            }
-        }
-        super.onRemove(state, level, pos, newState, movedByPiston);
-    }
+    // Breaking the wheel: see GuhWheelBlockEntity#preRemoveSideEffects (26.1: onRemove is gone)
 
     // --- redstone: full power in every direction while a guh is running ---
 

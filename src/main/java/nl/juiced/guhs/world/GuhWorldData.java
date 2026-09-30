@@ -32,6 +32,8 @@ import net.minecraft.core.UUIDUtil;
  */
 public class GuhWorldData extends SavedData {
     private static final String NAME = "guhs_world";
+    private static final net.minecraft.world.level.saveddata.SavedDataType<GuhWorldData> TYPE =
+            nl.juiced.guhs.storage.GuhSavedData.tagType("world", GuhWorldData::new, t -> load(t, null), d -> d.save(new CompoundTag(), null));   // (registries never used)
 
     public enum Access { PUBLIC, PRIVATE, WHITELIST }
 
@@ -101,8 +103,7 @@ public class GuhWorldData extends SavedData {
     private boolean lobbyBuilt;
 
     public static GuhWorldData get(MinecraftServer server) {
-        return server.overworld().getDataStorage().computeIfAbsent(
-                new SavedData.Factory<>(GuhWorldData::new, GuhWorldData::load, null), NAME);
+        return nl.juiced.guhs.storage.GuhSavedData.get(server.overworld(), TYPE, NAME);
     }
 
     public PlayerData player(UUID id) {
@@ -149,7 +150,6 @@ public class GuhWorldData extends SavedData {
 
     // --- saving -------------------------------------------------------------------------------------------------------
 
-    @Override
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
         ListTag maagList = new ListTag();
         for (Maag maag : maags.values()) {
