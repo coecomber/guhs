@@ -31,6 +31,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * A knabbelvoorraadje: a little mound of earth and leaves where a pluiseekhoorntje hid kaasknabbels (a knabbel peeks out).
  * Right-click it: you dig it up and get the knabbels ({@link #KNABBELS}); breaking it drops them too. Only squirrels make
@@ -68,8 +70,8 @@ public class KnabbelvoorraadjeBlock extends Block {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction dir, BlockState other, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
-        return dir == Direction.DOWN && !canSurvive(state, level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, dir, other, level, pos, otherPos);
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction dir, BlockPos otherPos, BlockState other, RandomSource random) {
+        return dir == Direction.DOWN && !canSurvive(state, level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, level, ticks, pos, dir, otherPos, other, random);
     }
 
     /** Can a stash go here (air or grass, on sturdy ground)? */

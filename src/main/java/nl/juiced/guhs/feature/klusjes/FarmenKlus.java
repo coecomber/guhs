@@ -58,7 +58,7 @@ public class FarmenKlus extends BasisKlus {
         BlockState state = level.getBlockState(pos);
         if (state.getBlock() instanceof CropBlock crop && crop.isMaxAge(state)) {
             List<ItemStack> drops = new ArrayList<>(Block.getDrops(state, level, pos, null, wie, ItemStack.EMPTY));
-            ItemStack zaad = crop.getCloneItemStack(level, pos, state);
+            ItemStack zaad = state.getCloneItemStack(level, pos, false);
             for (ItemStack d : drops) {
                 if (!zaad.isEmpty() && ItemStack.isSameItem(d, zaad) && d.getCount() > 0) {
                     d.shrink(1);                                    // (this one goes back into the ground)

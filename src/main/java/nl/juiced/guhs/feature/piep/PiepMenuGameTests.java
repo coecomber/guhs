@@ -173,7 +173,7 @@ public class PiepMenuGameTests {
             helper.assertTrue(!PiepDierItem.pakOp(m, ander), "not even directly");
             ander.setShiftKeyDown(true);
             ander.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-            d.interact(ander, InteractionHand.MAIN_HAND);
+            d.interact(ander, InteractionHand.MAIN_HAND, d.position());
             ander.setShiftKeyDown(false);
             helper.assertTrue(!d.isRemoved(), "sneak-clicking someone else's maatje doesn't pick it up");
         }
@@ -250,22 +250,22 @@ public class PiepMenuGameTests {
         s.setHealth(5f);
         // empty hand (owner): the menu, nothing else happens to it
         p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-        helper.assertTrue(s.interact(p, InteractionHand.MAIN_HAND).consumesAction() && !s.isRemoved() && !s.klaarVoor(p),
+        helper.assertTrue(s.interact(p, InteractionHand.MAIN_HAND, s.position()).consumesAction() && !s.isRemoved() && !s.klaarVoor(p),
                 "a click opens the menu (not picked up, not yet ready for a guh)");
         // food (owner, even sneaking): still feeding
         p.setShiftKeyDown(true);
         p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.KELP, 3));
-        s.interact(p, InteractionHand.MAIN_HAND);
+        s.interact(p, InteractionHand.MAIN_HAND, s.position());
         helper.assertTrue(!s.isRemoved() && s.getHealth() > 5f && p.getMainHandItem().getCount() == 2, "kelp still feeds (sneaking too)");
         // sneak + empty hand: picked up
         p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-        s.interact(p, InteractionHand.MAIN_HAND);
+        s.interact(p, InteractionHand.MAIN_HAND, s.position());
         p.setShiftKeyDown(false);
         helper.assertTrue(s.isRemoved() && !vind(p, PiepFeature.POEPSCHILLY_ITEM.get()).isEmpty(), "sneak + empty hand picks it up");
         // a wild muisje is still petted by anyone (aaien counts)
         PieppiepmuisjeEntity muis = helper.spawn(PiepFeature.PIEPPIEPMUISJE.get(), new BlockPos(5, 2, 5));
         p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);     // (the picked-up turtle landed in the hand)
-        muis.interact(p, InteractionHand.MAIN_HAND);
+        muis.interact(p, InteractionHand.MAIN_HAND, muis.position());
         helper.assertTrue(KnusVoortgang.teller(p, PiepVoortgang.GEAAID) == 1 && !muis.isRemoved(), "petting still works");
         muis.discard();
         leave(helper, p);
@@ -287,7 +287,7 @@ public class PiepMenuGameTests {
         helper.assertTrue(!PiepMenu.doe(p, muis, PiepMenu.Actie.WISSEL, PiepInstelling.ZWEMMEN.ordinal(), ""), "a muisje has no zwemmen setting");
         // saved and loaded
         CompoundTag tag = new CompoundTag();
-        muis.saveWithoutId(tag);
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(muis, tag);
         PieppiepmuisjeEntity kopie = PiepFeature.PIEPPIEPMUISJE.get().create(helper.getLevel(), EntitySpawnReason.TRIGGERED);
         kopie.load(tag);
         helper.assertTrue(!kopie.aan(PiepInstelling.PIEPJES) && !kopie.aan(PiepInstelling.VERSTOPPEN) && kopie.aan(PiepInstelling.VOLGEN),

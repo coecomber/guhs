@@ -12,6 +12,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * The smulschaal: the big bowl the Smulguh lends you for a game of {@link SmulGame}. It's never yours: outside a game it
  * vanishes from any inventory it ticks in, and dropped it's gone at once (the game hands a new one back).
@@ -22,7 +26,7 @@ public class SmulSchaalItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
         if (!level.isClientSide() && (!(entity instanceof ServerPlayer player) || !SmulGame.isPlaying(player))) {
             stack.setCount(0);
         }
@@ -42,7 +46,7 @@ public class SmulSchaalItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.smulschaal.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.smulschaal.lore").withStyle(ChatFormatting.GRAY));
     }
 }

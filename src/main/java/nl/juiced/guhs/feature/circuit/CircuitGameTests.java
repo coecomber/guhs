@@ -470,8 +470,8 @@ public class CircuitGameTests {
         CircuitExtra.markLive(mika);
         helper.getLevel().addFreshEntity(mika);
         helper.assertTrue(mika.kanPikken(), "ready to pinch");
-        helper.assertTrue(mika.isInvulnerableTo(helper.getLevel().damageSources().generic()), "a Mika-pikker can't be hurt (it's part of the game)");
-        helper.assertTrue(!mika.doHurtTarget(guh), "and never hurts anyone");
+        helper.assertTrue(mika.isInvulnerableTo(helper.getLevel(), helper.getLevel().damageSources().generic()), "a Mika-pikker can't be hurt (it's part of the game)");
+        helper.assertTrue(!mika.doHurtTarget(helper.getLevel(), guh), "and never hurts anyone");
         mika.pik(guh, null);
         helper.assertTrue(guh.lastSchok() == RaceGuhEntity.SCHOK_PIK && !mika.kanPikken() && mika.pinches() == 1, "it pinched the VAHOEG and giggles off");
         helper.succeedWhen(() -> {

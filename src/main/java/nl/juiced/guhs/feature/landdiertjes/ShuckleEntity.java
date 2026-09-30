@@ -194,8 +194,8 @@ public class ShuckleEntity extends Landdiertje {
         if (level().isClientSide()) {
             return;
         }
-        if (plekje != null && !isTame() && !hasRestriction()) {
-            restrictTo(plekje, 12);
+        if (plekje != null && !isTame() && !hasHome()) {
+            setHomeTo(plekje, 12);
         }
         if ((tickCount + getId()) % 5 == 0 && sapjeTijd <= 0 && schrikt()) {
             inSchelp(SCHELP_TICKS);
@@ -239,12 +239,12 @@ public class ShuckleEntity extends Landdiertje {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         if (isInSchelp() && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             playSound(LanddiertjesFeature.SHUCKLE_TIK.get(), 0.6f, 1.4f);
             return false;
         }
-        boolean r = super.hurt(source, amount);
+        boolean r = super.hurtServer(level, source, amount);
         if (r && isAlive() && !level().isClientSide()) {
             inSchelp(SCHELP_TICKS);
         }
@@ -359,7 +359,7 @@ public class ShuckleEntity extends Landdiertje {
     /** (The plekjes) the spot it belongs to: wild Sjokkels stay around it. */
     public void thuisBij(BlockPos plek) {
         plekje = plek.immutable();
-        restrictTo(plekje, 12);
+        setHomeTo(plekje, 12);
     }
 
     @Nullable
@@ -371,6 +371,6 @@ public class ShuckleEntity extends Landdiertje {
     public void temmen(ServerPlayer player) {
         super.temmen(player);
         plekje = null;
-        clearRestriction();
+        clearHome();
     }
 }

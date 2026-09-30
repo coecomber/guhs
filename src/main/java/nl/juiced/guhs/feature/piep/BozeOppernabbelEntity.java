@@ -72,8 +72,8 @@ public class BozeOppernabbelEntity extends BozeKaasknabbelEntity {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(net.minecraft.server.level.ServerLevel level) {
+        super.customServerAiStep(level);
         bossbalk.setProgress(getHealth() / getMaxHealth());
         if (!hulpGeroepen && getHealth() < getMaxHealth() / 2 && level() instanceof ServerLevel level) {
             hulpGeroepen = true;

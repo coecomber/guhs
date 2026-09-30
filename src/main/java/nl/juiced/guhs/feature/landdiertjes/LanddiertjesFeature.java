@@ -27,7 +27,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -74,12 +74,12 @@ public final class LanddiertjesFeature {
      * Sjokkels around ({@link ShucklePlekjeBlock}).
      */
     public static final DeferredBlock<Block> SHUCKLE_PLEKJE = BLOCKS.register("shuckle_plekje", () -> new ShucklePlekjeBlock(BlockBehaviour.Properties.of()
-            .noCollission().noLootTable().strength(-1f, 3600000f).noOcclusion().pushReaction(PushReaction.BLOCK).randomTicks()
+            .noCollision().noLootTable().strength(-1f, 3600000f).noOcclusion().pushReaction(PushReaction.BLOCK).randomTicks()
             .isValidSpawn((s, l, p, t) -> false)));
     /** A squirrel's stash of kaasknabbels (no item). */
     public static final DeferredBlock<KnabbelvoorraadjeBlock> KNABBELVOORRAADJE = BLOCKS.register("landdiertjes_knabbelvoorraadje",
             () -> new KnabbelvoorraadjeBlock(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).strength(0.3f).sound(SoundType.ROOTED_DIRT)
-                    .noCollission().noOcclusion().pushReaction(PushReaction.DESTROY).replaceable()));
+                    .noCollision().noOcclusion().pushReaction(PushReaction.DESTROY).replaceable()));
     /** A path of polished guhsteentjes (like a carpet). */
     public static final DeferredBlock<CarpetBlock> STEENTJESPAD = BLOCKS.register("landdiertjes_steentjespad",
             () -> new CarpetBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).strength(0.4f).sound(SoundType.STONE)));
@@ -109,20 +109,18 @@ public final class LanddiertjesFeature {
     public static final DeferredItem<PiepDierItem> SHUCKLE_ITEM = ITEMS.registerItem("shuckle_item",
             p -> new PiepDierItem(() -> SHUCKLE.get(), p), () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
-    public static final DeferredItem<DeferredSpawnEggItem> PLUISEGELTJE_SPAWN_EGG = ITEMS.registerItem("pluisegeltje_spawn_egg",
-            p -> new DeferredSpawnEggItem(PLUISEGELTJE, 0xF2D2C4, 0xB77A6A, p));
-    public static final DeferredItem<DeferredSpawnEggItem> GUH_KONIJNTJE_SPAWN_EGG = ITEMS.registerItem("guh_konijntje_spawn_egg",
-            p -> new DeferredSpawnEggItem(GUH_KONIJNTJE, 0xF8C6D8, 0xFFF4F8, p));
-    public static final DeferredItem<DeferredSpawnEggItem> PLUISEEKHOORNTJE_SPAWN_EGG = ITEMS.registerItem("pluiseekhoorntje_spawn_egg",
-            p -> new DeferredSpawnEggItem(PLUISEEKHOORNTJE, 0xE08A4E, 0xFFE6C8, p));
-    public static final DeferredItem<DeferredSpawnEggItem> SHUCKLE_SPAWN_EGG = ITEMS.registerItem("shuckle_spawn_egg",
-            p -> new DeferredSpawnEggItem(SHUCKLE, 0xD8323A, 0xF6D64A, p));
+    public static final DeferredItem<SpawnEggItem> PLUISEGELTJE_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "pluisegeltje_spawn_egg", PLUISEGELTJE);
+    public static final DeferredItem<SpawnEggItem> GUH_KONIJNTJE_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "guh_konijntje_spawn_egg", GUH_KONIJNTJE);
+    public static final DeferredItem<SpawnEggItem> PLUISEEKHOORNTJE_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "pluiseekhoorntje_spawn_egg", PLUISEEKHOORNTJE);
+    public static final DeferredItem<SpawnEggItem> SHUCKLE_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "shuckle_spawn_egg", SHUCKLE);
 
     // --- Sjokkel's things ----------------------------------------------------------------------------------------------------------
-    public static final FoodProperties SAPJE = new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f).alwaysEdible()
-            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 20 * 8, 0), 1f).build();
+    public static final FoodProperties SAPJE = new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f).alwaysEdible().build();
+    /** 1.1.0: the Regeneratie effect and the drinking live in a Consumable (was FoodProperties#effect + the DRINK animation). */
+    public static final net.minecraft.world.item.component.Consumable SAPJE_DRINKEN = net.minecraft.world.item.component.Consumables.defaultDrink()
+            .onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.REGENERATION, 20 * 8, 0), 1f)).build();
     public static final DeferredItem<LanddierItems.BessensapjeItem> BESSENSAPJE = ITEMS.registerItem("landdiertjes_bessensapje",
-            LanddierItems.BessensapjeItem::new, () -> new Item.Properties().stacksTo(16).food(SAPJE).rarity(Rarity.UNCOMMON));
+            LanddierItems.BessensapjeItem::new, () -> new Item.Properties().stacksTo(16).food(SAPJE, SAPJE_DRINKEN).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<LanddierItems.LoreItem> GUHSTEENTJE = ITEMS.registerItem("landdiertjes_guhsteentje",
             LanddierItems.LoreItem::new, () -> new Item.Properties());
 

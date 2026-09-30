@@ -69,7 +69,7 @@ public final class VogelSpawns {
     /** Night in this level (for the natural spawns; chunk generation doesn't ask). */
     public static boolean isNacht(LevelAccessor level) {
         if (level instanceof ServerLevelAccessor s) {
-            return s.getLevel().isNight();
+            return s.getLevel().isDarkOutside();
         }
         return false;
     }

@@ -38,6 +38,10 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.quest.GuhAdvancements;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * The roze guh koek: a pink-glazed koekje with big glossy eyes and a snoetje. They come six to a clear plastic tray, and so
  * does this block ({@link #KOEKEN} 1-6, in a 2 x 3 grid, filled row by row).
@@ -98,9 +102,9 @@ public class RozeGuhKoekBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction dir, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction dir, BlockPos neighbourPos, BlockState neighbour, RandomSource random) {
         return dir == Direction.DOWN && !canSurvive(state, level, pos) ? net.minecraft.world.level.block.Blocks.AIR.defaultBlockState()
-                : super.updateShape(state, dir, neighbour, level, pos, neighbourPos);
+                : super.updateShape(state, level, ticks, pos, dir, neighbourPos, neighbour, random);
     }
 
     @Override
@@ -120,8 +124,8 @@ public class RozeGuhKoekBlock extends HorizontalDirectionalBlock {
         } else {
             player.getFoodData().eat(PiepFeature.KOEK_ETEN.nutrition(), PiepFeature.KOEK_ETEN.saturation());
             gegeten(sp);
-            level.playSound(null, pos, SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.8f, 1.1f);
-            ((ServerLevel) level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(PiepFeature.ROZE_GUH_KOEK_ITEM.get())),
+            level.playSound(null, pos, SoundEvents.GENERIC_EAT.value(), SoundSource.PLAYERS, 0.8f, 1.1f);
+            ((ServerLevel) level).sendParticles(new ItemParticleOption(ParticleTypes.ITEM, PiepFeature.ROZE_GUH_KOEK_ITEM.get().asItem()),
                     pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5, 8, 0.2, 0.1, 0.2, 0.05);
         }
         eentjeMinder(level, pos, state);
@@ -171,8 +175,8 @@ public class RozeGuhKoekBlock extends HorizontalDirectionalBlock {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("block.guhs.roze_guh_koek.tooltip").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("block.guhs.roze_guh_koek.tooltip").withStyle(ChatFormatting.GRAY));
         }
     }
 }

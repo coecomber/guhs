@@ -48,7 +48,7 @@ public class GuhUiltjeEntity extends Vogeltje {
 
     /** Is it night here (the owl is awake)? */
     public boolean nacht() {
-        return level().isNight();
+        return level().isDarkOutside();
     }
 
     public boolean slaapt() {

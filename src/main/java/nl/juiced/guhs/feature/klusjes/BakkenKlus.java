@@ -175,7 +175,8 @@ public class BakkenKlus extends BasisKlus {
                 return;
             }
             for (ItemStack s : ingredienten) {
-                ItemStack rest = s.getCraftingRemainingItem();
+                net.minecraft.world.item.ItemStackTemplate restVan = s.getItem().getCraftingRemainder(s);
+                ItemStack rest = restVan == null ? ItemStack.EMPTY : restVan.create();
                 if (!rest.isEmpty()) {
                     pak(rest.copyWithCount(s.getCount()));      // (the empty bucket / bottle goes back)
                 }

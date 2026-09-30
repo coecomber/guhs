@@ -219,7 +219,7 @@ public abstract class Landdiertje extends TamableAnimal implements GeoEntity, Pi
         triggerAnim("actie", "eet");
         playSound(geluid(), 0.7f, 1.2f + random.nextFloat() * 0.2f);
         if (level() instanceof ServerLevel sl && !stack.isEmpty()) {
-            sl.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, stack.copyWithCount(1)), getX(), getY() + getBbHeight() * 0.6, getZ(),
+            sl.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, stack.copyWithCount(1).getItem()), getX(), getY() + getBbHeight() * 0.6, getZ(),
                     6, 0.12, 0.05, 0.12, 0.03);
         }
     }

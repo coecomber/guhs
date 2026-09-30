@@ -138,7 +138,7 @@ public class KaasmeesjeEntity extends Vogeltje {
         BlockState in = level().getBlockState(blockPosition());
         if (in.getBlock() instanceof KnabbelbessenstruikBlock && random.nextInt(50) == 0 && level() instanceof ServerLevel server) {
             triggerAnim("actie", "peck");
-            server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(VadswoudFeature.KNABBELBESSEN.get())),
+            server.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, VadswoudFeature.KNABBELBESSEN.get().asItem()),
                     getX(), getY() + 0.3, getZ(), 4, 0.1, 0.1, 0.1, 0.03);
             level().playSound(null, getX(), getY(), getZ(), SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.NEUTRAL, 0.3f, 1.8f);
         }

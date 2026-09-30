@@ -28,6 +28,7 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.huisje.Klusjes;
 import nl.juiced.guhs.feature.knus.GuhHooks;
 
+import net.minecraft.world.item.component.TooltipDisplay;
 /**
  * De klusjes rond het Guhhuisje (2.10 "Lieve vadsjes van elkaar", slice klusjes). The residents of a huisje do chores
  * within its home base ({@link nl.juiced.guhs.feature.huisje.Huisjes#BEREIK}); the owner switches them on or off per
@@ -71,10 +72,10 @@ public final class KlusjesFeature {
     public static final DeferredItem<BlockItem> GUHLAMPJE_ITEM = ITEMS.registerItem("klusjes_guhlampje",
             p -> new BlockItem(GUHLAMPJE.get(), p) {
                 @Override
-                public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-                    tooltip.add(Component.translatable("block.guhs.klusjes_guhlampje.lore").withStyle(ChatFormatting.GRAY));
+                public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+                    tooltip.accept(Component.translatable("block.guhs.klusjes_guhlampje.lore").withStyle(ChatFormatting.GRAY));
                 }
-            }, new Item.Properties());
+            }, () -> new Item.Properties());
     public static final DeferredItem<SchelpjeItem> SCHELPJE = ITEMS.registerItem("klusjes_schelpje", SchelpjeItem::new, () -> new Item.Properties());
 
     public static final DeferredHolder<SoundEvent, SoundEvent> GRAAF = sound("klusjes.graaf");

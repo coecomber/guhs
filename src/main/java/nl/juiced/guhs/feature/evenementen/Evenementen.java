@@ -229,7 +229,7 @@ public final class Evenementen {
             return null; // not now: try again in a moment
         }
         int last = data.getIntOr(LAST, 0) - 1;
-        EvenementType type = EvenementType.choose(player.getRandom(), player.level().isNight(),
+        EvenementType type = EvenementType.choose(player.getRandom(), player.level().isDarkOutside(),
                 last >= 0 && last < EvenementType.values().length ? EvenementType.values()[last] : null);
         Evenement started = start(type, player);
         if (started == null) {

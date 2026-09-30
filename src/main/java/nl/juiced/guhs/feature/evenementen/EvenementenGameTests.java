@@ -105,7 +105,7 @@ public class EvenementenGameTests {
         helper.assertTrue(snack.isRemoved() && Evenementen.boosted(guh), "it ate the knabbel and is happy now");
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 64));
         for (int i = 0; i < 40 && !guh.isTame(); i++) {
-            player.interactOn(guh, InteractionHand.MAIN_HAND);
+            player.interactOn(guh, InteractionHand.MAIN_HAND, guh.position());
         }
         helper.assertTrue(guh.isTame() && player.getUUID().equals(guh.getOwnerUUID()), "tamed");
         rain.end(false);
@@ -119,10 +119,10 @@ public class EvenementenGameTests {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 2));
         ParadeGuhEntity parader = helper.spawn(EvenementenFeature.PARADE_GUH.get(), new BlockPos(3, 1, 3));
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(EvenementenFeature.GOUDEN_KAASKNABBEL.get(), 2));
-        player.interactOn(guh, InteractionHand.MAIN_HAND);
+        player.interactOn(guh, InteractionHand.MAIN_HAND, guh.position());
         helper.assertTrue(guh.isTame() && player.getUUID().equals(guh.getOwnerUUID()), "one golden knabbel: tamed");
         helper.assertTrue(player.getMainHandItem().getCount() == 1, "and it's eaten");
-        player.interactOn(parader, InteractionHand.MAIN_HAND);
+        player.interactOn(parader, InteractionHand.MAIN_HAND, parader.position());
         helper.assertTrue(!parader.isTame() && player.getMainHandItem().getCount() == 1, "a parade guh is nobody's: not even with gold");
         helper.assertTrue(!Evenementen.wild(parader), "a parade guh isn't a wild guh");
         leave(helper, player);
@@ -392,7 +392,7 @@ public class EvenementenGameTests {
         helper.assertTrue(node != null && node.getChild("kaasregen") != null && node.getChild("parade") != null
                 && node.getChild("sterrenregen") != null && node.getChild("stop") != null, "/guhs evenement <kaasregen|parade|sterrenregen|stop>");
         var source = helper.getLevel().getServer().createCommandSourceStack();
-        helper.assertTrue(!node.canUse(source.withPermission(0)) && node.canUse(source.withPermission(2)), "for ops only");
+        helper.assertTrue(!node.canUse(source.withPermission(net.minecraft.server.permissions.LevelBasedPermissionSet.forLevel(net.minecraft.server.permissions.PermissionLevel.byId(0)))) && node.canUse(source.withPermission(net.minecraft.server.permissions.LevelBasedPermissionSet.forLevel(net.minecraft.server.permissions.PermissionLevel.byId(2)))), "for ops only");
         helper.succeed();
     }
 }

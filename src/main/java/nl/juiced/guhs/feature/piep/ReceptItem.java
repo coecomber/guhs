@@ -15,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The recipe of the roze guh koek (from the kaasknabbel-nest's treasure). Right-click: you know it now (per player, it
  * stays), and the Knabbeloven of the Knabbelbakkerij can bake it: zoetdeeg + plaatje + glazuur. The paper is used up.
@@ -61,7 +63,7 @@ public class ReceptItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.roze_guh_koek_recept.tooltip").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.roze_guh_koek_recept.tooltip").withStyle(ChatFormatting.GRAY));
     }
 }

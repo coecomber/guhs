@@ -41,6 +41,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The vogelvoerhuisje: a little pink bird table on a post. Put seeds on it (right-click with seeds: up to
  * {@link #MAX} scoops) and the birds within 16 blocks come and eat there; pluisvinkjes that eat there drop a pluisveertje now
@@ -111,7 +113,7 @@ public class VoerhuisjeBlock extends HorizontalDirectionalBlock {
     public static void vul(ServerLevel level, BlockPos pos, BlockState state) {
         level.setBlock(pos, state.setValue(VOER, Math.min(MAX, state.getValue(VOER) + 1)), Block.UPDATE_ALL);
         level.playSound(null, pos, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 0.8f, 1.3f);
-        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.WHEAT_SEEDS)), pos.getX() + 0.5, pos.getY() + 0.75,
+        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, Items.WHEAT_SEEDS.asItem()), pos.getX() + 0.5, pos.getY() + 0.75,
                 pos.getZ() + 0.5, 6, 0.2, 0.05, 0.2, 0.02);
         onthoud(level, pos);
     }
@@ -122,7 +124,7 @@ public class VoerhuisjeBlock extends HorizontalDirectionalBlock {
         if (!(state.getBlock() instanceof VoerhuisjeBlock) || state.getValue(VOER) <= 0) {
             return false;
         }
-        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.WHEAT_SEEDS)), vogel.getX(), vogel.getY() + 0.2,
+        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, Items.WHEAT_SEEDS.asItem()), vogel.getX(), vogel.getY() + 0.2,
                 vogel.getZ(), 2, 0.05, 0.05, 0.05, 0.02);
         if (vogel.getRandom().nextInt(6) == 0) {
             level.setBlock(pos, state.setValue(VOER, state.getValue(VOER) - 1), Block.UPDATE_ALL);
@@ -193,8 +195,8 @@ public class VoerhuisjeBlock extends HorizontalDirectionalBlock {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("block.guhs.vogels_voerhuisje.lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("block.guhs.vogels_voerhuisje.lore").withStyle(ChatFormatting.GRAY));
         }
     }
 }

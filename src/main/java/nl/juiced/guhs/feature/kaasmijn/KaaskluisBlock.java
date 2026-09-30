@@ -102,7 +102,7 @@ public class KaaskluisBlock extends HorizontalDirectionalBlock {
         }
         level.playSound(null, pos, SoundEvents.VAULT_OPEN_SHUTTER, SoundSource.BLOCKS, 1f, 1f);
         level.playSound(null, pos, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.7f, 1.4f);
-        level.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.85f, 0.2f), 1.4f), pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5,
+        level.sendParticles(new DustParticleOptions(0xFFD933 /* 1, 0.85, 0.2 */, 1.4f), pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5,
                 40, 0.5, 0.4, 0.5, 0.05);
         player.sendSystemMessage(Component.translatable("quest.guhs.kaasmijn.kluis_open").withStyle(ChatFormatting.GOLD));
         GuhAdvancements.grant(player, "kaasmijn_kluis");

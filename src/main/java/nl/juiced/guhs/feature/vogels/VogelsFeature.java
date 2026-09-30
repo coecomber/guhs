@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -73,14 +73,10 @@ public final class VogelsFeature {
             () -> EntityType.Builder.of(ZeemeeuwtjeEntity::new, MobCategory.CREATURE).sized(0.5f, 0.6f).eyeHeight(0.5f)
                     .clientTrackingRange(8).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("zeemeeuwtje"))));
 
-    public static final DeferredItem<DeferredSpawnEggItem> PLUISVINKJE_SPAWN_EGG = ITEMS.registerItem("pluisvinkje_spawn_egg",
-            p -> new DeferredSpawnEggItem(PLUISVINKJE, 0xFFE2EE, 0xF696BE, p));
-    public static final DeferredItem<DeferredSpawnEggItem> KAASMEESJE_SPAWN_EGG = ITEMS.registerItem("kaasmeesje_spawn_egg",
-            p -> new DeferredSpawnEggItem(KAASMEESJE, 0xFAD654, 0xB896D6, p));
-    public static final DeferredItem<DeferredSpawnEggItem> GUH_UILTJE_SPAWN_EGG = ITEMS.registerItem("guh_uiltje_spawn_egg",
-            p -> new DeferredSpawnEggItem(GUH_UILTJE, 0xC48E88, 0xFFE27A, p));
-    public static final DeferredItem<DeferredSpawnEggItem> ZEEMEEUWTJE_SPAWN_EGG = ITEMS.registerItem("zeemeeuwtje_spawn_egg",
-            p -> new DeferredSpawnEggItem(ZEEMEEUWTJE, 0xFCFCFA, 0xB2BCCC, p));
+    public static final DeferredItem<SpawnEggItem> PLUISVINKJE_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "pluisvinkje_spawn_egg", PLUISVINKJE);
+    public static final DeferredItem<SpawnEggItem> KAASMEESJE_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "kaasmeesje_spawn_egg", KAASMEESJE);
+    public static final DeferredItem<SpawnEggItem> GUH_UILTJE_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "guh_uiltje_spawn_egg", GUH_UILTJE);
+    public static final DeferredItem<SpawnEggItem> ZEEMEEUWTJE_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "zeemeeuwtje_spawn_egg", ZEEMEEUWTJE);
 
     // --- the bird feeder -------------------------------------------------------------------------------------------------
     public static final DeferredBlock<VoerhuisjeBlock> VOERHUISJE = BLOCKS.registerBlock("vogels_voerhuisje", VoerhuisjeBlock::new,

@@ -33,7 +33,7 @@ public class KaasaderBlock extends DropExperienceBlock {
 
     /** Mined by a player: the mined-out vein takes its place (the drops still come from the full vein). */
     @Override
-    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, net.minecraft.world.item.ItemStack toolStack, boolean willHarvest, FluidState fluid) {
         return level.setBlock(pos, minedOut.get().defaultBlockState(), level.isClientSide() ? 11 : 3);
     }
 
@@ -65,7 +65,7 @@ public class KaasaderBlock extends DropExperienceBlock {
         /** The cheese is back. */
         public void regrow(ServerLevel level, BlockPos pos) {
             level.setBlock(pos, vein.get().defaultBlockState(), 3);
-            level.sendParticles(new DustParticleOptions(new Vector3f(1f, 0.8f, 0.25f), 1.1f), pos.getX() + 0.5, pos.getY() + 0.5,
+            level.sendParticles(new DustParticleOptions(0xFFCC40 /* 1, 0.8, 0.25 */, 1.1f), pos.getX() + 0.5, pos.getY() + 0.5,
                     pos.getZ() + 0.5, 12, 0.4, 0.4, 0.4, 0.02);
             level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 0.6f, 1.4f);
         }

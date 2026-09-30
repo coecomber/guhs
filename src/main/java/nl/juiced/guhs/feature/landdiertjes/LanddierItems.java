@@ -19,6 +19,8 @@ import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.piep.PiepDierItem;
 import nl.juiced.guhs.feature.piep.Schouder;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** The items of the landdiertjes: the picked-up pluiseekhoorntje (with the shoulder), Sjokkel's bessensapje, a plain lore item. */
 public final class LanddierItems {
     private LanddierItems() {
@@ -91,8 +93,8 @@ public final class LanddierItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("item.guhs.landdiertjes_bessensapje.lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("item.guhs.landdiertjes_bessensapje.lore").withStyle(ChatFormatting.GRAY));
         }
     }
 
@@ -103,8 +105,8 @@ public final class LanddierItems {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
         }
     }
 }

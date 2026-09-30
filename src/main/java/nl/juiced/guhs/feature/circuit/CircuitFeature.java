@@ -76,7 +76,7 @@ public final class CircuitFeature {
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.ICE).strength(1f).friction(0.98f).lightLevel(s -> 4).sound(SoundType.GLASS));
     /** The shimmering skin of a rainbow boost ring (run through it: VAHOEG!). */
     public static final DeferredBlock<CircuitBlocks.Boostring> BOOSTRING = BLOCKS.registerBlock("circuit_boostring", CircuitBlocks.Boostring::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).noCollission().noOcclusion().strength(-1f, 3600000f).noLootTable()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_MAGENTA).noCollision().noOcclusion().strength(-1f, 3600000f).noLootTable()
                     .lightLevel(s -> 13).sound(SoundType.AMETHYST).isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK));
     /** The bouncy guh mushroom cap. */
     public static final DeferredBlock<CircuitBlocks.Stuiterpaddenstoel> STUITERPADDENSTOEL = BLOCKS.registerBlock("circuit_stuiterpaddenstoel",
@@ -110,7 +110,7 @@ public final class CircuitFeature {
     private static final NpcRole ROLE = new CircuitRole();
 
     private static DeferredBlock<CircuitBlocks.Marker> marker(String name) {
-        return BLOCKS.registerBlock(name, CircuitBlocks.Marker::new, BlockBehaviour.Properties.of().noCollission().noLootTable()
+        return BLOCKS.registerBlock(name, CircuitBlocks.Marker::new, () -> BlockBehaviour.Properties.of().noCollision().noLootTable()
                 .strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK));
     }
 

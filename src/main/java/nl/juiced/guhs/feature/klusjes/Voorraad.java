@@ -31,6 +31,17 @@ import nl.juiced.guhs.storage.BankContents;
  * {@link HuisjeOpslag#lever}.
  */
 public final class Voorraad {
+    /**
+     * 1.1.0: the block's item handler (NeoForge 26.1 has {@code Capabilities.Item.BLOCK}, a ResourceHandler; wrapped in the old
+     * slot-style IItemHandler so the chest code stays as it was). Null: not a container.
+     */
+    @SuppressWarnings("removal")
+    @Nullable
+    static IItemHandler handler(ServerLevel level, BlockPos pos) {
+        var resources = level.getCapability(Capabilities.Item.BLOCK, pos, null);
+        return resources == null ? null : IItemHandler.of(resources);
+    }
+
     private Voorraad() {
     }
 
@@ -59,7 +70,7 @@ public final class Voorraad {
                     if (be instanceof BankGuhBlockEntity || be instanceof HuisjeBlockEntity || be instanceof MolentjeBlockEntity || blokken.contains(p)
                             || p.getX() < minX - 4 || p.getX() > maxX + 4 || p.getY() < minY - 4 || p.getY() > maxY + 4
                             || p.getZ() < minZ - 4 || p.getZ() > maxZ + 4
-                            || level.getCapability(Capabilities.ItemHandler.BLOCK, p, null) == null) {
+                            || Voorraad.handler(level, p) == null) {
                         continue;
                     }
                     uit.add(p);
@@ -82,7 +93,7 @@ public final class Voorraad {
         }
         ItemStack rest = stack.copy();
         for (BlockPos p : kisten(level, h)) {
-            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, p, null);
+            IItemHandler handler = Voorraad.handler(level, p);
             if (handler != null) {
                 rest = ItemHandlerHelper.insertItemStacked(handler, rest, true);
                 if (rest.isEmpty()) {
@@ -97,7 +108,7 @@ public final class Voorraad {
     public static long tel(ServerLevel level, Huisje h, Predicate<ItemStack> wat) {
         long n = 0;
         for (BlockPos p : kisten(level, h)) {
-            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, p, null);
+            IItemHandler handler = Voorraad.handler(level, p);
             if (handler != null) {
                 for (int i = 0; i < handler.getSlots(); i++) {
                     ItemStack s = handler.getStackInSlot(i);
@@ -121,7 +132,7 @@ public final class Voorraad {
     /** Takes up to max items of ONE kind matching this (chests first, then the Bank Guh); EMPTY when there is none. */
     public static ItemStack neem(ServerLevel level, Huisje h, Predicate<ItemStack> wat, int max) {
         for (BlockPos p : kisten(level, h)) {
-            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, p, null);
+            IItemHandler handler = Voorraad.handler(level, p);
             if (handler == null) {
                 continue;
             }

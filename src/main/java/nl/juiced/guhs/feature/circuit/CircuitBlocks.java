@@ -98,7 +98,7 @@ public final class CircuitBlocks {
         }
 
         @Override
-        protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        protected boolean propagatesSkylightDown(BlockState state) {
             return true;
         }
 
@@ -107,7 +107,7 @@ public final class CircuitBlocks {
             if (random.nextInt(3) == 0) {
                 float hue = (level.getGameTime() % 70) / 70f + random.nextFloat() * 0.2f;
                 int rgb = java.awt.Color.HSBtoRGB(hue, 0.6f, 1f);
-                level.addParticle(new DustParticleOptions(new Vector3f(((rgb >> 16) & 255) / 255f, ((rgb >> 8) & 255) / 255f, (rgb & 255) / 255f), 1f),
+                level.addParticle(new DustParticleOptions(rgb & 0xFFFFFF, 1f),
                         pos.getX() + random.nextDouble(), pos.getY() + random.nextDouble(), pos.getZ() + random.nextDouble(), 0, 0, 0);
             }
         }
@@ -132,14 +132,14 @@ public final class CircuitBlocks {
         }
 
         @Override
-        public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+        public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
             entity.causeFallDamage(fallDistance, 0f, level.damageSources().fall());   // (no damage at all)
         }
 
         @Override
-        public void updateEntityAfterFallOn(BlockGetter level, Entity entity) {
+        public void updateEntityMovementAfterFallOn(BlockGetter level, Entity entity) {
             if (entity.isSuppressingBounce()) {
-                super.updateEntityAfterFallOn(level, entity);
+                super.updateEntityMovementAfterFallOn(level, entity);
                 return;
             }
             Vec3 v = entity.getDeltaMovement();
@@ -162,7 +162,7 @@ public final class CircuitBlocks {
             }
             Vec3 v = entity.getDeltaMovement();
             entity.setDeltaMovement(v.x * 1.1, STUITER, v.z * 1.1);
-            entity.hasImpulse = true;
+            entity.needsSync = true;
             if (!level.isClientSide()) {
                 level.playSound(null, pos, SoundEvents.SLIME_JUMP, SoundSource.BLOCKS, 0.9f, 1.3f + level.getRandom().nextFloat() * 0.3f);
                 ((net.minecraft.server.level.ServerLevel) level).sendParticles(ParticleTypes.HAPPY_VILLAGER, pos.getX() + 0.5, pos.getY() + 1.1,
@@ -209,7 +209,7 @@ public final class CircuitBlocks {
         }
 
         @Override
-        protected boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
+        protected boolean propagatesSkylightDown(BlockState state) {
             return true;
         }
     }

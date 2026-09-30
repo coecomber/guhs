@@ -87,7 +87,7 @@ public class VogelsGameTests {
             for (Vogeltje v : vogels) {
                 helper.assertTrue(v.getTarget() == null, v.naam() + " has no target");
                 helper.assertTrue(v.vliegt(), v.naam() + " flew up after being hit");
-                helper.assertTrue(!v.doHurtTarget(p), v.naam() + " can't hurt");
+                helper.assertTrue(!v.doHurtTarget(helper.getLevel(), p), v.naam() + " can't hurt");
             }
             helper.assertTrue(p.getHealth() >= hp, "the player wasn't hurt");
             vogels.forEach(Entity::discard);
@@ -129,11 +129,11 @@ public class VogelsGameTests {
         PluisvinkjeEntity vink = vogel(helper, VogelsFeature.PLUISVINKJE.get(), 6.5, 2, 6.5);
         p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.WHEAT_SEEDS, 5));
         AABB box = new AABB(helper.absolutePos(BlockPos.ZERO)).inflate(16);
-        p.interactOn(vink, InteractionHand.MAIN_HAND);
+        p.interactOn(vink, InteractionHand.MAIN_HAND, vink.position());
         helper.assertTrue(p.getMainHandItem().getCount() == 4, "a seed eaten");
         helper.assertTrue(veertjes(helper, box) == 1, "one pluisveertje for the seeds");
         helper.assertTrue(!vink.magVoerVeertje() && vink.vertrouwen() > 0 && GidsFeature.heeft(p, "diertjes/vogels_voeren"), "fed: trusts you, cooldown");
-        p.interactOn(vink, InteractionHand.MAIN_HAND);
+        p.interactOn(vink, InteractionHand.MAIN_HAND, vink.position());
         helper.assertTrue(veertjes(helper, box) == 1 && p.getMainHandItem().getCount() == 3, "no second feather right away");
         vink.veertjeNu();
         helper.runAfterDelay(10, () -> {

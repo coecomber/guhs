@@ -37,7 +37,7 @@ public final class Schouder {
                     player.level().dimension(), player.blockPosition(), player.getGameProfile().name(), player.level().getGameTime()));
         }
         CompoundTag tag = new CompoundTag();
-        dier.saveWithoutId(tag);
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(dier, tag);
         tag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(dier.getType()).toString());
         tag.remove("UUID");
         tag.remove("Pos");

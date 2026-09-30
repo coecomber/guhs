@@ -50,7 +50,7 @@ public abstract class Evenement {
         this.level = level;
         this.center = center;
         this.duration = duration;
-        this.bar = new ServerBossEvent(type.displayName(), type.bar, BossEvent.BossBarOverlay.NOTCHED_10);
+        this.bar = new ServerBossEvent(java.util.UUID.randomUUID(), type.displayName(), type.bar, BossEvent.BossBarOverlay.NOTCHED_10);
     }
 
     public Vec3 center() {

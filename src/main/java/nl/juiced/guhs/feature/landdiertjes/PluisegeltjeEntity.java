@@ -232,12 +232,12 @@ public class PluisegeltjeEntity extends Landdiertje {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         if (isOpgerold() && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             playSound(LanddiertjesFeature.EGELTJE_ROL.get(), 0.5f, 1.6f);
             return false;                                         // a fluffy ball: nothing gets through
         }
-        boolean r = super.hurt(source, amount);
+        boolean r = super.hurtServer(level, source, amount);
         if (r && isAlive() && !level().isClientSide()) {
             rolOp();
         }
@@ -252,8 +252,8 @@ public class PluisegeltjeEntity extends Landdiertje {
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
-        return source.is(net.minecraft.world.damagesource.DamageTypes.SWEET_BERRY_BUSH) || super.isInvulnerableTo(source);
+    public boolean isInvulnerableTo(net.minecraft.server.level.ServerLevel level, DamageSource source) {
+        return source.is(net.minecraft.world.damagesource.DamageTypes.SWEET_BERRY_BUSH) || super.isInvulnerableTo(level, source);
     }
 
     @Override

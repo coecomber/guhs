@@ -27,7 +27,7 @@ public class VallendeKnabbelEntity extends Entity implements ItemSupplier {
     private static final EntityDataAccessor<Float> DATA_LAND_Y = SynchedEntityData.defineId(VallendeKnabbelEntity.class, EntityDataSerializers.FLOAT);
     /** Blocks per tick. */
     public static final double FALL_SPEED = 0.3;
-    private static final DustParticleOptions GOLD = new DustParticleOptions(new Vector3f(1f, 0.85f, 0.25f), 0.8f);
+    private static final DustParticleOptions GOLD = new DustParticleOptions(0xFFD940 /* 1, 0.85, 0.25 */, 0.8f);
 
     /** Server: ticks it has been lying on the ground. */
     int landedTicks;
@@ -98,7 +98,7 @@ public class VallendeKnabbelEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 

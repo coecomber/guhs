@@ -15,6 +15,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The pluisveertje: a soft pink-white fluff feather of a Pluisvinkje. The Wolkenhoeder of the Hemelkapelletje asks one to make
  * the Knuffelhart beat. Right-click to blow it into the air a little: a puff of pink feathers (it isn't used up).
@@ -32,13 +34,13 @@ public class Pluisveertje extends Item {
             server.sendParticles(VogelsFeature.VEERTJE.get(), at.x, at.y, at.z, 6, 0.2, 0.1, 0.2, 0.02);
             level.playSound(null, player.getX(), player.getY(), player.getZ(), VogelsFeature.TJIEP.get(), SoundSource.PLAYERS, 0.4f, 1.6f);
         }
-        player.getCooldowns().addCooldown(this, 20);
+        player.getCooldowns().addCooldown(new ItemStack(this), 20);
         return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.pluisveertje.lore").withStyle(ChatFormatting.LIGHT_PURPLE));
-        tooltip.add(Component.translatable("item.guhs.pluisveertje.lore2").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.pluisveertje.lore").withStyle(ChatFormatting.LIGHT_PURPLE));
+        tooltip.accept(Component.translatable("item.guhs.pluisveertje.lore2").withStyle(ChatFormatting.GRAY));
     }
 }

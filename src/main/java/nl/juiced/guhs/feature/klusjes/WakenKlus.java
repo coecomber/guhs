@@ -79,7 +79,7 @@ public class WakenKlus extends BasisKlus {
         Vec3 m = huisje.midden();
         double r = Huisjes.BEREIK + EXTRA;
         List<Mob> lijst = level.getEntitiesOfClass(Mob.class, huisje.gebied().inflate(EXTRA), e -> e.isAlive() && e != wie
-                && (e instanceof Enemy || isMika(e)) && !isSpelMika(e) && !(e instanceof OwnableEntity o && o.getOwnerUUID() != null)
+                && (e instanceof Enemy || isMika(e)) && !isSpelMika(e) && !(e instanceof OwnableEntity o && nl.juiced.guhs.entity.Owners.uuid(o) != null)
                 && !e.isPassenger() && e.position().distanceToSqr(m.x, e.getY(), m.z) <= r * r);
         return lijst.stream().min(Comparator.comparingDouble(e -> e.position().distanceToSqr(m))).orElse(null);
     }

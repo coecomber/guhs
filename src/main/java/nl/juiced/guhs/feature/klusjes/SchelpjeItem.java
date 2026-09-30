@@ -13,6 +13,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * Een schelpje (klusjes): a shiny pink shell that huisje guhs fish up (chore "vissen") and sometimes dig up. Hold it to
  * your ear (right-click) and you hear the Guhzee, and a little guh thought. Crafted into bone meal.
@@ -32,13 +34,13 @@ public class SchelpjeItem extends Item {
             level.playSound(null, player.blockPosition(), KlusjesFeature.ZEE.get(), SoundSource.PLAYERS, 0.8f, 0.9f + level.getRandom().nextFloat() * 0.2f);
             player.sendOverlayMessage(Component.translatable("item.guhs.klusjes_schelpje.oor." + level.getRandom().nextInt(OOR_ZINNEN))
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
-            player.getCooldowns().addCooldown(this, 40);
+            player.getCooldowns().addCooldown(new ItemStack(this), 40);
         }
         return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.klusjes_schelpje.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.klusjes_schelpje.lore").withStyle(ChatFormatting.GRAY));
     }
 }

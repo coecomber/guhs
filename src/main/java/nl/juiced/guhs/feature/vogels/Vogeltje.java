@@ -225,8 +225,8 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(net.minecraft.server.level.ServerLevel level) {
+        super.customServerAiStep(level);
         if (thuis == null) {
             thuis = blockPosition();
         }
@@ -504,8 +504,8 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        boolean hurt = super.hurt(source, amount);
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
+        boolean hurt = super.hurtServer(level, source, amount);
         if (hurt && !level().isClientSide() && isAlive()) {
             vertrouwen = 0;
             Entity by = source.getEntity();
@@ -520,12 +520,12 @@ public abstract class Vogeltje extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public boolean doHurtTarget(Entity target) {
+    public boolean doHurtTarget(net.minecraft.server.level.ServerLevel level, Entity target) {
         return false;
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false;
     }
 

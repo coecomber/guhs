@@ -76,7 +76,7 @@ public final class KampvuurMarshmallow {
         }
         event.setCanceled(true);
         event.setCancellationResult(InteractionResult.SUCCESS);
-        if (!(event.getEntity() instanceof ServerPlayer player) || player.getCooldowns().isOnCooldown(stack.getItem())) {
+        if (!(event.getEntity() instanceof ServerPlayer player) || player.getCooldowns().isOnCooldown(stack)) {
             return;
         }
         if (!avond(level)) {
@@ -96,16 +96,16 @@ public final class KampvuurMarshmallow {
         if (!player.getAbilities().instabuild) {
             stack.shrink(1);
         }
-        player.getCooldowns().addCooldown(een.getItem(), WACHT);
+        player.getCooldowns().addCooldown(een, WACHT);
         player.getFoodData().eat(3, 0.6f);
         double x = vuur.getX() + 0.5, y = vuur.getY() + 1.0, z = vuur.getZ() + 0.5;
         level.sendParticles(ParticleTypes.SMALL_FLAME, x, y, z, 6, 0.15, 0.1, 0.15, 0.01);
         level.sendParticles(KamperenFeature.KAMPVUURVONKJE.get(), x, y + 0.2, z, 10, 0.25, 0.2, 0.25, 0.02);
-        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, een), player.getX(), player.getEyeY() - 0.15, player.getZ(),
+        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, een.getItem()), player.getX(), player.getEyeY() - 0.15, player.getZ(),
                 6, 0.12, 0.08, 0.12, 0.04);
         level.sendParticles(ParticleTypes.HEART, player.getX(), player.getEyeY() + 0.6, player.getZ(), 1, 0.1, 0.1, 0.1, 0);
         level.playSound(null, vuur, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 1f, 1.3f);
-        level.playSound(null, player.blockPosition(), SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.8f, 1.2f);
+        level.playSound(null, player.blockPosition(), SoundEvents.GENERIC_EAT.value(), SoundSource.PLAYERS, 0.8f, 1.2f);
         player.sendOverlayMessage(Component.translatable("gui.guhs.kamperen.marshmallow").withStyle(ChatFormatting.GOLD));
         int totaal = KnusVoortgang.tel(player, GEROOSTERD, 1);
         GuhAdvancements.grant(player, "kamperen_marshmallow");

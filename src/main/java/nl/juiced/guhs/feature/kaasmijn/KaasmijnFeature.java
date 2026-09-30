@@ -15,10 +15,7 @@ import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.Tiers;
-import net.minecraft.world.item.component.Unbreakable;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -80,16 +77,18 @@ public final class KaasmijnFeature {
     // --- items ------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<Item> KAASBROK = ITEMS.registerSimpleItem("kaasbrok",
             () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).build()));
-    public static final DeferredItem<LoreItem> GOUDKAAS = ITEMS.registerItem("goudkaas", LoreItem::new, new Item.Properties().rarity(Rarity.UNCOMMON)
-            .food(new FoodProperties.Builder().nutrition(6).saturationModifier(1.2f).alwaysEdible()
-                    .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 100, 1), 1f)
-                    .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 2400, 0), 1f).build()));
+    public static final DeferredItem<LoreItem> GOUDKAAS = ITEMS.registerItem("goudkaas", LoreItem::new, () -> new Item.Properties().rarity(Rarity.UNCOMMON)
+            .food(new FoodProperties.Builder().nutrition(6).saturationModifier(1.2f).alwaysEdible().build(),
+                    net.minecraft.world.item.component.Consumables.defaultFood()
+                    .onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 1), 1f))
+                    .onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.ABSORPTION, 2400, 0), 1f)).build()));
     public static final DeferredItem<LeenhouweelItem> LEENHOUWEEL = ITEMS.registerItem("leenhouweel",
-            p -> new LeenhouweelItem(Tiers.IRON, p.attributes(PickaxeItem.createAttributes(Tiers.IRON, 1.0f, -2.8f))),
-            new Item.Properties().component(DataComponents.UNBREAKABLE, new Unbreakable(true)).rarity(Rarity.UNCOMMON));
+            LeenhouweelItem::new,
+            () -> new Item.Properties().pickaxe(net.minecraft.world.item.ToolMaterial.IRON, 1.0f, -2.8f)
+                    .component(DataComponents.UNBREAKABLE, net.minecraft.util.Unit.INSTANCE).rarity(Rarity.UNCOMMON));
     public static final DeferredItem<KaashouweelItem> KAASHOUWEEL = ITEMS.registerItem("kaashouweel",
-            p -> new KaashouweelItem(p.attributes(PickaxeItem.createAttributes(KaashouweelItem.TIER, 1.0f, -2.8f))),
-            () -> new Item.Properties().rarity(Rarity.RARE));
+            KaashouweelItem::new,
+            () -> new Item.Properties().pickaxe(KaashouweelItem.TIER, 1.0f, -2.8f).repairable(KAASBROK.get()).rarity(Rarity.RARE));
 
     static {
         for (DeferredBlock<?> block : java.util.List.of(KAASADER, DIEPE_KAASADER, GOUDEN_KAASADER, UITGEMIJNDE_KAASADER,
