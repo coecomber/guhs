@@ -136,7 +136,7 @@ public final class Dagritme {
 
     /** The day of the rhythm (a morning belongs to the day it starts: it begins at 23000). */
     public static long ritmeDag(Level level) {
-        return Math.floorDiv(level.getDayTime() + 1000L, 24000L);
+        return Math.floorDiv(nl.juiced.guhs.world.GuhTime.dayTime(level) + 1000L, 24000L);
     }
 
     /** Does this guh live the guh day? (a resident, a free-roaming tamed guh, a wild guh in the Knuffeldal or a guh village) */
@@ -398,7 +398,7 @@ public final class Dagritme {
         Vec3 tip = guh.position().add(forward.scale(w * 0.6 + 0.35)).add(0, h * 0.55, 0);
         Vec3 mouth = guh.position().add(forward.scale(w * 0.5)).add(0, h * 0.4, 0);
         level.sendParticles(ParticleTypes.SMALL_FLAME, tip.x, tip.y, tip.z, 2, 0.03, 0.03, 0.03, 0.005);
-        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, marshmallow), mouth.x, mouth.y, mouth.z, 4, 0.08, 0.05, 0.08, 0.04);
+        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, net.minecraft.world.item.ItemStackTemplate.fromNonEmptyStack(marshmallow)), mouth.x, mouth.y, mouth.z, 4, 0.08, 0.05, 0.08, 0.04);
         guh.playSound(ModSounds.GUH_EAT.get(), 0.4f, guh.getVoicePitch() * 1.15f);
     }
 

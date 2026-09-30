@@ -30,11 +30,13 @@ public final class KnabbelspelenClient {
         modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAbove(VanillaGuiLayers.CAMERA_OVERLAYS, Guhs.id("knabbelspelen_blinddoek"),
                 KnabbelspelenClient::renderBlinddoek));
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> blinddoek = false);
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.SPELLEIDERGUH, Guhs.id("geo/entity/guh_npc_spelleiderguh.geo.json"));
-        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.SPELLEIDERGUH, (npc, state, bot) -> {
-            float t = (float) state.getAnimationTick() * 0.12f;
-            bot.apply("vahoegsakee_fluitje").ifPresent(b -> b.setRotX((float) Math.sin(t) * 0.12f));
-            bot.apply("vahoegsakee_klembord").ifPresent(b -> b.setRotZ((float) Math.sin(t * 0.5f) * 0.04f));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.SPELLEIDERGUH, Guhs.id("entity/guh_npc_spelleiderguh"));
+        SittingGuhRenderers.NPC_ANIMATORS.put(GuhNpcEntity.Kind.SPELLEIDERGUH, (npc, tick) -> {
+            float t = (float) tick * 0.12f;
+            return bones -> {
+                bones.ifPresent("vahoegsakee_fluitje", b -> b.setRotX((float) Math.sin(t) * 0.12f));
+                bones.ifPresent("vahoegsakee_klembord", b -> b.setRotZ((float) Math.sin(t * 0.5f) * 0.04f));
+            };
         });
     }
 

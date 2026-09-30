@@ -122,7 +122,7 @@ public final class VadswoudFeature {
     // --- items ----------------------------------------------------------------------------------------------------------
     public static final DeferredItem<VadsItems.Bessen> KNABBELBESSEN = ITEMS.registerItem("knabbelbessen",
             p -> new VadsItems.Bessen(KNABBELBESSENSTRUIK.get(), p),
-            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2f).build()));
+            () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2f).build()).useItemDescriptionPrefix());
     public static final DeferredItem<Item> KNABBELBESSENTAARTJE = ITEMS.registerSimpleItem("knabbelbessentaartje",
             () -> new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.6f).build()));
 
@@ -131,9 +131,9 @@ public final class VadswoudFeature {
                 VADSHOUT_POORT, VADSHOUT_DEUR, VADSHOUT_LUIK, VADSHOUT_BLADEREN, VADSMOS, VADSTOUW)) {
             ITEMS.registerSimpleBlockItem(block);
         }
-        ITEMS.registerItem("vadshout_zaailing", p -> new VadsItems.LoreBlock(VADSHOUT_ZAAILING.get(), p));
-        ITEMS.registerItem("vadshout_gezicht", p -> new VadsItems.LoreBlock(VADSHOUT_GEZICHT.get(), p));
-        ITEMS.registerItem("guhnestje", p -> new VadsItems.LoreBlock(GUHNESTJE.get(), p));
+        ITEMS.registerItem("vadshout_zaailing", p -> new VadsItems.LoreBlock(VADSHOUT_ZAAILING.get(), p), p -> p.useBlockDescriptionPrefix());
+        ITEMS.registerItem("vadshout_gezicht", p -> new VadsItems.LoreBlock(VADSHOUT_GEZICHT.get(), p), p -> p.useBlockDescriptionPrefix());
+        ITEMS.registerItem("guhnestje", p -> new VadsItems.LoreBlock(GUHNESTJE.get(), p), p -> p.useBlockDescriptionPrefix());
     }
 
     // --- worldgen, the nest's point of interest, particles ------------------------------------------------------------------

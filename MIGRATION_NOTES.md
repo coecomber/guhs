@@ -1083,3 +1083,17 @@ pass `sprites.get(random)` to super, `setSpriteFromAge(sprites)` unchanged.
 * S1: Pyjamas by the campfire (kamperen) and the klusje icon over a working guh (klusjes) are `GuhRenderer.hook`s now (`frame.pass` /
   `frame.layerExtra`) instead of `GuhRenderHooks.laag` layers; same bones, textures and pose.
 * S1: Kaasknabbel nests: SavedData `guhs:piep_nesten` (1.0.0 file `guhs_piep_nesten.dat` moved once by `GuhSavedData.get`).
+* S2: Vadswoud mist: 26.1 has no fog shapes, so the mist can no longer be cylindrical; it is set on the atmospheric (terrain)
+  fog distances of `ViewportEvent.RenderFog` and measured like all 26.1 environmental fog (looking down from high up in a
+  reuzenguhboom is a little hazier than in 1.0.0). Same distances (36..112 blocks), same fade in/out; the sky fog is untouched.
+* S2: Herinnering (the star of a guh in the wolkjes) held in the main hand: its sparkles come from a client tick for every
+  player the client sees (1.0.0: the item's client-side `inventoryTick`, which 26.1 no longer calls). Same chance and spot.
+* S2: Guh-molentje hoppers: the item capability is NeoForge 26.1's transactional `ResourceHandler<ItemResource>` (was
+  `IItemHandler`); same rules (graan in from the top/sides, never from below; only meel out at the bottom), aborted
+  transfers are rolled back. The graan/meel still drop when it is broken (now from `MolentjeBlockEntity#preRemoveSideEffects`).
+* S2: Knotwilg and vadshout leaves: 26.1 leaves drop falling-leaf particles by default; ours use chance 0 (as in 1.0.0).
+  The vadshout leaves keep their own mint-leaf particle.
+* S2: Knuffelhart: 1.0.0 passed a grey colour for the still sleeping heart, but its model has no tint index, so it never
+  showed; the port simply draws the model (same look).
+* S2: Knabbelkatapult notification sounds (countdown, fort done, run done) are sent as a `ClientboundSoundPacket` to the
+  player (26.1 removed `ServerPlayer#playNotifySound`, which sent the same packet).

@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
@@ -45,7 +45,7 @@ public final class GuhSneeuw {
 
     private static void particles(RegisterParticleProvidersEvent event) {
         // (dy carries what it is: 1 = a guh head, 0 = a flake; dx/dz are the wind)
-        event.registerSpriteSet(GuhpolderFeature.GUH_SNEEUW.get(), sprites -> (type, level, x, y, z, dx, dy, dz) ->
+        event.registerSpriteSet(GuhpolderFeature.GUH_SNEEUW.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) ->
                 new Vlok(level, x, y, z, dx, dy > 0.5, dz, sprites));
     }
 
@@ -64,7 +64,7 @@ public final class GuhSneeuw {
         if (!cam.isInitialized()) {
             return;
         }
-        Vec3 c = cam.getPosition();
+        Vec3 c = cam.position();
         // is there any polder near at all? (cheap: the camera's own spot and four around it)
         if (!polderBij(level, c)) {
             rest = 0;
@@ -86,7 +86,7 @@ public final class GuhSneeuw {
                 continue;       // under a roof or in the ground
             }
             Holder<Biome> biome = level.getBiome(p);
-            if (!biome.is(GuhpolderFeature.GUHPOLDER) || biome.value().getPrecipitationAt(p) != Biome.Precipitation.SNOW) {
+            if (!biome.is(GuhpolderFeature.GUHPOLDER) || biome.value().getPrecipitationAt(p, level.getSeaLevel()) != Biome.Precipitation.SNOW) {
                 continue;
             }
             boolean guhkop = r.nextInt(GUHKOP_EEN_OP) == 0;
@@ -105,7 +105,7 @@ public final class GuhSneeuw {
     }
 
     /** One guh-sneeuw flake (or guh head): drifts down swaying, fades in, melts away where it lands. */
-    static class Vlok extends TextureSheetParticle {
+    static class Vlok extends SingleQuadParticle {
         private static final int INFADEN = 20, UITFADEN = 30, SMELTEN = 30;
         private final boolean guhkop;
         private final double windX, windZ, val, zwaai;
@@ -113,7 +113,7 @@ public final class GuhSneeuw {
         private int geland = -1;
 
         Vlok(ClientLevel level, double x, double y, double z, double windX, boolean guhkop, double windZ, SpriteSet sprites) {
-            super(level, x, y, z);
+            super(level, x, y, z, sprites.first());
             this.guhkop = guhkop;
             this.windX = windX;
             this.windZ = windZ;
@@ -172,8 +172,8 @@ public final class GuhSneeuw {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

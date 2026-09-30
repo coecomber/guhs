@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.hemel.client;
 
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -120,7 +122,9 @@ public class HemelScherm extends Screen {
     // --- input ---------------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean mouseClicked(double mx, double my, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mx = event.x(), my = event.y();
+        int button = event.button();
         int lx = left + 10, ly = top + 42;
         if (mx >= lx && mx < lx + LIJST_W && my >= ly && my < ly + LIJST_H) {
             int i = scroll + (int) ((my - ly) / RIJ);
@@ -132,17 +136,19 @@ public class HemelScherm extends Screen {
                 return true;
             }
         }
-        return super.mouseClicked(mx, my, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override
-    public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        double mx = event.x(), my = event.y();
+        int button = event.button();
         if (mx >= left + 144 && mx < left + W - 10 && my >= top + 42 && my < top + 42 + 96) {
             draai += (float) dx * 2.5f;
             kanteling = Mth.clamp(kanteling + (float) dy, -30, 40);
             return true;
         }
-        return super.mouseDragged(mx, my, button, dx, dy);
+        return super.mouseDragged(event, dx, dy);
     }
 
     @Override

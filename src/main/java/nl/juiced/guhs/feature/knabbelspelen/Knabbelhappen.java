@@ -130,7 +130,7 @@ public final class Knabbelhappen implements Wedstrijd.Spel {
             s.goud++;
         }
         level.playSound(null, p.blockPosition(), KnabbelspelenFeature.HAP.get(), SoundSource.PLAYERS, 1f, goud ? 1.4f : 1f + level.getRandom().nextFloat() * 0.2f);
-        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, ding.stack()), ding.getX(), ding.getY() + 0.2, ding.getZ(), 10, 0.15, 0.15, 0.15, 0.08);
+        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, net.minecraft.world.item.ItemStackTemplate.fromNonEmptyStack(ding.stack())), ding.getX(), ding.getY() + 0.2, ding.getZ(), 10, 0.15, 0.15, 0.15, 0.08);
         if (goud) {
             level.sendParticles(ParticleTypes.WAX_ON, ding.getX(), ding.getY() + 0.2, ding.getZ(), 8, 0.3, 0.3, 0.3, 0.05);
             p.sendOverlayMessage(Component.translatable("quest.guhs.knabbelspelen.hap.goud", s.punten).withStyle(ChatFormatting.GOLD));

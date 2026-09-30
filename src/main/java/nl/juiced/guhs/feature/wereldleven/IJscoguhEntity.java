@@ -229,9 +229,9 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
     // --- nothing hurts him ------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel serverLevel, DamageSource source, float amount) {
         if (source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            return super.hurt(source, amount);
+            return super.hurtServer(serverLevel, source, amount);
         }
         return false;
     }
@@ -323,6 +323,12 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
     @Override
     public Player getTradingPlayer() {
         return tradingPlayer;
+    }
+
+    /** 26.1: the merchant menu asks the merchant (1.21.1's MerchantMenu checked getTradingPlayer() == player). */
+    @Override
+    public boolean stillValid(Player player) {
+        return tradingPlayer == player;
     }
 
     @Override

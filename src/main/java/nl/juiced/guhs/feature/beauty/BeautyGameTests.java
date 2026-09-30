@@ -232,7 +232,7 @@ public class BeautyGameTests {
         helper.assertTrue(guh.getClothes(GuhClothes.Slot.HEAD) == GuhClothes.SANTA_HAT, "dressed in a loaner");
         // a crash right now: the guh is saved with its loan note, and cleans itself up when it's loaded again
         CompoundTag saved = new CompoundTag();
-        guh.save(saved);
+        nl.juiced.guhs.storage.Nbt.save(guh, saved);
         BeautyShow.action(npc, player, BeautyShow.QUIT, 0);
         helper.assertTrue(BeautyShow.at(npc) == null && !BeautyShow.isPerforming(player), "stopping ends the show");
         helper.assertTrue(guh.isAlive() && guh.isOwnedBy(player) && !guh.isNoAi() && !guh.isInvulnerable(), "the guh is the player's again");
@@ -241,7 +241,7 @@ public class BeautyGameTests {
         helper.assertTrue(guh.hasBackpack() && guh.getBackpack().getItem(0).getCount() == 3, "and its backpack is untouched");
         helper.assertTrue(!guh.getPersistentData().contains(BeautyShow.LOAN) && !hasClothes(player), "no loan left, nothing in the inventory");
         guh.discard();
-        GuhEntity restored = (GuhEntity) net.minecraft.world.entity.EntityType.create(saved, helper.getLevel()).orElseThrow();
+        GuhEntity restored = (GuhEntity) net.minecraft.world.entity.EntityType.create(nl.juiced.guhs.storage.Nbt.input(helper.getLevel().registryAccess(), saved), helper.getLevel(), net.minecraft.world.entity.EntitySpawnReason.LOAD).orElseThrow();
         restored.setUUID(java.util.UUID.randomUUID());
         helper.assertTrue(restored.getPersistentData().contains(BeautyShow.LOAN) && !restored.isOwnedBy(player), "saved while borrowed");
         helper.getLevel().addFreshEntity(restored);
@@ -264,7 +264,7 @@ public class BeautyGameTests {
         BeautyShow.action(npc, b, BeautyShow.DRESS, GuhClothes.PARTY_HAT.ordinal());
         helper.assertTrue(show.worn().isEmpty(), "only the performer dresses the model");
         GuhEntity model = show.model();
-        net.minecraft.world.InteractionResult result = b.interactOn(model, net.minecraft.world.InteractionHand.MAIN_HAND);
+        net.minecraft.world.InteractionResult result = b.interactOn(model, net.minecraft.world.InteractionHand.MAIN_HAND, model.position());
         helper.assertTrue(result.consumesAction() && !model.isOrderedToSit(), "others can't touch the model");
         BeautyShow.leave(a);                                  // the performer logs out
         helper.assertTrue(BeautyShow.at(npc) == null && model.isRemoved(), "the show ends and the model goes home");

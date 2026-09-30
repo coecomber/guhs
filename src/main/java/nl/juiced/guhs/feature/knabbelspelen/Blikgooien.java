@@ -143,8 +143,7 @@ public final class Blikgooien implements Wedstrijd.Spel {
             return false;
         }
         ServerLevel level = p.level();
-        Snowball bal = new Snowball(level, p);
-        bal.setItem(new ItemStack(KnabbelspelenFeature.BLIK_PLUISBAL.get()));
+        Snowball bal = new Snowball(level, p, new ItemStack(KnabbelspelenFeature.BLIK_PLUISBAL.get()));
         bal.shootFromRotation(p, p.getXRot(), p.getYRot(), 0f, 1.5f, 0.6f);
         bal.addTag(TAG);
         level.addFreshEntity(bal);

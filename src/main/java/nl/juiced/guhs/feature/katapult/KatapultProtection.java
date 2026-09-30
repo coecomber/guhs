@@ -48,7 +48,7 @@ public final class KatapultProtection {
         if (server.dimension() != ModDimensions.GUHMENSION) {
             return false;
         }
-        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(KatapultFeature.KNABBELKATAPULT);
+        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(KatapultFeature.KNABBELKATAPULT);
         return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
     }
 

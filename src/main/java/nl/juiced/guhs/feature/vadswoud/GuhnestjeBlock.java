@@ -15,6 +15,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * A guh nest: a round straw rim around a soft pink bowl. At night the guh families crawl into it together, wild ones
  * and tame ones (see {@link SleepInNestGoal}). You walk (and a guh climbs) right into it: only the bottom is solid.
@@ -49,9 +51,9 @@ public class GuhnestjeBlock extends Block {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighbourPos, BlockState neighbour, RandomSource random) {
         return direction == Direction.DOWN && !canSurvive(state, level, pos) ? Blocks.AIR.defaultBlockState()
-                : super.updateShape(state, direction, neighbour, level, pos, neighbourPos);
+                : super.updateShape(state, level, ticks, pos, direction, neighbourPos, neighbour, random);
     }
 
     @Override

@@ -38,6 +38,7 @@ import nl.juiced.guhs.world.ModDimensions;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.component.TooltipDisplay;
 /**
  * De Knabbelspelen (2.9, De Grote Guhspelen; structure knabbelspelen in the Guhweides and Roze pluisjes): a big striped
  * circus tent with a guh face and two guh ears as tent tops, and six play fields around it. Juf Vahoegsakee
@@ -61,7 +62,7 @@ public final class KnabbelspelenFeature {
             KnabbelspelenBlocks.KaasmelkFles::new, () -> BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(0.4f, 2f).sound(SoundType.GLASS).noOcclusion());
     /** The invisible anchor under Juf Vahoegsakee. */
     public static final DeferredBlock<DoolhofBlocks.AnkerBlock> ANKER = BLOCKS.registerBlock("knabbelspelen_anker", DoolhofBlocks.AnkerBlock::new,
-            BlockBehaviour.Properties.of().noCollission().noLootTable().strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false));
+            () -> BlockBehaviour.Properties.of().noCollision().noLootTable().strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false));
 
     // --- items ---------------------------------------------------------------------------------------------------------
     /** The coin of the Knabbelspelen: a pink ribbon with a golden guh medal. */
@@ -90,8 +91,8 @@ public final class KnabbelspelenFeature {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> lines, TooltipFlag flag) {
-            lines.add(Component.translatable(lore).withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> lines, TooltipFlag flag) {
+            lines.accept(Component.translatable(lore).withStyle(ChatFormatting.GRAY));
         }
     }
 

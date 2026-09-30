@@ -2,10 +2,10 @@ package nl.juiced.guhs.feature.vadswoud.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.CherryParticle;
+import net.minecraft.client.particle.FallingLeavesParticle;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.renderer.fog.FogRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.material.FogType;
@@ -37,37 +37,38 @@ public final class VadswoudClient {
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(VadswoudFeature.VADSPLUISJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Pluisje(level, x, y, z, sprites));
-        event.registerSpriteSet(VadswoudFeature.VADSBLAADJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Blaadje(level, x, y, z, sprites));
-        event.registerSpriteSet(VadswoudFeature.GUH_ZZZ.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Zzz(level, x, y, z, sprites));
+        event.registerSpriteSet(VadswoudFeature.VADSPLUISJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Pluisje(level, x, y, z, sprites));
+        event.registerSpriteSet(VadswoudFeature.VADSBLAADJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Blaadje(level, x, y, z, sprites));
+        event.registerSpriteSet(VadswoudFeature.GUH_ZZZ.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Zzz(level, x, y, z, sprites));
     }
 
     private static void onTick(ClientTickEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         mistO = mist;
         boolean inWood = mc.level != null && mc.gameRenderer.getMainCamera().isInitialized()
-                && mc.level.getBiome(mc.gameRenderer.getMainCamera().getBlockPosition()).is(VadswoudFeature.VADSWOUD);
+                && mc.level.getBiome(mc.gameRenderer.getMainCamera().blockPosition()).is(VadswoudFeature.VADSWOUD);
         mist = Mth.approach(mist, inWood ? 1f : 0f, 0.012f);
     }
 
     private static void onFog(ViewportEvent.RenderFog event) {
         float m = Mth.lerp((float) event.getPartialTick(), mistO, mist);
-        if (m <= 0.001f || event.getMode() != FogRenderer.FogMode.FOG_TERRAIN || event.getType() != FogType.NONE) {
+        // (1.1.0: no terrain/sky fog modes any more - the atmospheric environment's distances are the terrain fog; the sky fog is left alone)
+        if (m <= 0.001f || !(event.getEnvironment() instanceof net.minecraft.client.renderer.fog.environment.AtmosphericFogEnvironment)
+                || event.getType() != FogType.ATMOSPHERIC) {
             return;
         }
         float far = event.getFarPlaneDistance();
         float newFar = Mth.lerp(m, far, Math.min(far, MIST_FAR));
         event.setFarPlaneDistance(newFar);
         event.setNearPlaneDistance(Mth.lerp(m, event.getNearPlaneDistance(), Math.min(MIST_NEAR, newFar * 0.4f)));
-        event.setFogShape(com.mojang.blaze3d.shaders.FogShape.CYLINDER);   // only the horizontal distance counts: looking down from high up stays clear
-        event.setCanceled(true);
+        // (1.1.0: fog shapes are gone - 26.1 measures the environmental fog spherically, see MIGRATION_NOTES "Behaviour changes")
     }
 
     /** Glowing fluff: drifts slowly up and sideways, fades in and out, shines in the dark. */
-    static class Pluisje extends TextureSheetParticle {
+    static class Pluisje extends SingleQuadParticle {
         Pluisje(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.first());
+            setSprite(sprites.get(random));
             lifetime = 100 + random.nextInt(100);
             quadSize = 0.04f + random.nextFloat() * 0.05f;
             gravity = -0.002f;
@@ -88,29 +89,30 @@ public final class VadswoudClient {
         }
 
         @Override
-        protected int getLightColor(float partialTick) {
+        protected int getLightCoords(float partialTick) {
             return 0xF000F0;
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A little mint leaf, falling and spinning like a cherry petal. */
-    static class Blaadje extends CherryParticle {
+    static class Blaadje extends FallingLeavesParticle {
         Blaadje(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z, sprites);
+            super(level, x, y, z, sprites.first(), 0.25F, 2.0F, false, true, 1.0F, 0.0F);   // (vanilla's cherry leaf settings)
+            setSprite(sprites.get(random));
             quadSize *= 1.2f;
         }
     }
 
     /** The Zzz of a sleeping guh: floats up and fades away. */
-    static class Zzz extends TextureSheetParticle {
+    static class Zzz extends SingleQuadParticle {
         Zzz(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.first());
+            setSprite(sprites.get(random));
             lifetime = 40;
             quadSize = 0.14f;
             gravity = 0f;
@@ -128,8 +130,8 @@ public final class VadswoudClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

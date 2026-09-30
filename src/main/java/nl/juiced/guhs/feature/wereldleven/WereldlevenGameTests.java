@@ -182,7 +182,7 @@ public class WereldlevenGameTests {
                 .thenExecute(() -> {
                     p.snapTo(guh.getX() + 1, guh.getY(), guh.getZ());
                     p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(WereldlevenFeature.MARSHMALLOW_KNABBEL.get(), 2));
-                    helper.assertTrue(guh.interact(p, InteractionHand.MAIN_HAND).consumesAction(), "it takes the marshmallow");
+                    helper.assertTrue(guh.interact(p, InteractionHand.MAIN_HAND, guh.position()).consumesAction(), "it takes the marshmallow");
                     helper.assertTrue(count(p, WereldlevenFeature.MARSHMALLOW_KNABBEL.get()) == 1, "one marshmallow less");
                     helper.assertTrue(KnusVoortgang.teller(p, WereldlevenVoortgang.MARSHMALLOWS) == 1 && advancement(p, "wereldleven_kampvuur"),
                             "counted, and the quest");
@@ -253,7 +253,7 @@ public class WereldlevenGameTests {
         GuhEntity guh = guh(helper, new BlockPos(6, 2, 6), Dagdeel.DAG);
         guh.getPersistentData().putBoolean(Dagritme.KAMPVUUR, true);   // (as saved with a guh that sat at the fire)
         p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(WereldlevenFeature.MARSHMALLOW_KNABBEL.get(), 2));
-        helper.assertFalse(guh.interact(p, InteractionHand.MAIN_HAND).consumesAction() && count(p, WereldlevenFeature.MARSHMALLOW_KNABBEL.get()) < 2,
+        helper.assertFalse(guh.interact(p, InteractionHand.MAIN_HAND, guh.position()).consumesAction() && count(p, WereldlevenFeature.MARSHMALLOW_KNABBEL.get()) < 2,
                 "no fire: no marshmallow");
         helper.startSequence()
                 .thenWaitUntil(() -> helper.assertTrue(!guh.getPersistentData().getBooleanOr(Dagritme.KAMPVUUR, false), "the old campfire flag is cleared"))
@@ -297,7 +297,7 @@ public class WereldlevenGameTests {
         Kaasijsjes.eet(p, Kaasijsjes.Smaak.CHOCO);
         helper.assertTrue(p.hasEffect(WereldlevenFeature.ZWEVERIG), "zweverig");
         p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(WereldlevenFeature.KAASIJSJES.get(Kaasijsjes.Smaak.MINT).get(), 2));
-        helper.assertTrue(guh.interact(p, InteractionHand.MAIN_HAND).consumesAction(), "the guh takes the ice cream");
+        helper.assertTrue(guh.interact(p, InteractionHand.MAIN_HAND, guh.position()).consumesAction(), "the guh takes the ice cream");
         helper.assertTrue(GuhHooks.heeft(guh, GuhHooks.IJSHOEDJE) && Kaasijsjes.hoedjeSmaak(guh) == Kaasijsjes.Smaak.MINT, "a mint ice-cream hat");
         helper.assertTrue(count(p, WereldlevenFeature.KAASIJSJES.get(Kaasijsjes.Smaak.MINT).get()) == 1, "one ice cream less");
         Kaasijsjes.geefGuh(guh, Kaasijsjes.Smaak.ROZE, p);
@@ -348,12 +348,12 @@ public class WereldlevenGameTests {
         IJscoguhEntity ijsco = helper.spawn(WereldlevenFeature.IJSCOGUH.get(), new BlockPos(6, 2, 6));
         ijsco.setNoAi(true);
         float hp = ijsco.getHealth();
-        helper.assertTrue(!ijsco.hurt(helper.getLevel().damageSources().playerAttack(p), 10f) && ijsco.getHealth() == hp, "nothing hurts him");
+        helper.assertTrue(!ijsco.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(p), 10f) && ijsco.getHealth() == hp, "nothing hurts him");
         int bel = ijsco.belTeller();
         ijsco.bel();
         helper.assertTrue(ijsco.belTeller() == bel + 1, "tingeling!");
         p.snapTo(ijsco.getX() + 1.5, ijsco.getY(), ijsco.getZ());
-        helper.assertTrue(ijsco.interact(p, InteractionHand.MAIN_HAND).consumesAction() && ijsco.getTradingPlayer() == p, "his shop opens");
+        helper.assertTrue(ijsco.interact(p, InteractionHand.MAIN_HAND, ijsco.position()).consumesAction() && ijsco.getTradingPlayer() == p, "his shop opens");
         helper.assertTrue(KnusVoortgang.teller(p, WereldlevenVoortgang.IJSCOGUH) == 1 && advancement(p, "wereldleven_ijscoguh"), "met him");
         p.closeContainer();
         helper.assertTrue(GuhVariant.IJSCOGUH.isCharacter() && GuhVariant.IJSCOGUH.npcKind() == null, "a creature page in the Guhdex");

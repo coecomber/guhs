@@ -49,15 +49,17 @@ public final class EilandenFeature {
                     .pushReaction(PushReaction.BLOCK));
     /** The invisible cloud stream of a wolkenlift (like a bubble column). */
     public static final DeferredBlock<WolkenstroomBlock> WOLKENSTROOM = BLOCKS.registerBlock("wolkenstroom", WolkenstroomBlock::new,
-            BlockBehaviour.Properties.of().mapColor(MapColor.NONE).noCollission().noLootTable().replaceable().noOcclusion()
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.NONE).noCollision().noLootTable().replaceable().noOcclusion()
                     .pushReaction(PushReaction.DESTROY).isValidSpawn((s, l, p, e) -> false).isRedstoneConductor((s, l, p) -> false)
                     .isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false));
 
     public static final DeferredItem<BlockItem> WOLKENLIFT_ITEM = ITEMS.registerSimpleBlockItem(WOLKENLIFT);
     /** Cloud candy floss from the treasure in the guh-face rock: floating down softly for a while. */
-    public static final DeferredItem<Item> WOLKENSUIKERSPIN = ITEMS.registerSimpleItem("wolkensuikerspin", new Item.Properties().stacksTo(16)
-            .food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.3f).fast().alwaysEdible()
-                    .effect(() -> new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 45, 0), 1f).build()));
+    public static final DeferredItem<Item> WOLKENSUIKERSPIN = ITEMS.registerSimpleItem("wolkensuikerspin", () -> new Item.Properties().stacksTo(16)
+            .food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.3f).alwaysEdible().build(),
+                    net.minecraft.world.item.component.Consumables.defaultFood().consumeSeconds(0.8f)
+                            .onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(
+                                    new MobEffectInstance(MobEffects.SLOW_FALLING, 20 * 45, 0), 1f)).build()));
 
     public static void register(IEventBus modBus) {
         BLOCKS.register(modBus);
@@ -86,7 +88,7 @@ public final class EilandenFeature {
         if (level.dimension() != ModDimensions.GUHMENSION) {
             return null;
         }
-        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(ISLANDS);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(ISLANDS);
         if (structure == null) {
             return null;
         }

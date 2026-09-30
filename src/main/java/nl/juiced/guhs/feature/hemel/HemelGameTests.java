@@ -131,7 +131,7 @@ public class HemelGameTests {
         Band.geefHartjes(guh, p, 250, Reden.OVERIG);
         UUID id = guh.getUUID();
         int hartjes = Band.hartjes(guh);
-        guh.kill();
+        guh.kill(helper.getLevel());
         helper.assertTrue(Hemel.lijst(p).stream().anyMatch(d -> d.bandId().equals(id) && d.naam().equals("Wolkje")), "in the list of the screen");
         CompoundTag data = Hemel.data(p, hart, null);
         helper.assertTrue(data.getListOrEmpty("Guhs").size() == 1
@@ -168,7 +168,7 @@ public class HemelGameTests {
         guh.tame(p);
         guh.setCustomName(Component.literal("Sterretje"));
         UUID id = guh.getUUID();
-        guh.kill();
+        guh.kill(helper.getLevel());
         List<ItemEntity> sterren = helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(helper.absolutePos(new BlockPos(9, 2, 9))).inflate(3),
                 e -> e.getItem().is(HemelFeature.HERINNERING.get()));
         helper.assertTrue(sterren.size() == 1, "one star");

@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.wereldleven.client;
 
+import net.minecraft.client.input.KeyEvent;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -161,7 +163,8 @@ public class GrijpmachineScherm extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int key, int scan, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
+        int key = event.key(), scan = event.scancode(), modifiers = event.modifiers();
         if (stuur(key, true)) {
             return true;
         }
@@ -169,15 +172,16 @@ public class GrijpmachineScherm extends Screen {
             laatZakken();
             return true;
         }
-        return super.keyPressed(key, scan, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override
-    public boolean keyReleased(int key, int scan, int modifiers) {
+    public boolean keyReleased(KeyEvent event) {
+        int key = event.key(), scan = event.scancode(), modifiers = event.modifiers();
         if (stuur(key, false)) {
             return true;
         }
-        return super.keyReleased(key, scan, modifiers);
+        return super.keyReleased(event);
     }
 
     // --- the animation -----------------------------------------------------------------------------------------------------

@@ -30,6 +30,7 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.registry.ModItems;
 
+import net.minecraft.world.item.component.TooltipDisplay;
 /**
  * The Guh Beauty Vads-wedstrijd (2.4): a grand catwalk theatre in the Guhmension where the Showguh runs a beauty
  * contest for guhs ({@link BeautyShow}). Its own blocks (stage markers, the loaner wardrobe), the showrozet (the prize
@@ -41,7 +42,7 @@ public final class BeautyFeature {
 
     /** The invisible markers of the stage (where the model stands) and the end of the catwalk. */
     public static final DeferredBlock<BeautyBlocks.Plek> PLEK = BLOCKS.registerBlock("beauty_plek", BeautyBlocks.Plek::new,
-            BlockBehaviour.Properties.of().noCollission().noLootTable().strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false));
+            () -> BlockBehaviour.Properties.of().noCollision().noLootTable().strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false));
     /** The loaner wardrobe: opens the dressing screen during your show. */
     public static final DeferredBlock<BeautyBlocks.Leenkast> LEENKAST = BLOCKS.registerBlock("beauty_leenkast", BeautyBlocks.Leenkast::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(2f).sound(SoundType.CHERRY_WOOD));
@@ -111,8 +112,8 @@ public final class BeautyFeature {
         }
 
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("item.guhs.showrozet.lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("item.guhs.showrozet.lore").withStyle(ChatFormatting.GRAY));
         }
     }
 

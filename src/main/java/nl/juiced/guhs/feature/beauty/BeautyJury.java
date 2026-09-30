@@ -142,7 +142,7 @@ public final class BeautyJury {
     }
 
     private static Component name(GuhClothes clothes) {
-        return ModItems.clothingItem(clothes).getDescription();
+        return Component.translatable(ModItems.clothingItem(clothes).getDescriptionId());
     }
 
     private BeautyJury() {

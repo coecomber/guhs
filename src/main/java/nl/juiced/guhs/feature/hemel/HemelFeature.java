@@ -72,7 +72,7 @@ public final class HemelFeature {
                     .lightLevel(s -> 13).sound(SoundType.AMETHYST).pushReaction(PushReaction.BLOCK).isValidSpawn((s, l, p, e) -> false)
                     .isRedstoneConductor((s, l, p) -> false).isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KnuffelhartBlockEntity>> KNUFFELHART_BE = BLOCK_ENTITY_TYPES.register(
-            "knuffelhart", () -> BlockEntityType.Builder.of(KnuffelhartBlockEntity::new, KNUFFELHART.get()).build(null));
+            "knuffelhart", () -> new BlockEntityType<>(KnuffelhartBlockEntity::new, KNUFFELHART.get()));
 
     /** A tiny twinkly star (the heart's sparkle, a guh's glans after coming back). */
     public static final DeferredHolder<ParticleType<?>, SimpleParticleType> STERRETJE = PARTICLES.register("hemel_sterretje",

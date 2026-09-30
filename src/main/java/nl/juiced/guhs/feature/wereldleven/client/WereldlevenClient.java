@@ -4,12 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SingleQuadParticle;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import nl.juiced.guhs.feature.knus.client.GuhRenderHooks;
 import nl.juiced.guhs.feature.wereldleven.GrijpmachineBlockEntity;
 import nl.juiced.guhs.feature.wereldleven.WereldlevenFeature;
 import nl.juiced.guhs.feature.wereldleven.WereldlevenPayloads;
@@ -24,7 +23,7 @@ public final class WereldlevenClient {
         modBus.addListener(WereldlevenClient::renderers);
         modBus.addListener(WereldlevenClient::particles);
         modBus.addListener(WereldlevenClient::models);
-        GuhRenderHooks.laag(WereldlevenLagen::render);
+        nl.juiced.guhs.client.GuhRenderer.hook(WereldlevenLagen::hook);
         WereldlevenFeature.openXylofoon = pos -> Minecraft.getInstance().setScreen(new XylofoonScherm(pos));
     }
 
@@ -33,14 +32,14 @@ public final class WereldlevenClient {
         event.registerBlockEntityRenderer(WereldlevenFeature.GRIJPMACHINE_BE.get(), GrijpmachineRenderer::new);
     }
 
-    private static void models(ModelEvent.RegisterAdditional event) {
-        event.register(GrijpmachineRenderer.KLAUW);
+    private static void models(ModelEvent.RegisterStandalone event) {
+        GrijpmachineRenderer.registerModels(event);
     }
 
     private static void particles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(WereldlevenFeature.ZANGNOOTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Nootje(level, x, y, z, sprites));
-        event.registerSpriteSet(WereldlevenFeature.IJSJESHARTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Hartje(level, x, y, z, sprites));
-        event.registerSpriteSet(WereldlevenFeature.FLUITSTOOM.get(), sprites -> (type, level, x, y, z, dx, dy, dz) -> new Stoom(level, x, y, z, dx, dy, dz, sprites));
+        event.registerSpriteSet(WereldlevenFeature.ZANGNOOTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Nootje(level, x, y, z, sprites));
+        event.registerSpriteSet(WereldlevenFeature.IJSJESHARTJE.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Hartje(level, x, y, z, sprites));
+        event.registerSpriteSet(WereldlevenFeature.FLUITSTOOM.get(), sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new Stoom(level, x, y, z, dx, dy, dz, sprites));
     }
 
     /** guhs:wereldleven_grijp_open */
@@ -61,12 +60,12 @@ public final class WereldlevenClient {
     }
 
     /** A music note in a soft colour: floats up, wobbling, and fades. */
-    static class Nootje extends TextureSheetParticle {
+    static class Nootje extends SingleQuadParticle {
         private final float fase;
 
         Nootje(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.first());
+            setSprite(sprites.get(random));
             lifetime = 30 + random.nextInt(20);
             quadSize = 0.12f + random.nextFloat() * 0.05f;
             gravity = -0.02f;
@@ -90,16 +89,16 @@ public final class WereldlevenClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A little pink heart: floats up and fades. */
-    static class Hartje extends TextureSheetParticle {
+    static class Hartje extends SingleQuadParticle {
         Hartje(ClientLevel level, double x, double y, double z, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.first());
+            setSprite(sprites.get(random));
             lifetime = 24 + random.nextInt(16);
             quadSize = 0.08f + random.nextFloat() * 0.05f;
             gravity = -0.015f;
@@ -116,16 +115,16 @@ public final class WereldlevenClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 
     /** A puff of steam from the fluitje: grows and fades. */
-    static class Stoom extends TextureSheetParticle {
+    static class Stoom extends SingleQuadParticle {
         Stoom(ClientLevel level, double x, double y, double z, double dx, double dy, double dz, SpriteSet sprites) {
-            super(level, x, y, z);
-            pickSprite(sprites);
+            super(level, x, y, z, sprites.first());
+            setSprite(sprites.get(random));
             lifetime = 16 + random.nextInt(8);
             quadSize = 0.06f;
             gravity = -0.01f;
@@ -144,8 +143,8 @@ public final class WereldlevenClient {
         }
 
         @Override
-        public ParticleRenderType getRenderType() {
-            return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        protected SingleQuadParticle.Layer getLayer() {
+            return SingleQuadParticle.Layer.TRANSLUCENT;
         }
     }
 

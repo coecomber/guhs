@@ -97,7 +97,7 @@ public final class GuhpolderFeature {
     public static final DeferredBlock<MolentjeBlock> GUH_MOLENTJE = BLOCKS.registerBlock("guh_molentje", MolentjeBlock::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(1.2f).sound(SoundType.WOOD).noOcclusion());
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MolentjeBlockEntity>> GUH_MOLENTJE_BE = BLOCK_ENTITY_TYPES.register(
-            "guh_molentje", () -> BlockEntityType.Builder.of(MolentjeBlockEntity::new, GUH_MOLENTJE.get()).build(null));
+            "guh_molentje", () -> new BlockEntityType<>(MolentjeBlockEntity::new, GUH_MOLENTJE.get()));
     public static final DeferredItem<Item> KNABBELMEEL = ITEMS.registerItem("knabbelmeel", GuhpolderItems.Lore::new, () -> new Item.Properties());
 
     static {
@@ -105,9 +105,9 @@ public final class GuhpolderFeature {
             ITEMS.registerSimpleBlockItem(block);
         }
         for (DeferredBlock<?> block : List.of(RIJPSPRIETJES, GUH_IJSBLOEMPJE, IJSPEGELGUH_KRISTAL)) {
-            ITEMS.registerItem(block.getId().getPath(), p -> new GuhpolderItems.LoreBlock(block.get(), p));
+            ITEMS.registerItem(block.getId().getPath(), p -> new GuhpolderItems.LoreBlock(block.get(), p), p -> p.useBlockDescriptionPrefix());
         }
-        ITEMS.registerItem("guh_molentje", p -> new GuhpolderItems.LoreBlock(GUH_MOLENTJE.get(), p), () -> new Item.Properties().rarity(Rarity.UNCOMMON));
+        ITEMS.registerItem("guh_molentje", p -> new GuhpolderItems.LoreBlock(GUH_MOLENTJE.get(), p), () -> new Item.Properties().rarity(Rarity.UNCOMMON).useBlockDescriptionPrefix());
     }
 
     // --- worldgen ----------------------------------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ public final class GuhpolderFeature {
 
     /** Hoppers: knabbelgraan goes in from the top and the sides, knabbelmeel comes out at the bottom. */
     private static void capabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, GUH_MOLENTJE_BE.get(), (be, side) -> be.handler(side));
+        event.registerBlockEntity(Capabilities.Item.BLOCK, GUH_MOLENTJE_BE.get(), (be, side) -> be.handler(side));
     }
 
     public static void payloads(PayloadRegistrar registrar) {

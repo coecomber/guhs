@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.beauty.client;
 
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -128,7 +130,7 @@ public class DressScreen extends Screen {
         super.extractRenderState(g, mouseX, mouseY, partialTick);
         GuhEntity model = model();
         if (model != null) {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(g, left + 12, top + 30, left + 112, top + H - 52, 38, 0.0625f,
+            InventoryScreen.extractEntityInInventoryFollowsMouse(g, left + 12, top + 30, left + 112, top + H - 52, 38, 0.0625f,
                     mouseX, mouseY, model);
             g.centeredText(font, model.getDisplayName(), left + 62, top + 12, 0xFFFFE6EE);
         }
@@ -178,7 +180,9 @@ public class DressScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mouseX = event.x(), mouseY = event.y();
+        int button = event.button();
         GuhEntity model = model();
         int y = top + 46;
         for (GuhClothes.Slot slot : ShowTheme.SLOTS) {
@@ -200,7 +204,7 @@ public class DressScreen extends Screen {
             }
             y += Math.max(1, (pieces.size() + PER_ROW - 1) / PER_ROW) * CELL + 2;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override

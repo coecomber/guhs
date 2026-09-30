@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -33,11 +33,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.entity.GuhEntity;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 /**
  * The knabbelbessen bush: a sweet berry bush that never pricks (guhs are soft, and so are their bushes). Walking through
  * it only slows you down a little (guhs not at all). Yellow berries (age 2 and 3) can be picked; it grows back.
  */
-public class KnabbelbessenstruikBlock extends BushBlock implements BonemealableBlock {
+public class KnabbelbessenstruikBlock extends VegetationBlock implements BonemealableBlock {
     public static final MapCodec<KnabbelbessenstruikBlock> CODEC = simpleCodec(KnabbelbessenstruikBlock::new);
     public static final int MAX_AGE = 3;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
@@ -50,12 +51,12 @@ public class KnabbelbessenstruikBlock extends BushBlock implements BonemealableB
     }
 
     @Override
-    protected MapCodec<? extends BushBlock> codec() {
+    protected MapCodec<? extends VegetationBlock> codec() {
         return CODEC;
     }
 
     @Override
-    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+    public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
         return new ItemStack(VadswoudFeature.KNABBELBESSEN.get());
     }
 
@@ -89,7 +90,7 @@ public class KnabbelbessenstruikBlock extends BushBlock implements BonemealableB
 
     /** No pricking: it only slows you down a bit. Guhs slip through without noticing. */
     @Override
-    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
         if (entity instanceof LivingEntity && !(entity instanceof GuhEntity)) {
             entity.makeStuckInBlock(state, new Vec3(0.9, 0.85, 0.9));
         }

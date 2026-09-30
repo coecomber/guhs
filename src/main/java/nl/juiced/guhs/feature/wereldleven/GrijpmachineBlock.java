@@ -31,6 +31,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * The grijpmachine (claw machine, 2.8 wereldleven): two blocks tall, a pink cabinet with a joystick and a glass case full
  * of guh plushies. Right-click with a ticket (#guhs:knus/grijptickets: a kermisbon or a minigame coin) and steer the
@@ -74,12 +76,12 @@ public class GrijpmachineBlock extends HorizontalDirectionalBlock implements Ent
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction dir, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction dir, BlockPos neighbourPos, BlockState neighbour, RandomSource random) {
         DoubleBlockHalf half = state.getValue(HALF);
         if (dir.getAxis() == Direction.Axis.Y && (half == DoubleBlockHalf.LOWER) == (dir == Direction.UP)) {
             return neighbour.is(this) && neighbour.getValue(HALF) != half ? state.setValue(FACING, neighbour.getValue(FACING)) : Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(state, dir, neighbour, level, pos, neighbourPos);
+        return super.updateShape(state, level, ticks, pos, dir, neighbourPos, neighbour, random);
     }
 
     @Override

@@ -1,5 +1,9 @@
 package nl.juiced.guhs.feature.wereldleven.client;
 
+import net.minecraft.client.input.KeyEvent;
+
+import net.minecraft.client.input.MouseButtonEvent;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Set;
@@ -120,24 +124,27 @@ public class XylofoonScherm extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double mx, double my, int button) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        double mx = event.x(), my = event.y();
+        int button = event.button();
         int bar = barAt(mx, my);
         if (bar >= 0 && button == 0) {
             speel(bar);
             return true;
         }
-        return super.mouseClicked(mx, my, button);
+        return super.mouseClicked(event, doubleClick);
     }
 
     @Override
-    public boolean keyPressed(int key, int scan, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
+        int key = event.key(), scan = event.scancode(), modifiers = event.modifiers();
         for (int i = 0; i < Koortje.NOTEN; i++) {
             if (key == GLFW.GLFW_KEY_1 + i || key == TOETSEN[i]) {
                 speel(i);
                 return true;
             }
         }
-        return super.keyPressed(key, scan, modifiers);
+        return super.keyPressed(event);
     }
 
     // --- drawing ---------------------------------------------------------------------------------------------------------------
