@@ -12,6 +12,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * Guh-schaatsen, lent by Schaatsmeester Guhglij (for the tour or for free skating). Hold them (in either hand) and step
  * onto the ice: you glide fast, with a skater's sway and the hiss of the blades ({@link ElftochtSchaatsen}); off the ice
@@ -24,7 +28,7 @@ public class SchaatsenItem extends Item {
 
     /** Only skaters keep their skates. */
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
         if (!level.isClientSide() && (!(entity instanceof Player player) || !ElftochtTocht.isBezig(player))) {
             stack.setCount(0);
         }
@@ -44,8 +48,8 @@ public class SchaatsenItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.guh_schaatsen.lore").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.guhs.guh_schaatsen.how").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.guh_schaatsen.lore").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.guh_schaatsen.how").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 }

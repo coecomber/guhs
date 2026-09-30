@@ -305,23 +305,23 @@ public class ElftochtGameTests {
     @GuhTest(template = BAAN, batch = "elftocht_licht", timeoutTicks = 100)
     public static void elftochtLichtenAanInDeNacht(GameTestHelper helper) {
         var level = helper.getLevel();
-        long was = level.getDayTime();
+        long was = nl.juiced.guhs.world.GuhTime.dayTime(level);
         BlockPos lampion = blok(helper, 22, 1, 12), korf = blok(helper, 22, 1, 14);
         try {
-            level.setDayTime(18000);
+            nl.juiced.guhs.world.GuhTime.setDayTime(level, 18000);
             helper.assertTrue(NachtlichtBlock.nacht(level), "midnight is night");
             NachtlichtBlock.bijwerken(level, lampion, level.getBlockState(lampion));
             NachtlichtBlock.bijwerken(level, korf, level.getBlockState(korf));
             helper.assertTrue(level.getBlockState(lampion).getValue(NachtlichtBlock.LIT) && level.getBlockState(korf).getValue(NachtlichtBlock.LIT),
                     "lit at night");
             helper.assertTrue(level.getBlockState(lampion).getLightEmission(level, lampion) == 15, "bright");
-            level.setDayTime(6000);
+            nl.juiced.guhs.world.GuhTime.setDayTime(level, 6000);
             NachtlichtBlock.bijwerken(level, lampion, level.getBlockState(lampion));
             NachtlichtBlock.bijwerken(level, korf, level.getBlockState(korf));
             helper.assertFalse(level.getBlockState(lampion).getValue(NachtlichtBlock.LIT) || level.getBlockState(korf).getValue(NachtlichtBlock.LIT),
                     "out by day");
         } finally {
-            level.setDayTime(was);
+            nl.juiced.guhs.world.GuhTime.setDayTime(level, was);
         }
         helper.succeed();
     }
@@ -420,17 +420,17 @@ public class ElftochtGameTests {
     @GuhTest(template = EMPTY, batch = "elftocht_structuur", timeoutTicks = 200)
     public static void elftochtStructuurPlaatsingEnRuis(GameTestHelper helper) {
         var access = helper.getLevel().getServer().registryAccess();
-        var structure = access.lookupOrThrow(Registries.STRUCTURE).get(ElftochtFeature.STRUCTURE);
+        var structure = access.lookupOrThrow(Registries.STRUCTURE).getValue(ElftochtFeature.STRUCTURE);
         helper.assertTrue(structure instanceof ElftochtStructure s && s.voorrang() == 900 && s.keepClear() >= 136, "the structure: " + structure);
         ElftochtStructure tocht = (ElftochtStructure) structure;
-        var set = access.lookupOrThrow(Registries.STRUCTURE_SET).get(Guhs.id("elfguhjestocht"));
+        var set = access.lookupOrThrow(Registries.STRUCTURE_SET).getValue(Guhs.id("elfguhjestocht"));
         helper.assertTrue(set != null && set.placement() instanceof ElftochtPlacement p && p.spacing() == tocht.cell(), "the placement: "
                 + (set == null ? null : set.placement()));
         ElftochtPlacement placement = (ElftochtPlacement) set.placement();
         helper.assertTrue(placement.vlak().minVlak() > 0 && placement.vlak().minVlak() == tocht.vlak().minVlak()
                 && placement.vlak().zee().isPresent() && placement.vlak().knuffel().isPresent(), "the dead-flat polder rules (sea + Knuffeldal masks)");
         Holder<NormalNoise.NoiseParameters> noise = placement.noise();
-        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).getValue(Guhs.id("guhmension"));
         for (long seed : new long[]{1L, 20290601L, -42L}) {
             RandomState state = RandomState.create(settings, access.lookupOrThrow(Registries.NOISE), seed);
             NormalNoise terrein = state.getOrCreateNoise(noise.unwrapKey().orElseThrow());

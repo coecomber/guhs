@@ -39,7 +39,7 @@ public final class TuintjesVoortgang {
         KnusVoortgang.mijlpaal(t, "tuintjes_oogst", OOGST, 30, () -> new ItemStack(ModItems.clothingItem(GuhClothes.TUINSCHORTJE)));
         KnusVoortgang.mijlpaal(t, "tuintjes_feestboeket", FEESTBOEKET, 1, stack(ModItems.KAAS_KNABBELS, 12), "tuintjes_feestboeket");
         KnusVoortgang.verzameling(t, TUINBOEK, TUINBOEK_LIJST,
-                item -> new ItemStack(BuiltInRegistries.ITEM.get(Guhs.id(item))));
+                item -> new ItemStack(BuiltInRegistries.ITEM.getValue(Guhs.id(item))));
     }
 
     static void geplant(ServerPlayer player, TuinPlant plant) {

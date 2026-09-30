@@ -141,7 +141,7 @@ public class ElftochtStructure extends Structure implements BouwRuimte.Ruimte {
         // the template's ground (GROND_Y, where the anchor is) on the top block of the ground; 2.10: the start element knows
         // its real ground (guhs:grond_single_pool_element, no moat), see KnuffeldalStadjeStructure
         return BouwRuimte.claim(context, this, JigsawPlacement.addPieces(context, startPool, Optional.of(startJigsawName), 1,
-                new BlockPos(spot.x(), nl.juiced.guhs.world.grond.Grond.startY(startPool, surface), spot.z()), false, Optional.empty(), maxDistance, PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
+                new BlockPos(spot.x(), nl.juiced.guhs.world.grond.Grond.startY(startPool, surface), spot.z()), false, Optional.empty(), new net.minecraft.world.level.levelgen.structure.structures.JigsawStructure.MaxDistance(maxDistance), PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
                 LiquidSettings.IGNORE_WATERLOGGING));
     }
 

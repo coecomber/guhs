@@ -21,6 +21,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * De guh_gieter: a pink watering can with a guh face. Right-click a tuintje: it waters the thirsty plants in a 3 x 3 around
  * it (one sip each); right-click water to fill it up again. The durability bar is the water in it ({@link #VOL} sips).
@@ -29,7 +31,7 @@ public class GuhGieterItem extends Item {
     public static final int VOL = 24;
 
     public GuhGieterItem(Properties properties) {
-        super(properties.durability(VOL).setNoRepair());
+        super(properties.durability(VOL));
     }
 
     public static int water(ItemStack stack) {
@@ -95,14 +97,15 @@ public class GuhGieterItem extends Item {
         return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
+    /** Not repaired by combining two cans (was {@code setNoRepair()}); 26.1 items are only enchantable with an ENCHANTABLE component. */
     @Override
-    public boolean isEnchantable(ItemStack stack) {
+    public boolean isCombineRepairable(ItemStack stack) {
         return false;
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.guhs.guh_gieter.water", water(stack), VOL).withStyle(ChatFormatting.AQUA));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.guh_gieter.water", water(stack), VOL).withStyle(ChatFormatting.AQUA));
     }
 }

@@ -123,7 +123,7 @@ public class KnuffeldalStadjeStructure extends Structure implements BouwRuimte.R
         // start piece down by its ground level delta (2.10: the real ground, guhs:grond_single_pool_element, so the land meets
         // the plein instead of sinking into a moat), so the anchor is asked that much higher minus one
         return BouwRuimte.claim(context, this, JigsawPlacement.addPieces(context, startPool, Optional.of(startJigsawName), size,
-                new BlockPos(peak.x(), nl.juiced.guhs.world.grond.Grond.startY(startPool, surface), peak.z()), false, Optional.empty(), maxDistance, PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
+                new BlockPos(peak.x(), nl.juiced.guhs.world.grond.Grond.startY(startPool, surface), peak.z()), false, Optional.empty(), new net.minecraft.world.level.levelgen.structure.structures.JigsawStructure.MaxDistance(maxDistance), PoolAliasLookup.EMPTY, DimensionPadding.ZERO,
                 LiquidSettings.IGNORE_WATERLOGGING));
     }
 

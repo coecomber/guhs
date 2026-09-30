@@ -353,7 +353,7 @@ public final class GidsVerhalenTab {
     }
 
     static ItemStack stack(String id) {
-        var item = BuiltInRegistries.ITEM.get(Identifier.tryParse(id) == null ? Identifier.withDefaultNamespace("book") : Identifier.tryParse(id));
+        var item = BuiltInRegistries.ITEM.getValue(Identifier.tryParse(id) == null ? Identifier.withDefaultNamespace("book") : Identifier.tryParse(id));
         return new ItemStack(item == Items.AIR ? Items.BOOK : item);
     }
 }

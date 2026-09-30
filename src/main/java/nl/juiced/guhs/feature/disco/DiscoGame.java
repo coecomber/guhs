@@ -272,7 +272,7 @@ public final class DiscoGame {
         Vec3 to = npc.position().subtract(Vec3.atBottomCenterOf(centre));
         float yaw = (float) (Math.toDegrees(Math.atan2(-to.x, to.z)));
         player.stopRiding();                                     // (off the guh or boat first: you dance on your own feet)
-        player.teleportTo(world, centre.getX() + 0.5, centre.getY(), centre.getZ() + 0.5, yaw, 0);
+        player.teleportTo(world, centre.getX() + 0.5, centre.getY(), centre.getZ() + 0.5, java.util.Set.of(), yaw, 0, true);
         songStart = world.getGameTime();
         muziek.start(world, centre, liedje);                     // the song starts now: beat 0
         player.sendSystemMessage(Component.translatable("quest.guhs.disco.go", liedje.naam(), liedje.niveauNaam())
@@ -698,7 +698,7 @@ public final class DiscoGame {
             return;
         }
         int rgb = song.kleur(b);
-        var dust = new DustParticleOptions(new org.joml.Vector3f(((rgb >> 16) & 255) / 255f, ((rgb >> 8) & 255) / 255f, (rgb & 255) / 255f), 1.6f);
+        var dust = new DustParticleOptions(rgb & 0xFFFFFF, 1.6f);
         for (int k = 0; k < 3; k++) {
             BlockPos ball = balls.get(world.getRandom().nextInt(balls.size()));
             Vec3 dir = new Vec3(world.getRandom().nextGaussian(), -Math.abs(world.getRandom().nextGaussian()), world.getRandom().nextGaussian()).normalize();
@@ -722,8 +722,7 @@ public final class DiscoGame {
         BlockPos mid = tiles.get(tiles.size() / 2);
         world.playSound(null, mid, SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.RECORDS, volume, kleur.pitch);
         world.playSound(null, mid, SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.RECORDS, volume * 0.5f, kleur.pitch);
-        var dust = new DustParticleOptions(new org.joml.Vector3f(((kleur.rgb >> 16) & 255) / 255f, ((kleur.rgb >> 8) & 255) / 255f,
-                (kleur.rgb & 255) / 255f), 1.4f);
+        var dust = new DustParticleOptions(kleur.rgb & 0xFFFFFF, 1.4f);
         for (int i = 0; i < tiles.size(); i += 2) {
             BlockPos t = tiles.get(i);
             world.sendParticles(dust, t.getX() + 0.5, t.getY() + 1.15, t.getZ() + 0.5, 1, 0.25, 0.05, 0.25, 0);
@@ -848,8 +847,8 @@ public final class DiscoGame {
             p.sendOverlayMessage(Component.translatable("quest.guhs.disco.bar.kijk", sequence.size()).withStyle(ChatFormatting.AQUA));
         } else if (phase == Phase.INPUT) {
             int seconds = (timer + 19) / 20;
-            p.displayClientMessage(Component.translatable("quest.guhs.disco.bar.jouw_beurt_tijd", step, sequence.size(), seconds)
-                    .withStyle(seconds <= 1 ? ChatFormatting.RED : ChatFormatting.GREEN), true);
+            p.sendOverlayMessage(Component.translatable("quest.guhs.disco.bar.jouw_beurt_tijd", step, sequence.size(), seconds)
+                    .withStyle(seconds <= 1 ? ChatFormatting.RED : ChatFormatting.GREEN));
         }
     }
 

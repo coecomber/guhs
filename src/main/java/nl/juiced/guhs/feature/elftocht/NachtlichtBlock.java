@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * The Elf-Guhjestocht's night lights: they light up when it gets dark and go out in the morning (checked on random
  * ticks, like a lamplighter walking along the canal: the lights come on one by one at dusk).
@@ -36,7 +37,7 @@ public final class NachtlichtBlock {
         if (level.dimensionType().hasFixedTime()) {
             return false;
         }
-        long t = Math.floorMod(level.getDayTime(), 24000L);
+        long t = nl.juiced.guhs.world.GuhTime.timeOfDay(level);
         return t >= NACHT_VAN && t < NACHT_TOT;
     }
 
@@ -116,10 +117,9 @@ public final class NachtlichtBlock {
         }
 
         @Override
-        protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbor, net.minecraft.world.level.LevelAccessor level,
-                                         BlockPos pos, BlockPos neighborPos) {
+        protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighbor, RandomSource random) {
             return direction == Direction.DOWN && !canSurvive(state, level, pos) ? net.minecraft.world.level.block.Blocks.AIR.defaultBlockState()
-                    : super.updateShape(state, direction, neighbor, level, pos, neighborPos);
+                    : super.updateShape(state, level, ticks, pos, direction, neighborPos, neighbor, random);
         }
 
         @Override

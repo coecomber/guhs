@@ -98,9 +98,9 @@ public final class ElftochtFeature {
     public static final DeferredItem<StempelkaartItem> STEMPELKAART = ITEMS.registerItem("stempelkaart", StempelkaartItem::new,
             () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<WarmDrankjeItem> WARME_CHOCOVET = ITEMS.registerItem("warme_chocovet", WarmDrankjeItem::new,
-            () -> new Item.Properties().stacksTo(16).food(drankje(3)));
+            () -> new Item.Properties().stacksTo(16).food(drankje(3), drankjeConsumable()));
     public static final DeferredItem<WarmDrankjeItem> SNERT_KOMMETJE = ITEMS.registerItem("snert_kommetje", WarmDrankjeItem::new,
-            () -> new Item.Properties().stacksTo(16).food(drankje(5)));
+            () -> new Item.Properties().stacksTo(16).food(drankje(5), drankjeConsumable()));
     public static final DeferredItem<BlockItem> KRUISJE_ITEM = ITEMS.registerItem("elf_guhjeskruisje", p -> new BlockItem(KRUISJE.get(), p),
             () -> new Item.Properties().rarity(Rarity.EPIC).stacksTo(16));
     public static final DeferredItem<BlockItem> LAMPION_ITEM = ITEMS.registerSimpleBlockItem(LAMPION);
@@ -109,8 +109,16 @@ public final class ElftochtFeature {
 
     /** A warm drink: a little food, and while it warms you (the boost) you skate and walk faster. */
     static FoodProperties drankje(int nutrition) {
-        return new FoodProperties.Builder().nutrition(nutrition).saturationModifier(0.5f).alwaysEdible().fast()
-                .effect(() -> new MobEffectInstance(MobEffects.SPEED, WarmDrankjeItem.BOOST_TICKS, 1), 1f).build();
+        return new FoodProperties.Builder().nutrition(nutrition).saturationModifier(0.5f).alwaysEdible().build();
+    }
+
+    /** 1.1.0: drunk quickly (0.8 s, was {@code fast()}), with the honey-drink sound, and the boost (was a food effect). */
+    static net.minecraft.world.item.component.Consumable drankjeConsumable() {
+        return net.minecraft.world.item.component.Consumables.defaultDrink().consumeSeconds(0.8f)
+                .sound(net.minecraft.sounds.SoundEvents.HONEY_DRINK)
+                .onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(
+                        new MobEffectInstance(MobEffects.SPEED, WarmDrankjeItem.BOOST_TICKS, 1), 1f))
+                .build();
     }
 
     // --- sounds --------------------------------------------------------------------------------------------------------

@@ -91,12 +91,12 @@ public class KopjesBlock extends HorizontalDirectionalBlock {
     /** Hands out a cup (true) or says it's still too hot (false). */
     public static boolean pak(ServerPlayer player, Soort soort, BlockPos pos) {
         Item drankje = soort.drankje();
-        if (player.getCooldowns().isOnCooldown(drankje)) {
+        if (player.getCooldowns().isOnCooldown(new ItemStack(drankje))) {
             player.sendOverlayMessage(Component.translatable("gui.guhs.elftocht.kopjes.wacht_" + soort.getSerializedName())
                     .withStyle(ChatFormatting.GOLD));
             return false;
         }
-        player.getCooldowns().addCooldown(drankje, WACHT);
+        player.getCooldowns().addCooldown(new ItemStack(drankje), WACHT);
         Minigames.give(player, new ItemStack(drankje));
         player.sendOverlayMessage(Component.translatable("gui.guhs.elftocht.kopjes.pak_" + soort.getSerializedName())
                 .withStyle(ChatFormatting.YELLOW));

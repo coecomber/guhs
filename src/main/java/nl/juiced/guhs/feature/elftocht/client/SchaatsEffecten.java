@@ -1,24 +1,25 @@
 package nl.juiced.guhs.feature.elftocht.client;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.elftocht.ElftochtFeature;
 import nl.juiced.guhs.feature.elftocht.ElftochtSchaatsen;
 
@@ -28,8 +29,10 @@ import nl.juiced.guhs.feature.elftocht.ElftochtSchaatsen;
  * the speed), a scrape at every stride and a little ice dust behind the skates.
  */
 public final class SchaatsEffecten {
-    /** Players whose render we tilted (popped again after their render). */
-    private static final Set<Integer> GEKANTELD = new HashSet<>();
+    /** Lean, roll and body yaw of a skating player (render state data, set at extract time). */
+    static final ContextKey<float[]> KANTEL = new ContextKey<>(Guhs.id("elftocht_kantel"));
+    /** Set on a render state whose pose we tilted (popped again after its render). */
+    private static final ContextKey<Boolean> GEKANTELD = new ContextKey<>(Guhs.id("elftocht_gekanteld"));
     private static final Map<UUID, Glij> GELUIDEN = new HashMap<>();
     private static final Map<UUID, Double> VORIG_SWAY = new HashMap<>();
 
@@ -52,26 +55,36 @@ public final class SchaatsEffecten {
         return new float[]{11f * amp, 7f * amp * Mth.sin(t * 0.28f)};
     }
 
-    @SubscribeEvent
-    public static void onRenderPre(RenderLivingEvent.Pre<?, ?> event) {
-        if (!(event.getEntity() instanceof Player p) || !schaatstZichtbaar(p) || snelheid(p) < 0.05) {
+    /** Extract time (render state modifier): the lean and sway of a skating player, with its body yaw. */
+    static void extract(Player p, AvatarRenderState state) {
+        if (!schaatstZichtbaar(p) || snelheid(p) < 0.05) {
             return;
         }
-        float partial = event.getPartialTick();
+        float partial = state.partialTick;
         float[] h = houding(p, partial);
-        float yaw = Mth.rotLerp(partial, p.yBodyRotO, p.yBodyRot);
+        state.setRenderData(KANTEL, new float[]{h[0], h[1], Mth.rotLerp(partial, p.yBodyRotO, p.yBodyRot)});
+    }
+
+    @SubscribeEvent
+    public static void onRenderPre(RenderLivingEvent.Pre<?, ?, ?> event) {
+        float[] h = event.getRenderState().getRenderData(KANTEL);
+        if (h == null) {
+            return;
+        }
+        float yaw = h[2];
         PoseStack ps = event.getPoseStack();
         ps.pushPose();
         ps.mulPose(Axis.YP.rotationDegrees(-yaw));
         ps.mulPose(Axis.XP.rotationDegrees(h[0]));
         ps.mulPose(Axis.ZP.rotationDegrees(h[1]));
         ps.mulPose(Axis.YP.rotationDegrees(yaw));
-        GEKANTELD.add(p.getId());
+        event.getRenderState().setRenderData(GEKANTELD, Boolean.TRUE);
     }
 
     @SubscribeEvent
-    public static void onRenderPost(RenderLivingEvent.Post<?, ?> event) {
-        if (GEKANTELD.remove(event.getEntity().getId())) {
+    public static void onRenderPost(RenderLivingEvent.Post<?, ?, ?> event) {
+        if (event.getRenderState().getRenderData(GEKANTELD) != null) {
+            event.getRenderState().setRenderData(GEKANTELD, null);
             event.getPoseStack().popPose();
         }
     }

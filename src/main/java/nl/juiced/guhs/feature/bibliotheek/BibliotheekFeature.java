@@ -27,6 +27,7 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.block.GuhFurnitureBlock;
 import nl.juiced.guhs.feature.NpcRole;
 
+import net.minecraft.world.item.component.TooltipDisplay;
 /**
  * De guhbibliotheek: a very rare, grand library in the Guhmension. The Bibliothecaris lends you guh lore books (one free
  * per guh day), asks quiz questions about them for boekenbonnen and sells the books, the librarian's outfit and the guh
@@ -50,10 +51,10 @@ public final class BibliotheekFeature {
 
     public static final DeferredItem<Item> BOEKENBON = ITEMS.registerItem("boekenbon", p -> new Item(p) {
         @Override
-        public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-            tooltip.add(Component.translatable("item.guhs.boekenbon.lore").withStyle(ChatFormatting.GRAY));
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("item.guhs.boekenbon.lore").withStyle(ChatFormatting.GRAY));
         }
-    }, new Item.Properties());
+    }, () -> new Item.Properties());
     public static final DeferredItem<BlockItem> GEHEIME_KAST_ITEM = ITEMS.registerSimpleBlockItem(GEHEIME_KAST);
     public static final DeferredItem<BlockItem> BOEKALTAAR_ITEM = ITEMS.registerSimpleBlockItem(BOEKALTAAR);
     public static final DeferredItem<BlockItem> GUHFAUTEUIL_ITEM = ITEMS.registerSimpleBlockItem(GUHFAUTEUIL);

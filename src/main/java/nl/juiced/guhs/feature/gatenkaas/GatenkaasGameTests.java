@@ -165,7 +165,7 @@ public class GatenkaasGameTests {
         // (he comes up within 6 blocks of the schreeuwer: keep him on the test floor, where the chunks tick)
         net.minecraft.world.phys.Vec3 onFloor = helper.absoluteVec(new net.minecraft.world.phys.Vec3(2.5, 1, 1.5));
         vadswaker.snapTo(onFloor.x, onFloor.y, onFloor.z, 0, 0);
-        helper.assertTrue(vadswaker.isEmerging() && vadswaker.isInvulnerableTo(helper.getLevel().damageSources().playerAttack(player)),
+        helper.assertTrue(vadswaker.isEmerging() && vadswaker.isInvulnerableTo(helper.getLevel(), helper.getLevel().damageSources().playerAttack(player)),
                 "he climbs out of the ground (and can't be hurt while he does)");
         helper.assertTrue(vadswaker.anger(player) > 0, "and he knows about you");
         // a fourth warning doesn't wake a second one
@@ -339,7 +339,7 @@ public class GatenkaasGameTests {
         // (relative to the test's structure block, one below the template: template y + 1)
         helper.assertBlockPresent(Blocks.CHEST, new BlockPos(13, 4, 21));
         helper.assertBlockPresent(Blocks.LADDER, new BlockPos(21, 6, 12));
-        var carts = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.vehicle.MinecartChest.class, helper.getBounds().inflate(1));
+        var carts = helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.vehicle.minecart.MinecartChest.class, helper.getBounds().inflate(1));
         helper.assertTrue(carts.size() == 1, "a chest cart: " + carts.size());
         helper.succeed();
     }

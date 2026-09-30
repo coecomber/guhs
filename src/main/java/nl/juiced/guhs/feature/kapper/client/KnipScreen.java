@@ -222,7 +222,7 @@ public class KnipScreen extends Screen {
         if (klant() && fotoZichtbaar && wens >= 0) {
             KapperKlantEntity f1 = foto();
             if (f1 != null) {
-                InventoryScreen.renderEntityInInventoryFollowsMouse(g, left + 12, py0 + 4, left + 112, py1 - 22, 34, 0.0625f, mouseX, mouseY, f1);
+                InventoryScreen.extractEntityInInventoryFollowsMouse(g, left + 12, py0 + 4, left + 112, py1 - 22, 34, 0.0625f, mouseX, mouseY, f1);
             }
             Component naam = Component.translatable("gui.guhs.kapper.kapsel." + Kapsel.values()[wens].stijl());
             Component kleur = Component.translatable(wensVerf < 0 ? "gui.guhs.kapper.verf.naturel" : "gui.guhs.kapper.verf." + Haarverf.values()[wensVerf].kleur());
@@ -237,7 +237,7 @@ public class KnipScreen extends Screen {
         g.centeredText(font, Component.translatable("gui.guhs.kapper.knip.klant"), left + 178, py0 - 8, ROZE);
         Entity e = minecraft != null && minecraft.level != null ? minecraft.level.getEntity(data.getIntOr("Klant", 0)) : null;
         if (klant() && e instanceof LivingEntity living) {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(g, left + 124, py0 + 4, left + 232, py1 - 4, 34, 0.0625f, mouseX, mouseY, living);
+            InventoryScreen.extractEntityInInventoryFollowsMouse(g, left + 124, py0 + 4, left + 232, py1 - 4, 34, 0.0625f, mouseX, mouseY, living);
         } else {
             String fase = data.getStringOr("Fase", "");
             Component t = "TUSSEN".equals(fase) && !data.getStringOr("Uitslag", "").isEmpty()

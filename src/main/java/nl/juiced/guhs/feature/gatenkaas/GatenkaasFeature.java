@@ -30,7 +30,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -124,15 +123,15 @@ public final class GatenkaasFeature {
     /** The crunchy crystal from old cheese (like the crunchy bits in old Gouda). Rare: only in the gatenkaas. */
     public static final DeferredItem<Item> KAASKORREL = ITEMS.registerSimpleItem("kaaskorrel", () -> new Item.Properties().rarity(Rarity.UNCOMMON));
     /** A knabbel you nibble very, very quietly: a while guhs:stil. */
-    public static final DeferredItem<Item> STILLE_KNABBEL = ITEMS.registerSimpleItem("stille_knabbel", new Item.Properties().rarity(Rarity.UNCOMMON)
-            .food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).alwaysEdible()
-                    .effect(() -> new MobEffectInstance(STIL, 20 * 90, 0), 1f).build()));
+    public static final DeferredItem<Item> STILLE_KNABBEL = ITEMS.registerSimpleItem("stille_knabbel", () -> new Item.Properties().rarity(Rarity.UNCOMMON)
+            .food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.4f).alwaysEdible().build(),
+                    net.minecraft.world.item.component.Consumables.defaultFood().onConsume(
+                            new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(new MobEffectInstance(STIL, 20 * 90, 0), 1f)).build()));
 
     public static final DeferredHolder<EntityType<?>, EntityType<VadswakerEntity>> VADSWAKER = ENTITY_TYPES.register("vadswaker",
             () -> EntityType.Builder.of(VadswakerEntity::new, MobCategory.MONSTER).sized(1.9f, 1.75f).eyeHeight(1.2f)
-                    .clientTrackingRange(16).fireImmune().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vadswaker"))));
-    public static final DeferredItem<DeferredSpawnEggItem> VADSWAKER_SPAWN_EGG = ITEMS.registerItem("vadswaker_spawn_egg",
-            p -> new DeferredSpawnEggItem(VADSWAKER, 0x6B4A2E, 0xF2C94C, p));
+                    .clientTrackingRange(16).fireImmune().notInPeaceful().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vadswaker"))));
+    public static final DeferredItem<net.minecraft.world.item.SpawnEggItem> VADSWAKER_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "vadswaker_spawn_egg", VADSWAKER);   // 1.0.0 colours 0x6B4A2E / 0xF2C94C (26.1: no tint)
 
     public static final DeferredHolder<Feature<?>, GatenkaasHolteFeature> HOLTE = FEATURES.register("gatenkaas_holte",
             () -> new GatenkaasHolteFeature(NoneFeatureConfiguration.CODEC));

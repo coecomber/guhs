@@ -123,7 +123,7 @@ public class BibliotheekGameTests {
         GuhNpcEntity npc = bibliothecaris(helper);
         ServerPlayer player = player(helper, npc);
         helper.assertTrue(Bibliothecaris.count(player) == 0, "a new reader has no books");
-        npc.interact(player, InteractionHand.MAIN_HAND);
+        npc.interact(player, InteractionHand.MAIN_HAND, npc.position());
         helper.assertTrue(GuhQuests.saved(player).getBooleanOr(Bibliothecaris.WELCOMED, false), "welcomed");
         helper.assertTrue(Bibliothecaris.count(player) == 0, "no lending: the books are on the lecterns");
         // a guh book in the inventory goes into the collection, and losing it doesn't lose it from the collection
@@ -304,7 +304,7 @@ public class BibliotheekGameTests {
         helper.assertTrue(books(player, Guhboek.GEHEIM) == 0, "one copy per player, ever");
         helper.assertTrue(helper.getBlockState(POS).getDestroySpeed(helper.getLevel(), helper.absolutePos(POS)) < 0,
                 "the stand can't be broken (and has no recipe)");
-        helper.assertTrue(helper.getLevel().getServer().getRecipeManager().byKey(Guhs.id("bieb_boekaltaar")).isEmpty(), "no recipe");
+        helper.assertTrue(helper.getLevel().getServer().getRecipeManager().byKey(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, Guhs.id("bieb_boekaltaar"))).isEmpty(), "no recipe");
         // all of them: the bookworm
         for (Guhboek book : Guhboek.values()) {
             player.getInventory().add(book.stack());

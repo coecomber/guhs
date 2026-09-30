@@ -258,7 +258,7 @@ public class KnuffeldalGameTests {
         helper.assertTrue(Knusfeest.stap(p, Feesttaak.FEESTTAART) == Knusfeest.Stap.GESTOLEN && Knusfeest.open(p, Feesttaak.FEESTTAART),
                 "stolen, still open");
         float health = mika.getHealth();
-        boolean hurt = mika.hurt(p.damageSources().playerAttack(p), 6f);
+        boolean hurt = mika.hurtOrSimulate(p.damageSources().playerAttack(p), 6f);
         helper.assertTrue(!hurt && mika.getHealth() == health && p.getHealth() == p.getMaxHealth(), "no fighting: nobody gets hurt");
         helper.assertTrue(KruimelMikaEntity.lekkernij(p) == false, "no treat in hand");
         p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 2));
@@ -449,7 +449,7 @@ public class KnuffeldalGameTests {
             }
         }
         // its pool exists and holds the 2.9 street piece (the Beroepenstraat, feature.beroepen)
-        var vrijPool = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).get(Guhs.id("knuffeldal_stadje/vrij"));
+        var vrijPool = helper.getLevel().registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).getValue(Guhs.id("knuffeldal_stadje/vrij"));
         helper.assertTrue(vrijPool != null && vrijPool.size() == 1
                 && vrijPool.getShuffledTemplates(net.minecraft.util.RandomSource.create(1)).get(0).toString().contains("beroepenstraat"),
                 "the free street pool holds the Beroepenstraat");
@@ -488,7 +488,7 @@ public class KnuffeldalGameTests {
             for (String r : List.of("knuffelsteen", "knuffelsteen_trap", "knuffelsteen_plaat", "knuffelsteen_muur", "knuffelsteen_gezicht", "pluisdak",
                     "pluisdak_trap", "pluisdak_plaat", "knuffelklinkers", "seizoensbloembak", "seizoensslinger", "feestbuffettafel", "sneeuwguhkopje",
                     "bladerhoopje")) {
-                helper.assertTrue(recipes.byKey(Guhs.id(r)).isPresent(), "a recipe for " + r);
+                helper.assertTrue(recipes.byKey(net.minecraft.resources.ResourceKey.create(Registries.RECIPE, Guhs.id(r))).isPresent(), "a recipe for " + r);
             }
             helper.assertTrue(KnuffeldalFeature.KNUFFELGRAS.get().defaultBlockState().is(net.minecraft.tags.BlockTags.DIRT), "knuffelgras is dirt for plants");
             helper.assertTrue(KnuffeldalFeature.PLUIZENBOOM_BLADEREN.get().defaultBlockState().is(net.minecraft.tags.BlockTags.LEAVES), "leaves");
@@ -496,7 +496,7 @@ public class KnuffeldalGameTests {
             helper.assertTrue(features.containsKey(KnuffeldalFeature.PLUIZENBOOM.identifier()) && features.containsKey(KnuffeldalFeature.REUZE_GUHPADDENSTOEL.identifier()),
                     "the tree and the huge mushroom");
             helper.assertTrue(helper.getLevel().registryAccess().lookupOrThrow(Registries.BIOME).containsKey(KnuffeldalFeature.KNUFFELDAL), "the biome");
-            var structure = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE).get(KnuffeldalFeature.STADJE);
+            var structure = helper.getLevel().registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(KnuffeldalFeature.STADJE);
             helper.assertTrue(structure instanceof KnuffeldalStadjeStructure s && s.keepClear() > 60 && s.voorrang() == 800, "the town: " + structure);
         } finally {
             leave(helper, p);
@@ -534,8 +534,8 @@ public class KnuffeldalGameTests {
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
         BiomeSource with = BiomeSource.CODEC.parse(ops, source).getOrThrow();
         BiomeSource before = BiomeSource.CODEC.parse(ops, without).getOrThrow();
-        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).get(Guhs.id("guhmension"));
-        KnuffeldalStadjeStructure town = (KnuffeldalStadjeStructure) access.lookupOrThrow(Registries.STRUCTURE).get(KnuffeldalFeature.STADJE);
+        NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).getValue(Guhs.id("guhmension"));
+        KnuffeldalStadjeStructure town = (KnuffeldalStadjeStructure) access.lookupOrThrow(Registries.STRUCTURE).getValue(KnuffeldalFeature.STADJE);
         Map<String, Integer> now = new HashMap<>(), then = new HashMap<>();
         int samples = 0, dalen = 0, dalenMetStadje = 0, groteDalen = 0, groteMetStadje = 0, stadjes = 0, kruimels = 0, middel = 0;
         final int step = 32, half = 3200, n = 2 * half / step;

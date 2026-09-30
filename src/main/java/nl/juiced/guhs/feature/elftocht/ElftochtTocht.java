@@ -232,7 +232,7 @@ public final class ElftochtTocht {
         ItemStack kaart = new ItemStack(ElftochtFeature.STEMPELKAART.get());
         StempelkaartItem.schrijf(kaart, 0, new int[0]);
         geef(player, kaart);
-        player.teleportTo((ServerLevel) player.level(), plek.x, plek.y, plek.z, richting, 5f);
+        player.teleportTo((ServerLevel) player.level(), plek.x, plek.y, plek.z, java.util.Set.of(), richting, 5f, true);
         GuhQuests.say(player, npc, "quest.guhs.elftocht.start", dorpNaam(VOLGORDE[0]));
         ElftochtVoortgang.grant(player, "elftocht_eerste_rit");
         return true;
@@ -281,7 +281,7 @@ public final class ElftochtTocht {
     /** The square of the Elf-Guhjestocht at this spot (the structure start's bounding box), or null outside one. */
     @Nullable
     static BoundingBox tochtGebied(ServerLevel level, BlockPos pos) {
-        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(ElftochtFeature.STRUCTURE);
+        Structure structure = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(ElftochtFeature.STRUCTURE);
         if (structure == null) {
             return null;
         }
@@ -456,8 +456,7 @@ public final class ElftochtTocht {
             double bx = boven.x + (level.getRandom().nextDouble() - 0.5) * 10, by = boven.y + level.getRandom().nextDouble() * 4,
                     bz = boven.z + (level.getRandom().nextDouble() - 0.5) * 10;
             int c = kleuren[b % kleuren.length];
-            var stof = new net.minecraft.core.particles.DustParticleOptions(new org.joml.Vector3f(((c >> 16) & 255) / 255f,
-                    ((c >> 8) & 255) / 255f, (c & 255) / 255f), 1.6f);
+            var stof = new net.minecraft.core.particles.DustParticleOptions(c, 1.6f);
             level.sendParticles(stof, bx, by, bz, 50, 1.4, 1.4, 1.4, 0);
             level.sendParticles(ParticleTypes.FIREWORK, bx, by, bz, 25, 0.2, 0.2, 0.2, 0.25);
         }

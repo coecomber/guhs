@@ -152,7 +152,7 @@ public final class Burgemeester implements NpcRole {
     static Set<Feesttaak> seizoensTaken(ServerPlayer player, long nummer) {
         RandomSource random = RandomSource.create(nummer * 31 + player.getUUID().getLeastSignificantBits());
         List<Feesttaak> all = new ArrayList<>(List.of(Feesttaak.values()));
-        net.minecraft.Util.shuffle(all, random);
+        net.minecraft.util.Util.shuffle(all, random);
         int n = 2 + random.nextInt(2);
         return EnumSet.copyOf(all.subList(0, n));
     }

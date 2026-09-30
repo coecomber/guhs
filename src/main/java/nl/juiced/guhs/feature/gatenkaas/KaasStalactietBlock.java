@@ -29,6 +29,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * A kaas stalactite (hanging, tip down) or stalagmite (standing, tip up): the pointed dripstone of the gatenkaas caves.
  * Stacked pieces get thinner towards the tip (base, middle, frustum, tip). The tip of a stalactite drips kaassaus; if
@@ -108,13 +109,13 @@ public class KaasStalactietBlock extends Block implements Fallable {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction from, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction from, BlockPos neighbourPos, BlockState neighbour, RandomSource random) {
         if (from.getAxis() != Direction.Axis.Y) {
             return state;
         }
         Direction dir = state.getValue(TIP_DIRECTION);
         if (from == dir.getOpposite() && !canSurvive(state, level, pos)) {
-            level.scheduleTick(pos, this, dir == Direction.DOWN ? 2 : 1);
+            ticks.scheduleTick(pos, this, dir == Direction.DOWN ? 2 : 1);
             return state;
         }
         return state.setValue(THICKNESS, thickness(level, pos, dir));
@@ -144,7 +145,7 @@ public class KaasStalactietBlock extends Block implements Fallable {
     }
 
     @Override
-    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
         if (state.getValue(TIP_DIRECTION) == Direction.UP && state.getValue(THICKNESS) == DripstoneThickness.TIP) {
             entity.causeFallDamage(fallDistance + 2f, 2f, level.damageSources().stalagmite());
         } else {
@@ -168,7 +169,7 @@ public class KaasStalactietBlock extends Block implements Fallable {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (isStalactite(state) && state.getValue(THICKNESS) == DripstoneThickness.TIP && random.nextInt(6) == 0) {
-            Vec3 offset = state.getOffset(level, pos);
+            Vec3 offset = state.getOffset(pos);
             level.addParticle(random.nextInt(3) == 0 ? ParticleTypes.FALLING_HONEY : ParticleTypes.DRIPPING_HONEY,
                     pos.getX() + 0.5 + offset.x, pos.getY() + 0.3, pos.getZ() + 0.5 + offset.z, 0, 0, 0);
         }
@@ -182,12 +183,12 @@ public class KaasStalactietBlock extends Block implements Fallable {
             case MIDDLE -> MIDDLE;
             case BASE -> BASE;
         };
-        Vec3 offset = state.getOffset(level, pos);
+        Vec3 offset = state.getOffset(pos);
         return shape.move(offset.x, 0, offset.z);
     }
 
     @Override
-    protected VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+    protected VoxelShape getOcclusionShape(BlockState state) {
         return Shapes.empty();
     }
 

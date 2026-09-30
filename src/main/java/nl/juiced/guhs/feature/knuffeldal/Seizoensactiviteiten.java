@@ -53,7 +53,8 @@ public final class Seizoensactiviteiten {
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 if (player.level().dimension() == ModDimensions.GUHMENSION) {
                     player.sendSystemMessage(Component.translatable("gui.guhs.seizoen.wissel." + nieuw.id()).withStyle(ChatFormatting.LIGHT_PURPLE));
-                    player.playNotifySound(KnuffeldalFeature.SEIZOEN_GELUID.get(), SoundSource.AMBIENT, 1f, 1f);
+                    player.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(KnuffeldalFeature.SEIZOEN_GELUID,
+                            SoundSource.AMBIENT, player.getX(), player.getY(), player.getZ(), 1f, 1f, player.getRandom().nextLong()));
                 }
             }
         });

@@ -254,8 +254,8 @@ public class VadswakerEntity extends Monster implements GeoEntity {
     // --- every tick ---------------------------------------------------------------------------------------------------
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         ServerLevel level = (ServerLevel) level();
         life++;
         poseTicks++;
@@ -348,7 +348,7 @@ public class VadswakerEntity extends Monster implements GeoEntity {
             Vec3 p = from.add(step.scale(i));
             level.sendParticles(ParticleTypes.SONIC_BOOM, p.x, p.y, p.z, 1, 0, 0, 0, 0);
         }
-        if (target.hurt(damageSources().sonicBoom(this), 10f)) {
+        if (target.hurtOrSimulate(damageSources().sonicBoom(this), 10f)) {
             double kb = 1.0 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
             target.push(step.x * 2.2 * kb, 0.5 * kb, step.z * 2.2 * kb);
             target.hurtMarked = true;
@@ -366,15 +366,15 @@ public class VadswakerEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean doHurtTarget(Entity target) {
+    public boolean doHurtTarget(ServerLevel serverLevel, Entity target) {
         triggerAnim("action", "attack");
         playSound(SoundEvents.WARDEN_ATTACK_IMPACT, 1.5f, 1.2f);
-        return super.doHurtTarget(target);
+        return super.doHurtTarget(serverLevel, target);
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        boolean hurt = super.hurt(source, amount);
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
+        boolean hurt = super.hurtServer(serverLevel, source, amount);
         if (hurt && source.getEntity() instanceof Player player && !isDigging()) {
             anger.merge(player.getUUID(), 100, (a, b) -> Math.min(MAX_ANGER, a + b));   // (hit him and he knows where you are)
             calmTicks = 0;
@@ -383,8 +383,8 @@ public class VadswakerEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
-        return (isEmerging() || isDigging()) && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || super.isInvulnerableTo(source);
+    public boolean isInvulnerableTo(ServerLevel serverLevel, DamageSource source) {
+        return (isEmerging() || isDigging()) && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || super.isInvulnerableTo(serverLevel, source);
     }
 
     @Override
@@ -398,7 +398,7 @@ public class VadswakerEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+    public boolean causeFallDamage(double fallDistance, float multiplier, DamageSource source) {
         return false;
     }
 
@@ -420,7 +420,7 @@ public class VadswakerEntity extends Monster implements GeoEntity {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return random.nextInt(3) == 0 ? ModSounds.MIKA_AMBIENT.get() : SoundEvents.GENERIC_EAT;
+        return random.nextInt(3) == 0 ? ModSounds.MIKA_AMBIENT.get() : SoundEvents.GENERIC_EAT.value();
     }
 
     @Override

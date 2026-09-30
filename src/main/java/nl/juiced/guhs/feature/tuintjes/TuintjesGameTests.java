@@ -199,12 +199,13 @@ public class TuintjesGameTests {
             helper.assertTrue(Knusfeest.stap(p, Feesttaak.FEESTBLOEMEN) == Knusfeest.Stap.GEMAAKT, "the feestboeket is made for the Knusfeest");
             helper.assertTrue(advancement(p, "quest/knusfeest_feestbloemen_gemaakt"), "its quest advancement");
             helper.assertTrue(KnusVoortgang.teller(p, TuintjesVoortgang.FEESTBOEKET) == 2, "counted");
-            var recipe = helper.getLevel().getRecipeManager().byKey(Guhs.id("feestboeket"));
-            helper.assertTrue(recipe.isPresent() && recipe.get().value().getResultItem(helper.getLevel().registryAccess()).is(TuintjesFeature.FEESTBOEKET.get()),
+            var recipe = helper.getLevel().recipeAccess().byKey(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, Guhs.id("feestboeket")));
+            helper.assertTrue(recipe.isPresent() && recipe.get().value() instanceof net.minecraft.world.item.crafting.CraftingRecipe crafting
+                            && crafting.assemble(net.minecraft.world.item.crafting.CraftingInput.EMPTY).is(TuintjesFeature.FEESTBOEKET.get()),
                     "the recipe");
-            helper.assertTrue(recipe.get().value().getIngredients().stream().filter(i -> !i.isEmpty())
+            helper.assertTrue(recipe.get().value().placementInfo().ingredients().stream()
                     .allMatch(i -> i.test(new ItemStack(TuintjesFeature.GUHBLOEMETJE.get()))), "made of guhbloemetjes only");
-            helper.assertTrue(recipe.get().value().getIngredients().stream().filter(i -> !i.isEmpty()).count() == 5, "five of them");
+            helper.assertTrue(recipe.get().value().placementInfo().ingredients().size() == 5, "five of them");
         } finally {
             Knusfeest.vergeet(p);
             leave(helper, p);

@@ -59,7 +59,7 @@ public final class BibliotheekProtection {
         if (server.dimension() != nl.juiced.guhs.world.ModDimensions.GUHMENSION) {
             return false;                                      // (it only generates in the Guhmension)
         }
-        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(LIBRARY);
+        Structure structure = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(LIBRARY);
         return structure != null && server.structureManager().getStructureAt(pos, structure).isValid();
     }
 

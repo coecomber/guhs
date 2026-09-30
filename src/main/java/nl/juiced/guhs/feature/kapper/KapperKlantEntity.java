@@ -102,12 +102,12 @@ public class KapperKlantEntity extends GuhEntity {
     // --- nobody's, never hurt, never saved -------------------------------------------------------------------------------
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(ServerLevel serverLevel, DamageSource source) {
         return !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     @Override
-    protected void dropEquipment() {
+    protected void dropEquipment(ServerLevel serverLevel) {
     }
 
     @Override

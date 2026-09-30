@@ -18,6 +18,10 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import nl.juiced.guhs.quest.Highscores;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * The stempelkaart of your tour (lent by Schaatsmeester Guhglij): eleven boxes, one per village, filled with a stamp
  * and your split time as you go. Its data ({@code Stempels}: how many, {@code Tijden}: the split times) is kept up to
@@ -50,7 +54,7 @@ public class StempelkaartItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
         if (!level.isClientSide() && (!(entity instanceof Player player) || !ElftochtTocht.opTocht(player))) {
             stack.setCount(0);
         }
@@ -70,15 +74,15 @@ public class StempelkaartItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         var tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         int n = tag.getIntOr("Stempels", 0);
         int[] tijden = tag.getIntArray("Tijden").orElse(new int[0]);
-        tooltip.add(Component.translatable("item.guhs.stempelkaart.lore", n).withStyle(ChatFormatting.GRAY));
+        tooltip.accept(Component.translatable("item.guhs.stempelkaart.lore", n).withStyle(ChatFormatting.GRAY));
         for (int k = 0; k < ElftochtTocht.VOLGORDE.length; k++) {
             int dorp = ElftochtTocht.VOLGORDE[k];
             boolean klaar = k < n;
-            tooltip.add(Component.literal(klaar ? " ✔ " : " ○ ").append(ElftochtTocht.dorpNaam(dorp))
+            tooltip.accept(Component.literal(klaar ? " ✔ " : " ○ ").append(ElftochtTocht.dorpNaam(dorp))
                     .append(klaar && k < tijden.length ? Component.literal("  " + Highscores.tijd(tijden[k])) : Component.empty())
                     .withStyle(klaar ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
         }

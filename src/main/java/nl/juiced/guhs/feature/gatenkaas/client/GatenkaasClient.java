@@ -1,5 +1,6 @@
 package nl.juiced.guhs.feature.gatenkaas.client;
 
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import nl.juiced.guhs.Guhs;
@@ -18,13 +19,14 @@ public final class GatenkaasClient {
 
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> event.registerEntityRenderer(GatenkaasFeature.VADSWAKER.get(), context -> {
-            GeoEntityRenderer<VadswakerEntity> renderer = new GeoEntityRenderer<>(context, new DefaultedEntityGeoModel<VadswakerEntity>(Guhs.id("vadswaker"))) {
+            GeoEntityRenderer<VadswakerEntity, LivingEntityRenderState> renderer = new GeoEntityRenderer<VadswakerEntity, LivingEntityRenderState>(context,
+                    new DefaultedEntityGeoModel<VadswakerEntity>(Guhs.id("vadswaker"))) {
                 {
                     this.shadowRadius = 0.45f * SCALE;
                 }
             };
             renderer.withScale(SCALE);
-            renderer.addRenderLayer(new AutoGlowingGeoLayer<>(renderer));
+            renderer.withRenderLayer(new AutoGlowingGeoLayer<>(renderer));
             return renderer;
         }));
     }
