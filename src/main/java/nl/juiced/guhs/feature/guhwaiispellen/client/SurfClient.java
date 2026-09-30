@@ -151,17 +151,18 @@ public final class SurfClient {
     /** Your keys in the beach's frame: A/D along the beach, W down the face, S up to the lip, space: jump. */
     private static int invoer(LocalPlayer p) {
         int bits = 0;
-        if (p.input.leftImpulse > 0) {
+        float left = p.input.getMoveVector().x, forward = p.input.getMoveVector().y;   // (1.1.0: was leftImpulse / forwardImpulse)
+        if (left > 0) {
             bits |= SurfSim.LINKS;
-        } else if (p.input.leftImpulse < 0) {
+        } else if (left < 0) {
             bits |= SurfSim.RECHTS;
         }
-        if (p.input.forwardImpulse > 0) {
+        if (forward > 0) {
             bits |= SurfSim.VOORUIT;
-        } else if (p.input.forwardImpulse < 0) {
+        } else if (forward < 0) {
             bits |= SurfSim.ACHTERUIT;
         }
-        if (p.input.jumping) {
+        if (p.input.keyPresses.jump()) {
             bits |= SurfSim.SPRING;
         }
         return bits;

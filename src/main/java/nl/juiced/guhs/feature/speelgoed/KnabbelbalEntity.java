@@ -244,6 +244,12 @@ public class KnabbelbalEntity extends Entity {
             lerpZ = position.z;
             lerpSteps = net.minecraft.world.entity.InterpolationHandler.DEFAULT_INTERPOLATION_STEPS;
         }
+
+        /** (a packet without a position keeps gliding to the last target, like 1.0.0's lerpTargetX/Y/Z) */
+        @Override
+        public Vec3 position() {
+            return lerpSteps > 0 ? new Vec3(lerpX, lerpY, lerpZ) : KnabbelbalEntity.this.position();
+        }
     };
 
     @Override

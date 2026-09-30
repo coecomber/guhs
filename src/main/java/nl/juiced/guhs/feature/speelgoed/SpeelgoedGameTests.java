@@ -145,12 +145,12 @@ public class SpeelgoedGameTests {
         helper.assertTrue(guh.getPersistentData().getLongOr(Spelen.BAL_TOT, 0L) > helper.getLevel().getGameTime(), "your guh wants to chase it");
         // an empty ball, filled with a kaasknabbel
         p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 2));
-        bal.interact(p, InteractionHand.MAIN_HAND);
+        bal.interact(p, InteractionHand.MAIN_HAND, bal.position());
         helper.assertTrue(bal.isVol() && p.getMainHandItem().getCount() == 1, "filled with one kaasknabbel");
         // picked up full, the item remembers
         p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         p.setShiftKeyDown(true);
-        bal.interact(p, InteractionHand.MAIN_HAND);
+        bal.interact(p, InteractionHand.MAIN_HAND, bal.position());
         helper.assertTrue(bal.isRemoved(), "sneak + right-click picks it up");
         ItemStack item = p.getInventory().getNonEquipmentItems().stream().filter(s -> s.is(SpeelgoedFeature.KNABBELBAL_ITEM.get())).findFirst().orElse(ItemStack.EMPTY);
         helper.assertTrue(!item.isEmpty() && KnabbelbalItem.isVol(item), "the ball item, still full");

@@ -162,7 +162,7 @@ public final class SurfSpel {
         SPELERS.put(player.getUUID(), s);
         player.stopRiding();
         Vec3 p = bord.position();
-        player.teleportTo(level, p.x, p.y + SurfPlankEntity.STAAN, p.z, spot.strandYaw(), 10);
+        player.teleportTo(level, p.x, p.y + SurfPlankEntity.STAAN, p.z, java.util.Set.of(), spot.strandYaw(), 10, true);
         player.startRiding(bord, true, true);
         Minigames.startKeeping(player);
         if (GuhQuests.count(player, GuhwaiiSpellenBlocks.SURFPLANKJE_LEEN.get()) == 0) {
@@ -399,7 +399,7 @@ public final class SurfSpel {
             while (!level.getBlockState(b).isAir() && b.getY() < npcPos.getY() + 4) {
                 b = b.above();
             }
-            player.teleportTo(level, beach.x, b.getY(), beach.z, spot.strandYaw() + 180, 0);
+            player.teleportTo(level, beach.x, b.getY(), beach.z, java.util.Set.of(), spot.strandYaw() + 180, 0, true);
         }
     }
 

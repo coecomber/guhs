@@ -183,7 +183,7 @@ public final class HulaSpel {
         player.stopRiding();
         Vec3 naar = npc.position().subtract(Vec3.atBottomCenterOf(mat));
         float yaw = (float) Math.toDegrees(Math.atan2(-naar.x, naar.z));
-        player.teleportTo(level, mat.getX() + 0.5, mat.getY() + 0.07, mat.getZ() + 0.5, yaw, 5);
+        player.teleportTo(level, mat.getX() + 0.5, mat.getY() + 0.07, mat.getZ() + 0.5, java.util.Set.of(), yaw, 5, true);
         Minigames.startKeeping(player);
         start = level.getGameTime();
         muziek(level, npc, true);

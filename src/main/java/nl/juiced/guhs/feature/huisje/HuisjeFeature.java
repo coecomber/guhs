@@ -58,9 +58,9 @@ public final class HuisjeFeature {
             () -> props().noLootTable());
 
     static {
-        ITEMS.registerItem("guhhuisje_klein", p -> new BlockItem(KLEIN.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
-        ITEMS.registerItem("guhhuisje_medium", p -> new BlockItem(MEDIUM.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
-        ITEMS.registerItem("guhhuisje_groot", p -> new BlockItem(GROOT.get(), p), () -> new Item.Properties().rarity(Rarity.UNCOMMON).useBlockDescriptionPrefix());
+        ITEMS.registerItem("guhhuisje_klein", p -> new HuisjeItem(KLEIN.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
+        ITEMS.registerItem("guhhuisje_medium", p -> new HuisjeItem(MEDIUM.get(), p), () -> new Item.Properties().useBlockDescriptionPrefix());
+        ITEMS.registerItem("guhhuisje_groot", p -> new HuisjeItem(GROOT.get(), p), () -> new Item.Properties().rarity(Rarity.UNCOMMON).useBlockDescriptionPrefix());
     }
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<HuisjeBlockEntity>> HUISJE_BE = BLOCK_ENTITIES.register("guhhuisje",
@@ -144,5 +144,20 @@ public final class HuisjeFeature {
     }
 
     private HuisjeFeature() {
+    }
+
+    /** A huisje item: its lore lines come from the block (1.0.0: Block#appendHoverText, gone in 26.1). */
+    static final class HuisjeItem extends BlockItem {
+        HuisjeItem(HuisjeBlock block, Item.Properties properties) {
+            super(block, properties);
+        }
+
+        @Override
+        public void appendHoverText(net.minecraft.world.item.ItemStack stack, Item.TooltipContext context, net.minecraft.world.item.component.TooltipDisplay display,
+                                    java.util.function.Consumer<net.minecraft.network.chat.Component> tooltip, net.minecraft.world.item.TooltipFlag flag) {
+            if (getBlock() instanceof HuisjeBlock blok) {
+                blok.appendHoverText(stack, context, display, tooltip, flag);
+            }
+        }
     }
 }

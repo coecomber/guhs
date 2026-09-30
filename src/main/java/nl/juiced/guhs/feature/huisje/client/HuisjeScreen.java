@@ -375,7 +375,7 @@ public class HuisjeScreen extends Screen {
 
     private static ItemStack icoon(String id) {
         Identifier rl = Identifier.tryParse(id);
-        return rl == null ? ItemStack.EMPTY : new ItemStack(BuiltInRegistries.ITEM.get(rl));
+        return rl == null ? ItemStack.EMPTY : new ItemStack(BuiltInRegistries.ITEM.getValue(rl));
     }
 
     /** One chore: [icon] name [on/off], its tip below. */

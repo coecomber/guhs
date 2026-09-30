@@ -283,7 +283,7 @@ public final class Huisjes extends SavedData {
 
     /** Can this entity live in huisjes at all (a band guh or a tamed maatje)? */
     public static boolean kanBewoner(Entity e) {
-        return Band.isBandGuh(e) || (e instanceof PiepMaatje && e instanceof TamableAnimal a && a.isTame() && a.getOwnerUUID() != null);
+        return Band.isBandGuh(e) || (e instanceof PiepMaatje && e instanceof TamableAnimal a && a.isTame() && nl.juiced.guhs.entity.Owners.uuid(a) != null);
     }
 
     /**

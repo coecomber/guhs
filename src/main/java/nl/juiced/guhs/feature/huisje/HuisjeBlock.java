@@ -267,7 +267,7 @@ public class HuisjeBlock extends BaseEntityBlock {
         return state.getBlock() instanceof HuisjeBlock b ? b.eigen(level, h.pos(), state, player) : null;
     }
 
-    @Override
+    /** The lore lines of the huisje item (1.1.0: blocks have no hover text any more; {@code HuisjeFeature.HuisjeItem} asks here). */
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         tooltip.accept(Component.translatable("block.guhs.guhhuisje.lore", maat.plekken()).withStyle(ChatFormatting.GRAY));
         tooltip.accept(Component.translatable("block.guhs." + maat.blokId() + ".lore").withStyle(ChatFormatting.LIGHT_PURPLE));
