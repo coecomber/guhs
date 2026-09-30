@@ -49,7 +49,7 @@ public final class Mijnguh implements NpcRole {
         if (LeenhouweelItem.count(player) == 0) {
             if (lyingAround(player)) {
                 GuhQuests.say(player, npc, "quest.guhs.kaasmijn.on_floor");   // (one each: pick that one up first)
-            } else if (!player.getInventory().getSelected().isEmpty() && player.getInventory().getFreeSlot() < 0) {
+            } else if (!player.getInventory().getSelectedItem().isEmpty() && player.getInventory().getFreeSlot() < 0) {
                 GuhQuests.say(player, npc, "quest.guhs.kaasmijn.full");       // (no room: the shop still opens)
             } else {
                 GuhQuests.say(player, npc, "quest.guhs.kaasmijn.loan");
@@ -72,7 +72,7 @@ public final class Mijnguh implements NpcRole {
     /** A loaner pickaxe for the player (in the selected slot if that's free; no room: none, he says so). */
     public static boolean lend(ServerPlayer player, GuhNpcEntity npc) {
         ItemStack pickaxe = new ItemStack(KaasmijnFeature.LEENHOUWEEL.get());
-        if (player.getInventory().getSelected().isEmpty()) {
+        if (player.getInventory().getSelectedItem().isEmpty()) {
             player.getInventory().setItem(player.getInventory().getSelectedSlot(), pickaxe);
         } else if (!player.getInventory().add(pickaxe)) {
             GuhQuests.say(player, npc, "quest.guhs.kaasmijn.full");

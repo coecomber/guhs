@@ -207,10 +207,10 @@ public class KaasmijnGameTests {
             var carts = helper.getLevel().getEntitiesOfClass(AbstractMinecart.class, area);
             helper.assertTrue(carts.size() == 1, "one cart: " + carts.size());
             AbstractMinecart cart = carts.get(0);
-            helper.assertTrue(cart.isInvulnerable() && !cart.hurt(helper.getLevel().damageSources().playerAttack(player), 100f),
+            helper.assertTrue(cart.isInvulnerable() && !cart.hurtServer(helper.getLevel(), helper.getLevel().damageSources().playerAttack(player), 100f),
                     "it can't be broken for a free minecart");
             // riding it counts for the Kaasexpress quest
-            player.startRiding(cart, true);
+            player.startRiding(cart, true, true);
             for (int i = 0; i < KaasmijnFeature.RIDE_SECONDS; i++) {
                 KaasmijnFeature.rideSecond(player);
             }

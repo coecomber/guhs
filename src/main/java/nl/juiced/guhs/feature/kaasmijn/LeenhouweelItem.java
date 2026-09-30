@@ -1,7 +1,5 @@
 package nl.juiced.guhs.feature.kaasmijn;
 
-import java.util.List;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,24 +8,30 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Tier;
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EquipmentSlot;
 /**
  * The Mijnguh's loaner pickaxe: an unbreakable iron pickaxe that only works inside a kaasmijn. The moment it is
  * outside one (in your inventory, or lying on the ground) it goes back to the Mijnguh, however it got there.
  * It can't be enchanted.
  */
-public class LeenhouweelItem extends PickaxeItem {
-    public LeenhouweelItem(Tier tier, Properties properties) {
-        super(tier, properties);
+public class LeenhouweelItem extends Item {
+    /** 1.1.0: an iron pickaxe through its properties ({@code pickaxe(ToolMaterial.IRON, ..)} + unbreakable). */
+    public LeenhouweelItem(Properties properties) {
+        super(properties);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide() && entity instanceof ServerPlayer player && (selected || player.tickCount % 20 == 0)
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
+        if (entity instanceof ServerPlayer player && ((equipSlot == EquipmentSlot.MAINHAND) || player.tickCount % 20 == 0)
                 && !KaasmijnProtection.inMine(level, player.blockPosition())) {     // (in hand: checked every tick, no mining outside)
             takeBack(player);
         }
@@ -76,18 +80,20 @@ public class LeenhouweelItem extends PickaxeItem {
         return false;
     }
 
+    /** Not at the enchanting table (1.1.0: was isEnchantable). */
     @Override
-    public boolean isEnchantable(ItemStack stack) {
+    public boolean isPrimaryItemFor(ItemStack stack, Holder<Enchantment> enchantment) {
+        return false;
+    }
+
+    /** Not with a book on the anvil either (1.1.0: was isBookEnchantable). */
+    @Override
+    public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
         return false;
     }
 
     @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-        return false;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable(getDescriptionId() + ".lore").withStyle(ChatFormatting.GRAY));
     }
 }

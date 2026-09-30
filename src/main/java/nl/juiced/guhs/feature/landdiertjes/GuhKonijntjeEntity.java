@@ -153,13 +153,13 @@ public class GuhKonijntjeEntity extends Landdiertje {
             hopWacht--;
         } else if (onGround() && !isInWater() && getNavigation().isInProgress() && getDeltaMovement().horizontalDistanceSqr() > 0.0006) {
             setDeltaMovement(getDeltaMovement().add(0, 0.3, 0));
-            hasImpulse = true;
+            needsSync = true;
             hopWacht = 7 + random.nextInt(4);
         }
     }
 
     @Override
-    protected int calculateFallDamage(float distance, float multiplier) {
+    protected int calculateFallDamage(double distance, float multiplier) {
         return super.calculateFallDamage(distance - 2f, multiplier);   // (bunnies land softly)
     }
 

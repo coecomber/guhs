@@ -25,6 +25,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * Het guhlampje (klusjes): a little standing lamp shaped like a guh head: two fluffy ears on its cap and a glowing
  * snoet-face in the glass. Right-click switches it on or off; huisje residents with the chore "lampjes" switch it on in the
@@ -68,10 +69,9 @@ public class GuhlampjeBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction dir, BlockState neighbour, net.minecraft.world.level.LevelAccessor level,
-                                     BlockPos pos, BlockPos neighbourPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction dir, BlockPos neighbourPos, BlockState neighbour, RandomSource random) {
         return dir == Direction.DOWN && !canSurvive(state, level, pos) ? net.minecraft.world.level.block.Blocks.AIR.defaultBlockState()
-                : super.updateShape(state, dir, neighbour, level, pos, neighbourPos);
+                : super.updateShape(state, level, ticks, pos, dir, neighbourPos, neighbour, random);
     }
 
     @Override

@@ -18,6 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /** Sterrenstof, left behind by a falling star: throw it up in the air and make a wish (you see in the dark for a while). */
 public class SterrenstofItem extends Item {
     public static final int NIGHT_VISION = 20 * 90;
@@ -35,13 +37,13 @@ public class SterrenstofItem extends Item {
             ((ServerLevel) level).sendParticles(ParticleTypes.END_ROD, player.getX(), player.getY() + 2.2, player.getZ(), 20, 0.4, 0.4, 0.4, 0.06);
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1f, 1.6f);
             player.sendOverlayMessage(Component.translatable("item.guhs.sterrenstof.wish").withStyle(ChatFormatting.AQUA));
-            player.getCooldowns().addCooldown(this, 20);
+            player.getCooldowns().addCooldown(new ItemStack(this), 20);
         }
         return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.sterrenstof.lore").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.sterrenstof.lore").withStyle(ChatFormatting.GRAY));
     }
 }

@@ -46,10 +46,11 @@ public final class SmulFeature {
     public static final DeferredItem<SmulSchaalItem> SMULSCHAAL = ITEMS.registerItem("smulschaal", SmulSchaalItem::new,
             () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     /** The golden kaasknabbel: a bonus in the game, and a (shop) treat that makes you quick. */
-    public static final DeferredItem<Item> GOUDEN_SMULKNABBEL = ITEMS.registerSimpleItem("gouden_smulknabbel", new Item.Properties()
-            .rarity(Rarity.RARE).food(new FoodProperties.Builder().nutrition(6).saturationModifier(1.2f).alwaysEdible()
-                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SPEED, 20 * 30, 1), 1f)
-                    .effect(() -> new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.ABSORPTION, 20 * 60, 0), 1f)
+    public static final DeferredItem<Item> GOUDEN_SMULKNABBEL = ITEMS.registerSimpleItem("gouden_smulknabbel", () -> new Item.Properties()
+            .rarity(Rarity.RARE).food(new FoodProperties.Builder().nutrition(6).saturationModifier(1.2f).alwaysEdible().build(),
+                    net.minecraft.world.item.component.Consumables.defaultFood()
+                    .onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SPEED, 20 * 30, 1), 1f))
+                    .onConsume(new net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.ABSORPTION, 20 * 60, 0), 1f))
                     .build()));
 
     public static final DeferredHolder<EntityType<?>, EntityType<SmulHapje>> HAPJE = ENTITY_TYPES.register("smul_hapje",
@@ -57,7 +58,7 @@ public final class SmulFeature {
                     .updateInterval(2).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("smul_hapje"))));
 
     private static DeferredBlock<VerstopBlocks.Marker> marker(String name) {
-        return BLOCKS.registerBlock(name, VerstopBlocks.Marker::new, BlockBehaviour.Properties.of().noCollission().noLootTable()
+        return BLOCKS.registerBlock(name, VerstopBlocks.Marker::new, () -> BlockBehaviour.Properties.of().noCollision().noLootTable()
                 .strength(-1f, 3600000f).noOcclusion().isValidSpawn((s, l, p, e) -> false));
     }
 

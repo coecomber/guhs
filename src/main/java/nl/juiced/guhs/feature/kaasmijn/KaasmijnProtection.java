@@ -16,7 +16,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MinecartItem;
-import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -59,7 +58,7 @@ public final class KaasmijnProtection {
         if (server.dimension() != ModDimensions.GUHMENSION) {
             return false;
         }
-        Structure mine = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(MINE);
+        Structure mine = server.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(MINE);
         return mine != null && server.structureManager().getStructureWithPieceAt(pos, mine).isValid();
     }
 
@@ -110,7 +109,7 @@ public final class KaasmijnProtection {
         Direction face = event.getFace() == null ? Direction.UP : event.getFace();
         // (no scolding for a pickaxe or a snack in your paw: you're just clicking a dispenser or the vault with it)
         ItemStack stack = event.getItemStack();
-        boolean quiet = stack.getItem() instanceof PickaxeItem || stack.has(DataComponents.FOOD);
+        boolean quiet = (stack.is(net.minecraft.tags.ItemTags.PICKAXES) || stack.getItem() instanceof KaashouweelItem || stack.getItem() instanceof LeenhouweelItem) || stack.has(DataComponents.FOOD);
         if (denied(event.getEntity(), event.getPos(), "quest.guhs.kaasmijn.no_build", quiet)
                 || denied(event.getEntity(), event.getPos().relative(face), "quest.guhs.kaasmijn.no_build", quiet)) {
             event.setUseItem(TriState.FALSE);

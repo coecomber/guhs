@@ -16,6 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import nl.juiced.guhs.entity.GuhEntity;
 
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
 /**
  * The golden kaasknabbel, only from the kaasregen: a wild guh can't resist it (tamed at once), and it's a tasty
  * golden snack for yourself too (as filling as a golden carrot, no magic).
@@ -45,7 +47,7 @@ public class GoudenKaasknabbelItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.guhs.gouden_kaasknabbel.lore").withStyle(ChatFormatting.GOLD));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable("item.guhs.gouden_kaasknabbel.lore").withStyle(ChatFormatting.GOLD));
     }
 }

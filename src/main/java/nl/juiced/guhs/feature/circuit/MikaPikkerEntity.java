@@ -119,7 +119,7 @@ public class MikaPikkerEntity extends PathfinderMob implements GeoEntity {
         Vec3 away = this.position().subtract(mount.position()).multiply(1, 0, 1);
         away = away.lengthSqr() < 1e-4 ? Vec3.directionFromRotation(0, homeYaw + 180) : away.normalize();
         this.setDeltaMovement(away.scale(0.35).add(0, 0.42, 0));
-        this.hasImpulse = true;
+        this.needsSync = true;
         this.triggerAnim("action", "giechel");
         if (this.level() instanceof ServerLevel level) {
             level.playSound(null, this, ModSounds.MIKA_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 1.7f);
@@ -164,7 +164,7 @@ public class MikaPikkerEntity extends PathfinderMob implements GeoEntity {
             this.teleportTo(home.x, home.y, home.z);
         }
         // on its spot: it keeps an eye on the race guhs coming by (or, a pusher, on the track down the hill)
-        RaceGuhEntity near = this.level().getNearestEntity(RaceGuhEntity.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forNonCombat(),
+        RaceGuhEntity near = ((ServerLevel) this.level()).getNearestEntity(RaceGuhEntity.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forNonCombat(),
                 this, getX(), getY(), getZ(), getBoundingBox().inflate(14, 6, 14));
         if (near != null && !isDuwer()) {
             this.getLookControl().setLookAt(near, 30f, 30f);
@@ -178,12 +178,12 @@ public class MikaPikkerEntity extends PathfinderMob implements GeoEntity {
     // --- never hurt, never hurting, never saved -------------------------------------------------------------------------
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(net.minecraft.server.level.ServerLevel level, DamageSource source) {
         return !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     @Override
-    public boolean doHurtTarget(Entity target) {
+    public boolean doHurtTarget(net.minecraft.server.level.ServerLevel level, Entity target) {
         return false;
     }
 

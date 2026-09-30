@@ -331,7 +331,7 @@ public class PluiseekhoorntjeEntity extends Landdiertje {
         super.temmen(player);
         volgendeVondst = level().getGameTime() + CADEAU_MIN / 2 + random.nextInt(CADEAU_WILLEKEURIG);
         if (wangen > 0) {                                        // what was in its cheeks: for you!
-            spawnAtLocation(new ItemStack(ModItems.KAAS_KNABBELS.get(), wangen));
+            spawnAtLocation((net.minecraft.server.level.ServerLevel) level(), new ItemStack(ModItems.KAAS_KNABBELS.get(), wangen));
             wangen = 0;
         }
     }

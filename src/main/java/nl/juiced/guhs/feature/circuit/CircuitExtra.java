@@ -78,7 +78,7 @@ public final class CircuitExtra implements RaceBaan.Extra {
         }
         for (RaceTrack.Marker m : track.markers("circuit_rolplek")) {
             if (m.vanaf() <= n) {
-                Vec3 back = Vec3.atLowerCornerOf(m.direction().getNormal()).scale(-1.3);
+                Vec3 back = m.direction().getUnitVec3().scale(-1.3);
                 MikaPikkerEntity duwer = spawn(level, m.centre().add(back), m.direction().toYRot(), true);
                 if (duwer != null) {
                     list(game, DUWERS).add(duwer.getUUID());
@@ -158,7 +158,7 @@ public final class CircuitExtra implements RaceBaan.Extra {
         }
         Vec3 at = m.centre().add(0, 0.1, 0);
         knabbel.snapTo(at.x, at.y, at.z, 0, 0);
-        knabbel.rol(Vec3.atLowerCornerOf(m.direction().getNormal()));
+        knabbel.rol(m.direction().getUnitVec3());
         LIVE.add(knabbel.getUUID());
         level.addFreshEntity(knabbel);
         level.playSound(null, at.x, at.y, at.z, SoundEvents.WOOL_PLACE, SoundSource.NEUTRAL, 1f, 0.6f);
@@ -197,7 +197,7 @@ public final class CircuitExtra implements RaceBaan.Extra {
         for (int i = 0; i < 2; i++) {
             float hue = ((ticks * 2 + i * 7) % 60) / 60f;
             int rgb = java.awt.Color.HSBtoRGB(hue, 0.75f, 1f);
-            DustParticleOptions dust = new DustParticleOptions(new Vector3f(((rgb >> 16) & 255) / 255f, ((rgb >> 8) & 255) / 255f, (rgb & 255) / 255f), 1.6f);
+            DustParticleOptions dust = new DustParticleOptions(rgb & 0xFFFFFF, 1.6f);
             level.sendParticles(dust, mount.getX() + back.x, mount.getY() + 0.35 + i * 0.3, mount.getZ() + back.z, 2, 0.15, 0.1, 0.15, 0);
         }
     }

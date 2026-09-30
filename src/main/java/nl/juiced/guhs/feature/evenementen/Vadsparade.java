@@ -89,9 +89,9 @@ public class Vadsparade extends Evenement {
     }
 
     private static final DustParticleOptions[] CONFETTI = {
-            new DustParticleOptions(new Vector3f(1f, 0.45f, 0.75f), 1.2f), new DustParticleOptions(new Vector3f(1f, 0.85f, 0.25f), 1.2f),
-            new DustParticleOptions(new Vector3f(0.55f, 0.9f, 0.75f), 1.2f), new DustParticleOptions(new Vector3f(0.5f, 0.7f, 1f), 1.2f),
-            new DustParticleOptions(new Vector3f(0.75f, 0.5f, 1f), 1.2f)};
+            new DustParticleOptions(0xFF73BF /* 1, 0.45, 0.75 */, 1.2f), new DustParticleOptions(0xFFD940 /* 1, 0.85, 0.25 */, 1.2f),
+            new DustParticleOptions(0x8CE6BF /* 0.55, 0.9, 0.75 */, 1.2f), new DustParticleOptions(0x80B2FF /* 0.5, 0.7, 1 */, 1.2f),
+            new DustParticleOptions(0xBF80FF /* 0.75, 0.5, 1 */, 1.2f)};
 
     final ParadeRoute route;
     final List<ParadeGuhEntity> guhs = new ArrayList<>();

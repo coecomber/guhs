@@ -26,6 +26,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * The guh_slaapzak: a pink sleeping bag with a hood that has two guh ears and a sleepy guh face. Sleep in it without a
  * bed (right-click at night, like a bed; it counts for skipping the night), but it isn't a home: it doesn't set your
@@ -68,9 +70,9 @@ public class SlaapzakBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction direction, BlockState neighbour, LevelAccessor level, BlockPos pos, BlockPos neighbourPos) {
+    protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighbourPos, BlockState neighbour, RandomSource random) {
         return direction == Direction.DOWN && !canSurvive(state, level, pos) ? Blocks.AIR.defaultBlockState()
-                : super.updateShape(state, direction, neighbour, level, pos, neighbourPos);
+                : super.updateShape(state, level, ticks, pos, direction, neighbourPos, neighbour, random);
     }
 
     @Override
@@ -89,8 +91,8 @@ public class SlaapzakBlock extends HorizontalDirectionalBlock {
         }
         if (player instanceof ServerPlayer serverPlayer) {
             serverPlayer.startSleepInBed(pos).ifLeft(problem -> {
-                if (problem.getMessage() != null) {
-                    player.sendOverlayMessage(problem.getMessage());
+                if (problem.message() != null) {
+                    player.sendOverlayMessage(problem.message());
                 }
             });
         }

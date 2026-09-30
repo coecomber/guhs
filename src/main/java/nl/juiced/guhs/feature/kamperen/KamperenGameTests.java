@@ -147,7 +147,7 @@ public class KamperenGameTests {
             helper.assertTrue(KampvuurMarshmallow.opa(helper.getLevel(), abs) == opa, "Opa Guh is at this fire");
             int n = KampvuurMarshmallow.rooster(p, abs, stand);
             helper.assertTrue(n == 1 && stand.getCount() == 1 && KnusVoortgang.teller(p, KampvuurMarshmallow.GEROOSTERD) == 1, "one roasted and eaten");
-            helper.assertTrue(p.getFoodData().getFoodLevel() > 10 && p.getCooldowns().isOnCooldown(Items.SUGAR), "a bite of food, then wait a moment");
+            helper.assertTrue(p.getFoodData().getFoodLevel() > 10 && p.getCooldowns().isOnCooldown(new net.minecraft.world.item.ItemStack(Items.SUGAR)), "a bite of food, then wait a moment");
             helper.assertTrue(LuisterGoal.luistert(guh), "the guh smells it and comes to the fire");
             helper.assertTrue(count(p, ModItems.KAAS_KNABBELS.get()) == 0, "no kaasknabbels (no knabbel machine)");
             helper.assertTrue(KnusVoortgang.mijlpalen("kamperen").stream().anyMatch(m -> m.id().equals("kamperen_marshmallows")), "a milestone");
@@ -226,9 +226,9 @@ public class KamperenGameTests {
             helper.assertTrue(level.getBlockState(abs).getValue(SlaapzakBlock.OCCUPIED), "occupied");
             level.getBlockState(abs).setBedOccupied(level, abs, p, false);
             helper.assertTrue(!level.getBlockState(abs).getValue(SlaapzakBlock.OCCUPIED), "free again");
-            var voor = p.getRespawnPosition();
-            p.setRespawnPosition(level.dimension(), abs, 0, false, false);
-            helper.assertTrue(java.util.Objects.equals(p.getRespawnPosition(), voor), "it doesn't become your spawn point");
+            var voor = p.getRespawnConfig();
+            p.setRespawnPosition(new ServerPlayer.RespawnConfig(net.minecraft.world.level.storage.LevelData.RespawnData.of(level.dimension(), abs, 0f, 0f), false), false);
+            helper.assertTrue(java.util.Objects.equals(p.getRespawnConfig(), voor), "it doesn't become your spawn point");
             KamperenEvents.uitgeslapen(p);
             helper.assertTrue(p.hasEffect(KamperenFeature.UITGERUST) && KnusVoortgang.teller(p, Verhalen.UITGESLAPEN) == 1, "uitgerust");
         } finally {

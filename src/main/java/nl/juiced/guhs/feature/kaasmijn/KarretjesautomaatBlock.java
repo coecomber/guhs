@@ -80,7 +80,8 @@ public class KarretjesautomaatBlock extends HorizontalDirectionalBlock {
             tell(player, "quest.guhs.kaasmijn.cart_ready");
             return false;
         }
-        Minecart cart = new Minecart(level, rail.getX() + 0.5, rail.getY() + 0.0625, rail.getZ() + 0.5);
+        Minecart cart = new Minecart(net.minecraft.world.entity.EntityType.MINECART, level);
+        cart.setInitialPos(rail.getX() + 0.5, rail.getY() + 0.0625, rail.getZ() + 0.5);
         cart.setInvulnerable(true);
         cart.addTag(CART_TAG);
         level.addFreshEntity(cart);

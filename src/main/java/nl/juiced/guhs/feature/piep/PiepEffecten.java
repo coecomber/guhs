@@ -35,7 +35,7 @@ public final class PiepEffecten {
         }
 
         @Override
-        public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+        public boolean applyEffectTick(net.minecraft.server.level.ServerLevel serverLevel, LivingEntity entity, int amplifier) {
             if (entity.level() instanceof ServerLevel level) {
                 level.sendParticles(PiepFeature.FRIS_SPARKEL.get(), entity.getX(), entity.getY() + entity.getBbHeight() * 0.7, entity.getZ(), 2,
                         entity.getBbWidth() * 0.4, entity.getBbHeight() * 0.3, entity.getBbWidth() * 0.4, 0.01);
@@ -56,7 +56,7 @@ public final class PiepEffecten {
         }
 
         @Override
-        public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+        public boolean applyEffectTick(net.minecraft.server.level.ServerLevel serverLevel, LivingEntity entity, int amplifier) {
             if (entity.level() instanceof ServerLevel level && entity instanceof Player) {
                 for (GuhEntity guh : level.getEntitiesOfClass(GuhEntity.class, entity.getBoundingBox().inflate(8))) {
                     if (guh.getRandom().nextInt(3) == 0) {
@@ -80,7 +80,7 @@ public final class PiepEffecten {
         }
 
         @Override
-        public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+        public boolean applyEffectTick(net.minecraft.server.level.ServerLevel serverLevel, LivingEntity entity, int amplifier) {
             if (entity.getHealth() < entity.getMaxHealth()) {
                 entity.heal(1f + amplifier);
             }

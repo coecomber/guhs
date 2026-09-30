@@ -95,12 +95,12 @@ public class ParadeGuhEntity extends GuhEntity {
     // --- nobody's, never hurt, never saved -------------------------------------------------------------------------------
 
     @Override
-    public boolean isInvulnerableTo(DamageSource source) {
+    public boolean isInvulnerableTo(net.minecraft.server.level.ServerLevel level, DamageSource source) {
         return !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
     }
 
     @Override
-    protected void dropEquipment() {
+    protected void dropEquipment(net.minecraft.server.level.ServerLevel level) {
         // the parade clothes belong to the parade
     }
 

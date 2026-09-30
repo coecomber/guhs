@@ -32,12 +32,12 @@ public final class Schouder {
     /** The maatje goes onto the player's shoulder (it leaves the world if it was in it). */
     public static void zet(ServerPlayer player, PiepMaatje maatje) {
         TamableAnimal dier = maatje.dier();
-        if (dier.isTame() && dier.getOwnerUUID() != null) {   // 2.10: "waar is mijn guh": on a shoulder
-            nl.juiced.guhs.feature.band.GuhVolger.zet(dier.getOwnerUUID(), nl.juiced.guhs.feature.band.Band.id(dier), new nl.juiced.guhs.feature.band.Plek(nl.juiced.guhs.feature.band.PlekSoort.SCHOUDER,
+        if (dier.isTame() && nl.juiced.guhs.entity.Owners.uuid(dier) != null) {   // 2.10: "waar is mijn guh": on a shoulder
+            nl.juiced.guhs.feature.band.GuhVolger.zet(nl.juiced.guhs.entity.Owners.uuid(dier), nl.juiced.guhs.feature.band.Band.id(dier), new nl.juiced.guhs.feature.band.Plek(nl.juiced.guhs.feature.band.PlekSoort.SCHOUDER,
                     player.level().dimension(), player.blockPosition(), player.getGameProfile().name(), player.level().getGameTime()));
         }
         CompoundTag tag = new CompoundTag();
-        dier.saveWithoutId(tag);
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(dier, tag);
         tag.putString("id", BuiltInRegistries.ENTITY_TYPE.getKey(dier.getType()).toString());
         tag.remove("UUID");
         tag.remove("Pos");
@@ -68,7 +68,7 @@ public final class Schouder {
         dier.setPersistenceRequired();
         level.addFreshEntity(dier);
         dier.playSound(maatje.oppakGeluid(), 0.8f, 1.3f);
-        if (dier.isTame() && dier.getOwnerUUID() != null) {   // 2.10: "waar is mijn guh": back on its paws
+        if (dier.isTame() && nl.juiced.guhs.entity.Owners.uuid(dier) != null) {   // 2.10: "waar is mijn guh": back on its paws
             nl.juiced.guhs.feature.band.GuhVolger.zet(dier, nl.juiced.guhs.feature.band.PlekSoort.WERELD, "");
         }
         return maatje;
@@ -83,7 +83,7 @@ public final class Schouder {
         if (e != null) {
             CompoundTag copy = tag.copy();
             copy.remove("id");
-            e.load(copy);
+            nl.juiced.guhs.storage.Nbt.load(e, copy);
         }
         return e;
     }

@@ -54,7 +54,7 @@ public final class KampvuurPyjama {
         if (level.dimensionType().hasFixedTime()) {
             return false;
         }
-        long t = Math.floorMod(level.getDayTime(), 24000L);
+        long t = nl.juiced.guhs.world.GuhTime.timeOfDay(level);
         return t >= 12500 && t < 23300;
     }
 

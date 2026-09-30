@@ -254,11 +254,11 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         if (isVerstopt() && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             return false;
         }
-        return super.hurt(source, amount);
+        return super.hurtServer(level, source, amount);
     }
 
     @Override
@@ -319,14 +319,16 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
     @Override
     public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
-        verstop().save(tag);
+        CompoundTag verstopTag = new CompoundTag();
+        verstop().save(verstopTag);
+        tag.store(verstopTag);                                   // (1.1.0: the old keys, at the top level like 1.0.0)
         tag.putInt("PiepUit", uitVlaggen());
     }
 
     @Override
     public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        verstop().load(tag);
+        verstop().load(nl.juiced.guhs.storage.Nbt.toTag(tag));
         setUitVlaggen(tag.getIntOr("PiepUit", 0));
     }
 
@@ -445,7 +447,7 @@ public class PieppiepmuisjeEntity extends TamableAnimal implements GeoEntity, Pi
                 playSound(PiepFeature.PIEP.get(), 0.7f, 1.3f);
                 heal(2);
                 if (level() instanceof ServerLevel sl) {
-                    sl.sendParticles(new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, new ItemStack(ModItems.KAAS_KNABBELS.get())),
+                    sl.sendParticles(new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM, ModItems.KAAS_KNABBELS.get().asItem()),
                             getX(), getY() + 0.2, getZ(), 6, 0.1, 0.05, 0.1, 0.03);
                 }
                 volgendeHap = level().getGameTime() + 200 + random.nextInt(200);

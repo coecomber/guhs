@@ -137,11 +137,15 @@ public final class KaasknabbelNest {
     public static final class Nesten extends SavedData {
         final Map<String, Gevecht> nesten = new HashMap<>();
 
+        /** 1.1.0: SavedDataType {@code guhs:piep_nesten}; the 1.0.0 file {@code guhs_piep_nesten.dat} is moved once (GuhSavedData). */
+        static final net.minecraft.world.level.saveddata.SavedDataType<Nesten> TYPE = nl.juiced.guhs.storage.GuhSavedData.tagType("piep_nesten",
+                Nesten::new, Nesten::load, n -> n.save(new CompoundTag()));
+
         static Nesten get(ServerLevel level) {
-            return level.getDataStorage().computeIfAbsent(new SavedData.Factory<>(Nesten::new, Nesten::load, null), "guhs_piep_nesten");
+            return nl.juiced.guhs.storage.GuhSavedData.get(level, TYPE, "guhs_piep_nesten");
         }
 
-        static Nesten load(CompoundTag tag, HolderLookup.Provider registries) {
+        static Nesten load(CompoundTag tag) {
             Nesten n = new Nesten();
             for (Tag t : tag.getListOrEmpty("Nesten")) {
                 Gevecht g = Gevecht.load((CompoundTag) t);
@@ -150,8 +154,7 @@ public final class KaasknabbelNest {
             return n;
         }
 
-        @Override
-        public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+        public CompoundTag save(CompoundTag tag) {
             ListTag list = new ListTag();
             for (Gevecht g : nesten.values()) {
                 list.add(g.save());
@@ -165,7 +168,7 @@ public final class KaasknabbelNest {
     @Nullable
     public static Gevecht nestBij(ServerLevel level, BlockPos pos) {
         var registry = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
-        var structure = registry.get(PiepFeature.KAASKNABBEL_NEST);
+        var structure = registry.getValue(PiepFeature.KAASKNABBEL_NEST);
         if (structure == null) {
             return null;
         }

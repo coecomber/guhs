@@ -38,7 +38,7 @@ public class BozeOppernabbelEntity extends BozeKaasknabbelEntity {
     public static final int HULP = 3;
     public static final float STAMP_SCHADE = 5f;
     public static final double STAMP_BEREIK = 4.5;
-    private final ServerBossEvent bossbalk = (ServerBossEvent) new ServerBossEvent(Component.translatable("entity.guhs.boze_oppernabbel"),
+    private final ServerBossEvent bossbalk = (ServerBossEvent) new ServerBossEvent(java.util.UUID.randomUUID(), Component.translatable("entity.guhs.boze_oppernabbel"),
             BossEvent.BossBarColor.YELLOW, BossEvent.BossBarOverlay.NOTCHED_10).setDarkenScreen(false);
     private boolean hulpGeroepen;
 
@@ -72,8 +72,8 @@ public class BozeOppernabbelEntity extends BozeKaasknabbelEntity {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(net.minecraft.server.level.ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         bossbalk.setProgress(getHealth() / getMaxHealth());
         if (!hulpGeroepen && getHealth() < getMaxHealth() / 2 && level() instanceof ServerLevel level) {
             hulpGeroepen = true;
@@ -100,7 +100,7 @@ public class BozeOppernabbelEntity extends BozeKaasknabbelEntity {
     }
 
     @Override
-    public boolean canChangeDimensions(Level from, Level to) {
+    public boolean canTeleport(Level from, Level to) {
         return false;
     }
 

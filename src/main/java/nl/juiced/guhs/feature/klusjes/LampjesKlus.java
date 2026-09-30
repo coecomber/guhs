@@ -41,7 +41,7 @@ public class LampjesKlus extends BasisKlus {
     /** The day part of this huisje (the tests' override, else the overworld clock). */
     static Dagdeel dagdeel(ServerLevel level, Huisje h) {
         Dagdeel test = HuisjeGoal.TEST_DAGDEEL.get(h.pos());
-        return test != null ? test : Dagdeel.van(level.getServer().overworld().getDayTime());
+        return test != null ? test : Dagdeel.van(nl.juiced.guhs.world.GuhTime.dayTime(level.getServer().overworld()));
     }
 
     @Nullable

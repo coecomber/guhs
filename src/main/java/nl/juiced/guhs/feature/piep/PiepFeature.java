@@ -26,7 +26,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
@@ -109,16 +109,11 @@ public final class PiepFeature {
             p -> new PiepDierItem(() -> POEPSCHILLY.get(), p), () -> new Item.Properties().stacksTo(1));
     public static final DeferredItem<PiepDierItem> SCHILLY_ITEM = ITEMS.registerItem("schilly_item",
             p -> new PiepDierItem(() -> SCHILLY.get(), p), () -> new Item.Properties().stacksTo(1));
-    public static final DeferredItem<DeferredSpawnEggItem> PIEPPIEPMUISJE_SPAWN_EGG = ITEMS.registerItem("pieppiepmuisje_spawn_egg",
-            p -> new DeferredSpawnEggItem(PIEPPIEPMUISJE, 0x2A2233, 0xECE4D0, p));
-    public static final DeferredItem<DeferredSpawnEggItem> POEPSCHILLY_SPAWN_EGG = ITEMS.registerItem("poepschilly_spawn_egg",
-            p -> new DeferredSpawnEggItem(POEPSCHILLY, 0x70803E, 0xEEE4D0, p));
-    public static final DeferredItem<DeferredSpawnEggItem> SCHILLY_SPAWN_EGG = ITEMS.registerItem("schilly_spawn_egg",
-            p -> new DeferredSpawnEggItem(SCHILLY, 0x86A04A, 0x6A5E50, p));
-    public static final DeferredItem<DeferredSpawnEggItem> BOZE_KAASKNABBEL_SPAWN_EGG = ITEMS.registerItem("boze_kaasknabbel_spawn_egg",
-            p -> new DeferredSpawnEggItem(BOZE_KAASKNABBEL, 0xF5A93A, 0x5C2A10, p));
-    public static final DeferredItem<DeferredSpawnEggItem> BOZE_OPPERNABBEL_SPAWN_EGG = ITEMS.registerItem("boze_oppernabbel_spawn_egg",
-            p -> new DeferredSpawnEggItem(BOZE_OPPERNABBEL, 0xEC8428, 0xFACE48, p));
+    public static final DeferredItem<SpawnEggItem> PIEPPIEPMUISJE_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "pieppiepmuisje_spawn_egg", PIEPPIEPMUISJE);
+    public static final DeferredItem<SpawnEggItem> POEPSCHILLY_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "poepschilly_spawn_egg", POEPSCHILLY);
+    public static final DeferredItem<SpawnEggItem> SCHILLY_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "schilly_spawn_egg", SCHILLY);
+    public static final DeferredItem<SpawnEggItem> BOZE_KAASKNABBEL_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "boze_kaasknabbel_spawn_egg", BOZE_KAASKNABBEL);
+    public static final DeferredItem<SpawnEggItem> BOZE_OPPERNABBEL_SPAWN_EGG = nl.juiced.guhs.registry.ModItems.spawnEgg(ITEMS, "boze_oppernabbel_spawn_egg", BOZE_OPPERNABBEL);
 
     // --- effects, particles, sounds -----------------------------------------------------------------------------------------
     public static final DeferredHolder<MobEffect, MobEffect> FRIS_VAN_BINNEN = MOB_EFFECTS.register("fris_van_binnen", PiepEffecten.FrisVanBinnen::new);

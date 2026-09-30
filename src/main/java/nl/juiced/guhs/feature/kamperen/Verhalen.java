@@ -75,7 +75,7 @@ public final class Verhalen {
 
     /** The night number (from noon to noon). */
     public static long nacht(Level level) {
-        return Math.floorDiv(level.getDayTime() + 12000L, 24000L);
+        return Math.floorDiv(nl.juiced.guhs.world.GuhTime.dayTime(level) + 12000L, 24000L);
     }
 
     private static CompoundTag data(ServerPlayer player) {

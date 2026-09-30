@@ -89,7 +89,7 @@ public class BozeKaasknabbelEntity extends PathfinderMob implements Enemy, GeoEn
         setPersistenceRequired();
     }
 
-    @Override
+    /** (1.1.0: peaceful is per entity type now; the type has no notInPeaceful(), so it stays in peaceful as before.) */
     public boolean shouldDespawnInPeaceful() {
         return false;
     }
@@ -115,7 +115,8 @@ public class BozeKaasknabbelEntity extends PathfinderMob implements Enemy, GeoEn
     static void zieli(ServerLevel level, Entity at, Component text, double scale) {
         CompoundTag tag = new CompoundTag();
         tag.putString("id", "minecraft:text_display");
-        tag.putString("text", Component.Serializer.toJson(text.copy().withStyle(ChatFormatting.ITALIC, ChatFormatting.GOLD), level.registryAccess()));
+        tag.put("text", net.minecraft.network.chat.ComponentSerialization.CODEC.encodeStart(level.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE),
+                text.copy().withStyle(ChatFormatting.ITALIC, ChatFormatting.GOLD)).getOrThrow());
         tag.putString("billboard", "center");
         tag.putInt("background", 0);
         tag.putByte("shadow", (byte) 1);
@@ -133,8 +134,8 @@ public class BozeKaasknabbelEntity extends PathfinderMob implements Enemy, GeoEn
         tags.add(net.minecraft.nbt.StringTag.valueOf(PiepEvents.ZIELI_TAG));
         tag.put("Tags", tags);
         Vec3 pos = at.position().add(0, at.getBbHeight() + 0.35, 0);
-        Entity display = net.minecraft.world.entity.EntityType.loadEntityRecursive(tag, level, e -> {
-            e.moveTo(pos.x, pos.y, pos.z, 0, 0);
+        Entity display = net.minecraft.world.entity.EntityType.loadEntityRecursive(tag, level, net.minecraft.world.entity.EntitySpawnReason.LOAD, e -> {
+            e.snapTo(pos.x, pos.y, pos.z, 0, 0);
             return e;
         });
         if (display != null) {

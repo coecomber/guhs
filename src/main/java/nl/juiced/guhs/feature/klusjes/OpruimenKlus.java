@@ -76,7 +76,7 @@ public class OpruimenKlus extends BasisKlus {
     }
 
     static boolean heeftSorteerbaars(ServerLevel level, BlockPos kist) {
-        IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, kist, null);
+        IItemHandler handler = Voorraad.handler(level, kist);
         if (handler == null) {
             return false;
         }
@@ -141,7 +141,7 @@ public class OpruimenKlus extends BasisKlus {
 
         /** An armful out of the chest, for the Bank Guh. */
         private void uitKist() {
-            IItemHandler handler = level.getCapability(Capabilities.ItemHandler.BLOCK, kist, null);
+            IItemHandler handler = Voorraad.handler(level, kist);
             if (handler == null) {
                 return;
             }

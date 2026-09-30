@@ -70,7 +70,7 @@ public class OppasKlus extends BasisKlus {
         long nu = level.getGameTime();
         List<TamableAnimal> maatjes = level.getEntitiesOfClass(TamableAnimal.class, huisje.gebied(), m -> m instanceof PiepMaatje pm
                 && m.isAlive() && !pm.isBezig() && huisje.inGebied(m.blockPosition()) && !Huisjes.isBinnen(m)
-                && (m.getOwnerUUID() == null || m.getOwnerUUID().equals(baas))
+                && (nl.juiced.guhs.entity.Owners.uuid(m) == null || nl.juiced.guhs.entity.Owners.uuid(m).equals(baas))
                 && uitgerust(m, RUST, nu));
         TamableAnimal maatje = maatjes.stream().min(Comparator.comparingDouble(m -> m.distanceToSqr(bewoner))).orElse(null);
         return maatje == null ? null : new Taak(level, huisje, bewoner, maatje);
@@ -116,9 +116,9 @@ public class OppasKlus extends BasisKlus {
             if (wie instanceof GuhEntity patient) {
                 if (!snackje.isEmpty()) {
                     patient.heal(SNACK_HEAL);
-                    level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, snackje), patient.getX(), patient.getEyeY(), patient.getZ(),
+                    level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, snackje.getItem()), patient.getX(), patient.getEyeY(), patient.getZ(),
                             8, 0.15, 0.1, 0.15, 0.05);
-                    level.playSound(null, patient.blockPosition(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 0.8f, 1.3f);
+                    level.playSound(null, patient.blockPosition(), SoundEvents.GENERIC_EAT.value(), SoundSource.NEUTRAL, 0.8f, 1.3f);
                     patient.emotes.start(Emote.SMAKKEN, false, GuhEmotes.Source.SELF);
                     snackje = ItemStack.EMPTY;
                 } else {
@@ -131,9 +131,9 @@ public class OppasKlus extends BasisKlus {
                 wie.heal(wie.getMaxHealth());
                 ItemStack knabbel = Voorraad.neem(level, huisje, s -> s.is(ModItems.KAAS_KNABBELS.get()), 1);
                 if (!knabbel.isEmpty()) {
-                    level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, knabbel), wie.getX(), wie.getEyeY(), wie.getZ(),
+                    level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, knabbel.getItem()), wie.getX(), wie.getEyeY(), wie.getZ(),
                             6, 0.1, 0.1, 0.1, 0.04);
-                    level.playSound(null, wie.blockPosition(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 0.6f, 1.6f);
+                    level.playSound(null, wie.blockPosition(), SoundEvents.GENERIC_EAT.value(), SoundSource.NEUTRAL, 0.6f, 1.6f);
                 }
                 hartjes(wie, 4);
                 wie.getPersistentData().putLong(VERZORGD, level.getGameTime());

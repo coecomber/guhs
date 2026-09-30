@@ -374,9 +374,9 @@ public final class SmulGame {
         int gained = soort.points * combo(streak) * (goldMode() ? 2 : 1);
         score += gained;
         caught++;
-        world.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, hapje.stack()), hapje.getX(), hapje.getY() + 0.3, hapje.getZ(),
+        world.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, hapje.stack().getItem()), hapje.getX(), hapje.getY() + 0.3, hapje.getZ(),
                 8, 0.2, 0.2, 0.2, 0.08);
-        world.playSound(null, p.blockPosition(), SoundEvents.GENERIC_EAT, SoundSource.PLAYERS, 0.6f, 1.2f + world.getRandom().nextFloat() * 0.2f);
+        world.playSound(null, p.blockPosition(), SoundEvents.GENERIC_EAT.value(), SoundSource.PLAYERS, 0.6f, 1.2f + world.getRandom().nextFloat() * 0.2f);
         world.playSound(null, p.blockPosition(), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.5f,
                 0.8f + Math.min(streak, 15) * 0.07f);
         if (soort == SmulHapje.Soort.GOUD) {
@@ -566,7 +566,7 @@ public final class SmulGame {
             if (inv.getItem(i).isEmpty()) {
                 inv.setSelectedSlot(i);
                 if (p.connection != null) {
-                    p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetCarriedItemPacket(i));
+                    p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetHeldSlotPacket(i));
                 }
                 inv.setItem(i, bowl);
                 return true;
@@ -789,7 +789,7 @@ public final class SmulGame {
         if (p instanceof FakePlayer || p.connection == null) {
             p.snapTo(x, y, z, yRot, 0);
         } else {
-            p.teleportTo(world, x, y, z, yRot, 0);
+            p.teleportTo(world, x, y, z, java.util.Set.of(), yRot, 0, true);
         }
     }
 

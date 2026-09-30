@@ -19,7 +19,7 @@ public final class CircuitClient {
             event.registerEntityRenderer(CircuitFeature.MIKAPIKKER.get(), MikaPikkerRenderer::new);
             event.registerEntityRenderer(CircuitFeature.ROLKNABBEL.get(), RolknabbelRenderer::new);
         });
-        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.CIRCUITGUH, Guhs.id("geo/entity/guh_npc_circuitguh.geo.json"));
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.CIRCUITGUH, Guhs.id("entity/guh_npc_circuitguh"));
     }
 
     public static void open(CircuitPayloads.Open payload) {

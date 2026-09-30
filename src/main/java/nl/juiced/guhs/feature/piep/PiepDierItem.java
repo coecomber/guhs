@@ -27,6 +27,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.item.component.TooltipDisplay;
+import java.util.function.Consumer;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Entity;
 /**
  * A piep-maatje you picked up (sneak + right-click it with an empty hand, or "Oppakken" in its menu; owner only): the whole
  * creature (name, owner, health, age, its menu settings, its rest timer...) rides along in the item's custom data, like the
@@ -51,7 +55,7 @@ public class PiepDierItem extends Item {
     public static ItemStack van(TamableAnimal dier, Item item) {
         nl.juiced.guhs.feature.band.Band.id(dier);   // 2.10: its own band id travels along (its entity UUID doesn't)
         CompoundTag tag = new CompoundTag();
-        dier.saveWithoutId(tag);
+        nl.juiced.guhs.storage.Nbt.saveWithoutId(dier, tag);
         tag.remove("UUID");
         tag.remove("Pos");
         tag.remove("Motion");
@@ -80,7 +84,11 @@ public class PiepDierItem extends Item {
             return false;
         }
         if (dier.isLeashed()) {
-            dier.dropLeash(true, !player.hasInfiniteMaterials());
+            if (!player.hasInfiniteMaterials()) {
+                dier.dropLeash();
+            } else {
+                dier.removeLeash();
+            }
         }
         dier.stopRiding();
         ItemStack stack = van(dier, maatje.oppakItem());
@@ -106,7 +114,7 @@ public class PiepDierItem extends Item {
         }
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         if (data != null) {
-            dier.load(data.copyTag());
+            nl.juiced.guhs.storage.Nbt.load(dier, data.copyTag());
         }
         if (stack.has(DataComponents.CUSTOM_NAME)) {
             dier.setCustomName(stack.getHoverName());
@@ -161,8 +169,8 @@ public class PiepDierItem extends Item {
 
     /** 2.10: "waar is mijn guh": in someone's pockets (checked every 5 seconds). */
     @Override
-    public void inventoryTick(ItemStack stack, Level level, net.minecraft.world.entity.Entity entity, int slot, boolean selected) {
-        if (!level.isClientSide() && entity instanceof Player holder && (level.getGameTime() + slot) % 100 == 0) {
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
+        if (entity instanceof Player holder && level.getGameTime() % 100 == 0) {    // (1.1.0: no slot index any more, see MIGRATION_NOTES)
             nl.juiced.guhs.feature.band.GuhVolger.inZakken(stack, holder);
         }
     }
@@ -177,7 +185,7 @@ public class PiepDierItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable(getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+        tooltip.accept(Component.translatable(getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
     }
 }

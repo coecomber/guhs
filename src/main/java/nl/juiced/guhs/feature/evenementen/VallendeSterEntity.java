@@ -22,7 +22,7 @@ import net.minecraft.world.level.storage.ValueInput;
  * Never saved, never breaks anything.
  */
 public class VallendeSterEntity extends Entity implements ItemSupplier {
-    private static final EntityDataAccessor<Vector3f> DATA_TARGET = SynchedEntityData.defineId(VallendeSterEntity.class, EntityDataSerializers.VECTOR3);
+    private static final EntityDataAccessor<org.joml.Vector3fc> DATA_TARGET = SynchedEntityData.defineId(VallendeSterEntity.class, EntityDataSerializers.VECTOR3);
     /** Blocks per tick. */
     public static final double SPEED = 1.1;
 
@@ -50,8 +50,8 @@ public class VallendeSterEntity extends Entity implements ItemSupplier {
         if (!this.level().isClientSide()) {
             return serverTarget;
         }
-        Vector3f t = this.entityData.get(DATA_TARGET);
-        return new Vec3(t.x, t.y, t.z);
+        org.joml.Vector3fc t = this.entityData.get(DATA_TARGET);
+        return new Vec3(t.x(), t.y(), t.z());
     }
 
     public boolean landed() {
@@ -115,7 +115,7 @@ public class VallendeSterEntity extends Entity implements ItemSupplier {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(net.minecraft.server.level.ServerLevel level, DamageSource source, float amount) {
         return false;
     }
 

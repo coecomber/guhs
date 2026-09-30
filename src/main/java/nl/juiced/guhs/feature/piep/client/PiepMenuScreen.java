@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.piep.client;
 
+import net.minecraft.client.input.KeyEvent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,12 +132,13 @@ public class PiepMenuScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyEvent event) {
+        int keyCode = event.key(), scanCode = event.scancode(), modifiers = event.modifiers();
         if (naam.isFocused() && (keyCode == 257 || keyCode == 335)) {      // enter
             hernoem();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return super.keyPressed(event);
     }
 
     @Override
@@ -163,7 +166,7 @@ public class PiepMenuScreen extends Screen {
         g.fill(px, py, px + pw, py + ph, KLEUR_VAKJE);
         float groot = Math.max(dier.getBbHeight(), dier.getBbWidth() * 0.9f);
         int schaal = (int) Math.min(80, 30 / Math.max(0.2f, groot));
-        InventoryScreen.renderEntityInInventoryFollowsMouse(g, px, py, px + pw, py + ph, schaal, 0.0625f, mouseX, mouseY, dier);
+        InventoryScreen.extractEntityInInventoryFollowsMouse(g, px, py, px + pw, py + ph, schaal, 0.0625f, mouseX, mouseY, dier);
     }
 
     @Override

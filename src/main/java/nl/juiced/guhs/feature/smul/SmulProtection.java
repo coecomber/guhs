@@ -34,7 +34,7 @@ public final class SmulProtection {
 
     /** Is this spot part of an eetfestijn? */
     public static boolean inFestijn(ServerLevel world, BlockPos pos) {
-        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(FESTIJN);
+        var structure = world.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(FESTIJN);
         return structure != null && world.structureManager().getStructureAt(pos, structure).isValid();
     }
 

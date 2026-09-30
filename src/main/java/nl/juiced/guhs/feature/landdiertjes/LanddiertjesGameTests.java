@@ -282,7 +282,7 @@ public class LanddiertjesGameTests {
         helper.assertTrue(n >= 1 && n <= ShucklePlekjeBlock.MAX, "one or two Sjokkels around the plekje: " + n);
         for (ShuckleEntity s : level.getEntitiesOfClass(ShuckleEntity.class, new AABB(abs).inflate(16))) {
             helper.assertTrue(s.plekje() != null && s.plekje().equals(abs) && !s.isTame(), "a wild Sjokkel of this plekje");
-            helper.assertTrue(s.hasRestriction() && s.getRestrictCenter().equals(abs), "it stays around its plekje");
+            helper.assertTrue(s.hasHome() && s.getHomePosition().equals(abs), "it stays around its plekje");
             s.discard();
         }
         // a player next to the plekje: nothing pops up
@@ -307,8 +307,8 @@ public class LanddiertjesGameTests {
         helper.assertTrue(egel.isOpgerold() && egel.isBezig(), "a fright: the egeltje rolls up");
         helper.assertTrue(shuckle.isInSchelp() && shuckle.isBezig(), "a fright: Sjokkel pulls into its shell");
         float e1 = egel.getHealth(), s1 = shuckle.getHealth();
-        helper.assertTrue(!egel.hurt(level.damageSources().generic(), 3f) && egel.getHealth() == e1, "rolled up nothing hurts it");
-        helper.assertTrue(!shuckle.hurt(level.damageSources().generic(), 3f) && shuckle.getHealth() == s1, "in its shell nothing hurts it");
+        helper.assertTrue(!egel.hurtServer(helper.getLevel(), level.damageSources().generic(), 3f) && egel.getHealth() == e1, "rolled up nothing hurts it");
+        helper.assertTrue(!shuckle.hurtServer(helper.getLevel(), level.damageSources().generic(), 3f) && shuckle.getHealth() == s1, "in its shell nothing hurts it");
         // Sjokkel's juice: three berries -> a bessensapje pops out
         shuckle.zetBessen(3);
         helper.runAfterDelay(PluisegeltjeEntity.ROL_TICKS + 20, () -> {

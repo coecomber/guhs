@@ -195,7 +195,7 @@ public class SmulHapje extends Entity {
     /** It lay on the floor too long: splat (and a missed good snack breaks your combo). */
     private void splat() {
         if (level() instanceof ServerLevel world) {
-            world.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, stack()), getX(), getY() + 0.2, getZ(), 10, 0.25, 0.1, 0.25, 0.08);
+            world.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, stack().getItem()), getX(), getY() + 0.2, getZ(), 10, 0.25, 0.1, 0.25, 0.08);
             world.playSound(null, getX(), getY(), getZ(), SoundEvents.SLIME_SQUISH_SMALL, SoundSource.NEUTRAL, 0.5f, 1.2f);
             if (soort().good() && game != null) {
                 SmulGame.missed(game);
@@ -211,10 +211,10 @@ public class SmulHapje extends Entity {
             for (int i = 0; i < 32 && pos.getY() > level().getMinY(); i++) {
                 pos.move(0, -1, 0);
                 if (!level().getBlockState(pos).getCollisionShape(level(), pos).isEmpty()) {
-                    org.joml.Vector3f colour = switch (soort()) {
-                        case GOUD -> new org.joml.Vector3f(1f, 0.85f, 0.2f);
-                        case MIKA_VET -> new org.joml.Vector3f(0.25f, 0.2f, 0.2f);
-                        default -> new org.joml.Vector3f(1f, 0.45f, 0.75f);
+                    int colour = switch (soort()) {
+                        case GOUD -> 0xFFD933;
+                        case MIKA_VET -> 0x403333;
+                        default -> 0xFF73BF;
                     };
                     level().addParticle(new DustParticleOptions(colour, 1.2f), getX() + (random.nextDouble() - 0.5) * 0.5,
                             pos.getY() + 1.05, getZ() + (random.nextDouble() - 0.5) * 0.5, 0, 0, 0);
@@ -231,6 +231,11 @@ public class SmulHapje extends Entity {
 
     @Override
     public boolean shouldBeSaved() {
+        return false;
+    }
+
+    @Override
+    public boolean hurtServer(ServerLevel level, net.minecraft.world.damagesource.DamageSource source, float amount) {
         return false;
     }
 
