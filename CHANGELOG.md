@@ -28,6 +28,19 @@ overworld stays as it was); in an existing world the new rules apply to land you
   mini picnics and quartz statues.
 - `/guhs bouwcheck` also reports the guaranteed buildings (how many, how far) and the story building nearest to spawn.
 
+### Wild animals no longer pile up
+
+- Wild animals, critters and Mikas no longer pile up in the world (the same kind of bug as the guhs in 1.1.1; on the
+  official server 2,901 zeemeeuwtjes, 2,495 pluisvinkjes, 2,219 guh bees and 1,054 Mikas were loaded). The birds' top-up
+  around players only counted 64 blocks and every new flock was saved with its chunk.
+- A wild one that a spawner brings while you play (the natural spawner, a mob spawner block, the birds' top-up, a
+  ladybird coming to your tuintje) now comes and goes: it isn't saved when its chunk unloads and it despawns when every
+  player is more than 128 blocks away (fish: 64), like a vanilla monster. New ones keep coming around you.
+- Everything you keep stays exactly as before: tame, named, leashed, from a bucket, bred, placed by a building, Big Mika
+  and the other bosses, the muisjes in the buildings. The animals the world is made with stay too, like vanilla cows.
+- The birds' top-up also waits when there are 40 birds within 128 blocks, and a tidy-up every 30 s removes far-away wild
+  ones of a kind when there are too many (above 200 + 100 per player), also the ones older worlds already saved.
+
 ## 1.1.1 — Minecraft 26.1.2
 
 A bugfix for servers. Same requirements as 1.1.0 (Minecraft 26.1.2, NeoForge 26.1.2.71+, GeckoLib 5.5.2+, Java 25).
