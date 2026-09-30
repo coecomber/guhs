@@ -60,6 +60,12 @@ neoForge {
     // Specify the version of NeoForge to use.
     version = project.neo_version
 
+    // GeckoLib 5 adds GeoRenderState to EntityRenderState/BlockEntityRenderState with a mixin at runtime; this lets javac
+    // see it too (copy of META-INF/interface_injections.json from the GeckoLib jar)
+    interfaceInjectionData {
+        from(file('gradle/geckolib_interface_injections.json'))
+    }
+
     // This line is optional. Access Transformers are automatically detected
     // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
 
