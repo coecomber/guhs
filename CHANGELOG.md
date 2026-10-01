@@ -70,6 +70,15 @@ Java 25).
   *Show the Area* shows it as the same blue dome as the Guh House's chore area. Only the one who placed it changes
   or breaks it. Recipe: 5 pink wool, a cheese nibble and a stick.
 
+### Fixes
+
+- **The Timmerguh's roof works in survival.** Laying a roof fluff on the ghost tiles of the half-built guh house in
+  Snuggledale said "the town is so cozy, nothing may change here" and put the tile back (only creative worked).
+- **No more raw text keys.** The Timmerguh's little helper (Tappy, *Timmertje* in Dutch) showed
+  `entity.guhs.bewoner.timmertje` above his head; 41 block tooltips (the Baltoguh statue, party garlands, the cradle,
+  the Chonkiness Scanner...) showed `item.guhs.<name>.lore`; ordinary guhs in the Cloud Chapel showed
+  `entity.guhs.guh.normal`. A new test checks every name, tooltip and building text.
+
 ## 1.1.3 — Minecraft 26.1.2
 
 A fix for the FTB Quests chapters. Same requirements as 1.1.2.
