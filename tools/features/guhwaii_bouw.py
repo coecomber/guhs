@@ -49,8 +49,9 @@ def trap(facing, half="bottom", shape="straight"):
 
 
 def sign(s, x, y, z, rotation, regels, hout="bamboo"):
-    """A standing sign with Dutch text (four lines)."""
-    msgs = NbtList(8, [json.dumps({"text": r}) for r in (regels + ["", "", "", ""])[:4]])
+    """A standing sign (four lines); 1.2.0: each line a translate key sign.guhs.guhwaii.<slug>, the Dutch as fallback."""
+    import sign_text
+    msgs = sign_text.messages("sign.guhs.guhwaii", regels)
     empty = NbtList(8, [json.dumps({"text": ""})] * 4)
     s.set(x, y, z, f"minecraft:{hout}_sign", {"rotation": str(rotation), "waterlogged": "false"},
           {"id": "minecraft:sign", "front_text": {"messages": msgs, "color": "black", "has_glowing_text": Byte(0)},
@@ -494,9 +495,14 @@ def capsule(h):
             s.set(x, vloer + 1, c - 4, "minecraft:stone_button", {"face": "floor", "facing": "south", "powered": "false"})
         else:
             s.set(x, vloer + 1, c - 4, "minecraft:sea_lantern")
-    book = {"id": "minecraft:written_book", "count": 1, "components": {"minecraft:written_book_content": {
-        "title": {"raw": "Logboek 626"}, "author": "Jumba-guh", "generation": 0,
-        "pages": compounds([{"raw": json.dumps({"text": p})} for p in LOGBOEK])}}}
+    # 1.2.0: the pages and the book's name are translate keys (book.guhs.logboek626.*, the Dutch as fallback); the title
+    # and author of a written book are plain strings in Minecraft (no components), so those stay Dutch
+    import sign_text
+    pages = [sign_text.line("book.guhs.logboek626", p, key=f"book.guhs.logboek626.{n + 1}") for n, p in enumerate(LOGBOEK)]
+    book = {"id": "minecraft:written_book", "count": 1, "components": {
+        "minecraft:written_book_content": {"title": {"raw": "Logboek 626"}, "author": "Jumba-guh", "generation": 0,
+                                           "pages": compounds([{"raw": p} for p in pages])},
+        "minecraft:custom_name": sign_text.line("book.guhs.logboek626", "Logboek 626", key="book.guhs.logboek626.title", italic=False)}}
     s.set(c + 4, vloer, c - 1, "minecraft:lectern", {"facing": "west", "has_book": "true", "powered": "false"},
           {"id": "minecraft:lectern", "Book": book, "Page": 0})
     s.set(c - 4, vloer + 1, c, "guhs:vadsigheid_poster", {"facing": "east"})

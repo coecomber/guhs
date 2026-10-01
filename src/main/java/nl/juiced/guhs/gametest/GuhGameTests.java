@@ -690,8 +690,13 @@ public class GuhGameTests {
         helper.succeedWhen(() -> {
             var sign = helper.getBlockEntity(new BlockPos(22, 3, 5), net.minecraft.world.level.block.entity.BlockEntity.class);
             helper.assertTrue(sign instanceof net.minecraft.world.level.block.entity.SignBlockEntity, "the sign should be there");
-            String line = ((net.minecraft.world.level.block.entity.SignBlockEntity) sign).getFrontText().getMessage(1, false).getString();
-            helper.assertTrue(line.equals("Ik had zn honger"), "the sign should keep its text: " + line);
+            // 1.2.0: the line is a translate key (each player reads it in their own language), its Dutch is the fallback
+            var line = ((net.minecraft.world.level.block.entity.SignBlockEntity) sign).getFrontText().getMessage(1, false);
+            helper.assertTrue(line.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t
+                    && t.getKey().equals("sign.guhs.giant_kaasknabbel.honger") && "Ik had zn honger".equals(t.getFallback()),
+                    "the sign should keep its text: " + line);
+            helper.assertTrue("Ik had zn honger".equals(nl.juiced.guhs.feature.reisguh.ReisguhGameTests.json("/assets/guhs/lang/nl_nl.json")
+                    .get("sign.guhs.giant_kaasknabbel.honger").getAsString()), "the Dutch text in nl_nl");
         });
     }
 
@@ -1846,7 +1851,7 @@ public class GuhGameTests {
             java.nio.file.Path packLang = quests.resolve("lang").resolve("en_us").resolve("chapters").resolve("pack.json5");
             java.nio.file.Files.createDirectories(packLang.getParent());
             java.nio.file.Files.writeString(packLang, "{\n  \"chapter.0123456789ABCDEF.title\": \"Other\",\n}\n");
-            java.nio.file.Files.createDirectories(quests.resolve("lang").resolve("nl_nl"));
+            // (1.2.0: no lang/nl_nl in this pack: the installer makes it)
             java.nio.file.Path groups = quests.resolve("chapter_groups.json5");
             java.nio.file.Files.writeString(groups, "{\n  chapter_groups: [\n    {\n      id: \"0123456789ABCDEF\",\n      icon: [1, 2],\n    }\n  ],\n}\n");
             helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.installInto(quests), "installs the first time");
@@ -1856,18 +1861,24 @@ public class GuhGameTests {
                     "the thirteen chapters (3.0: Guhverhalen, Diertjes van de Guhmensie), in reading order: " + names);
             for (String name : names) {
                 helper.assertTrue(java.nio.file.Files.exists(quests.resolve("chapters").resolve(name + ".json5")), "chapter " + name + " is there");
-                for (String locale : java.util.List.of("en_us", "nl_nl")) {
-                    helper.assertTrue(java.nio.file.Files.readString(quests.resolve("lang").resolve(locale).resolve("chapters").resolve(name + ".json5"))
-                            .contains("Hoe kom je hier?"), "the texts of " + name + " in " + locale);
-                }
+                // 1.2.0: Dutch in nl_nl, English in en_us (the shipped file; keys without English yet stay Dutch), the same keys in both
+                String nl = java.nio.file.Files.readString(quests.resolve("lang").resolve("nl_nl").resolve("chapters").resolve(name + ".json5"));
+                String en = java.nio.file.Files.readString(quests.resolve("lang").resolve("en_us").resolve("chapters").resolve(name + ".json5"));
+                helper.assertTrue(nl.contains("Hoe kom je hier?"), "the Dutch texts of " + name + " in nl_nl");
+                helper.assertTrue(en.equals(ftbResource("ftbquests/lang/en_us/" + name + ".json5")) && nl.equals(ftbResource("ftbquests/lang/nl_nl/" + name + ".json5")),
+                        "the texts of " + name + " are the shipped ones, per language");
+                helper.assertTrue(ftbLangKeys(en).equals(ftbLangKeys(nl)) && !ftbLangKeys(nl).isEmpty(), "every text of " + name + " is in both languages");
             }
             helper.assertTrue(!java.nio.file.Files.exists(quests.resolve("lang").resolve("de_de")), "no lang folder the pack doesn't have");
             String g = java.nio.file.Files.readString(groups);
             helper.assertTrue(g.contains("0123456789ABCDEF") && java.util.regex.Pattern.compile("id: \"475548[0-9A-F]{10}\"").matcher(g).find()
                     && g.indexOf("475548") > g.indexOf("icon: [1, 2]") && g.trim().endsWith("}") && g.contains("},\n    {"),
                     "our group is added after the pack's own: " + g);
-            String basis = java.nio.file.Files.readString(quests.resolve("lang").resolve("en_us").resolve("chapters").resolve("guhs_basis.json5"));
-            helper.assertTrue(basis.contains("&dGuhs") && java.nio.file.Files.readString(packLang).contains("Other"), "group title with the first chapter, the pack's texts stay");
+            for (String locale : nl.juiced.guhs.compat.FtbQuestsChapter.LOCALES) {
+                String basis = java.nio.file.Files.readString(quests.resolve("lang").resolve(locale).resolve("chapters").resolve("guhs_basis.json5"));
+                helper.assertTrue(basis.contains("chapter_group.475548"), "group title with the first chapter in " + locale);
+            }
+            helper.assertTrue(java.nio.file.Files.readString(packLang).contains("Other"), "the pack's texts stay");
             helper.assertTrue(!nl.juiced.guhs.compat.FtbQuestsChapter.installInto(quests), "not again when it's already there");
             helper.assertTrue(java.nio.file.Files.readString(groups).equals(g), "the group isn't added twice");
             // a fresh quests folder: chapter_groups.json5 is made
@@ -1951,8 +1962,10 @@ public class GuhGameTests {
             java.util.regex.Pattern title = java.util.regex.Pattern.compile("\"quest\\.(475548[0-9A-F]{10})\\.title\": ");
             for (String name : nl.juiced.guhs.compat.FtbQuestsChapter.chapters()) {
                 String chapter = ftbResource("ftbquests/chapters/" + name + ".json5");
-                String lang = ftbResource("ftbquests/lang/" + name + ".json5");
-                helper.assertTrue(chapter != null && lang != null, name + " is there");
+                String lang = ftbResource("ftbquests/lang/nl_nl/" + name + ".json5");
+                String en = ftbResource("ftbquests/lang/en_us/" + name + ".json5");
+                helper.assertTrue(chapter != null && lang != null && en != null, name + " is there, with Dutch and English texts");
+                helper.assertTrue(ftbLangKeys(en).equals(ftbLangKeys(lang)), name + ": the same text keys in en_us and nl_nl");
                 helper.assertTrue(chapter.contains("progression_mode: \"flexible\"") && chapter.contains("group: \"475548")
                         && chapter.contains("filename: \"" + name + "\""), name + ": flexible, in the Guhs group");
                 java.util.regex.Matcher m = title.matcher(lang);
@@ -1981,6 +1994,16 @@ public class GuhGameTests {
             helper.fail(e.toString());
         }
         helper.succeed();
+    }
+
+    /** The keys of an FTB Quests lang file (JSON5 as make_ftbquests.py writes it: one "key": value per line). */
+    private static java.util.Set<String> ftbLangKeys(String lang) {
+        java.util.Set<String> keys = new java.util.TreeSet<>();
+        java.util.regex.Matcher m = java.util.regex.Pattern.compile("(?m)^\\s*\"([a-z_]+\\.[0-9A-F]{16}\\.[a-z_]+)\"\\s*:").matcher(lang);
+        while (m.find()) {
+            keys.add(m.group(1));
+        }
+        return keys;
     }
 
     private static String ftbResource(String path) throws java.io.IOException {

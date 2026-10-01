@@ -154,12 +154,24 @@ def _wall_cells(cells):
     return walls
 
 
+def _hole_line(n):
+    """"Hole 3" on a sign: the lang key gui.guhs.golf.hole_title ("Hole %s") with the number as argument."""
+    import sign_text
+    return sign_text.ref("gui.guhs.golf.hole_title", "Hole %s", args=[n], color="dark_purple", bold=True)
+
+
+def _lijn(nl, key, **style):
+    import sign_text
+    return sign_text.component("sign.guhs.golf", nl, key=key, **style)
+
+
 def _sign_nbt(lines, colour="black", glow=False):
-    msgs = [json.dumps(l) if not isinstance(l, str) else json.dumps({"text": l}) for l in lines] + [json.dumps("")] * (4 - len(lines))
+    """1.2.0: a str line becomes a translate key sign.guhs.golf.<slug> with the Dutch as fallback (tools/sign_text.py)."""
+    import sign_text
     empty = [json.dumps("")] * 4
     from make_structures import NbtList, Byte
     return {"id": "minecraft:sign",
-            "front_text": {"messages": NbtList(8, msgs), "color": colour, "has_glowing_text": Byte(1 if glow else 0)},
+            "front_text": {"messages": sign_text.messages("sign.guhs.golf", lines), "color": colour, "has_glowing_text": Byte(1 if glow else 0)},
             "back_text": {"messages": NbtList(8, empty), "color": "black", "has_glowing_text": Byte(0)},
             "is_waxed": Byte(1)}
 
@@ -233,7 +245,7 @@ def golf_structure(h):
             k += 1
         name = HOLE_NAMES[n][0]
         S.set(tx + lx * k, G + lane["wall"] + 1, tz + lz * k, mc("cherry_sign"), {"rotation": str(SIGN_ROT[facing]), "waterlogged": "false"},
-              _sign_nbt([{"text": f"Hole {n + 1}", "color": "dark_purple", "bold": True}, {"translate": f"gui.guhs.golf.hole.{name}"},
+              _sign_nbt([_hole_line(n + 1), {"translate": f"gui.guhs.golf.hole.{name}"},
                          {"translate": "gui.guhs.golf.sign_par", "with": [str(PAR[n])]}]))
         lane["sign"] = (tx + lx * k, G + lane["wall"] + 1, tz + lz * k)
         if lane["wall"] > 1:                       # a low bit of wall behind the (furthest) tee, so you can climb in
@@ -431,7 +443,7 @@ def golf_structure(h):
     S.entity(NPC[0], NPC[1], NPC[2], {"id": "guhs:guh_npc", "Kind": "golfguh", "PersistenceRequired": h.Byte(1),
                                       "Rotation": h.floats(0.0, 0.0)})
     S.set(47, 6, Z0 + 1, mc("cherry_wall_sign"), {"facing": "south", "waterlogged": "false"},
-          _sign_nbt([{"text": "Top 3", "bold": True}, {"translate": "gui.guhs.golf.sign_top3_1"}, {"translate": "gui.guhs.golf.sign_top3_2"}, ""],
+          _sign_nbt([_lijn("Top 3", "sign.guhs.golf.top3", bold=True), {"translate": "gui.guhs.golf.sign_top3_1"}, {"translate": "gui.guhs.golf.sign_top3_2"}, ""],
                    "magenta", True))
     S.set(46, 6, Z0 + 1, mc("gold_block"))
     S.set(48, 6, Z0 + 1, mc("gold_block"))
@@ -485,10 +497,10 @@ def golf_structure(h):
         z = [60, 62, 64, 66, 68, 61, 63, 65, 67][i]
         name = HOLE_NAMES[i][0]
         S.set(37, y, z, mc("cherry_wall_sign"), {"facing": "east", "waterlogged": "false"},
-              _sign_nbt([{"text": f"Hole {i + 1}", "color": "dark_purple", "bold": True}, {"translate": f"gui.guhs.golf.hole.{name}"},
+              _sign_nbt([_hole_line(i + 1), {"translate": f"gui.guhs.golf.hole.{name}"},
                          {"translate": "gui.guhs.golf.sign_par", "with": [str(PAR[i])]}]))
     S.set(37, G + 4, 64, mc("cherry_wall_sign"), {"facing": "east", "waterlogged": "false"},
-          _sign_nbt([{"text": "Guhgolf", "color": "light_purple", "bold": True}, {"translate": "gui.guhs.golf.sign_total"},
+          _sign_nbt([_lijn("Guhgolf", "sign.guhs.golf.guhgolf", color="light_purple", bold=True), {"translate": "gui.guhs.golf.sign_total"},
                      {"translate": "gui.guhs.golf.sign_par", "with": [str(sum(PAR))]}], "black", True))
     for (x, z) in ((38, 58), (58, 58), (38, 69), (58, 69)):   # lamp posts
         S.set(x, G + 1, z, mc("cherry_fence"), FENCE0)

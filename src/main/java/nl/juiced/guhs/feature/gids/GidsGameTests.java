@@ -150,7 +150,7 @@ public class GidsGameTests {
         helper.succeed();
     }
 
-    /** Every text the gids screens show exists (the server's en_us: Dutch, like everything). */
+    /** Every text the gids screens show exists (in the server's language, en_us; check_en.py checks that nl_nl has the same keys). */
     @GuhTest(template = EMPTY)
     public static void gidsTekstenBestaan(GameTestHelper helper) {
         Language lang = Language.getInstance();

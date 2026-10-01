@@ -1,6 +1,6 @@
 """
-Builds the "Guhs" chapter group for FTB Quests (all in Dutch): nine themed chapters in src/main/resources/ftbquests/
-(chapters/<file>.json5, lang/<file>.json5, index.txt for the installer), plus their pictures
+Builds the "Guhs" chapter group for FTB Quests: thirteen themed chapters in src/main/resources/ftbquests/
+(chapters/<file>.json5, lang/nl_nl/<file>.json5 and lang/en_us/<file>.json5, index.txt for the installer), plus their pictures
 (textures/ftbquests, drawn by tools/make_ftbquests_art.py). The mod copies them into config/ftbquests/quests when FTB Quests
 is installed (see compat/FtbQuestsChapter.java). Bump CHAPTER_VERSION when you change the chapters, so packs get them.
 
@@ -16,12 +16,18 @@ completion: FTB Quests remembers the progress of a quest whose dependencies aren
 fragile chain once they are (an un-claimed "Guh!" kept a whole Guhdex at 0). The logical order (deps) still places the
 quests and puts "Komt na: ..." on a section's header; compat/FtbQuestsRepair ticks off what older worlds left stuck.
 
+Texts (1.2.0): the Dutch below is the source (lang/nl_nl); the English (lang/en_us) comes from the overlay in
+tools/lang/en/*.json, with readable keys: ftb.group.title, ftb.<chapter>.title / .sub / .section.<sid>,
+ftb.<chapter>.q.<quest>.title / .desc (the description as one string, a newline between the lines), ftb.komt_na(_elders).
+A key without English stays Dutch. The Dutch source of all those keys goes to tools/lang/source_ftb.json (for
+tools/lang/check_en.py). The section headers are pictures with the Dutch title painted in (make_ftbquests_art).
+
 Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all pictures)
 """
 import hashlib
 import os
 
-CHAPTER_VERSION = 21   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes)
+CHAPTER_VERSION = 22   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -820,6 +826,9 @@ def gates(deps):
     return {k: (v if k.startswith("maag_") else []) for k, v in deps.items()}
 
 
+LOCALES = ("nl_nl", "en_us")   # ftbquests/lang/<locale>/<chapter>.json5; compat/FtbQuestsChapter installs both
+
+
 def build(force_art=False):
     import make_ftbquests_art as art
     chapters, deps, where, info = plan()
@@ -848,23 +857,40 @@ def build(force_art=False):
     drawn = art.make_art(jobs, force=force_art)
     print(f"FTB Quests pictures: {len(jobs)} ({drawn} drawn)")
 
-    # the chapters, their texts and the installer's index
+    # the chapters, their texts (Dutch, and English from the overlay) and the installer's index
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import lang as en_overlay   # tools/lang/
+    overlay = en_overlay.load_overlay()
+    source = {}                                     # overlay key -> Dutch (tools/lang/source_ftb.json)
+
+    def texts(key, nl):
+        """{"nl_nl": Dutch, "en_us": English or the Dutch}, and the key into the source."""
+        source[key] = nl
+        return {"nl_nl": nl, "en_us": overlay.get(key, nl)}
+
     os.makedirs(os.path.join(OUT, "chapters"), exist_ok=True)
-    os.makedirs(os.path.join(OUT, "lang"), exist_ok=True)
+    for locale in LOCALES:
+        os.makedirs(os.path.join(OUT, "lang", locale), exist_ok=True)
     for old in ("guhs.snbt", "guhs_lang.snbt"):     # (the old single chapter before 2.8; the SNBT texts before 1.1.0)
         if os.path.exists(os.path.join(OUT, old)):
             os.remove(os.path.join(OUT, old))
-    for d in ("chapters", "lang"):                  # chapters that are gone, and the SNBT files before 1.1.0
-        for f in os.listdir(os.path.join(OUT, d)):
-            if not f.endswith(".json5") or f[:-6] not in CHAPTERS:
+    for d in ["chapters", "lang"] + [os.path.join("lang", locale) for locale in LOCALES]:
+        for f in os.listdir(os.path.join(OUT, d)):  # chapters that are gone, the SNBT files before 1.1.0, lang/<c>.json5 before 1.2.0
+            if os.path.isfile(os.path.join(OUT, d, f)) and (d == "lang" or not f.endswith(".json5") or f[:-6] not in CHAPTERS):
                 os.remove(os.path.join(OUT, d, f))
-    group_lang = {f"chapter_group.{group_id}.title": GROUP_TITLE}
+    group_title = texts("ftb.group.title", GROUP_TITLE)
+    texts("ftb.komt_na", "Komt na: %s")             # (painted on the section header pictures, not in the lang files yet)
+    texts("ftb.komt_na_elders", "Komt na: %s (%s)")
     index = [f"version {CHAPTER_VERSION}", f"group {group_id}"]
     total = 0
     for order, (c, ch) in enumerate(chapters.items()):
         spec = CHAPTERS[c]
         cid = qid(f"chapter/{c}")
-        lang = {f"chapter.{cid}.title": ftb_text(spec["title"]), f"chapter.{cid}.chapter_subtitle": [ftb_text(f"{order + 1}. " + spec["sub"])]}
+        title, sub = texts(f"ftb.{c}.title", spec["title"]), texts(f"ftb.{c}.sub", spec["sub"])
+        lang = {locale: {f"chapter.{cid}.title": ftb_text(title[locale]),
+                         f"chapter.{cid}.chapter_subtitle": [ftb_text(f"{order + 1}. " + sub[locale])]} for locale in LOCALES}
+        for sect in ch["sections"]:                 # (only painted on the header pictures, not in the lang files yet)
+            texts(f"ftb.{c}.section.{sect['sid']}", sect["title"])
         quests = []
         for key in [f"intro_{c}"] + [k for s in ch["sections"] for k in s["quests"]]:
             _, title, desc, icon, tasks, rewards, _, _, _, shape, xp = info[key]
@@ -882,8 +908,10 @@ def build(force_art=False):
             if shape:
                 qn["shape"] = shape
             quests.append(qn)
-            lang[f"quest.{qn['id']}.title"] = ftb_text(title)
-            lang[f"quest.{qn['id']}.quest_desc"] = [ftb_text(line) for line in desc.split("\n")]
+            qt, qd = texts(f"ftb.{c}.q.{key}.title", title), texts(f"ftb.{c}.q.{key}.desc", desc)
+            for locale in LOCALES:
+                lang[locale][f"quest.{qn['id']}.title"] = ftb_text(qt[locale])
+                lang[locale][f"quest.{qn['id']}.quest_desc"] = [ftb_text(line) for line in qd[locale].split("\n")]
         images = []
         for name, x, y, w, h in ch["images"]:
             img = {"height": float(h), "id": qid(f"image/{c}/{name}"), "image": f"guhs:textures/ftbquests/{c}/{name}.png",
@@ -901,14 +929,19 @@ def build(force_art=False):
                    "quests": quests}
         with open(os.path.join(OUT, "chapters", c + ".json5"), "w", encoding="utf-8", newline="\n") as f:
             f.write(json5(chapter) + "\n")
-        with open(os.path.join(OUT, "lang", c + ".json5"), "w", encoding="utf-8", newline="\n") as f:
-            f.write(json5((group_lang if order == 0 else {}) | lang) + "\n")
+        for locale in LOCALES:
+            group_lang = {f"chapter_group.{group_id}.title": ftb_text(group_title[locale])} if order == 0 else {}
+            with open(os.path.join(OUT, "lang", locale, c + ".json5"), "w", encoding="utf-8", newline="\n") as f:
+                f.write(json5(group_lang | lang[locale]) + "\n")
         index.append(f"chapter {c}")
         total += len(quests)
         print(f"  {c}: {len(quests)} quests in {len(ch['sections'])} sections, {len(ch['drawn'])} lines drawn, "
               f"{len(ch['hidden'])} quests with their lines hidden")
     with open(os.path.join(OUT, "index.txt"), "w", encoding="utf-8") as f:
         f.write("\n".join(index) + "\n")
+    en_overlay.write_json(en_overlay.FTB_SOURCE, source)
+    missing = sum(1 for k, v in source.items() if k not in overlay and en_overlay.needs_english(v))
+    print(f"FTB Quests texts: {len(source)} keys, {missing} still Dutch in en_us (no English in tools/lang/en yet)")
     assert total == len(QUESTS) == len({x[0] for x in QUESTS}), (total, len(QUESTS))
     print(f"FTB Quests: {len(chapters)} chapters, {total} quests ({total - len(CHAPTERS)} + {len(CHAPTERS)} 'Hoe kom je hier?')")
 

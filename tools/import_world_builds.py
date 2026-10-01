@@ -125,13 +125,16 @@ def read_world(world):
     return blocks, entities
 
 
-def block_entity(be):
-    """Only the parts 1.21.1 reads the same way: the id, and the text of signs."""
+def block_entity(be, build=None):
+    """Only the parts 1.21.1 reads the same way: the id, and the text of signs (1.2.0: lines listed in
+    sign_text.IMPORTED become translate keys with the Dutch as fallback; the rest stays literal)."""
+    import sign_text
     nbt = {"id": be["id"]}
     for side in ("front_text", "back_text"):
         if side in be:
             text = be[side]
-            nbt[side] = {"messages": ms.NbtList(8, [json.dumps(m if isinstance(m, str) else "") for m in text["messages"]]),
+            nbt[side] = {"messages": ms.NbtList(8, [sign_text.imported_message(build, m if isinstance(m, str) else "")
+                                                    for m in text["messages"]]),
                          "color": text.get("color", "black"), "has_glowing_text": ms.Byte(text.get("has_glowing_text", 0))}
     if "is_waxed" in be:
         nbt["is_waxed"] = ms.Byte(be["is_waxed"])
@@ -152,7 +155,7 @@ def main(world=WORLD):
                     if not b or (y == GROUND_Y and b[0] in SKIP_AT_GROUND):
                         continue
                     be = entities.get((x, y, z))
-                    s.set(x - x0, y - base, z - z0, REPLACE.get(b[0], b[0]), b[1], block_entity(be) if be else None)
+                    s.set(x - x0, y - base, z - z0, REPLACE.get(b[0], b[0]), b[1], block_entity(be, name) if be else None)
         # air in every empty spot above the ground inside the build's box, so hills can't poke through it
         s.clear_above([(x, z) for x in range(s.size[0]) for z in range(s.size[2])], 1)
         s.save(name)

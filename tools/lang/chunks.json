@@ -1,0 +1,30 @@
+{
+  "_doc": "Translation chunks for the English overlay. A key belongs to the chunk with the LONGEST matching prefix; keys that match no prefix go to 'default'. Its English goes in tools/lang/en/<id>.json. List a chunk's Dutch: python tools/lang/check_en.py --dump <id> (or --todo <id> for the untranslated ones). Translate c01_names first: it fixes the item/block/creature names the other chunks use (together with tools/lang/GLOSSARY.md).",
+  "default": "c09_minigames_gui",
+  "chunks": [
+    {"id": "c01_names", "title": "Names: items, blocks, creatures, biomes, effects, emotes, sound subtitles, config screen",
+     "prefixes": ["item.", "block.", "entity.", "biome.", "effect.", "painting.", "fluid_type.", "jukebox_song.", "key.", "dimension.", "itemGroup.", "emote.", "subtitles.", "guhs.configuration.", "name.", "death.", "enchantment."]},
+    {"id": "c02_guhdex", "title": "The Guhdex and the wist-je-datjes (did-you-knows)",
+     "prefixes": ["gui.guhs.guhdex.", "gui.guhs.wistjedat."]},
+    {"id": "c03_band", "title": "Lieve vadsjes: hearts, the guh menu's Knus, diary, favourites, huisje, chores, toys, Guhkamer, together",
+     "prefixes": ["gui.guhs.knus.", "gui.guhs.dagboek.", "gui.guhs.favorietjes.", "gui.guhs.favoriet.", "gui.guhs.klus.", "gui.guhs.klusjes.", "gui.guhs.huisje.", "gui.guhs.samen.", "gui.guhs.band.", "gui.guhs.guhkamer.", "gui.guhs.speelgoed.", "gui.guhs.speeltje.", "gui.guhs.personality.", "gui.guhs.niveau.", "gui.guhs.behavior.", "gui.guhs.wardrobe.", "gui.guhs.emotes.", "gui.guhs.protected.", "gui.guhs.launch.", "gui.guhs.dagdeel.", "sign.guhs.guhkamer."]},
+    {"id": "c04_verhalen", "title": "The stories: Guhverhalen screen, Baltoguh + sled, Guhtwo, Hemelkapelletje, Guhwai'i, Timmerguh (screens, signs, logbook)",
+     "prefixes": ["gui.guhs.verhalen.", "gui.guhs.balto.", "gui.guhs.baltoslee.", "gui.guhs.mewtwo.", "gui.guhs.hemel.", "gui.guhs.guhwaii.", "gui.guhs.timmerguh.", "gui.guhs.verhaal.", "sign.guhs.balto", "sign.guhs.timmerguh", "sign.guhs.guhwaii.", "book.guhs.logboek626."]},
+    {"id": "c05_advancements", "title": "Advancements, structure names (superkompas) and the remaining signs in structures",
+     "prefixes": ["advancements.", "structure.", "sign."]},
+    {"id": "c06_quests_knus", "title": "Quest messages (chat/screens): Knuffeldal, its buildings, camping, professions, the stomach story, surf & hula",
+     "prefixes": ["quest.guhs.kamperen.", "quest.guhs.beroepen.", "quest.guhs.ballon.", "quest.guhs.timmerguh.", "quest.guhs.bakkerij.", "quest.guhs.kapper.", "quest.guhs.boerderij.", "quest.guhs.burgemeester.", "quest.guhs.knuffelbad.", "quest.guhs.sterrenwacht.", "quest.guhs.knuffeldal.", "quest.guhs.juf_knuffel.", "quest.guhs.theeguh.", "quest.guhs.ijscoguh.", "quest.guhs.cocotje.", "quest.guhs.knus.", "quest.guhs.dentist.", "quest.guhs.vadsig.", "quest.guhs.guhbert.", "quest.guhs.cake.", "quest.guhs.swallowed.", "quest.guhs.enzyme.", "quest.guhs.guhbrouwketel.", "quest.guhs.guhwaiispellen."]},
+    {"id": "c07_quests_spel", "title": "Quest messages (chat/screens): minigames, the Guhmensie, Barbecuether, caves, swamp and wood",
+     "prefixes": ["quest."]},
+    {"id": "c08_knuffeldal_gui", "title": "Screens: Knuffeldal life, Piep, Guheinde, critters, clothes, events, the core menus (gids, menu, superkompas, bank...)",
+     "prefixes": ["gui.guhs.knuffelbad.", "gui.guhs.creche.", "gui.guhs.bakkerij.", "gui.guhs.kapper.", "gui.guhs.wereldleven.", "gui.guhs.theehuis.", "gui.guhs.beroepen.", "gui.guhs.sterrenwacht.", "gui.guhs.knusfeest.", "gui.guhs.knuffeldal.", "gui.guhs.seizoen.", "gui.guhs.boerderij.", "gui.guhs.kamperen.", "gui.guhs.ballon.", "gui.guhs.tuintjes.", "gui.guhs.piep.", "gui.guhs.guheinde.", "gui.guhs.maag.", "gui.guhs.kruimel_mika.", "gui.guhs.landdiertjes.", "gui.guhs.waterdiertjes.", "gui.guhs.vogels.", "gui.guhs.vadswoud.", "gui.guhs.gids.", "gui.guhs.menu.", "gui.guhs.superkompas.", "gui.guhs.mijnguhs.", "gui.guhs.bank.", "gui.guhs.reis.", "gui.guhs.wolkjes.", "gui.guhs.sled.", "gui.guhs.rps.", "gui.guhs.eilanden.", "gui.guhs.kleding.", "gui.guhs.kledingbron.", "gui.guhs.evenement."]},
+    {"id": "c09_minigames_gui", "title": "Screens: minigames, the library (incl. its books), highscores (and any new gui key)",
+     "prefixes": ["gui.", "book."]},
+    {"id": "c10_ftb_minigames_knuffeldal", "title": "FTB Quests book: Minigames & bijzondere plekken, Knuffeldal",
+     "prefixes": ["ftb.guhs_minigames.", "ftb.guhs_knuffeldal."]},
+    {"id": "c11_ftb_verhalen_band", "title": "FTB Quests book: Guhverhalen, Lieve vadsjes, Diertjes",
+     "prefixes": ["ftb.guhs_verhalen.", "ftb.guhs_band.", "ftb.guhs_diertjes."]},
+    {"id": "c12_ftb_rest", "title": "FTB Quests book: Guhs & basis, De Guhmensie, Grotten/moeras/woud, Barbecuether, Guheinde, Onderwater, Guhmaag, Piep!, group title",
+     "prefixes": ["ftb."]}
+  ]
+}

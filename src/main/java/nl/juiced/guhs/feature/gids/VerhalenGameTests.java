@@ -69,7 +69,7 @@ public class VerhalenGameTests {
         helper.assertTrue(lang.has(key(v.nu())) && lang.has(key(v.waar())), id + ": the texts exist for " + sleutel);
     }
 
-    /** Every questline, step, sleutel and heading has a text (the server's en_us: Dutch, like everything). */
+    /** Every questline, step, sleutel and heading has a text (in the server's language, en_us; nl_nl has the same keys). */
     @GuhTest(template = EMPTY)
     public static void verhalenTekstenBestaan(GameTestHelper helper) {
         Language lang = Language.getInstance();

@@ -753,6 +753,15 @@ public final class VisWedstrijd {
                 BOARD_HEAVIEST, VisSoort::kg));
     }
 
+    /** The lang key of the "~ Visrecords ~" sign (1.2.0: the sign text is translatable, tools/features/vissen.py). */
+    public static final String RECORD_SIGN_KEY = "sign.guhs.vissen.visrecords";
+
+    /** Is this the first line of the record sign? The translate key (1.2.0), or the literal Dutch of ponds placed before 1.2.0. */
+    public static boolean isRecordSignLine(Component line) {
+        return line.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t ? RECORD_SIGN_KEY.equals(t.getKey())
+                : line.getString().contains("Visrecords");
+    }
+
     /** The "~ Visrecords ~" sign within 18 blocks (any direction) of the Visguh, in loaded chunks (or null). */
     @Nullable
     private static BlockPos recordSign(ServerLevel world, BlockPos c) {
@@ -766,7 +775,7 @@ public final class VisWedstrijd {
                     BlockPos pos = be.getBlockPos();
                     if (be instanceof SignBlockEntity sign && Math.abs(pos.getX() - c.getX()) <= SIGN_REACH && Math.abs(pos.getZ() - c.getZ()) <= SIGN_REACH
                             && pos.getY() - c.getY() >= -3 && pos.getY() - c.getY() <= 5
-                            && sign.getFrontText().getMessage(0, false).getString().contains("Visrecords")
+                            && isRecordSignLine(sign.getFrontText().getMessage(0, false))
                             && (best == null || pos.distSqr(c) < best.distSqr(c))) {
                         best = pos.immutable();
                     }

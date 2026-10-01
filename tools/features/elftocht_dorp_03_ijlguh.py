@@ -197,10 +197,12 @@ class Dorp:
                     self.set(z, y, zz, blok, {"axis": "z"})
 
     def bord(self, x, y, z, facing, regels, muur=True, hout="spruce", kleur="black", glim=True):
+        """1.2.0: every line is a translate key sign.guhs.elftocht.dorp<INDEX>.<slug> with the Dutch as fallback."""
         from make_structures import NbtList, Byte
-        msgs = [json.dumps({"text": r}) for r in regels] + [json.dumps("")] * (4 - len(regels))
+        import sign_text
+        msgs = sign_text.messages(f"sign.guhs.elftocht.dorp{INDEX}", regels)
         nbt = {"id": "minecraft:sign", "is_waxed": Byte(1),
-               "front_text": {"messages": NbtList(8, msgs), "color": kleur, "has_glowing_text": Byte(1 if glim else 0)},
+               "front_text": {"messages": msgs, "color": kleur, "has_glowing_text": Byte(1 if glim else 0)},
                "back_text": {"messages": NbtList(8, [json.dumps("")] * 4), "color": "black", "has_glowing_text": Byte(0)}}
         if muur:
             self.set(x, y, z, f"{hout}_wall_sign", {"facing": facing, "waterlogged": False}, nbt)

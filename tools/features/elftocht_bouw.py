@@ -21,6 +21,7 @@ import sys
 from collections import deque
 
 from features import elftocht_route as R
+import sign_text  # noqa: E402
 from features import sterrenwacht_hulp as hulp
 
 AIR = "minecraft:air"
@@ -59,12 +60,12 @@ def mc(n):
 # small helpers
 # =====================================================================================================================
 def sign_nbt(lines, colour="black", glow=False):
-    from make_structures import NbtList, Byte
-    msgs = [json.dumps({"text": l}) for l in lines] + [json.dumps("")] * (4 - len(lines))
-    empty = [json.dumps("")] * 4
+    """A sign with the same text on both sides. 1.2.0: every line is a translate key sign.guhs.elftocht.<slug> with the
+    Dutch text as fallback (tools/sign_text.py); a line may also be a ready component (a dict)."""
+    from make_structures import Byte
     return {"id": "minecraft:sign",
-            "front_text": {"messages": NbtList(8, msgs), "color": colour, "has_glowing_text": Byte(1 if glow else 0)},
-            "back_text": {"messages": NbtList(8, msgs), "color": colour, "has_glowing_text": Byte(1 if glow else 0)},
+            "front_text": {"messages": sign_text.messages("sign.guhs.elftocht", lines), "color": colour, "has_glowing_text": Byte(1 if glow else 0)},
+            "back_text": {"messages": sign_text.messages("sign.guhs.elftocht", lines), "color": colour, "has_glowing_text": Byte(1 if glow else 0)},
             "is_waxed": Byte(1)}
 
 
@@ -637,7 +638,7 @@ def plaatshouder(s, index, ox, oy, oz, rng):
                 s.set(x, y, z, "guhs:knuffelsteen" if edge_ else AIR)
             s.set(x, oy + 5, z, "guhs:pluisdak")
     hulp.wall_face(s, hx0 + 5, oy + 2, hz0 + 7, 2, "south")
-    s.set(hx0 + 1, oy + 2, hz0 + 8, mc("spruce_wall_sign"), {"facing": "south", "waterlogged": "false"}, sign_nbt(["", naam, "(bouwt nog...)", ""]))
+    s.set(hx0 + 1, oy + 2, hz0 + 8, mc("spruce_wall_sign"), {"facing": "south", "waterlogged": "false"}, sign_nbt(["", sign_text.ref(f"gui.guhs.elftocht.dorp.{index}", naam), "(bouwt nog...)", ""]))
     s.set(hx0 + 4, oy, hz0 + 7, "guhs:vadshout_deur", {"facing": "south", "half": "lower", "hinge": "left", "open": "false", "powered": "false"})
     s.set(hx0 + 4, oy + 1, hz0 + 7, "guhs:vadshout_deur", {"facing": "south", "half": "upper", "hinge": "left", "open": "false", "powered": "false"})
     x, z = ox + 14, edge
@@ -1035,7 +1036,9 @@ def naamborden(s, ice, reserved, info):
                         s.set(px, OY, pz, mc("spruce_fence"))
                         s.set(px, OY + 1, pz, mc("blue_concrete"))
                         fx, fz = front[i]
-                        lines = ["", R.NAMEN[index], f"dorp {index} van 11", ""] if i == 0 else ["", "Elf-", "Guhjestocht", ""]
+                        lines = (["", sign_text.ref(f"gui.guhs.elftocht.dorp.{index}", R.NAMEN[index]),
+                                  sign_text.component("sign.guhs.elftocht", "dorp %s van %s", key="sign.guhs.elftocht.dorp_nr", args=[index, 11]), ""]
+                                 if i == 0 else ["", "Elf-", "Guhjestocht", ""])
                         s.set(fx, OY + 1, fz, mc("spruce_wall_sign"), {"facing": facing, "waterlogged": "false"},
                               sign_nbt(lines, "white", True))
                         reserved.add((px, pz))

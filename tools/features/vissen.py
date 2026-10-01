@@ -355,7 +355,10 @@ def inside(box, x, z):
 
 
 def sign_nbt(h, lines, colour="black"):
-    msgs = h.ms.NbtList(8, [json.dumps({"text": t}) for t in (list(lines) + [""] * 4)[:4]])
+    """1.2.0: every line is a translate key sign.guhs.vissen.<slug> with the Dutch as fallback (tools/sign_text.py); the
+    record board is sign.guhs.vissen.visrecords (VisWedstrijd.recordSign finds it by that key)."""
+    import sign_text
+    msgs = sign_text.messages("sign.guhs.vissen", lines)
     empty = h.ms.NbtList(8, ['""'] * 4)
     return {"id": "minecraft:sign", "is_waxed": h.Byte(1),
             "front_text": {"messages": msgs, "color": colour, "has_glowing_text": h.Byte(1)},

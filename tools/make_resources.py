@@ -1035,6 +1035,8 @@ COMMON = {
     "itemGroup.guhs": "Guhs",
     "gui.guhs.menu.hp": "HP: %s / %s",
 }
+# (1.2.0: this old English is only a draft from before 2.0; make_v2.write_lang() makes the real en_us from nl_nl plus the
+#  English overlay in tools/lang/en/*.json, so nothing below ends up in the game)
 w(f"{A}/lang/en_us.json", {
     **COMMON,
     "item.guhs.guh_spawn_egg": "Guh Spawn Egg",

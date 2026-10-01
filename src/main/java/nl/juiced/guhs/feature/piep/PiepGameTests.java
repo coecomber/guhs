@@ -401,8 +401,8 @@ public class PiepGameTests {
     public static void piepFtbHoofdstuk(GameTestHelper helper) {
         try {
             java.nio.file.Path quests = java.nio.file.Files.createTempDirectory("guhs-ftbpiep");
-            // 1.1.0: JSON5 (FTB Quests 26.1); a chapter's texts in lang/en_us/chapters/<chapter>.json5
-            java.nio.file.Path langDir = quests.resolve("lang").resolve("en_us").resolve("chapters");
+            // 1.1.0: JSON5 (FTB Quests 26.1); a chapter's texts in lang/<locale>/chapters/<chapter>.json5 (1.2.0: the Dutch in nl_nl)
+            java.nio.file.Path langDir = quests.resolve("lang").resolve("nl_nl").resolve("chapters");
             helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.installInto(quests), "installs");
             String piep = java.nio.file.Files.readString(quests.resolve("chapters").resolve("guhs_piep.json5"));
             String onderwater = java.nio.file.Files.readString(quests.resolve("chapters").resolve("guhs_onderwater.json5"));

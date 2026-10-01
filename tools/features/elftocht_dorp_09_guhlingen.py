@@ -100,10 +100,12 @@ class Kit:
         self.set(x, y + 1, z, "guhs:sneeuwpopguh", {"facing": facing, "half": "upper"})
 
     def sign(self, x, y, z, facing, lines, wall=True, wood="spruce", colour="white"):
-        """A waxed, glowing sign with literal Dutch text (the same in every language, like all guh signs)."""
+        """A waxed, glowing sign; 1.2.0: every line is a translate key sign.guhs.elftocht.dorp<INDEX>.<slug> with the Dutch
+        text as fallback (tools/sign_text.py), so each player reads it in their own language."""
         import json
+        import sign_text
         from make_structures import Byte, NbtList
-        msgs = NbtList(8, [json.dumps({"text": t}) for t in (list(lines) + [""] * 4)[:4]])
+        msgs = sign_text.messages(f"sign.guhs.elftocht.dorp{INDEX}", lines)
         empty = NbtList(8, [json.dumps("")] * 4)
         nbt = {"id": "minecraft:sign", "is_waxed": Byte(1),
                "front_text": {"messages": msgs, "color": colour, "has_glowing_text": Byte(1)},

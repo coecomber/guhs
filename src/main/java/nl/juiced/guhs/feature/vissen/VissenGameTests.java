@@ -301,7 +301,7 @@ public class VissenGameTests {
         VisWedstrijd.showScores(npc);
         BlockPos sign = null;
         for (BlockPos p : BlockPos.betweenClosed(c.offset(-18, -2, -4), c.offset(18, 4, 4))) {
-            if (helper.getLevel().getBlockEntity(p) instanceof SignBlockEntity s && s.getFrontText().getMessage(0, false).getString().contains("Visrecords")) {
+            if (helper.getLevel().getBlockEntity(p) instanceof SignBlockEntity s && VisWedstrijd.isRecordSignLine(s.getFrontText().getMessage(0, false))) {
                 sign = p.immutable();
             }
         }

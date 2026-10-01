@@ -17,14 +17,17 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
 
 /**
- * If FTB Quests is installed, puts the "Guhs" chapter group (thirteen themed chapters, their Dutch texts and the group)
+ * If FTB Quests is installed, puts the "Guhs" chapter group (thirteen themed chapters, their texts and the group)
  * into config/ftbquests/quests, so it shows up in the pack's quest book. The chapters are made by
  * tools/make_ftbquests.py; ftbquests/index.txt lists them (and the group id).
  * <p>
  * 1.1.0 (Minecraft 26.1.2): FTB Quests 26.1 reads only JSON5 (1.0.x wrote SNBT, which it ignores now). Everything goes
- * where FTB Quests saves it itself: chapters/&lt;name&gt;.json5, the texts in lang/en_us/chapters/&lt;name&gt;.json5 (every
- * .json5 under lang/&lt;locale&gt;/ is read and merged; our texts also go into lang/nl_nl/ when the pack has that folder),
- * and the group in chapter_groups.json5.
+ * where FTB Quests saves it itself: chapters/&lt;name&gt;.json5, the texts in lang/&lt;locale&gt;/chapters/&lt;name&gt;.json5 (every
+ * .json5 under lang/&lt;locale&gt;/ is read and merged), and the group in chapter_groups.json5.
+ * <p>
+ * 1.2.0: the texts come in two languages (ftbquests/lang/&lt;locale&gt;/&lt;name&gt;.json5 in the jar): English in lang/en_us
+ * (also FTB Quests' fallback for every other language) and Dutch in lang/nl_nl (the folder is made when the pack doesn't
+ * have it). FTB Quests shows the one that matches the player's Minecraft language.
  * <p>
  * Pack makers' own edits are left alone. FTB Quests re-saves the chapter files (and drops our "guhs_chapter_version"
  * marker when it does), so what we installed is remembered in quests/guhs_chapters.txt: per chapter the version and a
@@ -45,8 +48,8 @@ public final class FtbQuestsChapter {
     private static final Pattern POSITION = Pattern.compile("(?m)^\\s*\"?(x|y)\"?\\s*:\\s*(-?[0-9.]+(?:[eE][-+]?[0-9]+)?)[dD]?\\s*,?\\s*$");
     static final String INSTALLED = "guhs_chapters.txt";
     static final String EXT = ".json5";
-    /** The locales whose lang folder gets our texts: en_us always (FTB Quests' fallback), nl_nl when the pack has it. */
-    private static final List<String> LOCALES = List.of("en_us", "nl_nl");
+    /** The locales we ship texts for (ftbquests/lang/&lt;locale&gt;/): en_us (English, FTB Quests' fallback) and nl_nl (Dutch). */
+    public static final List<String> LOCALES = List.of("en_us", "nl_nl");
 
     public static void install() {
         if (ModList.get().isLoaded("ftbquests")) {
@@ -110,15 +113,13 @@ public final class FtbQuestsChapter {
                 Files.createDirectories(chapters);
                 Files.writeString(file, chapter, StandardCharsets.UTF_8);
                 installed.put(name, new String[] {String.valueOf(version), fingerprint(chapter)});
-                // the chapter's texts (Dutch in every language), in the file where FTB Quests keeps a chapter's texts itself
-                String chapterLang = resource("ftbquests/lang/" + name + EXT);
-                if (chapterLang != null) {
-                    for (String locale : LOCALES) {
-                        if (locale.equals("en_us") || Files.isDirectory(lang.resolve(locale))) {
-                            Path dir = lang.resolve(locale).resolve("chapters");
-                            Files.createDirectories(dir);
-                            Files.writeString(dir.resolve(name + EXT), chapterLang, StandardCharsets.UTF_8);
-                        }
+                // the chapter's texts per language, in the file where FTB Quests keeps a chapter's texts itself
+                for (String locale : LOCALES) {
+                    String chapterLang = resource("ftbquests/lang/" + locale + "/" + name + EXT);
+                    if (chapterLang != null) {
+                        Path dir = lang.resolve(locale).resolve("chapters");
+                        Files.createDirectories(dir);
+                        Files.writeString(dir.resolve(name + EXT), chapterLang, StandardCharsets.UTF_8);
                     }
                 }
                 wrote = true;

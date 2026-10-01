@@ -16,6 +16,7 @@ from PIL import Image
 
 sys.path.insert(0, os.path.dirname(__file__))
 import make_structures as ms  # noqa: E402
+import sign_text  # noqa: E402
 from make_structures import Structure, mc, Byte, Short, Float, Double, floats, compounds, chest  # noqa: E402
 
 R = os.path.join("src", "main", "resources")
@@ -642,7 +643,7 @@ def mika_kamp():
                     s.set(x, y, z, mc("iron_bars"), {"east": "true", "west": "true", "north": "true", "south": "true",
                                                      "waterlogged": "false"})
     s.set(cx + 1, 1, cz + 1, mc("magenta_carpet"))
-    s.entity(cx + 1.0, 1.0, cz + 1.0, ms.guh_nbt(0.6, CustomName='{"text":"Guhbert"}', NoAI=Byte(1),
+    s.entity(cx + 1.0, 1.0, cz + 1.0, ms.guh_nbt(0.6, CustomName=sign_text.line("name.guhs", "Guhbert", key="name.guhs.guhbert"), NoAI=Byte(1),
                                                  Invulnerable=Byte(1), Age=-1000000000,
                                                  Tags=ms.NbtList(8, ["guhs_caged_guhbert"])))
     # the Mika Boss next to the fire, two normal Mikas around
@@ -2234,15 +2235,39 @@ def stomach_story():
 # =====================================================================================================================
 # lang: merged into the files make_resources.py wrote
 # =====================================================================================================================
+def config_lang():
+    """The NeoForge config screen (GuhsClientConfig; 1.0.1 added these by hand to the JSON files)."""
+    lang("guhs.configuration.title", "Guhs Settings", "Guhs-instellingen")
+    lang("guhs.configuration.section.guhs.client.toml", "Client settings", "Clientinstellingen")
+    lang("guhs.configuration.section.guhs.client.toml.title", "Guhs client settings", "Guhs-clientinstellingen")
+    lang("guhs.configuration.addOfficialServer", "Add the official Guhs server", "Officiële Guhs-server toevoegen")
+    lang("guhs.configuration.addOfficialServer.tooltip",
+         "Adds \"Guhs Server\" (guhs.nl) to the top of the multiplayer server list, once per installation. A server you removed never comes back.",
+         "Zet \"Guhs Server\" (guhs.nl) één keer bovenaan je multiplayer-serverlijst. Een server die je hebt weggehaald komt nooit terug.")
+
+
 def write_lang():
+    """nl_nl: the Dutch of every generator (the source). en_us (1.2.0): nl_nl with the English overlay of
+    tools/lang/en/*.json on top; a key without English yet stays Dutch (see tools/lang/__init__.py). The `en` argument of
+    lang() is no longer used for en_us: the overlay is the one place for English."""
+    import lang as en_overlay   # tools/lang/
+    # the texts in structure templates (signs, book pages, names; tools/sign_text.py)
+    patched = sign_text.patch_imported(f"{D}/structure")
+    for k, v in sign_text.TEXTS.items():
+        if NL.get(k, v) != v:
+            raise ValueError(f"sign text {k}: {v!r} but the lang source says {NL[k]!r}")
+        NL[k] = v
     nl = json.load(open(f"{A}/lang/nl_nl.json", encoding="utf-8"))
     nl.update(NL)
-    en = json.load(open(f"{A}/lang/en_us.json", encoding="utf-8"))
-    en.update(EN)
-    en.update(nl)  # everything in Dutch, whatever language the game is set to
+    for k, fallback in sign_text.REFS.items():
+        if k not in nl:
+            raise ValueError(f"a structure refers to lang key {k} ({fallback!r}), but no generator makes it")
+    en, missing = en_overlay.english(nl)
     w(f"{A}/lang/nl_nl.json", nl)
     w(f"{A}/lang/en_us.json", en)
-    print(f"lang: {len(EN)} keys")
+    en_overlay.write_json(en_overlay.CONTEXT_FILE, dict(sorted(sign_text.CONTEXT.items())))
+    print(f"lang: {len(NL)} keys from make_v2, {len(sign_text.TEXTS)} structure texts{' (patched ' + ', '.join(patched) + ')' if patched else ''}; "
+          f"en_us: {missing} of {len(nl)} keys still Dutch (no English in tools/lang/en yet)")
 
 
 # =====================================================================================================================
@@ -4687,4 +4712,5 @@ if __name__ == "__main__":
     bouwruimte()
     grond()
     buiten_gebouwen()
+    config_lang()
     write_lang()
