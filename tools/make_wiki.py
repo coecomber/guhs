@@ -3583,7 +3583,14 @@ def build():
      ("Multiplayer: the server and every player need the mod.",
       "Multiplayer: de server en alle spelers hebben de mod nodig."),
      ("Everything is in the creative tab <b>Guhs</b>.", "Alles staat in het creatieve tabblad <b>Guhs</b>."),
-     ("All names and texts in the game are in Dutch.", "Alle namen en teksten in het spel zijn Nederlands."),
+     ("Every name and text in the game is in <b>English and Dutch</b>. Guhs follows your Minecraft language (Dutch when Minecraft is in Dutch, "
+      "English for every other language). To choose yourself, use the <b>Lang</b> button in the guh menu, or <i>Guhs language</i> in the mod's "
+      "settings (<i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>; in the file: <code>language</code> in <code>config/guhs-client.toml</code>): "
+      "Auto, NL or EN. Every player chooses for themselves, also on a server.",
+      "Alle namen en teksten in het spel zijn er in het <b>Nederlands en het Engels</b>. Guhs volgt de taal van Minecraft (Nederlands als Minecraft "
+      "Nederlands is, anders Engels). Zelf kiezen kan met de knop <b>Taal</b> in het guhmenu, of met <i>Taal van Guhs</i> in de instellingen van de mod "
+      "(<i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>; in het bestand: <code>language</code> in <code>config/guhs-client.toml</code>): "
+      "Auto, NL of EN. Elke speler kiest voor zichzelf, ook op een server."),
      ("<b>FTB Quests</b> in your pack? Then a <b>Guhs</b> chapter group is added to the quest book automatically: thirteen chapters with "
       + str(quest_count()) + " quests (every guh kind, every structure and biome, the stomach, the minigames, the Guheinde, the Barbecuether, the Knuffeldal, the pieppiepmuisjes, De Grote Guhspelen, your guh's hearts and huisje, the Guhverhalen and the critters...). "
       "Each chapter starts with a <i>Hoe kom je hier?</i> quest that links to where it begins.",

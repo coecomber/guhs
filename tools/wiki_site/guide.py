@@ -325,6 +325,12 @@ class Guide:
              "<b>Teleport</b>: in the guh menu you choose whether your guh teleports to you when it falls behind."),
             (f"<b>Kleding</b>: een kledingstuk eet je één keer op, en dan is het voor altijd van jou in de {L('systemen/kleding', 'kledingkast')}.",
              f"<b>Clothes</b>: eat a piece of clothing once and it's yours forever in the {L('systemen/kleding', 'wardrobe')}."),
+            ("<b>Taal</b>: Guhs volgt de taal van Minecraft (Nederlands als Minecraft Nederlands is, anders Engels). Liever zelf kiezen? Druk in het "
+             "guhmenu op <b>Taal</b> (Auto, NL of EN), of kies <i>Taal van Guhs</i> bij <i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>. "
+             "Dat geldt alleen voor jou, ook op een server.",
+             "<b>Language</b>: Guhs follows your Minecraft language (Dutch when Minecraft is in Dutch, English otherwise). Rather choose yourself? "
+             "Press <b>Lang</b> in the guh menu (Auto, NL or EN), or pick <i>Guhs language</i> under <i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>. "
+             "It's only for you, also on a server."),
             ("<b>De G-toets</b> (maag heen en terug) kun je aanpassen bij Besturing &rarr; Guhs.",
              "<b>The G key</b> (stomach there and back) can be changed in Controls &rarr; Guhs."),
             (f"<b>Handige commando's</b> voor creative en operators staan bij {L('systemen/commandos')}.",

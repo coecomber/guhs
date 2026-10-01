@@ -27,7 +27,8 @@ STOP = {"guh", "guhs", "vads", "njeg", "vahoeg", "kaas", "knus", "samen", "blij"
         "wol", "roze", "kleding", "outfit", "hula", "surfen", "guhdex", "model", "klant", "speelgoed", "knuffel", "set", "portaal",
         "kapper", "bakker", "juf", "opa", "baas", "koning", "gezellig", "besties", "uitgerust", "zweverig", "onvahoeg", "blosjes",
         "sjokkel's", "mint", "choco", "snow", "starry", "ghost", "golden", "rainbow", "teckel", "iron", "diamond", "netherite", "inside",
-        "the gate", "the guh head", "together", "chores", "toys", "events", "favourites", "commands", "advancements", "surfing", "jobs", "personalities", "effects", "clothes", "stories", "guhland", "guh-sneeuw", "bewoner", "sjoelen", "doolhof", "katapult", "circuit"}
+        "the gate", "the guh head", "together", "chores", "toys", "events", "favourites", "commands", "advancements", "surfing", "jobs", "personalities", "effects", "clothes", "stories", "guhland", "guh-sneeuw", "bewoner", "sjoelen", "doolhof", "katapult", "circuit",
+        "tooth", "tongue", "memory", "careers", "pearl", "faves", "teapot", "overalls", "nightcap", "bathrobe", "seashell"}
 CAT_PRIORITY = ["guhs", "npcs", "diertjes", "wezens", "minigames", "verhalen", "bouwwerken", "biomen", "dimensies", "systemen", "kleding",
                 "blokken", "items"]
 LIST_COLUMNS = {
@@ -88,6 +89,7 @@ class Renderer:
         self.version_left = []
         self.outlinks = {}
         self.alt = {}
+        self.en = builder.english
         for iid, pid in builder.item_page.items():
             for cat in ("items", "blokken", "kleding"):
                 self.alt[f"{cat}/{iid}"] = pid
@@ -112,6 +114,7 @@ class Renderer:
             names = set(pg.aliases) | {pg.title}
             if pg.cat in ("systemen", "minigames", "verhalen", "dimensies") and pg.title_en:
                 names.add(pg.title_en)
+            names |= {self.en.text(plain(n)) for n in names}     # the English names link too
             for n in names:
                 n = plain(n)
                 key = fold(n)
@@ -124,6 +127,7 @@ class Renderer:
         self.alias_re = re.compile(r"(?<![\w-])(" + trie_regex(sorted(self.alias, key=len, reverse=True)) + r")(?![\w-])", re.I)
 
     def autolink(self, h, page, linked):
+        h = self.en.html(h)         # the English names first (english.py), so a link never cuts an in-game text in two
         out, stack = [], []
         for part in re.split(r"(<[^>]+>)", h):
             if part.startswith("<"):
@@ -511,7 +515,7 @@ class Renderer:
                 f'<div class="box" id="installeren"><h2>{t("Install", "Installeren")}</h2>{install}</div>'
                 f'<div class="box" id="download"><h2>{t("Download", "Downloaden")}</h2>'
                 f'<p>{t("Guhs " + SITE_VERSION + " will be available on these sites:", "Guhs " + SITE_VERSION + " komt op deze sites:")}</p>{dl}</div>'
-                + (f'<div class="box"><h2>{t("Did you know? (from the game, in Dutch)", "Wist je dat?")}</h2><ul>{fact_html}</ul></div>' if fact_html else ""))
+                + (f'<div class="box"><h2>{t("Did you know? (from the game)", "Wist je dat?")}</h2><ul>{fact_html}</ul></div>' if fact_html else ""))
 
     # --- everything ------------------------------------------------------------------------------------------------------------------
     def render_all(self):
@@ -544,7 +548,7 @@ class Renderer:
                 title = f"{pg.title} - Guhs Wiki"
                 desc = first_sentences(plain(pg.lead_nl) or plain(pg.lead_en), 155)
             h = self.frame(pg, main, title, desc)
-            h = self.finalize(pg.path, h, pg.id)
+            h = self.en.html(self.finalize(pg.path, h, pg.id))
             dst = os.path.join(self.out, pg.path)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             with open(dst, "w", encoding="utf-8", newline="\n") as f:
@@ -568,7 +572,7 @@ class Renderer:
                 f'<p><a href="@@index@@">{t("To the home page", "Naar de startpagina")}</a></p>'
                 + (self.b.img("guh_sitting", "") if self.im.has("guh_sitting") else ""))
         h = self.frame(pg, main, "Niet gevonden - Guhs Wiki", "Pagina niet gevonden", root_override="", head_extra=head)
-        h = self.finalize("404.html", h, "404")
+        h = self.en.html(self.finalize("404.html", h, "404"))
         with open(os.path.join(self.out, "404.html"), "w", encoding="utf-8", newline="\n") as f:
             f.write(h)
 
@@ -581,8 +585,9 @@ class Renderer:
             thumb = self.im.use(pg.thumb, thumb=True) if pg.thumb and self.im.has(pg.thumb) else ""
             e = dict(t=plain(pg.title), c=d[1] if not pg.id.endswith("/index") else "Lijst", u=pg.path, i=thumb or "",
                      s=first_sentences(plain(pg.lead_nl), 120))
-            if pg.title_en != pg.title:
-                e["e"] = plain(pg.title_en)
+            title_en = self.en.text(plain(pg.title_en))
+            if title_en != plain(pg.title):
+                e["e"] = title_en
             if d[2] != d[1]:
                 e["ce"] = d[2] if not pg.id.endswith("/index") else "List"
             al = sorted(a for a in pg.aliases if a != pg.title)

@@ -463,7 +463,8 @@ class Builder:
             bname = g.kledingbron_names.get(bron, bron)
             pics = outfit_pics.get(bron, [])
             first_icon = next((self.im.item_icon(c["id"]) for c in pieces if self.im.item_icon(c["id"])), None)
-            pg = Page("kleding", f"kleding/set-{bron}", f"Kledingset: {bname}", f"Clothing set: {bname}", "Kledingset", "Clothing set",
+            bname_en = self.english.text(bname)
+            pg = Page("kleding", f"kleding/set-{bron}", f"Kledingset: {bname}", f"Clothing set: {bname_en}", "Kledingset", "Clothing set",
                       pics[0] if pics else first_icon)
             pg.no_autolink = True
             pg.images = pics
@@ -482,7 +483,7 @@ class Builder:
                 pg.info("From", "Waar", L(src))
                 pg.related.append(src)
             pg.lead_nl = f"De kleding van {esc(bname)}: {len(pieces)} {'stuk' if len(pieces) == 1 else 'stukken'}."
-            pg.lead_en = f"The clothes of {esc(bname)}: {len(pieces)} {'piece' if len(pieces) == 1 else 'pieces'}."
+            pg.lead_en = f"The clothes of {esc(bname_en)}: {len(pieces)} {'piece' if len(pieces) == 1 else 'pieces'}."
             pg.columns["slot"] = (-1, t("Set", "Set"))
             pg.columns["bron"] = (bname, esc(bname))
             pg.data["sort"] = " " + bname
@@ -869,8 +870,8 @@ class Builder:
                 steps += self.ftb_steps(chapter, section)
             if steps:
                 pg.add_section("steps", "Steps (FTB quests)", "Stappen (FTB-quests)",
-                               '<p class="note">' + t("The quest texts are in Dutch, like everything in the game.",
-                                                      "De questteksten zijn Nederlands, net als alles in het spel.")
+                               '<p class="note">' + t("The quest texts are in English and Dutch, like everything in the game (Guhs follows your language setting).",
+                                                      "De questteksten zijn Nederlands en Engels, net als alles in het spel (Guhs volgt je taalinstelling).")
                                + '</p><ol class="steps">' + "".join(steps) + "</ol>")
                 pg.info("Steps", "Stappen", str(len(steps)))
             pg.columns["kind"] = (0, t("Story", "Verhaal"))
@@ -887,7 +888,7 @@ class Builder:
                       "FTB-hoofdstuk", "FTB chapter", "icon_timmerguh_bouwboekje" if self.im.has("icon_timmerguh_bouwboekje") else None)
             pg.no_autolink = True
             pg.lead_nl = esc(plain_(spec.get("sub", "")))
-            pg.lead_en = t("A chapter of the Guhs FTB quest book (texts in Dutch).", "")
+            pg.lead_en = t("A chapter of the Guhs FTB quest book.", "")
             intro = "".join(f"<p>{esc(plain_(x))}</p>" for x in spec.get("intro", []))
             pg.add_section("intro", "How do you get here?", "Hoe kom je hier?", f'<div lang="nl">{intro}</div><div lang="en">{intro}</div>')
             total = 0
@@ -924,7 +925,7 @@ class Builder:
         for bid, b in g.books.items():
             books.append(f'<details class="book"><summary>{esc(b["title"])}</summary>'
                          + "".join(f'<p class="game-text">{esc(pg_)}</p>' for pg_ in b["pages"]) + "</details>")
-        P["systemen/guhboeken"].add_section("books", f"The {len(books)} books (in Dutch)", f"De {len(books)} boeken", "".join(books))
+        P["systemen/guhboeken"].add_section("books", f"The {len(books)} books", f"De {len(books)} boeken", "".join(books))
         # the superkompas tabs
         out = []
         for cat, kopjes in g.superkompas:
@@ -976,7 +977,7 @@ class Builder:
                            for a in advs)
             parts.append(f'<details class="book"><summary>{esc(title)} <span class="muted">({len(advs)})</span></summary>'
                          f'<div class="tscroll"><table class="data"><tbody>{rows}</tbody></table></div></details>')
-        P["systemen/vooruitgangen"].add_section("tabs", "All advancements (in Dutch)", "Alle vooruitgangen", "".join(parts))
+        P["systemen/vooruitgangen"].add_section("tabs", "All advancements", "Alle vooruitgangen", "".join(parts))
         P["systemen/vooruitgangen"].info("Advancements", "Vooruitgangen", str(len(g.advancements)))
         # plushies
         knuffels = [iid for iid in g.items if iid.startswith("knuffel_")]
@@ -1076,7 +1077,7 @@ class Builder:
                         pg.lead_nl = esc(first_sentences(plain(m.group(1)), 320))
                         pg.data["lead_nl_kb"] = True
                         break
-            if not pg.lead_en and pg.lead_nl and pg.cat not in ("home",):
+            if not pg.lead_en and pg.cat not in ("home",):
                 pg.lead_en = self.auto_en(pg)
             if not pg.lead_nl and pg.cat not in ("home",):
                 pg.lead_nl = self.auto_nl(pg)
@@ -1085,12 +1086,21 @@ class Builder:
                 pg.thumb = imgs[0] if imgs else CAT_ICON.get(pg.cat)
             pg.related = list(dict.fromkeys(r for r in pg.related if r in self.site.pages and r != pg.id))
 
+    @property
+    def english(self):
+        if not hasattr(self, "_english"):
+            from .english import English
+            self._english = English(self.g.root)
+        return self._english
+
     def auto_en(self, pg):
         kind = {"items": "an item", "blokken": "a block", "kleding": "a clothing piece for your guh", "npcs": "a guh character",
                 "diertjes": "a critter", "wezens": "a mob", "bouwwerken": "a structure", "biomen": "a biome", "guhs": "a kind of guh"}.get(pg.cat)
         s = f"<b>{esc(pg.title)}</b> is {kind} in Guhs." if kind else ""
-        if pg.data.get("lead_is_game_text") or pg.cat in ("npcs", "diertjes", "wezens", "guhs", "bouwwerken", "kleding"):
-            s += " " + t("Its in-game text (Dutch):", "") + f' <i class="game-text">{pg.lead_nl}</i>'
+        if pg.lead_nl and (pg.data.get("lead_is_game_text") or pg.cat in ("npcs", "diertjes", "wezens", "guhs", "bouwwerken", "kleding")):
+            game_text = html.unescape(pg.lead_nl)
+            game_text = esc(self.english.text(game_text)) if "<" not in game_text else pg.lead_nl
+            s += " " + t("Its in-game text:", "") + f' <i class="game-text">{game_text}</i>'
         return s
 
     def auto_nl(self, pg):

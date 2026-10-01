@@ -3,6 +3,45 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.0 — Minecraft 26.1.2
+
+Guhs speaks English! Until now every text in the mod was Dutch, also with Minecraft set to English. Now the whole mod
+is in English and in Dutch. Same requirements as 1.1.3 (Minecraft 26.1.2, NeoForge 26.1.2.71+, GeckoLib 5.5.2+,
+Java 25).
+
+### A full English translation
+
+- **Everything in English:** item and block names, tooltips, menus, the Guhdex, dialogues and answers, chat messages,
+  advancements, the guh menu, the Super Compass, minigame scoreboards, the stories and the books.
+- **The guh way, in English.** The guh words have English twins (*vadsig* is *chonky*, *njeg* is *nyeg*, *vahoeg* is
+  *wahoog*), the puns are English puns, and the places and characters have English names: Knuffeldal is
+  **Snuggledale**, the Guhmaag is the **Guhbelly**, the Guheinde is **the Guh End**, Opper-Mika is **Overlord Mika**,
+  kaasknabbels are **cheese nibbles**. Guh, guhs, the Guhmension, Mika and the Guhdex keep their names.
+- **The FTB quest book in both languages:** all 13 chapters with their 734 quests, including the chapter and section
+  pictures (they have an English version).
+- **Signs and books in the buildings** (the Eleven Guhtowns Tour, the golf course, the Guhfish Pond, Guhwai'i, the Mika
+  Camp...) are shown in the language of each player, also on a server.
+
+### The language switch
+
+- **Auto** (the default) follows your Minecraft language: Dutch when Minecraft is set to Dutch (`nl_nl`), English
+  for every other language.
+- Choose yourself with the new **Lang** button in the guh menu (*Taal* in Dutch: Auto, NL or EN), or with *Guhs
+  language* in the mod's settings (*Mods* → *Guhs* → *Config*; in the file: `language = "AUTO"`, `"NL"` or
+  `"EN"` in `config/guhs-client.toml`).
+- The choice is per player and only on your own computer: on a server, every player reads Guhs in their own language.
+  Minecraft's own texts keep following the Minecraft language.
+
+### Good to know
+
+- **Old saves keep their old texts.** Names and lines your world saved before 1.2.0 (band names, diary lines, guh
+  house names, ...) stay as they were, in Dutch. Signs in buildings that were already generated before 1.2.0 stay
+  Dutch too; buildings in new land get the two-language signs.
+- **Chat stays as it was written:** messages you got before switching the language don't change. A sign you look at
+  switches at once; a minigame scoreboard switches when it refreshes.
+- Some English texts are longer than the Dutch ones: a Guhdex page with a long description uses a smaller font.
+- The [wiki](https://guhs.nl/wiki/) uses the new English names too.
+
 ## 1.1.3 — Minecraft 26.1.2
 
 A fix for the FTB Quests chapters. Same requirements as 1.1.2.

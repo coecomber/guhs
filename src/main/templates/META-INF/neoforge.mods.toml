@@ -6,7 +6,7 @@ version="${mod_version}"
 displayName="${mod_name}"
 authors="Juiced"
 description='''
-Add lieve vadsige guhs to minecraft!
+Add sweet chonky guhs to Minecraft! (In English and Dutch.)
 '''
 
 # water and lava from outside stay out of the protected guh buildings
