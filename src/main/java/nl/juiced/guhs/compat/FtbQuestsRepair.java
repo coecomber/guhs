@@ -13,7 +13,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  * a task whose quest still waits for its dependencies, but only marks it done through a chain that runs at the moment the
  * dependency is completed; submitting the same progress again does nothing. So in worlds from before 1.1.3 (when every
  * quest still hung behind "Guh!"), a seen variant could stay at "1/1, not done" forever. Since 1.1.3 our quests have no
- * dependencies (only the stomach sizes), and this finishes what was already full: 5 s after joining, then every 10 s.
+ * dependencies (only the stomach sizes), and this finishes what was already full: 5 s after joining, then every 2 minutes.
  * Only loaded when FTB Quests is installed (see Guhs).
  */
 public final class FtbQuestsRepair {
@@ -21,7 +21,7 @@ public final class FtbQuestsRepair {
     private static final String OURS = "475548";   // all our quest ids start with "GUH" in hex (tools/make_ftbquests.py)
 
     public static void onPlayerTick(PlayerTickEvent.Post event) {
-        if (event.getEntity() instanceof ServerPlayer player && player.tickCount % 200 == 100) {
+        if (event.getEntity() instanceof ServerPlayer player && player.tickCount % 2400 == 100) {
             repair(player);
         }
     }

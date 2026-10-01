@@ -15,7 +15,7 @@ A fix for the FTB Quests chapters. Same requirements as 1.1.2.
   also when you did it before (seen guhs, tamed guhs, advancements). Only the stomach sizes in De Guhmaag still come
   after each other.
 - **Existing worlds are repaired.** Quests that were stuck at "done, but not ticked off" are ticked off by themselves a
-  few seconds after you join.
+  few seconds after you join (and then every 2 minutes).
 - The lines between quests are gone; the section headers still say what comes logically first ("Komt na: ...").
 
 ## 1.1.2 — Minecraft 26.1.2
