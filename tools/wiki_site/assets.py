@@ -284,7 +284,8 @@ JS = r"""
     document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-setlang')===l));});
     var s=document.getElementById('q');if(s){s.placeholder=s.getAttribute('data-ph-'+l)||s.placeholder;}
     var te=html.getAttribute('data-title-en');if(te){if(!html.getAttribute('data-title-nl'))html.setAttribute('data-title-nl',document.title);
-      document.title=l==='en'?te:html.getAttribute('data-title-nl');}}
+      document.title=l==='en'?te:html.getAttribute('data-title-nl');}
+    document.dispatchEvent(new Event('guhs-lang'));}
   document.querySelectorAll('[data-setlang]').forEach(function(b){b.addEventListener('click',function(){setLang(b.getAttribute('data-setlang'));});});
   setLang(html.getAttribute('data-lang')||'nl');
   // theme
@@ -336,9 +337,11 @@ JS = r"""
   document.querySelectorAll('table.list').forEach(function(tbl){
     var tbody=tbl.tBodies[0], rows=[].slice.call(tbody.rows), f=document.getElementById('filter'), chips=document.querySelectorAll('.chip[data-kind]'), kind='';
     var cnt=document.getElementById('shown');
-    function apply(){var v=fold(f?f.value:'');var n=0;rows.forEach(function(r){var ok=(!v||fold(r.getAttribute('data-text')).indexOf(v)>=0)&&(!kind||r.getAttribute('data-kind')===kind);
-      r.hidden=!ok;if(ok)n++;});if(cnt)cnt.textContent=n;}
+    // (a Dutch-only row, lang="nl", is hidden on the English side by the CSS: it doesn't count there)
+    function apply(){var v=fold(f?f.value:'');var n=0,en=html.getAttribute('data-lang')==='en';rows.forEach(function(r){var ok=(!v||fold(r.getAttribute('data-text')).indexOf(v)>=0)&&(!kind||r.getAttribute('data-kind')===kind);
+      r.hidden=!ok;if(ok&&!(en&&r.getAttribute('lang')==='nl'))n++;});if(cnt)cnt.textContent=n;}
     if(f)f.addEventListener('input',apply);
+    document.addEventListener('guhs-lang',apply);apply();
     chips.forEach(function(c){c.addEventListener('click',function(){var on=c.getAttribute('aria-pressed')!=='true';chips.forEach(function(x){x.setAttribute('aria-pressed','false');});
       c.setAttribute('aria-pressed',String(on));kind=on?c.getAttribute('data-kind'):'';apply();});});
     tbl.querySelectorAll('th[data-sort]').forEach(function(th,ci){th.addEventListener('click',function(){

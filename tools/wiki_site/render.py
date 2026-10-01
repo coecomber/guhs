@@ -326,9 +326,18 @@ class Renderer:
         return f'<a href="@@{pg.id}@@">{img}<span>{t(esc(pg.title_en), esc(pg.title))}<small>{t(kind_en, kind)}</small></span></a>'
 
     # --- the frame ------------------------------------------------------------------------------------------------------------------
+    def cat_counts(self):
+        """The number of pages per category, as inline text in both languages: a Dutch-only page (nl_only, e.g. the official
+        server) only counts on the Dutch side, like its row and its link."""
+        out = {}
+        for cat in CATEGORIES:
+            pages = [x for x in self.site.by_cat(cat) if not x.id.endswith("/index")]
+            out[cat] = t(str(len([x for x in pages if not x.data.get("nl_only")])), str(len(pages)))
+        return out
+
     def sidebar(self, page):
         if not hasattr(self, "_counts"):
-            self._counts = {cat: len([p_ for p_ in self.site.by_cat(cat) if not p_.id.endswith("/index")]) for cat in CATEGORIES}
+            self._counts = self.cat_counts()
         counts = self._counts
         items = []
         for cat in CAT_ORDER:
@@ -484,7 +493,8 @@ class Renderer:
                         f"<td>{t(esc(x.kind_en), esc(x.kind_nl))}</td>{extra}<td class=\"sum\">{t(esc(summary_en), esc(summary))}</td></tr>")
         kb = page.data.get("content", "")
         filters = (f'<div class="filters"><input id="filter" type="search" placeholder="Filter..." aria-label="Filter">{chips}'
-                   f'<span class="count-line"><span id="shown">{len(pages)}</span> / {len(pages)}</span></div>')
+                   f'<span class="count-line"><span id="shown">{len(pages)}</span> / '
+                   f'{t(str(len([x for x in pages if not x.data.get("nl_only")])), str(len(pages)))}</span></div>')
         table = f'<div class="tscroll"><table class="list"><thead>{head}</thead><tbody>{"".join(rows)}</tbody></table></div>'
         return f'{self.crumbs(page)}<h1>{t(d[4], d[3])}</h1>{kb}{filters}{table}'
 
@@ -494,7 +504,7 @@ class Renderer:
         start_html = self.clean_body(start.body) if start else ""
         intro_p = start_html.split("<ul>", 1)
         intro, install = (intro_p[0], "<ul>" + intro_p[1]) if len(intro_p) == 2 else (start_html, "")
-        counts = {cat: len([x for x in self.site.by_cat(cat) if not x.id.endswith("/index")]) for cat in CATEGORIES}
+        counts = self.cat_counts()
         tiles = []
         for cat in CAT_ORDER:
             d = CATEGORIES[cat]
