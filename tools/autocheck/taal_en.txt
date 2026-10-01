@@ -1,0 +1,109 @@
+# 1.2.0 English QA round (dev only): run/options.txt lang:en_us, Guhs language Auto. Run with:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/taal_en.txt -Dguhs.autocheck.fresh=true
+# Every menu once in English; at the end the guh menu's language button is pressed (Auto -> Nederlands) to show the live switch.
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+wait 40
+
+section Guhdex + tabs (English)
+gui guhdex en_guhdex
+gui knus en_knus
+gui minigames en_minigames
+gui kleding en_kleding
+gui superkompas en_superkompas
+gui mijnguhs list
+wait 10
+shot en_mijnguhs_lijst gui
+gui mijnguhs 1
+wait 10
+shot en_mijnguhs_pagina1 gui
+gui verhalen list
+wait 10
+shot en_verhalen_lijst gui
+gui close
+gui creative guhs en_creative
+
+section klassiekers screens (English)
+/execute in minecraft:overworld run tp @s 2700 170 2000
+wait 20
+/fill 2690 159 1990 2715 159 2010 minecraft:smooth_stone
+/summon guhs:guh_npc 2694.5 160 2000.5 {Kind:"showguh",NoAI:1b,PersistenceRequired:1b}
+/summon guhs:guh_npc 2698.5 160 2000.5 {Kind:"mepguh",NoAI:1b,PersistenceRequired:1b}
+/summon guhs:guh_npc 2702.5 160 2000.5 {Kind:"golfguh",NoAI:1b,PersistenceRequired:1b}
+/summon guhs:guh_npc 2706.5 160 2000.5 {Kind:"smulguh",NoAI:1b,PersistenceRequired:1b}
+/summon guhs:guh_npc 2710.5 160 2000.5 {Kind:"visguh",NoAI:1b,PersistenceRequired:1b}
+wait 10
+interact 2694.5 160 2000.5 guhs:guh_npc
+wait 15
+mouse 2 2
+widgets
+shot en_klassiekers_beauty gui
+gui close
+interact 2698.5 160 2000.5 guhs:guh_npc
+wait 15
+widgets
+shot en_klassiekers_meppen gui
+gui close
+interact 2702.5 160 2000.5 guhs:guh_npc
+wait 15
+widgets
+shot en_klassiekers_golf gui
+gui close
+interact 2706.5 160 2000.5 guhs:guh_npc
+wait 15
+widgets
+shot en_klassiekers_smul gui
+gui close
+interact 2710.5 160 2000.5 guhs:guh_npc
+wait 15
+widgets
+shot en_klassiekers_vissen gui
+gui close
+/kill @e[type=guhs:guh_npc,x=2702,y=160,z=2000,distance=..12]
+
+section huisje + guh menu (English)
+/gamemode spectator
+/execute in minecraft:overworld run tp @s 3000 150 3000
+/forceload add 2960 2960 3040 3040
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/fill 2970 140 2970 3030 147 3030 minecraft:air
+/time set noon
+wait 5
+huisje 3008 140 3000
+wait 40
+mouse 1 1
+widgets
+shot en_huisje_scherm gui
+gui close
+/summon guhs:guh 2996 140 3008 {NoAI:1b}
+wait 10
+guhmenu 2996 140 3008
+wait 20
+mouse 1 1
+widgets
+shot en_guhmenu gui
+press Lang: Auto (EN)
+wait 10
+widgets
+shot nl_guhmenu_na_knop gui
+gui close
+gui knus nl_knop_knus
+gui superkompas nl_knop_superkompas
+guhmenu 2996 140 3008
+wait 20
+press Taal: Nederlands
+wait 10
+shot en_guhmenu_na_knop2 gui
+press Lang: English
+wait 10
+shot auto_guhmenu_na_knop3 gui
+gui close
+
+section FTB quest book (English)
+gui ftbquests en_ftb
+quit

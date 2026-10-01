@@ -114,7 +114,7 @@ public class KnuffeldalGameTests {
     public static void knuffeldalCocotjeGoedAntwoord(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
         try {
-            // the exact words (the user's own; Dutch in every language)
+            // the exact words (the user's own) in nl_nl; 1.2.0: en_us has a real English translation of them
             Map<String, String> woorden = Map.of("quest.guhs.cocotje.vraag", "WEET JIJ WAAR ZE ZIJN??????",
                     "quest.guhs.cocotje.optie.1", "Ik ga gelijk zoeken!", "quest.guhs.cocotje.optie.2", "Ik zie ze aan je hangen Cocotje",
                     "quest.guhs.cocotje.optie.3", "Wie is ze?", "quest.guhs.cocotje.optie.4", "omda je vahoeg beh",
@@ -122,8 +122,10 @@ public class KnuffeldalGameTests {
                     "quest.guhs.cocotje.antwoord.2", "OHJA ZE HANGEN AAN ME VEH", "quest.guhs.cocotje.antwoord.3", "hmmm da wik dus ook ekkes nie eigi...",
                     "quest.guhs.cocotje.antwoord.4", "njeg.");
             for (var e : woorden.entrySet()) {
-                String got = Component.translatable(e.getKey()).getString();
-                helper.assertTrue(got.equals(e.getValue()), e.getKey() + " = '" + got + "'");
+                String got = nl.juiced.guhs.taal.NlTekst.get(e.getKey());
+                helper.assertTrue(e.getValue().equals(got), e.getKey() + " = '" + got + "'");
+                String en = Component.translatable(e.getKey()).getString();
+                helper.assertTrue(!en.isBlank() && !en.equals(e.getKey()), e.getKey() + " has no English");
             }
             GuhNpcEntity cocotje = npc(helper, new BlockPos(7, 2, 9), GuhNpcEntity.Kind.COCOTJE);
             var role = Features.role(GuhNpcEntity.Kind.COCOTJE);

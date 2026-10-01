@@ -1,0 +1,28 @@
+# 1.2.0 switch proof (dev only): Minecraft in English (run/options.txt lang:en_us) but language = "NL" in
+# run/config/guhs-client.toml: every Guhs text must be Dutch, vanilla stays English.
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+wait 40
+
+section NL with MC in English
+gui knus nlcfg_knus
+gui superkompas nlcfg_superkompas
+gui creative guhs nlcfg_creative
+/gamemode spectator
+/execute in minecraft:overworld run tp @s 3000 150 3000
+/forceload add 2960 2960 3040 3040
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/fill 2970 140 2970 3030 147 3030 minecraft:air
+/summon guhs:guh 2996 140 3008 {NoAI:1b}
+wait 10
+guhmenu 2996 140 3008
+wait 20
+mouse 1 1
+shot nlcfg_guhmenu gui
+gui close
+gui ftbquests nlcfg_ftb
+quit

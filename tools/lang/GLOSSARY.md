@@ -294,7 +294,7 @@ en_us name: Nether, End, Overworld, Ender Dragon, Sniffer...), Experiment 626, O
 | Mika-vesting | Mika Fortress | |
 | Terugpoort | Return Gate | |
 | Stille Voorraadkelder | Silent Pantry | |
-| Verlaten kaasmijnschacht | Abandoned Cheese Mineshaft | |
+| Verlaten kaasmijnschacht | Old Cheese Mineshaft | (shortened: fits the Super Compass button) |
 | Paalhut van de Moerasheks | Swamp Witch's Stilt Hut | |
 | Boomhutdorp | Treehouse Village | |
 | Barbecueput | Barbecue Pit | |

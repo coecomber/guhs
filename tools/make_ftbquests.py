@@ -834,33 +834,44 @@ def build(force_art=False):
     chapters, deps, where, info = plan()
     locks = gates(deps)
     group_id = qid("group")
+    # (1.2.0) the English overlay, also for the English pictures: <chapter>/en/title.png and en/kop_<sid>.png (with the
+    # English text painted in; the client shows those instead with English chosen: compat/FtbQuestsTaal.image)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import lang as en_overlay   # tools/lang/
+    overlay = en_overlay.load_overlay()
+    en_text = lambda key, nl: plain(overlay.get(key, nl))  # noqa: E731
     # the pictures (only redrawn when their recipe changes)
     jobs = {}
     for i, (c, ch) in enumerate(chapters.items()):
         spec = CHAPTERS[c]
         jobs[f"icon_{c}.png"] = ("icon", [spec["icon"], 64])
         jobs[f"{c}/title.png"] = ("title", [plain(spec["title"]), spec["colour"], spec["banner"][0], spec["banner"][1], i])
+        jobs[f"{c}/en/title.png"] = ("title", [en_text(f"ftb.{c}.title", spec["title"]), spec["colour"], spec["banner"][0],
+                                               spec["banner"][1], i])
         jobs[f"{c}/welkom.png"] = ("welcome", [spec["welcome"][0], spec["colour"], i, spec["welcome"][1]])
         ch["komt_na"] = {}
         for s in ch["sections"]:
             first = s["quests"][0]
-            sub = None
+            sub = sub_en = None
             if deps[first] and deps[first][0] not in s["quests"] and not any(k == first for k, _ in ch["drawn"]):
                 u = deps[first][0]
                 if u == f"intro_{c}" and spec["links"]:
                     u = spec["links"][0]          # (the intro itself comes after that quest in another chapter)
                 sub = ["Komt na: " + plain(info[u][1])]
+                q_en = en_text(f"ftb.{where[u]}.q.{u}.title", info[u][1])
+                sub_en = [plain(overlay.get("ftb.komt_na", "Komt na: %s")).replace("%s", q_en)]
                 if where.get(u) != c:
                     sub.insert(0, sub[0] + " (" + plain(CHAPTERS[where[u]]["title"]) + ")")
+                    ch_en = en_text(f"ftb.{where[u]}.title", CHAPTERS[where[u]]["title"])
+                    sub_en.insert(0, plain(overlay.get("ftb.komt_na_elders", "Komt na: %s (%s)")).replace("%s", q_en, 1).replace("%s", ch_en, 1))
             ch["komt_na"][s["sid"]] = sub
-            jobs[f"{c}/kop_{s['sid']}.png"] = ("header", [s["title"], s["portrait"], s["colour"] or spec["colour"], sub])
+            colour = s["colour"] or spec["colour"]
+            jobs[f"{c}/kop_{s['sid']}.png"] = ("header", [s["title"], s["portrait"], colour, sub])
+            jobs[f"{c}/en/kop_{s['sid']}.png"] = ("header", [en_text(f"ftb.{c}.section.{s['sid']}", s["title"]), s["portrait"], colour, sub_en])
     drawn = art.make_art(jobs, force=force_art)
     print(f"FTB Quests pictures: {len(jobs)} ({drawn} drawn)")
 
     # the chapters, their texts (Dutch, and English from the overlay) and the installer's index
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    import lang as en_overlay   # tools/lang/
-    overlay = en_overlay.load_overlay()
     source = {}                                     # overlay key -> Dutch (tools/lang/source_ftb.json)
 
     def texts(key, nl):

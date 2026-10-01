@@ -53,6 +53,9 @@ public final class GuhsTaal {
         modBus.addListener(GuhsTaal::addReloadListener);
         modBus.addListener(GuhsTaal::onConfigReload);
         NeoForge.EVENT_BUS.addListener(GuhsTaal::onLogin);
+        if (ModList.get().isLoaded("ftbquests")) {
+            NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.ClientTickEvent.Post e) -> nl.juiced.guhs.compat.FtbQuestsTaal.tick());
+        }
     }
 
     /** The choice of the config (AUTO when it isn't loaded yet). */
@@ -104,6 +107,9 @@ public final class GuhsTaal {
     private static void addReloadListener(AddClientReloadListenersEvent event) {
         event.addListener(RELOAD_ID, (ResourceManagerReloadListener) rm -> {
             load(rm);
+            if (ModList.get().isLoaded("ftbquests")) {
+                nl.juiced.guhs.compat.FtbQuestsTaal.forgetImages();
+            }
             apply();
         });
         event.addDependency(VanillaClientListeners.LANGUAGE, RELOAD_ID);

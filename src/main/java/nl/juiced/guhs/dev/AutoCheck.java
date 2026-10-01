@@ -1559,7 +1559,7 @@ public final class AutoCheck {
                                 minY = Math.min(minY, y);
                                 maxY = Math.max(maxY, y);
                                 String t = ((Component) quest.getClass().getMethod("getTitle").invoke(quest)).getString();
-                                if (t.equals("Hoe kom je hier?")) {
+                                if (t.equals("Hoe kom je hier?") || t.equals("How Do You Get Here?")) {   // (1.2.0: NL or EN book)
                                     intro = quest;
                                 }
                             }

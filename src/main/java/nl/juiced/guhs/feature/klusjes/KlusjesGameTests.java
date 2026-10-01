@@ -194,7 +194,7 @@ public class KlusjesGameTests {
         UUID id = Band.id(guh);
         int hartjes = Band.hartjes(guh);
         helper.succeedWhen(() -> {
-            helper.assertTrue(!kist.isEmpty(), "something dug up in the chest");
+            helper.assertTrue(!kist.isEmpty(), "something dug up in the chest" + staat(helper, guh));
             helper.assertTrue(Dagboek.stat(p.level().getServer(), p.getUUID(), id, DagboekStat.KLUSJES) >= 1, "counted in the dagboek");
             helper.assertTrue(Band.hartjes(guh) > hartjes, "hearts for the chore");
             helper.assertTrue(Dagboek.heeftEersteKeer(p.level().getServer(), p.getUUID(), id, "eerste_klusje")

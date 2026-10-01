@@ -1,9 +1,15 @@
 package nl.juiced.guhs.compat;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import dev.ftb.mods.ftblibrary.icon.Icon;
+import dev.ftb.mods.ftblibrary.icon.ImageIcon;
 import dev.ftb.mods.ftblibrary.platform.network.Play2ServerNetworking;
 import dev.ftb.mods.ftbquests.client.ClientQuestFile;
 import dev.ftb.mods.ftbquests.net.RequestTranslationTableMessage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.Identifier;
 import nl.juiced.guhs.client.GuhsTaal;
 
 /**
@@ -19,6 +25,29 @@ public final class FtbQuestsTaal {
         return GuhsTaal.choice().ftbLocale(original);
     }
 
+    /** English twins of our chapter pictures (textures/ftbquests/<chapter>/en/<name>.png), or null when there is none. */
+    private static final Map<Identifier, java.util.Optional<Icon<?>>> ENGELS = new ConcurrentHashMap<>();
+
+    /** A chapter picture as the quest book shows it (mixin client.FtbQuestsImageMixin): the English twin of our pictures
+     *  with text in them when the Guhs texts are English. */
+    public static Icon<?> image(Icon<?> icon) {
+        if (!(icon instanceof ImageIcon img) || !img.texture.getNamespace().equals(nl.juiced.guhs.Guhs.MODID)
+                || !img.texture.getPath().startsWith("textures/ftbquests/") || GuhsTaal.dutch()) {
+            return icon;
+        }
+        return ENGELS.computeIfAbsent(img.texture, id -> {
+            String path = id.getPath();
+            Identifier en = id.withPath(path.substring(0, path.lastIndexOf('/')) + "/en" + path.substring(path.lastIndexOf('/')));
+            return Minecraft.getInstance().getResourceManager().getResource(en).isPresent()
+                    ? java.util.Optional.<Icon<?>>of(Icon.getIcon(en)) : java.util.Optional.empty();
+        }).orElse(icon);
+    }
+
+    /** After a resource reload (a resource pack may add or change pictures). */
+    public static void forgetImages() {
+        ENGELS.clear();
+    }
+
     public static void onSwitch() {
         if (!ClientQuestFile.exists()) {
             return;
@@ -28,8 +57,20 @@ public final class FtbQuestsTaal {
         ClientQuestFile.getInstance().refreshGui();
     }
 
+    /** Joined a world/server: the quest file only arrives after the login, so the table is asked for once it is there
+     *  ({@link #tick()}). */
+    private static volatile boolean wachtOpBoek;
+
     public static void onLogin() {
-        Minecraft.getInstance().execute(FtbQuestsTaal::request);
+        wachtOpBoek = true;
+    }
+
+    /** Client tick (GuhsTaal, only with FTB Quests): ask for our table as soon as the quest file has arrived. */
+    public static void tick() {
+        if (wachtOpBoek && Minecraft.getInstance().getConnection() != null && ClientQuestFile.exists()) {
+            wachtOpBoek = false;
+            request();
+        }
     }
 
     private static void request() {
