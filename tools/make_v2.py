@@ -2240,10 +2240,6 @@ def config_lang():
     lang("guhs.configuration.title", "Guhs Settings", "Guhs-instellingen")
     lang("guhs.configuration.section.guhs.client.toml", "Client settings", "Clientinstellingen")
     lang("guhs.configuration.section.guhs.client.toml.title", "Guhs client settings", "Guhs-clientinstellingen")
-    lang("guhs.configuration.addOfficialServer", "Add the official Guhs server", "Officiële Guhs-server toevoegen")
-    lang("guhs.configuration.addOfficialServer.tooltip",
-         "Adds \"Guhs Server\" (guhs.nl) to the top of the multiplayer server list, once per installation. A server you removed never comes back.",
-         "Zet \"Guhs Server\" (guhs.nl) één keer bovenaan je multiplayer-serverlijst. Een server die je hebt weggehaald komt nooit terug.")
     # 1.2.0: the NL/EN switch (client/GuhsTaal; also a button in the guh menu)
     lang("guhs.configuration.language", "Guhs language", "Taal van Guhs")
     lang("guhs.configuration.language.tooltip",

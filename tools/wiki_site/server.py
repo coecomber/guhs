@@ -54,6 +54,7 @@ class ServerPage(Guide):
         pg = Page("systemen", PID, "Speel op de officiële server", "Play on the official server", "Gids", "Guide", "guh")
         pg.path_override = "server.html"
         pg.no_autolink = True
+        pg.data["nl_only"] = True       # the official server is only on the Dutch side of the site (render.py)
         pg.lead_nl = ("De officiële Guhs-server: 24/7 online, gratis en open voor iedereen. Met Prism Launcher sta je er in een paar minuten, "
                       "en je mods blijven vanzelf bij. Adres: guhs.nl.")
         pg.lead_en = ("The official Guhs server: online 24/7, free and open to everyone. With Prism Launcher you're in within minutes, "

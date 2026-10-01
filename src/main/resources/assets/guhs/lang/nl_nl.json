@@ -8780,8 +8780,6 @@
   "guhs.configuration.title": "Guhs-instellingen",
   "guhs.configuration.section.guhs.client.toml": "Clientinstellingen",
   "guhs.configuration.section.guhs.client.toml.title": "Guhs-clientinstellingen",
-  "guhs.configuration.addOfficialServer": "Officiële Guhs-server toevoegen",
-  "guhs.configuration.addOfficialServer.tooltip": "Zet \"Guhs Server\" (guhs.nl) één keer bovenaan je multiplayer-serverlijst. Een server die je hebt weggehaald komt nooit terug.",
   "guhs.configuration.language": "Taal van Guhs",
   "guhs.configuration.language.tooltip": "AUTO volgt de taal van Minecraft (Nederlands bij nl_nl, anders Engels); NL is altijd Nederlands, EN altijd Engels. Alleen voor jou, ook op servers.",
   "name.guhs.guhbert": "Guhbert",

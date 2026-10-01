@@ -1647,8 +1647,6 @@
   "guhs.configuration.title": "Guhs Settings",
   "guhs.configuration.section.guhs.client.toml": "Client Settings",
   "guhs.configuration.section.guhs.client.toml.title": "Guhs Client Settings",
-  "guhs.configuration.addOfficialServer": "Add the official Guhs server",
-  "guhs.configuration.addOfficialServer.tooltip": "Adds \"Guhs Server\" (guhs.nl) to the top of the multiplayer server list, once per installation. A server you removed never comes back.",
   "name.guhs.guhbert": "Guhbert",
   "guhs.configuration.language": "Guhs language",
   "guhs.configuration.language.tooltip": "AUTO follows the Minecraft language (Dutch for nl_nl, English for anything else); NL is always Dutch, EN always English. Only for you, also on servers.",

@@ -282,7 +282,9 @@ JS = r"""
   // language
   function setLang(l){html.setAttribute('data-lang',l);html.lang=l;store('guhs-wiki-lang',l);
     document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-setlang')===l));});
-    var s=document.getElementById('q');if(s){s.placeholder=s.getAttribute('data-ph-'+l)||s.placeholder;}}
+    var s=document.getElementById('q');if(s){s.placeholder=s.getAttribute('data-ph-'+l)||s.placeholder;}
+    var te=html.getAttribute('data-title-en');if(te){if(!html.getAttribute('data-title-nl'))html.setAttribute('data-title-nl',document.title);
+      document.title=l==='en'?te:html.getAttribute('data-title-nl');}}
   document.querySelectorAll('[data-setlang]').forEach(function(b){b.addEventListener('click',function(){setLang(b.getAttribute('data-setlang'));});});
   setLang(html.getAttribute('data-lang')||'nl');
   // theme
@@ -307,7 +309,8 @@ JS = r"""
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function run(){var v=fold(q.value.trim());sel=-1;if(!v){box.classList.remove('open');box.innerHTML='';return;}
     var words=v.split(/\s+/),out=[];
-    idx.forEach(function(e){var sc=0,ok=true;words.forEach(function(w){var p=e.f.indexOf(w);
+    var en=html.getAttribute('data-lang')==='en';
+    idx.forEach(function(e){if(en&&e.n)return;var sc=0,ok=true;words.forEach(function(w){var p=e.f.indexOf(w);
       if(p===0)sc+=100;else if(p>0)sc+=(e.f.charAt(p-1)===' '?60:40);else if(e.k2.indexOf(w)>=0)sc+=25;else if(e.s2.indexOf(w)>=0)sc+=8;else ok=false;});
       if(ok){sc-=e.t.length/10;if(e.p)sc+=e.p;out.push([sc,e]);}});
     out.sort(function(a,b){return b[0]-a[0];});out=out.slice(0,30);

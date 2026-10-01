@@ -100,6 +100,14 @@ class Renderer:
             return pid
         return self.alt.get(pid)
 
+    def nl_only(self, pid):
+        real = self.resolve(pid)
+        return bool(real and self.site.pages[real].data.get("nl_only"))
+
+    def nl_only_attr(self, pid):
+        """' lang="nl"' for an element that only points to a Dutch-only page (hidden on the English side)."""
+        return ' lang="nl"' if self.nl_only(pid) else ""
+
     @staticmethod
     def rel(from_path, to_path):
         depth = from_path.count("/")
@@ -282,6 +290,7 @@ class Renderer:
         rel = [r for r in page.related if r in self.site.pages]
         if rel:
             parts.append("<h2>" + t("See also", "Zie ook") + '</h2><div class="cards">' + "".join(self.card(self.site.pages[r]) for r in rel[:16]) + "</div>")
+            # (a card to a Dutch-only page gets lang="nl" from finalize())
         back = [b for b in backlinks.get(page.id, []) if b not in rel and b != page.id]
         if back:
             by_cat = {}
@@ -291,9 +300,22 @@ class Renderer:
             for cat in CAT_ORDER:
                 if cat in by_cat:
                     d = CATEGORIES[cat]
-                    blocks.append(f"<h3>{t(d[2], d[1])}</h3>" + ", ".join(
-                        f'<a href="@@{b}@@">{t(esc(self.site.pages[b].title_en), esc(self.site.pages[b].title))}</a>'
-                        for b in sorted(by_cat[cat], key=lambda x: fold(self.site.pages[x].title))[:40]))
+                    links = [f'<a href="@@{b}@@">{t(esc(self.site.pages[b].title_en), esc(self.site.pages[b].title))}</a>'
+                             for b in sorted(by_cat[cat], key=lambda x: fold(self.site.pages[x].title))[:40]]
+                    nl = [self.nl_only(b) for b in sorted(by_cat[cat], key=lambda x: fold(self.site.pages[x].title))[:40]]
+                    if all(nl):     # only Dutch-only pages: the whole block is Dutch-only
+                        blocks.append(f'<div lang="nl"><h3>{d[1]}</h3>' + ", ".join(links) + "</div>")
+                        continue
+                    # a Dutch-only page in a list: its comma goes with it, so the English list stays clean
+                    out_links, seen = [], False
+                    for i, (a, only) in enumerate(zip(links, nl)):
+                        if only:
+                            later = not all(nl[i + 1:])
+                            out_links.append(f'<span lang="nl">{", " if seen else ""}{a}{", " if not seen and later else ""}</span>')
+                            continue
+                        out_links.append(", " + a if seen else a)
+                        seen = True
+                    blocks.append(f"<h3>{t(d[2], d[1])}</h3>" + "".join(out_links))
             parts.append('<section class="backlinks"><h2>' + t("Pages that link here", "Pagina's die hierheen linken") + "</h2>" + "".join(blocks) + "</section>")
         return "".join(parts)
 
@@ -319,7 +341,7 @@ class Renderer:
         start = [("index", "Home", "Home"), ("systemen/aan-de-slag", "&#9733; Getting started", "&#9733; Aan de slag"), ("systemen/officiele-server", "&#9679; Official server", "&#9679; Officiële server"), ("systemen/temmen", "Your first guh", "Je eerste guh"), ("dimensies/guhmension", "The Guhmension", "De Guhmensie"),
                  ("systemen/superkompas", "The super compass", "Het superkompas"), ("systemen/ftb-quests", "FTB quests", "FTB-quests")]
         cur_attr = ' aria-current="page"'
-        first = "".join(f'<li><a href="@@{pid}@@"{cur_attr if page.id == pid else ""}>{t(en, nl)}</a></li>' for pid, en, nl in start)
+        first = "".join(f'<li{self.nl_only_attr(pid)}><a href="@@{pid}@@"{cur_attr if page.id == pid else ""}>{t(en, nl)}</a></li>' for pid, en, nl in start)
         return (f'<nav class="side" id="side" aria-label="Wiki"><h2>{t("Start", "Begin")}</h2><ul>{first}</ul>'
                 f'<h2>{t("Categories", "Categorieën")}</h2><ul>{"".join(items)}</ul></nav>')
 
@@ -347,9 +369,10 @@ class Renderer:
                   f'<span class="word">Guhs Wiki</span></a><span class="ver" title="Versie">v{SITE_VERSION}</span>{search}{tools}</div></header>')
         footer = (f'<footer class="site"><div class="in">{t("The Guhs wiki, for Guhs " + SITE_VERSION + " (Minecraft " + SITE_MC + ", NeoForge; Guhs 1.0.x for Minecraft 1.21.1). Every picture is rendered from the mod&#39;s own models and textures. Model by Lieke.", "De Guhs-wiki, voor Guhs " + SITE_VERSION + " (Minecraft " + SITE_MC + ", NeoForge; Guhs 1.0.x voor Minecraft 1.21.1). Alle plaatjes zijn gerenderd uit de modellen en textures van de mod zelf. Model door Lieke.")}'
                   f' &middot; <a href="@@systemen/commandos@@">{t("Commands", "Commando&#39;s")}</a>'
-                  f' &middot; <a href="https://guhs.nl/">{t("guhs.nl: the official server", "guhs.nl: de officiële server")}</a></div></footer>')
+                  f'<span lang="nl"> &middot; <a href="https://guhs.nl/">guhs.nl: de officiële server</a></span></div></footer>')
+        title_en = ' data-title-en="Guhs Wiki"' if page.data.get("nl_only") else ""     # a Dutch-only page: no Dutch title in an English tab
         return f"""<!doctype html>
-<html lang="nl" data-lang="nl">
+<html lang="nl" data-lang="nl"{title_en}>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -387,7 +410,12 @@ class Renderer:
         info = self.infobox_html(page)
         rel = self.related_html(page, backlinks)
         cls = "article guide" if page.data.get("guide") else "article"
-        return f'{self.crumbs(page)}{kind}{h1}<div class="{cls}"><div class="content">{body}{rel}</div>{info}</div>'
+        main = f'{self.crumbs(page)}{kind}{h1}<div class="{cls}"><div class="content">{body}{rel}</div>{info}</div>'
+        if page.data.get("nl_only"):
+            # a Dutch-only page (the official server): English visitors get a short note instead
+            main = (f'<div lang="nl">{main}</div><div lang="en"><h1>Njeg!</h1><p>This page is only available in Dutch.</p>'
+                    f'<p><a href="@@index@@">To the home page</a></p></div>')
+        return main
 
     # --- tokens -> relative paths -------------------------------------------------------------------------------------------------------
     def finalize(self, page_path, h, owner):
@@ -402,6 +430,8 @@ class Renderer:
                 self.missing_links.setdefault(pid, set()).add(owner)
                 return label.replace("@T@", esc(pid.split("/")[-1]))
             label = label.replace("@T@", title_of(real))
+            if self.site.pages[real].data.get("nl_only") and "lang=" not in pre + attrs:
+                attrs += ' lang="nl"'       # a link to a Dutch-only page never shows on the English side
             return f'<a {pre}href="{self.rel(page_path, self.site.pages[real].path)}"{attrs}>{label}</a>'
         h = re.sub(r'src="img/([^"]+)\.png"', r'src="@img:\1@"', h)
         h = re.sub(r'<a ([^>]*?)href="@@([^"@]+)@@"([^>]*)>(.*?)</a>', link, h, flags=re.S)
@@ -448,7 +478,8 @@ class Renderer:
                 else:
                     extra += '<td data-v=""></td>'
             text = fold(" ".join([x.title, x.title_en] + sorted(x.aliases) + [summary]))
-            rows.append(f'<tr data-kind="{esc(x.kind_nl)}" data-text="{esc(text)}"><td class="th">{thumb}</td>'
+            only = ' lang="nl"' if x.data.get("nl_only") else ""        # a Dutch-only page: no row on the English side
+            rows.append(f'<tr{only} data-kind="{esc(x.kind_nl)}" data-text="{esc(text)}"><td class="th">{thumb}</td>'
                         f'<td class="name" data-v="{esc(fold(x.title))}"><a href="@@{x.id}@@">{t(esc(x.title_en), esc(x.title))}</a></td>'
                         f"<td>{t(esc(x.kind_en), esc(x.kind_nl))}</td>{extra}<td class=\"sum\">{t(esc(summary_en), esc(summary))}</td></tr>")
         kb = page.data.get("content", "")
@@ -491,10 +522,11 @@ class Renderer:
                f'<span class="cta-txt"><small>{t("New here? Start here!", "Nieuw hier? Begin hier!")}</small><b>{t("Getting started", "Aan de slag")}</b>'
                f'<span>{t("The step-by-step guide: kaasknabbels, your first guh, the portal, the Reisguh, the super compass and your first goals.", "De stap-voor-stapgids: kaasknabbels, je eerste guh, het portaal, de Reisguh, het superkompas en je eerste doelen.")}</span></span>'
                f'<span class="go">{t("Read the guide", "Lees de gids")} &rarr;</span></a>')
-        srv = (f'<a class="start-cta srv-cta" href="@@systemen/officiele-server@@"><span class="cta-art">{self.b.img("guh_outfit_evenementen", "") if self.im.has("guh_outfit_evenementen") else ""}</span>'
-               f'<span class="cta-txt"><small>{t("Play together, 24/7", "Samen spelen, dag en nacht")}</small><b>{t("Play on the official server", "Speel op de officiële server")}</b>'
-               f'<span>{t("Join guhs.nl with Prism Launcher in a few minutes: step by step, the rules and help with problems.", "Join guhs.nl in een paar minuten met Prism Launcher: stap voor stap, de regels en hulp bij problemen.")}</span></span>'
-               f'<span class="go">{t("To the server", "Naar de server")} &rarr;</span></a>')
+        # the official server: only on the Dutch side
+        srv = (f'<a class="start-cta srv-cta" lang="nl" href="@@systemen/officiele-server@@"><span class="cta-art">{self.b.img("guh_outfit_evenementen", "") if self.im.has("guh_outfit_evenementen") else ""}</span>'
+               f'<span class="cta-txt"><small>Samen spelen, dag en nacht</small><b>Speel op de officiële server</b>'
+               f'<span>Join guhs.nl in een paar minuten met Prism Launcher: stap voor stap, de regels en hulp bij problemen.</span></span>'
+               f'<span class="go">Naar de server &rarr;</span></a>')
         first = ("<ol>"
                  f'<li>{t("Find a guh and feed it kaasknabbels until it is tame.", "Zoek een guh en voer hem kaasknabbels tot hij tam is.")} '
                  f'<a href="@@systemen/temmen@@">{t("Taming", "Temmen")}</a></li>'
@@ -593,6 +625,10 @@ class Renderer:
             al = sorted(a for a in pg.aliases if a != pg.title)
             if al:
                 e["k"] = " ".join(al)
+            if pg.data.get("nl_only"):
+                e["n"] = 1      # Dutch-only: the search leaves it out on the English side, and it has no English names
+                e.pop("e", None)
+                e["k"] = " ".join(a for a in al if a not in ("Official server", "Server rules"))
             if pg.data.get("guide"):
                 e["p"] = 40
                 e["c"], e["ce"] = "Gids", "Guide"

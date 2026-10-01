@@ -109,6 +109,7 @@ img{max-width:100%;height:auto}
 .tile .num{position:absolute;top:12px;left:12px;width:38px;height:38px;border-radius:50%;background:var(--c);color:#fff;
   font:700 20px/38px var(--display);text-align:center;box-shadow:0 3px 0 rgba(0,0,0,.18);z-index:2}
 .t-map{--c:var(--mint);--cs:var(--mint-soft)}.t-join{--c:var(--rasp);--cs:var(--rasp-soft)}.t-wiki{--c:var(--lilac);--cs:var(--lilac-soft)}
+.t-dl{--c:var(--mint);--cs:var(--mint-soft)}.t-guide{--c:var(--rasp);--cs:var(--rasp-soft)}
 /* facts + links */
 .facts{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0 0 22px;justify-content:center}
 .facts li{background:var(--card);border:1.5px solid var(--line2);border-radius:999px;padding:6px 14px;font-size:14.5px}
@@ -134,7 +135,9 @@ JS = r"""
   var html=document.documentElement;
   function store(k,v){try{localStorage.setItem(k,v);}catch(e){}}
   function setLang(l){html.setAttribute('data-lang',l);html.lang=l;store('guhs-wiki-lang',l);
-    document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-setlang')===l));});}
+    document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-setlang')===l));});
+    var te=html.getAttribute('data-title-en');if(te){if(!html.getAttribute('data-title-nl'))html.setAttribute('data-title-nl',document.title);
+      document.title=l==='en'?te:html.getAttribute('data-title-nl');}}
   document.querySelectorAll('[data-setlang]').forEach(function(b){b.addEventListener('click',function(){setLang(b.getAttribute('data-setlang'));});});
   setLang(html.getAttribute('data-lang')||'nl');
   var tb=document.getElementById('theme');
@@ -201,47 +204,60 @@ class Landing:
         map_img = self.first("shot210_elftocht_bovenaf", "shot210_doolhof_bovenaf")
         join_img = self.first("npc_reisguh", "guh_outfit_evenementen")
         wiki_img = self.first("icon_guhdex", "guh_sitting", "guh")
+        dl_img = self.first("guh_outfit_party", "icon_kaas_knabbels", "guh")
         icon = f'{w}favicon-64.png'
+        # The official server is only on the Dutch side: the map and "how do I join" tiles are Dutch-only (lang="nl", hidden by
+        # the language switch); the English side gets "Download" and "Getting started" in their place. None = not in that language.
         tiles = [
-            ("t-map", MAP_URL, 1, map_img, True, "Live kaart" if SERVER_OPEN else "Live kaart|soon", "Live map",
-             "Vlieg over de wereld van de server, in de Overworld én de Guhmensie. Kijk wat iedereen heeft gebouwd!",
-             "Fly over the server's world, in the Overworld and the Guhmension. See what everyone has built!",
-             "Open de kaart", "Open the map"),
-            ("t-join", f"{w}server.html", 2, join_img, False, "Hoe speel ik mee?", "How do I join?",
-             "Prism Launcher, één link plakken, klaar. Stap voor stap uitgelegd, met de regels en hulp bij problemen.",
-             "Prism Launcher, paste one link, done. Step by step, with the rules and help with problems.",
-             "Naar de uitleg", "To the guide"),
+            ("t-map", MAP_URL, 1, map_img, True, "Live kaart" if SERVER_OPEN else "Live kaart|soon", None,
+             "Vlieg over de wereld van de server, in de Overworld én de Guhmensie. Kijk wat iedereen heeft gebouwd!", None,
+             "Open de kaart", None),
+            ("t-join", f"{w}server.html", 2, join_img, False, "Hoe speel ik mee?", None,
+             "Prism Launcher, één link plakken, klaar. Stap voor stap uitgelegd, met de regels en hulp bij problemen.", None,
+             "Naar de uitleg", None),
+            ("t-dl", f"{w}index.html#download", 1, dl_img, False, None, "Download",
+             None, "Guhs is free on CurseForge, Modrinth and GitHub. Put it in your mods folder with GeckoLib and play!",
+             None, "Get the mod"),
+            ("t-guide", f"{w}aan-de-slag.html", 2, join_img, False, None, "Getting started",
+             None, "New here? The step-by-step guide: your first guh, the portal, the Guhmension and your first goals.",
+             None, "Read the guide"),
             ("t-wiki", f"{w}index.html", 3, wiki_img, False, "Wiki", "Wiki",
              "Alles over de guhs: temmen, de Guhmensie, minigames, verhalen, kleding en meer dan duizend pagina's.",
              "Everything about the guhs: taming, the Guhmension, minigames, stories, clothes and over a thousand pages.",
              "Open de wiki", "Open the wiki"),
         ]
+
+        def tt(nl, en):        # a text in one or both languages
+            return nl if en is None else en if nl is None else _t(nl, en)
         tile_html = ""
         for cls, href, num, pic, photo, h_nl, h_en, d_nl, d_en, go_nl, go_en in tiles:
-            h_nl, soon = h_nl.split("|")[0], h_nl.endswith("|soon")
+            only = ' lang="nl"' if h_en is None else ' lang="en"' if h_nl is None else ""
+            soon = bool(h_nl) and h_nl.endswith("|soon")
+            h_nl = h_nl.split("|")[0] if h_nl else None
             badge = f'<span class="badge">{_t("binnenkort", "soon")}</span>' if soon else ""
             ext = ' rel="noopener"' if href.startswith("http") else ""
             pic_html = self.img(pic, "") if pic else ""
-            tile_html += (f'<a class="tile {cls}" href="{href}"{ext}><span class="num" aria-hidden="true">{num}</span>{badge}'
+            tile_html += (f'<a class="tile {cls}"{only} href="{href}"{ext}><span class="num" aria-hidden="true">{num}</span>{badge}'
                           f'<span class="pic{" photo" if photo else ""}">{pic_html}</span>'
-                          f'<span class="txt"><b>{_t(h_nl, h_en)}</b><span class="d">{_t(d_nl, d_en)}</span>'
-                          f'<span class="go">{_t(go_nl, go_en)} &rarr;</span></span></a>')
-        facts = [("Dag en nacht online", "Online day and night"), ("Gratis &amp; open voor iedereen", "Free &amp; open to everyone"),
-                 ("Geen PvP", "No PvP"), (f"Minecraft {MC_VERSION}", f"Minecraft {MC_VERSION}"), (f"Guhs {GUHS_VERSION}", f"Guhs {GUHS_VERSION}"),
-                 ("Mods werken zichzelf bij", "Mods update themselves")]
-        facts_html = "".join(f"<li>{_t(nl, en)}</li>" for nl, en in facts)
+                          f'<span class="txt"><b>{tt(h_nl, h_en)}</b><span class="d">{tt(d_nl, d_en)}</span>'
+                          f'<span class="go">{tt(go_nl, go_en)} &rarr;</span></span></a>')
+        # (Dutch, English): None = only in the other language (the server facts are Dutch-only)
+        facts = [("Dag en nacht online", None), ("Gratis &amp; open voor iedereen", None), (None, "Free"),
+                 ("Geen PvP", None), (f"Minecraft {MC_VERSION}", f"Minecraft {MC_VERSION}"), (f"Guhs {GUHS_VERSION}", f"Guhs {GUHS_VERSION}"),
+                 (None, "NeoForge"), (None, "Singleplayer &amp; multiplayer"), ("Mods werken zichzelf bij", None)]
+        facts_html = "".join(f"<li>{_t(nl, en)}</li>" if nl and en else f'<li lang="{"nl" if nl else "en"}">{nl or en}</li>'
+                             for nl, en in facts)
         links = "".join(f'<a href="{u}" rel="noopener">{n}</a>' for n, u in LINKS)
         if SERVER_OPEN:
             status = (f'<span class="status" id="status" data-api="{STATUS_API}" role="status"><span class="dot" aria-hidden="true"></span>'
                       f'{_t("Status ophalen...", "Checking status...")}</span>')
-            small = _t(f"Minecraft {MC_VERSION} met Guhs {GUHS_VERSION}. Nieuw? Begin bij", f"Minecraft {MC_VERSION} with Guhs {GUHS_VERSION}. New? Start with")
+            small = f"Minecraft {MC_VERSION} met Guhs {GUHS_VERSION}. Nieuw? Begin bij"
         else:
             status = f'<span class="status soon"><span class="dot" aria-hidden="true"></span>{_t("Binnenkort open!", "Opening soon!")}</span>'
-            small = _t(f"De server opent binnenkort met Guhs {GUHS_VERSION} (Minecraft {MC_VERSION}). Alvast lezen hoe het werkt:",
-                       f"The server opens soon with Guhs {GUHS_VERSION} (Minecraft {MC_VERSION}). Read how it works already:")
+            small = f"De server opent binnenkort met Guhs {GUHS_VERSION} (Minecraft {MC_VERSION}). Alvast lezen hoe het werkt:"
         head_desc = "De officiële Guhs-server: lieve vadsige guhs, dag en nacht online op guhs.nl. Live kaart, uitleg om mee te spelen en de Guhs-wiki."
         return f"""<!doctype html>
-<html lang="nl" data-lang="nl">
+<html lang="nl" data-lang="nl" data-title-en="Guhs - the Minecraft mod full of lieve vadsige guhs">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -268,15 +284,16 @@ class Landing:
 <main>
 <section class="hero">
 <div>
-<span class="kicker">&#9733; {_t("De officiële Guhs-server", "The official Guhs server")}</span>
-<h1>{_t("Lieve vadsige guhs, <em>dag en nacht</em> online.", "Lieve vadsige guhs, online <em>day and night</em>.")}</h1>
+<span class="kicker">&#9733; {_t("De officiële Guhs-server", "A Minecraft mod")}</span>
+<h1>{_t("Lieve vadsige guhs, <em>dag en nacht</em> online.", "Lieve vadsige guhs, in <em>your own world</em>.")}</h1>
 <p class="pitch">{_t("Tem je eigen guh, stap samen door het kaasknabbelportaal de Guhmensie in en speel minigames met andere guhvrienden. Njeg!",
-                     "Tame your own guh, step through the kaasknabbel portal into the Guhmension together and play minigames with other guh friends. Njeg!")}</p>
-<div class="join">
+                     "Tame your own guh, step through the cheese nibble portal into the Guhmension and play minigames with your guh friends. Nyeg!")}</p>
+<div class="join" lang="nl">
 <span class="addr"><code id="addr">{ADDRESS}</code><button id="copy" type="button" data-addr="{ADDRESS}">{_t("Kopieer", "Copy")}</button></span>
 {status}
 </div>
-<p class="small">{small} <a href="{w}server.html">{_t("Hoe speel ik mee?", "How do I join?")}</a></p>
+<p class="small" lang="nl">{small} <a href="{w}server.html">Hoe speel ik mee?</a></p>
+<p class="small" lang="en">Minecraft {MC_VERSION} with Guhs {GUHS_VERSION}. New? Start with the <a href="{w}aan-de-slag.html">getting-started guide</a>.</p>
 </div>
 <div class="art">{self.img(hero_img, "Een guh") if hero_img else ""}<span class="bubble" aria-hidden="true">njeg!</span></div>
 </section>

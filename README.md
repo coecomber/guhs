@@ -58,9 +58,6 @@ Guhs are always friendly. Nothing in the mod makes them hurt you, and the one gr
   (redstone), the frying pan, sled rails, furniture, food and lots of decoration blocks.
 - **FTB Quests support.** If FTB Quests is installed, a *Guhs* chapter group (13 chapters, 700+ quests, nothing
   locked, in English and Dutch) installs itself.
-- **The official Guhs server.** Play together on `guhs.nl` (24/7, open to everyone): Guhs adds *Guhs Server* to
-  your multiplayer list once (turn it off with `addOfficialServer = false` in `config/guhs-client.toml`). How to
-  join: [Play on the official server](https://guhs.nl/wiki/server.html).
 
 Everything is explained, with pictures, in the **[Guhs wiki](https://guhs.nl/wiki/)**.
 
@@ -96,13 +93,10 @@ Install Guhs on **both** the server and every client. A world opened with 1.1.x 
 Want everything ready to go? Try the **Guhs Pack** modpack (Guhs + GeckoLib, JEI, Jade, JourneyMap, AppleSkin,
 Mouse Tweaks, Lootr and FTB Quests).
 
-## Modpacks, videos and servers
+## Modpacks and videos
 
 You may put Guhs in any modpack and make videos or streams about it (monetised is fine). You may not re-upload it
 on its own. See [LICENSE](LICENSE).
-
-On first start Guhs adds the official server (*Guhs Server*, `guhs.nl`) once to the top of the multiplayer server
-list. Making a pack with its own server list? Set `addOfficialServer = false` in `config/guhs-client.toml`.
 
 ## Building from source
 
@@ -149,7 +143,7 @@ hem aan, rij op hem, knuffel hem tot jullie *zielsguh bff 5evr <3* zijn, en volg
 - Diertjes: pieppiepmuisjes, knuffelschildpadjes, vogeltjes, eendjes, konijntjes, egeltjes en meer.
 - Handige blokken: de **Bankguh** (oneindige opslag), het guhwiel en guhdraad, de frituurpan, sledebanen en meubels.
 - **FTB Quests**: is het geïnstalleerd, dan komt er vanzelf een Guhs-hoofdstukkengroep bij (13 hoofdstukken, 700+ quests).
-- De **officiële Guhs-server** `guhs.nl` (dag en nacht aan): Guhs zet *Guhs Server* één keer in je serverlijst (uitzetten: `addOfficialServer = false` in `config/guhs-client.toml`). Zo speel je mee: [Speel op de officiële server](https://guhs.nl/wiki/server.html).
+- De **officiële Guhs-server** `guhs.nl` (dag en nacht aan). Zo speel je mee: [Speel op de officiële server](https://guhs.nl/wiki/server.html).
 
 **Nodig:** Guhs 1.1.x en 1.2.x: Minecraft 26.1.2, NeoForge 26.1.2.71+, GeckoLib 5.5.2+ (Java 25). Guhs 1.0.x: Minecraft 1.21.1,
 NeoForge 21.1.0+, GeckoLib 4.8+. Installeer Guhs op de server én bij elke speler.

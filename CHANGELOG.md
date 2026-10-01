@@ -42,6 +42,12 @@ Java 25).
 - Some English texts are longer than the Dutch ones: a Guhdex page with a long description uses a smaller font.
 - The [wiki](https://guhs.nl/wiki/) uses the new English names too.
 
+### The official server
+
+- **Guhs no longer adds the official server to your server list.** The *Guhs Server* entry (and the
+  `addOfficialServer` option in `config/guhs-client.toml`) is gone. Already have it in your list? It stays there.
+- The English side of the wiki no longer covers the official server; it's on the Dutch side only.
+
 ## 1.1.3 — Minecraft 26.1.2
 
 A fix for the FTB Quests chapters. Same requirements as 1.1.2.
