@@ -175,7 +175,8 @@ public final class KnuffeldalEvents {
 
     /** A friend in the town: an entry in the knuffelvriendjes (the residents also count up to the milestone). */
     public static void vriendje(ServerPlayer player, String naam) {
-        if (KnusVoortgang.ontdek(player, KnuffeldalVoortgang.VRIENDJES_BOEK, naam) && KnuffeldalVoortgang.BEWONERS.contains(naam)) {
+        if (KnuffeldalVoortgang.VRIENDJES_LIJST.contains(naam) && KnusVoortgang.ontdek(player, KnuffeldalVoortgang.VRIENDJES_BOEK, naam)
+                && KnuffeldalVoortgang.BEWONERS.contains(naam)) {
             KnusVoortgang.tel(player, KnuffeldalVoortgang.VRIENDJES, 1);
             if (KnusVoortgang.teller(player, KnuffeldalVoortgang.VRIENDJES) >= KnuffeldalVoortgang.BEWONERS.size()) {
                 GuhAdvancements.grant(player, "knuffeldal_alle_vriendjes");

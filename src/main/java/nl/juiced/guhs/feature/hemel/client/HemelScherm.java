@@ -231,7 +231,7 @@ public class HemelScherm extends Screen {
             }
             g.text(font, "☁", lx + 5, y + 7, 0xFFB8D4F0, false);
             g.text(font, font.plainSubstrByWidth(guh.naam().getString(), LIJST_W - 24), lx + 17, y + 3, DONKER, false);
-            Component v = Component.translatable("entity.guhs.guh." + guh.variant());
+            Component v = nl.juiced.guhs.entity.GuhVariant.byId(guh.variant()).displayName();
             g.pose().pushMatrix();
             g.pose().translate(lx + 17, y + 13);
             g.pose().scale(0.75f, 0.75f);

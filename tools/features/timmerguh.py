@@ -259,6 +259,15 @@ TEXTS = {
     "item.guhs.timmerguh_dakpluisje.lore": "Geleend van de Timmerguh. Past alleen op de doorzichtige plekjes van zijn oortjesdak.",
     "item.guhs.timmer_helmpje": "Timmermanshelmpje",
     "item.guhs.timmer_gereedschapsriem": "Gereedschapsriem",
+    # Timmertje, the little helper guh at the lunch table on the bouwplaats (a Knuffeldal resident from the template:
+    # KnuffeldalEvents names it entity.guhs.bewoner.<naam> and gives it BEWONER_LINES lines)
+    "entity.guhs.bewoner.timmertje": "Timmertje",
+    "quest.guhs.knuffeldal.bewoner.timmertje.0": "Hoi! Ik ben Timmertje, het hulpje van de Timmerguh. Ik hou de spijkertjes vast. "
+                                                 "Nou ja... meestal. Njeg.",
+    "quest.guhs.knuffeldal.bewoner.timmertje.1": "Eerst kaas, dan timmeren! Dat zegt de Timmerguh altijd. Daarom zit ik nu lekker "
+                                                 "vadsig aan de lunchtafel.",
+    "quest.guhs.knuffeldal.bewoner.timmertje.2": "Mijn helmpje is net zo scheef als dat van de Timmerguh. Later word ik ook een "
+                                                 "echte timmerguh. Tik tik, VAHOEG!",
     # the signs on the bouwplaats
     "sign.guhs.timmerguh_wegwijzer1": "Naar de",
     "sign.guhs.timmerguh_wegwijzer2": "bouwplaats!",

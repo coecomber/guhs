@@ -787,7 +787,17 @@ def lang_block_items():
                 name = k[len("block.guhs."):]
                 if name in items and f"item.guhs.{name}" not in data:
                     out[f"item.guhs.{name}"] = v
+            # 1.1.4: the tooltip lines the items build from their own description id (getDescriptionId() + ".lore" etc.)
+            # were written as block.guhs.<name>.lore too; without a copy the tooltip showed the raw item.guhs.<name>.lore
+            elif k.startswith("block.guhs.") and k.count(".") == 3 and k.rsplit(".", 1)[1] in TOOLTIP_SUFFIXES:
+                name, suffix = k[len("block.guhs."):].split(".")
+                if name in items and f"item.guhs.{name}.{suffix}" not in data:
+                    out[f"item.guhs.{name}.{suffix}"] = v
         w(path, out)
+
+
+# the suffixes the item classes append to getDescriptionId() (LoreItem, LoreBlockItem, ...)
+TOOLTIP_SUFFIXES = ("lore", "loan", "tooltip")
 
 
 # ---------------------------------------------------------------------------------------------------------------------

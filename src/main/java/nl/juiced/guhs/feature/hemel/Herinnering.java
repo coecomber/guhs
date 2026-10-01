@@ -70,7 +70,7 @@ public class Herinnering extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         CompoundTag d = data(stack);
         if (!d.getStringOr("Variant", "").isEmpty()) {
-            tooltip.accept(Component.translatable("item.guhs.herinnering.variant", Component.translatable("entity.guhs.guh." + d.getStringOr("Variant", "")))
+            tooltip.accept(Component.translatable("item.guhs.herinnering.variant", nl.juiced.guhs.entity.GuhVariant.byId(d.getStringOr("Variant", "")).displayName())
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         tooltip.accept(Component.translatable("item.guhs.herinnering.lore").withStyle(ChatFormatting.GRAY));

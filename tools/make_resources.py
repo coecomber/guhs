@@ -1031,6 +1031,8 @@ for name, (_p, _i, _f, _c, en_t, en_d, nl_t, nl_d) in ADVANCEMENTS.items():
 # --- lang ------------------------------------------------------------------------------------------------------
 COMMON = {
     "entity.guhs.guh": "Guh",
+    # 1.1.4: the invisible seat you sit on in guh chairs, sofas and sleds (never really shown, but never a raw key either)
+    "entity.guhs.guh_seat": "Guhzitplekje",
     "item.guhs.kaas_knabbels": "Kaas Knabbels",
     "itemGroup.guhs": "Guhs",
     "gui.guhs.menu.hp": "HP: %s / %s",
