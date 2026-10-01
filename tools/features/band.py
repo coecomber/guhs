@@ -262,6 +262,10 @@ SPEELTJES = {"knabbelbal": "Knabbelbal", "glijbaantje": "Guh-glijbaantje & klimr
 TEXTS = {
     # the levels, hearts, level-ups
     "gui.guhs.band.hartjes_erbij": "+%s ♥ %s  %s",
+    # 1.2.0: a tap is only petting (BandEvents.aai): always this line, the first 3 times with the menu hint
+    "gui.guhs.band.aai": "Je aait %s! ♥",
+    "gui.guhs.band.aai_tip": "(Houd rechtsklik ingedrukt voor het guhmenu)",
+    "gui.guhs.band.aai_hartjes": "+%s ♥ %s",
     "gui.guhs.band.hartjes_voortgang": "(%s / %s)",
     "gui.guhs.band.hartjes_max": "(%s: zielsguh!)",
     "gui.guhs.band.niveau_omhoog": "♥ %s en jij zijn nu %s! VAHOEG!",
@@ -375,8 +379,9 @@ def build(h):
 # =====================================================================================================================
 def ftb(fq):
     q, item, adv = fq.q, fq.item, fq.adv
-    q("band_aaien", "Aai aai", "Tik je tamme guh kort aan met rechtsklik: een aaitje! Elk aaitje is een &dhartje&r waard "
-      "(maar niet oneindig veel per dag, anders wordt hij verwend, njeg).", "minecraft:pink_dye", [adv("band_geaaid")], shape="circle")
+    q("band_aaien", "Aai aai", "Tik je tamme guh kort aan met rechtsklik: een aaitje! Hij wordt even helemaal plat van geluk, "
+      "duwt zijn kopje tegen je hand en er komen hartjes. Elk aaitje is een &dhartje&r waard (maar niet oneindig veel per dag, "
+      "anders wordt hij verwend, njeg). Zitten of opstaan doe je in het guhmenu: houd rechtsklik ingedrukt.", "minecraft:pink_dye", [adv("band_geaaid")], shape="circle")
     q("band_voeren", "Een hapje voor je guh", "Geef je eigen guh een snackje: een cupcake, een macaron, een ijsje, een koekje, zoete bessen... "
       "Hij smakt het op en jullie krijgen er &dhartjes&r bij. Misschien vind je zo zelfs zijn lievelingshapje!",
       "guhs:guh_cupcake", [adv("band_gevoerd")], rewards=(("guhs:guh_cupcake", 2),))

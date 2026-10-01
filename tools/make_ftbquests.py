@@ -74,7 +74,8 @@ def q(key, title, desc, icon, tasks, rewards=(("guhs:kaas_knabbels", 8),), deps=
 # --- begin ------------------------------------------------------------------------------------------------------------
 q("start", "Guh!", "Welkom bij de &dGuhs&r! Mollige roze knuffelmuisjes die overal rondlopen. Alles begint met &6kaasknabbels&r: daarmee tem, genees en fok je guhs.",
   "guhs:kaas_knabbels", [item("guhs:kaas_knabbels")], x=0, y=0, shape="gear")
-q("tame", "Een vadsig vriendje", "Voer een wilde guh kaasknabbels tot hij tam is (1 op 3 kans per knabbel). Een tamme guh krijgt 1000 levens!",
+q("tame", "Een vadsig vriendje", "Voer een wilde guh kaasknabbels tot hij tam is (1 op 3 kans per knabbel). Een tamme guh krijgt 1000 levens! "
+  "Tik hem kort aan met rechtsklik om hem te &daaien&r; houd rechtsklik ingedrukt voor zijn menu (zitten, emotes, kleding en meer).",
   "guhs:guh_spawn_egg", [adv("guhs:quest/tamed_normal")], deps=["start"], x=2, y=0)
 q("ride", "Hop hop, guh!", "Een grote guh (minstens ~1,7 blok) met een zadel kun je berijden.", "minecraft:saddle",
   [adv("guhs:guhmension/ride_guh")], deps=["tame"], x=4, y=0)
@@ -372,7 +373,7 @@ CHAPTERS = {
         links=["tame"],
         intro=["Dit hoofdstuk komt na &dEen vadsig vriendje&r in &dGuhs & basis&r: zodra je een guh getemd hebt, begint jullie "
                "&dhartjesmeter&r te lopen.",
-               "Geef je guh snacks, aai hem (kort rechtsklikken) en geef hem een dikke &dKnuffel&r (houd rechtsklik ingedrukt: het menu). "
+               "Geef je guh snacks, aai hem (kort rechtsklikken: elke aai is een knuffelmomentje) en geef hem een dikke &dKnuffel&r (houd rechtsklik ingedrukt: het menu). "
                "Zo worden jullie &dlieve vadsjes van elkaar&r, dan &dmega lieve vadsjes van elkaar&r en uiteindelijk "
                "&6zielsguh bff 5evr <3&r. Hartjes gaan nooit omlaag!",
                "Bouw een &dGuhhuisje&r (een huisje in de vorm van een guhhoofd): daar wonen je guhs en maatjes, slapen ze 's nachts "

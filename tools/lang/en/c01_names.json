@@ -1649,7 +1649,7 @@
   "guhs.configuration.section.guhs.client.toml.title": "Guhs Client Settings",
   "name.guhs.guhbert": "Guhbert",
   "guhs.configuration.language": "Guhs language",
-  "guhs.configuration.language.tooltip": "AUTO follows the Minecraft language (Dutch for nl_nl, English for anything else); NL is always Dutch, EN always English. Only for you, also on servers.",
+  "guhs.configuration.language.tooltip": "The language you read the Guhs texts in. AUTO follows the Minecraft language (Dutch for nl_nl, English for anything else); NL is always Dutch, EN always English. Only for you, also on servers. You can also switch with the language button in your Guhdex.",
   "entity.guhs.reisguh.plek.knuffeldal": "Snuggledale",
   "entity.guhs.reisguh.plek.guhkermis": "Guh Fair",
   "entity.guhs.reisguh.plek.guhland": "Guhland",
@@ -1681,5 +1681,14 @@
   "entity.guhs.race_guh.naam.7": "Fluffy Arrow",
   "entity.guhs.race_guh.naam.8": "Nibble Blaster",
   "entity.guhs.race_guh.naam.9": "Whirlguh",
-  "item.guhs.bieb_boek.door": "by %s"
+  "item.guhs.bieb_boek.door": "by %s",
+  "entity.guhs.guh_seat": "Guh Seat",
+  "emote.guhs.aaien": "Pet",
+  "emote.guhs.aaien.description": "Squishes flat with happiness for a moment, eyes shut, and pushes its little head against your hand.",
+  "entity.guhs.bewoner.timmertje": "Tappy",
+  "block.guhs.wilde_guhweerder": "Wild Guh Shoo-Sign",
+  "block.guhs.wilde_guhweerder.lore": "Put it in your house or base: no more wild guhs pop up in the area around it. Right-click: choose how big the area is and show it as a blue dome.",
+  "block.guhs.wilde_guhweerder.lore.lief": "Very sweet, nyeg! Wild guhs see the sign and know: a chonky lives here already. So they just go cuddle somewhere else.",
+  "guhs.configuration.languageChosen": "Language question answered",
+  "guhs.configuration.languageChosen.tooltip": "Off = the question 'Which language for Guhs?' comes once more when you join a world or server."
 }

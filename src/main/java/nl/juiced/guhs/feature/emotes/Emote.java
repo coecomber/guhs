@@ -45,7 +45,14 @@ public enum Emote {
     VERDRIETJE(60),
     // --- 3.0 ---
     /** Only the 626-guh (guhwaii): strums a little ukelele, "Aloha, njeg!" (see {@link #alleenVoor}). */
-    UKELELE(80);
+    UKELELE(80),
+    // --- 1.2.0 ---
+    /**
+     * Being petted (a short tap from the owner, BandEvents.aai): a squish (flatter and wider, eyes happily shut), then head
+     * and a paw up against your hand and a happy wiggle. Not in the picker, never a favourite or a random one, and it doesn't
+     * count for "alle emotes" ({@link #kiesbaar}).
+     */
+    AAIEN(32);
 
     public final int onceTicks;
     public final RawAnimation animation;
@@ -57,6 +64,16 @@ public enum Emote {
 
     public String id() {
         return name().toLowerCase(Locale.ROOT);
+    }
+
+    /** Can the owner pick it (the emote picker, a favourite)? Everything but the petting moment. */
+    public boolean kiesbaar() {
+        return this != AAIEN;
+    }
+
+    /** The emotes of the picker, in order. */
+    public static java.util.List<Emote> kiesbare() {
+        return java.util.Arrays.stream(values()).filter(Emote::kiesbaar).toList();
     }
 
     public Component displayName() {

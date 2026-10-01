@@ -26,9 +26,13 @@ Java 25).
 
 - **Auto** (the default) follows your Minecraft language: Dutch when Minecraft is set to Dutch (`nl_nl`), English
   for every other language.
-- Choose yourself with the new **Lang** button in the guh menu (*Taal* in Dutch: Auto, NL or EN), or with *Guhs
-  language* in the mod's settings (*Mods* → *Guhs* → *Config*; in the file: `language = "AUTO"`, `"NL"` or
-  `"EN"` in `config/guhs-client.toml`).
+- **The first time you join** a world or a server after installing, a small screen asks *"Welke taal wil je voor
+  Guhs? / Which language for Guhs?"* (in both languages): **Nederlands**, **English** or **Automatisch / Automatic**
+  (follows Minecraft). It asks once per installation (`languageChosen` in `config/guhs-client.toml`).
+- Change it later with the **language button under your Guhdex** (*Lang* / *Taal*: Auto, NL or EN; the Super
+  Compass has one too), or with *Guhs language* in the mod's settings (*Mods* → *Guhs* → *Config*; in the file:
+  `language = "AUTO"`, `"NL"` or `"EN"` in `config/guhs-client.toml`). Lost your Guhdex? You get a new one when
+  you go to the Guhmension.
 - The choice is per player and only on your own computer: on a server, every player reads Guhs in their own language.
   Minecraft's own texts keep following the Minecraft language.
 
@@ -48,13 +52,23 @@ Java 25).
   `addOfficialServer` option in `config/guhs-client.toml`) is gone. Already have it in your list? It stays there.
 - The English side of the wiki no longer covers the official server; it's on the Dutch side only.
 
+### Petting
+
+- **A short right-click on your own guh is now only petting.** It no longer makes your guh sit down or stand up: use
+  *Sit* / *Stand Up* in the guh menu (hold right-click). A big guh with a saddle still gets ridden with a tap, and
+  sneak + right-click still picks it up.
+- **Every pet is a sweet moment**, also when today's petting hearts are used up (the hearts still have a daily cap):
+  your guh squishes flat and wide with its eyes happily shut, wiggles, pushes its head and a paw up against your
+  hand, pink hearts pop up with a happy squeak, and the action bar says *"You pet ...! ♥"*. The first three times it
+  also reminds you that holding right-click opens the guh menu.
+
 ### Also new
 
-- **Wilde-guhweerder**: a little pink sign with guh ears and a sleeping guh face ("hier woont al een vadsje") for your
-  house or base. No wild guhs spawn in the area around it (8/16/24/32/48 blocks, right-click to choose); your own guhs,
-  babies and spawn-egg guhs are welcome, and guhs already there stay. "Laat de area zien" shows it as the same blue
-  dome as the Guhhuisje's klus-area. Only the one who placed it changes or breaks it. Recipe: 5 pink wool, a kaas
-  knabbel and a stick.
+- **Wild Guh Shoo-Sign** (*Wilde-guhweerder* in Dutch): a little pink sign with guh ears and a sleeping guh face
+  ("a chonky lives here already") for your house or base. No wild guhs spawn in the area around it (8/16/24/32/48
+  blocks, right-click to choose); your own guhs, babies and spawn-egg guhs are welcome, and guhs already there stay.
+  *Show the Area* shows it as the same blue dome as the Guh House's chore area. Only the one who placed it changes
+  or breaks it. Recipe: 5 pink wool, a cheese nibble and a stick.
 
 ## 1.1.3 — Minecraft 26.1.2
 

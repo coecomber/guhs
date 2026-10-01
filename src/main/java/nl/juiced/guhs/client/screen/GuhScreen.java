@@ -90,10 +90,6 @@ public class GuhScreen extends Screen {
         int y = top + 58;
         int half = (COL_W - GAP) / 2;
 
-        // 1.2.0: the language of the Guhs texts (Auto / NL / EN), under the guh preview; applies at once
-        addRenderableWidget(Button.builder(nl.juiced.guhs.client.GuhsTaal.label(), b -> nl.juiced.guhs.client.GuhsTaal.cycle())
-                .bounds(left + 8, top + PANEL_H - 8 - ROW_H, PREVIEW_W, ROW_H).tooltip(tip("gui.guhs.menu.taal.tooltip")).build());
-
         // toggles, two per row, then the Sounds submenu in the next free spot
         List<Entry> entries = toggles();
         for (int i = 0; i < entries.size(); i++) {

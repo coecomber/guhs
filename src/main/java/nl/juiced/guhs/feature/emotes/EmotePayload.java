@@ -45,7 +45,7 @@ public record EmotePayload(int entityId, int action, int emote) implements Custo
         switch (p.action()) {
             case NOW, LOOP -> {
                 Emote emote = Emote.byIndex(p.emote());
-                if (emote == null) {
+                if (emote == null || !emote.kiesbaar()) {   // (1.2.0: petting is a tap, not a pick)
                     return false;
                 }
                 if (!nl.juiced.guhs.feature.samen.SamenBeloning.heeft(player, emote)) {   // 2.10: the hartjes emotes are unlocks
@@ -70,6 +70,9 @@ public record EmotePayload(int entityId, int action, int emote) implements Custo
             }
             case FAVORITE -> {
                 Emote emote = Emote.byIndex(p.emote()); // anything else: no favourite
+                if (emote != null && !emote.kiesbaar()) {
+                    return false;
+                }
                 if (emote != null && !nl.juiced.guhs.feature.samen.SamenBeloning.heeft(player, emote)) {
                     nl.juiced.guhs.feature.samen.SamenBeloning.opSlot(player, emote);
                     return false;

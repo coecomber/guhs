@@ -247,12 +247,23 @@ public final class Band {
                 Math.min(6, 1 + n / 3), guh.getBbWidth() * 0.4, 0.15, guh.getBbWidth() * 0.4, 0.02);
         if (eigenaar != null && !reden.stil()) {
             ModNetworking.sendTo(eigenaar, new BandPayloads.Hartjes(guh.getId(), n));
-            BandNiveau volgende = r.niveau().volgende();
-            Component voortgang = volgende == null ? Component.translatable("gui.guhs.band.hartjes_max", r.hartjes)
-                    : Component.translatable("gui.guhs.band.hartjes_voortgang", r.hartjes, volgende.drempel());
-            eigenaar.sendOverlayMessage(Component.translatable("gui.guhs.band.hartjes_erbij", n, guh.getDisplayName(), voortgang)
-                    .withStyle(ChatFormatting.LIGHT_PURPLE));
+            if (reden != Reden.AAIEN) {   // (1.2.0: petting writes its own line, "Je aait ...! ♥", BandEvents.aai)
+                eigenaar.sendOverlayMessage(Component.translatable("gui.guhs.band.hartjes_erbij", n, guh.getDisplayName(), voortgang(r))
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
         }
+    }
+
+    private static Component voortgang(BandData.Rec r) {
+        BandNiveau volgende = r.niveau().volgende();
+        return volgende == null ? Component.translatable("gui.guhs.band.hartjes_max", r.hartjes)
+                : Component.translatable("gui.guhs.band.hartjes_voortgang", r.hartjes, volgende.drempel());
+    }
+
+    /** "+1 ♥ (12 / 50)": the hearts a guh just got and where it is now (1.2.0, the petting line). */
+    public static net.minecraft.network.chat.MutableComponent hartjesErbij(Mob guh, int n) {
+        BandData.Rec r = bijwerken(guh);
+        return Component.translatable("gui.guhs.band.aai_hartjes", n, r == null ? Component.empty() : voortgang(r));
     }
 
     /** The guh reached one or more new levels: announce each (now, or at the owner's next login). */

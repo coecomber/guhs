@@ -652,6 +652,10 @@ public final class AutoCheck {
                 // guhmenu <x> <y> <z>: tame the nearest guh and open its menu (GuhScreen, like holding right-click)
                 return interactEntity(BlockPos.containing(Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3])),
                         "guhs:guh", "guhmenu");
+            case "aai":
+                // aai <x> <y> <z>: (1.2.0) tame the nearest guh and pet it (a short tap: the squish, hearts and "Je aait ...!")
+                return interactEntityJob(BlockPos.containing(Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3])),
+                        "guhs:guh", "aai");
             case "piepmenu":
                 // piepmenu <x> <y> <z>: tame the nearest piep-maatje and open its menu
                 return interactEntity(BlockPos.containing(Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3])),
@@ -1403,6 +1407,28 @@ public final class AutoCheck {
                     return true;
                 };
             }
+            case "taalvraag": {
+                // gui taalvraag [name] [keep]: (1.2.0) the first-join language question (AutoCheck runs never get it by themselves);
+                // with "keep" it stays open (for mouse/press/shot commands) until 'gui close'
+                String name = a.length > 2 ? a[2] : "gui_taalvraag";
+                boolean keep = a.length > 3 && a[3].equalsIgnoreCase("keep");
+                if (!keep) {
+                    queue.addFirst(mc -> {
+                        mc.setScreen(null);
+                        opened = false;
+                        return true;
+                    });
+                    queue.addFirst(shot(name, true));
+                    queue.addFirst(waitTicks(4));
+                }
+                return mc -> {
+                    opened = true;
+                    parkMouse(mc);
+                    mc.setScreen(new nl.juiced.guhs.client.screen.TaalVraagScreen());
+                    note("  opened the language question");
+                    return true;
+                };
+            }
             case "knus": {
                 // gui knus [prefix]: the Guhdex's Knus tab (the overview of the sections)
                 String prefix = a.length > 2 ? a[2] : "gui_knus";
@@ -1955,6 +1981,11 @@ public final class AutoCheck {
                     });
                 }
                 case "piepmenu" -> nl.juiced.guhs.feature.piep.PiepMenu.open(sp, (nl.juiced.guhs.feature.piep.PiepMaatje) best);
+                case "aai" -> {
+                    sp.setShiftKeyDown(false);
+                    ((nl.juiced.guhs.entity.GuhEntity) best).onOwnerTap(sp);
+                    return "aai " + best.getName().getString() + " -> emote " + ((nl.juiced.guhs.entity.GuhEntity) best).emotes.current();
+                }
                 default -> {
                     var r = sp.interactOn(best, net.minecraft.world.InteractionHand.MAIN_HAND, best.getBoundingBox().getCenter().subtract(best.position()));
                     return how + " " + best.getName().getString() + " -> " + r;
@@ -1962,7 +1993,9 @@ public final class AutoCheck {
             }
             return how + " " + best.getName().getString();
         }, r -> {
-            opened = true;
+            if (!how.equals("aai")) {   // (petting opens no screen)
+                opened = true;
+            }
             note("  " + r);
         });
     }

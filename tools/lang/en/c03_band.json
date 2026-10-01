@@ -521,7 +521,7 @@
   "gui.guhs.dagboek.stat.speeltjes": "Times played",
   "gui.guhs.dagboek.eerste.getemd": "Tamed!",
   "gui.guhs.dagboek.eerste.getemd.tekst": "Today I got an owner. They gave me a cheese nibble and that was it, I was sold. Nyeg, that's how easy I am.",
-  "gui.guhs.dagboek.eerste.eerste_aai": "First pat",
+  "gui.guhs.dagboek.eerste.eerste_aai": "First pet",
   "gui.guhs.dagboek.eerste.eerste_aai.tekst": "A hand went over my fur. I'm still a little shy about it. One more time?",
   "gui.guhs.dagboek.eerste.eerste_knuffel": "First big cuddle",
   "gui.guhs.dagboek.eerste.eerste_knuffel.tekst": "My owner cuddled me so hard my chonk wobbled. WAHOOG!",
@@ -972,5 +972,7 @@
   "gui.guhs.huisje.standaardnaam.20": "Sleepy Snoot",
   "gui.guhs.huisje.standaardnaam.21": "Nyeg Nest",
   "gui.guhs.huisje.standaardnaam.22": "Cozy Cheese Room",
-  "gui.guhs.huisje.standaardnaam.23": "Guh Sweet Guh"
+  "gui.guhs.huisje.standaardnaam.23": "Guh Sweet Guh",
+  "gui.guhs.band.aai": "You pet %s! ♥",
+  "gui.guhs.band.aai_tip": "(Hold right-click for the guh menu)"
 }

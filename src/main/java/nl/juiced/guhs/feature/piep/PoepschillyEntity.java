@@ -475,7 +475,7 @@ public class PoepschillyEntity extends TamableAnimal implements GeoEntity, PiepM
      * (guhs:piep_op_guh) The client says: I right-clicked this guh with an empty hand while my turtle was ready. The guh's own
      * tap/hold handler (client.GuhInteractHandler) swallows empty-hand clicks on your own tamed guh and only sends "tap", so
      * the poetsbeurt never reached {@link #klikOpGuh}: that was the bug ("on my own guh nothing happens"). When no turtle is
-     * ready after all (it just ran out), the click does what it would have done: the guh's tap (sit/stand, ride).
+     * ready after all (it just ran out), the click does what it would have done: the guh's tap (a pet, or riding).
      */
     public static boolean opGuhGeklikt(GuhEntity guh, ServerPlayer player) {
         double bereik = 8.0 + guh.getBbWidth() * 2;

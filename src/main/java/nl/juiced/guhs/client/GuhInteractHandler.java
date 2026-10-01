@@ -22,7 +22,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
  * Right-clicking your own guh:
  * <ul>
- *     <li>short tap  -> ride it (if big enough and saddled) or sit/stand</li>
+ *     <li>short tap  -> pet it (1.2.0: only petting; sit/stand is in the Guh menu), or ride it when it is big enough and saddled</li>
  *     <li>sneak + tap -> pick it up (as an item)</li>
  *     <li>hold       -> open the Guh menu</li>
  * </ul>
@@ -104,7 +104,7 @@ public final class GuhInteractHandler {
     /** Items that should keep their normal right-click behaviour on a guh (feeding, leashing, naming, saddling). */
     private static boolean handlesItem(ItemStack stack, GuhEntity guh) {
         return !stack.is(ModItems.KAAS_KNABBELS.get()) && !stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get())
-                && !stack.is(nl.juiced.guhs.feature.band.BandFeature.SNACKS)   // 2.10: feeding a snack (hearts); a tap stays sit/stand
+                && !stack.is(nl.juiced.guhs.feature.band.BandFeature.SNACKS)   // 2.10: feeding a snack (hearts); a tap is a pet
                 && !stack.is(Items.LEAD) && !stack.is(Items.NAME_TAG) && !(stack.is(Items.SADDLE) && !guh.isSaddled());
     }
 

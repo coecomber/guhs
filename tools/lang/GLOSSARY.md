@@ -169,6 +169,8 @@ en_us name: Nether, End, Overworld, Ender Dragon, Sniffer...), Experiment 626, O
 | Op slot | Locked | |
 | Ontgrendeld | Unlocked | |
 | Rechtsklik(ken) | Right-click | |
+| aaien / aaitje / Je aait %s! | pet / a pet / You pet %s! | 1.2.0: a short tap on your own guh is only petting |
+| Welke taal wil je voor Guhs? / Automatisch | Which language for Guhs? / Automatic | 1.2.0 first-join question; language button label *Lang: %s* |
 
 ## 4. Emotes
 
@@ -647,6 +649,7 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | Kloontank / Labnotitie / Tankonderdeel | Clone Tank / Lab Note / Tank Part | |
 | Het Knuffelhart / Herinnering | The Snuggleheart / Memory | |
 | Guhmuziekplaat | Guh Music Disc | |
+| Wilde-guhweerder | Wild Guh Shoo-Sign | 1.2.0; "shoo-sign" in running text; its sign says *hier woont al een vadsje* = *a chonky lives here already* |
 
 ## 13. Food & bakery
 

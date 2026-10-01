@@ -994,5 +994,17 @@
   "commands.guhs.hemel.geen_hart": "No Snuggleheart nearby",
   "commands.guhs.samen.geen_guh": "Nyeg: no tamed guh of your own within 24 blocks, or an unknown level (pick one of the suggested levels).",
   "commands.guhs.samen.hartjes": "%s now has %s hearts: %s",
-  "commands.guhs.samen.mislukt": "Nyeg: that didn't work right now (a free guh of your own nearby?)."
+  "commands.guhs.samen.mislukt": "Nyeg: that didn't work right now (a free guh of your own nearby?).",
+  "gui.guhs.taalvraag.vraag": "Which language for Guhs?",
+  "gui.guhs.taalvraag.auto": "Automatic",
+  "gui.guhs.taalvraag.auto.tooltip": "Follows your Minecraft language: Dutch when Minecraft is in Dutch, English otherwise.",
+  "gui.guhs.taalvraag.later": "You can always change it later in your Guhdex (you get a new one when you go to the Guhmension) or in Mods → Guhs → Config.",
+  "gui.guhs.weerder.uitleg": "No wild guhs pop up inside this area. They see the sign and know: a chonky lives here already! Your own guhs, babies and guhs from a spawn egg are still welcome, and guhs that are already here get to stay.",
+  "gui.guhs.weerder.straal": "Area: %s blocks around the sign",
+  "gui.guhs.weerder.straal.tooltip": "No wild guhs within %s blocks of the sign (also a bit above and below it).",
+  "gui.guhs.weerder.lief": "Still sweet: the wild guhs just go cuddle somewhere else. Nyeg!",
+  "gui.guhs.weerder.koepel": "Show the Area: %s",
+  "gui.guhs.weerder.koepel.tooltip": "A see-through blue dome over the area where no wild guhs pop up. Only you can see it.",
+  "gui.guhs.weerder.van_wie": "This is %s's Wild Guh Shoo-Sign",
+  "gui.guhs.weerder.geplaatst": "Sign's up! Wild guhs now know a chonky lives here already (%s blocks around the sign). Right-click to choose the area."
 }

@@ -1,0 +1,57 @@
+# 1.2.0 finish (dev only): the first-join language question, the language button of the Guhdex and the Superkompas,
+# petting (the squish, hearts, the action bar) and the Wilde-guhweerder screen. Set run/options.txt lang (en_us or nl_nl)
+# first. Run with:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/taal120.txt -Dguhs.autocheck.fresh=true
+# (AutoCheck runs never get the language question by themselves: 'gui taalvraag' opens it.)
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+wait 20
+
+section the language question
+gui taalvraag taal120_vraag keep
+wait 6
+shot taal120_vraag gui
+mouse 1 1
+widgets
+gui close
+
+section the language button: Guhdex (every tab) and Superkompas
+gui knus taal120_knus
+gui minigames taal120_minigames
+gui superkompas taal120_superkompas
+
+section petting
+/summon guhs:guh 3000.5 140 3002.5 {NoAI:0b,PersistenceRequired:1b,Rotation:[0f,0f]}
+wait 20
+/tp @s 3002.5 140 3005 141 25
+look 141 25
+wait 20
+aai 3000.5 140 3002.5
+wait 2
+shot taal120_aai_squish gui
+wait 8
+shot taal120_aai_kopje gui
+wait 30
+aai 3000.5 140 3002.5
+wait 12
+shot taal120_aai_tweede gui
+unlock
+
+section the Wilde-guhweerder screen
+/kill @e[type=guhs:guh,distance=..20]
+weerder 3006 140 3000 16
+wait 40
+mouse 1 1
+widgets
+shot taal120_weerder_scherm gui
+gui close
+quit

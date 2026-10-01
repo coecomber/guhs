@@ -9,9 +9,9 @@
   "ftb.guhs_band.section.samen": "Playing Together, Cuddling Together",
   "ftb.guhs_band.section.favorietjes": "Faves",
   "ftb.guhs_band.q.intro_guhs_band.title": "How Do You Get Here?",
-  "ftb.guhs_band.q.intro_guhs_band.desc": "This chapter comes after &dA Chonky Buddy&r in &dGuhs & Basics&r: as soon as you've tamed a guh, your &dheart meter&r starts ticking.\n\nGive your guh snacks, pet it (a short right-click) and give it a big &dCuddle&r (hold right-click: the menu). That way you become &dsweet chonkies together&r, then &dmega sweet chonkies together&r and finally &6soulguh bff 5evr <3&r. Hearts never go down!\n\nBuild a &dGuh House&r (a little house shaped like a guh head): your guhs and buddies live there, sleep there at night and do chores during the day. Your &dGuhdex&r (My Guhs tab) has every guh's diary.\n\nNothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
+  "ftb.guhs_band.q.intro_guhs_band.desc": "This chapter comes after &dA Chonky Buddy&r in &dGuhs & Basics&r: as soon as you've tamed a guh, your &dheart meter&r starts ticking.\n\nGive your guh snacks, pet it (a short right-click: every pet is a cuddly moment) and give it a big &dCuddle&r (hold right-click: the menu). That way you become &dsweet chonkies together&r, then &dmega sweet chonkies together&r and finally &6soulguh bff 5evr <3&r. Hearts never go down!\n\nBuild a &dGuh House&r (a little house shaped like a guh head): your guhs and buddies live there, sleep there at night and do chores during the day. Your &dGuhdex&r (My Guhs tab) has every guh's diary.\n\nNothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
   "ftb.guhs_band.q.band_aaien.title": "Pat Pat",
-  "ftb.guhs_band.q.band_aaien.desc": "Give your tame guh a quick tap with right-click: a pat! Every pat is worth a &dheart&r (but not endlessly many per day, or it gets spoiled, nyeg).",
+  "ftb.guhs_band.q.band_aaien.desc": "Give your tame guh a quick tap with right-click: a pet! It squishes flat with happiness, pushes its little head against your hand and hearts pop up. Every pet is worth a &dheart&r (but not endlessly many per day, or it gets spoiled, nyeg). Sitting down or standing up is in the guh menu: hold right-click.",
   "ftb.guhs_band.q.band_voeren.title": "A Snack for Your Guh",
   "ftb.guhs_band.q.band_voeren.desc": "Give your own guh a little snack: a cupcake, a macaron, an ice cream, a cookie, sweet berries... It munches it up and you both get &dhearts&r. Maybe you'll even find its favorite snack!",
   "ftb.guhs_band.q.band_knuffel.title": "A Big Cuddle",
@@ -450,5 +450,7 @@
   "ftb.guhs_diertjes.q.landdiertjes_huisje.title": "A House for Them Too!",
   "ftb.guhs_diertjes.q.landdiertjes_huisje.desc": "Hedgehogs, bunnies, squirrels and Shuckly can also live in a &dguh house&r: use your picked-up critter on the house, or pick it in the house screen.",
   "ftb.guhs_diertjes.q.landdiertjes_alle.title": "A House Full of Critters",
-  "ftb.guhs_diertjes.q.landdiertjes_alle.desc": "Tame them all: a fluffhog, a guh bunny, a fluff squirrel and a Shuckly. WAHOOG!"
+  "ftb.guhs_diertjes.q.landdiertjes_alle.desc": "Tame them all: a fluffhog, a guh bunny, a fluff squirrel and a Shuckly. WAHOOG!",
+  "ftb.guhs_band.q.wilde_guhweerder.title": "A Chonky Lives Here Already",
+  "ftb.guhs_band.q.wilde_guhweerder.desc": "Put a &dWild Guh Shoo-Sign&r in your house or base (pink wool, a cheese nibble and a stick). Wild guhs see the sign and know: a chonky lives here already! So they sweetly go cuddle somewhere else. Right-click the sign to choose the area and show it as a &9blue dome&r. Your own guhs are welcome to stay."
 }

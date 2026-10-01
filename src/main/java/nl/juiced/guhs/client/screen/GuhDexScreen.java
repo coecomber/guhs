@@ -237,6 +237,9 @@ public class GuhDexScreen extends Screen {
         if (tab != Tab.MIJN_GUHS && nl.juiced.guhs.feature.band.client.MijnGuhsCache.heeftFocus()) {
             tab = Tab.MIJN_GUHS;   // 2.10: the menu's "Dagboekje" opens a guh's page
         }
+        // 1.2.0: the language of the Guhs texts (Auto / NL / EN), under the book at the right (above it when the window is low)
+        int taalY = top + H + 18 <= height ? top + H + 3 : Math.max(0, top - 17);
+        addRenderableWidget(nl.juiced.guhs.client.GuhsTaal.knop(left + W, taalY, 84, 14));
         // (2.9) the tabs are drawn and clicked by hand (icon tabs, see renderBackground / mouseClicked)
         switch (tab) {
             case MINIGAMES, KLEDING -> initLijst();

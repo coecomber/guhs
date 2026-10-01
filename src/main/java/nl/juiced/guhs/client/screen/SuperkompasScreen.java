@@ -86,6 +86,10 @@ public class SuperkompasScreen extends Screen {
             y += r.hoogte();
         }
         addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose()).bounds(left + W - 88, top + H - 28, 80, 20).build());
+        // 1.2.0: the language of the Guhs texts (Auto / NL / EN), under the panel at the right like the Guhdex's (above it when
+        // the window is low)
+        int taalY = top + H + 18 <= height ? top + H + 3 : Math.max(0, top - 17);
+        addRenderableWidget(nl.juiced.guhs.client.GuhsTaal.knop(left + W, taalY, 84, 14));
     }
 
     /** The rows: subheadings and pairs of places. */

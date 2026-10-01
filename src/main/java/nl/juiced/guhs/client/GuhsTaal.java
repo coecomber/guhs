@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -39,6 +41,9 @@ import org.jspecify.annotations.Nullable;
  * language (FTB Library and I18n.exists read that one; accesstransformer). A new Language object invalidates every
  * TranslatableContents cache (identity check), so chat, tooltips, names, books and screens follow at once. Signs cache their
  * rendered lines: those of the loaded chunks are reset too. FTB Quests: compat/FtbQuestsTaal (+ mixin client.FtbQuestsLocaleMixin).
+ * <p>
+ * Where you choose: once, the first time you join a world or server ({@link nl.juiced.guhs.client.screen.TaalVraagScreen}),
+ * then the button ({@link #knop}) in the Guhdex and the Superkompas, and the config screen (Mods, Guhs, Config).
  */
 public final class GuhsTaal {
     public static final Identifier RELOAD_ID = Guhs.id("taal");
@@ -53,6 +58,7 @@ public final class GuhsTaal {
         modBus.addListener(GuhsTaal::addReloadListener);
         modBus.addListener(GuhsTaal::onConfigReload);
         NeoForge.EVENT_BUS.addListener(GuhsTaal::onLogin);
+        NeoForge.EVENT_BUS.addListener(GuhsTaal::onClientTick);
         if (ModList.get().isLoaded("ftbquests")) {
             NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.ClientTickEvent.Post e) -> nl.juiced.guhs.compat.FtbQuestsTaal.tick());
         }
@@ -79,7 +85,7 @@ public final class GuhsTaal {
         return choice().code(minecraftLanguage());
     }
 
-    /** The guh menu button: Auto, NL, EN, Auto... (saved in config/guhs-client.toml, applied at once). */
+    /** The language button (Guhdex, Superkompas): Auto, NL, EN, Auto... (saved in config/guhs-client.toml, applied at once). */
     public static void cycle() {
         set(choice().next());
     }
@@ -89,6 +95,7 @@ public final class GuhsTaal {
             return;
         }
         GuhsClientConfig.LANGUAGE.set(taal);
+        GuhsClientConfig.LANGUAGE_CHOSEN.set(true);   // (chosen: the first-join question isn't needed any more)
         GuhsClientConfig.SPEC.save();
         apply();
     }
@@ -100,6 +107,52 @@ public final class GuhsTaal {
                 ? Component.translatable("gui.guhs.taal.auto_is", Component.translatable(dutch() ? "gui.guhs.taal.kort.nl" : "gui.guhs.taal.kort.en"))
                 : Component.translatable(taal.key());
         return Component.translatable("gui.guhs.menu.taal", name);
+    }
+
+    /**
+     * The language button of the Guhdex and the Superkompas (the "Gids" screens): "Taal: Auto (NL)", cycles Auto / NL / EN.
+     * At least {@code minW} wide, growing with its label; x is its RIGHT edge (it grows to the left).
+     */
+    public static Button knop(int right, int y, int minW, int h) {
+        int w = Math.max(minW, Minecraft.getInstance().font.width(label()) + 14);
+        return Button.builder(label(), b -> cycle()).bounds(right - w, y, w, h)
+                .tooltip(Tooltip.create(Component.translatable("gui.guhs.menu.taal.tooltip"))).build();
+    }
+
+    /** A Guhs text in one language, whatever the switch says (the first-join question shows both). */
+    public static String tekst(String key, boolean dutch) {
+        String v = (dutch ? nlTeksten : enTeksten).get(key);
+        return v != null ? v : key;
+    }
+
+    // ================================================================================================================
+    // The first-join question (once per installation, see GuhsClientConfig.LANGUAGE_CHOSEN)
+
+    /** Ticks to wait after joining before the question shows (the world appears first); -1 = nothing to ask. */
+    private static int vraagOver = -1;
+
+    /** DEV: the AutoCheck runs (-Dguhs.autocheck) never get the question by themselves (the script can open it). */
+    private static boolean autocheck() {
+        return System.getProperty("guhs.autocheck") != null;
+    }
+
+    private static void onClientTick(net.neoforged.neoforge.client.event.ClientTickEvent.Post event) {
+        if (vraagOver < 0) {
+            return;
+        }
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.level == null) {
+            return;
+        }
+        if (mc.screen != null) {
+            return;   // (a loading screen, the chat, a menu: wait till it's gone)
+        }
+        if (--vraagOver <= 0) {
+            vraagOver = -1;
+            if (!GuhsClientConfig.languageChosen()) {
+                mc.setScreen(new nl.juiced.guhs.client.screen.TaalVraagScreen());
+            }
+        }
     }
 
     // ================================================================================================================
@@ -123,6 +176,9 @@ public final class GuhsTaal {
 
     /** Joining a server: FTB Quests only gets the tables of the Minecraft language; ask for ours when it differs. */
     private static void onLogin(ClientPlayerNetworkEvent.LoggingIn event) {
+        if (!GuhsClientConfig.languageChosen() && !autocheck()) {
+            vraagOver = 40;   // 1.2.0: "Welke taal wil je voor Guhs? / Which language for Guhs?", two seconds after joining
+        }
         if (ModList.get().isLoaded("ftbquests")) {
             nl.juiced.guhs.compat.FtbQuestsTaal.onLogin();
         }

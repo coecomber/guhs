@@ -2406,11 +2406,11 @@ def lieve_vadsjes_section():
         recipe_card("guhhuisje_medium", "Guhhuisje (medium)", "Guhhuisje (medium)") + recipe_card("guhhuisje_groot", "Guhhuisje (groot)", "Guhhuisje (groot)") + '</div>' + \
         entry(icon("wilde_guhweerder", "Wilde-guhweerder").replace('class="px"', 'class="px" style="width:80px;height:80px"'),
               "Wilde-guhweerder", "Wilde-guhweerder",
-              p("<i>New in 1.2.0.</i> A little pink sign with guh ears and a sleeping guh face: <i>a vadsje already lives here</i>. Put it in your "
+              p("<i>New in 1.2.0.</i> A little pink sign with guh ears and a sleeping guh face: <i>a chonky lives here already</i>. Put it in your "
                 "house or base and no <b>wild</b> guhs pop up in the area around it (8, 16, 24, 32 or 48 blocks, also a bit above and below). Still "
                 "lief: the wild guhs see the sign and go cuddle somewhere else. Your own guhs, babies and guhs from a spawn egg are welcome, and guhs "
-                "that are already there stay. Right-click: choose the size and <b>Laat de area zien</b> (the same blue dome as the huisje's "
-                "klus-area). Only the one who placed it can change or break it.",
+                "that are already there stay. Right-click: choose the size and <b>Show the Area</b> (the same blue dome as the huisje's "
+                "chore area). Only the one who placed it can change or break it.",
                 "<i>Nieuw in 1.2.0.</i> Een klein roze bordje met guhoortjes en een slapend guhgezichtje: <i>hier woont al een vadsje</i>. Zet hem in "
                 "je huis of basis en er komen geen <b>wilde</b> guhs meer tevoorschijn in de area eromheen (8, 16, 24, 32 of 48 blokken, ook een "
                 "stukje erboven en eronder). Nog steeds lief: de wilde guhs zien het bordje en gaan ergens anders knuffelen. Je eigen guhs, "
@@ -4123,6 +4123,12 @@ def build():
             "<b>Genezen</b>: Kaas Knabbels geven 100 levens; Gefrituurde Kaasknabbels maken hem meteen helemaal beter."),
            ("<b>Breed</b>: two tamed guhs at full health + Kaas Knabbels. Babies get a size in between their parents.",
             "<b>Fokken</b>: twee tamme guhs met volle levens + Kaas Knabbels. Baby's krijgen een formaat tussen dat van hun ouders in."),
+           ("<b>Pet</b>: tap right-click (short) on your own guh. It squishes flat with happiness, eyes shut, pushes its head and a paw "
+            "against your hand and wiggles, with pink hearts: <i>You pet ...!</i> Every pet is a moment, also when today's petting hearts are "
+            "used up. Sitting and standing up is in the Guh menu (hold right-click).",
+            "<b>Aaien</b>: tik kort rechtsklik op je eigen guh. Hij wordt even helemaal plat van geluk, ogen dicht, duwt zijn kopje en een "
+            "pootje tegen je hand en wiebelt, met roze hartjes: <i>Je aait ...!</i> Elke aai is een momentje, ook als de aai-hartjes van "
+            "vandaag op zijn. Zitten en opstaan doe je in het guhmenu (houd rechtsklik ingedrukt)."),
            ("<b>Ride</b>: big guhs (at least ~1.7 blocks long) take a saddle; then tap right-click to hop on.",
             "<b>Rijden</b>: grote guhs (minstens ~1,7 blok lang) kunnen een zadel dragen; tik dan rechtsklik om op te stappen."),
            ("<b>Pick up</b>: sneak + right-click your guh. It becomes an item that keeps its name, size, HP, saddle and armour. "

@@ -790,7 +790,11 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         this.triggerAnim("action", "happy");
     }
 
-    /** Owner tapped (short right-click) with an empty-ish hand. Sneaking picks the guh up. */
+    /**
+     * Owner tapped (short right-click) with an empty-ish hand. 1.2.0: a tap is ONLY petting (a squish, hearts, "Je aait ...!";
+     * BandEvents.aai); sitting and standing up is the guh menu's Zitten button. A saddled rideable guh is mounted instead (there
+     * is no other way to ride). Sneaking picks the guh up.
+     */
     public void onOwnerTap(Player player) {
         if (player.isSecondaryUseActive()) {
             if (!this.isVehicle() && !this.isPassenger()) {
@@ -799,15 +803,14 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
             }
             return;
         }
-        if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
-            nl.juiced.guhs.feature.band.BandEvents.aai(this, sp);   // 2.10: a tap is a little pet (hearts)
-        }
         if (isRideable() && isSaddled() && !this.isVehicle()) {
             this.setOrderedToSit(false);
             this.setInSittingPose(false);
             player.startRiding(this);
-        } else {
-            toggleSit();
+            return;
+        }
+        if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+            nl.juiced.guhs.feature.band.BandEvents.aai(this, sp);   // a tap is a pet: always a sweet moment (+ hearts, capped per day)
         }
     }
 

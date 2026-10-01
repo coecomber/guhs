@@ -7,7 +7,7 @@
   "quest.4755485429C1B03F.quest_desc": [
     "This chapter comes after &dA Chonky Buddy&r in &dGuhs \\& Basics&r: as soon as you've tamed a guh, your &dheart meter&r starts ticking.",
     "",
-    "Give your guh snacks, pet it (a short right-click) and give it a big &dCuddle&r (hold right-click: the menu). That way you become &dsweet chonkies together&r, then &dmega sweet chonkies together&r and finally &6soulguh bff 5evr <3&r. Hearts never go down!",
+    "Give your guh snacks, pet it (a short right-click: every pet is a cuddly moment) and give it a big &dCuddle&r (hold right-click: the menu). That way you become &dsweet chonkies together&r, then &dmega sweet chonkies together&r and finally &6soulguh bff 5evr <3&r. Hearts never go down!",
     "",
     "Build a &dGuh House&r (a little house shaped like a guh head): your guhs and buddies live there, sleep there at night and do chores during the day. Your &dGuhdex&r (My Guhs tab) has every guh's diary.",
     "",
@@ -15,7 +15,7 @@
   ],
   "quest.4755483B93698FC8.title": "Pat Pat",
   "quest.4755483B93698FC8.quest_desc": [
-    "Give your tame guh a quick tap with right-click: a pat! Every pat is worth a &dheart&r (but not endlessly many per day, or it gets spoiled, nyeg).",
+    "Give your tame guh a quick tap with right-click: a pet! It squishes flat with happiness, pushes its little head against your hand and hearts pop up. Every pet is worth a &dheart&r (but not endlessly many per day, or it gets spoiled, nyeg). Sitting down or standing up is in the guh menu: hold right-click.",
   ],
   "quest.475548F98950F527.title": "A Snack for Your Guh",
   "quest.475548F98950F527.quest_desc": [
@@ -68,6 +68,10 @@
   "quest.4755488586A60868.title": "Full Is Full, Nyeg!",
   "quest.4755488586A60868.quest_desc": [
     "Fill a Guh House all the way up with residents. So many sweet chonkies under one roof!",
+  ],
+  "quest.47554875D303D1A0.title": "A Chonky Lives Here Already",
+  "quest.47554875D303D1A0.quest_desc": [
+    "Put a &dWild Guh Shoo-Sign&r in your house or base (pink wool, a cheese nibble and a stick). Wild guhs see the sign and know: a chonky lives here already! So they sweetly go cuddle somewhere else. Right-click the sign to choose the area and show it as a &9blue dome&r. Your own guhs are welcome to stay.",
   ],
   "quest.4755481D345F4D1F.title": "A Lamp with Ears",
   "quest.4755481D345F4D1F.quest_desc": [

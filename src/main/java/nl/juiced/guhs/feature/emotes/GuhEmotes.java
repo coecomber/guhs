@@ -145,7 +145,7 @@ public final class GuhEmotes {
         this.lookTarget = null;
         guh.setEmoteData((emote.ordinal() + 1) | (loop ? LOOP : 0));
         guh.getNavigation().stop();
-        if (guh.isTame()) {   // 2.10: the moments bus (favourite emote, dagboek...)
+        if (guh.isTame() && emote.kiesbaar()) {   // 2.10: the moments bus (favourite emote, dagboek...; petting has its own moment)
             nl.juiced.guhs.feature.band.Band.moment(guh, guh.getOwner() instanceof net.minecraft.server.level.ServerPlayer owner && owner.level() == guh.level()
                     && owner.distanceTo(guh) < 32 ? owner : null, nl.juiced.guhs.feature.band.Moment.EMOTE, emote.id());
         }
@@ -359,6 +359,8 @@ public final class GuhEmotes {
                 play(elapsed == 4, nl.juiced.guhs.feature.samen.SamenFeature.OOH.get(), 0.6f, 1f);
                 play(elapsed == 30, ModSounds.GUH_AMBIENT.get(), 0.35f, pitch * 0.72f);
             }
+            // 1.2.0: being petted (the happy squeak itself comes with the tap, BandEvents.aai): a soft content sigh at the wiggle
+            case AAIEN -> play(elapsed == 14, ModSounds.GUH_AMBIENT.get(), 0.35f, pitch * 1.35f);
             default -> {
             }
         }
@@ -463,6 +465,12 @@ public final class GuhEmotes {
                             head.z + Math.sin(a) * w * 0.5, 0, 0.05, 0);
                 }
             }
+            case AAIEN -> {
+                if (clientTicks == 4 || clientTicks == 14) {   // little hearts popping up from its head as it squishes
+                    level.addParticle(nl.juiced.guhs.feature.band.BandFeature.HARTJE.get(), head.x + (random.nextDouble() - 0.5) * w * 0.5,
+                            head.y + 0.1, head.z + (random.nextDouble() - 0.5) * w * 0.5, 0, 0.04, 0);
+                }
+            }
             case VERDRIETJE -> {
                 if (clientTicks % 18 == 9) {            // a little tear rolls down
                     Vec3 right = new Vec3(-forward.z, 0, forward.x);
@@ -507,7 +515,7 @@ public final class GuhEmotes {
     public static int alleNietBand() {
         int mask = 0;
         for (Emote e : Emote.values()) {
-            if (!nl.juiced.guhs.feature.samen.SamenBeloning.isBandEmote(e) && Emote.alleenVoor(e) == null) {   // (3.0: nor the ukelele)
+            if (!nl.juiced.guhs.feature.samen.SamenBeloning.isBandEmote(e) && Emote.alleenVoor(e) == null && e.kiesbaar()) {   // (3.0: nor the ukelele; 1.2.0: nor petting)
                 mask |= 1 << e.ordinal();
             }
         }

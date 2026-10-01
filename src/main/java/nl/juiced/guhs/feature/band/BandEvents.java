@@ -12,6 +12,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -118,14 +119,45 @@ public final class BandEvents {
         nl.juiced.guhs.quest.GuhAdvancements.grant(player, "band_gevoerd");
     }
 
-    /** A tap from the owner: a little pet. */
+    /** 1.2.0: how many times a player petted a guh (GuhQuests.saved): the first {@link #AAI_TIPS} pets show the menu hint. */
+    public static final String AAI_TELLER = "guhs_aai_teller";
+    public static final int AAI_TIPS = 3;
+
+    /**
+     * A tap from the owner: a pet. 1.2.0: ALWAYS a sweet moment, also when today's petting hearts are used up (Reden.AAIEN
+     * caps the hearts, not the cuddles): the squish emote ({@link Emote#AAIEN}: flatter and wider, eyes shut, head and paw up
+     * against your hand, a wiggle), pink hearts and a happy squeak, and "Je aait %s! ♥" in the action bar (the first few
+     * times with a hint that holding right-click opens the guh menu; otherwise with the hearts it got, if any).
+     */
     public static void aai(GuhEntity guh, ServerPlayer player) {
-        if (!Band.isBandGuh(guh) || player.isSecondaryUseActive()) {
+        if (player.isSecondaryUseActive() || !(guh.level() instanceof ServerLevel level)) {
             return;
         }
-        Band.geefHartjes(guh, player, Reden.AAIEN.standaard(), Reden.AAIEN);
-        Band.moment(guh, player, Moment.AANGEAAID, "");
-        nl.juiced.guhs.quest.GuhAdvancements.grant(player, "band_geaaid");
+        guh.getLookControl().setLookAt(player);
+        if (guh.emotes.start(Emote.AAIEN, false, GuhEmotes.Source.OWNER)) {
+            guh.emotes.setLookTarget(player.getUUID());   // (nose up towards your hand)
+        }
+        level.sendParticles(BandFeature.HARTJE.get(), guh.getX(), guh.getY() + guh.getBbHeight() + 0.15, guh.getZ(), 3,
+                guh.getBbWidth() * 0.3, 0.1, guh.getBbWidth() * 0.3, 0.02);
+        if (guh.areSoundsEnabled()) {
+            guh.playSound(ModSounds.GUH_HAPPY.get(), 0.7f, guh.getVoicePitch() * 1.15f);
+        }
+        int erbij = 0;
+        if (Band.isBandGuh(guh)) {
+            erbij = Band.geefHartjes(guh, player, Reden.AAIEN.standaard(), Reden.AAIEN);
+            Band.moment(guh, player, Moment.AANGEAAID, "");
+            nl.juiced.guhs.quest.GuhAdvancements.grant(player, "band_geaaid");
+        }
+        CompoundTag saved = nl.juiced.guhs.quest.GuhQuests.saved(player);
+        int keer = saved.getIntOr(AAI_TELLER, 0);
+        MutableComponent regel = Component.translatable("gui.guhs.band.aai", guh.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE);
+        if (keer < AAI_TIPS) {
+            saved.putInt(AAI_TELLER, keer + 1);
+            regel.append(Component.literal("  ")).append(Component.translatable("gui.guhs.band.aai_tip").withStyle(ChatFormatting.GRAY));
+        } else if (erbij > 0) {
+            regel.append(Component.literal("  ")).append(Band.hartjesErbij(guh, erbij).withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
+        player.sendOverlayMessage(regel);
     }
 
     /** The menu's "Knuffelen!": a big cuddle (KNUFFELEN, hearts), then 30 seconds rest for this guh. */

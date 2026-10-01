@@ -26,7 +26,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * little heart and the level that unlocks them, and their buttons are off.
  */
 public class EmotePickerScreen extends Screen {
-    private static final int COLS = 2, ROWS = (Emote.values().length + COLS - 1) / COLS;
+    private static final int COLS = 2, ROWS = (Emote.kiesbare().size() + COLS - 1) / COLS;
     private static final int COL_W = 196, GAP = 8, W = COLS * COL_W + (COLS + 1) * GAP;
     private static final int ROW_H = 19, BUTTON_H = 18, LIST_Y = 38, H = LIST_Y + ROW_H * ROWS + 4 + 20 + 8;
     /** Inside a column: star, name, "Nu", "Blijf". */
@@ -67,9 +67,9 @@ public class EmotePickerScreen extends Screen {
         refreshers.clear();
         left = (width - W) / 2;
         top = Math.max(4, (height - H) / 2);
-        Emote[] emotes = Emote.values();
-        for (int i = 0; i < emotes.length; i++) {
-            Emote emote = emotes[i];
+        List<Emote> emotes = Emote.kiesbare();   // (1.2.0: not the petting moment)
+        for (int i = 0; i < emotes.size(); i++) {
+            Emote emote = emotes.get(i);
             int x = colX(i), y = rowY(i);
             Button star = addRenderableWidget(Button.builder(starLabel(emote), b ->
                             send(EmotePayload.FAVORITE, guh.emotes.favorite() == emote ? -1 : emote.ordinal()))
@@ -144,9 +144,9 @@ public class EmotePickerScreen extends Screen {
         Component favText = Component.translatable("gui.guhs.emotes.favourite",
                 fav == null ? Component.translatable("gui.guhs.emotes.favourite.none") : fav.displayName());
         g.text(font, favText, left + W - GAP - font.width(favText), top + 24, 0xFFFFD27A);
-        Emote[] emotes = Emote.values();
-        for (int i = 0; i < emotes.length; i++) {
-            Emote emote = emotes[i];
+        List<Emote> emotes = Emote.kiesbare();
+        for (int i = 0; i < emotes.size(); i++) {
+            Emote emote = emotes.get(i);
             int x = colX(i), y = rowY(i);
             boolean o = open(emote);
             Component naam = o ? emote.displayName() : Component.literal("♥ ").withStyle(ChatFormatting.LIGHT_PURPLE).append(emote.displayName());

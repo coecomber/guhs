@@ -311,6 +311,8 @@ class Guide:
         body = _ul([
             (f"<b>Het guhmenu</b>: houd rechtsklik ingedrukt op je tamme guh. Aaien, knuffelen, emotes, kleding, hernoemen en het dagboekje. {L('systemen/guhmenu', 'Meer')}",
              f"<b>The guh menu</b>: hold right-click on your tamed guh. Petting, hugging, emotes, clothes, renaming and the diary. {L('systemen/guhmenu', 'More')}"),
+            ("<b>Aaien</b>: tik je guh kort aan met rechtsklik. Hij wordt plat van geluk, duwt zijn kopje tegen je hand en er komen hartjes.",
+             "<b>Petting</b>: tap your guh with a short right-click. It squishes flat with happiness, pushes its head against your hand and hearts pop up."),
             ("<b>Zitten</b>: kies <i>Zitten</i> in het guhmenu. Een zittende guh beweegt helemaal niet, zelfs niet voor kaasknabbels. <i>Rondvadsen</i> uit = blijven staan zonder te zitten.",
              "<b>Sit</b>: choose <i>Sit</i> in the guh menu. A sitting guh doesn't move at all, not even for kaasknabbels. <i>Wander</i> off = stay put without sitting."),
             ("<b>Oppakken</b>: sluip + rechtsklik op je guh. Hij wordt een voorwerp dat alles onthoudt (naam, levens, zadel, pantser). Rechtsklik op een blok om hem neer te zetten.",
@@ -325,12 +327,12 @@ class Guide:
              "<b>Teleport</b>: in the guh menu you choose whether your guh teleports to you when it falls behind."),
             (f"<b>Kleding</b>: een kledingstuk eet je één keer op, en dan is het voor altijd van jou in de {L('systemen/kleding', 'kledingkast')}.",
              f"<b>Clothes</b>: eat a piece of clothing once and it's yours forever in the {L('systemen/kleding', 'wardrobe')}."),
-            ("<b>Taal</b>: Guhs volgt de taal van Minecraft (Nederlands als Minecraft Nederlands is, anders Engels). Liever zelf kiezen? Druk in het "
-             "guhmenu op <b>Taal</b> (Auto, NL of EN), of kies <i>Taal van Guhs</i> bij <i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>. "
-             "Dat geldt alleen voor jou, ook op een server.",
-             "<b>Language</b>: Guhs follows your Minecraft language (Dutch when Minecraft is in Dutch, English otherwise). Rather choose yourself? "
-             "Press <b>Lang</b> in the guh menu (Auto, NL or EN), or pick <i>Guhs language</i> under <i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>. "
-             "It's only for you, also on a server."),
+            ("<b>Taal</b>: de eerste keer dat je een wereld of server binnenkomt, vraagt Guhs welke taal je wilt: <b>Nederlands</b>, <b>English</b> "
+             "of <b>Automatisch</b> (volgt de taal van Minecraft). Later wisselen? Druk op de taalknop onder je <b>Guhdex</b> (of in het "
+             "superkompas), of kies <i>Taal van Guhs</i> bij <i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>. Dat geldt alleen voor jou, ook op een server.",
+             "<b>Language</b>: the first time you join a world or server, Guhs asks which language you want: <b>Nederlands</b>, <b>English</b> "
+             "or <b>Automatic</b> (follows your Minecraft language). Change it later? Press the language button under your <b>Guhdex</b> (or in the "
+             "Super Compass), or pick <i>Guhs language</i> under <i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>. It's only for you, also on a server."),
             ("<b>De G-toets</b> (maag heen en terug) kun je aanpassen bij Besturing &rarr; Guhs.",
              "<b>The G key</b> (stomach there and back) can be changed in Controls &rarr; Guhs."),
             (f"<b>Handige commando's</b> voor creative en operators staan bij {L('systemen/commandos')}.",

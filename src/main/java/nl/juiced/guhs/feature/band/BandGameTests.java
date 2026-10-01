@@ -168,6 +168,44 @@ public class BandGameTests {
         helper.succeed();
     }
 
+    /** 1.2.0: a tap is only petting: no sitting down or standing up, and always the squish, also after today's hearts cap. */
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    public static void bandAaienIsAltijdEenMomentje(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
+        helper.runAfterDelay(10, () -> {
+            nl.juiced.guhs.quest.GuhQuests.saved(p).remove(BandEvents.AAI_TELLER);
+            guh.emotes.stop();
+            guh.onOwnerTap(p);
+            helper.assertTrue(!guh.isOrderedToSit() && !guh.isInSittingPose(), "a tap doesn't sit any more");
+            helper.assertTrue(guh.emotes.current() == nl.juiced.guhs.feature.emotes.Emote.AAIEN, "the squish: " + guh.emotes.current());
+            helper.assertTrue(Band.hartjes(guh) == Reden.AAIEN.standaard(), "a heart for the pet: " + Band.hartjes(guh));
+            helper.assertTrue(nl.juiced.guhs.quest.GuhQuests.saved(p).getIntOr(BandEvents.AAI_TELLER, 0) == 1, "the first pet is counted (menu hint)");
+            // today's petting hearts used up: still a sweet moment, no more hearts
+            for (int i = 0; i < Reden.AAIEN.dagMax(); i++) {
+                Band.geefHartjes(guh, p, 1, Reden.AAIEN);
+            }
+            int vol = Band.hartjes(guh);
+            for (int i = 0; i < 4; i++) {
+                guh.emotes.stop();
+                guh.onOwnerTap(p);
+                helper.assertTrue(guh.emotes.current() == nl.juiced.guhs.feature.emotes.Emote.AAIEN, "always the squish (" + i + ")");
+            }
+            helper.assertTrue(Band.hartjes(guh) == vol, "capped: no more hearts today: " + Band.hartjes(guh));
+            helper.assertTrue(nl.juiced.guhs.quest.GuhQuests.saved(p).getIntOr(BandEvents.AAI_TELLER, 0) == BandEvents.AAI_TIPS,
+                    "the hint only the first " + BandEvents.AAI_TIPS + " times");
+            // a sitting guh stays sitting (standing up is the menu's button), and the emote picker doesn't offer petting
+            guh.emotes.stop();
+            guh.toggleSit();
+            guh.onOwnerTap(p);
+            helper.assertTrue(guh.isOrderedToSit(), "still sitting after a pet");
+            helper.assertTrue(!nl.juiced.guhs.feature.emotes.Emote.AAIEN.kiesbaar()
+                    && !nl.juiced.guhs.feature.emotes.Emote.kiesbare().contains(nl.juiced.guhs.feature.emotes.Emote.AAIEN), "not in the picker");
+            weg(helper, p);
+            helper.succeed();
+        });
+    }
+
     @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void bandVoerenEnKnuffelenGevenMomenten(GameTestHelper helper) {
         ServerPlayer p = speler(helper);

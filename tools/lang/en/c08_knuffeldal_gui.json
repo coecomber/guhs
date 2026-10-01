@@ -1022,7 +1022,7 @@
   "gui.guhs.landdiertjes.shuckle_sapje": "%s crawls into his shell and... blub blub... it's turning into berry juice!",
   "gui.guhs.landdiertjes.shuckle_geen_bessen": "%s needs %s sweet berries first to make juice. Nyeg.",
   "gui.guhs.menu.taal": "Lang: %s",
-  "gui.guhs.menu.taal.tooltip": "The language you read all Guhs texts in. Auto follows the Minecraft language (Dutch for Dutch, English for anything else); or pick Dutch or English yourself. Only for you, also on servers. (A sign you're looking at switches too; a scoreboard only when it refreshes.)",
+  "gui.guhs.menu.taal.tooltip": "The language you read all Guhs texts in. Auto follows the Minecraft language (Dutch for Dutch, English for anything else); or pick Dutch or English yourself. Only for you, also on servers. (Also in Mods > Guhs > Config. A sign you're looking at switches too; a scoreboard only when it refreshes.)",
   "gui.guhs.kleding.prijs.munt.smaragden": "%s emeralds",
   "gui.guhs.kleding.prijs.munt.bakmunten_bij_bakker_korstje": "%s Bake Coins from Baker Crusty",
   "gui.guhs.kleding.prijs.hint.je_eerste_klusje_voor_boerin_hooibaal": "your first chore for Farmer Haybale",

@@ -175,8 +175,7 @@ public class GuhGameTests {
         guh.tame(player);
 
         guh.onOwnerTap(player);
-        helper.assertTrue(player.getVehicle() == null && guh.isOrderedToSit(), "without a saddle a tap should only sit");
-        guh.toggleSit();
+        helper.assertTrue(player.getVehicle() == null && !guh.isOrderedToSit(), "without a saddle a tap is only a pet (1.2.0: no sitting)");
 
         helper.assertTrue(guh.isSaddleable(), "big tamed guh should take a saddle");
         guh.equipSaddle(new ItemStack(Items.SADDLE), null);

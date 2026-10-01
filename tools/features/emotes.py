@@ -18,7 +18,9 @@ EMOTES = ["zwaaien", "dansen", "slapen", "vahoeg", "rollen", "smakken", "verlege
           # 2.10 (Lieve vadsjes van elkaar)
           "hartjes", "knuffeldansje", "bff_knuffel", "verdrietje",
           # 3.0 (Guhverhalen): only the 626-guh; its animation comes from tools/features/guhwaii.py animations(), not from here
-          "ukelele"]
+          "ukelele",
+          # 1.2.0: being petted (a tap from the owner; not in the picker)
+          "aaien"]
 
 
 def _kf(pairs):
@@ -284,10 +286,40 @@ def _sad():
     }}
 
 
+def _pet():
+    """1.2.0: being petted (32 ticks): a squish (flatter and wider, ears flat, eyes shut: GuhRenderer.slaapt), a bounce back,
+    then head up and a paw up against your hand (the guh looks at you: the game turns the head), a happy wiggle, settle."""
+    return {"loop": True, "animation_length": 1.6, "bones": {
+        "root": {"position": _kf([(0, [0, 0, 0]), (0.15, [0, -1.0, 0]), (0.35, [0, 0.6, 0]), (0.5, [0, 0.3, 0]), (1.3, [0, 0.3, 0]),
+                                  (1.6, [0, 0, 0])]),
+                 "rotation": _kf([(0, [0, 0, 0]), (0.15, [0, 0, 0]), (0.45, [-9, 0, 0]), (0.6, [-10, 0, 5]), (0.8, [-10, 0, -5]),
+                                  (1.0, [-10, 0, 5]), (1.2, [-10, 0, -5]), (1.4, [-4, 0, 0]), (1.6, [0, 0, 0])])},
+        "body": {"scale": _kf([(0, [1, 1, 1]), (0.15, [1.22, 0.74, 1.14]), (0.35, [0.94, 1.1, 0.96]), (0.5, [1.03, 0.98, 1.02]),
+                               (1.3, [1.03, 0.98, 1.02]), (1.6, [1, 1, 1])])},
+        "head": {"rotation": _kf([(0, [0, 0, 0]), (0.15, [0, 0, 0]), (0.5, [0, 0, 14]), (0.75, [0, 0, 8]), (1.0, [0, 0, 14]),
+                                  (1.3, [0, 0, 8]), (1.6, [0, 0, 0])]),
+                 "scale": _kf([(0, [1, 1, 1]), (0.15, [1.12, 0.84, 1.08]), (0.35, [0.97, 1.05, 0.98]), (0.5, [1, 1, 1])]),
+                 "position": _kf([(0, [0, 0, 0]), (0.15, [0, -0.8, 0]), (0.45, [0, 0.8, -0.5]), (1.3, [0, 0.8, -0.5]), (1.6, [0, 0, 0])])},
+        # the paw up against your hand
+        "leg_front_right": {"position": _kf([(0, [0, 0, 0]), (0.35, [0, 0, 0]), (0.6, [-2, 6.5, -9]), (1.3, [-2, 6.5, -9]), (1.6, [0, 0, 0])]),
+                            "scale": _kf([(0, [1, 1, 1]), (0.35, [1, 1, 1]), (0.6, [1.05, 1.5, 1.05]), (1.3, [1.05, 1.5, 1.05]),
+                                          (1.6, [1, 1, 1])]),
+                            "rotation": _kf([(0, [0, 0, 0]), (0.35, [0, 0, 0]), (0.6, [-20, 0, 15]), (0.9, [-25, 0, 22]),
+                                             (1.2, [-20, 0, 15]), (1.6, [0, 0, 0])])},
+        "ear_left": {"rotation": _kf([(0, [0, 0, 0]), (0.15, [0, 0, 40]), (0.4, [0, 0, -12]), (0.7, [0, 0, 10]), (1.0, [0, 0, -8]),
+                                      (1.3, [0, 0, 6]), (1.6, [0, 0, 0])])},
+        "ear_right": {"rotation": _kf([(0, [0, 0, 0]), (0.15, [0, 0, -40]), (0.4, [0, 0, 12]), (0.7, [0, 0, -10]), (1.0, [0, 0, 8]),
+                                       (1.3, [0, 0, -6]), (1.6, [0, 0, 0])])},
+        "tail": {"rotation": _kf([(0, [0, -35, 0]), (0.2, [0, 35, 0]), (0.4, [0, -35, 0]), (0.6, [0, 35, 0]), (0.8, [0, -35, 0]),
+                                  (1.0, [0, 35, 0]), (1.2, [0, -35, 0]), (1.4, [0, 35, 0]), (1.6, [0, -35, 0])])},
+    }}
+
+
 def animations():
-    """animation name -> animation, merged into the guh animation file."""
-    return {f"animation.guh.emote_{name}": make() for name, make in
-            zip(EMOTES, [_wave, _dance, _sleep, _vahoeg, _roll, _munch, _shy, _yawn, _sing, _hug, _hearts, _twirl, _bff_hug, _sad])}
+    """animation name -> animation, merged into the guh animation file. (The ukelele's comes from tools/features/guhwaii.py.)"""
+    makers = dict(zip(EMOTES[:14], [_wave, _dance, _sleep, _vahoeg, _roll, _munch, _shy, _yawn, _sing, _hug, _hearts, _twirl, _bff_hug, _sad]))
+    makers["aaien"] = _pet
+    return {f"animation.guh.emote_{name}": make() for name, make in makers.items()}
 
 
 # --- particles ----------------------------------------------------------------------------------------------------------
@@ -397,6 +429,10 @@ LANG = {
     "emote.guhs.ukelele.description": ("Tokkelt een klein ukeleletje en wiebelt met zijn extra armpjes. Aloha, njeg!",
                                        "Tokkelt een klein ukeleletje en wiebelt met zijn extra armpjes. Aloha, njeg!"),
     "gui.guhs.emotes.alleen_voor": ("Alleen de %s kan dat! Njeg.", "Alleen de %s kan dat! Njeg."),
+    # 1.2.0: being petted (a tap; not in the picker, but it has a name like every emote)
+    "emote.guhs.aaien": ("Aaien", "Aaien"),
+    "emote.guhs.aaien.description": ("Wordt even helemaal plat van geluk, ogen dicht, en duwt zijn kopje tegen je hand.",
+                                     "Wordt even helemaal plat van geluk, ogen dicht, en duwt zijn kopje tegen je hand."),
     "gui.guhs.emotes.hint": ("Star = favourite", "Ster = lievelingsemote"),
     "emote.guhs.zwaaien": ("Wave", "Zwaaien"),
     "emote.guhs.dansen": ("Dance", "Dansen"),

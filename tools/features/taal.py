@@ -3,7 +3,8 @@
 resolved (or hard-coded in Dutch) on the server. No registry content: this module only writes lang (Dutch; the English is in
 tools/lang/en/*.json like every other key).
 
-  gui.guhs.menu.taal / gui.guhs.taal.*          the language button in the guh menu (client/GuhsTaal: Auto / NL / EN)
+  gui.guhs.menu.taal / gui.guhs.taal.*          the language button of the Guhdex and the Superkompas (client/GuhsTaal: Auto / NL / EN)
+  gui.guhs.taalvraag.*                          the first-join question "Welke taal wil je voor Guhs?" (client/screen/TaalVraagScreen)
   entity.guhs.reisguh.plek.<id>                 the place names the templates give their Reisguh (quest/Reisguh.PLEKKEN)
   quest.guhs.reis.naam_xz                       "Guhkermis (12, -40)": a template name that was already taken
   gui.guhs.huisje.standaardnaam.<i>             the default huisje names (feature/huisje/Huisjes.NAMEN, same order)
@@ -25,13 +26,21 @@ TAAL = {
     "gui.guhs.menu.taal": "Taal: %s",
     "gui.guhs.menu.taal.tooltip": "In welke taal je alle Guhs-teksten leest. Auto volgt de taal van Minecraft (Nederlands bij "
                                   "Nederlands, anders Engels); of kies zelf Nederlands of Engels. Alleen voor jou, ook op servers. "
-                                  "(Een bord dat al in beeld is wisselt mee; een scorebord pas als het weer ververst.)",
+                                  "(Ook bij Mods > Guhs > Config. Een bord dat al in beeld is wisselt mee; een scorebord pas als het "
+                                  "weer ververst.)",
     "gui.guhs.taal.auto": "Auto",
     "gui.guhs.taal.nl": "Nederlands",
     "gui.guhs.taal.en": "English",
     "gui.guhs.taal.auto_is": "Auto (%s)",
     "gui.guhs.taal.kort.nl": "NL",
     "gui.guhs.taal.kort.en": "EN",
+    # the first-join question (client/screen/TaalVraagScreen): shown in BOTH languages, so the English of these keys is
+    # used even when the switch says Dutch
+    "gui.guhs.taalvraag.vraag": "Welke taal wil je voor Guhs?",
+    "gui.guhs.taalvraag.auto": "Automatisch",
+    "gui.guhs.taalvraag.auto.tooltip": "Volgt de taal van Minecraft: Nederlands als Minecraft Nederlands is, anders Engels.",
+    "gui.guhs.taalvraag.later": "Je kunt het altijd later veranderen in je Guhdex (je krijgt een nieuwe als je naar de Guhmensie "
+                                "gaat) of bij Mods → Guhs → Config.",
 }
 
 # quest/Reisguh.PLEKKEN: the Dutch name in the template -> id
@@ -190,7 +199,7 @@ def check(alles):
         for f in files:
             if f.endswith(".java"):
                 with open(os.path.join(root, f), encoding="utf-8") as fh:
-                    gebruikt.update(re.findall(r'"((?:gui\.guhs\.kleding\.prijs|commands\.guhs|gui\.guhs\.taal|gui\.guhs\.menu\.taal)\.[a-z0-9_.]+)"', fh.read()))
+                    gebruikt.update(re.findall(r'"((?:gui\.guhs\.kleding\.prijs|commands\.guhs|gui\.guhs\.taal|gui\.guhs\.taalvraag|gui\.guhs\.menu\.taal)\.[a-z0-9_.]+)"', fh.read()))
     for k in sorted(gebruikt):
         if k not in alles and not k.endswith("."):
             problems.append(f"the Java uses {k}, but taal.py has no Dutch for it")

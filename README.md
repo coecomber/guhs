@@ -23,15 +23,16 @@ Guhs are always friendly. Nothing in the mod makes them hurt you, and the one gr
 
 > **Language:** since 1.2.0 every in-game name and text is in **English and Dutch**, with a lot of guh puns in both.
 > *Auto* (the default) follows your Minecraft language (Dutch when Minecraft is in Dutch, English otherwise); pick
-> **Auto / NL / EN** yourself with the *Lang* button in the guh menu or *Guhs language* in the mod's config
-> (`language` in `config/guhs-client.toml`). Per player, also on servers. The [wiki](https://guhs.nl/wiki/) is in
+> **Auto / NL / EN** yourself: Guhs asks once when you first join a world or server, and later you switch with the
+> *Lang* button under your Guhdex or *Guhs language* in the mod's config (`language` in `config/guhs-client.toml`).
+> Per player, also on servers. The [wiki](https://guhs.nl/wiki/) is in
 > English and Dutch too. (Guhs 1.0.x for Minecraft 1.21.1 is Dutch only.)
 
 ## Features
 
 - **The guh.** Spawns in every overworld biome in random sizes (tiny to three blocks long). Tame it with Cheese
-  Nibbles, name it, pick it up (sneak + right-click), ride big ones with a saddle, and hold right-click for the
-  **guh menu**: sit, follow, behaviour, sounds, emotes, wardrobe, diary and more.
+  Nibbles, pet it (a short right-click), name it, pick it up (sneak + right-click), ride big ones with a saddle, and
+  hold right-click for the **guh menu**: sit, follow, behaviour, sounds, emotes, wardrobe, diary and more.
 - **20+ guh variants** (Mint, Choco, Ghost, Starry, Rainbow, Golden, Pinguh, Ender guh you can fly, Merguh that
   swims, ...), each with a page in the **Guhdex**, your in-game collection book.
 - **Hearts & friendship.** Every tamed guh has a heart meter with you, eight secret favourites to discover, friends
@@ -131,7 +132,7 @@ hem aan, rij op hem, knuffel hem tot jullie *zielsguh bff 5evr <3* zijn, en volg
 **Guhmensie**: een hele roze wereld vol guhs, kaas, minigames en verhaaltjes. Guhs zijn altijd lief.
 
 **Wat zit erin?**
-- De guh: tem, noem, pak op, rij, en open het guhmenu (rechtsklik ingedrukt houden).
+- De guh: tem, aai (kort rechtsklikken), noem, pak op, rij, en open het guhmenu (rechtsklik ingedrukt houden).
 - Meer dan 20 guh-varianten en de **Guhdex** om ze te verzamelen.
 - Een hartjesmeter per guh, geheime favorietjes, vriendjes, klusjes vanuit je **guhhuisje**, speelgoed en een dagboekje.
 - Meer dan 150 kledingstukjes in zeven vakjes, guh-harnas en een rugzak.
@@ -148,8 +149,8 @@ hem aan, rij op hem, knuffel hem tot jullie *zielsguh bff 5evr <3* zijn, en volg
 **Nodig:** Guhs 1.1.x en 1.2.x: Minecraft 26.1.2, NeoForge 26.1.2.71+, GeckoLib 5.5.2+ (Java 25). Guhs 1.0.x: Minecraft 1.21.1,
 NeoForge 21.1.0+, GeckoLib 4.8+. Installeer Guhs op de server én bij elke speler.
 Alle teksten in het spel zijn er in het Nederlands en het Engels (sinds 1.2.0; Guhs 1.0.x is alleen Nederlands):
-*Auto* volgt de taal van Minecraft, en met de knop *Taal* in het guhmenu of `language` in `config/guhs-client.toml`
-kies je zelf Auto, NL of EN. **Aanrader voor servers:** Lootr, zodat elke speler zijn eigen buit uit
+*Auto* volgt de taal van Minecraft. Guhs vraagt het één keer als je voor het eerst een wereld of server binnenkomt;
+daarna wissel je met de knop *Taal* onder je Guhdex of `language` in `config/guhs-client.toml` (Auto, NL of EN). **Aanrader voor servers:** Lootr, zodat elke speler zijn eigen buit uit
 kisten krijgt.
 
 **Modpacks en video's:** je mag Guhs in elk modpack stoppen en er (ook betaalde) video's en streams over maken. Los

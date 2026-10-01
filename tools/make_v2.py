@@ -2240,11 +2240,14 @@ def config_lang():
     lang("guhs.configuration.title", "Guhs Settings", "Guhs-instellingen")
     lang("guhs.configuration.section.guhs.client.toml", "Client settings", "Clientinstellingen")
     lang("guhs.configuration.section.guhs.client.toml.title", "Guhs client settings", "Guhs-clientinstellingen")
-    # 1.2.0: the NL/EN switch (client/GuhsTaal; also a button in the guh menu)
+    # 1.2.0: the NL/EN switch (client/GuhsTaal; also asked once when you first join, and a button in the Guhdex and the Superkompas)
     lang("guhs.configuration.language", "Guhs language", "Taal van Guhs")
     lang("guhs.configuration.language.tooltip",
          "AUTO follows the Minecraft language (Dutch for nl_nl, English for anything else); NL is always Dutch, EN always English. Only for you, also on servers.",
-         "AUTO volgt de taal van Minecraft (Nederlands bij nl_nl, anders Engels); NL is altijd Nederlands, EN altijd Engels. Alleen voor jou, ook op servers.")
+         "In welke taal je de Guhs-teksten leest. AUTO volgt de taal van Minecraft (Nederlands bij nl_nl, anders Engels); NL is altijd "
+         "Nederlands, EN altijd Engels. Alleen voor jou, ook op servers. Ook te wisselen met de taalknop in je Guhdex.")
+    lang("guhs.configuration.languageChosen", "Language question answered", "Taalvraag beantwoord")
+    lang("guhs.configuration.languageChosen.tooltip", "", "Uit = de vraag 'Welke taal wil je voor Guhs?' komt nog een keer als je een wereld of server binnenkomt.")
 
 
 def write_lang():

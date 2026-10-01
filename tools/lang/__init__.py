@@ -53,13 +53,27 @@ def needs_english(value):
     return bool(_LETTERS.search(_CODES.sub("", value)))
 
 
+# the tooltip suffixes mc26.lang_block_items() copies from block.guhs.<name>.<suffix> to item.guhs.<name>.<suffix> (mc26.TOOLTIP_SUFFIXES)
+TOOLTIP_SUFFIXES = ("lore", "loan", "tooltip")
+
+
+def derived_block(key):
+    """The block.guhs.* key an item.guhs.* key may be a copy of (its name, or a tooltip line), else None."""
+    if not key.startswith("item.guhs."):
+        return None
+    rest = key[len("item.guhs."):]
+    parts = rest.split(".")
+    if len(parts) == 1 or (len(parts) == 2 and parts[1] in TOOLTIP_SUFFIXES):
+        return "block.guhs." + rest
+    return None
+
+
 def derived_item(key, nl):
-    """item.guhs.X with exactly the text of block.guhs.X: mc26.lang_block_items() copies it (in every language), so it
-    takes the block's English and needs no overlay entry of its own."""
-    if not key.startswith("item.guhs.") or key.count(".") != 2:
-        return False
-    block = "block.guhs." + key[len("item.guhs."):]
-    return block in nl and nl[block] == nl[key]
+    """item.guhs.X (or its tooltip line item.guhs.X.lore/.loan/.tooltip) with exactly the text of block.guhs.X(.lore...):
+    mc26.lang_block_items() copies it (in every language), so it takes the block's English and needs no overlay entry of
+    its own."""
+    block = derived_block(key)
+    return block is not None and block in nl and nl[block] == nl[key]
 
 
 def english(nl, overlay=None):
@@ -69,8 +83,8 @@ def english(nl, overlay=None):
     for k, v in nl.items():
         if k in overlay:
             en[k] = overlay[k]
-        elif derived_item(k, nl) and "block.guhs." + k[len("item.guhs."):] in overlay:
-            en[k] = overlay["block.guhs." + k[len("item.guhs."):]]
+        elif derived_item(k, nl) and derived_block(k) in overlay:
+            en[k] = overlay[derived_block(k)]
         else:
             en[k] = v
             if needs_english(v) and not derived_item(k, nl):

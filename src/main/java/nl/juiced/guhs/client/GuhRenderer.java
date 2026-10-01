@@ -82,9 +82,10 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
         HOOKS.add(hook);
     }
 
-    /** Asleep: the SLAPEN emote (a nap, the night) or in a guh nest. */
+    /** Asleep: the SLAPEN emote (a nap, the night) or in a guh nest; 1.2.0: also eyes happily shut while being petted. */
     public static boolean slaapt(GuhEntity guh) {
         return guh.emotes.current() == nl.juiced.guhs.feature.emotes.Emote.SLAPEN
+                || guh.emotes.current() == nl.juiced.guhs.feature.emotes.Emote.AAIEN
                 || (guh.getKnusVlaggen() & nl.juiced.guhs.feature.vadswoud.SleepInNestGoal.OOGJES_DICHT) != 0;
     }
 

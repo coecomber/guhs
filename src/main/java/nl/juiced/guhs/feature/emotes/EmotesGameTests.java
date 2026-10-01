@@ -168,6 +168,10 @@ public class EmotesGameTests {
             // 2.10: the three hartjes emotes are unlocks (samen): locked at first, and they don't count for "alle"
             nl.juiced.guhs.feature.samen.SamenBeloning.wisEmotes(owner);
             for (Emote e : Emote.values()) {
+                if (!e.kiesbaar()) {   // 1.2.0: petting is a tap, the picker can't ask for it
+                    helper.assertTrue(!ask(owner, guh, EmotePayload.NOW, e) && guh.emotes.current() != e, "not pickable: " + e);
+                    continue;
+                }
                 if (nl.juiced.guhs.feature.samen.SamenBeloning.isBandEmote(e)) {
                     helper.assertTrue(!ask(owner, guh, EmotePayload.NOW, e) && guh.emotes.current() != e, "locked: " + e);
                     continue;

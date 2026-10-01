@@ -376,8 +376,9 @@ public class KnusGameTests {
             }
         }
         helper.assertTrue(Emote.byId("gapen") == Emote.GAPEN && Emote.byId("zingen") == Emote.ZINGEN && Emote.byId("knuffelen") == Emote.KNUFFELEN
-                && Emote.values().length == 15 && Emote.KNUFFELEN.ordinal() == 9 && Emote.VERDRIETJE.ordinal() == 13 && Emote.UKELELE.ordinal() == 14,
-                "fifteen emotes (2.10: four more, 3.0: the ukelele), the new ones last");
+                && Emote.values().length == 16 && Emote.KNUFFELEN.ordinal() == 9 && Emote.VERDRIETJE.ordinal() == 13 && Emote.UKELELE.ordinal() == 14
+                && Emote.AAIEN.ordinal() == 15,
+                "sixteen emotes (2.10: four more, 3.0: the ukelele, 1.2.0: petting), the new ones last");
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 1, 2));
         guh.setPersistenceRequired();
         int[] sung = {0};
