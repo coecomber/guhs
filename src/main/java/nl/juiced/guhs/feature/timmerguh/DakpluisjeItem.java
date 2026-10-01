@@ -43,7 +43,16 @@ public class DakpluisjeItem extends Item {
             return InteractionResult.FAIL;
         }
         if (!level.isClientSide() && context.getPlayer() instanceof ServerPlayer p) {
-            leg((ServerLevel) level, pos, p, context.getItemInHand());
+            // 1.2.0: NeoForge records every block set during useOn and then fires a place event for each one; in a Knuffeldal
+            // town the protection cancelled those ("Het Knuffeldal is zo knus...") and put the ghost tile back. The roof is
+            // the Timmerguh's own building work, so it isn't recorded as the player placing blocks.
+            boolean capture = level.captureBlockSnapshots;
+            level.captureBlockSnapshots = false;
+            try {
+                leg((ServerLevel) level, pos, p, context.getItemInHand());
+            } finally {
+                level.captureBlockSnapshots = capture;
+            }
         }
         return InteractionResult.SUCCESS;
     }

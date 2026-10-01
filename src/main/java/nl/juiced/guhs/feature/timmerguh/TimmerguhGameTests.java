@@ -92,6 +92,40 @@ public class TimmerguhGameTests {
         return holder != null && p.getAdvancements().getOrStartProgress(holder).isDone();
     }
 
+    /**
+     * 1.2.0: a right-click with a dakpluisje (NeoForge records the blocks set during useOn and fires a place event for each,
+     * which the Knuffeldal protection cancels in survival) records nothing: the roof part and the flag stay.
+     */
+    @GuhTest(template = BOUW, batch = BATCH + "_pluisje", timeoutTicks = 200)
+    public static void timmerguhDakpluisjeNietTegengehouden(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
+        GuhNpcEntity npc = timmerguh(helper, new BlockPos(3, 2, 10));
+        try {
+            p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+            BlockPos plek = Timmerguh.plekken(npc).get(0);
+            ItemStack stack = new ItemStack(TimmerguhFeature.DAKPLUISJE.get(), 2);
+            p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, stack);
+            level.captureBlockSnapshots = true;
+            level.capturedBlockSnapshots.clear();
+            try {
+                stack.getItem().useOn(new net.minecraft.world.item.context.UseOnContext(p, net.minecraft.world.InteractionHand.MAIN_HAND,
+                        new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(plek), Direction.UP, plek, false)));
+                helper.assertTrue(level.capturedBlockSnapshots.isEmpty(), "nothing recorded as placed by the player: " + level.capturedBlockSnapshots.size());
+                helper.assertTrue(level.captureBlockSnapshots, "recording is switched back on afterwards");
+            } finally {
+                level.captureBlockSnapshots = false;
+                level.capturedBlockSnapshots.clear();
+            }
+            helper.assertTrue(!level.getBlockState(plek).is(TimmerguhFeature.DAKPLEK.get()) && stack.getCount() == 1, "the roof part is on");
+            weg(helper, p);
+            helper.succeed();
+        } catch (RuntimeException e) {
+            weg(helper, p);
+            throw e;
+        }
+    }
+
     /** Lays every ghost tile round the Timmerguh with the player's dakpluisjes (as right-clicks would). */
     static void legAlles(ServerLevel level, GuhNpcEntity npc, ServerPlayer p) {
         for (BlockPos pos : Timmerguh.plekken(npc)) {
