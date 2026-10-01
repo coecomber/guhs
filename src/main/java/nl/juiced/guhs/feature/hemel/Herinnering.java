@@ -47,11 +47,11 @@ public class Herinnering extends Item {
         CompoundTag data = new CompoundTag();
         CompoundTag h = new CompoundTag();
         h.store("Band", UUIDUtil.CODEC, nl.juiced.guhs.feature.band.Band.id(guh));
-        h.putString("Naam", guh.getName().getString());
+        nl.juiced.guhs.taal.Tekst.put(h, "Naam", guh.getName());   // (1.2.0: a Component, see taal/Tekst)
         h.putString("Variant", guh.getVariant().id());
         data.put(TAG, h);
         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(data));
-        stack.set(DataComponents.CUSTOM_NAME, Component.translatable("item.guhs.herinnering.van", guh.getName().getString())
+        stack.set(DataComponents.CUSTOM_NAME, Component.translatable("item.guhs.herinnering.van", guh.getName().copy())
                 .withStyle(s -> s.withItalic(false).withColor(ChatFormatting.LIGHT_PURPLE)));
         return stack;
     }
@@ -84,8 +84,8 @@ public class Herinnering extends Item {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (level instanceof ServerLevel server) {
-            String naam = data(stack).getStringOr("Naam", "");
-            player.sendOverlayMessage(naam.isEmpty() ? Component.translatable("gui.guhs.hemel.ster.leeg").withStyle(ChatFormatting.LIGHT_PURPLE)
+            Component naam = nl.juiced.guhs.taal.Tekst.get(data(stack), "Naam");
+            player.sendOverlayMessage(nl.juiced.guhs.taal.Tekst.empty(naam) ? Component.translatable("gui.guhs.hemel.ster.leeg").withStyle(ChatFormatting.LIGHT_PURPLE)
                     : Component.translatable("gui.guhs.hemel.ster.knuffel", naam).withStyle(ChatFormatting.LIGHT_PURPLE));
             server.sendParticles(ParticleTypes.HEART, player.getX(), player.getY() + 1.4, player.getZ(), 5, 0.4, 0.3, 0.4, 0.02);
             server.sendParticles(HemelFeature.STERRETJE.get(), player.getX(), player.getY() + 1.2, player.getZ(), 14, 0.5, 0.5, 0.5, 0.03);

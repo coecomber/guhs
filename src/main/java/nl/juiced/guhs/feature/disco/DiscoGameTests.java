@@ -278,7 +278,7 @@ public class DiscoGameTests {
         }
         helper.assertTrue(GuhClothes.DISCO_KOPTELEFOONTJE.slot == GuhClothes.Slot.OREN, "the headphones go on the ears");
         helper.assertTrue("disco".equals(nl.juiced.guhs.feature.kleding.KledingBronnen.bron(GuhClothes.DISCO_KOPTELEFOONTJE))
-                && (DiscoFeature.PRICE_KOPTELEFOONTJE + " discomunten").equals(nl.juiced.guhs.feature.kleding.KledingBronnen.prijs(GuhClothes.DISCO_KOPTELEFOONTJE)),
+                && (DiscoFeature.PRICE_KOPTELEFOONTJE + " discomunten").equals(nl.juiced.guhs.taal.NlTekst.tekst(nl.juiced.guhs.feature.kleding.KledingBronnen.prijs(GuhClothes.DISCO_KOPTELEFOONTJE))),
                 "one source: the DJ-guh, for " + DiscoFeature.PRICE_KOPTELEFOONTJE + " discomunten");
         helper.assertTrue(nl.juiced.guhs.feature.spelen.SpelGroepen.kleding("disco").contains(GuhClothes.DISCO_KOPTELEFOONTJE),
                 "shown with the disco in the Guhdex");

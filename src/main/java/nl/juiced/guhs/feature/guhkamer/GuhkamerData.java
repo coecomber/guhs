@@ -78,7 +78,8 @@ public class GuhkamerData extends SavedData {
     /** A guh staying in the room. */
     public static final class Gast {
         public final UUID id;
-        public String naam;
+        /** 1.2.0: a Component (saved before 1.2.0 as a resolved String: a literal now). */
+        public net.minecraft.network.chat.Component naam;
         /** Its saved entity data while the room is empty; empty while it is in the world. */
         public CompoundTag data = new CompoundTag();
         /** Where it was in the room (to put it back there), or null. */
@@ -87,7 +88,7 @@ public class GuhkamerData extends SavedData {
         public CompoundTag looks = new CompoundTag();
         public long sinds;
 
-        public Gast(UUID id, String naam) {
+        public Gast(UUID id, net.minecraft.network.chat.Component naam) {
             this.id = id;
             this.naam = naam;
         }
@@ -99,7 +100,7 @@ public class GuhkamerData extends SavedData {
         CompoundTag save() {
             CompoundTag t = new CompoundTag();
             t.store("Id", UUIDUtil.CODEC, id);
-            t.putString("Naam", naam);
+            nl.juiced.guhs.taal.Tekst.put(t, "Naam", naam);
             if (!data.isEmpty()) {
                 t.put("Data", data);
             }
@@ -114,7 +115,7 @@ public class GuhkamerData extends SavedData {
         }
 
         static Gast load(CompoundTag t) {
-            Gast g = new Gast(t.read("Id", UUIDUtil.CODEC).orElseThrow(), t.getStringOr("Naam", ""));
+            Gast g = new Gast(t.read("Id", UUIDUtil.CODEC).orElseThrow(), nl.juiced.guhs.taal.Tekst.get(t, "Naam"));
             g.data = t.getCompoundOrEmpty("Data");
             if (t.contains("X")) {
                 g.plek = new Vec3(t.getDoubleOr("X", 0.0), t.getDoubleOr("Y", 0.0), t.getDoubleOr("Z", 0.0));

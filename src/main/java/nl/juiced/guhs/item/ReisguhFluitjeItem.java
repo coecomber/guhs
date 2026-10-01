@@ -39,8 +39,9 @@ public class ReisguhFluitjeItem extends Item {
         if (!level.isEmptyBlock(at) || !level.isEmptyBlock(at.above())) {
             return InteractionResult.FAIL;
         }
-        String name = player == null ? "Reisguh"
-                : Component.translatable("quest.guhs.reis.own_name", player.getName().getString()).getString();
+        // 1.2.0: a translatable name (every player reads it in their own language); the player's name is the argument
+        Component name = player == null ? Component.translatable("entity.guhs.guh_npc.reisguh")
+                : Component.translatable("quest.guhs.reis.own_name", player.getName().getString());
         Reisguh.place(level, at, player == null ? 0 : player.getYRot() + 180, name);
         level.playSound(null, at, net.minecraft.sounds.SoundEvents.NOTE_BLOCK_FLUTE.value(), net.minecraft.sounds.SoundSource.PLAYERS, 1f, 1.5f);
         if (player == null || !player.getAbilities().instabuild) {

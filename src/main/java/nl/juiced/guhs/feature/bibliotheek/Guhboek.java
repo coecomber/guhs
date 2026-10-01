@@ -80,11 +80,15 @@ public enum Guhboek {
         for (int i = 0; i < pages; i++) {
             list.add(Filterable.passThrough(Component.translatable("book.guhs.bieb." + id + "." + i)));
         }
+        // 1.2.0: no author (a plain String, one language): the "by" line is a translatable lore line instead
         stack.set(DataComponents.WRITTEN_BOOK_CONTENT, new WrittenBookContent(Filterable.passThrough("Guhboek " + (ordinal() + 1)),
-                "De Bibliothecaris", 0, list, true));
+                "", 0, list, true));
         stack.set(DataComponents.CUSTOM_NAME, title().copy().withStyle(Style.EMPTY.withItalic(false)
                 .withColor(secret() ? TextColor.fromLegacyFormat(ChatFormatting.LIGHT_PURPLE) : TextColor.fromRgb(0xF7B6CB))));
-        stack.set(DataComponents.LORE, new ItemLore(List.of(secret()
+        stack.set(DataComponents.LORE, new ItemLore(List.of(
+                Component.translatable("item.guhs.bieb_boek.door", Component.translatable("entity.guhs.guh_npc.bibliothecaris"))
+                        .withStyle(s -> s.withItalic(false).withColor(ChatFormatting.GRAY)),
+                secret()
                 ? Component.translatable("item.guhs.bieb_boek.lore_secret").withStyle(s -> s.withItalic(false).withColor(ChatFormatting.DARK_PURPLE))
                 : Component.translatable("item.guhs.bieb_boek.lore", ordinal() + 1, values().length)
                         .withStyle(s -> s.withItalic(false).withColor(ChatFormatting.GRAY)))));

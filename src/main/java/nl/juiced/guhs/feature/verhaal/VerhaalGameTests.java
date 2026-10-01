@@ -384,7 +384,7 @@ public class VerhaalGameTests {
         int hartjes = Band.hartjes(guh);
         guh.kill(helper.getLevel());
         helper.assertTrue(Wolkjes.isDood(p.level().getServer(), p.getUUID(), id) && Wolkjes.dood(p.level().getServer(), p.getUUID()).stream().anyMatch(d -> d.bandId().equals(id)
-                && d.naam().equals("Wolkje") && d.variant().equals("choco") && d.hartjes() == hartjes), "in the wolkjes, with its name, look and hearts");
+                && d.naam().getString().equals("Wolkje") && d.variant().equals("choco") && d.hartjes() == hartjes), "in the wolkjes, with its name, look and hearts");
         helper.assertTrue(GuhVolger.plek(p.level().getServer(), p.getUUID(), id).soort() == PlekSoort.IN_DE_WOLKJES, "Waar is hij? In de wolkjes... njeg");
         List<ItemEntity> sterren = helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(helper.absolutePos(new BlockPos(6, 1, 6))).inflate(3),
                 e -> e.getItem().is(HemelFeature.HERINNERING.get()));

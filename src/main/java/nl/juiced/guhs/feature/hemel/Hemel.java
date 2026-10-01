@@ -52,18 +52,18 @@ public final class Hemel {
     }
 
     /** The screen's data: the heart, today, and every dead tamed guh of the player (newest first). */
-    public static CompoundTag data(ServerPlayer p, BlockPos hart, @Nullable String net) {
+    public static CompoundTag data(ServerPlayer p, BlockPos hart, @Nullable Component net) {
         CompoundTag t = new CompoundTag();
         t.putLong("Pos", hart.asLong());
         t.putLong("Dag", Band.dag(p.level().getServer()));
         if (net != null) {
-            t.putString("Net", net);
+            nl.juiced.guhs.taal.Tekst.put(t, "Net", net);   // (1.2.0: a Component)
         }
         ListTag lijst = new ListTag();
         for (Wolkjes.DodeGuh d : Wolkjes.dood(p.level().getServer(), p.getUUID())) {
             CompoundTag g = new CompoundTag();
             g.store("Id", UUIDUtil.CODEC, d.bandId());
-            g.putString("Naam", d.naam());
+            nl.juiced.guhs.taal.Tekst.put(g, "Naam", d.naam());
             g.putString("Variant", d.variant());
             g.putInt("Hartjes", d.hartjes());
             g.putInt("Niveau", d.niveau().ordinal());
@@ -94,7 +94,7 @@ public final class Hemel {
         }
         GuhEntity guh = terug(p, hart, id);
         if (guh != null) {
-            ModNetworking.sendTo(p, new HemelPayloads.Open(data(p, hart, guh.getName().getString())));
+            ModNetworking.sendTo(p, new HemelPayloads.Open(data(p, hart, guh.getName().copy())));
         }
     }
 
@@ -171,7 +171,7 @@ public final class Hemel {
             return false;
         }
         UUID id = data.read("Band", UUIDUtil.CODEC).orElseThrow();
-        String naam = data.getStringOr("Naam", "");
+        Component naam = nl.juiced.guhs.taal.Tekst.get(data, "Naam");
         if (Wolkjes.isDood(p.level().getServer(), p.getUUID(), id)) {
             GuhEntity guh = terug(p, hart, id);
             if (guh != null) {

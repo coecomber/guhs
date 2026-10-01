@@ -115,9 +115,9 @@ public final class DoolhofFeature {
         Protected.add((level, pos) -> level instanceof net.minecraft.server.level.ServerLevel server && server.dimension() == ModDimensions.GUHMENSION
                 && DoolhofProtection.inDoolhof(server, pos));
         // the explorer's outfit: only from Meneer Vadskronkel's shop
-        KledingBronnen.bron(GuhClothes.DOOLHOF_HOEDJE, "doolhof", DoolhofRole.HOEDJE + " doolhofknabbels");
-        KledingBronnen.bron(GuhClothes.DOOLHOF_KOMPAS, "doolhof", DoolhofRole.KOMPAS + " doolhofknabbels");
-        KledingBronnen.bron(GuhClothes.DOOLHOF_RUGZAKJE, "doolhof", DoolhofRole.RUGZAKJE + " doolhofknabbels");
+        KledingBronnen.bron(GuhClothes.DOOLHOF_HOEDJE, "doolhof", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.doolhofknabbels", DoolhofRole.HOEDJE));
+        KledingBronnen.bron(GuhClothes.DOOLHOF_KOMPAS, "doolhof", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.doolhofknabbels", DoolhofRole.KOMPAS));
+        KledingBronnen.bron(GuhClothes.DOOLHOF_RUGZAKJE, "doolhof", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.doolhofknabbels", DoolhofRole.RUGZAKJE));
     }
 
     public static void payloads(PayloadRegistrar registrar) {

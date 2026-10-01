@@ -145,7 +145,13 @@ public final class Praat {
         ListTag list = new ListTag();
         if (args != null) {
             for (Object o : args) {
-                list.add(StringTag.valueOf(o instanceof Component c ? c.getString() : String.valueOf(o)));
+                if (o instanceof Component c) {   // 1.2.0: as a Component ({A: ...}), resolved by the reader's client
+                    CompoundTag a = new CompoundTag();
+                    nl.juiced.guhs.taal.Tekst.put(a, "A", c);
+                    list.add(a);
+                } else {
+                    list.add(StringTag.valueOf(String.valueOf(o)));
+                }
             }
         }
         return list;

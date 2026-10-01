@@ -38,7 +38,7 @@ import net.minecraft.world.entity.EntitySpawnReason;
  */
 public final class Wolkjes {
     /** One tamed guh in the wolkjes, for the Knuffelhart's screen. */
-    public record DodeGuh(UUID bandId, UUID eigenaar, String naam, String variant, int hartjes, BandNiveau niveau, CompoundTag looks, long doodDag) {
+    public record DodeGuh(UUID bandId, UUID eigenaar, Component naam, String variant, int hartjes, BandNiveau niveau, CompoundTag looks, long doodDag) {
     }
 
     /** Told about every tamed guh that goes to the wolkjes (after the bookkeeping; eigenaar null when offline). */
@@ -60,7 +60,7 @@ public final class Wolkjes {
         for (int i = recs.size() - 1; i >= 0; i--) {
             BandData.Rec r = recs.get(i);
             if (r.dood) {
-                out.add(new DodeGuh(r.id, eigenaar, r.naam.isEmpty() ? "Guh" : r.naam, r.looks.getStringOr("Variant", "").isEmpty() ? "normal"
+                out.add(new DodeGuh(r.id, eigenaar, r.weergave(), r.looks.getStringOr("Variant", "").isEmpty() ? "normal"
                         : r.looks.getStringOr("Variant", ""), r.hartjes, r.niveau(), r.looks.copy(), r.doodDag));
             }
         }
@@ -149,8 +149,9 @@ public final class Wolkjes {
         }
         guh.setOwnerUUID(eigenaar);
         guh.setTame(true, true);
-        if (!r.naam.isEmpty() && !r.naam.equals("Guh")) {
-            guh.setCustomName(Component.literal(r.naam));
+        // 1.2.0: only its own name comes back (before, an unnamed guh got its variant name as a fixed custom name)
+        if (!nl.juiced.guhs.taal.Tekst.empty(r.naam) && !(nl.juiced.guhs.taal.Tekst.literal(r.naam) && r.naam.getString().equals("Guh"))) {
+            guh.setCustomName(r.naam.copy());
         }
         guh.snapTo(pos.x, pos.y, pos.z, 0f, 0f);
         klaarzetten(guh);
@@ -203,7 +204,7 @@ public final class Wolkjes {
         r.doodDag = Band.dag(s);
         BandData.get(s).setDirty();
         GuhVolger.zet(eigenaar, id, new Plek(PlekSoort.IN_DE_WOLKJES, level.dimension(), guh.blockPosition(), "", level.getGameTime()));
-        Dagboek.wistJeDat(guh, "gui.guhs.wolkjes.wist", r.naam.isEmpty() ? "Guh" : r.naam);
+        Dagboek.wistJeDat(guh, "gui.guhs.wolkjes.wist", r.weergave());
         Band.moment(guh, online, Moment.DOOD, "");
         ItemStack ster = nl.juiced.guhs.feature.hemel.Herinnering.maak(guh);
         if (!ster.isEmpty()) {

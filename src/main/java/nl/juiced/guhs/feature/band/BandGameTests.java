@@ -269,7 +269,7 @@ public class BandGameTests {
             Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.test", String.valueOf(i));
         }
         BandData.Rec r = BandData.get(p.level().getServer()).vind(p.getUUID(), id);
-        helper.assertTrue(r.wist.size() == BandData.WIST_MAX && r.wist.get(0).args().get(0).equals("44"), "newest first, 40 kept");
+        helper.assertTrue(r.wist.size() == BandData.WIST_MAX && r.wist.get(0).args().get(0).equals(net.minecraft.network.chat.Component.literal("44")), "newest first, 40 kept");
         // saved and loaded
         CompoundTag tag = BandData.get(p.level().getServer()).save(new CompoundTag());
         BandData.Rec terug = BandData.load(tag).vind(p.getUUID(), id);

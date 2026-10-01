@@ -59,6 +59,7 @@ public final class Huisjes extends SavedData {
     public static final int MAX_NAAM = 32;
 
     /** The cute names a new huisje can get (then numbered when they are all taken). */
+    /** (1.2.0: shown through lang gui.guhs.huisje.standaardnaam.&lt;i&gt;, see Huisje.tekst; the Dutch stays the saved id) */
     static final List<String> NAMEN = List.of("Knabbelkasteeltje", "Villa Vads", "Huize Njeg", "Het Pluisnestje", "Snoetjeshuis",
             "Oortjeshof", "Vadsig Paleisje", "Knuffelhoekje", "Kaasknabbelkot", "Guhlief", "Roze Wolkje", "Het Warme Snoetje",
             "Pootjeshuis", "Zoete Knabbelstee", "Villa Vahoeg", "Het Dikke Kussentje", "Huize Pluisoor", "Knabbelkoepeltje",
@@ -201,7 +202,7 @@ public final class Huisjes extends SavedData {
     /** "Dit is het huisje van X" (gui.guhs.huisje.van_wie). */
     public static net.minecraft.network.chat.Component vanWie(Huisje h) {
         return net.minecraft.network.chat.Component.translatable("gui.guhs.huisje.van_wie",
-                h.eigenaarNaam().isEmpty() ? "?" : h.eigenaarNaam(), h.naam());
+                h.eigenaarNaam().isEmpty() ? "?" : h.eigenaarNaam(), h.naamTekst());
     }
 
     /** A player's name by UUID (online, else the profile cache; "" when unknown). */
@@ -309,7 +310,7 @@ public final class Huisjes extends SavedData {
         Huisjes data = get(s);
         h.bewoners.add(id);
         h.soorten.put(id, bewoner instanceof PiepMaatje m ? m.soort() : "guh");
-        h.namen.put(id, bewoner.getName().getString());
+        h.namen.put(id, bewoner.getName().copy());
         data.setDirty();
         CompoundTag p = bewoner.getPersistentData();
         p.putLong(THUIS, h.pos.asLong());
@@ -320,14 +321,14 @@ public final class Huisjes extends SavedData {
             mob.setHomeTo(BlockPos.containing(m), BEREIK);
             HuisjeGoal.zorgVoor(mob);
         }
-        GuhVolger.zet(bewoner, PlekSoort.HUISJE, h.naam);
+        GuhVolger.zet(bewoner, PlekSoort.HUISJE, h.naamTekst());
         bewoner.level().playSound(null, h.deur(), HuisjeFeature.DEUR_GELUID.get(), SoundSource.NEUTRAL, 0.8f, 1.2f);
         ServerPlayer owner = s.getPlayerList().getPlayer(h.eigenaar);
         if (bewoner instanceof Mob mob) {
             Band.moment(mob, owner, Moment.HUISJE_IN, h.naam);
         }
         if (owner != null) {
-            owner.sendOverlayMessage(Component.translatable("gui.guhs.huisje.trekt_in", bewoner.getDisplayName(), h.naam)
+            owner.sendOverlayMessage(Component.translatable("gui.guhs.huisje.trekt_in", bewoner.getDisplayName(), h.naamTekst())
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
             nl.juiced.guhs.quest.GuhAdvancements.grant(owner, "huisje_bewoner");
             if (h.isVol()) {
@@ -413,7 +414,7 @@ public final class Huisjes extends SavedData {
         e.snapTo(m.x, h.pos.getY() + 0.1, m.z, e.getYRot(), e.getXRot());
         houdBinnen(e);
         e.level().playSound(null, h.deur(), HuisjeFeature.DEUR_GELUID.get(), SoundSource.NEUTRAL, 0.7f, 1f);
-        GuhVolger.zet(e, PlekSoort.SLAAPT_IN_HUISJE, h.naam);
+        GuhVolger.zet(e, PlekSoort.SLAAPT_IN_HUISJE, h.naamTekst());
         if (e instanceof Mob mob) {
             Band.moment(mob, null, Moment.SLAAP, "");
         }
@@ -447,7 +448,7 @@ public final class Huisjes extends SavedData {
             BlockPos d = h.deur();
             e.snapTo(d.getX() + 0.5, d.getY(), d.getZ() + 0.5, h.facing.toYRot(), 0);
             e.level().playSound(null, d, HuisjeFeature.DEUR_GELUID.get(), SoundSource.NEUTRAL, 0.7f, 1.1f);
-            GuhVolger.zet(e, PlekSoort.HUISJE, h.naam);
+            GuhVolger.zet(e, PlekSoort.HUISJE, h.naamTekst());
         } else {
             BlockPos p = e.blockPosition();
             while (!e.level().getBlockState(p).isAir() && p.getY() < e.level().getMaxY() + 1) {

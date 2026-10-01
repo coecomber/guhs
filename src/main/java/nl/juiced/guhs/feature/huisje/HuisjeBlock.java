@@ -98,7 +98,7 @@ public class HuisjeBlock extends BaseEntityBlock {
         zetDelen(level, pos, state);
         if (level instanceof ServerLevel sl && placer instanceof ServerPlayer player) {
             Huisje h = Huisjes.registreer(sl, pos, state.getValue(FACING), maat, player.getUUID());
-            player.sendSystemMessage(Component.translatable("gui.guhs.huisje.gebouwd", h.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
+            player.sendSystemMessage(Component.translatable("gui.guhs.huisje.gebouwd", h.naamTekst()).withStyle(ChatFormatting.LIGHT_PURPLE));
             GidsFeature.grant(player, "lieve_vadsjes/huisje_gebouwd");
             if (maat == HuisjeMaat.GROOT) {
                 GidsFeature.grant(player, "lieve_vadsjes/huisje_groot");
@@ -201,7 +201,7 @@ public class HuisjeBlock extends BaseEntityBlock {
             return InteractionResult.CONSUME;
         }
         if (h.isVol()) {
-            sp.sendOverlayMessage(Component.translatable("gui.guhs.huisje.vol", h.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.huisje.vol", h.naamTekst()).withStyle(ChatFormatting.LIGHT_PURPLE));
             return InteractionResult.CONSUME;
         }
         BlockPos d = h.deur();

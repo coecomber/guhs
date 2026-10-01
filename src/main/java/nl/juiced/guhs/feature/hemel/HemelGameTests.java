@@ -132,7 +132,7 @@ public class HemelGameTests {
         UUID id = guh.getUUID();
         int hartjes = Band.hartjes(guh);
         guh.kill(helper.getLevel());
-        helper.assertTrue(Hemel.lijst(p).stream().anyMatch(d -> d.bandId().equals(id) && d.naam().equals("Wolkje")), "in the list of the screen");
+        helper.assertTrue(Hemel.lijst(p).stream().anyMatch(d -> d.bandId().equals(id) && d.naam().getString().equals("Wolkje")), "in the list of the screen");
         CompoundTag data = Hemel.data(p, hart, null);
         helper.assertTrue(data.getListOrEmpty("Guhs").size() == 1
                 && data.getListOrEmpty("Guhs").getCompoundOrEmpty(0).getStringOr("Naam", "").equals("Wolkje"), "the screen data");

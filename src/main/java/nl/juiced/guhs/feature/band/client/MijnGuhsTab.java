@@ -138,7 +138,7 @@ public final class MijnGuhsTab {
         GidsTekst.schaal(g, Component.translatable("gui.guhs.mijnguhs.draai"), px1 + 2, py2 - 8, 0.5f, LICHT, false);
         // name, variant, personality, level + bar
         int y = py2 + 3;
-        GidsTekst.passend(g, Component.literal(guh.naam()).withStyle(ChatFormatting.BOLD), px1, y, px2 - px1, 1f, DONKER, false);
+        GidsTekst.passend(g, guh.naam().copy().withStyle(ChatFormatting.BOLD), px1, y, px2 - px1, 1f, DONKER, false);
         y += 10;
         GidsTekst.passend(g, soortRegel(guh), px1, y, px2 - px1, 0.75f, TEKST, false);
         y += 8;
@@ -237,8 +237,8 @@ public final class MijnGuhsTab {
             BandNiveau niveau = BandNiveau.byIndex(guh.niveau());
             int tx = x + 38, rechts = x + w - 4;
             int breed = Math.min(110, w / 3);
-            Component naamRegel = guh.dood() ? Component.literal("☁ ").append(Component.literal(guh.naam()).withStyle(ChatFormatting.BOLD))
-                    : Component.literal(guh.naam()).withStyle(ChatFormatting.BOLD);   // (3.0: in de wolkjes)
+            Component naamRegel = guh.dood() ? Component.literal("☁ ").append(guh.naam().copy().withStyle(ChatFormatting.BOLD))
+                    : guh.naam().copy().withStyle(ChatFormatting.BOLD);   // (3.0: in de wolkjes)
             GidsTekst.passend(g, naamRegel, tx, y + 4, rechts - breed - tx - 6, 1f, DONKER, false);
             GidsTekst.passend(g, soortRegel(guh), tx, y + 16, rechts - breed - tx - 6, 0.75f, TEKST, false);
             GidsTekst.passend(g, hartje(niveau).append(" ").append(niveauNaam(niveau)), rechts, y + 5, breed, 0.625f, kleur(niveau), true);
@@ -258,7 +258,7 @@ public final class MijnGuhsTab {
 
         @Override
         public List<Component> tip(double mx, double my, int x, int y, int w) {
-            return List.of(Component.literal(guh.naam()).withStyle(ChatFormatting.BOLD), Component.translatable("gui.guhs.mijnguhs.open_tip"));
+            return List.of(guh.naam().copy().withStyle(ChatFormatting.BOLD), Component.translatable("gui.guhs.mijnguhs.open_tip"));
         }
     }
 
@@ -288,12 +288,12 @@ public final class MijnGuhsTab {
             out.add(new Tekst(Component.translatable("gui.guhs.mijnguhs.geen_vriendjes"), LICHT, 0.75f));
         }
         for (MijnGuhsCache.Vriend v : guh.vrienden()) {
-            out.add(new Tekst(v.bestie() ? Component.translatable("gui.guhs.mijnguhs.bestie", v.naam()) : Component.literal("♥ " + v.naam()),
+            out.add(new Tekst(v.bestie() ? Component.translatable("gui.guhs.mijnguhs.bestie", v.naam()) : Component.literal("♥ ").append(v.naam()),
                     v.bestie() ? 0xFFD89A10 : TEKST, 0.875f));
         }
         // chores
         out.add(new Kop(Component.translatable("gui.guhs.mijnguhs.kop.klusjes")));
-        if (guh.huisje().isEmpty()) {
+        if (guh.huisje().getString().isEmpty()) {
             out.add(new Tekst(Component.translatable("gui.guhs.mijnguhs.geen_huisje"), LICHT, 0.75f));
         } else {
             out.add(new Tekst(Component.translatable("gui.guhs.mijnguhs.woont_in", guh.huisje()), TEKST, 0.875f));

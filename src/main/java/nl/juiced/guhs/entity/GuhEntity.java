@@ -348,7 +348,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         }
         setSecretNote(false);
         player.sendSystemMessage(net.minecraft.network.chat.Component.translatable("chat.type.text", this.getDisplayName(),
-                net.minecraft.network.chat.Component.literal("shhh. niet doorvertellen. Lees dit...")));
+                net.minecraft.network.chat.Component.translatable("chat.guhs.secret_note.whisper")));   // (1.2.0: was a Dutch literal)
         ItemStack note = new ItemStack(net.minecraft.world.item.Items.PAPER);
         note.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME,
                 net.minecraft.network.chat.Component.translatable("item.guhs.secret_note")

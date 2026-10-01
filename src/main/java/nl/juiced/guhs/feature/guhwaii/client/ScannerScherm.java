@@ -100,8 +100,8 @@ public class ScannerScherm extends Screen {
         } else if (((int) nu / 4) % 2 == 0) {
             g.fill(px, py, px + PIC, py + PIC, 0x30FF8CC8);
         }
-        g.text(font, font.plainSubstrByWidth(scan.naam(), PIC), px, py + PIC + 4, TEKST, false);
-        g.text(font, font.plainSubstrByWidth(scan.soort(), PIC), px, py + PIC + 14, 0xFF8FB8E0, false);
+        g.text(font, font.plainSubstrByWidth(scan.naam().getString(), PIC), px, py + PIC + 4, TEKST, false);
+        g.text(font, font.plainSubstrByWidth(scan.soort().getString(), PIC), px, py + PIC + 14, 0xFF8FB8E0, false);
         // the meter
         int mx = l + 10 + PIC + 14, my = o + 22;
         g.text(font, Component.translatable("gui.guhs.guhwaii.scanner.niveau").withStyle(ChatFormatting.BOLD), mx, my, TEKST, false);

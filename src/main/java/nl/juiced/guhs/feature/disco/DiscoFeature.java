@@ -51,7 +51,7 @@ public final class DiscoFeature {
         DiscoBlocks.ITEMS.register(modBus);
         DiscoMuziek.SOUNDS.register(modBus);
         // 2.9: the headphones come only from the DJ-guh (the older disco pieces are registered by the kleding slice)
-        nl.juiced.guhs.feature.kleding.KledingBronnen.bron(GuhClothes.DISCO_KOPTELEFOONTJE, "disco", PRICE_KOPTELEFOONTJE + " discomunten");
+        nl.juiced.guhs.feature.kleding.KledingBronnen.bron(GuhClothes.DISCO_KOPTELEFOONTJE, "disco", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.discomunten", PRICE_KOPTELEFOONTJE));
         NeoForge.EVENT_BUS.register(DiscoProtection.class);
         nl.juiced.guhs.feature.Protected.add(DiscoProtection::protectedAt);
         NeoForge.EVENT_BUS.addListener(DiscoGame::onDamage);

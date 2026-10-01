@@ -365,7 +365,7 @@ public final class ElftochtTocht {
             player.level().playSound(null, player.blockPosition(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 1f, 0.8f + 0.1f * (3 - n));
         }
         if (rit.aftellen == 0) {
-            titel(player, Component.literal("VAHOEG!").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
+            titel(player, Component.translatable("gui.guhs.elftocht.vahoeg_titel").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
                     Component.translatable("gui.guhs.elftocht.go", dorpNaam(VOLGORDE[0])));
             player.level().playSound(null, player.blockPosition(), ElftochtFeature.FLUIT.get(), SoundSource.PLAYERS, 1.2f, 1f);
         } else if (player.getDeltaMovement().horizontalDistanceSqr() > 0.04 && rit.aftellen < AFTELLEN - 10) {

@@ -105,7 +105,7 @@ public final class SamenVriendjes {
                 continue;
             }
             UUID anderId = guh == ga ? b : a;
-            String naam = ander != null ? ander.getName().getString() : "?";
+            Object naam = ander != null ? ander.getName().copy() : "?";
             Band.moment(guh, owner, Moment.VRIENDJE, anderId.toString());
             Band.geefHartjes(guh, owner, Reden.VRIENDJE.dagMax(), Reden.VRIENDJE);
             if (!besties && Dagboek.eersteKeer(guh, owner, "eerste_vriendje")) {
@@ -166,7 +166,7 @@ public final class SamenVriendjes {
         }
         Band.moment(a, null, Moment.VRIENDJE, Band.id(b).toString());
         if (a.getRandom().nextInt(3) == 0) {
-            Dagboek.wistJeDat(a, "gui.guhs.wistjedat.samen.samen_slapen", b.getName().getString());
+            Dagboek.wistJeDat(a, "gui.guhs.wistjedat.samen.samen_slapen", b.getName().copy());
         }
         return true;
     }

@@ -40,7 +40,7 @@ public final class KlusBeloning {
         Dagboek.tel(mob, DagboekStat.KLUSJES, 1);
         Dagboek.eersteKeer(mob, owner, "eerste_klusje");
         if (Dagboek.eersteKeer(mob, null, "klusjes_" + klus.id())) {
-            Dagboek.wistJeDat(mob, "gui.guhs.wistjedat.klusjes." + klus.id(), h.naam());
+            Dagboek.wistJeDat(mob, "gui.guhs.wistjedat.klusjes." + klus.id(), h.naamTekst());
         }
         level.playSound(null, mob.blockPosition(), KlusjesFeature.KLAAR.get(), SoundSource.NEUTRAL, 0.45f, 1.1f + mob.getRandom().nextFloat() * 0.3f);
         level.sendParticles(KlusjesFeature.STERRETJE.get(), mob.getX(), mob.getY() + mob.getBbHeight() + 0.3, mob.getZ(), 4, 0.25, 0.15, 0.25, 0.0);
@@ -87,10 +87,10 @@ public final class KlusBeloning {
     /** Something rare dug up or fished: the owner hears about it, the guh writes it down. */
     public static void zeldzaam(Mob mob, Huisje h, ItemStack vondst) {
         ServerPlayer owner = Band.eigenaarOnline(mob);
-        Dagboek.wistJeDat(mob, "gui.guhs.wistjedat.klusjes.zeldzaam", vondst.getHoverName().getString(), h.naam());
+        Dagboek.wistJeDat(mob, "gui.guhs.wistjedat.klusjes.zeldzaam", vondst.getHoverName().copy(), h.naamTekst());
         if (owner != null) {
             GidsFeature.grant(owner, "lieve_vadsjes/klusjes_zeldzaam");
-            owner.sendSystemMessage(Component.translatable("gui.guhs.klusjes.zeldzaam", mob.getName(), vondst.getHoverName(), h.naam())
+            owner.sendSystemMessage(Component.translatable("gui.guhs.klusjes.zeldzaam", mob.getName(), vondst.getHoverName(), h.naamTekst())
                     .withStyle(ChatFormatting.GOLD));
         }
     }

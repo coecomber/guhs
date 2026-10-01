@@ -31,7 +31,7 @@ public final class KledingBronnen {
             "timmerguh", "nomguh", "sledesprint", "mewtwo", "hemel", "guhwaii", "guhwaii_spellen");
 
     private static final Map<GuhClothes, String> BRON = new EnumMap<>(GuhClothes.class);
-    private static final Map<GuhClothes, String> PRIJS = new EnumMap<>(GuhClothes.class);
+    private static final Map<GuhClothes, net.minecraft.network.chat.Component> PRIJS = new EnumMap<>(GuhClothes.class);
     private static final List<String> BRONNEN = new ArrayList<>(BEKEND);
 
     /** Registers the source of a piece (the same piece again: the last one counts; there should be only one). */
@@ -42,8 +42,9 @@ public final class KledingBronnen {
         }
     }
 
-    /** Registers the source of a piece with its price, e.g. "4 sjoelschijfjes" (shown in the Kleding tab). */
-    public static synchronized void bron(GuhClothes c, String bronId, String prijs) {
+    /** Registers the source of a piece with its price, e.g. "4 sjoelschijfjes" (shown in the Kleding tab; 1.2.0: a
+     *  translatable, see {@link #prijs(String, Object...)}). */
+    public static synchronized void bron(GuhClothes c, String bronId, net.minecraft.network.chat.Component prijs) {
         bron(c, bronId);
         PRIJS.put(c, prijs);
     }
@@ -56,8 +57,14 @@ public final class KledingBronnen {
 
     /** The price text of a piece (null: none given). */
     @Nullable
-    public static synchronized String prijs(GuhClothes c) {
+    public static synchronized net.minecraft.network.chat.Component prijs(GuhClothes c) {
         return PRIJS.get(c);
+    }
+
+    /** 1.2.0: a price or hint text: lang gui.guhs.kleding.prijs.munt.&lt;coin&gt; ("%s sjoelschijfjes", the amount as argument)
+     *  or gui.guhs.kleding.prijs.hint.&lt;hint&gt; (the Dutch is in tools/features/taal.py). */
+    public static net.minecraft.network.chat.Component prijs(String key, Object... args) {
+        return net.minecraft.network.chat.Component.translatable(key, args);
     }
 
     /** All source ids, in registration order (the §5.4/§5.5 ones first); lang gui.guhs.kledingbron.&lt;id&gt;. */

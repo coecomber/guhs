@@ -109,7 +109,7 @@ public final class GidsMinigamesTab {
                 return r;
             }
         }
-        return new MaagPayloads.HighscoreRow(game, false, "", "", "");
+        return new MaagPayloads.HighscoreRow(game, false, Component.empty(), Component.empty(), "");
     }
 
     static String jij() {
@@ -329,13 +329,13 @@ public final class GidsMinigamesTab {
             MaagPayloads.HighscoreRow row = rij(game.id());
             GidsTekst.passend(g, label(game.id()), c[0], y + 2, c[1] - c[0] - 7, 0.75f, DONKER, false);
             if (row.played()) {
-                GidsTekst.passend(g, Component.literal(row.best()).withStyle(ChatFormatting.BOLD), c[1], y + 2, c[2] - c[1] - 4, 0.75f, FEL, false);
+                GidsTekst.passend(g, row.best().copy().withStyle(ChatFormatting.BOLD), c[1], y + 2, c[2] - c[1] - 4, 0.75f, FEL, false);
             } else {
                 GidsTekst.schaal(g, Component.literal("-"), c[1], y + 2, 0.75f, GRIJS, false);
             }
             if (row.hasRecord()) {
                 boolean mine = row.holder().equals(jij());
-                Component rec = Component.literal(row.record()).withStyle(ChatFormatting.BOLD)
+                Component rec = row.record().copy().withStyle(ChatFormatting.BOLD)
                         .append(Component.literal(" " + (mine ? "★ " : "") + row.holder()).withStyle(ChatFormatting.RESET));
                 GidsTekst.passend(g, rec, c[2], y + 2, x + w - 4 - c[2], 0.75f, mine ? GOUD : ROZE, false);
             } else {

@@ -25,7 +25,7 @@ public final class MijnGuhsCache {
     public record Fav(String soort, @Nullable Component naam) {
     }
 
-    public record Vriend(String naam, boolean bestie) {
+    public record Vriend(Component naam, boolean bestie) {
     }
 
     public record Eerste(String id, long dag) {
@@ -35,8 +35,8 @@ public final class MijnGuhsCache {
     }
 
     /** One of your guhs as the tab shows it. */
-    public record Guh(UUID id, String naam, CompoundTag looks, int hartjes, int niveau, int volgende, List<Fav> fav, List<Vriend> vrienden,
-                      String huisje, List<Component> klussen, Component plek, Map<String, Long> stats, List<Eerste> eerste, List<Wist> wist,
+    public record Guh(UUID id, Component naam, CompoundTag looks, int hartjes, int niveau, int volgende, List<Fav> fav, List<Vriend> vrienden,
+                      Component huisje, List<Component> klussen, Component plek, Map<String, Long> stats, List<Eerste> eerste, List<Wist> wist,
                       long sinds, boolean dood) {
     }
 
@@ -135,7 +135,7 @@ public final class MijnGuhsCache {
         List<Vriend> vrienden = new ArrayList<>();
         ListTag v = t.getListOrEmpty("Vrienden");
         for (int i = 0; i < v.size(); i++) {
-            vrienden.add(new Vriend(v.getCompoundOrEmpty(i).getStringOr("Naam", ""), v.getCompoundOrEmpty(i).getBooleanOr("Bestie", false)));
+            vrienden.add(new Vriend(nl.juiced.guhs.taal.Tekst.get(v.getCompoundOrEmpty(i), "Naam"), v.getCompoundOrEmpty(i).getBooleanOr("Bestie", false)));
         }
         List<Component> klussen = new ArrayList<>();
         ListTag k = t.getListOrEmpty("Klussen");
@@ -157,8 +157,8 @@ public final class MijnGuhsCache {
         for (int i = 0; i < w.size(); i++) {
             wist.add(new Wist(tekst(w.getCompoundOrEmpty(i).getStringOr("Tekst", ""), reg), w.getCompoundOrEmpty(i).getLongOr("Dag", 0L)));
         }
-        return new Guh(UUID.fromString(t.getStringOr("Id", "")), t.getStringOr("Naam", ""), t.getCompoundOrEmpty("Looks"), t.getIntOr("Hartjes", 0), t.getIntOr("Niveau", 0),
-                t.getIntOr("Volgende", 0), fav, vrienden, t.getStringOr("Huisje", ""), klussen, tekst(t.getStringOr("Plek", ""), reg), stats, eerste, wist,
+        return new Guh(UUID.fromString(t.getStringOr("Id", "")), nl.juiced.guhs.taal.Tekst.get(t, "Naam"), t.getCompoundOrEmpty("Looks"), t.getIntOr("Hartjes", 0), t.getIntOr("Niveau", 0),
+                t.getIntOr("Volgende", 0), fav, vrienden, nl.juiced.guhs.taal.Tekst.get(t, "Huisje"), klussen, tekst(t.getStringOr("Plek", ""), reg), stats, eerste, wist,
                 t.getLongOr("Sinds", 0L), t.getBooleanOr("Dood", false));
     }
 

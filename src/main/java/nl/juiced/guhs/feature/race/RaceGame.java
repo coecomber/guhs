@@ -141,6 +141,7 @@ public final class RaceGame {
 
     private static final Map<UUID, RaceGame> GAMES = new ConcurrentHashMap<>();       // by race guh NPC
     private static final Map<UUID, RaceGame> RACERS = new ConcurrentHashMap<>();      // by racer
+    /** (1.2.0: shown through lang entity.guhs.race_guh.naam.&lt;i&gt;; tools/features/taal.py has the same list) */
     private static final String[] GUH_NAMES = {"Bliksemvads", "Turbo Njeg", "Vahoeg 3000", "Roze Donder", "Kaasknabbel Express", "Vadsraket",
             "Snelle Gerrit", "Pluizige Pijl", "Knabbelknaller", "Wervelguh"};
     private static final DustParticleOptions PINK = new DustParticleOptions(0xFF8CCC /* 1, 0.55, 0.8 */, 1.4f);
@@ -370,7 +371,7 @@ public final class RaceGame {
         guh.wear(GuhClothes.JOCKEY_PET);
         guh.wear(GuhClothes.JOCKEY_JASJE);
         guh.wear(GuhClothes.RACEBRIL);
-        guh.setCustomName(Component.literal(GUH_NAMES[level.getRandom().nextInt(GUH_NAMES.length)]));
+        guh.setCustomName(Component.translatable("entity.guhs.race_guh.naam." + level.getRandom().nextInt(GUH_NAMES.length)));
         guh.setFrozen(true);
         level.addFreshEntity(guh);
         game.guh = guh.getUUID();

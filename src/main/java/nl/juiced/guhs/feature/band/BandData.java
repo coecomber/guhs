@@ -35,7 +35,8 @@ public final class BandData extends SavedData {
     public record Eerste(String id, long dag) {
     }
 
-    public record WistJeDat(String key, List<String> args, long dag) {
+    /** 1.2.0: the args are Components (names, items, biomes: resolved by the reader's client); old saves had Strings. */
+    public record WistJeDat(String key, List<net.minecraft.network.chat.Component> args, long dag) {
     }
 
     /** One guh (or maatje) of one owner. */
@@ -45,7 +46,9 @@ public final class BandData extends SavedData {
         public boolean guh = true;
         /** The maatje kind ("pieppiepmuisje", "schilly", "poepschilly"), "guh" for guhs. */
         public String soort = "guh";
-        public String naam = "";
+        /** 1.2.0: its own name (a custom name; a player's name is a literal) or empty: then {@link #weergave()} uses its
+         *  variant's name, so every player reads that in their own language. Before 1.2.0 a resolved String (Dutch). */
+        public net.minecraft.network.chat.Component naam = net.minecraft.network.chat.Component.empty();
         /** Looks for the Guhdex preview: variant, personality, clothes ids per slot, hair colour, scale, baby. */
         public CompoundTag looks = new CompoundTag();
         public int hartjes;
@@ -85,6 +88,15 @@ public final class BandData extends SavedData {
             return stats.getOrDefault(s, 0L);
         }
 
+        /** The name to show: its own name, or else the name of its variant ("Roze Guh"), or "Guh". */
+        public net.minecraft.network.chat.Component weergave() {
+            if (!nl.juiced.guhs.taal.Tekst.empty(naam)) {
+                return naam;
+            }
+            String v = looks.getStringOr("Variant", "");
+            return guh && !v.isEmpty() ? nl.juiced.guhs.entity.GuhVariant.byId(v).displayName() : net.minecraft.network.chat.Component.literal("Guh");
+        }
+
         public boolean heeftEerste(String id) {
             return eerste.stream().anyMatch(e -> e.id().equals(id));
         }
@@ -94,7 +106,7 @@ public final class BandData extends SavedData {
             t.store("Id", UUIDUtil.CODEC, id);
             t.putBoolean("Guh", guh);
             t.putString("Soort", soort);
-            t.putString("Naam", naam);
+            nl.juiced.guhs.taal.Tekst.put(t, "Naam", naam);
             t.put("Looks", looks.copy());
             t.putInt("Hartjes", hartjes);
             t.putInt("Niveau", niveau);
@@ -123,7 +135,11 @@ public final class BandData extends SavedData {
                 CompoundTag c = new CompoundTag();
                 c.putString("Key", x.key());
                 ListTag args = new ListTag();
-                x.args().forEach(a -> args.add(StringTag.valueOf(a)));
+                for (net.minecraft.network.chat.Component a : x.args()) {   // (1.2.0: {A: component}; before, plain strings)
+                    CompoundTag at = new CompoundTag();
+                    nl.juiced.guhs.taal.Tekst.put(at, "A", a);
+                    args.add(at);
+                }
                 c.put("Args", args);
                 c.putLong("Dag", x.dag());
                 w.add(c);
@@ -146,8 +162,13 @@ public final class BandData extends SavedData {
             Rec r = new Rec(t.read("Id", UUIDUtil.CODEC).orElseThrow());
             r.guh = !t.contains("Guh") || t.getBooleanOr("Guh", false);
             r.soort = t.getStringOr("Soort", "").isEmpty() ? "guh" : t.getStringOr("Soort", "");
-            r.naam = t.getStringOr("Naam", "");
+            r.naam = nl.juiced.guhs.taal.Tekst.get(t, "Naam");
             r.looks = t.getCompoundOrEmpty("Looks");
+            // 1.2.0: before, an unnamed guh saved its variant name (resolved, Dutch) as its name; its looks only have a
+            // "Naam" when it had a custom name. Without one the name is cleared: weergave() shows the variant in any language.
+            if (r.guh && r.looks.contains("Variant") && !r.looks.contains("Naam") && nl.juiced.guhs.taal.Tekst.literal(r.naam)) {
+                r.naam = net.minecraft.network.chat.Component.empty();
+            }
             r.hartjes = Math.max(0, t.getIntOr("Hartjes", 0));
             r.niveau = t.getIntOr("Niveau", 0);
             for (int i : t.getIntArray("TeMelden").orElse(new int[0])) {
@@ -184,10 +205,11 @@ public final class BandData extends SavedData {
             ListTag w = t.getListOrEmpty("Wist");
             for (int i = 0; i < w.size(); i++) {
                 CompoundTag c = w.getCompoundOrEmpty(i);
-                List<String> args = new ArrayList<>();
+                List<net.minecraft.network.chat.Component> args = new ArrayList<>();
                 ListTag a = c.getListOrEmpty("Args");
                 for (int j = 0; j < a.size(); j++) {
-                    args.add(a.getStringOr(j, ""));
+                    Tag arg = a.get(j);
+                    args.add(arg instanceof CompoundTag at ? nl.juiced.guhs.taal.Tekst.get(at, "A") : net.minecraft.network.chat.Component.literal(arg.asString().orElse("")));
                 }
                 r.wist.add(new WistJeDat(c.getStringOr("Key", ""), args, c.getLongOr("Dag", 0L)));
             }

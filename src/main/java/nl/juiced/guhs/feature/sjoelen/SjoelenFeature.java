@@ -95,9 +95,9 @@ public final class SjoelenFeature {
         NeoForge.EVENT_BUS.register(SjoelenEvents.class);
         NeoForge.EVENT_BUS.register(SjoelenProtection.class);
         Protected.add(SjoelenProtection::inHuisje);
-        KledingBronnen.bron(GuhClothes.SJOELEN_PETJE, "sjoelen", PRIJS_PETJE + " sjoelschijfjes");
-        KledingBronnen.bron(GuhClothes.SJOELEN_BROCHE, "sjoelen", PRIJS_BROCHE + " sjoelschijfjes");
-        KledingBronnen.bron(GuhClothes.SJOELEN_VESTJE, "sjoelen", PRIJS_VESTJE + " sjoelschijfjes");
+        KledingBronnen.bron(GuhClothes.SJOELEN_PETJE, "sjoelen", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.sjoelschijfjes", PRIJS_PETJE));
+        KledingBronnen.bron(GuhClothes.SJOELEN_BROCHE, "sjoelen", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.sjoelschijfjes", PRIJS_BROCHE));
+        KledingBronnen.bron(GuhClothes.SJOELEN_VESTJE, "sjoelen", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.sjoelschijfjes", PRIJS_VESTJE));
     }
 
     public static void payloads(PayloadRegistrar registrar) {

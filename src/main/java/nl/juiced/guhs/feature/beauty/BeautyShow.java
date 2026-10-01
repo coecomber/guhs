@@ -83,6 +83,7 @@ public final class BeautyShow {
     private static final String BEST = "guhs_beauty_best", SHOWS_PLAYED = "guhs_beauty_shows", FIRST = "guhs_beauty_first";
     /** Only common looks: a model must not fill in anybody's Guhdex. */
     private static final GuhVariant[] MODEL_LOOKS = {GuhVariant.NORMAL, GuhVariant.NORMAL, GuhVariant.MINT, GuhVariant.CHOCO, GuhVariant.SNOW};
+    /** (1.2.0: shown through lang entity.guhs.beauty_model.naam.&lt;i&gt;; tools/features/taal.py has the same list) */
     private static final String[] MODEL_NAMES = {"Vadsy", "Guhlia", "Knabbeline", "Bolleke", "Pluisje", "Vadsiena", "Guhnther", "Mollie", "Kaasje", "Poekie"};
     /** The catwalk tune (semitones from F#), four ticks a note. */
     private static final int[] MELODY = {0, 4, 7, 12, 7, 4, 0, -5, 0, 4, 7, 11, 12, 11, 7, 4, 2, 5, 9, 12, 9, 5, 2, -3};
@@ -261,7 +262,7 @@ public final class BeautyShow {
         Klassiekers.records(data, n -> best(player, n));
         data.putInt("Shows", saved.getIntOr(SHOWS_PLAYED, 0));
         GuhEntity own = ownGuh(player);
-        data.putString("OwnGuh", own == null ? "" : own.getDisplayName().getString());
+        nl.juiced.guhs.taal.Tekst.put(data, "OwnGuh", own == null ? Component.empty() : own.getDisplayName());   // (1.2.0: a Component)
         ModNetworking.sendTo(player, new BeautyPayloads.Open(npc.getId(), data));
     }
 
@@ -344,7 +345,7 @@ public final class BeautyShow {
             guh.setInvulnerable(true);
             guh.setPersistenceRequired();
             guh.addTag(MODEL_TAG);
-            name = Component.literal(MODEL_NAMES[world.getRandom().nextInt(MODEL_NAMES.length)]);
+            name = Component.translatable("entity.guhs.beauty_model.naam." + world.getRandom().nextInt(MODEL_NAMES.length));
             guh.setCustomName(Component.translatable("entity.guhs.beauty_model", name));
         }
         List<ShowTheme> themes = new ArrayList<>(List.of(ShowTheme.values()));

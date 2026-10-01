@@ -33,7 +33,7 @@ public final class BallonCommando {
                         b -> !b.isRemoved() && !b.isDeco() && !b.vliegt())
                 .stream().min(Comparator.comparingDouble(b -> b.distanceToSqr(player))).orElse(null);
         if (ballon == null) {
-            source.sendFailure(Component.literal("Njeg: geen guh-luchtballon in de buurt (binnen " + (int) BEREIK + " blokken)."));
+            source.sendFailure(Component.translatable("commands.guhs.ballonvlucht.geen_ballon", (int) BEREIK));
             return 0;
         }
         if (player.isSpectator()) {
@@ -44,10 +44,10 @@ public final class BallonCommando {
                 .stream().min(Comparator.comparingDouble(n -> n.distanceToSqr(ballon))).orElse(null);
         BallonRoute route = BallonVlucht.volgendeRoute(player);
         if (!ballon.stijgOp(player, route, kapitein)) {
-            source.sendFailure(Component.literal("Njeg: deze ballon kan nu niet opstijgen."));
+            source.sendFailure(Component.translatable("commands.guhs.ballonvlucht.kan_niet"));
             return 0;
         }
-        source.sendSuccess(() -> Component.literal("VAHOEG! De ballon stijgt op: " + route.id()), false);
+        source.sendSuccess(() -> Component.translatable("commands.guhs.ballonvlucht.stijgt_op", route.id()), false);
         return 1;
     }
 
@@ -55,10 +55,10 @@ public final class BallonCommando {
         ServerPlayer player = source.getPlayerOrException();
         if (player.getVehicle() instanceof LuchtballonEntity ballon && ballon.vliegt()) {
             ballon.land(false);
-            source.sendSuccess(() -> Component.literal("De ballon is weer geland."), false);
+            source.sendSuccess(() -> Component.translatable("commands.guhs.ballonvlucht.geland"), false);
             return 1;
         }
-        source.sendFailure(Component.literal("Njeg: je zit niet in een vliegende ballon."));
+        source.sendFailure(Component.translatable("commands.guhs.ballonvlucht.niet_in_ballon"));
         return 0;
     }
 }

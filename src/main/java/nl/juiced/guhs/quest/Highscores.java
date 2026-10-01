@@ -64,8 +64,8 @@ public final class Highscores {
             new Game("golf", GolfGame.BOARD, true, t -> t + " (" + GolfGame.rel(t - GolfGame.TOTAL_PAR) + ")",
                     () -> GolfFeature.GOLFBALLETJE.get(), p -> GolfGame.best(p)),
             new Game("smul", SmulGame.BOARD, false, s -> s + " pt", () -> SmulFeature.SMULMUNT.get(), p -> SmulGame.best(p)),
-            new Game("vissen", VisWedstrijd.BOARD_POINTS, false, s -> s + " punten", () -> VissenFeature.VISBON.get(), p -> VisWedstrijd.best(p)),
-            new Game("vissen_zwaarste", VisWedstrijd.BOARD_HEAVIEST, false, g -> VisSoort.kg(g), () -> VissenFeature.vis(VisSoort.GOUDEN_GUHVIS),
+            new Game("vissen", VisWedstrijd.BOARD_POINTS, false, s -> s + " pt", () -> VissenFeature.VISBON.get(), p -> VisWedstrijd.best(p)),
+            new Game("vissen_zwaarste", VisWedstrijd.BOARD_HEAVIEST, false, g -> VisSoort.kg(g).getString(), () -> VissenFeature.vis(VisSoort.GOUDEN_GUHVIS),
                     p -> VisWedstrijd.heaviest(p)),
             new Game("verstop_makkelijk", "verstop_makkelijk", true, t -> VerstopGame.time(t), () -> ModItems.VERSTOPGUHTICKET.get(),
                     p -> VerstopGame.best(p, VerstopGame.Level.MAKKELIJK)),
@@ -97,11 +97,11 @@ public final class Highscores {
                     () -> GolfFeature.GOLFBALLETJE.get(), p -> -1),
             new Game("smul_makkelijk", SmulGame.BOARD + "_makkelijk", false, s -> s + " pt", () -> SmulFeature.SMULMUNT.get(), p -> 0),
             new Game("smul_lastig", SmulGame.BOARD + "_lastig", false, s -> s + " pt", () -> SmulFeature.SMULMUNT.get(), p -> 0),
-            new Game("vissen_makkelijk", VisWedstrijd.BOARD_POINTS + "_makkelijk", false, s -> s + " punten", () -> VissenFeature.VISBON.get(), p -> 0),
-            new Game("vissen_lastig", VisWedstrijd.BOARD_POINTS + "_lastig", false, s -> s + " punten", () -> VissenFeature.VISBON.get(), p -> 0),
-            new Game("vissen_zwaarste_makkelijk", VisWedstrijd.BOARD_HEAVIEST + "_makkelijk", false, g -> VisSoort.kg(g),
+            new Game("vissen_makkelijk", VisWedstrijd.BOARD_POINTS + "_makkelijk", false, s -> s + " pt", () -> VissenFeature.VISBON.get(), p -> 0),
+            new Game("vissen_lastig", VisWedstrijd.BOARD_POINTS + "_lastig", false, s -> s + " pt", () -> VissenFeature.VISBON.get(), p -> 0),
+            new Game("vissen_zwaarste_makkelijk", VisWedstrijd.BOARD_HEAVIEST + "_makkelijk", false, g -> VisSoort.kg(g).getString(),
                     () -> VissenFeature.vis(VisSoort.GOUDEN_GUHVIS), p -> 0),
-            new Game("vissen_zwaarste_lastig", VisWedstrijd.BOARD_HEAVIEST + "_lastig", false, g -> VisSoort.kg(g),
+            new Game("vissen_zwaarste_lastig", VisWedstrijd.BOARD_HEAVIEST + "_lastig", false, g -> VisSoort.kg(g).getString(),
                     () -> VissenFeature.vis(VisSoort.GOUDEN_GUHVIS), p -> 0),
             // the disco: makkelijk = Vadsige Tango, the row "disco" = medium (the remix), lastig = Mika-Mambo, and the bonus song
             new Game("disco_makkelijk", DiscoGame.BOARD + "_makkelijk", false, n -> n + " ♫", () -> DiscoBlocks.DISCOMUNT.get(), p -> 0),
@@ -214,14 +214,19 @@ public final class Highscores {
         return top.isEmpty() ? null : top.get(0);
     }
 
+    /** 1.2.0: a score as the reader's client shows it (the heaviest fish in kg per language; everything else is neutral). */
+    public static net.minecraft.network.chat.Component tekst(Game game, int score) {
+        return game.board().startsWith(VisWedstrijd.BOARD_HEAVIEST) ? VisSoort.kg(score) : net.minecraft.network.chat.Component.literal(game.format().apply(score));
+    }
+
     /** The page for this player, formatted the way each game shows its scores. */
     public static List<MaagPayloads.HighscoreRow> rows(ServerPlayer player) {
         List<MaagPayloads.HighscoreRow> rows = new ArrayList<>();
         for (Game game : GAMES) {
             Integer best = personalBest(player, game);
             Scorebord.Entry record = record(player.level().getServer(), game);
-            rows.add(new MaagPayloads.HighscoreRow(game.id(), best != null, best != null ? game.format().apply(best) : "",
-                    record == null ? "" : game.format().apply(record.score()), record == null ? "" : record.name()));
+            rows.add(new MaagPayloads.HighscoreRow(game.id(), best != null, best != null ? tekst(game, best) : net.minecraft.network.chat.Component.empty(),
+                    record == null ? net.minecraft.network.chat.Component.empty() : tekst(game, record.score()), record == null ? "" : record.name()));
         }
         return rows;
     }

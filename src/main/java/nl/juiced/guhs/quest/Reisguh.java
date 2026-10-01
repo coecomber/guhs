@@ -54,8 +54,55 @@ public final class Reisguh {
     /** ...but never closer than this to another Reisguh (was 200). */
     public static final int WILD_AFSTAND = 160;
 
-    /** One waypoint: where its Reisguh sits, which way it looks, what it's called. */
-    public record Point(UUID id, String name, BlockPos pos, float yaw) {
+    /** One waypoint: where its Reisguh sits, which way it looks, what it's called (1.2.0: a Component, see {@link #vanOud}). */
+    public record Point(UUID id, Component name, BlockPos pos, float yaw) {
+    }
+
+    /**
+     * 1.2.0: the place names the structure templates give their Reisguh (ReisName, tools/features/reisguh_plek.py) are
+     * Dutch strings; they become the lang keys entity.guhs.reisguh.plek.&lt;id&gt; when loaded, so every player reads them in
+     * their own language. The templates themselves don't change.
+     */
+    public static final Map<String, String> PLEKKEN = Map.ofEntries(
+            Map.entry("Knuffeldal", "knuffeldal"), Map.entry("Guhkermis", "guhkermis"), Map.entry("Guhland", "guhland"),
+            Map.entry("Nomguh", "nomguh"), Map.entry("Guhwarden", "guhwarden"), Map.entry("Ballonfestival", "ballonfestival"),
+            Map.entry("Guhcircuit", "guhcircuit"), Map.entry("Ohana op Guhwai'i", "ohana"), Map.entry("De capsule van 626", "capsule"),
+            Map.entry("Guhkasteel", "guhkasteel"), Map.entry("Kloon-eiland", "kloon_eiland"));
+    private static final java.util.regex.Pattern MET_XZ = java.util.regex.Pattern.compile("^(.*) \\((-?\\d+), (-?\\d+)\\)$");
+    private static final String VAN = "Reisguh van ";
+
+    /**
+     * 1.2.0: a saved Reisguh name (before 1.2.0 always a String, resolved in Dutch) to what it means: a template place name,
+     * the automatic names ("Guhportaal (x, z)", "Reisguh (x, z)", "Reisguh van Speler", "Guhkermis (x, z)") as their
+     * translatable form; anything else (a player's own name) stays the literal it is.
+     */
+    public static Component vanOud(Component name) {
+        if (!nl.juiced.guhs.taal.Tekst.literal(name)) {
+            return name;
+        }
+        String s = name.getString();
+        String plek = PLEKKEN.get(s);
+        if (plek != null) {
+            return Component.translatable("entity.guhs.reisguh.plek." + plek);
+        }
+        var m = MET_XZ.matcher(s);
+        if (m.matches()) {
+            int x = Integer.parseInt(m.group(2)), z = Integer.parseInt(m.group(3));
+            String base = m.group(1);
+            if (base.equals("Guhportaal")) {
+                return Component.translatable("quest.guhs.reis.portal_name", x, z);
+            }
+            if (base.equals("Reisguh")) {
+                return Component.translatable("quest.guhs.reis.wild_name", x, z);
+            }
+            if (PLEKKEN.containsKey(base)) {
+                return Component.translatable("quest.guhs.reis.naam_xz", vanOud(Component.literal(base)), x, z);
+            }
+        }
+        if (s.startsWith(VAN) && s.length() > VAN.length()) {
+            return Component.translatable("quest.guhs.reis.own_name", s.substring(VAN.length()));
+        }
+        return name;
     }
 
     /** All waypoints of the world, and which ones each player has discovered. */
@@ -75,7 +122,7 @@ public final class Reisguh {
             for (Point p : points.values()) {
                 CompoundTag c = new CompoundTag();
                 c.store("Id", UUIDUtil.CODEC, p.id());
-                c.putString("Name", p.name());
+                nl.juiced.guhs.taal.Tekst.put(c, "Name", p.name());
                 c.putLong("Pos", p.pos().asLong());
                 c.putFloat("Yaw", p.yaw());
                 list.add(c);
@@ -95,7 +142,7 @@ public final class Reisguh {
             Data data = new Data();
             for (Tag t : tag.getListOrEmpty("Points")) {
                 CompoundTag c = (CompoundTag) t;
-                data.points.put(c.read("Id", UUIDUtil.CODEC).orElseThrow(), new Point(c.read("Id", UUIDUtil.CODEC).orElseThrow(), c.getStringOr("Name", ""), BlockPos.of(c.getLongOr("Pos", 0L)), c.getFloatOr("Yaw", 0.0F)));
+                data.points.put(c.read("Id", UUIDUtil.CODEC).orElseThrow(), new Point(c.read("Id", UUIDUtil.CODEC).orElseThrow(), vanOud(nl.juiced.guhs.taal.Tekst.get(c, "Name")), BlockPos.of(c.getLongOr("Pos", 0L)), c.getFloatOr("Yaw", 0.0F)));
             }
             CompoundTag players = tag.getCompoundOrEmpty("Discovered");
             for (String key : players.keySet()) {
@@ -154,16 +201,16 @@ public final class Reisguh {
      * coordinates behind her name when that name is already taken, so two kermissen are easy to tell apart in the menu.
      */
     static void uniekeNaam(GuhNpcEntity npc, Data data) {
-        String naam = npc.getReisName();
-        if (naam.isEmpty() || data.points.values().stream().noneMatch(p -> !p.id().equals(npc.getUUID()) && p.name().equals(naam))) {
+        Component naam = npc.getReisName();
+        if (nl.juiced.guhs.taal.Tekst.empty(naam) || data.points.values().stream().noneMatch(p -> !p.id().equals(npc.getUUID()) && p.name().equals(naam))) {
             return;
         }
-        String nieuw = naam + " (" + npc.blockPosition().getX() + ", " + npc.blockPosition().getZ() + ")";
-        npc.setReisName(nieuw.length() > MAX_NAME ? nieuw.substring(0, MAX_NAME) : nieuw);
+        npc.setReisName(Component.translatable("quest.guhs.reis.naam_xz", naam, npc.blockPosition().getX(), npc.blockPosition().getZ()));
     }
 
-    public static String name(GuhNpcEntity npc) {
-        return npc.getReisName().isEmpty() ? Component.translatable("entity.guhs.guh_npc.reisguh").getString() : npc.getReisName();
+    /** Her name as every player reads it (1.2.0: a Component, resolved on the client). */
+    public static Component name(GuhNpcEntity npc) {
+        return nl.juiced.guhs.taal.Tekst.empty(npc.getReisName()) ? Component.translatable("entity.guhs.guh_npc.reisguh") : npc.getReisName();
     }
 
     /** Right-click: discover it, or open its menu. */
@@ -200,12 +247,12 @@ public final class Reisguh {
         }
         list.sort(Comparator.comparingDouble(p -> p.pos().distSqr(npc.blockPosition())));
         CompoundTag tag = new CompoundTag();
-        tag.putString("Name", name(npc));
+        nl.juiced.guhs.taal.Tekst.put(tag, "Name", name(npc));
         ListTag points = new ListTag();
         for (Point p : list) {
             CompoundTag c = new CompoundTag();
             c.store("Id", UUIDUtil.CODEC, p.id());
-            c.putString("Name", p.name());
+            nl.juiced.guhs.taal.Tekst.put(c, "Name", p.name());
             c.putInt("Distance", (int) Math.sqrt(p.pos().distSqr(npc.blockPosition())));
             points.add(c);
         }
@@ -227,9 +274,9 @@ public final class Reisguh {
             if (name.isEmpty() || name.length() > MAX_NAME) {
                 return;
             }
-            npc.setReisName(name);
+            npc.setReisName(Component.literal(name));
             tick(npc);
-            data.points.put(npc.getUUID(), new Point(npc.getUUID(), name, npc.blockPosition(), npc.getYRot()));
+            data.points.put(npc.getUUID(), new Point(npc.getUUID(), Component.literal(name), npc.blockPosition(), npc.getYRot()));
             data.setDirty();
             player.sendOverlayMessage(Component.translatable("quest.guhs.reis.renamed", name).withStyle(ChatFormatting.LIGHT_PURPLE));
             open(npc, player);
@@ -267,7 +314,7 @@ public final class Reisguh {
         data.setDirty();
         CompoundTag tag = nl.juiced.guhs.storage.Nbt.saveWithoutId(npc);
         tag.putString("id", "guhs:guh_npc");
-        tag.putString("GuhDisplayName", name(npc));
+        nl.juiced.guhs.taal.Tekst.put(tag, "GuhDisplayName", name(npc));
         npc.discard();
         player.getInventory().placeItemBackInInventory(nl.juiced.guhs.item.PickedUpGuhItem.of(tag));
         player.sendOverlayMessage(Component.translatable("quest.guhs.reis.picked_up", name(npc)).withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -283,7 +330,7 @@ public final class Reisguh {
         if (data.points.values().stream().anyMatch(p -> p.pos().closerThan(pos, WILD_AFSTAND))) {
             return;
         }
-        place(level, pos, random.nextFloat() * 360f, Component.translatable("quest.guhs.reis.wild_name", pos.getX(), pos.getZ()).getString());
+        place(level, pos, random.nextFloat() * 360f, Component.translatable("quest.guhs.reis.wild_name", pos.getX(), pos.getZ()));
     }
 
     /** Where you arrive when you travel to a Reisguh: in front of it (or on top when that's blocked). */
@@ -303,7 +350,7 @@ public final class Reisguh {
 
     /** A new Reisguh at a spot (made sure it has a floor and room), looking `yaw`. */
     @Nullable
-    public static GuhNpcEntity place(ServerLevel level, BlockPos pos, float yaw, String name) {
+    public static GuhNpcEntity place(ServerLevel level, BlockPos pos, float yaw, Component name) {
         GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
         if (npc == null) {
             return null;
@@ -339,7 +386,7 @@ public final class Reisguh {
                 BlockPos at = spot.above(dy);
                 if (level.isEmptyBlock(at) && level.isEmptyBlock(at.above()) && level.getBlockState(at.below()).isSolid()) {
                     float yaw = (float) Math.toDegrees(Math.atan2(-(portal.getX() - at.getX()), portal.getZ() - at.getZ()));
-                    place(level, at, yaw, Component.translatable("quest.guhs.reis.portal_name", at.getX(), at.getZ()).getString());
+                    place(level, at, yaw, Component.translatable("quest.guhs.reis.portal_name", at.getX(), at.getZ()));
                     return;
                 }
             }
@@ -349,7 +396,7 @@ public final class Reisguh {
         level.setBlockAndUpdate(at.below(), net.minecraft.world.level.block.Blocks.PINK_WOOL.defaultBlockState());
         level.setBlockAndUpdate(at, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
         level.setBlockAndUpdate(at.above(), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
-        place(level, at, 0, Component.translatable("quest.guhs.reis.portal_name", at.getX(), at.getZ()).getString());
+        place(level, at, 0, Component.translatable("quest.guhs.reis.portal_name", at.getX(), at.getZ()));
     }
 
     /** For tests: the Reisguhs on the list within {@code range} of {@code pos} (1.1.0: entities in a chunk that was only

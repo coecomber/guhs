@@ -11,10 +11,12 @@ import nl.juiced.guhs.Guhs;
 /** Guhwai'i's payloads: guhs:guhwaii_scan (server -> client: open the vadsigheid-scanner's big screen for this guh). */
 public final class GuhwaiiPayloads {
     /** The scanner measured a guh: its entity id (for the picture), its name and its kind (variant name). */
-    public record Scan(int guhId, String naam, String soort) implements CustomPacketPayload {
+    /** 1.2.0: name and kind as Components (resolved in the player's own language). */
+    public record Scan(int guhId, net.minecraft.network.chat.Component naam, net.minecraft.network.chat.Component soort) implements CustomPacketPayload {
         public static final Type<Scan> TYPE = new Type<>(Guhs.id("guhwaii_scan"));
         public static final StreamCodec<FriendlyByteBuf, Scan> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.VAR_INT, Scan::guhId, ByteBufCodecs.STRING_UTF8, Scan::naam, ByteBufCodecs.STRING_UTF8, Scan::soort, Scan::new);
+                ByteBufCodecs.VAR_INT, Scan::guhId, net.minecraft.network.chat.ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC, Scan::naam,
+                net.minecraft.network.chat.ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC, Scan::soort, Scan::new);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

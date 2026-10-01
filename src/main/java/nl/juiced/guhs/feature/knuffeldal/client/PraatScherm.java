@@ -152,7 +152,7 @@ public class PraatScherm extends Screen {
         g.fill(bx - 4, by + 12, bx, by + 18, 0xFFFFF4F8);
         List<Object> args = new ArrayList<>();
         for (Tag t : nu().getListOrEmpty("Args")) {
-            args.add(t.asString().orElse(""));
+            args.add(t instanceof net.minecraft.nbt.CompoundTag a ? nl.juiced.guhs.taal.Tekst.get(a, "A") : t.asString().orElse(""));
         }
         Component tekst = Component.translatable(nu().getStringOr("Tekst", ""), args.toArray());
         List<FormattedCharSequence> lines = font.split(tekst, bw - 10);

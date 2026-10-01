@@ -100,9 +100,9 @@ public final class KatapultFeature {
         NeoForge.EVENT_BUS.register(KatapultEvents.class);
         NeoForge.EVENT_BUS.register(KatapultProtection.class);
         Protected.add(KatapultProtection::inKasteel);
-        KledingBronnen.bron(GuhClothes.KATAPULT_HELMPJE, "katapult", PRIJS_HELMPJE + " katapultsterren");
-        KledingBronnen.bron(GuhClothes.KATAPULT_OORBELLETJES, "katapult", PRIJS_OORBELLETJES + " katapultsterren");
-        KledingBronnen.bron(GuhClothes.KATAPULT_RIEM, "katapult", PRIJS_RIEM + " katapultsterren");
+        KledingBronnen.bron(GuhClothes.KATAPULT_HELMPJE, "katapult", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.katapultsterren", PRIJS_HELMPJE));
+        KledingBronnen.bron(GuhClothes.KATAPULT_OORBELLETJES, "katapult", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.katapultsterren", PRIJS_OORBELLETJES));
+        KledingBronnen.bron(GuhClothes.KATAPULT_RIEM, "katapult", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.katapultsterren", PRIJS_RIEM));
     }
 
     public static void payloads(PayloadRegistrar registrar) {

@@ -70,11 +70,24 @@ public final class Klassiekers {
         return bord(server, title, base, null, format);
     }
 
+    /** 1.2.0: {@link #bord(MinecraftServer, Component, String, IntFunction)} with scores as Components (e.g. "1,50 kg" per language). */
+    public static Component bordTekst(MinecraftServer server, Component title, String base, IntFunction<Component> format) {
+        List<String> boards = new ArrayList<>();
+        List<Component> headings = new ArrayList<>();
+        koppen(boards, headings, base, null);
+        return Scorebord.tekst(server, title, boards, headings, format);
+    }
+
     /** As {@link #bord(MinecraftServer, Component, String, IntFunction)}, with a line after each level name (e.g. "9 holes, par 26"). */
     public static Component bord(MinecraftServer server, Component title, String base, @javax.annotation.Nullable IntFunction<Component> extra,
                                  IntFunction<String> format) {
         List<String> boards = new ArrayList<>();
         List<Component> headings = new ArrayList<>();
+        koppen(boards, headings, base, extra);
+        return Scorebord.text(server, title, boards, headings, format);
+    }
+
+    private static void koppen(List<String> boards, List<Component> headings, String base, @javax.annotation.Nullable IntFunction<Component> extra) {
         for (Niveau n : Niveau.values()) {
             boards.add(n.board(base));
             // (a child with its own colour: Scorebord.text colours the heading itself pink)
@@ -84,7 +97,6 @@ public final class Klassiekers {
             }
             headings.add(heading);
         }
-        return Scorebord.text(server, title, boards, headings, format);
     }
 
     /** The colour of a level: green, yellow, red. */

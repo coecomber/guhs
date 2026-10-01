@@ -154,7 +154,7 @@ public final class Favorietjes {
                 ChatFormatting.BOLD));
         Dagboek.eersteKeer(guh, eigenaar, "eerste_favoriet");
         Dagboek.eersteKeer(guh, eigenaar, "favorietjes_fav_" + soort.id());
-        Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.favorietjes.ontdekt_" + soort.id(), naam.getString());
+        Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.favorietjes.ontdekt_" + soort.id(), naam);
         GidsFeature.grant(eigenaar, "lieve_vadsjes/favorietjes_eerste");
         GidsFeature.grant(eigenaar, "lieve_vadsjes/favorietjes_" + soort.id());
         Set<FavorietSoort> alle = Favorieten.ontdekt(level.getServer(), eigenaar.getUUID(), Band.id(guh));

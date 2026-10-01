@@ -1722,8 +1722,8 @@ public final class AutoCheck {
             }
             java.util.List<nl.juiced.guhs.feature.band.client.MijnGuhsCache.Vriend> vrienden = new java.util.ArrayList<>();
             if (i > 0) {
-                vrienden.add(new nl.juiced.guhs.feature.band.client.MijnGuhsCache.Vriend(soorten[(i + 1) % 4][2], i == 2));
-                vrienden.add(new nl.juiced.guhs.feature.band.client.MijnGuhsCache.Vriend(soorten[(i + 2) % 4][2], false));
+                vrienden.add(new nl.juiced.guhs.feature.band.client.MijnGuhsCache.Vriend(net.minecraft.network.chat.Component.literal(soorten[(i + 1) % 4][2]), i == 2));
+                vrienden.add(new nl.juiced.guhs.feature.band.client.MijnGuhsCache.Vriend(net.minecraft.network.chat.Component.literal(soorten[(i + 2) % 4][2]), false));
             }
             java.util.List<net.minecraft.network.chat.Component> klussen = new java.util.ArrayList<>();
             if (i >= 2) {
@@ -1749,8 +1749,8 @@ public final class AutoCheck {
                     i == 2 ? "gui.guhs.band.plek.huisje" : "gui.guhs.band.plek.wereld", "Villa Vahoeg",
                     net.minecraft.network.chat.Component.translatable("gui.guhs.band.dim.guhs.guhmension"), 120, 70, -48);
             out.add(new nl.juiced.guhs.feature.band.client.MijnGuhsCache.Guh(java.util.UUID.nameUUIDFromBytes(("voorbeeld" + i).getBytes()),
-                    soorten[i][2], looks, hartjes[i], niveau.ordinal(), volgende == null ? -1 : volgende.drempel(), fav, vrienden,
-                    i >= 2 ? "Villa Vahoeg" : "", klussen, plek, stats, eerste, wist, 0, false));
+                    net.minecraft.network.chat.Component.literal(soorten[i][2]), looks, hartjes[i], niveau.ordinal(), volgende == null ? -1 : volgende.drempel(), fav, vrienden,
+                    net.minecraft.network.chat.Component.literal(i >= 2 ? "Villa Vahoeg" : ""), klussen, plek, stats, eerste, wist, 0, false));
         }
         return out;
     }

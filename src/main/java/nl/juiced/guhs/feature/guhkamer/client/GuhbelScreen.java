@@ -184,11 +184,11 @@ public class GuhbelScreen extends Screen {
             if (pop != null) {
                 GuhPop.teken(g, x + 1, y + 1, x + 29, y + RIJ - 3, pop, 30, -5);
             }
-            GidsTekst.passend(g, Component.literal(c.getStringOr("Naam", "")).withStyle(ChatFormatting.BOLD), x + 32, y + 4, w - 36, 0.875f, DONKER, false);
+            GidsTekst.passend(g, nl.juiced.guhs.taal.Tekst.get(c, "Naam").copy().withStyle(ChatFormatting.BOLD), x + 32, y + 4, w - 36, 0.875f, DONKER, false);
             BandNiveau n = BandNiveau.byIndex(c.getIntOr("Niveau", 0));
             Component onder = MijnGuhsTab.hartje(n).append(" ").append(MijnGuhsTab.niveauNaam(n));
-            if (!c.getStringOr("Woont", "").isEmpty()) {
-                onder = Component.translatable("gui.guhs.guhkamer.bel.woont", c.getStringOr("Woont", "")).append(" · ").append(onder);
+            if (!nl.juiced.guhs.taal.Tekst.empty(nl.juiced.guhs.taal.Tekst.get(c, "Woont"))) {
+                onder = Component.translatable("gui.guhs.guhkamer.bel.woont", nl.juiced.guhs.taal.Tekst.get(c, "Woont")).append(" · ").append(onder);
             }
             GidsTekst.passend(g, onder, x + 32, y + 16, w - 36, 0.625f, MijnGuhsTab.kleur(n), false);
         }
@@ -201,7 +201,7 @@ public class GuhbelScreen extends Screen {
 
         @Override
         public List<Component> tip(double mx, double my, int x, int y, int w) {
-            return List.of(Component.translatable(klikKey, c.getStringOr("Naam", "")));
+            return List.of(Component.translatable(klikKey, nl.juiced.guhs.taal.Tekst.get(c, "Naam")));
         }
     }
 

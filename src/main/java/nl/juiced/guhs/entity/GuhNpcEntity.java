@@ -131,17 +131,18 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     /** Saved state for the character's feature role (see nl.juiced.guhs.feature.NpcRole). */
     public net.minecraft.nbt.CompoundTag roleData = new net.minecraft.nbt.CompoundTag();
 
-    /** A Reisguh's own name (the waypoint's name), empty = just "Reisguh". */
-    private String reisName = "";
+    /** A Reisguh's own name (the waypoint's name), empty = just "Reisguh". 1.2.0: a Component (a place name of a template
+     *  or an automatic name is translatable, a player's own name a literal; quest/Reisguh.vanOud). */
+    private Component reisName = Component.empty();
 
-    public String getReisName() {
+    public Component getReisName() {
         return reisName;
     }
 
-    public void setReisName(String name) {
+    public void setReisName(Component name) {
         this.reisName = name;
-        if (getKind() == Kind.REISGUH && !name.isEmpty()) {
-            this.setCustomName(Component.literal(name));
+        if (getKind() == Kind.REISGUH && !nl.juiced.guhs.taal.Tekst.empty(name)) {
+            this.setCustomName(name.copy());
         }
     }
 
@@ -235,8 +236,8 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         if (getKind() == Kind.VERSTOPGUHTJE) {
             tag.store("Verstop", CompoundTag.CODEC, verstop.save());
         }
-        if (!reisName.isEmpty()) {
-            tag.putString("ReisName", reisName);
+        if (!nl.juiced.guhs.taal.Tekst.empty(reisName)) {
+            nl.juiced.guhs.taal.Tekst.put(tag, "ReisName", reisName);
         }
         if (!roleData.isEmpty()) {
             tag.store("RoleData", CompoundTag.CODEC, roleData);
@@ -253,7 +254,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         }
         maagOwner = tag.read("MaagOwner", UUIDUtil.CODEC).isPresent() ? tag.read("MaagOwner", UUIDUtil.CODEC).orElseThrow() : null;
         verstop.load(tag.read("Verstop", CompoundTag.CODEC).orElseGet(CompoundTag::new));
-        setReisName(tag.getStringOr("ReisName", ""));
+        setReisName(nl.juiced.guhs.quest.Reisguh.vanOud(nl.juiced.guhs.taal.Tekst.get(tag, "ReisName")));
         roleData = tag.read("RoleData", CompoundTag.CODEC).orElseGet(CompoundTag::new);
         if (getKind() == Kind.POORTWACHTER && !roleData.contains("GateYaw")) {
             roleData.putFloat("GateYaw", getYRot()); // (the Rotation from a structure is already loaded here)

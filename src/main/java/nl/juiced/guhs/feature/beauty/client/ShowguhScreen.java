@@ -44,13 +44,13 @@ public class ShowguhScreen extends Screen {
             NiveauKeuze.knoppen(this::addRenderableWidget, "beauty", left + 20, top + H - 80, W - 40);
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.beauty.start"), b -> send(NiveauKeuze.actie("beauty", BeautyShow.START)))
                     .bounds(left + 20, top + H - 56, bw, 20).tooltip(Tooltip.create(Component.translatable("gui.guhs.beauty.start.tooltip"))).build());
-            String own = data.getStringOr("OwnGuh", "");
-            Button withOwn = Button.builder(own.isEmpty() ? Component.translatable("gui.guhs.beauty.start_own.none")
+            Component own = nl.juiced.guhs.taal.Tekst.get(data, "OwnGuh");
+            Button withOwn = Button.builder(nl.juiced.guhs.taal.Tekst.empty(own) ? Component.translatable("gui.guhs.beauty.start_own.none")
                                     : Component.translatable("gui.guhs.beauty.start_own", own), b -> send(NiveauKeuze.actie("beauty", BeautyShow.START_OWN)))
                     .bounds(left + 24 + bw, top + H - 56, bw, 20)
-                    .tooltip(Tooltip.create(Component.translatable(own.isEmpty() ? "gui.guhs.beauty.start_own.none.tooltip"
+                    .tooltip(Tooltip.create(Component.translatable(nl.juiced.guhs.taal.Tekst.empty(own) ? "gui.guhs.beauty.start_own.none.tooltip"
                             : "gui.guhs.beauty.start_own.tooltip"))).build();
-            withOwn.active = !own.isEmpty();
+            withOwn.active = !nl.juiced.guhs.taal.Tekst.empty(own);
             addRenderableWidget(withOwn);
         }
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.beauty.shop"), b -> send(BeautyShow.SHOP))

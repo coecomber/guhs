@@ -42,7 +42,7 @@ public final class Huisje {
     final List<UUID> bewoners = new ArrayList<>();
     /** Per resident: "guh" or the maatje kind; and its name (for the screen when it isn't loaded). */
     final Map<UUID, String> soorten = new HashMap<>();
-    final Map<UUID, String> namen = new HashMap<>();
+    final Map<UUID, net.minecraft.network.chat.Component> namen = new HashMap<>();
     /** Chores switched on/off per resident (only what was set; the rest is the chore's default). */
     final Map<UUID, Map<String, Boolean>> klussen = new HashMap<>();
 
@@ -87,8 +87,29 @@ public final class Huisje {
         return eigenaarNaam;
     }
 
+    /** The name as the owner typed it, or the Dutch default name (the id for "is this name taken"). */
     public String naam() {
         return naam;
+    }
+
+    /** 1.2.0: the name to show: a default name ({@link Huisjes#NAMEN}, maybe numbered) in the reader's language,
+     *  a name the owner typed as it is. */
+    public net.minecraft.network.chat.Component naamTekst() {
+        return tekst(naam);
+    }
+
+    /** {@link #naamTekst()} for a saved name String: "Villa Vads 2" becomes gui.guhs.huisje.standaardnaam.1 + " 2". */
+    public static net.minecraft.network.chat.Component tekst(String naam) {
+        for (int i = 0; i < Huisjes.NAMEN.size(); i++) {
+            String n = Huisjes.NAMEN.get(i);
+            if (naam.equals(n)) {
+                return net.minecraft.network.chat.Component.translatable("gui.guhs.huisje.standaardnaam." + i);
+            }
+            if (naam.startsWith(n + " ") && naam.substring(n.length() + 1).matches("\\d+")) {
+                return net.minecraft.network.chat.Component.translatable("gui.guhs.huisje.standaardnaam." + i).append(" " + naam.substring(n.length() + 1));
+            }
+        }
+        return net.minecraft.network.chat.Component.literal(naam);
     }
 
     /** Band ids of the residents (guhs and maatjes). */
@@ -105,8 +126,9 @@ public final class Huisje {
         return soorten.getOrDefault(bewoner, "guh");
     }
 
-    public String naamVan(UUID bewoner) {
-        return namen.getOrDefault(bewoner, "");
+    /** A resident's name (1.2.0: a Component; saved before 1.2.0 as a resolved String). */
+    public net.minecraft.network.chat.Component naamVan(UUID bewoner) {
+        return namen.getOrDefault(bewoner, net.minecraft.network.chat.Component.empty());
     }
 
     /** The middle of the huisje (on its floor). */
@@ -220,7 +242,7 @@ public final class Huisje {
             CompoundTag c = new CompoundTag();
             c.store("Id", UUIDUtil.CODEC, b);
             c.putString("Soort", soort(b));
-            c.putString("Naam", naamVan(b));
+            nl.juiced.guhs.taal.Tekst.put(c, "Naam", naamVan(b));
             CompoundTag k = new CompoundTag();
             klussen.getOrDefault(b, Map.of()).forEach(k::putBoolean);
             c.put("Klussen", k);
@@ -247,7 +269,7 @@ public final class Huisje {
             UUID id = c.read("Id", UUIDUtil.CODEC).orElseThrow();
             h.bewoners.add(id);
             h.soorten.put(id, c.getStringOr("Soort", ""));
-            h.namen.put(id, c.getStringOr("Naam", ""));
+            h.namen.put(id, nl.juiced.guhs.taal.Tekst.get(c, "Naam"));
             CompoundTag k = c.getCompoundOrEmpty("Klussen");
             if (!k.isEmpty()) {
                 Map<String, Boolean> m = new LinkedHashMap<>();

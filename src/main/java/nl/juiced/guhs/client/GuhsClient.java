@@ -43,6 +43,8 @@ public final class GuhsClient {
         container.registerExtensionPoint(net.neoforged.neoforge.client.gui.IConfigScreenFactory.class,
                 net.neoforged.neoforge.client.gui.ConfigurationScreen::new);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(OfficialServerEntry::onScreenInit);
+        // 1.2.0: the NL/EN switch of the Guhs texts (config "language", guh menu button)
+        GuhsTaal.init(modBus);
         nl.juiced.guhs.feature.FeaturesClient.init(modBus);
         modBus.addListener(GuhsClient::registerRenderers);
         modBus.addListener(GuhsClient::registerLayerDefinitions);

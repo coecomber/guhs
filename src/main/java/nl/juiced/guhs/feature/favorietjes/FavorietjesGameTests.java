@@ -264,12 +264,12 @@ public class FavorietjesGameTests {
         BandData.Rec r = BandData.get(s).vind(p.getUUID(), id);
         int n0 = r.wist.size();
         a.getPersistentData().remove(Verhaaltjes.DAG_KEY);
-        helper.assertTrue(Verhaaltjes.wist(a, "aai", 1, ""), "a wist-je-datje");
-        helper.assertTrue(!Verhaaltjes.wist(a, "aai", 1, ""), "not twice a day about the same");
+        helper.assertTrue(Verhaaltjes.wist(a, "aai", 1, net.minecraft.network.chat.Component.empty()), "a wist-je-datje");
+        helper.assertTrue(!Verhaaltjes.wist(a, "aai", 1, net.minecraft.network.chat.Component.empty()), "not twice a day about the same");
         helper.assertTrue(r.wist.size() == n0 + 1 && r.wist.get(0).key().startsWith("gui.guhs.wistjedat.favorietjes.aai."), "newest first");
         int geschreven = 1;
         for (String sleutel : List.of("droom", "wakker", "regen", "nacht", "rit", "record", "spel", "klus", "guhkamer", "onweer")) {
-            if (Verhaaltjes.wist(a, sleutel, 1, "")) {
+            if (Verhaaltjes.wist(a, sleutel, 1, net.minecraft.network.chat.Component.empty())) {
                 geschreven++;
             }
         }

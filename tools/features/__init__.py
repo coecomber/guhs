@@ -27,7 +27,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 3.0.x: the Guhdex tab Verhalen
             'gids_verhalen',
             # 1.1.2: the Guhmension placement rebalance (guaranteed minigames/landmarks, story tag): after everything else
-            'plaatsing']
+            'plaatsing',
+            # 1.2.0: the texts of the NL/EN switch and of what the server used to resolve (lang only)
+            'taal']
 
 
 def modules():

@@ -57,7 +57,7 @@ public final class MijnGuhs {
         for (BandData.Rec r : data.guhsVan(player.getUUID())) {
             CompoundTag t = new CompoundTag();
             t.putString("Id", r.id.toString());
-            t.putString("Naam", r.naam.isEmpty() ? "Guh" : r.naam);
+            nl.juiced.guhs.taal.Tekst.put(t, "Naam", r.weergave());   // (1.2.0: Components, read on the client)
             t.put("Looks", r.looks.copy());
             t.putInt("Hartjes", r.hartjes);
             t.putInt("Niveau", r.niveau().ordinal());
@@ -79,14 +79,14 @@ public final class MijnGuhs {
             for (UUID v : Vriendjes.vriendenVan(s, r.id)) {
                 BandData.Rec vr = data.vindOveral(v);
                 CompoundTag f = new CompoundTag();
-                f.putString("Naam", vr == null || vr.naam.isEmpty() ? "Guh" : vr.naam);
+                nl.juiced.guhs.taal.Tekst.put(f, "Naam", vr == null ? Component.literal("Guh") : vr.weergave());
                 f.putBoolean("Bestie", v.equals(bestie));
                 vrienden.add(f);
             }
             t.put("Vrienden", vrienden);
             // its huisje and chores
             Huisje h = Huisjes.vanBewoner(s, player.getUUID(), r.id);
-            t.putString("Huisje", h == null ? "" : h.naam());
+            nl.juiced.guhs.taal.Tekst.put(t, "Huisje", h == null ? Component.empty() : h.naamTekst());
             ListTag klussen = new ListTag();
             if (h != null) {
                 for (Klus k : Klusjes.alle()) {

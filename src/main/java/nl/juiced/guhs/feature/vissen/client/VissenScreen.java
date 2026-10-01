@@ -100,7 +100,7 @@ public class VissenScreen extends Screen {
         VisSoort heavy = VisSoort.byId(data.getStringOr("HeaviestSoort", ""));
         g.text(font, Component.translatable("gui.guhs.vissen.mine.heaviest"), lx, y0 + 46, 0xFFE6FAFF);
         g.text(font, heavy == null ? Component.literal("  -") : Component.literal("  ").append(Component.translatable("item.guhs." + heavy.id()))
-                .append(" " + VisSoort.kg(data.getIntOr("Heaviest", 0))), lx, y0 + 57, 0xFFB8DCE8);
+                .append(" ").append(VisSoort.kg(data.getIntOr("Heaviest", 0))), lx, y0 + 57, 0xFFB8DCE8);
         g.text(font, Component.translatable("gui.guhs.vissen.mine.games", data.getIntOr("Games", 0)), lx, y0 + 69, 0xFFE6FAFF);
 
         Niveau shown = data.getBooleanOr("Running", false) ? Niveau.byId(data.getStringOr("Niveau", "")) : NiveauKeuze.gekozen("vissen");
@@ -128,7 +128,7 @@ public class VissenScreen extends Screen {
         if (!heaviestList.isEmpty()) {
             CompoundTag z = heaviestList.getCompoundOrEmpty(0);
             g.text(font, Component.translatable("gui.guhs.vissen.board.heaviest", z.getStringOr("Name", "")), rx, y0 + 47, 0xFFFFD27A);
-            g.text(font, Component.literal("  " + VisSoort.kg(z.getIntOr("Points", 0))), rx, y0 + 58, 0xFFB8DCE8);
+            g.text(font, Component.literal("  ").append(VisSoort.kg(z.getIntOr("Points", 0))), rx, y0 + 58, 0xFFB8DCE8);
         }
     }
 

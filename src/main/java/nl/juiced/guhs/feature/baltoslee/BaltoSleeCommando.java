@@ -80,14 +80,14 @@ public final class BaltoSleeCommando {
         for (ServerPlayer p : spelers) {
             SleeRit.data(p).putBoolean("Vrij", true);
         }
-        source.sendSuccess(() -> Component.literal("De sledesprint is vrij voor " + spelers.size() + " speler(s). Njeg!"), true);
+        source.sendSuccess(() -> Component.translatable("commands.guhs.baltoslee.vrij", spelers.size()), true);
         return spelers.size();
     }
 
     private static NomguhRoute route(CommandSourceStack source, ServerPlayer p, BlockPos anker) {
         BlockPos a = anker != null ? anker : Nomguh.anker(p.level(), p.blockPosition());
         if (a == null) {
-            source.sendFailure(Component.literal("Njeg: geen Nomguh in de buurt. Geef een anker op, of probeer /guhs baltoslee proef."));
+            source.sendFailure(Component.translatable("commands.guhs.baltoslee.geen_nomguh"));
             return null;
         }
         return NomguhRoute.laad().in(a);
@@ -117,7 +117,7 @@ public final class BaltoSleeCommando {
         SleeRit rit = soort.equals("tocht") ? (SleeTocht.startMet(p, r, null) ? SleeRit.van(p) : null)
                 : SleeRit.start(p, r, SleeRit.Modus.SPRINT, Niveau.byId(soort), null, null);
         if (rit == null) {
-            source.sendFailure(Component.literal("Njeg: je bent al met iets anders bezig."));
+            source.sendFailure(Component.translatable("commands.guhs.baltoslee.bezig"));
             return 0;
         }
         return 1;
@@ -158,7 +158,7 @@ public final class BaltoSleeCommando {
         npc.snapTo(p.getX(), p.getY(), p.getZ(), p.getYRot() + 180, 0);
         npc.setPersistenceRequired();
         level.addFreshEntity(npc);
-        source.sendSuccess(() -> Component.literal("Steele-Mika staat klaar voor de sledesprint. Njeh-heh!"), true);
+        source.sendSuccess(() -> Component.translatable("commands.guhs.baltoslee.steele"), true);
         return 1;
     }
 

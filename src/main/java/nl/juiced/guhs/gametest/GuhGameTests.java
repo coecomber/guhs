@@ -1344,8 +1344,8 @@ public class GuhGameTests {
                 }
             }
         }
-        var ra = nl.juiced.guhs.quest.Reisguh.place(guhmension, a, 0, "A");
-        var rb = nl.juiced.guhs.quest.Reisguh.place(guhmension, b, 0, "B");
+        var ra = nl.juiced.guhs.quest.Reisguh.place(guhmension, a, 0, net.minecraft.network.chat.Component.literal("A"));
+        var rb = nl.juiced.guhs.quest.Reisguh.place(guhmension, b, 0, net.minecraft.network.chat.Component.literal("B"));
         net.minecraft.server.level.ServerPlayer player = net.neoforged.neoforge.common.util.FakePlayerFactory.get(guhmension,
                 new com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "reiziger"));
         player.snapTo(a.getX() + 1.5, a.getY(), a.getZ() + 0.5);
@@ -1355,7 +1355,7 @@ public class GuhGameTests {
         helper.assertTrue(nl.juiced.guhs.quest.Reisguh.discovered(player, ra.getUUID()) && nl.juiced.guhs.quest.Reisguh.discovered(player, rb.getUUID()),
                 "right-clicking discovers them");
         nl.juiced.guhs.quest.Reisguh.action(rb, player, nl.juiced.guhs.quest.Reisguh.RENAME, "Guhstation");
-        helper.assertTrue(rb.getReisName().equals("Guhstation"), "and renames them");
+        helper.assertTrue(rb.getReisName().getString().equals("Guhstation"), "and renames them");
         BlockPos arrive = nl.juiced.guhs.quest.Reisguh.arrivalSpot(guhmension, ra.getUUID());
         helper.assertTrue(arrive != null && arrive.distSqr(ra.blockPosition()) < 16, "travelling lands you right next to the Reisguh: " + arrive);
         nl.juiced.guhs.quest.Reisguh.nearPortal(guhmension, portal);

@@ -108,7 +108,11 @@ public class BibliotheekGameTests {
             helper.assertTrue(Guhboek.of(stack) == book, "it knows which book it is: " + book.id);
             var content = stack.get(DataComponents.WRITTEN_BOOK_CONTENT);
             helper.assertTrue(content != null && content.pages().size() == book.pages && content.resolved(), "pages of " + book.id);
-            helper.assertTrue(content.title().raw().length() <= 32 && "De Bibliothecaris".equals(content.author()), "title and author");
+            // 1.2.0: no author String (one language); the "by" line is translatable lore
+            var lore = stack.get(DataComponents.LORE);
+            helper.assertTrue(content.title().raw().length() <= 32 && content.author().isEmpty() && lore != null
+                    && lore.lines().get(0).getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents door
+                    && door.getKey().equals("item.guhs.bieb_boek.door"), "title, and the author as lore");
             helper.assertTrue(stack.has(DataComponents.CUSTOM_NAME), "a translated name");
             helper.assertTrue(book.secret() == Boolean.TRUE.equals(stack.get(DataComponents.ENCHANTMENT_GLINT_OVERRIDE)), "only the secret one glitters");
         }

@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -119,12 +120,12 @@ public final class Verhaaltjes {
             }
             case KNUFFEL -> {
                 eerste(guh, getuige, "favorietjes_knuffel");
-                wist(guh, "knuffel", 2, Favorieten.naam(FavorietSoort.KNUFFEL, waarde).getString());
+                wist(guh, "knuffel", 2, Favorieten.naam(FavorietSoort.KNUFFEL, waarde));
             }
             case LIEDJE -> {
                 boolean disco = waarde.startsWith("disco:");
                 eerste(guh, getuige, disco ? "favorietjes_disco" : "favorietjes_koortje");
-                wist(guh, disco ? "liedje_disco" : "liedje_koortje", 2, Favorieten.naam(FavorietSoort.LIEDJE, waarde).getString());
+                wist(guh, disco ? "liedje_disco" : "liedje_koortje", 2, Favorieten.naam(FavorietSoort.LIEDJE, waarde));
             }
             case EMOTE -> {
                 String eerste = EERSTE_EMOTE.get(waarde);
@@ -132,20 +133,20 @@ public final class Verhaaltjes {
                     if (eerste != null) {
                         eerste(guh, getuige, eerste);
                     }
-                    wist(guh, "emote_" + waarde, 4, "");
+                    wist(guh, "emote_" + waarde, 4, Component.empty());
                 }
             }
             case KLEDING -> {
                 eerste(guh, getuige, "favorietjes_kleding");
                 GuhClothes stuk = GuhClothes.byId(waarde);
-                wist(guh, "kleding", 2, stuk == null ? waarde : new ItemStack(ModItems.clothingItem(stuk)).getHoverName().getString());
+                wist(guh, "kleding", 2, stuk == null ? Component.literal(waarde) : new ItemStack(ModItems.clothingItem(stuk)).getHoverName().copy());
             }
-            case RIT -> wist(guh, "rit", 2, "");
+            case RIT -> wist(guh, "rit", 2, Component.empty());
             case REIS -> {
                 mijlpaal(guh, getuige, DagboekStat.BLOKKEN_SAMEN, 1000, "favorietjes_reis_1000");
                 mijlpaal(guh, getuige, DagboekStat.BLOKKEN_SAMEN, 10000, "favorietjes_reis_10000");
                 mijlpaal(guh, getuige, DagboekStat.BLOKKEN_SAMEN, 42195, "favorietjes_marathon");
-                wist(guh, "reis", 8, String.valueOf(stat(guh, DagboekStat.BLOKKEN_SAMEN)));
+                wist(guh, "reis", 8, Component.literal(String.valueOf(stat(guh, DagboekStat.BLOKKEN_SAMEN))));
             }
             case DIMENSIE -> {
                 String eerste = EERSTE_DIM.get(waarde);
@@ -154,39 +155,39 @@ public final class Verhaaltjes {
                 }
                 String naam = DIM_NAAM.get(waarde);
                 if (naam != null) {
-                    wist(guh, "dim_" + naam, 1, "");
+                    wist(guh, "dim_" + naam, 1, Component.empty());
                 }
             }
             case MINIGAME_EINDE -> {
-                wist(guh, varianten("spel_" + waarde) > 0 ? "spel_" + waarde : "spel", 1, "");
+                wist(guh, varianten("spel_" + waarde) > 0 ? "spel_" + waarde : "spel", 1, Component.empty());
             }
             case RECORD -> {
                 eerste(guh, getuige, "favorietjes_record");
-                wist(guh, "record", 1, "");
+                wist(guh, "record", 1, Component.empty());
             }
             case KLUSJE -> {
                 mijlpaal(guh, getuige, DagboekStat.KLUSJES, 100, "favorietjes_klusjes_100");
-                wist(guh, varianten("klus_" + waarde) > 0 ? "klus_" + waarde : "klus", 3, "");
+                wist(guh, varianten("klus_" + waarde) > 0 ? "klus_" + waarde : "klus", 3, Component.empty());
             }
             case SPEELTJE -> {
                 mijlpaal(guh, getuige, DagboekStat.SPEELTJES, 50, "favorietjes_speeltjes_50");
                 wist(guh, varianten("speeltje_" + waarde) > 0 ? "speeltje_" + waarde : "speeltje", 2,
-                        Favorieten.naam(FavorietSoort.SPEELTJE, waarde).getString());
+                        Favorieten.naam(FavorietSoort.SPEELTJE, waarde));
             }
             case VRIENDJE -> wist(guh, "vriendje", 2, guhNaam(guh.level().getServer(), waarde));
             case SLAAP -> {
                 eerste(guh, getuige != null ? getuige : Band.eigenaarOnline(guh), "favorietjes_nachtje");
-                wist(guh, "droom", 2, "");
+                wist(guh, "droom", 2, Component.empty());
             }
-            case WAKKER -> wist(guh, "wakker", 3, "");
-            case GUHKAMER -> wist(guh, "guhkamer", 1, "");
-            case AANGEAAID -> wist(guh, "aai", 5, "");
+            case WAKKER -> wist(guh, "wakker", 3, Component.empty());
+            case GUHKAMER -> wist(guh, "guhkamer", 1, Component.empty());
+            case AANGEAAID -> wist(guh, "aai", 5, Component.empty());
             case GEKNUFFELD -> {
                 mijlpaal(guh, getuige, DagboekStat.KNUFFELS, 10, "favorietjes_knuffels_10");
                 mijlpaal(guh, getuige, DagboekStat.KNUFFELS, 100, "favorietjes_knuffels_100");
-                wist(guh, "knuffel_groot", 3, "");
+                wist(guh, "knuffel_groot", 3, Component.empty());
             }
-            case HUISJE_IN -> wist(guh, "huisje_in", 1, waarde);
+            case HUISJE_IN -> wist(guh, "huisje_in", 1, nl.juiced.guhs.feature.huisje.Huisje.tekst(waarde));
             default -> {
             }
         }
@@ -200,7 +201,7 @@ public final class Verhaaltjes {
             if (eigenaar == null) {
                 continue;
             }
-            String ander = guhNaam(s, paar[1].toString());
+            Component ander = guhNaam(s, paar[1].toString());
             if (besties) {
                 Dagboek.eersteKeer(s, eigenaar, paar[0], "favorietjes_besties");
             }
@@ -235,20 +236,20 @@ public final class Verhaaltjes {
         }
         if (level.isRainingAt(boven)) {
             eerste(guh, eigenaar, "favorietjes_regen");
-            wist(guh, "regen", 2, "");
+            wist(guh, "regen", 2, Component.empty());
             if (level.isThundering()) {
                 eerste(guh, eigenaar, "favorietjes_onweer");
-                wist(guh, "onweer", 1, "");
+                wist(guh, "onweer", 1, Component.empty());
             }
         } else if (level.isRaining() && level.getBiome(boven).value().getPrecipitationAt(boven, level.getSeaLevel()) == Biome.Precipitation.SNOW) {
             eerste(guh, eigenaar, "favorietjes_sneeuwvlokjes");
-            wist(guh, "sneeuwvlokjes", 1, "");
+            wist(guh, "sneeuwvlokjes", 1, Component.empty());
         } else if (level.dimensionType().hasSkyLight() && !level.dimensionType().hasFixedTime() && level.isDarkOutside()) {
             eerste(guh, eigenaar, "favorietjes_sterrennacht");
-            wist(guh, "nacht", 3, "");
+            wist(guh, "nacht", 3, Component.empty());
             if (nl.juiced.guhs.world.GuhTime.moonPhase(level) == 0) {
                 eerste(guh, eigenaar, "favorietjes_volle_maan");
-                wist(guh, "volle_maan", 1, "");
+                wist(guh, "volle_maan", 1, Component.empty());
             }
         }
     }
@@ -278,7 +279,7 @@ public final class Verhaaltjes {
      * The guh writes a wist-je-datje about this sleutel: 1 in kans, at most once per Minecraft day per sleutel. Returns
      * true when it wrote one.
      */
-    public static boolean wist(Mob guh, String sleutel, int kans, String ding) {
+    public static boolean wist(Mob guh, String sleutel, int kans, Component ding) {
         int n = varianten(sleutel);
         MinecraftServer s = guh.level().getServer();
         if (n <= 0 || s == null || !Band.isBandGuh(guh)) {
@@ -303,33 +304,35 @@ public final class Verhaaltjes {
         return true;
     }
 
-    static String baasjeNaam(MinecraftServer s, UUID eigenaar) {
+    /** 1.2.0: Components (the reader's client resolves them), see BandData.WistJeDat. */
+    static Component baasjeNaam(MinecraftServer s, UUID eigenaar) {
         ServerPlayer p = s.getPlayerList().getPlayer(eigenaar);
         if (p != null) {
-            return p.getGameProfile().name();
+            return Component.literal(p.getGameProfile().name());
         }
-        return s.services().nameToIdCache().get(eigenaar).map(net.minecraft.server.players.NameAndId::name).orElse("mijn baasje");
+        return s.services().nameToIdCache().get(eigenaar).map(n -> (Component) Component.literal(n.name()))
+                .orElse(Component.translatable("gui.guhs.wistjedat.mijn_baasje"));
     }
 
-    static String guhNaam(@Nullable MinecraftServer s, String bandId) {
+    static Component guhNaam(@Nullable MinecraftServer s, String bandId) {
         if (s == null) {
-            return "een guh";
+            return Component.translatable("gui.guhs.wistjedat.een_guh");
         }
         try {
             BandData.Rec r = BandData.get(s).vindOveral(UUID.fromString(bandId));
-            return r == null || r.naam.isEmpty() ? "een guh" : r.naam;
+            return r == null ? Component.translatable("gui.guhs.wistjedat.een_guh") : r.weergave();
         } catch (IllegalArgumentException e) {
-            return "een guh";
+            return Component.translatable("gui.guhs.wistjedat.een_guh");
         }
     }
 
-    static String itemNaam(String itemId) {
+    static Component itemNaam(String itemId) {
         Identifier id = Identifier.tryParse(itemId);
         Item item = id == null ? null : BuiltInRegistries.ITEM.getOptional(id).orElse(null);
-        return item == null ? itemId : new ItemStack(item).getHoverName().getString();
+        return item == null ? Component.literal(itemId) : new ItemStack(item).getHoverName().copy();
     }
 
-    static String bioomNaam(String biome) {
-        return Favorieten.naam(FavorietSoort.PLEK, biome).getString();
+    static Component bioomNaam(String biome) {
+        return Favorieten.naam(FavorietSoort.PLEK, biome);
     }
 }

@@ -106,6 +106,15 @@ public class HuisjeScreen extends Screen {
         return null;
     }
 
+    /** 1.2.0: renaming with the shown name unchanged keeps a default name translatable (it isn't frozen into one language). */
+    private void hernoem() {
+        Component nu = nl.juiced.guhs.taal.Tekst.get(data, "Naam");
+        if (!nl.juiced.guhs.taal.Tekst.literal(nu) && naam.getValue().strip().equals(nu.getString())) {
+            return;
+        }
+        stuur(HuisjePayloads.Actie.NAAM, "", naam.getValue(), false, 0);
+    }
+
     private void stuur(HuisjePayloads.Actie actie, String id, String tekst, boolean aan, int entity) {
         ClientPacketDistributor.sendToServer(new HuisjePayloads.Doe(pos, actie.ordinal(), id, tekst, aan, entity));
     }
@@ -116,7 +125,7 @@ public class HuisjeScreen extends Screen {
         top = (height - H) / 2;
         naam = new EditBox(font, left + 10, top + 22, 236, 16, Component.translatable("gui.guhs.huisje.naam"));
         naam.setMaxLength(Huisjes.MAX_NAAM);
-        naam.setValue(data.getStringOr("Naam", ""));
+        naam.setValue(nl.juiced.guhs.taal.Tekst.get(data, "Naam").getString());
         boolean mag = mag();
         if (!mag) {
             nieuw = false;
@@ -125,7 +134,7 @@ public class HuisjeScreen extends Screen {
         }
         addRenderableWidget(naam);
         Button hernoem = Button.builder(Component.translatable("gui.guhs.huisje.hernoem"),
-                b -> stuur(HuisjePayloads.Actie.NAAM, "", naam.getValue(), false, 0)).bounds(left + 250, top + 21, 62, 18).build();
+                b -> hernoem()).bounds(left + 250, top + 21, 62, 18).build();
         hernoem.active = mag;
         if (!mag) {
             hernoem.setTooltip(alleenKijken());
@@ -195,7 +204,7 @@ public class HuisjeScreen extends Screen {
         if (!mag()) {
             // 3.0: someone else's huisje: whose it is (you may only look)
             String eigenaar = data.getStringOr("EigenaarNaam", "");
-            Component van = Component.translatable("gui.guhs.huisje.van_wie", eigenaar.isEmpty() ? "?" : eigenaar, data.getStringOr("Naam", ""))
+            Component van = Component.translatable("gui.guhs.huisje.van_wie", eigenaar.isEmpty() ? "?" : eigenaar, nl.juiced.guhs.taal.Tekst.get(data, "Naam"))
                     .withStyle(ChatFormatting.BOLD);
             g.fill(left + 6, top + 40, left + W - 6, top + 51, 0x40D27A9C);
             GidsTekst.passend(g, van.copy().append(Component.literal("  ")).append(Component.translatable("gui.guhs.timmerguh.alleen_kijken_kort")
@@ -208,7 +217,7 @@ public class HuisjeScreen extends Screen {
         }
         GidsTekst.schaal(g, Component.translatable("gui.guhs.huisje.kop.bewoners").withStyle(ChatFormatting.BOLD), left + 8, top + 53, 0.875f, ROZE, false);
         Component kop = nieuw ? Component.translatable("gui.guhs.huisje.kop.nieuw")
-                : gekozen != null && bewoner(gekozen) != null ? Component.translatable("gui.guhs.huisje.kop.klusjes_van", bewoner(gekozen).getStringOr("Naam", ""))
+                : gekozen != null && bewoner(gekozen) != null ? Component.translatable("gui.guhs.huisje.kop.klusjes_van", nl.juiced.guhs.taal.Tekst.get(bewoner(gekozen), "Naam"))
                 : Component.translatable("gui.guhs.huisje.kop.klusjes");
         GidsTekst.passend(g, kop.copy().withStyle(ChatFormatting.BOLD), left + 146, top + 53, W - 146 - 8, 0.875f, ROZE, false);
         if (lijst("Bewoners").isEmpty()) {
@@ -265,7 +274,7 @@ public class HuisjeScreen extends Screen {
     public boolean keyPressed(KeyEvent event) {
         int keyCode = event.key(), scanCode = event.scancode(), modifiers = event.modifiers();
         if (naam != null && naam.isFocused() && mag() && (keyCode == 257 || keyCode == 335)) {
-            stuur(HuisjePayloads.Actie.NAAM, "", naam.getValue(), false, 0);
+            hernoem();
             return true;
         }
         return super.keyPressed(event);
@@ -314,7 +323,7 @@ public class HuisjeScreen extends Screen {
             if (pop != null) {
                 GuhPop.teken(g, x + 1, y + 1, x + 29, y + RIJ - 3, pop, 30, -5);
             }
-            GidsTekst.passend(g, Component.literal(b.getStringOr("Naam", "")).withStyle(ChatFormatting.BOLD), x + 32, y + 4, w - 36, 0.875f, DONKER, false);
+            GidsTekst.passend(g, nl.juiced.guhs.taal.Tekst.get(b, "Naam").copy().withStyle(ChatFormatting.BOLD), x + 32, y + 4, w - 36, 0.875f, DONKER, false);
             Component onder;
             int kleur = LICHT;
             if (b.getIntOr("Niveau", 0) >= 0) {
@@ -460,9 +469,9 @@ public class HuisjeScreen extends Screen {
                 @Override
                 public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
                     g.fill(x, y, x + w, y + 20, hover ? 0x40F77AB0 : 0x18F7B6CB);
-                    GidsTekst.passend(g, Component.literal(c.getStringOr("Naam", "")).withStyle(ChatFormatting.BOLD), x + 4, y + 3, w - 8, 0.875f, DONKER, false);
-                    Component onder = c.getStringOr("Woont", "").isEmpty() ? Component.translatable("gui.guhs.huisje.trek_in")
-                            : Component.translatable("gui.guhs.huisje.verhuis", c.getStringOr("Woont", ""));
+                    GidsTekst.passend(g, nl.juiced.guhs.taal.Tekst.get(c, "Naam").copy().withStyle(ChatFormatting.BOLD), x + 4, y + 3, w - 8, 0.875f, DONKER, false);
+                    Component onder = nl.juiced.guhs.taal.Tekst.empty(nl.juiced.guhs.taal.Tekst.get(c, "Woont")) ? Component.translatable("gui.guhs.huisje.trek_in")
+                            : Component.translatable("gui.guhs.huisje.verhuis", nl.juiced.guhs.taal.Tekst.get(c, "Woont"));
                     GidsTekst.passend(g, onder, x + 4, y + 13, w - 8, 0.625f, LICHT, false);
                 }
 

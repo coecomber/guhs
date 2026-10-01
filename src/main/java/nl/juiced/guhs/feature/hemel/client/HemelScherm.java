@@ -35,7 +35,7 @@ public class HemelScherm extends Screen {
     private static final int W = 320, H = 204, RIJ = 22, LIJST_W = 124, LIJST_H = 132;
     private static final int PANEL = 0xF6FFF6FB, RAND = 0xFFF2C14E, ROZE = 0xFFE0629E, DONKER = 0xFF5A2A48, GRIJS = 0xFF9A7890;
 
-    private record Guh(UUID id, String naam, String variant, int hartjes, int niveau, CompoundTag looks, long doodDag) {
+    private record Guh(UUID id, Component naam, String variant, int hartjes, int niveau, CompoundTag looks, long doodDag) {
     }
 
     private record Hartje(float x, float y, float snel, float fase, int kleur) {
@@ -47,7 +47,7 @@ public class HemelScherm extends Screen {
     private float draai = 20, kanteling = 8;
     private GuhEntity pop;
     private UUID popVan;
-    private String netNaam;
+    private Component netNaam;
     private int netTijd;
     private int tijd;
     private final List<Hartje> hartjes = new ArrayList<>();
@@ -65,7 +65,7 @@ public class HemelScherm extends Screen {
         guhs.clear();
         for (Tag t : nieuw.getListOrEmpty("Guhs")) {
             CompoundTag g = (CompoundTag) t;
-            guhs.add(new Guh(g.read("Id", UUIDUtil.CODEC).orElseThrow(), g.getStringOr("Naam", ""), g.getStringOr("Variant", ""), g.getIntOr("Hartjes", 0), g.getIntOr("Niveau", 0),
+            guhs.add(new Guh(g.read("Id", UUIDUtil.CODEC).orElseThrow(), nl.juiced.guhs.taal.Tekst.get(g, "Naam"), g.getStringOr("Variant", ""), g.getIntOr("Hartjes", 0), g.getIntOr("Niveau", 0),
                     g.getCompoundOrEmpty("Looks"), g.getLongOr("DoodDag", 0L)));
         }
         gekozen = 0;
@@ -75,7 +75,7 @@ public class HemelScherm extends Screen {
             }
         }
         if (nieuw.contains("Net")) {
-            netNaam = nieuw.getStringOr("Net", "");
+            netNaam = nl.juiced.guhs.taal.Tekst.get(nieuw, "Net");
             netTijd = 100;
             for (int i = 0; i < 24; i++) {
                 nieuwHartje(true);
@@ -230,7 +230,7 @@ public class HemelScherm extends Screen {
                 g.fill(lx, y, lx + LIJST_W, y + RIJ, 0xFFFFEEF6);
             }
             g.text(font, "☁", lx + 5, y + 7, 0xFFB8D4F0, false);
-            g.text(font, font.plainSubstrByWidth(guh.naam(), LIJST_W - 24), lx + 17, y + 3, DONKER, false);
+            g.text(font, font.plainSubstrByWidth(guh.naam().getString(), LIJST_W - 24), lx + 17, y + 3, DONKER, false);
             Component v = Component.translatable("entity.guhs.guh." + guh.variant());
             g.pose().pushMatrix();
             g.pose().translate(lx + 17, y + 13);
@@ -264,7 +264,7 @@ public class HemelScherm extends Screen {
             GuhPop.teken(g, kx, ky + 2, kx + kw, ky + 84, pop, draai, kanteling);
         }
         int y = ky + 89;
-        GidsTekst.passend(g, Component.literal(guh.naam()).withStyle(ChatFormatting.BOLD), kx, y, kw, 1f, DONKER, false);
+        GidsTekst.passend(g, guh.naam().copy().withStyle(ChatFormatting.BOLD), kx, y, kw, 1f, DONKER, false);
         Component niveau = BandNiveau.byIndex(guh.niveau()).naam();
         GidsTekst.passend(g, Component.translatable("gui.guhs.hemel.scherm.hartjes", guh.hartjes()).append(" · ").append(niveau), kx, y + 11, kw, 1f, ROZE, false);
         long dag = data.getLongOr("Dag", 0L);

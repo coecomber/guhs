@@ -91,7 +91,7 @@ public final class HuisjePayloads {
         CompoundTag t = new CompoundTag();
         t.putLong("Pos", h.pos().asLong());
         t.putString("Maat", h.maat().id());
-        t.putString("Naam", h.naam());
+        nl.juiced.guhs.taal.Tekst.put(t, "Naam", h.naamTekst());   // (1.2.0: Components, read with Tekst on the client)
         t.putInt("Plekken", h.maat().plekken());
         // 3.0: whose it is, and whether the viewer may change it (timmerguh greys the buttons for the others)
         t.store("Eigenaar", UUIDUtil.CODEC, h.eigenaar());
@@ -105,7 +105,7 @@ public final class HuisjePayloads {
             String soort = h.soort(id);
             b.putString("Soort", soort);
             Entity e = level == null ? null : Huisjes.zoekBewoner(level, h, id);
-            b.putString("Naam", e != null ? e.getName().getString() : h.naamVan(id));
+            nl.juiced.guhs.taal.Tekst.put(b, "Naam", e != null ? e.getName() : h.naamVan(id));
             BandData.Rec r = band.vind(h.eigenaar(), id);
             b.putInt("Niveau", "guh".equals(soort) && r != null ? r.niveau().ordinal() : -1);
             b.putInt("Hartjes", r == null ? 0 : r.hartjes);
@@ -147,10 +147,10 @@ public final class HuisjePayloads {
                 }
                 CompoundTag c = new CompoundTag();
                 c.putInt("Entity", e.getId());
-                c.putString("Naam", e.getName().getString());
+                nl.juiced.guhs.taal.Tekst.put(c, "Naam", e.getName());
                 c.putString("Soort", e instanceof PiepMaatje m ? m.soort() : "guh");
                 Huisje ander = Huisjes.thuisVan(e);
-                c.putString("Woont", ander == null ? "" : ander.naam());
+                nl.juiced.guhs.taal.Tekst.put(c, "Woont", ander == null ? Component.empty() : ander.naamTekst());
                 kandidaten.add(c);
             }
         }
@@ -190,7 +190,7 @@ public final class HuisjePayloads {
             case TREK_IN -> {
                 Entity e = level.getEntity(p.entity());
                 if (e == null || e.distanceTo(player) > 24 || !Huisjes.trekIn(h, e)) {
-                    player.sendOverlayMessage(Component.translatable(h.isVol() ? "gui.guhs.huisje.vol" : "gui.guhs.huisje.niet_jouw_guh", h.naam())
+                    player.sendOverlayMessage(Component.translatable(h.isVol() ? "gui.guhs.huisje.vol" : "gui.guhs.huisje.niet_jouw_guh", h.naamTekst())
                             .withStyle(ChatFormatting.GRAY));
                 } else if (e instanceof TamableAnimal t && t.isOrderedToSit()) {
                     t.setOrderedToSit(false);   // (a new resident stands up: it has a home to look after)

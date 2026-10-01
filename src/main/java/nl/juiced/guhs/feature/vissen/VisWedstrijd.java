@@ -747,9 +747,9 @@ public final class VisWedstrijd {
         }
         var server = world.getServer();
         Scorebord.show(world, pos, "vissen", Klassiekers.bord(server, Component.translatable("gui.guhs.scorebord.vissen")
-                .append(Component.literal(": ")).append(Component.translatable("gui.guhs.scorebord.vissen.punten")), BOARD_POINTS, p -> p + " punten"));
+                .append(Component.literal(": ")).append(Component.translatable("gui.guhs.scorebord.vissen.punten")), BOARD_POINTS, p -> p + " pt"));
         Vec3 beside = pos.add(side.getStepX() * 3.6, 0, side.getStepZ() * 3.6);
-        Scorebord.show(world, beside, "vissen_zwaarste", Klassiekers.bord(server, Component.translatable("gui.guhs.scorebord.vissen.zwaarste"),
+        Scorebord.show(world, beside, "vissen_zwaarste", Klassiekers.bordTekst(server, Component.translatable("gui.guhs.scorebord.vissen.zwaarste"),
                 BOARD_HEAVIEST, VisSoort::kg));
     }
 

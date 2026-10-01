@@ -77,14 +77,14 @@ public final class BaltoEvents {
                         .executes(c -> {
                             ServerPlayer p = EntityArgument.getPlayer(c, "speler");
                             int s = BaltoVerhaal.stap(p);
-                            c.getSource().sendSuccess(() -> Component.literal(p.getScoreboardName() + ": stap " + s + " (" + BaltoVerhaal.naam(s) + ")"), false);
+                            c.getSource().sendSuccess(() -> Component.literal(p.getScoreboardName() + ": step " + s + " (" + BaltoVerhaal.naam(s) + ")"), false);
                             return s;
                         })
                         .then(Commands.argument("stap", IntegerArgumentType.integer(0, BaltoVerhaal.KLAAR)).executes(c -> {
                             ServerPlayer p = EntityArgument.getPlayer(c, "speler");
                             int s = IntegerArgumentType.getInteger(c, "stap");
                             BaltoVerhaal.zet(p, s);
-                            c.getSource().sendSuccess(() -> Component.literal(p.getScoreboardName() + " -> stap " + s + " (" + BaltoVerhaal.naam(s) + ")"), true);
+                            c.getSource().sendSuccess(() -> Component.literal(p.getScoreboardName() + " -> step " + s + " (" + BaltoVerhaal.naam(s) + ")"), true);
                             return s;
                         }))))
                 .then(Commands.literal("moment").then(Commands.argument("speler", EntityArgument.player())

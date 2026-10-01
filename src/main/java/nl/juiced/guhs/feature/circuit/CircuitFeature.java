@@ -126,9 +126,9 @@ public final class CircuitFeature {
         RaceBaan.RACEBAAN.extra(new CircuitExtra(false));        // (the old racebaan's Mika-pikkers on lastig)
         Minigames.registerGame(Minigames.CIRCUIT, p -> RaceGame.isRacingIn(p, Minigames.CIRCUIT));
         RaceProtection.protect(CircuitBanen.STRUCTURE, "gui.guhs.circuit.no_build");
-        KledingBronnen.bron(GuhClothes.CIRCUIT_HELMPJE, "circuit", CircuitRole.PRICE_HELMPJE + " circuitbekers");
-        KledingBronnen.bron(GuhClothes.CIRCUIT_VLAGCAPE, "circuit", CircuitRole.PRICE_VLAGCAPE + " circuitbekers");
-        KledingBronnen.bron(GuhClothes.CIRCUIT_RACEPAK, "circuit", CircuitRole.PRICE_RACEPAK + " circuitbekers");
+        KledingBronnen.bron(GuhClothes.CIRCUIT_HELMPJE, "circuit", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.circuitbekers", CircuitRole.PRICE_HELMPJE));
+        KledingBronnen.bron(GuhClothes.CIRCUIT_VLAGCAPE, "circuit", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.circuitbekers", CircuitRole.PRICE_VLAGCAPE));
+        KledingBronnen.bron(GuhClothes.CIRCUIT_RACEPAK, "circuit", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.circuitbekers", CircuitRole.PRICE_RACEPAK));
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> CircuitExtra.forgetAll());
     }
 

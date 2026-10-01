@@ -67,8 +67,8 @@ public final class GidsKledingIcoon {
         String bron = KledingBronnen.bron(c);
         out.add(Component.translatable("gui.guhs.gids.tip.bron", bron == null ? Component.translatable("gui.guhs.gids.zonder_bron")
                 : Component.translatable("gui.guhs.kledingbron." + bron)).withStyle(ChatFormatting.GRAY));
-        String prijs = KledingBronnen.prijs(c);
-        if (prijs != null && !prijs.isEmpty()) {
+        Component prijs = KledingBronnen.prijs(c);
+        if (prijs != null) {
             out.add(Component.translatable("gui.guhs.gids.tip.prijs", prijs).withStyle(ChatFormatting.GOLD));
         }
         out.add(heeft(c) ? Component.translatable("gui.guhs.gids.tip.ontgrendeld").withStyle(ChatFormatting.GREEN)

@@ -198,12 +198,13 @@ public final class MaagPayloads {
     }
 
     /** One minigame on the Guhdex Highscores page: your best (formatted like the game does), and the server record + holder. */
-    public record HighscoreRow(String game, boolean played, String best, String record, String holder) {
+    /** (1.2.0: best and record are Components, see Highscores.tekst) */
+    public record HighscoreRow(String game, boolean played, net.minecraft.network.chat.Component best, net.minecraft.network.chat.Component record, String holder) {
         public static final StreamCodec<FriendlyByteBuf, HighscoreRow> STREAM_CODEC = StreamCodec.composite(
                 ByteBufCodecs.STRING_UTF8, HighscoreRow::game,
                 ByteBufCodecs.BOOL, HighscoreRow::played,
-                ByteBufCodecs.STRING_UTF8, HighscoreRow::best,
-                ByteBufCodecs.STRING_UTF8, HighscoreRow::record,
+                net.minecraft.network.chat.ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC, HighscoreRow::best,
+                net.minecraft.network.chat.ComponentSerialization.TRUSTED_CONTEXT_FREE_STREAM_CODEC, HighscoreRow::record,
                 ByteBufCodecs.STRING_UTF8, HighscoreRow::holder, HighscoreRow::new);
 
         public boolean hasRecord() {

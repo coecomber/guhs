@@ -284,18 +284,19 @@ public final class BandEvents {
         return PlekSoort.WERELD;
     }
 
-    public static String plekDetail(Entity e) {
+    /** 1.2.0: a Component (a huisje's or a vehicle's name is read in the reader's own language). */
+    public static Component plekDetail(Entity e) {
         if (Huisjes.isBewoner(e)) {
             Huisje h = Huisjes.thuisVan(e);
-            return h == null ? "" : h.naam();
+            return h == null ? Component.empty() : h.naamTekst();
         }
         if (e.isVehicle() && e instanceof Mob m && m.getControllingPassenger() instanceof Player p) {
-            return p.getGameProfile().name();
+            return Component.literal(p.getGameProfile().name());
         }
         if (e.getVehicle() != null) {
-            return e.getVehicle().getName().getString();
+            return e.getVehicle().getName().copy();
         }
-        return "";
+        return Component.empty();
     }
 
     // =====================================================================================================================
@@ -345,7 +346,7 @@ public final class BandEvents {
         if (e instanceof nl.juiced.guhs.feature.piep.PoepschillyEntity turtle && turtle.isBinnen()) {
             GuhEntity guh = ((net.minecraft.server.level.ServerLevel) e.level()).getNearestEntity(GuhEntity.class, net.minecraft.world.entity.ai.targeting.TargetingConditions.forNonCombat()
                     .ignoreLineOfSight(), null, e.getX(), e.getY(), e.getZ(), e.getBoundingBox().inflate(2));
-            GuhVolger.zet(e, PlekSoort.IN_GUH, guh == null ? "" : guh.getName().getString());
+            GuhVolger.zet(e, PlekSoort.IN_GUH, guh == null ? Component.empty() : guh.getName().copy());
             return;
         }
         GuhVolger.zet(e, plekSoort(e), plekDetail(e));
@@ -453,12 +454,13 @@ public final class BandEvents {
             if (menu instanceof GuhWardrobeMenu) {
                 GuhEntity drager = rugzakVan(player, c);
                 GuhVolger.item(stack, PlekSoort.ITEM_RUGZAK, player.level().dimension(), drager != null ? drager.blockPosition() : player.blockPosition(),
-                        drager != null ? drager.getName().getString() : "", tijd);
+                        drager != null ? drager.getName().copy() : Component.empty(), tijd);
             } else if (c instanceof PlayerEnderChestContainer) {
-                GuhVolger.item(stack, PlekSoort.ITEM_KIST, player.level().dimension(), player.blockPosition(), "enderkist", tijd);
+                GuhVolger.item(stack, PlekSoort.ITEM_KIST, player.level().dimension(), player.blockPosition(),
+                        Component.translatable("block.minecraft.ender_chest"), tijd);
             } else {
                 BlockPos pos = c instanceof BlockEntity be ? be.getBlockPos() : player.blockPosition();
-                String soort = c instanceof BlockEntity be ? be.getBlockState().getBlock().getName().getString() : "";
+                Component soort = c instanceof BlockEntity be ? be.getBlockState().getBlock().getName() : Component.empty();
                 GuhVolger.item(stack, PlekSoort.ITEM_KIST, player.level().dimension(), pos, soort, tijd);
             }
         }

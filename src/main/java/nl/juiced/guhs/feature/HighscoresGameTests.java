@@ -134,7 +134,11 @@ public class HighscoresGameTests {
                 && !Highscores.game("vissen_zwaarste").lowerIsBetter(), "times and strokes: lower is better");
         helper.assertTrue(Highscores.game("race").format().apply(1234).equals(RaceRecords.time(1234)), "race time");
         helper.assertTrue(Highscores.game("golf").format().apply(GolfGame.TOTAL_PAR - 2).equals((GolfGame.TOTAL_PAR - 2) + " (-2)"), "golf strokes");
-        helper.assertTrue(Highscores.game("vissen_zwaarste").format().apply(1500).equals(VisSoort.kg(1500)) && VisSoort.kg(1500).equals("1,50 kg"), "kg");
+        // 1.2.0: kg is translatable (gui.guhs.vissen.kg, "%s,%s kg" / "%s.%s kg"): the reader's client puts the decimal sign
+        helper.assertTrue(VisSoort.kg(1500).getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents kg
+                && kg.getKey().equals("gui.guhs.vissen.kg") && java.util.Arrays.equals(kg.getArgs(), new Object[] {"1", "50"})
+                && nl.juiced.guhs.taal.NlTekst.tekst(VisSoort.kg(1500)).equals("1,50 kg") && nl.juiced.guhs.taal.NlTekst.tekst(VisSoort.kg(1999)).equals("2,00 kg"), "kg");
+        helper.assertTrue(Highscores.tekst(Highscores.game("vissen_zwaarste"), 1500).equals(VisSoort.kg(1500)), "kg on the Highscores page");
         helper.assertTrue(Highscores.game("verstop_medium").format().apply(20 * 75).equals("1:15"), "verstop time");
         helper.assertTrue(Highscores.game("meppen").format().apply(230).equals("230 pt"), "meppen points");
         helper.assertTrue(Highscores.game("beauty").format().apply(60).equals("60 / 90"), "beauty total");
@@ -142,11 +146,11 @@ public class HighscoresGameTests {
         GuhQuests.saved(p).putInt("guhs_verstop_best_" + VerstopGame.Level.MAKKELIJK.id(), 600);
         helper.assertTrue(Integer.valueOf(600).equals(Highscores.personalBest(p, Highscores.game("verstop_makkelijk"))), "an older verstop record");
         MaagPayloads.HighscoreRow row = Highscores.rows(p).stream().filter(r -> r.game().equals("verstop_makkelijk")).findFirst().orElseThrow();
-        helper.assertTrue(row.played() && row.best().equals("0:30"), "shown as 0:30: " + row.best());
+        helper.assertTrue(row.played() && row.best().getString().equals("0:30"), "shown as 0:30: " + row.best());
         // the payload
         MaagPayloads.HighscoresData data = new MaagPayloads.HighscoresData(List.of(
-                new MaagPayloads.HighscoreRow("race", true, "1:02.5", "0:59.1", "Juiced"),
-                new MaagPayloads.HighscoreRow("disco", false, "", "", "")));
+                new MaagPayloads.HighscoreRow("race", true, net.minecraft.network.chat.Component.literal("1:02.5"), net.minecraft.network.chat.Component.literal("0:59.1"), "Juiced"),
+                new MaagPayloads.HighscoreRow("disco", false, net.minecraft.network.chat.Component.empty(), net.minecraft.network.chat.Component.empty(), "")));
         FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
         MaagPayloads.HighscoresData.STREAM_CODEC.encode(buf, data);
         MaagPayloads.HighscoresData back = MaagPayloads.HighscoresData.STREAM_CODEC.decode(buf);

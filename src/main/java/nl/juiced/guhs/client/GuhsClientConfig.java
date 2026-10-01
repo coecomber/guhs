@@ -6,6 +6,8 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public final class GuhsClientConfig {
     public static final ModConfigSpec SPEC;
     public static final ModConfigSpec.BooleanValue ADD_OFFICIAL_SERVER;
+    /** 1.2.0: the language of the Guhs texts (client/GuhsTaal). */
+    public static final ModConfigSpec.EnumValue<nl.juiced.guhs.taal.Taal> LANGUAGE;
 
     static {
         ModConfigSpec.Builder b = new ModConfigSpec.Builder();
@@ -16,7 +18,18 @@ public final class GuhsClientConfig {
                         "Modpack makers: set this to false to leave the server list alone.")
                 .translation("guhs.configuration.addOfficialServer")
                 .define("addOfficialServer", true);
+        LANGUAGE = b
+                .comment("Language of the Guhs texts (items, menus, quests, signs...): AUTO follows the Minecraft language",
+                        "(nl_nl -> Dutch, anything else -> English), NL is always Dutch, EN always English. Only your own client;",
+                        "also works on servers. The guh menu has a button for it too.")
+                .translation("guhs.configuration.language")
+                .defineEnum("language", nl.juiced.guhs.taal.Taal.AUTO);
         SPEC = b.build();
+    }
+
+    /** The chosen language; AUTO while the config isn't loaded yet (early during startup). */
+    public static nl.juiced.guhs.taal.Taal language() {
+        return SPEC.isLoaded() ? LANGUAGE.get() : nl.juiced.guhs.taal.Taal.AUTO;
     }
 
     private GuhsClientConfig() {

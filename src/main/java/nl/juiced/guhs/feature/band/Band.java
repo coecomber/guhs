@@ -130,7 +130,7 @@ public final class Band {
     static BandData.Rec bijwerken(Entity guh) {
         BandData.Rec r = rec(guh);
         if (r != null && guh instanceof GuhEntity g) {
-            r.naam = g.getName().getString();
+            r.naam = g.hasCustomName() ? g.getCustomName().copy() : Component.empty();   // (1.2.0: see BandData.Rec.naam)
             r.looks = looks(g);
             if (r.sindsDag < 0) {
                 r.sindsDag = dag(g.level().getServer());
@@ -156,7 +156,7 @@ public final class Band {
         t.putFloat("Scale", g.getGuhScale());
         t.putBoolean("Baby", g.isBaby());
         if (g.hasCustomName()) {
-            t.putString("Naam", g.getName().getString());
+            nl.juiced.guhs.taal.Tekst.put(t, "Naam", g.getCustomName());
         }
         return t;
     }
@@ -282,7 +282,7 @@ public final class Band {
             return;
         }
         BandData.Rec r = BandData.get(eigenaar.level().getServer()).vind(eigenaar.getUUID(), bandId);
-        Component naam = guh != null ? guh.getDisplayName() : Component.literal(r == null || r.naam.isEmpty() ? "Guh" : r.naam);
+        Component naam = guh != null ? guh.getDisplayName() : r == null ? Component.literal("Guh") : r.weergave();
         eigenaar.sendSystemMessage(Component.translatable("gui.guhs.band.niveau_omhoog", naam, niveau.naam().copy()
                 .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE));
         eigenaar.sendOverlayMessage(Component.translatable("gui.guhs.band.niveau_titel", niveau.naam()).withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -429,7 +429,7 @@ public final class Band {
             }
             case HUISJE_IN -> {
                 if (Dagboek.eersteKeer(guh, speler, "eerste_huisje")) {
-                    Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.band.eerste_huisje", waarde);
+                    Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.band.eerste_huisje", nl.juiced.guhs.feature.huisje.Huisje.tekst(waarde));
                 }
             }
             default -> {

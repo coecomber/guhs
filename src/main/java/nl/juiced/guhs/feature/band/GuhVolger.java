@@ -59,6 +59,11 @@ public final class GuhVolger {
 
     /** Convenience from a loaded guh or maatje (owner, id, dimension and position from the entity). */
     public static void zet(Entity guhOfMaatje, PlekSoort soort, String detail) {
+        zet(guhOfMaatje, soort, Component.literal(detail));
+    }
+
+    /** {@link #zet(Entity, PlekSoort, String)} with a detail every player reads in their own language (1.2.0). */
+    public static void zet(Entity guhOfMaatje, PlekSoort soort, Component detail) {
         MinecraftServer s = guhOfMaatje.level().getServer();
         UUID eigenaar = Band.eigenaar(guhOfMaatje);
         if (s == null || eigenaar == null || !(Band.isBandGuh(guhOfMaatje) || guhOfMaatje instanceof PiepMaatje)) {
@@ -70,7 +75,7 @@ public final class GuhVolger {
         if (guh && guhOfMaatje instanceof GuhEntity g) {
             BandData.Rec r = BandData.get(s).vind(eigenaar, g.getUUID());
             if (r != null) {
-                r.naam = g.getName().getString();
+                r.naam = g.hasCustomName() ? g.getCustomName().copy() : Component.empty();   // (1.2.0: see BandData.Rec.naam)
             }
         }
     }
@@ -80,15 +85,20 @@ public final class GuhVolger {
      * Does nothing for other items or items without an owner.
      */
     public static void item(ItemStack stack, PlekSoort soort, ResourceKey<Level> dim, BlockPos pos, String detail, long tijd) {
+        item(stack, soort, dim, pos, Component.literal(detail), tijd);
+    }
+
+    /** {@link #item(ItemStack, PlekSoort, ResourceKey, BlockPos, String, long)} with a translatable detail (1.2.0). */
+    public static void item(ItemStack stack, PlekSoort soort, ResourceKey<Level> dim, BlockPos pos, Component detail, long tijd) {
         MinecraftServer s = Band.server();
         Wie wie = wie(stack);
         if (s == null || wie == null) {
             return;
         }
         zet(s, wie.eigenaar, wie.id, new Plek(soort, dim, pos, detail, tijd), wie.guh, wie.guh ? "guh" : null);
-        if (!wie.naam.isEmpty()) {
+        if (!nl.juiced.guhs.taal.Tekst.empty(wie.naam)) {
             BandData.Rec r = BandData.get(s).vind(wie.eigenaar, wie.id);
-            if (r != null && r.naam.isEmpty()) {
+            if (r != null && nl.juiced.guhs.taal.Tekst.empty(r.naam)) {
                 r.naam = wie.naam;
             }
         }
@@ -111,7 +121,7 @@ public final class GuhVolger {
             if (!"guhs:guh".equals(tag.getStringOr("id", "")) || !tag.read("UUID", UUIDUtil.CODEC).isPresent() || !tag.read("Owner", UUIDUtil.CODEC).isPresent()) {
                 return null;   // (a Reisguh, or a wild one)
             }
-            return new Wie(tag.read("Owner", UUIDUtil.CODEC).orElseThrow(), tag.read("UUID", UUIDUtil.CODEC).orElseThrow(), true, tag.getStringOr("GuhDisplayName", ""));
+            return new Wie(tag.read("Owner", UUIDUtil.CODEC).orElseThrow(), tag.read("UUID", UUIDUtil.CODEC).orElseThrow(), true, nl.juiced.guhs.taal.Tekst.get(tag, "GuhDisplayName"));
         }
         if (stack.getItem() instanceof nl.juiced.guhs.feature.piep.PiepDierItem) {
             CustomData data = stack.get(DataComponents.CUSTOM_DATA);
@@ -124,12 +134,12 @@ public final class GuhVolger {
                 return null;
             }
             return new Wie(tag.read("Owner", UUIDUtil.CODEC).orElseThrow(), forge.read(Band.BAND_ID, UUIDUtil.CODEC).orElseThrow(), false,
-                    stack.has(DataComponents.CUSTOM_NAME) ? stack.getHoverName().getString() : "");
+                    stack.has(DataComponents.CUSTOM_NAME) ? stack.getHoverName().copy() : Component.empty());
         }
         return null;
     }
 
-    public record Wie(UUID eigenaar, UUID id, boolean guh, String naam) {
+    public record Wie(UUID eigenaar, UUID id, boolean guh, Component naam) {
     }
 
     @Nullable

@@ -94,12 +94,12 @@ public final class GuhkamerPayloads {
             for (GuhkamerData.Gast g : k.gasten.values()) {
                 CompoundTag c = new CompoundTag();
                 c.putString("Id", g.id.toString());
-                c.putString("Naam", g.naam);
+                nl.juiced.guhs.taal.Tekst.put(c, "Naam", g.naam);
                 c.put("Looks", g.looks.copy());
                 BandData.Rec r = band.vind(eigenaar, g.id);
                 c.putInt("Niveau", r == null ? 0 : r.niveau().ordinal());
                 Huisje h = Huisjes.vanBewoner(player.level().getServer(), eigenaar, g.id);
-                c.putString("Woont", h == null ? "" : h.naam());
+                nl.juiced.guhs.taal.Tekst.put(c, "Woont", h == null ? net.minecraft.network.chat.Component.empty() : h.naamTekst());
                 gasten.add(c);
             }
         }
@@ -111,11 +111,11 @@ public final class GuhkamerPayloads {
             }
             CompoundTag c = new CompoundTag();
             c.putString("Id", g.getUUID().toString());
-            c.putString("Naam", g.getName().getString());
+            nl.juiced.guhs.taal.Tekst.put(c, "Naam", g.getName());
             c.put("Looks", Band.looks(g));
             c.putInt("Niveau", Band.niveau(g).ordinal());
             Huisje h = Huisjes.thuisVan(g);
-            c.putString("Woont", h == null ? "" : h.naam());
+            nl.juiced.guhs.taal.Tekst.put(c, "Woont", h == null ? net.minecraft.network.chat.Component.empty() : h.naamTekst());
             bij.add(c);
         }
         t.put("Bij", bij);

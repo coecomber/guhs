@@ -93,7 +93,7 @@ public final class SamenEvents {
         }
         GuhEntity guh = naaste(player);
         if (doel == null || guh == null) {
-            source.sendFailure(Component.literal("Njeg: geen eigen tamme guh binnen 24 blokken, of onbekend niveau (lief, mega, zielsguh)."));
+            source.sendFailure(Component.translatable("commands.guhs.samen.geen_guh"));
             return 0;
         }
         for (int dag = 0; dag < 40 && Band.hartjes(guh) < doel.drempel(); dag++) {
@@ -108,7 +108,7 @@ public final class SamenEvents {
             }
         }
         int h = Band.hartjes(guh);
-        source.sendSuccess(() -> Component.literal(guh.getName().getString() + " heeft nu " + h + " hartjes: " + Band.niveau(guh).naam().getString()), false);
+        source.sendSuccess(() -> Component.translatable("commands.guhs.samen.hartjes", guh.getName(), h, Band.niveau(guh).naam()), false);
         return 1;
     }
 
@@ -129,7 +129,7 @@ public final class SamenEvents {
             default -> false;
         };
         if (!ok) {
-            source.sendFailure(Component.literal("Njeg: dat lukte nu niet (een eigen, vrije guh in de buurt?)."));
+            source.sendFailure(Component.translatable("commands.guhs.samen.mislukt"));
             return 0;
         }
         return 1;

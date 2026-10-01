@@ -232,8 +232,8 @@ public final class Guhkamer {
             Dagboek.wistJeDat(guh, "gui.guhs.wistjedat.guhkamer.logeren_" + (1 + van.getRandom().nextInt(3)));
         }
         markeer(guh, true);
-        GuhkamerData.Gast gast = k.gasten.computeIfAbsent(id, i -> new GuhkamerData.Gast(i, guh.getName().getString()));
-        gast.naam = guh.getName().getString();
+        GuhkamerData.Gast gast = k.gasten.computeIfAbsent(id, i -> new GuhkamerData.Gast(i, guh.getName().copy()));
+        gast.naam = guh.getName().copy();
         gast.looks = Band.looks(guh);
         gast.sinds = s.overworld().getGameTime();
         gast.plek = null;
@@ -394,7 +394,7 @@ public final class Guhkamer {
             }
             e.stopRiding();
             g.plek = e.position();
-            g.naam = e.getName().getString();
+            g.naam = e.getName().copy();
             if (e instanceof GuhEntity guh) {
                 g.looks = Band.looks(guh);
             }

@@ -59,7 +59,7 @@ public final class Dagboek {
         data.setDirty();
         ServerPlayer owner = s.getPlayerList().getPlayer(eigenaar);
         if (owner != null) {
-            owner.sendSystemMessage(Component.translatable("gui.guhs.dagboek.nieuw", r.naam.isEmpty() ? "Guh" : r.naam,
+            owner.sendSystemMessage(Component.translatable("gui.guhs.dagboek.nieuw", r.weergave(),
                     Component.translatable("gui.guhs.dagboek.eerste." + id).withStyle(ChatFormatting.BOLD)).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         return true;
@@ -71,8 +71,9 @@ public final class Dagboek {
         return r != null && r.heeftEerste(id);
     }
 
-    /** The guh "writes" a sentence (a translatable key + args), newest first, 40 kept. */
-    public static void wistJeDat(Mob guh, String langKey, String... args) {
+    /** The guh "writes" a sentence (a translatable key + args), newest first, 40 kept. 1.2.0: an arg is a Component
+     *  (a name every reader sees in their own language) or anything else (a player name, a number: a literal). */
+    public static void wistJeDat(Mob guh, String langKey, Object... args) {
         if (!Band.isBandGuh(guh) || guh.level().getServer() == null) {
             return;
         }
@@ -80,11 +81,15 @@ public final class Dagboek {
         wistJeDat(guh.level().getServer(), Band.eigenaar(guh), Band.id(guh), langKey, args);
     }
 
-    /** {@link #wistJeDat(Mob, String, String...)} for a guh that isn't loaded. */
-    public static void wistJeDat(MinecraftServer s, UUID eigenaar, UUID bandId, String langKey, String... args) {
+    /** {@link #wistJeDat(Mob, String, Object...)} for a guh that isn't loaded. */
+    public static void wistJeDat(MinecraftServer s, UUID eigenaar, UUID bandId, String langKey, Object... args) {
         BandData data = BandData.get(s);
         BandData.Rec r = data.rec(eigenaar, bandId);
-        r.wist.add(0, new BandData.WistJeDat(langKey, List.of(args), Band.dag(s)));
+        List<Component> tekst = new java.util.ArrayList<>();
+        for (Object a : args) {
+            tekst.add(a instanceof Component c ? c.copy() : Component.literal(String.valueOf(a)));
+        }
+        r.wist.add(0, new BandData.WistJeDat(langKey, List.copyOf(tekst), Band.dag(s)));
         while (r.wist.size() > BandData.WIST_MAX) {
             r.wist.remove(r.wist.size() - 1);
         }

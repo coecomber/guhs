@@ -154,10 +154,10 @@ public final class ElftochtFeature {
         Protected.add(ElftochtProtection::protectedAt);
         GuhHooks.tick(ElftochtPubliek::tick);
         // the tour's clothes: only from Schaatsmeester Guhglij's shop
-        KledingBronnen.bron(GuhClothes.ELFTOCHT_SCHAATSMUTS, "elftocht", SchaatsmeesterRole.PRIJS_MUTS + " elfstempels");
-        KledingBronnen.bron(GuhClothes.ELFTOCHT_TRUITJE, "elftocht", SchaatsmeesterRole.PRIJS_TRUITJE + " elfstempels");
-        KledingBronnen.bron(GuhClothes.ELFTOCHT_SJAAL, "elftocht", SchaatsmeesterRole.PRIJS_SJAAL + " elfstempels");
-        KledingBronnen.bron(GuhClothes.ELFTOCHT_OORWARMERS, "elftocht", SchaatsmeesterRole.PRIJS_OORWARMERS + " elfstempels");
+        KledingBronnen.bron(GuhClothes.ELFTOCHT_SCHAATSMUTS, "elftocht", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.elfstempels", SchaatsmeesterRole.PRIJS_MUTS));
+        KledingBronnen.bron(GuhClothes.ELFTOCHT_TRUITJE, "elftocht", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.elfstempels", SchaatsmeesterRole.PRIJS_TRUITJE));
+        KledingBronnen.bron(GuhClothes.ELFTOCHT_SJAAL, "elftocht", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.elfstempels", SchaatsmeesterRole.PRIJS_SJAAL));
+        KledingBronnen.bron(GuhClothes.ELFTOCHT_OORWARMERS, "elftocht", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.elfstempels", SchaatsmeesterRole.PRIJS_OORWARMERS));
     }
 
     public static void payloads(PayloadRegistrar registrar) {

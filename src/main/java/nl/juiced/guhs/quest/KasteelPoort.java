@@ -55,10 +55,19 @@ public final class KasteelPoort {
         }
     }
 
+    /** The secret guh word in the chat near a guard: "njeg", or its English "nyeg" (1.2.0: the English hints spell that). */
+    public static final java.util.List<String> GEHEIM_WOORD = java.util.List.of("njeg", "nyeg");
+
+    /** Does this chat line say the secret guh word? */
+    public static boolean zegtGeheimWoord(String tekst) {
+        String t = tekst.toLowerCase(java.util.Locale.ROOT);
+        return GEHEIM_WOORD.stream().anyMatch(t::contains);
+    }
+
     /** "njeg" in the chat near a guard: the secret guh word. */
     public static void onChat(ServerChatEvent event) {
         ServerPlayer player = event.getPlayer();
-        if (isFriend(player) || !event.getRawText().toLowerCase(java.util.Locale.ROOT).contains("njeg")) {
+        if (isFriend(player) || !zegtGeheimWoord(event.getRawText())) {
             return;
         }
         List<GuhNpcEntity> guards = guards(player.level(), player.position(), REACH);

@@ -41,7 +41,7 @@ public class PickedUpGuhItem extends Item {
         tag.putString("id", EntityType.getKey(guh.getType()).toString());
         tag.putBoolean("Sitting", false);
         if (guh.hasCustomName()) {
-            tag.putString("GuhDisplayName", guh.getName().getString());
+            nl.juiced.guhs.taal.Tekst.put(tag, "GuhDisplayName", guh.getCustomName());   // (1.2.0: the name itself, any language)
         }
         guh.discard();
         ItemStack stack = of(tag);
@@ -115,7 +115,7 @@ public class PickedUpGuhItem extends Item {
     public Component getName(ItemStack stack) {
         CompoundTag data = guhData(stack);
         if (data.contains("GuhDisplayName")) {
-            return Component.translatable("item.guhs.picked_up_guh.named", data.getStringOr("GuhDisplayName", ""));
+            return Component.translatable("item.guhs.picked_up_guh.named", nl.juiced.guhs.taal.Tekst.get(data, "GuhDisplayName"));
         }
         return super.getName(stack);
     }

@@ -82,8 +82,10 @@ public enum VisSoort {
         return null;
     }
 
-    /** "2,35 kg" (Dutch decimal comma). */
-    public static String kg(int grams) {
-        return String.format(Locale.ROOT, "%.2f", grams / 1000f).replace('.', ',') + " kg";
+    /** "2,35 kg" / "2.35 kg": 1.2.0, translatable (gui.guhs.vissen.kg: kilos and hundredths), so each reader gets their own
+     *  decimal sign. */
+    public static net.minecraft.network.chat.Component kg(int grams) {
+        int centi = Math.round(grams / 10f);
+        return net.minecraft.network.chat.Component.translatable("gui.guhs.vissen.kg", String.valueOf(centi / 100), String.format(Locale.ROOT, "%02d", centi % 100));
     }
 }

@@ -2244,6 +2244,11 @@ def config_lang():
     lang("guhs.configuration.addOfficialServer.tooltip",
          "Adds \"Guhs Server\" (guhs.nl) to the top of the multiplayer server list, once per installation. A server you removed never comes back.",
          "Zet \"Guhs Server\" (guhs.nl) één keer bovenaan je multiplayer-serverlijst. Een server die je hebt weggehaald komt nooit terug.")
+    # 1.2.0: the NL/EN switch (client/GuhsTaal; also a button in the guh menu)
+    lang("guhs.configuration.language", "Guhs language", "Taal van Guhs")
+    lang("guhs.configuration.language.tooltip",
+         "AUTO follows the Minecraft language (Dutch for nl_nl, English for anything else); NL is always Dutch, EN always English. Only for you, also on servers.",
+         "AUTO volgt de taal van Minecraft (Nederlands bij nl_nl, anders Engels); NL is altijd Nederlands, EN altijd Engels. Alleen voor jou, ook op servers.")
 
 
 def write_lang():

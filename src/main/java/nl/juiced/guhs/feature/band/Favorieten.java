@@ -184,7 +184,7 @@ public final class Favorieten {
                 MinecraftServer s = Band.server();
                 try {
                     BandData.Rec r = s == null ? null : BandData.get(s).vindOveral(UUID.fromString(waarde));
-                    return Component.literal(r == null || r.naam.isEmpty() ? "Guh" : r.naam);
+                    return r == null ? Component.literal("Guh") : r.weergave();
                 } catch (IllegalArgumentException e) {
                     return Component.literal("Guh");
                 }

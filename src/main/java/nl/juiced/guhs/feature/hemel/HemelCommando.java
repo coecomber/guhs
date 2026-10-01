@@ -31,7 +31,7 @@ public final class HemelCommando {
         } else {
             HemelQuest.vergeet(p);
         }
-        source.sendSuccess(() -> Component.literal("Knuffelhart " + (ja ? "klopt" : "slaapt") + " voor " + p.getName().getString()), true);
+        source.sendSuccess(() -> Component.translatable(ja ? "commands.guhs.hemel.klopt" : "commands.guhs.hemel.slaapt", p.getName()), true);
         return 1;
     }
 
@@ -39,7 +39,7 @@ public final class HemelCommando {
         ServerPlayer p = source.getPlayerOrException();
         BlockPos hart = Wolkenhoeder.zoekHart(p.level(), p.blockPosition(), 24, 56);
         if (hart == null) {
-            source.sendFailure(Component.literal("Geen Knuffelhart in de buurt"));
+            source.sendFailure(Component.translatable("commands.guhs.hemel.geen_hart"));
             return 0;
         }
         p.teleportTo(p.level(), hart.getX() + 0.5, hart.getY() - 1, hart.getZ() + 3.5, java.util.Set.of(), 180f, 10f, true);

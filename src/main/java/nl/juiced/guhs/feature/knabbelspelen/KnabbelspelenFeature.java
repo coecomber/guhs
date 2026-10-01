@@ -150,9 +150,9 @@ public final class KnabbelspelenFeature {
         Protected.add((level, pos) -> level instanceof net.minecraft.server.level.ServerLevel server && server.dimension() == ModDimensions.GUHMENSION
                 && KnabbelspelenProtection.inSpelen(server, pos));
         // the sports outfit: only from Juf Vahoegsakee's shop
-        KledingBronnen.bron(GuhClothes.SPELEN_ZWEETBANDJE, "knabbelspelen", KnabbelspelenRole.ZWEETBANDJE + " spelenlintjes");
-        KledingBronnen.bron(GuhClothes.SPELEN_FLUITJE, "knabbelspelen", KnabbelspelenRole.FLUITJE + " spelenlintjes");
-        KledingBronnen.bron(GuhClothes.SPELEN_SPORTSHIRTJE, "knabbelspelen", KnabbelspelenRole.SPORTSHIRTJE + " spelenlintjes");
+        KledingBronnen.bron(GuhClothes.SPELEN_ZWEETBANDJE, "knabbelspelen", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.spelenlintjes", KnabbelspelenRole.ZWEETBANDJE));
+        KledingBronnen.bron(GuhClothes.SPELEN_FLUITJE, "knabbelspelen", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.spelenlintjes", KnabbelspelenRole.FLUITJE));
+        KledingBronnen.bron(GuhClothes.SPELEN_SPORTSHIRTJE, "knabbelspelen", nl.juiced.guhs.feature.kleding.KledingBronnen.prijs("gui.guhs.kleding.prijs.munt.spelenlintjes", KnabbelspelenRole.SPORTSHIRTJE));
     }
 
     public static void payloads(PayloadRegistrar registrar) {

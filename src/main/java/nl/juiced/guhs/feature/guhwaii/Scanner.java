@@ -46,7 +46,7 @@ public final class Scanner {
     public static final String RESULTAAT = "gui.guhs.guhwaii.scanner.onberekenbaar";
 
     /** A measurement: which guh, and what came out (always ONBEREKENBAAR VAHOEG). */
-    public record Meting(GuhEntity guh, String naam, String uitkomst) {
+    public record Meting(GuhEntity guh, Component naam, String uitkomst) {
     }
 
     private record Lopend(ServerLevel level, BlockPos pos, UUID guh, @Nullable UUID speler, long start) {
@@ -121,12 +121,12 @@ public final class Scanner {
 
     /** Measures this guh on the scanner at pos (the screen for the player, the sounds and the result for everybody near). */
     public static Meting scan(ServerLevel level, BlockPos pos, GuhEntity guh, @Nullable ServerPlayer player) {
-        String naam = guh.getDisplayName().getString();
+        Component naam = guh.getDisplayName();
         Meting m = new Meting(guh, naam, RESULTAAT);
         guh.getNavigation().stop();
         if (player != null) {
             guh.getLookControl().setLookAt(player);
-            ModNetworking.sendTo(player, new GuhwaiiPayloads.Scan(guh.getId(), naam, guh.getVariant().displayName().getString()));
+            ModNetworking.sendTo(player, new GuhwaiiPayloads.Scan(guh.getId(), naam, guh.getVariant().displayName()));
             GuhwaiiFeature.advancement(player, "scanner");
         }
         LOPEND.put(sleutel(level, pos), new Lopend(level, pos.immutable(), guh.getUUID(), player == null ? null : player.getUUID(), level.getGameTime()));
@@ -171,7 +171,7 @@ public final class Scanner {
         level.sendParticles(ParticleTypes.HEART, x, y, z, 8, 0.6, 0.4, 0.6, 0.05);
         level.sendParticles(ParticleTypes.POOF, x, y + 0.8, z, 10, 0.3, 0.2, 0.3, 0.05);
         Entity e = level.getEntity(l.guh());
-        String naam = e == null ? "?" : e.getDisplayName().getString();
+        Component naam = e == null ? Component.literal("?") : e.getDisplayName();
         if (e instanceof GuhEntity guh && guh.isAlive()) {
             guh.playSound(ModSounds.GUH_HAPPY.get(), 1f, guh.getVoicePitch());
             if (GuhEmotes.canStart(guh)) {

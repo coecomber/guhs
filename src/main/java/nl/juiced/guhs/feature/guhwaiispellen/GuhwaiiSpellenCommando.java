@@ -54,7 +54,7 @@ public final class GuhwaiiSpellenCommando {
         ServerPlayer p = source.getPlayerOrException();
         GuhNpcEntity lilo = lilo(p, "surf");
         if (lilo == null) {
-            source.sendFailure(Component.literal("Njeg: geen surf-Lilo-guh in de buurt."));
+            source.sendFailure(Component.translatable("commands.guhs.guhwaiispellen.geen_surf"));
             return 0;
         }
         if (p.isSpectator()) {
@@ -67,7 +67,7 @@ public final class GuhwaiiSpellenCommando {
         ServerPlayer p = source.getPlayerOrException();
         GuhNpcEntity lilo = lilo(p, "hula");
         if (lilo == null) {
-            source.sendFailure(Component.literal("Njeg: geen hula-Lilo-guh in de buurt."));
+            source.sendFailure(Component.translatable("commands.guhs.guhwaiispellen.geen_hula"));
             return 0;
         }
         if (p.isSpectator()) {
@@ -84,12 +84,12 @@ public final class GuhwaiiSpellenCommando {
                         n -> n.getKind() == GuhNpcEntity.Kind.LILO_GUH && "surf".equals(n.roleData.getStringOr(NpcRollen.PLEK, "")))
                 .stream().min(Comparator.comparingDouble(n -> n.distanceToSqr(pos))).orElse(null);
         if (lilo == null) {
-            source.sendFailure(Component.literal("Njeg: geen surf-Lilo-guh binnen " + (int) BEREIK + " blokken."));
+            source.sendFailure(Component.translatable("commands.guhs.guhwaiispellen.geen_surf_binnen", (int) BEREIK));
             return 0;
         }
         Surfplek.Spot spot = Surfplek.zoek(level, lilo.blockPosition());
         if (spot == null) {
-            source.sendFailure(Component.literal("surfspot: GEEN open water bij Lilo-guh op " + lilo.blockPosition().toShortString()));
+            source.sendFailure(Component.literal("surfspot: NO open water near the Lilo-guh at " + lilo.blockPosition().toShortString()));
             return 0;
         }
         int water = 0, alles = 0;
@@ -123,7 +123,7 @@ public final class GuhwaiiSpellenCommando {
             HulaSpel.of(npc).klaar(npc, p);
             return 1;
         }
-        source.sendFailure(Component.literal("Je surft en danst niet."));
+        source.sendFailure(Component.translatable("commands.guhs.guhwaiispellen.niet_bezig"));
         return 0;
     }
 

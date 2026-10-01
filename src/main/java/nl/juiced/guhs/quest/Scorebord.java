@@ -101,6 +101,11 @@ public final class Scorebord {
 
     /** A board as text: a title, then per board a heading and its top 3 (score shown with format). */
     public static Component text(MinecraftServer server, Component title, List<String> boards, List<Component> headings, IntFunction<String> format) {
+        return tekst(server, title, boards, headings, s -> Component.literal(format.apply(s)));
+    }
+
+    /** 1.2.0: {@link #text} with the score as a Component (resolved by each reader's client). */
+    public static Component tekst(MinecraftServer server, Component title, List<String> boards, List<Component> headings, IntFunction<Component> format) {
         MutableComponent text = Component.empty().append(title.copy().withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         for (int i = 0; i < boards.size(); i++) {
             if (headings.size() > i) {
@@ -112,7 +117,10 @@ public final class Scorebord {
             }
             for (int p = 0; p < list.size(); p++) {
                 ChatFormatting colour = p == 0 ? ChatFormatting.YELLOW : p == 1 ? ChatFormatting.WHITE : ChatFormatting.GOLD;
-                text.append("\n").append(Component.literal((p + 1) + ". " + list.get(p).name() + "  " + format.apply(list.get(p).score())).withStyle(colour));
+                String regel = (p + 1) + ". " + list.get(p).name() + "  ";
+                Component score = format.apply(list.get(p).score());
+                text.append("\n").append((nl.juiced.guhs.taal.Tekst.literal(score) ? Component.literal(regel + score.getString())
+                        : Component.literal(regel).append(score)).withStyle(colour));
             }
         }
         return text;
