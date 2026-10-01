@@ -29,7 +29,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.1.2: the Guhmension placement rebalance (guaranteed minigames/landmarks, story tag): after everything else
             'plaatsing',
             # 1.2.0: the texts of the NL/EN switch and of what the server used to resolve (lang only)
-            'taal']
+            'taal',
+            # 1.2.0: the Wilde-guhweerder
+            'weerder']
 
 
 def modules():

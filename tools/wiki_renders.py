@@ -2357,11 +2357,12 @@ def main_v210(out, captured=None):
         "pluizige_tunnel": ("guhs:block/pluizige_tunnel_dak", (("guhs:block/pluizige_tunnel_ingang", (0, 0, 0)),)),
         "klusjes_guhlampje": ("guhs:block/klusjes_guhlampje_aan", ()),
         "klusjes_guhlampje_uit": ("guhs:block/klusjes_guhlampje_uit", ()),
+        "wilde_guhweerder": ("guhs:block/wilde_guhweerder", ()),   # 1.2.0
         "guhkamer_deur": ("guhs:block/guhkamer_deur_onder", (("guhs:block/guhkamer_deur_boven", (0, 1, 0)),)),
     }
     for name, (ref, extra) in spec.items():
         try:
-            save(render(toy(ref, extra), 30 if name.startswith(("pluizige", "klusjes")) else 210, -22, 420), name)
+            save(render(toy(ref, extra), 30 if name.startswith(("pluizige", "klusjes", "wilde")) else 210, -22, 420), name)
         except Exception as e:  # noqa: BLE001
             print("no render for", name, e)
     row, x = [], 0.0
@@ -2414,6 +2415,10 @@ def main_v210(out, captured=None):
             save(item_icon(f"guhs:item/{n}", 64), "icon_" + n)
         else:
             print("no icon for", n)
+    try:   # 1.2.0: the Wilde-guhweerder (a block item: its model, small)
+        save(render(model_quads("guhs:block/wilde_guhweerder"), 30, -25, 256).resize((64, 64), Image.LANCZOS), "icon_wilde_guhweerder")
+    except Exception as e:  # noqa: BLE001
+        print("no icon for wilde_guhweerder", e)
     for n, ref in (("ladder", "block/ladder"), ("oak_door", "item/oak_door"), ("glass_pane", "block/glass"),
                    ("oak_slab", "minecraft:block/oak_slab"), ("oak_fence", "minecraft:block/oak_fence_inventory")):
         if os.path.exists(os.path.join(out, f"icon_{n}.png")):

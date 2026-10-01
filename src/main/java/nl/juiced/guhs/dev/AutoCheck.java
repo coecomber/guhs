@@ -656,6 +656,11 @@ public final class AutoCheck {
                 // piepmenu <x> <y> <z>: tame the nearest piep-maatje and open its menu
                 return interactEntity(BlockPos.containing(Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3])),
                         null, "piepmenu");
+            case "weerder":
+                // weerder <x> <y> <z> [straal]: (1.2.0) a Wilde-guhweerder there (facing south) of the player, its screen open and
+                // its blue dome on
+                return weerder(BlockPos.containing(Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3])),
+                        a.length > 4 ? Integer.parseInt(a[4]) : nl.juiced.guhs.feature.weerder.WeerderFeature.STANDAARD);
             case "huisje":
                 // huisje <x> <y> <z>: (2.10) a groot Guhhuisje there (door to the south) with three residents (two guhs and a
                 // muisje), its screen open and its blue dome on
@@ -1789,6 +1794,34 @@ public final class AutoCheck {
                     }
                 });
                 return "huisje " + h.naam() + " at " + pos.toShortString() + " with " + h.bewoners().size() + " residents";
+            }, r -> note("  " + r)));
+            return true;
+        };
+    }
+
+    /** A Wilde-guhweerder (facing south) of the player with this radius, its screen open, the dome on. */
+    private static Action weerder(BlockPos pos, int straal) {
+        return mc0 -> {
+            opened = true;
+            queue.addFirst(server(server -> {
+                ServerPlayer sp = player(server);
+                ServerLevel level = sp.level();
+                level.setBlock(pos, nl.juiced.guhs.feature.weerder.WeerderFeature.WEERDER.get().defaultBlockState()
+                        .setValue(nl.juiced.guhs.feature.weerder.WildeGuhweerderBlock.FACING, net.minecraft.core.Direction.SOUTH), 3);
+                if (!(level.getBlockEntity(pos) instanceof nl.juiced.guhs.feature.weerder.WeerderBlockEntity be)) {
+                    return "no weerder at " + pos.toShortString();
+                }
+                be.zetEigenaar(sp);
+                be.zetStraal(straal);
+                nl.juiced.guhs.feature.weerder.WeerderPayloads.open(sp, be);
+                Minecraft.getInstance().execute(() -> {
+                    nl.juiced.guhs.feature.weerder.client.WeerderKoepel.zet(pos, true);
+                    Minecraft m = Minecraft.getInstance();
+                    if (m.screen != null) {
+                        m.screen.resize(m.screen.width, m.screen.height);
+                    }
+                });
+                return "weerder at " + pos.toShortString() + " radius " + be.straal();
             }, r -> note("  " + r)));
             return true;
         };

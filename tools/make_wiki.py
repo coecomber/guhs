@@ -2403,7 +2403,20 @@ def lieve_vadsjes_section():
           "<i>Sinds 3.0 hebben de drie recepten het <b>Bouwboekje van de Timmerguh</b> nodig (het blijft in het rooster liggen): doe eerst zijn questline "
           "<i>Samen een huisje bouwen</i> in een Knuffeldal-stadje. Huisjes die al staan blijven gewoon werken. Zie <a href='#new30'>Nieuw in 3.0</a>.</i>") + \
         '<div class="recipes">' + recipe_card("guhhuisje_klein", "Guhhuisje (klein)", "Guhhuisje (klein)") + \
-        recipe_card("guhhuisje_medium", "Guhhuisje (medium)", "Guhhuisje (medium)") + recipe_card("guhhuisje_groot", "Guhhuisje (groot)", "Guhhuisje (groot)") + '</div>'
+        recipe_card("guhhuisje_medium", "Guhhuisje (medium)", "Guhhuisje (medium)") + recipe_card("guhhuisje_groot", "Guhhuisje (groot)", "Guhhuisje (groot)") + '</div>' + \
+        entry(icon("wilde_guhweerder", "Wilde-guhweerder").replace('class="px"', 'class="px" style="width:80px;height:80px"'),
+              "Wilde-guhweerder", "Wilde-guhweerder",
+              p("<i>New in 1.2.0.</i> A little pink sign with guh ears and a sleeping guh face: <i>a vadsje already lives here</i>. Put it in your "
+                "house or base and no <b>wild</b> guhs pop up in the area around it (8, 16, 24, 32 or 48 blocks, also a bit above and below). Still "
+                "lief: the wild guhs see the sign and go cuddle somewhere else. Your own guhs, babies and guhs from a spawn egg are welcome, and guhs "
+                "that are already there stay. Right-click: choose the size and <b>Laat de area zien</b> (the same blue dome as the huisje's "
+                "klus-area). Only the one who placed it can change or break it.",
+                "<i>Nieuw in 1.2.0.</i> Een klein roze bordje met guhoortjes en een slapend guhgezichtje: <i>hier woont al een vadsje</i>. Zet hem in "
+                "je huis of basis en er komen geen <b>wilde</b> guhs meer tevoorschijn in de area eromheen (8, 16, 24, 32 of 48 blokken, ook een "
+                "stukje erboven en eronder). Nog steeds lief: de wilde guhs zien het bordje en gaan ergens anders knuffelen. Je eigen guhs, "
+                "baby'tjes en guhs uit een spawn-ei zijn welkom, en guhs die er al zijn blijven. Rechtsklik: kies de grootte en <b>Laat de area "
+                "zien</b> (dezelfde blauwe koepel als de klus-area van het huisje). Alleen wie hem neerzette kan hem veranderen of weghalen.")) + \
+        '<div class="recipes">' + recipe_card("wilde_guhweerder", "Wilde-guhweerder", "Wilde-guhweerder") + '</div>'
 
     # ---------------------------------------------------------------- D: the ten klusjes
     KLUS = [("Kaasknabbels opgraven", "guh, muisje",

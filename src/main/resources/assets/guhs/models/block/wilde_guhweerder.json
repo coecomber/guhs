@@ -1,0 +1,259 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "guhs:block/wilde_guhweerder_rand",
+    "bord": "guhs:block/wilde_guhweerder_bord",
+    "achter": "guhs:block/wilde_guhweerder_achter",
+    "rand": "guhs:block/wilde_guhweerder_rand",
+    "paal": "guhs:block/wilde_guhweerder_paal",
+    "oor": "guhs:block/wilde_guhweerder_oor",
+    "voet": "guhs:block/wilde_guhweerder_voet"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        1,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        1,
+        7
+      ],
+      "to": [
+        9,
+        6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paal"
+        },
+        "south": {
+          "texture": "#paal"
+        },
+        "east": {
+          "texture": "#paal"
+        },
+        "west": {
+          "texture": "#paal"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        6,
+        7
+      ],
+      "to": [
+        15,
+        14,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bord",
+          "uv": [
+            1,
+            4,
+            15,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#achter",
+          "uv": [
+            1,
+            4,
+            15,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#rand",
+          "uv": [
+            7,
+            0,
+            9,
+            8
+          ]
+        },
+        "west": {
+          "texture": "#rand",
+          "uv": [
+            7,
+            0,
+            9,
+            8
+          ]
+        },
+        "up": {
+          "texture": "#rand",
+          "uv": [
+            1,
+            7,
+            15,
+            9
+          ]
+        },
+        "down": {
+          "texture": "#rand",
+          "uv": [
+            1,
+            7,
+            15,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        14,
+        7.5
+      ],
+      "to": [
+        5.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#oor",
+          "uv": [
+            4,
+            5,
+            11,
+            15
+          ]
+        },
+        "south": {
+          "texture": "#oor",
+          "uv": [
+            4,
+            5,
+            11,
+            15
+          ]
+        },
+        "east": {
+          "texture": "#oor",
+          "uv": [
+            4,
+            5,
+            11,
+            15
+          ]
+        },
+        "west": {
+          "texture": "#oor",
+          "uv": [
+            4,
+            5,
+            11,
+            15
+          ]
+        },
+        "up": {
+          "texture": "#oor",
+          "uv": [
+            4,
+            5,
+            11,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        10.5,
+        14,
+        7.5
+      ],
+      "to": [
+        13.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#oor",
+          "uv": [
+            4,
+            5,
+            11,
+            15
+          ]
+        },
+        "south": {
+          "texture": "#oor",
+          "uv": [
+            4,
+            5,
+            11,
+            15
+          ]
+        },
+        "east": {
+          "texture": "#oor",
+          "uv": [
+            4,
+            5,
+            11,
+            15
+          ]
+        },
+        "west": {
+          "texture": "#oor",
+          "uv": [
+            4,
+            5,
+            11,
+            15
+          ]
+        },
+        "up": {
+          "texture": "#oor",
+          "uv": [
+            4,
+            5,
+            11,
+            15
+          ]
+        }
+      }
+    }
+  ]
+}

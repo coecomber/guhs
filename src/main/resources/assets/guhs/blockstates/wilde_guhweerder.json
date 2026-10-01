@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/wilde_guhweerder"
+    },
+    "facing=east": {
+      "model": "guhs:block/wilde_guhweerder",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/wilde_guhweerder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/wilde_guhweerder",
+      "y": 270
+    }
+  }
+}

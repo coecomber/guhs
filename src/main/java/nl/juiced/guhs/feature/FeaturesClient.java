@@ -71,6 +71,8 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.vogels.client.VogelsClient.init(modBus);
         nl.juiced.guhs.feature.waterdiertjes.client.WaterdiertjesClient.init(modBus);
         nl.juiced.guhs.feature.landdiertjes.client.LanddiertjesClient.init(modBus);
+        // --- 1.2.0 ---
+        nl.juiced.guhs.feature.weerder.client.WeerderClient.init(modBus);
     }
 
     private FeaturesClient() {

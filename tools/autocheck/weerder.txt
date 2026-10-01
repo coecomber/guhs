@@ -1,0 +1,38 @@
+# Wilde-guhweerder (1.2.0) AutoCheck: the block, its screen and the blue dome. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/weerder.txt
+# (commands: see autocheck.txt; 'weerder <x> <y> <z> [straal]' places one of the player, opens its screen and turns the dome on)
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode creative
+/tp @s 3000 140 3006
+wait 40
+
+section wilde-guhweerder: screen, the block up close, the dome (radius 16)
+weerder 3000 140 3000 16
+wait 40
+mouse 1 1
+widgets
+shot gui_weerder_scherm gui
+gui close
+/gamemode spectator
+camera 3000.5 140 3002.8 180 25
+waitrender 300
+shot weerder_dichtbij
+camera 3000.5 140 2998.2 0 25
+wait 10
+shot weerder_achterkant
+camera 3021 146 3021 135 22
+wait 10
+shot weerder_koepel
+quit

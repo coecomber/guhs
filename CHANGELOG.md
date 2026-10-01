@@ -48,6 +48,14 @@ Java 25).
   `addOfficialServer` option in `config/guhs-client.toml`) is gone. Already have it in your list? It stays there.
 - The English side of the wiki no longer covers the official server; it's on the Dutch side only.
 
+### Also new
+
+- **Wilde-guhweerder**: a little pink sign with guh ears and a sleeping guh face ("hier woont al een vadsje") for your
+  house or base. No wild guhs spawn in the area around it (8/16/24/32/48 blocks, right-click to choose); your own guhs,
+  babies and spawn-egg guhs are welcome, and guhs already there stay. "Laat de area zien" shows it as the same blue
+  dome as the Guhhuisje's klus-area. Only the one who placed it changes or breaks it. Recipe: 5 pink wool, a kaas
+  knabbel and a stick.
+
 ## 1.1.3 — Minecraft 26.1.2
 
 A fix for the FTB Quests chapters. Same requirements as 1.1.2.

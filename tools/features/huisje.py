@@ -454,3 +454,6 @@ def ftb(fq):
       rewards=(("guhs:gefrituurde_kaasknabbels", 4),), shape="gear", xp=300)
     q("huisje_vol", "Vol is vol, njeg!", "Laat een Guhhuisje helemaal vol wonen. Zoveel lieve vadsjes onder een dak!",
       "guhs:guhhuisje_medium", [adv("guhs:lieve_vadsjes/huisje_vol")], rewards=(("guhs:kaas_knabbels", 16),), xp=150)
+    # 1.2.0: the Wilde-guhweerder (its own module; its quest belongs next to the huisje quests)
+    from features import weerder
+    weerder.ftb_huisje(fq)

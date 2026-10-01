@@ -192,9 +192,12 @@ public final class Zeemeerguh {
         return depth == 0 ? null : new BlockPos(x, top - (depth - 1) / 2, z);
     }
 
-    /** A new wild Zeemeerguh in the water at pos (null if there's no room). */
+    /** A new wild Zeemeerguh in the water at pos (null if there's no room, or in a Wilde-guhweerder's area). */
     @Nullable
     public static GuhEntity spawnAt(ServerLevel level, BlockPos pos, RandomSource random) {
+        if (!nl.juiced.guhs.feature.weerder.WeerderFeature.wildeGuhMag(level, pos)) {
+            return null;   // (1.2.0: a Wilde-guhweerder's area: no wild guhs here)
+        }
         GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);
         if (guh == null) {
             return null;

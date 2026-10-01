@@ -27,7 +27,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 22   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English
+CHAPTER_VERSION = 23   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 

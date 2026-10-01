@@ -89,6 +89,8 @@ public final class Features {
         nl.juiced.guhs.feature.vogels.VogelsFeature.register(modBus);
         nl.juiced.guhs.feature.waterdiertjes.WaterdiertjesFeature.register(modBus);
         nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature.register(modBus);
+        // --- 1.2.0 ---
+        nl.juiced.guhs.feature.weerder.WeerderFeature.register(modBus);
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -158,6 +160,8 @@ public final class Features {
         nl.juiced.guhs.feature.vogels.VogelsFeature.payloads(registrar);
         nl.juiced.guhs.feature.waterdiertjes.WaterdiertjesFeature.payloads(registrar);
         nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature.payloads(registrar);
+        // --- 1.2.0 ---
+        nl.juiced.guhs.feature.weerder.WeerderFeature.payloads(registrar);
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -226,6 +230,8 @@ public final class Features {
         nl.juiced.guhs.feature.vogels.VogelsFeature.creative(output);
         nl.juiced.guhs.feature.waterdiertjes.WaterdiertjesFeature.creative(output);
         nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature.creative(output);
+        // --- 1.2.0 ---
+        nl.juiced.guhs.feature.weerder.WeerderFeature.creative(output);
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

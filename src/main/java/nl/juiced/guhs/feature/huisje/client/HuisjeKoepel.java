@@ -86,8 +86,11 @@ public final class HuisjeKoepel {
         }
     }
 
-    /** A hemisphere of quads (two sides), the lower rings a bit stronger, with a slow shimmer; plus a ring on the ground. */
-    private static void koepel(Matrix4f m, VertexConsumer vc, float r, float tijd) {
+    /**
+     * A hemisphere of quads (two sides), the lower rings a bit stronger, with a slow shimmer; plus a ring on the ground.
+     * (1.2.0: public, the Wilde-guhweerder draws its area with the same dome.)
+     */
+    public static void koepel(Matrix4f m, VertexConsumer vc, float r, float tijd) {
         for (int i = 0; i < RINGEN; i++) {
             double a0 = Math.PI / 2 * i / RINGEN, a1 = Math.PI / 2 * (i + 1) / RINGEN;
             float y0 = (float) (Math.sin(a0) * r), y1 = (float) (Math.sin(a1) * r);
