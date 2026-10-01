@@ -8,7 +8,7 @@ change them here. The pack itself lives in https://github.com/coecomber/guhs-pac
 from .guide import Guide, _p, _tip, _ul
 from .landing import SERVER_OPEN
 from .pages import L
-from .site import Page, t
+from .site import MOD_VERSION, Page, t
 
 PID = "systemen/officiele-server"
 
@@ -18,7 +18,7 @@ IP = "2.28.142.15"
 MC = "26.1.2"
 NEOFORGE = "26.1.2.112"
 JAVA = "25"
-GUHS = "1.1.0"
+GUHS = MOD_VERSION
 MAP_URL = "https://map.guhs.nl/"
 PACK_REPO = "https://github.com/coecomber/guhs-pack"
 PACK_TOML = "https://pack.guhs.nl/pack.toml"

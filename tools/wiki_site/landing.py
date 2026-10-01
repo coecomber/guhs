@@ -11,7 +11,7 @@ import os
 from xml.sax.saxutils import escape as xml_escape
 
 from .assets import EARLY_JS
-from .site import t
+from .site import MOD_VERSION, t
 
 DOMAIN = "guhs.nl"
 ADDRESS = "guhs.nl"
@@ -20,7 +20,7 @@ STATUS_API = "https://api.mcsrvstat.us/3/" + ADDRESS
 # Is the server open? False = "binnenkort" state (address with a "coming soon" pill, no live status call, a badge on the
 # map tile, and a banner on the wiki's server page). Keep this name: the 1.0.0 site on main has False, the 1.1.0 build True.
 SERVER_OPEN = True
-GUHS_VERSION = "1.1.0"
+GUHS_VERSION = MOD_VERSION
 MC_VERSION = "26.1.2"
 LINKS = [
     ("CurseForge", "https://www.curseforge.com/minecraft/mc-mods/guhs"),

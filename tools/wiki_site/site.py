@@ -2,9 +2,26 @@
 The page model of the wiki site: every page, the categories, which pictures belong to which page ("claims", used to put
 the knowledge-base chunks on the right page) and the names that get auto-linked in texts.
 """
+import os
 import html
 import re
 import unicodedata
+
+
+def _mod_version():
+    """mod_version from gradle.properties, so the site never shows an old Guhs version."""
+    props = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "gradle.properties")
+    try:
+        with open(props, encoding="utf-8") as f:
+            for line in f:
+                if line.startswith("mod_version="):
+                    return line.split("=", 1)[1].strip()
+    except OSError:
+        pass
+    return "?"
+
+
+MOD_VERSION = _mod_version()
 
 # category key -> (dir, NL name, EN name, NL list title, EN list title, NL intro, EN intro)
 CATEGORIES = {
