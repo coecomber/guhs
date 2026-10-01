@@ -3,6 +3,21 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.1.3 — Minecraft 26.1.2
+
+A fix for the FTB Quests chapters. Same requirements as 1.1.2.
+
+### FTB Quests: nothing is locked any more
+
+- **No quest waits for "Guh!" any more.** Before, every quest hung (through a chain of lines) behind the very first
+  quest. FTB Quests did remember what you had already done, but didn't tick it off: if you claimed "Guh!" late, a whole
+  Guhdex of seen guhs could stay at 0 completed. Now every quest ticks itself off as soon as you've done it, in any order,
+  also when you did it before (seen guhs, tamed guhs, advancements). Only the stomach sizes in De Guhmaag still come
+  after each other.
+- **Existing worlds are repaired.** Quests that were stuck at "done, but not ticked off" are ticked off by themselves a
+  few seconds after you join.
+- The lines between quests are gone; the section headers still say what comes logically first ("Komt na: ...").
+
 ## 1.1.2 — Minecraft 26.1.2
 
 A new balance of the buildings in the Guhmension, after a look at the official server (1,399 buildings in 6 x 6 km:

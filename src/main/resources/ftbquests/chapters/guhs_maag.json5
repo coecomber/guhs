@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_maag",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 20,
+  guhs_chapter_version: 21,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_maag.png",
@@ -94,9 +94,6 @@
       ],
       x: 2.0,
       y: 1.5,
-      dependencies: [
-        "4755486E9E523698",
-      ],
       size: 1.3,
       shape: "gear",
     },
@@ -125,10 +122,6 @@
       ],
       x: 0.0,
       y: 6.5625,
-      dependencies: [
-        "475548B3399FAB18",
-      ],
-      hide_dependency_lines: true,
       shape: "octagon",
     },
     {
@@ -157,9 +150,6 @@
       ],
       x: 1.5,
       y: 6.5625,
-      dependencies: [
-        "475548DFA0DC3DDF",
-      ],
     },
     {
       id: "475548EB96E41B8A",
@@ -192,9 +182,6 @@
       ],
       x: 3.0,
       y: 6.5625,
-      dependencies: [
-        "475548ACA430C796",
-      ],
     },
     {
       id: "475548A1B8585122",
@@ -231,9 +218,6 @@
       ],
       x: 4.5,
       y: 6.5625,
-      dependencies: [
-        "475548EB96E41B8A",
-      ],
     },
     {
       id: "47554871B3B7E4D9",
@@ -266,9 +250,6 @@
       ],
       x: 6.0,
       y: 6.5625,
-      dependencies: [
-        "475548A1B8585122",
-      ],
       shape: "gear",
     },
     {

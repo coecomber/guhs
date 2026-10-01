@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_piep",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 20,
+  guhs_chapter_version: 21,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_piep.png",
@@ -82,9 +82,6 @@
       ],
       x: 2.0,
       y: 1.5,
-      dependencies: [
-        "4755485753677BE6",
-      ],
       size: 1.3,
       shape: "gear",
     },
@@ -119,10 +116,6 @@
       ],
       x: 0.0,
       y: 6.5625,
-      dependencies: [
-        "47554856CE8506B3",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -156,9 +149,6 @@
       ],
       x: 1.5,
       y: 6.5625,
-      dependencies: [
-        "4755481E85BC9590",
-      ],
     },
     {
       id: "475548D485787C2E",
@@ -188,9 +178,6 @@
       ],
       x: 3.0,
       y: 6.5625,
-      dependencies: [
-        "475548F32F32432C",
-      ],
     },
     {
       id: "475548D218D36E4A",
@@ -222,9 +209,6 @@
       ],
       x: 4.5,
       y: 6.5625,
-      dependencies: [
-        "475548D485787C2E",
-      ],
       shape: "rsquare",
     },
     {
@@ -257,10 +241,6 @@
       ],
       x: 6.0,
       y: 6.5625,
-      dependencies: [
-        "47554856CE8506B3",
-      ],
-      hide_dependency_lines: true,
       shape: "circle",
     },
     {
@@ -294,9 +274,6 @@
       ],
       x: 7.5,
       y: 6.5625,
-      dependencies: [
-        "47554801C0A788AA",
-      ],
     },
     {
       id: "4755488913C61428",
@@ -329,9 +306,6 @@
       ],
       x: 9.0,
       y: 6.5625,
-      dependencies: [
-        "47554824513BDCD6",
-      ],
       shape: "gear",
     },
     {
@@ -365,9 +339,6 @@
       ],
       x: 9.0,
       y: 8.0625,
-      dependencies: [
-        "4755488913C61428",
-      ],
     },
     {
       id: "4755483F66D29F94",
@@ -400,9 +371,6 @@
       ],
       x: 7.5,
       y: 8.0625,
-      dependencies: [
-        "475548D44BDF23C4",
-      ],
       shape: "rsquare",
     },
   ],

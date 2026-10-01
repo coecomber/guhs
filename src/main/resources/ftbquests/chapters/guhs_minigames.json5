@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_minigames",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 20,
+  guhs_chapter_version: 21,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_minigames.png",
@@ -322,9 +322,6 @@
       ],
       x: 2.0,
       y: 1.5,
-      dependencies: [
-        "4755485753677BE6",
-      ],
       size: 1.3,
       shape: "gear",
     },
@@ -353,10 +350,6 @@
       ],
       x: 0.0,
       y: 6.5625,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "47554809997CE611",
@@ -389,9 +382,6 @@
       ],
       x: 1.5,
       y: 6.5625,
-      dependencies: [
-        "4755480AD7564B03",
-      ],
     },
     {
       id: "475548BE4AF124F4",
@@ -424,9 +414,6 @@
       ],
       x: 3.0,
       y: 6.5625,
-      dependencies: [
-        "47554809997CE611",
-      ],
     },
     {
       id: "475548CDA367444A",
@@ -459,9 +446,6 @@
       ],
       x: 4.5,
       y: 6.5625,
-      dependencies: [
-        "475548BE4AF124F4",
-      ],
       shape: "gear",
     },
     {
@@ -495,9 +479,6 @@
       ],
       x: 6.0,
       y: 6.5625,
-      dependencies: [
-        "475548CDA367444A",
-      ],
     },
     {
       id: "475548964A1CF7F7",
@@ -528,9 +509,6 @@
       ],
       x: 7.5,
       y: 6.5625,
-      dependencies: [
-        "4755484C3824C902",
-      ],
     },
     {
       id: "475548134B4D81D6",
@@ -560,9 +538,6 @@
       ],
       x: 9.0,
       y: 6.5625,
-      dependencies: [
-        "475548964A1CF7F7",
-      ],
     },
     {
       id: "4755485E61E6B92E",
@@ -595,9 +570,6 @@
       ],
       x: 9.0,
       y: 8.0625,
-      dependencies: [
-        "475548134B4D81D6",
-      ],
       shape: "gear",
     },
     {
@@ -625,10 +597,6 @@
       ],
       x: 11.5,
       y: 6.5625,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548C70D03D857",
@@ -661,9 +629,6 @@
       ],
       x: 13.0,
       y: 6.5625,
-      dependencies: [
-        "475548C77E559F04",
-      ],
     },
     {
       id: "47554884FAF99C6F",
@@ -696,9 +661,6 @@
       ],
       x: 14.5,
       y: 6.5625,
-      dependencies: [
-        "475548C70D03D857",
-      ],
     },
     {
       id: "475548C547DDEABC",
@@ -731,9 +693,6 @@
       ],
       x: 16.0,
       y: 6.5625,
-      dependencies: [
-        "47554884FAF99C6F",
-      ],
       shape: "gear",
     },
     {
@@ -767,9 +726,6 @@
       ],
       x: 17.5,
       y: 6.5625,
-      dependencies: [
-        "475548C547DDEABC",
-      ],
     },
     {
       id: "47554882BC287843",
@@ -800,9 +756,6 @@
       ],
       x: 19.0,
       y: 6.5625,
-      dependencies: [
-        "475548414C185225",
-      ],
     },
     {
       id: "47554808EED9E448",
@@ -832,9 +785,6 @@
       ],
       x: 20.5,
       y: 6.5625,
-      dependencies: [
-        "47554882BC287843",
-      ],
     },
     {
       id: "4755488D62BDFC72",
@@ -867,9 +817,6 @@
       ],
       x: 20.5,
       y: 8.0625,
-      dependencies: [
-        "47554808EED9E448",
-      ],
     },
     {
       id: "4755486EA41E47D7",
@@ -902,9 +849,6 @@
       ],
       x: 19.0,
       y: 8.0625,
-      dependencies: [
-        "4755488D62BDFC72",
-      ],
       shape: "gear",
     },
     {
@@ -932,10 +876,6 @@
       ],
       x: 0.0,
       y: 12.025,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548858F8683C1",
@@ -968,9 +908,6 @@
       ],
       x: 1.5,
       y: 12.025,
-      dependencies: [
-        "475548A1A68FC9C9",
-      ],
     },
     {
       id: "47554887DD3CD755",
@@ -1003,9 +940,6 @@
       ],
       x: 3.0,
       y: 12.025,
-      dependencies: [
-        "475548858F8683C1",
-      ],
     },
     {
       id: "475548A275EF2BFD",
@@ -1038,9 +972,6 @@
       ],
       x: 4.5,
       y: 12.025,
-      dependencies: [
-        "47554887DD3CD755",
-      ],
     },
     {
       id: "475548794B077971",
@@ -1073,9 +1004,6 @@
       ],
       x: 6.0,
       y: 12.025,
-      dependencies: [
-        "475548A275EF2BFD",
-      ],
     },
     {
       id: "4755485EDC3F9C64",
@@ -1108,9 +1036,6 @@
       ],
       x: 7.5,
       y: 12.025,
-      dependencies: [
-        "475548794B077971",
-      ],
       shape: "gear",
     },
     {
@@ -1141,9 +1066,6 @@
       ],
       x: 9.0,
       y: 12.025,
-      dependencies: [
-        "4755485EDC3F9C64",
-      ],
     },
     {
       id: "4755481AFEA42383",
@@ -1176,9 +1098,6 @@
       ],
       x: 9.0,
       y: 13.525,
-      dependencies: [
-        "4755486273D32EB2",
-      ],
       shape: "gear",
     },
     {
@@ -1206,10 +1125,6 @@
       ],
       x: 11.5,
       y: 12.025,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548D170EB50FA",
@@ -1242,9 +1157,6 @@
       ],
       x: 13.0,
       y: 12.025,
-      dependencies: [
-        "47554831B31C88BD",
-      ],
     },
     {
       id: "475548B401E1CFDD",
@@ -1277,9 +1189,6 @@
       ],
       x: 14.5,
       y: 12.025,
-      dependencies: [
-        "475548D170EB50FA",
-      ],
     },
     {
       id: "475548DE11721740",
@@ -1312,9 +1221,6 @@
       ],
       x: 16.0,
       y: 12.025,
-      dependencies: [
-        "475548B401E1CFDD",
-      ],
       shape: "hexagon",
     },
     {
@@ -1348,9 +1254,6 @@
       ],
       x: 17.5,
       y: 12.025,
-      dependencies: [
-        "475548DE11721740",
-      ],
       shape: "gear",
     },
     {
@@ -1379,9 +1282,6 @@
       ],
       x: 19.0,
       y: 12.025,
-      dependencies: [
-        "47554813D09D8206",
-      ],
     },
     {
       id: "4755488ADCA90DB9",
@@ -1414,9 +1314,6 @@
       ],
       x: 20.5,
       y: 12.025,
-      dependencies: [
-        "475548B99F404A30",
-      ],
       shape: "gear",
     },
     {
@@ -1450,10 +1347,6 @@
       ],
       x: 20.5,
       y: 13.525,
-      dependencies: [
-        "475548B401E1CFDD",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -1496,10 +1389,6 @@
       ],
       x: 19.0,
       y: 13.525,
-      dependencies: [
-        "475548D170EB50FA",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "4755488D45FC94DF",
@@ -1527,9 +1416,6 @@
       ],
       x: 17.5,
       y: 13.525,
-      dependencies: [
-        "475548B99F404A30",
-      ],
     },
     {
       id: "47554801DC55D50B",
@@ -1556,10 +1442,6 @@
       ],
       x: 0.0,
       y: 17.4875,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "4755482D2C782B35",
@@ -1592,9 +1474,6 @@
       ],
       x: 1.5,
       y: 17.4875,
-      dependencies: [
-        "47554801DC55D50B",
-      ],
     },
     {
       id: "475548D8550E6CED",
@@ -1627,9 +1506,6 @@
       ],
       x: 3.0,
       y: 17.4875,
-      dependencies: [
-        "4755482D2C782B35",
-      ],
       shape: "gear",
     },
     {
@@ -1663,9 +1539,6 @@
       ],
       x: 4.5,
       y: 17.4875,
-      dependencies: [
-        "475548D8550E6CED",
-      ],
       shape: "hexagon",
     },
     {
@@ -1697,9 +1570,6 @@
       ],
       x: 6.0,
       y: 17.4875,
-      dependencies: [
-        "475548F79B78331F",
-      ],
     },
     {
       id: "4755480683244EED",
@@ -1729,9 +1599,6 @@
       ],
       x: 7.5,
       y: 17.4875,
-      dependencies: [
-        "4755488CFB09D297",
-      ],
     },
     {
       id: "4755488568F1A1B6",
@@ -1764,9 +1631,6 @@
       ],
       x: 9.0,
       y: 17.4875,
-      dependencies: [
-        "4755480683244EED",
-      ],
       shape: "gear",
     },
     {
@@ -1800,9 +1664,6 @@
       ],
       x: 9.0,
       y: 18.9875,
-      dependencies: [
-        "4755488568F1A1B6",
-      ],
       shape: "gear",
     },
     {
@@ -1830,10 +1691,6 @@
       ],
       x: 11.5,
       y: 17.4875,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548F79EE534C8",
@@ -1861,9 +1718,6 @@
       ],
       x: 13.0,
       y: 17.4875,
-      dependencies: [
-        "4755483F8C9960F8",
-      ],
     },
     {
       id: "4755482346B33A76",
@@ -1891,9 +1745,6 @@
       ],
       x: 14.5,
       y: 17.4875,
-      dependencies: [
-        "475548F79EE534C8",
-      ],
     },
     {
       id: "47554825DBAE8AC2",
@@ -1921,9 +1772,6 @@
       ],
       x: 16.0,
       y: 17.4875,
-      dependencies: [
-        "4755482346B33A76",
-      ],
     },
     {
       id: "4755484DF22E88D8",
@@ -1951,9 +1799,6 @@
       ],
       x: 17.5,
       y: 17.4875,
-      dependencies: [
-        "47554825DBAE8AC2",
-      ],
       shape: "gear",
     },
     {
@@ -1984,9 +1829,6 @@
       ],
       x: 19.0,
       y: 17.4875,
-      dependencies: [
-        "4755484DF22E88D8",
-      ],
     },
     {
       id: "475548FC391BB9C3",
@@ -2014,9 +1856,6 @@
       ],
       x: 20.5,
       y: 17.4875,
-      dependencies: [
-        "47554886DD856496",
-      ],
     },
     {
       id: "475548C8AE2C49A8",
@@ -2043,10 +1882,6 @@
       ],
       x: 0.0,
       y: 22.95,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548EA1E272B40",
@@ -2079,9 +1914,6 @@
       ],
       x: 1.5,
       y: 22.95,
-      dependencies: [
-        "475548C8AE2C49A8",
-      ],
     },
     {
       id: "475548733B9F6D96",
@@ -2114,9 +1946,6 @@
       ],
       x: 3.0,
       y: 22.95,
-      dependencies: [
-        "475548EA1E272B40",
-      ],
     },
     {
       id: "475548C3A4654C21",
@@ -2149,9 +1978,6 @@
       ],
       x: 4.5,
       y: 22.95,
-      dependencies: [
-        "475548733B9F6D96",
-      ],
     },
     {
       id: "475548FE596B266C",
@@ -2186,9 +2012,6 @@
       ],
       x: 6.0,
       y: 22.95,
-      dependencies: [
-        "475548C3A4654C21",
-      ],
       shape: "gear",
     },
     {
@@ -2219,9 +2042,6 @@
       ],
       x: 7.5,
       y: 22.95,
-      dependencies: [
-        "475548FE596B266C",
-      ],
     },
     {
       id: "4755482DE66BB2E8",
@@ -2254,9 +2074,6 @@
       ],
       x: 9.0,
       y: 22.95,
-      dependencies: [
-        "475548BC4DD0D389",
-      ],
       shape: "gear",
     },
     {
@@ -2284,10 +2101,6 @@
       ],
       x: 11.5,
       y: 22.95,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548E1558765BB",
@@ -2320,9 +2133,6 @@
       ],
       x: 13.0,
       y: 22.95,
-      dependencies: [
-        "475548FFE82FCC33",
-      ],
     },
     {
       id: "475548B620B532CB",
@@ -2355,10 +2165,6 @@
       ],
       x: 14.5,
       y: 22.95,
-      dependencies: [
-        "475548FFE82FCC33",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "4755482E4B3CD864",
@@ -2391,10 +2197,6 @@
       ],
       x: 16.0,
       y: 22.95,
-      dependencies: [
-        "475548FFE82FCC33",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -2428,10 +2230,6 @@
       ],
       x: 17.5,
       y: 22.95,
-      dependencies: [
-        "475548FFE82FCC33",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "4755481BEE683328",
@@ -2458,10 +2256,6 @@
       ],
       x: 0.0,
       y: 26.912499999999998,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548B01243317A",
@@ -2494,9 +2288,6 @@
       ],
       x: 1.5,
       y: 26.912499999999998,
-      dependencies: [
-        "4755481BEE683328",
-      ],
     },
     {
       id: "475548CBC79ACBDC",
@@ -2527,10 +2318,6 @@
       ],
       x: 3.0,
       y: 26.912499999999998,
-      dependencies: [
-        "4755481BEE683328",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548E71950231C",
@@ -2563,10 +2350,6 @@
       ],
       x: 4.5,
       y: 26.912499999999998,
-      dependencies: [
-        "4755481BEE683328",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -2599,10 +2382,6 @@
       ],
       x: 11.5,
       y: 26.912499999999998,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
       shape: "octagon",
     },
     {
@@ -2631,9 +2410,6 @@
       ],
       x: 13.0,
       y: 26.912499999999998,
-      dependencies: [
-        "475548C05F697ED8",
-      ],
     },
     {
       id: "475548E140372C86",
@@ -2661,9 +2437,6 @@
       ],
       x: 14.5,
       y: 26.912499999999998,
-      dependencies: [
-        "47554826548264E3",
-      ],
     },
     {
       id: "4755480051F584D6",
@@ -2696,9 +2469,6 @@
       ],
       x: 16.0,
       y: 26.912499999999998,
-      dependencies: [
-        "475548E140372C86",
-      ],
       shape: "diamond",
     },
     {
@@ -2741,9 +2511,6 @@
       ],
       x: 17.5,
       y: 26.912499999999998,
-      dependencies: [
-        "4755480051F584D6",
-      ],
       shape: "gear",
     },
     {
@@ -2772,9 +2539,6 @@
       ],
       x: 19.0,
       y: 26.912499999999998,
-      dependencies: [
-        "4755488731A53619",
-      ],
     },
     {
       id: "47554881E62C2B2D",
@@ -2807,9 +2571,6 @@
       ],
       x: 20.5,
       y: 26.912499999999998,
-      dependencies: [
-        "4755483923BA6B04",
-      ],
       shape: "gear",
     },
     {
@@ -2861,9 +2622,6 @@
       ],
       x: 20.5,
       y: 28.412499999999998,
-      dependencies: [
-        "47554881E62C2B2D",
-      ],
       shape: "diamond",
     },
     {
@@ -2896,10 +2654,6 @@
       ],
       x: 0.0,
       y: 32.375,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
       shape: "hexagon",
     },
     {
@@ -2928,9 +2682,6 @@
       ],
       x: 1.5,
       y: 32.375,
-      dependencies: [
-        "475548F69974F1D7",
-      ],
     },
     {
       id: "475548720CC0F282",
@@ -2961,9 +2712,6 @@
       ],
       x: 3.0,
       y: 32.375,
-      dependencies: [
-        "475548121F90D993",
-      ],
     },
     {
       id: "475548C779F6C560",
@@ -2991,9 +2739,6 @@
       ],
       x: 4.5,
       y: 32.375,
-      dependencies: [
-        "475548720CC0F282",
-      ],
     },
     {
       id: "475548E1FFF8F502",
@@ -3023,9 +2768,6 @@
       ],
       x: 6.0,
       y: 32.375,
-      dependencies: [
-        "475548C779F6C560",
-      ],
     },
     {
       id: "475548FEA8FD3A8E",
@@ -3057,9 +2799,6 @@
       ],
       x: 7.5,
       y: 32.375,
-      dependencies: [
-        "475548E1FFF8F502",
-      ],
       shape: "gear",
     },
     {
@@ -3110,9 +2849,6 @@
       ],
       x: 9.0,
       y: 32.375,
-      dependencies: [
-        "475548FEA8FD3A8E",
-      ],
       shape: "rsquare",
     },
     {
@@ -3145,10 +2881,6 @@
       ],
       x: 11.5,
       y: 32.375,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -3182,9 +2914,6 @@
       ],
       x: 13.0,
       y: 32.375,
-      dependencies: [
-        "475548F2C3072206",
-      ],
     },
     {
       id: "475548D052D4B8AB",
@@ -3217,9 +2946,6 @@
       ],
       x: 14.5,
       y: 32.375,
-      dependencies: [
-        "47554840008A6FF3",
-      ],
     },
     {
       id: "4755485C556227A0",
@@ -3252,9 +2978,6 @@
       ],
       x: 16.0,
       y: 32.375,
-      dependencies: [
-        "475548D052D4B8AB",
-      ],
     },
     {
       id: "4755482436815DDB",
@@ -3287,9 +3010,6 @@
       ],
       x: 17.5,
       y: 32.375,
-      dependencies: [
-        "4755485C556227A0",
-      ],
       shape: "gear",
     },
     {
@@ -3333,9 +3053,6 @@
       ],
       x: 19.0,
       y: 32.375,
-      dependencies: [
-        "4755482436815DDB",
-      ],
     },
     {
       id: "475548D0F3606F95",
@@ -3368,9 +3085,6 @@
       ],
       x: 20.5,
       y: 32.375,
-      dependencies: [
-        "475548C77995F676",
-      ],
     },
     {
       id: "475548D9B78F7425",
@@ -3405,9 +3119,6 @@
       ],
       x: 20.5,
       y: 33.875,
-      dependencies: [
-        "475548D0F3606F95",
-      ],
     },
     {
       id: "475548980F989F11",
@@ -3435,10 +3146,6 @@
       ],
       x: 0.0,
       y: 37.8375,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "4755480F6DE2695F",
@@ -3466,9 +3173,6 @@
       ],
       x: 1.5,
       y: 37.8375,
-      dependencies: [
-        "475548980F989F11",
-      ],
     },
     {
       id: "475548ADF917CFA5",
@@ -3496,10 +3200,6 @@
       ],
       x: 3.0,
       y: 37.8375,
-      dependencies: [
-        "475548980F989F11",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548E2A93DF110",
@@ -3527,10 +3227,6 @@
       ],
       x: 4.5,
       y: 37.8375,
-      dependencies: [
-        "475548980F989F11",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "47554898DEA11A70",
@@ -3558,10 +3254,6 @@
       ],
       x: 6.0,
       y: 37.8375,
-      dependencies: [
-        "475548980F989F11",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548438842EB9D",
@@ -3589,10 +3281,6 @@
       ],
       x: 7.5,
       y: 37.8375,
-      dependencies: [
-        "475548980F989F11",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548688C77BE65",
@@ -3633,14 +3321,6 @@
       ],
       x: 9.0,
       y: 37.8375,
-      dependencies: [
-        "4755480F6DE2695F",
-        "475548ADF917CFA5",
-        "475548E2A93DF110",
-        "47554898DEA11A70",
-        "475548438842EB9D",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -3673,10 +3353,6 @@
       ],
       x: 11.5,
       y: 37.8375,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
       shape: "circle",
     },
     {
@@ -3710,9 +3386,6 @@
       ],
       x: 13.0,
       y: 37.8375,
-      dependencies: [
-        "47554896A47CFE51",
-      ],
     },
     {
       id: "47554867E7BBADAD",
@@ -3745,9 +3418,6 @@
       ],
       x: 14.5,
       y: 37.8375,
-      dependencies: [
-        "475548520EDD79D2",
-      ],
     },
     {
       id: "475548FBBC98B405",
@@ -3780,9 +3450,6 @@
       ],
       x: 16.0,
       y: 37.8375,
-      dependencies: [
-        "47554867E7BBADAD",
-      ],
       shape: "hexagon",
     },
     {
@@ -3818,9 +3485,6 @@
       ],
       x: 17.5,
       y: 37.8375,
-      dependencies: [
-        "475548FBBC98B405",
-      ],
     },
     {
       id: "4755488DCA9CB4D9",
@@ -3853,9 +3517,6 @@
       ],
       x: 19.0,
       y: 37.8375,
-      dependencies: [
-        "47554809D3FF4C66",
-      ],
       shape: "gear",
     },
     {
@@ -3889,9 +3550,6 @@
       ],
       x: 20.5,
       y: 37.8375,
-      dependencies: [
-        "4755488DCA9CB4D9",
-      ],
       shape: "rsquare",
     },
     {
@@ -3924,10 +3582,6 @@
       ],
       x: 0.0,
       y: 41.8,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
       shape: "circle",
     },
     {
@@ -3961,9 +3615,6 @@
       ],
       x: 1.5,
       y: 41.8,
-      dependencies: [
-        "47554825ECEE7473",
-      ],
     },
     {
       id: "4755485630613F2B",
@@ -3996,9 +3647,6 @@
       ],
       x: 3.0,
       y: 41.8,
-      dependencies: [
-        "47554836B1695B5F",
-      ],
     },
     {
       id: "4755485AFDCE02D4",
@@ -4031,9 +3679,6 @@
       ],
       x: 4.5,
       y: 41.8,
-      dependencies: [
-        "4755485630613F2B",
-      ],
       shape: "gear",
     },
     {
@@ -4066,10 +3711,6 @@
       ],
       x: 6.0,
       y: 41.8,
-      dependencies: [
-        "4755485630613F2B",
-      ],
-      hide_dependency_lines: true,
       shape: "hexagon",
     },
     {
@@ -4121,10 +3762,6 @@
       ],
       x: 7.5,
       y: 41.8,
-      dependencies: [
-        "47554836B1695B5F",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548A68B4F7834",
@@ -4156,10 +3793,6 @@
       ],
       x: 11.5,
       y: 41.8,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
       shape: "circle",
     },
     {
@@ -4193,9 +3826,6 @@
       ],
       x: 13.0,
       y: 41.8,
-      dependencies: [
-        "475548A68B4F7834",
-      ],
     },
     {
       id: "47554832B053900E",
@@ -4228,9 +3858,6 @@
       ],
       x: 14.5,
       y: 41.8,
-      dependencies: [
-        "47554855AD08DBA4",
-      ],
     },
     {
       id: "475548D077B2AF10",
@@ -4263,9 +3890,6 @@
       ],
       x: 16.0,
       y: 41.8,
-      dependencies: [
-        "47554832B053900E",
-      ],
       shape: "hexagon",
     },
     {
@@ -4298,9 +3922,6 @@
       ],
       x: 17.5,
       y: 41.8,
-      dependencies: [
-        "475548D077B2AF10",
-      ],
       shape: "hexagon",
     },
     {
@@ -4334,9 +3955,6 @@
       ],
       x: 19.0,
       y: 41.8,
-      dependencies: [
-        "475548504EE48A0E",
-      ],
       shape: "gear",
     },
     {
@@ -4370,9 +3988,6 @@
       ],
       x: 20.5,
       y: 41.8,
-      dependencies: [
-        "475548C8CF61517D",
-      ],
       shape: "rsquare",
     },
     {
@@ -4405,10 +4020,6 @@
       ],
       x: 0.0,
       y: 45.762499999999996,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
       shape: "circle",
     },
     {
@@ -4442,9 +4053,6 @@
       ],
       x: 1.5,
       y: 45.762499999999996,
-      dependencies: [
-        "475548A8968EEAD5",
-      ],
     },
     {
       id: "4755484E1C6CEE78",
@@ -4477,9 +4085,6 @@
       ],
       x: 3.0,
       y: 45.762499999999996,
-      dependencies: [
-        "4755489903674232",
-      ],
     },
     {
       id: "4755488B1D88004B",
@@ -4512,10 +4117,6 @@
       ],
       x: 4.5,
       y: 45.762499999999996,
-      dependencies: [
-        "4755489903674232",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "47554850E5891FAD",
@@ -4548,10 +4149,6 @@
       ],
       x: 6.0,
       y: 45.762499999999996,
-      dependencies: [
-        "4755489903674232",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -4585,9 +4182,6 @@
       ],
       x: 7.5,
       y: 45.762499999999996,
-      dependencies: [
-        "47554850E5891FAD",
-      ],
       shape: "hexagon",
     },
     {
@@ -4639,10 +4233,6 @@
       ],
       x: 9.0,
       y: 45.762499999999996,
-      dependencies: [
-        "4755489903674232",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "4755485ED0EC891E",
@@ -4675,10 +4265,6 @@
       ],
       x: 11.5,
       y: 45.762499999999996,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
       shape: "circle",
     },
     {
@@ -4712,9 +4298,6 @@
       ],
       x: 13.0,
       y: 45.762499999999996,
-      dependencies: [
-        "4755485ED0EC891E",
-      ],
     },
     {
       id: "4755489FFC48ABFE",
@@ -4747,9 +4330,6 @@
       ],
       x: 14.5,
       y: 45.762499999999996,
-      dependencies: [
-        "475548B8E9048CAF",
-      ],
       shape: "gear",
     },
     {
@@ -4783,9 +4363,6 @@
       ],
       x: 16.0,
       y: 45.762499999999996,
-      dependencies: [
-        "4755489FFC48ABFE",
-      ],
     },
     {
       id: "4755488F88435451",
@@ -4818,10 +4395,6 @@
       ],
       x: 17.5,
       y: 45.762499999999996,
-      dependencies: [
-        "475548B8E9048CAF",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "4755485C0B23A2AC",
@@ -4848,10 +4421,6 @@
       ],
       x: 0.0,
       y: 49.724999999999994,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548BBF4BDE6D4",
@@ -4884,9 +4453,6 @@
       ],
       x: 1.5,
       y: 49.724999999999994,
-      dependencies: [
-        "4755485C0B23A2AC",
-      ],
     },
     {
       id: "4755487BE18E6E5A",
@@ -4919,9 +4485,6 @@
       ],
       x: 3.0,
       y: 49.724999999999994,
-      dependencies: [
-        "475548BBF4BDE6D4",
-      ],
     },
     {
       id: "4755489CBED89ABD",
@@ -4954,10 +4517,6 @@
       ],
       x: 4.5,
       y: 49.724999999999994,
-      dependencies: [
-        "475548BBF4BDE6D4",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548AE4014FB23",
@@ -4990,10 +4549,6 @@
       ],
       x: 6.0,
       y: 49.724999999999994,
-      dependencies: [
-        "475548BBF4BDE6D4",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548BD11AF5B98",
@@ -5026,12 +4581,6 @@
       ],
       x: 7.5,
       y: 49.724999999999994,
-      dependencies: [
-        "4755487BE18E6E5A",
-        "4755489CBED89ABD",
-        "475548AE4014FB23",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -5065,10 +4614,6 @@
       ],
       x: 9.0,
       y: 49.724999999999994,
-      dependencies: [
-        "475548BBF4BDE6D4",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "4755482A459EBE73",
@@ -5101,10 +4646,6 @@
       ],
       x: 9.0,
       y: 51.224999999999994,
-      dependencies: [
-        "475548BBF4BDE6D4",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -5138,10 +4679,6 @@
       ],
       x: 7.5,
       y: 51.224999999999994,
-      dependencies: [
-        "475548BBF4BDE6D4",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -5175,10 +4712,6 @@
       ],
       x: 11.5,
       y: 49.724999999999994,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
       shape: "gear",
     },
     {
@@ -5220,9 +4753,6 @@
       ],
       x: 13.0,
       y: 49.724999999999994,
-      dependencies: [
-        "475548CB65F2E24D",
-      ],
       shape: "rsquare",
     },
     {
@@ -5255,10 +4785,6 @@
       ],
       x: 0.0,
       y: 55.18749999999999,
-      dependencies: [
-        "47554867D43B4C54",
-      ],
-      hide_dependency_lines: true,
       shape: "circle",
     },
     {
@@ -5292,9 +4818,6 @@
       ],
       x: 1.5,
       y: 55.18749999999999,
-      dependencies: [
-        "475548E006EB2DD7",
-      ],
     },
     {
       id: "475548AF7C757117",
@@ -5325,10 +4848,6 @@
       ],
       x: 3.0,
       y: 55.18749999999999,
-      dependencies: [
-        "475548E006EB2DD7",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548321705AC6B",
@@ -5358,10 +4877,6 @@
       ],
       x: 4.5,
       y: 55.18749999999999,
-      dependencies: [
-        "475548E006EB2DD7",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548FCF35677EC",
@@ -5397,9 +4912,6 @@
       ],
       x: 6.0,
       y: 55.18749999999999,
-      dependencies: [
-        "475548321705AC6B",
-      ],
     },
   ],
 }

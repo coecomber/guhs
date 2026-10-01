@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_guheinde",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 20,
+  guhs_chapter_version: 21,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guheinde.png",
@@ -113,10 +113,6 @@
       ],
       x: 2.0,
       y: 1.5,
-      dependencies: [
-        "475548BF9CE78C33",
-        "4755482D2E52EC6D",
-      ],
       size: 1.3,
       shape: "gear",
     },
@@ -148,10 +144,6 @@
       ],
       x: 0.0,
       y: 6.5625,
-      dependencies: [
-        "4755482CDD9DBAAA",
-      ],
-      hide_dependency_lines: true,
       shape: "hexagon",
     },
     {
@@ -180,9 +172,6 @@
       ],
       x: 1.5,
       y: 6.5625,
-      dependencies: [
-        "475548F95D32C0F4",
-      ],
     },
     {
       id: "4755480BF2E8ECFD",
@@ -213,9 +202,6 @@
       ],
       x: 3.0,
       y: 6.5625,
-      dependencies: [
-        "4755484A511D2B07",
-      ],
     },
     {
       id: "475548E52AC6A515",
@@ -247,9 +233,6 @@
       ],
       x: 4.5,
       y: 6.5625,
-      dependencies: [
-        "4755480BF2E8ECFD",
-      ],
       shape: "octagon",
     },
     {
@@ -283,9 +266,6 @@
       ],
       x: 6.0,
       y: 6.5625,
-      dependencies: [
-        "475548E52AC6A515",
-      ],
     },
     {
       id: "47554894C6AA450A",
@@ -313,9 +293,6 @@
       ],
       x: 7.5,
       y: 6.5625,
-      dependencies: [
-        "4755482A87ECB0FE",
-      ],
     },
     {
       id: "475548048B20D10A",
@@ -347,9 +324,6 @@
       ],
       x: 9.0,
       y: 6.5625,
-      dependencies: [
-        "47554894C6AA450A",
-      ],
       shape: "octagon",
     },
     {
@@ -378,10 +352,6 @@
       ],
       x: 0.0,
       y: 10.525,
-      dependencies: [
-        "475548048B20D10A",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548BB4CB92BB5",
@@ -409,9 +379,6 @@
       ],
       x: 1.5,
       y: 10.525,
-      dependencies: [
-        "4755486B3BEC166E",
-      ],
     },
     {
       id: "4755488B952685DE",
@@ -444,9 +411,6 @@
       ],
       x: 3.0,
       y: 10.525,
-      dependencies: [
-        "475548BB4CB92BB5",
-      ],
       shape: "gear",
     },
     {
@@ -480,9 +444,6 @@
       ],
       x: 4.5,
       y: 10.525,
-      dependencies: [
-        "4755488B952685DE",
-      ],
     },
     {
       id: "4755485F779FAD61",
@@ -515,9 +476,6 @@
       ],
       x: 6.0,
       y: 10.525,
-      dependencies: [
-        "4755481C395DF146",
-      ],
     },
     {
       id: "47554812E1FEE001",
@@ -548,9 +506,6 @@
       ],
       x: 7.5,
       y: 10.525,
-      dependencies: [
-        "4755485F779FAD61",
-      ],
     },
     {
       id: "4755489D1C3345E2",
@@ -578,10 +533,6 @@
       ],
       x: 0.0,
       y: 14.4875,
-      dependencies: [
-        "4755488B952685DE",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "4755480846A343A2",
@@ -613,9 +564,6 @@
       ],
       x: 1.5,
       y: 14.4875,
-      dependencies: [
-        "4755489D1C3345E2",
-      ],
       shape: "octagon",
     },
     {
@@ -651,9 +599,6 @@
       ],
       x: 3.0,
       y: 14.4875,
-      dependencies: [
-        "4755480846A343A2",
-      ],
       shape: "gear",
     },
     {
@@ -687,9 +632,6 @@
       ],
       x: 4.5,
       y: 14.4875,
-      dependencies: [
-        "47554832292EA215",
-      ],
     },
     {
       id: "47554806041E9EFE",
@@ -722,9 +664,6 @@
       ],
       x: 6.0,
       y: 14.4875,
-      dependencies: [
-        "47554821BCBB035E",
-      ],
     },
   ],
 }

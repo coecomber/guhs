@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_barbecuether",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 20,
+  guhs_chapter_version: 21,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_barbecuether.png",
@@ -118,9 +118,6 @@
       ],
       x: 2.0,
       y: 1.5,
-      dependencies: [
-        "4755486E9E523698",
-      ],
       size: 1.3,
       shape: "gear",
     },
@@ -154,10 +151,6 @@
       ],
       x: 0.0,
       y: 6.5625,
-      dependencies: [
-        "475548E99A05234B",
-      ],
-      hide_dependency_lines: true,
       shape: "hexagon",
     },
     {
@@ -186,9 +179,6 @@
       ],
       x: 1.5,
       y: 6.5625,
-      dependencies: [
-        "475548903D2CC46B",
-      ],
     },
     {
       id: "475548617D7DEE71",
@@ -219,9 +209,6 @@
       ],
       x: 3.0,
       y: 6.5625,
-      dependencies: [
-        "475548109CF14ED4",
-      ],
     },
     {
       id: "4755486661FEB05F",
@@ -249,9 +236,6 @@
       ],
       x: 4.5,
       y: 6.5625,
-      dependencies: [
-        "475548617D7DEE71",
-      ],
     },
     {
       id: "475548D75B55D4F7",
@@ -279,9 +263,6 @@
       ],
       x: 6.0,
       y: 6.5625,
-      dependencies: [
-        "4755486661FEB05F",
-      ],
     },
     {
       id: "475548854F353678",
@@ -314,9 +295,6 @@
       ],
       x: 7.5,
       y: 6.5625,
-      dependencies: [
-        "475548D75B55D4F7",
-      ],
       shape: "gear",
     },
     {
@@ -368,9 +346,6 @@
       ],
       x: 9.0,
       y: 6.5625,
-      dependencies: [
-        "475548854F353678",
-      ],
       shape: "rsquare",
     },
     {
@@ -399,9 +374,6 @@
       ],
       x: 9.0,
       y: 8.0625,
-      dependencies: [
-        "4755489650471B98",
-      ],
     },
     {
       id: "475548DC058D6F1D",
@@ -433,10 +405,6 @@
       ],
       x: 11.5,
       y: 6.5625,
-      dependencies: [
-        "475548854F353678",
-      ],
-      hide_dependency_lines: true,
       shape: "octagon",
     },
     {
@@ -464,9 +432,6 @@
       ],
       x: 13.0,
       y: 6.5625,
-      dependencies: [
-        "475548DC058D6F1D",
-      ],
       shape: "circle",
     },
     {
@@ -494,9 +459,6 @@
       ],
       x: 14.5,
       y: 6.5625,
-      dependencies: [
-        "475548252EBF83A7",
-      ],
       shape: "circle",
     },
     {
@@ -524,9 +486,6 @@
       ],
       x: 16.0,
       y: 6.5625,
-      dependencies: [
-        "475548C0D817235B",
-      ],
       shape: "circle",
     },
     {
@@ -554,9 +513,6 @@
       ],
       x: 17.5,
       y: 6.5625,
-      dependencies: [
-        "47554844A84A0EAC",
-      ],
       shape: "circle",
     },
     {
@@ -584,9 +540,6 @@
       ],
       x: 19.0,
       y: 6.5625,
-      dependencies: [
-        "475548D57BAAA244",
-      ],
       shape: "circle",
     },
     {
@@ -617,9 +570,6 @@
       ],
       x: 20.5,
       y: 6.5625,
-      dependencies: [
-        "475548C208FE09FF",
-      ],
     },
     {
       id: "475548E8E057443F",
@@ -649,9 +599,6 @@
       ],
       x: 20.5,
       y: 8.0625,
-      dependencies: [
-        "475548A0B5993233",
-      ],
     },
     {
       id: "4755482B1A2684B8",
@@ -679,9 +626,6 @@
       ],
       x: 19.0,
       y: 8.0625,
-      dependencies: [
-        "475548E8E057443F",
-      ],
       shape: "diamond",
     },
     {
@@ -730,9 +674,6 @@
       ],
       x: 17.5,
       y: 8.0625,
-      dependencies: [
-        "4755482B1A2684B8",
-      ],
       shape: "diamond",
     },
     {
@@ -765,10 +706,6 @@
       ],
       x: 0.0,
       y: 12.025,
-      dependencies: [
-        "475548DC058D6F1D",
-      ],
-      hide_dependency_lines: true,
       shape: "hexagon",
     },
     {
@@ -799,9 +736,6 @@
       ],
       x: 1.5,
       y: 12.025,
-      dependencies: [
-        "4755480991155DDC",
-      ],
     },
     {
       id: "4755482BC240D32B",
@@ -829,9 +763,6 @@
       ],
       x: 3.0,
       y: 12.025,
-      dependencies: [
-        "4755483F45BF1559",
-      ],
     },
     {
       id: "475548270CB71A9A",
@@ -861,9 +792,6 @@
       ],
       x: 4.5,
       y: 12.025,
-      dependencies: [
-        "4755482BC240D32B",
-      ],
     },
     {
       id: "475548C0720DC8CC",
@@ -896,9 +824,6 @@
       ],
       x: 6.0,
       y: 12.025,
-      dependencies: [
-        "475548270CB71A9A",
-      ],
       shape: "gear",
     },
     {
@@ -958,9 +883,6 @@
       ],
       x: 7.5,
       y: 12.025,
-      dependencies: [
-        "475548C0720DC8CC",
-      ],
       shape: "rsquare",
     },
     {
@@ -997,9 +919,6 @@
       ],
       x: 9.0,
       y: 12.025,
-      dependencies: [
-        "4755485659A76DFD",
-      ],
       shape: "diamond",
     },
     {
@@ -1033,9 +952,6 @@
       ],
       x: 9.0,
       y: 13.525,
-      dependencies: [
-        "4755480ED23B2480",
-      ],
       shape: "octagon",
     },
     {
@@ -1069,9 +985,6 @@
       ],
       x: 7.5,
       y: 13.525,
-      dependencies: [
-        "4755480E84F66AAD",
-      ],
       shape: "gear",
     },
     {
@@ -1105,10 +1018,6 @@
       ],
       x: 11.5,
       y: 12.025,
-      dependencies: [
-        "475548C208FE09FF",
-      ],
-      hide_dependency_lines: true,
       shape: "hexagon",
     },
     {
@@ -1142,9 +1051,6 @@
       ],
       x: 13.0,
       y: 12.025,
-      dependencies: [
-        "47554893F38A1AE3",
-      ],
       shape: "octagon",
     },
     {
@@ -1177,9 +1083,6 @@
       ],
       x: 14.5,
       y: 12.025,
-      dependencies: [
-        "475548624E51A122",
-      ],
       shape: "hexagon",
     },
     {
@@ -1207,9 +1110,6 @@
       ],
       x: 16.0,
       y: 12.025,
-      dependencies: [
-        "47554804C59A212D",
-      ],
     },
     {
       id: "475548FF71E8F8E7",
@@ -1242,9 +1142,6 @@
       ],
       x: 17.5,
       y: 12.025,
-      dependencies: [
-        "47554896CDEC0CA4",
-      ],
       shape: "gear",
     },
     {
@@ -1291,9 +1188,6 @@
       ],
       x: 19.0,
       y: 12.025,
-      dependencies: [
-        "475548FF71E8F8E7",
-      ],
     },
     {
       id: "475548D9FEBA099D",
@@ -1321,9 +1215,6 @@
       ],
       x: 20.5,
       y: 12.025,
-      dependencies: [
-        "475548A195F9CEA0",
-      ],
       shape: "diamond",
     },
     {
@@ -1352,9 +1243,6 @@
       ],
       x: 20.5,
       y: 13.525,
-      dependencies: [
-        "475548D9FEBA099D",
-      ],
       shape: "diamond",
     },
   ],

@@ -1812,7 +1812,33 @@ public class GuhGameTests {
         helper.succeed();
     }
 
-    @GuhTest(template = EMPTY)
+    /** 1.1.3: nothing hangs behind "Guh!" any more: only the stomach sizes (De Guhmaag) have real dependencies. */
+    @GuhTest(template = EMPTY, batch = "ftbquests")
+    public static void ftbQuestsOnlyTheStomachSizesAreLocked(GameTestHelper helper) {
+        try {
+            java.util.List<String> names = nl.juiced.guhs.compat.FtbQuestsChapter.chapters();
+            helper.assertTrue(names.size() >= 13, "all chapters listed: " + names);
+            for (String name : names) {
+                String path = "ftbquests/chapters/" + name + ".json5";
+                String chapter;
+                try (java.io.InputStream in = GuhGameTests.class.getClassLoader().getResourceAsStream(path)) {
+                    helper.assertTrue(in != null, "ships " + path);
+                    chapter = new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+                }
+                int locks = (int) java.util.regex.Pattern.compile("(?m)^\\s*\"?dependencies\"?\\s*:").matcher(chapter).results().count();
+                if (name.equals("guhs_maag")) {
+                    helper.assertTrue(locks == 5, "the five stomach sizes come after each other, not " + locks);
+                } else {
+                    helper.assertTrue(locks == 0, name + " has " + locks + " locked quests");
+                }
+            }
+            helper.succeed();
+        } catch (java.io.IOException e) {
+            helper.fail("io: " + e);
+        }
+    }
+
+    @GuhTest(template = EMPTY, batch = "ftbquests")
     public static void ftbQuestsChapterInstallsOnceAndMergesTheTexts(GameTestHelper helper) {
         try {
             java.nio.file.Path quests = java.nio.file.Files.createTempDirectory("guhs-ftbquests");
@@ -1856,7 +1882,7 @@ public class GuhGameTests {
     }
 
     /** Our old single chapter goes (it has the version marker); chapters a pack maker edited (no marker) stay as they are. */
-    @GuhTest(template = EMPTY)
+    @GuhTest(template = EMPTY, batch = "ftbquests")
     public static void ftbQuestsReplacesOurOldChapterButKeepsPackEdits(GameTestHelper helper) {
         try {
             java.nio.file.Path quests = java.nio.file.Files.createTempDirectory("guhs-ftbquests");

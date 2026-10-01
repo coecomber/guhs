@@ -10,17 +10,18 @@ Which chapter a quest lands in (so quests added later find their place by themse
   3. the quest key's prefix (PREFIX_CHAPTER);
   4. otherwise: De Guhmensie (quests of this file) or Minigames & bijzondere plekken (quests of a feature module).
 Quests that no section names get a section of their own at the end of their chapter (one per feature module), and a
-feature's quests without dependencies follow each other. Nothing is locked: every chapter is "flexible", so the lines
-only show what logically comes first; only the stomach sizes (maag_64 ... maag_128) are "linear". A line that would run
-through another quest, a picture or another line is hidden (the dependency stays: you see it in the quest), and a
-section whose first line is hidden says "Komt na: ..." on its header instead.
+feature's quests without dependencies follow each other. Nothing is locked (1.1.3): only the stomach sizes (maag_64 ...
+maag_128) get real FTB Quests dependencies ("linear"). Every other quest has none, because a dependency also holds back
+completion: FTB Quests remembers the progress of a quest whose dependencies aren't done yet, but only ticks it off through a
+fragile chain once they are (an un-claimed "Guh!" kept a whole Guhdex at 0). The logical order (deps) still places the
+quests and puts "Komt na: ..." on a section's header; compat/FtbQuestsRepair ticks off what older worlds left stuck.
 
 Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all pictures)
 """
 import hashlib
 import os
 
-CHAPTER_VERSION = 20   # 20 = 1.1.0: JSON5 for FTB Quests 26.1
+CHAPTER_VERSION = 21   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes)
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -268,7 +269,8 @@ GROUP_TITLE = "&dGuhs"
 READING = ("&dGuhs & basis&r > &dDe Guhmensie&r > &6Minigames & bijzondere plekken&r > &9Onderwater&r > &cDe Guhmaag&r > "
            "&5Het Guheinde&r > &6De Guhbarbecuether&r > &eGrotten, moeras & woud&r > &dKnuffeldal&r > &dPiep!&r > &dLieve vadsjes&r"
            " > &dGuhverhalen&r > &aDiertjes&r")
-NIKS_OP_SLOT = "Niks zit op slot: de lijntjes laten alleen zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!"
+NIKS_OP_SLOT = ("Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. "
+                "De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!")
 # file: title, subtitle, ribbon colour, icon, banner renders (left, right), welcome picture (renders, structure behind them),
 #       links (the quests in other chapters this chapter comes after), the "Hoe kom je hier?" text (one paragraph per line)
 CHAPTERS = {
@@ -808,14 +810,20 @@ def plan():
     out = {}
     for c in ORDER:
         pos, links, images = layout(c, sections[c], deps)
-        hidden, drawn = visible_lines(pos, links, images, deps)
+        hidden, drawn = visible_lines(pos, links, images, gates(deps))
         out[c] = dict(sections=sections[c], pos=pos, links=links, images=images, hidden=hidden, drawn=drawn)
     return out, deps, where, info
+
+
+def gates(deps):
+    """The dependencies FTB Quests really gets: only the stomach sizes come after each other (see the top)."""
+    return {k: (v if k.startswith("maag_") else []) for k, v in deps.items()}
 
 
 def build(force_art=False):
     import make_ftbquests_art as art
     chapters, deps, where, info = plan()
+    locks = gates(deps)
     group_id = qid("group")
     # the pictures (only redrawn when their recipe changes)
     jobs = {}
@@ -828,7 +836,7 @@ def build(force_art=False):
         for s in ch["sections"]:
             first = s["quests"][0]
             sub = None
-            if deps[first] and not any(k == first for k, _ in ch["drawn"]):
+            if deps[first] and deps[first][0] not in s["quests"] and not any(k == first for k, _ in ch["drawn"]):
                 u = deps[first][0]
                 if u == f"intro_{c}" and spec["links"]:
                     u = spec["links"][0]          # (the intro itself comes after that quest in another chapter)
@@ -863,8 +871,8 @@ def build(force_art=False):
             qn = quest_nbt(key, icon, tasks, rewards, xp)
             x, y = ch["pos"][key]
             qn["x"], qn["y"] = float(x), float(y)
-            if deps[key]:
-                qn["dependencies"] = [qid(d) for d in deps[key]]
+            if locks[key]:
+                qn["dependencies"] = [qid(d) for d in locks[key]]
             if key in ch["hidden"]:
                 qn["hide_dependency_lines"] = True
             if key.startswith("maag_"):

@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_onderwater",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 20,
+  guhs_chapter_version: 21,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_onderwater.png",
@@ -106,9 +106,6 @@
       ],
       x: 2.0,
       y: 1.5,
-      dependencies: [
-        "4755485753677BE6",
-      ],
       size: 1.3,
       shape: "gear",
     },
@@ -142,10 +139,6 @@
       ],
       x: 0.0,
       y: 6.5625,
-      dependencies: [
-        "475548505846658B",
-      ],
-      hide_dependency_lines: true,
       shape: "octagon",
     },
     {
@@ -178,10 +171,6 @@
       ],
       x: 0.0,
       y: 10.525,
-      dependencies: [
-        "4755482F37984F1D",
-      ],
-      hide_dependency_lines: true,
       shape: "hexagon",
     },
     {
@@ -213,9 +202,6 @@
       ],
       x: 1.5,
       y: 10.525,
-      dependencies: [
-        "475548285CE1D90B",
-      ],
     },
     {
       id: "47554801FC127186",
@@ -243,9 +229,6 @@
       ],
       x: 3.0,
       y: 10.525,
-      dependencies: [
-        "475548F4D5ADEAF7",
-      ],
     },
     {
       id: "47554883CCC13E99",
@@ -278,9 +261,6 @@
       ],
       x: 4.5,
       y: 10.525,
-      dependencies: [
-        "47554801FC127186",
-      ],
     },
     {
       id: "475548F911332414",
@@ -310,9 +290,6 @@
       ],
       x: 6.0,
       y: 10.525,
-      dependencies: [
-        "47554883CCC13E99",
-      ],
     },
     {
       id: "475548DD8C2075F6",
@@ -344,9 +321,6 @@
       ],
       x: 7.5,
       y: 10.525,
-      dependencies: [
-        "475548F911332414",
-      ],
     },
     {
       id: "4755483D62F2D4D0",
@@ -374,9 +348,6 @@
       ],
       x: 9.0,
       y: 10.525,
-      dependencies: [
-        "475548DD8C2075F6",
-      ],
       shape: "rsquare",
     },
     {
@@ -428,9 +399,6 @@
       ],
       x: 9.0,
       y: 12.025,
-      dependencies: [
-        "4755483D62F2D4D0",
-      ],
       shape: "gear",
     },
     {
@@ -470,10 +438,6 @@
       ],
       x: 0.0,
       y: 15.9875,
-      dependencies: [
-        "475548505846658B",
-      ],
-      hide_dependency_lines: true,
     },
     {
       id: "475548EBCDA0CA1E",
@@ -506,9 +470,6 @@
       ],
       x: 1.5,
       y: 15.9875,
-      dependencies: [
-        "475548D59AA75088",
-      ],
       shape: "rsquare",
     },
     {
@@ -548,9 +509,6 @@
       ],
       x: 3.0,
       y: 15.9875,
-      dependencies: [
-        "475548EBCDA0CA1E",
-      ],
     },
     {
       id: "475548A2F6307A9E",
@@ -583,9 +541,6 @@
       ],
       x: 4.5,
       y: 15.9875,
-      dependencies: [
-        "4755484408C60CAF",
-      ],
       shape: "rsquare",
     },
     {
@@ -618,9 +573,6 @@
       ],
       x: 6.0,
       y: 15.9875,
-      dependencies: [
-        "475548A2F6307A9E",
-      ],
     },
   ],
 }

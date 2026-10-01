@@ -156,6 +156,10 @@ configurations {
 
 dependencies {
     implementation "com.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+    // 1.1.3: compat/FtbQuestsRepair talks to FTB Quests (only loaded when it's installed; never a dependency of the jar)
+    compileOnly("dev.ftb.mods:ftb-quests-neoforge:${ftb_quests_version}") { transitive = false }
+    compileOnly("dev.ftb.mods:ftb-library-neoforge:${ftb_library_version}") { transitive = false }
+    compileOnly("dev.ftb.mods:ftb-teams-neoforge:${ftb_teams_version}") { transitive = false }
     // Dev-only helpers: only loaded in the dev runs, never part of the guhs jar.
     // (left out of GameTest runs, where JourneyMap trips over the mock test players)
     if (!gradle.startParameter.taskNames.any { it.toLowerCase().contains("gametest") }) {
