@@ -1006,5 +1006,7 @@
   "gui.guhs.weerder.koepel": "Show the Area: %s",
   "gui.guhs.weerder.koepel.tooltip": "A see-through blue dome over the area where no wild guhs pop up. Only you can see it.",
   "gui.guhs.weerder.van_wie": "This is %s's Wild Guh Shoo-Sign",
-  "gui.guhs.weerder.geplaatst": "Sign's up! Wild guhs now know a chonky lives here already (%s blocks around the sign). Right-click to choose the area."
+  "gui.guhs.weerder.geplaatst": "Sign's up! Wild guhs now know a chonky lives here already (%s blocks around the sign). Right-click to choose the area.",
+  "gui.guhs.guh_oven.aan": "Guh power! The oven is baking.",
+  "gui.guhs.guh_oven.uit": "No guh power. Put the Guh Oven next to a running Guh Wheel or next to powered Guh Wire (and put something in it to bake)."
 }

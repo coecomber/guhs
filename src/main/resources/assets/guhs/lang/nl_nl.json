@@ -7091,6 +7091,7 @@
   "quest.guhs.timmerguh.dak_uitleg": "Tik tik tik... klaar! Hier zijn %s dakpluisjes. Klim de steiger op (de ladder bij de bouwkeet) en rechtsklik elk doorzichtig plekje op het dak met een dakpluisje. Vergeet de oortjes niet!",
   "quest.guhs.timmerguh.nieuw_dak": "Het vorige huisje is af... en er is meteen een guhgezinnetje ingetrokken, njeg! Dus zetten we er gewoon nog een dak op. Hier zijn %s dakpluisjes: klim de steiger op en rechtsklik elk doorzichtig plekje.",
   "quest.guhs.timmerguh.dak_nog": "Nog %s plekjes, dan zit het oortjesdak erop! Klim de steiger op en rechtsklik de doorzichtige plekjes met je dakpluisjes. Ik hou de ladder vast, beloofd.",
+  "quest.guhs.timmerguh.dak_laatste": "Nog maar %s plekjes? Die zitten zo lastig, die tik ik zelf even vast! Tik tik, pluf!",
   "quest.guhs.timmerguh.dak_af": "DE VLAG IN TOP! Het oortjesdak zit erop, njeg! Weet je wat? Dit kleine huisje is voor jou: ons eerste huisje. Zet het bij je thuis neer en laat een van je guhs erin wonen. Kom het me daarna vertellen!",
   "quest.guhs.timmerguh.hint.bewoner": "zet het kleine Guhhuisje neer bij je thuis, laat een van je guhs erin wonen en vertel het de Timmerguh",
   "quest.guhs.timmerguh.bewoner_nog": "Woont er al een guh in je huisje? Zet het neer, rechtsklik het en kies Nieuwe bewoner (of rechtsklik het met een opgepakte guh). Daarna kom je het me vertellen, njeg!",
@@ -8795,6 +8796,7 @@
   "chat.guhs.secret_note.whisper": "shhh. niet doorvertellen. Lees dit...",
   "gui.guhs.elftocht.vahoeg_titel": "VAHOEG!",
   "item.guhs.bieb_boek.door": "door %s",
+  "quest.guhs.reis.hoort_hier": "Deze Reisguh hoort bij dit gebouw, njeg! Hij blijft hier lekker zitten.",
   "gui.guhs.kleding.prijs.munt.smaragden": "%s smaragden",
   "gui.guhs.kleding.prijs.munt.bakmunten_bij_bakker_korstje": "%s bakmunten bij Bakker Korstje",
   "gui.guhs.kleding.prijs.hint.je_eerste_klusje_voor_boerin_hooibaal": "je eerste klusje voor Boerin Hooibaal",
@@ -8884,6 +8886,13 @@
   "gui.guhs.weerder.koepel.tooltip": "Een doorzichtige blauwe koepel over de area waar geen wilde guhs tevoorschijn komen. Alleen jij ziet hem.",
   "gui.guhs.weerder.van_wie": "Dit is de Wilde-guhweerder van %s",
   "gui.guhs.weerder.geplaatst": "Bordje staat! Wilde guhs weten nu dat hier al een vadsje woont (%s blokken om het bordje heen). Rechtsklik om de area te kiezen.",
+  "block.guhs.guh_oven": "Guhoven",
+  "item.guhs.guh_oven": "Guhoven",
+  "block.guhs.guh_oven.lore": "Geen kolen of houtskool nodig: hij bakt op guhkracht! Zet hem naast een draaiend Guhrad, of sluit hem aan met Guhdraad. Gewone redstone vindt hij niks.",
+  "item.guhs.guh_oven.lore": "Geen kolen of houtskool nodig: hij bakt op guhkracht! Zet hem naast een draaiend Guhrad, of sluit hem aan met Guhdraad. Gewone redstone vindt hij niks.",
+  "block.guhs.guh_oven.lore.lief": "Het guhtje rent in het rad, en de oven bakt de knabbels. Samen vadsig, njeg!",
+  "gui.guhs.guh_oven.aan": "Guhkracht! De oven bakt.",
+  "gui.guhs.guh_oven.uit": "Geen guhkracht. Zet de Guhoven naast een draaiend Guhrad of naast Guhdraad met stroom erop (en doe er iets in om te bakken).",
   "guhs.configuration.title": "Guhs-instellingen",
   "guhs.configuration.section.guhs.client.toml": "Clientinstellingen",
   "guhs.configuration.section.guhs.client.toml.title": "Guhs-clientinstellingen",
@@ -9086,7 +9095,5 @@
   "sign.guhs.guhwaii.niet_aanraken": "NIET AANRAKEN!",
   "sign.guhs.guhwaii.behalve_als_je": "(behalve als je",
   "sign.guhs.guhwaii.een_guh_bent": "een guh bent)",
-  "sign.guhs.giant_kaasknabbel.honger": "Ik had zn honger",
-  "quest.guhs.reis.hoort_hier": "Deze Reisguh hoort bij dit gebouw, njeg! Hij blijft hier lekker zitten.",
-  "quest.guhs.timmerguh.dak_laatste": "Nog maar %s plekjes? Die zitten zo lastig, die tik ik zelf even vast! Tik tik, pluf!"
+  "sign.guhs.giant_kaasknabbel.honger": "Ik had zn honger"
 }

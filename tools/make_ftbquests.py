@@ -27,7 +27,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 24   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen
+CHAPTER_VERSION = 25   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -428,6 +428,8 @@ MODULE_CHAPTER = {
     "verhaal": "guhs_verhalen", "timmerguh": "guhs_verhalen", "balto": "guhs_verhalen", "balto_slee": "guhs_verhalen",
     "mewtwo": "guhs_verhalen", "hemel": "guhs_verhalen", "guhwaii": "guhs_verhalen", "guhwaii_spellen": "guhs_verhalen",
     "vogels": "guhs_diertjes", "waterdiertjes": "guhs_diertjes", "landdiertjes": "guhs_diertjes",
+    # 1.2.5: the Guhoven (its quest sits next to the Guhrad, in the section "thuis")
+    "guhoven": "guhs_basis",
 }
 PREFIX_CHAPTER = [("maag", "guhs_maag"), ("heiligdom", "guhs_maag"), ("variant_", "guhs_basis"), ("emote", "guhs_basis"),
                   ("biome_", "guhs_guhmensie"), ("struct_", "guhs_guhmensie"), ("verstop", "guhs_minigames"), ("kermis", "guhs_minigames"),
@@ -448,7 +450,7 @@ SECTIONS = {
         sec("rijden", "Rijden & vliegen", "guh:ender", keys=["ride", "launch", "ender_tame", "ender_ride"]),
         sec("soorten", "Guhsoorten & de Guhdex", "guh:starry", keys=[f"variant_{v}" for v, _ in VARIANTS] + ["guhdex_full"]),
         sec("thuis", "Lekker eten & gezellig thuis", "item:guhs:guh_taart",
-            keys=["taart", "sweets", "fondue", "shake", "furniture", "vadszak", "lampgion", "wheel"]),
+            keys=["taart", "sweets", "fondue", "shake", "furniture", "vadszak", "lampgion", "wheel", "guh_oven"]),
         sec("emotes", "Emotes: kijk wat ik kan!", "guh:mint", module="emotes", upstream="tame"),
     ],
     "guhs_guhmensie": [

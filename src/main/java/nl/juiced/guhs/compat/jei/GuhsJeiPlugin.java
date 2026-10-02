@@ -47,6 +47,12 @@ public class GuhsJeiPlugin implements IModPlugin {
         registration.addRecipeTransferHandler(new BankTransfer(registration.getTransferHelper()), RecipeTypes.CRAFTING);
     }
 
+    /** 1.2.5: the Guhoven bakes the furnace's smelting recipes (on guh power): JEI lists it next to the furnace. */
+    @Override
+    public void registerRecipeCatalysts(mezz.jei.api.registration.IRecipeCatalystRegistration registration) {
+        registration.addCraftingStation(RecipeTypes.SMELTING, nl.juiced.guhs.feature.guhoven.GuhovenFeature.GUH_OVEN.get());
+    }
+
     static final class BankTransfer implements IRecipeTransferHandler<BankGuhMenu, RecipeHolder<CraftingRecipe>> {
         private final IRecipeTransferHandlerHelper helper;
 

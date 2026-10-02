@@ -943,7 +943,7 @@ def recipe_card(rid, en=None, nl=None):
     path = os.path.join("src", "main", "resources", "data", "guhs", "recipe", rid + ".json")
     r = json.load(open(path, encoding="utf-8"))
     TAGS = {"minecraft:wool": "pink_wool", "minecraft:planks": "oak_planks", "guhs:knus/pluiswol": "pluiswol", "guhs:knus/kaasmelk": "kaasmelk",
-            "minecraft:wooden_slabs": "oak_slab", "minecraft:wooden_fences": "oak_fence", "minecraft:wooden_doors": "oak_door"}
+            "minecraft:stone_crafting_materials": "cobblestone", "minecraft:wooden_slabs": "oak_slab", "minecraft:wooden_fences": "oak_fence", "minecraft:wooden_doors": "oak_door"}
 
     def name(ing):
         ing = ing[0] if isinstance(ing, list) else ing
@@ -4585,7 +4585,16 @@ def build():
                   "Roze redstonestof die <b>nooit zwakker wordt</b>. Hij verbindt zoals redstonestof (puntjes, lijnen, hoeken, trapjes op). "
                   "Als er ergens stroom op een verbonden draad staat, geeft de hele draad volle stroom &mdash; hoe lang hij ook is. "
                   "Donker oudroze als hij uit is, felroze met glinsteringen als hij aan is. Werkt met alles wat redstonestroom geeft "
-                  "behalve redstonestof (zet er een versterker tussen)."), wide=True)
+                  "behalve redstonestof (zet er een versterker tussen)."), wide=True) +           entry(img("guh_oven", "Guh oven"), "Guh Oven", "Guhoven",
+                p("<i>New in 1.2.5.</i> A pink furnace with a guh face that needs <b>no fuel</b>: it bakes on <b>guh power</b>. Put it "
+                  "next to a running Guh Wheel (any of its blocks) or next to powered Guh Wire and it smelts just like a furnace (the "
+                  "same recipes and speed, XP, hoppers, comparator). Ordinary redstone (levers, torches, a redstone block) does nothing. "
+                  "Its screen has a little guh wheel instead of the fuel slot: pink while it bakes.",
+                  "<i>Nieuw in 1.2.5.</i> Een roze oven met een guhgezichtje die <b>geen brandstof</b> nodig heeft: hij bakt op "
+                  "<b>guhkracht</b>. Zet hem naast een draaiend Guhrad (elk blok ervan) of naast Guhdraad met stroom erop en hij smelt "
+                  "net als een oven (dezelfde recepten en snelheid, XP, trechters, comparator). Gewone redstone (hendels, fakkels, een "
+                  "redstoneblok) doet niks. In zijn scherm zit een klein guhradje in plaats van het brandstofvakje: roze als hij bakt."),
+                wide=True) +           '<div class="recipes">' + recipe_card("guh_oven", "Guh Oven", "Guhoven") + '</div>'
     S.append(section("redstone", "Redstone", "Redstone", red))
 
     # --- guhmension -------------------------------------------------------------------------------------------------

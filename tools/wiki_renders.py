@@ -2419,6 +2419,12 @@ def main_v210(out, captured=None):
         save(render(model_quads("guhs:block/wilde_guhweerder"), 30, -25, 256).resize((64, 64), Image.LANCZOS), "icon_wilde_guhweerder")
     except Exception as e:  # noqa: BLE001
         print("no icon for wilde_guhweerder", e)
+    try:   # 1.2.5: the Guhoven (lit, its guh face to the front), and its recipe icon
+        oven = render(model_quads("guhs:block/guh_oven_on"), 30, -25, 320)
+        save(oven, "guh_oven")
+        save(oven.resize((64, 64), Image.LANCZOS), "icon_guh_oven")
+    except Exception as e:  # noqa: BLE001
+        print("no render for guh_oven", e)
     for n, ref in (("ladder", "block/ladder"), ("oak_door", "item/oak_door"), ("glass_pane", "block/glass"),
                    ("oak_slab", "minecraft:block/oak_slab"), ("oak_fence", "minecraft:block/oak_fence_inventory")):
         if os.path.exists(os.path.join(out, f"icon_{n}.png")):

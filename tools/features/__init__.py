@@ -31,7 +31,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.2.0: the texts of the NL/EN switch and of what the server used to resolve (lang only)
             'taal',
             # 1.2.0: the Wilde-guhweerder
-            'weerder']
+            'weerder',
+            # 1.2.5: the Guhoven (bakes on guh power)
+            'guhoven']
 
 
 def modules():

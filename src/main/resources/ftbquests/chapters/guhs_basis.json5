@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_basis",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 24,
+  guhs_chapter_version: 25,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_basis.png",
@@ -1173,9 +1173,43 @@
           count: 8,
         },
       ],
-      x: 11.5,
+      x: 20.5,
       y: 12.025,
       shape: "diamond",
+    },
+    {
+      id: "4755485299AA59F1",
+      icon: {
+        id: "guhs:guh_oven",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_oven",
+          },
+          id: "4755481F9B56E01C",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485CFD64A433",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548771614439D",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 19.0,
+      y: 12.025,
     },
     {
       id: "47554803591FB2A0",

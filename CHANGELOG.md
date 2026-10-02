@@ -8,6 +8,11 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 - **JEI's "+" works in the Bank Guh.** With JEI installed, the "+" on a crafting recipe fills the Bank Guh's crafting grid:
   items come from the Bank Guh first and from your inventory second (shift-click: as many as fit). Missing items are
   shown in red, like at a crafting table.
+- **New: the Guh Oven (Guhoven).** A pink furnace with a guh face that needs no fuel: it bakes on guh power. Put it next
+  to a running Guh Wheel (any of its blocks) or next to powered Guh Wire, and it smelts like a furnace (same recipes and
+  speed, XP, hoppers, comparator). Plain redstone does nothing. Its screen shows a little guh wheel instead of the fuel
+  slot. Recipe: 8 cobblestone (or blackstone / cobbled deepslate) around 1 Kaas Knabbel. New FTB quest next to the Guh
+  Wheel.
 
 ## 1.2.4 — Minecraft 26.1.2
 

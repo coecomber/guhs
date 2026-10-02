@@ -1,0 +1,47 @@
+# Guhoven (1.2.5) AutoCheck: a running Guhrad -> Guhdraad -> the Guhoven baking raw iron, and its screen. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/guhoven.txt
+# (commands: see autocheck.txt)
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode creative
+/tp @s 3000 140 3008
+wait 40
+
+section guhoven: wheel -> wire -> oven (baking) and an unpowered one next to it
+/setblock 2995 140 3000 guhs:guh_wheel[facing=east,running=true]
+/setblock 2996 140 3000 guhs:guh_wire
+/setblock 2997 140 3000 guhs:guh_wire
+/setblock 2998 140 3000 guhs:guh_wire
+/setblock 2999 140 3000 guhs:guh_oven[facing=south]
+/setblock 3001 140 3000 guhs:guh_oven[facing=south]
+/data merge block 2999 140 3000 {Items:[{Slot:0b,id:"minecraft:raw_iron",count:64}]}
+/data merge block 3001 140 3000 {Items:[{Slot:0b,id:"minecraft:raw_iron",count:64}]}
+wait 240
+/gamemode spectator
+camera 3001.5 141.6 3004.2 160 18
+waitrender 300
+shot guhoven_bakt
+/gamemode creative
+/tp @s 2999.5 140 3002.5 180 20
+wait 20
+gui keep
+use 2999 140 3000
+wait 30
+shot guhoven_scherm gui
+gui close
+gui keep
+use 3001 140 3000
+wait 30
+shot guhoven_scherm_uit gui
+gui close

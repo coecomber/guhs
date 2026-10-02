@@ -7091,6 +7091,7 @@
   "quest.guhs.timmerguh.dak_uitleg": "Tap tap tap... done! Here are %s roof fluffs. Climb up the scaffolding (the ladder by the site hut) and right-click each see-through spot on the roof with a roof fluff. Don't forget the ears!",
   "quest.guhs.timmerguh.nieuw_dak": "The last house is done... and a little guh family moved right in, nyeg! So we'll just put another roof on. Here are %s roof fluffs: climb up the scaffolding and right-click each see-through spot.",
   "quest.guhs.timmerguh.dak_nog": "%s more spots, then the ear roof is on! Climb up the scaffolding and right-click the see-through spots with your roof fluffs. I'll hold the ladder, promise.",
+  "quest.guhs.timmerguh.dak_laatste": "Only %s spots left? Those are so tricky to reach, I'll tap them in myself! Tap tap, poof!",
   "quest.guhs.timmerguh.dak_af": "TOPPING OUT! The ear roof is on, nyeg! You know what? This little house is for you: our very first house. Put it down at your home and let one of your guhs live in it. Then come and tell me!",
   "quest.guhs.timmerguh.hint.bewoner": "put the small Guh House down at your home, let one of your guhs live in it and tell the Carpenter Guh",
   "quest.guhs.timmerguh.bewoner_nog": "Is a guh living in your house yet? Put it down, right-click it and choose New Resident (or right-click it while carrying a guh). Then come and tell me, nyeg!",
@@ -8795,6 +8796,7 @@
   "chat.guhs.secret_note.whisper": "shhh. don't tell anyone. Read this...",
   "gui.guhs.elftocht.vahoeg_titel": "WAHOOG!",
   "item.guhs.bieb_boek.door": "by %s",
+  "quest.guhs.reis.hoort_hier": "This Travel Guh belongs to this building, nyeg! It's staying right here.",
   "gui.guhs.kleding.prijs.munt.smaragden": "%s emeralds",
   "gui.guhs.kleding.prijs.munt.bakmunten_bij_bakker_korstje": "%s Bake Coins from Baker Crusty",
   "gui.guhs.kleding.prijs.hint.je_eerste_klusje_voor_boerin_hooibaal": "your first chore for Farmer Haybale",
@@ -8884,6 +8886,13 @@
   "gui.guhs.weerder.koepel.tooltip": "A see-through blue dome over the area where no wild guhs pop up. Only you can see it.",
   "gui.guhs.weerder.van_wie": "This is %s's Wild Guh Shoo-Sign",
   "gui.guhs.weerder.geplaatst": "Sign's up! Wild guhs now know a chonky lives here already (%s blocks around the sign). Right-click to choose the area.",
+  "block.guhs.guh_oven": "Guh Oven",
+  "item.guhs.guh_oven": "Guh Oven",
+  "block.guhs.guh_oven.lore": "No coal or charcoal needed: it bakes on guh power! Put it next to a running Guh Wheel, or hook it up with Guh Wire. It doesn't care for plain redstone.",
+  "item.guhs.guh_oven.lore": "No coal or charcoal needed: it bakes on guh power! Put it next to a running Guh Wheel, or hook it up with Guh Wire. It doesn't care for plain redstone.",
+  "block.guhs.guh_oven.lore.lief": "The little guh runs in the wheel, and the oven bakes the nibbles. Chonky teamwork, nyeg!",
+  "gui.guhs.guh_oven.aan": "Guh power! The oven is baking.",
+  "gui.guhs.guh_oven.uit": "No guh power. Put the Guh Oven next to a running Guh Wheel or next to powered Guh Wire (and put something in it to bake).",
   "guhs.configuration.title": "Guhs Settings",
   "guhs.configuration.section.guhs.client.toml": "Client Settings",
   "guhs.configuration.section.guhs.client.toml.title": "Guhs Client Settings",
@@ -9086,7 +9095,5 @@
   "sign.guhs.guhwaii.niet_aanraken": "DO NOT TOUCH!",
   "sign.guhs.guhwaii.behalve_als_je": "(unless you",
   "sign.guhs.guhwaii.een_guh_bent": "are a guh)",
-  "sign.guhs.giant_kaasknabbel.honger": "I was so hungry",
-  "quest.guhs.reis.hoort_hier": "This Travel Guh belongs to this building, nyeg! It's staying right here.",
-  "quest.guhs.timmerguh.dak_laatste": "Only %s spots left? Those are so tricky to reach, I'll tap them in myself! Tap tap, poof!"
+  "sign.guhs.giant_kaasknabbel.honger": "I was so hungry"
 }
