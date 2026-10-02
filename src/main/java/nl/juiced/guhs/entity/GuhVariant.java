@@ -22,8 +22,8 @@ public enum GuhVariant {
     GOLDEN(2),
     /** Its fur slowly runs through all the colours. */
     RAINBOW(3),
-    /** Dark purple with twinkling stars that glow in the dark. */
-    STARRY(3),
+    /** Dark purple with twinkling stars that glow in the dark. 1.2.5: only from the Sterrenregen event (Sterrenregen), never rolled here. */
+    STARRY(0),
     /** See-through; only comes out at night (and vanishes at sunrise, unless tamed). */
     GHOST(4),
     /** An extra long body with six legs. */

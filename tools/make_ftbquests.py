@@ -27,7 +27,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 23   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder
+CHAPTER_VERSION = 24   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -106,7 +106,7 @@ VARIANTS = [("normal", "Gewone guh"), ("mint", "Muntguh"), ("choco", "Chocoguh")
             ("brococolief", "Brococolief"), ("reisguh", "Reisguh"), ("poortwachter", "Poortwachter")]
 for i, (v, name) in enumerate(VARIANTS):
     q(f"variant_{v}", name, f"Kom dichtbij een &d{name}&r (binnen 3 blokjes) zodat hij in je Guhdex komt." +
-      (" Heel zeldzaam!" if v in ("golden", "rainbow", "starry") else "") + (" Alleen 's nachts!" if v == "ghost" else "") +
+      (" Heel zeldzaam!" if v in ("golden", "rainbow") else "") + (" Komt alleen met een sterrenregen!" if v == "starry" else "") + (" Alleen 's nachts!" if v == "ghost" else "") +
       (" Een geheimzinnige guh met een briefje..." if v == "brococolief" else "") +
       (" Vliegt rond op de Guhpieken!" if v == "ender" else "") +
       (" Zit op zijn troon in het legendarische guhkasteel." if v == "koning" else ""),
