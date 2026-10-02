@@ -9095,5 +9095,6 @@
   "sign.guhs.guhwaii.niet_aanraken": "DO NOT TOUCH!",
   "sign.guhs.guhwaii.behalve_als_je": "(unless you",
   "sign.guhs.guhwaii.een_guh_bent": "are a guh)",
-  "sign.guhs.giant_kaasknabbel.honger": "I was so hungry"
+  "sign.guhs.giant_kaasknabbel.honger": "I was so hungry",
+  "gui.guhs.huisje.meldingen.tooltip": "Chat messages when a resident finds something rare (marshmallow nibble, guh crystal...): on or off. The diary always writes it down."
 }

@@ -123,7 +123,7 @@ public class HuisjeScreen extends Screen {
     protected void init() {
         left = (width - W) / 2;
         top = (height - H) / 2;
-        naam = new EditBox(font, left + 10, top + 22, 236, 16, Component.translatable("gui.guhs.huisje.naam"));
+        naam = new EditBox(font, left + 10, top + 22, 214, 16, Component.translatable("gui.guhs.huisje.naam"));
         naam.setMaxLength(Huisjes.MAX_NAAM);
         naam.setValue(nl.juiced.guhs.taal.Tekst.get(data, "Naam").getString());
         boolean mag = mag();
@@ -134,12 +134,22 @@ public class HuisjeScreen extends Screen {
         }
         addRenderableWidget(naam);
         Button hernoem = Button.builder(Component.translatable("gui.guhs.huisje.hernoem"),
-                b -> hernoem()).bounds(left + 250, top + 21, 62, 18).build();
+                b -> hernoem()).bounds(left + 228, top + 21, 62, 18).build();
         hernoem.active = mag;
         if (!mag) {
             hernoem.setTooltip(alleenKijken());
         }
         addRenderableWidget(hernoem);
+        // 1.2.5: chat messages about rare finds on/off
+        boolean meld = data.getBooleanOr("Meldingen", true);
+        Button melding = Button.builder(meldLabel(meld), b -> {
+            data.putBoolean("Meldingen", !data.getBooleanOr("Meldingen", true));
+            stuur(HuisjePayloads.Actie.MELDINGEN, "", "", data.getBooleanOr("Meldingen", true), 0);
+            b.setMessage(meldLabel(data.getBooleanOr("Meldingen", true)));
+        }).bounds(left + 294, top + 21, 18, 18).tooltip(mag ? net.minecraft.client.gui.components.Tooltip.create(
+                Component.translatable("gui.guhs.huisje.meldingen.tooltip")) : alleenKijken()).build();
+        melding.active = mag;
+        addRenderableWidget(melding);
         ListTag lijst = lijst("Bewoners");
         if (gekozen == null || bewoner(gekozen) == null) {
             gekozen = lijst.isEmpty() ? null : lijst.getCompoundOrEmpty(0).getStringOr("Id", "");
@@ -178,6 +188,11 @@ public class HuisjeScreen extends Screen {
         }).bounds(left + 176, by, 96, 18).tooltip(net.minecraft.client.gui.components.Tooltip.create(
                 Component.translatable("gui.guhs.huisje.koepel.tooltip"))).build());
         addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose()).bounds(left + 276, by, 36, 18).build());
+    }
+
+    private static Component meldLabel(boolean aan) {
+        return aan ? Component.literal("!").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
+                : Component.literal("!").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.STRIKETHROUGH);
     }
 
     private Component koepelLabel() {

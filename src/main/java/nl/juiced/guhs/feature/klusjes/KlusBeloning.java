@@ -90,6 +90,8 @@ public final class KlusBeloning {
         Dagboek.wistJeDat(mob, "gui.guhs.wistjedat.klusjes.zeldzaam", vondst.getHoverName().copy(), h.naamTekst());
         if (owner != null) {
             GidsFeature.grant(owner, "lieve_vadsjes/klusjes_zeldzaam");
+        }
+        if (owner != null && h.meldingen()) {   // 1.2.5: switchable in the huisje screen
             owner.sendSystemMessage(Component.translatable("gui.guhs.klusjes.zeldzaam", mob.getName(), vondst.getHoverName(), h.naamTekst())
                     .withStyle(ChatFormatting.GOLD));
         }

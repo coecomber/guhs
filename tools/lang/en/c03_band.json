@@ -974,5 +974,6 @@
   "gui.guhs.huisje.standaardnaam.22": "Cozy Cheese Room",
   "gui.guhs.huisje.standaardnaam.23": "Guh Sweet Guh",
   "gui.guhs.band.aai": "You pet %s! ♥",
-  "gui.guhs.band.aai_tip": "(Hold right-click for the guh menu)"
+  "gui.guhs.band.aai_tip": "(Hold right-click for the guh menu)",
+  "gui.guhs.huisje.meldingen.tooltip": "Chat messages when a resident finds something rare (marshmallow nibble, guh crystal...): on or off. The diary always writes it down."
 }

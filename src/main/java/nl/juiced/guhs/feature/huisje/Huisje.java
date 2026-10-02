@@ -39,6 +39,8 @@ public final class Huisje {
     /** 3.0: the owner's name (stored when placed, kept up to date at login): "Dit is het huisje van X". */
     String eigenaarNaam = "";
     String naam;
+    /** 1.2.5: chat messages when a resident finds something rare (the owner can switch them off in the screen). */
+    boolean meldingen = true;
     final List<UUID> bewoners = new ArrayList<>();
     /** Per resident: "guh" or the maatje kind; and its name (for the screen when it isn't loaded). */
     final Map<UUID, String> soorten = new HashMap<>();
@@ -88,6 +90,14 @@ public final class Huisje {
     }
 
     /** The name as the owner typed it, or the Dutch default name (the id for "is this name taken"). */
+    public boolean meldingen() {
+        return meldingen;
+    }
+
+    public void zetMeldingen(boolean aan) {
+        this.meldingen = aan;
+    }
+
     public String naam() {
         return naam;
     }
@@ -237,6 +247,7 @@ public final class Huisje {
         t.store("Eigenaar", UUIDUtil.CODEC, eigenaar);
         t.putString("EigenaarNaam", eigenaarNaam);
         t.putString("Naam", naam);
+        t.putBoolean("Meldingen", meldingen);
         ListTag list = new ListTag();
         for (UUID b : bewoners) {
             CompoundTag c = new CompoundTag();
@@ -263,6 +274,7 @@ public final class Huisje {
                 facing == null || facing.getAxis().isVertical() ? Direction.NORTH : facing, HuisjeMaat.byId(t.getStringOr("Maat", "")),
                 t.read("Eigenaar", UUIDUtil.CODEC).orElseThrow(), t.getStringOr("Naam", ""));
         h.eigenaarNaam = t.getStringOr("EigenaarNaam", "");
+        h.meldingen = t.getBooleanOr("Meldingen", true);
         ListTag list = t.getListOrEmpty("Bewoners");
         for (int i = 0; i < list.size(); i++) {
             CompoundTag c = list.getCompoundOrEmpty(i);

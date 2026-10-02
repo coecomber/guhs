@@ -15,6 +15,9 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
   Wheel.
 - **The Wild Guh Shoo-Sign also keeps Brococoliefs out.** A Brococolief with a secret note no longer walks up to a player
   inside the area, and one that wanders in poofs away.
+- **Rare-find messages can be switched off per Guh House.** The new "!" button next to "Rename" in a Guh House's screen
+  turns the chat messages off (and on) when its residents find something rare (marshmallow nibbles, guh crystals...).
+  The diary still writes it down.
 
 ## 1.2.4 — Minecraft 26.1.2
 

@@ -38,7 +38,7 @@ public final class HuisjePayloads {
     public static volatile Consumer<Open> opener = p -> {
     };
 
-    public enum Actie { NAAM, TREK_IN, UIT, KLUS }
+    public enum Actie { NAAM, TREK_IN, UIT, KLUS, MELDINGEN }
 
     public record Open(CompoundTag data) implements CustomPacketPayload {
         public static final Type<Open> TYPE = new Type<>(Guhs.id("huisje_open"));
@@ -97,6 +97,7 @@ public final class HuisjePayloads {
         t.store("Eigenaar", UUIDUtil.CODEC, h.eigenaar());
         t.putString("EigenaarNaam", h.eigenaarNaam());
         t.putBoolean("MagBewerken", Huisjes.magBewerken(player, h));
+        t.putBoolean("Meldingen", h.meldingen());
         BandData band = BandData.get(player.level().getServer());
         ListTag bewoners = new ListTag();
         for (UUID id : h.bewoners()) {
@@ -203,6 +204,10 @@ public final class HuisjePayloads {
                 } catch (IllegalArgumentException ignored) {
                     // (not a band id)
                 }
+            }
+            case MELDINGEN -> {
+                h.zetMeldingen(p.aan());
+                Huisjes.dirty();
             }
             case KLUS -> {
                 try {

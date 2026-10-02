@@ -107,6 +107,22 @@ public class HuisjeGameTests {
         return HuisjeBlock.bouw(helper.getLevel(), helper.absolutePos(at), Direction.SOUTH, maat, owner.getUUID());
     }
 
+    /** 1.2.5: the owner switches the rare-find chat messages off in the screen; it's saved with the huisje. */
+    @GuhTest(template = TUIN, batch = BATCH + "_meldingen")
+    public static void huisjeMeldingenUit(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(1, 1, 1));
+        Huisje h = bouw(helper, new BlockPos(5, 1, 5), HuisjeMaat.KLEIN, p);
+        helper.assertTrue(h.meldingen(), "on by default");
+        HuisjePayloads.doe(p, new HuisjePayloads.Doe(h.pos(), HuisjePayloads.Actie.MELDINGEN.ordinal(), "", "", false, -1));
+        helper.assertTrue(!h.meldingen(), "switched off");
+        Huisje kopie = Huisje.load(h.save());
+        helper.assertTrue(kopie != null && !kopie.meldingen(), "saved off");
+        HuisjePayloads.doe(p, new HuisjePayloads.Doe(h.pos(), HuisjePayloads.Actie.MELDINGEN.ordinal(), "", "", true, -1));
+        helper.assertTrue(h.meldingen(), "on again");
+        weg(helper, p);
+        helper.succeed();
+    }
+
     // =====================================================================================================================
 
     @GuhTest(template = TUIN, batch = BATCH)
