@@ -36,13 +36,24 @@ public final class Feestbuffet {
     /** Tables this close to the Burgemeester (or the event's middle) are laid. */
     public static final int RADIUS = 28;
 
+    /**
+     * Game tests: the tests' own areas. A scan from a spot inside one only counts the tables in it (the radius reaches into
+     * the neighbouring tests, and structures of earlier batches stay in the world).
+     */
+    public static final List<net.minecraft.world.phys.AABB> TEST_GRENZEN = new java.util.concurrent.CopyOnWriteArrayList<>();
+
     private Feestbuffet() {
     }
 
     /** The feestbuffettafels around a spot (a box of radius x 8 x radius). */
     public static List<BlockPos> tafels(ServerLevel level, BlockPos centre, int radius) {
         List<BlockPos> out = new ArrayList<>();
+        net.minecraft.world.phys.AABB grens = TEST_GRENZEN.stream().filter(b -> b.contains(net.minecraft.world.phys.Vec3.atCenterOf(centre)))
+                .findFirst().orElse(null);
         for (BlockPos p : BlockPos.betweenClosed(centre.offset(-radius, -4, -radius), centre.offset(radius, 4, radius))) {
+            if (grens != null && !grens.contains(net.minecraft.world.phys.Vec3.atCenterOf(p))) {
+                continue;
+            }
             if (level.isLoaded(p) && level.getBlockState(p).is(KnuffeldalFeature.FEESTBUFFETTAFEL.get())) {
                 out.add(p.immutable());
             }

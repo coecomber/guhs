@@ -91,6 +91,7 @@ public class KlusjesGameTests {
 
     static void weg(GameTestHelper helper, Huisje h, ServerPlayer... players) {
         HuisjeGoal.TEST_DAGDEEL.remove(h.pos());
+        KlusGebied.TEST_GRENS.remove(h.pos());
         for (ServerPlayer p : players) {
             helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
         }
@@ -99,6 +100,7 @@ public class KlusjesGameTests {
     static Huisje huisje(GameTestHelper helper, ServerPlayer owner) {
         Huisje h = HuisjeBlock.bouw(helper.getLevel(), helper.absolutePos(HUISJE), Direction.SOUTH, HuisjeMaat.KLEIN, owner.getUUID());
         HuisjeGoal.TEST_DAGDEEL.put(h.pos(), Dagdeel.DAG);
+        KlusGebied.TEST_GRENS.put(h.pos(), helper.getBounds());   // (only chores inside this test, not in the neighbours')
         return h;
     }
 
@@ -193,6 +195,9 @@ public class KlusjesGameTests {
         GuhEntity guh = bewoner(helper, h, p, new BlockPos(14, 2, 15), "opgraven");
         UUID id = Band.id(guh);
         int hartjes = Band.hartjes(guh);
+        var grens = helper.getBounds();
+        helper.assertTrue(KlusGebied.van(helper.getLevel(), h, KlusGebied.Soort.GRAAF).stream()
+                .allMatch(q -> grens.contains(q.getX() + 0.5, q.getY() + 0.5, q.getZ() + 0.5)), "only dig spots in this test's own garden");
         helper.succeedWhen(() -> {
             helper.assertTrue(!kist.isEmpty(), "something dug up in the chest" + staat(helper, guh));
             helper.assertTrue(Dagboek.stat(p.level().getServer(), p.getUUID(), id, DagboekStat.KLUSJES) >= 1, "counted in the dagboek");

@@ -70,6 +70,17 @@ public final class KlusGebied {
     private static final Map<String, Scan> SCANS = new ConcurrentHashMap<>();
     /** Claimed targets: "dim|pos" -> game time the claim ends. */
     private static final Map<String, Long> CLAIMS = new ConcurrentHashMap<>();
+    /**
+     * Game tests: huisje pos -> the test's own area. The home base reaches past a test's floor into the neighbouring tests
+     * (structures of earlier batches stay in the world), so a resident could walk off to dig in someone else's test.
+     */
+    public static final Map<BlockPos, net.minecraft.world.phys.AABB> TEST_GRENS = new ConcurrentHashMap<>();
+
+    /** Inside the home base's game test (always true outside game tests). */
+    static boolean inTest(Huisje h, net.minecraft.world.phys.Vec3 p) {
+        net.minecraft.world.phys.AABB grens = TEST_GRENS.isEmpty() ? null : TEST_GRENS.get(h.pos());
+        return grens == null || grens.contains(p);
+    }
 
     private KlusGebied() {
     }
@@ -188,6 +199,7 @@ public final class KlusGebied {
         Map<Soort, List<BlockPos>> uit = new EnumMap<>(Soort.class);
         AABB box = h.gebied();
         List<BlockPos> huisjeBlokken = h.blokken();
+        net.minecraft.world.phys.AABB grens = TEST_GRENS.isEmpty() ? null : TEST_GRENS.get(h.pos());
         BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
         int x0 = (int) Math.floor(box.minX), x1 = (int) Math.ceil(box.maxX), z0 = (int) Math.floor(box.minZ), z1 = (int) Math.ceil(box.maxZ);
         int y0 = Math.max(level.getMinY(), (int) Math.floor(box.minY)), y1 = Math.min(level.getMaxY() + 1 - 3, (int) Math.ceil(box.maxY));
@@ -199,7 +211,7 @@ public final class KlusGebied {
                 }
                 for (int y = y0; y <= y1; y++) {
                     p.set(x, y, z);
-                    if (!h.inGebied(p)) {
+                    if (!h.inGebied(p) || grens != null && !grens.contains(x + 0.5, y + 0.5, z + 0.5)) {
                         continue;
                     }
                     BlockState s = level.getBlockState(p);

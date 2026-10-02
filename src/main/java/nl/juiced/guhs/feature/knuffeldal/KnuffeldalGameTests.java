@@ -167,6 +167,8 @@ public class KnuffeldalGameTests {
     @GuhTest(template = PLEIN, timeoutTicks = 200, batch = "knuffeldal_feest")
     public static void knuffeldalGroteKnusfeestEnSeizoensfeest(GameTestHelper helper) {
         ServerPlayer p = player(helper, new BlockPos(7, 2, 6));
+        var grens = helper.getBounds();
+        Feestbuffet.TEST_GRENZEN.add(grens);   // (only this test's two tables, not the neighbours')
         try {
             Knusfeest.vergeet(p);
             GuhNpcEntity burgemeester = npc(helper, new BlockPos(7, 2, 8), GuhNpcEntity.Kind.BURGEMEESTERGUH);
@@ -218,6 +220,7 @@ public class KnuffeldalGameTests {
             role.talk(burgemeester, p);
             helper.assertTrue(!Knusfeest.rondeBezig(p), "once per season");
         } finally {
+            Feestbuffet.TEST_GRENZEN.remove(grens);
             Knusfeest.vergeet(p);
             GuhQuests.saved(p).remove(Feestbuffet.TITEL);
             leave(helper, p);
@@ -233,7 +236,10 @@ public class KnuffeldalGameTests {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(13, 2, 13));
         guh.setPersistenceRequired();
         guh.tame(p);
+        var grens = helper.getBounds();
+        Feestbuffet.TEST_GRENZEN.add(grens);   // (only this test's tables, not the neighbours')
         KnusfeestEvenement feest = KnusfeestEvenement.maak(helper.getLevel(), p);
+        Feestbuffet.TEST_GRENZEN.remove(grens);
         feest.autoJoin = false;
         Evenementen.begin(feest, p);
         helper.succeedWhen(() -> {

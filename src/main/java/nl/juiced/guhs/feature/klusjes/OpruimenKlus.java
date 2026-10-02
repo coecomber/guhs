@@ -69,7 +69,7 @@ public class OpruimenKlus extends BasisKlus {
     static ItemEntity vind(ServerLevel level, Huisje huisje, Vec3 bij, @Nullable Vec3 binnen6) {
         long nu = level.getGameTime();
         List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, huisje.gebied(), i -> i.isAlive() && !i.getItem().isEmpty()
-                && i.getAge() >= RUST && !i.hasPickUpDelay() && huisje.inGebied(i.blockPosition())
+                && i.getAge() >= RUST && !i.hasPickUpDelay() && huisje.inGebied(i.blockPosition()) && KlusGebied.inTest(huisje, i.position())
                 && (binnen6 == null || i.position().distanceToSqr(binnen6) <= 36)
                 && !(GECLAIMD.containsKey(i) && GECLAIMD.get(i) > nu) && Voorraad.past(level, huisje, i.getItem()));
         return items.stream().min(Comparator.comparingDouble(i -> i.distanceToSqr(bij))).orElse(null);
