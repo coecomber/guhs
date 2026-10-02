@@ -293,9 +293,9 @@ w(f"{D}/worldgen/noise_settings/guhmension.json", {
     "spawn_target": [],
     # everything below the surface is pink wool (default_block); per biome the top layers differ
     "surface_rule": seq(
-        # the very bottom (y=0) is netherrack
+        # the very bottom (y=0) is bedrock
         cond({"type": "minecraft:vertical_gradient", "random_name": "guhs:netherrack_floor",
-              "true_at_and_below": {"absolute": 0}, "false_at_and_above": {"absolute": 1}}, block("minecraft:netherrack")),
+              "true_at_and_below": {"absolute": 0}, "false_at_and_above": {"absolute": 1}}, block("minecraft:bedrock")),
         # Mika's biome: darker pink (magenta wool) with a few pink spots, 4 blocks deep
         cond(in_biome("mikas_biome"), seq(
             cond(surface(0), seq(cond(patches(0.5), block("minecraft:pink_wool")), block("minecraft:magenta_wool"))),

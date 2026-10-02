@@ -4628,9 +4628,9 @@ def build():
                    "hoeken hoeven niet). Het gaat <b>vanzelf</b> aan zodra het frame dicht is. Sta er 1,5 seconde in. "
                    "Is er aan de andere kant nog geen portaal, dan wordt er een gebouwd op het oppervlak, op een roze wolplatformpje."), wide=True) + \
         f'<h3 style="margin-top:12px">{t("Biomes", "Biomen")}</h3><div class="tscroll"><table><tr><th>{t("Biome", "Bioom")}</th><th>{t("Terrain", "Terrein")}</th><th>{t("What it looks like", "Hoe het eruitziet")}</th></tr>{brows}</table></div>' + \
-        p("The ground: <b>netherrack</b> at y0, then always solid (pink wool, ores, caves) up to y30. The surface starts from y30 "
+        p("The ground: <b>bedrock</b> at y0, then always solid (pink wool, ores, caves) up to y30. The surface starts from y30 "
           "and its shape depends on the biome: almost flat, rolling hills, or very steep mountains and cliffs.",
-          "De grond: <b>netherrack</b> op y0, daarna altijd vol (roze wol, ertsen, grotten) tot y30. Vanaf y30 begint het oppervlak "
+          "De grond: <b>bedrock</b> op y0, daarna altijd vol (roze wol, ertsen, grotten) tot y30. Vanaf y30 begint het oppervlak "
           "en de vorm hangt af van het bioom: bijna vlak, glooiende heuvels of heel steile bergen en kliffen.") + \
         entry(img("kaas_saus", "Kaas saus"), "Kaas saus", "Kaassaus",
               p("Thick, bubbly cheese sauce (like lava, but it doesn't burn) that flows from the spouts of cheese fountains and through cave pantries. It spreads as far as water but three times "

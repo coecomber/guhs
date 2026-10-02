@@ -309,6 +309,11 @@ public final class Reisguh {
     // --- moving Reisguhs: pick one up like a tamed guh, put it down somewhere else -------------------------------------
 
     public static void pickUp(GuhNpcEntity npc, ServerPlayer player) {
+        // 1.2.1: a Reisguh that came with a building stays there (it can't be put down in a building again either)
+        if (player.level().structureManager().getStructureWithPieceAt(npc.blockPosition(), s -> true).isValid()) {
+            player.sendOverlayMessage(Component.translatable("quest.guhs.reis.hoort_hier").withStyle(ChatFormatting.LIGHT_PURPLE));
+            return;
+        }
         Data data = Data.get(player.level().getServer());
         data.points.remove(npc.getUUID());                          // (back in the list where it's put down again)
         data.setDirty();

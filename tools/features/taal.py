@@ -66,6 +66,7 @@ OVERIG = {
     "chat.guhs.secret_note.whisper": "shhh. niet doorvertellen. Lees dit...",
     "gui.guhs.elftocht.vahoeg_titel": "VAHOEG!",
     "item.guhs.bieb_boek.door": "door %s",
+    "quest.guhs.reis.hoort_hier": "Deze Reisguh hoort bij dit gebouw, njeg! Hij blijft hier lekker zitten.",   # 1.2.1
 }
 
 # where a clothing piece comes from (KledingBronnen.prijs: the amount is the argument)

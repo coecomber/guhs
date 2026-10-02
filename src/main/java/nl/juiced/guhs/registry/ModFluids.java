@@ -32,7 +32,13 @@ public final class ModFluids {
                     .canExtinguish(true)
                     .supportsBoating(true)
                     .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
-                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)));
+                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)) {
+                @Override
+                public boolean move(net.minecraft.world.level.material.FluidState state, net.minecraft.world.entity.LivingEntity entity,
+                                    net.minecraft.world.phys.Vec3 input, double gravity) {
+                    return thickMove(this, entity, input, gravity);
+                }
+            });
 
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> KAAS_SAUS = FLUIDS.register("kaas_saus",
             () -> new BaseFlowingFluid.Source(properties()));
@@ -46,7 +52,13 @@ public final class ModFluids {
                     .density(1100).viscosity(1400).temperature(310).motionScale(0.012)
                     .canSwim(true).canDrown(true).canExtinguish(true).supportsBoating(true).lightLevel(4)
                     .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
-                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)));
+                    .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)) {
+                @Override
+                public boolean move(net.minecraft.world.level.material.FluidState state, net.minecraft.world.entity.LivingEntity entity,
+                                    net.minecraft.world.phys.Vec3 input, double gravity) {
+                    return thickMove(this, entity, input, gravity);
+                }
+            });
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> MAAGZUUR = FLUIDS.register("maagzuur",
             () -> new BaseFlowingFluid.Source(maagzuurProperties()));
     public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> FLOWING_MAAGZUUR = FLUIDS.register("flowing_maagzuur",
@@ -66,6 +78,32 @@ public final class ModFluids {
                 .slopeFindDistance(3)       // water 4, lava 2
                 .levelDecreasePerBlock(1)   // like water: flows 7 blocks
                 .explosionResistance(100f);
+    }
+
+    /**
+     * 1.2.1: moving through our sauces. On 26.1 NeoForge a modded fluid whose FluidType doesn't move the entity itself gets
+     * no movement at all (LivingEntity.travelInFluid only handles water and lava), so you were stuck in kaas saus. This is
+     * lava's thick, slow movement (you can still swim up and climb out).
+     */
+    public static boolean thickMove(FluidType type, net.minecraft.world.entity.LivingEntity entity, net.minecraft.world.phys.Vec3 input, double gravity) {
+        double y0 = entity.getY();
+        boolean falling = entity.getDeltaMovement().y <= 0.0;
+        entity.moveRelative(0.02F, input);
+        entity.move(net.minecraft.world.entity.MoverType.SELF, entity.getDeltaMovement());
+        if (entity.getFluidTypeHeight(type) <= entity.getFluidJumpThreshold()) {
+            entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.8F, 0.5));
+            entity.setDeltaMovement(entity.getFluidFallingAdjustedMovement(gravity, falling, entity.getDeltaMovement()));
+        } else {
+            entity.setDeltaMovement(entity.getDeltaMovement().scale(0.5));
+        }
+        if (gravity != 0.0) {
+            entity.setDeltaMovement(entity.getDeltaMovement().add(0.0, -gravity / 4.0, 0.0));
+        }
+        net.minecraft.world.phys.Vec3 v = entity.getDeltaMovement();
+        if (entity.horizontalCollision && entity.isFree(v.x, v.y + 0.6F - entity.getY() + y0, v.z)) {
+            entity.setDeltaMovement(v.x, 0.3F, v.z);
+        }
+        return true;
     }
 
     private ModFluids() {

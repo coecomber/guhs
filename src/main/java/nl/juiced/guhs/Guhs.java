@@ -71,6 +71,8 @@ public class Guhs {
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.world.BouwCheck::onServerTick);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.world.BouwRuimte::onLevelLoad);
         NeoForge.EVENT_BUS.addListener(KeepOnDeathHandler::onDeath);
+        NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.entity.TamGuhBescherming::onAttack);   // 1.2.1: others' tamed guhs
+        NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.entity.TamGuhBescherming::onDamage);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.PicknickMuziek::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(KeepOnDeathHandler::onRespawnCopy);
         // (26.1: VillagerTradesEvent is gone; guh villager trades come from mixin/VillagerMixin, owner A)

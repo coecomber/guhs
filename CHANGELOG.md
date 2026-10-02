@@ -3,6 +3,19 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.1 — Minecraft 26.1.2
+
+Small fixes. Same requirements as 1.2.0.
+
+- **Moving in cheese sauce.** You couldn't move at all in kaas saus (cheese sauce) or stomach acid. Now you wade and
+  swim through it, slowly, like through lava.
+- **Bedrock floor in the Guhmension.** The bottom layer is bedrock instead of netherrack (for land you haven't visited
+  yet; existing chunks keep their floor).
+- **Tamed guhs are safe.** You can't hurt someone else's tamed guh any more (also not with arrows), and a tamed guh never
+  hurts a player.
+- **Travel Guhs in buildings stay put.** A Travel Guh that came with a building can't be picked up any more (you couldn't
+  put it down in a building again either).
+
 ## 1.2.0 — Minecraft 26.1.2
 
 Guhs speaks English! Until now every text in the mod was Dutch, also with Minecraft set to English. Now the whole mod
