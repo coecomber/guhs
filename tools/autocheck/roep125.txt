@@ -1,0 +1,22 @@
+# 1.2.5 "Roep naar mij" (dev only): the Guhdex Mijn guhs page with the call button, English client (run/options.txt lang:en_us).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/roep125.txt -Dguhs.autocheck.fresh=true
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+wait 40
+
+section Mijn guhs: the call button
+gui mijnguhs 1
+wait 10
+widgets
+shot roep_pagina gui
+mouse 226 270
+wait 5
+shot roep_tip gui
+gui mijnguhs 3
+wait 10
+mouse 226 270
+wait 5
+shot roep_grijs_tip gui
+gui close

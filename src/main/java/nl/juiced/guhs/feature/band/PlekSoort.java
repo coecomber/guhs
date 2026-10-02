@@ -40,7 +40,9 @@ public enum PlekSoort {
     /** Unknown (never seen yet, or gone). */
     ONBEKEND,
     /** 3.0: it died: "In de wolkjes... njeg" (the Knuffelhart can bring it back, see Wolkjes). */
-    IN_DE_WOLKJES;
+    IN_DE_WOLKJES,
+    /** 1.2.5: just called over with "Roep naar mij" in the Guhdex (detail: the owner's name). */
+    BIJ_JOU;
 
     public String id() {
         return name().toLowerCase(Locale.ROOT);

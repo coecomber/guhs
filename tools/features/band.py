@@ -199,6 +199,7 @@ PLEKKEN = {  # %1$s detail, %2$s dimension, %3$s %4$s %5$s x y z
     "schouder": "Zit op de schouder van %1$s (%2$s, %3$s %4$s %5$s)",
     "in_guh": "Zit in guh %1$s voor een poetsbeurt (%2$s, %3$s %4$s %5$s)",
     "onbekend": "Geen idee, njeg... Kom maar eens langs, dan onthoudt je Guhdex het!",
+    "bij_jou": "Gezellig bij jou! (%2$s, %3$s %4$s %5$s)",  # 1.2.5: just called over ("Roep naar mij")
 }
 DIMENSIES = {
     "minecraft.overworld": "Bovenwereld", "minecraft.the_nether": "de Nether", "minecraft.the_end": "het End",
@@ -290,6 +291,16 @@ TEXTS = {
     "gui.guhs.mijnguhs.hartjes": "%s / %s hartjes",
     "gui.guhs.mijnguhs.hartjes_max": "%s hartjes. Zielsguh!",
     "gui.guhs.mijnguhs.open_tip": "Klik voor het dagboekje",
+    # 1.2.5: "Roep naar mij" on a guh's page
+    "gui.guhs.mijnguhs.roep": "Roep naar mij",
+    "gui.guhs.mijnguhs.roep.tip": "Roep %s naar je toe, waar hij ook is (ook in een andere dimensie). Hij komt uit zijn Guhhuisje of de Guhkamer en loopt weer gezellig met je mee.",
+    "gui.guhs.mijnguhs.roep.opgepakt": "%s zit opgepakt in een kist, rugzak of zakken - haal hem zelf op!",
+    "gui.guhs.mijnguhs.roep.guhwiel": "%s rent rondjes in een Guh Wheel - haal hem zelf op!",
+    "gui.guhs.mijnguhs.roep.dood": "%s is in de wolkjes... Roepen helpt niet, maar het Knuffelhart wel.",
+    "gui.guhs.mijnguhs.roep.komt": "%s komt eraan! VAHOEG!",
+    "gui.guhs.mijnguhs.roep.zoeken": "%s wordt opgehaald... even geduld!",
+    "gui.guhs.mijnguhs.roep.kwijt": "Njeg, %s is nergens te vinden. Ga eens kijken waar hij het laatst was!",
+    "gui.guhs.mijnguhs.roep.niet_jouw": "Dat is niet jouw guh, njeg!",
     "gui.guhs.mijnguhs.kop.favorietjes": "Favorietjes",
     "gui.guhs.mijnguhs.favorietjes_hint": "Nog geen favorietjes ontdekt. Probeer eens van alles: eten, plekjes, liedjes, speeltjes... Je guh "
                                           "laat het wel merken!",

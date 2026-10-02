@@ -504,6 +504,7 @@
   "gui.guhs.band.plek.schouder": "Sitting on %1$s's shoulder (%2$s, %3$s %4$s %5$s)",
   "gui.guhs.band.plek.in_guh": "Inside guh %1$s for a scrub (%2$s, %3$s %4$s %5$s)",
   "gui.guhs.band.plek.onbekend": "No idea, nyeg... Come by sometime, then your Guhdex will remember!",
+  "gui.guhs.band.plek.bij_jou": "Right by your side! (%2$s, %3$s %4$s %5$s)",
   "gui.guhs.band.dim.minecraft.overworld": "Overworld",
   "gui.guhs.band.dim.minecraft.the_nether": "the Nether",
   "gui.guhs.band.dim.minecraft.the_end": "the End",

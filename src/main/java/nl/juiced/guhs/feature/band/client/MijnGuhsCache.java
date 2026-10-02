@@ -37,7 +37,7 @@ public final class MijnGuhsCache {
     /** One of your guhs as the tab shows it. */
     public record Guh(UUID id, Component naam, CompoundTag looks, int hartjes, int niveau, int volgende, List<Fav> fav, List<Vriend> vrienden,
                       Component huisje, List<Component> klussen, Component plek, Map<String, Long> stats, List<Eerste> eerste, List<Wist> wist,
-                      long sinds, boolean dood) {
+                      long sinds, boolean dood, String plekSoort) {
     }
 
     private static List<Guh> guhs = List.of();
@@ -159,7 +159,7 @@ public final class MijnGuhsCache {
         }
         return new Guh(UUID.fromString(t.getStringOr("Id", "")), nl.juiced.guhs.taal.Tekst.get(t, "Naam"), t.getCompoundOrEmpty("Looks"), t.getIntOr("Hartjes", 0), t.getIntOr("Niveau", 0),
                 t.getIntOr("Volgende", 0), fav, vrienden, nl.juiced.guhs.taal.Tekst.get(t, "Huisje"), klussen, tekst(t.getStringOr("Plek", ""), reg), stats, eerste, wist,
-                t.getLongOr("Sinds", 0L), t.getBooleanOr("Dood", false));
+                t.getLongOr("Sinds", 0L), t.getBooleanOr("Dood", false), t.getStringOr("PlekSoort", ""));
     }
 
     private static Component tekst(String json, HolderLookup.Provider reg) {

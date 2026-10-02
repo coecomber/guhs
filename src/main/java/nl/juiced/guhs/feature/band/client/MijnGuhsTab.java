@@ -25,6 +25,8 @@ import nl.juiced.guhs.feature.band.BandNiveau;
 import nl.juiced.guhs.feature.band.BandPayloads;
 import nl.juiced.guhs.feature.band.DagboekStat;
 import nl.juiced.guhs.feature.band.FavorietSoort;
+import nl.juiced.guhs.feature.band.PlekSoort;
+import nl.juiced.guhs.feature.band.Roepen;
 import nl.juiced.guhs.feature.gids.client.GidsLijst;
 import nl.juiced.guhs.feature.gids.client.GidsTekst;
 
@@ -53,6 +55,11 @@ public final class MijnGuhsTab {
     };
     /** The cache version the pictures were made for (new data: new clothes, so new pictures). */
     private int versie = -1;
+    /** 1.2.5: "Roep naar mij" on a guh's page (null on the list) and its tooltip. */
+    @Nullable
+    private Button roepKnop;
+    private List<Component> roepTip = List.of();
+    private static final int ROEP_Y = 188, ROEP_H = 14;
 
     /** (AutoCheck) open this guh's page (null: the list). */
     public static void open(@Nullable UUID id) {
@@ -80,6 +87,7 @@ public final class MijnGuhsTab {
         if (open != null && guh == null) {
             open = null;
         }
+        roepKnop = null;
         if (guh == null) {
             lijst.plaats(left + 8, top + 28, w - 14, h - 34);
             lijst.zet(lijstRegels());
@@ -90,6 +98,18 @@ public final class MijnGuhsTab {
                 open = null;
                 this.herbouw.run();
             }).bounds(left + 8, top + 28, 98, 14).build());
+            // 1.2.5: call this guh over, wherever it is (grey when it is picked up, in a Guh Wheel or in the wolkjes)
+            Roepen.Uitkomst niet = Roepen.nietRoepbaar(PlekSoort.byId(guh.plekSoort()), guh.dood());
+            roepKnop = Button.builder(Component.translatable("gui.guhs.mijnguhs.roep"),
+                    b -> ClientPacketDistributor.sendToServer(new BandPayloads.Roep(guh.id()))).bounds(left + 8, top + ROEP_Y, 98, ROEP_H).build();
+            roepKnop.active = niet == null;
+            Component uitleg = Component.translatable(niet == null ? "gui.guhs.mijnguhs.roep.tip" : switch (niet) {
+                case DOOD -> "gui.guhs.mijnguhs.roep.dood";
+                case GUHWIEL -> "gui.guhs.mijnguhs.roep.guhwiel";
+                default -> "gui.guhs.mijnguhs.roep.opgepakt";
+            }, guh.naam());
+            roepTip = regels(uitleg, niet == null ? ChatFormatting.GRAY : ChatFormatting.GOLD);
+            knop.accept(roepKnop);
             lijst.plaats(left + 112, top + 28, w - 118, h - 34);
             lijst.zet(pagina(guh));
             lijst.scrollNaar(paginaScroll);
@@ -156,7 +176,20 @@ public final class MijnGuhsTab {
 
     @Nullable
     public List<Component> tip(double mx, double my) {
+        if (roepKnop != null && mx >= roepKnop.getX() && mx < roepKnop.getX() + roepKnop.getWidth() && my >= roepKnop.getY()
+                && my < roepKnop.getY() + roepKnop.getHeight()) {
+            return roepTip;
+        }
         return lijst.tip(mx, my);
+    }
+
+    /** A tooltip text cut into lines of at most 180 pixels (the tooltip doesn't wrap by itself). */
+    private List<Component> regels(Component tekst, ChatFormatting kleur) {
+        List<Component> out = new ArrayList<>();
+        for (net.minecraft.network.chat.FormattedText r : font.getSplitter().splitLines(tekst, 180, net.minecraft.network.chat.Style.EMPTY)) {
+            out.add(Component.literal(r.getString()).withStyle(kleur));
+        }
+        return out;
     }
 
     public boolean wiel(double mx, double my, double delta) {

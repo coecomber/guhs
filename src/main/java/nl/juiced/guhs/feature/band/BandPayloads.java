@@ -73,6 +73,24 @@ public final class BandPayloads {
         }
     }
 
+    /** 1.2.5, client to server: "Roep naar mij" on a guh's page in the Guhdex (its band id); checked by {@link Roepen#roep}. */
+    public record Roep(java.util.UUID id) implements CustomPacketPayload {
+        public static final Type<Roep> TYPE = new Type<>(Guhs.id("band_roep"));
+        public static final StreamCodec<FriendlyByteBuf, Roep> STREAM_CODEC = StreamCodec.composite(
+                net.minecraft.core.UUIDUtil.STREAM_CODEC, Roep::id, Roep::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        public static void handle(Roep p, IPayloadContext context) {
+            if (context.player() instanceof ServerPlayer sp) {
+                Roepen.roep(sp, p.id());
+            }
+        }
+    }
+
     /** Sends the owner's Mijn guhs data (e.g. before the Guhdex opens). */
     public static void sync(ServerPlayer player) {
         MijnGuhs.stuur(player, null);
@@ -82,6 +100,7 @@ public final class BandPayloads {
         registrar.playToClient(MijnGuhsData.TYPE, MijnGuhsData.STREAM_CODEC, MijnGuhsData::handle);
         registrar.playToClient(Hartjes.TYPE, Hartjes.STREAM_CODEC, Hartjes::handle);
         registrar.playToServer(Vraag.TYPE, Vraag.STREAM_CODEC, Vraag::handle);
+        registrar.playToServer(Roep.TYPE, Roep.STREAM_CODEC, Roep::handle);
     }
 
     private BandPayloads() {

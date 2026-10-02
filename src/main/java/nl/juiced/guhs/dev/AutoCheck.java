@@ -1777,11 +1777,12 @@ public final class AutoCheck {
             wist.add(new nl.juiced.guhs.feature.band.client.MijnGuhsCache.Wist(
                     net.minecraft.network.chat.Component.translatable("gui.guhs.wistjedat.band.getemd", "Dev"), 1));
             net.minecraft.network.chat.Component plek = net.minecraft.network.chat.Component.translatable(
-                    i == 2 ? "gui.guhs.band.plek.huisje" : "gui.guhs.band.plek.wereld", "Villa Vahoeg",
+                    i == 2 ? "gui.guhs.band.plek.huisje" : i == 3 ? "gui.guhs.band.plek.item_kist" : "gui.guhs.band.plek.wereld", i == 3 ? "Kist" : "Villa Vahoeg",
                     net.minecraft.network.chat.Component.translatable("gui.guhs.band.dim.guhs.guhmension"), 120, 70, -48);
             out.add(new nl.juiced.guhs.feature.band.client.MijnGuhsCache.Guh(java.util.UUID.nameUUIDFromBytes(("voorbeeld" + i).getBytes()),
                     net.minecraft.network.chat.Component.literal(soorten[i][2]), looks, hartjes[i], niveau.ordinal(), volgende == null ? -1 : volgende.drempel(), fav, vrienden,
-                    net.minecraft.network.chat.Component.literal(i >= 2 ? "Villa Vahoeg" : ""), klussen, plek, stats, eerste, wist, 0, false));
+                    net.minecraft.network.chat.Component.literal(i >= 2 ? "Villa Vahoeg" : ""), klussen, plek, stats, eerste, wist, 0, false,
+                    i == 3 ? "item_kist" : "wereld"));
         }
         return out;
     }

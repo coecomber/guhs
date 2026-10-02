@@ -54,6 +54,7 @@ public final class BandFeature {
         NeoForge.EVENT_BUS.register(BandEvents.class);
         GuhHooks.tick(BandEvents::tick);
         Scorebord.opInzending(BandEvents::ingezonden);
+        Roepen.register(modBus);   // 1.2.5: "Roep naar mij" in the Guhdex
     }
 
     public static void payloads(PayloadRegistrar registrar) {

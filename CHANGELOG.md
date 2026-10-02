@@ -24,6 +24,13 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
   as they are (the Timmerguh still taps in the last 2 spots himself).
 - **Getting on a saddled guh is a pet too.** Tapping your saddled guh to ride it now also gives the petting moment
   (the little squish, hearts, the happy sound and a heart on its meter), and you get on just like before.
+- **New: "Call to me" in the Guhdex.** On a tamed guh's page in My Guhs, the new button calls that guh over to you,
+  wherever it is: far away, in an unloaded chunk or in another dimension (it is loaded first, then hops over with a poof,
+  hearts and a happy guh sound). It lands about 2 blocks from you on safe ground, stands up and follows you again. A guh
+  that lived in a Guh House moves out (its place and chores are freed), a guest in the Guh Room is checked out, and a
+  lead or a ride is let go (the lead goes into your pockets). "Where is ...?" then says it's right by your side. The
+  button is grey for a guh that is picked up (in a chest, backpack or pockets), running in a Guh Wheel or up in the
+  clouds. Only the owner can call a guh.
 
 ## 1.2.4 — Minecraft 26.1.2
 

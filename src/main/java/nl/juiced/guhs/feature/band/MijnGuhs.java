@@ -97,6 +97,7 @@ public final class MijnGuhs {
             }
             t.put("Klussen", klussen);
             t.putString("Plek", json(GuhVolger.tekst(r.plek), registries));
+            t.putString("PlekSoort", r.plek.soort().id());   // 1.2.5: "Roep naar mij" is grey for a picked-up guh
             CompoundTag stats = new CompoundTag();
             for (DagboekStat st : DagboekStat.values()) {
                 stats.putLong(st.id(), r.stat(st));
