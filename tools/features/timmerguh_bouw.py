@@ -92,7 +92,9 @@ def huis(b):
     tiles = {}
     top = {}
     for k, regio in niveaus.items():
-        binnen = niveaus.get(k + 2, set()) if k + 2 <= hoogste else set()
+        # 1.2.5: the level under the cap is a ring too (it used to be full, so its middle lay hidden under the cap and
+        # could only be clicked from inside the dome); the cap itself is full
+        binnen = niveaus.get(k + 2, set()) if k + 2 <= hoogste else niveaus.get(k + 1, set())
         y = ROOF + k
         for (x, z) in regio - binnen:
             top[(x, z)] = y
@@ -110,6 +112,13 @@ def huis(b):
             deel = "binnenoor" if (du, dv) in BINNENOOR else "oor"
             b.set(ex, ey + dv, ez + du, DAKPLEK, {"deel": deel})
             tiles[(ex, ey + dv, ez + du)] = deel
+        # 1.2.5: an ear's foot tile sunk into the dome (dome on all four sides, the ear on top) would show no face to the
+        # outside air: that bit of the ear is on already (pink wool, it holds the ear onto the dome)
+        for du in (-1, 0, 1):
+            voet = (ex, ey, ez + du)
+            if all(b.get(voet[0] + dx, voet[1], voet[2] + dz) in (DAKPLEK, st.DAK) for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1))):
+                b.set(*voet, DELEN[tiles.pop(voet)])
+                b.vaste_oren = getattr(b, "vaste_oren", 0) + 1
     # the dakbalken over the open room, under the dome (the roof's frame)
     for z in range(HZ0 + 2, HZ1 - 1, 3):
         for x in range(HX0, HX1 + 1):
@@ -336,12 +345,32 @@ def build(h):
     return b
 
 
+ZIJDEN = ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1))
+
+
+def buitenlucht(b):
+    """The air cells connected (through air) to the sides or the top of the template: the outside air."""
+    def lucht(x, y, z):
+        return b.get(x, y, z) in (None, "minecraft:air")
+    open_ = [(x, y, z) for x in range(W) for y in range(G + 1, H) for z in range(D)
+             if (x in (0, W - 1) or z in (0, D - 1) or y == H - 1) and lucht(x, y, z)]
+    seen = set(open_)
+    while open_:
+        x, y, z = open_.pop()
+        for dx, dy, dz in ZIJDEN:
+            n = (x + dx, y + dy, z + dz)
+            if n not in seen and 0 <= n[0] < W and G < n[1] < H and 0 <= n[2] < D and lucht(*n):
+                seen.add(n)
+                open_.append(n)
+    return seen
+
+
 def check_bouwplaats(b):
     problems = []
     tiles = b.tiles
     dak = [p for p, d in tiles.items() if d == "dak"]
     oren = [p for p, d in tiles.items() if d != "dak"]
-    if not 16 <= len(dak) <= 40 or len(oren) != 2 * len(OOR):
+    if not 16 <= len(dak) <= 40 or len(oren) != 2 * len(OOR) - getattr(b, "vaste_oren", 0) or len(oren) < 8:
         problems.append(f"bouwplaats: {len(dak)} dak tiles and {len(oren)} ear tiles")
     for p, d in tiles.items():
         if b.get(*p) != DAKPLEK:
@@ -351,6 +380,14 @@ def check_bouwplaats(b):
     far = [p for p in tiles if not any(math.dist((p[0] + 0.5, p[1] + 0.5, p[2] + 0.5), (s[0] + 0.5, s[1] + 1.6, s[2] + 0.5)) <= 4.5 for s in stand)]
     if far:
         problems.append(f"bouwplaats: {len(far)} ghost tiles can't be reached from the roof/scaffolding, e.g. {far[:3]}")
+    # 1.2.5: every ghost tile shows at least one face to the OUTSIDE air (the air connected to the edge of the template, not
+    # the closed room under the dome), so it can be clicked from the scaffolding/roof - not only from inside the dome
+    buiten = buitenlucht(b)
+    verstopt = [p for p in tiles if not any((p[0] + dx, p[1] + dy, p[2] + dz) in buiten for dx, dy, dz in ZIJDEN)]
+    if verstopt:
+        bedekt = [p for p in verstopt if b.get(p[0], p[1] + 1, p[2]) in (DAKPLEK, st.DAK)]
+        problems.append(f"bouwplaats: {len(verstopt)} ghost tiles show no face to the outside air ({len(bedekt)} covered by "
+                        f"another roof/ghost tile on top), e.g. {verstopt[:3]}")
     js = b.jigsaws
     if len(js) != 1 or js[0][0] != JIGSAW or js[0][1] != "guhs:bouwplaats_ingang" or js[0][4] != "east_up":
         problems.append(f"bouwplaats: jigsaws {js}")
