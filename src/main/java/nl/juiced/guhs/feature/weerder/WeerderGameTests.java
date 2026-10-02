@@ -57,6 +57,28 @@ public class WeerderGameTests {
         }
     }
 
+    /** 1.2.5: a wild Brococolief (with its secret note) that walks into a weerder's area poofs away; outside it stays. */
+    @GuhTest(template = "empty", batch = BATCH + "_broco", timeoutTicks = 100)
+    public static void weerderHoudtBrococoliefsWeg(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        zet(helper, p, 8);
+        GuhEntity binnen = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 1, 3));
+        binnen.setVariant(nl.juiced.guhs.entity.GuhVariant.BROCOCOLIEF);
+        binnen.setSecretNote(true);
+        GuhEntity buiten = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 1, 3));
+        buiten.setVariant(nl.juiced.guhs.entity.GuhVariant.BROCOCOLIEF);
+        buiten.setSecretNote(true);
+        buiten.snapTo(helper.absolutePos(BORD).getX() + 40.5, buiten.getY(), helper.absolutePos(BORD).getZ() + 0.5, 0, 0);
+        GuhEntity tam = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 1, 3));
+        tam.setVariant(nl.juiced.guhs.entity.GuhVariant.BROCOCOLIEF);
+        tam.tame(p);
+        helper.succeedWhen(() -> {
+            helper.assertTrue(binnen.isRemoved(), "the wild Brococolief inside the area poofed away");
+            helper.assertTrue(!buiten.isRemoved() && !tam.isRemoved(), "outside the area, and a tamed one, stay");
+            weg(helper, p);
+        });
+    }
+
     /** What the spawn position check (NeoForge's MobSpawnEvent.PositionCheck, used by the natural spawner) says for a guh here. */
     static MobSpawnEvent.PositionCheck.Result check(ServerLevel level, BlockPos abs, EntitySpawnReason reason, boolean tam, ServerPlayer owner) {
         GuhEntity guh = ModEntities.GUH.get().create(level, EntitySpawnReason.TRIGGERED);

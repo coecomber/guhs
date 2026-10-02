@@ -13,6 +13,8 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
   speed, XP, hoppers, comparator). Plain redstone does nothing. Its screen shows a little guh wheel instead of the fuel
   slot. Recipe: 8 cobblestone (or blackstone / cobbled deepslate) around 1 Kaas Knabbel. New FTB quest next to the Guh
   Wheel.
+- **The Wild Guh Shoo-Sign also keeps Brococoliefs out.** A Brococolief with a secret note no longer walks up to a player
+  inside the area, and one that wanders in poofs away.
 
 ## 1.2.4 — Minecraft 26.1.2
 

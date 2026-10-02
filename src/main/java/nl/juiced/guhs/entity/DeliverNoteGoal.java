@@ -26,17 +26,31 @@ public class DeliverNoteGoal extends Goal {
 
     @Override
     public boolean canUse() {
+        // 1.2.5: a wild Brococolief doesn't come into the area of a Wilde-guhweerder: inside one it poofs away
+        if (!guh.isTame() && (guh.hasSecretNote() || guh.getVariant() == GuhVariant.BROCOCOLIEF)
+                && guh.level() instanceof net.minecraft.server.level.ServerLevel level
+                && nl.juiced.guhs.feature.weerder.WeerderIndex.beschermd(level, guh.blockPosition())) {
+            level.sendParticles(net.minecraft.core.particles.ParticleTypes.POOF, guh.getX(), guh.getY() + 0.5, guh.getZ(), 12, 0.3, 0.3, 0.3, 0.02);
+            guh.discard();
+            return false;
+        }
         if (!guh.hasSecretNote() || guh.isOrderedToSit()) {
             return false;
         }
         target = guh.level().getNearestPlayer(guh, FIND_RANGE);
-        return target != null && !target.isSpectator();
+        return target != null && !target.isSpectator() && !beschermd(target);
     }
 
     @Override
     public boolean canContinueToUse() {
         return guh.hasSecretNote() && target != null && target.isAlive() && !target.isSpectator()
-                && guh.distanceToSqr(target) < FIND_RANGE * FIND_RANGE * 1.5;
+                && guh.distanceToSqr(target) < FIND_RANGE * FIND_RANGE * 1.5 && !beschermd(target);
+    }
+
+    /** 1.2.5: a player inside a Wilde-guhweerder's area is not walked to by a wild note guh. */
+    private boolean beschermd(Player player) {
+        return !guh.isTame() && player.level() instanceof net.minecraft.server.level.ServerLevel level
+                && nl.juiced.guhs.feature.weerder.WeerderIndex.beschermd(level, player.blockPosition());
     }
 
     @Override
