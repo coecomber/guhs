@@ -126,6 +126,36 @@ public class TimmerguhGameTests {
         }
     }
 
+    /** 1.2.2: clicking the roof right next to an open ghost tile (one you can't see) lays that tile. */
+    @GuhTest(template = BOUW, batch = BATCH + "_naast", timeoutTicks = 200)
+    public static void timmerguhDakNaastOpenPlekje(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
+        GuhNpcEntity npc = timmerguh(helper, new BlockPos(3, 2, 10));
+        try {
+            p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+            List<BlockPos> ps = Timmerguh.plekken(npc);
+            BlockPos laatste = ps.get(ps.size() - 1);
+            ItemStack stack = new ItemStack(TimmerguhFeature.DAKPLUISJE.get(), ps.size());
+            p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, stack);
+            for (BlockPos pos : ps.subList(0, ps.size() - 1)) {
+                DakpluisjeItem.leg(level, pos, p, stack);
+            }
+            helper.assertTrue(Timmerguh.open(npc) == 1, "one left");
+            // click a laid roof part next to the last one
+            BlockPos naast = ps.stream().filter(q -> !q.equals(laatste) && q.distSqr(laatste) <= 4.0).findFirst().orElseThrow();
+            helper.assertTrue(laatste.equals(Timmerguh.naasteOpen(level, naast, 2.0)), "the open spot next to it is found");
+            stack.getItem().useOn(new net.minecraft.world.item.context.UseOnContext(p, net.minecraft.world.InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(naast), Direction.UP, naast, false)));
+            helper.assertTrue(Timmerguh.open(npc) == 0, "clicking next to it laid the last one");
+            weg(helper, p);
+            helper.succeed();
+        } catch (RuntimeException e) {
+            weg(helper, p);
+            throw e;
+        }
+    }
+
     /** Lays every ghost tile round the Timmerguh with the player's dakpluisjes (as right-clicks would). */
     static void legAlles(ServerLevel level, GuhNpcEntity npc, ServerPlayer p) {
         for (BlockPos pos : Timmerguh.plekken(npc)) {

@@ -36,6 +36,13 @@ public class DakpluisjeItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
+        if (!level.getBlockState(pos).is(TimmerguhFeature.DAKPLEK.get()) && level instanceof ServerLevel server) {
+            // 1.2.2: clicked the roof next to an open spot you can't see (under the top of the dome): lay that one
+            BlockPos naast = Timmerguh.naasteOpen(server, pos, 2.0);
+            if (naast != null) {
+                pos = naast;
+            }
+        }
         if (!level.getBlockState(pos).is(TimmerguhFeature.DAKPLEK.get())) {
             if (!level.isClientSide() && context.getPlayer() instanceof ServerPlayer p) {
                 p.sendOverlayMessage(Component.translatable("gui.guhs.timmerguh.past_niet").withStyle(ChatFormatting.LIGHT_PURPLE));

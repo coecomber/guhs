@@ -3,6 +3,12 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.3 — Minecraft 26.1.2
+
+- **The Timmerguh's roof can always be finished.** A few ghost tiles of the dome lie right under its top and could only be
+  clicked from inside. Now a roof fluff on the roof right next to an open spot lays that spot, and when you talk to the
+  Timmerguh while the roof isn't done, little sparkles show where the open spots are.
+
 ## 1.2.2 — Minecraft 26.1.2
 
 - **Moving in cheese sauce, for real this time.** 1.2.1 added the movement but in a place Minecraft 26.1 never calls, so

@@ -96,6 +96,7 @@ public final class Timmerguh implements NpcRole {
                         geefPluisjes(player, open - heb);
                     }
                     praat(player, npc, "dak_nog", new Object[] {open});
+                    wijsOpen(npc);   // 1.2.2: little lights on the spots that are still open
                 }
             }
             case TimmerguhVoortgang.BEWONER -> {
@@ -281,6 +282,38 @@ public final class Timmerguh implements NpcRole {
         int[] delen = npc.roleData.getIntArray("Delen").orElse(new int[0]);
         DakplekBlock.Deel[] alle = DakplekBlock.Deel.values();
         return i < delen.length ? alle[Math.floorMod(delen[i], alle.length)] : DakplekBlock.Deel.DAK;
+    }
+
+    /** 1.2.2: sparkles on every ghost tile that is still open, so the last ones (e.g. under the top of the dome) are easy to find. */
+    static void wijsOpen(GuhNpcEntity npc) {
+        ServerLevel level = (ServerLevel) npc.level();
+        for (BlockPos p : plekken(npc)) {
+            if (level.getBlockState(p).is(TimmerguhFeature.DAKPLEK.get())) {
+                level.sendParticles(ParticleTypes.END_ROD, p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 12, 0.35, 0.35, 0.35, 0.01);
+                level.sendParticles(ParticleTypes.HAPPY_VILLAGER, p.getX() + 0.5, p.getY() + 1.1, p.getZ() + 0.5, 6, 0.3, 0.2, 0.3, 0.0);
+            }
+        }
+    }
+
+    /**
+     * 1.2.2: the open ghost tile of a Timmerguh roof nearest to pos (within max blocks), or null. Some tiles of the dome lie
+     * right under the top of the dome and can only be seen from inside; clicking the roof next to them lays them too.
+     */
+    @javax.annotation.Nullable
+    public static BlockPos naasteOpen(ServerLevel level, BlockPos pos, double max) {
+        BlockPos best = null;
+        double bestD = max * max;
+        for (GuhNpcEntity npc : level.getEntitiesOfClass(GuhNpcEntity.class, new AABB(pos).inflate(BEREIK + 8),
+                n -> n.getKind() == GuhNpcEntity.Kind.TIMMERGUH)) {
+            for (BlockPos p : plekken(npc)) {
+                double d = p.distSqr(pos);
+                if (d <= bestD && level.getBlockState(p).is(TimmerguhFeature.DAKPLEK.get())) {
+                    best = p;
+                    bestD = d;
+                }
+            }
+        }
+        return best;
     }
 
     /** How many ghost tiles are still open. */
