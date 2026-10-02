@@ -34,8 +34,7 @@ public final class ModFluids {
                     .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
                     .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)) {
                 @Override
-                public boolean move(net.minecraft.world.level.material.FluidState state, net.minecraft.world.entity.LivingEntity entity,
-                                    net.minecraft.world.phys.Vec3 input, double gravity) {
+                public boolean move(net.minecraft.world.entity.LivingEntity entity, net.minecraft.world.phys.Vec3 input, double gravity) {
                     return thickMove(this, entity, input, gravity);
                 }
             });
@@ -54,8 +53,7 @@ public final class ModFluids {
                     .sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
                     .sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)) {
                 @Override
-                public boolean move(net.minecraft.world.level.material.FluidState state, net.minecraft.world.entity.LivingEntity entity,
-                                    net.minecraft.world.phys.Vec3 input, double gravity) {
+                public boolean move(net.minecraft.world.entity.LivingEntity entity, net.minecraft.world.phys.Vec3 input, double gravity) {
                     return thickMove(this, entity, input, gravity);
                 }
             });

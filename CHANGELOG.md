@@ -3,6 +3,12 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.2 — Minecraft 26.1.2
+
+- **Moving in cheese sauce, for real this time.** 1.2.1 added the movement but in a place Minecraft 26.1 never calls, so
+  you were still stuck in kaas saus, stomach acid and the Barbecuether's frying sauce. Now you wade through them slowly,
+  like lava (a new test walks a pig through all three).
+
 ## 1.2.1 — Minecraft 26.1.2
 
 Small fixes. Same requirements as 1.2.0.

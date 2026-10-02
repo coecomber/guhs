@@ -69,7 +69,7 @@ public final class Kaasfrituursaus {
 
             /** Moving through it: the same thick, slow movement as lava (vanilla only does that for lava itself). */
             @Override
-            public boolean move(FluidState state, LivingEntity entity, Vec3 movementVector, double gravity) {
+            public boolean move(LivingEntity entity, Vec3 movementVector, double gravity) {   // (1.2.1: 26.1 calls this one)
                 double y0 = entity.getY();
                 entity.moveRelative(0.02F, movementVector);
                 entity.move(net.minecraft.world.entity.MoverType.SELF, entity.getDeltaMovement());
