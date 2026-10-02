@@ -66,7 +66,8 @@ OVERIG = {
     "chat.guhs.secret_note.whisper": "shhh. niet doorvertellen. Lees dit...",
     "gui.guhs.elftocht.vahoeg_titel": "VAHOEG!",
     "item.guhs.bieb_boek.door": "door %s",
-    "gui.guhs.huisje.meldingen.tooltip": "Meldingen in de chat als een bewoner iets zeldzaams vindt (marshmallowknabbel, guhkristal...): aan of uit. Het dagboekje schrijft het altijd op.",   # 1.2.5
+    "gui.guhs.huisje.meldingen": "Meldingen van zeldzame vondsten: %s",   # 1.2.5
+    "gui.guhs.huisje.meldingen.tooltip": "Klik om de berichten in de chat aan of uit te zetten als een bewoner iets zeldzaams vindt (marshmallowknabbel, guhkristal...). Het dagboekje schrijft het altijd op.",   # 1.2.5
     "quest.guhs.reis.hoort_hier": "Deze Reisguh hoort bij dit gebouw, njeg! Hij blijft hier lekker zitten.",   # 1.2.1
 }
 

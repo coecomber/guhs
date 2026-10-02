@@ -9096,5 +9096,6 @@
   "sign.guhs.guhwaii.behalve_als_je": "(unless you",
   "sign.guhs.guhwaii.een_guh_bent": "are a guh)",
   "sign.guhs.giant_kaasknabbel.honger": "I was so hungry",
-  "gui.guhs.huisje.meldingen.tooltip": "Chat messages when a resident finds something rare (marshmallow nibble, guh crystal...): on or off. The diary always writes it down."
+  "gui.guhs.huisje.meldingen.tooltip": "Click to turn the chat messages on or off for when a resident finds something rare (marshmallow nibble, guh crystal...). The diary always writes it down.",
+  "gui.guhs.huisje.meldingen": "Rare-find messages: %s"
 }

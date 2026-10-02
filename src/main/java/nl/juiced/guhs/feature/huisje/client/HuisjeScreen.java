@@ -146,8 +146,8 @@ public class HuisjeScreen extends Screen {
             data.putBoolean("Meldingen", !data.getBooleanOr("Meldingen", true));
             stuur(HuisjePayloads.Actie.MELDINGEN, "", "", data.getBooleanOr("Meldingen", true), 0);
             b.setMessage(meldLabel(data.getBooleanOr("Meldingen", true)));
-        }).bounds(left + 294, top + 21, 18, 18).tooltip(mag ? net.minecraft.client.gui.components.Tooltip.create(
-                Component.translatable("gui.guhs.huisje.meldingen.tooltip")) : alleenKijken()).build();
+            b.setTooltip(meldTip(data.getBooleanOr("Meldingen", true)));
+        }).bounds(left + 294, top + 21, 18, 18).tooltip(mag ? meldTip(meld) : alleenKijken()).build();
         melding.active = mag;
         addRenderableWidget(melding);
         ListTag lijst = lijst("Bewoners");
@@ -188,6 +188,14 @@ public class HuisjeScreen extends Screen {
         }).bounds(left + 176, by, 96, 18).tooltip(net.minecraft.client.gui.components.Tooltip.create(
                 Component.translatable("gui.guhs.huisje.koepel.tooltip"))).build());
         addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose()).bounds(left + 276, by, 36, 18).build());
+    }
+
+    /** "Meldingen van zeldzame vondsten: aan" + what it does. */
+    private static net.minecraft.client.gui.components.Tooltip meldTip(boolean aan) {
+        return net.minecraft.client.gui.components.Tooltip.create(Component.empty()
+                .append(Component.translatable("gui.guhs.huisje.meldingen",
+                        Component.translatable(aan ? "gui.guhs.huisje.aan" : "gui.guhs.huisje.uit")).withStyle(ChatFormatting.BOLD))
+                .append(Component.literal("\n")).append(Component.translatable("gui.guhs.huisje.meldingen.tooltip").withStyle(ChatFormatting.GRAY)));
     }
 
     private static Component meldLabel(boolean aan) {
