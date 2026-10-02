@@ -18,6 +18,12 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 - **Rare-find messages can be switched off per Guh House.** The new "!" button next to "Rename" in a Guh House's screen
   turns the chat messages off (and on) when its residents find something rare (marshmallow nibbles, guh crystals...).
   The diary still writes it down.
+- **Every roof spot of a new building site can be reached from outside.** On building sites in newly generated
+  Knuffeldal towns, no ghost tile of the Timmerguh's dome lies hidden under the top any more: each one shows at least
+  one side to the open air, so you can lay it from the scaffolding or the roof. Building sites that already exist stay
+  as they are (the Timmerguh still taps in the last 2 spots himself).
+- **Getting on a saddled guh is a pet too.** Tapping your saddled guh to ride it now also gives the petting moment
+  (the little squish, hearts, the happy sound and a heart on its meter), and you get on just like before.
 
 ## 1.2.4 — Minecraft 26.1.2
 
