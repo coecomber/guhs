@@ -161,6 +161,99 @@ public class BankGuhMenu extends AbstractContainerMenu {
         broadcastChanges();
     }
 
+    /**
+     * 1.2.5: JEI's "+": put a recipe in the crafting grid. Per grid slot the items that may go there; each comes from the bank
+     * first, then from the player's inventory (what was in the grid goes back to the bank first). max: as many as fit.
+     */
+    public void vulGrid(List<List<ItemStack>> keuzes, boolean max) {
+        if (bank == null) {
+            return;
+        }
+        handleAction(Action.CLEAR_GRID, ItemStack.EMPTY, 0, false);
+        ItemStack[] gekozen = new ItemStack[9];
+        for (int i = 0; i < 9 && i < keuzes.size(); i++) {
+            for (ItemStack kandidaat : keuzes.get(i)) {
+                if (!kandidaat.isEmpty() && beschikbaar(kandidaat) > 0) {
+                    gekozen[i] = kandidaat.copyWithCount(1);
+                    break;
+                }
+            }
+        }
+        int rondes = max ? 64 : 1;
+        for (int r = 0; r < rondes; r++) {
+            // check the whole round first, so the grid stays even
+            java.util.Map<String, Integer> nodig = new java.util.HashMap<>();
+            boolean kan = false;
+            for (int i = 0; i < 9; i++) {
+                if (gekozen[i] == null) {
+                    continue;
+                }
+                ItemStack in = craftGrid.getItem(i);
+                if (!in.isEmpty() && in.getCount() >= in.getMaxStackSize()) {
+                    kan = false;
+                    nodig = null;
+                    break;
+                }
+                kan = true;
+                nodig.merge(sleutel(gekozen[i]), 1, Integer::sum);
+            }
+            if (!kan || nodig == null) {
+                break;
+            }
+            boolean genoeg = true;
+            for (int i = 0; i < 9; i++) {
+                if (gekozen[i] != null && beschikbaar(gekozen[i]) < nodig.get(sleutel(gekozen[i]))) {
+                    genoeg = false;
+                }
+            }
+            if (!genoeg) {
+                break;
+            }
+            for (int i = 0; i < 9; i++) {
+                if (gekozen[i] != null) {
+                    ItemStack een = neem(gekozen[i]);
+                    ItemStack in = craftGrid.getItem(i);
+                    if (in.isEmpty()) {
+                        craftGrid.setItem(i, een);
+                    } else {
+                        in.grow(een.getCount());
+                    }
+                }
+            }
+        }
+        slotsChanged(craftGrid);
+        broadcastChanges();
+    }
+
+    private static String sleutel(ItemStack stack) {
+        return stack.getItem() + "|" + stack.getComponentsPatch();
+    }
+
+    /** How many of this item the bank plus the player's inventory have. */
+    private long beschikbaar(ItemStack like) {
+        long n = bank.getStorage().count(like);
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
+            if (ItemStack.isSameItemSameComponents(s, like) && !Features.isLoaned(s)) {
+                n += s.getCount();
+            }
+        }
+        return n;
+    }
+
+    /** One of this item: from the bank first, else from the player's inventory. */
+    private ItemStack neem(ItemStack like) {
+        ItemStack uitBank = bank.getStorage().extract(like, 1);
+        if (!uitBank.isEmpty()) {
+            return uitBank;
+        }
+        for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
+            if (ItemStack.isSameItemSameComponents(s, like) && !Features.isLoaned(s)) {
+                return s.split(1);
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
     private void depositCarried(int button) {
         ItemStack carried = getCarried();
         if (carried.isEmpty() || bank == null || Features.isLoaned(carried)) {

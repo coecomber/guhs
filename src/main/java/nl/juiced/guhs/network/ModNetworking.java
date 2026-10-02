@@ -9,6 +9,7 @@ public final class ModNetworking {
         registrar.playToServer(SledControlPayload.TYPE, SledControlPayload.STREAM_CODEC, SledControlPayload::handle);
         registrar.playToServer(GuhActionPayload.TYPE, GuhActionPayload.STREAM_CODEC, GuhActionPayload::handle);
         registrar.playToServer(BankActionPayload.TYPE, BankActionPayload.STREAM_CODEC, BankActionPayload::handle);
+        registrar.playToServer(BankJeiPayload.TYPE, BankJeiPayload.STREAM_CODEC, BankJeiPayload::handle);   // 1.2.5: JEI "+"
         registrar.playToServer(DrinkKaasSausPayload.TYPE, DrinkKaasSausPayload.STREAM_CODEC, DrinkKaasSausPayload::handle);
         registrar.playToClient(BankContentsPayload.TYPE, BankContentsPayload.STREAM_CODEC, BankContentsPayload::handle);
         MaagPayloads.register(registrar);

@@ -3,6 +3,12 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.5 — Minecraft 26.1.2
+
+- **JEI's "+" works in the Bank Guh.** With JEI installed, the "+" on a crafting recipe fills the Bank Guh's crafting grid:
+  items come from the Bank Guh first and from your inventory second (shift-click: as many as fit). Missing items are
+  shown in red, like at a crafting table.
+
 ## 1.2.4 — Minecraft 26.1.2
 
 - **The Timmerguh finishes the last bits himself.** With 2 or fewer roof spots left, talk to the Timmerguh: those spots
