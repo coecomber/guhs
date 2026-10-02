@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.4 — Minecraft 26.1.2
+
+- **The Timmerguh finishes the last bits himself.** With 2 or fewer roof spots left, talk to the Timmerguh: those spots
+  are tricky to reach, so he taps them in himself and the roof is done. Works for existing building sites too.
+
 ## 1.2.3 — Minecraft 26.1.2
 
 - **The Timmerguh's roof can always be finished.** A few ghost tiles of the dome lie right under its top and could only be

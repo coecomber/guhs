@@ -156,6 +156,31 @@ public class TimmerguhGameTests {
         }
     }
 
+    /** 1.2.4: with only 2 spots left, talking to the Timmerguh: he lays them himself and the roof is done. */
+    @GuhTest(template = BOUW, batch = BATCH + "_laatste", timeoutTicks = 200)
+    public static void timmerguhLegtDeLaatsteZelf(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
+        GuhNpcEntity npc = timmerguh(helper, new BlockPos(3, 2, 10));
+        try {
+            TimmerguhVoortgang.zet(p, TimmerguhVoortgang.DAK);
+            List<BlockPos> ps = Timmerguh.plekken(npc);
+            ItemStack stack = new ItemStack(TimmerguhFeature.DAKPLUISJE.get(), ps.size());
+            for (BlockPos pos : ps.subList(0, ps.size() - 2)) {
+                DakpluisjeItem.leg(level, pos, p, stack);
+            }
+            helper.assertTrue(Timmerguh.open(npc) == 2, "two left");
+            Timmerguh.ROLE.talk(npc, p);
+            helper.assertTrue(Timmerguh.open(npc) == 0 && TimmerguhVoortgang.stap(p) == TimmerguhVoortgang.BEWONER,
+                    "the Timmerguh laid the last two and the roof is done: step " + TimmerguhVoortgang.stap(p));
+            weg(helper, p);
+            helper.succeed();
+        } catch (RuntimeException e) {
+            weg(helper, p);
+            throw e;
+        }
+    }
+
     /** Lays every ghost tile round the Timmerguh with the player's dakpluisjes (as right-clicks would). */
     static void legAlles(ServerLevel level, GuhNpcEntity npc, ServerPlayer p) {
         for (BlockPos pos : Timmerguh.plekken(npc)) {

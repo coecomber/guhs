@@ -300,6 +300,7 @@ TEXTS = {
                      "dak op. Hier zijn %s dakpluisjes: klim de steiger op en rechtsklik elk doorzichtig plekje.",
     Q + "dak_nog": "Nog %s plekjes, dan zit het oortjesdak erop! Klim de steiger op en rechtsklik de doorzichtige plekjes met je "
                    "dakpluisjes. Ik hou de ladder vast, beloofd.",
+    Q + "dak_laatste": "Nog maar %s plekjes? Die zitten zo lastig, die tik ik zelf even vast! Tik tik, pluf!",   # 1.2.4
     Q + "dak_af": "DE VLAG IN TOP! Het oortjesdak zit erop, njeg! Weet je wat? Dit kleine huisje is voor jou: ons eerste huisje. "
                   "Zet het bij je thuis neer en laat een van je guhs erin wonen. Kom het me daarna vertellen!",
     Q + "hint.bewoner": "zet het kleine Guhhuisje neer bij je thuis, laat een van je guhs erin wonen en vertel het de Timmerguh",

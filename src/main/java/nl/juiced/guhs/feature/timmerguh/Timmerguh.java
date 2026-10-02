@@ -90,6 +90,10 @@ public final class Timmerguh implements NpcRole {
                     praat(player, npc, "niks");
                 } else if (open == 0) {
                     dakAf(npc, player);
+                } else if (open <= LAATSTE && plekken(npc).size() - open >= 4) {
+                    // 1.2.4: the last spots can be hidden under the top of the dome: the Timmerguh taps them in himself
+                    praat(player, npc, "dak_laatste", new Object[] {open});
+                    legZelf(npc, player);
                 } else {
                     int heb = GuhQuests.count(player, TimmerguhFeature.DAKPLUISJE.get());
                     if (heb < open) {
@@ -282,6 +286,28 @@ public final class Timmerguh implements NpcRole {
         int[] delen = npc.roleData.getIntArray("Delen").orElse(new int[0]);
         DakplekBlock.Deel[] alle = DakplekBlock.Deel.values();
         return i < delen.length ? alle[Math.floorMod(delen[i], alle.length)] : DakplekBlock.Deel.DAK;
+    }
+
+    /** 1.2.4: at most this many open spots and the Timmerguh lays them himself when you talk to him. */
+    static final int LAATSTE = 2;
+
+    /** 1.2.4: the Timmerguh lays every open spot himself (then the roof is done, like the player laid the last one). */
+    static void legZelf(GuhNpcEntity npc, ServerPlayer player) {
+        ServerLevel level = (ServerLevel) npc.level();
+        List<BlockPos> ps = plekken(npc);
+        BlockPos laatste = null;
+        for (BlockPos p : ps) {
+            BlockState s = level.getBlockState(p);
+            if (s.is(TimmerguhFeature.DAKPLEK.get())) {
+                level.setBlock(p, s.getValue(DakplekBlock.DEEL).gelegd(), 3);
+                level.sendParticles(ParticleTypes.HAPPY_VILLAGER, p.getX() + 0.5, p.getY() + 1.0, p.getZ() + 0.5, 8, 0.3, 0.2, 0.3, 0.0);
+                laatste = p;
+            }
+        }
+        if (laatste != null) {
+            level.playSound(null, laatste, nl.juiced.guhs.feature.beroepen.BeroepenFeature.HAMER.get(), SoundSource.BLOCKS, 0.9f, 1.1f);
+            gelegd(level, laatste, player);
+        }
     }
 
     /** 1.2.2: sparkles on every ghost tile that is still open, so the last ones (e.g. under the top of the dome) are easy to find. */
