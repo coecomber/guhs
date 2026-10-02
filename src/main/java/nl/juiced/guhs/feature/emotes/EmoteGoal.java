@@ -77,7 +77,8 @@ public class EmoteGoal extends Goal {
     @Override
     public void stop() {
         // pushed aside by something more important (fleeing, panicking): then the emote is over too
-        if (guh.emotes.current() != null && !guh.isOrderedToSit()) {
+        // (1.2.5: getting on turns the goals off - the pet you give when you get on goes on; GuhEmotes ends it when you ride off)
+        if (guh.emotes.current() != null && !guh.isOrderedToSit() && !(guh.emotes.current() == Emote.AAIEN && guh.isVehicle())) {
             guh.emotes.stop();
         }
     }

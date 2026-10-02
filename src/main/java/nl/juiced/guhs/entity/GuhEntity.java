@@ -806,6 +806,9 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         if (isRideable() && isSaddled() && !this.isVehicle()) {
             this.setOrderedToSit(false);
             this.setInSittingPose(false);
+            if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                nl.juiced.guhs.feature.band.BandEvents.aai(this, sp);   // 1.2.5: getting on is a pet too (hearts, the squish)
+            }
             player.startRiding(this);
             return;
         }

@@ -206,6 +206,30 @@ public class BandGameTests {
         });
     }
 
+    /** 1.2.5: getting on a saddled guh (a tap) is a pet too: the squish and a heart, and you still get on. */
+    @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
+    public static void bandOpstappenIsOokAaien(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        GuhEntity guh = guh(helper, p, new BlockPos(5, 2, 5));
+        guh.setGuhScale(1.5f);
+        guh.equipSaddle(new ItemStack(net.minecraft.world.item.Items.SADDLE), null);
+        helper.runAfterDelay(10, () -> {
+            helper.assertTrue(guh.isRideable() && guh.isSaddled(), "rideable and saddled");
+            guh.emotes.stop();
+            guh.onOwnerTap(p);
+            helper.assertTrue(guh.isVehicle() && p.getVehicle() == guh, "on its back");
+            helper.assertTrue(guh.emotes.current() == nl.juiced.guhs.feature.emotes.Emote.AAIEN, "the squish: " + guh.emotes.current());
+            helper.assertTrue(Band.hartjes(guh) == Reden.AAIEN.standaard(), "a heart for the pet: " + Band.hartjes(guh));
+        });
+        helper.runAfterDelay(14, () -> {
+            helper.assertTrue(guh.isVehicle() && guh.emotes.current() == nl.juiced.guhs.feature.emotes.Emote.AAIEN,
+                    "the squish goes on under the rider: " + guh.emotes.current());
+            p.stopRiding();
+            weg(helper, p);
+            helper.succeed();
+        });
+    }
+
     @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void bandVoerenEnKnuffelenGevenMomenten(GameTestHelper helper) {
         ServerPlayer p = speler(helper);

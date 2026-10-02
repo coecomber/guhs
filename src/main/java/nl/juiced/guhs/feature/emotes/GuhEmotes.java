@@ -124,9 +124,18 @@ public final class GuhEmotes {
 
     /** Can it do an emote right now? (a running one also stops when this turns false) */
     public static boolean canContinue(GuhEntity guh) {
+        return !guh.isVehicle() && vrij(guh);
+    }
+
+    private static boolean vrij(GuhEntity guh) {
         return guh.getType() == ModEntities.GUH.get() && guh.isAlive() && !guh.isNoAi() && guh.getHiddenBy() == null
-                && !guh.isVehicle() && !guh.isPassenger() && !guh.isInWater() && !guh.isInLava()
+                && !guh.isPassenger() && !guh.isInWater() && !guh.isInLava()
                 && guh.getLaunchState() == GuhEntity.LAUNCH_NONE && guh.getTarget() == null;
+    }
+
+    /** 1.2.5: the pet you give when you get on a saddled guh: its squish goes on under you, until you ride off. */
+    private static boolean aaienBereden(GuhEntity guh, Emote emote) {
+        return emote == Emote.AAIEN && guh.isVehicle() && vrij(guh) && guh.getDeltaMovement().horizontalDistanceSqr() < 0.0025;
     }
 
     /** Can it start one? (also standing on something: not while falling or flying) */
@@ -179,7 +188,7 @@ public final class GuhEmotes {
         if (emote != null) {
             // (a standing guh is held still by EmoteGoal: if something else makes it walk, that went first)
             boolean walking = !guh.isOrderedToSit() && elapsed > 3 && !guh.getNavigation().isDone();
-            if (!canContinue(guh) || ownerLeft() || walking) {
+            if (!(canContinue(guh) || aaienBereden(guh, emote)) || ownerLeft() || walking) {
                 stop();
             } else {
                 elapsed++;
