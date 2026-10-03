@@ -172,7 +172,7 @@ public class BandGameTests {
     @GuhTest(template = WEI, batch = BATCH, timeoutTicks = 100)
     public static void bandAaienIsAltijdEenMomentje(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
-        GuhEntity guh = guh(helper, p, new BlockPos(5, 1, 5));
+        GuhEntity guh = guh(helper, p, new BlockPos(5, 2, 5));
         helper.runAfterDelay(10, () -> {
             nl.juiced.guhs.quest.GuhQuests.saved(p).remove(BandEvents.AAI_TELLER);
             guh.emotes.stop();
