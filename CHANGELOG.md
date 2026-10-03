@@ -3,6 +3,12 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.7 — Minecraft 26.1.2
+
+- **The pharmacy job with more players.** Snotje is one shared little guh: when one player gave him the kaasmelkdrankje, a
+  second player who was busy with the same job heard "he's better already" and was stuck. Now everyone who is on the job
+  can give their drankje, and Snotje sniffles again when the next helper talks to the doctor.
+
 ## 1.2.6 — Minecraft 26.1.2
 
 - **My Guhs shows where each guh is.** The list in the Guhdex now says where every guh is (its Guh House, wandering, in a

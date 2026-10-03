@@ -60,6 +60,10 @@ public final class Apotheek implements NpcRole {
                 GuhQuests.say(player, npc, "quest.guhs.beroepen.apotheek.kaasmelk");
             }
         } else if (stap == 1) {
+            // 1.2.7: Snotje is shared; when someone else made him better in the meantime, he's sniffling again for this helper
+            for (GuhEntity s : snotjes(npc)) {
+                s.getPersistentData().putBoolean(SNOTJE, true);
+            }
             int kruidjes = GuhQuests.count(player, BeroepenFeature.SNOTKRUIDJE.get());
             if (GuhQuests.count(player, BeroepenFeature.KAASMELKDRANKJE.get()) > 0) {
                 GuhQuests.say(player, npc, "quest.guhs.beroepen.apotheek.geef");
@@ -129,7 +133,9 @@ public final class Apotheek implements NpcRole {
             }
             return false;
         }
-        if (!snotje.getPersistentData().getBooleanOr(SNOTJE, false)) {
+        // 1.2.7: a helper who is on the job (step 1) can always give the drankje, also when another player already made
+        // Snotje better (he's one shared guhtje): before, that helper got "al beter" and was stuck
+        if (!snotje.getPersistentData().getBooleanOr(SNOTJE, false) && BeroepenVoortgang.stap(player, BEROEP) != 1) {
             player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.snotje.al_beter").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }

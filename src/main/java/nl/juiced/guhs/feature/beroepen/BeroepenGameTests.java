@@ -224,6 +224,20 @@ public class BeroepenGameTests {
             helper.assertTrue(!snotje.getPersistentData().getBooleanOr(Apotheek.SNOTJE, false) && BeroepenVoortgang.stap(p, Beroep.APOTHEEK) == 2,
                     "Snotje is better, step 2");
             helper.assertTrue(count(p, Items.GLASS_BOTTLE) == 1 && count(p, BeroepenFeature.KAASMELKDRANKJE.get()) == 0, "the bottle stays");
+            // 1.2.7: a second helper who is on the job while someone else makes the (shared) Snotje better isn't stuck
+            ServerPlayer q = player(helper, 5, 5);
+            try {
+                Apotheek.ROLE.talk(npc, q);
+                helper.assertTrue(BeroepenVoortgang.stap(q, Beroep.APOTHEEK) == 1, "the second helper starts");
+                snotje.getPersistentData().putBoolean(Apotheek.SNOTJE, false);   // (the first helper cured him meanwhile)
+                ItemStack tweede = new ItemStack(BeroepenFeature.KAASMELKDRANKJE.get());
+                helper.assertTrue(Apotheek.snotje(q, snotje, tweede) && BeroepenVoortgang.stap(q, Beroep.APOTHEEK) == 2,
+                        "the second helper can still give the drankje: step " + BeroepenVoortgang.stap(q, Beroep.APOTHEEK));
+                // someone who isn't on the job hears he's better already
+                helper.assertTrue(!Apotheek.snotje(p, snotje, new ItemStack(BeroepenFeature.KAASMELKDRANKJE.get())), "p is done: al beter");
+            } finally {
+                leave(helper, q);
+            }
             Apotheek.ROLE.talk(npc, p);
             beloond(helper, p, Beroep.APOTHEEK);
             Apotheek.ROLE.talk(npc, p);
