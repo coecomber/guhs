@@ -42,6 +42,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  *   it is, statistics, eerste keren and wist-je-datjes (feature.band.client.MijnGuhsTab).</li>
  *   <li><b>Verhalen</b>: every questline with your step, what to do now, whom to visit, what you need and the rewards
  *   (feature.gids.client.GidsVerhalenTab, data feature.gids.VerhalenVoortgang).</li>
+ *   <li><b>Titels</b> (1.2.6): every title; pick the one that shows behind your name (feature.titels.client.GidsTitelsTab).</li>
  * </ul>
  * The Minigames and Kleding tabs scroll (mouse wheel or the bar); what is folded open is remembered while the game runs.
  */
@@ -58,11 +59,15 @@ public class GuhDexScreen extends Screen {
     public static java.util.List<MaagPayloads.HighscoreRow> highscores = java.util.List.of();
     /** The tab bar: the tabs start at (left + TABS_X, top + TABS_Y); the page below it starts at top + BODY. */
     private static final int TABS_X = 6, TABS_Y = 2, BODY = 25, LIST_TOP = 28;
+    /** 1.2.6: seven tabs, so each a little narrower than the Superkompas's (the title still fits next to them). */
+    private static final int TAB_W = 22, TAB_GAP = 1;
     private final nl.juiced.guhs.feature.gids.client.GidsLijst lijst = new nl.juiced.guhs.feature.gids.client.GidsLijst();
     /** 2.10: the Mijn guhs tab (its own list, preview and pages). */
     private final nl.juiced.guhs.feature.band.client.MijnGuhsTab mijnGuhs = new nl.juiced.guhs.feature.band.client.MijnGuhsTab();
     /** The Verhalen tab (its list and the page of a questline). */
     private final nl.juiced.guhs.feature.gids.client.GidsVerhalenTab verhalen = new nl.juiced.guhs.feature.gids.client.GidsVerhalenTab();
+    /** 1.2.6: the Titels tab (pick the title behind your name). */
+    private final nl.juiced.guhs.feature.titels.client.GidsTitelsTab titels = new nl.juiced.guhs.feature.titels.client.GidsTitelsTab();
     /**
      * Layout of a guh page: the picture (with the page arrows and the page number under it) on the left, the text column
      * on the right down to TEXT_BOTTOM, then the rewards. Everything stays inside its own box: long texts are wrapped
@@ -80,7 +85,9 @@ public class GuhDexScreen extends Screen {
         /** 2.10: your own tamed guhs, each with its dagboekje (feature.band.client.MijnGuhsTab). */
         MIJN_GUHS("guhs:guhhuisje_klein", net.minecraft.world.item.Items.RED_BED),
         /** Every questline: where you are, what to do now, whom to visit (feature.gids.client.GidsVerhalenTab). */
-        VERHALEN("minecraft:writable_book", net.minecraft.world.item.Items.WRITABLE_BOOK);
+        VERHALEN("minecraft:writable_book", net.minecraft.world.item.Items.WRITABLE_BOOK),
+        /** 1.2.6: your titles; pick the one behind your name (feature.titels.client.GidsTitelsTab). */
+        TITELS("minecraft:name_tag", net.minecraft.world.item.Items.NAME_TAG);
 
         private final String icon;
         private final net.minecraft.world.item.Item standIn;
@@ -189,6 +196,9 @@ public class GuhDexScreen extends Screen {
         if (tab == Tab.VERHALEN) {
             nl.juiced.guhs.feature.gids.client.VerhalenCache.vraag(); // (fresh steps and counts)
         }
+        if (tab == Tab.TITELS) {
+            nl.juiced.guhs.feature.titels.client.TitelsCache.vraag(); // (titles earned since the Guhdex opened)
+        }
         rebuildWidgets();
     }
 
@@ -246,6 +256,7 @@ public class GuhDexScreen extends Screen {
             case KNUS -> initKnus();
             case MIJN_GUHS -> mijnGuhs.init(font, left, top, W, H, this::addRenderableWidget, this::rebuildWidgets);
             case VERHALEN -> verhalen.init(left, top, W, H, this::addRenderableWidget, this::rebuildWidgets);
+            case TITELS -> titels.init(left, top, W, H);
             default -> initGuhs();
         }
     }
@@ -292,8 +303,8 @@ public class GuhDexScreen extends Screen {
         g.fill(left, top + BODY - 1, left + W, top + BODY, 0xFFD27A9C);
         List<ItemStack> icons = java.util.Arrays.stream(Tab.values()).map(Tab::icoon).toList();
         nl.juiced.guhs.feature.gids.client.GidsTabs.teken(g, left + TABS_X, top + TABS_Y, icons, tab.ordinal(), mouseX, mouseY,
-                nl.juiced.guhs.feature.gids.client.GidsTabs.GUHDEX);
-        int tx = left + TABS_X + nl.juiced.guhs.feature.gids.client.GidsTabs.breedte(Tab.values().length) + 8;
+                nl.juiced.guhs.feature.gids.client.GidsTabs.GUHDEX, TAB_W, TAB_GAP);
+        int tx = left + TABS_X + nl.juiced.guhs.feature.gids.client.GidsTabs.breedte(Tab.values().length, TAB_W, TAB_GAP) + 6;
         Component bold = title.copy().withStyle(ChatFormatting.BOLD);
         g.text(font, bold, tx, top + 9, 0xFF7A2848, false);
         scaled(g, Component.literal("· ").append(tab.naam()), tx + font.width(bold) + 4, top + 10, 0.875f, 0xFFB0708A, false);
@@ -302,6 +313,7 @@ public class GuhDexScreen extends Screen {
             case KNUS -> renderKnus(g, mouseX, mouseY);
             case MIJN_GUHS -> mijnGuhs.teken(g, mouseX, mouseY);
             case VERHALEN -> verhalen.teken(g, mouseX, mouseY);
+            case TITELS -> titels.teken(g, mouseX, mouseY);
             default -> renderGuhs(g, mouseX, mouseY);
         }
     }
@@ -310,12 +322,12 @@ public class GuhDexScreen extends Screen {
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(g, mouseX, mouseY, partialTick);
         // tooltips last, above everything: the tab names, and the rows of the list tabs
-        int hover = nl.juiced.guhs.feature.gids.client.GidsTabs.onder(left + TABS_X, top + TABS_Y, Tab.values().length, mouseX, mouseY);
+        int hover = nl.juiced.guhs.feature.gids.client.GidsTabs.onder(left + TABS_X, top + TABS_Y, Tab.values().length, mouseX, mouseY, TAB_W, TAB_GAP);
         if (hover >= 0) {
             g.setTooltipForNextFrame(font, Tab.values()[hover].naam(), mouseX, mouseY);
-        } else if (tab == Tab.MINIGAMES || tab == Tab.KLEDING || tab == Tab.MIJN_GUHS || tab == Tab.VERHALEN) {
+        } else if (tab == Tab.MINIGAMES || tab == Tab.KLEDING || tab == Tab.MIJN_GUHS || tab == Tab.VERHALEN || tab == Tab.TITELS) {
             List<Component> tip = tab == Tab.MIJN_GUHS ? mijnGuhs.tip(mouseX, mouseY) : tab == Tab.VERHALEN ? verhalen.tip(mouseX, mouseY)
-                    : lijst.tip(mouseX, mouseY);
+                    : tab == Tab.TITELS ? titels.tip(mouseX, mouseY) : lijst.tip(mouseX, mouseY);
             if (tip != null && !tip.isEmpty()) {
                 g.setComponentTooltipForNextFrame(font, tip, mouseX, mouseY);
             }
@@ -332,6 +344,9 @@ public class GuhDexScreen extends Screen {
             return true;
         }
         if (tab == Tab.VERHALEN && verhalen.wiel(mouseX, mouseY, scrollY)) {
+            return true;
+        }
+        if (tab == Tab.TITELS && titels.wiel(mouseX, mouseY, scrollY)) {
             return true;
         }
         if (tab == Tab.GUHS && mouseX >= left && mouseX < left + W && mouseY >= top + BODY && mouseY < top + H && scrollY != 0) {
@@ -355,6 +370,9 @@ public class GuhDexScreen extends Screen {
         if (tab == Tab.VERHALEN && verhalen.sleep(mouseY)) {
             return true;
         }
+        if (tab == Tab.TITELS && titels.sleep(mouseY)) {
+            return true;
+        }
         return super.mouseDragged(event, dragX, dragY);
     }
 
@@ -365,6 +383,7 @@ public class GuhDexScreen extends Screen {
         lijst.los();
         mijnGuhs.los();
         verhalen.los();
+        titels.los();
         return super.mouseReleased(event);
     }
 
@@ -644,7 +663,7 @@ public class GuhDexScreen extends Screen {
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         double mouseX = event.x(), mouseY = event.y();
         int button = event.button();
-        int hit = nl.juiced.guhs.feature.gids.client.GidsTabs.onder(left + TABS_X, top + TABS_Y, Tab.values().length, mouseX, mouseY);
+        int hit = nl.juiced.guhs.feature.gids.client.GidsTabs.onder(left + TABS_X, top + TABS_Y, Tab.values().length, mouseX, mouseY, TAB_W, TAB_GAP);
         if (hit >= 0 && button == 0) {
             if (Tab.values()[hit] != tab) {
                 minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
@@ -665,6 +684,9 @@ public class GuhDexScreen extends Screen {
         }
         if (tab == Tab.VERHALEN) {
             return verhalen.klik(mouseX, mouseY, button);
+        }
+        if (tab == Tab.TITELS) {
+            return titels.klik(mouseX, mouseY, button);
         }
         if (tab != Tab.KNUS || button != 0) {
             return false;

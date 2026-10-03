@@ -113,12 +113,12 @@ public final class Feestbuffet {
             Minigames.give(player, new ItemStack(KnuffeldalFeature.KNUS_OORKONDE.get()));
             Minigames.give(player, new ItemStack(ModItems.clothingItem(GuhClothes.BURGEMEESTERSSJERP)));
             GuhQuests.saved(player).putBoolean(TITEL, true);
-            player.refreshTabListName();
+            nl.juiced.guhs.feature.titels.Titels.ververs(player);
             KnusVoortgang.hoogste(player, KnuffeldalVoortgang.FINALE, 1);
             GuhAdvancements.grant(player, "knuffeldal_finale");
             KnuffeldalAdvancements.toon(player, "knusfeest_klaar");
             KnuffeldalAdvancements.toon(player, "knuffelburgemeester");
-            player.level().getServer().getPlayerList().broadcastSystemMessage(Component.translatable("gui.guhs.knuffeldal.titel_gekregen", player.getDisplayName())
+            player.level().getServer().getPlayerList().broadcastSystemMessage(Component.translatable("gui.guhs.knuffeldal.titel_gekregen", player.getName())
                     .withStyle(ChatFormatting.LIGHT_PURPLE), false);
         } else {
             // a seasonal feast: a treat of the season

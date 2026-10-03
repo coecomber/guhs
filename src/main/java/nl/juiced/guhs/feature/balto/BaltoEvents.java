@@ -31,15 +31,7 @@ public final class BaltoEvents {
     public static final String ZIEK = "guhs_balto_ziek";
     static final String OUTFITS = "guhs_balto_outfits";
 
-    // --- the title --------------------------------------------------------------------------------------------------------
-    @SubscribeEvent
-    public static void onTabName(PlayerEvent.TabListNameFormat event) {
-        if (event.getEntity() instanceof ServerPlayer player && BaltoVerhaal.isHeld(player)) {
-            Component base = event.getDisplayName() != null ? event.getDisplayName() : player.getName();
-            event.setDisplayName(base.copy().append(Component.literal(" ✿ ").withStyle(ChatFormatting.AQUA))
-                    .append(Component.translatable("gui.guhs.balto.titel").withStyle(ChatFormatting.AQUA)));
-        }
-    }
+    // (the title "Held van Nomguh": feature.titels, 1.2.6)
 
     // --- the sick babies (GuhHooks.tick) ------------------------------------------------------------------------------------
     static void guhTick(GuhEntity guh) {

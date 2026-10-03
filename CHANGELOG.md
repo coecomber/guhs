@@ -8,6 +8,15 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 - **My Guhs shows where each guh is.** The list in the Guhdex now says where every guh is (its Guh House, wandering, in a
   chest, with you...) instead of its personality; hover a row for the exact spot. The personality is still on the guh's
   own page.
+- **New: titles you can pick.** The Guhdex has a new tab, **Titles**: every title in the game, with the ones you've earned
+  ready to pick and the others greyed out with a little lock and a hint on how to earn them. Pick one title (click it
+  again, or "No title", to show none) and it shows after your name in the player list, **above your head** and **in
+  chat**. Until you pick, you keep showing what you had (Hero of Nomguh, or else Snuggle Mayor), and only one title shows
+  at a time, no more two titles in a row.
+- **Six new titles** next to Hero of Nomguh and Snuggle Mayor: **Friend of Guhtwo** (Clone Island), **Ohana Guh**
+  (Guhwai'i), **Cloud Friend** (the Snuggleheart in the Cloud Chapel), **House Builder** (the Carpenter Guh),
+  **Over-Chonker** (defeat Overlord Mika) and **Guh Expert** (a full Guhdex). Whoever already did those gets the title
+  right away; a newly earned title is announced in chat.
 
 ## 1.2.5 — Minecraft 26.1.2
 

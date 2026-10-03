@@ -4435,7 +4435,19 @@ def build():
                   "De kapotte slee, Het Grote Knusfeest, Het Guheinde, De Grillguh helpt en de vier beroepen). Elke rij zegt <i>Nog niet begonnen</i>, <i>Stap x van y</i> "
                   "of <i>Klaar! Vahoeg!</i>. Klik op een rij voor de pagina: <b>Wat nu?</b>, <b>waar</b> (welk personage, op welke plek), de spullen die je nog nodig "
                   "hebt (wat je hebt tegenover wat je nodig hebt), alle stappen met vinkjes en de beloningen. Voortgang is per speler en geldt voor elk bouwwerk van "
-                  "die soort, dus op een tweede kloon-eiland of Nomguh ga je verder waar je was."), wide=True)
+                  "die soort, dus op een tweede kloon-eiland of Nomguh ga je verder waar je was.") +
+                p("<i>New in 1.2.6.</i> The seventh tab, <b>Titels</b> (the name tag), lists every <b>title</b>. Pick one you have earned (click it again, or "
+                  "<i>Geen titel</i>, for none) and it shows after your name in the player list, above your head and in chat. A title you don't have yet is "
+                  "grey with a little lock and a hint. The titles: <b>Held van Nomguh</b> (help Baltoguh in Nomguh), <b>Knuffelburgemeester</b> (Het Grote "
+                  "Knusfeest), <b>Vriend van Guhtwo</b> (the kloon-eiland), <b>Ohana-guh</b> (the 626-guh on Guhwai'i), <b>Wolkenvriend</b> (the Knuffelhart "
+                  "in the Hemelkapelletje), <b>Huisjesbouwer</b> (build a guhhuisje with the Timmerguh), <b>Opper-vadser</b> (defeat Opper-Mika in the "
+                  "Guheinde) and <b>Guhkenner</b> (a full Guhdex).",
+                  "<i>Nieuw in 1.2.6.</i> Het zevende tabblad, <b>Titels</b> (het naamkaartje), laat elke <b>titel</b> zien. Kies er een die je verdiend hebt "
+                  "(klik 'm nog een keer aan, of <i>Geen titel</i>, voor geen) en hij staat achter je naam in de spelerslijst, boven je hoofd en in de chat. "
+                  "Een titel die je nog niet hebt is grijs met een slotje en een tip. De titels: <b>Held van Nomguh</b> (help Baltoguh in Nomguh), "
+                  "<b>Knuffelburgemeester</b> (Het Grote Knusfeest), <b>Vriend van Guhtwo</b> (het kloon-eiland), <b>Ohana-guh</b> (de 626-guh op Guhwai'i), "
+                  "<b>Wolkenvriend</b> (het Knuffelhart in het Hemelkapelletje), <b>Huisjesbouwer</b> (bouw een guhhuisje met de Timmerguh), "
+                  "<b>Opper-vadser</b> (versla Opper-Mika in het Guheinde) en <b>Guhkenner</b> (een volle Guhdex)."), wide=True)
     S.append(section("guhdex", "Guhdex", "Guhdex", dex))
 
     # --- food, furniture and deco ---------------------------------------------------------------------------------------

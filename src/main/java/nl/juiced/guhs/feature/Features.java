@@ -61,6 +61,7 @@ public final class Features {
         nl.juiced.guhs.feature.spelen.SpelenFeature.register(modBus);
         nl.juiced.guhs.feature.kleding.KledingFeature.register(modBus);
         nl.juiced.guhs.feature.gids.GidsFeature.register(modBus);
+        nl.juiced.guhs.feature.titels.TitelsFeature.register(modBus);   // 1.2.6: the titles
         nl.juiced.guhs.feature.sjoelen.SjoelenFeature.register(modBus);
         nl.juiced.guhs.feature.doolhof.DoolhofFeature.register(modBus);
         nl.juiced.guhs.feature.katapult.KatapultFeature.register(modBus);
@@ -134,6 +135,7 @@ public final class Features {
         nl.juiced.guhs.feature.spelen.SpelenFeature.payloads(registrar);
         nl.juiced.guhs.feature.kleding.KledingFeature.payloads(registrar);
         nl.juiced.guhs.feature.gids.GidsFeature.payloads(registrar);
+        nl.juiced.guhs.feature.titels.TitelsFeature.payloads(registrar);   // 1.2.6: the titles
         nl.juiced.guhs.feature.sjoelen.SjoelenFeature.payloads(registrar);
         nl.juiced.guhs.feature.doolhof.DoolhofFeature.payloads(registrar);
         nl.juiced.guhs.feature.katapult.KatapultFeature.payloads(registrar);

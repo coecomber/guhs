@@ -97,7 +97,7 @@ public final class BaltoVerhaal {
         s.remove(HELD);
         s.remove(MUKLUK);
         VerhaalGuhs.vergeet(p, VerhaalGuh.BALTOGUH);
-        p.refreshTabListName();
+        nl.juiced.guhs.feature.titels.Titels.ververs(p);
     }
 
     // =================================================================================================================
@@ -391,7 +391,7 @@ public final class BaltoVerhaal {
             Minigames.give(p, new ItemStack(ModItems.clothingItem(c)));
         }
         GuhQuests.saved(p).putBoolean(HELD, true);
-        p.refreshTabListName();
+        nl.juiced.guhs.feature.titels.Titels.ververs(p);
         grant(p, "balto_held");
         ServerLevel level = p.level();
         Vec3 at = bij != null ? bij.position() : p.position();

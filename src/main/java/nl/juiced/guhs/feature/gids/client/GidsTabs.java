@@ -22,27 +22,37 @@ public final class GidsTabs {
 
     /** Draws the tabs from (x, y) to the right; the chosen tab reaches 1 pixel lower (it merges into the page). */
     public static void teken(GuiGraphicsExtractor g, int x, int y, List<ItemStack> icons, int actief, double mouseX, double mouseY, Stijl s) {
+        teken(g, x, y, icons, actief, mouseX, mouseY, s, W, GAP);
+    }
+
+    /** The same, with tabs of width w and gap pixels between them (1.2.6: the Guhdex has seven tabs, a little narrower). */
+    public static void teken(GuiGraphicsExtractor g, int x, int y, List<ItemStack> icons, int actief, double mouseX, double mouseY, Stijl s,
+            int w, int gap) {
         for (int i = 0; i < icons.size(); i++) {
-            int tx = x + i * (W + GAP);
+            int tx = x + i * (w + gap);
             boolean on = i == actief;
-            boolean hover = !on && binnen(tx, y, mouseX, mouseY);
+            boolean hover = !on && binnen(tx, y, w, mouseX, mouseY);
             int top = on ? y : y + 2;
             int bottom = y + H + (on ? 1 : 0);
             // a rounded tab: the frame colour around it, the corners cut off
-            g.fill(tx + 1, top, tx + W - 1, top + 1, s.rand());
+            g.fill(tx + 1, top, tx + w - 1, top + 1, s.rand());
             g.fill(tx, top + 1, tx + 1, bottom, s.rand());
-            g.fill(tx + W - 1, top + 1, tx + W, bottom, s.rand());
-            g.fill(tx + 1, top + 1, tx + W - 1, bottom, on ? s.actief() : hover ? s.hover() : s.tab());
-            g.fill(tx + 2, top + 1, tx + W - 2, top + 2, s.glans());
+            g.fill(tx + w - 1, top + 1, tx + w, bottom, s.rand());
+            g.fill(tx + 1, top + 1, tx + w - 1, bottom, on ? s.actief() : hover ? s.hover() : s.tab());
+            g.fill(tx + 2, top + 1, tx + w - 2, top + 2, s.glans());
             int iy = top + (bottom - top - 16) / 2 + (on ? 0 : 1);
-            g.item(icons.get(i), tx + (W - 16) / 2, iy);
+            g.item(icons.get(i), tx + (w - 16) / 2, iy);
         }
     }
 
     /** The tab under the mouse (-1: none). */
     public static int onder(int x, int y, int count, double mouseX, double mouseY) {
+        return onder(x, y, count, mouseX, mouseY, W, GAP);
+    }
+
+    public static int onder(int x, int y, int count, double mouseX, double mouseY, int w, int gap) {
         for (int i = 0; i < count; i++) {
-            if (binnen(x + i * (W + GAP), y, mouseX, mouseY)) {
+            if (binnen(x + i * (w + gap), y, w, mouseX, mouseY)) {
                 return i;
             }
         }
@@ -51,11 +61,15 @@ public final class GidsTabs {
 
     /** The width of a row of tabs. */
     public static int breedte(int count) {
-        return count * W + Math.max(0, count - 1) * GAP;
+        return breedte(count, W, GAP);
     }
 
-    private static boolean binnen(int tx, int y, double mouseX, double mouseY) {
-        return mouseX >= tx && mouseX < tx + W && mouseY >= y && mouseY < y + H;
+    public static int breedte(int count, int w, int gap) {
+        return count * w + Math.max(0, count - 1) * gap;
+    }
+
+    private static boolean binnen(int tx, int y, int w, double mouseX, double mouseY) {
+        return mouseX >= tx && mouseX < tx + w && mouseY >= y && mouseY < y + H;
     }
 
     private GidsTabs() {

@@ -43,6 +43,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.spelen.client.SpelenClient.init(modBus);
         nl.juiced.guhs.feature.kleding.client.KledingClient.init(modBus);
         nl.juiced.guhs.feature.gids.client.GidsClient.init(modBus);
+        nl.juiced.guhs.feature.titels.client.TitelsCache.init();   // 1.2.6: the titles
         nl.juiced.guhs.feature.sjoelen.client.SjoelenClient.init(modBus);
         nl.juiced.guhs.feature.doolhof.client.DoolhofClient.init(modBus);
         nl.juiced.guhs.feature.katapult.client.KatapultClient.init(modBus);

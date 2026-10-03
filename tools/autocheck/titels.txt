@@ -1,0 +1,89 @@
+# 1.2.6 the titles (visual QA): the Guhdex tab Titels (English client, run/options.txt lang:en_us) and the title in chat. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/titels.txt -Dguhs.autocheck.fresh=true
+# (gui 640x360 at gui scale 2: the Guhdex is at 170,75; the rows start at y 103: "No title" 16 high, then 20 per title)
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+wait 40
+
+section titels: a player without titles (everything locked)
+titelsstand wis
+wait 10
+gui dexopen titels
+wait 20
+shot gui_titels_leeg gui
+mouse 300 209
+wait 5
+shot gui_titels_leeg_tip_slot gui
+gui close
+
+section titels: four titles earned, never chosen (the first one shows)
+titelsstand
+wait 10
+gui dexopen titels
+mouse 20 20
+wait 20
+shot gui_titels_lijst gui
+mouse 300 129
+wait 5
+shot gui_titels_tip_gekozen gui
+mouse 300 169
+wait 5
+shot gui_titels_tip_kies gui
+mouse 300 189
+wait 5
+shot gui_titels_tip_slot gui
+mouse 300 111
+wait 5
+shot gui_titels_tip_geen gui
+mouse 325 88
+wait 5
+shot gui_titels_tabnaam gui
+
+section titels: click another title, click it again (none)
+click 300 249
+wait 15
+mouse 20 20
+wait 5
+shot gui_titels_gekozen_opper gui
+click 300 249
+wait 15
+shot gui_titels_geen_gekozen gui
+click 300 149
+wait 15
+shot gui_titels_gekozen_burgemeester gui
+gui close
+
+section the other tabs still fit next to seven tabs
+gui dexopen guhs
+wait 10
+shot gui_titels_tabbalk_guhs gui
+gui close
+gui dexopen mijn_guhs
+wait 10
+shot gui_titels_tabbalk_mijnguhs gui
+gui close
+gui dexopen minigames
+wait 10
+shot gui_titels_tabbalk_minigames gui
+gui close
+
+section the title in chat (and the name above the head, as the client computes it)
+clearchat
+titelsstand kies held_van_nomguh
+wait 10
+titelnaam
+/say Guh!
+wait 10
+titelsstand kies opper_vadser
+wait 10
+titelnaam
+/say VAHOEG!
+wait 10
+titelsstand geen
+wait 10
+titelnaam
+/say njeg
+wait 20
+shot titels_chat gui

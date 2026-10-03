@@ -239,6 +239,7 @@ public final class GuhDex {
         nl.juiced.guhs.feature.kleding.KledingUnlocks.sync(player); // (2.9: the Kleding tab's unlocks)
         nl.juiced.guhs.feature.band.BandPayloads.sync(player);      // (2.10: the Mijn guhs tab)
         nl.juiced.guhs.feature.gids.VerhalenPayloads.sync(player);  // (the Verhalen tab: every questline's step)
+        nl.juiced.guhs.feature.titels.TitelsPayloads.sync(player);  // (1.2.6: the Titels tab)
         nl.juiced.guhs.network.ModNetworking.sendTo(player, MaagPayloads.GuhDexData.of(GuhWorldData.get(player.level().getServer()).player(player.getUUID())));
     }
 

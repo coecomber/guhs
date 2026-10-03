@@ -88,6 +88,33 @@ OVERIG = {
     "gui.guhs.band.plek.bij_jou.kort": "Bij jou!",
     "gui.guhs.band.plek.in_de_wolkjes.kort": "In de wolkjes",
     "quest.guhs.reis.hoort_hier": "Deze Reisguh hoort bij dit gebouw, njeg! Hij blijft hier lekker zitten.",   # 1.2.1
+    # 1.2.6: the titles (feature/titels): the Guhdex tab Titels, the new titles and their hints
+    "gui.guhs.guhdex.tab.titels": "Titels",
+    "gui.guhs.titels.naam.vriend_van_guhtwo": "Vriend van Guhtwo",
+    "gui.guhs.titels.naam.ohana_guh": "Ohana-guh",
+    "gui.guhs.titels.naam.wolkenvriend": "Wolkenvriend",
+    "gui.guhs.titels.naam.huisjesbouwer": "Huisjesbouwer",
+    "gui.guhs.titels.naam.opper_vadser": "Opper-vadser",
+    "gui.guhs.titels.naam.guhkenner": "Guhkenner",
+    "gui.guhs.titels.hint.held_van_nomguh": "Help Baltoguh in Nomguh",
+    "gui.guhs.titels.hint.knuffelburgemeester": "Vier het Grote Knusfeest in het Knuffeldal",
+    "gui.guhs.titels.hint.vriend_van_guhtwo": "Help Guhtwo op het kloon-eiland",
+    "gui.guhs.titels.hint.ohana_guh": "Word familie van 626-guh op Guhwai'i",
+    "gui.guhs.titels.hint.wolkenvriend": "Laat het Knuffelhart in het Hemelkapelletje weer kloppen",
+    "gui.guhs.titels.hint.huisjesbouwer": "Bouw samen met de Timmerguh een guhhuisje",
+    "gui.guhs.titels.hint.opper_vadser": "Versla Opper-Mika in het Guheinde",
+    "gui.guhs.titels.hint.guhkenner": "Maak je Guhdex helemaal vol",
+    "gui.guhs.titels.geen": "Geen titel",
+    "gui.guhs.titels.geen.tip": "Klik om alleen je naam te laten zien, zonder titel.",
+    "gui.guhs.titels.uitleg": "Kies de titel die anderen achter je naam zien",
+    "gui.guhs.titels.gekozen": "Dit is je titel!",
+    "gui.guhs.titels.kies": "Klik om deze titel te kiezen",
+    "gui.guhs.titels.tip.waar": "Je gekozen titel staat achter je naam in de spelerslijst, boven je hoofd en in de chat.",
+    "gui.guhs.titels.tip.voorbeeld": "Zo ziet je naam eruit:",
+    "gui.guhs.titels.tip.kies": "Klik om deze titel te kiezen.",
+    "gui.guhs.titels.tip.weg": "Klik nog een keer om 'm weg te halen.",
+    "gui.guhs.titels.tip.op_slot": "Nog op slot. Zo verdien je 'm:",
+    "gui.guhs.titels.nieuw": "Nieuwe titel: %s! Kies 'm in je Guhdex (tabblad Titels).",
 }
 
 # where a clothing piece comes from (KledingBronnen.prijs: the amount is the argument)

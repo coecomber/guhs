@@ -112,17 +112,7 @@ public final class KnuffeldalEvents {
         }
     }
 
-    // --- the title -------------------------------------------------------------------------------------------------------
-
-    /** The Knuffelburgemeester (the Grote Knusfeest's finale) has the title behind their name in the player list. */
-    @SubscribeEvent
-    public static void onTabName(net.neoforged.neoforge.event.entity.player.PlayerEvent.TabListNameFormat event) {
-        if (event.getEntity() instanceof ServerPlayer player && Burgemeester.isKnuffelburgemeester(player)) {
-            Component base = event.getDisplayName() != null ? event.getDisplayName() : player.getName();
-            event.setDisplayName(base.copy().append(Component.literal(" ✿ ").withStyle(ChatFormatting.LIGHT_PURPLE))
-                    .append(Component.translatable("gui.guhs.knuffeldal.titel").withStyle(ChatFormatting.LIGHT_PURPLE)));
-        }
-    }
+    // (the title "Knuffelburgemeester": feature.titels, 1.2.6)
 
     // --- the town ---------------------------------------------------------------------------------------------------------
 

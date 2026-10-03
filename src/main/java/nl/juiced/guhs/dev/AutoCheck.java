@@ -782,6 +782,30 @@ public final class AutoCheck {
                     nl.juiced.guhs.feature.beroepen.BeroepenVoortgang.rondAf(sp, nl.juiced.guhs.feature.beroepen.BeroepenVoortgang.Beroep.POLITIE, null);
                     return nl.juiced.guhs.feature.gids.VerhalenVoortgang.alle(sp).size();
                 }, n -> note("  verhalenstand: " + n + " questlines"));
+            case "titelsstand":
+                // titelsstand [kies <id>|geen|wis]: gives the player four titles (Held van Nomguh, Knuffelburgemeester, Vriend
+                // van Guhtwo, Opper-vadser), or picks one / none, or takes them all away (for the Guhdex tab Titels)
+                return server(server -> {
+                    ServerPlayer sp = player(server);
+                    var saved = nl.juiced.guhs.quest.GuhQuests.saved(sp);
+                    boolean wis = a.length > 1 && a[1].equals("wis");
+                    if (a.length > 2 && a[1].equals("kies")) {
+                        nl.juiced.guhs.feature.titels.Titels.kies(sp, a[2]);
+                    } else if (a.length > 1 && a[1].equals("geen")) {
+                        nl.juiced.guhs.feature.titels.Titels.kies(sp, nl.juiced.guhs.feature.titels.Titels.GEEN);
+                    } else {
+                        saved.putBoolean(nl.juiced.guhs.feature.balto.BaltoVerhaal.HELD, !wis);
+                        saved.putBoolean(nl.juiced.guhs.feature.knuffeldal.Feestbuffet.TITEL, !wis);
+                        saved.putInt(nl.juiced.guhs.feature.guheinde.GuheindeGevecht.WINS, wis ? 0 : 1);
+                        nl.juiced.guhs.feature.mewtwo.MewtwoVoortgang.zetStap(sp, wis ? 0 : nl.juiced.guhs.feature.mewtwo.MewtwoVoortgang.KLAAR);
+                        saved.remove(nl.juiced.guhs.feature.titels.Titels.KEUZE);
+                        nl.juiced.guhs.feature.titels.Titels.kijk(sp);
+                    }
+                    nl.juiced.guhs.feature.titels.TitelsPayloads.sync(sp);
+                    var t = nl.juiced.guhs.feature.titels.Titels.actief(sp);
+                    return nl.juiced.guhs.feature.titels.Titels.behaald(sp).size() + " titles, showing " + (t == null ? "none" : t.id())
+                            + ", display name \"" + sp.getDisplayName().getString() + "\"";
+                }, n -> note("  titelsstand: " + n));
             case "doolhofstart":
                 // doolhofstart <makkelijk|medium|lastig>: start a doolhof game at the nearest doolhofguh (within 400 blocks)
                 return server(server -> {
@@ -953,6 +977,13 @@ public final class AutoCheck {
                     lockPitch = rot[1];
                     note(String.format(Locale.ROOT, "  kijknaar %s: %.1f blocks away", a[1], r[0].distanceTo(r[1])));
                 });
+            case "titelnaam":
+                // titelnaam: notes the name the CLIENT shows above this player's head (PlayerEvent.NameFormat with the server's
+                // guhs:titels_actief list; other players' clients compute the same)
+                return mc2 -> {
+                    note("  titelnaam (client, above the head): \"" + (mc2.player == null ? "?" : mc2.player.getDisplayName().getString()) + "\"");
+                    return true;
+                };
             case "clearchat":
                 // clearchat: empty the chat (for clean screenshots with the HUD)
                 return mc2 -> {

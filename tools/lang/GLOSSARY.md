@@ -425,6 +425,13 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | De witte wolf-guh | The White Wolf Guh | |
 | Verteller | Narrator | |
 | Held van Nomguh | Hero of Nomguh | title |
+| Vriend van Guhtwo | Friend of Guhtwo | title (1.2.6) |
+| Ohana-guh | Ohana Guh | title (1.2.6) |
+| Wolkenvriend | Cloud Friend | title (1.2.6) |
+| Huisjesbouwer | House Builder | title (1.2.6) |
+| Opper-vadser | Over-Chonker | title (1.2.6) |
+| Guhkenner | Guh Expert | title (1.2.6) |
+| Titels / Geen titel | Titles / No title | Guhdex tab (1.2.6) |
 | Guhtwo | Guhtwo | |
 | Mieuwguh | Mewguh | |
 | Professor Knabbelkloon | Professor Nibbleclone | |
