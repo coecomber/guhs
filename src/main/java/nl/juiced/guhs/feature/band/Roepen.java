@@ -58,7 +58,7 @@ import nl.juiced.guhs.registry.ModSounds;
  */
 public final class Roepen {
     /** How long we wait for an unloaded guh's entity to load. */
-    static final int WACHT = 200;
+    static final int WACHT = 1200;   // (1.2.6: was 200; a busy server needs longer to load a far chunk and its entities)
     private static final int TICKET_STRAAL = 2;
 
     public static final DeferredRegister<TicketType> TICKET_TYPES = DeferredRegister.create(Registries.TICKET_TYPE, Guhs.MODID);

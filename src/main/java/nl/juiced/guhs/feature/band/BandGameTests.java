@@ -59,7 +59,10 @@ public class BandGameTests {
 
     /** A tamed guh of this player (a band guh). */
     static GuhEntity guh(GameTestHelper helper, ServerPlayer owner, BlockPos at) {
-        GuhEntity guh = helper.spawn(ModEntities.GUH.get(), at);
+        // (26.1: y=1 of the test template is its grass layer; a guh spawned inside it suffocates a little every 10 ticks,
+        // which ends its emotes and made these tests flaky: stand it on top)
+        BlockPos op = helper.getBlockState(at).isAir() ? at : at.above();
+        GuhEntity guh = helper.spawn(ModEntities.GUH.get(), op);
         guh.tame(owner);
         return guh;
     }

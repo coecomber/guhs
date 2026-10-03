@@ -80,6 +80,20 @@ public class RoepGameTests {
         return guh;
     }
 
+    /**
+     * 1.2.6: the test server sprints its ticks, but a far chunk and its entities load on worker threads in real time: while
+     * we wait for one, give those threads a few milliseconds per tick (else thousands of ticks pass before it's loaded).
+     */
+    private static void adem(boolean wachten) {
+        if (wachten) {
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
     private static void losLaten(ServerLevel level, BlockPos pos) {
         ChunkPos c = ChunkPos.containing(pos);
         level.setChunkForced(c.x(), c.z(), false);
@@ -98,7 +112,7 @@ public class RoepGameTests {
         helper.assertTrue(GuhVolger.plek(p.level().getServer(), p.getUUID(), e.getUUID()).soort() == PlekSoort.BIJ_JOU, wat + ": waar is hij? bij jou");
     }
 
-    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 2000)
     public static void roepVanVer(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(12, 1, 12));
         ServerLevel level = helper.getLevel();
@@ -107,6 +121,7 @@ public class RoepGameTests {
         guh.toggleSit();
         UUID id = guh.getUUID();
         helper.succeedWhen(() -> {
+            adem(level.getEntity(id) == null);
             helper.assertTrue(level.getEntity(id) != null, "its forced chunk is loaded");   // (the entity section loads a tick later)
             helper.assertTrue(Roepen.roep(p, id) == Roepen.Uitkomst.OK, "called");
             Entity e = level.getEntity(id);
@@ -134,6 +149,7 @@ public class RoepGameTests {
         helper.assertTrue(Roepen.bezig(id), "a fetch job");
         helper.assertTrue(Roepen.roep(p, id) == Roepen.Uitkomst.BEZIG && Roepen.bezig(id), "calling again: still the same fetch");
         helper.succeedWhen(() -> {
+            adem(level.getEntity(id) == null);
             Entity e = level.getEntity(id);
             helper.assertTrue(e != null && !Roepen.bezig(id), "loaded with a ticket and arrived");
             bijSpeler(helper, p, e, "from an unloaded chunk");
@@ -213,6 +229,7 @@ public class RoepGameTests {
         helper.assertTrue(hartjes > 0, "it has hearts");
         helper.succeedWhen(() -> {
             // (the Nether is really generated on the test server: its chunks around the guh take a while)
+            adem(nether.getEntity(id) == null);
             helper.assertTrue(nether.getEntity(id) != null, "its forced chunk in the Nether is loaded");
             helper.assertTrue(Roepen.roep(p, id) == Roepen.Uitkomst.OK, "called from the Nether");
             Entity e = helper.getLevel().getEntity(id);
