@@ -273,7 +273,8 @@ public final class MijnGuhsTab {
             Component naamRegel = guh.dood() ? Component.literal("☁ ").append(guh.naam().copy().withStyle(ChatFormatting.BOLD))
                     : guh.naam().copy().withStyle(ChatFormatting.BOLD);   // (3.0: in de wolkjes)
             GidsTekst.passend(g, naamRegel, tx, y + 4, rechts - breed - tx - 6, 1f, DONKER, false);
-            GidsTekst.passend(g, soortRegel(guh), tx, y + 16, rechts - breed - tx - 6, 0.75f, TEKST, false);
+            // 1.2.6: where the guh is (short), instead of its personality (that's on its page)
+            GidsTekst.passend(g, plekRegel(guh), tx, y + 16, rechts - breed - tx - 6, 0.75f, TEKST, false);
             GidsTekst.passend(g, hartje(niveau).append(" ").append(niveauNaam(niveau)), rechts, y + 5, breed, 0.625f, kleur(niveau), true);
             float frac = guh.volgende() <= 0 ? 1f : (float) (guh.hartjes() - niveau.drempel()) / Math.max(1, guh.volgende() - niveau.drempel());
             GidsTekst.balk(g, rechts - breed, y + 16, breed, 4, frac);
@@ -291,7 +292,8 @@ public final class MijnGuhsTab {
 
         @Override
         public List<Component> tip(double mx, double my, int x, int y, int w) {
-            return List.of(guh.naam().copy().withStyle(ChatFormatting.BOLD), Component.translatable("gui.guhs.mijnguhs.open_tip"));
+            return List.of(guh.naam().copy().withStyle(ChatFormatting.BOLD), guh.plek().copy().withStyle(ChatFormatting.GRAY),
+                    Component.translatable("gui.guhs.mijnguhs.open_tip"));
         }
     }
 
@@ -441,6 +443,21 @@ public final class MijnGuhsTab {
     // =====================================================================================================================
     // bits
     // =====================================================================================================================
+
+    /** 1.2.6, the list row: the variant and where the guh is, short ("Mint Guh · Guh House Villa Chonk"). */
+    static Component plekRegel(MijnGuhsCache.Guh guh) {
+        Component soort = GuhVariant.byId(guh.looks().getStringOr("Variant", "")).displayName();
+        return soort.copy().append(" · ").append(kortePlek(guh.plek()));
+    }
+
+    /** The short text of a place (gui.guhs.band.plek.X.kort with the same args), or the long one when there is no short one. */
+    static Component kortePlek(Component plek) {
+        if (plek.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t
+                && net.minecraft.client.resources.language.I18n.exists(t.getKey() + ".kort")) {
+            return Component.translatable(t.getKey() + ".kort", t.getArgs());
+        }
+        return plek;
+    }
 
     static Component soortRegel(MijnGuhsCache.Guh guh) {
         GuhVariant v = GuhVariant.byId(guh.looks().getStringOr("Variant", ""));

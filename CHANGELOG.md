@@ -3,6 +3,12 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.6 — Minecraft 26.1.2
+
+- **My Guhs shows where each guh is.** The list in the Guhdex now says where every guh is (its Guh House, wandering, in a
+  chest, with you...) instead of its personality; hover a row for the exact spot. The personality is still on the guh's
+  own page.
+
 ## 1.2.5 — Minecraft 26.1.2
 
 - **JEI's "+" works in the Bank Guh.** With JEI installed, the "+" on a crafting recipe fills the Bank Guh's crafting grid:

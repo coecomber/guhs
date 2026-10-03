@@ -68,6 +68,25 @@ OVERIG = {
     "item.guhs.bieb_boek.door": "door %s",
     "gui.guhs.huisje.meldingen": "Meldingen van zeldzame vondsten: %s",   # 1.2.5
     "gui.guhs.huisje.meldingen.tooltip": "Klik om de berichten in de chat aan of uit te zetten als een bewoner iets zeldzaams vindt (marshmallowknabbel, guhkristal...). Het dagboekje schrijft het altijd op.",   # 1.2.5
+    # 1.2.6: the short place of a guh in the Mijn guhs list (same args as the long gui.guhs.band.plek.* texts)
+    "gui.guhs.band.plek.wereld.kort": "Loopt rond (%2$s)",
+    "gui.guhs.band.plek.zit.kort": "Zit te wachten (%2$s)",
+    "gui.guhs.band.plek.huisje.kort": "Guhhuisje %1$s",
+    "gui.guhs.band.plek.slaapt_in_huisje.kort": "Slaapt in %1$s",
+    "gui.guhs.band.plek.rijdt_op.kort": "%1$s zit bovenop",
+    "gui.guhs.band.plek.rijdt_mee.kort": "Rijdt mee op %1$s",
+    "gui.guhs.band.plek.item_speler.kort": "In de zakken van %1$s",
+    "gui.guhs.band.plek.item_kist.kort": "In een kist (%2$s)",
+    "gui.guhs.band.plek.item_rugzak.kort": "In de rugzak van %1$s",
+    "gui.guhs.band.plek.item_bank.kort": "In een Bank Guh (%2$s)",
+    "gui.guhs.band.plek.item_grond.kort": "Pakketje op de grond (%2$s)",
+    "gui.guhs.band.plek.guhwiel.kort": "In een Guh Wheel (%2$s)",
+    "gui.guhs.band.plek.guhkamer.kort": "Logeert in de Guhkamer",
+    "gui.guhs.band.plek.schouder.kort": "Op de schouder van %1$s",
+    "gui.guhs.band.plek.in_guh.kort": "In guh %1$s",
+    "gui.guhs.band.plek.onbekend.kort": "Geen idee, njeg...",
+    "gui.guhs.band.plek.bij_jou.kort": "Bij jou!",
+    "gui.guhs.band.plek.in_de_wolkjes.kort": "In de wolkjes",
     "quest.guhs.reis.hoort_hier": "Deze Reisguh hoort bij dit gebouw, njeg! Hij blijft hier lekker zitten.",   # 1.2.1
 }
 
