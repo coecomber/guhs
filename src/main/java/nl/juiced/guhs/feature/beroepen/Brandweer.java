@@ -240,8 +240,23 @@ public final class Brandweer implements NpcRole {
         if (!(e instanceof GuhNpcEntity npc)) {
             return false;
         }
-        if (!player.getUUID().equals(BeroepenHulp.speler(npc)) || BeroepenVoortgang.stap(player, BEROEP) != 2) {
-            player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.brandweer.guhtje_wacht").withStyle(ChatFormatting.LIGHT_PURPLE));
+        boolean mijn = player.getUUID().equals(BeroepenHulp.speler(npc));
+        if (mijn && BeroepenVoortgang.stap(player, BEROEP) == 1) {
+            controleer(npc);   // (1.2.6: maybe the last fire just went out)
+        }
+        if (!mijn || BeroepenVoortgang.stap(player, BEROEP) != 2) {
+            // 1.2.6: say what's in the way: fires still burning, someone else's job, or no job running (a leftover guhtje)
+            if (mijn && BeroepenVoortgang.stap(player, BEROEP) == 1) {
+                player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.brandweer.guhtje_eerst_blussen", brandend(npc)).withStyle(ChatFormatting.LIGHT_PURPLE));
+            } else if (BeroepenHulp.speler(npc) == null || BeroepenHulp.verlopen(npc)) {
+                // nobody is on this job any more: this guhtje was left behind; it climbs down by itself
+                level.sendParticles(ParticleTypes.CLOUD, g.getX(), g.getY() + 0.3, g.getZ(), 10, 0.2, 0.2, 0.2, 0.02);
+                g.discard();
+                npc.roleData.remove("Guhtje");
+                player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.brandweer.guhtje_zelf").withStyle(ChatFormatting.LIGHT_PURPLE));
+            } else {
+                player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.brandweer.guhtje_wacht").withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
             return false;
         }
         Vec3 bij = npc.position().add(npc.getLookAngle().multiply(1, 0, 1).normalize().scale(1.2));

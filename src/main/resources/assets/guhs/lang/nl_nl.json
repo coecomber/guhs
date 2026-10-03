@@ -9151,5 +9151,7 @@
   "gui.guhs.titels.tip.kies": "Klik om deze titel te kiezen.",
   "gui.guhs.titels.tip.weg": "Klik nog een keer om 'm weg te halen.",
   "gui.guhs.titels.tip.op_slot": "Nog op slot. Zo verdien je 'm:",
-  "gui.guhs.titels.nieuw": "Nieuwe titel: %s! Kies 'm in je Guhdex (tabblad Titels)."
+  "gui.guhs.titels.nieuw": "Nieuwe titel: %s! Kies 'm in je Guhdex (tabblad Titels).",
+  "gui.guhs.beroepen.brandweer.guhtje_eerst_blussen": "Eerst blussen! Er branden nog %s vuurtjes. Daarna springt het guhtje in je armen.",
+  "gui.guhs.beroepen.brandweer.guhtje_zelf": "Het guhtje is zelf maar naar beneden geklommen. Praat met Blusguh om opnieuw te helpen!"
 }

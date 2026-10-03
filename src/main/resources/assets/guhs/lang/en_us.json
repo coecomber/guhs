@@ -9151,5 +9151,7 @@
   "gui.guhs.titels.tip.kies": "Click to pick this title.",
   "gui.guhs.titels.tip.weg": "Click again to take it off.",
   "gui.guhs.titels.tip.op_slot": "Still locked. How to earn it:",
-  "gui.guhs.titels.nieuw": "New title: %s! Pick it in your Guhdex (Titles tab)."
+  "gui.guhs.titels.nieuw": "New title: %s! Pick it in your Guhdex (Titles tab).",
+  "gui.guhs.beroepen.brandweer.guhtje_eerst_blussen": "Put the fires out first! %s are still burning. Then the little guh jumps into your arms.",
+  "gui.guhs.beroepen.brandweer.guhtje_zelf": "The little guh climbed down by itself. Talk to Splashguh to help again!"
 }

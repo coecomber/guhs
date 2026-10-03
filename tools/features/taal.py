@@ -87,6 +87,8 @@ OVERIG = {
     "gui.guhs.band.plek.onbekend.kort": "Geen idee, njeg...",
     "gui.guhs.band.plek.bij_jou.kort": "Bij jou!",
     "gui.guhs.band.plek.in_de_wolkjes.kort": "In de wolkjes",
+    "gui.guhs.beroepen.brandweer.guhtje_eerst_blussen": "Eerst blussen! Er branden nog %s vuurtjes. Daarna springt het guhtje in je armen.",   # 1.2.6
+    "gui.guhs.beroepen.brandweer.guhtje_zelf": "Het guhtje is zelf maar naar beneden geklommen. Praat met Blusguh om opnieuw te helpen!",   # 1.2.6
     "quest.guhs.reis.hoort_hier": "Deze Reisguh hoort bij dit gebouw, njeg! Hij blijft hier lekker zitten.",   # 1.2.1
     # 1.2.6: the titles (feature/titels): the Guhdex tab Titels, the new titles and their hints
     "gui.guhs.guhdex.tab.titels": "Titels",

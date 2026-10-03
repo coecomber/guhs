@@ -122,7 +122,13 @@ public class BeroepenGameTests {
             helper.assertTrue(g != null && Brandweer.isBoomguhtje(g) && g.blockPosition().equals(helper.absolutePos(new BlockPos(11, 5, 12))),
                     "the guhtje sits on the branch: " + (g == null ? null : g.blockPosition()));
             helper.assertTrue(!Brandweer.red(q, g), "only the helper can get it down");
-            helper.assertTrue(Brandweer.red(p, g), "rescued");
+            // 1.2.6: the right-click the way the 26.1 server handles it (EntityInteractSpecific first; cancelled = the end)
+            var klik = net.neoforged.neoforge.common.CommonHooks.onInteractEntityAt(p, g, Vec3.ZERO, net.minecraft.world.InteractionHand.MAIN_HAND);
+            helper.assertTrue(klik != null && !Brandweer.isBoomguhtje(g), "rescued with a right-click: " + klik);
+            helper.assertTrue(nl.juiced.guhs.entity.JsonNaamFix.lees(net.minecraft.network.chat.Component.literal(
+                    "{\"translate\": \"entity.guhs.beroepen_snotje\"}")) != null
+                    && nl.juiced.guhs.entity.JsonNaamFix.lees(net.minecraft.network.chat.Component.literal("Pluisje")) == null,
+                    "a JSON name from a template becomes a real component; a plain name stays");
             beloond(helper, p, Beroep.BRANDWEER);
             helper.assertTrue(count(p, BeroepenFeature.GUH_BRANDSLANG.get()) == 0, "Blusguh took his hose back");
             helper.assertTrue(g.distanceTo(npc) < 3, "the guhtje is down by Blusguh");

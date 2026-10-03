@@ -1088,5 +1088,7 @@
   "gui.guhs.kleding.prijs.munt.elfstempels": "%s Town Stamps",
   "gui.guhs.kleding.prijs.munt.katapultsterren": "%s Catapult Stars",
   "gui.guhs.kleding.prijs.munt.spelenlintjes": "%s Games Ribbons",
-  "gui.guhs.kleding.prijs.munt.sjoelschijfjes": "%s Shuffle Pucks"
+  "gui.guhs.kleding.prijs.munt.sjoelschijfjes": "%s Shuffle Pucks",
+  "gui.guhs.beroepen.brandweer.guhtje_eerst_blussen": "Put the fires out first! %s are still burning. Then the little guh jumps into your arms.",
+  "gui.guhs.beroepen.brandweer.guhtje_zelf": "The little guh climbed down by itself. Talk to Splashguh to help again!"
 }

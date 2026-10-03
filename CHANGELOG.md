@@ -18,6 +18,12 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
   **Over-Chonker** (defeat Overlord Mika) and **Guh Expert** (a full Guhdex). Whoever already did those gets the title
   right away; a newly earned title is announced in chat.
 
+- **The job guhs react to a right-click again.** Since the move to Minecraft 26.1 the little guh in the tree (Fire Chief
+  Splashguh's job) and Snotje (the pharmacy's job) ignored every right-click, so those two jobs couldn't be finished. Fixed.
+  The little guh in the tree now also says what's in the way (fires still burning, or no job running).
+- **No more raw names.** Guhs that a building names itself (Snotje, the Beauty jury, the nurse in Nomguh...) showed text like
+  `{"translate": "entity.guhs.beroepen_snotje"}` above their heads; they have their real names again, also in existing worlds.
+
 ## 1.2.5 — Minecraft 26.1.2
 
 - **JEI's "+" works in the Bank Guh.** With JEI installed, the "+" on a crafting recipe fills the Bank Guh's crafting grid:
