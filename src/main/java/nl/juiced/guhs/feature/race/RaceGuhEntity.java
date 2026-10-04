@@ -591,6 +591,19 @@ public class RaceGuhEntity extends GuhEntity {
         return false;
     }
 
+    /**
+     * 1.2.7: the racer leaves the kart for whatever reason (gets off, is teleported away, logs out...): their own guh on the
+     * back seat hops off at once. The race guh is never saved, so a guh still sitting on it when its chunk unloads would be
+     * lost for good.
+     */
+    @Override
+    protected void removePassenger(net.minecraft.world.entity.Entity passenger) {
+        super.removePassenger(passenger);
+        if (!this.level().isClientSide() && passenger instanceof ServerPlayer racer) {
+            nl.juiced.guhs.feature.samen.SamenMee.uitDeKart(racer);
+        }
+    }
+
     @Override
     public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);

@@ -232,9 +232,18 @@ public final class CircuitExtra implements RaceBaan.Extra {
                 RaceGame.grant(racer, "grote_guhspelen/circuit_goud_lastig");
             }
         }
-        if (game.goudTicks() >= 0 && total < game.goudTicks()) {
+        // 1.2.7: "Sneller dan de legende" no longer hangs on the live world record (the record holder never saw a golden
+        // ghost, nor did the first racer on an empty board, and a sharp record locked everyone else out for good): a
+        // gold-medal time on any circuit track is the legend's time. Beating the golden ghost itself still counts too.
+        boolean geest = game.goudTicks() >= 0 && total < game.goudTicks();
+        if (geest || medal == RaceGame.Medal.GOUD) {
+            boolean nieuw = !RaceGame.has(racer, "grote_guhspelen/circuit_gouden_geest");
             RaceGame.grant(racer, "grote_guhspelen/circuit_gouden_geest");
-            racer.sendSystemMessage(Component.translatable("quest.guhs.circuit.gouden_geest").withStyle(ChatFormatting.GOLD));
+            if (geest) {
+                racer.sendSystemMessage(Component.translatable("quest.guhs.circuit.gouden_geest").withStyle(ChatFormatting.GOLD));
+            } else if (nieuw) {
+                racer.sendSystemMessage(Component.translatable("quest.guhs.circuit.gouden_tijd").withStyle(ChatFormatting.GOLD));
+            }
         }
     }
 

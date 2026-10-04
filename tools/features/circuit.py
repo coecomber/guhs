@@ -182,7 +182,7 @@ ADVANCEMENTS = [  # name, parent, icon, frame, criteria (None: code-granted), ti
     ("circuit_goud_lastig", "circuit_lastig", "minecraft:gold_block", "challenge", None,
      "Goud op lastig! VAHOEG!", "Haal goud op lastig op een baan van het Guh-Circuit"),
     ("circuit_gouden_geest", "circuit_eerste", "minecraft:gold_ingot", "challenge", None,
-     "Sneller dan de legende", "Versla de gouden geest en pak zelf het baanrecord"),
+     "Sneller dan de legende", "Versla de gouden geest of rij een gouden tijd op een baan van het Guh-Circuit"),
     ("circuit_kleding", "circuit_gevonden", "guhs:circuit_helmpje", "goal",
      {"items": {"trigger": "minecraft:inventory_changed", "conditions": {"items": [
          {"items": "guhs:circuit_helmpje"}, {"items": "guhs:circuit_racepak"}, {"items": "guhs:circuit_vlagcape"}]}},
@@ -330,7 +330,7 @@ def ftb(fq):
     fq.q("circuit_lastig", "Eigenwijze renguh", "Rij een race op &clastig&r: een supersnelle maar eigenwijze renguh, veel Mika-pikkers, en de zilveren VAHOEG-pads doen het niet.",
          "guhs:circuit_stuiterpaddenstoel", [fq.adv("guhs:grote_guhspelen/circuit_lastig")], rewards=(("guhs:circuitbeker", 3),), deps=("circuit_eerste",),
          x=6, y=-1, xp=200)
-    fq.q("circuit_gouden_geest", "Sneller dan de legende", "Versla de &6gouden geest&r: het baanrecord van de wereld rijdt met je mee. Ben jij sneller?",
+    fq.q("circuit_gouden_geest", "Sneller dan de legende", "Versla de &6gouden geest&r (het baanrecord van de wereld rijdt met je mee) of rij een &6gouden tijd&r op een baan van het Guh-Circuit. Ben jij zo snel als de legende?",
          "minecraft:gold_ingot", [fq.adv("guhs:grote_guhspelen/circuit_gouden_geest")], rewards=(("guhs:circuitbeker", 4),), deps=("circuit_eerste",),
          x=6, y=1, shape="gear", xp=300)
     fq.q("circuit_kleding", "Echte coureur", "Koop het hele circuitpakje bij Coach Vahoegvroem: circuithelmpje, vahoeg-racepak en geblokte vlagcape. Alleen daar!",

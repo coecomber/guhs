@@ -71,6 +71,8 @@ public final class RaceGame {
     /** Extra coins for beating your own record, and in the welcome bag of your first race (on a track). */
     public static final int RECORD_PRIZES = 2, FIRST_PRIZES = 4;
     public static final int COUNTDOWN = 60, OFF_GRACE = 100, STUCK_TICKS = 200, OFF_TRACK_TICKS = 25, MAX_TICKS = 20 * 60 * 6;
+    /** 1.2.7: a racer who goes through no ring for this long isn't racing any more: the track is free for the next one. */
+    public static final int GATE_IDLE_TICKS = 20 * 90;
     /** Makkelijk ("wide rails"): off the road for this long before it counts, and a reset only goes back a little way. */
     public static final int OFF_TRACK_TICKS_MAKKELIJK = 70, TERUG_TICKS = 40;
     /**
@@ -137,9 +139,14 @@ public final class RaceGame {
     }
 
     /** Why a race ends early. */
-    public enum Ending { GAVE_UP, GONE, TOO_LATE, STOPPED }
+    public enum Ending { GAVE_UP, GONE, TOO_LATE, IDLE, STOPPED }
 
-    private static final Map<UUID, RaceGame> GAMES = new ConcurrentHashMap<>();       // by race guh NPC
+    /** 1.2.7: by race guh NPC and track (was: by NPC, so one racer kept all three tracks of the circuit busy). */
+    private static final Map<String, RaceGame> GAMES = new ConcurrentHashMap<>();
+
+    private static String key(UUID npc, RaceBaan baan) {
+        return npc + "/" + baan.id;
+    }
     private static final Map<UUID, RaceGame> RACERS = new ConcurrentHashMap<>();      // by racer
     /** (1.2.0: shown through lang entity.guhs.race_guh.naam.&lt;i&gt;; tools/features/taal.py has the same list) */
     private static final String[] GUH_NAMES = {"Bliksemvads", "Turbo Njeg", "Vahoeg 3000", "Roze Donder", "Kaasknabbel Express", "Vadsraket",
@@ -225,9 +232,39 @@ public final class RaceGame {
 
     // --- who is who ---------------------------------------------------------------------------------------------------
 
+    /** A race running at this NPC (on any of its tracks), or null. */
     @Nullable
     public static RaceGame of(GuhNpcEntity npc) {
-        return GAMES.get(npc.getUUID());
+        for (RaceGame game : GAMES.values()) {
+            if (game.npcId.equals(npc.getUUID())) {
+                return game;
+            }
+        }
+        return null;
+    }
+
+    /** The race running on this track of this NPC, or null: every track has its own racer. */
+    @Nullable
+    public static RaceGame of(GuhNpcEntity npc, RaceBaan baan) {
+        return GAMES.get(key(npc.getUUID(), baan));
+    }
+
+    /** All races running at this NPC. */
+    public static java.util.List<RaceGame> allOf(GuhNpcEntity npc) {
+        java.util.List<RaceGame> list = new java.util.ArrayList<>();
+        for (RaceGame game : GAMES.values()) {
+            if (game.npcId.equals(npc.getUUID())) {
+                list.add(game);
+            }
+        }
+        return list;
+    }
+
+    /** From the NPC's tick: every race of this NPC whose guh stopped ticking is over. */
+    public static void checkAllAlive(GuhNpcEntity npc) {
+        for (RaceGame game : allOf(npc)) {
+            game.checkAlive(npc);
+        }
     }
 
     @Nullable
@@ -340,7 +377,7 @@ public final class RaceGame {
     /** The racer asked for a race on a track and level. */
     public static void start(GuhNpcEntity npc, ServerPlayer player, RaceBaan baan, Niveau niveau) {
         ServerLevel level = (ServerLevel) npc.level();
-        RaceGame running = GAMES.get(npc.getUUID());
+        RaceGame running = GAMES.get(key(npc.getUUID(), baan));
         if (running != null) {
             ServerPlayer other = level.getServer().getPlayerList().getPlayer(running.racer);
             GuhQuests.say(player, npc, "quest.guhs.race.busy", other == null ? "?" : other.getDisplayName(), Math.min(running.lap + 1, running.laps()),
@@ -375,7 +412,7 @@ public final class RaceGame {
         guh.setFrozen(true);
         level.addFreshEntity(guh);
         game.guh = guh.getUUID();
-        GAMES.put(npc.getUUID(), game);
+        GAMES.put(key(npc.getUUID(), baan), game);
         RACERS.put(player.getUUID(), game);
 
         player.stopRiding();
@@ -595,6 +632,8 @@ public final class RaceGame {
         }
         if (ticks >= MAX_TICKS) {
             end(level, Ending.TOO_LATE);
+        } else if (ticks - lastGateTicks >= GATE_IDLE_TICKS) {
+            end(level, Ending.IDLE);
         }
     }
 
@@ -987,6 +1026,12 @@ public final class RaceGame {
         }
     }
 
+    /** Does the player have this advancement already? */
+    public static boolean has(ServerPlayer player, String path) {
+        var holder = player.level().getServer().getAdvancements().get(nl.juiced.guhs.Guhs.id(path));
+        return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
+    }
+
     /** Ends the race early. */
     public void end(ServerLevel level, Ending ending) {
         ServerPlayer player = level.getServer().getPlayerList().getPlayer(racer);
@@ -1119,6 +1164,11 @@ public final class RaceGame {
     }
 
     // --- for tests -------------------------------------------------------------------------------------------------------
+
+    /** (Tests) the race has been going for this many more ticks. */
+    public void skipTicks(int more) {
+        ticks += more;
+    }
 
     /** (Tests) the test moves the race guh by teleporting it around: no speed check. */
     public void trustTeleports() {

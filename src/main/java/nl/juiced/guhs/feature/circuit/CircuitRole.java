@@ -39,15 +39,16 @@ public final class CircuitRole implements NpcRole {
 
     @Override
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
-        RaceGame game = RaceGame.of(npc);
         npc.level().playSound(null, npc, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 1.15f);
         checkOutfit(player);
-        if (game != null && game.racer().equals(player.getUUID())) {
+        if (RaceGame.allOf(npc).stream().anyMatch(g -> g.racer().equals(player.getUUID()))) {
             GuhQuests.say(player, npc, "quest.guhs.circuit.go_go");
             return;
         }
         boolean nieuw = CircuitBanen.BANEN.stream().noneMatch(b -> RaceRecords.finishedOnce(player, b.id));
-        GuhQuests.say(player, npc, game != null ? "quest.guhs.circuit.hello_busy" : nieuw ? "quest.guhs.circuit.hello_new" : "quest.guhs.circuit.hello");
+        // 1.2.7: every track has its own racer: "busy" only when all of them are taken
+        boolean vol = CircuitBanen.BANEN.stream().allMatch(b -> RaceGame.of(npc, b) != null);
+        GuhQuests.say(player, npc, vol ? "quest.guhs.circuit.hello_busy" : nieuw ? "quest.guhs.circuit.hello_new" : "quest.guhs.circuit.hello");
         CircuitPayloads.send(player, new CircuitPayloads.Open(npc.getId(), screenData(npc, player)));
     }
 
@@ -70,6 +71,13 @@ public final class CircuitRole implements NpcRole {
             data.putString("RaceBaan", game.baan().id);
         }
         for (RaceBaan baan : CircuitBanen.BANEN) {
+            RaceGame op = RaceGame.of(npc, baan);                   // 1.2.7: who is racing on this track (the others are free)
+            data.putBoolean("Busy_" + baan.id, op != null);
+            if (op != null) {
+                ServerPlayer opRacer = ((ServerLevel) npc.level()).getServer().getPlayerList().getPlayer(op.racer());
+                data.putString("Racer_" + baan.id, opRacer == null ? "?" : opRacer.getGameProfile().name());
+                data.putInt("Lap_" + baan.id, Math.min(op.lap() + 1, op.laps()));
+            }
             for (Niveau n : Niveau.values()) {
                 String key = baan.id + "_" + n.id(), rec = baan.records(n);
                 data.putInt("Best_" + key, RaceRecords.best(player, rec));
@@ -118,10 +126,7 @@ public final class CircuitRole implements NpcRole {
 
     @Override
     public void tick(GuhNpcEntity npc) {
-        RaceGame game = RaceGame.of(npc);
-        if (game != null) {
-            game.checkAlive(npc);
-        }
+        RaceGame.checkAllAlive(npc);
         if ((npc.tickCount + npc.getId()) % 100 == 0) {
             showScores(npc);
         }
