@@ -546,6 +546,7 @@ public final class SmulGame {
         if (p.containerMenu.getCarried().is(SmulFeature.SMULSCHAAL.get())) {
             p.containerMenu.setCarried(ItemStack.EMPTY);
         }
+        geefTerug(p);
         MobEffectInstance slow = p.getEffect(MobEffects.SLOWNESS);
         if (slow != null && slow.getDuration() <= MIKA_SLOW_TICKS && slow.getAmplifier() == 2) {
             p.removeEffect(MobEffects.SLOWNESS);
@@ -574,11 +575,42 @@ public final class SmulGame {
         }
         int free = inv.getFreeSlot();
         if (free < 0) {
-            return false;
+            // 1.2.7: full pockets are no reason to send a player away: what is in the hand is kept safe (like the
+            // Mika-mep mallet does) and comes back with the bowl's return (cleanup)
+            CompoundTag saved = GuhQuests.saved(p);
+            if (saved.contains(STASH)) {
+                return false;                                       // (already keeping something: never overwrite it)
+            }
+            int slot = inv.getSelectedSlot();
+            saved.put(STASH, nl.juiced.guhs.storage.Nbt.saveStack(p.registryAccess(), inv.getItem(slot)));
+            saved.putInt(STASH_SLOT, slot);
+            inv.setItem(slot, bowl);
+            return true;
         }
         inv.setItem(free, inv.getItem(inv.getSelectedSlot()));
         inv.setItem(inv.getSelectedSlot(), bowl);
         return true;
+    }
+
+    private static final String STASH = "guhs_smul_stash", STASH_SLOT = "guhs_smul_stash_slot";
+
+    /** Gives back what the bowl replaced in full pockets. */
+    private static void geefTerug(ServerPlayer p) {
+        CompoundTag saved = GuhQuests.saved(p);
+        if (!saved.contains(STASH)) {
+            return;
+        }
+        ItemStack stack = nl.juiced.guhs.storage.Nbt.parseStack(p.registryAccess(), saved.getCompoundOrEmpty(STASH));
+        int slot = saved.getIntOr(STASH_SLOT, 0);
+        saved.remove(STASH);
+        saved.remove(STASH_SLOT);
+        if (!stack.isEmpty()) {
+            if (p.getInventory().getItem(slot).isEmpty()) {
+                p.getInventory().setItem(slot, stack);
+            } else {
+                nl.juiced.guhs.feature.Minigames.give(p, stack);
+            }
+        }
     }
 
     /** The bowl can't be put away in a chest (or a guh's wardrobe...) or thrown away: it comes back to you. */

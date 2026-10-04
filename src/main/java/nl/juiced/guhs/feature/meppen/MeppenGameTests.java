@@ -252,6 +252,23 @@ public class MeppenGameTests {
         done(helper, npc, player);
     }
 
+    /** 1.2.7: a mallet that got lost during the game comes back; and whoever plays can't be hurt, so can't hurt others either. */
+    @GuhTest(template = ROOM, batch = "mep_hamer_terug")
+    public static void mepLostMalletComesBack(GameTestHelper helper) {
+        GuhNpcEntity npc = mepguh(helper, 16);
+        ServerPlayer player = player(helper, npc);
+        play(helper, npc, player);
+        player.getInventory().setItem(player.getInventory().getSelectedSlot(), ItemStack.EMPTY);
+        helper.assertTrue(count(player, MeppenFeature.MEP_HAMER.get()) == 0, "(the mallet is lost)");
+        MepGame.hamerTerug(player);
+        helper.assertTrue(count(player, MeppenFeature.MEP_HAMER.get()) == 1 && player.getMainHandItem().is(MeppenFeature.MEP_HAMER.get()),
+                "a new mallet, in your hand");
+        MepGame.hamerTerug(player);
+        helper.assertTrue(count(player, MeppenFeature.MEP_HAMER.get()) == 1, "never two");
+        helper.assertTrue(nl.juiced.guhs.feature.Minigames.invulnerable(player), "a Mika-mepper can't be hurt, so can't hit others either");
+        done(helper, npc, player);
+    }
+
     @GuhTest(template = ROOM)
     public static void mepMalletCantBeKept(GameTestHelper helper) {
         GuhNpcEntity npc = mepguh(helper, 16);
