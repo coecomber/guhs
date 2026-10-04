@@ -31,10 +31,18 @@ import com.geckolib.util.GeckoLibUtil;
 /**
  * The Hungry Guh from the guh picnics: sits up and never moves. Right-click it and it asks (in chat) for
  * {@link #KNABBELS_WANTED} gefrituurde kaasknabbels. Right-click with that many in your hand and it happily
- * disappears, leaving you a Bank Guh.
+ * gives you a Bank Guh. 1.2.7: it stays (it used to disappear, so one player per picnic got a Bank Guh) and serves
+ * every player once; it remembers who had one ({@link #GEHAD}).
  */
 public class QuestGuhEntity extends PathfinderMob implements GeoEntity {
     public static final int KNABBELS_WANTED = 10;
+    /** Entity data: the players (UUIDs) who got their Bank Guh from this one. */
+    public static final String GEHAD = "guhs_bank_gehad";
+
+    /** Did this player get their Bank Guh from this Hungry Guh already? */
+    public boolean heeftGehad(Player player) {
+        return getPersistentData().getCompoundOrEmpty(GEHAD).contains(player.getUUID().toString());
+    }
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.guh_sitting.idle");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
@@ -67,16 +75,20 @@ public class QuestGuhEntity extends PathfinderMob implements GeoEntity {
         }
         ItemStack stack = player.getItemInHand(hand);
         Component name = Component.literal("<").append(this.getDisplayName()).append("> ").withStyle(ChatFormatting.LIGHT_PURPLE);
-        if (stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()) && stack.getCount() >= KNABBELS_WANTED) {
+        if (heeftGehad(player)) {
+            player.sendSystemMessage(name.copy().append(Component.translatable("entity.guhs.quest_guh.al_gehad").withStyle(ChatFormatting.WHITE)));
+            this.level().playSound(null, this, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 1.1f);
+        } else if (stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()) && stack.getCount() >= KNABBELS_WANTED) {
             stack.consume(KNABBELS_WANTED, player);
+            net.minecraft.nbt.CompoundTag gehad = getPersistentData().getCompoundOrEmpty(GEHAD);
+            gehad.putBoolean(player.getUUID().toString(), true);
+            getPersistentData().put(GEHAD, gehad);
             player.getInventory().placeItemBackInInventory(new ItemStack(ModItems.BANK_GUH.get()));
             player.sendSystemMessage(name.copy().append(Component.translatable("entity.guhs.quest_guh.thanks").withStyle(ChatFormatting.WHITE)));
             if (this.level() instanceof ServerLevel server) {
                 server.sendParticles(ParticleTypes.HEART, getX(), getY() + 1.5, getZ(), 10, 0.5, 0.5, 0.5, 0.1);
-                server.sendParticles(ParticleTypes.POOF, getX(), getY() + 0.8, getZ(), 25, 0.4, 0.6, 0.4, 0.05);
             }
             this.level().playSound(null, this, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1.1f);
-            this.discard();
         } else {
             int holding = stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()) ? stack.getCount() : 0;
             player.sendSystemMessage(name.copy().append(Component.translatable("entity.guhs.quest_guh.request", KNABBELS_WANTED, holding)

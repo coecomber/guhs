@@ -80,6 +80,7 @@ public class Guhs {
         NeoForge.EVENT_BUS.addListener(ModVillagers::onVillagerTick);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.GuhQuests::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.GuhQuests::onBigMikaKilled);
+        NeoForge.EVENT_BUS.register(nl.juiced.guhs.world.VoorIedereen.class);   // 1.2.7: one-of-a-kind things for every player
         NeoForge.EVENT_BUS.register(nl.juiced.guhs.world.MaagProtection.class);
         NeoForge.EVENT_BUS.register(nl.juiced.guhs.world.VerstopProtection.class);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.quest.VerstopGame::onDamage);

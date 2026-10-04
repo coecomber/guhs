@@ -328,17 +328,43 @@ public final class KaasknabbelNest {
         }
         level.sendParticles(ParticleTypes.HAPPY_VILLAGER, kist.getX() + 0.5, kist.getY() + 0.8, kist.getZ() + 0.5, 20, 0.6, 0.4, 0.6, 0);
         level.playSound(null, kist, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1f, 1.2f);
-        for (ServerPlayer p : spelersBij(level, g)) {
+        List<ServerPlayer> winnaars = new ArrayList<>(spelersBij(level, g));
+        for (ServerPlayer p : winnaars) {
             p.sendOverlayMessage(Component.translatable("gui.guhs.piep.gewoon_zieli").withStyle(ChatFormatting.GOLD));
             PiepVoortgang.tel(p, PiepVoortgang.NEST, 1, "piep_nest_gewonnen");
         }
         for (UUID id : g.spelers) {
             ServerPlayer p = level.getServer().getPlayerList().getPlayer(id);
-            if (p != null && !spelersBij(level, g).contains(p)) {
+            if (p != null && !winnaars.contains(p)) {
                 PiepVoortgang.tel(p, PiepVoortgang.NEST, 1, "piep_nest_gewonnen");
+                winnaars.add(p);
             }
         }
+        geefRecepten(winnaars, eersteKeer);
         GEVECHTEN.remove(level.dimension().identifier() + "|" + g.key);
+    }
+
+    /**
+     * 1.2.7: the recipe of the roze guh koek for everybody who helped win and doesn't know it yet (the nest's first treasure
+     * holds one paper, and a nest that was won before holds none: on a server only the very first winner could learn it).
+     * {@code inKist}: this win's chest has a paper too, so one of them finds theirs there. Returns how many were handed out.
+     */
+    public static int geefRecepten(List<ServerPlayer> winnaars, boolean inKist) {
+        int n = 0;
+        boolean kist = inKist;
+        for (ServerPlayer p : winnaars) {
+            if (ReceptItem.kent(p) || nl.juiced.guhs.quest.GuhQuests.count(p, PiepFeature.ROZE_GUH_KOEK_RECEPT.get()) > 0) {
+                continue;
+            }
+            if (kist) {
+                kist = false;      // (the paper in the chest is this one's)
+                continue;
+            }
+            nl.juiced.guhs.quest.GuhQuests.give(p, PiepFeature.ROZE_GUH_KOEK_RECEPT.get());
+            p.sendSystemMessage(Component.translatable("gui.guhs.piep.recept_gekregen").withStyle(ChatFormatting.LIGHT_PURPLE));
+            n++;
+        }
+        return n;
     }
 
     /** Stops a fight (everyone gone): the knabbels hop back into their holes. */

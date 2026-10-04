@@ -50,14 +50,35 @@ public final class EilandenEvents {
     public static final double FLOAT_SPEED = 0.12;
     /** For this many ticks after riding a wolkenlift, the clouds still catch you (a lift of your own drops you anywhere). */
     public static final int LIFT_GRACE = 100;
+    /** 1.2.7: the knabbels are counted per player (FED_PER: player UUID -> knabbels; FED: the count of before 1.2.7, for everyone). */
+    static final String FED_PER = "guhs_wolk_knabbels_per";
+    /** Player data (GuhQuests.saved): the Wolkguh's outfit was handed out (once per player). */
+    public static final String PAKJE = "guhs_wolk_pakje";
+    /** Where the Wolkguh stands in the islands' template (tools/features/eilanden.py), and how big it is. */
+    public static final BlockPos WOLK_PLEK = new BlockPos(50, 63, 74);
+    public static final float WOLK_SCHAAL = 1.25f;
+    public static final String SOORT = "wolkguh";
+    /** 1.2.7: islands without a wild Wolkguh (somebody tamed it) get a new one after this long (one Minecraft day). */
+    public static final long NIEUWE_WOLK_NA = 24000L;
     static final String FED = "guhs_wolk_knabbels", HOME = "guhs_wolk_home", LIFT_MSG = "guhs_eilanden_lift", CAUGHT = "guhs_eilanden_caught";
 
     public static boolean isWolk(Object entity) {
         return entity instanceof GuhEntity guh && guh.getVariant() == GuhVariant.WOLK;
     }
 
+    /** The knabbels of the player who fed this Wolkguh the most (plus what it ate before 1.2.7). */
     public static int knabbelsFed(GuhEntity guh) {
-        return guh.getPersistentData().getIntOr(FED, 0);
+        CompoundTag per = guh.getPersistentData().getCompoundOrEmpty(FED_PER);
+        int best = 0;
+        for (String key : per.keySet()) {
+            best = Math.max(best, per.getIntOr(key, 0));
+        }
+        return guh.getPersistentData().getIntOr(FED, 0) + best;
+    }
+
+    /** The knabbels this player fed this Wolkguh (1.2.7: everybody earns its trust themselves). */
+    public static int knabbelsFed(GuhEntity guh, java.util.UUID player) {
+        return guh.getPersistentData().getIntOr(FED, 0) + guh.getPersistentData().getCompoundOrEmpty(FED_PER).getIntOr(player.toString(), 0);
     }
 
     // --- taming the Wolkguh: patience (and a lot of knabbels) ---------------------------------------------------------
@@ -70,8 +91,10 @@ public final class EilandenEvents {
                 || !(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-        int fed = knabbelsFed(guh) + 1;
-        guh.getPersistentData().putInt(FED, fed);
+        int fed = knabbelsFed(guh, player.getUUID()) + 1;
+        CompoundTag per = guh.getPersistentData().getCompoundOrEmpty(FED_PER);
+        per.putInt(player.getUUID().toString(), per.getIntOr(player.getUUID().toString(), 0) + 1);
+        guh.getPersistentData().put(FED_PER, per);
         ServerLevel level = player.level();
         level.sendParticles(ParticleTypes.CLOUD, guh.getX(), guh.getY() + guh.getBbHeight() * 0.6, guh.getZ(), 6, 0.3, 0.2, 0.3, 0.01);
         if (fed < KNABBELS_NEEDED) {
@@ -93,13 +116,44 @@ public final class EilandenEvents {
             return;
         }
         GuhEntity guh = (GuhEntity) event.getAnimal();
-        if (knabbelsFed(guh) < KNABBELS_NEEDED) {
+        if (event.getTamer() == null || knabbelsFed(guh, event.getTamer().getUUID()) < KNABBELS_NEEDED) {
             event.setCanceled(true);
         } else if (event.getTamer() instanceof ServerPlayer player) {
-            guh.getPersistentData().remove(HOME);
+            CompoundTag data = guh.getPersistentData();
+            if (data.contains(HOME) && player.level() instanceof ServerLevel thuis) {
+                // (the next one comes a day after this one left, not a day after it was last looked at)
+                nl.juiced.guhs.world.Terugkeer.vertrokken(thuis, SOORT, BlockPos.of(data.getLongOr(HOME, 0L)));
+            }
+            data.remove(HOME);
+            data.remove(FED_PER);
+            wolkPakje(player);
             player.sendSystemMessage(Component.translatable("quest.guhs.eilanden.tamed").withStyle(ChatFormatting.AQUA));
             player.level().sendParticles(ParticleTypes.CLOUD, guh.getX(), guh.getY() + 0.5, guh.getZ(), 30, 0.8, 0.5, 0.8, 0.02);
         }
+    }
+
+    /**
+     * 1.2.7: the Wolkguh's own outfit (wolkenmuts, wolkenkraag) for the player who tames one: the pieces they don't have
+     * yet, once per player (the wolkenkist on the islands only has them for whoever opens it first). Returns how many.
+     */
+    public static int wolkPakje(ServerPlayer player) {
+        CompoundTag saved = nl.juiced.guhs.quest.GuhQuests.saved(player);
+        if (saved.getBooleanOr(PAKJE, false)) {
+            return 0;
+        }
+        saved.putBoolean(PAKJE, true);
+        int n = 0;
+        for (nl.juiced.guhs.entity.GuhClothes c : List.of(nl.juiced.guhs.entity.GuhClothes.WOLKENMUTS, nl.juiced.guhs.entity.GuhClothes.WOLKENKRAAG)) {
+            net.minecraft.world.item.Item item = ModItems.clothingItem(c);
+            if (!nl.juiced.guhs.feature.kleding.KledingUnlocks.heeft(player, c) && nl.juiced.guhs.quest.GuhQuests.count(player, item) == 0) {
+                nl.juiced.guhs.quest.GuhQuests.give(player, item);
+                n++;
+            }
+        }
+        if (n > 0) {
+            player.sendSystemMessage(Component.translatable("quest.guhs.eilanden.pakje").withStyle(ChatFormatting.AQUA));
+        }
+        return n;
     }
 
     /** A wild Wolkguh is a cloud: nothing hurts it (only /kill). Its outfit is for whoever tames it, not for whoever hits hardest. */
@@ -167,6 +221,52 @@ public final class EilandenEvents {
             level.sendParticles(ParticleTypes.CLOUD, guh.getX(), guh.getY() + 0.4, guh.getZ(), 16, 0.4, 0.3, 0.4, 0.02);
             level.playSound(null, home, SoundEvents.WOOL_PLACE, SoundSource.NEUTRAL, 1f, 1.5f);
         }
+    }
+
+    // --- a new Wolkguh for the next player (1.2.7) ---------------------------------------------------------------------
+
+    /** Every 10 seconds per player on the islands: is there still a wild Wolkguh? If not for a day, a new one floats in. */
+    @SubscribeEvent
+    public static void onIslandTick(PlayerTickEvent.Post event) {
+        if (!(event.getEntity() instanceof ServerPlayer player) || (player.tickCount + player.getId()) % 200 != 0 || player.isSpectator()
+                || player.level().dimension() != nl.juiced.guhs.world.ModDimensions.GUHMENSION) {
+            return;
+        }
+        ServerLevel level = player.level();
+        for (var stuk : nl.juiced.guhs.world.Terugkeer.stukken(level, EilandenFeature.ISLANDS, player.blockPosition(), "zwevende_eilanden")) {
+            net.minecraft.world.level.levelgen.structure.BoundingBox b = stuk.getBoundingBox();
+            wolkTerug(level, nl.juiced.guhs.world.Terugkeer.wereld(stuk, WOLK_PLEK),
+                    new net.minecraft.world.phys.AABB(b.minX(), b.minY(), b.minZ(), b.maxX() + 1, b.maxY() + 1, b.maxZ() + 1).inflate(8));
+        }
+    }
+
+    /**
+     * One island group: {@code plek} is where its Wolkguh lives, {@code eilanden} the whole building. A wild Wolkguh
+     * anywhere on it counts; when there has been none for {@link #NIEUWE_WOLK_NA} a new one comes. Returns the new one.
+     */
+    @javax.annotation.Nullable
+    public static GuhEntity wolkTerug(ServerLevel level, BlockPos plek, net.minecraft.world.phys.AABB eilanden) {
+        boolean wild = !level.getEntitiesOfClass(GuhEntity.class, eilanden, g -> isWolk(g) && !g.isTame() && g.isAlive()).isEmpty();
+        if (!nl.juiced.guhs.world.Terugkeer.moetTerug(level, SOORT, plek, wild, NIEUWE_WOLK_NA)) {
+            return null;
+        }
+        return nieuweWolkguh(level, plek);
+    }
+
+    /** A new wild Wolkguh at home, in its own outfit (like the one the islands come with). */
+    public static GuhEntity nieuweWolkguh(ServerLevel level, BlockPos plek) {
+        GuhEntity guh = nl.juiced.guhs.registry.ModEntities.GUH.get().create(level, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+        guh.snapTo(plek.getX() + 0.5, plek.getY() + 0.1, plek.getZ() + 0.5, level.getRandom().nextFloat() * 360f, 0);
+        guh.setVariant(GuhVariant.WOLK);
+        guh.setGuhScale(WOLK_SCHAAL);
+        guh.wear(nl.juiced.guhs.entity.GuhClothes.WOLKENMUTS);
+        guh.wear(nl.juiced.guhs.entity.GuhClothes.WOLKENKRAAG);
+        guh.setPersistenceRequired();
+        guh.getPersistentData().putLong(HOME, plek.asLong());
+        level.addFreshEntity(guh);
+        level.sendParticles(ParticleTypes.CLOUD, guh.getX(), guh.getY() + 0.5, guh.getZ(), 30, 0.8, 0.5, 0.8, 0.02);
+        level.playSound(null, plek, SoundEvents.WOOL_PLACE, SoundSource.NEUTRAL, 1f, 1.5f);
+        return guh;
     }
 
     // --- falling -------------------------------------------------------------------------------------------------------

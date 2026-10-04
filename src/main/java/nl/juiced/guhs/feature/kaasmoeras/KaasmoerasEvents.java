@@ -155,15 +155,49 @@ public final class KaasmoerasEvents {
         grantShown(player, "guhmension/kaasmoeras_stuiter");
     }
 
-    /** Opening the barrel of a knabbelvlotje (while it still has its loot). */
+    /** Barrel data: this is the barrel of a knabbelvlotje (stays when the loot is gone). */
+    public static final String VLOTJE_TON = "guhs_vlotje_ton";
+
+    /**
+     * Opening the barrel of a knabbelvlotje. 1.2.7: for everybody, also when somebody else took the loot already (the
+     * barrel is marked the first time; one that was emptied before 1.2.7 is known by the raft around it).
+     */
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
         if (event.getEntity() instanceof ServerPlayer player
                 && event.getLevel().getBlockEntity(event.getPos()) instanceof RandomizableContainerBlockEntity container
-                && VLOTJE_LOOT.equals(container.getLootTable())) {
+                && isVlotjeTon(player.level(), event.getPos(), container)) {
             GuhAdvancements.grant(player, "kaasmoeras_vlotje");
             grantShown(player, "guhmension/kaasmoeras_vlotje");
         }
+    }
+
+    /** Is this the loot barrel of a knabbelvlotje (with or without its loot)? */
+    public static boolean isVlotjeTon(net.minecraft.server.level.ServerLevel level, BlockPos pos, RandomizableContainerBlockEntity container) {
+        if (container.getPersistentData().getBooleanOr(VLOTJE_TON, false)) {
+            return true;
+        }
+        boolean ja = VLOTJE_LOOT.equals(container.getLootTable()) || lijktOpVlotje(level, pos);
+        if (ja) {
+            container.getPersistentData().putBoolean(VLOTJE_TON, true);
+            container.setChanged();
+        }
+        return ja;
+    }
+
+    /**
+     * The raft of KaasmoerasPoelFeature.vlotje around this barrel: a barrel on a waterlogged spruce slab, the mast (three
+     * spruce fences) at +2, +1 and the lampion post at +3, +2, in the Guhmensie.
+     */
+    public static boolean lijktOpVlotje(net.minecraft.server.level.ServerLevel level, BlockPos ton) {
+        if (level.dimension() != nl.juiced.guhs.world.ModDimensions.GUHMENSION || !level.getBlockState(ton).is(net.minecraft.world.level.block.Blocks.BARREL)
+                || !level.getBlockState(ton.below()).is(net.minecraft.world.level.block.Blocks.SPRUCE_SLAB)) {
+            return false;
+        }
+        BlockPos mast = ton.offset(2, 0, 1);
+        return level.getBlockState(mast).is(net.minecraft.world.level.block.Blocks.SPRUCE_FENCE)
+                && level.getBlockState(mast.above()).is(net.minecraft.world.level.block.Blocks.SPRUCE_FENCE)
+                && level.getBlockState(ton.offset(3, 0, 2)).is(net.minecraft.world.level.block.Blocks.SPRUCE_FENCE);
     }
 
     /** Grants one of our shown advancements (with an impossible trigger: the mod decides when). */
