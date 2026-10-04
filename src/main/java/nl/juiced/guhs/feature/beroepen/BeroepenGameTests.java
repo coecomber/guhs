@@ -350,4 +350,45 @@ public class BeroepenGameTests {
         helper.assertTrue(dorpen != null && dorpen.size() == 3, "three village layouts");
         helper.succeed();
     }
+
+    /**
+     * 1.2.7: only the detective of the running case finds its sack (a player still on step 1 of an old case can't take
+     * it), and when the helper's own sack is gone Vahoegsma starts the trail again.
+     */
+    @GuhTest(template = "beroepen_test_politie", batch = "beroepen_politie_fix127", timeoutTicks = 100)
+    public static void beroepenPolitieAlleenDeEigenZaak(GameTestHelper helper) {
+        ServerPlayer p = player(helper, 4, 2);
+        ServerPlayer q = player(helper, 5, 2);
+        GuhNpcEntity npc = npc(helper, GuhNpcEntity.Kind.POLITIEGUH, 4, 4);
+        var level = helper.getLevel();
+        try {
+            BeroepenVoortgang.zet(p, Beroep.POLITIE, 1);      // (p: still on step 1 of a case that ran out while p was away)
+            Politie.ROLE.talk(npc, q);
+            BlockPos buit = Politie.buit(npc);
+            helper.assertTrue(BeroepenVoortgang.stap(q, Beroep.POLITIE) == 1 && buit != null, "q's case");
+            helper.assertTrue(!Politie.gevonden(level, buit, p) && BeroepenVoortgang.stap(p, Beroep.POLITIE) == 1
+                    && level.getBlockState(buit).is(BeroepenFeature.KNABBELBUIT.get()) && buit.equals(Politie.buit(npc)), "p can't take q's sack");
+            // q's sack is gone (swept away, broken by an op...): talking starts the trail again
+            level.setBlock(buit, BeroepenFeature.VERSTOPPLEK.get().defaultBlockState(), 3);
+            Politie.ROLE.talk(npc, q);
+            BlockPos nieuw = Politie.buit(npc);
+            helper.assertTrue(nieuw != null && level.getBlockState(nieuw).is(BeroepenFeature.KNABBELBUIT.get()) && !Politie.spoor(npc).isEmpty()
+                    && BeroepenVoortgang.stap(q, Beroep.POLITIE) == 1, "a new trail and a new sack for q: " + nieuw);
+            Politie.ROLE.talk(npc, q);
+            helper.assertTrue(nieuw.equals(Politie.buit(npc)), "with the sack in place he just says: follow the trail");
+            helper.assertTrue(Politie.gevonden(level, nieuw, q) && BeroepenVoortgang.stap(q, Beroep.POLITIE) == 2, "q finds its own sack");
+            Politie.ROLE.talk(npc, q);
+            beloond(helper, q, Beroep.POLITIE);
+            // p (old step 1, no case of its own): a fresh case
+            Politie.ROLE.talk(npc, p);
+            BlockPos vanP = Politie.buit(npc);
+            helper.assertTrue(vanP != null && Politie.gevonden(level, vanP, p), "p gets a case of its own and solves it");
+            Politie.ROLE.talk(npc, p);
+            beloond(helper, p, Beroep.POLITIE);
+            Politie.stop(npc);
+        } finally {
+            leave(helper, p, q);
+        }
+        helper.succeed();
+    }
 }

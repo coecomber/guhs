@@ -104,6 +104,7 @@ public final class Hooibaal implements NpcRole {
         d.putLong("Dag", dag);
         d.putString("Klus", klus.id());
         d.putInt("Stand", 0);
+        d.remove(DIEREN);
         d.putBoolean("Klaar", false);
         return klus;
     }
@@ -114,6 +115,7 @@ public final class Hooibaal implements NpcRole {
         d.putLong("Dag", Seizoen.dag(player.level()));
         d.putString("Klus", klus.id());
         d.putInt("Stand", 0);
+        d.remove(DIEREN);
         d.putBoolean("Klaar", false);
     }
 
@@ -130,12 +132,48 @@ public final class Hooibaal implements NpcRole {
 
     // --- the doing chores count while you work ---------------------------------------------------------------------------
 
-    /** A care step by this player (BoerderijDier.verzorg). */
+    /** Per player: the animals (UUIDs) that already count for today's doing chore. */
+    static final String DIEREN = "Dieren";
+
+    /**
+     * A care step by this player (BoerderijDier.verzorg). 1.2.7: it counts once per animal <b>per player</b>, also when
+     * somebody else (or the voerbak) cared for that animal earlier today, so every player can do their chore on the same
+     * day with the same animals.
+     */
     static void gedaan(ServerPlayer player, BoerderijDier.Zorg zorg, BoerderijDier dier) {
-        Klus klus = vandaag(player);
-        if (klus != null && klus.name().equals(zorg.name())) {
-            stap(player, klus);
+        if (!kanTellen(player, zorg, dier)) {
+            return;
         }
+        CompoundTag d = BoerderijVoortgang.data(player);
+        net.minecraft.nbt.ListTag dieren = d.getListOrEmpty(DIEREN);
+        dieren.add(net.minecraft.nbt.StringTag.valueOf(dier.getUUID().toString()));
+        d.put(DIEREN, dieren);
+        stap(player, Klus.valueOf(zorg.name()));
+    }
+
+    /** Would this care for this animal count for the player's chore of today (the right chore, not done, a new animal)? */
+    static boolean kanTellen(ServerPlayer player, BoerderijDier.Zorg zorg, BoerderijDier dier) {
+        Klus klus = vandaag(player);
+        if (klus == null || !klus.name().equals(zorg.name())) {
+            return false;
+        }
+        CompoundTag d = BoerderijVoortgang.data(player);
+        if (d.getIntOr("Stand", 0) >= klus.doel) {
+            return false;
+        }
+        net.minecraft.nbt.ListTag dieren = d.getListOrEmpty(DIEREN);
+        String id = dier.getUUID().toString();
+        for (int i = 0; i < dieren.size(); i++) {
+            if (id.equals(dieren.getStringOr(i, ""))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Is the voerbak chore open for this player (then a portion counts, also in a full voerbak)? */
+    static boolean voerbakOpen(ServerPlayer player) {
+        return vandaag(player) == Klus.VOERBAK && BoerderijVoortgang.data(player).getIntOr("Stand", 0) < Klus.VOERBAK.doel;
     }
 
     /** A voerbak got a portion from this player. */

@@ -206,7 +206,9 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
                 case BORSTELEN -> BoerderijVoortgang.BORSTELEN;
                 case VOEREN -> BoerderijVoortgang.VOEREN;
             }, 1);
-            Hooibaal.gedaan(player, z, this);
+        }
+        if (player != null) {
+            Hooibaal.gedaan(player, z, this);   // (1.2.7: per player, also when the animal already had this care today)
         }
         if (!wasBlij && isBlij()) {
             level.sendParticles(ParticleTypes.HAPPY_VILLAGER, getX(), getY() + getBbHeight() + 0.3, getZ(), 10, 0.4, 0.3, 0.4, 0.0);
@@ -243,9 +245,14 @@ public abstract class BoerderijDier extends Animal implements GeoEntity {
             return InteractionResult.SUCCESS;
         }
         nieuweDag();
-        if (voer && !heeftZorg(Zorg.VOEREN)) {
+        boolean alGevoerd = heeftZorg(Zorg.VOEREN);
+        if (voer && (!alGevoerd || Hooibaal.kanTellen(sp, Zorg.VOEREN, this))) {
+            // (1.2.7: already fed today by someone else or the voerbak: a second helping still counts for your own chore)
             stack.consume(1, player);
             verzorg(Zorg.VOEREN, sp);
+            if (alGevoerd) {
+                return InteractionResult.SUCCESS;
+            }
             if (!isBaby() && canFallInLove()) {
                 setInLove(player);
             } else if (isBaby()) {

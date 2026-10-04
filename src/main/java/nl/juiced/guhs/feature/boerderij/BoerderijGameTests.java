@@ -395,4 +395,74 @@ public class BoerderijGameTests {
         }
         helper.succeed();
     }
+
+    /**
+     * 1.2.7: every player can do Boerin Hooibaal's chore on the same day with the same animals (an animal counts once per
+     * player, also when somebody else cared for it earlier today), and the voerbak chore counts in a full voerbak too.
+     */
+    @GuhTest(template = WEI, batch = "boerderij_fix127")
+    public static void boerderijKlusjesVoorElkeSpeler(GameTestHelper helper) {
+        ServerPlayer p = player(helper);
+        ServerPlayer q = player(helper);
+        List<GuhschaapjeEntity> dieren = List.of(dier(helper, BoerderijFeature.GUHSCHAAPJE.get(), 5, 5),
+                dier(helper, BoerderijFeature.GUHSCHAAPJE.get(), 7, 5), dier(helper, BoerderijFeature.GUHSCHAAPJE.get(), 5, 7));
+        BlockPos bak = new BlockPos(3, 2, 3);
+        helper.setBlock(bak, BoerderijFeature.GUH_VOERBAK.get().defaultBlockState().setValue(GuhVoerbakBlock.VOER, GuhVoerbakBlock.MAX));
+        try {
+            // petting: p first, then q with the very same animals
+            Hooibaal.zetKlus(p, Hooibaal.Klus.AAIEN);
+            Hooibaal.zetKlus(q, Hooibaal.Klus.AAIEN);
+            p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            q.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            dieren.get(0).mobInteract(p, InteractionHand.MAIN_HAND);
+            dieren.get(0).mobInteract(p, InteractionHand.MAIN_HAND);
+            helper.assertTrue(BoerderijVoortgang.data(p).getIntOr("Stand", 0) == 1, "the same animal twice counts once");
+            dieren.get(1).mobInteract(p, InteractionHand.MAIN_HAND);
+            dieren.get(2).mobInteract(p, InteractionHand.MAIN_HAND);
+            helper.assertTrue(Hooibaal.rondAf(p) && Hooibaal.klaarVandaag(p), "p's petting chore is done");
+            for (GuhschaapjeEntity d : dieren) {
+                helper.assertTrue(d.heeftZorg(BoerderijDier.Zorg.AAIEN), "already petted today (by p)");
+                d.mobInteract(q, InteractionHand.MAIN_HAND);
+            }
+            helper.assertTrue(BoerderijVoortgang.data(q).getIntOr("Stand", 0) == 3, "q's chore counts the same animals: "
+                    + BoerderijVoortgang.data(q).getIntOr("Stand", 0));
+            helper.assertTrue(Hooibaal.rondAf(q) && Hooibaal.klaarVandaag(q), "q's petting chore is done on the same day");
+            helper.assertTrue(KnusVoortgang.teller(q, BoerderijVoortgang.AAIEN) == 0, "(the Knus counter still counts an animal once a day)");
+            // feeding: the animals are already fed by p; q's second helping still counts for q's chore
+            p.getInventory().clearContent();
+            q.getInventory().clearContent();
+            Hooibaal.zetKlus(p, Hooibaal.Klus.VOEREN);
+            Hooibaal.zetKlus(q, Hooibaal.Klus.VOEREN);
+            p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(BoerderijFeature.KNABBELVOER.get(), 5));
+            q.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(BoerderijFeature.KNABBELVOER.get(), 5));
+            for (GuhschaapjeEntity d : dieren) {
+                d.mobInteract(p, InteractionHand.MAIN_HAND);
+            }
+            helper.assertTrue(p.getMainHandItem().getCount() == 2 && Hooibaal.rondAf(p), "p fed three and is done");
+            for (GuhschaapjeEntity d : dieren) {
+                helper.assertTrue(d.heeftZorg(BoerderijDier.Zorg.VOEREN), "already fed today");
+                d.mobInteract(q, InteractionHand.MAIN_HAND);
+            }
+            helper.assertTrue(q.getMainHandItem().getCount() == 2 && BoerderijVoortgang.data(q).getIntOr("Stand", 0) == 3,
+                    "q fed the same three: " + q.getMainHandItem().getCount());
+            dieren.get(0).mobInteract(q, InteractionHand.MAIN_HAND);
+            helper.assertTrue(q.getMainHandItem().getCount() == 2, "enough is enough: no more voer taken");
+            helper.assertTrue(Hooibaal.rondAf(q), "q's feeding chore is done on the same day");
+            // the voerbak: full already (somebody else filled it), q's portions still count
+            q.getInventory().clearContent();
+            Hooibaal.zetKlus(q, Hooibaal.Klus.VOERBAK);
+            ItemStack voer = klik(helper, q, bak, new ItemStack(BoerderijFeature.KNABBELVOER.get(), 4));
+            voer = klik(helper, q, bak, voer);
+            helper.assertTrue(voer.getCount() == 2 && helper.getBlockState(bak).getValue(GuhVoerbakBlock.VOER) == GuhVoerbakBlock.MAX,
+                    "two portions on top of the full voerbak: " + voer.getCount());
+            voer = klik(helper, q, bak, voer);
+            helper.assertTrue(voer.getCount() == 2, "the chore is complete: a full voerbak takes no more");
+            helper.assertTrue(Hooibaal.rondAf(q), "q's voerbak chore is done");
+            ItemStack vanP = klik(helper, p, bak, new ItemStack(BoerderijFeature.KNABBELVOER.get(), 2));
+            helper.assertTrue(vanP.getCount() == 2, "without the chore a full voerbak is just full");
+        } finally {
+            leave(helper, p, q);
+        }
+        helper.succeed();
+    }
 }

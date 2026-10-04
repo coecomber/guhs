@@ -71,6 +71,13 @@ public class GuhVoerbakBlock extends HorizontalDirectionalBlock {
             return InteractionResult.TRY_WITH_EMPTY_HAND;
         }
         if (state.getValue(VOER) >= MAX) {
+            if (!level.isClientSide() && Hooibaal.voerbakOpen((ServerPlayer) player)) {
+                // 1.2.7: full already (another player was first): your portion goes on top and still counts for your chore
+                stack.consume(1, player);
+                level.playSound(null, pos, SoundEvents.COMPOSTER_FILL, SoundSource.BLOCKS, 1f, 1.2f);
+                Hooibaal.voerbakGevuld((ServerPlayer) player);
+                return InteractionResult.SUCCESS;
+            }
             if (!level.isClientSide()) {
                 player.sendOverlayMessage(Component.translatable("gui.guhs.boerderij.voerbak.vol").withStyle(ChatFormatting.LIGHT_PURPLE));
             }

@@ -68,7 +68,8 @@ public final class Politie implements NpcRole {
             GuhQuests.say(player, npc, "quest.guhs.beroepen.politie.bezet");
             return;
         }
-        if (!mijn || stap == 0) {
+        if (!mijn || stap == 0 || !buitLigtEr(npc)) {
+            // (1.2.7: also when the helper's own sack is gone - taken, swept away: the trail starts again)
             start(npc, player);
         } else {
             GuhQuests.say(player, npc, "quest.guhs.beroepen.politie.volg");
@@ -190,7 +191,11 @@ public final class Politie implements NpcRole {
      * place is free again), the prints are swept up, the Knabbeldief runs if it's still there.
      */
     public static boolean gevonden(ServerLevel level, BlockPos pos, ServerPlayer player) {
-        if (BeroepenVoortgang.stap(player, BEROEP) != 1) {
+        List<GuhNpcEntity> zaken = level.getEntitiesOfClass(GuhNpcEntity.class, new AABB(pos).inflate(BEREIK + 16),
+                n -> n.getKind() == GuhNpcEntity.Kind.POLITIEGUH && n.roleData.getLongOr("Buit", 0L) == pos.asLong() && n.roleData.contains("Buit"));
+        // 1.2.7: only the detective of this case finds its sack (a player still on step 1 of an old case can't take it)
+        boolean vanMij = zaken.isEmpty() || zaken.stream().anyMatch(n -> player.getUUID().equals(BeroepenHulp.speler(n)));
+        if (BeroepenVoortgang.stap(player, BEROEP) != 1 || !vanMij) {
             player.sendOverlayMessage(Component.translatable("gui.guhs.beroepen.politie.niet_van_jou").withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
@@ -199,8 +204,7 @@ public final class Politie implements NpcRole {
         level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.8f, 0.8f);
         BeroepenVoortgang.zet(player, BEROEP, 2);
         player.sendSystemMessage(Component.translatable("gui.guhs.beroepen.politie.gevonden").withStyle(ChatFormatting.GOLD));
-        for (GuhNpcEntity npc : level.getEntitiesOfClass(GuhNpcEntity.class, new AABB(pos).inflate(BEREIK + 16),
-                n -> n.getKind() == GuhNpcEntity.Kind.POLITIEGUH && n.roleData.getLongOr("Buit", 0L) == pos.asLong() && n.roleData.contains("Buit"))) {
+        for (GuhNpcEntity npc : zaken) {
             veeg(npc);
             KnabbeldiefMikaEntity mika = mika(npc);
             if (mika != null) {
@@ -209,6 +213,12 @@ public final class Politie implements NpcRole {
             npc.roleData.remove("Buit");
         }
         return true;
+    }
+
+    /** Is the sack of this detective's case still lying at its hiding place? */
+    static boolean buitLigtEr(GuhNpcEntity npc) {
+        return npc.roleData.contains("Buit")
+                && npc.level().getBlockState(BlockPos.of(npc.roleData.getLongOr("Buit", 0L))).is(BeroepenFeature.KNABBELBUIT.get());
     }
 
     @Nullable
