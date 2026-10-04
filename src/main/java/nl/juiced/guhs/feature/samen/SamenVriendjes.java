@@ -121,8 +121,40 @@ public final class SamenVriendjes {
         if (owner != null && ga != null && gb != null) {
             owner.sendSystemMessage(Component.translatable(besties ? "gui.guhs.samen.besties" : "gui.guhs.samen.vriendjes",
                     ga.getDisplayName(), gb.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
-            GidsFeature.grant(owner, besties ? "lieve_vadsjes/samen_besties" : "lieve_vadsjes/samen_vriendjes");
             owner.level().playSound(null, ga.blockPosition(), BandFeature.HARTJES_GELUID.get(), SoundSource.NEUTRAL, 1f, 1.2f);
+        }
+        // 1.2.7: the advancement for the owner(s) of both guhs who are online, also when a guh isn't loaded right now
+        // (an owner who is offline catches up at login: inhalen)
+        for (UUID id : new UUID[]{a, b}) {
+            UUID eigenaar = nl.juiced.guhs.feature.band.BandData.get(s).eigenaarVan(id);
+            ServerPlayer p = eigenaar == null ? null : s.getPlayerList().getPlayer(eigenaar);
+            if (p != null) {
+                GidsFeature.grant(p, besties ? "lieve_vadsjes/samen_besties" : "lieve_vadsjes/samen_vriendjes");
+            }
+        }
+    }
+
+    /**
+     * 1.2.7, at login: two of your guhs (or yours and somebody else's) became friends or besties while you were away:
+     * the advancements you missed.
+     */
+    public static void inhalen(ServerPlayer player) {
+        MinecraftServer s = player.level().getServer();
+        boolean vriend = false, bestie = false;
+        for (nl.juiced.guhs.feature.band.BandData.Rec rec : nl.juiced.guhs.feature.band.BandData.get(s).guhsVan(player.getUUID())) {
+            for (UUID ander : Vriendjes.vriendenVan(s, rec.id)) {
+                vriend = true;
+                bestie |= Vriendjes.besties(s, rec.id, ander);
+            }
+            if (bestie) {
+                break;
+            }
+        }
+        if (vriend) {
+            GidsFeature.grant(player, "lieve_vadsjes/samen_vriendjes");
+        }
+        if (bestie) {
+            GidsFeature.grant(player, "lieve_vadsjes/samen_besties");
         }
     }
 

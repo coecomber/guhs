@@ -289,4 +289,29 @@ public class KamperenGameTests {
         helper.assertTrue(t.get().filterBlocks(BlockPos.ZERO, settings, KamperenFeature.SLAAPZAK.get(), true).size() >= 6, "sleeping bags");
         helper.succeed();
     }
+
+    /**
+     * 1.2.7: Opa Guh is one of the nine knuffelvriendjes (he was never ticked off, so the collection stayed at 8/9): a
+     * talk grants it, for every player, also for who met him long ago.
+     */
+    @GuhTest(template = EMPTY, batch = "kamperen_fix127")
+    public static void kamperenOpaGuhIsEenKnuffelvriendje(GameTestHelper helper) {
+        GuhNpcEntity opa = opa(helper, new BlockPos(4, 1, 2));
+        ServerPlayer p = player(helper);
+        ServerPlayer q = player(helper);
+        try {
+            String boek = nl.juiced.guhs.feature.knuffeldal.KnuffeldalVoortgang.VRIENDJES_BOEK;
+            helper.assertTrue(nl.juiced.guhs.feature.knuffeldal.KnuffeldalVoortgang.VRIENDJES_LIJST.contains("opa_guh"), "he is in the collection");
+            nl.juiced.guhs.quest.GuhQuests.saved(q).putInt("guhs_kamperen_gesproken", 7);     // (q met him long before 1.2.7)
+            helper.assertTrue(!KnusVoortgang.heeft(p, boek, "opa_guh") && !KnusVoortgang.heeft(q, boek, "opa_guh"), "not yet");
+            OpaGuh.INSTANCE.talk(opa, p);
+            helper.assertTrue(KnusVoortgang.heeft(p, boek, "opa_guh") && !KnusVoortgang.heeft(q, boek, "opa_guh"), "p's first talk");
+            OpaGuh.INSTANCE.talk(opa, q);
+            helper.assertTrue(KnusVoortgang.heeft(q, boek, "opa_guh"), "q's next talk catches up");
+        } finally {
+            leave(helper, p, q);
+            opa.discard();
+        }
+        helper.succeed();
+    }
 }

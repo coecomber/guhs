@@ -37,6 +37,8 @@ public final class OpaGuh implements NpcRole {
     @Override
     public void talk(GuhNpcEntity npc, ServerPlayer player) {
         npc.level().playSound(null, npc, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 1f, 0.7f);
+        // 1.2.7: Opa Guh is one of the knuffelvriendjes (it was never ticked off: also for who talked to him before)
+        nl.juiced.guhs.feature.knuffeldal.KnuffeldalEvents.vriendje(player, "opa_guh");
         var saved = GuhQuests.saved(player);
         int keer = saved.getIntOr(GESPROKEN, 0);
         if (player.isSecondaryUseActive() && keer > 0) {

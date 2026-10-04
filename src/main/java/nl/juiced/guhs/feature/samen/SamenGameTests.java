@@ -549,4 +549,43 @@ public class SamenGameTests {
             helper.succeed();
         });
     }
+
+    /**
+     * 1.2.7: the friends / besties advancements reach the owners of both guhs (two players), and an owner who missed the
+     * moment (offline) catches up at login.
+     */
+    @GuhTest(template = WEI, batch = "samen_fix127", timeoutTicks = 100)
+    public static void samenVriendjesVoorBeideEigenaarsEnInhalen(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(2, 1, 2));
+        ServerPlayer q = speler(helper, new BlockPos(3, 1, 2));
+        ServerPlayer r = speler(helper, new BlockPos(4, 1, 2));
+        GuhEntity a = guh(helper, p, new BlockPos(5, 1, 5));
+        GuhEntity b = guh(helper, q, new BlockPos(7, 1, 5));
+        helper.runAfterDelay(5, () -> {
+            try {
+                var s = helper.getLevel().getServer();
+                String vriend = "lieve_vadsjes/samen_vriendjes", bestie = "lieve_vadsjes/samen_besties";
+                helper.assertTrue(Band.isBandGuh(a) && Band.isBandGuh(b), "two band guhs of two players");
+                helper.assertTrue(!GidsFeature.heeft(p, vriend) && !GidsFeature.heeft(q, vriend), "not friends yet");
+                Vriendjes.samen(s, Band.id(a), Band.id(b), Vriendjes.VRIENDJES);
+                helper.assertTrue(GidsFeature.heeft(p, vriend) && GidsFeature.heeft(q, vriend), "friends: both owners get the advancement");
+                helper.assertTrue(!GidsFeature.heeft(p, bestie) && !GidsFeature.heeft(r, vriend), "no besties yet, and nothing for a bystander");
+                Vriendjes.samen(s, Band.id(a), Band.id(b), Vriendjes.BESTIES);
+                helper.assertTrue(GidsFeature.heeft(p, bestie) && GidsFeature.heeft(q, bestie), "besties: both owners");
+                // q missed it (was offline): the login catch-up
+                for (String name : List.of(vriend, bestie)) {
+                    var holder = s.getAdvancements().get(Guhs.id(name));
+                    q.getAdvancements().revoke(holder, "done");
+                }
+                helper.assertTrue(!GidsFeature.heeft(q, vriend) && !GidsFeature.heeft(q, bestie), "(as if q was offline)");
+                SamenVriendjes.inhalen(q);
+                helper.assertTrue(GidsFeature.heeft(q, vriend) && GidsFeature.heeft(q, bestie), "caught up at login");
+                SamenVriendjes.inhalen(r);
+                helper.assertTrue(!GidsFeature.heeft(r, vriend) && !GidsFeature.heeft(r, bestie), "a player without friends among the guhs gets nothing");
+            } finally {
+                weg(helper, p, q, r);
+            }
+            helper.succeed();
+        });
+    }
 }

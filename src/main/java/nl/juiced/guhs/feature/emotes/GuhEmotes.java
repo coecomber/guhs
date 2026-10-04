@@ -303,9 +303,14 @@ public final class GuhEmotes {
             ticksLeft = Math.max(ticksLeft, JUKEBOX_DANCE_TICKS);
         } else if (start(Emote.DANSEN, false, Source.JUKEBOX)) {
             ticksLeft = JUKEBOX_DANCE_TICKS;
-            Player near = guh.level().getNearestPlayer(guh, 16);
-            if (near instanceof ServerPlayer sp) {
-                GuhAdvancements.grant(sp, "emote_jukebox");
+            // 1.2.7: the guh's owner (when online) and everyone watching (within 16 blocks), not only the nearest player
+            if (guh.getOwner() instanceof ServerPlayer owner) {
+                GuhAdvancements.grant(owner, "emote_jukebox");
+            }
+            for (Player near : guh.level().players()) {
+                if (near instanceof ServerPlayer sp && !sp.isSpectator() && sp.distanceToSqr(guh) <= 16 * 16) {
+                    GuhAdvancements.grant(sp, "emote_jukebox");
+                }
             }
         }
     }

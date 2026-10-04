@@ -659,4 +659,244 @@ public class KnuffeldalGameTests {
         helper.assertTrue(groteDalen == 0 || groteMetStadje >= 0.6 * groteDalen, "most big dalen have their town: " + report);
         helper.succeed();
     }
+
+    // =================================================================================================================
+    // 1.2.7: for any number of players, forever
+    // =================================================================================================================
+    private static final String FIX = "knuffeldal_fix127";
+
+    private static ItemStack item(String id) {
+        return new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(Guhs.id(id)));
+    }
+
+    /**
+     * A feest-item that got lost is asked again by the Burgemeester (so it can be made anew), the feesttaart is never
+     * food for the buffet, the tea table or a Kruimel-Mika, and a feest-item that was ready before he asked still grants
+     * its "made" quest advancement. Two players, each with their own list.
+     */
+    @GuhTest(template = PLEIN, batch = FIX)
+    public static void knuffeldalKwijtFeestItemWordtOpnieuwGevraagd(GameTestHelper helper) {
+        ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
+        ServerPlayer q = player(helper, new BlockPos(8, 2, 7));
+        try {
+            for (ServerPlayer s : List.of(p, q)) {
+                Knusfeest.vergeet(s);
+                Knusfeest.nieuweRonde(s, 0, EnumSet.of(Feesttaak.FEESTTAART, Feesttaak.FEESTBLOEMEN));
+            }
+            ItemStack taart = item("feesttaart");
+            helper.assertTrue(!Feestbuffet.buffetEten(taart) && !nl.juiced.guhs.feature.theehuis.Theekransje.isGebak(taart)
+                    && !KruimelMikaEntity.isLekkernij(taart), "the feesttaart is never eaten: not on the buffet, the tea table or by a Mika");
+            helper.assertTrue(Feestbuffet.buffetEten(item("knabbelbroodje")) && KruimelMikaEntity.isLekkernij(item("knabbelbroodje"))
+                    && KruimelMikaEntity.isLekkernij(new ItemStack(ModItems.KAAS_KNABBELS.get())), "the other treats still are");
+            // p made the cake and lost it
+            Knusfeest.gemaakt(p, Feesttaak.FEESTTAART);
+            helper.assertTrue(Knusfeest.nodig(p, Feesttaak.FEESTTAART), "made but not in the pockets: needed again");
+            p.getInventory().add(taart.copy());
+            helper.assertTrue(!Knusfeest.nodig(p, Feesttaak.FEESTTAART), "in the pockets: not needed");
+            p.getInventory().clearContent();
+            helper.assertTrue(Burgemeester.lever(p) == 0 && Knusfeest.stap(p, Feesttaak.FEESTTAART) == Knusfeest.Stap.GEVRAAGD,
+                    "the Burgemeester asks the lost cake again");
+            // q is not touched by that, and hands in its own
+            Knusfeest.gemaakt(q, Feesttaak.FEESTTAART);
+            q.getInventory().add(taart.copy());
+            helper.assertTrue(Burgemeester.lever(q) == 1 && Knusfeest.gebracht(q, Feesttaak.FEESTTAART) && !Knusfeest.gebracht(p, Feesttaak.FEESTTAART),
+                    "q delivers its own cake");
+            // p bakes a new one and delivers
+            Knusfeest.gemaakt(p, Feesttaak.FEESTTAART);
+            p.getInventory().add(taart.copy());
+            helper.assertTrue(Burgemeester.lever(p) == 1 && Knusfeest.gebracht(p, Feesttaak.FEESTTAART), "p delivers the new cake");
+            // a found-back item that is lost again: the same
+            Knusfeest.zet(q, Feesttaak.FEESTBLOEMEN, Knusfeest.Stap.TERUGGEVONDEN);
+            helper.assertTrue(Burgemeester.lever(q) == 0 && Knusfeest.stap(q, Feesttaak.FEESTBLOEMEN) == Knusfeest.Stap.GEVRAAGD, "asked again");
+            // a feestboeket that was ready before (never "made" in this round): handed in, and the quest counts it as made
+            helper.assertTrue(!advancement(q, "knusfeest_feestbloemen_gemaakt"), "not made yet");
+            q.getInventory().add(item("feestboeket"));
+            helper.assertTrue(Burgemeester.lever(q) == 1 && Knusfeest.alleGebracht(q), "the ready-made boeket is handed in");
+            helper.assertTrue(advancement(q, "knusfeest_feestbloemen_gemaakt"), "and its 'made' quest is granted too");
+        } finally {
+            Knusfeest.vergeet(p);
+            Knusfeest.vergeet(q);
+            leave(helper, p, q);
+        }
+        helper.succeed();
+    }
+
+    /** A resident is never tamed (whatever the way, by whoever), can't be hurt or leashed; a tamed one is no resident any more. */
+    @GuhTest(template = PLEIN, batch = FIX)
+    public static void knuffeldalBewonersZijnVanIedereen(GameTestHelper helper) {
+        ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
+        ServerPlayer q = player(helper, new BlockPos(8, 2, 7));
+        try {
+            GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(3, 2, 3));
+            GuhHooks.maakBewoner(guh, guh.blockPosition());
+            guh.getPersistentData().putString(GuhHooks.BEWONER_NAAM, "pluisje");
+            Bewoners.opJoin(guh);   // (what KnuffeldalEvents.onJoin does when it comes into the world)
+            helper.assertTrue(guh.isInvulnerable() && !guh.canBeLeashed(), "a resident can't be hurt or leashed");
+            helper.assertTrue(!guh.hurtServer(helper.getLevel(), q.damageSources().playerAttack(q), 50f) && guh.isAlive(), "a survival player can't hurt it");
+            helper.assertTrue(!Evenementen.wild(guh), "the kaasregen and the golden knabbel leave it alone");
+            for (ServerPlayer s : List.of(p, q)) {
+                helper.assertTrue(!Evenementen.tameNow(guh, s) && !guh.isTame(), "taming is refused, for every player");
+                helper.assertTrue(net.neoforged.neoforge.event.EventHooks.onAnimalTame(guh, s), "the tame event is cancelled");
+            }
+            Evenementen.makeHappy(guh, 200);
+            p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 30));
+            for (int i = 0; i < 30; i++) {
+                guh.mobInteract(p, InteractionHand.MAIN_HAND);
+            }
+            helper.assertTrue(!guh.isTame() && GuhHooks.isBewoner(guh), "thirty knabbels on a happy resident: still the town's");
+            // a wild guh is still tameable and leashable
+            GuhEntity wild = helper.spawn(ModEntities.GUH.get(), new BlockPos(5, 2, 3));
+            helper.assertTrue(wild.canBeLeashed() && !net.neoforged.neoforge.event.EventHooks.onAnimalTame(wild, p), "a wild guh is as before");
+            // tamed before 1.2.7: it stays the player's guh, and is no resident any more
+            GuhEntity mee = helper.spawn(ModEntities.GUH.get(), new BlockPos(7, 2, 3));
+            GuhHooks.maakBewoner(mee, mee.blockPosition());
+            mee.getPersistentData().putString(GuhHooks.BEWONER_NAAM, "dikkie");
+            mee.tame(q);
+            Bewoners.opJoin(mee);
+            helper.assertTrue(mee.isTame() && mee.isOwnedBy(q) && !GuhHooks.isBewoner(mee) && GuhHooks.thuis(mee) == null && !mee.isInvulnerable(),
+                    "the tamed one is q's guh, not a resident");
+        } finally {
+            leave(helper, p, q);
+        }
+        helper.succeed();
+    }
+
+    /** A town that misses a resident gets it back at its home spot (once), made like the town template makes it. */
+    @GuhTest(template = PLEIN, batch = FIX)
+    public static void knuffeldalVerdwenenBewonerKomtTerug(GameTestHelper helper) {
+        var level = helper.getLevel();
+        // the real town templates hold the residents (the houses in the four corners, Timmertje on the bouwplaats)
+        java.util.Set<String> namen = new java.util.TreeSet<>();
+        Bewoners.Plek dikkie = null;
+        for (String t : List.of("plein", "hoek_noordoost", "hoek_noordwest", "hoek_zuidoost", "hoek_zuidwest", "bouwplaats", "beroepenstraat")) {
+            for (Bewoners.Plek plek : Bewoners.template(level, Guhs.id("knuffeldal_stadje/" + t))) {
+                namen.add(plek.naam());
+                if (plek.naam().equals("dikkie")) {
+                    dikkie = plek;
+                }
+            }
+        }
+        helper.assertTrue(namen.containsAll(KnuffeldalVoortgang.BEWONERS), "all six residents are read from the town's templates: " + namen);
+        helper.assertTrue(dikkie != null, "Dikkie's template entry");
+        // Dikkie's spot in this test "town"
+        BlockPos thuis = helper.absolutePos(new BlockPos(4, 2, 4));
+        net.minecraft.world.phys.AABB zoek = new net.minecraft.world.phys.AABB(helper.absolutePos(new BlockPos(0, 0, 0))).inflate(1)
+                .minmax(new net.minecraft.world.phys.AABB(helper.absolutePos(new BlockPos(15, 6, 15))));
+        List<Bewoners.Plek> plekken = List.of(new Bewoners.Plek("dikkie", Vec3.atBottomCenterOf(thuis), dikkie.nbt()));
+        java.util.function.Supplier<List<GuhEntity>> dikkies = () -> level.getEntitiesOfClass(GuhEntity.class, zoek,
+                g -> g.isAlive() && GuhHooks.isBewoner(g) && "dikkie".equals(g.getPersistentData().getStringOr(GuhHooks.BEWONER_NAAM, "")));
+        // somebody tamed Dikkie away before the fix: that one is no resident any more
+        GuhEntity oud = helper.spawn(ModEntities.GUH.get(), new BlockPos(8, 2, 8));
+        GuhHooks.maakBewoner(oud, thuis);
+        oud.getPersistentData().putString(GuhHooks.BEWONER_NAAM, "dikkie");
+        ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
+        try {
+            oud.tame(p);
+            Bewoners.opJoin(oud);
+            helper.assertTrue(dikkies.get().isEmpty(), "the town misses Dikkie");
+            helper.assertTrue(Bewoners.herstel(level, plekken, zoek) == 1, "a new Dikkie comes");
+            List<GuhEntity> nu = dikkies.get();
+            helper.assertTrue(nu.size() == 1, "exactly one: " + nu.size());
+            GuhEntity nieuw = nu.get(0);
+            helper.assertTrue(!nieuw.isTame() && nieuw.isInvulnerable() && thuis.equals(GuhHooks.thuis(nieuw)) && nieuw.hasCustomName(),
+                    "a real resident: at home, named, protected (home " + GuhHooks.thuis(nieuw) + ")");
+            helper.assertTrue(Math.abs(nieuw.getGuhScale() - 1.35f) < 0.01f, "as big as the template's Dikkie: " + nieuw.getGuhScale());
+            helper.assertTrue(Bewoners.herstel(level, plekken, zoek) == 0 && dikkies.get().size() == 1, "not twice");
+            // every player can make friends with the new one
+            ServerPlayer q = player(helper, new BlockPos(6, 2, 6));
+            try {
+                for (ServerPlayer s : List.of(p, q)) {
+                    s.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                    nieuw.mobInteract(s, InteractionHand.MAIN_HAND);
+                    helper.assertTrue(KnusVoortgang.heeft(s, KnuffeldalVoortgang.VRIENDJES_BOEK, "dikkie"), "a friend for every player");
+                }
+            } finally {
+                leave(helper, q);
+            }
+            // a double one (the old one turned up again): the re-created extra leaves
+            GuhEntity dubbel = Bewoners.maak(level, plekken.get(0));
+            helper.assertTrue(dubbel != null && dikkies.get().size() == 2, "two for a moment");
+            helper.assertTrue(Bewoners.herstel(level, plekken, zoek) == 0 && dikkies.get().size() == 1, "one again");
+            dikkies.get().forEach(Entity::discard);
+            oud.discard();
+        } finally {
+            leave(helper, p);
+        }
+        helper.succeed();
+    }
+
+    /** The feast can't start while the player is in another event: the Burgemeester says so, and it starts the next time. */
+    @GuhTest(template = PLEIN, batch = FIX)
+    public static void knuffeldalFeestWachtOpAnderEvenement(GameTestHelper helper) {
+        ServerPlayer p = player(helper, new BlockPos(7, 2, 7));
+        GuhNpcEntity burgemeester = npc(helper, new BlockPos(7, 2, 5), GuhNpcEntity.Kind.BURGEMEESTERGUH);
+        Evenement regen = null;
+        try {
+            Knusfeest.vergeet(p);
+            Knusfeest.nieuweRonde(p, 0, EnumSet.of(Feesttaak.FEESTBLOEMEN));
+            Burgemeester.gebracht(p, Feesttaak.FEESTBLOEMEN);
+            regen = Evenementen.start(nl.juiced.guhs.feature.evenementen.EvenementType.KAASREGEN, p);
+            helper.assertTrue(regen != null && Evenementen.eventOf(p) == regen, "in a kaasregen");
+            Burgemeester.feest(burgemeester, p);
+            helper.assertTrue(Evenementen.eventOf(p) == regen && Knusfeest.rondeBezig(p), "no feast yet (and nothing lost): he says to come back");
+            regen.end(false);
+            regen = null;
+            helper.assertTrue(Evenementen.eventOf(p) == null, "the kaasregen is over");
+            Burgemeester.feest(burgemeester, p);
+            helper.assertTrue(Evenementen.eventOf(p) instanceof KnusfeestEvenement || !Knusfeest.rondeBezig(p), "now the feast starts (or its rewards come)");
+            Evenement feest = Evenementen.eventOf(p);
+            if (feest != null) {
+                feest.end(false);
+            }
+        } finally {
+            if (regen != null) {
+                regen.end(false);
+            }
+            Knusfeest.vergeet(p);
+            leave(helper, p);
+        }
+        helper.succeed();
+    }
+
+    /** A sneeuwguhkopje and Bob's dakpan work for a survival player inside a protected town (nothing is put back). */
+    @GuhTest(template = PLEIN, batch = FIX)
+    public static void knuffeldalEigenWerkInBeschermdStadje(GameTestHelper helper) {
+        var level = helper.getLevel();
+        BlockPos onder = new BlockPos(11, 2, 11), boven = onder.above(), plek = new BlockPos(11, 2, 13);
+        helper.setBlock(onder, Blocks.SNOW_BLOCK);
+        helper.setBlock(boven, Blocks.SNOW_BLOCK);
+        helper.setBlock(plek, nl.juiced.guhs.feature.beroepen.BeroepenFeature.DAKPLEK.get());
+        BlockPos a = helper.absolutePos(new BlockPos(9, 0, 9)), b = helper.absolutePos(new BlockPos(14, 8, 14));
+        PleinSlot.testStadje(BoundingBox.fromCorners(a, b));
+        ServerPlayer p = player(helper, new BlockPos(10, 2, 10));
+        try {
+            helper.assertTrue(KnuffeldalProtection.inStadje(level, helper.absolutePos(onder)), "in the protected (test) town");
+            // still protected: a dirt block isn't placed
+            BlockPos naast = helper.absolutePos(new BlockPos(12, 1, 12));
+            level.setBlock(naast.above(), Blocks.AIR.defaultBlockState(), 3);
+            p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.DIRT, 2));
+            p.gameMode.useItemOn(p, level, p.getMainHandItem(), InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.phys.BlockHitResult(Vec3.atCenterOf(naast).add(0, 0.5, 0), net.minecraft.core.Direction.UP, naast, false));
+            helper.assertTrue(!level.getBlockState(naast.above()).is(Blocks.DIRT) && p.getMainHandItem().getCount() == 2,
+                    "no building in the town: " + level.getBlockState(naast.above()) + " x" + p.getMainHandItem().getCount());
+            // the sneeuwpopguh
+            BlockPos top = helper.absolutePos(boven);
+            p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(KnuffeldalFeature.SNEEUWGUHKOPJE.get(), 2));
+            p.gameMode.useItemOn(p, level, p.getMainHandItem(), InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.phys.BlockHitResult(Vec3.atCenterOf(top).add(0, 0.5, 0), net.minecraft.core.Direction.UP, top, false));
+            helper.assertTrue(helper.getBlockState(onder).is(KnuffeldalFeature.SNEEUWPOPGUH.get()) && helper.getBlockState(boven).is(KnuffeldalFeature.SNEEUWPOPGUH.get()),
+                    "the sneeuwpopguh stands (and stays): " + helper.getBlockState(onder));
+            helper.assertTrue(p.getMainHandItem().getCount() == 1, "one kopje used");
+            // Bob's dakpan (a block item) on his ghost tile
+            BlockPos tegel = helper.absolutePos(plek);
+            p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(nl.juiced.guhs.feature.beroepen.BeroepenFeature.DAKPAN_ITEM.get(), 2));
+            p.gameMode.useItemOn(p, level, p.getMainHandItem(), InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.phys.BlockHitResult(Vec3.atCenterOf(tegel).add(0, 0.5, 0), net.minecraft.core.Direction.UP, tegel, false));
+            helper.assertTrue(helper.getBlockState(plek).is(nl.juiced.guhs.feature.beroepen.BeroepenFeature.DAKPAN.get()) && p.getMainHandItem().getCount() == 1,
+                    "the dakpan lies on the ghost tile (and stays): " + helper.getBlockState(plek));
+        } finally {
+            leave(helper, p);
+        }
+        helper.succeed();
+    }
 }

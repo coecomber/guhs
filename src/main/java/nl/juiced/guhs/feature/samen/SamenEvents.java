@@ -33,6 +33,7 @@ public final class SamenEvents {
     public static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             SamenBeloning.inhalen(player);
+            SamenVriendjes.inhalen(player);   // 1.2.7: friends made while you were offline
         }
     }
 
