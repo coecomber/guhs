@@ -516,6 +516,9 @@ def recipes(h):
     h.shapeless("oog_van_vadsig", ["guhs:guh_kristal", "guhs:kaas_knabbels", "guhs:mika_traan"], "guhs:oog_van_vadsig")
     h.shaped("knabbelkristal", ["GGG", "GOG", "GTG"], {"G": "minecraft:glass", "O": "guhs:oog_van_vadsig", "T": "guhs:mika_traan"},
              "guhs:knabbelkristal")
+    # 1.2.7: one pair of wings per vetschip isn't enough for a whole server: with kaaskorst from the Guheinde you can make them
+    h.shaped("guhvleugels", ["MKM", "MTM", "C C"], {"M": "minecraft:phantom_membrane", "K": "guhs:knabbelkristal", "T": "guhs:mika_traan",
+                                                    "C": "guhs:kaaskorst"}, "guhs:guhvleugels")
     h.shaped("kaaskorst_stenen", ["KK", "KK"], {"K": "guhs:kaaskorst"}, "guhs:kaaskorst_stenen", 4)
     h.shaped("kaaskorst_stenen_trap", ["K  ", "KK ", "KKK"], {"K": "guhs:kaaskorst_stenen"}, "guhs:kaaskorst_stenen_trap", 4)
     h.shaped("kaaskorst_stenen_plaat", ["KKK"], {"K": "guhs:kaaskorst_stenen"}, "guhs:kaaskorst_stenen_plaat", 6)

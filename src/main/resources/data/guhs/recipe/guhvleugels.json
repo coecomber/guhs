@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MKM",
+    "MTM",
+    "C C"
+  ],
+  "key": {
+    "M": "minecraft:phantom_membrane",
+    "K": "guhs:knabbelkristal",
+    "T": "guhs:mika_traan",
+    "C": "guhs:kaaskorst"
+  },
+  "result": {
+    "id": "guhs:guhvleugels"
+  }
+}
