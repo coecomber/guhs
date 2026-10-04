@@ -66,7 +66,7 @@ public final class OpaGuh implements NpcRole {
 
     /** What he says (and does): a story at night, a tip in the daytime. Public for the tests (avond = story time). */
     public static void praat(GuhNpcEntity npc, ServerPlayer player, boolean avond) {
-        if (Verhalen.luistert(player)) {
+        if (Verhalen.luistert(player, npc)) {
             GuhQuests.say(player, npc, "quest.guhs.kamperen.sst");
         } else if (!avond) {
             int keer = GuhQuests.saved(player).getIntOr(GESPROKEN, 0);

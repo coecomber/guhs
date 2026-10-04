@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "FFF",
+    "FCF",
+    "FFF"
+  ],
+  "key": {
+    "F": "guhs:gefrituurde_kaasknabbels",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "guhs:bank_guh"
+  }
+}

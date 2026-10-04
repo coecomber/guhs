@@ -34,8 +34,11 @@ import net.minecraft.world.level.storage.ValueInput;
  */
 public class KoningsTroonBlock extends GuhFurnitureBlock implements EntityBlock {
     public static final BooleanProperty ROYAL = BooleanProperty.create("royal");
-    /** How long the throne stays empty before a new king comes (3 Minecraft days). */
-    public static final long NEW_KING_AFTER = 3 * 24000L;
+    /**
+     * How long the throne stays without a wild king before a new one comes (1.2.7: one Minecraft day, it was three; a
+     * tamed king doesn't count, so the next player finds a king of their own).
+     */
+    public static final long NEW_KING_AFTER = 24000L;
 
     public KoningsTroonBlock(Properties properties) {
         super(properties, 0.55, new double[]{1, 0, 1, 15, 9, 15}, new double[]{1, 9, 12, 15, 30, 16});
@@ -51,6 +54,17 @@ public class KoningsTroonBlock extends GuhFurnitureBlock implements EntityBlock 
     protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(ROYAL);
+    }
+
+    /** 1.2.7: the castle's own throne can't be mined (it calls the next king); creative players still can. */
+    @Override
+    protected float getDestroyProgress(BlockState state, net.minecraft.world.entity.player.Player player, net.minecraft.world.level.BlockGetter level, BlockPos pos) {
+        return state.getValue(ROYAL) && !player.isCreative() ? 0f : super.getDestroyProgress(state, player, level, pos);
+    }
+
+    @Override
+    public float getExplosionResistance(BlockState state, net.minecraft.world.level.BlockGetter level, BlockPos pos, net.minecraft.world.level.Explosion explosion) {
+        return state.getValue(ROYAL) ? 3_600_000f : super.getExplosionResistance(state, level, pos, explosion);
     }
 
     @Nullable
@@ -80,10 +94,10 @@ public class KoningsTroonBlock extends GuhFurnitureBlock implements EntityBlock 
             }
         }
 
-        /** Is there a king? If not for 3 days, a new one comes. */
+        /** Is there a wild king? If not for a day, a new one comes (a tamed king left on the throne is somebody's pet). */
         public void check(ServerLevel level, BlockPos pos, BlockState state) {
             boolean king = !level.getEntitiesOfClass(GuhEntity.class, new AABB(pos).inflate(4),
-                    g -> g.getVariant() == GuhVariant.KONING).isEmpty();
+                    g -> g.getVariant() == GuhVariant.KONING && !g.isTame()).isEmpty();
             if (king || lastKing == Long.MIN_VALUE) {
                 lastKing = level.getGameTime();
                 setChanged();

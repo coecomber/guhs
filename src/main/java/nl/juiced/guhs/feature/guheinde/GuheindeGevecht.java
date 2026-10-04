@@ -93,6 +93,22 @@ public class GuheindeGevecht extends SavedData {
     public int rainTicks;
     private final Set<UUID> participants = new HashSet<>();
     private int checkTicks;
+    /** 1.2.7: when each participant was last near the fight (game time). */
+    private final java.util.Map<UUID, Long> lastSeen = new java.util.HashMap<>();
+    /**
+     * 1.2.7: winners who weren't there to take their reward (died or logged off just before the last hit): player ->
+     * the fight's time in seconds. They get it as soon as they are back (alive, anywhere on the server).
+     */
+    private final java.util.Map<UUID, Integer> pending = new java.util.HashMap<>();
+    /** 1.2.7: the last time somebody was near an active fight (game time; UNKNOWN: set at the next tick). */
+    private static final long UNKNOWN = Long.MIN_VALUE;
+    private long lastActivity = UNKNOWN;
+    /** 1.2.7: Opper-Mika and his mount of a fight that was given up but who weren't loaded then: they go when they turn up. */
+    private final Set<UUID> strays = new HashSet<>();
+    /** Whoever was near the fight in the last 5 minutes still wins when he falls. */
+    public static final long RECENT = 20 * 60 * 5;
+    /** A called-back fight nobody has been near for this long is over (the terugportaal opens again for newcomers). */
+    public static final long ABANDONED = 20 * 60 * 20;
 
     public static void register() {
         NeoForge.EVENT_BUS.addListener((LevelTickEvent.Post event) -> {
@@ -177,6 +193,9 @@ public class GuheindeGevecht extends SavedData {
     // ------------------------------------------------------------------------------------------------------------
 
     private void tick(ServerLevel level) {
+        if (!pending.isEmpty() && level.getGameTime() % 20 == 0) {
+            givePending(level);
+        }
         if (level.players().isEmpty()) {
             return;
         }
@@ -201,7 +220,20 @@ public class GuheindeGevecht extends SavedData {
             tickRespawn(level);
             return;
         }
+        if (!strays.isEmpty() && level.getGameTime() % 20 == 0) {
+            removeStrays(level);
+        }
         if (!fightActive) {
+            return;
+        }
+        long now = level.getGameTime();
+        if (lastActivity == UNKNOWN) {
+            lastActivity = now;
+        }
+        // 1.2.7: a called-back fight that everybody walked away from is over: its closed terugportaal would trap whoever
+        // comes into the Guheinde next (the first fight stays: the portal is closed until the first win anyway)
+        if (isAbandoned(now)) {
+            abandonFight(level);
             return;
         }
         if (!level.isLoaded(center()) || level.getPlayers(p -> p.distanceToSqr(Vec3.atCenterOf(center())) < 160 * 160).isEmpty()) {
@@ -209,6 +241,8 @@ public class GuheindeGevecht extends SavedData {
         }
         for (ServerPlayer player : level.getPlayers(p -> p.distanceToSqr(Vec3.atCenterOf(center())) < 160 * 160 && !p.isSpectator())) {
             participants.add(player.getUUID());
+            lastSeen.put(player.getUUID(), now);
+            lastActivity = now;
         }
         OpperMikaEntity boss = boss(level);
         HongerigeEnderguhEntity mount = mount(level);
@@ -225,6 +259,99 @@ public class GuheindeGevecht extends SavedData {
         if (level.getGameTime() % 10 == 0) {
             beams(level, boss);
         }
+    }
+
+    /** Gives a recalled fight up: Opper-Mika and his Enderguh fly off, the terugportaal opens again. */
+    public void abandonFight(ServerLevel level) {
+        fightActive = false;
+        OpperMikaEntity boss = boss(level);
+        HongerigeEnderguhEntity mount = mount(level);
+        if (boss != null) {
+            boss.discard();
+        } else if (bossId != null) {
+            strays.add(bossId);
+        }
+        if (mount != null) {
+            mount.discard();
+        } else if (mountId != null) {
+            strays.add(mountId);
+        }
+        bossId = null;
+        mountId = null;
+        feeder = null;
+        participants.clear();
+        lastSeen.clear();
+        lastActivity = UNKNOWN;
+        for (KnabbelkristalEntity c : pillarCrystals(level)) {
+            c.setBeamTarget(null);
+        }
+        if (islandBuilt) {
+            openPortal(level);
+        }
+        broadcast(level, "gui.guhs.guheinde.gevecht_verlaten", ChatFormatting.LIGHT_PURPLE);
+        setDirty();
+    }
+
+    private void removeStrays(ServerLevel level) {
+        for (java.util.Iterator<UUID> it = strays.iterator(); it.hasNext(); ) {
+            net.minecraft.world.entity.Entity e = level.getEntity(it.next());
+            if (e != null) {
+                e.discard();
+                it.remove();
+                setDirty();
+            }
+        }
+    }
+
+    /**
+     * The participants who were near the fight until a moment ago ({@link #RECENT}) but aren't among these winners: their
+     * reward waits ({@link #givePending}). Ends the list of participants of this fight.
+     */
+    public void rememberAbsent(List<ServerPlayer> winners, long now, int seconds) {
+        for (UUID id : participants) {
+            if (winners.stream().noneMatch(w -> w.getUUID().equals(id)) && now - lastSeen.getOrDefault(id, Long.MIN_VALUE / 2) <= RECENT) {
+                pending.put(id, seconds);
+            }
+        }
+        participants.clear();
+        lastSeen.clear();
+        lastActivity = UNKNOWN;
+        setDirty();
+    }
+
+    /** Is this a called-back fight that everybody walked away from ({@link #ABANDONED} ago)? */
+    public boolean isAbandoned(long now) {
+        return fightActive && everWon && lastActivity != UNKNOWN && now - lastActivity >= ABANDONED;
+    }
+
+    /** Winners who weren't there at the last hit get their reward as soon as they are back (alive, anywhere). */
+    public void givePending(ServerLevel level) {
+        for (java.util.Iterator<java.util.Map.Entry<UUID, Integer>> it = pending.entrySet().iterator(); it.hasNext(); ) {
+            java.util.Map.Entry<UUID, Integer> e = it.next();
+            ServerPlayer p = level.getServer().getPlayerList().getPlayer(e.getKey());
+            if (p != null && p.isAlive() && !p.isSpectator()) {
+                it.remove();
+                p.sendSystemMessage(Component.translatable("gui.guhs.guheinde.beloning.later").withStyle(ChatFormatting.LIGHT_PURPLE));
+                reward(p, null, e.getValue());
+                setDirty();
+            }
+        }
+    }
+
+    /** (Tests) the players whose reward is still waiting for them. */
+    public Set<UUID> pendingRewards() {
+        return java.util.Collections.unmodifiableSet(pending.keySet());
+    }
+
+    /** (Tests) a participant, last near the fight at this game time. */
+    public void addParticipant(UUID player, long seenAt) {
+        participants.add(player);
+        lastSeen.put(player, seenAt);
+    }
+
+    /** (Tests) pretends somebody was last near the active fight at this game time. */
+    public void setLastActivity(long gameTime) {
+        lastActivity = gameTime;
     }
 
     @Nullable
@@ -361,7 +488,9 @@ public class GuheindeGevecht extends SavedData {
         fightActive = true;
         feeder = null;
         participants.clear();
+        lastSeen.clear();
         fightStart = level.getGameTime();
+        lastActivity = fightStart;
         spawnBoss(level, null);
         broadcast(level, "gui.guhs.guheinde.aankomst", ChatFormatting.DARK_PURPLE);
         setDirty();
@@ -446,13 +575,16 @@ public class GuheindeGevecht extends SavedData {
         int seconds = (int) ((level.getGameTime() - fightStart) / 20);
         List<ServerPlayer> winners = new ArrayList<>();
         for (ServerPlayer p : level.players()) {
-            if (!p.isSpectator() && (participants.contains(p.getUUID()) || p.distanceToSqr(boss) < 128 * 128)) {
+            if (!p.isSpectator() && p.isAlive() && (participants.contains(p.getUUID()) || p.distanceToSqr(boss) < 128 * 128)) {
                 winners.add(p);
             }
         }
-        if (source.getEntity() instanceof ServerPlayer killer && !winners.contains(killer)) {
+        if (source.getEntity() instanceof ServerPlayer killer && !winners.contains(killer) && killer.isAlive()) {
             winners.add(killer);
         }
+        // 1.2.7: whoever fought along until a moment ago but isn't here now (died, respawned at home, logged off) wins too:
+        // their reward waits for them (a dead player's inventory is gone at the respawn, so they can't take it right now)
+        rememberAbsent(winners, level.getGameTime(), seconds);
         HongerigeEnderguhEntity mount = mount(level);
         ServerPlayer mountFor = null;
         for (ServerPlayer p : winners) {
@@ -690,6 +822,18 @@ public class GuheindeGevecht extends SavedData {
             list.add(new net.minecraft.nbt.IntArrayTag(UUIDUtil.uuidToIntArray(id)));
         }
         tag.put("Participants", list);
+        CompoundTag seen = new CompoundTag();
+        lastSeen.forEach((id, t) -> seen.putLong(id.toString(), t));
+        tag.put("LastSeen", seen);
+        CompoundTag wait = new CompoundTag();
+        pending.forEach((id, s) -> wait.putInt(id.toString(), s));
+        tag.put("Pending", wait);
+        tag.putLong("LastActivity", lastActivity);
+        ListTag stray = new ListTag();
+        for (UUID id : strays) {
+            stray.add(new net.minecraft.nbt.IntArrayTag(UUIDUtil.uuidToIntArray(id)));
+        }
+        tag.put("Strays", stray);
         return tag;
     }
 
@@ -707,6 +851,18 @@ public class GuheindeGevecht extends SavedData {
         f.gateways = tag.getIntOr("Gateways", 0);
         for (Tag t : tag.getListOrEmpty("Participants")) {
             f.participants.add(UUIDUtil.uuidFromIntArray(((net.minecraft.nbt.IntArrayTag) t).getAsIntArray()));
+        }
+        CompoundTag seen = tag.getCompoundOrEmpty("LastSeen");
+        for (String key : seen.keySet()) {
+            f.lastSeen.put(UUID.fromString(key), seen.getLongOr(key, 0L));
+        }
+        CompoundTag wait = tag.getCompoundOrEmpty("Pending");
+        for (String key : wait.keySet()) {
+            f.pending.put(UUID.fromString(key), wait.getIntOr(key, 0));
+        }
+        f.lastActivity = tag.getLongOr("LastActivity", UNKNOWN);
+        for (Tag t : tag.getListOrEmpty("Strays")) {
+            f.strays.add(UUIDUtil.uuidFromIntArray(((net.minecraft.nbt.IntArrayTag) t).getAsIntArray()));
         }
         return f;
     }

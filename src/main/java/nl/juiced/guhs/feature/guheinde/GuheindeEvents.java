@@ -2,20 +2,15 @@ package nl.juiced.guhs.feature.guheinde;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
@@ -30,7 +25,6 @@ import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.registry.ModSounds;
 import nl.juiced.guhs.world.GuhWorldData;
-import org.joml.Vector3f;
 
 /**
  * The Guheinde's small rules outside the fight: Mika's cry Mika-tranen, the Koningguh tells the story (and knights you
@@ -47,6 +41,9 @@ public final class GuheindeEvents {
         NeoForge.EVENT_BUS.addListener(GuheindeEvents::onDrops);
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, GuheindeEvents::onInteract);
         NeoForge.EVENT_BUS.addListener(GuheindeEvents::onDamage);
+        NeoForge.EVENT_BUS.addListener(MagereCellen::onPlayerTick);
+        NeoForge.EVENT_BUS.addListener(MagereCellen::onServerTick);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, GuheindeEvents::onTame);
     }
 
     /** Grants one of the Guheinde advancements (tab guheinde, all granted from code). */
@@ -55,6 +52,12 @@ public final class GuheindeEvents {
         if (holder != null && !player.getAdvancements().getOrStartProgress(holder).isDone()) {
             player.getAdvancements().award(holder, "done");
         }
+    }
+
+    /** The portal in a Knabbelkelder is open and this player was part of it (or goes through it): both advancements. */
+    public static void portaalOpen(ServerPlayer player) {
+        nl.juiced.guhs.quest.GuhAdvancements.grant(player, "guheinde_portaal");
+        advancement(player, "guheinde_portaal");   // (the shown one: guheinde/, not quest/)
     }
 
     // --- Mika-tranen ---------------------------------------------------------------------------------------------------
@@ -99,8 +102,9 @@ public final class GuheindeEvents {
         ItemStack hand = player.getMainHandItem();
         if (guh.getVariant() == GuhVariant.MAGER) {
             if (GuheindeReis.isKnabbel(hand)) {
-                hand.consume(1, player);
-                feedMager(player, guh);
+                if (feedMager(player, guh)) {
+                    hand.consume(1, player);
+                }
             } else {
                 player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guheinde.mager.honger").withStyle(ChatFormatting.GRAY));
             }
@@ -109,26 +113,27 @@ public final class GuheindeEvents {
             return;
         }
         // (any hand but a taming snack: the book he gives you may well end up in your hand)
-        if (guh.getVariant() == GuhVariant.KONING && !guh.isTame() && !GuheindeReis.isKnabbel(hand) && !player.isShiftKeyDown()) {
+        // (1.2.7) somebody else's tamed king still tells the story; your own only while he has something new to tell
+        if (guh.getVariant() == GuhVariant.KONING && !GuheindeReis.isKnabbel(hand) && !player.isShiftKeyDown()
+                && (!guh.isTame() || !guh.isOwnedBy(player) || heeftNieuws(player))) {
             talkToKoning(player, guh);
             event.setCanceled(true);
             event.setCancellationResult(InteractionResult.SUCCESS);
         }
     }
 
-    /** VAHOEG! A starved guh from the Knabbelkelder gets a kaasknabbel: it gets its colour (a random guh) and runs off. */
-    public static void feedMager(ServerPlayer player, GuhEntity guh) {
-        GuhVariant now = GuhVariant.roll(guh.getRandom());
-        guh.setVariant(now);
-        ServerLevel level = player.level();
-        level.sendParticles(ParticleTypes.HEART, guh.getX(), guh.getY() + guh.getBbHeight() + 0.3, guh.getZ(), 8, 0.4, 0.3, 0.4, 0);
-        level.sendParticles(new DustParticleOptions(0xFF8CBF /* 1, 0.55, 0.75 */, 1.5f), guh.getX(), guh.getY() + 0.5, guh.getZ(), 30, 0.5, 0.5, 0.5, 0.1);
-        level.playSound(null, guh, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1.2f, 1.2f);
-        guh.addEffect(new MobEffectInstance(MobEffects.SPEED, 600, 2));
-        Vec3 away = guh.position().subtract(player.position()).normalize();
-        guh.setDeltaMovement(away.x * 0.6, 0.5, away.z * 0.6);
-        guh.hurtMarked = true;
-        GuhQuests.say(player, guh, "gui.guhs.guheinde.mager.vahoeg");
+    /**
+     * VAHOEG! A starved guh from the Knabbelkelder gets a kaasknabbel: a colourful guh (a random one) hops out and runs
+     * off. 1.2.7: the grey guh itself stays in its cell for the next player (it remembers who fed it: once per player).
+     * False: this player fed this one already (no knabbel eaten, nothing counted).
+     */
+    public static boolean feedMager(ServerPlayer player, GuhEntity guh) {
+        if (MagereCellen.heeftGevoerd(guh, player.getUUID())) {
+            MagereCellen.alGevoerd(player, guh);
+            return false;
+        }
+        MagereCellen.onthoud(guh, player.getUUID());
+        MagereCellen.bevrijd(player, guh);
         // the Guhdex: the page of the magere guh, with its star for saving one
         GuhWorldData data = GuhWorldData.get(player.level().getServer());
         GuhWorldData.PlayerData p = data.player(player.getUUID());
@@ -142,10 +147,55 @@ public final class GuheindeEvents {
         if (gered >= BEVRIJDER) {
             advancement(player, "guheinde_bevrijder");
         }
+        return true;
+    }
+
+    /** Has the Koningguh something new for this player (the story, or the knighthood after a win)? */
+    public static boolean heeftNieuws(ServerPlayer player) {
+        CompoundTag saved = GuhQuests.saved(player);
+        int state = saved.getIntOr(KONING, 0);
+        return state == 0 || state < 2 && saved.getIntOr(GuheindeGevecht.WINS, 0) > 0;
+    }
+
+    /** Player data (GuhQuests.saved): the Koningguh's outfit was handed out (once per player). */
+    public static final String PAKJE = "guhs_koning_pakje";
+
+    /**
+     * 1.2.7: the king's own outfit (crown, mantle, medallion) for this player: the pieces they don't have yet, once per
+     * player (when they tame a Koningguh, or when he knights them). There is one treasure chest per castle and it holds
+     * one piece: without this only the first player could ever get the set. Returns how many pieces were given.
+     */
+    public static int koningPakje(ServerPlayer player) {
+        CompoundTag saved = GuhQuests.saved(player);
+        if (saved.getBooleanOr(PAKJE, false)) {
+            return 0;
+        }
+        saved.putBoolean(PAKJE, true);
+        int n = 0;
+        for (nl.juiced.guhs.entity.GuhClothes c : java.util.List.of(nl.juiced.guhs.entity.GuhClothes.KONING_KROON,
+                nl.juiced.guhs.entity.GuhClothes.KONING_MANTEL, nl.juiced.guhs.entity.GuhClothes.KONING_KETTING)) {
+            net.minecraft.world.item.Item item = ModItems.clothingItem(c);
+            if (!nl.juiced.guhs.feature.kleding.KledingUnlocks.heeft(player, c) && GuhQuests.count(player, item) == 0) {
+                GuhQuests.give(player, item);
+                n++;
+            }
+        }
+        if (n > 0) {
+            player.sendSystemMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guheinde.koning.pakje").withStyle(ChatFormatting.GOLD));
+        }
+        return n;
+    }
+
+    /** Taming a Koningguh: his outfit for you (once per player; the king keeps wearing his own). */
+    private static void onTame(net.neoforged.neoforge.event.entity.living.AnimalTameEvent event) {
+        if (!event.isCanceled() && event.getAnimal() instanceof GuhEntity guh && guh.getVariant() == GuhVariant.KONING
+                && event.getTamer() instanceof ServerPlayer player) {
+            koningPakje(player);
+        }
     }
 
     /**
-     * The Koningguh (wild, on his throne) and the Guheinde: first he tells you the story and gives you the book about it;
+     * The Koningguh (on his throne, wild or somebody's) and the Guheinde: first he tells you the story and gives you the book about it;
      * after you've beaten Opper-Mika he knights you: Ridder van het Guheinde.
      */
     public static void talkToKoning(ServerPlayer player, GuhEntity koning) {
@@ -168,6 +218,7 @@ public final class GuheindeEvents {
             GuhQuests.give(player, ModItems.GEFRITUURDE_KAASKNABBELS.get());
             saved.putInt(KONING, 2);
             advancement(player, "guheinde_ridder");
+            koningPakje(player);
         } else {
             String hint = wins > 0 ? "gui.guhs.guheinde.koning.dank"
                     : GuhQuests.count(player, GuheindeFeature.OOG_VAN_VADSIG.get()) > 0 ? "gui.guhs.guheinde.koning.hint_oog"

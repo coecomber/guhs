@@ -320,9 +320,33 @@ public final class GuhQuests {
                 level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 1.4f);
             }
         }
+        // (1.2.7) the cake got lost again (eaten by lava, dropped, left in a chest far away): the picnic has another one
+        if (p.maagQuest == 3 && player.tickCount % 200 == 0 && count(player, ModItems.VERLOREN_GUH_TAART.get()) == 0) {
+            ServerLevel level = player.level();
+            net.minecraft.nbt.CompoundTag saved = saved(player);
+            long now = level.getGameTime();
+            var picnic = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).getValue(GUH_PICNIC);
+            if (now - saved.getLongOr(TAART_OPNIEUW, -TAART_WACHT) >= TAART_WACHT && picnic != null
+                    && level.structureManager().getStructureWithPieceAt(player.blockPosition(), picnic).isValid()) {
+                regiveCake(player);
+            }
+        }
         GuhDex.onPlayerTick(player, data);
         GuhDex.findCreatures(player);
         GuhDex.seeCreatures(player);
+    }
+
+    /** Player data: when the picnic last gave this player a new cake (game time); at most one per {@link #TAART_WACHT}. */
+    public static final String TAART_OPNIEUW = "guhs_taart_opnieuw";
+    public static final long TAART_WACHT = 20 * 60 * 5;
+
+    /** Step 3 without the cake (it got lost): the picnic guhs baked another one. */
+    public static void regiveCake(ServerPlayer player) {
+        saved(player).putLong(TAART_OPNIEUW, player.level().getGameTime());
+        give(player, ModItems.VERLOREN_GUH_TAART.get());
+        player.sendSystemMessage(Component.translatable("quest.guhs.cake.again").withStyle(ChatFormatting.GOLD));
+        hint(player, "quest.guhs.next.balloons");
+        player.level().playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 1.4f);
     }
 
     // ------------------------------------------------------------------------------------------------------------
@@ -424,12 +448,10 @@ public final class GuhQuests {
         }
     }
 
+    /** 1.2.7: not just the one who lands the last hit: everybody near the fight beat Big Mika (VoorIedereen). */
     public static void onBigMikaKilled(LivingDeathEvent event) {
-        if (event.getEntity() instanceof MikaEntity mika && mika.isBoss()
-                && event.getSource().getEntity() instanceof ServerPlayer player) {
-            GuhWorldData data = GuhWorldData.get(player.level().getServer());
-            data.player(player.getUUID()).beatBigMika = true;
-            data.setDirty();
+        if (event.getEntity() instanceof MikaEntity mika && mika.isBoss() && !mika.level().isClientSide()) {
+            nl.juiced.guhs.world.VoorIedereen.bigMikaVerslagen(mika, event.getSource().getEntity() instanceof ServerPlayer player ? player : null);
         }
     }
 

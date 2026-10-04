@@ -229,7 +229,10 @@ public class GuheindeGameTests {
 
     // --- the Knabbelkelder's magere guhs, the Koningguh ----------------------------------------------------------------
 
-    /** A magere guh eats a knabbel: VAHOEG! It gets a colour, the Guhdex a page with its star. */
+    /**
+     * A magere guh eats a knabbel: VAHOEG! A colourful guh runs off, the Guhdex gets a page with its star. 1.2.7: the grey
+     * guh itself stays for the next player (IedereenGameTests has the second player).
+     */
     @GuhTest(template = EMPTY)
     public static void aMagereGuhGoesVahoeg(GameTestHelper helper) {
         ServerPlayer player = player(helper);
@@ -237,9 +240,12 @@ public class GuheindeGameTests {
         guh.setVariant(GuhVariant.MAGER);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.KAAS_KNABBELS.get(), 2));
         player.interactOn(guh, InteractionHand.MAIN_HAND, guh.position());
-        helper.assertTrue(guh.getVariant() != GuhVariant.MAGER, "no longer grey");
+        List<GuhEntity> vrij = MagereCellen.vrij().stream().filter(g -> g.distanceToSqr(guh) < 64).toList();
+        helper.assertTrue(vrij.size() == 1 && vrij.get(0).getVariant() != GuhVariant.MAGER, "a guh with its colour back");
+        helper.assertTrue(guh.getVariant() == GuhVariant.MAGER && guh.isAlive(), "the grey one stays in its cell for the next player");
         helper.assertTrue(player.getMainHandItem().getCount() == 1, "it ate the knabbel");
-        helper.assertTrue(!guh.isTame(), "it runs off, it isn't yours");
+        helper.assertTrue(!vrij.get(0).isTame(), "it runs off, it isn't yours");
+        vrij.get(0).discard();
         GuhWorldData.PlayerData p = GuhWorldData.get(player.level().getServer()).player(player.getUUID());
         helper.assertTrue(p.seen.contains(GuhVariant.MAGER) && p.tamed.contains(GuhVariant.MAGER), "Guhdex page + star");
         helper.assertTrue(GuhQuests.saved(player).getIntOr(GuheindeEvents.GERED, 0) == 1, "counted");

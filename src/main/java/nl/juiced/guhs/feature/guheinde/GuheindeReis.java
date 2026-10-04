@@ -90,6 +90,7 @@ public final class GuheindeReis {
             return null;
         }
         if (entity instanceof ServerPlayer player) {
+            GuheindeEvents.portaalOpen(player);   // (1.2.7: you went through an open portal, whoever put the eyes in)
             BlockPos spot = besidePortal(from, portal);
             CompoundTag t = new CompoundTag();
             t.putDouble("X", spot.getX() + 0.5);

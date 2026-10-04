@@ -123,6 +123,15 @@ public final class Verhalen {
         return false;
     }
 
+    /**
+     * Is the player listening to the story THIS Opa is telling? (1.2.7: an Opa only shushes his own listeners; a story
+     * left behind at another campfire, whose Opa isn't loaded any more, no longer makes every Opa say "sst".)
+     */
+    public static boolean luistert(ServerPlayer player, GuhNpcEntity opa) {
+        Voorlezing v = BEZIG.get(opa.getUUID());
+        return v != null && v.luisteraars.containsKey(player.getUUID());
+    }
+
     /** Which story this Opa tells (-1: none). */
     public static int verhaal(GuhNpcEntity opa) {
         Voorlezing v = BEZIG.get(opa.getUUID());

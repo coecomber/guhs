@@ -108,9 +108,23 @@ public final class BaltoBlocks {
             return VORM;
         }
 
+        /** 1.2.7: the quest "Een held op een sokkel" (quest/balto_beeldje had no way to be earned): placing the statue does it. */
+        @Override
+        public void setPlacedBy(Level level, BlockPos pos, BlockState state, @javax.annotation.Nullable net.minecraft.world.entity.LivingEntity placer,
+                                net.minecraft.world.item.ItemStack stack) {
+            super.setPlacedBy(level, pos, state, placer, stack);
+            if (placer instanceof net.minecraft.server.level.ServerPlayer player) {
+                nl.juiced.guhs.quest.GuhAdvancements.grant(player, "balto_beeldje");
+            }
+        }
+
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
             if (level instanceof ServerLevel server) {
+                // (and clicking one that already stands: for whoever placed theirs before 1.2.7)
+                if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                    nl.juiced.guhs.quest.GuhAdvancements.grant(sp, "balto_beeldje");
+                }
                 long nu = server.getGameTime();
                 if (nu - player.getPersistentData().getLongOr("guhs_balto_beeldje", 0L) > 40) {
                     player.getPersistentData().putLong("guhs_balto_beeldje", nu);

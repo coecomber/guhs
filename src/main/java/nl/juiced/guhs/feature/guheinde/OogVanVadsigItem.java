@@ -35,6 +35,9 @@ import java.util.function.Consumer;
  * of the portal room to open the way to the Guheinde.
  */
 public class OogVanVadsigItem extends Item {
+    /** Everybody this close to the portal when it opens "opened it". */
+    public static final double PORTAAL_BEREIK = 24;
+
     public OogVanVadsigItem(Properties properties) {
         super(properties);
     }
@@ -56,10 +59,14 @@ public class OogVanVadsigItem extends Item {
         level.updateNeighbourForOutputSignal(pos, filled.getBlock());
         context.getItemInHand().shrink(1);
         level.levelEvent(1503, pos, 0);
-        if (KnabbelportaalframeBlock.tryOpenPortal(level, pos) && context.getPlayer() instanceof ServerPlayer player) {
-            GuhAdvancements.grant(player, "guheinde_portaal");
-            GuheindeEvents.advancement(player, "guheinde_portaal");   // (the shown one: guheinde/, not quest/)
-            player.sendSystemMessage(Component.translatable("gui.guhs.guheinde.portaal_open").withStyle(ChatFormatting.LIGHT_PURPLE));
+        if (KnabbelportaalframeBlock.tryOpenPortal(level, pos) && level instanceof ServerLevel server) {
+            // 1.2.7: everybody who is there when the portal opens gets it (not just whoever put in the last eye); whoever
+            // comes later gets it by going through (GuheindeReis.portalDestination)
+            for (ServerPlayer near : server.getPlayers(p -> !p.isSpectator() && (p == context.getPlayer()
+                    || p.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= PORTAAL_BEREIK * PORTAAL_BEREIK))) {
+                GuheindeEvents.portaalOpen(near);
+                near.sendSystemMessage(Component.translatable("gui.guhs.guheinde.portaal_open").withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
         }
         return InteractionResult.CONSUME;
     }

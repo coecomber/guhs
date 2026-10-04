@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GVG",
+    "GVG",
+    "CCC"
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "V": "minecraft:purple_wool",
+    "C": "minecraft:stripped_cherry_log"
+  },
+  "result": {
+    "id": "guhs:koningstroon"
+  }
+}

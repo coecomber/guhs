@@ -356,7 +356,7 @@ public class GuhGameTests {
         helper.assertTrue(!quest.isRemoved() && player.getMainHandItem().getCount() == 9, "9 is not enough");
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.GEFRITUURDE_KAASKNABBELS.get(), 12));
         quest.interact(player, InteractionHand.MAIN_HAND, quest.position());
-        helper.assertTrue(quest.isRemoved(), "the Hungry Guh should leave after the trade");
+        helper.assertTrue(!quest.isRemoved() && quest.heeftGehad(player), "1.2.7: the Hungry Guh stays for the next player (and knows who had one)");
         helper.assertTrue(player.getInventory().countItem(ModItems.GEFRITUURDE_KAASKNABBELS.get()) == 2, "10 knabbels should be taken");
         helper.assertTrue(player.getInventory().countItem(ModItems.BANK_GUH.get()) == 1, "should get a Bank Guh");
         helper.succeed();
@@ -1269,7 +1269,7 @@ public class GuhGameTests {
         throne.setLastKing(helper.getLevel().getGameTime() - nl.juiced.guhs.block.KoningsTroonBlock.NEW_KING_AFTER - 1);
         throne.check(helper.getLevel(), abs, helper.getBlockState(pos));
         var kings = kings(helper);
-        helper.assertTrue(kings.size() == 1, "after 3 days a new Koningguh sits on the throne");
+        helper.assertTrue(kings.size() == 1, "after a day a new Koningguh sits on the throne");
         GuhEntity king = kings.get(0);
         helper.assertTrue(king.isInSittingPose() && king.getGuhScale() > 1.5f, "a big king, sitting");
         helper.assertTrue(king.getClothes(nl.juiced.guhs.entity.GuhClothes.Slot.HEAD) == nl.juiced.guhs.entity.GuhClothes.KONING_KROON

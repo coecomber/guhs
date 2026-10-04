@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "NGN",
+    " N "
+  ],
+  "key": {
+    "S": "minecraft:string",
+    "N": "minecraft:gold_nugget",
+    "G": "minecraft:gold_ingot"
+  },
+  "result": {
+    "id": "guhs:guh_belletje"
+  }
+}
