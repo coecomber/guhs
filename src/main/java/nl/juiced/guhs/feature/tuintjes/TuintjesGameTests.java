@@ -227,4 +227,58 @@ public class TuintjesGameTests {
                 "the tuinboek and at least three milestones");
         helper.succeed();
     }
+
+    /**
+     * 1.2.7: the gieter for real (a survival player's right-click) inside a protected Guhboerderij: the plants are watered
+     * and stay watered (NeoForge's recorded "placed" blocks were cancelled by the protection and put back), and only real
+     * watering is counted.
+     */
+    @GuhTest(template = TUIN, batch = "tuintjes_fix127")
+    public static void tuintjesGieterInBeschermdGebied(GameTestHelper helper) {
+        var level = helper.getLevel();
+        ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
+        BlockPos a = pot(helper, new BlockPos(4, 2, 4), true, TuinPlant.THEEKRUID);
+        BlockPos b = pot(helper, new BlockPos(5, 2, 4), false, TuinPlant.GUHBLOEM);
+        var box = net.minecraft.world.level.levelgen.structure.BoundingBox.fromCorners(helper.absolutePos(new BlockPos(0, 0, 0)),
+                helper.absolutePos(new BlockPos(12, 6, 12)));
+        nl.juiced.guhs.feature.boerderij.BoerderijProtection.TEST_AREAS.add(box);
+        try {
+            helper.assertTrue(nl.juiced.guhs.feature.Protected.at(level, a), "a protected farm");
+            p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(TuintjesFeature.GUH_GIETER.get()));
+            p.gameMode.useItemOn(p, level, p.getMainHandItem(), net.minecraft.world.InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(a), net.minecraft.core.Direction.UP, a, false));
+            helper.assertTrue(level.getBlockState(a).getValue(TuinBlock.GEWATERD) && level.getBlockState(b).getValue(TuinBlock.GEWATERD),
+                    "watered, and it stays watered");
+            helper.assertTrue(GuhGieterItem.water(p.getMainHandItem()) == GuhGieterItem.VOL - 2, "two sips used");
+            helper.assertTrue(KnusVoortgang.teller(p, TuintjesVoortgang.GEGOTEN) == 2, "counted: " + KnusVoortgang.teller(p, TuintjesVoortgang.GEGOTEN));
+            p.gameMode.useItemOn(p, level, p.getMainHandItem(), net.minecraft.world.InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(a), net.minecraft.core.Direction.UP, a, false));
+            helper.assertTrue(GuhGieterItem.water(p.getMainHandItem()) == GuhGieterItem.VOL - 2 && KnusVoortgang.teller(p, TuintjesVoortgang.GEGOTEN) == 2,
+                    "already wet: nothing used, nothing counted");
+            helper.assertTrue(!level.captureBlockSnapshots, "block recording is as it was");
+        } finally {
+            nl.juiced.guhs.feature.boerderij.BoerderijProtection.TEST_AREAS.remove(box);
+            leave(helper, p);
+        }
+        helper.succeed();
+    }
+
+    /** 1.2.7: plants that grow from a song count for every player listening, not only the nearest one. */
+    @GuhTest(template = TUIN, batch = "tuintjes_fix127")
+    public static void tuintjesZangTeltVoorIedereen(GameTestHelper helper) {
+        ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
+        ServerPlayer q = player(helper, new BlockPos(9, 2, 9));
+        var level = helper.getLevel();
+        try {
+            BlockPos pot = pot(helper, new BlockPos(5, 2, 5), false, TuinPlant.THEEKRUID);
+            TuinBlock.vergeetZang(level, pot);
+            int voorP = KnusVoortgang.teller(p, TuintjesVoortgang.ZANG), voorQ = KnusVoortgang.teller(q, TuintjesVoortgang.ZANG);
+            TuintjesFeature.zang(level, pot, 3, 1f);
+            helper.assertTrue(KnusVoortgang.teller(p, TuintjesVoortgang.ZANG) == voorP + 1 && KnusVoortgang.teller(q, TuintjesVoortgang.ZANG) == voorQ + 1,
+                    "both players heard the song: " + KnusVoortgang.teller(p, TuintjesVoortgang.ZANG) + " / " + KnusVoortgang.teller(q, TuintjesVoortgang.ZANG));
+        } finally {
+            leave(helper, p, q);
+        }
+        helper.succeed();
+    }
 }

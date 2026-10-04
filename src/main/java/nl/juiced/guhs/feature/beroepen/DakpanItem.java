@@ -40,7 +40,8 @@ public class DakpanItem extends BlockItem {
             return InteractionResult.FAIL;
         }
         if (!level.isClientSide() && context.getPlayer() instanceof ServerPlayer p) {
-            leg((ServerLevel) level, pos, p, context.getItemInHand());
+            // 1.2.7: Bob's own roof, not the player placing blocks (EigenWerk: a protection can't put the ghost tile back)
+            nl.juiced.guhs.feature.EigenWerk.doe(level, () -> leg((ServerLevel) level, pos, p, context.getItemInHand()));
         }
         return InteractionResult.SUCCESS;
     }

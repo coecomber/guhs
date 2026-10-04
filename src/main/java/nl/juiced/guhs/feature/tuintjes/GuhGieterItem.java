@@ -56,7 +56,8 @@ public class GuhGieterItem extends Item {
         if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
         }
-        int gegoten = giet(level, pos, stack);
+        // 1.2.7: not recorded as the player placing blocks (a protected farm or town put the dry plants back, EigenWerk)
+        int gegoten = nl.juiced.guhs.feature.EigenWerk.doe(level, () -> giet(level, pos, stack));
         level.playSound(null, pos, TuintjesFeature.GIETER_GELUID.get(), SoundSource.PLAYERS, 1f, 1f);
         if (player instanceof ServerPlayer sp && gegoten > 0) {
             TuintjesVoortgang.gegoten(sp, gegoten);

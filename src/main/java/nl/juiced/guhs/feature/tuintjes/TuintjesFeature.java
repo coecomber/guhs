@@ -100,7 +100,7 @@ public final class TuintjesFeature {
         });
     }
 
-    /** Guhs sing here: the plants around may grow a step; the nearest player (16 blocks) gets it on the Knus tab. */
+    /** Guhs sing here: the plants around may grow a step; every player within 16 blocks gets it on the Knus tab. */
     static void zang(net.minecraft.server.level.ServerLevel level, net.minecraft.core.BlockPos pos, int radius) {
         zang(level, pos, radius, TuinBlock.KANS_ZANG);
     }
@@ -109,8 +109,8 @@ public final class TuintjesFeature {
     static void zang(net.minecraft.server.level.ServerLevel level, net.minecraft.core.BlockPos pos, int radius, float kans) {
         int grew = TuinBlock.zang(level, pos, radius, kans);
         if (grew > 0) {
-            var player = level.getNearestPlayer(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 16, false);
-            if (player instanceof ServerPlayer sp) {
+            // 1.2.7: everyone listening (within 16 blocks), not only the nearest player
+            for (ServerPlayer sp : level.getPlayers(p -> !p.isSpectator() && p.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 16 * 16)) {
                 TuintjesVoortgang.zang(sp, grew);
             }
         }

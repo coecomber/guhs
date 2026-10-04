@@ -130,6 +130,10 @@ public final class Protected {
         if (event.getLevel().isClientSide() || !firestarter(event.getItemStack())) {
             return;
         }
+        if (event.getItemStack().is(net.minecraft.world.item.Items.WATER_BUCKET)
+                && event.getLevel().getBlockState(event.getPos()).is(nl.juiced.guhs.feature.knuffelbad.KnuffelbadFeature.GUH_WASTOBBE.get())) {
+            return;   // 1.2.7: a bucket of water on a wash tub is its shower (nothing is poured out): that's fine
+        }
         BlockPos target = event.getPos().relative(event.getFace() == null ? Direction.UP : event.getFace());
         if (denied(event.getEntity(), target)) {
             event.setUseItem(TriState.FALSE);

@@ -88,9 +88,16 @@ public final class KnuffeldalItems {
             Direction facing = player == null ? Direction.NORTH : player.getDirection().getOpposite();
             BlockState lower = KnuffeldalFeature.SNEEUWPOPGUH.get().defaultBlockState()
                     .setValue(KnuffeldalBlocks.Sneeuwpopguh.FACING, facing).setValue(KnuffeldalBlocks.Sneeuwpopguh.HALF, DoubleBlockHalf.LOWER);
-            level.setBlock(top, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
-            level.setBlock(bottom, lower, Block.UPDATE_ALL);
-            level.setBlock(top, lower.setValue(KnuffeldalBlocks.Sneeuwpopguh.HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
+            // 1.2.7: not recorded as the player placing blocks (EigenWerk: a protected place put the snow blocks back)
+            boolean staat = nl.juiced.guhs.feature.EigenWerk.doe(level, () -> {
+                level.setBlock(top, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                level.setBlock(bottom, lower, Block.UPDATE_ALL);
+                level.setBlock(top, lower.setValue(KnuffeldalBlocks.Sneeuwpopguh.HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
+                return level.getBlockState(bottom).is(KnuffeldalFeature.SNEEUWPOPGUH.get()) && level.getBlockState(top).is(KnuffeldalFeature.SNEEUWPOPGUH.get());
+            });
+            if (!staat) {
+                return InteractionResult.FAIL;   // (it didn't happen: nothing used up, nothing counted)
+            }
             context.getItemInHand().consume(1, player);
             level.playSound(null, top, SoundEvents.SNOW_GOLEM_AMBIENT, SoundSource.BLOCKS, 1f, 1.4f);
             ((ServerLevel) level).sendParticles(KnuffeldalFeature.SNEEUWVLOKJE.get(), top.getX() + 0.5, top.getY() + 0.8, top.getZ() + 0.5,

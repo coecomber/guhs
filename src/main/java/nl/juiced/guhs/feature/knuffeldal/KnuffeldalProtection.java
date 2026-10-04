@@ -77,6 +77,10 @@ public final class KnuffeldalProtection {
         if (!building) {
             return;
         }
+        if (stack.getItem() instanceof nl.juiced.guhs.feature.beroepen.DakpanItem
+                && event.getLevel().getBlockState(event.getPos()).is(nl.juiced.guhs.feature.beroepen.BeroepenFeature.DAKPLEK.get())) {
+            return;   // 1.2.7: Bob's dakpan (a block item) on a ghost tile of his roof in the Beroepenstraat: that's his job, not building
+        }
         Direction face = event.getFace() == null ? Direction.UP : event.getFace();
         if (denied(event.getEntity(), event.getPos(), true) || denied(event.getEntity(), event.getPos().relative(face), false)) {
             event.setUseItem(TriState.FALSE);

@@ -467,4 +467,42 @@ public class KnuffelbadGameTests {
         helper.assertTrue(!rit.shouldBeSaved() && rit.vanRit() && !rit.isPickable(), "a slide's duck isn't saved or hit");
         helper.succeedWhen(() -> helper.assertTrue(rit.isRemoved() && !deco.isRemoved(), "a slide's duck without its ride goes; yours stays"));
     }
+
+    /**
+     * 1.2.7: a survival player's bucket of water on the wash tub inside the protected Knuffelbad is its shower (the
+     * general fire/flood protection cancelled the click): the guh is rinsed, the bucket stays full, nothing is poured.
+     */
+    @GuhTest(template = TOBBE, batch = "knuffelbad_fix127", timeoutTicks = 100)
+    public static void knuffelbadEmmerOpWastobbeInBeschermdBad(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        KnuffelbadProtection.testGebied(level, helper.getBounds());
+        ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
+        BlockPos tobbe = helper.absolutePos(new BlockPos(4, 2, 4));
+        try {
+            helper.assertTrue(nl.juiced.guhs.feature.Protected.at(level, tobbe) && KnuffelbadProtection.geweigerd(p, tobbe), "a protected Knuffelbad, a survival player");
+            GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(6, 2, 6));
+            guh.tame(p);
+            helper.assertTrue(Wasritueel.inzepen(p, guh), "soaped");
+            for (int i = 0; i < Wasritueel.SCHROBBEN; i++) {
+                Wasritueel.schrobben(p, guh);
+            }
+            helper.assertTrue(Wasritueel.stap(guh) == Wasritueel.GESCHUIMD, "all foam");
+            p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(net.minecraft.world.item.Items.WATER_BUCKET));
+            p.gameMode.useItemOn(p, level, p.getMainHandItem(), net.minecraft.world.InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.phys.BlockHitResult(Vec3.atCenterOf(tobbe).add(0, 0.5, 0), net.minecraft.core.Direction.UP, tobbe, false));
+            helper.assertTrue(Wasritueel.stap(guh) == Wasritueel.GESPOELD, "the bucket rinses the guh: " + Wasritueel.stap(guh));
+            helper.assertTrue(p.getMainHandItem().is(net.minecraft.world.item.Items.WATER_BUCKET) && level.getBlockState(tobbe).is(KnuffelbadFeature.GUH_WASTOBBE.get())
+                    && level.getFluidState(tobbe.above()).isEmpty(), "the bucket stays full, no water poured");
+            // still protected: the same bucket on the floor next to the tub pours nothing
+            BlockPos vloer = tobbe.offset(2, -1, 0);
+            p.gameMode.useItemOn(p, level, p.getMainHandItem(), net.minecraft.world.InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.phys.BlockHitResult(Vec3.atCenterOf(vloer).add(0, 0.5, 0), net.minecraft.core.Direction.UP, vloer, false));
+            helper.assertTrue(p.getMainHandItem().is(net.minecraft.world.item.Items.WATER_BUCKET) && level.getFluidState(vloer.above()).isEmpty(),
+                    "no flooding the Knuffelbad");
+            Wasritueel.stop(guh);
+        } finally {
+            weg(helper, p);
+        }
+        helper.succeed();
+    }
 }
