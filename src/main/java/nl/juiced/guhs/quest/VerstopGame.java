@@ -75,6 +75,15 @@ public final class VerstopGame {
 
     /** Actions from the screen. */
     public static final int START = 0, JOIN = 3, SHOP = 4;
+    /**
+     * 1.2.7 (one game per house, for everyone on the server): a game is over after {@link #MAX_TICKS} whatever happens, and
+     * a seeker who hasn't moved a step (or found a guh) for {@link #IDLE_TICKS} drops out, so a game nobody is really
+     * playing never keeps the house (and its level) occupied.
+     */
+    public static final int MAX_TICKS = 20 * 60 * 30, IDLE_TICKS = 20 * 60 * 3;
+    /** Per seeker: where they last stood and when they last moved (not saved: after a restart the clock starts again). */
+    private final java.util.Map<UUID, net.minecraft.world.phys.Vec3> idlePos = new java.util.HashMap<>();
+    private final java.util.Map<UUID, Long> idleSince = new java.util.HashMap<>();
     /** How far from Verstopguhtje the house reaches (it's 80x80, she stands in the middle of the roof). */
     public static final int HOUSE_RADIUS = 42, HOUSE_DEPTH = 16;
     private static final GuhVariant[] HIDERS = {GuhVariant.NORMAL, GuhVariant.NORMAL, GuhVariant.MINT, GuhVariant.CHOCO, GuhVariant.SNOW};
@@ -168,7 +177,12 @@ public final class VerstopGame {
         } else if (!game.isPlaying(player) && (isSeeking(player) || nl.juiced.guhs.feature.Minigames.busyElsewhere(player, nl.juiced.guhs.feature.Minigames.VERSTOP))) {
             GuhQuests.say(player, npc, "quest.guhs.minigame.busy");   // (still in another game, or seeking in another house)
         } else if (game.isRunning()) {
+            boolean nieuw = !game.isPlaying(player);
             game.join(npc, player);
+            if (nieuw && action >= START && action < START + Level.values().length && Level.values()[action - START] != game.level) {
+                // 1.2.7: you picked another level than the one that's running: say so (you join the running game)
+                GuhQuests.say(player, npc, "quest.guhs.verstop.loopt_al", Component.translatable("gui.guhs.verstop." + game.level.id()));
+            }
         } else if (action >= START && action < START + Level.values().length) {
             game.start(npc, player, Level.values()[action - START]);
         }
@@ -389,6 +403,35 @@ public final class VerstopGame {
             reset(npc);
             return;
         }
+        // 1.2.7: the whole game takes too long, or a seeker stands still for minutes: out, so the house is free again
+        long now = world.getGameTime();
+        if (now - startTick > MAX_TICKS) {
+            for (ServerPlayer p : online(world)) {
+                p.sendSystemMessage(Component.translatable("quest.guhs.verstop.te_lang", found, level.guhs).withStyle(ChatFormatting.LIGHT_PURPLE));
+                SEEKERS.remove(p.getUUID(), npc.getUUID());
+                backToRoof(npc, p);
+            }
+            reset(npc);
+            return;
+        }
+        for (ServerPlayer p : online(world)) {
+            net.minecraft.world.phys.Vec3 was = idlePos.get(p.getUUID());
+            if (was == null || was.distanceToSqr(p.position()) > 1.0) {
+                idlePos.put(p.getUUID(), p.position());
+                idleSince.put(p.getUUID(), now);
+            } else if (now - idleSince.getOrDefault(p.getUUID(), now) > IDLE_TICKS) {
+                players.remove(p.getUUID());
+                SEEKERS.remove(p.getUUID(), npc.getUUID());
+                p.sendSystemMessage(Component.translatable("quest.guhs.verstop.idle", found, level.guhs).withStyle(ChatFormatting.LIGHT_PURPLE));
+                backToRoof(npc, p);
+            }
+        }
+        idlePos.keySet().retainAll(players);
+        idleSince.keySet().retainAll(players);
+        if (players.isEmpty()) {
+            reset(npc);
+            return;
+        }
         Component bar = Component.translatable("quest.guhs.verstop.bar", Component.translatable("gui.guhs.verstop." + level.id()), found,
                 level.guhs, time((int) (world.getGameTime() - startTick))).withStyle(ChatFormatting.LIGHT_PURPLE);
         online(world).forEach(p -> {
@@ -432,6 +475,8 @@ public final class VerstopGame {
         hidden.clear();
         players.forEach(id -> SEEKERS.remove(id, npc.getUUID()));
         players.clear();
+        idlePos.clear();
+        idleSince.clear();
         level = null;
         found = 0;
     }
@@ -618,6 +663,15 @@ public final class VerstopGame {
             }
         }
         return list;
+    }
+
+    /** (Tests) the game started this many ticks earlier; this seeker has been standing still for so long. */
+    public void testClocks(int gameTicks, @Nullable ServerPlayer seeker, int idleTicks) {
+        startTick -= gameTicks;
+        if (seeker != null) {
+            idlePos.put(seeker.getUUID(), seeker.position());
+            idleSince.put(seeker.getUUID(), seeker.level().getGameTime() - idleTicks);
+        }
     }
 
     private static void backToRoof(GuhNpcEntity npc, ServerPlayer player) {

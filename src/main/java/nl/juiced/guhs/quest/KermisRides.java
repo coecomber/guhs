@@ -20,7 +20,11 @@ public final class KermisRides {
     public static void lap(ServerPlayer player, GuhSleeEntity sled) {
         give(player, new ItemStack(ModItems.KERMISBON.get()));
         CompoundTag data = GuhQuests.saved(player);
-        if (!data.getBooleanOr(FIRST, false)) {
+        if (!data.getBooleanOr(FIRST, false) && freeSlots(player) < 3) {
+            // 1.2.7: the one-time prize bag waits until it fits (it used to fall along the track, for anyone to take)
+            player.sendSystemMessage(Component.translatable("quest.guhs.kermis.first_full").withStyle(ChatFormatting.GOLD));
+            player.level().playSound(null, sled.blockPosition(), SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 0.9f, 1.5f);
+        } else if (!data.getBooleanOr(FIRST, false)) {
             data.putBoolean(FIRST, true);
             give(player, new ItemStack(ModItems.GUH_BALLON.get(), 3));
             give(player, new ItemStack(ModItems.KAASHONING.get(), 4));
@@ -34,10 +38,19 @@ public final class KermisRides {
         player.sendOverlayMessage(Component.translatable("quest.guhs.kermis.lap").withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
+    /** Into the pockets; what doesn't fit lies in front of the player, for them alone (1.2.7: was a loose drop). */
     private static void give(ServerPlayer player, ItemStack stack) {
-        if (!player.getInventory().add(stack)) {
-            player.drop(stack, false);
+        nl.juiced.guhs.feature.Minigames.give(player, stack);
+    }
+
+    static int freeSlots(ServerPlayer player) {
+        int free = 0;
+        for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
+            if (stack.isEmpty()) {
+                free++;
+            }
         }
+        return free;
     }
 
     private KermisRides() {

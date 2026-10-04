@@ -23,6 +23,7 @@ public final class Features {
         Protected.register();
         Protected.add(nl.juiced.guhs.world.VerstopProtection::protectedAt);
         Loaned.register();
+        nl.juiced.guhs.quest.Kermis.register();               // 1.2.7: the kermis can't be broken and keeps its sleds
         nl.juiced.guhs.feature.knus.Knus.register(modBus);   // 2.8: the shared Knus framework, before every 2.8 feature
         nl.juiced.guhs.feature.beauty.BeautyFeature.register(modBus);
         nl.juiced.guhs.feature.race.RaceFeature.register(modBus);
