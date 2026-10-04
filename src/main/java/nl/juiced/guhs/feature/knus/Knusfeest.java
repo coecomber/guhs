@@ -72,6 +72,24 @@ public final class Knusfeest {
         }
     }
 
+    /**
+     * Does the player (still) need to make this task's feest-item? Asked and not made yet, or made / found back but the
+     * item is no longer in their pockets (lost, burnt, eaten by the void): then the feature offers its feest-activity
+     * again, so a lost item never blocks the Knusfeest.
+     */
+    public static boolean nodig(ServerPlayer player, Feesttaak taak) {
+        Stap stap = stap(player, taak);
+        if (stap == Stap.GEVRAAGD) {
+            return true;
+        }
+        return (stap == Stap.GEMAAKT || stap == Stap.TERUGGEVONDEN) && !heeftItem(player, taak);
+    }
+
+    /** Does the player carry a feest-item of this task ({@code #guhs:knus/<id>})? */
+    public static boolean heeftItem(ServerPlayer player, Feesttaak taak) {
+        return player.getInventory().hasAnyMatching(s -> s.is(taak.tag()));
+    }
+
     /** Has the player delivered this task (in the current round)? */
     public static boolean gebracht(ServerPlayer player, Feesttaak taak) {
         return stap(player, taak) == Stap.GEBRACHT;

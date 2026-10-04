@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.feature.Minigames;
+import nl.juiced.guhs.feature.knus.Feesttaak;
 import nl.juiced.guhs.feature.knus.KnusTags;
 import nl.juiced.guhs.feature.knus.KnusVoortgang;
 import nl.juiced.guhs.feature.knus.Knusfeest;
@@ -76,6 +77,9 @@ public final class Feestbuffet {
 
     /** Buffet food: things you baked, grew or poured (#guhs:knus/gebak, oogst, thee, kaasmelk), and kaasknabbels. */
     public static boolean buffetEten(ItemStack stack) {
+        if (Feesttaak.isFeestItem(stack)) {
+            return false;   // (the feesttaart & co are for the Burgemeester: never eaten by accident, 1.2.7)
+        }
         return stack.is(KnusTags.GEBAK) || stack.is(KnusTags.OOGST) || stack.is(KnusTags.THEE) || stack.is(KnusTags.KAASMELK)
                 || stack.is(ModItems.KAAS_KNABBELS.get()) || stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get());
     }

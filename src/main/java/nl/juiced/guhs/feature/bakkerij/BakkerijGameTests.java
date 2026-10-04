@@ -441,4 +441,54 @@ public class BakkerijGameTests {
                 })
                 .thenSucceed();
     }
+
+    /**
+     * 1.2.7: a feesttaart that got lost (made, but not in the pockets any more) can be baked again: the feestklant comes
+     * back, also for a second player on the same server; the milestone counts only the first one.
+     */
+    @GuhTest(template = TEST, timeoutTicks = 400, batch = BATCH + "_feest_kwijt")
+    public static void bakkerijKwijteFeesttaartOpnieuwBakken(GameTestHelper helper) {
+        GuhNpcEntity npc = korstje(helper);
+        ServerPlayer p = player(helper, npc.position().add(0, 0, 1));
+        ServerPlayer q = player(helper, npc.position().add(1, 0, 1));
+        Knusfeest.nieuweRonde(p, 0, EnumSet.of(Feesttaak.FEESTTAART));
+        Knusfeest.nieuweRonde(q, 0, EnumSet.of(Feesttaak.FEESTTAART));
+        Knusfeest.gemaakt(p, Feesttaak.FEESTTAART);
+        Knusfeest.gemaakt(q, Feesttaak.FEESTTAART);
+        KnusVoortgang.tel(p, BakkerijVoortgang.FEESTTAART, 1);
+        q.getInventory().add(new ItemStack(BakkerijFeature.FEESTTAART.get()));
+        helper.assertTrue(Knusfeest.nodig(p, Feesttaak.FEESTTAART), "made but lost: p needs a new one");
+        helper.assertTrue(!Knusfeest.nodig(q, Feesttaak.FEESTTAART), "q still has the cake: no second one");
+        helper.assertTrue(BakkerijGame.start(npc, p), "started");
+        BakkerijGame game = BakkerijGame.of(npc);
+        game.klanten = false;
+        helper.assertTrue(game.feest(), "a feest game again, although the task was made before");
+        ServerLevel world = helper.getLevel();
+        helper.startSequence()
+                .thenWaitUntil(() -> helper.assertTrue(!game.counting(), "the countdown"))
+                .thenExecute(() -> game.score = BakkerijGame.FEEST_MIN)
+                .thenWaitUntil(() -> helper.assertTrue(game.klanten(world).stream().anyMatch(k -> k.recept() == Recept.FEESTTAART && k.wacht()),
+                        "the feestklant comes again"))
+                .thenExecute(() -> {
+                    BakkerijKlant feest = game.klanten(world).stream().filter(k -> k.recept() == Recept.FEESTTAART).findFirst().orElseThrow();
+                    game.gebakken(p, Recept.FEESTTAART, Recept.Kwaliteit.GOED);
+                    helper.assertTrue(BakkerijGame.serveer(p, feest), "the feesttaart is served");
+                    helper.assertTrue(count(p, BakkerijFeature.FEESTTAART.get()) == 1, "a new real feesttaart");
+                    helper.assertTrue(Knusfeest.stap(p, Feesttaak.FEESTTAART) == Knusfeest.Stap.GEMAAKT && !Knusfeest.nodig(p, Feesttaak.FEESTTAART),
+                            "made, and not needed any more");
+                    helper.assertTrue(KnusVoortgang.teller(p, BakkerijVoortgang.FEESTTAART) == 1, "the milestone isn't counted twice");
+                    BakkerijGame.stopFor(p);
+                    // the second player, with the cake in the pockets: an ordinary game
+                    helper.assertTrue(BakkerijGame.start(npc, q) && !BakkerijGame.of(npc).feest(), "q has the cake: no feest game");
+                    BakkerijGame.stopFor(q);
+                    // q loses it too: a feest game for q as well
+                    q.getInventory().clearContent();
+                    helper.assertTrue(BakkerijGame.start(npc, q) && BakkerijGame.of(npc).feest(), "q lost it: a feest game");
+                    BakkerijGame.stopFor(q);
+                    Knusfeest.vergeet(p);
+                    Knusfeest.vergeet(q);
+                    leave(helper, p, q);
+                })
+                .thenSucceed();
+    }
 }

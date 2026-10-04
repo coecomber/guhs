@@ -52,6 +52,16 @@ public enum Feesttaak {
         return Component.translatable("gui.guhs.knusfeest.taak." + id());
     }
 
+    /** Is this stack one of the six feest-items (for the Burgemeester: never food for a buffet, a tea table or a Mika)? */
+    public static boolean isFeestItem(net.minecraft.world.item.ItemStack stack) {
+        for (Feesttaak t : values()) {
+            if (stack.is(t.tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Nullable
     public static Feesttaak byId(String id) {
         for (Feesttaak t : values()) {

@@ -164,7 +164,7 @@ public final class BakkerijGame {
     public static void talk(GuhNpcEntity npc, ServerPlayer player) {
         BakkerijGame game = of(npc);
         boolean mine = game != null && game.player.equals(player.getUUID());
-        boolean feest = Knusfeest.stap(player, Feesttaak.FEESTTAART) == Knusfeest.Stap.GEVRAAGD;
+        boolean feest = Knusfeest.nodig(player, Feesttaak.FEESTTAART);
         GuhQuests.say(player, npc, game == null ? (feest ? "quest.guhs.bakkerij.hello.feest" : "quest.guhs.bakkerij.hello")
                 : mine ? "quest.guhs.bakkerij.busy_you" : "quest.guhs.bakkerij.busy");
         npc.playSound(ModSounds.GUH_AMBIENT.get(), 1f, 1.1f);
@@ -221,7 +221,7 @@ public final class BakkerijGame {
             GuhQuests.say(player, npc, "quest.guhs.bakkerij.broken");
             return false;
         }
-        boolean feest = Knusfeest.stap(player, Feesttaak.FEESTTAART) == Knusfeest.Stap.GEVRAAGD;
+        boolean feest = Knusfeest.nodig(player, Feesttaak.FEESTTAART);
         BakkerijGame game = new BakkerijGame(npc.getUUID(), player, winkel, feest, world.getGameTime());
         GAMES.put(npc.getUUID(), game);
         PLAYERS.put(player.getUUID(), npc.getUUID());
@@ -451,10 +451,14 @@ public final class BakkerijGame {
 
     /** The feestklant got her cake: Korstje packs a real one for the Grote Knusfeest. */
     private void feesttaart(ServerPlayer p) {
-        if (Knusfeest.stap(p, Feesttaak.FEESTTAART) == Knusfeest.Stap.GEVRAAGD) {
+        if (Knusfeest.nodig(p, Feesttaak.FEESTTAART)) {
+            // (also a second time: a feesttaart that got lost can always be baked again, 1.2.7)
+            boolean eerste = Knusfeest.stap(p, Feesttaak.FEESTTAART) == Knusfeest.Stap.GEVRAAGD;
             Minigames.give(p, new ItemStack(BakkerijFeature.FEESTTAART.get()));
             Knusfeest.gemaakt(p, Feesttaak.FEESTTAART);
-            KnusVoortgang.tel(p, BakkerijVoortgang.FEESTTAART, 1);
+            if (eerste) {
+                KnusVoortgang.tel(p, BakkerijVoortgang.FEESTTAART, 1);
+            }
             p.sendSystemMessage(Component.translatable("quest.guhs.bakkerij.feesttaart").withStyle(ChatFormatting.LIGHT_PURPLE));
             title(p, Component.translatable("quest.guhs.bakkerij.title.feesttaart").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
                     Component.translatable("quest.guhs.bakkerij.title.feesttaart.sub"), 5, 50, 15);

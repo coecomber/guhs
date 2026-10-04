@@ -419,6 +419,9 @@ public final class Theekransje {
 
     /** Something sweet for the table: bakery cakes (#guhs:knus/gebak) and a few ordinary sweets. */
     public static boolean isGebak(ItemStack stack) {
+        if (nl.juiced.guhs.feature.knus.Feesttaak.isFeestItem(stack)) {
+            return false;   // (the feesttaart is for the Burgemeester: never served by accident, 1.2.7)
+        }
         return stack.is(KnusTags.GEBAK) || stack.is(Items.COOKIE) || stack.is(Items.PUMPKIN_PIE) || stack.is(Items.CAKE) || stack.is(Items.SWEET_BERRIES)
                 || stack.is(Items.HONEY_BOTTLE);
     }

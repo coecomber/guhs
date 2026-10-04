@@ -117,7 +117,8 @@ public class KnuffeldalKruisGameTests {
         helper.assertTrue(TheeBlocks.thee(stack("kaasmelk")) == TheeBlocks.Soort.KAASMELKTHEE, "kaasmelk -> kaasmelkthee");
         helper.assertTrue(TheeBlocks.thee(stack("theekruid")) == TheeBlocks.Soort.THEEKRUIDTHEE, "theekruid -> theekruidthee");
         helper.assertTrue(TheeBlocks.thee(stack("guhbloemetje")) == TheeBlocks.Soort.GUHBLOEMENTHEE, "guhbloemetje -> guhbloementhee");
-        helper.assertTrue(Theekransje.isGebak(stack("vadsdonut")) && Theekransje.isGebak(stack("feesttaart")), "bakery cakes on the tea table");
+        helper.assertTrue(Theekransje.isGebak(stack("vadsdonut")) && !Theekransje.isGebak(stack("feesttaart")),
+                "bakery cakes on the tea table (1.2.7: but never the feesttaart, that one is for the Burgemeester)");
         // the feestbuffet: baked, grown and poured
         for (String id : List.of("knabbelbroodje", "theekruid", "knabbelgraan", "guhbloemetje", "kaasmelkthee", "kaasmelk")) {
             helper.assertTrue(Feestbuffet.buffetEten(stack(id)), id + " goes on the feestbuffet");

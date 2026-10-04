@@ -122,6 +122,10 @@ public final class Burgemeester implements NpcRole {
             if (!item.isEmpty()) {
                 gebracht(player, taak);
                 n++;
+            } else if (stap == Knusfeest.Stap.GEMAAKT || stap == Knusfeest.Stap.TERUGGEVONDEN) {
+                // made, but not in the pockets (lost? left at home?): asked again, so it can always be made anew (1.2.7)
+                Knusfeest.zet(player, taak, Knusfeest.Stap.GEVRAAGD);
+                player.sendSystemMessage(Component.translatable("quest.guhs.burgemeester.kwijt", taak.naam()).withStyle(ChatFormatting.GOLD));
             }
         }
         if (n > 0) {
@@ -135,11 +139,18 @@ public final class Burgemeester implements NpcRole {
         Knusfeest.zet(player, taak, Knusfeest.Stap.GEBRACHT);
         KnusVoortgang.tel(player, KnuffeldalVoortgang.TAAKJES, 1);
         GuhAdvancements.grant(player, "knuffeldal_taakje_gebracht");
+        // 1.2.7: an item that was ready before the Burgemeester asked (a feestboeket made earlier...) still counts as made
+        GuhAdvancements.grant(player, "knusfeest_" + taak.id() + "_gemaakt");
     }
 
     /** Everything is there: the feast at the feestbuffet (the Grote Knusfeest's finale, or the seasonal one). */
     static void feest(GuhNpcEntity npc, ServerPlayer player) {
-        if (nl.juiced.guhs.feature.evenementen.Evenementen.eventOf(player) != null) {
+        var bezig = nl.juiced.guhs.feature.evenementen.Evenementen.eventOf(player);
+        if (bezig != null) {
+            if (!(bezig instanceof KnusfeestEvenement)) {
+                // 1.2.7: in another event (a kaasregen, a parade...): say so, the feast starts when you come back after it
+                GuhQuests.say(player, npc, "quest.guhs.burgemeester.feest_wacht");
+            }
             return;   // (already feasting)
         }
         var event = nl.juiced.guhs.feature.evenementen.Evenementen.start(nl.juiced.guhs.feature.evenementen.EvenementType.KNUSFEEST, player);

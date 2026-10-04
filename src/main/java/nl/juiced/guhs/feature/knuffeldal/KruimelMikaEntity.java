@@ -307,15 +307,19 @@ public class KruimelMikaEntity extends PathfinderMob implements GeoEntity {
 
     /** Is this player holding a treat (#guhs:knus/lekkernij)? */
     static boolean lekkernij(Player player) {
-        return player.getMainHandItem().is(KnusTags.LEKKERNIJ) || player.getOffhandItem().is(KnusTags.LEKKERNIJ)
-                || player.getMainHandItem().is(ModItems.KAAS_KNABBELS.get()) || player.getOffhandItem().is(ModItems.KAAS_KNABBELS.get());
+        return isLekkernij(player.getMainHandItem()) || isLekkernij(player.getOffhandItem());
+    }
+
+    /** A treat: #guhs:knus/lekkernij or kaasknabbels, but never a feest-item (the feesttaart is for the Burgemeester). */
+    static boolean isLekkernij(ItemStack stack) {
+        return !Feesttaak.isFeestItem(stack) && (stack.is(KnusTags.LEKKERNIJ) || stack.is(ModItems.KAAS_KNABBELS.get()));
     }
 
     /** Right-click: with a treat it eats, lets go of the loot and runs off giggling; without, it giggles. */
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        boolean treat = stack.is(KnusTags.LEKKERNIJ) || stack.is(ModItems.KAAS_KNABBELS.get());
+        boolean treat = isLekkernij(stack);
         if (level().isClientSide()) {
             return treat ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
