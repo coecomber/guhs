@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_barbecuether",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 25,
+  guhs_chapter_version: 26,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_barbecuether.png",

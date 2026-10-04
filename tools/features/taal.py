@@ -89,6 +89,31 @@ OVERIG = {
     "gui.guhs.band.plek.in_de_wolkjes.kort": "In de wolkjes",
     "gui.guhs.beroepen.brandweer.guhtje_eerst_blussen": "Eerst blussen! Er branden nog %s vuurtjes. Daarna springt het guhtje in je armen.",   # 1.2.6
     "gui.guhs.beroepen.brandweer.guhtje_zelf": "Het guhtje is zelf maar naar beneden geklommen. Praat met Blusguh om opnieuw te helpen!",   # 1.2.6
+    # 1.2.7: the multiplayer fixes (everyone can finish every quest)
+    "quest.guhs.cake.again": "De picknick-guhs hadden nog een guh-taart voor je! Breng hem met 3 guh-ballonnen naar Moeder Vadsig.",
+    "gui.guhs.guheinde.mager.al_gevoerd": "Deze magere guh heb je al een knabbel gegeven. In de andere cellen zitten er nog meer!",
+    "gui.guhs.guheinde.koning.pakje": "De Koningguh geeft je wat je nog mist van zijn koningspakje! Houd het rechtsklik ingedrukt om het te ontgrendelen.",
+    "quest.guhs.eilanden.pakje": "De Wolkguh geeft je zijn reserve-wolkenmuts en -wolkenkraag (wat je nog niet had)! Houd ze rechtsklik ingedrukt om ze te ontgrendelen.",
+    "entity.guhs.quest_guh.al_gehad": "Guh! Jij hebt mijn vriendje de Bankguh al gekregen. Wil je er nog een? Die kun je zelf maken: een kist met gefrituurde kaasknabbels eromheen!",
+    "gui.guhs.piep.recept_gekregen": "Jij hielp ook mee: hier is het recept van de Roze Guh Koek voor jou! Rechtsklik om het te leren.",
+    "gui.guhs.gatenkaas.voorraadboek_kopie": "Je schrijft het dagboek van de Voorraadmika snel over: nu heb je een eigen exemplaar!",
+    "gui.guhs.guheinde.beloning.later": "Opper-Mika is verslagen terwijl jij even weg was. Jij vocht mee, dus dit is ook voor jou!",
+    "gui.guhs.guheinde.gevecht_verlaten": "Niemand meer te zien... Opper-Mika vliegt mopperend weg. Het terugportaal gaat weer open.",
+    "quest.guhs.burgemeester.kwijt": "Njeg, ik zie je %s nergens! Kwijt? Geeft niks: maak maar een nieuwe (of haal hem even op), dan tik ik hem af.",
+    "quest.guhs.burgemeester.feest_wacht": "Ahum! Alles is er, maar jij bent nog druk met iets anders. Kom straks bij me terug, dan begint het Knusfeest!",
+    "gui.guhs.kermis.no_build": "Njeg! Van de Guhkermis blijf je af: hier mag je niks slopen of bouwen. Lekker een rondje rijden!",
+    "quest.guhs.kermis.first_full": "Rondje! Maar je zakken zitten vol: maak 3 vakjes vrij, dan krijg je na je volgende rondje je prijzenzakje. Njeg!",
+    "quest.guhs.doolhof.uit_de_heg": "Oeps, je zat vast in de heg! Meneer Vadskronkel zet je op het plein.",
+    "quest.guhs.circuit.gouden_tijd": "Een gouden tijd: je bent zo snel als de legende! VAHOEG!",
+    "quest.guhs.race.ended.idle": "Anderhalve minuut geen ring gehaald? De renguh is ingedut, njeg. Race voorbij!",
+    "quest.guhs.golf.wachtende": "%s wil ook graag golfen! Speel lekker door: wie een minuut niks doet, moet de baan vrijgeven.",
+    "quest.guhs.golf.te_lang": "Njeg, een kwartier op de baan en er staat iemand te wachten! De Golfguh stopt je rondje.",
+    "quest.guhs.verstop.loopt_al": "Er loopt al een spelletje op %s! Je zoekt gezellig mee (samen zoeken telt niet voor records).",
+    "quest.guhs.verstop.te_lang": "Een half uur gezocht (%s van %s gevonden): de guhs komen zelf tevoorschijn. Tot de volgende keer!",
+    "quest.guhs.verstop.idle": "Je staat al een tijdje stil, dus je stopt met zoeken (%s van %s gevonden). Tot de volgende keer!",
+    "quest.guhs.vissen.loopt_al": "Deze wedstrijd is op %s: dat koos de eerste visser.",
+    "gui.guhs.elftocht.zak_vol": "Je zakken zitten vol! Maak een vakje vrij voor: %s",
+    "gui.guhs.elftocht.kruisje_vol": "Je zakken zitten vol: het Elf-Guhjeskruisje (en de extra elfstempels) krijg je na je volgende tocht. Maak een vakje vrij!",
     "quest.guhs.reis.hoort_hier": "Deze Reisguh hoort bij dit gebouw, njeg! Hij blijft hier lekker zitten.",   # 1.2.1
     # 1.2.6: the titles (feature/titels): the Guhdex tab Titels, the new titles and their hints
     "gui.guhs.guhdex.tab.titels": "Titels",

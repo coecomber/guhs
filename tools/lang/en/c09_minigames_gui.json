@@ -1033,5 +1033,9 @@
   "gui.guhs.titels.tip.kies": "Click to pick this title.",
   "gui.guhs.titels.tip.weg": "Click again to take it off.",
   "gui.guhs.titels.tip.op_slot": "Still locked. How to earn it:",
-  "gui.guhs.titels.nieuw": "New title: %s! Pick it in your Guhdex (Titles tab)."
+  "gui.guhs.titels.nieuw": "New title: %s! Pick it in your Guhdex (Titles tab).",
+  "gui.guhs.gatenkaas.voorraadboek_kopie": "You quickly copy the Pantry Mika's diary: now you have a copy of your own!",
+  "gui.guhs.kermis.no_build": "Nyeg! Hands off the Guh Fair: no breaking or building here. Just go for a ride!",
+  "gui.guhs.elftocht.zak_vol": "Your pockets are full! Free up a slot for: %s",
+  "gui.guhs.elftocht.kruisje_vol": "Your pockets are full: you'll get the Eleven Guhtowns Cross (and the extra Town Stamps) after your next tour. Free up a slot!"
 }

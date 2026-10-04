@@ -1090,5 +1090,10 @@
   "gui.guhs.kleding.prijs.munt.spelenlintjes": "%s Games Ribbons",
   "gui.guhs.kleding.prijs.munt.sjoelschijfjes": "%s Shuffle Pucks",
   "gui.guhs.beroepen.brandweer.guhtje_eerst_blussen": "Put the fires out first! %s are still burning. Then the little guh jumps into your arms.",
-  "gui.guhs.beroepen.brandweer.guhtje_zelf": "The little guh climbed down by itself. Talk to Splashguh to help again!"
+  "gui.guhs.beroepen.brandweer.guhtje_zelf": "The little guh climbed down by itself. Talk to Splashguh to help again!",
+  "gui.guhs.guheinde.mager.al_gevoerd": "You already gave this skinny guh a nibble. There are more in the other cells!",
+  "gui.guhs.guheinde.koning.pakje": "The King Guh gives you the pieces of his royal outfit you were still missing! Hold right-click with them to unlock them.",
+  "gui.guhs.piep.recept_gekregen": "You helped too: here's the recipe for the Pink Guh Cookie for you! Right-click to learn it.",
+  "gui.guhs.guheinde.beloning.later": "Overlord Mika was beaten while you were away for a moment. You fought along, so this is for you too!",
+  "gui.guhs.guheinde.gevecht_verlaten": "Nobody left to see... Overlord Mika flies off, grumbling. The portal back opens again."
 }

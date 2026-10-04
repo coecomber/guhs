@@ -632,5 +632,16 @@
   "quest.guhs.circuit.duwer.hallo": "Hee hee, this cheese nibble is about to roll down! Push!",
   "quest.guhs.next.hemel_zoeken": "bring the Cloud Shepherd a guh crystal, a golden cheese nibble and a fluff feather",
   "quest.guhs.next.hemel_terug": "talk to the Cloud Shepherd or click the Snuggleheart to bring a guh back from the clouds",
-  "quest.guhs.reis.hoort_hier": "This Travel Guh belongs to this building, nyeg! It's staying right here."
+  "quest.guhs.reis.hoort_hier": "This Travel Guh belongs to this building, nyeg! It's staying right here.",
+  "quest.guhs.eilanden.pakje": "The Cloud Guh gives you his spare cloud hat and cloud collar (whatever you didn't have yet)! Hold right-click with them to unlock them.",
+  "quest.guhs.kermis.first_full": "Lap! But your pockets are full: free up 3 slots and you'll get your prize bag after your next lap. Nyeg!",
+  "quest.guhs.doolhof.uit_de_heg": "Oops, you were stuck in the hedge! Mr. Chonkwiggle puts you on the square.",
+  "quest.guhs.circuit.gouden_tijd": "A gold-medal time: you're as fast as the legend! WAHOOG!",
+  "quest.guhs.race.ended.idle": "A minute and a half without a ring? The racing guh dozed off, nyeg. Race over!",
+  "quest.guhs.golf.wachtende": "%s would like to golf too! Keep playing: if you do nothing for a minute, you have to give up the course.",
+  "quest.guhs.golf.te_lang": "Nyeg, fifteen minutes on the course and someone's waiting! The Golf Guh ends your round.",
+  "quest.guhs.verstop.loopt_al": "There's already a game going on %s! You're seeking along (seeking together doesn't count for records).",
+  "quest.guhs.verstop.te_lang": "Half an hour of seeking (%s of %s found): the guhs come out by themselves. See you next time!",
+  "quest.guhs.verstop.idle": "You've been standing still for a while, so you stop seeking (%s of %s found). See you next time!",
+  "quest.guhs.vissen.loopt_al": "This contest is on %s: the first angler picked that."
 }

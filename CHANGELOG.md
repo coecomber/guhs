@@ -5,6 +5,127 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 
 ## 1.2.7 — Minecraft 26.1.2
 
+The "everyone can finish everything" update: every quest, job and minigame was checked for playing with many players
+on one server, forever. Same requirements as 1.2.6. Fixes also repair worlds that already exist.
+
+### Unique things in the world
+
+- **Every quest can be done by everybody on a server.** A lot of things in the world were there for one player only: the
+  first one to get there had them, and whoever came later could never finish the quest. That's fixed, also in worlds that
+  already exist:
+  - **The skinny guhs in the Nibble Cellar stay.** Feeding one used it up (40 in the whole world, and you need six). Now the
+    gray guh stays in its cell for the next player, and a colorful guh hops out and runs off. Each skinny guh counts once
+    per player ("you already gave this one a nibble"), and cells that were already empty get a skinny guh back when you
+    walk into the cellar.
+  - **The King Guh.** A tamed king left on the throne no longer keeps the next king away: a new wild King Guh comes after
+    one day (it was three). Somebody else's tamed king still tells you the story of the Guh End and knights you. The
+    castle's own throne can't be mined anymore, and the Royal Guh Throne has a recipe (gold, purple wool, stripped cherry
+    logs). The king's outfit (crown, cape, medallion): the pieces you don't have yet are yours when you tame a King Guh or
+    when he knights you, once per player.
+  - **The Cloud Guh.** Islands whose Cloud Guh was tamed get a new wild one after a day, it counts the nibbles per
+    player, and taming one gives you its cloud hat and cloud collar (once per player, if you didn't have them).
+  - **Big Mika** comes back to his hall three days after he was beaten, and everybody within 32 blocks of the fight gets
+    the credit (the quest, the advancement and the guhbelly upgrade), not just whoever landed the last hit.
+  - **The Hungry Guh** at the picnic no longer disappears: it gives every player one Bank Guh. A second Bank Guh can be
+    crafted (a chest with fried cheese nibbles all around it).
+  - **The Lost Guh Cake.** Lost the cake after finding it? Walk into a Guh Picnic again and the picnic guhs have another
+    one for you.
+  - **The portal to the Guh End** counts for everybody who is there when it opens, and for everybody who goes through it
+    later (it used to count only for whoever put in the last eye).
+  - **The Baltoguh Statuette quest** (put your statuette somewhere nice) could never be completed. Placing the statuette
+    (or clicking one that already stands) now does it.
+  - **The sunken guh ship** and the **nibble raft** count for everybody who opens the chest or barrel, also when somebody
+    else already took the loot.
+  - **The Pink Guh Cookie recipe.** Everybody who helps win a Cheese Nibble Nest and doesn't know the recipe yet gets
+    their own copy (it was one per nest, ever).
+  - **The Pantry Mika's diary.** Click the lectern in the Silent Pantry and you get your own copy, once per player.
+  - **Sled parts and Guh Wings.** The Sled Runner and the Guh Jingle Bell were chest loot only and the Guh Wings one pair per
+    grease ship: all three have a recipe now (the wings need cheese rind from the Guh End).
+  - **Squeaksqueak mice, fluffhogs, guh bunnies and fluff squirrels** get a gentle top-up around players, like the
+    birds: when none are around, a new wild one may turn up (they come and go until somebody tames them).
+- **Overlord Mika.** Whoever fought along but died or logged off just before the last hit still gets the reward, as soon
+  as they are back. And a called-back fight that everybody walked away from ends by itself after 20 minutes, so the
+  closed portal back no longer traps the next visitor.
+- **Small multiplayer fixes.** The story's Baltoguh is no longer invisible for everybody while one player is out on the
+  sled trek; Grandpa Guh only shushes the players listening to *his* story; somebody else's dropped loaner pickaxe no
+  longer keeps the Miner Guh from lending you one.
+
+### Snuggledale and the jobs
+
+<!-- fix127b: changelog bullets for 1.2.7 (English, player-facing). The main session merges these into CHANGELOG.md. -->
+
+- **A lost Party Cake can be baked again.** Whoever lost the Party Cake (or another party item) after making it was stuck
+  on the Cozyfest forever: Baker Crusty refused to bake a second one. Now the party customer comes back whenever your
+  cake is asked for and not in your pockets, and Mayor Chonkworth simply asks for a lost party item again ("make a new
+  one, or go fetch it"). The Party Cake can no longer be eaten by accident: not on the party buffet, not at a tea party
+  and not by a Crumb Mika.
+- **The residents of the Snuggledale town belong to everyone.** Fluffy, Chubbs and the other residents can no longer be
+  tamed (not with nibbles, not during a Cheese Shower, not with a Golden Cheese Nibble), hurt or put on a lead, so every player
+  can make friends with all of them. A town that already lost a resident gets a new one at its house; a resident somebody
+  tamed earlier stays that player's guh.
+- **Farmer Haybale's chores work for everyone on the same day.** Petting, brushing and feeding count once per animal *per
+  player*, also when somebody else (or the feeding trough) already cared for that animal today, and filling the Guh
+  Feeding Trough counts even when it is already full.
+- **Inspector Wahoogsby's case is yours alone.** Only the detective of the running case can pick up its sack of nibbles
+  (a player still stuck on an old case could take it and leave the real detective stranded), and if your sack is gone the
+  Inspector lays a fresh trail when you talk to him.
+- **Bob the Guhbuilder's Roof Tiles can be laid in survival.** The town's protection stopped the Roof Tiles from being
+  used at all on Bob's roof; they fit on his ghost tiles again.
+- **The Guh Watering Can works on the Guh Farm and in the town.** Watering plants inside a protected place was undone at
+  once in survival (the water was used up, the plants stayed dry). The same goes for building a Snowman Guh there.
+- **A bucket of water on the Guh Washtub works in the Snuggle Pool.** The pool's protection cancelled the click, so guhs
+  could only be rinsed with an empty hand.
+- **Grandpa Guh counts as a Snuggle Friend.** The collection was stuck at 8 of 9 for everyone; talk to him (again) and he
+  is ticked off.
+- **Mayor Chonkworth tells you when the Cozyfest has to wait.** If you were in another event (a Cheese Shower, a Chonk Parade)
+  with everything handed in, he said nothing and no party started; now he asks you to come back after.
+- **Smaller fixes for playing together.** Handing in a ready-made Party Bouquet completes its "made" quest too; the
+  "friends" and "besties" quests of two guhs go to both owners and are caught up when you log in; plants growing from a
+  guh song and guhs dancing at a jukebox count for everyone nearby (and the guh's owner), not only the nearest player.
+
+### Minigames
+
+- **The Guh Fair keeps its sleds.** A rider who logged out on the roller coaster took the station's sled along (a sled is
+  saved with its only rider), and with two sleds per fair the coaster was soon empty for everyone else. Riders now get off
+  first when they leave the game. A fair that already lost its sleds gets new ones at the station (the Fair Guh looks after
+  that), and a station sled left somewhere along the track rides home by itself and parks at the station.
+- **The Guh Fair can't be broken any more**, like the other minigame buildings: no breaking, building or blowing up the
+  coaster in survival. Putting your own sled on the rails and riding are still fine. A station piece that lost its finish
+  line gets it back.
+- **No more waking up inside a hedge of the Guh Maze.** Whoever logged out between the hedges could come back in the
+  middle of the next player's maze, stuck in a hedge that can't be broken. When your game stops you are put on the square,
+  and anyone who does end up inside a maze hedge is put on the square within a couple of seconds.
+- **"Faster Than the Legend" can be earned by everyone, forever.** The quest needed you to beat the world's live track
+  record, so the record holder (who never sees a golden ghost), the first racer on an empty board and everyone after a
+  very sharp record were locked out. A gold-medal time on any track of the Guh Circuit now counts as the legend's time;
+  beating the golden ghost itself still counts too.
+- **Shops serve everyone at once.** Every guh character's shop used to help one customer at a time, with no time limit: one
+  player with the trading screen open kept the shop shut for the whole server. Now any number of players can trade with
+  the same character at the same time. (The Ice Cream Guh still serves one customer at a time, but someone who buys
+  nothing for a minute has to let the next one have a go.)
+- **The Guh Circuit: one racer per track.** A race on one track no longer keeps the other two busy; Coach Wahoog-Vroom's
+  screen shows per track who is racing. On every race track, a race ends after a minute and a half without passing a
+  ring, so an idle racer doesn't hold the track.
+- **Mini golf, when somebody is waiting**: once another player has asked for the course, the golfer has to keep going (a
+  minute without anything happening, or a round of more than fifteen minutes, ends the round) and is told so. Alone,
+  a round is as relaxed as before.
+- **Hide-and-Guh**: a game ends after half an hour at most, a seeker who stands still for three minutes drops out, and when
+  you pick a level while another one is already running you are told which level you joined. The Guhfish contest tells
+  joiners its level too.
+- **Hula**: a dancer who was teleported away no longer stays "dancing" (unhurtable, and refused by every other game).
+  **Surfing**: changing dimension mid-ride no longer drops you at the beach's coordinates in the other dimension.
+- **Egg-and-spoon race**: your speed is now averaged over a few ticks, so a calmly walking player on a busy connection no
+  longer keeps dropping the egg.
+- **Your own guh in the race kart is safe**: it hops off the moment you leave the kart for whatever reason (it could be
+  lost when the race guh disappeared with it still on the back seat).
+- Small things: lost skates or a lost stamp card come back during the Eleven Guhtowns Tour (and with full pockets they
+  wait for a free slot instead of landing on the ground); the one-time Eleven Guhtowns Cross and the fair's first-lap
+  prize bag wait until they fit in your pockets; the food fest no longer sends you away with full pockets (what's in your
+  hand is kept safe, like at Whack-a-Mika); a lost Whack-a-Mika mallet comes back, and you can't hit others while playing
+  it; with the golf club in your hand you can still pet your own guh.
+
+### Other fixes
+
 - **The pharmacy job with more players.** Snotje is one shared little guh: when one player gave him the kaasmelkdrankje, a
   second player who was busy with the same job heard "he's better already" and was stuck. Now everyone who is on the job
   can give their drankje, and Snotje sniffles again when the next helper talks to the doctor.

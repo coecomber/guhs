@@ -27,7 +27,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 25   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven
+CHAPTER_VERSION = 26   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -180,7 +180,7 @@ q("kasteel", "Lang leve de Koning!", "Het legendarische &dguhkasteel&r: 256x256,
   "guhs:guhmensie_superkompas", [structure("guh_kasteel")], rewards=(("guhs:gefrituurde_kaasknabbels", 16),), deps=["guhmension"], x=8, y=19.5, shape="gear", xp=500)
 q("guhvriend", "Guhvriend", "De poortwachters van het guhkasteel laten alleen guhvrienden binnen. Bewijs het: ga lekker vadsig op het bankje zitten, of zeg het geheime guhwoord in de chat...",
   "guhs:guh_bank", [adv("guhvriend")], rewards=(("guhs:kaas_knabbels", 32),), deps=["kasteel"], x=8, y=21, xp=200)
-q("koning_tem", "Vahoege Majesteit", "Tem de Koningguh op zijn troon met kaasknabbels en neem zijn koningspakje mee (kroon, mantel, medaillon). Na een paar dagen komt er een nieuwe koning!",
+q("koning_tem", "Vahoege Majesteit", "Tem de Koningguh op zijn troon met kaasknabbels en krijg zijn koningspakje (kroon, mantel, medaillon). Na een dag komt er een nieuwe koning, dus iedereen kan er een temmen!",
   "guhs:koning_kroon", [adv("guhs:guhmension/koning_pakje")], rewards=(("minecraft:diamond", 5),), deps=["kasteel"], x=9.5, y=19.5, xp=500)
 q("kasteel_schat", "De schatkamer", "Vind de schatkamer achter de troon (via de galerij) en neem de &6koninklijke guhtroon&r mee naar huis.",
   "guhs:koningstroon", [item("guhs:koningstroon")], rewards=(("guhs:vahoege_vads_ingot", 4),), deps=["kasteel"], x=11, y=19.5, xp=300)
