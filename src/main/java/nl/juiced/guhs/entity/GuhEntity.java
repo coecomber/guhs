@@ -654,6 +654,12 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
     // Taming, feeding, breeding, riding
     // ------------------------------------------------------------------------------------------------------------
 
+    /** 1.2.7: a resident of a Knuffeldal town stays in its town (no leash). */
+    @Override
+    public boolean canBeLeashed() {
+        return !(nl.juiced.guhs.feature.knus.GuhHooks.isBewoner(this) && !this.isTame()) && super.canBeLeashed();
+    }
+
     @Override
     public boolean isFood(ItemStack stack) {
         return stack.is(ModItems.KAAS_KNABBELS.get());

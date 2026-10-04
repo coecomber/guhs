@@ -73,6 +73,7 @@ public final class KnuffeldalEvents {
                 guh.setCustomName(Component.translatable("entity.guhs.bewoner." + naam));
             }
         }
+        Bewoners.opJoin(guh);   // 1.2.7: residents are protected (a tamed one is no resident any more)
         maybePluisguh(level, guh);
     }
 
@@ -107,6 +108,10 @@ public final class KnuffeldalEvents {
 
     @SubscribeEvent
     public static void onTame(AnimalTameEvent event) {
+        if (event.getAnimal() instanceof GuhEntity bewoner && GuhHooks.isBewoner(bewoner) && !bewoner.isTame()) {
+            event.setCanceled(true);   // 1.2.7: a resident lives in the town, for everyone: never tamed, whatever the way
+            return;
+        }
         if (event.getAnimal() instanceof GuhEntity guh && guh.getVariant() == GuhVariant.PLUISGUH && event.getTamer() instanceof ServerPlayer player) {
             KnusVoortgang.hoogste(player, KnuffeldalVoortgang.PLUISGUH, 1);
         }
@@ -125,6 +130,9 @@ public final class KnuffeldalEvents {
             if (KnusVoortgang.teller(player, KnuffeldalVoortgang.STADJE) == 0) {
                 KnusVoortgang.hoogste(player, KnuffeldalVoortgang.STADJE, 1);
                 player.sendSystemMessage(Component.translatable("gui.guhs.knuffeldal.welkom").withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
+            if (player.tickCount % 200 == 7) {
+                Bewoners.controleer(player);   // 1.2.7: a town that misses a resident gets it back
             }
         }
         KruimelMikaEntity.playerTick(player);

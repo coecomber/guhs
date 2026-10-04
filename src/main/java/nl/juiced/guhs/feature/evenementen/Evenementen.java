@@ -288,7 +288,8 @@ public final class Evenementen {
      */
     public static boolean wild(GuhEntity guh) {
         return guh.getType() == ModEntities.GUH.get() && !guh.isTame() && guh.getHiddenBy() == null && guh.isAlive()
-                && guh.getVariant() != nl.juiced.guhs.entity.GuhVariant.WOLK;
+                && guh.getVariant() != nl.juiced.guhs.entity.GuhVariant.WOLK
+                && !nl.juiced.guhs.feature.knus.GuhHooks.isBewoner(guh);   // (1.2.7: the residents of a town are never tamed)
     }
 
     /** It ate a knabbel from the kaasregen: happy (and easy to tame) for this long. */
