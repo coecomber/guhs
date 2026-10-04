@@ -238,16 +238,36 @@ public final class ElftochtTocht {
         return true;
     }
 
-    private static void geef(ServerPlayer player, ItemStack stack) {
+    /**
+     * Lends the skates / the stamp card, unless the player has them already. 1.2.7: with full pockets it is not thrown on
+     * the ground any more (a loaned thing lying around): the player hears to make room, and {@link #tick} hands it over as
+     * soon as there is (also when it got lost on the way). True when the player has it now.
+     */
+    private static boolean geef(ServerPlayer player, ItemStack stack) {
         for (ItemStack s : player.getInventory().getNonEquipmentItems()) {
             if (s.is(stack.getItem())) {
-                return;
+                return true;
             }
         }
-        if (player.getOffhandItem().is(stack.getItem())) {
-            return;
+        if (player.getOffhandItem().is(stack.getItem()) || player.containerMenu.getCarried().is(stack.getItem())) {
+            return true;
+        }
+        if (player.getInventory().getFreeSlot() < 0) {
+            player.sendOverlayMessage(Component.translatable("gui.guhs.elftocht.zak_vol", stack.getHoverName()).withStyle(ChatFormatting.GOLD));
+            return false;
         }
         Minigames.give(player, stack);
+        return true;
+    }
+
+    /** 1.2.7 (every 5 seconds of a ride): lost skates or a lost stamp card come back, with the stamps you have. */
+    static void spullen(ServerPlayer player, Rit rit) {
+        geef(player, new ItemStack(ElftochtFeature.SCHAATSEN.get()));
+        if (!rit.vrij) {
+            ItemStack kaart = new ItemStack(ElftochtFeature.STEMPELKAART.get());
+            StempelkaartItem.schrijf(kaart, rit.volgende, java.util.Arrays.copyOf(rit.splits, rit.volgende));
+            geef(player, kaart);
+        }
     }
 
     /** Ends a ride (the loaned things go back); reden = a lang key for the actionbar, or null. */
@@ -332,6 +352,9 @@ public final class ElftochtTocht {
         }
         if (player.tickCount % 20 == 0) {
             ElftochtPubliek.pinguhs(player);
+        }
+        if (player.tickCount % 100 == 0) {
+            spullen(player, rit);
         }
         if (rit.vrij) {
             if (player.tickCount % 20 == 0 && rit.buiten == 0) {
@@ -497,7 +520,10 @@ public final class ElftochtTocht {
     private static void finish(GuhNpcEntity npc, ServerPlayer player, Rit rit) {
         int tijd = rit.tijd;
         CompoundTag saved = GuhQuests.saved(player);
-        boolean eerste = !saved.getBooleanOr(KRUISJE, false);
+        opruimen(player);                                       // (the loaned skates and card first: that makes room)
+        // 1.2.7: the one-time kruisje (and its extra stamps) only when it really fits in the pockets; else next time
+        boolean nooit = !saved.getBooleanOr(KRUISJE, false);
+        boolean eerste = nooit && player.getInventory().getFreeSlot() >= 0;
         int munten = munten(tijd) + (eerste ? EERSTE_KEER : 0);
         Minigames.give(player, new ItemStack(ElftochtFeature.ELFSTEMPEL.get(), munten));
         if (eerste) {
@@ -540,6 +566,8 @@ public final class ElftochtTocht {
         }
         if (eerste) {
             player.sendSystemMessage(Component.translatable("gui.guhs.elftocht.kruisje", EERSTE_KEER).withStyle(ChatFormatting.LIGHT_PURPLE));
+        } else if (nooit) {
+            player.sendSystemMessage(Component.translatable("gui.guhs.elftocht.kruisje_vol").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         if (plaats == 1) {
             player.sendSystemMessage(Component.translatable("gui.guhs.elftocht.server_record").withStyle(ChatFormatting.GOLD));

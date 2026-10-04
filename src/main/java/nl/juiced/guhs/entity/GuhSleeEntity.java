@@ -148,6 +148,12 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
         }
         if (key == DATA_ON_RAIL && !entityData.get(DATA_ON_RAIL)) {
             piece = null;
+        } else if (key == DATA_RUNNING && !isRunning() && entityData.get(DATA_ON_RAIL)) {
+            SleePath.Piece server = SleePath.Piece.of(level(), entityData.get(DATA_PIECE));
+            if (server != null) {                    // stopped: stand exactly where the server stopped it
+                piece = server;
+                t = entityData.get(DATA_T);
+            }
         } else if (key == DATA_T && entityData.get(DATA_ON_RAIL)) {
             SleePath.Piece server = SleePath.Piece.of(level(), entityData.get(DATA_PIECE));
             if (server == null) {
@@ -190,6 +196,9 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
             return;
         }
         moveAlong(isRunning() ? SPEEDS[getSpeed() - 1] * slopeFactor() : 0);
+        if (!level().isClientSide()) {
+            tickHoming();
+        }
         if (!level().isClientSide() && tickCount % 20 == 0) {
             sync();
         }
@@ -205,6 +214,106 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
         }
         double up = piece.at(t).heading().y * (isForward() ? 1 : -1);
         return Mth.clamp(1 - 0.75 * up, 0.45, 1.9);
+    }
+
+    // --- coming home (1.2.7): a kermis sled left somewhere on the track rides back to the station by itself --------------
+
+    /** How long an empty sled looks for the station before it gives up (a track without a finish line). */
+    private static final int HOMING_LIMIT = 20 * 180;
+    /** Riding home without a rider (saved). */
+    private boolean homing;
+    private int homingTicks;
+    /** Looked for the station in vain: don't try again until someone has ridden it. */
+    private boolean homeless;
+    /** Where at the station this sled is going to stand (once it has come to the finish piece). */
+    @Nullable
+    private nl.juiced.guhs.quest.Kermis.Spot homeSpot;
+
+    public boolean isHoming() {
+        return homing;
+    }
+
+    private boolean hasPlayer() {
+        for (Entity passenger : getPassengers()) {
+            if (passenger instanceof Player) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean finishAt(@Nullable SleePath.Piece p) {
+        return p != null && level().getBlockEntity(p.anchor()) instanceof nl.juiced.guhs.block.entity.SleeRailBlockEntity rail && rail.isFinish();
+    }
+
+    /** Standing at the station: on the finish piece, or on the piece right after it. */
+    public boolean atStation() {
+        if (piece == null) {
+            return false;
+        }
+        if (finishAt(piece)) {
+            return true;
+        }
+        SleePath.Next before = SleePath.next(level(), piece, false);
+        return before != null && finishAt(before.piece());
+    }
+
+    /**
+     * A locked sled of a guh kermis without a rider, somewhere along the track: it rides on to the station (the finish
+     * piece) and stops there. Getting in takes over again.
+     */
+    public void startHoming() {
+        if (level().isClientSide() || piece == null || !isLocked() || hasPlayer() || atStation()
+                || nl.juiced.guhs.quest.Kermis.area(level(), blockPosition()) == null) {
+            return;
+        }
+        homing = true;
+        homingTicks = 0;
+        homeSpot = null;
+        entityData.set(DATA_SPEED, Math.max(2, getSpeed()));
+        setRunning(true);
+    }
+
+    private void stopHoming() {
+        homing = false;
+        homeSpot = null;
+        homingTicks = 0;
+    }
+
+    private void tickHoming() {
+        if (!homing) {
+            // (a sled parked along the track, or left there before 1.2.7: found again every 5 seconds)
+            if (isLocked() && !homeless && !isRunning() && tickCount % 100 == 50 && !hasPlayer()) {
+                startHoming();
+            }
+            return;
+        }
+        if (piece == null || ++homingTicks > HOMING_LIMIT) {
+            stopHoming();
+            homeless = true;
+            setRunning(false);
+            return;
+        }
+        if (!isRunning()) {
+            setRunning(true);                        // (the end of a line stops the sled and turns it around: on again)
+        }
+        if (homeSpot == null && finishAt(piece)) {
+            homeSpot = nl.juiced.guhs.quest.Kermis.freeSpot(level(), piece, this);
+            if (!homeSpot.piece().anchor().equals(piece.anchor()) && !isForward()) {
+                entityData.set(DATA_FORWARD, true);  // came in backwards and the first spot is taken: the other one is behind us
+                sync();
+            }
+        }
+        if (homeSpot != null && homeSpot.piece().anchor().equals(piece.anchor())
+                && (isForward() ? t >= homeSpot.t() : t <= homeSpot.t())) {
+            t = homeSpot.t();
+            entityData.set(DATA_FORWARD, homeSpot.forward());
+            entityData.set(DATA_RUNNING, false);
+            stopHoming();
+            moveAlong(0);
+            sync();
+            playSound(SoundEvents.NOTE_BLOCK_CHIME.value(), 0.8f, 1.2f);
+        }
     }
 
     /** Pieces gone by since the last finish line (a lap has to be a real lap). */
@@ -384,6 +493,11 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     protected void addPassenger(Entity passenger) {
         super.addPassenger(passenger);
         if (!level().isClientSide() && passenger instanceof Player player) {
+            homeless = false;
+            if (homing) {                            // someone hops on a sled that was riding home: it's theirs now
+                stopHoming();
+                setRunning(false);
+            }
             player.sendOverlayMessage(Component.translatable("entity.guhs.guh_slee.hint").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
@@ -395,6 +509,9 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
         if (!level().isClientSide() && passenger instanceof net.minecraft.world.entity.LivingEntity living
                 && level().getBlockState(blockPosition().below(2)).isAir()) {
             living.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SLOW_FALLING, 160, 0, false, false));
+        }
+        if (!level().isClientSide() && passenger instanceof Player && !isRemoved()) {
+            startHoming();                           // 1.2.7: a kermis sled left along the track rides back to its station
         }
     }
 
@@ -445,6 +562,9 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
         tag.putBoolean("Running", isRunning());
         tag.putInt("Speed", getSpeed());
         tag.putBoolean("Locked", isLocked());
+        if (homing) {
+            tag.putBoolean("Homing", true);
+        }
     }
 
     @Override
@@ -453,6 +573,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
         entityData.set(DATA_RUNNING, tag.getBooleanOr("Running", false));
         setSpeed(tag.keySet().contains("Speed") ? tag.getIntOr("Speed", 0) : 1);
         setLocked(tag.getBooleanOr("Locked", false));
+        homing = tag.getBooleanOr("Homing", false);
         pendingPiece = (tag).read("Piece", BlockPos.CODEC).orElse(null);
         t = tag.getDoubleOr("T", 0.0);
     }

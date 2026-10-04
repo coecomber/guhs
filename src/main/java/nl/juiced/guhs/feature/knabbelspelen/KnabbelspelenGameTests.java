@@ -259,6 +259,15 @@ public class KnabbelspelenGameTests {
             Eierlopen.SPEL.tick(w, d, p, level, 6 + i);
         }
         helper.assertTrue(s.gevallen == 1, "the egg dropped");
+        // 1.2.7: a calm walk that arrives in bursts (nothing one tick, two steps the next) is still a calm walk
+        s.rust();
+        s.wiebel = 0;
+        for (int i = 0; i < 80; i++) {
+            s.vorige = p.position().add(i % 2 == 0 ? 0 : 0.3, 0, 0);
+            s.vorigeYaw = p.getYRot();
+            Eierlopen.SPEL.tick(w, d, p, level, 20 + i);
+        }
+        helper.assertTrue(s.gevallen == 1 && s.wiebel < 0.3, "steps in bursts (0.15 a tick on average) don't drop the egg: " + s.gevallen + " / " + s.wiebel);
         double[] b = Speelvelden.baan(w.anker, Onderdeel.EIERLOPEN, d.baan, p.position());
         helper.assertTrue(Math.abs(b[0] - Speelvelden.EI_VLAGGEN[0]) < 0.6, "back at the last flag: u " + b[0]);
         weg(helper, p);

@@ -316,6 +316,26 @@ public class SmulGameTests {
     }
 
     /** A game on lastig: half as many smulmunten more, its own record and board, and the lastig advancement. */
+    /** 1.2.7: full pockets are no reason to be sent away: what you hold is kept safe and comes back after the game. */
+    @GuhTest(template = ARENA, timeoutTicks = 100, batch = "smul_vol")
+    public static void smulWithFullPocketsKeepsYourItemSafe(GameTestHelper helper) {
+        GuhNpcEntity npc = smulguh(helper);
+        ServerPlayer p = player(helper, npc);
+        var inv = p.getInventory();
+        for (int i = 0; i < 36; i++) {
+            inv.setItem(i, new net.minecraft.world.item.ItemStack(i == inv.getSelectedSlot() ? net.minecraft.world.item.Items.DIAMOND : net.minecraft.world.item.Items.DIRT, 3));
+        }
+        helper.assertTrue(inv.getFreeSlot() < 0, "full pockets");
+        helper.assertTrue(SmulGame.start(npc, p) && SmulGame.isPlaying(p), "the game starts anyway");
+        helper.assertTrue(p.getMainHandItem().is(SmulFeature.SMULSCHAAL.get()) && count(p, net.minecraft.world.item.Items.DIAMOND) == 0,
+                "the bowl is in your hand, the diamonds are kept safe");
+        SmulGame.stopFor(p);
+        helper.assertTrue(!hasBowl(p) && inv.getItem(inv.getSelectedSlot()).is(net.minecraft.world.item.Items.DIAMOND)
+                && count(p, net.minecraft.world.item.Items.DIAMOND) == 3, "after the game: the bowl is gone, the diamonds are back in their slot");
+        leave(helper, p);
+        helper.succeed();
+    }
+
     @GuhTest(template = ARENA, timeoutTicks = 200, batch = BATCH)
     public static void smulLastigGivesMoreMuntenAndItsOwnBoard(GameTestHelper helper) {
         GuhNpcEntity npc = smulguh(helper);

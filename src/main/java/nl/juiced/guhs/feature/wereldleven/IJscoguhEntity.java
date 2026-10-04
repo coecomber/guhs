@@ -191,6 +191,11 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
             return;
         }
         LEVEND.add(this);
+        if (tradingPlayer instanceof ServerPlayer klant && tickCount - klantSinds > KLANT_TICKS
+                && klant.containerMenu instanceof net.minecraft.world.inventory.MerchantMenu) {
+            klant.closeContainer();                                 // 1.2.7: just looking for a minute: the next customer's turn
+            tradingPlayer = null;
+        }
         if (tradingPlayer != null && (!tradingPlayer.isAlive() || !(tradingPlayer.containerMenu instanceof net.minecraft.world.inventory.MerchantMenu)
                 || tradingPlayer.distanceToSqr(this) > 64)) {
             tradingPlayer = null;
@@ -277,6 +282,7 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
             GuhQuests.say(sp, this, "quest.guhs.ijscoguh.hallo." + random.nextInt(4));
             ontmoet(sp);
             setTradingPlayer(player);
+            klantSinds = tickCount;
             openTradingScreen(player, getDisplayName(), 1);
         }
         return InteractionResult.SUCCESS;
@@ -336,8 +342,18 @@ public class IJscoguhEntity extends PathfinderMob implements GeoEntity, Merchant
         this.offers = offers;
     }
 
+    /** 1.2.7: a customer who buys nothing for this long has to let the next one have a go (he serves one at a time). */
+    public static final int KLANT_TICKS = 20 * 60;
+    private int klantSinds;
+
+    /** (Tests) the customer has been standing here this many ticks longer. */
+    public void klantWacht(int ticks) {
+        klantSinds -= ticks;
+    }
+
     @Override
     public void notifyTrade(MerchantOffer offer) {
+        klantSinds = tickCount;
         offer.increaseUses();
         playSound(ModSounds.GUH_HAPPY.get(), 1f, 1.3f);
         if (tradingPlayer instanceof ServerPlayer sp) {

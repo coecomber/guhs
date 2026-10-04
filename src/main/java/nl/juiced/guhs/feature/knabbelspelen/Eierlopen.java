@@ -25,6 +25,14 @@ public final class Eierlopen implements Wedstrijd.Spel {
     public static final double RUSTIG = 0.165, DRAAI = 12;
     /** Within this distance of a flag's spot the flag counts. */
     public static final double VLAG = 1.35;
+    /**
+     * 1.2.7: on a server a player's steps arrive in bursts (nothing for a few ticks, then several steps at once). Measured
+     * per tick that looked like running, and a calmly walking player on a busy connection kept dropping the egg. Now the
+     * distance above the calm pace is saved up ({@link Staat#teveel}, it drains again while you go slower): only what
+     * doesn't fit in this allowance (blocks) makes the egg wobble. A burst of a calm walk always fits (a bigger step than
+     * that is a teleport); really going too fast fills it within a moment.
+     */
+    public static final double SPELING = 1.35;
 
     static final class Staat {
         int vlag, gevallen, melding;
@@ -33,6 +41,23 @@ public final class Eierlopen implements Wedstrijd.Spel {
         float vorigeYaw;
         double herstartU;
         double herstartS;
+        /** How far ahead of the calm pace you are (blocks), at most {@link #SPELING}. */
+        double teveel;
+
+        /** This tick's step: how many blocks of it were really too fast (0 for a calm walk, also one that comes in bursts). */
+        double teSnel(double step) {
+            teveel = Math.max(0, teveel + step - RUSTIG);
+            if (teveel <= SPELING) {
+                return 0;
+            }
+            double over = teveel - SPELING;
+            teveel = SPELING;
+            return over;
+        }
+
+        void rust() {
+            teveel = 0;
+        }
     }
 
     static Staat staat(Wedstrijd.Deelnemer d) {
@@ -60,6 +85,7 @@ public final class Eierlopen implements Wedstrijd.Spel {
         s.vorige = p.position();
         s.vorigeYaw = p.getYRot();
         s.wiebel = 0;
+        s.rust();
     }
 
     /** The spot of flag i of lane k (next to the flag, where you walk past it). */
@@ -76,7 +102,8 @@ public final class Eierlopen implements Wedstrijd.Spel {
         s.vorige = pos;
         s.vorigeYaw = p.getYRot();
         if (snelheid < 1.5) {                                   // (not a teleport)
-            s.wiebel += Math.max(0, snelheid - RUSTIG) * 9 + Math.max(0, draai - DRAAI) * 0.01 + (p.isSprinting() ? 0.05 : 0);
+            // 1.2.7: the speed is smoothed, see SPELING
+            s.wiebel += s.teSnel(snelheid) * 9 + Math.max(0, draai - DRAAI) * 0.01 + (p.isSprinting() ? 0.05 : 0);
         }
         s.wiebel = Math.max(0, s.wiebel - 0.012);
         if (s.wiebel >= 1) {
@@ -123,6 +150,7 @@ public final class Eierlopen implements Wedstrijd.Spel {
         Staat s = staat(d);
         s.gevallen++;
         s.wiebel = 0;
+        s.rust();
         level.playSound(null, p.blockPosition(), KnabbelspelenFeature.EI_KAPOT.get(), SoundSource.PLAYERS, 1f, 1f);
         level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, net.minecraft.world.item.Items.EGG), p.getX(), p.getY() + 0.8, p.getZ(),
                 14, 0.2, 0.2, 0.2, 0.1);

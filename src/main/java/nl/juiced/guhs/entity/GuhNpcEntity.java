@@ -215,9 +215,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
             } else if (getKind() == Kind.VERSTOPGUHTJE) {
                 nl.juiced.guhs.quest.VerstopGame.talk(this, serverPlayer);
             } else if (getKind() == Kind.KERMIS_GUH) {
-                if (tradingPlayer == null) {
-                    GuhQuests.say(serverPlayer, this, "quest.guhs.kermis.hello");
-                }
+                GuhQuests.say(serverPlayer, this, "quest.guhs.kermis.hello");
                 openShop(player);
             } else {
                 GuhQuests.talkTo(this, serverPlayer);
@@ -320,15 +318,27 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
                 new net.minecraft.world.item.ItemStack(nl.juiced.guhs.registry.ModItems.clothingItem(clothes)), Integer.MAX_VALUE, 0, 0);
     }
 
-    /** Opens the stall (Kermis-guh, Verstopguhtje). */
-    /** Opens the shop for this player; while someone else is still shopping, the character says so. */
+    /**
+     * Opens the shop for this player. 1.2.7: any number of players can shop with the same character at once (it used to
+     * serve one customer at a time, with no time limit: one player with the screen open kept the shop shut for everybody
+     * else). Every trading screen has its own counter (the payment and result slots are the menu's); the character only
+     * has to know who its {@link #customers} are.
+     */
     public void openShop(Player player) {
-        if (tradingPlayer == null || tradingPlayer == player) {
-            setTradingPlayer(player);
-            openTradingScreen(player, getDisplayName(), 1);
-        } else if (player instanceof ServerPlayer serverPlayer) {
-            GuhQuests.say(serverPlayer, this, "quest.guhs.shop.busy");
+        if (this.level().isClientSide()) {
+            return;
         }
+        customers.add(player);
+        this.tradingPlayer = player;                                // (the customer who came last)
+        openTradingScreen(player, getDisplayName(), 1);
+    }
+
+    /** Everybody who has this character's shop open right now (pruned every tick). */
+    private final java.util.Set<Player> customers = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
+
+    /** Is this player shopping here right now? */
+    public boolean isCustomer(Player player) {
+        return customers.contains(player);
     }
 
     private static net.minecraft.world.item.trading.MerchantOffer offer(int bonnen, GuhClothes clothes) {
@@ -337,9 +347,13 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
                 new net.minecraft.world.item.ItemStack(nl.juiced.guhs.registry.ModItems.clothingItem(clothes)), Integer.MAX_VALUE, 0, 0);
     }
 
+    /** (Vanilla calls this with null when a trading screen closes: that customer is pruned in {@link #tick}.) */
     @Override
     public void setTradingPlayer(@Nullable Player player) {
         this.tradingPlayer = player;
+        if (player != null) {
+            customers.add(player);
+        }
     }
 
     @Nullable
@@ -385,7 +399,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
     /** 26.1: Merchant#stillValid is abstract now; 1.21.1's MerchantMenu checked just the trading player. */
     @Override
     public boolean stillValid(Player player) {
-        return this.getTradingPlayer() == player;
+        return customers.contains(player) && this.isAlive() && player.level() == this.level() && player.distanceToSqr(this) <= 64;
     }
 
     @Override
@@ -415,9 +429,15 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         if (!this.level().isClientSide() && getKind() == Kind.POORTWACHTER) {
             nl.juiced.guhs.quest.KasteelPoort.tick(this);
         }
-        if (tradingPlayer != null && (!tradingPlayer.isAlive() || !(tradingPlayer.containerMenu instanceof net.minecraft.world.inventory.MerchantMenu)
-                || tradingPlayer.distanceToSqr(this) > 64)) {
-            tradingPlayer = null;
+        if (!this.level().isClientSide() && getKind() == Kind.KERMIS_GUH) {
+            nl.juiced.guhs.quest.Kermis.tick(this);   // 1.2.7: the station's finish line and sleds
+        }
+        if (!customers.isEmpty()) {
+            customers.removeIf(p -> !p.isAlive() || p.isRemoved() || p.level() != this.level()
+                    || !(p.containerMenu instanceof net.minecraft.world.inventory.MerchantMenu) || p.distanceToSqr(this) > 64);
+        }
+        if (tradingPlayer != null && !customers.contains(tradingPlayer)) {
+            tradingPlayer = customers.isEmpty() ? null : customers.iterator().next();
         }
     }
 

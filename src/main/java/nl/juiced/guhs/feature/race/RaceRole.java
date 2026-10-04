@@ -112,10 +112,7 @@ public final class RaceRole implements NpcRole {
 
     @Override
     public void tick(GuhNpcEntity npc) {
-        RaceGame game = RaceGame.of(npc);
-        if (game != null) {
-            game.checkAlive(npc);
-        }
+        RaceGame.checkAllAlive(npc);
         if ((npc.tickCount + npc.getId()) % 100 == 0) {
             showScores(npc);
         }

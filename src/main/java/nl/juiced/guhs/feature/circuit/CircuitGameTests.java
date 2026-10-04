@@ -76,6 +76,31 @@ public class CircuitGameTests {
         return helper.getLevel().getEntitiesOfClass(type, helper.getBounds().inflate(8), Entity::isAlive).size();
     }
 
+    /**
+     * 1.2.7: "Sneller dan de legende" doesn't hang on the live world record any more: a gold-medal time on a circuit track
+     * earns it, also for the record holder and on an empty board (no golden ghost at all); a slower race doesn't.
+     */
+    @GuhTest(batch = "circuit_legende", template = CIRCUIT, timeoutTicks = 200)
+    public static void circuitGoudenGeestIsVoorIedereenTeHalen(GameTestHelper helper) {
+        GuhNpcEntity npc = coach(helper);
+        ServerPlayer player = racer(helper, npc);
+        RaceGeesten.forget(player.level().getServer(), CircuitBanen.VADS.boardTotal(Niveau.MAKKELIJK));
+        CircuitRole.action(npc, player, CircuitRole.START, "vads", Niveau.MAKKELIJK.ordinal());
+        RaceGame game = RaceGame.of(npc, CircuitBanen.VADS);
+        helper.assertTrue(game != null && game.goudTicks() < 0, "a race on an empty board: no golden ghost");
+        String adv = "grote_guhspelen/circuit_gouden_geest";
+        helper.assertTrue(!RaceGame.has(player, adv), "not yet");
+        int goud = CircuitBanen.VADS.medalTicks(0, Niveau.MAKKELIJK);
+        CircuitBanen.VADS.extra().finish(game, helper.getLevel(), player, goud + 200, RaceGame.Medal.of(goud + 200, CircuitBanen.VADS, Niveau.MAKKELIJK), false);
+        helper.assertTrue(!RaceGame.has(player, adv), "slower than gold: no");
+        helper.assertTrue(RaceGame.Medal.of(goud, CircuitBanen.VADS, Niveau.MAKKELIJK) == RaceGame.Medal.GOUD, "the gold time is gold");
+        CircuitBanen.VADS.extra().finish(game, helper.getLevel(), player, goud, RaceGame.Medal.GOUD, true);
+        helper.assertTrue(RaceGame.has(player, adv), "a gold-medal time: faster than the legend, without any ghost");
+        game.end(helper.getLevel(), RaceGame.Ending.STOPPED);
+        leave(helper, player);
+        helper.succeed();
+    }
+
     private static void leave(GameTestHelper helper, Player... players) {
         for (Player p : players) {
             helper.getLevel().removePlayerImmediately((ServerPlayer) p, Entity.RemovalReason.DISCARDED);
@@ -102,10 +127,28 @@ public class CircuitGameTests {
         helper.assertTrue(game.track().gates.size() == 5, "5 rings on the Regenboogbaan: " + game.track().gates.size());
         helper.assertTrue(game.laps() == 3, "3 laps");
         helper.assertTrue(count(helper, MikaPikkerEntity.class) == 4, "medium: 4 Mika-pikkers along the track: " + count(helper, MikaPikkerEntity.class));
-        // one at a time: somebody else has to wait (on any track)
+        // one at a time per track: somebody else has to wait for this track...
         ServerPlayer other = racer(helper, npc);
-        CircuitRole.action(npc, other, CircuitRole.START, "vads", Niveau.LASTIG.ordinal());
-        helper.assertTrue(RaceGame.of(npc) == game && !RaceGame.isRacingAny(other), "one race at a time on the circuit");
+        CircuitRole.action(npc, other, CircuitRole.START, "regenboog", Niveau.LASTIG.ordinal());
+        helper.assertTrue(RaceGame.of(npc) == game && !RaceGame.isRacingAny(other), "one race at a time on a track");
+        // ... 1.2.7: but the other tracks are free (one racer used to keep all three busy)
+        helper.assertTrue(CircuitRole.screenData(npc, other).getBooleanOr("Busy_regenboog", false)
+                && !CircuitRole.screenData(npc, other).getBooleanOr("Busy_vads", true), "her screen: the Regenboogbaan is taken, the Vadsbaan is free");
+        CircuitRole.action(npc, other, CircuitRole.START, "vads", Niveau.MAKKELIJK.ordinal());
+        RaceGame tweede = RaceGame.of(npc, CircuitBanen.VADS);
+        helper.assertTrue(tweede != null && tweede != game && RaceGame.of(other) == tweede && RaceGame.of(npc, CircuitBanen.REGENBOOG) == game
+                && RaceGame.allOf(npc).size() == 2, "a second racer on the Vadsbaan at the same time");
+        helper.assertTrue(CircuitRole.screenData(npc, other).getStringOr("Racer_regenboog", "").equals(player.getGameProfile().name()), "and who races where");
+        // 1.2.7: a racer who passes no ring for a minute and a half gives the track back
+        tweede.skipCountdown(npc);
+        tweede.skipTicks(RaceGame.GATE_IDLE_TICKS - 2);
+        tweede.tick(npc);
+        helper.assertTrue(RaceGame.of(npc, CircuitBanen.VADS) == tweede, "not yet");
+        tweede.tick(npc);
+        tweede.tick(npc);
+        helper.assertTrue(RaceGame.of(npc, CircuitBanen.VADS) == null && !RaceGame.isRacingAny(other) && RaceGame.of(npc) == game,
+                "no ring for 90 seconds: that race is over, the other one goes on");
+        leave(helper, other);
         game.skipCountdown(npc);
         for (int lap = 0; lap < game.laps(); lap++) {
             for (int gate : new int[]{1, 2, 3, 4, 0}) {

@@ -262,6 +262,54 @@ public class DoolhofGameTests {
     }
 
     /**
+     * 1.2.7: nobody is left behind between the hedges. A game that stops puts its player on the plaza, and a player who
+     * does end up inside a hedge (logged in there after someone else's maze grew) is put on the plaza by the watchdog;
+     * not in creative, and not the player the maze is growing for.
+     */
+    @GuhTest(template = GEBOUW, timeoutTicks = 200, batch = "doolhof_heg")
+    public static void doolhofNiemandBlijftInDeHeg(GameTestHelper helper) {
+        GuhNpcEntity npc = vadskronkel(helper);
+        ServerPlayer p = speler(helper, npc);
+        ServerLevel level = helper.getLevel();
+        DoolhofGame game = DoolhofGame.start(npc, p, Niveau.MAKKELIJK);
+        helper.assertTrue(game != null, "the game started");
+        Anker a = game.anker;
+        // a hedge of the field while the maze is still growing: the player it grows for is left alone
+        BlockPos heg = a.blok(DoolhofVeld.FX, DoolhofVeld.G + 1, DoolhofVeld.FZ + 5);
+        helper.assertTrue(level.getBlockState(heg).is(DoolhofFeature.HEG.get()) || level.getBlockState(heg).is(DoolhofFeature.HEG_GEZICHT.get()),
+                "the border is hedge: " + level.getBlockState(heg));
+        Vec3 was = p.position();
+        p.snapTo(heg.getX() + 0.5, heg.getY(), heg.getZ() + 0.5);
+        helper.assertTrue(game.fase() == DoolhofGame.Fase.BOUWEN && !DoolhofGame.uitDeHeg(p), "not while the maze grows for you");
+        p.snapTo(was.x, was.y, was.z);
+        game.meteen(level, p);
+        // (a) the game stops while the player stands in the maze: on the plaza
+        int[] c = game.kaart.cellen().get(0);
+        Vec3 cel = DoolhofVeld.cel(a, c[0], c[1], DoolhofVeld.G + 1);
+        p.snapTo(cel.x, cel.y, cel.z);
+        helper.assertTrue(DoolhofVeld.inVeld(a, p.position(), 0), "in the field");
+        DoolhofGame.stopFor(p);
+        helper.assertTrue(!DoolhofGame.isPlaying(p) && !DoolhofVeld.inVeld(a, p.position(), 0), "stopped: out of the field, at " + p.position());
+        helper.assertTrue(p.position().distanceTo(DoolhofGame.plein(a)) < 1, "on the plaza");
+        // (b) somebody who is inside a hedge anyway
+        ServerPlayer ander = speler(helper, npc);
+        ander.snapTo(heg.getX() + 0.5, heg.getY(), heg.getZ() + 0.5);
+        ander.setGameMode(GameType.CREATIVE);
+        helper.assertTrue(!DoolhofGame.uitDeHeg(ander), "a builder in creative stays where they are");
+        ander.setGameMode(GameType.SURVIVAL);
+        helper.assertTrue(DoolhofGame.uitDeHeg(ander) && ander.position().distanceTo(DoolhofGame.plein(a)) < 1, "out of the hedge, onto the plaza");
+        helper.assertTrue(!DoolhofGame.uitDeHeg(ander), "and nothing happens to a player who isn't in a hedge");
+        // ... also through the player tick (every 2 seconds)
+        ander.snapTo(heg.getX() + 0.5, heg.getY(), heg.getZ() + 0.5);
+        ander.tickCount = 40;
+        DoolhofGame.onPlayerTick(new net.neoforged.neoforge.event.tick.PlayerTickEvent.Post(ander));
+        helper.assertTrue(ander.position().distanceTo(DoolhofGame.plein(a)) < 1, "the watchdog does it by itself");
+        weg(helper, p);
+        weg(helper, ander);
+        helper.succeed();
+    }
+
+    /**
      * 2.10: the knabbels float sparkling above the hedges (you see them from afar, you pick one up by walking under it), and
      * none ever gets lost: a knabbel whose entity went away is hidden again within a second (self-heal), a lost one that turns
      * up again is taken back. On makkelijk the bar counts how many are still hidden.

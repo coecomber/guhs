@@ -342,6 +342,7 @@ public final class MepGame {
         tick++;
         if (tick % 20 == 0) {
             refresh(p);
+            hamerTerug(p);
         }
         // no chests, chest boats or other containers while playing: the mallet can't be put away (the shop is fine)
         if (p.containerMenu != p.inventoryMenu && !(p.containerMenu instanceof net.minecraft.world.inventory.MerchantMenu)) {
@@ -811,6 +812,22 @@ public final class MepGame {
         inv.setSelectedSlot(slot);
         if (p.connection != null && !(p instanceof FakePlayer)) {
             p.connection.send(new ClientboundSetHeldSlotPacket(slot));
+        }
+    }
+
+    /** 1.2.7: the mallet got lost during the game (put in a guh's backpack, a hopper...): here is another one. */
+    static void hamerTerug(ServerPlayer p) {
+        Inventory inv = p.getInventory();
+        if (inv.contains(new ItemStack(MeppenFeature.MEP_HAMER.get())) || p.containerMenu.getCarried().is(MeppenFeature.MEP_HAMER.get())) {
+            return;
+        }
+        if (!GuhQuests.saved(p).contains(STASH)) {
+            giveHammer(p);
+            return;
+        }
+        int free = inv.getFreeSlot();                               // (something is kept safe already: only into a free slot)
+        if (free >= 0) {
+            inv.setItem(free, new ItemStack(MeppenFeature.MEP_HAMER.get()));
         }
     }
 

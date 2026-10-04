@@ -103,16 +103,23 @@ public final class GolfEvents {
     /** No hanging the club in an item frame, giving it to an armour stand or an allay... */
     @SubscribeEvent
     public static void onInteract(PlayerInteractEvent.EntityInteract event) {
-        if (isClub(event.getItemStack()) && !(event.getTarget() instanceof GuhNpcEntity) && !(event.getTarget() instanceof GolfBallEntity)) {
+        if (isClub(event.getItemStack()) && !(event.getTarget() instanceof GuhNpcEntity) && !(event.getTarget() instanceof GolfBallEntity)
+                && !eigenGuh(event.getTarget(), event.getEntity())) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
     public static void onInteractAt(PlayerInteractEvent.EntityInteractSpecific event) {
-        if (isClub(event.getItemStack()) && !(event.getTarget() instanceof GuhNpcEntity) && !(event.getTarget() instanceof GolfBallEntity)) {
+        if (isClub(event.getItemStack()) && !(event.getTarget() instanceof GuhNpcEntity) && !(event.getTarget() instanceof GolfBallEntity)
+                && !eigenGuh(event.getTarget(), event.getEntity())) {
             event.setCanceled(true);
         }
+    }
+
+    /** 1.2.7: with the club in your hand you can still pet / talk to your own guh (it only can't be given to anything). */
+    private static boolean eigenGuh(net.minecraft.world.entity.Entity target, net.minecraft.world.entity.player.Player player) {
+        return target instanceof nl.juiced.guhs.entity.GuhEntity guh && guh.isOwnedBy(player);
     }
 
     /** A golfer whose Golfguh isn't there any more (her chunk unloaded, she's gone): the round is over. */

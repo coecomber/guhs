@@ -83,7 +83,7 @@ public class CircuitScreen extends Screen {
         Button race = addRenderableWidget(Button.builder(Component.translatable("gui.guhs.circuit.start", baan().naam(), Niveau.of(gekozenNiveau).naam())
                 .withStyle(ChatFormatting.GOLD), x -> send(CircuitRole.START, true)).bounds(left + 20, top + 176, W - 40, 20)
                 .tooltip(tip(Component.translatable("gui.guhs.circuit.start.tooltip"))).build());
-        race.active = !data.getBooleanOr("Busy", false);
+        race.active = !data.getBooleanOr("Busy_" + baan().id, false);
         int sw = (W - 40 - 12) / 4;
         addRenderableWidget(Button.builder(Component.translatable(data.getBooleanOr("GhostOn", false) ? "gui.guhs.race.ghost.on" : "gui.guhs.race.ghost.off"),
                 x -> send(CircuitRole.GHOST, true)).bounds(left + 20, top + H - 30, sw, 20).tooltip(tip(Component.translatable("gui.guhs.race.ghost.tooltip"))).build());
@@ -110,13 +110,14 @@ public class CircuitScreen extends Screen {
         RaceBaan b = baan();
         Niveau n = Niveau.of(gekozenNiveau);
         int y = top + 74;
-        Component info = data.getBooleanOr("Busy", false)
-                ? Component.translatable("gui.guhs.circuit.busy", data.getStringOr("Racer", ""),
-                Component.translatable("gui.guhs.race.baan." + data.getStringOr("RaceBaan", "")), data.getIntOr("Lap", 0))
+        boolean bezet = data.getBooleanOr("Busy_" + b.id, false);    // 1.2.7: per track
+        Component info = bezet
+                ? Component.translatable("gui.guhs.circuit.busy", data.getStringOr("Racer_" + b.id, ""),
+                Component.translatable("gui.guhs.race.baan." + b.id), data.getIntOr("Lap_" + b.id, 0))
                 : Component.translatable("gui.guhs.circuit.baan." + b.id);
         List<FormattedCharSequence> lines = font.split(info, W - 30);
         for (FormattedCharSequence line : lines.subList(0, Math.min(4, lines.size()))) {
-            g.centeredText(font, line, width / 2, y, data.getBooleanOr("Busy", false) ? 0xFFFFB0C8 : 0xFFE8D8F0);
+            g.centeredText(font, line, width / 2, y, bezet ? 0xFFFFB0C8 : 0xFFE8D8F0);
             y += 10;
         }
         String key = b.id + "_" + n.id();

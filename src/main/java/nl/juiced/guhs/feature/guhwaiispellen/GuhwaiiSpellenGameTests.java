@@ -159,6 +159,25 @@ public class GuhwaiiSpellenGameTests {
         helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
     }
 
+    /** 1.2.7: a dancer whose Lilo-guh stopped ticking (teleported away) doesn't stay "dancing": the watchdog frees them. */
+    @GuhTest(template = STRAND, timeoutTicks = 100, batch = "guhwaiispellen_hula_waak")
+    public static void guhwaiispellenHulaDanserBlijftNietHangen(GameTestHelper helper) {
+        GuhNpcEntity npc = lilo(helper, "hula", new BlockPos(6, 2, 2));
+        ServerPlayer p = speler(helper, npc);
+        HulaSpel spel = HulaSpel.of(npc);
+        helper.assertTrue(spel.start(npc, p, HulaLiedje.GUHLA_HULA_ROCK) && HulaSpel.danst(p), "the dance starts");
+        helper.assertTrue(!HulaSpel.waak(p) && HulaSpel.danst(p), "Lilo-guh is there: dancing on");
+        spel.testStil(helper.getLevel(), HulaSpel.STIL_TICKS + 5);
+        helper.assertTrue(HulaSpel.waak(p) && !HulaSpel.danst(p) && nl.juiced.guhs.feature.Minigames.playing(p) == null,
+                "Lilo-guh hasn't ticked for 2 seconds: an ordinary player again");
+        helper.runAfterDelay(5, () -> {
+            helper.assertTrue(!spel.bezig(), "and Lilo-guh tidies up her side when she ticks again");
+            npc.discard();
+            weg(helper, p);
+            helper.succeed();
+        });
+    }
+
     /** A whole surf game with Lilo-guh: the roles, the loaned board, the boards on the water, schelpjesmunten, the level's own board. */
     @GuhTest(template = STRAND, timeoutTicks = 200)
     public static void guhwaiispellenSurfSpelMunten(GameTestHelper helper) {

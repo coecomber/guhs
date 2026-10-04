@@ -128,10 +128,12 @@ public final class Minigames {
 
     // --- no fighting in god mode -------------------------------------------------------------------------------------
 
-    /** Is this player protected by a game (can't get hurt)? Meppen isn't: hitting Mikas is the game. */
+    /**
+     * Is this player protected by a game (can't get hurt)? 1.2.7: Mika-meppen too (its players can't be hurt either, and
+     * whacking the Mikas is a click on their heads, which are blocks: no reason to let them hit other players or guhs).
+     */
     public static boolean invulnerable(ServerPlayer player) {
-        String game = playing(player);
-        return game != null && !game.equals(MEPPEN);
+        return playing(player) != null;
     }
 
     /** A player who can't get hurt can't hurt anyone else either. */

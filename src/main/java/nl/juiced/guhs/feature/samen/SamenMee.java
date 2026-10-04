@@ -169,6 +169,11 @@ public final class SamenMee {
         level.sendParticles(ParticleTypes.POOF, guh.getX(), guh.getY() + 0.3, guh.getZ(), 6, 0.2, 0.2, 0.2, 0.02);
     }
 
+    /** 1.2.7: the racer left the kart (RaceGuhEntity#removePassenger): the guh riding along goes back to where it was, now. */
+    public static void uitDeKart(ServerPlayer racer) {
+        stapUit(racer.level().getServer(), racer.getUUID());
+    }
+
     /** The guh riding along with this racer (tests), or null. */
     @Nullable
     public static UUID inKart(ServerPlayer racer) {

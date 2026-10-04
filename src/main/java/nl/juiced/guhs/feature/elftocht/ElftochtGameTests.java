@@ -156,6 +156,68 @@ public class ElftochtGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.2.7: full pockets. The skates and the card wait for a free slot (and come back when they got lost), and the one-time
+     * kruisje with its extra stamps is only "had" once it really went into the pockets.
+     */
+    @GuhTest(template = BAAN, batch = "elftocht_vol", timeoutTicks = 200)
+    public static void elftochtMetVolleZakken(GameTestHelper helper) {
+        GuhNpcEntity meester = npc(helper, GuhNpcEntity.Kind.SCHAATSMEESTERGUH, 0);
+        GuhNpcEntity guhwarden = npc(helper, GuhNpcEntity.Kind.STEMPELGUH, 1);
+        ServerPlayer p = speler(helper, 3, 4);
+        for (int i = 0; i < 36; i++) {
+            p.getInventory().setItem(i, new ItemStack(net.minecraft.world.item.Items.DIRT, 64));
+        }
+        helper.assertTrue(ElftochtTocht.start(meester, p, false), "the tour starts");
+        helper.assertTrue(tel(p, ElftochtFeature.SCHAATSEN.get()) == 0 && tel(p, ElftochtFeature.STEMPELKAART.get()) == 0, "full pockets: nothing yet");
+        helper.assertTrue(helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, p.getBoundingBox().inflate(4),
+                e -> e.getItem().is(ElftochtFeature.SCHAATSEN.get()) || e.getItem().is(ElftochtFeature.STEMPELKAART.get())).isEmpty(), "and nothing loaned on the ground");
+        p.getInventory().setItem(0, ItemStack.EMPTY);
+        p.getInventory().setItem(1, ItemStack.EMPTY);
+        ElftochtTocht.spullen(p, ElftochtTocht.rit(p));
+        helper.assertTrue(tel(p, ElftochtFeature.SCHAATSEN.get()) == 1 && tel(p, ElftochtFeature.STEMPELKAART.get()) == 1, "room: here are the skates and the card");
+        // the card gets lost on the way: a new one, with the stamps you have
+        ElftochtTocht.testStempels(p, 10);
+        for (int i = 0; i < 36; i++) {
+            if (p.getInventory().getItem(i).is(ElftochtFeature.STEMPELKAART.get())) {
+                p.getInventory().setItem(i, ItemStack.EMPTY);
+            }
+        }
+        ElftochtTocht.spullen(p, ElftochtTocht.rit(p));
+        ItemStack kaart = p.getInventory().getNonEquipmentItems().stream().filter(s -> s.is(ElftochtFeature.STEMPELKAART.get())).findFirst().orElseThrow();
+        helper.assertTrue(StempelkaartItem.stempels(kaart) == 10, "the new card has your 10 stamps: " + StempelkaartItem.stempels(kaart));
+        // the finish with (again) full pockets: the loan makes room for the kruisje
+        ElftochtTocht.testTijd(p, ElftochtTocht.SNEL[0] + 20);
+        helper.assertTrue(ElftochtTocht.stempel(guhwarden, p, 1), "the finish stamp");
+        helper.assertTrue(tel(p, ElftochtFeature.KRUISJE_ITEM.get()) == 1 && GuhQuests.saved(p).getBooleanOr(ElftochtTocht.KRUISJE, false),
+                "the kruisje fits where the skates were");
+        weg(helper, p);
+        // somebody whose pockets are really full (skates in the off hand, no card): the kruisje waits for the next tour
+        ServerPlayer q = speler(helper, 3, 4);
+        helper.assertTrue(ElftochtTocht.start(meester, q, false), "the tour starts");
+        ElftochtTocht.testStempels(q, 10);
+        ElftochtTocht.opruimen(q);
+        for (int i = 0; i < 36; i++) {
+            q.getInventory().setItem(i, new ItemStack(net.minecraft.world.item.Items.DIRT, 64));
+        }
+        ElftochtTocht.testTijd(q, ElftochtTocht.SNEL[0] + 20);
+        helper.assertTrue(ElftochtTocht.stempel(guhwarden, q, 1), "the finish stamp");
+        helper.assertTrue(tel(q, ElftochtFeature.KRUISJE_ITEM.get()) == 0 && !GuhQuests.saved(q).getBooleanOr(ElftochtTocht.KRUISJE, false),
+                "no room: no kruisje, and it isn't counted as had");
+        q.getInventory().setItem(0, ItemStack.EMPTY);
+        q.getInventory().setItem(1, ItemStack.EMPTY);
+        q.getInventory().setItem(2, ItemStack.EMPTY);
+        helper.assertTrue(ElftochtTocht.start(meester, q, false), "the next tour");
+        ElftochtTocht.testStempels(q, 10);
+        ElftochtTocht.testTijd(q, ElftochtTocht.SNEL[0] + 20);
+        helper.assertTrue(ElftochtTocht.stempel(guhwarden, q, 1), "the finish stamp");
+        helper.assertTrue(tel(q, ElftochtFeature.KRUISJE_ITEM.get()) == 1 && GuhQuests.saved(q).getBooleanOr(ElftochtTocht.KRUISJE, false),
+                "now it fits: the kruisje");
+        helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, q.getBoundingBox().inflate(6)).forEach(Entity::discard);
+        weg(helper, q);
+        helper.succeed();
+    }
+
     /** The finish: elfstempels (12 + speed, +5 the first time), the kruisje only the first time, the board, the advancement; the loan ends. */
     @GuhTest(template = BAAN, batch = "elftocht_finish", timeoutTicks = 200)
     public static void elftochtFinishBeloningEnKruisje(GameTestHelper helper) {

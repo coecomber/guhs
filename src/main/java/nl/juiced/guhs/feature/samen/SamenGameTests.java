@@ -296,6 +296,12 @@ public class SamenGameTests {
         helper.assertTrue(guh.getVehicle() == mount && guh.getUUID().equals(SamenMee.inKart(p)), "your guh hopped on behind you");
         helper.assertTrue(mount.getControllingPassenger() == p, "you still steer");
         helper.assertTrue(quest(p, "samen_kart") && GidsFeature.heeft(p, "lieve_vadsjes/samen_kart"), "the advancements");
+        // 1.2.7: the racer leaves the kart (for whatever reason) while the race is still on: the guh is off at once, the
+        // race guh is never saved and would take it along
+        p.stopRiding();
+        helper.assertTrue(RaceGame.of(npc) == game, "the race is still on (5 seconds to hop back on)");
+        helper.assertTrue(!guh.isPassenger() && SamenMee.inKart(p) == null && guh.position().distanceTo(van) < 1.5,
+                "the racer got off: the guh is off the kart at once, back where it was");
         game.end(helper.getLevel(), RaceGame.Ending.STOPPED);
         helper.assertTrue(!guh.isPassenger() && SamenMee.inKart(p) == null, "after the race it hops off");
         helper.assertTrue(guh.position().distanceTo(van) < 1.5, "back where it was");
