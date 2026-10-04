@@ -92,7 +92,7 @@ public final class HuisjeFeature {
         GuhHooks.doelen((guh, goals) -> goals.addGoal(3, new HuisjeGoal(guh)));
         GuhHooks.tick(guh -> {
             if (Huisjes.isBinnen(guh)) {
-                Huisjes.houdBinnen(guh);
+                Huisjes.binnenTick(guh);
             }
         });
         // maatjes (muisjes, Schilly, Poepschilly) get the home-base goal when they join the level
@@ -128,7 +128,7 @@ public final class HuisjeFeature {
         });
         NeoForge.EVENT_BUS.addListener((EntityTickEvent.Pre event) -> {
             if (event.getEntity() instanceof PiepMaatje && !event.getEntity().level().isClientSide() && Huisjes.isBinnen(event.getEntity())) {
-                Huisjes.houdBinnen(event.getEntity());
+                Huisjes.binnenTick(event.getEntity());
             }
         });
     }

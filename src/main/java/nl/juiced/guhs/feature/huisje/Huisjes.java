@@ -405,6 +405,9 @@ public final class Huisjes extends SavedData {
 
     /** Goes inside through the door: hidden, no name, not pushable, zzz at the windows. */
     public static void naarBinnen(Entity e, Huisje h) {
+        if (thuisVan(e) != h) {
+            return;   // (1.2.7: only a resident of this very huisje goes inside)
+        }
         e.getPersistentData().putBoolean(BINNEN, true);
         BandVlaggen.zet(e, BandVlaggen.HUISJE_BINNEN, true);
         if (e instanceof Mob mob) {
@@ -422,6 +425,18 @@ public final class Huisjes extends SavedData {
         if (owner != null) {
             nl.juiced.guhs.quest.GuhAdvancements.grant(owner, "huisje_slapen");
         }
+    }
+
+    /**
+     * Every tick while "inside". 1.2.7: a guh that is marked inside but has no huisje any more (the 1.2.6 bug: kicked out
+     * while asleep, it was put back inside by a stale goal tick and stayed hidden and floating forever) comes out.
+     */
+    static void binnenTick(Entity e) {
+        if (!e.level().isClientSide() && thuisVan(e) == null) {
+            naarBuiten(e, null, false);
+            return;
+        }
+        houdBinnen(e);
     }
 
     /** Every tick while inside: stay hidden, still and out of the way. */

@@ -106,6 +106,7 @@ public class HuisjeGoal extends Goal {
         if (!mag() || Huisjes.isBinnen(mob)) {
             stopTaak();
         }
+        huisje = null;   // (1.2.7: never trust the cached huisje after a stop)
         mob.getNavigation().stop();
     }
 
@@ -131,6 +132,12 @@ public class HuisjeGoal extends Goal {
     @Override
     public void tick() {
         if (!(mob.level() instanceof ServerLevel level)) {
+            return;
+        }
+        // 1.2.7: moved out during this tick ("Uit huis" on a sleeping guh): the goal still gets one more tick before
+        // canContinueToUse stops it, and the cached huisje would put the guh back "inside" a house it no longer has
+        if (!Huisjes.isBewoner(mob)) {
+            huisje = null;
             return;
         }
         Huisje h = thuis();

@@ -191,6 +191,46 @@ public class HuisjeGameTests {
         });
     }
 
+    /**
+     * 1.2.7: "Uit huis" on a guh that sleeps inside at night: it comes out and stays out (it used to be put back "inside" a
+     * house it no longer had, hidden and floating forever); and a guh that is in that broken state heals itself.
+     */
+    @GuhTest(template = TUIN, batch = BATCH + "_uitzetten", timeoutTicks = 900)
+    public static void huisjeSlapendeGuhUitHuisZetten(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(22, 1, 22));
+        Huisje h = bouw(helper, new BlockPos(4, 1, 4), HuisjeMaat.MEDIUM, p);
+        GuhEntity guh = guh(helper, p, new BlockPos(9, 1, 12));
+        GuhEntity kapot = guh(helper, p, new BlockPos(14, 2, 14));
+        Huisjes.trekIn(h, guh);
+        HuisjeGoal.TEST_DAGDEEL.put(h.pos(), Dagdeel.NACHT);
+        AtomicInteger fase = new AtomicInteger();
+        java.util.concurrent.atomic.AtomicLong sinds = new java.util.concurrent.atomic.AtomicLong();
+        helper.onEachTick(() -> {
+            if (fase.get() == 0 && Huisjes.isBinnen(guh)) {
+                // the kick from the huisje screen, while it is still night
+                Huisjes.trekUit(p.level().getServer(), h, Band.id(guh));
+                // and a guh in the state the 1.2.6 bug left behind: marked inside, no huisje
+                BandVlaggen.zet(kapot, BandVlaggen.HUISJE_BINNEN, true);
+                kapot.setNoGravity(true);
+                kapot.setInvisible(true);
+                kapot.noPhysics = true;
+                sinds.set(helper.getTick());
+                fase.set(1);
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(fase.get() == 1 && helper.getTick() >= sinds.get() + 40, "went inside, was kicked out, 2 seconds later");
+            helper.assertTrue(!Huisjes.isBewoner(guh) && !Huisjes.isBinnen(guh), "moved out and not inside");
+            helper.assertTrue(!guh.isInvisible() && !guh.isNoGravity() && !guh.noPhysics, "visible, with gravity and physics");
+            helper.assertTrue(GuhVolger.plek(p.level().getServer(), p.getUUID(), Band.id(guh)).soort() != PlekSoort.SLAAPT_IN_HUISJE,
+                    "the Guhdex doesn't say it sleeps in a huisje");
+            helper.assertTrue(!Huisjes.isBinnen(kapot) && !kapot.isInvisible() && !kapot.isNoGravity() && !kapot.noPhysics,
+                    "a guh stuck 'inside' without a huisje heals itself");
+            HuisjeGoal.TEST_DAGDEEL.remove(h.pos());
+            weg(helper, p);
+        });
+    }
+
     @GuhTest(template = TUIN, batch = BATCH, timeoutTicks = 900)
     public static void huisjeSlapenBinnenEnGapendWakker(GameTestHelper helper) {
         ServerPlayer p = speler(helper, new BlockPos(22, 1, 22));

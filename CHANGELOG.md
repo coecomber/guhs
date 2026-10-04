@@ -8,6 +8,9 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 - **The pharmacy job with more players.** Snotje is one shared little guh: when one player gave him the kaasmelkdrankje, a
   second player who was busy with the same job heard "he's better already" and was stuck. Now everyone who is on the job
   can give their drankje, and Snotje sniffles again when the next helper talks to the doctor.
+- **A guh moved out of its Guh House at night is no longer stuck.** Using "Move Out" on a guh that was asleep inside left
+  it invisible and floating, "asleep" in a house it no longer had (so "Call to me" refused it). It comes out properly now,
+  and guhs that are already stuck that way free themselves.
 
 ## 1.2.6 — Minecraft 26.1.2
 
