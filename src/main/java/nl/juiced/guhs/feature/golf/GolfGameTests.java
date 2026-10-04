@@ -304,6 +304,42 @@ public class GolfGameTests {
         });
     }
 
+    /**
+     * 1.2.7: one golfer per course. Alone the round is as relaxed as ever; once somebody else asked for the course, a
+     * minute of nothing (or a round of more than a quarter of an hour) ends it, so the next one gets a turn.
+     */
+    @GuhTest(template = COURSE, timeoutTicks = 200, batch = "golf_wachten")
+    public static void golfRoundMakesRoomWhenSomeoneWaits(GameTestHelper helper) {
+        GuhNpcEntity npc = golfguh(helper);
+        ServerPlayer player = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
+        player.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
+        GolfGame.action(npc, player, GolfGame.START);
+        GolfGame game = GolfGame.of(npc);
+        helper.assertTrue(game.isPlayedBy(player), "the round is on");
+        game.testClocks(helper.getLevel(), GolfGame.IDLE_LIMIT_WAITING + 40, GolfGame.ROUND_LIMIT + 40, false);
+        game.tick(npc);
+        helper.assertTrue(game.isPlayedBy(player), "alone: more than a minute without a swing (and a long round) is fine");
+        ServerPlayer other = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
+        other.snapTo(npc.getX(), npc.getY(), npc.getZ() + 2);
+        GolfGame.action(npc, other, GolfGame.START);
+        helper.assertTrue(game.isPlayedBy(player) && !GolfGame.isGolfing(other), "the other one has to wait");
+        game.testClocks(helper.getLevel(), 20, GolfGame.ROUND_LIMIT + 40, true);
+        game.tick(npc);
+        helper.assertTrue(!game.isRunning() && !GolfGame.isGolfing(player), "somebody is waiting and the round took too long: over");
+        GolfGame.action(npc, other, GolfGame.START);
+        helper.assertTrue(game.isPlayedBy(other), "the next one's turn");
+        game.testClocks(helper.getLevel(), GolfGame.IDLE_LIMIT_WAITING + 40, 100, true);
+        game.tick(npc);
+        helper.assertTrue(!game.isRunning(), "with somebody waiting, a minute of nothing ends the round");
+        GolfGame.action(npc, other, GolfGame.START);
+        game.testClocks(helper.getLevel(), GolfGame.IDLE_LIMIT + 40, 100, false);
+        game.tick(npc);
+        helper.assertTrue(!game.isRunning(), "and three minutes of nothing always does");
+        leave(helper, player);
+        leave(helper, other);
+        helper.succeed();
+    }
+
     private static void behindTee(GameTestHelper helper, ServerPlayer player, BlockPos tee) {
         Direction way = helper.getLevel().getBlockState(tee).getValue(GolfBlocks.Afslag.FACING);
         player.snapTo(tee.getX() + 0.5 - way.getStepX() * 1.5, tee.getY() + 1, tee.getZ() + 0.5 - way.getStepZ() * 1.5, way.toYRot(), 30);

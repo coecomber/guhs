@@ -80,6 +80,10 @@ public final class HulaSpel {
     private int score, combo, maxCombo, ticks, dansBeat = -1;
     private final int[] tellers = new int[HulaKaart.Oordeel.values().length];
     private final Set<UUID> luisteraars = new HashSet<>();
+    /** 1.2.7: the game time Lilo-guh last ticked this game (the dancers' watchdog, {@link #waak}). */
+    private long laatsteTick;
+    /** A dance whose Lilo-guh hasn't ticked for this long is over for its dancer. */
+    public static final int STIL_TICKS = 40;
 
     public static HulaSpel of(GuhNpcEntity npc) {
         return SPELLEN.computeIfAbsent(npc.getUUID(), id -> new HulaSpel());
@@ -179,6 +183,7 @@ public final class HulaSpel {
         java.util.Arrays.fill(tellers, 0);
         dansBeat = -1;
         DANSERS.put(danser, npc.getUUID());
+        laatsteTick = level.getGameTime();
         fase = Fase.BEZIG;
         player.stopRiding();
         Vec3 naar = npc.position().subtract(Vec3.atBottomCenterOf(mat));
@@ -245,6 +250,7 @@ public final class HulaSpel {
     public void tick(GuhNpcEntity npc) {
         ServerLevel level = (ServerLevel) npc.level();
         ticks++;
+        laatsteTick = level.getGameTime();
         if (ticks % 100 == 1) {
             toonScores(npc);
         }
@@ -443,6 +449,31 @@ public final class HulaSpel {
 
     static void opUitloggen(ServerPlayer p) {
         DANSERS.remove(p.getUUID());
+    }
+
+    /**
+     * 1.2.7 (every second, for every player; like the Bakkerij and the Creche): a dancer whose Lilo-guh stopped ticking (the
+     * dancer was teleported away, her chunk went to sleep) is an ordinary player again, instead of staying "dancing" for
+     * good: unhurtable and refused by every other game. Lilo-guh tidies up her side when she ticks again.
+     */
+    static boolean waak(ServerPlayer p) {
+        UUID npc = DANSERS.get(p.getUUID());
+        if (npc == null) {
+            return false;
+        }
+        HulaSpel spel = SPELLEN.get(npc);
+        if (spel != null && spel.bezig() && p.getUUID().equals(spel.danser) && p.level().getGameTime() - spel.laatsteTick <= STIL_TICKS) {
+            return false;
+        }
+        DANSERS.remove(p.getUUID());
+        Minigames.forget(p);
+        p.sendSystemMessage(Component.translatable("quest.guhs.guhwaiispellen.hula.weg").withStyle(ChatFormatting.LIGHT_PURPLE));
+        return true;
+    }
+
+    /** (Tests) Lilo-guh last ticked this dance so many ticks ago. */
+    public void testStil(ServerLevel level, int ticks) {
+        laatsteTick = level.getGameTime() - ticks;
     }
 
     static void vergeetAlles() {

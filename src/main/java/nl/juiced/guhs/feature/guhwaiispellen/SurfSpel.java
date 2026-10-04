@@ -67,11 +67,14 @@ public final class SurfSpel {
     private final ArrayDeque<int[]> invoer = new ArrayDeque<>();
     private int stil, sneak;
     private boolean klaar;
+    /** 1.2.7: the world of this beach (a surfer who changed dimension is not put on "the beach" of the other world). */
+    private final net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dimensie;
 
     private SurfSpel(ServerPlayer p, GuhNpcEntity npc, Niveau niveau, Surfplek.Spot spot, int seed) {
         this.speler = p.getUUID();
         this.npc = npc.getUUID();
         this.npcPos = npc.blockPosition();
+        this.dimensie = npc.level().dimension();
         this.niveau = niveau;
         this.spot = spot;
         this.seed = seed;
@@ -393,7 +396,7 @@ public final class SurfSpel {
         }
         Minigames.forget(player);
         // back on the beach, next to Lilo-guh
-        if (player.isAlive() && player.level() == level) {
+        if (player.isAlive() && player.level() == level && level.dimension() == dimensie) {
             Vec3 beach = Vec3.atBottomCenterOf(npcPos).add(Vec3.atLowerCornerOf(spot.origin().subtract(npcPos)).normalize().scale(-1.5));
             BlockPos b = BlockPos.containing(beach);
             while (!level.getBlockState(b).isAir() && b.getY() < npcPos.getY() + 4) {

@@ -292,12 +292,16 @@ public final class VisWedstrijd {
             GuhQuests.say(player, npc, "quest.guhs.vissen.no_room");
             return false;
         }
-        if (!scores.isEmpty()) {
+        boolean meedoen = !scores.isEmpty();
+        if (meedoen) {
             together = true;
             tell(npc, Component.translatable("quest.guhs.vissen.joined", player.getDisplayName()).withStyle(ChatFormatting.AQUA));
         }
         scores.put(player.getUUID(), new Score(player.getGameProfile().name()));
-        if (niveau != Niveau.MEDIUM) {
+        if (meedoen) {
+            // 1.2.7: whoever started picked the level: a joiner hears which one is running (also when it's medium)
+            player.sendSystemMessage(Component.translatable("quest.guhs.vissen.loopt_al", Klassiekers.naam(niveau)).withStyle(ChatFormatting.AQUA));
+        } else if (niveau != Niveau.MEDIUM) {
             player.sendSystemMessage(Component.translatable("gui.guhs.klassiekers.vissen.niveau", Klassiekers.naam(niveau)).withStyle(ChatFormatting.AQUA));
         }
         ServerBossEvent bar = new ServerBossEvent(net.minecraft.util.Mth.createInsecureUUID(player.getRandom()), Component.translatable("entity.guhs.guh_npc.visguh"), BossEvent.BossBarColor.PINK,

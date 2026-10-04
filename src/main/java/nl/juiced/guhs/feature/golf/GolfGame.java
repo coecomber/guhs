@@ -74,6 +74,13 @@ public final class GolfGame {
     /** Actions from the Golfguh's screen. */
     public static final int START = 0, SHOP = 1, STOP = 2;
     public static final int COUNTDOWN = 61, NEXT_HOLE_DELAY = 50, HAZARD_DELAY = 30, IDLE_LIMIT = 20 * 180, SAIL_TICKS = 20;
+    /**
+     * 1.2.7 (one golfer per course): while somebody else is waiting for the course (they asked the Golfguh in the last
+     * {@link #WAIT_TICKS}), the golfer has to keep going: a minute without anything happening, in whatever phase, ends the
+     * round, and so does a round of more than {@link #ROUND_LIMIT}. Alone, the round is as relaxed as before (only
+     * {@link #IDLE_LIMIT}, now in every phase too, so a round that hangs always ends).
+     */
+    public static final int IDLE_LIMIT_WAITING = 20 * 60, ROUND_LIMIT = 20 * 60 * 15, WAIT_TICKS = 20 * 60 * 5;
     /** 2.10: on a lastig round the windmill turns twice as fast. */
     public static final int SAIL_TICKS_LASTIG = 10;
     /** The version of the saved course (2: with the tees of all three levels); an older one is scanned again. */
@@ -118,6 +125,9 @@ public final class GolfGame {
     private UUID ball;
     private Vec3 lastShot = Vec3.ZERO;
     private long lastSwing;
+    /** 1.2.7: when the round started, until when somebody is waiting for the course, and the phase the idle clock last saw. */
+    private long roundStart, waitingUntil;
+    private Phase idlePhase = Phase.IDLE;
     /** A short message is on the action bar: the status bar waits until then. */
     private long quietUntil;
 
@@ -298,6 +308,11 @@ public final class GolfGame {
         }
         if (isRunning()) {
             GuhQuests.say(p, npc, "quest.guhs.golf.busy", playerName);
+            ServerPlayer golfer = player == null ? null : world.getServer().getPlayerList().getPlayer(player);
+            if (golfer != null && world.getGameTime() > waitingUntil) {
+                golfer.sendSystemMessage(Component.translatable("quest.guhs.golf.wachtende", p.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
+            waitingUntil = world.getGameTime() + WAIT_TICKS;        // 1.2.7: somebody is waiting: no dawdling now
             return;
         }
         if (isGolfing(p)) {
@@ -328,6 +343,8 @@ public final class GolfGame {
         strokes = 0;
         lastSwing = world.getGameTime();
         lastTick = world.getGameTime();
+        roundStart = world.getGameTime();
+        waitingUntil = 0;
         giveClub(p);
         nl.juiced.guhs.feature.Minigames.startKeeping(p);
         p.clearFire();
@@ -681,6 +698,14 @@ public final class GolfGame {
         removeBumpers(npc, world);
     }
 
+    /** (Tests) the clocks of the round: so many ticks ago was the last swing / the start, and is somebody waiting? */
+    public void testClocks(ServerLevel world, int idleTicks, int roundTicks, boolean waiting) {
+        lastSwing = world.getGameTime() - idleTicks;
+        roundStart = world.getGameTime() - roundTicks;
+        waitingUntil = waiting ? world.getGameTime() + WAIT_TICKS : 0;
+        idlePhase = phase;
+    }
+
     /** A golfer logged out, died or went to another dimension: the round is over (the ball goes by itself). */
     public static void leave(ServerPlayer p) {
         UUID npc = GOLFERS.remove(p.getUUID());
@@ -734,8 +759,18 @@ public final class GolfGame {
             }
             return;
         }
-        if (world.getGameTime() - lastSwing > IDLE_LIMIT && (phase == Phase.AIM || phase == Phase.COUNTDOWN)) {
+        long now = world.getGameTime();
+        if (phase != idlePhase) {                                      // (something happened: the ball came to rest, the next hole...)
+            idlePhase = phase;
+            lastSwing = Math.max(lastSwing, now);
+        }
+        boolean waiting = now <= waitingUntil;
+        if (now - lastSwing > (waiting ? IDLE_LIMIT_WAITING : IDLE_LIMIT)) {
             end(npc, p, "quest.guhs.golf.idle", false);
+            return;
+        }
+        if (waiting && now - roundStart > ROUND_LIMIT) {
+            end(npc, p, "quest.guhs.golf.te_lang", false);
             return;
         }
         if (npc.tickCount % 20 == 0) {

@@ -103,6 +103,9 @@ public final class GuhwaiiSpellenFeature {
         NeoForge.EVENT_BUS.addListener((PlayerTickEvent.Post event) -> {
             if (event.getEntity() instanceof ServerPlayer p) {
                 SurfSpel.tick(p);
+                if (p.tickCount % 20 == 0) {
+                    HulaSpel.waak(p);                               // 1.2.7: never "dancing" for good
+                }
             }
         });
         NeoForge.EVENT_BUS.addListener(SurfSpel::opAfstappen);
