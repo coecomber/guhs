@@ -245,8 +245,10 @@ public final class SleeRit {
             }
         }
         if (kopie != null) {
+            // 1.2.7: the story's Baltoguh is one guh for the whole server: he is no longer hidden while one player's sled
+            // is out (everybody else lost him for the whole trek). rit.kopie stays, so a copy hidden by an older version
+            // still comes back when the ride ends.
             rit.kopie = kopie.getUUID();
-            verstop(kopie, true);
         }
         rit.steeleNpc = npc == null ? null : npc.getUUID();
         RIJDERS.put(player.getUUID(), rit);

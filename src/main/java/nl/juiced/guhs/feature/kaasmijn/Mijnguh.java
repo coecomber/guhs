@@ -63,10 +63,13 @@ public final class Mijnguh implements NpcRole {
         npc.openShop(player);
     }
 
-    /** Is one of the Mijnguh's pickaxes lying on the floor near this player (they dropped it, or had no room)? */
-    static boolean lyingAround(ServerPlayer player) {
+    /**
+     * Is one of the Mijnguh's pickaxes that THIS player dropped lying on the floor near them? (1.2.7: somebody else's
+     * dropped pickaxe no longer keeps you from borrowing one.)
+     */
+    public static boolean lyingAround(ServerPlayer player) {
         return !player.level().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, player.getBoundingBox().inflate(LYING_AROUND),
-                e -> e.getItem().getItem() instanceof LeenhouweelItem).isEmpty();
+                e -> e.getItem().getItem() instanceof LeenhouweelItem && e.getOwner() == player).isEmpty();
     }
 
     /** A loaner pickaxe for the player (in the selected slot if that's free; no room: none, he says so). */
