@@ -248,9 +248,63 @@ public final class DoolhofGame {
         }
     }
 
+    /** The plaza in front of the entrance, next to Meneer Vadskronkel. */
+    static Vec3 plein(Anker anker) {
+        return anker.punt(DoolhofVeld.AX + 0.5, DoolhofVeld.G + 1, DoolhofVeld.AZ + 3.5);
+    }
+
+    /**
+     * 1.2.7: a player whose game stops while they are still between the hedges goes to the plaza. Someone who logged out in
+     * the field used to come back in the middle of the next player's (new) maze: inside a hedge, which can't be broken.
+     */
+    static boolean naarPlein(ServerLevel world, Anker anker, ServerPlayer p) {
+        if (p.level() != world || p.isSpectator() || !p.isAlive() || !DoolhofVeld.inVeld(anker, p.position(), 0)
+                || DoolhofVeld.hoogte(anker, p.getY()) >= DoolhofVeld.G + 6) {
+            return false;
+        }
+        Vec3 plein = plein(anker);
+        p.stopRiding();
+        teleport(p, world, plein.x, plein.y, plein.z, p.getYRot());
+        return true;
+    }
+
+    private static boolean heg(ServerLevel world, BlockPos pos) {
+        net.minecraft.world.level.block.state.BlockState s = world.getBlockState(pos);
+        return s.is(DoolhofFeature.HEG.get()) || s.is(DoolhofFeature.HEG_GEZICHT.get());
+    }
+
+    /**
+     * 1.2.7: the safety net for everyone who does end up inside a hedge of a Guhdoolhof (logged in there, a maze from
+     * before this fix...): Meneer Vadskronkel puts them on the plaza. Not in creative, and not the player the maze is
+     * being grown for. Checked every 2 seconds for every player (so right after logging in too).
+     */
+    public static boolean uitDeHeg(ServerPlayer p) {
+        ServerLevel world = p.level();
+        if (p.isCreative() || p.isSpectator() || !p.isAlive()
+                || !(heg(world, p.blockPosition()) || heg(world, BlockPos.containing(p.getEyePosition())))) {
+            return false;
+        }
+        DoolhofGame game = gameOf(p);
+        if (game != null && game.fase == Fase.BOUWEN) {
+            return false;
+        }
+        for (GuhNpcEntity npc : world.getEntitiesOfClass(GuhNpcEntity.class, p.getBoundingBox().inflate(128, 48, 128),
+                n -> n.getKind() == GuhNpcEntity.Kind.DOOLHOFGUH)) {
+            Anker anker = DoolhofVeld.anker(npc);
+            if (anker != null && DoolhofVeld.inVeld(anker, p.position(), 1)) {
+                Vec3 plein = plein(anker);
+                p.stopRiding();
+                teleport(p, world, plein.x, plein.y, plein.z, p.getYRot());
+                p.sendSystemMessage(Component.translatable("quest.guhs.doolhof.uit_de_heg").withStyle(ChatFormatting.GREEN));
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Walkers in the field while the hedges grow go to the plaza (nobody gets stuck in a hedge). */
     static void weg(ServerLevel world, Anker anker, @Nullable ServerPlayer behalve) {
-        Vec3 plein = anker.punt(DoolhofVeld.AX + 0.5, DoolhofVeld.G + 1, DoolhofVeld.AZ + 3.5);
+        Vec3 plein = plein(anker);
         for (ServerPlayer p : world.players()) {
             if (p == behalve || p.isSpectator() || !DoolhofVeld.inVeld(anker, p.position(), 0)) {
                 continue;
@@ -609,6 +663,7 @@ public final class DoolhofGame {
     void stop(ServerLevel world, @Nullable ServerPlayer p, String key) {
         end(world, p);
         if (p != null) {
+            naarPlein(world, anker, p);                            // 1.2.7: never left behind between the hedges
             p.sendSystemMessage(Component.translatable(key).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
     }
@@ -688,6 +743,9 @@ public final class DoolhofGame {
     public static void onPlayerTick(net.neoforged.neoforge.event.tick.PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer p) || p.tickCount % 20 != 0) {
             return;
+        }
+        if (p.tickCount % 40 == 0) {
+            uitDeHeg(p);
         }
         if (!isPlaying(p)) {
             if (p.tickCount % 200 == 0 && p.getInventory().contains(new ItemStack(DoolhofFeature.GESTOLEN_KNABBEL.get()))) {
