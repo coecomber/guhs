@@ -51,7 +51,7 @@ public final class VadsUitlezing {
         if (knoop instanceof VadsBron bron) {
             uit.add(Component.translatable(K + "geeft", bron.vadsAanbod()).withStyle(ChatFormatting.GREEN));
             if (!net.teltMee(bron) && bron.vadsSoort() != null) {
-                uit.add(Component.translatable(K + "telt_niet_mee", bron.vadsSoort().max, bron.vadsSoort().naam()).withStyle(ChatFormatting.GOLD));
+                uit.add(Component.translatable(K + "telt_niet_mee", bron.vadsSoort().max, bron.vadsSoort().naam(bron.vadsSoort().max)).withStyle(ChatFormatting.GOLD));
             }
         }
         if (knoop instanceof VadsVerbruiker verbruiker) {

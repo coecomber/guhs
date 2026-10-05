@@ -245,7 +245,9 @@ EXTRAS = [
     ("vads", "Super vahoege!", "Hak samengeperst super vahoege vads (ijzeren houweel) en smelt het.", "guhs:vahoege_vads_ingot",
      [item("guhs:vahoege_vads_ingot")]),
     ("paxel", "Vadspaxel", "Houweel, bijl en schep in een, en hij gaat nooit kapot.", "guhs:vahoege_vads_paxel", [item("guhs:vahoege_vads_paxel")]),
-    ("wheel", "Guhrad", "Zet je tamme guh in een guhrad: volle redstonestroom!", "guhs:guh_wheel", [item("guhs:guh_wheel")]),
+    ("wheel", "Guhrad", "Zet je tamme guh in een &dGuhrad&r: hij rent &dvadskracht&r bij elkaar voor je guhmachines, en moe wordt hij "
+     "nooit. Een blij guhtje rent extra hard! &dGuhdraad&r brengt de vadskracht naar je machines. Kijk naar het rad of de draad en je "
+     "leest hoeveel vadskracht je opstelling gebruikt. Njeg!", "guhs:guh_wheel", [item("guhs:guh_wheel")]),
 ]
 for i, (key, title, desc, icon, tasks) in enumerate(EXTRAS):
     q(key, title, desc, icon, tasks, deps=["guhmension"] if key not in ("wheel", "furniture", "taart") else ["start"],

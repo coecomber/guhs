@@ -35,7 +35,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.2.5: the Guhoven (bakes on guh power)
             'guhoven',
             # 1.2.8: het Bleekwoud
-            'bleekwoud']
+            'bleekwoud',
+            # bbq2: the foundations and the slices (F0 "skelet" owns this list: CONTRACT_130 5.1; here only what F1 needs)
+            'vadskracht']
 
 
 def modules():

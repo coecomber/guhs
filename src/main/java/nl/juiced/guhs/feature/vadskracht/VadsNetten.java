@@ -40,6 +40,8 @@ final class VadsNetten {
     private static final Map<ServerLevel, VadsNetten> PER_WERELD = new ConcurrentHashMap<>();
     /** True while a net flips its own Guhdraad: the neighbour updates of that must not start a check. */
     static boolean bezig;
+    /** The most blocks in one net ({@link VadsGetallen#MAX_NET}; a game test makes it small for a moment). */
+    static int maxNet = VadsGetallen.MAX_NET;
 
     static VadsNetten van(ServerLevel level) {
         return PER_WERELD.computeIfAbsent(level, VadsNetten::new);
@@ -234,12 +236,13 @@ final class VadsNetten {
             erbij.clear();
             weg.clear();
         }
+        List<VadsNet> alle = netten.isEmpty() ? List.of() : new ArrayList<>(netten);
         for (long key : verdwenen) {
             if (level.getChunkSource().getChunkNow(ChunkPos.getX(key), ChunkPos.getZ(key)) == null) {
                 netWeg.add(key);
             }
-            for (VadsNet net : new ArrayList<>(netten)) {
-                if (net.chunks.contains(key)) {
+            for (VadsNet net : alle) {
+                if (!net.vervallen && net.chunks.contains(key)) {
                     verval(net);
                     zaden.addAll(net.plekken);
                 }
@@ -255,8 +258,8 @@ final class VadsNetten {
                     zaden.add(be.getBlockPos().asLong());
                 }
             }
-            for (VadsNet net : new ArrayList<>(netten)) {
-                if (net.rand.contains(key)) {
+            for (VadsNet net : alle) {
+                if (!net.vervallen && net.rand.contains(key)) {
                     verval(net);
                     if (!net.plekken.isEmpty()) {
                         zaden.add(net.plekken.iterator().nextLong());
@@ -291,7 +294,10 @@ final class VadsNetten {
                     long key = it.nextLong();
                     if (perPlek.get(key) == net) {
                         perPlek.remove(key);
-                        zaden.add(key);
+                        p.set(key);
+                        if (geladen(p)) {
+                            zaden.add(key);
+                        }
                     }
                 }
             }
@@ -393,7 +399,7 @@ final class VadsNetten {
 
     /** Adds a block to the net being built; false = the net is full (too big). */
     private boolean erbij(VadsNet net, BlockPos pos, @Nullable VadsKnoop k, ArrayDeque<BlockPos> todo) {
-        if (net.plekken.size() >= VadsGetallen.MAX_NET) {
+        if (net.plekken.size() >= maxNet) {
             net.teGroot = true;
             return false;
         }

@@ -1,0 +1,83 @@
+# Vadskracht (bbq2, foundation F1) AutoCheck: the hover readout under the crosshair, the faces of the machines, the battery
+# gauge, the Guhoven's faces. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_vadskracht.txt
+# (commands: see autocheck.txt; /guhs vadskracht [x y z] says the readout of a block in chat)
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode creative
+/tp @s 3000 140 3008
+wait 40
+
+section a net that runs: source (20 VK) -> Guhdraad -> test machine, Guhoven, battery
+/setblock 2994 140 3000 guhs:vadskracht_testbron[kracht=2]
+/fill 2995 140 3000 3001 140 3000 guhs:guh_wire
+/setblock 2996 140 2999 guhs:vadskracht_testmachine[facing=south]
+/setblock 2998 140 2999 guhs:guh_oven[facing=south]
+/setblock 3000 140 2999 guhs:vadskracht_testbatterij[facing=south]
+/data merge block 2998 140 2999 {Items:[{Slot:0b,id:"minecraft:raw_iron",count:64}]}
+/data merge block 2996 140 2999 {Vakken:{stacks:[{id:"minecraft:cobblestone",count:32},{}]}}
+wait 200
+/guhs vadskracht 2998 140 2999
+/gamemode spectator
+camera 2998.5 141.8 3004.5 180 15
+waitrender 300
+shot vadskracht_net_draait
+/gamemode creative
+
+section hover readout: looking at the Guhdraad, the machine, the oven, the battery, the source
+/tp @s 2997.5 140 3002.5 180 35
+wait 30
+clearchat
+shot vadskracht_hover_draad gui
+/tp @s 2996.5 140 3001.5 180 10
+wait 30
+shot vadskracht_hover_machine gui
+/tp @s 2998.5 140 3001.5 180 10
+wait 30
+shot vadskracht_hover_oven gui
+/tp @s 3000.5 140 3001.5 180 10
+wait 30
+shot vadskracht_hover_batterij gui
+/tp @s 2994.5 140 3002.5 180 25
+wait 30
+shot vadskracht_hover_bron gui
+
+section too heavy: two more machines (20 asked, 10 given after the source is turned down): everything stands still, faces asleep
+/setblock 2994 140 3000 guhs:vadskracht_testbron[kracht=1]
+/setblock 2999 140 3001 guhs:vadskracht_testmachine[facing=south]
+/setblock 3001 140 3001 guhs:vadskracht_testmachine[facing=south]
+/data merge block 3000 140 2999 {Inhoud:0L}
+wait 60
+/guhs vadskracht 2998 140 2999
+/tp @s 2998.5 140 3001.5 180 10
+wait 30
+shot vadskracht_hover_te_zwaar gui
+/gamemode spectator
+camera 2998.5 141.8 3004.5 180 15
+waitrender 300
+shot vadskracht_net_te_zwaar
+/gamemode creative
+
+section five Guhraden next to each other (the fifth does not count once guhs run in them: put guhs in by hand to see it)
+/setblock 3008 140 2992 guhs:guh_wheel[facing=south]
+/guhs vadskracht 3008 140 2992
+/tp @s 3008.5 140 2996.5 180 0
+wait 30
+shot vadskracht_hover_leeg_guhrad gui
+
+section a machine of 2 x 2 blocks (the test one: its three parts are invisible blocks, the model is one block)
+/setblock 3012 140 3000 guhs:vadskracht_testmachine_groot[facing=south]
+wait 20
+/guhs vadskracht 3012 140 3000
+quit

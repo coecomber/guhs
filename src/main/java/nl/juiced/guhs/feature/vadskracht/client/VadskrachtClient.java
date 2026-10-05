@@ -30,6 +30,15 @@ public final class VadskrachtClient {
         NeoForge.EVENT_BUS.addListener(VadskrachtClient::lore);
     }
 
+    /**
+     * The front texture of a machine made with tools/features/vadskracht.py {@code machine(h, name, ...)} for this face:
+     * {@code guhs:textures/block/<name>_voor_<slaapt|werkt|vol>.png}. For a machine that draws itself (a block entity
+     * renderer, GeckoLib) and wants the same three faces as the block-model machines.
+     */
+    public static Identifier snoetTextuur(String name, nl.juiced.guhs.feature.vadskracht.Snoet snoet) {
+        return Guhs.id("textures/block/" + name + "_voor_" + snoet.getSerializedName() + ".png");
+    }
+
     private static void lore(ItemTooltipEvent event) {
         Identifier id = BuiltInRegistries.ITEM.getKey(event.getItemStack().getItem());
         if (Guhs.MODID.equals(id.getNamespace()) && LORE.contains(id.getPath())) {

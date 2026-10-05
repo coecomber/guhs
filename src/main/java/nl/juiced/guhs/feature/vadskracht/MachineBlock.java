@@ -32,7 +32,8 @@ import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
  * removed ({@link MachineBlockEntity#preRemoveSideEffects}).
  * <p>
  * A machine bigger than one block overrides {@link #breed}, {@link #hoog}, {@link #diep} ({@link Meerblok}): the part
- * blocks ({@link #deel}) are placed and removed with it, and it only fits where the whole box is free.
+ * blocks ({@link #deel}) are placed and removed with it (however it is placed: by a player, by /setblock, by code), and a
+ * player can only place it where the whole box is free.
  * <p>
  * A subclass gives: {@code codec()}, {@code newBlockEntity} (a {@link MachineBlockEntity}), and registers the capabilities
  * of its block entity type with {@link VadskrachtFeature#machineCapabilities}. Resources: tools/features/vadskracht.py
@@ -100,15 +101,16 @@ public abstract class MachineBlock extends BaseEntityBlock implements Meerblok.V
         if (placer instanceof Player player && level.getBlockEntity(pos) instanceof MachineBlockEntity machine) {
             machine.zetEigenaar(player.getUUID());
         }
-        if (isGroot() && !level.isClientSide()) {
-            Meerblok.plaats(level, pos, state, deel());
-        }
     }
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
         super.onPlace(state, level, pos, oldState, movedByPiston);
         if (!oldState.is(this)) {
+            if (isGroot() && !level.isClientSide()) {
+                // however the kern got here (a player, /setblock, a structure, code): its parts come with it, where there is room
+                Meerblok.plaats(level, pos, state, deel());
+            }
             VadsKracht.veranderd(level, pos);
         }
     }

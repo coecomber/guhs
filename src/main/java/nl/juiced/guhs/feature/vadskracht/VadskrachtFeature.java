@@ -190,20 +190,20 @@ public final class VadskrachtFeature {
         if (pos == null) {
             HitResult hit = source.getPlayerOrException().pick(8, 1f, false);
             if (!(hit instanceof BlockHitResult blok) || hit.getType() != HitResult.Type.BLOCK) {
-                source.sendFailure(Component.translatable("commands.guhs.vadskracht.niets"));
+                source.sendFailure(Component.translatable("gui.guhs.vadskracht.commando.niets"));
                 return 0;
             }
             pos = blok.getBlockPos();
         }
         VadsNet net = VadsKracht.net(level, pos);
         if (net == VadsNet.EMPTY) {
-            source.sendFailure(Component.translatable("commands.guhs.vadskracht.niets"));
+            source.sendFailure(Component.translatable("gui.guhs.vadskracht.commando.niets"));
             return 0;
         }
         for (Component regel : VadsKracht.regels(level, pos)) {
             source.sendSuccess(() -> regel, false);
         }
-        source.sendSuccess(() -> Component.translatable("commands.guhs.vadskracht.net", net.status().name(), net.grootte(), net.knopen().size(),
+        source.sendSuccess(() -> Component.translatable("gui.guhs.vadskracht.commando.net", net.status().name(), net.grootte(), net.knopen().size(),
                 VadsNetten.van(level).aantal()), false);
         return net.draait() ? 1 : 0;
     }
