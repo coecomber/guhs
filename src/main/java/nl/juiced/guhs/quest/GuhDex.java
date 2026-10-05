@@ -72,6 +72,44 @@ public final class GuhDex {
         return geteld(seen) >= TELLEND.size();
     }
 
+    /**
+     * bbq2: the pages that are new in this update (they count, see CONTRACT_130 §5.3): by name, so this compiles before the
+     * skeleton added them to GuhVariant.
+     */
+    public static final java.util.Set<String> NIEUW_BBQ2 = java.util.Set.of("SAM_GUH", "GUHSHI", "SAUSBLUBJE", "SAUSLOPER", "WORSTZWIJNTJE", "BEZORGGUHTJE");
+    /** GuhQuests.saved: this player had every page before the new ones came (they keep the Guhkenner title). */
+    public static final String KENNER_OUD = "guhs_guhkenner_oud", KENNER_GEKEKEN = "guhs_guhkenner_gekeken";
+
+    /** Every counting page except the six new ones seen? */
+    public static boolean volZonderNieuw(java.util.Collection<GuhVariant> seen) {
+        return TELLEND.stream().filter(v -> !NIEUW_BBQ2.contains(v.name())).allMatch(seen::contains);
+    }
+
+    /**
+     * bbq2: a Guhkenner: a full Guhdex now, OR whoever had a full Guhdex before the six new pages came (the flag
+     * {@link #KENNER_OUD}, set at login by {@link #onthoudKenner}). The title Guhkenner uses this.
+     */
+    public static boolean kenner(ServerPlayer player) {
+        return vol(GuhWorldData.get(player.level().getServer()).player(player.getUUID()).seen)
+                || GuhQuests.saved(player).getBooleanOr(KENNER_OUD, false);
+    }
+
+    /**
+     * (login) looked at ONCE per player, the first time they log in with this update: whoever has every page except the
+     * six new ones by then had a full Guhdex before and keeps the title for good. Later logins change nothing (a new
+     * player needs the six new pages too).
+     */
+    public static void onthoudKenner(ServerPlayer player) {
+        net.minecraft.nbt.CompoundTag saved = GuhQuests.saved(player);
+        if (saved.getBooleanOr(KENNER_GEKEKEN, false)) {
+            return;
+        }
+        saved.putBoolean(KENNER_GEKEKEN, true);
+        if (volZonderNieuw(GuhWorldData.get(player.level().getServer()).player(player.getUUID()).seen)) {
+            saved.putBoolean(KENNER_OUD, true);
+        }
+    }
+
     /** The same, for the client's page ids. */
     public static int geteldIds(java.util.Collection<String> seenIds) {
         return (int) seenIds.stream().filter(id -> EXTRA.stream().noneMatch(v -> v.id().equals(id))).count();

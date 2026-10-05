@@ -44,8 +44,14 @@ public final class Praat {
         void antwoord(ServerPlayer p, @Nullable Entity spreker, int optie);
     }
 
-    private record Lopend(@Nullable String sleutel, int spreker) {
+    private record Lopend(@Nullable String sleutel, int spreker, long sinds, net.minecraft.world.phys.Vec3 plek) {
+        Lopend(ServerPlayer p, @Nullable String sleutel, int spreker) {
+            this(sleutel, spreker, p.level().getServer() == null ? 0 : p.level().getServer().getTickCount(), p.position());
+        }
     }
+
+    /** bbq2: how long a screen without a sleutel (whose closing is never reported) counts as "still talking" (ticks). */
+    private static final int PRAAT_TICKS = 200;
 
     private static final Map<String, Antwoord> LUISTERAARS = new ConcurrentHashMap<>();
     private static final Map<UUID, Lopend> LOPEND = new ConcurrentHashMap<>();
@@ -64,7 +70,7 @@ public final class Praat {
         if (sleutel != null) {
             data.putString("Sleutel", sleutel);
         }
-        LOPEND.put(p.getUUID(), new Lopend(sleutel, spreker.getId()));
+        LOPEND.put(p.getUUID(), new Lopend(p, sleutel, spreker.getId()));
         ModNetworking.sendTo(p, new KnuffeldalPayloads.Open(spreker.getId(), data));
     }
 
@@ -92,7 +98,7 @@ public final class Praat {
             data.putString("Tekst", regels.get(0).tekstKey());
         }
         data.put("Opties", opties(opties));
-        LOPEND.put(p.getUUID(), new Lopend(sleutel, eerste));
+        LOPEND.put(p.getUUID(), new Lopend(p, sleutel, eerste));
         ModNetworking.sendTo(p, new KnuffeldalPayloads.Open(eerste, data));
     }
 
@@ -108,6 +114,23 @@ public final class Praat {
     public static String lopend(ServerPlayer p) {
         Lopend l = LOPEND.get(p.getUUID());
         return l == null ? null : l.sleutel();
+    }
+
+    /**
+     * bbq2: is this player reading a talking screen right now ({@link Duwtje#mag} leaves them alone)? A screen with a
+     * sleutel counts until its end is reported; one without (an NPC's own answers: closing is never reported) for
+     * {@link #PRAAT_TICKS} ticks, as long as the player did not walk away.
+     */
+    public static boolean bezig(ServerPlayer p) {
+        Lopend l = LOPEND.get(p.getUUID());
+        if (l == null || p.level().getServer() == null) {
+            return false;
+        }
+        long duurt = p.level().getServer().getTickCount() - l.sinds();
+        if (duurt < 0 || p.position().distanceToSqr(l.plek()) > 2.25) {
+            return false;
+        }
+        return l.sleutel() != null ? duurt < 20 * 300 : duurt < PRAAT_TICKS;
     }
 
     /** (KnuffeldalPayloads.Action) an answer came back from the talking screen. */
@@ -138,7 +161,7 @@ public final class Praat {
 
     /** (tests) pretend the screen of this player opened with this sleutel. */
     public static void doeAlsOf(ServerPlayer p, @Nullable String sleutel, @Nullable Entity spreker) {
-        LOPEND.put(p.getUUID(), new Lopend(sleutel, spreker == null ? -1 : spreker.getId()));
+        LOPEND.put(p.getUUID(), new Lopend(p, sleutel, spreker == null ? -1 : spreker.getId()));
     }
 
     private static ListTag args(Object[] args) {

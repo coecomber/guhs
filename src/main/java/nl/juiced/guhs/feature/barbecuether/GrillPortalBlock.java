@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -74,8 +75,60 @@ public class GrillPortalBlock extends Block implements Portal {
         return super.updateShape(state, level, ticks, pos, facing, facingPos, facingState, random);
     }
 
+    /**
+     * bbq2 (CONTRACT_130 §6.2.10): the portal locks. Each is asked when something wants to go from the Guhmensie to the
+     * Barbecuether: a non-null Component = refused, with that message (shown once per attempt). The way back is never
+     * asked. Add yours from your Feature.register:
+     * {@code GrillPortalBlock.SLOTEN.add((level, entity) -> entity instanceof ServerPlayer p && !klaar(p) ? Component.translatable("...") : null);}
+     */
+    public static final java.util.List<java.util.function.BiFunction<ServerLevel, Entity, Component>> SLOTEN = new java.util.concurrent.CopyOnWriteArrayList<>();
+    /** How long (ticks) a refused player isn't told again: one message per attempt, not one per tick in the flames. */
+    public static final int SLOT_BERICHT_TICKS = 100;
+    private static final java.util.Map<java.util.UUID, Long> GEWEIGERD_OP = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** Why this entity may not go to the Barbecuether from here (null: it may; always null on the way back). */
+    @Nullable
+    public static Component slot(ServerLevel level, Entity entity) {
+        return slot(level.dimension(), level, entity);
+    }
+
+    /** The same with the dimension the portal stands in passed in (the game tests have no Guhmensie). */
+    @Nullable
+    public static Component slot(net.minecraft.resources.ResourceKey<Level> dim, ServerLevel level, Entity entity) {
+        if (dim != nl.juiced.guhs.world.ModDimensions.GUHMENSION) {
+            return null;
+        }
+        for (java.util.function.BiFunction<ServerLevel, Entity, Component> slot : SLOTEN) {
+            Component nee = slot.apply(level, entity);
+            if (nee != null) {
+                return nee;
+            }
+        }
+        return null;
+    }
+
+    /** Refused (with the message, once per attempt)? */
+    public static boolean geweigerd(ServerLevel level, Entity entity) {
+        Component nee = slot(level, entity);
+        if (nee == null) {
+            return false;
+        }
+        if (entity instanceof net.minecraft.server.level.ServerPlayer p) {
+            long nu = level.getServer().getTickCount();
+            Long vorige = GEWEIGERD_OP.get(p.getUUID());
+            if (vorige == null || nu - vorige >= SLOT_BERICHT_TICKS || nu < vorige) {
+                p.sendSystemMessage(nee.copy().withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+            }
+            GEWEIGERD_OP.put(p.getUUID(), nu);   // (still standing in the flames: the same attempt)
+        }
+        return true;
+    }
+
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+        if (level instanceof ServerLevel server && !SLOTEN.isEmpty() && entity.canUsePortal(false) && geweigerd(server, entity)) {
+            return;   // (bbq2: a portal lock says no)
+        }
         if (entity.canUsePortal(false)) {
             entity.setAsInsidePortal(this, pos);
         }
@@ -93,6 +146,9 @@ public class GrillPortalBlock extends Block implements Portal {
     @Nullable
     @Override
     public TeleportTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
+        if (!SLOTEN.isEmpty() && slot(level, entity) != null) {
+            return null;   // (bbq2: locked; entityInside already said why)
+        }
         return GrillPortalForcer.getDestination(level, entity, pos);
     }
 
