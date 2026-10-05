@@ -3,7 +3,8 @@ Renders the pictures for the Guhs wiki (docs): mobs from their .geo.json models,
 item icons, and isometric views of the structures. Everything comes from the mod's own files, so the wiki
 always matches the mod.
 
-Usage (from the project root):  python tools/wiki_renders.py <output folder>   (add --only-29 / --only-210 for just the 2.9 / 2.10 pictures)
+Usage (from the project root):  python tools/wiki_renders.py <output folder>   (add --only-29 / --only-210 / --only-30 / --only-128
+for just the pictures of 2.9 / 2.10 / 3.0 / 1.2.8; -h shows this text)
 Requires: pillow, numpy
 """
 import collections
@@ -2778,10 +2779,189 @@ def main_v30(out, captured=None):
         save(render_structure(keyed(turned(st, turns)), sprites, px=px, max_size=1500), name)
 
     shots_30(out)
+    main_v128(out)
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# 1.2.8: het Bleekwoud (bleekhout, bleekmos, the guh hearts, kaashars and harsstenen, the oogbloempje, the Kraakguh and
+# the Kraak-Mika, the Bleke Open Plek and the Houthakkershutje), the guh-palm wood set, the grand cheese fountain with
+# its pink ball, and the huisje screen's "Wat kan hier?" overview
+# ---------------------------------------------------------------------------------------------------------------------
+WOOD_128 = ("bleekhout", "guhwaii_palm")
+# blocks whose first blockstate model is the whole block
+BLOCKS_128 = ("bleekhout_stam", "bleekhout_gestript", "bleekhout_gezicht", "bleekhout_planken", "bleekhout_bladeren", "bleekhout_trap",
+              "bleekhout_plaat", "bleekhout_poort", "bleekhout_luik", "bleekmos", "bleekmos_tapijt", "krakend_guhhartje", "verzuurd_guhhartje",
+              "kaashars_blok", "harsstenen", "harsstenen_trap", "harsstenen_plaat", "gebeitelde_harsstenen",
+              "guhwaii_palm_stam", "guhwaii_palm_gestript", "guhwaii_palm_planken", "guhwaii_palm_trap", "guhwaii_palm_plaat",
+              "guhwaii_palm_poort", "guhwaii_palm_luik")
+# blocks with a model of their own for the inventory (fences and walls)
+INVENTORY_128 = {"bleekhout_hek": "bleekhout_hek_inventory", "guhwaii_palm_hek": "guhwaii_palm_hek_inventory", "harsstenen_muur": "harsstenen_muur_inventory"}
+# plants (a cross of two planes): a 3D picture, and the flat texture as their icon
+CROSS_128 = ("bleekhout_zaailing", "oogbloempje", "open_oogbloempje", "bleek_hangmos")
+STRUCTURES_128 = {"bleke_open_plek": ("structure_bleke_open_plek", 0), "houthakkershutje": ("structure_houthakkershutje", 0)}
+# which way to look at a piece so its front shows (yaw), and where things are in the little Bleekwoud scene
+YAW_128 = {"trap": 210, "poort": 210, "deur": 240}
+HEART_128 = (3, 3, 3)
+GUH_128 = (1.5, 1, -0.2)
+SCENE_YAW_128 = 215
+_PANEL128 = (310, 120, 970, 600)     # the huisje screen and its overview in the 1.2.8 screenshots (1280 x 720, GUI scale 2)
+# in-game pictures of the 1.2.8 visual QA (docs/screenshots/128_<name>.png, made with tools/autocheck/overzicht128.txt): name -> crop box
+SHOTS_128 = {"gui_huisje_knop": _PANEL128, "gui_overzicht_klusjes": _PANEL128, "gui_overzicht_speeltjes": _PANEL128,
+             "gui_overzicht_en": _PANEL128}
+
+
+def shots_128(out):
+    """The in-game screenshots of 1.2.8 (docs/screenshots/128_*), cropped, as 256-colour PNGs (shot128_*)."""
+    for name, box in SHOTS_128.items():
+        path = os.path.join("docs", "screenshots", f"128_{name}.png")
+        if not os.path.exists(path):
+            print("no screenshot", path)
+            continue
+        im = Image.open(path).convert("RGB").crop(box)
+        im.quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.FLOYDSTEINBERG).save(
+            os.path.join(out, f"shot128_{name}.png"), optimize=True)
+        print("rendered", f"shot128_{name}")
+
+
+def main_v128(out):
+    """1.2.8: the blocks of the Bleekwoud and the guh-palm wood set (3D, from their block models; they double as icons),
+    the Kraakguh and the Kraak-Mika, the two Bleekwoud structures and the grand cheese fountain (from their .nbt), a
+    little piece of Bleekwoud for the biome page, and the screenshots of the huisje overview."""
+    sys.path.insert(0, "tools")
+    os.makedirs(out, exist_ok=True)
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
+
+    def save(im, name, crop=False):
+        if crop:
+            box = im.getbbox()
+            im = im.crop((max(0, box[0] - 8), max(0, box[1] - 8), min(im.width, box[2] + 8), min(im.height, box[3] + 8)))
+        im.save(os.path.join(out, name + ".png"))
+        print("rendered", name)
+
+    def block(name, quads, yaw=30, pitch=-24, icon=True):
+        save(render(quads, yaw, pitch, 320, margin=0.05), f"block_{name}")
+        if icon:
+            save(render(quads, yaw, -30, 256).resize((64, 64), Image.LANCZOS), "icon_" + name)
+
+    # --- blocks ---
+    for b in BLOCKS_128:
+        block(b, model_quads(first_model(b)), yaw=YAW_128.get(b.rsplit("_", 1)[-1], 30))
+    for b in ("krakend_guhhartje", "verzuurd_guhhartje"):    # (the big picture: awake, at night; the icon stays the item's look)
+        block(b, model_quads(f"guhs:block/{b}_wakker"), icon=False)
+    for b, model in INVENTORY_128.items():
+        block(b, model_quads(f"guhs:block/{model}"), yaw=120)
+    for wood in WOOD_128:    # a door is two blocks: both halves (its icon is the flat item texture, like in the game)
+        door = model_quads(f"guhs:block/{wood}_deur_bottom_left") + offset_quads(model_quads(f"guhs:block/{wood}_deur_top_left"), dy=1)
+        block(f"{wood}_deur", door, yaw=YAW_128["deur"], pitch=-14, icon=False)
+    for b in CROSS_128:
+        block(b, model_quads(first_model(b)), yaw=20, pitch=-14, icon=False)
+    # kaashars sticks to the side of a block: clumps on a bleekhoutstam
+    stam = model_quads(first_model("bleekhout_stam"))
+    hars = [Quad((1, 1, -0.01), (-1, 0, 0), (0, -1, 0), "guhs:block/kaashars", (0, 0, 1, 1), (0, 0, -1)),
+            Quad((1, 1, 1.01), (-1, 0, 0), (0, -1, 0), "guhs:block/kaashars", (0, 0, 1, 1), (0, 0, 1)),
+            Quad((1.01, 1, 1), (0, 0, -1), (0, -1, 0), "guhs:block/kaashars", (0, 0, 1, 1), (1, 0, 0)),
+            Quad((-0.01, 1, 1), (0, 0, -1), (0, -1, 0), "guhs:block/kaashars", (0, 0, 1, 1), (-1, 0, 0))]
+    block("kaashars", stam + hars, icon=False)
+    # flat icons: the item textures (plants, doors, signs, the resin clump, the brick, the spawn eggs)
+    for name, ref in [(b, f"guhs:block/{b}") for b in CROSS_128 if b != "bleek_hangmos"] + \
+                     [(n, f"guhs:item/{n}") for n in ("bleek_hangmos", "bleekhout_deur", "bleekhout_bord", "guhwaii_palm_deur", "guhwaii_palm_bord",
+                                                      "kaashars", "harssteen", "kraakguh_spawn_egg", "kraak_mika_spawn_egg")]:
+        save(item_icon(ref, 64), "icon_" + name)
+    # the guh hearts: asleep and awake, the creaking one and the soured one
+    row = []
+    for i, m in enumerate(("krakend_guhhartje_slaapt", "krakend_guhhartje_wakker", "verzuurd_guhhartje_slaapt", "verzuurd_guhhartje_wakker")):
+        row += offset_quads(model_quads(f"guhs:block/{m}"), dx=i * 1.2)
+    save(render(row, 20, -20, 760, margin=0.03), "guhhartjes", crop=True)
+    # the oogbloempje by day (closed) and at night (open)
+    row = model_quads(first_model("oogbloempje")) + offset_quads(model_quads(first_model("open_oogbloempje")), dx=1.1)
+    save(render(row, 20, -14, 520, margin=0.03), "oogbloempjes", crop=True)
+
+    # --- the Kraakguh and the Kraak-Mika (every bone shown: the moss and the twig are theirs) ---
+    def kraak(k):
+        """Its wooden skin with the glowing eyes (the glow mask) drawn over it, like in the game at night."""
+        skin = Image.alpha_composite(texture(f"guhs:entity/{k}"), texture(f"guhs:entity/{k}_glowmask"))
+        return geo_quads(geo(k), np.asarray(skin).astype(np.float32), show_only_variant_bones=("",))
+    save(render(kraak("kraakguh"), 35, -20, 480), "kraakguh")
+    save(render(kraak("kraakguh"), 150, -22, 400), "kraakguh_back")
+    save(render(kraak("kraak_mika"), 30, -18, 480), "kraak_mika")
+    save(render(kraak("kraak_mika"), 150, -22, 400), "kraak_mika_back")
+
+    # --- a little piece of Bleekwoud: a thick tree with a heart in its trunk, moss, carpets, hanging moss and oogbloempjes ---
+    scene = []
+    put = lambda model, x, y, z: scene.extend(offset_quads(model_quads(model), x, y, z))
+    trunk = ((3, 3), (4, 3), (3, 4), (4, 4))
+    for x in range(8):
+        for z in range(8):
+            put("guhs:block/bleekmos", x, 0, z)
+    for x, z in trunk:
+        for y in range(1, 7):
+            put("guhs:block/krakend_guhhartje_wakker" if (x, y, z) == HEART_128 else "guhs:block/bleekhout_stam", x, y, z)
+    for x in range(1, 7):
+        for z in range(1, 7):
+            for y in (6, 7, 8):
+                edge = x in (1, 6) or z in (1, 6)
+                if ((x, z) in trunk and y == 6) or (y == 8 and edge) or (y == 6 and edge and (x + z) % 2):
+                    continue
+                put("guhs:block/bleekhout_bladeren", x, y, z)
+    for x, z, n in ((1, 2, 2), (2, 1, 1), (6, 2, 3), (5, 1, 2), (1, 5, 1), (2, 6, 2), (6, 5, 2), (5, 6, 1)):
+        for i in range(n):
+            put("guhs:block/bleek_hangmos_punt" if i == n - 1 else "guhs:block/bleek_hangmos", x, 5 - i, z)
+    for x, z in ((0, 1), (1, 0), (7, 0), (0, 5), (2, 2), (7, 6), (5, 7), (6, 6)):
+        put("guhs:block/bleekmos_tapijt", x, 1, z)
+    for x, z, m in ((1, 1, "open_oogbloempje"), (5, 0, "oogbloempje"), (0, 3, "open_oogbloempje"), (2, 0, "oogbloempje"), (0, 7, "open_oogbloempje"),
+                    (7, 2, "open_oogbloempje"), (6, 7, "oogbloempje"), (7, 5, "open_oogbloempje"), (3, 7, "open_oogbloempje")):
+        put(f"guhs:block/{m}", x, 1, z)
+    scene += offset_quads(kraak("kraakguh"), *GUH_128)
+    save(render(scene, SCENE_YAW_128, -20, 900, margin=0.03), "bleekwoud", crop=True)
+
+    # --- the buildings, from their .nbt (isometric, front-left) ---
+    for k in ("minecraft:jigsaw", "minecraft:structure_void", "minecraft:barrier", "minecraft:light"):
+        SPECIAL_COLOURS[k] = None
+    for k, ref in (("lantern", "lantern"), ("light_gray_bed", "light_gray_wool"), ("glass_pane", "glass"), ("lectern", "lectern_sides"),
+                   ("crafting_table", "crafting_table_top"), ("potted_pink_tulip", "pink_tulip"), ("potted_allium", "allium"),
+                   ("chest", "oak_planks")):
+        BLOCK_TEXTURES.setdefault("minecraft:" + k, "block/" + ref)
+    BLOCK_TEXTURES.update({"guhs:bleekhout_wandbord": "guhs:block/bleekhout_planken", "guhs:bleekhout_bord": "guhs:block/bleekhout_planken",
+                           "guhs:bleekmos_tapijt": "guhs:block/bleekmos", "guhs:bleekhout_deur": "guhs:block/bleekhout_deur_bottom"})
+    block_colour.cache_clear()
+    hide = ("saddle",) + tuple(f"armor_{t}{p}" for t in ("iron", "diamond", "netherite") for p in ("", "_body"))
+    guh = geo_quads(geo("guh"), "guhs:entity/guh", hide=hide)
+    sprites = {"guh": {"img": render(guh, 45, -30, 256, margin=0.02), "blocks": 1.0, "foot": 0.85}}
+
+    def colours(st):
+        """Our own blocks without a texture of their own name (stairs, fences...): the colour of their model's biggest face."""
+        for name in sorted({v[0] for v in st.blocks.values()}):
+            if name.startswith("guhs:") and block_colour(name) == (200, 0, 200):
+                try:
+                    quads = model_quads(first_model(name.split(":")[1]))
+                    BLOCK_TEXTURES[name] = max(quads, key=lambda q: np.linalg.norm(np.cross(q.u, q.v))).tex
+                except Exception as e:  # noqa: BLE001
+                    print("no colour for", name, e)
+        block_colour.cache_clear()
+
+    for sid, (name, turns) in STRUCTURES_128.items():
+        st = load_structure(sid)
+        if st is None:
+            print("no structure for", sid)
+            continue
+        colours(st)
+        W, H, D = st.size
+        save(render_structure(turned(st, turns), sprites, px=max(3, min(22, int(1500 / (W + D)))), max_size=1500), name)
+    # the grand cheese fountain: its ball is pink glazed terracotta now (drawn the way main() draws it: 12 px a block)
+    st = load_structure("grand_cheese_fountain")
+    if st is not None:
+        colours(st)
+        save(render_structure(st, sprites, px=12, max_size=1100), "structure_grand_cheese_fountain")
+    shots_128(out)
 
 
 if __name__ == "__main__":
-    if "--only-30" in sys.argv:        # (just the 3.0 + 2.10.1 pictures, into an existing img folder)
+    if sys.argv[1:2] in (["-h"], ["--help"]):
+        print(__doc__)
+    elif "--only-128" in sys.argv:     # (just the 1.2.8 pictures, into an existing img folder)
+        sys.argv.remove("--only-128")
+        main_v128(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
+    elif "--only-30" in sys.argv:        # (just the 3.0 + 2.10.1 pictures, into an existing img folder)
         sys.argv.remove("--only-30")
         main_v30(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
     elif "--only-210" in sys.argv:       # (just the 2.10 pictures, into an existing img folder)
