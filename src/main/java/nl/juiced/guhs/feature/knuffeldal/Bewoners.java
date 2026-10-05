@@ -113,7 +113,7 @@ public final class Bewoners {
     }
 
     /** Are the entities of every chunk of this area loaded? */
-    static boolean geladen(ServerLevel level, AABB area) {
+    public static boolean geladen(ServerLevel level, AABB area) {
         int x0 = (int) Math.floor(area.minX) >> 4, x1 = (int) Math.floor(area.maxX) >> 4;
         int z0 = (int) Math.floor(area.minZ) >> 4, z1 = (int) Math.floor(area.maxZ) >> 4;
         for (int x = x0; x <= x1; x++) {
@@ -127,7 +127,7 @@ public final class Bewoners {
     }
 
     /** The residents of this town (world spots), from the templates of its pieces. */
-    static List<Plek> plekken(ServerLevel level, StructureStart start) {
+    public static List<Plek> plekken(ServerLevel level, StructureStart start) {
         List<Plek> out = new ArrayList<>();
         for (StructurePiece piece : start.getPieces()) {
             if (!(piece instanceof PoolElementStructurePiece pool)) {

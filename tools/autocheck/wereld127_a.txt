@@ -1,0 +1,109 @@
+# 1.2.7 in a real generated world, part A: Knabbelkelder cells, Wolkguh, Big Mika (dev/WereldCheck.java for the commands).
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/wereld127_a.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/effect give @s minecraft:night_vision infinite 0 true
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section knabbelkelder
+ga knabbelkelder draai
+plek lokaal 33 4 58
+tpplek
+wait 60
+hier
+plek cel 0
+plek cel 9
+plek lokaal 33 4 58
+tpplek
+wait 260
+cellen
+tel 40 plek kelder-start
+terugkeer dump
+log --- three cell guhs removed: nothing comes back before the waiting time (5 min) is over
+plek cel 0
+weg mager 60 3
+plek lokaal 33 4 58
+wait 320
+cellen
+terugkeer dump
+log --- 5 minutes later (Terugkeer.verschuif 6000): the three cells refill, once
+terugkeer 6000
+wait 320
+cellen
+wait 700
+cellen
+tel 40 plek kelder-na-bijvullen
+log --- a stray (a cell guh put in the corridor) goes back, no double
+plek lokaal 33 4 66
+tpplek
+plek lokaal 33 4 58
+stoor mager
+wait 260
+cellen
+tpplek
+log --- feeding as the player
+adv quest/guheinde_gered
+tel 40 plek voor-voeren
+voer mager
+tel 40 plek na-voeren
+adv quest/guheinde_gered
+voer mager
+cellen
+wait 1000
+tel 40 plek na-45s
+cellen
+perf
+
+section wolkguh
+ga zwevende_eilanden draai
+plek wolk
+tpplek 2 3 2
+wait 60
+hier
+wait 460
+plek wolk
+tel 90 plek eilanden-start
+terugkeer dump
+log --- the Wolkguh removed: none comes back within the day
+weg wolk 150
+wait 460
+tel 90 plek eilanden-zonder
+terugkeer dump
+log --- a day later (Terugkeer.verschuif 24000): exactly one new one, at home, dressed
+terugkeer 24000
+wait 460
+plek wolk
+tel 90 plek eilanden-terug
+wait 900
+plek wolk
+tel 90 plek eilanden-later
+perf
+
+section big mika
+ga challenging_guh_caves draai
+plek bigmika
+tpplek 3 1 3
+wait 60
+hier
+wait 460
+plek bigmika
+tel 60 plek hal-start
+adv guhmension/defeat_big_mika
+log --- Big Mika killed: credit for the player near, none comes back within three days
+weg boss 80 kill
+wait 40
+hier
+adv guhmension/defeat_big_mika
+wait 460
+plek bigmika
+terugkeer dump
+log --- three days later (Terugkeer.verschuif 72000): exactly one new Big Mika
+terugkeer 72000
+wait 460
+plek bigmika
+wait 900
+plek bigmika
+tel 60 plek hal-later
+perf
+quit

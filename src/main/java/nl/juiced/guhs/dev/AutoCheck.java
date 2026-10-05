@@ -1026,9 +1026,15 @@ public final class AutoCheck {
                     startQuit(mc2);
                     return true;
                 };
-            default:
+            default: {
+                // (1.2.7) the checks in a real generated world: WereldCheck
+                Action w = WereldCheck.parse(a, rest);
+                if (w != null) {
+                    return w;
+                }
                 problem("unknown script command: " + line);
                 return null;
+            }
         }
     }
 
@@ -1113,7 +1119,7 @@ public final class AutoCheck {
             "doMobLoot", "mob_drops", "doFireTick", "fire_spread_radius_around_player", "randomTickSpeed", "random_tick_speed",
             "mobGriefing", "mob_griefing", "sendCommandFeedback", "send_command_feedback", "keepInventory", "keep_inventory");
 
-    private static Action command(String rawCmd) {
+    static Action command(String rawCmd) {
         String fixed = rawCmd;
         java.util.regex.Matcher gm = java.util.regex.Pattern.compile("^((?:execute .* run )?gamerule )([A-Za-z]+)(.*)$").matcher(rawCmd);
         if (gm.matches() && OLD_GAMERULES.containsKey(gm.group(2))) {
@@ -1187,7 +1193,7 @@ public final class AutoCheck {
     }
 
     /** Run something on the server thread and wait for it. */
-    private static <T> Action server(Function<net.minecraft.server.MinecraftServer, T> job, Consumer<T> then) {
+    static <T> Action server(Function<net.minecraft.server.MinecraftServer, T> job, Consumer<T> then) {
         CompletableFuture<T>[] f = new CompletableFuture[1];
         return mc -> {
             if (f[0] == null) {
@@ -1208,12 +1214,12 @@ public final class AutoCheck {
         };
     }
 
-    private static ServerPlayer player(net.minecraft.server.MinecraftServer server) {
+    static ServerPlayer player(net.minecraft.server.MinecraftServer server) {
         return server.getPlayerList().getPlayers().get(0);
     }
 
     /** Teleport (level null = stay) and hold that rotation. */
-    private static Action teleport(ResourceKey<Level> dim, Vec3 pos, float yaw, float pitch) {
+    static Action teleport(ResourceKey<Level> dim, Vec3 pos, float yaw, float pitch) {
         return server(server -> {
             ServerPlayer sp = player(server);
             ServerLevel level = dim == null ? sp.level() : server.getLevel(dim);

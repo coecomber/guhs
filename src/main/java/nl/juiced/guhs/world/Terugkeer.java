@@ -117,6 +117,18 @@ public class Terugkeer extends SavedData {
         GEMIST.put(level.dimension().identifier() + "|" + sleutel(soort, plek), level.getGameTime() - ticksGeleden);
     }
 
+    /** (Tests, dev) everything that is remembered in this level: key -> the game time its inhabitant was last seen. */
+    public static Map<String, Long> alles(ServerLevel level) {
+        return new java.util.TreeMap<>(get(level).gezien);
+    }
+
+    /** (Tests, dev) as if this many ticks went by: every inhabitant of this level was last seen that much longer ago. */
+    public static void verschuif(ServerLevel level, long ticks) {
+        Terugkeer t = get(level);
+        t.gezien.replaceAll((k, v) -> v - ticks);
+        t.setDirty();
+    }
+
     // --- where things are in a building ------------------------------------------------------------------------------------
 
     /**

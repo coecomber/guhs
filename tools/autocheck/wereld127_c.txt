@@ -1,0 +1,41 @@
+# 1.2.7 in a real generated world, part C: the wild animals don't grow without bound (muisjes and land animals top-ups).
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/wereld127_c.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/effect give @s minecraft:night_vision infinite 0 true
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section dieren in een stadje
+ga knuffeldal_stadje
+plek midden
+tpplek 0 1 0
+/gamerule spawn_mobs true
+wait 100
+hier
+tel 128 start
+wait 1200
+tel 128 na-1-min
+wait 1200
+tel 128 na-2-min
+wait 1200
+tel 128 na-3-min
+wait 2400
+tel 128 na-5-min
+log --- 40 top-up tries in a row without the dice: the caps hold
+aanvul 40
+tel 128 na-aanvul
+perf
+
+section dieren bij een guh village
+ga guh_village
+plek midden
+tpplek 0 6 0
+wait 100
+hier
+tel 128 dorp-start
+wait 3600
+tel 128 dorp-na-3-min
+aanvul 40
+tel 128 dorp-na-aanvul
+quit

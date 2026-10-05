@@ -1,0 +1,98 @@
+# 1.2.7 in a real generated world, part B: Knuffeldal residents, kermis, wreck chest, larder lectern, raft barrel.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/wereld127_b.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/effect give @s minecraft:night_vision infinite 0 true
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section knuffeldal stadje
+ga knuffeldal_stadje
+plek midden
+tpplek 0 4 0
+wait 60
+hier
+wait 700
+bewoners
+tel 120 plek stadje-start
+log --- one resident removed: it comes back once, at its spot
+weg bewoner:dikkie 300
+wait 900
+bewoners
+wait 1300
+bewoners
+tel 120 plek stadje-later
+log --- a resident can't be hurt (survival) or tamed
+plek bewoner pluisje
+tpplek 1 0 1
+/gamemode survival
+wait 20
+sla bewoner:pluisje
+sla bewoner:pluisje
+voer bewoner:pluisje 12
+bewoners
+/gamemode creative
+perf
+
+section kermis
+ga guh_kermis draai
+plek station
+tpplek 2 2 2
+wait 60
+hier
+wait 260
+plek station
+tel 80 plek kermis-start
+log --- survival: no breaking
+/gamemode survival
+wait 10
+breek
+/gamemode creative
+log --- both station sleds removed: two new ones
+weg slee 150
+wait 460
+plek station
+tel 80 plek kermis-nieuwe-sleeen
+wait 600
+plek station
+log --- the finish piece broken (creative): the Kermis-guh puts it back
+breek
+plek station
+wait 260
+plek station
+tel 80 plek kermis-eind
+perf
+
+section onderwater wrak
+ga onderwater draai
+plek wrak
+tpplek 1 1 0
+wait 60
+hier
+adv quest/onderwater_wrak
+klik
+adv quest/onderwater_wrak
+
+section stille voorraadkelder
+ga stille_voorraadkelder draai
+plek lectern
+tpplek 1 1 0
+wait 60
+hier
+klik
+klik
+plek lectern
+
+section knabbelvlotje
+gabiome kaasmoeras
+wait 60
+plek ton
+tpplek 0 2 0
+wait 40
+adv quest/kaasmoeras_vlotje
+adv guhmension/kaasmoeras_vlotje
+klik
+adv quest/kaasmoeras_vlotje
+adv guhmension/kaasmoeras_vlotje
+klik
+quit

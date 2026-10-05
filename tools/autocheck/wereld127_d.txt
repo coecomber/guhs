@@ -1,0 +1,44 @@
+# 1.2.7 in a real generated world, part D: a kermis sled left on the track rides home; the finish piece broken; a raft as generated.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/wereld127_d.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/effect give @s minecraft:night_vision infinite 0 true
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section knabbelvlotje
+gabiome kaasmoeras
+wait 60
+plek ton
+blokken 4
+
+section kermis: a sled left on the track rides home
+ga guh_kermis draai
+plek station
+tpplek 2 2 2
+wait 300
+plek station
+rit start
+wait 160
+rit stop
+plek station
+tpplek 2 4 2
+wait 200
+plek station
+wait 600
+plek station
+wait 900
+plek station
+tel 80 plek kermis-na-thuisrit
+log --- the finish piece broken (creative): the Kermis-guh puts it back, the sleds end up at the station
+breek
+wait 2
+plek station
+wait 300
+plek station
+wait 1500
+plek station
+wait 1500
+plek station
+tel 80 plek kermis-eind
+quit
