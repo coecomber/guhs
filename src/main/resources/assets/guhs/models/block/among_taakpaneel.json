@@ -1,0 +1,56 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/among_taakpaneel_zij",
+    "zij": "guhs:block/among_taakpaneel_zij",
+    "voor": "guhs:block/among_taakpaneel_voor"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "down": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "south": {
+          "texture": "#zij"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor"
+        }
+      }
+    }
+  ]
+}

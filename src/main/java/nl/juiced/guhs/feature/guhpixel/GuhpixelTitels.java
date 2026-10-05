@@ -22,6 +22,9 @@ public final class GuhpixelTitels {
         // <px_grap2>
         // </px_grap2>
         // <px_among>
+        ALLE.add(new Titels.Titel("among_sus", "gui.guhs.titels.naam.among_sus", net.minecraft.ChatFormatting.RED, "guhs:among_noodknop", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.WEGGESTEMD) >= 3));
+        ALLE.add(new Titels.Titel("among_onterecht", "gui.guhs.titels.naam.among_onterecht", net.minecraft.ChatFormatting.AQUA, "guhs:among_ventilatieluik", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.ONTERECHT) >= 1));
+        ALLE.add(new Titels.Titel("among_kussenkampioen", "gui.guhs.titels.naam.among_kussenkampioen", net.minecraft.ChatFormatting.LIGHT_PURPLE, "guhs:among_kussen", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.WINST_MIKA) >= 5));
         // </px_among>
         // <px_guhkade>
         // </px_guhkade>

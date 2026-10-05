@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/among_ventilatieluik",
+    "luik": "guhs:block/among_ventilatieluik"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        2,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#luik"
+        },
+        "up": {
+          "texture": "#luik"
+        },
+        "north": {
+          "texture": "#luik"
+        },
+        "south": {
+          "texture": "#luik"
+        },
+        "west": {
+          "texture": "#luik"
+        },
+        "east": {
+          "texture": "#luik"
+        }
+      }
+    }
+  ]
+}

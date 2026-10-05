@@ -117,6 +117,10 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // <px_grap2>
         // </px_grap2>
         // <px_among>
+        /** Among Guhs: the Kapitein-guh of De Vadsvaarder (the queue of the real game). */
+        AMONG_KAPITEIN(1.0f),
+        /** Among Guhs: the Logboek-guh beside the Kapitein: your personal numbers. */
+        AMONG_LOGBOEKGUH(1.0f),
         // </px_among>
         // <px_guhkade>
         // </px_guhkade>

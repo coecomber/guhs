@@ -1,0 +1,87 @@
+# guhpixel slice "among" (visual QA, dev only; run by the merge step): Among Guhs, the engine. The lobby with the
+# Kapitein-guh and the Logboek-guh, the queue screen, a round as crew (HUD, the ship, the guh NPCs in their suits, a task
+# panel, a meeting) and a round as the Mika (the pillow, the Saboteerkaart, a vent). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/px_among.txt -PautocheckTimeout=20
+# Buttons are pressed by their Dutch label (guhstaal nl). Screens of a round cannot be opened without a round, so the script
+# plays: /guhs px among speel normaal crew|mika starts one alone, at once, with that role.
+section setup
+guhstaal nl
+/gamemode survival
+/time set noon
+/weather clear
+wait 40
+
+section the lobby: the Kapitein-guh and the Logboek-guh
+/guhs px lobby
+wait 60
+/tp @s 0.5 100 -22.5 180 0
+wait 20
+shot among_lobby_kapitein
+
+section the queue screen
+/guhs px among wachtrij
+wait 20
+shot among_wachtrij gui
+# the leader picks Lastig
+press Niveau: Normaal
+wait 10
+shot among_wachtrij_lastig gui
+gui close
+wait 5
+
+section a round as crew: the start, the HUD, the ship
+/guhs px among speel normaal crew
+wait 80
+shot among_crew_start
+/guhs px among rollen
+wait 5
+shot among_crew_rollen
+# look around the Kantine: the table with the button, the guhs in their suits
+look 180 10
+wait 10
+shot among_crew_kantine
+look 0 10
+wait 10
+shot among_crew_kantine_zuid
+
+section a meeting (the dev command calls one)
+/guhs px among vergader
+wait 30
+shot among_vergadering_bespreken gui
+# a statement: "Ik was in..." and then a room
+press Ik was in...
+wait 10
+shot among_vergadering_kies_kamer gui
+press de Slaapzaal
+wait 200
+shot among_vergadering_uitspraken gui
+wait 260
+shot among_vergadering_stemmen gui
+press Overslaan
+wait 300
+shot among_vergadering_uitslag gui
+wait 200
+shot among_na_vergadering
+
+section the tasks done by the dev command: the crew's bar fills, the round goes on until the NPCs finish
+/guhs px among taken
+wait 20
+shot among_crew_taken_klaar
+/guhs px among einde
+wait 60
+
+section a round as the Mika: the pillow, the map
+/guhs px among speel normaal mika
+wait 80
+shot among_mika_start
+# the Saboteerkaart in the hand, and use it
+/item replace entity @s weapon.mainhand with guhs:among_saboteerkaart
+wait 5
+useitem 2
+wait 20
+shot among_saboteerkaart gui
+gui close
+wait 5
+/guhs px among einde
+wait 60
+/guhs px huis
