@@ -78,7 +78,8 @@ public class SuperkompasItem extends GuhCompassItem {
      */
     public static final List<Category> CATEGORIES = List.of(
             cat("avontuur", "guhs:kaashouweel", net.minecraft.world.item.Items.IRON_PICKAXE, "guh_caves", "challenging_guh_caves", "evil_mika_home",
-                    "kaasmijn", "moerasheks_hut", "kaasknabbel_nest"),   // 2.8.1 Piep
+                    "kaasmijn", "moerasheks_hut", "kaasknabbel_nest",   // 2.8.1 Piep
+                    "bleke_open_plek", "houthakkershutje"),   // 1.2.8 het Bleekwoud
             cat("quests", "minecraft:writable_book", net.minecraft.world.item.Items.WRITABLE_BOOK, "vadsig_heiligdom", "mika_kamp", "guh_picnic", "sleehut"),
             new Category("minigames", "guhs:discomunt", net.minecraft.world.item.Items.JUKEBOX, List.of(
                     new Kopje("klassiekers", List.of("verstopguh_huis", "guh_kermis", "vadsig_eetfestijn", "mika_mep_hal", "guh_disco", "guhvis_vijver",

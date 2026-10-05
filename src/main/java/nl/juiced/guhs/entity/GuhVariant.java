@@ -117,6 +117,8 @@ public enum GuhVariant {
     PLUISVINKJE(0), KAASMEESJE(0), GUH_UILTJE(0), ZEEMEEUWTJE(0),                         // creatures (vogels)
     GUHXOLOTL(0), GUH_EENDJE(0), KNABBELVLINDERTJE(0), GLIMGUHTJE(0), LIEVEHEERSBEESTJE(0), // creatures (waterdiertjes)
     PLUISEGELTJE(0), GUH_KONIJNTJE(0), PLUISEEKHOORNTJE(0), SHUCKLE(0),                    // creatures (landdiertjes)
+    // --- 1.2.8 (het Bleekwoud): creature pages (their id is their entity id); bonus pages, see GuhDex.EXTRA ---
+    KRAAKGUH(0), KRAAK_MIKA(0),
     // <balto>
     // </balto>
     // <mewtwo>

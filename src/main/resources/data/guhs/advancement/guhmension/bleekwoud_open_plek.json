@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:guhmension/bleekwoud_bezocht",
+  "display": {
+    "icon": {
+      "id": "guhs:oogbloempje"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_open_plek.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_open_plek.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "structures": "guhs:bleke_open_plek"
+          }
+        }
+      }
+    }
+  }
+}

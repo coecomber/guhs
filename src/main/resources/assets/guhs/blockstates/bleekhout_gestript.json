@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/bleekhout_gestript"
+    },
+    "axis=z": {
+      "model": "guhs:block/bleekhout_gestript_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "guhs:block/bleekhout_gestript_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

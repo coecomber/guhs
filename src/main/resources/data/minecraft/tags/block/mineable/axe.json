@@ -90,6 +90,20 @@
     "guhs:guhwaii_palm_deur",
     "guhs:guhwaii_palm_luik",
     "guhs:guhwaii_palm_bord",
-    "guhs:guhwaii_palm_wandbord"
+    "guhs:guhwaii_palm_wandbord",
+    "guhs:bleekhout_stam",
+    "guhs:bleekhout_gestript",
+    "guhs:bleekhout_gezicht",
+    "guhs:bleekhout_planken",
+    "guhs:bleekhout_trap",
+    "guhs:bleekhout_plaat",
+    "guhs:bleekhout_hek",
+    "guhs:bleekhout_poort",
+    "guhs:bleekhout_deur",
+    "guhs:bleekhout_luik",
+    "guhs:bleekhout_bord",
+    "guhs:bleekhout_wandbord",
+    "guhs:krakend_guhhartje",
+    "guhs:verzuurd_guhhartje"
   ]
 }

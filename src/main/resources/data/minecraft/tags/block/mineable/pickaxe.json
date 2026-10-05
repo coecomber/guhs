@@ -103,6 +103,11 @@
     "guhs:baltoguh_beeldje",
     "guhs:baltoslee_beker",
     "guhs:vadsigheid_scanner",
-    "guhs:guh_oven"
+    "guhs:guh_oven",
+    "guhs:harsstenen",
+    "guhs:harsstenen_trap",
+    "guhs:harsstenen_plaat",
+    "guhs:harsstenen_muur",
+    "guhs:gebeitelde_harsstenen"
   ]
 }

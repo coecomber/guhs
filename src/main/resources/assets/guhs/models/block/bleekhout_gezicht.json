@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "guhs:block/bleekhout_stam_top",
+    "front": "guhs:block/bleekhout_gezicht",
+    "side": "guhs:block/bleekhout_stam"
+  }
+}

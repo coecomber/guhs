@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:harsstenen",
+  "result": {
+    "id": "guhs:harsstenen_plaat",
+    "count": 2
+  }
+}

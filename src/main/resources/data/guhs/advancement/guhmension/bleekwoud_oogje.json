@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:guhmension/bleekwoud_bezocht",
+  "display": {
+    "icon": {
+      "id": "guhs:open_oogbloempje"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_oogje.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_oogje.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:open_oogbloempje"
+          }
+        ]
+      }
+    }
+  }
+}

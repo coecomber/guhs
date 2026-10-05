@@ -76,6 +76,8 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.weerder.client.WeerderClient.init(modBus);
         // --- 1.2.5 ---
         nl.juiced.guhs.feature.guhoven.client.GuhovenClient.init(modBus);
+        // --- 1.2.8: het Bleekwoud ---
+        nl.juiced.guhs.feature.bleekwoud.client.BleekwoudClient.init(modBus);
     }
 
     private FeaturesClient() {

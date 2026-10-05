@@ -50,6 +50,9 @@
     },
     "guhs:guhwaii": {
       "villager_type": "guhs:guh"
+    },
+    "guhs:bleekwoud": {
+      "villager_type": "guhs:guh"
     }
   }
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S",
+    "H",
+    "S"
+  ],
+  "key": {
+    "S": "guhs:bleekhout_stam",
+    "H": "guhs:kaashars_blok"
+  },
+  "result": {
+    "id": "guhs:krakend_guhhartje"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/mossy_carpet_side",
+  "textures": {
+    "side": "guhs:block/bleekmos_tapijt_hoog"
+  }
+}

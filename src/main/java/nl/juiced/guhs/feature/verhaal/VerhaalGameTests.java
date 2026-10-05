@@ -472,7 +472,7 @@ public class VerhaalGameTests {
     @GuhTest(template = WEI, batch = BATCH)
     public static void verhaalGuhdexPaginas(GameTestHelper helper) {
         for (GuhVariant v : GuhVariant.values()) {
-            if (v.ordinal() > GuhVariant.ROOKGUH.ordinal()) {
+            if (v.ordinal() > GuhVariant.ROOKGUH.ordinal() && !GuhDex.EXTRA.contains(v)) {   // (1.2.8: the Bleekwoud's two are bonus pages)
                 helper.assertTrue(GuhDex.ENTRIES.contains(v) && GuhDex.TELLEND.contains(v), v + ": a counting page");
                 helper.assertTrue(v.isVerhaalGuh() == GuhDex.TAMEABLE.contains(v) && v.isVerhaalGuh() != v.isCharacter(), v + ": tameable only if a story guh");
             }
@@ -487,7 +487,8 @@ public class VerhaalGameTests {
             helper.assertTrue(c.isCharacter() && c.npcKind() == null, c + ": a creature page");
         }
         helper.assertTrue(GuhDex.ENTRIES.get(GuhDex.ENTRIES.size() - 1) == GuhVariant.values()[GuhVariant.values().length - 1]
-                && GuhDex.EXTRA.equals(java.util.Set.of(GuhVariant.ROOKGUH)), "appended in enum order, the Rookguh still the only bonus page");
+                && GuhDex.EXTRA.equals(java.util.Set.of(GuhVariant.ROOKGUH, GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA)),
+                "appended in enum order; the bonus pages are the Rookguh and (1.2.8) the two of the Bleekwoud");
         // the range overload: a creature page seen from further away (only here when no slice registered this page yet)
         if (!GuhDex.isCreaturePage(GuhVariant.PLUISVINKJE)) {
             ServerPlayer p = speler(helper, new BlockPos(1, 1, 1));

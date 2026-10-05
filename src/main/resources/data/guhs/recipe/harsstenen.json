@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "HH",
+    "HH"
+  ],
+  "key": {
+    "H": "guhs:harssteen"
+  },
+  "result": {
+    "id": "guhs:harsstenen"
+  }
+}

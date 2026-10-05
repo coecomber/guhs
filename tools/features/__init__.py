@@ -33,7 +33,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.2.0: the Wilde-guhweerder
             'weerder',
             # 1.2.5: the Guhoven (bakes on guh power)
-            'guhoven']
+            'guhoven',
+            # 1.2.8: het Bleekwoud
+            'bleekwoud']
 
 
 def modules():

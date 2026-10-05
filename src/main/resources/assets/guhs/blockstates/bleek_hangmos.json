@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "tip=false": {
+      "model": "guhs:block/bleek_hangmos"
+    },
+    "tip=true": {
+      "model": "guhs:block/bleek_hangmos_punt"
+    }
+  }
+}

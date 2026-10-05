@@ -20,7 +20,7 @@ from .site import CAT_ICON, CAT_ORDER, CATEGORIES, esc, fold, p, t
 
 SECTION_ORDER = ["start", "mobs", "care", "personalities", "maag", "sled", "guhdex", "food", "items", "vads", "redstone", "guhmension",
                  "villages", "structures", "reizen", "new21", "new22", "new23", "new24", "rare24", "new25", "new26", "new27", "new28",
-                 "new281", "new29", "fixes210", "new210", "fixes2101", "new30", "more", "recipes"]
+                 "new281", "new29", "fixes210", "new210", "fixes2101", "new30", "new128", "more", "recipes"]
 AUTOLINK_SKIP_TAGS = {"a", "h1", "h2", "h3", "h4", "code", "summary", "button", "th", "dt", "script", "style", "kbd", "b"}
 STOP = {"guh", "guhs", "vads", "njeg", "vahoeg", "kaas", "knus", "samen", "blij", "lief", "stil", "emotes", "effecten", "items", "blokken",
         "slee", "blokje", "klein", "groot", "medium", "makkelijk", "lastig", "kist", "hart", "eten", "vis", "ster", "gras", "tong", "tand",

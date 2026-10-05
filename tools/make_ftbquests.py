@@ -422,6 +422,7 @@ MODULE_CHAPTER = {
     "guheinde": "guhs_guheinde",
     "barbecuether": "guhs_barbecuether", "spiesburcht": "guhs_barbecuether",
     "gatenkaas": "guhs_extra27", "kaasmoeras": "guhs_extra27", "vadswoud": "guhs_extra27",
+    "bleekwoud": "guhs_extra27",   # 1.2.8
     "knuffeldal": "guhs_knuffeldal", "bakkerij": "guhs_knuffeldal", "creche": "guhs_knuffeldal", "theehuis": "guhs_knuffeldal",
     "kapper": "guhs_knuffeldal", "boerderij": "guhs_knuffeldal", "tuintjes": "guhs_knuffeldal", "sterrenwacht": "guhs_knuffeldal",
     "ballon": "guhs_knuffeldal", "kamperen": "guhs_knuffeldal", "knuffelbad": "guhs_knuffeldal", "wereldleven": "guhs_knuffeldal",
@@ -529,6 +530,7 @@ SECTIONS = {
         sec("moerasheks", "De moerasheks", "wiki:moerasheks_mika", module="kaasmoeras", upstream="kaasmoeras_vind"),
         sec("vadswoud", "Het Vadswoud", "npc:boswachterguh", module="vadswoud", until="vadswoud_gezin", upstream="intro"),
         sec("families", "Guhfamilies & pakjes", "npc:knabbelplukker", module="vadswoud", upstream="vadswoud_bezoek"),
+        sec("bleekwoud", "Het Bleekwoud", "geo:kraakguh:kraakguh", module="bleekwoud", upstream="intro"),   # 1.2.8
     ],
     "guhs_knuffeldal": [
         sec("knusfeest", "Het Grote Knusfeest", "npc:burgemeesterguh", module="knuffeldal", until="knuffeldal_pluisguh", upstream="intro"),

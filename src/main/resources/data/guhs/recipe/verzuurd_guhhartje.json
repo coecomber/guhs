@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:krakend_guhhartje",
+    "minecraft:fermented_spider_eye"
+  ],
+  "result": {
+    "id": "guhs:verzuurd_guhhartje"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/harsstenen_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/harsstenen"
+    },
+    "type=top": {
+      "model": "guhs:block/harsstenen_plaat_top"
+    }
+  }
+}

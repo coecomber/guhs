@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "bleekhout_fence_gate",
+  "key": {
+    "#": "minecraft:stick",
+    "W": "guhs:bleekhout_planken"
+  },
+  "pattern": [
+    "#W#",
+    "#W#"
+  ],
+  "result": {
+    "id": "guhs:bleekhout_poort"
+  }
+}

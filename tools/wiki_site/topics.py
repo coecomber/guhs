@@ -494,7 +494,7 @@ H3_RULES = [
 ]
 # section -> page, the last resort
 SECTION_RULES = {
-    "start": "index", "new26": "verhalen/guheinde", "new21": "minigames/kermis", "personalities": "systemen/karakters",
+    "start": "index", "new128": "biomen/bleekwoud", "new26": "verhalen/guheinde", "new21": "minigames/kermis", "personalities": "systemen/karakters",
     "care": "systemen/temmen", "maag": "dimensies/guhmaag", "sled": "systemen/guhslee", "guhdex": "systemen/guhdex",
     "vads": "systemen/vahoege-vads", "redstone": DROP, "guhmension": "dimensies/guhmension", "villages": "bouwwerken/guh_village",
     "reizen": "systemen/superkompas", "more": "systemen/vooruitgangen", "food": DROP, "items": DROP, "structures": DROP,

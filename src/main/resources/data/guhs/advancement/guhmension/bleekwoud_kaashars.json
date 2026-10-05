@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:guhmension/bleekwoud_knuffel",
+  "display": {
+    "icon": {
+      "id": "guhs:kaashars"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_kaashars.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_kaashars.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:kaashars"
+          }
+        ]
+      }
+    }
+  }
+}

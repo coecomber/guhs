@@ -57,7 +57,8 @@ public final class GuhDex {
      * 2.10.1: bonus pages: in the Guhdex, but they don't count for progress (the "all pages" milestones, the maag upgrade
      * that needs a full Guhdex, the seen counter), so "alles verzameld" is exactly what it was in 2.10.0.
      */
-    public static final java.util.Set<GuhVariant> EXTRA = java.util.Set.of(GuhVariant.ROOKGUH);
+    public static final java.util.Set<GuhVariant> EXTRA = java.util.Set.of(GuhVariant.ROOKGUH,
+            GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA);   // (1.2.8: the Bleekwoud is rare and they only come at night)
     /** The pages that count for progress (ENTRIES without the {@link #EXTRA} ones). */
     public static final List<GuhVariant> TELLEND = ENTRIES.stream().filter(v -> !EXTRA.contains(v)).toList();
 

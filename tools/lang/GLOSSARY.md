@@ -870,3 +870,21 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | Plaatje (bakvorm) | Disc | bakery shape |
 | TATUU (sirene) | Nee-naw | fire siren sound |
 | Dames en heren-guhs | Ladies and Guhtlemen | |
+
+## 22. The Palewood (1.2.8)
+
+| Dutch | English | note |
+|---|---|---|
+| Bleekwoud | Palewood | the biome: "the Palewood" in running text |
+| Bleekhout(-stam/-planken/-bord/...) | Pale Guhwood (Log/Planks/Sign/...) | |
+| Slapend guhgezichtje in de schors | Sleepy Guh Face in the Bark | |
+| Bleekmos / Bleekmostapijt / Bleek hangmos | Palewood Moss / Palewood Moss Carpet / Hanging Palewood Moss | not vanilla's "Pale Moss" |
+| Krakend Guhhartje / Verzuurd Guhhartje | Creaking Guh Heart / Soured Guh Heart | verzuurd = soured; "zure hartjes" = sour hearts |
+| Kraakguh / Kraak-Mika | Creakguh / Creak Mika | |
+| Krak! / Krak... krak... | Creak! / Creak... creak... | |
+| houten knuffel | wooden hug | |
+| Kaashars / Blok kaashars | Cheese Resin / Block of Cheese Resin | |
+| Harssteen / Harsstenen (trap/plaat/muur) / Gebeitelde harsstenen | Cheese Resin Brick / Cheese Resin Bricks (Brick Stairs/Slab/Wall) / Chiseled Cheese Resin Bricks | |
+| Oogbloempje (dicht/open) | Guh Eyeblossom (Closed/Open) | "guh eyeblossom" in running text |
+| Bleke open plek / De Bleke Open Plek | Pale Clearing / The Pale Clearing | |
+| Houthakkershutje / Houthakkerguh | Woodcutter's Hut / Woodcutter Guh | |

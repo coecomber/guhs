@@ -460,5 +460,9 @@
   "gui.guhs.guhdex.tab.verhalen": "Tales",
   "gui.guhs.wistjedat.een_guh": "a guh",
   "gui.guhs.wistjedat.mijn_baasje": "my human",
-  "gui.guhs.guhdex.tab.titels": "Titles"
+  "gui.guhs.guhdex.tab.titels": "Titles",
+  "gui.guhs.guhdex.rarity.kraakguh": "Rarity: Rare: at night in the Palewood, near a tree with a Creaking Guh Heart",
+  "gui.guhs.guhdex.info.kraakguh": "A guh made of pale wood, with moss on its head. It belongs to a Creaking Guh Heart and only comes out at night. It only moves when nobody is looking: look at it and it stands stock-still. Look away... creak! All it wants is to give you a wooden hug (that makes you slow for a moment). Hitting it doesn't help: cheese resin just drips from its tree. At sunrise it crumbles away, and also when you chop its heart out of the tree.",
+  "gui.guhs.guhdex.rarity.kraak_mika": "Rarity: Very Rare: at night in the Palewood, near a tree with a Soured Guh Heart",
+  "gui.guhs.guhdex.info.kraak_mika": "A Mika made of pale wood with yellow-green eyes. It comes out of a soured heart. Just like the Creakguh it only moves when nobody is looking, but it doesn't come to hug: it comes to shove. NYEG! It doesn't hurt. After a few good whacks it has had enough and crawls back into its tree until the next night."
 }
