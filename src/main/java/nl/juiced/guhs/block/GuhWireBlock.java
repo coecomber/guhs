@@ -1,10 +1,7 @@
 package nl.juiced.guhs.block;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -30,15 +27,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.redstone.Orientation;
+import nl.juiced.guhs.feature.vadskracht.VadsKracht;
 /**
- * Guh Wire: pink "redstone dust" that never loses strength. Every piece of a connected wire network outputs a full
- * 15 as soon as any piece is powered, no matter how long the network is (like redstone dust without the fading).
- * It looks and connects like redstone dust (dot / line / corner / up a block), dark rose when off and bright
- * glowing pink with sparkles when powered.
+ * Guhdraad: pink "redstone dust" that carries vadskracht (bbq2; feature/vadskracht). Everything joined by Guhdraad is one
+ * net: sources (a Guhrad...), machines (the Guhoven...) and batteries. It looks and connects like redstone dust (dot / line /
+ * corner / up a block) and also bends towards every vadskracht block; dark rose while its net stands still, bright glowing
+ * pink with sparkles while its net runs ({@link #POWERED}, set by the net: {@code VadsNet}).
  * <p>
- * Powered by anything that gives redstone power (Guh Wheel, levers, torches, repeaters, redstone blocks...)
- * except redstone dust: dust next to guh wire would feed the wire's own power back into it and never turn off,
- * so to go from dust into guh wire, put a repeater in between.
+ * Redstone INTO the wire does nothing any more (a lever is not a guh). The wire still GIVES a full redstone signal (15) while
+ * its net runs, however long it is, so old builds that used a Guhrad as a redstone source keep working.
  */
 public class GuhWireBlock extends Block {
     public static final MapCodec<GuhWireBlock> CODEC = simpleCodec(GuhWireBlock::new);
@@ -52,13 +49,8 @@ public class GuhWireBlock extends Block {
     public static final int COLOR_ON = 0xFF5CB8;
     private static final DustParticleOptions SPARKLE = new DustParticleOptions(0xFF73BF /* 1.0, 0.45, 0.75 */, 0.8f);
     /** Safety limit for one connected network. */
-    public static final int MAX_NETWORK_SIZE = 8192;
+    public static final int MAX_NETWORK_SIZE = nl.juiced.guhs.feature.vadskracht.VadsGetallen.MAX_NET;
     private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 1, 16);
-
-    /** True while we're measuring the input power: the wires then output nothing, so they can't power themselves. */
-    private static boolean measuring;
-    /** True while we're flipping a network on/off, so the resulting neighbour updates don't restart the calculation. */
-    private static boolean updating;
 
     public GuhWireBlock(Properties properties) {
         super(properties);
@@ -149,7 +141,7 @@ public class GuhWireBlock extends Block {
         if (canGoUp && nextState.isFaceSturdy(level, next, Direction.UP) && isWire(level.getBlockState(next.above()))) {
             return nextState.isFaceSturdy(level, next, dir.getOpposite()) ? RedstoneSide.UP : RedstoneSide.SIDE;
         }
-        if (isWire(nextState) || nextState.canRedstoneConnectTo(level, next, dir)) {
+        if (isWire(nextState) || nextState.canRedstoneConnectTo(level, next, dir) || nextState.is(VadsKracht.TOON)) {
             return RedstoneSide.SIDE;
         }
         if (!nextState.isRedstoneConductor(level, next) && isWire(level.getBlockState(next.below()))) {
@@ -180,7 +172,7 @@ public class GuhWireBlock extends Block {
 
     @Override
     protected int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return !measuring && state.getValue(POWERED) ? 15 : 0;
+        return state.getValue(POWERED) ? 15 : 0;
     }
 
     /** Strongly powers the block it lies on (just like redstone dust), so power also goes "through" that block. */
@@ -189,7 +181,7 @@ public class GuhWireBlock extends Block {
         return direction == Direction.UP ? getSignal(state, level, pos, direction) : 0;
     }
 
-    // --- network updates ---
+    // --- the vadskracht net (feature/vadskracht keeps it; the wire only says when something changed) ---
 
     @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
@@ -199,73 +191,29 @@ public class GuhWireBlock extends Block {
             if (shaped != state) {
                 level.setBlock(pos, shaped, Block.UPDATE_CLIENTS);
             }
-            updateNetwork(level, pos);
+            VadsKracht.veranderd(level, pos);
         }
     }
 
+    /** A neighbour changed: a machine may have appeared or disappeared next to the wire. */
     @Override
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @org.jspecify.annotations.Nullable Orientation orientation, boolean movedByPiston) {
-        updateNetwork(level, pos);
+        if (level instanceof net.minecraft.server.level.ServerLevel server) {
+            VadsKracht.buurVeranderd(server, pos);
+        }
     }
 
     @Override
     protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean movedByPiston) {
         super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
-        {   // 26.1: was onRemove (only called when the block really changed, on the server)
-            // the wire that was here may have been powering the block below / the rest of the network
-            level.updateNeighborsAt(pos.below(), this);
-            for (BlockPos next : connections(pos)) {
-                if (level.getBlockState(next).is(this)) {
-                    updateNetwork(level, next);
-                }
-            }
-        }
+        // 26.1: was onRemove (only called when the block really changed, on the server)
+        // the wire that was here may have been powering the block below; the rest of its net is rebuilt
+        level.updateNeighborsAt(pos.below(), this);
+        VadsKracht.veranderd(level, pos);
     }
 
-    private void updateNetwork(Level level, BlockPos start) {
-        if (level.isClientSide() || updating || !level.getBlockState(start).is(this)) {
-            return;
-        }
-        Set<BlockPos> network = collectNetwork(level, start);
-        boolean powered = isNetworkPowered(level, network);
-
-        updating = true;
-        try {
-            List<BlockPos> changed = new ArrayList<>();
-            for (BlockPos pos : network) {
-                BlockState state = level.getBlockState(pos);
-                if (state.getValue(POWERED) != powered) {
-                    level.setBlock(pos, state.setValue(POWERED, powered), Block.UPDATE_CLIENTS);
-                    changed.add(pos);
-                }
-            }
-            for (BlockPos pos : changed) {
-                level.updateNeighborsAt(pos, this);
-                level.updateNeighborsAt(pos.below(), this);
-            }
-        } finally {
-            updating = false;
-        }
-    }
-
-    private Set<BlockPos> collectNetwork(Level level, BlockPos start) {
-        Set<BlockPos> seen = new HashSet<>();
-        ArrayDeque<BlockPos> todo = new ArrayDeque<>();
-        seen.add(start);
-        todo.add(start);
-        while (!todo.isEmpty() && seen.size() < MAX_NETWORK_SIZE) {
-            for (BlockPos next : connections(todo.poll())) {
-                if (!seen.contains(next) && level.getBlockState(next).is(this)) {
-                    seen.add(next);
-                    todo.add(next);
-                }
-            }
-        }
-        return seen;
-    }
-
-    /** Wires connect to wires next to, above, below, and diagonally up/down a step (like dust going up stairs). */
-    private static List<BlockPos> connections(BlockPos pos) {
+    /** Wires connect to wires next to, above, below, and diagonally up/down a step (like dust going up stairs). The first 6 are the faces, in Direction order. */
+    public static List<BlockPos> connections(BlockPos pos) {
         List<BlockPos> list = new ArrayList<>(14);
         for (Direction dir : Direction.values()) {
             list.add(pos.relative(dir));
@@ -275,29 +223,5 @@ public class GuhWireBlock extends Block {
             list.add(pos.relative(dir).below());
         }
         return list;
-    }
-
-    private boolean isNetworkPowered(Level level, Set<BlockPos> network) {
-        measuring = true;
-        try {
-            for (BlockPos pos : network) {
-                for (Direction dir : Direction.values()) {
-                    BlockPos neighbor = pos.relative(dir);
-                    if (network.contains(neighbor)) {
-                        continue;
-                    }
-                    BlockState neighborState = level.getBlockState(neighbor);
-                    if (neighborState.is(this) || neighborState.is(Blocks.REDSTONE_WIRE)) {
-                        continue;
-                    }
-                    if (level.getSignal(neighbor, dir) > 0) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        } finally {
-            measuring = false;
-        }
     }
 }
