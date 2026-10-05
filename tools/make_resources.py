@@ -597,15 +597,20 @@ w(f"{D}/loot_table/chests/grand_cheese_fountain.json", {"type": "minecraft:chest
         {"type": "minecraft:item", "name": "minecraft:gold_ingot", "weight": 1, "functions": count(1, 2)},
     ]}]})
 
-# --- Bank Guh: infinite storage block (drawn by GeckoLib; the block model only provides break particles) -----------
+# --- Bank Guh: storage block (drawn by GeckoLib; the block model only provides break particles) --------------------
+# (bbq2: at most 256 of one kind until it has the upgrade; the block state "opgevoerd" mirrors the upgrade so the client
+#  can let an upgraded bank sparkle. The Hapluikje, the link key and the upgrade item: tools/features/bank.py)
 w(f"{A}/models/block/bank_guh.json", {"textures": {"particle": "minecraft:block/pink_wool"}})
-w(f"{A}/blockstates/bank_guh.json", {"variants": {f"facing={f}": {"model": "guhs:block/bank_guh"} for f in ("north", "east", "south", "west")}})
+w(f"{A}/blockstates/bank_guh.json", {"variants": {f"facing={f},opgevoerd={o}": {"model": "guhs:block/bank_guh"}
+                                                  for f in ("north", "east", "south", "west") for o in ("false", "true")}})
 w(f"{A}/models/item/bank_guh.json", {"parent": "minecraft:item/generated", "textures": {"layer0": "guhs:item/bank_guh"}})
 w(f"{A}/models/item/quest_guh_spawn_egg.json", {"parent": "minecraft:item/template_spawn_egg"})
-# always drops, and takes its whole stomach with it (like a shulker box)
+# always drops, and takes its whole stomach with it (like a shulker box); bbq2: also its upgrade and its id (the id is
+# what a Hapluikje is linked to)
 w(f"{D}/loot_table/blocks/bank_guh.json", {"type": "minecraft:block", "pools": [{
     "rolls": 1, "entries": [{"type": "minecraft:item", "name": "guhs:bank_guh", "functions": [
-        {"function": "minecraft:copy_components", "source": "block_entity", "include": ["guhs:bank_contents"]}]}]}],
+        {"function": "minecraft:copy_components", "source": "block_entity",
+         "include": ["guhs:bank_contents", "guhs:bank_opgevoerd", "guhs:bank_id"]}]}]}],
     "random_sequence": "guhs:blocks/bank_guh"})
 
 # --- guh armour ---------------------------------------------------------------------------------------------------
@@ -1480,11 +1485,11 @@ w(f"{A}/lang/nl_nl.json", {
     "item.guhs.picked_up_guh.named": "%s (opgepakt)",
     "item.guhs.picked_up_guh.hint": "Rechtsklik op een blok om hem neer te zetten, of op een guhrad om te rennen",
     "block.guhs.guh_wheel.occupied": "Er rent al een guh in dit rad",
-    "block.guhs.bank_guh.lore": "Zo vadsig dat er oneindig veel spullen in zijn buikje passen",
+    "block.guhs.bank_guh.lore": "Zo vadsig dat er van alles in zijn buikje past: wel %s van elke soort!",
     "block.guhs.bank_guh.contents": "%s spullen (%s soorten) in zijn buikje",
     "entity.guhs.quest_guh": "Hongerige Guh",
     "entity.guhs.quest_guh.request": "Guh guh... ik heb zooo'n honger! Breng me %s gefrituurde kaasknabbels (in je hand) en je krijgt iets heel vadsigs. (Je hebt er nu %s.)",
-    "entity.guhs.quest_guh.thanks": "Nom nom nom! Dankjewel! Hier, neem mijn vriendje de Bankguh - die kan alles opeten en zit nooit vol!",
+    "entity.guhs.quest_guh.thanks": "Nom nom nom! Dankjewel! Hier, neem mijn vriendje de Bankguh - die lust alles, wel 256 van elke soort!",
     "item.guhs.quest_guh_spawn_egg": "Hongerige Guh-spawnei",
     "gui.guhs.bank.search": "Zoeken... (@mod)",
     "gui.guhs.bank.summary": "%s spullen, %s soorten",

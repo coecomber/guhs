@@ -266,7 +266,7 @@ for i, (key, title, desc, icon, tasks) in enumerate(EXTRAS):
 q("bank", "De Hongerige Guh", "Bij een &dguh-picknick&r in de Guhmensie zit de &dHongerige Guh&r. Voer hem 10 &egefrituurde kaasknabbels&r (uit de guh-koekenpan met Mika's vet) en je krijgt zijn vriendje de &dBank Guh&r. Iedere speler krijgt er een, en dit is de enige manier om aan een Bank Guh te komen: je kunt hem niet zelf maken. Wees er dus zuinig op!",
   "guhs:bank_guh", [adv("guhs:guhmension/feed_hungry_guh")], rewards=(("guhs:kaas_knabbels", 16),), deps=["struct_guh_picnic", "frying"],
   shape="gear", xp=200)
-q("bank_plaatsen", "Je eigen Bank Guh", "Zet je &dBank Guh&r neer en klik erop: er passen oneindig veel spullen in zijn buikje. Je kunt zoeken, sorteren en filteren, en er zit een werkbankrooster in (met JEI vult de &e+&r het rooster eerst vanuit de bank). Staat hij in de klus-area van een Guhhuisje? Dan sorteren de bewoners alles wat ze verzamelen erin. Breek je hem af, dan neemt hij alles mee.",
+q("bank_plaatsen", "Je eigen Bank Guh", "Zet je &dBank Guh&r neer en klik erop: van elke soort passen er wel &e256&r in zijn buikje (met het &dBodemloos Knabbelmaagje&r van de uitvinder-guh zelfs oneindig veel). Je kunt zoeken, sorteren en filteren, en er zit een werkbankrooster in (met JEI vult de &e+&r het rooster eerst vanuit de bank). Staat hij in de klus-area van een Guhhuisje? Dan sorteren de bewoners alles wat ze verzamelen erin. Breek je hem af, dan neemt hij alles mee.",
   "guhs:bank_guh", [item("guhs:bank_guh")], deps=["bank"], shape="rsquare")
 GROOT = {"bank"}   # drawn a bit bigger, like the "Hoe kom je hier?" quests
 

@@ -1,0 +1,116 @@
+# bbq2 (bank) AutoCheck: the Bank Guh's screen with the cap of 256 per kind (the line under the grid, a full kind in red,
+# the tooltips "n/256" / full / more than the cap from before the cap, the "Vol!" line after a refused deposit), an upgraded
+# bank (gold line, sparkles), and the Hapluikje (its three faces, the hover readout, the message of a click). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_bank.txt
+# (commands: see autocheck.txt; the window is 640 x 360 gui pixels at gui scale 2, the bank screen is 195 x 262: its grid
+#  starts at 230,81 and a cell is 18 wide, so the first three cells have their middles at 239 / 257 / 275, 90)
+# NOT run by the bank slice (no game client there): the merge step runs it and looks at the pictures.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode creative
+/clear @s
+/tp @s 3000 140 3008
+wait 40
+
+section Bank Guh: the cap in the screen (sorted by count: 64000 logs from "before the cap", 256 cobblestone = full, 120 dirt, 31 knabbels)
+/setblock 2996 140 3000 guhs:bank_guh[facing=south]
+/data merge block 2996 140 3000 {Stomach:[{item:{id:"minecraft:cobblestone",count:1},count:256L},{item:{id:"minecraft:dirt",count:1},count:120L},{item:{id:"minecraft:oak_log",count:1},count:64000L},{item:{id:"guhs:kaas_knabbels",count:1},count:31L}]}
+/tp @s 2996.5 140 3002.5 180 20
+wait 20
+gui keep
+use 2996 140 3000
+wait 30
+shot bank_scherm_grens gui
+widgets
+mouse 257 90
+wait 5
+shot bank_tooltip_vol gui
+mouse 239 90
+wait 5
+shot bank_tooltip_van_vroeger gui
+mouse 275 90
+wait 5
+shot bank_tooltip_n_van_256 gui
+mouse 2 2
+# a refused deposit: cobblestone in the inventory, "Alles erin" -> the cobblestone stays and the line says "Vol!"
+/give @s minecraft:cobblestone 64
+/give @s minecraft:gravel 10
+wait 10
+press Alles erin
+wait 10
+shot bank_scherm_vol_melding gui
+gui close
+/clear @s
+
+section Bank Guh: upgraded (the gold line in the screen, sparkles on the block)
+/guhs bank opvoeren 2996 140 3000
+wait 10
+gui keep
+use 2996 140 3000
+wait 30
+shot bank_scherm_opgevoerd gui
+mouse 257 90
+wait 5
+shot bank_tooltip_opgevoerd gui
+mouse 2 2
+gui close
+/gamemode spectator
+camera 2996.5 141.4 3003.5 180 12
+waitrender 300
+wait 60
+shot bank_opgevoerd_glinstert
+/gamemode creative
+
+section Hapluikje: asleep (no vadskracht), happy (linked, vadskracht), surprised (its bank is full of what the hopper offers)
+/setblock 3000 140 3000 guhs:hapluikje[facing=south]
+/setblock 3002 140 3000 guhs:vadskracht_testbron[kracht=1]
+/setblock 3003 140 3000 guhs:hapluikje[facing=south]
+/setblock 3004 140 3000 guhs:hapluikje[facing=south]
+/setblock 3006 140 3000 guhs:bank_guh[facing=south]
+/data merge block 3006 140 3000 {Stomach:[{item:{id:"minecraft:cobblestone",count:1},count:256L}]}
+/guhs bank koppel 3003 140 3000 2996 140 3000
+/guhs bank koppel 3004 140 3000 3006 140 3000
+/setblock 3004 141 3000 minecraft:hopper{Items:[{Slot:0b,id:"minecraft:cobblestone",count:8}]}
+/setblock 3003 141 3000 minecraft:hopper{Items:[{Slot:0b,id:"minecraft:dirt",count:8}]}
+wait 80
+/guhs bank adres 2996 140 3000
+/gamemode spectator
+camera 3002.5 141.3 3004.2 180 12
+waitrender 300
+shot hapluikje_gezichten
+/gamemode creative
+
+section Hapluikje: the hover readout and what a click says
+/tp @s 3003.5 140 3002.5 180 10
+wait 20
+/tp @s 3003.5 140 3002.5 180 10
+wait 30
+clearchat
+shot hapluikje_hover_gekoppeld gui
+use 3003 140 3000
+wait 10
+shot hapluikje_klik_klaar gui
+/tp @s 3000.5 140 3002.5 180 10
+wait 30
+shot hapluikje_hover_slaapt_los gui
+use 3000 140 3000
+wait 10
+shot hapluikje_klik_slaapt gui
+/tp @s 3004.5 140 3002.5 180 10
+wait 30
+shot hapluikje_hover_bank_vol gui
+
+section the items in the creative tab (names, tooltips: the merge step hovers them by hand)
+gui creative guhs
+quit
