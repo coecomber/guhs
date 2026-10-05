@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -179,8 +180,9 @@ public class VadskrachtGameTests {
             helper.assertTrue(bijBron.grootte() <= 6 && bijMachine.grootte() <= 6, "no net is bigger than the limit");
             helper.assertFalse(machine.heeftKracht(), "a setup that is too big stands still");
             draadAan(helper, p(4, 1), false);
-            helper.assertTrue(lees(helper, p(8, 1)).contains("Te groot: meer dan 6 blokken aan elkaar, daar wordt een guh duizelig van. Alles staat stil."),
-                    "readout: " + lees(helper, p(8, 1)));
+            // (the text names the real limit, VadsGetallen.MAX_NET)
+            helper.assertTrue(lees(helper, p(8, 1)).contains("Te groot: meer dan " + VadsGetallen.MAX_NET
+                    + " blokken aan elkaar, daar wordt een guh duizelig van. Alles staat stil."), "readout: " + lees(helper, p(8, 1)));
             // shorter: source, three wires, machine fit in one net
             for (int x = 4; x <= 8; x++) {
                 helper.setBlock(p(x, 1), Blocks.AIR);
@@ -206,12 +208,12 @@ public class VadskrachtGameTests {
         VadsNet net = net(helper, p(3, 1));
         helper.assertTrue(net.draait() && machine.heeftKracht(), "the net runs");
         VadsNetten beheer = VadsNetten.van(level);
-        net.knopen().forEach(plek -> beheer.chunkWeg(net.minecraft.world.level.ChunkPos.containing(plek)));
+        net.knopen().forEach(plek -> beheer.chunkWeg(ChunkPos.containing(plek)));
         helper.runAfterDelay(3, () -> {
             VadsNet nieuw = beheer.bekend(helper.absolutePos(p(3, 1)));
             helper.assertTrue(nieuw != null && nieuw != net, "after an unload event the net was built again");
             helper.assertTrue(nieuw.draait() && nieuw.grootte() == 5 && machine.heeftKracht(), "and it is the same net as before");
-            beheer.chunkErbij(net.minecraft.world.level.ChunkPos.containing(helper.absolutePos(p(3, 1))));
+            beheer.chunkErbij(ChunkPos.containing(helper.absolutePos(p(3, 1))));
             helper.runAfterDelay(3, () -> {
                 helper.assertTrue(beheer.bekend(helper.absolutePos(p(3, 1))) == nieuw, "a chunk that loads with knopen that have a net already changes nothing");
                 helper.assertTrue(machine.heeftKracht(), "still running");

@@ -63,8 +63,6 @@ public final class VadsNet {
     boolean teGroot;
     /** Replaced by a newer net (or about to be). */
     boolean vervallen;
-    /** Its tick within the second. */
-    int fase;
 
     // --- the last evaluation ---
     private Status status = Status.LEEG;

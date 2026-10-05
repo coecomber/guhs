@@ -292,8 +292,10 @@ def blocks(h):
         f"facing={f},snoet={staat}": {"model": f"guhs:block/vadskracht_testmachine_{staat}", **({"y": r} if r else {})}
         for f, r in ROT.items() for staat in STATEN}})
     toon(h, "vadskracht_testmachine_groot")
-    # the fluids of the Guh-technologie (Java: Sauzen.TECHNIEK)
-    h.add_tag("guhs/tags/fluid/techniek_sauzen", ["guhs:kaas_saus", "guhs:kaasfrituursaus", "minecraft:water", "minecraft:milk"])
+    # the fluids of the Guh-technologie (Java: Sauzen.TECHNIEK). minecraft:milk is NeoForge's milk fluid, switched on by
+    # VadskrachtFeature; "required": false so the tag also loads where that fluid does not exist (tools/check_datapack26.py)
+    h.w(f"{h.D}/tags/fluid/techniek_sauzen.json", {"replace": False, "values": [
+        "guhs:kaas_saus", "guhs:kaasfrituursaus", "minecraft:water", {"id": "minecraft:milk", "required": False}]})
 
 
 def guhrad_tabel(h):

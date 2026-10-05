@@ -31,8 +31,8 @@ import org.slf4j.Logger;
 /**
  * The vadskracht nets of one level (see {@link VadsKracht}). Nets are cached: every block of a net points at its
  * {@link VadsNet}, and a net is only rebuilt (a flood fill from the changed spot) when a wire or knoop is placed or removed,
- * when a chunk it ends at loads, or when a chunk it lies in unloads. Once per second each net is evaluated (the nets are
- * spread over the ticks of the second); a change of what a knoop gives or asks makes its net evaluate again the next tick.
+ * when a chunk it ends at loads, or when a chunk it lies in unloads. Once per second every net is evaluated (a handful of
+ * calls per knoop, no block lookups); a change of what a knoop gives or asks makes its net evaluate again the next tick.
  * Nothing is saved: after a restart the nets come back from the block entities of the chunks that load.
  */
 final class VadsNetten {
@@ -206,19 +206,12 @@ final class VadsNetten {
                 }
             }
         }
-        if (!netten.isEmpty()) {
-            int fase = (int) Math.floorMod(level.getGameTime(), (long) VadsGetallen.TIK);
-            List<VadsNet> nu = null;
-            for (VadsNet net : netten) {
-                if (net.fase == fase) {
-                    (nu == null ? nu = new ArrayList<>() : nu).add(net);
-                }
-            }
-            if (nu != null) {
-                for (VadsNet net : nu) {
-                    if (!net.vervallen) {
-                        evalueer(net, true);
-                    }
+        // the second: every net of the level on the same tick, so a net that is rebuilt (however often) never charges or
+        // empties its batteries twice in one second
+        if (!netten.isEmpty() && Math.floorMod(level.getGameTime(), (long) VadsGetallen.TIK) == 0) {
+            for (VadsNet net : new ArrayList<>(netten)) {
+                if (!net.vervallen) {
+                    evalueer(net, true);
                 }
             }
         }
@@ -272,7 +265,7 @@ final class VadsNetten {
     /** Builds a net from every waiting spot, drops what the old nets still claim, and evaluates the new nets. */
     private void bouwAlles() {
         List<VadsNet> nieuw = new ArrayList<>();
-        for (int ronde = 0; ronde < 4 && !zaden.isEmpty(); ronde++) {
+        for (int ronde = 0; ronde < 4 && (!zaden.isEmpty() || !oud.isEmpty()); ronde++) {
             long[] nu = zaden.toLongArray();
             zaden.clear();
             BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos();
@@ -323,7 +316,6 @@ final class VadsNetten {
             return null;
         }
         VadsNet net = new VadsNet();
-        net.fase = (int) Math.floorMod(start.asLong() * 31L + level.getGameTime(), (long) VadsGetallen.TIK);
         ArrayDeque<BlockPos> todo = new ArrayDeque<>();
         neem(net, start, startKnoop);
         todo.add(start);
