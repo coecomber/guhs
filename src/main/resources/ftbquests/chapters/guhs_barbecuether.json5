@@ -78,6 +78,30 @@
         "Komt na: Rookdelta",
       ],
     },
+    {
+      height: 1.5625,
+      id: "47554800245648DC",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_fossiel_mijn_opgraving.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "47554843961E6162",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_fossiel_mijn_mijn.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 6,
   progression_mode: "flexible",
@@ -1243,6 +1267,421 @@
       ],
       x: 20.5,
       y: 13.525,
+      shape: "diamond",
+    },
+    {
+      id: "475548FE7F1B4205",
+      icon: {
+        id: "minecraft:bone_block",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:fossiel_opgraving",
+          id: "475548C6355AF73B",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F164977A55",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548388997A364",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "47554801C0717267",
+      icon: {
+        id: "guhs:fossielmijn_kwastje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/archeoloog_stap_1",
+          id: "475548F64853F1E1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554864696F681F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 17.4875,
+    },
+    {
+      id: "47554885828EBD37",
+      icon: {
+        id: "guhs:fossielmijn_bot_ribben",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/archeoloog_stap_2",
+          id: "4755480AB0528562",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485E19CD90F0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554833DED29961",
+      icon: {
+        id: "guhs:fossielmijn_bot_schedel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/archeoloog_stap_3",
+          id: "4755484338EA90C7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548772561211E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 17.4875,
+    },
+    {
+      id: "4755486A24815FA9",
+      icon: {
+        id: "guhs:fossielmijn_fossielbeeldje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/archeoloog_stap_4",
+          id: "47554817B414A978",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554869877989C7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548412EB8FAF5",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "475548D733D0BB61",
+      icon: {
+        id: "guhs:fossielmijn_kwastje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fossiel_mijn_dagvondst",
+          id: "475548A858EC3D5B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480A46A1A84B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:bone_meal",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 17.4875,
+      shape: "circle",
+    },
+    {
+      id: "475548F85974C742",
+      icon: {
+        id: "guhs:fossielmijn_fossielbeeldje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/fossiel_mijn_beeldje",
+          id: "4755485461B98D51",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F9EEF7B9CC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 17.4875,
+      shape: "diamond",
+    },
+    {
+      id: "4755486B3D981C48",
+      icon: {
+        id: "guhs:fossielmijn_zoutkristalblok",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:zoutkristalmijn",
+          id: "475548A2D7A041C0",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554867F47BC0CA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "47554829996AD1AA",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "475548BC4D60E9A3",
+      icon: {
+        id: "minecraft:rail",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mijnwerker_stap_1",
+          id: "4755483E7954AC56",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489CD3EBC7E9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755484C252239FB",
+      icon: {
+        id: "guhs:fossielmijn_puin",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mijnwerker_stap_2",
+          id: "475548D5EBECEBDA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C51125BF4D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548C65C9CFFDD",
+      icon: {
+        id: "guhs:fossielmijn_zoutader",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mijnwerker_stap_3",
+          id: "4755483CC0D579EE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548868913DEAF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 17.4875,
+    },
+    {
+      id: "475548E47950336A",
+      icon: {
+        id: "guhs:fossielmijn_zoutkristalhouweel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mijnwerker_stap_4",
+          id: "47554822AD502573",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486D4201A470",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548AA2A8AF3C5",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "4755485ABE20F56A",
+      icon: {
+        id: "guhs:zoutkristal",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:zoutkristal",
+          },
+          count: 16,
+          id: "4755480B89DC3D68",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A42F7C26E6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755482A8F98A51F",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 19.0,
+      y: 17.4875,
+      shape: "rsquare",
+    },
+    {
+      id: "475548A25A7F35A4",
+      icon: {
+        id: "guhs:fossielmijn_zoutkristalblok",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:fossielmijn_zoutkristalblok",
+          },
+          count: 4,
+          id: "4755489BC1552C1F",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483302C518C7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 17.4875,
       shape: "diamond",
     },
   ],

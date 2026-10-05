@@ -1,0 +1,234 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skeletrek"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "schedel": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_schedel"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "ruggengraat": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_ruggengraat"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "ribben": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_ribben"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "pootjes": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_pootjes"
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "staart": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_staart"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skeletrek",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "schedel": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_schedel",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "ruggengraat": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_ruggengraat",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "ribben": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_ribben",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "pootjes": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_pootjes",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "staart": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_staart",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skeletrek",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "schedel": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_schedel",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "ruggengraat": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_ruggengraat",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "ribben": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_ribben",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "pootjes": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_pootjes",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "staart": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_staart",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skeletrek",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "schedel": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_schedel",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "ruggengraat": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_ruggengraat",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "ribben": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_ribben",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "pootjes": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_pootjes",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "staart": "true"
+      },
+      "apply": {
+        "model": "guhs:block/fossielmijn_skelet_staart",
+        "y": 270
+      }
+    }
+  ]
+}

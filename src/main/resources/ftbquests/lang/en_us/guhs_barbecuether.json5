@@ -151,4 +151,60 @@
   "quest.475548D585541FDC.quest_desc": [
     "Drink a Guh Potion. Give Sneaky Nibble a try: then nobody can hear you anymore.",
   ],
+  "quest.475548FE7F1B4205.title": "Botten in de as",
+  "quest.475548FE7F1B4205.quest_desc": [
+    "Ergens in de Guhbarbecuether graaft de &dArcheoloog-guh&r het skelet van een reuzenguh op: de &6Fossiel-opgraving&r. Het superkompas (Barbecue > Fossiel-opgraving) wijst de weg.",
+  ],
+  "quest.47554801C0717267.title": "De vondst van de eeuw",
+  "quest.47554801C0717267.quest_desc": [
+    "Praat met de &dArcheoloog-guh&r bij zijn tent. Je krijgt een &6Guhkwastje&r van hem.",
+  ],
+  "quest.47554885828EBD37.title": "Kwasten maar!",
+  "quest.47554885828EBD37.quest_desc": [
+    "Houd met het Guhkwastje rechtsklik ingedrukt op het &6bottenzand&r in de put (daar steekt een puntje bot uit de as). Elk plekje geeft jou één bot; vijf botten heb je nodig. Iedereen vindt zijn eigen botten, ook als er al iemand kwastte.",
+  ],
+  "quest.47554833DED29961.title": "Bot voor bot",
+  "quest.47554833DED29961.quest_desc": [
+    "Klik met de botten op het &6rek&r onder het afdakje. Alleen jij ziet jouw skelet groeien.",
+  ],
+  "quest.4755486A24815FA9.title": "Tyrannoguhrus Njex",
+  "quest.4755486A24815FA9.quest_desc": [
+    "Vertel de Archeoloog-guh dat hij staat! Je krijgt een &6Tyrannoguhrus-beeldje&r en mag het kwastje houden.",
+  ],
+  "quest.475548D733D0BB61.title": "Elke dag een botje",
+  "quest.475548D733D0BB61.quest_desc": [
+    "Na het skelet ligt er in elk plekje bottenzand elke dag weer iets voor jou: een botje, wat knabbels, soms een zoutkristal. Kwast er eentje los!",
+  ],
+  "quest.475548F85974C742.title": "Njex op de kast",
+  "quest.475548F85974C742.quest_desc": [
+    "Zet je Tyrannoguhrus-beeldje ergens neer waar iedereen het ziet.",
+  ],
+  "quest.4755486B3D981C48.title": "Een berg van zout",
+  "quest.4755486B3D981C48.quest_desc": [
+    "Een witte berg vol kristallen op de bodem van een grot: de &6Zoutkristalmijn&r. Het superkompas (Barbecue > Zoutkristalmijn) wijst de weg.",
+  ],
+  "quest.475548BC4D60E9A3.title": "Wat een puinhoop",
+  "quest.475548BC4D60E9A3.quest_desc": [
+    "Praat met de &dMijnwerker-guh&r bij zijn schuurtje voor de mijn.",
+  ],
+  "quest.4755484C252239FB.title": "Het spoor vrij",
+  "quest.4755484C252239FB.quest_desc": [
+    "Hak vijf brokken &6puin&r van het karrenspoor in de gangen. (Het puin valt na een minuutje weer terug voor de volgende speler: jouw vijf tellen gewoon.)",
+  ],
+  "quest.475548C65C9CFFDD.title": "De kristalader",
+  "quest.475548C65C9CFFDD.quest_desc": [
+    "Volg het spoor tot in de grot en hak met een houweel in de roze &6kristalader&r.",
+  ],
+  "quest.475548E47950336A.title": "Zout op de boterham",
+  "quest.475548E47950336A.quest_desc": [
+    "Breng drie zoutkristallen naar de Mijnwerker-guh. Je krijgt zijn &6Zoutkristalhouweel&r: daarmee geeft de ader twee keer zoveel.",
+  ],
+  "quest.4755485ABE20F56A.title": "Een zak zout",
+  "quest.4755485ABE20F56A.quest_desc": [
+    "De kristalader is van iedereen een beetje: elke speler heeft er een eigen voorraad in, die vanzelf weer aangroeit. Verzamel 16 &6zoutkristallen&r: daarmee begint de Guh-technologie met zout.",
+  ],
+  "quest.475548A25A7F35A4.title": "Zoute bouwstenen",
+  "quest.475548A25A7F35A4.quest_desc": [
+    "Vier zoutkristallen maken een &6zoutkristalblok&r: het geeft zacht licht. Maak er een paar.",
+  ],
 }

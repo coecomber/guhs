@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:zoutkristalmijn",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21301118,
+    "min_afstand": 250,
+    "max_afstand": 900,
+    "alleen_nieuw": true,
+    "sector": 5,
+    "sectoren": 16
+  }
+}
