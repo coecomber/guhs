@@ -67,6 +67,11 @@ public class GuhhartjeBlock extends BaseEntityBlock {
         return CODEC;
     }
 
+    /** An awake heart glows softly (you can find it in the dark trunk at night). */
+    public static int licht(BlockState state) {
+        return state.getValue(STATE) == CreakingHeartState.AWAKE ? 7 : 0;
+    }
+
     /** The soured heart: it calls a Kraak-Mika. */
     public boolean verzuurd() {
         return verzuurd;

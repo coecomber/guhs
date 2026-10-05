@@ -152,7 +152,7 @@ public class SpiesburchtGameTests {
     @GuhTest(template = ROOM)
     public static void rookguhPaginaTeltNietMeeVoorVoltooiing(GameTestHelper helper) {
         GuhVariant page = GuhVariant.ROOKGUH;
-        helper.assertTrue(GuhDex.EXTRA.contains(page) && !GuhDex.TELLEND.contains(page) && GuhDex.TELLEND.size() == GuhDex.ENTRIES.size() - 1,
+        helper.assertTrue(GuhDex.EXTRA.contains(page) && !GuhDex.TELLEND.contains(page) && GuhDex.TELLEND.size() == GuhDex.ENTRIES.size() - GuhDex.EXTRA.size(),   // (1.2.8: the Bleekwoud's two are bonus pages too)
                 "a bonus page, not counted");
         helper.assertTrue(GuhDex.MILESTONES.get(2).seen() == GuhDex.TELLEND.size() && GuhDex.MILESTONES.get(3).seen() == GuhDex.TELLEND.size(),
                 "the all-pages milestones ask for the counting pages only");

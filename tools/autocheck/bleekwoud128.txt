@@ -44,8 +44,23 @@ plek lokaal 17 8 17
 plekcmd tp @s ~ ~ ~ facing {p}
 waitrender 200
 shot plek_dag_boven
-log --- night: the heart wakes up, its Kraakguh comes
+log --- in the forest next to the clearing, by day and by night
+plek lokaal 17 5 52
+tpplek 0 12 0
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.3 ~
+look 30 0
+waitrender 200
+/execute at @s if biome ~ ~ ~ guhs:bleekwoud
+shot bos_dag
+look 150 -20
+wait 40
+shot bos_dag_kruin
 /time set midnight
+look 30 0
+wait 300
+shot bos_nacht
+tel 40
+log --- night: the heart wakes up, its Kraakguh comes
 plek lokaal 17 5 27
 tpplek 0 0.2 0
 plek lokaal 17 14 18

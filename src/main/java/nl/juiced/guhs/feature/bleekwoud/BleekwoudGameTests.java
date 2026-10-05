@@ -102,8 +102,20 @@ public class BleekwoudGameTests {
         return helper.getBlockState(HART).getValue(GuhhartjeBlock.STATE);
     }
 
+    /** The creatures of this test's own heart (a neighbouring test may have its own). */
     private static <T extends Mob> List<T> wezens(GameTestHelper helper, Class<T> type) {
-        return helper.getLevel().getEntitiesOfClass(type, box(helper).inflate(16), e -> !e.isRemoved());
+        BlockPos hart = helper.absolutePos(HART);
+        return helper.getLevel().getEntitiesOfClass(type, box(helper).inflate(40), e -> !e.isRemoved() && e instanceof KraakWezen w && hart.equals(w.hart()));
+    }
+
+    /** The end of a heart test: the heart goes (its creature crumbles with it), the night is the world's own again, the players leave. */
+    private static void klaar(GameTestHelper helper, ServerPlayer... players) {
+        helper.setBlock(HART, Blocks.AIR);
+        helper.setBlock(HART.above(), Blocks.AIR);
+        helper.setBlock(HART.below(), BleekwoudFeature.BLEEKMOS.get());
+        nacht(helper, null);
+        leave(helper, players);
+        helper.succeed();
     }
 
     private static boolean adv(ServerPlayer p, String path) {
@@ -156,8 +168,8 @@ public class BleekwoudGameTests {
         });
         helper.runAfterDelay(190, () -> {
             helper.assertTrue(toestand(helper) == CreakingHeartState.AWAKE, "a stripped bleekhout log counts: awake again, not " + toestand(helper));
-            nacht(helper, null);
-            helper.succeed();
+            helper.setBlock(new BlockPos(3, 2, 3), Blocks.AIR);
+            klaar(helper);
         });
     }
 
@@ -177,9 +189,7 @@ public class BleekwoudGameTests {
         helper.runAfterDelay(360, () -> {
             helper.assertTrue(wezens(helper, KraakguhEntity.class).size() == 1, "never a second one: " + wezens(helper, KraakguhEntity.class).size());
             helper.assertTrue(p.getHealth() == p.getMaxHealth(), "nobody got hurt");
-            nacht(helper, null);
-            leave(helper, p);
-            helper.succeed();
+            klaar(helper, p);
         });
     }
 
@@ -237,9 +247,7 @@ public class BleekwoudGameTests {
         });
         helper.runAfterDelay(140, () -> {
             helper.assertTrue(wezens(helper, KraakguhEntity.class).size() == 1 && p.getHealth() == p.getMaxHealth(), "still there, nobody hurt");
-            nacht(helper, null);
-            leave(helper, p);
-            helper.succeed();
+            klaar(helper, p);
         });
     }
 
@@ -261,9 +269,7 @@ public class BleekwoudGameTests {
         });
         helper.runAfterDelay(200, () -> {
             helper.assertTrue(wezens(helper, KraakguhEntity.class).isEmpty(), "and none comes back");
-            nacht(helper, null);
-            leave(helper, p);
-            helper.succeed();
+            klaar(helper, p);
         });
     }
 
@@ -282,9 +288,7 @@ public class BleekwoudGameTests {
         });
         helper.runAfterDelay(260, () -> {
             helper.assertTrue(wezens(helper, KraakguhEntity.class).isEmpty(), "none by day");
-            nacht(helper, null);
-            leave(helper, p);
-            helper.succeed();
+            klaar(helper, p);
         });
     }
 
@@ -334,9 +338,7 @@ public class BleekwoudGameTests {
         helper.runAfterDelay(na + 330, () -> {
             helper.assertTrue(wezens(helper, KraakMikaEntity.class).size() == 1, "the next night: a new one");
             helper.assertTrue(p.getHealth() == p.getMaxHealth() && guh.getHealth() == guh.getMaxHealth(), "nobody got hurt");
-            nacht(helper, null);
-            leave(helper, p);
-            helper.succeed();
+            klaar(helper, p);
         });
     }
 
@@ -484,24 +486,48 @@ public class BleekwoudGameTests {
         // the forest's heart tree: the heart sits between two logs, asleep, natural
         var feature = level.registryAccess().lookupOrThrow(Registries.CONFIGURED_FEATURE).getValue(Guhs.id("bleekhout_boom_hart"));
         helper.assertTrue(feature != null, "the heart tree exists");
-        BlockPos plek = helper.absolutePos(new BlockPos(3, 2, 10));
-        boolean placed = false;
-        for (int i = 0; i < 20 && !placed; i++) {
-            placed = feature.place(level, generator, level.getRandom(), plek);
+        // the forest's heart tree, again and again in the middle of the (cleared) field: every one has a natural, sleeping heart
+        // between two logs; about one heart in five is soured
+        BlockPos plek = helper.absolutePos(new BlockPos(7, 2, 7));
+        int harten = 0, zuur = 0;
+        for (int i = 0; i < 60; i++) {
+            ruimOp(level, plek);
+            if (!feature.place(level, generator, level.getRandom(), plek)) {
+                continue;
+            }
+            BlockPos hart = null;
+            for (BlockPos q : BlockPos.betweenClosed(plek.offset(-3, 0, -3), plek.offset(4, 14, 4))) {
+                if (level.getBlockState(q).getBlock() instanceof GuhhartjeBlock) {
+                    hart = q.immutable();
+                }
+            }
+            helper.assertTrue(hart != null, "a heart tree has a heart in its trunk");
+            BlockState s = level.getBlockState(hart);
+            helper.assertTrue(s.getValue(GuhhartjeBlock.NATURAL) && s.getValue(GuhhartjeBlock.STATE) == CreakingHeartState.DORMANT
+                    && GuhhartjeBlock.hasRequiredLogs(s, level, hart) && level.getBlockEntity(hart) instanceof GuhhartjeBlockEntity,
+                    "a natural, sleeping heart between two logs, with its block entity");
+            harten++;
+            zuur += ((GuhhartjeBlock) s.getBlock()).verzuurd() ? 1 : 0;
         }
-        helper.assertTrue(placed, "the heart tree grows");
-        BlockPos hart = null;
-        for (BlockPos q : BlockPos.betweenClosed(plek.offset(-3, 0, -3), plek.offset(4, 14, 4))) {
-            if (level.getBlockState(q).getBlock() instanceof GuhhartjeBlock) {
-                hart = q.immutable();
+        ruimOp(level, plek);
+        LOGGER.info("Bleekwoud heart trees: {} hearts, {} of them soured", harten, zuur);
+        helper.assertTrue(harten >= 40 && zuur >= 3 && zuur <= harten * 0.4, "about one heart in five is soured: " + zuur + " of " + harten);
+        helper.succeed();
+    }
+
+    /** Takes away what the trees of this test left (only tree blocks: a neighbouring test keeps its own things) and lays the moss floor again. */
+    private static void ruimOp(ServerLevel level, BlockPos plek) {
+        for (BlockPos q : BlockPos.betweenClosed(plek.offset(-8, 0, -8), plek.offset(8, 18, 8))) {
+            BlockState st = level.getBlockState(q);
+            if (st.is(BleekwoudFeature.STAMMEN) || st.is(BleekwoudFeature.BLEEKHOUT_BLADEREN.get()) || st.is(BleekwoudFeature.BLEEK_HANGMOS.get())
+                    || st.is(BleekwoudFeature.BLEEKMOS_TAPIJT.get()) || st.is(BleekwoudFeature.BLEEKHOUT_ZAAILING.get())
+                    || st.getBlock() instanceof GuhhartjeBlock || st.getBlock() instanceof BleekwoudBlocks.Oogbloempje) {
+                level.setBlock(q, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
             }
         }
-        helper.assertTrue(hart != null, "with a heart in its trunk");
-        BlockState s = level.getBlockState(hart);
-        helper.assertTrue(s.getValue(GuhhartjeBlock.NATURAL) && s.getValue(GuhhartjeBlock.STATE) == CreakingHeartState.DORMANT
-                && GuhhartjeBlock.hasRequiredLogs(s, level, hart) && level.getBlockEntity(hart) instanceof GuhhartjeBlockEntity,
-                "a natural, sleeping heart between two logs, with its block entity");
-        helper.succeed();
+        for (BlockPos q : BlockPos.betweenClosed(plek.offset(-7, -1, -7), plek.offset(7, -1, 7))) {
+            level.setBlock(q, BleekwoudFeature.BLEEKMOS.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     // --- the structures ----------------------------------------------------------------------------------------------------------
@@ -523,6 +549,7 @@ public class BleekwoudGameTests {
             helper.assertTrue(telBlok(helper, BleekwoudFeature.OOGBLOEMPJE.get()) + telBlok(helper, BleekwoudFeature.OPEN_OOGBLOEMPJE.get()) >= 30,
                     "the flowers stay on the moss");
             helper.assertTrue(telBlok(helper, BleekwoudFeature.BLEEK_HANGMOS.get()) >= 5, "hanging moss stays under the leaves");
+            helper.setBlock(hart, BleekwoudFeature.BLEEKHOUT_STAM.get());      // (it would call a Kraakguh in the test world at night)
             helper.succeed();
         });
     }

@@ -148,9 +148,10 @@ public final class BleekwoudFeature {
 
     // --- the hearts -----------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<GuhhartjeBlock> KRAKEND_GUHHARTJE = BLOCKS.registerBlock("krakend_guhhartje",
-            p -> new GuhhartjeBlock(false, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CREAKING_HEART));
+            p -> new GuhhartjeBlock(false, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CREAKING_HEART).lightLevel(GuhhartjeBlock::licht));
     public static final DeferredBlock<GuhhartjeBlock> VERZUURD_GUHHARTJE = BLOCKS.registerBlock("verzuurd_guhhartje",
-            p -> new GuhhartjeBlock(true, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CREAKING_HEART).mapColor(MapColor.COLOR_LIGHT_GREEN));
+            p -> new GuhhartjeBlock(true, p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CREAKING_HEART).mapColor(MapColor.COLOR_LIGHT_GREEN)
+                    .lightLevel(GuhhartjeBlock::licht));
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GuhhartjeBlockEntity>> GUHHARTJE_BE = BLOCK_ENTITIES.register("krakend_guhhartje",
             () -> new BlockEntityType<>(GuhhartjeBlockEntity::new, KRAKEND_GUHHARTJE.get(), VERZUURD_GUHHARTJE.get()));
 

@@ -292,8 +292,9 @@ def check(plek, hut):
 
 
 def test_templates(h):
-    """A mossy field for the game tests (the floor is y = 0: stand on y = 1)."""
-    veld = h.Structure((15, 10, 15))
+    """A mossy field for the game tests (in a test the floor is y = 1: stand on y = 2). High enough for a big tree: the game
+    test puts a cage of barriers around the template, a ceiling too."""
+    veld = h.Structure((15, 22, 15))
     for x in range(15):
         for z in range(15):
             veld.set(x, 0, z, MOSS)
