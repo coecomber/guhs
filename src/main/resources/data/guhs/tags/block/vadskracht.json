@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:guh_wheel",
+    "guhs:guh_wheel_part",
+    "guhs:guh_wire",
+    "guhs:guh_oven",
+    "guhs:machine_deel",
+    "guhs:vadskracht_testbron",
+    "guhs:vadskracht_testbatterij",
+    "guhs:vadskracht_testmachine",
+    "guhs:vadskracht_testmachine_groot"
+  ]
+}

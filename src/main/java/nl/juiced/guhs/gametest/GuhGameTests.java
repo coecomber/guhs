@@ -264,7 +264,11 @@ public class GuhGameTests {
         helper.succeedWhen(() -> helper.assertBlockProperty(lamp, RedstoneLampBlock.LIT, false));
     }
 
-    /** 40 blocks of guh wire: a lamp at the far end still gets full power (redstone dust fades out after 15). */
+    /**
+     * 40 blocks of guh wire: a lamp at the far end still gets full power (redstone dust fades out after 15). bbq2: the wire
+     * carries vadskracht, so the power comes from a vadskracht source (not from redstone), and the wire gives a redstone
+     * signal while its net runs.
+     */
     @GuhTest(template = WIRE_ROOM, timeoutTicks = 60)
     public static void guhWireCarriesFullPowerOver40Blocks(GameTestHelper helper) {
         int length = 40;
@@ -276,12 +280,18 @@ public class GuhGameTests {
         }
         BlockPos lamp = new BlockPos(length + 1, 1, 1);
         helper.setBlock(lamp, Blocks.REDSTONE_LAMP);
+        BlockPos end = helper.absolutePos(new BlockPos(length, 1, 1));
         helper.setBlock(new BlockPos(0, 1, 1), Blocks.REDSTONE_BLOCK);
+        helper.assertFalse(nl.juiced.guhs.feature.vadskracht.VadsKracht.net(helper.getLevel(), end).draait(), "redstone into the wire does nothing");
+        helper.assertBlockProperty(new BlockPos(length, 1, 1), GuhWireBlock.POWERED, false);
+        helper.setBlock(new BlockPos(0, 1, 1), nl.juiced.guhs.feature.vadskracht.VadskrachtFeature.TESTBRON.get());
 
+        helper.assertTrue(nl.juiced.guhs.feature.vadskracht.VadsKracht.net(helper.getLevel(), end).draait(), "the net of the wire runs");
         helper.assertBlockProperty(new BlockPos(length, 1, 1), GuhWireBlock.POWERED, true);
         helper.assertBlockProperty(lamp, RedstoneLampBlock.LIT, true);
         // and it switches off again: the wire must not keep itself powered
         helper.setBlock(new BlockPos(0, 1, 1), Blocks.AIR);
+        helper.assertFalse(nl.juiced.guhs.feature.vadskracht.VadsKracht.net(helper.getLevel(), end).draait(), "no source any more");
         helper.assertBlockProperty(new BlockPos(length, 1, 1), GuhWireBlock.POWERED, false);
         helper.succeedWhen(() -> helper.assertBlockProperty(lamp, RedstoneLampBlock.LIT, false));
     }

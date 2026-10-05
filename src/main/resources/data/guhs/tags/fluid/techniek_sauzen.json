@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:kaas_saus",
+    "guhs:kaasfrituursaus",
+    "minecraft:water",
+    {
+      "id": "minecraft:milk",
+      "required": false
+    }
+  ]
+}

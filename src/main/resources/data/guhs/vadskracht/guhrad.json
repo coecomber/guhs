@@ -1,0 +1,20 @@
+{
+  "standaard": {
+    "kracht": 10,
+    "blij": 15
+  },
+  "varianten": {
+    "baltoguh": {
+      "kracht": 20,
+      "blij": 25
+    },
+    "mewtwo": {
+      "kracht": 25,
+      "blij": 25
+    },
+    "stitch626": {
+      "kracht": 20,
+      "blij": 25
+    }
+  }
+}

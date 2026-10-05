@@ -25,6 +25,8 @@ import net.minecraft.world.level.ScheduledTickAccess;
 /**
  * Invisible filler that makes the big Guh Wheel really take up 3x3 blocks. Remembers where it sits relative to the
  * wheel (the wheel block is the bottom middle), passes clicks on to it, and breaking it breaks the whole wheel.
+ * bbq2: every part is a block of the wheel's vadskracht knoop (the capability is registered in VadskrachtFeature), so
+ * Guhdraad and machines connect to any of the 3x3 blocks.
  */
 public class GuhWheelPartBlock extends Block {
     public static final MapCodec<GuhWheelPartBlock> CODEC = simpleCodec(GuhWheelPartBlock::new);
@@ -82,10 +84,19 @@ public class GuhWheelPartBlock extends Block {
         return super.playerWillDestroy(level, pos, state, player);
     }
 
+    @Override
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        if (!oldState.is(this)) {
+            nl.juiced.guhs.feature.vadskracht.VadsKracht.veranderd(level, pos);
+        }
+    }
+
     /** However a part disappears (explosion, piston, command...), the whole wheel goes with it. */
     @Override
     protected void affectNeighborsAfterRemoval(BlockState state, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean movedByPiston) {
         super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
+        nl.juiced.guhs.feature.vadskracht.VadsKracht.veranderd(level, pos);
         BlockPos wheel = wheelPos(state, pos);
         if (level.getBlockState(wheel).is(ModBlocks.GUH_WHEEL.get())) {
             level.destroyBlock(wheel, true);

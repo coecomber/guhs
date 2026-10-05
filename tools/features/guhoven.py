@@ -1,12 +1,14 @@
 """
 De Guhoven (1.2.5; the Java side is feature/guhoven).
 
-A furnace that needs no fuel: it bakes on guh power. Put it next to a running Guhrad (any of its 3x3 blocks) or next to powered
-Guhdraad and it smelts exactly like a vanilla furnace (same recipes, same speed, XP, hoppers, comparator). Ordinary redstone
-(levers, torches, dust, a redstone block) does nothing: it really wants a running guh. Pink stone with a guh face: two ears at
-the top, two eyes, a little snoet, and the oven mouth glows when it bakes. This module makes:
-  - block guh_oven (front unlit/lit, side, top; orientable model with 4 facings x lit, item model, loot table: drops itself,
-    recipe: 8 stone (the furnace tag) around 1 kaasknabbel, mineable/pickaxe)
+A furnace that needs no fuel: it bakes on vadskracht (bbq2: it is a consumer in a vadskracht net, features/vadskracht.py).
+Put it next to a Guhrad with a guh in it (any of its 3x3 blocks) or join it to one with Guhdraad and it smelts exactly like a
+vanilla furnace (same recipes, same speed, XP, hoppers, comparator). Ordinary redstone (levers, torches, dust, a redstone
+block) does nothing: it really wants a running guh. Pink stone with a guh face: two ears at the top, two eyes, a little snoet,
+and the oven mouth glows when it bakes. Like every guh machine the face shows how it is doing: asleep without vadskracht,
+awake with it, surprised when the result slot is full. This module makes:
+  - block guh_oven (front asleep/awake/lit/full, side, top; orientable model with 4 facings x lit x snoet, item model, loot
+    table: drops itself, recipe: 8 stone (the furnace tag) around 1 kaasknabbel, mineable/pickaxe, the tag guhs:vadskracht)
   - the screen's guh wheel icon (instead of the fuel slot: off and on)
   - the texts (name, lore, screen) and the FTB quest (next to the Guhrad in "Lekker eten & gezellig thuis")
 """
@@ -15,6 +17,8 @@ import os
 
 import numpy as np
 from PIL import Image
+
+from features import vadskracht
 
 NAME = "guh_oven"
 ROT = {"north": 0, "east": 90, "south": 180, "west": 270}
@@ -55,7 +59,8 @@ def _rand(a):
 # =====================================================================================================================
 # textures
 # =====================================================================================================================
-def _voor(aan):
+def _voor(aan, staat="werkt"):
+    """The front: the oven mouth (dark, or glowing when it bakes) under the guh face of this state (vadskracht.snoet)."""
     a = _ruis(STEEN, 5, 5301)
     _rand(a)
     # two little ears in the top corners (rounded, a pinker inside)
@@ -65,15 +70,7 @@ def _voor(aan):
                 _zet(a, ox + x, y, OOR)
         for x, y in ((1, 2), (2, 2), (1, 3), (2, 3)):
             _zet(a, ox + x, y, OOR_BINNEN)
-    # eyes (with a white shine), blush and a snoet
-    for ex in (4, 10):
-        for x, y in ((ex, 5), (ex + 1, 5), (ex, 6), (ex + 1, 6)):
-            _zet(a, x, y, OOG)
-        _zet(a, ex, 5, (255, 255, 255))
-    for x in (2, 3, 12, 13):
-        _zet(a, x, 7, BLOS)
-    _zet(a, 7, 7, SNOET)
-    _zet(a, 8, 7, SNOET)
+    # (the face comes last: eyes with a white shine, blush and a snoet, the standard face of every guh machine)
     # the oven mouth (rows 9..13, columns 4..11, round corners): dark when off, glowing when it bakes
     for y in range(9, 14):
         for x in range(4, 12):
@@ -97,7 +94,7 @@ def _voor(aan):
     for y in range(10, 13):
         _zet(a, 3, y, STEEN_DONKER)
         _zet(a, 12, y, STEEN_DONKER)
-    return Image.fromarray(a)
+    return vadskracht.snoet(Image.fromarray(a), 2, 5, staat)
 
 
 def _zij():
@@ -169,6 +166,8 @@ def _wiel(aan, size=24):
 def textures(h):
     h.save(_voor(False), "block", f"{NAME}_front.png")
     h.save(_voor(True), "block", f"{NAME}_front_on.png")
+    h.save(_voor(False, "slaapt"), "block", f"{NAME}_front_slaapt.png")
+    h.save(_voor(False, "vol"), "block", f"{NAME}_front_vol.png")
     h.save(_zij(), "block", f"{NAME}_side.png")
     h.save(_boven(), "block", f"{NAME}_top.png")
     h.save(_wiel(False), "gui", f"{NAME}_wiel.png")
@@ -181,12 +180,14 @@ def textures(h):
 def blocks_and_items(h):
     A = h.A
     t = lambda k: f"guhs:block/{NAME}_{k}"
-    for model, front in ((NAME, "front"), (f"{NAME}_on", "front_on")):
+    for model, front in ((NAME, "front"), (f"{NAME}_on", "front_on"), (f"{NAME}_slaapt", "front_slaapt"), (f"{NAME}_vol", "front_vol")):
         h.w(f"{A}/models/block/{model}.json", {"parent": "minecraft:block/orientable",
                                                 "textures": {"front": t(front), "side": t("side"), "top": t("top")}})
+    # lit (it bakes) wins; else the face says it: asleep without vadskracht, surprised when the result slot is full
+    achter = lambda lit, snoet: "_on" if lit == "true" else {"slaapt": "_slaapt", "werkt": "", "vol": "_vol"}[snoet]
     h.w(f"{A}/blockstates/{NAME}.json", {"variants": {
-        f"facing={f},lit={lit}": {"model": f"guhs:block/{NAME}{'_on' if lit == 'true' else ''}", **({"y": r} if r else {})}
-        for f, r in ROT.items() for lit in ("false", "true")}})
+        f"facing={f},lit={lit},snoet={snoet}": {"model": f"guhs:block/{NAME}{achter(lit, snoet)}", **({"y": r} if r else {})}
+        for f, r in ROT.items() for lit in ("false", "true") for snoet in vadskracht.STATEN}})
     h.w(f"{A}/models/item/{NAME}.json", {"parent": f"guhs:block/{NAME}"})
     h.self_drop(NAME)
     # as cheap as a furnace: 8 stone (the same tag as the furnace: cobblestone, blackstone, cobbled deepslate) around a kaasknabbel
@@ -199,12 +200,13 @@ def blocks_and_items(h):
 # =====================================================================================================================
 TEXTS = {
     f"block.guhs.{NAME}": "Guhoven",
-    f"block.guhs.{NAME}.lore": "Geen kolen of houtskool nodig: hij bakt op guhkracht! Zet hem naast een draaiend Guhrad, of sluit hem "
-                               "aan met Guhdraad. Gewone redstone vindt hij niks.",
+    f"block.guhs.{NAME}.lore": "Geen kolen of houtskool nodig: hij bakt op vadskracht! Zet hem naast een Guhrad waar een guh in rent, "
+                               "of sluit hem aan met Guhdraad. Gewone redstone vindt hij niks.",
     f"block.guhs.{NAME}.lore.lief": "Het guhtje rent in het rad, en de oven bakt de knabbels. Samen vadsig, njeg!",
-    f"gui.guhs.{NAME}.aan": "Guhkracht! De oven bakt.",
-    f"gui.guhs.{NAME}.uit": "Geen guhkracht. Zet de Guhoven naast een draaiend Guhrad of naast Guhdraad met stroom erop (en doe er "
-                            "iets in om te bakken).",
+    f"gui.guhs.{NAME}.aan": "Vadskracht! De oven bakt.",
+    f"gui.guhs.{NAME}.uit": "De oven bakt niet. Hij heeft vadskracht nodig: zet hem naast een Guhrad waar een guh in rent, of sluit "
+                            "hem aan met Guhdraad (en doe er iets in om te bakken). Kijk naar de oven en je leest of je opstelling "
+                            "genoeg vadskracht heeft.",
 }
 
 
@@ -216,9 +218,11 @@ def texts(h):
 def selfcheck(h):
     A, D = h.A, h.D
     missing = [p for p in (f"{A}/blockstates/{NAME}.json", f"{A}/models/block/{NAME}.json", f"{A}/models/block/{NAME}_on.json",
+                           f"{A}/models/block/{NAME}_slaapt.json", f"{A}/models/block/{NAME}_vol.json",
                            f"{A}/models/item/{NAME}.json", f"{D}/loot_table/blocks/{NAME}.json", f"{D}/recipe/{NAME}.json")
                if not os.path.exists(p)]
-    missing += [k for k in ("block/guh_oven_front", "block/guh_oven_front_on", "block/guh_oven_side", "block/guh_oven_top",
+    missing += [k for k in ("block/guh_oven_front", "block/guh_oven_front_on", "block/guh_oven_front_slaapt", "block/guh_oven_front_vol",
+                            "block/guh_oven_side", "block/guh_oven_top",
                             "gui/guh_oven_wiel", "gui/guh_oven_wiel_aan")
                 if not os.path.exists(os.path.join(h.TEX, *k.split("/")) + ".png")]
     missing += [k for k in TEXTS if k not in h.NL]
@@ -237,7 +241,8 @@ def build(h):
 # FTB quest: in the section "Lekker eten & gezellig thuis" of Guhs & basis, right after the Guhrad
 # =====================================================================================================================
 def ftb(fq):
-    fq.q("guh_oven", "Bakken op guhkracht", "Een &dGuhoven&r (8 keisteen om een kaasknabbel) heeft geen kolen nodig: hij bakt op "
-         "guhkracht! Zet hem naast een draaiend &dGuhrad&r, of sluit hem aan met &dGuhdraad&r. Gewone redstone vindt hij niks. "
-         "Het guhtje rent, de oven bakt. Njeg!",
+    fq.q("guh_oven", "Bakken op vadskracht", "Een &dGuhoven&r (8 keisteen om een kaasknabbel) heeft geen kolen nodig: hij bakt op "
+         "&dvadskracht&r! Zet hem naast een &dGuhrad&r waar een guh in rent, of sluit hem aan met &dGuhdraad&r. Kijk naar de oven "
+         "en je leest hoeveel vadskracht je opstelling gebruikt: vraagt die meer dan je guhs bij elkaar rennen, dan staat alles "
+         "stil. Gewone redstone vindt hij niks. Het guhtje rent, de oven bakt. Njeg!",
          f"guhs:{NAME}", [fq.item(f"guhs:{NAME}")], rewards=(("guhs:kaas_knabbels", 8),), deps=["wheel"], xp=50)
