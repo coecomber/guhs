@@ -10,7 +10,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * An immutable snapshot of what's inside a Bank Guh: item (count 1) + how many (a long, so practically infinite).
+ * An immutable snapshot of what's inside a Bank Guh: item (count 1) + how many (a long: an upgraded bank has no limit,
+ * and a bank from before the cap of {@link BankStorage#CAP} may hold more than the cap).
  * Used as the item data component (so a broken Bank Guh keeps its contents) and to sync the list to the screen.
  */
 public record BankContents(List<Entry> entries) {
