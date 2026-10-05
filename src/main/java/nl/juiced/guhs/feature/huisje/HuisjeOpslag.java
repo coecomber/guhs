@@ -24,6 +24,9 @@ import nl.juiced.guhs.feature.Features;
  * Where the chores' output goes (2.10): a Bank Guh within the home base sorts it (never loaned items), else a container
  * touching the huisje (within 2 blocks of any of its blocks), else a container within 4 blocks, else it pops out at the
  * door.
+ * <p>
+ * bbq2: a Bank Guh holds at most 256 of one kind (until it is upgraded), so it may take only a part: what it is full of
+ * goes on to the next Bank Guh of the home base, then to the containers, then to the door. Nothing is thrown away.
  */
 public final class HuisjeOpslag {
     private HuisjeOpslag() {
@@ -36,10 +39,11 @@ public final class HuisjeOpslag {
         }
         ItemStack rest = stack.copy();
         if (!Features.isLoaned(rest)) {
-            BankGuhBlockEntity bank = bankGuh(level, h);
-            if (bank != null) {
-                bank.getStorage().insert(rest);
-                return ItemStack.EMPTY;
+            for (BankGuhBlockEntity bank : bankGuhs(level, h)) {
+                rest = bank.getStorage().insert(rest);   // (the remainder: what this bank is full of)
+                if (rest.isEmpty()) {
+                    return ItemStack.EMPTY;
+                }
             }
         }
         for (BlockPos pos : containers(level, h, 4)) {
@@ -77,19 +81,36 @@ public final class HuisjeOpslag {
     /** The nearest Bank Guh in the home base, or null. */
     @Nullable
     public static BankGuhBlockEntity bankGuh(ServerLevel level, Huisje h) {
-        BankGuhBlockEntity best = null;
-        double bestD = Double.MAX_VALUE;
+        List<BankGuhBlockEntity> banken = bankGuhs(level, h);
+        return banken.isEmpty() ? null : banken.get(0);
+    }
+
+    /** Every Bank Guh in the home base, the nearest to the huisje first. */
+    public static List<BankGuhBlockEntity> bankGuhs(ServerLevel level, Huisje h) {
+        List<BankGuhBlockEntity> banken = new ArrayList<>();
         Vec3 m = h.midden();
         for (BlockEntity be : blockEntities(level, h.gebied())) {
             if (be instanceof BankGuhBlockEntity bank && h.inGebied(be.getBlockPos())) {
-                double d = be.getBlockPos().distToCenterSqr(m);
-                if (d < bestD) {
-                    best = bank;
-                    bestD = d;
-                }
+                banken.add(bank);
             }
         }
-        return best;
+        banken.sort(Comparator.comparingDouble(bank -> bank.getBlockPos().distToCenterSqr(m)));
+        return banken;
+    }
+
+    /** How many more of this item the Bank Guhs of the home base take together (bbq2: the cap; 0 for a loaned thing). */
+    public static long bankRuimte(ServerLevel level, Huisje h, ItemStack stack) {
+        if (stack.isEmpty() || Features.isLoaned(stack)) {
+            return 0;
+        }
+        long ruimte = 0;
+        for (BankGuhBlockEntity bank : bankGuhs(level, h)) {
+            ruimte += bank.getStorage().room(stack);
+            if (ruimte < 0) {
+                return Long.MAX_VALUE;   // (an upgraded bank: no limit)
+            }
+        }
+        return ruimte;
     }
 
     /**

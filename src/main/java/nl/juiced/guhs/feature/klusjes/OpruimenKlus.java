@@ -28,6 +28,10 @@ import nl.juiced.guhs.feature.huisje.KlusTaak;
  * huisje's chest into the Bank Guh, one armful at a time (never loaned things: those stay in the chest). Only when there
  * is somewhere to put it (a chest with room or a Bank Guh), else things would only move to the door and back. Guhs and
  * pieppiepmuisjes.
+ * <p>
+ * bbq2: a Bank Guh holds at most 256 of one kind (unless upgraded). So only what the bank still has room for counts as
+ * "to be sorted", and an armful is never bigger than that room: what the bank is full of simply stays in the chest (else
+ * a guh would carry it to the bank and back for ever).
  */
 public class OpruimenKlus extends BasisKlus {
     public static final int PER_KEER = 4;
@@ -61,7 +65,7 @@ public class OpruimenKlus extends BasisKlus {
         }
         if (HuisjeOpslag.heeftBankGuh(level, huisje)) {
             for (BlockPos kist : Voorraad.kisten(level, huisje)) {
-                if (heeftSorteerbaars(level, kist)) {
+                if (heeftSorteerbaars(level, huisje, kist)) {
                     return KlusStand.ja("sorteren", 0);
                 }
             }
@@ -81,7 +85,7 @@ public class OpruimenKlus extends BasisKlus {
         }
         if (HuisjeOpslag.heeftBankGuh(level, huisje)) {
             for (BlockPos kist : Voorraad.kisten(level, huisje)) {
-                if (heeftSorteerbaars(level, kist)) {
+                if (heeftSorteerbaars(level, huisje, kist)) {
                     return new Taak(level, huisje, bewoner, null, kist);
                 }
             }
@@ -104,14 +108,15 @@ public class OpruimenKlus extends BasisKlus {
                 && !(vrij && GECLAIMD.containsKey(i) && GECLAIMD.get(i) > nu) && Voorraad.past(level, huisje, i.getItem()));
     }
 
-    static boolean heeftSorteerbaars(ServerLevel level, BlockPos kist) {
+    /** Is there something in this chest that a Bank Guh of the home base still has room for? */
+    static boolean heeftSorteerbaars(ServerLevel level, Huisje huisje, BlockPos kist) {
         IItemHandler handler = Voorraad.handler(level, kist);
         if (handler == null) {
             return false;
         }
         for (int i = 0; i < handler.getSlots(); i++) {
             ItemStack s = handler.getStackInSlot(i);
-            if (!s.isEmpty() && !Features.isLoaned(s)) {
+            if (!s.isEmpty() && !Features.isLoaned(s) && HuisjeOpslag.bankRuimte(level, huisje, s) > 0) {
                 return true;
             }
         }
@@ -168,7 +173,7 @@ public class OpruimenKlus extends BasisKlus {
             }
         }
 
-        /** An armful out of the chest, for the Bank Guh. */
+        /** An armful out of the chest, for the Bank Guh: never more than the bank still takes of it. */
         private void uitKist() {
             IItemHandler handler = Voorraad.handler(level, kist);
             if (handler == null) {
@@ -176,8 +181,9 @@ public class OpruimenKlus extends BasisKlus {
             }
             for (int i = 0; i < handler.getSlots(); i++) {
                 ItemStack s = handler.getStackInSlot(i);
-                if (!s.isEmpty() && !Features.isLoaned(s)) {
-                    ItemStack uit = handler.extractItem(i, s.getCount(), false);
+                long ruimte = s.isEmpty() ? 0 : HuisjeOpslag.bankRuimte(level, huisje, s);
+                if (ruimte > 0) {
+                    ItemStack uit = handler.extractItem(i, (int) Math.min(s.getCount(), ruimte), false);
                     if (!uit.isEmpty()) {
                         pak(uit);
                         aantal += uit.getCount();

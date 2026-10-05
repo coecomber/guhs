@@ -86,12 +86,16 @@ public final class Voorraad {
         return HuisjeOpslag.heeftBankGuh(level, h) || !kisten(level, h).isEmpty();
     }
 
-    /** Would this stack fit (a Bank Guh always has room, except for loaned things)? */
+    /**
+     * Would this stack fit? bbq2: a Bank Guh only has room up to its cap (256 of one kind, unless it is upgraded), so the
+     * part the Bank Guhs of the home base do not take must fit in the chests; never a loaned thing in a bank.
+     */
     public static boolean past(ServerLevel level, Huisje h, ItemStack stack) {
-        if (!Features.isLoaned(stack) && HuisjeOpslag.heeftBankGuh(level, h)) {
+        long inBank = HuisjeOpslag.bankRuimte(level, h, stack);
+        if (inBank >= stack.getCount()) {
             return true;
         }
-        ItemStack rest = stack.copy();
+        ItemStack rest = stack.copyWithCount(stack.getCount() - (int) inBank);
         for (BlockPos p : kisten(level, h)) {
             IItemHandler handler = Voorraad.handler(level, p);
             if (handler != null) {
