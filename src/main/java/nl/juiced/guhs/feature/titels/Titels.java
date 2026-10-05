@@ -64,8 +64,11 @@ public final class Titels {
             VRIEND_VAN_GUHTWO = "vriend_van_guhtwo", OHANA_GUH = "ohana_guh", WOLKENVRIEND = "wolkenvriend",
             HUISJESBOUWER = "huisjesbouwer", OPPER_VADSER = "opper_vadser", GUHKENNER = "guhkenner";
 
-    /** Every title, in the order of the Guhdex tab (the two old ones first: see the class comment). */
-    public static final List<Titel> ALLE = List.of(
+    /**
+     * Every title, in the order of the Guhdex tab (the two old ones first: see the class comment). bbq2: a feature adds its
+     * own with {@link #registreer} (they come after these).
+     */
+    public static final List<Titel> ALLE = new java.util.concurrent.CopyOnWriteArrayList<>(List.of(
             new Titel(HELD_VAN_NOMGUH, "gui.guhs.balto.titel", ChatFormatting.AQUA, "guhs:baltoguh_beeldje", BaltoVerhaal::isHeld),
             new Titel(KNUFFELBURGEMEESTER, "gui.guhs.knuffeldal.titel", ChatFormatting.LIGHT_PURPLE, "guhs:knus_oorkonde",
                     Burgemeester::isKnuffelburgemeester),
@@ -79,7 +82,21 @@ public final class Titels {
             new Titel(OPPER_VADSER, "gui.guhs.titels.naam." + OPPER_VADSER, ChatFormatting.RED, "guhs:knabbelkroon",
                     p -> GuhQuests.saved(p).getIntOr(GuheindeGevecht.WINS, 0) > 0),
             new Titel(GUHKENNER, "gui.guhs.titels.naam." + GUHKENNER, ChatFormatting.GREEN, "guhs:guhdex",
-                    p -> GuhDex.vol(GuhWorldData.get(p.level().getServer()).player(p.getUUID()).seen)));
+                    GuhDex::kenner)));
+
+    /**
+     * bbq2: adds a title (from your Feature.register; common code, both sides): lang {@code gui.guhs.titels.naam.<id>} and
+     * {@code gui.guhs.titels.hint.<id>} from your own module.
+     * <pre>
+     * Titels.registreer(new Titels.Titel("ringdrager", "gui.guhs.titels.naam.ringdrager", ChatFormatting.GOLD, "guhs:knabbelring", RING::klaar));
+     * </pre>
+     */
+    public static void registreer(Titel t) {
+        if (van(t.id()) != null) {
+            throw new IllegalStateException("Titel " + t.id() + " is registered twice");
+        }
+        ALLE.add(t);
+    }
 
     /** Server: the title each online player showed last (to notice changes; "" = none). */
     private static final Map<UUID, String> LAATST = new ConcurrentHashMap<>();

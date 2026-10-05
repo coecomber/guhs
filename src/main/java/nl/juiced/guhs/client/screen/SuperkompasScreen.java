@@ -96,11 +96,16 @@ public class SuperkompasScreen extends Screen {
     private List<GidsLijst.Regel> regels() {
         List<GidsLijst.Regel> out = new ArrayList<>();
         SuperkompasItem.Category c = SuperkompasItem.CATEGORIES.get(tab);
+        out.add(new MijnVerhaal());   // (bbq2: the first entry of every tab)
         for (SuperkompasItem.Kopje k : c.kopjes()) {
+            // (bbq2: what Guhdalfs sluier still hides for this player is not listed)
+            List<String> s = k.structures().stream().filter(id -> !nl.juiced.guhs.feature.verhaal.VerhaalSync.Client.verborgen(id)).toList();
+            if (s.isEmpty()) {
+                continue;
+            }
             if (k.id() != null) {
                 out.add(new Kopje(k.naam()));
             }
-            List<String> s = k.structures();
             for (int i = 0; i < s.size(); i += 2) {
                 out.add(new Paar(s.get(i), i + 1 < s.size() ? s.get(i + 1) : null));
             }
@@ -208,6 +213,58 @@ public class SuperkompasScreen extends Screen {
         public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
             int tw = GidsTekst.passend(g, Component.literal("✦ ").append(naam).withStyle(ChatFormatting.BOLD), x + 1, y + 4, w - 20, 0.875f, GOUD, false);
             g.fill(x + tw + 6, y + 8, x + w - 1, y + 9, 0x80F7D27A);
+        }
+    }
+
+    /**
+     * bbq2: "Mijn verhaal": the compass follows your story by itself (SuperkompasItem.DOEL): one wide button, with the
+     * questline you follow next to its name.
+     */
+    private final class MijnVerhaal implements GidsLijst.Regel {
+        @Override
+        public int hoogte() {
+            return KNOP_H + 5;
+        }
+
+        private Component doel() {
+            String volg = nl.juiced.guhs.feature.verhaal.VerhaalSync.Client.volg();
+            return volg.isEmpty() ? Component.translatable("gui.guhs.verhaal.kompas.geen")
+                    : Component.translatable("gui.guhs.verhalen." + volg + ".naam");
+        }
+
+        @Override
+        public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mx, int my, boolean hover) {
+            boolean gekozen = SuperkompasItem.DOEL.equals(chosen);
+            boolean on = hover && my >= y + 1 && my < y + 1 + KNOP_H;
+            g.fill(x, y + 1, x + w, y + 1 + KNOP_H, gekozen || on ? GOUD : 0xFF9A7A4A);
+            g.fill(x + 1, y + 2, x + w - 1, y + KNOP_H, on ? 0xFF6A4E34 : gekozen ? 0xFF5A3A2A : 0xFF4A3426);
+            g.fill(x + 1, y + 2, x + w - 1, y + 3, 0x20FFFFFF);
+            g.item(new ItemStack(net.minecraft.world.item.Items.WRITABLE_BOOK), x + 3, y + 3);
+            Component label = Component.translatable("structure.guhs." + SuperkompasItem.DOEL);
+            if (gekozen) {
+                label = Component.literal("\u25B6 ").append(label);
+            }
+            int lw = GidsTekst.passend(g, label.copy().withStyle(ChatFormatting.BOLD), x + 23, y + 7, w / 2 - 26, 1f, gekozen ? GOUD : LICHT, false);
+            GidsTekst.passend(g, doel(), x + 23 + lw + 8, y + 8, w - 23 - lw - 14, 0.75f, ZACHT, false);
+        }
+
+        @Override
+        public boolean klik(double mx, double my, int x, int y, int w) {
+            if (my >= y + 1 && my < y + 1 + KNOP_H) {
+                kies(SuperkompasItem.DOEL);
+                return true;
+            }
+            return false;
+        }
+
+        @Nullable
+        @Override
+        public List<Component> tip(double mx, double my, int x, int y, int w) {
+            List<Component> out = new ArrayList<>();
+            out.add(Component.translatable("structure.guhs." + SuperkompasItem.DOEL).withStyle(ChatFormatting.BOLD));
+            out.add(Component.translatable("structure.guhs." + SuperkompasItem.DOEL + ".tooltip").withStyle(ChatFormatting.GRAY));
+            out.add(doel().copy().withStyle(ChatFormatting.GOLD));
+            return out;
         }
     }
 

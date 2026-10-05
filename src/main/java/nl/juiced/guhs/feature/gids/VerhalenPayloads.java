@@ -25,7 +25,7 @@ public final class VerhalenPayloads {
     public record Data(List<VerhaalStand> verhalen) implements CustomPacketPayload {
         public static final Type<Data> TYPE = new Type<>(Guhs.id("gids_verhalen"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Data> STREAM_CODEC = StreamCodec.composite(
-                VerhaalStand.STREAM_CODEC.apply(ByteBufCodecs.list(64)), Data::verhalen, Data::new);
+                VerhaalStand.STREAM_CODEC.apply(ByteBufCodecs.list(256)), Data::verhalen, Data::new);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

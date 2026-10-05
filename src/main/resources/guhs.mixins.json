@@ -18,6 +18,7 @@
   "client": [
     "client.FtbQuestsImageMixin",
     "client.FtbQuestsLocaleMixin",
-    "client.LevelRendererMixin"
+    "client.LevelRendererMixin",
+    "client.VerhaalEntityRenderMixin"
   ]
 }

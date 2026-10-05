@@ -34,6 +34,14 @@ import nl.juiced.guhs.feature.verhaal.wereld.RegioPiekPlacement;
  *   <li>the dead tamed guhs ("In de wolkjes", {@code nl.juiced.guhs.feature.band.Wolkjes}), huisje ownership, the generic maatje
  *       shoulder, the ukelele emote gate: in their own packages.</li>
  * </ul>
+ * bbq2: the verhaal engine on top of it (resources: tools/features/verhaal_motor.py):
+ * <ul>
+ *   <li>{@link Verhaallijn} / {@link Verhaallijnen}: questlines with per-player steps, synced ({@link VerhaalSync});</li>
+ *   <li>{@link Cutscene} / {@link Cutscenes} (camera cutscenes) and {@link Verteller} (narrator cards), with the lock {@link Vast};</li>
+ *   <li>{@link Reiskaart} / {@link Reiskaarten} (the Guhdex travel map), {@link Doel} / {@link Doelen} (the next-goal pointer);</li>
+ *   <li>{@link Sluiers} (Guhdalfs sluier), {@link Duwtje} and {@link Rustpunten} (gentle shoves, rest points);</li>
+ *   <li>{@link VerhaalDemo}: the demo story (dev only), {@link VerhaalMotor}: events and {@code /guhs verhaal}.</li>
+ * </ul>
  */
 public final class VerhaalFeature {
     public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(Registries.STRUCTURE_TYPE, Guhs.MODID);
@@ -48,6 +56,11 @@ public final class VerhaalFeature {
     /** The water of the Guhwai'i region (its own warm lagoon-sea, see wereld.GuhwaiiWaterFeature). */
     public static final DeferredHolder<net.minecraft.world.level.levelgen.feature.Feature<?>, nl.juiced.guhs.feature.verhaal.wereld.GuhwaiiWaterFeature>
             GUHWAII_WATER = FEATURES.register("guhwaii_water", nl.juiced.guhs.feature.verhaal.wereld.GuhwaiiWaterFeature::new);
+
+    /** bbq2: the thick smoke of Guhdalfs sluier (client: client.SluierRook; particle file by tools/features/verhaal_motor.py). */
+    public static final DeferredRegister<net.minecraft.core.particles.ParticleType<?>> PARTICLES = DeferredRegister.create(Registries.PARTICLE_TYPE, Guhs.MODID);
+    public static final DeferredHolder<net.minecraft.core.particles.ParticleType<?>, net.minecraft.core.particles.SimpleParticleType> SLUIERROOK =
+            PARTICLES.register("verhaal_sluierrook", () -> new net.minecraft.core.particles.SimpleParticleType(true));
 
     /** The new biomes (tools/features/verhaal_wereld.py) and their noises. */
     public static final ResourceKey<Biome> SNEEUWGUHTOENDRA = ResourceKey.create(Registries.BIOME, Guhs.id("sneeuwguhtoendra"));
@@ -67,11 +80,20 @@ public final class VerhaalFeature {
         STRUCTURE_TYPES.register(modBus);
         PLACEMENT_TYPES.register(modBus);
         FEATURES.register(modBus);
+        PARTICLES.register(modBus);
         NeoForge.EVENT_BUS.register(VerhaalEvents.class);
         GuhHooks.tick(VerhaalGuhs::tick);
+        // bbq2: the verhaal engine (questlines, cutscenes, narrator cards, the next-goal pointer, Guhdalfs sluier)
+        NeoForge.EVENT_BUS.register(VerhaalMotor.class);
+        NeoForge.EVENT_BUS.register(Vast.class);
+        NeoForge.EVENT_BUS.register(Sluiers.class);
+        NeoForge.EVENT_BUS.register(Doelen.class);
+        VerhaalDemo.register();
     }
 
     public static void payloads(PayloadRegistrar registrar) {
+        VerhaalSync.register(registrar);
+        VerhaalPayloads.register(registrar);
     }
 
     public static void creative(Consumer<ItemStack> output) {

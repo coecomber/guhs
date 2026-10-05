@@ -76,7 +76,7 @@ public class SuperkompasItem extends GuhCompassItem {
      * (2.9) One Minigames tab with every game: the classics, the Knuffeldal games (their places also stay under Knus) and De
      * Grote Guhspelen.
      */
-    public static final List<Category> CATEGORIES = List.of(
+    private static final List<Category> VASTE_CATEGORIES = List.of(
             cat("avontuur", "guhs:kaashouweel", net.minecraft.world.item.Items.IRON_PICKAXE, "guh_caves", "challenging_guh_caves", "evil_mika_home",
                     "kaasmijn", "moerasheks_hut", "kaasknabbel_nest",   // 2.8.1 Piep
                     "bleke_open_plek", "houthakkershutje"),   // 1.2.8 het Bleekwoud
@@ -100,6 +100,54 @@ public class SuperkompasItem extends GuhCompassItem {
             // 3.0 (Guhverhalen): the story places
             cat("verhalen", "guhs:baltoguh_beeldje", net.minecraft.world.item.Items.BOOK, "nomguh", "kloon_eiland", "hemelkapelletje", "guhwaii_ohana",
                     "guhwaii_capsule", "guhwaii_surfstrand", "knuffeldal_stadje"));
+    /**
+     * The tabs of the menu (bbq2: {@link #voegToe} adds structures to a tab; the fixed list above keeps its shape, the
+     * self-check of tools/features/gids.py reads it).
+     */
+    public static final List<Category> CATEGORIES = new java.util.concurrent.CopyOnWriteArrayList<>(VASTE_CATEGORIES);
+
+    /**
+     * bbq2 (CONTRACT_130 §2.4): the choice "Mijn verhaal": no structure, the compass follows the player's story by itself
+     * ({@code feature.verhaal.Doelen.wijs}: the next goal, or the portal last used when the goal is in another dimension).
+     * It is the first entry of every tab. Lang structure.guhs.@doel (+ .tooltip).
+     */
+    public static final String DOEL = "@doel";
+
+    /**
+     * bbq2: adds a structure (a guhs structure id without namespace) to a tab of the menu, after what is there (from your
+     * Feature.register; common code, both sides): {@code SuperkompasItem.voegToe("barbecue", "pepertuin")}. Lang
+     * structure.guhs.&lt;id&gt; (+ .tooltip). A structure behind Guhdalfs sluier only shows once it is open for the player.
+     */
+    public static void voegToe(String tab, String structuur) {
+        synchronized (CATEGORIES) {
+            for (int i = 0; i < CATEGORIES.size(); i++) {
+                Category c = CATEGORIES.get(i);
+                if (!c.id().equals(tab)) {
+                    continue;
+                }
+                if (c.structures().contains(structuur)) {
+                    return;
+                }
+                List<Kopje> kopjes = new java.util.ArrayList<>(c.kopjes());
+                int los = -1;
+                for (int k = 0; k < kopjes.size(); k++) {
+                    if (kopjes.get(k).id() == null) {
+                        los = k;
+                    }
+                }
+                if (los < 0) {
+                    kopjes.add(new Kopje(null, List.of(structuur)));
+                } else {
+                    List<String> lijst = new java.util.ArrayList<>(kopjes.get(los).structures());
+                    lijst.add(structuur);
+                    kopjes.set(los, new Kopje(null, lijst));
+                }
+                CATEGORIES.set(i, new Category(c.id(), c.icon(), c.standIn(), kopjes));
+                return;
+            }
+        }
+        throw new IllegalArgumentException("The Superkompas has no tab " + tab);
+    }
 
     /** The first tab that has this structure (-1: none). */
     public static int categoryOf(@Nullable String structure) {
@@ -116,7 +164,7 @@ public class SuperkompasItem extends GuhCompassItem {
     }
 
     public static boolean allowed(String structure) {
-        return CATEGORIES.stream().anyMatch(c -> c.structures().contains(structure));
+        return DOEL.equals(structure) || CATEGORIES.stream().anyMatch(c -> c.structures().contains(structure));
     }
 
     @Nullable
@@ -139,7 +187,59 @@ public class SuperkompasItem extends GuhCompassItem {
     @Override
     protected ResourceKey<Structure> target(ItemStack stack) {
         String id = chosen(stack);
-        return id == null ? null : ResourceKey.create(Registries.STRUCTURE, Guhs.id(id));
+        return id == null || DOEL.equals(id) ? null : ResourceKey.create(Registries.STRUCTURE, Guhs.id(id));
+    }
+
+    /**
+     * bbq2: "Mijn verhaal" follows the story (see {@link #DOEL}); a structure behind Guhdalfs sluier is not found while it
+     * is closed for the holder (the compass spins, as where there is none).
+     */
+    @Override
+    public void inventoryTick(ItemStack stack, net.minecraft.server.level.ServerLevel level, net.minecraft.world.entity.Entity entity,
+            net.minecraft.world.entity.@org.jspecify.annotations.Nullable EquipmentSlot equipSlot) {
+        String id = chosen(stack);
+        if (id != null && entity instanceof net.minecraft.server.level.ServerPlayer p) {
+            boolean doel = DOEL.equals(id);
+            if (doel || nl.juiced.guhs.feature.verhaal.Sluiers.isVerborgen(p, id)) {
+                if (level.getGameTime() % 20 == 0) {
+                    volgVerhaal(stack, level, p, doel);
+                }
+                return;
+            }
+        }
+        super.inventoryTick(stack, level, entity, equipSlot);
+    }
+
+    /** (bbq2, also for the tests) points at the story's next goal (doel), or at nothing (a hidden structure), and says so while the compass is held. */
+    public static void volgVerhaal(ItemStack stack, net.minecraft.server.level.ServerLevel level, net.minecraft.server.level.ServerPlayer p, boolean doel) {
+        net.minecraft.core.BlockPos naar = doel ? nl.juiced.guhs.feature.verhaal.Doelen.wijs(p) : null;
+        if (naar != null) {
+            net.minecraft.world.item.component.LodestoneTracker tracker = new net.minecraft.world.item.component.LodestoneTracker(
+                    java.util.Optional.of(net.minecraft.core.GlobalPos.of(level.dimension(), naar)), false);
+            if (!tracker.equals(stack.get(DataComponents.LODESTONE_TRACKER))) {
+                stack.set(DataComponents.LODESTONE_TRACKER, tracker);
+            }
+        } else if (stack.has(DataComponents.LODESTONE_TRACKER)) {
+            stack.remove(DataComponents.LODESTONE_TRACKER);
+        }
+        if (p.getMainHandItem() != stack && p.getOffhandItem() != stack) {
+            return;
+        }
+        Component tekst;
+        nl.juiced.guhs.feature.verhaal.Doel d = doel ? nl.juiced.guhs.feature.verhaal.Doelen.van(p) : null;
+        if (!doel) {
+            tekst = Component.translatable("item.guhs.guh_compass.none");
+        } else if (d == null) {
+            tekst = Component.translatable("gui.guhs.verhaal.kompas.geen");
+        } else if (naar == null) {
+            tekst = Component.translatable(d.dim() == level.dimension() ? "gui.guhs.verhaal.kompas.zoek" : "gui.guhs.verhaal.kompas.elders", d.tekst());
+        } else if (d.dim() != level.dimension()) {
+            tekst = Component.translatable("gui.guhs.verhaal.kompas.portaal", d.tekst());
+        } else {
+            int blokken = (int) Math.round(Math.hypot(naar.getX() - p.getX(), naar.getZ() - p.getZ()) / 10) * 10;
+            tekst = Component.translatable("gui.guhs.verhaal.kompas.afstand", d.tekst(), Math.max(blokken, 5));
+        }
+        p.sendOverlayMessage(tekst.copy().withStyle(ChatFormatting.LIGHT_PURPLE));
     }
 
     @Override

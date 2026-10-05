@@ -289,6 +289,11 @@ def build(h):
         for k, t in waar.items():
             h.lang(f"{base}.waar.{k}", t, t)
     selfcheck()
+    # bbq2: the verhaal engine's own module (verhaal_motor: the registered questlines, cutscenes, narrator cards, the demo).
+    # The skeleton lists it in FEATURES; until then it is built from here, so its texts are never missing.
+    from features import FEATURES, verhaal_motor
+    if "verhaal_motor" not in FEATURES:
+        verhaal_motor.build(h)
 
 
 def java_tabel():
