@@ -342,12 +342,11 @@ def quest_items():
     ]:
         lang(key, en, nl)
     shaped("guh_ballon", [" W ", " W ", " S "], {"W": "minecraft:pink_wool", "S": "minecraft:string"}, "guhs:guh_ballon", 2)
-    # 1.2.7: the sled parts were chest loot only (first come, first served on a server): you can also make them,
-    # and the Bank Guh too (the Hungry Guh of a picnic serves every player once; this is for a second one)
+    # 1.2.7: the sled parts were chest loot only (first come, first served on a server): you can also make them
+    # (1.2.8: the Bank Guh recipe is gone again: it only comes from the Hungry Guh's quest, once per player)
     shaped("sleeglijder", ["S S", "III"], {"S": "minecraft:stick", "I": "minecraft:iron_ingot"}, "guhs:sleeglijder")
     shaped("guh_belletje", [" S ", "NGN", " N "], {"S": "minecraft:string", "N": "minecraft:gold_nugget", "G": "minecraft:gold_ingot"},
            "guhs:guh_belletje")
-    shaped("bank_guh", ["FFF", "FCF", "FFF"], {"F": "guhs:gefrituurde_kaasknabbels", "C": "minecraft:chest"}, "guhs:bank_guh")
     shapeless("guhdex", ["minecraft:book", "guhs:kaas_knabbels", "minecraft:pink_dye"], "guhs:guhdex")
     shaped("guh_kristal_verrekijker", ["C", "S"], {"C": "guhs:guh_kristal", "S": "minecraft:spyglass"}, "guhs:guh_kristal_verrekijker")
     # balloons are found at guh picnics too (you need 3 for the party)
