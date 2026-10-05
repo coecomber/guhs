@@ -277,8 +277,8 @@ public final class BaanBesturing {
 
     /** Your head hit something on the way up: the block above you hops, and the server hears of it. */
     private static void kop(LocalPlayer p, Level level) {
-        if (!(p.verticalCollision && !p.verticalCollisionBelow && valVoor > 0.05)) {
-            return;
+        if (!(p.verticalCollision && !p.verticalCollisionBelow) || p.onGround()) {
+            return;                                           // (only a bump on the way up)
         }
         Baan baan = GuhrioClient.baan();
         Direction d = baan.richting(stuk);

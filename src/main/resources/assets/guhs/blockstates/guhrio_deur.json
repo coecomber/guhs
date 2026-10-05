@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "guhs:block/guhrio_deur_onder"
+    },
+    "half=upper": {
+      "model": "guhs:block/guhrio_deur_boven"
+    }
+  }
+}

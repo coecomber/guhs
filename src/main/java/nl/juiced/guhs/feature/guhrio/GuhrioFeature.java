@@ -67,6 +67,8 @@ public final class GuhrioFeature {
     public static final DeferredBlock<GuhrioBlocks.PijpLijfBlok> PIJP_LIJF = BLOCKS.registerBlock("guhrio_pijp_lijf", GuhrioBlocks.PijpLijfBlok::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).strength(1.5f, 6f).sound(SoundType.COPPER)
                     .isValidSpawn((s, l, p, e) -> false).isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p) -> false).dynamicShape());
+    public static final DeferredBlock<GuhrioBlocks.DeurBlok> DEUR = BLOCKS.registerBlock("guhrio_deur", GuhrioBlocks.DeurBlok::new,
+            () -> los(MapColor.COLOR_BROWN).sound(SoundType.WOOD));
     public static final DeferredBlock<GuhrioBlocks.GuhmbaPlek> GUHMBA_PLEK = BLOCKS.registerBlock("guhrio_guhmba_plek", GuhrioBlocks.GuhmbaPlek::new,
             () -> BlockBehaviour.Properties.of().noCollision().noLootTable().strength(-1f, 3600000f).noOcclusion()
                     .isValidSpawn((s, l, p, e) -> false).pushReaction(PushReaction.BLOCK));
@@ -75,7 +77,7 @@ public final class GuhrioFeature {
             ITEMS.registerSimpleBlockItem(GROND), ITEMS.registerSimpleBlockItem(BLOK), ITEMS.registerSimpleBlockItem(STARTBLOK),
             ITEMS.registerSimpleBlockItem(VRAAGBLOK), ITEMS.registerSimpleBlockItem(STEEN), ITEMS.registerSimpleBlockItem(MUNT),
             ITEMS.registerSimpleBlockItem(VLAG), ITEMS.registerSimpleBlockItem(MAST), ITEMS.registerSimpleBlockItem(PIJP),
-            ITEMS.registerSimpleBlockItem(PIJP_LIJF), ITEMS.registerSimpleBlockItem(GUHMBA_PLEK));
+            ITEMS.registerSimpleBlockItem(PIJP_LIJF), ITEMS.registerSimpleBlockItem(DEUR), ITEMS.registerSimpleBlockItem(GUHMBA_PLEK));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GuhrioBlocks.StartBlockEntity>> START_BE = BLOCK_ENTITIES.register("guhrio_start",
             () -> new BlockEntityType<>(GuhrioBlocks.StartBlockEntity::new, STARTBLOK.get()));

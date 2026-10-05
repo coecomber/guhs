@@ -55,6 +55,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  *     <li>{@link VlagBlok}: a flag: your spot to come back to. {@link MastBlok}: the flagpole, the end of the level.</li>
  *     <li>{@link PijpBlok} (the mouth) and {@link PijpLijfBlok}: a green pipe; duck on the mouth and you come out of the
  *     other mouth with the same {@link PijpBlok#KANAAL} in this level.</li>
+ *     <li>{@link DeurBlok}: a door (two high); press W in it and you step out of the other door with the same channel.</li>
  *     <li>{@link GuhmbaPlek}: where a Guhmba lives (invisible).</li>
  * </ul>
  */
@@ -494,6 +495,94 @@ public final class GuhrioBlocks {
                 return;
             }
             GuhrioSpel.pijp(player, sessie, pos, naar);
+        }
+    }
+
+    /**
+     * A door in the lane, two blocks high (half lower / upper, like any door). Stand in it and press W: you step out of the
+     * other door of this level with the same {@link PijpBlok#KANAAL} (it may be on another lane: a room behind the wall).
+     */
+    public static class DeurBlok extends Block implements GuhrioStuk {
+        public static final MapCodec<DeurBlok> CODEC = simpleCodec(DeurBlok::new);
+        public static final EnumProperty<net.minecraft.world.level.block.state.properties.DoubleBlockHalf> HALF =
+                net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF;
+
+        public DeurBlok(Properties properties) {
+            super(properties);
+            registerDefaultState(stateDefinition.any().setValue(PijpBlok.KANAAL, 0)
+                    .setValue(HALF, net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER));
+        }
+
+        @Override
+        protected MapCodec<? extends Block> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+            builder.add(PijpBlok.KANAAL, HALF);
+        }
+
+        @Override
+        public BlockState getStateForPlacement(BlockPlaceContext context) {
+            BlockState onder = context.getLevel().getBlockState(context.getClickedPos().below());
+            return onder.getBlock() instanceof DeurBlok
+                    ? onder.setValue(HALF, net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER) : defaultBlockState();
+        }
+
+        @Override
+        protected boolean propagatesSkylightDown(BlockState state) {
+            return true;
+        }
+
+        private static boolean onderste(BlockState state) {
+            return state.getBlock() instanceof DeurBlok && state.getValue(HALF) == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER;
+        }
+
+        /** The other door (its lower block) of this one in the level, or null. */
+        @Nullable
+        public static BlockPos andere(GuhrioSpel.Actief actief, BlockPos pos, BlockState state) {
+            List<GuhrioSpel.Stuk> deuren = actief.stukken.stream()
+                    .filter(s -> onderste(s.state()) && s.state().getValue(PijpBlok.KANAAL).equals(state.getValue(PijpBlok.KANAAL))).toList();
+            for (int i = 0; i < deuren.size(); i++) {
+                if (deuren.get(i).pos().equals(pos) && deuren.size() > 1) {
+                    return deuren.get((i + 1) % deuren.size()).pos();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void deur(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
+            BlockPos hier = onderste(state) ? pos : pos.below();
+            BlockState onder = player.level().getBlockState(hier);
+            if (!onderste(onder)) {
+                return;
+            }
+            BlockPos naar = andere(sessie.actief, hier, onder);
+            if (naar == null || !player.level().isLoaded(naar)) {
+                return;
+            }
+            // (you must really stand in it)
+            if (Math.abs(player.getY() - hier.getY()) > 1.2 || Math.abs(player.getX() - (hier.getX() + 0.5)) > 0.8
+                    || Math.abs(player.getZ() - (hier.getZ() + 0.5)) > 0.8) {
+                return;
+            }
+            GuhrioSpel.deur(player, sessie, hier, naar);
+        }
+
+        /** Click it with an empty hand (creative): the next channel. */
+        @Override
+        protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+            if (!player.isCreative() || GuhrioSpel.speelt(player)) {
+                return InteractionResult.PASS;
+            }
+            if (!level.isClientSide()) {
+                BlockState nieuw = state.cycle(PijpBlok.KANAAL);
+                level.setBlock(pos, nieuw, 3);
+                player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guhrio.pijp.kanaal", nieuw.getValue(PijpBlok.KANAAL)));
+            }
+            return InteractionResult.SUCCESS;
         }
     }
 

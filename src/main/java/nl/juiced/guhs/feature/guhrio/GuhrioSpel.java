@@ -642,6 +642,21 @@ public final class GuhrioSpel {
         geluid(player.level(), Vec3.atCenterOf(van), SoundEvents.BUBBLE_COLUMN_WHIRLPOOL_INSIDE, 0.7f, 0.7f);
     }
 
+    /** Through the door at {@code van}: you stand in the door at {@code naar} at once. */
+    public static void deur(ServerPlayer player, Sessie s, BlockPos van, BlockPos naar) {
+        int naarBaan = s.level().baanVan(naar);
+        if (naarBaan < 0 || s.pijp != null) {
+            return;
+        }
+        s.baan = naarBaan;
+        player.setDeltaMovement(Vec3.ZERO);
+        player.teleportTo(naar.getX() + 0.5, naar.getY(), naar.getZ() + 0.5);
+        GuhrioPayloads.send(player, new GuhrioPayloads.Moment(GuhrioPayloads.Moment.DEUR, naar, naarBaan));
+        stuurStaat(player, s);
+        geluid(player.level(), Vec3.atCenterOf(van), SoundEvents.WOODEN_DOOR_OPEN, 0.8f, 1.0f);
+        geluid(player.level(), Vec3.atCenterOf(naar), SoundEvents.WOODEN_DOOR_CLOSE, 0.8f, 1.0f);
+    }
+
     static void geluid(ServerLevel level, Vec3 waar, SoundEvent geluid, float volume, float toon) {
         level.playSound(null, waar.x, waar.y, waar.z, geluid, SoundSource.PLAYERS, volume, toon);
     }

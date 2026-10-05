@@ -158,7 +158,7 @@ public class GuhrioGameTests {
             helper.assertTrue(lvl.baanVan(start.get(0).pos()) == 0, naam + ": the start block is on the first lane");
             int stukken = 0;
             for (Block blok : new Block[]{GuhrioFeature.MUNT.get(), GuhrioFeature.VRAAGBLOK.get(), GuhrioFeature.STEEN.get(), GuhrioFeature.VLAG.get(),
-                    GuhrioFeature.MAST.get(), GuhrioFeature.PIJP.get(), GuhrioFeature.GUHMBA_PLEK.get()}) {
+                    GuhrioFeature.MAST.get(), GuhrioFeature.PIJP.get(), GuhrioFeature.DEUR.get(), GuhrioFeature.GUHMBA_PLEK.get()}) {
                 for (StructureTemplate.StructureBlockInfo info : template.filterBlocks(BlockPos.ZERO, settings, blok)) {
                     helper.assertTrue(lvl.baanVan(info.pos()) >= 0, naam + ": " + blok + " at " + info.pos() + " lies in a lane");
                     stukken++;
@@ -510,6 +510,35 @@ public class GuhrioGameTests {
         helper.assertTrue(!s.inPijp() && GuhrioSpel.sessie(p) == s, "and out of it: the pipes are solid again");
         helper.assertFalse(state.getCollisionShape(level, vanAbs, CollisionContext.of(p)).isEmpty(), "solid for you too");
         weg(helper, p, q);
+        helper.succeed();
+    }
+
+    /** W in a door takes you to the other door with the same channel, from either half of it. */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void deurBrengtJeVerder(GameTestHelper helper) {
+        BlockPos startAbs = bouw(helper);
+        BlockState onder = GuhrioFeature.DEUR.get().defaultBlockState().setValue(GuhrioBlocks.PijpBlok.KANAAL, 7);
+        BlockState boven = onder.setValue(GuhrioBlocks.DeurBlok.HALF, net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER);
+        BlockPos van = new BlockPos(6, 2, Z), naar = new BlockPos(17, 2, Z);
+        for (BlockPos d : new BlockPos[]{van, naar}) {
+            helper.setBlock(d, onder);
+            helper.setBlock(d.above(), boven);
+        }
+        ServerPlayer p = start(helper, startAbs);
+        GuhrioSpel.Sessie s = GuhrioSpel.sessie(p);
+        BlockPos vanAbs = helper.absolutePos(van), naarAbs = helper.absolutePos(naar);
+        zet(helper, p, 9.5, 2);
+        GuhrioSpel.actie(p, GuhrioPayloads.Actie.DEUR, vanAbs, 0);
+        near(helper, p.getX(), helper.absoluteVec(new Vec3(9.5, 0, 0)).x, "you must stand in the door");
+        zet(helper, p, 6.5, 2);
+        GuhrioSpel.actie(p, GuhrioPayloads.Actie.DEUR, vanAbs.above(), 0);     // (the upper half works too)
+        near(helper, p.getX(), naarAbs.getX() + 0.5, "through the door");
+        near(helper, p.getY(), naarAbs.getY(), "standing in the other one");
+        GuhrioSpel.tick(p);
+        helper.assertTrue(GuhrioSpel.sessie(p) == s && !s.inPijp(), "still in the level");
+        GuhrioSpel.actie(p, GuhrioPayloads.Actie.DEUR, naarAbs, 0);
+        near(helper, p.getX(), vanAbs.getX() + 0.5, "and back");
+        weg(helper, p);
         helper.succeed();
     }
 

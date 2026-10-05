@@ -104,7 +104,7 @@ public final class GuhrioClient {
         NeoForge.EVENT_BUS.addListener((RenderFrameEvent.Pre event) -> BaanBesturing.kijkVast());
         NeoForge.EVENT_BUS.addListener((ViewportEvent.ComputeFov event) -> BaanCamera.fov(event));
         NeoForge.EVENT_BUS.addListener((RenderGuiLayerEvent.Pre event) -> {
-            if (speelt() && GuhrioHud.VERBORGEN.contains(event.getName())) {
+            if (speelt() && GuhrioHud.verborgen(event.getName())) {
                 event.setCanceled(true);
             }
         });
@@ -146,6 +146,20 @@ public final class GuhrioClient {
     /** What a piece is for you (0 as built). */
     public static int staat(BlockPos pos) {
         return banen == null ? 0 : STAAT.getOrDefault(pos, 0);
+    }
+
+    /** (dev: one line of what this game knows of the level) */
+    public static String devInfo() {
+        Baan b = baan();
+        return b == null ? "not in a level" : "level " + wereld + " lane " + baan + " (" + b.id + ") coins " + munten + " power " + kracht
+                + " time " + tijd + " pieces changed " + STAAT.size() + " camera type " + Minecraft.getInstance().options.getCameraType();
+    }
+
+    /** (dev: how far along the lane you are, or NaN) */
+    public static double devS() {
+        Baan b = baan();
+        LocalPlayer p = Minecraft.getInstance().player;
+        return b == null || p == null ? Double.NaN : b.plek(p.getX(), p.getZ()).s();
     }
 
     // =====================================================================================================================
@@ -288,6 +302,13 @@ public final class GuhrioClient {
                 klaar = GuhrioSpel.KLAAR_TICKS;
                 klaarTijd = m.getal();
                 BaanBesturing.klaar(p, m.pos());
+            }
+            case GuhrioPayloads.Moment.DEUR -> {
+                zetBaan(m.getal());
+                flits = 8;
+                p.setDeltaMovement(0, 0, 0);
+                BaanBesturing.terug(p);
+                BaanCamera.begin(p);
             }
             case GuhrioPayloads.Moment.KRIMP -> flits = 4;
             default -> {

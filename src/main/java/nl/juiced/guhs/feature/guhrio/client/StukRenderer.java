@@ -45,7 +45,9 @@ public class StukRenderer implements BlockEntityRenderer<GuhrioBlocks.StukBlockE
 
     private final BlockModelResolver blokken;
     private final ItemModelResolver items;
-    private final ItemStack muntStack = new ItemStack(GuhrioFeature.MUNT.get());
+    /** (made at the first coin: the renderers are created before item stacks can be)*/
+    @Nullable
+    private ItemStack muntStack;
 
     public StukRenderer(BlockEntityRendererProvider.Context context) {
         this.blokken = context.blockModelResolver();
@@ -78,6 +80,9 @@ public class StukRenderer implements BlockEntityRenderer<GuhrioBlocks.StukBlockE
         } else if (bs.getBlock() instanceof GuhrioBlocks.MuntBlok && staat == 0) {
             state.isMunt = true;
             state.draai = ((nu % 40) + partialTick) * 9f;
+            if (muntStack == null) {
+                muntStack = new ItemStack(GuhrioFeature.MUNT.get());
+            }
             items.updateForTopItem(state.munt, muntStack, ItemDisplayContext.FIXED, be.getLevel(), null, (int) be.getBlockPos().asLong());
         }
     }

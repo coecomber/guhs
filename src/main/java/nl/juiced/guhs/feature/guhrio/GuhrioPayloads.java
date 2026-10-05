@@ -115,6 +115,8 @@ public final class GuhrioPayloads {
         public static final int KRIMP = 5;
         /** Landed on a creature (getal: its entity id): bounce (the server saw it; your own game bounced already). */
         public static final int STUITER = 6;
+        /** You stepped through a door and stand in the door at pos (getal: the lane you are on now). */
+        public static final int DEUR = 7;
 
         public static final Type<Moment> TYPE = new Type<>(Guhs.id("guhrio_moment"));
         public static final StreamCodec<FriendlyByteBuf, Moment> STREAM_CODEC = StreamCodec.composite(

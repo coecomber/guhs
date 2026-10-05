@@ -5,7 +5,8 @@ Super Guhrio (bbq2; the Java side is feature/guhrio) - the side-view engine's ow
               guhrio_vraagblok (the ?-block: inhoud munt/superknabbel; the state leeg=true is only its empty look),
               guhrio_steen (brick), guhrio_munt (a coin in the lane), guhrio_vlag (a flag: your spot to come back to),
               guhrio_mast (the flagpole, top=true carries the flag), guhrio_pijp (a pipe's mouth, kanaal 0..15) and
-              guhrio_pijp_lijf (its body), guhrio_guhmba_plek (where a Guhmba lives; invisible)
+              guhrio_pijp_lijf (its body), guhrio_deur (a door, half lower/upper, kanaal 0..15), guhrio_guhmba_plek (where a
+              Guhmba lives; invisible)
   entity      textures/entity/guhrio_guhmba.png (the boxes of client/GuhmbaRenderer)
   levels      level_json(h, id, banen, ...) writes data/guhs/guhrio_level/<id>.json: the lanes of a level in the level's
               own frame (the start block is 0,0,0, +x is the way it faces, +z its right hand). LevelBouwer below builds a
@@ -31,6 +32,7 @@ TESTBAAN = "guhrio_test_baan"
 GROND, BLOK, START, VRAAG, STEEN, MUNT = ("guhs:guhrio_grond", "guhs:guhrio_blok", "guhs:guhrio_startblok", "guhs:guhrio_vraagblok",
                                           "guhs:guhrio_steen", "guhs:guhrio_munt")
 VLAG, MAST, PIJP, PIJP_LIJF, GUHMBA = "guhs:guhrio_vlag", "guhs:guhrio_mast", "guhs:guhrio_pijp", "guhs:guhrio_pijp_lijf", "guhs:guhrio_guhmba_plek"
+DEUR = "guhs:guhrio_deur"
 AIR = "minecraft:air"
 
 # the Guhmba is a mini-Mika: the Mika's dusty pink
@@ -226,6 +228,32 @@ def _start():
     return img
 
 
+def _deur(boven):
+    """Half of a door: dark wood with a pink frame; the top half has a little window, the bottom half the knob."""
+    a = _vlak((132, 84, 52), 4, 9110 + boven)
+    lijst, donker = (236, 150, 186), (86, 50, 30)
+    a[:, 0:2, :3] = lijst
+    a[:, 14:16, :3] = lijst
+    if boven:
+        a[0:2, :, :3] = lijst
+        for y in range(4, 9):
+            for x in range(5, 11):
+                _px(a, x, y, (150, 220, 250) if (x + y) % 5 else (230, 250, 255))
+        for x in range(4, 12):
+            _px(a, x, 3, donker)
+            _px(a, x, 9, donker)
+    else:
+        for x in range(4, 12):
+            _px(a, x, 4, donker)
+            _px(a, x, 12, donker)
+        for y in range(4, 13):
+            _px(a, 4, y, donker)
+            _px(a, 11, y, donker)
+        _px(a, 12, 1, (255, 214, 70))
+        _px(a, 12, 2, (200, 150, 30))
+    return Image.fromarray(a)
+
+
 def _guhmba_gezicht(a, x0, y0):
     """The grumpy face, 12 x 9 at (x0, y0): slanted brows, white eyes, a Mika nose, a frown with two little teeth."""
     wit, zwart, neus = (255, 255, 255), (40, 22, 34), (236, 110, 150)
@@ -285,6 +313,8 @@ def textures(h):
     h.save(_paal((120, 220, 110)), "block", "guhrio_mast.png")
     h.save(_paal((120, 220, 110), top=(255, 210, 60), vlag=(255, 120, 180)), "block", "guhrio_mast_top.png")
     h.save(_start(), "block", "guhrio_startblok.png")
+    h.save(_deur(False), "block", "guhrio_deur_onder.png")
+    h.save(_deur(True), "block", "guhrio_deur_boven.png")
     h.save(_munt(), "item", "guhrio_munt.png")
     h.save(_guhmba_icoon(), "item", "guhrio_guhmba_plek.png")
     h.save(_guhmba(), "entity", "guhrio_guhmba.png")
@@ -322,13 +352,23 @@ def blocks_and_items(h):
     h.item_model("guhrio_vlag", b("guhrio_vlag"))
     h.item_model("guhrio_mast", b("guhrio_mast_top"))
     h.item_model("guhrio_startblok", b("guhrio_startblok"))
+    # the door: two thin crossed panels (one of them always faces the camera, whichever way the lane runs)
+    for half in ("onder", "boven"):
+        tex = b(f"guhrio_deur_{half}")
+        face = {"uv": [0, 0, 16, 16], "texture": "#deur"}
+        h.w(f"{A}/models/block/guhrio_deur_{half}.json", {"render_type": "cutout", "textures": {"deur": tex, "particle": tex}, "elements": [
+            {"from": [0, 0, 7.5], "to": [16, 16, 8.5], "faces": {"north": face, "south": face}},
+            {"from": [7.5, 0, 0], "to": [8.5, 16, 16], "faces": {"east": face, "west": face}}]})
+    h.w(f"{A}/blockstates/guhrio_deur.json", {"variants": {"half=lower": {"model": b("guhrio_deur_onder")},
+                                                            "half=upper": {"model": b("guhrio_deur_boven")}}})
+    h.item_model("guhrio_deur", b("guhrio_deur_onder"))
     # drawn by their block entity / not drawn at all: a model with only the breaking particles
     for name, particle in (("guhrio_munt", "guhs:item/guhrio_munt"), ("guhrio_guhmba_plek", "guhs:item/guhrio_guhmba_plek")):
         h.w(f"{A}/models/block/{name}.json", {"textures": {"particle": particle}})
         h.w(f"{A}/blockstates/{name}.json", {"variants": {"": {"model": b(name)}}})
         h.item_model(name)
     for name in ("guhrio_grond", "guhrio_blok", "guhrio_steen", "guhrio_vraagblok", "guhrio_pijp", "guhrio_pijp_lijf", "guhrio_munt",
-                 "guhrio_vlag", "guhrio_mast", "guhrio_startblok"):
+                 "guhrio_vlag", "guhrio_mast", "guhrio_startblok", "guhrio_deur"):
         h.self_drop(name)
     h.add_tag("minecraft/tags/block/mineable/pickaxe", [f"guhs:{n}" for n in ("guhrio_grond", "guhrio_blok", "guhrio_steen", "guhrio_vraagblok",
                                                                              "guhrio_pijp", "guhrio_pijp_lijf")])
@@ -347,11 +387,12 @@ TEXTS = {
     "block.guhs.guhrio_mast": "Guhrio-vlaggenmast",
     "block.guhs.guhrio_pijp": "Groene pijp",
     "block.guhs.guhrio_pijp_lijf": "Groene pijp (onderstuk)",
+    "block.guhs.guhrio_deur": "Guhrio-deur",
     "block.guhs.guhrio_startblok": "Guhrio-startvlag",
     "block.guhs.guhrio_guhmba_plek": "Guhmba-plekje",
     "entity.guhs.guhrio_guhmba": "Guhmba",
     "gui.guhs.guhrio.hud.naam": "GUHRIO",
-    "gui.guhs.guhrio.hud.klein": "klein maar vads",
+    "gui.guhs.guhrio.hud.klein": "klein",
     "gui.guhs.guhrio.hud.super": "SUPER!",
     "gui.guhs.guhrio.hud.munten": "MUNTEN",
     "gui.guhs.guhrio.hud.wereld": "WERELD",
@@ -361,7 +402,7 @@ TEXTS = {
     "gui.guhs.guhrio.klaar": "Level %s gehaald in %s met %s munten. Vahoeg!",
     "gui.guhs.guhrio.klaar.record": "Level %s gehaald in %s met %s munten. Dat is je snelste tijd, vahoeg!",
     "gui.guhs.guhrio.geen_level": "Deze startvlag weet niet welk level hij is (%s), njeg.",
-    "gui.guhs.guhrio.pijp.kanaal": "Pijp-kanaal %s (twee pijpen met hetzelfde kanaal horen bij elkaar)",
+    "gui.guhs.guhrio.pijp.kanaal": "Kanaal %s (twee pijpen of twee deuren met hetzelfde kanaal horen bij elkaar)",
 }
 
 
@@ -471,7 +512,9 @@ def testlevel(h):
     s.set(38, y, Z, VLAG)
     for i, x in enumerate((40, 41, 42)):                                       # stairs
         s.fill(x, y, Z, x, y + i, Z, BLOK)
-    s.set(45, y, Z, GUHMBA)
+    for k, half in enumerate(("lower", "upper")):                              # a door to the bonus room too
+        s.set(44, y + k, Z, DEUR, {"kanaal": "5", "half": half})
+    s.set(46, y, Z, GUHMBA)
     s.set(48, y, Z, GUHMBA)
     # pipe 2: where you come back from the bonus room
     s.set(50, y, Z, PIJP_LIJF)
@@ -497,10 +540,12 @@ def testlevel(h):
     s.set(28, B + 2, Z, PIJP, {"kanaal": "1"})
     s.set(46, B + 1, Z, PIJP_LIJF)
     s.set(46, B + 2, Z, PIJP, {"kanaal": "2"})
-    for x in range(31, 44):
+    for x in range(31, 43):
         s.set(x, B + 1, Z, MUNT)
         if x % 2 == 1:
             s.set(x, B + 3, Z, MUNT)
+    for k, half in enumerate(("lower", "upper")):
+        s.set(44, B + 1 + k, Z, DEUR, {"kanaal": "5", "half": half})
     lvl.baan("bonus", [(26, B + 1, Z), (48, B + 1, Z)], onder=B, boven=B + 8)
     lvl.save()
 

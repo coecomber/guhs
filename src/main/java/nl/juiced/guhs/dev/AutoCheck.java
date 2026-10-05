@@ -105,6 +105,8 @@ public final class AutoCheck {
     private static Float lockYaw, lockPitch;
     /** 2.10.1: hold W (drive on / drive off). */
     private static boolean driveForward;
+    /** bbq2: keys held by 'key <name> on' (Super Guhrio's side view is played with the real keys). */
+    private static final java.util.Set<net.minecraft.client.KeyMapping> heldKeys = new java.util.LinkedHashSet<>();
     private static boolean opened; // a screen the script opened itself
     /** 2.9 visual QA: the box of the structure the last tplocate found (camrel / relcmd are relative to its min corner). */
     private static BoundingBox lastBox;
@@ -318,6 +320,9 @@ public final class AutoCheck {
                 applyLock();
                 if (driveForward) {
                     mc.options.keyUp.setDown(true);
+                }
+                for (net.minecraft.client.KeyMapping k : heldKeys) {
+                    k.setDown(true);
                 }
                 for (int guard = 0; guard < 50; guard++) {
                     if (current == null) {
@@ -861,6 +866,90 @@ public final class AutoCheck {
                 return mc2 -> {
                     driveForward = a[1].equalsIgnoreCase("on");
                     mc2.options.keyUp.setDown(driveForward);
+                    return true;
+                };
+            case "key":
+                // key <left|right|up|down|jump|sneak|sprint> on|off: (bbq2) hold a movement key until off;  key all off
+                return mc2 -> {
+                    var o = mc2.options;
+                    if (a[1].equalsIgnoreCase("all")) {
+                        heldKeys.forEach(k -> k.setDown(false));
+                        heldKeys.clear();
+                        return true;
+                    }
+                    net.minecraft.client.KeyMapping k = switch (a[1].toLowerCase(Locale.ROOT)) {
+                        case "left" -> o.keyLeft;
+                        case "right" -> o.keyRight;
+                        case "up" -> o.keyUp;
+                        case "down" -> o.keyDown;
+                        case "jump" -> o.keyJump;
+                        case "sneak" -> o.keyShift;
+                        case "sprint" -> o.keySprint;
+                        default -> null;
+                    };
+                    if (k == null) {
+                        problem("key: unknown key " + a[1]);
+                        return true;
+                    }
+                    boolean on = a.length < 3 || a[2].equalsIgnoreCase("on");
+                    if (on) {
+                        heldKeys.add(k);
+                    } else {
+                        heldKeys.remove(k);
+                    }
+                    k.setDown(on);
+                    return true;
+                };
+            case "guhriowacht": {
+                // guhriowacht <s> [maxTicks]: (bbq2) wait until the player is at least s blocks along the lane (or, with a
+                // minus sign, at most that far); gives up after maxTicks (default 200)
+                double doel = Double.parseDouble(a[1]);
+                int max = a.length > 2 ? Integer.parseInt(a[2]) : 200;
+                int[] t = {0};
+                return mc2 -> {
+                    double nu = nl.juiced.guhs.feature.guhrio.client.GuhrioClient.devS();
+                    boolean daar = doel >= 0 ? nu >= doel : nu <= -doel;
+                    if (!daar && ++t[0] > max) {
+                        problem("guhriowacht " + a[1] + ": not there after " + max + " ticks (s = " + nu + ")");
+                        return true;
+                    }
+                    return daar;
+                };
+            }
+            case "guhriosprong": {
+                // guhriosprong <ticks> [label]: (bbq2) hold space for that many ticks and note how high and far the jump went
+                int hold = Integer.parseInt(a[1]);
+                int[] t = {0};
+                double[] m = new double[4];
+                return mc2 -> {
+                    var p = mc2.player;
+                    if (t[0] == 0) {
+                        m[0] = p.getY();
+                        m[1] = p.getY();
+                        m[2] = p.getX();
+                        m[3] = p.getZ();
+                    }
+                    mc2.options.keyJump.setDown(t[0] < hold);
+                    m[1] = Math.max(m[1], p.getY());
+                    t[0]++;
+                    if (t[0] > 3 && (p.onGround() || t[0] > 80)) {
+                        mc2.options.keyJump.setDown(false);
+                        note("  guhriosprong " + rest + ": " + String.format(Locale.ROOT, "%.2f blocks high, %.2f blocks far, %d ticks in the air",
+                                m[1] - m[0], Math.abs(p.getX() - m[2]) + Math.abs(p.getZ() - m[3]), t[0] - 1));
+                        return true;
+                    }
+                    return false;
+                };
+            }
+            case "guhriopos":
+                // guhriopos [label]: (bbq2) where the player and the camera are, and what the player's game knows of the level
+                return mc2 -> {
+                    var cam = mc2.gameRenderer.getMainCamera();
+                    var p = mc2.player;
+                    note("  guhriopos " + rest + ": " + String.format(Locale.ROOT, "player %.2f %.2f %.2f yaw %.0f ground %s vel %.3f %.3f %.3f | camera %.2f %.2f %.2f yaw %.1f pitch %.1f | ",
+                            p.getX(), p.getY(), p.getZ(), p.getYRot(), p.onGround(), p.getDeltaMovement().x, p.getDeltaMovement().y, p.getDeltaMovement().z,
+                            cam.position().x, cam.position().y, cam.position().z, cam.yRot(), cam.xRot())
+                            + nl.juiced.guhs.feature.guhrio.client.GuhrioClient.devInfo());
                     return true;
                 };
             case "racekart":
