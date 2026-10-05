@@ -24,7 +24,7 @@ public final class SluierRook {
     /** How far from the viewer the wall is drawn (blocks). */
     public static final double ZICHT = 40;
     /** Smoke clouds per block of wall per tick (each is some three blocks wide and lives about five seconds: they overlap into a wall). */
-    private static final double DICHTHEID = 0.16;
+    private static final double DICHTHEID = 0.2;
     /** How far below and above the viewer's eyes the wall is drawn at most (it is as high as the sluier's box). */
     private static final double ONDER = 22, HOOG = 26;
     /** Smoke clouds per square block of the lid per tick (only drawn for a viewer who could look in over the wall). */

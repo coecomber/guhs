@@ -91,10 +91,10 @@ def groep(h, groep_id, kop):
     h.lang(f"gui.guhs.verhalen.kop.{groep_id}", kop, kop)
 
 
-def verhaallijn(h, id, naam, uitleg, stappen, klaar, extra=None, kort=None):
+def verhaallijn(h, id, naam, uitleg, stappen, klaar=None, extra=None, kort=None):
     """
     The texts of a Verhaallijn. stappen = [(stapnaam, nu, waar), ...] in order (step i = index i), klaar = (nu, waar) for when
-    it is done, extra = {sleutel: (nu, waar)} for every variant sleutel (Verhaallijn.Builder.extraSleutels), kort =
+    it is done (default: "Klaar! Vahoeg!" at the last step's place), extra = {sleutel: (nu, waar)} for every variant sleutel (Verhaallijn.Builder.extraSleutels), kort =
     {sleutel: the short objective line} (default: the nu text). Also writes the hidden advancements quest/<id>_stap_<i>.
     """
     base = f"gui.guhs.verhalen.{id}"
@@ -104,7 +104,8 @@ def verhaallijn(h, id, naam, uitleg, stappen, klaar, extra=None, kort=None):
     for i, (stapnaam, nu, waar) in enumerate(stappen):
         h.lang(f"{base}.stap.{i}", stapnaam, stapnaam)
         sleutels[str(i)] = (nu, waar)
-    sleutels["klaar"] = klaar
+    # (no klaar given: a plain "done" at the place of the last step)
+    sleutels["klaar"] = klaar or ("Klaar! Vahoeg!", stappen[-1][2])
     sleutels.update(extra or {})
     for s, (nu, waar) in sleutels.items():
         h.lang(f"{base}.nu.{s}", nu, nu)
