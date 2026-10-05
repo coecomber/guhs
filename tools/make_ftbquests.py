@@ -895,6 +895,7 @@ def plan():
     """Everything but the writing: ({chapter: dict(sections, pos, links, images, hidden, drawn)}, deps, where, info)."""
     info = {x[0]: x for x in QUESTS}
     sections = assign()
+    einde = slots()   # (bbq2: the FTB_SLOT pictures)
     where = {}
     for c, ss in sections.items():
         where[f"intro_{c}"] = c
@@ -924,7 +925,6 @@ def plan():
             if c in last and not any(linear(d) for d in deps[key]):
                 deps[key] = [last[c]]
             last[c] = key
-    einde = slots()
     out = {}
     for c in ORDER:
         pos, links, images = layout(c, sections[c], deps, einde[c])
