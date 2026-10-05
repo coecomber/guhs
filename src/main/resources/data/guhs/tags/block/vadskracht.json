@@ -9,6 +9,10 @@
     "guhs:vadskracht_testbron",
     "guhs:vadskracht_testbatterij",
     "guhs:vadskracht_testmachine",
-    "guhs:vadskracht_testmachine_groot"
+    "guhs:vadskracht_testmachine_groot",
+    "guhs:sauspomp",
+    "guhs:brouwautomaat",
+    "guhs:frituurautomaat",
+    "guhs:grillkoolpers"
   ]
 }

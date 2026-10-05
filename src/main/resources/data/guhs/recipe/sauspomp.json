@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IPI",
+    "SBS",
+    "IGI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:piston",
+    "S": "guhs:sausslang",
+    "B": "minecraft:bucket",
+    "G": "guhs:grillspies"
+  },
+  "result": {
+    "id": "guhs:sauspomp"
+  }
+}

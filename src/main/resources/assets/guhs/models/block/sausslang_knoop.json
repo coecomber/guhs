@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/sausslang",
+    "slang": "guhs:block/sausslang",
+    "knoop": "guhs:block/sausslang_knoop"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        5,
+        5
+      ],
+      "to": [
+        11,
+        11,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#knoop",
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ]
+        },
+        "south": {
+          "texture": "#knoop",
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ]
+        },
+        "east": {
+          "texture": "#knoop",
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ]
+        },
+        "west": {
+          "texture": "#knoop",
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ]
+        },
+        "up": {
+          "texture": "#knoop",
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ]
+        },
+        "down": {
+          "texture": "#knoop",
+          "uv": [
+            5,
+            5,
+            11,
+            11
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I I",
+    "PBP",
+    "IGI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "P": "#minecraft:planks",
+    "B": "minecraft:barrel",
+    "G": "guhs:grillspies"
+  },
+  "result": {
+    "id": "guhs:sausvat"
+  }
+}

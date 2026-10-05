@@ -1,7 +1,94 @@
 {
   "variants": {
-    "": {
-      "model": "guhs:block/grillkoolpers"
+    "facing=north,perst=false,snoet=slaapt": {
+      "model": "guhs:block/grillkoolpers_slaapt"
+    },
+    "facing=north,perst=true,snoet=slaapt": {
+      "model": "guhs:block/grillkoolpers_slaapt_perst"
+    },
+    "facing=north,perst=false,snoet=werkt": {
+      "model": "guhs:block/grillkoolpers_werkt"
+    },
+    "facing=north,perst=true,snoet=werkt": {
+      "model": "guhs:block/grillkoolpers_werkt_perst"
+    },
+    "facing=north,perst=false,snoet=vol": {
+      "model": "guhs:block/grillkoolpers_vol"
+    },
+    "facing=north,perst=true,snoet=vol": {
+      "model": "guhs:block/grillkoolpers_vol_perst"
+    },
+    "facing=east,perst=false,snoet=slaapt": {
+      "model": "guhs:block/grillkoolpers_slaapt",
+      "y": 90
+    },
+    "facing=east,perst=true,snoet=slaapt": {
+      "model": "guhs:block/grillkoolpers_slaapt_perst",
+      "y": 90
+    },
+    "facing=east,perst=false,snoet=werkt": {
+      "model": "guhs:block/grillkoolpers_werkt",
+      "y": 90
+    },
+    "facing=east,perst=true,snoet=werkt": {
+      "model": "guhs:block/grillkoolpers_werkt_perst",
+      "y": 90
+    },
+    "facing=east,perst=false,snoet=vol": {
+      "model": "guhs:block/grillkoolpers_vol",
+      "y": 90
+    },
+    "facing=east,perst=true,snoet=vol": {
+      "model": "guhs:block/grillkoolpers_vol_perst",
+      "y": 90
+    },
+    "facing=south,perst=false,snoet=slaapt": {
+      "model": "guhs:block/grillkoolpers_slaapt",
+      "y": 180
+    },
+    "facing=south,perst=true,snoet=slaapt": {
+      "model": "guhs:block/grillkoolpers_slaapt_perst",
+      "y": 180
+    },
+    "facing=south,perst=false,snoet=werkt": {
+      "model": "guhs:block/grillkoolpers_werkt",
+      "y": 180
+    },
+    "facing=south,perst=true,snoet=werkt": {
+      "model": "guhs:block/grillkoolpers_werkt_perst",
+      "y": 180
+    },
+    "facing=south,perst=false,snoet=vol": {
+      "model": "guhs:block/grillkoolpers_vol",
+      "y": 180
+    },
+    "facing=south,perst=true,snoet=vol": {
+      "model": "guhs:block/grillkoolpers_vol_perst",
+      "y": 180
+    },
+    "facing=west,perst=false,snoet=slaapt": {
+      "model": "guhs:block/grillkoolpers_slaapt",
+      "y": 270
+    },
+    "facing=west,perst=true,snoet=slaapt": {
+      "model": "guhs:block/grillkoolpers_slaapt_perst",
+      "y": 270
+    },
+    "facing=west,perst=false,snoet=werkt": {
+      "model": "guhs:block/grillkoolpers_werkt",
+      "y": 270
+    },
+    "facing=west,perst=true,snoet=werkt": {
+      "model": "guhs:block/grillkoolpers_werkt_perst",
+      "y": 270
+    },
+    "facing=west,perst=false,snoet=vol": {
+      "model": "guhs:block/grillkoolpers_vol",
+      "y": 270
+    },
+    "facing=west,perst=true,snoet=vol": {
+      "model": "guhs:block/grillkoolpers_vol_perst",
+      "y": 270
     }
   }
 }
