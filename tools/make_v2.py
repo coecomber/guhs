@@ -390,9 +390,9 @@ VARIANT_DEX = {  # id: (rarity en, rarity nl, info en, info nl)
                "Zijn vacht is een nachthemel vol gloeiende sterren."),
     "rainbow": ("Very rare", "Heel zeldzaam", "Changes colour all the time. Nobody knows how.",
                 "Verandert steeds van kleur. Niemand weet hoe."),
-    "ender": ("Rare (Guh Peaks only)", "Zeldzaam (alleen op de Guhpieken)",
-              "Enderguh: black and purple, with dragon wings. Tame it (1 in 8 knabbels, or 1 fried knabbel), saddle it and fly!",
-              "Enderguh: zwart-paars met drakenvleugels. Tem hem (1 op 8 knabbels, of 1 gefrituurde knabbel), zadel hem en vlieg!"),
+    "ender": ("Rare (Guh End only, after beating Opper-Mika)", "Zeldzaam (alleen in het Guheinde, na het verslaan van Opper-Mika)",
+              "Enderguh: black and purple, with dragon wings. It lives in the Guheinde and can only be tamed once you beat Opper-Mika (1 in 8 knabbels, or 1 fried knabbel). Saddle it and fly!",
+              "Enderguh: zwart-paars met drakenvleugels. Hij woont in het Guheinde en laat zich pas temmen als je Opper-Mika hebt verslagen (1 op 8 knabbels, of 1 gefrituurde knabbel). Zadel hem en vlieg!"),
     "koning": ("Unique (guh castle)", "Uniek (guhkasteel)",
                "The Koningguh on his throne in the legendary guh castle. Royal purple, a white mane, a moustache. Tame him with kaas knabbels for his outfit!",
                "De Koningguh op zijn troon in het legendarische guhkasteel. Koningspaars, witte manen, een snorretje. Tem hem met kaasknabbels voor zijn pakje!"),
@@ -1347,6 +1347,13 @@ def bees_slimes_mikas():
     add_tag("minecraft/tags/point_of_interest_type/bee_home", ["guhs:knabbelkorf"])
     add_tag("minecraft/tags/block/beehives", ["guhs:knabbelkorf"])
     add_tag("minecraft/tags/block/mineable/axe", ["guhs:knabbelkorf"])
+    # 1.2.8: every kind of Mika (nl.juiced.guhs.entity.Mikas): an aggressive guh only fights Mikas and hostile mobs.
+    # A new Mika type only has to be added here (and to data/guhs/tags/entity_type/mikas.json).
+    add_tag("guhs/tags/entity_type/mikas", ["guhs:mika", "guhs:nether_mika", "guhs:mika_baas", "guhs:opper_mika", "guhs:mika_larfje",
+                                            "guhs:moerasheks_mika", "guhs:vonk_mika", "guhs:knekel_mika", "guhs:aangebrande_mika",
+                                            "guhs:kruimel_mika", "guhs:doolhof_mika", "guhs:circuit_mikapikker", "guhs:knabbeldief_mika"])
+    # technically monsters, but sweet: an aggressive guh leaves them alone
+    add_tag("guhs/tags/entity_type/geen_vijand", ["guhs:guh_slime"])
     shaped("knabbelkorf", ["PPP", "KKK", "PPP"], {"P": "#minecraft:planks", "K": "guhs:kaas_knabbels"}, "guhs:knabbelkorf")
 
     # pink slime block
@@ -2402,7 +2409,7 @@ def kermis():
         "gui.guhs.menu.gravity.tooltip": "Aan: zwaar en platgedrukt, kan niet springen, valt sneller",
         "gui.guhs.menu.wander.tooltip": "Aan: je guh vadst zelf rond. Uit: hij blijft braaf staan waar hij is",
         "gui.guhs.menu.sounds.tooltip": "Guhgeluidjes aan of uit, en hoe vaak",
-        "gui.guhs.menu.radius.tooltip": "Hoe ver weg een agressieve guh mobs aanvalt",
+        "gui.guhs.menu.radius.tooltip": "Hoe ver weg een agressieve guh monsters en Mika's aanvalt",
         "gui.guhs.menu.name.tooltip": "Geef je guh een naam (Enter of Hernoem); geen naamkaartje nodig",
         "gui.guhs.menu.wardrobe.tooltip": "Kleertjes, pantser en de rugzak van je guh, met je eigen inventaris erbij",
         "gui.guhs.menu.sounds.ambient.tooltip": "Maakt je guh uit zichzelf geluidjes?",
@@ -4285,7 +4292,7 @@ SUPER_STRUCTURES = {  # structure: (name, what's there)
     "hamster_house_extra_extra_large": ("Guhland", "Het zeer zeldzame guh-pretpark met reuzenrad en sleebaan"),
     "guhramid": ("Guhramide", "Zeldzame roze piramide met een Gouden Guh in een geheime kamer"),
     "guh_statue": ("Guhstandbeeld", "Een reuzenguh van blokken"),
-    "grand_cheese_fountain": ("Grote kaasfontein", "Drie schalen kaassaus en een vadsbol"),
+    "grand_cheese_fountain": ("Grote kaasfontein", "Drie schalen kaassaus en een roze bol"),
     "cheese_fountain": ("Kaasfontein", "Een fontein van kaassaus"),
     "guh_village": ("Guhdorp", "Guhdorpelingen met guhberoepen: handelen!"),
     "hamster_house": ("Hamsterhuis", "Klein hamsterhuis met een guh-spawner"),

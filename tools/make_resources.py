@@ -585,6 +585,26 @@ w(f"{D}/loot_table/chests/guh_picnic.json", {"type": "minecraft:chest", "pools":
         {"type": "minecraft:item", "name": "guhs:challenge_compass", "weight": 2},
         {"type": "minecraft:item", "name": "minecraft:pink_wool", "weight": 4, "functions": count(2, 8)},
     ]}]})
+# (1.2.8) the cheese fountains: only kaasknabbels, a few fried ones and a little iron and gold. Nothing else, no vads
+# (CheeseFountainGameTests checks that); the grand fountain gives somewhat more of the same.
+w(f"{D}/loot_table/chests/cheese_fountain.json", {"type": "minecraft:chest", "pools": [
+    {"rolls": {"type": "minecraft:uniform", "min": 2, "max": 3}, "entries": [
+        {"type": "minecraft:item", "name": "guhs:kaas_knabbels", "weight": 10, "functions": count(3, 8)},
+        {"type": "minecraft:item", "name": "guhs:gefrituurde_kaasknabbels", "weight": 3, "functions": count(1, 2)},
+        {"type": "minecraft:item", "name": "minecraft:iron_nugget", "weight": 4, "functions": count(2, 6)},
+        {"type": "minecraft:item", "name": "minecraft:gold_nugget", "weight": 3, "functions": count(2, 5)},
+        {"type": "minecraft:item", "name": "minecraft:iron_ingot", "weight": 1},
+        {"type": "minecraft:item", "name": "minecraft:gold_ingot", "weight": 1},
+    ]}]})
+w(f"{D}/loot_table/chests/grand_cheese_fountain.json", {"type": "minecraft:chest", "pools": [
+    {"rolls": {"type": "minecraft:uniform", "min": 4, "max": 6}, "entries": [
+        {"type": "minecraft:item", "name": "guhs:kaas_knabbels", "weight": 10, "functions": count(6, 14)},
+        {"type": "minecraft:item", "name": "guhs:gefrituurde_kaasknabbels", "weight": 4, "functions": count(2, 4)},
+        {"type": "minecraft:item", "name": "minecraft:iron_nugget", "weight": 3, "functions": count(4, 9)},
+        {"type": "minecraft:item", "name": "minecraft:gold_nugget", "weight": 3, "functions": count(3, 8)},
+        {"type": "minecraft:item", "name": "minecraft:iron_ingot", "weight": 2, "functions": count(1, 2)},
+        {"type": "minecraft:item", "name": "minecraft:gold_ingot", "weight": 1, "functions": count(1, 2)},
+    ]}]})
 
 # --- Bank Guh: infinite storage block (drawn by GeckoLib; the block model only provides break particles) -----------
 w(f"{A}/models/block/bank_guh.json", {"textures": {"particle": "minecraft:block/pink_wool"}})
@@ -1209,7 +1229,7 @@ w(f"{A}/lang/en_us.json", {
     "gui.guhs.menu.ride.small": "Too small to ride (needs %s blocks)",
     "gui.guhs.menu.ride.baby": "Too young to ride",
     "gui.guhs.menu.behavior": "Behaviour: %s",
-    "gui.guhs.menu.behavior.tooltip": "Passive (flee): runs away when a mob hurts it. Passive: does nothing. Neutral: fights back. Aggressive: attacks mobs within the radius.",
+    "gui.guhs.menu.behavior.tooltip": "Passive (flee): runs away when a mob hurts it. Passive: does nothing. Neutral: fights back. Aggressive: attacks monsters and Mikas within the radius, never sweet critters.",
     "gui.guhs.behavior.passive_flee": "Passive (flee)",
     "gui.guhs.behavior.passive": "Passive",
     "gui.guhs.behavior.neutral": "Neutral",
@@ -1442,7 +1462,7 @@ w(f"{A}/lang/nl_nl.json", {
     "gui.guhs.menu.ride.small": "Te klein om te berijden (moet %s blokken zijn)",
     "gui.guhs.menu.ride.baby": "Te jong om te berijden",
     "gui.guhs.menu.behavior": "Gedrag: %s",
-    "gui.guhs.menu.behavior.tooltip": "Passief (vluchten): rent weg als een mob hem pijn doet. Passief: doet niks. Neutraal: vecht terug. Agressief: valt mobs binnen de straal aan.",
+    "gui.guhs.menu.behavior.tooltip": "Passief (vluchten): rent weg als een mob hem pijn doet. Passief: doet niks. Neutraal: vecht terug. Agressief: valt monsters en Mika's binnen de straal aan, nooit lieve diertjes.",
     "gui.guhs.behavior.passive_flee": "Passief (vluchten)",
     "gui.guhs.behavior.passive": "Passief",
     "gui.guhs.behavior.neutral": "Neutraal",

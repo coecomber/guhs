@@ -30,7 +30,7 @@ public enum GuhVariant {
     TECKEL(5, "teckel"),
     /** The guh with the secret note (never rolled here, see GuhEntity.SECRET_NOTE_CHANCE); it wears the pink onesie. */
     BROCOCOLIEF(0),
-    /** Black and purple with dragon wings: flies (and you can fly on it). Only on the Guh Peaks (GuhEntity.ENDER_CHANCE). */
+    /** Black and purple with dragon wings: flies (and you can fly on it). 1.2.8: only wild in the Guheinde, around players who beat Opper-Mika (feature/guheinde/Enderguhs). */
     ENDER(0, "ender"),
     /** The Koningguh: royal purple, a white mane, a moustache and golden socks. One on the throne of every guh castle. */
     KONING(0, "koning"),

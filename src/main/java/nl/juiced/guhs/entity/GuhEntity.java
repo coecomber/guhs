@@ -84,10 +84,12 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
     public static final float RIDEABLE_SCALE = 1.2f;
     /** Chance (1 in N) that a kaas knabbel tames a wild guh. */
     public static final int TAME_CHANCE = 3;
-    /** The ender guh: 1 in N guhs born on the Guh Peaks; 1 in N kaas knabbels tames it (fried knabbels always do). */
-    public static final int ENDER_CHANCE = 30, ENDER_TAME_CHANCE = 8;
-    private static final net.minecraft.resources.ResourceKey<net.minecraft.world.level.biome.Biome> GUH_PEAKS =
-            net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BIOME, nl.juiced.guhs.Guhs.id("guh_peaks"));
+    /**
+     * The ender guh: 1 in N kaas knabbels tames it (fried knabbels always do). 1.2.8: it is no longer born on the Guh Peaks
+     * of the Guhmension; wild ones only live in the Guheinde, around players who beat Opper-Mika, and only those players
+     * can tame one or fly on one (feature/guheinde/Enderguhs).
+     */
+    public static final int ENDER_TAME_CHANCE = 8;
     /** Client: is the rider holding jump (set by GuhsClient; the rider's own client steers a flying guh). */
     public static java.util.function.BooleanSupplier riderJumping = () -> false;
     /** The Koningguh is always a giant (about 2.5 blocks long). */
@@ -125,6 +127,8 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
     /** The launch move of a tamed guh mount: 0 = none, 1 = sucking in air, 2 = flying, 3 = dropping down. */
     private static final EntityDataAccessor<Integer> DATA_LAUNCH = SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.INT);
     public static final int LAUNCH_NONE = 0, LAUNCH_CHARGING = 1, LAUNCH_FLYING = 2, LAUNCH_DROPPING = 3;
+    /** (1.2.8) An Enderguh whose rider did not beat Opper-Mika: it walks instead of flying (synced: the rider's client steers). */
+    private static final EntityDataAccessor<Boolean> DATA_VLIEG_SLOT = SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.BOOLEAN);
     /** Emotes (feature/emotes): the emote it is doing now (see GuhEmotes: 0 = none) and its favourite one (-1 = none). */
     private static final EntityDataAccessor<Integer> DATA_EMOTE = SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_FAVORITE_EMOTE = SynchedEntityData.defineId(GuhEntity.class, EntityDataSerializers.INT);
@@ -213,6 +217,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         builder.define(DATA_HIDDEN, false);
         DATA_CLOTHES.forEach(slot -> builder.define(slot, -1));
         builder.define(DATA_LAUNCH, LAUNCH_NONE);
+        builder.define(DATA_VLIEG_SLOT, false);
         builder.define(DATA_EMOTE, 0);
         builder.define(DATA_FAVORITE_EMOTE, -1);
         builder.define(DATA_KNUS_VLAGGEN, 0);
@@ -244,7 +249,17 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                return isTame() && (getBehavior() == Behavior.NEUTRAL || getBehavior() == Behavior.AGGRESSIVE) && super.canUse();
+                // (1.2.8) defending never goes against another guh or somebody's pet
+                return isTame() && (getBehavior() == Behavior.NEUTRAL || getBehavior() == Behavior.AGGRESSIVE)
+                        && getLastHurtByMob() != null && !nooitDoelwit(getLastHurtByMob()) && super.canUse();
+            }
+
+            @Override
+            protected void alertOther(Mob mob, LivingEntity target) {
+                if (mob instanceof GuhEntity guh) {
+                    guh.verdedigDoel = target.getUUID();   // (the helper defends too: see magDoelwit)
+                }
+                super.alertOther(mob, target);
             }
         }.setAlertOthers(GuhEntity.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Mob.class, 10, true, false,
@@ -308,22 +323,23 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
                     wear(GuhClothes.PINK_ONESIE);
                     setSecretNote(true); // shhh...
                 } else {
-                    GuhVariant variant = GuhVariant.roll(this.random);
-                    if (variant == GuhVariant.GHOST && level.getLevel().isBrightOutside()) {
-                        variant = GuhVariant.NORMAL; // ghosts only come out at night
-                    }
-                    if (level.getBiome(this.blockPosition()).is(GUH_PEAKS) && this.random.nextInt(ENDER_CHANCE) == 0) {
-                        variant = GuhVariant.ENDER; // big enough to ride
-                        setGuhScale(Math.max(getGuhScale(), RIDEABLE_SCALE + 0.15f + this.random.nextFloat() * 0.4f));
-                    }
-                    setVariant(variant);
-                    if (variant != GuhVariant.ENDER && this.random.nextInt(OUTFIT_CHANCE) == 0) {
+                    setVariant(wildeVariant(this.random, level.getLevel().isBrightOutside()));
+                    if (this.random.nextInt(OUTFIT_CHANCE) == 0) {
                         GuhClothes.WILD_OUTFITS.get(this.random.nextInt(GuhClothes.WILD_OUTFITS.size())).forEach(this::wear);
                     }
                 }
             }
         }
         return super.finalizeSpawn(level, difficulty, spawnType, spawnGroupData);
+    }
+
+    /**
+     * The variant of a wild guh born in the Guhmension, in any biome (ghosts only come out at night). 1.2.8: never an
+     * Enderguh any more (it used to be 1 in 30 guhs on the Guh Peaks): see feature/guheinde/Enderguhs.
+     */
+    public static GuhVariant wildeVariant(RandomSource random, boolean bright) {
+        GuhVariant variant = GuhVariant.roll(random);
+        return variant == GuhVariant.GHOST && bright ? GuhVariant.NORMAL : variant;
     }
 
     // ------------------------------------------------------------------------------------------------------------
@@ -394,13 +410,54 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         this.entityData.set(DATA_ATTACK_RADIUS, Mth.clamp(radius, MIN_ATTACK_RADIUS, MAX_ATTACK_RADIUS));
     }
 
-    /** Aggressive guhs attack other mobs, but never players, other guhs or their owner's pets. */
+    /**
+     * (1.2.8) Aggressive guhs only attack hostile mobs (monsters, also modded ones) and every kind of Mika
+     * ({@link Mikas#isVijand}): never a passive or neutral mob or a critter, never players, other guhs or anybody's pets.
+     */
     private boolean wantsToFight(LivingEntity target) {
-        if (target instanceof GuhEntity || target instanceof QuestGuhEntity || target instanceof Player) {
+        return !(target instanceof Player) && !nooitDoelwit(target) && Mikas.isVijand(target);
+    }
+
+    /** A guh never goes after another guh, a quest guh or a pet (anything tamed or owned), whatever happens. */
+    public static boolean nooitDoelwit(LivingEntity target) {
+        if (target instanceof GuhEntity || target instanceof QuestGuhEntity) {
+            return true;
+        }
+        return target instanceof TamableAnimal pet && pet.isTame()
+                || target instanceof net.minecraft.world.entity.OwnableEntity owned && owned.getOwnerReference() != null;
+    }
+
+    /** The one this guh is defending itself (or a guh friend) against: who hurt it last. */
+    @Nullable
+    private java.util.UUID verdedigDoel;
+
+    /**
+     * (1.2.8) May this guh have this target (now)? Only a tamed guh fights: an aggressive one its enemies
+     * ({@link #wantsToFight}), a neutral or aggressive one whoever hurt it (or a guh friend).
+     */
+    public boolean magDoelwit(LivingEntity target) {
+        if (!isTame() || nooitDoelwit(target)) {
             return false;
         }
-        return !(target instanceof TamableAnimal pet && pet.isTame() && Owners.uuid(pet) != null
-                && Owners.uuid(pet).equals(this.getOwnerUUID()));
+        Behavior behavior = getBehavior();
+        if (behavior == Behavior.AGGRESSIVE && wantsToFight(target)) {
+            return true;
+        }
+        return (behavior == Behavior.NEUTRAL || behavior == Behavior.AGGRESSIVE) && target.getUUID().equals(verdedigDoel);
+    }
+
+    /** (1.2.8) A target that isn't allowed (any more) is never set: see {@link #magDoelwit}. */
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        if (target != null && !this.level().isClientSide()) {
+            if (target == this.getLastHurtByMob()) {
+                verdedigDoel = target.getUUID();
+            }
+            if (!magDoelwit(target)) {
+                target = null;
+            }
+        }
+        super.setTarget(target);
     }
 
     /** 26.1: vanilla dropped getOwnerUUID (owners are an EntityReference now); kept for Guhs' many callers. */
@@ -684,6 +741,15 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
             return InteractionResult.SUCCESS;
         }
         ItemStack stack = player.getItemInHand(hand);
+        if (isEnder() && !this.isTame() && (isFood(stack) || stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()))
+                && !nl.juiced.guhs.feature.guheinde.Enderguhs.heeftVerslagen(player)) {
+            // (1.2.8) a wild Enderguh only lets itself be tamed by somebody who beat Opper-Mika: the knabbel stays yours
+            if (!this.level().isClientSide()) {
+                nl.juiced.guhs.feature.guheinde.Enderguhs.temSlot(player);
+                this.level().broadcastEntityEvent(this, (byte) 6); // smoke
+            }
+            return this.level().isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
+        }
         if (stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()) && isEnder() && !this.isTame()) {
             // the ender guh can't resist fried knabbels
             if (!this.level().isClientSide()) {
@@ -1031,7 +1097,7 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         if (gedrag != null && gedrag.travel(this, input)) {
             return; // 3.0: a story variant moves its own way (Guhtwo floats over gaps...)
         }
-        if (isEnder() && getLaunchState() == LAUNCH_NONE && getControllingPassenger() instanceof Player rider) {
+        if (isEnder() && !isVliegSlot() && getLaunchState() == LAUNCH_NONE && getControllingPassenger() instanceof Player rider) {
             Vec3 look = rider.getLookAngle();
             Vec3 left = new Vec3(look.z, 0, -look.x).normalize();
             double speed = rider.isSprinting() ? 0.9 : 0.6;
@@ -1054,6 +1120,35 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
 
     public boolean isEnder() {
         return getVariant() == GuhVariant.ENDER || getVariant() == GuhVariant.VAHOEGE_ENDER;
+    }
+
+    /**
+     * (1.2.8) Is flying locked for whoever rides this Enderguh now? Only a rider who beat Opper-Mika flies on one
+     * (Enderguhs#heeftVerslagen, the rider counts, not the owner); for anybody else it walks like any big guh.
+     */
+    public boolean isVliegSlot() {
+        return this.entityData.get(DATA_VLIEG_SLOT);
+    }
+
+    /** Server: sets the flying lock for the rider it has now. Returns whether flying is locked. */
+    private boolean updateVliegSlot() {
+        boolean slot = isEnder() && this.getFirstPassenger() instanceof Player rider
+                && !nl.juiced.guhs.feature.guheinde.Enderguhs.heeftVerslagen(rider);
+        this.entityData.set(DATA_VLIEG_SLOT, slot);
+        if (slot && this.isNoGravity() && getLaunchState() == LAUNCH_NONE) {
+            this.setNoGravity(false);   // (it was flying by itself when you got on: it comes down)
+        }
+        return slot;
+    }
+
+    /** (1.2.8) Getting on an Enderguh that won't fly with you yet: it tells you so, once per time you get on. */
+    @Override
+    protected void addPassenger(net.minecraft.world.entity.Entity passenger) {
+        super.addPassenger(passenger);
+        if (!this.level().isClientSide() && isEnder() && passenger == this.getFirstPassenger() && updateVliegSlot()
+                && passenger instanceof Player rider) {
+            nl.juiced.guhs.feature.guheinde.Enderguhs.vliegSlot(rider);
+        }
     }
 
     /** Getting off a flying ender guh up high: you float down instead of falling. */
@@ -1082,7 +1177,8 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
     /** Wild guhs in the Guhmension come and go (there are LOTS of them); everywhere else they stay like normal animals. */
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return !this.isTame() && this.level().dimension() == ModDimensions.GUHMENSION
+        return !this.isTame() && (this.level().dimension() == ModDimensions.GUHMENSION
+                || this.entityTags().contains(nl.juiced.guhs.feature.guheinde.Enderguhs.WILD))   // (1.2.8: the wild Enderguhs of the Guheinde)
                 && !nl.juiced.guhs.feature.verhaal.VerhaalGuhs.isKopie(this);   // (3.0: a story copy stays)
     }
 
@@ -1308,6 +1404,9 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
             owner.heal(1f);
             this.level().broadcastEntityEvent(this, (byte) 7); // hearts
         }
+        if (!this.level().isClientSide() && this.tickCount % 10 == 0 && this.getTarget() != null && !magDoelwit(this.getTarget())) {
+            this.setTarget(null);   // (1.2.8) a running target that isn't allowed any more (behaviour changed, it got tamed...) is dropped
+        }
         if (isEnder()) {
             if (this.level().isClientSide() && this.random.nextInt(3) == 0) {
                 this.level().addParticle(net.minecraft.core.particles.ParticleTypes.PORTAL, this.getRandomX(0.6), this.getRandomY() - 0.2,
@@ -1318,6 +1417,10 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
             }
             if (this.isVehicle()) {
                 this.getPassengers().forEach(p -> p.resetFallDistance());
+                this.resetFallDistance();
+            }
+            if (!this.level().isClientSide() && this.tickCount % 20 == 0 && (this.isVehicle() || isVliegSlot())) {
+                updateVliegSlot();   // (1.2.8) the rider just beat Opper-Mika, or got off
             }
             if (!this.level().isClientSide() && this.isInSittingPose() && this.isNoGravity()) {
                 this.setNoGravity(false); // sitting: come down and land

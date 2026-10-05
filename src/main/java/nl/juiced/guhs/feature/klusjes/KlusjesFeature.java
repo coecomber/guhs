@@ -41,7 +41,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
  *   <li>{@link BakkenKlus bakken}: knabbelgraan to the guh-molentje, bake pastries in the knabbeloven;</li>
  *   <li>{@link VissenKlus vissen}: fish guhvissen and schelpjes when there is water;</li>
  *   <li>{@link WakenKlus waken}: peep and run to the owner when a Mika or monster comes, push Mika's gently away;</li>
- *   <li>{@link PlukkenKlus plukken}: pick guh flowers, knabbelbessen and sweet berries, plant a new flower now and then;</li>
+ *   <li>{@link PlukkenKlus plukken}: pick guh flowers, knabbelbessen and sweet berries (the flowers stay, no new ones are planted);</li>
  *   <li>{@link LampjesKlus lampjes}: guh lamps on in the evening, off in the morning (with a yawn);</li>
  *   <li>{@link OppasKlus oppas}: cuddle and feed muisjes and turtles, heal a hurt guh with a snack.</li>
  * </ol>
