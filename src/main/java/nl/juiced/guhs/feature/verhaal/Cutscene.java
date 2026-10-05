@@ -28,9 +28,9 @@ import net.minecraft.world.phys.Vec3;
  * <pre>
  * public static final Cutscene AANKOMST = Cutscene.maak("ringh2_aankomst").duur(200).bij("ring_h2").kaart("ring_h2")
  *         .speler(new Vec3(0.5, 0, 6.5), 180)
- *         .acteur("guhrond", GuhsEntities.NPC, new Vec3(0.5, 0, 0.5), 0, tag -&gt; tag.putString("Kind", "GUHROND"))
+ *         .npc("guhrond", GuhNpcEntity.Kind.GUHROND, new Vec3(0.5, 0, 0.5), 0)
  *         .camera(0, new Vec3(6, 3, 8), new Vec3(0.5, 1, 3)).camera(120, new Vec3(3, 2, 5), new Vec3(0.5, 1, 1))
- *         .cameraVolgt(121, new Vec3(-3, 1.5, 3), "speler")
+ *         .cameraKnipVolgt(121, new Vec3(-3, 1.5, 3), "speler")
  *         .loop("speler", 20, 100, new Vec3(0.5, 0, 2.5)).kijk("guhrond", 100, new Vec3(0.5, 1, 2.5))
  *         .zeg(110, "guhrond", "welkom", 80)
  *         .registreer();

@@ -47,6 +47,9 @@ public final class VerhaalClient {
                 dex.verhalenVernieuwd();
             }
         };
+        modBus.addListener((net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent event) -> event.registerSpriteSet(
+                nl.juiced.guhs.feature.verhaal.VerhaalFeature.SLUIERROOK.get(),
+                sprites -> (type, level, x, y, z, dx, dy, dz, random) -> new SluierRook.Wolk(level, x, y, z, dx, dy, dz, sprites.get(random))));
         modBus.addListener((RegisterGuiLayersEvent event) -> {
             event.registerAboveAll(LAAG_DOEL, VerhaalHud::doel);
             event.registerAboveAll(LAAG_CUTSCENE, VerhaalHud::cutscene);

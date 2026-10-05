@@ -143,14 +143,21 @@ public final class VertelScherm extends Screen {
             return;
         }
         klaar = true;
-        if (Minecraft.getInstance().getConnection() != null) {
-            ClientPacketDistributor.sendToServer(new VerhaalPayloads.Klaar(soort, id));
-        }
-        sluit();
+        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK.value(), 1.0f));
     }
 
     @Override
     public void tick() {
+        if (klaar) {
+            // (the tick after the click: tell the server, which runs what comes after, and close)
+            if (open == this) {
+                if (Minecraft.getInstance().getConnection() != null) {
+                    ClientPacketDistributor.sendToServer(new VerhaalPayloads.Klaar(soort, id));
+                }
+                sluit();
+            }
+            return;
+        }
         int voor = zichtbaar();
         ticks++;
         if (zichtbaar() > voor) {

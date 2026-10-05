@@ -29,7 +29,8 @@ import nl.juiced.guhs.quest.GuhDex;
  * /guhs verhaal herbekijk scene|kaart &lt;id&gt;   what the Guhdex button does
  * /guhs verhaal vergeet scene|kaart &lt;id&gt;     forget that you saw it
  * /guhs verhaal doel                         where your story points now
- * /guhs verhaal demo [open|wis]              (dev) the demo story: {@link VerhaalDemo}
+ * /guhs verhaal demo [open|sluier|wis]       (dev) the demo story: {@link VerhaalDemo}
+ * /guhs verhaal demo proef &lt;structuur&gt;       (dev) a closed sluier around a real structure: does it find the copy here?
  * </pre>
  */
 public final class VerhaalMotor {
@@ -153,6 +154,8 @@ public final class VerhaalMotor {
             verhaal.then(Commands.literal("demo").executes(c -> VerhaalDemo.speel(c.getSource().getPlayerOrException()))
                     .then(Commands.literal("open").executes(c -> VerhaalDemo.open(c.getSource().getPlayerOrException())))
                     .then(Commands.literal("sluier").executes(c -> VerhaalDemo.sluier(c.getSource().getPlayerOrException())))
+                    .then(Commands.literal("proef").then(Commands.argument("structuur", StringArgumentType.word())
+                            .executes(c -> VerhaalDemo.proef(c.getSource(), c.getSource().getPlayerOrException(), StringArgumentType.getString(c, "structuur")))))
                     .then(Commands.literal("wis").executes(c -> VerhaalDemo.wis(c.getSource().getPlayerOrException()))));
         }
         event.getDispatcher().register(Commands.literal("guhs").then(verhaal));

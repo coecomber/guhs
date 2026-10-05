@@ -69,6 +69,7 @@ public final class CutsceneSpeler {
     @Nullable
     private static CameraEntiteit camera;
     private static CameraType oudeCamera = CameraType.FIRST_PERSON;
+    private static boolean oudeHud;
     @Nullable
     private static Vec3 spelerPlek;
     private static float spelerYaw, spelerPitch;
@@ -141,6 +142,7 @@ public final class CutsceneSpeler {
         schud = 0;
         ondertitel = null;
         LocalPlayer speler = mc.player;
+        oudeHud = mc.options.hideGui;
         spelerPlek = null;
         spelerYaw = speler.getYRot();
         spelerPitch = speler.getXRot();
@@ -216,6 +218,7 @@ public final class CutsceneSpeler {
         ACTEUR_IDS.clear();
         SPRONG.clear();
         Cutscenes.wisAnimaties();
+        mc.options.hideGui = oudeHud;
         if (camera != null) {
             camera = null;
             mc.options.setCameraType(oudeCamera);
@@ -270,6 +273,9 @@ public final class CutsceneSpeler {
         if (mc.isPaused()) {
             return;
         }
+        // the HUD is off as with F1 (minimaps and other overlays of other mods go with it); our own bars and subtitles are a layer
+        // that is drawn anyway
+        mc.options.hideGui = true;
         // the real player stays where they are (the first ticks follow the server, which may set them on the ground)
         if (t < 10 || spelerPlek == null) {
             spelerPlek = speler.position();

@@ -268,12 +268,12 @@ public class VerhaalMotorGameTests {
         helper.assertTrue(s.plek("guh", 0).equals(new Vec3(0.5, 0, 6.5)) && s.plek("guh", 500).equals(new Vec3(0.5, 0, 2.5)), "an actor starts and ends where the script says");
         helper.assertTrue(Math.abs(s.plek("guh", 50).z - 4.5) < 1e-6 && s.looptNu("guh", 50) && !s.looptNu("guh", 90), "halfway its walk");
         helper.assertTrue(Math.abs(net.minecraft.util.Mth.wrapDegrees(s.yaw("guh", 50) - 180f)) < 0.01f, "it faces where it walks (north)");
-        helper.assertTrue(Math.abs(net.minecraft.util.Mth.wrapDegrees(s.yaw("reisguh", 10) - 90f)) < 0.01f, "an actor keeps its yaw until it looks");
+        helper.assertTrue(Math.abs(net.minecraft.util.Mth.wrapDegrees(s.yaw("reisguh", 10) - 270f)) < 0.01f, "an actor keeps its yaw until it looks");
         float kijkt = s.yaw("reisguh", 70);
-        helper.assertTrue(Math.abs(net.minecraft.util.Mth.wrapDegrees(kijkt - Cutscene.yawVan(new Vec3(-3, 0, -2)))) < 0.01f, "then it looks at the point");
+        helper.assertTrue(Math.abs(net.minecraft.util.Mth.wrapDegrees(kijkt - Cutscene.yawVan(new Vec3(3, 0, -1)))) < 0.01f, "then it looks at the point");
         Vec3[] c0 = s.cameraOp(0), c30 = s.cameraOp(30), c105 = s.cameraOp(105), c106 = s.cameraOp(106);
         helper.assertTrue(c0[0].equals(new Vec3(6.0, 3.2, -2.0)) && c30[0].distanceTo(c0[0]) > 0.2 && c30[0].distanceTo(new Vec3(5.0, 2.4, 1.0)) > 0.2, "the camera glides");
-        helper.assertTrue(c105[0].distanceTo(new Vec3(4.0, 1.8, 5.5)) < 1e-6 && c106[0].equals(new Vec3(2.2, 1.3, 0.6)), "and jumps at a cut");
+        helper.assertTrue(c105[0].distanceTo(new Vec3(4.0, 1.8, 5.5)) < 1e-6 && c106[0].equals(new Vec3(3.4, 1.7, -0.6)), "and jumps at a cut");
         helper.assertTrue(c106[1].distanceTo(s.plek("guh", 106).add(0, 1, 0)) < 1e-6, "a following camera looks at its actor");
         helper.assertTrue(s.zwartOp(100) == 0 && s.zwartOp(186) == 1f && s.zinOp(20) != null && s.zinOp(20).key().equals("begin") && s.zinOp(75) == null, "fades and subtitles");
         // the anchor: a scene position turns exactly like a template block
@@ -301,7 +301,10 @@ public class VerhaalMotorGameTests {
         Sluiers.wisPlekken(level, VerhaalDemo.PLEK);
         Sluiers.Zone zone = Sluiers.zetPlek(level, VerhaalDemo.PLEK, new BoundingBox(o.getX() + 3, o.getY() - 2, o.getZ() - 2, o.getX() + 8, o.getY() + 6, o.getZ() + 2));
         try {
-            helper.assertTrue(zone.x0() == o.getX() + 1 && zone.x1() == o.getX() + 10 && zone.z0() == o.getZ() - 4, "the wall stands rand blocks around the box");
+            helper.assertTrue(zone.x0() == o.getX() + 1 && zone.x1() == o.getX() + 10 && zone.z0() == o.getZ() - 4 && zone.y0() == o.getY() - 4
+                    && zone.y1() == o.getY() + 8, "the wall stands rand blocks around the box");
+            helper.assertTrue(Sluiers.magBinnen(p, o.east(5).above(20)) && Sluiers.magBinnen(p, o.east(5).below(9)) && Sluiers.zone(level, o.east(5).above(20)) == null,
+                    "above and below the box is free (a mine under a plain doesn't close the plain)");
             helper.assertTrue(Sluiers.isVerborgen(p, VerhaalDemo.PLEK) && !Sluiers.open(p, VerhaalDemo.PLEK) && !Sluiers.isVerborgen(klaar, VerhaalDemo.PLEK)
                     && Sluiers.open(p, "geen_sluier"), "hidden until the story is there");
             BlockPos binnen = o.east(5);

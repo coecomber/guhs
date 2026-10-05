@@ -78,12 +78,12 @@ public final class VerhaalDemo {
         scene = Cutscene.maak("verhaal_demo").duur(190).bij("demo").kaart("demo").verbergEcht(12)
                 .speler(new Vec3(0.5, 0, 0.5), 0)
                 .guh("guh", GuhVariant.NORMAL, new Vec3(0.5, 0, 6.5), 180)
-                .npc("reisguh", GuhNpcEntity.Kind.REISGUH, new Vec3(3.5, 0, 4.5), 90)
+                .npc("reisguh", GuhNpcEntity.Kind.REISGUH, new Vec3(-2.5, 0, 3.5), 270)
                 .camera(0, new Vec3(6.0, 3.2, -2.0), new Vec3(0.5, 1.0, 3.0))
                 .camera(60, new Vec3(5.0, 2.4, 1.0), new Vec3(0.5, 1.0, 3.0))
                 .camera(105, new Vec3(4.0, 1.8, 5.5), new Vec3(0.5, 1.0, 2.0))
-                .cameraKnipVolgt(106, new Vec3(2.2, 1.3, 0.6), "guh")
-                .cameraVolgt(160, new Vec3(-1.6, 1.5, 0.8), "guh")
+                .cameraKnipVolgt(106, new Vec3(3.4, 1.7, -0.6), "guh")
+                .cameraVolgt(160, new Vec3(2.4, 1.6, 5.4), "guh")
                 .loop("guh", 20, 80, new Vec3(0.5, 0, 2.5))
                 .kijk("reisguh", 60, new Vec3(0.5, 1, 2.5))
                 .kijk("speler", 0, new Vec3(0.5, 1, 6.5))
@@ -150,6 +150,20 @@ public final class VerhaalDemo {
         Sluiers.wisPlekken(p.level(), PLEK);
         zone(p, p.blockPosition());
         return 1;
+    }
+
+    /**
+     * /guhs verhaal demo proef &lt;structuur&gt;: (dev check of the sluier on real worldgen) puts a sluier that is closed for
+     * everybody around every copy of this structure, looks for copies around the player right away and says what it found.
+     */
+    static int proef(net.minecraft.commands.CommandSourceStack bron, ServerPlayer p, String structuur) {
+        if (!Sluiers.structuren().contains(structuur)) {
+            Sluiers.registreer(structuur, 4, speler -> false);
+        }
+        Sluiers.ontdek(p);
+        List<Sluiers.Zone> zones = Sluiers.zones(p.level(), structuur);
+        bron.sendSuccess(() -> Component.literal("sluier " + structuur + ": " + zones.size() + " wall(s) around here" + (zones.isEmpty() ? "" : " " + zones)), false);
+        return zones.size();
     }
 
     /** /guhs verhaal demo open: the line is done, the sluier dissolves, the second line opens. */

@@ -53,9 +53,10 @@ import nl.juiced.guhs.network.ModNetworking;
  * <pre>
  * Sluiers.registreer("guhvendel", 6, p -&gt; RingFeature.H1.klaar(p));
  * </pre>
- * The wall stands around the box of the structure's pieces plus {@code rand} blocks, from the bottom of the world to the
- * top (so nobody drops in from above either). Python: {@code verhaal_motor.sluier(h, structuur)} puts the structure on
- * the list of the live map ({@code data/guhs/kaart/verborgen.json}).
+ * The sluier is a box of smoke: the bounding box of the structure's pieces plus {@code rand} blocks on every side (also
+ * above and below: a mine under a plain does not close the plain, and whoever flies over looks at a lid of smoke). Python:
+ * {@code verhaal_motor.sluier(h, structuur)} puts the structure on the list of the live map
+ * ({@code data/guhs/kaart/verborgen.json}).
  */
 public final class Sluiers {
     /** The message comes at most once per this many ticks. */
@@ -69,17 +70,22 @@ public final class Sluiers {
     private record Sluier(String structuur, int rand, Predicate<ServerPlayer> open) {
     }
 
-    /** A wall in the world: the structure and the block bounds (rand included) it stands around, at any height. */
-    public record Zone(String structuur, int x0, int z0, int x1, int z1) {
-        public boolean binnen(double x, double z) {
-            return x >= x0 && x < x1 + 1 && z >= z0 && z < z1 + 1;
+    /** A sluier in the world: the structure and the block bounds (rand included) of its box of smoke. */
+    public record Zone(String structuur, int x0, int y0, int z0, int x1, int y1, int z1) {
+        /** The box of a structure's pieces with rand blocks around it. */
+        public static Zone van(String structuur, BoundingBox doos, int rand) {
+            return new Zone(structuur, doos.minX() - rand, doos.minY() - rand, doos.minZ() - rand, doos.maxX() + rand, doos.maxY() + rand, doos.maxZ() + rand);
+        }
+
+        public boolean binnen(double x, double y, double z) {
+            return x >= x0 && x < x1 + 1 && y >= y0 && y < y1 + 1 && z >= z0 && z < z1 + 1;
         }
 
         public boolean binnen(BlockPos pos) {
-            return pos.getX() >= x0 && pos.getX() <= x1 && pos.getZ() >= z0 && pos.getZ() <= z1;
+            return pos.getX() >= x0 && pos.getX() <= x1 && pos.getY() >= y0 && pos.getY() <= y1 && pos.getZ() >= z0 && pos.getZ() <= z1;
         }
 
-        /** How far (blocks) this spot is inside, measured to the nearest wall (negative: outside). */
+        /** How far (blocks) this spot is inside, measured sideways to the nearest wall (negative: outside). */
         public double diepte(double x, double z) {
             return Math.min(Math.min(x - x0, x1 + 1 - x), Math.min(z - z0, z1 + 1 - z));
         }
@@ -145,7 +151,7 @@ public final class Sluiers {
 
     /** May this player be at pos (false: it is behind a sluier that is closed for them)? */
     public static boolean magBinnen(ServerPlayer p, BlockPos pos) {
-        return dicht(p, p.level(), pos.getX() + 0.5, pos.getZ() + 0.5) == null;
+        return dicht(p, p.level(), pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5) == null;
     }
 
     /** Spectators and creative operators walk through. */
@@ -169,13 +175,13 @@ public final class Sluiers {
 
     /** The closed wall (for this player) around this spot, or null. */
     @Nullable
-    private static Zone dicht(ServerPlayer p, Level level, double x, double z) {
+    private static Zone dicht(ServerPlayer p, Level level, double x, double y, double z) {
         Map<String, Zone> zones = ZONES.get(level.dimension());
         if (zones == null || zones.isEmpty()) {
             return null;
         }
         for (Zone zone : zones.values()) {
-            if (zone.binnen(x, z) && !open(p, zone.structuur())) {
+            if (zone.binnen(x, y, z) && !open(p, zone.structuur())) {
                 return zone;
             }
         }
@@ -188,8 +194,7 @@ public final class Sluiers {
      */
     public static Zone zetPlek(ServerLevel level, String structuur, BoundingBox doos) {
         Sluier s = van(structuur);
-        int rand = s == null ? 0 : s.rand();
-        Zone zone = new Zone(structuur, doos.minX() - rand, doos.minZ() - rand, doos.maxX() + rand, doos.maxZ() + rand);
+        Zone zone = Zone.van(structuur, doos, s == null ? 0 : s.rand());
         Map<String, Zone> zones = ZONES.computeIfAbsent(level.dimension(), d -> new ConcurrentHashMap<>());
         zones.put(structuur + "#" + doos.minX() + "," + doos.minZ(), zone);
         return zone;
@@ -214,8 +219,14 @@ public final class Sluiers {
     // finding the structures, keeping players out
     // =====================================================================================================================
 
+    /** The walls found so far around this structure in this dimension. */
+    public static List<Zone> zones(Level level, String structuur) {
+        Map<String, Zone> zones = ZONES.get(level.dimension());
+        return zones == null ? List.of() : zones.values().stream().filter(z -> z.structuur().equals(structuur)).toList();
+    }
+
     /** Looks for copies of the sluier structures in the loaded chunks around the player (their own chunk included). */
-    private static void ontdek(ServerPlayer p) {
+    static void ontdek(ServerPlayer p) {
         List<Sluier> alle;
         synchronized (ALLE) {
             alle = List.copyOf(ALLE.values());
@@ -260,9 +271,7 @@ public final class Sluiers {
                         ChunkAccess bij = level.getChunk(ChunkPos.getX(start), ChunkPos.getZ(start), ChunkStatus.STRUCTURE_STARTS);
                         StructureStart ss = bij.getStartForStructure(e.getKey());
                         if (ss != null && ss.isValid()) {
-                            BoundingBox b = ss.getBoundingBox();
-                            int rand = e.getValue().rand();
-                            zones.put(key, new Zone(e.getValue().structuur(), b.minX() - rand, b.minZ() - rand, b.maxX() + rand, b.maxZ() + rand));
+                            zones.put(key, Zone.van(e.getValue().structuur(), ss.getBoundingBox(), e.getValue().rand()));
                         }
                     }
                 }
@@ -292,8 +301,10 @@ public final class Sluiers {
             CompoundTag t = new CompoundTag();
             t.putString("S", z.structuur());
             t.putInt("X0", z.x0());
+            t.putInt("Y0", z.y0());
             t.putInt("Z0", z.z0());
             t.putInt("X1", z.x1());
+            t.putInt("Y1", z.y1());
             t.putInt("Z1", z.z1());
             lijst.add(t);
         }
@@ -315,7 +326,7 @@ public final class Sluiers {
 
     /** (also for the tests) one tick of the wall for this player: remembers where they were outside, sends them back out. */
     static void houdBuiten(ServerPlayer p) {
-        Zone zone = dicht(p, p.level(), p.getX(), p.getZ());
+        Zone zone = dicht(p, p.level(), p.getX(), p.getY(), p.getZ());
         if (zone == null) {
             if (p.onGround() || p.isPassenger() || !BUITEN.containsKey(p.getUUID())) {
                 BUITEN.put(p.getUUID(), new Buiten(p.level().dimension(), p.position(), p.getYRot()));
@@ -335,7 +346,7 @@ public final class Sluiers {
             }
         } else {
             Buiten b = BUITEN.get(p.getUUID());
-            Vec3 naar = b != null && b.dim() == p.level().dimension() && dicht(p, p.level(), b.plek().x, b.plek().z) == null
+            Vec3 naar = b != null && b.dim() == p.level().dimension() && dicht(p, p.level(), b.plek().x, b.plek().y, b.plek().z) == null
                     && b.plek().distanceToSqr(p.position()) < 48 * 48 ? b.plek() : rand(p, zone);
             Duwtje.terug(p, p.level().dimension(), naar, p.getYRot());
         }

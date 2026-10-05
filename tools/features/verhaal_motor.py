@@ -355,6 +355,8 @@ def selfcheck(h):
 def build(h):
     for key, tekst in ALGEMEEN.items():
         h.lang(key, tekst, tekst)
+    # the smoke cloud of Guhdalfs sluier (Java: VerhaalFeature.SLUIERROOK, client.SluierRook.Wolk): vanilla's big puffs
+    h.w(f"{h.A}/particles/verhaal_sluierrook.json", {"textures": [f"minecraft:big_smoke_{i}" for i in range(4)]})
     del VERBORGEN[:]
     h.w(f"{h.D}/kaart/verborgen.json", {"structures": []})   # (every sluier(h, ...) of a later module adds its structure)
     demo(h)

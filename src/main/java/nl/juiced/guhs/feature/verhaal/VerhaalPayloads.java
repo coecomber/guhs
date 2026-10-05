@@ -129,7 +129,7 @@ public final class VerhaalPayloads {
         }
     }
 
-    /** The smoke walls of this player near them: "Zones" [{S (structure), X0, Z0, X1, Z1}]. */
+    /** The smoke walls of this player near them: "Zones" [{S (structure), X0, Y0, Z0, X1, Y1, Z1}]. */
     public record Rook(CompoundTag data) implements CustomPacketPayload {
         public static final Type<Rook> TYPE = new Type<>(Guhs.id("verhaal_sluiers"));
         public static final StreamCodec<FriendlyByteBuf, Rook> STREAM_CODEC = StreamCodec.composite(

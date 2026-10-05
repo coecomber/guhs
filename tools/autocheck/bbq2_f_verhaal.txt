@@ -16,7 +16,6 @@ section setup
 /forceload add 2970 2970 3030 3030
 wait 80
 /fill 2970 139 2970 3030 139 3030 minecraft:grass_block
-/fill 2975 140 2975 3025 155 3025 minecraft:air
 /gamemode creative
 /tp @s 3000.5 140 3000.5 0 0
 wait 40
@@ -31,7 +30,8 @@ wait 20
 shot bbq2_verhaal_kaart_1 gui
 wait 80
 shot bbq2_verhaal_kaart_2 gui
-press Verder »
+# the button "Verder" (its label depends on the language): the middle of the bottom of the card (640x360 at GUI scale 2)
+click 320 342
 
 section the cutscene (190 ticks)
 wait 40
@@ -83,4 +83,12 @@ gui verhalen @kaart:demo
 wait 20
 shot bbq2_verhaal_reiskaart_klaar gui
 gui close
+
+section Guhdalfs sluier around a real structure (worldgen): the wall is found from the chunks' structure references
+/gamemode spectator
+opnieuw
+tplocate auto mika_kamp
+/guhs verhaal demo proef mika_kamp
+wait 80
+shot bbq2_verhaal_sluier_structuur gui
 quit
