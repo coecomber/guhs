@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "bleekhout_stairs",
+  "key": {
+    "#": "guhs:bleekhout_planken"
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "guhs:bleekhout_trap"
+  }
+}

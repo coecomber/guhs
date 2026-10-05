@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:bleekhout_stam",
+    "guhs:kaas_knabbels"
+  ],
+  "result": {
+    "id": "guhs:bleekhout_gezicht"
+  }
+}

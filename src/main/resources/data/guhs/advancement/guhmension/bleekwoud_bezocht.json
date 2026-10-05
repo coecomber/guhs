@@ -1,0 +1,29 @@
+{
+  "parent": "guhs:guhmension/enter_guhmension",
+  "display": {
+    "icon": {
+      "id": "guhs:bleekhout_zaailing"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_bezocht.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_bezocht.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:bleekwoud"
+          }
+        }
+      }
+    }
+  }
+}

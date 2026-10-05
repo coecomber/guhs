@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "guhs:block/krakend_guhhartje_wakker_top",
+    "side": "guhs:block/krakend_guhhartje_wakker"
+  }
+}

@@ -449,6 +449,27 @@
             ],
             "offset": 0.0
           }
+        },
+        {
+          "biome": "guhs:bleekwoud",
+          "parameters": {
+            "temperature": -0.55,
+            "humidity": 0.55,
+            "continentalness": [
+              -1.0,
+              1.0
+            ],
+            "erosion": [
+              -0.25,
+              0.25
+            ],
+            "weirdness": 0.0,
+            "depth": [
+              -1.0,
+              1.0
+            ],
+            "offset": 0.0
+          }
         }
       ]
     }

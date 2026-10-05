@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/bleekhout_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/bleekhout_planken"
+    },
+    "type=top": {
+      "model": "guhs:block/bleekhout_plaat_top"
+    }
+  }
+}

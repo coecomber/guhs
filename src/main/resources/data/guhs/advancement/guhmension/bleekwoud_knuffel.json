@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:guhmension/bleekwoud_bezocht",
+  "display": {
+    "icon": {
+      "id": "guhs:krakend_guhhartje"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_knuffel.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_knuffel.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

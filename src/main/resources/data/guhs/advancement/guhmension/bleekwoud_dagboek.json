@@ -1,0 +1,22 @@
+{
+  "parent": "guhs:guhmension/bleekwoud_hutje",
+  "display": {
+    "icon": {
+      "id": "minecraft:written_book"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_dagboek.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhmension.bleekwoud_dagboek.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

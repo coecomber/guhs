@@ -328,8 +328,9 @@ def selfcheck(h):
     for f in os.listdir(java):
         if f.endswith(".java") and "GameTests" not in f:
             used |= set(re.findall(r'"((?:quest|gui|item|entity)\.guhs\.[a-z0-9_.]+)"', open(os.path.join(java, f), encoding="utf-8").read()))
+    from features import taal   # (1.2.6: two brandweer texts live in taal.OVERIG, the lang-only module)
     for k in sorted(used):
-        if k not in T and not any(x.startswith(k) for x in T):
+        if k not in T and k not in taal.OVERIG and not any(x.startswith(k) for x in T):
             missing.append(f"text {k}")
     if missing:
         raise SystemExit(f"beroepen: missing {missing}")

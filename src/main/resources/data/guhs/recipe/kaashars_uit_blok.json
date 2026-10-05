@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:kaashars_blok"
+  ],
+  "result": {
+    "id": "guhs:kaashars",
+    "count": 9
+  }
+}

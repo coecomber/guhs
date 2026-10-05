@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "#guhs:bleekhout_stammen"
+  ],
+  "result": {
+    "id": "guhs:bleekhout_planken",
+    "count": 4
+  }
+}

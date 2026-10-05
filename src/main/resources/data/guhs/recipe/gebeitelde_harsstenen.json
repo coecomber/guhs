@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P",
+    "P"
+  ],
+  "key": {
+    "P": "guhs:harsstenen_plaat"
+  },
+  "result": {
+    "id": "guhs:gebeitelde_harsstenen"
+  }
+}

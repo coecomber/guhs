@@ -90,6 +90,18 @@
         "Komt na: Het Vadswoud",
       ],
     },
+    {
+      height: 1.5625,
+      id: "4755485E4FD15B60",
+      image: "guhs:textures/ftbquests/guhs_extra27/kop_bleekwoud.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 7,
   progression_mode: "flexible",
@@ -1291,6 +1303,417 @@
       x: 7.5,
       y: 17.4875,
       shape: "rsquare",
+    },
+    {
+      id: "4755483626C731A2",
+      icon: {
+        id: "guhs:bleekhout_zaailing",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:bleekwoud",
+          id: "4755488F6DA42953",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F5D53BFB58",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755486ED2C9EDA5",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 17.4875,
+      shape: "circle",
+    },
+    {
+      id: "47554824FD22EF7C",
+      icon: {
+        id: "guhs:bleekhout_planken",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bleekhout_planken",
+          },
+          count: 16,
+          id: "47554848E3345E1F",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bleekhout_deur",
+          },
+          id: "475548070018D62D",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bleekhout_bord",
+          },
+          id: "475548575D006838",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548574D443E90",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bleekhout_zaailing",
+          },
+          count: 4,
+        },
+        {
+          id: "4755488BEA1F85D7",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 13.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755489AFD61169A",
+      icon: {
+        id: "guhs:open_oogbloempje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:open_oogbloempje",
+          },
+          id: "4755483000199F98",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548599782A929",
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:flower_pot",
+          },
+        },
+        {
+          id: "47554801051A2D5B",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 14.5,
+      y: 17.4875,
+    },
+    {
+      id: "4755484AA57EEFE3",
+      icon: {
+        id: "guhs:kraakguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_kraakguh",
+          id: "4755484DF4926A99",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554816CF592D78",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548B143C7EA25",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 16.0,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "4755487A66D41494",
+      icon: {
+        id: "guhs:krakend_guhhartje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guhmension/bleekwoud_knuffel",
+          id: "47554806D8561DE8",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E3DCE63EC5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 2,
+        },
+        {
+          id: "475548BD87C1D635",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 17.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548063551719C",
+      icon: {
+        id: "guhs:kaashars",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaashars",
+          },
+          count: 8,
+          id: "475548D292293B5D",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554802ECAFD26B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C01253CF44",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 19.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554860713665DF",
+      icon: {
+        id: "guhs:harsstenen",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:harsstenen",
+          },
+          count: 8,
+          id: "475548B610E68AEF",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554883FECB3BB9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaashars",
+          },
+          count: 4,
+        },
+        {
+          id: "4755480213B0AC32",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 20.5,
+      y: 17.4875,
+    },
+    {
+      id: "4755483D4C727EE1",
+      icon: {
+        id: "minecraft:iron_axe",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guhmension/bleekwoud_hartje",
+          id: "475548B4ADBE80FC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FEEDA001A2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaashars",
+          },
+          count: 3,
+        },
+        {
+          id: "475548D6CDC11D93",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 20.5,
+      y: 18.9875,
+    },
+    {
+      id: "475548A7B0D47F51",
+      icon: {
+        id: "guhs:oogbloempje",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:bleke_open_plek",
+          id: "475548B9B20B778D",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C66F969CD8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755483E6EE39263",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 19.0,
+      y: 18.9875,
+      shape: "gear",
+    },
+    {
+      id: "47554847F98AB392",
+      icon: {
+        id: "guhs:bleekhout_deur",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:houthakkershutje",
+          id: "475548311424849B",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483757D8A52E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548518C3A3438",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 17.5,
+      y: 18.9875,
+      shape: "gear",
+    },
+    {
+      id: "475548025CB77A47",
+      icon: {
+        id: "minecraft:written_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guhmension/bleekwoud_dagboek",
+          id: "475548A384C49DF0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548725F964BD2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bleekhout_zaailing",
+          },
+          count: 2,
+        },
+        {
+          id: "475548A00AE5774C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 16.0,
+      y: 18.9875,
+    },
+    {
+      id: "475548CB5AF13CE7",
+      icon: {
+        id: "guhs:kraak_mika_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_kraak_mika",
+          id: "4755489FC8C27B4B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489244C0C5DB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:mika_vet",
+          },
+        },
+        {
+          id: "47554815CB07C5A8",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 14.5,
+      y: 18.9875,
+      shape: "gear",
     },
   ],
 }

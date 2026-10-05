@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "axis=y,creaking_heart_state=uprooted,natural=true": {
+      "model": "guhs:block/krakend_guhhartje"
+    },
+    "axis=z,creaking_heart_state=uprooted,natural=true": {
+      "model": "guhs:block/krakend_guhhartje_horizontal",
+      "x": 90
+    },
+    "axis=x,creaking_heart_state=uprooted,natural=true": {
+      "model": "guhs:block/krakend_guhhartje_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,creaking_heart_state=uprooted,natural=false": {
+      "model": "guhs:block/krakend_guhhartje"
+    },
+    "axis=z,creaking_heart_state=uprooted,natural=false": {
+      "model": "guhs:block/krakend_guhhartje_horizontal",
+      "x": 90
+    },
+    "axis=x,creaking_heart_state=uprooted,natural=false": {
+      "model": "guhs:block/krakend_guhhartje_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,creaking_heart_state=dormant,natural=true": {
+      "model": "guhs:block/krakend_guhhartje_slaapt"
+    },
+    "axis=z,creaking_heart_state=dormant,natural=true": {
+      "model": "guhs:block/krakend_guhhartje_slaapt_horizontal",
+      "x": 90
+    },
+    "axis=x,creaking_heart_state=dormant,natural=true": {
+      "model": "guhs:block/krakend_guhhartje_slaapt_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,creaking_heart_state=dormant,natural=false": {
+      "model": "guhs:block/krakend_guhhartje_slaapt"
+    },
+    "axis=z,creaking_heart_state=dormant,natural=false": {
+      "model": "guhs:block/krakend_guhhartje_slaapt_horizontal",
+      "x": 90
+    },
+    "axis=x,creaking_heart_state=dormant,natural=false": {
+      "model": "guhs:block/krakend_guhhartje_slaapt_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,creaking_heart_state=awake,natural=true": {
+      "model": "guhs:block/krakend_guhhartje_wakker"
+    },
+    "axis=z,creaking_heart_state=awake,natural=true": {
+      "model": "guhs:block/krakend_guhhartje_wakker_horizontal",
+      "x": 90
+    },
+    "axis=x,creaking_heart_state=awake,natural=true": {
+      "model": "guhs:block/krakend_guhhartje_wakker_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,creaking_heart_state=awake,natural=false": {
+      "model": "guhs:block/krakend_guhhartje_wakker"
+    },
+    "axis=z,creaking_heart_state=awake,natural=false": {
+      "model": "guhs:block/krakend_guhhartje_wakker_horizontal",
+      "x": 90
+    },
+    "axis=x,creaking_heart_state=awake,natural=false": {
+      "model": "guhs:block/krakend_guhhartje_wakker_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

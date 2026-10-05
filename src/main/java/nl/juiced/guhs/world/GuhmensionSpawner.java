@@ -107,7 +107,8 @@ public final class GuhmensionSpawner {
             BlockPos pos = new BlockPos(gx, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, gx, gz), gz);
             if (!GuhEntity.checkGuhSpawnRules(ModEntities.GUH.get(), level, EntitySpawnReason.NATURAL, pos, random)
                     || nl.juiced.guhs.quest.VerstopGame.inHouse(level, pos) || nl.juiced.guhs.feature.beauty.BeautyProtection.inTheatre(level, pos)
-                    || !nl.juiced.guhs.feature.weerder.WeerderFeature.wildeGuhMag(level, pos)) {   // (1.2.0: a Wilde-guhweerder's area)
+                    || !nl.juiced.guhs.feature.weerder.WeerderFeature.wildeGuhMag(level, pos)   // (1.2.0: a Wilde-guhweerder's area)
+                    || level.getBiome(pos).is(nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.BLEEKWOUD)) {   // (1.2.8: the Bleekwoud is silent)
                 continue;
             }
             if (i == 0) {

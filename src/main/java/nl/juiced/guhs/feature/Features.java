@@ -95,6 +95,8 @@ public final class Features {
         nl.juiced.guhs.feature.weerder.WeerderFeature.register(modBus);
         // --- 1.2.5 ---
         nl.juiced.guhs.feature.guhoven.GuhovenFeature.register(modBus);
+        // --- 1.2.8: het Bleekwoud ---
+        nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.register(modBus);
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -239,6 +241,8 @@ public final class Features {
         nl.juiced.guhs.feature.weerder.WeerderFeature.creative(output);
         // --- 1.2.5 ---
         nl.juiced.guhs.feature.guhoven.GuhovenFeature.creative(output);
+        // --- 1.2.8: het Bleekwoud ---
+        nl.juiced.guhs.feature.bleekwoud.BleekwoudFeature.creative(output);
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

@@ -1037,5 +1037,17 @@
   "gui.guhs.gatenkaas.voorraadboek_kopie": "You quickly copy the Pantry Mika's diary: now you have a copy of your own!",
   "gui.guhs.kermis.no_build": "Nyeg! Hands off the Guh Fair: no breaking or building here. Just go for a ride!",
   "gui.guhs.elftocht.zak_vol": "Your pockets are full! Free up a slot for: %s",
-  "gui.guhs.elftocht.kruisje_vol": "Your pockets are full: you'll get the Eleven Guhtowns Cross (and the extra Town Stamps) after your next tour. Free up a slot!"
+  "gui.guhs.elftocht.kruisje_vol": "Your pockets are full: you'll get the Eleven Guhtowns Cross (and the extra Town Stamps) after your next tour. Free up a slot!",
+  "gui.guhs.bleekwoud.knuffel": "The Creakguh gives you a wooden hug. Creak!",
+  "gui.guhs.bleekwoud.geen_naam": "It belongs to its heart: it doesn't want a name tag.",
+  "gui.guhs.bleekwoud.dagboek_kopie": "You quickly copy the Woodcutter Guh's diary: now you have a copy of your own!",
+  "book.guhs.bleekwoud.dagboek.title": "The Woodcutter Guh's Diary",
+  "book.guhs.bleekwoud.dagboek.door": "by the Woodcutter Guh",
+  "book.guhs.bleekwoud.dagboek.0": "Diary of the Woodcutter Guh.\n\nDay 1. Wahoog! I found a forest full of pale trees. Lovely white wood, and so nice and quiet. Not a guh in sight. I'll build a little hut and get chopping. Nyeg!",
+  "book.guhs.bleekwoud.dagboek.1": "Day 2. Something creaked outside last night. Creak... creak... Must be the wind. But there is never any wind here. I pulled my blankie over my little ears.",
+  "book.guhs.bleekwoud.dagboek.2": "Day 3. There is a wooden guh standing between the trees. It wasn't there yesterday! It doesn't move. It only stares. With little orange eyes.",
+  "book.guhs.bleekwoud.dagboek.3": "Day 4. I looked at my axe for a moment. When I looked up again, the wooden guh stood CLOSER. I looked away. Creak. Even closer! As long as I look, it stands still.",
+  "book.guhs.bleekwoud.dagboek.4": "Day 5. I stared at it all night long. My eyes are stinging. When the sun came up, it just crumbled away. And something is beating inside that thick tree, just like a little heart. Ba-dum.",
+  "book.guhs.bleekwoud.dagboek.5": "Day 6. I had to sneeze. Achoo! Eyes shut. And then... a hug. A wooden hug! Creak! For a moment I could hardly walk. It only wanted a cuddle. Quite sweet, really.",
+  "book.guhs.bleekwoud.dagboek.6": "Day 7. Sweet or not: I want a good night's sleep. I'm moving to Snuggledale, nothing creaks there. Whoever reads this: keep looking, or let it hug you. But watch out for the sour hearts: a Mika comes out of those. NYEG! Bye, hut."
 }

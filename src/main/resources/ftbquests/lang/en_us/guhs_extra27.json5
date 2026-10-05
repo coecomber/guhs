@@ -155,4 +155,52 @@
   "quest.47554892B8E217FF.quest_desc": [
     "Trade for the &6picker's cap&r and the &6picking basket&r at the Nibble Picker. With the basket on its back, your guh looks seriously chonky!",
   ],
+  "quest.4755483626C731A2.title": "The Palewood",
+  "quest.4755483626C731A2.quest_desc": [
+    "Very rare, somewhere far away in the Guhmension, lies a forest where all the pink has drained away: the &7Palewood&r. White trunks, gray moss, and it is quiet as a mouse: not a single guh lives there. Go and find it!",
+  ],
+  "quest.47554824FD22EF7C.title": "Pale Guhwood",
+  "quest.47554824FD22EF7C.quest_desc": [
+    "Chop down a pale tree and make &7pale guhwood planks&r, a pale guhwood door and a pale guhwood sign. One sapling grows a little tree, four in a square a thick one.",
+  ],
+  "quest.4755489AFD61169A.title": "Eye Open",
+  "quest.4755489AFD61169A.quest_desc": [
+    "By day the &7guh eyeblossoms&r are asleep. At night they open their eyes one by one and turn &6orange&r. Pick one while it is open!",
+  ],
+  "quest.4755484AA57EEFE3.title": "Creak... Creak...",
+  "quest.4755484AA57EEFE3.quest_desc": [
+    "Some trees have a &6Creaking Guh Heart&r inside. At night it wakes up and calls its &7Creakguh&r: a guh made of wood. It only moves when you are NOT looking. Find one (within 8 blocks) for your Guhdex.",
+  ],
+  "quest.4755487A66D41494.title": "A Wooden Hug",
+  "quest.4755487A66D41494.quest_desc": [
+    "The Creakguh is a guh, so it is sweet: all it wants is to hug you. Turn around, wait a moment... &6Creak!&r It makes you slow for a few seconds, nothing more.",
+  ],
+  "quest.475548063551719C.title": "Cheese Resin",
+  "quest.475548063551719C.quest_desc": [
+    "Give a Creakguh a tap: it doesn't feel a thing, but &6cheese resin&r drips from the trunk around its heart. Scrape it off the tree. Nine make a block, and smelted it becomes a &6cheese resin brick&r.",
+  ],
+  "quest.47554860713665DF.title": "Cheese Resin Bricks",
+  "quest.47554860713665DF.quest_desc": [
+    "Smelt cheese resin in a furnace into cheese resin bricks and build &6Cheese Resin Bricks&r with them: warm cheese yellow, with stairs, slabs and little walls.",
+  ],
+  "quest.4755483D4C727EE1.title": "Heartbreaker",
+  "quest.4755483D4C727EE1.quest_desc": [
+    "Want to get rid of a Creakguh? Find the tree where the sparkle trail leads and chop out the &6Creaking Guh Heart&r. With Silk Touch you can take the heart with you and put it between two pale guhwood logs at home.",
+  ],
+  "quest.475548A7B0D47F51.title": "The Pale Clearing",
+  "quest.475548A7B0D47F51.quest_desc": [
+    "In the middle of the Palewood lies a round clearing full of guh eyeblossoms, with an ancient tree. High up in its trunk a little heart is beating... The Super Compass (Adventure) shows the way.",
+  ],
+  "quest.47554847F98AB392.title": "The Woodcutter's Hut",
+  "quest.47554847F98AB392.quest_desc": [
+    "Somebody used to live here: the &7Woodcutter Guh&r. His axe is still stuck in the stump. Where did he go? The Super Compass (Adventure) shows the way.",
+  ],
+  "quest.475548025CB77A47.title": "The Diary",
+  "quest.475548025CB77A47.quest_desc": [
+    "On the lectern in the hut lies the &dWoodcutter Guh's diary&r. Click the lectern: everybody gets a copy of their own.",
+  ],
+  "quest.475548CB5AF13CE7.title": "Sour Heart, Sour Mika",
+  "quest.475548CB5AF13CE7.quest_desc": [
+    "One in five hearts is &asoured&r (yellow-green). No Creakguh comes out of those, but a &cCreak Mika&r: it comes to shove you when you're not looking. NYEG! After a few whacks it crawls back into its tree.",
+  ],
 }
