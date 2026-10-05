@@ -75,7 +75,22 @@ def body(w):
         + w.recipe_card("bzg_brievenbus", "Mailbox", "Brievenbus"),
         stats=[(("Where", "Waar"), t("Guhpixel lobby", "Lobby van Guhpixel")), (("Players", "Spelers"), t("1 per studio, any number of studios", "1 per studio, zoveel studio's als nodig")),
                (("Time", "Duur"), t("about 5 minutes", "ongeveer 5 minuten"))])
-    return guhmon + bzg
+    def kaarten(rijen):
+        return '<div class="cards">' + "".join(
+            f'<div class="card"><figure class="stage">{img(n, en)}</figure><h3>{t(en, nl)}</h3><p>{t(den, dnl)}</p></div>'
+            for n, en, nl, den, dnl in rijen) + "</div>"
+
+    guhmon_kaarten = kaarten([
+        ("guhmon_gym", "The Nap Gym", "De Dutjesgym", "A field with a nibble ball in the middle, the challenger's mat, and stands "
+         "full of sleeping fans.", "Een veld met een knabbelbal in het midden, de mat van de uitdager en tribunes vol slapende fans."),
+        ("guhmon_badgedoos", "Badge Case", "Badgedoosje", "Here with all three badges in it.", "Hier met alle drie de badges erin.")])
+    bzg_kaarten = kaarten([
+        ("bzg_studio", "Studio and farm set", "Studio en boerderijdecor", "The stage on the left, the farm behind the set wall on the right.",
+         "Links het podium, rechts achter de decorwand de boerderij."),
+        ("bzg_boer", "Farmer Guhrrit", "Boer Guhrrit", "Straw hat, overalls, and a straw in his mouth.", "Strohoed, overall en een strootje in zijn mond."),
+        ("bzg_brievenbus", "Mailbox", "Brievenbus", "The flag is up: there is mail (only in the show).", "Het vlaggetje staat omhoog: er is post (alleen in de show)."),
+        ("bzg_ingelijste_brief", "Framed Letter", "Ingelijste brief", "Right-click to read the thank-you note.", "Rechtsklik om het bedankbriefje te lezen.")])
+    return guhmon + guhmon_kaarten + bzg + bzg_kaarten
 
 
 def renders(r):
