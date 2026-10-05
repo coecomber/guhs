@@ -108,6 +108,8 @@
     "guhs:harsstenen_trap",
     "guhs:harsstenen_plaat",
     "guhs:harsstenen_muur",
-    "guhs:gebeitelde_harsstenen"
+    "guhs:gebeitelde_harsstenen",
+    "guhs:vadskracht_testbatterij",
+    "guhs:vadskracht_testmachine"
   ]
 }
