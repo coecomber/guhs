@@ -1,0 +1,50 @@
+{
+  "wereld": "TEST",
+  "banen": [
+    {
+      "id": "hoofd",
+      "punten": [
+        [
+          -4,
+          0,
+          0
+        ],
+        [
+          79,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 13,
+      "hoogte": 6,
+      "onder": -5,
+      "boven": 9
+    },
+    {
+      "id": "bonus",
+      "punten": [
+        [
+          22,
+          12,
+          0
+        ],
+        [
+          44,
+          12,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 13,
+      "hoogte": 6,
+      "onder": 11,
+      "boven": 19
+    }
+  ],
+  "uitgang": [
+    76,
+    0,
+    0
+  ]
+}

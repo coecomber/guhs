@@ -1,0 +1,214 @@
+# bbq2: Super Guhrio's side view in the real client. Builds the test level in the sky (start block at 5004 150 5002, running
+# east: template x/y/z + 5000/142/5000, the lane on z 5002, you walk at y 150, s = x - 5000.5), plays through it with the
+# real keys ('key ... on/off', 'guhriowacht <s>') and shoots the side view with the panel; 'guhriopos' notes where the
+# player and the camera are. Then the little level with a corner.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/guhrio.txt -PautocheckTimeout=20
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/execute in minecraft:overworld run tp @s 5002.5 175 5002.5 -90 0
+wait 60
+/guhs guhrio testlevel 5004 150 5002
+wait 20
+/tp @s 5002.5 150 5002.5 -90 0
+wait 20
+waitrender 400
+/gamemode survival
+wait 5
+guhriopos before the start
+shot guhrio_00_voor_de_start gui
+
+section in the level: the side view and the panel
+key up on
+wait 14
+key up off
+wait 20
+guhriopos start (walked into the start block)
+shot guhrio_01_start gui
+guhriosprong 2 a tap, standing
+guhriosprong 14 held, standing
+key right on
+key sprint on
+wait 3
+guhriosprong 14 held, running
+key sprint off
+key right off
+wait 10
+/tp @s 5004.5 150 5002.5
+wait 10
+key right on
+wait 3
+guhriosprong 14 held, walking
+guhriosprong 2 a tap, walking
+key right off
+wait 10
+/tp @s 5004.5 150 5002.5
+wait 10
+key right on
+guhriowacht 7
+shot guhrio_02_lopen gui
+guhriowacht 11.4
+key jump on
+wait 3
+key jump off
+wait 1
+shot guhrio_03_vraagblok gui
+guhriowacht 16.4
+key jump on
+wait 3
+key jump off
+guhriowacht 18.4
+key jump on
+wait 3
+key jump off
+wait 8
+key right off
+wait 12
+guhriopos after the row (coins, Superknabbel)
+shot guhrio_04_super gui
+key left on
+wait 12
+key left off
+wait 6
+shot guhrio_05_naar_links gui
+key right on
+key sprint on
+guhriowacht 19.6
+key jump on
+wait 3
+key jump off
+wait 2
+shot guhrio_06_super_breekt_steen gui
+key sprint off
+wait 14
+key right off
+guhriopos against the step
+wait 6
+
+section the Guhmba: landed on
+/execute at @e[type=guhs:guhrio_guhmba,sort=nearest,limit=1] run tp @s ~ ~2.6 ~
+wait 4
+guhriopos falling on the Guhmba
+shot guhrio_07_stamp gui
+wait 6
+guhriopos after the bounce
+shot guhrio_08_guhmba_plat gui
+
+section the pipe to the bonus room and back
+/tp @s 5028.5 152 5002.5
+wait 12
+shot guhrio_09_op_de_pijp gui
+key down on
+wait 3
+key down off
+wait 4
+shot guhrio_10_pijp_in gui
+wait 26
+guhriopos in the bonus room
+shot guhrio_11_bonuskamer gui
+key right on
+guhriowacht 12
+shot guhrio_12_bonus_munten gui
+guhriowacht 15
+key right off
+wait 10
+/tp @s 5044.5 162 5002.5
+wait 4
+key up on
+wait 3
+key up off
+wait 8
+guhriopos through the door (on the main lane)
+shot guhrio_12b_door_de_deur gui
+key up on
+wait 3
+key up off
+wait 12
+guhriopos and back through it (in the bonus room)
+/tp @s 5046.5 164 5002.5
+wait 12
+key down on
+wait 3
+key down off
+wait 40
+guhriopos back on the main lane
+shot guhrio_13_terug_beneden gui
+
+section the flag, the fall, the Guhmba from the side
+/tp @s 5036.5 150 5002.5
+wait 10
+key right on
+guhriowacht 38.6
+key right off
+wait 8
+guhriopos at the flag
+shot guhrio_14_vlag gui
+/tp @s 5052.5 150 5002.5
+wait 10
+key right on
+wait 6
+guhriopos walking into the Guhmba
+wait 20
+shot guhrio_15_guhmba_geraakt gui
+wait 60
+key right off
+wait 30
+guhriopos after the Guhmba and the gap (back at the flag)
+shot guhrio_16_terug_bij_de_vlag gui
+
+section the flagpole
+/tp @s 5071.5 154 5002.5
+wait 10
+shot guhrio_17_trap gui
+key right on
+guhriowacht 75.4 120
+wait 8
+key right off
+guhriopos at the pole
+shot guhrio_18_mast gui
+wait 20
+shot guhrio_19_gehaald gui
+wait 70
+guhriopos after the level
+shot guhrio_20_na_het_level gui
+
+section the level with a corner
+key all off
+/gamemode creative
+/tp @s 5298.5 175 5300.5 -90 0
+wait 60
+/guhs guhrio testhoek 5302 150 5302
+wait 20
+/tp @s 5301.5 150 5302.5 -90 0
+wait 20
+waitrender 400
+/gamemode survival
+/guhs guhrio start 5302 150 5302
+wait 30
+guhriopos corner level start
+shot guhrio_30_hoek_start gui
+key right on
+guhriowacht 16
+guhriopos before the corner
+shot guhrio_31_voor_de_hoek gui
+guhriowacht 19.6
+shot guhrio_32_hoek_a gui
+guhriowacht 21.6
+guhriopos on the corner
+shot guhrio_33_hoek_b gui
+guhriowacht 23.4
+guhriopos around the corner
+shot guhrio_34_om_de_hoek gui
+wait 12
+key right off
+wait 10
+guhriopos after the corner
+shot guhrio_35_na_de_hoek gui
+/guhs guhrio stop
+wait 10
+guhriopos stopped
+shot guhrio_36_gestopt gui
+key all off
+quit

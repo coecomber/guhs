@@ -8,6 +8,7 @@
     "EntitySaveMixin",
     "FlowingFluidMixin",
     "GameTestInfoMixin",
+    "GuhrioDuwMixin",
     "MockConnectionMixin",
     "ServerLevelMixin",
     "VillagerMixin"
@@ -18,6 +19,7 @@
   "client": [
     "client.FtbQuestsImageMixin",
     "client.FtbQuestsLocaleMixin",
+    "client.GuhrioCameraMixin",
     "client.LevelRendererMixin",
     "client.VerhaalEntityRenderMixin"
   ]
