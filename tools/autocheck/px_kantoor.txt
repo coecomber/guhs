@@ -18,6 +18,7 @@ wait 80
 /fill 2994 140 3013 3006 143 3013 minecraft:white_concrete
 /gamemode creative
 /clear @s
+guhstaal nl
 /guhs px klok herstel
 /tp @s 3000 140 3008 0 0
 wait 40
