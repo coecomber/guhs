@@ -29,10 +29,18 @@ import nl.juiced.guhs.taal.Tekst;
  * The shop of the Verkoper-guh: every offer in its group (a scrolling list), with its icon, name, price in muntjes and a
  * "Koop" button; the explanation is the tooltip. The server decides everything (Winkel.koop) and answers with a fresh
  * list and a message.
+ * <p>
+ * The over-the-top store dressing (lobby slice; texts gui.guhs.lobby.winkel.*): a "-0%" sale tag in the corner, a line of
+ * sale and EULA jokes that changes every few seconds, how many things each group has, how many muntjes are still missing
+ * for something too expensive, and the small print at the bottom.
  */
 public class WinkelScherm extends Screen {
     private static final int W = 300, H = 222, RIJ = 24, KOP = 15, KNOP_W = 52;
     private static final int RAND = 0xFFF7B6CB, PANEEL = 0xF0301A26, TEKST = 0xFFFFE6EE, GOUD = 0xFFFFD27A, DOF = 0xFFB090A0, GROEN = 0xFF68D88A;
+    private static final int UITVERKOOP = 0xFFD8344A;
+    /** The jokes under the title: the kern's three (grap.1..3) and the lobby's (gui.guhs.lobby.winkel.grap.0..n-1), 4 seconds each. */
+    private static final int GRAPPEN_KERN = 3, GRAPPEN_LOBBY = 6;
+    private static final long GRAP_MS = 4000L;
 
     private CompoundTag data;
     private final GidsLijst lijst = new GidsLijst();
@@ -65,17 +73,22 @@ public class WinkelScherm extends Screen {
         List<GidsLijst.Regel> regels = new ArrayList<>();
         ListTag aanbod = data.getListOrEmpty("Aanbod");
         String groep = null;
+        int saldo = data.getIntOr("Saldo", 0);
+        java.util.Map<String, Integer> perGroep = new java.util.HashMap<>();
+        for (int i = 0; i < aanbod.size(); i++) {
+            perGroep.merge(aanbod.getCompoundOrEmpty(i).getStringOr("Groep", ""), 1, Integer::sum);
+        }
         for (int i = 0; i < aanbod.size(); i++) {
             CompoundTag a = aanbod.getCompoundOrEmpty(i);
             String g = a.getStringOr("Groep", "");
             if (!g.equals(groep)) {
                 groep = g;
-                regels.add(new Kop(Component.translatable("gui.guhs.guhpixel.winkel.groep." + g)));
+                regels.add(new Kop(Component.translatable("gui.guhs.guhpixel.winkel.groep." + g), perGroep.getOrDefault(g, 0)));
             }
-            regels.add(new Rij(a));
+            regels.add(new Rij(a, saldo));
         }
         if (aanbod.isEmpty()) {
-            regels.add(new Kop(Component.translatable("gui.guhs.guhpixel.winkel.leeg")));
+            regels.add(new Kop(Component.translatable("gui.guhs.guhpixel.winkel.leeg"), 0));
         }
         lijst.zet(regels);
     }
@@ -86,14 +99,21 @@ public class WinkelScherm extends Screen {
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, RAND);
         g.fill(left, top, left + W, top + H, PANEEL);
         g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, top + 7, TEKST);
-        g.centeredText(font, Component.translatable("gui.guhs.guhpixel.winkel.grap." + (1 + (int) (Math.floorMod(data.getListOrEmpty("Aanbod").size(), 3)))),
+        int grap = (int) ((System.currentTimeMillis() / GRAP_MS) % (GRAPPEN_KERN + GRAPPEN_LOBBY));
+        g.centeredText(font, Component.translatable(grap < GRAPPEN_KERN ? "gui.guhs.guhpixel.winkel.grap." + (grap + 1) : "gui.guhs.lobby.winkel.grap." + (grap - GRAPPEN_KERN)),
                 width / 2, top + 19, DOF);
+        // the sale tag in the corner: "-0%"
+        g.fill(left + 5, top + 4, left + 37, top + 17, 0xFF7A1424);
+        g.fill(left + 6, top + 5, left + 36, top + 16, UITVERKOOP);
+        g.centeredText(font, Component.translatable("gui.guhs.lobby.winkel.korting").withStyle(ChatFormatting.BOLD), left + 21, top + 7, 0xFFFFFFFF);
         Component saldo = Component.translatable("gui.guhs.guhpixel.hud.muntjes", data.getIntOr("Saldo", 0));
         g.text(font, saldo, left + W - 8 - font.width(saldo), top + 7, GOUD, false);
         lijst.teken(g, mouseX, mouseY, RAND, 0x30F7B6CB);
         Component melding = Tekst.get(data, "Melding");
         if (!Tekst.empty(melding)) {
             GidsTekst.passend(g, melding, left + 8, top + H - 40, W - 16, 1f, TEKST, false);
+        } else {
+            GidsTekst.passend(g, Component.translatable("gui.guhs.lobby.winkel.kleine_lettertjes"), left + 8, top + H - 38, W - 16, 0.75f, DOF, false);
         }
     }
 
@@ -133,7 +153,7 @@ public class WinkelScherm extends Screen {
     }
 
     /** A group heading. */
-    private record Kop(Component tekst) implements GidsLijst.Regel {
+    private record Kop(Component tekst, int aantal) implements GidsLijst.Regel {
         @Override
         public int hoogte() {
             return KOP;
@@ -142,7 +162,11 @@ public class WinkelScherm extends Screen {
         @Override
         public void teken(GuiGraphicsExtractor g, int x, int y, int w, int mouseX, int mouseY, boolean hover) {
             g.fill(x, y + KOP - 2, x + w, y + KOP - 1, 0x60F7B6CB);
-            GidsTekst.passend(g, tekst.copy().withStyle(ChatFormatting.BOLD), x + 2, y + 3, w - 4, 1f, 0xFFFF9AC8, false);
+            GidsTekst.passend(g, tekst.copy().withStyle(ChatFormatting.BOLD), x + 2, y + 3, w - 64, 1f, 0xFFFF9AC8, false);
+            if (aantal > 0) {
+                Component n = Component.translatable(aantal == 1 ? "gui.guhs.lobby.winkel.aantal.1" : "gui.guhs.lobby.winkel.aantal", aantal);
+                GidsTekst.schaal(g, n, x + w - 3, y + 5, 0.75f, DOF, true);
+            }
         }
     }
 
@@ -152,11 +176,12 @@ public class WinkelScherm extends Screen {
         @Nullable
         private ItemStack icoon;
         private final Component naam, uitleg;
-        private final int prijs, gekocht, max;
+        private final int prijs, gekocht, max, tekort;
         private final Winkel.Uitkomst kan;
 
-        Rij(CompoundTag a) {
+        Rij(CompoundTag a, int saldo) {
             this.a = a;
+            this.tekort = Math.max(0, a.getIntOr("Prijs", 0) - saldo);
             this.naam = Tekst.get(a, "Naam");
             this.uitleg = Tekst.get(a, "Uitleg");
             this.prijs = a.getIntOr("Prijs", 0);
@@ -228,7 +253,10 @@ public class WinkelScherm extends Screen {
                 tip.add(Component.translatable("gui.guhs.guhpixel.winkel.max", gekocht, max).withStyle(ChatFormatting.GRAY));
             }
             switch (kan) {
-                case TE_DUUR -> tip.add(Component.translatable("gui.guhs.guhpixel.winkel.nee.te_duur").withStyle(ChatFormatting.GOLD));
+                case TE_DUUR -> {
+                    tip.add(Component.translatable("gui.guhs.guhpixel.winkel.nee.te_duur").withStyle(ChatFormatting.GOLD));
+                    tip.add(Component.translatable("gui.guhs.lobby.winkel.tekort", tekort).withStyle(ChatFormatting.GRAY));
+                }
                 case EIS -> {
                     Component eis = Tekst.get(a, "Eis");
                     tip.add((Tekst.empty(eis) ? Component.translatable("gui.guhs.guhpixel.winkel.nee.eis") : eis.copy()).withStyle(ChatFormatting.GOLD));

@@ -6,18 +6,26 @@
     "monster": {
       "bounding_box": "piece",
       "spawns": []
+    },
+    "creature": {
+      "bounding_box": "piece",
+      "spawns": []
     }
   },
   "terrain_adaptation": "beard_box",
-  "check_radius": 13,
-  "max_height_difference": 9,
-  "keep_clear": 15,
+  "check_radius": 21,
+  "max_height_difference": 11,
+  "keep_clear": 19,
   "jigsaw": {
     "type": "minecraft:jigsaw",
     "biomes": "#guhs:has_structure/internetcafe",
     "step": "fluid_springs",
     "spawn_overrides": {
       "monster": {
+        "bounding_box": "piece",
+        "spawns": []
+      },
+      "creature": {
         "bounding_box": "piece",
         "spawns": []
       }

@@ -16,6 +16,9 @@ public final class GuhpixelTitels {
 
     static {
         // <px_lobby>
+        ALLE.add(new Titels.Titel("lobby_knabbelspeurder", "gui.guhs.titels.naam.lobby_knabbelspeurder", net.minecraft.ChatFormatting.GOLD, "guhs:gouden_kaasknabbel", nl.juiced.guhs.feature.guhpixel.lobby.Knabbels::alleGevonden));
+        ALLE.add(new Titels.Titel("lobby_dakhaas", "gui.guhs.titels.naam.lobby_dakhaas", net.minecraft.ChatFormatting.AQUA, "minecraft:feather", nl.juiced.guhs.feature.guhpixel.lobby.LobbyParkour::gehaald));
+        ALLE.add(new Titels.Titel("lobby_mvg", "gui.guhs.titels.naam.lobby_mvg", net.minecraft.ChatFormatting.LIGHT_PURPLE, "guhs:guhpixel_netwerkkabeltje", nl.juiced.guhs.feature.guhpixel.lobby.LobbySlice::isMvgPlusPlus));
         // </px_lobby>
         // <px_grap1>
         // </px_grap1>

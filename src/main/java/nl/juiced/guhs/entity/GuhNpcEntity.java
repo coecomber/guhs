@@ -111,6 +111,11 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // </guhwaiispellen>
         // guhpixel: one block per slice; a slice adds its kinds ONLY between its own two markers (names N_..., one per line, each ending in a comma)
         // <px_lobby>
+        LOBBY_WELKOMSTGUH(1.0f),
+        LOBBY_VERKOPER_GUH(1.0f),
+        LOBBY_CHATGUH(0.8f),
+        INTERNETCAFE_BEHEERDER(1.0f),
+        INTERNETCAFE_SLAPER(0.85f),
         // </px_lobby>
         // <px_grap1>
         // </px_grap1>
