@@ -341,7 +341,7 @@ KLUSSEN = {  # the chore names + the tips of the huisje screen (what it needs ne
     "waken": ("Wachten & waarschuwen", "Piept en rent naar jou als er een Mika of monster bij het huisje komt, en duwt Mika's heel "
               "zachtjes weg. Nooit vechten, altijd lief! (Guhs; muisjes piepen alleen)"),
     "plukken": ("Bloemetjes & bessen plukken", "Plukt knabbelbessen en zoete bessen, en een bloemetje bij elke bloem (die blijft staan): alle soorten "
-                "bloemen, het vaakst een roze guhbloem. Plant soms een nieuw bloemetje. (Guhs en muisjes)"),
+                "bloemen, het vaakst een roze guhbloem. (Guhs en muisjes)"),
     "lampjes": ("Lampjes aan & uit", "Doet 's avonds de guhlampjes en kaarsjes in de klus-area aan en 's ochtends weer uit, met een "
                 "grote gaap. (Guhs)"),
     "oppas": ("Muisje-oppas & verzorgen", "Knuffelt en voert pieppiepmuisjes, Schilly en Poepschilly in de buurt. Een gewonde guh krijgt "
@@ -507,7 +507,7 @@ def ftb(fq):
       "minecraft:bell", [a("klusjes_waken")], rewards=(("guhs:kaas_knabbels", 8),), xp=50)
     q("klusjes_plukken", "Bessenplukker", "Knabbelbessen, zoete bessen of bloemen bij het huisje? Het klusje &ePlukken&r plukt ze voor je (de struikjes en "
       "bloemetjes blijven staan): bij een bloem komt er een bloemetje van een willekeurige soort mee, het vaakst een roze "
-      "guhbloem. Soms plant je guh zelfs een nieuw bloemetje.",
+      "guhbloem.",
       "guhs:knabbelbessen", [a("klusjes_plukken")], rewards=(("guhs:kaas_knabbels", 8),), xp=50)
     q("klusjes_lampjes", "Lichtjes aan", "Zet guhlampjes (of kaarsjes) rond je huisje. Als het avond wordt, doet een bewoner ze aan, en 's "
       "ochtends gapend weer uit.", "guhs:klusjes_guhlampje", [a("klusjes_lampjes")], rewards=(("guhs:marshmallow_knabbel", 2),), xp=50)

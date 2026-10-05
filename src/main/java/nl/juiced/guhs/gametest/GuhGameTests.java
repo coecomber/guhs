@@ -483,7 +483,7 @@ public class GuhGameTests {
     // Guh menu settings: behaviour, sounds, armour
     // ------------------------------------------------------------------------------------------------------------
 
-    @GuhTest(template = WIRE_ROOM, timeoutTicks = 200)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 200, batch = "b128_gedrag_agressief")
     public static void aggressiveGuhAttacksMobsInItsRadius(GameTestHelper helper) {
         for (int x = 0; x < 20; x++) {
             for (int z = 0; z < 3; z++) {
@@ -503,7 +503,7 @@ public class GuhGameTests {
         helper.succeedWhen(() -> helper.assertTrue(zombie.getHealth() < zombie.getMaxHealth(), "the aggressive guh should attack the husk; target=" + guh.getTarget() + " dist=" + guh.distanceTo(zombie) + " nav=" + guh.getNavigation().isDone()));
     }
 
-    @GuhTest(template = WIRE_ROOM, timeoutTicks = 100)
+    @GuhTest(template = WIRE_ROOM, timeoutTicks = 100, batch = "b128_gedrag_passief")
     public static void passiveGuhLeavesMobsAlone(GameTestHelper helper) {
         for (int x = 0; x < 20; x++) {
             for (int z = 0; z < 3; z++) {
@@ -1241,13 +1241,16 @@ public class GuhGameTests {
         });
     }
 
-    @GuhTest(template = EMPTY)
+    @GuhTest(template = EMPTY, batch = "b128_ender_tem")
     public static void enderGuhFliesAndLovesFriedKnabbels(GameTestHelper helper) {
         GuhEntity guh = helper.spawn(ModEntities.GUH.get(), new BlockPos(2, 2, 2));
         guh.setVariant(nl.juiced.guhs.entity.GuhVariant.ENDER);
         helper.assertTrue(guh.getNavigation() instanceof net.minecraft.world.entity.ai.navigation.FlyingPathNavigation, "an ender guh flies");
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.GEFRITUURDE_KAASKNABBELS.get(), 1));
+        guh.mobInteract(player, InteractionHand.MAIN_HAND);
+        helper.assertTrue(!guh.isTame() && player.getMainHandItem().getCount() == 1, "(1.2.8) not for somebody who didn't beat Opper-Mika (the knabbel stays)");
+        nl.juiced.guhs.quest.GuhQuests.saved(player).putInt(nl.juiced.guhs.feature.guheinde.GuheindeGevecht.WINS, 1);
         guh.mobInteract(player, InteractionHand.MAIN_HAND);
         helper.assertTrue(guh.isTame(), "one fried knabbel tames it");
         GuhEntity normal = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 2, 4));

@@ -405,6 +405,10 @@ public class KlusjesGameTests {
                     "the berries are in the chest");
             helper.assertTrue(telKist(kist, s -> PlukkenKlus.soorten().contains(s.getItem())) > 0, "a flower picked");
             helper.assertBlockPresent(Blocks.POPPY, bloem);
+            // (1.2.8) picking never plants a new flower: the flowers do not multiply
+            for (BlockPos q : BlockPos.betweenClosed(bloem.offset(-3, -1, -3), bloem.offset(3, 1, 3))) {
+                helper.assertTrue(q.equals(bloem) || !helper.getBlockState(q).is(net.minecraft.tags.BlockTags.FLOWERS), "no new flower at " + q);
+            }
             weg(helper, h, p);
         });
     }

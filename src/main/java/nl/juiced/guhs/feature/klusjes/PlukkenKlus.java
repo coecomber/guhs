@@ -10,7 +10,6 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -35,16 +34,13 @@ import nl.juiced.guhs.registry.ModBlocks;
  * Bloemetjes & bessen plukken: the resident picks the ripe knabbelbessen and sweet berries in the home base (the bush
  * stays and grows again), up to {@link #PER_KEER} bushes per trip. No berries? Then it picks a bloom at any flower
  * (vanilla or ours): the flower keeps standing (every flower once per {@link #BLOEM_RUST} ticks) and the resident brings
- * home a flower of any kind ({@link #kiesBloem}: the roze guhbloem twice as often as the others). Now and then it plants
- * a new little flower of the standing kind next to it (as long as there are fewer than {@link #MAX_BLOEMEN}).
+ * home a flower of any kind ({@link #kiesBloem}: the roze guhbloem twice as often as the others). (1.2.8) It never
+ * plants new flowers any more: the flowers no longer multiply.
  * Guhs and pieppiepmuisjes.
  */
 public class PlukkenKlus extends BasisKlus {
     public static final int PER_KEER = 4;
     public static final int BLOEM_RUST = 6000;
-    public static final int MAX_BLOEMEN = 24;
-    /** 1 in N picked flowers gets a new little neighbour. */
-    public static final int PLANT_KANS = 3;
     private static final Map<String, Long> GEPLUKT = new ConcurrentHashMap<>();
     /** The tall flowers (not in the small flowers tag). */
     static final java.util.Set<Block> HOGE_BLOEMEN = java.util.Set.of(Blocks.SUNFLOWER, Blocks.LILAC, Blocks.ROSE_BUSH, Blocks.PEONY);
@@ -173,7 +169,6 @@ public class PlukkenKlus extends BasisKlus {
         }
 
         private void bloem() {
-            BlockState s = level.getBlockState(doel);
             if (!bloemRijp(level, doel)) {
                 return;
             }
@@ -187,22 +182,6 @@ public class PlukkenKlus extends BasisKlus {
             sprankel(Vec3.atCenterOf(doel), 3);
             aantal = 1;
             gelukt();
-            if (mob.getRandom().nextInt(PLANT_KANS) == 0 && KlusGebied.van(level, huisje, KlusGebied.Soort.BLOEM).size() < MAX_BLOEMEN) {
-                plantNaast(s);
-            }
-        }
-
-        /** A new little flower of the same kind on a free spot next to it (within 2). */
-        private void plantNaast(BlockState bloem) {
-            for (int i = 0; i < 12; i++) {
-                BlockPos p = doel.offset(mob.getRandom().nextInt(5) - 2, mob.getRandom().nextInt(3) - 1, mob.getRandom().nextInt(5) - 2);
-                if (!p.equals(doel) && huisje.inGebied(p) && level.getBlockState(p).isAir() && bloem.canSurvive(level, p)) {
-                    level.setBlock(p, bloem.getBlock().defaultBlockState(), Block.UPDATE_ALL);
-                    level.playSound(null, p, SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 0.8f, 1.2f);
-                    level.sendParticles(ParticleTypes.HAPPY_VILLAGER, p.getX() + 0.5, p.getY() + 0.4, p.getZ() + 0.5, 8, 0.3, 0.2, 0.3, 0.0);
-                    return;
-                }
-            }
         }
     }
 

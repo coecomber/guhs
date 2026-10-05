@@ -254,7 +254,7 @@ KLUSSEN = {
     "bakken": ("Bakken & molen", "Maalt knabbelgraan in een guh-molentje en bakt in een knabbeloven. Zet ze vlak bij het huisje!"),
     "vissen": ("Vissen", "Vist guhvissen en schelpjes als er water bij het huisje is."),
     "waken": ("Wachten & waarschuwen", "Piept en rent naar jou als er een Mika of monster komt, en duwt Mika's heel zachtjes weg. Nooit vechten!"),
-    "plukken": ("Bloemetjes & bessen plukken", "Plukt guhbloemen, knabbelbessen en zoete bessen, en plant soms een nieuw bloemetje."),
+    "plukken": ("Bloemetjes & bessen plukken", "Plukt guhbloemen, knabbelbessen en zoete bessen."),
     "lampjes": ("Lampjes aan & uit", "Doet 's avonds de guhlampjes rond het huisje aan en 's ochtends weer uit (met een gaap)."),
     "oppas": ("Muisje-oppas & verzorgen", "Zorgt voor pieppiepmuisjes en schildpadjes in de buurt, en geeft een gewonde guh een snackje."),
 }

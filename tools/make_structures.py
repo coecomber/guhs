@@ -628,6 +628,7 @@ def cheese_fountain():
     s.set(c, 11, c, *SAUS)                                                 # the spout: flows down bowl after bowl
     for (x, z) in ((0, 8), (16, 8), (8, 0), (8, 16)):                     # on the plaza (in the rim the saus washed them away)
         s.set(x, 1, z, mc("potted_pink_tulip"))
+    chest(s, 13, 1, 2, "north", "guhs:chests/cheese_fountain")            # (1.2.8) a little chest on the plaza: a few knabbels
     guh(s, 3.5, 1.0, 3.5, scale=0.8)
     guh(s, 13.5, 1.0, 12.5, scale=1.1)
     s.clear_above(footprint, 1)
@@ -993,7 +994,9 @@ def grand_cheese_fountain():
             for z in range(D):
                 if math.dist((x, z), (c, c)) <= r + 0.3:
                     s.set(x, y, z, KB if math.dist((x, z), (c, c)) < r - 0.7 else mc("pink_concrete"))
-    s.sphere(c, 19, c, 2.6, "guhs:compressed_super_vahoege_vads")                      # a vads orb on top...
+    # (1.2.8) the orb on top was vads ore (compressed_super_vahoege_vads): about seventy blocks of it, far too good for a
+    # fountain you find early. Now it is a shiny pink orb.
+    s.sphere(c, 19, c, 2.6, mc("pink_glazed_terracotta"))                              # a pink orb on top...
     s.set(c, 22, c, *SAUS)                                                             # ...with the spout
     for (x, z) in ((c - 7, c - 7), (c + 7, c - 7), (c - 7, c + 7), (c + 7, c + 7)):    # four jets in the pool
         s.fill(x, 1, z, x, 8, z, KB)
@@ -1004,7 +1007,7 @@ def grand_cheese_fountain():
         x = int(round(c + 13.8 * math.cos(math.radians(a))))
         z = int(round(c + 13.8 * math.sin(math.radians(a))))
         s.set(x, 1, z, mc("potted_pink_tulip") if a % 90 else mc("potted_allium"))
-    chest(s, c, 1, 1, "south", "guhs:chests/guh_picnic")
+    chest(s, c, 1, 1, "south", "guhs:chests/grand_cheese_fountain")                   # (1.2.8: its own modest loot, see make_resources.py)
     guh(s, 5.5, 1.0, 15.5, scale=1.4)
     guh(s, 25.5, 1.0, 12.5, scale=0.8)
     guh(s, 15.5, 1.0, 28.5, scale=2.0)

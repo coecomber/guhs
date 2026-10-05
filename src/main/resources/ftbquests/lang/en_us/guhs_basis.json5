@@ -40,11 +40,11 @@
   ],
   "quest.47554801DEE1F937.title": "Dragon Buddy",
   "quest.47554801DEE1F937.quest_desc": [
-    "Tame an &5Enderguh&r (Guh Peaks): 1 in 8 cheese nibbles, or all at once with a fried cheese nibble.",
+    "Tame an &5Enderguh&r. They live in the Guh End and only let themselves be tamed once you have beaten Overlord Mika: 1 in 8 cheese nibbles, or all at once with a fried cheese nibble.",
   ],
   "quest.475548D682B03811.title": "Chonk Flight",
   "quest.475548D682B03811.quest_desc": [
-    "Saddle your Enderguh and fly! Look where you want to go, W = forward, space = up.",
+    "Saddle your Enderguh and fly! Look where you want to go, W = forward, space = up. Flying only works once you have beaten Overlord Mika.",
   ],
   "quest.475548E81EBD2AE5.title": "Common Guh",
   "quest.475548E81EBD2AE5.quest_desc": [
@@ -84,7 +84,7 @@
   ],
   "quest.4755484F0E1FD4F4.title": "Enderguh",
   "quest.4755484F0E1FD4F4.quest_desc": [
-    "Get close to an &dEnderguh&r (within 3 blocks) so it goes into your Guhdex. It flies around the Guh Peaks!",
+    "Get close to an &dEnderguh&r (within 3 blocks) so it goes into your Guhdex. It lives in the Guh End: you only see it after beating Overlord Mika!",
   ],
   "quest.4755487B05630BA3.title": "King Guh",
   "quest.4755487B05630BA3.quest_desc": [

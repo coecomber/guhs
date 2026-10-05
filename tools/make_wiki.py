@@ -280,6 +280,10 @@ def guheinde_section():
                    "de Opper-Mikatrofee en een getemde <b>Vahoege Enderguh</b> met zadel om op te vliegen."),
                   ("Later wins: an <b>Enderguh-ei</b>. Put it down: it cracks and a baby Vahoege Enderguh hops out.",
                    "Latere overwinningen: een <b>Enderguh-ei</b>. Zet het neer: het barst open en er hupt een baby-Vahoege Enderguh uit."),
+                  ("Since 1.2.8: once you beat Opper-Mika yourself, now and then a wild <b>Enderguh</b> flies in near you in Het Guheinde (never during the fight). "
+                   "Only players who beat him can tame one, and only they can fly on an Enderguh; for everybody else it just walks.",
+                   "Sinds 1.2.8: heb je Opper-Mika zelf verslagen, dan komt er in Het Guheinde af en toe een wilde <b>Enderguh</b> bij je in de buurt aanvliegen (nooit tijdens het gevecht). "
+                   "Alleen wie hem heeft verslagen kan er een temmen, en alleen zij kunnen op een Enderguh vliegen; bij ieder ander loopt hij gewoon."),
                   ("The first win in a world opens Opper-Mika's <b>knabbelschat</b> under the Knabbelberg and lights the terugportaal on top.",
                    "De eerste overwinning in een wereld opent Opper-Mika's <b>knabbelschat</b> onder de Knabbelberg en zet het terugportaal bovenop aan."),
                   ("Every win makes a <b>Knabbelpoort</b> around the island (up to 20): it throws you ~1200 blocks out to the outer islands.",
@@ -2441,8 +2445,8 @@ def lieve_vadsjes_section():
              "A Mika or monster near the huisje? It peeps (a pink !), runs to you and warns you, and <b>gently pushes Mikas away</b>. It never fights and never hurts anyone. Always lief!",
              "Een Mika of monster bij het huisje? Hij piept (een roze !), rent naar je toe en waarschuwt je, en <b>duwt Mika's heel zachtjes weg</b>. Nooit vechten, nooit pijn doen. Altijd lief!"),
             ("Bloemetjes &amp; bessen plukken", "guh, muisje",
-             "Picks knabbelbessen and sweet berries (the bush stays) and a bloom from kaasbloemen and roze guhbloemen (the flower stays), and sometimes plants a new little flower.",
-             "Plukt knabbelbessen en zoete bessen (de struik blijft) en een bloemetje bij elke bloem (de bloem blijft staan): alle soorten bloemen, het vaakst een roze guhbloem. Plant soms een nieuw bloemetje."),
+             "Picks knabbelbessen and sweet berries (the bush stays) and a bloom from kaasbloemen and roze guhbloemen (the flower stays).",
+             "Plukt knabbelbessen en zoete bessen (de struik blijft) en een bloemetje bij elke bloem (de bloem blijft staan): alle soorten bloemen, het vaakst een roze guhbloem."),
             ("Lampjes aan &amp; uit", "guh",
              "In the evening it switches the guhlampjes and candles in the area on, in a little round; in the morning off again, with a big yawn.",
              "'s Avonds doet hij in een rondje de guhlampjes en kaarsjes in de klus-area aan; 's ochtends weer uit, met een grote gaap."),
@@ -3949,16 +3953,19 @@ def build():
                 "het rijden om het paneel te openen. Elke knop in het paneel (en in het guhmenu) vertelt wat hij doet als je er met je muis "
                 "op staat.")) + \
         entry(img("guh_variant_ender", "Ender guh"), "The ender guh", "De Enderguh",
-              p("A black and purple guh with <b>dragon wings</b>, little horns and glowing purple eyes. It lives only on the "
-                "<b>Guh Peaks</b> (about 1 in 30 guhs there) and flies around; hold kaas knabbels and it comes to you. Taming is harder: "
-                "1 in 8 knabbels, or at once with a <b>fried kaas knabbel</b>. A tamed ender guh is always big enough to ride: saddle it "
-                "and <b>fly</b>! Look where you want to go and hold W, jump = up, let go = hover. Getting off in the air? You float down.",
-                "Een zwart-paarse guh met <b>drakenvleugels</b>, hoorntjes en gloeiende paarse ogen. Hij woont alleen op de "
-                "<b>Guhpieken</b> (ongeveer 1 op de 30 guhs daar) en vliegt rond; houd kaasknabbels vast en hij komt naar je toe. Temmen "
-                "is pittiger: 1 op 8 knabbels, of in een keer met een <b>gefrituurde kaasknabbel</b>. Een tamme Enderguh is altijd groot "
+              p("A black and purple guh with <b>dragon wings</b>, little horns and glowing purple eyes. Since 1.2.8 it is an "
+                "endgame guh: wild ones only fly around in <b>Het Guheinde</b>, near players who beat <b>Opper-Mika</b> themselves (no longer on the Guh Peaks). "
+                "Only such a player can tame one: 1 in 8 knabbels, or at once with a <b>fried kaas knabbel</b>. A tamed ender guh is always big enough to ride: saddle it "
+                "and <b>fly</b>! Look where you want to go and hold W, jump = up, let go = hover. Getting off in the air? You float down. "
+                "A rider who did not beat Opper-Mika yet can't fly on any Enderguh: it just walks, like any big guh.",
+                "Een zwart-paarse guh met <b>drakenvleugels</b>, hoorntjes en gloeiende paarse ogen. Sinds 1.2.8 is het een "
+                "eindspelguh: wilde vliegen alleen nog rond in <b>Het Guheinde</b>, bij spelers die zelf <b>Opper-Mika</b> hebben verslagen (niet meer op de Guhpieken). "
+                "Alleen zo'n speler kan er een temmen: 1 op 8 knabbels, of in een keer met een <b>gefrituurde kaasknabbel</b>. Een tamme Enderguh is altijd groot "
                 "genoeg om te berijden: zadel hem en <b>vlieg</b>! Kijk waar je heen wilt en houd W vast, spatie = omhoog, loslaten = "
-                "zweven. In de lucht afstappen? Dan zweef je naar beneden."),
-              stats=[(("Where", "Waar"), t("Guh Peaks", "Guhpieken")), (("Taming", "Temmen"), t("1 in 8, or fried knabbels", "1 op 8, of gefrituurde knabbels"))]) + \
+                "zweven. In de lucht afstappen? Dan zweef je naar beneden. Wie Opper-Mika nog niet heeft verslagen kan op geen enkele "
+                "Enderguh vliegen: hij loopt dan gewoon, zoals elke grote guh."),
+              stats=[(("Where", "Waar"), t("Het Guheinde, after beating Opper-Mika", "Het Guheinde, na het verslaan van Opper-Mika")),
+                     (("Taming", "Temmen"), t("1 in 8, or fried knabbels", "1 op 8, of gefrituurde knabbels"))]) + \
         p("Also new: every guh compass now really points to the <b>nearest</b> structure of its kind (it used to search around 0,0), and "
           "the guh blossom tree has a guh-fur bark, sometimes with a little face.",
           "Ook nieuw: elk guhkompas wijst nu echt naar het <b>dichtstbijzijnde</b> bouwwerk van zijn soort (hij zocht per ongeluk rond "
@@ -4148,8 +4155,8 @@ def build():
 <tr><td>{t("Sit / Stand", "Zitten / Opstaan")}</td><td>{t("Stay put or follow you. A sitting guh doesn't move at all, not even for kaas knabbels.", "Blijven zitten of je volgen. Een zittende guh beweegt helemaal niet, zelfs niet voor kaasknabbels.")}</td></tr>
 <tr><td>{t("Teleport to me", "Naar mij teleporteren")}</td><td>{t("Whether it teleports to you when it falls behind.", "Of hij naar je toe teleporteert als hij achterblijft.")}</td></tr>
 <tr><td>{t("Gravity", "Zwaartekracht")}</td><td>{t("On: heavy and squished flat, can't jump, falls faster.", "Aan: zwaar en platgedrukt, kan niet springen, valt sneller.")}</td></tr>
-<tr><td>{t("Behaviour", "Gedrag")}</td><td>{t("<b>Passive (flee)</b>: runs from mobs that hurt it. <b>Passive</b>: does nothing. <b>Neutral</b>: fights back. <b>Aggressive</b>: attacks mobs within the attack radius (1&ndash;20 blocks) &mdash; never players, guhs or your pets. Bigger guhs hit harder.",
-                                                                    "<b>Passief (vluchten)</b>: rent weg van mobs die hem pijn doen. <b>Passief</b>: doet niks. <b>Neutraal</b>: vecht terug. <b>Agressief</b>: valt mobs binnen de aanvalsstraal aan (1&ndash;20 blokken) &mdash; nooit spelers, guhs of je huisdieren. Grotere guhs slaan harder.")}</td></tr>
+<tr><td>{t("Behaviour", "Gedrag")}</td><td>{t("<b>Passive (flee)</b>: runs from mobs that hurt it. <b>Passive</b>: does nothing. <b>Neutral</b>: fights back. <b>Aggressive</b>: attacks monsters and every kind of Mika within the attack radius (1&ndash;20 blocks) &mdash; never sweet critters or other passive animals, players, guhs or pets. Bigger guhs hit harder.",
+                                                                    "<b>Passief (vluchten)</b>: rent weg van mobs die hem pijn doen. <b>Passief</b>: doet niks. <b>Neutraal</b>: vecht terug. <b>Agressief</b>: valt monsters en alle soorten Mika's binnen de aanvalsstraal aan (1&ndash;20 blokken) &mdash; nooit lieve diertjes of andere vreedzame dieren, spelers, guhs of huisdieren. Grotere guhs slaan harder.")}</td></tr>
 <tr><td>{t("Sounds...", "Geluiden...")}</td><td>{t("Guh noises on/off and how often (very rarely &hellip; very often).", "Guhgeluidjes aan/uit en hoe vaak (heel zelden &hellip; heel vaak).")}</td></tr>
 <tr><td>{t("Rename", "Hernoem")}</td><td>{t("Type a name, no name tag needed.", "Typ een naam, geen naamkaartje nodig.")}</td></tr>
 <tr><td>{t("Wander", "Rondvadsen")}</td><td>{t("Off: the guh stays put where it stands (without sitting down): no strolling around, no following you.", "Uit: de guh blijft staan waar hij staat (zonder te gaan zitten): niet rondlopen, niet achter je aan.")}</td></tr>
@@ -4793,11 +4800,11 @@ def build():
         fig("structure_quartz_statue", "Quartz statue", "Kwartsbeeldje", "common", "vaak",
             "A small white quartz statue.", "Een klein wit kwartsbeeldje."),
         fig("structure_cheese_fountain", "Cheese fountain", "Kaasfontein", "semi-rare, also overworld", "vrij zeldzaam, ook overworld",
-            "A spout on top of a Block of Kaasknabbels column: the kaas saus really flows, spilling over two bowls into the basin. Have a sip!",
-            "Een spuit boven op een zuil van Blokken kaasknabbels: de kaassaus stroomt echt, over twee schalen het bassin in. Neem een slokje!"),
+            "A spout on top of a Block of Kaasknabbels column: the kaas saus really flows, spilling over two bowls into the basin. Have a sip! A little chest on the plaza holds a few kaasknabbels.",
+            "Een spuit boven op een zuil van Blokken kaasknabbels: de kaassaus stroomt echt, over twee schalen het bassin in. Neem een slokje! In een kistje op het plein zitten een paar kaasknabbels."),
         fig("structure_grand_cheese_fountain", "Grand cheese fountain", "Grote kaasfontein", "rare, also overworld", "zeldzaam, ook overworld",
-            "The big one: a vads orb on top, three cascading bowls, four spouting pillars in a deep kaas saus pool and a picnic chest.",
-            "De grote: een vadsbol bovenop, drie schalen waar de saus overheen klatert, vier spuitende zuilen in een diep kaassausbad en een picknickkist."),
+            "The big one: a shiny pink orb on top, three cascading bowls, four spouting pillars in a deep kaas saus pool and a chest with kaasknabbels, a few fried ones and a little iron and gold.",
+            "De grote: een glimmende roze bol bovenop, drie schalen waar de saus overheen klatert, vier spuitende zuilen in een diep kaassausbad en een kist met kaasknabbels, een paar gefrituurde en een beetje ijzer en goud."),
         fig("structure_central_room", "Guh caves: central room", "Guhgrotten: middenkamer", "common, deep underground (y14)", "vaak, diep onder de grond (y14)",
             "Underground networks of yellow hamster tubes around a big hamster room: bedding, hay, a guh wheel, wool guh portraits, a chest and a frying pan.",
             "Ondergrondse netwerken van gele hamsterbuizen rond een grote hamsterkamer: bodembedekking, hooi, een guhrad, wollen guhportretten, een kist en een koekenpan."),

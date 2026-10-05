@@ -59,6 +59,9 @@ RACE_NAMEN = ["Bliksemvads", "Turbo Njeg", "Vahoeg 3000", "Roze Donder", "Kaaskn
               "Snelle Gerrit", "Pluizige Pijl", "Knabbelknaller", "Wervelguh"]
 
 OVERIG = {
+    # 1.2.8: the Enderguh belongs to the endgame (feature/guheinde/Enderguhs)
+    "gui.guhs.guheinde.enderguh.vlieg_slot": "Deze Enderguh wil nog niet met je vliegen. Die krachten krijg je pas na het verslaan van de Enderdraak... of toch niet? Misschien bestaat er wel een Ender-Mika-variant. Hint hint.",
+    "gui.guhs.guheinde.enderguh.tem_slot": "Deze Enderguh is nog een beetje verlegen. Hij laat zich pas temmen door wie Opper-Mika in het Guheinde heeft verslagen. Guh!",
     "quest.guhs.reis.naam_xz": "%s (%s, %s)",
     "gui.guhs.wistjedat.een_guh": "een guh",
     "gui.guhs.wistjedat.mijn_baasje": "mijn baasje",

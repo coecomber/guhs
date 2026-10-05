@@ -108,7 +108,7 @@ for i, (v, name) in enumerate(VARIANTS):
     q(f"variant_{v}", name, f"Kom dichtbij een &d{name}&r (binnen 3 blokjes) zodat hij in je Guhdex komt." +
       (" Heel zeldzaam!" if v in ("golden", "rainbow") else "") + (" Komt alleen met een sterrenregen!" if v == "starry" else "") + (" Alleen 's nachts!" if v == "ghost" else "") +
       (" Een geheimzinnige guh met een briefje..." if v == "brococolief" else "") +
-      (" Vliegt rond op de Guhpieken!" if v == "ender" else "") +
+      (" Woont in het Guheinde: je ziet hem pas na het verslaan van Opper-Mika!" if v == "ender" else "") +
       (" Zit op zijn troon in het legendarische guhkasteel." if v == "koning" else ""),
       "guhs:guhdex", [adv(f"seen_{v}")], rewards=(("guhs:kaas_knabbels", 16),), deps=["guhmension"], x=-7 + i * 1.5, y=9,
       shape="rsquare")
@@ -164,9 +164,9 @@ q("sled", "De kapotte slee", "Breng de Slee-guh een sleeglijder (guhgrotten), ee
 q("ride_sled", "WIEEE!", "Bouw een baan en rijd met je guhslee (vier guhs trekken hem!).", "guhs:sleerail_bocht", [adv("ride_sled")],
   deps=["sled"], x=2, y=15, xp=200)
 
-q("ender_tame", "Drakenvriendje", "Tem een &5Enderguh&r (Guhpieken): 1 op 8 kaasknabbels, of in een keer met een gefrituurde kaasknabbel.",
+q("ender_tame", "Drakenvriendje", "Tem een &5Enderguh&r. Die wonen in het Guheinde en laten zich pas temmen als je Opper-Mika hebt verslagen: 1 op 8 kaasknabbels, of in een keer met een gefrituurde kaasknabbel.",
   "minecraft:dragon_egg", [adv("guhs:quest/tamed_ender")], rewards=(("minecraft:saddle", 1),), deps=["variant_ender"], x=10, y=10.5, xp=300)
-q("ender_ride", "Vadsvlucht", "Zadel je Enderguh en vlieg! Kijk waar je heen wilt, W = vooruit, spatie = omhoog.", "minecraft:elytra",
+q("ender_ride", "Vadsvlucht", "Zadel je Enderguh en vlieg! Kijk waar je heen wilt, W = vooruit, spatie = omhoog. Vliegen kan pas als je Opper-Mika hebt verslagen.", "minecraft:elytra",
   [adv("guhs:quest/ride_ender")], rewards=(("guhs:gefrituurde_kaasknabbels", 8),), deps=["ender_tame"], x=11.5, y=10.5, shape="gear", xp=300)
 
 # --- Reisguhs (2.3.0) -----------------------------------------------------------------------------------------------------
