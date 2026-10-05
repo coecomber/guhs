@@ -9,4 +9,7 @@ FTB_SECTIES = [("ring_h2", "De Raad van Guhrond", "npc:guhrond", None)]
 
 
 def build(h):
-    pass
+    # the F0 placeholder of the questline (one step; Java: RingH2Feature.LIJN), so the travel map of ring-kern has its halte
+    from features import verhaal_motor
+    verhaal_motor.verhaallijn(h, "ring_h2", "De Raad van Guhrond", "Dit deel van het verhaal wordt nog geschreven. Njeg!",
+                              stappen=[("Wordt nog geschreven", "Dit deel van het verhaal wordt nog geschreven. Njeg!", "Guhvendel")])

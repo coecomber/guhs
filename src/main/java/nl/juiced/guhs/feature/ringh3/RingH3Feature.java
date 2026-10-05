@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
@@ -19,6 +20,12 @@ import nl.juiced.guhs.feature.wereld.Plaatshouder;
  * name and the field type (subclasses are fine).
  */
 public final class RingH3Feature {
+    /**
+     * The questline of this part of the story. F0 placeholder of one step (CONTRACT_130 6.2.5): the travel map of ring-kern
+     * has its halte before the slice exists; the slice gives it its real steps. Texts: tools/features/ring_h3.py.
+     */
+    public static final Verhaallijn LIJN = Verhaallijn.maak("ring_h3", "knabbelring").stappen(1).na("ring_h2").registreer();
+
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
 
     public static final DeferredHolder<EntityType<?>, EntityType<Plaatshouder>> BARBECUEROG = Plaatshouder.type(ENTITY_TYPES, "barbecuerog");

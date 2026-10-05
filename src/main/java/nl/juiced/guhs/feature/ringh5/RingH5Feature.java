@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -24,6 +25,12 @@ import nl.juiced.guhs.feature.wereld.Plaatshouder;
  * name and the field type (subclasses are fine).
  */
 public final class RingH5Feature {
+    /**
+     * The questline of this part of the story. F0 placeholder of one step (CONTRACT_130 6.2.5): the travel map of ring-kern
+     * has its halte before the slice exists; the slice gives it its real steps. Texts: tools/features/ring_h5.py.
+     */
+    public static final Verhaallijn LIJN = Verhaallijn.maak("ring_h5", "knabbelring").stappen(1).na("ring_h4").registreer();
+
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);

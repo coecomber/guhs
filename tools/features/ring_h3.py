@@ -9,4 +9,7 @@ FTB_SECTIES = [("ring_h3", "De Mijnen van Knabbelmoria", "npc:gimguh", None)]
 
 
 def build(h):
-    pass
+    # the F0 placeholder of the questline (one step; Java: RingH3Feature.LIJN), so the travel map of ring-kern has its halte
+    from features import verhaal_motor
+    verhaal_motor.verhaallijn(h, "ring_h3", "De Mijnen van Knabbelmoria", "Dit deel van het verhaal wordt nog geschreven. Njeg!",
+                              stappen=[("Wordt nog geschreven", "Dit deel van het verhaal wordt nog geschreven. Njeg!", "De Mijnen van Knabbelmoria")])
