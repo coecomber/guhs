@@ -9,9 +9,9 @@ section setup
 /weather clear
 /guhs px lobby
 wait 120
-/guhs px grap reset skyblok
-/guhs px grap reset bedwars
-/guhs px grap reset vadsnite
+/guhs px grap skyblok reset
+/guhs px grap bedwars reset
+/guhs px grap vadsnite reset
 
 section lobby: Skyblok-guh, Bedwars-guh, Vadsnite-guh with their floating lines
 camera -16 102.5 -11 180 8
