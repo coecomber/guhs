@@ -1,0 +1,128 @@
+# Saus door slangen (bbq2, tech-vloeistof) AutoCheck: the six sauce blocks with their faces, a running sauce factory, the
+# hover readout with the tank lines, the gauge of the Sausvat, the stamp of the Grillkoolpers, and everything asleep when the
+# net is too heavy. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_tech-vloeistof.txt
+# (commands: see autocheck.txt; /guhs techsaus vul <x y z> <kaassaus|frituursaus|water|melk|leeg> [mB] sets a tank,
+#  /guhs techsaus stand <x y z> says what a block holds and how many ends its hoses reach, /guhs vadskracht <x y z> the readout)
+# Layout (row z = 3001, faces to the south, you stand south of it and look north):
+#   x 2994 source | 2995 pump on water | 2996 hose | 2997 vat (water) | 2998 press | 2999 vat (frituursaus)
+#   | 3000 Frituurautomaat | 3001 vat (kaassaus) | 3002 Brouwautomaat | 3004 vat (milk, full) | 3005 a loose hose knot
+# Guhdraad runs behind them on row z = 3000.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:smooth_stone
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode creative
+/tp @s 2999 140 3007
+wait 40
+
+section a sauce factory that runs: 60 vadskracht for pump (6) + press (8) + Frituurautomaat (8) + Brouwautomaat (8)
+/setblock 2995 138 3001 minecraft:smooth_stone
+/setblock 2995 139 3001 minecraft:water
+/setblock 2994 140 3000 guhs:vadskracht_testbron[kracht=6]
+/fill 2995 140 3000 3002 140 3000 guhs:guh_wire
+/setblock 2995 140 3001 guhs:sauspomp[facing=south]
+/setblock 2997 140 3001 guhs:sausvat[facing=south]
+/setblock 2996 140 3001 guhs:sausslang
+/setblock 2998 140 3001 guhs:grillkoolpers[facing=south]
+/setblock 2999 140 3001 guhs:sausvat[facing=south]
+/setblock 3000 140 3001 guhs:frituurautomaat[facing=south]
+/setblock 3001 140 3001 guhs:sausvat[facing=south]
+/setblock 3002 140 3001 guhs:brouwautomaat[facing=south]
+/setblock 3004 140 3001 guhs:sausvat[facing=south]
+/setblock 3005 140 3001 guhs:sausslang
+/guhs techsaus vul 2999 140 3001 frituursaus 9000
+/guhs techsaus vul 3001 140 3001 kaassaus 5000
+/guhs techsaus vul 3004 140 3001 melk
+/data merge block 3000 140 3001 {Vakken:{stacks:[{id:"guhs:kaas_knabbels",count:64},{},{}]}}
+/data merge block 3002 140 3001 {Vakken:{stacks:[{id:"guhs:kaas_knabbels",count:4},{id:"minecraft:glass_bottle",count:12},{},{},{},{},{},{}]}}
+wait 160
+/guhs techsaus stand 2995 140 3001
+/guhs techsaus stand 2998 140 3001
+/guhs techsaus stand 3002 140 3001
+/guhs vadskracht 3000 140 3001
+/gamemode spectator
+camera 2999.5 142.2 3006.5 180 18
+waitrender 300
+shot techsaus_fabriek
+camera 2996.5 141.6 3004.0 180 15
+waitrender 200
+shot techsaus_pomp_slang_vat
+camera 2998.5 142.0 3004.0 180 12
+waitrender 200
+shot techsaus_grillkoolpers
+camera 3001.5 141.6 3004.0 180 15
+waitrender 200
+shot techsaus_frituur_en_brouw
+camera 3004.5 141.6 3004.0 180 15
+waitrender 200
+shot techsaus_melkvat_en_losse_slang
+# from behind: the couplings of the pump, the handle of the basket, the hoses on the back
+camera 2999.5 142.2 2996.0 0 18
+waitrender 300
+shot techsaus_fabriek_achter
+/gamemode creative
+
+section hover readout: the vadskracht lines, then the tanks and what the machine waits for
+/tp @s 2995.5 140 3003.5 180 10
+wait 20
+/tp @s 2995.5 140 3003.5 180 10
+wait 30
+clearchat
+shot techsaus_hover_pomp gui
+/tp @s 2998.5 140 3003.5 180 10
+wait 30
+shot techsaus_hover_pers gui
+/tp @s 2998.5 140 3003.5 180 -20
+wait 30
+shot techsaus_hover_pers_boven gui
+/tp @s 3000.5 140 3003.5 180 10
+wait 30
+shot techsaus_hover_frituur gui
+/tp @s 3002.5 140 3003.5 180 10
+wait 30
+shot techsaus_hover_brouw gui
+
+section the press at work: wait for the stamp to come down
+/guhs techsaus vul 2998 140 3001 frituursaus 4000
+/guhs techsaus vul 2998 140 3001 water 4000
+wait 30
+/gamemode spectator
+camera 2998.5 142.0 3004.0 180 12
+waitrender 100
+shot techsaus_pers_perst
+/gamemode creative
+
+section too heavy: the source turned down to 20 (30 asked): every face asleep, nothing moves
+/setblock 2994 140 3000 guhs:vadskracht_testbron[kracht=2]
+wait 60
+/guhs vadskracht 3000 140 3001
+/tp @s 3000.5 140 3003.5 180 10
+wait 30
+shot techsaus_hover_te_zwaar gui
+/gamemode spectator
+camera 2999.5 142.2 3006.5 180 18
+waitrender 300
+shot techsaus_fabriek_slaapt
+/gamemode creative
+
+section the items in the inventory (the press is two blocks high: it must fit its slot)
+/clear @s
+/give @s guhs:sauspomp
+/give @s guhs:sausslang 8
+/give @s guhs:sausvat
+/give @s guhs:brouwautomaat
+/give @s guhs:frituurautomaat
+/give @s guhs:grillkoolpers
+wait 20
+shot techsaus_items gui
+quit
