@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -104,6 +106,7 @@ public final class Bezetting {
 
     private static final Map<String, Wezen> WEZENS = new LinkedHashMap<>();
     private static final Map<String, Prop> PROPS = new LinkedHashMap<>();
+    private static final Map<String, ResourceKey<Level>> DIMENSIES = new ConcurrentHashMap<>();
     /** (not saved) dimension|id@chunk -> the game time it was first seen missing. */
     private static final Map<String, Long> GEMIST = new ConcurrentHashMap<>();
 
@@ -166,6 +169,19 @@ public final class Bezetting {
         synchronized (WEZENS) {
             WEZENS.put(w.id, w);
         }
+    }
+
+    /**
+     * The registration {@code id} (an npc, wezen or blokken) only counts in this dimension. For a structure that stands in
+     * more than one: the barbecueput is in the Guhmensie and in the Guhbarbecuether.
+     */
+    public static void alleenIn(String id, ResourceKey<Level> dimensie) {
+        DIMENSIES.put(id, dimensie);
+    }
+
+    private static boolean telt(String id, ServerLevel level) {
+        ResourceKey<Level> dim = DIMENSIES.get(id);
+        return dim == null || dim == level.dimension();
     }
 
     // --- where things are ------------------------------------------------------------------------------------------------
@@ -233,11 +249,17 @@ public final class Bezetting {
         int gemaakt = 0;
         Map<String, List<StructureStart>> starts = new HashMap<>();
         for (Wezen w : wezens) {
+            if (!telt(w.id, level)) {
+                continue;
+            }
             for (StructureStart start : starts.computeIfAbsent(w.structuur, n -> kopieen(level, n, bij))) {
                 gemaakt += wezen(level, start, w) ? 1 : 0;
             }
         }
         for (Prop prop : props) {
+            if (!telt(prop.id, level)) {
+                continue;
+            }
             for (StructureStart start : starts.computeIfAbsent(prop.structuur, n -> kopieen(level, n, bij))) {
                 gemaakt += prop(level, start, prop) ? 1 : 0;
             }
@@ -504,6 +526,7 @@ public final class Bezetting {
         synchronized (PROPS) {
             PROPS.remove(id);
         }
+        DIMENSIES.remove(id);
         GEMIST.keySet().removeIf(k -> k.contains("|" + id + "@"));
     }
 

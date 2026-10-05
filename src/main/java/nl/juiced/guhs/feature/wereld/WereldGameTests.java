@@ -116,6 +116,12 @@ public class WereldGameTests {
 
             Bezetting.npc(id, BEWOOND, "wereld_test_gebouw", new BlockPos(3, 1, 3), GuhNpcEntity.Kind.WACHTERGUH, "testplek");
             String tag = Bezetting.tag(id, start);
+            Bezetting.alleenIn(id, net.minecraft.world.level.Level.NETHER);
+            Bezetting.zetGemist(level, id, start, Bezetting.BEVESTIG + 1);
+            helper.assertTrue(Bezetting.controleer(level, bij) == 0 && metTag(helper, tag).isEmpty(), "only in another dimension: not here");
+            Bezetting.vergeet(id);
+            Bezetting.npc(id, BEWOOND, "wereld_test_gebouw", new BlockPos(3, 1, 3), GuhNpcEntity.Kind.WACHTERGUH, "testplek");
+            Bezetting.alleenIn(id, level.dimension());
             helper.assertTrue(Bezetting.controleer(level, bij) == 0 && metTag(helper, tag).isEmpty(), "missing once: nothing yet");
             Bezetting.zetGemist(level, id, start, Bezetting.BEVESTIG + 1);
             helper.assertTrue(Bezetting.controleer(level, bij) == 1, "missing twice: made");

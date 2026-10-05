@@ -153,6 +153,43 @@ public final class Kopieen {
         return null;
     }
 
+    /**
+     * The other way round: the template coordinates ({@link #wereld}'s {@code lokaal}) of a world position, for the piece
+     * {@code stuk} of this copy (a guhs:burcht: of the whole build). Null when the copy has no such piece. For finding the
+     * numbers to register: stand at the spot in a real copy and ask /guhs wereld kopie &lt;structuur&gt;.
+     */
+    @Nullable
+    public static BlockPos lokaal(StructureStart start, @Nullable String stuk, BlockPos wereld) {
+        BlockPos nul = wereld(start, stuk, BlockPos.ZERO);
+        if (nul == null) {
+            return null;
+        }
+        Rotation terug = switch (draai(start, stuk)) {
+            case CLOCKWISE_90 -> Rotation.COUNTERCLOCKWISE_90;
+            case COUNTERCLOCKWISE_90 -> Rotation.CLOCKWISE_90;
+            case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
+            default -> Rotation.NONE;
+        };
+        return StructureTemplate.transform(wereld.subtract(nul), Mirror.NONE, terug, BlockPos.ZERO);
+    }
+
+    /**
+     * The jigsaw piece of this copy this world position lies in: its template name (the {@code stuk} to register with), or
+     * null: no piece there, or a copy that is one build (a guhs:burcht: coordinates count in the whole build, no stuk).
+     */
+    @Nullable
+    public static String stukBij(StructureStart start, BlockPos wereld) {
+        for (StructurePiece piece : start.getPieces()) {
+            if (piece.getBoundingBox().isInside(wereld)) {
+                Identifier id = template(piece);
+                if (id != null) {
+                    return id.getPath();
+                }
+            }
+        }
+        return null;
+    }
+
     /** How the piece that {@link #wereld} uses is turned (NONE when there is no such piece). */
     public static Rotation draai(StructureStart start, @Nullable String stuk) {
         if (start.getStructure() instanceof BurchtStructure) {
@@ -179,9 +216,6 @@ public final class Kopieen {
             }
             Identifier id = template(piece);
             if (id != null && id.getPath().contains(stuk)) {
-                return piece;
-            }
-            if (id == null && piece instanceof TemplateStructurePiece && piece.toString().contains(stuk)) {
                 return piece;
             }
         }
