@@ -5,8 +5,8 @@ This is the F0 stub (CONTRACT_130 5.1): the slice replaces the content of this m
 (NPC names and textures, Guhdex pages, the fixed ids) come from features/bbq2.py.
 """
 # The chapter guhs_knabbelring is the one chapter whose quests really depend on each other (make_ftbquests.py FTB_LINEAIR):
-# every ring module sets it. A quest without deps comes after the previous quest of the same module; the first quest of a
-# module names the last quest of the chapter before it in deps=[...].
+# every ring module sets it. Its quests are one chain in quest order (FEATURES order: ring, ring_h1 ... ring_h6,
+# ring_sausuman); a quest that must come after another one names it in deps=[...] (the Toren van Sausuman: a quest of h4).
 FTB_LINEAIR = True
 FTB_SECTIES = [("ring", "De Knabbelring", "npc:guhdalf", None)]
 

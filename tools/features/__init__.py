@@ -7,6 +7,7 @@ The 2.4 features (minigames and rare structures), one module each. Every module 
   variants(rng, v)    extra guh variant textures: {id: (fur colour or None, {swatch: painter})} (like make_guh_variants.variants)
   CLOTHES             ids of its guh clothes (item models; same ids as the GuhClothes enum, lower case)
   icons(ic)           item icons of its guh clothes: {clothes id: image} (ic is make_clothes_icons)
+  FTB_CHAPTER, FTB_SECTION, FTB_PORTRAIT, and (bbq2) FTB_SECTIES, FTB_LINEAIR, FTB_SLOT: where its FTB quests land (make_ftbquests.py)
 """
 import importlib
 
