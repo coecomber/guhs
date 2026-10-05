@@ -372,16 +372,25 @@ public class GuhGameTests {
         helper.succeed();
     }
 
+    /** bbq2: at most 256 of one kind (the rest comes back to the caller); with the upgrade there is no limit (more: BankGameTests). */
     @GuhTest(template = EMPTY)
-    public static void bankGuhStoresInfinitelyAndKeepsItWhenBroken(GameTestHelper helper) {
+    public static void bankGuhStoresUpToTheCapAndKeepsItWhenBroken(GameTestHelper helper) {
         BlockPos pos = new BlockPos(2, 1, 2);
         helper.setBlock(pos, ModBlocks.BANK_GUH.get());
         BankGuhBlockEntity bank = helper.getBlockEntity(pos, BankGuhBlockEntity.class);
+        int terug = 0;
         for (int i = 0; i < 1000; i++) {
-            bank.getStorage().insert(new ItemStack(Items.COBBLESTONE, 64));
+            terug += bank.getStorage().insert(new ItemStack(Items.COBBLESTONE, 64)).getCount();
         }
-        bank.getStorage().insert(new ItemStack(Items.DIAMOND, 3));
-        helper.assertTrue(bank.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 64_000, "64,000 cobblestone should fit");
+        helper.assertTrue(bank.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 256 && terug == 64_000 - 256,
+                "256 cobblestone fit, the other " + (64_000 - 256) + " came back to the caller (got " + terug + ")");
+        bank.getStorage().setUpgraded(true);
+        for (int i = 0; i < 1000; i++) {
+            helper.assertTrue(bank.getStorage().insert(new ItemStack(Items.COBBLESTONE, 64)).isEmpty(), "upgraded: every stack fits");
+        }
+        helper.assertTrue(bank.getStorage().insert(new ItemStack(Items.DIAMOND, 3)).isEmpty(), "three diamonds");
+        helper.assertTrue(bank.getStorage().extract(new ItemStack(Items.COBBLESTONE), 256).getCount() == 256, "(256 out again)");
+        helper.assertTrue(bank.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 64_000, "upgraded: 64,000 cobblestone fit");
         ItemStack taken = bank.getStorage().extract(new ItemStack(Items.COBBLESTONE), 64);
         helper.assertTrue(taken.getCount() == 64 && bank.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 63_936, "taking a stack");
 
