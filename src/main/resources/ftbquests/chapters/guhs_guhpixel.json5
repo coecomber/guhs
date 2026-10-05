@@ -30,6 +30,18 @@
       x: 12.15,
       y: 1.5,
     },
+    {
+      height: 1.5625,
+      id: "475548D35CD3C720",
+      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_thuis.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 13,
   progression_mode: "flexible",
@@ -72,6 +84,104 @@
       y: 1.5,
       size: 1.3,
       shape: "gear",
+    },
+    {
+      id: "47554846911EC7FE",
+      icon: {
+        id: "guhs:guhbioscoop_projector",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhbioscoop_projector",
+          },
+          id: "4755488296749D6B",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DF4FAB5F3C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D81D94FEAF",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755486F480C2C6A",
+      icon: {
+        id: "guhs:guhbioscoop_popcorn",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhbioscoop_eerste_film",
+          id: "47554893286795DC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481520238753",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755480EDE744497",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548E739739DA4",
+      icon: {
+        id: "guhs:guhbioscoop_stoeltje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhbioscoop_alles",
+          id: "475548B841DA973C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480254A3795D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548126EBDA55A",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
     },
   ],
 }

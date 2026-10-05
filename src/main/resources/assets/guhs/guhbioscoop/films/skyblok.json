@@ -1,0 +1,1429 @@
+{
+  "formaat": 1,
+  "id": "skyblok",
+  "duur": 970,
+  "atlas": {
+    "textuur": "guhs:textures/guhbioscoop/skyblok.png",
+    "breedte": 256,
+    "hoogte": 128
+  },
+  "sprites": {
+    "bed": {
+      "uv": [
+        67,
+        85,
+        30,
+        10
+      ]
+    },
+    "bedje": {
+      "uv": [
+        173,
+        85,
+        11,
+        4
+      ]
+    },
+    "boom": {
+      "uv": [
+        122,
+        1,
+        18,
+        24
+      ]
+    },
+    "denkwolk": {
+      "uv": [
+        141,
+        1,
+        30,
+        24
+      ]
+    },
+    "deur": {
+      "uv": [
+        237,
+        1,
+        12,
+        20
+      ]
+    },
+    "eiland": {
+      "uv": [
+        172,
+        1,
+        64,
+        22
+      ]
+    },
+    "eiland_klein": {
+      "uv": [
+        1,
+        85,
+        30,
+        12
+      ]
+    },
+    "emmer": {
+      "uv": [
+        132,
+        85,
+        7,
+        7
+      ]
+    },
+    "generator": {
+      "uv": [
+        190,
+        85,
+        11,
+        3
+      ]
+    },
+    "guh_lila_blij_rond_headset": {
+      "uv": [
+        1,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_lila_dicht_rond_headset": {
+      "uv": [
+        24,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_lila_open_rond_headset": {
+      "uv": [
+        47,
+        66,
+        22,
+        18
+      ]
+    },
+    "guh_lila_schrik_rond_headset": {
+      "uv": [
+        70,
+        66,
+        22,
+        18
+      ]
+    },
+    "ijs": {
+      "uv": [
+        140,
+        85,
+        7,
+        7
+      ]
+    },
+    "kist": {
+      "uv": [
+        98,
+        85,
+        10,
+        8
+      ]
+    },
+    "kruis": {
+      "uv": [
+        148,
+        85,
+        9,
+        7
+      ]
+    },
+    "ladder": {
+      "uv": [
+        114,
+        1,
+        7,
+        46
+      ]
+    },
+    "plakband": {
+      "uv": [
+        202,
+        85,
+        3,
+        2
+      ]
+    },
+    "sterren": {
+      "uv": [
+        1,
+        1,
+        112,
+        64
+      ]
+    },
+    "vuurwerk_blauw": {
+      "uv": [
+        93,
+        66,
+        17,
+        17
+      ],
+      "frames": 3,
+      "per": 5
+    },
+    "vuurwerk_geel": {
+      "uv": [
+        145,
+        66,
+        17,
+        17
+      ],
+      "frames": 3,
+      "per": 5
+    },
+    "vuurwerk_roze": {
+      "uv": [
+        197,
+        66,
+        17,
+        17
+      ],
+      "frames": 3,
+      "per": 5
+    },
+    "wit": {
+      "uv": [
+        185,
+        85,
+        4,
+        4
+      ]
+    },
+    "wolk": {
+      "uv": [
+        109,
+        85,
+        22,
+        8
+      ]
+    },
+    "wolk_groot": {
+      "uv": [
+        32,
+        85,
+        34,
+        11
+      ]
+    },
+    "zzz": {
+      "uv": [
+        158,
+        85,
+        7,
+        7
+      ],
+      "frames": 2,
+      "per": 12
+    }
+  },
+  "scenes": [
+    {
+      "naam": "titel",
+      "duur": 70,
+      "lagen": [
+        {
+          "vlak": "#1a2a5a",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "sterren",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "sprite": "eiland_klein",
+          "x": 41,
+          "y": 46,
+          "golf": {
+            "ax": 0,
+            "ay": 1.5,
+            "per": 40
+          }
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t1",
+          "schaal": 2.0,
+          "uitlijn": "midden",
+          "kleur": "#ffd27a",
+          "schaduw": true,
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": -18
+            },
+            {
+              "t": 14,
+              "x": 56,
+              "y": 10,
+              "e": "uit"
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t2",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 56,
+          "y": 32,
+          "van": 18
+        }
+      ]
+    },
+    {
+      "naam": "eiland",
+      "duur": 170,
+      "lagen": [
+        {
+          "vlak": "#8fd0ff",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 37,
+          "y": 0,
+          "w": 1,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 75,
+          "y": 0,
+          "w": 1,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 0,
+          "y": 31,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "plakband",
+          "x": 36,
+          "y": 30
+        },
+        {
+          "sprite": "plakband",
+          "x": 74,
+          "y": 30
+        },
+        {
+          "sprite": "wolk",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 46,
+          "y": 12
+        },
+        {
+          "sprite": "wolk",
+          "x": 82,
+          "y": 40
+        },
+        {
+          "sprite": "ladder",
+          "x": 102,
+          "y": 14
+        },
+        {
+          "sprite": "deur",
+          "x": 86,
+          "y": 8
+        },
+        {
+          "sprite": "eiland",
+          "x": 20,
+          "y": 40
+        },
+        {
+          "sprite": "boom",
+          "x": 60,
+          "y": 17
+        },
+        {
+          "sprite": "kist",
+          "x": 24,
+          "y": 32
+        },
+        {
+          "sprite": "bed",
+          "x": 36,
+          "y": 31
+        },
+        {
+          "sprite": "guh_lila_open_rond_headset",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": -24,
+              "y": 22
+            },
+            {
+              "t": 45,
+              "x": 2,
+              "y": 22
+            },
+            {
+              "t": 60,
+              "x": 22,
+              "y": 22,
+              "e": "zacht"
+            }
+          ],
+          "tot": 60,
+          "golf": {
+            "ax": 0,
+            "ay": 0.8,
+            "per": 8
+          }
+        },
+        {
+          "sprite": "guh_lila_open_rond_headset",
+          "x": 22,
+          "y": 22,
+          "van": 60
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t3",
+          "schaal": 0.75,
+          "uitlijn": "links",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 3,
+          "y": 3,
+          "van": 84
+        }
+      ]
+    },
+    {
+      "naam": "kist",
+      "duur": 150,
+      "lagen": [
+        {
+          "vlak": "#8fd0ff",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 37,
+          "y": 0,
+          "w": 1,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 75,
+          "y": 0,
+          "w": 1,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 0,
+          "y": 31,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "plakband",
+          "x": 36,
+          "y": 30
+        },
+        {
+          "sprite": "plakband",
+          "x": 74,
+          "y": 30
+        },
+        {
+          "sprite": "wolk",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 46,
+          "y": 12
+        },
+        {
+          "sprite": "wolk",
+          "x": 82,
+          "y": 40
+        },
+        {
+          "sprite": "ladder",
+          "x": 102,
+          "y": 14
+        },
+        {
+          "sprite": "deur",
+          "x": 86,
+          "y": 8
+        },
+        {
+          "sprite": "eiland",
+          "x": 20,
+          "y": 40
+        },
+        {
+          "sprite": "boom",
+          "x": 60,
+          "y": 17
+        },
+        {
+          "sprite": "kist",
+          "x": 24,
+          "y": 32
+        },
+        {
+          "sprite": "bed",
+          "x": 36,
+          "y": 31
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t3",
+          "schaal": 0.75,
+          "uitlijn": "links",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 3,
+          "y": 3
+        },
+        {
+          "sprite": "ijs",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 26,
+              "y": 32
+            },
+            {
+              "t": 16,
+              "x": 20,
+              "y": 20,
+              "e": "uit"
+            }
+          ]
+        },
+        {
+          "sprite": "emmer",
+          "sleutels": [
+            {
+              "t": 6,
+              "x": 26,
+              "y": 32
+            },
+            {
+              "t": 22,
+              "x": 31,
+              "y": 20,
+              "e": "uit"
+            },
+            {
+              "t": 78,
+              "x": 31,
+              "y": 20
+            },
+            {
+              "t": 92,
+              "x": 44,
+              "y": 20,
+              "e": "in"
+            },
+            {
+              "t": 104,
+              "x": 88,
+              "y": 34
+            },
+            {
+              "t": 124,
+              "x": 96,
+              "y": 70,
+              "r": 300,
+              "e": "in"
+            }
+          ]
+        },
+        {
+          "sprite": "guh_lila_open_rond_headset",
+          "x": 34,
+          "y": 22,
+          "tot": 70
+        },
+        {
+          "sprite": "guh_lila_open_rond_headset",
+          "sleutels": [
+            {
+              "t": 70,
+              "x": 34,
+              "y": 22
+            },
+            {
+              "t": 80,
+              "x": 30,
+              "y": 22,
+              "e": "uit"
+            }
+          ],
+          "spiegel": true,
+          "van": 70,
+          "tot": 106
+        },
+        {
+          "sprite": "guh_lila_schrik_rond_headset",
+          "x": 30,
+          "y": 22,
+          "van": 106
+        }
+      ]
+    },
+    {
+      "naam": "bonk",
+      "duur": 150,
+      "lagen": [
+        {
+          "vlak": "#8fd0ff",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 37,
+          "y": 0,
+          "w": 1,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 75,
+          "y": 0,
+          "w": 1,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 0,
+          "y": 31,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "plakband",
+          "x": 36,
+          "y": 30
+        },
+        {
+          "sprite": "plakband",
+          "x": 74,
+          "y": 30
+        },
+        {
+          "sprite": "ladder",
+          "x": 102,
+          "y": 14
+        },
+        {
+          "sprite": "deur",
+          "x": 86,
+          "y": 8
+        },
+        {
+          "sprite": "eiland",
+          "x": 20,
+          "y": 40
+        },
+        {
+          "sprite": "boom",
+          "x": 60,
+          "y": 17
+        },
+        {
+          "sprite": "kist",
+          "x": 24,
+          "y": 32
+        },
+        {
+          "sprite": "bed",
+          "x": 36,
+          "y": 31
+        },
+        {
+          "sprite": "wolk",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "sprite": "wolk",
+          "x": 82,
+          "y": 40
+        },
+        {
+          "sprite": "wolk_groot",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 20,
+              "y": 6
+            },
+            {
+              "t": 52,
+              "x": 20,
+              "y": 6
+            },
+            {
+              "t": 60,
+              "x": 22,
+              "y": 3,
+              "e": "uit"
+            },
+            {
+              "t": 64,
+              "x": 20,
+              "y": 6
+            },
+            {
+              "t": 104,
+              "x": 16,
+              "y": 70,
+              "r": 40,
+              "e": "in"
+            }
+          ]
+        },
+        {
+          "sprite": "guh_lila_open_rond_headset",
+          "x": 30,
+          "y": 22,
+          "tot": 40
+        },
+        {
+          "sprite": "guh_lila_blij_rond_headset",
+          "sleutels": [
+            {
+              "t": 40,
+              "x": 30,
+              "y": 22
+            },
+            {
+              "t": 52,
+              "x": 30,
+              "y": 8,
+              "e": "uit"
+            }
+          ],
+          "van": 40,
+          "tot": 52
+        },
+        {
+          "sprite": "guh_lila_schrik_rond_headset",
+          "sleutels": [
+            {
+              "t": 52,
+              "x": 30,
+              "y": 8
+            },
+            {
+              "t": 64,
+              "x": 30,
+              "y": 22,
+              "e": "in"
+            }
+          ],
+          "van": 52,
+          "tot": 110
+        },
+        {
+          "sprite": "guh_lila_open_rond_headset",
+          "x": 30,
+          "y": 22,
+          "van": 110
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t4",
+          "schaal": 1.0,
+          "uitlijn": "links",
+          "kleur": "#ff5a5a",
+          "schaduw": true,
+          "x": 44,
+          "y": 6,
+          "van": 52,
+          "tot": 74
+        }
+      ]
+    },
+    {
+      "naam": "denken",
+      "duur": 150,
+      "lagen": [
+        {
+          "vlak": "#8fd0ff",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 37,
+          "y": 0,
+          "w": 1,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 75,
+          "y": 0,
+          "w": 1,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 0,
+          "y": 31,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "plakband",
+          "x": 36,
+          "y": 30
+        },
+        {
+          "sprite": "plakband",
+          "x": 74,
+          "y": 30
+        },
+        {
+          "sprite": "wolk",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 46,
+          "y": 12
+        },
+        {
+          "sprite": "wolk",
+          "x": 82,
+          "y": 40
+        },
+        {
+          "sprite": "ladder",
+          "x": 102,
+          "y": 14
+        },
+        {
+          "sprite": "deur",
+          "x": 86,
+          "y": 8
+        },
+        {
+          "sprite": "eiland",
+          "x": 20,
+          "y": 40
+        },
+        {
+          "sprite": "boom",
+          "x": 60,
+          "y": 17
+        },
+        {
+          "sprite": "kist",
+          "x": 24,
+          "y": 32
+        },
+        {
+          "sprite": "bed",
+          "x": 36,
+          "y": 31
+        },
+        {
+          "sprite": "guh_lila_open_rond_headset",
+          "x": 22,
+          "y": 22,
+          "tot": 92
+        },
+        {
+          "sprite": "denkwolk",
+          "x": 34,
+          "y": 0,
+          "van": 10,
+          "tot": 92
+        },
+        {
+          "sprite": "generator",
+          "x": 44,
+          "y": 6,
+          "van": 14,
+          "tot": 92
+        },
+        {
+          "sprite": "kruis",
+          "x": 45,
+          "y": 4,
+          "van": 46,
+          "tot": 92
+        },
+        {
+          "vlak": "#ffffff",
+          "x": 42,
+          "y": 3,
+          "w": 15,
+          "h": 12,
+          "van": 66,
+          "tot": 92
+        },
+        {
+          "sprite": "bedje",
+          "x": 44,
+          "y": 7,
+          "van": 66,
+          "tot": 92,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 16
+          }
+        },
+        {
+          "sprite": "guh_lila_blij_rond_headset",
+          "sleutels": [
+            {
+              "t": 92,
+              "x": 22,
+              "y": 22
+            },
+            {
+              "t": 120,
+              "x": 40,
+              "y": 20,
+              "e": "zacht"
+            }
+          ],
+          "van": 92,
+          "tot": 120,
+          "golf": {
+            "ax": 0,
+            "ay": 0.8,
+            "per": 8
+          }
+        },
+        {
+          "sprite": "guh_lila_dicht_rond_headset",
+          "x": 40,
+          "y": 20,
+          "van": 120
+        },
+        {
+          "sprite": "bed",
+          "x": 36,
+          "y": 31,
+          "van": 120
+        },
+        {
+          "sprite": "zzz",
+          "x": 60,
+          "y": 12,
+          "van": 126
+        }
+      ]
+    },
+    {
+      "naam": "uitgespeeld",
+      "duur": 170,
+      "lagen": [
+        {
+          "vlak": "#8fd0ff",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 37,
+          "y": 0,
+          "w": 1,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 75,
+          "y": 0,
+          "w": 1,
+          "h": 64
+        },
+        {
+          "vlak": "#79bfee",
+          "x": 0,
+          "y": 31,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "plakband",
+          "x": 36,
+          "y": 30
+        },
+        {
+          "sprite": "plakband",
+          "x": 74,
+          "y": 30
+        },
+        {
+          "sprite": "wolk",
+          "x": 6,
+          "y": 6
+        },
+        {
+          "sprite": "wolk_groot",
+          "x": 46,
+          "y": 12
+        },
+        {
+          "sprite": "wolk",
+          "x": 82,
+          "y": 40
+        },
+        {
+          "sprite": "ladder",
+          "x": 102,
+          "y": 14
+        },
+        {
+          "sprite": "deur",
+          "x": 86,
+          "y": 8
+        },
+        {
+          "sprite": "eiland",
+          "x": 20,
+          "y": 40
+        },
+        {
+          "sprite": "boom",
+          "x": 60,
+          "y": 17
+        },
+        {
+          "sprite": "kist",
+          "x": 24,
+          "y": 32
+        },
+        {
+          "sprite": "guh_lila_dicht_rond_headset",
+          "x": 40,
+          "y": 20
+        },
+        {
+          "sprite": "bed",
+          "x": 36,
+          "y": 31
+        },
+        {
+          "sprite": "zzz",
+          "x": 60,
+          "y": 12
+        },
+        {
+          "sprite": "vuurwerk_roze",
+          "x": 8,
+          "y": 4,
+          "van": 24,
+          "tot": 39
+        },
+        {
+          "sprite": "vuurwerk_geel",
+          "x": 84,
+          "y": 2,
+          "van": 44,
+          "tot": 59
+        },
+        {
+          "sprite": "vuurwerk_blauw",
+          "x": 30,
+          "y": 34,
+          "van": 64,
+          "tot": 79
+        },
+        {
+          "sprite": "vuurwerk_geel",
+          "x": 6,
+          "y": 30,
+          "van": 84,
+          "tot": 99
+        },
+        {
+          "sprite": "vuurwerk_roze",
+          "x": 80,
+          "y": 28,
+          "van": 104,
+          "tot": 119
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t1",
+          "schaal": 1.5,
+          "uitlijn": "midden",
+          "kleur": "#ffe27a",
+          "schaduw": true,
+          "x": 56,
+          "y": 3,
+          "van": 16
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t5",
+          "schaal": 1.25,
+          "uitlijn": "midden",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 56,
+          "y": 17,
+          "van": 22
+        }
+      ]
+    },
+    {
+      "naam": "aftiteling",
+      "duur": 110,
+      "lagen": [
+        {
+          "vlak": "#140c1c",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t6",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 66
+            },
+            {
+              "t": 80,
+              "x": 56,
+              "y": 16
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t7",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 77
+            },
+            {
+              "t": 80,
+              "x": 56,
+              "y": 27
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t8",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 88
+            },
+            {
+              "t": 80,
+              "x": 56,
+              "y": 38
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t9",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 99
+            },
+            {
+              "t": 80,
+              "x": 56,
+              "y": 49
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.skyblok.t10",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffd27a",
+          "schaduw": true,
+          "x": 56,
+          "y": 4,
+          "van": 82
+        },
+        {
+          "sprite": "guh_lila_dicht_rond_headset",
+          "x": 86,
+          "y": 44,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 30
+          }
+        },
+        {
+          "sprite": "zzz",
+          "x": 100,
+          "y": 34,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 24
+          }
+        }
+      ]
+    }
+  ],
+  "ondertitels": [
+    {
+      "van": 78,
+      "tot": 148,
+      "tekst": "gui.guhs.guhbioscoop.film.skyblok.o1"
+    },
+    {
+      "van": 156,
+      "tot": 236,
+      "tekst": "gui.guhs.guhbioscoop.film.skyblok.o2"
+    },
+    {
+      "van": 245,
+      "tot": 312,
+      "tekst": "gui.guhs.guhbioscoop.film.skyblok.o3"
+    },
+    {
+      "van": 320,
+      "tot": 386,
+      "tekst": "gui.guhs.guhbioscoop.film.skyblok.o4"
+    },
+    {
+      "van": 392,
+      "tot": 450,
+      "tekst": "gui.guhs.guhbioscoop.film.skyblok.o5"
+    },
+    {
+      "van": 458,
+      "tot": 536,
+      "tekst": "gui.guhs.guhbioscoop.film.skyblok.o6"
+    },
+    {
+      "van": 544,
+      "tot": 602,
+      "tekst": "gui.guhs.guhbioscoop.film.skyblok.o7"
+    },
+    {
+      "van": 608,
+      "tot": 686,
+      "tekst": "gui.guhs.guhbioscoop.film.skyblok.o8"
+    },
+    {
+      "van": 712,
+      "tot": 782,
+      "tekst": "gui.guhs.guhbioscoop.film.skyblok.o9"
+    },
+    {
+      "van": 788,
+      "tot": 856,
+      "tekst": "gui.guhs.guhbioscoop.film.skyblok.o10"
+    }
+  ],
+  "geluiden": [
+    {
+      "t": 2,
+      "geluid": "guhs:guhbioscoop.film.titel",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 90,
+      "geluid": "guhs:guhbioscoop.film.guh",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 156,
+      "geluid": "guhs:guhbioscoop.film.pling",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 244,
+      "geluid": "guhs:guhbioscoop.film.klik",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 320,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 366,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 0.6
+    },
+    {
+      "t": 430,
+      "geluid": "guhs:guhbioscoop.film.vahoeg",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 442,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 0.7
+    },
+    {
+      "t": 496,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 586,
+      "geluid": "guhs:guhbioscoop.film.njeg",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 606,
+      "geluid": "guhs:guhbioscoop.film.pling",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 662,
+      "geluid": "guhs:guhbioscoop.film.gaap",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 706,
+      "geluid": "guhs:guhbioscoop.film.fanfare",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 714,
+      "geluid": "guhs:guhbioscoop.film.boem",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 734,
+      "geluid": "guhs:guhbioscoop.film.boem",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 754,
+      "geluid": "guhs:guhbioscoop.film.boem",
+      "volume": 1.0,
+      "toon": 0.9
+    },
+    {
+      "t": 774,
+      "geluid": "guhs:guhbioscoop.film.boem",
+      "volume": 1.0,
+      "toon": 1.1
+    },
+    {
+      "t": 794,
+      "geluid": "guhs:guhbioscoop.film.boem",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 872,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    }
+  ],
+  "cues": [
+    {
+      "t": 348,
+      "soort": "schrik"
+    },
+    {
+      "t": 368,
+      "soort": "lach"
+    },
+    {
+      "t": 444,
+      "soort": "schrik"
+    },
+    {
+      "t": 498,
+      "soort": "lach"
+    },
+    {
+      "t": 610,
+      "soort": "lach"
+    },
+    {
+      "t": 710,
+      "soort": "juich"
+    },
+    {
+      "t": 794,
+      "soort": "lach"
+    },
+    {
+      "t": 876,
+      "soort": "slaap"
+    }
+  ]
+}

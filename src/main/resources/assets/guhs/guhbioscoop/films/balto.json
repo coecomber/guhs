@@ -1,0 +1,1413 @@
+{
+  "formaat": 1,
+  "id": "balto",
+  "duur": 1080,
+  "atlas": {
+    "textuur": "guhs:textures/guhbioscoop/balto.png",
+    "breedte": 256,
+    "hoogte": 256
+  },
+  "sprites": {
+    "ballon": {
+      "uv": [
+        73,
+        162,
+        40,
+        20
+      ]
+    },
+    "bergen": {
+      "uv": [
+        1,
+        131,
+        224,
+        30
+      ]
+    },
+    "guh_balto_blij_punt_binnenecece6": {
+      "uv": [
+        114,
+        162,
+        22,
+        18
+      ]
+    },
+    "guh_balto_boos_punt_binnenecece6": {
+      "uv": [
+        137,
+        162,
+        22,
+        18
+      ]
+    },
+    "guh_balto_dicht_punt_binnenecece6": {
+      "uv": [
+        160,
+        162,
+        22,
+        18
+      ]
+    },
+    "guh_balto_open_punt_binnenecece6": {
+      "uv": [
+        183,
+        162,
+        22,
+        18
+      ]
+    },
+    "guh_lila_blij_rond_wangen": {
+      "uv": [
+        206,
+        162,
+        22,
+        18
+      ]
+    },
+    "guh_lila_half_rond_ziek": {
+      "uv": [
+        229,
+        162,
+        22,
+        18
+      ]
+    },
+    "guh_sneeuw_open_rond_zuster": {
+      "uv": [
+        1,
+        191,
+        22,
+        18
+      ]
+    },
+    "guh_steele_mika_punt_tand": {
+      "uv": [
+        24,
+        191,
+        22,
+        18
+      ]
+    },
+    "hut": {
+      "uv": [
+        38,
+        162,
+        34,
+        26
+      ]
+    },
+    "maan": {
+      "uv": [
+        47,
+        191,
+        12,
+        12
+      ]
+    },
+    "medkist": {
+      "uv": [
+        60,
+        191,
+        11,
+        7
+      ]
+    },
+    "slee": {
+      "uv": [
+        87,
+        191,
+        22,
+        6
+      ]
+    },
+    "sneeuw_a": {
+      "uv": [
+        1,
+        1,
+        112,
+        64
+      ]
+    },
+    "sneeuw_b": {
+      "uv": [
+        114,
+        1,
+        112,
+        64
+      ]
+    },
+    "ster": {
+      "uv": [
+        110,
+        191,
+        5,
+        5
+      ]
+    },
+    "sterren": {
+      "uv": [
+        1,
+        66,
+        112,
+        64
+      ]
+    },
+    "wit": {
+      "uv": [
+        116,
+        191,
+        4,
+        4
+      ]
+    },
+    "ziekenhuisje": {
+      "uv": [
+        1,
+        162,
+        36,
+        28
+      ]
+    },
+    "zzz": {
+      "uv": [
+        72,
+        191,
+        7,
+        7
+      ],
+      "frames": 2,
+      "per": 12
+    }
+  },
+  "scenes": [
+    {
+      "naam": "titel",
+      "duur": 70,
+      "lagen": [
+        {
+          "vlak": "#1e2a4a",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "sterren",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "sprite": "bergen",
+          "x": -20,
+          "y": 34
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t1",
+          "schaal": 2.0,
+          "uitlijn": "midden",
+          "kleur": "#bfe4ff",
+          "schaduw": true,
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": -18
+            },
+            {
+              "t": 14,
+              "x": 56,
+              "y": 10,
+              "e": "uit"
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t2",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffffff",
+          "schaduw": true,
+          "x": 56,
+          "y": 32,
+          "van": 18
+        }
+      ]
+    },
+    {
+      "naam": "nomguh",
+      "duur": 150,
+      "lagen": [
+        {
+          "vlak": "#1e2a4a",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "sterren",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "sprite": "maan",
+          "x": 92,
+          "y": 5
+        },
+        {
+          "sprite": "bergen",
+          "x": -30,
+          "y": 22
+        },
+        {
+          "vlak": "#eef2fa",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 14
+        },
+        {
+          "vlak": "#d0d8ea",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "ziekenhuisje",
+          "x": 6,
+          "y": 23
+        },
+        {
+          "sprite": "guh_sneeuw_open_rond_zuster",
+          "x": 44,
+          "y": 32
+        },
+        {
+          "sprite": "guh_lila_half_rond_ziek",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 70,
+              "y": 38,
+              "s": 0.7
+            },
+            {
+              "t": 40,
+              "x": 70,
+              "y": 38
+            },
+            {
+              "t": 44,
+              "x": 70,
+              "y": 34,
+              "e": "uit"
+            },
+            {
+              "t": 50,
+              "x": 70,
+              "y": 38,
+              "e": "in"
+            }
+          ]
+        },
+        {
+          "sprite": "guh_lila_half_rond_ziek",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 84,
+              "y": 38,
+              "s": 0.7
+            },
+            {
+              "t": 62,
+              "x": 84,
+              "y": 38
+            },
+            {
+              "t": 66,
+              "x": 84,
+              "y": 34,
+              "e": "uit"
+            },
+            {
+              "t": 72,
+              "x": 84,
+              "y": 38,
+              "e": "in"
+            }
+          ]
+        },
+        {
+          "sprite": "guh_lila_half_rond_ziek",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 98,
+              "y": 38,
+              "s": 0.7
+            },
+            {
+              "t": 84,
+              "x": 98,
+              "y": 38
+            },
+            {
+              "t": 88,
+              "x": 98,
+              "y": 34,
+              "e": "uit"
+            },
+            {
+              "t": 94,
+              "x": 98,
+              "y": 38,
+              "e": "in"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "naam": "steele",
+      "duur": 140,
+      "lagen": [
+        {
+          "vlak": "#1e2a4a",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "sterren",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "sprite": "maan",
+          "x": 92,
+          "y": 5
+        },
+        {
+          "sprite": "bergen",
+          "x": -30,
+          "y": 22
+        },
+        {
+          "vlak": "#eef2fa",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 14
+        },
+        {
+          "vlak": "#d0d8ea",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "guh_steele_mika_punt_tand",
+          "x": 70,
+          "y": 32,
+          "tot": 70,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 6
+          }
+        },
+        {
+          "sprite": "guh_steele_mika_punt_tand",
+          "x": 70,
+          "y": 32,
+          "van": 70
+        },
+        {
+          "sprite": "guh_balto_open_punt_binnenecece6",
+          "x": 16,
+          "y": 32,
+          "tot": 70
+        },
+        {
+          "sprite": "guh_balto_boos_punt_binnenecece6",
+          "x": 16,
+          "y": 32,
+          "van": 70,
+          "tot": 104
+        },
+        {
+          "sprite": "guh_balto_boos_punt_binnenecece6",
+          "sleutels": [
+            {
+              "t": 104,
+              "x": 16,
+              "y": 32
+            },
+            {
+              "t": 136,
+              "x": -30,
+              "y": 32,
+              "e": "in"
+            }
+          ],
+          "spiegel": true,
+          "van": 104,
+          "golf": {
+            "ax": 0,
+            "ay": 0.8,
+            "per": 8
+          }
+        },
+        {
+          "sprite": "ballon",
+          "x": 56,
+          "y": 4,
+          "spiegel": true,
+          "tot": 66
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t3",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#5a5a6a",
+          "x": 76,
+          "y": 8,
+          "tot": 66
+        }
+      ]
+    },
+    {
+      "naam": "storm",
+      "duur": 170,
+      "lagen": [
+        {
+          "vlak": "#1e2a4a",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "sterren",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "sprite": "maan",
+          "x": 92,
+          "y": 5
+        },
+        {
+          "sprite": "bergen",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 0,
+              "y": 22
+            },
+            {
+              "t": 170,
+              "x": -110,
+              "y": 22
+            }
+          ]
+        },
+        {
+          "vlak": "#eef2fa",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 14
+        },
+        {
+          "vlak": "#d0d8ea",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "slee",
+          "x": 22,
+          "y": 42,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 10,
+            "fase": 3
+          }
+        },
+        {
+          "sprite": "guh_balto_boos_punt_binnenecece6",
+          "x": 44,
+          "y": 30,
+          "tot": 96,
+          "golf": {
+            "ax": 1,
+            "ay": 1.5,
+            "per": 10
+          }
+        },
+        {
+          "sprite": "guh_balto_open_punt_binnenecece6",
+          "sleutels": [
+            {
+              "t": 96,
+              "x": 44,
+              "y": 30
+            },
+            {
+              "t": 104,
+              "x": 44,
+              "y": 18,
+              "e": "uit"
+            },
+            {
+              "t": 114,
+              "x": 44,
+              "y": 30,
+              "e": "in"
+            }
+          ],
+          "van": 96,
+          "tot": 114
+        },
+        {
+          "sprite": "guh_balto_boos_punt_binnenecece6",
+          "x": 44,
+          "y": 30,
+          "van": 114,
+          "golf": {
+            "ax": 1,
+            "ay": 1.5,
+            "per": 10
+          }
+        },
+        {
+          "sprite": "sneeuw_a",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 0,
+              "y": -64
+            },
+            {
+              "t": 170,
+              "x": -40,
+              "y": 128
+            }
+          ]
+        },
+        {
+          "sprite": "sneeuw_a",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 30,
+              "y": -128
+            },
+            {
+              "t": 170,
+              "x": -10,
+              "y": 64
+            }
+          ]
+        },
+        {
+          "sprite": "sneeuw_b",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 10,
+              "y": 0
+            },
+            {
+              "t": 170,
+              "x": -60,
+              "y": 192
+            }
+          ]
+        },
+        {
+          "sprite": "sneeuw_b",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 20,
+              "y": -192
+            },
+            {
+              "t": 170,
+              "x": -50,
+              "y": 0
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t4",
+          "schaal": 0.75,
+          "uitlijn": "links",
+          "kleur": "#ffe27a",
+          "schaduw": true,
+          "x": 44,
+          "y": 8,
+          "van": 98,
+          "tot": 124
+        }
+      ]
+    },
+    {
+      "naam": "hut",
+      "duur": 120,
+      "lagen": [
+        {
+          "vlak": "#1e2a4a",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "sterren",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "sprite": "maan",
+          "x": 92,
+          "y": 5
+        },
+        {
+          "sprite": "bergen",
+          "x": -30,
+          "y": 22
+        },
+        {
+          "vlak": "#eef2fa",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 14
+        },
+        {
+          "vlak": "#d0d8ea",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "hut",
+          "x": 66,
+          "y": 25
+        },
+        {
+          "sprite": "medkist",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 76,
+              "y": 42
+            },
+            {
+              "t": 60,
+              "x": 76,
+              "y": 42
+            },
+            {
+              "t": 72,
+              "x": 50,
+              "y": 30,
+              "e": "uit"
+            }
+          ]
+        },
+        {
+          "sprite": "guh_balto_open_punt_binnenecece6",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": -24,
+              "y": 32
+            },
+            {
+              "t": 46,
+              "x": 34,
+              "y": 32,
+              "e": "uit"
+            }
+          ],
+          "tot": 46,
+          "golf": {
+            "ax": 0,
+            "ay": 0.8,
+            "per": 8
+          }
+        },
+        {
+          "sprite": "guh_balto_blij_punt_binnenecece6",
+          "sleutels": [
+            {
+              "t": 46,
+              "x": 34,
+              "y": 32
+            },
+            {
+              "t": 56,
+              "x": 34,
+              "y": 24,
+              "e": "uit"
+            },
+            {
+              "t": 66,
+              "x": 34,
+              "y": 32,
+              "e": "in"
+            }
+          ],
+          "van": 46
+        },
+        {
+          "sprite": "ster",
+          "x": 60,
+          "y": 24,
+          "van": 72,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 12
+          }
+        }
+      ]
+    },
+    {
+      "naam": "terug",
+      "duur": 160,
+      "lagen": [
+        {
+          "vlak": "#141c38",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "sterren",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "vlak": "#3ad08a",
+          "x": 0,
+          "y": 6,
+          "w": 112,
+          "h": 3,
+          "golf": {
+            "ax": 0,
+            "ay": 2,
+            "per": 50,
+            "fase": 0
+          }
+        },
+        {
+          "vlak": "#58e0b0",
+          "x": 0,
+          "y": 11,
+          "w": 112,
+          "h": 3,
+          "golf": {
+            "ax": 0,
+            "ay": 2,
+            "per": 50,
+            "fase": 14
+          }
+        },
+        {
+          "vlak": "#7a8cf0",
+          "x": 0,
+          "y": 16,
+          "w": 112,
+          "h": 3,
+          "golf": {
+            "ax": 0,
+            "ay": 2,
+            "per": 50,
+            "fase": 28
+          }
+        },
+        {
+          "sprite": "bergen",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": -110,
+              "y": 22
+            },
+            {
+              "t": 160,
+              "x": 0,
+              "y": 22
+            }
+          ]
+        },
+        {
+          "vlak": "#eef2fa",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 14
+        },
+        {
+          "sprite": "slee",
+          "x": 46,
+          "y": 42,
+          "spiegel": true,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 10,
+            "fase": 3
+          }
+        },
+        {
+          "sprite": "medkist",
+          "x": 54,
+          "y": 37,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 10,
+            "fase": 3
+          }
+        },
+        {
+          "sprite": "guh_balto_open_punt_binnenecece6",
+          "x": 26,
+          "y": 30,
+          "spiegel": true,
+          "tot": 70,
+          "golf": {
+            "ax": 1,
+            "ay": 1.5,
+            "per": 10
+          }
+        },
+        {
+          "sprite": "guh_balto_blij_punt_binnenecece6",
+          "x": 26,
+          "y": 28,
+          "r": -14,
+          "spiegel": true,
+          "van": 70,
+          "tot": 120
+        },
+        {
+          "sprite": "guh_balto_open_punt_binnenecece6",
+          "x": 26,
+          "y": 30,
+          "spiegel": true,
+          "van": 120,
+          "golf": {
+            "ax": 1,
+            "ay": 1.5,
+            "per": 10
+          }
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t5",
+          "schaal": 0.75,
+          "uitlijn": "links",
+          "kleur": "#bfe4ff",
+          "schaduw": true,
+          "x": 14,
+          "y": 20,
+          "van": 70,
+          "tot": 120
+        }
+      ]
+    },
+    {
+      "naam": "held",
+      "duur": 170,
+      "lagen": [
+        {
+          "vlak": "#1e2a4a",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "sprite": "sterren",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "sprite": "maan",
+          "x": 92,
+          "y": 5
+        },
+        {
+          "sprite": "bergen",
+          "x": -30,
+          "y": 22
+        },
+        {
+          "vlak": "#eef2fa",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 14
+        },
+        {
+          "vlak": "#d0d8ea",
+          "x": 0,
+          "y": 50,
+          "w": 112,
+          "h": 1
+        },
+        {
+          "sprite": "ziekenhuisje",
+          "x": 6,
+          "y": 23
+        },
+        {
+          "sprite": "guh_sneeuw_open_rond_zuster",
+          "x": 40,
+          "y": 32
+        },
+        {
+          "sprite": "guh_lila_blij_rond_wangen",
+          "x": 62,
+          "y": 38,
+          "s": 0.7,
+          "golf": {
+            "ax": 0,
+            "ay": 2.5,
+            "per": 12,
+            "fase": 0
+          }
+        },
+        {
+          "sprite": "guh_lila_blij_rond_wangen",
+          "x": 76,
+          "y": 38,
+          "s": 0.7,
+          "golf": {
+            "ax": 0,
+            "ay": 2.5,
+            "per": 12,
+            "fase": 4
+          }
+        },
+        {
+          "sprite": "guh_lila_blij_rond_wangen",
+          "x": 90,
+          "y": 38,
+          "s": 0.7,
+          "golf": {
+            "ax": 0,
+            "ay": 2.5,
+            "per": 12,
+            "fase": 8
+          }
+        },
+        {
+          "sprite": "guh_balto_blij_punt_binnenecece6",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 120,
+              "y": 32
+            },
+            {
+              "t": 30,
+              "x": 96,
+              "y": 32,
+              "e": "uit"
+            }
+          ],
+          "spiegel": true,
+          "tot": 96
+        },
+        {
+          "sprite": "guh_balto_dicht_punt_binnenecece6",
+          "x": 96,
+          "y": 32,
+          "van": 96
+        },
+        {
+          "sprite": "zzz",
+          "x": 108,
+          "y": 20,
+          "van": 102
+        },
+        {
+          "vlak": "#bfe4ff",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 0,
+              "y": -14,
+              "w": 112,
+              "h": 12
+            },
+            {
+              "t": 14,
+              "x": 0,
+              "y": 3,
+              "w": 112,
+              "h": 12,
+              "e": "uit"
+            }
+          ],
+          "tot": 96
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t6",
+          "schaal": 1.0,
+          "uitlijn": "midden",
+          "kleur": "#1e2a4a",
+          "x": 56,
+          "y": 5,
+          "van": 14,
+          "tot": 96
+        }
+      ]
+    },
+    {
+      "naam": "aftiteling",
+      "duur": 100,
+      "lagen": [
+        {
+          "vlak": "#140c1c",
+          "x": 0,
+          "y": 0,
+          "w": 112,
+          "h": 64
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t7",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 66
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 16
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t8",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 77
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 27
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t9",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 88
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 38
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t10",
+          "schaal": 0.6,
+          "uitlijn": "midden",
+          "kleur": "#ffe6ee",
+          "sleutels": [
+            {
+              "t": 0,
+              "x": 56,
+              "y": 99
+            },
+            {
+              "t": 70,
+              "x": 56,
+              "y": 49
+            }
+          ]
+        },
+        {
+          "tekst": "gui.guhs.guhbioscoop.film.balto.t11",
+          "schaal": 0.75,
+          "uitlijn": "midden",
+          "kleur": "#ffd27a",
+          "schaduw": true,
+          "x": 56,
+          "y": 4,
+          "van": 72
+        },
+        {
+          "sprite": "guh_balto_dicht_punt_binnenecece6",
+          "x": 86,
+          "y": 44,
+          "golf": {
+            "ax": 0,
+            "ay": 0.6,
+            "per": 30
+          }
+        },
+        {
+          "sprite": "zzz",
+          "x": 100,
+          "y": 34,
+          "golf": {
+            "ax": 0,
+            "ay": 1,
+            "per": 24
+          }
+        }
+      ]
+    }
+  ],
+  "ondertitels": [
+    {
+      "van": 78,
+      "tot": 144,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o1"
+    },
+    {
+      "van": 150,
+      "tot": 216,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o2"
+    },
+    {
+      "van": 225,
+      "tot": 286,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o3"
+    },
+    {
+      "van": 292,
+      "tot": 356,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o4"
+    },
+    {
+      "van": 365,
+      "tot": 436,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o5"
+    },
+    {
+      "van": 444,
+      "tot": 526,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o6"
+    },
+    {
+      "van": 538,
+      "tot": 644,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o7"
+    },
+    {
+      "van": 655,
+      "tot": 728,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o8"
+    },
+    {
+      "van": 736,
+      "tot": 806,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o9"
+    },
+    {
+      "van": 815,
+      "tot": 890,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o10"
+    },
+    {
+      "van": 908,
+      "tot": 976,
+      "tekst": "gui.guhs.guhbioscoop.film.balto.o11"
+    }
+  ],
+  "geluiden": [
+    {
+      "t": 2,
+      "geluid": "guhs:guhbioscoop.film.titel",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 114,
+      "geluid": "guhs:guhbioscoop.film.njeg",
+      "volume": 1.0,
+      "toon": 1.6
+    },
+    {
+      "t": 136,
+      "geluid": "guhs:guhbioscoop.film.njeg",
+      "volume": 1.0,
+      "toon": 1.7
+    },
+    {
+      "t": 158,
+      "geluid": "guhs:guhbioscoop.film.njeg",
+      "volume": 1.0,
+      "toon": 1.5
+    },
+    {
+      "t": 226,
+      "geluid": "guhs:guhbioscoop.film.mika",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 250,
+      "geluid": "guhs:guhbioscoop.film.mika",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 324,
+      "geluid": "guhs:guhbioscoop.film.guh",
+      "volume": 1.0,
+      "toon": 0.8
+    },
+    {
+      "t": 362,
+      "geluid": "guhs:guhbioscoop.film.wind",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 420,
+      "geluid": "guhs:guhbioscoop.film.wind",
+      "volume": 1.0,
+      "toon": 1.2
+    },
+    {
+      "t": 458,
+      "geluid": "guhs:guhbioscoop.film.plof",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 480,
+      "geluid": "guhs:guhbioscoop.film.wind",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 580,
+      "geluid": "guhs:guhbioscoop.film.vahoeg",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 602,
+      "geluid": "guhs:guhbioscoop.film.pling",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 720,
+      "geluid": "guhs:guhbioscoop.film.vahoeg",
+      "volume": 1.0,
+      "toon": 0.7
+    },
+    {
+      "t": 734,
+      "geluid": "guhs:guhbioscoop.film.vahoeg",
+      "volume": 1.0,
+      "toon": 0.6
+    },
+    {
+      "t": 818,
+      "geluid": "guhs:guhbioscoop.film.fanfare",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 850,
+      "geluid": "guhs:guhbioscoop.film.vahoeg",
+      "volume": 1.0,
+      "toon": 1.4
+    },
+    {
+      "t": 914,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    },
+    {
+      "t": 992,
+      "geluid": "guhs:guhbioscoop.film.snurk",
+      "volume": 1.0,
+      "toon": 1.0
+    }
+  ],
+  "cues": [
+    {
+      "t": 116,
+      "soort": "snik"
+    },
+    {
+      "t": 328,
+      "soort": "juich"
+    },
+    {
+      "t": 460,
+      "soort": "schrik"
+    },
+    {
+      "t": 590,
+      "soort": "juich"
+    },
+    {
+      "t": 724,
+      "soort": "snik"
+    },
+    {
+      "t": 774,
+      "soort": "lach"
+    },
+    {
+      "t": 822,
+      "soort": "juich"
+    },
+    {
+      "t": 914,
+      "soort": "lach"
+    },
+    {
+      "t": 950,
+      "soort": "slaap"
+    },
+    {
+      "t": 996,
+      "soort": "slaap"
+    }
+  ]
+}
