@@ -1,0 +1,553 @@
+package nl.juiced.guhs.feature.guhrio;
+
+import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Nullable;
+
+import com.mojang.serialization.MapCodec;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.EntityCollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+
+/**
+ * The blocks of Super Guhrio. A level is simply built with them in its lanes; none of them ever changes in the world:
+ * what a block is for one player (a coin taken, a ?-block empty, a brick broken) lives in that player's
+ * {@link GuhrioSpel.Sessie} and is drawn per player (client.StukRenderer), so any number of players have their own level.
+ * <ul>
+ *     <li>{@link StartBlok}: the way in (walk into it or click it); it knows which level (its block entity) and which way
+ *     the level runs (its facing).</li>
+ *     <li>{@link VraagBlok}: bump it from below: a coin or a power-up, once per run per player.</li>
+ *     <li>{@link SteenBlok}: a brick; it hops when you bump it, and breaks (for you) when you carry the Superknabbel.</li>
+ *     <li>{@link MuntBlok}: a coin floating in the lane.</li>
+ *     <li>{@link VlagBlok}: a flag: your spot to come back to. {@link MastBlok}: the flagpole, the end of the level.</li>
+ *     <li>{@link PijpBlok} (the mouth) and {@link PijpLijfBlok}: a green pipe; duck on the mouth and you come out of the
+ *     other mouth with the same {@link PijpBlok#KANAAL} in this level.</li>
+ *     <li>{@link GuhmbaPlek}: where a Guhmba lives (invisible).</li>
+ * </ul>
+ */
+public final class GuhrioBlocks {
+    private GuhrioBlocks() {
+    }
+
+    /** What a ?-block holds. */
+    public enum Inhoud implements StringRepresentable {
+        MUNT, SUPERKNABBEL;
+
+        @Override
+        public String getSerializedName() {
+            return name().toLowerCase(Locale.ROOT);
+        }
+    }
+
+    public static final EnumProperty<Inhoud> INHOUD = EnumProperty.create("inhoud", Inhoud.class);
+    /** Only for the look (the empty ?-block is this state's model): in the world it is always false. */
+    public static final BooleanProperty LEEG = BooleanProperty.create("leeg");
+
+    @Nullable
+    private static Player speler(CollisionContext context) {
+        return context instanceof EntityCollisionContext e && e.getEntity() instanceof Player p ? p : null;
+    }
+
+    // =====================================================================================================================
+    // the way in
+    // =====================================================================================================================
+
+    /** Which level a start block starts. */
+    public static class StartBlockEntity extends BlockEntity {
+        private String level = "";
+
+        public StartBlockEntity(BlockPos pos, BlockState state) {
+            super(GuhrioFeature.START_BE.get(), pos, state);
+        }
+
+        public String level() {
+            return level;
+        }
+
+        public void zetLevel(String level) {
+            this.level = level == null ? "" : level;
+            setChanged();
+        }
+
+        @Override
+        protected void saveAdditional(ValueOutput tag) {
+            super.saveAdditional(tag);
+            tag.putString("Level", level);
+        }
+
+        @Override
+        protected void loadAdditional(ValueInput tag) {
+            super.loadAdditional(tag);
+            level = tag.getStringOr("Level", "");
+        }
+    }
+
+    /**
+     * The start of a level: a little arch in the lane. Walk into it (or click it) and you are in the level it names,
+     * which runs the way it faces. You have to step out of it before it takes you again.
+     */
+    public static class StartBlok extends HorizontalDirectionalBlock implements EntityBlock {
+        public static final MapCodec<StartBlok> CODEC = simpleCodec(StartBlok::new);
+        private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 16, 15);
+
+        public StartBlok(Properties properties) {
+            super(properties);
+            registerDefaultState(stateDefinition.any().setValue(FACING, Direction.EAST));
+        }
+
+        @Override
+        protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+            builder.add(FACING);
+        }
+
+        @Override
+        public BlockState getStateForPlacement(BlockPlaceContext context) {
+            return defaultBlockState().setValue(FACING, context.getHorizontalDirection());
+        }
+
+        @Override
+        protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            return SHAPE;
+        }
+
+        @Override
+        protected boolean propagatesSkylightDown(BlockState state) {
+            return true;
+        }
+
+        @Nullable
+        @Override
+        public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+            return new StartBlockEntity(pos, state);
+        }
+
+        @Override
+        protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effects, boolean precise) {
+            if (!level.isClientSide() && entity instanceof ServerPlayer player && GuhrioSpel.magStarten(player)) {
+                GuhrioSpel.start(player, pos);
+            }
+        }
+
+        @Override
+        protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+            if (!level.isClientSide() && player instanceof ServerPlayer sp && GuhrioSpel.sessie(sp) == null) {
+                GuhrioSpel.start(sp, pos);
+            }
+            return InteractionResult.SUCCESS;
+        }
+    }
+
+    // =====================================================================================================================
+    // the pieces that are drawn per player
+    // =====================================================================================================================
+
+    /** A ?-block, a brick or a coin: drawn per player by client.StukRenderer; remembers only when it last hopped (client). */
+    public static class StukBlockEntity extends BlockEntity {
+        /** Client: the game time it was last bumped (it hops for a few ticks), or far in the past. */
+        public long bots = Long.MIN_VALUE / 2;
+
+        public StukBlockEntity(BlockPos pos, BlockState state) {
+            super(GuhrioFeature.STUK_BE.get(), pos, state);
+        }
+    }
+
+    /** The shared part of the per-player pieces: invisible in the world's own drawing, a block entity for the real drawing. */
+    private abstract static class GetekendStuk extends Block implements EntityBlock, GuhrioStuk {
+        GetekendStuk(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        protected RenderShape getRenderShape(BlockState state) {
+            return RenderShape.INVISIBLE;
+        }
+
+        @Override
+        protected boolean propagatesSkylightDown(BlockState state) {
+            return true;
+        }
+
+        @Override
+        protected float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
+            return 1f;
+        }
+
+        @Nullable
+        @Override
+        public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+            return new StukBlockEntity(pos, state);
+        }
+    }
+
+    /** The ?-block: bump it from below. A coin or a power-up comes out, once per run for every player. */
+    public static class VraagBlok extends GetekendStuk {
+        public static final MapCodec<VraagBlok> CODEC = simpleCodec(VraagBlok::new);
+
+        public VraagBlok(Properties properties) {
+            super(properties);
+            registerDefaultState(stateDefinition.any().setValue(INHOUD, Inhoud.MUNT).setValue(LEEG, false));
+        }
+
+        @Override
+        protected MapCodec<? extends Block> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+            builder.add(INHOUD, LEEG);
+        }
+
+        @Override
+        public void bots(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
+            if (sessie.staat(pos) != 0) {
+                return;
+            }
+            GuhrioSpel.zetStaat(player, sessie, pos, 1);
+            ServerLevel level = player.level();
+            Vec3 boven = Vec3.atBottomCenterOf(pos.above());
+            if (state.getValue(INHOUD) == Inhoud.SUPERKNABBEL) {
+                GuhrioSpel.zetKracht(player, sessie, GuhrioSpel.Kracht.SUPER);
+                GuhrioSpel.geluid(level, boven, SoundEvents.PLAYER_LEVELUP, 0.6f, 1.6f);
+                level.sendParticles(player, ParticleTypes.HAPPY_VILLAGER, false, false, boven.x, boven.y + 0.3, boven.z, 10, 0.3, 0.3, 0.3, 0.02);
+            } else {
+                GuhrioSpel.munt(player, sessie, 1);
+                GuhrioSpel.geluidAnderen(player, boven, SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5f, 1.5f);
+                level.sendParticles(player, ParticleTypes.WAX_ON, false, false, boven.x, boven.y + 0.4, boven.z, 6, 0.2, 0.3, 0.2, 0.02);
+            }
+        }
+    }
+
+    /**
+     * A brick. It hops when you bump it; with the Superknabbel it breaks, for you alone: you (and only you) walk through
+     * where it was until you start the level again.
+     */
+    public static class SteenBlok extends GetekendStuk {
+        public static final MapCodec<SteenBlok> CODEC = simpleCodec(SteenBlok::new);
+
+        public SteenBlok(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        protected MapCodec<? extends Block> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            Player p = speler(context);
+            return p != null && GuhrioSpel.staat(p, pos) == 1 ? Shapes.empty() : super.getCollisionShape(state, level, pos, context);
+        }
+
+        @Override
+        public void bots(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
+            if (sessie.staat(pos) != 0 || sessie.kracht != GuhrioSpel.Kracht.SUPER) {
+                return;
+            }
+            GuhrioSpel.zetStaat(player, sessie, pos, 1);
+            ServerLevel level = player.level();
+            GuhrioSpel.geluid(level, Vec3.atCenterOf(pos), SoundEvents.DECORATED_POT_SHATTER, 0.7f, 1.0f);
+            level.sendParticles(player, new BlockParticleOption(ParticleTypes.BLOCK, state), false, false,
+                    pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 24, 0.3, 0.3, 0.3, 0.1);
+        }
+    }
+
+    /** A coin in the lane: walk or jump through it. Back when you start the level again; everybody has their own. */
+    public static class MuntBlok extends GetekendStuk {
+        public static final MapCodec<MuntBlok> CODEC = simpleCodec(MuntBlok::new);
+        private static final VoxelShape SHAPE = Block.box(4, 2, 4, 12, 14, 12);
+
+        public MuntBlok(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        protected MapCodec<? extends Block> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            return SHAPE;
+        }
+
+        @Override
+        public void binnen(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
+            if (sessie.staat(pos) != 0) {
+                return;
+            }
+            GuhrioSpel.zetStaat(player, sessie, pos, 1);
+            GuhrioSpel.munt(player, sessie, 1);
+            GuhrioSpel.geluidAnderen(player, Vec3.atCenterOf(pos), SoundEvents.EXPERIENCE_ORB_PICKUP, 0.45f, 1.7f);
+        }
+    }
+
+    // =====================================================================================================================
+    // flags
+    // =====================================================================================================================
+
+    /** A flag on a little pole: touch it and this is where you come back to. */
+    public static class VlagBlok extends Block implements GuhrioStuk {
+        public static final MapCodec<VlagBlok> CODEC = simpleCodec(VlagBlok::new);
+        private static final VoxelShape SHAPE = Block.box(6, 0, 6, 10, 16, 10);
+
+        public VlagBlok(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        protected MapCodec<? extends Block> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            return SHAPE;
+        }
+
+        @Override
+        protected boolean propagatesSkylightDown(BlockState state) {
+            return true;
+        }
+
+        @Override
+        public void binnen(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
+            GuhrioSpel.vlag(player, sessie, pos);
+        }
+    }
+
+    /** The flagpole at the end of a level (stack them; the top one carries the flag): touch it anywhere and you are done. */
+    public static class MastBlok extends Block implements GuhrioStuk {
+        public static final MapCodec<MastBlok> CODEC = simpleCodec(MastBlok::new);
+        public static final BooleanProperty TOP = BooleanProperty.create("top");
+        private static final VoxelShape SHAPE = Block.box(6, 0, 6, 10, 16, 10);
+
+        public MastBlok(Properties properties) {
+            super(properties);
+            registerDefaultState(stateDefinition.any().setValue(TOP, false));
+        }
+
+        @Override
+        protected MapCodec<? extends Block> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+            builder.add(TOP);
+        }
+
+        @Override
+        public BlockState getStateForPlacement(BlockPlaceContext context) {
+            // the top one carries the flag (placing one on top of another moves the flag up: see neighbour updates below)
+            return defaultBlockState().setValue(TOP, !(context.getLevel().getBlockState(context.getClickedPos().above()).getBlock() instanceof MastBlok));
+        }
+
+        @Override
+        protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            return SHAPE;
+        }
+
+        @Override
+        protected boolean propagatesSkylightDown(BlockState state) {
+            return true;
+        }
+
+        @Override
+        public void binnen(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
+            GuhrioSpel.klaar(player, sessie, pos);
+        }
+    }
+
+    // =====================================================================================================================
+    // the green pipe
+    // =====================================================================================================================
+
+    /** A player who is going through a pipe walks (sinks) right through the pipe's blocks; everybody else stands on them. */
+    private static VoxelShape pijpVorm(Block blok, VoxelShape vorm, CollisionContext context) {
+        Player p = speler(context);
+        return p != null && GuhrioSpel.inPijp(p) ? Shapes.empty() : vorm;
+    }
+
+    /** The body of a green pipe (under its mouth). */
+    public static class PijpLijfBlok extends Block {
+        public static final MapCodec<PijpLijfBlok> CODEC = simpleCodec(PijpLijfBlok::new);
+
+        public PijpLijfBlok(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        protected MapCodec<? extends Block> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            return pijpVorm(this, super.getCollisionShape(state, level, pos, context), context);
+        }
+    }
+
+    /**
+     * The mouth of a green pipe, opening upwards. Stand on it and duck (S): you sink in and come up out of the other mouth
+     * of this level with the same {@link #KANAAL} (with more than two: the next one in the level).
+     */
+    public static class PijpBlok extends Block implements GuhrioStuk {
+        public static final MapCodec<PijpBlok> CODEC = simpleCodec(PijpBlok::new);
+        public static final IntegerProperty KANAAL = IntegerProperty.create("kanaal", 0, 15);
+
+        public PijpBlok(Properties properties) {
+            super(properties);
+            registerDefaultState(stateDefinition.any().setValue(KANAAL, 0));
+        }
+
+        @Override
+        protected MapCodec<? extends Block> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+            builder.add(KANAAL);
+        }
+
+        @Override
+        protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            return pijpVorm(this, super.getCollisionShape(state, level, pos, context), context);
+        }
+
+        /** Click it with an empty hand (creative): the next channel, so builders can pair pipes without commands. */
+        @Override
+        protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+            if (!player.isCreative() || GuhrioSpel.speelt(player)) {
+                return InteractionResult.PASS;
+            }
+            if (!level.isClientSide()) {
+                BlockState nieuw = state.cycle(KANAAL);
+                level.setBlock(pos, nieuw, 3);
+                player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guhrio.pijp.kanaal", nieuw.getValue(KANAAL)));
+            }
+            return InteractionResult.SUCCESS;
+        }
+
+        /** The other mouth of this pipe in the level, or null. */
+        @Nullable
+        public static BlockPos andere(GuhrioSpel.Actief actief, BlockPos pos, BlockState state) {
+            List<GuhrioSpel.Stuk> monden = actief.stukken.stream()
+                    .filter(s -> s.state().getBlock() instanceof PijpBlok && s.state().getValue(KANAAL).equals(state.getValue(KANAAL))).toList();
+            for (int i = 0; i < monden.size(); i++) {
+                if (monden.get(i).pos().equals(pos) && monden.size() > 1) {
+                    return monden.get((i + 1) % monden.size()).pos();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void duik(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
+            BlockPos naar = andere(sessie.actief, pos, state);
+            if (naar == null || !player.level().isLoaded(naar)) {
+                return;
+            }
+            // (you must really stand on it)
+            if (Math.abs(player.getY() - (pos.getY() + 1)) > 0.6 || Math.abs(player.getX() - (pos.getX() + 0.5)) > 0.8
+                    || Math.abs(player.getZ() - (pos.getZ() + 0.5)) > 0.8) {
+                return;
+            }
+            GuhrioSpel.pijp(player, sessie, pos, naar);
+        }
+    }
+
+    // =====================================================================================================================
+    // creatures
+    // =====================================================================================================================
+
+    /** Where a Guhmba lives: invisible, you walk through it. While somebody plays the level there is a Guhmba for it. */
+    public static class GuhmbaPlek extends Block implements GuhrioStuk {
+        public static final MapCodec<GuhmbaPlek> CODEC = simpleCodec(GuhmbaPlek::new);
+
+        public GuhmbaPlek(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        protected MapCodec<? extends Block> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected RenderShape getRenderShape(BlockState state) {
+            return RenderShape.INVISIBLE;
+        }
+
+        @Override
+        protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            // (only somebody holding the block sees and clicks it, like a structure void)
+            return context.isHoldingItem(asItem()) ? Shapes.block() : Shapes.empty();
+        }
+
+        @Override
+        protected boolean propagatesSkylightDown(BlockState state) {
+            return true;
+        }
+
+        @Override
+        public void wek(ServerLevel level, GuhrioSpel.Actief actief, GuhrioSpel.Stuk stuk) {
+            Entity nu = actief.wezens.get(stuk.pos());
+            if (nu != null && !nu.isRemoved()) {
+                return;
+            }
+            BlockPos pos = stuk.pos();
+            if (!level.isPositionEntityTicking(pos)) {
+                return;
+            }
+            GuhmbaEntity guhmba = GuhrioFeature.GUHMBA.get().create(level, EntitySpawnReason.TRIGGERED);
+            if (guhmba == null) {
+                return;
+            }
+            guhmba.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0f, 0f);
+            guhmba.zetBaan(actief.level.banen().get(stuk.baan()), pos);
+            level.addFreshEntity(guhmba);
+            actief.wezens.put(pos, guhmba);
+        }
+    }
+}

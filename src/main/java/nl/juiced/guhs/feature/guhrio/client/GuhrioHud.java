@@ -1,0 +1,82 @@
+package nl.juiced.guhs.feature.guhrio.client;
+
+import java.util.Set;
+
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import nl.juiced.guhs.feature.guhrio.GuhrioFeature;
+import nl.juiced.guhs.feature.guhrio.GuhrioSpel;
+
+/**
+ * The panel of a Super Guhrio level, along the top of the screen like the old games: who (GUHRIO and your power-up), your
+ * coins of this run, which level, the time. Also the black of going through a pipe, the flash of coming back to your flag,
+ * and the banner at the flagpole. The game's own bars (hotbar, hearts, food, the crosshair...) are hidden in a level:
+ * nothing there can hurt you and your hands do nothing.
+ */
+public final class GuhrioHud {
+    /** The vanilla layers a level hides. */
+    static final Set<Identifier> VERBORGEN = Set.of(VanillaGuiLayers.CROSSHAIR, VanillaGuiLayers.HOTBAR, VanillaGuiLayers.PLAYER_HEALTH,
+            VanillaGuiLayers.ARMOR_LEVEL, VanillaGuiLayers.FOOD_LEVEL, VanillaGuiLayers.VEHICLE_HEALTH, VanillaGuiLayers.AIR_LEVEL,
+            VanillaGuiLayers.CONTEXTUAL_INFO_BAR_BACKGROUND, VanillaGuiLayers.EXPERIENCE_LEVEL, VanillaGuiLayers.CONTEXTUAL_INFO_BAR,
+            VanillaGuiLayers.SELECTED_ITEM_NAME);
+
+    private GuhrioHud() {
+    }
+
+    static void teken(GuiGraphicsExtractor g, DeltaTracker delta) {
+        if (!GuhrioClient.speelt()) {
+            return;
+        }
+        Minecraft mc = Minecraft.getInstance();
+        int w = g.guiWidth(), h = g.guiHeight();
+        // the black of a pipe, the flash of coming back
+        float donker = Math.max(BaanBesturing.pijpDonker(), GuhrioClient.flits / 12f);
+        if (donker > 0.01f) {
+            g.fill(0, 0, w, h, ((int) (Math.min(1f, donker) * 255) << 24));
+        }
+        if (mc.options.hideGui) {
+            return;
+        }
+        Font font = mc.font;
+        int kolom = w / 4, y = 8;
+        // GUHRIO + power-up
+        kop(g, font, Component.translatable("gui.guhs.guhrio.hud.naam"), kolom / 2, y);
+        Component kracht = Component.translatable(GuhrioClient.kracht == GuhrioSpel.Kracht.SUPER.ordinal() ? "gui.guhs.guhrio.hud.super" : "gui.guhs.guhrio.hud.klein");
+        g.centeredText(font, kracht, kolom / 2, y + 11, 0xFFFFFFFF);
+        // coins
+        kop(g, font, Component.translatable("gui.guhs.guhrio.hud.munten"), kolom + kolom / 2, y);
+        String munten = "x" + (GuhrioClient.munten < 10 ? "0" : "") + GuhrioClient.munten;
+        int mx = kolom + kolom / 2 - (font.width(munten) + 12) / 2;
+        g.pose().pushMatrix();
+        g.pose().translate(mx - 2, y + 8);
+        g.pose().scale(0.75f, 0.75f);
+        g.item(new ItemStack(GuhrioFeature.MUNT.get()), 0, 0);
+        g.pose().popMatrix();
+        g.text(font, munten, mx + 12, y + 11, 0xFFFFFFFF, true);
+        // which level
+        kop(g, font, Component.translatable("gui.guhs.guhrio.hud.wereld"), 2 * kolom + kolom / 2, y);
+        g.centeredText(font, GuhrioClient.wereld(), 2 * kolom + kolom / 2, y + 11, 0xFFFFFFFF);
+        // the time
+        kop(g, font, Component.translatable("gui.guhs.guhrio.hud.tijd"), 3 * kolom + kolom / 2, y);
+        g.centeredText(font, GuhrioSpel.tijd(GuhrioClient.klaar > 0 ? GuhrioClient.klaarTijd : GuhrioClient.tijd), 3 * kolom + kolom / 2, y + 11, 0xFFFFFFFF);
+        // done!
+        if (GuhrioClient.klaar > 0) {
+            Component klaar = Component.translatable("gui.guhs.guhrio.hud.klaar");
+            g.pose().pushMatrix();
+            g.pose().translate(w / 2f, h / 3f);
+            g.pose().scale(2f, 2f);
+            g.centeredText(font, klaar, 0, 0, 0xFFFFE14D);
+            g.pose().popMatrix();
+        }
+    }
+
+    private static void kop(GuiGraphicsExtractor g, Font font, Component tekst, int x, int y) {
+        g.centeredText(font, tekst, x, y, 0xFFFFD24A);
+    }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "top=false": {
+      "model": "guhs:block/guhrio_mast"
+    },
+    "top=true": {
+      "model": "guhs:block/guhrio_mast_top"
+    }
+  }
+}

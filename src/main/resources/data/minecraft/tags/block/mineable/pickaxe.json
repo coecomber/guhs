@@ -108,6 +108,12 @@
     "guhs:harsstenen_trap",
     "guhs:harsstenen_plaat",
     "guhs:harsstenen_muur",
-    "guhs:gebeitelde_harsstenen"
+    "guhs:gebeitelde_harsstenen",
+    "guhs:guhrio_grond",
+    "guhs:guhrio_blok",
+    "guhs:guhrio_steen",
+    "guhs:guhrio_vraagblok",
+    "guhs:guhrio_pijp",
+    "guhs:guhrio_pijp_lijf"
   ]
 }

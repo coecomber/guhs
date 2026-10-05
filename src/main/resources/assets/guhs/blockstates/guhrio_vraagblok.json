@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "inhoud=munt,leeg=false": {
+      "model": "guhs:block/guhrio_vraagblok"
+    },
+    "inhoud=munt,leeg=true": {
+      "model": "guhs:block/guhrio_vraagblok_leeg"
+    },
+    "inhoud=superknabbel,leeg=false": {
+      "model": "guhs:block/guhrio_vraagblok"
+    },
+    "inhoud=superknabbel,leeg=true": {
+      "model": "guhs:block/guhrio_vraagblok_leeg"
+    }
+  }
+}
