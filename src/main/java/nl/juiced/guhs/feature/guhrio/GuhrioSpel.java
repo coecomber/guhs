@@ -66,6 +66,8 @@ public final class GuhrioSpel {
     public static final double BEREIK = 4.5;
     /** Ticks: down into a pipe (and up out of it), at the flagpole before you are let go, safe after losing a power-up. */
     public static final int PIJP_TICKS = 12, KLAAR_TICKS = 70, VEILIG_TICKS = 40;
+    /** In a level your food never drops under this (so you can always run). */
+    public static final int RENNEN_ETEN = 8;
     /** How deep in the pipe you go (a player is 1.8 high). */
     public static final double PIJP_DIEP = 1.85;
 
@@ -121,6 +123,9 @@ public final class GuhrioSpel {
         Pijpreis pijp;
         /** Counting down at the flagpole; safe ticks after losing a power-up. */
         int klaar, veilig;
+        /** Your food when you came in (given back when you leave: a level never makes you hungry). */
+        int eten;
+        float verzadiging;
 
         Sessie(UUID speler, Actief actief) {
             this.speler = speler;
@@ -172,6 +177,33 @@ public final class GuhrioSpel {
 
     @Nullable
     public static ClientKant client;
+
+    /** Somebody reached a flagpole (for quests, the highscores, the Guhdex...). */
+    public interface KlaarLuisteraar {
+        void klaar(ServerPlayer player, Sessie sessie, int ticks, boolean record);
+    }
+
+    /** Called when a player finishes a level (add yours at mod construction). */
+    public static final List<KlaarLuisteraar> BIJ_KLAAR = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    /** What a level does with an action of its own that the player's game reports (see {@link #actie}). */
+    public interface ActieDoener {
+        void doe(ServerPlayer player, Sessie sessie, BlockPos pos, int wezen);
+    }
+
+    private static final Map<Integer, ActieDoener> ACTIES = new ConcurrentHashMap<>();
+
+    /**
+     * A new kind of {@link GuhrioPayloads.Actie} (soort 100 and up; the engine's own are below). The player's game sends it
+     * with {@code new GuhrioPayloads.Actie(soort, pos, wezen)}; the doer is only called for a player who is in a level and
+     * not in a pipe or at the flagpole, and has to check itself that the action can be true.
+     */
+    public static void registreerActie(int soort, ActieDoener doener) {
+        if (soort < 100) {
+            throw new IllegalArgumentException("guhrio: actions below 100 are the engine's");
+        }
+        ACTIES.put(soort, doener);
+    }
 
     private static final Map<UUID, Sessie> SESSIES = new ConcurrentHashMap<>();
     private static final Map<String, Actief> ACTIEF = new ConcurrentHashMap<>();
@@ -263,6 +295,8 @@ public final class GuhrioSpel {
         }
         Sessie s = new Sessie(player.getUUID(), actief);
         s.vlag = actief.level.start();
+        s.eten = player.getFoodData().getFoodLevel();
+        s.verzadiging = player.getFoodData().getSaturationLevel();
         SESSIES.put(player.getUUID(), s);
         zetLijf(player, true);
         player.getAbilities().flying = false;
@@ -293,6 +327,8 @@ public final class GuhrioSpel {
         }
         zetLijf(player, false);
         zetGroot(player, false);
+        player.getFoodData().setFoodLevel(s.eten);
+        player.getFoodData().setSaturation(s.verzadiging);
         RUST.put(player.getUUID(), player.level().getGameTime() + 40);
         GuhrioPayloads.send(player, new GuhrioPayloads.Stop(reden.ordinal()));
         if (reden == Einde.UITGELOGD && player.level().dimension() == s.level().dimensie()) {
@@ -451,6 +487,9 @@ public final class GuhrioSpel {
         }
         player.clearFire();
         player.resetFallDistance();
+        if (player.getFoodData().getFoodLevel() < RENNEN_ETEN) {
+            player.getFoodData().setFoodLevel(RENNEN_ETEN);       // (running needs more than 6; you get your own food back when you leave)
+        }
         if (s.veilig > 0) {
             s.veilig--;
         }
@@ -623,6 +662,9 @@ public final class GuhrioSpel {
         }
         GuhrioPayloads.send(player, new GuhrioPayloads.Moment(GuhrioPayloads.Moment.KLAAR, pos, s.ticks));
         stuurStaat(player, s);
+        for (KlaarLuisteraar l : BIJ_KLAAR) {
+            l.klaar(player, s, s.ticks, record);
+        }
         player.sendSystemMessage(Component.translatable(record ? "gui.guhs.guhrio.klaar.record" : "gui.guhs.guhrio.klaar",
                 s.level().level().wereld(), tijd(s.ticks), s.munten).withStyle(ChatFormatting.GOLD));
         ServerLevel level = player.level();
@@ -686,6 +728,11 @@ public final class GuhrioSpel {
             return;
         }
         ServerLevel level = player.level();
+        ActieDoener eigen = ACTIES.get(soort);
+        if (eigen != null) {
+            eigen.doe(player, s, pos, wezen);
+            return;
+        }
         if (soort == GuhrioPayloads.Actie.STAMP || soort == GuhrioPayloads.Actie.GERAAKT) {
             Entity e = level.getEntity(wezen);
             if (e instanceof GuhrioWezen w && e.isAlive() && e.distanceToSqr(player) <= BEREIK * BEREIK) {

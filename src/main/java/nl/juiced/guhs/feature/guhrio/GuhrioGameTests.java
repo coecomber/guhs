@@ -244,6 +244,33 @@ public class GuhrioGameTests {
         helper.succeed();
     }
 
+    /** Players in a level stand on one line: they don't shove each other. And a level never makes you hungry. */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void spelersDuwenElkaarNiet(GameTestHelper helper) {
+        BlockPos startAbs = bouw(helper);
+        ServerPlayer a = speler(helper), b = speler(helper);
+        a.getFoodData().setFoodLevel(3);
+        helper.assertTrue(GuhrioSpel.start(a, startAbs) && GuhrioSpel.start(b, startAbs), "two players in the same level");
+        helper.assertTrue(GuhrioSpel.sessie(a) != GuhrioSpel.sessie(b) && GuhrioSpel.sessie(a).actief == GuhrioSpel.sessie(b).actief,
+                "each their own run of the same level");
+        zet(helper, a, 9.5, 2);
+        zet(helper, b, 9.7, 2);
+        a.setDeltaMovement(Vec3.ZERO);
+        b.setDeltaMovement(Vec3.ZERO);
+        a.push(b);
+        b.push(a);
+        helper.assertTrue(a.getDeltaMovement().equals(Vec3.ZERO) && b.getDeltaMovement().equals(Vec3.ZERO), "no shoving in a level");
+        GuhrioSpel.tick(a);
+        helper.assertTrue(a.getFoodData().getFoodLevel() >= GuhrioSpel.RENNEN_ETEN, "fed enough to run while you play");
+        GuhrioSpel.stop(a, GuhrioSpel.Einde.GESTOPT);
+        GuhrioSpel.stop(b, GuhrioSpel.Einde.GESTOPT);
+        helper.assertTrue(a.getFoodData().getFoodLevel() == 3, "your own food back afterwards");
+        a.push(b);
+        helper.assertFalse(a.getDeltaMovement().equals(Vec3.ZERO) && b.getDeltaMovement().equals(Vec3.ZERO), "(out of a level players shove as always)");
+        weg(helper, a, b);
+        helper.succeed();
+    }
+
     /** Nobody is hurt in a level; out of it you can be again. */
     @GuhTest(template = KAMER, batch = BATCH)
     public static void geenSchadeInEenLevel(GameTestHelper helper) {
@@ -552,6 +579,13 @@ public class GuhrioGameTests {
         ServerPlayer p = start(helper, startAbs);
         GuhrioSpel.Sessie s = GuhrioSpel.sessie(p);
         GuhrioSpel.spaar(p).remove("Tijden");
+        int[] gehaald = {0};
+        GuhrioSpel.KlaarLuisteraar luisteraar = (wie, sessie, ticks, record) -> {
+            if (wie == p && record && ticks == 38) {
+                gehaald[0]++;
+            }
+        };
+        GuhrioSpel.BIJ_KLAAR.add(luisteraar);
         for (int i = 0; i < 37; i++) {
             GuhrioSpel.tick(p);
         }
@@ -559,6 +593,7 @@ public class GuhrioGameTests {
         GuhrioSpel.tick(p);
         helper.assertTrue(s.klaar(), "the pole: done");
         helper.assertTrue(GuhrioSpel.besteTijd(p, LEVEL) == 38, "your time is kept: " + GuhrioSpel.besteTijd(p, LEVEL));
+        helper.assertTrue(gehaald[0] == 1, "the levels' listeners hear of it");
         zet(helper, p, 16.5, 2);
         for (int i = 0; i < GuhrioSpel.KLAAR_TICKS - 1; i++) {
             GuhrioSpel.tick(p);
@@ -577,6 +612,7 @@ public class GuhrioGameTests {
         zet(helper, p, 16.5, 2);
         GuhrioSpel.tick(p);
         helper.assertTrue(s2.klaar() && GuhrioSpel.besteTijd(p, LEVEL) == 38, "the best time stays");
+        GuhrioSpel.BIJ_KLAAR.remove(luisteraar);
         weg(helper, p);
         helper.succeed();
     }
