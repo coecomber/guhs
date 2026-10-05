@@ -87,6 +87,11 @@ public final class Cutscenes {
         return Vast.is(p);
     }
 
+    /** (client.VerhaalClient) the local player starts or stops watching a scene or a card. */
+    public static void zetClientBezig(boolean bezig) {
+        Vast.clientBezig = bezig;
+    }
+
     /** Has this player watched the scene to the end? */
     public static boolean gezien(ServerPlayer p, String id) {
         return GuhQuests.saved(p).getCompoundOrEmpty(key(id)).getBooleanOr("Gezien", false);

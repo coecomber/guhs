@@ -76,7 +76,7 @@ public class SuperkompasItem extends GuhCompassItem {
      * (2.9) One Minigames tab with every game: the classics, the Knuffeldal games (their places also stay under Knus) and De
      * Grote Guhspelen.
      */
-    public static final List<Category> CATEGORIES = new java.util.concurrent.CopyOnWriteArrayList<>(List.of(
+    private static final List<Category> VASTE_CATEGORIES = List.of(
             cat("avontuur", "guhs:kaashouweel", net.minecraft.world.item.Items.IRON_PICKAXE, "guh_caves", "challenging_guh_caves", "evil_mika_home",
                     "kaasmijn", "moerasheks_hut", "kaasknabbel_nest",   // 2.8.1 Piep
                     "bleke_open_plek", "houthakkershutje"),   // 1.2.8 het Bleekwoud
@@ -99,7 +99,12 @@ public class SuperkompasItem extends GuhCompassItem {
                     "ballonfestival", "kampeerplekje", "knuffelbad"),
             // 3.0 (Guhverhalen): the story places
             cat("verhalen", "guhs:baltoguh_beeldje", net.minecraft.world.item.Items.BOOK, "nomguh", "kloon_eiland", "hemelkapelletje", "guhwaii_ohana",
-                    "guhwaii_capsule", "guhwaii_surfstrand", "knuffeldal_stadje")));
+                    "guhwaii_capsule", "guhwaii_surfstrand", "knuffeldal_stadje"));
+    /**
+     * The tabs of the menu (bbq2: {@link #voegToe} adds structures to a tab; the fixed list above keeps its shape, the
+     * self-check of tools/features/gids.py reads it).
+     */
+    public static final List<Category> CATEGORIES = new java.util.concurrent.CopyOnWriteArrayList<>(VASTE_CATEGORIES);
 
     /**
      * bbq2 (CONTRACT_130 §2.4): the choice "Mijn verhaal": no structure, the compass follows the player's story by itself

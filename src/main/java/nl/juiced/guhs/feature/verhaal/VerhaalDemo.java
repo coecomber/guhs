@@ -41,7 +41,7 @@ public final class VerhaalDemo {
     /** The demo only exists in a dev environment (dev client, dev server, game tests). */
     public static final boolean AAN = !FMLEnvironment.isProduction();
     public static final String PLEK = "demo_plek";
-    private static final String ANKER = "guhs_demo_anker", DIM = "guhs_demo_dim";
+    static final String ANKER = "guhs_demo_anker", DIM = "guhs_demo_dim";
 
     static Verhaallijn lijn, vervolg;
     static Cutscene scene;

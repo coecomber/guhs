@@ -11,7 +11,8 @@ Which chapter a quest lands in (so quests added later find their place by themse
   4. otherwise: De Guhmensie (quests of this file) or Minigames & bijzondere plekken (quests of a feature module).
 Quests that no section names get a section of their own at the end of their chapter (one per feature module), and a
 feature's quests without dependencies follow each other. Nothing is locked (1.1.3): only the stomach sizes (maag_64 ...
-maag_128) get real FTB Quests dependencies ("linear"). Every other quest has none, because a dependency also holds back
+maag_128) get real FTB Quests dependencies ("linear"), and (bbq2) the quests of a feature module that says FTB_LINEAIR = True
+(a story told in order: each of its quests really depends on the one before it, see linear()). Every other quest has none, because a dependency also holds back
 completion: FTB Quests remembers the progress of a quest whose dependencies aren't done yet, but only ticks it off through a
 fragile chain once they are (an un-claimed "Guh!" kept a whole Guhdex at 0). The logical order (deps) still places the
 quests and puts "Komt na: ..." on a section's header; compat/FtbQuestsRepair ticks off what older worlds left stuck.
@@ -830,6 +831,15 @@ def plan():
         for s in ss:
             if s["upstream"]:
                 deps[s["quests"][0]] = [f"intro_{c}" if s["upstream"] == "intro" else s["upstream"]]
+    # bbq2: the quests of FTB_LINEAIR modules are one chain per chapter, in quest order (so also from one module to the next,
+    # e.g. the chapters of a story): a linear quest that doesn't name a linear quest itself comes after the one before it
+    last = {}
+    for key, *_ in QUESTS:
+        if linear(key):
+            c = where[key]
+            if c in last and not any(linear(d) for d in deps[key]):
+                deps[key] = [last[c]]
+            last[c] = key
     out = {}
     for c in ORDER:
         pos, links, images = layout(c, sections[c], deps)
@@ -838,9 +848,15 @@ def plan():
     return out, deps, where, info
 
 
+def linear(key):
+    """bbq2: is this a quest of a feature module with FTB_LINEAIR = True (a story in order: real dependencies)?"""
+    return bool(getattr(MODULES.get(SOURCE.get(key)), "FTB_LINEAIR", False))
+
+
 def gates(deps):
-    """The dependencies FTB Quests really gets: only the stomach sizes come after each other (see the top)."""
-    return {k: (v if k.startswith("maag_") else []) for k, v in deps.items()}
+    """The dependencies FTB Quests really gets: the stomach sizes come after each other, and (bbq2) the quests of an
+    FTB_LINEAIR module depend on the linear quests before them (see the top). The rule for every other quest: none."""
+    return {k: (v if k.startswith("maag_") else [d for d in v if linear(d)] if linear(k) else []) for k, v in deps.items()}
 
 
 LOCALES = ("nl_nl", "en_us")   # ftbquests/lang/<locale>/<chapter>.json5; compat/FtbQuestsChapter installs both
@@ -929,8 +945,8 @@ def build(force_art=False):
                 qn["dependencies"] = [qid(d) for d in locks[key]]
             if key in ch["hidden"]:
                 qn["hide_dependency_lines"] = True
-            if key.startswith("maag_"):
-                qn["progression_mode"] = "linear"   # the only lock: the stomach sizes come after each other
+            if key.startswith("maag_") or linear(key) and locks[key]:
+                qn["progression_mode"] = "linear"   # the only locks: the stomach sizes, and (bbq2) a story told in order
             if key.startswith("intro_") or key in GROOT:
                 qn["size"] = 1.3
             if shape:
