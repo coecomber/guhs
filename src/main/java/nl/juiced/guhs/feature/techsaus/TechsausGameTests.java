@@ -48,7 +48,7 @@ import nl.juiced.guhs.taal.NlTekst;
 /**
  * Game tests of the sauce machines (bbq2 tech-vloeistof, batch "techsaus"): the pump lifts sauce out of a source that stays,
  * hoses carry it (round a bend, to two vats, and not past a cut), the vat is tapped and filled with buckets and keeps its
- * sauce as an item, the Brouwautomaat, the Frituurautomaat and the Grillkoolpers do their work on vadskracht and stand still
+ * sauce as an item, machines survive saving in the middle of their work, the Brouwautomaat, the Frituurautomaat and the Grillkoolpers do their work on vadskracht and stand still
  * without it, pipes only reach the right slots, and the Guhbrouwketel and the frying pan still work by hand.
  * Template techsaus_test_kamer: 11 x 6 x 7 with a stone floor two blocks thick: the top layer of the floor is helper y 2
  * (a source is dug into it), things stand at helper y 3.
@@ -522,6 +522,47 @@ public class TechsausGameTests {
                 })
                 .thenWaitUntil(() -> helper.assertTrue(pomp.tank().inhoud() > 0 && frituur.vakken().getAmountAsInt(FrituurautomaatBlockEntity.IN) == 0, "with 30 all run"))
                 .thenExecute(() -> gelijk(helper, VadsNet.Status.DRAAIT, VadsKracht.net(level, helper.absolutePos(p(4, 3))).status(), "the net runs"))
+                .thenSucceed();
+    }
+
+    // =====================================================================================================================
+    // saving
+    // =====================================================================================================================
+
+    /** A machine in the middle of its work survives saving: the tanks, the slots, what bubbles and how far it is. */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void techsausMachinesOnthoudenAlles(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BrouwautomaatBlockEntity brouw = zet(helper, p(2, 2), TechsausFeature.BROUWAUTOMAAT.get(), BrouwautomaatBlockEntity.class);
+        kracht(helper, p(2, 1), 1);
+        brouw.tank().zet(Sauzen.kaassaus(), 2500);
+        brouw.vakken().set(BrouwautomaatBlockEntity.INGREDIENT, ItemResource.of(ModItems.KAAS_KNABBELS.get()), 2);
+        brouw.vakken().set(BrouwautomaatBlockEntity.FLESJES, ItemResource.of(Items.GLASS_BOTTLE), 7);
+        GrillkoolpersBlockEntity pers = zet(helper, p(6, 2), TechsausFeature.GRILLKOOLPERS.get(), GrillkoolpersBlockEntity.class);
+        kracht(helper, p(6, 1), 1);
+        pers.saus().zet(Sauzen.frituursaus(), 3000);
+        pers.water().zet(Sauzen.water(), 1500);
+        SauspompBlockEntity pomp = zet(helper, p(9, 2), TechsausFeature.SAUSPOMP.get(), SauspompBlockEntity.class);
+        pomp.tank().zet(Sauzen.melk(), 750);
+        helper.startSequence()
+                .thenWaitUntil(() -> helper.assertTrue(brouw.voortgang() >= 5 && pers.voortgang() >= 5, "both are at work"))
+                .thenExecute(() -> {
+                    BrouwautomaatBlockEntity brouw2 = new BrouwautomaatBlockEntity(helper.absolutePos(p(2, 2)), helper.getBlockState(p(2, 2)));
+                    brouw2.loadWithComponents(nl.juiced.guhs.storage.Nbt.input(level.registryAccess(), brouw.saveWithoutMetadata(level.registryAccess())));
+                    helper.assertTrue(brouw2.brouwsel() == brouw.brouwsel() && brouw2.brouwsel() != null && brouw2.voortgang() == brouw.voortgang(),
+                            "the brew and how far it is: " + brouw2.brouwsel() + " " + brouw2.voortgang());
+                    helper.assertTrue(brouw2.tank().inhoud() == 1500 && brouw2.tank().saus().equals(Sauzen.kaassaus()), "the tank: " + brouw2.tank().inhoud());
+                    helper.assertTrue(brouw2.vakken().getAmountAsInt(BrouwautomaatBlockEntity.INGREDIENT) == 1
+                            && brouw2.vakken().getAmountAsInt(BrouwautomaatBlockEntity.FLESJES) == 4, "the slots");
+                    GrillkoolpersBlockEntity pers2 = new GrillkoolpersBlockEntity(helper.absolutePos(p(6, 2)), helper.getBlockState(p(6, 2)));
+                    pers2.loadWithComponents(nl.juiced.guhs.storage.Nbt.input(level.registryAccess(), pers.saveWithoutMetadata(level.registryAccess())));
+                    helper.assertTrue(pers2.perst() && pers2.voortgang() == pers.voortgang(), "the press and how far it is");
+                    helper.assertTrue(pers2.saus().inhoud() == 2000 && pers2.saus().saus().equals(Sauzen.frituursaus()) && pers2.water().inhoud() == 500
+                            && pers2.water().saus().equals(Sauzen.water()), "both tanks: " + pers2.saus().inhoud() + " / " + pers2.water().inhoud());
+                    SauspompBlockEntity pomp2 = new SauspompBlockEntity(helper.absolutePos(p(9, 2)), helper.getBlockState(p(9, 2)));
+                    pomp2.loadWithComponents(nl.juiced.guhs.storage.Nbt.input(level.registryAccess(), pomp.saveWithoutMetadata(level.registryAccess())));
+                    helper.assertTrue(pomp2.tank().inhoud() == 750 && pomp2.tank().saus().equals(Sauzen.melk()), "the pump's tank (milk from a bucket)");
+                })
                 .thenSucceed();
     }
 
