@@ -1,0 +1,95 @@
+# Guh-parkour (guhpixel slice "parkour") AutoCheck: the demo course, guhs running it, the Scorebord and the post screen. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/px_parkour.txt -PautocheckTimeout=15
+# (commands: see autocheck.txt; own dev commands: /guhs px parkour baan | guh [n] | scherm | stand)
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/execute in minecraft:overworld run tp @s 3000 141 3000 -90 0
+/forceload add 2980 2980 3060 3020
+wait 80
+/fill 2990 139 2990 3050 139 3010 minecraft:grass_block
+/fill 2990 140 2990 3050 150 3010 minecraft:air
+wait 10
+
+section the demo course (start at 3002 140 3000, 30 blocks to the east) with three guhs
+/tp @s 3000 140 3000 -90 0
+wait 5
+/guhs px parkour baan
+wait 10
+/guhs px parkour guh 3
+wait 20
+/gamemode spectator
+camera 3017 152 3016 180 38
+waitrender 300
+shot guhparkour_baan_overzicht
+camera 3001 142 3004 215 15
+wait 10
+shot guhparkour_start_en_scorebord
+# the pieces up close while the guhs run (a few moments each)
+camera 3005.5 141.5 3003 180 12
+wait 60
+shot guhparkour_horde
+camera 3010 142 3004 180 14
+wait 40
+shot guhparkour_springplank
+camera 3014.5 141.5 3004 180 14
+wait 60
+shot guhparkour_slalompaaltjes
+camera 3019.5 141.5 3004 180 14
+wait 60
+shot guhparkour_kruiptunnel_bobbel
+camera 3024.5 141.5 3004 180 14
+wait 80
+shot guhparkour_evenwichtsbalk
+camera 3028.5 141.5 3002.5 180 18
+wait 80
+shot guhparkour_knabbeltafeltje
+camera 3031.5 141.5 3003 180 14
+wait 60
+shot guhparkour_finish
+
+section the Scorebord after a few laps
+wait 600
+camera 2999.6 141.6 3002.5 -90 4
+wait 10
+shot guhparkour_scorebord_tekst
+/guhs px parkour stand
+
+section the post screen (Dutch, English, GUI scale 3)
+/gamemode creative
+/guhs px parkour scherm
+wait 30
+guhstaal nl
+wait 10
+mouse 1 1
+widgets
+shot nl_guhparkour_scherm gui
+mouse 250 120
+wait 5
+shot nl_guhparkour_scherm_tip gui
+click 420 110
+wait 10
+mouse 1 1
+shot nl_guhparkour_scherm_guh_gekozen gui
+guhstaal en
+wait 10
+shot en_guhparkour_scherm gui
+guiscale 3
+wait 10
+shot en_guhparkour_scherm_schaal3 gui
+guiscale 2
+guhstaal auto
+wait 5
+gui close
+
+section the Guhdex section
+gui dexopen guhpixel
+wait 30
+shot guhparkour_guhdex gui
+gui close
+quit

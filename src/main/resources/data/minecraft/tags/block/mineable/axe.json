@@ -104,6 +104,15 @@
     "guhs:bleekhout_bord",
     "guhs:bleekhout_wandbord",
     "guhs:krakend_guhhartje",
-    "guhs:verzuurd_guhhartje"
+    "guhs:verzuurd_guhhartje",
+    "guhs:guhparkour_startpaaltje",
+    "guhs:guhparkour_finishpaaltje",
+    "guhs:guhparkour_horde",
+    "guhs:guhparkour_springplank",
+    "guhs:guhparkour_kruiptunnel",
+    "guhs:guhparkour_slalompaaltjes",
+    "guhs:guhparkour_evenwichtsbalk",
+    "guhs:guhparkour_knabbeltafeltje",
+    "guhs:guhparkour_scorebord"
   ]
 }

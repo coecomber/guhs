@@ -30,6 +30,18 @@
       x: 12.15,
       y: 1.5,
     },
+    {
+      height: 1.5625,
+      id: "4755482E3B73901F",
+      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_parkour.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 13,
   progression_mode: "flexible",
@@ -71,6 +83,175 @@
       x: 2.0,
       y: 1.5,
       size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "475548FA03A2D79D",
+      icon: {
+        id: "guhs:guhparkour_startpaaltje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhparkour_startpaaltje",
+          },
+          id: "475548038E481317",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhparkour_finishpaaltje",
+          },
+          id: "4755480102F7F081",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554834F65B9612",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+      shape: "circle",
+    },
+    {
+      id: "475548BA39B4753E",
+      icon: {
+        id: "guhs:guhparkour_horde",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhparkour_horde",
+          },
+          id: "475548204ED9D039",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhparkour_springplank",
+          },
+          id: "4755482C4DDACEB0",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483B38E94CCE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548972CFE8071",
+      icon: {
+        id: "guhs:guhparkour_finishpaaltje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhparkour_rondje",
+          id: "475548E98E8DA0AE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554841C564492E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755489F5F0B30EE",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755481300707161",
+      icon: {
+        id: "guhs:guhparkour_scorebord",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhparkour_scorebord",
+          },
+          id: "475548E9A3E68488",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FF9504D49C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548C63C272CFB",
+      icon: {
+        id: "guhs:guhparkour_knabbeltafeltje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhparkour_groot",
+          id: "475548768C4C5518",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484D335D340F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 3,
+        },
+        {
+          id: "475548F7E4BA9C32",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
       shape: "gear",
     },
   ],

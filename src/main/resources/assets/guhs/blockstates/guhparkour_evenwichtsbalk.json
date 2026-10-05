@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guhparkour_evenwichtsbalk"
+    },
+    "facing=east": {
+      "model": "guhs:block/guhparkour_evenwichtsbalk",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guhparkour_evenwichtsbalk",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guhparkour_evenwichtsbalk",
+      "y": 270
+    }
+  }
+}

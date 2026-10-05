@@ -11,4 +11,24 @@
     "",
     "Play the joke games, earn &6Guhpixel Coins&r (not an item: they are on your name) and buy things for your home with them: the Guhcade, the Guh Office and the Guh Cinema. The &dTravel Agency&r and the &dGuh Parkour&r are simply in the Guhmension. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
   ],
+  "quest.475548FA03A2D79D.title": "On Your Marks...",
+  "quest.475548FA03A2D79D.quest_desc": [
+    "Make a &dStart Post&r and a &dFinish Post&r. Between them comes the &dGuh Parkour&r: a route past toys and obstacles that your guhs run laps on. Hold the Start Post in your hand and click the pieces in order: 1, 2, 3... and the Finish Post last. Then put the Start Post down (within 32 blocks of all the pieces).",
+  ],
+  "quest.475548BA39B4753E.title": "Hup, Boing, Oops",
+  "quest.475548BA39B4753E.quest_desc": [
+    "Build obstacles: the &dGuh Hurdle&r (hup, over you go) and the &dGuh Springboard&r (boing!). There are also the &dCrawl Tunnel&r (your guh travels through it as a bump), the &dSlalom Poles&r, the &dBalance Beam&r (oops, off... and back on) and the &dNibble Table&r: the mandatory pit stop. The slide, the seesaw, the swing and the fluffy tunnel can be part of the route too!",
+  ],
+  "quest.475548972CFE8071.title": "Go!",
+  "quest.475548972CFE8071.quest_desc": [
+    "Right-click the Start Post, pick one of your guhs and put it &don the route&r (four fit at once). It trots to the start, uses every piece and then simply starts again, until you take it off. Let a guh run &6a whole lap&r. In the same screen you move pieces earlier or later in the route, or take them out.",
+  ],
+  "quest.4755481300707161.title": "The Fastest Chonk",
+  "quest.4755481300707161.quest_desc": [
+    "Put a &dParkour Scoreboard&r within 32 blocks of your Start Post. It shows, per guh, the number of laps and the &6best lap time&r. Which of your guhs is the fastest? (And which one falls off the beam the most, Nyeg?)",
+  ],
+  "quest.475548C63C272CFB.title": "The Great Guh Parkour",
+  "quest.475548C63C272CFB.quest_desc": [
+    "Build a route of &6at least eight pieces&r with a Finish Post at the end and let a guh run all of it. A route holds sixteen pieces. After that it has surely earned a nap.",
+  ],
 }

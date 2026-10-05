@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " WP",
+    " F ",
+    " S "
+  ],
+  "key": {
+    "W": "minecraft:white_wool",
+    "P": "minecraft:pink_wool",
+    "F": "#minecraft:wooden_fences",
+    "S": "#minecraft:wooden_slabs"
+  },
+  "result": {
+    "id": "guhs:guhparkour_finishpaaltje"
+  }
+}
