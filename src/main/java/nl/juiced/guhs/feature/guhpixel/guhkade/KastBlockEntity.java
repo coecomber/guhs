@@ -80,17 +80,37 @@ public class KastBlockEntity extends BlockEntity {
     // the scores
     // =====================================================================================================================
 
+    /**
+     * A cabinet on the server gets its three house names and joins the list of loaded cabinets the first time anything
+     * wants to know about it (onLoad does the same, but only runs a tick after the block was put down).
+     */
+    private void klaarzetten() {
+        if (level == null || level.isClientSide() || isBoven()) {
+            return;
+        }
+        if (!begonnen) {
+            huisnamen();
+            setChanged();
+        }
+        if (!isRemoved()) {
+            Guhkade.Kasten.erbij(level, worldPosition);
+        }
+    }
+
     /** Every line, the best first. */
     public List<Regel> regels() {
+        klaarzetten();
         return List.copyOf(regels);
     }
 
     public List<Regel> top() {
+        klaarzetten();
         return List.copyOf(regels.subList(0, Math.min(TOP, regels.size())));
     }
 
     /** This player's or guh's best on this cabinet (0 = never played here). */
     public int scoreVan(UUID id) {
+        klaarzetten();
         for (Regel r : regels) {
             if (r.id().equals(id)) {
                 return r.score();
@@ -114,6 +134,7 @@ public class KastBlockEntity extends BlockEntity {
      * else 0. The name is refreshed either way (a guh may have a new name).
      */
     public int voegToe(UUID id, Component naam, int score, boolean guh) {
+        klaarzetten();
         int oud = -1;
         for (int i = 0; i < regels.size(); i++) {
             if (regels.get(i).id().equals(id)) {
@@ -188,14 +209,7 @@ public class KastBlockEntity extends BlockEntity {
     @Override
     public void onLoad() {
         super.onLoad();
-        if (level == null || level.isClientSide() || isBoven()) {
-            return;
-        }
-        if (!begonnen) {
-            huisnamen();
-            setChanged();
-        }
-        Guhkade.Kasten.erbij(level, worldPosition);
+        klaarzetten();
     }
 
     @Override
