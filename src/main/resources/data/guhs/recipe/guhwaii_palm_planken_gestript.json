@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:guhwaii_palm_gestript"
+  ],
+  "result": {
+    "id": "guhs:guhwaii_palm_planken",
+    "count": 4
+  }
+}

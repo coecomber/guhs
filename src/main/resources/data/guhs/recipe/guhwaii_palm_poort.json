@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "guhwaii_palm_fence_gate",
+  "key": {
+    "#": "minecraft:stick",
+    "W": "guhs:guhwaii_palm_planken"
+  },
+  "pattern": [
+    "#W#",
+    "#W#"
+  ],
+  "result": {
+    "id": "guhs:guhwaii_palm_poort"
+  }
+}

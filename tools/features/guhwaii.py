@@ -12,8 +12,10 @@ without the surf/hula minigames: those are guhwaii_spellen). Java: nl.juiced.guh
   BONES / variants / clothes / CLOTHES / icons / animations: the 626-guh's bones and fur, the four outfit pieces
                (hula-rokje, bloemenkrans, Stitch-oren + antennes, surfplankje), the ukelele emote
 """
+import json
 import os
 import random
+import zipfile
 
 import numpy as np
 
@@ -179,6 +181,15 @@ LANG = {
     "block.guhs.guhwaii_palm_blad.lore": "Lange wuivende bladeren. Er groeien kokosnoten onder!",
     "block.guhs.guhwaii_palm_kiemplant": "Kiemende kokosnoot",
     "block.guhs.guhwaii_palm_planken": "Guh-palmplanken",
+    # the guh-palm wood set (1.2.8)
+    "block.guhs.guhwaii_palm_gestript": "Gestripte guh-palmstam",
+    "block.guhs.guhwaii_palm_trap": "Guh-palmtrap",
+    "block.guhs.guhwaii_palm_plaat": "Guh-palmplaat",
+    "block.guhs.guhwaii_palm_hek": "Guh-palmhek",
+    "block.guhs.guhwaii_palm_poort": "Guh-palmpoort",
+    "block.guhs.guhwaii_palm_deur": "Guh-palmdeur",
+    "block.guhs.guhwaii_palm_luik": "Guh-palmluik",
+    "block.guhs.guhwaii_palm_bord": "Guh-palmbord",
     "block.guhs.kokosnoot": "Kokosnoot",
     "item.guhs.kokosnoot": "Kokosnoot",
     "item.guhs.kokosnoot.lore": "Eet hem op (krak, slurp!), geef hem aan je guh, of plant hem in het zand: dan groeit er een guh-palm.",
@@ -408,6 +419,92 @@ def rommeltje_models(h):
     h.w(f"{A}/models/item/guhwaii_rommeltje.json", {"parent": "guhs:block/guhwaii_rommeltje_0"})
 
 
+# the guh-palm wood set (1.2.8): our block -> the vanilla oak block whose blockstate, models, loot and recipe it borrows
+PALM_HOUT = {"guhwaii_palm_trap": "oak_stairs", "guhwaii_palm_plaat": "oak_slab", "guhwaii_palm_hek": "oak_fence",
+             "guhwaii_palm_poort": "oak_fence_gate", "guhwaii_palm_deur": "oak_door", "guhwaii_palm_luik": "oak_trapdoor"}
+PALM_SET = ["guhwaii_palm_gestript", *PALM_HOUT, "guhwaii_palm_bord"]          # (+ guhwaii_palm_wandbord: the sign on a wall)
+
+
+def palm_houtset(h):
+    """
+    The palm's stripped log, stairs, slab, fence, gate, door, trapdoor and sign (standing guhwaii_palm_bord + wall
+    guhwaii_palm_wandbord, one item): vanilla oak's blockstates, models, loot and recipes with the palm's textures (the same
+    way as vadswoud.wood_set), their recipes, loot and tags. Textures: guhwaii_tex.palm_houtset.
+    """
+    A, D, w = h.A, h.D, h.w
+    P = "guhs:guhwaii_palm_planken"
+    # the stripped log
+    for model, parent in (("guhwaii_palm_gestript", "cube_column"), ("guhwaii_palm_gestript_horizontal", "cube_column_horizontal")):
+        w(f"{A}/models/block/{model}.json", {"parent": f"minecraft:block/{parent}", "textures": {
+            "end": "guhs:block/guhwaii_palm_gestript_top", "side": "guhs:block/guhwaii_palm_gestript"}})
+    w(f"{A}/blockstates/guhwaii_palm_gestript.json", {"variants": {
+        "axis=y": {"model": "guhs:block/guhwaii_palm_gestript"},
+        "axis=z": {"model": "guhs:block/guhwaii_palm_gestript_horizontal", "x": 90},
+        "axis=x": {"model": "guhs:block/guhwaii_palm_gestript_horizontal", "x": 90, "y": 90}}})
+    w(f"{A}/models/item/guhwaii_palm_gestript.json", {"parent": "guhs:block/guhwaii_palm_gestript"})
+    h.self_drop("guhwaii_palm_gestript")
+    h.shapeless("guhwaii_palm_planken_gestript", ["guhs:guhwaii_palm_gestript"], P, 4)
+    # stairs, slab, fence, gate, door, trapdoor: vanilla oak, repainted
+    tex_ = {"minecraft:block/oak_planks": "guhs:block/guhwaii_palm_planken", "minecraft:block/oak_door_top": "guhs:block/guhwaii_palm_deur_top",
+            "minecraft:block/oak_door_bottom": "guhs:block/guhwaii_palm_deur_bottom", "minecraft:block/oak_trapdoor": "guhs:block/guhwaii_palm_luik"}
+    with zipfile.ZipFile(os.path.join("build", "moddev", "artifacts", "neoforge-21.1.251-client-extra-aka-minecraft-resources.jar")) as z:
+        names = z.namelist()
+
+        def recipe(oak, ours):
+            text = json.dumps(json.loads(z.read(f"data/minecraft/recipe/{oak}.json")))
+            text = text.replace('"item": "minecraft:oak_planks"', f'"item": "{P}"')
+            text = text.replace(f'"id": "minecraft:{oak}"', f'"id": "guhs:{ours}"').replace('"group": "wooden_', '"group": "guhwaii_palm_')
+            w(f"{D}/recipe/{ours}.json", json.loads(text))
+
+        for ours, oak in PALM_HOUT.items():
+            state = json.dumps(json.loads(z.read(f"assets/minecraft/blockstates/{oak}.json")))
+            state = state.replace("minecraft:block/oak_planks", "guhs:block/guhwaii_palm_planken").replace(f"minecraft:block/{oak}", f"guhs:block/{ours}")
+            w(f"{A}/blockstates/{ours}.json", json.loads(state))
+            # (fence models are called oak_fence_*, so the gate's models must not be caught by the fence prefix)
+            for path in names:
+                if not path.startswith(f"assets/minecraft/models/block/{oak}") or not path.endswith(".json"):
+                    continue
+                rest = path[len(f"assets/minecraft/models/block/{oak}"):-5]
+                if oak == "oak_fence" and rest.startswith("_gate"):
+                    continue
+                model = json.loads(z.read(path))
+                model["textures"] = {k: tex_.get(v, v) for k, v in model.get("textures", {}).items()}
+                if oak in ("oak_door", "oak_trapdoor"):
+                    model["render_type"] = "minecraft:cutout"
+                w(f"{A}/models/block/{ours}{rest}.json", model)
+            loot = z.read(f"data/minecraft/loot_table/blocks/{oak}.json").decode("utf-8")
+            w(f"{D}/loot_table/blocks/{ours}.json", json.loads(loot.replace(f"minecraft:{oak}", f"guhs:{ours}")))
+            recipe(oak, ours)
+        recipe("oak_sign", "guhwaii_palm_bord")
+    w(f"{A}/models/item/guhwaii_palm_trap.json", {"parent": "guhs:block/guhwaii_palm_trap"})
+    w(f"{A}/models/item/guhwaii_palm_plaat.json", {"parent": "guhs:block/guhwaii_palm_plaat"})
+    w(f"{A}/models/item/guhwaii_palm_hek.json", {"parent": "guhs:block/guhwaii_palm_hek_inventory"})
+    w(f"{A}/models/item/guhwaii_palm_poort.json", {"parent": "guhs:block/guhwaii_palm_poort"})
+    w(f"{A}/models/item/guhwaii_palm_luik.json", {"parent": "guhs:block/guhwaii_palm_luik_bottom"})
+    h.item_model("guhwaii_palm_deur")
+    # the sign: the block model only carries the break particles (the sign itself is drawn by the vanilla sign renderer with
+    # guhs:entity/signs/guhwaii_palm, Java: GuhwaiiFeature.PALM_WOOD); the wall sign drops the standing one's loot table
+    w(f"{A}/models/block/guhwaii_palm_bord.json", {"textures": {"particle": "guhs:block/guhwaii_palm_planken"}})
+    for bord in ("guhwaii_palm_bord", "guhwaii_palm_wandbord"):
+        w(f"{A}/blockstates/{bord}.json", {"variants": {"": {"model": "guhs:block/guhwaii_palm_bord"}}})
+    h.item_model("guhwaii_palm_bord")
+    h.self_drop("guhwaii_palm_bord")
+    # tags (all the palm set's lines together)
+    add = h.add_tag
+    for kind in ("block", "item"):
+        add(f"minecraft/tags/{kind}/logs_that_burn", ["guhs:guhwaii_palm_gestript"])
+        add(f"minecraft/tags/{kind}/wooden_stairs", ["guhs:guhwaii_palm_trap"])
+        add(f"minecraft/tags/{kind}/wooden_slabs", ["guhs:guhwaii_palm_plaat"])
+        add(f"minecraft/tags/{kind}/wooden_fences", ["guhs:guhwaii_palm_hek"])
+        add(f"minecraft/tags/{kind}/fence_gates", ["guhs:guhwaii_palm_poort"])
+        add(f"minecraft/tags/{kind}/wooden_doors", ["guhs:guhwaii_palm_deur"])
+        add(f"minecraft/tags/{kind}/wooden_trapdoors", ["guhs:guhwaii_palm_luik"])
+    add("minecraft/tags/block/standing_signs", ["guhs:guhwaii_palm_bord"])
+    add("minecraft/tags/block/wall_signs", ["guhs:guhwaii_palm_wandbord"])
+    add("minecraft/tags/item/signs", ["guhs:guhwaii_palm_bord"])
+    add("minecraft/tags/block/mineable/axe", [f"guhs:{b}" for b in PALM_SET + ["guhwaii_palm_wandbord"]])
+
+
 def blocks_and_items(h):
     A, D, w = h.A, h.D, h.w
     # --- the guh-palm ---
@@ -436,6 +533,7 @@ def blocks_and_items(h):
                                                         "textures": {"cross": "guhs:block/guhwaii_palm_kiemplant"}})
     w(f"{A}/blockstates/guhwaii_palm_kiemplant.json", {"variants": {f"stage={s}": {"model": "guhs:block/guhwaii_palm_kiemplant"} for s in (0, 1)}})
     h.simple_block("guhwaii_palm_planken")
+    palm_houtset(h)
     # --- the kokosnoot (hanging or lying; its face on one side) ---
     for i, naam in enumerate(("groen", "half", "bruin")):
         t = {"voor": f"guhs:block/kokosnoot_{naam}", "vacht": f"guhs:block/kokosnoot_{naam}_vacht", "particle": f"guhs:block/kokosnoot_{naam}_vacht"}
@@ -632,11 +730,29 @@ def selfcheck(h):
             problems.append(f"lore (te vads): {key}")
     for b in ("guhwaii_palm_stam", "guhwaii_palm_gezicht", "guhwaii_palm_blad", "guhwaii_palm_kiemplant", "guhwaii_palm_planken", "kokosnoot",
               "roze_hibiscus", "guhwaii_plumeria", "guhwaii_paradijsbloem", "guhwaii_orchidee", "schilly_eitjes", "vadsigheid_scanner",
-              "vadsigheid_poster", "guhwaii_rommeltje"):
+              "vadsigheid_poster", "guhwaii_rommeltje", *PALM_SET):
         if not os.path.exists(f"{h.A}/blockstates/{b}.json"):
             problems.append(f"block {b}: no blockstate")
         if f"block.guhs.{b}" not in h.NL:
             problems.append(f"block {b}: no name")
+    # the palm wood set: an item model, a loot table and a recipe each, and every texture its models name
+    for b in PALM_SET:
+        for wat, pad in (("item model", f"{h.A}/models/item/{b}.json"), ("loot table", f"{h.D}/loot_table/blocks/{b}.json")):
+            if not os.path.exists(pad):
+                problems.append(f"block {b}: no {wat}")
+        if b != "guhwaii_palm_gestript" and not os.path.exists(f"{h.D}/recipe/{b}.json"):
+            problems.append(f"block {b}: no recipe")
+    if not os.path.exists(f"{h.A}/blockstates/guhwaii_palm_wandbord.json"):
+        problems.append("block guhwaii_palm_wandbord: no blockstate")
+    for f in sorted(os.listdir(f"{h.A}/models/block")):
+        if f.startswith("guhwaii_palm_"):
+            with open(f"{h.A}/models/block/{f}", encoding="utf-8") as fh:
+                for t in json.load(fh).get("textures", {}).values():
+                    if t.startswith("guhs:") and not os.path.exists(f"{h.TEX}/{t[5:]}.png"):
+                        problems.append(f"texture {t} ({f}) missing")
+    for t in ("entity/signs/guhwaii_palm", "item/guhwaii_palm_bord", "item/guhwaii_palm_deur"):
+        if not os.path.exists(f"{h.TEX}/{t}.png"):
+            problems.append(f"texture {t} missing")
     for i in ("kokosnoot", "kokosmelk", "guhwaii_ukelele", "vadsigheid_scanner", "vadsigheid_poster", "schilly_eitjes", "roze_hibiscus"):
         if not os.path.exists(f"{h.A}/models/item/{i}.json"):
             problems.append(f"item {i}: no item model")

@@ -649,6 +649,7 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | Vadsigheid-scanner | Chonkiness Scanner | |
 | Onberekenbaar vahoeg | Incalculably Wahoog | poster/painting |
 | Kokosnoot / Kokosmelk / Guh-palm | Coconut / Coconut Milk / Guh Palm | |
+| Guh-palm(stam/-planken/-trap/-plaat/-hek/-poort/-deur/-luik/-bord), Gestripte guh-palmstam | Guh Palm (Log/Planks/Stairs/Slab/Fence/Fence Gate/Door/Trapdoor/Sign), Stripped Guh Palm Log | the palm wood set (1.2.8) |
 | Schilly-eitjes | Shelly Eggs | |
 | Baltoguh-beeldje / Medicijnkist | Baltoguh Statuette / Medicine Chest | |
 | Sneeuwguhspar | Snowguh Spruce | |

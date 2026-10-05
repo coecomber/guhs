@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "guhwaii_palm_stairs",
+  "key": {
+    "#": "guhs:guhwaii_palm_planken"
+  },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "result": {
+    "count": 4,
+    "id": "guhs:guhwaii_palm_trap"
+  }
+}

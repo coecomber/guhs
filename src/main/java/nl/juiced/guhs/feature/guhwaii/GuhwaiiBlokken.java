@@ -18,6 +18,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -28,6 +29,7 @@ import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,6 +41,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.ItemAbility;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModSounds;
 
@@ -67,6 +71,22 @@ public final class GuhwaiiBlokken {
     // the guh-palm
     // =================================================================================================================
 
+    /** The palm trunk: an axe strips it (to {@code guhwaii_palm_gestript}, same axis). */
+    public static class PalmStam extends RotatedPillarBlock {
+        public PalmStam(Properties properties) {
+            super(properties);
+        }
+
+        @Nullable
+        @Override
+        public BlockState getToolModifiedState(BlockState state, UseOnContext context, ItemAbility ability, boolean simulate) {
+            if (ability == ItemAbilities.AXE_STRIP) {
+                return GuhwaiiFeature.PALM_GESTRIPT.get().defaultBlockState().setValue(AXIS, state.getValue(AXIS));
+            }
+            return super.getToolModifiedState(state, context, ability, simulate);
+        }
+    }
+
     /**
      * A palm trunk block with a guh face on one side (the palms of Guhwai'i each have one, looking out to sea). Click it:
      * it winks at you, "Njeg!".
@@ -93,6 +113,16 @@ public final class GuhwaiiBlokken {
         @Override
         public BlockState getStateForPlacement(BlockPlaceContext context) {
             return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+        }
+
+        /** An axe strips the face away too (like vadshout_gezicht): a plain stripped palm log is left. */
+        @Nullable
+        @Override
+        public BlockState getToolModifiedState(BlockState state, UseOnContext context, ItemAbility ability, boolean simulate) {
+            if (ability == ItemAbilities.AXE_STRIP) {
+                return GuhwaiiFeature.PALM_GESTRIPT.get().defaultBlockState();
+            }
+            return super.getToolModifiedState(state, context, ability, simulate);
         }
 
         @Override

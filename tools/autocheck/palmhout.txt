@@ -1,0 +1,82 @@
+# Guh-palm wood set (1.2.8) AutoCheck: every new block in a row (with a written sign), the items in the hotbar, the sign's
+# edit screen. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/palmhout.txt
+# (commands: see autocheck.txt)
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:smooth_stone
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode creative
+/tp @s 3000 140 3008
+wait 40
+
+section palmhout: the row (log, face, stripped x2, planks, stairs, slab x2, fence + gate, doors, trapdoors, signs)
+/setblock 2990 140 3000 guhs:guhwaii_palm_stam
+/setblock 2991 140 3000 guhs:guhwaii_palm_gezicht[facing=south]
+/setblock 2992 140 3000 guhs:guhwaii_palm_gestript
+/setblock 2993 140 3000 guhs:guhwaii_palm_gestript[axis=x]
+/setblock 2994 140 3000 guhs:guhwaii_palm_planken
+/setblock 2995 140 3000 guhs:guhwaii_palm_trap[facing=north]
+/setblock 2996 140 3000 guhs:guhwaii_palm_plaat
+/setblock 2997 140 3000 guhs:guhwaii_palm_plaat[type=top]
+/setblock 2998 140 3000 guhs:guhwaii_palm_hek
+/setblock 2999 140 3000 guhs:guhwaii_palm_poort[facing=south]
+/setblock 3000 140 3000 guhs:guhwaii_palm_hek
+/setblock 3001 140 3000 guhs:guhwaii_palm_poort[facing=south,open=true]
+/setblock 3002 140 3000 guhs:guhwaii_palm_hek
+/setblock 3004 140 3000 guhs:guhwaii_palm_deur[half=lower,facing=north]
+/setblock 3004 141 3000 guhs:guhwaii_palm_deur[half=upper,facing=north]
+/setblock 3005 140 3000 guhs:guhwaii_palm_deur[half=lower,facing=north,open=true]
+/setblock 3005 141 3000 guhs:guhwaii_palm_deur[half=upper,facing=north,open=true]
+/setblock 3007 140 3000 guhs:guhwaii_palm_luik[half=bottom]
+/setblock 3008 140 3000 guhs:guhwaii_palm_luik[half=bottom,open=true,facing=south]
+/setblock 3010 140 3000 guhs:guhwaii_palm_bord[rotation=0]{front_text:{messages:["Aloha","njeg!","","guh-palm"]}}
+/setblock 3012 140 3000 guhs:guhwaii_palm_planken
+/setblock 3012 141 3000 guhs:guhwaii_palm_planken
+/setblock 3012 141 3001 guhs:guhwaii_palm_wandbord[facing=south]{front_text:{messages:["Ohana","betekent","familie",""]}}
+wait 40
+/gamemode spectator
+camera 3001.5 143.5 3013 180 12
+waitrender 300
+shot palmhout_rij
+camera 2994.5 142 3005.5 180 12
+waitrender 200
+shot palmhout_links
+camera 3001.5 142 3005 180 12
+waitrender 200
+shot palmhout_midden
+camera 3008.5 142 3005 180 12
+waitrender 200
+shot palmhout_rechts
+
+section palmhout: the items (hotbar)
+/gamemode creative
+/item replace entity @s hotbar.0 with guhs:guhwaii_palm_gestript
+/item replace entity @s hotbar.1 with guhs:guhwaii_palm_planken
+/item replace entity @s hotbar.2 with guhs:guhwaii_palm_trap
+/item replace entity @s hotbar.3 with guhs:guhwaii_palm_plaat
+/item replace entity @s hotbar.4 with guhs:guhwaii_palm_hek
+/item replace entity @s hotbar.5 with guhs:guhwaii_palm_poort
+/item replace entity @s hotbar.6 with guhs:guhwaii_palm_deur
+/item replace entity @s hotbar.7 with guhs:guhwaii_palm_luik
+/item replace entity @s hotbar.8 with guhs:guhwaii_palm_bord
+/tp @s 3010.5 140 3003.5 180 10
+wait 20
+shot palmhout_items gui
+
+section palmhout: the sign's edit screen
+gui keep
+use 3010 140 3000
+wait 30
+shot palmhout_bord_scherm gui
+gui close
+quit
