@@ -1912,5 +1912,54 @@
       }
     ],
     "subtitle": "subtitles.guhs.guhpixel.portaal"
+  },
+  "guhkantoor.inklokken": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkantoor.inklokken"
+  },
+  "guhkantoor.uitklokken": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.1,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkantoor.uitklokken"
+  },
+  "guhkantoor.printer": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.cartography_table.take_result",
+        "type": "event",
+        "pitch": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkantoor.printer"
+  },
+  "guhkantoor.toetsenbord": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wooden_button.click_on",
+        "type": "event",
+        "pitch": 1.8,
+        "volume": 0.5
+      },
+      {
+        "name": "minecraft:block.wooden_button.click_off",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkantoor.toetsenbord"
   }
 }

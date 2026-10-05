@@ -30,6 +30,18 @@
       x: 12.15,
       y: 1.5,
     },
+    {
+      height: 1.5625,
+      id: "475548D35CD3C720",
+      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_thuis.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 13,
   progression_mode: "flexible",
@@ -71,6 +83,106 @@
       x: 2.0,
       y: 1.5,
       size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "475548FF6140570D",
+      icon: {
+        id: "guhs:guhkantoor_prikklok",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhkantoor_prikklok",
+          },
+          id: "475548DAB9D0D3A4",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A6817E1C8E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554898B2E514FD",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+      shape: "rsquare",
+    },
+    {
+      id: "475548EBD6A644EC",
+      icon: {
+        id: "guhs:guhkantoor_loonstrookje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhkantoor_loonstrookje",
+          id: "4755486CBAE578AB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554872DDA4EAAE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548F942D0EE3B",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755488ADDD499D0",
+      icon: {
+        id: "guhs:guhkantoor_kwartaalrapport",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhkantoor_kwartaal",
+          id: "475548DD00DC1E2A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B2C87EE30B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755489643A089CE",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
       shape: "gear",
     },
   ],

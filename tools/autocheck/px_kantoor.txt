@@ -1,0 +1,104 @@
+# Guhpixel slice "kantoor" AutoCheck: a Guhkantoor with two guhs asleep on their keyboards, the Prikklok screen (before and
+# after a shift of 8 real hours), the three papers (reading screens) and papers on a wall. Run (merge step):
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/px_kantoor.txt
+# (commands: see autocheck.txt; dev commands: /guhs px kantoor set|papier|demo|stand|vrij, /guhs px klok <uren>|herstel)
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:pink_concrete
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/fill 2994 140 3013 3006 143 3013 minecraft:white_concrete
+/gamemode creative
+/clear @s
+/guhs px klok herstel
+/tp @s 3000 140 3008 0 0
+wait 40
+
+section kantoor: a Prikklok, two Bureautjes, two guhs asleep on the keyboard
+/guhs px kantoor demo
+/setblock 2998 141 3012 guhs:guhkantoor_loonstrookje[facing=north]
+/setblock 3000 142 3012 guhs:guhkantoor_oorkonde[facing=north]
+/setblock 3002 141 3012 guhs:guhkantoor_kwartaalrapport[facing=north]
+wait 100
+/gamemode spectator
+camera 3000.5 141.9 3007.2 0 14
+waitrender 300
+shot 1_kantoor_guhs_slapen
+camera 2998.5 141.4 3009.4 0 20
+waitrender 200
+shot 2_bureautje_dichtbij
+/gamemode creative
+/tp @s 3000 140 3009 0 20
+wait 20
+
+section the Prikklok screen
+gui keep
+use 3000 140 3011
+wait 30
+widgets
+shot 3_prikklok_scherm gui
+gui close
+/guhs px klok 8.1
+gui keep
+use 3000 140 3011
+wait 30
+widgets
+shot 4_prikklok_loon_klaar gui
+press Loon (1)
+wait 20
+shot 5_prikklok_loon_gehaald gui
+gui close
+/guhs px kantoor stand
+
+section the papers
+/clear @s
+/guhs px kantoor papier
+wait 10
+gui keep
+useitem 5
+wait 20
+shot 6_loonstrookje gui
+gui close
+/item replace entity @s weapon.mainhand from entity @s hotbar.1
+gui keep
+useitem 5
+wait 20
+shot 7_kwartaalrapport gui
+scroll 640 360 -6
+wait 10
+shot 8_kwartaalrapport_onder gui
+gui close
+/item replace entity @s weapon.mainhand from entity @s hotbar.2
+gui keep
+useitem 5
+wait 20
+shot 9_oorkonde gui
+gui close
+
+section english
+guhstaal en
+gui keep
+use 3000 140 3011
+wait 30
+widgets
+shot 10_prikklok_en gui
+gui close
+gui keep
+useitem 5
+wait 20
+shot 11_oorkonde_en gui
+gui close
+guhstaal nl
+
+section tidy
+/guhs px kantoor vrij
+/guhs px klok herstel
+quit

@@ -11,4 +11,16 @@
     "",
     "Speel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de Guhmensie. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
   ],
+  "quest.475548FF6140570D.title": "Het Guhkantoor",
+  "quest.475548FF6140570D.quest_desc": [
+    "Koop bij de &dVerkoper-guh&r in de Guhpixel-lobby de &6Guhkantoor-set&r: een &dPrikklok&r en een &dBureautje&r. Zet het Bureautje binnen 8 blokken van de Prikklok (er passen er 4 op één klok) en klik op de klok om een guh aan het werk te zetten. Werken betekent hier: slapen op het toetsenbord. Njeg!",
+  ],
+  "quest.475548EBD6A644EC.title": "Loon naar slapen",
+  "quest.475548EBD6A644EC.quest_desc": [
+    "Na &68 echte uren&r slapen ligt er bij de Prikklok een &dloonstrookje&r voor je guh. Bruto: 0 knabbels. Ingehouden: een paar dutjes. Lees het (rechtsklik in de lucht) of hang het aan de muur. De tijd loopt gewoon door als je er niet bent.",
+  ],
+  "quest.4755488ADDD499D0.title": "De lijn is vlak",
+  "quest.4755488ADDD499D0.quest_desc": [
+    "Bij elk derde loonstrookje krijg je een &dkwartaalrapport&r: grafieken (allemaal vlak), hoogtepunten (\"Vergadering uitgesteld wegens vadsen\") en de &6Werknemer van de maand&r: de guh die het langst sliep. Het levert helemaal niks op. Vahoeg!",
+  ],
 }
