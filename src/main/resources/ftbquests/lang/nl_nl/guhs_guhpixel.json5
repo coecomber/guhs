@@ -11,4 +11,24 @@
     "",
     "Speel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de Guhmensie. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
   ],
+  "quest.47554882233FE417.title": "Een speelkast voor thuis",
+  "quest.47554882233FE417.quest_desc": [
+    "De &dVerkoper-guh&r in de Guhpixel-lobby verkoopt echte &dGuhkade-kasten&r: &6Flappy Guh&r en &6Mika-Pong&r. Je eerste kast kost 250 muntjes, elke volgende 150. Koop er een en zet hem thuis neer: twee blokken hoog, met een scherm dat echt beweegt.",
+  ],
+  "quest.475548362F88FE22.title": "Muntje erin!",
+  "quest.475548362F88FE22.quest_desc": [
+    "Rechtsklik op je kast en speel een potje. &6Flappy Guh&r: spatie, W of klik om te fladderen. &6Mika-Pong&r: W en S (of de pijltjes) voor je batje. Elke kast houdt zijn eigen top 5 bij, met namen.",
+  ],
+  "quest.47554892A98798C2.title": "Fladderkampioen",
+  "quest.47554892A98798C2.quest_desc": [
+    "Haal &610 punten&r in Flappy Guh: 10 kaasknabbelpilaren voorbij zonder er eentje aan te tikken. De pilaren komen steeds sneller, njeg!",
+  ],
+  "quest.475548C7C681575C.title": "De Mika is er klaar mee",
+  "quest.475548C7C681575C.quest_desc": [
+    "Haal &630 punten&r in Mika-Pong. De guh terugrollen is 1 punt, hem langs de Mika rollen is er 5. Drie keer langs jou en het potje is voorbij.",
+  ],
+  "quest.4755480E71FDD2C3.title": "Sorry, vadsje",
+  "quest.4755480E71FDD2C3.quest_desc": [
+    "Je tamme guhs lopen af en toe zelf naar een kast om te spelen, en ze worden er steeds beter in (tot hun plafond: dat hangt af van hun soort). Haal een hogere score dan een guh op dezelfde kast. Hij kijkt even sip... en gaat dan extra oefenen.",
+  ],
 }

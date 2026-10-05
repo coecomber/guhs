@@ -30,6 +30,18 @@
       x: 12.15,
       y: 1.5,
     },
+    {
+      height: 1.5625,
+      id: "475548D35CD3C720",
+      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_thuis.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 13,
   progression_mode: "flexible",
@@ -71,6 +83,168 @@
       x: 2.0,
       y: 1.5,
       size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "47554882233FE417",
+      icon: {
+        id: "guhs:guhkade_kast_flappy",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhkade_kast",
+          id: "4755487F64BF9EB4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C34BBDBE04",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548EE7347E834",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+      shape: "gear",
+    },
+    {
+      id: "475548362F88FE22",
+      icon: {
+        id: "guhs:guhkade_kast_pong",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhkade_gespeeld",
+          id: "4755483F8DFB80BF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482584527CBF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "475548F5D4361D85",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "47554892A98798C2",
+      icon: {
+        id: "guhs:guhkade_kast_flappy",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhkade_flappy_mijlpaal",
+          id: "47554846AE4CC1FB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DE7228AF35",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 4,
+        },
+        {
+          id: "4755481F1190FCCF",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548C7C681575C",
+      icon: {
+        id: "guhs:guhkade_kast_pong",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhkade_pong_mijlpaal",
+          id: "47554859F2EF7B08",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CFB7917952",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 4,
+        },
+        {
+          id: "4755488801739DA1",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755480E71FDD2C3",
+      icon: {
+        id: "guhs:guh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhkade_guh_verslagen",
+          id: "47554816CA4D59AD",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D00A18D2FD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755486BF9B091CC",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
       shape: "gear",
     },
   ],

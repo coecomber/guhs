@@ -1,0 +1,246 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/guhkade_kast_flappy_zij",
+    "zij": "guhs:block/guhkade_kast_flappy_zij",
+    "voor": "guhs:block/guhkade_kast_flappy_voor",
+    "bord": "guhs:block/guhkade_kast_flappy_bord",
+    "paneel": "guhs:block/guhkade_kast_flappy_paneel",
+    "scherm": "guhs:block/guhkade_kast_scherm",
+    "rand": "guhs:block/guhkade_kast_rand",
+    "rood": "guhs:block/guhkade_knop_rood",
+    "geel": "guhs:block/guhkade_knop_geel"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        5
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rand"
+        },
+        "up": {
+          "texture": "#rand"
+        },
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#zij",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        0,
+        4
+      ],
+      "to": [
+        15,
+        12,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        },
+        "up": {
+          "texture": "#rand"
+        },
+        "down": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        1.5,
+        3.95
+      ],
+      "to": [
+        14,
+        10.5,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#scherm",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        0,
+        2
+      ],
+      "to": [
+        2,
+        14,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#zij"
+        },
+        "east": {
+          "texture": "#rand"
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        0,
+        2
+      ],
+      "to": [
+        15,
+        14,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#zij"
+        },
+        "up": {
+          "texture": "#zij"
+        },
+        "down": {
+          "texture": "#zij"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        11.5,
+        1
+      ],
+      "to": [
+        15,
+        15.5,
+        5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rand"
+        },
+        "up": {
+          "texture": "#rand"
+        },
+        "north": {
+          "texture": "#bord",
+          "uv": [
+            0,
+            4,
+            16,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        14,
+        5
+      ],
+      "to": [
+        15,
+        15.5,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rand"
+        },
+        "up": {
+          "texture": "#rand"
+        },
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        }
+      }
+    }
+  ]
+}

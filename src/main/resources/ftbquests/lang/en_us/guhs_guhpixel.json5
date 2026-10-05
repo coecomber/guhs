@@ -11,4 +11,24 @@
     "",
     "Play the joke games, earn &6Guhpixel Coins&r (not an item: they are on your name) and buy things for your home with them: the Guhcade, the Guh Office and the Guh Cinema. The &dTravel Agency&r and the &dGuh Parkour&r are simply in the Guhmension. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
   ],
+  "quest.47554882233FE417.title": "An Arcade Cabinet for Home",
+  "quest.47554882233FE417.quest_desc": [
+    "The &dShopkeeper Guh&r in the Guhpixel lobby sells real &dGuhcade cabinets&r: &6Flappy Guh&r and &6Mika Pong&r. Your first cabinet costs 250 coins, every one after that 150. Buy one and put it down at home: two blocks tall, with a screen that really moves.",
+  ],
+  "quest.475548362F88FE22.title": "Coin In!",
+  "quest.475548362F88FE22.quest_desc": [
+    "Right-click your cabinet and play a game. &6Flappy Guh&r: space, W or click to flap. &6Mika Pong&r: W and S (or the arrow keys) for your paddle. Every cabinet keeps its own top 5, with names.",
+  ],
+  "quest.47554892A98798C2.title": "Flapping Champion",
+  "quest.47554892A98798C2.quest_desc": [
+    "Score &610 points&r in Flappy Guh: 10 cheese nibble pillars passed without touching a single one. The pillars keep coming faster, Nyeg!",
+  ],
+  "quest.475548C7C681575C.title": "The Mika Has Had Enough",
+  "quest.475548C7C681575C.quest_desc": [
+    "Score &630 points&r in Mika Pong. Rolling the guh back is 1 point, rolling it past the Mika is 5. Three times past you and the game is over.",
+  ],
+  "quest.4755480E71FDD2C3.title": "Sorry, Little Chonk",
+  "quest.4755480E71FDD2C3.quest_desc": [
+    "Now and then your tame guhs walk up to a cabinet to play by themselves, and they keep getting better at it (up to their ceiling: that depends on their kind). Get a higher score than a guh on the same cabinet. It looks glum for a moment... and then practices extra.",
+  ],
 }
