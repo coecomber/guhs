@@ -30,6 +30,18 @@
       x: 12.15,
       y: 1.5,
     },
+    {
+      height: 1.5625,
+      id: "475548509CF7D298",
+      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_grapjes.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Het superkompas (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 13,
   progression_mode: "flexible",
@@ -72,6 +84,102 @@
       y: 1.5,
       size: 1.3,
       shape: "gear",
+    },
+    {
+      id: "47554803B5F85396",
+      icon: {
+        id: "guhs:skyblok_fles",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/skyblok_klaar",
+          id: "475548C239DF1D49",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CEC83D700F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D4937D7FFB",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755484319B5D57C",
+      icon: {
+        id: "guhs:bedwars_slaapmuts_rood",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bedwars_klaar",
+          id: "4755487B3507F063",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EB72852029",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554829723FFF9B",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548D9CF5ABA3F",
+      icon: {
+        id: "guhs:vadsnite_parachuterugzakje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vadsnite_klaar",
+          id: "475548C0B85F52EC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F8313C58EF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548EA45C0E7F4",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
     },
   ],
 }

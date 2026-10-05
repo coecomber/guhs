@@ -113,6 +113,12 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // <px_lobby>
         // </px_lobby>
         // <px_grap1>
+        /** Guhpixel: the Skyblok-guh (a deadly serious pro with a headset) at the lobby anchor SPEL_SKYBLOK. */
+        SKYBLOK_GUH(1.0f),
+        /** Guhpixel: the Bedwars-guh (armour made of pillows) at the lobby anchor SPEL_BEDWARS. */
+        BEDWARS_GUH(1.0f),
+        /** Guhpixel: the Vadsnite-guh (a parachute backpack) at the lobby anchor SPEL_VADSNITE. */
+        VADSNITE_GUH(1.0f),
         // </px_grap1>
         // <px_grap2>
         // </px_grap2>

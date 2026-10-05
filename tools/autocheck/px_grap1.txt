@@ -1,0 +1,121 @@
+# Guhpixel slice grap1 AutoCheck: the three game guhs in the lobby, then Skyblok, Bedwars and Vadsnite in their arenas. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/px_grap1.txt
+# (commands: see autocheck.txt; written by the slice, not run by it: the merge step runs it.)
+# The arenas of a fresh world: cell 0 = Skyblok at 4096 64 0, cell 1 = Bedwars at 4608 64 0, cell 2 = Vadsnite at 5120 64 0.
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/guhs px lobby
+wait 120
+/guhs px grap reset skyblok
+/guhs px grap reset bedwars
+/guhs px grap reset vadsnite
+
+section lobby: Skyblok-guh, Bedwars-guh, Vadsnite-guh with their floating lines
+camera -16 102.5 -11 180 8
+waitrender 300
+shot skyblok_lobby_spelguhs
+camera -24 101.2 -12.5 180 5
+waitrender 100
+shot skyblok_npc
+camera -16 101.2 -17.5 180 5
+waitrender 100
+shot bedwars_npc
+camera -8 101.2 -20.5 180 5
+waitrender 100
+shot vadsnite_npc
+unlock
+/tp @s -24 100 -13 180 0
+wait 20
+gui keep
+npc skyblok_guh 3 0.5
+interact npc
+wait 30
+shot skyblok_praat gui
+gui close
+
+section keepsakes (the bottle on the plaza floor, the clothes in the wardrobe list)
+/guhs px grap1 aandenken
+wait 20
+/setblock 2 100 4 guhs:skyblok_fles[facing=north]
+camera 2.5 101.2 6.5 180 25
+waitrender 100
+shot skyblok_fles
+/setblock 2 100 4 minecraft:air
+unlock
+
+section Skyblok: the island in its painted box, the guide bar, nothing works, the bed
+/tp @s 0 100 0
+/guhs px speel skyblok
+wait 80
+shot skyblok_start gui
+camera 4118.5 78 22.5 135 12
+waitrender 200
+shot skyblok_eiland_in_doos
+camera 4107.5 76 12.5 180 -35
+waitrender 100
+shot skyblok_lucht_met_naden_ladder_deur
+unlock
+/tp @s 4108.5 75 11.5 180 30
+wait 20
+use 4109 75 10
+wait 60
+shot skyblok_uitgespeeld gui
+wait 160
+shot skyblok_aftiteling gui
+/guhs px stop
+wait 40
+
+section Bedwars: four team islands, the bridges, the guhs around the bed, the end screen
+/guhs px speel bedwars
+wait 60
+shot bedwars_start gui
+camera 4650.5 86 50.5 135 30
+waitrender 200
+shot bedwars_eilanden
+wait 200
+shot bedwars_bruggen
+unlock
+/tp @s 4634.5 73 27.5 180 30
+wait 20
+use 4634 73 25
+wait 420
+shot bedwars_verdedigd gui
+/gamemode spectator
+camera 4638.5 77 30.5 135 35
+waitrender 100
+shot bedwars_guhs_om_het_bed
+/gamemode creative
+unlock
+/guhs px stop
+wait 40
+
+section Vadsnite: the Vadsbus, 99 guhs jumping, the counter, the slaapwolk, the victory
+/guhs px speel vadsnite
+wait 60
+shot vadsnite_in_de_bus gui
+wait 75
+camera 5172.5 96 52.5 135 12
+waitrender 200
+shot vadsnite_guhs_springen gui
+wait 50
+shot vadsnite_guhs_slapen gui
+unlock
+/gamemode survival
+/tp @s 5144.5 75 28.5 180 10
+wait 100
+shot vadsnite_slaapwolk gui
+wait 260
+shot vadsnite_overwinning gui
+/gamemode creative
+/guhs px stop
+wait 40
+
+section Guhdex and quest book
+gui dexopen guhpixel
+wait 20
+shot skyblok_gids gui
+gui close
+quit
