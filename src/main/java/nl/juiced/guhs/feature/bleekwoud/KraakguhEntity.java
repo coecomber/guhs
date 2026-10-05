@@ -276,7 +276,8 @@ public class KraakguhEntity extends PathfinderMob implements GeoEntity, KraakWez
      */
     public void knuffel(ServerPlayer player) {
         player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, KNUFFEL_TRAAGHEID, 1, false, true, true), this);
-        playSound(BleekwoudFeature.KRAAK_KNUFFEL.get(), 1f, 1f);
+        playSound(BleekwoudFeature.KRAAK_KNUFFEL.get(), 1f, 1f);      // (the squeak)
+        playSound(BleekwoudFeature.KRAAK_BEVRIES.get(), 0.8f, 1.1f);  // (and the creak)
         if (level() instanceof ServerLevel server) {
             server.sendParticles(ParticleTypes.HEART, (getX() + player.getX()) / 2, getY() + 1.0, (getZ() + player.getZ()) / 2, 7, 0.4, 0.3, 0.4, 0.02);
         }

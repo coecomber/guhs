@@ -3,7 +3,6 @@ package nl.juiced.guhs.feature.bleekwoud;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -297,6 +296,9 @@ public class BleekwoudGameTests {
         ServerPlayer p = player(helper, new BlockPos(1, 2, 1));
         pilaar(helper, BleekwoudFeature.VERZUURD_GUHHARTJE.get());
         KraakMikaEntity[] mika = new KraakMikaEntity[1];
+        nl.juiced.guhs.entity.GuhEntity guh = helper.spawn(nl.juiced.guhs.registry.ModEntities.GUH.get(), new BlockPos(2, 2, 12));
+        guh.setPersistenceRequired();
+        guh.setNoAi(true);
         helper.runAfterDelay(120, () -> {
             List<KraakMikaEntity> w = wezens(helper, KraakMikaEntity.class);
             helper.assertTrue(w.size() == 1 && wezens(helper, KraakguhEntity.class).isEmpty(), "a soured heart calls one Kraak-Mika: " + w.size());
@@ -313,7 +315,8 @@ public class BleekwoudGameTests {
             int n = i;
             helper.runAfterDelay(140 + i * 12, () -> {
                 helper.assertTrue(mika[0].isAlive() && mika[0].getHealth() == mika[0].getMaxHealth(), "hit " + n + ": still whole");
-                mika[0].hurtServer(helper.getLevel(), p.damageSources().playerAttack(p), 30f);
+                // (the player's hits and those of a guh count alike: an aggressive tame guh never fights it forever)
+                mika[0].hurtServer(helper.getLevel(), n % 2 == 0 ? p.damageSources().playerAttack(p) : p.damageSources().mobAttack(guh), 30f);
             });
         }
         int na = 140 + KraakMikaEntity.KLAPPEN_GENOEG * 12;
@@ -330,7 +333,7 @@ public class BleekwoudGameTests {
         helper.runAfterDelay(na + 170, () -> nacht(helper, true));
         helper.runAfterDelay(na + 330, () -> {
             helper.assertTrue(wezens(helper, KraakMikaEntity.class).size() == 1, "the next night: a new one");
-            helper.assertTrue(p.getHealth() == p.getMaxHealth(), "nobody got hurt");
+            helper.assertTrue(p.getHealth() == p.getMaxHealth() && guh.getHealth() == guh.getMaxHealth(), "nobody got hurt");
             nacht(helper, null);
             leave(helper, p);
             helper.succeed();
@@ -556,9 +559,10 @@ public class BleekwoudGameTests {
     // --- the biome's share ------------------------------------------------------------------------------------------------------
 
     /**
-     * Samples the Guhmension's biomes at the surface (from the dimension JSON and its noise settings, three seeds, 16000 x
-     * 16000 blocks each): the Bleekwoud is about 1% of it. The log line also lists what other spots in the noise would give
-     * (how PARAMS in tools/features/bleekwoud.py was tuned).
+     * Samples the Guhmension's biomes at the surface (from the dimension JSON and its noise settings; three seeds, a grid
+     * of 16000 x 16000 blocks each, every 32 blocks): the Bleekwoud is about 1% of it, and it lies in real patches of
+     * forest, not in slivers. The log line gives the numbers (and, with the environment variable GUHS_BLEEKWOUD_ZOEK set,
+     * how high the region noise goes: how TERM in tools/features/bleekwoud.py was tuned).
      */
     @GuhTest(template = "empty", batch = "bleekwoud_aandeel", timeoutTicks = 2400)
     public static void bleekwoudAandeel(GameTestHelper helper) {
@@ -572,54 +576,104 @@ public class BleekwoudGameTests {
         }
         RegistryOps<JsonElement> ops = RegistryOps.create(JsonOps.INSTANCE, access);
         NoiseGeneratorSettings settings = access.lookupOrThrow(Registries.NOISE_SETTINGS).getValue(Guhs.id("guhmension"));
-        List<Climate.TargetPoint> points = new ArrayList<>();
+        List<Climate.TargetPoint[][]> grids = new ArrayList<>();
         for (long seed : new long[]{1L, 20281201L, -778899L}) {
             Climate.Sampler sampler = RandomState.create(settings, access.lookupOrThrow(Registries.NOISE), seed).sampler();
-            for (int x = -8000; x < 8000; x += 48) {
-                for (int z = -8000; z < 8000; z += 48) {
-                    points.add(sampler.sample(QuartPos.fromBlock(x), QuartPos.fromBlock(100), QuartPos.fromBlock(z)));
+            Climate.TargetPoint[][] grid = new Climate.TargetPoint[N][N];
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    grid[i][j] = sampler.sample(QuartPos.fromBlock(-8000 + i * STAP), QuartPos.fromBlock(100), QuartPos.fromBlock(-8000 + j * STAP));
                 }
             }
+            grids.add(grid);
         }
-        double share = aandeel(BiomeSource.CODEC.parse(ops, source).getOrThrow(), points);
+        double[] nu = meet(BiomeSource.CODEC.parse(ops, source).getOrThrow(), grids);
         StringBuilder andere = new StringBuilder();
         if (System.getenv("GUHS_BLEEKWOUD_ZOEK") != null) {
-            for (double t : new double[]{-0.65, -0.6, -0.55, -0.5}) {
-                for (double hu : new double[]{0.5, 0.55, 0.6, 0.65}) {
-                    for (double off : new double[]{0.0}) {
-                        JsonObject alt = source.deepCopy();
-                        JsonArray biomes = new JsonArray();
-                        for (JsonElement e : alt.getAsJsonArray("biomes")) {
-                            JsonObject o = e.getAsJsonObject().deepCopy();
-                            if (o.get("biome").getAsString().equals("guhs:bleekwoud")) {
-                                JsonObject pr = o.getAsJsonObject("parameters");
-                                pr.addProperty("temperature", t);
-                                pr.addProperty("humidity", hu);
-                                pr.addProperty("offset", off);
-                            }
-                            biomes.add(o);
-                        }
-                        alt.add("biomes", biomes);
-                        andere.append(String.format(java.util.Locale.ROOT, "[t %.2f h %.2f off %.2f: %.2f%%] ", t, hu, off,
-                                100 * aandeel(BiomeSource.CODEC.parse(ops, alt).getOrThrow(), points)));
+            // how much of the world the region noise is above a threshold (before the masks against the other regions)
+            var key = ResourceKey.create(Registries.NOISE, Guhs.id("bleekwoud"));
+            float[] values = new float[3 * N * N];
+            int n = 0;
+            for (long seed : new long[]{1L, 20281201L, -778899L}) {
+                var noise = RandomState.create(settings, access.lookupOrThrow(Registries.NOISE), seed).getOrCreateNoise(key);
+                for (int i = 0; i < N; i++) {
+                    for (int j = 0; j < N; j++) {
+                        values[n++] = (float) noise.getValue(-8000 + i * STAP, 0, -8000 + j * STAP);
                     }
                 }
             }
+            java.util.Arrays.sort(values);
+            for (double part : new double[]{0.008, 0.010, 0.012, 0.015, 0.02, 0.03, 0.05}) {
+                andere.append(String.format(java.util.Locale.ROOT, "%n   the top %.1f%% of the noise is above %.3f", 100 * part,
+                        values[(int) (values.length * (1 - part))]));
+            }
         }
-        LOGGER.info("Bleekwoud share of the Guhmension surface: {}% of {} samples {}", String.format(java.util.Locale.ROOT, "%.2f", 100 * share),
-                points.size(), andere);
-        helper.assertTrue(share >= 0.006 && share <= 0.016, String.format(java.util.Locale.ROOT, "the Bleekwoud is about 1%% of the Guhmension: %.2f%%", 100 * share));
+        LOGGER.info("Bleekwoud share of the Guhmension surface ({} samples): {} {}", 3 * N * N, tekst(nu), andere);
+        helper.assertTrue(nu[0] >= 0.006 && nu[0] <= 0.016, "the Bleekwoud is about 1% of the Guhmension: " + tekst(nu));
+        helper.assertTrue(nu[3] >= 0.8, "most of it lies in patches of a hectare or more (real forests, no specks): " + tekst(nu));
         helper.succeed();
     }
 
-    private static double aandeel(BiomeSource source, List<Climate.TargetPoint> points) {
+    private static final int STAP = 32, N = 500;
+
+    private static String tekst(double[] m) {
+        return String.format(java.util.Locale.ROOT, "%.2f%% in %d patches (median %.1f ha, biggest %.1f ha; %.0f%% of it in patches of 1 ha or more, %.0f%% in 4 ha or more)",
+                100 * m[0], (int) m[1], m[2], m[4], 100 * m[3], 100 * m[5]);
+    }
+
+    /** {share, patches, median patch in hectares, the part of the area in patches of 1 ha or more, biggest patch in ha, the part in 4 ha or more}. */
+    private static double[] meet(BiomeSource source, List<Climate.TargetPoint[][]> grids) {
         MultiNoiseBiomeSource multi = (MultiNoiseBiomeSource) source;
-        int n = 0;
-        for (Climate.TargetPoint p : points) {
-            if (multi.getNoiseBiome(p).is(BleekwoudFeature.BLEEKWOUD)) {
-                n++;
+        long total = 0, in = 0;
+        List<Integer> patches = new ArrayList<>();
+        for (Climate.TargetPoint[][] grid : grids) {
+            boolean[][] is = new boolean[N][N];
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    is[i][j] = multi.getNoiseBiome(grid[i][j]).is(BleekwoudFeature.BLEEKWOUD);
+                    total++;
+                    if (is[i][j]) {
+                        in++;
+                    }
+                }
+            }
+            java.util.ArrayDeque<int[]> queue = new java.util.ArrayDeque<>();
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (!is[i][j]) {
+                        continue;
+                    }
+                    int size = 0;
+                    is[i][j] = false;
+                    queue.add(new int[]{i, j});
+                    while (!queue.isEmpty()) {
+                        int[] c = queue.poll();
+                        size++;
+                        for (int[] d : new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) {
+                            int x = c[0] + d[0], z = c[1] + d[1];
+                            if (x >= 0 && z >= 0 && x < N && z < N && is[x][z]) {
+                                is[x][z] = false;
+                                queue.add(new int[]{x, z});
+                            }
+                        }
+                    }
+                    patches.add(size);
+                }
             }
         }
-        return n / (double) points.size();
+        patches.sort(null);
+        double cell = STAP * STAP / 10000.0;      // hectares per sample
+        long big = 0, bigger = 0;
+        for (int size : patches) {
+            if (size * cell >= 1.0) {
+                big += size;
+            }
+            if (size * cell >= 4.0) {
+                bigger += size;
+            }
+        }
+        double median = patches.isEmpty() ? 0 : patches.get(patches.size() / 2) * cell;
+        double biggest = patches.isEmpty() ? 0 : patches.get(patches.size() - 1) * cell;
+        return new double[]{in / (double) total, patches.size(), median, in == 0 ? 0 : big / (double) in, biggest, in == 0 ? 0 : bigger / (double) in};
     }
 }

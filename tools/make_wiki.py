@@ -2723,6 +2723,112 @@ def fixes210_section():
     return section("fixes210", "Fixes in 2.10", "Fixes in 2.10", body)
 
 
+def bleekwoud_section():
+    """1.2.8: Het Bleekwoud (the mod's own Pale Garden): the biome, bleekhout, the guh hearts with the Kraakguh and the
+    Kraak-Mika, kaashars, the oogbloempje, and the two structures (tools/features/bleekwoud.py)."""
+    intro = p("Somewhere far away in the Guhmension lies a forest where all the pink has drained away: <b>the Palewood</b> (het Bleekwoud). "
+              "It is rare (about 1% of the surface) and silent: no music, no wild guhs, no critters. By day everything sleeps. At night something "
+              "in the trees wakes up... but don't worry: it is a guh, so it only wants a hug.",
+              "Ergens ver weg in de Guhmensie ligt een bos waar al het roze uit is weggelopen: <b>het Bleekwoud</b>. Het is zeldzaam (ongeveer "
+              "1% van het oppervlak) en muisstil: geen muziek, geen wilde guhs, geen diertjes. Overdag slaapt alles. 's Nachts wordt er iets "
+              "wakker in de bomen... maar geen zorgen: het is een guh, dus hij wil alleen maar knuffelen.")
+    biome = h3("Het Bleekwoud", "Het Bleekwoud") + \
+        p("A dense forest of thick, almost white <b>pale guhwood</b> trees with gray-pink leaves, on a carpet of <b>Palewood Moss</b> with moss "
+          "carpets and <b>hanging moss</b> under the crowns. The sky and the fog are a dim gray and a pale haze hangs between the trunks. "
+          "<b>Guh eyeblossoms</b> grow on the moss. Nothing spawns here.",
+          "Een dicht bos van dikke, bijna witte <b>bleekhout</b>bomen met grijsroze bladeren, op een tapijt van <b>bleekmos</b> met mostapijtjes "
+          "en <b>bleek hangmos</b> onder de kruinen. De lucht en de mist zijn dof grijs en tussen de stammen hangt een bleke nevel. Op het mos "
+          "groeien <b>oogbloempjes</b>. Er spawnt hier niets.") + \
+        cmd("/execute in guhs:guhmension run locate biome guhs:bleekwoud") + \
+        ul([("<b>Pale guhwood</b> is a full wood set: log, stripped log, planks, stairs, slab, fence, fence gate, door, trapdoor, <b>sign</b>, "
+             "leaves and sapling. A log + a cheese nibble makes a <b>sleepy guh face in the bark</b> (its eyes are closed).",
+             "<b>Bleekhout</b> is een hele houtset: stam, gestripte stam, planken, trap, plaat, hek, poort, deur, luik, <b>bord</b>, bladeren en "
+             "zaailing. Een stam + een kaasknabbel wordt een <b>slapend guhgezichtje in de schors</b> (oogjes dicht)."),
+            ("One sapling grows a little tree; <b>four in a square</b> grow a big, thick one (a tree from saplings never has a heart).",
+             "Eén zaailing wordt een klein boompje; <b>vier in een vierkant</b> worden een dikke, grote boom (een boom uit zaailingen heeft nooit een hartje)."),
+            ("<b>Palewood Moss</b>: bonemeal spreads it, with carpets and eyeblossoms. Two moss blocks make three carpets; the carpet climbs up the "
+             "blocks next to it in tufts.",
+             "<b>Bleekmos</b>: beendermeel laat het uitbreiden, met tapijtjes en oogbloempjes. Twee mosblokken maken drie tapijtjes; het tapijt "
+             "kruipt in plukjes omhoog tegen de blokken ernaast."),
+            ("<b>Guh eyeblossom</b>: closed and gray by day, open and orange at night (they open one after the other). Fits in a flower pot, "
+             "gives gray or orange dye, and is harmless in suspicious stew (Slow Falling / Night Vision).",
+             "<b>Oogbloempje</b>: overdag dicht en grijs, 's nachts open en oranje (ze gaan een voor een open). Past in een bloempot, geeft "
+             "grijze of oranje kleurstof, en is ongevaarlijk in verdachte soep (Langzaam vallen / Nachtzicht).")])
+    hart = h3("The Creaking Guh Heart and the Creakguh", "Het Krakend Guhhartje en de Kraakguh") + \
+        p("About one tree in ten has a <b>Creaking Guh Heart</b> in its trunk. It only works with a pale guhwood log on both ends (like vanilla's "
+          "Creaking Heart): by day it sleeps, at night it wakes up, its little heart beats, and when a player is within 32 blocks it calls its own "
+          "<b>Creakguh</b>: a guh of pale wood with moss on its head.",
+          "Ongeveer een op de tien bomen heeft een <b>Krakend Guhhartje</b> in zijn stam. Het werkt alleen met een bleekhoutstam aan beide "
+          "kanten (net als het krakende hart van Minecraft): overdag slaapt het, 's nachts wordt het wakker, het hartje klopt, en als er een "
+          "speler binnen 32 blokken is roept het zijn eigen <b>Kraakguh</b>: een guh van bleek hout met mos op zijn bol.") + \
+        table([("What", "Wat"), ("How it works", "Hoe het werkt")], [
+            [("Moving", "Bewegen"), ("Only while <b>no player looks at it</b> (not through walls; creative players and spectators don't count). "
+                                    "The moment you look, it freezes with a creak and a little wobble.",
+                                    "Alleen als <b>geen speler naar hem kijkt</b> (niet door muren; creatieve spelers en toeschouwers tellen niet). "
+                                    "Zodra je kijkt, bevriest hij met een krak en een wiebeltje.")],
+            [("The wooden hug", "De houten knuffel"), ("When it reaches you: <b>Slowness for 3 seconds</b>, hearts, a squeak and a creak. Never any "
+                                                       "damage. Then it rests for 10 seconds before it sneaks again.",
+                                                       "Als hij bij je is: <b>3 seconden Traagheid</b>, hartjes, een piep en een krak. Nooit schade. "
+                                                       "Daarna rust hij 10 seconden voor hij weer gaat sluipen.")],
+            [("Hitting it", "Slaan"), ("Does nothing to it while its heart stands. <b>Cheese resin</b> drips on the trunk around the heart (2-3 clumps), "
+                                       "and a trail of sparks shows you which tree it belongs to.",
+                                       "Doet hem niks zolang zijn hartje er is. Er druipt <b>kaashars</b> op de stam rond het hartje (2-3 klontjes), "
+                                       "en een sprankelspoor laat zien bij welke boom hij hoort.")],
+            [("Its heart", "Zijn hartje"), ("It stays within 32 blocks of it, crumbles at dawn, and crumbles when the heart is broken. No leash, "
+                                            "no name tag, no boat: it belongs to its heart.",
+                                            "Hij blijft binnen 32 blokken, verkruimelt bij zonsopgang, en ook als het hartje kapot gaat. Geen "
+                                            "leiband, geen naamplaatje, geen bootje: hij hoort bij zijn hartje.")],
+            [("Breaking the heart", "Het hartje breken"), ("Drops 1-3 cheese resin (more with Fortune) and, for a natural heart, a little xp. With "
+                                                           "<b>Silk Touch</b> you get the heart itself. Recipe: log / block of cheese resin / log.",
+                                                           "Geeft 1-3 kaashars (meer met Fortuin) en, bij een natuurlijk hartje, een beetje xp. Met "
+                                                           "<b>Zijden aanraking</b> krijg je het hartje zelf. Recept: stam / blok kaashars / stam.")]]) + \
+        p("<b>The Soured Guh Heart</b> (about one heart in five, yellow-green) calls a <b>Creak Mika</b> instead: a wooden Mika with the same "
+          "only-when-unseen rule. Like every Mika it only <b>shoves</b> (a push, no damage, NYEG!). After <b>8 hits</b> (yours, or your aggressive "
+          "guhs') it has had enough for tonight and crumbles back into its tree; the next night a new one comes. Craft one: a Creaking Guh Heart + "
+          "a fermented spider eye.",
+          "<b>Het Verzuurd Guhhartje</b> (ongeveer een op de vijf, geelgroen) roept een <b>Kraak-Mika</b>: een houten Mika met dezelfde "
+          "alleen-als-niemand-kijkt-regel. Net als elke Mika <b>duwt</b> hij alleen (een zet, geen schade, NJEG!). Na <b>8 meppen</b> (van jou, "
+          "of van je agressieve guhs) heeft hij er genoeg van voor vannacht en verkruimelt hij terug in zijn boom; de volgende nacht komt er een "
+          "nieuwe. Zelf maken: een Krakend Guhhartje + een gefermenteerd spinnenoog.")
+    hars = h3("Cheese resin", "Kaashars") + \
+        ul([("<b>Cheese Resin</b> sticks to the sides of blocks like vanilla's resin clump (one item per face).",
+             "<b>Kaashars</b> plakt op de zijkanten van blokken, net als de harsklont van Minecraft (een stuk per kant)."),
+            ("9 cheese resin = a <b>Block of Cheese Resin</b> (and back).", "9 kaashars = een <b>Blok kaashars</b> (en terug)."),
+            ("Smelt cheese resin into a <b>Cheese Resin Brick</b>; 4 bricks make <b>Cheese Resin Bricks</b>, with stairs, slab, wall and a chiseled "
+             "variant (also in the stonecutter).",
+             "Smelt kaashars tot een <b>harssteen</b>; 4 harsstenen maken <b>Harsstenen</b>, met trap, plaat, muur en een gebeitelde variant "
+             "(ook in de steenzaag).")])
+    bouw = h3("The Pale Clearing and the Woodcutter's Hut", "De Bleke Open Plek en het Houthakkershutje") + \
+        p("Two small structures, only in the Palewood. The Super Compass finds both under <i>Adventure</i>.",
+          "Twee kleine bouwwerken, alleen in het Bleekwoud. Het superkompas vindt ze allebei onder <i>Avontuur</i>.") + \
+        cmd("/execute in guhs:guhmension run locate structure guhs:bleke_open_plek") + \
+        cmd("/execute in guhs:guhmension run locate structure guhs:houthakkershutje") + \
+        ul([("<b>The Pale Clearing</b>: a round clearing full of guh eyeblossoms, ringed by eight big trees, with an ancient tree in the middle that "
+             "holds a Creaking Guh Heart high in its trunk (you see it glow at night), and a half-buried chest (saplings, cheese resin, cheese nibbles, "
+             "eyeblossoms, moss).",
+             "<b>De Bleke Open Plek</b>: een ronde open plek vol oogbloempjes, omringd door acht dikke bomen, met in het midden een oeroude boom met "
+             "hoog in zijn stam een Krakend Guhhartje (je ziet het 's nachts gloeien), en een half begraven kist (zaailingen, kaashars, kaasknabbels, "
+             "oogbloempjes, mos)."),
+            ("<b>The Woodcutter's Hut</b>: the abandoned cabin of the Woodcutter Guh. A bed, a chest (planks, logs, an iron axe, cheese nibbles, cheese "
+             "resin), his axe still in the stump, and his <b>diary</b> on the lectern: seven short pages about the creaking at night. Click the "
+             "lectern and <b>every player gets a copy of their own</b>. He moved to Snuggledale, for a good night's sleep.",
+             "<b>Het Houthakkershutje</b>: het verlaten hutje van de Houthakkerguh. Een bed, een kist (planken, stammen, een ijzeren bijl, kaasknabbels, "
+             "kaashars), zijn bijl nog in de stronk, en zijn <b>dagboek</b> op de lessenaar: zeven korte bladzijden over het gekraak 's nachts. Klik op "
+             "de lessenaar en <b>elke speler krijgt een eigen exemplaar</b>. Hij is naar Knuffeldal verhuisd, om eens lekker te slapen.")])
+    meer = h3("Advancements, Guhdex and quests", "Vooruitgangen, Guhdex en quests") + \
+        ul([("Nine advancements (tab Guhmensie): find the Palewood, pick an open eyeblossom, get hugged, collect cheese resin, break a heart, get "
+             "shoved by a Creak Mika, find both structures, read the diary.",
+             "Negen vooruitgangen (tab Guhmensie): vind het Bleekwoud, pluk een open oogbloempje, laat je knuffelen, verzamel kaashars, breek een "
+             "hartje, word geduwd door een Kraak-Mika, vind beide bouwwerken, lees het dagboek."),
+            ("Guhdex pages for the <b>Creakguh</b> and the <b>Creak Mika</b> (come within 8 blocks). They are bonus pages: they don't count for "
+             "\"collected everything\".",
+             "Guhdex-pagina's voor de <b>Kraakguh</b> en de <b>Kraak-Mika</b> (kom binnen 8 blokken). Het zijn bonuspagina's: ze tellen niet mee "
+             "voor \"alles verzameld\"."),
+            ("Twelve FTB quests in the section <i>Het Bleekwoud</i> (chapter Grotten, moeras &amp; woud). Nothing is locked.",
+             "Twaalf FTB-quests in de sectie <i>Het Bleekwoud</i> (hoofdstuk Grotten, moeras &amp; woud). Niets zit op slot.")])
+    return section("new128", "New in 1.2.8: the Palewood", "Nieuw in 1.2.8: het Bleekwoud", intro + biome + hart + hars + bouw + meer)
+
+
 def verhalen30_section():
     """3.0.0 "Guhverhalen": the Timmerguh and the huisjes, the Baltoguh in Nomguh with the sled ride and the sledesprint, the
     Guhtwo on the kloon-eiland with Mieuwguh and Sjokkel, the Hemelkapelletje with the Knuffelhart, Lilo & 626-guh on Guhwai'i
@@ -3613,6 +3719,9 @@ def build():
 """))
 
     # --- new in 3.0: Guhverhalen, and 2.10.1 ------------------------------------------------------------------------------
+    # --- new in 1.2.8: het Bleekwoud ------------------------------------------------------------------------------------------
+    S.append(bleekwoud_section())
+
     S.append(verhalen30_section())
     S.append(fixes2101_section())
 
@@ -4964,7 +5073,7 @@ def build():
     S.append(section("more", "Advancements and commands", "Vooruitgangen en commando's", adv))
 
     toc = "".join(f'<a href="#{sid}">{t(en, nl)}</a>' for sid, en, nl in [
-        ("start", "Getting started", "Aan de slag"), ("new30", "New in 3.0", "Nieuw in 3.0"), ("fixes2101", "2.10.1", "2.10.1"), ("new210", "New in 2.10", "Nieuw in 2.10"), ("fixes210", "Fixes in 2.10", "Fixes in 2.10"), ("new29", "New in 2.9", "Nieuw in 2.9"), ("new281", "New in 2.8.1", "Nieuw in 2.8.1"), ("new28", "New in 2.8", "Nieuw in 2.8"), ("new27", "New in 2.7", "Nieuw in 2.7"), ("new26", "New in 2.6", "Nieuw in 2.6"), ("new25", "New in 2.5", "Nieuw in 2.5"), ("new24", "New in 2.4", "Nieuw in 2.4"), ("rare24", "Rare places", "Zeldzame plekken"), ("mobs", "Creatures", "Wezens"), ("care", "Your guh", "Jouw guh"), ("personalities", "Personalities", "Karakters"),
+        ("start", "Getting started", "Aan de slag"), ("new128", "New in 1.2.8", "Nieuw in 1.2.8"), ("new30", "New in 3.0", "Nieuw in 3.0"), ("fixes2101", "2.10.1", "2.10.1"), ("new210", "New in 2.10", "Nieuw in 2.10"), ("fixes210", "Fixes in 2.10", "Fixes in 2.10"), ("new29", "New in 2.9", "Nieuw in 2.9"), ("new281", "New in 2.8.1", "Nieuw in 2.8.1"), ("new28", "New in 2.8", "Nieuw in 2.8"), ("new27", "New in 2.7", "Nieuw in 2.7"), ("new26", "New in 2.6", "Nieuw in 2.6"), ("new25", "New in 2.5", "Nieuw in 2.5"), ("new24", "New in 2.4", "Nieuw in 2.4"), ("rare24", "Rare places", "Zeldzame plekken"), ("mobs", "Creatures", "Wezens"), ("care", "Your guh", "Jouw guh"), ("personalities", "Personalities", "Karakters"),
         ("maag", "The guh stomach", "De guhmaag"), ("sled", "The guh sled", "De guh-slee"), ("guhdex", "Guhdex", "Guhdex"),
         ("food", "Food &amp; deco", "Eten &amp; deco"),
         ("items", "Items &amp; blocks", "Voorwerpen &amp; blokken"), ("vads", "Vahoege Vads", "Vahoege vads"),

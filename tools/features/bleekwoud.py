@@ -2,8 +2,9 @@
 Het Bleekwoud (1.2.8): the mod's own take on the Pale Garden, in the Guhmension. A rare, silent forest where all the pink
 has drained away (Java: nl.juiced.guhs.feature.bleekwoud).
 
-  - the biome guhs:bleekwoud: a small slice of the Guhmension's multi_noise (PARAMS; about 1% of the surface, measured by
-    the game test bleekwoudAandeel), no music, dim grey sky and fog, pale grass and leaves, NO spawns at all
+  - the biome guhs:bleekwoud: a region of its own in the Guhmension (the low noise guhs:bleekwoud moves the multi_noise
+    temperature; about 1% of the surface in patches of a few hectares, measured by the game test bleekwoudAandeel), no
+    music, dim grey sky and fog, pale grass and leaves, NO spawns at all
   - the wood set bleekhout_* (stam, gestript, gezicht, planken, trap, plaat, hek, poort, deur, luik, bord + wandbord,
     bladeren, zaailing), bleekmos (block, tapijt, bleek_hangmos)
   - krakend_guhhartje / verzuurd_guhhartje (the hearts), kaashars (clump), kaashars_blok, harssteen (item), harsstenen
@@ -22,10 +23,21 @@ from features import bleekwoud_bouw as bouw
 from features import bleekwoud_tex as tex
 
 BIOME = "bleekwoud"
-# the slice of the Guhmension's biome source: a point far out in the cold, wet corner of the rolling middle band
-# (erosion like the Vadswoud); OFFSET shrinks its cell. Tuned with the game test BleekwoudGameTests.bleekwoudAandeel.
-PARAMS = {"temperature": -0.55, "humidity": 0.55, "continentalness": [-1.0, 1.0], "erosion": [-0.25, 0.25], "weirdness": 0.0,
-          "depth": [-1.0, 1.0], "offset": 0.0}
+# The biome is a REGION of its own, like the Sneeuwguhtoendra (features/verhaal_wereld.py): the Guhmension's temperature and
+# humidity noises are small (64 blocks), so a rare point in them only gives specks of a few blocks. The low noise
+# guhs:bleekwoud (512 blocks) gives real patches of forest: where it is above TERM (and away from the deep seas, the
+# Knuffeldal, the Guhpolder, the tundra and Guhwai'i) the multi-noise TEMPERATURE drops and the HUMIDITY rises by SHIFT, to
+# the Bleekwoud's own entry in the coldest, wettest corner (TEMP, HUMID; OFFSET keeps it out of the rest of the world, where
+# the two small noises never get that far together). No other region moves those two, so nothing crosses it.
+# The terrain stays what it is. Below y 40-48 the term fades out, so the cave biomes under the forest stay.
+# TERM is tuned with the game test BleekwoudGameTests.bleekwoudAandeel (about 1% of the surface).
+NOISE = "bleekwoud"
+NOISE_OCTAVE = -9
+TERM = (0.650, 0.656)
+SHIFT = 12.0
+TEMP, HUMID, OFFSET = -2.0, 2.0, 1.0
+GUHWAII_OFF = (0.34, 0.40)          # never next to a Guhwai'i (its region starts at guhwaii noise 0.42)
+KELDER_Y = (40, 48)
 
 WOOD = {"bleekhout_trap": "oak_stairs", "bleekhout_plaat": "oak_slab", "bleekhout_hek": "oak_fence",
         "bleekhout_poort": "oak_fence_gate", "bleekhout_deur": "oak_door", "bleekhout_luik": "oak_trapdoor"}
@@ -413,7 +425,7 @@ def worldgen(h):
                              "upper_size": 2},
             "decorators": decorators, "ignore_vines": True, "force_dirt": False}}
     w(f"{wg}/configured_feature/bleekhout_boom.json", big([hang]))
-    # one tree in ten has a heart; one heart in five is soured
+    # the heart tree (placed apart, see below); one heart in five is soured
     w(f"{wg}/configured_feature/bleekhout_boom_hart.json", big([hang, {"type": "guhs:krakend_guhhartje", "probability": 1.0, "soured": 0.2}]))
     w(f"{wg}/configured_feature/bleekhout_boompje.json", {"type": "minecraft:tree", "config": {
         "trunk_provider": log, "foliage_provider": leaf,
@@ -424,9 +436,12 @@ def worldgen(h):
         "ignore_vines": True, "force_dirt": False}})
     survive = {"type": "minecraft:block_predicate_filter", "predicate": {"type": "minecraft:would_survive",
                                                                            "state": {"Name": "guhs:bleekhout_zaailing", "Properties": {"stage": "0"}}}}
-    for name, count in (("bleekhout_boom_hart", 2), ("bleekhout_boom", 14)):
+    # a dense canopy of big trees; a heart tree is tried in one chunk in two (measured in a generated forest: about one
+    # awake heart within the 32 blocks around you at night, a handful per forest; one in five of them soured)
+    for name, first in (("bleekhout_boom_hart", [{"type": "minecraft:rarity_filter", "chance": 2}]),
+                        ("bleekhout_boom", [{"type": "minecraft:count", "count": 14}])):
         w(f"{wg}/placed_feature/{name}.json", {"feature": f"guhs:{name}", "placement": [
-            {"type": "minecraft:count", "count": count}, {"type": "minecraft:in_square"},
+            *first, {"type": "minecraft:in_square"},
             {"type": "minecraft:heightmap", "heightmap": "WORLD_SURFACE_WG"}, survive, {"type": "minecraft:biome"}]})
 
     # moss patches (vanilla's pale moss patch with our blocks): around the trees and from bonemeal
@@ -470,9 +485,29 @@ def worldgen(h):
         "features": [[], [], [], [], [], [], ores, [], [], ["guhs:bleekhout_boom_hart", "guhs:bleekhout_boom", "guhs:bleekmos_plekken",
                                                             "guhs:oogbloempjes"], []]})
 
+    # the region: the noise, the router term on the temperature, the biome's own entry
+    from features import knuffeldal_wereld as kw
+    from features import verhaal_wereld as vw
+    w(f"{wg}/noise/{NOISE}.json", {"firstOctave": NOISE_OCTAVE, "amplitudes": [1.0]})
+
+    def term():
+        buiten = kw.mul(kw.mul(kw.geen_zee(), vw.geen_knuffel()), kw.mul(vw.geen_polder(), kw.mul(
+            vw.geen_toendra(), kw.spline(vw.GUHWAII_NOISE, [(GUHWAII_OFF[0], 1.0), (GUHWAII_OFF[1], 0.0)]))))
+        vlak = {"type": "minecraft:cache_2d", "argument": kw.mul(kw.spline(NOISE, [(TERM[0], 0.0), (TERM[1], 1.0)]), buiten)}
+        return kw.mul(vlak, kw.gradient(KELDER_Y[0], KELDER_Y[1], 0.0, 1.0))
+
+    def router(d):
+        r = d["noise_router"]
+        if f"guhs:{NOISE}" not in json.dumps(r["temperature"]):      # (idempotent: the file is written fresh every full run)
+            r["temperature"] = kw.add(r["temperature"], kw.mul(term(), -SHIFT))
+            r["vegetation"] = kw.add(r["vegetation"], kw.mul(term(), SHIFT))
+    h.patch_json(f"{wg}/noise_settings/guhmension.json", router)
+
     def biome_source(d):
+        anything = [-2.0, 2.0]
         entries = [e for e in d["generator"]["biome_source"]["biomes"] if e["biome"] != f"guhs:{BIOME}"]
-        entries.append({"biome": f"guhs:{BIOME}", "parameters": dict(PARAMS)})
+        entries.append({"biome": f"guhs:{BIOME}", "parameters": {"temperature": TEMP, "humidity": HUMID, "continentalness": [-1.0, 1.0],
+                                                                 "erosion": anything, "weirdness": 0.0, "depth": [-1.0, 1.0], "offset": OFFSET}})
         d["generator"]["biome_source"]["biomes"] = entries
     h.patch_json(f"{D}/dimension/guhmension.json", biome_source)
 
@@ -496,11 +531,12 @@ def structures(h):
     over = {"monster": none, "creature": none, "ambient": none}
     h.TEMPLATE_SIZES[bouw.PLEK] = 17
     h.FLATNESS[bouw.PLEK] = 12
-    h.structure(bouw.PLEK, [BIOME], spacing=12, separation=5, salt=20281201, start_y=-bouw.G, reach=40, centre=bouw.PLEK_ANCHOR,
+    # (the forests are small, 1 to 13 hectares: a tight grid, so that most forests have one of each)
+    h.structure(bouw.PLEK, [BIOME], spacing=6, separation=3, salt=20281201, start_y=-bouw.G, reach=40, centre=bouw.PLEK_ANCHOR,
                 spawn_overrides=over)
     h.TEMPLATE_SIZES[bouw.HUT] = 9
     h.FLATNESS[bouw.HUT] = 9
-    h.structure(bouw.HUT, [BIOME], spacing=10, separation=4, salt=20281202, start_y=-bouw.G, reach=40, centre=bouw.HUT_ANCHOR,
+    h.structure(bouw.HUT, [BIOME], spacing=5, separation=2, salt=20281202, start_y=-bouw.G, reach=40, centre=bouw.HUT_ANCHOR,
                 spawn_overrides=over)
 
 
@@ -616,7 +652,7 @@ def ftb(fq):
     q("bleekwoud_harsstenen", "Harsstenen", "Smelt kaashars in een oven tot harsstenen en bouw er &6harsstenen&r mee: warm kaasgeel, "
       "met trappen, platen en muurtjes.", "guhs:harsstenen", [item("guhs:harsstenen", 8)], rewards=(("guhs:kaashars", 4),), x=4, y=y, xp=100)
     q("bleekwoud_hartje", "Hartje gebroken", "Wil je van een Kraakguh af? Zoek de boom waar het sprankelspoor naartoe gaat en hak "
-      "het &6Krakend Guhhartje&r eruit. Met zachte aanraking kun je het hartje meenemen en thuis tussen twee bleekhoutstammen zetten.",
+      "het &6Krakend Guhhartje&r eruit. Met Zijden aanraking kun je het hartje meenemen en thuis tussen twee bleekhoutstammen zetten.",
       "minecraft:iron_axe", [adv("guhs:guhmension/bleekwoud_hartje")], rewards=(("guhs:kaashars", 3),), x=6, y=y, xp=150)
     y = 74
     q("bleekwoud_open_plek", "De Bleke Open Plek", "Midden in het Bleekwoud ligt een ronde open plek vol oogbloempjes, met een "

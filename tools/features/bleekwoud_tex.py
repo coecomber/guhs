@@ -19,7 +19,7 @@ BARK_TOP = ((176, 164, 160), (240, 234, 228))
 STRIPPED = ((204, 194, 188), (246, 240, 234))
 PLANKS = ((196, 186, 180), (240, 233, 226))
 DOOR = ((180, 170, 166), (238, 231, 225))
-LEAF = (204, 180, 186)
+LEAF = ((126, 112, 118), (226, 208, 214))
 MOSS = ((132, 128, 124), (206, 200, 196))
 HARS = ((196, 112, 22), (255, 214, 96))
 ORANJE = (252, 120, 18)
@@ -110,10 +110,13 @@ def flower(open_):
         for y in range(3, 8):
             if (x, y) not in ((5, 3), (10, 3), (5, 7), (10, 7)):
                 px[x, y] = (252, 250, 246, 255) if open_ else (176, 170, 172, 255)
-    if open_:
-        for (x, y) in ((7, 4), (8, 4), (7, 5), (8, 5), (7, 6), (8, 6), (6, 5), (9, 5)):
+    if open_:                                                               # a round guh eye: lashes, a big pupil, a shine
+        for x in range(6, 10):
+            px[x, 3] = (70, 44, 30, 255)
+        for (x, y) in ((7, 4), (8, 4), (7, 5), (8, 5), (7, 6), (8, 6), (6, 5), (6, 6), (9, 5), (9, 6)):
             px[x, y] = (40, 28, 34, 255)
-        px[7, 4] = (255, 255, 255, 255)                                     # the shine
+        px[7, 4] = px[6, 5] = (255, 255, 255, 255)                          # the shine
+        px[7, 7] = px[8, 7] = (236, 150, 170, 255)                          # a little blush under it
     else:
         for x in range(6, 10):
             px[x, 5] = (70, 62, 66, 255)                                    # the closed eyelid
@@ -156,7 +159,7 @@ def textures(h):
     save(ramp(v("block/dark_oak_trapdoor"), *DOOR), "block", "bleekhout_luik.png")
     save(ramp(v("entity/signs/dark_oak"), *PLANKS), "entity", "signs", "bleekhout.png")
     save(ramp(v("item/dark_oak_sign"), *PLANKS), "item", "bleekhout_bord.png")
-    save(h.colorize(v("block/dark_oak_leaves"), LEAF), "block", "bleekhout_bladeren.png")
+    save(ramp(v("block/dark_oak_leaves"), *LEAF), "block", "bleekhout_bladeren.png")
     sap = ramp(v("block/dark_oak_sapling"), (120, 110, 112), (226, 208, 212))
     save(sap, "block", "bleekhout_zaailing.png")
     # the moss: pale grey with a few faint flecks; the carpet's tufts; hanging moss

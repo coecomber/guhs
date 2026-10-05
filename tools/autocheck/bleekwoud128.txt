@@ -1,0 +1,185 @@
+# 1.2.8 in a real generated world: the Bleekwoud by day and by night, a Kraakguh, both structures, the diary lectern.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bleekwoud128.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+
+section the biome by day
+tpbiome guhs:guhmension guhs:bleekwoud
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+look 45 5
+waitrender 300
+hier
+shot bleekwoud_dag_grond
+look 200 -15
+wait 60
+shot bleekwoud_dag_omhoog
+
+section the biome by night
+/time set midnight
+wait 400
+look 45 5
+wait 40
+shot bleekwoud_nacht_grond
+tel 48
+
+section de Bleke Open Plek
+/time set noon
+ga bleke_open_plek
+plek lokaal 17 5 31
+tpplek 0 1.5 0
+plek lokaal 17 12 17
+unlock
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot plek_dag
+plek lokaal 22 4 13
+blokken 2
+plek lokaal 17 5 9
+tpplek 0 9 0
+plek lokaal 17 8 17
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 200
+shot plek_dag_boven
+log --- night: the heart wakes up, its Kraakguh comes
+/time set midnight
+plek lokaal 17 5 27
+tpplek 0 0.2 0
+plek lokaal 17 14 18
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 300
+shot plek_nacht_hart
+tel 40 plek
+/effect give @s minecraft:night_vision infinite 0 true
+/gamemode survival
+/execute at @e[type=guhs:kraakguh,limit=1,sort=nearest] run tp @s ~3 ~0.2 ~3 facing entity @e[type=guhs:kraakguh,limit=1,sort=nearest]
+wait 40
+shot kraakguh_wakker
+log --- a tap: kaashars on the trunk
+sla guhs:kraakguh
+wait 20
+sla guhs:kraakguh
+wait 140
+plek lokaal 17 5 25
+tpplek 0 0.2 0
+plek lokaal 17 14 18
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 40
+shot plek_kaashars
+log --- turn around: it sneaks up and hugs
+/execute at @e[type=guhs:kraakguh,limit=1,sort=nearest] run tp @s ~5 ~0.2 ~ facing entity @e[type=guhs:kraakguh,limit=1,sort=nearest]
+wait 10
+/execute at @s run tp @s ~ ~ ~ ~180 ~
+wait 300
+adv guhmension/bleekwoud_knuffel
+tel 12
+/execute at @s run tp @s ~ ~ ~ facing entity @e[type=guhs:kraakguh,limit=1,sort=nearest]
+wait 20
+shot kraakguh_na_knuffel
+log --- dawn: it crumbles
+/time set noon
+wait 100
+tel 40 plek
+/effect clear @s
+
+section het Houthakkershutje
+/gamemode creative
+ga houthakkershutje
+plek lokaal 8 5 16
+tpplek 0 1.5 0
+plek lokaal 8 7 8
+plekcmd tp @s ~ ~ ~ facing {p}
+waitrender 300
+shot hut_dag
+plek lokaal 15 5 15
+tpplek 0 2.5 0
+plek lokaal 12 5 10
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 60
+shot hut_stronk
+plek lokaal 6 5 7
+tpplek 0 0.2 0
+plek lokaal 9 6 5
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 60
+shot hut_binnen
+plek lectern
+adv guhmension/bleekwoud_dagboek
+klik
+adv guhmension/bleekwoud_dagboek
+hier
+/time set midnight
+plek lokaal 8 5 16
+tpplek 0 1.5 0
+plek lokaal 8 7 8
+plekcmd tp @s ~ ~ ~ facing {p}
+wait 200
+shot hut_nacht
+
+section the blocks and the Kraak-Mika
+/time set noon
+/execute at @s run tp @s ~ 180 ~
+/execute at @s run fill ~-15 ~-1 ~-2 ~15 ~-1 ~8 guhs:bleekmos
+/execute at @s run tp @s ~ ~0.1 ~ 0 12
+look 0 12
+/execute at @s run setblock ~-13 ~ ~5 guhs:bleekhout_stam
+/execute at @s run setblock ~-12 ~ ~5 guhs:bleekhout_gezicht[facing=north]
+/execute at @s run setblock ~-11 ~ ~5 guhs:bleekhout_gestript
+/execute at @s run setblock ~-10 ~ ~5 guhs:bleekhout_planken
+/execute at @s run setblock ~-9 ~ ~5 guhs:bleekhout_trap[facing=south]
+/execute at @s run setblock ~-8 ~ ~5 guhs:bleekhout_plaat
+/execute at @s run setblock ~-7 ~ ~5 guhs:bleekhout_hek
+/execute at @s run setblock ~-6 ~ ~5 guhs:bleekhout_poort
+/execute at @s run setblock ~-5 ~ ~5 guhs:bleekhout_luik
+/execute at @s run setblock ~-4 ~ ~5 guhs:bleekhout_bord[rotation=8]
+/execute at @s run setblock ~-3 ~ ~5 guhs:bleekhout_bladeren[persistent=true]
+/execute at @s run setblock ~-2 ~ ~5 guhs:bleekhout_zaailing
+/execute at @s run setblock ~-1 ~ ~5 guhs:bleekmos_tapijt
+/execute at @s run setblock ~0 ~ ~5 guhs:oogbloempje
+/execute at @s run setblock ~1 ~ ~5 guhs:open_oogbloempje
+/execute at @s run setblock ~2 ~ ~5 guhs:potted_open_oogbloempje
+/execute at @s run setblock ~3 ~ ~5 guhs:krakend_guhhartje
+/execute at @s run setblock ~4 ~ ~5 guhs:verzuurd_guhhartje
+/execute at @s run setblock ~5 ~ ~5 guhs:kaashars_blok
+/execute at @s run setblock ~6 ~ ~5 guhs:harsstenen
+/execute at @s run setblock ~7 ~ ~5 guhs:harsstenen_trap[facing=south]
+/execute at @s run setblock ~8 ~ ~5 guhs:harsstenen_plaat
+/execute at @s run setblock ~9 ~ ~5 guhs:harsstenen_muur
+/execute at @s run setblock ~10 ~ ~5 guhs:gebeitelde_harsstenen
+/execute at @s run setblock ~11 ~ ~5 guhs:bleekhout_stam
+/execute at @s run setblock ~11 ~1 ~5 guhs:krakend_guhhartje[creaking_heart_state=awake]
+/execute at @s run setblock ~11 ~2 ~5 guhs:bleekhout_stam
+/execute at @s run setblock ~11 ~1 ~4 guhs:kaashars[south=true]
+/execute at @s run setblock ~12 ~ ~5 guhs:bleekhout_stam
+/execute at @s run setblock ~12 ~1 ~5 guhs:verzuurd_guhhartje[creaking_heart_state=awake]
+/execute at @s run setblock ~12 ~2 ~5 guhs:bleekhout_stam
+/execute at @s run setblock ~12 ~3 ~5 guhs:bleekhout_bladeren[persistent=true]
+/execute at @s run setblock ~12 ~3 ~4 guhs:bleekhout_bladeren[persistent=true]
+/execute at @s run setblock ~12 ~2 ~4 guhs:bleek_hangmos
+/execute at @s run setblock ~-6 ~ ~7 guhs:bleekhout_deur[half=lower,facing=south]
+/execute at @s run setblock ~-6 ~1 ~7 guhs:bleekhout_deur[half=upper,facing=south]
+waitrender 200
+shot blokken_links
+/execute at @s run tp @s ~-7 ~ ~2
+wait 40
+shot blokken_dichtbij_links
+/execute at @s run tp @s ~14 ~ ~
+wait 40
+shot blokken_dichtbij_rechts
+/execute at @s run tp @s ~-7 ~ ~-2
+/gamemode survival
+/execute at @s run summon guhs:kraakguh ~-1.5 ~ ~3 {Rotation:[180f,0f]}
+/execute at @s run summon guhs:kraak_mika ~1.5 ~ ~3 {Rotation:[180f,0f]}
+wait 60
+shot kraakguh_en_kraak_mika
+/gamemode creative
+/kill @e[type=guhs:kraak_mika]
+/kill @e[type=guhs:kraakguh]
+
+section the Guhdex pages and the Superkompas
+gui guhdex dex128
+gui superkompas sk128
+quit
