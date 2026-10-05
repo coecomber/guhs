@@ -1,3 +1,0 @@
-- **Guh palm wood set.** The guh palm of Guhwai'i is now a complete wood type: Stripped Guh Palm Log, Guh Palm Stairs, Slab, Fence, Fence Gate, Door, Trapdoor and Sign (standing and on a wall), all in the pale sandy colour of the Guh Palm Planks.
-- Strip a Guh Palm Log with an axe to get a Stripped Guh Palm Log. Stripping a Guh Palm Log with Face removes the face too.
-- All pieces are crafted with the usual wood recipes from Guh Palm Planks (planks also come from the stripped log), burn as furnace fuel, are mined fastest with an axe and sit next to the Guh Palm Planks in the creative tab.

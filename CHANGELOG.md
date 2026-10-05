@@ -3,6 +3,53 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.8 — Minecraft 26.1.2
+
+A new rare biome, a wood set for the guh palm, an overview in the Guh House and a round of balance changes. Same
+requirements as 1.2.7. New worldgen (the Palewood, the changed grand cheese fountain) only appears in newly generated chunks.
+
+### The Palewood
+
+- **New biome: the Palewood (Bleekwoud).** A rare, silent forest in the Guhmension (about 1% of the surface, in patches of roughly 1 to 14 hectares) where all the pink has drained away: pale, almost white trunks, gray-pink leaves, a thick carpet of pale moss with hanging moss, a dim gray sky and a pale haze between the trees. No music plays there and no wild guhs or critters live there.
+- **Pale Guhwood**: a complete new wood set: log (with a sleepy guh face in the bark as a variant), stripped log, planks, stairs, slab, fence, fence gate, door, trapdoor, **sign**, leaves and sapling (one sapling: a small tree; four in a square: a big one). Plus Palewood Moss, Palewood Moss Carpet (bonemeal spreads it) and Hanging Palewood Moss.
+- **Creaking Guh Heart.** Some trees in the Palewood have a little heart in their trunk. It sleeps by day and wakes up at night (between two pale guhwood logs), with a beating heart and soft creaks, and then calls its own **Creakguh**. Break the heart and its creature crumbles away; it drops cheese resin (the heart itself with Silk Touch). A heart you place yourself between two pale guhwood logs works too.
+- **The Creakguh**: a guh made of pale wood with glowing orange eyes. It only moves when nobody is looking at it and freezes the moment you look (creak!). It is a guh, so it is friendly: when it reaches you it gives you a **wooden hug** (a few seconds of Slowness, hearts, a squeak and a creak, never any damage) and then stands still for a while. It can't be hurt while its heart stands, and it crumbles at dawn.
+- **Soured Guh Heart and the Creak Mika.** About one heart in five is soured (yellow-green). It calls a **Creak Mika** instead: a wooden Mika that sneaks up the same way and shoves you (a push, no damage, NYEG!). After 8 hits (yours or your aggressive guhs') it has had enough for the night and crumbles back into its tree; a new one comes the next night.
+- **Cheese resin**: hit a Creakguh or Creak Mika and cheese resin drips onto the trunk around its heart, with a trail of sparks from the creature to the heart. Nine clumps make a Block of Cheese Resin; smelt a clump into a Cheese Resin Brick; four of those make **Cheese Resin Bricks**, with stairs, slab, wall and a chiseled variant (stonecutter recipes too).
+- **Guh Eyeblossom**: a little flower with a guh eye that is closed (gray) by day and opens (orange) at night, one after the other. Can be potted, gives gray or orange dye, and is harmless in suspicious stew (Slow Falling / Night Vision).
+- **Two new structures, only in the Palewood** (find them with the Super Compass under Adventure, or with /locate): the **Pale Clearing** (a round clearing full of eyeblossoms, ringed by big trees, with an ancient tree holding a heart high in its trunk and a half-buried chest) and the **Woodcutter's Hut** (the abandoned cabin of the Woodcutter Guh, with his axe still in the stump and his diary on the lectern: every player gets a copy of their own by clicking the lectern).
+- **Progress**: 9 new advancements, Guhdex pages for the Creakguh and the Creak Mika (bonus pages: they don't count for "collected everything"), and 12 new FTB quests in the section "The Palewood" (chapter Caves, swamp & forest). Everything can be done by every player on a server.
+- Wild guhs no longer spawn inside the Palewood (it is meant to be silent).
+
+### Guh palm wood
+
+- **Guh palm wood set.** The guh palm of Guhwai'i is now a complete wood type: Stripped Guh Palm Log, Guh Palm Stairs, Slab, Fence, Fence Gate, Door, Trapdoor and Sign (standing and on a wall), all in the pale sandy colour of the Guh Palm Planks.
+- Strip a Guh Palm Log with an axe to get a Stripped Guh Palm Log. Stripping a Guh Palm Log with Face removes the face too.
+- All pieces are crafted with the usual wood recipes from Guh Palm Planks (planks also come from the stripped log), burn as furnace fuel, are mined fastest with an axe and sit next to the Guh Palm Planks in the creative tab.
+
+### Guh House
+
+- **Guh House: "What's Possible Here?"** The Guh House screen has a new little **?** button next to the house name. It opens an overview of what the blue chore area around that house offers right now:
+  - **Chores:** every chore with a green *yes*, a yellow *later* or a red *no*, a short reason with a count ("Ripe crops: 3", "Not enough water: 1 of the 3 blocks", "Lights: 2. They go on in the evening...") and how many of your residents can do it. Hover a chore to read exactly what it needs and who can do it (guhs, squeaksqueak mice, Shelly and Poopshelly, Shuckly).
+  - **Toys and More:** how many Nibble Balls, Guh Slides, Fluffy Tunnels, Guh Seesaws, Guh Swings, jukeboxes and burning campfires stand in the area (also when that's zero), with a tooltip telling what your residents do with them.
+  - The overview refreshes by itself every few seconds (or press Refresh), scrolls with the mouse wheel, and Esc or Back closes only the overview. Only the owner of the house can open it.
+
+### Balance
+
+- **Picking chore:** residents no longer plant new flowers while picking, so flowers don't multiply any more. They still pick a little flower at every flower (which stays put) and the berries, as before.
+- **The Enderguh is an endgame guh now.**
+  - Enderguhs are no longer born on the Guh Peaks (or anywhere else in the Guhmension).
+  - Wild Enderguhs now fly around in the Guh End, but only near players who have beaten Overlord Mika themselves: one comes by now and then, never many at once, and never during the fight.
+  - Only a player who has beaten Overlord Mika can tame a wild Enderguh. For everybody else it stays shy (your cheese nibble is not used up).
+  - Flying on an Enderguh (also a Wahoog Enderguh, also one you already had) only works for a rider who has beaten Overlord Mika. For everybody else it simply walks, like any big guh, and tells you so with a little hint when you get on.
+  - Enderguhs you already have stay yours. Beating Overlord Mika still gives you a tamed Wahoog Enderguh the first time and an Enderguh Egg after that.
+  - The Guhdex, the quests, the library book about the Guhmension and its quiz now say where the Enderguh really lives.
+  - Quest book: the three Enderguh quests (Enderguh, Dragon Buddy, Chonk Flight) moved from "Guhs & Basics" to the Guh End chapter, in their own little section "Wild Enderguhs" after Overlord Mika. Progress you already made is kept.
+  - "Chonk Flight" now counts when you really fly on your Enderguh (or Wahoog Enderguh), not for just getting on. If you already had it, you keep it.
+- **Cheese fountains:** the grand cheese fountain's loot is a lot more modest. Its chest now only holds cheese nibbles, a few fried cheese nibbles and a little iron and gold (it used to be a full picnic chest), and the ball on top is a shiny pink ball instead of a ball of chonk ore. Only newly generated fountains change. The small cheese fountain is unchanged (it never had a chest).
+- **Aggressive guhs** only attack monsters (also from other mods) and Mikas you can fight. They leave Shellies, Squeaksqueak Mice, critters and all other passive or neutral animals alone, and also the Mikas of minigames and jobs that can't be hurt anyway (the Mika Boss, Crumb Mika, Hedge Mika, Mika Snatcher and Nibble Thief). A guh never goes after another guh or somebody's pet, not even to defend itself. A target that is no longer allowed is dropped right away.
+- **Bank Guh:** the crafting recipe is gone again. The Bank Guh only comes from the Hungry Guh at a guh picnic (feed him 10 fried cheese nibbles; one Bank Guh per player), so take good care of it. Its quest now has a proper place in the quest book: a little questline "The Hungry Guh & the Bank Guh" in the Guhmension chapter, right after the structures, with a new follow-up quest "Your Very Own Bank Guh" that explains what it can do. The Hungry Guh no longer tells you that you can craft another one.
+
 ## 1.2.7 — Minecraft 26.1.2
 
 The "everyone can finish everything" update: every quest, job and minigame was checked for playing with many players

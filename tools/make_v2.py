@@ -1351,7 +1351,7 @@ def bees_slimes_mikas():
     # NOT in here, on purpose: the Mikas of a minigame or a job that can't be hurt (mika_baas, kruimel_mika, doolhof_mika,
     # circuit_mikapikker, knabbeldief_mika): an aggressive guh leaves them alone.
     add_tag("guhs/tags/entity_type/mikas", ["guhs:mika", "guhs:nether_mika", "guhs:opper_mika", "guhs:mika_larfje",
-                                            "guhs:moerasheks_mika", "guhs:vonk_mika", "guhs:knekel_mika", "guhs:aangebrande_mika"])
+                                            "guhs:moerasheks_mika", "guhs:vonk_mika", "guhs:knekel_mika", "guhs:aangebrande_mika", "guhs:kraak_mika"])
     # technically monsters, but sweet: an aggressive guh leaves them alone
     add_tag("guhs/tags/entity_type/geen_vijand", ["guhs:guh_slime"])
     shaped("knabbelkorf", ["PPP", "KKK", "PPP"], {"P": "#minecraft:planks", "K": "guhs:kaas_knabbels"}, "guhs:knabbelkorf")
