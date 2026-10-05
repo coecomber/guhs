@@ -11,4 +11,36 @@
     "",
     "Speel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de Guhmensie. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
   ],
+  "quest.475548529F28E877.title": "Reisbureau De Vadsvakantie",
+  "quest.475548529F28E877.quest_desc": [
+    "Ergens ver weg in de &dGuhmensie&r staat een wit-roze huisje met een reuzenkoffer op het dak: &dReisbureau \"De Vadsvakantie\"&r. Het &6Superkompas&r wijst de weg (tabblad Knus). Daar kun je je guh op vakantie sturen!",
+  ],
+  "quest.4755483E342CB0B7.title": "De Reisagent-guh",
+  "quest.4755483E342CB0B7.quest_desc": [
+    "Praat met de &dReisagent-guh&r achter de balie. Hij stuurt guhs op reis: ze komen terug met een ansichtkaart, een souvenir en een zonnebril op.",
+  ],
+  "quest.4755485957984174.title": "Koffertje inpakken",
+  "quest.4755485957984174.quest_desc": [
+    "Een guh gaat niet op reis zonder koffertje. Breng de Reisagent-guh &64 kaasknabbels&r voor onderweg, &61 stuk wol&r als kussentje en &61 papiertje&r voor de ansichtkaart.",
+  ],
+  "quest.4755482ECF97EF67.title": "Proefreisje om de hoek",
+  "quest.4755482ECF97EF67.quest_desc": [
+    "Zet één van je guhs bij de balie en stuur hem op het &dproefreisje om de hoek&r. Dat duurt vijf echte minuten. Haal hem daarna op bij de balie: je krijgt de &6Reisstempel&r!",
+  ],
+  "quest.47554852A5E7DE08.title": "Een Reisbalie voor thuis",
+  "quest.47554852A5E7DE08.quest_desc": [
+    "Maak met de Reisstempel, papier en planken je eigen &dReisbalie&r. Die werkt precies als de balie in het Reisbureau: elke echte dag vier nieuwe reizen van 1, 2, 8 of 24 uur. Er mag één guh tegelijk weg, en hij kan nooit kwijtraken.",
+  ],
+  "quest.4755480A72DEA640.title": "Goede reis, njeg!",
+  "quest.4755480A72DEA640.quest_desc": [
+    "Stuur een guh op een echte reis en haal hem op als hij terug is. Hij brengt een &6ansichtkaart&r mee (rechtsklik om te lezen) en een &6souvenir&r voor in huis.",
+  ],
+  "quest.475548B7E99FCC44.title": "Met een beetje geluk",
+  "quest.475548B7E99FCC44.quest_desc": [
+    "Elke reis heeft ook een &dzeldzaam souvenir&r. Hoe langer de reis, hoe groter de kans: van 1 op 20 bij een reis van 1 uur tot bijna 1 op 3 bij 24 uur. Vind er één!",
+  ],
+  "quest.475548CA9C4A9A9B.title": "Het Gouden koffertje",
+  "quest.475548CA9C4A9A9B.quest_desc": [
+    "Een souvenir dat je al hebt wordt een &6stempel&r op je reispas. Bij tien stempels krijg je van de Reisagent-guh een &6Gouden koffertje&r.",
+  ],
 }

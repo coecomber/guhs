@@ -1912,5 +1912,58 @@
       }
     ],
     "subtitle": "subtitles.guhs.guhpixel.portaal"
+  },
+  "reisbureau.vertrek": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.villager.work_cartographer",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:item.bundle.insert",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.reisbureau.vertrek"
+  },
+  "reisbureau.terug": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.reisbureau.terug"
+  },
+  "reisbureau.stempel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wood.place",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.reisbureau.stempel"
+  },
+  "reisbureau.balie": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.reisbureau.balie"
   }
 }
