@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.huisje.Huisje;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.feature.tuintjes.TuinBlock;
 import nl.juiced.guhs.feature.tuintjes.TuintjesFeature;
@@ -39,6 +40,25 @@ public class FarmenKlus extends BasisKlus {
     @Override
     public boolean kan(Mob bewoner) {
         return isGuh(bewoner);
+    }
+
+    @Override
+    public String doeners() {
+        return "guhs";
+    }
+
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        int rijp = KlusGebied.van(level, huisje, KlusGebied.Soort.GEWAS).size();
+        if (rijp > 0) {
+            return KlusStand.ja("rijp", rijp);
+        }
+        int dorst = KlusGebied.van(level, huisje, KlusGebied.Soort.DORSTIG).size();
+        if (dorst > 0) {
+            return KlusStand.ja("dorstig", dorst);
+        }
+        int groeit = KlusGebied.van(level, huisje, KlusGebied.Soort.GROEIT).size();
+        return groeit > 0 ? KlusStand.straks("groeit", groeit) : KlusStand.nee("geen", 0);
     }
 
     @Nullable

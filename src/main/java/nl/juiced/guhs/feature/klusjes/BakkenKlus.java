@@ -22,6 +22,7 @@ import nl.juiced.guhs.feature.bakkerij.KnabbelovenBlock;
 import nl.juiced.guhs.feature.bakkerij.Recept;
 import nl.juiced.guhs.feature.guhpolder.MolentjeBlockEntity;
 import nl.juiced.guhs.feature.huisje.Huisje;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.feature.knus.KnusTags;
 
@@ -44,6 +45,35 @@ public class BakkenKlus extends BasisKlus {
     @Override
     public boolean kan(Mob bewoner) {
         return isGuh(bewoner);
+    }
+
+    @Override
+    public String doeners() {
+        return "guhs";
+    }
+
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        List<BlockPos> ovens = KlusGebied.van(level, huisje, KlusGebied.Soort.OVEN);
+        List<BlockPos> molens = KlusGebied.van(level, huisje, KlusGebied.Soort.MOLEN);
+        if (ovens.isEmpty() && molens.isEmpty()) {
+            return KlusStand.nee("geen", 0);
+        }
+        if (!ovens.isEmpty() && recept(level, huisje, new Random(0)) != null) {
+            return KlusStand.ja("bakken", ovens.size());
+        }
+        boolean graan = Voorraad.tel(level, huisje, s -> s.is(KnusTags.KNABBELGRAAN)) > 0;
+        for (BlockPos p : molens) {
+            if (level.getBlockEntity(p) instanceof MolentjeBlockEntity m) {
+                if (!m.meel().isEmpty()) {
+                    return KlusStand.ja("meel", m.meel().getCount());
+                }
+                if (graan && m.graan().getCount() < MolentjeBlockEntity.MAX - 8) {
+                    return KlusStand.ja("malen", 0);
+                }
+            }
+        }
+        return KlusStand.nee(ovens.isEmpty() ? "geen_graan" : molens.isEmpty() ? "geen_recept" : "geen_spullen", 0);
     }
 
     @Nullable

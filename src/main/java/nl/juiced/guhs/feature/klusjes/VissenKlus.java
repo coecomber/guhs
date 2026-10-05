@@ -24,6 +24,7 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.emotes.Emote;
 import nl.juiced.guhs.feature.emotes.GuhEmotes;
 import nl.juiced.guhs.feature.huisje.Huisje;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.feature.vissen.VissenFeature;
 import nl.juiced.guhs.registry.ModItems;
@@ -46,6 +47,28 @@ public class VissenKlus extends BasisKlus {
     @Override
     public boolean kan(Mob bewoner) {
         return isGuh(bewoner) || isSchildpad(bewoner);
+    }
+
+    @Override
+    public String doeners() {
+        return "guhs_schildpadjes";
+    }
+
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        List<BlockPos> water = KlusGebied.van(level, huisje, KlusGebied.Soort.WATER);
+        if (water.isEmpty()) {
+            return KlusStand.nee("geen", 0);
+        }
+        if (water.size() < MIN_WATER) {
+            return KlusStand.nee("te_weinig", water.size());
+        }
+        for (BlockPos p : water) {
+            if (level.isLoaded(p) && KlusGebied.viswater(level, p, level.getBlockState(p)) && oever(level, p) != null) {
+                return KlusStand.ja("water", water.size());
+            }
+        }
+        return KlusStand.nee("geen_oever", water.size());
     }
 
     @Nullable

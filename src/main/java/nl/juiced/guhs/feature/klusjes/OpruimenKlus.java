@@ -19,6 +19,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 import nl.juiced.guhs.feature.Features;
 import nl.juiced.guhs.feature.huisje.Huisje;
 import nl.juiced.guhs.feature.huisje.HuisjeOpslag;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 
 /**
@@ -44,6 +45,30 @@ public class OpruimenKlus extends BasisKlus {
         return isGuh(bewoner) || isMuisje(bewoner);
     }
 
+    @Override
+    public String doeners() {
+        return "guhs_muisjes";
+    }
+
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        if (!Voorraad.heeftOpslag(level, huisje)) {
+            return KlusStand.nee("geen_opslag", 0);
+        }
+        int n = liggend(level, huisje, null, false).size();
+        if (n > 0) {
+            return KlusStand.ja("spullen", n);
+        }
+        if (HuisjeOpslag.heeftBankGuh(level, huisje)) {
+            for (BlockPos kist : Voorraad.kisten(level, huisje)) {
+                if (heeftSorteerbaars(level, kist)) {
+                    return KlusStand.ja("sorteren", 0);
+                }
+            }
+        }
+        return KlusStand.straks("netjes", 0);
+    }
+
     @Nullable
     @Override
     public KlusTaak zoek(ServerLevel level, Huisje huisje, Mob bewoner) {
@@ -67,12 +92,16 @@ public class OpruimenKlus extends BasisKlus {
     /** The nearest item in the home base worth tidying (that fits somewhere), or null. */
     @Nullable
     static ItemEntity vind(ServerLevel level, Huisje huisje, Vec3 bij, @Nullable Vec3 binnen6) {
+        return liggend(level, huisje, binnen6, true).stream().min(Comparator.comparingDouble(i -> i.distanceToSqr(bij))).orElse(null);
+    }
+
+    /** Everything lying around in the home base worth tidying (that fits somewhere); vrij: not what another resident walks to. */
+    static List<ItemEntity> liggend(ServerLevel level, Huisje huisje, @Nullable Vec3 binnen6, boolean vrij) {
         long nu = level.getGameTime();
-        List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, huisje.gebied(), i -> i.isAlive() && !i.getItem().isEmpty()
+        return level.getEntitiesOfClass(ItemEntity.class, huisje.gebied(), i -> i.isAlive() && !i.getItem().isEmpty()
                 && i.getAge() >= RUST && !i.hasPickUpDelay() && huisje.inGebied(i.blockPosition()) && KlusGebied.inTest(huisje, i.position())
                 && (binnen6 == null || i.position().distanceToSqr(binnen6) <= 36)
-                && !(GECLAIMD.containsKey(i) && GECLAIMD.get(i) > nu) && Voorraad.past(level, huisje, i.getItem()));
-        return items.stream().min(Comparator.comparingDouble(i -> i.distanceToSqr(bij))).orElse(null);
+                && !(vrij && GECLAIMD.containsKey(i) && GECLAIMD.get(i) > nu) && Voorraad.past(level, huisje, i.getItem()));
     }
 
     static boolean heeftSorteerbaars(ServerLevel level, BlockPos kist) {

@@ -32,10 +32,15 @@ import net.minecraft.core.UUIDUtil;
  * The huisje screen's messages: server to client "open (or refresh) the screen of this huisje" ({@code guhs:huisje_open},
  * with its residents, their chores and who could move in), client to server a button ({@code guhs:huisje_actie}: rename,
  * move in, move out, a chore on/off). Only the owner (or an operator) within 16 blocks.
+ * 1.2.8: the overview dialog asks ({@code guhs:huisje_overzicht_vraag}) and gets {@code guhs:huisje_overzicht}.
  */
 public final class HuisjePayloads {
     /** Client: opens/refreshes the screen (set by client.HuisjeClient). */
     public static volatile Consumer<Open> opener = p -> {
+    };
+
+    /** Client: the overview of the open screen arrived (set by client.HuisjeClient). */
+    public static volatile Consumer<Overzicht> overzichtOntvanger = p -> {
     };
 
     public enum Actie { NAAM, TREK_IN, UIT, KLUS, MELDINGEN }
@@ -73,9 +78,45 @@ public final class HuisjePayloads {
         }
     }
 
+    /** 1.2.8, client to server: "what can be done around this huisje?" ({@link HuisjeOverzicht}; the owner or an op only). */
+    public record OverzichtVraag(BlockPos pos) implements CustomPacketPayload {
+        public static final Type<OverzichtVraag> TYPE = new Type<>(Guhs.id("huisje_overzicht_vraag"));
+        public static final StreamCodec<FriendlyByteBuf, OverzichtVraag> STREAM_CODEC = StreamCodec.composite(
+                BlockPos.STREAM_CODEC, OverzichtVraag::pos, OverzichtVraag::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        public static void handle(OverzichtVraag p, IPayloadContext context) {
+            if (context.player() instanceof ServerPlayer sp) {
+                HuisjeOverzicht.handle(sp, p.pos());
+            }
+        }
+    }
+
+    /** 1.2.8, server to client: the overview of one huisje ({@link HuisjeOverzicht#data}). */
+    public record Overzicht(CompoundTag data) implements CustomPacketPayload {
+        public static final Type<Overzicht> TYPE = new Type<>(Guhs.id("huisje_overzicht"));
+        public static final StreamCodec<FriendlyByteBuf, Overzicht> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.COMPOUND_TAG, Overzicht::data, Overzicht::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+
+        public static void handle(Overzicht p, IPayloadContext context) {
+            overzichtOntvanger.accept(p);
+        }
+    }
+
     static void register(PayloadRegistrar registrar) {
         registrar.playToClient(Open.TYPE, Open.STREAM_CODEC, Open::handle);
         registrar.playToServer(Doe.TYPE, Doe.STREAM_CODEC, Doe::handle);
+        registrar.playToServer(OverzichtVraag.TYPE, OverzichtVraag.STREAM_CODEC, OverzichtVraag::handle);
+        registrar.playToClient(Overzicht.TYPE, Overzicht.STREAM_CODEC, Overzicht::handle);
     }
 
     // =====================================================================================================================

@@ -25,6 +25,7 @@ import nl.juiced.guhs.feature.emotes.Emote;
 import nl.juiced.guhs.feature.emotes.GuhEmotes;
 import nl.juiced.guhs.feature.huisje.Huisje;
 import nl.juiced.guhs.feature.huisje.Huisjes;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 
 /**
@@ -53,6 +54,17 @@ public class WakenKlus extends BasisKlus {
         return isGuh(bewoner) || isMuisje(bewoner);
     }
 
+    @Override
+    public String doeners() {
+        return "guhs_muisjes";
+    }
+
+    /** Always on guard; the reason tells whether something scary is around right now. */
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        return KlusStand.ja(dreiging(level, huisje, null) != null ? "gevaar" : "rustig", 0);
+    }
+
     @Nullable
     @Override
     public KlusTaak zoek(ServerLevel level, Huisje huisje, Mob bewoner) {
@@ -75,7 +87,7 @@ public class WakenKlus extends BasisKlus {
 
     /** The nearest Mika or monster near the huisje (a tame thing never counts), or null. */
     @Nullable
-    static LivingEntity dreiging(ServerLevel level, Huisje huisje, Mob wie) {
+    static LivingEntity dreiging(ServerLevel level, Huisje huisje, @Nullable Mob wie) {
         Vec3 m = huisje.midden();
         double r = Huisjes.BEREIK + EXTRA;
         List<Mob> lijst = level.getEntitiesOfClass(Mob.class, huisje.gebied().inflate(EXTRA), e -> e.isAlive() && e != wie

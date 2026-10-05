@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.huisje.Huisje;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.feature.vadswoud.KnabbelbessenstruikBlock;
 import nl.juiced.guhs.feature.vadswoud.VadswoudFeature;
@@ -88,6 +89,26 @@ public class PlukkenKlus extends BasisKlus {
 
     static boolean bloemRijp(ServerLevel level, BlockPos p) {
         return KlusGebied.guhbloem(level.getBlockState(p)) && GEPLUKT.getOrDefault(sleutel(level, p), Long.MIN_VALUE / 2) + BLOEM_RUST <= level.getGameTime();
+    }
+
+    @Override
+    public String doeners() {
+        return "guhs_muisjes";
+    }
+
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        int bessen = KlusGebied.van(level, huisje, KlusGebied.Soort.BES).size();
+        if (bessen > 0) {
+            return KlusStand.ja("bessen", bessen);
+        }
+        List<BlockPos> bloemen = KlusGebied.van(level, huisje, KlusGebied.Soort.BLOEM);
+        int rijp = (int) bloemen.stream().filter(p -> level.isLoaded(p) && bloemRijp(level, p)).count();
+        if (rijp > 0) {
+            return KlusStand.ja("bloemen", rijp);
+        }
+        int later = bloemen.size() + KlusGebied.van(level, huisje, KlusGebied.Soort.STRUIK).size();
+        return later > 0 ? KlusStand.straks("later", later) : KlusStand.nee("geen", 0);
     }
 
     @Nullable

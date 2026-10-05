@@ -3,6 +3,7 @@ package nl.juiced.guhs.feature.speelgoed;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
@@ -10,6 +11,8 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,6 +43,12 @@ public final class Speeltjes {
                 KnabbelbalEntity bal = bal(level, wie, rond, bereik);
                 return bal == null ? null : new KnabbelbalSpel(wie, level, bal);
             }
+
+            @Override
+            public List<Telling> tel(ServerLevel level, BlockPos rond, int bereik, Predicate<BlockPos> binnen) {
+                int n = (int) ballen(level, rond, bereik).stream().filter(b -> b.isAlive() && binnen.test(b.blockPosition())).count();
+                return List.of(new Telling("knabbelbal", new ItemStack(SpeelgoedFeature.KNABBELBAL_ITEM.get()), n));
+            }
         });
         Speelgoed.registreer(new Soort("glijbaantje") {
             @Nullable
@@ -53,6 +62,11 @@ public final class Speeltjes {
                         .min(Comparator.comparingDouble(p -> p.distSqr(wie.blockPosition())))
                         .map(p -> (KlusTaak) new ToestelSpel(wie, level, p, 0)).orElse(null);
             }
+
+            @Override
+            public List<Telling> tel(ServerLevel level, BlockPos rond, int bereik, Predicate<BlockPos> binnen) {
+                return List.of(telToestel(level, rond, bereik, binnen, "guh_glijbaantje", SpeelgoedFeature.GLIJBAANTJE.get()));
+            }
         });
         Speelgoed.registreer(new Soort("tunnel") {
             @Nullable
@@ -62,6 +76,21 @@ public final class Speeltjes {
                     return null;
                 }
                 return tunnel(level, wie, rond, bereik);
+            }
+
+            /** Tunnels, not pieces: connected pieces count once. */
+            @Override
+            public List<Telling> tel(ServerLevel level, BlockPos rond, int bereik, Predicate<BlockPos> binnen) {
+                Set<BlockPos> gezien = new java.util.HashSet<>();
+                int n = 0;
+                for (BlockPos p : toestellen(level, rond, bereik).filter(p -> level.getBlockState(p).getBlock() instanceof TunnelBlock)
+                        .filter(binnen).map(BlockPos::immutable).toList()) {
+                    if (gezien.add(p)) {
+                        gezien.addAll(TunnelBlock.netwerk(level, p, 64));
+                        n++;
+                    }
+                }
+                return List.of(new Telling("pluizige_tunnel", new ItemStack(SpeelgoedFeature.TUNNEL.get()), n));
             }
         });
         Speelgoed.registreer(new Soort("wip_schommel") {
@@ -77,6 +106,12 @@ public final class Speeltjes {
                                 .thenComparingDouble(p -> p.distSqr(wie.blockPosition())))
                         .map(p -> (KlusTaak) new ToestelSpel(wie, level, p, ((ToestelBlock) level.getBlockState(p).getBlock()).vrijePlek(level, p)))
                         .orElse(null);
+            }
+
+            @Override
+            public List<Telling> tel(ServerLevel level, BlockPos rond, int bereik, Predicate<BlockPos> binnen) {
+                return List.of(telToestel(level, rond, bereik, binnen, "guh_wip", SpeelgoedFeature.WIP.get()),
+                        telToestel(level, rond, bereik, binnen, "guh_schommel", SpeelgoedFeature.SCHOMMEL.get()));
             }
         });
     }
@@ -100,11 +135,21 @@ public final class Speeltjes {
                 .map(PoiRecord::getPos);
     }
 
+    /** 1.2.8: how many of this toy block (its controller) stand within bereik of rond and inside {@code binnen}. */
+    static Speeltje.Telling telToestel(ServerLevel level, BlockPos rond, int bereik, Predicate<BlockPos> binnen, String id, Block blok) {
+        int n = (int) toestellen(level, rond, bereik).filter(p -> level.getBlockState(p).is(blok)).filter(binnen).count();
+        return new Speeltje.Telling(id, new ItemStack(blok), n);
+    }
+
+    /** Every knabbelbal within bereik (horizontally) of rond. */
+    static List<KnabbelbalEntity> ballen(ServerLevel level, BlockPos rond, int bereik) {
+        return level.getEntitiesOfClass(KnabbelbalEntity.class, new AABB(rond).inflate(bereik, 6, bereik));
+    }
+
     /** The nearest knabbelbal within bereik (horizontally) of rond. */
     @Nullable
     static KnabbelbalEntity bal(ServerLevel level, Mob wie, BlockPos rond, int bereik) {
-        List<KnabbelbalEntity> ballen = level.getEntitiesOfClass(KnabbelbalEntity.class, new AABB(rond).inflate(bereik, 6, bereik));
-        return ballen.stream().min(Comparator.comparingDouble(b -> b.distanceToSqr(wie))).orElse(null);
+        return ballen(level, rond, bereik).stream().min(Comparator.comparingDouble(b -> b.distanceToSqr(wie))).orElse(null);
     }
 
     /** A run through the nearest tunnel: in at the nearest entrance, out at the one farthest along the way. */

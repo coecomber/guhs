@@ -1017,6 +1017,33 @@ public final class AutoCheck {
                         }
                     }
                 }, r -> note("  " + r));
+            // --- 1.2.8 visual QA: the huisje screen's "Wat kan hier?" dialog ---
+            case "huisjeoverzicht":
+                // huisjeoverzicht: open the "Wat kan hier?" dialog on the open huisje screen (like its "?" button)
+                return mc2 -> {
+                    if (mc2.screen instanceof nl.juiced.guhs.feature.huisje.client.HuisjeScreen s) {
+                        s.openOverzicht();
+                        if (!s.overzichtOpen()) {
+                            problem("huisjeoverzicht: the dialog did not open");
+                        }
+                    } else {
+                        problem("huisjeoverzicht: no huisje screen open");
+                    }
+                    return true;
+                };
+            case "guhstaal":
+                // guhstaal <nl|en|auto>: the Guhs language switch, live (the open screen must follow at once)
+                return mc2 -> {
+                    nl.juiced.guhs.client.GuhsTaal.set(nl.juiced.guhs.taal.Taal.valueOf(a[1].toUpperCase(Locale.ROOT)));
+                    return true;
+                };
+            case "guiscale":
+                // guiscale <n>: the GUI scale (the open screen is laid out again)
+                return mc2 -> {
+                    mc2.options.guiScale().set(Integer.parseInt(a[1]));
+                    mc2.resizeGui();
+                    return true;
+                };
             case "seed":
                 return mc2 -> true; // (handled before world creation: see guhs.autocheck.seed)
             case "quit":

@@ -38,6 +38,19 @@ public interface Klus {
         return 200;
     }
 
+    /**
+     * 1.2.8: who can do it, for the overview (text gui.guhs.huisje.overzicht.wie.&lt;this&gt;): "guhs", "guhs_muisjes",
+     * "guhs_schildpadjes", "sjokkel"; "" = not told. Keep it next to {@link #kan}.
+     */
+    default String doeners() {
+        return "";
+    }
+
+    /** 1.2.8: what there is to do for this chore around this huisje right now (the overview in the huisje screen). */
+    default KlusStand stand(ServerLevel level, Huisje huisje) {
+        return KlusStand.ONBEKEND;
+    }
+
     /** Something to do now, or null. */
     @Nullable
     KlusTaak zoek(ServerLevel level, Huisje huisje, Mob bewoner);
