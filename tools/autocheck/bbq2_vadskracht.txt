@@ -37,6 +37,9 @@ shot vadskracht_net_draait
 
 section hover readout: looking at the Guhdraad, the machine, the oven, the battery, the source
 /tp @s 2997.5 140 3002.5 180 35
+wait 20
+# (again: with one teleport right after the free camera above, the shot of the merge run still looked ahead and missed the wire)
+/tp @s 2997.5 140 3002.5 180 35
 wait 30
 clearchat
 shot vadskracht_hover_draad gui
