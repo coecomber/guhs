@@ -191,8 +191,8 @@ public final class GuhrioBlocks {
     }
 
     /** The shared part of the per-player pieces: invisible in the world's own drawing, a block entity for the real drawing. */
-    private abstract static class GetekendStuk extends Block implements EntityBlock, GuhrioStuk {
-        GetekendStuk(Properties properties) {
+    public abstract static class GetekendStuk extends Block implements EntityBlock, GuhrioStuk {
+        protected GetekendStuk(Properties properties) {
             super(properties);
         }
 
