@@ -137,6 +137,11 @@ public final class KnuffeldalItems {
                     .append(Component.literal(" - ").append(Component.translatable("gui.guhs.knusfeest.stap." + (stap == null ? "gevraagd"
                             : stap.name().toLowerCase(java.util.Locale.ROOT)))))
                     .withStyle(done ? ChatFormatting.GREEN : stap == Knusfeest.Stap.GESTOLEN ? ChatFormatting.GOLD : ChatFormatting.WHITE));
+            if (stap == null || stap == Knusfeest.Stap.GEVRAAGD) {
+                // (1.2.9) still to do: where do you get it?
+                lines.add(Component.literal("   ").append(Component.translatable("gui.guhs.knusfeest.waar." + taak.id()))
+                        .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+            }
         }
         return lines;
     }

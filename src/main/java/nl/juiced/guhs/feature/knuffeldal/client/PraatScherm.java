@@ -164,12 +164,15 @@ public class PraatScherm extends Screen {
             g.text(font, n, bx + bw - 5 - font.width(n), by + PIC - 11, 0xFFB08AA0, false);
         }
         if (data.getStringOr("Scherm", "").equals("burgemeester")) {
-            renderLijst(g, top + 22 + PIC + 8);
+            renderLijst(g, top + 22 + PIC + 8, mouseX, mouseY);
         }
     }
 
-    /** The Knusfeest list: a line per task, with its step and (when you carry it) a little "!" to hand it in. */
-    private void renderLijst(GuiGraphicsExtractor g, int y) {
+    /**
+     * The Knusfeest list: a line per task, with its step and (when you carry it) a little "!" to hand it in. 1.2.9: pointing
+     * at a task tells you where to get it and how far you are.
+     */
+    private void renderLijst(GuiGraphicsExtractor g, int y, int mouseX, int mouseY) {
         var taken = data.getListOrEmpty("Taken");
         Component kop = Component.translatable(data.getLongOr("Ronde", 0L) == 0 ? "gui.guhs.knusfeest.lijst_kop" : "gui.guhs.knusfeest.lijst_kop_seizoen");
         g.text(font, kop, left + 10, y, 0xFFFFB6D8, false);
@@ -184,6 +187,17 @@ public class PraatScherm extends Screen {
             int colour = done ? 0xFF68D88A : t.getBooleanOr("Bij", false) ? 0xFFFFD27A : stap.equals("gestolen") ? 0xFFF7A060 : TEXT;
             Component line = Component.literal(mark + " ").append(Component.translatable("gui.guhs.knusfeest.taak." + t.getStringOr("Id", "")));
             g.text(font, font.plainSubstrByWidth(line.getString(), (W - 20) / 2 - 4), x, yy, colour, false);
+            if (mouseX >= x && mouseX < x + (W - 20) / 2 && mouseY >= yy - 1 && mouseY < yy + 10) {
+                String id = t.getStringOr("Id", "");
+                List<FormattedCharSequence> tip = new ArrayList<>();
+                tip.add(Component.translatable("gui.guhs.knusfeest.taak." + id).withStyle(ChatFormatting.LIGHT_PURPLE).getVisualOrderText());
+                if (stap.isEmpty() || stap.equals("gevraagd")) {
+                    tip.addAll(font.split(Component.translatable("gui.guhs.knusfeest.waar." + id), 190));
+                }
+                tip.addAll(font.split(Component.translatable("gui.guhs.knusfeest.stap." + (stap.isEmpty() ? "gevraagd" : stap))
+                        .withStyle(ChatFormatting.GRAY), 190));
+                g.setTooltipForNextFrame(font, tip, mouseX, mouseY);
+            }
         }
         int hintY = y + ((taken.size() + 1) / 2) * 11 + 2;
         if (hintY < top + H - 30) {

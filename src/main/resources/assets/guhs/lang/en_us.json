@@ -2969,7 +2969,7 @@
   "gui.guhs.knusfeest.lijst_kop_seizoen": "The season party - party chores:",
   "gui.guhs.knusfeest.lijst_klaar": "There are no party chores right now. Come back to Mayor Chonkworth next season!",
   "gui.guhs.knusfeest.lijst_leeg": "The list is still empty. Talk to Mayor Chonkworth on the square in Snuggledale first.",
-  "gui.guhs.knusfeest.hint": "! = you have it with you, ? = stolen: follow the crumbs",
+  "gui.guhs.knusfeest.hint": "Point at a task: where do you get it?  ! = with you  ? = stolen",
   "quest.guhs.burgemeester.start": "Ahem! Welcome, welcome to Snuggledale! I'm Mayor Chonkworth. The Great Cozyfest is coming up... and NOTHING is ready! No cake, no tea, no garlands, nyeg! Will you help? Here's my list of six party chores. And watch out for the Crumb Mikas: they snatch everything!",
   "quest.guhs.burgemeester.lijst": "Look, this is what's still on the list. Bring everything here and I'll tick it off. Ahem, WAHOOG!",
   "quest.guhs.burgemeester.hoi": "Ah, there you are again! How are the party chores going? Let's see what you've got.",

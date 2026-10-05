@@ -3,6 +3,14 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.9 — Minecraft 26.1.2
+
+A small fix release. Same requirements as 1.2.8, no worldgen changes.
+
+- **Fixed: right-clicking your own tamed guh with an item only petted it.** The client treated almost every item as "a tap is a pet", so the click never reached the guh. Now every item that does something on a guh goes through: tea and cake for a guest at Mrs. Teaspoon's tea party (this made 100 cosiness impossible to reach by serving), the baby bottle and clean diaper for a baby guh, a golden dandelion on a baby guh (vanilla: it stays small), guh armor and a clothing piece you already unlocked. With anything else in your hand a tap is still a pet and holding still opens the Guh menu.
+- **Tea party: there is always a guest who asks for tea** until you have poured your first cup, so the plain Nibble Tea you get from the house can always be served.
+- **The Great Snug Party: where do you get the six party items?** In Mayor Chonkworth's screen, point at a task to read where to get it and how far you are. The Snug Party List (right-click) now prints the same explanation under every task you still have to do.
+
 ## 1.2.8 — Minecraft 26.1.2
 
 A new rare biome, a wood set for the guh palm, an overview in the Guh House and a round of balance changes. Same
