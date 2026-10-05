@@ -185,19 +185,34 @@ public final class KaasmoerasEvents {
         return ja;
     }
 
+    /** How many parts of a knabbelvlotje have to be around a barrel (out of the seven {@link #lijktOpVlotje} looks at). */
+    public static final int VLOTJE_DELEN = 3;
+
     /**
-     * The raft of KaasmoerasPoelFeature.vlotje around this barrel: a barrel on a waterlogged spruce slab, the mast (three
-     * spruce fences) at +2, +1 and the lampion post at +3, +2, in the Guhmensie.
+     * The raft of KaasmoerasPoelFeature.vlotje around this barrel, in the Guhmensie: the spruce slab under it, the floater
+     * log next to that, the mast (two spruce fences at +2, +1) with its pink sail, the lampion post at +3, +2 and the
+     * block of kaasknabbels at 0, +2. A few of them are enough: in a generated world a pool next door now and then
+     * takes a bite out of a raft (kaasmodder where the slab under the barrel was).
      */
     public static boolean lijktOpVlotje(net.minecraft.server.level.ServerLevel level, BlockPos ton) {
-        if (level.dimension() != nl.juiced.guhs.world.ModDimensions.GUHMENSION || !level.getBlockState(ton).is(net.minecraft.world.level.block.Blocks.BARREL)
-                || !level.getBlockState(ton.below()).is(net.minecraft.world.level.block.Blocks.SPRUCE_SLAB)) {
-            return false;
+        return level.dimension() == nl.juiced.guhs.world.ModDimensions.GUHMENSION && vlotDelen(level, ton) >= VLOTJE_DELEN;
+    }
+
+    /** How many of the seven parts of a knabbelvlotje stand around this barrel (0: no barrel). */
+    public static int vlotDelen(net.minecraft.world.level.BlockGetter level, BlockPos ton) {
+        if (!level.getBlockState(ton).is(net.minecraft.world.level.block.Blocks.BARREL)) {
+            return 0;
         }
-        BlockPos mast = ton.offset(2, 0, 1);
-        return level.getBlockState(mast).is(net.minecraft.world.level.block.Blocks.SPRUCE_FENCE)
-                && level.getBlockState(mast.above()).is(net.minecraft.world.level.block.Blocks.SPRUCE_FENCE)
-                && level.getBlockState(ton.offset(3, 0, 2)).is(net.minecraft.world.level.block.Blocks.SPRUCE_FENCE);
+        var fence = net.minecraft.world.level.block.Blocks.SPRUCE_FENCE;
+        int delen = 0;
+        delen += level.getBlockState(ton.below()).is(net.minecraft.world.level.block.Blocks.SPRUCE_SLAB) ? 1 : 0;
+        delen += level.getBlockState(ton.offset(0, -1, -1)).is(net.minecraft.world.level.block.Blocks.STRIPPED_SPRUCE_LOG) ? 1 : 0;
+        delen += level.getBlockState(ton.offset(2, 0, 1)).is(fence) ? 1 : 0;
+        delen += level.getBlockState(ton.offset(2, 1, 1)).is(fence) ? 1 : 0;
+        delen += level.getBlockState(ton.offset(1, 1, 1)).is(net.minecraft.world.level.block.Blocks.PINK_WOOL) ? 1 : 0;
+        delen += level.getBlockState(ton.offset(3, 0, 2)).is(fence) ? 1 : 0;
+        delen += level.getBlockState(ton.offset(0, 0, 2)).is(nl.juiced.guhs.registry.ModBlocks.BLOCK_OF_KAASKNABBELS.get()) ? 1 : 0;
+        return delen;
     }
 
     /** Grants one of our shown advancements (with an impossible trigger: the mod decides when). */

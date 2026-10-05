@@ -322,15 +322,31 @@ public class KaasmoerasGameTests {
         int water = countWater(helper);
         helper.assertTrue(water > 40, "a real pool: " + water);
         int barrels = 0, banners = 0;
+        BlockPos ton = null;
         for (BlockPos p : BlockPos.betweenClosed(helper.absolutePos(BlockPos.ZERO), helper.absolutePos(new BlockPos(25, 8, 25)))) {
             if (level.getBlockEntity(p) instanceof RandomizableContainerBlockEntity c && KaasmoerasEvents.VLOTJE_LOOT.equals(c.getLootTable())) {
                 barrels++;
+                ton = p.immutable();
             }
             if (level.getBlockState(p).is(Blocks.PINK_BANNER)) {
                 banners++;
             }
         }
         helper.assertTrue(barrels == 1 && banners == 1, "a knabbelvlotje with its barrel of loot and its guh flag: " + barrels + "/" + banners);
+        // 1.2.7: an emptied barrel is known by the raft around it, also when a pool next door took a bite out of the raft
+        // (seen in a generated world: kaasmodder where the slab under the barrel was)
+        helper.assertTrue(KaasmoerasEvents.vlotDelen(level, ton) == 7, "the whole raft is around its barrel: " + KaasmoerasEvents.vlotDelen(level, ton));
+        BlockState slab = level.getBlockState(ton.below());
+        level.setBlock(ton.below(), KaasmoerasFeature.KAASMODDER.get().defaultBlockState(), 3);
+        level.setBlock(ton.offset(0, -1, -1), KaasmoerasFeature.KAASMODDER.get().defaultBlockState(), 3);
+        helper.assertTrue(KaasmoerasEvents.vlotDelen(level, ton) == 5 && 5 >= KaasmoerasEvents.VLOTJE_DELEN, "a damaged raft is still a raft");
+        level.setBlock(ton.below(), slab, 3);
+        BlockPos los = helper.absolutePos(new BlockPos(1, 6, 1));
+        level.setBlock(los, Blocks.BARREL.defaultBlockState(), 3);
+        level.setBlock(los.below(), slab, 3);
+        helper.assertTrue(KaasmoerasEvents.vlotDelen(level, los) < KaasmoerasEvents.VLOTJE_DELEN, "any barrel on a slab is no raft");
+        level.setBlock(los, Blocks.AIR.defaultBlockState(), 3);
+        level.setBlock(los.below(), Blocks.AIR.defaultBlockState(), 3);
         helper.runAfterDelay(60, () -> {
             helper.assertTrue(countWater(helper) == water, "the water stays in its pool: " + water + " -> " + countWater(helper));
             helper.succeed();

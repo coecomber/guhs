@@ -228,6 +228,9 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     /** Where at the station this sled is going to stand (once it has come to the finish piece). */
     @Nullable
     private nl.juiced.guhs.quest.Kermis.Spot homeSpot;
+    /** The finish piece that spot belongs to. */
+    @Nullable
+    private SleePath.Piece homeFinish;
 
     public boolean isHoming() {
         return homing;
@@ -270,6 +273,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
         homing = true;
         homingTicks = 0;
         homeSpot = null;
+        homeFinish = null;
         entityData.set(DATA_SPEED, Math.max(2, getSpeed()));
         setRunning(true);
     }
@@ -277,6 +281,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
     private void stopHoming() {
         homing = false;
         homeSpot = null;
+        homeFinish = null;
         homingTicks = 0;
     }
 
@@ -298,6 +303,7 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
             setRunning(true);                        // (the end of a line stops the sled and turns it around: on again)
         }
         if (homeSpot == null && finishAt(piece)) {
+            homeFinish = piece;
             homeSpot = nl.juiced.guhs.quest.Kermis.freeSpot(level(), piece, this);
             if (!homeSpot.piece().anchor().equals(piece.anchor()) && !isForward()) {
                 entityData.set(DATA_FORWARD, true);  // came in backwards and the first spot is taken: the other one is behind us
@@ -306,6 +312,20 @@ public class GuhSleeEntity extends Entity implements GeoEntity {
         }
         if (homeSpot != null && homeSpot.piece().anchor().equals(piece.anchor())
                 && (isForward() ? t >= homeSpot.t() : t <= homeSpot.t())) {
+            if (homeFinish != null && !homeSpot.free(level(), this)) {
+                // two sleds riding home together both saw this spot free (the first one was still riding): the other
+                // sled parked here meanwhile, so this one goes on to the spot that is still free
+                nl.juiced.guhs.quest.Kermis.Spot other = nl.juiced.guhs.quest.Kermis.freeSpot(level(), homeFinish, this);
+                if (!other.piece().anchor().equals(homeSpot.piece().anchor())) {
+                    homeSpot = other;
+                    boolean ahead = !other.piece().anchor().equals(homeFinish.anchor());   // (the second spot is the piece after the finish)
+                    if (isForward() != ahead) {
+                        entityData.set(DATA_FORWARD, ahead);
+                        sync();
+                    }
+                    return;
+                }
+            }
             t = homeSpot.t();
             entityData.set(DATA_FORWARD, homeSpot.forward());
             entityData.set(DATA_RUNNING, false);

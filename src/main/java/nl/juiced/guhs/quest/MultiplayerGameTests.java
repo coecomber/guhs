@@ -141,6 +141,71 @@ public class MultiplayerGameTests {
         });
     }
 
+    /**
+     * Both station sleds ride home at the same time and come to the station from both sides (seen in a generated world,
+     * after the finish piece had been broken and put back: one sled had turned around). Both saw the first spot free,
+     * because the other one was still riding up to it, and they parked in each other. Now each gets its own spot.
+     */
+    @GuhTest(template = "guh_kermis", timeoutTicks = 600, batch = "mp_kermis_samen")
+    public static void twoKermisSledsRidingHomeTogetherEachGetTheirOwnSpot(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        AABB b = helper.getBounds();
+        BoundingBox box = new BoundingBox((int) b.minX, (int) b.minY, (int) b.minZ, (int) b.maxX, (int) b.maxY, (int) b.maxZ);
+        Kermis.Area found = null;
+        for (int dy = 0; dy <= 1 && found == null; dy++) {
+            Kermis.Area tryArea = new Kermis.Area(box, helper.absolutePos(new BlockPos(0, dy, 0)), Rotation.NONE);
+            SleePath.Placement st = Kermis.station(level, tryArea);
+            if (st != null && level.getBlockState(st.anchor()).getBlock() instanceof SleeRailBlock) {
+                found = tryArea;
+            }
+        }
+        helper.assertTrue(found != null, "the kermis template is where the test expects it");
+        Kermis.Area area = found;
+        Kermis.TEST_AREAS.put(box, area);
+        GuhSleeEntity[] sled = {null, null};
+        helper.runAfterDelay(30, () -> {
+            List<GuhSleeEntity> all = sleds(helper);
+            helper.assertTrue(all.size() == 2, "both sleds stand at the station: " + all.size());
+            sled[0] = all.get(0);
+            sled[1] = all.get(1);
+            SleePath.Piece finish = SleePath.Piece.of(level, Kermis.station(level, area).anchor());
+            SleePath.Next na = SleePath.next(level, finish, true);
+            helper.assertTrue(na != null, "the track goes on after the station");
+            // sled 1: past the piece after the finish, coming back (it reaches the finish piece after db blocks);
+            // sled 0: before the finish, riding up to it: it has picked its spot, but isn't there yet, when sled 1 comes in
+            double db = na.piece().shape().length() + 0.6, da = db - 0.8;
+            zetOpBaan(level, sled[1], finish, true, db);
+            zetOpBaan(level, sled[0], finish, false, da);
+            sled[0].startHoming();
+            sled[1].startHoming();
+            helper.assertTrue(sled[0].isHoming() && sled[1].isHoming(), "both sleds ride home: " + sled[0].isHoming() + " / " + sled[1].isHoming());
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(sled[0] != null && !sled[0].isHoming() && !sled[1].isHoming() && !sled[0].isRunning() && !sled[1].isRunning()
+                    && sled[0].atStation() && sled[1].atStation(), "both empty sleds park at the station");
+            if (sled[0].distanceTo(sled[1]) <= 1.5) {
+                throw new IllegalStateException("each sled on its own spot, not in each other: " + sled[0].distanceTo(sled[1]) + " apart");
+            }
+            Kermis.TEST_AREAS.remove(box);
+        });
+    }
+
+    /** Puts a sled this many blocks of track away from the finish piece (past it, or before it), facing the finish. */
+    private static void zetOpBaan(ServerLevel level, GuhSleeEntity sled, SleePath.Piece finish, boolean erna, double afstand) {
+        SleePath.Next stuk = SleePath.next(level, finish, erna);
+        for (int i = 0; i < 20 && stuk != null && afstand > stuk.piece().shape().length(); i++) {
+            afstand -= stuk.piece().shape().length();
+            stuk = SleePath.next(level, stuk.piece(), stuk.forward());
+        }
+        if (stuk == null) {
+            throw new IllegalStateException("the track ends before the sled's spot");
+        }
+        double t = afstand / stuk.piece().shape().length();
+        t = stuk.forward() ? t : 1 - t;
+        SleePath.Point p = stuk.piece().at(t);
+        sled.putOn(stuk.piece(), p.pos(), stuk.forward() ? p.heading().reverse() : p.heading());
+    }
+
     /** Two customers at one character's shop at the same time: each has their own counter, and both can buy. */
     @GuhTest(template = "empty", batch = "mp_winkel")
     public static void twoCustomersShopAtOnce(GameTestHelper helper) {
