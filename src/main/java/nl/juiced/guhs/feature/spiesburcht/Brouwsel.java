@@ -33,10 +33,21 @@ public enum Brouwsel {
     /** guhs:stil (you can't be heard); without that effect, invisibility. */
     SLUIPKNABBEL(0x7E9A5A),
     /** Jump boost and slow falling. */
-    GUHSPRONG(0x8CD2F0);
+    GUHSPRONG(0x8CD2F0),
+    // bbq2 (CONTRACT_130 5.4): reserved for the slices, which give them their drankje with {@link #zetDrankje}
+    /** (sausdieren) from blubroom, the Sausblubje's drop. */
+    BLUBROOM(0xE8A23C),
+    /** (toren-peper) the hot pepper drink of the Pepertuin. */
+    PEPERVUUR(0xD8322A),
+    /** (toren-peper) the sweet pepper drink of the Pepertuin. */
+    PEPERZOET(0xF27A8C);
 
     /** The effect Sluipknabbel gives: registered by another part of the mod (the Stille Voorraadkelder). */
     public static final Identifier STIL = Guhs.id("stil");
+
+    /** bbq2: the drankjes (and their effects) of the Brouwsels that came after the first five, set by their owner slices. */
+    private static final java.util.Map<Brouwsel, java.util.function.Supplier<? extends Item>> DRANKJES = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final java.util.Map<Brouwsel, java.util.function.Supplier<List<MobEffectInstance>>> EFFECTEN = new java.util.concurrent.ConcurrentHashMap<>();
 
     public final int colour;
 
@@ -62,14 +73,37 @@ public enum Brouwsel {
             case ROOKLOOP -> new ItemStack(SpiesburchtFeature.ROOKLOOPDRANKJE.get());
             case SLUIPKNABBEL -> new ItemStack(SpiesburchtFeature.SLUIPKNABBELDRANKJE.get());
             case GUHSPRONG -> new ItemStack(SpiesburchtFeature.GUHSPRONGDRANKJE.get());
+            default -> {
+                java.util.function.Supplier<? extends Item> item = DRANKJES.get(this);
+                yield item == null ? ItemStack.EMPTY : new ItemStack(item.get());
+            }
         };
+    }
+
+    /**
+     * bbq2: the Guhdrankje of a Brouwsel that has none of its own above (BLUBROOM, PEPERVUUR, PEPERZOET), from the owner slice's
+     * {@code register}; its ingredients go in the item tag {@code guhs:brouwsel/<id>}. Until then the pan can't brew it.
+     */
+    public static void zetDrankje(Brouwsel b, java.util.function.Supplier<? extends Item> item) {
+        DRANKJES.put(b, item);
+    }
+
+    /** bbq2: like {@link #zetDrankje(Brouwsel, java.util.function.Supplier)}, with the effects a {@link GuhdrankjeItem} of it gives. */
+    public static void zetDrankje(Brouwsel b, java.util.function.Supplier<? extends Item> item, java.util.function.Supplier<List<MobEffectInstance>> effecten) {
+        DRANKJES.put(b, item);
+        EFFECTEN.put(b, effecten);
+    }
+
+    /** bbq2: can the pan brew this now (the first five always; a later one once its slice gave it a drankje)? */
+    public boolean heeftDrankje() {
+        return this != BOUILLON && !drankje().isEmpty();
     }
 
     /** What this ingredient brews (null: nothing, it's not an ingredient). */
     @Nullable
     public static Brouwsel forIngredient(ItemStack stack) {
         for (Brouwsel b : values()) {
-            if (b.ingredient() != null && stack.is(b.ingredient())) {
+            if (b.ingredient() != null && b.heeftDrankje() && stack.is(b.ingredient())) {
                 return b;
             }
         }
@@ -94,6 +128,10 @@ public enum Brouwsel {
             case SLUIPKNABBEL -> List.of(stil().<MobEffectInstance>map(h -> new MobEffectInstance(h, 2400, 0))
                     .orElseGet(() -> new MobEffectInstance(MobEffects.INVISIBILITY, 1800, 0)));
             case GUHSPRONG -> List.of(new MobEffectInstance(MobEffects.JUMP_BOOST, 1800, 1), new MobEffectInstance(MobEffects.SLOW_FALLING, 1800, 0));
+            default -> {
+                java.util.function.Supplier<List<MobEffectInstance>> e = EFFECTEN.get(this);
+                yield e == null ? List.of() : e.get();
+            }
         };
     }
 }

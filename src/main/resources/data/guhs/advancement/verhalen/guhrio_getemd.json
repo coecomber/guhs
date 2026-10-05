@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:kaas_knabbels"
+    },
+    "title": {
+      "translate": "advancements.guhs.verhalen.guhrio_getemd.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.verhalen.guhrio_getemd.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:verhalen/root"
+}

@@ -13,3 +13,6 @@ chapter guhs_piep
 chapter guhs_band
 chapter guhs_verhalen
 chapter guhs_diertjes
+chapter guhs_techniek
+chapter guhs_knabbelring
+chapter guhs_guhrio

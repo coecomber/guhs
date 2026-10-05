@@ -1,0 +1,77 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_guhrio",
+  group: "475548DB0F6F37EB",
+  guhs_chapter_version: 27,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guhrio.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "47554868CBD9614A",
+  images: [
+    {
+      height: 3.0,
+      id: "475548A1F33C583F",
+      image: "guhs:textures/ftbquests/guhs_guhrio/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 10.25,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "475548486B0A09DA",
+      image: "guhs:textures/ftbquests/guhs_guhrio/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 12.15,
+      y: 1.5,
+    },
+  ],
+  order_index: 15,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "475548C4CA145A6D",
+      linked_quest: "475548854F353678",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "475548DD9032E6F5",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guhrio.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "475548318CD9D629",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C1DD998D14",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+  ],
+}

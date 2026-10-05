@@ -1,0 +1,25 @@
+package nl.juiced.guhs.feature.ringh4;
+
+import java.util.function.Consumer;
+
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+
+/**
+ * bbq2 (ring-h4): chapter 4 of the Knabbelring: De Spiegel van Guhladriel.
+ * This is the F0 stub (CONTRACT_130 5.1): the slice fills it in place. Resources come from tools/features/ring_h4.py.
+ */
+public final class RingH4Feature {
+    public static void register(IEventBus modBus) {
+    }
+
+    public static void payloads(PayloadRegistrar registrar) {
+    }
+
+    public static void creative(Consumer<ItemStack> output) {
+    }
+
+    private RingH4Feature() {
+    }
+}

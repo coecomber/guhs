@@ -11,7 +11,10 @@ import nl.juiced.guhs.entity.GuhVariant;
 public enum VerhaalGuh {
     BALTOGUH(GuhVariant.BALTOGUH, "balto"),
     MEWTWO(GuhVariant.MEWTWO, "mewtwo"),
-    STITCH626(GuhVariant.STITCH626, "guhwaii");
+    STITCH626(GuhVariant.STITCH626, "guhwaii"),
+    // bbq2: Sam-guh (after the Knabbelring) and Guhshi (after the duel in Super Guhrio)
+    SAM_GUH(GuhVariant.SAM_GUH, "ring"),
+    GUHSHI(GuhVariant.GUHSHI, "guhrio");
 
     private final GuhVariant variant;
     private final String pkg;

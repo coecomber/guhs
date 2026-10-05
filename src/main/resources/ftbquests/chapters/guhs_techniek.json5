@@ -1,0 +1,92 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_techniek",
+  group: "475548DB0F6F37EB",
+  guhs_chapter_version: 27,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_techniek.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "475548054659CF74",
+  images: [
+    {
+      height: 3.0,
+      id: "47554820E446F575",
+      image: "guhs:textures/ftbquests/guhs_techniek/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 10.25,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "475548114ED2F4DA",
+      image: "guhs:textures/ftbquests/guhs_techniek/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 12.15,
+      y: 1.5,
+    },
+    {
+      height: 3.4375,
+      id: "475548FFB3611B71",
+      image: "guhs:textures/ftbquests/guhs_techniek/slot_tech_quests.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 5.71875,
+      hover: [
+        "Hier ontbreekt nog een stukje. Njeg!",
+        "De laatste uitvindingen liggen diep in het &5Guheinde&r:",
+        "de Bestelguh, draadloze vadskracht en de Guhterminal.",
+        "Die komen in een volgende update. Bouw vast een mooie fabriek!",
+      ],
+    },
+  ],
+  order_index: 13,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "4755483A47C65BC9",
+      linked_quest: "4755485EDA0EA987",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "475548606F626425",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_techniek.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "475548F89170F205",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554872725F20AF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+  ],
+}

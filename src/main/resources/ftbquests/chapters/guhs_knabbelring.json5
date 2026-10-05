@@ -1,0 +1,77 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_knabbelring",
+  group: "475548DB0F6F37EB",
+  guhs_chapter_version: 27,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_knabbelring.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "475548DF44E3D554",
+  images: [
+    {
+      height: 3.0,
+      id: "4755489D3F0980C2",
+      image: "guhs:textures/ftbquests/guhs_knabbelring/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 10.25,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "475548C09C630A2C",
+      image: "guhs:textures/ftbquests/guhs_knabbelring/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 12.15,
+      y: 1.5,
+    },
+  ],
+  order_index: 14,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "47554880178DE7C8",
+      linked_quest: "475548854F353678",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "4755488F454AC501",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_knabbelring.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "475548D09BF9A56F",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483DCD17CCED",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+  ],
+}

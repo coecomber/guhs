@@ -7,6 +7,7 @@ The 2.4 features (minigames and rare structures), one module each. Every module 
   variants(rng, v)    extra guh variant textures: {id: (fur colour or None, {swatch: painter})} (like make_guh_variants.variants)
   CLOTHES             ids of its guh clothes (item models; same ids as the GuhClothes enum, lower case)
   icons(ic)           item icons of its guh clothes: {clothes id: image} (ic is make_clothes_icons)
+  FTB_CHAPTER, FTB_SECTION, FTB_PORTRAIT, and (bbq2) FTB_SECTIES, FTB_LINEAIR, FTB_SLOT: where its FTB quests land (make_ftbquests.py)
 """
 import importlib
 
@@ -35,7 +36,12 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.2.5: the Guhoven (bakes on guh power)
             'guhoven',
             # 1.2.8: het Bleekwoud
-            'bleekwoud']
+            'bleekwoud',
+            # bbq2 (CONTRACT_130 5.1): the skelet and its helper library, the three foundations, then the 27 slices (append only, see above)
+            'bbq2', 'vadskracht', 'verhaal_motor', 'wereld', 'bank', 'tech_bronnen', 'tech_buizen', 'tech_machines', 'tech_vloeistof', 'tech_bezorg',
+            'tech_klusjes', 'tech_quests', 'paleizen', 'bestaand', 'fossiel_mijn', 'sausdieren', 'camping_markt', 'toren_peper', 'ring', 'ring_h1',
+            'ring_h2', 'ring_h3', 'ring_h4', 'ring_h5', 'ring_h6', 'ring_sausuman', 'guhrio', 'guhrio_w1', 'guhrio_w2', 'guhrio_w3',
+            'guhrio_beloning']
 
 
 def modules():

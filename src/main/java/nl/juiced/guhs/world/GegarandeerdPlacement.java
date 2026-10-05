@@ -22,6 +22,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.QuartPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -55,6 +56,19 @@ import nl.juiced.guhs.registry.ModStructureTypes;
  * normal copies), the Superkompas, the guh compasses and {@link BouwRuimte} find it the usual way. The search needs the
  * level (chunk generator, templates), so every world registers itself ({@link #onthoud}: at level load, and /guhs bouwcheck for
  * its other seeds).
+ * <p>
+ * bbq2: two optional fields for the sets that are added to worlds that exist already (the old sets don't have them, their
+ * spots stay exactly what they were):
+ * <ul>
+ *   <li>{@code "alleen_nieuw": true}: a structure start is only made when its chunk is generated for the first time, so in an
+ *       existing world a new set whose spot lies in old chunks would never appear. Such a set only takes a spot where no chunk
+ *       within its reach + 16 blocks (+ the reach of the buildings that would have to give way to it, but that may stand there
+ *       already) exists yet ({@link NieuwTerrein}); when its ring has none, the search goes on in a ring of 1.5x and then 2x the
+ *       distances. The spot is saved in the dimension ({@link GegarandeerdData}) the first time it is found and is the answer for
+ *       ever after. In a brand-new world nothing exists yet, so the search finds what it always found.</li>
+ *   <li>{@code "rond": "guhs:<other set>"}: the ring lies around the guaranteed copy of that set instead of around 0,0 (a
+ *       chain of story places a walk apart). That set must go first (a higher voorrang), else nothing is placed.</li>
+ * </ul>
  */
 public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -67,24 +81,80 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         ).apply(i, Sector::new));
     }
 
+    /**
+     * bbq2: only in terrain that does not exist yet (alleen_nieuw), and around the guaranteed copy of another set instead of
+     * 0,0 (rond: that structure set's id); flat fields in the placement JSON, both optional.
+     */
+    public record Nieuw(boolean alleenNieuw, Optional<Identifier> rond) {
+        public static final Nieuw GEEN = new Nieuw(false, Optional.empty());
+        public static final MapCodec<Nieuw> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+                Codec.BOOL.optionalFieldOf("alleen_nieuw", false).forGetter(Nieuw::alleenNieuw),
+                Identifier.CODEC.optionalFieldOf("rond").forGetter(Nieuw::rond)
+        ).apply(i, Nieuw::new));
+    }
+
+    /** (the slice of the ring and the bbq2 fields together: the codec builder takes three more fields at most) */
+    private record Extra(Sector sector, Nieuw nieuw) {
+        static final MapCodec<Extra> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+                Sector.CODEC.forGetter(Extra::sector),
+                Nieuw.CODEC.forGetter(Extra::nieuw)
+        ).apply(i, Extra::new));
+    }
+
     public static final MapCodec<GegarandeerdPlacement> CODEC = RecordCodecBuilder.mapCodec(i -> placementCodec(i).and(i.group(
             Codec.intRange(0, 100000).fieldOf("min_afstand").forGetter(p -> p.minAfstand),
             Codec.intRange(16, 100000).fieldOf("max_afstand").forGetter(p -> p.maxAfstand),
-            Sector.CODEC.forGetter(p -> new Sector(p.sector, p.sectoren))
-    )).apply(i, GegarandeerdPlacement::new));
+            Extra.CODEC.forGetter(p -> new Extra(new Sector(p.sector, p.sectoren), p.nieuw))
+    )).apply(i, (offset, method, frequency, salt, exclusion, min, max, extra) ->
+            new GegarandeerdPlacement(offset, method, frequency, salt, exclusion, min, max, extra.sector(), extra.nieuw())));
+
+    /** bbq2: the ring grows this much when an alleen_nieuw set finds no new terrain in it. */
+    private static final double[] RUIMER = {1.0, 1.5, 2.0};
+    /** bbq2: blocks of new terrain kept around the reach of an alleen_nieuw copy. */
+    public static final int NIEUW_RAND = 16;
 
     private final int minAfstand;
     private final int maxAfstand;
     private final int sector;
     private final int sectoren;
+    private final Nieuw nieuw;
 
     public GegarandeerdPlacement(Vec3i locateOffset, FrequencyReductionMethod method, float frequency, int salt,
                                  Optional<ExclusionZone> exclusion, int minAfstand, int maxAfstand, Sector sector) {
+        this(locateOffset, method, frequency, salt, exclusion, minAfstand, maxAfstand, sector, Nieuw.GEEN);
+    }
+
+    public GegarandeerdPlacement(Vec3i locateOffset, FrequencyReductionMethod method, float frequency, int salt,
+                                 Optional<ExclusionZone> exclusion, int minAfstand, int maxAfstand, Sector sector, Nieuw nieuw) {
         super(locateOffset, method, frequency, salt, exclusion, 1, 1, 0, HolderSet.empty());
         this.minAfstand = minAfstand;
         this.maxAfstand = Math.max(maxAfstand, minAfstand + 64);
         this.sector = sector.sector();
         this.sectoren = sector.sectoren();
+        this.nieuw = nieuw;
+    }
+
+    /** The slice of the ring this set takes (sector of sectoren), and its salt. */
+    public int sector() {
+        return sector;
+    }
+
+    public int sectoren() {
+        return sectoren;
+    }
+
+    public int zout() {
+        return salt();
+    }
+
+    /** bbq2: does this set only stand in terrain that did not exist yet when its spot was chosen? */
+    public boolean alleenNieuw() {
+        return nieuw.alleenNieuw();
+    }
+
+    /** bbq2: the set whose guaranteed copy is the middle of this one's ring (empty: 0,0). */
+    public Optional<Identifier> rond() {
+        return nieuw.rond();
     }
 
     public int minAfstand() {
@@ -110,6 +180,18 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         final LevelHeightAccessor height;
         final long seed;
         final Map<GegarandeerdPlacement, Optional<Plek>> plekken = new ConcurrentHashMap<>();
+        /**
+         * bbq2: the saved spots of the alleen_nieuw sets, when this is the level's own world (its own generator state): only
+         * there chunks exist and spots are kept. Null for the other seeds of /guhs bouwcheck and the gametests' generators:
+         * those are brand-new worlds, searched like before.
+         */
+        @Nullable
+        final GegarandeerdData opslag;
+        /** bbq2: which chunks of that world exist (asked when a search starts); null when {@link #opslag} is. */
+        @Nullable
+        final java.util.function.Supplier<NieuwTerrein> terrein;
+        /** bbq2: the level's own world (a found spot is written to disk at once). */
+        final boolean echt;
 
         Wereld(ServerLevel level, ChunkGeneratorStructureState state, long seed, @Nullable ChunkGenerator generator, @Nullable LevelHeightAccessor height) {
             this.level = new WeakReference<>(level);
@@ -117,7 +199,56 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
             this.seed = seed;
             this.generator = generator;
             this.height = height;
+            this.opslag = generator == null && level.getChunkSource().getGeneratorState() == state ? OPSLAG.get(level) : null;
+            this.terrein = opslag == null ? null : () -> NieuwTerrein.van(level);
+            this.echt = opslag != null;
         }
+
+        /** (tests) a world with its own saved spots and its own idea of which chunks exist. */
+        Wereld(ServerLevel level, ChunkGeneratorStructureState state, long seed, ChunkGenerator generator, LevelHeightAccessor height,
+               GegarandeerdData opslag, java.util.function.Supplier<NieuwTerrein> terrein) {
+            this.level = new WeakReference<>(level);
+            this.state = new WeakReference<>(state);
+            this.seed = seed;
+            this.generator = generator;
+            this.height = height;
+            this.opslag = opslag;
+            this.terrein = terrein;
+            this.echt = false;
+        }
+    }
+
+    /** bbq2: the saved spots per level, loaded on the server thread ({@link #laad}) before anything searches. */
+    private static final Map<ServerLevel, GegarandeerdData> OPSLAG = java.util.Collections.synchronizedMap(new java.util.WeakHashMap<>());
+
+    /**
+     * bbq2: loads the saved spots of this level's alleen_nieuw sets (server thread, at level load, before {@link #onthoud}),
+     * and starts remembering the chunks it saves while one of them still has to be found.
+     */
+    public static void laad(ServerLevel level) {
+        boolean heeft = false, open = false;
+        GegarandeerdData data = null;
+        for (Holder<StructureSet> set : level.getChunkSource().getGeneratorState().possibleStructureSets()) {
+            if (set.value().placement() instanceof GegarandeerdPlacement g && g.alleenNieuw()) {
+                if (data == null) {
+                    data = GegarandeerdData.get(level);
+                }
+                heeft = true;
+                open |= data.plek(naam(set)) == null;
+            }
+        }
+        if (heeft) {
+            OPSLAG.put(level, data);
+        }
+        if (open) {
+            NieuwTerrein.volg(level);
+        }
+    }
+
+    /** bbq2: the saved spots of this level (null: it has no alleen_nieuw set). */
+    @Nullable
+    public static GegarandeerdData opslag(ServerLevel level) {
+        return OPSLAG.get(level);
     }
 
     private static final List<Wereld> WERELDEN = new ArrayList<>();
@@ -136,6 +267,37 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         synchronized (WERELDEN) {
             WERELDEN.removeIf(w -> w.level.get() == null || w.state.get() == null || w.state.get() == state);
             WERELDEN.add(new Wereld(level, state, seed, generator, height));
+        }
+        installeer(state);
+    }
+
+    /**
+     * bbq2 (tests: the test server has none of our dimensions): registers a world like
+     * {@link #onthoud(ServerLevel, ChunkGeneratorStructureState, long, ChunkGenerator, LevelHeightAccessor)}, in which the
+     * alleen_nieuw sets search as in a world that exists: {@code terrein} says which chunks are there, {@code opslag} keeps
+     * the spots.
+     */
+    public static void onthoudBestaand(ServerLevel level, ChunkGeneratorStructureState state, long seed, ChunkGenerator generator,
+                                       LevelHeightAccessor height, GegarandeerdData opslag, java.util.function.Supplier<NieuwTerrein> terrein) {
+        synchronized (WERELDEN) {
+            Wereld nieuw = new Wereld(level, state, seed, generator, height, opslag, terrein);
+            for (Wereld w : WERELDEN) {
+                if (w.state.get() == state && w.seed == seed) {
+                    // (the sets that are not alleen_nieuw stand where they stood: no need to search them again)
+                    w.plekken.forEach((g, plek) -> {
+                        if (!g.alleenNieuw()) {
+                            nieuw.plekken.put(g, plek);
+                        }
+                    });
+                }
+            }
+            WERELDEN.removeIf(w -> w.level.get() == null || w.state.get() == null || w.state.get() == state);
+            WERELDEN.add(nieuw);
+        }
+        for (Holder<StructureSet> set : state.possibleStructureSets()) {
+            if (set.value().placement() instanceof GegarandeerdPlacement g) {
+                g.laatste = null;   // (the answer of an earlier world of this state)
+            }
         }
         installeer(state);
     }
@@ -338,6 +500,7 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
                 }
             }
             LOGGER.info("Guhs: {} of {} guaranteed buildings placed in {} ({} s)", found, todo.size(), dim, (System.nanoTime() - t) / 1_000_000_000);
+            NieuwTerrein.klaar(level);   // (bbq2: the searches of this load are done: the saved chunks need not be remembered any more)
         }, "Guhs gegarandeerd " + dim);
         thread.setDaemon(true);
         thread.setPriority(Thread.MIN_PRIORITY);
@@ -372,44 +535,175 @@ public class GegarandeerdPlacement extends ConcentricRingsStructurePlacement {
         if (set == null) {
             return Optional.empty();
         }
+        // bbq2: an alleen_nieuw set in the level's own world: the saved spot is the answer for ever
+        GegarandeerdData opslag = alleenNieuw() ? w.opslag : null;
+        if (opslag != null) {
+            Plek bewaard = opslag.plek(naam(set));
+            if (bewaard != null) {
+                return Optional.of(bewaard);
+            }
+        }
         long start = System.nanoTime();
         ChunkGenerator generator = w.generator != null ? w.generator : level.getChunkSource().getGenerator();
         LevelHeightAccessor height = w.height != null ? w.height : level;
         RandomState random = state.randomState();
+        // bbq2: the middle of the ring: 0,0, or the guaranteed copy of the set this one lies around
+        int mx = 0, mz = 0;
+        if (rond().isPresent()) {
+            Optional<ChunkPos> midden = middenVan(state, w.seed, set);
+            if (midden.isEmpty()) {
+                return Optional.empty();
+            }
+            mx = midden.get().getMinBlockX();
+            mz = midden.get().getMinBlockZ();
+        }
+        // bbq2: only where nothing exists yet (the level's own world; elsewhere the world is brand new)
+        NieuwTerrein terrein = opslag != null && w.terrein != null ? w.terrein.get() : null;
+        int vrij = terrein == null ? 0 : vrij(set, level, generator);
         double midden = draai(w.seed) + Math.PI * 2 * sector / sectoren, half = Math.PI / sectoren;
         SplittableRandom rng = new SplittableRandom(mix(w.seed * 31 + salt()));
-        int tries = 0, biomeOk = 0, vlakOk = 0;
-        for (int[] ronde : RONDES) {
-            Set<ChunkPos> gehad = new HashSet<>();
-            for (int k = 0; k < ronde[0]; k++) {
-                double a = ronde[1] == 1 ? midden + (rng.nextDouble() * 2 - 1) * half : rng.nextDouble() * Math.PI * 2;
-                // (evenly over the area of the ring; the locate spot, the chunk's corner, stays inside the ring)
-                double lo = minAfstand + 24, hi = maxAfstand - 24;
-                double r = Math.sqrt(lo * lo + rng.nextDouble() * (hi * hi - lo * lo));
-                ChunkPos c = new ChunkPos(Math.floorDiv((int) Math.round(Math.cos(a) * r), 16), Math.floorDiv((int) Math.round(Math.sin(a) * r), 16));
-                double d = Math.hypot(c.getMinBlockX(), c.getMinBlockZ());
-                if (d < minAfstand || d > maxAfstand || !gehad.add(c)) {
-                    continue;
-                }
-                tries++;
-                if (ronde[2] == 1 && !biomePast(set, generator, random, height, c)) {
-                    continue;
-                }
-                biomeOk++;
-                if (!vlakGenoeg(set, generator, random, height, c, ronde[3])) {
-                    continue;
-                }
-                vlakOk++;
-                if (start(set, level, height, generator, random, w.seed, c, ronde[3])) {
-                    LOGGER.debug("Guhs: guaranteed {} at chunk {} ({} blocks, flatness x{}, {} tries, {} ms)", naam(set), c, (int) d, ronde[3], tries,
-                            (System.nanoTime() - start) / 1_000_000);
-                    return Optional.of(new Plek(c, ronde[3]));
+        int tries = 0, biomeOk = 0, vlakOk = 0, nieuwOk = 0;
+        for (double ruimer : terrein == null ? new double[]{1.0} : RUIMER) {
+            int min = (int) Math.round(minAfstand * ruimer), max = (int) Math.round(maxAfstand * ruimer);
+            for (int[] ronde : RONDES) {
+                Set<ChunkPos> gehad = new HashSet<>();
+                for (int k = 0; k < ronde[0]; k++) {
+                    double a = ronde[1] == 1 ? midden + (rng.nextDouble() * 2 - 1) * half : rng.nextDouble() * Math.PI * 2;
+                    // (evenly over the area of the ring; the locate spot, the chunk's corner, stays inside the ring)
+                    double lo = min + 24, hi = max - 24;
+                    double r = Math.sqrt(lo * lo + rng.nextDouble() * (hi * hi - lo * lo));
+                    ChunkPos c = new ChunkPos(Math.floorDiv(mx + (int) Math.round(Math.cos(a) * r), 16), Math.floorDiv(mz + (int) Math.round(Math.sin(a) * r), 16));
+                    double d = Math.hypot(c.getMinBlockX() - mx, c.getMinBlockZ() - mz);
+                    if (d < min || d > max || !gehad.add(c)) {
+                        continue;
+                    }
+                    tries++;
+                    if (terrein != null && !terrein.nieuw(c, vrij)) {
+                        continue;   // (the cheapest check first: around the players most of a ring exists already)
+                    }
+                    nieuwOk++;
+                    if (ronde[2] == 1 && !biomePast(set, generator, random, height, c)) {
+                        continue;
+                    }
+                    biomeOk++;
+                    if (!vlakGenoeg(set, generator, random, height, c, ronde[3])) {
+                        continue;
+                    }
+                    vlakOk++;
+                    if (start(set, level, height, generator, random, w.seed, c, ronde[3])) {
+                        LOGGER.debug("Guhs: guaranteed {} at chunk {} ({} blocks, flatness x{}, {} tries, {} ms)", naam(set), c, (int) d, ronde[3], tries,
+                                (System.nanoTime() - start) / 1_000_000);
+                        Plek plek = new Plek(c, ronde[3]);
+                        if (opslag != null) {
+                            plek = opslag.zet(naam(set), plek);
+                            LOGGER.info("Guhs: the guaranteed {} stands at chunk {} ({} blocks from {}, new terrain within {} blocks{})", naam(set),
+                                    plek.chunk(), (int) d, rond().map(Identifier::toString).orElse("0,0"), vrij, ruimer > 1 ? ", ring x" + ruimer : "");
+                            if (w.echt) {
+                                bewaar(level);
+                            }
+                        }
+                        return Optional.of(plek);
+                    }
                 }
             }
         }
-        LOGGER.warn("Guhs: no spot for the guaranteed {} between {} and {} blocks ({} spots, {} in its biome, {} flat enough)", naam(set),
-                minAfstand, maxAfstand, tries, biomeOk, vlakOk);
+        if (terrein != null) {
+            LOGGER.warn("Guhs: no spot in new terrain for the guaranteed {} between {} and {} blocks, also not x1.5 and x2 ({} spots, {} in new "
+                    + "terrain, {} of those in its biome, {} flat enough); it is searched again the next time the world loads", naam(set), minAfstand,
+                    maxAfstand, tries, nieuwOk, biomeOk, vlakOk);
+        } else {
+            LOGGER.warn("Guhs: no spot for the guaranteed {} between {} and {} blocks ({} spots, {} in its biome, {} flat enough)", naam(set),
+                    minAfstand, maxAfstand, tries, biomeOk, vlakOk);
+        }
         return Optional.empty();
+    }
+
+    /**
+     * bbq2: the guaranteed copy of the set this one lies around (rond). That set must go first (a higher voorrang): a search
+     * waits for the sets that go before it, never the other way round, so two searches can't wait for each other.
+     */
+    private Optional<ChunkPos> middenVan(ChunkGeneratorStructureState state, long seed, Holder<StructureSet> set) {
+        Identifier id = rond().orElseThrow();
+        for (Holder<StructureSet> other : state.possibleStructureSets()) {
+            if (other.unwrapKey().filter(k -> k.identifier().equals(id)).isPresent() && other.value().placement() instanceof GegarandeerdPlacement g) {
+                if (g == this || g.zoekt() || voorrang(other) <= voorrang(set)) {
+                    LOGGER.error("Guhs: the guaranteed {} lies around {}, which doesn't go before it (it needs a higher voorrang): not placed", naam(set), id);
+                    return Optional.empty();
+                }
+                Optional<ChunkPos> plek = g.plek(state, seed);
+                if (plek.isEmpty()) {
+                    LOGGER.warn("Guhs: the guaranteed {} lies around {}, which has no spot: not placed", naam(set), id);
+                }
+                return plek;
+            }
+        }
+        LOGGER.warn("Guhs: the guaranteed {} lies around {}, which is no guaranteed set of this dimension: not placed", naam(set), id);
+        return Optional.empty();
+    }
+
+    /** The voorrang of a set: the highest of its structures (0: none takes part in BouwRuimte). */
+    private static int voorrang(Holder<StructureSet> set) {
+        int voorrang = 0;
+        for (StructureSet.StructureSelectionEntry e : set.value().structures()) {
+            if (e.structure().value() instanceof BouwRuimte.Ruimte r) {
+                voorrang = Math.max(voorrang, r.voorrang());
+            }
+        }
+        return voorrang;
+    }
+
+    /**
+     * bbq2: how far around the middle of its start chunk an alleen_nieuw copy wants new terrain (blocks, per axis): its own
+     * reach + {@link #NIEUW_RAND}, + the reach of the furthest-reaching building that would have to give way to it. Such a
+     * building gives way while it is generated, but one that stands in old chunks already can't: with this margin its start
+     * chunk is new terrain too, or it is too far away to touch the copy.
+     */
+    private static int vrij(Holder<StructureSet> set, ServerLevel level, ChunkGenerator generator) {
+        int reach = 0;
+        for (StructureSet.StructureSelectionEntry e : set.value().structures()) {
+            if (e.structure().value() instanceof BouwRuimte.Ruimte r) {
+                reach = Math.max(reach, r.keepClear());
+            }
+        }
+        return reach + NIEUW_RAND + BouwRuimte.reikwijdteNa(level.registryAccess(), generator.getBiomeSource(), set);
+    }
+
+    /** bbq2: writes the saved spots to disk right away (server thread): a crash must not make a second copy. */
+    private static void bewaar(ServerLevel level) {
+        level.getServer().execute(() -> level.getDataStorage().scheduleSave());
+    }
+
+    /**
+     * bbq2 (/guhs bouwcheck gegarandeerd, tests): the name, spot and middle of the ring of every guaranteed set of this state,
+     * the sets that go first first.
+     */
+    public record Kopie(String set, GegarandeerdPlacement placement, Optional<ChunkPos> plek, int middenX, int middenZ) {
+    }
+
+    public static List<Kopie> kopieen(ChunkGeneratorStructureState state, long seed) {
+        List<Kopie> uit = new ArrayList<>();
+        List<Holder<StructureSet>> sets = new ArrayList<>();
+        for (Holder<StructureSet> set : state.possibleStructureSets()) {
+            if (set.value().placement() instanceof GegarandeerdPlacement) {
+                sets.add(set);
+            }
+        }
+        sets.sort((a, b) -> voorrang(a) != voorrang(b) ? Integer.compare(voorrang(b), voorrang(a)) : naam(a).compareTo(naam(b)));
+        for (Holder<StructureSet> set : sets) {
+            GegarandeerdPlacement g = (GegarandeerdPlacement) set.value().placement();
+            Optional<ChunkPos> plek = g.plek(state, seed);
+            int mx = 0, mz = 0;
+            if (g.rond().isPresent()) {
+                for (Kopie k : uit) {
+                    if (k.set.equals(g.rond().get().toString()) && k.plek.isPresent()) {
+                        mx = k.plek.get().getMinBlockX();
+                        mz = k.plek.get().getMinBlockZ();
+                    }
+                }
+            }
+            uit.add(new Kopie(naam(set), g, plek, mx, mz));
+        }
+        return uit;
     }
 
     private static String naam(Holder<StructureSet> set) {

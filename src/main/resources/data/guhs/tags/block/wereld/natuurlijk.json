@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:houtskoolsteen",
+    "guhs:as_aarde",
+    "guhs:as_blok",
+    "guhs:mosterd_blok",
+    "guhs:mosterd_nylium",
+    "guhs:pindasaus_nylium",
+    "guhs:sate_vlees",
+    "guhs:knuffelgras",
+    "guhs:rijpgras",
+    "guhs:vadsmos",
+    "guhs:bleekmos",
+    "guhs:kaasmodder",
+    "guhs:modderig_kaasgras",
+    "minecraft:pink_wool",
+    "minecraft:magenta_wool",
+    "minecraft:white_wool",
+    "minecraft:pink_terracotta",
+    "minecraft:magenta_terracotta",
+    "minecraft:pink_concrete_powder",
+    "minecraft:grass_block",
+    "minecraft:sand",
+    "minecraft:sandstone",
+    "minecraft:clay",
+    "minecraft:snow_block",
+    "minecraft:snow",
+    "#minecraft:dirt"
+  ]
+}
