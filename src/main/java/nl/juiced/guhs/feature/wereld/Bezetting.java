@@ -383,7 +383,6 @@ public final class Bezetting {
         }
         Rotation draai = Kopieen.draai(start, prop.stuk);
         StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(draai).setMirror(Mirror.NONE);
-        boolean alles = true;
         for (BlockPos keuze : prop.keuzes) {
             BlockPos basis = Kopieen.wereld(start, prop.stuk, keuze);
             if (basis == null) {
@@ -394,8 +393,7 @@ public final class Bezetting {
                 BoundingBox box = template.get().getBoundingBox(settings, hoek);
                 Boolean past = past(level, box);
                 if (past == null) {
-                    alles = false;   // (not loaded: look again later)
-                    break;
+                    return false;   // (not loaded: look again later, so the spots keep their order of preference)
                 }
                 if (past) {
                     template.get().placeInWorld(level, hoek, hoek, settings, level.getRandom(), Block.UPDATE_CLIENTS);
@@ -406,11 +404,9 @@ public final class Bezetting {
                 }
             }
         }
-        if (alles) {
-            data.plekken.put(tag, GEEN);
-            data.setDirty();
-            LOGGER.info("Guhs: no free spot for {} at {} {}: this copy goes without", prop.template, prop.structuur, start.getChunkPos());
-        }
+        data.plekken.put(tag, GEEN);
+        data.setDirty();
+        LOGGER.info("Guhs: no free spot for {} at {} {}: this copy goes without", prop.template, prop.structuur, start.getChunkPos());
         return false;
     }
 
@@ -445,9 +441,6 @@ public final class Bezetting {
                 BlockState onder = level.getBlockState(at.set(x, box.minY() - 1, z));
                 grond += onder.isSolidRender() || onder.is(NATUURLIJK) && !onder.canBeReplaced() ? 1 : 0;
             }
-        }
-        if (Bescherming.beschermd(level, new BlockPos(box.minX(), box.minY(), box.minZ())) || Bescherming.beschermd(level, new BlockPos(box.maxX(), box.maxY(), box.maxZ()))) {
-            return false;   // (inside another quest building)
         }
         return grond * 2 >= kolommen;
     }

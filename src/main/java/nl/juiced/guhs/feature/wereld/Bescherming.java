@@ -87,11 +87,11 @@ public final class Bescherming {
     // --- registering -----------------------------------------------------------------------------------------------------
 
     /**
-     * Nobody breaks, places, explodes or floods inside the boxes of the pieces (+ {@code rand} blocks, at most 16) of every
+     * Nobody breaks, places, explodes or floods inside the boxes of the pieces (+ {@code rand} blocks, at most 64) of every
      * copy of {@code guhs:<structuur>}; the message is gui.guhs.wereld.beschermd. From Feature.register.
      */
     public static void registreer(String structuur, int rand) {
-        REGELS.put(structuur, new Regel(structuur, Math.max(0, Math.min(16, rand))));
+        REGELS.put(structuur, new Regel(structuur, Math.max(0, Math.min(64, rand))));
         grootsteRand = REGELS.values().stream().mapToInt(Regel::rand).max().orElse(0);
         STRUCTUREN.clear();
         ZONES.clear();
@@ -190,8 +190,8 @@ public final class Bescherming {
             return null;
         }
         // (a copy's rim may reach into a chunk that the copy itself doesn't touch: the neighbours near the chunk's edge too)
-        int rand = grootsteRand, cx = pos.getX() >> 4, cz = pos.getZ() >> 4, lx = pos.getX() & 15, lz = pos.getZ() & 15;
-        int x0 = lx < rand ? cx - 1 : cx, x1 = lx > 15 - rand ? cx + 1 : cx, z0 = lz < rand ? cz - 1 : cz, z1 = lz > 15 - rand ? cz + 1 : cz;
+        int rand = grootsteRand;
+        int x0 = (pos.getX() - rand) >> 4, x1 = (pos.getX() + rand) >> 4, z0 = (pos.getZ() - rand) >> 4, z1 = (pos.getZ() + rand) >> 4;
         for (int x = x0; x <= x1; x++) {
             for (int z = z0; z <= z1; z++) {
                 LevelChunk chunk = level.getChunkSource().getChunkNow(x, z);
