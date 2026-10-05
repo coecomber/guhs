@@ -16,8 +16,10 @@ TEXTURES = ["guh"] + [f"guh_{v}" for v in (
     "asguh", "brococolief", "brontosaurus", "choco", "ender", "ghost", "golden", "kaasmoerasguh", "koning", "mager", "mint",
     "pluisguh", "snow", "starry", "teckel", "vahoege_ender", "wolk", "zeemeerguh",
     "pinguh", "pinguh_keizer", "pinguh_pluis",
-    "baltoguh", "mewtwo", "stitch626")] + [f"guh_rainbow_{i}" for i in range(8)]
+    "baltoguh", "mewtwo", "stitch626",
+    "sam_guh", "guhshi")] + [f"guh_rainbow_{i}" for i in range(8)]
 # (3.0: "baltoguh", "mewtwo", "stitch626": the story guhs of the Guhverhalen, painted by make_guh_variants + their slices)
+# (bbq2: "sam_guh" (features/ring.py) and "guhshi" (features/guhrio.py), the same way)
 # (2.9: "pinguh", "pinguh_keizer", "pinguh_pluis" are the three Pinguh looks, painted by tools/features/guhpolder.py)
 GLOWMASKS = ["guh_ender_glowmask"]
 

@@ -3,6 +3,7 @@ The pictures of the FTB Quests chapters (made by tools/make_ftbquests.py, which 
   textures/ftbquests/<chapter>/title.png     a cute title banner: the chapter name on a ribbon, guh renders, kaasknabbels, hearts
   textures/ftbquests/<chapter>/welkom.png    a group picture next to the "Hoe kom je hier?" quest (guhs / NPCs / a structure)
   textures/ftbquests/<chapter>/kop_<id>.png  a section header: a ribbon with a portrait and the section title
+  textures/ftbquests/<chapter>/slot_<module>.png   (bbq2) a "to be continued" card at the end of a chapter: what is still missing
   textures/ftbquests/icon_<chapter>.png      the chapter's guh icon (a custom FTB icon)
 Guhs, NPCs and creatures are rendered from their own .geo.json models with tools/wiki_renders.py; structures come from the
 wiki renders (docs/wiki/img, also made by wiki_renders.py). Text uses Minecraft's own pixel font (from the vanilla jar).
@@ -40,6 +41,7 @@ PALETTE = {
     "lime": ((236, 250, 160), (190, 214, 70), (70, 90, 14)),
     "peach": ((255, 222, 214), (255, 160, 170), (120, 50, 60)),
     "green": ((200, 244, 196), (104, 200, 110), (26, 84, 36)),   # 3.0: Diertjes van de Guhmensie
+    "cyan": ((196, 246, 250), (84, 204, 224), (16, 84, 104)),    # bbq2: Guh-technologie
 }
 
 
@@ -344,6 +346,64 @@ def header(title, portrait, colour, sub=None):
     return img
 
 
+def _dashed_ellipse(d, box, colour, width, dashes=14):
+    """An ellipse drawn as dashes (an empty spot where a quest will come)."""
+    step = 360 / dashes
+    for i in range(dashes):
+        d.arc(box, i * step, i * step + step * 0.55, fill=colour, width=width)
+
+
+def _dashed_frame(d, box, colour, width, dash=26, gap=16):
+    """A rectangle drawn as dashes."""
+    x0, y0, x1, y1 = box
+    for x in range(int(x0), int(x1), dash + gap):
+        d.line((x, y0, min(x + dash, x1), y0), fill=colour, width=width)
+        d.line((x, y1, min(x + dash, x1), y1), fill=colour, width=width)
+    for y in range(int(y0), int(y1), dash + gap):
+        d.line((x0, y, x0, min(y + dash, y1)), fill=colour, width=width)
+        d.line((x1, y, x1, min(y + dash, y1)), fill=colour, width=width)
+
+
+def slot(title, portrait, colour, lines):
+    """1024x352 (bbq2, FTB_SLOT): a "to be continued" card at the end of a chapter. A ribbon like a section header, but the
+    card under it is only a dashed outline with the lines of text and a row of empty, dashed quest spots with a question
+    mark that fade away to the right: this part is still missing."""
+    W, H = 1024, 352
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    light, main, dark = PALETTE[colour]
+    d = ImageDraw.Draw(img, "RGBA")
+    d.rounded_rectangle((14, 84, W - 14, H - 8), radius=30, fill=light + (70,))
+    _dashed_frame(d, (14, 84, W - 14, H - 8), dark + (230,), 5)
+    ribbon(d, 84, 22, W - 10, 138, PALETTE[colour], tails=False, stitch=False)
+    d.ellipse((4, 4, 156, 156), fill=light + (255,), outline=dark + (255,), width=6)
+    if portrait:
+        spr = fit(sprite(portrait), 122, 122)
+        img.alpha_composite(spr, (80 - spr.width // 2, 80 - spr.height // 2))
+    crop = lambda t: t.crop(t.getbbox())  # noqa: E731
+    room = W - 174 - 40
+    for scale in (6, 5, 4, 3):
+        txt = crop(fancy_text(title, scale, (255, 255, 255), dark, shadow=False))
+        if txt.width <= room:
+            break
+    img.alpha_composite(txt, (174, 80 - txt.height // 2))
+    # the lines, as big as the longest one allows
+    scale = next((sc for sc in (3, 2) if all(text_mask(t, sc).width <= W - 250 for t in lines)), 2)
+    y = 166
+    for t in lines:
+        line = crop(fancy_text(t, scale, (255, 255, 255), dark, shadow=False))
+        img.alpha_composite(line, (184, y))
+        y += 8 * scale + 8
+    # empty quest spots, fading out: nothing here yet
+    for i in range(6):
+        fade = max(40, 235 - i * 38)
+        cx, cy, r = 250 + i * 128, H - 46, 28
+        _dashed_ellipse(d, (cx - r, cy - r, cx + r, cy + r), dark + (fade,), 5)
+        q = crop(fancy_text("?", 4, light, dark, shadow=False))
+        q.putalpha(q.getchannel("A").point(lambda v, f=fade: v * f // 255))
+        img.alpha_composite(q, (cx - q.width // 2, cy - q.height // 2))
+    return img
+
+
 # ---------------------------------------------------------------------------------------------------------------------
 def _stamp():
     try:
@@ -361,7 +421,7 @@ def make_art(jobs, force=False):
         new_stamp[rel] = key
         if not force and stamp.get(rel) == key and os.path.exists(path):
             continue
-        img = {"title": title_banner, "welcome": welcome_picture, "header": header, "icon": face}[fn](*args)
+        img = {"title": title_banner, "welcome": welcome_picture, "header": header, "icon": face, "slot": slot}[fn](*args)
         os.makedirs(os.path.dirname(path), exist_ok=True)
         img.save(path, optimize=True)
         drawn += 1

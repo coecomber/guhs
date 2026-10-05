@@ -354,6 +354,25 @@ public enum GuhClothes {
     GUHWAII_SURFPLANKJE(Slot.BACK, "outfit_guhwaii_surfplank"),
     // </guhwaii>
     //
+    // --- bbq2 (CONTRACT_130 5.4): the slices put their pieces between their own markers, each line ending with a comma ---
+    // <paleizen>
+    // </paleizen>
+    //
+    // <bestaand>
+    // </bestaand>
+    //
+    // <camping_markt>
+    // </camping_markt>
+    //
+    // <toren_peper>
+    // </toren_peper>
+    //
+    // <ring>
+    // </ring>
+    //
+    // <guhrio_beloning>
+    // </guhrio_beloning>
+    //
     ;
 
     /**

@@ -119,6 +119,11 @@ public enum GuhVariant {
     PLUISEGELTJE(0), GUH_KONIJNTJE(0), PLUISEEKHOORNTJE(0), SHUCKLE(0),                    // creatures (landdiertjes)
     // --- 1.2.8 (het Bleekwoud): creature pages (their id is their entity id); bonus pages, see GuhDex.EXTRA ---
     KRAAKGUH(0), KRAAK_MIKA(0),
+    // --- bbq2 (CONTRACT_130 5.3): the story guhs Sam-guh and Guhshi (isVerhaalGuh), then four creature pages (their id is their
+    // entity id); all six count for "compleet" ---
+    // <bbq2>
+    SAM_GUH(0, "samguh"), GUHSHI(0, "guhshi"), SAUSBLUBJE(0), SAUSLOPER(0), WORSTZWIJNTJE(0), BEZORGGUHTJE(0),
+    // </bbq2>
     // <balto>
     // </balto>
     // <mewtwo>
@@ -143,7 +148,7 @@ public enum GuhVariant {
      * its own fur (tameable once per player through nl.juiced.guhs.feature.verhaal.VerhaalGuhs, never by kaas knabbels).
      */
     public boolean isVerhaalGuh() {
-        return this == BALTOGUH || this == MEWTWO || this == STITCH626;
+        return nl.juiced.guhs.feature.verhaal.VerhaalGuh.van(this) != null;   // (bbq2: also Sam-guh and Guhshi)
     }
 
     /** The kind of guh character this page is about (null for a real variant). */
@@ -175,7 +180,7 @@ public enum GuhVariant {
     public static final int ROLL_OUT_OF = 1000;
     /** Bone prefixes that only some variants show (all hidden on a normal guh). */
     public static final List<String> VARIANT_BONES = List.of("outfit_", "neck", "teckel", "ender", "koning", "wolk", "zeemeer", "asguh", "pluis", "pinguh",
-            "balto", "mewtwo", "stitch");
+            "balto", "mewtwo", "stitch", "samguh", "guhshi");
     /** How far the brontosaurus guh's head sits up (and forward) on its neck, in model pixels. */
     public static final float NECK_UP = 22f, NECK_FORWARD = 4.5f;
     /** How far the teckel guh's back legs and tail sit further back, in model pixels. */

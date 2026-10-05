@@ -97,6 +97,14 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // --- 3.0 (Guhverhalen; the roles: nl.juiced.guhs.feature.verhaal.NpcRollen, set by the owner slices) ---
         TIMMERGUH(1.0f), BORIS(0.9f), STEELE_MIKA(1.0f), MUK(1.3f), LUK(1.3f), ROSY(0.55f), WITTE_WOLFGUH(1.25f),
         KNABBELKLOON(1.0f), WOLKENHOEDER(1.05f), LILO_GUH(0.8f), NANI_GUH(1.0f), TIKIGUH(1.0f),
+        // --- bbq2 (CONTRACT_130 5.2; the roles: NpcRollen, set by the owner slices; no Guhdex pages) ---
+        // <bbq2>
+        UITVINDERGUH(1.0f), WACHTERGUH(1.0f), KNUFFELMAKERGUH(1.0f), MIKA_OMA(0.9f), STALKNECHTGUH(1.0f), TOLWACHTER_MIKA(1.0f),
+        ARCHEOLOOGGUH(1.0f), MIJNWERKERGUH(1.0f), VERZORGERGUH(1.0f), KAMPBAASGUH(1.0f), HOUTHAKKERGUH(1.0f),
+        MARKTMEESTER_MIKA(1.0f), TORENWACHTERGUH(1.0f), PEPERTELERGUH(1.0f), GUHDALF(1.15f), SMIKAGOL(0.85f), ARAGUH(1.0f),
+        LEGUHLAS(1.0f), GIMGUH(0.85f), BOROMIKA(1.0f), MERRIE(0.8f), PIPPGUH(0.8f), GUHROND(1.0f), GUHLADRIEL(1.0f), SAUSUMAN(1.2f),
+        PADGUH(0.8f), PERZIKGUH(1.0f),
+        // </bbq2>
         // <timmerguh>
         // </timmerguh>
         // <balto>
