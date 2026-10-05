@@ -285,6 +285,8 @@ TEXTS = {
                                        "allemaal heeft meegemaakt.",
     # the Guhdex tab Mijn guhs
     "gui.guhs.guhdex.tab.mijn_guhs": "Mijn guhs",
+    "gui.guhs.guhdex.tab.andere_vadsjes": "Mijn andere vadsjes",
+    "gui.guhs.anderevadsjes.leeg": "Je hebt nog geen andere tamme vadsjes, njeg! Tem een pieppiepmuisje, een Schilly of een ander diertje en hier zie je waar het is.",
     "gui.guhs.mijnguhs.leeg": "Je hebt nog geen tamme guhs, njeg! Tem er een met kaasknabbels en hier verschijnt zijn dagboekje.",
     "gui.guhs.mijnguhs.terug": "< Alle guhs",
     "gui.guhs.mijnguhs.draai": "sleep om te draaien",

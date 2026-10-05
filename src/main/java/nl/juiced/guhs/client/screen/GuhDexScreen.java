@@ -64,6 +64,7 @@ public class GuhDexScreen extends Screen {
     private final nl.juiced.guhs.feature.gids.client.GidsLijst lijst = new nl.juiced.guhs.feature.gids.client.GidsLijst();
     /** 2.10: the Mijn guhs tab (its own list, preview and pages). */
     private final nl.juiced.guhs.feature.band.client.MijnGuhsTab mijnGuhs = new nl.juiced.guhs.feature.band.client.MijnGuhsTab();
+    private final nl.juiced.guhs.feature.band.client.AndereVadsjesTab andereVadsjes = new nl.juiced.guhs.feature.band.client.AndereVadsjesTab();
     /** The Verhalen tab (its list and the page of a questline). */
     private final nl.juiced.guhs.feature.gids.client.GidsVerhalenTab verhalen = new nl.juiced.guhs.feature.gids.client.GidsVerhalenTab();
     /** 1.2.6: the Titels tab (pick the title behind your name). */
@@ -84,6 +85,8 @@ public class GuhDexScreen extends Screen {
         KLEDING("guhs:party_hat", net.minecraft.world.item.Items.LEATHER_HELMET),
         /** 2.10: your own tamed guhs, each with its dagboekje (feature.band.client.MijnGuhsTab). */
         MIJN_GUHS("guhs:guhhuisje_klein", net.minecraft.world.item.Items.RED_BED),
+        /** 1.2.10: your other tamed critters and where they are (feature.band.client.AndereVadsjesTab). */
+        ANDERE_VADSJES("guhs:pieppiepmuisje_item", net.minecraft.world.item.Items.TURTLE_EGG),
         /** Every questline: where you are, what to do now, whom to visit (feature.gids.client.GidsVerhalenTab). */
         VERHALEN("minecraft:writable_book", net.minecraft.world.item.Items.WRITABLE_BOOK),
         /** 1.2.6: your titles; pick the one behind your name (feature.titels.client.GidsTitelsTab). */
@@ -152,7 +155,7 @@ public class GuhDexScreen extends Screen {
 
     /** 2.10: new Mijn guhs data arrived while that tab shows. */
     public void mijnGuhsVernieuwd() {
-        if (tab == Tab.MIJN_GUHS) {
+        if (tab == Tab.MIJN_GUHS || tab == Tab.ANDERE_VADSJES) {
             rebuildWidgets();
         }
     }
@@ -186,11 +189,14 @@ public class GuhDexScreen extends Screen {
         if (tab == Tab.MIJN_GUHS) {
             mijnGuhs.bewaarScroll();
         }
+        if (tab == Tab.ANDERE_VADSJES) {
+            andereVadsjes.bewaarScroll();
+        }
         if (tab == Tab.VERHALEN) {
             verhalen.bewaarScroll();
         }
         tab = newTab;
-        if (tab == Tab.MIJN_GUHS) {
+        if (tab == Tab.MIJN_GUHS || tab == Tab.ANDERE_VADSJES) {
             nl.juiced.guhs.feature.band.client.MijnGuhsTab.vraag();   // (fresh hearts and places)
         }
         if (tab == Tab.VERHALEN) {
@@ -255,6 +261,7 @@ public class GuhDexScreen extends Screen {
             case MINIGAMES, KLEDING -> initLijst();
             case KNUS -> initKnus();
             case MIJN_GUHS -> mijnGuhs.init(font, left, top, W, H, this::addRenderableWidget, this::rebuildWidgets);
+            case ANDERE_VADSJES -> andereVadsjes.init(font, left, top, W, H);
             case VERHALEN -> verhalen.init(left, top, W, H, this::addRenderableWidget, this::rebuildWidgets);
             case TITELS -> titels.init(left, top, W, H);
             default -> initGuhs();
@@ -307,11 +314,15 @@ public class GuhDexScreen extends Screen {
         int tx = left + TABS_X + nl.juiced.guhs.feature.gids.client.GidsTabs.breedte(Tab.values().length, TAB_W, TAB_GAP) + 6;
         Component bold = title.copy().withStyle(ChatFormatting.BOLD);
         g.text(font, bold, tx, top + 9, 0xFF7A2848, false);
-        scaled(g, Component.literal("· ").append(tab.naam()), tx + font.width(bold) + 4, top + 10, 0.875f, 0xFFB0708A, false);
+        // (1.2.10: eight tabs: a long tab name is squeezed into what is left of the bar)
+        int nx = tx + font.width(bold) + 4;
+        nl.juiced.guhs.feature.gids.client.GidsTekst.passend(g, Component.literal("· ").append(tab.naam()), nx, top + 10, left + W - 4 - nx, 0.875f,
+                0xFFB0708A, false);
         switch (tab) {
             case MINIGAMES, KLEDING -> lijst.teken(g, mouseX, mouseY, 0xFFD27A9C, 0x30D27A9C);
             case KNUS -> renderKnus(g, mouseX, mouseY);
             case MIJN_GUHS -> mijnGuhs.teken(g, mouseX, mouseY);
+            case ANDERE_VADSJES -> andereVadsjes.teken(g, mouseX, mouseY);
             case VERHALEN -> verhalen.teken(g, mouseX, mouseY);
             case TITELS -> titels.teken(g, mouseX, mouseY);
             default -> renderGuhs(g, mouseX, mouseY);
@@ -325,8 +336,10 @@ public class GuhDexScreen extends Screen {
         int hover = nl.juiced.guhs.feature.gids.client.GidsTabs.onder(left + TABS_X, top + TABS_Y, Tab.values().length, mouseX, mouseY, TAB_W, TAB_GAP);
         if (hover >= 0) {
             g.setTooltipForNextFrame(font, Tab.values()[hover].naam(), mouseX, mouseY);
-        } else if (tab == Tab.MINIGAMES || tab == Tab.KLEDING || tab == Tab.MIJN_GUHS || tab == Tab.VERHALEN || tab == Tab.TITELS) {
-            List<Component> tip = tab == Tab.MIJN_GUHS ? mijnGuhs.tip(mouseX, mouseY) : tab == Tab.VERHALEN ? verhalen.tip(mouseX, mouseY)
+        } else if (tab == Tab.MINIGAMES || tab == Tab.KLEDING || tab == Tab.MIJN_GUHS || tab == Tab.ANDERE_VADSJES || tab == Tab.VERHALEN
+                || tab == Tab.TITELS) {
+            List<Component> tip = tab == Tab.MIJN_GUHS ? mijnGuhs.tip(mouseX, mouseY) : tab == Tab.ANDERE_VADSJES ? andereVadsjes.tip(mouseX, mouseY)
+                    : tab == Tab.VERHALEN ? verhalen.tip(mouseX, mouseY)
                     : tab == Tab.TITELS ? titels.tip(mouseX, mouseY) : lijst.tip(mouseX, mouseY);
             if (tip != null && !tip.isEmpty()) {
                 g.setComponentTooltipForNextFrame(font, tip, mouseX, mouseY);
@@ -341,6 +354,9 @@ public class GuhDexScreen extends Screen {
             return true;
         }
         if (tab == Tab.MIJN_GUHS && mijnGuhs.wiel(mouseX, mouseY, scrollY)) {
+            return true;
+        }
+        if (tab == Tab.ANDERE_VADSJES && andereVadsjes.wiel(mouseX, mouseY, scrollY)) {
             return true;
         }
         if (tab == Tab.VERHALEN && verhalen.wiel(mouseX, mouseY, scrollY)) {
@@ -367,6 +383,9 @@ public class GuhDexScreen extends Screen {
         if (tab == Tab.MIJN_GUHS && mijnGuhs.sleep(mouseX, mouseY, dragX, dragY)) {
             return true;
         }
+        if (tab == Tab.ANDERE_VADSJES && andereVadsjes.sleep(mouseY)) {
+            return true;
+        }
         if (tab == Tab.VERHALEN && verhalen.sleep(mouseY)) {
             return true;
         }
@@ -382,6 +401,7 @@ public class GuhDexScreen extends Screen {
         int button = event.button();
         lijst.los();
         mijnGuhs.los();
+        andereVadsjes.los();
         verhalen.los();
         titels.los();
         return super.mouseReleased(event);
@@ -681,6 +701,9 @@ public class GuhDexScreen extends Screen {
         }
         if (tab == Tab.MIJN_GUHS) {
             return mijnGuhs.klik(mouseX, mouseY, button);
+        }
+        if (tab == Tab.ANDERE_VADSJES) {
+            return andereVadsjes.klik(mouseX, mouseY, button);
         }
         if (tab == Tab.VERHALEN) {
             return verhalen.klik(mouseX, mouseY, button);

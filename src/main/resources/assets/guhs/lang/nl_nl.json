@@ -6072,6 +6072,8 @@
   "gui.guhs.menu.dagboekje": "Dagboekje",
   "gui.guhs.menu.dagboekje.tooltip": "Open het dagboekje van je guh in de Guhdex: hartjes, favorietjes, vriendjes, waar hij is en wat hij allemaal heeft meegemaakt.",
   "gui.guhs.guhdex.tab.mijn_guhs": "Mijn guhs",
+  "gui.guhs.guhdex.tab.andere_vadsjes": "Mijn andere vadsjes",
+  "gui.guhs.anderevadsjes.leeg": "Je hebt nog geen andere tamme vadsjes, njeg! Tem een pieppiepmuisje, een Schilly of een ander diertje en hier zie je waar het is.",
   "gui.guhs.mijnguhs.leeg": "Je hebt nog geen tamme guhs, njeg! Tem er een met kaasknabbels en hier verschijnt zijn dagboekje.",
   "gui.guhs.mijnguhs.terug": "< Alle guhs",
   "gui.guhs.mijnguhs.draai": "sleep om te draaien",

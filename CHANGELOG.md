@@ -3,6 +3,13 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.10 — Minecraft 26.1.2
+
+A small addition. Same requirements as 1.2.9, no worldgen changes.
+
+- **New Guhdex tab: My Other Chonkies (Mijn andere vadsjes).** Next to "My Guhs" there is now a list of all your other tamed critters (Squeaksqueak Mice, Poopshelly, Shelly, the little land animals, the Guhxolotl...), grouped by kind: its name and where it is right now (walking around, sitting, on your shoulder, as an item in a chest or in someone's pockets...). Hover a row for the full place with coordinates. A critter shows up once the game has seen it after this update (it is nearby and loaded, or you carry it as an item).
+- **More on the tooltip of a picked-up guh**: its variant and personality, and its hearts with you (the level and how many hearts until the next one; for guhs picked up from this version on), next to the size, HP and saddle that were already there. A picked-up critter (mouse, Shelly, land animals...) now shows what it is when it has a name of its own, and its HP.
+
 ## 1.2.9 — Minecraft 26.1.2
 
 A small fix release. Same requirements as 1.2.8, no worldgen changes.

@@ -6072,6 +6072,8 @@
   "gui.guhs.menu.dagboekje": "Diary",
   "gui.guhs.menu.dagboekje.tooltip": "Open your guh's diary in the Guhdex: hearts, faves, buddies, where he is and everything he's been through.",
   "gui.guhs.guhdex.tab.mijn_guhs": "My Guhs",
+  "gui.guhs.guhdex.tab.andere_vadsjes": "My Other Chonkies",
+  "gui.guhs.anderevadsjes.leeg": "You don't have any other tame critters yet, nyeg! Tame a squeaksqueak mouse, a Shelly or another little animal and you'll see here where it is.",
   "gui.guhs.mijnguhs.leeg": "You don't have any tame guhs yet, nyeg! Tame one with cheese nibbles and his diary will show up here.",
   "gui.guhs.mijnguhs.terug": "< All Guhs",
   "gui.guhs.mijnguhs.draai": "drag to spin",
