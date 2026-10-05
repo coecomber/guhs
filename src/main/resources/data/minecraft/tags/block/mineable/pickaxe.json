@@ -141,6 +141,14 @@
     "guhs:grote_knabbelmachine",
     "guhs:knabbelmachine_beeldje",
     "guhs:elfentouw_haak",
-    "guhs:oog_van_sausron_beeldje"
+    "guhs:oog_van_sausron_beeldje",
+    "guhs:vadskracht_testbatterij",
+    "guhs:vadskracht_testmachine",
+    "guhs:guhrio_grond",
+    "guhs:guhrio_blok",
+    "guhs:guhrio_steen",
+    "guhs:guhrio_vraagblok",
+    "guhs:guhrio_pijp",
+    "guhs:guhrio_pijp_lijf"
   ]
 }
