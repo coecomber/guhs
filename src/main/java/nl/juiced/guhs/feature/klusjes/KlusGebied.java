@@ -27,7 +27,6 @@ import nl.juiced.guhs.feature.guhpolder.MolentjeBlock;
 import nl.juiced.guhs.feature.huisje.Huisje;
 import nl.juiced.guhs.feature.tuintjes.TuinBlock;
 import nl.juiced.guhs.feature.vadswoud.KnabbelbessenstruikBlock;
-import nl.juiced.guhs.registry.ModBlocks;
 
 /**
  * What there is to do in the home base of a huisje: one scan of its whole area ({@link Huisje#inGebied}, the blue dome)
@@ -50,7 +49,7 @@ public final class KlusGebied {
         WATER,
         /** Knabbelbessen and sweet berries ready to pick. */
         BES,
-        /** Guh flowers (kaasbloem, roze guhbloem). */
+        /** Flowers: every small flower (vanilla and ours) and the tall ones, not the wither rose. */
         BLOEM,
         /** Full knabbelkorven. */
         KORF,
@@ -167,7 +166,15 @@ public final class KlusGebied {
     }
 
     public static boolean guhbloem(BlockState s) {
-        return s.is(ModBlocks.KAASBLOEM.get()) || s.is(ModBlocks.ROZE_GUHBLOEM.get());
+        if (s.is(net.minecraft.world.level.block.Blocks.WITHER_ROSE)) {
+            return false;
+        }
+        if (s.is(net.minecraft.tags.BlockTags.SMALL_FLOWERS)) {
+            return true;
+        }
+        // tall flowers: only the lower half is a spot
+        return PlukkenKlus.HOGE_BLOEMEN.contains(s.getBlock())
+                && s.getValue(net.minecraft.world.level.block.DoublePlantBlock.HALF) == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER;
     }
 
     public static boolean volleKorf(BlockState s) {

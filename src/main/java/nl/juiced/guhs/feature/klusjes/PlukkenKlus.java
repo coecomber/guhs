@@ -8,14 +8,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -24,12 +29,14 @@ import nl.juiced.guhs.feature.huisje.Huisje;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.feature.vadswoud.KnabbelbessenstruikBlock;
 import nl.juiced.guhs.feature.vadswoud.VadswoudFeature;
+import nl.juiced.guhs.registry.ModBlocks;
 
 /**
  * Bloemetjes & bessen plukken: the resident picks the ripe knabbelbessen and sweet berries in the home base (the bush
- * stays and grows again), up to {@link #PER_KEER} bushes per trip. No berries? Then it picks a guh flower (kaasbloem,
- * roze guhbloem): only a bloom, the flower keeps standing (every flower once per {@link #BLOEM_RUST} ticks), and now and
- * then it plants a new little flower of the same kind next to it (as long as there are fewer than {@link #MAX_BLOEMEN}).
+ * stays and grows again), up to {@link #PER_KEER} bushes per trip. No berries? Then it picks a bloom at any flower
+ * (vanilla or ours): the flower keeps standing (every flower once per {@link #BLOEM_RUST} ticks) and the resident brings
+ * home a flower of any kind ({@link #kiesBloem}: the roze guhbloem twice as often as the others). Now and then it plants
+ * a new little flower of the standing kind next to it (as long as there are fewer than {@link #MAX_BLOEMEN}).
  * Guhs and pieppiepmuisjes.
  */
 public class PlukkenKlus extends BasisKlus {
@@ -39,6 +46,36 @@ public class PlukkenKlus extends BasisKlus {
     /** 1 in N picked flowers gets a new little neighbour. */
     public static final int PLANT_KANS = 3;
     private static final Map<String, Long> GEPLUKT = new ConcurrentHashMap<>();
+    /** The tall flowers (not in the small flowers tag). */
+    static final java.util.Set<Block> HOGE_BLOEMEN = java.util.Set.of(Blocks.SUNFLOWER, Blocks.LILAC, Blocks.ROSE_BUSH, Blocks.PEONY);
+    @Nullable
+    private static List<Item> soorten;
+
+    /** Every kind of flower a resident can bring home: all small flowers (vanilla, ours, other mods) and the tall ones. */
+    public static List<Item> soorten() {
+        if (soorten == null) {
+            List<Item> uit = new ArrayList<>();
+            for (Holder<Block> b : BuiltInRegistries.BLOCK.getTagOrEmpty(BlockTags.SMALL_FLOWERS)) {
+                Item i = b.value().asItem();
+                if (b.value() != Blocks.WITHER_ROSE && i != Items.AIR && !uit.contains(i)) {
+                    uit.add(i);
+                }
+            }
+            for (Block b : HOGE_BLOEMEN) {
+                uit.add(b.asItem());
+            }
+            uit.sort(java.util.Comparator.comparing(i -> BuiltInRegistries.ITEM.getKey(i).toString()));
+            soorten = uit;
+        }
+        return soorten;
+    }
+
+    /** A flower of a random kind; the roze guhbloem counts twice. */
+    public static ItemStack kiesBloem(net.minecraft.util.RandomSource random) {
+        List<Item> lijst = soorten();
+        int n = random.nextInt(lijst.size() + 1);
+        return new ItemStack(n == lijst.size() ? ModBlocks.ROZE_GUHBLOEM.get().asItem() : lijst.get(n));
+    }
 
     PlukkenKlus() {
         super("plukken", () -> new ItemStack(VadswoudFeature.KNABBELBESSEN.get()), 300);
@@ -145,7 +182,7 @@ public class PlukkenKlus extends BasisKlus {
                 long nu = level.getGameTime();
                 GEPLUKT.entrySet().removeIf(e -> e.getValue() + BLOEM_RUST < nu);
             }
-            pak(new ItemStack(s.getBlock()));
+            pak(kiesBloem(mob.getRandom()));
             level.playSound(null, doel, SoundEvents.CAVE_VINES_PICK_BERRIES, SoundSource.BLOCKS, 0.8f, 1.4f);
             sprankel(Vec3.atCenterOf(doel), 3);
             aantal = 1;

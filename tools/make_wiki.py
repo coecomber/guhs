@@ -2442,7 +2442,7 @@ def lieve_vadsjes_section():
              "Een Mika of monster bij het huisje? Hij piept (een roze !), rent naar je toe en waarschuwt je, en <b>duwt Mika's heel zachtjes weg</b>. Nooit vechten, nooit pijn doen. Altijd lief!"),
             ("Bloemetjes &amp; bessen plukken", "guh, muisje",
              "Picks knabbelbessen and sweet berries (the bush stays) and a bloom from kaasbloemen and roze guhbloemen (the flower stays), and sometimes plants a new little flower.",
-             "Plukt knabbelbessen en zoete bessen (de struik blijft) en een bloemetje van kaasbloemen en roze guhbloemen (de bloem blijft staan), en plant soms een nieuw bloemetje."),
+             "Plukt knabbelbessen en zoete bessen (de struik blijft) en een bloemetje bij elke bloem (de bloem blijft staan): alle soorten bloemen, het vaakst een roze guhbloem. Plant soms een nieuw bloemetje."),
             ("Lampjes aan &amp; uit", "guh",
              "In the evening it switches the guhlampjes and candles in the area on, in a little round; in the morning off again, with a big yawn.",
              "'s Avonds doet hij in een rondje de guhlampjes en kaarsjes in de klus-area aan; 's ochtends weer uit, met een grote gaap."),

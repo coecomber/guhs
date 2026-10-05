@@ -316,7 +316,7 @@ ADV = {  # id: (parent, icon, frame, title, description)
     "klusjes_bakken": ("huisje_gebouwd", "guhs:knabbeloven", "task", "Guh de bakker", "Laat een bewoner malen in een guh-molentje of bakken in een knabbeloven"),
     "klusjes_vissen": ("huisje_gebouwd", "guhs:guh_vis", "task", "Visje vangen", "Laat een bewoner guhvissen en schelpjes vangen in de vijver bij het huisje"),
     "klusjes_waken": ("huisje_gebouwd", "minecraft:bell", "task", "Waakguh", "Een bewoner piept en waarschuwt je voor een Mika of monster (en duwt Mika's zachtjes weg)"),
-    "klusjes_plukken": ("huisje_gebouwd", "guhs:knabbelbessen", "task", "Bessenplukker", "Laat een bewoner bessen of guhbloemetjes plukken"),
+    "klusjes_plukken": ("huisje_gebouwd", "guhs:knabbelbessen", "task", "Bessenplukker", "Laat een bewoner bessen of bloemetjes plukken"),
     "klusjes_lampjes": ("huisje_gebouwd", "guhs:klusjes_guhlampje", "task", "Lichtjes aan", "Een bewoner doet 's avonds de lampjes aan (en 's ochtends gapend weer uit)"),
     "klusjes_oppas": ("huisje_gebouwd", "guhs:kaas_knabbels", "task", "Oppasguh", "Een bewoner verzorgt een muisje, schildpadje of een gewonde guh"),
     "klusjes_bank": ("klusjes_opruimen", "guhs:bank_guh", "task", "Alles op zijn plek", "Laat de spulletjes van klusjes in een Bank Guh sorteren"),
@@ -340,8 +340,8 @@ KLUSSEN = {  # the chore names + the tips of the huisje screen (what it needs ne
                "Guhvis! (Guhs, Schilly en Poepschilly)"),
     "waken": ("Wachten & waarschuwen", "Piept en rent naar jou als er een Mika of monster bij het huisje komt, en duwt Mika's heel "
               "zachtjes weg. Nooit vechten, altijd lief! (Guhs; muisjes piepen alleen)"),
-    "plukken": ("Bloemetjes & bessen plukken", "Plukt knabbelbessen en zoete bessen, en een bloemetje van kaasbloemen en roze guhbloemen "
-                "(die blijven staan). Plant soms een nieuw bloemetje. (Guhs en muisjes)"),
+    "plukken": ("Bloemetjes & bessen plukken", "Plukt knabbelbessen en zoete bessen, en een bloemetje bij elke bloem (die blijft staan): alle soorten "
+                "bloemen, het vaakst een roze guhbloem. Plant soms een nieuw bloemetje. (Guhs en muisjes)"),
     "lampjes": ("Lampjes aan & uit", "Doet 's avonds de guhlampjes en kaarsjes in de klus-area aan en 's ochtends weer uit, met een "
                 "grote gaap. (Guhs)"),
     "oppas": ("Muisje-oppas & verzorgen", "Knuffelt en voert pieppiepmuisjes, Schilly en Poepschilly in de buurt. Een gewonde guh krijgt "
@@ -505,8 +505,9 @@ def ftb(fq):
     q("klusjes_waken", "Waakguh", "Bewoners met het klusje &eWachten & waarschuwen&r piepen als er een Mika of monster bij het huisje komt, rennen "
       "naar je toe en duwen Mika's heel zachtjes weg. Vechten doen ze nooit: guhs zijn altijd lief!",
       "minecraft:bell", [a("klusjes_waken")], rewards=(("guhs:kaas_knabbels", 8),), xp=50)
-    q("klusjes_plukken", "Bessenplukker", "Knabbelbessen, zoete bessen, kaasbloemen en roze guhbloemen bij het huisje? Het klusje &ePlukken&r plukt ze "
-      "voor je (de struikjes en bloemetjes blijven staan) en plant soms zelfs een nieuw bloemetje.",
+    q("klusjes_plukken", "Bessenplukker", "Knabbelbessen, zoete bessen of bloemen bij het huisje? Het klusje &ePlukken&r plukt ze voor je (de struikjes en "
+      "bloemetjes blijven staan): bij een bloem komt er een bloemetje van een willekeurige soort mee, het vaakst een roze "
+      "guhbloem. Soms plant je guh zelfs een nieuw bloemetje.",
       "guhs:knabbelbessen", [a("klusjes_plukken")], rewards=(("guhs:kaas_knabbels", 8),), xp=50)
     q("klusjes_lampjes", "Lichtjes aan", "Zet guhlampjes (of kaarsjes) rond je huisje. Als het avond wordt, doet een bewoner ze aan, en 's "
       "ochtends gapend weer uit.", "guhs:klusjes_guhlampje", [a("klusjes_lampjes")], rewards=(("guhs:marshmallow_knabbel", 2),), xp=50)

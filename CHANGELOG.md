@@ -126,6 +126,12 @@ on one server, forever. Same requirements as 1.2.6. Fixes also repair worlds tha
 
 ### Other fixes
 
+- **Guhs pick every kind of flower.** The *Picking* chore of a Guh House only knew cheese flowers and pink guh flowers. Now
+  a resident picks a bloom at any flower in its area (vanilla ones, tall ones and ours; the flower stays), and what it
+  brings home is a flower of a random kind: all of them, the pink guh flower twice as often as the others. (No wither
+  roses.)
+- **Found while checking a real world:** two Guh Fair sleds riding home at the same time no longer park inside each
+  other, and a nibble raft that a cheese pool took a bite out of is still recognised.
 - **The pharmacy job with more players.** Snotje is one shared little guh: when one player gave him the kaasmelkdrankje, a
   second player who was busy with the same job heard "he's better already" and was stuck. Now everyone who is on the job
   can give their drankje, and Snotje sniffles again when the next helper talks to the doctor.

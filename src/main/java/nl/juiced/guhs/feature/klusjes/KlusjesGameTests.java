@@ -383,16 +383,28 @@ public class KlusjesGameTests {
         BlockPos bes = new BlockPos(7, 2, 15), zoet = new BlockPos(9, 2, 16), bloem = new BlockPos(15, 2, 15);
         helper.setBlock(bes, VadswoudFeature.KNABBELBESSENSTRUIK.get().defaultBlockState().setValue(KnabbelbessenstruikBlock.AGE, 3));
         helper.setBlock(zoet, Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 3));
-        helper.setBlock(bloem, ModBlocks.KAASBLOEM.get());
+        helper.setBlock(bloem, Blocks.POPPY);   // (1.2.7) any flower is a spot
         Huisje h = huisje(helper, p);
         bewoner(helper, h, p, new BlockPos(12, 2, 14), "plukken");
+        // every kind comes home, the roze guhbloem twice as often, never a wither rose
+        java.util.Map<net.minecraft.world.item.Item, Integer> tel = new java.util.HashMap<>();
+        net.minecraft.util.RandomSource r = net.minecraft.util.RandomSource.create(7);
+        int n = PlukkenKlus.soorten().size();
+        for (int i = 0; i < (n + 1) * 400; i++) {
+            tel.merge(PlukkenKlus.kiesBloem(r).getItem(), 1, Integer::sum);
+        }
+        helper.assertTrue(tel.keySet().containsAll(PlukkenKlus.soorten()) && tel.size() == n && !tel.containsKey(Items.WITHER_ROSE)
+                && tel.containsKey(Items.DANDELION) && tel.containsKey(Items.PEONY) && tel.containsKey(ModBlocks.KAASBLOEM.get().asItem())
+                && tel.containsKey(nl.juiced.guhs.feature.guhwaii.GuhwaiiFeature.BLOEMEN.get(0).get().asItem()), "every flower kind: " + tel.size() + "/" + n);
+        int roze = tel.get(ModBlocks.ROZE_GUHBLOEM.get().asItem()), klaproos = tel.get(Items.POPPY);
+        helper.assertTrue(roze > klaproos * 1.6 && roze < klaproos * 2.5, "roze twice as common: " + roze + " vs " + klaproos);
         helper.succeedWhen(() -> {
             helper.assertTrue(helper.getBlockState(bes).getValue(KnabbelbessenstruikBlock.AGE) < 3
                     && helper.getBlockState(zoet).getValue(SweetBerryBushBlock.AGE) < 3, "both bushes picked (and they stay)");
             helper.assertTrue(telKist(kist, s -> s.is(VadswoudFeature.KNABBELBESSEN.get())) > 0 && telKist(kist, s -> s.is(Items.SWEET_BERRIES)) > 0,
                     "the berries are in the chest");
-            helper.assertTrue(telKist(kist, s -> s.is(ModBlocks.KAASBLOEM.get().asItem())) > 0, "a kaasbloem picked");
-            helper.assertBlockPresent(ModBlocks.KAASBLOEM.get(), bloem);
+            helper.assertTrue(telKist(kist, s -> PlukkenKlus.soorten().contains(s.getItem())) > 0, "a flower picked");
+            helper.assertBlockPresent(Blocks.POPPY, bloem);
             weg(helper, h, p);
         });
     }
