@@ -12,7 +12,9 @@
               "function": "minecraft:copy_components",
               "source": "block_entity",
               "include": [
-                "guhs:bank_contents"
+                "guhs:bank_contents",
+                "guhs:bank_opgevoerd",
+                "guhs:bank_id"
               ]
             }
           ]

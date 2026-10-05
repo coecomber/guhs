@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IZI",
+    "ILI",
+    "IKI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "Z": "guhs:zoutkristal",
+    "L": "#minecraft:wooden_trapdoors",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:hapluikje"
+  }
+}

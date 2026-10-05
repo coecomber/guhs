@@ -225,7 +225,7 @@
   ],
   "quest.4755483D64D9C5D3.title": "Je eigen Bank Guh",
   "quest.4755483D64D9C5D3.quest_desc": [
-    "Zet je &dBank Guh&r neer en klik erop: er passen oneindig veel spullen in zijn buikje. Je kunt zoeken, sorteren en filteren, en er zit een werkbankrooster in (met JEI vult de &e+&r het rooster eerst vanuit de bank). Staat hij in de klus-area van een Guhhuisje? Dan sorteren de bewoners alles wat ze verzamelen erin. Breek je hem af, dan neemt hij alles mee.",
+    "Zet je &dBank Guh&r neer en klik erop: van elke soort passen er wel &e256&r in zijn buikje (met het &dBodemloos Knabbelmaagje&r van de uitvinder-guh zelfs oneindig veel). Je kunt zoeken, sorteren en filteren, en er zit een werkbankrooster in (met JEI vult de &e+&r het rooster eerst vanuit de bank). Staat hij in de klus-area van een Guhhuisje? Dan sorteren de bewoners alles wat ze verzamelen erin. Breek je hem af, dan neemt hij alles mee.",
   ],
   "quest.475548AFC2EB45F3.title": "Knabbelboer",
   "quest.475548AFC2EB45F3.quest_desc": [
@@ -282,5 +282,29 @@
   "quest.475548056E6FFE61.title": "Feestneus",
   "quest.475548056E6FFE61.quest_desc": [
     "Maak alle drie de evenementen mee: de kaasregen, de Vadsparade en de sterrenregen.",
+  ],
+  "quest.475548B5EEC988FD.title": "Vol is vol, njeg",
+  "quest.475548B5EEC988FD.quest_desc": [
+    "Hoe vadsig hij ook is: van &eelke soort&r past er hooguit &e256&r in het buikje van een &dBank Guh&r. Zijn scherm laat het zien (&e256/256&r wordt rood) en wat er niet meer bij past houd je gewoon zelf. Vul er eentje tot hij van iets vol zit. Had je bank al meer dan dat? Geen paniek: er raakt niks kwijt, je kunt het er altijd uit halen.",
+  ],
+  "quest.4755486F23BB6189.title": "Het Bodemloos Knabbelmaagje",
+  "quest.4755486F23BB6189.quest_desc": [
+    "De &duitvinder-guh&r in de &6Oude Guhrad-centrale&r (Guhbarbecuether) heeft iets geknutseld: het &dBodemloos Knabbelmaagje&r. Help hem met zijn oefenhal en je krijgt er een. Klik ermee op je Bank Guh en er past van alles &eoneindig veel&r in. Het blijft bij die bank, ook als je hem oppakt. Pas dan kunnen &eKnabbelbuizen&r er ook spullen uit halen.",
+  ],
+  "quest.475548D383258643.title": "De Banksleutel",
+  "quest.475548D383258643.quest_desc": [
+    "Maak een &dBanksleutel&r (een zoutkristal, een goudstaaf en een kaasknabbel) en klik ermee op je &dBank Guh&r: de sleutel kent hem nu. Hij raakt nooit op, dus je koppelt er zoveel Hapluikjes mee als je wilt.",
+  ],
+  "quest.475548A41773A4BA.title": "Het Hapluikje",
+  "quest.475548A41773A4BA.quest_desc": [
+    "Maak een &dHapluikje&r: een machientje met een bekje. Het heeft &e2 vadskracht&r nodig (zet het naast een Guhrad met een guh erin, of sluit het aan met Guhdraad). Zonder vadskracht doet het een dutje.",
+  ],
+  "quest.475548AB5B193DA2.title": "Sleutel erop",
+  "quest.475548AB5B193DA2.quest_desc": [
+    "Klik met de Banksleutel (die je Bank Guh al kent) op het Hapluikje. Vanaf nu hapt dat luikje voor precies die ene bank. Meer luikjes voor dezelfde bank? Mag! Kijk naar het luikje en je leest voor welke bank het hapt.",
+  ],
+  "quest.475548691E03F72C.title": "Hap!",
+  "quest.475548691E03F72C.quest_desc": [
+    "Klik met iets in je hand op het Hapluikje (of zet er een trechter of Knabbelbuis op): &dhap&r, het ligt in je Bank Guh. Hoe ver weg die ook staat, zelfs in een &eandere dimensie&r. Het luikje hapt alleen: er komt nooit iets uit. Staat je bank nergens of zit hij vol met dat ding? Dan houdt het luikje zijn bekje dicht en houd jij je spullen.",
   ],
 }
