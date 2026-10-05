@@ -16,15 +16,28 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.SignItem;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.StandingSignBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.WallSignBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -34,6 +47,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -55,7 +69,7 @@ import nl.juiced.guhs.feature.verhaal.VerhaalGuhs;
  * guhwaiispellen). Resources: tools/features/guhwaii.py (+ guhwaii_tex.py, guhwaii_bouw.py, guhwaii_modellen.py).
  * <ul>
  *   <li>The island's own things: guh-palms with a guh face in the trunk ({@link GuhwaiiBlokken.PalmGezicht}, fronds, the
- *       sprouting coconut), the {@code kokosnoot} (hangs, ripens, drops; eat it, or plant it on sand), {@code kokosmelk}, the pink
+ *       sprouting coconut; 1.2.8: the palm wood set {@link #PALM_HOUTSET}, tests in PalmHoutGameTests), the {@code kokosnoot} (hangs, ripens, drops; eat it, or plant it on sand), {@code kokosmelk}, the pink
  *       hibiscus and three more tropical flowers (+ pots), the {@link SchillyEitjesBlock Schilly-eitjes} on the beaches that
  *       hatch into baby Poepschillys and Schillys, and the shallow kaaskoraal reef in the lagoon with guhvisjes
  *       ({@link GuhwaiiWorldgen}).</li>
@@ -85,7 +99,7 @@ public final class GuhwaiiFeature {
     public static final String BRON = "guhwaii";
 
     // --- the guh-palm ---------------------------------------------------------------------------------------------------
-    public static final DeferredBlock<RotatedPillarBlock> PALM_STAM = BLOCKS.registerBlock("guhwaii_palm_stam", RotatedPillarBlock::new,
+    public static final DeferredBlock<GuhwaiiBlokken.PalmStam> PALM_STAM = BLOCKS.registerBlock("guhwaii_palm_stam", GuhwaiiBlokken.PalmStam::new,
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LOG).mapColor(MapColor.WOOD));
     public static final DeferredBlock<GuhwaiiBlokken.PalmGezicht> PALM_GEZICHT = BLOCKS.registerBlock("guhwaii_palm_gezicht",
             GuhwaiiBlokken.PalmGezicht::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.JUNGLE_LOG).mapColor(MapColor.WOOD));
@@ -98,6 +112,49 @@ public final class GuhwaiiFeature {
     public static final DeferredBlock<GuhwaiiBlokken.Kokosnoot> KOKOSNOOT = BLOCKS.registerBlock("kokosnoot", GuhwaiiBlokken.Kokosnoot::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).strength(0.4f).sound(SoundType.WOOD).noOcclusion().randomTicks()
                     .pushReaction(PushReaction.DESTROY));
+
+    // --- the guh-palm wood set (1.2.8): stripped log, stairs, slab, fence, gate, door, trapdoor, sign ------------------------
+    /** The palm planks sound like bamboo planks, so the whole set (doors, gates, signs) does too. */
+    public static final BlockSetType PALM_SET = BlockSetType.register(new BlockSetType("guhs:guhwaii_palm", true, true, true,
+            BlockSetType.PressurePlateSensitivity.EVERYTHING, SoundType.BAMBOO_WOOD, SoundEvents.BAMBOO_WOOD_DOOR_CLOSE,
+            SoundEvents.BAMBOO_WOOD_DOOR_OPEN, SoundEvents.BAMBOO_WOOD_TRAPDOOR_CLOSE, SoundEvents.BAMBOO_WOOD_TRAPDOOR_OPEN,
+            SoundEvents.BAMBOO_WOOD_PRESSURE_PLATE_CLICK_OFF, SoundEvents.BAMBOO_WOOD_PRESSURE_PLATE_CLICK_ON,
+            SoundEvents.BAMBOO_WOOD_BUTTON_CLICK_OFF, SoundEvents.BAMBOO_WOOD_BUTTON_CLICK_ON));
+    /** Registered (the sign's texture is guhs:entity/signs/guhwaii_palm; the client adds it to the sign sheet, see GuhwaiiClient). */
+    public static final WoodType PALM_WOOD = WoodType.register(new WoodType("guhs:guhwaii_palm", PALM_SET, SoundType.BAMBOO_WOOD,
+            SoundType.BAMBOO_WOOD_HANGING_SIGN, SoundEvents.BAMBOO_WOOD_FENCE_GATE_CLOSE, SoundEvents.BAMBOO_WOOD_FENCE_GATE_OPEN));
+
+    private static BlockBehaviour.Properties palmhout() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.BAMBOO_PLANKS).mapColor(MapColor.SAND);
+    }
+
+    private static BlockBehaviour.Properties palmbord() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.SAND).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollision()
+                .strength(1f).ignitedByLava();
+    }
+
+    public static final DeferredBlock<RotatedPillarBlock> PALM_GESTRIPT = BLOCKS.registerBlock("guhwaii_palm_gestript", RotatedPillarBlock::new,
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.STRIPPED_JUNGLE_LOG).mapColor(MapColor.SAND));
+    public static final DeferredBlock<StairBlock> PALM_TRAP = BLOCKS.registerBlock("guhwaii_palm_trap",
+            p -> new StairBlock(PALM_PLANKEN.get().defaultBlockState(), p), () -> palmhout());
+    public static final DeferredBlock<SlabBlock> PALM_PLAAT = BLOCKS.registerBlock("guhwaii_palm_plaat", SlabBlock::new, () -> palmhout());
+    public static final DeferredBlock<FenceBlock> PALM_HEK = BLOCKS.registerBlock("guhwaii_palm_hek", FenceBlock::new, () -> palmhout());
+    public static final DeferredBlock<FenceGateBlock> PALM_POORT = BLOCKS.registerBlock("guhwaii_palm_poort",
+            p -> new FenceGateBlock(PALM_WOOD, p), () -> palmhout().forceSolidOn());
+    public static final DeferredBlock<DoorBlock> PALM_DEUR = BLOCKS.registerBlock("guhwaii_palm_deur",
+            p -> new DoorBlock(PALM_SET, p), () -> palmhout().strength(3f).noOcclusion().pushReaction(PushReaction.DESTROY));
+    public static final DeferredBlock<TrapDoorBlock> PALM_LUIK = BLOCKS.registerBlock("guhwaii_palm_luik",
+            p -> new TrapDoorBlock(PALM_SET, p), () -> palmhout().strength(3f).noOcclusion().isValidSpawn((s, l, pos, e) -> false));
+    public static final DeferredBlock<StandingSignBlock> PALM_BORD = BLOCKS.registerBlock("guhwaii_palm_bord",
+            p -> new StandingSignBlock(PALM_WOOD, p), () -> palmbord());
+    /** The sign on a wall: the same name and the same drop as the standing one (its item is guhwaii_palm_bord). */
+    public static final DeferredBlock<WallSignBlock> PALM_WANDBORD = BLOCKS.registerBlock("guhwaii_palm_wandbord",
+            p -> new WallSignBlock(PALM_WOOD, p),
+            () -> palmbord().overrideDescription("block.guhs.guhwaii_palm_bord").overrideLootTable(Optional.of(
+                    ResourceKey.create(Registries.LOOT_TABLE, Guhs.id("blocks/guhwaii_palm_bord")))));
+    /** The set as it stands in the creative tab (after the planks). */
+    public static final List<DeferredBlock<?>> PALM_HOUTSET = List.of(PALM_GESTRIPT, PALM_TRAP, PALM_PLAAT, PALM_HEK, PALM_POORT, PALM_DEUR,
+            PALM_LUIK, PALM_BORD);
 
     // --- flowers ------------------------------------------------------------------------------------------------------------
     public static final DeferredBlock<GuhwaiiBlokken.TropischeBloem> ROZE_HIBISCUS = bloem("roze_hibiscus", MapColor.COLOR_PINK);
@@ -139,9 +196,12 @@ public final class GuhwaiiFeature {
             () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
     static {
-        for (DeferredBlock<?> block : List.of(PALM_STAM, PALM_PLANKEN)) {
+        for (DeferredBlock<?> block : List.of(PALM_STAM, PALM_PLANKEN, PALM_GESTRIPT, PALM_TRAP, PALM_PLAAT, PALM_HEK, PALM_POORT, PALM_DEUR,
+                PALM_LUIK)) {
             ITEMS.registerSimpleBlockItem(block);
         }
+        ITEMS.registerItem("guhwaii_palm_bord", p -> new SignItem(PALM_BORD.get(), PALM_WANDBORD.get(), p),
+                p -> p.stacksTo(16).useBlockDescriptionPrefix());
         for (DeferredBlock<?> block : List.of(PALM_GEZICHT, PALM_BLAD, SCHILLY_EITJES, ROMMELTJE, ROZE_HIBISCUS, PLUMERIA, PARADIJSBLOEM, ORCHIDEE)) {
             ITEMS.registerItem(block.getId().getPath(), p -> new GuhwaiiItems.LoreBlockItem(block.get(), p));
         }
@@ -174,6 +234,7 @@ public final class GuhwaiiFeature {
         ITEMS.register(modBus);
         FEATURES.register(modBus);
         modBus.addListener(GuhwaiiFeature::setup);
+        modBus.addListener(GuhwaiiFeature::bordBlokken);
         NeoForge.EVENT_BUS.register(GuhwaiiEvents.class);
         nl.juiced.guhs.feature.Protected.add(GuhwaiiEvents::beschermd);
         // the 626-guh: climbs, carries two, ukelele (+ hangs from ceilings: a goal of its own)
@@ -196,6 +257,10 @@ public final class GuhwaiiFeature {
             fire.setFlammable(PALM_STAM.get(), 5, 5);
             fire.setFlammable(PALM_GEZICHT.get(), 5, 5);
             fire.setFlammable(PALM_PLANKEN.get(), 5, 20);
+            fire.setFlammable(PALM_GESTRIPT.get(), 5, 5);
+            for (Block hout : List.of(PALM_TRAP.get(), PALM_PLAAT.get(), PALM_HEK.get(), PALM_POORT.get())) {
+                fire.setFlammable(hout, 5, 20);
+            }
             fire.setFlammable(PALM_BLAD.get(), 30, 60);
             FlowerPotBlock pot = (FlowerPotBlock) Blocks.FLOWER_POT;
             pot.addPlant(ROZE_HIBISCUS.getId(), POT_HIBISCUS);
@@ -205,13 +270,23 @@ public final class GuhwaiiFeature {
         });
     }
 
+    /** The palm signs are ordinary signs: the vanilla sign block entity (and its renderer) accepts them. */
+    private static void bordBlokken(BlockEntityTypeAddBlocksEvent event) {
+        event.modify(BlockEntityType.SIGN, PALM_BORD.get(), PALM_WANDBORD.get());
+    }
+
     public static void payloads(PayloadRegistrar registrar) {
         GuhwaiiPayloads.register(registrar);
     }
 
     public static void creative(Consumer<ItemStack> output) {
-        for (var block : List.of(PALM_STAM, PALM_GEZICHT, PALM_BLAD, PALM_PLANKEN, ROZE_HIBISCUS, PLUMERIA, PARADIJSBLOEM, ORCHIDEE, SCHILLY_EITJES,
-                VADSIGHEID_SCANNER, VADSIGHEID_POSTER)) {
+        for (var block : List.of(PALM_STAM, PALM_GEZICHT, PALM_BLAD, PALM_PLANKEN)) {
+            output.accept(new ItemStack(block.get()));
+        }
+        for (var block : PALM_HOUTSET) {
+            output.accept(new ItemStack(block.get()));
+        }
+        for (var block : List.of(ROZE_HIBISCUS, PLUMERIA, PARADIJSBLOEM, ORCHIDEE, SCHILLY_EITJES, VADSIGHEID_SCANNER, VADSIGHEID_POSTER)) {
             output.accept(new ItemStack(block.get()));
         }
         output.accept(new ItemStack(KOKOSNOOT_ITEM.get()));

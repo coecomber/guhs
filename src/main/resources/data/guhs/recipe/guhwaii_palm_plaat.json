@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "guhwaii_palm_slab",
+  "key": {
+    "#": "guhs:guhwaii_palm_planken"
+  },
+  "pattern": [
+    "###"
+  ],
+  "result": {
+    "count": 6,
+    "id": "guhs:guhwaii_palm_plaat"
+  }
+}

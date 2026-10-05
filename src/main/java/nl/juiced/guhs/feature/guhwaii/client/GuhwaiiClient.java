@@ -33,6 +33,9 @@ public final class GuhwaiiClient {
     private static ItemStack ukelele;
 
     public static void init(IEventBus modBus) {
+        // the palm sign: its wood type's sprite (guhs:entity/signs/guhwaii_palm) joins the sign sheet's table
+        modBus.addListener((net.neoforged.fml.event.lifecycle.FMLClientSetupEvent event) -> event.enqueueWork(
+                () -> net.minecraft.client.renderer.Sheets.addWoodType(GuhwaiiFeature.PALM_WOOD)));
         SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.LILO_GUH, Guhs.id("entity/guh_npc_lilo_guh"));
         SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.NANI_GUH, Guhs.id("entity/guh_npc_nani_guh"));
         // Lilo's hair and her skirt sway a little in the sea breeze; Nani's flower nods

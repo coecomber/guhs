@@ -12,6 +12,7 @@ Guhwai'i (3.0, slice guhwaii): the block, item, painting and poster textures (al
 A tiny 3x5 pixel font writes the Dutch words on the poster and the screen.
 """
 import math
+import os
 import random
 
 import numpy as np
@@ -207,6 +208,55 @@ def planken(rng):
             if y % 4 == 3 or (x + (y // 4) * 5) % 8 == 7:
                 put(im, x, y, clamp(v * 0.78 for v in im.getpixel((x, y))[:3]))
     return im
+
+
+# =====================================================================================================================
+# the guh-palm wood set (1.2.8): the stripped trunk (drawn here), door / trapdoor / sign (vanilla shapes in the planks' colours)
+# =====================================================================================================================
+HOUT = (214, 178, 120)              # the planks' base colour
+HOUT_DONKER = (146, 114, 72)
+HOUT_LICHT = (230, 198, 140)
+
+
+def palm_gestript(rng):
+    """The trunk without its scaly bark: pale fibrous wood, long vertical fibres and a faint memory of the bands."""
+    im = noisy((218, 184, 128), 6, rng)
+    kolom = [rng.choice((1.0, 1.0, 0.94, 1.05, 0.88)) for _ in range(16)]
+    for y in range(16):
+        for x in range(16):
+            c = im.getpixel((x, y))[:3]
+            f = kolom[x]
+            if y % 4 == 3:
+                f *= 0.93
+            if (x * 7 + y) % 13 == 0:
+                f *= 0.82
+            put(im, x, y, clamp(v * f for v in c))
+    return im
+
+
+def palm_gestript_top(rng):
+    im = noisy(BARK_LIGHT, 6, rng)
+    for y in range(16):
+        for x in range(16):
+            d = math.hypot(x - 7.5, y - 7.5)
+            if d > 7:
+                put(im, x, y, clamp(v * 0.9 for v in (218, 184, 128)))
+            elif int(d) % 3 == 0:
+                put(im, x, y, clamp(v * 0.85 for v in BARK_LIGHT))
+    return im
+
+
+def palm_houtset(h):
+    """Door, trapdoor, their item, the sign (entity texture 64 x 32 + item): the vanilla jungle/oak ones in palm-plank colours."""
+    h.save(palm_gestript(random.Random(30130)), "block", "guhwaii_palm_gestript.png")
+    h.save(palm_gestript_top(random.Random(30131)), "block", "guhwaii_palm_gestript_top.png")
+    for bron, soort, naam in (("block/jungle_door_top", "block", "guhwaii_palm_deur_top"),
+                              ("block/jungle_door_bottom", "block", "guhwaii_palm_deur_bottom"),
+                              ("item/jungle_door", "item", "guhwaii_palm_deur"),
+                              ("block/jungle_trapdoor", "block", "guhwaii_palm_luik"),
+                              ("item/jungle_sign", "item", "guhwaii_palm_bord"),
+                              ("entity/signs/jungle", "entity", os.path.join("signs", "guhwaii_palm"))):
+        h.save(h.ramp(h.vanilla(bron), HOUT_DONKER, HOUT_LICHT), soort, naam + ".png")
 
 
 # =====================================================================================================================
@@ -531,6 +581,7 @@ def textures(h):
     save(palm_blad(rng), "block", "guhwaii_palm_blad.png")
     save(kiemplant(rng), "block", "guhwaii_palm_kiemplant.png")
     save(planken(rng), "block", "guhwaii_palm_planken.png")
+    palm_houtset(h)
     for naam, kleur in (("groen", KOKOS_GROEN), ("half", KOKOS_HALF), ("bruin", KOKOS_BRUIN)):
         save(kokos(random.Random(30113), kleur), "block", f"kokosnoot_{naam}.png")
     save(kokos_item(random.Random(30114)), "item", "kokosnoot.png")

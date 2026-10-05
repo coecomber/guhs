@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/guhwaii_palm_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/guhwaii_palm_planken"
+    },
+    "type=top": {
+      "model": "guhs:block/guhwaii_palm_plaat_top"
+    }
+  }
+}
