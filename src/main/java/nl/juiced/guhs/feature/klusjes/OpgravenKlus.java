@@ -27,6 +27,7 @@ import nl.juiced.guhs.feature.band.DagboekStat;
 import nl.juiced.guhs.feature.emotes.Emote;
 import nl.juiced.guhs.feature.emotes.GuhEmotes;
 import nl.juiced.guhs.feature.huisje.Huisje;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.registry.ModItems;
 
@@ -47,6 +48,17 @@ public class OpgravenKlus extends BasisKlus {
     @Override
     public boolean kan(Mob bewoner) {
         return isGuh(bewoner) || isMuisje(bewoner);
+    }
+
+    @Override
+    public String doeners() {
+        return "guhs_muisjes";
+    }
+
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        int n = KlusGebied.van(level, huisje, KlusGebied.Soort.GRAAF).size();
+        return n > 0 ? KlusStand.ja("plekjes", n) : KlusStand.nee("geen", 0);
     }
 
     @Nullable

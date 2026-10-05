@@ -23,6 +23,7 @@ import nl.juiced.guhs.feature.boerderij.BoerderijFeature;
 import nl.juiced.guhs.feature.boerderij.GuhkoeEntity;
 import nl.juiced.guhs.feature.boerderij.KippennestjeBlock;
 import nl.juiced.guhs.feature.huisje.Huisje;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.registry.ModItems;
 
@@ -43,6 +44,26 @@ public class DierenKlus extends BasisKlus {
     @Override
     public boolean kan(Mob bewoner) {
         return isGuh(bewoner);
+    }
+
+    @Override
+    public String doeners() {
+        return "guhs";
+    }
+
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        boolean voer = Voorraad.tel(level, huisje, s -> s.is(BoerderijFeature.KNABBELVOER.get())) > 0;
+        boolean fles = Voorraad.tel(level, huisje, s -> s.is(Items.GLASS_BOTTLE)) > 0;
+        List<BoerderijDier> dieren = level.getEntitiesOfClass(BoerderijDier.class, huisje.gebied(), d -> d.isAlive()
+                && huisje.inGebied(d.blockPosition()) && KlusGebied.inTest(huisje, d.position()));
+        int werk = KlusGebied.van(level, huisje, KlusGebied.Soort.NEST).size() + KlusGebied.van(level, huisje, KlusGebied.Soort.KORF).size()
+                + (int) dieren.stream().filter(d -> nodig(d, voer, fles)).count();
+        if (werk > 0) {
+            return KlusStand.ja("werk", werk);
+        }
+        int later = dieren.size() + KlusGebied.van(level, huisje, KlusGebied.Soort.DIER_LATER).size();
+        return later > 0 ? KlusStand.straks("tevreden", later) : KlusStand.nee("geen", 0);
     }
 
     @Nullable

@@ -42,6 +42,15 @@ public final class Speelgoed {
         return null;
     }
 
+    /** 1.2.8: every toy line of the overview (the kinds in registration order), counted like {@link Speeltje#tel}. */
+    public static List<Speeltje.Telling> tel(ServerLevel level, BlockPos rond, int bereik, java.util.function.Predicate<BlockPos> binnen) {
+        List<Speeltje.Telling> uit = new ArrayList<>();
+        for (Speeltje s : ALLE) {
+            uit.addAll(s.tel(level, rond, bereik, binnen));
+        }
+        return uit;
+    }
+
     /** A random toy nearby to play with (the kinds in random order, the first that has one), or null. */
     @Nullable
     public static KlusTaak willekeurig(ServerLevel level, Mob wie, BlockPos rond, int bereik) {

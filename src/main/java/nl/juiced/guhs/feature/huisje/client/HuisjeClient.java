@@ -29,6 +29,11 @@ public final class HuisjeClient {
                 mc.setScreen(new HuisjeScreen(p.data()));
             }
         });
+        HuisjePayloads.overzichtOntvanger = p -> Minecraft.getInstance().execute(() -> {
+            if (Minecraft.getInstance().screen instanceof HuisjeScreen s && s.pos().asLong() == p.data().getLongOr("Pos", 0L)) {
+                s.overzicht(p.data());
+            }
+        });
         NeoForge.EVENT_BUS.addListener(HuisjeKoepel::teken);
         // (asleep inside its huisje: no model, no name, no shadow; 1.1.0: the guh renderer is a GeckoLib renderer, so this is a
         // render state modifier instead of cancelling RenderLivingEvent.Pre)

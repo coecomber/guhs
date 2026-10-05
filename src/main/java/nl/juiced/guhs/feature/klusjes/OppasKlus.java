@@ -22,6 +22,7 @@ import nl.juiced.guhs.feature.emotes.Emote;
 import nl.juiced.guhs.feature.emotes.GuhEmotes;
 import nl.juiced.guhs.feature.huisje.Huisje;
 import nl.juiced.guhs.feature.huisje.Huisjes;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.feature.piep.PiepMaatje;
 import nl.juiced.guhs.registry.ModEntities;
@@ -53,6 +54,31 @@ public class OppasKlus extends BasisKlus {
     @Override
     public boolean kan(Mob bewoner) {
         return isGuh(bewoner);
+    }
+
+    @Override
+    public String doeners() {
+        return "guhs";
+    }
+
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        UUID baas = huisje.eigenaar();
+        long nu = level.getGameTime();
+        int gewond = level.getEntitiesOfClass(GuhEntity.class, huisje.gebied(), g -> g.isAlive() && g.getType() == ModEntities.GUH.get()
+                && g.isTame() && baas.equals(g.getOwnerUUID()) && g.getHealth() < g.getMaxHealth() - 1 && huisje.inGebied(g.blockPosition())
+                && KlusGebied.inTest(huisje, g.position()) && !Huisjes.isBinnen(g) && uitgerust(g, PATIENT_RUST, nu)).size();
+        if (gewond > 0) {
+            return KlusStand.ja("gewond", gewond);
+        }
+        List<TamableAnimal> maatjes = level.getEntitiesOfClass(TamableAnimal.class, huisje.gebied(), m -> m instanceof PiepMaatje
+                && m.isAlive() && huisje.inGebied(m.blockPosition()) && KlusGebied.inTest(huisje, m.position()) && !Huisjes.isBinnen(m)
+                && (nl.juiced.guhs.entity.Owners.uuid(m) == null || nl.juiced.guhs.entity.Owners.uuid(m).equals(baas)));
+        int toe = (int) maatjes.stream().filter(m -> !((PiepMaatje) m).isBezig() && uitgerust(m, RUST, nu)).count();
+        if (toe > 0) {
+            return KlusStand.ja("maatjes", toe);
+        }
+        return maatjes.isEmpty() ? KlusStand.nee("geen", 0) : KlusStand.straks("verzorgd", maatjes.size());
     }
 
     @Nullable

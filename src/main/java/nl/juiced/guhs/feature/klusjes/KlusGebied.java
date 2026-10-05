@@ -60,7 +60,18 @@ public final class KlusGebied {
         /** Knabbelovens. */
         OVEN,
         /** Lamps of the tag guhs:klusjes/lampjes. */
-        LAMP
+        LAMP,
+        // 1.2.8: only for the overview in the huisje screen ("everything is there, just nothing to do right now")
+        /** Crops and planted guhtuintjes that aren't ripe yet. */
+        GROEIT,
+        /** Knabbelbessen and sweet berry bushes without ripe berries. */
+        STRUIK,
+        /** Kippennestjes without eggs and knabbelkorven that aren't full yet. */
+        DIER_LATER,
+        /** Jukeboxes (guhs dance when one plays). */
+        JUKEBOX,
+        /** Burning campfires (guhs put on their pyjamas there late in the evening). */
+        KAMPVUUR
     }
 
     private record Scan(long tot, Map<Soort, List<BlockPos>> lijsten) {
@@ -76,7 +87,7 @@ public final class KlusGebied {
     public static final Map<BlockPos, net.minecraft.world.phys.AABB> TEST_GRENS = new ConcurrentHashMap<>();
 
     /** Inside the home base's game test (always true outside game tests). */
-    static boolean inTest(Huisje h, net.minecraft.world.phys.Vec3 p) {
+    public static boolean inTest(Huisje h, net.minecraft.world.phys.Vec3 p) {
         net.minecraft.world.phys.AABB grens = TEST_GRENS.isEmpty() ? null : TEST_GRENS.get(h.pos());
         return grens == null || grens.contains(p);
     }
@@ -263,6 +274,21 @@ public final class KlusGebied {
         }
         if (lampje(s)) {
             return Soort.LAMP;
+        }
+        if (s.getBlock() instanceof CropBlock || TuinBlock.groeit(s)) {
+            return Soort.GROEIT;
+        }
+        if (s.getBlock() instanceof KnabbelbessenstruikBlock || s.getBlock() instanceof SweetBerryBushBlock) {
+            return Soort.STRUIK;
+        }
+        if (s.getBlock() instanceof KippennestjeBlock || s.getBlock() instanceof KnabbelkorfBlock) {
+            return Soort.DIER_LATER;
+        }
+        if (s.is(net.minecraft.world.level.block.Blocks.JUKEBOX)) {
+            return Soort.JUKEBOX;
+        }
+        if (s.is(net.minecraft.tags.BlockTags.CAMPFIRES) && net.minecraft.world.level.block.CampfireBlock.isLitCampfire(s)) {
+            return Soort.KAMPVUUR;
         }
         if (viswater(level, p, s)) {
             return Soort.WATER;

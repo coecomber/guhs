@@ -42,6 +42,9 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * (the blue dome, {@link HuisjeKoepel}).
  * 3.0 (timmerguh): someone else's huisje opens read-only (data "MagBewerken" false): "Dit is het huisje van X" at the top,
  * the name can't be edited and every button that changes something is grey (only "Klus-area" and "Klaar" work).
+ * 1.2.8: the little "?" button next to the name opens the dialog "Wat kan hier?" on top of this screen
+ * ({@link HuisjeOverzichtPaneel}: which chores can be done around this huisje right now and why, which toys stand there);
+ * while it is open this screen is dimmed and only the dialog takes the mouse and the keys (Esc closes the dialog only).
  */
 public class HuisjeScreen extends Screen {
     private static final int W = 320, H = 230, RIJ = 28;
@@ -57,6 +60,9 @@ public class HuisjeScreen extends Screen {
     private boolean nieuw;
     private final GidsLijst bewoners = new GidsLijst(), rechts = new GidsLijst();
     private final Map<String, LivingEntity> poppen = new HashMap<>();
+    /** 1.2.8: the open "Wat kan hier?" dialog, or null. */
+    @Nullable
+    private HuisjeOverzichtPaneel overzicht;
 
     /** 3.0: may this viewer change the huisje (its owner or an op)? Otherwise the screen is read-only. */
     private boolean mag() {
@@ -91,6 +97,33 @@ public class HuisjeScreen extends Screen {
         return pos;
     }
 
+    /** 1.2.8: the server's answer for the "Wat kan hier?" dialog (ignored when it was closed meanwhile). */
+    public void overzicht(CompoundTag antwoord) {
+        if (overzicht != null) {
+            overzicht.zet(antwoord);
+        }
+    }
+
+    /** 1.2.8: is the "Wat kan hier?" dialog open? */
+    public boolean overzichtOpen() {
+        return overzicht != null;
+    }
+
+    /** 1.2.8: opens the "Wat kan hier?" dialog over this screen and asks the server for it. */
+    public void openOverzicht() {
+        if (overzicht != null || !mag()) {
+            return;
+        }
+        overzicht = new HuisjeOverzichtPaneel(pos, this::sluitOverzicht);
+        rebuildWidgets();
+        overzicht.vraag();
+    }
+
+    private void sluitOverzicht() {
+        overzicht = null;
+        rebuildWidgets();
+    }
+
     private ListTag lijst(String key) {
         return data.getListOrEmpty(key);
     }
@@ -123,7 +156,7 @@ public class HuisjeScreen extends Screen {
     protected void init() {
         left = (width - W) / 2;
         top = (height - H) / 2;
-        naam = new EditBox(font, left + 10, top + 22, 214, 16, Component.translatable("gui.guhs.huisje.naam"));
+        naam = new EditBox(font, left + 10, top + 22, 192, 16, Component.translatable("gui.guhs.huisje.naam"));
         naam.setMaxLength(Huisjes.MAX_NAAM);
         naam.setValue(nl.juiced.guhs.taal.Tekst.get(data, "Naam").getString());
         boolean mag = mag();
@@ -134,7 +167,7 @@ public class HuisjeScreen extends Screen {
         }
         addRenderableWidget(naam);
         Button hernoem = Button.builder(Component.translatable("gui.guhs.huisje.hernoem"),
-                b -> hernoem()).bounds(left + 228, top + 21, 62, 18).build();
+                b -> hernoem()).bounds(left + 206, top + 21, 62, 18).build();
         hernoem.active = mag;
         if (!mag) {
             hernoem.setTooltip(alleenKijken());
@@ -150,6 +183,12 @@ public class HuisjeScreen extends Screen {
         }).bounds(left + 294, top + 21, 18, 18).tooltip(mag ? meldTip(meld) : alleenKijken()).build();
         melding.active = mag;
         addRenderableWidget(melding);
+        // 1.2.8: "Wat kan hier?" (which chores and toys the area offers)
+        Button wat = Button.builder(Component.literal("?").withStyle(ChatFormatting.BOLD), b -> openOverzicht())
+                .bounds(left + 272, top + 21, 18, 18).tooltip(mag ? net.minecraft.client.gui.components.Tooltip.create(
+                        Component.translatable("gui.guhs.huisje.overzicht.knop.tooltip")) : alleenKijken()).build();
+        wat.active = mag;
+        addRenderableWidget(wat);
         ListTag lijst = lijst("Bewoners");
         if (gekozen == null || bewoner(gekozen) == null) {
             gekozen = lijst.isEmpty() ? null : lijst.getCompoundOrEmpty(0).getStringOr("Id", "");
@@ -188,6 +227,21 @@ public class HuisjeScreen extends Screen {
         }).bounds(left + 176, by, 96, 18).tooltip(net.minecraft.client.gui.components.Tooltip.create(
                 Component.translatable("gui.guhs.huisje.koepel.tooltip"))).build());
         addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose()).bounds(left + 276, by, 36, 18).build());
+        if (overzicht != null && !mag) {
+            overzicht = null;   // (no longer allowed to change this huisje: the server wouldn't answer any more)
+        }
+        if (overzicht != null) {
+            // the dialog lies over the screen: everything under it rests until it closes
+            overzicht.plaats(left + 12, top + 8, W - 24, H - 16);
+            for (var kind : children()) {
+                if (kind instanceof net.minecraft.client.gui.components.AbstractWidget widget) {
+                    widget.active = false;
+                    widget.setFocused(false);
+                }
+            }
+            naam.setEditable(false);
+            setFocused(null);
+        }
     }
 
     /** "Meldingen van zeldzame vondsten: aan" + what it does. */
@@ -246,12 +300,18 @@ public class HuisjeScreen extends Screen {
         if (lijst("Bewoners").isEmpty()) {
             GidsTekst.alinea(g, Component.translatable("gui.guhs.huisje.leeg"), left + 12, top + 68, 124, 0.75f, LICHT);
         }
-        bewoners.teken(g, mouseX, mouseY, 0xFFD27A9C, 0x30D27A9C);
-        rechts.teken(g, mouseX, mouseY, 0xFFD27A9C, 0x30D27A9C);
+        int mx = overzicht != null ? -1 : mouseX, my = overzicht != null ? -1 : mouseY;   // (no hover under the dialog)
+        bewoners.teken(g, mx, my, 0xFFD27A9C, 0x30D27A9C);
+        rechts.teken(g, mx, my, 0xFFD27A9C, 0x30D27A9C);
     }
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        if (overzicht != null) {
+            super.extractRenderState(g, -1, -1, partialTick);   // (the widgets under the dialog: no hover, no tooltips)
+            overzicht.teken(g, mouseX, mouseY, partialTick);
+            return;
+        }
         super.extractRenderState(g, mouseX, mouseY, partialTick);
         List<Component> tip = bewoners.tip(mouseX, mouseY);
         if (tip == null) {
@@ -266,6 +326,9 @@ public class HuisjeScreen extends Screen {
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         double mx = event.x(), my = event.y();
         int button = event.button();
+        if (overzicht != null) {
+            return overzicht.klik(event, doubleClick);
+        }
         if (super.mouseClicked(event, doubleClick)) {
             return true;
         }
@@ -274,6 +337,9 @@ public class HuisjeScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double mx, double my, double sx, double sy) {
+        if (overzicht != null) {
+            return overzicht.wiel(mx, my, sy);
+        }
         return bewoners.wiel(mx, my, sy) || rechts.wiel(mx, my, sy) || super.mouseScrolled(mx, my, sx, sy);
     }
 
@@ -281,6 +347,9 @@ public class HuisjeScreen extends Screen {
     public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
         double mx = event.x(), my = event.y();
         int button = event.button();
+        if (overzicht != null) {
+            return overzicht.sleep(my);
+        }
         return bewoners.sleep(my) || rechts.sleep(my) || super.mouseDragged(event, dx, dy);
     }
 
@@ -290,12 +359,25 @@ public class HuisjeScreen extends Screen {
         int button = event.button();
         bewoners.los();
         rechts.los();
+        if (overzicht != null) {
+            overzicht.los();
+            return true;
+        }
         return super.mouseReleased(event);
     }
 
     @Override
     public boolean keyPressed(KeyEvent event) {
         int keyCode = event.key(), scanCode = event.scancode(), modifiers = event.modifiers();
+        if (overzicht != null) {
+            // Esc (or the inventory key) closes only the dialog; nothing reaches the screen under it
+            if (keyCode == 256 || minecraft != null && minecraft.options.keyInventory.matches(event)) {
+                sluitOverzicht();
+            } else {
+                overzicht.toets(keyCode);
+            }
+            return true;
+        }
         if (naam != null && naam.isFocused() && mag() && (keyCode == 257 || keyCode == 335)) {
             hernoem();
             return true;
@@ -307,6 +389,8 @@ public class HuisjeScreen extends Screen {
     public void tick() {
         if (minecraft == null || minecraft.player == null || minecraft.player.distanceToSqr(pos.getCenter()) > 24 * 24) {
             onClose();
+        } else if (overzicht != null) {
+            overzicht.tick();
         }
     }
 

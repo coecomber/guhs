@@ -18,6 +18,7 @@ import nl.juiced.guhs.feature.emotes.Emote;
 import nl.juiced.guhs.feature.emotes.GuhEmotes;
 import nl.juiced.guhs.feature.huisje.Huisje;
 import nl.juiced.guhs.feature.huisje.HuisjeGoal;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.feature.knus.Dagdeel;
 
@@ -42,6 +43,26 @@ public class LampjesKlus extends BasisKlus {
     static Dagdeel dagdeel(ServerLevel level, Huisje h) {
         Dagdeel test = HuisjeGoal.TEST_DAGDEEL.get(h.pos());
         return test != null ? test : Dagdeel.van(nl.juiced.guhs.world.GuhTime.dayTime(level.getServer().overworld()));
+    }
+
+    @Override
+    public String doeners() {
+        return "guhs";
+    }
+
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        List<BlockPos> lampen = KlusGebied.van(level, huisje, KlusGebied.Soort.LAMP);
+        if (lampen.isEmpty()) {
+            return KlusStand.nee("geen", 0);
+        }
+        Dagdeel d = dagdeel(level, huisje);
+        if (d != Dagdeel.AVOND && d != Dagdeel.OCHTEND) {
+            return KlusStand.straks("tijd", lampen.size());
+        }
+        boolean aan = d == Dagdeel.AVOND;
+        int n = (int) lampen.stream().filter(p -> level.isLoaded(p) && moet(level, p, aan)).count();
+        return n > 0 ? KlusStand.ja(aan ? "aan" : "uit", n) : KlusStand.straks("klaar", lampen.size());
     }
 
     @Nullable

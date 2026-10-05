@@ -16,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.band.Band;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.huisje.Huisje;
+import nl.juiced.guhs.feature.huisje.KlusStand;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 import nl.juiced.guhs.feature.klusjes.BasisKlus;
 import nl.juiced.guhs.feature.klusjes.StappenTaak;
@@ -46,6 +47,20 @@ public class PolijstenKlus extends BasisKlus {
 
     public static boolean isSteen(ItemStack s) {
         return s.is(Items.COBBLESTONE) || s.is(Items.MOSSY_COBBLESTONE) || s.is(Items.COBBLED_DEEPSLATE);
+    }
+
+    @Override
+    public String doeners() {
+        return "sjokkel";
+    }
+
+    @Override
+    public KlusStand stand(ServerLevel level, Huisje huisje) {
+        if (!Voorraad.heeftOpslag(level, huisje)) {
+            return KlusStand.nee("geen_opslag", 0);
+        }
+        int stenen = (int) Math.min(9999, Voorraad.tel(level, huisje, PolijstenKlus::isSteen));
+        return stenen > 0 ? KlusStand.ja("stenen", stenen) : KlusStand.nee("geen_stenen", 0);
     }
 
     @Nullable

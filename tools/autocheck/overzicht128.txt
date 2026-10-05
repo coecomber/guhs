@@ -1,0 +1,131 @@
+# 1.2.8 visual QA (dev only): the huisje screen's "?" button and its dialog "Wat kan hier?" in Dutch and English, at GUI
+# scale 2 and 3 (1280 x 720). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/overzicht128.txt -PautocheckTimeout=15
+# (new commands: huisjeoverzicht, guhstaal <nl|en|auto>, guiscale <n>)
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+wait 40
+
+section a huisje with things around it
+/execute in minecraft:overworld run tp @s 3000 150 3000
+/forceload add 2960 2960 3040 3040
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+wait 5
+# a little pond, a field (ripe and growing), flowers, a lamp, toys, a jukebox, a campfire
+/fill 3012 139 3008 3014 139 3009 minecraft:water
+/fill 3000 139 3006 3003 139 3006 minecraft:farmland
+/fill 3000 140 3006 3002 140 3006 minecraft:wheat[age=7]
+/setblock 3003 140 3006 minecraft:wheat[age=2]
+/setblock 3005 140 3008 minecraft:poppy
+/setblock 3006 140 3008 minecraft:dandelion
+/setblock 3010 140 3006 guhs:klusjes_guhlampje
+/summon guhs:knabbelbal 3004 141 3004
+/setblock 3014 140 3004 guhs:pluizige_tunnel
+/setblock 3015 140 3004 guhs:pluizige_tunnel
+/setblock 3002 140 3010 minecraft:jukebox
+/setblock 3012 140 3004 minecraft:campfire
+wait 5
+huisje 3008 140 3000
+wait 40
+
+section Dutch, GUI scale 2
+guhstaal nl
+wait 10
+mouse 1 1
+shot nl_huisje_met_knop gui
+mouse 441 95
+wait 5
+shot nl_huisje_knop_tip gui
+huisjeoverzicht
+wait 40
+mouse 1 1
+widgets
+shot nl_overzicht_1 gui
+mouse 260 150
+wait 5
+shot nl_overzicht_tip_klus gui
+mouse 1 1
+scroll 300 180 -9
+wait 3
+shot nl_overzicht_2 gui
+mouse 260 200
+wait 5
+shot nl_overzicht_tip_klus2 gui
+mouse 1 1
+scroll 300 180 -9
+wait 3
+shot nl_overzicht_3 gui
+scroll 300 180 -30
+wait 3
+shot nl_overzicht_4 gui
+mouse 260 240
+wait 5
+shot nl_overzicht_tip_ding gui
+mouse 250 273
+wait 25
+shot nl_overzicht_tip_ververs gui
+
+section English (switched live while the dialog is open), GUI scale 2
+guhstaal en
+wait 10
+mouse 1 1
+shot en_overzicht_4 gui
+mouse 260 240
+wait 5
+shot en_overzicht_tip_ding gui
+mouse 1 1
+scroll 300 180 30
+wait 3
+shot en_overzicht_1 gui
+mouse 260 150
+wait 5
+shot en_overzicht_tip_klus gui
+mouse 1 1
+scroll 300 180 -9
+wait 3
+shot en_overzicht_2 gui
+scroll 300 180 -9
+wait 3
+shot en_overzicht_3 gui
+
+section GUI scale 3 (a small screen: 426 x 240), English then Dutch
+guiscale 3
+wait 10
+scroll 200 120 30
+mouse 1 1
+shot en_schaal3_1 gui
+mouse 150 90
+wait 5
+shot en_schaal3_tip gui
+mouse 1 1
+scroll 200 120 -9
+wait 3
+shot en_schaal3_2 gui
+guhstaal nl
+wait 10
+shot nl_schaal3_2 gui
+scroll 200 120 30
+wait 3
+shot nl_schaal3_1 gui
+mouse 150 90
+wait 5
+shot nl_schaal3_tip gui
+scroll 200 120 -40
+mouse 150 200
+wait 5
+shot nl_schaal3_eind gui
+# "Terug": only the dialog closes, the huisje screen is back
+click 325 213
+wait 5
+mouse 1 1
+shot nl_schaal3_terug gui
+guiscale 2
+wait 5
+guhstaal auto
+gui close
+quit
