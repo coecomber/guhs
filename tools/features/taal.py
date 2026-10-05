@@ -97,7 +97,7 @@ OVERIG = {
     "gui.guhs.guheinde.mager.al_gevoerd": "Deze magere guh heb je al een knabbel gegeven. In de andere cellen zitten er nog meer!",
     "gui.guhs.guheinde.koning.pakje": "De Koningguh geeft je wat je nog mist van zijn koningspakje! Houd het rechtsklik ingedrukt om het te ontgrendelen.",
     "quest.guhs.eilanden.pakje": "De Wolkguh geeft je zijn reserve-wolkenmuts en -wolkenkraag (wat je nog niet had)! Houd ze rechtsklik ingedrukt om ze te ontgrendelen.",
-    "entity.guhs.quest_guh.al_gehad": "Guh! Jij hebt mijn vriendje de Bankguh al gekregen. Wil je er nog een? Die kun je zelf maken: een kist met gefrituurde kaasknabbels eromheen!",
+    "entity.guhs.quest_guh.al_gehad": "Guh! Jij hebt mijn vriendje de Bankguh al gekregen. Iedereen krijgt er eentje van mij, dus wees er maar zuinig op!",
     "gui.guhs.piep.recept_gekregen": "Jij hielp ook mee: hier is het recept van de Roze Guh Koek voor jou! Rechtsklik om het te leren.",
     "gui.guhs.gatenkaas.voorraadboek_kopie": "Je schrijft het dagboek van de Voorraadmika snel over: nu heb je een eigen exemplaar!",
     "gui.guhs.guheinde.beloning.later": "Opper-Mika is verslagen terwijl jij even weg was. Jij vocht mee, dus dit is ook voor jou!",

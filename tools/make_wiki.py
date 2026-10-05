@@ -4040,10 +4040,10 @@ def build():
     quest = entry(img("guh_sitting", "Hungry Guh"), "Hungry Guh", "Hongerige Guh",
                   p("Sits up on its hind legs at guh picnics. Right-click it and it tells you in chat that it wants "
                     "<b>10 gefrituurde kaasknabbels</b>. Right-click it while holding at least 10 and it happily disappears, "
-                    "leaving you a <b>Bank Guh</b>. It can't be hurt or pushed.",
+                    "leaving you a <b>Bank Guh</b>. Every player gets one from it, once, and that is the only way to get a Bank Guh (it can't be crafted). It can't be hurt or pushed.",
                     "Zit rechtop op zijn achterpootjes bij guhpicknicks. Rechtsklik erop en hij vertelt in de chat dat hij "
                     "<b>10 gefrituurde kaasknabbels</b> wil. Rechtsklik terwijl je er minstens 10 vasthoudt en hij verdwijnt blij, "
-                    "met een <b>Bankguh</b> voor jou als beloning. Hij kan geen pijn krijgen en niet geduwd worden."))
+                    "met een <b>Bankguh</b> voor jou als beloning. Iedere speler krijgt er een van hem, een keer, en dat is de enige manier om aan een Bankguh te komen (je kunt hem niet zelf maken). Hij kan geen pijn krijgen en niet geduwd worden."))
     new_mobs = f'''<h3 style="margin-top:18px">{t("New in 2.0", "Nieuw in 2.0")}</h3>''' + \
         entry(img("guh_bee", "Guh bee"), "Guh bee", "Guhbij",
               p("A fluffy pink bee with guh eyes and little guh ears. Flies from flower to flower like a normal bee and fills a "
@@ -4155,8 +4155,8 @@ def build():
 <tr><td>{t("Sit / Stand", "Zitten / Opstaan")}</td><td>{t("Stay put or follow you. A sitting guh doesn't move at all, not even for kaas knabbels.", "Blijven zitten of je volgen. Een zittende guh beweegt helemaal niet, zelfs niet voor kaasknabbels.")}</td></tr>
 <tr><td>{t("Teleport to me", "Naar mij teleporteren")}</td><td>{t("Whether it teleports to you when it falls behind.", "Of hij naar je toe teleporteert als hij achterblijft.")}</td></tr>
 <tr><td>{t("Gravity", "Zwaartekracht")}</td><td>{t("On: heavy and squished flat, can't jump, falls faster.", "Aan: zwaar en platgedrukt, kan niet springen, valt sneller.")}</td></tr>
-<tr><td>{t("Behaviour", "Gedrag")}</td><td>{t("<b>Passive (flee)</b>: runs from mobs that hurt it. <b>Passive</b>: does nothing. <b>Neutral</b>: fights back. <b>Aggressive</b>: attacks monsters and every kind of Mika within the attack radius (1&ndash;20 blocks) &mdash; never sweet critters or other passive animals, players, guhs or pets. Bigger guhs hit harder.",
-                                                                    "<b>Passief (vluchten)</b>: rent weg van mobs die hem pijn doen. <b>Passief</b>: doet niks. <b>Neutraal</b>: vecht terug. <b>Agressief</b>: valt monsters en alle soorten Mika's binnen de aanvalsstraal aan (1&ndash;20 blokken) &mdash; nooit lieve diertjes of andere vreedzame dieren, spelers, guhs of huisdieren. Grotere guhs slaan harder.")}</td></tr>
+<tr><td>{t("Behaviour", "Gedrag")}</td><td>{t("<b>Passive (flee)</b>: runs from mobs that hurt it. <b>Passive</b>: does nothing. <b>Neutral</b>: fights back. <b>Aggressive</b>: attacks monsters and Mikas within the attack radius (1&ndash;20 blocks) &mdash; never sweet critters or other passive animals, players, guhs or pets. Bigger guhs hit harder.",
+                                                                    "<b>Passief (vluchten)</b>: rent weg van mobs die hem pijn doen. <b>Passief</b>: doet niks. <b>Neutraal</b>: vecht terug. <b>Agressief</b>: valt monsters en Mika's binnen de aanvalsstraal aan (1&ndash;20 blokken) &mdash; nooit lieve diertjes of andere vreedzame dieren, spelers, guhs of huisdieren. Grotere guhs slaan harder.")}</td></tr>
 <tr><td>{t("Sounds...", "Geluiden...")}</td><td>{t("Guh noises on/off and how often (very rarely &hellip; very often).", "Guhgeluidjes aan/uit en hoe vaak (heel zelden &hellip; heel vaak).")}</td></tr>
 <tr><td>{t("Rename", "Hernoem")}</td><td>{t("Type a name, no name tag needed.", "Typ een naam, geen naamkaartje nodig.")}</td></tr>
 <tr><td>{t("Wander", "Rondvadsen")}</td><td>{t("Off: the guh stays put where it stands (without sitting down): no strolling around, no following you.", "Uit: de guh blijft staan waar hij staat (zonder te gaan zitten): niet rondlopen, niet achter je aan.")}</td></tr>
@@ -4532,8 +4532,8 @@ def build():
              "Found in hamster houses. Unlike normal spawners you can mine it with a pickaxe and take it home.",
              "Te vinden in hamsterhuizen. Anders dan gewone spawners kun je hem met een houweel meenemen."),
         card(img("guh_sitting", "Bank Guh"), "Bank Guh", "Bankguh",
-             "So <i>vadsig</i> it stores infinite items in its stomach. Search (<code>@mod</code>), sort, filter, a crafting grid, deposit all. Keeps everything when broken.",
-             "Zo <i>vadsig</i> dat er oneindig veel spullen in zijn buikje passen. Zoeken (<code>@mod</code>), sorteren, filteren, een werkbank, alles erin. Houdt alles als je hem breekt."),
+             "So <i>vadsig</i> it stores infinite items in its stomach. Search (<code>@mod</code>), sort, filter, a crafting grid, deposit all. Keeps everything when broken. Only from the Hungry Guh at a guh picnic (one per player); it can't be crafted.",
+             "Zo <i>vadsig</i> dat er oneindig veel spullen in zijn buikje passen. Zoeken (<code>@mod</code>), sorteren, filteren, een werkbank, alles erin. Houdt alles als je hem breekt. Alleen van de Hongerige Guh bij een guhpicknick (een per speler); je kunt hem niet zelf maken."),
         card(icon("picked_up_guh", "Picked-up guh").replace('class="px"', 'class="px" style="width:96px;height:96px"'),
              "Picked-up Guh", "Opgepakte guh", "Your guh, in your pocket. Put it down on a block, or into a Guh Wheel.",
              "Je guh, in je zak. Zet hem op een blok, of in een guhrad."),
@@ -4800,8 +4800,8 @@ def build():
         fig("structure_quartz_statue", "Quartz statue", "Kwartsbeeldje", "common", "vaak",
             "A small white quartz statue.", "Een klein wit kwartsbeeldje."),
         fig("structure_cheese_fountain", "Cheese fountain", "Kaasfontein", "semi-rare, also overworld", "vrij zeldzaam, ook overworld",
-            "A spout on top of a Block of Kaasknabbels column: the kaas saus really flows, spilling over two bowls into the basin. Have a sip! A little chest on the plaza holds a few kaasknabbels.",
-            "Een spuit boven op een zuil van Blokken kaasknabbels: de kaassaus stroomt echt, over twee schalen het bassin in. Neem een slokje! In een kistje op het plein zitten een paar kaasknabbels."),
+            "A spout on top of a Block of Kaasknabbels column: the kaas saus really flows, spilling over two bowls into the basin. Have a sip!",
+            "Een spuit boven op een zuil van Blokken kaasknabbels: de kaassaus stroomt echt, over twee schalen het bassin in. Neem een slokje!"),
         fig("structure_grand_cheese_fountain", "Grand cheese fountain", "Grote kaasfontein", "rare, also overworld", "zeldzaam, ook overworld",
             "The big one: a shiny pink orb on top, three cascading bowls, four spouting pillars in a deep kaas saus pool and a chest with kaasknabbels, a few fried ones and a little iron and gold.",
             "De grote: een glimmende roze bol bovenop, drie schalen waar de saus overheen klatert, vier spuitende zuilen in een diep kaassausbad en een kist met kaasknabbels, een paar gefrituurde en een beetje ijzer en goud."),

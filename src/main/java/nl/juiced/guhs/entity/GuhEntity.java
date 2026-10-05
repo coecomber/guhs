@@ -1130,6 +1130,12 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         return this.entityData.get(DATA_VLIEG_SLOT);
     }
 
+    /** Is this Enderguh in the air with its rider steering (two blocks of nothing under it)? */
+    public boolean isVliegtMetRuiter() {
+        return isEnder() && !isVliegSlot() && this.getControllingPassenger() instanceof Player && !this.onGround()
+                && this.level().noCollision(this, this.getBoundingBox().expandTowards(0, -2, 0)) && !this.isInWater();
+    }
+
     /** Server: sets the flying lock for the rider it has now. Returns whether flying is locked. */
     private boolean updateVliegSlot() {
         boolean slot = isEnder() && this.getFirstPassenger() instanceof Player rider
@@ -1420,7 +1426,10 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
                 this.resetFallDistance();
             }
             if (!this.level().isClientSide() && this.tickCount % 20 == 0 && (this.isVehicle() || isVliegSlot())) {
-                updateVliegSlot();   // (1.2.8) the rider just beat Opper-Mika, or got off
+                // (1.2.8) the rider just beat Opper-Mika, or got off; and "Vadsvlucht" is for really flying (not for getting on)
+                if (!updateVliegSlot() && isVliegtMetRuiter() && this.getControllingPassenger() instanceof net.minecraft.server.level.ServerPlayer rider) {
+                    nl.juiced.guhs.quest.GuhAdvancements.grant(rider, "ride_ender");
+                }
             }
             if (!this.level().isClientSide() && this.isInSittingPose() && this.isNoGravity()) {
                 this.setNoGravity(false); // sitting: come down and land

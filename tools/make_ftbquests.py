@@ -104,14 +104,14 @@ q("pink_moon", "Roze maan", "Blijf een nacht in de Guhmensie en kijk omhoog: een
 VARIANTS = [("normal", "Gewone guh"), ("mint", "Muntguh"), ("choco", "Chocoguh"), ("snow", "Sneeuwguh"), ("brontosaurus", "Brontosaurusguh"),
             ("teckel", "Teckelguh"), ("ghost", "Spookguh"), ("starry", "Sterrenguh"), ("rainbow", "Regenboogguh"), ("ender", "Enderguh"), ("koning", "Koningguh"), ("golden", "Gouden Guh"),
             ("brococolief", "Brococolief"), ("reisguh", "Reisguh"), ("poortwachter", "Poortwachter")]
-for i, (v, name) in enumerate(VARIANTS):
+for i, (v, name) in enumerate(VARIANTS):   # (1.2.8: variant_ender is shown in the Guheinde chapter, see SECTIONS)
     q(f"variant_{v}", name, f"Kom dichtbij een &d{name}&r (binnen 3 blokjes) zodat hij in je Guhdex komt." +
       (" Heel zeldzaam!" if v in ("golden", "rainbow") else "") + (" Komt alleen met een sterrenregen!" if v == "starry" else "") + (" Alleen 's nachts!" if v == "ghost" else "") +
       (" Een geheimzinnige guh met een briefje..." if v == "brococolief" else "") +
       (" Woont in het Guheinde: je ziet hem pas na het verslaan van Opper-Mika!" if v == "ender" else "") +
       (" Zit op zijn troon in het legendarische guhkasteel." if v == "koning" else ""),
-      "guhs:guhdex", [adv(f"seen_{v}")], rewards=(("guhs:kaas_knabbels", 16),), deps=["guhmension"], x=-7 + i * 1.5, y=9,
-      shape="rsquare")
+      "guhs:guhdex", [adv(f"seen_{v}")], rewards=(("guhs:kaas_knabbels", 16),), deps=["guheinde_winst" if v == "ender" else "guhmension"],
+      x=-7 + i * 1.5, y=9, shape="rsquare")
 q("guhdex_full", "Guhdex vol!", "Alle guhsoorten gezien. Echte vahoege guhkenner!", "guhs:guh_kristal_verrekijker",
   [adv(f"seen_{v}") for v, _ in VARIANTS], rewards=(("guhs:guh_kristal", 16),), deps=[f"variant_{v}" for v, _ in VARIANTS],
   x=0, y=10.5, shape="gear", xp=500)
@@ -246,11 +246,20 @@ EXTRAS = [
      [item("guhs:vahoege_vads_ingot")]),
     ("paxel", "Vadspaxel", "Houweel, bijl en schep in een, en hij gaat nooit kapot.", "guhs:vahoege_vads_paxel", [item("guhs:vahoege_vads_paxel")]),
     ("wheel", "Guhrad", "Zet je tamme guh in een guhrad: volle redstonestroom!", "guhs:guh_wheel", [item("guhs:guh_wheel")]),
-    ("bank", "Bankguh", "Voer de Hongerige Guh 10 gefrituurde kaasknabbels.", "guhs:bank_guh", [adv("guhs:guhmension/feed_hungry_guh")]),
 ]
 for i, (key, title, desc, icon, tasks) in enumerate(EXTRAS):
     q(key, title, desc, icon, tasks, deps=["guhmension"] if key not in ("wheel", "furniture", "taart") else ["start"],
       x=-7 + (i % 8) * 2, y=21 + (i // 8) * 1.5, shape="diamond")
+
+
+# 1.2.8: the Bank Guh only comes from the Hungry Guh (no recipe any more): its own little questline, after the guh picnic
+# (the key "bank" is the old quest: the same quest id, so progress is kept)
+q("bank", "De Hongerige Guh", "Bij een &dguh-picknick&r in de Guhmensie zit de &dHongerige Guh&r. Voer hem 10 &egefrituurde kaasknabbels&r (uit de guh-koekenpan met Mika's vet) en je krijgt zijn vriendje de &dBank Guh&r. Iedere speler krijgt er een, en dit is de enige manier om aan een Bank Guh te komen: je kunt hem niet zelf maken. Wees er dus zuinig op!",
+  "guhs:bank_guh", [adv("guhs:guhmension/feed_hungry_guh")], rewards=(("guhs:kaas_knabbels", 16),), deps=["struct_guh_picnic", "frying"],
+  shape="gear", xp=200)
+q("bank_plaatsen", "Je eigen Bank Guh", "Zet je &dBank Guh&r neer en klik erop: er passen oneindig veel spullen in zijn buikje. Je kunt zoeken, sorteren en filteren, en er zit een werkbankrooster in (met JEI vult de &e+&r het rooster eerst vanuit de bank). Staat hij in de klus-area van een Guhhuisje? Dan sorteren de bewoners alles wat ze verzamelen erin. Breek je hem af, dan neemt hij alles mee.",
+  "guhs:bank_guh", [item("guhs:bank_guh")], deps=["bank"], shape="rsquare")
+GROOT = {"bank"}   # drawn a bit bigger, like the "Hoe kom je hier?" quests
 
 
 # --- the 2.4+ features add their own quests (tools/features/*.py) -----------------------------------------------------------
@@ -447,8 +456,8 @@ def sec(sid, title, portrait, keys=None, module=None, until=None, upstream=None,
 SECTIONS = {
     "guhs_basis": [
         sec("eerste_guh", "Je eerste guh", "guh:normal", keys=["frying", "start", "tame", "wardrobe"]),
-        sec("rijden", "Rijden & vliegen", "guh:ender", keys=["ride", "launch", "ender_tame", "ender_ride"]),
-        sec("soorten", "Guhsoorten & de Guhdex", "guh:starry", keys=[f"variant_{v}" for v, _ in VARIANTS] + ["guhdex_full"]),
+        sec("rijden", "Rijden & vliegen", "guh:ender", keys=["ride", "launch"]),
+        sec("soorten", "Guhsoorten & de Guhdex", "guh:starry", keys=[f"variant_{v}" for v, _ in VARIANTS if v != "ender"] + ["guhdex_full"]),
         sec("thuis", "Lekker eten & gezellig thuis", "item:guhs:guh_taart",
             keys=["taart", "sweets", "fondue", "shake", "furniture", "vadszak", "lampgion", "wheel", "guh_oven"]),
         sec("emotes", "Emotes: kijk wat ik kan!", "guh:mint", module="emotes", upstream="tame"),
@@ -462,8 +471,9 @@ SECTIONS = {
         sec("kasteel", "Het guhkasteel", "guh:koning", keys=["kasteel", "koning_tem", "kasteel_schat", "guhvriend"]),
         sec("slee", "De guhslee", "npc:slee_guh", keys=["sleehut", "sled", "ride_sled", "coaster"]),
         sec("bouwwerken", "Bouwwerken", "wiki:structure_hamster_house", keys=[f"struct_{s}" for s, _ in STRUCTS]),
+        sec("hongerige_guh", "De Hongerige Guh & de Bank Guh", "item:guhs:bank_guh", keys=["bank", "bank_plaatsen"]),
         sec("spullen", "Knabbels, kristal & vads", "item:guhs:guh_kristal",
-            keys=["knabbelboer", "bloesem", "ze_hangen", "crystal", "spyglass", "vads", "paxel", "bank"]),
+            keys=["knabbelboer", "bloesem", "ze_hangen", "crystal", "spyglass", "vads", "paxel"]),
         sec("evenementen", "Evenementen", "wiki:guh_outfit_evenementen", module="evenementen", upstream="guhmension"),
     ],
     "guhs_minigames": [
@@ -503,6 +513,8 @@ SECTIONS = {
     "guhs_guheinde": [
         sec("opweg", "Op weg naar het Guheinde", "guh:koning", module="guheinde", until="guheinde_kristal", upstream="intro"),
         sec("oppermika", "Opper-Mika", "geo:mika:opper_mika", module="guheinde", until="guheinde_poort", upstream="guheinde_binnen"),
+        # 1.2.8: the Enderguh is an endgame guh: its three quests (same keys, so the same quest ids) moved here from Guhs & basis
+        sec("enderguhs", "Wilde Enderguhs", "guh:ender", keys=["variant_ender", "ender_tame", "ender_ride"], upstream="guheinde_winst"),
         sec("buiteneilanden", "De buiteneilanden", "guh:vahoege_ender", module="guheinde", upstream="guheinde_winst"),
     ],
     "guhs_barbecuether": [
@@ -917,7 +929,7 @@ def build(force_art=False):
                 qn["hide_dependency_lines"] = True
             if key.startswith("maag_"):
                 qn["progression_mode"] = "linear"   # the only lock: the stomach sizes come after each other
-            if key.startswith("intro_"):
+            if key.startswith("intro_") or key in GROOT:
                 qn["size"] = 1.3
             if shape:
                 qn["shape"] = shape

@@ -628,7 +628,6 @@ def cheese_fountain():
     s.set(c, 11, c, *SAUS)                                                 # the spout: flows down bowl after bowl
     for (x, z) in ((0, 8), (16, 8), (8, 0), (8, 16)):                     # on the plaza (in the rim the saus washed them away)
         s.set(x, 1, z, mc("potted_pink_tulip"))
-    chest(s, 13, 1, 2, "north", "guhs:chests/cheese_fountain")            # (1.2.8) a little chest on the plaza: a few knabbels
     guh(s, 3.5, 1.0, 3.5, scale=0.8)
     guh(s, 13.5, 1.0, 12.5, scale=1.1)
     s.clear_above(footprint, 1)

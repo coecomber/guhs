@@ -117,6 +117,7 @@ public class Balans128GameTests {
         helper.assertTrue(!vanWinnaar.isNoGravity(), "it comes down and walks");
         helper.runAfterDelay(25, () -> {
             helper.assertTrue(vanWinnaar.isVliegSlot() && !vanNieuw.isVliegSlot(), "it stays that way while they ride");
+            helper.assertTrue(!vlucht(nieuw) && !vlucht(winnaar), "Vadsvlucht is not for getting on (nor for a locked Enderguh)");
             GuhQuests.saved(nieuw).putInt(GuheindeGevecht.WINS, 1);   // ...and then they beat Opper-Mika
         });
         helper.runAfterDelay(50, () -> {
@@ -130,6 +131,40 @@ public class Balans128GameTests {
             nieuw.stopRiding();
             helper.assertTrue(!vanWinnaar.isVliegSlot(), "nobody on it any more: no lock");
             done(helper, nieuw, winnaar);
+        });
+    }
+
+    private static boolean vlucht(ServerPlayer player) {
+        var holder = player.level().getServer().getAdvancements().get(Guhs.id("quest/ride_ender"));
+        return holder != null && player.getAdvancements().getOrStartProgress(holder).isDone();
+    }
+
+    /** "Vadsvlucht" (quest/ride_ender) is for really flying on your Enderguh: in the air, with the flying lock open. */
+    @GuhTest(template = EMPTY, batch = "b128_ender_vlucht", timeoutTicks = 200)
+    public static void vadsvluchtIsForReallyFlying(GameTestHelper helper) {
+        ServerPlayer winnaar = player(helper, true);
+        for (int x = 0; x < 5; x++) {
+            for (int z = 0; z < 5; z++) {
+                helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE);   // (the empty template has no floor)
+            }
+        }
+        GuhEntity guh = helper.spawn(ModEntities.GUH.get(), POS);
+        guh.setVariant(GuhVariant.ENDER);
+        guh.tame(winnaar);
+        boolean op = winnaar.startRiding(guh);
+        helper.assertTrue(op && !guh.isVliegSlot(), "on it, no lock: " + op + " " + guh.isVliegSlot());
+        helper.runAfterDelay(45, () -> {
+            helper.assertTrue(!vlucht(winnaar) && !guh.isVliegtMetRuiter(), "sitting on it on the ground is no Vadsvlucht: y " + guh.getY() + " ground " + guh.onGround() + " adv " + vlucht(winnaar)
+                    + " flying " + guh.isVliegtMetRuiter() + " below " + helper.getLevel().getBlockState(guh.blockPosition().below()));
+            Vec3 hoog = helper.absoluteVec(new Vec3(2.5, 12, 2.5));
+            guh.setNoGravity(true);     // (the rider's client steers a flying Enderguh; here the test holds it up)
+            guh.snapTo(hoog.x, hoog.y, hoog.z, 0f, 0f);
+            guh.setOnGround(false);
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(helper.getTick() > 50 && vlucht(winnaar), "flying on the Enderguh: Vadsvlucht; flying=" + guh.isVliegtMetRuiter());
+            winnaar.stopRiding();
+            helper.getLevel().removePlayerImmediately(winnaar, Entity.RemovalReason.DISCARDED);
         });
     }
 
@@ -188,7 +223,10 @@ public class Balans128GameTests {
 
     // --- the cheese fountains --------------------------------------------------------------------------------------------------
 
-    /** The fountains only give kaasknabbels, a few fried ones and a little iron and gold; no vads anywhere. */
+    /**
+     * The grand cheese fountain's chest only gives kaasknabbels, a few fried ones and a little iron and gold, and there is no
+     * vads ore in it any more; the small fountain has no chest at all.
+     */
     @GuhTest(template = EMPTY, batch = "b128_fontein")
     public static void cheeseFountainsGiveModestLoot(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
@@ -196,34 +234,33 @@ public class Balans128GameTests {
                 Items.IRON_INGOT, Items.GOLD_INGOT);
         var params = new LootParams.Builder(level).withParameter(LootContextParams.ORIGIN, helper.absoluteVec(new Vec3(1, 1, 1)))
                 .create(LootContextParamSets.CHEST);
-        int[] meesteKnabbels = new int[2];
-        String[] namen = {"cheese_fountain", "grand_cheese_fountain"};
-        for (int n = 0; n < namen.length; n++) {
-            LootTable table = level.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Guhs.id("chests/" + namen[n])));
-            helper.assertTrue(table != LootTable.EMPTY, "the loot table of the " + namen[n]);
-            Set<Item> gezien = new java.util.HashSet<>();
-            for (int i = 0; i < 500; i++) {
-                int knabbels = 0, gefrituurd = 0, staven = 0;
-                for (ItemStack s : table.getRandomItems(params)) {
-                    helper.assertTrue(mag.contains(s.getItem()), namen[n] + ": not allowed in a fountain chest: " + s);
-                    gezien.add(s.getItem());
-                    knabbels += s.is(ModItems.KAAS_KNABBELS.get()) ? s.getCount() : 0;
-                    gefrituurd += s.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()) ? s.getCount() : 0;
-                    staven += s.is(Items.IRON_INGOT) || s.is(Items.GOLD_INGOT) ? s.getCount() : 0;
-                }
-                helper.assertTrue(gefrituurd <= (n == 0 ? 6 : 24) && staven <= (n == 0 ? 3 : 12), namen[n] + ": a little, not a lot: " + gefrituurd + " fried, " + staven + " ingots");
-                meesteKnabbels[n] = Math.max(meesteKnabbels[n], knabbels);
+        LootTable table = level.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Guhs.id("chests/grand_cheese_fountain")));
+        helper.assertTrue(table != LootTable.EMPTY, "the loot table of the grand cheese fountain");
+        helper.assertTrue(level.getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Guhs.id("chests/cheese_fountain")))
+                == LootTable.EMPTY, "the small fountain has no loot table");
+        Set<Item> gezien = new java.util.HashSet<>();
+        for (int i = 0; i < 500; i++) {
+            int gefrituurd = 0, staven = 0;
+            for (ItemStack s : table.getRandomItems(params)) {
+                helper.assertTrue(mag.contains(s.getItem()), "not allowed in a fountain chest: " + s);
+                gezien.add(s.getItem());
+                gefrituurd += s.is(ModItems.GEFRITUURDE_KAASKNABBELS.get()) ? s.getCount() : 0;
+                staven += s.is(Items.IRON_INGOT) || s.is(Items.GOLD_INGOT) ? s.getCount() : 0;
             }
-            helper.assertTrue(gezien.equals(mag), namen[n] + ": knabbels, fried knabbels, iron and gold: " + gezien);
+            helper.assertTrue(gefrituurd <= 24 && staven <= 12, "a little, not a lot: " + gefrituurd + " fried, " + staven + " ingots");
         }
-        helper.assertTrue(meesteKnabbels[1] > meesteKnabbels[0], "the grand fountain gives somewhat more: " + meesteKnabbels[1] + " > " + meesteKnabbels[0]);
-        // the templates: their chest has that loot table, and there is no vads ore in them (the orb of the grand fountain was vads ore)
+        helper.assertTrue(gezien.equals(mag), "knabbels, fried knabbels, iron and gold: " + gezien);
+        // the templates: no vads ore (the orb of the grand fountain was vads ore), one modest chest in the grand one, none in the small one
         StructurePlaceSettings settings = new StructurePlaceSettings();
-        for (String naam : namen) {
+        for (String naam : new String[]{"cheese_fountain", "grand_cheese_fountain"}) {
             StructureTemplate t = level.getStructureManager().get(Guhs.id(naam)).orElseThrow();
             List<StructureTemplate.StructureBlockInfo> kisten = t.filterBlocks(BlockPos.ZERO, settings, Blocks.CHEST);
-            helper.assertTrue(kisten.size() == 1 && kisten.get(0).nbt() != null
-                    && kisten.get(0).nbt().getStringOr("LootTable", "").equals("guhs:chests/" + naam), naam + ": one chest with its own loot: " + kisten);
+            if (naam.equals("cheese_fountain")) {
+                helper.assertTrue(kisten.isEmpty(), "the small fountain has no chest");
+            } else {
+                helper.assertTrue(kisten.size() == 1 && kisten.get(0).nbt() != null
+                        && kisten.get(0).nbt().getStringOr("LootTable", "").equals("guhs:chests/grand_cheese_fountain"), "one chest with its own loot: " + kisten);
+            }
             helper.assertTrue(t.filterBlocks(BlockPos.ZERO, settings, ModBlocks.COMPRESSED_SUPER_VAHOEGE_VADS.get()).isEmpty(), naam + ": no vads ore");
             helper.assertTrue(t.filterBlocks(BlockPos.ZERO, settings, Blocks.BARREL).isEmpty(), naam + ": no other loot");
         }
@@ -275,19 +312,28 @@ public class Balans128GameTests {
     /** Every kind of Mika is in the tag guhs:mikas, an aggressive guh goes after a Mika, and a target that isn't allowed any more is dropped. */
     @GuhTest(template = WIRE_ROOM, batch = "b128_mika", timeoutTicks = 300)
     public static void anAggressiveGuhFightsEveryMika(GameTestHelper helper) {
-        for (EntityType<?> type : List.of(ModEntities.MIKA.get(), ModEntities.NETHER_MIKA.get(), ModEntities.MIKA_BAAS.get(), GuheindeFeature.OPPER_MIKA.get(),
+        for (EntityType<?> type : List.of(ModEntities.MIKA.get(), ModEntities.NETHER_MIKA.get(), GuheindeFeature.OPPER_MIKA.get(),
                 GuheindeFeature.MIKA_LARFJE.get(), KaasmoerasFeature.MOERASHEKS_MIKA.get(), SpiesburchtFeature.VONK_MIKA.get(),
-                SpiesburchtFeature.KNEKEL_MIKA.get(), SpiesburchtFeature.AANGEBRANDE_MIKA.get(), KnuffeldalFeature.KRUIMEL_MIKA.get(),
-                DoolhofFeature.MIKA.get(), CircuitFeature.MIKAPIKKER.get(), BeroepenFeature.KNABBELDIEF_MIKA.get())) {
+                SpiesburchtFeature.KNEKEL_MIKA.get(), SpiesburchtFeature.AANGEBRANDE_MIKA.get())) {
             helper.assertTrue(Mikas.isMika(type), "in the tag guhs:mikas: " + type);
         }
         for (EntityType<?> type : List.of(ModEntities.GUH.get(), PiepFeature.SCHILLY.get(), PiepFeature.PIEPPIEPMUISJE.get(), EntityType.ZOMBIE, EntityType.COW)) {
             helper.assertTrue(!Mikas.isMika(type), "no Mika: " + type);
         }
+        // the Mikas of a minigame or a job can't be hurt: they are not in the tag and no monsters, so a guh leaves them alone
+        for (EntityType<?> type : List.of(ModEntities.MIKA_BAAS.get(), KnuffeldalFeature.KRUIMEL_MIKA.get(), DoolhofFeature.MIKA.get(),
+                CircuitFeature.MIKAPIKKER.get(), BeroepenFeature.KNABBELDIEF_MIKA.get())) {
+            Entity spel = type.create(helper.getLevel(), net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+            helper.assertTrue(spel != null && !Mikas.isMika(type) && !Mikas.isVijand(spel), "a game Mika is no enemy: " + type);
+            spel.discard();
+        }
         ServerPlayer owner = player(helper, false), ander = player(helper, false);
         GuhEntity guh = vechtguh(helper, owner, GuhEntity.Behavior.AGGRESSIVE);
         var muisje = stil(helper, PiepFeature.PIEPPIEPMUISJE.get(), 4);
+        var mikaBaas = stil(helper, ModEntities.MIKA_BAAS.get(), 5);   // (closer than the Mika: it would be picked first)
         MikaEntity mika = stil(helper, ModEntities.MIKA.get(), 8);
+        guh.setTarget(mikaBaas);
+        helper.assertTrue(guh.getTarget() == null, "a game Mika is never set as the target");
         helper.assertTrue(Mikas.isMika(mika) && Mikas.isVijand(mika) && !Mikas.isVijand(muisje) && !Mikas.isMika(guh), "the helper");
         // defending never goes against somebody's pet or another guh
         Wolf hond = stil(helper, EntityType.WOLF, 14);
@@ -303,6 +349,7 @@ public class Balans128GameTests {
         helper.assertTrue(guh.getTarget() == null, "a critter neither");
         int[] fase = {0};
         helper.onEachTick(() -> {
+            helper.assertTrue(guh.getTarget() != mikaBaas, "the Mika-baas is left alone");
             if (fase[0] == 0 && guh.getTarget() == mika) {
                 fase[0] = 1;
                 guh.setBehavior(GuhEntity.Behavior.NEUTRAL);   // (neutral: the Mika did nothing to it, so it lets go)
@@ -314,6 +361,7 @@ public class Balans128GameTests {
             helper.assertTrue(fase[0] == 2, "it went after the Mika, and dropped it when it turned neutral: phase " + fase[0] + ", target " + guh.getTarget());
             helper.assertTrue(muisje.getHealth() == muisje.getMaxHealth(), "the muisje is fine");
             muisje.discard();
+            mikaBaas.discard();
             hond.discard();
             andereGuh.discard();
             helper.getLevel().removePlayerImmediately(owner, Entity.RemovalReason.DISCARDED);

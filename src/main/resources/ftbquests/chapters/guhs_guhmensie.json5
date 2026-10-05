@@ -104,11 +104,23 @@
     },
     {
       height: 1.5625,
+      id: "475548D8994A20DC",
+      image: "guhs:textures/ftbquests/guhs_guhmensie/kop_hongerige_guh.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 22.66875,
+      hover: [
+        "Komt na: Guh-picknick",
+      ],
+    },
+    {
+      height: 1.5625,
       id: "4755488AE5F07412",
       image: "guhs:textures/ftbquests/guhs_guhmensie/kop_spullen.png",
       rotation: 0.0,
       width: 10.0,
-      x: 4.5,
+      x: 16.0,
       y: 22.66875,
       hover: [
         "Komt na: Welkom in de Guhmensie!",
@@ -120,8 +132,8 @@
       image: "guhs:textures/ftbquests/guhs_guhmensie/kop_evenementen.png",
       rotation: 0.0,
       width: 10.0,
-      x: 16.0,
-      y: 22.66875,
+      x: 4.5,
+      y: 26.631249999999998,
       hover: [
         "Komt na: Welkom in de Guhmensie!",
       ],
@@ -1662,6 +1674,70 @@
       shape: "square",
     },
     {
+      id: "475548BD5AF1F610",
+      icon: {
+        id: "guhs:bank_guh",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:guhmension/feed_hungry_guh",
+          id: "475548F3EF22FDC6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482CDD9BF436",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755488ADE67E4F0",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 0.0,
+      y: 24.45,
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "4755483D64D9C5D3",
+      icon: {
+        id: "guhs:bank_guh",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bank_guh",
+          },
+          id: "47554876FD6FA2CA",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554889AB96CA79",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 24.45,
+      shape: "rsquare",
+    },
+    {
       id: "475548AFC2EB45F3",
       icon: {
         id: "guhs:zaadbak",
@@ -1688,7 +1764,7 @@
           count: 8,
         },
       ],
-      x: 0.0,
+      x: 11.5,
       y: 24.45,
       shape: "diamond",
     },
@@ -1718,7 +1794,7 @@
           count: 8,
         },
       ],
-      x: 1.5,
+      x: 13.0,
       y: 24.45,
       shape: "diamond",
     },
@@ -1748,7 +1824,7 @@
           count: 8,
         },
       ],
-      x: 3.0,
+      x: 14.5,
       y: 24.45,
       shape: "diamond",
     },
@@ -1779,7 +1855,7 @@
           count: 8,
         },
       ],
-      x: 4.5,
+      x: 16.0,
       y: 24.45,
       shape: "diamond",
     },
@@ -1809,7 +1885,7 @@
           count: 8,
         },
       ],
-      x: 6.0,
+      x: 17.5,
       y: 24.45,
       shape: "diamond",
     },
@@ -1839,7 +1915,7 @@
           count: 8,
         },
       ],
-      x: 7.5,
+      x: 19.0,
       y: 24.45,
       shape: "diamond",
     },
@@ -1869,36 +1945,8 @@
           count: 8,
         },
       ],
-      x: 9.0,
+      x: 20.5,
       y: 24.45,
-      shape: "diamond",
-    },
-    {
-      id: "475548BD5AF1F610",
-      icon: {
-        id: "guhs:bank_guh",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:guhmension/feed_hungry_guh",
-          id: "475548F3EF22FDC6",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755482CDD9BF436",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-      ],
-      x: 0.0,
-      y: 25.95,
       shape: "diamond",
     },
     {
@@ -1930,8 +1978,8 @@
           xp: 50,
         },
       ],
-      x: 11.5,
-      y: 24.45,
+      x: 0.0,
+      y: 28.412499999999998,
     },
     {
       id: "475548A0D2BDA039",
@@ -1962,8 +2010,8 @@
           xp: 100,
         },
       ],
-      x: 13.0,
-      y: 24.45,
+      x: 1.5,
+      y: 28.412499999999998,
     },
     {
       id: "4755489987A6924E",
@@ -1994,8 +2042,8 @@
           xp: 150,
         },
       ],
-      x: 14.5,
-      y: 24.45,
+      x: 3.0,
+      y: 28.412499999999998,
     },
     {
       id: "475548A5029A1872",
@@ -2026,8 +2074,8 @@
           xp: 150,
         },
       ],
-      x: 16.0,
-      y: 24.45,
+      x: 4.5,
+      y: 28.412499999999998,
     },
     {
       id: "475548C88413AA21",
@@ -2058,8 +2106,8 @@
           xp: 300,
         },
       ],
-      x: 17.5,
-      y: 24.45,
+      x: 6.0,
+      y: 28.412499999999998,
       shape: "gear",
     },
     {
@@ -2091,8 +2139,8 @@
           xp: 300,
         },
       ],
-      x: 19.0,
-      y: 24.45,
+      x: 7.5,
+      y: 28.412499999999998,
       shape: "gear",
     },
     {
@@ -2123,8 +2171,8 @@
           xp: 200,
         },
       ],
-      x: 20.5,
-      y: 24.45,
+      x: 9.0,
+      y: 28.412499999999998,
     },
   ],
 }

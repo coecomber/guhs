@@ -246,7 +246,7 @@
   "entity.guhs.quest_guh": "Hungry Guh",
   "entity.guhs.quest_guh.request": "Guh guh... I'm sooo hungry! Bring me %s fried cheese nibbles (in your hand) and you'll get something super chonky. (You have %s now.)",
   "entity.guhs.quest_guh.thanks": "Nom nom nom! Thank you! Here, take my buddy the Bank Guh - they can eat anything and are never full!",
-  "entity.guhs.quest_guh.al_gehad": "Guh! You already got my buddy the Bank Guh. Want another one? You can make it yourself: a chest with fried cheese nibbles all around it!",
+  "entity.guhs.quest_guh.al_gehad": "Guh! You already got my buddy the Bank Guh. Everybody gets one from me, so take good care of it!",
   "item.guhs.quest_guh_spawn_egg": "Hungry Guh Spawn Egg",
   "gui.guhs.bank.search": "Search... (@mod)",
   "gui.guhs.bank.summary": "%s items, %s kinds",

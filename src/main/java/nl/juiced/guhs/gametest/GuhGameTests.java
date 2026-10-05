@@ -1954,7 +1954,7 @@ public class GuhGameTests {
     }
 
     /** Every quest is in exactly one chapter, links point to our quests, the pictures exist, only the stomach sizes are locked. */
-    @GuhTest(template = EMPTY)
+    @GuhTest(template = EMPTY, batch = "ftbquests_compleet")
     public static void ftbQuestsChaptersAreComplete(GameTestHelper helper) {
         ftbQuestsTellsAResaveFromAnEdit(helper);
         try {
