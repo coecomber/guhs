@@ -585,17 +585,8 @@ w(f"{D}/loot_table/chests/guh_picnic.json", {"type": "minecraft:chest", "pools":
         {"type": "minecraft:item", "name": "guhs:challenge_compass", "weight": 2},
         {"type": "minecraft:item", "name": "minecraft:pink_wool", "weight": 4, "functions": count(2, 8)},
     ]}]})
-# (1.2.8) the cheese fountains: only kaasknabbels, a few fried ones and a little iron and gold. Nothing else, no vads
-# (CheeseFountainGameTests checks that); the grand fountain gives somewhat more of the same.
-w(f"{D}/loot_table/chests/cheese_fountain.json", {"type": "minecraft:chest", "pools": [
-    {"rolls": {"type": "minecraft:uniform", "min": 2, "max": 3}, "entries": [
-        {"type": "minecraft:item", "name": "guhs:kaas_knabbels", "weight": 10, "functions": count(3, 8)},
-        {"type": "minecraft:item", "name": "guhs:gefrituurde_kaasknabbels", "weight": 3, "functions": count(1, 2)},
-        {"type": "minecraft:item", "name": "minecraft:iron_nugget", "weight": 4, "functions": count(2, 6)},
-        {"type": "minecraft:item", "name": "minecraft:gold_nugget", "weight": 3, "functions": count(2, 5)},
-        {"type": "minecraft:item", "name": "minecraft:iron_ingot", "weight": 1},
-        {"type": "minecraft:item", "name": "minecraft:gold_ingot", "weight": 1},
-    ]}]})
+# (1.2.8) the grand cheese fountain's chest: only kaasknabbels, a few fried ones and a little iron and gold. Nothing else, no
+# vads (Balans128GameTests checks that). The small cheese fountain has no chest.
 w(f"{D}/loot_table/chests/grand_cheese_fountain.json", {"type": "minecraft:chest", "pools": [
     {"rolls": {"type": "minecraft:uniform", "min": 4, "max": 6}, "entries": [
         {"type": "minecraft:item", "name": "guhs:kaas_knabbels", "weight": 10, "functions": count(6, 14)},

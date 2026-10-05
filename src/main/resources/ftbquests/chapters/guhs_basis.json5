@@ -305,70 +305,6 @@
       y: 6.5625,
     },
     {
-      id: "47554801DEE1F937",
-      icon: {
-        id: "minecraft:dragon_egg",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/tamed_ender",
-          id: "4755480D2AFE023A",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548F165D5D54E",
-          type: "item",
-          item: {
-            count: 1,
-            id: "minecraft:saddle",
-          },
-        },
-        {
-          id: "4755485739106C5F",
-          type: "xp",
-          xp: 300,
-        },
-      ],
-      x: 14.5,
-      y: 6.5625,
-    },
-    {
-      id: "475548D682B03811",
-      icon: {
-        id: "minecraft:elytra",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/ride_ender",
-          id: "475548E61F168483",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548949DFB36D0",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:gefrituurde_kaasknabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "4755481CCEB7AF68",
-          type: "xp",
-          xp: 300,
-        },
-      ],
-      x: 16.0,
-      y: 6.5625,
-      shape: "gear",
-    },
-    {
       id: "475548E81EBD2AE5",
       icon: {
         id: "guhs:guhdex",
@@ -621,34 +557,6 @@
       shape: "rsquare",
     },
     {
-      id: "4755484F0E1FD4F4",
-      icon: {
-        id: "guhs:guhdex",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/seen_ender",
-          id: "475548F05CE3AD6C",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548AFA43836F8",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 16,
-        },
-      ],
-      x: 3.0,
-      y: 12.025,
-      shape: "rsquare",
-    },
-    {
       id: "4755487B05630BA3",
       icon: {
         id: "guhs:guhdex",
@@ -672,7 +580,7 @@
           count: 16,
         },
       ],
-      x: 4.5,
+      x: 3.0,
       y: 12.025,
       shape: "rsquare",
     },
@@ -700,7 +608,7 @@
           count: 16,
         },
       ],
-      x: 6.0,
+      x: 4.5,
       y: 12.025,
       shape: "rsquare",
     },
@@ -728,7 +636,7 @@
           count: 16,
         },
       ],
-      x: 7.5,
+      x: 6.0,
       y: 12.025,
       shape: "rsquare",
     },
@@ -756,7 +664,7 @@
           count: 16,
         },
       ],
-      x: 9.0,
+      x: 7.5,
       y: 12.025,
       shape: "rsquare",
     },
@@ -784,8 +692,8 @@
           count: 16,
         },
       ],
-      x: 0.0,
-      y: 13.525,
+      x: 9.0,
+      y: 12.025,
       shape: "rsquare",
     },
     {
@@ -901,7 +809,7 @@
           xp: 500,
         },
       ],
-      x: 1.5,
+      x: 0.0,
       y: 13.525,
       shape: "gear",
     },

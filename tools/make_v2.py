@@ -1346,11 +1346,12 @@ def bees_slimes_mikas():
     add_tag("minecraft/tags/point_of_interest_type/bee_home", ["guhs:knabbelkorf"])
     add_tag("minecraft/tags/block/beehives", ["guhs:knabbelkorf"])
     add_tag("minecraft/tags/block/mineable/axe", ["guhs:knabbelkorf"])
-    # 1.2.8: every kind of Mika (nl.juiced.guhs.entity.Mikas): an aggressive guh only fights Mikas and hostile mobs.
-    # A new Mika type only has to be added here (and to data/guhs/tags/entity_type/mikas.json).
-    add_tag("guhs/tags/entity_type/mikas", ["guhs:mika", "guhs:nether_mika", "guhs:mika_baas", "guhs:opper_mika", "guhs:mika_larfje",
-                                            "guhs:moerasheks_mika", "guhs:vonk_mika", "guhs:knekel_mika", "guhs:aangebrande_mika",
-                                            "guhs:kruimel_mika", "guhs:doolhof_mika", "guhs:circuit_mikapikker", "guhs:knabbeldief_mika"])
+    # 1.2.8: every Mika you can fight (nl.juiced.guhs.entity.Mikas): an aggressive guh only fights these Mikas and hostile
+    # mobs. A new fightable Mika type only has to be added here (and to data/guhs/tags/entity_type/mikas.json).
+    # NOT in here, on purpose: the Mikas of a minigame or a job that can't be hurt (mika_baas, kruimel_mika, doolhof_mika,
+    # circuit_mikapikker, knabbeldief_mika): an aggressive guh leaves them alone.
+    add_tag("guhs/tags/entity_type/mikas", ["guhs:mika", "guhs:nether_mika", "guhs:opper_mika", "guhs:mika_larfje",
+                                            "guhs:moerasheks_mika", "guhs:vonk_mika", "guhs:knekel_mika", "guhs:aangebrande_mika"])
     # technically monsters, but sweet: an aggressive guh leaves them alone
     add_tag("guhs/tags/entity_type/geen_vijand", ["guhs:guh_slime"])
     shaped("knabbelkorf", ["PPP", "KKK", "PPP"], {"P": "#minecraft:planks", "K": "guhs:kaas_knabbels"}, "guhs:knabbelkorf")
@@ -2188,9 +2189,8 @@ def stomach_story():
         w(f"{D}/advancement/quest/tamed_{v}.json", {"criteria": {"done": {"trigger": "minecraft:tame_animal", "conditions": {
             "entity": [{"condition": "minecraft:entity_properties", "entity": "this",
                         "predicate": {"type": "guhs:guh", "nbt": "{Variant:\"%s\"}" % v}}]}}}})
-    w(f"{D}/advancement/quest/ride_ender.json", {"criteria": {"done": {"trigger": "minecraft:started_riding", "conditions": {
-        "player": [{"condition": "minecraft:entity_properties", "entity": "this",
-                    "predicate": {"vehicle": {"type": "guhs:guh", "nbt": "{Variant:\"ender\"}"}}}]}}}})
+    # (1.2.8) granted by GuhEntity when you really fly on an Enderguh (in the air, the flying lock open), not for getting on
+    w(f"{D}/advancement/quest/ride_ender.json", {"criteria": {"done": {"trigger": "minecraft:impossible"}}})
     w(f"{D}/advancement/quest/ride_sled.json", {"criteria": {"done": {"trigger": "minecraft:started_riding", "conditions": {
         "player": [{"condition": "minecraft:entity_properties", "entity": "this",
                     "predicate": {"vehicle": {"type": "guhs:guh_slee"}}}]}}}})

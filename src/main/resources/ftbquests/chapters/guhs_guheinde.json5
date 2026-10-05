@@ -56,12 +56,24 @@
     },
     {
       height: 1.5625,
+      id: "475548B2597BE85F",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_enderguhs.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 12.70625,
+      hover: [
+        "Komt na: OPPER-GEVADST!",
+      ],
+    },
+    {
+      height: 1.5625,
       id: "47554813ECA2A0B2",
       image: "guhs:textures/ftbquests/guhs_guheinde/kop_buiteneilanden.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 12.70625,
+      y: 16.668750000000003,
       hover: [
         "Komt na: OPPER-GEVADST!",
       ],
@@ -508,6 +520,98 @@
       y: 10.525,
     },
     {
+      id: "4755484F0E1FD4F4",
+      icon: {
+        id: "guhs:guhdex",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_ender",
+          id: "475548F05CE3AD6C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AFA43836F8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 0.0,
+      y: 14.4875,
+      shape: "rsquare",
+    },
+    {
+      id: "47554801DEE1F937",
+      icon: {
+        id: "minecraft:dragon_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tamed_ender",
+          id: "4755480D2AFE023A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F165D5D54E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:saddle",
+          },
+        },
+        {
+          id: "4755485739106C5F",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 1.5,
+      y: 14.4875,
+    },
+    {
+      id: "475548D682B03811",
+      icon: {
+        id: "minecraft:elytra",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ride_ender",
+          id: "475548E61F168483",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548949DFB36D0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755481CCEB7AF68",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 3.0,
+      y: 14.4875,
+      shape: "gear",
+    },
+    {
       id: "4755489D1C3345E2",
       icon: {
         id: "guhs:mika_steen",
@@ -532,7 +636,7 @@
         },
       ],
       x: 0.0,
-      y: 14.4875,
+      y: 18.450000000000003,
     },
     {
       id: "4755480846A343A2",
@@ -563,7 +667,7 @@
         },
       ],
       x: 1.5,
-      y: 14.4875,
+      y: 18.450000000000003,
       shape: "octagon",
     },
     {
@@ -598,7 +702,7 @@
         },
       ],
       x: 3.0,
-      y: 14.4875,
+      y: 18.450000000000003,
       shape: "gear",
     },
     {
@@ -631,7 +735,7 @@
         },
       ],
       x: 4.5,
-      y: 14.4875,
+      y: 18.450000000000003,
     },
     {
       id: "47554806041E9EFE",
@@ -663,7 +767,7 @@
         },
       ],
       x: 6.0,
-      y: 14.4875,
+      y: 18.450000000000003,
     },
   ],
 }

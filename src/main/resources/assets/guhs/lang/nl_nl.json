@@ -246,7 +246,7 @@
   "entity.guhs.quest_guh": "Hongerige Guh",
   "entity.guhs.quest_guh.request": "Guh guh... ik heb zooo'n honger! Breng me %s gefrituurde kaasknabbels (in je hand) en je krijgt iets heel vadsigs. (Je hebt er nu %s.)",
   "entity.guhs.quest_guh.thanks": "Nom nom nom! Dankjewel! Hier, neem mijn vriendje de Bankguh - die kan alles opeten en zit nooit vol!",
-  "entity.guhs.quest_guh.al_gehad": "Guh! Jij hebt mijn vriendje de Bankguh al gekregen. Wil je er nog een? Die kun je zelf maken: een kist met gefrituurde kaasknabbels eromheen!",
+  "entity.guhs.quest_guh.al_gehad": "Guh! Jij hebt mijn vriendje de Bankguh al gekregen. Iedereen krijgt er eentje van mij, dus wees er maar zuinig op!",
   "item.guhs.quest_guh_spawn_egg": "Hongerige Guh-spawnei",
   "gui.guhs.bank.search": "Zoeken... (@mod)",
   "gui.guhs.bank.summary": "%s spullen, %s soorten",

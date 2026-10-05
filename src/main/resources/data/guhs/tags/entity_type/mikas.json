@@ -3,16 +3,11 @@
   "values": [
     "guhs:mika",
     "guhs:nether_mika",
-    "guhs:mika_baas",
     "guhs:opper_mika",
     "guhs:mika_larfje",
     "guhs:moerasheks_mika",
     "guhs:vonk_mika",
     "guhs:knekel_mika",
-    "guhs:aangebrande_mika",
-    "guhs:kruimel_mika",
-    "guhs:doolhof_mika",
-    "guhs:circuit_mikapikker",
-    "guhs:knabbeldief_mika"
+    "guhs:aangebrande_mika"
   ]
 }

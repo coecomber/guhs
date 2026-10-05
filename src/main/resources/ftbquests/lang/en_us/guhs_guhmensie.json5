@@ -219,6 +219,14 @@
   "quest.475548EFA8C8A840.quest_desc": [
     "Find a &dQuartz Statuette&r.",
   ],
+  "quest.475548BD5AF1F610.title": "The Hungry Guh",
+  "quest.475548BD5AF1F610.quest_desc": [
+    "At a &dguh picnic&r in the Guhmension sits the &dHungry Guh&r. Feed him 10 &efried cheese nibbles&r (from the Guh Frying Pan with Mika's Grease) and you get his buddy the &dBank Guh&r. Every player gets one, and this is the only way to get a Bank Guh: you can't craft it. So take good care of it!",
+  ],
+  "quest.4755483D64D9C5D3.title": "Your Very Own Bank Guh",
+  "quest.4755483D64D9C5D3.quest_desc": [
+    "Put your &dBank Guh&r down and click it: endless stuff fits in its tummy. You can search, sort and filter, and it has a crafting grid (with JEI, the &e+&r fills the grid from the bank first). Is it in the chore area of a Guh House? Then the residents sort everything they collect into it. Break it and it takes everything along.",
+  ],
   "quest.475548AFC2EB45F3.title": "Nibble Farmer",
   "quest.475548AFC2EB45F3.quest_desc": [
     "Place a Chonk Seed Box in a guh village and plant Cheese Nibble Seeds on farmland.",
@@ -246,10 +254,6 @@
   "quest.4755482E95A250B4.title": "Chonk Paxel",
   "quest.4755482E95A250B4.quest_desc": [
     "Pickaxe, axe and shovel in one, and it never breaks.",
-  ],
-  "quest.475548BD5AF1F610.title": "Bank Guh",
-  "quest.475548BD5AF1F610.quest_desc": [
-    "Feed the Hungry Guh 10 fried cheese nibbles.",
   ],
   "quest.47554832E4478C3B.title": "Something's Going On!",
   "quest.47554832E4478C3B.quest_desc": [
