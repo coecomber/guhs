@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:item/guhmon_badge_njeg",
+    "badge": "guhs:item/guhmon_badge_njeg",
+    "rand": "minecraft:block/gold_block"
+  },
+  "elements": [
+    {
+      "from": [
+        5.4,
+        2.4,
+        4.5
+      ],
+      "to": [
+        7.8,
+        2.8,
+        6.8999999999999995
+      ],
+      "faces": {
+        "down": {
+          "texture": "#rand",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#badge",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "rotation": 180
+        },
+        "north": {
+          "texture": "#rand",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#rand",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#rand",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#rand",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        }
+      }
+    }
+  ]
+}

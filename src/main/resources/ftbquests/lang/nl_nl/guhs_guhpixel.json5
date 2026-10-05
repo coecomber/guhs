@@ -11,4 +11,16 @@
     "",
     "Speel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de Guhmensie. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
   ],
+  "quest.4755483F8948F2EB.title": "Guhmon-gevecht",
+  "quest.4755483F8948F2EB.quest_desc": [
+    "Praat in de lobby van Guhpixel met &dGymleider Dutjes&r en daag hem uit met een van je eigen guhs (of de leenguh van de gym). Hier geen HP, maar een &9SLAAPbalk&r: wie het eerst slaapt, wint. Verliezen kost niets.",
+  ],
+  "quest.475548298AF628B6.title": "Alle drie de gymbadges",
+  "quest.475548298AF628B6.quest_desc": [
+    "In het &6Badgedoosje&r past meer dan één badge. Win nog eens en verdien de &dNjegbadge&r (laat een Dutje van Snurkel mislukken met jouw Njeg) en de &6Knabbelbadge&r (val in slaap met een vol buikje). De andere vijf gyms zijn dicht wegens dutje.",
+  ],
+  "quest.4755481EE824C15B.title": "Boer zoekt Guh",
+  "quest.4755481EE824C15B.quest_desc": [
+    "&dPresentatrice Guhvon&r neemt in de lobby van Guhpixel haar tv-programma op. Lees de drie brieven voor &6Boer Guhrrit&r, stop iedereen in tijdens de logeerweek en help hem kiezen. Het is maar televisie, njeg.",
+  ],
 }

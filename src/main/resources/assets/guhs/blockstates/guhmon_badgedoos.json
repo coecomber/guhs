@@ -1,0 +1,156 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "dutjes": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_dutjes"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "dutjes": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_dutjes",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "dutjes": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_dutjes",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "dutjes": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_dutjes",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "njeg": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_njeg"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "njeg": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_njeg",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "njeg": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_njeg",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "njeg": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_njeg",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "north",
+        "knabbel": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_knabbel"
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "knabbel": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_knabbel",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "knabbel": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_knabbel",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "knabbel": "true"
+      },
+      "apply": {
+        "model": "guhs:block/guhmon_badgedoos_knabbel",
+        "y": 270
+      }
+    }
+  ]
+}
