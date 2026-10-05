@@ -109,6 +109,25 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // </guhwaii>
         // <guhwaiispellen>
         // </guhwaiispellen>
+        // guhpixel: one block per slice; a slice adds its kinds ONLY between its own two markers (names N_..., one per line, each ending in a comma)
+        // <px_lobby>
+        // </px_lobby>
+        // <px_grap1>
+        // </px_grap1>
+        // <px_grap2>
+        // </px_grap2>
+        // <px_among>
+        // </px_among>
+        // <px_guhkade>
+        // </px_guhkade>
+        // <px_kantoor>
+        // </px_kantoor>
+        // <px_bioscoop>
+        // </px_bioscoop>
+        // <px_reisbureau>
+        // </px_reisbureau>
+        // <px_parkour>
+        // </px_parkour>
         ;
 
         public final float scale;

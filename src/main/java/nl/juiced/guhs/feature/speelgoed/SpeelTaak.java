@@ -9,7 +9,7 @@ import nl.juiced.guhs.feature.huisje.KlusTaak;
  * One play session of one guh (or muisje) with one toy: the {@link KlusTaak} that the huisje's HuisjeGoal (residents)
  * or {@link SpeelGoal} (everyone else) ticks. Walking there is shared here.
  */
-abstract class SpeelTaak implements KlusTaak {
+public abstract class SpeelTaak implements KlusTaak {
     protected final Mob mob;
     protected final ServerLevel level;
     protected int ticks;
@@ -17,7 +17,7 @@ abstract class SpeelTaak implements KlusTaak {
     private Vec3 laatstePlek = Vec3.ZERO;
     private int vast, bijna;
 
-    SpeelTaak(Mob mob, ServerLevel level) {
+    protected SpeelTaak(Mob mob, ServerLevel level) {
         this.mob = mob;
         this.level = level;
     }

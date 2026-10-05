@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guhpixel_poort"
+    },
+    "facing=east": {
+      "model": "guhs:block/guhpixel_poort",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guhpixel_poort",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guhpixel_poort",
+      "y": 270
+    }
+  }
+}

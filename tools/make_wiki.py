@@ -2727,6 +2727,22 @@ def fixes210_section():
     return section("fixes210", "Fixes in 2.10", "Fixes in 2.10", body)
 
 
+def guhpixel_sections():
+    """guhpixel: three sections, each the joined bodies of tools/wiki_px/<slice>.py (body(w): w is this module). A slice that
+    has not written its part yet returns "", and a section without any text is left out. -> [(sid, en, nl, html)]"""
+    import importlib
+    import types
+    w = types.SimpleNamespace(**globals())   # (this module, however it was loaded: the wiki site loads it under another name)
+    out = []
+    for sid, en, nl, slices in (("guhpixel", "Guhpixel", "Guhpixel", ["lobby", "grap1", "grap2", "among", "guhkade", "kantoor", "bioscoop"]),
+                                ("reisbureau", "The Travel Agency", "Het Reisbureau", ["reisbureau"]),
+                                ("guhparkour", "Guh Parkour", "Guh-parkour", ["parkour"])):
+        body = "".join(importlib.import_module(f"wiki_px.{x}").body(w) for x in slices)
+        if body:
+            out.append((sid, en, nl, section(sid, en, nl, body)))
+    return out
+
+
 def bleekwoud_section():
     """1.2.8: Het Bleekwoud (the mod's own Pale Garden): the biome, bleekhout, the guh hearts with the Kraakguh and the
     Kraak-Mika, kaashars, the oogbloempje, and the two structures (tools/features/bleekwoud.py)."""
@@ -3714,16 +3730,18 @@ def build():
       "Nederlands is, anders Engels). Zelf kiezen kan met de knop <b>Taal</b> in het guhmenu, of met <i>Taal van Guhs</i> in de instellingen van de mod "
       "(<i>Mods</i> &rarr; <i>Guhs</i> &rarr; <i>Config</i>; in het bestand: <code>language</code> in <code>config/guhs-client.toml</code>): "
       "Auto, NL of EN. Elke speler kiest voor zichzelf, ook op een server."),
-     ("<b>FTB Quests</b> in your pack? Then a <b>Guhs</b> chapter group is added to the quest book automatically: thirteen chapters with "
+     ("<b>FTB Quests</b> in your pack? Then a <b>Guhs</b> chapter group is added to the quest book automatically: fourteen chapters with "
       + str(quest_count()) + " quests (every guh kind, every structure and biome, the stomach, the minigames, the Guheinde, the Barbecuether, the Knuffeldal, the pieppiepmuisjes, De Grote Guhspelen, your guh's hearts and huisje, the Guhverhalen and the critters...). "
       "Each chapter starts with a <i>Hoe kom je hier?</i> quest that links to where it begins.",
-      "<b>FTB Quests</b> in je pack? Dan komt er vanzelf een groep <b>Guhs</b> in het questboek: dertien hoofdstukken met " + str(quest_count()) + " quests "
+      "<b>FTB Quests</b> in je pack? Dan komt er vanzelf een groep <b>Guhs</b> in het questboek: veertien hoofdstukken met " + str(quest_count()) + " quests "
       "(elke guhsoort, elk bouwwerk en bioom, de maag, de minigames, het Guheinde, de Barbecuether, het Knuffeldal, de pieppiepmuisjes, De Grote Guhspelen, de hartjes en het huisje van je guh, de Guhverhalen en de diertjes...). Elk hoofdstuk begint met een "
       "<i>Hoe kom je hier?</i>-quest met een linkje naar waar het begint.")])}
 """))
 
     # --- new in 3.0: Guhverhalen, and 2.10.1 ------------------------------------------------------------------------------
     # --- new in 1.2.8: het Bleekwoud ------------------------------------------------------------------------------------------
+    for _sid, _en, _nl, _html in guhpixel_sections():   # guhpixel, the Reisbureau, the Guh-parkour
+        S.append(_html)
     S.append(bleekwoud_section())
 
     S.append(verhalen30_section())
@@ -5080,7 +5098,7 @@ def build():
     S.append(section("more", "Advancements and commands", "Vooruitgangen en commando's", adv))
 
     toc = "".join(f'<a href="#{sid}">{t(en, nl)}</a>' for sid, en, nl in [
-        ("start", "Getting started", "Aan de slag"), ("new128", "New in 1.2.8", "Nieuw in 1.2.8"), ("new30", "New in 3.0", "Nieuw in 3.0"), ("fixes2101", "2.10.1", "2.10.1"), ("new210", "New in 2.10", "Nieuw in 2.10"), ("fixes210", "Fixes in 2.10", "Fixes in 2.10"), ("new29", "New in 2.9", "Nieuw in 2.9"), ("new281", "New in 2.8.1", "Nieuw in 2.8.1"), ("new28", "New in 2.8", "Nieuw in 2.8"), ("new27", "New in 2.7", "Nieuw in 2.7"), ("new26", "New in 2.6", "Nieuw in 2.6"), ("new25", "New in 2.5", "Nieuw in 2.5"), ("new24", "New in 2.4", "Nieuw in 2.4"), ("rare24", "Rare places", "Zeldzame plekken"), ("mobs", "Creatures", "Wezens"), ("care", "Your guh", "Jouw guh"), ("personalities", "Personalities", "Karakters"),
+        ("start", "Getting started", "Aan de slag"), *[(_s, _e, _n) for _s, _e, _n, _ in guhpixel_sections()], ("new128", "New in 1.2.8", "Nieuw in 1.2.8"), ("new30", "New in 3.0", "Nieuw in 3.0"), ("fixes2101", "2.10.1", "2.10.1"), ("new210", "New in 2.10", "Nieuw in 2.10"), ("fixes210", "Fixes in 2.10", "Fixes in 2.10"), ("new29", "New in 2.9", "Nieuw in 2.9"), ("new281", "New in 2.8.1", "Nieuw in 2.8.1"), ("new28", "New in 2.8", "Nieuw in 2.8"), ("new27", "New in 2.7", "Nieuw in 2.7"), ("new26", "New in 2.6", "Nieuw in 2.6"), ("new25", "New in 2.5", "Nieuw in 2.5"), ("new24", "New in 2.4", "Nieuw in 2.4"), ("rare24", "Rare places", "Zeldzame plekken"), ("mobs", "Creatures", "Wezens"), ("care", "Your guh", "Jouw guh"), ("personalities", "Personalities", "Karakters"),
         ("maag", "The guh stomach", "De guhmaag"), ("sled", "The guh sled", "De guh-slee"), ("guhdex", "Guhdex", "Guhdex"),
         ("food", "Food &amp; deco", "Eten &amp; deco"),
         ("items", "Items &amp; blocks", "Voorwerpen &amp; blokken"), ("vads", "Vahoege Vads", "Vahoege vads"),

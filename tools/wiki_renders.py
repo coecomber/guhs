@@ -2780,8 +2780,32 @@ def main_v30(out, captured=None):
     shots_30(out)
 
 
+def main_px(out):
+    """guhpixel: the kern's own pictures (the Guhpixel-poort, the Netwerkkabeltje) and those of every slice
+    (tools/wiki_px/<slice>.py renders(r): r is this module, r.OUT the folder; pictures are named <namespace>_*.png)."""
+    import importlib
+    sys.path.insert(0, "tools")
+    os.makedirs(out, exist_ok=True)
+    r = sys.modules[__name__]
+    r.OUT = out
+    try:
+        poort = render(model_quads("guhs:block/guhpixel_poort"), 30, -25, 320)
+        poort.save(os.path.join(out, "guhpixel_poort.png"))
+        poort.resize((64, 64), Image.LANCZOS).save(os.path.join(out, "icon_guhpixel_poort.png"))
+        item_icon("guhs:item/guhpixel_netwerkkabeltje").save(os.path.join(out, "icon_guhpixel_netwerkkabeltje.png"))
+        print("rendered guhpixel_poort, icon_guhpixel_netwerkkabeltje")
+    except Exception as e:
+        print("no render for the guhpixel kern", e)
+    import wiki_px
+    for x in wiki_px.SLICES:
+        importlib.import_module(f"wiki_px.{x}").renders(r)
+
+
 if __name__ == "__main__":
-    if "--only-30" in sys.argv:        # (just the 3.0 + 2.10.1 pictures, into an existing img folder)
+    if "--only-px" in sys.argv:        # (just the guhpixel pictures, into an existing img folder)
+        sys.argv.remove("--only-px")
+        main_px(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
+    elif "--only-30" in sys.argv:        # (just the 3.0 + 2.10.1 pictures, into an existing img folder)
         sys.argv.remove("--only-30")
         main_v30(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
     elif "--only-210" in sys.argv:       # (just the 2.10 pictures, into an existing img folder)
@@ -2792,3 +2816,4 @@ if __name__ == "__main__":
         main_v29(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
     else:
         main(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
+        main_px(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))

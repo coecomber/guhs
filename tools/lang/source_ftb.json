@@ -11,7 +11,7 @@
   "ftb.guhs_basis.section.emotes": "Emotes: kijk wat ik kan!",
   "ftb.guhs_basis.section.extra_kleding": "Kleding voor je guh",
   "ftb.guhs_basis.q.intro_guhs_basis.title": "Hoe kom je hier?",
-  "ftb.guhs_basis.q.intro_guhs_basis.desc": "Je bent er al! Dit is het allereerste hoofdstuk: hier begint elk guh-avontuur, met een handje &6kaasknabbels&r.\n\nLees de hoofdstukken van boven naar beneden: &dGuhs & basis&r > &dDe Guhmensie&r > &6Minigames & bijzondere plekken&r > &9Onderwater&r > &cDe Guhmaag&r > &5Het Guheinde&r > &6De Guhbarbecuether&r > &eGrotten, moeras & woud&r > &dKnuffeldal&r > &dPiep!&r > &dLieve vadsjes&r > &dGuhverhalen&r > &aDiertjes&r.\n\nBovenaan elk hoofdstuk staat zo'n &dHoe kom je hier?&r-quest, met een linkje naar de quest in een ander hoofdstuk waar het begint.\n\nNiks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag! (Alleen de maaggroottes in De Guhmaag komen echt na elkaar.)",
+  "ftb.guhs_basis.q.intro_guhs_basis.desc": "Je bent er al! Dit is het allereerste hoofdstuk: hier begint elk guh-avontuur, met een handje &6kaasknabbels&r.\n\nLees de hoofdstukken van boven naar beneden: &dGuhs & basis&r > &dDe Guhmensie&r > &6Minigames & bijzondere plekken&r > &9Onderwater&r > &cDe Guhmaag&r > &5Het Guheinde&r > &6De Guhbarbecuether&r > &eGrotten, moeras & woud&r > &dKnuffeldal&r > &dPiep!&r > &dLieve vadsjes&r > &dGuhverhalen&r > &aDiertjes&r > &dGuhpixel&r.\n\nBovenaan elk hoofdstuk staat zo'n &dHoe kom je hier?&r-quest, met een linkje naar de quest in een ander hoofdstuk waar het begint.\n\nNiks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag! (Alleen de maaggroottes in De Guhmaag komen echt na elkaar.)",
   "ftb.guhs_basis.q.frying.title": "Frituurvads",
   "ftb.guhs_basis.q.frying.desc": "Vul de guh-koekenpan met Mika's vet en frituur kaasknabbels. Gefrituurde kaasknabbels maken een tamme guh meteen helemaal beter.",
   "ftb.guhs_basis.q.start.title": "Guh!",
@@ -1614,5 +1614,9 @@
   "ftb.guhs_diertjes.q.landdiertjes_huisje.title": "Ook een huisje!",
   "ftb.guhs_diertjes.q.landdiertjes_huisje.desc": "Egeltjes, konijntjes, eekhoorntjes en Sjokkel kunnen ook in een &dguhhuisje&r wonen: gebruik je opgepakte diertje op het huisje, of kies het in het huisjesscherm.",
   "ftb.guhs_diertjes.q.landdiertjes_alle.title": "Een huis vol diertjes",
-  "ftb.guhs_diertjes.q.landdiertjes_alle.desc": "Tem ze allemaal: een pluisegeltje, een guh-konijntje, een pluiseekhoorntje en een Sjokkel. VAHOEG!"
+  "ftb.guhs_diertjes.q.landdiertjes_alle.desc": "Tem ze allemaal: een pluisegeltje, een guh-konijntje, een pluiseekhoorntje en een Sjokkel. VAHOEG!",
+  "ftb.guhs_guhpixel.title": "&dGuhpixel",
+  "ftb.guhs_guhpixel.sub": "De minigame-server van de guhs. /lobby, njeg!",
+  "ftb.guhs_guhpixel.q.intro_guhs_guhpixel.title": "Hoe kom je hier?",
+  "ftb.guhs_guhpixel.q.intro_guhs_guhpixel.desc": "Dit hoofdstuk komt na &6Het superkompas&r in &dDe Guhmensie&r: kies daar in de tab &dMinigames&r het &dGuh-internetcafé \"De Trage Verbinding\"&r.\n\nIn het café slapen guhs achter oude beige computers. Loop door het grote beeldscherm en je staat in de lobby van &dGuhpixel&r: de minigame-server van de guhs. Daarna werken &6/lobby&r, &6/hub&r en &6/l&r overal.\n\nSpeel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de Guhmensie. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!"
 }

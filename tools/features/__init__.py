@@ -35,7 +35,10 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.2.5: the Guhoven (bakes on guh power)
             'guhoven',
             # 1.2.8: het Bleekwoud
-            'bleekwoud']
+            'bleekwoud',
+            # guhpixel: the kern, then its nine slices (each a stub until its slice fills it in)
+            'guhpixel', 'guhpixel_lobby', 'guhpixel_grap1', 'guhpixel_grap2', 'guhpixel_among', 'guhpixel_guhkade', 'guhpixel_kantoor',
+            'guhpixel_bioscoop', 'guhpixel_reisbureau', 'guhpixel_parkour']
 
 
 def modules():

@@ -22,6 +22,9 @@ DIMENSIONS = {
     "barbecuether": ("De Guhbarbecuether", "The Guh Barbecuether", "barbecuether_portaal",
                      "Een hete barbecuedimensie van houtskool, roosterijzer, pindasaus en mosterd, met Spiesburchten en het Mika-grillpaleis. Je gaat erheen door een grillkoolframe.",
                      "A hot barbecue dimension of charcoal, grill iron, peanut sauce and mustard, with Spiesburchten and the Mika grill palace. You get there through a grillkool frame."),
+    "guhpixel": ("Guhpixel", "Guhpixel", "guhpixel_poort",
+                 "De minigame-server van de guhs: een zwevende lobby vol spelletjes, een winkel en Guhpixel-muntjes. Je komt er door het grote beeldscherm in het Guh-internetcafé, daarna met /lobby.",
+                 "The minigame server of the guhs: a floating lobby full of games, a shop and Guhpixel Coins. You get there through the big screen in the Guh Internet Café, after that with /lobby."),
 }
 
 # --- minigames -------------------------------------------------------------------------------------------------------------
@@ -154,6 +157,9 @@ STORIES = {
 # --- mechanics ---------------------------------------------------------------------------------------------------------------
 # id -> (NL title, EN title, picture, NL lead, EN lead, related)
 SYSTEMS = {
+    "guhparkour": ("Guh-parkour", "Guh Parkour", "guh_wip",
+                   "Bouw een parcours van speelgoed en hindernissen tussen een Startpaaltje en een Finishpaaltje; je guhs rennen het rondje na rondje.",
+                   "Build a course of toys and obstacles between a Start Post and a Finish Post; your guhs run it lap after lap.", ["systemen/hartjes"]),
     "temmen": ("Temmen, rijden en oppakken", "Taming, riding and picking up", "guh_saddle",
                "Een wilde guh tem je met kaasknabbels. Een tamme guh kun je berijden, oppakken, aankleden en lanceren.",
                "You tame a wild guh with kaasknabbels. A tamed guh can be ridden, picked up, dressed up and launched.", ["systemen/karakters", "systemen/hartjes"]),
@@ -494,7 +500,8 @@ H3_RULES = [
 ]
 # section -> page, the last resort
 SECTION_RULES = {
-    "start": "index", "new128": "biomen/bleekwoud", "new26": "verhalen/guheinde", "new21": "minigames/kermis", "personalities": "systemen/karakters",
+    "start": "index", "guhpixel": "dimensies/guhpixel", "reisbureau": "bouwwerken/reisbureau", "guhparkour": "systemen/guhparkour",
+    "new128": "biomen/bleekwoud", "new26": "verhalen/guheinde", "new21": "minigames/kermis", "personalities": "systemen/karakters",
     "care": "systemen/temmen", "maag": "dimensies/guhmaag", "sled": "systemen/guhslee", "guhdex": "systemen/guhdex",
     "vads": "systemen/vahoege-vads", "redstone": DROP, "guhmension": "dimensies/guhmension", "villages": "bouwwerken/guh_village",
     "reizen": "systemen/superkompas", "more": "systemen/vooruitgangen", "food": DROP, "items": DROP, "structures": DROP,

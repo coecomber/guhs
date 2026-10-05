@@ -1875,5 +1875,42 @@
       }
     ],
     "subtitle": "subtitles.guhs.bleekwoud.oogbloempje.dicht"
+  },
+  "guhpixel.muntje": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.experience_orb.pickup",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhpixel.muntje"
+  },
+  "guhpixel.ontgrendeld": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.toast.challenge_complete",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhpixel.ontgrendeld"
+  },
+  "guhpixel.portaal": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 1.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhpixel.portaal"
   }
 }

@@ -106,6 +106,7 @@ public final class MijnGuhsTab {
             Component uitleg = Component.translatable(niet == null ? "gui.guhs.mijnguhs.roep.tip" : switch (niet) {
                 case DOOD -> "gui.guhs.mijnguhs.roep.dood";
                 case GUHWIEL -> "gui.guhs.mijnguhs.roep.guhwiel";
+                case NIET_THUIS -> "gui.guhs.guhpixel.roep.niet_thuis";
                 default -> "gui.guhs.mijnguhs.roep.opgepakt";
             }, guh.naam());
             roepTip = regels(uitleg, niet == null ? ChatFormatting.GRAY : ChatFormatting.GOLD);

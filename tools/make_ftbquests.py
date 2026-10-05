@@ -1,5 +1,5 @@
 """
-Builds the "Guhs" chapter group for FTB Quests: thirteen themed chapters in src/main/resources/ftbquests/
+Builds the "Guhs" chapter group for FTB Quests: fourteen themed chapters in src/main/resources/ftbquests/
 (chapters/<file>.json5, lang/nl_nl/<file>.json5 and lang/en_us/<file>.json5, index.txt for the installer), plus their pictures
 (textures/ftbquests, drawn by tools/make_ftbquests_art.py). The mod copies them into config/ftbquests/quests when FTB Quests
 is installed (see compat/FtbQuestsChapter.java). Bump CHAPTER_VERSION when you change the chapters, so packs get them.
@@ -27,7 +27,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 27   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved
+CHAPTER_VERSION = 28   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -284,7 +284,7 @@ for _name, _module in zip(_features.FEATURES, _features.modules()):
 GROUP_TITLE = "&dGuhs"
 READING = ("&dGuhs & basis&r > &dDe Guhmensie&r > &6Minigames & bijzondere plekken&r > &9Onderwater&r > &cDe Guhmaag&r > "
            "&5Het Guheinde&r > &6De Guhbarbecuether&r > &eGrotten, moeras & woud&r > &dKnuffeldal&r > &dPiep!&r > &dLieve vadsjes&r"
-           " > &dGuhverhalen&r > &aDiertjes&r")
+           " > &dGuhverhalen&r > &aDiertjes&r > &dGuhpixel&r")
 NIKS_OP_SLOT = ("Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. "
                 "De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!")
 # file: title, subtitle, ribbon colour, icon, banner renders (left, right), welcome picture (renders, structure behind them),
@@ -410,6 +410,19 @@ CHAPTERS = {
                "heel guh-achtig! En ergens, heel traag... Sjokkel.",
                "Kom dichtbij om ze in je &dGuhdex&r te zetten: ze tellen allemaal mee voor &6alles verzameld&r. Sommige kun je zelfs temmen "
                "en oppakken. " + NIKS_OP_SLOT]),
+    # guhpixel: the minigame-server parody, and the home things, the Reisbureau and the Guh-parkour that came with it
+    "guhs_guhpixel": dict(
+        title="&dGuhpixel", sub="De minigame-server van de guhs. /lobby, njeg!", colour="magenta", icon="guh:rainbow",
+        banner=("guh:golden", "guh:starry"),
+        welcome=(["guh:rainbow", "guh:golden", "guh:ghost", "guh:starry"], None),
+        links=["superkompas"],
+        intro=["Dit hoofdstuk komt na &6Het superkompas&r in &dDe Guhmensie&r: kies daar in de tab &dMinigames&r het "
+               "&dGuh-internetcafé \"De Trage Verbinding\"&r.",
+               "In het café slapen guhs achter oude beige computers. Loop door het grote beeldscherm en je staat in de lobby van "
+               "&dGuhpixel&r: de minigame-server van de guhs. Daarna werken &6/lobby&r, &6/hub&r en &6/l&r overal.",
+               "Speel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis "
+               "mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de "
+               "Guhmensie. " + NIKS_OP_SLOT]),
 }
 ORDER = list(CHAPTERS)
 
@@ -440,6 +453,10 @@ MODULE_CHAPTER = {
     "vogels": "guhs_diertjes", "waterdiertjes": "guhs_diertjes", "landdiertjes": "guhs_diertjes",
     # 1.2.5: the Guhoven (its quest sits next to the Guhrad, in the section "thuis")
     "guhoven": "guhs_basis",
+    # guhpixel: the kern and its nine slices
+    "guhpixel": "guhs_guhpixel", "guhpixel_lobby": "guhs_guhpixel", "guhpixel_grap1": "guhs_guhpixel", "guhpixel_grap2": "guhs_guhpixel",
+    "guhpixel_among": "guhs_guhpixel", "guhpixel_guhkade": "guhs_guhpixel", "guhpixel_kantoor": "guhs_guhpixel",
+    "guhpixel_bioscoop": "guhs_guhpixel", "guhpixel_reisbureau": "guhs_guhpixel", "guhpixel_parkour": "guhs_guhpixel",
 }
 PREFIX_CHAPTER = [("maag", "guhs_maag"), ("heiligdom", "guhs_maag"), ("variant_", "guhs_basis"), ("emote", "guhs_basis"),
                   ("biome_", "guhs_guhmensie"), ("struct_", "guhs_guhmensie"), ("verstop", "guhs_minigames"), ("kermis", "guhs_minigames"),
@@ -574,6 +591,16 @@ SECTIONS = {
         sec("waterdiertjes", "Water & insectjes", "item:minecraft:axolotl_bucket", module="waterdiertjes", upstream="intro"),
         sec("landdiertjes", "Egeltjes, konijntjes, eekhoorntjes & Sjokkel", "item:minecraft:sweet_berries", module="landdiertjes", upstream="intro"),
     ],
+    # guhpixel (a section may take the quests of several modules: module=(a, b, ...))
+    "guhs_guhpixel": [
+        sec("px_lobby", "De lobby van Guhpixel", "guh:rainbow", module=("guhpixel", "guhpixel_lobby"), upstream="intro"),
+        sec("px_grapjes", "Grapspelletjes", "guh:golden", module=("guhpixel_grap1", "guhpixel_grap2"), upstream="intro"),
+        sec("px_among", "Among Guhs", "guh:ghost", module="guhpixel_among", upstream="intro"),
+        sec("px_thuis", "Voor thuis: Guhkade, Guhkantoor & Guhbioscoop", "guh:starry",
+            module=("guhpixel_guhkade", "guhpixel_kantoor", "guhpixel_bioscoop"), upstream="intro"),
+        sec("px_reisbureau", "Reisbureau De Vadsvakantie", "guh:mint", module="guhpixel_reisbureau", upstream="intro"),
+        sec("px_parkour", "Guh-parkour", "guh:choco", module="guhpixel_parkour", upstream="intro"),
+    ],
 }
 COLUMNS = {"guhs_onderwater": 1, "guhs_maag": 1, "guhs_guheinde": 1}
 
@@ -612,15 +639,16 @@ def assign():
                 ks = [k for k in s["keys"] if k in known and k not in done]
             else:
                 ks = []
-                for k in by_module.get(s["module"], []):
-                    if k == s["until"]:
-                        break
-                    if k not in done:
-                        ks.append(k)
+                for m in (s["module"] if isinstance(s["module"], (list, tuple)) else [s["module"]]):   # (guhpixel: several modules)
+                    for k in by_module.get(m, []):
+                        if k == s["until"]:
+                            break
+                        if k not in done:
+                            ks.append(k)
             done.update(ks)
             if ks:
                 # 3.0: a module may give its section another picture (FTB_PORTRAIT = "<spec>")
-                portret = getattr(MODULES.get(s["module"]), "FTB_PORTRAIT", None) if s["module"] else None
+                portret = getattr(MODULES.get(s["module"]), "FTB_PORTRAIT", None) if isinstance(s["module"], str) else None
                 out[c].append(dict(s, quests=ks, **({"portrait": portret} if portret else {})))
     # the rest: a section per feature module (or "Nog meer guh-dingen") at the end of its chapter
     for k in keys:

@@ -354,6 +354,25 @@ public enum GuhClothes {
     GUHWAII_SURFPLANKJE(Slot.BACK, "outfit_guhwaii_surfplank"),
     // </guhwaii>
     //
+    // guhpixel: one block per slice; a slice adds its clothes ONLY between its own two markers (names N_..., 4 spaces, one constant per line)
+    // <px_lobby>
+    // </px_lobby>
+    // <px_grap1>
+    // </px_grap1>
+    // <px_grap2>
+    // </px_grap2>
+    // <px_among>
+    // </px_among>
+    // <px_guhkade>
+    // </px_guhkade>
+    // <px_kantoor>
+    // </px_kantoor>
+    // <px_bioscoop>
+    // </px_bioscoop>
+    // <px_reisbureau>
+    // </px_reisbureau>
+    // <px_parkour>
+    // </px_parkour>
     ;
 
     /**
