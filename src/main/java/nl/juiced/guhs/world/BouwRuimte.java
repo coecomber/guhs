@@ -87,6 +87,7 @@ public final class BouwRuimte {
     public static void onLevelLoad(LevelEvent.Load event) {
         if (event.getLevel() instanceof ServerLevel level) {
             remember(level.getChunkSource().randomState(), level.getChunkSource().getGeneratorState());
+            GegarandeerdPlacement.laad(level);   // (bbq2: the saved spots of the alleen_nieuw sets, before anything searches)
             GegarandeerdPlacement.onthoud(level, level.getChunkSource().getGeneratorState(), level.getSeed());
             GegarandeerdPlacement.vooruit(level);
         }
@@ -148,6 +149,32 @@ public final class BouwRuimte {
         index = i;
         STARTS.clear();
         return i;
+    }
+
+    /**
+     * bbq2: the furthest reach (keep_clear, blocks) of the guhs sets that can stand in this biome source and would have to give
+     * way to the guaranteed copy of this set (they go after it); 0 when there are none. See GegarandeerdPlacement.vrij.
+     */
+    public static int reikwijdteNa(RegistryAccess access, BiomeSource source, Holder<StructureSet> gegarandeerd) {
+        Index i = index(access);
+        SetInfo mine = null;
+        for (SetInfo s : i.sets) {
+            if (s.set.value() == gegarandeerd.value()) {
+                mine = s;
+            }
+        }
+        if (mine == null) {
+            return 0;
+        }
+        Map<SetInfo, Boolean> possible = POSSIBLE.computeIfAbsent(source, b -> new ConcurrentHashMap<>());
+        int reach = 0;
+        for (SetInfo other : i.sets) {
+            if (other != mine && (other.voorrang < mine.voorrang || (other.voorrang == mine.voorrang && other.name.compareTo(mine.name) > 0))
+                    && possible.computeIfAbsent(other, o -> canBeIn(o, source))) {
+                reach = Math.max(reach, other.reach);
+            }
+        }
+        return reach;
     }
 
     /**

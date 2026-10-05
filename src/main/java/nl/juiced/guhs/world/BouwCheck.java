@@ -74,6 +74,10 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
  *   <li>compleet: generates the guhs buildings of the world seed in that square (a ticket per building) and compares the
  *       placed blocks with their templates: how much is right, how much is missing or overwritten (by another building
  *       or by the terrain), and how much of the bottom layer hangs above air.</li>
+ *   <li>gegarandeerd (bbq2): lists every guaranteed copy of a dimension (the dimension you are in when none is given): its
+ *       chunk, its distance to the middle of its ring, and whether it stands in new terrain ("nieuw terrein: ja" = its start
+ *       chunk did not exist yet when the spot was chosen, or the building is there; "nee" = the chunk existed before the set
+ *       did, so the building never appeared there).</li>
  * </ul>
  * The report goes to the chat (short) and to &lt;world&gt;/bouwcheck/&lt;dimension&gt;.txt (long).
  */
@@ -101,6 +105,10 @@ public final class BouwCheck {
     public static void registerCommands(RegisterCommandsEvent event) {
         event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("bouwcheck").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("stop").executes(c -> stop(c.getSource())))
+                .then(Commands.literal("gegarandeerd")
+                        .executes(c -> gegarandeerd(c.getSource(), c.getSource().getLevel()))
+                        .then(Commands.argument("dimensie", DimensionArgument.dimension())
+                                .executes(c -> gegarandeerd(c.getSource(), DimensionArgument.getDimension(c, "dimensie")))))
                 .then(Commands.argument("dimensie", DimensionArgument.dimension())
                         .then(Commands.argument("straal", IntegerArgumentType.integer(16, 30000))
                                 .executes(c -> run(c, 3, true, 0))
@@ -126,6 +134,62 @@ public final class BouwCheck {
         j.stopped = true;
         source.sendSuccess(() -> Component.literal("Bouwcheck wordt gestopt."), true);
         return 1;
+    }
+
+    /**
+     * bbq2: /guhs bouwcheck gegarandeerd [dimensie]: every guaranteed copy of the dimension. "nieuw terrein": an alleen_nieuw
+     * set with a saved spot stands in terrain that was new when it was chosen; for the others the start chunk is looked at:
+     * not generated yet (the building will come), or generated with the start in it. "nee" = the chunk was generated before
+     * the set existed: the building is not there.
+     */
+    private static int gegarandeerd(CommandSourceStack source, ServerLevel level) {
+        List<String> lines = gegarandeerdRegels(level);
+        String dim = level.dimension().identifier().toString();
+        source.sendSuccess(() -> Component.literal("Bouwcheck gegarandeerd " + dim + ": " + lines.size() + " sets"), false);
+        lines.forEach(line -> source.sendSuccess(() -> Component.literal("  " + line), false));
+        write(source.getServer(), level, "gegarandeerd", String.join(System.lineSeparator(), lines) + System.lineSeparator());
+        return lines.size();
+    }
+
+    /** One line per guaranteed set of this level (server thread: it looks at the start chunks that exist). */
+    public static List<String> gegarandeerdRegels(ServerLevel level) {
+        ChunkGeneratorStructureState state = level.getChunkSource().getGeneratorState();
+        NieuwTerrein terrein = NieuwTerrein.van(level);
+        GegarandeerdData opslag = GegarandeerdPlacement.opslag(level);
+        List<String> lines = new ArrayList<>();
+        for (GegarandeerdPlacement.Kopie k : GegarandeerdPlacement.kopieen(state, level.getSeed())) {
+            String naam = k.set() + (k.placement().alleenNieuw() ? " (alleen nieuw)" : "");
+            if (k.plek().isEmpty()) {
+                lines.add(naam + ": GEEN PLEK");
+                continue;
+            }
+            ChunkPos c = k.plek().get();
+            int d = (int) Math.round(Math.hypot(c.getMinBlockX() - k.middenX(), c.getMinBlockZ() - k.middenZ()));
+            boolean bestaat = terrein.bestaat(c.x(), c.z());
+            boolean bewaard = opslag != null && opslag.plek(k.set()) != null;
+            String staat;
+            boolean nieuw;
+            if (!bestaat) {
+                staat = "nog niet gegenereerd";
+                nieuw = true;
+            } else {
+                boolean er = false;
+                var chunk = level.getChunk(c.x(), c.z(), net.minecraft.world.level.chunk.status.ChunkStatus.STRUCTURE_STARTS);
+                StructureSet set = level.registryAccess().lookupOrThrow(Registries.STRUCTURE_SET).getValue(Identifier.parse(k.set()));
+                if (set != null) {
+                    for (StructureSet.StructureSelectionEntry e : set.structures()) {
+                        StructureStart start = chunk.getStartForStructure(e.structure().value());
+                        er |= start != null && start.isValid();
+                    }
+                }
+                staat = er ? "staat er" : "STAAT ER NIET";
+                nieuw = er;
+            }
+            lines.add(String.format("%s: chunk %s (blok %d, %d), %d blokken van %s, nieuw terrein: %s (%s%s)", naam, c, c.getMiddleBlockX(),
+                    c.getMiddleBlockZ(), d, k.placement().rond().map(Identifier::toString).orElse("0,0"), nieuw ? "ja" : "nee", staat,
+                    bewaard ? ", plek bewaard" : ""));
+        }
+        return lines;
     }
 
     private static int run(CommandContext<CommandSourceStack> c, int seeds, boolean complete, int max) throws CommandSyntaxException {
