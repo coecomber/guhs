@@ -9343,6 +9343,7 @@
   "gui.guhs.kledingbron.toren_peper": "De vuurtoren en de Pepertuin",
   "gui.guhs.kledingbron.ring": "In de ban van de Knabbelring",
   "gui.guhs.kledingbron.guhrio_beloning": "Super Guhrio",
+  "gui.guhs.wereld.beschermd": "Dit hoort bij het gebouw: hier kun je niks stukmaken of neerzetten. Njeg!",
   "guhs.configuration.title": "Guhs-instellingen",
   "guhs.configuration.section.guhs.client.toml": "Clientinstellingen",
   "guhs.configuration.section.guhs.client.toml.title": "Guhs-clientinstellingen",
