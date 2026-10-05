@@ -421,8 +421,9 @@ CHAPTERS = {
     # chapter whose quests really depend on each other: FTB_LINEAIR) and Super Guhrio (features/guhrio*.py)
     "guhs_techniek": dict(
         title="&bGuh-technologie", sub="Vadskracht, buizen en knabbelende machines. Njeg, het werkt vanzelf!", colour="cyan",
-        icon="item:guhs:guh_wheel", banner=("guh:normal", "guh:golden"),
-        welcome=(["guh:normal", "item:guhs:guh_wheel", "item:guhs:guh_oven", "guh:mint"], None),
+        icon="item:guhs:block/guh_oven_front_on",   # (the Guhrad has no flat picture; the oven's snoet says "machine with a face")
+        banner=("guh:normal", "guh:golden"),
+        welcome=(["guh:normal", "item:guhs:block/guh_oven_front_on", "item:guhs:guh_wire", "guh:mint"], None),
         links=["wheel"],
         intro=["Dit hoofdstuk komt na &dHet Guhrad&r in &dGuhs & basis&r: een guh die in een rad rent, maakt &bvadskracht&r.",
                "Met &bGuhdraad&r breng je die kracht naar machines met een snoetje: ovens, buizen, knabbelaars... Elk rijtje "
