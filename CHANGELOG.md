@@ -3,7 +3,7 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
-## Unreleased: the Guhpixel update (no version number yet) — Minecraft 26.1.2
+## 1.3.0 — the Guhpixel update — Minecraft 26.1.2
 
 A big update. New structures (the Guh internet café and the travel agency) only appear in chunks that were not generated yet.
 

@@ -63,7 +63,7 @@ public final class SkyblokSessie extends GrapSessie {
     public static final SpelSoort SPEL = new SpelSoort(ID, ARENA, 1, 1, LobbyPlek.SPEL_SKYBLOK, SkyblokSessie::new);
     /** How many steps the guide says there are. */
     public static final String GIDS_STAPPEN = "4.812";
-    static final int NAAR_STAP_2 = 60, KIST_WACHT = 20 * 30, POGING_WACHT = 20 * 25, HINT_ELKE = 20 * 20, BENEDEN_MAX = 20 * 15;
+    static final int NAAR_STAP_2 = 60, KIST_WACHT = 20 * 30, POGING_WACHT = 20 * 25, HINT_ELKE = 20 * 20, BENEDEN_MAX = 20 * 3;
     /** The finale: when the credit cards start after lying down, ticks per card, how many cards. */
     static final int AFTITELING_NA = 100, KAART_TICKS = 36, KAARTEN = 7;
     private static final int[] NEE = {1, 2, 3, 4, 5, 6};

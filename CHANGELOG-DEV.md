@@ -7,8 +7,8 @@ old history for the curious; it is not needed to play. Player-facing changes fro
 
 Worlds from the internal versions were never meant to carry over; start a new world for 1.0.0.
 
-## guhpixel (in development, no version number yet)
-Build notes of the Guhpixel update; the player-facing text is the "Unreleased" section of [CHANGELOG.md](CHANGELOG.md).
+## guhpixel (released as 1.3.0)
+Build notes of the Guhpixel update; the player-facing text is the "1.3.0" section of [CHANGELOG.md](CHANGELOG.md).
 - Built as a kern plus nine slices (lobby, grap1, grap2, among, guhkade, kantoor, bioscoop, reisbureau, parkour) in
   `feature/guhpixel/*` and `tools/features/guhpixel_*.py`; game test batches `px_*`.
 - FTB chapter "De Guhmensie", section "De biomen": the nine missing Guhmensie biomes added (bleekwoud, gatenkaasgrotten,

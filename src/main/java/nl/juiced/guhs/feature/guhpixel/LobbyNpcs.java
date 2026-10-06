@@ -28,7 +28,7 @@ import nl.juiced.guhs.registry.ModEntities;
  */
 public final class LobbyNpcs {
     private static final int ELKE = 100;
-    private static final double KOP_Y = 2.55, REGEL_Y = 2.25;
+    private static final double KOP_Y = 3.05, REGEL_Y = 2.75;
 
     private record Npc(LobbyPlek plek, GuhNpcEntity.Kind kind, @Nullable Component kop, @Nullable Function<MinecraftServer, Component> onderregel) {
     }
