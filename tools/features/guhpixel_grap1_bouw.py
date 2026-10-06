@@ -108,12 +108,17 @@ def skyblok(h):
     s.set(6, 1, 20, "minecraft:white_carpet")
     s.set(6, 1, 21, "minecraft:white_carpet")
     s.set(4, 1, 21, "minecraft:light_blue_carpet")
-    # light everywhere (a closed box): invisible light blocks on a grid, wherever there is nothing
-    for x in range(3, W - 1, 5):
-        for y in range(3, H - 1, 5):
-            for z in range(3, W - 1, 5):
-                if (x, y, z) not in s.blocks:
-                    s.set(x, y, z, "minecraft:light", {"level": "15", "waterlogged": "false"})
+    # light everywhere (a closed box has no daylight): invisible light blocks in every free cell, so the painted sky, the
+    # clouds and the island are as bright as a real day (a grid of them left the box dim and yellowish in the client).
+    # Around the island only every other cell: the open corner of the L and the room above the grass stay real air.
+    for x in range(1, W - 1):
+        for y in range(1, H - 1):
+            for z in range(1, W - 1):
+                if (x, y, z) in s.blocks:
+                    continue
+                if 9 <= x <= 16 and 9 <= z <= 16 and 8 <= y <= 18 and (x + y + z) % 2 == 0:
+                    continue
+                s.set(x, y, z, "minecraft:light", {"level": "15", "waterlogged": "false"})
     s.save(SKYBLOK)
     return s
 

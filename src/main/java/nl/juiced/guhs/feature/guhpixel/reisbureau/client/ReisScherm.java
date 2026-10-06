@@ -244,7 +244,7 @@ public class ReisScherm extends Screen {
         int lx = left + 8;
         g.text(font, Component.translatable(G + "vandaag").withStyle(ChatFormatting.BOLD), lx, top + 22, ROZE, false);
         GidsTekst.passend(g, Component.translatable(G + "nieuw_over", Reizen.tijd(Math.max(0L, data.getLongOr("Morgen", 0L) - (System.currentTimeMillis() - ontvangen)))),
-                lx + LINKS_W, top + 24, 76, 0.625f, DOF, true);
+                left + W - 8, top + 16, 150, 0.625f, DOF, true);   // (a line of its own under the title: beside the heading it ran into the Dutch one)
         for (int i = 0; i < reizen.size(); i++) {
             tekenReis(g, reizen.get(i), lx, kaartY(i), mouseX, mouseY);
         }

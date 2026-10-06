@@ -22,6 +22,7 @@ shot among_lobby_kapitein
 section the queue screen (the oefenrondje counts as played: the real queue is open)
 /guhs px grap among klaar
 wait 10
+gui keep
 /guhs px among wachtrij
 wait 20
 shot among_wachtrij gui
@@ -35,10 +36,10 @@ wait 5
 section a round as crew: the start, the HUD, the ship
 /guhs px among speel normaal crew
 wait 80
-shot among_crew_start
+shot among_crew_start gui
 /guhs px among rollen
 wait 5
-shot among_crew_rollen
+shot among_crew_rollen gui
 # look around the Kantine: the table with the button, the guhs in their suits
 look 180 10
 wait 10
@@ -48,6 +49,7 @@ wait 10
 shot among_crew_kantine_zuid
 
 section a meeting (the dev command calls one)
+gui keep
 /guhs px among vergader
 wait 30
 shot among_vergadering_bespreken gui
@@ -64,22 +66,24 @@ press Overslaan
 wait 300
 shot among_vergadering_uitslag gui
 wait 200
+gui close
 shot among_na_vergadering
 
 section the tasks done by the dev command: the crew's bar fills, the round goes on until the NPCs finish
 /guhs px among taken
 wait 20
-shot among_crew_taken_klaar
+shot among_crew_taken_klaar gui
 /guhs px among einde
 wait 60
 
 section a round as the Mika: the pillow, the map
 /guhs px among speel normaal mika
 wait 80
-shot among_mika_start
+shot among_mika_start gui
 # the Saboteerkaart in the hand, and use it
 /item replace entity @s weapon.mainhand with guhs:among_saboteerkaart
 wait 5
+gui keep
 useitem 2
 wait 20
 shot among_saboteerkaart gui
@@ -89,42 +93,52 @@ wait 5
 wait 60
 
 section the ten task panels (the dev command opens them as the Taakjes-paneel at home does)
+gui keep
 /guhs px among taak worstjes
 wait 15
 shot among_taak_worstjes gui
 gui close
+gui keep
 /guhs px among taak pasje
 wait 15
 shot among_taak_pasje gui
 gui close
+gui keep
 /guhs px among taak kruimelbak
 wait 15
 shot among_taak_kruimelbak gui
 gui close
+gui keep
 /guhs px among taak pindasaus
 wait 15
 shot among_taak_pindasaus gui
 gui close
+gui keep
 /guhs px among taak sorteren
 wait 15
 shot among_taak_sorteren gui
 gui close
+gui keep
 /guhs px among taak dromen
 wait 15
 shot among_taak_dromen gui
 gui close
+gui keep
 /guhs px among taak wegen
 wait 15
 shot among_taak_wegen gui
 gui close
+gui keep
 /guhs px among taak schakelaars
 wait 15
 shot among_taak_schakelaars gui
 gui close
+gui keep
 /guhs px among taak herstel_licht
 wait 15
 shot among_taak_herstel_licht gui
 gui close
+gui keep
 /guhs px among taak herstel_alarm
 wait 15
 shot among_taak_herstel_alarm gui
@@ -132,6 +146,7 @@ gui close
 wait 5
 
 section the stats board of the Logboek-guh
+gui keep
 /guhs px among cijfers
 wait 15
 shot among_cijfers gui
@@ -142,7 +157,7 @@ section the oefenrondje: the start, the sleeping crew, the meeting
 /guhs px grap among reset
 /guhs px among oefen
 wait 80
-shot among_oefen_start
+shot among_oefen_start gui
 /guhs px among oefen slaap
 wait 20
 look 180 10

@@ -62,6 +62,7 @@ shot guhparkour_scorebord_tekst
 
 section the post screen (Dutch, English, GUI scale 3)
 /gamemode creative
+gui keep
 /guhs px parkour scherm
 wait 30
 guhstaal nl

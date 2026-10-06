@@ -15,7 +15,8 @@ guiscale 2
 /forceload add 2970 2970 3030 3030
 wait 80
 /fill 2970 139 2970 3030 139 3030 minecraft:pink_concrete
-/fill 2975 140 2975 3025 152 3025 minecraft:air
+/fill 2975 140 2975 3025 145 3025 minecraft:air
+/fill 2975 146 2975 3025 152 3025 minecraft:air
 /fill 2984 140 2994 3016 144 2994 minecraft:white_concrete
 /gamemode creative
 /tp @s 3000 140 3008
@@ -179,10 +180,13 @@ section the building in the Guhmensie
 /gamemode spectator
 tplocate auto reisbureau
 waitrender 400
-camrel 8 9 -14 0 20
+# (template coordinates: the building is x 3..13, z 5..13 with its door at 8, 5 and the ground at y 4; spectator, a
+# creative player that is put in the air falls)
+/gamemode spectator
+looktpl 8.5 11 -9 8.5 6 9
 waitrender 200
 shot 19_reisbureau_gebouw
-camrel 8 6.6 5.6 0 10
+looktpl 8.5 6.7 6.6 8.5 6 12
 waitrender 200
 shot 20_reisbureau_binnen
 quit

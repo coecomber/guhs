@@ -14,7 +14,9 @@ section setup
 /forceload add 2970 2970 3040 3040
 wait 80
 /fill 2970 139 2970 3040 139 3040 minecraft:pink_concrete
-/fill 2975 140 2975 3035 152 3035 minecraft:air
+/fill 2975 140 2975 3035 143 3035 minecraft:air
+/fill 2975 144 2975 3035 147 3035 minecraft:air
+/fill 2975 148 2975 3035 152 3035 minecraft:air
 /gamemode creative
 /tp @s 3000 140 3000 -90 0
 wait 20

@@ -77,13 +77,13 @@ public class VergaderScherm extends Screen {
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.among.vergadering.overslaan"),
                     b -> ClientPacketDistributor.sendToServer(new AmongPayloads.Actie(AmongPayloads.STEM, -1, 0))).bounds(left + 8, top + H - 26, LINKS - 12, 20).build());
         }
-        int rx = left + LINKS + 6, rw = W - LINKS - 14, ky = top + H - 74;
+        int rx = left + LINKS + 6, rw = W - LINKS - 14, ky = knopY();
         boolean magZeggen = stap() != 2 && wakker() && data.getIntOr("Zeggen", 0) > 0;
         if (magZeggen && soort == null) {
             for (int i = 0; i < KIES.length; i++) {
                 Uitspraak.Soort s = KIES[i];
                 addRenderableWidget(Button.builder(Component.translatable("gui.guhs.among.zeg." + s.id()), b -> kies(s))
-                        .bounds(rx + (i % 4) * (rw / 4), ky + (i / 4) * 22, rw / 4 - 2, 20).build());
+                        .bounds(rx + (i % 3) * (rw / 3), ky + (i / 3) * 22, rw / 3 - 2, 20).build());
             }
         } else if (magZeggen && soort.overIemand() && wie < 0) {
             int n = 0;
@@ -104,7 +104,7 @@ public class VergaderScherm extends Screen {
             for (int i = 0; i < kamers.size(); i++) {
                 CompoundTag k = kamers.getCompoundOrEmpty(i);
                 int zone = k.getIntOr("Idx", -1);
-                addRenderableWidget(Button.builder(Tekst.get(k, "Naam"), b -> zeg(zone)).bounds(rx + (i % 5) * (rw / 5), ky + (i / 5) * 22, rw / 5 - 2, 20).build());
+                addRenderableWidget(Button.builder(Tekst.get(k, "Naam"), b -> zeg(zone)).bounds(rx + (i % 3) * (rw / 3), ky + (i / 3) * 22, rw / 3 - 2, 20).build());
             }
         }
         if (soort != null) {
@@ -116,6 +116,22 @@ public class VergaderScherm extends Screen {
         }
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.among.vergadering.chatten"), b -> onClose())
                 .bounds(left + W - 88, top + H - 26, 80, 20).build());
+    }
+
+    /**
+     * The top of the statement buttons. Statements and rooms stand three beside each other (four or five cut their texts
+     * off), so they need more rows than the names; the log above gives way.
+     */
+    private int knopY() {
+        int rijen = 2;
+        if (stap() != 2 && wakker() && data.getIntOr("Zeggen", 0) > 0) {
+            if (soort == null) {
+                rijen = (KIES.length + 2) / 3;
+            } else if (!(soort.overIemand() && wie < 0) && soort.metZone()) {
+                rijen = Math.max(2, (data.getListOrEmpty("Kamers").size() + 2) / 3);
+            }
+        }
+        return top + H - 30 - rijen * 22;
     }
 
     private void kies(Uitspraak.Soort s) {
@@ -229,7 +245,7 @@ public class VergaderScherm extends Screen {
             g.text(font, Component.translatable("gui.guhs.among.vergadering.straks"), left + 8, top + H - 20, DOF, false);
         }
         // what was said: the newest lines that fit
-        int rx = left + LINKS + 6, rw = W - LINKS - 14, ly0 = top + 22, ly1 = top + H - 90;
+        int rx = left + LINKS + 6, rw = W - LINKS - 14, ly0 = top + 22, ly1 = knopY() - 16;
         g.fill(rx - 2, ly0, rx + rw + 2, ly1, VAK);
         ListTag uitspraken = data.getListOrEmpty("Uitspraken");
         List<FormattedCharSequence> regels = new ArrayList<>();
@@ -262,7 +278,7 @@ public class VergaderScherm extends Screen {
         } else {
             hulp = Component.translatable("gui.guhs.among.zeg.waar", Component.translatable("gui.guhs.among.zeg." + soort.id()));
         }
-        g.text(font, hulp, rx, top + H - 86, GOUD, false);
+        g.text(font, hulp, rx, knopY() - 12, GOUD, false);
     }
 
     @Override

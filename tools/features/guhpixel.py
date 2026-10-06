@@ -181,7 +181,9 @@ def dimensie(h):
     # (the biome is written in the old shape like every other biome: mc26.py converts its effects)
     h.w(f"{D}/worldgen/biome/guhpixel.json", {
         "has_precipitation": False, "temperature": 0.8, "downfall": 0.0,
-        "effects": {"sky_color": 0x8FD0FF, "fog_color": 0xFFD6EA, "water_color": 0x7AD0FF, "water_fog_color": 0x5AA0E0},
+        "effects": {"sky_color": 0x8FD0FF, "fog_color": 0xFFD6EA, "water_color": 0x7AD0FF, "water_fog_color": 0x5AA0E0,
+                    # (fresh green grass and leaves: without these a dry biome paints the Skyblok island and its tree olive)
+                    "grass_color": 0x7FCB52, "foliage_color": 0x62B33B},
         "spawners": {}, "spawn_costs": {}, "carvers": {"air": []}, "features": []})
 
 
