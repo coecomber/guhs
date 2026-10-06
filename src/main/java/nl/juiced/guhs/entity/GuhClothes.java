@@ -368,6 +368,14 @@ public enum GuhClothes {
     // </toren_peper>
     //
     // <ring>
+    /** bbq2 (ring-kern): the rewards of the Knabbelring. Guhdalf's pointy hat, with his beard. */
+    RING_GUHDALFHOED(Slot.HEAD, "outfit_ring_hoed", "outfit_ring_baard"),
+    /** The elf cloak of Guhladriel with its leaf pin. */
+    RING_ELFENMANTEL(Slot.BACK, "outfit_ring_mantel", "outfit_ring_speld"),
+    /** Hairy hobbit feet (over the four paws). */
+    RING_HOBBITVOETEN(Slot.BODY, "outfit_ring_voet"),
+    /** The ring on a chain round the neck. */
+    RING_RINGKETTING(Slot.NECK, "outfit_ring_ketting", "outfit_ring_ringetje"),
     // </ring>
     //
     // <guhrio_beloning>
