@@ -1,0 +1,364 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/campingmarkt_hakblok_zij",
+    "zij": "guhs:block/campingmarkt_hakblok_zij",
+    "boven": "guhs:block/campingmarkt_hakblok_boven",
+    "stam": "minecraft:block/spruce_log",
+    "kop": "minecraft:block/spruce_log_top",
+    "binnen": "minecraft:block/stripped_spruce_log",
+    "ijzer": "guhs:block/campingmarkt_haring",
+    "steel": "guhs:block/campingmarkt_plank"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        9,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            7.0,
+            15,
+            16.0
+          ],
+          "texture": "#zij"
+        },
+        "south": {
+          "uv": [
+            1,
+            7.0,
+            15,
+            16.0
+          ],
+          "texture": "#zij"
+        },
+        "west": {
+          "uv": [
+            1,
+            7.0,
+            15,
+            16.0
+          ],
+          "texture": "#zij"
+        },
+        "east": {
+          "uv": [
+            1,
+            7.0,
+            15,
+            16.0
+          ],
+          "texture": "#zij"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#boven"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#boven"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        9,
+        4
+      ],
+      "to": [
+        5,
+        12,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            5,
+            8,
+            8
+          ],
+          "texture": "#kop"
+        },
+        "south": {
+          "uv": [
+            5,
+            5,
+            8,
+            8
+          ],
+          "texture": "#kop"
+        },
+        "west": {
+          "uv": [
+            4,
+            4,
+            12,
+            7
+          ],
+          "texture": "#stam"
+        },
+        "east": {
+          "uv": [
+            4,
+            0,
+            12,
+            3
+          ],
+          "texture": "#binnen"
+        },
+        "up": {
+          "uv": [
+            2,
+            4,
+            5,
+            12
+          ],
+          "texture": "#stam"
+        },
+        "down": {
+          "uv": [
+            2,
+            4,
+            5,
+            12
+          ],
+          "texture": "#stam"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        9,
+        4
+      ],
+      "to": [
+        14,
+        12,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            8,
+            5,
+            11,
+            8
+          ],
+          "texture": "#kop"
+        },
+        "south": {
+          "uv": [
+            8,
+            5,
+            11,
+            8
+          ],
+          "texture": "#kop"
+        },
+        "west": {
+          "uv": [
+            4,
+            0,
+            12,
+            3
+          ],
+          "texture": "#binnen"
+        },
+        "east": {
+          "uv": [
+            4,
+            4,
+            12,
+            7
+          ],
+          "texture": "#stam"
+        },
+        "up": {
+          "uv": [
+            11,
+            4,
+            14,
+            12
+          ],
+          "texture": "#stam"
+        },
+        "down": {
+          "uv": [
+            11,
+            4,
+            14,
+            12
+          ],
+          "texture": "#stam"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        9,
+        6
+      ],
+      "to": [
+        8.5,
+        14,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            7
+          ],
+          "texture": "#ijzer"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            7
+          ],
+          "texture": "#ijzer"
+        },
+        "west": {
+          "uv": [
+            6,
+            2,
+            10,
+            7
+          ],
+          "texture": "#ijzer"
+        },
+        "east": {
+          "uv": [
+            6,
+            2,
+            10,
+            7
+          ],
+          "texture": "#ijzer"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            6,
+            8.5,
+            10
+          ],
+          "texture": "#ijzer"
+        },
+        "down": {
+          "uv": [
+            7.5,
+            6,
+            8.5,
+            10
+          ],
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        13,
+        9
+      ],
+      "to": [
+        8.5,
+        14,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            3
+          ],
+          "texture": "#steel"
+        },
+        "south": {
+          "uv": [
+            7.5,
+            2,
+            8.5,
+            3
+          ],
+          "texture": "#steel"
+        },
+        "west": {
+          "uv": [
+            9.0,
+            2,
+            16.0,
+            3
+          ],
+          "texture": "#steel"
+        },
+        "east": {
+          "uv": [
+            9.0,
+            2,
+            16.0,
+            3
+          ],
+          "texture": "#steel"
+        },
+        "up": {
+          "uv": [
+            7.5,
+            0.0,
+            8.5,
+            7.0
+          ],
+          "texture": "#steel"
+        },
+        "down": {
+          "uv": [
+            7.5,
+            0.0,
+            8.5,
+            7.0
+          ],
+          "texture": "#steel"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          13.5,
+          9
+        ],
+        "axis": "x",
+        "angle": 22.5
+      }
+    }
+  ]
+}

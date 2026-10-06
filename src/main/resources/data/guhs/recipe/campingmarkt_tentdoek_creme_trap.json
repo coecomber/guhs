@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "D  ",
+    "DD ",
+    "DDD"
+  ],
+  "key": {
+    "D": "guhs:campingmarkt_tentdoek_creme"
+  },
+  "result": {
+    "id": "guhs:campingmarkt_tentdoek_creme_trap",
+    "count": 4
+  }
+}

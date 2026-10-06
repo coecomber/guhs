@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:campingmarkt_tentdoek_rood",
+    "guhs:campingmarkt_tentdoek_rood_trap",
+    "guhs:campingmarkt_tentdoek_rood_plaat",
+    "guhs:campingmarkt_tentdoek_geel",
+    "guhs:campingmarkt_tentdoek_geel_trap",
+    "guhs:campingmarkt_tentdoek_geel_plaat",
+    "guhs:campingmarkt_tentdoek_groen",
+    "guhs:campingmarkt_tentdoek_groen_trap",
+    "guhs:campingmarkt_tentdoek_groen_plaat",
+    "guhs:campingmarkt_tentdoek_blauw",
+    "guhs:campingmarkt_tentdoek_blauw_trap",
+    "guhs:campingmarkt_tentdoek_blauw_plaat",
+    "guhs:campingmarkt_tentdoek_creme",
+    "guhs:campingmarkt_tentdoek_creme_trap",
+    "guhs:campingmarkt_tentdoek_creme_plaat"
+  ]
+}

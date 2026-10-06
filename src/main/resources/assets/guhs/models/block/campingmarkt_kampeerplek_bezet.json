@@ -1,0 +1,146 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/campingmarkt_plank",
+    "hout": "guhs:block/campingmarkt_plank",
+    "bord": "guhs:block/campingmarkt_bord_bezet"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        9,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7,
+            7.0,
+            9,
+            16.0
+          ],
+          "texture": "#hout"
+        },
+        "south": {
+          "uv": [
+            7,
+            7.0,
+            9,
+            16.0
+          ],
+          "texture": "#hout"
+        },
+        "west": {
+          "uv": [
+            7,
+            7.0,
+            9,
+            16.0
+          ],
+          "texture": "#hout"
+        },
+        "east": {
+          "uv": [
+            7,
+            7.0,
+            9,
+            16.0
+          ],
+          "texture": "#hout"
+        },
+        "up": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#hout"
+        },
+        "down": {
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "texture": "#hout"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        8,
+        6
+      ],
+      "to": [
+        15,
+        15,
+        7
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1,
+            4,
+            15,
+            11
+          ],
+          "texture": "#bord"
+        },
+        "south": {
+          "uv": [
+            1,
+            4,
+            15,
+            11
+          ],
+          "texture": "#bord"
+        },
+        "west": {
+          "uv": [
+            6,
+            1,
+            7,
+            8
+          ],
+          "texture": "#hout"
+        },
+        "east": {
+          "uv": [
+            6,
+            1,
+            7,
+            8
+          ],
+          "texture": "#hout"
+        },
+        "up": {
+          "uv": [
+            1,
+            9,
+            15,
+            10
+          ],
+          "texture": "#hout"
+        },
+        "down": {
+          "uv": [
+            1,
+            9,
+            15,
+            10
+          ],
+          "texture": "#hout"
+        }
+      }
+    }
+  ]
+}

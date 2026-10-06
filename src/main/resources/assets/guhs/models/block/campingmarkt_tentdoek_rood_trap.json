@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "guhs:block/campingmarkt_tentdoek_rood",
+    "top": "guhs:block/campingmarkt_tentdoek_rood",
+    "side": "guhs:block/campingmarkt_tentdoek_rood"
+  }
+}

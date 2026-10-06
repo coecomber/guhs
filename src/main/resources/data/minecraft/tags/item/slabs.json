@@ -10,6 +10,11 @@
     "guhs:pluisdak_plaat",
     "guhs:nomguh_sneeuwdak_plaat",
     "guhs:tiki_rietdak_plaat",
-    "guhs:harsstenen_plaat"
+    "guhs:harsstenen_plaat",
+    "guhs:campingmarkt_tentdoek_rood_plaat",
+    "guhs:campingmarkt_tentdoek_geel_plaat",
+    "guhs:campingmarkt_tentdoek_groen_plaat",
+    "guhs:campingmarkt_tentdoek_blauw_plaat",
+    "guhs:campingmarkt_tentdoek_creme_plaat"
   ]
 }

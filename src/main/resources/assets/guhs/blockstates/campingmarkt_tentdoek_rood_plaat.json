@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/campingmarkt_tentdoek_rood_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/campingmarkt_tentdoek_rood_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/campingmarkt_tentdoek_rood"
+    }
+  }
+}
