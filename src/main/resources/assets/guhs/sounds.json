@@ -1934,5 +1934,150 @@
       }
     ],
     "subtitle": "subtitles.guhs.techbezorg.guhtje"
+  },
+  "sausdieren.sausloper": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.strider.ambient",
+        "type": "event",
+        "pitch": 1.45,
+        "volume": 0.7
+      },
+      {
+        "name": "guhs:entity.guh.ambient",
+        "type": "event",
+        "pitch": 0.85,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.sausloper"
+  },
+  "sausdieren.sausloper.blij": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.strider.happy",
+        "type": "event",
+        "pitch": 1.5
+      },
+      {
+        "name": "guhs:entity.guh.happy",
+        "type": "event",
+        "pitch": 0.9,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.sausloper.blij"
+  },
+  "sausdieren.sausloper.bibber": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.strider.retreat",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.sausloper.bibber"
+  },
+  "sausdieren.sausloper.stap": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.strider.step_lava",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.sausloper.stap"
+  },
+  "sausdieren.sausloper.smak": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.strider.eat",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.sausloper.smak"
+  },
+  "sausdieren.sausblubje.plof": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.magma_cube.squish_small",
+        "type": "event",
+        "pitch": 1.3
+      },
+      {
+        "name": "minecraft:block.honey_block.fall",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.sausblubje.plof"
+  },
+  "sausdieren.sausblubje.blub": {
+    "sounds": [
+      {
+        "name": "minecraft:block.bubble_column.bubble_pop",
+        "type": "event",
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:block.lava.pop",
+        "type": "event",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.sausblubje.blub"
+  },
+  "sausdieren.sausblubje.splits": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.magma_cube.squish",
+        "type": "event",
+        "pitch": 1.4
+      },
+      {
+        "name": "minecraft:block.honey_block.break",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.sausblubje.splits"
+  },
+  "sausdieren.potje": {
+    "sounds": [
+      {
+        "name": "minecraft:item.bottle.fill",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.potje"
+  },
+  "sausdieren.poortje": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.poortje"
+  },
+  "sausdieren.stuiter": {
+    "sounds": [
+      {
+        "name": "minecraft:block.slime_block.fall",
+        "type": "event",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:entity.magma_cube.jump",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.sausdieren.stuiter"
   }
 }
