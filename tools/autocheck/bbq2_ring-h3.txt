@@ -1,0 +1,196 @@
+# bbq2, ring-h3 (AutoCheck, dev only): De Mijnen van Knabbelmoria. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_ring-h3.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs ringh3 ..., feature/ringh3/RingH3Commands.java)
+# The script builds a copy of the mine by hand (/guhs ringh3 bouw, dev runs only: the real one stands once per world, a walk
+# from Guhvendel) and walks through it: the gate with its glowing inscription, the gate opening, the lever hall, the well
+# room, the rune stones, the great hall in its own dim light, the Barbecuerog asleep (eyes and cracks), awake (does the hall
+# light up with him? is he as big and as terrible as he should be?), the chasm with the Brokkelpad, the bridge, and frames of
+# the two scenes: the bucket, and the bridge scene at its beats (the reveal, the leap, the side-on shot, the four words, the
+# flash, the bridge breaking, the whip, "Vlucht, dwazen... njeg").
+# NOT run by the slice itself (no game client in phase 2): this is for the merge step's visual check. Things only a client
+# shows and that nobody has seen yet: the model in the game, its glow mask, the light he carries (a light block of the
+# viewer's game), the camera shake, the white flashes, the span that breaks for the viewer, every camera of both scenes.
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 7000 120 7000
+/forceload add 6960 6920 7080 7020
+wait 100
+/fill 6990 119 6990 7010 119 7010 minecraft:stone
+/tp @s 7000.5 120 7000.5
+wait 20
+/guhs ringh3 bouw
+wait 100
+/guhs ring hoofdstuk 3
+/guhs ringh3 stap 1
+/effect clear @s
+clearchat
+
+section the west forecourt and the gate
+/guhs ringh3 ga plein
+wait 10
+/tp @s ~-3 ~3 ~4 -110 10
+wait 5
+/tp @s ~ ~ ~ -110 10
+wait 60
+shot bbq2_ringh3_plein world
+/guhs ringh3 ga poort
+wait 5
+/tp @s ~ ~ ~ -90 -25
+wait 5
+/tp @s ~ ~ ~ -90 -25
+wait 40
+shot bbq2_ringh3_poort_runen world
+/guhs ringh3 deur west
+wait 30
+shot bbq2_ringh3_poort_open world
+
+section the lever hall, the well room, the rune stones
+/guhs ringh3 stap 2
+/guhs ringh3 ga hefbomen
+wait 10
+/tp @s ~ ~1 ~ 180 5
+wait 5
+/tp @s ~ ~ ~ 180 5
+wait 50
+shot bbq2_ringh3_hefboomhal world
+/guhs ringh3 stap 4
+/guhs ringh3 ga put
+wait 10
+/tp @s ~ ~1.5 ~4 150 15
+wait 5
+/tp @s ~ ~ ~ 150 15
+wait 50
+shot bbq2_ringh3_putkamer world
+/guhs ringh3 ga gang
+wait 10
+/tp @s ~1 ~ ~ 90 0
+wait 5
+/tp @s ~ ~ ~ 90 0
+wait 40
+shot bbq2_ringh3_runen world
+/guhs ringh3 deur geheim
+wait 30
+shot bbq2_ringh3_geheime_deur world
+
+section the great hall in its own light, the Barbecuerog asleep and awake
+/guhs ringh3 stap 5
+/guhs ringh3 ga rand
+wait 10
+/tp @s ~ ~2 ~ 90 0
+wait 5
+/tp @s ~ ~ ~ 90 0
+wait 60
+shot bbq2_ringh3_zuilenhal world
+/guhs ringh3 rog
+wait 20
+shot bbq2_ringh3_rog_ogen world
+wait 110
+shot bbq2_ringh3_rog_opkomst world
+wait 60
+shot bbq2_ringh3_rog_brul world
+wait 160
+shot bbq2_ringh3_rog_loopt world
+/guhs ringh3 ga hal
+wait 5
+/tp @s ~3 ~0.2 ~-8 60 -30
+wait 5
+/tp @s ~ ~ ~ 60 -30
+wait 30
+shot bbq2_ringh3_rog_van_onder world
+/guhs ringh3 rog weg
+wait 20
+
+section the chasm, the Brokkelpad, the bridge
+/guhs ringh3 ga rand
+wait 10
+/tp @s ~1 ~3 ~ -90 25
+wait 5
+/tp @s ~ ~ ~ -90 25
+wait 50
+shot bbq2_ringh3_kloof world
+/guhs ringh3 ga brug
+wait 10
+/tp @s ~ ~1 ~ -90 5
+wait 5
+/tp @s ~ ~ ~ -90 5
+wait 40
+shot bbq2_ringh3_brug world
+/guhs ringh3 brug kapot
+wait 30
+shot bbq2_ringh3_brug_kapot world
+/guhs ringh3 brug heel
+wait 20
+
+section the scene with the bucket
+/guhs ringh3 ga put
+wait 20
+/guhs ringh3 scene emmer
+wait 30
+shot bbq2_ringh3_emmer_1 world
+wait 60
+shot bbq2_ringh3_emmer_2 world
+wait 60
+shot bbq2_ringh3_emmer_put world
+wait 180
+shot bbq2_ringh3_emmer_guhdalf world
+wait 180
+
+section the bridge scene, beat by beat (88 seconds)
+/guhs ringh3 ga oever
+wait 20
+/guhs ringh3 scene brug
+wait 150
+shot bbq2_ringh3_brug_01_ogen world
+wait 110
+shot bbq2_ringh3_brug_02_opkomst world
+wait 50
+shot bbq2_ringh3_brug_03_brul world
+wait 80
+shot bbq2_ringh3_brug_04_guhdalf world
+wait 90
+shot bbq2_ringh3_brug_05_vlucht_hoog world
+wait 90
+shot bbq2_ringh3_brug_06_omkijken world
+wait 90
+shot bbq2_ringh3_brug_07_oever world
+wait 100
+shot bbq2_ringh3_brug_08_sprong world
+wait 100
+shot bbq2_ringh3_brug_09_zijkant world
+wait 100
+shot bbq2_ringh3_brug_10_staf world
+wait 80
+shot bbq2_ringh3_brug_11_zwaard world
+wait 90
+shot bbq2_ringh3_brug_12_you world
+wait 56
+shot bbq2_ringh3_brug_13_vads_flits world
+wait 30
+shot bbq2_ringh3_brug_14_vads world
+wait 106
+shot bbq2_ringh3_brug_15_breekt world
+wait 40
+shot bbq2_ringh3_brug_16_val world
+wait 80
+shot bbq2_ringh3_brug_17_zo world
+wait 60
+shot bbq2_ringh3_brug_18_zweep world
+wait 40
+shot bbq2_ringh3_brug_19_vlucht_dwazen world
+wait 90
+shot bbq2_ringh3_brug_20_weg world
+wait 110
+shot bbq2_ringh3_brug_21_araguh world
+wait 120
+
+section the keepsake and the Guhdex
+/guhs ringh3 stap 7
+/give @s guhs:ringh3_rune 4
+gui verhalen ring_h3
+wait 30
+shot bbq2_ringh3_guhdex gui

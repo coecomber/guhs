@@ -54,9 +54,9 @@ public final class Plekken {
     public static final BlockPos ROG_EINDE = new BlockPos(43, 12, 14);
     public static final BlockPos HAL_INGANG = new BlockPos(21, 12, 25);
     public static final BlockPos RUSTVUUR_HAL = new BlockPos(21, 12, 29);
-    public static final BlockPos RUSTVUUR_PUT = new BlockPos(26, 21, 40);
-    public static final BlockPos RUSTVUUR_PLEIN = new BlockPos(27, 31, 57);
-    public static final BlockPos RUSTVUUR_OOST = new BlockPos(68, 31, 58);
+    public static final BlockPos RUSTVUUR_PUT = new BlockPos(25, 21, 38);
+    public static final BlockPos RUSTVUUR_PLEIN = new BlockPos(27, 31, 59);
+    public static final BlockPos RUSTVUUR_OOST = new BlockPos(68, 31, 59);
     public static final BlockPos ARAGUH = new BlockPos(64, 31, 62);
     public static final Doos OOSTPLEIN = new Doos(60, 30, 53, 75, 40, 70);
     // the doors: the blocks that slide away (templates guhs:ringh3_deur_<name>)

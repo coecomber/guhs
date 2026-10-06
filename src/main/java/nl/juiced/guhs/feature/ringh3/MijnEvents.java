@@ -56,7 +56,7 @@ public final class MijnEvents {
             return;
         }
         BlockPos lokaal = m.lokaal(p.blockPosition());
-        if (Plekken.KLOOF.binnen(lokaal) && !p.isSpectator() && !p.getAbilities().flying) {
+        if (Plekken.KLOOF.binnen(lokaal) && !p.isSpectator() && !p.isCreative()) {
             p.resetFallDistance();
             Ring.behaald(p, "ring_h3_gevallen");
             terug(p, m, Ring.GEVALLEN, null);

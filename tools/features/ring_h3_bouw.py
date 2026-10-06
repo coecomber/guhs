@@ -164,9 +164,9 @@ PLEKKEN = {
     "ROG_EINDE": (43, DIEP, 14),                       # how far he follows: the edge of the hall
     "HAL_INGANG": (21, DIEP, 25),                      # where Gimguh's passage comes out
     "RUSTVUUR_HAL": (21, DIEP, 29),
-    "RUSTVUUR_PUT": (26, MIDDEL, 40),
-    "RUSTVUUR_PLEIN": (27, BOVEN, 57),
-    "RUSTVUUR_OOST": (68, BOVEN, 58),
+    "RUSTVUUR_PUT": (25, MIDDEL, 38),
+    "RUSTVUUR_PLEIN": (27, BOVEN, 59),
+    "RUSTVUUR_OOST": (68, BOVEN, 59),
     "ARAGUH": (64, BOVEN, 62),
     "OOSTPLEIN": (60, G, 53, 75, G + 10, 70),
 }
@@ -426,7 +426,19 @@ class Bouw:
             self.set(vx + dx, BOVEN, vz - 2, SATE, {"axis": "x"})
         for dz in (-1, 0, 1):
             self.set(vx - kant * -2, BOVEN, vz + dz, SATE, {"axis": "z"})
-        self.vat(vx + kant * 2, BOVEN, vz + 2)
+        self.vat(vx - kant * 2, BOVEN, vz - 2)
+        for z in (59, 65):
+            px = cx - kant * 4
+            if self.get(px, BOVEN, z) in (AIR, None):
+                self.set(px, BOVEN, z, HEK)
+                self.set(px, BOVEN + 1, z, HEK)
+                self.lamp(px, BOVEN + 2, z, False)
+        for z in (60, 64):
+            px = cx + kant * 2
+            if self.get(px, BOVEN, z) in (AIR, None):
+                self.set(px, BOVEN, z, HEK)
+                self.set(px, BOVEN + 1, z, HEK)
+                self.lamp(px, BOVEN + 2, z, False)
         self.staand_bord(cx - kant * 6, BOVEN, 64, 4 if kant < 0 else 12, bord)
 
     # --- inside -------------------------------------------------------------------------------------------------------------------
@@ -440,6 +452,11 @@ class Bouw:
                 self.gat(x, y1 + 1, z)
                 self.set(x, y1 + 2, z, STENEN)
         self.kroonluchter(cx, y1 + 1, 62, 2)
+        # two lamps on plinths inside the gate, one on each side of the door
+        lx = x0 + 1 if west else x1 - 1
+        for z in (z0 + 1, z1 - 1):
+            self.set(lx, y0, z, GEBEITELD)
+            self.lamp(lx, y0 + 1, z, False)
         for x in (x0, x1):
             for z in (z0, z1):
                 for y in range(y0, y1 + 1):
@@ -548,9 +565,9 @@ class Bouw:
         self.bord(sx - 1, y0 + 1, sz, "west", tekst.BORDEN["stele_3"])
         self.bord(sx + 1, y0 + 1, sz, "east", tekst.BORDEN["stele_3"])
         # chandeliers, a knabbel hoard, barrels and a cart of old tools along the south wall
-        for x in (38, 46):
+        for x in (35, 39, 43, 47):
             for z in (31, 38):
-                self.kroonluchter(x - 1, y1, z, 2)
+                self.kroonluchter(x, y1, z, 2 if x in (39, 43) else 1)
         for (x, z) in ((36, z1), (37, z1), (36, z1 - 1), (48, z1), (49, z1)):
             self.vat(x, y0, z)
         self.vat(36, y0 + 1, z1)
@@ -615,6 +632,8 @@ class Bouw:
         for dz in range(-2, 3):
             self.set(px, y0 + 4, pz + dz, SATE, {"axis": "z"})
         self.ketting(px, y0 + 2, y0 + 3, pz)
+        self.lamp(px, y0 + 3, pz - 1, True)
+        self.lamp(px, y0 + 3, pz + 1, True)
         # Durguh's tomb against the north wall: a sarcophagus, his name, his skull, an offering of his favourite
         from features import ring_h3_tekst as tekst
         for x in range(19, 24):
@@ -642,11 +661,11 @@ class Bouw:
         self.set(vx, y0, vz, VUUR)
         for dx in (-1, 0, 1):
             self.set(vx + dx, y0, vz + 2, SATE, {"axis": "x"})
-        self.vat(x1, y0, vz - 2)
+        self.vat(x1 - 1, y0, z1)
         for (x, z) in ((x0, z0), (x1, z0), (x0, z1), (x1, z1)):
             for y in range(y0, y1 + 1):
                 self.set(x, y, z, KAASSTEEN if y in (y0, y1) else BASALT, {"axis": "y"} if y not in (y0, y1) else None)
-        for (x, z) in ((x0 + 3, z0 + 3), (x1 - 3, z0 + 3), (x1 - 3, z1 - 3), (x0 + 3, z1 - 3)):
+        for (x, z) in ((x0 + 2, z0 + 2), (x1 - 2, z0 + 2), (x1 - 2, z1 - 2), (x0 + 2, z1 - 2), (x0 + 2, pz), (x1 - 2, pz), (px, z0 + 2), (px, z1 - 2)):
             self.kroonluchter(x, y1, z, 1)
         # the west wall: six rune stones and, between them, the door nobody sees (the same bricks as the wall)
         for z, teken in zip(RUNE_Z, RUNE_TEKENS):
@@ -779,6 +798,11 @@ class Bouw:
                 # an ember bowl on the nave side of the foot: the only light the hall has
                 bz = cz + (2 if cz < zm else -2)
                 if cx != 23:
+                    self.set(cx + 2, y0, bz, GEBEITELD)
+                    self.set(cx + 2, y0 + 1, bz, GLOEIKOOL)
+                    self.vast.add((cx + 2, y0, bz))
+                    self.vast.add((cx + 2, y0 + 1, bz))
+                else:
                     self.set(cx + 2, y0, bz, ROOKGAT)
                     self.vast.add((cx + 2, y0, bz))
         # arches between the pillars across the nave (ribs of the vault)
@@ -910,7 +934,7 @@ class Bouw:
                         self.set(x, y, z, (KAASTEGEL if z == 14 else LEI if abs(z - 14) <= 1 else TEGEL) if y == dek else self.steen(0.3) if y > dek - 3 else HOUTSKOOL)
         for z in (12, 16):
             self.set(bx1, dek + 1, z, GEBEITELD)
-            self.set(bx1, dek + 2, z, ROOKGAT)
+            self.set(bx1, dek + 2, z, GLOEIKOOL)
             self.vast.add((bx1, dek + 2, z))
         # the Brug van Knabbel-dum: one narrow span, three wide, no railing, an arch underneath
         gx0, gy, gz0, gx1, _, gz1 = BRUG
@@ -934,6 +958,9 @@ class Bouw:
         for z in (10, 18):
             self.zuil(ox0 + 3, z, DIEP, DIEP + 6, breed=0)
             self.set(ox0 + 3, DIEP + 7, z, GLOEIKOOL)
+        for z in (5, 23):
+            self.set(ox0 + 6, DIEP, z, GEBEITELD)
+            self.set(ox0 + 6, DIEP + 1, z, GLOEIKOOL)
         from features import ring_h3_tekst as tekst
         self.staand_bord(ox0 + 1, DIEP, 17, 4, tekst.BORDEN["brug"])
 
@@ -950,6 +977,10 @@ class Bouw:
                     self.set(x, stap, z, GEPOLIJST if x == 83 else self.steen(0.3))
                 for y in range(stap + 1, stap + 5):
                     self.gat(x, y, z)
+            for x in (81, 85):
+                for y in range(stap, stap + 5):
+                    if (x, y, z) not in self.binnen:
+                        self.set(x, y, z, KAASSTEEN if y == stap + 2 else self.steen(0.25, 0.03))
             if z % 4 == 2:
                 self.lamp(83, stap + 4, z, True)
         for x in range(53, 82):
@@ -962,6 +993,10 @@ class Bouw:
                     self.set(x, stap, z, GEPOLIJST if z == 40 and x % 3 else self.steen(0.3))
                 for y in range(stap + 1, stap + (5 if x > 76 else 4)):
                     self.gat(x, y, z)
+            for z in (38, 42):
+                for y in range(stap, stap + 4):
+                    if (x, y, z) not in self.binnen and not (53 <= x <= 55 and z == 42) and not (82 <= x <= 84 and z == 38):
+                        self.set(x, y, z, KAASSTEEN if y == stap + 2 else self.steen(0.25, 0.03))
             if x % 6 == 0 and x < 77:
                 self.lamp(x, stap + 3, 40, True)
         for z in range(42, 59):
@@ -974,6 +1009,10 @@ class Bouw:
                     self.set(x, stap, z, GEPOLIJST if x == 54 else self.steen(0.3))
                 for y in range(stap + 1, stap + 5 if z >= 52 else stap + 4):
                     self.gat(x, y, z)
+            for x in (52, 56):
+                for y in range(stap, stap + 4):
+                    if (x, y, z) not in self.binnen:
+                        self.set(x, y, z, KAASSTEEN if y == stap + 2 else self.steen(0.25, 0.03))
             if z % 5 == 0:
                 self.lamp(54, stap + (4 if z >= 52 else 3), z, True)
 

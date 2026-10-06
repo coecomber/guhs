@@ -283,3 +283,92 @@ def alles(b, out, alleen=()):
             for kind, id, x, y, z, yaw, plek, van, tot in B.CAST:
                 k.figuur(beeld, diepte, cam, (x + 0.5, y, z + 0.5))
             naar_png(beeld, os.path.join(out, f"{'werk' if werk else 'blik'}_{naam}.png"))
+
+
+# =====================================================================================================================
+# frames of the scenes
+# =====================================================================================================================
+# what the Barbecuerog plays when a scene names an animation: (animation, loops)
+_LUS = {"loop", "donker", "wankel", "idle"}
+
+
+def _rog_pose(geo_file, anims, naam, sinds):
+    """The model in the pose of scene animation `naam`, `sinds` ticks after it started."""
+    from features import ring_h3_modellen as M
+    if not naam:
+        naam = "idle"
+    a = anims[f"animation.{M.NAAM}.{naam}"]
+    t = sinds / 20.0
+    lengte = a["animation_length"]
+    if naam in _LUS:
+        t = t % lengte
+    elif t > lengte:
+        a, t = anims[f"animation.{M.NAAM}.idle"], (t - lengte) % 4.0
+    return M.pose(geo_file, a, t)
+
+
+def scene_frames(b, out, s, tijden, breed=480, hoog=270):
+    """Draws the scene `s` at these ticks: the camera of that moment, every actor where the script has it (the Barbecuerog as
+    his model in the pose of his animation, with the light he carries; everybody else as a marker), the bridge gone after it
+    breaks. Returns the file names."""
+    import copy
+    from features import ring_h3_modellen as M
+    from features import ring_h3_scene as S
+    heel = Kijker(b)
+    kapot_b = copy.copy(b)
+    kapot_b.s = copy.copy(b.s)
+    kapot_b.s.blocks = dict(b.s.blocks)
+    x0, y0, z0, x1, y1, z1 = B.BRUG_KAPOT
+    for x in range(x0, x1 + 1):
+        for y in range(y0, y1 + 1):
+            for z in range(z0, z1 + 1):
+                kapot_b.s.blocks[(x, y, z)] = (B.AIR, {}, None)
+    kapot = Kijker(kapot_b) if s.id == "ringh3_brug" else heel
+    geo_file = M.maak().geo()
+    anims = M.animaties()["animations"]
+    tex, glow = M.textuur()
+    namen = []
+    for t in tijden:
+        k = kapot if (s.id == "ringh3_brug" and t >= S.BREEKT) else heel
+        oog, kijk = s.camera_op(t)
+        rog = None
+        for naam, soort, arg, start, yaw in s.acteurs:
+            if soort == "wezen":
+                rog = (naam, s.plek(naam, t), s.animatie_op(naam, t))
+        licht = None
+        brandt = False
+        if rog:
+            anim, sinds = rog[2]
+            brandt = anim != "donker" and not (anim == "opkomst" and t - sinds < 26)
+            if brandt and rog[1][1] > 0:
+                licht = k.met_licht([(rog[1][0], rog[1][1] + 5.5, rog[1][2], 15)])
+        beeld, diepte, cam = k.teken(oog, kijk, breed=breed, hoog=hoog, licht=licht)
+        for naam, soort, arg, start, yaw in s.acteurs:
+            p = s.plek(naam, t)
+            if soort == "wezen":
+                anim, sinds = rog[2]
+                # which way he looks: along his last walk, else the yaw he started with
+                kijkt = yaw
+                for a, t0, t1, naar in sorted((l for l in s.lopen if l[0] == naam), key=lambda l: l[1]):
+                    if t >= t0:
+                        hier = s.plek(naam, t0)
+                        dx, dz = naar[0] - hier[0], naar[2] - hier[2]
+                        if abs(dx) + abs(dz) > 1e-3:
+                            kijkt = math.degrees(math.atan2(-dx, dz))
+                k.model(beeld, diepte, cam, _rog_pose(geo_file, anims, anim, t - sinds), tex, glow, np.array(p, np.float32), kijkt,
+                        helder=0.5 if brandt else 0.12)
+            else:
+                rgb = (120, 190, 255) if soort == "speler" else (150, 150, 170) if naam == "guhdalf" else (255, 150, 200)
+                k.figuur(beeld, diepte, cam, p, rgb=rgb, hoog=1.8 if soort == "speler" else 1.1, breed=0.6 if soort == "speler" else 0.8)
+        for ft, ticks, sterkte in s.flitsen:
+            if ft <= t < ft + ticks * 2.5:
+                a = sterkte * (1 - (t - ft) / (ticks * 2.5)) ** 1.6
+                beeld = beeld * (1 - a) + np.array([255, 248, 230], np.float32) * a
+        # the bars of a scene
+        balk = int(hoog * 0.13)
+        beeld[:balk] = 0
+        beeld[-balk:] = 0
+        naam = f"scene_{s.id}_{t:04d}.png"
+        naar_png(beeld, os.path.join(out, naam), schaal=2)
+        namen.append(naam)
+    return namen
