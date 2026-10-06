@@ -30,6 +30,9 @@ import net.minecraft.world.level.storage.ValueInput;
  * <p>
  * bbq2: the wheel is a source of vadskracht ({@link VadsBron}, kind GUHRAD): while a guh runs it gives what that guh's
  * variant gives ({@link GuhradKracht}: 10 VK, a happy guh 15, the story guhs more). A guh never tires and needs no food.
+ * <p>
+ * bbq2 (tech-bronnen): every story guh does its rounds in its own way ({@link nl.juiced.guhs.feature.techbron.GuhradStijl}:
+ * the wheel's speed, a floating Guhtwo, a line in the hover readout), and the readout tips that a happy guh runs harder.
  */
 public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
     @Nullable
@@ -109,12 +112,31 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
         return guhData != null && blij;
     }
 
+    /** How the guh in this wheel does its rounds (tech-bronnen: the Baltoguh runs harder, Guhtwo floats...). Both sides. */
+    public nl.juiced.guhs.feature.techbron.GuhradStijl stijl() {
+        return nl.juiced.guhs.feature.techbron.GuhradStijl.van(guhData);
+    }
+
+    /** Would the guh in this wheel give more if it were happy (so the hover readout gives the tip)? */
+    public boolean kanBlijer() {
+        return guhData != null && !blij && GuhradKracht.van(guhData, true) > GuhradKracht.van(guhData, false);
+    }
+
     @Override
     public void vadsRegels(java.util.function.Consumer<net.minecraft.network.chat.Component> regels) {
         if (guhData == null) {
             regels.accept(net.minecraft.network.chat.Component.translatable("gui.guhs.vadskracht.guhrad.leeg").withStyle(net.minecraft.ChatFormatting.GRAY));
-        } else if (blij) {
+            return;
+        }
+        // tech-bronnen: what is special about this guh (per variant), then its mood
+        net.minecraft.network.chat.Component stijl = stijl().regel();
+        if (stijl != null) {
+            regels.accept(stijl);
+        }
+        if (blij) {
             regels.accept(net.minecraft.network.chat.Component.translatable("gui.guhs.vadskracht.guhrad.blij").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+        } else if (kanBlijer()) {
+            regels.accept(net.minecraft.network.chat.Component.translatable("gui.guhs.techbron.guhrad.tip").withStyle(net.minecraft.ChatFormatting.GRAY));
         }
     }
 
@@ -133,11 +155,15 @@ public class GuhWheelBlockEntity extends BlockEntity implements VadsBron {
             be.displayGuh = null;
             return;
         }
-        be.spin += 9f;
+        // tech-bronnen: the wheel turns as hard as its guh runs (per variant; a happy guh a bit faster still)
+        nl.juiced.guhs.feature.techbron.GuhradStijl stijl = be.stijl();
+        float tempo = stijl.tempo * (be.blij ? 1.25f : 1f);
+        be.spin += 9f * tempo;
         GuhEntity guh = be.getDisplayGuh();
         if (guh != null) {
             guh.tickCount++; // drives the GeckoLib animation clock
-            guh.walkAnimation.update(1.0f, 0.4f, guh.isBaby() ? 3.0f : 1.0f); // "moving" -> walk animation
+            // "moving" -> walk animation; a floating guh (Guhtwo) keeps its legs still
+            guh.walkAnimation.update(stijl.zweeft ? 0f : Math.min(1.6f, tempo), 0.4f, guh.isBaby() ? 3.0f : 1.0f);
         }
     }
 
