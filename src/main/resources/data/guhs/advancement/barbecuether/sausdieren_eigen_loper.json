@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:sausdieren_pindasaus_stok"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.sausdieren_eigen_loper.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.sausdieren_eigen_loper.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:barbecuether/sausdieren_stal"
+}

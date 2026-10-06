@@ -78,6 +78,30 @@
         "Komt na: Rookdelta",
       ],
     },
+    {
+      height: 1.5625,
+      id: "4755486985C59A34",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_sausdieren_stal.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755482C803F7D0D",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_sausdieren_blubjes.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 6,
   progression_mode: "flexible",
@@ -1244,6 +1268,424 @@
       x: 20.5,
       y: 13.525,
       shape: "diamond",
+    },
+    {
+      id: "475548E775826A98",
+      icon: {
+        id: "guhs:sausdieren_pindasaus_stok",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:sausloper_stal",
+          id: "47554816789292EC",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482964FE2FBB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "4755482B76DE0A2D",
+      icon: {
+        id: "guhs:sausdieren_pindasaus_stok",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sausloper_stap_1",
+          id: "475548F105003F0D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554852ABA43CC8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548B992D25437",
+      icon: {
+        id: "guhs:pindasausplasje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sausloper_stap_2",
+          id: "4755489E3702167D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488CF27A9A92",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755482084D701C7",
+      icon: {
+        id: "guhs:pindascheutjes",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sausloper_stap_3",
+          id: "4755489B1C4CB71F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554843DCC0C11B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 17.4875,
+    },
+    {
+      id: "4755482D8D8CD6BC",
+      icon: {
+        id: "minecraft:saddle",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sausloper_stap_4",
+          id: "47554822E61D64BB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548ED31595BB6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755487B0C1FBF6F",
+      icon: {
+        id: "minecraft:saddle",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sausloper_stap_5",
+          id: "47554835491872E9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A4FB6FEB4B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:pindascheutjes",
+          },
+          count: 4,
+        },
+        {
+          id: "475548EE2EAA40F1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548FA3D1B28DD",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "4755487431B4A064",
+      icon: {
+        id: "guhs:sausloper_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:barbecuether/sausdieren_eigen_loper",
+          id: "475548788BB1BBA9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D73FD0CCDE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:pindascheutjes",
+          },
+          count: 6,
+        },
+        {
+          id: "475548AEF0268F3D",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554897AEE84717",
+      icon: {
+        id: "guhs:sausloper_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_sausloper",
+          id: "475548F918BE644F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481DBE6D946B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 18.9875,
+    },
+    {
+      id: "47554827284D9EF9",
+      icon: {
+        id: "guhs:pindascheutjes",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:barbecuether/sausdieren_snel",
+          id: "475548864133481E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486295A9F3BE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554816391F2775",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 7.5,
+      y: 18.9875,
+      shape: "octagon",
+    },
+    {
+      id: "4755487AF7CC9383",
+      icon: {
+        id: "guhs:sausblubje_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_sausblubje",
+          id: "475548C30AE9B8EC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554835D3B89292",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "475548FE8754A46C",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/sausdieren_gesplitst",
+          id: "475548127DB58F49",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A55C193FF5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755486F7A2C9E25",
+      icon: {
+        id: "guhs:blubroom",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:blubroom",
+          },
+          count: 3,
+          id: "475548A14617DF20",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554821DAC2D714",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548C9E8FC5632",
+      icon: {
+        id: "guhs:sausblubje_potje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:sausblubje_potje",
+          },
+          id: "4755484699899807",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488415B61A96",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 17.4875,
+    },
+    {
+      id: "475548A2793D82AC",
+      icon: {
+        id: "guhs:sausdieren_stuiterdrankje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:sausdieren_stuiterdrankje",
+          },
+          id: "47554889686E0EF8",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554854C0F4CF8C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548840322D2D4",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 17.4875,
+      shape: "gear",
     },
   ],
 }

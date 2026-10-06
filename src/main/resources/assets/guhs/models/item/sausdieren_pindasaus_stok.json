@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld_rod",
+  "textures": {
+    "layer0": "guhs:item/sausdieren_pindasaus_stok"
+  }
+}
