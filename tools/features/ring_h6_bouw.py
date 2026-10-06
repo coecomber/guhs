@@ -74,8 +74,8 @@ SPLEET = dict(x0=33, x1=36, z0=45, z1=50, y=69)          # the landing in front 
 RAND = (41, 66, 48)                                      # the anchor of the finale: a feet cell on the balcony
 BALKON = dict(x0=39, x1=43, z0=44, z1=51, y=66)
 MAND = (45, 50)                                          # the frying basket: x and z from .. to
-# the roads: (from angle, to angle, from feet y, to feet y); an angle is clockwise from the south seen from above... no:
-# 0 = south (+z), 90 = east (+x), 180 = north, 270 = west; the roads run with rising angle
+# the roads: (from angle, to angle, from feet y, to feet y). Angles in degrees: 0 = south (+z), 90 = east (+x), 180 = north,
+# 270 = west; every road runs with rising angle (and may pass 360: road 3 goes round the south side to the east face)
 PADEN = {1: (0.0, 256.0, 10, 30), 3: (289.0, 440.0, 50, 58), 4: (118.0, 257.0, 64, 69)}
 
 
