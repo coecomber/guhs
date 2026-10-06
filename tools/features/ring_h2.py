@@ -379,6 +379,57 @@ def camera_check(scenes_java, blocks):
     return problems
 
 
+def blok_check(h, blocks):
+    """Every block of the template exists (a guhs block: its blockstate file; a vanilla one: in the 1.21.1 jar the templates
+    are written for), and every property the blockstate file knows has a value it knows."""
+    import zipfile
+    problems = []
+    jar = zipfile.ZipFile(os.path.join("build", "moddev", "artifacts", "neoforge-21.1.251-client-extra-aka-minecraft-resources.jar"))
+    bekend = {}
+
+    def eigenschappen(name):
+        if name not in bekend:
+            ns, pad = name.split(":")
+            try:
+                if ns == "guhs":
+                    data = json.load(open(f"{h.A}/blockstates/{pad}.json", encoding="utf-8"))
+                else:
+                    data = json.loads(jar.read(f"assets/minecraft/blockstates/{pad}.json"))
+            except (OSError, KeyError):
+                bekend[name] = None
+                return None
+            props = {}
+
+            def neem(k, v):
+                for deel in str(v).split("|"):
+                    props.setdefault(k, set()).add(deel)
+            for key in data.get("variants", {}):
+                for paar in filter(None, key.split(",")):
+                    k, v = paar.split("=")
+                    neem(k, v)
+            for part in data.get("multipart", []):
+                wanneer = part.get("when", {})
+                for w in wanneer.get("OR", wanneer.get("AND", [wanneer])):
+                    for k, v in w.items():
+                        neem(k, v)
+            bekend[name] = props
+        return bekend[name]
+    gezien = set()
+    for (name, props, _nbt) in blocks.values():
+        sleutel = (name, tuple(sorted(props.items())))
+        if sleutel in gezien:
+            continue
+        gezien.add(sleutel)
+        props_bekend = eigenschappen(name)
+        if props_bekend is None:
+            problems.append(f"the template uses {name}, which has no blockstate file")
+            continue
+        for k, v in props.items():
+            if k in props_bekend and v not in props_bekend[k]:
+                problems.append(f"the template uses {name}[{k}={v}]: {k} is one of {sorted(props_bekend[k])}")
+    return problems
+
+
 def selfcheck(h):
     problems = []
     for key in ([T + k for k in PRAAT] + list(GUI) + [f"structure.guhs.{STRUCTUUR}", f"gui.guhs.verhalen.{LIJN}.kort.5", f"gui.guhs.verhaal.kaart.{KAART}.regel.3",
@@ -414,6 +465,7 @@ def selfcheck(h):
         problems.append("Guhvendel.PLEK is not the template's plek")
     scenes = open(os.path.join(pkg, "RingH2Scenes.java"), encoding="utf-8").read()
     problems += camera_check(scenes, GEBOUWD)
+    problems += blok_check(h, GEBOUWD)
     for scene_id, regels in (("ringh2_raad", SCENE_RAAD), ("ringh2_genootschap", SCENE_GENOOTSCHAP)):
         a = scenes.index(f'"{scene_id}"')
         b = scenes.index("return s.registreer();", a)

@@ -432,6 +432,121 @@ public final class RingH2GameTests {
         helper.succeed();
     }
 
+    /**
+     * The real template, placed in the world (high above the test, with its neighbours told: unlike in worldgen every block
+     * of sauce gets its tick). After eight seconds every block of kaassaus is still exactly what the template says and there
+     * is no sauce anywhere else: the falls, the pools and the stream are written in the state they settle in (and one bank
+     * stone taken out shows that the sauce would have run if it could). The
+     * seventeen characters came with it, each with its own id, turned as written and only there for the steps of its scene.
+     * And no block of the template is unknown to the game.
+     */
+    @GuhTest(template = "empty", batch = "ringh2_bouw", timeoutTicks = 600)
+    public static void ringh2GuhvendelInDeWereld(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Verhaallijn lijn = RingH2Feature.LIJN;
+        StructureTemplate t = level.getStructureManager().get(Guhs.id(Guhvendel.STRUCTUUR)).orElseThrow();
+        BlockPos hoek = helper.absolutePos(new BlockPos(-28, 44, -28));
+        BlockPos eind = hoek.offset(t.getSize().getX() - 1, t.getSize().getY() - 1, t.getSize().getZ() - 1);
+        List<net.minecraft.world.level.ChunkPos> chunks = new ArrayList<>();
+        for (int cx = (hoek.getX() - 2) >> 4; cx <= (eind.getX() + 2) >> 4; cx++) {
+            for (int cz = (hoek.getZ() - 2) >> 4; cz <= (eind.getZ() + 2) >> 4; cz++) {
+                chunks.add(new net.minecraft.world.level.ChunkPos(cx, cz));
+                level.setChunkForced(cx, cz, true);
+            }
+        }
+        // the blocks of this mod the house is built of: all known to the game (an unknown id would have become air)
+        StructurePlaceSettings zo = new StructurePlaceSettings();
+        for (String id : new String[]{"kaas_saus", "houtskoolsteen", "houtskoolsteen_stenen", "mosterd_blok", "mosterd_nylium", "kaasmos", "mosterdscheutjes",
+                "worst_stam", "parelmoer", "parelmoer_tegels", "kaaskorst_stenen", "guhbloesem_log", "guhbloesem_leaves", "guh_kristal_lamp", "uienlicht",
+                "block_of_kaasknabbels", "ring_rustvuur", "feestbuffettafel", "theepotje", "guh_taart", "knabbelbak", "potted_knabbelroos", "lime_kussen",
+                "white_kussen", "yellow_kussen", "knabbelroos", "kaasbloem", "roze_guhbloem"}) {
+            net.minecraft.world.level.block.Block block = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(Guhs.id(id));
+            helper.assertTrue(block != Blocks.AIR && !t.filterBlocks(BlockPos.ZERO, zo, block).isEmpty(), "the template has blocks of guhs:" + id);
+        }
+        net.minecraft.world.level.block.Block saus = nl.juiced.guhs.registry.ModBlocks.KAAS_SAUS.get();
+        java.util.Map<BlockPos, net.minecraft.world.level.block.state.BlockState> verwacht = new java.util.HashMap<>();
+        for (StructureTemplate.StructureBlockInfo info : t.filterBlocks(hoek, zo, saus)) {
+            verwacht.put(info.pos().immutable(), info.state());
+        }
+        long bronnen = verwacht.values().stream().filter(s -> s.getFluidState().isSource()).count();
+        helper.assertTrue(verwacht.size() > 150 && bronnen > 100 && verwacht.size() - bronnen > 30,
+                "three falls, their pools and the stream: " + verwacht.size() + " blocks of sauce, " + bronnen + " still");
+        helper.assertTrue(RingH2Commands.bouw(level, hoek), "the template is placed");
+        Guhvendel.Oord o = Guhvendel.oord(level, hoek.offset(Guhvendel.MIDDEN));
+        helper.assertTrue(o != null && level.getBlockState(o.bel()).is(Blocks.BELL) && level.getBlockState(o.anker()).is(Blocks.CHISELED_QUARTZ_BLOCK)
+                && o.inKom(Vec3.atBottomCenterOf(hoek.offset(Guhvendel.MIDDEN))), "the copy: its bell and its stone table are where the Java side says");
+        BlockPos lokaleOever = new BlockPos(29, Guhvendel.MIDDEN.getY() - 1, 30), oever = hoek.offset(lokaleOever);
+        helper.runAfterDelay(160, () -> {
+            // 1. the sauce did not move
+            List<String> fouten = new ArrayList<>();
+            int gevonden = 0;
+            for (BlockPos pos : BlockPos.betweenClosed(hoek.offset(-2, -2, -2), eind.offset(2, 2, 2))) {
+                net.minecraft.world.level.block.state.BlockState state = level.getBlockState(pos);
+                net.minecraft.world.level.block.state.BlockState hoort = verwacht.get(pos);
+                if (state.is(saus)) {
+                    gevonden++;
+                    if (hoort == null) {
+                        fouten.add("sauce ran to " + pos.subtract(hoek).toShortString());
+                    } else if (hoort != state) {
+                        fouten.add("the sauce at " + pos.subtract(hoek).toShortString() + " changed: " + hoort + " -> " + state);
+                    }
+                } else if (hoort != null) {
+                    fouten.add("the sauce at " + pos.subtract(hoek).toShortString() + " is gone: " + state);
+                }
+            }
+            helper.assertTrue(fouten.isEmpty() && gevonden == verwacht.size(),
+                    "every block of sauce stays as it was written (" + gevonden + " of " + verwacht.size() + "): " + fouten.stream().limit(8).toList());
+            // (and that means something: the sauce here does tick. Take one stone out of the bank of the stream...)
+            helper.assertTrue(level.getBlockState(oever).isSolid() && level.getBlockState(oever.east()).is(saus), "a bank stone next to the stream at " + lokaleOever);
+            level.setBlock(oever, Blocks.AIR.defaultBlockState(), 3);
+        });
+        helper.runAfterDelay(230, () -> {
+            helper.assertTrue(level.getBlockState(oever).is(saus) && !level.getFluidState(oever).isSource(), "... and the sauce runs into the gap: " + level.getBlockState(oever));
+            // 2. the cast came with the template
+            net.minecraft.world.phys.AABB doos = new net.minecraft.world.phys.AABB(Vec3.atLowerCornerOf(hoek), Vec3.atLowerCornerOf(eind.offset(1, 1, 1)));
+            List<GuhNpcEntity> npcs = level.getEntitiesOfClass(GuhNpcEntity.class, doos, Entity::isAlive);
+            ServerPlayer voor = speler(helper, 0, 0), raad = speler(helper, 1, 0), na = speler(helper, 2, 0);
+            for (ServerPlayer p : List.of(voor, raad, na)) {
+                naHoofdstuk1(p);
+            }
+            lijn.zet(voor, Guhvendel.WELKOM);
+            lijn.zet(raad, Guhvendel.VERTREK);
+            lijn.zet(na, Guhvendel.STAPPEN);
+            for (Guhvendel.Bewoner b : Guhvendel.BEWONERS) {
+                List<GuhNpcEntity> deze = npcs.stream().filter(n -> n.getPersistentData().getStringOr(nl.juiced.guhs.feature.wereld.Bezetting.TAG, "").startsWith(b.id())).toList();
+                helper.assertTrue(deze.size() == 1, b.id() + " came with the template once: " + deze.size());
+                GuhNpcEntity npc = deze.get(0);
+                helper.assertTrue(npc.getKind() == b.kind() && Guhvendel.PLEK.equals(npc.roleData.getStringOr(NpcRollen.PLEK, "")) && npc.isInvulnerable()
+                        && NpcRollen.van(npc) instanceof GuhvendelRol, b.id() + " is a " + b.kind().id() + " of the house");
+                BlockPos lokaal = npc.blockPosition().subtract(hoek);
+                helper.assertTrue(lokaal.getX() == b.x() && lokaal.getZ() == b.z() && Math.abs(npc.getY() - hoek.getY() - b.y()) < 1.0,
+                        b.id() + " stands at " + b.blok().toShortString() + ": " + lokaal.toShortString() + " (y " + (npc.getY() - hoek.getY()) + ")");
+                helper.assertTrue(Zicht.magZien(voor, npc) == (b.van() <= Guhvendel.WELKOM && Guhvendel.WELKOM <= b.tot())
+                        && Zicht.magZien(raad, npc) == (b.van() <= Guhvendel.VERTREK && Guhvendel.VERTREK <= b.tot())
+                        && Zicht.magZien(na, npc) == (b.tot() > Guhvendel.STAPPEN), b.id() + " only exists for the steps " + b.van() + ".." + b.tot());
+            }
+            helper.assertTrue(npcs.size() == Guhvendel.BEWONERS.size(), "nobody else lives here: " + npcs.size());
+            // tidy up: nothing of the house stays in the test world
+            for (Entity e : level.getEntitiesOfClass(Entity.class, doos.inflate(4), e -> !(e instanceof ServerPlayer))) {
+                e.discard();
+            }
+            for (BlockPos pos : BlockPos.betweenClosed(hoek.offset(-2, -2, -2), eind.offset(2, 2, 2))) {
+                if (!level.getBlockState(pos).isAir()) {
+                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2 | 16);
+                }
+            }
+            for (Entity e : level.getEntitiesOfClass(Entity.class, doos.inflate(4), e -> !(e instanceof ServerPlayer))) {
+                e.discard();
+            }
+            for (net.minecraft.world.level.ChunkPos c : chunks) {
+                level.setChunkForced(c.x(), c.z(), false);
+            }
+            Kopieen.testWissen(level);
+            weg(helper, voor, raad, na);
+            helper.succeed();
+        });
+    }
+
     private RingH2GameTests() {
     }
 }
