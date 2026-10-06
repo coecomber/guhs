@@ -14,13 +14,13 @@
   "tiles_z": 1,
   "tile_size": 32,
   "anchor": [
-    48,
+    55,
     28,
-    15
+    16
   ],
   "placement": "brug",
   "min_y": 40,
   "max_y": 62,
   "reach": 40,
-  "keep_clear": 49
+  "keep_clear": 56
 }

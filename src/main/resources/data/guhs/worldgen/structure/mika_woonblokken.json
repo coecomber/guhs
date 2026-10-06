@@ -14,13 +14,13 @@
   "tiles_z": 2,
   "tile_size": 32,
   "anchor": [
-    31,
+    24,
     12,
-    31
+    23
   ],
   "placement": "paleis",
   "min_y": 33,
   "max_y": 33,
   "reach": 24,
-  "keep_clear": 33
+  "keep_clear": 41
 }
