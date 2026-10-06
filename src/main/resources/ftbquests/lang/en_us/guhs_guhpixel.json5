@@ -11,28 +11,16 @@
     "",
     "Play the joke games, earn &6Guhpixel Coins&r (not an item: they are on your name) and buy things for your home with them: the Guhcade, the Guh Office and the Guh Cinema. The &dTravel Agency&r and the &dGuh Parkour&r are simply in the Guhmension. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
   ],
-  "quest.475548AC675103AC.title": "The Slow Connection",
-  "quest.475548AC675103AC.quest_desc": [
-    "Somewhere in the Guhmension stands a little beige building with a dish on its roof: the &dGuh Internet Café \"The Slow Connection\"&r. Your Super Compass (tab &dMinigames&r) shows the way. Inside, guhs are asleep behind old computers, and the &fAdmin Guh&r asks whether you have tried turning it off and on again. Nyeg.",
+  "quest.47554803B5F85396.title": "Skyblok Completed",
+  "quest.47554803B5F85396.quest_desc": [
+    "Talk to the &dSkyblok Guh&r in the &dGuhpixel&r lobby and travel to THE island. The manual has 4,812 steps. Nobody has ever reached step 2... but there is said to be a shortcut, Nyeg. The first time you get 100 coins and a keepsake.",
   ],
-  "quest.4755480367800A14.title": "Connected!",
-  "quest.4755480367800A14.quest_desc": [
-    "In the internet café, walk straight through the &dgiant screen&r. Beeeeep krrr... and you are in the lobby of &dGuhpixel&r! From now on &e/lobby&r (or &e/hub&r, or &e/l&r) works everywhere. Talk to the &eWelcome Guh&r: it gives you a &bNetwork Cable&r.",
+  "quest.4755484319B5D57C.title": "Bed Defended",
+  "quest.4755484319B5D57C.quest_desc": [
+    "Talk to the &dBedwars Guh&r in the &dGuhpixel&r lobby. Four teams come to your island over little bridges of wool. Defend your bed, with everything you've got! The first time you get 100 coins and a keepsake.",
   ],
-  "quest.475548CAE2BE14CB.title": "A Gate for Home",
-  "quest.475548CAE2BE14CB.quest_desc": [
-    "With the &bNetwork Cable&r from the Welcome Guh you make a &dGuhpixel Gate&r at home: iron, glass, redstone and the cable in the middle. Right-click the little screen and off you go, to the lobby. Lost the cable? The Welcome Guh has another one.",
-  ],
-  "quest.47554852CDD9EA16.title": "Rooftop Runner",
-  "quest.47554852CDD9EA16.quest_desc": [
-    "On the east side of the lobby lies a green &astart plate&r. Step off it and the clock runs: over the AFK Corner, the floating cushions and the roofs of all the stalls to the &ffinish&r on the roof of the shop. Falling doesn't hurt. The first time you get 50 coins.",
-  ],
-  "quest.475548C7D82A87BD.title": "Nibble Sleuth",
-  "quest.475548C7D82A87BD.quest_desc": [
-    "&6Ten golden nibbles&r are hidden in the lobby: behind things, on roofs and... under the ground. Right-click them: every nibble is 10 coins. They stay where they are for everyone, so nobody snatches them from under your nose.",
-  ],
-  "quest.47554810A339D3A4.title": "Most Valuable Guh",
-  "quest.47554810A339D3A4.quest_desc": [
-    "Your &drank&r stands in front of your name and depends on all the coins you ever earned: &7[GUH]&r, &a[CHONK]&r (250), &b[CHONK+]&r (750), &6[MVG]&r (1250) and &d[MVG++]&r (1750). Become at least &6[MVG]&r. Spending is just fine!",
+  "quest.475548D9CF5ABA3F.title": "Chonk Royale",
+  "quest.475548D9CF5ABA3F.quest_desc": [
+    "Talk to the &dChonknite Guh&r in the &dGuhpixel&r lobby and jump out of the flying &dChonk Bus&r with 99 guhs. Whoever stays awake the longest wins. The first time you get 100 coins and a keepsake.",
   ],
 }

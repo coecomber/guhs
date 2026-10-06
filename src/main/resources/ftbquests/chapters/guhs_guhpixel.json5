@@ -32,8 +32,8 @@
     },
     {
       height: 1.5625,
-      id: "475548C6AD6911E7",
-      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_lobby.png",
+      id: "475548509CF7D298",
+      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_grapjes.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
@@ -86,114 +86,53 @@
       shape: "gear",
     },
     {
-      id: "475548AC675103AC",
+      id: "47554803B5F85396",
       icon: {
-        id: "guhs:internetcafe_computer",
+        id: "guhs:skyblok_fles",
       },
       tasks: [
         {
-          type: "structure",
-          structure: "guhs:internetcafe",
-          id: "4755485441378153",
+          type: "advancement",
+          advancement: "guhs:quest/skyblok_klaar",
+          id: "475548C239DF1D49",
+          criterion: "",
         },
       ],
       rewards: [
         {
-          id: "47554884E12F50D3",
+          id: "475548CEC83D700F",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 10,
+          count: 8,
         },
         {
-          id: "475548AEF9BB358F",
+          id: "475548D4937D7FFB",
           type: "xp",
           xp: 100,
         },
       ],
       x: 0.0,
       y: 6.5625,
-      shape: "gear",
     },
     {
-      id: "4755480367800A14",
+      id: "4755484319B5D57C",
       icon: {
-        id: "guhs:guhpixel_netwerkkabeltje",
-      },
-      tasks: [
-        {
-          type: "dimension",
-          dimension: "guhs:guhpixel",
-          id: "475548DAC18E387F",
-        },
-      ],
-      rewards: [
-        {
-          id: "47554860768CA741",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "47554875966AADB9",
-          type: "xp",
-          xp: 150,
-        },
-      ],
-      x: 1.5,
-      y: 6.5625,
-      shape: "octagon",
-    },
-    {
-      id: "475548CAE2BE14CB",
-      icon: {
-        id: "guhs:guhpixel_poort",
-      },
-      tasks: [
-        {
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:guhpixel_poort",
-          },
-          id: "475548860C139641",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548AC5FEB2A5D",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-      ],
-      x: 3.0,
-      y: 6.5625,
-    },
-    {
-      id: "47554852CDD9EA16",
-      icon: {
-        id: "minecraft:feather",
+        id: "guhs:bedwars_slaapmuts_rood",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/lobby_parkour",
-          id: "475548012C0992AA",
+          advancement: "guhs:quest/bedwars_klaar",
+          id: "4755487B3507F063",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548581958B334",
+          id: "475548EB72852029",
           type: "item",
           item: {
             count: 1,
@@ -202,30 +141,30 @@
           count: 8,
         },
         {
-          id: "4755487BC5766D18",
+          id: "47554829723FFF9B",
           type: "xp",
           xp: 100,
         },
       ],
-      x: 4.5,
+      x: 1.5,
       y: 6.5625,
     },
     {
-      id: "475548C7D82A87BD",
+      id: "475548D9CF5ABA3F",
       icon: {
-        id: "guhs:gouden_kaasknabbel",
+        id: "guhs:vadsnite_parachuterugzakje",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/lobby_knabbels",
-          id: "47554899B06E944B",
+          advancement: "guhs:quest/vadsnite_klaar",
+          id: "475548C0B85F52EC",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "4755486EA8305BC6",
+          id: "475548F8313C58EF",
           type: "item",
           item: {
             count: 1,
@@ -234,46 +173,13 @@
           count: 8,
         },
         {
-          id: "4755483E2441CDD3",
+          id: "475548EA45C0E7F4",
           type: "xp",
-          xp: 150,
+          xp: 100,
         },
       ],
-      x: 6.0,
+      x: 3.0,
       y: 6.5625,
-    },
-    {
-      id: "47554810A339D3A4",
-      icon: {
-        id: "minecraft:gold_ingot",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/lobby_rang_mvg",
-          id: "475548852655ABD9",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755489D9B83F266",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 24,
-        },
-        {
-          id: "47554853EEBC679A",
-          type: "xp",
-          xp: 300,
-        },
-      ],
-      x: 7.5,
-      y: 6.5625,
-      shape: "hexagon",
     },
   ],
 }

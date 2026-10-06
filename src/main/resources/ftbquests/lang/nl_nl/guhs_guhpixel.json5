@@ -11,28 +11,16 @@
     "",
     "Speel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de Guhmensie. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
   ],
-  "quest.475548AC675103AC.title": "De Trage Verbinding",
-  "quest.475548AC675103AC.quest_desc": [
-    "Ergens in de Guhmensie staat een beige gebouwtje met een schotel op het dak: het &dGuh-internetcafé \"De Trage Verbinding\"&r. Je superkompas (tab &dMinigames&r) wijst de weg. Binnen slapen guhs achter oude computers, en de &fBeheerder-guh&r vraagt of je hem al uit en weer aan hebt gezet. Njeg.",
+  "quest.47554803B5F85396.title": "Skyblok uitgespeeld",
+  "quest.47554803B5F85396.quest_desc": [
+    "Praat in de lobby van &dGuhpixel&r met de &dSkyblok-guh&r en reis naar hét eiland. De handleiding telt 4.812 stappen. Niemand heeft ooit stap 2 gehaald... maar er schijnt een kortere weg te zijn, njeg. De eerste keer krijg je 100 muntjes en een aandenken.",
   ],
-  "quest.4755480367800A14.title": "Verbinding gelukt!",
-  "quest.4755480367800A14.quest_desc": [
-    "Loop in het internetcafé dwars door het &dreuzenbeeldscherm&r. Piiieeep krrr... en je staat in de lobby van &dGuhpixel&r! Vanaf nu werkt &e/lobby&r (of &e/hub&r, of &e/l&r) overal. Praat met de &eWelkomstguh&r: die geeft je een &bNetwerkkabeltje&r.",
+  "quest.4755484319B5D57C.title": "Bed verdedigd",
+  "quest.4755484319B5D57C.quest_desc": [
+    "Praat in de lobby van &dGuhpixel&r met de &dBedwars-guh&r. Vier teams komen over bruggetjes van wol naar je eiland. Verdedig je bed, met alles wat je hebt! De eerste keer krijg je 100 muntjes en een aandenken.",
   ],
-  "quest.475548CAE2BE14CB.title": "Een poort voor thuis",
-  "quest.475548CAE2BE14CB.quest_desc": [
-    "Met het &bNetwerkkabeltje&r van de Welkomstguh maak je thuis een &dGuhpixel-poort&r: ijzer, glas, redstone en het kabeltje in het midden. Rechtsklik op het beeldschermpje en hup, je bent in de lobby. Kabeltje kwijt? De Welkomstguh heeft er nog een.",
-  ],
-  "quest.47554852CDD9EA16.title": "Dakhaas",
-  "quest.47554852CDD9EA16.quest_desc": [
-    "Aan de oostkant van de lobby ligt een groene &astartplaat&r. Stap eraf en de tijd loopt: over de AFK-hoek, de zwevende kussens en de daken van alle kraampjes naar de &ffinish&r op het dak van de winkel. Vallen doet geen pijn. De eerste keer krijg je 50 muntjes.",
-  ],
-  "quest.475548C7D82A87BD.title": "Knabbelspeurder",
-  "quest.475548C7D82A87BD.quest_desc": [
-    "In de lobby liggen &6tien gouden knabbels&r verstopt: achter dingen, op daken en... onder de grond. Rechtsklik erop: elke knabbel is 10 muntjes. Ze blijven liggen voor iedereen, dus niemand pikt ze voor je neus weg.",
-  ],
-  "quest.47554810A339D3A4.title": "Meest Vadsige Guh",
-  "quest.47554810A339D3A4.quest_desc": [
-    "Je &drang&r staat voor je naam en hangt af van alle muntjes die je ooit verdiende: &7[GUH]&r, &a[VADS]&r (250), &b[VADS+]&r (750), &6[MVG]&r (1250) en &d[MVG++]&r (1750). Word minstens &6[MVG]&r. Uitgeven mag gewoon!",
+  "quest.475548D9CF5ABA3F.title": "Vadsoverwinning",
+  "quest.475548D9CF5ABA3F.quest_desc": [
+    "Praat in de lobby van &dGuhpixel&r met de &dVadsnite-guh&r en spring met 99 guhs uit de vliegende &dVadsbus&r. Wie het langst wakker blijft, wint. De eerste keer krijg je 100 muntjes en een aandenken.",
   ],
 }

@@ -358,6 +358,16 @@ public enum GuhClothes {
     // <px_lobby>
     // </px_lobby>
     // <px_grap1>
+    /** Guhpixel, Bedwars keepsake: the Teamslaapmuts of team Rood (the nightcap bones, in the team colour). */
+    BEDWARS_SLAAPMUTS_ROOD(Slot.HEAD, "outfit_slaapmutsje"),
+    /** Guhpixel, Bedwars keepsake: the Teamslaapmuts of team Blauw. */
+    BEDWARS_SLAAPMUTS_BLAUW(Slot.HEAD, "outfit_slaapmutsje"),
+    /** Guhpixel, Bedwars keepsake: the Teamslaapmuts of team Groen. */
+    BEDWARS_SLAAPMUTS_GROEN(Slot.HEAD, "outfit_slaapmutsje"),
+    /** Guhpixel, Bedwars keepsake: the Teamslaapmuts of team Geel. */
+    BEDWARS_SLAAPMUTS_GEEL(Slot.HEAD, "outfit_slaapmutsje"),
+    /** Guhpixel, Vadsnite keepsake: the Parachuterugzakje (a pack with a rolled-up pink parachute and a pull cord, BACK). */
+    VADSNITE_PARACHUTERUGZAKJE(Slot.BACK, "outfit_vadsnite_rugzak"),
     // </px_grap1>
     // <px_grap2>
     // </px_grap2>
