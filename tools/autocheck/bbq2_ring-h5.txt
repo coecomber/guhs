@@ -1,0 +1,183 @@
+# bbq2, ring-h5 (AutoCheck, dev only): chapter 5 of the Knabbelring, De Zwarte Roosterpoort. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_ring-h5.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs ringh5 ..., feature/ringh5/RingH5Commands.java)
+# A try-out copy of the whole valley is put down with /guhs ringh5 bouw (dev runs only): its camp at the player's feet, the
+# valley towards +z (south). Then: the inhabitants (Bezetting), "controle" (every spot of Plekken in the copy), and shots of
+# the camp with Boromika, the first look from the ridge, the wall with the gate of grates and its two towers, the Mika head
+# with the Eye in its socket, the light of the Eye on het Asveld (with the player in it and behind a wall), a hiding
+# place, de Kale Vlakte, the smoke and a rider in the lane, het Wachthek with its three guards, the barred side door, the
+# three scenes (one frame each), the statuette, and the questline's page in the Guhdex.
+# NOT run by the slice itself (no game client in phase 2): this is for the merge step's visual check.
+# What to look for: the Eye fills its socket and glows; its pupil turns with the light; the light on the ground is a flat
+# glowing eye with flames at its rim and a thin beam of sparks up to the tower; the grate of the gate is see-through with
+# the glow behind it; the side door shows bars while the step is below 9; nothing in the valley looks like a box.
+
+section setup
+/gamemode creative
+/time set midnight
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 7000 100 7000
+/forceload add 6950 6990 7049 7100
+wait 80
+/guhs ring wis
+/guhs ringh5 bouw
+wait 200
+/guhs ringh5 stap 0
+/guhs ring geef
+/guhs wereld bezetting
+wait 80
+/guhs wereld bezetting
+wait 40
+/guhs ringh5 controle
+clearchat
+
+section the camp at the mouth
+/gamemode spectator
+/guhs ringh5 ga kamp
+wait 20
+look 200 5
+wait 40
+shot bbq2_ringh5_kamp world
+look 0 -12
+wait 20
+shot bbq2_ringh5_kamp_rug world
+
+section the first look from the ridge
+/guhs ringh5 ga uitkijk
+wait 20
+look 0 -14
+waitrender 200
+shot bbq2_ringh5_uitkijk world
+renderdistance 12
+look 0 -30
+wait 40
+shot bbq2_ringh5_uitkijk_oog world
+
+section the wall, the gate, the two towers
+/guhs ringh5 ga vlakte
+wait 20
+look -10 -22
+waitrender 200
+shot bbq2_ringh5_poort world
+/guhs ringh5 ga laan
+wait 20
+look -75 -30
+wait 40
+shot bbq2_ringh5_poort_dichtbij world
+
+section the Eye in its socket (from the air in front of it), awake
+/guhs ringh5 ga oog
+wait 10
+look 0 -8
+wait 60
+shot bbq2_ringh5_oog world
+look 0 -8
+wait 100
+shot bbq2_ringh5_oog_later world
+
+section the light on het Asveld: in the open, then behind the first hiding place
+/gamemode survival
+/guhs ringh5 ga asveld
+wait 20
+/guhs ringh5 blik
+wait 4
+look 0 -20
+shot bbq2_ringh5_blik_gezien gui
+wait 60
+/guhs ringh5 stand
+shot bbq2_ringh5_blik_terug gui
+/gamemode spectator
+/guhs ringh5 ga asveld
+wait 200
+look -40 20
+shot bbq2_ringh5_asveld world
+clearchat
+
+section de Kale Vlakte and the Holte
+/guhs ringh5 ga slakkenhut
+wait 20
+look -80 5
+wait 60
+shot bbq2_ringh5_vlakte world
+/guhs ringh5 ga holte
+wait 20
+look 60 0
+wait 40
+shot bbq2_ringh5_holte world
+
+section the lane: the smoke, a rider, het Wachthek
+/gamemode survival
+/guhs ringh5 stap 6
+/guhs ringh5 ga holte
+wait 40
+look 100 0
+wait 60
+shot bbq2_ringh5_rook world
+/gamemode spectator
+/guhs ringh5 ga laan
+wait 20
+look 90 0
+wait 80
+shot bbq2_ringh5_laan_ruiters world
+/guhs ringh5 ga hek
+wait 20
+look 90 0
+wait 60
+shot bbq2_ringh5_wachthek world
+
+section the side door: barred below step 9
+/gamemode survival
+/guhs ringh5 stap 8
+/guhs ringh5 ga poortje
+wait 60
+look 160 0
+wait 40
+shot bbq2_ringh5_poortje_dicht world
+
+section the scenes (one frame each; they are not skippable: the waits are their length)
+/guhs ringh5 ga kamp
+wait 20
+/guhs ringh5 scene boromika
+wait 250
+shot bbq2_ringh5_scene_boromika gui
+wait 420
+/guhs ringh5 ga uitkijk
+wait 20
+/guhs ringh5 scene oog
+wait 260
+shot bbq2_ringh5_scene_oog gui
+wait 130
+shot bbq2_ringh5_scene_oog_licht gui
+wait 240
+/guhs ringh5 ga poortje
+wait 20
+/guhs ringh5 scene guhdalf
+wait 290
+shot bbq2_ringh5_scene_guhdalf gui
+wait 170
+shot bbq2_ringh5_scene_guhdalf_oog gui
+wait 240
+
+section behind the wall, the statuette, the Guhdex
+/guhs ringh5 stap 9
+/guhs ringh5 ga poortje
+wait 60
+look 160 0
+shot bbq2_ringh5_poortje_open world
+/guhs ringh5 ga achter
+wait 40
+look -90 -30
+shot bbq2_ringh5_achter world
+/setblock ~2 ~ ~ guhs:oog_van_sausron_beeldje[facing=west]
+wait 60
+look -90 20
+shot bbq2_ringh5_beeldje world
+gui verhalen ring_h5
+wait 20
+shot bbq2_ringh5_guhdex gui
+gui close
+/guhs ringh5 stand
+shot bbq2_ringh5_stand gui
