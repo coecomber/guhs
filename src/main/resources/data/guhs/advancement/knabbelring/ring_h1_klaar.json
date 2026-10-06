@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:grillkool"
+    },
+    "title": {
+      "translate": "advancements.guhs.knabbelring.ring_h1_klaar.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knabbelring.ring_h1_klaar.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knabbelring/ring_gekregen"
+}
