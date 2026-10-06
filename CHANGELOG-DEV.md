@@ -8,7 +8,6 @@ old history for the curious; it is not needed to play. Player-facing changes fro
 Worlds from the internal versions were never meant to carry over; start a new world for 1.0.0.
 
 ## guhpixel (in development, no version number yet)
-- Final check (full suite, dedicated server, dev client): two old assertions know the Reisbureau in the Superkompas and that Guhpixel NPCs have no Guhdex character page; the Skyblok box is lit evenly and Guhpixel grass and leaves are fresh green; the Among Guhs meeting shows its statements and rooms three beside each other (the texts were cut off); the trip screen's "new trips in" line no longer runs into the heading; the O of the Guhkade pixel font is square (it read as a smudge); autocheck scripts keep the screens they open and use cameras that stay put.
 Build notes of the Guhpixel update; the player-facing text is the "Unreleased" section of [CHANGELOG.md](CHANGELOG.md).
 - Built as a kern plus nine slices (lobby, grap1, grap2, among, guhkade, kantoor, bioscoop, reisbureau, parkour) in
   `feature/guhpixel/*` and `tools/features/guhpixel_*.py`; game test batches `px_*`.
@@ -31,6 +30,7 @@ Build notes of the Guhpixel update; the player-facing text is the "Unreleased" s
   Guhkade, the Guhkantoor and the Guhbioscoop (systemen); the Guhpixel NPCs link to their game or building and have
   their own picture (`npc_<kind>.png`, rendered by `wiki_renders.py --only-px`). Fixed: the Guhpixel, Reisbureau and
   Guh-parkour texts were on the site twice (`make_wiki.py` built those sections a second time for its contents list).
+- Final check (full suite, dedicated server, dev client): two old assertions know the Reisbureau in the Superkompas and that Guhpixel NPCs have no Guhdex character page; the Skyblok box is lit evenly and Guhpixel grass and leaves are fresh green; the Among Guhs meeting shows its statements and rooms three beside each other (the texts were cut off); the trip screen's "new trips in" line no longer runs into the heading; the O of the Guhkade pixel font is square (it read as a smudge); autocheck scripts keep the screens they open and use cameras that stay put.
 
 ## Public 1.0.0 fix round (on top of internal 3.0.0)
 - Overworld guh spawns made much rarer (a bit rarer than sheep/cows, still in every biome).
