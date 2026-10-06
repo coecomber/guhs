@@ -1,0 +1,119 @@
+# bbq2 tech-machines AutoCheck: the guh machines in a row (Vadsmolen, Oogster, Knabbelaar, Neerzetter, Tekentafel,
+# Knutselmachine, Plantagebak), their moving parts, their faces, the hover readout, their screens. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_tech-machines.txt
+# /guhs techmachine demo (dev runs only) builds the row 4 blocks south of the player, every machine looking north with work
+# in front of it and a test source on a Guhdraad behind them. With the player at 3000 140 2990:
+#   molen 2989 140 2995, Oogster 2993, Knabbelaar 2998, Neerzetter 3001, Tekentafel 3004, Knutselmachine 3006 (all z 2995),
+#   Plantagebak 3009..3011 x 2993..2995 (kern 3010 140 2993), source 2987 140 2996.
+# What to look at: every machine is a little guh (face, two ears), nothing is a bare box; parts move only while working;
+# the Knabbelaar's teeth go up and down; the tree stands in the MIDDLE of the bak.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 2990
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/fill 2980 140 2980 3020 170 3020 minecraft:air
+/gamemode creative
+/tp @s 3000 140 2990
+wait 20
+
+section the row (everything works: molen grinds bones, Oogster cuts wheat, Knabbelaar eats, Neerzetter places, bak grows)
+/guhs techmachine demo
+wait 30
+/gamemode spectator
+camera 3000.5 145 2981.5 0 22
+waitrender 300
+shot techmachine_rij
+camera 2991.0 141.6 2990.2 0 8
+wait 10
+shot techmachine_molen_oogster
+/setblock 2998 140 2994 minecraft:stone
+/setblock 3001 140 2994 minecraft:air
+camera 2999.5 141.4 2991.4 0 8
+wait 25
+shot techmachine_knabbelaar_neerzetter
+camera 2998.5 140.9 2993.2 0 5
+wait 12
+shot techmachine_knabbelaar_dichtbij
+camera 3005.0 141.6 2991.6 0 12
+wait 10
+shot techmachine_tekentafel_knutselmachine
+camera 3010.5 143.5 2987.5 0 20
+wait 10
+shot techmachine_plantagebak_zaailing
+camera 3010.5 143.0 2997.5 180 15
+wait 10
+shot techmachine_plantagebak_achterkant
+
+section the hover readout (under the vadskracht lines: each machine's own line)
+/gamemode creative
+/tp @s 2993.5 140 2993.2 0 20
+wait 20
+/tp @s 2993.5 140 2993.2 0 20
+wait 30
+clearchat
+shot techmachine_hover_oogster gui
+/tp @s 2998.5 140 2992.5 0 10
+wait 30
+shot techmachine_hover_knabbelaar gui
+/tp @s 3006.5 140 2993.2 0 15
+wait 30
+shot techmachine_hover_knutselmachine gui
+/tp @s 3010.5 140 2991.2 0 25
+wait 30
+shot techmachine_hover_plantagebak gui
+
+section the screens
+/tp @s 2989.5 140 2993.2 0 15
+wait 10
+use 2989 140 2995
+wait 10
+shot techmachine_scherm_vadsmolen gui
+gui close
+/tp @s 2993.5 140 2993.2 0 15
+wait 10
+use 2993 140 2995
+wait 10
+shot techmachine_scherm_oogster gui
+gui close
+/tp @s 3004.5 140 2993.2 0 15
+wait 10
+use 3004 140 2995
+wait 10
+shot techmachine_scherm_tekentafel gui
+gui close
+/tp @s 3006.5 140 2993.2 0 15
+wait 10
+use 3006 140 2995
+wait 10
+shot techmachine_scherm_knutselmachine gui
+gui close
+/tp @s 3010.5 140 2991.2 0 25
+wait 10
+use 3010 140 2993
+wait 10
+shot techmachine_scherm_plantagebak gui
+gui close
+
+section the tree (45 seconds of work after the sapling was planted; then the face is surprised)
+/gamemode spectator
+camera 3010.5 146 2981.5 0 12
+wait 760
+waitrender 200
+shot techmachine_plantagebak_boom
+/guhs vadskracht 3010 140 2993
+
+section no vadskracht: every face asleep, nothing moves
+/setblock 2987 140 2996 minecraft:air
+wait 50
+camera 3000.5 145 2981.5 0 22
+shot techmachine_rij_slaapt
+
+quit
