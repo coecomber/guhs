@@ -180,6 +180,9 @@ public final class Opgraving {
         int streken = b != null && b.pos.equals(pos) ? b.streken + 1 : 1;
         if (streken < STREKEN) {
             BEZIG.put(p.getUUID(), new Bezig(pos.immutable(), streken));
+            // a little ash flies up at every stroke (the brush's own dust skips a block the world does not draw itself)
+            p.level().sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, p.level().getBlockState(pos)), pos.getX() + 0.5, pos.getY() + 1.02,
+                    pos.getZ() + 0.5, 3 + streken, 0.2, 0.02, 0.2, 0.01);
             return false;
         }
         BEZIG.remove(p.getUUID());
