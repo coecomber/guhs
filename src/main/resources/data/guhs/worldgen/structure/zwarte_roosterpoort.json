@@ -1,0 +1,35 @@
+{
+  "type": "guhs:burcht",
+  "biomes": "#guhs:has_structure/zwarte_roosterpoort",
+  "step": "fluid_springs",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": []
+    },
+    "creature": {
+      "bounding_box": "piece",
+      "spawns": []
+    },
+    "ambient": {
+      "bounding_box": "piece",
+      "spawns": []
+    }
+  },
+  "templates": "guhs:zwarte_roosterpoort",
+  "tiles_x": 3,
+  "tiles_z": 3,
+  "tile_size": 32,
+  "anchor": [
+    48,
+    6,
+    48
+  ],
+  "placement": "brug",
+  "min_y": 40,
+  "max_y": 58,
+  "reach": 44,
+  "keep_clear": 49,
+  "voorrang": 270
+}

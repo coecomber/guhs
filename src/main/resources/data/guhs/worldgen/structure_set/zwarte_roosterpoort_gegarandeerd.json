@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:zwarte_roosterpoort",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21302008,
+    "min_afstand": 250,
+    "max_afstand": 700,
+    "alleen_nieuw": true,
+    "sector": 13,
+    "sectoren": 16
+  }
+}

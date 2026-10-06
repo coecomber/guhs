@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "guhs:block/oog_van_sausron_beeldje"
+    },
+    "facing=east": {
+      "model": "guhs:block/oog_van_sausron_beeldje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/oog_van_sausron_beeldje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/oog_van_sausron_beeldje",
+      "y": 270
     }
   }
 }
