@@ -126,6 +126,9 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         VADSNITE_GUH(1.0f),
         // </px_grap1>
         // <px_grap2>
+        GUHMON_GYMLEIDER(1.05f),
+        BZG_PRESENTATRICE(1.0f),
+        BZG_BOER(1.1f),
         // </px_grap2>
         // <px_among>
         // </px_among>

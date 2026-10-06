@@ -370,6 +370,11 @@ public enum GuhClothes {
     VADSNITE_PARACHUTERUGZAKJE(Slot.BACK, "outfit_vadsnite_rugzak"),
     // </px_grap1>
     // <px_grap2>
+    /** Guhmon-gevecht (guhpixel, the keepsake of the gym of Gymleider Dutjes): a red and white trainer cap with a little knabbel on the front. */
+    GUHMON_TRAINERSPET(Slot.HEAD, "outfit_cap"),
+    /** Boer zoekt Guh (guhpixel, the keepsake of the show): the straw hat of Boer Guhrrit with a red checkered band, and his blue overall. */
+    BZG_STROHOED(Slot.HEAD, "outfit_rain_hat"),
+    BZG_OVERALL(Slot.BODY, "outfit_suit"),
     // </px_grap2>
     // <px_among>
     // </px_among>

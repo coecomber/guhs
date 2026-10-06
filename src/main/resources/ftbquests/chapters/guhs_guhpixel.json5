@@ -86,21 +86,21 @@
       shape: "gear",
     },
     {
-      id: "47554803B5F85396",
+      id: "4755483F8948F2EB",
       icon: {
-        id: "guhs:skyblok_fles",
+        id: "guhs:guhmon_badge_dutjes",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/skyblok_klaar",
-          id: "475548C239DF1D49",
+          advancement: "guhs:quest/guhmon_klaar",
+          id: "475548F38E3F03FF",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548CEC83D700F",
+          id: "47554883686AAB73",
           type: "item",
           item: {
             count: 1,
@@ -109,62 +109,62 @@
           count: 8,
         },
         {
-          id: "475548D4937D7FFB",
+          id: "475548F43D216734",
           type: "xp",
-          xp: 100,
+          xp: 50,
         },
       ],
       x: 0.0,
       y: 6.5625,
     },
     {
-      id: "4755484319B5D57C",
+      id: "475548298AF628B6",
       icon: {
-        id: "guhs:bedwars_slaapmuts_rood",
+        id: "guhs:guhmon_badgedoos",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/bedwars_klaar",
-          id: "4755487B3507F063",
+          advancement: "guhs:quest/guhmon_badges",
+          id: "475548E62C59CA38",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548EB72852029",
+          id: "475548CD6C1C93A4",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 8,
+          count: 12,
         },
         {
-          id: "47554829723FFF9B",
+          id: "4755481DD0DDDC82",
           type: "xp",
-          xp: 100,
+          xp: 50,
         },
       ],
       x: 1.5,
       y: 6.5625,
     },
     {
-      id: "475548D9CF5ABA3F",
+      id: "4755481EE824C15B",
       icon: {
-        id: "guhs:vadsnite_parachuterugzakje",
+        id: "guhs:bzg_ingelijste_brief",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/vadsnite_klaar",
-          id: "475548C0B85F52EC",
+          advancement: "guhs:quest/bzg_klaar",
+          id: "475548079795FA6F",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548F8313C58EF",
+          id: "47554894B4985EB3",
           type: "item",
           item: {
             count: 1,
@@ -173,9 +173,9 @@
           count: 8,
         },
         {
-          id: "475548EA45C0E7F4",
+          id: "4755483991137773",
           type: "xp",
-          xp: 100,
+          xp: 50,
         },
       ],
       x: 3.0,
