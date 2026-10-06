@@ -1,0 +1,56 @@
+{
+  "wereld": "2-1",
+  "banen": [
+    {
+      "id": "hoofd",
+      "punten": [
+        [
+          -2,
+          0,
+          0
+        ],
+        [
+          93,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 6,
+      "onder": -4,
+      "boven": 8
+    },
+    {
+      "id": "kelder",
+      "punten": [
+        [
+          6,
+          0,
+          0
+        ],
+        [
+          28,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 6,
+      "onder": 9,
+      "boven": 15
+    }
+  ],
+  "uitgang": [
+    47,
+    19,
+    -44
+  ],
+  "ingang": [
+    45,
+    19,
+    -25
+  ],
+  "na": "kasteel_1_2"
+}

@@ -1,7 +1,16 @@
 {
   "variants": {
-    "": {
+    "axis=y": {
       "model": "guhs:block/guhrio_pijp_lijf"
+    },
+    "axis=z": {
+      "model": "guhs:block/guhrio_pijp_lijf",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "guhs:block/guhrio_pijp_lijf",
+      "x": 90,
+      "y": 90
     }
   }
 }

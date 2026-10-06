@@ -24,4 +24,37 @@ public interface GuhrioWezen {
             GuhrioSpel.geraakt(player, sessie);
         }
     }
+
+    /** Does the server want to hear that it touched the player from the side (default: when it is dangerous)? */
+    default boolean aanraakbaar() {
+        return gevaarlijk();
+    }
+
+    /**
+     * (the player's game) Does it touch this box right now? Default: its own box. A creature that is not a box (a turning
+     * grill spit) answers for its real shape.
+     */
+    default boolean raaktVak(net.minecraft.world.phys.AABB vak) {
+        return ((net.minecraft.world.entity.Entity) this).getBoundingBox().intersects(vak);
+    }
+
+    /** Something you stand on that moves (a platform): the player's game carries you along with it. */
+    default boolean draagt() {
+        return false;
+    }
+
+    /** A knabbel thrown by {@code gooier} (the Vuurpeper) hit it. True: it did something (the knabbel is gone either way). */
+    default boolean knabbel(ServerPlayer gooier, GuhrioSpel.Sessie sessie) {
+        return false;
+    }
+
+    /** A sliding shell hit it ({@code schopper}: who kicked the shell, or null). True: the shell goes on, false: it bounces back. */
+    default boolean schild(@javax.annotation.Nullable ServerPlayer schopper) {
+        return true;
+    }
+
+    /** Guhshi's tongue reached it. True: eaten (it is gone for a while). */
+    default boolean tong(ServerPlayer player, GuhrioSpel.Sessie sessie) {
+        return false;
+    }
 }

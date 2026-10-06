@@ -65,7 +65,7 @@ public final class GuhrioBlocks {
 
     /** What a ?-block holds. */
     public enum Inhoud implements StringRepresentable {
-        MUNT, SUPERKNABBEL;
+        MUNT, SUPERKNABBEL, VUURPEPER;
 
         @Override
         public String getSerializedName() {
@@ -86,9 +86,20 @@ public final class GuhrioBlocks {
     // the way in
     // =====================================================================================================================
 
-    /** Which level a start block starts. */
+    /** Which level a start block starts; for a gate ({@link PoortBlok}) also where that level's start block is. */
     public static class StartBlockEntity extends BlockEntity {
         private String level = "";
+        /** A gate: the level's start block, in the gate's own frame (+x the way the gate faces, +z its right hand). */
+        private BlockPos naar = BlockPos.ZERO;
+
+        public BlockPos naar() {
+            return naar;
+        }
+
+        public void zetNaar(BlockPos naar) {
+            this.naar = naar.immutable();
+            setChanged();
+        }
 
         public StartBlockEntity(BlockPos pos, BlockState state) {
             super(GuhrioFeature.START_BE.get(), pos, state);
@@ -107,12 +118,16 @@ public final class GuhrioBlocks {
         protected void saveAdditional(ValueOutput tag) {
             super.saveAdditional(tag);
             tag.putString("Level", level);
+            tag.putInt("NaarX", naar.getX());
+            tag.putInt("NaarY", naar.getY());
+            tag.putInt("NaarZ", naar.getZ());
         }
 
         @Override
         protected void loadAdditional(ValueInput tag) {
             super.loadAdditional(tag);
             level = tag.getStringOr("Level", "");
+            naar = new BlockPos(tag.getIntOr("NaarX", 0), tag.getIntOr("NaarY", 0), tag.getIntOr("NaarZ", 0));
         }
     }
 
@@ -171,6 +186,84 @@ public final class GuhrioBlocks {
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
             if (!level.isClientSide() && player instanceof ServerPlayer sp && GuhrioSpel.sessie(sp) == null) {
                 GuhrioSpel.start(sp, pos);
+            }
+            return InteractionResult.SUCCESS;
+        }
+    }
+
+    /**
+     * A gate to a level whose lanes are somewhere else (the level hall of the castle): walk into it (or click it) and you
+     * are in the level of the start block its block entity points at ({@link StartBlockEntity#naar}, counted in the gate's
+     * own frame, so it turns with the building). Refused levels (an earlier one must be done first) say so.
+     */
+    public static class PoortBlok extends HorizontalDirectionalBlock implements EntityBlock {
+        public static final MapCodec<PoortBlok> CODEC = simpleCodec(PoortBlok::new);
+        private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 16, 15);
+
+        public PoortBlok(Properties properties) {
+            super(properties);
+            registerDefaultState(stateDefinition.any().setValue(FACING, Direction.EAST));
+        }
+
+        @Override
+        protected MapCodec<? extends HorizontalDirectionalBlock> codec() {
+            return CODEC;
+        }
+
+        @Override
+        protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+            builder.add(FACING);
+        }
+
+        @Override
+        public BlockState getStateForPlacement(BlockPlaceContext context) {
+            return defaultBlockState().setValue(FACING, context.getHorizontalDirection());
+        }
+
+        @Override
+        protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            return SHAPE;
+        }
+
+        @Override
+        protected boolean propagatesSkylightDown(BlockState state) {
+            return true;
+        }
+
+        @Nullable
+        @Override
+        public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+            return new StartBlockEntity(pos, state);
+        }
+
+        /** The start block this gate leads to, or null. */
+        @Nullable
+        public static BlockPos start(Level level, BlockPos pos, BlockState state) {
+            if (!(level.getBlockEntity(pos) instanceof StartBlockEntity be) || be.naar().equals(BlockPos.ZERO)) {
+                return null;
+            }
+            return GuhrioLevel.wereld(pos, state.getValue(FACING), be.naar());
+        }
+
+        private static void ga(ServerPlayer player, BlockPos pos, BlockState state) {
+            BlockPos start = start(player.level(), pos, state);
+            if (start != null) {
+                GuhrioSpel.start(player, start);
+            }
+        }
+
+        @Override
+        protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effects, boolean precise) {
+            if (!level.isClientSide() && entity instanceof ServerPlayer player && GuhrioSpel.magStarten(player)) {
+                ga(player, pos, state);
+                GuhrioSpel.rust(player, 30);
+            }
+        }
+
+        @Override
+        protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
+            if (!level.isClientSide() && player instanceof ServerPlayer sp && GuhrioSpel.sessie(sp) == null) {
+                ga(sp, pos, state);
             }
             return InteractionResult.SUCCESS;
         }
@@ -245,12 +338,17 @@ public final class GuhrioBlocks {
             GuhrioSpel.zetStaat(player, sessie, pos, 1);
             ServerLevel level = player.level();
             Vec3 boven = Vec3.atBottomCenterOf(pos.above());
-            if (state.getValue(INHOUD) == Inhoud.SUPERKNABBEL) {
-                GuhrioSpel.zetKracht(player, sessie, GuhrioSpel.Kracht.SUPER);
-                GuhrioSpel.geluid(level, boven, SoundEvents.PLAYER_LEVELUP, 0.6f, 1.6f);
-                level.sendParticles(player, ParticleTypes.HAPPY_VILLAGER, false, false, boven.x, boven.y + 0.3, boven.z, 10, 0.3, 0.3, 0.3, 0.02);
+            Inhoud inhoud = state.getValue(INHOUD);
+            if (inhoud != Inhoud.MUNT) {
+                // (the Vuurpeper is never taken away by a Superknabbel)
+                if (inhoud == Inhoud.VUURPEPER || sessie.kracht == GuhrioSpel.Kracht.GEEN) {
+                    GuhrioSpel.zetKracht(player, sessie, inhoud == Inhoud.VUURPEPER ? GuhrioSpel.Kracht.VUUR : GuhrioSpel.Kracht.SUPER);
+                }
+                GuhrioSpel.geluid(level, boven, SoundEvents.PLAYER_LEVELUP, 0.6f, inhoud == Inhoud.VUURPEPER ? 1.9f : 1.6f);
+                level.sendParticles(player, inhoud == Inhoud.VUURPEPER ? ParticleTypes.FLAME : ParticleTypes.HAPPY_VILLAGER, false, false,
+                        boven.x, boven.y + 0.3, boven.z, 10, 0.3, 0.3, 0.3, 0.02);
             } else {
-                GuhrioSpel.munt(player, sessie, 1);
+                GuhrioSpel.muntVan(player, sessie, pos);
                 GuhrioSpel.geluidAnderen(player, boven, SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5f, 1.5f);
                 level.sendParticles(player, ParticleTypes.WAX_ON, false, false, boven.x, boven.y + 0.4, boven.z, 6, 0.2, 0.3, 0.2, 0.02);
             }
@@ -281,7 +379,7 @@ public final class GuhrioBlocks {
 
         @Override
         public void bots(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
-            if (sessie.staat(pos) != 0 || sessie.kracht != GuhrioSpel.Kracht.SUPER) {
+            if (sessie.staat(pos) != 0 || !sessie.kracht.groot()) {
                 return;
             }
             GuhrioSpel.zetStaat(player, sessie, pos, 1);
@@ -317,7 +415,7 @@ public final class GuhrioBlocks {
                 return;
             }
             GuhrioSpel.zetStaat(player, sessie, pos, 1);
-            GuhrioSpel.munt(player, sessie, 1);
+            GuhrioSpel.muntVan(player, sessie, pos);
             GuhrioSpel.geluidAnderen(player, Vec3.atCenterOf(pos), SoundEvents.EXPERIENCE_ORB_PICKUP, 0.45f, 1.7f);
         }
     }
@@ -409,8 +507,8 @@ public final class GuhrioBlocks {
         return p != null && GuhrioSpel.inPijp(p) ? Shapes.empty() : vorm;
     }
 
-    /** The body of a green pipe (under its mouth). */
-    public static class PijpLijfBlok extends Block {
+    /** The body of a green pipe (behind its mouth): a pillar along its axis (y under an upward mouth). */
+    public static class PijpLijfBlok extends net.minecraft.world.level.block.RotatedPillarBlock {
         public static final MapCodec<PijpLijfBlok> CODEC = simpleCodec(PijpLijfBlok::new);
 
         public PijpLijfBlok(Properties properties) {
@@ -418,7 +516,7 @@ public final class GuhrioBlocks {
         }
 
         @Override
-        protected MapCodec<? extends Block> codec() {
+        public MapCodec<? extends net.minecraft.world.level.block.RotatedPillarBlock> codec() {
             return CODEC;
         }
 
@@ -429,16 +527,23 @@ public final class GuhrioBlocks {
     }
 
     /**
-     * The mouth of a green pipe, opening upwards. Stand on it and duck (S): you sink in and come up out of the other mouth
-     * of this level with the same {@link #KANAAL} (with more than two: the next one in the level).
+     * The mouth of a green pipe. It opens the way it faces: up (stand on it and duck, S), down (it hangs from above: a way
+     * out only) or sideways (walk into it; a sideways mouth is two blocks high: the upper block has {@link #BOVEN} and is
+     * only a look). You come out of the other mouth of this level with the same {@link #KANAAL} (with more than two: the
+     * next one in the level). {@link #INGANG} false: a way out only (a one-way pipe).
      */
     public static class PijpBlok extends Block implements GuhrioStuk {
         public static final MapCodec<PijpBlok> CODEC = simpleCodec(PijpBlok::new);
         public static final IntegerProperty KANAAL = IntegerProperty.create("kanaal", 0, 15);
+        public static final EnumProperty<Direction> FACING = net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
+        public static final BooleanProperty INGANG = BooleanProperty.create("ingang");
+        public static final BooleanProperty BOVEN = BooleanProperty.create("boven");
+        /** How far inside a sideways or hanging mouth you are while you travel. */
+        public static final double ZIJ_DIEP = 1.3;
 
         public PijpBlok(Properties properties) {
             super(properties);
-            registerDefaultState(stateDefinition.any().setValue(KANAAL, 0));
+            registerDefaultState(stateDefinition.any().setValue(KANAAL, 0).setValue(FACING, Direction.UP).setValue(INGANG, true).setValue(BOVEN, false));
         }
 
         @Override
@@ -448,7 +553,22 @@ public final class GuhrioBlocks {
 
         @Override
         protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-            builder.add(KANAAL);
+            builder.add(KANAAL, FACING, INGANG, BOVEN);
+        }
+
+        @Override
+        public BlockState getStateForPlacement(BlockPlaceContext context) {
+            return defaultBlockState().setValue(FACING, context.getClickedFace());
+        }
+
+        @Override
+        protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+            return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+        }
+
+        @Override
+        protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+            return state.rotate(mirror.getRotation(state.getValue(FACING)));
         }
 
         @Override
@@ -470,11 +590,37 @@ public final class GuhrioBlocks {
             return InteractionResult.SUCCESS;
         }
 
+        private static Direction kant(BlockState state) {
+            return state.getBlock() instanceof PijpBlok ? state.getValue(FACING) : Direction.UP;
+        }
+
+        /** Where you stand (your feet) when you are out of the mouth at {@code pos}. */
+        public static Vec3 buiten(BlockGetter level, BlockPos pos, BlockState state) {
+            Direction f = kant(state);
+            return switch (f) {
+                case UP -> new Vec3(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+                case DOWN -> new Vec3(pos.getX() + 0.5, pos.getY() - GuhrioSpel.PIJP_DIEP, pos.getZ() + 0.5);
+                default -> new Vec3(pos.getX() + 0.5 + f.getStepX(), pos.getY(), pos.getZ() + 0.5 + f.getStepZ());
+            };
+        }
+
+        /** Where you are when you are deepest inside the mouth at {@code pos}. */
+        public static Vec3 binnen(BlockGetter level, BlockPos pos, BlockState state) {
+            Direction f = kant(state);
+            Vec3 uit = buiten(level, pos, state);
+            return switch (f) {
+                case UP -> uit.add(0, -GuhrioSpel.pijpDiepte(level, pos), 0);
+                case DOWN -> new Vec3(uit.x, pos.getY(), uit.z);
+                default -> uit.add(-f.getStepX() * ZIJ_DIEP, 0, -f.getStepZ() * ZIJ_DIEP);
+            };
+        }
+
         /** The other mouth of this pipe in the level, or null. */
         @Nullable
         public static BlockPos andere(GuhrioSpel.Actief actief, BlockPos pos, BlockState state) {
             List<GuhrioSpel.Stuk> monden = actief.stukken.stream()
-                    .filter(s -> s.state().getBlock() instanceof PijpBlok && s.state().getValue(KANAAL).equals(state.getValue(KANAAL))).toList();
+                    .filter(s -> s.state().getBlock() instanceof PijpBlok && !s.state().getValue(BOVEN)
+                            && s.state().getValue(KANAAL).equals(state.getValue(KANAAL))).toList();
             for (int i = 0; i < monden.size(); i++) {
                 if (monden.get(i).pos().equals(pos) && monden.size() > 1) {
                     return monden.get((i + 1) % monden.size()).pos();
@@ -485,13 +631,29 @@ public final class GuhrioBlocks {
 
         @Override
         public void duik(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
+            ServerLevel level = player.level();
+            if (state.getValue(BOVEN)) {
+                pos = pos.below();
+                state = level.getBlockState(pos);
+                if (!(state.getBlock() instanceof PijpBlok)) {
+                    return;
+                }
+            }
+            Direction f = state.getValue(FACING);
+            if (!state.getValue(INGANG) || f == Direction.DOWN) {
+                return;                                        // (a way out only)
+            }
             BlockPos naar = andere(sessie.actief, pos, state);
-            if (naar == null || !player.level().isLoaded(naar)) {
+            if (naar == null || !level.isLoaded(naar)) {
                 return;
             }
-            // (you must really stand on it)
-            if (Math.abs(player.getY() - (pos.getY() + 1)) > 0.6 || Math.abs(player.getX() - (pos.getX() + 0.5)) > 0.8
-                    || Math.abs(player.getZ() - (pos.getZ() + 0.5)) > 0.8) {
+            // a Hapbloem that is out of its pipe: not now
+            if (f == Direction.UP && sessie.actief.wezens.get(pos.above()) instanceof HapbloemEntity bloem && bloem.buiten()) {
+                return;
+            }
+            // (you must really stand on it / in front of it)
+            Vec3 sta = buiten(level, pos, state);
+            if (Math.abs(player.getY() - sta.y) > 0.6 || Math.abs(player.getX() - sta.x) > 0.8 || Math.abs(player.getZ() - sta.z) > 0.8) {
                 return;
             }
             GuhrioSpel.pijp(player, sessie, pos, naar);
@@ -590,6 +752,49 @@ public final class GuhrioBlocks {
     // creatures
     // =====================================================================================================================
 
+    /**
+     * Where a creature of the level lives: invisible, you walk through it (only somebody holding the block sees it). While
+     * somebody plays the level its creature is there ({@link #maak}); it is shared by everybody in the level.
+     */
+    public abstract static class WezenPlek extends Block implements GuhrioStuk {
+        protected WezenPlek(Properties properties) {
+            super(properties);
+        }
+
+        @Override
+        protected RenderShape getRenderShape(BlockState state) {
+            return RenderShape.INVISIBLE;
+        }
+
+        @Override
+        protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            // (only somebody holding the block sees and clicks it, like a structure void)
+            return context.isHoldingItem(asItem()) ? Shapes.block() : Shapes.empty();
+        }
+
+        @Override
+        protected boolean propagatesSkylightDown(BlockState state) {
+            return true;
+        }
+
+        /** The creature of this spot (not yet in the world), or null. */
+        @Nullable
+        protected abstract Entity maak(ServerLevel level, GuhrioSpel.Actief actief, GuhrioSpel.Stuk stuk);
+
+        @Override
+        public void wek(ServerLevel level, GuhrioSpel.Actief actief, GuhrioSpel.Stuk stuk) {
+            Entity nu = actief.wezens.get(stuk.pos());
+            if ((nu != null && !nu.isRemoved()) || !level.isPositionEntityTicking(stuk.pos())) {
+                return;
+            }
+            Entity nieuw = maak(level, actief, stuk);
+            if (nieuw != null) {
+                level.addFreshEntity(nieuw);
+                actief.wezens.put(stuk.pos(), nieuw);
+            }
+        }
+    }
+
     /** Where a Guhmba lives: invisible, you walk through it. While somebody plays the level there is a Guhmba for it. */
     public static class GuhmbaPlek extends Block implements GuhrioStuk {
         public static final MapCodec<GuhmbaPlek> CODEC = simpleCodec(GuhmbaPlek::new);
@@ -634,7 +839,7 @@ public final class GuhrioBlocks {
                 return;
             }
             guhmba.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0f, 0f);
-            guhmba.zetBaan(actief.level.banen().get(stuk.baan()), pos);
+            guhmba.zetBaan(actief, actief.level.banen().get(stuk.baan()), pos);
             level.addFreshEntity(guhmba);
             actief.wezens.put(pos, guhmba);
         }

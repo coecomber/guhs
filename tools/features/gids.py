@@ -124,6 +124,11 @@ def rij_labels():
         rows[f"sledesprint_{lvl}"] = f"Sledesprint: {lvl}"
         rows[f"surfen_{lvl}"] = f"Surfen: {lvl}"
         rows[f"hula_{lvl}"] = f"Hula: {lvl}"
+    # bbq2 (Super Guhrio; the rows are appended to Highscores.GAMES by feature/guhrio)
+    rows["guhrio_kasteel"] = "Het hele kasteel in één keer"
+    for wereld in "123":
+        for nr in "12":
+            rows[f"guhrio_{wereld}_{nr}"] = f"Level {wereld}-{nr}"
     return rows
 
 

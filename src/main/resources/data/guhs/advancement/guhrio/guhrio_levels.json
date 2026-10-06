@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:guhrio_mast"
+    },
+    "title": {
+      "translate": "advancements.guhs.guhrio.guhrio_levels.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guhrio.guhrio_levels.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:guhrio/root"
+}

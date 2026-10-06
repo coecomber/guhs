@@ -66,12 +66,24 @@ public final class GuhrioPayloads {
         }
     }
 
-    /** Server -> client: the panel (coins of this run, your coins in all, the time, your power-up) and the heartbeat. */
-    public record Staat(int munten, int totaal, int ticks, int kracht, int baan) implements CustomPacketPayload {
+    /**
+     * Server -> client: the panel (coins of this run, the coins in your pocket, the time, your power-up), the lane you are
+     * on, your switch channels (bits), the big vadsmunten of this level you have (bits), the Guhshi that carries you (its
+     * entity id; 0: none, -1: not made yet) - and the heartbeat.
+     */
+    public record Staat(int munten, int totaal, int ticks, int kracht, int baan, int kanalen, int vads, int guhshi) implements CustomPacketPayload {
         public static final Type<Staat> TYPE = new Type<>(Guhs.id("guhrio_staat"));
-        public static final StreamCodec<FriendlyByteBuf, Staat> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.VAR_INT, Staat::munten, ByteBufCodecs.VAR_INT, Staat::totaal, ByteBufCodecs.VAR_INT, Staat::ticks,
-                ByteBufCodecs.VAR_INT, Staat::kracht, ByteBufCodecs.VAR_INT, Staat::baan, Staat::new);
+        public static final StreamCodec<FriendlyByteBuf, Staat> STREAM_CODEC = StreamCodec.of((buf, s) -> {
+            buf.writeVarInt(s.munten);
+            buf.writeVarInt(s.totaal);
+            buf.writeVarInt(s.ticks);
+            buf.writeVarInt(s.kracht);
+            buf.writeVarInt(s.baan);
+            buf.writeVarInt(s.kanalen);
+            buf.writeVarInt(s.vads);
+            buf.writeVarInt(s.guhshi);
+        }, buf -> new Staat(buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(),
+                buf.readVarInt(), buf.readVarInt()));
 
         @Override
         public Type<? extends CustomPacketPayload> type() {
@@ -111,12 +123,16 @@ public final class GuhrioPayloads {
         public static final int KLAAR = 3;
         /** A new flag at pos is yours. */
         public static final int VLAG = 4;
-        /** You lost your power-up (and are safe for a moment). */
+        /** You lost your power-up (getal 0) or Guhshi (getal 1), and are safe for a moment. */
         public static final int KRIMP = 5;
         /** Landed on a creature (getal: its entity id): bounce (the server saw it; your own game bounced already). */
         public static final int STUITER = 6;
         /** You stepped through a door and stand in the door at pos (getal: the lane you are on now). */
         public static final int DEUR = 7;
+        /** The big vadsmunt at pos is yours (getal: how many of this level you have now). */
+        public static final int VADSMUNT = 8;
+        /** Guhshi's tongue shot out (getal: how far in tenths of a block, negative = back along the lane). */
+        public static final int TONG = 9;
 
         public static final Type<Moment> TYPE = new Type<>(Guhs.id("guhrio_moment"));
         public static final StreamCodec<FriendlyByteBuf, Moment> STREAM_CODEC = StreamCodec.composite(
@@ -148,6 +164,12 @@ public final class GuhrioPayloads {
         public static final int GERAAKT = 5;
         /** "You say I am in a level, but my game let go of it": send the level again. */
         public static final int WEER = 6;
+        /** The action key: throw a knabbel (Vuurpeper) or Guhshi's tongue ({@code wezen}: +1 further along the lane, -1 back). */
+        public static final int GOOI = 7;
+        /** You want out of the level (back to its entrance). */
+        public static final int STOP = 8;
+        /** You stand on the block at pos (a switch). */
+        public static final int STAP = 9;
 
         public static final Type<Actie> TYPE = new Type<>(Guhs.id("guhrio_actie"));
         public static final StreamCodec<FriendlyByteBuf, Actie> STREAM_CODEC = StreamCodec.composite(

@@ -1885,6 +1885,17 @@
   "ftb.guhs_knabbelring.q.ring_wegwijs.desc": "Zo raak je de weg nooit kwijt: &6linksboven&r staat wat je nu moet doen, in de &dGuhdex&r (tab Verhalen) staat je &6reiskaart&r, het &6Superkompas&r wijst naar 'Mijn verhaal' en Sam-guh weet het ook. De hoofdstukken hieronder gaan één voor één open.",
   "ftb.guhs_guhrio.title": "&cSuper Guhrio",
   "ftb.guhs_guhrio.sub": "Bedankt! Maar de prinses is in een ander kasteeldeel, njeg",
+  "ftb.guhs_guhrio.section.guhrio": "Het Kasteel van de Grote Nether-Mika",
   "ftb.guhs_guhrio.q.intro_guhs_guhrio.title": "Hoe kom je hier?",
-  "ftb.guhs_guhrio.q.intro_guhs_guhrio.desc": "Dit hoofdstuk komt na &6VAHOEG, hij brandt weer!&r in &6De Guhbarbecuether&r.\n\nIn een frituursauszee van de Guhbarbecuether staat het &cKasteel van de Grote Nether-Mika&r (superkompas: Barbecue). Op het voorplein wacht &dPad-guh&r: Prinses Perzikguh is meegenomen... voor een stukje taart.\n\nBinnen speel je alles &cvan opzij&r: A en D lopen, spatie springt. Vallen kost niks: je begint gewoon weer bij de laatste vlag. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!"
+  "ftb.guhs_guhrio.q.intro_guhs_guhrio.desc": "Dit hoofdstuk komt na &6VAHOEG, hij brandt weer!&r in &6De Guhbarbecuether&r.\n\nIn een frituursauszee van de Guhbarbecuether staat het &cKasteel van de Grote Nether-Mika&r (superkompas: Barbecue). Op het voorplein wacht &dPad-guh&r: Prinses Perzikguh is meegenomen... voor een stukje taart.\n\nBinnen speel je alles &cvan opzij&r: A en D lopen, spatie springt. Vallen kost niks: je begint gewoon weer bij de laatste vlag. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
+  "ftb.guhs_guhrio.q.guhrio_kasteel.title": "Een kasteel in de saus",
+  "ftb.guhs_guhrio.q.guhrio_kasteel.desc": "Midden in de frituursauszee van de Guhbarbecuether staat het &6Kasteel van de Grote Nether-Mika&r. Het superkompas (Barbecue > Kasteel van de Grote Nether-Mika) wijst de weg; er ligt een steigertje voor de poort.",
+  "ftb.guhs_guhrio.q.guhrio_binnen.title": "Van opzij bekeken",
+  "ftb.guhs_guhrio.q.guhrio_binnen.desc": "Loop in de levelhal door de poort van &6level 1-1&r. In een level kijk je van opzij: &dA&r en &dD&r lopen, &dspatie&r springt (ingedrukt houden = hoger), &dS&r duikt in een pijp, &dW&r gaat door een deur, sprinten is rennen. Er gaat nooit iets stuk en niemand doet je pijn: wie valt of geduwd wordt, staat weer bij zijn laatste vlaggetje. Twee keer &dQ&r = eruit.",
+  "ftb.guhs_guhrio.q.guhrio_levels.title": "Zes vlaggenmasten",
+  "ftb.guhs_guhrio.q.guhrio_levels.desc": "Haal de vlaggenmast van alle zes de levels: de binnentuin (1-1, 1-2), de kelders (2-1, 2-2) en de burcht (3-1, 3-2). Elke poort gaat open als het level ervoor gehaald is.",
+  "ftb.guhs_guhrio.q.guhrio_vadsmunten.title": "Achttien keer vads",
+  "ftb.guhs_guhrio.q.guhrio_vadsmunten.desc": "In elk level liggen drie &6grote vadsmunten&r. Ze blijven van jou, ook als je het level opnieuw speelt; de Guhdex (Verhalen > Super Guhrio) houdt per level bij welke je hebt.",
+  "ftb.guhs_guhrio.q.guhrio_loop.title": "In één ruk door",
+  "ftb.guhs_guhrio.q.guhrio_loop.desc": "Begin bij level 1-1 en haal alle zes de levels achter elkaar, in volgorde. Je tijd komt op het highscorebord (Guhdex > Highscores), naast het record van de server. Tijd die je in een level verliest door eruit te stappen telt mee, njeg."
 }

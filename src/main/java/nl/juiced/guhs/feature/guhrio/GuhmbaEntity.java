@@ -2,8 +2,6 @@ package nl.juiced.guhs.feature.guhrio;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -11,41 +9,27 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.InterpolationHandler;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
-import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.registry.ModSounds;
 
 /**
  * A Guhmba: a grumbling mini-Mika that walks up and down its lane. It turns at a wall, at a ledge and at the end of the
  * lane. Land on it and it is flat ("njeg!") and you bounce; a few seconds later it pops back up, giggling. Touch it from
  * the side and you are back at your flag (or you lose your power-up): it only shoves, nobody is ever hurt, and neither is
- * the Guhmba. It belongs to a {@link GuhrioBlocks.GuhmbaPlek} of a level somebody plays and is never saved.
+ * the Guhmba. A thrown knabbel or a sliding shell squashes it too; Guhshi's tongue eats it (it is back a little later).
+ * It belongs to a {@link GuhrioBlocks.GuhmbaPlek} of a level somebody plays and is never saved.
  */
-public class GuhmbaEntity extends Entity implements GuhrioWezen {
+public class GuhmbaEntity extends LoopWezen {
     /** Blocks per tick. */
     public static final double SNELHEID = 0.05;
-    /** How long it stays flat. */
-    public static final int PLAT_TICKS = 60;
+    /** How long it stays flat; how long it is gone after Guhshi ate it. */
+    public static final int PLAT_TICKS = 60, WEG_TICKS = 100;
     private static final EntityDataAccessor<Boolean> DATA_PLAT = SynchedEntityData.defineId(GuhmbaEntity.class, EntityDataSerializers.BOOLEAN);
 
-    private final InterpolationHandler interpolation = new InterpolationHandler(this, 3);
-    @Nullable
-    private Baan baan;
-    @Nullable
-    private BlockPos thuis;
-    private int stuk;
-    /** +1 further along the lane, -1 back. */
-    private int teken = -1;
     private int platTicks;
-    /** Client: how flat it is drawn (0 round .. 1 flat) and its walk. */
-    public float platheid, platheidO, loop, loopO;
+    /** Client: how flat it is drawn (0 round .. 1 flat). */
+    public float platheid, platheidO;
 
     public GuhmbaEntity(EntityType<? extends GuhmbaEntity> type, Level level) {
         super(type, level);
@@ -56,120 +40,51 @@ public class GuhmbaEntity extends Entity implements GuhrioWezen {
         builder.define(DATA_PLAT, false);
     }
 
-    /** The lane it walks on and the spot it belongs to. */
-    public void zetBaan(Baan baan, BlockPos thuis) {
-        this.baan = baan;
-        this.thuis = thuis;
-        this.stuk = baan.plek(getX(), getZ()).stuk();
-        draai();
-    }
-
     public boolean plat() {
         return this.entityData.get(DATA_PLAT);
     }
 
-    /** Which way it walks along its lane (+1 / -1). */
-    public int teken() {
-        return teken;
-    }
-
-    public void zetTeken(int teken) {
-        this.teken = teken < 0 ? -1 : 1;
-        draai();
-    }
-
-    private Vec3 vooruit() {
-        Direction d = baan == null ? Direction.EAST : baan.richting(stuk);
-        return new Vec3(d.getStepX() * teken, 0, d.getStepZ() * teken);
-    }
-
-    private void draai() {
-        Vec3 v = vooruit();
-        float yaw = (float) Math.toDegrees(Math.atan2(-v.x, v.z));
-        this.setYRot(yaw);
+    @Override
+    protected void clientTick() {
+        super.clientTick();
+        platheidO = platheid;
+        platheid += ((plat() ? 1f : 0f) - platheid) * 0.5f;
     }
 
     @Override
-    public InterpolationHandler getInterpolation() {
-        return interpolation;
+    protected double snelheid() {
+        return plat() ? 0 : SNELHEID;
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (this.level().isClientSide()) {
-            interpolation.interpolate();
-            platheidO = platheid;
-            platheid += ((plat() ? 1f : 0f) - platheid) * 0.5f;
-            loopO = loop;
-            Vec3 d = this.position().subtract(this.xo, this.yo, this.zo);
-            loop += (float) Math.sqrt(d.x * d.x + d.z * d.z) * 6f;
-            return;
-        }
-        ServerLevel level = (ServerLevel) this.level();
-        Vec3 v = this.getDeltaMovement();
-        double val = this.onGround() ? -0.08 : v.y - 0.08;
-        if (plat()) {
-            if (--platTicks <= 0) {
-                this.entityData.set(DATA_PLAT, false);
-                level.playSound(null, getX(), getY(), getZ(), ModSounds.MIKA_AMBIENT.get(), SoundSource.NEUTRAL, 0.5f, 1.9f);
-            }
-            this.move(MoverType.SELF, new Vec3(0, val, 0));
-            this.setDeltaMovement(0, this.onGround() ? 0 : val * 0.98, 0);
-            return;
-        }
-        Vec3 voor = vooruit();
-        if (this.onGround() && afgrond(level, voor)) {
-            teken = -teken;
-            voor = vooruit();
-        }
-        this.move(MoverType.SELF, new Vec3(voor.x * SNELHEID, val, voor.z * SNELHEID));
-        this.setDeltaMovement(voor.x * SNELHEID, this.onGround() ? 0 : val * 0.98, voor.z * SNELHEID);
-        if (this.horizontalCollision) {
-            teken = -teken;
-        }
-        if (baan != null) {
-            Baan.Stap stap = baan.stap(stuk, getX(), getZ());
-            stuk = stap.stuk();
-            this.setPos(stap.x(), getY(), stap.z());
-            if (stap.eind()) {
-                teken = -teken;
-            }
-            if (getY() < baan.onder - 4) {
-                this.discard();                       // (fell out of the level: its spot makes a new one)
-                return;
-            }
-        } else if (getY() < level.getMinY() - 8) {
-            this.discard();
-            return;
-        }
-        draai();
-        if (this.isInLava() || this.isInWater()) {
-            this.clearFire();
+    protected void naStap(ServerLevel level) {
+        if (plat() && --platTicks <= 0) {
+            this.entityData.set(DATA_PLAT, false);
+            level.playSound(null, getX(), getY(), getZ(), ModSounds.MIKA_AMBIENT.get(), SoundSource.NEUTRAL, 0.5f, 1.9f);
         }
     }
 
-    /** Is there nothing to stand on one step ahead? */
-    private boolean afgrond(ServerLevel level, Vec3 voor) {
-        BlockPos onder = BlockPos.containing(getX() + voor.x * 0.6, getY() - 0.3, getZ() + voor.z * 0.6);
-        return level.getBlockState(onder).getCollisionShape(level, onder).isEmpty();
+    @Override
+    protected void terugThuis() {
+        super.terugThuis();
+        this.entityData.set(DATA_PLAT, false);
     }
 
     // --- GuhrioWezen -----------------------------------------------------------------------------------------------------
 
     @Override
     public boolean stampbaar() {
-        return !plat();
+        return !plat() && !weg();
     }
 
     @Override
     public boolean gevaarlijk() {
-        return !plat();
+        return !plat() && !weg();
     }
 
     @Override
     public void stamp(ServerPlayer player, GuhrioSpel.Sessie sessie) {
-        if (plat()) {
+        if (plat() || weg()) {
             return;
         }
         maakPlat();
@@ -186,33 +101,29 @@ public class GuhmbaEntity extends Entity implements GuhrioWezen {
         }
     }
 
-    // --- an entity that is only there for the game ----------------------------------------------------------------------
-
     @Override
-    public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
-        return false;
+    public boolean knabbel(ServerPlayer gooier, GuhrioSpel.Sessie sessie) {
+        if (plat() || weg()) {
+            return false;
+        }
+        maakPlat();
+        return true;
     }
 
     @Override
-    public boolean isPickable() {
-        return false;
+    public boolean schild(@Nullable ServerPlayer schopper) {
+        if (!plat() && !weg()) {
+            maakPlat();
+        }
+        return true;
     }
 
     @Override
-    public boolean isPushable() {
-        return false;
-    }
-
-    @Override
-    public boolean shouldBeSaved() {
-        return false;
-    }
-
-    @Override
-    protected void readAdditionalSaveData(ValueInput tag) {
-    }
-
-    @Override
-    protected void addAdditionalSaveData(ValueOutput tag) {
+    public boolean tong(ServerPlayer player, GuhrioSpel.Sessie sessie) {
+        if (weg()) {
+            return false;
+        }
+        wegVoor(WEG_TICKS);
+        return true;
     }
 }

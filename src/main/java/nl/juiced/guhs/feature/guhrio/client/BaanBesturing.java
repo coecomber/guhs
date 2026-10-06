@@ -11,8 +11,10 @@ import net.minecraft.client.player.ClientInput;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.level.Level;
@@ -26,31 +28,45 @@ import nl.juiced.guhs.feature.guhrio.GuhrioBlocks;
 import nl.juiced.guhs.feature.guhrio.GuhrioPayloads;
 import nl.juiced.guhs.feature.guhrio.GuhrioSpel;
 import nl.juiced.guhs.feature.guhrio.GuhrioStuk;
+import nl.juiced.guhs.feature.guhrio.GuhrioStukken;
 import nl.juiced.guhs.feature.guhrio.GuhrioWezen;
+import nl.juiced.guhs.feature.verhaal.Cutscenes;
 
 /**
  * Your keys and your body in a level (the player's own game moves the player, so this is where the lane really holds you).
  * <ul>
  *     <li>The keys ({@link BaanInput}): A and D walk left and right on the screen, which is back and forth along the lane;
- *     space jumps (let go early for a small hop), S or sneak ducks (and goes down a pipe), W is for doors, sprint runs.
- *     Under it is the normal walking of the game: you are simply turned to face along the lane and "walk forward".</li>
+ *     space jumps (hold it for a high jump, tap for a hop), S or sneak ducks (and goes down a pipe), W is for doors, sprint
+ *     runs, a mouse button throws a knabbel (Vuurpeper) or shoots Guhshi's tongue, Q twice leaves the level. Under it is
+ *     the normal walking of the game: you are simply turned to face along the lane and "walk forward".</li>
  *     <li>The line: before and after every step you are put on the lane's line ({@link Baan#stap}), your sideways speed is
  *     gone, a corner turns your speed with you, the two ends stop you.</li>
  *     <li>What your game sees happen, the moment it happens, and tells the server ({@link GuhrioPayloads.Actie}): your
- *     head under a block, a coin, a creature you land on (you bounce at once) or that touches you, ducking on a pipe.</li>
- *     <li>The little films: sinking into a pipe and rising out of the other, sliding down the flagpole.</li>
+ *     head under a block (a hidden block appears right before it), a coin, a creature you land on (you bounce at once) or
+ *     that touches you, ducking on a pipe or walking into a sideways one, standing on a switch.</li>
+ *     <li>What carries you: a moving platform takes you along; on Guhshi a held jump flutters.</li>
+ *     <li>The little films: into a pipe and out of the other (in any direction), sliding down the flagpole.</li>
  * </ul>
- * The numbers at the top are the feel of the game; change them here.
+ * A cutscene always wins: while {@code Cutscenes.bezig} nothing here touches you. The numbers at the top are the feel of
+ * the game (together with GuhrioSpel's jump strength, gravity and speed); change them here.
  */
 public final class BaanBesturing {
     /** In the air you steer much better than normal: this much speed per tick towards where you push, up to these speeds. */
-    public static final double LUCHT_STUUR = 0.03, LUCHT_LOOP = 0.21, LUCHT_REN = 0.29;
-    /** Letting go of space while still rising this fast cuts the jump (a small hop). */
-    public static final double HOP_VANAF = 0.18, HOP_REST = 0.45;
+    public static final double LUCHT_STUUR = 0.04, LUCHT_LOOP = 0.26, LUCHT_REN = 0.365;
+    /**
+     * The jump of the old platform games: while you rise with space held you are lighter (this much speed back per tick),
+     * letting go cuts what is left of the rise, and you fall heavier than you rose.
+     */
+    public static final double STIJG_LICHTER = 0.035, HOP_REST = 0.4, VAL_ERBIJ = 0.03, VAL_MAX = -1.3;
     /** The bounce off a creature: normal, and with space held. */
-    public static final double STUITER = 0.52, STUITER_HOOG = 0.82;
+    public static final double STUITER = 0.48, STUITER_HOOG = 0.70;
     /** Sliding down the flagpole (blocks per tick). */
     public static final double GLIJ = 0.14;
+    /** On Guhshi: holding space at the top of a jump flutters this long, rising this fast. */
+    public static final int FLADDER_TICKS = 24;
+    public static final double FLADDER = 0.03;
+    /** Ticks between two throws / licks, and how long "press Q again" waits. */
+    public static final int ACTIE_RUST = 6, STOP_WACHT = 40;
 
     /** The piece of the lane you are on, the way you face along it (+1 further, -1 back). */
     private static int stuk;
@@ -59,15 +75,21 @@ public final class BaanBesturing {
     /** Rising from a jump of your own (so letting go of space may cut it). */
     private static boolean sprong;
     private static double valVoor;
-    private static boolean wasW;
-    /** 0 not in a pipe; 1 sinking in; 2 waiting inside for the server; 3 rising out. */
+    private static boolean wasW, cutscene;
+    /** 0 not in a pipe; 1 going in; 2 waiting inside for the server; 3 coming out. */
     private static int pijpFase;
     private static int pijpTick;
-    private static double pijpX, pijpZ, pijpTop, pijpDiep;
+    private static Vec3 pijpVan = Vec3.ZERO, pijpNaar = Vec3.ZERO;
+    private static boolean pijpStaat;
     @Nullable
     private static BlockPos mast;
-    private static int rustStamp, rustDuik;
-    private static final Map<Integer, Integer> RUST_WEZEN = new HashMap<>();
+    private static int rustStamp, rustDuik, rustActie, stopWacht, fladder;
+    private static final Map<Integer, Integer> RUST_WEZENS = new HashMap<>();
+    private static final Map<BlockPos, Integer> RUST_STAP = new HashMap<>();
+    /** What carries you (a platform) and where it was last tick. */
+    @Nullable
+    private static Entity drager;
+    private static Vec3 dragerWas = Vec3.ZERO;
 
     private BaanBesturing() {
     }
@@ -96,13 +118,18 @@ public final class BaanBesturing {
         return (o.keyRight.isDown() ? 1 : 0) - (o.keyLeft.isDown() ? 1 : 0);
     }
 
-    /** No keys now: in a pipe, at the flagpole. */
+    /** No keys now: in a pipe, at the flagpole, watching a cutscene. */
     private static boolean stil() {
-        return pijpFase != 0 || mast != null;
+        return pijpFase != 0 || mast != null || cutscene;
     }
 
     static boolean inPijp() {
         return pijpFase != 0;
+    }
+
+    /** The piece of the lane you are on. */
+    static int stukNu() {
+        return stuk;
     }
 
     /** The way you face along the lane (+1 further, -1 back). */
@@ -122,6 +149,7 @@ public final class BaanBesturing {
         kijk = 1;
         sprong = false;
         mast = null;
+        drager = null;
         yaw = yawVan(baan);
         if (!(p.input instanceof BaanInput)) {
             p.input = new BaanInput();
@@ -132,7 +160,11 @@ public final class BaanBesturing {
         pijpFase = 0;
         mast = null;
         sprong = false;
-        RUST_WEZEN.clear();
+        cutscene = false;
+        drager = null;
+        stopWacht = 0;
+        RUST_WEZENS.clear();
+        RUST_STAP.clear();
     }
 
     /** You were put back at your flag. */
@@ -140,6 +172,7 @@ public final class BaanBesturing {
         Baan baan = GuhrioClient.baan();
         pijpFase = 0;
         sprong = false;
+        drager = null;
         if (baan != null) {
             stuk = baan.plek(p.getX(), p.getZ()).stuk();
         }
@@ -153,7 +186,7 @@ public final class BaanBesturing {
     /** Every frame: you look along the lane, whatever the mouse does. */
     static void kijkVast() {
         LocalPlayer p = Minecraft.getInstance().player;
-        if (p == null || !GuhrioClient.speelt()) {
+        if (p == null || !GuhrioClient.speelt() || Cutscenes.bezig(p)) {
             return;
         }
         p.setYRot(yaw);
@@ -177,24 +210,43 @@ public final class BaanBesturing {
             return;
         }
         Minecraft mc = Minecraft.getInstance();
+        if (Cutscenes.bezig(p)) {
+            cutscene = true;                                   // (the scene has the camera and the keys; the level waits)
+            drager = null;
+            return;
+        }
+        if (cutscene) {
+            cutscene = false;
+            stuk = baan.plek(p.getX(), p.getZ()).stuk();
+            BaanCamera.begin(p);
+        }
         if (!(p.input instanceof BaanInput)) {
             p.input = new BaanInput();
         }
         if (p.getAbilities().flying) {
             p.getAbilities().flying = false;
         }
-        RUST_WEZEN.replaceAll((id, t) -> t - 1);
-        RUST_WEZEN.values().removeIf(t -> t <= 0);
+        RUST_WEZENS.replaceAll((id, t) -> t - 1);
+        RUST_WEZENS.values().removeIf(t -> t <= 0);
+        RUST_STAP.replaceAll((pos, t) -> t - 1);
+        RUST_STAP.values().removeIf(t -> t <= 0);
         if (rustStamp > 0) {
             rustStamp--;
         }
         if (rustDuik > 0) {
             rustDuik--;
         }
+        if (rustActie > 0) {
+            rustActie--;
+        }
+        if (stopWacht > 0) {
+            stopWacht--;
+        }
         valVoor = p.getDeltaMovement().y;
         if (stil()) {
             return;
         }
+        draag(p);
         int scherm = teken(mc.options);
         int teken = scherm * baan.schermRechts();
         if (teken != 0) {
@@ -206,22 +258,43 @@ public final class BaanBesturing {
         Direction oud = baan.richting(stuk), d = baan.richting(nieuw);
         double langs = v.x * oud.getStepX() + v.z * oud.getStepZ();
         stuk = nieuw;
+        boolean lucht = !p.onGround() && !p.isInWater();
         // in the air: steer
-        if (!p.onGround() && teken != 0 && !p.isInWater()) {
+        if (lucht && teken != 0) {
             double top = p.isSprinting() ? LUCHT_REN : LUCHT_LOOP;
             if (langs * teken < top) {
                 langs = teken > 0 ? Math.min(top, langs + LUCHT_STUUR) : Math.max(-top, langs - LUCHT_STUUR);
             }
         }
         double vy = v.y;
-        // a small hop: space let go while still rising from your own jump
-        if (sprong) {
-            if (p.onGround() || vy <= 0) {
+        boolean spatie = mc.options.keyJump.isDown() && mc.screen == null;
+        if (p.onGround()) {
+            sprong = false;
+            fladder = 0;
+        } else if (lucht) {
+            if (vy > 0) {
+                if (sprong && spatie) {
+                    vy += STIJG_LICHTER;                       // a held jump rises longer
+                } else if (sprong) {
+                    vy *= HOP_REST;                            // let go: a small hop
+                    sprong = false;
+                }
+            } else {
                 sprong = false;
-            } else if (!mc.options.keyJump.isDown() && vy > HOP_VANAF) {
-                vy *= HOP_REST;
-                sprong = false;
+                if (GuhrioClient.guhshi != 0 && spatie && fladder < FLADDER_TICKS) {
+                    fladder++;                                 // Guhshi flutters: a little higher, a lot further
+                    vy = FLADDER;
+                    if (fladder % 4 == 1) {
+                        p.playSound(SoundEvents.PARROT_FLY, 0.5f, 1.5f);
+                    }
+                } else {
+                    vy = Math.max(VAL_MAX, vy - VAL_ERBIJ);    // falling is heavier than rising
+                }
             }
+        }
+        // a hidden block right above your head on the way up: it is there now (your head will find it this very step)
+        if (vy > 0 && lucht) {
+            onzichtbaar(p, p.level(), d, vy);
         }
         p.setDeltaMovement(d.getStepX() * langs, vy, d.getStepZ() * langs);
         if (Math.abs(op.x() - p.getX()) > 1e-6 || Math.abs(op.z() - p.getZ()) > 1e-6) {
@@ -232,13 +305,56 @@ public final class BaanBesturing {
         p.setXRot(0f);
     }
 
+    /** What carries you (a platform) moved: you move with it. */
+    private static void draag(LocalPlayer p) {
+        if (drager == null) {
+            return;
+        }
+        if (!drager.isAlive() || !(drager instanceof GuhrioWezen w) || !w.draagt()) {
+            drager = null;
+            return;
+        }
+        Vec3 nu = drager.position();
+        Vec3 d = nu.subtract(dragerWas);
+        dragerWas = nu;
+        AABB vak = drager.getBoundingBox();
+        AABB ik = p.getBoundingBox();
+        boolean erop = p.getDeltaMovement().y <= 0.05 && Math.abs(ik.minY - (vak.maxY - d.y)) < 0.4
+                && ik.maxX > vak.minX - 0.3 && ik.minX < vak.maxX + 0.3 && ik.maxZ > vak.minZ - 0.3 && ik.minZ < vak.maxZ + 0.3;
+        if (!erop || d.lengthSqr() > 4) {
+            drager = null;
+            return;
+        }
+        p.setPos(p.getX() + d.x, vak.maxY, p.getZ() + d.z);
+        p.setOnGround(true);
+        p.resetFallDistance();
+        Vec3 v = p.getDeltaMovement();
+        p.setDeltaMovement(v.x, Math.max(v.y, 0), v.z);
+    }
+
+    /** Rising under a hidden block you have not found yet: your own game makes it solid for you now. */
+    private static void onzichtbaar(LocalPlayer p, Level level, Direction d, double vy) {
+        AABB box = p.getBoundingBox();
+        for (double uit : new double[]{0, 0.29, -0.29}) {
+            // (the cell your head is about to enter: a rise is less than a block a tick, so its top now and after the step)
+            for (double y : new double[]{box.maxY + 0.01, box.maxY + vy + 0.05}) {
+                BlockPos pos = BlockPos.containing(p.getX() + d.getStepX() * uit, y, p.getZ() + d.getStepZ() * uit);
+                if (level.getBlockState(pos).getBlock() instanceof GuhrioStukken.OnzichtbaarBlok && GuhrioClient.staat(pos) == 0
+                        && box.maxY <= pos.getY() + 1e-3) {
+                    GuhrioClient.raad(pos.immutable(), 1);
+                    return;
+                }
+            }
+        }
+    }
+
     // =====================================================================================================================
     // every tick, after you moved (before your game tells the server where you are)
     // =====================================================================================================================
 
     static void na(LocalPlayer p) {
         Baan baan = GuhrioClient.baan();
-        if (baan == null) {
+        if (baan == null || Cutscenes.bezig(p)) {
             return;
         }
         Minecraft mc = Minecraft.getInstance();
@@ -265,14 +381,16 @@ public final class BaanBesturing {
         if (Math.abs(op.x() - p.getX()) > 1e-6 || Math.abs(op.z() - p.getZ()) > 1e-6) {
             p.setPos(op.x(), p.getY(), op.z());
         }
-        if (!p.onGround() && valVoor <= 0 && p.getDeltaMovement().y > 0.3 && mc.options.keyJump.isDown()) {
+        boolean spatie = mc.options.keyJump.isDown() && mc.screen == null;
+        if (!p.onGround() && valVoor <= 0 && p.getDeltaMovement().y > 0.3 && spatie) {
             sprong = true;                                    // (left the ground by a jump of your own this tick)
+            drager = null;
         }
         Level level = p.level();
         kop(p, level);
         stukken(p, level);
-        wezens(p, level, mc.options.keyJump.isDown());
-        toetsen(p, level, mc.options);
+        wezens(p, level, spatie);
+        toetsen(p, level, mc.options, baan);
     }
 
     /** Your head hit something on the way up: the block above you hops, and the server hears of it. */
@@ -287,7 +405,7 @@ public final class BaanBesturing {
         for (double uit : new double[]{0, 0.29, -0.29}) {
             BlockPos pos = BlockPos.containing(p.getX() + d.getStepX() * uit, y, p.getZ() + d.getStepZ() * uit);
             BlockState state = level.getBlockState(pos);
-            if (state.getBlock() instanceof GuhrioStuk && !state.getCollisionShape(level, pos).isEmpty()) {
+            if (state.getBlock() instanceof GuhrioStuk && !state.getCollisionShape(level, pos, net.minecraft.world.phys.shapes.CollisionContext.of(p)).isEmpty()) {
                 if (level.getBlockEntity(pos) instanceof GuhrioBlocks.StukBlockEntity be) {
                     be.bots = level.getGameTime();
                 }
@@ -295,7 +413,7 @@ public final class BaanBesturing {
                     if (!GuhrioClient.raad(pos, 1)) {
                         p.playSound(SoundEvents.STONE_HIT, 0.6f, 0.7f);
                     }
-                } else if (state.getBlock() instanceof GuhrioBlocks.SteenBlok && GuhrioClient.kracht == GuhrioSpel.Kracht.SUPER.ordinal()) {
+                } else if (state.getBlock() instanceof GuhrioBlocks.SteenBlok && GuhrioClient.kracht != GuhrioSpel.Kracht.GEEN.ordinal()) {
                     GuhrioClient.raad(pos, 1);
                 } else {
                     p.playSound(SoundEvents.STONE_HIT, 0.6f, 0.9f);
@@ -316,8 +434,9 @@ public final class BaanBesturing {
                 for (int y = Mth.floor(box.minY); y <= Mth.floor(box.maxY); y++) {
                     pos.set(x, y, z);
                     BlockState state = level.getBlockState(pos);
-                    if (state.getBlock() instanceof GuhrioBlocks.MuntBlok && GuhrioClient.staat(pos) == 0
-                            && box.intersects(x + 0.2, y + 0.1, z + 0.2, x + 0.8, y + 0.9, z + 0.8) && GuhrioClient.raad(pos, 1)) {
+                    if ((state.getBlock() instanceof GuhrioBlocks.MuntBlok || state.getBlock() instanceof GuhrioStukken.VadsmuntBlok)
+                            && GuhrioClient.staat(pos) == 0 && box.intersects(x + 0.2, y + 0.1, z + 0.2, x + 0.8, y + 0.9, z + 0.8)
+                            && GuhrioClient.raad(pos, 1)) {
                         stuur(GuhrioPayloads.Actie.RAAK, pos.immutable(), 0);
                     }
                 }
@@ -325,12 +444,20 @@ public final class BaanBesturing {
         }
     }
 
-    /** The creatures you touch: on top of one you bounce, anything else is for the server to judge. */
+    /** The creatures you touch: on top of one you bounce, a platform carries you, anything else is for the server to judge. */
     private static void wezens(LocalPlayer p, Level level, boolean spatie) {
         AABB box = p.getBoundingBox();
-        for (Entity e : level.getEntities(p, box.inflate(0.05), x -> x instanceof GuhrioWezen && x.isAlive())) {
+        for (Entity e : level.getEntities(p, box.inflate(0.05, 0.2, 0.05), x -> x instanceof GuhrioWezen && x.isAlive() && !x.isInvisible())) {
             GuhrioWezen w = (GuhrioWezen) e;
-            if (RUST_WEZEN.containsKey(e.getId())) {
+            if (w.draagt()) {
+                AABB vak = e.getBoundingBox();
+                if (drager != e && p.getDeltaMovement().y <= 0.05 && Math.abs(box.minY - vak.maxY) < 0.15) {
+                    drager = e;
+                    dragerWas = e.position();
+                }
+                continue;
+            }
+            if (RUST_WEZENS.containsKey(e.getId()) || !w.raaktVak(box.inflate(0.05))) {
                 continue;
             }
             boolean vanBoven = valVoor < -0.02 && p.yo >= e.getY() + e.getBbHeight() * 0.5;
@@ -338,27 +465,47 @@ public final class BaanBesturing {
                 Vec3 v = p.getDeltaMovement();
                 p.setDeltaMovement(v.x, spatie ? STUITER_HOOG : STUITER, v.z);
                 p.resetFallDistance();
-                sprong = false;
+                sprong = spatie;
+                fladder = 0;
                 rustStamp = 3;
-                RUST_WEZEN.put(e.getId(), 12);
+                RUST_WEZENS.put(e.getId(), 12);
                 p.playSound(SoundEvents.SLIME_SQUISH_SMALL, 0.8f, 1.2f);
                 stuur(GuhrioPayloads.Actie.STAMP, p.blockPosition(), e.getId());
-            } else if (w.gevaarlijk()) {
-                RUST_WEZEN.put(e.getId(), 12);
+            } else if (w.aanraakbaar()) {
+                RUST_WEZENS.put(e.getId(), 12);
                 stuur(GuhrioPayloads.Actie.GERAAKT, p.blockPosition(), e.getId());
             }
         }
     }
 
-    /** S on a pipe, W at a door. */
-    private static void toetsen(LocalPlayer p, Level level, Options o) {
-        boolean s = (o.keyDown.isDown() || o.keyShift.isDown()) && Minecraft.getInstance().screen == null;
-        boolean w = o.keyUp.isDown() && Minecraft.getInstance().screen == null;
-        if (s && p.onGround() && rustDuik == 0) {
+    /** S on a pipe, walking into a sideways pipe, W at a door, standing on a switch. */
+    private static void toetsen(LocalPlayer p, Level level, Options o, Baan baan) {
+        boolean vrij = Minecraft.getInstance().screen == null;
+        boolean s = (o.keyDown.isDown() || o.keyShift.isDown()) && vrij;
+        boolean w = o.keyUp.isDown() && vrij;
+        if (p.onGround()) {
             BlockPos onder = BlockPos.containing(p.getX(), p.getY() - 0.2, p.getZ());
-            if (level.getBlockState(onder).getBlock() instanceof GuhrioBlocks.PijpBlok) {
+            BlockState state = level.getBlockState(onder);
+            if (s && rustDuik == 0 && state.getBlock() instanceof GuhrioBlocks.PijpBlok) {
                 rustDuik = 15;
                 stuur(GuhrioPayloads.Actie.DUIK, onder, 0);
+            }
+            if (state.getBlock() instanceof GuhrioStukken.SchakelaarBlok && !RUST_STAP.containsKey(onder)) {
+                RUST_STAP.put(onder.immutable(), 20);
+                stuur(GuhrioPayloads.Actie.STAP, onder, 0);
+            }
+            // a sideways pipe: walk into its mouth
+            int teken = teken(o) * baan.schermRechts();
+            if (teken != 0 && p.horizontalCollision && rustDuik == 0) {
+                Direction d = baan.richting(stuk);
+                Direction loopt = teken > 0 ? d : d.getOpposite();
+                BlockPos voor = BlockPos.containing(p.getX() + loopt.getStepX() * 0.8, p.getY() + 0.2, p.getZ() + loopt.getStepZ() * 0.8);
+                BlockState mond = level.getBlockState(voor);
+                if (mond.getBlock() instanceof GuhrioBlocks.PijpBlok && mond.getValue(GuhrioBlocks.PijpBlok.FACING) == loopt.getOpposite()
+                        && mond.getValue(GuhrioBlocks.PijpBlok.INGANG)) {
+                    rustDuik = 15;
+                    stuur(GuhrioPayloads.Actie.DUIK, voor, 0);
+                }
             }
         }
         if (w && !wasW) {
@@ -373,6 +520,32 @@ public final class BaanBesturing {
         wasW = w;
     }
 
+    /** A mouse button in a level: throw a knabbel (Vuurpeper) or Guhshi's tongue, the way you face. */
+    static void actieToets() {
+        LocalPlayer p = Minecraft.getInstance().player;
+        if (p == null || stil() || rustActie > 0 || (GuhrioClient.guhshi == 0 && GuhrioClient.kracht != GuhrioSpel.Kracht.VUUR.ordinal())) {
+            return;
+        }
+        rustActie = ACTIE_RUST;
+        p.swing(InteractionHand.MAIN_HAND);
+        stuur(GuhrioPayloads.Actie.GOOI, p.blockPosition(), kijk);
+    }
+
+    /** Q in a level: once asks, twice (within two seconds) leaves. */
+    static void stopToets() {
+        LocalPlayer p = Minecraft.getInstance().player;
+        if (p == null || Cutscenes.bezig(p)) {
+            return;
+        }
+        if (stopWacht > 0) {
+            stopWacht = 0;
+            stuur(GuhrioPayloads.Actie.STOP, p.blockPosition(), 0);
+        } else {
+            stopWacht = STOP_WACHT;
+            Minecraft.getInstance().gui.setOverlayMessage(Component.translatable("gui.guhs.guhrio.stoppen"), false);
+        }
+    }
+
     private static void stuur(int soort, BlockPos pos, int wezen) {
         ClientPacketDistributor.sendToServer(new GuhrioPayloads.Actie(soort, pos, wezen));
     }
@@ -381,42 +554,42 @@ public final class BaanBesturing {
     // the pipe and the flagpole
     // =====================================================================================================================
 
-    /** The server lets you into the pipe whose mouth is at {@code pos}: you sink in. */
+    /** The server lets you into the pipe whose mouth is at {@code pos}: you go in. */
     static void pijpIn(LocalPlayer p, BlockPos pos) {
+        BlockState state = p.level().getBlockState(pos);
         pijpFase = 1;
         pijpTick = 0;
-        zetPijp(p, pos);
+        pijpVan = GuhrioBlocks.PijpBlok.buiten(p.level(), pos, state);
+        pijpNaar = GuhrioBlocks.PijpBlok.binnen(p.level(), pos, state);
+        sprong = false;
+        drager = null;
         p.playSound(SoundEvents.BUBBLE_COLUMN_WHIRLPOOL_INSIDE, 0.7f, 0.7f);
     }
 
-    /** The server put you in the other pipe (mouth at {@code pos}): you rise out. */
+    /** The server put you in the other pipe (mouth at {@code pos}): you come out. */
     static void pijpUit(LocalPlayer p, BlockPos pos) {
+        BlockState state = p.level().getBlockState(pos);
         pijpFase = 3;
         pijpTick = 0;
-        zetPijp(p, pos);
+        pijpVan = GuhrioBlocks.PijpBlok.binnen(p.level(), pos, state);
+        pijpNaar = GuhrioBlocks.PijpBlok.buiten(p.level(), pos, state);
+        // (out of a mouth that hangs from above you drop; out of any other you stand)
+        pijpStaat = !(state.getBlock() instanceof GuhrioBlocks.PijpBlok) || state.getValue(GuhrioBlocks.PijpBlok.FACING) != Direction.DOWN;
+        sprong = false;
         Baan baan = GuhrioClient.baan();
         if (baan != null) {
-            stuk = baan.plek(pijpX, pijpZ).stuk();
+            stuk = baan.plek(pijpNaar.x, pijpNaar.z).stuk();
         }
-    }
-
-    private static void zetPijp(LocalPlayer p, BlockPos pos) {
-        pijpX = pos.getX() + 0.5;
-        pijpZ = pos.getZ() + 0.5;
-        pijpTop = pos.getY() + 1;
-        pijpDiep = GuhrioSpel.pijpDiepte(p.level(), pos);
-        sprong = false;
     }
 
     private static void pijp(LocalPlayer p) {
         pijpTick++;
         double t = Mth.clamp(pijpTick / (double) GuhrioSpel.PIJP_TICKS, 0, 1);
-        double y = switch (pijpFase) {
-            case 1 -> pijpTop - pijpDiep * t;
-            case 3 -> pijpTop - pijpDiep * (1 - t);
-            default -> pijpTop - pijpDiep;
+        Vec3 plek = switch (pijpFase) {
+            case 1, 3 -> pijpVan.lerp(pijpNaar, t);
+            default -> pijpNaar;
         };
-        p.setPos(pijpX, y, pijpZ);
+        p.setPos(plek.x, plek.y, plek.z);
         p.setDeltaMovement(Vec3.ZERO);
         p.resetFallDistance();
         if (pijpFase == 1 && t >= 1) {
@@ -424,10 +597,12 @@ public final class BaanBesturing {
             pijpTick = 0;
         } else if (pijpFase == 2 && pijpTick > 60) {
             pijpFase = 0;                                        // (the server never took us through: step out again)
-            p.setPos(pijpX, pijpTop, pijpZ);
+            p.setPos(pijpVan.x, pijpVan.y, pijpVan.z);
         } else if (pijpFase == 3 && t >= 1) {
             pijpFase = 0;
-            p.setOnGround(true);
+            if (pijpStaat) {
+                p.setOnGround(true);
+            }
         }
     }
 
@@ -446,6 +621,7 @@ public final class BaanBesturing {
     static void klaar(LocalPlayer p, BlockPos pos) {
         mast = pos.immutable();
         sprong = false;
+        drager = null;
         p.setDeltaMovement(0, Math.min(0, p.getDeltaMovement().y), 0);
     }
 }

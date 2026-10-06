@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guhrio_kasteel",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21302308,
+    "min_afstand": 400,
+    "max_afstand": 1100,
+    "alleen_nieuw": true,
+    "sector": 11,
+    "sectoren": 16
+  }
+}
