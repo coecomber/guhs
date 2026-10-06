@@ -151,4 +151,52 @@
   "quest.475548D585541FDC.quest_desc": [
     "Drink een Guhdrankje. Probeer de Sluipknabbel eens: dan hoort niemand je meer.",
   ],
+  "quest.475548E113A26CC7.title": "De Wachter-guh",
+  "quest.475548E113A26CC7.quest_desc": [
+    "In de hal van elke &6Spiesburcht&r staat naast het beeld een wachthokje. Daarin staat de &6Wachter-guh&r: helm op, spies in de poot. Zeg eens hallo (hij schrikt een beetje).",
+  ],
+  "quest.47554844AE89E0DE.title": "Vier brugvuren",
+  "quest.47554844AE89E0DE.quest_desc": [
+    "De Vonk-Mika's hebben de brugvuren uitgeblazen! Op elke brug staat een vuurkorf op een sokkel. Rechtsklik ze alle vier met de &6aansteekspies&r van de Wachter-guh. Jouw vuren blijven voor jou branden.",
+  ],
+  "quest.475548C5396CF11A.title": "Melden bij de wachter",
+  "quest.475548C5396CF11A.quest_desc": [
+    "Alle vier de vuren branden. Ga het de Wachter-guh vertellen: hij heeft nog een klusje.",
+  ],
+  "quest.4755481E36D9CF22.title": "Mikakruid wieden",
+  "quest.4755481E36D9CF22.quest_desc": [
+    "Het &dpindasaus-tuintje&r (één trap omhoog, midden in de burcht) staat vol paars, prikkerig &5Mikakruid&r. Klik op elke pol om hem eruit te trekken.",
+  ],
+  "quest.47554839B8470EF2.title": "Ere-wachter",
+  "quest.47554839B8470EF2.quest_desc": [
+    "Vuren aan, tuintje netjes. Haal bij de Wachter-guh je beloning: het &blantaarnrecept&r, twee Zielige lantaarntjes en het wachterspak voor je guh.",
+  ],
+  "quest.475548259C13240D.title": "Zielig lantaarntje",
+  "quest.475548259C13240D.quest_desc": [
+    "Met het &blantaarnrecept&r in je werkbank (het blijft liggen): 6 ijzerklompjes, gloeikoolgruis en lichtblauwe verf. Het lantaarntje kijkt zielig, tot je het aait (rechtsklik).",
+  ],
+  "quest.4755489119B72063.title": "Het wachterspak",
+  "quest.4755489119B72063.quest_desc": [
+    "Een ijzeren helm met een satépluim en een roetzwarte mantel met een gloeiende zoom. Houd ze vast (rechtsklik ingedrukt) om ze te ontgrendelen voor de kledingkast.",
+  ],
+  "quest.47554864BA1D32C2.title": "De gevangen Knuffelmaker-guh",
+  "quest.47554864BA1D32C2.quest_desc": [
+    "Op de eerste verdieping van elk &cMika-grillpaleis&r, naast de kooien met gestolen knuffelguhs, zit de &dKnuffelmaker-guh&r in zijn naaihoek. Hij moet Mika-sokken stoppen. Praat met hem (zachtjes).",
+  ],
+  "quest.4755482872EF2618.title": "Drie knuffels bevrijden",
+  "quest.4755482872EF2618.quest_desc": [
+    "Open de drie kooien. Het losgeld is &6één vahoege vads&r per knuffel (rechtsklik de kooi ermee). Of &7sluip&r (bukken) en peuter het slot los als geen Nether-Mika kijkt: drie keer klikken. Betrapt? Dan krijg je alleen een duw. Een Sluipknabbeldrankje helpt!",
+  ],
+  "quest.47554888DF61782F.title": "Draad voor de naadjes",
+  "quest.47554888DF61782F.quest_desc": [
+    "De Mika's hebben aan de knuffels getrokken. Breng de Knuffelmaker-guh &f4 draad&r: je krijgt drie knuffels en zijn &dknuffelpatroon&r.",
+  ],
+  "quest.4755486D305224B5.title": "Een bed vol knuffels",
+  "quest.4755486D305224B5.quest_desc": [
+    "Met het &dknuffelpatroon&r in je werkbank naai je ze zelf: 5 wol (roze, zwart of lichtgrijs) en een draad. Verzamel de Knuffelguh, de Knuffel-Mika en de Knuffel-Rookguh. Knijp er maar in!",
+  ],
+  "quest.4755488BA52C1D52.title": "Op kousenvoetjes",
+  "quest.4755488BA52C1D52.quest_desc": [
+    "Peuter een knuffelkooi open &7zonder te betalen&r en zonder dat een Nether-Mika je ziet.",
+  ],
 }

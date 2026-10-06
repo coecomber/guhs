@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "lit=false,nr=0": {
+      "model": "guhs:block/bestaand_vuurkorf"
+    },
+    "lit=false,nr=1": {
+      "model": "guhs:block/bestaand_vuurkorf"
+    },
+    "lit=false,nr=2": {
+      "model": "guhs:block/bestaand_vuurkorf"
+    },
+    "lit=false,nr=3": {
+      "model": "guhs:block/bestaand_vuurkorf"
+    },
+    "lit=true,nr=0": {
+      "model": "guhs:block/bestaand_vuurkorf_aan"
+    },
+    "lit=true,nr=1": {
+      "model": "guhs:block/bestaand_vuurkorf_aan"
+    },
+    "lit=true,nr=2": {
+      "model": "guhs:block/bestaand_vuurkorf_aan"
+    },
+    "lit=true,nr=3": {
+      "model": "guhs:block/bestaand_vuurkorf_aan"
+    }
+  }
+}

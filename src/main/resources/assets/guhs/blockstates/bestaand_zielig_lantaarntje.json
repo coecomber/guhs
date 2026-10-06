@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "blij=false,hanging=false": {
+      "model": "guhs:block/bestaand_zielig_lantaarntje"
+    },
+    "blij=false,hanging=true": {
+      "model": "guhs:block/bestaand_zielig_lantaarntje_hangend"
+    },
+    "blij=true,hanging=false": {
+      "model": "guhs:block/bestaand_zielig_lantaarntje_blij"
+    },
+    "blij=true,hanging=true": {
+      "model": "guhs:block/bestaand_zielig_lantaarntje_hangend_blij"
+    }
+  }
+}

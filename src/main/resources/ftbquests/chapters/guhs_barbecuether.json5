@@ -78,6 +78,30 @@
         "Komt na: Rookdelta",
       ],
     },
+    {
+      height: 1.5625,
+      id: "4755482E79777AC0",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_bestaand_wachter.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "47554839C61ABC5E",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_bestaand_knuffelmaker.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 6,
   progression_mode: "flexible",
@@ -1243,6 +1267,372 @@
       ],
       x: 20.5,
       y: 13.525,
+      shape: "diamond",
+    },
+    {
+      id: "475548E113A26CC7",
+      icon: {
+        id: "guhs:gebeitelde_houtskoolsteen_stenen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/wachter_stap_1",
+          id: "47554813B5C6C22F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554836FCD0D58F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554844AE89E0DE",
+      icon: {
+        id: "guhs:bestaand_aansteekspies",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/wachter_stap_2",
+          id: "47554826ECF3F3A2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485DA05CCD3C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548C5396CF11A",
+      icon: {
+        id: "minecraft:campfire",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/wachter_stap_3",
+          id: "475548869F370B66",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B7BA032FB8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755481E36D9CF22",
+      icon: {
+        id: "guhs:pindascheutjes",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/wachter_stap_4",
+          id: "475548E2C537D91F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F737789F68",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 17.4875,
+    },
+    {
+      id: "47554839B8470EF2",
+      icon: {
+        id: "guhs:bestaand_recept_lantaarn",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/wachter_stap_5",
+          id: "475548ECF8C93E06",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548160D6A6C9B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gegrilde_kaasknabbelsate",
+          },
+          count: 4,
+        },
+        {
+          id: "475548B895CB751B",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "475548259C13240D",
+      icon: {
+        id: "guhs:bestaand_zielig_lantaarntje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bestaand_zielig_lantaarntje",
+          },
+          id: "47554888889A05A4",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C6D6004F9F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gloeikoolgruis",
+          },
+          count: 4,
+        },
+      ],
+      x: 7.5,
+      y: 17.4875,
+    },
+    {
+      id: "4755489119B72063",
+      icon: {
+        id: "guhs:bestaand_wachtershelm",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bestaand_wachtershelm",
+          },
+          id: "4755488FFAEF5A14",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bestaand_wachtersmantel",
+          },
+          id: "4755481A1600FE8A",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B3E9A233EE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554864BA1D32C2",
+      icon: {
+        id: "minecraft:loom",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/knuffelmaker_stap_1",
+          id: "4755487D5A51850B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554839E809AEF2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 17.4875,
+    },
+    {
+      id: "4755482872EF2618",
+      icon: {
+        id: "guhs:roosterijzer_tralies",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/knuffelmaker_stap_2",
+          id: "475548C04738CEB2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A5680773C0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554888DF61782F",
+      icon: {
+        id: "minecraft:string",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/knuffelmaker_stap_3",
+          id: "4755480B22384DEB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554810D065C5BD",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548F0F50B52E0",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 14.5,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "4755486D305224B5",
+      icon: {
+        id: "guhs:bestaand_knuffelguh",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bestaand_knuffelguh",
+          },
+          id: "47554896C97C70A4",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bestaand_knuffelmika",
+          },
+          id: "475548A058423016",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bestaand_knuffelrookguh",
+          },
+          id: "47554819856A1B6D",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554855AA0E5161",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755488BA52C1D52",
+      icon: {
+        id: "minecraft:tripwire_hook",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bestaand_gesloten",
+          id: "47554801B1BD949F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489E38388739",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:sluipknabbeldrankje",
+          },
+        },
+      ],
+      x: 17.5,
+      y: 17.4875,
       shape: "diamond",
     },
   ],

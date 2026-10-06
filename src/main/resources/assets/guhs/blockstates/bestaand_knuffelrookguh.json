@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/bestaand_knuffelrookguh"
+    },
+    "facing=east": {
+      "model": "guhs:block/bestaand_knuffelrookguh",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/bestaand_knuffelrookguh",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/bestaand_knuffelrookguh",
+      "y": 270
+    }
+  }
+}
