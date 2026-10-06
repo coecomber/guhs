@@ -104,6 +104,14 @@ public class PaleizenGameTests {
         return p.getMainHandItem();
     }
 
+    /** An empty main hand: what was in it goes to the back of the inventory (a given item lands in the hand of an empty inventory). */
+    private static void legeHand(ServerPlayer p) {
+        ItemStack was = p.getMainHandItem().copyAndClear();
+        if (!was.isEmpty()) {
+            p.getInventory().setItem(27, was);
+        }
+    }
+
     private static GuhNpcEntity npc(GameTestHelper helper, GuhNpcEntity.Kind kind, BlockPos at) {
         ServerLevel level = helper.getLevel();
         GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
@@ -274,7 +282,7 @@ public class PaleizenGameTests {
             helper.assertTrue(OmaQuest.LIJN.stap(a) == 1 && tel(a, soep) == 3 && OmaQuest.LIJN.stap(b) == 0, "a has three bowls of soup, b nothing yet");
             helper.assertTrue(OmaQuest.moppertTegen(a, 0) && !OmaQuest.moppertTegen(b, 0) && !OmaQuest.moppertTegen(a, 3), "the grumpy three grumble at a");
             // step 1: an empty hand gets a grumble, soup a slurp; once per neighbour
-            a.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            legeHand(a);
             OmaQuest.klik(a, buren[0], InteractionHand.MAIN_HAND);
             helper.assertTrue(OmaQuest.soepOver(a) == 3, "no soup, no peace");
             inHand(a, soep);

@@ -24,7 +24,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
  *   <li>every tick for a player who has not paid toll: the gate of a Mika-brugpaleis near them ({@link TolQuest#poort}); once
  *       a second for a player who is looking for Knorretje: their runaway ({@link StalQuest#tick});</li>
  *   <li>a right-click on a block with a plank of the Tolwachter or the sack of feed (before the building's protection sees
- *       it: these two are the questline's own way of changing the building), and on the tolbel;</li>
+ *       it: these two are the questline's own way of changing the building), with a plank into thin air (the hole), and on
+ *       the tolbel;</li>
  *   <li>an ingot held out to a Nether-Mika by a friend of Mika-oma ({@link OmaQuest#ruil}).</li>
  * </ul>
  */
@@ -80,6 +81,16 @@ public final class PaleizenEvents {
             event.setCancellationResult(InteractionResult.SUCCESS);
         } else if (event.getHand() == InteractionHand.MAIN_HAND) {
             TolQuest.bel(p, event.getPos());   // (the bell rings by itself: the click goes on)
+        }
+    }
+
+    /** A plank of the Tolwachter aimed into the hole itself (no block under the crosshair): the same as a click on the deck. */
+    @SubscribeEvent
+    public static void klikLucht(PlayerInteractEvent.RightClickItem event) {
+        if (!event.getLevel().isClientSide() && event.getEntity() instanceof ServerPlayer p && event.getItemStack().is(PaleizenFeature.LOSSE_PLANK.get())
+                && TolQuest.legPlank(p, event.getItemStack())) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.SUCCESS);
         }
     }
 
