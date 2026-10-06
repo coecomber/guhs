@@ -623,7 +623,9 @@ def _slot(naam):
     for module in MODULES:
         try:
             m = importlib.import_module(f"features.{module}")
-        except ImportError:
+        except ModuleNotFoundError as e:
+            if e.name != f"features.{module}":
+                raise                                             # (the slice's module is there but broken: say so)
             continue
         if getattr(m, naam, None) is not None:
             uit.append(getattr(m, naam))
