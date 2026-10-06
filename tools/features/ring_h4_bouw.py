@@ -983,6 +983,19 @@ class Stad:
                 elif r < 0.085:
                     self.set(x, top + 1, z, "guhs:sate_zwammetje")
 
+    def bedekt(self):
+        """Nylium under a solid block turns to rock in the game (like grass under a block): make it rock here, so a copy is
+        exactly its template (/guhs bouwcheck ... compleet)."""
+        for (x, y, z), (name, props, _) in list(self.s.blocks.items()):
+            if name != NYLIUM:
+                continue
+            boven = self.s.blocks.get((x, y + 1, z))
+            if boven is None:
+                continue
+            b = boven[0]
+            if _top(b, boven[1]) == 1.0 and not b.endswith(("_slab", "_stairs", "_plaat", "_trapdoor")) and b not in (VUUR, SPIEGEL, HEK):
+                self.set(x, y, z, ROTS)
+
     # --- 8. who lives here ------------------------------------------------------------------------------------------------------
     def bewoners(self):
         from features import ring
@@ -1022,6 +1035,7 @@ def bouw(h):
     s.treden()
     s.licht()
     s.planten()
+    s.bedekt()
     s.bewoners()
     return s
 

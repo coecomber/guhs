@@ -37,7 +37,7 @@ VORIGE = "knabbelmoria"       # the chapter before: the city lies around its gua
 # the search lands in a Satébos whenever there is one in the ring and still finds a spot when there is none
 BIOMES = ["satebos", "worstenwoud", "houtskoolvlakte", "asdal"]
 VOORKEUR = ["satebos"]
-ANDERS = 12
+ANDERS = 8
 
 
 def kaart():

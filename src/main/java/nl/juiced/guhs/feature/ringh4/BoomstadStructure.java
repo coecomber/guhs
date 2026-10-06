@@ -33,7 +33,8 @@ import nl.juiced.guhs.world.BouwRuimte;
  * <ul>
  *   <li>the gate's column has a dry cave floor above the sauce sea with room over it, low enough for the whole build (the
  *       crown of the great tree) to fit under the top of the world: template layer 0 comes in the first layer of air there,
- *       so the path at the gate starts one step above the cave floor;</li>
+ *       so the path at the gate starts one step above the cave floor (the floors of the column are tried from the lowest
+ *       up);</li>
  *   <li>the column of the way on has a floor within {@link #VERSCHIL} blocks of that height (so nobody arrives at the far
  *       bank in front of a wall or over a pit);</li>
  *   <li>all four turns are tried, the first one that fits is taken.</li>
@@ -48,7 +49,7 @@ import nl.juiced.guhs.world.BouwRuimte;
  */
 public class BoomstadStructure extends BurchtStructure {
     /** How far the floor at the way on may differ from the floor at the gate. */
-    public static final int VERSCHIL = 5;
+    public static final int VERSCHIL = 6;
 
     public static final MapCodec<BoomstadStructure> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             settingsCodec(i),
@@ -134,17 +135,20 @@ public class BoomstadStructure extends BurchtStructure {
         NoiseColumn bijPoort = context.chunkGenerator().getBaseColumn(x + p.getX(), z + p.getZ(), context.heightAccessor(), context.randomState());
         int laag = context.chunkGenerator().getSeaLevel() + 2;
         int hoog = context.heightAccessor().getMaxY() - hoogte - 2;
+        NoiseColumn bijUitgang = null;
         for (int y = laag; y <= hoog; y++) {
-            if (isVloer(bijPoort, y) && vrij(bijPoort, y, 5)) {
-                NoiseColumn bijUitgang = context.chunkGenerator().getBaseColumn(x + u.getX(), z + u.getZ(), context.heightAccessor(), context.randomState());
-                for (int d = 0; d <= VERSCHIL; d++) {
-                    for (int s : new int[]{y + d, y - d}) {
-                        if (s >= laag - 1 && isVloer(bijUitgang, s) && vrij(bijUitgang, s, 4)) {
-                            return y;
-                        }
+            if (!isVloer(bijPoort, y) || !vrij(bijPoort, y, 4)) {
+                continue;
+            }
+            if (bijUitgang == null) {
+                bijUitgang = context.chunkGenerator().getBaseColumn(x + u.getX(), z + u.getZ(), context.heightAccessor(), context.randomState());
+            }
+            for (int d = 0; d <= VERSCHIL; d++) {
+                for (int s : new int[]{y + d, y - d}) {
+                    if (s >= laag - 1 && isVloer(bijUitgang, s) && vrij(bijUitgang, s, 3)) {
+                        return y;
                     }
                 }
-                return Integer.MIN_VALUE;   // (the lowest floor at the gate is the one that counts: no climbing to a higher gallery)
             }
         }
         return Integer.MIN_VALUE;
