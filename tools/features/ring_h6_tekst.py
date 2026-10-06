@@ -124,6 +124,9 @@ TEKSTEN = {
     "quest.guhs.ringh6.rookguh.vrij.3": "Eindelijk! Wij zijn compleet! Roep maar als de berg gaat borrelen, wij komen aanvliegen!",
     "quest.guhs.ringh6.rookguh.zielig": "Het Rookguhje kijkt je door de tralies aan. Het slot zit aan de voorkant.",
     "quest.guhs.ringh6.rookguh.sam": "Arm ding. Goed gedaan, baas. Verder omhoog!",
+    "quest.guhs.ringh6.rookguh.dank.1": "Vahoeg, ringdrager! Wij wonen hier nu gewoon. Zonder kooi. Het ruikt naar friet, njeg!",
+    "quest.guhs.ringh6.rookguh.dank.2": "Weet je nog, die vlucht naar huis? Papa heeft er nog spierpijn van. Dank je wel!",
+    "quest.guhs.ringh6.rookguh.dank.3": "De Mika's hebben nu een echte afzuigkap gekocht. Die doet het niet. Wij lachen ons rond!",
     # the rope
     "quest.guhs.ringh6.touw.hint": "Het pad houdt op. Kijk omhoog naar het blauwe lampje en rechtsklik met het Elfentouw.",
     "quest.guhs.ringh6.touw.sam": "Ik kan niet klimmen met al die pannen, baas. Ga maar, ik kom wel! (Vraag niet hoe.)",

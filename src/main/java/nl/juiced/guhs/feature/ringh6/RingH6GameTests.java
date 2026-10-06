@@ -39,7 +39,7 @@ import nl.juiced.guhs.quest.GuhQuests;
 
 /**
  * bbq2 (ring-h6): chapter 6, server side, on the small test mountain (template ringh6_test_berg: the same named spots as the
- * real Frituurberg on a floor of 25 x 17, tools/features/ring_h6_bouw.py test_berg). Mock players get no packets and are not
+ * real Frituurberg on a floor of 25 x 17 with the camp in a pit two blocks lower, tools/features/ring_h6_bouw.py test_berg). Mock players get no packets and are not
  * ticked by the server: the tests call the chapter's once-a-second upkeep themselves and post the player tick event (that is
  * what ends a cutscene a mock player "watches").
  */
@@ -180,6 +180,10 @@ public final class RingH6GameTests {
             GekooideRookguhEntity gekooid = GekooideRookguhEntity.maak(level, berg.midden("kooi_1"), 1);
             level.addFreshEntity(gekooid);
             helper.assertTrue(Zicht.magZien(p, gekooid) && Zicht.magZien(vriend, gekooid) && !Zicht.magZien(klaar, gekooid), "the caged Rookguhje: for who still has to free it");
+            GekooideRookguhEntity thuis = GekooideRookguhEntity.thuis(level, berg.midden("kooi_2").add(0, 4, 0), 2);
+            level.addFreshEntity(thuis);
+            helper.assertTrue(thuis.isThuis() && Zicht.magZien(klaar, thuis) && !Zicht.magZien(p, thuis), "afterwards the Rookguhjes live there, for who is done");
+            thuis.discard();
             Klim.slot(p, slot1, 1);
             helper.assertTrue(lijn.stap(p) == 2 && lijn.stap(vriend) == 0, "the lock of cage 1: step 2");
             helper.assertTrue(!Zicht.magZien(p, gekooid) && Zicht.magZien(vriend, gekooid), "gone for who freed it, still there for the friend");
@@ -216,7 +220,7 @@ public final class RingH6GameTests {
     public static void ringh6KoolEnVeilig(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         Berg.Kopie berg = berg(helper);
-        ServerPlayer p = speler(helper, berg, "start_2");
+        ServerPlayer p = speler(helper, berg, "start_1");
         opStap(p, 1);
         Klim.seconde(p);
         helper.assertTrue(Berg.van(p) == berg, "the player is on the mountain");
@@ -237,7 +241,7 @@ public final class RingH6GameTests {
         Klim.red(gast, berg, Klim.FRITUUR);
         helper.assertTrue(gast.position().distanceTo(berg.midden("kamp")) < 0.5, "a visitor is put at the camp");
         // a coal
-        zet(p, berg, "start_2");
+        zet(p, berg, "start_1");
         helper.assertTrue(Kolen.opDeFlank(p, berg), "on the flank coals fall");
         zet(gast, berg, "kamp_vuur");
         helper.assertTrue(!Kolen.opDeFlank(gast, berg), "at a Rustvuurtje no coals fall");

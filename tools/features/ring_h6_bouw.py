@@ -343,6 +343,9 @@ class Berg(sb.Bouw):
         self.set(cx, y + 1, cz + 2 * kant, SLOT, {"nr": str(nr)})
         self.bord(cx - 2, y, cz + 3 * kant, 0 if kant > 0 else 8, tekst.BORDEN[f"kooi_{nr}"])
         self.s.entity(cx + 0.5, y + 0.4, cz + 0.5, rookguh_nbt(self.h, nr))
+        # ...and afterwards it lives here, free: it hovers over the roof of its old cage for whoever finished the story
+        self.s.entity(cx + 0.5, y + 6.0, cz + 0.5, rookguh_nbt(self.h, nr, thuis=True))
+        self.plekken[f"thuis_{nr}"] = (cx, y + 6, cz)
         self.plekken[f"slot_{nr}"] = (cx, y + 1, cz + 2 * kant)
         self.plekken[f"kooi_{nr}"] = (cx, y, cz)
 
@@ -350,7 +353,8 @@ class Berg(sb.Bouw):
         (x, y, z), facing, start = HAKEN[nr]
         self.set(x, y, z, HAAK, {"facing": facing})
         dx = -1 if facing == "west" else 1
-        self.lantern(x, y - 1, z, hanging=True, soul=True)        # a blue lantern under every hook: look up, there it is
+        # a blue lantern under the rim block the hook hangs on (a hook carries nothing): look up, there it is
+        self.lantern(x - dx, y - 1, z, hanging=True, soul=True)
         # the rope post at the launch spot
         sx, sy, sz = start
         self.fence(sx, sy, sz + 1)
@@ -419,7 +423,7 @@ class Berg(sb.Bouw):
             self.haak(nr)
         self.bord(HAKEN[1][2][0] + 2, 30, HAKEN[1][2][2] + 2, 8, tekst.BORDEN["touw"])
         self.bord(OOST["x0"] + 1, OOST["y"], OOST["z0"], 14, tekst.BORDEN["zwaar"])
-        self.bord(SPLEET["x0"], SPLEET["y"], SPLEET["z1"], 12, tekst.BORDEN["spleet"])
+        self.bord(SPLEET["x0"] + 1, SPLEET["y"], SPLEET["z1"], 12, tekst.BORDEN["spleet"])
 
     # --- the crater -----------------------------------------------------------------------------------------------------------
     def spleet(self):
@@ -537,11 +541,14 @@ class Berg(sb.Bouw):
         self.routes["sam"] = punten
 
 
-def rookguh_nbt(h, nr):
-    """The little Rookguh of cage `nr` (Java: feature/ringh6/GekooideRookguhEntity, Bezetting id ringh6_rookguh_<nr>): only there
-    for players who did not open that cage yet (the Zicht marks of ring-kern: steps 0..nr of ring_h6)."""
-    return {"id": ROOKGUH, "PersistenceRequired": h.Byte(1), "Invulnerable": h.Byte(1), "Nr": nr, "Rotation": h.floats(0.0, 0.0),
-            "Tags": h.ms.NbtList(8, ["guhs_ring_zicht"]), "NeoForgeData": {"guhs_bezetting": f"ringh6_rookguh_{nr}", "guhs_ring_bij": f"ring_h6:0-{nr}"}}
+def rookguh_nbt(h, nr, thuis=False):
+    """The little Rookguh of cage `nr` (Java: feature/ringh6/GekooideRookguhEntity). Caged (Bezetting id ringh6_rookguh_<nr>): only
+    there for players who did not open that cage yet (the Zicht marks of ring-kern: steps 0..nr of ring_h6). thuis (Bezetting
+    id ringh6_vrije_rookguh_<nr>): the same Rookguhje, free, for players whose story is done (step 7 and on)."""
+    naam, bij = (f"ringh6_vrije_rookguh_{nr}", "ring_h6:7-99") if thuis else (f"ringh6_rookguh_{nr}", f"ring_h6:0-{nr}")
+    return {"id": ROOKGUH, "PersistenceRequired": h.Byte(1), "Invulnerable": h.Byte(1), "Nr": nr, "Thuis": h.Byte(1 if thuis else 0),
+            "Rotation": h.floats(0.0, 0.0), "Tags": h.ms.NbtList(8, ["guhs_ring_zicht"]),
+            "NeoForgeData": {"guhs_bezetting": naam, "guhs_ring_bij": bij}}
 
 
 def berg(h):
@@ -699,8 +706,18 @@ def check(b):
         problems.append(f"the pool holds only {len(saus)} blocks of sauce")
     if sum(1 for v in blocks.values() if v[0].endswith("_sign")) < 8:
         problems.append("signs are missing")
-    if len(b.s.entities) != 3:
-        problems.append(f"{len(b.s.entities)} caged Rookguhs instead of 3")
+    if len(b.s.entities) != 6:
+        problems.append(f"{len(b.s.entities)} Rookguhjes instead of 6 (three caged, three free)")
+    # what hangs or stands on another block has that block (a burcht is placed with shape updates: it would drop off)
+    for (x, y, z), v in blocks.items():
+        if v[0].endswith("lantern"):
+            hangt = v[1].get("hanging") == "true"
+            n = _naam(b, (x, y + 1, z) if hangt else (x, y - 1, z))
+            if n is None or n == AIR or n == sb.mc(HAAK) or (hangt and not _vast(n) and n != "minecraft:chain"):
+                problems.append(f"a lantern at {(x, y, z)} has nothing to {'hang' if hangt else 'stand'} on ({n})")
+        elif v[0].endswith("_sign") or v[0] in (VUUR, sb.mc(SMEUL)) or v[0].endswith("_carpet") or v[0].endswith("_kussen"):
+            if not _vast(_naam(b, (x, y - 1, z))):
+                problems.append(f"{v[0]} at {(x, y, z)} stands on {_naam(b, (x, y - 1, z))}")
     # nothing that hangs on its neighbour across a seam of the burcht
     from features import paleizen_bouw
     problems += paleizen_bouw.check_steun(b, ANKER)
@@ -711,35 +728,41 @@ def check(b):
 # the test mountain (RingH6GameTests): the same named spots on one floor
 # =====================================================================================================================
 def test_berg(h):
+    """A floor four blocks thick (you stand at y 4) with the camp in a pit two blocks lower, so that the ledges lie higher than
+    the camp, as on the real mountain."""
     s = h.Structure((25, 12, 17))
     for x in range(25):
         for z in range(17):
             s.set(x, 0, z, HOUTSKOOL)
-            s.set(x, 1, z, STENEN)
-    p = {"kamp": (2, 2, 3), "kamp_vuur": (2, 2, 2), "rand": (21, 2, 13), "spleet": (15, 2, 15), "frituur": (22, 1, 14)}
+            kuil = x <= 4 and z <= 5
+            for y in range(1, 4):
+                if not kuil or y == 1:
+                    s.set(x, y, z, STENEN)
+    F = 4
+    p = {"kamp": (2, 2, 3), "kamp_vuur": (2, 2, 2), "rand": (21, F, 13), "spleet": (15, F, 15), "frituur": (22, F - 1, 14)}
     s.set(2, 2, 2, VUUR)
     # three "ledges" in a row: a fire, a lock, and a pillar with the hook that leads to the next one
     for n in (1, 2, 3):
         x = 2 + n * 5
-        s.set(x, 2, 2, VUUR)
-        s.set(x + 2, 3, 2, SLOT, {"nr": str(n)})
-        s.set(x + 2, 2, 2, STENEN)
+        s.set(x, F, 2, VUUR)
+        s.set(x + 2, F + 1, 2, SLOT, {"nr": str(n)})
+        s.set(x + 2, F, 2, STENEN)
         hoog = 3 + n
-        for y in range(2, 2 + hoog):
+        for y in range(F, F + hoog):
             s.set(x, y, 8, STENEN)
-        s.set(x, 1 + hoog, 9, HAAK, {"facing": "south"})
-        p[f"vuur_{n}"] = (x, 2, 2)
-        p[f"slot_{n}"] = (x + 2, 3, 2)
-        p[f"kooi_{n}"] = (x + 2, 2, 4)
-        p[f"richel_{n}"] = (x + 1, 2, 4)
-        p[f"haak_{n}"] = (x, 1 + hoog, 9)
-        p[f"start_{n}"] = (x, 2, 13)
-        p[f"boven_{n}"] = (x, 2 + hoog, 8)
+        s.set(x, F + hoog - 1, 9, HAAK, {"facing": "south"})
+        p[f"vuur_{n}"] = (x, F, 2)
+        p[f"slot_{n}"] = (x + 2, F + 1, 2)
+        p[f"kooi_{n}"] = (x + 2, F, 4)
+        p[f"richel_{n}"] = (x + 1, F, 4)
+        p[f"haak_{n}"] = (x, F + hoog - 1, 9)
+        p[f"start_{n}"] = (x, F, 13)
+        p[f"boven_{n}"] = (x, F + hoog, 8)
     # the pool: a tub of sauce in the floor
     for x in range(22, 24):
         for z in range(14, 16):
-            s.set(x, 1, z, SAUS, {"level": "0"})
-    routes = {"sam": [(8.5, 2, 5.5), (12.5, 2, 6.5), (16.5, 2, 11.5), (18.5, 2, 13.5), (21.5, 2, 13.5)]}
+            s.set(x, F - 1, z, SAUS, {"level": "0"})
+    routes = {"sam": [(8.5, F, 5.5), (12.5, F, 6.5), (16.5, F, 11.5), (18.5, F, 13.5), (21.5, F, 13.5)]}
     return s, p, routes
 
 

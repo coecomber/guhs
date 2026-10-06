@@ -70,7 +70,8 @@ public final class Klim {
     }
 
     private static final Map<UUID, Graai> GRAAIEN = new ConcurrentHashMap<>();
-    private static final Map<UUID, Double> GROND = new ConcurrentHashMap<>();
+    /** How far each climber who is in the air right now has fallen (the most their fall distance has been). */
+    private static final Map<UUID, Double> VALT = new ConcurrentHashMap<>();
     private static final Map<UUID, Long> RIT = new ConcurrentHashMap<>();
 
     private static Verhaallijn lijn() {
@@ -92,7 +93,7 @@ public final class Klim {
         ServerLevel level = p.level();
         Berg.Kopie berg = opDeBergWereld(level) ? Berg.zoek(p) : null;
         if (berg == null) {
-            GROND.remove(p.getUUID());
+            VALT.remove(p.getUUID());
         }
         if (lijn.klaar(p) || !lijn.aanDeBeurt(p) || p.isSpectator() || !p.isAlive()) {
             return;
@@ -486,10 +487,12 @@ public final class Klim {
         }
         // a long fall (shoved off a ledge, a missed jump): nothing broken, back at the rest point
         if (p.onGround() || p.isPassenger() || Gaven.klimt(p)) {
-            Double vorige = GROND.put(p.getUUID(), p.getY());
-            if (vorige != null && p.onGround() && vorige - p.getY() > VAL && Ring.aanZet(p, lijn(), lijn().stap(p))) {
+            Double viel = VALT.remove(p.getUUID());
+            if (viel != null && p.onGround() && viel > VAL && Ring.aanZet(p, lijn(), lijn().stap(p))) {
                 red(p, berg, Ring.GEVALLEN);
             }
+        } else if (p.fallDistance > 0) {
+            VALT.merge(p.getUUID(), (double) p.fallDistance, Math::max);
         }
     }
 
@@ -500,7 +503,7 @@ public final class Klim {
         }
         p.clearFire();
         p.fallDistance = 0;
-        GROND.remove(p.getUUID());
+        VALT.remove(p.getUUID());
         Rustpunten.Punt punt = Ring.rustpunt(p);
         if (Ring.opReis(p) && punt != null && punt.dim() == p.level().dimension() && berg.binnen(punt.plek(), 4)) {
             Ring.terugNaarRustpunt(p, reden, null);
@@ -518,13 +521,13 @@ public final class Klim {
 
     static void vergeet(UUID speler) {
         GRAAIEN.remove(speler);
-        GROND.remove(speler);
+        VALT.remove(speler);
         RIT.remove(speler);
     }
 
     static void wisAlles() {
         GRAAIEN.clear();
-        GROND.clear();
+        VALT.clear();
         RIT.clear();
     }
 

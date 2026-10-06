@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.ring.Zicht;
 import nl.juiced.guhs.feature.spiesburcht.RookguhEntity;
+import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModSounds;
 
 /**
@@ -34,6 +35,9 @@ import nl.juiced.guhs.registry.ModSounds;
  *       every cage of every copy.</li>
  *   <li><b>Free</b> ({@link #vrij}): what the player who opened the lock sees: their own Rookguhje that wriggles out,
  *       spins up through the smoke with a trail of hearts and is gone (never saved).</li>
+ *   <li><b>At home</b> ({@link #thuis}; it also comes with the template): afterwards the three live on the mountain, free:
+ *       each hovers over the roof of its old cage, only for players whose story is done, and thanks them when clicked
+ *       ("structures stay open, characters live there with new chats").</li>
  * </ul>
  */
 public class GekooideRookguhEntity extends RookguhEntity {
@@ -41,6 +45,7 @@ public class GekooideRookguhEntity extends RookguhEntity {
     public static final int VLIEGT = 70;
     private int nr = 1;
     private int vrijTicks = -1;
+    private boolean thuis;
     @Nullable
     private UUID bevrijder;
 
@@ -61,6 +66,25 @@ public class GekooideRookguhEntity extends RookguhEntity {
         guh.setInvulnerable(true);
         Zicht.alleenBij(guh, RingH6Feature.LIJN.id(), 0, nr);
         return guh;
+    }
+
+    /** The Rookguhje of cage {@code nr} as it lives on the mountain after the story (for players who are done): not yet added. */
+    @Nullable
+    public static GekooideRookguhEntity thuis(ServerLevel level, Vec3 plek, int nr) {
+        GekooideRookguhEntity guh = RingH6Feature.ROOKGUH.get().create(level, EntitySpawnReason.STRUCTURE);
+        if (guh == null) {
+            return null;
+        }
+        guh.nr = nr;
+        guh.thuis = true;
+        guh.snapTo(plek.x, plek.y, plek.z, 0f, 0f);
+        guh.setInvulnerable(true);
+        Zicht.alleenBij(guh, RingH6Feature.LIJN.id(), RingH6Feature.LIJN.stappen(), 99);
+        return guh;
+    }
+
+    public boolean isThuis() {
+        return thuis;
     }
 
     /** The Rookguhje this player just freed: only they see it, it floats away by itself. */
@@ -125,9 +149,13 @@ public class GekooideRookguhEntity extends RookguhEntity {
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (!level().isClientSide() && hand == InteractionHand.MAIN_HAND && !isVrij()) {
-            playSound(ModSounds.GUH_AMBIENT.get(), 0.8f, getVoicePitch());
-            player.sendOverlayMessage(Component.translatable("quest.guhs.ringh6.rookguh.zielig").withStyle(ChatFormatting.GRAY));
+        if (!level().isClientSide() && hand == InteractionHand.MAIN_HAND && !isVrij() && player instanceof ServerPlayer p) {
+            playSound(thuis ? ModSounds.GUH_HAPPY.get() : ModSounds.GUH_AMBIENT.get(), 0.8f, getVoicePitch());
+            if (thuis) {
+                GuhQuests.say(p, this, "quest.guhs.ringh6.rookguh.dank." + nr);
+            } else {
+                p.sendOverlayMessage(Component.translatable("quest.guhs.ringh6.rookguh.zielig").withStyle(ChatFormatting.GRAY));
+            }
         }
         return InteractionResult.SUCCESS;
     }
@@ -161,11 +189,13 @@ public class GekooideRookguhEntity extends RookguhEntity {
     public void addAdditionalSaveData(ValueOutput tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Nr", nr);
+        tag.putBoolean("Thuis", thuis);
     }
 
     @Override
     public void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
         nr = Math.max(1, Math.min(3, tag.getIntOr("Nr", 1)));
+        thuis = tag.getBooleanOr("Thuis", false);
     }
 }

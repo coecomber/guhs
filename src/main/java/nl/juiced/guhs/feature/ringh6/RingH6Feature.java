@@ -124,12 +124,15 @@ public final class RingH6Feature {
 
         // the mountain: hidden and whole until the story gets there (no rim: you bridge or dig up to the box and step in)
         Ring.sluier(Berg.STRUCTUUR, 0, 6);
-        // a Rookguhje in every cage of every copy (they also come with the template: this only repairs)
+        // a Rookguhje in every cage of every copy, and the same three living free over their old cages for whoever is done
+        // (they also come with the template: this only repairs)
         Berg.Gegevens berg = Berg.echt();
         for (int nr = 1; nr <= 3; nr++) {
             int kooi = nr;
             Bezetting.wezen("ringh6_rookguh_" + nr, Berg.STRUCTUUR, null, berg.plek("kooi_" + nr),
                     (level, plek, draai) -> GekooideRookguhEntity.maak(level, plek, kooi), 6);
+            Bezetting.wezen("ringh6_vrije_rookguh_" + nr, Berg.STRUCTUUR, null, berg.plek("thuis_" + nr),
+                    (level, plek, draai) -> GekooideRookguhEntity.thuis(level, plek, kooi), 6);
         }
         // the story
         Verteller.registreer(Klim.KAART, 4, LIJN.id());
