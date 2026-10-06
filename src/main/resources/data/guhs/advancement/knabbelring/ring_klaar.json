@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:knabbelring"
+    },
+    "title": {
+      "translate": "advancements.guhs.knabbelring.ring_klaar.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knabbelring.ring_klaar.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knabbelring/ring_gedragen"
+}

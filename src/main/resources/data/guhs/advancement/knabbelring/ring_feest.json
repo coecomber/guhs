@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:ring_feestknabbel"
+    },
+    "title": {
+      "translate": "advancements.guhs.knabbelring.ring_feest.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knabbelring.ring_feest.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knabbelring/ring_klaar"
+}

@@ -1,6 +1,202 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/block",
   "textures": {
-    "all": "guhs:block/elfentouw_haak"
-  }
+    "particle": "minecraft:block/iron_block",
+    "ijzer": "minecraft:block/iron_block",
+    "donker": "guhs:block/gepolijst_roosterijzer"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        1,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#donker"
+        },
+        "up": {
+          "texture": "#donker"
+        },
+        "north": {
+          "texture": "#donker"
+        },
+        "south": {
+          "texture": "#donker"
+        },
+        "west": {
+          "texture": "#donker"
+        },
+        "east": {
+          "texture": "#donker"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        1,
+        6
+      ],
+      "to": [
+        10,
+        1.6,
+        10
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        },
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        7.4,
+        1.6,
+        7.4
+      ],
+      "to": [
+        8.6,
+        6.4,
+        8.6
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        },
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        7.4,
+        6.4,
+        7.4
+      ],
+      "to": [
+        8.6,
+        7.6,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        },
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        7.4,
+        3.6,
+        9.8
+      ],
+      "to": [
+        8.6,
+        6.4,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        },
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        7.4,
+        3.0,
+        9.0
+      ],
+      "to": [
+        8.6,
+        3.9,
+        10.4
+      ],
+      "faces": {
+        "down": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        },
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        }
+      }
+    }
+  ]
 }

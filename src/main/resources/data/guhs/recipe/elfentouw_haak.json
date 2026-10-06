@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I ",
+    "IS"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "guhs:elfentouw_haak",
+    "count": 2
+  }
+}

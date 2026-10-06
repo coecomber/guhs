@@ -1,3 +1,6 @@
 {
-  "parent": "guhs:block/elfentouw_haak"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/elfentouw_haak"
+  }
 }

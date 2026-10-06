@@ -54,9 +54,18 @@ import nl.juiced.guhs.feature.huisje.Huisjes;
  * </ul>
  * A spot is looked up through the structure references of its (loaded) chunk, so this costs next to nothing where no
  * registered structure is near. The boxes of a copy are kept once they were read.
+ * <p>
+ * bbq2 (ring-kern, CONTRACT_130 13.9): a story structure behind Guhdalfs sluier is protected as ONE box, the very box of
+ * its smoke ({@link #registreerDoos}: the box around all pieces + the rim, the gaps between the pieces included), and a
+ * sluier around something placed by code is a box here too ({@link #zetDoos}). So "hidden" and "protected" are the same
+ * blocks, the quest exceptions ({@link #uitzondering}) hold everywhere inside, and machines ({@link #magWijzigen}) know it.
  */
 public final class Bescherming {
-    private record Regel(String structuur, int rand) {
+    /** The widest rim a structure can ask for (blocks). */
+    public static final int MAX_RAND = 64;
+
+    /** heel: one box around all pieces (a story structure behind a sluier) instead of a box per piece. */
+    private record Regel(String structuur, int rand, boolean heel) {
     }
 
     /** The boxes of one copy, grown by the rim, and the box around all of them. */
@@ -80,6 +89,8 @@ public final class Bescherming {
     /** (not saved) per level: the registered structures of its registries, and the zone per (structure, start chunk). */
     private static final Map<ServerLevel, Map<Structure, Regel>> STRUCTUREN = Collections.synchronizedMap(new WeakHashMap<>());
     private static final Map<ServerLevel, Map<Structure, Map<Long, Zone>>> ZONES = Collections.synchronizedMap(new WeakHashMap<>());
+    /** (not saved) per dimension: the boxes put down by code ({@link #zetDoos}), by their key. */
+    private static final Map<net.minecraft.resources.ResourceKey<Level>, Map<String, Zone>> DOZEN = new ConcurrentHashMap<>();
 
     private Bescherming() {
     }
@@ -91,10 +102,48 @@ public final class Bescherming {
      * copy of {@code guhs:<structuur>}; the message is gui.guhs.wereld.beschermd. From Feature.register.
      */
     public static void registreer(String structuur, int rand) {
-        REGELS.put(structuur, new Regel(structuur, Math.max(0, Math.min(64, rand))));
+        registreer(structuur, rand, false);
+    }
+
+    /**
+     * Like {@link #registreer}, but the copy is ONE box: the box around all its pieces + {@code rand} on every side, so the
+     * gaps between the pieces are protected too. This is the box of Guhdalfs sluier ({@code feature.verhaal.Sluiers}
+     * registers every story structure this way). Once a structure is a whole box it stays one, whoever registers it again.
+     */
+    public static void registreerDoos(String structuur, int rand) {
+        registreer(structuur, rand, true);
+    }
+
+    private static void registreer(String structuur, int rand, boolean heel) {
+        Regel oud = REGELS.get(structuur);
+        int r = Math.max(0, Math.min(MAX_RAND, rand));
+        REGELS.put(structuur, new Regel(structuur, oud != null && oud.heel() && !heel ? Math.max(r, oud.rand()) : r, heel || oud != null && oud.heel()));
         grootsteRand = REGELS.values().stream().mapToInt(Regel::rand).max().orElse(0);
         STRUCTUREN.clear();
         ZONES.clear();
+    }
+
+    /**
+     * A protected box in this dimension without a generated structure (things placed by code, the game tests): exactly
+     * {@code doos}, under the name {@code structuur} (its {@link #uitzondering}s hold here). Not saved: whoever places it
+     * puts it back after a restart ({@code Sluiers.zetPlek} does both).
+     */
+    public static void zetDoos(ServerLevel level, String structuur, BoundingBox doos) {
+        DOZEN.computeIfAbsent(level.dimension(), d -> new ConcurrentHashMap<>())
+                .put(structuur + "#" + doos.minX() + "," + doos.minY() + "," + doos.minZ(), new Zone(structuur, doos, List.of(doos)));
+    }
+
+    /** Forgets the boxes of {@link #zetDoos} of this structure in this dimension. */
+    public static void wisDozen(ServerLevel level, String structuur) {
+        Map<String, Zone> dozen = DOZEN.get(level.dimension());
+        if (dozen != null) {
+            dozen.values().removeIf(z -> z.structuur.equals(structuur));
+        }
+    }
+
+    /** (server stopped) the boxes put down by code are gone with the world. */
+    public static void wisDozen() {
+        DOZEN.clear();
     }
 
     /** The quest blocks of {@code guhs:<structuur>} this player may break or place after all (asked for protected spots only). */
@@ -182,6 +231,14 @@ public final class Bescherming {
     /** The protected copy this spot lies in (null: none). */
     @Nullable
     private static Zone zone(ServerLevel level, BlockPos pos) {
+        Map<String, Zone> dozen = DOZEN.get(level.dimension());
+        if (dozen != null && !dozen.isEmpty()) {
+            for (Zone z : dozen.values()) {
+                if (z.bevat(pos)) {
+                    return z;
+                }
+            }
+        }
         if (REGELS.isEmpty()) {
             return null;
         }
@@ -260,7 +317,14 @@ public final class Bescherming {
         for (StructurePiece piece : start.getPieces()) {
             stukken.add(piece.getBoundingBox().inflatedBy(regel.rand));
         }
-        return new Zone(regel.structuur, BoundingBox.encapsulatingBoxes(stukken).orElse(new BoundingBox(0, 0, 0, 0, 0, 0)), List.copyOf(stukken));
+        BoundingBox alles = BoundingBox.encapsulatingBoxes(stukken).orElse(new BoundingBox(0, 0, 0, 0, 0, 0));
+        // (a story structure: one box, the gaps between its pieces included; the same box as its sluier)
+        return new Zone(regel.structuur, alles, regel.heel ? List.of(alles) : List.copyOf(stukken));
+    }
+
+    /** Nothing is protected anywhere (no registration, no box put down by code). */
+    private static boolean leeg() {
+        return REGELS.isEmpty() && DOZEN.isEmpty();
     }
 
     /** (tests) forget what was read for this level. */
@@ -295,7 +359,7 @@ public final class Bescherming {
 
     /** Using an item on a block (buckets, flint and steel, an axe on a log, a hoe...): not here. Opening things is fine. */
     static void opGebruik(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty() || REGELS.isEmpty()) {
+        if (event.getLevel().isClientSide() || event.getItemStack().isEmpty() || leeg()) {
             return;
         }
         BlockPos naast = event.getPos().relative(event.getFace() == null ? Direction.UP : event.getFace());
@@ -306,13 +370,13 @@ public final class Bescherming {
     }
 
     static void opExplosie(ExplosionEvent.Detonate event) {
-        if (!REGELS.isEmpty() && event.getLevel() instanceof ServerLevel level) {
+        if (!leeg() && event.getLevel() instanceof ServerLevel level) {
             event.getAffectedBlocks().removeIf(pos -> beschermd(level, pos));
         }
     }
 
     static void opMobGriefing(EntityMobGriefingEvent event) {
-        if (!REGELS.isEmpty() && event.getEntity() != null && !(event.getEntity() instanceof Player)
+        if (!leeg() && event.getEntity() != null && !(event.getEntity() instanceof Player)
                 && beschermd(event.getEntity().level(), event.getEntity().blockPosition())) {
             event.setCanGrief(false);
         }
@@ -320,7 +384,7 @@ public final class Bescherming {
 
     /** A piston never pushes or pulls blocks of a protected building, nor blocks into one. */
     static void opZuiger(PistonEvent.Pre event) {
-        if (REGELS.isEmpty() || !(event.getLevel() instanceof ServerLevel level)) {
+        if (leeg() || !(event.getLevel() instanceof ServerLevel level)) {
             return;
         }
         BlockPos pos = event.getPos();

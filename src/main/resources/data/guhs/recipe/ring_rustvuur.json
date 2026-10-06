@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " K ",
+    "SCS",
+    "LLL"
+  ],
+  "key": {
+    "K": "guhs:kaas_knabbels",
+    "S": "minecraft:stick",
+    "C": "minecraft:cauldron",
+    "L": "#minecraft:logs"
+  },
+  "result": {
+    "id": "guhs:ring_rustvuur"
+  }
+}

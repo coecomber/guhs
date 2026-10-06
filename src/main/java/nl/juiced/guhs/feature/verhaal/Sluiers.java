@@ -34,9 +34,6 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.event.level.ExplosionEvent;
-import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import nl.juiced.guhs.Guhs;
@@ -49,7 +46,7 @@ import nl.juiced.guhs.network.ModNetworking;
  * puts them back outside with "Guhdalf vindt dat je hier nog niet aan toe bent, njeg" (at most once per 5 s, never
  * damage, a mount comes along), the structure is not in their Superkompas and can't be a {@link Doel}. When {@code open}
  * turns true the smoke dissolves for that player. Spectators and creative operators pass. Nobody breaks or places there,
- * ever ({@link Bescherming}). Register from your Feature.register (common code):
+ * ever ({@link Bescherming}: the very same box, see below). Register from your Feature.register (common code):
  * <pre>
  * Sluiers.registreer("guhvendel", 6, p -&gt; RingFeature.H1.klaar(p));
  * </pre>
@@ -57,6 +54,18 @@ import nl.juiced.guhs.network.ModNetworking;
  * above and below: a mine under a plain does not close the plain, and whoever flies over looks at a lid of smoke). Python:
  * {@code verhaal_motor.sluier(h, structuur)} puts the structure on the list of the live map
  * ({@code data/guhs/kaart/verborgen.json}).
+ * <p>
+ * bbq2 (ring-kern, CONTRACT_130 13.9): one box for everything. The box of smoke IS the protected box
+ * ({@link Bescherming#registreerDoos}, {@link Bescherming#zetDoos}): no gaps between the pieces, quest exceptions and
+ * machines see the same blocks. And what is inside does not leak to a player for whom the sluier is closed:
+ * <ul>
+ *   <li>creatures: {@link #magZien(ServerPlayer, Entity)} is asked by the entity tracker (mixin RingZichtMixin), so that
+ *       player's game never hears of an entity inside (no model through the smoke, no name tag, no sound of it, and a boss
+ *       bar that follows who sees the boss never starts);</li>
+ *   <li>boss bars that are kept by hand: {@link #balk} adds and removes the right players;</li>
+ *   <li>sounds played at a spot inside: {@link #magHoren} is asked when the server sends them out (mixin
+ *       RingSluierGeluidMixin).</li>
+ * </ul>
  */
 public final class Sluiers {
     /** The message comes at most once per this many ticks. */
@@ -65,6 +74,7 @@ public final class Sluiers {
     public static final int ZICHT = 96;
     /** How deep (blocks) a player may step in and only gets a shove; deeper they are put back outside. */
     public static final double DUW_DIEPTE = 1.5;
+    /** (BESCHERMD: the old text of the sluier's own protection; Bescherming says gui.guhs.wereld.beschermd now.) */
     public static final String BERICHT = "quest.guhs.verhaal.sluier", BESCHERMD = "gui.guhs.verhaal.beschermd";
 
     private record Sluier(String structuur, int rand, Predicate<ServerPlayer> open) {
@@ -118,10 +128,11 @@ public final class Sluiers {
      * the Superkompas until open.
      */
     public static void registreer(String structuur, int rand, Predicate<ServerPlayer> open) {
+        int r = Math.max(0, Math.min(Bescherming.MAX_RAND, rand));   // (the same cap as the protection: one box)
         synchronized (ALLE) {
-            ALLE.put(structuur, new Sluier(structuur, Math.max(0, rand), open));
+            ALLE.put(structuur, new Sluier(structuur, r, open));
         }
-        Bescherming.registreer(structuur, rand);
+        Bescherming.registreerDoos(structuur, r);
     }
 
     @Nullable
@@ -197,6 +208,8 @@ public final class Sluiers {
         Zone zone = Zone.van(structuur, doos, s == null ? 0 : s.rand());
         Map<String, Zone> zones = ZONES.computeIfAbsent(level.dimension(), d -> new ConcurrentHashMap<>());
         zones.put(structuur + "#" + doos.minX() + "," + doos.minZ(), zone);
+        // (the same box is protected: break / place / explosions, the structure's quest exceptions, machines)
+        Bescherming.zetDoos(level, structuur, new BoundingBox(zone.x0(), zone.y0(), zone.z0(), zone.x1(), zone.y1(), zone.z1()));
         return zone;
     }
 
@@ -206,6 +219,7 @@ public final class Sluiers {
         if (zones != null) {
             zones.values().removeIf(z -> z.structuur().equals(structuur));
         }
+        Bescherming.wisDozen(level, structuur);
     }
 
     /** (tests) forgets a registration. */
@@ -295,6 +309,7 @@ public final class Sluiers {
             return;
         }
         GESTUURD.put(p.getUUID(), nu);
+        kijkOpnieuw(p);   // (a wall came or went for this player: so did the creatures behind it)
         CompoundTag data = new CompoundTag();
         ListTag lijst = new ListTag();
         for (Zone z : nu) {
@@ -375,50 +390,74 @@ public final class Sluiers {
     }
 
     // =====================================================================================================================
-    // nobody breaks or places there (until feature.wereld.Bescherming does it itself)
+    // what is inside does not leak out (CONTRACT_130 13.9)
     // =====================================================================================================================
 
-    private static boolean beschermd(Level level, BlockPos pos) {
-        return !level.isClientSide() && !Bescherming.beschermd(level, pos) && zone(level, pos) != null;
+    /** The closed wall (for this player) around this spot in this level, or null (also null for who {@link #passeert}). */
+    @Nullable
+    private static Zone dichtVoor(ServerPlayer p, Level level, double x, double y, double z) {
+        Map<String, Zone> zones = ZONES.get(level.dimension());
+        if (zones == null || zones.isEmpty() || p.level() != level) {
+            return null;
+        }
+        Zone zone = dicht(p, level, x, y, z);
+        return zone == null || passeert(p) ? null : zone;
     }
 
-    private static boolean geweigerd(@Nullable Entity wie, Level level, BlockPos pos) {
-        if (!beschermd(level, pos)) {
-            return false;
+    /**
+     * May this player's game know about this entity? False for a creature (anything but a player) that is inside a sluier
+     * that is closed for the player. Asked by the entity tracker for every (entity, player) pair whenever the player or the
+     * entity moves, so a boss, an NPC or a Mika inside is simply not there for who is not that far in the story: no model
+     * through the smoke, no name tag, no sounds of the entity, and {@code startSeenByPlayer} (boss bars!) never runs.
+     */
+    public static boolean magZien(ServerPlayer p, Entity e) {
+        return e instanceof Player || dichtVoor(p, e.level(), e.getX(), e.getY(), e.getZ()) == null;
+    }
+
+    /** May this player hear / see something that happens at this spot (false: it is inside a sluier closed for them)? */
+    public static boolean magHoren(ServerPlayer p, Level level, double x, double y, double z) {
+        return dichtVoor(p, level, x, y, z) == null;
+    }
+
+    /** Is there any sluier at all in this dimension (the cheap question before {@link #magHoren} per player)? */
+    public static boolean heeftZones(ResourceKey<Level> dim) {
+        Map<String, Zone> zones = ZONES.get(dim);
+        return zones != null && !zones.isEmpty();
+    }
+
+    /**
+     * Keeps a boss bar that is managed by hand right: every player within {@code straal} blocks of the boss who may see it
+     * ({@link #magZien}) is on the bar, everybody else is taken off. Call it about once a second from the tick of the boss.
+     * (A bar that only follows {@code startSeenByPlayer} / {@code stopSeenByPlayer} needs nothing: the tracker asks
+     * {@link #magZien} itself.)
+     */
+    public static void balk(net.minecraft.server.level.ServerBossEvent balk, Entity baas, double straal) {
+        if (!(baas.level() instanceof ServerLevel level)) {
+            return;
         }
-        if (wie instanceof ServerPlayer p) {
-            if (passeert(p)) {
-                return false;
+        for (ServerPlayer p : List.copyOf(balk.getPlayers())) {
+            if (p.level() != level || p.distanceToSqr(baas) > straal * straal || !magZien(p, baas)) {
+                balk.removePlayer(p);
             }
-            p.sendOverlayMessage(Component.translatable(BESCHERMD).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
-        return true;
-    }
-
-    @SubscribeEvent
-    public static void onBreak(BreakBlockEvent event) {
-        Player speler = event.getPlayer();
-        if (geweigerd(speler, speler.level(), event.getPos())) {
-            event.setCanceled(true);
+        for (ServerPlayer p : level.players()) {
+            if (p.distanceToSqr(baas) <= straal * straal && magZien(p, baas)) {
+                balk.addPlayer(p);
+            }
         }
     }
 
-    @SubscribeEvent
-    public static void onPlace(BlockEvent.EntityPlaceEvent event) {
-        if (event.getLevel() instanceof Level level && geweigerd(event.getEntity(), level, event.getPos())) {
-            event.setCanceled(true);
+    /** The sluier opened or closed for this player: the tracker looks again at once (else at their next step). */
+    private static void kijkOpnieuw(ServerPlayer p) {
+        if (p.connection != null) {
+            p.level().getChunkSource().move(p);
         }
-    }
-
-    @SubscribeEvent
-    public static void onExplosion(ExplosionEvent.Detonate event) {
-        Level level = event.getLevel();
-        event.getAffectedBlocks().removeIf(pos -> beschermd(level, pos));
     }
 
     @SubscribeEvent
     public static void onStopped(ServerStoppedEvent event) {
         ZONES.clear();
+        Bescherming.wisDozen();
         BUITEN.clear();
         BERICHT_OP.clear();
         DUW_OP.clear();

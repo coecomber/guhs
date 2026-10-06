@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:elfenmanteltje"
+    },
+    "title": {
+      "translate": "advancements.guhs.knabbelring.ring_rots.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knabbelring.ring_rots.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knabbelring/ring_gaven"
+}

@@ -114,7 +114,8 @@ public class TitelsGameTests {
     public static void titelsTekstenBestaan(GameTestHelper helper) {
         Language lang = Language.getInstance();
         Set<String> ids = new HashSet<>(), namen = new HashSet<>();
-        helper.assertTrue(Titels.ALLE.size() == 8, "eight titles, got " + Titels.ALLE.size());
+        // (bbq2: the eight built-in titles, and the ones slices registered with Titels.registreer: ringdrager, ...)
+        helper.assertTrue(Titels.ALLE.size() >= 8, "at least the eight built-in titles, got " + Titels.ALLE.size());
         for (Titels.Titel t : Titels.ALLE) {
             helper.assertTrue(ids.add(t.id()) && namen.add(t.naamSleutel()), "unique: " + t.id());
             helper.assertTrue(lang.has(t.naamSleutel()), "name of " + t.id());
@@ -163,11 +164,15 @@ public class TitelsGameTests {
                 Titels.HUISJESBOUWER, () -> TimmerguhVoortgang.zet(p, TimmerguhVoortgang.KLAAR),
                 Titels.OPPER_VADSER, () -> GuhQuests.saved(p).putInt(GuheindeGevecht.WINS, 1),
                 Titels.GUHKENNER, () -> GuhWorldData.get(helper.getLevel().getServer()).player(p.getUUID()).seen.addAll(GuhDex.TELLEND));
-        helper.assertTrue(hoe.size() == Titels.ALLE.size(), "a way to earn every title");
+        // (bbq2: a title a slice registered itself is tested by that slice, e.g. RingGameTests.ringVerhaal)
+        helper.assertTrue(Titels.ALLE.stream().filter(t -> hoe.containsKey(t.id())).count() == hoe.size(), "a way to earn every built-in title");
         int n = 0;
         // (the last one first: each new title is the only new one)
         for (int i = Titels.ALLE.size() - 1; i >= 0; i--) {
             Titels.Titel t = Titels.ALLE.get(i);
+            if (!hoe.containsKey(t.id())) {
+                continue;
+            }
             helper.assertTrue(!Titels.heeft(p, t), t.id() + " isn't earned yet");
             hoe.get(t.id()).run();
             n++;
