@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guhladriel_boomstad",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21301908,
+    "min_afstand": 300,
+    "max_afstand": 800,
+    "alleen_nieuw": true,
+    "sector": 13,
+    "sectoren": 16
+  }
+}

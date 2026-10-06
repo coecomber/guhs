@@ -42,6 +42,18 @@
         "Komt na: VAHOEG, hij brandt weer! (De Guhbarbecuether)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548C8E5A27B7C",
+      image: "guhs:textures/ftbquests/guhs_knabbelring/kop_ring_h4.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 4.78125,
+      hover: [
+        "Komt na: Op avontuur!",
+      ],
+    },
   ],
   order_index: 14,
   progression_mode: "flexible",
@@ -531,6 +543,230 @@
         "4755482EBB284428",
       ],
       progression_mode: "linear",
+    },
+    {
+      id: "475548FF3BCBB641",
+      icon: {
+        id: "guhs:sate_stam",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_h4_stap_1",
+          id: "475548607C74E012",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554821D1DF12EC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 11.5,
+      y: 6.5625,
+      dependencies: [
+        "475548622257E13C",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+    },
+    {
+      id: "47554819F0D6EB10",
+      icon: {
+        id: "minecraft:spyglass",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_h4_stap_2",
+          id: "4755481A3B40C052",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A73F4BB1C3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 13.0,
+      y: 6.5625,
+      dependencies: [
+        "475548FF3BCBB641",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548B65899201F",
+      icon: {
+        id: "minecraft:quartz_pillar",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_h4_stap_3",
+          id: "475548F7AF806F6D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548405E86F40D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 14.5,
+      y: 6.5625,
+      dependencies: [
+        "47554819F0D6EB10",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "47554885A69B7E3A",
+      icon: {
+        id: "guhs:ring_rustvuur",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_h4_stap_4",
+          id: "475548A86721812D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483C99F0C772",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+      dependencies: [
+        "475548B65899201F",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755486C46E124A0",
+      icon: {
+        id: "guhs:ringh4_spiegel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_h4_stap_5",
+          id: "47554852BE38CFEB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A162C15F8B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 17.5,
+      y: 6.5625,
+      dependencies: [
+        "47554885A69B7E3A",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755488BFB2073B5",
+      icon: {
+        id: "guhs:lichtflesje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_h4_stap_6",
+          id: "47554818BB0B7AE0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548210CAE365E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 19.0,
+      y: 6.5625,
+      dependencies: [
+        "4755486C46E124A0",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "4755483A1E5F05A3",
+      icon: {
+        id: "minecraft:birch_boat",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_h4_stap_7",
+          id: "475548ED1D4901F1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548055F816103",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755487517A9F12F",
+          type: "xp",
+          xp: 120,
+        },
+      ],
+      x: 20.5,
+      y: 6.5625,
+      dependencies: [
+        "4755488BFB2073B5",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
     },
   ],
 }
