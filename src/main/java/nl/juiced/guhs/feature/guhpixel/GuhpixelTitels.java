@@ -9,7 +9,9 @@ import nl.juiced.guhs.feature.titels.Titels;
  * The titles of the guhpixel slices. Titels.ALLE ends with this list (one shared line there). A slice adds its titles
  * ONLY between its own two markers, one {@code ALLE.add(new Titels.Titel("n_id", "gui.guhs.titels.naam.n_id", colour,
  * "guhs:icon_item", player -> ...));} per line, and writes gui.guhs.titels.naam.&lt;id&gt; and .hint.&lt;id&gt;. The predicate
- * reads saved progress; there is no "has title" flag. Fixed ids: among_sus ("Sus"), among_onterecht ("Onterecht weggestemd").
+ * reads saved progress; there is no "has title" flag. Fixed id: among_sus ("Sus").
+ * (1.3.1) Six titles of 1.3.0 are gone again: lobby_dakhaas, lobby_mvg, among_onterecht, among_kussenkampioen, among_speurguh
+ * and among_taakjesguh. Who had one of them chosen shows no title (Titels.actief). The rank [MVG++] itself stays.
  */
 public final class GuhpixelTitels {
     public static final List<Titels.Titel> ALLE = new ArrayList<>();
@@ -17,8 +19,6 @@ public final class GuhpixelTitels {
     static {
         // <px_lobby>
         ALLE.add(new Titels.Titel("lobby_knabbelspeurder", "gui.guhs.titels.naam.lobby_knabbelspeurder", net.minecraft.ChatFormatting.GOLD, "guhs:gouden_kaasknabbel", nl.juiced.guhs.feature.guhpixel.lobby.Knabbels::alleGevonden));
-        ALLE.add(new Titels.Titel("lobby_dakhaas", "gui.guhs.titels.naam.lobby_dakhaas", net.minecraft.ChatFormatting.AQUA, "minecraft:feather", nl.juiced.guhs.feature.guhpixel.lobby.LobbyParkour::gehaald));
-        ALLE.add(new Titels.Titel("lobby_mvg", "gui.guhs.titels.naam.lobby_mvg", net.minecraft.ChatFormatting.LIGHT_PURPLE, "guhs:guhpixel_netwerkkabeltje", nl.juiced.guhs.feature.guhpixel.lobby.LobbySlice::isMvgPlusPlus));
         // </px_lobby>
         // <px_grap1>
         // </px_grap1>
@@ -26,10 +26,6 @@ public final class GuhpixelTitels {
         // </px_grap2>
         // <px_among>
         ALLE.add(new Titels.Titel("among_sus", "gui.guhs.titels.naam.among_sus", net.minecraft.ChatFormatting.RED, "guhs:among_noodknop", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.WEGGESTEMD) >= 3));
-        ALLE.add(new Titels.Titel("among_onterecht", "gui.guhs.titels.naam.among_onterecht", net.minecraft.ChatFormatting.AQUA, "guhs:among_ventilatieluik", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.ONTERECHT) >= 1));
-        ALLE.add(new Titels.Titel("among_kussenkampioen", "gui.guhs.titels.naam.among_kussenkampioen", net.minecraft.ChatFormatting.LIGHT_PURPLE, "guhs:among_kussen", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.WINST_MIKA) >= 5));
-        ALLE.add(new Titels.Titel("among_speurguh", "gui.guhs.titels.naam.among_speurguh", net.minecraft.ChatFormatting.GOLD, "guhs:among_stembriefje", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.WINST_CREW) >= 10));
-        ALLE.add(new Titels.Titel("among_taakjesguh", "gui.guhs.titels.naam.among_taakjesguh", net.minecraft.ChatFormatting.GREEN, "guhs:among_taakpaneel", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.TAKEN) >= 100));
         // </px_among>
         // <px_guhkade>
         // </px_guhkade>

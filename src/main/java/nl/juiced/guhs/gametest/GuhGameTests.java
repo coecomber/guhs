@@ -731,6 +731,10 @@ public class GuhGameTests {
             if (v == nl.juiced.guhs.entity.GuhVariant.NORMAL) normal++;
         }
         helper.assertTrue(normal > 85_000, "normal guhs should be by far the most common: " + normal);
+        // 1.3.1: every variant a little rarer: 72 of 1000 guhs (was 90), and the note guh 1 in 500 (was 200)
+        helper.assertTrue(java.util.Arrays.stream(nl.juiced.guhs.entity.GuhVariant.values()).mapToInt(v -> v.weight).sum() == 72
+                && nl.juiced.guhs.entity.GuhVariant.MINT.weight == 17 && nl.juiced.guhs.entity.GuhVariant.CHOCO.weight == 17
+                && nl.juiced.guhs.entity.GuhVariant.SNOW.weight == 13 && GuhEntity.SECRET_NOTE_CHANCE == 500 && normal > 92_000, "the 1.3.1 odds: " + normal);
         helper.assertTrue(seen.size() == java.util.Arrays.stream(nl.juiced.guhs.entity.GuhVariant.values()).filter(v -> v.weight > 0 || v == nl.juiced.guhs.entity.GuhVariant.NORMAL).count(), "every variant can turn up (except brococolief, the ender guh: Guh Peaks only, the Koningguh: castle only, the Wolkguh: floating islands only...): " + seen);
         helper.assertFalse(seen.contains(nl.juiced.guhs.entity.GuhVariant.BROCOCOLIEF), "brococolief only comes with the note");
 

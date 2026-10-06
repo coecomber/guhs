@@ -13,8 +13,7 @@
 | De winkel / Guhpixel-winkel | The Shop / Guhpixel Shop | |
 | kraampje | stall | the game stalls in the lobby |
 | Knabbelspeurder | Nibble Sleuth | title |
-| Dakhaas | Rooftop Runner | title (Dutch pun on "dakhaas" = alley cat) |
-| Meest Vadsige Guh | Most Valuable Guh | title; what MVG stands for (Dutch: Meest Vadsige Guh) |
+| Meest Vadsige Guh | Most Valuable Guh | what MVG stands for (Dutch: Meest Vadsige Guh); no title since 1.3.1 |
 | Spelers online: n (en 47 guhs) | Players online: n (and 47 guhs) | |
 | TERUG NAAR HUIS | BACK HOME | the exit door |
 | BINNENKORT, njeg | COMING SOON, Nyeg | the empty stall |

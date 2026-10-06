@@ -105,7 +105,7 @@ public final class LobbySlice {
         return PxData.deel(p, "lobby");
     }
 
-    /** The highest rank (title "MVG++ in hart en nieren"). */
+    /** The highest rank. (1.3.1: no title hangs on it any more.) */
     public static boolean isMvgPlusPlus(ServerPlayer p) {
         return Toegang.heeft(p) && Muntjes.rang(p) == Rang.MVG_PLUS_PLUS;
     }

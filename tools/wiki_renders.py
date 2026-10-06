@@ -544,7 +544,7 @@ def main(out):
                 "item/iron_ingot", "item/stick", "item/redstone", "item/pink_dye", "item/saddle", "item/name_tag", "item/bucket",
                 "guhs:item/vahoege_vads", "guhs:item/vahoege_vads_ingot", "guhs:item/vahoege_vads_sword",
                 "guhs:item/vahoege_vads_pickaxe", "guhs:item/vahoege_vads_axe", "guhs:item/vahoege_vads_shovel",
-                "guhs:item/vahoege_vads_hoe", "guhs:item/vahoege_vads_paxel", "guhs:item/vahoege_vads_helmet",
+                "guhs:item/vahoege_vads_hoe", "guhs:item/vahoege_vads_paxel", "guhs:item/vahoege_vads_shears", "guhs:item/vahoege_vads_helmet",
                 "guhs:item/vahoege_vads_chestplate", "guhs:item/vahoege_vads_leggings", "guhs:item/vahoege_vads_boots",
                 "guhs:item/guh_cave_compass_00", "guhs:item/challenge_compass_00", "item/compass_00",
                 "guhs:item/pink_onesie", "guhs:item/striped_sweater", "guhs:item/raincoat", "guhs:item/chef_jacket",

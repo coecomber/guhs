@@ -87,7 +87,7 @@ public class SuperkompasItem extends GuhCompassItem {
                     new Kopje("knuffeldal", List.of("knuffeldal_stadje", "knuffelbad")),
                     new Kopje("grote_guhspelen", List.of("sjoelhuisje", "guhdoolhof", "knabbelkatapult", "knabbelspelen", "elfguhjestocht", "guh_circuit")),
                     new Kopje("verhalen", List.of("nomguh", "guhwaii_surfstrand")),   // 3.0 (Guhverhalen)
-                    new Kopje("guhpixel", List.of("internetcafe")))),   // guhpixel: the Guh-internetcafe
+                    new Kopje("guhpixel", List.of("internetcafe", "reisbureau")))),   // guhpixel: the Guh-internetcafe; 1.3.1: + the Reisbureau
             cat("wonderen", "guhs:guh_kristal", net.minecraft.world.item.Items.AMETHYST_SHARD, "guh_kasteel", "zwevende_eilanden",
                     "hamster_house_extra_extra_large", "guhramid", "guhbibliotheek", "onderwater"),
             cat("wonen", "guhs:knuffelsteen_gezicht", net.minecraft.world.item.Items.OAK_DOOR, "guh_village", "hamster_house", "hamster_house_medium",
@@ -100,7 +100,7 @@ public class SuperkompasItem extends GuhCompassItem {
                     "ballonfestival", "kampeerplekje", "knuffelbad", "reisbureau"),   // (guhpixel: the Reisbureau)
             // 3.0 (Guhverhalen): the story places
             cat("verhalen", "guhs:baltoguh_beeldje", net.minecraft.world.item.Items.BOOK, "nomguh", "kloon_eiland", "hemelkapelletje", "guhwaii_ohana",
-                    "guhwaii_capsule", "guhwaii_surfstrand", "knuffeldal_stadje"));
+                    "guhwaii_surfstrand", "knuffeldal_stadje"));   // (1.3.1: the capsule is part of the Ohana questline, no place of its own)
 
     /** The first tab that has this structure (-1: none). */
     public static int categoryOf(@Nullable String structure) {

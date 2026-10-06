@@ -144,13 +144,8 @@ def body(w):
              "Alleen een ronde die je uitspeelt geeft Guhpixel-muntjes. De <b>Logboek-guh</b> naast de Kapitein houdt je eigen cijferbord bij "
              "(rondes, winst als crew en als Mika, keren weggestemd en onterecht weggestemd, taken, de muntjes van vandaag); de cijfers staan "
              "ook in de Guhdex.")
-    out += table([("Title", "Titel"), ("How", "Hoe")], [
-        ["<b>Sus</b>", ("Get voted out three times.", "Word drie keer weggestemd.")],
-        [("<b>Wrongly Voted Out</b>", "<b>Onterecht weggestemd</b>"), ("Get voted out while you were not the Mika.", "Word weggestemd terwijl je niet de Mika was.")],
-        [("<b>Pillow Champion</b>", "<b>Kussenkampioen</b>"), ("Win five rounds as Mika.", "Win vijf rondes als Mika.")],
-        [("<b>Sleuth Guh</b>", "<b>Speurguh</b>"), ("Win ten rounds as crew.", "Win tien rondes als crew.")],
-        [("<b>Task Guh</b>", "<b>Taakjesguh</b>"), ("Do a hundred tasks.", "Doe honderd taken.")],
-    ])
+    out += p("Get voted out three times and you earn the title <b>Sus</b>.",
+             "Word drie keer weggestemd en je verdient de titel <b>Sus</b>.")
     out += h3("In the shop", "In de winkel")
     out += p("After your first real round the <b>Shopkeeper Guh</b> sells the Among Guhs things for Guhpixel Coins. Suits and hats are clothes for "
              "your own guhs (you buy each once, every guh of yours can wear it); the ship things are real blocks you can buy as often as you like.",

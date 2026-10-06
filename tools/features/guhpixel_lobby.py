@@ -155,10 +155,6 @@ TEXTS = {
     # --- titles ---
     "gui.guhs.titels.naam.lobby_knabbelspeurder": "Knabbelspeurder",
     "gui.guhs.titels.hint.lobby_knabbelspeurder": "Vind alle tien de gouden knabbels in de Guhpixel-lobby.",
-    "gui.guhs.titels.naam.lobby_dakhaas": "Dakhaas",
-    "gui.guhs.titels.hint.lobby_dakhaas": "Haal de finish van de lobby-parkour.",
-    "gui.guhs.titels.naam.lobby_mvg": "Meest Vadsige Guh",
-    "gui.guhs.titels.hint.lobby_mvg": "Bereik de hoogste rang van Guhpixel.",
 }
 for _i, _naam in enumerate(CHAT_NAMEN):
     TEXTS[f"gui.guhs.lobby.chat.naam.{_i}"] = _naam

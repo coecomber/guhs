@@ -22,8 +22,8 @@
 | Rood, Blauw, Groen, Geel, Roze, Oranje, Paars, Wit, Bruin, Mint | Red, Blue, Green, Yellow, Pink, Orange, Purple, White, Brown, Mint | a guh NPC is called by its color |
 | sus | sus | stays "sus" |
 | tellen (10 tellen) | seconds | |
-| Sus / Onterecht weggestemd / Kussenkampioen | Sus / Wrongly Voted Out / Pillow Champion | titles |
-| Speurguh / Taakjesguh | Sleuth Guh / Task Guh | titles |
+| Sus | Sus | title (the only Among Guhs title since 1.3.1) |
+| Onterecht weggestemd | Wrongly Voted Out | a number on the stats board |
 | oefenrondje | practice round | the one-time parody round at Captain Guh (joke game "among") |
 | SUS-stickerbord | SUS Sticker Board | the keepsake of the practice round |
 | (kleur) ruimtepakje / luchttank | (color) Space Suit / air tank | shop clothes: "Red Space Suit" |

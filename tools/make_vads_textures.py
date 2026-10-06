@@ -55,6 +55,10 @@ save(recolour(vanilla("item/raw_iron"), PINK, 1.3, lambda h, s, v: True), "item"
 # tools + armour items (from diamond)
 for tool in ("sword", "pickaxe", "axe", "shovel", "hoe", "helmet", "chestplate", "leggings", "boots"):
     save(recolour(vanilla(f"item/diamond_{tool}"), PINK, 1.1, is_diamond), "item", f"vahoege_vads_{tool}.png")
+# 1.3.1: the block of vahoege vads (from the iron block, in the deep purple of the ingot)
+save(recolour(vanilla("block/iron_block"), LILAC, 1.4, lambda h, s, v: True, 0.82), "block", "block_of_vahoege_vads.png")
+# 1.3.1: the shears (from the iron shears: the grey blades turn guh pink, the handles stay)
+save(recolour(vanilla("item/shears"), PINK, 2.1, is_grey, 1.08), "item", "vahoege_vads_shears.png")
 # the paxel: the pickaxe with a lilac axe blade on its left end and a shovel spade on its right end
 pa = np.asarray(recolour(vanilla("item/diamond_pickaxe"), PINK, 1.1, is_diamond)).copy()
 BLADE = ["..LL....",       # axe blade (L light, M mid, D dark, O outline)

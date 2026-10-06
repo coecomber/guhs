@@ -37,6 +37,7 @@ import nl.juiced.guhs.quest.GuhQuests;
  * order). Phase 1 registers every group ({@link SpelenFeature}); the data is static and the same on both sides.
  * <p>
  * Visited: every 40 ticks the server looks whether a player stands in the structure of a group they haven't visited yet
+ * (1.3.1: or in any place of the Superkompas, saved in the same list as "s:" + structure id)
  * and remembers it ({@code GuhQuests.saved(player)["guhs_bezocht"]}, survives death); the client gets the list with the
  * payload {@code guhs:spelgroepen_data} ({@link #sync}: on login, on opening the Guhdex and on every new visit).
  * Lang: gui.guhs.spelgroep.&lt;id&gt; (name), gui.guhs.spelgroep.&lt;id&gt;.waar (where: biome + building + NPC),
@@ -45,6 +46,11 @@ import nl.juiced.guhs.quest.GuhQuests;
 public final class SpelGroepen {
     /** The saved list of visited groups (ids) in {@link GuhQuests#saved}. */
     public static final String KEY = "guhs_bezocht";
+    /**
+     * (1.3.1) The prefix of a visited Superkompas place in the same saved list and payload: "s:" + structure id (without
+     * namespace). A group id never has a colon, so the two kinds cannot collide.
+     */
+    public static final String STRUCTUUR = "s:";
     /** How often (ticks) the server looks whether a player is in a group's structure. */
     public static final int CHECK_TICKS = 40;
 
@@ -136,7 +142,17 @@ public final class SpelGroepen {
         return lijst(player).contains(groepId);
     }
 
-    /** The visited group ids of this player (server). */
+    /** (1.3.1) Has this player been in this Superkompas place (structure id without namespace)? Server: saved; client: synced. */
+    public static boolean structuurBezocht(Player player, String structuur) {
+        return bezocht(player, STRUCTUUR + structuur);
+    }
+
+    /** (1.3.1) Remembers a visit to a Superkompas place (server); true when it is new. */
+    public static boolean bezoekStructuur(ServerPlayer player, String structuur) {
+        return bezoek(player, STRUCTUUR + structuur);
+    }
+
+    /** The visited ids of this player (server): group ids, and (1.3.1) "s:" + structure id for Superkompas places. */
     public static List<String> bezocht(Player player) {
         return lijst(player);
     }
@@ -169,28 +185,53 @@ public final class SpelGroepen {
     }
 
     /**
-     * (Server, every {@link #CHECK_TICKS} ticks per player) remembers the groups whose structure the player stands in.
-     * Returns the newly visited group ids (for tests).
+     * (Server, every {@link #CHECK_TICKS} ticks per player) remembers the groups whose structure the player stands in, and
+     * (1.3.1) every Superkompas place the player stands in ("s:" + structure id; a group's building counts as its place
+     * too). Returns the newly visited ids (for tests). Cheap: nothing happens where no structure is at all.
      */
     public static List<String> kijk(ServerPlayer player) {
         List<String> nieuw = new ArrayList<>();
-        if (!(player.level() instanceof ServerLevel level)) {
+        if (!(player.level() instanceof ServerLevel level) || !level.structureManager().hasAnyStructureAt(player.blockPosition())) {
             return nieuw;
         }
         List<String> al = lijst(player);
         var structures = level.registryAccess().lookupOrThrow(Registries.STRUCTURE);
         for (Groep g : alle()) {
-            if (g.structuur() == null || al.contains(g.id())) {
-                continue;
-            }
-            Structure structure = structures.getValue(Guhs.id(g.structuur()));
-            if (structure != null && level.structureManager().getStructureWithPieceAt(player.blockPosition(), structure).isValid()) {
-                if (bezoek(player, g.id())) {
-                    nieuw.add(g.id());
-                }
+            if (g.structuur() != null && !al.contains(g.id()) && staatIn(level, structures, player, g.structuur())) {
+                nieuw.add(g.id());
             }
         }
+        for (String id : KOMPAS_PLEKKEN.get()) {
+            if (!al.contains(STRUCTUUR + id) && staatIn(level, structures, player, id)) {
+                nieuw.add(STRUCTUUR + id);
+            }
+        }
+        // a group's building that is no Superkompas place (none today) still counts as found
+        for (String id : List.copyOf(nieuw)) {
+            Groep g = van(id);
+            if (g != null && !al.contains(STRUCTUUR + g.structuur()) && !nieuw.contains(STRUCTUUR + g.structuur())) {
+                nieuw.add(STRUCTUUR + g.structuur());
+            }
+        }
+        if (!nieuw.isEmpty()) {
+            ListTag list = GuhQuests.saved(player).getListOrEmpty(KEY);
+            for (String id : nieuw) {
+                list.add(StringTag.valueOf(id));
+            }
+            GuhQuests.saved(player).put(KEY, list);
+            sync(player);
+        }
         return nieuw;
+    }
+
+    /** Every structure id of the Superkompas, once (a place may be in more than one tab). */
+    private static final Supplier<List<String>> KOMPAS_PLEKKEN = com.google.common.base.Suppliers.memoize(
+            () -> nl.juiced.guhs.item.SuperkompasItem.CATEGORIES.stream().flatMap(c -> c.structures().stream()).distinct().toList())::get;
+
+    /** Stands the player in a piece of this structure? (A structure this world doesn't know: no.) */
+    private static boolean staatIn(ServerLevel level, net.minecraft.core.Registry<Structure> structures, ServerPlayer player, String id) {
+        Structure structure = structures.getValue(Guhs.id(id));
+        return structure != null && level.structureManager().getStructureWithPieceAt(player.blockPosition(), structure).isValid();
     }
 
     /** The client's copy of the player's visited groups. */
@@ -204,6 +245,11 @@ public final class SpelGroepen {
 
         public static boolean bezocht(String groepId) {
             return BEZOCHT.contains(groepId);
+        }
+
+        /** (1.3.1) Has the player been in this Superkompas place (structure id without namespace)? */
+        public static boolean structuurBezocht(String structuur) {
+            return BEZOCHT.contains(STRUCTUUR + structuur);
         }
 
         private Client() {

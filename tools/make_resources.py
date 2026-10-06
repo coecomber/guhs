@@ -633,7 +633,26 @@ w(f"{D}/loot_table/blocks/compressed_super_vahoege_vads.json", {"type": "minecra
             {"function": "minecraft:apply_bonus", "enchantment": "minecraft:fortune", "formula": "minecraft:ore_drops"},
             {"function": "minecraft:explosion_decay"}]}]}]}],
     "random_sequence": "guhs:blocks/compressed_super_vahoege_vads"})
-w(f"{R}/data/minecraft/tags/block/needs_iron_tool.json", {"values": ["guhs:compressed_super_vahoege_vads"]})
+w(f"{R}/data/minecraft/tags/block/needs_iron_tool.json", {"values": ["guhs:compressed_super_vahoege_vads", "guhs:block_of_vahoege_vads"]})
+# 1.3.1: the block of vahoege vads: nine ingots <-> one block (a metal storage block; the Knabbelbaken's pyramid is made of it)
+w(f"{A}/models/block/block_of_vahoege_vads.json", {"parent": "minecraft:block/cube_all", "textures": {"all": "guhs:block/block_of_vahoege_vads"}})
+w(f"{A}/blockstates/block_of_vahoege_vads.json", {"variants": {"": {"model": "guhs:block/block_of_vahoege_vads"}}})
+w(f"{A}/models/item/block_of_vahoege_vads.json", {"parent": "guhs:block/block_of_vahoege_vads"})
+w(f"{D}/loot_table/blocks/block_of_vahoege_vads.json", {"type": "minecraft:block", "pools": [{
+    "rolls": 1, "entries": [{"type": "minecraft:item", "name": "guhs:block_of_vahoege_vads"}],
+    "conditions": [{"condition": "minecraft:survives_explosion"}]}],
+    "random_sequence": "guhs:blocks/block_of_vahoege_vads"})
+w(f"{D}/recipe/block_of_vahoege_vads.json", {
+    "type": "minecraft:crafting_shaped", "category": "building",
+    "pattern": ["###", "###", "###"], "key": {"#": {"item": "guhs:vahoege_vads_ingot"}},
+    "result": {"id": "guhs:block_of_vahoege_vads", "count": 1}})
+w(f"{D}/recipe/vahoege_vads_ingot_from_block.json", {
+    "type": "minecraft:crafting_shapeless", "category": "misc",
+    "ingredients": [{"item": "guhs:block_of_vahoege_vads"}],
+    "result": {"id": "guhs:vahoege_vads_ingot", "count": 9}})
+for _kind in ("block", "item"):
+    w(f"{R}/data/c/tags/{_kind}/storage_blocks/vahoege_vads.json", {"replace": False, "values": ["guhs:block_of_vahoege_vads"]})
+    w(f"{R}/data/c/tags/{_kind}/storage_blocks.json", {"replace": False, "values": ["#c:storage_blocks/vahoege_vads"]})
 for item in ("vahoege_vads", "vahoege_vads_ingot", "vahoege_vads_helmet", "vahoege_vads_chestplate", "vahoege_vads_leggings",
              "vahoege_vads_boots"):
     w(f"{A}/models/item/{item}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": f"guhs:item/{item}"}})
@@ -664,7 +683,13 @@ w(f"{D}/recipe/vahoege_vads_paxel.json", {"type": "minecraft:crafting_shapeless"
     "result": {"id": "guhs:vahoege_vads_paxel", "count": 1}})
 w(f"{D}/tags/block/mineable/paxel.json", {"values": ["#minecraft:mineable/pickaxe", "#minecraft:mineable/axe",
                                                      "#minecraft:mineable/shovel"]})
-GEAR = [f"guhs:vahoege_vads_{p}" for p in list(SHAPES) + ["paxel"]]
+# 1.3.1: the Vahoege-vadsschaar: the vanilla shears shape, with vahoege vads (the raw vads, not the ingot) instead of iron
+w(f"{A}/models/item/vahoege_vads_shears.json", {"parent": "minecraft:item/generated", "textures": {"layer0": "guhs:item/vahoege_vads_shears"}})
+w(f"{D}/recipe/vahoege_vads_shears.json", {"type": "minecraft:crafting_shaped", "category": "equipment", "pattern": [" V", "V "],
+    "key": {"V": {"item": "guhs:vahoege_vads"}}, "result": {"id": "guhs:vahoege_vads_shears", "count": 1}})
+w(f"{R}/data/c/tags/item/tools/shear.json", {"replace": False, "values": ["guhs:vahoege_vads_shears"]})
+w(f"{R}/data/minecraft/tags/item/enchantable/mining.json", {"replace": False, "values": ["guhs:vahoege_vads_shears"]})
+GEAR = [f"guhs:vahoege_vads_{p}" for p in list(SHAPES) + ["paxel", "shears"]]
 w(f"{D}/tags/item/keep_on_death.json", {"values": GEAR})
 for tag, members in (("swords", ["sword"]), ("pickaxes", ["pickaxe", "paxel"]), ("axes", ["axe", "paxel"]),
                      ("shovels", ["shovel", "paxel"]),
@@ -843,7 +868,7 @@ self_drop("guh_spawner")
 w(f"{R}/data/minecraft/tags/block/mineable/pickaxe.json",
   {"values": ["guhs:kaasknabbel_stone", "guhs:kaasknabbel_deepslate", "guhs:kaasknabbel_cobblestone",
               "guhs:frying_pan", "guhs:guh_wheel", "guhs:guh_spawner",
-                         "guhs:compressed_super_vahoege_vads"]})
+                         "guhs:compressed_super_vahoege_vads", "guhs:block_of_vahoege_vads"]})
 
 for item in ("mika_vet", "gefrituurde_kaasknabbels"):
     w(f"{A}/models/item/{item}.json", {"parent": "minecraft:item/generated", "textures": {"layer0": f"guhs:item/{item}"}})
@@ -1195,6 +1220,7 @@ w(f"{A}/lang/en_us.json", {
     "biome.guhs.mikas_biome": "Mika's Biome",
     "block.guhs.bank_guh": "Bank Guh",
     "block.guhs.compressed_super_vahoege_vads": "Compressed Super Vahoege Vads",
+    "block.guhs.block_of_vahoege_vads": "Block of Vahoege Vads",
     "item.guhs.vahoege_vads": "Vahoege Vads",
     "item.guhs.vahoege_vads_ingot": "Vahoege Vads Ingot",
     "item.guhs.vahoege_vads_sword": "Vahoege Vads Sword",
@@ -1203,6 +1229,8 @@ w(f"{A}/lang/en_us.json", {
     "item.guhs.vahoege_vads_shovel": "Vahoege Vads Shovel",
     "item.guhs.vahoege_vads_hoe": "Vahoege Vads Hoe",
     "item.guhs.vahoege_vads_paxel": "Vahoege Vads Paxel",
+    "item.guhs.vahoege_vads_shears": "Vahoege Vads Shears",
+    "item.guhs.vahoege_vads_shears.lore": "Never breaks. Sheep get a wahoog haircut.",
     "item.guhs.vahoege_vads_helmet": "Vahoege Vads Helmet",
     "item.guhs.vahoege_vads_chestplate": "Vahoege Vads Chestplate",
     "item.guhs.vahoege_vads_leggings": "Vahoege Vads Leggings",
@@ -1428,6 +1456,7 @@ w(f"{A}/lang/nl_nl.json", {
     "biome.guhs.mikas_biome": "Mika's bioom",
     "block.guhs.bank_guh": "Bankguh",
     "block.guhs.compressed_super_vahoege_vads": "Samengeperste super vahoege vads",
+    "block.guhs.block_of_vahoege_vads": "Blok vahoege vads",
     "item.guhs.vahoege_vads": "Vahoege vads",
     "item.guhs.vahoege_vads_ingot": "Vahoege-vadsstaaf",
     "item.guhs.vahoege_vads_sword": "Vahoege-vadszwaard",
@@ -1436,6 +1465,8 @@ w(f"{A}/lang/nl_nl.json", {
     "item.guhs.vahoege_vads_shovel": "Vahoege-vadsschep",
     "item.guhs.vahoege_vads_hoe": "Vahoege-vadsschoffel",
     "item.guhs.vahoege_vads_paxel": "Vahoege-vadspaxel",
+    "item.guhs.vahoege_vads_shears": "Vahoege-vadsschaar",
+    "item.guhs.vahoege_vads_shears.lore": "Gaat nooit kapot. Knip maar raak, njeg! Het schaap vindt het vahoeg.",
     "item.guhs.vahoege_vads_helmet": "Vahoege-vadshelm",
     "item.guhs.vahoege_vads_chestplate": "Vahoege-vadsborstplaat",
     "item.guhs.vahoege_vads_leggings": "Vahoege-vadsbeenstukken",

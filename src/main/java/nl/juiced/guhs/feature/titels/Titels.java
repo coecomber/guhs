@@ -113,7 +113,8 @@ public final class Titels {
 
     /**
      * The title this player shows (null: none): the chosen one when it is earned; nothing when they chose "geen titel";
-     * else (never chosen, or the chosen one isn't theirs any more) the first earned one.
+     * (1.3.1) nothing either when the chosen title doesn't exist any more; else (never chosen, or the chosen one isn't theirs
+     * any more) the first earned one.
      */
     @Nullable
     public static Titel actief(ServerPlayer p) {
@@ -124,6 +125,9 @@ public final class Titels {
         Titel gekozen = van(keuze);
         if (gekozen != null && heeft(p, gekozen)) {
             return gekozen;
+        }
+        if (gekozen == null && !keuze.isEmpty()) {
+            return null;   // (1.3.1) the chosen title doesn't exist any more (it was removed): no title, not some other one
         }
         for (Titel t : ALLE) {
             if (heeft(p, t)) {

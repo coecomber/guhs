@@ -81,20 +81,19 @@ def body(w):
         "kost je je rang niet. Je kunt hem uitzetten in de Guhdex (tab Guhpixel &amp; uitjes, klik op je rang)."))
     out.append(table([("Rank", "Rang"), ("Coins ever earned", "Muntjes ooit verdiend")],
                      [[w.t(en, nl), str(n)] for en, nl, n in RANGEN]))
-    out.append(p("MVG? Most Valuable Guh. Reaching [MVG++] earns the title <i>Most Valuable Guh</i>.",
-                 "MVG? Meest Vadsige Guh. Wie [MVG++] haalt krijgt de titel <i>Meest Vadsige Guh</i>."))
+    out.append(p("MVG? Most Valuable Guh.", "MVG? Meest Vadsige Guh."))
     out.append(h3("Lobby parkour and golden nibbles", "Lobby-parkour en gouden knabbels"))
     out.append(entry(
         img("lobby_gouden_knabbel", "A golden lobby nibble"), "Two things to do between games", "Twee dingen voor tussendoor",
         ul([
             ("<b>Lobby parkour</b>: a green start plate lies at the east side. Step off it and the clock runs: up the AFK corner, over floating cushions and "
              "the roofs of all the stalls (three of them are checkpoints) to the checkered finish on the shop roof. Falling does not hurt; just start again. "
-             "Your <b>personal best</b> floats at the start, next to the three fastest roof runners of the server. The first finish pays <b>50 coins</b> and "
-             "earns the title <i>Rooftop Runner</i>. Flying does not count.",
+             "Your <b>personal best</b> floats at the start, next to the three fastest roof runners of the server. The first finish pays <b>50 coins</b>. "
+             "Flying does not count.",
              "<b>Lobby-parkour</b>: aan de oostkant ligt een groene startplaat. Stap eraf en de tijd loopt: de AFK-hoek op, over zwevende kussens en de daken "
              "van alle kraampjes (drie ervan zijn tussenpunten) naar de geblokte finish op het dak van de winkel. Vallen doet geen pijn; begin gewoon opnieuw. "
-             "Je <b>eigen record</b> zweeft bij de start, naast de drie snelste daklopers van de server. De eerste finish levert <b>50 muntjes</b> op en de "
-             "titel <i>Dakhaas</i>. Vliegen telt niet."),
+             "Je <b>eigen record</b> zweeft bij de start, naast de drie snelste daklopers van de server. De eerste finish levert <b>50 muntjes</b> op. "
+             "Vliegen telt niet."),
             ("<b>Ten golden nibbles</b> are hidden in the lobby: behind things, on roofs, and one under the ground. Right-click one: <b>10 coins</b>, once per "
              "nibble. They stay where they are, so every player can find all ten. All ten earn the title <i>Nibble Sleuth</i>.",
              "<b>Tien gouden knabbels</b> liggen verstopt in de lobby: achter dingen, op daken, en eentje onder de grond. Rechtsklik erop: <b>10 muntjes</b>, "

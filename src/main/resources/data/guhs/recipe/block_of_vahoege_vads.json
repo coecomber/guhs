@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": "guhs:vahoege_vads_ingot"
+  },
+  "result": {
+    "id": "guhs:block_of_vahoege_vads"
+  }
+}

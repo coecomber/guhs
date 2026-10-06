@@ -137,8 +137,8 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
     public static final double LAUNCH_SPEED = 1.95, LAUNCH_SINK = 0.06;
     public static final int BACKPACK_SIZE = 18;
     private static final net.minecraft.resources.Identifier PERSONALITY_SPEED = nl.juiced.guhs.Guhs.id("personality_speed");
-    /** About 1 in this many spawned guhs carries a secret note for the first player it meets. */
-    public static final int SECRET_NOTE_CHANCE = 200;
+    /** About 1 in this many spawned guhs carries a secret note for the first player it meets (Brococolief). 1.3.1: 500, was 200. */
+    public static final int SECRET_NOTE_CHANCE = 500;
     /** About 1 in this many wild Guhmension guhs already wears an outfit. */
     public static final int OUTFIT_CHANCE = 25;
 

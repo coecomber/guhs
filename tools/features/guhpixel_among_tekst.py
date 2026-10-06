@@ -226,14 +226,6 @@ TEXTS = {
     # --- titles ---
     "gui.guhs.titels.naam.among_sus": "Sus",
     "gui.guhs.titels.hint.among_sus": "Word drie keer weggestemd in Among Guhs",
-    "gui.guhs.titels.naam.among_onterecht": "Onterecht weggestemd",
-    "gui.guhs.titels.hint.among_onterecht": "Word weggestemd terwijl je niet de Mika was",
-    "gui.guhs.titels.naam.among_kussenkampioen": "Kussenkampioen",
-    "gui.guhs.titels.hint.among_kussenkampioen": "Win vijf rondes Among Guhs als Mika",
-    "gui.guhs.titels.naam.among_speurguh": "Speurguh",
-    "gui.guhs.titels.hint.among_speurguh": "Win tien rondes Among Guhs als crew",
-    "gui.guhs.titels.naam.among_taakjesguh": "Taakjesguh",
-    "gui.guhs.titels.hint.among_taakjesguh": "Doe honderd taken in Among Guhs",
 }
 for _kleur, _naam in KLEUREN.items():
     TEXTS[f"gui.guhs.among.kleur.{_kleur}"] = _naam

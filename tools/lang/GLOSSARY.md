@@ -544,7 +544,7 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | Vahoege vads | Wahoog Chonk | the pink ore material |
 | Samengeperste super vahoege vads | Compressed Super Wahoog Chonk | |
 | Vahoege-vadsstaaf | Wahoog Chonk Ingot | |
-| Vahoege-vads(zwaard/houweel/bijl/schep/schoffel/paxel) | Wahoog Chonk (Sword/Pickaxe/Axe/Shovel/Hoe/Paxel) | |
+| Vahoege-vads(zwaard/houweel/bijl/schep/schoffel/paxel/schaar) | Wahoog Chonk (Sword/Pickaxe/Axe/Shovel/Hoe/Paxel/Shears) | |
 | Vahoege-vads(helm/borstplaat/beenstukken/laarzen) | Wahoog Chonk (Helmet/Chestplate/Leggings/Boots) | |
 | guhpantser (IJzeren/Diamanten/Netherieten) | Guh Armor (Iron/Diamond/Netherite) | |
 | Bankguh / Bank Guh | Bank Guh | infinite storage; *het buikje* = *the tummy* |
@@ -931,8 +931,7 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | De winkel / Guhpixel-winkel | The Shop / Guhpixel Shop | |
 | kraampje | stall | the game stalls in the lobby |
 | Knabbelspeurder | Nibble Sleuth | title |
-| Dakhaas | Rooftop Runner | title (Dutch pun on "dakhaas" = alley cat) |
-| Meest Vadsige Guh | Most Valuable Guh | title; what MVG stands for (Dutch: Meest Vadsige Guh) |
+| Meest Vadsige Guh | Most Valuable Guh | what MVG stands for (Dutch: Meest Vadsige Guh); no title since 1.3.1 |
 | Spelers online: n (en 47 guhs) | Players online: n (and 47 guhs) | |
 | TERUG NAAR HUIS | BACK HOME | the exit door |
 | BINNENKORT, njeg | COMING SOON, Nyeg | the empty stall |
@@ -1024,8 +1023,8 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | Rood, Blauw, Groen, Geel, Roze, Oranje, Paars, Wit, Bruin, Mint | Red, Blue, Green, Yellow, Pink, Orange, Purple, White, Brown, Mint | a guh NPC is called by its color |
 | sus | sus | stays "sus" |
 | tellen (10 tellen) | seconds | |
-| Sus / Onterecht weggestemd / Kussenkampioen | Sus / Wrongly Voted Out / Pillow Champion | titles |
-| Speurguh / Taakjesguh | Sleuth Guh / Task Guh | titles |
+| Sus | Sus | title (the only Among Guhs title since 1.3.1) |
+| Onterecht weggestemd | Wrongly Voted Out | a number on the stats board |
 | oefenrondje | practice round | the one-time parody round at Captain Guh (joke game "among") |
 | SUS-stickerbord | SUS Sticker Board | the keepsake of the practice round |
 | (kleur) ruimtepakje / luchttank | (color) Space Suit / air tank | shop clothes: "Red Space Suit" |

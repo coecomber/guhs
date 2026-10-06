@@ -27,7 +27,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 28   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel
+CHAPTER_VERSION = 29   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel; 29 = 1.3.1: the Vadsschaar quest
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
@@ -252,6 +252,9 @@ EXTRAS = [
      [item("guhs:vahoege_vads_ingot")]),
     ("paxel", "Vadspaxel", "Houweel, bijl en schep in een, en hij gaat nooit kapot.", "guhs:vahoege_vads_paxel", [item("guhs:vahoege_vads_paxel")]),
     ("wheel", "Guhrad", "Zet je tamme guh in een guhrad: volle redstonestroom!", "guhs:guh_wheel", [item("guhs:guh_wheel")]),
+    # 1.3.1 (appended: the quests above keep their places)
+    ("schaar", "Vadsschaar", "Twee vahoege vads schuin boven elkaar, net als een gewone schaar. Hij knipt alles wat een schaar knipt en hij gaat nooit kapot.",
+     "guhs:vahoege_vads_shears", [item("guhs:vahoege_vads_shears")]),
 ]
 for i, (key, title, desc, icon, tasks) in enumerate(EXTRAS):
     q(key, title, desc, icon, tasks, deps=["guhmension"] if key not in ("wheel", "furniture", "taart") else ["start"],
@@ -497,7 +500,7 @@ SECTIONS = {
         sec("bouwwerken", "Bouwwerken", "wiki:structure_hamster_house", keys=[f"struct_{s}" for s, _ in STRUCTS]),
         sec("hongerige_guh", "De Hongerige Guh & de Bank Guh", "item:guhs:bank_guh", keys=["bank", "bank_plaatsen"]),
         sec("spullen", "Knabbels, kristal & vads", "item:guhs:guh_kristal",
-            keys=["knabbelboer", "bloesem", "ze_hangen", "crystal", "spyglass", "vads", "paxel"]),
+            keys=["knabbelboer", "bloesem", "ze_hangen", "crystal", "spyglass", "vads", "paxel", "schaar"]),
         sec("evenementen", "Evenementen", "wiki:guh_outfit_evenementen", module="evenementen", upstream="guhmension"),
     ],
     "guhs_minigames": [

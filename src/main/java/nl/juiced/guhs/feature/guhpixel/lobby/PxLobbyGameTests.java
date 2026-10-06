@@ -244,7 +244,7 @@ public class PxLobbyGameTests {
         op(helper, p, finish, true, 260);
         helper.assertTrue(!LobbyParkour.bezig(p) && LobbyParkour.best(p) == 100 && LobbyParkour.keren(p) == 1, "finished in 260 - 160 ticks: " + LobbyParkour.best(p));
         helper.assertTrue(Muntjes.saldo(p) == LobbyParkour.MUNTJES && Muntjes.isVerdiend(p, LobbyParkour.SLEUTEL) && adv(p, "lobby_parkour")
-                && LobbyParkour.gehaald(p) && Titels.heeft(p, Titels.van("lobby_dakhaas")), "the first finish: 50 muntjes, the advancement, the title");
+                && LobbyParkour.gehaald(p) && Titels.van("lobby_dakhaas") == null, "the first finish: 50 muntjes, the advancement (1.3.1: no title any more)");
         helper.assertTrue(LobbyParkour.tijd(100).equals("0:05.00") && LobbyParkour.tijd(1234).equals("1:01.70"), "times read m:ss.hh");
         // a faster run: a new record, no second reward. Two players run at the same time, each on their own clock.
         op(helper, p, start, true, 1000);
@@ -456,10 +456,10 @@ public class PxLobbyGameTests {
         Toegang.vergrendel(q);
         String dicht = GidsBlad.stand(q).getListOrEmpty("Rijen").toString();
         helper.assertTrue(!dicht.contains("gui.guhs.lobby.gids.kop") && dicht.contains("gui.guhs.guhpixel.gids.zoek_cafe"), "locked: only the hint to the café");
-        // ranks: the advancement at [MVG], the title at [MVG++]
-        for (String id : List.of("lobby_knabbelspeurder", "lobby_dakhaas", "lobby_mvg")) {
-            helper.assertTrue(Titels.van(id) != null && !Titels.heeft(p, Titels.van(id)), "title " + id + " exists and is not earned yet");
-        }
+        // ranks: the advancement at [MVG]; (1.3.1) the lobby has one title left, the parkour and [MVG++] ones are gone
+        helper.assertTrue(Titels.van("lobby_knabbelspeurder") != null && !Titels.heeft(p, Titels.van("lobby_knabbelspeurder")),
+                "title lobby_knabbelspeurder exists and is not earned yet");
+        helper.assertTrue(Titels.van("lobby_dakhaas") == null && Titels.van("lobby_mvg") == null, "1.3.1: no Dakhaas and no Meest Vadsige Guh title");
         Muntjes.zet(p, Rang.MVG.vanaf() - 1);
         LobbySlice.controleerRang(p);
         helper.assertTrue(!adv(p, "lobby_rang_mvg"), "not yet [MVG]");
@@ -467,7 +467,7 @@ public class PxLobbyGameTests {
         LobbySlice.controleerRang(p);
         helper.assertTrue(adv(p, "lobby_rang_mvg") && !LobbySlice.isMvgPlusPlus(p), "[MVG]: the advancement");
         Muntjes.zet(p, Rang.MVG_PLUS_PLUS.vanaf());
-        helper.assertTrue(LobbySlice.isMvgPlusPlus(p) && Titels.heeft(p, Titels.van("lobby_mvg")), "[MVG++]: the title");
+        helper.assertTrue(LobbySlice.isMvgPlusPlus(p) && Muntjes.rang(p) == Rang.MVG_PLUS_PLUS, "[MVG++]: the rank (1.3.1: without a title)");
         Muntjes.zet(q, Rang.MVG_PLUS_PLUS.vanaf());
         LobbySlice.controleerRang(q);
         helper.assertTrue(!adv(q, "lobby_rang_mvg") && !LobbySlice.isMvgPlusPlus(q), "a rank only counts for who unlocked Guhpixel");

@@ -245,6 +245,16 @@ public class TitelsGameTests {
         toont(helper, p, titel(Titels.VRIEND_VAN_GUHTWO), "the new one");
         helper.assertTrue(Titels.kies(p, ""), "\"\" is none too");
         toont(helper, p, null, "none again");
+        // 1.3.1: a saved choice for a title that doesn't exist any more (six guhpixel titles were removed): no title, no raw key
+        for (String weg : List.of("lobby_dakhaas", "lobby_mvg", "among_onterecht", "among_kussenkampioen", "among_speurguh", "among_taakjesguh")) {
+            helper.assertTrue(Titels.van(weg) == null, "removed in 1.3.1: " + weg);
+            GuhQuests.saved(p).putString(Titels.KEUZE, weg);
+            Titels.kijk(p);
+            toont(helper, p, null, "a removed title was chosen (" + weg + ")");
+            helper.assertTrue(TitelsPayloads.stand(p).actief().isEmpty() && !TitelsPayloads.stand(p).behaald().contains(weg), "the tab: none shows");
+        }
+        helper.assertTrue(Titels.kies(p, Titels.OPPER_VADSER), "and another title can be chosen again");
+        toont(helper, p, titel(Titels.OPPER_VADSER), "after a removed title");
         weg(helper, p);
         helper.succeed();
     }

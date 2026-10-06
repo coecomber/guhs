@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_guhmensie",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 28,
+  guhs_chapter_version: 29,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_guhmensie.png",
@@ -133,7 +133,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 28.131249999999998,
+      y: 29.631249999999998,
       hover: [
         "Komt na: Welkom in de Guhmensie!",
       ],
@@ -2193,6 +2193,36 @@
       shape: "diamond",
     },
     {
+      id: "4755483224CCDE40",
+      icon: {
+        id: "guhs:vahoege_vads_shears",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoege_vads_shears",
+          },
+          id: "475548712C6614F5",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F53310339E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 27.45,
+      shape: "diamond",
+    },
+    {
       id: "47554832E4478C3B",
       icon: {
         id: "minecraft:bell",
@@ -2222,7 +2252,7 @@
         },
       ],
       x: 0.0,
-      y: 29.912499999999998,
+      y: 31.412499999999998,
     },
     {
       id: "475548A0D2BDA039",
@@ -2254,7 +2284,7 @@
         },
       ],
       x: 1.5,
-      y: 29.912499999999998,
+      y: 31.412499999999998,
     },
     {
       id: "4755489987A6924E",
@@ -2286,7 +2316,7 @@
         },
       ],
       x: 3.0,
-      y: 29.912499999999998,
+      y: 31.412499999999998,
     },
     {
       id: "475548A5029A1872",
@@ -2318,7 +2348,7 @@
         },
       ],
       x: 4.5,
-      y: 29.912499999999998,
+      y: 31.412499999999998,
     },
     {
       id: "475548C88413AA21",
@@ -2350,7 +2380,7 @@
         },
       ],
       x: 6.0,
-      y: 29.912499999999998,
+      y: 31.412499999999998,
       shape: "gear",
     },
     {
@@ -2383,7 +2413,7 @@
         },
       ],
       x: 7.5,
-      y: 29.912499999999998,
+      y: 31.412499999999998,
       shape: "gear",
     },
     {
@@ -2415,7 +2445,7 @@
         },
       ],
       x: 9.0,
-      y: 29.912499999999998,
+      y: 31.412499999999998,
     },
   ],
 }

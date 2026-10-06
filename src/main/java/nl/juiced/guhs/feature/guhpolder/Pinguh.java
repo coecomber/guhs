@@ -39,7 +39,7 @@ import nl.juiced.guhs.world.ModDimensions;
  */
 public final class Pinguh {
     /** Out of the plain wild guhs born in the Guhpolder, this many become a Pinguh. */
-    public static final float KANS = 0.5f;
+    public static final float KANS = 0.33f;   // 1.3.1: a third (was half)
     /** Out of 100 grown-up Pinguhs, this many keep the grey fluffy chick look. */
     public static final int PLUIS_PROCENT = 8;
     /** A keizer is this much bigger than it would have been (once, when it is grown up). */

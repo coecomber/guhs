@@ -637,18 +637,22 @@ public class PxAmongGameTests {
         ServerPlayer p = PxTest.speler(helper), q = PxTest.speler(helper);
         helper.assertTrue(AmongBeloning.bedrag(false, 0, false) == 25 && AmongBeloning.bedrag(true, 0, false) == 45 && AmongBeloning.bedrag(true, 7, false) == 59
                 && AmongBeloning.bedrag(false, 3, true) == 47 && AmongBeloning.bedrag(true, 7, true) == 89, "the pay table");
-        Titels.Titel sus = null, onterecht = null;
+        Titels.Titel sus = null;
         for (Titels.Titel t : GuhpixelTitels.ALLE) {
             if (t.id().equals("among_sus")) {
                 sus = t;
-            } else if (t.id().equals("among_onterecht")) {
-                onterecht = t;
             }
         }
-        helper.assertTrue(sus != null && onterecht != null && !sus.behaald().test(p) && !onterecht.behaald().test(p), "the titles exist and are not earned yet");
+        helper.assertTrue(sus != null && !sus.behaald().test(p), "the title exists and is not earned yet");
+        // 1.3.1: Sus is the only Among Guhs title left
+        helper.assertTrue(GuhpixelTitels.ALLE.stream().filter(t -> t.id().startsWith("among_")).count() == 1, "one Among Guhs title");
+        for (String weg : List.of("among_onterecht", "among_kussenkampioen", "among_speurguh", "among_taakjesguh")) {
+            helper.assertTrue(Titels.van(weg) == null, "1.3.1: no title " + weg);
+        }
         int saldo = Muntjes.saldo(p);
         helper.assertTrue(AmongBeloning.rondeKlaar(p, false, true, false, 7, 0, true) == 59 && Muntjes.saldo(p) == saldo + 59, "a win as crew with seven tasks");
-        helper.assertTrue(onterecht.behaald().test(p) && !sus.behaald().test(p) && !onterecht.behaald().test(q), "wrongly voted out once: that title, for this player only");
+        helper.assertTrue(AmongBeloning.cijfer(p, AmongBeloning.ONTERECHT) == 1 && !sus.behaald().test(p) && AmongBeloning.cijfer(q, AmongBeloning.ONTERECHT) == 0,
+                "wrongly voted out once: counted, for this player only (no title for it)");
         helper.assertTrue(AmongBeloning.rondeKlaar(p, true, true, true, 0, 4, false) == 68, "a win as Mika on Lastig (tasks do not count for a Mika)");
         helper.assertTrue(AmongBeloning.rondeKlaar(p, true, false, false, 0, 1, true) == 25 && AmongBeloning.rondeKlaar(p, false, false, false, 2, 0, true) == 29,
                 "two lost rounds");
@@ -889,23 +893,16 @@ public class PxAmongGameTests {
                 "the ship things are real items, as often as you like");
         helper.assertTrue(Winkel.koop(p, GuhClothes.AMONG_RUIMTEPAKJE_WIT.id()) == Winkel.Uitkomst.TE_DUUR && AmongSlice.heeft(p, AmongSlice.PAKJES) == 1
                 && AmongSlice.heeft(p, AmongSlice.HOEDJES) == 1, "no muntjes left for a second suit");
-        // the stats board and the two extra titles
+        // the stats board (1.3.1: one title on it, Sus)
         CompoundTag bord = AmongBeloning.cijfersTag(p);
         helper.assertTrue(bord.getIntOr(AmongBeloning.RONDES, 0) == 1 && bord.getIntOr("DagMax", 0) == AmongBeloning.DAG_MAX
-                && bord.getIntOr("Vandaag", 0) == AmongBeloning.bedrag(false, 1, false) && bord.getListOrEmpty("Titels").size() == 5, "the stats board");
-        Titels.Titel speur = null, taakjes = null;
-        for (Titels.Titel t : GuhpixelTitels.ALLE) {
-            if (t.id().equals("among_speurguh")) {
-                speur = t;
-            } else if (t.id().equals("among_taakjesguh")) {
-                taakjes = t;
-            }
-        }
-        helper.assertTrue(speur != null && taakjes != null && !speur.behaald().test(p) && !taakjes.behaald().test(p), "two more titles, not earned yet");
+                && bord.getIntOr("Vandaag", 0) == AmongBeloning.bedrag(false, 1, false) && bord.getListOrEmpty("Titels").size() == 1, "the stats board");
+        int crewWinst = AmongBeloning.cijfer(p, AmongBeloning.WINST_CREW), taken = AmongBeloning.cijfer(p, AmongBeloning.TAKEN);
         for (int i = 0; i < 10; i++) {
             AmongBeloning.rondeKlaar(p, false, true, false, 10, 0, false);
         }
-        helper.assertTrue(speur.behaald().test(p) && taakjes.behaald().test(p) && !speur.behaald().test(q), "ten wins as crew and a hundred tasks");
+        helper.assertTrue(AmongBeloning.cijfer(p, AmongBeloning.WINST_CREW) == crewWinst + 10 && AmongBeloning.cijfer(p, AmongBeloning.TAKEN) == taken + 100
+                && AmongBeloning.cijfer(q, AmongBeloning.WINST_CREW) == 0, "ten wins as crew and a hundred tasks are counted (no titles for them)");
         PxTest.klaar(helper, p, q);
         helper.succeed();
     }
