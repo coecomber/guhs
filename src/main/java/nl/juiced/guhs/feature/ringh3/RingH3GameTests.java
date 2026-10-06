@@ -347,6 +347,8 @@ public final class RingH3GameTests {
         ServerPlayer p = speler(helper, m, new BlockPos(60, 6, 14), 5), gast = speler(helper, m, new BlockPos(62, 6, 14), 7);
         ServerPlayer derde = speler(helper, m, new BlockPos(64, 9, 16), 5);
         try {
+            // (a player whose client never said "loaded" can't be hurt at all: this one is loaded, so the mine is what protects them)
+            derde.connection.handleAcceptPlayerLoad(new net.minecraft.network.protocol.game.ServerboundPlayerLoadedPacket());
             derde.hurtServer(level, level.damageSources().fall(), 8f);
             helper.assertTrue(derde.getHealth() == derde.getMaxHealth(), "a fall never hurts in the mine");
             derde.hurtServer(level, level.damageSources().generic(), 2f);
