@@ -1,0 +1,106 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/among_noodknop_voet",
+    "voet": "guhs:block/among_noodknop_voet",
+    "knop": "guhs:block/among_noodknop_knop"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        0,
+        3
+      ],
+      "to": [
+        13,
+        3,
+        13
+      ],
+      "faces": {
+        "down": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        3,
+        5
+      ],
+      "to": [
+        11,
+        5,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        4.5,
+        5,
+        4.5
+      ],
+      "to": [
+        11.5,
+        8,
+        11.5
+      ],
+      "faces": {
+        "down": {
+          "texture": "#knop"
+        },
+        "up": {
+          "texture": "#knop"
+        },
+        "north": {
+          "texture": "#knop"
+        },
+        "south": {
+          "texture": "#knop"
+        },
+        "west": {
+          "texture": "#knop"
+        },
+        "east": {
+          "texture": "#knop"
+        }
+      }
+    }
+  ]
+}

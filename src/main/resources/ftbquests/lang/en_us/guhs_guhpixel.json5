@@ -11,16 +11,24 @@
     "",
     "Play the joke games, earn &6Guhpixel Coins&r (not an item: they are on your name) and buy things for your home with them: the Guhcade, the Guh Office and the Guh Cinema. The &dTravel Agency&r and the &dGuh Parkour&r are simply in the Guhmension. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
   ],
-  "quest.4755483F8948F2EB.title": "Guhmon Battle",
-  "quest.4755483F8948F2EB.quest_desc": [
-    "Talk to &dGym Leader Naps&r in the Guhpixel lobby and challenge him with one of your own guhs (or the gym's loaner guh). No HP here, only a &9SLEEP bar&r: whoever falls asleep first wins. Losing costs nothing.",
+  "quest.47554895BB596105.title": "The Practice Round",
+  "quest.47554895BB596105.quest_desc": [
+    "Talk to &bCaptain Guh&r in the lobby of &dGuhpixel&r and fly a practice round on &dThe Chonkfarer&r. Do your task, see what the rest of the crew is up to and find the Mika. There is said to be one on board, Nyeg. The first time you get 100 coins and a keepsake, and after that you may join the real game.",
   ],
-  "quest.475548298AF628B6.title": "All three gym badges",
-  "quest.475548298AF628B6.quest_desc": [
-    "The &6Badge Case&r has room for more than one badge. Win again and earn the &dNyeg Badge&r (make one of Snorkel's Naps fail with your Nyeg) and the &6Nibble Badge&r (fall asleep on a full tummy). The other five gyms are closed for a nap.",
+  "quest.4755486551019EA3.title": "Aboard The Chonkfarer",
+  "quest.4755486551019EA3.quest_desc": [
+    "Talk to &bCaptain Guh&r in the Guhpixel lobby and play a whole round of &dAmong Guhs&r. Crew: do your tasks and vote the Mika out. Mika: push everybody asleep without anybody seeing it. Empty places are filled with guhs in space suits. Nobody gets hurt: whoever sleeps simply dreams on.",
   ],
-  "quest.4755481EE824C15B.title": "Farmer Wants a Guh",
-  "quest.4755481EE824C15B.quest_desc": [
-    "&dHost Guhvon&r in the Guhpixel lobby is recording her TV show. Read the three letters for &6Farmer Guhrrit&r, tuck everybody in during the stay-over week and help him choose. It's only television, nyeg.",
+  "quest.47554876EC1B2EC8.title": "Tasks Done, Mika Gone",
+  "quest.47554876EC1B2EC8.quest_desc": [
+    "Win a round as &bcrew&r: finish all tasks together, or vote the Mika out in a meeting. Listen well to what the guhs say: they tell what they really saw. Mostly, Nyeg.",
+  ],
+  "quest.475548A3D794F646.title": "Secretly a Mika",
+  "quest.475548A3D794F646.quest_desc": [
+    "Win a round as the &cMika&r. Only push when nobody is looking, crawl through the vents, put the lights out and say in the meeting with a straight snout that you were in the Cafeteria.",
+  ],
+  "quest.4755483F60762104.title": "Two Mikas on Board",
+  "quest.4755483F60762104.quest_desc": [
+    "Play a round on &6Hard&r: ten participants, two Mikas and one and a half times the coins. The leader of the queue picks the level.",
   ],
 }

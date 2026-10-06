@@ -32,8 +32,8 @@
     },
     {
       height: 1.5625,
-      id: "475548509CF7D298",
-      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_grapjes.png",
+      id: "47554888B3C51270",
+      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_among.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
@@ -86,21 +86,21 @@
       shape: "gear",
     },
     {
-      id: "4755483F8948F2EB",
+      id: "47554895BB596105",
       icon: {
-        id: "guhs:guhmon_badge_dutjes",
+        id: "guhs:among_sus_bord",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/guhmon_klaar",
-          id: "475548F38E3F03FF",
+          advancement: "guhs:quest/among_klaar",
+          id: "475548B12B41132D",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "47554883686AAB73",
+          id: "4755486732475309",
           type: "item",
           item: {
             count: 1,
@@ -109,30 +109,63 @@
           count: 8,
         },
         {
-          id: "475548F43D216734",
+          id: "475548D7E2E7CF3C",
           type: "xp",
-          xp: 50,
+          xp: 100,
         },
       ],
       x: 0.0,
       y: 6.5625,
     },
     {
-      id: "475548298AF628B6",
+      id: "4755486551019EA3",
       icon: {
-        id: "guhs:guhmon_badgedoos",
+        id: "guhs:among_noodknop",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/guhmon_badges",
-          id: "475548E62C59CA38",
+          advancement: "guhs:quest/among_ronde",
+          id: "47554823B5C2813B",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548CD6C1C93A4",
+          id: "475548D44F29E1B5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548F3D4F37E5D",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+      shape: "circle",
+    },
+    {
+      id: "47554876EC1B2EC8",
+      icon: {
+        id: "guhs:among_taakpaneel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/among_crew_winst",
+          id: "475548B846A87C96",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554801818D4B0D",
           type: "item",
           item: {
             count: 1,
@@ -141,45 +174,78 @@
           count: 12,
         },
         {
-          id: "4755481DD0DDDC82",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 1.5,
-      y: 6.5625,
-    },
-    {
-      id: "4755481EE824C15B",
-      icon: {
-        id: "guhs:bzg_ingelijste_brief",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/bzg_klaar",
-          id: "475548079795FA6F",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "47554894B4985EB3",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "4755483991137773",
+          id: "475548BF44B99764",
           type: "xp",
           xp: 50,
         },
       ],
       x: 3.0,
       y: 6.5625,
+    },
+    {
+      id: "475548A3D794F646",
+      icon: {
+        id: "guhs:among_kussen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/among_mika_winst",
+          id: "475548D415C3057C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E435A89FDB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548FAA831F37C",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755483F60762104",
+      icon: {
+        id: "guhs:among_ventilatieluik",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/among_lastig",
+          id: "4755481A80949C67",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482359275E0B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548222CAE7D0E",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+      shape: "hexagon",
     },
   ],
 }

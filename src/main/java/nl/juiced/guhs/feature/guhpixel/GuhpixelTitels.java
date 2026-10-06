@@ -25,6 +25,11 @@ public final class GuhpixelTitels {
         // <px_grap2>
         // </px_grap2>
         // <px_among>
+        ALLE.add(new Titels.Titel("among_sus", "gui.guhs.titels.naam.among_sus", net.minecraft.ChatFormatting.RED, "guhs:among_noodknop", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.WEGGESTEMD) >= 3));
+        ALLE.add(new Titels.Titel("among_onterecht", "gui.guhs.titels.naam.among_onterecht", net.minecraft.ChatFormatting.AQUA, "guhs:among_ventilatieluik", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.ONTERECHT) >= 1));
+        ALLE.add(new Titels.Titel("among_kussenkampioen", "gui.guhs.titels.naam.among_kussenkampioen", net.minecraft.ChatFormatting.LIGHT_PURPLE, "guhs:among_kussen", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.WINST_MIKA) >= 5));
+        ALLE.add(new Titels.Titel("among_speurguh", "gui.guhs.titels.naam.among_speurguh", net.minecraft.ChatFormatting.GOLD, "guhs:among_stembriefje", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.WINST_CREW) >= 10));
+        ALLE.add(new Titels.Titel("among_taakjesguh", "gui.guhs.titels.naam.among_taakjesguh", net.minecraft.ChatFormatting.GREEN, "guhs:among_taakpaneel", p -> nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.cijfer(p, nl.juiced.guhs.feature.guhpixel.among.AmongBeloning.TAKEN) >= 100));
         // </px_among>
         // <px_guhkade>
         // </px_guhkade>

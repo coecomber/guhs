@@ -162,9 +162,20 @@
     "guhwaii_bloemenkrans": "roze",
     "guhwaii_stitchoren": "blauw",
     "guhwaii_surfplankje": "wit",
-    "guhmon_trainerspet": "rood",
-    "bzg_strohoed": "geel",
-    "bzg_overall": "blauw"
+    "among_ruimtepakje_rood": "rood",
+    "among_ruimtepakje_blauw": "blauw",
+    "among_ruimtepakje_groen": "groen",
+    "among_ruimtepakje_geel": "geel",
+    "among_ruimtepakje_roze": "roze",
+    "among_ruimtepakje_oranje": "oranje",
+    "among_ruimtepakje_paars": "paars",
+    "among_ruimtepakje_wit": "wit",
+    "among_hoedje_plantje": "groen",
+    "among_hoedje_ei": "wit",
+    "among_hoedje_wc_rol": "wit",
+    "among_hoedje_kaaspunt": "geel",
+    "among_hoedje_briefje": "geel",
+    "among_hoedje_knabbel": "geel"
   },
   "wistjedat": {
     "eten_ijskoud": 3,

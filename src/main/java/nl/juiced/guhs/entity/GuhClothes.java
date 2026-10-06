@@ -377,6 +377,34 @@ public enum GuhClothes {
     BZG_OVERALL(Slot.BODY, "outfit_suit"),
     // </px_grap2>
     // <px_among>
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in rood (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_ROOD(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in blauw (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_BLAUW(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in groen (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_GROEN(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in geel (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_GEEL(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in roze (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_ROZE(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in oranje (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_ORANJE(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in paars (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_PAARS(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the Ruimtepakje in wit (the suit bones, with an air tank on the back). */
+    AMONG_RUIMTEPAKJE_WIT(Slot.BODY, "outfit_suit", "outfit_among_rugtank"),
+    /** Guhpixel, Among Guhs shop: the hoedje "plantje" (a little plant in a pot on the head). */
+    AMONG_HOEDJE_PLANTJE(Slot.HEAD, "outfit_among_plantje"),
+    /** Guhpixel, Among Guhs shop: the hoedje "ei" (a fried egg on the head). */
+    AMONG_HOEDJE_EI(Slot.HEAD, "outfit_among_ei"),
+    /** Guhpixel, Among Guhs shop: the hoedje "wc_rol" (a roll of toilet paper on the head). */
+    AMONG_HOEDJE_WC_ROL(Slot.HEAD, "outfit_among_wcrol"),
+    /** Guhpixel, Among Guhs shop: the hoedje "kaaspunt" (a wedge of cheese on the head). */
+    AMONG_HOEDJE_KAASPUNT(Slot.HEAD, "outfit_among_kaaspunt"),
+    /** Guhpixel, Among Guhs shop: the hoedje "briefje" (a sticky note that says 'sus' on the head). */
+    AMONG_HOEDJE_BRIEFJE(Slot.HEAD, "outfit_among_briefje"),
+    /** Guhpixel, Among Guhs shop: the hoedje "knabbel" (a big kaasknabbel on the head). */
+    AMONG_HOEDJE_KNABBEL(Slot.HEAD, "outfit_among_knabbel"),
     // </px_among>
     // <px_guhkade>
     // </px_guhkade>
