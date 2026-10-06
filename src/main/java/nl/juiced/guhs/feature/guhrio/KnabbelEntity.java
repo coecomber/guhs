@@ -26,7 +26,8 @@ import net.minecraft.world.phys.Vec3;
  * It never touches a player. Never saved.
  */
 public class KnabbelEntity extends LevelWezen {
-    public static final double SNELHEID = 0.5, ZWAARTE = 0.06, STUITER = 0.32;
+    /** (the bounce is low on purpose: a knabbel never hops over a Guhmba) */
+    public static final double SNELHEID = 0.5, ZWAARTE = 0.06, STUITER = 0.22;
     public static final int LEEFT = 50, STUITERS = 4;
 
     @Nullable

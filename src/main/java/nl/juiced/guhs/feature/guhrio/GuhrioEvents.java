@@ -40,6 +40,7 @@ import nl.juiced.guhs.Guhs;
  * /guhs guhrio testlevel [pos]     (dev runs only: it carves a big box of air) build the test level: its start block
  *                                  there (default: two blocks in front of you), running the way you look
  * /guhs guhrio testhoek [pos]      (dev runs only) the same for the little level with a corner in its lane
+ * /guhs guhrio bouwkasteel &lt;pos&gt;   (dev runs only) the whole castle, unturned, with its corner there
  * /guhs guhrio guhshi &lt;0|1&gt;        Guhshi carries you / not
  * /guhs guhrio kanaal &lt;k&gt; &lt;0|1&gt;    switch channel k off / on for you
  * /guhs guhrio ei                  you found Guhshi's egg
@@ -152,7 +153,27 @@ public final class GuhrioEvents {
             guhrio = guhrio.then(Commands.literal("testlevel").executes(c -> testlevel(c.getSource(), TESTLEVEL, null))
                             .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> testlevel(c.getSource(), TESTLEVEL, BlockPosArgument.getBlockPos(c, "pos")))))
                     .then(Commands.literal("testhoek").executes(c -> testlevel(c.getSource(), TESTHOEK, null))
-                            .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> testlevel(c.getSource(), TESTHOEK, BlockPosArgument.getBlockPos(c, "pos")))));
+                            .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> testlevel(c.getSource(), TESTHOEK, BlockPosArgument.getBlockPos(c, "pos")))))
+                    // (the whole castle, unturned, its corner at pos: 127 x 96 x 127 blocks; for looking at it without finding one)
+                    .then(Commands.literal("bouwkasteel").then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> {
+                        BlockPos hoek = BlockPosArgument.getBlockPos(c, "pos");
+                        ServerLevel level = c.getSource().getLevel();
+                        int tegels = 0;
+                        for (int i = 0; i < 8; i++) {
+                            for (int j = 0; j < 8; j++) {
+                                StructureTemplate tegel = level.getStructureManager().get(Guhs.id(GuhrioKasteel.STRUCTUUR + "/stuk_" + i + "_" + j)).orElse(null);
+                                if (tegel != null) {
+                                    BlockPos plek = hoek.offset(i * 32, 0, j * 32);
+                                    tegel.placeInWorld(level, plek, plek, new StructurePlaceSettings(), level.getRandom(), 2);
+                                    tegels++;
+                                }
+                            }
+                        }
+                        int n = tegels;
+                        c.getSource().sendSuccess(() -> Component.literal("Guhrio castle built: " + n + " tiles, its corner at " + hoek.toShortString()
+                                + " (the level hall is at +63 +27 +60, the forecourt at +63 +27 +118)"), true);
+                        return tegels;
+                    })));
         }
         guhrio = guhrio
                 .then(Commands.literal("guhshi").then(Commands.argument("n", IntegerArgumentType.integer(0, 1)).executes(c -> {
@@ -200,7 +221,7 @@ public final class GuhrioEvents {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     StringBuilder tekst = new StringBuilder("Guhrio castle: step " + GuhrioKasteel.LIJN.stap(p) + ", coins " + GuhrioSpel.munten(p) + " (ever "
                             + GuhrioKasteel.muntenOoit(p) + "), vadsmunten " + GuhrioKasteel.alleVadsmunten(p) + "/" + GuhrioKasteel.VADSMUNTEN + ", egg "
-                            + GuhrioKasteel.heeftEi(p) + ", duel " + GuhrioKasteel.duelGewonnen(p) + ", castle time " + GuhrioSpel.tijd(GuhrioKasteel.kasteelTijd(p)));
+                            + GuhrioKasteel.heeftEi(p) + ", duel " + GuhrioKasteel.duelGewonnen((net.minecraft.world.entity.player.Player) p) + ", castle time " + GuhrioSpel.tijd(GuhrioKasteel.kasteelTijd(p)));
                     for (String id : GuhrioKasteel.LEVELS) {
                         tekst.append("\n  ").append(id).append(": done ").append(GuhrioKasteel.gehaald(p, id)).append(", best ")
                                 .append(GuhrioSpel.tijd(GuhrioSpel.besteTijd(p, id))).append(", vads ").append(Integer.toBinaryString(GuhrioKasteel.vadsmunten(p, id)));

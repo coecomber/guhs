@@ -27,11 +27,11 @@ import nl.juiced.guhs.Guhs;
  * preview of exactly these boxes). The file: {@code {"textuur": [w, h], "delen": {"<deel>": [{"van": [x, y, z], "tot":
  * [x, y, z], "voor": [u, v, w, h], "zij": [...], "boven": [...], "achter": [...], "onder": [...]}]}}}: sizes in pixels
  * (16 = one block), the front of the creature is +z, every face gets a rectangle of the texture ({@code zij} is the default
- * for the sides, the back and the bottom). A renderer draws part by part ({@link #dien}), each with its own place and turn.
+ * for every face without one of its own; {@code links} / {@code rechts} are the creature's own left (+x) and right). A renderer draws part by part ({@link #dien}), each with its own place and turn.
  */
 public final class DoosModel {
-    private record Doos(float x0, float y0, float z0, float x1, float y1, float z1, float[] voor, float[] achter, float[] zij, float[] boven,
-                        float[] onder) {
+    private record Doos(float x0, float y0, float z0, float x1, float y1, float z1, float[] voor, float[] achter, float[] links, float[] rechts,
+                        float[] boven, float[] onder) {
     }
 
     private static final Map<String, DoosModel> ALLE = new ConcurrentHashMap<>();
@@ -57,8 +57,8 @@ public final class DoosModel {
                             JsonObject d = e.getAsJsonObject();
                             float[] van = getallen(d.getAsJsonArray("van")), tot = getallen(d.getAsJsonArray("tot"));
                             float[] zij = getallen(d.getAsJsonArray("zij"));
-                            dozen.add(new Doos(van[0], van[1], van[2], tot[0], tot[1], tot[2], of(d, "voor", zij), of(d, "achter", zij), zij,
-                                    of(d, "boven", zij), of(d, "onder", zij)));
+                            dozen.add(new Doos(van[0], van[1], van[2], tot[0], tot[1], tot[2], of(d, "voor", zij), of(d, "achter", zij),
+                                    of(d, "links", zij), of(d, "rechts", zij), of(d, "boven", zij), of(d, "onder", zij)));
                         }
                         delen.put(deel.getKey(), dozen);
                     }
@@ -110,8 +110,8 @@ public final class DoosModel {
         float x0 = d.x0, y0 = d.y0, z0 = d.z0, x1 = d.x1, y1 = d.y1, z1 = d.z1;
         vlak(vc, pose, licht, d.voor, x0, y0, z1, x1, y0, z1, x1, y1, z1, x0, y1, z1, 0, 0, 1);      // front
         vlak(vc, pose, licht, d.achter, x1, y0, z0, x0, y0, z0, x0, y1, z0, x1, y1, z0, 0, 0, -1);   // back
-        vlak(vc, pose, licht, d.zij, x1, y0, z1, x1, y0, z0, x1, y1, z0, x1, y1, z1, 1, 0, 0);       // its left
-        vlak(vc, pose, licht, d.zij, x0, y0, z0, x0, y0, z1, x0, y1, z1, x0, y1, z0, -1, 0, 0);      // its right
+        vlak(vc, pose, licht, d.links, x1, y0, z1, x1, y0, z0, x1, y1, z0, x1, y1, z1, 1, 0, 0);     // its left
+        vlak(vc, pose, licht, d.rechts, x0, y0, z0, x0, y0, z1, x0, y1, z1, x0, y1, z0, -1, 0, 0);   // its right
         vlak(vc, pose, licht, d.boven, x0, y1, z1, x1, y1, z1, x1, y1, z0, x0, y1, z0, 0, 1, 0);     // top
         vlak(vc, pose, licht, d.onder, x0, y0, z0, x1, y0, z0, x1, y0, z1, x0, y0, z1, 0, -1, 0);    // bottom
     }

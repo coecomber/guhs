@@ -73,13 +73,21 @@ public record GuhrioLevel(String id, String wereld, List<BaanDef> banen, @Nullab
         GELEZEN.clear();
     }
 
+    /** Takes a level made in code away again (tests). */
+    public static void vergeet(String id) {
+        VAST.remove(id);
+    }
+
     /** The level with this id: from code, else from {@code data/guhs/guhrio_level/<id>.json}. */
     @Nullable
     public static GuhrioLevel vind(MinecraftServer server, String id) {
         GuhrioLevel vast = VAST.get(id);
-        if (vast != null) {
-            return vast;
-        }
+        return vast != null ? vast : bestand(server, id);
+    }
+
+    /** The level of the file {@code data/guhs/guhrio_level/<id>.json}, whatever was registered from code; null: no such file. */
+    @Nullable
+    public static GuhrioLevel bestand(MinecraftServer server, String id) {
         if (id == null || id.isEmpty() || !id.matches("[a-z0-9_/.-]+")) {
             return null;
         }

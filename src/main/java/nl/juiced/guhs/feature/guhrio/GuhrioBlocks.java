@@ -118,14 +118,16 @@ public final class GuhrioBlocks {
         protected void saveAdditional(ValueOutput tag) {
             super.saveAdditional(tag);
             tag.putString("Level", level);
-            tag.putLong("Naar", naar.asLong());
+            tag.putInt("NaarX", naar.getX());
+            tag.putInt("NaarY", naar.getY());
+            tag.putInt("NaarZ", naar.getZ());
         }
 
         @Override
         protected void loadAdditional(ValueInput tag) {
             super.loadAdditional(tag);
             level = tag.getStringOr("Level", "");
-            naar = BlockPos.of(tag.getLongOr("Naar", 0L));
+            naar = new BlockPos(tag.getIntOr("NaarX", 0), tag.getIntOr("NaarY", 0), tag.getIntOr("NaarZ", 0));
         }
     }
 
@@ -505,8 +507,8 @@ public final class GuhrioBlocks {
         return p != null && GuhrioSpel.inPijp(p) ? Shapes.empty() : vorm;
     }
 
-    /** The body of a green pipe (under its mouth). */
-    public static class PijpLijfBlok extends Block {
+    /** The body of a green pipe (behind its mouth): a pillar along its axis (y under an upward mouth). */
+    public static class PijpLijfBlok extends net.minecraft.world.level.block.RotatedPillarBlock {
         public static final MapCodec<PijpLijfBlok> CODEC = simpleCodec(PijpLijfBlok::new);
 
         public PijpLijfBlok(Properties properties) {
@@ -514,7 +516,7 @@ public final class GuhrioBlocks {
         }
 
         @Override
-        protected MapCodec<? extends Block> codec() {
+        public MapCodec<? extends net.minecraft.world.level.block.RotatedPillarBlock> codec() {
             return CODEC;
         }
 

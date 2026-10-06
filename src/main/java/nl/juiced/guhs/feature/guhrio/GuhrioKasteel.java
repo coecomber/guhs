@@ -28,7 +28,7 @@ import nl.juiced.guhs.quest.Scorebord;
  *     <li>the records: every level and the whole castle in one go (the six levels in order, starting at 1-1; time lost in
  *     a level you walked out of counts) go to the Scorebord boards {@link #bord} / {@link #BORD_KASTEEL}, so the Guhdex
  *     highscore page shows your own best and the server record;</li>
- *     <li>Guhshi's egg ({@link #heeftEi}) and the duel ({@link #duelGewonnen}).</li>
+ *     <li>Guhshi's egg ({@link #heeftEi}) and the duel ({@link #winDuel}, {@link #duelGewonnen}).</li>
  * </ul>
  * The level slices and the reward slice only call what is public here.
  */
@@ -133,6 +133,7 @@ public final class GuhrioKasteel {
         vads.putInt(levelId, was | 1 << nummer);
         zetDeel(player, "Vads", vads);
         if (alleVadsmunten(player) >= VADSMUNTEN) {
+            nl.juiced.guhs.quest.GuhAdvancements.grant(player, "guhrio_vadsmunten");
             GidsFeature.grant(player, "guhrio/guhrio_vadsmunten");
             player.sendSystemMessage(Component.translatable("gui.guhs.guhrio.vadsmunten_alle").withStyle(ChatFormatting.GOLD));
         }
@@ -201,7 +202,7 @@ public final class GuhrioKasteel {
      * The duel is won (the duel slice calls this). The questline is done, the hidden advancement "guhrio_duel" is granted,
      * and {@link #BIJ_DUEL} hears of it (the reward slice: Guhshi is yours). True the first time.
      */
-    public static boolean duelGewonnen(ServerPlayer player) {
+    public static boolean winDuel(ServerPlayer player) {
         boolean eerste = !gehaald(player, DUEL);
         markeer(player, DUEL);
         LIJN.zet(player, LIJN.stappen());
@@ -263,6 +264,10 @@ public final class GuhrioKasteel {
     static void klaar(ServerPlayer player, GuhrioSpel.Sessie s, boolean record) {
         String id = s.level().level().id();
         int nr = LEVELS.indexOf(id);
+        if (DUEL.equals(id)) {
+            winDuel(player);                                 // (a duel level that simply ends at a flagpole)
+            return;
+        }
         if (nr < 0) {
             return;
         }
@@ -285,6 +290,7 @@ public final class GuhrioKasteel {
             return;
         }
         GuhrioSpel.spaar(player).remove("Loop");
+        nl.juiced.guhs.quest.GuhAdvancements.grant(player, "guhrio_kasteel_loop");
         int beste = kasteelTijd(player);
         boolean snelst = beste == 0 || totaal < beste;
         if (snelst) {
