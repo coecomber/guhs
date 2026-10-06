@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guhparkour_slalompaaltjes"
+    },
+    "facing=east": {
+      "model": "guhs:block/guhparkour_slalompaaltjes",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guhparkour_slalompaaltjes",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guhparkour_slalompaaltjes",
+      "y": 270
+    }
+  }
+}

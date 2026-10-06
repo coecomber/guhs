@@ -11,36 +11,24 @@
     "",
     "Speel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de Guhmensie. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
   ],
-  "quest.475548529F28E877.title": "Reisbureau De Vadsvakantie",
-  "quest.475548529F28E877.quest_desc": [
-    "Ergens ver weg in de &dGuhmensie&r staat een wit-roze huisje met een reuzenkoffer op het dak: &dReisbureau \"De Vadsvakantie\"&r. Het &6Superkompas&r wijst de weg (tabblad Knus). Daar kun je je guh op vakantie sturen!",
+  "quest.475548FA03A2D79D.title": "Op uw plaatsen...",
+  "quest.475548FA03A2D79D.quest_desc": [
+    "Maak een &dStartpaaltje&r en een &dFinishpaaltje&r. Daartussen komt het &dGuh-parkour&r: een route langs speelgoed en hindernissen waar je guhs rondjes over lopen. Houd het Startpaaltje in je hand en klik de stukken aan in volgorde: 1, 2, 3... en als laatste het Finishpaaltje. Zet het Startpaaltje daarna neer (binnen 32 blokken van alle stukken).",
   ],
-  "quest.4755483E342CB0B7.title": "De Reisagent-guh",
-  "quest.4755483E342CB0B7.quest_desc": [
-    "Praat met de &dReisagent-guh&r achter de balie. Hij stuurt guhs op reis: ze komen terug met een ansichtkaart, een souvenir en een zonnebril op.",
+  "quest.475548BA39B4753E.title": "Hup, boing, oeps",
+  "quest.475548BA39B4753E.quest_desc": [
+    "Bouw hindernissen: de &dGuh-horde&r (hup, eroverheen) en de &dGuh-springplank&r (boing!). Er zijn ook de &dKruiptunnel&r (je guh loopt er als een bobbel doorheen), de &dSlalompaaltjes&r, de &dEvenwichtsbalk&r (oeps, eraf... en er weer op) en het &dKnabbeltafeltje&r: de verplichte pitstop. Het glijbaantje, de wip, de schommel en de pluizige tunnel mogen ook in de route!",
   ],
-  "quest.4755485957984174.title": "Koffertje inpakken",
-  "quest.4755485957984174.quest_desc": [
-    "Een guh gaat niet op reis zonder koffertje. Breng de Reisagent-guh &64 kaasknabbels&r voor onderweg, &61 stuk wol&r als kussentje en &61 papiertje&r voor de ansichtkaart.",
+  "quest.475548972CFE8071.title": "Af!",
+  "quest.475548972CFE8071.quest_desc": [
+    "Rechtsklik op het Startpaaltje, kies een van je guhs en zet hem &dop de route&r (er passen er vier tegelijk op). Hij draaft naar de start, gebruikt elk stuk en begint dan gewoon opnieuw, tot je hem eraf haalt. Laat een guh &6een heel rondje&r lopen. In hetzelfde scherm zet je stukken eerder of later in de route, of haal je ze eruit.",
   ],
-  "quest.4755482ECF97EF67.title": "Proefreisje om de hoek",
-  "quest.4755482ECF97EF67.quest_desc": [
-    "Zet één van je guhs bij de balie en stuur hem op het &dproefreisje om de hoek&r. Dat duurt vijf echte minuten. Haal hem daarna op bij de balie: je krijgt de &6Reisstempel&r!",
+  "quest.4755481300707161.title": "De snelste vads",
+  "quest.4755481300707161.quest_desc": [
+    "Zet een &dParkour-scorebord&r binnen 32 blokken van je Startpaaltje. Daarop staat per guh het aantal rondjes en de &6beste rondetijd&r. Wie van je guhs is de snelste? (En wie valt het vaakst van de balk, njeg?)",
   ],
-  "quest.47554852A5E7DE08.title": "Een Reisbalie voor thuis",
-  "quest.47554852A5E7DE08.quest_desc": [
-    "Maak met de Reisstempel, papier en planken je eigen &dReisbalie&r. Die werkt precies als de balie in het Reisbureau: elke echte dag vier nieuwe reizen van 1, 2, 8 of 24 uur. Er mag één guh tegelijk weg, en hij kan nooit kwijtraken.",
-  ],
-  "quest.4755480A72DEA640.title": "Goede reis, njeg!",
-  "quest.4755480A72DEA640.quest_desc": [
-    "Stuur een guh op een echte reis en haal hem op als hij terug is. Hij brengt een &6ansichtkaart&r mee (rechtsklik om te lezen) en een &6souvenir&r voor in huis.",
-  ],
-  "quest.475548B7E99FCC44.title": "Met een beetje geluk",
-  "quest.475548B7E99FCC44.quest_desc": [
-    "Elke reis heeft ook een &dzeldzaam souvenir&r. Hoe langer de reis, hoe groter de kans: van 1 op 20 bij een reis van 1 uur tot bijna 1 op 3 bij 24 uur. Vind er één!",
-  ],
-  "quest.475548CA9C4A9A9B.title": "Het Gouden koffertje",
-  "quest.475548CA9C4A9A9B.quest_desc": [
-    "Een souvenir dat je al hebt wordt een &6stempel&r op je reispas. Bij tien stempels krijg je van de Reisagent-guh een &6Gouden koffertje&r.",
+  "quest.475548C63C272CFB.title": "Het grote Guh-parkour",
+  "quest.475548C63C272CFB.quest_desc": [
+    "Bouw een route van &6minstens acht stukken&r met een Finishpaaltje aan het eind en laat een guh hem helemaal uitlopen. Er passen zestien stukken in een route. Daarna heeft hij wel een dutje verdiend.",
   ],
 }

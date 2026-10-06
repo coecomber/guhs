@@ -32,8 +32,8 @@
     },
     {
       height: 1.5625,
-      id: "475548B09E4A59AA",
-      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_reisbureau.png",
+      id: "4755482E3B73901F",
+      image: "guhs:textures/ftbquests/guhs_guhpixel/kop_px_parkour.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
@@ -86,20 +86,96 @@
       shape: "gear",
     },
     {
-      id: "475548529F28E877",
+      id: "475548FA03A2D79D",
       icon: {
-        id: "guhs:reisbureau_koffertje",
+        id: "guhs:guhparkour_startpaaltje",
       },
       tasks: [
         {
-          type: "structure",
-          structure: "guhs:reisbureau",
-          id: "475548450D656D1E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhparkour_startpaaltje",
+          },
+          id: "475548038E481317",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhparkour_finishpaaltje",
+          },
+          id: "4755480102F7F081",
         },
       ],
       rewards: [
         {
-          id: "4755481795650F0E",
+          id: "47554834F65B9612",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+      shape: "circle",
+    },
+    {
+      id: "475548BA39B4753E",
+      icon: {
+        id: "guhs:guhparkour_horde",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhparkour_horde",
+          },
+          id: "475548204ED9D039",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhparkour_springplank",
+          },
+          id: "4755482C4DDACEB0",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483B38E94CCE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548972CFE8071",
+      icon: {
+        id: "guhs:guhparkour_finishpaaltje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhparkour_rondje",
+          id: "475548E98E8DA0AE",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554841C564492E",
           type: "item",
           item: {
             count: 1,
@@ -108,72 +184,7 @@
           count: 12,
         },
         {
-          id: "475548444F4B0EF7",
-          type: "xp",
-          xp: 100,
-        },
-      ],
-      x: 0.0,
-      y: 6.5625,
-      shape: "circle",
-    },
-    {
-      id: "4755483E342CB0B7",
-      icon: {
-        id: "guhs:reisbureau_kaart_om_de_hoek",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/reisbureau_kennis",
-          id: "4755484E6C447841",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755483CF3E88326",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "47554843E40E41CB",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 1.5,
-      y: 6.5625,
-    },
-    {
-      id: "4755485957984174",
-      icon: {
-        id: "minecraft:paper",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/reisbureau_koffer",
-          id: "475548A38CFBF2F4",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755482548BF1B6E",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "47554807C7A26E6E",
+          id: "4755489F5F0B30EE",
           type: "xp",
           xp: 50,
         },
@@ -182,56 +193,23 @@
       y: 6.5625,
     },
     {
-      id: "4755482ECF97EF67",
+      id: "4755481300707161",
       icon: {
-        id: "guhs:reisbureau_stempel",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/reisbureau_proefreis",
-          id: "475548023967099C",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "47554806FB09988E",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 12,
-        },
-        {
-          id: "47554831783C422A",
-          type: "xp",
-          xp: 100,
-        },
-      ],
-      x: 4.5,
-      y: 6.5625,
-      shape: "gear",
-    },
-    {
-      id: "47554852A5E7DE08",
-      icon: {
-        id: "guhs:reisbureau_balie",
+        id: "guhs:guhparkour_scorebord",
       },
       tasks: [
         {
           type: "item",
           item: {
             count: 1,
-            id: "guhs:reisbureau_balie",
+            id: "guhs:guhparkour_scorebord",
           },
-          id: "4755483449D09AE3",
+          id: "475548E9A3E68488",
         },
       ],
       rewards: [
         {
-          id: "4755483460AC0D74",
+          id: "475548FF9504D49C",
           type: "item",
           item: {
             count: 1,
@@ -239,113 +217,42 @@
           },
           count: 8,
         },
+      ],
+      x: 4.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548C63C272CFB",
+      icon: {
+        id: "guhs:guhparkour_knabbeltafeltje",
+      },
+      tasks: [
         {
-          id: "4755487F25F1BAE4",
+          type: "advancement",
+          advancement: "guhs:quest/guhparkour_groot",
+          id: "475548768C4C5518",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484D335D340F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 3,
+        },
+        {
+          id: "475548F7E4BA9C32",
           type: "xp",
-          xp: 50,
+          xp: 200,
         },
       ],
       x: 6.0,
       y: 6.5625,
-    },
-    {
-      id: "4755480A72DEA640",
-      icon: {
-        id: "guhs:reisbureau_souvenir_kaasmarkt",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/reisbureau_eerste_reis",
-          id: "475548D1662E2836",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548888C464FA4",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 12,
-        },
-        {
-          id: "4755485D286B1BE0",
-          type: "xp",
-          xp: 100,
-        },
-      ],
-      x: 7.5,
-      y: 6.5625,
-    },
-    {
-      id: "475548B7E99FCC44",
-      icon: {
-        id: "guhs:reisbureau_zeldzaam_kaasmarkt",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/reisbureau_zeldzaam",
-          id: "4755487A8A842FEE",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "47554868EDA02D5C",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:gefrituurde_kaasknabbels",
-          },
-          count: 4,
-        },
-        {
-          id: "475548A99E77C1B0",
-          type: "xp",
-          xp: 150,
-        },
-      ],
-      x: 9.0,
-      y: 6.5625,
       shape: "gear",
-    },
-    {
-      id: "475548CA9C4A9A9B",
-      icon: {
-        id: "guhs:reisbureau_gouden_koffertje",
-      },
-      tasks: [
-        {
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:reisbureau_gouden_koffertje",
-          },
-          id: "475548D2EA4F061B",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548C92A53C13C",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:gefrituurde_kaasknabbels",
-          },
-          count: 4,
-        },
-        {
-          id: "47554850EBF5DA55",
-          type: "xp",
-          xp: 150,
-        },
-      ],
-      x: 9.0,
-      y: 8.0625,
     },
   ],
 }
