@@ -72,13 +72,13 @@ final class RingH2Commands {
             })));
         }
         ga(h2, "bel", Guhvendel.BEL.offset(1, -1, 1));
-        ga(h2, "hal", new BlockPos(24, 6, 26));
-        ga(h2, "poort", new BlockPos(30, 5, 58));
-        ga(h2, "keuken", new BlockPos(41, 5, 44));
+        ga(h2, "hal", new BlockPos(24, 10, 26));
+        ga(h2, "poort", Guhvendel.MIDDEN.offset(0, 0, 23));
+        ga(h2, "keuken", Guhvendel.MIDDEN.offset(11, 0, 9));
         if (!FMLEnvironment.isProduction()) {
             h2.then(Commands.literal("bouw").executes(c -> {
                 ServerPlayer p = c.getSource().getPlayerOrException();
-                return zeg(c, bouw(p.level(), p.blockPosition()) ? "Guhvendel stands here (a test copy): its gate is " + Guhvendel.MIDDEN.getX() + " east, 58 south of you"
+                return zeg(c, bouw(p.level(), p.blockPosition()) ? "Guhvendel stands here (a test copy): its gate is " + Guhvendel.MIDDEN.getX() + " east, 58 south and " + Guhvendel.MIDDEN.getY() + " up"
                         : "no template guhs:" + Guhvendel.STRUCTUUR);
             }));
         }

@@ -69,12 +69,15 @@ public final class Guhvendel {
     /** The NpcRollen plek of every character of this house, and the id of the narrator card. */
     public static final String PLEK = "guhvendel", KAART = "ring_h2";
     /** Template coordinates: the stone table in the middle of the council ring (the anchor of both cutscenes). */
-    public static final BlockPos KRING = new BlockPos(41, 6, 27);
+    public static final BlockPos KRING = new BlockPos(41, 10, 27);
     /** Template coordinates: the council bell. */
-    public static final BlockPos BEL = new BlockPos(36, 7, 24);
-    /** Template coordinates: the middle of the cirque (floor level), and how far its floor reaches. */
-    public static final BlockPos MIDDEN = new BlockPos(30, 5, 35);
-    public static final int KOM = 24;
+    public static final BlockPos BEL = new BlockPos(36, 11, 24);
+    /**
+     * Template coordinates: the middle of the cirque (where you stand), how far its floor reaches, and how far above the
+     * floor the template sets air (its dome: a copy on a high cave floor must stay under the bedrock roof).
+     */
+    public static final BlockPos MIDDEN = new BlockPos(30, 9, 35);
+    public static final int KOM = 24, KOEPEL = 23;
 
     /** The steps of {@link RingH2Feature#LIJN}. */
     public static final int REIS = 0, WELKOM = 1, KENNIS = 2, RAADSBEL = 3, MELDEN = 4, VERTREK = 5, STAPPEN = 6;
@@ -91,23 +94,23 @@ public final class Guhvendel {
     }
 
     public static final List<Bewoner> BEWONERS = List.of(
-            new Bewoner("ringh2_guhrond_stoep", GuhNpcEntity.Kind.GUHROND, 24, 6, 25, 0.0, 270f, 0, 3),
-            new Bewoner("ringh2_guhdalf_voor", GuhNpcEntity.Kind.GUHDALF, 34, 5, 30, 0.0, 135f, 0, 3),
-            new Bewoner("ringh2_araguh_voor", GuhNpcEntity.Kind.ARAGUH, 34, 5, 55, 0.0, 0f, 0, 3),
-            new Bewoner("ringh2_leguhlas_voor", GuhNpcEntity.Kind.LEGUHLAS, 18, 5, 44, 0.0, 270f, 0, 3),
-            new Bewoner("ringh2_gimguh_voor", GuhNpcEntity.Kind.GIMGUH, 21, 5, 44, 0.0, 90f, 0, 3),
-            new Bewoner("ringh2_boromika_voor", GuhNpcEntity.Kind.BOROMIKA, 15, 6, 30, 0.0, 0f, 0, 3),
-            new Bewoner("ringh2_merrie_voor", GuhNpcEntity.Kind.MERRIE, 40, 5, 44, 0.0, 180f, 0, 3),
-            new Bewoner("ringh2_pippguh_voor", GuhNpcEntity.Kind.PIPPGUH, 42, 5, 44, 0.0, 180f, 0, 3),
-            new Bewoner("ringh2_guhrond_raad", GuhNpcEntity.Kind.GUHROND, 41, 6, 22, 0.5, 0f, 4, 5),
-            new Bewoner("ringh2_guhdalf_raad", GuhNpcEntity.Kind.GUHDALF, 44, 6, 23, 0.5, 45f, 4, 5),
-            new Bewoner("ringh2_araguh_raad", GuhNpcEntity.Kind.ARAGUH, 38, 6, 23, 0.5, 315f, 4, 5),
-            new Bewoner("ringh2_leguhlas_raad", GuhNpcEntity.Kind.LEGUHLAS, 46, 6, 26, 0.5, 90f, 4, 5),
-            new Bewoner("ringh2_gimguh_raad", GuhNpcEntity.Kind.GIMGUH, 46, 6, 28, 0.5, 90f, 4, 5),
-            new Bewoner("ringh2_boromika_raad", GuhNpcEntity.Kind.BOROMIKA, 44, 6, 31, 0.5, 135f, 4, 5),
-            new Bewoner("ringh2_merrie_raad", GuhNpcEntity.Kind.MERRIE, 49, 5, 31, 0.0, 60f, 4, 5),
-            new Bewoner("ringh2_pippguh_raad", GuhNpcEntity.Kind.PIPPGUH, 50, 5, 29, 0.0, 80f, 4, 5),
-            new Bewoner("ringh2_guhrond_thuis", GuhNpcEntity.Kind.GUHROND, 24, 6, 27, 0.0, 270f, 6, 99));
+            new Bewoner("ringh2_guhrond_stoep", GuhNpcEntity.Kind.GUHROND, 24, 10, 25, 0.0, 270f, 0, 3),
+            new Bewoner("ringh2_guhdalf_voor", GuhNpcEntity.Kind.GUHDALF, 34, 9, 30, 0.0, 135f, 0, 3),
+            new Bewoner("ringh2_araguh_voor", GuhNpcEntity.Kind.ARAGUH, 34, 9, 55, 0.0, 0f, 0, 3),
+            new Bewoner("ringh2_leguhlas_voor", GuhNpcEntity.Kind.LEGUHLAS, 18, 9, 44, 0.0, 270f, 0, 3),
+            new Bewoner("ringh2_gimguh_voor", GuhNpcEntity.Kind.GIMGUH, 21, 9, 44, 0.0, 90f, 0, 3),
+            new Bewoner("ringh2_boromika_voor", GuhNpcEntity.Kind.BOROMIKA, 15, 10, 30, 0.0, 0f, 0, 3),
+            new Bewoner("ringh2_merrie_voor", GuhNpcEntity.Kind.MERRIE, 40, 9, 44, 0.0, 180f, 0, 3),
+            new Bewoner("ringh2_pippguh_voor", GuhNpcEntity.Kind.PIPPGUH, 42, 9, 44, 0.0, 180f, 0, 3),
+            new Bewoner("ringh2_guhrond_raad", GuhNpcEntity.Kind.GUHROND, 41, 10, 22, 0.5, 0f, 4, 5),
+            new Bewoner("ringh2_guhdalf_raad", GuhNpcEntity.Kind.GUHDALF, 44, 10, 23, 0.5, 45f, 4, 5),
+            new Bewoner("ringh2_araguh_raad", GuhNpcEntity.Kind.ARAGUH, 38, 10, 23, 0.5, 315f, 4, 5),
+            new Bewoner("ringh2_leguhlas_raad", GuhNpcEntity.Kind.LEGUHLAS, 46, 10, 26, 0.5, 90f, 4, 5),
+            new Bewoner("ringh2_gimguh_raad", GuhNpcEntity.Kind.GIMGUH, 46, 10, 28, 0.5, 90f, 4, 5),
+            new Bewoner("ringh2_boromika_raad", GuhNpcEntity.Kind.BOROMIKA, 44, 10, 31, 0.5, 135f, 4, 5),
+            new Bewoner("ringh2_merrie_raad", GuhNpcEntity.Kind.MERRIE, 49, 9, 31, 0.0, 60f, 4, 5),
+            new Bewoner("ringh2_pippguh_raad", GuhNpcEntity.Kind.PIPPGUH, 50, 9, 29, 0.0, 80f, 4, 5),
+            new Bewoner("ringh2_guhrond_thuis", GuhNpcEntity.Kind.GUHROND, 24, 10, 27, 0.0, 270f, 6, 99));
 
     /** A copy of Guhvendel in the world: the cutscene anchor, the bell, the middle of the cirque, how it is turned, its box. */
     public record Oord(BlockPos anker, BlockPos bel, BlockPos midden, Rotation draai, BoundingBox doos) {
@@ -148,7 +151,9 @@ public final class Guhvendel {
         if (anker == null || bel == null || midden == null) {
             return null;
         }
-        return new Oord(anker, bel, midden, Kopieen.draai(start, null), start.getBoundingBox());
+        // (the box of the piece itself: a start's own box is 12 blocks wider all round, for the terrain adaptation)
+        BoundingBox doos = start.getPieces().isEmpty() ? start.getBoundingBox() : start.getPieces().get(0).getBoundingBox();
+        return new Oord(anker, bel, midden, Kopieen.draai(start, null), doos);
     }
 
     /** Is this player inside the cirque of a copy? */

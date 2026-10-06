@@ -6,7 +6,7 @@
 # council (Guhrond on the porch, the pair at the knabbel pile, the kitchen); frames of the council and of the fellowship;
 # the cast in the council ring; the Guhdex page of the chapter; Guhrond alone after the chapter.
 # NOT run by the slice itself (no game client in phase 2): this is for the merge step's visual check.
-# The template's corner is put at 6000 140 6000: the gate is at 6030 145 6058, the council ring's table at 6041 146 6027.
+# The template's corner is put at 6000 140 6000: the gate is at 6030 149 6058, the council ring's table at 6041 150 6027.
 
 section setup
 /gamemode spectator
@@ -15,7 +15,7 @@ section setup
 /effect give @s minecraft:night_vision infinite 0 true
 /gamerule doDaylightCycle false
 /gamerule doMobSpawning false
-/tp @s 6030 150 6035
+/tp @s 6030 154 6035
 /forceload add 5990 5990 6070 6070
 wait 80
 /fill 5990 139 5990 6070 139 6070 guhs:houtskoolsteen
@@ -32,29 +32,29 @@ clearchat
 
 section the house (nobody's story is here yet: no cast for a player at step 0 who is an op in creative... they see everybody)
 /gamemode spectator
-/tp @s 6030.5 152 6072 180 18
+/tp @s 6030.5 156 6072 180 18
 wait 5
-/tp @s 6030.5 152 6072 180 18
+/tp @s 6030.5 156 6072 180 18
 wait 40
 shot bbq2_ringh2_guhvendel_zuid world
-/tp @s 6052 160 6062 135 30
+/tp @s 6052 164 6062 135 30
 wait 5
-/tp @s 6052 160 6062 135 30
+/tp @s 6052 164 6062 135 30
 wait 40
 shot bbq2_ringh2_guhvendel_zuidoost world
-/tp @s 6030.5 147 6030 180 -12
+/tp @s 6030.5 151 6030 180 -12
 wait 5
-/tp @s 6030.5 147 6030 180 -12
+/tp @s 6030.5 151 6030 180 -12
 wait 40
 shot bbq2_ringh2_grote_val world
-/tp @s 6033 148 6026 270 5
+/tp @s 6033 152 6026 270 5
 wait 5
-/tp @s 6033 148 6026 270 5
+/tp @s 6033 152 6026 270 5
 wait 40
 shot bbq2_ringh2_hal world
-/tp @s 6031 150 6031 300 20
+/tp @s 6031 154 6031 300 20
 wait 5
-/tp @s 6031 150 6031 300 20
+/tp @s 6031 154 6031 300 20
 wait 40
 shot bbq2_ringh2_raadskring world
 
@@ -73,19 +73,19 @@ wait 20
 section before the council: Guhrond on the porch, the pair at the pile, the kitchen
 /guhs ringh2 stap 2
 wait 40
-/tp @s 6027.5 145 6026.5 90 0
+/tp @s 6027.5 149 6026.5 90 0
 wait 5
-/tp @s 6027.5 145 6026.5 90 0
+/tp @s 6027.5 149 6026.5 90 0
 wait 40
 shot bbq2_ringh2_guhrond_stoep world
-/tp @s 6019.5 145 6047.5 180 5
+/tp @s 6019.5 149 6047.5 180 5
 wait 5
-/tp @s 6019.5 145 6047.5 180 5
+/tp @s 6019.5 149 6047.5 180 5
 wait 40
 shot bbq2_ringh2_leguhlas_gimguh world
-/tp @s 6041.5 145 6047.5 180 5
+/tp @s 6041.5 149 6047.5 180 5
 wait 5
-/tp @s 6041.5 145 6047.5 180 5
+/tp @s 6041.5 149 6047.5 180 5
 wait 40
 shot bbq2_ringh2_keuken world
 
@@ -112,9 +112,9 @@ wait 120
 
 section after the bell: the cast sits in the council ring
 wait 40
-/tp @s 6036.5 146 6030.5 300 5
+/tp @s 6036.5 150 6030.5 300 5
 wait 5
-/tp @s 6036.5 146 6030.5 300 5
+/tp @s 6036.5 150 6030.5 300 5
 wait 40
 shot bbq2_ringh2_kring_bezet world
 
@@ -145,14 +145,14 @@ gui close
 section after the chapter: only Guhrond lives here
 /guhs ringh2 stap 6
 wait 40
-/tp @s 6027.5 145 6026.5 90 0
+/tp @s 6027.5 149 6026.5 90 0
 wait 5
-/tp @s 6027.5 145 6026.5 90 0
+/tp @s 6027.5 149 6026.5 90 0
 wait 40
 shot bbq2_ringh2_guhrond_thuis world
-/tp @s 6036.5 146 6030.5 300 5
+/tp @s 6036.5 150 6030.5 300 5
 wait 5
-/tp @s 6036.5 146 6030.5 300 5
+/tp @s 6036.5 150 6030.5 300 5
 wait 40
 shot bbq2_ringh2_kring_leeg world
 /guhs ring wis

@@ -272,16 +272,25 @@ def texts(h):
         bbq2.verborgen(h, name)
 
 
+GEBOUWD = {}     # the blocks of the template of this run (for the camera check of the self-check)
+
+
 def structuur(h):
     s, problems = bouw.bouw(h)
     if problems:
         raise SystemExit("ring_h2: Guhvendel is not right:\n  " + "\n  ".join(problems[:40]))
     s.save(STRUCTUUR)
+    GEBOUWD.clear()
+    GEBOUWD.update(s.blocks)
     titel, tooltip = STRUCTUUR_TEKST
+    # The cave floors of the Guhbarbecuether are rugged and the Worstenwoud is only about a twentieth of the ring: with the
+    # flatness numbers of the other buildings (26-40 / 8-10) two of six seeds had NO spot at all (RingH2GameTests
+    # ringh2GuhvendelVindtEenPlek). The template brings its own floor, foot and dome, so it only asks for a cave floor with
+    # some room in the middle and floors within 8 blocks of it 8 blocks around.
     # exactly one per world (no random spread): the first of the story chain, in its own slice of the ring around 0,0; the
     # next chapters lie "rond" this one. In the Superkompas (tab barbecue) once the sluier is open for the player.
     wereld.bbq_structuur(h, STRUCTUUR, soort="grot", titel=titel, tooltip=tooltip, biomes=["worstenwoud"], salt=SALT, templates=[(STRUCTUUR, 1)],
-                         gegarandeerd=dict(sector=12, min=250, max=700), voorrang=300, kompas="barbecue", grootte=40, vlak=10, hoogte=16)
+                         gegarandeerd=dict(sector=12, min=250, max=700), voorrang=300, kompas="barbecue", grootte=16, vlak=16, hoogte=12)
     # the centre jigsaw is in layer 0 and the pool says where the ground really is (the trick of fossiel_mijn / toren_peper):
     # the floor of the cirque lands on the cave floor and the terrain is smoothed towards it
 
@@ -302,6 +311,72 @@ def structuur(h):
         for z in range(25):
             t.set(x, 0, z, "minecraft:smooth_quartz")
     t.save("ringh2_test_kamer")
+
+
+def camera_check(scenes_java, blocks):
+    """Nobody has seen these scenes in the game yet, so at least this: no camera stands (or glides) inside a block of the
+    house, nothing of the house stands between a camera and what it looks at, and no actor is put inside a block. The
+    positions are read from RingH2Scenes.java: scene coordinates, relative to the stone table (bouw.KRING)."""
+    import math
+    problems = []
+    ax, ay, az = bouw.KRING
+    vrij = set(bouw.DUN) | {bouw.KETTING, bouw.LANTAARN}
+    getal = r"(-?[\d.]+)"
+    vec = rf"new Vec3\({getal}, {getal}, {getal}\)"
+
+    def blok(x, y, z):
+        b = blocks.get((ax + math.floor(x), ay + math.floor(y), az + math.floor(z)))
+        return b[0] if b else None
+
+    def dicht(x, y, z):
+        """Something of the house fills this point (a slab or a cushion only its lower half)."""
+        n = blok(x, y, z)
+        if n is None or n in vrij:
+            return False
+        if n.endswith("_slab") or "kussen" in n:
+            return (y % 1.0) < 0.5
+        return True
+    # 1. every position of the script: not inside a block (the ring waits inside the stone on purpose)
+    for x, y, z in sorted({tuple(float(v) for v in m) for m in re.findall(vec, scenes_java)}):
+        if (x, y, z) != (0.5, 0.25, 0.5) and dicht(x, y + 0.01, z):
+            problems.append(f"scene position {(x, y, z)} is inside {blok(x, y + 0.01, z)}")
+    # 2. the cameras, per scene
+    for naam in ("raad", "genootschap"):
+        a = scenes_java.index(f"private static Cutscene {naam}()")
+        b = scenes_java.index("return s.registreer();", a)
+        punten = []
+        for m in re.finditer(rf"\.camera(Knip)?(Volgt)?\((\d+), {vec}, (?:{vec}|(\w+))\)", scenes_java[a:b]):
+            knip, tijd = m.group(1), int(m.group(3))
+            pos = tuple(float(v) for v in m.group(4, 5, 6))
+            kijk = tuple(float(v) for v in m.group(7, 8, 9)) if m.group(7) else None
+            punten.append((tijd, pos, kijk, bool(knip)))
+        punten.sort()
+        if len(punten) < 6:
+            problems.append(f"scene {naam}: only {len(punten)} camera points were read")
+        for i, (tijd, pos, kijk, knip) in enumerate(punten):
+            stappen = [pos]
+            if i + 1 < len(punten) and not punten[i + 1][3]:
+                volgende = punten[i + 1][1]
+                stappen += [tuple(pos[k] + (volgende[k] - pos[k]) * n / 12.0 for k in range(3)) for n in range(1, 12)]
+            for (x, y, z) in stappen:
+                raak = [blok(x + dx, y + dy, z + dz) for dx, dz in ((0, 0), (0.3, 0), (-0.3, 0), (0, 0.3), (0, -0.3)) for dy in (0, -0.3)
+                        if dicht(x + dx, y + dy, z + dz)]
+                if raak:
+                    problems.append(f"scene {naam}: the camera of tick {tijd} is in or against {raak[0]} at {tuple(round(v, 1) for v in (x, y, z))}")
+                    break
+            if kijk:
+                d = [kijk[k] - pos[k] for k in range(3)]
+                lang = sum(v * v for v in d) ** 0.5
+                n = int(lang / 0.2)
+                for j in range(1, n):
+                    f = j / n
+                    if lang * (1 - f) < 0.9:
+                        break       # (the last bit: what it looks at)
+                    q = tuple(pos[k] + d[k] * f for k in range(3))
+                    if dicht(*q):
+                        problems.append(f"scene {naam}: the camera of tick {tijd} looks at {kijk} through {blok(*q)} at {tuple(round(v, 1) for v in q)}")
+                        break
+    return problems
 
 
 def selfcheck(h):
@@ -326,8 +401,8 @@ def selfcheck(h):
     for naam, (x, y, z) in (("KRING", bouw.KRING), ("BEL", bouw.BEL), ("MIDDEN", (bouw.CX, bouw.G + 1, bouw.CZ))):
         if f"{naam} = new BlockPos({x}, {y}, {z})" not in java:
             problems.append(f"Guhvendel.{naam} is not {(x, y, z)}")
-    if f"KOM = {int(bouw.RAND) + 1};" not in java:
-        problems.append(f"Guhvendel.KOM is not {int(bouw.RAND) + 1}")
+    if f"KOM = {int(bouw.RAND) + 1}," not in java or f"KOEPEL = {bouw.KOEPEL};" not in java:
+        problems.append(f"Guhvendel.KOM / KOEPEL are not {int(bouw.RAND) + 1} / {bouw.KOEPEL}")
     rijen = re.findall(r'new Bewoner\("(\w+)", GuhNpcEntity\.Kind\.(\w+), (\d+), (\d+), (\d+), ([\d.]+), ([\d.]+)f, (\d+), (\d+)\)', java)
     javaset = {(i, k.lower(), int(x), int(y), int(z), float(dy), float(yaw), int(van), int(tot)) for i, k, x, y, z, dy, yaw, van, tot in rijen}
     pyset = {(i, k, x, y, z, float(dy), float(yaw), van, tot) for (i, k, x, y, z, dy, yaw, van, tot) in bouw.BEWONERS}
@@ -338,6 +413,7 @@ def selfcheck(h):
     if f'PLEK = "{bouw.PLEK}"' not in java:
         problems.append("Guhvendel.PLEK is not the template's plek")
     scenes = open(os.path.join(pkg, "RingH2Scenes.java"), encoding="utf-8").read()
+    problems += camera_check(scenes, GEBOUWD)
     for scene_id, regels in (("ringh2_raad", SCENE_RAAD), ("ringh2_genootschap", SCENE_GENOOTSCHAP)):
         a = scenes.index(f'"{scene_id}"')
         b = scenes.index("return s.registreer();", a)

@@ -94,8 +94,8 @@ public final class RingH2Scenes {
                 .loop(SPELER, 10, 70, new Vec3(-2.5, 0, 1.5))
                 .kijk(SPELER, 72, KIJK_GUHROND);
         // 2. Guhrond opens the council
-        s.cameraKnip(120, new Vec3(-2.6, 1.7, 3.2), KIJK_GUHROND)
-                .camera(270, new Vec3(-1.8, 1.6, 2.4), KIJK_GUHROND)
+        s.cameraKnip(120, new Vec3(-1.2, 1.8, 3.4), KIJK_GUHROND)
+                .camera(270, new Vec3(-0.6, 1.65, 2.6), KIJK_GUHROND)
                 .animatie(GUHROND, 124, "praat").zeg(124, GUHROND, "welkom", 88)
                 .animatie(GUHROND, 216, "wijs").zeg(218, GUHROND, "leg", 56);
         // 3. the ring on the stone
@@ -213,7 +213,7 @@ public final class RingH2Scenes {
                 .cameraKnip(620, new Vec3(-2.6, 1.7, 3.2), KIJK_GUHROND)
                 .animatie(GUHROND, 622, "praat").zeg(622, GUHROND, "scheiden", 94);
         // 7. Merrie and Pippguh
-        s.cameraKnip(720, new Vec3(1.5, 2.3, -1.5), new Vec3(5.0, 0.8, 3.0))
+        s.cameraKnip(720, new Vec3(-0.5, 2.4, -2.0), new Vec3(5.0, 0.8, 3.0))
                 .animatie(GUHROND, 720, "")
                 .loop(MERRIE, 722, 762, new Vec3(2.6, 0, 2.2)).kijk(MERRIE, 764, KIJK_GUHROND)
                 .loop(PIPPGUH, 728, 770, new Vec3(1.6, 0, 3.1)).kijk(PIPPGUH, 772, KIJK_GUHROND)
@@ -223,7 +223,7 @@ public final class RingH2Scenes {
                 .animatie(PIPPGUH, 886, "");
         // 8. nine companions
         s.cameraKnip(934, new Vec3(-3.4, 2.6, 4.4), new Vec3(0.5, 1.0, -0.5))
-                .camera(1124, new Vec3(-5.4, 3.6, 6.0), new Vec3(0.5, 1.0, -0.5))
+                .camera(1124, new Vec3(-3.8, 3.3, 4.1), new Vec3(0.5, 1.0, -0.5))
                 .animatie(GUHROND, 936, "wijs").zeg(936, GUHROND, "negen", 100)
                 .geluid(1040, () -> SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1f)
                 .deeltjes(1040, ParticleTypes.HAPPY_VILLAGER, new Vec3(0.5, 1.6, 0.5), 30, 2.4)

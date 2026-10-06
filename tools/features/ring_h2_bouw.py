@@ -4,7 +4,7 @@ Knabbelring, in a rock cirque of the Worstenwoud with three kaassaus waterfalls.
 Guhbarbecuether (type guhs:barbecueput through wereld.bbq_structuur), x to the east, z to the south, ground layer G (you walk
 on G + 1). The cirque is open to the south, where the gate is.
 
-  - the CIRQUE: a horseshoe of charred rock with bands of mustard, 19 high. The great fall drops down its north wall into a
+  - the CIRQUE: a horseshoe of charred rock with bands of mustard, 19 high, on a foot of rock. The great fall drops down its north wall into a
     pool; two smaller falls (north-west and north-east) feed it through two brooks. From the pool the sauce runs south down
     the middle to a round basin behind the gate. Every block of sauce is written in the state it would settle in (springs in
     a notch of the rock, a lip, a falling curtain, still sauce in a bed of rock): nothing flows away, nothing needs a tick.
@@ -31,8 +31,9 @@ import sys
 
 NAAM = "guhvendel"
 MIDDEN = "guhs:guhvendel_midden"
-G = 4                                   # the ground layer (what you walk on is G + 1)
-SIZE = (61, 38, 61)
+G = 8                                   # the ground layer (what you walk on is G + 1); under it a foot of rock
+KOEPEL = 23                             # the template sets air up to this far above the floor, never higher
+SIZE = (61, G + 27, 61)
 CX, CZ = 30, 35                         # the middle of the cirque (and the centre jigsaw)
 RAND = 23.0                             # the flat floor of the cirque reaches this far from the middle
 KLIF = 19                               # how high the rock stands above the floor
@@ -91,7 +92,7 @@ HV = G + 1                              # its floor block (you stand on G + 2)
 MUUR_TOP = G + 7
 DEUR_Z = 26
 TX, TZ, TR = 10, 35, 3.4                # the tower: axis and radius
-TOREN_TOP = G + 18
+TOREN_TOP = G + 16
 
 # --- the council ring (east bank) -----------------------------------------------------------------------------------------
 KX, KZ, KR = 41, 27, 7.3
@@ -112,7 +113,7 @@ PX0, PX1, PZ0, PZ1 = 37, 45, 40, 46     # the kitchen pavilion (its pillars stan
 RUSTVUUR = (38, G + 1, 51)
 STAPEL = (19, 41)                       # the knabbel pile (2 x 2)
 BOMEN = [(16, 40, 5), (23, 47, 4), (12, 48, 6), (47, 36, 5), (21, 54, 4), (40, 55, 5), (25, 20, 4)]
-WORSTEN = [(5, 27, 9, 1), (55, 41, 11, -1), (40, 9, 8, 1)]      # (x, z, height, lean) on top of the rock
+WORSTEN = [(5, 41, 10, 1), (54, 31, 11, -1), (50, 50, 8, -1)]   # (x, z, height, lean) on the low shoulders of the rock
 
 # the falls: (the x of the curtain, the z of the spring, how high above the floor the spring is); the curtain falls one
 # block south of its spring, into a pool
@@ -240,13 +241,18 @@ class Bouw:
                             hg = 0
                 self.top[(x, z)] = G + hg
         for (x, z), top in self.top.items():
-            for y in range(0, top + 1):
+            # the foot: eight layers of rock under the middle, thinner towards the rim (a copy that hangs over a dip of the
+            # cave floor shows a rounded underside, not the bottom of a box)
+            r = math.hypot(x - CX, z - CZ)
+            onder = int(round((G - 2) * _glad((r - 17) / 12.0) + (_ruis(x // 2, z // 2, 9) - 0.5) * 1.6 * _glad((r - 17) / 6.0)))
+            for y in range(max(0, min(G - 2, onder)), top + 1):
                 self.set(x, y, z, self.steen(x, y, z, top))
-        # the air of the cirque: a dome over the plate, so the cave's own rock never hangs into the house
+        # the air of the cirque: a dome over the plate, so the cave's own rock never hangs into the house. Never higher than
+        # KOEPEL above the floor: a copy on a high cave floor must not open the bedrock roof of the dimension.
         for (x, z), top in self.top.items():
             r = math.hypot(x - CX, z - CZ)
-            koepel = G + 10 + int(25 * math.sqrt(max(0.0, 1 - (r / 31.5) ** 2)))
-            for y in range(top + 1, min(self.H, max(koepel, top + 5))):
+            koepel = G + 11 + int((KOEPEL - 10) * math.sqrt(max(0.0, 1 - (r / 31.5) ** 2)))
+            for y in range(top + 1, min(self.H, G + 1 + KOEPEL + 1, max(koepel, top + 5) + 1)):
                 self.set(x, y, z, AIR)
 
     def steen(self, x, y, z, top):
@@ -921,7 +927,7 @@ def check(s):
     zes = ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1))
     schuin = tuple((dx, dy, dz) for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)) for dy in (1, -1))   # (a roof of stairs)
     solid = {c for c, b in blocks.items() if b[0] != AIR}
-    seen = {c for c in solid if c[1] <= G}
+    seen = {c for c in solid if c[1] <= G and blocks[c][0] in (ROTS, ROTS_STENEN, MOSTERD, NYLIUM, KAASMOS)}
     todo = list(seen)
     while todo:
         x, y, z = todo.pop()
@@ -984,7 +990,13 @@ def check(s):
                            ("the knabbel pile", (STAPEL[0], G + 1, STAPEL[1] + 2))):
         if not bij(x, y, z):
             problems.append(f"{wat} at {(x, y, z)} can't be walked to from the gate")
-    # 5. a player in the council ring can't fall off the plate, and the bridge has room over it
+    # 5. no air above the dome (the bedrock roof), and the middle of the plate has its whole foot
+    hoog = max((c[1] for c, b in blocks.items() if b[0] == AIR), default=0)
+    if hoog > G + 1 + KOEPEL:
+        problems.append(f"air up to layer {hoog}, above the dome ({G + 1 + KOEPEL})")
+    if nm((CX, 0, CZ - 3)) != ROTS or nm((CX + 10, 0, CZ + 10)) != ROTS:
+        problems.append("the middle of the plate has no foot down to layer 0")
+    # 6. the bridge has room over it
     for z in BRUG_Z:
         for x in range(28, 34):
             for y in (G + 3, G + 4):

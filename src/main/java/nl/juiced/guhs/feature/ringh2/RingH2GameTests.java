@@ -358,6 +358,80 @@ public final class RingH2GameTests {
         helper.succeed();
     }
 
+    /**
+     * Guhvendel finds its one spot in the real generator of the Guhbarbecuether (the test server has no such dimension, so
+     * the generator is built here, as world/PlaatsingGameTests does for the Guhmensie): for several seeds the guaranteed set
+     * has a spot in its ring, in new terrain, the structure really starts there (the Worstenwoud, a cave floor with room),
+     * and the house with the air of its dome fits between the sauce sea and the bedrock roof.
+     */
+    @GuhTest(template = "empty", batch = "ringh2_wereld", timeoutTicks = 12000)
+    public static void ringh2GuhvendelVindtEenPlek(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        var access = level.registryAccess();
+        com.mojang.serialization.DynamicOps<com.google.gson.JsonElement> ops = net.minecraft.resources.RegistryOps.create(com.mojang.serialization.JsonOps.INSTANCE, access);
+        net.minecraft.world.level.biome.BiomeSource biomes;
+        try (var reader = level.getServer().getResourceManager().getResource(Guhs.id("dimension/barbecuether.json")).orElseThrow().openAsReader()) {
+            biomes = net.minecraft.world.level.biome.BiomeSource.CODEC.parse(ops, com.google.gson.JsonParser.parseReader(reader).getAsJsonObject()
+                    .getAsJsonObject("generator").getAsJsonObject("biome_source")).getOrThrow();
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException(e);
+        }
+        var settings = access.lookupOrThrow(net.minecraft.core.registries.Registries.NOISE_SETTINGS).getOrThrow(
+                net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.NOISE_SETTINGS, Guhs.id("barbecuether")));
+        var generator = new net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator(biomes, settings);
+        var height = net.minecraft.world.level.LevelHeightAccessor.create(settings.value().noiseSettings().minY(), settings.value().noiseSettings().height());
+        var sets = access.lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE_SET);
+        var set = sets.getValue(Guhs.id(Guhvendel.STRUCTUUR + "_gegarandeerd"));
+        helper.assertTrue(set != null && set.placement() instanceof nl.juiced.guhs.world.GegarandeerdPlacement, "the guaranteed set of Guhvendel");
+        helper.assertTrue(sets.getValue(Guhs.id(Guhvendel.STRUCTUUR)) == null, "no random-spread set: exactly one Guhvendel per world");
+        var plaatsing = (nl.juiced.guhs.world.GegarandeerdPlacement) set.placement();
+        var entry = set.structures().get(0);
+        int zee = generator.getSeaLevel(), dak = height.getMaxY() - 5;
+        StringBuilder verslag = new StringBuilder();
+        List<String> fouten = new ArrayList<>();
+        for (long seed : new long[]{20261099L, 628114333L, 628122252L, 20261001L, 7L, 123456789L}) {
+            var random = net.minecraft.world.level.levelgen.RandomState.create(settings.value(), access.lookupOrThrow(net.minecraft.core.registries.Registries.NOISE), seed);
+            var state = net.minecraft.world.level.chunk.ChunkGeneratorStructureState.createForNormal(random, seed, biomes, sets);
+            state.ensureStructuresGenerated();
+            nl.juiced.guhs.world.BouwRuimte.remember(random, state);
+            // (a world in which nothing exists yet: the set is "alleen_nieuw")
+            nl.juiced.guhs.world.GegarandeerdPlacement.onthoudBestaand(level, state, seed, generator, height, new nl.juiced.guhs.world.GegarandeerdData(),
+                    () -> nl.juiced.guhs.world.NieuwTerrein.van(k -> false));
+            Optional<net.minecraft.world.level.ChunkPos> plek = plaatsing.plek(state, seed);
+            if (plek.isEmpty()) {
+                fouten.add("seed " + seed + ": no spot");
+                continue;
+            }
+            net.minecraft.world.level.ChunkPos c = plek.get();
+            int d = (int) Math.round(Math.hypot(c.getMiddleBlockX(), c.getMiddleBlockZ()));
+            var structure = entry.structure().value();
+            var start = structure.generate(entry.structure(), level.dimension(), access, generator, biomes, random, level.getStructureManager(), seed, c, 0, height,
+                    structure.biomes()::contains);
+            if (!start.isValid()) {
+                fouten.add("seed " + seed + ": does not start at " + c);
+                continue;
+            }
+            // (the piece's own box: the start's box is 12 wider all round for the terrain adaptation)
+            BoundingBox doos = start.getPieces().get(0).getBoundingBox();
+            int vloer = doos.minY() + Guhvendel.MIDDEN.getY();
+            verslag.append(String.format("seed %d: chunk %s, %d blocks from 0,0, floor y %d, box y %d..%d; ", seed, c, d, vloer, doos.minY(), doos.maxY()));
+            if (d < plaatsing.minAfstand() - 16 || d > plaatsing.maxAfstand() + 16) {
+                fouten.add("seed " + seed + ": " + d + " blocks from the middle, outside its ring");
+            }
+            // (what the template sets ABOVE the dome is solid: a roof tip or a tree top in the rock opens nothing)
+            if (vloer <= zee + 1 || vloer + Guhvendel.KOEPEL >= dak) {
+                fouten.add("seed " + seed + ": does not fit between the sauce sea (" + zee + ") and the bedrock roof (" + dak + "): floor " + vloer
+                        + ", the dome's air up to " + (vloer + Guhvendel.KOEPEL));
+            }
+            if (doos.getXSpan() < 2 * Guhvendel.KOM || doos.getZSpan() < 2 * Guhvendel.KOM) {
+                fouten.add("seed " + seed + ": the start is not the whole house: " + doos);
+            }
+        }
+        org.slf4j.LoggerFactory.getLogger("guhs").info("RingH2: Guhvendel in the Barbecuether: {} problems: {}", verslag, fouten);
+        helper.assertTrue(fouten.isEmpty(), "Guhvendel has its spot in every world: " + fouten + " (" + verslag + ")");
+        helper.succeed();
+    }
+
     private RingH2GameTests() {
     }
 }
