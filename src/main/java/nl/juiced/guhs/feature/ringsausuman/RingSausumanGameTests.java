@@ -382,6 +382,7 @@ public class RingSausumanGameTests {
         helper.assertTrue(behaald(p, "quest/ring_sausuman_pannantir"), "looked into the Pannantir");
         helper.assertTrue(LIJN.stap(p) == 0 && !LIJN.begonnen(p), "looking is no step of the questline");
         klik(helper, p, rad);
+        helper.assertTrue(behaald(p, "quest/ring_sausuman_mikarad"), "poked the Mika");
         helper.assertTrue(helper.getLevel().getBlockEntity(helper.absolutePos(rad)) instanceof MikaradBlock.Kern kern && kern.vadsAanbod() == MikaradBlock.VERMOGEN
                 && kern.vadsSoort() == null, "the Mika-rad is a source of " + MikaradBlock.VERMOGEN);
         weg(helper, p);

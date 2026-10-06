@@ -44,7 +44,7 @@ public final class RingSausumanClient {
             move = mok(Cutscenes.animatieTicks(npc) + (t - Mth.floor(t)), t, false, false);
         } else if (!naam.isEmpty()) {
             move = CastAnimaties.maak(naam, Cutscenes.animatieTicks(npc) + (t - Mth.floor(t)), Lijf.VIERPOOT);
-        } else if (!Cutscenes.bezig(net.minecraft.client.Minecraft.getInstance().player) && stap() >= MOKT_VANAF) {
+        } else if (!inScene() && stap() >= MOKT_VANAF) {
             move = mok(100f, t, true, stap() >= RingSausumanFeature.LIJN.stappen());
         } else {
             move = null;
@@ -57,6 +57,12 @@ public final class RingSausumanClient {
         }
         float wuif = Mth.sin(t * 0.05f) * 0.03f;
         return CastAnimaties.samen(move, b -> b.ifPresent("sausuman_baard", s -> s.setRotX(s.getRotX() + wuif)));
+    }
+
+    /** Is the viewer watching a scene (then the actor does what the scene says, also in a replay after the questline)? */
+    private static boolean inScene() {
+        var speler = net.minecraft.client.Minecraft.getInstance().player;
+        return speler != null && Cutscenes.bezig(speler);
     }
 
     /** The viewer's own step of the tower's questline (-1: not known yet). */

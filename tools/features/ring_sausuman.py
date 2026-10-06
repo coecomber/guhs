@@ -30,6 +30,9 @@ SALT = 21302201                                  # slice 22 (CONTRACT_130 3); th
 STRUCTUUR = bouw.STRUCTUUR
 BOOMSTAD = "guhladriel_boomstad"                 # chapter 4's structure: the tower stands 200-400 blocks from it
 VOORRANG = 250                                   # (CONTRACT_130 3: the ring structures 300 .. 260, the tower 250)
+# free blocks the cave must have above the yard: the whole shaft and the feet of the horns stand in the open; only where the
+# ceiling comes lower the template opens it itself (ring_sausuman_bouw.Bouw.grond)
+HOOGTE = 32
 BEELDEN = 8                                      # the visions of the Pannantir (PannantirBlock.BEELDEN)
 VERMOGEN = 10                                    # what the Mika-rad gives (MikaradBlock.VERMOGEN)
 
@@ -163,7 +166,7 @@ STAPPEN = [  # (stapnaam, nu, waar): the questline in the Guhdex and on the trav
 ]
 KORT = {"0": "Praat met Sausuman in zijn toren", "1": "Haal deeg, hete saus en kaas boven in de toren", "2": "Trek aan de hendel van de Ringenbakker",
         "3": "Bied Sausuman een hapje uienring aan"}
-VERBORGEN = ["ring_sausuman_mok", "ring_sausuman_uienring", "ring_sausuman_dagelijks", "ring_sausuman_pannantir"]
+VERBORGEN = ["ring_sausuman_mok", "ring_sausuman_uienring", "ring_sausuman_dagelijks", "ring_sausuman_pannantir", "ring_sausuman_mikarad"]
 ADV = [  # name, parent, icon, frame, title, description (tab knabbelring)
     ("ring_sausuman_mok", "ring_gekregen", "guhs:ringsausuman_uienring", "goal", "Eén uienring om ze allemaal op te eten",
      "Help Sausuman zijn eigen ring bakken. Het wordt een uienring. Hij mokt"),
@@ -489,7 +492,7 @@ def structuur(h):
     wereld.bbq_structuur(h, STRUCTUUR, soort="grot", titel="Toren van Sausuman",
                          tooltip="De zwarte toren van Sausuman, de tovenaar-Mika die ook een hapje wil (Guhbarbecuether)",
                          biomes=wereld.BBQ, salt=SALT, templates=[(STRUCTUUR, 1)], gegarandeerd=gegarandeerd, voorrang=VOORRANG,
-                         kompas="barbecue", grootte=24, vlak=10, hoogte=22)
+                         kompas="barbecue", grootte=24, vlak=10, hoogte=HOOGTE)
     # the centre jigsaw is in layer 0 and the pool says where the ground really is (as fossiel-mijn, sausdieren and toren-peper do)
 
     def grond(pool, delta=bouw.G + 1):
@@ -594,6 +597,10 @@ def selfcheck(h):
         for m in re.finditer(r'\.zeg\(\d+, "\w*", "(\w+)"', src):
             if f"scene.guhs.ringsausuman_bakken.{m.group(1)}" not in h.NL:
                 problems.append(f"{f}: the scene says {m.group(1)}, which has no text")
+    for name in re.findall(r'grant\(\w+, "(ring_sausuman_\w+)"\)|behaald\(\w+, "(ring_sausuman_\w+)"\)', "".join(
+            open(os.path.join(JAVA, f), encoding="utf-8").read() for f in os.listdir(JAVA) if f.endswith(".java") and not f.endswith("GameTests.java"))):
+        if (name[0] or name[1]) not in VERBORGEN:
+            problems.append(f"the Java side grants quest/{name[0] or name[1]}, which this module does not write")
     for soort in bouw.SOORTEN:
         for key in (f"{GUI}voorraad.pak.{soort}", f"{GUI}voorraad.heb_je.{soort}", f"{GUI}voorraad.klaar.{soort}"):
             if key not in h.NL:
@@ -658,8 +665,9 @@ def ftb(fq):
     eerste = ["ring_sausuman_toren"]
     q("ring_sausuman_te_zwaar", "Te zwaar, njeg",
       "Kijk eens naar de machines in de hal: &cTe zwaar: er is vadskracht te weinig, dus alles staat stil&r. Sausuman heeft vijf echte "
-      "machines aan één &6Mika-rad&r gehangen, en een Mika rent niet. Zo moet het dus niet. Hoe het wel moet staat bij &bGuh-technologie&r: "
-      "een Guhrad, met een guh erin.", "guhs:guh_wire", [adv("ring_sausuman_stap_1")], rewards=(("guhs:kaas_knabbels", 4),), deps=eerste)
+      "machines aan één &6Mika-rad&r gehangen, en een Mika rent niet. Por de Mika maar eens (rechtsklik op het rad). Zo moet het dus niet. "
+      "Hoe het wel moet staat bij &bGuh-technologie&r: een Guhrad, met een guh erin.", "guhs:guh_wire", [adv("ring_sausuman_mikarad")],
+      rewards=(("guhs:kaas_knabbels", 4),), deps=eerste)
     q("ring_sausuman_pannantir", "De Pannantír",
       "Boven in de toren staat een pan waar je dingen in ziet. Kijk er eens in (rechtsklik). Meestal zie je een oog dat trek heeft. Na "
       "afloop mag je er zelf een mee naar huis nemen.", "guhs:ringsausuman_pannantir", [adv("ring_sausuman_pannantir")],

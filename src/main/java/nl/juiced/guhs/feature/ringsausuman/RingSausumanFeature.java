@@ -3,10 +3,14 @@ package nl.juiced.guhs.feature.ringsausuman;
 import java.util.List;
 import java.util.function.Consumer;
 
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.food.FoodProperties;
@@ -16,6 +20,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
@@ -179,7 +186,7 @@ public final class RingSausumanFeature {
     /**
      * {@code /guhs ringsausuman stand} (ops; for the AutoCheck script and dev checks): where the caller is in the questline
      * and what they carry; in dev runs only {@code toren}: the tower's template around you, your feet on the spot just
-     * outside its door. The steps themselves: {@code /guhs verhaal stap ring_sausuman <speler> <n>}.
+     * outside its door, and {@code dump}: the generated copy around you as a template file. The steps themselves: {@code /guhs verhaal stap ring_sausuman <speler> <n>}.
      */
     private static void commando(RegisterCommandsEvent event) {
         var wortel = Commands.literal("ringsausuman").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
@@ -197,8 +204,36 @@ public final class RingSausumanFeature {
                 c.getSource().sendSuccess(() -> Component.literal(gelukt ? "guhs:sausuman_toren staat op " + hoek.toShortString() : "Geen template"), false);
                 return gelukt ? 1 : 0;
             }));
+            wortel.then(Commands.literal("dump").executes(c -> dump(c.getSource())));
         }
         event.getDispatcher().register(Commands.literal("guhs").then(wortel));
+    }
+
+    /**
+     * (dev) the generated copy of the tower around the source, with 10 blocks of land around it and 4 under it, as a template
+     * file in the server folder: to look at how it lies in real terrain (pictures: see the slice's manual).
+     */
+    private static int dump(CommandSourceStack source) {
+        ServerLevel level = source.getLevel();
+        StructureStart start = Bezetting.start(level, Toren.STRUCTUUR, BlockPos.containing(source.getPosition()));
+        if (start == null) {
+            source.sendFailure(Component.literal("no copy of guhs:" + Toren.STRUCTUUR + " here"));
+            return 0;
+        }
+        BoundingBox box = start.getBoundingBox();
+        BlockPos hoek = new BlockPos(box.minX() - 10, Math.max(level.getMinY(), box.minY() - 4), box.minZ() - 10);
+        BlockPos maat = new BlockPos(box.getXSpan() + 20, Math.min(level.getMaxY(), box.maxY() + 8) - hoek.getY() + 1, box.getZSpan() + 20);
+        StructureTemplate template = new StructureTemplate();
+        template.fillFromWorld(level, hoek, maat, false, List.of());
+        var file = level.getServer().getServerDirectory().resolve("ringsausuman_dump.nbt");
+        try {
+            NbtIo.writeCompressed(template.save(new CompoundTag()), file);
+        } catch (java.io.IOException e) {
+            source.sendFailure(Component.literal("dump failed: " + e));
+            return 0;
+        }
+        source.sendSuccess(() -> Component.literal("dumped " + box + " from corner " + hoek.toShortString() + " to " + file), false);
+        return 1;
     }
 
     private RingSausumanFeature() {

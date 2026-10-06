@@ -30,6 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import nl.juiced.guhs.feature.vadskracht.BronSoort;
 import nl.juiced.guhs.feature.vadskracht.VadsBron;
 import nl.juiced.guhs.feature.vadskracht.VadsKracht;
+import nl.juiced.guhs.quest.GuhAdvancements;
 
 /**
  * Het Mika-rad: Sausuman's answer to the Guhrad. No guh wants to run for him, so there is an Uruk-Mika in it, and a Mika
@@ -110,6 +111,7 @@ public class MikaradBlock extends BaseEntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (player instanceof ServerPlayer sp) {
             sp.sendOverlayMessage(Component.translatable("gui.guhs.ringsausuman.mikarad.por"));
+            GuhAdvancements.grant(sp, "ring_sausuman_mikarad");
         }
         return InteractionResult.SUCCESS;
     }
