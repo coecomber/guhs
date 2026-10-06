@@ -49,8 +49,9 @@ import nl.juiced.guhs.storage.Nbt;
  * bbq2 (ring-h2): chapter 2 of the Knabbelring, server side. Template ringh2_test_kamer (tools/features/ring_h2.py): a bare
  * floor of 25 x 25. The test server has no Barbecuether, so a copy of Guhvendel is a structure start made by hand
  * ({@link RingH2Commands#kopie}) around the room, placed so that the council ring's stone table lands on {@link #TAFEL}; the
- * characters are put down by the test. Mock players get no packets and are not ticked: a test posts their tick event itself
- * (a mock "watches" a card or a scene for two ticks) and calls the chapter's once-a-second upkeep by hand.
+ * characters are put down by the test. Mock players get no packets: a test posts their tick event itself (a mock "watches"
+ * a card or a scene for two ticks) and calls the chapter's once-a-second upkeep by hand (with the posted ticks it also runs
+ * by itself now and then: the asserts hold either way).
  */
 public final class RingH2GameTests {
     private static final String KAMER = "ringh2_test_kamer", BATCH = "ringh2";
@@ -64,8 +65,6 @@ public final class RingH2GameTests {
         BlockPos at = helper.absolutePos(new BlockPos(x, 2, z));
         p.snapTo(at.getX() + 0.5, at.getY(), at.getZ() + 0.5);
         p.setOnGround(true);
-        // (never on the tick on which a once-a-second listener would run by itself: the tests call those by hand)
-        p.tickCount = Math.floorMod(3 - p.getId(), 20);
         Ring.OVERAL = true;
         return p;
     }
@@ -127,9 +126,13 @@ public final class RingH2GameTests {
         naHoofdstuk1(vriend);
         helper.assertTrue(lijn.stappen() == Guhvendel.STAPPEN && lijn.aanDeBeurt(p) && !lijn.aanDeBeurt(vreemde) && lijn.stap(p) == Guhvendel.REIS,
                 "six steps; the chapter is the player's once chapter 1 is done");
+        Vec3 binnen = p.position();
         Guhvendel.Oord o = Guhvendel.oord(level, p.blockPosition());
         helper.assertTrue(o != null && o.anker().equals(helper.absolutePos(TAFEL)) && o.bel().equals(helper.absolutePos(TAFEL.offset(-5, 1, -3)))
-                && o.draai() == Rotation.NONE && o.inKom(p.position()), "the copy is found: the stone table, the bell, the cirque");
+                && o.draai() == Rotation.NONE && o.inKom(binnen), "the copy is found: the stone table, the bell, the cirque");
+        // the player is still on the way (far above the room: no copy near them)
+        p.snapTo(binnen.x, binnen.y + 90, binnen.z);
+        helper.assertTrue(Guhvendel.oord(level, p.blockPosition()) == null && !Guhvendel.binnen(p), "far away: no Guhvendel here");
         helper.setBlock(TAFEL.offset(-5, 1, -3), Blocks.BELL);
         List<GuhNpcEntity> npcs = new ArrayList<>();
         GuhNpcEntity guhrond = zet(helper, GuhNpcEntity.Kind.GUHROND, 10, 4), guhdalf = zet(helper, GuhNpcEntity.Kind.GUHDALF, 12, 4);
@@ -147,13 +150,20 @@ public final class RingH2GameTests {
         // step 0: the card first, then walking into the cirque is the arrival
         Guhvendel.seconde(p);
         helper.assertTrue(Cutscenes.bezig(p) && !Verteller.gezien(p, Guhvendel.KAART) && lijn.stap(p) == Guhvendel.REIS, "the narrator card of the chapter shows");
+        // (the friend stands in the cirque all the time and reads the card too: from then on only what THEY do counts)
+        Guhvendel.seconde(vriend);
         helper.onEachTick(() -> {
             tik(p);
             tik(vriend);
         });
         helper.runAfterDelay(6, () -> {
             helper.assertTrue(!Cutscenes.bezig(p) && Verteller.gezien(p, Guhvendel.KAART) && lijn.begonnen(p) && lijn.stap(p) == Guhvendel.REIS,
-                    "the card was read: the chapter has begun, the player is not there yet");
+                    "the card was read: the chapter has begun, the player is not there yet (watching " + Cutscenes.bezig(p) + ", read "
+                            + Verteller.gezien(p, Guhvendel.KAART) + ", begun " + lijn.begonnen(p) + ", step " + lijn.stap(p) + ")");
+            Guhvendel.seconde(p);
+            helper.assertTrue(lijn.stap(p) == Guhvendel.REIS, "still on the way: not arrived");
+            p.snapTo(binnen.x, binnen.y, binnen.z);
+            helper.assertTrue(Guhvendel.binnen(p), "the player walks into the cirque");
             Guhvendel.seconde(p);
             helper.assertTrue(lijn.stap(p) == Guhvendel.WELKOM, "inside the cirque: arrived (step " + lijn.stap(p) + ")");
             Guhvendel.seconde(p);
@@ -187,8 +197,8 @@ public final class RingH2GameTests {
             helper.assertTrue(tel(p, ModItems.KAAS_KNABBELS.get()) == 2, "and only one, ever");
             helper.assertTrue(Guhvendel.ontmoet(p) == 6 && lijn.stap(p) == Guhvendel.RAADSBEL, "everybody met: on to the bell (step " + lijn.stap(p) + ")");
             // the friend stood next to it all: nothing of this is theirs
-            helper.assertTrue(lijn.stap(vriend) == Guhvendel.REIS && Guhvendel.ontmoet(vriend) == 0 && !Verteller.gezien(vriend, Guhvendel.KAART),
-                    "the friend's story did not move");
+            helper.assertTrue(lijn.stap(vriend) <= Guhvendel.WELKOM && Guhvendel.ontmoet(vriend) == 0 && tel(vriend, ModItems.KAAS_KNABBELS.get()) == 0,
+                    "the friend met nobody and got nothing: step " + lijn.stap(vriend));
             helper.assertTrue(!Guhvendel.luid(vriend, o) && !Cutscenes.bezig(vriend), "the bell does not start a council for the friend");
             // step 3: the bell starts the council for the player whose turn it is
             helper.assertTrue(Guhvendel.luid(p, o) && Cutscenes.bezig(p) && lijn.stap(p) == Guhvendel.RAADSBEL, "the bell: the council plays, the step waits for its end");
@@ -203,7 +213,7 @@ public final class RingH2GameTests {
             NpcRollen.van(guhdalf).antwoord(guhdalf, p, GuhvendelRol.JA);
             helper.assertTrue(lijn.stap(p) == Guhvendel.MELDEN, "Guhdalf's 'op weg' is not for this step");
             NpcRollen.van(guhrond).antwoord(guhrond, vriend, GuhvendelRol.JA);
-            helper.assertTrue(!Cutscenes.bezig(vriend) && lijn.stap(vriend) == Guhvendel.REIS, "the friend can't volunteer in somebody else's council");
+            helper.assertTrue(!Cutscenes.bezig(vriend) && lijn.stap(vriend) <= Guhvendel.WELKOM, "the friend can't volunteer in somebody else's council");
             NpcRollen.van(guhrond).antwoord(guhrond, p, GuhvendelRol.JA);
             helper.assertTrue(Cutscenes.bezig(p) && lijn.stap(p) == Guhvendel.MELDEN, "'ik neem de ring wel mee': the fellowship plays");
         });
@@ -227,7 +237,8 @@ public final class RingH2GameTests {
             }
             Guhvendel.seconde(p);
             helper.assertTrue(lijn.klaar(p) && !Cutscenes.bezig(p) && !Guhvendel.luid(p, o), "nothing starts again after the chapter");
-            helper.assertTrue(lijn.stap(vriend) == Guhvendel.REIS, "and the friend still has it all ahead");
+            helper.assertTrue(lijn.stap(vriend) <= Guhvendel.WELKOM && !Cutscenes.gezien(vriend, RingH2Scenes.RAAD.id()) && tel(vriend, RingFeature.STOOFPOTJE.get()) == 0,
+                    "and the friend still has it all ahead");
             for (GuhNpcEntity npc : npcs) {
                 npc.discard();
             }
