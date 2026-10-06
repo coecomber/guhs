@@ -30,6 +30,18 @@ public interface GuhrioStuk {
     default void deur(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
     }
 
+    /** The player stands on this block (reported by the player's game; at most about once a second per block). */
+    default void stap(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
+    }
+
+    /**
+     * A player enters the level: what this piece is for them from the start (0: as built). For pieces that remember
+     * something for ever (a big vadsmunt you already have, Guhshi's egg).
+     */
+    default int begin(ServerPlayer player, GuhrioSpel.Sessie sessie, BlockPos pos, BlockState state) {
+        return 0;
+    }
+
     /** Once a second while somebody plays the level: keep what belongs to this piece alive (a Guhmba on its spot). */
     default void wek(ServerLevel level, GuhrioSpel.Actief actief, GuhrioSpel.Stuk stuk) {
     }

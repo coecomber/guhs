@@ -35,8 +35,11 @@ import nl.juiced.guhs.Guhs;
  * <pre>
  * { "banen": [ { "id": "hoofd", "punten": [[0,0,0],[60,0,0],[60,0,-20]], "camera": "rechts",
  *                "afstand": 13, "hoogte": 6, "onder": -6, "boven": 14 } ],
- *   "wereld": "1-1", "uitgang": [84, 1, 0] }
+ *   "wereld": "1-1", "uitgang": [84, 1, 0], "ingang": [-3, 0, 0], "na": "kasteel_1_1" }
  * </pre>
+ * {@code uitgang}: where you are put after the flagpole; {@code ingang}: where you are put when you leave the level any
+ * other way (stopping, logging out) - both optional, both in the level's frame, and both may lie far outside the lanes (the
+ * hall of the castle); {@code na}: the level that this player must have finished first (the start block refuses otherwise).
  * {@code camera}: on which hand of the lane's direction the camera stands (rechts: further along the lane is right on
  * screen); {@code afstand}: how far away; {@code hoogte}: how many blocks it shows above and below its middle;
  * {@code onder}/{@code boven}: the floor you fall out under and the ceiling, relative to the start block. The first lane
@@ -45,7 +48,13 @@ import nl.juiced.guhs.Guhs;
  * <p>
  * {@link #plaats} turns the definition into the lanes in the world for one start block ({@link Geplaatst}).
  */
-public record GuhrioLevel(String id, String wereld, List<BaanDef> banen, @Nullable BlockPos uitgang) {
+public record GuhrioLevel(String id, String wereld, List<BaanDef> banen, @Nullable BlockPos uitgang, @Nullable BlockPos ingang,
+                          @Nullable String na) {
+    /** A level without an entrance spot of its own and without a level that must be done first. */
+    public GuhrioLevel(String id, String wereld, List<BaanDef> banen, @Nullable BlockPos uitgang) {
+        this(id, wereld, banen, uitgang, null, null);
+    }
+
     /** One lane in the level's own frame. */
     public record BaanDef(String id, List<BlockPos> punten, boolean cameraRechts, double afstand, double hoogte, int onder, int boven) {
     }
@@ -107,7 +116,8 @@ public record GuhrioLevel(String id, String wereld, List<BaanDef> banen, @Nullab
             throw new IllegalArgumentException("guhrio level " + id + ": no lanes");
         }
         return new GuhrioLevel(id, json.has("wereld") ? json.get("wereld").getAsString() : id, banen,
-                json.has("uitgang") ? pos(json.getAsJsonArray("uitgang")) : null);
+                json.has("uitgang") ? pos(json.getAsJsonArray("uitgang")) : null, json.has("ingang") ? pos(json.getAsJsonArray("ingang")) : null,
+                json.has("na") ? json.get("na").getAsString() : null);
     }
 
     private static BlockPos pos(JsonArray a) {
@@ -142,6 +152,17 @@ public record GuhrioLevel(String id, String wereld, List<BaanDef> banen, @Nullab
                 }
             }
             return -1;
+        }
+
+        /** Where you stand after leaving the level without finishing it (the level's {@code ingang}), or null. */
+        @Nullable
+        public BlockPos ingang() {
+            return level.ingang == null ? null : GuhrioLevel.wereld(anker, kant, level.ingang);
+        }
+
+        /** A spot of the level's own frame in the world. */
+        public BlockPos wereld(BlockPos eigen) {
+            return GuhrioLevel.wereld(anker, kant, eigen);
         }
 
         /** Where a player starts (and comes back to before the first flag): on the first lane, at the start block. */

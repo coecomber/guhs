@@ -82,8 +82,8 @@ public final class BaanCamera {
         Baan baan = GuhrioClient.baan();
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer p = mc.player;
-        if (baan == null || p == null || !klaar) {
-            return null;
+        if (baan == null || p == null || !klaar || nl.juiced.guhs.feature.verhaal.Cutscenes.bezig(p) || mc.getCameraEntity() != p) {
+            return null;                                       // (a cutscene has the camera: the lane's camera steps aside)
         }
         double px = Mth.lerp(partial, p.xo, p.getX()), pz = Mth.lerp(partial, p.zo, p.getZ());
         double s = baan.plek(px, pz).s() + Mth.lerp(partial, vooruitO, vooruit);
@@ -104,7 +104,9 @@ public final class BaanCamera {
     /** The field of view that shows {@link Baan#hoogte} blocks above and below the middle at the lane. */
     static void fov(ViewportEvent.ComputeFov event) {
         Baan baan = GuhrioClient.baan();
-        if (baan == null || !event.usedConfiguredFov()) {
+        Minecraft mc = Minecraft.getInstance();
+        if (baan == null || !event.usedConfiguredFov() || mc.player == null || nl.juiced.guhs.feature.verhaal.Cutscenes.bezig(mc.player)
+                || mc.getCameraEntity() != mc.player) {
             return;
         }
         event.setFOV((float) Math.toDegrees(2 * Math.atan(baan.hoogte / baan.afstand)));

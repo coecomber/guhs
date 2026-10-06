@@ -31,8 +31,12 @@ public final class GuhrioHud {
      * little game with its own screen.
      */
     static boolean verborgen(Identifier laag) {
-        return !BLIJFT.contains(laag) && !nl.juiced.guhs.Guhs.MODID.equals(laag.getNamespace());
+        // (of Guhs itself only this panel and the cutscene's bars stay: no vadskracht readout, no objective line in a level)
+        return !BLIJFT.contains(laag) && !laag.equals(LAAG) && !laag.equals(nl.juiced.guhs.feature.verhaal.client.VerhaalClient.LAAG_CUTSCENE);
     }
+
+    /** This panel's own layer. */
+    static final Identifier LAAG = nl.juiced.guhs.Guhs.id("guhrio_hud");
 
     private GuhrioHud() {
     }
@@ -48,7 +52,7 @@ public final class GuhrioHud {
         if (donker > 0.01f) {
             g.fill(0, 0, w, h, ((int) (Math.min(1f, donker) * 255) << 24));
         }
-        if (mc.options.hideGui) {
+        if (mc.options.hideGui || (mc.player != null && nl.juiced.guhs.feature.verhaal.Cutscenes.bezig(mc.player))) {
             return;
         }
         Font font = mc.font;
@@ -58,8 +62,17 @@ public final class GuhrioHud {
         g.fill(links - 4, y - 5, links + breed + 4, y - 4, 0xFFFFD24A);
         // GUHRIO + power-up
         kop(g, font, Component.translatable("gui.guhs.guhrio.hud.naam"), links + kolom / 2, y);
-        Component kracht = Component.translatable(GuhrioClient.kracht == GuhrioSpel.Kracht.SUPER.ordinal() ? "gui.guhs.guhrio.hud.super" : "gui.guhs.guhrio.hud.klein");
-        g.centeredText(font, kracht, links + kolom / 2, y + 11, 0xFFFFFFFF);
+        boolean vuur = GuhrioClient.kracht == GuhrioSpel.Kracht.VUUR.ordinal(), groot = GuhrioClient.kracht != GuhrioSpel.Kracht.GEEN.ordinal();
+        Component kracht = Component.translatable(GuhrioClient.guhshi != 0 ? "gui.guhs.guhrio.hud.guhshi"
+                : vuur ? "gui.guhs.guhrio.hud.vuur" : groot ? "gui.guhs.guhrio.hud.super" : "gui.guhs.guhrio.hud.klein");
+        g.centeredText(font, kracht, links + kolom / 2, y + 11, vuur ? 0xFFFF8A4A : 0xFFFFFFFF);
+        // the three big vadsmunten of this level, above the bar
+        for (int i = 0; i < 3; i++) {
+            g.pose().pushMatrix();
+            g.pose().translate(w / 2f - 27 + i * 18, y - 22);
+            g.item(new ItemStack((GuhrioClient.vads >> i & 1) != 0 ? GuhrioFeature.VADSMUNT.get().asItem() : GuhrioFeature.VADSMUNT_SCHIM.get()), 0, 0);
+            g.pose().popMatrix();
+        }
         // coins
         kop(g, font, Component.translatable("gui.guhs.guhrio.hud.munten"), links + kolom + kolom / 2, y);
         String munten = "x" + (GuhrioClient.munten < 10 ? "0" : "") + GuhrioClient.munten;

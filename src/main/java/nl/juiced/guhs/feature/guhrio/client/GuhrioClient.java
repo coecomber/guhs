@@ -61,6 +61,13 @@ public final class GuhrioClient {
     private static long gevraagd;
     /** The panel. */
     static int munten, totaal, tijd, kracht;
+    /** Your switch channels (bits), the big vadsmunten of this level you have (bits), the Guhshi that carries you (entity id, 0: none). */
+    static int kanalen, vads, guhshi;
+    /** Ticks left of Guhshi's tongue and how far it reaches (blocks, negative: back along the lane). */
+    static int tong;
+    static float tongVer;
+    /** Set by the avatar render-state modifier: this player is drawn sitting on a level's Guhshi. */
+    private static final net.minecraft.util.context.ContextKey<Boolean> OP_GUHSHI = new net.minecraft.util.context.ContextKey<>(Guhs.id("guhrio_op_guhshi"));
     /** Ticks left of: the black flash after coming back to your flag, the "done" banner. */
     static int flits, klaar;
     static int klaarTijd;
@@ -70,10 +77,35 @@ public final class GuhrioClient {
 
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> {
-            event.registerEntityRenderer(GuhrioFeature.GUHMBA.get(), GuhmbaRenderer::new);
+            DoosModel.vergeet();
+            event.registerEntityRenderer(GuhrioFeature.GUHMBA.get(), WezenRenderers.Guhmba::new);
+            event.registerEntityRenderer(GuhrioFeature.SCHILD_MIKA.get(), WezenRenderers.SchildMika::new);
+            event.registerEntityRenderer(GuhrioFeature.PLOF_MIKA.get(), WezenRenderers.PlofMika::new);
+            event.registerEntityRenderer(GuhrioFeature.HAPBLOEM.get(), WezenRenderers.Hapbloem::new);
+            event.registerEntityRenderer(GuhrioFeature.GUHRIO_GRILLSPIES.get(), WezenRenderers.Grillspies::new);
+            event.registerEntityRenderer(GuhrioFeature.GUHRIO_KNABBEL.get(), WezenRenderers.Knabbel::new);
+            event.registerEntityRenderer(GuhrioFeature.PLATFORM.get(), c -> new WezenRenderers.Dek<>(c, "guhrio_platform"));
+            event.registerEntityRenderer(GuhrioFeature.VALBLOK.get(), c -> new WezenRenderers.Dek<>(c, "guhrio_valblok"));
             event.registerBlockEntityRenderer(GuhrioFeature.STUK_BE.get(), StukRenderer::new);
         });
-        modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(Guhs.id("guhrio_hud"), GuhrioHud::teken));
+        // a player on a level's Guhshi is drawn sitting, lifted onto his back
+        modBus.addListener((net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent event) -> event.registerAvatarEntityModifier(
+                new net.neoforged.neoforge.client.renderstate.AvatarRenderStateModifier() {
+                    @Override
+                    public <T extends net.minecraft.world.entity.Avatar & net.minecraft.client.entity.ClientAvatarEntity> void accept(
+                            T avatar, net.minecraft.client.renderer.entity.state.AvatarRenderState state) {
+                        if (opGuhshi(avatar)) {
+                            state.isPassenger = true;
+                            state.setRenderData(OP_GUHSHI, true);
+                        }
+                    }
+                }));
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.RenderPlayerEvent.Pre<?> event) -> {
+            if (Boolean.TRUE.equals(event.getRenderState().getRenderData(OP_GUHSHI))) {
+                event.getPoseStack().translate(0, ZIT_HOOGTE, 0);
+            }
+        });
+        modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(GuhrioHud.LAAG, GuhrioHud::teken));
         GuhrioSpel.client = new GuhrioSpel.ClientKant() {
             @Override
             public boolean speelt(Player player) {
@@ -89,7 +121,25 @@ public final class GuhrioClient {
             public boolean inPijp(Player player) {
                 return player == Minecraft.getInstance().player && BaanBesturing.inPijp();
             }
+
+            @Override
+            public int kanalen(Player player) {
+                return player == Minecraft.getInstance().player && GuhrioClient.speelt() ? kanalen : 0;
+            }
         };
+        NeoForge.EVENT_BUS.addListener((ClientTickEvent.Pre event) -> {
+            // Q in a level never drops what you hold: it is the way out (twice)
+            Minecraft mc = Minecraft.getInstance();
+            if (speelt() && mc.player != null) {
+                boolean q = false;
+                while (mc.options.keyDrop.consumeClick()) {
+                    q = true;
+                }
+                if (q && mc.screen == null) {
+                    BaanBesturing.stopToets();
+                }
+            }
+        });
         NeoForge.EVENT_BUS.addListener((PlayerTickEvent.Pre event) -> {
             if (event.getEntity() instanceof LocalPlayer p && p == Minecraft.getInstance().player) {
                 BaanBesturing.voor(p);
@@ -101,7 +151,10 @@ public final class GuhrioClient {
             }
         });
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> tick());
-        NeoForge.EVENT_BUS.addListener((RenderFrameEvent.Pre event) -> BaanBesturing.kijkVast());
+        NeoForge.EVENT_BUS.addListener((RenderFrameEvent.Pre event) -> {
+            BaanBesturing.kijkVast();
+            houGuhshiBij();
+        });
         NeoForge.EVENT_BUS.addListener((ViewportEvent.ComputeFov event) -> BaanCamera.fov(event));
         NeoForge.EVENT_BUS.addListener((RenderGuiLayerEvent.Pre event) -> {
             if (speelt() && GuhrioHud.verborgen(event.getName())) {
@@ -113,6 +166,9 @@ public final class GuhrioClient {
             if (speelt()) {
                 event.setSwingHand(false);
                 event.setCanceled(true);
+                if (event.isAttack() || event.isUseItem()) {
+                    BaanBesturing.actieToets();                // (a mouse button: a knabbel, or Guhshi's tongue)
+                }
             }
         });
         NeoForge.EVENT_BUS.addListener((ExtractBlockOutlineRenderStateEvent event) -> {
@@ -146,6 +202,49 @@ public final class GuhrioClient {
     /** What a piece is for you (0 as built). */
     public static int staat(BlockPos pos) {
         return banen == null ? 0 : STAAT.getOrDefault(pos, 0);
+    }
+
+    /** Is switch channel k on for you? */
+    public static boolean kanaal(int k) {
+        return banen != null && (kanalen >> k & 1) != 0;
+    }
+
+    /** How far above the ground a player sits on a level's Guhshi. */
+    public static final double ZIT_HOOGTE = 0.62;
+
+    /** Is this player carried by a level's Guhshi (a guh of that kind that stands exactly where the player is)? */
+    static boolean opGuhshi(net.minecraft.world.entity.Entity speler) {
+        if (speler == Minecraft.getInstance().player) {
+            return banen != null && guhshi != 0;
+        }
+        for (nl.juiced.guhs.entity.GuhEntity guh : speler.level().getEntitiesOfClass(nl.juiced.guhs.entity.GuhEntity.class, speler.getBoundingBox().inflate(0.4),
+                g -> g.getVariant() == nl.juiced.guhs.entity.GuhVariant.GUHSHI && g.isNoAi())) {
+            if (guh.distanceToSqr(speler) < 0.5) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Every frame: the Guhshi that carries YOU is exactly under you (the server's copy of him lags a few ticks behind). */
+    private static void houGuhshiBij() {
+        Minecraft mc = Minecraft.getInstance();
+        if (banen == null || guhshi <= 0 || mc.player == null || mc.level == null) {
+            return;
+        }
+        net.minecraft.world.entity.Entity guh = mc.level.getEntity(guhshi);
+        if (guh == null) {
+            return;
+        }
+        LocalPlayer p = mc.player;
+        guh.setPos(p.getX(), p.getY(), p.getZ());
+        guh.xo = guh.xOld = p.xo;
+        guh.yo = guh.yOld = p.yo;
+        guh.zo = guh.zOld = p.zo;
+        guh.setYRot(p.getYRot());
+        guh.yRotO = p.yRotO;
+        guh.setYBodyRot(p.getYRot());
+        guh.setYHeadRot(p.getYRot());
     }
 
     /** (dev: one line of what this game knows of the level) */
@@ -182,6 +281,7 @@ public final class GuhrioClient {
             STAAT.put(BlockPos.of(plekken[i]), standen[i]);
         }
         munten = tijd = kracht = 0;
+        kanalen = vads = guhshi = tong = 0;
         flits = klaar = 0;
         stil = 0;
         if (vorigeCamera == null) {
@@ -202,6 +302,7 @@ public final class GuhrioClient {
         boolean bezig = banen != null;
         banen = null;
         STAAT.clear();
+        kanalen = vads = guhshi = tong = 0;
         flits = klaar = 0;
         BaanBesturing.einde();
         BaanCamera.einde();
@@ -233,6 +334,9 @@ public final class GuhrioClient {
         totaal = payload.totaal();
         tijd = payload.ticks();
         kracht = payload.kracht();
+        kanalen = payload.kanalen();
+        vads = payload.vads();
+        guhshi = payload.guhshi();
         if (banen != null && payload.baan() != baan && payload.baan() < banen.size() && !BaanBesturing.inPijp()) {
             zetBaan(payload.baan());
         }
@@ -271,7 +375,9 @@ public final class GuhrioClient {
             return;
         }
         BlockState state = mc.level.getBlockState(pos);
-        if (state.getBlock() instanceof GuhrioBlocks.MuntBlok) {
+        if (state.getBlock() instanceof nl.juiced.guhs.feature.guhrio.GuhrioStukken.VadsmuntBlok) {
+            mc.player.playSound(SoundEvents.PLAYER_LEVELUP, 0.5f, 1.8f);
+        } else if (state.getBlock() instanceof GuhrioBlocks.MuntBlok) {
             mc.player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.45f, 1.7f);
         } else if (state.getBlock() instanceof GuhrioBlocks.VraagBlok) {
             mc.player.playSound(SoundEvents.EXPERIENCE_ORB_PICKUP, 0.5f, 1.5f);
@@ -311,8 +417,29 @@ public final class GuhrioClient {
                 BaanCamera.begin(p);
             }
             case GuhrioPayloads.Moment.KRIMP -> flits = 4;
+            case GuhrioPayloads.Moment.VADSMUNT -> mc.gui.setOverlayMessage(
+                    net.minecraft.network.chat.Component.translatable("gui.guhs.guhrio.vadsmunt", m.getal()), false);
+            case GuhrioPayloads.Moment.TONG -> {
+                tong = 6;
+                tongVer = m.getal() / 10f;
+                tongDeeltjes(p);
+            }
             default -> {
             }
+        }
+    }
+
+    /** Guhshi's tongue: a quick pink line along the lane, the way it shot. */
+    private static void tongDeeltjes(LocalPlayer p) {
+        Baan b = baan();
+        if (b == null) {
+            return;
+        }
+        double s = b.plek(p.getX(), p.getZ()).s();
+        int n = Math.max(2, (int) Math.abs(tongVer * 3));
+        for (int i = 1; i <= n; i++) {
+            net.minecraft.world.phys.Vec3 punt = b.punt(s + tongVer * i / n, p.getY() + 0.75);
+            p.level().addParticle(new net.minecraft.core.particles.DustParticleOptions(0xFF7090, 1.1f), punt.x, punt.y, punt.z, 0, 0, 0);
         }
     }
 
@@ -344,6 +471,12 @@ public final class GuhrioClient {
         }
         if (flits > 0) {
             flits--;
+        }
+        if (tong > 0) {
+            tong--;
+        }
+        if (nl.juiced.guhs.feature.verhaal.Cutscenes.bezig(mc.player)) {
+            return;                                            // (a cutscene has the camera; the clock stands still)
         }
         if (klaar > 0) {
             klaar--;

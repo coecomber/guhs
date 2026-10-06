@@ -37,9 +37,16 @@ import nl.juiced.guhs.Guhs;
  * out, death, another dimension; being taken away is noticed by the tick), no damage and no mounting in a level, and the
  * dev command (op 2):
  * <pre>
- * /guhs guhrio testlevel [pos]     build the test level: its start block there (default: two blocks in front of you),
- *                                  running the way you look
- * /guhs guhrio testhoek [pos]      the same for the little level with a corner in its lane
+ * /guhs guhrio testlevel [pos]     (dev runs only: it carves a big box of air) build the test level: its start block
+ *                                  there (default: two blocks in front of you), running the way you look
+ * /guhs guhrio testhoek [pos]      (dev runs only) the same for the little level with a corner in its lane
+ * /guhs guhrio guhshi &lt;0|1&gt;        Guhshi carries you / not
+ * /guhs guhrio kanaal &lt;k&gt; &lt;0|1&gt;    switch channel k off / on for you
+ * /guhs guhrio ei                  you found Guhshi's egg
+ * /guhs guhrio gehaald &lt;level&gt;     this level counts as finished for you (kasteel_1_1 ... kasteel_3_2)
+ * /guhs guhrio munten &lt;n&gt;          n level coins in your pocket
+ * /guhs guhrio wis                 forget everything Guhrio remembers of you
+ * /guhs guhrio kasteel             what the castle remembers of you
  * /guhs guhrio start [pos]         enter the level of the start block there (default: the nearest within 48 blocks)
  * /guhs guhrio stop                leave the level
  * /guhs guhrio terug               back to your flag
@@ -97,7 +104,24 @@ public final class GuhrioEvents {
         }
     }
 
-    /** No boats, carts or riding guhs in a lane (a mount that belongs to the level comes with the levels). */
+    /** The Guhshi under a player in a level is only a look: nobody clicks, feeds, leashes or rides it. */
+    @SubscribeEvent
+    public static void onKlikGuhshi(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteractSpecific event) {
+        if (event.getTarget().getPersistentData().contains(GuhrioSpel.GUHSHI_TAG)) {
+            event.setCancellationResult(net.minecraft.world.InteractionResult.FAIL);
+            event.setCanceled(true);
+        }
+    }
+
+    /** A level's Guhshi that was saved after all (the server stopped while somebody rode him) never comes back. */
+    @SubscribeEvent
+    public static void onJoin(net.neoforged.neoforge.event.entity.EntityJoinLevelEvent event) {
+        if (!event.getLevel().isClientSide() && event.loadedFromDisk() && event.getEntity().getPersistentData().contains(GuhrioSpel.GUHSHI_TAG)) {
+            event.setCanceled(true);
+        }
+    }
+
+    /** No boats, carts or riding guhs in a lane (Guhshi carries you as a look, not as a mount). */
     @SubscribeEvent
     public static void onMount(EntityMountEvent event) {
         if (event.isMounting() && event.getEntityMounting() instanceof ServerPlayer player && GuhrioSpel.sessie(player) != null) {
@@ -122,11 +146,68 @@ public final class GuhrioEvents {
 
     @SubscribeEvent
     public static void onCommands(RegisterCommandsEvent event) {
-        var guhrio = Commands.literal("guhrio").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                .then(Commands.literal("testlevel").executes(c -> testlevel(c.getSource(), TESTLEVEL, null))
-                        .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> testlevel(c.getSource(), TESTLEVEL, BlockPosArgument.getBlockPos(c, "pos")))))
-                .then(Commands.literal("testhoek").executes(c -> testlevel(c.getSource(), TESTHOEK, null))
-                        .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> testlevel(c.getSource(), TESTHOEK, BlockPosArgument.getBlockPos(c, "pos")))))
+        var guhrio = Commands.literal("guhrio").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS));
+        if (!net.neoforged.fml.loading.FMLEnvironment.isProduction()) {
+            // (these two carve a box of 84 x 28 x 20 blocks of air: never in a real world)
+            guhrio = guhrio.then(Commands.literal("testlevel").executes(c -> testlevel(c.getSource(), TESTLEVEL, null))
+                            .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> testlevel(c.getSource(), TESTLEVEL, BlockPosArgument.getBlockPos(c, "pos")))))
+                    .then(Commands.literal("testhoek").executes(c -> testlevel(c.getSource(), TESTHOEK, null))
+                            .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> testlevel(c.getSource(), TESTHOEK, BlockPosArgument.getBlockPos(c, "pos")))));
+        }
+        guhrio = guhrio
+                .then(Commands.literal("guhshi").then(Commands.argument("n", IntegerArgumentType.integer(0, 1)).executes(c -> {
+                    ServerPlayer p = c.getSource().getPlayerOrException();
+                    GuhrioSpel.Sessie s = GuhrioSpel.sessie(p);
+                    if (s == null) {
+                        return 0;
+                    }
+                    GuhrioSpel.zetGuhshi(p, s, IntegerArgumentType.getInteger(c, "n") == 1);
+                    return 1;
+                })))
+                .then(Commands.literal("kanaal").then(Commands.argument("k", IntegerArgumentType.integer(0, GuhrioSpel.KANALEN - 1))
+                        .then(Commands.argument("n", IntegerArgumentType.integer(0, 1)).executes(c -> {
+                            ServerPlayer p = c.getSource().getPlayerOrException();
+                            GuhrioSpel.Sessie s = GuhrioSpel.sessie(p);
+                            if (s == null) {
+                                return 0;
+                            }
+                            GuhrioSpel.zetKanaal(p, s, IntegerArgumentType.getInteger(c, "k"), IntegerArgumentType.getInteger(c, "n") == 1);
+                            return 1;
+                        }))))
+                .then(Commands.literal("ei").executes(c -> GuhrioKasteel.geefEi(c.getSource().getPlayerOrException()) ? 1 : 0))
+                .then(Commands.literal("gehaald").then(Commands.argument("id", StringArgumentType.word()).executes(c -> {
+                    ServerPlayer p = c.getSource().getPlayerOrException();
+                    String id = StringArgumentType.getString(c, "id");
+                    if (!GuhrioKasteel.LEVELS.contains(id)) {
+                        c.getSource().sendFailure(Component.literal("Not a level of the castle: " + id + " (" + String.join(", ", GuhrioKasteel.LEVELS) + ")"));
+                        return 0;
+                    }
+                    GuhrioKasteel.devGehaald(p, id);
+                    return 1;
+                })))
+                .then(Commands.literal("munten").then(Commands.argument("n", IntegerArgumentType.integer(0, 9999)).executes(c -> {
+                    GuhrioSpel.spaar(c.getSource().getPlayerOrException()).putInt("Munten", IntegerArgumentType.getInteger(c, "n"));
+                    return 1;
+                })))
+                .then(Commands.literal("wis").executes(c -> {
+                    ServerPlayer p = c.getSource().getPlayerOrException();
+                    GuhrioSpel.stop(p, GuhrioSpel.Einde.GESTOPT);
+                    nl.juiced.guhs.quest.GuhQuests.saved(p).remove("guhrio");
+                    GuhrioKasteel.LIJN.wis(p);
+                    return 1;
+                }))
+                .then(Commands.literal("kasteel").executes(c -> {
+                    ServerPlayer p = c.getSource().getPlayerOrException();
+                    StringBuilder tekst = new StringBuilder("Guhrio castle: step " + GuhrioKasteel.LIJN.stap(p) + ", coins " + GuhrioSpel.munten(p) + " (ever "
+                            + GuhrioKasteel.muntenOoit(p) + "), vadsmunten " + GuhrioKasteel.alleVadsmunten(p) + "/" + GuhrioKasteel.VADSMUNTEN + ", egg "
+                            + GuhrioKasteel.heeftEi(p) + ", duel " + GuhrioKasteel.duelGewonnen(p) + ", castle time " + GuhrioSpel.tijd(GuhrioKasteel.kasteelTijd(p)));
+                    for (String id : GuhrioKasteel.LEVELS) {
+                        tekst.append("\n  ").append(id).append(": done ").append(GuhrioKasteel.gehaald(p, id)).append(", best ")
+                                .append(GuhrioSpel.tijd(GuhrioSpel.besteTijd(p, id))).append(", vads ").append(Integer.toBinaryString(GuhrioKasteel.vadsmunten(p, id)));
+                    }
+                    c.getSource().sendSuccess(() -> Component.literal(tekst.toString()), false);
+                    return 1;
+                }))
                 .then(Commands.literal("start").executes(c -> start(c.getSource(), null))
                         .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> start(c.getSource(), BlockPosArgument.getLoadedBlockPos(c, "pos")))))
                 .then(Commands.literal("stop").executes(c -> {

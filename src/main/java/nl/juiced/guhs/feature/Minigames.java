@@ -38,6 +38,8 @@ public final class Minigames {
     /** The 2.9 games (De Grote Guhspelen; phase 1 registers each as "never playing", its feature replaces that). */
     public static final String SJOELEN = "sjoelen", DOOLHOF = "doolhof", KATAPULT = "katapult", KNABBELSPELEN = "knabbelspelen",
             ELFTOCHT = "elftocht", CIRCUIT = "circuit", BEROEPEN = "beroepen";
+    /** bbq2: a level of Super Guhrio (feature/guhrio registers it: one game at a time, and protected like the others). */
+    public static final String GUHRIO = "guhrio";
 
     /** Games registered by features (2.8): id -> "is this player playing it now?". A later registration replaces an earlier one. */
     private static final Map<String, java.util.function.Predicate<ServerPlayer>> GAMES = new java.util.concurrent.ConcurrentHashMap<>();

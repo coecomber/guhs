@@ -127,7 +127,11 @@ public final class Highscores {
             // --- 3.0 (Guhverhalen): the Nomguh sledesprint (balto-slee), surfing and hula (guhwaii-spellen) ---
             time("sledesprint_makkelijk", "sledebelletje"), time("sledesprint_medium", "sledebelletje"), time("sledesprint_lastig", "sledebelletje"),
             points("surfen_makkelijk", "schelpjesmunt"), points("surfen_medium", "schelpjesmunt"), points("surfen_lastig", "schelpjesmunt"),
-            points("hula_makkelijk", "schelpjesmunt"), points("hula_medium", "schelpjesmunt"), points("hula_lastig", "schelpjesmunt"));
+            points("hula_makkelijk", "schelpjesmunt"), points("hula_medium", "schelpjesmunt"), points("hula_lastig", "schelpjesmunt"),
+            // --- bbq2 (Super Guhrio): the whole castle in one go and the six levels (feature/guhrio/GuhrioKasteel submits them) ---
+            time("guhrio_kasteel", "guhrio_vadsmunt"),
+            time("guhrio_1_1", "guhrio_munt"), time("guhrio_1_2", "guhrio_munt"), time("guhrio_2_1", "guhrio_munt"),
+            time("guhrio_2_2", "guhrio_munt"), time("guhrio_3_1", "guhrio_munt"), time("guhrio_3_2", "guhrio_munt"));
 
     /** A 2.9 row with points ("N pt", higher is better; board = id, icon = the game's coin). */
     private static Game points(String id, String coin) {
