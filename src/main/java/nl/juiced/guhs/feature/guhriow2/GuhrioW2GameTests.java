@@ -372,4 +372,53 @@ public class GuhrioW2GameTests {
         helper.assertTrue(aantal[5] > 500, "the cellars stand on their own ground: " + aantal[5]);
         helper.succeed();
     }
+
+    /**
+     * The warp on the real castle: read from its tiles, the gate of every level a warp pipe leads to stands within the
+     * search range of the spot where level 2-2's flagpole puts you (the hall), and points at that level's start block.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void guhriow2WarpInHetKasteel(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        java.util.Map<String, BlockPos> starts = new java.util.HashMap<>();
+        java.util.Map<String, Direction> kanten = new java.util.HashMap<>();
+        java.util.Map<String, List<BlockPos[]>> poorten = new java.util.HashMap<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                StructureTemplate tegel = level.getStructureManager().get(Guhs.id(GuhrioKasteel.STRUCTUUR + "/stuk_" + i + "_" + j)).orElse(null);
+                if (tegel == null) {
+                    continue;
+                }
+                BlockPos hoek = new BlockPos(i * 32, 0, j * 32);
+                for (StructureTemplate.StructureBlockInfo info : tegel.filterBlocks(hoek, new StructurePlaceSettings(), GuhrioFeature.STARTBLOK.get())) {
+                    String id = info.nbt() == null ? "" : info.nbt().getStringOr("Level", "");
+                    starts.put(id, info.pos());
+                    kanten.put(id, info.state().getValue(GuhrioBlocks.StartBlok.FACING));
+                }
+                for (StructureTemplate.StructureBlockInfo info : tegel.filterBlocks(hoek, new StructurePlaceSettings(), GuhrioFeature.POORT.get())) {
+                    CompoundTag nbt = info.nbt() == null ? new CompoundTag() : info.nbt();
+                    BlockPos naar = new BlockPos(nbt.getIntOr("NaarX", 0), nbt.getIntOr("NaarY", 0), nbt.getIntOr("NaarZ", 0));
+                    BlockPos doel = GuhrioLevel.wereld(info.pos(), info.state().getValue(GuhrioBlocks.PoortBlok.FACING), naar);
+                    poorten.computeIfAbsent(nbt.getStringOr("Level", ""), k -> new java.util.ArrayList<>()).add(new BlockPos[]{info.pos(), doel});
+                }
+            }
+        }
+        GuhrioLevel twee = GuhrioLevel.bestand(level.getServer(), GuhrioW2.LEVEL_2);
+        helper.assertTrue(twee != null && starts.containsKey(GuhrioW2.LEVEL_2) && twee.uitgang() != null, "level 2-2 has a start block in the castle");
+        BlockPos hal = GuhrioLevel.wereld(starts.get(GuhrioW2.LEVEL_2), kanten.get(GuhrioW2.LEVEL_2), twee.uitgang());
+        for (int kanaal : new int[]{13, 14, 15}) {
+            String doel = GuhrioW2.WARP.get(kanaal);
+            boolean gevonden = false;
+            for (BlockPos[] poort : poorten.getOrDefault(doel, List.of())) {
+                BlockPos d = poort[0].subtract(hal);
+                if (Math.abs(d.getX()) <= GuhrioW2.ZOEK && Math.abs(d.getZ()) <= GuhrioW2.ZOEK && d.getY() >= -1 && d.getY() <= 2
+                        && poort[1].equals(starts.get(doel))) {
+                    gevonden = true;
+                }
+            }
+            helper.assertTrue(gevonden, "warp pipe " + kanaal + ": the gate of " + doel + " stands within " + GuhrioW2.ZOEK + " blocks of the hall's middle " + hal
+                    + " and leads to its start block " + starts.get(doel) + ": " + poorten.getOrDefault(doel, List.of()).stream().map(q -> q[0] + " -> " + q[1]).toList());
+        }
+        helper.succeed();
+    }
 }

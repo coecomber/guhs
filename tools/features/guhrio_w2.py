@@ -43,6 +43,7 @@ PLAFOND = 11                 # the brick ceiling of the main lane
 K0, K1 = 12, 19              # a room's floor and ceiling
 EI_KANAAL = 7                # the switch channel of the egg gate
 WARP = {13: "3-1", 14: "3-2", 15: "1-1"}       # a warp pipe's channel -> where it leads (Java: GuhrioW2.WARP)
+ZOEK = 26                    # how far round the hall's middle a warp pipe looks for a gate (Java: GuhrioW2.ZOEK)
 STATS = {}                   # what the check counted per level (for the build log and the wiki texts)
 
 
@@ -478,6 +479,14 @@ def selfcheck(h):
     for wereld, kamers in (("2-1", 1), ("2-2", 2)):
         if wereld not in STATS:
             missing.append(f"level {wereld} was not built from this module")
+    # a warp pipe finds the level it leads to through that level's gate in the hall, searching ZOEK blocks round the spot
+    # where a flagpole puts you (Java: GuhrioW2.zoekStart): the gates must stand within that range
+    from features import guhrio_kasteel as gk
+    for wereld in WARP.values():
+        thema, kant = next((t, k) for w, t, k in gk.LEVELS if w == wereld)
+        poort = (41 if kant == "west" else 85, gk.G + 1, gk.POORT_Z[thema])
+        if any(abs(poort[i] - gk.HAL_UIT[i]) > ZOEK for i in (0, 2)) or not 0 <= poort[1] - gk.HAL_UIT[1] <= 1:
+            missing.append(f"the gate of level {wereld} at {poort} is further than {ZOEK} blocks from the hall's middle {gk.HAL_UIT}")
     if missing:
         raise SystemExit(f"guhrio_w2: missing {missing}")
 
