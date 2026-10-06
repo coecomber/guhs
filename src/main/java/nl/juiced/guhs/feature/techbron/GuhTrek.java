@@ -51,6 +51,13 @@ public final class GuhTrek {
     private static final int ROEP_TICKS = 2 * TechbronGetallen.KIJK + 5;
     /** A guh this close to its spot (horizontally) has arrived. */
     private static final double AANKOMST = 0.75;
+    /** A guh that has been on the source this many looks without reaching its own spot settles where it is. */
+    private static final int WACHT = 4;
+    /**
+     * A guh that takes part keeps counting while it is within this many blocks around the source's zone: a nudge of a guh
+     * that walks past does not make what the source gives flicker (and with it a whole net start and stop).
+     */
+    private static final double SPELING = 0.75;
 
     private GuhTrek() {
     }
@@ -164,7 +171,7 @@ public final class GuhTrek {
         private final Emote emote;
         /** Guh -> the index of its spot. */
         private final Map<UUID, Integer> leden = new HashMap<>();
-        /** Guh -> how many looks it has been standing still on the source without reaching its own spot. */
+        /** Guh -> how many looks it has been on the source without reaching its own spot. */
         private final Map<UUID, Integer> wacht = new HashMap<>();
         private final List<GuhEntity> bezig = new ArrayList<>();
 
@@ -239,8 +246,8 @@ public final class GuhTrek {
                 roep(guh, bron, plek);
                 boolean erop = zone.contains(guh.position());
                 if (doetMee(guh, emote)) {
-                    if (erop) {
-                        bezig.add(guh);
+                    if (erop || zone.inflate(SPELING, 0, SPELING).contains(guh.position())) {
+                        bezig.add(guh);               // (nudged a little by a guh that walked past: it still takes part)
                     } else {
                         guh.emotes.stop();            // shoved off the source: it walks back
                         guh.getPersistentData().remove(EMOTE);
@@ -254,9 +261,11 @@ public final class GuhTrek {
                 } else {
                     double dx = guh.getX() - plek.x, dz = guh.getZ() - plek.z;
                     aangekomen = dx * dx + dz * dz <= AANKOMST * AANKOMST && Math.abs(guh.getY() - plek.y) < 1.5;
-                    if (!aangekomen && erop && guh.getNavigation().isDone()) {
-                        // on the source, but it cannot get to its own spot (others lie in the way): this will do
-                        aangekomen = wacht.merge(guh.getUUID(), 1, Integer::sum) >= 2;
+                    if (!aangekomen && erop) {
+                        // on the source, but it does not get to its own spot (others lie or sit in the way): this will do
+                        aangekomen = wacht.merge(guh.getUUID(), 1, Integer::sum) >= WACHT;
+                    } else if (!erop) {
+                        wacht.remove(guh.getUUID());
                     }
                 }
                 if (aangekomen && GuhEmotes.canStart(guh) && guh.emotes.start(emote, true, GuhEmotes.Source.SELF)) {

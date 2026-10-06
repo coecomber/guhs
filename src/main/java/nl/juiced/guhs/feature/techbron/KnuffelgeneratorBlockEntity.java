@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,8 +29,15 @@ import nl.juiced.guhs.feature.vadskracht.VadsGetallen;
  * from the cushion runs extra hard in a Guhrad.
  */
 public class KnuffelgeneratorBlockEntity extends BronBlockEntity {
-    /** The eight spots, as offsets from the middle of the cushion. */
-    private static final double[][] PLEKKEN = {{-0.55, -0.55}, {0.55, 0.55}, {0.55, -0.55}, {-0.55, 0.55}, {0, 0}, {0, -0.8}, {0, 0.8}, {-0.8, 0}};
+    /** How far the spots are apart: a little more than a guh is wide (0.9), so guhs that lie on their spots do not push each other. */
+    private static final double TUSSEN = 0.95;
+    /**
+     * The eight spots, as (to the right, to the back) of the middle of the cushion seen from the front: a grid of 3 x 3
+     * without the back middle (where the cushion's ears stand). The first guh lies in the middle, the next ones beside it,
+     * then the back corners and the front row.
+     */
+    private static final double[][] PLEKKEN = {{0, 0}, {-TUSSEN, 0}, {TUSSEN, 0}, {-TUSSEN, TUSSEN}, {TUSSEN, TUSSEN}, {0, -TUSSEN},
+            {-TUSSEN, -TUSSEN}, {TUSSEN, -TUSSEN}};
 
     private final GuhTrek.Groep groep = new GuhTrek.Groep(VadsGetallen.KNUFFEL_MAX_GUHS, Emote.SLAPEN);
     private int guhs;
@@ -48,13 +56,15 @@ public class KnuffelgeneratorBlockEntity extends BronBlockEntity {
         return zone(0.5);
     }
 
-    /** The eight spots on the cushion. */
+    /** The eight spots on the cushion (the first is its middle). */
     public List<Vec3> plekken() {
+        Direction facing = getBlockState().getValue(BronBlock.FACING);
+        Direction rechts = facing.getClockWise(), achter = facing.getOpposite();
         AABB vloer = vloer();
         Vec3 midden = new Vec3((vloer.minX + vloer.maxX) / 2, vloer.minY + KnuffelgeneratorBlock.HOOGTE / 16.0, (vloer.minZ + vloer.maxZ) / 2);
         List<Vec3> uit = new ArrayList<>(PLEKKEN.length);
         for (double[] p : PLEKKEN) {
-            uit.add(midden.add(p[0], 0, p[1]));
+            uit.add(midden.add(rechts.getStepX() * p[0] + achter.getStepX() * p[1], 0, rechts.getStepZ() * p[0] + achter.getStepZ() * p[1]));
         }
         return uit;
     }

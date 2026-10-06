@@ -160,8 +160,25 @@ public class TechbronGameTests {
         return be(helper, pos);
     }
 
+    /** Every guh in and around the test room, for a failure message: where it is (helper coordinates) and what it does. */
+    static String wie(GameTestHelper helper, net.minecraft.world.phys.AABB zone) {
+        StringBuilder uit = new StringBuilder();
+        BlockPos o = helper.absolutePos(BlockPos.ZERO);
+        for (GuhEntity guh : helper.getLevel().getEntitiesOfClass(GuhEntity.class, helper.getBounds().inflate(12))) {
+            uit.append(String.format(java.util.Locale.ROOT, " [%.1f %.1f %.1f%s%s%s%s%s %s]", guh.getX() - o.getX(), guh.getY() - o.getY(), guh.getZ() - o.getZ(),
+                    guh.isTame() ? " tam" : " wild", guh.isOrderedToSit() ? " zit" : "", guh.mayWander() ? " volgt" : "",
+                    GuhTrek.bron(guh) != null ? " geroepen" : "", zone.contains(guh.position()) ? " erop" : "", guh.emotes.current()));
+        }
+        return uit.toString();
+    }
+
     static boolean ligt(GuhEntity guh, KnuffelgeneratorBlockEntity kussen) {
-        return GuhTrek.doetMee(guh, Emote.SLAPEN) && kussen.zone().contains(guh.position());
+        return GuhTrek.doetMee(guh, Emote.SLAPEN) && kussen.zone().inflate(0.75, 0, 0.75).contains(guh.position());
+    }
+
+    /** How wide a guh is. */
+    static double guhBreedte() {
+        return ModEntities.GUH.get().getWidth();
     }
 
     // =====================================================================================================================
@@ -189,25 +206,39 @@ public class TechbronGameTests {
         helper.assertTrue(lees(helper, kern).contains("Nog geen guh op het kussen: tamme guhs binnen " + TechbronGetallen.BEREIK
                 + " blokken komen vanzelf liggen"), "readout of the empty cushion: " + lees(helper, kern));
         gelijk(helper, 8, kussen.plekken().size(), "eight spots");
-        helper.assertTrue(kussen.plekken().stream().allMatch(plek -> kussen.zone().contains(plek)), "every spot lies on the cushion");
+        helper.assertTrue(kussen.plekken().stream().allMatch(plek -> kussen.zone(0).contains(plek)), "every spot lies on the cushion");
+        List<Vec3> plekken = kussen.plekken();
+        for (Vec3 a : plekken) {
+            for (Vec3 b : plekken) {
+                helper.assertTrue(a == b || Math.max(Math.abs(a.x - b.x), Math.abs(a.z - b.z)) > guhBreedte(), "guhs on their spots do not push each other");
+            }
+        }
 
         List<GuhEntity> tam = List.of(guh(helper, speler, 2, 2), guh(helper, speler, 12, 4), guh(helper, speler, 10, 12));
         GuhEntity wild = helper.spawn(ModEntities.GUH.get(), p(3, 10));
         GuhEntity zit = zittend(helper, speler, Vec3.atBottomCenterOf(helper.absolutePos(p(12, 12))));
+        // who may come, asked directly (a resident cannot wait for the walk: this test has no huisje, and the huisjes set a guh
+        // without one free again)
+        BlockPos kernAbs = helper.absolutePos(kern);
+        Vec3 midden = kussen.zone().getCenter();
         GuhEntity bewoner = guh(helper, speler, 3, 12);
+        helper.assertTrue(GuhTrek.magMee(bewoner, kernAbs, kussen.zone(0), midden, Emote.SLAPEN), "a free tamed guh may come");
         bewoner.getPersistentData().putLong(nl.juiced.guhs.feature.huisje.Huisjes.THUIS, 0L);    // (what Huisjes.isBewoner reads)
         helper.assertTrue(nl.juiced.guhs.feature.huisje.Huisjes.isBewoner(bewoner), "the test's resident counts as one");
+        helper.assertFalse(GuhTrek.magMee(bewoner, kernAbs, kussen.zone(0), midden, Emote.SLAPEN), "a guh that lives in a Guhhuisje does not come");
+        bewoner.discard();
+        helper.assertFalse(GuhTrek.magMee(wild, kernAbs, kussen.zone(0), midden, Emote.SLAPEN), "a wild guh does not come");
+        helper.assertFalse(GuhTrek.magMee(zit, kernAbs, kussen.zone(0), midden, Emote.SLAPEN), "a guh that sits somewhere else does not come");
 
         helper.succeedWhen(() -> {
-            gelijk(helper, 3, kussen.guhs(), "three guhs on the cushion");
+            gelijk(helper, 3, kussen.guhs(), "three guhs on the cushion;" + wie(helper, kussen.zone()));
             for (GuhEntity guh : tam) {
                 helper.assertTrue(ligt(guh, kussen), "a tamed guh lies asleep on the cushion: " + guh.position() + " " + guh.emotes.current());
                 helper.assertTrue(Band.isBlij(guh), "lying on the cushion makes a guh blij");
             }
             helper.assertFalse(kussen.zone().contains(wild.position()) && wild.emotes.current() == Emote.SLAPEN && GuhTrek.bron(wild) != null,
                     "a wild guh is not called");
-            helper.assertTrue(GuhTrek.bron(wild) == null && GuhTrek.bron(zit) == null && GuhTrek.bron(bewoner) == null,
-                    "a wild guh, a guh that sits elsewhere and a huisje guh are not called");
+            helper.assertTrue(GuhTrek.bron(wild) == null && GuhTrek.bron(zit) == null, "a wild guh and a guh that sits elsewhere are not called");
             helper.assertTrue(zit.blockPosition().equals(helper.absolutePos(p(12, 12))), "the sitting guh stayed where it sits");
             gelijk(helper, 3 * VadsGetallen.KNUFFEL_PER_GUH, kussen.vadsAanbod(), "aanbod");
             VadsNet net = net(helper, p(8, 6));
@@ -251,7 +282,7 @@ public class TechbronGameTests {
             guhs.add(guh(helper, speler, 3 + i, 3 + (i % 2) * 7));       // eight more around it: ten guhs for eight spots
         }
         helper.succeedWhen(() -> {
-            gelijk(helper, VadsGetallen.KNUFFEL_MAX_GUHS, kussen.guhs(), "eight guhs count");
+            gelijk(helper, VadsGetallen.KNUFFEL_MAX_GUHS, kussen.guhs(), "eight guhs count;" + wie(helper, kussen.zone()));
             gelijk(helper, VadsGetallen.KNUFFEL_MAX_GUHS * VadsGetallen.KNUFFEL_PER_GUH, kussen.vadsAanbod(), "aanbod of a full cushion");
             gelijk(helper, Snoet.VOL, snoet(helper, kern), "a full cushion looks surprised");
             helper.assertTrue(ligt(guhs.get(0), kussen) && ligt(guhs.get(1), kussen) && guhs.get(0).isOrderedToSit(), "the sitting guhs count where they sit");
@@ -341,7 +372,7 @@ public class TechbronGameTests {
                     helper.assertTrue(disco.speelt(), "the song plays");
                     gelijk(helper, VadsGetallen.DISCO_MAX_GUHS, disco.dansers(), "four dancers");
                     gelijk(helper, VadsGetallen.DISCO_MAX_GUHS * VadsGetallen.DISCO_PER_GUH, disco.vadsAanbod(), "aanbod");
-                    long dansen = guhs.stream().filter(guh -> GuhTrek.doetMee(guh, Emote.DANSEN) && disco.zone().contains(guh.position())).count();
+                    long dansen = guhs.stream().filter(guh -> GuhTrek.doetMee(guh, Emote.DANSEN) && disco.zone().inflate(0.75, 0, 0.75).contains(guh.position())).count();
                     gelijk(helper, (long) VadsGetallen.DISCO_MAX_GUHS, dansen, "four of the five dance on the floor");
                     helper.assertTrue(GuhTrek.bron(wild) == null, "a wild guh is not called");
                     gelijk(helper, Snoet.VOL, snoet(helper, kern), "a full floor looks surprised");
@@ -567,7 +598,7 @@ public class TechbronGameTests {
         for (int i = 0; i < 3; i++) {
             helper.setBlock(p(2 * i, 0), TechbronFeature.KNUFFELGENERATOR.get());
             kussens[i] = be(helper, p(2 * i, 0));
-            zittend(helper, speler, kussens[i].plekken().get(4));         // (the middle of the cushion)
+            zittend(helper, speler, kussens[i].plekken().get(0));         // (the middle of the cushion)
         }
         // Gloeisterkernen x 8..9, z 0
         helper.setBlock(p(8, 0), TechbronFeature.GLOEISTERKERN.get());
