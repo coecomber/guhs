@@ -1913,80 +1913,53 @@
     ],
     "subtitle": "subtitles.guhs.guhpixel.portaal"
   },
-  "guhkade.muntje": {
+  "guhkantoor.inklokken": {
     "sounds": [
       {
         "name": "minecraft:block.note_block.bell",
         "type": "event",
         "pitch": 1.6,
-        "volume": 0.7
+        "volume": 0.8
       }
     ],
-    "subtitle": "subtitles.guhs.guhkade.muntje"
+    "subtitle": "subtitles.guhs.guhkantoor.inklokken"
   },
-  "guhkade.piep": {
+  "guhkantoor.uitklokken": {
     "sounds": [
       {
-        "name": "minecraft:block.note_block.bit",
+        "name": "minecraft:block.note_block.bell",
         "type": "event",
-        "pitch": 1.4,
+        "pitch": 1.1,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkantoor.uitklokken"
+  },
+  "guhkantoor.printer": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.cartography_table.take_result",
+        "type": "event",
+        "pitch": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkantoor.printer"
+  },
+  "guhkantoor.toetsenbord": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wooden_button.click_on",
+        "type": "event",
+        "pitch": 1.8,
         "volume": 0.5
       },
       {
-        "name": "minecraft:block.note_block.bit",
+        "name": "minecraft:block.wooden_button.click_off",
         "type": "event",
-        "pitch": 1.7,
+        "pitch": 1.6,
         "volume": 0.5
       }
     ],
-    "subtitle": "subtitles.guhs.guhkade.piep"
-  },
-  "guhkade.punt": {
-    "sounds": [
-      {
-        "name": "minecraft:block.note_block.bit",
-        "type": "event",
-        "pitch": 2.0,
-        "volume": 0.7
-      }
-    ],
-    "subtitle": "subtitles.guhs.guhkade.punt"
-  },
-  "guhkade.af": {
-    "sounds": [
-      {
-        "name": "minecraft:block.note_block.didgeridoo",
-        "type": "event",
-        "pitch": 0.7,
-        "volume": 0.7
-      }
-    ],
-    "subtitle": "subtitles.guhs.guhkade.af"
-  },
-  "guhkade.record": {
-    "sounds": [
-      {
-        "name": "minecraft:entity.player.levelup",
-        "type": "event",
-        "pitch": 1.7,
-        "volume": 0.5
-      }
-    ],
-    "subtitle": "subtitles.guhs.guhkade.record"
-  },
-  "guhkade.sip": {
-    "sounds": [
-      {
-        "name": "guhs:guh_ambient3",
-        "pitch": 0.7,
-        "volume": 0.7
-      },
-      {
-        "name": "guhs:guh_ambient7",
-        "pitch": 0.7,
-        "volume": 0.7
-      }
-    ],
-    "subtitle": "subtitles.guhs.guhkade.sip"
+    "subtitle": "subtitles.guhs.guhkantoor.toetsenbord"
   }
 }

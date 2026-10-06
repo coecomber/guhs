@@ -1620,14 +1620,10 @@
   "ftb.guhs_guhpixel.section.px_thuis": "Voor thuis: Guhkade, Guhkantoor & Guhbioscoop",
   "ftb.guhs_guhpixel.q.intro_guhs_guhpixel.title": "Hoe kom je hier?",
   "ftb.guhs_guhpixel.q.intro_guhs_guhpixel.desc": "Dit hoofdstuk komt na &6Het superkompas&r in &dDe Guhmensie&r: kies daar in de tab &dMinigames&r het &dGuh-internetcafé \"De Trage Verbinding\"&r.\n\nIn het café slapen guhs achter oude beige computers. Loop door het grote beeldscherm en je staat in de lobby van &dGuhpixel&r: de minigame-server van de guhs. Daarna werken &6/lobby&r, &6/hub&r en &6/l&r overal.\n\nSpeel de grapspelletjes, verdien &6Guhpixel-muntjes&r (geen voorwerp: ze staan op je naam) en koop er dingen voor thuis mee: de Guhkade, het Guhkantoor en de Guhbioscoop. Het &dReisbureau&r en het &dGuh-parkour&r vind je gewoon in de Guhmensie. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
-  "ftb.guhs_guhpixel.q.guhkade_kast.title": "Een speelkast voor thuis",
-  "ftb.guhs_guhpixel.q.guhkade_kast.desc": "De &dVerkoper-guh&r in de Guhpixel-lobby verkoopt echte &dGuhkade-kasten&r: &6Flappy Guh&r en &6Mika-Pong&r. Je eerste kast kost 250 muntjes, elke volgende 150. Koop er een en zet hem thuis neer: twee blokken hoog, met een scherm dat echt beweegt.",
-  "ftb.guhs_guhpixel.q.guhkade_gespeeld.title": "Muntje erin!",
-  "ftb.guhs_guhpixel.q.guhkade_gespeeld.desc": "Rechtsklik op je kast en speel een potje. &6Flappy Guh&r: spatie, W of klik om te fladderen. &6Mika-Pong&r: W en S (of de pijltjes) voor je batje. Elke kast houdt zijn eigen top 5 bij, met namen.",
-  "ftb.guhs_guhpixel.q.guhkade_flappy_mijlpaal.title": "Fladderkampioen",
-  "ftb.guhs_guhpixel.q.guhkade_flappy_mijlpaal.desc": "Haal &610 punten&r in Flappy Guh: 10 kaasknabbelpilaren voorbij zonder er eentje aan te tikken. De pilaren komen steeds sneller, njeg!",
-  "ftb.guhs_guhpixel.q.guhkade_pong_mijlpaal.title": "De Mika is er klaar mee",
-  "ftb.guhs_guhpixel.q.guhkade_pong_mijlpaal.desc": "Haal &630 punten&r in Mika-Pong. De guh terugrollen is 1 punt, hem langs de Mika rollen is er 5. Drie keer langs jou en het potje is voorbij.",
-  "ftb.guhs_guhpixel.q.guhkade_guh_verslagen.title": "Sorry, vadsje",
-  "ftb.guhs_guhpixel.q.guhkade_guh_verslagen.desc": "Je tamme guhs lopen af en toe zelf naar een kast om te spelen, en ze worden er steeds beter in (tot hun plafond: dat hangt af van hun soort). Haal een hogere score dan een guh op dezelfde kast. Hij kijkt even sip... en gaat dan extra oefenen."
+  "ftb.guhs_guhpixel.q.guhkantoor_prikklok.title": "Het Guhkantoor",
+  "ftb.guhs_guhpixel.q.guhkantoor_prikklok.desc": "Koop bij de &dVerkoper-guh&r in de Guhpixel-lobby de &6Guhkantoor-set&r: een &dPrikklok&r en een &dBureautje&r. Zet het Bureautje binnen 8 blokken van de Prikklok (er passen er 4 op één klok) en klik op de klok om een guh aan het werk te zetten. Werken betekent hier: slapen op het toetsenbord. Njeg!",
+  "ftb.guhs_guhpixel.q.guhkantoor_loonstrookje.title": "Loon naar slapen",
+  "ftb.guhs_guhpixel.q.guhkantoor_loonstrookje.desc": "Na &68 echte uren&r slapen ligt er bij de Prikklok een &dloonstrookje&r voor je guh. Bruto: 0 knabbels. Ingehouden: een paar dutjes. Lees het (rechtsklik in de lucht) of hang het aan de muur. De tijd loopt gewoon door als je er niet bent.",
+  "ftb.guhs_guhpixel.q.guhkantoor_kwartaal.title": "De lijn is vlak",
+  "ftb.guhs_guhpixel.q.guhkantoor_kwartaal.desc": "Bij elk derde loonstrookje krijg je een &dkwartaalrapport&r: grafieken (allemaal vlak), hoogtepunten (\"Vergadering uitgesteld wegens vadsen\") en de &6Werknemer van de maand&r: de guh die het langst sliep. Het levert helemaal niks op. Vahoeg!"
 }

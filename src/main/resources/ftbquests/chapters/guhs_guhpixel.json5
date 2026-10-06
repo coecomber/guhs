@@ -86,21 +86,23 @@
       shape: "gear",
     },
     {
-      id: "47554882233FE417",
+      id: "475548FF6140570D",
       icon: {
-        id: "guhs:guhkade_kast_flappy",
+        id: "guhs:guhkantoor_prikklok",
       },
       tasks: [
         {
-          type: "advancement",
-          advancement: "guhs:quest/guhkade_kast",
-          id: "4755487F64BF9EB4",
-          criterion: "",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhkantoor_prikklok",
+          },
+          id: "475548DAB9D0D3A4",
         },
       ],
       rewards: [
         {
-          id: "475548C34BBDBE04",
+          id: "475548A6817E1C8E",
           type: "item",
           item: {
             count: 1,
@@ -109,141 +111,77 @@
           count: 8,
         },
         {
-          id: "475548EE7347E834",
+          id: "47554898B2E514FD",
           type: "xp",
-          xp: 100,
+          xp: 50,
         },
       ],
       x: 0.0,
       y: 6.5625,
-      shape: "gear",
+      shape: "rsquare",
     },
     {
-      id: "475548362F88FE22",
+      id: "475548EBD6A644EC",
       icon: {
-        id: "guhs:guhkade_kast_pong",
+        id: "guhs:guhkantoor_loonstrookje",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/guhkade_gespeeld",
-          id: "4755483F8DFB80BF",
+          advancement: "guhs:quest/guhkantoor_loonstrookje",
+          id: "4755486CBAE578AB",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "4755482584527CBF",
+          id: "47554872DDA4EAAE",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 6,
+          count: 8,
         },
         {
-          id: "475548F5D4361D85",
+          id: "475548F942D0EE3B",
           type: "xp",
-          xp: 50,
+          xp: 100,
         },
       ],
       x: 1.5,
       y: 6.5625,
     },
     {
-      id: "47554892A98798C2",
+      id: "4755488ADDD499D0",
       icon: {
-        id: "guhs:guhkade_kast_flappy",
+        id: "guhs:guhkantoor_kwartaalrapport",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/guhkade_flappy_mijlpaal",
-          id: "47554846AE4CC1FB",
+          advancement: "guhs:quest/guhkantoor_kwartaal",
+          id: "475548DD00DC1E2A",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548DE7228AF35",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:gefrituurde_kaasknabbels",
-          },
-          count: 4,
-        },
-        {
-          id: "4755481F1190FCCF",
-          type: "xp",
-          xp: 200,
-        },
-      ],
-      x: 3.0,
-      y: 6.5625,
-    },
-    {
-      id: "475548C7C681575C",
-      icon: {
-        id: "guhs:guhkade_kast_pong",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/guhkade_pong_mijlpaal",
-          id: "47554859F2EF7B08",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548CFB7917952",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:gefrituurde_kaasknabbels",
-          },
-          count: 4,
-        },
-        {
-          id: "4755488801739DA1",
-          type: "xp",
-          xp: 200,
-        },
-      ],
-      x: 4.5,
-      y: 6.5625,
-    },
-    {
-      id: "4755480E71FDD2C3",
-      icon: {
-        id: "guhs:guh_spawn_egg",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/guhkade_guh_verslagen",
-          id: "47554816CA4D59AD",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548D00A18D2FD",
+          id: "475548B2C87EE30B",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 12,
+          count: 8,
         },
         {
-          id: "4755486BF9B091CC",
+          id: "4755489643A089CE",
           type: "xp",
-          xp: 300,
+          xp: 150,
         },
       ],
-      x: 6.0,
+      x: 3.0,
       y: 6.5625,
       shape: "gear",
     },
