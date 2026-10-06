@@ -1,7 +1,30 @@
 {
   "variants": {
-    "": {
+    "facing=up": {
       "model": "guhs:block/elfentouw_haak"
+    },
+    "facing=down": {
+      "model": "guhs:block/elfentouw_haak",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "guhs:block/elfentouw_haak",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/elfentouw_haak",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/elfentouw_haak",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "guhs:block/elfentouw_haak",
+      "x": 90,
+      "y": 90
     }
   }
 }

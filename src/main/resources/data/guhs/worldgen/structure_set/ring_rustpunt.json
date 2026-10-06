@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:ring_rustpunt",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 9,
+    "separation": 4,
+    "salt": 21301501
+  }
+}
