@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ZKZ",
+    "KGK",
+    "ZKZ"
+  ],
+  "key": {
+    "Z": "guhs:zoutkristal",
+    "K": "guhs:grillkool",
+    "G": "guhs:gloeister"
+  },
+  "result": {
+    "id": "guhs:gloeisterkern"
+  }
+}

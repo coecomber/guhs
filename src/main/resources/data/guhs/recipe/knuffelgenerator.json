@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "WKW",
+    "VVV"
+  ],
+  "key": {
+    "W": "minecraft:pink_wool",
+    "K": "guhs:kaas_knabbels",
+    "V": "minecraft:feather"
+  },
+  "result": {
+    "id": "guhs:knuffelgenerator"
+  }
+}

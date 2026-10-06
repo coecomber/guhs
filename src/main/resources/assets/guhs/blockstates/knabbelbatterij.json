@@ -1,7 +1,79 @@
 {
   "variants": {
-    "": {
-      "model": "guhs:block/knabbelbatterij"
+    "facing=north,lading=0": {
+      "model": "guhs:block/knabbelbatterij_0"
+    },
+    "facing=north,lading=1": {
+      "model": "guhs:block/knabbelbatterij_1"
+    },
+    "facing=north,lading=2": {
+      "model": "guhs:block/knabbelbatterij_2"
+    },
+    "facing=north,lading=3": {
+      "model": "guhs:block/knabbelbatterij_3"
+    },
+    "facing=north,lading=4": {
+      "model": "guhs:block/knabbelbatterij_4"
+    },
+    "facing=east,lading=0": {
+      "model": "guhs:block/knabbelbatterij_0",
+      "y": 90
+    },
+    "facing=east,lading=1": {
+      "model": "guhs:block/knabbelbatterij_1",
+      "y": 90
+    },
+    "facing=east,lading=2": {
+      "model": "guhs:block/knabbelbatterij_2",
+      "y": 90
+    },
+    "facing=east,lading=3": {
+      "model": "guhs:block/knabbelbatterij_3",
+      "y": 90
+    },
+    "facing=east,lading=4": {
+      "model": "guhs:block/knabbelbatterij_4",
+      "y": 90
+    },
+    "facing=south,lading=0": {
+      "model": "guhs:block/knabbelbatterij_0",
+      "y": 180
+    },
+    "facing=south,lading=1": {
+      "model": "guhs:block/knabbelbatterij_1",
+      "y": 180
+    },
+    "facing=south,lading=2": {
+      "model": "guhs:block/knabbelbatterij_2",
+      "y": 180
+    },
+    "facing=south,lading=3": {
+      "model": "guhs:block/knabbelbatterij_3",
+      "y": 180
+    },
+    "facing=south,lading=4": {
+      "model": "guhs:block/knabbelbatterij_4",
+      "y": 180
+    },
+    "facing=west,lading=0": {
+      "model": "guhs:block/knabbelbatterij_0",
+      "y": 270
+    },
+    "facing=west,lading=1": {
+      "model": "guhs:block/knabbelbatterij_1",
+      "y": 270
+    },
+    "facing=west,lading=2": {
+      "model": "guhs:block/knabbelbatterij_2",
+      "y": 270
+    },
+    "facing=west,lading=3": {
+      "model": "guhs:block/knabbelbatterij_3",
+      "y": 270
+    },
+    "facing=west,lading=4": {
+      "model": "guhs:block/knabbelbatterij_4",
+      "y": 270
     }
   }
 }

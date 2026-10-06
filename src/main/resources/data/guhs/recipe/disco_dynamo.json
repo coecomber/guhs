@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "RJR",
+    "KKK"
+  ],
+  "key": {
+    "G": "minecraft:pink_stained_glass",
+    "R": "minecraft:redstone",
+    "J": "minecraft:jukebox",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:disco_dynamo"
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "textures": {
+    "particle": "guhs:block/blubkacheltje_blubje",
+    "blubje": "guhs:block/blubkacheltje_blubje"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#blubje",
+          "uv": [
+            0,
+            0,
+            6,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#blubje",
+          "uv": [
+            6,
+            0,
+            12,
+            5
+          ]
+        },
+        "west": {
+          "texture": "#blubje",
+          "uv": [
+            6,
+            0,
+            12,
+            5
+          ]
+        },
+        "east": {
+          "texture": "#blubje",
+          "uv": [
+            6,
+            0,
+            12,
+            5
+          ]
+        },
+        "up": {
+          "texture": "#blubje",
+          "uv": [
+            0,
+            5,
+            6,
+            11
+          ]
+        },
+        "down": {
+          "texture": "#blubje",
+          "uv": [
+            0,
+            5,
+            6,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        5,
+        6
+      ],
+      "to": [
+        10,
+        6,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#blubje",
+          "uv": [
+            6,
+            5,
+            10,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#blubje",
+          "uv": [
+            6,
+            5,
+            10,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#blubje",
+          "uv": [
+            6,
+            5,
+            10,
+            6
+          ]
+        },
+        "east": {
+          "texture": "#blubje",
+          "uv": [
+            6,
+            5,
+            10,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#blubje",
+          "uv": [
+            1,
+            6,
+            5,
+            10
+          ]
+        }
+      }
+    }
+  ]
+}

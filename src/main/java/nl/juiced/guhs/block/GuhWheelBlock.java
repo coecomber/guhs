@@ -146,8 +146,11 @@ public class GuhWheelBlock extends BaseEntityBlock {
         nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.GUHWIEL, level.dimension(), pos, "",
                 level.getGameTime());   // 2.10: "waar is mijn guh": running in the wheel
         stack.consume(1, player);
-        level.playSound(null, pos, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1f);
+        level.playSound(null, pos, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, wheel.isBlij() ? 1.25f : 1f);
         level.setBlock(pos, state.setValue(RUNNING, true), 3);
+        // tech-bronnen: what this guh gives, said at once (a happy guh runs extra hard)
+        player.sendOverlayMessage(Component.translatable(wheel.isBlij() ? "gui.guhs.techbron.guhrad.rent_blij" : "gui.guhs.techbron.guhrad.rent",
+                wheel.vadsAanbod()));
         return InteractionResult.SUCCESS;
     }
 

@@ -42,10 +42,13 @@ OOR_BINNEN = (255, 140, 182)
 
 # what a guh gives in a Guhrad, per variant: (an ordinary day, a happy guh). The standard comes from VadsGetallen.java.
 # DESIGN: the story guhs give 20-25 (the Baltoguh runs harder, Guhtwo lets the wheel float, the 626-guh counts double).
+# (tech-bronnen: the two story guhs of this update too; how each does its rounds is feature/techbron/GuhradStijl.java)
 GUHRAD_VARIANTEN = {
     "baltoguh": (20, 25),
     "mewtwo": (25, 25),
     "stitch626": (20, 25),
+    "sam_guh": (20, 25),
+    "guhshi": (20, 25),
 }
 
 
