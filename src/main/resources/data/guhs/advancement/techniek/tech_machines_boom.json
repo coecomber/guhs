@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:plantagebak"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_machines_boom.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_machines_boom.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:techniek/root"
+}

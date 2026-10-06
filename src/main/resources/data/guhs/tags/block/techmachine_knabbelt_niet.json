@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:reinforced_deepslate",
+    "minecraft:budding_amethyst",
+    "guhs:guhhuisje_deel",
+    "guhs:speelgoed_deel",
+    "guhs:slee_rail_part",
+    "guhs:guh_wheel_part"
+  ]
+}

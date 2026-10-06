@@ -1,0 +1,145 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/knabbelaar_tand",
+    "tand": "guhs:block/knabbelaar_tand"
+  },
+  "elements": [
+    {
+      "from": [
+        4.5,
+        3.25,
+        -1.25
+      ],
+      "to": [
+        7.5,
+        7,
+        -0.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tand",
+          "uv": [
+            0,
+            0,
+            3,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#tand",
+          "uv": [
+            0,
+            0,
+            3,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#tand",
+          "uv": [
+            0,
+            0,
+            3,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#tand",
+          "uv": [
+            0,
+            0,
+            3,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#tand",
+          "uv": [
+            0,
+            0,
+            3,
+            4
+          ]
+        },
+        "down": {
+          "texture": "#tand",
+          "uv": [
+            0,
+            0,
+            3,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8.5,
+        3.25,
+        -1.25
+      ],
+      "to": [
+        11.5,
+        7,
+        -0.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#tand",
+          "uv": [
+            4,
+            0,
+            7,
+            4
+          ]
+        },
+        "south": {
+          "texture": "#tand",
+          "uv": [
+            4,
+            0,
+            7,
+            4
+          ]
+        },
+        "west": {
+          "texture": "#tand",
+          "uv": [
+            4,
+            0,
+            7,
+            4
+          ]
+        },
+        "east": {
+          "texture": "#tand",
+          "uv": [
+            4,
+            0,
+            7,
+            4
+          ]
+        },
+        "up": {
+          "texture": "#tand",
+          "uv": [
+            4,
+            0,
+            7,
+            4
+          ]
+        },
+        "down": {
+          "texture": "#tand",
+          "uv": [
+            4,
+            0,
+            7,
+            4
+          ]
+        }
+      }
+    }
+  ]
+}

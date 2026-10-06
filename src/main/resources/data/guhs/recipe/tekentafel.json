@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "WGW",
+    "W W"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "W": "#minecraft:planks",
+    "G": "guhs:grillspies"
+  },
+  "result": {
+    "id": "guhs:tekentafel"
+  }
+}
