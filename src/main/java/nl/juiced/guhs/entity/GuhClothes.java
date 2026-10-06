@@ -362,6 +362,12 @@ public enum GuhClothes {
     // </bestaand>
     //
     // <camping_markt>
+    /** bbq2 (camping-markt, the Kampbaas-guh's thank-you, source "camping_markt"): an olive bucket hat with a pink band. */
+    CAMPINGMARKT_HOEDJE(Slot.HEAD, "outfit_rain_hat"),
+    /** bbq2 (camping-markt): a scout's neckerchief, yellow with a red edge. */
+    CAMPINGMARKT_HALSDOEK(Slot.NECK, "outfit_scarf"),
+    /** bbq2 (camping-markt): a camping backpack with a rolled-up sleeping mat on top. */
+    CAMPINGMARKT_RUGZAK(Slot.BACK, "outfit_backpack"),
     // </camping_markt>
     //
     // <toren_peper>
