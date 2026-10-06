@@ -104,7 +104,7 @@ public final class RingFeature {
             () -> EntityType.Builder.of(SmikagolEntity::new, MobCategory.MISC).sized(0.7f, 0.75f).eyeHeight(0.5f).clientTrackingRange(10)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("smikagol"))));
     public static final DeferredHolder<EntityType<?>, EntityType<KnekelRuiterEntity>> KNEKEL_RUITER = ENTITY_TYPES.register("knekel_ruiter",
-            () -> EntityType.Builder.of(KnekelRuiterEntity::new, MobCategory.MISC).sized(1.1f, 2.3f).eyeHeight(1.9f).clientTrackingRange(10).fireImmune()
+            () -> EntityType.Builder.of(KnekelRuiterEntity::new, MobCategory.MISC).sized(1.1f, 2.7f).eyeHeight(2.3f).clientTrackingRange(10).fireImmune()
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("knekel_ruiter"))));
     public static final DeferredItem<SpawnEggItem> SMIKAGOL_SPAWN_EGG = ModItems.spawnEgg(ITEMS, "smikagol_spawn_egg", SMIKAGOL);
     public static final DeferredItem<SpawnEggItem> KNEKEL_RUITER_SPAWN_EGG = ModItems.spawnEgg(ITEMS, "knekel_ruiter_spawn_egg", KNEKEL_RUITER);

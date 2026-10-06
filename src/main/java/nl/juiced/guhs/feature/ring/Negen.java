@@ -186,6 +186,19 @@ public final class Negen {
      */
     @Nullable
     public static KnekelRuiterEntity patrouille(ServerLevel level, List<BlockPos> ronde) {
+        KnekelRuiterEntity r = maakPatrouille(level, ronde);
+        if (r != null) {
+            level.addFreshEntity(r);
+        }
+        return r;
+    }
+
+    /**
+     * The same rider, NOT yet added to the world: for a {@code Bezetting.wezen} maker (which adds, tags and repairs it):
+     * {@code Bezetting.wezen("ringh5_ruiter_1", "zwarte_roosterpoort", null, lokaal, (level, plek, draai) -> Negen.maakPatrouille(level, ronde(level)))}.
+     */
+    @Nullable
+    public static KnekelRuiterEntity maakPatrouille(ServerLevel level, List<BlockPos> ronde) {
         KnekelRuiterEntity r = RingFeature.KNEKEL_RUITER.get().create(level, EntitySpawnReason.TRIGGERED);
         if (r == null || ronde.isEmpty()) {
             return null;
@@ -193,7 +206,6 @@ public final class Negen {
         BlockPos start = ronde.get(0);
         r.snapTo(start.getX() + 0.5, start.getY(), start.getZ() + 0.5, 0f, 0f);
         r.zetRoute(ronde);
-        level.addFreshEntity(r);
         return r;
     }
 
