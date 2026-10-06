@@ -1,0 +1,160 @@
+# bbq2 (paleizen) AutoCheck: the three Mika palaces as try-out copies in the overworld, their characters and the Worstzwijntje,
+# and the real copies in the Guhbarbecuether. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_paleizen.txt
+# (commands: see autocheck.txt; "/guhs paleizen bouw <structuur>" is a dev-only command: it puts the building in front of
+# you, its way in at your feet, and the questlines treat it as a real copy; "/guhs verhaal stap <lijn> <speler> <n>" sets a step)
+# Template coordinates -> world, for a copy built at x y z:
+#   brugpaleis: world = (x - 2, y - 26, z - 15) + template    woonblokken: (x - 31, y - 13, z - 53) + template
+#   stal:       (x - 40, y - 7, z - 12) + template
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 200 3000
+/forceload add 2990 2960 3110 3040
+wait 80
+/gamemode creative
+
+section Het Mika-brugpaleis: the whole bridge, the Mika face, the gap with its scaffold, the bell tower
+/tp @s 3000 200 3000
+wait 20
+/guhs paleizen bouw mika_brugpaleis
+wait 100
+/gamemode spectator
+camera 3046 214 2930 0 14
+waitrender 400
+shot bbq2_paleizen_brug_overzicht
+camera 3008 206 3000 -90 2
+waitrender 200
+shot bbq2_paleizen_brug_gezicht
+camera 3058 212 2990 -40 38
+waitrender 200
+shot bbq2_paleizen_brug_gat
+camera 3066 206 3000 -90 0
+waitrender 200
+shot bbq2_paleizen_brug_klokkentoren
+# the Tolwachter-Mika and his first screen
+/gamemode creative
+/tp @s 3030.5 203 3000.5 -90 0
+wait 20
+npc tolwachter_mika 3 0
+wait 10
+shot bbq2_paleizen_tolwachter
+gui keep
+interact npc
+wait 30
+shot bbq2_paleizen_tolwachter_scherm gui
+gui close
+# the gate shoves a survival player who has not paid back out
+/guhs verhaal wis tolwachter @s
+/gamemode survival
+/tp @s 3040.5 203 3000.5 -90 0
+wait 40
+shot bbq2_paleizen_tolpoort_duw gui
+/gamemode creative
+# the planks: step 2, five planks, five clicks at the gap
+/guhs verhaal stap tolwachter @s 2
+/give @s guhs:paleizen_losse_plank 5
+/tp @s 3054.5 203 3000.5 -90 40
+wait 20
+use 3055 202 3000
+wait 10
+use 3055 202 3000
+wait 10
+shot bbq2_paleizen_brug_twee_rijen gui
+
+section De Mika-stal: the barn, the paddock, the boxes with the Worstzwijntjes
+/tp @s 3000 200 3200
+/forceload add 2950 3170 3020 3240
+wait 60
+/fill 2950 195 3170 3020 199 3240 guhs:houtskoolsteen
+/guhs paleizen bouw mika_stal
+wait 100
+/gamemode spectator
+camera 3018 214 3212 60 28
+waitrender 300
+shot bbq2_paleizen_stal_overzicht
+camera 3000 203 3200 90 4
+waitrender 200
+shot bbq2_paleizen_stal_deur
+camera 2978 202 3200 90 10
+waitrender 200
+shot bbq2_paleizen_stal_gangpad
+/gamemode creative
+/tp @s 2994.5 200 3200.5 90 0
+wait 20
+npc stalknechtguh 3 0
+wait 10
+shot bbq2_paleizen_stalknecht
+gui keep
+interact npc
+wait 30
+shot bbq2_paleizen_stalknecht_scherm gui
+gui close
+
+section De Mika-woonblokken: the estate, the courtyard, Mika-oma on the top gallery, the roof garden
+/tp @s 3000 200 3400
+/forceload add 2960 3330 3040 3410
+wait 60
+/guhs paleizen bouw mika_woonblokken
+wait 140
+/gamemode spectator
+camera 3040 250 3440 135 32
+waitrender 400
+shot bbq2_paleizen_woon_overzicht
+camera 2960 244 3336 -45 28
+waitrender 400
+shot bbq2_paleizen_woon_achterkant
+camera 3000 203 3392 180 -8
+waitrender 300
+shot bbq2_paleizen_woon_poort
+camera 3000 208 3378 180 -14
+waitrender 300
+shot bbq2_paleizen_woon_binnenplaats
+camera 2997.5 222 3360 180 8
+waitrender 300
+shot bbq2_paleizen_mika_oma
+camera 3014 219 3384 -60 20
+waitrender 300
+shot bbq2_paleizen_daktuin
+
+section the creatures in a row: the Worstzwijntje (grown and young) and the six neighbours
+/gamemode creative
+/tp @s 3000 200 3600
+/forceload add 2990 3590 3010 3610
+wait 40
+/fill 2990 199 3590 3010 199 3610 minecraft:smooth_stone
+/summon guhs:worstzwijntje 2996 200 3596 {NoAI:1b,Rotation:[0f,0f]}
+/summon guhs:worstzwijntje 2998 200 3596 {NoAI:1b,Age:-24000,Rotation:[0f,0f]}
+/summon guhs:paleizen_mopper_mika 2996 200 3600 {NoAI:1b,Nr:0,Rotation:[0f,0f]}
+/summon guhs:paleizen_mopper_mika 2998 200 3600 {NoAI:1b,Nr:1,Rotation:[0f,0f]}
+/summon guhs:paleizen_mopper_mika 3000 200 3600 {NoAI:1b,Nr:2,Rotation:[0f,0f]}
+/summon guhs:paleizen_mopper_mika 3002 200 3600 {NoAI:1b,Nr:3,Rotation:[0f,0f]}
+/summon guhs:paleizen_mopper_mika 3004 200 3600 {NoAI:1b,Nr:4,Rotation:[0f,0f]}
+/summon guhs:paleizen_mopper_mika 3006 200 3600 {NoAI:1b,Nr:5,Rotation:[0f,0f]}
+wait 20
+/gamemode spectator
+camera 2997 201 3599 180 14
+wait 20
+shot bbq2_paleizen_worstzwijntjes
+camera 3001 201.5 3604 180 10
+wait 20
+shot bbq2_paleizen_buren
+
+section the Guhdex: the three questlines and the page of the Worstzwijntje
+/gamemode creative
+gui verhalen list
+wait 20
+shot bbq2_paleizen_gids_lijst gui
+gui close
+
+section the real copies in the Guhbarbecuether (worldgen)
+mist off
+tplocate auto mika_woonblokken
+tplocate auto mika_stal
+tplocate auto mika_brugpaleis
+mist on

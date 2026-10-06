@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:mika_woonblokken",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21300908,
+    "min_afstand": 250,
+    "max_afstand": 900,
+    "alleen_nieuw": true,
+    "sector": 1,
+    "sectoren": 16
+  }
+}
