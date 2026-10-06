@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IHI",
+    "ZKZ",
+    "IDI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "H": "minecraft:hopper",
+    "Z": "guhs:zoutkristal",
+    "K": "guhs:kaas_knabbels",
+    "D": "guhs:guh_wire"
+  },
+  "result": {
+    "id": "guhs:opzuiger"
+  }
+}

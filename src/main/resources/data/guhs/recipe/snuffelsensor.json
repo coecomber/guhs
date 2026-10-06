@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " Z ",
+    "DXD",
+    "SSS"
+  ],
+  "key": {
+    "Z": "guhs:zoutkristal",
+    "D": "guhs:guh_wire",
+    "X": "guhs:kaas_knabbels",
+    "S": "minecraft:stone"
+  },
+  "result": {
+    "id": "guhs:snuffelsensor"
+  }
+}

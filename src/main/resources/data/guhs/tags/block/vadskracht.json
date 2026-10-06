@@ -9,6 +9,12 @@
     "guhs:vadskracht_testbron",
     "guhs:vadskracht_testbatterij",
     "guhs:vadskracht_testmachine",
-    "guhs:vadskracht_testmachine_groot"
+    "guhs:vadskracht_testmachine_groot",
+    "guhs:opzuiger",
+    "guhs:voorraadmeter",
+    "guhs:snuffelsensor",
+    "guhs:guhklok",
+    "guhs:guhteller",
+    "guhs:knabbelbuis_filter"
   ]
 }

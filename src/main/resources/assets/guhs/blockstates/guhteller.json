@@ -1,7 +1,94 @@
 {
   "variants": {
-    "": {
-      "model": "guhs:block/guhteller"
+    "facing=north,signaal=false,snoet=slaapt": {
+      "model": "guhs:block/guhteller_slaapt"
+    },
+    "facing=north,signaal=false,snoet=werkt": {
+      "model": "guhs:block/guhteller_werkt"
+    },
+    "facing=north,signaal=false,snoet=vol": {
+      "model": "guhs:block/guhteller_vol"
+    },
+    "facing=north,signaal=true,snoet=slaapt": {
+      "model": "guhs:block/guhteller_slaapt_aan"
+    },
+    "facing=north,signaal=true,snoet=werkt": {
+      "model": "guhs:block/guhteller_werkt_aan"
+    },
+    "facing=north,signaal=true,snoet=vol": {
+      "model": "guhs:block/guhteller_vol_aan"
+    },
+    "facing=east,signaal=false,snoet=slaapt": {
+      "model": "guhs:block/guhteller_slaapt",
+      "y": 90
+    },
+    "facing=east,signaal=false,snoet=werkt": {
+      "model": "guhs:block/guhteller_werkt",
+      "y": 90
+    },
+    "facing=east,signaal=false,snoet=vol": {
+      "model": "guhs:block/guhteller_vol",
+      "y": 90
+    },
+    "facing=east,signaal=true,snoet=slaapt": {
+      "model": "guhs:block/guhteller_slaapt_aan",
+      "y": 90
+    },
+    "facing=east,signaal=true,snoet=werkt": {
+      "model": "guhs:block/guhteller_werkt_aan",
+      "y": 90
+    },
+    "facing=east,signaal=true,snoet=vol": {
+      "model": "guhs:block/guhteller_vol_aan",
+      "y": 90
+    },
+    "facing=south,signaal=false,snoet=slaapt": {
+      "model": "guhs:block/guhteller_slaapt",
+      "y": 180
+    },
+    "facing=south,signaal=false,snoet=werkt": {
+      "model": "guhs:block/guhteller_werkt",
+      "y": 180
+    },
+    "facing=south,signaal=false,snoet=vol": {
+      "model": "guhs:block/guhteller_vol",
+      "y": 180
+    },
+    "facing=south,signaal=true,snoet=slaapt": {
+      "model": "guhs:block/guhteller_slaapt_aan",
+      "y": 180
+    },
+    "facing=south,signaal=true,snoet=werkt": {
+      "model": "guhs:block/guhteller_werkt_aan",
+      "y": 180
+    },
+    "facing=south,signaal=true,snoet=vol": {
+      "model": "guhs:block/guhteller_vol_aan",
+      "y": 180
+    },
+    "facing=west,signaal=false,snoet=slaapt": {
+      "model": "guhs:block/guhteller_slaapt",
+      "y": 270
+    },
+    "facing=west,signaal=false,snoet=werkt": {
+      "model": "guhs:block/guhteller_werkt",
+      "y": 270
+    },
+    "facing=west,signaal=false,snoet=vol": {
+      "model": "guhs:block/guhteller_vol",
+      "y": 270
+    },
+    "facing=west,signaal=true,snoet=slaapt": {
+      "model": "guhs:block/guhteller_slaapt_aan",
+      "y": 270
+    },
+    "facing=west,signaal=true,snoet=werkt": {
+      "model": "guhs:block/guhteller_werkt_aan",
+      "y": 270
+    },
+    "facing=west,signaal=true,snoet=vol": {
+      "model": "guhs:block/guhteller_vol_aan",
+      "y": 270
     }
   }
 }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BHB",
+    " Z "
+  ],
+  "key": {
+    "B": "guhs:knabbelbuis",
+    "H": "minecraft:hopper",
+    "Z": "guhs:zoutkristal"
+  },
+  "result": {
+    "id": "guhs:knabbelbuis_richting",
+    "count": 2
+  }
+}
