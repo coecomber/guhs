@@ -1,0 +1,196 @@
+# bbq2 (guhrio-w2): world 2 of Super Guhrio, "de kelders" (levels 2-1 and 2-2), in the real client.
+# NOT run by the slice (a slice starts no game client): this is for the merge step's visual check.
+# Builds the whole castle unturned in the sky with its corner at 6000 100 6000 (dev command /guhs guhrio bouwkasteel), so
+# castle coordinates + (6000, 100, 6000) are world coordinates. The cellar's row 0 is y 104: you walk in row 4 (y 108), the
+# rooms above the ceiling have their floor in row 12 (you stand at y 117).
+#   2-1 (west wing): the lane is x 6019, it runs SOUTH: z = 6011 + s.   start block 6019 108 6013
+#   2-2 (east wing): the lane is x 6107, it runs NORTH: z = 6106 - s.   start block 6107 108 6104
+# Look at: a clean side view of every part (nothing in front of the lane, the whole height of the main lane in the picture),
+# the teal ground and brick ceiling with its keystones, the painted wall (lamps on the pillars, barrels, painted pipes, the
+# egg over the door), the Hapbloemen in their pipes, the two platforms and the island, the red cage round the vadsmunt, the
+# falling blocks, the lift and the high ledge; in the rooms: the picture must show the room and not the lane below it
+# (the coin cellar, the eierkamertje with the egg on its hay, the black warp room with 3-1 / 3-2 / 1-1 in gold over the
+# three gold-and-purple warp pipes). The hatching scene: black bars, the player's stand-in walks to the nest with the egg
+# (a flat egg picture that faces the camera) over its head, the egg hops into the nest, wobbles twice, the screen goes
+# dark, Guhshi sits on the nest, hops, the subtitles read "Krak...", "Njeg?", "Njeg! Mama!". After it: Guhshi on the nest,
+# then under the player. The warp: the player stands at the start of 3-1 with the message in the chat.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_guhrio-w2.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/execute in minecraft:overworld run tp @s 6063.5 190 6063.5 0 90
+wait 60
+/forceload add 6000 6000 6127 6127
+wait 40
+/guhs guhrio bouwkasteel 6000 100 6000
+wait 100
+waitrender 600
+/guhs guhrio wis
+/guhs guhriow2 wis
+/guhs guhrio gehaald kasteel_1_1
+/guhs guhrio gehaald kasteel_1_2
+/gamemode survival
+
+section 2-1 De buizenkelder: the main lane
+/guhs guhrio start 6019 108 6013
+wait 30
+guhriopos 2-1 at the start
+shot w2_2_1_00_start gui
+/tp @s 6019.5 108 6026.5
+wait 20
+shot w2_2_1_01_eerste_pijp_en_stenen gui
+/tp @s 6019.5 111 6035.5
+wait 20
+shot w2_2_1_02_buizensteeg_hoge_weg gui
+/tp @s 6019.5 108 6052.5
+wait 20
+shot w2_2_1_03_vlag_voor_de_saus gui
+/tp @s 6019.5 108 6062.5
+wait 40
+shot w2_2_1_04_eilandje_en_platforms gui
+/tp @s 6019.5 108 6073.5
+wait 20
+shot w2_2_1_05_schild_mika_tunnel_kooi gui
+/tp @s 6019.5 110 6077.5
+wait 20
+shot w2_2_1_06_op_de_richel_onder_de_kooi gui
+/tp @s 6019.5 108 6081.5
+wait 20
+shot w2_2_1_07_valblokken gui
+/tp @s 6019.5 108 6090.5
+wait 30
+shot w2_2_1_08_lift gui
+/tp @s 6019.5 113 6095.5
+wait 20
+shot w2_2_1_09_hoge_richel_vadsmunt gui
+/tp @s 6019.5 108 6098.5
+wait 20
+shot w2_2_1_10_trap_en_mast gui
+
+section 2-1: down the first pipe into the coin cellar (wait for the Hapbloem), and out through the sideways pipe
+/tp @s 6019.5 110 6021.5
+wait 10
+key down on
+wait 160
+key down off
+wait 40
+guhriopos 2-1 in the coin cellar
+shot w2_2_1_11_muntenkelder gui
+key right on
+wait 120
+key right off
+wait 60
+guhriopos 2-1 out of the coin cellar (dropped out of the ceiling at s = 40)
+shot w2_2_1_12_uit_de_muntenkelder gui
+/guhs guhrio stop
+wait 20
+
+section 2-2 Het nest van Guhshi: to the door and the egg
+/guhs guhrio gehaald kasteel_2_1
+/guhs guhrio start 6107 108 6104
+wait 30
+shot w2_2_2_00_start gui
+/tp @s 6107.5 108 6092.5
+wait 30
+shot w2_2_2_01_platform_en_vadsmunt gui
+/tp @s 6107.5 108 6082.5
+wait 20
+shot w2_2_2_02_deur_onder_het_ei gui
+/tp @s 6107.5 108 6062.5
+wait 30
+guhriopos 2-2 at the egg gate without the egg (the lock asks for it; the red gate is shut)
+shot w2_2_2_03_eierslot_dicht gui
+/tp @s 6107.5 108 6080.5
+wait 10
+key up on
+wait 6
+key up off
+wait 30
+guhriopos 2-2 through the door: the eierkamertje
+shot w2_2_2_04_eierkamertje gui
+/tp @s 6107.5 119 6074.5
+wait 20
+guhriopos 2-2 the egg is found
+shot w2_2_2_05_ei_gevonden gui
+key right on
+wait 100
+key right off
+wait 60
+guhriopos 2-2 out of the eierkamertje (dropped out of the ceiling at s = 43)
+shot w2_2_2_06_voor_het_hek gui
+
+section 2-2: through the gate, the hatching scene
+/tp @s 6107.5 108 6062.5
+wait 30
+shot w2_2_2_07_eierslot_open gui
+/tp @s 6107.5 108 6059.5
+wait 10
+key right on
+wait 30
+key right off
+shot w2_2_2_08_scene_begin
+wait 40
+shot w2_2_2_09_scene_ei_in_het_nest
+wait 40
+shot w2_2_2_10_scene_krak
+wait 50
+shot w2_2_2_11_scene_guhshi
+wait 40
+shot w2_2_2_12_scene_mama
+wait 140
+/guhs guhriow2 stand
+shot w2_2_2_13_guhshi_op_zijn_nest gui
+/tp @s 6107.5 109 6054.5
+wait 20
+guhriopos 2-2 on Guhshi
+shot w2_2_2_14_op_guhshi gui
+/tp @s 6107.5 108 6044.5
+wait 10
+key right on
+key sprint on
+wait 14
+key jump on
+wait 50
+key jump off
+key sprint off
+key right off
+wait 20
+guhriopos 2-2 after the flutter jump over the wide pit
+shot w2_2_2_15_fladdersprong gui
+
+section 2-2: the pipe to the warp room, and a warp
+/tp @s 6107.5 110 6026.5
+wait 10
+key down on
+wait 160
+key down off
+wait 40
+guhriopos 2-2 in the warp room
+shot w2_2_2_16_warpkamer gui
+/tp @s 6107.5 117 6040.5
+wait 20
+shot w2_2_2_17_warpkamer_midden gui
+/tp @s 6107.5 118 6048.5
+wait 10
+key down on
+wait 20
+key down off
+wait 40
+guhriopos after the warp pipe 3-1 (the player must be in level 3-1)
+/guhs guhriow2 stand
+shot w2_2_2_18_na_de_warp gui
+/guhs guhrio stop
+wait 20
+
+section the hatching scene by itself (anchored on the block the player stands on, the lane running east)
+/gamemode creative
+/tp @s 6063.5 127 6060.5 -90 0
+wait 20
+/guhs verhaal scene guhriow2_uit 0
+wait 60
+shot w2_scene_los_060
+wait 90
+shot w2_scene_los_150
+wait 160
