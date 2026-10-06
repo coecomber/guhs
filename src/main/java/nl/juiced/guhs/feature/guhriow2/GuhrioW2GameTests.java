@@ -94,7 +94,7 @@ public class GuhrioW2GameTests {
     /** World 2's own tick for a mock player (it runs every fifth tick of the player's own count). */
     private static void tik(ServerPlayer p) {
         p.tickCount = 0;
-        tik(p);
+        GuhrioW2.tick(p);
     }
 
     private static boolean dicht(ServerLevel level, BlockPos abs, ServerPlayer p) {
