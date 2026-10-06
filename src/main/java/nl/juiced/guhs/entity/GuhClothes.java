@@ -356,6 +356,8 @@ public enum GuhClothes {
     //
     // --- bbq2 (CONTRACT_130 5.4): the slices put their pieces between their own markers, each line ending with a comma ---
     // <paleizen>
+    /** bbq2 (Mika-oma's reward, "Soep van Mika-oma"): a dark red knitted beanie with a cream rim and two little knitted Mika horns. */
+    PALEIZEN_MIKAMUTS(Slot.HEAD, "outfit_paleizen_muts"),
     // </paleizen>
     //
     // <bestaand>
