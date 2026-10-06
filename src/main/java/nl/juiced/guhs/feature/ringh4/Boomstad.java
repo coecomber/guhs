@@ -82,6 +82,16 @@ public final class Boomstad {
 
     private static final List<Proef> TEST = new CopyOnWriteArrayList<>();
 
+    private record Gezien(ServerLevel level, long tijd, @Nullable Kopie kopie) {
+    }
+
+    /** (not saved) the copy a player stood in when the compass last asked. */
+    private static final Map<java.util.UUID, Gezien> GEZIEN = new java.util.concurrent.ConcurrentHashMap<>();
+
+    static void vergeet(java.util.UUID speler) {
+        GEZIEN.remove(speler);
+    }
+
     /** (Game tests) a copy that counts as standing in this level; its spots are {@code plekken} (world positions). */
     public static Kopie test(ServerLevel level, BlockPos anker, Map<String, Vec3> plekken, List<Vec3> route) {
         Kopie k = new Kopie(anker, Rotation.NONE, Map.copyOf(plekken), List.copyOf(route));
@@ -141,7 +151,17 @@ public final class Boomstad {
      * their step (the gate, the hall, the guest flet, the mirror, the jetty).
      */
     static Doel doel(ServerPlayer p, int stap) {
-        Kopie k = stap > 0 ? bij(p.level(), p.blockPosition()) : null;
+        Kopie k = null;
+        if (stap > 0) {
+            // (the compass asks every tick: the copy around a player is looked up once in two seconds)
+            long nu = p.level().getGameTime();
+            Gezien g = GEZIEN.get(p.getUUID());
+            if (g == null || g.level != p.level() || nu - g.tijd >= 40 || nu < g.tijd) {
+                g = new Gezien(p.level(), nu, bij(p.level(), p.blockPosition()));
+                GEZIEN.put(p.getUUID(), g);
+            }
+            k = g.kopie;
+        }
         if (k == null) {
             return Ring.doel(4);
         }

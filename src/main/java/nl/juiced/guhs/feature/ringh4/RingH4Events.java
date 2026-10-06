@@ -173,6 +173,7 @@ public final class RingH4Events {
     @SubscribeEvent
     public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
         GEKEKEN.remove(event.getEntity().getUUID());
+        Boomstad.vergeet(event.getEntity().getUUID());
         if (event.getEntity().getVehicle() instanceof ElfenbootjeEntity boot && boot.soort() == ElfenbootjeEntity.RIT) {
             boot.eindig(false);
         }
