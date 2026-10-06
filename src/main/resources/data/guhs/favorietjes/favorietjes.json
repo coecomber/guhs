@@ -169,7 +169,11 @@
     "campingmarkt_halsdoek": "geel",
     "campingmarkt_rugzak": "groen",
     "torenpeper_wachtersjas": "blauw",
-    "torenpeper_peperslinger": "groen"
+    "torenpeper_peperslinger": "groen",
+    "ring_guhdalfhoed": "blauw",
+    "ring_elfenmantel": "groen",
+    "ring_hobbitvoeten": "bruin",
+    "ring_ringketting": "wit"
   },
   "wistjedat": {
     "eten_ijskoud": 3,
