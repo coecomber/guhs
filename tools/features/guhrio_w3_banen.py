@@ -88,8 +88,9 @@ def _kamer(baan, naam, s0, s1, wand, onder=13, boven=19):
 # =====================================================================================================================
 def bouw_3_1(baan):
     """
-    s 2 start, 9 Guhshi | 16 the first spit (over solid ground) | 22-24 a gap | 25 flag | 32-45 the sauce with three spit
-    hubs to hop over (vadsmunt 0 over the middle one) | 47 flag | 51, 55 Plof-Mika's (vadsmunt 1 under the second) |
+    s 2 start, 9 Guhshi | 16 the first spit (over solid ground) | 22-24 a gap | 25 flag, 30 Guhshi | 32-45 the sauce with
+    three spit hubs to hop over (vadsmunt 0 over the middle one) | 47 flag, 48 Guhshi | 51, 55 Plof-Mika's (vadsmunt 1 under
+    the second) |
     58 Guhshi's hitching post, 60 the Vuurpeper bush | 63-65 two Guhmba's in a pen | 71-76 the block with the slit: a knabbel
     through it flips the switch that opens the red wall at 79; on top of it the pipe (with a Hapbloem) to the treasury in the
     sky (vadsmunt 2; its way out drops you at 78, still in front of the wall) | 80 flag, 81 Guhshi | 82-85 the big stairs, a
@@ -109,7 +110,8 @@ def bouw_3_1(baan):
         baan.munt(s, Y + 2 + (s == 23))
     baan.vlag(25, Y)
     baan.blok(26, Y)
-    baan.guhmba(29, Y)
+    baan.guhmba(28, Y)
+    baan.guhshi(30, Y)                                           # (he runs back to a spot when something touches you)
     # the grill spits over the sauce: three hubs to stand on (for a moment), each with its skewer
     for i, s in enumerate((34, 38, 42)):
         _spies(baan, s, G, lengte=2, tegen_klok=i % 2 == 1, fase=i)
@@ -117,6 +119,7 @@ def bouw_3_1(baan):
         baan.munt(s, Y + 2)
     baan.vadsmunt(38, Y + 3, 0)
     baan.vlag(47, Y)
+    baan.guhshi(48, Y)
     # two Plof-Mika's: walk under them and they drop
     baan.plof_mika(51, Y + 5)
     baan.munt(51, Y)
@@ -162,8 +165,8 @@ def bouw_3_2(baan):
     the timed switch at 20 lays a bridge (vadsmunt 0 high over it: on Guhshi or big) | 33 flag, 35 Guhshi | 36-51 falling
     blocks over the sauce under two fast spits (vadsmunt 1 low between the first two: a small hop) | 53 flag, 55 Guhshi |
     57-68 a platform glides under two Plof-Mika's | 70 flag, 72 the hitching post, 73 the door to the Peperkamer (rows
-    13..19: the bush, a knabbel through the slit opens the cage with vadsmunt 2) | 76-83 the second big gap, a spit in the
-    middle of it (the timed switch at 75) | 85 flag | 86-89 the big stairs, 92 the flagpole.
+    13..19: the bush, a knabbel through the slit opens the cage with vadsmunt 2) | 76-83 the second big gap, a spit swinging
+    up through it from below (the timed switch at 75) | 85 flag | 86-89 the big stairs, 92 the flagpole.
     """
     baan.hoofdbaan(0, TOP)
     _grond(baan, [(22, 31), (36, 51), (57, 68), (76, 83)])
@@ -207,7 +210,9 @@ def bouw_3_2(baan):
     baan.schakelaar(75, Y + 3, 5, "tijd")
     for s in range(76, 84):
         baan.schakelblok(s, G, 5, aan=True)
-    _spies(baan, 80, Y + 2, lengte=2)
+    # (its hub hangs down in the pit: the skewer swings up through the bridge - mind your feet - and never reaches whoever
+    # flutters over the gap; a hub at head height would stop a big player on the bridge and bump a fluttering one)
+    _spies(baan, 80, 1, lengte=3)
     for s in (77, 78, 82, 83):
         baan.munt(s, Y + 3)
     baan.vlag(85, Y)
