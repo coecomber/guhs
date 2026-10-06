@@ -558,12 +558,13 @@ public class TorenpeperGameTests {
                 helper.assertTrue(e.gids().equals(a.getUUID()) && e.lamp().equals(abs) && d >= 6.5 && d <= Vuurtoren.START_MAX + 0.5, "a lost one starts away from the lamp: " + d);
                 helper.assertTrue(e.getType() == TorenpeperFeature.VERDWAALDE_ROOKGUH.get() && e instanceof RookguhEntity && !e.isThuis(), "a small Rookguh, not home");
             }
-            // keep one, put it 10 blocks from A; it can't be hurt
+            // keep one and put it right next to the burning lamp, B with a seinlantaarn beside it; it can't be hurt
             for (int i = 1; i < eigen.size(); i++) {
                 eigen.get(i).discard();
             }
             r[0] = eigen.get(0);
-            zet(helper, r[0], new BlockPos(17, 3, 14));
+            zet(helper, r[0], new BlockPos(9, 3, 10));
+            zet(helper, b, new BlockPos(9, 2, 12));
             helper.assertTrue(!r[0].hurtServer(level, level.damageSources().playerAttack(a), 5f) && r[0].getHealth() == r[0].getMaxHealth(), "you don't hit a Rookguh");
             // the lamp must burn for it to come home: A lit it (step 3), so within a second it does
         } catch (RuntimeException | Error e) {
@@ -584,10 +585,15 @@ public class TorenpeperGameTests {
                 VerdwaaldeRookguhEntity g = r[0];
                 switch (fase[0]) {
                     case 0 -> {
-                        // B holds a seinlantaarn next to it: it is not B's, it does not follow
+                        // B holds a seinlantaarn next to it: it is not B's, it does not follow; and nobody led it here, so the
+                        // light next to it means nothing to it yet
                         inHand(b, TorenpeperFeature.SEINLANTAARN.get(), 1);
-                        if (++teller[0] > 30) {
+                        if (++teller[0] > 40) {
+                            helper.assertTrue(Vuurtoren.brandt(level, abs), "the lamp burns (A lit it)");
                             helper.assertTrue(!g.volgt() && g.isAlive(), "it does not follow somebody else's lantern");
+                            helper.assertTrue(!g.eet() && !g.isThuis() && !g.isGeleid() && g.fed() == 0, "a lost Rookguh never comes home by itself");
+                            // now 10 blocks from A, who takes the lantern in hand
+                            zet(helper, g, new BlockPos(17, 3, 14));
                             inHand(a, TorenpeperFeature.SEINLANTAARN.get(), 1);
                             fase[0] = 1;
                             teller[0] = 0;

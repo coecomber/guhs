@@ -26,8 +26,9 @@ import nl.juiced.guhs.feature.spiesburcht.RookguhEntity;
 /**
  * A lost Rookguh of the lighthouse's questline: a small, thin Rookguh that can't find its way home through the smoke. It
  * belongs to ONE player (its {@link #gids() guide}): it follows only that player, only while they hold the seinlantaarn, and
- * when it comes within {@link Vuurtoren#THUIS_STRAAL} blocks of a burning lamp it sees the light, eats its fill (it gets
- * round and rosy like any fed Rookguh) and floats home, which counts for its guide ({@link Vuurtoren#thuisgekomen}).
+ * when it has been led ({@link #LEID_TICKS} of following) to within {@link Vuurtoren#THUIS_STRAAL} blocks of a burning lamp it
+ * sees the light, eats its fill (it gets round and rosy like any fed Rookguh) and floats home, which counts for its guide
+ * ({@link Vuurtoren#thuisgekomen}).
  * Feeding it six kaasknabbels by hand sends it home just the same.
  * <p>
  * It is never saved and never spawned by the world; {@link Vuurtoren#tik} makes the ones a player still needs. Without its
@@ -39,12 +40,14 @@ public class VerdwaaldeRookguhEntity extends RookguhEntity {
     public static final double VOLG_BEREIK = 14.0, VOLG_LOS = 26.0;
     /** Ticks between the bites it takes once it is home. */
     public static final int HAP_TICKS = 8;
+    /** It only trusts the light after following its guide this long (a lost Rookguh never comes home by itself). */
+    public static final int LEID_TICKS = 20;
 
     @Nullable
     private UUID gids;
     private BlockPos lamp = BlockPos.ZERO;
     private Vec3 anker = Vec3.ZERO;
-    private int alleen, eet, vast;
+    private int alleen, eet, vast, geleid;
     private double vorigeAfstand;
     private boolean geteld, volgt;
 
@@ -68,9 +71,19 @@ public class VerdwaaldeRookguhEntity extends RookguhEntity {
         return lamp;
     }
 
-    /** Has it seen the light (it is on its way home, and counted)? */
+    /** Has it seen the light (it is on its way home)? */
     public boolean isThuis() {
         return isVahoeg();
+    }
+
+    /** Was its homecoming counted for its guide (or is there nobody left to count it for)? */
+    public boolean isGeteld() {
+        return geteld;
+    }
+
+    /** Has it followed its guide long enough to trust the light? */
+    public boolean isGeleid() {
+        return geleid >= LEID_TICKS;
     }
 
     /** Is it following its guide right now? */
@@ -130,7 +143,7 @@ public class VerdwaaldeRookguhEntity extends RookguhEntity {
             level.sendParticles(gids, ParticleTypes.END_ROD, false, false, getX(), getY() + getBbHeight() + 0.35, getZ(), 1, 0.15, 0.1, 0.15, 0.0);
         }
         double dx = getX() - (lamp.getX() + 0.5), dz = getZ() - (lamp.getZ() + 0.5);
-        if (dx * dx + dz * dz <= Vuurtoren.THUIS_STRAAL * Vuurtoren.THUIS_STRAAL && Vuurtoren.brandt(level, lamp)) {
+        if (isGeleid() && dx * dx + dz * dz <= Vuurtoren.THUIS_STRAAL * Vuurtoren.THUIS_STRAAL && Vuurtoren.brandt(level, lamp)) {
             // home: it eats (the last bite is its guide's: a saved Rookguh on their count) and then floats up by itself
             setDeltaMovement(getDeltaMovement().scale(0.6));
             if (eet++ % HAP_TICKS == 0) {
@@ -241,6 +254,7 @@ public class VerdwaaldeRookguhEntity extends RookguhEntity {
                 return;
             }
             getLookControl().setLookAt(wie, 30f, 30f);
+            geleid++;
             double d = distanceTo(wie);
             if (d > 3.5) {
                 getMoveControl().setWantedPosition(wie.getX(), wie.getEyeY() + 0.4, wie.getZ(), 1.3);

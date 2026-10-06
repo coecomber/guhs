@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.torenpeper;
 
+import javax.annotation.Nullable;
+
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -217,8 +219,11 @@ public class PeperplantBlock extends CropBlock {
         return InteractionResult.SUCCESS;
     }
 
-    /** Picks a ripe plant: its peppers pop out, the plant starts over from stage 1. Returns what was picked (empty: not ripe). */
-    public ItemStack pluk(ServerLevel level, BlockPos pos, BlockState state, Player player) {
+    /**
+     * Picks a ripe plant: its peppers pop out, the plant starts over from stage 1. Returns what was picked (empty: not ripe).
+     * {@code player} may be null (a harvesting machine, a chore guh).
+     */
+    public ItemStack pluk(ServerLevel level, BlockPos pos, BlockState state, @Nullable Player player) {
         if (!isRijp(state)) {
             return ItemStack.EMPTY;
         }

@@ -173,10 +173,10 @@ public final class Vuurtoren {
         return p.getMainHandItem().is(TorenpeperFeature.SEINLANTAARN.get()) || p.getOffhandItem().is(TorenpeperFeature.SEINLANTAARN.get());
     }
 
-    /** This player's lost Rookguhs within reach of the lamp that still have to come home. */
+    /** This player's lost Rookguhs within reach of the lamp whose homecoming has not been counted yet. */
     public static List<VerdwaaldeRookguhEntity> van(ServerLevel level, UUID gids, BlockPos lamp) {
         return level.getEntitiesOfClass(VerdwaaldeRookguhEntity.class, new AABB(lamp).inflate(BEREIK + 16),
-                r -> r.isAlive() && gids.equals(r.gids()) && !r.isThuis());
+                r -> r.isAlive() && gids.equals(r.gids()) && !r.isGeteld());
     }
 
     /** One of this player's lost Rookguhs came home (it turned VAHOEG): counted once; the last one finishes step 3. */
@@ -230,26 +230,26 @@ public final class Vuurtoren {
     }
 
     /**
-     * Where a lost Rookguh starts: a free spot {@link #START_MIN}..{@link #START_MAX} blocks from the lamp, low enough to walk
-     * to, a little above the ground. When the cave gives no such spot (or the lamp stands somewhere odd): next to the
-     * gallery, where a real tower always has room.
+     * Where a lost Rookguh starts, in this order: (1) a free spot {@link #START_MIN}..{@link #START_MAX} blocks from the lamp,
+     * a little above the ground of the cave (or of the land around a lamp that stands low); (2) on the plate of a real tower,
+     * just outside {@link #THUIS_STRAAL}, a few blocks above its ground; (3) next to the gallery, where a real tower always has
+     * room. Only where entities tick (a lost Rookguh in a chunk that sleeps would never come, or leave).
      */
     static Vec3 startplek(ServerLevel level, BlockPos lamp, VerdwaaldeRookguhEntity rookguh, RandomSource random) {
         for (int poging = 0; poging < 40; poging++) {
             double hoek = random.nextDouble() * Math.PI * 2;
             double afstand = START_MIN + random.nextDouble() * (START_MAX - START_MIN);
             double x = lamp.getX() + 0.5 + Math.cos(hoek) * afstand, z = lamp.getZ() + 0.5 + Math.sin(hoek) * afstand;
-            int top = lamp.getY() - 4;
-            // (only where entities tick: a lost Rookguh in a chunk that sleeps would never come, or leave)
+            int top = lamp.getY() + (poging % 2 == 0 ? -4 : 3);
             if (!level.isPositionEntityTicking(BlockPos.containing(x, top, z)) || !vrij(level, rookguh, x, top, z)) {
                 continue;
             }
-            // down to the ground (at most the height of the tower), then a little up again
-            int y = top;
-            while (y > lamp.getY() - 26 && y > level.getMinY() + 2 && vrij(level, rookguh, x, y - 1, z)) {
+            // down to the ground (at most a tower's height), then a little up again
+            int y = top, bodem = Math.max(top - 26, level.getMinY() + 2);
+            while (y > bodem && vrij(level, rookguh, x, y - 1, z)) {
                 y--;
             }
-            if (y == lamp.getY() - 26) {
+            if (y == bodem) {
                 continue;   // (no ground under it: a hole, or the edge of a cliff)
             }
             int hoog = Math.min(top, y + 2);
@@ -258,9 +258,11 @@ public final class Vuurtoren {
             }
         }
         Vec3 plek = Vec3.atBottomCenterOf(lamp.above(2));
-        for (int poging = 0; poging < 16; poging++) {
+        for (int poging = 0; poging < 32; poging++) {
             double hoek = random.nextDouble() * Math.PI * 2;
-            plek = new Vec3(lamp.getX() + 0.5 + Math.cos(hoek) * 7.0, lamp.getY() - 2.0, lamp.getZ() + 0.5 + Math.sin(hoek) * 7.0);
+            boolean plaat = poging < 16;
+            double afstand = plaat ? THUIS_STRAAL + 1.5 + random.nextDouble() * 3.0 : 7.0;
+            plek = new Vec3(lamp.getX() + 0.5 + Math.cos(hoek) * afstand, lamp.getY() - (plaat ? 18.0 : 2.0), lamp.getZ() + 0.5 + Math.sin(hoek) * afstand);
             if (level.isPositionEntityTicking(BlockPos.containing(plek)) && vrij(level, rookguh, plek.x, plek.y, plek.z)) {
                 break;
             }
