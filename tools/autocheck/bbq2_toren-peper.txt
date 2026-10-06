@@ -1,0 +1,207 @@
+# Toren-peper (bbq2, slice 14) AutoCheck: the Rookguh-vuurtoren (four sides, the door, the spiral, the lantern room, the lamp
+# dark and burning with its beams, a lost Rookguh following the seinlantaarn) and the Pepertuin (four sides, the kas inside,
+# the kweekbakken with the player's own plants at every stage, the show beds, the garden), both guhs, the items.
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_toren-peper.txt
+# (commands: see autocheck.txt; /guhs torenpeper stand|rookguh|kweek <0-4> are this slice's own, "toren" and "tuin" exist in dev
+#  runs only and put the template round you: your feet on the spot of its guh. /guhs verhaal stap ... is the story engine's.)
+
+section setup: a floor of houtskoolsteen (the ground layer of both templates at y 143, you walk at y 144)
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule doFireTick false
+/tp @s 3415 150 3420
+/forceload add 3370 3370 3470 3470
+wait 80
+/fill 3370 140 3370 3470 142 3470 guhs:houtskoolsteen
+/fill 3370 143 3370 3470 143 3470 guhs:as_aarde
+/fill 3370 144 3370 3470 180 3470 minecraft:air
+/gamemode creative
+/tp @s 3415.5 144 3420.5
+wait 20
+/guhs torenpeper toren
+wait 60
+
+section the lighthouse from its four corners (template corner 3400 140 3400, the tower's axis 3415 3413, the lamp at y 164)
+/gamemode spectator
+camera 3386 168 3386 -45 18
+waitrender 300
+shot torenpeper_toren_noordwest
+camera 3446 168 3386 45 18
+waitrender 300
+shot torenpeper_toren_noordoost
+camera 3446 168 3446 135 18
+waitrender 300
+shot torenpeper_toren_zuidoost
+camera 3386 168 3446 -135 18
+waitrender 300
+shot torenpeper_toren_zuidwest
+
+section from the ground: the entrance arch and the forecourt, the keeper, the door, the cottage, up the tower
+camera 3415.5 145.6 3436 180 -8
+waitrender 200
+shot torenpeper_toren_ingang
+camera 3415.5 145.6 3424.5 180 -30
+waitrender 200
+shot torenpeper_toren_omhoog
+camera 3418.5 145.4 3421.5 120 4
+waitrender 100
+shot torenpeper_torenwachter
+camera 3422.5 145.6 3419.5 180 0
+waitrender 100
+shot torenpeper_huisje_deur
+camera 3423.5 145.6 3414.5 180 5
+waitrender 100
+shot torenpeper_huisje_binnen
+
+section inside: the foot of the spiral, halfway up, the lantern room with the dark lamp, the gallery
+camera 3415.5 145.7 3415.5 180 -55
+waitrender 100
+shot torenpeper_trap_onder
+camera 3415.5 153.7 3415.5 180 -40
+waitrender 100
+shot torenpeper_trap_midden
+camera 3415.5 164.7 3417.5 180 4
+waitrender 100
+shot torenpeper_lampenhuis_donker
+camera 3421.5 166.5 3419.5 135 28
+waitrender 100
+shot torenpeper_omloop
+
+section the lamp burns for who lit it: step 3 of the questline, at night, from the forecourt and from afar
+/gamemode creative
+/tp @s 3415.5 144 3424.5 180 -30
+/guhs verhaal stap vuurtoren @s 3
+/time set midnight
+wait 60
+shot torenpeper_lamp_brandt
+/gamemode spectator
+camera 3452 150 3452 135 -16
+waitrender 200
+shot torenpeper_lichtbundels
+camera 3415.5 164.7 3417.5 180 4
+waitrender 100
+shot torenpeper_lampenhuis_licht
+/time set noon
+
+section the lost Rookguhs: three of the player's own around the tower (a sparkle above each), one following the seinlantaarn
+/gamemode creative
+/tp @s 3415.5 144 3436.5 180 0
+wait 10
+/guhs torenpeper rookguh
+/guhs torenpeper rookguh
+/guhs torenpeper rookguh
+wait 40
+/guhs torenpeper stand
+/gamemode spectator
+camera 3415.5 176 3413.5 0 89
+waitrender 200
+shot torenpeper_rookguhs_boven
+/gamemode creative
+/tp @s 3415.5 144 3440.5 180 0
+/item replace entity @s weapon.mainhand with guhs:torenpeper_seinlantaarn
+wait 200
+shot torenpeper_rookguh_volgt gui
+/tp @s 3415.5 144 3422.5 180 -20
+wait 160
+shot torenpeper_rookguh_thuis gui
+/guhs torenpeper stand
+/kill @e[type=guhs:torenpeper_verdwaalde_rookguh]
+
+section setup: the Pepertuin (template corner 3500 140 3500, the kas x 3504..3514 z 3505..3521)
+/gamemode spectator
+/tp @s 3511 150 3523
+/forceload add 3480 3480 3550 3550
+wait 80
+/fill 3480 140 3480 3550 142 3550 guhs:houtskoolsteen
+/fill 3480 143 3480 3550 143 3550 guhs:as_aarde
+/fill 3480 144 3480 3550 170 3550 minecraft:air
+/gamemode creative
+/tp @s 3511.5 144 3523.5
+wait 20
+/guhs torenpeper tuin
+wait 60
+
+section the pepper garden from its four corners
+/gamemode spectator
+camera 3488 158 3488 -45 28
+waitrender 300
+shot torenpeper_tuin_noordwest
+camera 3543 158 3488 45 28
+waitrender 300
+shot torenpeper_tuin_noordoost
+camera 3543 158 3539 135 28
+waitrender 300
+shot torenpeper_tuin_zuidoost
+camera 3488 158 3539 -135 28
+waitrender 300
+shot torenpeper_tuin_zuidwest
+
+section from the ground: the entrance and the Peperteler-guh, the kas from its door, the brewing corner, the garden with the scarecrow
+camera 3510.5 145.6 3531 180 0
+waitrender 200
+shot torenpeper_tuin_ingang
+camera 3514.5 145.4 3524.5 110 4
+waitrender 100
+shot torenpeper_peperteler
+camera 3509.5 145.6 3520.5 180 6
+waitrender 100
+shot torenpeper_kas_binnen
+camera 3509.5 145.6 3509.5 180 8
+waitrender 100
+shot torenpeper_brouwhoek
+camera 3516.5 147.5 3523 -150 16
+waitrender 100
+shot torenpeper_tuin_bedden
+
+section the kweekbakken (west of the aisle), drawn for the local player: empty, then the four stages of their own plants
+/gamemode creative
+/tp @s 3509.5 144 3513.5 90 18
+/guhs verhaal stap pepertuin @s 1
+/guhs torenpeper kweek 0
+wait 20
+shot torenpeper_kweekbak_leeg
+/guhs torenpeper kweek 1
+wait 20
+shot torenpeper_kweekbak_1
+/guhs torenpeper kweek 2
+wait 20
+shot torenpeper_kweekbak_2
+/guhs torenpeper kweek 3
+wait 20
+shot torenpeper_kweekbak_3
+/guhs torenpeper kweek 4
+wait 20
+shot torenpeper_kweekbak_rijp
+use 3507 144 3513
+wait 10
+shot torenpeper_kweekbak_geplukt gui
+/guhs torenpeper stand
+
+section the show beds east of the aisle (real plants: ripe ones in red, green and pink), picking one
+/tp @s 3509.5 144 3513.5 -90 18
+wait 10
+shot torenpeper_kijkbedden
+use 3511 145 3513
+wait 10
+shot torenpeper_geplukt gui
+/kill @e[type=minecraft:item]
+
+section the items and blocks of this slice in the creative tab, the two guhs' talking screens
+gui creative guhs
+gui close
+npc pepertelerguh 2.5 0.6
+interact npc
+wait 20
+shot torenpeper_peperteler_praat gui
+gui close
+/tp @s 3418.5 144 3421.5
+npc torenwachterguh 2.5 0.6
+interact npc
+wait 20
+shot torenpeper_torenwachter_praat gui
+gui close
+quit

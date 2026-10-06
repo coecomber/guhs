@@ -1,0 +1,13 @@
+{
+  "type": "guhs:barbecueput",
+  "biomes": "#guhs:has_structure/rookguh_vuurtoren",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "guhs:rookguh_vuurtoren/start",
+  "start_jigsaw_name": "guhs:rookguh_vuurtoren_midden",
+  "check_radius": 28,
+  "max_height_difference": 10,
+  "headroom": 26,
+  "keep_clear": 20
+}

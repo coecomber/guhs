@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "groei=0,soort=groen": {
+      "model": "guhs:block/torenpeper_kweekbak_groen_0"
+    },
+    "groei=0,soort=rood": {
+      "model": "guhs:block/torenpeper_kweekbak_rood_0"
+    },
+    "groei=0,soort=roze": {
+      "model": "guhs:block/torenpeper_kweekbak_roze_0"
+    },
+    "groei=1,soort=groen": {
+      "model": "guhs:block/torenpeper_kweekbak_groen_1"
+    },
+    "groei=1,soort=rood": {
+      "model": "guhs:block/torenpeper_kweekbak_rood_1"
+    },
+    "groei=1,soort=roze": {
+      "model": "guhs:block/torenpeper_kweekbak_roze_1"
+    },
+    "groei=2,soort=groen": {
+      "model": "guhs:block/torenpeper_kweekbak_groen_2"
+    },
+    "groei=2,soort=rood": {
+      "model": "guhs:block/torenpeper_kweekbak_rood_2"
+    },
+    "groei=2,soort=roze": {
+      "model": "guhs:block/torenpeper_kweekbak_roze_2"
+    },
+    "groei=3,soort=groen": {
+      "model": "guhs:block/torenpeper_kweekbak_groen_3"
+    },
+    "groei=3,soort=rood": {
+      "model": "guhs:block/torenpeper_kweekbak_rood_3"
+    },
+    "groei=3,soort=roze": {
+      "model": "guhs:block/torenpeper_kweekbak_roze_3"
+    },
+    "groei=4,soort=groen": {
+      "model": "guhs:block/torenpeper_kweekbak_groen_4"
+    },
+    "groei=4,soort=rood": {
+      "model": "guhs:block/torenpeper_kweekbak_rood_4"
+    },
+    "groei=4,soort=roze": {
+      "model": "guhs:block/torenpeper_kweekbak_roze_4"
+    }
+  }
+}
