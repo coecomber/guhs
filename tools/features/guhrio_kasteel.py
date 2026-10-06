@@ -38,7 +38,9 @@ STENEN, TRAP, PLAAT, MUUR, HEK, GEBEITELD = sb.STENEN, sb.TRAP, sb.PLAAT, sb.MUU
 AIR = sb.AIR
 ZWART, ZWART_TRAP = "minecraft:polished_blackstone_bricks", "minecraft:polished_blackstone_brick_stairs"
 DAK, DAK_TRAP, DAK_PLAAT = "minecraft:red_nether_bricks", "minecraft:red_nether_brick_stairs", "minecraft:red_nether_brick_slab"
-ORANJE = "guhs:guhrio_steen"
+# the orange trim (bands, merlons, window frames, thousands of blocks): the brick's look on a PLAIN block. Never build with
+# the brick piece guhs:guhrio_steen itself: its block entity draws it (only within 96 blocks) and nothing can hang on it
+ORANJE = "guhs:guhrio_siersteen"
 GOUD = "minecraft:gold_block"
 GLAS = "minecraft:orange_stained_glass"
 LICHT = "minecraft:shroomlight"
@@ -715,6 +717,9 @@ def controleer_camera(b, banen):
 
 
 HANGT = ("wall_sign", "wall_hanging_sign", "wall_banner", "wall_torch", "ladder", "lever", "_button", "tripwire_hook", "cocoa", "_bed")
+# the pieces a block entity draws (GuhrioBlocks.GetekendStuk: dynamicShape, so the game never calls them solid): whatever hangs
+# on one of these falls off at the first block update (found on a dev server: the welcome sign of the forecourt was gone)
+NIET_VAST = ("guhs:guhrio_steen", "guhs:guhrio_vraagblok", "guhs:guhrio_onzichtbaar", "guhs:guhrio_schakelaar", "guhs:guhrio_schakelblok")
 STAP = {"north": (0, -1), "south": (0, 1), "west": (-1, 0), "east": (1, 0)}
 
 
@@ -739,6 +744,9 @@ def controleer_naden(b):
                 continue                                         # (the head lies one further the way the bed faces)
         else:
             dx, dz = -dx, -dz                                     # (its support is behind it)
+        if "_bed" not in naam and (b.get(x + dx, y, z + dz) or "") in NIET_VAST:
+            fouten.append(f"{NAAM}: {naam} at {(x, y, z)} hangs on {b.get(x + dx, y, z + dz)}, a drawn piece that is not solid for the game: "
+                          f"put a plain block behind it (guhs:guhrio_siersteen has the brick's look)")
         c, anker = (min(x, x + dx), ANKER[0]) if dx else (min(z, z + dz), ANKER[2])
         if naad(c, anker):
             fouten.append(f"{NAAM}: {naam} at {(x, y, z)} hangs across a tile / chunk seam (its other block is at {(x + dx, y, z + dz)}): "

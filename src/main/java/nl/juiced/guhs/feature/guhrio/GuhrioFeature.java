@@ -58,6 +58,13 @@ public final class GuhrioFeature {
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1.5f, 6f).sound(SoundType.STONE));
     public static final DeferredBlock<Block> BLOK = BLOCKS.registerSimpleBlock("guhrio_blok",
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(1.5f, 6f).sound(SoundType.STONE));
+    /**
+     * The brick as plain masonry: the look of {@link #STEEN}, but an ordinary block. The castle's orange trim is made of it
+     * (thousands of blocks). A brick PIECE is no building block: its block entity draws it (one by one, only within 96
+     * blocks), it lets light through and the game does not call it solid, so a wall sign falls off it.
+     */
+    public static final DeferredBlock<Block> SIERSTEEN = BLOCKS.registerSimpleBlock("guhrio_siersteen",
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(1.5f, 6f).sound(SoundType.STONE));
 
     public static final DeferredBlock<GuhrioBlocks.StartBlok> STARTBLOK = BLOCKS.registerBlock("guhrio_startblok", GuhrioBlocks.StartBlok::new,
             () -> los(MapColor.COLOR_RED).lightLevel(s -> 8));
@@ -109,7 +116,8 @@ public final class GuhrioFeature {
             () -> los(MapColor.COLOR_LIGHT_GREEN));
 
     public static final List<DeferredItem<BlockItem>> BLOK_ITEMS = List.of(
-            ITEMS.registerSimpleBlockItem(GROND), ITEMS.registerSimpleBlockItem(BLOK), ITEMS.registerSimpleBlockItem(STARTBLOK),
+            ITEMS.registerSimpleBlockItem(GROND), ITEMS.registerSimpleBlockItem(BLOK), ITEMS.registerSimpleBlockItem(SIERSTEEN),
+            ITEMS.registerSimpleBlockItem(STARTBLOK),
             ITEMS.registerSimpleBlockItem(POORT),
             ITEMS.registerSimpleBlockItem(VRAAGBLOK), ITEMS.registerSimpleBlockItem(STEEN), ITEMS.registerSimpleBlockItem(ONZICHTBAAR),
             ITEMS.registerSimpleBlockItem(MUNT), ITEMS.registerSimpleBlockItem(VADSMUNT),

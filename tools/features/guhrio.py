@@ -10,7 +10,8 @@ Super Guhrio (bbq2; the Java side is feature/guhrio) - the engine's resources, t
   guhrio_proef     the engine's own practice lanes (what stands in a level slot until its slice delivers)
   guhrio_kasteel   the castle guhs:guhrio_kasteel: the shell, the slots, the levels stamped in, the structure set
 
-  blocks      guhrio_grond, guhrio_blok, guhrio_startblok, guhrio_poort (a gate to a level elsewhere), guhrio_vraagblok
+  blocks      guhrio_grond, guhrio_blok, guhrio_siersteen (plain blocks to build with; siersteen = the brick's look for the
+              castle's trim), guhrio_startblok, guhrio_poort (a gate to a level elsewhere), guhrio_vraagblok
               (inhoud munt / superknabbel / vuurpeper; leeg=true is only its empty look), guhrio_steen, guhrio_onzichtbaar,
               guhrio_munt, guhrio_vadsmunt (nummer 0..2), guhrio_vlag, guhrio_mast (top), guhrio_pijp (kanaal 0..15, facing,
               ingang, boven) + guhrio_pijp_lijf (axis), guhrio_deur (half, kanaal), guhrio_schakelaar (kanaal 0..7, soort,
@@ -347,10 +348,10 @@ def textures(h):
 # =====================================================================================================================
 ONZICHTBAAR = ("guhrio_munt", "guhrio_vadsmunt", "guhrio_onzichtbaar", "guhrio_guhmba_plek", "guhrio_schild_mika_plek", "guhrio_plof_mika_plek",
                "guhrio_hapbloem_plek", "guhrio_platform_plek", "guhrio_valblok_plek", "guhrio_guhshi_ei", "guhrio_guhshi_plek")
-DROPT = ("guhrio_grond", "guhrio_blok", "guhrio_steen", "guhrio_vraagblok", "guhrio_pijp", "guhrio_pijp_lijf", "guhrio_munt", "guhrio_vadsmunt",
+DROPT = ("guhrio_grond", "guhrio_blok", "guhrio_siersteen", "guhrio_steen", "guhrio_vraagblok", "guhrio_pijp", "guhrio_pijp_lijf", "guhrio_munt", "guhrio_vadsmunt",
          "guhrio_vlag", "guhrio_mast", "guhrio_startblok", "guhrio_poort", "guhrio_deur", "guhrio_schakelaar", "guhrio_schakelblok",
          "guhrio_grillspies_plek", "guhrio_guhshi_ei", "guhrio_guhshi_plek")
-BLOKKEN = ("guhrio_grond", "guhrio_blok", "guhrio_steen", "guhrio_vraagblok", "guhrio_onzichtbaar", "guhrio_munt", "guhrio_vadsmunt", "guhrio_vlag",
+BLOKKEN = ("guhrio_grond", "guhrio_blok", "guhrio_siersteen", "guhrio_steen", "guhrio_vraagblok", "guhrio_onzichtbaar", "guhrio_munt", "guhrio_vadsmunt", "guhrio_vlag",
            "guhrio_mast", "guhrio_pijp", "guhrio_pijp_lijf", "guhrio_startblok", "guhrio_poort", "guhrio_deur", "guhrio_schakelaar",
            "guhrio_schakelblok", "guhrio_guhmba_plek", "guhrio_schild_mika_plek", "guhrio_plof_mika_plek", "guhrio_hapbloem_plek",
            "guhrio_grillspies_plek", "guhrio_platform_plek", "guhrio_valblok_plek", "guhrio_guhshi_ei", "guhrio_guhshi_plek")
@@ -361,6 +362,8 @@ def blocks_and_items(h):
     b = lambda n: f"guhs:block/{n}"
     for name in ("guhrio_grond", "guhrio_blok", "guhrio_steen", "guhrio_grillspies_plek"):
         h.simple_block(name)
+    # the brick as plain masonry (the castle's trim): the brick's look on an ordinary block, see GuhrioFeature.SIERSTEEN
+    h.simple_block("guhrio_siersteen", b("guhrio_steen"))
     # the ?-block: its own look and its empty look (the block entity draws the one that is true for you)
     h.w(f"{A}/models/block/guhrio_vraagblok.json", {"parent": "minecraft:block/cube_all", "textures": {"all": b("guhrio_vraagblok")}})
     h.w(f"{A}/models/block/guhrio_vraagblok_leeg.json", {"parent": "minecraft:block/cube_all", "textures": {"all": b("guhrio_vraagblok_leeg")}})
@@ -422,8 +425,8 @@ def blocks_and_items(h):
     for name in DROPT:
         h.self_drop(name)
     h.add_tag("minecraft/tags/block/mineable/pickaxe", [f"guhs:{n}" for n in (
-        "guhrio_grond", "guhrio_blok", "guhrio_steen", "guhrio_vraagblok", "guhrio_pijp", "guhrio_pijp_lijf", "guhrio_schakelaar",
-        "guhrio_schakelblok", "guhrio_grillspies_plek")])
+        "guhrio_grond", "guhrio_blok", "guhrio_siersteen", "guhrio_steen", "guhrio_vraagblok", "guhrio_pijp", "guhrio_pijp_lijf",
+        "guhrio_schakelaar", "guhrio_schakelblok", "guhrio_grillspies_plek")])
 
 
 # =====================================================================================================================
@@ -433,6 +436,7 @@ TEXTS = {
     "block.guhs.guhrio_grond": "Guhrio-grond",
     "block.guhs.guhrio_blok": "Guhrio-blok",
     "block.guhs.guhrio_steen": "Guhrio-steen",
+    "block.guhs.guhrio_siersteen": "Guhrio-siersteen",
     "block.guhs.guhrio_vraagblok": "Vraagtekenblok",
     "block.guhs.guhrio_onzichtbaar": "Onzichtbaar vraagtekenblok",
     "block.guhs.guhrio_munt": "Guhrio-munt",
