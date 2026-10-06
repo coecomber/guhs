@@ -1,0 +1,26 @@
+{
+  "type": "guhs:burcht",
+  "biomes": "#guhs:has_structure/mika_woonblokken",
+  "step": "fluid_springs",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": []
+    }
+  },
+  "templates": "guhs:mika_woonblokken",
+  "tiles_x": 2,
+  "tiles_z": 2,
+  "tile_size": 32,
+  "anchor": [
+    31,
+    12,
+    31
+  ],
+  "placement": "paleis",
+  "min_y": 33,
+  "max_y": 33,
+  "reach": 24,
+  "keep_clear": 33
+}

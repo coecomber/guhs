@@ -19,6 +19,11 @@
     "guhs:stempelkaart",
     "guhs:guh_brandslang",
     "guhs:beroepen_dakpan",
-    "guhs:surfplankje_leen"
+    "guhs:surfplankje_leen",
+    "guhs:paleizen_omasoep",
+    "guhs:paleizen_breiwerkje",
+    "guhs:paleizen_zwijnenvoer",
+    "guhs:paleizen_gevangen_zwijntje",
+    "guhs:paleizen_losse_plank"
   ]
 }

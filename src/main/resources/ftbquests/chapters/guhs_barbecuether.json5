@@ -78,6 +78,42 @@
         "Komt na: Rookdelta",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548ECAF3ED7EA",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_paleizen_woonblokken.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548EEA83A5906",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_paleizen_stal.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "47554836A82787B5",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_paleizen_brugpaleis.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 21.16875,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 6,
   progression_mode: "flexible",
@@ -1244,6 +1280,676 @@
       x: 20.5,
       y: 13.525,
       shape: "diamond",
+    },
+    {
+      id: "475548E29569B020",
+      icon: {
+        id: "minecraft:orange_stained_glass_pane",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:mika_woonblokken",
+          id: "4755483F37EDC0E8",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D0D4E7B5C8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548796196C0B6",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "4755480E981B93E9",
+      icon: {
+        id: "guhs:paleizen_omasoep",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_oma_stap_1",
+          id: "475548F9136E6D1B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A8865A62B7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 17.4875,
+    },
+    {
+      id: "47554848F6F3F5A6",
+      icon: {
+        id: "minecraft:bowl",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_oma_stap_2",
+          id: "475548785CB06FE6",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480CB71038D7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755489D05449468",
+      icon: {
+        id: "minecraft:pink_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_oma_stap_3",
+          id: "475548B35A2FEC19",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554829A3EB4929",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 17.4875,
+    },
+    {
+      id: "47554842CE2D8485",
+      icon: {
+        id: "guhs:paleizen_mikamuts",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/mika_oma_stap_4",
+          id: "475548E7B5D8AEC4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B79F0163C1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548F33899E79E",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "475548754EA6DF87",
+      icon: {
+        id: "guhs:paleizen_mikamuts",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:paleizen_mikamuts",
+          },
+          id: "475548459E04D661",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554865A8F421E8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 7.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548D610A39960",
+      icon: {
+        id: "guhs:vahoege_vads_ingot",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/paleizen_korting",
+          id: "4755485CA4898D03",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D070BB8D23",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554848A3BC41B1",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:mika_stal",
+          id: "475548408E55EA98",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DBE03AADC5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755486D74A5A3A8",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "4755485C5A893339",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/stalknecht_stap_1",
+          id: "4755488A17718BB1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B1A533438F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755483581F2EC9C",
+      icon: {
+        id: "guhs:worstzwijntje_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/stalknecht_stap_2",
+          id: "47554876BC264C01",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488D88E5D87E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 17.4875,
+    },
+    {
+      id: "47554840E6F01578",
+      icon: {
+        id: "guhs:paleizen_zwijnenvoer",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/stalknecht_stap_3",
+          id: "4755481FEA332F55",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F54CBFA9BB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 17.4875,
+    },
+    {
+      id: "475548CA389C1BAC",
+      icon: {
+        id: "guhs:paleizen_worstzwijntje_mandje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/stalknecht_stap_4",
+          id: "4755487F4ED6D434",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488B50E9DE15",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knabbelvoer",
+          },
+          count: 8,
+        },
+        {
+          id: "4755482C63643A13",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "475548ACDA684EE8",
+      icon: {
+        id: "guhs:guhdex",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_worstzwijntje",
+          id: "475548B3E1A23FA4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DDC5556F5E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 17.4875,
+    },
+    {
+      id: "475548114698B411",
+      icon: {
+        id: "guhs:paleizen_worstzwijntje_mandje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:paleizen_worstzwijntje_mandje",
+          },
+          id: "47554887CAFADAF8",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488D4AAF76FB",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knabbelvoer",
+          },
+          count: 6,
+        },
+      ],
+      x: 20.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548ED05E89A3B",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/paleizen_snuffel",
+          id: "47554835A718A7F7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488417BCF3D1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 18.9875,
+    },
+    {
+      id: "475548C2A7837F36",
+      icon: {
+        id: "guhs:paleizen_brugplank",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:mika_brugpaleis",
+          id: "475548BAB49BAF96",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486DC42FF1C6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548DC3F6181D0",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 22.95,
+      shape: "hexagon",
+    },
+    {
+      id: "47554806AFF8F02D",
+      icon: {
+        id: "minecraft:gold_nugget",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tolwachter_stap_1",
+          id: "47554839EA7AC75D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C6D1FF3D48",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 22.95,
+    },
+    {
+      id: "47554857146896BE",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tolwachter_stap_2",
+          id: "4755482D7A355660",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548356825EC67",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 22.95,
+    },
+    {
+      id: "47554829770D6716",
+      icon: {
+        id: "guhs:paleizen_losse_plank",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tolwachter_stap_3",
+          id: "475548571712FCB1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E36BE88788",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 22.95,
+    },
+    {
+      id: "4755482D35B8984C",
+      icon: {
+        id: "minecraft:bell",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tolwachter_stap_4",
+          id: "4755484C37742BE3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484E2BD58F23",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 22.95,
+    },
+    {
+      id: "475548302ECD859C",
+      icon: {
+        id: "guhs:paleizen_recept_brug",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/tolwachter_stap_5",
+          id: "475548D07FB4116B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FA734C4333",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554882DC5B6C91",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 22.95,
+      shape: "gear",
+    },
+    {
+      id: "47554836074C3471",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/paleizen_raadsels",
+          id: "47554880F639A8C3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483032B4B9F2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 22.95,
+    },
+    {
+      id: "47554835793D89AE",
+      icon: {
+        id: "guhs:paleizen_brugleuning",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:paleizen_brugplank",
+          },
+          count: 12,
+          id: "475548DEBC4C11F6",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:paleizen_brugleuning",
+          },
+          count: 4,
+          id: "475548F9963852F4",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482E09AB51AF",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 24.45,
     },
   ],
 }

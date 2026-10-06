@@ -1875,5 +1875,49 @@
       }
     ],
     "subtitle": "subtitles.guhs.bleekwoud.oogbloempje.dicht"
+  },
+  "paleizen.worstzwijntje_knor": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.pig.ambient",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.paleizen.worstzwijntje_knor"
+  },
+  "paleizen.worstzwijntje_gil": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.pig.hurt",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.paleizen.worstzwijntje_gil"
+  },
+  "paleizen.mopper": {
+    "sounds": [
+      {
+        "name": "guhs:entity.mika.ambient",
+        "type": "event",
+        "pitch": 0.75,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.paleizen.mopper"
+  },
+  "paleizen.plank": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wood.place",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.paleizen.plank"
   }
 }

@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:paleizen_worstzwijntje_mandje"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.paleizen_stalknecht.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.paleizen_stalknecht.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:barbecuether/paleizen_stal"
+}
