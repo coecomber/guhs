@@ -247,7 +247,7 @@ VARIANT_HOME = {
     "koning": "bouwwerken/guh_kasteel", "wolk": "bouwwerken/zwevende_eilanden", "zeemeerguh": "bouwwerken/onderwater",
     "mager": "bouwwerken/knabbelkelder", "vahoege_ender": "dimensies/guheinde", "kaasmoerasguh": "biomen/kaasmoeras",
     "asguh": "biomen/asdal", "pluisguh": "biomen/knuffeldal", "pinguh": "biomen/guhpolder", "golden": "bouwwerken/guhramid",
-    "ender": "biomen/guh_peaks", "snow": "biomen/guh_peaks", "brococolief": "bouwwerken/guh_village",
+    "ender": "dimensies/guheinde", "snow": "biomen/guh_peaks", "brococolief": "bouwwerken/guh_village",
     "baltoguh": "verhalen/nomguh", "mewtwo": "verhalen/kloon-eiland", "stitch626": "verhalen/ohana",
 }
 # NPC kind (or villager profession) -> where it lives
@@ -305,6 +305,7 @@ ENTITY_HOME = {
     "guhschaapje": "bouwwerken/guhboerderij", "knabbelkippetje": "bouwwerken/guhboerderij", "guhkoe": "bouwwerken/guhboerderij",
     "kikkerguh": "biomen/kaasmoeras", "kaasmot": "biomen/kaasmoeras", "rookguh": "dimensies/barbecuether", "vonk_mika": "bouwwerken/spiesburcht",
     "knekel_mika": "dimensies/barbecuether", "nether_mika": "dimensies/barbecuether",
+    "kraakguh": "biomen/bleekwoud", "kraak_mika": "biomen/bleekwoud",
 }
 # structure ids without a lang name
 STRUCTURE_NAMES = {"block_guh": ("Blokguh", "Block guh"), "giant_cake": ("Reuzentaart", "Giant cake"),
@@ -335,10 +336,10 @@ BIOME_PICS = {"diepe_guhzee": ["diepe_guhzee"], "gatenkaasgrotten": ["gatenkaas"
               "vadswoud": ["vadshout_gezichtjes"], "guhpolder": ["shot29_biome_guhpolder"], "sneeuwguhtoendra": ["shot30_biome_guhmension_sneeuwguhtoendra"],
               "guhwaii": ["shot30_biome_guhmension_guhwaii"], "guh_kristalmijn": ["guh_kristal_cluster"], "knuffeldal": ["structure_knuffeldal_stadje"],
               "guh_fields": ["roze_gras"], "guh_meadows": ["roze_guhbloem"], "pink_puffs": ["pink_kussen"], "kaas_flats": ["block_of_kaasknabbels"],
-              "knabbel_crumbs": ["kaasknabbel_dirt"], "guh_peaks": ["guh_variant_ender"], "vads_cliffs": ["vadsaambeeld"],
+              "knabbel_crumbs": ["kaasknabbel_dirt"], "guh_peaks": ["guh_variant_snow"], "vads_cliffs": ["vadsaambeeld"],
               "mikas_biome": ["mika"], "guh_sea": ["guh_vis"], "guhmaag": ["maagwand"], "guheinde": ["structure_guheinde_knabbelberg"],
               "houtskoolvlakte": ["houtskoolsteen"], "asdal": ["as_blok"], "satebos": ["sate_stam"], "worstenwoud": ["worst_stam"],
-              "rookdelta": ["rookgat"]}
+              "rookdelta": ["rookgat"], "bleekwoud": ["bleekwoud"]}
 # outfit render -> clothing source (bron)
 OUTFIT_PICS = {
     "guh_outfit_onesie": "brococolief", "guh_outfit_sweater": "kleermaker", "guh_outfit_rain": "kleermaker", "guh_outfit_party": "loot_picknick",
@@ -496,6 +497,7 @@ H3_RULES = [
     ("new27", "Het Vadswoud", "biomen/vadswoud"), ("new27", "De Diepe Guhzee", "biomen/diepe_guhzee"),
     ("new27", "Minigames and the Guhdex", "systemen/guhdex"), ("new27", "Boss: the Aangebrande Mika", "wezens/aangebrande_mika"),
     ("sled", "Building a track", "systemen/guhslee"),
+    ("new128", "Guh palm wood", "biomen/guhwaii"), ("new128", "Guh House", "systemen/guhhuisje"),
     ("*", "Handy commands", "systemen/commandos"), ("*", "Advancements", DROP), ("*", "FTB quests", DROP), ("*", "Some recipes", DROP),
 ]
 # section -> page, the last resort

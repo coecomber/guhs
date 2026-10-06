@@ -722,6 +722,33 @@ public class GuhEntity extends TamableAnimal implements GeoEntity {
         return stack.is(ModItems.KAAS_KNABBELS.get());
     }
 
+    /**
+     * (client, GuhInteractHandler; 1.2.9) Does a right-click with this item do something of its own on this tamed guh of the
+     * player's (feeding, dressing, a wish at the tea table...)? Then the click goes to {@link #mobInteract} as usual; with
+     * anything else in your hand a tap is a pet and holding opens the menu. Keep this in step with mobInteract.
+     */
+    public boolean heeftEigenKlik(ItemStack stack, Player player) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+        if (stack.is(ModItems.KAAS_KNABBELS.get()) || stack.is(ModItems.GEFRITUURDE_KAASKNABBELS.get())
+                || stack.is(nl.juiced.guhs.feature.band.BandFeature.SNACKS)   // 2.10: feeding a snack (hearts)
+                || stack.is(Items.LEAD) || stack.is(Items.NAME_TAG) || (stack.is(Items.SADDLE) && !isSaddled())) {
+            return true;
+        }
+        if (stack.is(Items.GOLDEN_DANDELION) && this.isBaby()) {
+            return true;   // vanilla: a baby stays (or stops staying) small
+        }
+        if (isBodyArmorItem(stack) && this.getBodyArmorItem().isEmpty()) {
+            return true;
+        }
+        if (stack.getItem() instanceof nl.juiced.guhs.item.GuhClothingItem clothing && clothing.getClothes().slot != GuhClothes.Slot.HAAR
+                && nl.juiced.guhs.feature.kleding.KledingUnlocks.heeft(player, clothing.getClothes())) {
+            return true;
+        }
+        return nl.juiced.guhs.feature.knus.GuhHooks.neemtItem(this, stack);
+    }
+
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (nl.juiced.guhs.feature.verhaal.VerhaalGuhs.isKopieOveral(this)) {

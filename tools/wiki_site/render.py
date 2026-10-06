@@ -63,7 +63,7 @@ def trie_regex(words):
     return build(trie)
 
 
-V = r"(?:2\.(?:10\.1|10|8\.1|[1-9])|3\.0)(?![\d.]*\d)"      # the release numbers the one-page wiki talks about
+V = r"(?<![\d.])(?:2\.(?:10\.1|10|8\.1|[1-9])|3\.0)(?![\d.]*\d)"      # the release numbers the one-page wiki talks about (not the 2.8 in 1.2.8)
 NOT_A_UNIT = r"(?!\s*(?:%|blocks|blokken|x\b|&times;|times|keer|hearts|hartjes))"
 
 
@@ -215,7 +215,8 @@ class Renderer:
                 c["image_html"] = ""
             elif c.kind in ("card", "figure") and c.images and c.images[0] == main_pic:
                 body = fold(plain(split_t(c.body)[1] if 'lang="nl"' in (c.body or "") else c.body))
-                if not body or body[:60] in lead:
+                # (the same text as the lead: once is enough - unless that lead came from this very text and isn't shown as a lead)
+                if not body or (body[:60] in lead and not page.data.get("lead_nl_kb")):
                     continue
                 c = type(c)(c)
                 c["image_html"] = ""

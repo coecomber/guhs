@@ -3,6 +3,27 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.11 — Minecraft 26.1.2
+
+A small change. Same requirements as 1.2.10, no worldgen changes.
+
+- **Captain Cloudy (Kapitein Wolkje) now asks first.** Clicking him used to put you in the balloon straight away, and his shop was hidden behind sneak + click. Now he opens a little menu: he tells you which loop he flies today and how full your Balloon Stamp Card is, and you choose **All aboard!**, **Your shop (Balloon Coins)** or **How does it work?**. Sneak + click still opens the shop directly.
+
+## 1.2.10 — Minecraft 26.1.2
+
+A small addition. Same requirements as 1.2.9, no worldgen changes.
+
+- **New Guhdex tab: My Other Chonkies (Mijn andere vadsjes).** Next to "My Guhs" there is now a list of all your other tamed critters (Squeaksqueak Mice, Poopshelly, Shelly, the little land animals, the Guhxolotl...), grouped by kind: its name and where it is right now (walking around, sitting, on your shoulder, as an item in a chest or in someone's pockets...). Hover a row for the full place with coordinates. A critter shows up once the game has seen it after this update (it is nearby and loaded, or you carry it as an item).
+- **More on the tooltip of a picked-up guh**: its variant and personality, and its hearts with you (the level and how many hearts until the next one; for guhs picked up from this version on), next to the size, HP and saddle that were already there. A picked-up critter (mouse, Shelly, land animals...) now shows what it is when it has a name of its own, and its HP.
+
+## 1.2.9 — Minecraft 26.1.2
+
+A small fix release. Same requirements as 1.2.8, no worldgen changes.
+
+- **Fixed: right-clicking your own tamed guh with an item only petted it.** The client treated almost every item as "a tap is a pet", so the click never reached the guh. Now every item that does something on a guh goes through: tea and cake for a guest at Mrs. Teaspoon's tea party (this made 100 cosiness impossible to reach by serving), the baby bottle and clean diaper for a baby guh, a golden dandelion on a baby guh (vanilla: it stays small), guh armor and a clothing piece you already unlocked. With anything else in your hand a tap is still a pet and holding still opens the Guh menu.
+- **Tea party: there is always a guest who asks for tea** until you have poured your first cup, so the plain Nibble Tea you get from the house can always be served.
+- **The Great Snug Party: where do you get the six party items?** In Mayor Chonkworth's screen, point at a task to read where to get it and how far you are. The Snug Party List (right-click) now prints the same explanation under every task you still have to do.
+
 ## 1.2.8 — Minecraft 26.1.2
 
 A new rare biome, a wood set for the guh palm, an overview in the Guh House and a round of balance changes. Same

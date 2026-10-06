@@ -113,6 +113,8 @@ public final class Theekransje {
     private UUID gastheer;
     final List<Gast> gasten = new ArrayList<>();
     int timer, ticks, gezelligheid, zelfgebakken;
+    /** (1.2.9) Until the first cup is poured there is always a guest who wants tea: the house tea is never for nothing. */
+    boolean theeGeschonken;
 
     private Theekransje(UUID theelepel) {
         this.theelepel = theelepel;
@@ -217,6 +219,7 @@ public final class Theekransje {
         ticks = 0;
         gezelligheid = 0;
         zelfgebakken = 0;
+        theeGeschonken = false;
         GASTHEREN.put(gastheer, level.getGameTime());
         Minigames.startKeeping(player);
         for (BlockPos t : tafels) {
@@ -329,7 +332,8 @@ public final class Theekransje {
         if (g.wens == Wens.GEEN) {
             g.rust -= 20;
             if (g.rust <= 0) {
-                g.wens = level.getRandom().nextInt(100) < 55 ? Wens.THEE : Wens.GEBAK;
+                boolean niemandThee = !theeGeschonken && gasten.stream().noneMatch(x -> x.wens == Wens.THEE);
+                g.wens = niemandThee || level.getRandom().nextInt(100) < 55 ? Wens.THEE : Wens.GEBAK;
                 g.wensTimer = WENS_TICKS;
                 level.playSound(null, guh, ModSounds.GUH_AMBIENT.get(), SoundSource.NEUTRAL, 0.8f, 1.3f);
                 return true;
@@ -417,6 +421,12 @@ public final class Theekransje {
         return InteractionResult.SUCCESS;
     }
 
+    /** (GuhHooks.item, client) Tea or something sweet in your hand, and this guh sits at a tea table: the click serves it. */
+    static boolean isVoorGast(GuhEntity guh, ItemStack stack) {
+        return TheehuisPayloads.CLIENT_WENSEN.containsKey(guh.getId())
+                && (stack.getItem() instanceof TheeBlocks.Thee || stack.is(KnusTags.THEE) || isGebak(stack));
+    }
+
     /** Something sweet for the table: bakery cakes (#guhs:knus/gebak) and a few ordinary sweets. */
     public static boolean isGebak(ItemStack stack) {
         if (nl.juiced.guhs.feature.knus.Feesttaak.isFeestItem(stack)) {
@@ -438,6 +448,7 @@ public final class Theekransje {
             bijzonder = soort.bijzonder();
             KnusVoortgang.ontdek(host, TheehuisVoortgang.THEESOORTEN, soort.id());
             KnusVoortgang.hoogste(host, TheehuisVoortgang.SOORTEN, KnusVoortgang.ontdekt(host, TheehuisVoortgang.THEESOORTEN).size());
+            theeGeschonken = true;
             KnusVoortgang.tel(host, TheehuisVoortgang.INGESCHONKEN, 1);
             level.playSound(null, guh, TheehuisFeature.INSCHENKEN.get(), SoundSource.NEUTRAL, 1f, 1.1f);
             level.sendParticles(TheehuisFeature.THEESTOOM.get(), guh.getX(), guh.getY() + 1.0, guh.getZ(), 4, 0.15, 0.1, 0.15, 0.01);
