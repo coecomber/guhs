@@ -42,6 +42,18 @@
         "Komt na: VAHOEG, hij brandt weer! (De Guhbarbecuether)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548995CEA6F81",
+      image: "guhs:textures/ftbquests/guhs_knabbelring/kop_ring_sausuman.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 4.78125,
+      hover: [
+        "Komt na: De gaven van Guhladriel",
+      ],
+    },
   ],
   order_index: 14,
   progression_mode: "flexible",
@@ -530,6 +542,234 @@
       dependencies: [
         "4755482EBB284428",
       ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548436B8828CC",
+      icon: {
+        id: "minecraft:polished_blackstone_bricks",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_sausuman_stap_1",
+          id: "475548CCCAAC96B1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485869706BDC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 6.5625,
+      dependencies: [
+        "4755485780C0891F",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+      shape: "hexagon",
+    },
+    {
+      id: "475548E59DC6327C",
+      icon: {
+        id: "guhs:ringsausuman_ringdeeg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_sausuman_stap_2",
+          id: "475548162F3718B1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554839B78E9F27",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 6.5625,
+      dependencies: [
+        "475548436B8828CC",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548A45400E1BF",
+      icon: {
+        id: "guhs:ringsausuman_frituursaus",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_sausuman_stap_3",
+          id: "475548EE52AD4CE2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F0EF1FA717",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 6.5625,
+      dependencies: [
+        "475548E59DC6327C",
+      ],
+      progression_mode: "linear",
+    },
+    {
+      id: "475548D71942DB2C",
+      icon: {
+        id: "guhs:ringsausuman_uienring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_sausuman_stap_4",
+          id: "4755485C0E176E69",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548603AB64560",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548C2B3998B76",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+      dependencies: [
+        "475548A45400E1BF",
+      ],
+      progression_mode: "linear",
+      shape: "gear",
+    },
+    {
+      id: "475548BD28073970",
+      icon: {
+        id: "guhs:guh_wire",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_sausuman_stap_1",
+          id: "47554881B31293F9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487CA5253FEE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 17.5,
+      y: 6.5625,
+      dependencies: [
+        "475548436B8828CC",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+    },
+    {
+      id: "475548DF63E1FE9D",
+      icon: {
+        id: "guhs:ringsausuman_pannantir",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_sausuman_pannantir",
+          id: "4755484295A57D64",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B770AF3771",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 19.0,
+      y: 6.5625,
+      dependencies: [
+        "475548436B8828CC",
+      ],
+      hide_dependency_lines: true,
+      progression_mode: "linear",
+    },
+    {
+      id: "47554889FAE44D06",
+      icon: {
+        id: "guhs:ringsausuman_uienring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ring_sausuman_dagelijks",
+          id: "475548E087105F17",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482BA2EC1363",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 20.5,
+      y: 6.5625,
+      dependencies: [
+        "475548D71942DB2C",
+      ],
+      hide_dependency_lines: true,
       progression_mode: "linear",
     },
   ],

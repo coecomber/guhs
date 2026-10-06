@@ -67,4 +67,32 @@
   "quest.475548622257E13C.quest_desc": [
     "Zo raak je de weg nooit kwijt: &6linksboven&r staat wat je nu moet doen, in de &dGuhdex&r (tab Verhalen) staat je &6reiskaart&r, het &6Superkompas&r wijst naar 'Mijn verhaal' en Sam-guh weet het ook. De hoofdstukken hieronder gaan één voor één open.",
   ],
+  "quest.475548436B8828CC.title": "Een zwarte toren vol rook",
+  "quest.475548436B8828CC.quest_desc": [
+    "Niet ver van de boomstad van Guhladriel staat een zwarte toren te sputteren. Daar woont &6Sausuman van de Vele Sauzen&r, een tovenaar-Mika die ook een hapje van de ring wil. Je &dSuperkompas&r weet de weg (tab Barbecue). Het hoeft niet voor de reis, maar het ruikt er wel lekker, njeg.",
+  ],
+  "quest.475548E59DC6327C.title": "Deeg, saus en... kaas?",
+  "quest.475548E59DC6327C.quest_desc": [
+    "Sausuman krijgt geen hapje, dus bakt hij zelf een ring. Haal voor zijn &6Ringenbakker&r: &6ringdeeg&r van de Deegkneder (eerste verdieping), &6hete frituursaus&r uit de Sauskraan (tweede) en &6kaas&r uit de Kaaskast (derde). Die kast is alleen een beetje leeg.",
+  ],
+  "quest.475548A45400E1BF.title": "Eén ring om ze allemaal op te eten",
+  "quest.475548A45400E1BF.quest_desc": [
+    "Alles bij je? Trek dan aan de hendel van de &6Ringenbakker&r, beneden in de hal. Achteruit: hij ronkt, hij sputtert, hij schudt... PLING!",
+  ],
+  "quest.475548D71942DB2C.title": "Ik mok",
+  "quest.475548D71942DB2C.quest_desc": [
+    "Het is een &6uienring&r geworden. Sausuman wilde kaas, dit is groente, dus nu zit hij in zijn Mokhoek. Bied hem een hapje aan. Je krijgt de &6Pannantír&r, een handvol uienringen, en de Ringenbakker bakt voortaan elke dag een uienring voor je.",
+  ],
+  "quest.475548BD28073970.title": "Te zwaar, njeg",
+  "quest.475548BD28073970.quest_desc": [
+    "Kijk eens naar de machines in de hal: &cTe zwaar: er is vadskracht te weinig, dus alles staat stil&r. Sausuman heeft vijf echte machines aan één &6Mika-rad&r gehangen, en een Mika rent niet. Zo moet het dus niet. Hoe het wel moet staat bij &bGuh-technologie&r: een Guhrad, met een guh erin.",
+  ],
+  "quest.475548DF63E1FE9D.title": "De Pannantír",
+  "quest.475548DF63E1FE9D.quest_desc": [
+    "Boven in de toren staat een pan waar je dingen in ziet. Kijk er eens in (rechtsklik). Meestal zie je een oog dat trek heeft. Na afloop mag je er zelf een mee naar huis nemen.",
+  ],
+  "quest.47554889FAE44D06.title": "Elke dag een ring",
+  "quest.47554889FAE44D06.quest_desc": [
+    "Als Sausuman mokt, doet de &6Ringenbakker&r het nog steeds: trek aan de hendel en je krijgt één &6uienring&r per dag. Hij kijkt niet. Hij kijkt nooit.",
+  ],
 }

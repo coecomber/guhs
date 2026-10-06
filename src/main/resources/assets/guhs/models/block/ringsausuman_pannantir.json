@@ -1,0 +1,144 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "saus": "guhs:block/ringsausuman_pannantir",
+    "ijzer": "guhs:block/ringsausuman_pannantir_ijzer",
+    "particle": "guhs:block/ringsausuman_pannantir_ijzer"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        6,
+        2
+      ],
+      "to": [
+        14,
+        9,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        },
+        "down": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#saus"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        1,
+        6
+      ],
+      "to": [
+        10,
+        6,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        },
+        "down": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        1,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        },
+        "down": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        7,
+        7
+      ],
+      "to": [
+        16,
+        8,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#ijzer"
+        },
+        "south": {
+          "texture": "#ijzer"
+        },
+        "west": {
+          "texture": "#ijzer"
+        },
+        "east": {
+          "texture": "#ijzer"
+        },
+        "down": {
+          "texture": "#ijzer"
+        },
+        "up": {
+          "texture": "#ijzer"
+        }
+      }
+    }
+  ]
+}
