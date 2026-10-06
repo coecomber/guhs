@@ -17,7 +17,11 @@ import net.neoforged.neoforge.transfer.item.ItemResource;
 import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.feature.bank.BankFeature;
 import nl.juiced.guhs.feature.bank.HapluikjeBlockEntity;
+import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
+import nl.juiced.guhs.feature.bestaand.BestaandFeature;
+import nl.juiced.guhs.feature.campingmarkt.CampingmarktFeature;
 import nl.juiced.guhs.feature.fossielmijn.FossielmijnFeature;
+import nl.juiced.guhs.feature.paleizen.PaleizenFeature;
 import nl.juiced.guhs.feature.sausdieren.SausdierenFeature;
 import nl.juiced.guhs.feature.techbezorg.HaltepaaltjeBlock;
 import nl.juiced.guhs.feature.techbezorg.HaltepaaltjeBlockEntity;
@@ -28,9 +32,14 @@ import nl.juiced.guhs.feature.techbuis.BuisStukBlock;
 import nl.juiced.guhs.feature.techbuis.BuisStukBlockEntity;
 import nl.juiced.guhs.feature.techbuis.FilterBlockEntity;
 import nl.juiced.guhs.feature.techbuis.TechbuisFeature;
+import nl.juiced.guhs.feature.techbezorg.FluitjeItem;
 import nl.juiced.guhs.feature.techmachine.KnabbelaarBlockEntity;
+import nl.juiced.guhs.feature.techmachine.Oogst;
 import nl.juiced.guhs.feature.techmachine.TechmachineFeature;
 import nl.juiced.guhs.feature.techsaus.TechsausFeature;
+import nl.juiced.guhs.feature.torenpeper.PeperSoort;
+import nl.juiced.guhs.feature.torenpeper.PeperplantBlock;
+import nl.juiced.guhs.feature.torenpeper.TorenpeperFeature;
 import nl.juiced.guhs.feature.vadskracht.Kisten;
 import nl.juiced.guhs.feature.vadskracht.MachineBlock;
 import nl.juiced.guhs.feature.vadskracht.TestbronBlock;
@@ -44,7 +53,9 @@ import nl.juiced.guhs.world.WildeDieren;
  * "techsamen"). Knabbelbuizen at a real Bank Guh (in up to the cap, out only when upgraded, the Filterstuk's "laat liggen
  * N"), the Bezorgguhtje at a Hapluikje and at an upgraded Bank Guh, the item tags that point at another slice's items, and
  * what the Knabbelaar never eats of the other slices. Template techbezorg_test_kamer: 15 x 6 x 15 with a stone floor
- * (things stand at helper y 2).
+ * (things stand at helper y 2). Added at the merge of the buildings (paleizen, bestaand, camping-markt, toren-peper): the
+ * Oogster's harvest of the peperplant, the camping's recipe card in the Plantagebak recipe, the keeper's real whistle, and
+ * the quest props of those buildings that a Knabbelaar leaves alone.
  */
 public class TechSamenGameTests {
     private static final String BATCH = "techsamen", KAMER = "techbezorg_test_kamer";
@@ -262,12 +273,19 @@ public class TechSamenGameTests {
                 ModBlocks.BANK_GUH.get().defaultBlockState(), TechbuisFeature.KNABBELBUIS_RICHTING.get().defaultBlockState(),
                 TechbezorgFeature.HALTEPAALTJE.get().defaultBlockState(), TechsausFeature.SAUSVAT.get().defaultBlockState(),
                 TechbronFeature.KNUFFELGENERATOR.get().defaultBlockState(), FossielmijnFeature.BOTTENZAND.get().defaultBlockState(),
-                FossielmijnFeature.SKELETREK.get().defaultBlockState());
+                FossielmijnFeature.SKELETREK.get().defaultBlockState(),
+                // the buildings: quest props that stand outside a protected box (the Spiesburcht stays breakable) or that nobody can make
+                BestaandFeature.VUURKORF.get().defaultBlockState(), PaleizenFeature.BREIWERK.get().defaultBlockState(),
+                CampingmarktFeature.KAMPEERPLEK.get().defaultBlockState(), CampingmarktFeature.VADSSTAPEL.get().defaultBlockState(),
+                TorenpeperFeature.VUURTORENLAMP.get().defaultBlockState(), TorenpeperFeature.KWEEKBAK.get().defaultBlockState());
         for (BlockState state : nooit) {
             helper.assertTrue(!KnabbelaarBlockEntity.magKnabbelen(level, pos, state), "the Knabbelaar never eats " + state.getBlock());
         }
         helper.assertTrue(KnabbelaarBlockEntity.magKnabbelen(level, pos, FossielmijnFeature.ZOUTKRISTALERTS.get().defaultBlockState()),
                 "zoutkristalerts in the open world is fair game");
+        helper.assertTrue(KnabbelaarBlockEntity.magKnabbelen(level, pos, CampingmarktFeature.TENTDOEK.get("rood").blok().get().defaultBlockState())
+                && KnabbelaarBlockEntity.magKnabbelen(level, pos, PaleizenFeature.BRUGPLANK.get().defaultBlockState()),
+                "the building blocks a player gets from the buildings (tent canvas, bridge planks) are ordinary blocks to it");
         helper.assertTrue(WildeDieren.soorten().contains(SausdierenFeature.SAUSLOPER.get()) && WildeDieren.soorten().contains(SausdierenFeature.SAUSBLUBJE.get()),
                 "the tidy-up of wild animals knows the Sausloper and the Sausblubje");
         // every recipe of the merged slices loads (an unknown item id in a recipe drops it without a crash)
@@ -278,6 +296,62 @@ public class TechSamenGameTests {
             var key = net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, nl.juiced.guhs.Guhs.id(recept));
             helper.assertTrue(level.getServer().getRecipeManager().byKey(key).isPresent(), "the recipe guhs:" + recept + " loads");
         }
+        // the Plantagebak (tech-machines) asks for the recipe card that the Grillcamping gives (camping-markt); the whistle the
+        // Torenwachter-guh gives (toren-peper) is tech-bezorg's real one
+        var bak = level.getServer().getRecipeManager().byKey(net.minecraft.resources.ResourceKey.create(
+                net.minecraft.core.registries.Registries.RECIPE, nl.juiced.guhs.Guhs.id("plantagebak")));
+        ItemStack kaart = new ItemStack(CampingmarktFeature.RECEPT_PLANTAGEBAK.get());
+        helper.assertTrue(bak.isPresent() && bak.get().value().placementInfo().ingredients().stream().anyMatch(i -> i.test(kaart)),
+                "the Plantagebak recipe holds the camping's recipe card");
+        helper.assertTrue(kaart.getItem().getCraftingRemainder(kaart) != null, "and the card stays in the grid");
+        helper.assertTrue(TechbezorgFeature.BEZORGGUHTJE_FLUITJE.get() instanceof FluitjeItem, "the Bezorgguhtje-fluitje is the real whistle, not a placeholder");
+        helper.succeed();
+    }
+
+    // =====================================================================================================================
+    // the Oogster and the peperplant of the Pepertuin
+    // =====================================================================================================================
+
+    /**
+     * The Oogster's rules ({@link Oogst}) on a ripe peperplant (toren-peper, a CropBlock): on hot ground it cuts red
+     * Vahoegpepers, a seed goes back into the ground, and the young plant it leaves knows its ground again (the kind is
+     * corrected when the plant is placed) and has its clock, so the field keeps growing without anybody. A young plant is
+     * left alone.
+     */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void techsamenOogsterOogstPepers(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        PeperplantBlock plant = TorenpeperFeature.PEPERPLANT.get();
+        helper.setBlock(p(7, 7), Blocks.MAGMA_BLOCK);
+        helper.setBlock(p(9, 7), BarbecuetherFeature.AS_AARDE.get());
+        BlockPos heet = p(7, 7).above(), gewoon = p(9, 7).above();
+        helper.setBlock(heet, plant.getStateForAge(PeperplantBlock.MAX_AGE));
+        helper.setBlock(gewoon, plant.getStateForAge(1));
+        BlockPos plek = helper.absolutePos(heet);
+        gelijk(helper, PeperSoort.ROOD, level.getBlockState(plek).getValue(PeperplantBlock.SOORT), "a plant on magma carries red peppers");
+        helper.assertTrue(Oogst.isRijp(level, plek), "the Oogster sees the ripe peperplant");
+        helper.assertTrue(!Oogst.isRijp(level, helper.absolutePos(gewoon)) && Oogst.bekijk(level, helper.absolutePos(gewoon)) == null,
+                "and leaves a young one alone");
+        Oogst.Pluk pluk = Oogst.bekijk(level, plek);
+        helper.assertTrue(pluk != null, "a cut is offered");
+        int rood = 0, zaad = 0, anders = 0;
+        for (ItemStack stack : pluk.oogst()) {
+            if (stack.is(TorenpeperFeature.VAHOEGPEPER.get())) {
+                rood += stack.getCount();
+            } else if (stack.is(TorenpeperFeature.PEPERZAADJES.get())) {
+                zaad += stack.getCount();
+            } else {
+                anders += stack.getCount();
+            }
+        }
+        helper.assertTrue(rood >= PeperplantBlock.PLUK_MIN && rood <= PeperplantBlock.PLUK_MAX, "2 or 3 Vahoegpepers: " + rood);
+        helper.assertTrue(zaad <= 1 && anders == 0, "at most one spare seed (one went back into the ground) and nothing else: " + pluk.oogst());
+        helper.assertTrue(Oogst.doe(level, pluk), "the cut is carried out");
+        BlockState jong = level.getBlockState(plek);
+        helper.assertTrue(jong.is(plant) && jong.getValue(PeperplantBlock.AGE) == 0, "a young plant stands there: " + jong);
+        gelijk(helper, PeperSoort.ROOD, jong.getValue(PeperplantBlock.SOORT), "that still knows its hot ground");
+        helper.assertTrue(level.getBlockTicks().hasScheduledTick(plek, plant), "and grows on by itself (its clock runs)");
+        helper.assertTrue(!Oogst.isRijp(level, plek), "nothing to cut again right away");
         helper.succeed();
     }
 }

@@ -59,13 +59,11 @@ VERHAAL_GUHS = {"sam_guh": ("ring", "Een eigen Sam-guh", "Neem Sam-guh mee naar 
 
 # CONTRACT_130 7: id -> (kind, placeholder name, colour); the owner slice writes the real thing over it
 VASTE_IDS = {
-    # (the rows of bank, tech-bronnen, tech-buizen, tech-machines, tech-vloeistof, tech-bezorg, fossiel-mijn and sausdieren
-    # went at their merge: those slices write every file of their ids themselves)
+    # (the rows of bank, tech-bronnen, tech-buizen, tech-machines, tech-vloeistof, tech-bezorg, fossiel-mijn, sausdieren and
+    # paleizen went at their merge: those slices write every file of their ids themselves)
     # tech-quests
     "grote_knabbelmachine": ("block", "De Grote Knabbelmachine", (240, 170, 90)), "perfecte_knabbel": ("item", "Perfecte knabbel", (255, 214, 90)),
     "knabbelmachine_beeldje": ("block", "Knabbelmachine-beeldje", (214, 170, 80)),
-    # paleizen
-    "worstzwijntje": ("entity", "Worstzwijntje", None),
     # ring-kern, ring-h3, ring-h5
     "knabbelring": ("item", "De Knabbelring", (255, 200, 60)), "lichtflesje": ("item", "Lichtflesje", (220, 244, 255)),
     "elfenmanteltje": ("item", "Elfenmanteltje", (140, 180, 130)), "elfentouw": ("item", "Elfentouw", (220, 210, 180)),
