@@ -3,7 +3,16 @@
   "biomes": "#guhs:has_structure/guhrio_kasteel",
   "step": "fluid_springs",
   "terrain_adaptation": "none",
-  "spawn_overrides": {},
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": []
+    },
+    "creature": {
+      "bounding_box": "piece",
+      "spawns": []
+    }
+  },
   "templates": "guhs:guhrio_kasteel",
   "tiles_x": 4,
   "tiles_z": 4,
