@@ -78,6 +78,30 @@
         "Komt na: Rookdelta",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548FECA3E43CB",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_toren_peper_vuurtoren.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755484F4D648ADE",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_toren_peper_pepertuin.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 6,
   progression_mode: "flexible",
@@ -1244,6 +1268,596 @@
       x: 20.5,
       y: 13.525,
       shape: "diamond",
+    },
+    {
+      id: "475548E0CAEC8653",
+      icon: {
+        id: "guhs:torenpeper_seinlantaarn",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:rookguh_vuurtoren",
+          id: "4755489821A5DFEA",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548591A8DFC91",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "475548459D7EF34A",
+      icon: {
+        id: "guhs:torenpeper_vuurtorenlamp",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtoren_stap_1",
+          id: "47554879B7FFC7CF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483D03C2583F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 17.4875,
+    },
+    {
+      id: "47554874772C9D68",
+      icon: {
+        id: "guhs:gloeikoolgruis",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtoren_stap_2",
+          id: "475548AAF4F4AC29",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554885E3865917",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554865D8FA61CF",
+      icon: {
+        id: "guhs:torenpeper_lampkooltje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtoren_stap_3",
+          id: "47554882973F2D47",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554834D5736069",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 17.4875,
+    },
+    {
+      id: "4755481C0068C4ED",
+      icon: {
+        id: "guhs:rookguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtoren_stap_4",
+          id: "4755484D0269E306",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548741C2F5DFA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 17.4875,
+    },
+    {
+      id: "475548A4A9C5A600",
+      icon: {
+        id: "guhs:bezorgguhtje_fluitje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vuurtoren_stap_5",
+          id: "475548C594B48193",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554851C4A819A4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755487279279881",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "4755484E71378B5C",
+      icon: {
+        id: "guhs:bezorgguhtje_fluitje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bezorgguhtje_fluitje",
+          },
+          id: "47554834AFE79723",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A32B0CC801",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 9.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554831BDB3CF5D",
+      icon: {
+        id: "guhs:torenpeper_wachtersjas",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:torenpeper_wachtersjas",
+          },
+          id: "475548813539FE41",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548302DD007E5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 9.0,
+      y: 18.9875,
+    },
+    {
+      id: "4755483C7EF60BB8",
+      icon: {
+        id: "guhs:torenpeper_vuurtorenlamp",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:torenpeper_vuurtorenlamp",
+          },
+          id: "4755481C71801997",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489E0CE968AE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 18.9875,
+    },
+    {
+      id: "475548175E26304F",
+      icon: {
+        id: "guhs:torenpeper_vahoegpeper",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:pepertuin",
+          id: "4755488052B94C90",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487A9197DE19",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "4755485060A6E631",
+      icon: {
+        id: "guhs:torenpeper_peperzaadjes",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/pepertuin_stap_1",
+          id: "475548307DE35804",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548ED8E544D17",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 17.4875,
+    },
+    {
+      id: "475548FFB1E0BB02",
+      icon: {
+        id: "guhs:torenpeper_kweekbak",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/pepertuin_stap_2",
+          id: "47554800DD4F6D81",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554830B7E6238F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548AF0726536F",
+      icon: {
+        id: "guhs:guhbrouwketel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/pepertuin_stap_3",
+          id: "4755488B745EF992",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B3FD93FC26",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 17.4875,
+    },
+    {
+      id: "475548A2928EF4A3",
+      icon: {
+        id: "guhs:torenpeper_peperslinger",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/pepertuin_stap_4",
+          id: "475548532342B7CA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A979C39C48",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548A7B09377B0",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "4755489938277C57",
+      icon: {
+        id: "guhs:torenpeper_njegpeper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/toren_peper_geplukt",
+          id: "4755489438280EA4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548804768B44C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755487C205DEA29",
+      icon: {
+        id: "guhs:torenpeper_peperzaadjes",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:torenpeper_njegpeper",
+          },
+          count: 4,
+          id: "475548ADE1F67FA9",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:torenpeper_vahoegpeper",
+          },
+          count: 4,
+          id: "475548D8517E5F31",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:torenpeper_snoeppeper",
+          },
+          count: 4,
+          id: "475548655E20A7E7",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548051D9AE510",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548C7D94CB228",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 20.5,
+      y: 17.4875,
+    },
+    {
+      id: "47554841003C845A",
+      icon: {
+        id: "guhs:torenpeper_pepervuurdrankje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:torenpeper_pepervuurdrankje",
+          },
+          id: "475548CC2749A014",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B74F362C4F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 18.9875,
+    },
+    {
+      id: "475548AD89F3548F",
+      icon: {
+        id: "guhs:torenpeper_peperzoetdrankje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:torenpeper_peperzoetdrankje",
+          },
+          id: "47554824EF38DA4E",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548828C1F015A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 18.9875,
+    },
+    {
+      id: "4755480036673571",
+      icon: {
+        id: "guhs:torenpeper_vahoegpeper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/toren_peper_heet",
+          id: "475548ED96E19CA7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488E0A7952F8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_saus_bucket",
+          },
+        },
+      ],
+      x: 17.5,
+      y: 18.9875,
+      shape: "octagon",
+    },
+    {
+      id: "475548A5C33735FD",
+      icon: {
+        id: "guhs:torenpeper_peperslinger",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:torenpeper_peperslinger",
+          },
+          id: "4755484B580BB432",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548719C232D8F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 16.0,
+      y: 18.9875,
     },
   ],
 }
