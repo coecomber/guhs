@@ -159,6 +159,9 @@ VARIANT_BONES = {"teckel": ("teckel",), "ender": ("ender",), "koning": ("koning"
                  "asguh": ("asguh",), "pluisguh": ("pluis",), "brontosaurus": ("neck",), "vahoege_ender": ("ender",),
                  "baltoguh": ("balto",), "mewtwo": ("mewtwo",), "stitch626": ("stitch",),   # 3.0: the story guhs
                  "sam_guh": ("samguh",)}   # bbq2: Sam-guh (his pack, bedroll, pan and tuft)
+# bbq2 (ring-kern): two looks in one NPC model (the game picks one per viewer): a picture shows the look of the start of
+# the story, so Guhdalf is grey and Araguh wears no crown yet (no spoilers in the quest book)
+NPC_HIDE = {"guhdalf": ("wit_hoed", "wit_mantel", "wit_knop"), "araguh": ("araguh_kroon",)}
 
 
 @lru_cache(maxsize=None)
@@ -177,7 +180,7 @@ def sprite(spec, size=256):
     elif kind == "npc":
         own = GEO(f"guh_npc_{rest}")
         model = own if os.path.exists(own) else GEO("guh_sitting")
-        img = wr.render(wr.geo_quads(model, f"guhs:entity/npc_{rest}"), 24, -10, size, margin=0.02)
+        img = wr.render(wr.geo_quads(model, f"guhs:entity/npc_{rest}", hide=NPC_HIDE.get(rest, ())), 24, -10, size, margin=0.02)
     elif kind == "geo":
         model, tex = rest.split(":", 1)
         img = wr.render(wr.geo_quads(GEO(model), f"guhs:entity/{tex}"), 26, -12, size, margin=0.02)

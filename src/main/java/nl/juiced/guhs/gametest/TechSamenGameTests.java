@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
+import nl.juiced.guhs.feature.Features;
 import nl.juiced.guhs.feature.bank.BankFeature;
 import nl.juiced.guhs.feature.bank.HapluikjeBlockEntity;
 import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
@@ -22,6 +23,7 @@ import nl.juiced.guhs.feature.bestaand.BestaandFeature;
 import nl.juiced.guhs.feature.campingmarkt.CampingmarktFeature;
 import nl.juiced.guhs.feature.fossielmijn.FossielmijnFeature;
 import nl.juiced.guhs.feature.paleizen.PaleizenFeature;
+import nl.juiced.guhs.feature.ring.RingFeature;
 import nl.juiced.guhs.feature.sausdieren.SausdierenFeature;
 import nl.juiced.guhs.feature.techbezorg.HaltepaaltjeBlock;
 import nl.juiced.guhs.feature.techbezorg.HaltepaaltjeBlockEntity;
@@ -305,6 +307,15 @@ public class TechSamenGameTests {
                 "the Plantagebak recipe holds the camping's recipe card");
         helper.assertTrue(kaart.getItem().getCraftingRemainder(kaart) != null, "and the card stays in the grid");
         helper.assertTrue(TechbezorgFeature.BEZORGGUHTJE_FLUITJE.get() instanceof FluitjeItem, "the Bezorgguhtje-fluitje is the real whistle, not a placeholder");
+        // the Knabbelring (ring-kern) stays with its bearer: it is a loaned thing, which is what the Knabbelbuis, the Opzuiger, the
+        // Hapluikje and the Bank Guh ask before they take a stack; the lamp of the Lichtflesje (a vanilla light block that walks
+        // along with its holder) is nothing a Knabbelaar can eat; the hook and the rest fire can be made
+        helper.assertTrue(Features.isLoaned(new ItemStack(RingFeature.KNABBELRING.get())), "no machine takes the Knabbelring");
+        helper.assertTrue(!KnabbelaarBlockEntity.magKnabbelen(level, pos, Blocks.LIGHT.defaultBlockState()), "the Knabbelaar never eats the lamp of the Lichtflesje");
+        for (String recept : List.of("elfentouw_haak", "ring_rustvuur")) {
+            var key = net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, nl.juiced.guhs.Guhs.id(recept));
+            helper.assertTrue(level.getServer().getRecipeManager().byKey(key).isPresent(), "the recipe guhs:" + recept + " loads");
+        }
         helper.succeed();
     }
 

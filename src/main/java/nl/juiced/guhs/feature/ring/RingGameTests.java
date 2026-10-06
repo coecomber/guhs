@@ -219,6 +219,25 @@ public final class RingGameTests {
         helper.succeed();
     }
 
+    /**
+     * (merge ring-kern) The test room is a floor three blocks above the flat test world and only its own chunks tick, so a
+     * hunter that appeared on the ground around it never rides in: whether one landed on the floor was a matter of the
+     * random angle and of which neighbouring chunks happened to be loaded. Every hunter outside the room is put on the far
+     * side of the floor (still at a distance); in the real game they ride in from wherever they appeared.
+     */
+    private static List<KnekelRuiterEntity> naarBinnen(GameTestHelper helper, List<KnekelRuiterEntity> ruiters) {
+        AABB kamer = helper.getBounds();
+        int buiten = 0;
+        for (KnekelRuiterEntity r : ruiters) {
+            if (!kamer.contains(r.position())) {
+                BlockPos plek = helper.absolutePos(new BlockPos(13 + buiten % 3 * 2, 2, 13 + buiten / 3 * 2));
+                r.snapTo(plek.getX() + 0.5, plek.getY(), plek.getZ() + 0.5, r.getYRot(), 0f);
+                buiten++;
+            }
+        }
+        return ruiters;
+    }
+
     /** The Nine: they come for whoever wears the ring, only that player sees them, caught = back at the rest point, unharmed. */
     @GuhTest(template = KAMER, batch = BATCH + "_negen", timeoutTicks = 500)
     public static void ringNegenPakken(GameTestHelper helper) {
@@ -237,6 +256,7 @@ public final class RingGameTests {
             helper.assertTrue(r.isJager() && Zicht.magZien(p, r) && !Zicht.magZien(ander, r) && r.ziet(p), "a hunter is its prey's alone and smells the ring");
             helper.assertTrue(r.distanceToSqr(p) >= 9 * 9, "they appear at a distance");
         }
+        naarBinnen(helper, ruiters);
         float leven = p.getHealth();
         helper.succeedWhen(() -> {
             helper.assertTrue(p.position().distanceTo(rust) < 0.5, "caught: back at the rest point (now " + BlockPos.containing(p.position()) + ", from " + hier + ")");
@@ -256,7 +276,7 @@ public final class RingGameTests {
         int n = Negen.jaag(p);
         // (only the test's own chunks tick: the riders that came inside the room are the ones that can be watched)
         AABB kamer = helper.getBounds();
-        List<KnekelRuiterEntity> binnen = Negen.ruiters(p).stream().filter(r -> kamer.contains(r.position())).toList();
+        List<KnekelRuiterEntity> binnen = naarBinnen(helper, Negen.ruiters(p)).stream().filter(r -> kamer.contains(r.position())).toList();
         helper.assertTrue(n >= 1 && !binnen.isEmpty(), "riders came, some of them into the room: " + binnen.size() + " of " + n);
         // the Lichtflesje: a rider within its flash is blind for a while, the ones far away are not
         KnekelRuiterEntity dichtbij = Negen.patrouille(helper.getLevel(), List.of(helper.absolutePos(new BlockPos(7, 2, 3)), helper.absolutePos(new BlockPos(7, 2, 6))));
