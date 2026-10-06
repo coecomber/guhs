@@ -365,6 +365,10 @@ public enum GuhClothes {
     // </camping_markt>
     //
     // <toren_peper>
+    /** bbq2 (the Torenwachter-guh's thanks, Rookguh-vuurtoren): a navy keeper's coat with gold buttons and a red-and-white striped collar. */
+    TORENPEPER_WACHTERSJAS(Slot.BODY, "outfit_suit", "outfit_torenpeper_jas"),
+    /** bbq2 (the Peperteler-guh's thanks, Pepertuin): a string of red, green and pink peppers round the neck. */
+    TORENPEPER_PEPERSLINGER(Slot.NECK, "outfit_torenpeper_slinger"),
     // </toren_peper>
     //
     // <ring>
