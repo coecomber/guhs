@@ -460,9 +460,12 @@ public final class Ring {
         Negen.einde(p);
     }
 
+    /** (tests) every level counts as a world of the story: the test server has neither the Guhmensie nor the Barbecuether. */
+    public static boolean OVERAL;
+
     /** Is this level the Guhmensie or the Barbecuether (where the story plays)? */
     static boolean verhaalWereld(ServerLevel level) {
-        return level.dimension() == ModDimensions.GUHMENSION || level.dimension() == BarbecuetherFeature.BARBECUETHER;
+        return OVERAL || level.dimension() == ModDimensions.GUHMENSION || level.dimension() == BarbecuetherFeature.BARBECUETHER;
     }
 
     private Ring() {

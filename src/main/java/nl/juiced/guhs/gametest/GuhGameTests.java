@@ -1845,6 +1845,9 @@ public class GuhGameTests {
                 int locks = (int) java.util.regex.Pattern.compile("(?m)^\\s*\"?dependencies\"?\\s*:").matcher(chapter).results().count();
                 if (name.equals("guhs_maag")) {
                     helper.assertTrue(locks == 5, "the five stomach sizes come after each other, not " + locks);
+                } else if (name.equals("guhs_knabbelring")) {
+                    // (bbq2: the one story that is told in order: its quests really depend on each other, FTB_LINEAIR)
+                    helper.assertTrue(locks >= 1, "the Knabbelring is told in order");
                 } else {
                     helper.assertTrue(locks == 0, name + " has " + locks + " locked quests");
                 }
@@ -1997,8 +2000,9 @@ public class GuhGameTests {
                     helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.class.getClassLoader().getResource("assets/guhs/" + img.group(1)) != null,
                             "picture " + img.group(1));
                 }
-                linear += chapter.split("progression_mode: \"linear\"", -1).length - 1;
-                helper.assertTrue(name.equals("guhs_maag") || !chapter.contains("\"linear\""), name + ": nothing locked");
+                boolean verhaal = name.equals("guhs_knabbelring");   // (bbq2: the one story told in order, FTB_LINEAIR)
+                linear += verhaal ? 0 : chapter.split("progression_mode: \"linear\"", -1).length - 1;
+                helper.assertTrue(name.equals("guhs_maag") || verhaal || !chapter.contains("\"linear\""), name + ": nothing locked");
             }
             helper.assertTrue(quests.size() >= 429, "all quests (420 + 9 Hoe kom je hier?): " + quests.size());
             helper.assertTrue(quests.containsAll(links) && !links.isEmpty(), "the links point to our quests");

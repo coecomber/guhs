@@ -1,0 +1,129 @@
+# bbq2, ring-kern (AutoCheck, dev only): the cast of the Knabbelring, the ring, the Nine, Sam-guh, a rest point. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_ring-kern.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs ring ..., feature/ring/RingCommands.java)
+# Shots: the ten cast characters in a row (front and back), Guhdalf grey and white, Smikagol and a Knekel-Mika rider as
+# entities, the items in the hotbar, a Rustvuurtje with Sam-guh cooking, the Nine around the player, the rock disguise,
+# the Guhdex travel map of the Knabbelring and the locked-portal message in the chat.
+# NOT run by the slice itself (no game client in phase 2): this is for the merge step's visual check.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 5000 141 5010
+/forceload add 4970 4970 5030 5030
+wait 80
+/fill 4970 139 4970 5030 139 5030 guhs:houtskoolsteen
+/fill 4970 140 4970 5030 150 5030 minecraft:air
+/gamemode creative
+/kill @e[type=!minecraft:player,distance=..60]
+/guhs ring wis
+wait 20
+clearchat
+
+section the cast in a row (they look at the player)
+/tp @s 4991.5 140 5000.5 180 0
+/guhs ring cast guhdalf
+/tp @s 4993.5 140 5000.5 180 0
+/guhs ring cast araguh
+/tp @s 4995.5 140 5000.5 180 0
+/guhs ring cast leguhlas
+/tp @s 4997.5 140 5000.5 180 0
+/guhs ring cast gimguh
+/tp @s 4999.5 140 5000.5 180 0
+/guhs ring cast boromika
+/tp @s 5001.5 140 5000.5 180 0
+/guhs ring cast merrie
+/tp @s 5003.5 140 5000.5 180 0
+/guhs ring cast pippguh
+/tp @s 5005.5 140 5000.5 180 0
+/guhs ring cast guhrond
+/tp @s 5007.5 140 5000.5 180 0
+/guhs ring cast guhladriel
+/tp @s 5009.5 140 5000.5 180 0
+/guhs ring cast smikagol
+/tp @s 4996.5 141.5 4993.5 0 8
+wait 5
+/tp @s 4996.5 141.5 4993.5 0 8
+wait 40
+shot bbq2_ring_cast_links world
+/tp @s 5005.5 141.5 4993.5 0 8
+wait 5
+/tp @s 5005.5 141.5 4993.5 0 8
+wait 40
+shot bbq2_ring_cast_rechts world
+/tp @s 5000.5 142 5007.5 180 10
+wait 5
+/tp @s 5000.5 142 5007.5 180 10
+wait 40
+shot bbq2_ring_cast_achter world
+
+section Guhdalf de Witte (for a player whose chapter 3 is done) and Araguh crowned (story done)
+/guhs ring hoofdstuk 7
+wait 30
+/tp @s 4992.5 141.2 4996.5 0 5
+wait 5
+/tp @s 4992.5 141.2 4996.5 0 5
+wait 40
+shot bbq2_ring_guhdalf_wit_araguh_kroon world
+/guhs ring wis
+wait 20
+
+section Smikagol and a rider (entities)
+/kill @e[type=guhs:guh_npc,distance=..60]
+/summon guhs:smikagol 4998.5 140 5000.5 {NoAI:1b,Rotation:[180f,0f]}
+/summon guhs:knekel_ruiter 5002.5 140 5000.5 {NoAI:1b,Rotation:[180f,0f]}
+/tp @s 5000.5 141.5 4995.0 0 8
+wait 5
+/tp @s 5000.5 141.5 4995.0 0 8
+wait 40
+shot bbq2_ring_smikagol_ruiter world
+/kill @e[type=guhs:smikagol,distance=..60]
+/kill @e[type=guhs:knekel_ruiter,distance=..60]
+
+section the items
+/clear @s
+/guhs ring geef
+/give @s guhs:elfentouw_haak
+/give @s guhs:ring_rustvuur
+/give @s guhs:ring_stoofpotje
+/give @s guhs:ring_feestknabbel
+/give @s guhs:ring_vissenbotje
+wait 20
+shot bbq2_ring_items gui
+
+section a rest point: the fire, Sam-guh cooks, the hook
+/gamemode survival
+/setblock 5000 140 5000 guhs:ring_rustvuur
+/setblock 5004 143 5000 guhs:houtskoolsteen
+/setblock 5004 143 4999 guhs:elfentouw_haak[facing=north]
+/tp @s 5000.5 140 4996.5 0 10
+/guhs ring hoofdstuk 2
+/guhs ring sam
+wait 60
+shot bbq2_ring_rustpunt_sam world
+wait 80
+shot bbq2_ring_stoofpotje gui
+
+section the ring on: the Nine come
+/guhs ring om
+/guhs ring negen
+wait 30
+shot bbq2_ring_negen world
+/guhs ring af
+/guhs ring negen weg
+wait 20
+
+section the Guhdex travel map and the locked portal
+gui verhalen @kaart:knabbelring
+wait 20
+shot bbq2_ring_reiskaart gui
+gui close
+/guhs ring stand
+wait 10
+shot bbq2_ring_stand gui
+/guhs ring wis
+/gamemode creative

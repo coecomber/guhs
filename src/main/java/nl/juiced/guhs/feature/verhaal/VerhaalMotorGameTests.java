@@ -464,6 +464,12 @@ public class VerhaalMotorGameTests {
     public static void verhaalMotorPortaalslot(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper), q = speler(helper);
+        // (bbq2 ring-kern: the Knabbelring's own lock is registered for everybody; these two have finished chapter 1)
+        Verhaallijn h1 = Verhaallijnen.van("ring_h1");
+        if (h1 != null) {
+            h1.zet(p, h1.stappen());
+            h1.zet(q, h1.stappen());
+        }
         java.util.function.BiFunction<ServerLevel, Entity, Component> slot = (lvl, e) -> e == p ? Component.literal("nee") : null;
         helper.assertTrue(GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, p) == null, "no lock: open");
         GrillPortalBlock.SLOTEN.add(slot);

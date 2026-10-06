@@ -41,13 +41,30 @@ public final class Cast {
     /** The phases of the default lines, and how many lines each kind has per phase (quest.guhs.ring.cast.&lt;kind&gt;.&lt;fase&gt;.&lt;n&gt;). */
     public static final String VOOR = "voor", REIS = "reis", NA = "na";
     public static final int REGELS = 2;
-    /** roleData of a Guhdalf: "wit" / "grijs" pins his look (else: white for a viewer whose chapter 3 is done). */
-    public static final String GUHDALF_LOOK = "guhs_ring_look";
+    /**
+     * roleData of a character: its look. Guhdalf: "wit" / "grijs" (else: white for a viewer whose chapter 3 is done);
+     * Araguh: "kroon" (else: crowned for a viewer whose story is done). Only a cutscene actor's game reads it (roleData is
+     * not sent for characters in the world: those follow the viewer's story).
+     */
+    public static final String LOOK = "guhs_ring_look";
 
     static void registreer() {
         for (GuhNpcEntity.Kind kind : KINDS) {
             NpcRollen.zet(kind, new Rol(kind));
         }
+    }
+
+    /**
+     * The NBT of a cutscene actor with a pinned look: {@code Cutscene.Builder.acteur("guhdalf", ModEntities.GUH_NPC,
+     * start, yaw, Cast.acteur(Kind.GUHDALF, "wit"))} (Guhdalf de Witte before the viewer's own story says so).
+     */
+    public static java.util.function.Consumer<net.minecraft.nbt.CompoundTag> acteur(GuhNpcEntity.Kind kind, String look) {
+        return tag -> {
+            tag.putString("Kind", kind.id());
+            net.minecraft.nbt.CompoundTag rol = new net.minecraft.nbt.CompoundTag();
+            rol.putString(LOOK, look);
+            tag.put("RoleData", rol);
+        };
     }
 
     /** Where this player is in the story, for a character's small talk. */
