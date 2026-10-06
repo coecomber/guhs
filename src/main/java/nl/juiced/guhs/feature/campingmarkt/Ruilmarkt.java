@@ -72,6 +72,8 @@ public final class Ruilmarkt {
     /** The moods of the Marktmeester; the answer that fits mood i is option i + 1. */
     public static final int OPSCHEPPEN = 0, ZUCHTEN = 1, GROMMEN = 2;
     public static final int COMPLIMENT = 1, LAAG_BIEDEN = 2, WEGLOPEN = 3;
+    /** After the questline his screen asks: haggle for the bargain of the day, or the shop? */
+    public static final int KOOPJE_OPTIE = 11, WINKEL_OPTIE = 12;
     /** The player's own counters in the questline: the number of the fake stack (0: not drawn yet), weighings since the last stamp. */
     public static final String NEP = "nep", WEGINGEN = "wegingen", KOOPJE_DAG = "koopje_dag";
     /** What the Marktmeester's bargain of the day is drawn from, and what a Mika gives for a vads bar. */
@@ -356,9 +358,10 @@ public final class Ruilmarkt {
                     }
                 }
                 default -> {
-                    if (koopjeVrij(p)) {
-                        zeg(p, npc, Q + "koopje_vraag");
-                        begin(npc, p);
+                    if (bezig(p) != null) {
+                        begin(npc, p);   // (a haggle that was left open goes on)
+                    } else if (koopjeVrij(p)) {
+                        scherm(p, npc, Q + "koopje_vraag", new Praat.Optie(KOOPJE_OPTIE, Q + "optie.koopje"), new Praat.Optie(WINKEL_OPTIE, Q + "optie.winkel"));
                     } else {
                         zeg(p, npc, Q + "tip" + npc.getRandom().nextInt(TIPS));
                         npc.openShop(p);
@@ -369,7 +372,14 @@ public final class Ruilmarkt {
 
         @Override
         protected void antwoord(GuhNpcEntity npc, ServerPlayer p, int stap, int optie) {
-            zet(npc, p, optie);
+            if (optie == KOOPJE_OPTIE && koopjeVrij(p)) {
+                begin(npc, p);
+            } else if (optie == WINKEL_OPTIE && CampingmarktFeature.RUILMARKT.klaar(p)) {
+                Praat.sluit(p);
+                npc.openShop(p);
+            } else {
+                zet(npc, p, optie);
+            }
         }
 
         /** After the questline: honest prices for the things of the Guhbarbecuether. */

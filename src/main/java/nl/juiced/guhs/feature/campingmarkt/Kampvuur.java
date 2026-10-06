@@ -102,7 +102,6 @@ public final class Kampvuur {
         if (!gebouw && stack.is(Items.FLINT_AND_STEEL) && !brandt) {
             // at home: lit for good
             level.setBlock(pos, state.setValue(CampingmarktBlocks.KampvuurBlock.BRANDT, true), Block.UPDATE_ALL);
-            level.scheduleTick(pos, state.getBlock(), FEEST_STAP);
             level.playSound(null, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1f, 1f);
             stack.hurtAndBreak(1, p, hand);
             return;
@@ -140,9 +139,11 @@ public final class Kampvuur {
         boolean was = state.getValue(CampingmarktBlocks.KampvuurBlock.BRANDT);
         if (!was) {
             level.setBlock(pos, state.setValue(CampingmarktBlocks.KampvuurBlock.BRANDT, true), Block.UPDATE_ALL);
-            level.scheduleTick(pos, blok, FEEST_STAP);
         }
         Herstel.na(level, pos, state.setValue(CampingmarktBlocks.KampvuurBlock.BRANDT, false), BRAND_TICKS);
+        if (!level.getBlockTicks().hasScheduledTick(pos, blok)) {
+            level.scheduleTick(pos, blok, FEEST_STAP);
+        }
         double x = pos.getX() + 0.5, y = pos.getY() + 0.6, z = pos.getZ() + 0.5;
         level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 0.8f, 0.9f);
         level.sendParticles(ParticleTypes.FLAME, x, y, z, 30, 0.35, 0.3, 0.35, 0.04);

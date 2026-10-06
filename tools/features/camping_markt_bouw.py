@@ -505,9 +505,11 @@ def camping(h):
             b.trap(x, G + 1, z1, "north", om=True)
     b.set(x0 + 2, G + 2, z1, "bell", {"attachment": "floor", "facing": "north", "powered": "false"}, {"id": "minecraft:bell"})
     b.pot(x1 - 3, G + 2, z1, "south")
-    # inside: his bed, a shelf of keys, a map table, a barrel of marshmallows
-    b.set(x0 + 1, G + 1, z0 + 1, "pink_bed", {"facing": "west", "part": "head", "occupied": "false"}, {"id": "minecraft:bed"})
-    b.set(x0 + 2, G + 1, z0 + 1, "pink_bed", {"facing": "west", "part": "foot", "occupied": "false"}, {"id": "minecraft:bed"})
+    # inside: his sleeping bag on a rug (no bed: a bed blows up in the Guhbarbecuether, a guh sleeping bag only says no),
+    # a map table, a barrel of marshmallows
+    b.set(x0 + 1, G + 1, z0 + 1, SLAAPZAK, {"facing": "west", "occupied": "false"})
+    b.set(x0 + 2, G + 1, z0 + 1, "minecraft:pink_carpet")
+    b.set(x0 + 1, G + 1, z0 + 2, "minecraft:white_carpet")
     b.set(x1 - 1, G + 1, z0 + 1, "cartography_table")
     b.vat(x1 - 1, G + 1, z0 + 2, "guhs:chests/campingmarkt_camping")
     b.vat(x1 - 1, G + 2, z0 + 2, facing="west")
@@ -537,9 +539,12 @@ def camping(h):
     b.stempel(tent("blauw", 2, 4, rand="creme"), 9, G + 1, 11)                 # north-west: x 9..13, z 11..14, the door south
     b.stempel(tent("rood", 2, 4, rand="creme"), 31, G + 1, 11)                 # north-east: x 31..35, z 11..14
     b.stempel(tent("groen", 3, 5, rand="geel", luifel=True), 5, G + 1, 25, 3)  # west: the family tent, its door (and awning) east
-    for (x, z) in ((11, 16), (33, 16)):                       # a little cooking fire in front of the two small tents
-        b.set(x, G + 1, z, "campfire", {"lit": "true", "facing": "north", "signal_fire": "false", "waterlogged": "false"},
+    for (x, z) in ((11, 16), (33, 16)):                       # a little cooking fire in front of the two small tents, laid ready
+        # (not lit: a burning vanilla camp fire hurts whoever walks into it, and this is a village full of visitors)
+        b.set(x, G + 1, z, "campfire", {"lit": "false", "facing": "north", "signal_fire": "false", "waterlogged": "false"},
               {"id": "minecraft:campfire"})
+    b.set(10, G + 1, 16, "minecraft:cauldron")
+    b.set(32, G + 1, 16, "minecraft:cauldron")
     b.set(13, G + 1, 16, KAAL, {"axis": "x"})
     b.set(35, G + 1, 16, KAAL, {"axis": "x"})
     b.vat(36, G + 1, 13)
@@ -600,7 +605,7 @@ def camping(h):
     b.set(33, G + 1, 17, STAM, {"axis": "x"})                 # loose logs and split wood lying about
     b.set(34, G + 1, 17, STAM, {"axis": "x"})
     b.set(30, G + 1, 25, "minecraft:spruce_button", {"face": "floor", "facing": "north", "powered": "false"})
-    b.bord(34, G + 1, 26, ["Houthakker-guh", "Hakken? Graag!", "(vingers", "tellen na afloop)"], rotation=3)
+    b.bord(34, G + 1, 26, ["Houthakker-guh", "Hakken? Graag!", "(vingers", "tellen daarna)"], rotation=3)
     b.lantaarnpaal(34, 27, 2)
     worstboom(b, 38, 27, 4)
 
@@ -794,9 +799,9 @@ def markt(h):
     for x in range(20, 25):
         b.set(x, G + 5, gz, doek("rood" if x % 2 == 0 else "creme"))
         b.plaat(x, G + 6, gz, name=doekplaat("rood" if x % 2 == 0 else "creme"))
-    b.bord(21, G + 5, gz + 1, ["~~~~~~~~", "Nether-Mika", "RUIL-", "~~~~~~~~"], facing="south")
-    b.bord(22, G + 5, gz + 1, ["~~~~~~~~", "ruilmarkt", "MARKT", "~~~~~~~~"], facing="south")
-    b.bord(23, G + 5, gz + 1, ["Vads erin,", "verrassing", "eruit.", "Mjauw!"], facing="south")
+    b.bord(21, G + 5, gz + 1, ["Vads erin,", "verrassing", "eruit.", "Mjauw!"], facing="south")
+    b.bord(22, G + 5, gz + 1, ["~~~~~~~~", "Nether-Mika-", "ruilmarkt", "~~~~~~~~"], facing="south")
+    b.bord(23, G + 5, gz + 1, ["Afdingen", "mag altijd.", "Nepvads", "nooit!"], facing="south")
     # --- the notice board by the way in, lamp posts on the outer ring, hand carts and crates ---
     for x in (16, 17, 18):
         b.set(x, G + 2, 37, PLANK)
@@ -841,7 +846,7 @@ def markt(h):
 # =====================================================================================================================
 # the geometry self-check
 # =====================================================================================================================
-OP_DE_GROND = ("minecraft:barrel", "minecraft:campfire", "minecraft:spruce_sign", "minecraft:cartography_table", "minecraft:pink_bed",
+OP_DE_GROND = ("minecraft:barrel", "minecraft:campfire", "minecraft:spruce_sign", "minecraft:cartography_table", "minecraft:cauldron",
                "minecraft:decorated_pot", "minecraft:flower_pot", "minecraft:potted_crimson_fungus", "minecraft:potted_warped_fungus",
                "minecraft:cake", "minecraft:bell", "minecraft:smoker", "minecraft:bookshelf", "minecraft:purple_candle", SLAAPZAK, SMEUL,
                KAMPVUUR, HAKBLOK, BORD, HARING, WEEGSCHAAL, VADSSTAPEL, "guhs:sate_zwammetje", "guhs:worst_zwammetje", "guhs:pindascheutjes",
@@ -1016,11 +1021,11 @@ def kampeerder_nbt(h, i):
 
 
 def kraam_mika_nbt(h, i):
-    """The entity data of stall holder i of the market: a Nether-Mika that stays behind its counter."""
+    """The entity data of stall holder i of the market (KraamMikaEntity: a Nether-Mika in an apron that stays behind its counter)."""
     x, y, z, yaw = KRAAM_MIKAS[i]
     ms = h.ms
-    return {"id": "guhs:nether_mika", "Rotation": ms.floats(float(yaw), 0.0), "PersistenceRequired": ms.Byte(1), "Invulnerable": ms.Byte(1),
-            "NeoForgeData": {"guhs_bezetting": f"campingmarkt_kraam_{i}"}}
+    return {"id": "guhs:campingmarkt_kraam_mika", "Kraam": i, "Rotation": ms.floats(float(yaw), 0.0), "PersistenceRequired": ms.Byte(1),
+            "Invulnerable": ms.Byte(1), "NeoForgeData": {"guhs_bezetting": f"campingmarkt_kraam_{i}"}}
 
 
 def build_all(h, bewaar=True):
@@ -1142,7 +1147,7 @@ def teken(struct, px=16, guhs=True):
             items.append((x + z + d[0] + d[2], y + d[1], (x, y, z), d, kleur))
     for (x, y, z, nbt) in struct.entities:
         soort = nbt["id"]
-        kleur = (240, 140, 180) if soort == "guhs:guh" else (150, 100, 190) if soort == "guhs:nether_mika" else (250, 220, 120)
+        kleur = (240, 140, 180) if soort == "guhs:guh" else (150, 100, 190) if soort == "guhs:campingmarkt_kraam_mika" else (250, 220, 120)
         if not guhs:
             continue
         items.append((x - 0.5 + z - 0.5 + 0.3 + 0.3, y, (x - 0.5, y, z - 0.5), (0.25, 0, 0.25, 0.75, 0.9, 0.75), kleur))
@@ -1199,7 +1204,7 @@ def preview(out):
     wr.SPECIAL_COLOURS["guhs:smeulkooltjes"] = (230, 120, 40)
     for naam, kleur in (("potted_crimson_fungus", (150, 40, 50)), ("potted_warped_fungus", (30, 150, 140)), ("flower_pot", (124, 68, 54)),
                         ("smoker", (86, 80, 72)), ("cake", (250, 240, 230)), ("decorated_pot", (150, 80, 60)), ("purple_candle", (150, 90, 190)),
-                        ("soul_lantern", (120, 220, 230)), ("amethyst_block", (134, 98, 190)), ("pink_bed", (238, 141, 173))):
+                        ("soul_lantern", (120, 220, 230)), ("amethyst_block", (134, 98, 190)), ("cauldron", (74, 74, 78))):
         wr.SPECIAL_COLOURS["minecraft:" + naam] = kleur
     wr.block_colour.cache_clear()
     os.makedirs(out, exist_ok=True)

@@ -542,6 +542,8 @@ public class CampingmarktGameTests {
             // the bargain of the day: once a day, for a haggle won
             helper.assertTrue(Ruilmarkt.koopjeVrij(a) && !Ruilmarkt.koopjeVrij(b), "a may haggle for the bargain of the day");
             rol.talk(npc, a);
+            helper.assertTrue(Ruilmarkt.bezig(a) == null, "he asks first: the bargain, or the shop?");
+            rol.antwoord(npc, a, Ruilmarkt.KOOPJE_OPTIE);
             Ruilmarkt.Afdingen h = Ruilmarkt.bezig(a);
             helper.assertTrue(h != null, "a haggle for the bargain");
             Ruilmarkt.Zet z = Ruilmarkt.Zet.VERDER;
@@ -771,6 +773,22 @@ public class CampingmarktGameTests {
         for (int i = 0; i < CampingmarktFeature.KRAAM_PLEKKEN.size(); i++) {
             helper.assertTrue(CampingmarktFeature.KRAAM_PLEKKEN.get(i).equals(opMarkt.get(CampingmarktFeature.KRAAM_ID + i)), "stall holder " + i + " stands where Java says: " + opMarkt);
         }
+        // (the stall holders are this slice's own peaceful Mika's with their stall number, the residents are guhs)
+        int kraamMikas = 0, guhs = 0;
+        for (Tag t : markt.save(new CompoundTag()).getListOrEmpty("entities")) {
+            CompoundTag nbt = t.asCompound().orElse(new CompoundTag()).getCompoundOrEmpty("nbt");
+            String tag = nbt.getCompoundOrEmpty("NeoForgeData").getStringOr(Bezetting.TAG, "");
+            if (tag.startsWith(CampingmarktFeature.KRAAM_ID)) {
+                helper.assertTrue("guhs:campingmarkt_kraam_mika".equals(nbt.getStringOr("id", "")) && (CampingmarktFeature.KRAAM_ID + nbt.getIntOr("Kraam", -1)).equals(tag),
+                        "a stall holder of the template: " + nbt);
+                kraamMikas++;
+            }
+        }
+        for (Tag t : camping.save(new CompoundTag()).getListOrEmpty("entities")) {
+            CompoundTag nbt = t.asCompound().orElse(new CompoundTag()).getCompoundOrEmpty("nbt");
+            guhs += "guhs:guh".equals(nbt.getStringOr("id", "")) ? 1 : 0;
+        }
+        helper.assertTrue(kraamMikas == KraamMikaEntity.AANTAL && guhs == Kamperen.KAMPEERDERS.size(), kraamMikas + " stall holders, " + guhs + " residents");
         // worldgen
         for (StructureTemplate t : List.of(camping, markt)) {
             List<StructureTemplate.StructureBlockInfo> jigsaws = t.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.JIGSAW);

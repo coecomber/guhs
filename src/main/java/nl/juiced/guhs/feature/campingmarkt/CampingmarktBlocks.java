@@ -227,7 +227,7 @@ public final class CampingmarktBlocks {
 
     /**
      * The big camp fire of the camping: BRANDT = it burns (light, flames, crackling). What a click does is in
-     * {@link Kampvuur#klik}: wood on it, poke it up, roast over it. While it burns it ticks once a second ({@link Kampvuur#feest}).
+     * {@link Kampvuur#klik}: wood on it, poke it up, roast over it. While a party fire burns it ticks ({@link Kampvuur#feest}).
      */
     public static class KampvuurBlock extends Block {
         public static final MapCodec<KampvuurBlock> CODEC = simpleCodec(KampvuurBlock::new);
@@ -275,7 +275,8 @@ public final class CampingmarktBlocks {
 
         @Override
         protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-            if (state.getValue(BRANDT)) {
+            // (only a fire that was lit for a party and will go out again: one that burns for good at home is just a fire)
+            if (state.getValue(BRANDT) && nl.juiced.guhs.feature.wereld.Herstel.wacht(level, pos)) {
                 Kampvuur.feest(level, pos);
                 level.scheduleTick(pos, this, Kampvuur.FEEST_STAP);
             }
