@@ -104,6 +104,9 @@
     "guhs:bleekhout_bord",
     "guhs:bleekhout_wandbord",
     "guhs:krakend_guhhartje",
-    "guhs:verzuurd_guhhartje"
+    "guhs:verzuurd_guhhartje",
+    "guhs:tekentafel",
+    "guhs:plantagebak",
+    "guhs:techmachine_plantagebak_deel"
   ]
 }

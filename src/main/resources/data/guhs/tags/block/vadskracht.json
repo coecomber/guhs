@@ -9,6 +9,13 @@
     "guhs:vadskracht_testbron",
     "guhs:vadskracht_testbatterij",
     "guhs:vadskracht_testmachine",
-    "guhs:vadskracht_testmachine_groot"
+    "guhs:vadskracht_testmachine_groot",
+    "guhs:oogster",
+    "guhs:knabbelaar",
+    "guhs:neerzetter",
+    "guhs:vadsmolen",
+    "guhs:knutselmachine",
+    "guhs:plantagebak",
+    "guhs:techmachine_plantagebak_deel"
   ]
 }

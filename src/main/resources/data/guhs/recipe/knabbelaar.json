@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IPI",
+    "GDG",
+    "SKS"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:iron_pickaxe",
+    "G": "guhs:grillspies",
+    "D": "guhs:guh_wire",
+    "S": "#minecraft:stone_crafting_materials",
+    "K": "guhs:kaas_knabbels"
+  },
+  "result": {
+    "id": "guhs:knabbelaar"
+  }
+}

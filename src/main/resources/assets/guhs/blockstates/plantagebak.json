@@ -1,7 +1,49 @@
 {
   "variants": {
-    "": {
-      "model": "guhs:block/plantagebak"
+    "facing=north,snoet=slaapt": {
+      "model": "guhs:block/plantagebak_slaapt"
+    },
+    "facing=north,snoet=werkt": {
+      "model": "guhs:block/plantagebak_werkt"
+    },
+    "facing=north,snoet=vol": {
+      "model": "guhs:block/plantagebak_vol"
+    },
+    "facing=east,snoet=slaapt": {
+      "model": "guhs:block/plantagebak_slaapt",
+      "y": 90
+    },
+    "facing=east,snoet=werkt": {
+      "model": "guhs:block/plantagebak_werkt",
+      "y": 90
+    },
+    "facing=east,snoet=vol": {
+      "model": "guhs:block/plantagebak_vol",
+      "y": 90
+    },
+    "facing=south,snoet=slaapt": {
+      "model": "guhs:block/plantagebak_slaapt",
+      "y": 180
+    },
+    "facing=south,snoet=werkt": {
+      "model": "guhs:block/plantagebak_werkt",
+      "y": 180
+    },
+    "facing=south,snoet=vol": {
+      "model": "guhs:block/plantagebak_vol",
+      "y": 180
+    },
+    "facing=west,snoet=slaapt": {
+      "model": "guhs:block/plantagebak_slaapt",
+      "y": 270
+    },
+    "facing=west,snoet=werkt": {
+      "model": "guhs:block/plantagebak_werkt",
+      "y": 270
+    },
+    "facing=west,snoet=vol": {
+      "model": "guhs:block/plantagebak_vol",
+      "y": 270
     }
   }
 }

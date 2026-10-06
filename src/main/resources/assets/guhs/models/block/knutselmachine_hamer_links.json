@@ -1,0 +1,145 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/knutselmachine_hamer",
+    "hamer": "guhs:block/knutselmachine_hamer"
+  },
+  "elements": [
+    {
+      "from": [
+        3,
+        16.5,
+        7.5
+      ],
+      "to": [
+        4,
+        17.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            1,
+            7,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            1,
+            7,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            1,
+            7,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            1,
+            7,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            1,
+            7,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            1,
+            7,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        2.5,
+        15.25,
+        6
+      ],
+      "to": [
+        4.5,
+        18.25,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            7,
+            2,
+            10
+          ]
+        },
+        "south": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            7,
+            2,
+            10
+          ]
+        },
+        "west": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            7,
+            2,
+            10
+          ]
+        },
+        "east": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            7,
+            2,
+            10
+          ]
+        },
+        "up": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            7,
+            2,
+            10
+          ]
+        },
+        "down": {
+          "texture": "#hamer",
+          "uv": [
+            0,
+            7,
+            2,
+            10
+          ]
+        }
+      }
+    }
+  ]
+}
