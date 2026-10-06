@@ -64,12 +64,9 @@ VASTE_IDS = {
     # tech-quests
     "grote_knabbelmachine": ("block", "De Grote Knabbelmachine", (240, 170, 90)), "perfecte_knabbel": ("item", "Perfecte knabbel", (255, 214, 90)),
     "knabbelmachine_beeldje": ("block", "Knabbelmachine-beeldje", (214, 170, 80)),
-    # ring-kern, ring-h3, ring-h5
-    "knabbelring": ("item", "De Knabbelring", (255, 200, 60)), "lichtflesje": ("item", "Lichtflesje", (220, 244, 255)),
-    "elfenmanteltje": ("item", "Elfenmanteltje", (140, 180, 130)), "elfentouw": ("item", "Elfentouw", (220, 210, 180)),
-    "elfentouw_haak": ("block", "Elfentouwhaak", (170, 170, 180)), "smikagol": ("entity", "Smikagol", None),
-    "knekel_ruiter": ("entity", "Knekel-Mika-ruiter", None), "barbecuerog": ("entity", "De Barbecuerog", None),
-    "oog_van_sausron": ("entity", "Het Oog van Sausron", None),
+    # (ring-kern's rows went at its merge too: the Knabbelring, the three gifts, the Elfentouwhaak, Smikagol and the rider)
+    # ring-h3, ring-h5
+    "barbecuerog": ("entity", "De Barbecuerog", None), "oog_van_sausron": ("entity", "Het Oog van Sausron", None),
     "oog_van_sausron_beeldje": ("block", "Beeldje van het Oog van Sausron", (240, 130, 50)),
 }
 # the reserved Brouwsels (Brouwsel.java): id -> the name of what bubbles in the pan
