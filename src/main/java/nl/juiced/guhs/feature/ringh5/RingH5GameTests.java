@@ -399,6 +399,19 @@ public final class RingH5GameTests {
         // outside the camp nothing happens
         Hoofdstuk.seconde(p);
         helper.assertTrue(lijn.stap(p) == Hoofdstuk.AANKOMEN && !Verteller.gezien(p, Scenes.KAART), "not at the camp yet");
+        // where the compass points: inside the valley at the camp, outside it at the way in with the least rock in front
+        helper.assertTrue(Hoofdstuk.inBouw(kamp, p.position()) && kamp.wereld(Plekken.VUUR_KAMP).equals(Hoofdstuk.doel(p, Hoofdstuk.AANKOMEN).plek()),
+                "in the valley the goal of step 0 is the camp fire");
+        naar(p, kamp.midden(Plekken.INGANGEN.get(0).offset(2, 0, -5)));
+        Hoofdstuk.seconde(p);
+        helper.assertTrue(!Hoofdstuk.inBouw(kamp, p.position()) && Hoofdstuk.hier(p) != null, "just outside the mouth: at the valley, not in it");
+        helper.assertTrue(kamp.wereld(Plekken.INGANGEN.get(0)).equals(Hoofdstuk.doel(p, Hoofdstuk.AANKOMEN).plek()), "outside it the goal is a way in: the mouth, the nearest");
+        BlockPos voorDeMond = kamp.wereld(Plekken.INGANGEN.get(0).offset(0, 1, -1));
+        helper.assertTrue(Hoofdstuk.rotsVoor(level, kamp, 0) == 0, "the mouth is open");
+        level.setBlock(voorDeMond, net.minecraft.world.level.block.Blocks.STONE.defaultBlockState(), 2);
+        helper.assertTrue(Hoofdstuk.rotsVoor(level, kamp, 0) == 1, "a block of rock right in front of the mouth is counted");
+        level.setBlock(voorDeMond, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 2);
+        zet(helper, p, new BlockPos(30, 2, 30));
         GuhNpcEntity boromika = Cast.zet(level, GuhNpcEntity.Kind.BOROMIKA, kamp.midden(Plekken.BOROMIKA), 120f, RingH5Feature.BOROMIKA_PLEK);
         Map<String, Vec3> onthoud = new HashMap<>();
         int[] fase = {0};

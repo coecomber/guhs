@@ -184,17 +184,13 @@ final class RingH5Commands {
             fout += deur == 9 ? 0 : 1;
         }
         // the three ways in: is there air right outside the build (else a player digs the last blocks)?
-        int[][] naarBuiten = {{0, -1}, {-1, 0}, {1, 0}};
         String[] namen = {"mouth", "west tunnel", "east tunnel"};
         s.append(", ways in:");
         for (int i = 0; i < Plekken.INGANGEN.size(); i++) {
-            int rots = 0;
-            while (rots < 12 && level.isLoaded(t.wereld(Plekken.INGANGEN.get(i).offset(naarBuiten[i][0] * (rots + 1), 0, naarBuiten[i][1] * (rots + 1))))
-                    && level.getBlockState(t.wereld(Plekken.INGANGEN.get(i).offset(naarBuiten[i][0] * (rots + 1), 1, naarBuiten[i][1] * (rots + 1)))).blocksMotion()) {
-                rots++;
-            }
-            s.append(" ").append(namen[i]).append(rots == 0 ? " open" : rots >= 12 ? " 12+ blocks of rock" : " " + rots + " blocks of rock");
+            int rots = Hoofdstuk.rotsVoor(level, t, i);
+            s.append(" ").append(namen[i]).append(rots == 0 ? " open" : rots >= Hoofdstuk.INGANG_KIJK ? " " + rots + "+ blocks of rock" : " " + rots + " blocks of rock");
         }
+        s.append(" (the compass points at the ").append(namen[Hoofdstuk.besteIngang(level, t, c.getSource().getPosition())]).append(")");
         AABB doos = t.doos(List.of(BlockPos.ZERO, Plekken.MAAT));
         int ogen = level.getEntitiesOfClass(OogEntity.class, doos, Entity::isAlive).size();
         int wachters = level.getEntitiesOfClass(RoosterwachterEntity.class, doos, Entity::isAlive).size();

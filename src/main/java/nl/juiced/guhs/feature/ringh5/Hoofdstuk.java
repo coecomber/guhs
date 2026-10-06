@@ -80,11 +80,18 @@ public final class Hoofdstuk {
     public static final double BIJ = 4.5;
     /** The Lichtflesje blows the smoke away from this near (blocks from the smoke's box). */
     public static final double LICHT_BEREIK = 10;
+    /** From this far (blocks from a piece of the valley) the compass of a player at step 0 points at a way in. */
+    public static final int NADER_BEREIK = 96;
+    /** How far outside a way in the rock is counted (blocks), and how long the answer is kept (ticks). */
+    public static final int INGANG_KIJK = 12, INGANG_ONTHOUD = 600;
     /** Sauce that welled up in the valley is filled in again this near a player (blocks, per axis). */
     public static final int SAUS_BEREIK = 7;
 
     /** (not saved) the copy each player of this chapter is in right now. */
     private static final Map<UUID, Terrein> HIER = new ConcurrentHashMap<>();
+    /** (not saved) the copy a player at step 0 is walking up to, and per copy which way in is the most open (looked at now and then). */
+    private static final Map<UUID, Terrein> NADERT = new ConcurrentHashMap<>();
+    private static final Map<Terrein, long[]> BESTE_INGANG = new ConcurrentHashMap<>();
     /** (not saved) the step Smikagol is leading each player for. */
     private static final Map<UUID, Integer> LEIDT = new ConcurrentHashMap<>();
     private static final Map<UUID, Long> BERICHT = new ConcurrentHashMap<>();
@@ -116,9 +123,17 @@ public final class Hoofdstuk {
         Terrein t = Terrein.bij(p.level(), p.blockPosition());
         if (t == null) {
             HIER.remove(p.getUUID());
+            // (still walking up to it: from this far the compass already points at the best way in, not at the valley's middle)
+            Terrein ver = lijn().stap(p) == AANKOMEN ? Terrein.zoek(p.level(), p.blockPosition(), NADER_BEREIK) : null;
+            if (ver != null) {
+                NADERT.put(p.getUUID(), ver);
+            } else {
+                NADERT.remove(p.getUUID());
+            }
             return;
         }
         HIER.put(p.getUUID(), t);
+        NADERT.remove(p.getUUID());
         int stap = lijn().stap(p);
         rook(p, t);
         dempSaus(p, t);
@@ -503,8 +518,15 @@ public final class Hoofdstuk {
     @Nullable
     static Doel doel(ServerPlayer p, int stap) {
         Terrein t = HIER.get(p.getUUID());
+        if (t == null && stap == AANKOMEN) {
+            t = NADERT.get(p.getUUID());
+        }
         if (t == null || !t.isIn(p.level())) {
             return Ring.doel(5);
+        }
+        if (stap == AANKOMEN && !inBouw(t, p.position())) {
+            // outside the valley: to the way in with the least rock in front of it
+            return Doel.plek(t.dim(), t.wereld(Plekken.INGANGEN.get(besteIngang(p.level(), t, p.position()))), Component.translatable("gui.guhs.ringh5.doel.ingang"));
         }
         BlockPos lokaal = switch (stap) {
             case AANKOMEN, BOROMIKA -> Plekken.VUUR_KAMP;
@@ -518,6 +540,53 @@ public final class Hoofdstuk {
             default -> Plekken.VUUR_ACHTER;
         };
         return Doel.plek(t.dim(), t.wereld(lokaal), Component.translatable("gui.guhs.ringh5.doel." + Math.min(stap, ACHTER)));
+    }
+
+    /** Is this world position inside the build itself (its box, not the margin around it)? */
+    static boolean inBouw(Terrein t, Vec3 wereld) {
+        Vec3 l = t.lokaal(wereld);
+        return l.x >= 0 && l.z >= 0 && l.y >= 0 && l.x < Plekken.MAAT.getX() && l.z < Plekken.MAAT.getZ() && l.y < Plekken.MAAT.getY();
+    }
+
+    /** Which way out of the build a way in points (x, z in the build): the mouth to -z, the tunnels to -x and +x. */
+    private static final int[][] NAAR_BUITEN = {{0, -1}, {-1, 0}, {1, 0}};
+
+    /**
+     * How many blocks of rock lie right outside this way in ({@link Plekken#INGANGEN}), at head height, up to
+     * {@link #INGANG_KIJK}: 0 = a cave comes right up to it. The valley is placed where the cave is most open, but it may
+     * still stand with a side in solid rock (outside the build a player can dig, inside nobody can).
+     */
+    public static int rotsVoor(ServerLevel level, Terrein t, int ingang) {
+        BlockPos van = Plekken.INGANGEN.get(ingang);
+        int rots = 0;
+        while (rots < INGANG_KIJK) {
+            BlockPos pos = t.wereld(van.offset(NAAR_BUITEN[ingang][0] * (rots + 1), 1, NAAR_BUITEN[ingang][1] * (rots + 1)));
+            if (!level.isLoaded(pos) || !level.getBlockState(pos).blocksMotion()) {
+                break;
+            }
+            rots++;
+        }
+        return rots;
+    }
+
+    /** The way in with the least rock in front of it (the nearest one when it makes no difference); kept for a while. */
+    static int besteIngang(ServerLevel level, Terrein t, Vec3 hier) {
+        long nu = level.getGameTime();
+        long[] oud = BESTE_INGANG.get(t);
+        if (oud != null && nu >= oud[1] && nu - oud[1] < INGANG_ONTHOUD) {
+            return (int) oud[0];
+        }
+        int beste = 0;
+        double besteScore = Double.MAX_VALUE;
+        for (int i = 0; i < Plekken.INGANGEN.size(); i++) {
+            double score = rotsVoor(level, t, i) * 1000.0 + t.midden(Plekken.INGANGEN.get(i)).distanceTo(hier);
+            if (score < besteScore) {
+                besteScore = score;
+                beste = i;
+            }
+        }
+        BESTE_INGANG.put(t, new long[]{beste, nu});
+        return beste;
     }
 
     // =====================================================================================================================
@@ -576,12 +645,15 @@ public final class Hoofdstuk {
 
     static void vergeet(UUID speler) {
         HIER.remove(speler);
+        NADERT.remove(speler);
         LEIDT.remove(speler);
         BERICHT.remove(speler);
     }
 
     static void wisAlles() {
         HIER.clear();
+        NADERT.clear();
+        BESTE_INGANG.clear();
         LEIDT.clear();
         BERICHT.clear();
         Terrein.wisAlles();

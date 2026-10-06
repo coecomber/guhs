@@ -68,6 +68,7 @@ TEKSTEN = {
     "gui.guhs.ringh5.doel.7": "Het vuurtje bij het Roosterpoortje",
     "gui.guhs.ringh5.doel.8": "Het Roosterpoortje",
     "gui.guhs.ringh5.doel.9": "Het vuurtje achter de muur",
+    "gui.guhs.ringh5.doel.ingang": "De ingang van het dal van de Zwarte Roosterpoort",
     "gui.guhs.ringh5.beloning.gids": "Smikagol wijst je de weg",
 }
 
