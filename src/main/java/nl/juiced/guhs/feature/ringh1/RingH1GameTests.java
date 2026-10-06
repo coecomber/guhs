@@ -239,7 +239,7 @@ public final class RingH1GameTests {
      * An old big barbecueput (a structure start made by hand around the template barbecueput_groot): Bezetting puts the camp
      * on the first free spot of the strip around it, then Guhdalf and Sam-guh at the camp; the frame of the pit is found.
      */
-    @GuhTest(template = KAMER, batch = BATCH + "_kamp", timeoutTicks = 300)
+    @GuhTest(template = KAMER, batch = BATCH + "_kamp", timeoutTicks = 2400)
     public static void ringh1KampBijOudePut(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         String[] ids = {Gouw.KAMP, Gouw.GUHDALF_KAMP, Gouw.SAM_KAMP};
@@ -263,6 +263,7 @@ public final class RingH1GameTests {
                 if (level.setChunkForced(x, z, true)) {
                     geforceerd.add(new ChunkPos(x, z));
                 }
+                level.getChunk(x, z);   // (now, not "some time": the test server runs its ticks faster than chunks get made)
             }
         }
         boolean[] gedaan = {false};

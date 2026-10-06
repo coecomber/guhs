@@ -383,7 +383,10 @@ public final class Gouw {
         return put.distSqr(van) < gouw.distSqr(van) ? put : gouw;
     }
 
-    /** The nearest big barbecueput (a start of guhs:barbecueput whose piece is barbecueput_groot) nearer than {@code binnen} (squared). */
+    /**
+     * The nearest big barbecueput (a start of guhs:barbecueput whose piece is barbecueput_groot) nearer than {@code binnen}
+     * (squared), in land that exists already (a new big pit is always a Knabbelgouw, which the caller looks for itself).
+     */
     @Nullable
     private static BlockPos oudePut(ServerLevel level, BlockPos van, double binnen) {
         Optional<Holder.Reference<Structure>> holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(ResourceKey.create(Registries.STRUCTURE, Guhs.id(PUT)));
@@ -410,9 +413,13 @@ public final class Gouw {
         kandidaten.sort(Comparator.comparingLong(Kandidaat::afstand));
         Structure structuur = holder.get().value();
         Bezetting.Geplaatst geplaatst = Bezetting.Geplaatst.get(level);
+        nl.juiced.guhs.world.NieuwTerrein terrein = nl.juiced.guhs.world.NieuwTerrein.van(level);
         for (Kandidaat k : kandidaten) {
             if (k.afstand() * 256.0 > binnen + 4 * 256.0 * 16) {
                 break;   // (everything from here on is further away than what was found already)
+            }
+            if (!terrein.bestaat(k.chunk().x(), k.chunk().z())) {
+                continue;   // (land that was never made has no old pit: nothing is generated for this question)
             }
             if (level.structureManager().checkStructurePresence(k.chunk(), structuur, k.placement(), false) == StructureCheckResult.START_NOT_PRESENT) {
                 continue;

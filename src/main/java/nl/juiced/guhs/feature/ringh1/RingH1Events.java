@@ -42,8 +42,9 @@ import nl.juiced.guhs.quest.GuhQuests;
  *       ends at the portal ({@link Feest}). About every two seconds: the camps around are protected boxes.</li>
  *   <li>Nobody tramples Sam-guh's moestuin.</li>
  *   <li>{@code /guhs ringh1 stand | zoek | vuurwerk | wis}, and in a dev run {@code kamp} (the camp with Guhdalf and Sam-guh
- *       where you stand) and {@code gouw} (the whole Knabbelgouw template where you stand): for AutoCheck scripts and dev
- *       checks. The texts are literals (dev tools).</li>
+ *       where you stand), {@code gouw} (the whole Knabbelgouw template where you stand) and {@code dump <structuur> [marge]}
+ *       (a generated copy with the land around it as a template file): for AutoCheck scripts and dev checks. The texts are
+ *       literals (dev tools).</li>
  * </ul>
  */
 public final class RingH1Events {
@@ -109,6 +110,11 @@ public final class RingH1Events {
                 ServerPlayer p = c.getSource().getPlayerOrException();
                 return zeg(c, zetKamp(p.level(), p.blockPosition().below(), Rotation.NONE) ? "the camp, Guhdalf and Sam-guh are here" : "no template " + Gouw.KAMP_TEMPLATE);
             }));
+            ringh1.then(Commands.literal("dump").then(Commands.argument("structuur", com.mojang.brigadier.arguments.StringArgumentType.word())
+                    .executes(c -> dump(c.getSource(), com.mojang.brigadier.arguments.StringArgumentType.getString(c, "structuur"), 14))
+                    .then(Commands.argument("marge", com.mojang.brigadier.arguments.IntegerArgumentType.integer(0, 64))
+                            .executes(c -> dump(c.getSource(), com.mojang.brigadier.arguments.StringArgumentType.getString(c, "structuur"),
+                                    com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "marge"))))));
             ringh1.then(Commands.literal("gouw").executes(c -> {
                 ServerPlayer p = c.getSource().getPlayerOrException();
                 return zeg(c, zetGouw(p.level(), p.blockPosition().below(Gouw.G + 1)) ? "the Knabbelgouw template is here (no residents: that is Bezetting's work)"
@@ -138,14 +144,45 @@ public final class RingH1Events {
         return 1 + l.stap(p);
     }
 
-    private static int zoek(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
-        ServerPlayer p = c.getSource().getPlayerOrException();
-        BlockPos daar = Gouw.zoek(p.level(), p.blockPosition());
-        Gouw.Plek kamp = Gouw.kampBijPut(p.level(), p.blockPosition());
-        zeg(c, "nearest Guhdalf: " + (daar == null ? "none found" : daar.toShortString() + " (" + (int) Math.sqrt(daar.distSqr(p.blockPosition())) + " blocks)")
+    /** Where the nearest Guhdalf is, seen from the source (a player, or the console with /execute in ... positioned ...). */
+    private static int zoek(CommandContext<CommandSourceStack> c) {
+        ServerLevel level = c.getSource().getLevel();
+        BlockPos hier = BlockPos.containing(c.getSource().getPosition());
+        BlockPos daar = Gouw.zoek(level, hier);
+        Gouw.Plek kamp = Gouw.kampBijPut(level, hier);
+        zeg(c, "nearest Guhdalf: " + (daar == null ? "none found" : daar.toShortString() + " (" + (int) Math.sqrt(daar.distSqr(hier)) + " blocks)")
                 + "; camp of the old pit here: " + (kamp == null ? "none" : kamp.hoek().toShortString() + " " + kamp.draai())
-                + "; frame here: " + Optional.ofNullable(Gouw.frame(p.level(), p.blockPosition())).map(BlockPos::toShortString).orElse("none"));
+                + "; frame here: " + Optional.ofNullable(Gouw.frame(level, hier)).map(BlockPos::toShortString).orElse("none"));
         return daar == null ? 0 : 1;
+    }
+
+    /**
+     * (dev) the copy of this structure around the source with `marge` blocks of land around it and 6 under it, as a template
+     * file in the server folder (ringh1_dump_&lt;structuur&gt;.nbt): to draw what worldgen really made.
+     */
+    private static int dump(CommandSourceStack source, String structuur, int marge) {
+        ServerLevel level = source.getLevel();
+        net.minecraft.world.level.levelgen.structure.StructureStart start = nl.juiced.guhs.feature.wereld.Bezetting.start(level, structuur,
+                BlockPos.containing(source.getPosition()));
+        if (start == null) {
+            source.sendFailure(Component.literal("no copy of guhs:" + structuur + " here"));
+            return 0;
+        }
+        net.minecraft.world.level.levelgen.structure.BoundingBox box = start.getBoundingBox();
+        BlockPos hoek = new BlockPos(box.minX() - marge, Math.max(level.getMinY(), box.minY() - 6), box.minZ() - marge);
+        BlockPos maat = new BlockPos(box.getXSpan() + 2 * marge, Math.min(level.getMaxY(), box.maxY() + 8) - hoek.getY() + 1, box.getZSpan() + 2 * marge);
+        StructureTemplate template = new StructureTemplate();
+        template.fillFromWorld(level, hoek, maat, true, java.util.List.of());
+        var file = level.getServer().getServerDirectory().resolve("ringh1_dump_" + structuur + ".nbt");
+        try {
+            net.minecraft.nbt.NbtIo.writeCompressed(template.save(new CompoundTag()), file);
+        } catch (java.io.IOException e) {
+            source.sendFailure(Component.literal("dump failed: " + e));
+            return 0;
+        }
+        source.sendSuccess(() -> Component.literal("dumped " + box + " (turned " + nl.juiced.guhs.feature.wereld.Kopieen.draai(start, null) + ") from corner "
+                + hoek.toShortString() + " to " + file), false);
+        return 1;
     }
 
     /** (dev, tests) forget chapter 1 of this player: the questline, the card and the scenes, the camp they started at. */

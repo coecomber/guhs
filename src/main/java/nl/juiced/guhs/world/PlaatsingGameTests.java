@@ -165,7 +165,8 @@ public class PlaatsingGameTests {
             }
         }
         LOGGER.info("Plaatsing: {} guaranteed ({}), {} story starts within 900 blocks, problems: {}", found, report, stories, fouten);
-        helper.assertTrue(found == MINIGAMES.size() + LANDMARKS.size(), "every guaranteed set is in the Guhmension: " + found);
+        // (bbq2 ring-h1: + the Knabbelgouw, the one guaranteed set of the Guhmensie that is no minigame or landmark)
+        helper.assertTrue(found == MINIGAMES.size() + LANDMARKS.size() + 1, "every guaranteed set is in the Guhmension: " + found);
         helper.assertTrue(fouten.isEmpty(), "guaranteed copies in their ring, no story near spawn: " + fouten);
         helper.succeed();
     }
