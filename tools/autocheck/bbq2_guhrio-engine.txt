@@ -189,9 +189,7 @@ wait 20
 wait 5
 /tp @s 6107.5 108 6092.5
 wait 10
-key use on
-wait 2
-key use off
+/guhs guhrio gooi
 wait 6
 shot level_2_2_01_knabbel gui
 /tp @s 6107.5 108 6052.5

@@ -94,18 +94,14 @@ public final class GuhrioClient {
                     @Override
                     public <T extends net.minecraft.world.entity.Avatar & net.minecraft.client.entity.ClientAvatarEntity> void accept(
                             T avatar, net.minecraft.client.renderer.entity.state.AvatarRenderState state) {
-                        if (opGuhshi(avatar)) {
+                        boolean op = opGuhshi(avatar);
+                        state.setRenderData(OP_GUHSHI, op ? Boolean.TRUE : null);
+                        if (op) {
                             state.isPassenger = true;
-                            state.setRenderData(OP_GUHSHI, true);
                         }
                     }
                 }));
-        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.RenderPlayerEvent.Pre<?> event) -> {
-            if (Boolean.TRUE.equals(event.getRenderState().getRenderData(OP_GUHSHI))) {
-                event.getPoseStack().translate(0, ZIT_HOOGTE, 0);
-            }
-        });
-        modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(GuhrioHud.LAAG, GuhrioHud::teken));
+        NeoForge.EVENT_BUS.register(Zit.class);
         GuhrioSpel.client = new GuhrioSpel.ClientKant() {
             @Override
             public boolean speelt(Player player) {
@@ -202,6 +198,32 @@ public final class GuhrioClient {
     /** What a piece is for you (0 as built). */
     public static int staat(BlockPos pos) {
         return banen == null ? 0 : STAAT.getOrDefault(pos, 0);
+    }
+
+    /** Lifts a player who sits on a level's Guhshi onto his back (the pose is put back after the player is drawn). */
+    public static final class Zit {
+        private static final net.minecraft.util.context.ContextKey<Boolean> GETILD = new net.minecraft.util.context.ContextKey<>(Guhs.id("guhrio_getild"));
+
+        private Zit() {
+        }
+
+        @net.neoforged.bus.api.SubscribeEvent
+        public static void voor(net.neoforged.neoforge.client.event.RenderLivingEvent.Pre<?, ?, ?> event) {
+            if (Boolean.TRUE.equals(event.getRenderState().getRenderData(OP_GUHSHI))) {
+                event.getPoseStack().pushPose();
+                event.getPoseStack().translate(0, ZIT_HOOGTE, 0);
+                event.getRenderState().setRenderData(GETILD, Boolean.TRUE);
+            }
+        }
+
+        @net.neoforged.bus.api.SubscribeEvent
+        public static void na(net.neoforged.neoforge.client.event.RenderLivingEvent.Post<?, ?, ?> event) {
+            if (event.getRenderState().getRenderData(GETILD) != null) {
+                event.getRenderState().setRenderData(GETILD, null);
+                event.getRenderState().setRenderData(OP_GUHSHI, null);
+                event.getPoseStack().popPose();
+            }
+        }
     }
 
     /** Is switch channel k on for you? */

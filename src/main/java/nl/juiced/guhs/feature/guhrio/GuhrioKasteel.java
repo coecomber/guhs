@@ -39,6 +39,8 @@ public final class GuhrioKasteel {
     public static final String DUEL = "kasteel_duel";
     /** The Scorebord / Highscores board of the whole castle in one go. */
     public static final String BORD_KASTEEL = "guhrio_kasteel";
+    /** The castle's group in the Minigames tab of the Guhdex (also the clothes source of the reward slice). */
+    public static final String GROEP = "guhrio_beloning";
     /** How many big vadsmunten there are in all. */
     public static final int VADSMUNTEN = LEVELS.size() * 3;
 
@@ -65,6 +67,15 @@ public final class GuhrioKasteel {
         nl.juiced.guhs.feature.wereld.Bescherming.registreer(STRUCTUUR, 4);
         nl.juiced.guhs.item.SuperkompasItem.voegToe("barbecue", STRUCTUUR);
         nl.juiced.guhs.feature.Minigames.registerGame(nl.juiced.guhs.feature.Minigames.GUHRIO, p -> GuhrioSpel.sessie(p) != null);
+        // the castle's group in the Minigames tab of the Guhdex: its Highscores rows, and (the group's id is their source) the
+        // clothes of the reward slice. Without a structure: the castle is in the Superkompas tab "barbecue", not "minigames",
+        // and is no building of the explorer advancements.
+        List<String> rijen = new ArrayList<>(List.of(BORD_KASTEEL));
+        LEVELS.forEach(id -> rijen.add(bord(id)));
+        nl.juiced.guhs.feature.spelen.SpelGroepen.groep(new nl.juiced.guhs.feature.spelen.SpelGroepen.Groep(GROEP,
+                nl.juiced.guhs.feature.spelen.SpelGroepen.Tijdperk.VERHALEN,
+                nl.juiced.guhs.feature.spelen.SpelGroepen.icoon("guhrio_vadsmunt", net.minecraft.world.item.Items.GOLD_NUGGET), null,
+                nl.juiced.guhs.entity.GuhNpcEntity.Kind.PADGUH, rijen));
     }
 
     /** The Scorebord board of a level ("guhrio_1_1"). */

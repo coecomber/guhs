@@ -369,6 +369,12 @@ public final class GuhrioSpel {
         s.eten = player.getFoodData().getFoodLevel();
         s.verzadiging = player.getFoodData().getSaturationLevel();
         SESSIES.put(player.getUUID(), s);
+        // (remembered with the player: whoever is still "in a level" at a login never left it properly - a crashed server)
+        BlockPos ingang = actief.level.ingang();
+        if (ingang != null) {
+            spaar(player).putLong("Binnen", ingang.asLong());
+            spaar(player).putString("BinnenDim", level.dimension().identifier().toString());
+        }
         GuhrioKasteel.begin(player, s);
         for (Stuk stuk : actief.stukken) {
             if (stuk.state.getBlock() instanceof GuhrioStuk blok) {
@@ -407,6 +413,8 @@ public final class GuhrioSpel {
         }
         zetLijf(player, false);
         zetGroot(player, false);
+        spaar(player).remove("Binnen");
+        spaar(player).remove("BinnenDim");
         if (s.guhshiDier != null) {
             s.guhshiDier.discard();
             s.guhshiDier = null;
@@ -427,6 +435,26 @@ public final class GuhrioSpel {
             player.teleportTo(uit.getX() + 0.5, uit.getY(), uit.getZ() + 0.5);
         } else if (reden == Einde.GESTOPT && ingang != null) {
             player.setDeltaMovement(Vec3.ZERO);
+            player.teleportTo(ingang.getX() + 0.5, ingang.getY(), ingang.getZ() + 0.5);
+        }
+    }
+
+    /**
+     * A player logs in. Somebody the server lost in the middle of a level (it crashed: the level halls of the castle are
+     * sealed) is put at that level's entrance, and the level's jump, weight and size are taken off again.
+     */
+    public static void login(ServerPlayer player) {
+        CompoundTag spaar = spaar(player);
+        zetLijf(player, false);
+        zetGroot(player, false);
+        if (!spaar.contains("Binnen") || SESSIES.containsKey(player.getUUID())) {
+            return;
+        }
+        BlockPos ingang = BlockPos.of(spaar.getLongOr("Binnen", 0L));
+        boolean hier = player.level().dimension().identifier().toString().equals(spaar.getStringOr("BinnenDim", ""));
+        spaar.remove("Binnen");
+        spaar.remove("BinnenDim");
+        if (hier) {
             player.teleportTo(ingang.getX() + 0.5, ingang.getY(), ingang.getZ() + 0.5);
         }
     }

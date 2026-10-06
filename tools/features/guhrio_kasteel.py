@@ -692,6 +692,38 @@ def controleer_camera(b, banen):
     return fouten[:20]
 
 
+HANGT = ("wall_sign", "wall_hanging_sign", "wall_banner", "wall_torch", "ladder", "lever", "_button", "tripwire_hook", "cocoa", "_bed")
+STAP = {"north": (0, -1), "south": (0, 1), "west": (-1, 0), "east": (1, 0)}
+
+
+def controleer_naden(b):
+    """
+    A guhs:burcht is placed tile by tile and chunk by chunk, and a block whose support (or other half) lies in a bit that
+    is placed later breaks off (found by the paleizen slice on real copies: ladders and bed halves gone). The seams are the
+    tile edges and the chunk edges; the anchor stands on block 8 of its chunk and a turned copy shifts the edge by one. So
+    nothing that hangs on a wall (signs, ladders, banners, torches, buttons...) and no bed may straddle such a pair of
+    columns - in the shell, and in whatever a level or a room of another slice put into the castle.
+    """
+    def naad(c, anker):
+        return (c - anker) % 16 in (7, 8) or c % sb.TILE == sb.TILE - 1
+
+    fouten = []
+    for (x, y, z), (naam, props, _nbt) in b.s.blocks.items():
+        if not any(k in naam for k in HANGT) or "facing" not in props or props["facing"] not in STAP:
+            continue
+        dx, dz = STAP[props["facing"]]
+        if "_bed" in naam:
+            if props.get("part") != "foot":
+                continue                                         # (the head lies one further the way the bed faces)
+        else:
+            dx, dz = -dx, -dz                                     # (its support is behind it)
+        c, anker = (min(x, x + dx), ANKER[0]) if dx else (min(z, z + dz), ANKER[2])
+        if naad(c, anker):
+            fouten.append(f"{NAAM}: {naam} at {(x, y, z)} hangs across a tile / chunk seam (its other block is at {(x + dx, y, z + dz)}): "
+                          f"move it one or two blocks")
+    return fouten[:20]
+
+
 # =====================================================================================================================
 def bouw(h):
     """Builds the whole castle; returns (Bouw, lane builders, problems)."""
@@ -726,7 +758,7 @@ def bouw(h):
         for fn in (fns if fns else ([standaard] if standaard else [])):
             fn(plek)
     banen = levels(h, b, poorten)
-    problems += controleer_camera(b, banen)
+    problems += controleer_camera(b, banen) + controleer_naden(b)
     return b, banen, problems
 
 

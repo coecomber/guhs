@@ -43,6 +43,7 @@ import nl.juiced.guhs.Guhs;
  * /guhs guhrio bouwkasteel &lt;pos&gt;   (dev runs only) the whole castle, unturned, with its corner there
  * /guhs guhrio guhshi &lt;0|1&gt;        Guhshi carries you / not
  * /guhs guhrio kanaal &lt;k&gt; &lt;0|1&gt;    switch channel k off / on for you
+ * /guhs guhrio gooi                what a mouse button does: a knabbel (Vuurpeper) or Guhshi's tongue, further along the lane
  * /guhs guhrio ei                  you found Guhshi's egg
  * /guhs guhrio gehaald &lt;level&gt;     this level counts as finished for you (kasteel_1_1 ... kasteel_3_2)
  * /guhs guhrio munten &lt;n&gt;          n level coins in your pocket
@@ -73,6 +74,13 @@ public final class GuhrioEvents {
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
         GuhrioSpel.serverTick(event.getServer());
+    }
+
+    @SubscribeEvent
+    public static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            GuhrioSpel.login(player);
+        }
     }
 
     @SubscribeEvent
@@ -195,6 +203,11 @@ public final class GuhrioEvents {
                             GuhrioSpel.zetKanaal(p, s, IntegerArgumentType.getInteger(c, "k"), IntegerArgumentType.getInteger(c, "n") == 1);
                             return 1;
                         }))))
+                .then(Commands.literal("gooi").executes(c -> {
+                    ServerPlayer p = c.getSource().getPlayerOrException();
+                    GuhrioSpel.Sessie s = GuhrioSpel.sessie(p);
+                    return s != null && (s.guhshi ? GuhrioSpel.tong(p, s, 1) : GuhrioSpel.gooi(p, s, 1)) ? 1 : 0;
+                }))
                 .then(Commands.literal("ei").executes(c -> GuhrioKasteel.geefEi(c.getSource().getPlayerOrException()) ? 1 : 0))
                 .then(Commands.literal("gehaald").then(Commands.argument("id", StringArgumentType.word()).executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();

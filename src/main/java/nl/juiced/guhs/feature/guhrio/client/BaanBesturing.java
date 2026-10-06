@@ -336,7 +336,8 @@ public final class BaanBesturing {
     private static void onzichtbaar(LocalPlayer p, Level level, Direction d, double vy) {
         AABB box = p.getBoundingBox();
         for (double uit : new double[]{0, 0.29, -0.29}) {
-            for (double y = box.maxY; y <= box.maxY + vy + 0.05; y += 0.5) {
+            // (the cell your head is about to enter: a rise is less than a block a tick, so its top now and after the step)
+            for (double y : new double[]{box.maxY + 0.01, box.maxY + vy + 0.05}) {
                 BlockPos pos = BlockPos.containing(p.getX() + d.getStepX() * uit, y, p.getZ() + d.getStepZ() * uit);
                 if (level.getBlockState(pos).getBlock() instanceof GuhrioStukken.OnzichtbaarBlok && GuhrioClient.staat(pos) == 0
                         && box.maxY <= pos.getY() + 1e-3) {
