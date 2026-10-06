@@ -1,0 +1,113 @@
+# Bezorgguhtje (bbq2, slice tech-bezorg) AutoCheck: the guhtje on its step, the Stepstation with its faces, the two kinds of
+# Haltepaaltje, a round that really delivers, the two screens, the hover readout, the Guhdex page. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_tech-bezorg.txt
+# (commands: see autocheck.txt; /guhs techbezorg says what every Stepstation near you does; /guhs techbezorg fluit = the whistle)
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:grass_block
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode creative
+/tp @s 3000 140 3008
+wait 40
+
+section the blocks: a Stepstation asleep (no vadskracht) and one awake, an ophalen pole, an afleveren pole, one on a chest
+/setblock 2994 140 3000 guhs:stepstation[facing=south]
+/setblock 2997 140 2999 guhs:vadskracht_testbron[kracht=1]
+/setblock 2997 140 3000 guhs:stepstation[facing=south]
+/setblock 3000 140 2999 minecraft:chest[facing=south]
+/setblock 3000 140 3000 guhs:haltepaaltje[facing=north,ophalen=true]
+/setblock 3002 140 2999 minecraft:chest[facing=south]
+/setblock 3002 140 3000 guhs:haltepaaltje[facing=north,ophalen=false]
+/setblock 3004 140 3000 minecraft:barrel
+/setblock 3004 141 3000 guhs:haltepaaltje[facing=down,ophalen=true]
+wait 60
+/gamemode spectator
+camera 2999.5 142.2 3006.5 180 16
+waitrender 300
+shot bezorg_blokken
+camera 2996.0 141.2 3003.6 180 6
+wait 20
+shot bezorg_stations_dichtbij
+/gamemode creative
+
+section the guhtje: two without a station (spawn egg), from the front and from behind
+/summon guhs:bezorgguhtje 2986.5 140 3004.5 {NoAI:1b,Rotation:[0f,0f]}
+/summon guhs:bezorgguhtje 2988.5 140 3004.5 {NoAI:1b,Rotation:[180f,0f]}
+wait 20
+/gamemode spectator
+camera 2987.5 140.9 3007.6 180 8
+wait 20
+shot bezorgguhtje_voor_en_achter
+camera 2990.6 141.0 3004.5 90 8
+wait 20
+shot bezorgguhtje_opzij
+/gamemode creative
+/kill @e[type=guhs:bezorgguhtje,nbt={NoAI:1b}]
+
+section a working round (dev command): the guhtje takes the kaasknabbels to the other chest and leaves the cobblestone
+/tp @s 3000 140 2990 0 0
+wait 20
+/tp @s 3000 140 2990 0 0
+wait 10
+/guhs techbezorg proef
+wait 60
+/guhs techbezorg
+/gamemode spectator
+camera 3004.0 143.5 2988.0 320 22
+waitrender 200
+shot bezorg_ronde_begin
+wait 60
+shot bezorg_ronde_onderweg_1
+wait 60
+shot bezorg_ronde_onderweg_2
+wait 200
+/guhs techbezorg
+shot bezorg_ronde_klaar
+/gamemode creative
+
+section the screens: the Stepstation (backpack, the round) and a Haltepaaltje (ophalen/afleveren, the filter)
+/tp @s 3000.5 140 2991.5 0 20
+wait 20
+gui keep
+use 3000 140 2993
+wait 30
+widgets
+shot bezorg_scherm_station gui
+gui close
+gui keep
+use 2998 140 2998
+wait 30
+widgets
+shot bezorg_scherm_halte gui
+gui close
+
+section hover readout on the Stepstation
+/tp @s 3000.5 140 2991.5 0 25
+wait 20
+/tp @s 3000.5 140 2991.5 0 25
+wait 30
+clearchat
+shot bezorg_hover_station gui
+
+section the whistle: the guhtje comes and its backpack opens
+/give @s guhs:bezorgguhtje_fluitje
+/tp @s 3006.5 140 2986.5 90 10
+wait 20
+gui keep
+/guhs techbezorg fluit
+wait 120
+shot bezorg_fluitje_rugzak gui
+gui close
+
+section Guhdex page
+gui guhdex bezorg_guhdex
+quit
