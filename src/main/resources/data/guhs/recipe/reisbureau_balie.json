@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PSP",
+    "HHH",
+    "H H"
+  ],
+  "key": {
+    "P": "minecraft:paper",
+    "S": "guhs:reisbureau_stempel",
+    "H": "#minecraft:planks"
+  },
+  "result": {
+    "id": "guhs:reisbureau_balie"
+  }
+}

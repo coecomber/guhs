@@ -143,6 +143,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // <px_bioscoop>
         // </px_bioscoop>
         // <px_reisbureau>
+        REISBUREAU_AGENT(1.0f),
         // </px_reisbureau>
         // <px_parkour>
         // </px_parkour>

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/reisbureau_koffertje"
+    },
+    "facing=east": {
+      "model": "guhs:block/reisbureau_koffertje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/reisbureau_koffertje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/reisbureau_koffertje",
+      "y": 270
+    }
+  }
+}

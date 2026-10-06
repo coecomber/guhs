@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/reisbureau_zeldzaam_lingsesdijk"
+    },
+    "facing=east": {
+      "model": "guhs:block/reisbureau_zeldzaam_lingsesdijk",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/reisbureau_zeldzaam_lingsesdijk",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/reisbureau_zeldzaam_lingsesdijk",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/reisbureau_zeldzaam_knuffeldal"
+    },
+    "facing=east": {
+      "model": "guhs:block/reisbureau_zeldzaam_knuffeldal",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/reisbureau_zeldzaam_knuffeldal",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/reisbureau_zeldzaam_knuffeldal",
+      "y": 270
+    }
+  }
+}

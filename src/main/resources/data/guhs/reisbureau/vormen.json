@@ -1,0 +1,444 @@
+{
+  "reisbureau_souvenir_lingsesdijk": {
+    "muur": true,
+    "vorm": [
+      0.5,
+      0.5,
+      14.0,
+      15.5,
+      15.5,
+      16.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_lingsesdijk": {
+    "muur": true,
+    "vorm": [
+      0.5,
+      0.0,
+      14.0,
+      15.5,
+      16.0,
+      16.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_souvenir_kaasmarkt": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      3.0,
+      13.0,
+      13.0,
+      13.5
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_kaasmarkt": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      3.0,
+      13.0,
+      8.0,
+      13.0
+    ],
+    "licht": 0,
+    "effect": "glinster"
+  },
+  "reisbureau_souvenir_vadswoud": {
+    "muur": false,
+    "vorm": [
+      1.5,
+      0.0,
+      2.0,
+      14.5,
+      5.5,
+      14.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_vadswoud": {
+    "muur": false,
+    "vorm": [
+      5.0,
+      0.0,
+      5.0,
+      11.0,
+      12.5,
+      11.0
+    ],
+    "licht": 10,
+    "effect": "glim"
+  },
+  "reisbureau_souvenir_knuffeldal": {
+    "muur": false,
+    "vorm": [
+      4.0,
+      0.0,
+      1.5,
+      12.0,
+      11.0,
+      14.5
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_knuffeldal": {
+    "muur": false,
+    "vorm": [
+      4.0,
+      0.0,
+      4.0,
+      12.0,
+      14.5,
+      12.0
+    ],
+    "licht": 0,
+    "effect": "glinster"
+  },
+  "reisbureau_souvenir_guhwaii": {
+    "muur": false,
+    "vorm": [
+      2.0,
+      0.0,
+      2.0,
+      14.0,
+      13.0,
+      14.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_guhwaii": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      5.0,
+      13.0,
+      16.0,
+      11.0
+    ],
+    "licht": 0,
+    "effect": "glinster"
+  },
+  "reisbureau_souvenir_barbecuether": {
+    "muur": false,
+    "vorm": [
+      1.5,
+      0.0,
+      2.5,
+      14.5,
+      9.5,
+      13.5
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_barbecuether": {
+    "muur": false,
+    "vorm": [
+      1.5,
+      0.0,
+      3.5,
+      14.5,
+      10.0,
+      12.5
+    ],
+    "licht": 0,
+    "effect": "stoom"
+  },
+  "reisbureau_souvenir_efteguh": {
+    "muur": false,
+    "vorm": [
+      2.5,
+      0.0,
+      1.5,
+      13.5,
+      16.0,
+      13.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_efteguh": {
+    "muur": false,
+    "vorm": [
+      2.0,
+      0.0,
+      2.0,
+      14.0,
+      12.5,
+      14.0
+    ],
+    "licht": 4,
+    "effect": "muziek"
+  },
+  "reisbureau_souvenir_guhkenhof": {
+    "muur": false,
+    "vorm": [
+      5.0,
+      0.0,
+      5.5,
+      11.0,
+      14.5,
+      10.5
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_guhkenhof": {
+    "muur": false,
+    "vorm": [
+      5.0,
+      0.0,
+      5.5,
+      11.0,
+      14.5,
+      10.5
+    ],
+    "licht": 0,
+    "effect": "glinster"
+  },
+  "reisbureau_souvenir_nomguh": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      3.0,
+      13.0,
+      12.0,
+      13.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_nomguh": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      3.0,
+      13.0,
+      12.0,
+      13.0
+    ],
+    "licht": 0,
+    "effect": "sneeuw"
+  },
+  "reisbureau_souvenir_guhrijs": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      3.0,
+      13.0,
+      16.0,
+      13.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_guhrijs": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      3.0,
+      13.0,
+      16.0,
+      13.0
+    ],
+    "licht": 12,
+    "effect": "glinster"
+  },
+  "reisbureau_souvenir_camping": {
+    "muur": false,
+    "vorm": [
+      1.5,
+      0.0,
+      2.0,
+      14.5,
+      9.0,
+      14.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_camping": {
+    "muur": false,
+    "vorm": [
+      2.5,
+      0.0,
+      4.0,
+      15.5,
+      8.0,
+      12.0
+    ],
+    "licht": 13,
+    "effect": "vuur"
+  },
+  "reisbureau_souvenir_guhnetie": {
+    "muur": false,
+    "vorm": [
+      1.0,
+      0.0,
+      4.0,
+      15.0,
+      11.5,
+      12.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_guhnetie": {
+    "muur": true,
+    "vorm": [
+      3.0,
+      3.5,
+      13.5,
+      13.0,
+      16.0,
+      16.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_souvenir_kaasmaan": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      3.0,
+      13.0,
+      10.5,
+      13.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_kaasmaan": {
+    "muur": false,
+    "vorm": [
+      4.0,
+      0.0,
+      4.0,
+      12.0,
+      16.0,
+      12.0
+    ],
+    "licht": 0,
+    "effect": "glinster"
+  },
+  "reisbureau_souvenir_wereldreis": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      4.0,
+      12.0,
+      13.0,
+      12.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_wereldreis": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      4.0,
+      12.0,
+      13.0,
+      12.0
+    ],
+    "licht": 0,
+    "effect": "glinster"
+  },
+  "reisbureau_souvenir_cruise": {
+    "muur": false,
+    "vorm": [
+      2.0,
+      0.0,
+      5.0,
+      16.0,
+      8.0,
+      11.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_cruise": {
+    "muur": true,
+    "vorm": [
+      1.5,
+      1.5,
+      14.0,
+      14.5,
+      15.0,
+      16.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_souvenir_balkonie": {
+    "muur": true,
+    "vorm": [
+      0.5,
+      0.5,
+      14.0,
+      15.5,
+      15.5,
+      16.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_zeldzaam_balkonie": {
+    "muur": true,
+    "vorm": [
+      1.5,
+      4.5,
+      15.0,
+      14.5,
+      14.0,
+      16.0
+    ],
+    "licht": 0,
+    "effect": ""
+  },
+  "reisbureau_gouden_koffertje": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      4.5,
+      13.0,
+      9.0,
+      11.0
+    ],
+    "licht": 0,
+    "effect": "glinster"
+  },
+  "reisbureau_koffertje": {
+    "muur": false,
+    "vorm": [
+      3.0,
+      0.0,
+      4.5,
+      13.0,
+      9.0,
+      11.0
+    ],
+    "licht": 0,
+    "effect": ""
+  }
+}

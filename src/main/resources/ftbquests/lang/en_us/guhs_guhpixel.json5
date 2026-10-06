@@ -11,16 +11,36 @@
     "",
     "Play the joke games, earn &6Guhpixel Coins&r (not an item: they are on your name) and buy things for your home with them: the Guhcade, the Guh Office and the Guh Cinema. The &dTravel Agency&r and the &dGuh Parkour&r are simply in the Guhmension. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
   ],
-  "quest.47554846911EC7FE.title": "Your Own Guh Cinema",
-  "quest.47554846911EC7FE.quest_desc": [
-    "Buy a &dGuh Cinema Set&r from the &dShopkeeper Guh&r in the Guhpixel lobby: a projector, a whole screen of Cinema Screen (7 wide, 4 high) and four Cinema Seats. Build the screen at home and put the projector in front of it, with the lens toward the screen. Rattle rattle!",
+  "quest.475548529F28E877.title": "Travel Agency The Chonk Vacation",
+  "quest.475548529F28E877.quest_desc": [
+    "Somewhere far away in the &dGuhmension&r stands a little white-and-pink house with a giant suitcase on its roof: &dTravel Agency \"The Chonk Vacation\"&r. The &6Super Compass&r shows the way (tab Cozy). There you can send your guh on vacation!",
   ],
-  "quest.4755486F480C2C6A.title": "Movie Night",
-  "quest.4755486F480C2C6A.quest_desc": [
-    "Right-click the projector and pick a movie: you get one for every Guhpixel joke game you finish, and for the stories of Baltoguh, Guhtwo and 626-guh too. Watch it to the end. Your guhs find a seat by themselves, and with a &dPopcorn Machine&r they get popcorn. Quiet in the theater, nyeg!",
+  "quest.4755483E342CB0B7.title": "The Travel Agent Guh",
+  "quest.4755483E342CB0B7.quest_desc": [
+    "Talk to the &dTravel Agent Guh&r behind the desk. He sends guhs on trips: they come back with a postcard, a souvenir and sunglasses on.",
   ],
-  "quest.475548E739739DA4.title": "Movie Buff",
-  "quest.475548E739739DA4.quest_desc": [
-    "Watch all &dnine movies&r to the end: Skyblok, Bedwars, Chonknite, Guhmon, Farmer Wants a Guh, Among Guhs, Baltoguh, Guhtwo and 626. They all end the same way. Guess how, nyeg.",
+  "quest.4755485957984174.title": "Packing the Little Suitcase",
+  "quest.4755485957984174.quest_desc": [
+    "A guh does not travel without a little suitcase. Bring the Travel Agent Guh &64 cheese nibbles&r for the road, &61 piece of wool&r as a little pillow and &61 piece of paper&r for the postcard.",
+  ],
+  "quest.4755482ECF97EF67.title": "Trial Trip Around the Corner",
+  "quest.4755482ECF97EF67.quest_desc": [
+    "Put one of your guhs at the desk and send him on the &dtrial trip around the corner&r. That takes five real minutes. Then collect him at the desk: you get the &6Travel Stamp&r!",
+  ],
+  "quest.47554852A5E7DE08.title": "A Travel Desk for at Home",
+  "quest.47554852A5E7DE08.quest_desc": [
+    "With the Travel Stamp, paper and planks you make your own &dTravel Desk&r. It works exactly like the desk in the Travel Agency: every real day four new trips of 1, 2, 8 or 24 hours. One guh at a time may go, and he can never get lost.",
+  ],
+  "quest.4755480A72DEA640.title": "Have a Nice Trip, Nyeg!",
+  "quest.4755480A72DEA640.quest_desc": [
+    "Send a guh on a real trip and collect him when he is back. He brings a &6postcard&r (right-click to read) and a &6souvenir&r for your house.",
+  ],
+  "quest.475548B7E99FCC44.title": "With a Bit of Luck",
+  "quest.475548B7E99FCC44.quest_desc": [
+    "Every trip also has a &drare souvenir&r. The longer the trip, the bigger the chance: from 1 in 20 on a 1-hour trip to almost 1 in 3 on a 24-hour trip. Find one!",
+  ],
+  "quest.475548CA9C4A9A9B.title": "The Golden Suitcase",
+  "quest.475548CA9C4A9A9B.quest_desc": [
+    "A souvenir you already have becomes a &6stamp&r on your travel pass. At ten stamps the Travel Agent Guh gives you a &6Golden Suitcase&r.",
   ],
 }
