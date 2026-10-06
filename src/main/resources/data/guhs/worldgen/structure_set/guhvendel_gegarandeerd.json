@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:guhvendel",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21301708,
+    "min_afstand": 250,
+    "max_afstand": 700,
+    "alleen_nieuw": true,
+    "sector": 12,
+    "sectoren": 16
+  }
+}
