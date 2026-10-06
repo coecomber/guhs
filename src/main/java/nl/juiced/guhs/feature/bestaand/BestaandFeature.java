@@ -1,16 +1,23 @@
 package nl.juiced.guhs.feature.bestaand;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,8 +25,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
@@ -37,6 +46,7 @@ import nl.juiced.guhs.feature.verhaal.Doel;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import nl.juiced.guhs.feature.wereld.Bezetting;
+import nl.juiced.guhs.feature.wereld.Kopieen;
 import nl.juiced.guhs.quest.GuhQuests;
 
 /**
@@ -208,12 +218,80 @@ public final class BestaandFeature {
 
     /**
      * /guhs bestaand (operators; for AutoCheck scripts and dev checks): "stand" says where you are in both questlines, "wis"
-     * forgets them for you (the fires go out and the plush guhs are back in their cages, for you alone).
+     * forgets them for you (the fires go out and the plush guhs are back in their cages, for you alone), "vuur &lt;nr&gt;" /
+     * "kooi &lt;nr&gt;" light a bridge fire / free a plush for you without a click, and "ga &lt;plek&gt;" puts you in front of
+     * a spot of the copy you are at (hokje, brug0..3, tuin, kooi0..2, naaihoek), looking at it.
      */
     private static void commando(RegisterCommandsEvent event) {
+        var ga = Commands.literal("ga");
+        for (String plek : GA.keySet()) {
+            ga.then(Commands.literal(plek).executes(c -> ga(c, plek)));
+        }
         event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("bestaand").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                 .then(Commands.literal("stand").executes(BestaandFeature::stand))
-                .then(Commands.literal("wis").executes(BestaandFeature::wis))));
+                .then(Commands.literal("wis").executes(BestaandFeature::wis))
+                .then(Commands.literal("vuur").then(Commands.argument("nr", IntegerArgumentType.integer(0, Vuren.AANTAL - 1))
+                        .executes(c -> vlag(c, WACHTER, "vuur_"))))
+                .then(Commands.literal("kooi").then(Commands.argument("nr", IntegerArgumentType.integer(0, Kooien.AANTAL - 1))
+                        .executes(c -> vlag(c, KNUFFELMAKER, "kooi_"))))
+                .then(ga)));
+    }
+
+    /** A spot of "/guhs bestaand ga": in which building, where you stand and what you look at (template coordinates). */
+    private record Ga(String structuur, BlockPos sta, BlockPos kijk) {
+    }
+
+    private static final Map<String, Ga> GA = gaPlekken();
+
+    private static Map<String, Ga> gaPlekken() {
+        Map<String, Ga> uit = new LinkedHashMap<>();
+        uit.put("hokje", new Ga(SPIESBURCHT, Plekken.WACHTER.offset(0, 0, -5), Plekken.WACHTER.above()));
+        for (int k = 0; k < Plekken.BRUGVUREN.size(); k++) {
+            // (five steps towards the keep along the bridge, in the middle of the walkway)
+            BlockPos vuur = Plekken.BRUGVUREN.get(k).get(0), m = Plekken.BURCHT_MIDDEN;
+            boolean langsX = Math.abs(vuur.getX() - m.getX()) > Math.abs(vuur.getZ() - m.getZ());
+            BlockPos sta = langsX ? new BlockPos(vuur.getX() - 5 * Integer.signum(vuur.getX() - m.getX()), vuur.getY(), m.getZ())
+                    : new BlockPos(m.getX(), vuur.getY(), vuur.getZ() - 5 * Integer.signum(vuur.getZ() - m.getZ()));
+            uit.put("brug" + k, new Ga(SPIESBURCHT, sta, vuur.above(Vuren.KORF_HOOGTE)));
+        }
+        uit.put("tuin", new Ga(SPIESBURCHT, Plekken.BURCHT_MIDDEN.atY(Plekken.MIKAKRUID.get(0).getY()), Plekken.MIKAKRUID.get(0)));
+        BlockPos paleis = new BlockPos(36, Plekken.NAAIHOEK.getY(), 36);
+        for (int i = 0; i < Plekken.KOOIEN.size(); i++) {
+            BlockPos kooi = Plekken.KOOIEN.get(i);
+            uit.put("kooi" + i, new Ga(GRILLPALEIS, kooi.offset(4 * Integer.signum(paleis.getX() - kooi.getX()), 0, 4 * Integer.signum(paleis.getZ() - kooi.getZ())),
+                    kooi.above()));
+        }
+        uit.put("naaihoek", new Ga(GRILLPALEIS, Plekken.NAAIHOEK.offset(2, 0, -3), Plekken.KNUFFELMAKER.above()));
+        return uit;
+    }
+
+    private static int ga(CommandContext<CommandSourceStack> c, String plek) throws CommandSyntaxException {
+        ServerPlayer p = c.getSource().getPlayerOrException();
+        Ga ga = GA.get(plek);
+        ServerLevel level = p.level();
+        StructureStart start = Bezetting.start(level, ga.structuur, p.blockPosition());
+        BlockPos sta = start == null ? null : Kopieen.wereld(start, null, ga.sta), kijk = start == null ? null : Kopieen.wereld(start, null, ga.kijk);
+        if (sta == null || kijk == null) {
+            c.getSource().sendFailure(Component.literal("No guhs:" + ga.structuur + " within " + Bezetting.BEREIK + " blocks: go there first (/locate structure guhs:"
+                    + ga.structuur + ")"));
+            return 0;
+        }
+        Vec3 van = Vec3.atBottomCenterOf(sta), naar = Vec3.atCenterOf(kijk).subtract(van.add(0, p.getEyeHeight(), 0));
+        float yaw = (float) (Mth.atan2(naar.z, naar.x) * Mth.RAD_TO_DEG) - 90f;
+        float pitch = (float) -(Mth.atan2(naar.y, naar.horizontalDistance()) * Mth.RAD_TO_DEG);
+        p.teleportTo(level, van.x, van.y, van.z, Set.of(), yaw, pitch, false);
+        Schijn.straks(p);
+        c.getSource().sendSuccess(() -> Component.literal("bestaand: " + plek + " at " + sta.toShortString() + " (copy " + start.getChunkPos() + ", turned "
+                + Kopieen.draai(start, null) + ")"), false);
+        return 1;
+    }
+
+    /** Sets the flag {@code naam<nr>} of this line for the caller: a fire that burns, a plush that is free (no step, no reward). */
+    private static int vlag(CommandContext<CommandSourceStack> c, Verhaallijn lijn, String naam) throws CommandSyntaxException {
+        ServerPlayer p = c.getSource().getPlayerOrException();
+        lijn.vlag(p, naam + IntegerArgumentType.getInteger(c, "nr"), true);
+        Schijn.ververs(p);
+        return stand(c);
     }
 
     private static int stand(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {

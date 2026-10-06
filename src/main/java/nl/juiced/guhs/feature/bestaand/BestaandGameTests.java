@@ -144,6 +144,21 @@ public class BestaandGameTests {
         return helper.getLevel().getEntitiesOfClass(Entity.class, kamer, e -> e.isAlive() && e.getPersistentData().getStringOr(Bezetting.TAG, "").equals(tag));
     }
 
+    /**
+     * What this player is shown inside this test's own room ({@code breed} wide). A fire bowl burns for whoever lit its
+     * bridge in EVERY Spiesburcht, so the bowls of another test room a few blocks further are on the player's list too.
+     */
+    private static Map<BlockPos, BlockState> zietHier(GameTestHelper helper, ServerPlayer p, int breed) {
+        AABB kamer = new AABB(helper.absolutePos(BlockPos.ZERO)).expandTowards(breed - 1, 12, breed - 1);
+        Map<BlockPos, BlockState> uit = new java.util.HashMap<>();
+        Schijn.gewenst(p).forEach((pos, state) -> {
+            if (kamer.contains(Vec3.atCenterOf(pos))) {
+                uit.put(pos, state);
+            }
+        });
+        return uit;
+    }
+
     private static void vergeetVuren() {
         for (int k = 0; k < Vuren.AANTAL; k++) {
             Bezetting.vergeet(BestaandFeature.BRUGVUUR_ID + k);
@@ -205,9 +220,9 @@ public class BestaandGameTests {
             helper.assertTrue(!level.getBlockState(korven.get(0)).getValue(VuurkorfBlock.LIT), "the block in the world stays out");
             helper.assertTrue(Schijn.ziet(a, korven.get(0)).getValue(VuurkorfBlock.LIT) && !Schijn.ziet(b, korven.get(0)).getValue(VuurkorfBlock.LIT),
                     "a sees it burn, b sees it cold");
-            Map<BlockPos, BlockState> zietA = Schijn.gewenst(a);
+            Map<BlockPos, BlockState> zietA = zietHier(helper, a, 16);
             helper.assertTrue(zietA.size() == 1 && zietA.get(korven.get(0)) != null && zietA.get(korven.get(0)).getValue(VuurkorfBlock.LIT)
-                    && zietA.get(korven.get(0)).getLightEmission() == 15, "the refresh keeps showing it to a, with its light");
+                    && zietA.get(korven.get(0)).getLightEmission() == 15, "the refresh keeps showing it to a, with its light: " + zietA);
             helper.assertTrue(Schijn.gewenst(b).isEmpty(), "and nothing to b");
             gebruik(a, korven.get(0));
             helper.assertTrue(Vuren.aantal(a) == 1 && BestaandFeature.WACHTER.stap(a) == BestaandFeature.WACHTER_VUREN, "the same bowl again counts once");
@@ -226,7 +241,7 @@ public class BestaandGameTests {
             gebruik(a, korven.get(3));
             helper.assertTrue(Vuren.aantal(a) == 4 && BestaandFeature.WACHTER.stap(a) == BestaandFeature.WACHTER_MELDEN
                     && advancement(a, "wachter_stap_2") && advancement(a, "barbecuether/bestaand_brugvuren"), "the fourth fire: on to the Wachter-guh");
-            helper.assertTrue(Schijn.gewenst(a).size() == 4 && Schijn.gewenst(b).size() == 1, "a sees four fires, b one");
+            helper.assertTrue(zietHier(helper, a, 16).size() == 4 && zietHier(helper, b, 16).size() == 1, "a sees four fires, b one");
             for (BlockPos pos : korven) {
                 helper.assertTrue(!level.getBlockState(pos).getValue(VuurkorfBlock.LIT), "every bowl is still out in the world");
             }
@@ -238,7 +253,7 @@ public class BestaandGameTests {
             helper.assertTrue(BestaandFeature.WACHTER.stap(a) == BestaandFeature.WACHTER_TUIN && advancement(a, "wachter_stap_3"), "step 3: the tuintje");
             // a fire bowl that goes away is forgotten
             level.setBlockAndUpdate(korven.get(3), Blocks.AIR.defaultBlockState());
-            helper.assertTrue(Schijn.gewenst(a).size() == 3, "a removed bowl is no longer shown");
+            helper.assertTrue(zietHier(helper, a, 16).size() == 3, "a removed bowl is no longer shown");
         } finally {
             weg(helper, a, b);
         }
@@ -319,7 +334,7 @@ public class BestaandGameTests {
                         "tuft " + i + " is shown at its spot, which is air in the world");
                 helper.assertTrue(Tuintje.bij(level, pos) == i, "and a click there is that tuft");
             }
-            helper.assertTrue(Schijn.gewenst(b).isEmpty(), "b (at another step) sees none");
+            helper.assertTrue(zietHier(helper, b, 24).isEmpty(), "b (at another step) sees none");
             helper.assertTrue(!Tuintje.klik(b, level, pollen.get(0)), "and can't pull one");
             helper.assertTrue(!Tuintje.klik(a, level, pollen.get(0).above(3)), "a click somewhere else pulls nothing");
             helper.assertTrue(Tuintje.klik(a, level, pollen.get(0)) && Tuintje.gewied(a, 0) && Tuintje.aantal(a) == 1, "a pulls tuft 0");
@@ -619,7 +634,7 @@ public class BestaandGameTests {
      * The Zielig lantaarntje cheers up when patted (brighter) and hangs or stands; a plush can be squeezed; the recipes need
      * their card, which stays in the grid.
      */
-    @GuhTest(template = BRUG, batch = BATCH)
+    @GuhTest(template = BURCHT, batch = BATCH)
     public static void bestaandBlokken(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(7, 2, 7));
