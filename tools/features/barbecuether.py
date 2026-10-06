@@ -709,13 +709,22 @@ def structures(h):
     h.w(f"{D}/worldgen/structure/barbecueput.json", {
         "type": "guhs:barbecueput", "biomes": "#guhs:has_structure/barbecueput", "step": "surface_structures",
         "spawn_overrides": {}, "terrain_adaptation": "beard_thin", "start_pool": "guhs:barbecueput/start",
-        "start_jigsaw_name": put.MIDDEN, "check_radius": 20, "max_height_difference": 12, "headroom": 10})
-    h.w(f"{D}/worldgen/template_pool/barbecueput/start.json", {"fallback": "minecraft:empty", "elements": [
-        {"weight": wgt, "element": {"element_type": "minecraft:single_pool_element", "location": f"guhs:{name}",
-                                    "projection": "rigid", "processors": "minecraft:empty"}}
-        for name, wgt in (("barbecueput_groot", 2), ("barbecueput_klein_a", 1), ("barbecueput_klein_b", 1))]})
-    # rare, but findable: about as rare as the guh kermis (many spots are too steep, so the grid is a bit tighter)
-    h.w(f"{D}/worldgen/structure_set/barbecueput.json", {"structures": [{"structure": "guhs:barbecueput", "weight": 1}],
+        "start_jigsaw_name": put.MIDDEN, "check_radius": 20, "max_height_difference": 12, "headroom": 10,
+        # bbq2 (ring-h1): in the open (the Guhmensie) only the small pits from now on: a new big pit there is always the
+        # middle of a Knabbelgouw (guhs:knabbelgouw, the second structure of this set; features/ring_h1.py)
+        "surface_pool": "guhs:barbecueput/klein"})
+    def pool(*templates):
+        return {"fallback": "minecraft:empty", "elements": [
+            {"weight": wgt, "element": {"element_type": "minecraft:single_pool_element", "location": f"guhs:{name}",
+                                        "projection": "rigid", "processors": "minecraft:empty"}} for name, wgt in templates]}
+    h.w(f"{D}/worldgen/template_pool/barbecueput/start.json", pool(("barbecueput_groot", 2), ("barbecueput_klein_a", 1), ("barbecueput_klein_b", 1)))
+    h.w(f"{D}/worldgen/template_pool/barbecueput/klein.json", pool(("barbecueput_klein_a", 1), ("barbecueput_klein_b", 1)))
+    # rare, but findable: about as rare as the guh kermis (many spots are too steep, so the grid is a bit tighter).
+    # bbq2 (ring-h1): the set holds two structures. In the Guhmensie the game picks one of them per spot (3 : 2 for the
+    # Knabbelgouw, as the big pit had 2 of 4 and the Knabbelgouw needs more flat room; where it does not fit, a small pit
+    # comes); in the Guhbarbecuether the Knabbelgouw's biomes never match, so there it is always guhs:barbecueput.
+    h.w(f"{D}/worldgen/structure_set/barbecueput.json", {"structures": [{"structure": "guhs:barbecueput", "weight": 2},
+                                                                        {"structure": "guhs:knabbelgouw", "weight": 3}],
                                                          "placement": {"type": "minecraft:random_spread", "spacing": 36, "separation": 14,
                                                                        "salt": 27012027}})
     h.w(f"{D}/tags/worldgen/biome/has_structure/barbecueput.json", {"values": [f"guhs:{b}" for b in h.GUHMENSION_LAND + ["mikas_biome"]]
