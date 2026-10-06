@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:bank_upgrade"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.bank_opgevoerd.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.bank_opgevoerd.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:techniek/bank_gehapt"
+}

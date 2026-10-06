@@ -256,6 +256,10 @@ public class KlusjesGameTests {
         helper.setBlock(bank, ModBlocks.BANK_GUH.get());
         BankGuhBlockEntity be = (BankGuhBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(bank));
         ServerLevel level = helper.getLevel();
+        // bbq2: the bank is full of dirt (the cap) but for five: only five of the chest's dirt can be sorted, the rest stays
+        int cap = nl.juiced.guhs.storage.BankStorage.CAP;
+        be.getStorage().insert(new ItemStack(Items.DIRT), cap - 5);
+        kist.setItem(1, new ItemStack(Items.DIRT, 12));
         for (int i = 0; i < 3; i++) {
             Vec3 v = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(14 + i, 2, 16)));
             ItemEntity item = new ItemEntity(level, v.x, v.y, v.z, new ItemStack(Items.APPLE, 2));
@@ -268,7 +272,22 @@ public class KlusjesGameTests {
         helper.succeedWhen(() -> {
             helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, h.gebied()).isEmpty(), "nothing lies around any more" + staat(helper, guh));
             helper.assertTrue(be.getStorage().count(new ItemStack(Items.APPLE)) == 6, "the apples are sorted into the Bank Guh");
-            helper.assertTrue(be.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 10 && kist.isEmpty(), "the chest is sorted into the Bank Guh");
+            helper.assertTrue(be.getStorage().count(new ItemStack(Items.COBBLESTONE)) == 10 && telKist(kist, s -> s.is(Items.COBBLESTONE)) == 0,
+                    "the chest is sorted into the Bank Guh");
+            helper.assertTrue(be.getStorage().count(new ItemStack(Items.DIRT)) == cap && telKist(kist, s -> s.is(Items.DIRT)) == 7,
+                    "the bank took the five dirt it had room for, the other seven stay in the chest: " + be.getStorage().count(new ItemStack(Items.DIRT))
+                            + " / " + telKist(kist, s -> s.is(Items.DIRT)));
+            helper.assertTrue(!OpruimenKlus.heeftSorteerbaars(level, h, helper.absolutePos(KIST)), "nothing left that the bank has room for");
+            helper.assertTrue(nl.juiced.guhs.feature.huisje.HuisjeOpslag.bankRuimte(level, h, new ItemStack(Items.DIRT)) == 0, "the bank is full of dirt");
+            helper.assertTrue(Voorraad.past(level, h, new ItemStack(Items.DIRT, 64)), "past: the chest still has room for dirt");
+            for (int i = 0; i < kist.getContainerSize(); i++) {
+                if (kist.getItem(i).isEmpty()) {
+                    kist.setItem(i, new ItemStack(Items.STONE, 64));
+                }
+            }
+            helper.assertTrue(!Voorraad.past(level, h, new ItemStack(Items.DIRT, 64)) && Voorraad.past(level, h, new ItemStack(Items.DIRT, 57))
+                    && Voorraad.past(level, h, new ItemStack(Items.GRAVEL, 64)),
+                    "past: bank full of dirt and the chest has room for 57 only; gravel still fits in the bank");
             helper.assertTrue(guh.getHealth() >= leven, "(nobody got hurt)");
             weg(helper, h, p);
         });

@@ -28,6 +28,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import nl.juiced.guhs.menu.BankGuhMenu;
 import nl.juiced.guhs.network.BankActionPayload;
 import nl.juiced.guhs.storage.BankContents;
+import nl.juiced.guhs.storage.BankStorage;
 
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 /**
@@ -36,6 +37,10 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
  * <p>
  * In the grid: left-click takes a stack, right-click half a stack, shift-click puts a stack in your inventory;
  * clicking while holding something puts it in (right-click: just one). Shift-click in your inventory stores the stack.
+ * <p>
+ * bbq2: the stomach holds at most {@link BankStorage#CAP} of one kind of item until the bank got the upgrade. The line
+ * under the grid says which of the two it is; a kind that is full has a red count and "256/256" in its tooltip, and
+ * when the bank refuses something (the server tells: {@code BankVolPayload}) that line says so for a few seconds.
  */
 public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
     private static final int BG = 0xFF3A1F2C;
@@ -44,6 +49,11 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
     private static final int SLOT = 0xFF8B5A6E;
     private static final int SLOT_HOVER = 0x80FFFFFF;
     private static final int TEXT = 0xFF5A2640;
+    private static final int VOL = 0xFFC8324B;
+    private static final int VOL_LICHT = 0xFFFF8A8A;
+    private static final int GOUD = 0xFF9A6A00;
+    /** How long the "the bank is full of this" line stays (ms). */
+    private static final long VOL_MS = 3500;
 
     enum Sort { NAME, COUNT, MOD }
 
@@ -57,6 +67,8 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
     private List<BankContents.Entry> visible = List.of();
     private BankContents lastContents;
     private String lastQuery = "";
+    private int volTeller;
+    private long volTot;
 
     public BankGuhScreen(BankGuhMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title, 195, 262);
@@ -235,6 +247,8 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
         Component summary = Component.translatable("gui.guhs.bank.summary", shortCount(total), menu.getClientContents().entries().size());
         g.text(font, summary, imageWidth - 8 - font.width(summary), titleLabelY, 0xFF8B4A68, false);
 
+        capRegel(g);
+
         // the stored items
         int start = scrollRow * BankGuhMenu.GRID_COLS;
         for (int i = 0; i < BankGuhMenu.GRID_COLS * BankGuhMenu.GRID_ROWS && start + i < visible.size(); i++) {
@@ -248,12 +262,46 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
             g.pose().scale(0.66f, 0.66f);
             float tx = (sx + 17 - font.width(count) * 0.66f) / 0.66f;
             float ty = (sy + 11) / 0.66f;
-            g.text(font, count, (int) tx, (int) ty, 0xFFFFFFFF, true);
+            g.text(font, count, (int) tx, (int) ty, isVol(e) ? VOL_LICHT : 0xFFFFFFFF, true);
             g.pose().popMatrix();
             if (isHovering(sx - 1, sy - 1, 18, 18, mouseX, mouseY)) {
                 g.fill(sx, sy, sx + 16, sy + 16, SLOT_HOVER);
             }
         }
+    }
+
+    /** Does the bank refuse more of this kind (at or over the cap, and no upgrade)? */
+    private boolean isVol(BankContents.Entry e) {
+        return !menu.isClientUpgraded() && e.count() >= BankStorage.CAP;
+    }
+
+    /**
+     * The line between the stored items and the crafting grid: the cap ("Hooguit 256 van elke soort"), or that this bank
+     * is upgraded, or for a few seconds what the bank just refused. Scaled down to fit the width of the grid.
+     */
+    private void capRegel(GuiGraphicsExtractor g) {
+        if (menu.getClientVolTeller() != volTeller) {
+            volTeller = menu.getClientVolTeller();
+            volTot = net.minecraft.util.Util.getMillis() + VOL_MS;
+        }
+        Component regel;
+        int kleur;
+        if (net.minecraft.util.Util.getMillis() < volTot && !menu.getClientVol().isEmpty()) {
+            regel = Component.translatable("gui.guhs.bank.vol", menu.getClientVol().getHoverName(), BankStorage.CAP);
+            kleur = VOL;
+        } else if (menu.isClientUpgraded()) {
+            regel = Component.translatable("gui.guhs.bank.opgevoerd");
+            kleur = GOUD;
+        } else {
+            regel = Component.translatable("gui.guhs.bank.cap", BankStorage.CAP);
+            kleur = 0xFF8B4A68;
+        }
+        int breed = BankGuhMenu.GRID_COLS * 18 + 11;
+        float schaal = Math.min(0.75f, breed / (float) Math.max(1, font.width(regel)));
+        g.pose().pushMatrix();
+        g.pose().scale(schaal, schaal);
+        g.text(font, regel, (int) (BankGuhMenu.GRID_X / schaal), (int) ((BankGuhMenu.GRID_Y + BankGuhMenu.GRID_ROWS * 18 + 1.5f) / schaal), kleur, false);
+        g.pose().popMatrix();
     }
 
     private void renderGridTooltip(GuiGraphicsExtractor g, int mouseX, int mouseY) {
@@ -263,7 +311,19 @@ public class BankGuhScreen extends AbstractContainerScreen<BankGuhMenu> {
         }
         BankContents.Entry e = visible.get(index);
         List<Component> lines = new ArrayList<>(getTooltipFromContainerItem(e.item()));
-        lines.add(Component.translatable("gui.guhs.bank.stored", String.format(Locale.ROOT, "%,d", e.count())).withStyle(ChatFormatting.LIGHT_PURPLE));
+        String aantal = String.format(Locale.ROOT, "%,d", e.count());
+        if (menu.isClientUpgraded()) {
+            lines.add(Component.translatable("gui.guhs.bank.stored", aantal).withStyle(ChatFormatting.LIGHT_PURPLE));
+        } else {
+            // n/256, and what it means when that kind is full (or holds more than the cap, from before the cap)
+            lines.add(Component.translatable("gui.guhs.bank.stored.cap", aantal, BankStorage.CAP)
+                    .withStyle(isVol(e) ? ChatFormatting.RED : ChatFormatting.LIGHT_PURPLE));
+            if (e.count() > BankStorage.CAP) {
+                lines.add(Component.translatable("gui.guhs.bank.stored.te_veel", BankStorage.CAP).withStyle(ChatFormatting.GRAY));
+            } else if (isVol(e)) {
+                lines.add(Component.translatable("gui.guhs.bank.stored.vol").withStyle(ChatFormatting.GRAY));
+            }
+        }
         g.setTooltipForNextFrame(font, lines, e.item().getTooltipImage(), e.item(), mouseX, mouseY);
     }
 

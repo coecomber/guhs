@@ -328,6 +328,27 @@ public class HuisjeGameTests {
             HuisjeOpslag.lever(level, h, geleend.copy());
             helper.assertTrue(be.getStorage().count(geleend) == 0 && chest.countItem(geleend.getItem()) == 1, "a loaned thing never goes into the bank");
         }
+        // bbq2: the bank holds at most 256 of one kind; what it is full of goes on to the chest, nothing is lost
+        int cap = nl.juiced.guhs.storage.BankStorage.CAP;
+        be.getStorage().insert(new ItemStack(Items.WHEAT), cap - 6);
+        helper.assertTrue(HuisjeOpslag.bankRuimte(level, h, new ItemStack(Items.WHEAT)) == 6, "room for six more wheat");
+        helper.assertTrue(HuisjeOpslag.lever(level, h, new ItemStack(Items.WHEAT, 10)).isEmpty(), "delivered");
+        helper.assertTrue(be.getStorage().count(new ItemStack(Items.WHEAT)) == cap && chest.countItem(Items.WHEAT) == 4,
+                "six wheat filled the bank to its cap, the other four went on to the chest");
+        helper.assertTrue(HuisjeOpslag.bankRuimte(level, h, new ItemStack(Items.WHEAT)) == 0, "the bank is full of wheat");
+        if (!geleend.isEmpty()) {
+            helper.assertTrue(HuisjeOpslag.bankRuimte(level, h, geleend) == 0, "(no room for a loaned thing, ever)");
+        }
+        // a second Bank Guh in the home base takes what the first one is full of
+        BlockPos bank2 = new BlockPos(13, 1, 12);
+        helper.setBlock(bank2, ModBlocks.BANK_GUH.get());
+        BankGuhBlockEntity be2 = (BankGuhBlockEntity) level.getBlockEntity(helper.absolutePos(bank2));
+        helper.assertTrue(HuisjeOpslag.bankGuhs(level, h).size() == 2 && HuisjeOpslag.bankGuh(level, h) == be, "two banks, the nearest first");
+        HuisjeOpslag.lever(level, h, new ItemStack(Items.WHEAT, 3));
+        helper.assertTrue(be2.getStorage().count(new ItemStack(Items.WHEAT)) == 3 && chest.countItem(Items.WHEAT) == 4, "the second bank took the wheat");
+        // an upgraded bank always has room
+        be.getStorage().setUpgraded(true);
+        helper.assertTrue(HuisjeOpslag.bankRuimte(level, h, new ItemStack(Items.WHEAT)) > 1_000_000, "upgraded: no limit");
         weg(helper, p);
         helper.succeed();
     }

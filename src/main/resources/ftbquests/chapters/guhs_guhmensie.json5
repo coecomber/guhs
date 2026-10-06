@@ -138,6 +138,18 @@
         "Komt na: Welkom in de Guhmensie!",
       ],
     },
+    {
+      height: 1.5625,
+      id: "4755483348B2A0B1",
+      image: "guhs:textures/ftbquests/guhs_guhmensie/kop_bank.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 26.631249999999998,
+      hover: [
+        "Komt na: Guh! (Guhs \\& basis)",
+      ],
+    },
   ],
   order_index: 1,
   progression_mode: "flexible",
@@ -2173,6 +2185,204 @@
       ],
       x: 9.0,
       y: 28.412499999999998,
+    },
+    {
+      id: "475548B5EEC988FD",
+      icon: {
+        id: "guhs:bank_guh",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bank_vol",
+          id: "475548C84BA4A546",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E864A896B4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755482419E7ACF3",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 11.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "4755486F23BB6189",
+      icon: {
+        id: "guhs:bank_upgrade",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bank_opgevoerd",
+          id: "475548D311C8F52A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548520F5576E9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 4,
+        },
+        {
+          id: "475548B35C56E353",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 13.0,
+      y: 28.412499999999998,
+      shape: "rsquare",
+    },
+    {
+      id: "475548D383258643",
+      icon: {
+        id: "guhs:bank_sleutel",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:bank_sleutel",
+          },
+          id: "4755489A74D9B7A7",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485E01079224",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D051C26E96",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 14.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "475548A41773A4BA",
+      icon: {
+        id: "guhs:hapluikje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:hapluikje",
+          },
+          id: "475548275F362487",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548069FF4116F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548EEA7A737B4",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 16.0,
+      y: 28.412499999999998,
+    },
+    {
+      id: "475548AB5B193DA2",
+      icon: {
+        id: "guhs:bank_sleutel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bank_gekoppeld",
+          id: "475548A5DB4FFC00",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548830204B765",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554898E57E3826",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 17.5,
+      y: 28.412499999999998,
+    },
+    {
+      id: "475548691E03F72C",
+      icon: {
+        id: "guhs:hapluikje",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/bank_gehapt",
+          id: "475548436F8F7545",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CACBEDE206",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 2,
+        },
+        {
+          id: "475548E8E191E4BB",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 19.0,
+      y: 28.412499999999998,
+      shape: "circle",
     },
   ],
 }
