@@ -315,10 +315,15 @@ class Bouw:
         (cx, cz), (rx, rz) = ROTS_MIDDEN, ROTS_STRAAL
         for x in range(MAAT[0]):
             for z in range(MAAT[2]):
-                d = math.hypot((x - cx) / rx, (z - cz) / rz)
+                # (no drum: the outline wanders in and out, the flanks slope down to the floor, a few crags stand on top)
+                d = math.hypot((x - cx) / rx, (z - cz) / rz) * (1.0 + (0.5 - self.ruis(x + 131, z + 57, 7.0)) * 0.26)
                 if d >= 1.0:
                     continue
                 hoog = 4.5 + 11.0 * (1 - d ** 2.4) ** 0.7 + (self.ruis(x, z, 5.0) - 0.5) * 4.0 + (self.ruis(x, z, 2.2) - 0.5) * 1.6
+                hoog += max(0.0, self.ruis(x + 40, z + 90, 3.4) - 0.62) * 9.0 * (1 - d)
+                if d > 0.5:
+                    t = (d - 0.5) / 0.5
+                    hoog = max(1.0, hoog * (1 - 0.86 * t * t * (3 - 2 * t)))
                 # the two sheer faces with the gates
                 if x < 37 or x > 59:
                     if abs(z - 62) <= 7:
@@ -332,7 +337,7 @@ class Bouw:
         # the faces themselves: flat dressed rock, a little higher than the rock behind them
         for x, kant in ((37, -1), (59, 1)):
             for z in range(54, 71):
-                hoog = 13.5 - abs(z - 62) * 0.5 + (self.ruis(z, x, 3.0) - 0.5) * 1.5
+                hoog = 13.5 - abs(z - 62) * 0.5 - max(0, abs(z - 62) - 6) * 2.0 + (self.ruis(z, x, 3.0) - 0.5) * 1.5
                 for y in range(G - 2, BOVEN + max(3, int(hoog)) + 1):
                     for diep in range(0, 3):
                         self.set(x - kant * diep, y, z, HOUTSKOOL if abs(z - 62) > 6 or y > BOVEN + 10 else self.steen(0.3))

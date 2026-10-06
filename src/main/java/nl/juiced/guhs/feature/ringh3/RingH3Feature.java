@@ -12,6 +12,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
@@ -31,7 +32,7 @@ import nl.juiced.guhs.feature.verhaal.Verteller;
  * bbq2 (ring-h3): chapter 3 of "In de ban van de Knabbelring": <b>De Mijnen van Knabbelmoria</b> (DESIGN_130 4). Resources:
  * tools/features/ring_h3.py (+ ring_h3_bouw, _modellen, _scene, _tekst, _java, _beeld, _wiki).
  * <p>
- * One structure, {@code guhs:knabbelmoria}: a mine sunk into the rock under a cave floor of the Houtskoolvlakte, exactly once per
+ * One structure, {@code guhs:knabbelmoria} (type {@link MijnStructure}): a mine sunk into the rock under a cave floor of the Houtskoolvlakte, exactly once per
  * world, hidden behind Guhdalfs sluier until the player's own story gets there ({@link Ring#sluier}). The questline
  * {@link #LIJN} ({@code ring_h3}, seven steps, per player):
  * <ol start="0">
@@ -56,6 +57,10 @@ public final class RingH3Feature {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
+    public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister.create(Registries.STRUCTURE_TYPE, Guhs.MODID);
+    /** The structure type of the mine: a barbecueput-style cave building that stands on the LOWEST cave floor of its column. */
+    public static final DeferredHolder<StructureType<?>, StructureType<MijnStructure>> MIJN_TYPE =
+            STRUCTURE_TYPES.register("ringh3_mijn", () -> () -> MijnStructure.CODEC);
     /** The narrator card of the chapter (also the page behind the picture-book replay of the two scenes). */
     public static final String KAART = "ring_h3";
     public static final int KAART_REGELS = 4;
@@ -110,6 +115,7 @@ public final class RingH3Feature {
         ITEMS.register(modBus);
         ENTITY_TYPES.register(modBus);
         SOUNDS.register(modBus);
+        STRUCTURE_TYPES.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent event) -> event.put(BARBECUEROG.get(), BarbecuerogEntity.createAttributes().build()));
         NeoForge.EVENT_BUS.register(MijnEvents.class);
         NeoForge.EVENT_BUS.addListener(RingH3Commands::register);

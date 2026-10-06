@@ -57,8 +57,10 @@ def snede(b, y_van, y_tot, px=9, doos=None, draai=0):
 # the ray caster
 # =====================================================================================================================
 class Kijker:
-    def __init__(self, b):
-        X, Y, Z = B.MAAT
+    def __init__(self, b, maat=None, open_boven=B.G + 1):
+        """b.s.blocks: the blocks; maat: the size of the grid (default: the template's); open_boven: from this y on a cell that is
+        not set counts as open air (the cave above the floor) instead of rock (a dump of a real copy: 0, everything is known)."""
+        X, Y, Z = maat or B.MAAT
         self.maat = (X, Y, Z)
         self.vol = np.zeros((X, Y, Z), bool)
         self.rgb = np.zeros((X, Y, Z, 3), np.float32)
@@ -81,10 +83,10 @@ class Kijker:
         leeg = np.ones((X, Y, Z), bool)
         for (x, y, z) in b.s.blocks:
             leeg[x, y, z] = False
-        leeg[:, B.G + 1:, :] = False                 # (above the cave floor the template leaves the open cave alone)
+        leeg[:, open_boven:, :] = False              # (above the cave floor the template leaves the open cave alone)
         self.vol |= leeg
         self.rgb[leeg] = kleur(B.HOUTSKOOL)
-        self.dicht[:, B.G + 1:, :] &= self.vol[:, B.G + 1:, :]
+        self.dicht[:, open_boven:, :] &= self.vol[:, open_boven:, :]
         self.bron = bron
         self.licht = self._verspreid(bron)
 

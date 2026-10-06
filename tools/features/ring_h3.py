@@ -38,6 +38,7 @@ VORIGE = "guhvendel"          # the story chain: this structure stands 250-500 b
 # until ring-h2 is merged there is no guhvendel to stand near: then the mine takes a slice of the ring round 0,0 of its own
 # (sectors 0-12 are taken, CONTRACT_130 3); with ring-h2 in the tree this is never used
 NOOD_SECTOR = 13
+TYPE = "guhs:ringh3_mijn"
 
 # =====================================================================================================================
 # the three blocks
@@ -247,7 +248,11 @@ def structuur(h):
 
     def leeg(s):
         s["spawn_overrides"] = {soort: {"bounding_box": "piece", "spawns": []} for soort in ("monster", "creature", "ambient")}
+        # the mine's own structure type (feature/ringh3/MijnStructure): a barbecueput that stands on the LOWEST cave floor of its
+        # column, so the 30 blocks under it are rock and sauce sea, not open cave
+        s["type"] = TYPE
     h.patch_json(f"{h.D}/worldgen/structure/{STRUCTUUR}.json", leeg)
+    h.RUIMTE_HOOKS[TYPE] = lambda s, jigsaw_reach: jigsaw_reach(s, True)      # (make_v2.bouwruimte: keep_clear, like a barbecueput)
     verhaal_motor.sluier(h, STRUCTUUR)
 
 
@@ -304,6 +309,8 @@ def selfcheck(h):
     pool = json.load(open(f"{h.D}/worldgen/template_pool/{STRUCTUUR}/start.json", encoding="utf-8"))
     if any(e["element"].get("ground_level_delta") != bouw.G + 1 for e in pool["elements"]):
         problems.append("the start pool has no ground_level_delta")
+    if json.load(open(f"{h.D}/worldgen/structure/{STRUCTUUR}.json", encoding="utf-8"))["type"] != TYPE:
+        problems.append(f"the structure is not a {TYPE}")
     if not os.path.exists(f"{h.D}/worldgen/structure_set/{STRUCTUUR}_gegarandeerd.json") or os.path.exists(f"{h.D}/worldgen/structure_set/{STRUCTUUR}.json"):
         problems.append("the mine must have a guaranteed copy and no random spread")
     sounds_json = json.load(open(f"{h.A}/sounds.json", encoding="utf-8"))

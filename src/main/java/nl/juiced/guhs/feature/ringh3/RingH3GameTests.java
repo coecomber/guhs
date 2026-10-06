@@ -539,7 +539,8 @@ public final class RingH3GameTests {
                 && Scenes.BRUG_BREEKT < Scenes.BRUG.duur() && Scenes.FLITSEN.length >= 3 && Scenes.BRUG.acteur("rog") != null, "the two scenes");
         helper.assertTrue(Scenes.BRUG.zinnen().stream().filter(z -> z.key().startsWith("you_")).count() == 4, "Guhdalf's line comes word by word");
         // worldgen
-        helper.assertTrue(Kopieen.structuur(level, Mijn.STRUCTUUR) instanceof BarbecuePutStructure, "a cave building");
+        helper.assertTrue(Kopieen.structuur(level, Mijn.STRUCTUUR) instanceof BarbecuePutStructure && Kopieen.structuur(level, Mijn.STRUCTUUR) instanceof MijnStructure,
+                "a cave building, of the kind that stands on the lowest floor");
         var pool = level.registryAccess().lookupOrThrow(Registries.TEMPLATE_POOL).getValue(Guhs.id(Mijn.STRUCTUUR + "/start"));
         helper.assertTrue(pool != null, "its start pool");
         StructurePoolElement element = pool.getRandomTemplate(level.getRandom());
