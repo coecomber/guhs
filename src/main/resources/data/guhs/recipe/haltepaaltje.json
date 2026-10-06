@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "W",
+    "G",
+    "I"
+  ],
+  "key": {
+    "W": "minecraft:yellow_wool",
+    "G": "guhs:grillspies",
+    "I": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "guhs:haltepaaltje",
+    "count": 2
+  }
+}

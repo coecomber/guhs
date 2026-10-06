@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IKI",
+    "GWG",
+    "IMI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "K": "guhs:kaas_knabbels",
+    "G": "guhs:grillspies",
+    "W": "guhs:guh_wire",
+    "M": "minecraft:minecart"
+  },
+  "result": {
+    "id": "guhs:stepstation"
+  }
+}

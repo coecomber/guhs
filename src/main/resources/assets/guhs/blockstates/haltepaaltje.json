@@ -1,7 +1,40 @@
 {
   "variants": {
-    "": {
-      "model": "guhs:block/haltepaaltje"
+    "facing=down,ophalen=true": {
+      "model": "guhs:block/haltepaaltje_ophalen_neer"
+    },
+    "facing=north,ophalen=true": {
+      "model": "guhs:block/haltepaaltje_ophalen"
+    },
+    "facing=east,ophalen=true": {
+      "model": "guhs:block/haltepaaltje_ophalen",
+      "y": 90
+    },
+    "facing=south,ophalen=true": {
+      "model": "guhs:block/haltepaaltje_ophalen",
+      "y": 180
+    },
+    "facing=west,ophalen=true": {
+      "model": "guhs:block/haltepaaltje_ophalen",
+      "y": 270
+    },
+    "facing=down,ophalen=false": {
+      "model": "guhs:block/haltepaaltje_afleveren_neer"
+    },
+    "facing=north,ophalen=false": {
+      "model": "guhs:block/haltepaaltje_afleveren"
+    },
+    "facing=east,ophalen=false": {
+      "model": "guhs:block/haltepaaltje_afleveren",
+      "y": 90
+    },
+    "facing=south,ophalen=false": {
+      "model": "guhs:block/haltepaaltje_afleveren",
+      "y": 180
+    },
+    "facing=west,ophalen=false": {
+      "model": "guhs:block/haltepaaltje_afleveren",
+      "y": 270
     }
   }
 }
