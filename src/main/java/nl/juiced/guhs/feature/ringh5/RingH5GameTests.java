@@ -551,6 +551,49 @@ public final class RingH5GameTests {
         });
     }
 
+    /**
+     * Nothing in the valley burns a player: sauce that welled up near a player of the chapter is filled in again, and fire
+     * and sauce do no damage inside a copy (outside it they do what they always do).
+     */
+    @GuhTest(template = KAMER, batch = "ringh5_saus")
+    public static void ringh5Saus(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Terrein.wisAlles();
+        Terrein t = veld(helper);
+        ServerPlayer p = speler(helper, OPEN);
+        klaarTot(p, 4);
+        BlockPos plas = helper.absolutePos(OPEN.offset(3, 0, 1)), inVloer = helper.absolutePos(OPEN.offset(-2, -1, 2)), ver = helper.absolutePos(OPEN.offset(16, 0, 0));
+        for (BlockPos pos : List.of(plas, inVloer, ver)) {
+            level.setBlock(pos, nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature.KAASFRITUURSAUS_BLOCK.get().defaultBlockState(), 2);
+        }
+        helper.assertTrue(Hoofdstuk.dempSaus(p, t) == 2, "the two springs near the player are filled in");
+        helper.assertTrue(level.getBlockState(plas).isAir(), "above the floor: air again");
+        helper.assertTrue(level.getBlockState(inVloer).is(nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature.HOUTSKOOLSTEEN.get()), "in the floor: rock again");
+        helper.assertTrue(!level.getFluidState(ver).isEmpty(), "far from any player nothing is touched");
+        level.setBlock(ver, net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 2);
+        level.setBlock(inVloer, helper.getLevel().getBlockState(inVloer.north()), 2);
+        // fire and sauce do no damage in a copy that is known, and do outside it
+        // (a player whose client never said "loaded" can't be hurt at all)
+        p.connection.handleAcceptPlayerLoad(new net.minecraft.network.protocol.game.ServerboundPlayerLoadedPacket());
+        float leven = p.getHealth();
+        p.hurtServer(level, level.damageSources().lava(), 4f);
+        helper.assertTrue(p.getHealth() < leven, "outside any valley sauce burns as ever");
+        p.setHealth(p.getMaxHealth());
+        p.invulnerableTime = 0;
+        Terrein.test(t);
+        helper.assertTrue(Terrein.kent(level, p.position()), "the stand-in valley is known now");
+        p.igniteForSeconds(5);
+        p.hurtServer(level, level.damageSources().lava(), 4f);
+        helper.assertTrue(p.getHealth() == p.getMaxHealth(), "inside the valley nothing burns a player");
+        helper.assertTrue(!p.isOnFire(), "and the flames are out");
+        p.invulnerableTime = 0;
+        p.hurtServer(level, level.damageSources().generic(), 1f);
+        helper.assertTrue(p.getHealth() < p.getMaxHealth(), "(other damage is not this chapter's business)");
+        Terrein.wisAlles();
+        weg(helper, p);
+        helper.succeed();
+    }
+
     private RingH5GameTests() {
     }
 }

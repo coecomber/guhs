@@ -5,7 +5,9 @@ one-eyed Mika head on a spire, staring down the valley for his lost snack.
 
 The valley is the whole course of chapter 5, from the mouth you come in by (z 0) to the mouth behind the wall (z 95):
 
-    z  0 - 10   het Kamp        the camp at the mouth: the first Rustvuurtje, Boromika, the provisions Smikagol sniffs at
+    z  0 - 10   het Kamp        the camp at the mouth: the first Rustvuurtje, Boromika, the provisions Smikagol sniffs at;
+                                besides the mouth a tunnel through the cliff on either side (the valley may stand in solid
+                                rock: three ways in, in three directions)
     z 11 - 18   de Uitkijkrug   a ridge of rock with a worn stair over it: on top you see the gate and the Eye for the first time
     z 20 - 41   het Asveld      ruins and toppled grates to hide behind while the gaze of the Eye sweeps the field (zone A)
     z 42 - 45   de Slakkenhut   a ruined hut with the third Rustvuurtje
@@ -95,12 +97,12 @@ PLEKKEN = {
     "UITKIJK": [(48, F + 3, 14)],
     # zone A: where a player counts as "in the field", and the line the gaze of the Eye runs up and down
     "ZONE_A": [(10, F - 1, 21), (60, F + 6, 41)],
-    "BLIK_A": [(48, F, 22), (41, F, 26), (34, F, 30), (27, F, 34), (20, F, 38), (15, F, 41)],
+    "BLIK_A": [(48, F, 24), (41, F, 26), (34, F, 30), (27, F, 34), (20, F, 38), (18, F, 39)],
     # its hiding places (a standing cell each): Smikagol runs from one to the next
     "SCHUIL_A": [(43, F, 23), (36, F, 27), (29, F, 31), (22, F, 35), (16, F, 39)],
     # zone B
     "ZONE_B": [(16, F - 1, 46), (83, F + 6, 56)],
-    "BLIK_B": [(18, F, 48), (38, F, 50), (60, F, 51), (80, F, 54)],
+    "BLIK_B": [(24, F, 49), (38, F, 50), (60, F, 51), (80, F, 54)],
     # where the Eye looks when nobody is in a zone (a slow round over the whole valley floor)
     "BLIK_RUST": [(30, F, 26), (66, F, 30), (70, F, 50), (26, F, 52)],
     # the valley in front of the wall: here a worn ring draws the Eye
@@ -110,7 +112,7 @@ PLEKKEN = {
     # the two riders: each the two ends of its round
     "RUITER_1": [(66, F, 63), (50, F, 63)], "RUITER_2": [(50, F, 64), (66, F, 64)],
     # het Wachthek: the three guards (they look east, down the lane) and the post up to which the ring had better stay off
-    "WACHTER_1": [(26, F, 63)], "WACHTER_2": [(26, F, 68)], "WACHTER_3": [(22, F, 65)], "SCHEDELPAAL": [(33, F, 62)],
+    "WACHTER_1": [(26, F, 63)], "WACHTER_2": [(26, F, 68)], "WACHTER_3": [(23, F, 67)], "SCHEDELPAAL": [(33, F, 62)],
     # het Roosterpoortje: the bars a player sees until Guhdalf opened it (really air), the tunnel behind it, where the scene starts
     "DEUR": [(12, F, 70), (14, F + 2, 70)], "TUNNEL": [(12, F, 70), (14, F + 3, 77)], "VOOR_DEUR": [(10, F, 66), (16, F + 3, 69)],
     "DEUR_SCENE": [(13, F, 67)],
@@ -123,6 +125,8 @@ PLEKKEN = {
     "ROUTE_HEK": [(33, F, 65), (24, F, 65), (20, F, 65)],
     "ROUTE_DEUR": [(16, F, 66), (13, F, 68)],
     "ROUTE_ACHTER": [(13, F, 72), (13, F, 79), (18, F, 83)],
+    # the three ways in: the mouth and a tunnel through the cliff on either side of the camp (where they meet the edge of the build)
+    "INGANGEN": [(48, F, 0), (0, F, 6), (95, F, 6)],
     # the whole build (for the test copy)
     "MAAT": [(SX, SY, SZ)], "ANKER": [ANKER],
 }
@@ -338,7 +342,7 @@ def kamp(b, h):
     _stam(b, vx - 4, F, vz - 1, "z", 3)                    # (the space south and east of the fire stays free: the scene plays there)
     # Boromika's corner: his round shield against a rock, a horn on a post
     bx, _, bz = PLEKKEN["BOROMIKA"][0]
-    for dx, dy in ((1, 0), (2, 0), (2, 1), (3, 0)):
+    for dx, dy in ((1, 0), (1, 1), (2, 0), (2, 1), (3, 0)):
         b.set(bx + dx + 1, F + dy, bz - 2, ROTS)
     b.set(bx + 2, F + 1, bz - 1, "minecraft:polished_blackstone_button", {"face": "wall", "facing": "south", "powered": "false"})
     # Sam-guh's kitchen: a cauldron on the stones and a crate of knabbels
@@ -373,6 +377,36 @@ def kamp(b, h):
     # Boromika himself (a cast character of chapter 5: there from the moment the chapter begins)
     from features import ring
     b.s.entity(bx + 0.5, F, bz + 0.5, ring.cast(h, "boromika", "ringh5_boromika", "ring_h5", 0, 99, plek="ringh5_kamp", yaw=120.0))
+
+
+def zijgangen(b):
+    """A tunnel through the cliff on either side of the camp, out to the edge of the build: the valley may come to stand in
+    solid rock with its mouth against a wall, and then one of these two may be the side a cave comes by (outside the build
+    a player digs; inside it nobody can)."""
+    for west in (True, False):
+        xs = range(0, links(6) + 3) if west else range(rechts(6) - 2, SX)
+        for x in xs:
+            for z in (5, 6, 7):
+                for y in range(0, G):
+                    b.set(x, y, z, ROTS)
+                b.set(x, G, z, STENEN if z == 6 else b.grondblok(x, z))
+                for y in range(F, F + 4 - (1 if z != 6 and x % 5 == 2 else 0)):
+                    b.set(x, y, z, AIR)
+            # rock around it where the cliff is thin
+            for z in (4, 8):
+                for y in range(0, F + 5):
+                    if b.get(x, y, z) is None:
+                        b.set(x, y, z, ROTS)
+            for z in (5, 6, 7):
+                for y in (F + 4, F + 5):
+                    if b.get(x, y, z) is None:
+                        b.set(x, y, z, ROTS)
+        binnen_x = links(6) + 3 if west else rechts(6) - 3
+        b.fence(binnen_x, F, 4)
+        b.fence(binnen_x, F + 1, 4)
+        b.lantern(binnen_x, F + 2, 4)
+        _bord(b, binnen_x + (1 if west else -1), F, 4, 0, ["Kamp van de", "Reisgenoten.", "Vuurtje brandt.", "Kom binnen, njeg!"])
+        b.must_reach["the way in on the " + ("west" if west else "east")] = (0 if west else SX - 1, F, 6)
 
 
 def uitkijk(b):
@@ -448,6 +482,13 @@ def weg(b):
                     b.set(x, y, z, AIR)
     for z in (24, 34, 44, 58):
         rooster_in_vloer(b, 47, z, 49, z + 1)
+    # watch fires of the Mika's along the road (low: one block of blackstone, a glowing coal in an iron basket)
+    for z in (28, 40, 52, 64):
+        for x in (45, 51):
+            b.set(x, F, z, ZWART_GLAD)
+            b.set(x, F + 1, z, GLOEIKOOL if (x + z) % 2 else ROOSTER)
+            if (x + z) % 2 == 0:
+                b.set(x, F, z, GLOEIKOOL)
     for i, z in enumerate(range(22, MUUR_Z[0] - 6, 6)):
         for x in (44, 52):
             hoog = 1 if 44 <= z <= 58 else (2, 1, 3, 1, 2)[(i + (x == 52)) % 5]
@@ -514,7 +555,7 @@ def asveld(b):
     for x, z, lengte in ((52, 30, 4), (44, 36, 3), (32, 38, 2), (25, 25, 3)):
         for i in range(lengte):
             b.set(x + i, F, z, b.brick(0.5))
-    for x, z in ((38, 22), (30, 26), (47, 31), (19, 30), (26, 39), (54, 36), (35, 34)):
+    for x, z in ((38, 22), (30, 26), (53, 31), (19, 30), (26, 39), (54, 36), (35, 34)):
         b.set(x, F, z, SMEUL)
     for x, z, as_ in ((50, 25, "x"), (23, 29, "z"), (40, 33, "x")):
         b.set(x, F, z, BOT, {"axis": as_})
@@ -522,6 +563,53 @@ def asveld(b):
     for (x0, _, z0), (x1, _, z1) in zip(PLEKKEN["SCHUIL_A"], PLEKKEN["SCHUIL_A"][1:]):
         b.open.append(((x0 + x1) // 2, F, (z0 + z1) // 2 - 1))
     b.open.append((46, F, 21))
+
+
+def aankleding(b):
+    """What makes the valley a place: dunes of ash against the cliffs, rubble, a broken cart, cages, all off the course."""
+    rng = random.Random(SEED + 31)
+    # dunes: low mounds of ash in the corners of the fields (never on a line of the gaze or a route)
+    bezet = set()
+    for naam, punten in PLEKKEN.items():
+        if naam.startswith(("BLIK_A", "BLIK_B", "ROUTE", "SCHUIL", "RUITER", "WACHTER")):
+            for (x0, _, z0), (x1, _, z1) in zip(punten, punten[1:] + punten[-1:]):
+                n = max(abs(x1 - x0), abs(z1 - z0), 1)
+                for i in range(n + 1):
+                    bezet.add((round(x0 + (x1 - x0) * i / n), round(z0 + (z1 - z0) * i / n)))
+
+    def vrij(x, z, r):
+        return all((x + dx, z + dz) not in bezet for dx in range(-r - 3, r + 4) for dz in range(-r - 3, r + 4))
+
+    for cx, cz, r in ((66, 24, 4), (74, 34, 5), (64, 40, 3), (14, 26, 3), (72, 22, 3), (58, 44, 2), (30, 43, 2), (12, 54, 3), (40, 58, 2), (76, 44, 3)):
+        if not vrij(cx, cz, r) or not all(binnen(cx + d, cz) and binnen(cx, cz + d) for d in (-r, r)):
+            continue
+        for dx in range(-r, r + 1):
+            for dz in range(-r, r + 1):
+                hoog = int(round(1.6 - math.hypot(dx, dz) * 1.6 / r + rng.random() * 0.6))
+                for y in range(F, F + max(0, min(2, hoog))):
+                    if b.get(cx + dx, y, cz + dz) == AIR:
+                        b.set(cx + dx, y, cz + dz, AS if y > F or rng.random() < 0.5 else AS_AARDE)
+    # a broken cart of the Mika's beside the road (two wheels of grate, a bed of planks, a spilled load of grillkool)
+    for x in range(54, 58):
+        b.slab(x, F, 27, "top", block="minecraft:crimson_slab")
+        b.slab(x, F, 28, "top", block="minecraft:crimson_slab")
+    for x, z in ((54, 26), (57, 26), (54, 29)):
+        b.set(x, F, z, ROOSTER)
+    b.set(58, F, 28, GRILLKOOL)
+    b.set(59, F, 27, GRILLKOOL)
+    b.set(58, F, 26, "minecraft:crimson_fence", {"north": "false", "east": "false", "south": "false", "west": "false", "waterlogged": "false"})
+    # cages on posts along the east cliff: whoever came to the wrong door (empty: the guhs got away)
+    for x, z in ((80, 30), (82, 38), (79, 46)):
+        if not binnen(x + 2, z):
+            continue
+        for y in range(F, F + 3):
+            b.set(x, y, z, PILAAR, {"axis": "y"})
+        b.set(x, F + 3, z, ROOSTER)
+        b.set(x, F + 4, z, MIKAKOP, {"facing": "west"})
+    # rubble of the old wall, strewn over the far side of the plain
+    for x, z in ((62, 24), (70, 28), (67, 37), (20, 24), (15, 31), (74, 40), (36, 44), (63, 57), (22, 56), (30, 58)):
+        if vrij(x, z, 0) and b.get(x, F, z) == AIR:
+            b.set(x, F, z, b.brick(0.6))
 
 
 def slakkenhut(b):
@@ -977,6 +1065,7 @@ def bouw(h):
     for plaat in ((40, 2, 58, 10), (12, 21, 60, 41), (16, 45, 84, 57), (18, 62, 82, 69), (10, 78, 30, 92)):
         b.vlak(*plaat)
     kamp(b, h)
+    zijgangen(b)
     weg(b)
     asveld(b)
     uitkijk(b)
@@ -992,6 +1081,7 @@ def bouw(h):
     wachthek(b)
     poortje(b)
     achter(b)
+    aankleding(b)
     b.connect()
     return b, check(b)
 

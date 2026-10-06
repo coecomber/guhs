@@ -56,8 +56,11 @@ import nl.juiced.guhs.feature.wereld.Bezetting;
 public final class RingH5Feature {
     /** The structure of this chapter. */
     public static final String STRUCTUUR = "zwarte_roosterpoort";
-    /** How far around the valley's box Guhdalfs sluier (and the protection) reaches. */
-    public static final int RAND = 3;
+    /**
+     * How far around the valley's box Guhdalfs sluier (and the protection) reaches: not at all. The valley may come to stand
+     * in solid rock, and then a player has to dig the last blocks to one of its three ways in ({@link Plekken#INGANGEN}).
+     */
+    public static final int RAND = 0;
 
     /** The questline of this chapter (ring-kern and the travel map refer to this field and its id). */
     public static final Verhaallijn LIJN = Verhaallijn.maak("ring_h5", "knabbelring").stappen(Hoofdstuk.STAPPEN).na("ring_h4")

@@ -80,6 +80,8 @@ public final class Hoofdstuk {
     public static final double BIJ = 4.5;
     /** The Lichtflesje blows the smoke away from this near (blocks from the smoke's box). */
     public static final double LICHT_BEREIK = 10;
+    /** Sauce that welled up in the valley is filled in again this near a player (blocks, per axis). */
+    public static final int SAUS_BEREIK = 7;
 
     /** (not saved) the copy each player of this chapter is in right now. */
     private static final Map<UUID, Terrein> HIER = new ConcurrentHashMap<>();
@@ -119,6 +121,7 @@ public final class Hoofdstuk {
         HIER.put(p.getUUID(), t);
         int stap = lijn().stap(p);
         rook(p, t);
+        dempSaus(p, t);
         if (!Duwtje.mag(p)) {
             return;   // (watching a scene, reading a card, talking)
         }
@@ -378,6 +381,30 @@ public final class Hoofdstuk {
         p.level().sendParticles(p, ParticleTypes.LARGE_SMOKE, true, false, m.x, m.y - 1.0, m.z, 30, doos.getXsize() / 2.2, 1.0, doos.getZsize() / 2.2, 0.01);
     }
 
+    /**
+     * (once a second) the valley has no sauce in it, but the world may let a spring of kaasfrituursaus well up in its rock
+     * afterwards (it burns like lava). Whatever sauce is within {@link #SAUS_BEREIK} blocks of a player of this chapter, inside
+     * the valley, is filled in again: rock below the floor, air above it.
+     */
+    static int dempSaus(ServerPlayer p, Terrein t) {
+        ServerLevel level = p.level();
+        BlockPos hier = p.blockPosition();
+        int n = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(hier.offset(-SAUS_BEREIK, -3, -SAUS_BEREIK), hier.offset(SAUS_BEREIK, 4, SAUS_BEREIK))) {
+            if (!level.getFluidState(pos).is(BarbecuetherFeature.KAASFRITUURSAUS.get()) && !level.getFluidState(pos).is(BarbecuetherFeature.FLOWING_KAASFRITUURSAUS.get())) {
+                continue;
+            }
+            Vec3 l = t.lokaal(Vec3.atCenterOf(pos));
+            if (l.x < 0 || l.z < 0 || l.x >= Plekken.MAAT.getX() || l.z >= Plekken.MAAT.getZ() || l.y < 0 || l.y >= Plekken.MAAT.getY()) {
+                continue;
+            }
+            level.setBlock(pos, l.y < Plekken.VUUR_KAMP.getY() ? BarbecuetherFeature.HOUTSKOOLSTEEN.get().defaultBlockState()
+                    : net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+            n++;
+        }
+        return n;
+    }
+
     /** (every other tick) what gently pushes a player back: the smoke they can't see through, the door that is still locked. */
     static void snel(ServerPlayer p) {
         Terrein t = HIER.get(p.getUUID());
@@ -391,11 +418,15 @@ public final class Hoofdstuk {
             bericht(p, "quest.guhs.ringh5.rook.dicht");
         }
         if (lijn().stap(p) < ACHTER && t.in(Plekken.TUNNEL, hier)) {
-            Vec3 voor = t.midden(Plekken.DEUR_SCENE);
-            if (hier.distanceToSqr(voor) > 5.5 * 5.5) {
-                Duwtje.terug(p, p.level().dimension(), voor, t.yaw(0f));   // (deep in: by a pearl, a glitch: put back in front of it)
+            // out again on the side they came in by (the valley side, or from behind the wall: no short cut either way)
+            double z = t.lokaal(hier).z;
+            int voor = Plekken.TUNNEL.get(0).getZ(), achter = Plekken.TUNNEL.get(1).getZ() + 1;
+            boolean voorkant = z - voor <= achter - z;
+            Vec3 buiten = voorkant ? t.midden(Plekken.DEUR_SCENE) : t.midden(new BlockPos(Plekken.DEUR_SCENE.getX(), Plekken.DEUR_SCENE.getY(), achter + 2));
+            if (Math.min(z - voor, achter - z) > 2.5) {
+                Duwtje.terug(p, p.level().dimension(), buiten, t.yaw(voorkant ? 0f : 180f));   // (deep in: a pearl, a glitch)
             } else {
-                Duwtje.duw(p, voor.subtract(hier), 0.8);
+                Duwtje.duw(p, buiten.subtract(hier), 0.8);
             }
             bericht(p, "quest.guhs.ringh5.poortje.dicht");
         }

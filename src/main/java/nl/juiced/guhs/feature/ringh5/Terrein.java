@@ -174,6 +174,21 @@ public record Terrein(ResourceKey<Level> dim, BlockPos nul, Rotation draai) {
         return null;
     }
 
+    /** Does this spot lie in a copy that was found already (no looking: for what is asked very often)? */
+    public static boolean kent(Level level, Vec3 plek) {
+        for (Terrein t : TEST) {
+            if (t.isIn(level) && t.bevat(plek)) {
+                return true;
+            }
+        }
+        for (Terrein t : GEVONDEN.values()) {
+            if (t.isIn(level) && t.bevat(plek)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * The nearest copy with a piece within {@code afstand} blocks of this spot (loaded chunks only), whether or not the
      * spot lies in it: for the op commands.

@@ -37,14 +37,14 @@ public final class Plekken {
 
     /** Het Asveld: the box that counts as "in the field", the line the gaze runs up and down, its hiding places. */
     public static final List<BlockPos> ZONE_A = List.of(new BlockPos(10, 6, 21), new BlockPos(60, 13, 41));
-    public static final List<BlockPos> BLIK_A = List.of(new BlockPos(48, 7, 22), new BlockPos(41, 7, 26), new BlockPos(34, 7, 30),
-            new BlockPos(27, 7, 34), new BlockPos(20, 7, 38), new BlockPos(15, 7, 41));
+    public static final List<BlockPos> BLIK_A = List.of(new BlockPos(48, 7, 24), new BlockPos(41, 7, 26), new BlockPos(34, 7, 30),
+            new BlockPos(27, 7, 34), new BlockPos(20, 7, 38), new BlockPos(18, 7, 39));
     public static final List<BlockPos> SCHUIL_A = List.of(new BlockPos(43, 7, 23), new BlockPos(36, 7, 27), new BlockPos(29, 7, 31),
             new BlockPos(22, 7, 35), new BlockPos(16, 7, 39));
 
     /** De Kale Vlakte: its box and the line of the gaze. */
     public static final List<BlockPos> ZONE_B = List.of(new BlockPos(16, 6, 46), new BlockPos(83, 13, 56));
-    public static final List<BlockPos> BLIK_B = List.of(new BlockPos(18, 7, 48), new BlockPos(38, 7, 50), new BlockPos(60, 7, 51),
+    public static final List<BlockPos> BLIK_B = List.of(new BlockPos(24, 7, 49), new BlockPos(38, 7, 50), new BlockPos(60, 7, 51),
             new BlockPos(80, 7, 54));
 
     /** Where the Eye looks when nobody is in a zone (a slow round), and the valley in which a worn ring draws it. */
@@ -63,7 +63,7 @@ public final class Plekken {
     /** Het Wachthek: its three guards (they look east, down the lane) and the post of skulls in front of it. */
     public static final BlockPos WACHTER_1 = new BlockPos(26, 7, 63);
     public static final BlockPos WACHTER_2 = new BlockPos(26, 7, 68);
-    public static final BlockPos WACHTER_3 = new BlockPos(22, 7, 65);
+    public static final BlockPos WACHTER_3 = new BlockPos(23, 7, 67);
     public static final BlockPos SCHEDELPAAL = new BlockPos(33, 7, 62);
 
     /** Het Roosterpoortje: the bars a player sees until Guhdalf opened it (really air), the tunnel, the yard in front, where the scene plays. */
@@ -84,6 +84,9 @@ public final class Plekken {
     public static final List<BlockPos> ROUTE_HEK = List.of(new BlockPos(33, 7, 65), new BlockPos(24, 7, 65), new BlockPos(20, 7, 65));
     public static final List<BlockPos> ROUTE_DEUR = List.of(new BlockPos(16, 7, 66), new BlockPos(13, 7, 68));
     public static final List<BlockPos> ROUTE_ACHTER = List.of(new BlockPos(13, 7, 72), new BlockPos(13, 7, 79), new BlockPos(18, 7, 83));
+
+    /** The three ways in, where they meet the edge of the build: the mouth, and a tunnel through the cliff on either side of the camp. */
+    public static final List<BlockPos> INGANGEN = List.of(new BlockPos(48, 7, 0), new BlockPos(0, 7, 6), new BlockPos(95, 7, 6));
 
     /** The size of the whole build and its anchor (the burcht's anchor: tools/features/ring_h5.py). */
     public static final BlockPos MAAT = new BlockPos(96, 64, 96);
