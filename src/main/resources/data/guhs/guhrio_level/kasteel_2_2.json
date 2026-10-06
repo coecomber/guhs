@@ -1,0 +1,36 @@
+{
+  "wereld": "2-2",
+  "banen": [
+    {
+      "id": "hoofd",
+      "punten": [
+        [
+          -2,
+          0,
+          0
+        ],
+        [
+          93,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 6,
+      "onder": -4,
+      "boven": 15
+    }
+  ],
+  "uitgang": [
+    44,
+    19,
+    -44
+  ],
+  "ingang": [
+    46,
+    19,
+    -25
+  ],
+  "na": "kasteel_2_1"
+}

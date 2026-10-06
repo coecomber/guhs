@@ -1,0 +1,22 @@
+{
+  "type": "guhs:burcht",
+  "biomes": "#guhs:has_structure/guhrio_kasteel",
+  "step": "fluid_springs",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {},
+  "templates": "guhs:guhrio_kasteel",
+  "tiles_x": 4,
+  "tiles_z": 4,
+  "tile_size": 32,
+  "anchor": [
+    63,
+    26,
+    58
+  ],
+  "placement": "paleis",
+  "min_y": 33,
+  "max_y": 33,
+  "reach": 48,
+  "keep_clear": 70,
+  "voorrang": 290
+}

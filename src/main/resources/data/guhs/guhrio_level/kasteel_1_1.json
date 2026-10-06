@@ -1,0 +1,35 @@
+{
+  "wereld": "1-1",
+  "banen": [
+    {
+      "id": "hoofd",
+      "punten": [
+        [
+          -2,
+          0,
+          0
+        ],
+        [
+          93,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 6,
+      "onder": -4,
+      "boven": 15
+    }
+  ],
+  "uitgang": [
+    47,
+    -4,
+    -44
+  ],
+  "ingang": [
+    55,
+    -4,
+    -25
+  ]
+}

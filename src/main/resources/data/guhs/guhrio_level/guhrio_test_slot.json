@@ -1,0 +1,35 @@
+{
+  "wereld": "SLOT",
+  "banen": [
+    {
+      "id": "hoofd",
+      "punten": [
+        [
+          -2,
+          0,
+          0
+        ],
+        [
+          27,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 6,
+      "onder": -3,
+      "boven": 8
+    }
+  ],
+  "uitgang": [
+    26,
+    0,
+    0
+  ],
+  "ingang": [
+    -1,
+    0,
+    0
+  ]
+}

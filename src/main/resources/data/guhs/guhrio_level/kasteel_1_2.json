@@ -1,0 +1,56 @@
+{
+  "wereld": "1-2",
+  "banen": [
+    {
+      "id": "hoofd",
+      "punten": [
+        [
+          -2,
+          0,
+          0
+        ],
+        [
+          93,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 6,
+      "onder": -4,
+      "boven": 8
+    },
+    {
+      "id": "bonus",
+      "punten": [
+        [
+          26,
+          0,
+          0
+        ],
+        [
+          42,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 6,
+      "onder": 9,
+      "boven": 15
+    }
+  ],
+  "uitgang": [
+    44,
+    -4,
+    -44
+  ],
+  "ingang": [
+    36,
+    -4,
+    -25
+  ],
+  "na": "kasteel_1_1"
+}

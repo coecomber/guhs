@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "ingedrukt=false": {
+      "model": "guhs:block/guhrio_schakelaar"
+    },
+    "ingedrukt=true": {
+      "model": "guhs:block/guhrio_schakelaar_in"
+    }
+  }
+}

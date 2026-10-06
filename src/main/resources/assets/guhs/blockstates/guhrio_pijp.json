@@ -1,7 +1,30 @@
 {
   "variants": {
-    "": {
+    "facing=up": {
       "model": "guhs:block/guhrio_pijp"
+    },
+    "facing=down": {
+      "model": "guhs:block/guhrio_pijp",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "guhs:block/guhrio_pijp",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guhrio_pijp",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guhrio_pijp",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "guhs:block/guhrio_pijp",
+      "x": 90,
+      "y": 90
     }
   }
 }

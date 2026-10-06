@@ -149,6 +149,9 @@
     "guhs:guhrio_steen",
     "guhs:guhrio_vraagblok",
     "guhs:guhrio_pijp",
-    "guhs:guhrio_pijp_lijf"
+    "guhs:guhrio_pijp_lijf",
+    "guhs:guhrio_schakelaar",
+    "guhs:guhrio_schakelblok",
+    "guhs:guhrio_grillspies_plek"
   ]
 }
