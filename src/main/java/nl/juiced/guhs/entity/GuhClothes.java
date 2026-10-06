@@ -395,6 +395,16 @@ public enum GuhClothes {
     // </ring>
     //
     // <guhrio_beloning>
+    /** bbq2 (guhrio-beloning, Pad-guh's shop): the red cap with a white badge (a G) and a big brown moustache under the nose. */
+    GUHRIOBELONING_RODE_PET(Slot.HEAD, "outfit_guhriobeloning_pet", "outfit_guhriobeloning_snor"),
+    /** bbq2 (guhrio-beloning, Pad-guh's shop): the green cap of the other brother (an L on its badge), no moustache. */
+    GUHRIOBELONING_GROENE_PET(Slot.HEAD, "outfit_guhriobeloning_pet"),
+    /** bbq2 (guhrio-beloning, Pad-guh's shop): a green turtle shell on the back, with a white rim. */
+    GUHRIOBELONING_SCHILD(Slot.BACK, "outfit_guhriobeloning_schild"),
+    /** bbq2 (guhrio-beloning, from Prinses Perzikguh after the duel): her little golden crown with a red and a blue jewel. */
+    GUHRIOBELONING_PRINSESSENKROON(Slot.HEAD, "outfit_guhriobeloning_kroon"),
+    /** bbq2 (guhrio-beloning, from Pad-guh for all 18 big vadsmunten): the cap in shining gold, a vadsmunt on its badge. */
+    GUHRIOBELONING_GOUDEN_PET(Slot.HEAD, "outfit_guhriobeloning_pet"),
     // </guhrio_beloning>
     //
     ;
