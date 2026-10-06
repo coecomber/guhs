@@ -1,0 +1,14 @@
+{
+  "type": "guhs:barbecueput",
+  "biomes": "#guhs:has_structure/oude_guhrad_centrale",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "guhs:oude_guhrad_centrale/start",
+  "start_jigsaw_name": "guhs:oude_guhrad_centrale_midden",
+  "check_radius": 36,
+  "max_height_difference": 10,
+  "headroom": 24,
+  "keep_clear": 24,
+  "voorrang": 280
+}

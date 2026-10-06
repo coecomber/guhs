@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "IPI",
+    "XPI",
     "SBS",
     "IGI"
   ],
@@ -11,7 +11,8 @@
     "P": "minecraft:piston",
     "S": "guhs:sausslang",
     "B": "minecraft:bucket",
-    "G": "guhs:grillspies"
+    "G": "guhs:grillspies",
+    "X": "guhs:techquest_recept_saus"
   },
   "result": {
     "id": "guhs:sauspomp"

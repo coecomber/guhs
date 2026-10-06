@@ -1,0 +1,294 @@
+{
+  "textures": {
+    "koper": "guhs:block/techquest_km_koper",
+    "koper_donker": "guhs:block/techquest_km_koper_donker",
+    "ijzer": "guhs:block/techquest_km_ijzer",
+    "roze": "guhs:block/techquest_km_roze",
+    "roze_donker": "guhs:block/techquest_km_roze_donker",
+    "glas": "guhs:block/techquest_km_glas",
+    "gloei": "guhs:block/techquest_km_gloei",
+    "bek": "guhs:block/techquest_km_bek",
+    "tand": "guhs:block/techquest_km_tand",
+    "hout": "guhs:block/techquest_km_hout",
+    "knabbel": "guhs:block/techquest_km_knabbel",
+    "oog_dicht": "guhs:block/techquest_km_oog_dicht",
+    "oog_open": "guhs:block/techquest_km_oog_open",
+    "neus": "guhs:block/techquest_km_neus",
+    "blos": "guhs:block/techquest_km_blos",
+    "particle": "guhs:block/techquest_km_koper"
+  },
+  "elements": [
+    {
+      "from": [
+        -16,
+        -16,
+        -16
+      ],
+      "to": [
+        -4,
+        -10,
+        -2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            1.5
+          ],
+          "texture": "#koper_donker"
+        },
+        "south": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            1.5
+          ],
+          "texture": "#koper_donker"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            0.0,
+            3.5,
+            1.5
+          ],
+          "texture": "#koper_donker"
+        },
+        "east": {
+          "uv": [
+            0.0,
+            0.0,
+            3.5,
+            1.5
+          ],
+          "texture": "#koper_donker"
+        },
+        "up": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            3.5
+          ],
+          "texture": "#koper_donker"
+        },
+        "down": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            3.5
+          ],
+          "texture": "#koper_donker"
+        }
+      }
+    },
+    {
+      "from": [
+        -12,
+        -16,
+        -10
+      ],
+      "to": [
+        0,
+        24,
+        2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.0,
+            0.0,
+            4.0,
+            10.0
+          ],
+          "texture": "#ijzer"
+        },
+        "south": {
+          "uv": [
+            1.0,
+            0.0,
+            4.0,
+            10.0
+          ],
+          "texture": "#ijzer"
+        },
+        "west": {
+          "uv": [
+            1.5,
+            0.0,
+            4.5,
+            10.0
+          ],
+          "texture": "#ijzer"
+        },
+        "east": {
+          "uv": [
+            1.5,
+            0.0,
+            4.5,
+            10.0
+          ],
+          "texture": "#ijzer"
+        },
+        "up": {
+          "uv": [
+            1.0,
+            1.5,
+            4.0,
+            4.5
+          ],
+          "texture": "#ijzer"
+        },
+        "down": {
+          "uv": [
+            1.0,
+            1.5,
+            4.0,
+            4.5
+          ],
+          "texture": "#ijzer"
+        }
+      }
+    },
+    {
+      "from": [
+        -14,
+        24,
+        -12
+      ],
+      "to": [
+        2,
+        28,
+        4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.5,
+            10.0,
+            4.5,
+            11.0
+          ],
+          "texture": "#koper_donker"
+        },
+        "south": {
+          "uv": [
+            0.5,
+            10.0,
+            4.5,
+            11.0
+          ],
+          "texture": "#koper_donker"
+        },
+        "west": {
+          "uv": [
+            1.0,
+            10.0,
+            5.0,
+            11.0
+          ],
+          "texture": "#koper_donker"
+        },
+        "east": {
+          "uv": [
+            1.0,
+            10.0,
+            5.0,
+            11.0
+          ],
+          "texture": "#koper_donker"
+        },
+        "up": {
+          "uv": [
+            0.5,
+            1.0,
+            4.5,
+            5.0
+          ],
+          "texture": "#koper_donker"
+        },
+        "down": {
+          "uv": [
+            0.5,
+            1.0,
+            4.5,
+            5.0
+          ],
+          "texture": "#koper_donker"
+        }
+      }
+    },
+    {
+      "from": [
+        -10,
+        28,
+        -8
+      ],
+      "to": [
+        -2,
+        30,
+        0
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            1.5,
+            11.0,
+            3.5,
+            11.5
+          ],
+          "texture": "#bek"
+        },
+        "south": {
+          "uv": [
+            1.5,
+            11.0,
+            3.5,
+            11.5
+          ],
+          "texture": "#bek"
+        },
+        "west": {
+          "uv": [
+            2.0,
+            11.0,
+            4.0,
+            11.5
+          ],
+          "texture": "#bek"
+        },
+        "east": {
+          "uv": [
+            2.0,
+            11.0,
+            4.0,
+            11.5
+          ],
+          "texture": "#bek"
+        },
+        "up": {
+          "uv": [
+            1.5,
+            2.0,
+            3.5,
+            4.0
+          ],
+          "texture": "#bek"
+        },
+        "down": {
+          "uv": [
+            1.5,
+            2.0,
+            3.5,
+            4.0
+          ],
+          "texture": "#bek"
+        }
+      }
+    }
+  ]
+}

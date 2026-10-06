@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "IPI",
+    "XPI",
     "SGS",
     "HDH"
   ],
@@ -12,7 +12,8 @@
     "S": "guhs:sausslang",
     "G": "guhs:grillspies",
     "H": "guhs:houtskoolsteen",
-    "D": "guhs:guh_wire"
+    "D": "guhs:guh_wire",
+    "X": "guhs:techquest_recept_saus"
   },
   "result": {
     "id": "guhs:grillkoolpers"

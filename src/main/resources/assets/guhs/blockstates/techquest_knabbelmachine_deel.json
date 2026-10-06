@@ -1,0 +1,976 @@
+{
+  "variants": {
+    "nr=0": {
+      "model": "guhs:block/techquest_km_fundering_0_0_0"
+    },
+    "nr=1": {
+      "model": "guhs:block/techquest_km_fundering_0_0_1"
+    },
+    "nr=2": {
+      "model": "guhs:block/techquest_km_fundering_0_0_2"
+    },
+    "nr=3": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=4": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=5": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=6": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=7": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=8": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=9": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=10": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=11": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=12": {
+      "model": "guhs:block/techquest_km_fundering_1_0_0"
+    },
+    "nr=13": {
+      "model": "guhs:block/techquest_km_fundering_1_0_1"
+    },
+    "nr=14": {
+      "model": "guhs:block/techquest_km_fundering_1_0_2"
+    },
+    "nr=15": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=16": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=17": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=18": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=19": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=20": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=21": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=22": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=23": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=24": {
+      "model": "guhs:block/techquest_km_fundering_2_0_0"
+    },
+    "nr=25": {
+      "model": "guhs:block/techquest_km_fundering_2_0_1"
+    },
+    "nr=26": {
+      "model": "guhs:block/techquest_km_fundering_2_0_2"
+    },
+    "nr=27": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=28": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=29": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=30": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=31": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=32": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=33": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=34": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=35": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=36": {
+      "model": "guhs:block/techquest_km_ketel_0_0_0"
+    },
+    "nr=37": {
+      "model": "guhs:block/techquest_km_ketel_0_0_1"
+    },
+    "nr=38": {
+      "model": "guhs:block/techquest_km_ketel_0_0_2"
+    },
+    "nr=39": {
+      "model": "guhs:block/techquest_km_ketel_0_1_0"
+    },
+    "nr=40": {
+      "model": "guhs:block/techquest_km_ketel_0_1_1"
+    },
+    "nr=41": {
+      "model": "guhs:block/techquest_km_ketel_0_1_2"
+    },
+    "nr=42": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=43": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=44": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=45": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=46": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=47": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=48": {
+      "model": "guhs:block/techquest_km_ketel_1_0_0"
+    },
+    "nr=49": {
+      "model": "guhs:block/techquest_km_ketel_1_0_1"
+    },
+    "nr=50": {
+      "model": "guhs:block/techquest_km_ketel_1_0_2"
+    },
+    "nr=51": {
+      "model": "guhs:block/techquest_km_ketel_1_1_0"
+    },
+    "nr=52": {
+      "model": "guhs:block/techquest_km_ketel_1_1_1"
+    },
+    "nr=53": {
+      "model": "guhs:block/techquest_km_ketel_1_1_2"
+    },
+    "nr=54": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=55": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=56": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=57": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=58": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=59": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=60": {
+      "model": "guhs:block/techquest_km_ketel_2_0_0"
+    },
+    "nr=61": {
+      "model": "guhs:block/techquest_km_ketel_2_0_1"
+    },
+    "nr=62": {
+      "model": "guhs:block/techquest_km_ketel_2_0_2"
+    },
+    "nr=63": {
+      "model": "guhs:block/techquest_km_ketel_2_1_0"
+    },
+    "nr=64": {
+      "model": "guhs:block/techquest_km_ketel_2_1_1"
+    },
+    "nr=65": {
+      "model": "guhs:block/techquest_km_ketel_2_1_2"
+    },
+    "nr=66": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=67": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=68": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=69": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=70": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=71": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=72": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=73": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=74": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=75": {
+      "model": "guhs:block/techquest_km_maag_0_1_0"
+    },
+    "nr=76": {
+      "model": "guhs:block/techquest_km_maag_0_1_1"
+    },
+    "nr=77": {
+      "model": "guhs:block/techquest_km_maag_0_1_2"
+    },
+    "nr=78": {
+      "model": "guhs:block/techquest_km_maag_0_2_0"
+    },
+    "nr=79": {
+      "model": "guhs:block/techquest_km_maag_0_2_1"
+    },
+    "nr=80": {
+      "model": "guhs:block/techquest_km_maag_0_2_2"
+    },
+    "nr=81": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=82": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=83": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=84": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=85": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=86": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=87": {
+      "model": "guhs:block/techquest_km_maag_1_1_0"
+    },
+    "nr=88": {
+      "model": "guhs:block/techquest_km_maag_1_1_1"
+    },
+    "nr=89": {
+      "model": "guhs:block/techquest_km_maag_1_1_2"
+    },
+    "nr=90": {
+      "model": "guhs:block/techquest_km_maag_1_2_0"
+    },
+    "nr=91": {
+      "model": "guhs:block/techquest_km_maag_1_2_1"
+    },
+    "nr=92": {
+      "model": "guhs:block/techquest_km_maag_1_2_2"
+    },
+    "nr=93": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=94": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=95": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=96": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=97": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=98": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=99": {
+      "model": "guhs:block/techquest_km_maag_2_1_0"
+    },
+    "nr=100": {
+      "model": "guhs:block/techquest_km_maag_2_1_1"
+    },
+    "nr=101": {
+      "model": "guhs:block/techquest_km_maag_2_1_2"
+    },
+    "nr=102": {
+      "model": "guhs:block/techquest_km_maag_2_2_0"
+    },
+    "nr=103": {
+      "model": "guhs:block/techquest_km_maag_2_2_1"
+    },
+    "nr=104": {
+      "model": "guhs:block/techquest_km_maag_2_2_2"
+    },
+    "nr=105": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=106": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=107": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=108": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=109": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=110": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=111": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=112": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=113": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=114": {
+      "model": "guhs:block/techquest_km_snoet_0_2_0"
+    },
+    "nr=115": {
+      "model": "guhs:block/techquest_km_snoet_0_2_1"
+    },
+    "nr=116": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=117": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=118": {
+      "model": "guhs:block/techquest_km_snoet_0_3_1"
+    },
+    "nr=119": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=120": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=121": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=122": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=123": {
+      "model": "guhs:block/techquest_km_snoet_1_1_0"
+    },
+    "nr=124": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=125": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=126": {
+      "model": "guhs:block/techquest_km_snoet_1_2_0"
+    },
+    "nr=127": {
+      "model": "guhs:block/techquest_km_snoet_1_2_1"
+    },
+    "nr=128": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=129": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=130": {
+      "model": "guhs:block/techquest_km_snoet_1_3_1"
+    },
+    "nr=131": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=132": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=133": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=134": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=135": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=136": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=137": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=138": {
+      "model": "guhs:block/techquest_km_snoet_2_2_0"
+    },
+    "nr=139": {
+      "model": "guhs:block/techquest_km_snoet_2_2_1"
+    },
+    "nr=140": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=141": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=142": {
+      "model": "guhs:block/techquest_km_snoet_2_3_1"
+    },
+    "nr=143": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=144": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=145": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=146": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=147": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=148": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=149": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=150": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=151": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=152": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=153": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=154": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=155": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=156": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=157": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=158": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=159": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=160": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=161": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=162": {
+      "model": "guhs:block/techquest_km_ogen_dicht_1_2_0"
+    },
+    "nr=163": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=164": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=165": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=166": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=167": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=168": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=169": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=170": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=171": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=172": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=173": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=174": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=175": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=176": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=177": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=178": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=179": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=180": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=181": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=182": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=183": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=184": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=185": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=186": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=187": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=188": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=189": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=190": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=191": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=192": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=193": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=194": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=195": {
+      "model": "guhs:block/techquest_km_ogen_open_1_1_0"
+    },
+    "nr=196": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=197": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=198": {
+      "model": "guhs:block/techquest_km_ogen_open_1_2_0"
+    },
+    "nr=199": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=200": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=201": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=202": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=203": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=204": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=205": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=206": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=207": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=208": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=209": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=210": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=211": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=212": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=213": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=214": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=215": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=216": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=217": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=218": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=219": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=220": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=221": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=222": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=223": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=224": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=225": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=226": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=227": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=228": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=229": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=230": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=231": {
+      "model": "guhs:block/techquest_km_kaak_1_1_0"
+    },
+    "nr=232": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=233": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=234": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=235": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=236": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=237": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=238": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=239": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=240": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=241": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=242": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=243": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=244": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=245": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=246": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=247": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=248": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=249": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=250": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=251": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=252": {
+      "model": "guhs:block/techquest_km_steiger_0_0_0"
+    },
+    "nr=253": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=254": {
+      "model": "guhs:block/techquest_km_steiger_0_0_2"
+    },
+    "nr=255": {
+      "model": "guhs:block/techquest_km_steiger_0_1_0"
+    },
+    "nr=256": {
+      "model": "guhs:block/techquest_km_steiger_0_1_1"
+    },
+    "nr=257": {
+      "model": "guhs:block/techquest_km_steiger_0_1_2"
+    },
+    "nr=258": {
+      "model": "guhs:block/techquest_km_steiger_0_2_0"
+    },
+    "nr=259": {
+      "model": "guhs:block/techquest_km_steiger_0_2_1"
+    },
+    "nr=260": {
+      "model": "guhs:block/techquest_km_steiger_0_2_2"
+    },
+    "nr=261": {
+      "model": "guhs:block/techquest_km_steiger_0_3_0"
+    },
+    "nr=262": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=263": {
+      "model": "guhs:block/techquest_km_steiger_0_3_2"
+    },
+    "nr=264": {
+      "model": "guhs:block/techquest_km_steiger_1_0_0"
+    },
+    "nr=265": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=266": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=267": {
+      "model": "guhs:block/techquest_km_steiger_1_1_0"
+    },
+    "nr=268": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=269": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=270": {
+      "model": "guhs:block/techquest_km_steiger_1_2_0"
+    },
+    "nr=271": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=272": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=273": {
+      "model": "guhs:block/techquest_km_steiger_1_3_0"
+    },
+    "nr=274": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=275": {
+      "model": "guhs:block/techquest_km_steiger_1_3_2"
+    },
+    "nr=276": {
+      "model": "guhs:block/techquest_km_steiger_2_0_0"
+    },
+    "nr=277": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=278": {
+      "model": "guhs:block/techquest_km_steiger_2_0_2"
+    },
+    "nr=279": {
+      "model": "guhs:block/techquest_km_steiger_2_1_0"
+    },
+    "nr=280": {
+      "model": "guhs:block/techquest_km_steiger_2_1_1"
+    },
+    "nr=281": {
+      "model": "guhs:block/techquest_km_steiger_2_1_2"
+    },
+    "nr=282": {
+      "model": "guhs:block/techquest_km_steiger_2_2_0"
+    },
+    "nr=283": {
+      "model": "guhs:block/techquest_km_steiger_2_2_1"
+    },
+    "nr=284": {
+      "model": "guhs:block/techquest_km_steiger_2_2_2"
+    },
+    "nr=285": {
+      "model": "guhs:block/techquest_km_steiger_2_3_0"
+    },
+    "nr=286": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=287": {
+      "model": "guhs:block/techquest_km_steiger_2_3_2"
+    },
+    "nr=288": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=289": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=290": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=291": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=292": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=293": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=294": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=295": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=296": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=297": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=298": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=299": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=300": {
+      "model": "guhs:block/techquest_km_knabbel_1_0_0"
+    },
+    "nr=301": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=302": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=303": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=304": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=305": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=306": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=307": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=308": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=309": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=310": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=311": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=312": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=313": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=314": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=315": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=316": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=317": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=318": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=319": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=320": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=321": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=322": {
+      "model": "guhs:block/techquest_km_leeg"
+    },
+    "nr=323": {
+      "model": "guhs:block/techquest_km_leeg"
+    }
+  }
+}

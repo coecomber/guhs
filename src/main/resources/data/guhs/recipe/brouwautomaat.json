@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    " R ",
+    "XR ",
     "SKS",
     "IDI"
   ],
@@ -11,7 +11,8 @@
     "S": "guhs:sausslang",
     "K": "guhs:guhbrouwketel",
     "I": "minecraft:iron_ingot",
-    "D": "guhs:guh_wire"
+    "D": "guhs:guh_wire",
+    "X": "guhs:techquest_recept_saus"
   },
   "result": {
     "id": "guhs:brouwautomaat"

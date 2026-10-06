@@ -1,3 +1,22 @@
 {
-  "parent": "guhs:block/knabbelmachine_beeldje"
+  "parent": "guhs:block/knabbelmachine_beeldje",
+  "display": {
+    "gui": {
+      "rotation": [
+        20,
+        215,
+        0
+      ],
+      "translation": [
+        0,
+        -1.5,
+        0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  }
 }
