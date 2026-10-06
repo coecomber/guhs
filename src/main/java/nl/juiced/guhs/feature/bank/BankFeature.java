@@ -51,7 +51,7 @@ import nl.juiced.guhs.storage.BankStorage;
  * <li><b>The cap.</b> A Bank Guh holds at most {@link BankStorage#CAP} of one kind of item (item + components); the rules
  * live in {@link BankStorage} (the single way in, which hands back what does not fit) and every caller keeps that
  * remainder. Banks that held more before the cap existed keep everything.</li>
- * <li><b>The upgrade</b> ({@link #BANK_UPGRADE}, "Bodemloos Buikje"): used on a placed Bank Guh it takes the cap away for
+ * <li><b>The upgrade</b> ({@link #BANK_UPGRADE}, "Bodemloos Knabbelmaagje"): used on a placed Bank Guh it takes the cap away for
  * good. It stays with the bank when the bank is picked up (block entity + the item component {@link #BANK_OPGEVOERD} +
  * the loot table). Only the uitvinder-guh gives one (tech-quests): there is no recipe.</li>
  * <li><b>The item capability of the Bank Guh</b> ({@link nl.juiced.guhs.storage.BankHandler}): pipes, hoppers and chore
@@ -88,7 +88,7 @@ public final class BankFeature {
     /** The link key: click a Bank Guh (the key remembers it), then every Hapluikje that must feed that bank. */
     public static final DeferredItem<Item> BANK_SLEUTEL = ITEMS.<Item>registerItem("bank_sleutel", BankSleutelItem::new,
             () -> new Item.Properties().stacksTo(1));
-    /** The one upgrade ("Bodemloos Buikje"): use it on a placed Bank Guh. Given by tech-quests (no recipe). */
+    /** The one upgrade ("Bodemloos Knabbelmaagje"): use it on a placed Bank Guh. Given by tech-quests (no recipe). */
     public static final DeferredItem<Item> BANK_UPGRADE = ITEMS.<Item>registerItem("bank_upgrade", BankUpgradeItem::new,
             () -> new Item.Properties().stacksTo(16).rarity(Rarity.EPIC));
 

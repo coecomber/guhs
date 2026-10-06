@@ -38,7 +38,7 @@ import nl.juiced.guhs.registry.ModSounds;
  * Bank Guh: right-click to open its stomach (storage with search, sort, filters and a crafting grid; at most 256 of one
  * kind of item until it got the upgrade). Breaking it keeps everything inside the item, the upgrade included.
  * <p>
- * bbq2: a click with the Bodemloos Buikje ({@code guhs:bank_upgrade}) upgrades it, a click with a Banksleutel
+ * bbq2: a click with the Bodemloos Knabbelmaagje ({@code guhs:bank_upgrade}) upgrades it, a click with a Banksleutel
  * ({@code guhs:bank_sleutel}) makes the key remember this bank (for a Hapluikje). {@link #OPGEVOERD} mirrors the
  * upgrade of the block entity so the client can let an upgraded bank sparkle.
  */

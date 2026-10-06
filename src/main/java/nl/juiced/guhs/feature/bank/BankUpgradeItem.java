@@ -19,7 +19,7 @@ import nl.juiced.guhs.registry.ModSounds;
 import nl.juiced.guhs.storage.BankStorage;
 
 /**
- * The Bodemloos Buikje ({@code guhs:bank_upgrade}): the one upgrade of the Bank Guh. Used on a placed bank it takes away
+ * The Bodemloos Knabbelmaagje ({@code guhs:bank_upgrade}): the one upgrade of the Bank Guh. Used on a placed bank it takes away
  * the cap of {@link BankStorage#CAP} per kind of item, for good: the upgrade stays with that bank, also when the bank is
  * picked up and put down again. One item per bank; a bank that has it already does not eat a second one. The uitvinder-guh
  * of the Oude Guhrad-centrale gives it (tech-quests); there is no recipe.
