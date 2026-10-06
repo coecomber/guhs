@@ -333,11 +333,16 @@ public class VerhaalMotorGameTests {
             Sluiers.houdBuiten(toeschouwer);
             helper.assertTrue(klaar.position().equals(daar) && toeschouwer.position().equals(daar), "open for a player whose story is there; spectators pass");
             // nobody breaks or places there
+            // (bbq2 ring-kern, CONTRACT_130 13.9: the sluier's box IS the protected box of feature.wereld.Bescherming)
             BreakBlockEvent breek = new BreakBlockEvent(level, binnen.below(), Blocks.STONE.defaultBlockState(), klaar);
-            Sluiers.onBreak(breek);
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(breek);
             BreakBlockEvent ernaast = new BreakBlockEvent(level, o.below(), Blocks.STONE.defaultBlockState(), klaar);
-            Sluiers.onBreak(ernaast);
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(ernaast);
             helper.assertTrue(breek.isCanceled() && !ernaast.isCanceled(), "protected inside, also for players who may enter; free outside");
+            helper.assertTrue(nl.juiced.guhs.feature.wereld.Bescherming.beschermd(level, new BlockPos(zone.x0(), zone.y0(), zone.z0()))
+                    && nl.juiced.guhs.feature.wereld.Bescherming.beschermd(level, new BlockPos(zone.x1(), zone.y1(), zone.z1()))
+                    && !nl.juiced.guhs.feature.wereld.Bescherming.beschermd(level, new BlockPos(zone.x0() - 1, zone.y0(), zone.z0())),
+                    "the protected box is exactly the box of smoke");
             // the goal pointer and the compass never give a hidden structure away
             Doel doel = Doel.structuur(level.dimension(), VerhaalDemo.PLEK, Component.literal("x"));
             helper.assertTrue(Doelen.zoek(p, doel) == null, "a hidden structure is never a goal");
