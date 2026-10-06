@@ -361,6 +361,10 @@ public enum GuhClothes {
     // </paleizen>
     //
     // <bestaand>
+    /** bbq2 (bestaand), the Wachter-guh's reward: a dark iron helmet with a nose guard and a saté skewer as its plume. */
+    BESTAAND_WACHTERSHELM(Slot.HEAD, "outfit_wachtershelm"),
+    /** bbq2 (bestaand), the Wachter-guh's reward: a charcoal cape with a glowing hem and a pink guh face on the back. */
+    BESTAAND_WACHTERSMANTEL(Slot.BODY, "outfit_cape"),
     // </bestaand>
     //
     // <camping_markt>
