@@ -1,5 +1,6 @@
 package nl.juiced.guhs.feature.ringh6;
 
+import java.util.List;
 import java.util.Locale;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -9,6 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -26,6 +28,8 @@ import nl.juiced.guhs.feature.verhaal.Verteller;
  * /guhs ringh6 stand              where the player is in the chapter, the mountain they are on, the ring's weight
  * /guhs ringh6 stap &lt;0-7&gt;        the story up to chapter 5 is done and this chapter stands at that step (7 = done)
  * /guhs ringh6 ga &lt;plek&gt;         to a named spot of the mountain the player is on (kamp, richel_1, start_2, spleet, rand ...)
+ * /guhs ringh6 controle           the mountain at this spot: is every fire, lock, hook, standing spot and Rookguhje where the
+ *                                 story expects it (a real copy, whichever way it is turned; also from the console)
  * /guhs ringh6 kool               a coal over the player's head
  * /guhs ringh6 graai              Smikagol grabs now
  * /guhs ringh6 thuis              where the flight home would put this player down
@@ -70,7 +74,7 @@ final class RingH6Commands {
             return b.buildFuture();
         }).executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();
-            Berg.Kopie berg = Berg.zoek(p);
+            Berg.Kopie berg = Berg.hier(p.level(), p.blockPosition());
             String plek = StringArgumentType.getString(c, "plek");
             if (berg == null || !berg.g().plekken().containsKey(plek)) {
                 return zeg(c, berg == null ? "you are not on a Frituurberg" : "no such spot: " + plek);
@@ -79,6 +83,18 @@ final class RingH6Commands {
             Duwtje.terug(p, p.level().dimension(), Vec3.atBottomCenterOf(daar), p.getYRot());
             return zeg(c, plek + " = " + daar.toShortString());
         })));
+        cmd.then(Commands.literal("controle").executes(c -> {
+            // (also from the console: execute in guhs:barbecuether positioned <x y z> run guhs ringh6 controle)
+            ServerLevel level = c.getSource().getLevel();
+            Berg.Kopie berg = Berg.hier(level, BlockPos.containing(c.getSource().getPosition()));
+            if (berg == null) {
+                return zeg(c, "no Frituurberg here (loaded chunks only)");
+            }
+            List<String> mis = Berg.controleer(berg, true);
+            return zeg(c, "Frituurberg, anchor " + berg.anker().toShortString() + ", turned " + berg.draai() + ": camp " + berg.wereld("kamp").toShortString()
+                    + ", balcony " + berg.wereld("rand").toShortString() + ": "
+                    + (mis.isEmpty() ? "everything is where the story expects it" : mis.size() + " problem(s): " + String.join("; ", mis)));
+        }));
         cmd.then(Commands.literal("kool").executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();
             return zeg(c, Kolen.laatVallen(p.level(), p.position(), p) != null ? "a coal comes down" : "no room above you for a coal");

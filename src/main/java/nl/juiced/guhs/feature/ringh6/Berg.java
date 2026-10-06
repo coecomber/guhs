@@ -23,9 +23,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
+import nl.juiced.guhs.feature.ring.Gaven;
+import nl.juiced.guhs.feature.ring.RingFeature;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
 import nl.juiced.guhs.feature.verhaal.Sluiers;
 import nl.juiced.guhs.feature.wereld.Bezetting;
@@ -171,9 +176,22 @@ public final class Berg {
         for (Sluiers.Zone zone : Sluiers.zones(level, STRUCTUUR)) {
             dichtbij |= pos.getX() >= zone.x0() - 8 && pos.getX() <= zone.x1() + 8 && pos.getZ() >= zone.z0() - 8 && pos.getZ() <= zone.z1() + 8;
         }
-        if (!dichtbij) {
-            return null;
-        }
+        return dichtbij ? echte(level, pos) : null;
+    }
+
+    /**
+     * The same without the cheap first look (the sluier only knows a copy once a player came near it): for the op commands,
+     * which may be run from the console at a copy nobody visited yet.
+     */
+    @Nullable
+    static Kopie hier(ServerLevel level, BlockPos pos) {
+        Kopie k = bij(level, pos);
+        return k != null ? k : echte(level, pos);
+    }
+
+    @Nullable
+    private static Kopie echte(ServerLevel level, BlockPos pos) {
+        Vec3 v = Vec3.atCenterOf(pos);
         StructureStart start = Bezetting.start(level, STRUCTUUR, pos);
         if (start == null) {
             return null;
@@ -189,6 +207,68 @@ public final class Berg {
             ECHTE.put(start, k);
         }
         return k.binnen(v, 4) ? k : null;
+    }
+
+    /**
+     * Is everything the story needs where {@link Gegevens} says it is on this copy? The fires, the locks (each with its
+     * number), the hooks, a place to stand on every named spot and along Sam-guh's route, the frituur in the pool and (when
+     * {@code wezens}) the six Rookguhjes. Returns what is wrong (empty: all is well). For /guhs ringh6 controle (a real,
+     * generated copy, whichever way it is turned) and the game tests.
+     */
+    public static List<String> controleer(Kopie k, boolean wezens) {
+        List<String> mis = new ArrayList<>();
+        ServerLevel level = k.level();
+        for (String vuur : new String[]{"kamp_vuur", "vuur_1", "vuur_2", "vuur_3"}) {
+            if (!level.getBlockState(k.wereld(vuur)).is(RingFeature.RUSTVUUR.get())) {
+                mis.add("no Rustvuurtje at " + vuur + " " + k.wereld(vuur).toShortString());
+            }
+        }
+        for (int nr = 1; nr <= 3; nr++) {
+            BlockState slot = level.getBlockState(k.wereld("slot_" + nr));
+            if (!(slot.getBlock() instanceof KooislotBlock) || slot.getValue(KooislotBlock.NR) != nr) {
+                mis.add("no lock " + nr + " at " + k.wereld("slot_" + nr).toShortString());
+            }
+            if (!(level.getBlockState(k.wereld("haak_" + nr)).getBlock() instanceof Gaven.Haak)) {
+                mis.add("no hook " + nr + " at " + k.wereld("haak_" + nr).toShortString());
+            }
+        }
+        for (String plek : k.g().plekken().keySet()) {
+            boolean voet = plek.equals("kamp") || plek.equals("spleet") || plek.equals("rand") || plek.startsWith("richel_") || plek.startsWith("start_")
+                    || plek.startsWith("boven_");
+            if (voet && !staan(level, k.wereld(plek))) {
+                mis.add("nowhere to stand at " + plek + " " + k.wereld(plek).toShortString());
+            }
+        }
+        int i = 0;
+        for (Vec3 punt : k.route("sam")) {
+            BlockPos cel = BlockPos.containing(punt);
+            if (!staan(level, cel) && !staan(level, cel.above()) && !staan(level, cel.below())) {
+                mis.add("Sam-guh's route point " + i + " " + cel.toShortString() + " is no place to stand");
+            }
+            i++;
+        }
+        if (level.getFluidState(k.wereld("frituur")).getType() != BarbecuetherFeature.KAASFRITUURSAUS.get()) {
+            mis.add("no frituur in the pool at " + k.wereld("frituur").toShortString());
+        }
+        if (wezens) {
+            BlockPos a = k.wereld(BlockPos.ZERO), b = k.wereld(k.g().grootte());
+            int caged = 0, thuis = 0;
+            for (GekooideRookguhEntity guh : level.getEntitiesOfClass(GekooideRookguhEntity.class, new AABB(Vec3.atLowerCornerOf(a), Vec3.atLowerCornerOf(b)).inflate(2))) {
+                if (guh.isThuis()) {
+                    thuis++;
+                } else if (!guh.isVrij()) {
+                    caged++;
+                }
+            }
+            if (caged != 3 || thuis != 3) {
+                mis.add(caged + " caged and " + thuis + " free Rookguhjes (3 and 3 are meant to be here; Bezetting brings them when a player is near)");
+            }
+        }
+        return mis;
+    }
+
+    private static boolean staan(ServerLevel level, BlockPos voet) {
+        return level.getBlockState(voet.below()).blocksMotion() && !level.getBlockState(voet).blocksMotion() && !level.getBlockState(voet.above()).blocksMotion();
     }
 
     /** (once a second) looks up the mountain this player is on and remembers it for {@link #van}. */

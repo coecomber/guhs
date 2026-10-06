@@ -136,6 +136,10 @@ public final class RingH6GameTests {
         helper.assertTrue(level.getBlockState(test.wereld("slot_2")).getBlock() instanceof KooislotBlock
                 && level.getBlockState(test.wereld("slot_2")).getValue(KooislotBlock.NR) == 2, "the test mountain has its locks");
         helper.assertTrue(Berg.bij(level, test.wereld("kamp")) == test && Berg.bij(level, test.wereld("kamp").above(40)) == null, "found by a spot on it");
+        List<String> mis = Berg.controleer(test, false);
+        helper.assertTrue(mis.isEmpty(), "the test mountain has everything the story needs: " + mis);
+        level.setBlockAndUpdate(test.wereld("haak_2"), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
+        helper.assertTrue(Berg.controleer(test, false).size() == 1 && Berg.controleer(test, true).size() == 2, "the check notices a missing hook (and Rookguhjes)");
         // the questline, the scenes, the card
         Verhaallijn lijn = RingH6Feature.LIJN;
         helper.assertTrue(lijn == Ring.lijn(6) && lijn.stappen() == 7 && "ring_h5".equals(lijn.na()) && lijn.doelregel(), "the questline of chapter 6");
