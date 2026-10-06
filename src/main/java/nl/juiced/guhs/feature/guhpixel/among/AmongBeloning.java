@@ -37,6 +37,27 @@ public final class AmongBeloning {
         return cijfers(p).getIntOr(sleutel, 0);
     }
 
+    /** Everything the personal stats board (client.CijfersScherm) shows: the numbers, today's pot, the titles. */
+    public static CompoundTag cijfersTag(ServerPlayer p) {
+        CompoundTag t = cijfers(p).copy();
+        nl.juiced.guhs.taal.Tekst.put(t, "Naam", p.getName());
+        t.putInt("Vandaag", Muntjes.vandaag(p, POT));
+        t.putInt("DagMax", DAG_MAX);
+        t.putInt("Oefenrondjes", nl.juiced.guhs.feature.guhpixel.Grappen.keren(p, OefenSessie.GRAP));
+        net.minecraft.nbt.ListTag titels = new net.minecraft.nbt.ListTag();
+        for (nl.juiced.guhs.feature.titels.Titels.Titel titel : nl.juiced.guhs.feature.guhpixel.GuhpixelTitels.ALLE) {
+            if (titel.id().startsWith("among_")) {
+                CompoundTag k = new CompoundTag();
+                nl.juiced.guhs.taal.Tekst.put(k, "Naam", titel.naam());
+                nl.juiced.guhs.taal.Tekst.put(k, "Hint", titel.hint());
+                k.putBoolean("Heeft", titel.behaald().test(p));
+                titels.add(k);
+            }
+        }
+        t.put("Titels", titels);
+        return t;
+    }
+
     private static void plus(CompoundTag t, String sleutel, int n) {
         t.putInt(sleutel, t.getIntOr(sleutel, 0) + n);
     }

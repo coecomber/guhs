@@ -2016,5 +2016,15 @@
       }
     ],
     "subtitle": "subtitles.guhs.among.paneel"
+  },
+  "among.snurk": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.sleep",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.snurk"
   }
 }

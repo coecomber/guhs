@@ -24,7 +24,9 @@ import nl.juiced.guhs.feature.guhpixel.among.model.Simulatie;
  * {@code speel [normaal|lastig] [mika|crew]} (a round alone, right now, with that role) · {@code wachtrij} (join the queue
  * from anywhere in the lobby) · {@code rollen} (who is the Mika) · {@code vergader} (a meeting now) · {@code taken} (your
  * tasks are done) · {@code einde} (stop the round) · {@code sim [rondes]} (headless NPC rounds: the win rates) ·
- * {@code cijfers wis}.
+ * {@code cijfers} (the stats board) · {@code cijfers wis} · {@code oefen} (the oefenrondje now) · {@code oefen slaap} (skip the
+ * walking: every guh sleeps at its panel) · {@code taak [soort]} (a task mini-game, as the Taakjes-paneel at home opens it) ·
+ * {@code aandenken} (the SUS-stickerbord and every suit and hat).
  */
 public final class AmongCommando {
     static void register(RegisterCommandsEvent event) {
@@ -86,6 +88,37 @@ public final class AmongCommando {
             PxData.vuil(p.level().getServer());
             return 1;
         })));
+        among.then(Commands.literal("oefen").executes(ctx -> Sessies.start(OefenSessie.SPEL, List.of(ctx.getSource().getPlayerOrException()), new CompoundTag()) != null ? 1 : 0)
+                .then(Commands.literal("slaap").executes(ctx -> {
+                    if (Sessies.van(ctx.getSource().getPlayerOrException()) instanceof OefenSessie oefen) {
+                        oefen.iedereenSlaapt();
+                        return 1;
+                    }
+                    return 0;
+                })));
+        LiteralArgumentBuilder<CommandSourceStack> taak = Commands.literal("taak").executes(ctx -> {
+            AmongThuis.taak(ctx.getSource().getPlayerOrException());
+            return 1;
+        });
+        for (String soort : java.util.stream.Stream.concat(Taken.SOORTEN.stream(), java.util.stream.Stream.of(TaakSoorten.HERSTEL_LICHT, TaakSoorten.HERSTEL_ALARM)).toList()) {
+            taak.then(Commands.literal(soort).executes(ctx -> {
+                AmongThuis.taak(ctx.getSource().getPlayerOrException(), soort);
+                return 1;
+            }));
+        }
+        among.then(taak);
+        among.then(Commands.literal("aandenken").executes(ctx -> {
+            ServerPlayer p = ctx.getSource().getPlayerOrException();
+            nl.juiced.guhs.feature.guhpixel.Aandenken.item(p, new net.minecraft.world.item.ItemStack(AmongSlice.SUS_BORD_ITEM.get()));
+            nl.juiced.guhs.feature.guhpixel.Aandenken.kleding(p, AmongSlice.PAKJES);
+            nl.juiced.guhs.feature.guhpixel.Aandenken.kleding(p, AmongSlice.HOEDJES);
+            return 1;
+        }));
+        among.then(Commands.literal("cijfers").executes(ctx -> {
+            ServerPlayer p = ctx.getSource().getPlayerOrException();
+            nl.juiced.guhs.network.ModNetworking.sendTo(p, new AmongPayloads.Scherm(AmongPayloads.CIJFERS, AmongBeloning.cijfersTag(p)));
+            return 1;
+        }));
         event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("px")
                 .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).then(among)));
     }

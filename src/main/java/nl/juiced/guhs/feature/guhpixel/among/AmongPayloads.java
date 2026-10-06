@@ -19,13 +19,13 @@ import nl.juiced.guhs.feature.guhpixel.Sessies;
  *   <li>{@code guhs:among_scherm} (to the client): {@code soort} + one tag. Kinds: {@link #HUD} (role, tasks, bar, sabotage,
  *   cooldowns; an empty tag clears it), {@link #WACHTRIJ} (the queue at the Kapitein-guh), {@link #VERGADERING} (the whole
  *   meeting: participants, statements, votes, result), {@link #TAAK} (open a task panel), {@link #KAART} (the ship map: sabotage
- *   or vents).</li>
+ *   or vents), {@link #CIJFERS} (the personal logbook at the Logboek-guh).</li>
  *   <li>{@code guhs:among_actie} (to the server): what the player did: {@code soort} + two numbers + a free tag (the result of a
  *   task panel). The server checks everything again ({@link AmongSessie}, {@link AmongWachtrij}).</li>
  * </ul>
  */
 public final class AmongPayloads {
-    public static final String HUD = "hud", WACHTRIJ = "wachtrij", VERGADERING = "vergadering", TAAK = "taak", KAART = "kaart";
+    public static final String HUD = "hud", WACHTRIJ = "wachtrij", VERGADERING = "vergadering", TAAK = "taak", KAART = "kaart", CIJFERS = "cijfers";
     public static final int STEM = 1, ZEG = 2, TAAK_KLAAR = 3, TAAK_STOP = 4, SABOTEER = 5, LUIK = 6, WACHTRIJ_KLAAR = 7, WACHTRIJ_NIVEAU = 8, WACHTRIJ_WEG = 9;
 
     public static volatile Consumer<Scherm> ontvanger = p -> { };
@@ -72,7 +72,21 @@ public final class AmongPayloads {
             AmongWachtrij.actie(p, a.soort());
             return;
         }
+        if (Sessies.van(p) instanceof OefenSessie oefen) {
+            switch (a.soort()) {
+                case STEM -> oefen.stem(p, a.a());
+                case ZEG -> oefen.zeg(p, a.a(), a.b(), a.extra().getIntOr("Zone", -1));
+                case TAAK_KLAAR -> oefen.taakKlaar(p, a.extra());
+                case TAAK_STOP -> oefen.taakStop(p);
+                default -> {
+                }
+            }
+            return;
+        }
         if (!(Sessies.van(p) instanceof AmongSessie s)) {
+            if (a.soort() == TAAK_KLAAR && a.a() == -1) {
+                AmongThuis.taakKlaar(p, a.extra());      // the Taakjes-paneel at home
+            }
             return;
         }
         switch (a.soort()) {

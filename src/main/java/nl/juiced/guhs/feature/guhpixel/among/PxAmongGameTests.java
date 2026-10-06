@@ -21,7 +21,16 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec3;
+import nl.juiced.guhs.entity.GuhClothes;
+import nl.juiced.guhs.entity.GuhEntity;
+import nl.juiced.guhs.feature.guhpixel.Grappen;
 import nl.juiced.guhs.feature.guhpixel.GuhpixelTitels;
+import nl.juiced.guhs.feature.guhpixel.Guhpixel;
+import nl.juiced.guhs.feature.guhpixel.Winkel;
+import nl.juiced.guhs.feature.kleding.KledingBronnen;
+import nl.juiced.guhs.feature.kleding.KledingUnlocks;
+import nl.juiced.guhs.feature.knus.GuhHooks;
+import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.feature.guhpixel.Kluis;
 import nl.juiced.guhs.feature.guhpixel.Muntjes;
 import nl.juiced.guhs.feature.guhpixel.PxTest;
@@ -48,8 +57,12 @@ import org.slf4j.Logger;
  *   <li>a round on the real ship with a mock player as the Mika and one as crew: guh NPCs, panels, the button, vents, lights,
  *   doors, the droomguh in spectator mode, the pay-out, the inventory and the game mode coming back;</li>
  *   <li>the queue with two players, "klaar" and the difficulty; the rewards with the daily cap; the titles;</li>
- *   <li>the headless simulation of NPC-only rounds: the Mika must win 35-65% on Normaal (the numbers go to the log, lines
- *   starting with {@code [px_among sim]}).</li>
+ *   <li>the headless simulation of NPC-only rounds: the Mika must win 35-65% on Normaal and a round must take ten to fifteen
+ *   minutes on average (the numbers go to the log, lines starting with {@code [px_among sim]});</li>
+ *   <li>the eight task mini-games and the two repair panels: every opgave can be solved, a wrong answer is refused;</li>
+ *   <li>the oefenrondje (the parody round) from the first panel to the Mika in the vent, the reward once, the queue it unlocks;</li>
+ *   <li>the shop (suits, hats, ship things), the extra titles, the stats board; the ship things at home: the Noodknop's
+ *   meeting of your own guhs, the guh that peeks out of the Ventilatieluik, the Taakjes-paneel.</li>
  * </ul>
  */
 public class PxAmongGameTests {
@@ -417,7 +430,7 @@ public class PxAmongGameTests {
         AmongSessie s = start(helper, List.of(p), opties("crew", false), b -> {
             b.duwAfkoelStart = 10_000_000;       // the NPC Mika keeps still: this test moves everything itself
             b.saboteerGemiddeld = 10_000_000;
-            b.spelerTaakTijd = 10;
+            b.spelerTaakTijd = 5;
             b.herstelTijd = 10;
             b.deurTijd = 30;
             b.lichtReageerKans = 0;
@@ -438,12 +451,20 @@ public class PxAmongGameTests {
         helper.assertTrue(s.gebruikBlok(p, paneelPos) && r.d(0).werkPaneel == -1, "a click from the table: too far, nothing starts");
         naarKnoop(s, p, paneel.knoop());
         helper.assertTrue(s.gebruikBlok(p, paneelPos) && r.d(0).werkPaneel == paneel.idx(), "at the panel the task starts");
-        helper.assertTrue(!s.taakKlaar(p, paneel.idx(), new CompoundTag()) && taak.stap == 0, "'done' at once is refused");
+        helper.assertTrue(taak.taak.soort().equals(s.opgaveSoort(p)) && !s.opgave(p).isEmpty()
+                && !(TaakSoorten.van(taak.taak.soort()) instanceof TaakSoorten.Wachtpaneel), "the panel is a real mini-game with an opgave");
+        helper.assertTrue(!s.taakKlaar(p, paneel.idx(), Taken.oplossing(s.opgaveSoort(p), s.opgave(p))) && taak.stap == 0,
+                "the right answer at once is refused (too fast)");
         helper.assertTrue(!s.gebruikBlok(p, s.arena().wereld(5, 1, 5)), "a floor block is no panel");
         helper.runAtTickTime(3, () -> s.gebruikBlok(p, paneelPos));
-        helper.runAtTickTime(14, () -> {
-            helper.assertTrue(s.taakKlaar(p, paneel.idx(), new CompoundTag()) && taak.stap == 1 && r.d(0).takenKlaar + r.stappenKlaar() >= 1,
-                    "after the panel's time the step is done");
+        helper.runAtTickTime(13, () -> {
+            helper.assertTrue(!s.taakKlaar(p, paneel.idx(), new CompoundTag()) && taak.stap == 0 && s.opgave(p).isEmpty(),
+                    "a wrong answer is refused, and the panel has to be opened again");
+            s.gebruikBlok(p, paneelPos);
+        });
+        helper.runAtTickTime(23, () -> {
+            helper.assertTrue(s.taakKlaar(p, paneel.idx(), Taken.oplossing(s.opgaveSoort(p), s.opgave(p))) && taak.stap == 1
+                    && r.d(0).takenKlaar + r.stappenKlaar() >= 1, "the right answer after the panel's time: the step is done");
             // a vent is not for the crew
             Schip.Luik luik = schip.luiken.get(0);
             helper.assertTrue(level.getBlockState(s.arena().wereld(luik.x(), luik.y(), luik.z())).is(AmongSlice.VENTILATIELUIK.get())
@@ -457,11 +478,21 @@ public class PxAmongGameTests {
             helper.assertTrue(p.hasEffect(MobEffects.BLINDNESS) && s.hudTag(0).getIntOr("Sabotage", 0) == Ronde.Sabotage.LICHT.ordinal(), "blind in the dark");
             naarKnoop(s, p, schip.lichtPaneel.knoop());
             BlockPos licht = s.arena().wereld(schip.lichtPaneel.bx(), schip.lichtPaneel.by(), schip.lichtPaneel.bz());
-            helper.assertTrue(s.gebruikBlok(p, licht) && !s.taakKlaar(p, schip.lichtPaneel.idx(), new CompoundTag()) && r.donker(), "repairing takes a moment");
+            helper.assertTrue(s.gebruikBlok(p, licht) && TaakSoorten.HERSTEL_LICHT.equals(s.opgaveSoort(p))
+                    && Integer.bitCount(s.opgave(p).getIntOr("Begin", 31)) <= Taken.LICHTEN - 2, "the light panel: at least two switches are off");
+            helper.assertTrue(!s.taakKlaar(p, schip.lichtPaneel.idx(), Taken.oplossing(TaakSoorten.HERSTEL_LICHT, s.opgave(p))) && r.donker(),
+                    "repairing takes a moment");
             s.gebruikBlok(p, licht);
         });
         helper.runAtTickTime(52, () -> {
-            helper.assertTrue(s.taakKlaar(p, schip.lichtPaneel.idx(), new CompoundTag()) && !r.donker() && !p.hasEffect(MobEffects.BLINDNESS), "the lights are on again");
+            CompoundTag halfAan = new CompoundTag();
+            halfAan.putInt("Stand", 5);
+            helper.assertTrue(!s.taakKlaar(p, schip.lichtPaneel.idx(), halfAan) && r.donker(), "not every switch up: still dark");
+            s.gebruikBlok(p, s.arena().wereld(schip.lichtPaneel.bx(), schip.lichtPaneel.by(), schip.lichtPaneel.bz()));
+        });
+        helper.runAtTickTime(60, () -> {
+            helper.assertTrue(s.taakKlaar(p, schip.lichtPaneel.idx(), Taken.oplossing(TaakSoorten.HERSTEL_LICHT, s.opgave(p))) && !r.donker()
+                    && !p.hasEffect(MobEffects.BLINDNESS), "the lights are on again");
             // doors: real blocks in the doorways of the room, gone again after a while
             int ziekenboeg = schip.zoneVan("ziekenboeg");
             Schip.Deur deur = schip.deurenVan(ziekenboeg).get(0);
@@ -471,7 +502,7 @@ public class PxAmongGameTests {
             helper.assertTrue(level.getBlockState(s.arena().wereld(deur.x0(), 2, deur.z0())).is(Blocks.PINK_WOOL)
                     && level.getBlockState(s.arena().wereld(deur.x1(), 4, deur.z1())).is(Blocks.PINK_WOOL), "pillow doors in the doorway");
         });
-        helper.runAtTickTime(90, () -> {
+        helper.runAtTickTime(98, () -> {
             Schip.Deur deur = schip.deurenVan(schip.zoneVan("ziekenboeg")).get(0);
             helper.assertTrue(level.getBlockState(s.arena().wereld(deur.x0(), 2, deur.z0())).isAir() && r.sabotage == Ronde.Sabotage.GEEN, "open again");
             // the button: once per round, with a cooldown
@@ -483,7 +514,7 @@ public class PxAmongGameTests {
             r.knopAfkoel = 0;
             helper.assertTrue(s.gebruikBlok(p, knop) && r.fase == Ronde.Fase.VERGADERING && r.d(0).knopGebruikt, "a meeting by the button");
         });
-        helper.runAtTickTime(115, () -> helper.assertTrue(s.stem(p, -1) && !s.stem(p, -1), "skip, once"));
+        helper.runAtTickTime(122, () -> helper.assertTrue(s.stem(p, -1) && !s.stem(p, -1), "skip, once"));
         helper.runAtTickTime(200, () -> {
             helper.assertTrue(r.fase == Ronde.Fase.SPEL && r.vorigeVergadering != null, "the meeting is over, the round goes on");
             // the NPC Mika pushes the player asleep: a droomguh in spectator mode, a sleeping guh where the player stood
@@ -515,7 +546,8 @@ public class PxAmongGameTests {
         helper.runAtTickTime(215, () -> {
             int stappen = r.stappenKlaar();
             int paneel2 = r.d(0).werkPaneel;
-            helper.assertTrue(paneel2 >= 0 && s.taakKlaar(p, paneel2, new CompoundTag()) && r.stappenKlaar() == stappen + 1, "and it counts for the crew");
+            helper.assertTrue(paneel2 >= 0 && s.taakKlaar(p, paneel2, Taken.oplossing(s.opgaveSoort(p), s.opgave(p))) && r.stappenKlaar() == stappen + 1,
+                    "and it counts for the crew");
             // everybody finishes: the crew wins, the player is paid for a win and the own tasks
             for (Deelnemer d : r.deelnemers) {
                 r.devTakenKlaar(d.idx);
@@ -552,6 +584,9 @@ public class PxAmongGameTests {
             return gestart[0];
         };
         try {
+            helper.assertTrue(!AmongWachtrij.magSpelen(a) && !AmongWachtrij.erbij(a) && AmongWachtrij.grootte() == 0, "the oefenrondje comes first");
+            Grappen.voltooi(a, OefenSessie.GRAP);
+            Grappen.voltooi(b, OefenSessie.GRAP);
             helper.assertTrue(AmongWachtrij.magSpelen(a) && AmongWachtrij.erbij(a) && AmongWachtrij.erbij(b) && AmongWachtrij.grootte() == 2
                     && a.getUUID().equals(AmongWachtrij.leider()), "two players in the queue, the first is the leader");
             CompoundTag stand = AmongWachtrij.stand(helper.getLevel().getServer(), b, true);
@@ -580,6 +615,7 @@ public class PxAmongGameTests {
             // alone = at once
             PxTest.gebied(helper);
             ServerPlayer c = PxTest.speler(helper);
+            Grappen.voltooi(c, OefenSessie.GRAP);
             gestart[0] = null;
             AmongWachtrij.erbij(c);
             AmongWachtrij.actie(c, AmongPayloads.WACHTRIJ_KLAAR);
@@ -645,10 +681,309 @@ public class PxAmongGameTests {
         helper.assertTrue(normaal.onbeslist() == 0 && lastig.onbeslist() == 0, "every round ends with a winner");
         helper.assertTrue(normaal.mikaDeel() >= 0.35 && normaal.mikaDeel() <= 0.65, "Normaal: the Mika wins 35-65%: " + normaal.tekst("Normaal"));
         helper.assertTrue(lastig.mikaDeel() >= 0.40 && lastig.mikaDeel() <= 0.80, "Lastig: the Mikas win 40-80%: " + lastig.tekst("Lastig"));
-        helper.assertTrue(normaal.gemTicks() >= 20 * 60 * 6 && normaal.gemTicks() <= 20 * 60 * 15 && normaal.langste() <= 20 * 60 * 25,
-                "a round takes a believable while: " + normaal.tekst("Normaal"));
+        helper.assertTrue(normaal.gemTicks() >= 20 * 60 * 10 && normaal.gemTicks() <= 20 * 60 * 15 && normaal.langste() <= 20 * 60 * 25,
+                "a round takes ten to fifteen minutes on average: " + normaal.tekst("Normaal"));
+        helper.assertTrue(lastig.gemTicks() >= 20 * 60 * 10 && lastig.gemTicks() <= 20 * 60 * 15, "on Lastig too: " + lastig.tekst("Lastig"));
         helper.assertTrue(normaal.doorTaken() > 0 && normaal.doorStemmen() > 0 && normaal.doorOvermacht() > 0, "every ending happens");
         helper.assertTrue(normaal.gemVergaderingen() >= 2 && normaal.gemDuwen() >= 3, "meetings and pushes happen");
         helper.succeed();
+    }
+    // =====================================================================================================================
+    // the task mini-games
+    // =====================================================================================================================
+    @GuhTest(template = KLEIN, batch = BATCH)
+    public static void taakspelletjes(GameTestHelper helper) {
+        Schip schip = Schip.standaard();
+        Set<String> soorten = new HashSet<>();
+        for (Schip.Taak taak : schip.taken) {
+            soorten.add(taak.soort());
+        }
+        helper.assertTrue(soorten.equals(new HashSet<>(Taken.SOORTEN)) && Taken.SOORTEN.size() == 8, "the ship's tasks are the eight classics: " + soorten);
+        List<String> alle = new java.util.ArrayList<>(Taken.SOORTEN);
+        alle.add(TaakSoorten.HERSTEL_LICHT);
+        alle.add(TaakSoorten.HERSTEL_ALARM);
+        Balans balans = Balans.normaal();
+        for (String soort : alle) {
+            TaakSoorten.TaakSoort ts = TaakSoorten.van(soort);
+            helper.assertTrue(!(ts instanceof TaakSoorten.Wachtpaneel) && ts.minTicks(balans) >= 5, soort + " is a mini-game that takes a moment");
+            for (int seed = 0; seed < 40; seed++) {
+                java.util.Random rng = new java.util.Random(seed);
+                for (int stap = 0; stap < 2; stap++) {
+                    CompoundTag opgave = ts.opgave(rng, stap);
+                    CompoundTag goed = Taken.oplossing(soort, opgave);
+                    helper.assertTrue(ts.geldig(opgave, goed), soort + " seed " + seed + ": the right answer is right");
+                    helper.assertTrue(!ts.geldig(new CompoundTag(), goed), soort + ": no answer without an opgave");
+                    if (!soort.equals(Taken.DROMEN)) {
+                        helper.assertTrue(!ts.geldig(opgave, new CompoundTag()), soort + ": an empty answer is wrong");
+                    }
+                }
+            }
+        }
+        java.util.Random rng = new java.util.Random(5);
+        // worstjes: every sausage on the hook of its own colour, and no two on one hook
+        CompoundTag worst = TaakSoorten.van(Taken.WORSTJES).opgave(rng, 0), recht = new CompoundTag();
+        recht.putIntArray("Paren", new int[]{0, 1, 2, 3});
+        helper.assertTrue(!TaakSoorten.van(Taken.WORSTJES).geldig(worst, recht), "worstjes: straight across is never the answer");
+        // pasje: too fast and too slow
+        CompoundTag pasje = TaakSoorten.van(Taken.PASJE).opgave(rng, 0), vlug = new CompoundTag(), traag = new CompoundTag();
+        vlug.putInt("Ms", pasje.getIntOr("Min", 0) - 1);
+        traag.putInt("Ms", pasje.getIntOr("Max", 0) + 1);
+        helper.assertTrue(!TaakSoorten.van(Taken.PASJE).geldig(pasje, vlug) && !TaakSoorten.van(Taken.PASJE).geldig(pasje, traag), "pasje: too fast, too slow");
+        // pindasaus: only around the line
+        CompoundTag saus = TaakSoorten.van(Taken.PINDASAUS).opgave(rng, 0), over = new CompoundTag(), onder = new CompoundTag();
+        over.putInt("Peil", saus.getIntOr("Doel", 0) + saus.getIntOr("Marge", 0) + 1);
+        onder.putInt("Peil", saus.getIntOr("Doel", 0) - saus.getIntOr("Marge", 0) - 1);
+        helper.assertTrue(saus.getIntOr("Doel", 0) + saus.getIntOr("Marge", 0) <= 100 && !TaakSoorten.van(Taken.PINDASAUS).geldig(saus, over)
+                && !TaakSoorten.van(Taken.PINDASAUS).geldig(saus, onder), "pindasaus: spilled or not enough");
+        // sorteren: one piece in the wrong bin
+        CompoundTag sorteer = TaakSoorten.van(Taken.SORTEREN).opgave(rng, 0), fout = Taken.oplossing(Taken.SORTEREN, sorteer);
+        int[] bakken = fout.getIntArray("Bakken").orElseThrow();
+        bakken[2] = (bakken[2] + 1) % Taken.BAKKEN;
+        fout.putIntArray("Bakken", bakken);
+        helper.assertTrue(!TaakSoorten.van(Taken.SORTEREN).geldig(sorteer, fout), "sorteren: a piece in the wrong bin");
+        // kruimelbak and wegen: let go too early
+        CompoundTag kruimel = TaakSoorten.van(Taken.KRUIMELBAK).opgave(rng, 0), kort = new CompoundTag();
+        kort.putInt("Vast", kruimel.getIntOr("Houd", 0) - 1);
+        kort.putInt("Stil", 10);
+        helper.assertTrue(!TaakSoorten.van(Taken.KRUIMELBAK).geldig(kruimel, kort)
+                && !TaakSoorten.van(Taken.WEGEN).geldig(TaakSoorten.van(Taken.WEGEN).opgave(rng, 0), kort), "kruimelbak, wegen: not long enough");
+        // schakelaars and the alarm code
+        CompoundTag schakel = TaakSoorten.van(Taken.SCHAKELAARS).opgave(rng, 0), begin = new CompoundTag(), code = new CompoundTag();
+        begin.putInt("Stand", schakel.getIntOr("Begin", 0));
+        CompoundTag alarm = TaakSoorten.van(TaakSoorten.HERSTEL_ALARM).opgave(rng, 0);
+        code.putInt("Code", alarm.getIntOr("Code", 0) + 1);
+        helper.assertTrue(!TaakSoorten.van(Taken.SCHAKELAARS).geldig(schakel, begin) && !TaakSoorten.van(TaakSoorten.HERSTEL_ALARM).geldig(alarm, code)
+                && alarm.getIntOr("Code", 0) >= 1000 && alarm.getIntOr("Code", 0) <= 9999, "schakelaars: not as they started; the alarm: the right code only");
+        // dromen: the second panel of the task is the upload
+        helper.assertTrue(!TaakSoorten.van(Taken.DROMEN).opgave(rng, 0).getBooleanOr("Upload", true)
+                && TaakSoorten.van(Taken.DROMEN).opgave(rng, 1).getBooleanOr("Upload", false), "dromen: download first, upload second");
+        // the map the Mika's screen draws
+        CompoundTag kaart = AmongSessie.kaartTag(schip);
+        helper.assertTrue(kaart.getListOrEmpty("Zones").size() == schip.zones.size() && kaart.getListOrEmpty("Luiken").size() == schip.luiken.size()
+                && kaart.getListOrEmpty("Herstel").size() == 3 && kaart.getIntOr("Breedte", 0) == schip.breedte, "the ship map has every zone, vent and repair panel");
+        helper.succeed();
+    }
+
+    // =====================================================================================================================
+    // the oefenrondje (the parody round)
+    // =====================================================================================================================
+    @GuhTest(template = SCHIP, batch = BATCH, timeoutTicks = 400)
+    public static void oefenrondje(GameTestHelper helper) {
+        PxTest.gebied(helper);
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = PxTest.speler(helper);
+        p.getInventory().setItem(3, new ItemStack(Items.DIAMOND, 7));
+        int saldo = Muntjes.saldo(p);
+        helper.assertTrue(Grappen.van(OefenSessie.GRAP) != null && Grappen.van(OefenSessie.GRAP).stappen() == OefenSessie.STAPPEN
+                && !Grappen.isKlaar(p, OefenSessie.GRAP) && !AmongWachtrij.magSpelen(p), "before the oefenrondje the real queue is closed");
+        CompoundTag opties = new CompoundTag();
+        opties.putInt("Tempo", 20);
+        Sessie sessie = Sessies.startOp(level, helper.absolutePos(new BlockPos(2, 2, 2)), OefenSessie.SPEL, List.of(p), opties);
+        helper.assertTrue(sessie instanceof OefenSessie, "the oefenrondje started");
+        OefenSessie s = (OefenSessie) sessie;
+        Schip schip = Schip.standaard();
+        helper.assertTrue(s.fase() == OefenSessie.Fase.TAAK && Grappen.stap(p, OefenSessie.GRAP) == 1
+                && level.getEntitiesOfClass(AmongGuhEntity.class, s.doos()).size() == 8 && p.getInventory().getItem(3).isEmpty()
+                && p.getInventory().getItem(8).is(AmongSlice.STEMBRIEFJE.get()), "step 1: eight guhs at the table, the own things in the safe");
+        Schip.Paneel paneel = schip.panelen.get(schip.paneelVan("kantine_kruimel"));
+        BlockPos paneelPos = s.arena().wereld(paneel.bx(), paneel.by(), paneel.bz());
+        helper.assertTrue(s.gebruikBlok(p, paneelPos) && s.opgave().isEmpty(), "from the chair the panel is too far");
+        Schip.Knoop bij = schip.knopen.get(paneel.knoop());
+        Vec3 plek = s.arena().wereld(new Vec3(bij.x(), 2.0, bij.z()));
+        p.teleportTo(level, plek.x, plek.y, plek.z, Set.of(), 0f, 0f, true);
+        helper.assertTrue(s.guh(OefenSessie.ROOD) != null, "Rood is there");
+        s.klikGuh(p, s.guh(OefenSessie.ROOD));
+        helper.assertTrue(s.fase() == OefenSessie.Fase.TAAK, "reporting comes after the own task");
+        helper.assertTrue(s.gebruikBlok(p, paneelPos) && !s.opgave().isEmpty() && !s.taakKlaar(p, new CompoundTag()) && s.fase() == OefenSessie.Fase.TAAK,
+                "the real kruimelbak panel; a wrong answer changes nothing");
+        helper.assertTrue(s.gebruikBlok(p, paneelPos) && s.taakKlaar(p, Taken.oplossing(Taken.KRUIMELBAK, s.opgave()))
+                && s.fase() == OefenSessie.Fase.ZOEKEN && Grappen.stap(p, OefenSessie.GRAP) == 2 && s.hudTag().getIntOr("Klaar", 0) == 1, "step 2: go and look");
+        helper.runAtTickTime(12, () -> {
+            // the crew walked off; skip the rest of the walking
+            s.iedereenSlaapt();
+            helper.assertTrue(s.slapers() == 7 && s.guh(OefenSessie.BRUIN) == null && s.guh(3).slaapt(), "everybody sleeps at a panel; the Mika is in a vent");
+            Schip.Luik luik = schip.luikIn(schip.zoneVan("elektra"));
+            BlockPos luikPos = s.arena().wereld(luik.x(), luik.y(), luik.z());
+            helper.assertTrue(s.gebruikBlok(p, luikPos) && s.fase() == OefenSessie.Fase.ZOEKEN, "the vent is for later");
+            s.klikGuh(p, s.guh(3));
+            CompoundTag v = s.vergaderTag(true);
+            helper.assertTrue(s.fase() == OefenSessie.Fase.VERGADERING && Grappen.stap(p, OefenSessie.GRAP) == 3 && s.slapers() == 0 && !s.guh(3).slaapt()
+                    && v.getListOrEmpty("Deelnemers").size() == 9 && v.getListOrEmpty("Uitspraken").size() == 1 && v.contains("Onderwerp")
+                    && v.getIntOr("Stap", -1) == 0, "step 3: the meeting, everybody awake at the table");
+            helper.assertTrue(!s.stem(p, OefenSessie.ROOD), "no voting while talking");
+            helper.assertTrue(s.zeg(p, Uitspraak.Soort.VERDENK.ordinal(), OefenSessie.BRUIN, -1) && s.vergaderTag(false).getListOrEmpty("Uitspraken").size() >= 2,
+                    "a ready-made statement of the player");
+        });
+        helper.runAtTickTime(36, () -> {
+            CompoundTag v = s.vergaderTag(false);
+            helper.assertTrue(v.getIntOr("Stap", -1) == 1 && v.getListOrEmpty("Uitspraken").size() >= 10, "eight scripted lines, the report and the answer: time to vote");
+            helper.assertTrue(s.stem(p, OefenSessie.BRUIN) && !s.stem(p, OefenSessie.ROOD) && s.vergaderTag(false).getIntOr("MijnStem", -2) == OefenSessie.BRUIN,
+                    "one vote");
+        });
+        helper.runAtTickTime(48, () -> {
+            CompoundTag v = s.vergaderTag(false);
+            helper.assertTrue(v.getIntOr("Stap", -1) == 2 && v.contains("UitslagTekst") && v.getIntOr("Weg", 0) == -1
+                    && v.getListOrEmpty("Deelnemers").getCompoundOrEmpty(OefenSessie.ROOD).getIntOr("Stemmen", 0) == 7, "the verdict: seven votes for Rood, nobody is voted out");
+        });
+        helper.runAtTickTime(62, () -> {
+            helper.assertTrue(s.fase() == OefenSessie.Fase.LUIK && Grappen.stap(p, OefenSessie.GRAP) == 4 && s.slapers() == 7, "step 4: everybody dozed off again");
+            Schip.Luik stil = schip.luikIn(schip.zoneVan("slaapzaal")), luik = schip.luikIn(schip.zoneVan("elektra"));
+            helper.assertTrue(s.gebruikBlok(p, s.arena().wereld(stil.x(), stil.y(), stil.z())) && s.fase() == OefenSessie.Fase.LUIK, "a quiet vent");
+            helper.assertTrue(s.gebruikBlok(p, s.arena().wereld(luik.x(), luik.y(), luik.z())) && s.fase() == OefenSessie.Fase.GEVONDEN
+                    && s.guh(OefenSessie.BRUIN) != null && s.guh(OefenSessie.BRUIN).slaapt() && !Grappen.isKlaar(p, OefenSessie.GRAP),
+                    "the Mika sleeps in the vent of Elektra; the reward comes when the own inventory is back");
+        });
+        helper.runAtTickTime(80, () -> {
+            helper.assertTrue(Sessies.van(p) == null && s.isGestopt() && Grappen.isKlaar(p, OefenSessie.GRAP) && Muntjes.saldo(p) == saldo + Grappen.BELONING
+                    && p.getInventory().getItem(3).is(Items.DIAMOND) && p.getInventory().getItem(3).getCount() == 7
+                    && p.getInventory().hasAnyMatching(st -> st.is(AmongSlice.SUS_BORD_ITEM.get()))
+                    && !p.getInventory().hasAnyMatching(st -> st.is(AmongSlice.STEMBRIEFJE.get())),
+                    "done: 100 muntjes, the SUS-stickerbord, the own inventory back");
+            helper.assertTrue(AmongWachtrij.magSpelen(p) && level.getEntitiesOfClass(AmongGuhEntity.class, s.doos()).isEmpty(), "the real queue is open; the ship is empty");
+            // again: no second reward
+            Sessie weer = Sessies.startOp(level, helper.absolutePos(new BlockPos(2, 2, 2)), OefenSessie.SPEL, List.of(p), opties);
+            helper.assertTrue(weer instanceof OefenSessie, "a replay starts");
+            Sessies.verlaat(p, nl.juiced.guhs.feature.guhpixel.Vertrek.VERLATEN);
+            helper.assertTrue(Muntjes.saldo(p) == saldo + Grappen.BELONING && Grappen.keren(p, OefenSessie.GRAP) == 1, "leaving a replay early pays nothing and counts nothing");
+            PxTest.klaar(helper, p);
+            helper.succeed();
+        });
+    }
+
+    // =====================================================================================================================
+    // the shop, the titles, the stats board
+    // =====================================================================================================================
+    @GuhTest(template = KLEIN, batch = BATCH)
+    public static void winkelKledingEnCijfers(GameTestHelper helper) {
+        PxTest.gebied(helper);
+        ServerPlayer p = PxTest.speler(helper), q = PxTest.speler(helper);
+        int pakjes = 0, hoedjes = 0, deco = 0;
+        for (Winkel.Aanbod a : Winkel.alle()) {
+            pakjes += a.groep().equals("among_pakjes") ? 1 : 0;
+            hoedjes += a.groep().equals("among_hoedjes") ? 1 : 0;
+            deco += a.groep().equals("among_deco") ? 1 : 0;
+        }
+        helper.assertTrue(pakjes == 8 && hoedjes == 6 && deco == 3, "eight suits, six hats, three ship things: " + pakjes + "/" + hoedjes + "/" + deco);
+        for (GuhClothes c : AmongSlice.PAKJES) {
+            helper.assertTrue(c.slot == GuhClothes.Slot.BODY && AmongSlice.BRON.equals(KledingBronnen.bron(c)) && c.shows("outfit_suit")
+                    && c.shows("outfit_among_rugtank") && Winkel.van(c.id()) != null, "the suit " + c);
+        }
+        for (GuhClothes c : AmongSlice.HOEDJES) {
+            helper.assertTrue(c.slot == GuhClothes.Slot.HEAD && AmongSlice.BRON.equals(KledingBronnen.bron(c)) && Winkel.van(c.id()) != null, "the hat " + c);
+        }
+        Muntjes.zet(p, 235);       // (with the 27 of the round below: 5 muntjes short of everything this test buys plus a second suit)
+        String rood = GuhClothes.AMONG_RUIMTEPAKJE_ROOD.id();
+        helper.assertTrue(Winkel.kan(p, Winkel.van(rood)) == Winkel.Uitkomst.EIS && Winkel.koop(p, rood) == Winkel.Uitkomst.EIS && Muntjes.saldo(p) == 235,
+                "a round of Among Guhs first");
+        AmongBeloning.rondeKlaar(p, false, false, false, 1, 0, false);
+        int saldo = Muntjes.saldo(p);
+        helper.assertTrue(Winkel.prijs(p, Winkel.van(rood)) == AmongSlice.PRIJS_PAKJE && Winkel.koop(p, rood) == Winkel.Uitkomst.OK
+                && KledingUnlocks.heeft(p, GuhClothes.AMONG_RUIMTEPAKJE_ROOD) && !KledingUnlocks.heeft(q, GuhClothes.AMONG_RUIMTEPAKJE_ROOD)
+                && Muntjes.saldo(p) == saldo - 30 && Winkel.koop(p, rood) == Winkel.Uitkomst.MAX, "a suit is an unlock, once, for this player");
+        helper.assertTrue(Winkel.koop(p, GuhClothes.AMONG_HOEDJE_EI.id()) == Winkel.Uitkomst.OK && KledingUnlocks.heeft(p, GuhClothes.AMONG_HOEDJE_EI)
+                && Muntjes.saldo(p) == saldo - 55, "a hat for 25");
+        helper.assertTrue(Winkel.koop(p, "among_noodknop") == Winkel.Uitkomst.OK && Winkel.koop(p, "among_ventilatieluik") == Winkel.Uitkomst.OK
+                && Winkel.koop(p, "among_taakpaneel") == Winkel.Uitkomst.OK && Winkel.koop(p, "among_taakpaneel") == Winkel.Uitkomst.OK
+                && p.getInventory().countItem(AmongSlice.TAAKPANEEL_ITEM.get()) == 2 && p.getInventory().countItem(AmongSlice.NOODKNOP_ITEM.get()) == 1
+                && p.getInventory().countItem(AmongSlice.VENTILATIELUIK_ITEM.get()) == 1 && Muntjes.saldo(p) == saldo - 55 - 60 - 40 - 80,
+                "the ship things are real items, as often as you like");
+        helper.assertTrue(Winkel.koop(p, GuhClothes.AMONG_RUIMTEPAKJE_WIT.id()) == Winkel.Uitkomst.TE_DUUR && AmongSlice.heeft(p, AmongSlice.PAKJES) == 1
+                && AmongSlice.heeft(p, AmongSlice.HOEDJES) == 1, "no muntjes left for a second suit");
+        // the stats board and the two extra titles
+        CompoundTag bord = AmongBeloning.cijfersTag(p);
+        helper.assertTrue(bord.getIntOr(AmongBeloning.RONDES, 0) == 1 && bord.getIntOr("DagMax", 0) == AmongBeloning.DAG_MAX
+                && bord.getIntOr("Vandaag", 0) == AmongBeloning.bedrag(false, 1, false) && bord.getListOrEmpty("Titels").size() == 5, "the stats board");
+        Titels.Titel speur = null, taakjes = null;
+        for (Titels.Titel t : GuhpixelTitels.ALLE) {
+            if (t.id().equals("among_speurguh")) {
+                speur = t;
+            } else if (t.id().equals("among_taakjesguh")) {
+                taakjes = t;
+            }
+        }
+        helper.assertTrue(speur != null && taakjes != null && !speur.behaald().test(p) && !taakjes.behaald().test(p), "two more titles, not earned yet");
+        for (int i = 0; i < 10; i++) {
+            AmongBeloning.rondeKlaar(p, false, true, false, 10, 0, false);
+        }
+        helper.assertTrue(speur.behaald().test(p) && taakjes.behaald().test(p) && !speur.behaald().test(q), "ten wins as crew and a hundred tasks");
+        PxTest.klaar(helper, p, q);
+        helper.succeed();
+    }
+
+    // =====================================================================================================================
+    // the ship things at home
+    // =====================================================================================================================
+    @GuhTest(template = KLEIN, batch = BATCH, timeoutTicks = 300)
+    public static void scheepsdingenThuis(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = PxTest.speler(helper);
+        int loop = AmongThuis.LOOPTIJD, regel = AmongThuis.REGELTIJD, afkoel = AmongThuis.AFKOEL, gluur = AmongThuis.GLUURTIJD;
+        AmongThuis.LOOPTIJD = 20;
+        AmongThuis.REGELTIJD = 8;
+        AmongThuis.AFKOEL = 30;
+        AmongThuis.GLUURTIJD = 24;
+        AmongThuis.leeg();
+        Runnable terug = () -> {
+            AmongThuis.LOOPTIJD = loop;
+            AmongThuis.REGELTIJD = regel;
+            AmongThuis.AFKOEL = afkoel;
+            AmongThuis.GLUURTIJD = gluur;
+            AmongThuis.leeg();
+        };
+        try {
+            helper.assertTrue(!Guhpixel.in(p), "this is home, not Guhpixel");
+            BlockPos knopRel = new BlockPos(8, 2, 8), luikRel = new BlockPos(3, 2, 12);
+            helper.setBlock(knopRel, AmongSlice.NOODKNOP.get());
+            helper.setBlock(luikRel, AmongSlice.VENTILATIELUIK.get());
+            BlockPos knop = helper.absolutePos(knopRel), luik = helper.absolutePos(luikRel);
+            // nobody at home: nobody comes
+            helper.assertTrue(!AmongThuis.vergadering(level, knop, p) && !AmongThuis.vergadert(level, knop), "no guhs: no meeting");
+            GuhEntity a = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 2, 4)), b = helper.spawn(ModEntities.GUH.get(), new BlockPos(12, 2, 5)),
+                    zit = helper.spawn(ModEntities.GUH.get(), new BlockPos(5, 2, 10)), wild = helper.spawn(ModEntities.GUH.get(), new BlockPos(12, 2, 12));
+            a.tame(p);
+            b.tame(p);
+            zit.tame(p);
+            zit.setOrderedToSit(true);
+            a.wear(GuhClothes.AMONG_RUIMTEPAKJE_ROOD);
+            helper.assertTrue(AmongThuis.beschikbaar(level, knop, p).size() == 2 && !AmongThuis.beschikbaar(level, knop, p).contains(zit)
+                    && !AmongThuis.beschikbaar(level, knop, p).contains(wild), "your own guhs that can walk: two (not the sitting one, not the wild one)");
+            helper.assertTrue(AmongThuis.vergadering(level, knop, p) && AmongThuis.vergadert(level, knop) && !AmongThuis.vergadering(level, knop, p),
+                    "the button calls a meeting; one at a time");
+            // the vent: a guh in a space suit peeks out and ducks away again
+            helper.assertTrue(AmongThuis.gluur(level, luik) && !AmongThuis.gluur(level, luik), "a guh peeks out of the vent, one at a time");
+            List<AmongGuhEntity> gluurders = level.getEntitiesOfClass(AmongGuhEntity.class, new net.minecraft.world.phys.AABB(luik).inflate(1));
+            helper.assertTrue(gluurders.size() == 1 && gluurders.get(0).gluurt() && gluurders.get(0).getY() < luik.getY()
+                    && gluurders.get(0).getY() > luik.getY() - 0.51, "half out of the hatch");
+            // the panel: a task mini-game for fun, checked like on the ship, no reward
+            int saldo = Muntjes.saldo(p);
+            String soort = AmongThuis.taak(p);
+            helper.assertTrue(Taken.SOORTEN.contains(soort) && !AmongThuis.opgave(p).isEmpty()
+                    && AmongThuis.taakKlaar(p, Taken.oplossing(soort, AmongThuis.opgave(p))) && !AmongThuis.taakKlaar(p, new CompoundTag())
+                    && Muntjes.saldo(p) == saldo, "the Taakjes-paneel at home: a real task, no reward");
+            AmongThuis.taak(p, Taken.SCHAKELAARS);
+            AmongPayloads.opActie(p, new AmongPayloads.Actie(AmongPayloads.TAAK_KLAAR, -1, 0, Taken.oplossing(Taken.SCHAKELAARS, AmongThuis.opgave(p))));
+            helper.assertTrue(AmongThuis.opgave(p).isEmpty(), "the answer of the screen reaches the home panel");
+            helper.runAtTickTime(10, () -> helper.assertTrue(GuhHooks.isBezig(a) && GuhHooks.isBezig(b) && !GuhHooks.isBezig(zit) && !GuhHooks.isBezig(wild),
+                    "the two guhs are on their way to the meeting"));
+            helper.runAtTickTime(40, () -> helper.assertTrue(level.getEntitiesOfClass(AmongGuhEntity.class, new net.minecraft.world.phys.AABB(luik).inflate(1)).isEmpty(),
+                    "the peeking guh is gone again"));
+            // 20 ticks of walking, three agenda points and the decision, every 8 ticks: over after 20 + 3 * 8 ticks
+            helper.runAtTickTime(60, () -> {
+                helper.assertTrue(!AmongThuis.vergadert(level, knop) && !GuhHooks.isBezig(a) && !GuhHooks.isBezig(b) && a.isAlive() && b.isAlive(),
+                        "the meeting is over, nothing was decided, the guhs are free again");
+                helper.assertTrue(!AmongThuis.vergadering(level, knop, p), "the guhs are tired of meetings for a moment");
+            });
+            helper.runAtTickTime(100, () -> {
+                boolean weer = AmongThuis.vergadering(level, knop, p);
+                level.setBlockAndUpdate(knop, Blocks.AIR.defaultBlockState());
+                terug.run();
+                helper.assertTrue(weer, "after a while they come again");
+                PxTest.klaar(helper, p);
+                helper.succeed();
+            });
+        } catch (RuntimeException e) {
+            terug.run();
+            throw e;
+        }
     }
 }

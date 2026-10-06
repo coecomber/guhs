@@ -86,6 +86,38 @@
       shape: "gear",
     },
     {
+      id: "47554895BB596105",
+      icon: {
+        id: "guhs:among_sus_bord",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/among_klaar",
+          id: "475548B12B41132D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486732475309",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D7E2E7CF3C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+    },
+    {
       id: "4755486551019EA3",
       icon: {
         id: "guhs:among_noodknop",
@@ -114,7 +146,7 @@
           xp: 50,
         },
       ],
-      x: 0.0,
+      x: 1.5,
       y: 6.5625,
       shape: "circle",
     },
@@ -147,7 +179,7 @@
           xp: 50,
         },
       ],
-      x: 1.5,
+      x: 3.0,
       y: 6.5625,
     },
     {
@@ -179,7 +211,7 @@
           xp: 50,
         },
       ],
-      x: 3.0,
+      x: 4.5,
       y: 6.5625,
     },
     {
@@ -211,7 +243,7 @@
           xp: 100,
         },
       ],
-      x: 4.5,
+      x: 6.0,
       y: 6.5625,
       shape: "hexagon",
     },

@@ -23,3 +23,14 @@
 | sus | sus | stays "sus" |
 | tellen (10 tellen) | seconds | |
 | Sus / Onterecht weggestemd / Kussenkampioen | Sus / Wrongly Voted Out / Pillow Champion | titles |
+| Speurguh / Taakjesguh | Sleuth Guh / Task Guh | titles |
+| oefenrondje | practice round | the one-time parody round at Captain Guh (joke game "among") |
+| SUS-stickerbord | SUS Sticker Board | the keepsake of the practice round |
+| (kleur) ruimtepakje / luchttank | (color) Space Suit / air tank | shop clothes: "Red Space Suit" |
+| Plantjeshoedje / Eihoedje / Wc-rolhoedje | Little Plant Hat / Fried Egg Hat / Toilet Roll Hat | shop hats |
+| Kaaspunthoedje / Sus-briefje / Knabbelhoedje | Cheese Wedge Hat / Sus Note / Nibble Hat | |
+| hendel / streep / bak / schakelaar / lampje / briefje | lever / line / bin / switch / little lamp / note | words of the task panels |
+| kaasknabbel / knabbel / kruimel (the three bins) | Cheese / Nibble / Crumb | short labels on the bins |
+| noodvergadering / agendapunt / besluit | emergency meeting / (agenda) item / decision | the Emergency Button at home |
+| gluren (uit het luik) | to peek out (of the vent) | the Vent Hatch at home |
+| cijferbord / logboek | stats board / logbook | the Logbook Guh's screen |

@@ -39,6 +39,11 @@ public class AmongGuhEntity extends GuhEntity {
 
     /** The participant this guh is (index in the round). */
     public int deelnemer = -1;
+    /** How deep a guh that peeks out of a vent at home sits in the floor (its eyes stay just above the hatch). */
+    public static final double GLUUR_DIEP = 0.34;
+    private int gluurTicks = -1, gluurDuur;
+    private double gluurY;
+    private float gluurYaw;
 
     public AmongGuhEntity(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
@@ -97,12 +102,48 @@ public class AmongGuhEntity extends GuhEntity {
         }));
     }
 
+    /**
+     * (The Ventilatieluik at home) this guh only peeks out of a vent: it comes up, looks left and right, ducks away after
+     * this many ticks and is gone.
+     */
+    public void gluur(int ticks) {
+        gluurTicks = gluurDuur = Math.max(20, ticks);
+        gluurY = getY();
+        gluurYaw = getYRot();
+    }
+
+    public boolean gluurt() {
+        return gluurTicks >= 0;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (level().isClientSide() || gluurTicks < 0) {
+            return;
+        }
+        int t = gluurDuur - gluurTicks;
+        // up in eight ticks, down in the last eight (never deeper than half a block: the light is read at its eyes)
+        double op = Math.min(1.0, Math.min(t, gluurTicks) / 8.0);
+        setPos(getX(), gluurY - (1.0 - op) * 0.16, getZ());
+        float kijk = gluurYaw + (float) Math.sin(t / 7.0) * 55f;
+        setYHeadRot(kijk);
+        setYRot(gluurYaw);
+        setYBodyRot(gluurYaw);
+        if (--gluurTicks < 0) {
+            level().playSound(null, blockPosition().above(), AmongSlice.GELUID_LUIK.get(), net.minecraft.sounds.SoundSource.BLOCKS, 0.4f, 0.9f);
+            discard();
+        }
+    }
+
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer sp && hand == InteractionHand.MAIN_HAND) {
             Sessie s = Sessies.van(sp);
             if (s instanceof AmongSessie among) {
                 among.klikGuh(sp, this);
+            } else if (s instanceof OefenSessie oefen) {
+                oefen.klikGuh(sp, this);
             }
         }
         return InteractionResult.SUCCESS;

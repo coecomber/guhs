@@ -1,12 +1,14 @@
 """
 Guhpixel slice "among" (Java: feature/guhpixel/among; namespace among; English: tools/lang/en/c34_px_among.json).
 
-Part 1, the engine of Among Guhs: the ship "De Vadsvaarder" (guhpixel_among_bouw.py: the arena template and the layout
-table data/guhs/guhpixel/among_schip.txt that Java reads), the three ship blocks (task panel, emergency button, vent),
-the three game items (pillow, sabotage map, voting slip), the space suit texture of the guh NPCs, the Kapitein-guh and the
-Logboek-guh, the sounds, the hidden FTB advancements, every text and the FTB quests of the real game.
-The task panels are placeholders (a bar that fills): the real mini-games come later behind TaakSoorten / AmongClient.taakScherm.
-Every text is Dutch here (guhpixel_among_tekst.py).
+Among Guhs: the ship "De Vadsvaarder" (guhpixel_among_bouw.py: the arena template and the layout table
+data/guhs/guhpixel/among_schip.txt that Java reads), the three ship blocks (task panel, emergency button, vent), the three
+game items (pillow, sabotage map, voting slip), the space suit texture of the guh NPCs, the Kapitein-guh and the Logboek-guh,
+the sounds, the hidden FTB advancements, every text and the FTB quests.
+With the task mini-games, the oefenrondje and the shop (guhpixel_among_tex.py): the sprite sheet of the task panels, the
+SUS-stickerbord (keepsake of the oefenrondje, joke game "among"), and the shop's clothes: eight Ruimtepakjes and six hoedjes
+(BONES / clothes / icons / CLOTHES; they only appear after `python tools/make_guh_variants.py`, make_sleep_eyes.py and
+make_clothes_icons.py). Every text is Dutch here (guhpixel_among_tekst.py).
 """
 import os
 
@@ -15,12 +17,26 @@ from PIL import Image
 
 from features import guhpixel_among_bouw as bouw
 from features import guhpixel_among_tekst as tekst
+from features import guhpixel_among_tex as tex
 from features import guhpixel_lib as lib
+from features import kleding
 
 TEXTS = tekst.TEXTS
-BLOKKEN = ("among_taakpaneel", "among_noodknop", "among_ventilatieluik")
+BLOKKEN = ("among_taakpaneel", "among_noodknop", "among_ventilatieluik", "among_sus_bord")
 ITEMS = ("among_kussen", "among_saboteerkaart", "among_stembriefje")
-ADVANCEMENTS = ("among_ronde", "among_crew_winst", "among_mika_winst", "among_lastig")
+OEFEN_STAPPEN = 4
+ADVANCEMENTS = ("among_ronde", "among_crew_winst", "among_mika_winst", "among_lastig", "among_klaar") + tuple(
+    f"among_stap_{i}" for i in range(1, OEFEN_STAPPEN + 1))
+# the shop's clothes (make_guh_variants.py, make_clothes_icons.py and make_resources.py read these four names)
+CLOTHES = tex.CLOTHES
+BONES = tex.BONES
+clothes = tex.clothes
+icons = tex.icons
+# kleding.py checks that every piece has exactly one source in KledingBronLijst.java, except the pieces inside the marker
+# blocks of slices that register their own source. This slice registers its own (KledingBronnen.bron in AmongSlice.winkel)
+# and may not edit kleding.py, so it tells that check about its marker block here (every feature module is imported
+# before the first build runs). Shared edit wanted: a line for the px_* markers in kleding.py; then this line can go.
+kleding.ANDERE_30.add("px_among")
 SOUNDS = {
     "among.begin": [{"name": "minecraft:block.bell.use", "type": "event", "pitch": 1.3}],
     "among.duw": [{"name": "minecraft:block.wool.fall", "type": "event", "pitch": 0.7}, {"name": "guhs:guh_ambient5", "pitch": 0.7}],
@@ -32,17 +48,21 @@ SOUNDS = {
     "among.taak": [{"name": "minecraft:entity.experience_orb.pickup", "type": "event", "pitch": 0.9}],
     "among.luik": [{"name": "minecraft:block.iron_trapdoor.open", "type": "event", "pitch": 0.8}],
     "among.paneel": [{"name": "minecraft:block.note_block.bit", "type": "event", "pitch": 1.6}],
+    "among.snurk": [{"name": "minecraft:entity.fox.sleep", "type": "event", "pitch": 0.8}],
 }
 ONDERTITELS = {
     "among.begin": "De Vadsvaarder vertrekt", "among.duw": "Guh wordt in slaap geduwd", "among.vergadering": "Noodknop loeit",
     "among.stem": "Stembriefje ritselt", "among.weggestemd": "Kussen lanceert een guh", "among.sabotage": "Er gaat iets stuk",
     "among.alarm": "Knabbelalarm piept", "among.taak": "Taak is klaar", "among.luik": "Luik klappert", "among.paneel": "Paneel piept",
+    "among.snurk": "Gesnurk uit een luik",
 }
 
 
 def build(h):
     textures(h)
+    tex.vel(h)
     blokken(h)
+    tex.sus_bord(h, TEXTS["block.guhs.among_sus_bord"], TEXTS["block.guhs.among_sus_bord.lore"])
     for item in ITEMS:
         h.item_model(item)
     lib.npc(h, "among_kapitein", "Kapitein-guh", hue=0.60, sat=0.55)
@@ -252,12 +272,13 @@ def blokken(h):
 
 # =====================================================================================================================
 def selfcheck(h):
-    lib.controleer(h, "guhpixel_among", blokken=BLOKKEN, items=BLOKKEN + ITEMS, keys=TEXTS, templates=(bouw.NAME,))
+    lib.controleer(h, "guhpixel_among", blokken=BLOKKEN, items=BLOKKEN + ITEMS + tuple(CLOTHES), keys=TEXTS, templates=(bouw.NAME,))
     problems = []
     for f in [f"advancement/quest/{a}.json" for a in ADVANCEMENTS] + ["guhpixel/among_schip.txt"] + [f"loot_table/blocks/{b}.json" for b in BLOKKEN]:
         if not os.path.exists(f"{h.D}/{f}"):
             problems.append(f"missing data/guhs/{f}")
-    for t in ("entity/among_pakje.png", "entity/among_vizier.png", "entity/npc_among_kapitein.png", "entity/npc_among_logboekguh.png"):
+    for t in ("entity/among_pakje.png", "entity/among_vizier.png", "entity/npc_among_kapitein.png", "entity/npc_among_logboekguh.png",
+              "gui/among_taken.png", "block/among_sus_bord.png"):
         if not os.path.exists(os.path.join(h.TEX, t)):
             problems.append(f"missing texture {t}")
     for kid in bouw.KAMERS:
@@ -268,6 +289,30 @@ def selfcheck(h):
             if key not in TEXTS:
                 problems.append(f"missing {key}")
     java = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "guhpixel", "among")
+    # the task mini-games: the kinds of the ship table are the kinds Java knows, each with its texts
+    taken_src = open(os.path.join(java, "Taken.java"), encoding="utf-8").read()
+    for soort in bouw.TAAK_SOORTEN:
+        if f'"{soort}"' not in taken_src:
+            problems.append(f"task kind {soort} has no mini-game in Taken.java")
+    for i in range(1, OEFEN_STAPPEN + 1):
+        if f"gui.guhs.among.grap.stap.{i}" not in TEXTS:
+            problems.append(f"the oefenrondje has no text for step {i}")
+    if f"STAPPEN = {OEFEN_STAPPEN};" not in open(os.path.join(java, "OefenSessie.java"), encoding="utf-8").read():
+        problems.append("OefenSessie.STAPPEN is not the number of steps of the oefenrondje")
+    kleren = open(os.path.join("src", "main", "java", "nl", "juiced", "guhs", "entity", "GuhClothes.java"), encoding="utf-8").read()
+    for c in CLOTHES:
+        if f"    {c.upper()}(" not in kleren:
+            problems.append(f"clothes {c} is not in GuhClothes")
+        if f"item.guhs.{c}" not in TEXTS:
+            problems.append(f"clothes {c} has no name")
+    thuis_src = open(os.path.join(java, "AmongThuis.java"), encoding="utf-8").read()
+    agenda = sum(1 for k in TEXTS if k.startswith("gui.guhs.among.thuis.agenda."))
+    besluiten = sum(1 for k in TEXTS if k.startswith("gui.guhs.among.thuis.besluit.") and k[-1].isdigit())
+    if f"AGENDA_TEKSTEN = {agenda}," not in thuis_src or f"BESLUITEN = {besluiten};" not in thuis_src:
+        problems.append("AmongThuis does not know how many agenda points and decisions there are")
+    if "STICKERS = %d;" % sum(1 for k in TEXTS if k.startswith("gui.guhs.among.sus_bord.")) not in open(
+            os.path.join(java, "AmongBlokken.java"), encoding="utf-8").read():
+        problems.append("AmongBlokken.SusBord.STICKERS is not the number of sticker lines")
     slice_src = open(os.path.join(java, "AmongSlice.java"), encoding="utf-8").read()
     if f"new Vec3i({bouw.W}, {bouw.H}, {bouw.D})" not in slice_src:
         problems.append("AmongSlice.MAAT is not the size of the ship")
@@ -288,6 +333,10 @@ def selfcheck(h):
 def ftb(fq):
     q, adv = fq.q, fq.adv
     y = 0
+    q("among_klaar", "Het oefenrondje", "Praat in de lobby van &dGuhpixel&r met de &bKapitein-guh&r en vlieg een oefenrondje mee op "
+      "&dDe Vadsvaarder&r. Doe je taak, kijk wat de rest van de crew uitspookt en zoek de Mika. Er schijnt er een aan boord te zijn, njeg. "
+      "De eerste keer krijg je 100 muntjes en een aandenken, en daarna mag je het echte spel in.",
+      "guhs:among_sus_bord", [adv("among_klaar")], rewards=(("guhs:kaas_knabbels", 8),), x=-2, y=y, xp=100)
     q("among_ronde", "Aan boord van De Vadsvaarder", "Praat met de &bKapitein-guh&r in de Guhpixel-lobby en speel een hele ronde &dAmong Guhs&r. "
       "Crew: doe je taken en stem de Mika weg. Mika: duw iedereen in slaap zonder dat iemand het ziet. Lege plekken worden gevuld met guhs in "
       "ruimtepakjes. Niemand doet elkaar pijn: wie slaapt, droomt gewoon verder.",

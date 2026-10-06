@@ -3,13 +3,15 @@ package nl.juiced.guhs.feature.guhpixel.among.model;
 /**
  * Every tunable number of a round, in ticks and blocks. Two presets: {@link #normaal} (9 participants, 1 Mika) and
  * {@link #lastig} (10 participants, 2 Mikas). Tuned with {@link Simulatie} so that NPC-only rounds on Normaal are won
- * by the Mika about half of the time.
+ * by the Mika about half of the time and a round takes ten to fifteen minutes: about 12 minutes on Normaal (the Mika wins
+ * 50%), about 13 on Lastig (the Mikas win 58%). Ten tasks each and a pillow that needs almost a minute to cool down make
+ * the round that long; with fewer tasks or a quicker pillow it is over in nine.
  */
 public final class Balans {
     public boolean lastig;
     public int deelnemers = 9;
     public int mikas = 1;
-    public int takenPerGuh = 7;
+    public int takenPerGuh = 10;
 
     /** Walking speed of a guh NPC, blocks per tick. */
     public double npcSnelheid = 0.13;
@@ -18,10 +20,10 @@ public final class Balans {
     /** Through a door into the next zone a participant sees this far. */
     public double zichtDeur = 6.0;
 
-    public int duwAfkoel = 700;
-    public int duwAfkoelStart = 400;
+    public int duwAfkoel = 1100;
+    public int duwAfkoelStart = 900;
     /** The cooldown every Mika gets after a meeting (the second Mika a bit more: they do not push at the same moment). */
-    public int duwAfkoelVergadering = 800;
+    public int duwAfkoelVergadering = 1200;
     public double duwBereik = 2.6;
     /** After a push the OTHER Mikas must wait this part of the cooldown too (two Mikas do not push twice as fast). */
     public double duwAfkoelSamen = 0.0;
@@ -33,7 +35,10 @@ public final class Balans {
     public int luikAfkoel = 40;
     /** Ticks a participant needs at a panel to fix a sabotage. */
     public int herstelTijd = 60;
-    /** Ticks a real player needs for one task step of the placeholder panel (the server checks 80% of it). */
+    /**
+     * The pace of a real player's task panels, in percent: every mini-game has its own shortest time (Taken), and the server
+     * refuses an answer that comes sooner than that time times this (tests make it small).
+     */
     public int spelerTaakTijd = 100;
 
     public int bespreekTijd = 400;
@@ -78,8 +83,8 @@ public final class Balans {
         b.lastig = true;
         b.deelnemers = 10;
         b.mikas = 2;
-        b.duwAfkoel = 1000;
-        b.duwAfkoelVergadering = 1200;
+        b.duwAfkoel = 1550;
+        b.duwAfkoelVergadering = 1700;
         b.duwAfkoelSamen = 1.0;
         b.mikaStemtMee = 2;
         b.beschuldigKans = 0.35;

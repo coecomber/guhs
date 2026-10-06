@@ -31,9 +31,9 @@ import nl.juiced.guhs.taal.Tekst;
 /**
  * Client side of Among Guhs: the guh NPCs in their coloured space suits (a GuhRenderer hook: the suit bones again in the
  * participant's colour, with a pale visor), the HUD of a round (role, the crew's task bar, the own tasks, sabotage,
- * cooldowns) and the four screens: the queue ({@link WachtrijScherm}), the meeting ({@link VergaderScherm}), a task panel
- * ({@link TaakScherm}, or whatever {@link #taakScherm} registered for that kind of task) and the ship map
- * ({@link KaartScherm}: sabotage, vents).
+ * cooldowns) and the screens: the queue ({@link WachtrijScherm}), the meeting ({@link VergaderScherm}), the task
+ * mini-games ({@link TaakSpellen}; {@link TaakScherm} is the waiting panel for a kind without one), the ship map
+ * ({@link KaartScherm}: sabotage, vents) and the personal logbook ({@link CijfersScherm}).
  */
 public final class AmongClient {
     private static final Identifier PAK = Guhs.id("textures/entity/among_pakje.png");
@@ -51,6 +51,7 @@ public final class AmongClient {
             Minecraft mc = Minecraft.getInstance();
             mc.execute(() -> ontvang(mc, p));
         };
+        TaakSpellen.registreer();
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> event.registerEntityRenderer(AmongSlice.AMONG_GUH.get(), GuhRenderer::new));
         modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(Guhs.id("among_hud"), AmongClient::tekenHud));
         GuhRenderer.hook((guh, partialTick, frame) -> {
@@ -106,6 +107,7 @@ public final class AmongClient {
             }
             case AmongPayloads.TAAK -> mc.setScreen(TAAK_SCHERMEN.getOrDefault(data.getStringOr("Soort", ""), TaakScherm::new).apply(data));
             case AmongPayloads.KAART -> mc.setScreen(new KaartScherm(data));
+            case AmongPayloads.CIJFERS -> mc.setScreen(new CijfersScherm(data));
             default -> {
             }
         }

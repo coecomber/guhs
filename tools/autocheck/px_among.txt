@@ -1,4 +1,5 @@
-# guhpixel slice "among" (visual QA, dev only; run by the merge step): Among Guhs, the engine. The lobby with the
+# guhpixel slice "among" (visual QA, dev only; run by the merge step): Among Guhs. The ten task panels, the stats board, the
+# oefenrondje and the shop things are at the end; first the engine: the lobby with the
 # Kapitein-guh and the Logboek-guh, the queue screen, a round as crew (HUD, the ship, the guh NPCs in their suits, a task
 # panel, a meeting) and a round as the Mika (the pillow, the Saboteerkaart, a vent). Run:
 #   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/px_among.txt -PautocheckTimeout=20
@@ -18,7 +19,9 @@ wait 60
 wait 20
 shot among_lobby_kapitein
 
-section the queue screen
+section the queue screen (the oefenrondje counts as played: the real queue is open)
+/guhs px grap among klaar
+wait 10
 /guhs px among wachtrij
 wait 20
 shot among_wachtrij gui
@@ -84,4 +87,77 @@ gui close
 wait 5
 /guhs px among einde
 wait 60
+
+section the ten task panels (the dev command opens them as the Taakjes-paneel at home does)
+/guhs px among taak worstjes
+wait 15
+shot among_taak_worstjes gui
+gui close
+/guhs px among taak pasje
+wait 15
+shot among_taak_pasje gui
+gui close
+/guhs px among taak kruimelbak
+wait 15
+shot among_taak_kruimelbak gui
+gui close
+/guhs px among taak pindasaus
+wait 15
+shot among_taak_pindasaus gui
+gui close
+/guhs px among taak sorteren
+wait 15
+shot among_taak_sorteren gui
+gui close
+/guhs px among taak dromen
+wait 15
+shot among_taak_dromen gui
+gui close
+/guhs px among taak wegen
+wait 15
+shot among_taak_wegen gui
+gui close
+/guhs px among taak schakelaars
+wait 15
+shot among_taak_schakelaars gui
+gui close
+/guhs px among taak herstel_licht
+wait 15
+shot among_taak_herstel_licht gui
+gui close
+/guhs px among taak herstel_alarm
+wait 15
+shot among_taak_herstel_alarm gui
+gui close
+wait 5
+
+section the stats board of the Logboek-guh
+/guhs px among cijfers
+wait 15
+shot among_cijfers gui
+gui close
+wait 5
+
+section the oefenrondje: the start, the sleeping crew, the meeting
+/guhs px grap among reset
+/guhs px among oefen
+wait 80
+shot among_oefen_start
+/guhs px among oefen slaap
+wait 20
+look 180 10
+shot among_oefen_kantine
+/guhs px stop
+wait 40
+
+section the keepsake, the suits and the hats (the wardrobe shows them), the ship things at home
+/guhs px huis
+wait 60
+/guhs px among aandenken
+wait 10
+/give @s guhs:among_noodknop
+/give @s guhs:among_ventilatieluik
+/give @s guhs:among_taakpaneel
+wait 10
+shot among_aandenken_inventaris
 /guhs px huis

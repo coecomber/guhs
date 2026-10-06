@@ -155,7 +155,8 @@ public class VergaderScherm extends Screen {
         g.fill(left - 1, top - 1, left + W + 1, top + H + 1, RAND);
         g.fill(left, top, left + W, top + H, PANEEL);
         int stap = stap();
-        g.text(font, title.copy().withStyle(ChatFormatting.BOLD), left + 8, top + 7, TEKST, false);
+        Component kop = data.contains("Onderwerp") ? Tekst.get(data, "Onderwerp") : title;
+        g.text(font, kop.copy().withStyle(ChatFormatting.BOLD), left + 8, top + 7, TEKST, false);
         Component fase = stap == 2 ? Component.translatable("gui.guhs.among.vergadering.uitslag")
                 : Component.translatable(stap == 0 ? "gui.guhs.among.vergadering.bespreken" : "gui.guhs.among.vergadering.stemmen", AmongClient.seconden(over));
         g.text(font, fase, left + W - 8 - font.width(fase), top + 7, stap == 1 ? GOUD : TEKST, false);
@@ -200,7 +201,9 @@ public class VergaderScherm extends Screen {
         if (stap == 2) {
             Component uitslag;
             int weg = data.getIntOr("Weg", -1);
-            if (weg < 0) {
+            if (data.contains("UitslagTekst")) {
+                uitslag = Tekst.get(data, "UitslagTekst");       // (the oefenrondje has its own verdict)
+            } else if (weg < 0) {
                 uitslag = Component.translatable(data.getBooleanOr("Gelijk", false) ? "gui.guhs.among.uitslag.gelijk" : "gui.guhs.among.uitslag.niemand");
             } else {
                 Component naam = Component.empty();
@@ -211,12 +214,15 @@ public class VergaderScherm extends Screen {
                 }
                 uitslag = Component.translatable(data.getBooleanOr("WegMika", false) ? "gui.guhs.among.uitslag.mika" : "gui.guhs.among.uitslag.geen_mika", naam);
             }
-            int y = top + H - 30;
-            for (FormattedCharSequence regel : font.split(uitslag, LINKS - 12)) {
+            List<FormattedCharSequence> uitslagRegels = font.split(uitslag, LINKS - 12);
+            int y = top + H - 30 - Math.max(0, uitslagRegels.size() - 2) * 10;
+            for (FormattedCharSequence regel : uitslagRegels) {
                 g.text(font, regel, left + 8, y, GOUD, false);
                 y += 10;
             }
-            g.text(font, Component.translatable("gui.guhs.among.vergadering.overgeslagen", data.getIntOr("Overgeslagen", 0)), left + 8, top + H - 42, DOF, false);
+            if (uitslagRegels.size() <= 2) {
+                g.text(font, Component.translatable("gui.guhs.among.vergadering.overgeslagen", data.getIntOr("Overgeslagen", 0)), left + 8, top + H - 42, DOF, false);
+            }
         } else if (stap == 1 && mijnStem != -2) {
             g.text(font, Component.translatable("gui.guhs.among.vergadering.gestemd"), left + 8, top + H - 20, GROEN, false);
         } else if (stap == 0) {

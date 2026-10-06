@@ -2,6 +2,7 @@ package nl.juiced.guhs.feature.guhpixel.among;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.nbt.CompoundTag;
 import nl.juiced.guhs.feature.guhpixel.among.model.Balans;
@@ -15,8 +16,8 @@ import nl.juiced.guhs.feature.guhpixel.among.model.Balans;
  *   <li>client side: {@code among.client.TaakSchermen} maps the same id to the screen that opens.</li>
  * </ul>
  * Every kind of the ship table (worstjes, pasje, kruimelbak, pindasaus, sorteren, dromen, wegen, schakelaars) and the two
- * repair jobs ({@link #HERSTEL_LICHT}, {@link #HERSTEL_ALARM}) start as the placeholder {@link Wachtpaneel}: a panel with a
- * bar that fills while you stay. A real mini-game replaces one with {@link #registreer}; nothing else changes.
+ * repair jobs ({@link #HERSTEL_LICHT}, {@link #HERSTEL_ALARM}) is a real mini-game ({@link Taken}); a kind nobody
+ * registered falls back to the {@link Wachtpaneel}: a panel with a bar that fills while you stay.
  */
 public final class TaakSoorten {
     public static final String HERSTEL_LICHT = "herstel_licht", HERSTEL_ALARM = "herstel_alarm";
@@ -32,8 +33,13 @@ public final class TaakSoorten {
             return duur(balans) * 4 / 5;
         }
 
-        /** Is the result the client sent a finished task? (Never trust a score: check what can be checked.) */
-        default boolean geldig(CompoundTag resultaat) {
+        /** What this panel asks this time (sent to the client with the panel); stap: 0 for the first panel of a task. */
+        default CompoundTag opgave(Random rng, int stap) {
+            return new CompoundTag();
+        }
+
+        /** Is the result the client sent the answer to that opgave? (Never trust a score: check what can be checked.) */
+        default boolean geldig(CompoundTag opgave, CompoundTag resultaat) {
             return true;
         }
     }
@@ -49,8 +55,7 @@ public final class TaakSoorten {
     private static final Map<String, TaakSoort> SOORTEN = new LinkedHashMap<>();
 
     static {
-        registreer(new Wachtpaneel(HERSTEL_LICHT, true));
-        registreer(new Wachtpaneel(HERSTEL_ALARM, true));
+        Taken.registreer();
     }
 
     public static void registreer(TaakSoort soort) {

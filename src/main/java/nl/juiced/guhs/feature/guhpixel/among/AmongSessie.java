@@ -85,6 +85,10 @@ public final class AmongSessie extends Sessie {
     private final Map<UUID, GameType> oudeModus = new HashMap<>();
     /** The repair job a player is busy with: participant -> {panel, since}. */
     private final int[] herstelPaneel, herstelSinds;
+    /** What the panel a player has open asks (Taken): participant -> the opgave and its kind. */
+    private final CompoundTag[] opgaveVan;
+    private final String[] opgaveSoort;
+    private final java.util.Random puzzelRng;
     private final List<BlockPos> deurBlokken = new ArrayList<>();
     private int eindTeller = -1;
     private boolean afgerekend;
@@ -115,6 +119,9 @@ public final class AmongSessie extends Sessie {
         this.bedVan = new int[n];
         this.herstelPaneel = new int[n];
         this.herstelSinds = new int[n];
+        this.opgaveVan = new CompoundTag[n];
+        this.opgaveSoort = new String[n];
+        this.puzzelRng = new java.util.Random(seed ^ 0x5DEECE66DL);
         java.util.Arrays.fill(bedVan, -1);
         java.util.Arrays.fill(herstelPaneel, -1);
         for (int i = 0; i < spelers.size(); i++) {
@@ -184,6 +191,16 @@ public final class AmongSessie extends Sessie {
             return;
         }
         Deelnemer d = ronde.d(i);
+        geefPak(p, d.kleur);
+        if (d.mika()) {
+            p.getInventory().setItem(0, new ItemStack(AmongSlice.KUSSEN.get()));
+            p.getInventory().setItem(1, new ItemStack(AmongSlice.SABOTEERKAART.get()));
+        }
+        p.getInventory().setItem(8, new ItemStack(AmongSlice.STEMBRIEFJE.get()));
+    }
+
+    /** The space suit of a real player: dyed leather in the participant's colour. */
+    static void geefPak(ServerPlayer p, nl.juiced.guhs.feature.guhpixel.among.model.Kleur kleur) {
         for (EquipmentSlot slot : new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET}) {
             ItemStack pak = new ItemStack(switch (slot) {
                 case HEAD -> Items.LEATHER_HELMET;
@@ -191,15 +208,10 @@ public final class AmongSessie extends Sessie {
                 case LEGS -> Items.LEATHER_LEGGINGS;
                 default -> Items.LEATHER_BOOTS;
             });
-            pak.set(DataComponents.DYED_COLOR, new DyedItemColor(d.kleur.rgb));
-            pak.set(DataComponents.CUSTOM_NAME, Component.translatable("gui.guhs.among.pakje", Component.translatable("gui.guhs.among.kleur." + d.kleur.id)));
+            pak.set(DataComponents.DYED_COLOR, new DyedItemColor(kleur.rgb));
+            pak.set(DataComponents.CUSTOM_NAME, Component.translatable("gui.guhs.among.pakje", Component.translatable("gui.guhs.among.kleur." + kleur.id)));
             p.setItemSlot(slot, pak);
         }
-        if (d.mika()) {
-            p.getInventory().setItem(0, new ItemStack(AmongSlice.KUSSEN.get()));
-            p.getInventory().setItem(1, new ItemStack(AmongSlice.SABOTEERKAART.get()));
-        }
-        p.getInventory().setItem(8, new ItemStack(AmongSlice.STEMBRIEFJE.get()));
     }
 
     @Override
@@ -720,6 +732,7 @@ public final class AmongSessie extends Sessie {
             data.putString("Soort", soort);
             data.putInt("Duur", TaakSoorten.van(soort).duur(ronde.balans));
             data.putBoolean("Herstel", true);
+            data.put("Opgave", nieuweOpgave(d.idx, soort, 0));
             ModNetworking.sendTo(p, new AmongPayloads.Scherm(AmongPayloads.TAAK, data));
             return;
         }
@@ -733,7 +746,29 @@ public final class AmongSessie extends Sessie {
         data.putInt("Duur", TaakSoorten.van(t.taak.soort()).duur(ronde.balans));
         data.putInt("Stap", t.stap + 1);
         data.putInt("Stappen", t.taak.panelen().length);
+        data.put("Opgave", nieuweOpgave(d.idx, t.taak.soort(), t.stap));
         ModNetworking.sendTo(p, new AmongPayloads.Scherm(AmongPayloads.TAAK, data));
+    }
+
+    private CompoundTag nieuweOpgave(int idx, String soort, int stap) {
+        opgaveSoort[idx] = soort;
+        opgaveVan[idx] = TaakSoorten.van(soort).opgave(puzzelRng, stap);
+        return opgaveVan[idx].copy();
+    }
+
+    /** What the panel this player has open asks (an empty tag: no panel open), and of which kind it is. */
+    public CompoundTag opgave(ServerPlayer p) {
+        int i = idx(p);
+        return i >= 0 && opgaveVan[i] != null ? opgaveVan[i] : new CompoundTag();
+    }
+
+    public String opgaveSoort(ServerPlayer p) {
+        int i = idx(p);
+        return i >= 0 && opgaveSoort[i] != null ? opgaveSoort[i] : "";
+    }
+
+    private boolean antwoordGoed(int i, String soort, CompoundTag resultaat) {
+        return opgaveVan[i] != null && soort.equals(opgaveSoort[i]) && TaakSoorten.van(soort).geldig(opgaveVan[i], resultaat);
     }
 
     /** The client says the panel is finished. Checked here: the right panel, long enough, still standing there, a good result. */
@@ -747,7 +782,7 @@ public final class AmongSessie extends Sessie {
             Schip.Paneel paneel = schip.panelen.get(paneelIdx);
             String soort = paneel.soort() == Schip.PaneelSoort.LICHT ? TaakSoorten.HERSTEL_LICHT : TaakSoorten.HERSTEL_ALARM;
             TaakSoorten.TaakSoort ts = TaakSoorten.van(soort);
-            goed = ronde.tick - herstelSinds[i] >= ts.minTicks(ronde.balans) && ts.geldig(resultaat) && ronde.herstel(i, paneelIdx);
+            goed = ronde.tick - herstelSinds[i] >= ts.minTicks(ronde.balans) && antwoordGoed(i, soort, resultaat) && ronde.herstel(i, paneelIdx);
             herstelPaneel[i] = -1;
         } else {
             TaakStand t = ronde.taakBij(i, paneelIdx);
@@ -755,8 +790,9 @@ public final class AmongSessie extends Sessie {
                 return false;
             }
             TaakSoorten.TaakSoort ts = TaakSoorten.van(t.taak.soort());
-            goed = ts.geldig(resultaat) && ronde.taakKlaar(i, paneelIdx, ts.minTicks(ronde.balans));
+            goed = antwoordGoed(i, t.taak.soort(), resultaat) && ronde.taakKlaar(i, paneelIdx, ts.minTicks(ronde.balans));
         }
+        opgaveVan[i] = null;
         if (!goed) {
             nee(p, "taak_mislukt");
         }
@@ -772,6 +808,7 @@ public final class AmongSessie extends Sessie {
         if (i >= 0) {
             ronde.d(i).werkPaneel = -1;
             herstelPaneel[i] = -1;
+            opgaveVan[i] = null;
         }
     }
 
@@ -900,7 +937,12 @@ public final class AmongSessie extends Sessie {
     // --- what the clients get ---------------------------------------------------------------------------------------------------
 
     private void stuurKaart(ServerPlayer p, @Nullable Schip.Luik luik) {
-        CompoundTag data = new CompoundTag();
+        CompoundTag data = kaartTag(schip);
+        int ik = idx(p);
+        if (ik >= 0) {
+            data.putDouble("X", ronde.d(ik).x);
+            data.putDouble("Z", ronde.d(ik).z);
+        }
         ListTag kamers = new ListTag();
         if (luik != null) {
             data.putInt("Luik", luik.idx());
@@ -922,6 +964,45 @@ public final class AmongSessie extends Sessie {
         }
         data.put("Kamers", kamers);
         ModNetworking.sendTo(p, new AmongPayloads.Scherm(AmongPayloads.KAART, data));
+    }
+
+    /** The ship as the map screen draws it: its size, every zone as a rectangle, the vents and the three repair panels. */
+    static CompoundTag kaartTag(Schip schip) {
+        CompoundTag data = new CompoundTag();
+        data.putInt("Breedte", schip.breedte);
+        data.putInt("Diepte", schip.diepte);
+        ListTag zones = new ListTag();
+        for (Schip.Zone z : schip.zones) {
+            CompoundTag k = new CompoundTag();
+            k.putInt("Idx", z.idx());
+            k.putString("Id", z.kamer() ? z.id() : "gang");
+            k.putBoolean("Kamer", z.kamer());
+            k.putIntArray("Vak", new int[]{z.x0(), z.z0(), z.x1(), z.z1()});
+            zones.add(k);
+        }
+        data.put("Zones", zones);
+        ListTag luiken = new ListTag();
+        for (Schip.Luik l : schip.luiken) {
+            CompoundTag k = new CompoundTag();
+            k.putInt("Idx", l.idx());
+            k.putInt("X", l.x());
+            k.putInt("Z", l.z());
+            k.putString("Net", l.netwerk());
+            luiken.add(k);
+        }
+        data.put("Luiken", luiken);
+        ListTag herstel = new ListTag();
+        List<Schip.Paneel> panelen = new ArrayList<>(schip.alarmPanelen);
+        panelen.add(schip.lichtPaneel);
+        for (Schip.Paneel paneel : panelen) {
+            CompoundTag k = new CompoundTag();
+            k.putInt("X", paneel.bx());
+            k.putInt("Z", paneel.bz());
+            k.putBoolean("Licht", paneel == schip.lichtPaneel);
+            herstel.add(k);
+        }
+        data.put("Herstel", herstel);
+        return data;
     }
 
     public void stuurHud() {
