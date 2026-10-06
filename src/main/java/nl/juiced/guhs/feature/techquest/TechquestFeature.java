@@ -196,7 +196,8 @@ public final class TechquestFeature {
     /**
      * /guhs techquest (operators; for AutoCheck scripts and dev checks, literal texts): "stand" says where you are in both
      * questlines, "fase &lt;0..6&gt;" sets the stage of YOUR Grote Knabbelmachine (the questline is started over up to there),
-     * "dag" forgets that you took today's knabbel, "opstelling" says which setups of the copy you stand in work.
+     * "dag" forgets that you took today's knabbel, "opstelling" says which setups of the copy you stand in work, "richt"
+     * furnishes that copy at once with every setup broken (what the tick does when a player comes near).
      * (The steps themselves: /guhs verhaal stap techniek|knabbelmachine.) Only in a dev run: "proef [0..3]" puts the
      * building down with your feet on the floor of its door (turned 0..3 quarter turns) and furnishes it, "proef weg"
      * forgets those copies, "dump" saves the generated copy you stand at as a template file.
@@ -223,6 +224,17 @@ public final class TechquestFeature {
                     nl.juiced.guhs.quest.GuhQuests.saved(p).remove(Knabbelmachine.DAG);
                     Knabbelmachine.sync(p);
                     c.getSource().sendSuccess(() -> Component.literal("techquest: knabbel klaar " + Knabbelmachine.knabbelKlaar(p)), false);
+                    return 1;
+                }))
+                .then(Commands.literal("richt").executes(c -> {
+                    Centrale.Kopie k = Centrale.bij(c.getSource().getLevel(), BlockPos.containing(c.getSource().getPosition()));
+                    if (k == null) {
+                        c.getSource().sendFailure(Component.literal("techquest: no Oude Guhrad-centrale here"));
+                        return 0;
+                    }
+                    Centrale.richtIn(k);
+                    c.getSource().sendSuccess(() -> Component.literal("techquest: furnished the copy turned " + k.draai() + ", wheel 1 at "
+                            + k.w(Centrale.RADEREN[0]).toShortString()), false);
                     return 1;
                 }))
                 .then(Commands.literal("opstelling").executes(c -> {
