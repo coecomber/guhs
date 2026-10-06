@@ -6,6 +6,11 @@
     "guhs:guhhuisje_deel",
     "guhs:speelgoed_deel",
     "guhs:slee_rail_part",
-    "guhs:guh_wheel_part"
+    "guhs:guh_wheel_part",
+    "guhs:knabbelbuis",
+    "guhs:sausslang",
+    "guhs:tekentafel",
+    "guhs:fossielmijn_zoutader",
+    "guhs:fossielmijn_puin"
   ]
 }
