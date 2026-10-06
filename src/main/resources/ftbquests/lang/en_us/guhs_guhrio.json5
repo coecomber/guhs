@@ -31,4 +31,28 @@
   "quest.47554805AFF4AADE.quest_desc": [
     "Begin bij level 1-1 en haal alle zes de levels achter elkaar, in volgorde. Je tijd komt op het highscorebord (Guhdex > Highscores), naast het record van de server. Tijd die je in een level verliest door eruit te stappen telt mee, njeg.",
   ],
+  "quest.475548FF37501B58.title": "Level 2-1: De buizenkelder",
+  "quest.475548FF37501B58.quest_desc": [
+    "De poort van &6level 2-1&r gaat open zodra je de binnentuin (1-1 en 1-2) gehaald hebt. Beneden is het donker en staat het vol &agroene pijpen&r: ga er op staan en druk op &dS&r om erin te duiken. Kijk uit voor de &dHapbloemen&r: zolang zo'n bloem uit haar pijp steekt, krijg je een natte zoen en sta je weer bij je vlaggetje. Over de kaassaus glijden platforms heen en weer; wachten mag, njeg.",
+  ],
+  "quest.47554834A867AA0B.title": "Kelder-vads",
+  "quest.47554834A867AA0B.quest_desc": [
+    "Vind alle zes de &6grote vadsmunten&r van de kelders. Twee tips. In level 2-1 hangt er een in een rode kooi: de &buitroeptekenschakelaar&r die de kooi opent zit aan het eind van een tunneltje waar jij niet in past. Het schild van een &dSchild-Mika&r wel: spring op hem en geef zijn schild een zetje. En in level 2-2 ligt er een op een plek waar je alleen door een pijp komt, njeg.",
+  ],
+  "quest.47554827C03856CE.title": "Een gespikkeld ei",
+  "quest.47554827C03856CE.quest_desc": [
+    "In &6level 2-2&r zit een hek met een &deierslot&r in de weg. Het gaat alleen open voor wie het &aei van Guhshi&r bij zich heeft. Zoek de deur onder het geschilderde ei (druk op &dW&r als je erin staat): in het eierkamertje ligt het op een bedje van hooi.",
+  ],
+  "quest.475548F526116D15.title": "Krak... njeg!",
+  "quest.475548F526116D15.quest_desc": [
+    "Loop met het ei door het eierslot naar het &6broednest&r, een warm kacheltje met stro erop. Daar kruipt &aGuhshi&r uit zijn ei. Hij denkt dat jij zijn mama bent. Spring op het nest en hij draagt je: houd &dspatie&r ingedrukt om te fladderen en klik om zijn tong uit te steken. Wie tegen je aan botst krijgt Guhshi te pakken in plaats van jou; hij wacht dan weer op zijn nest.",
+  ],
+  "quest.475548C17B0B759C.title": "Level 2-2: Het nest van Guhshi",
+  "quest.475548C17B0B759C.quest_desc": [
+    "Rijd op Guhshi naar de vlaggenmast van &6level 2-2&r. Het grote gat in de vloer haal je fladderend (of te voet, op het trage platform). Daarna gaat de poort van de burcht open: level 3-1.",
+  ],
+  "quest.475548E5E033C1B3.title": "Binnendoor",
+  "quest.475548E5E033C1B3.quest_desc": [
+    "Niet elke pijp komt uit waar je denkt. Ergens in level 2-2 woont een Hapbloem in een pijp die naar de &5warpkamer&r leidt: drie gouden pijpen met een getal erboven. Duik erin en je staat meteen in dat level, en de poort ervan in de hal blijft voortaan voor je open. Het level waar je uit vertrok telt dan niet als gehaald, njeg.",
+  ],
 }

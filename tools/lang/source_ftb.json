@@ -1886,6 +1886,7 @@
   "ftb.guhs_guhrio.title": "&cSuper Guhrio",
   "ftb.guhs_guhrio.sub": "Bedankt! Maar de prinses is in een ander kasteeldeel, njeg",
   "ftb.guhs_guhrio.section.guhrio": "Het Kasteel van de Grote Nether-Mika",
+  "ftb.guhs_guhrio.section.guhrio_w2": "Wereld 2: de kelders",
   "ftb.guhs_guhrio.q.intro_guhs_guhrio.title": "Hoe kom je hier?",
   "ftb.guhs_guhrio.q.intro_guhs_guhrio.desc": "Dit hoofdstuk komt na &6VAHOEG, hij brandt weer!&r in &6De Guhbarbecuether&r.\n\nIn een frituursauszee van de Guhbarbecuether staat het &cKasteel van de Grote Nether-Mika&r (superkompas: Barbecue). Op het voorplein wacht &dPad-guh&r: Prinses Perzikguh is meegenomen... voor een stukje taart.\n\nBinnen speel je alles &cvan opzij&r: A en D lopen, spatie springt. Vallen kost niks: je begint gewoon weer bij de laatste vlag. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
   "ftb.guhs_guhrio.q.guhrio_kasteel.title": "Een kasteel in de saus",
@@ -1897,5 +1898,17 @@
   "ftb.guhs_guhrio.q.guhrio_vadsmunten.title": "Achttien keer vads",
   "ftb.guhs_guhrio.q.guhrio_vadsmunten.desc": "In elk level liggen drie &6grote vadsmunten&r. Ze blijven van jou, ook als je het level opnieuw speelt; de Guhdex (Verhalen > Super Guhrio) houdt per level bij welke je hebt.",
   "ftb.guhs_guhrio.q.guhrio_loop.title": "In één ruk door",
-  "ftb.guhs_guhrio.q.guhrio_loop.desc": "Begin bij level 1-1 en haal alle zes de levels achter elkaar, in volgorde. Je tijd komt op het highscorebord (Guhdex > Highscores), naast het record van de server. Tijd die je in een level verliest door eruit te stappen telt mee, njeg."
+  "ftb.guhs_guhrio.q.guhrio_loop.desc": "Begin bij level 1-1 en haal alle zes de levels achter elkaar, in volgorde. Je tijd komt op het highscorebord (Guhdex > Highscores), naast het record van de server. Tijd die je in een level verliest door eruit te stappen telt mee, njeg.",
+  "ftb.guhs_guhrio.q.guhrio_w2_buizenkelder.title": "Level 2-1: De buizenkelder",
+  "ftb.guhs_guhrio.q.guhrio_w2_buizenkelder.desc": "De poort van &6level 2-1&r gaat open zodra je de binnentuin (1-1 en 1-2) gehaald hebt. Beneden is het donker en staat het vol &agroene pijpen&r: ga er op staan en druk op &dS&r om erin te duiken. Kijk uit voor de &dHapbloemen&r: zolang zo'n bloem uit haar pijp steekt, krijg je een natte zoen en sta je weer bij je vlaggetje. Over de kaassaus glijden platforms heen en weer; wachten mag, njeg.",
+  "ftb.guhs_guhrio.q.guhrio_w2_vads.title": "Kelder-vads",
+  "ftb.guhs_guhrio.q.guhrio_w2_vads.desc": "Vind alle zes de &6grote vadsmunten&r van de kelders. Twee tips. In level 2-1 hangt er een in een rode kooi: de &buitroeptekenschakelaar&r die de kooi opent zit aan het eind van een tunneltje waar jij niet in past. Het schild van een &dSchild-Mika&r wel: spring op hem en geef zijn schild een zetje. En in level 2-2 ligt er een op een plek waar je alleen door een pijp komt, njeg.",
+  "ftb.guhs_guhrio.q.guhrio_w2_ei.title": "Een gespikkeld ei",
+  "ftb.guhs_guhrio.q.guhrio_w2_ei.desc": "In &6level 2-2&r zit een hek met een &deierslot&r in de weg. Het gaat alleen open voor wie het &aei van Guhshi&r bij zich heeft. Zoek de deur onder het geschilderde ei (druk op &dW&r als je erin staat): in het eierkamertje ligt het op een bedje van hooi.",
+  "ftb.guhs_guhrio.q.guhrio_w2_uitgebroed.title": "Krak... njeg!",
+  "ftb.guhs_guhrio.q.guhrio_w2_uitgebroed.desc": "Loop met het ei door het eierslot naar het &6broednest&r, een warm kacheltje met stro erop. Daar kruipt &aGuhshi&r uit zijn ei. Hij denkt dat jij zijn mama bent. Spring op het nest en hij draagt je: houd &dspatie&r ingedrukt om te fladderen en klik om zijn tong uit te steken. Wie tegen je aan botst krijgt Guhshi te pakken in plaats van jou; hij wacht dan weer op zijn nest.",
+  "ftb.guhs_guhrio.q.guhrio_w2_nest.title": "Level 2-2: Het nest van Guhshi",
+  "ftb.guhs_guhrio.q.guhrio_w2_nest.desc": "Rijd op Guhshi naar de vlaggenmast van &6level 2-2&r. Het grote gat in de vloer haal je fladderend (of te voet, op het trage platform). Daarna gaat de poort van de burcht open: level 3-1.",
+  "ftb.guhs_guhrio.q.guhrio_w2_warp.title": "Binnendoor",
+  "ftb.guhs_guhrio.q.guhrio_w2_warp.desc": "Niet elke pijp komt uit waar je denkt. Ergens in level 2-2 woont een Hapbloem in een pijp die naar de &5warpkamer&r leidt: drie gouden pijpen met een getal erboven. Duik erin en je staat meteen in dat level, en de poort ervan in de hal blijft voortaan voor je open. Het level waar je uit vertrok telt dan niet als gehaald, njeg."
 }

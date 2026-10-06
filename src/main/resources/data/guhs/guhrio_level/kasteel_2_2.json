@@ -19,6 +19,46 @@
       "afstand": 11,
       "hoogte": 6,
       "onder": -4,
+      "boven": 7
+    },
+    {
+      "id": "ei",
+      "punten": [
+        [
+          14,
+          0,
+          0
+        ],
+        [
+          38,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 4,
+      "onder": 8,
+      "boven": 15
+    },
+    {
+      "id": "warp",
+      "punten": [
+        [
+          48,
+          0,
+          0
+        ],
+        [
+          91,
+          0,
+          0
+        ]
+      ],
+      "camera": "rechts",
+      "afstand": 11,
+      "hoogte": 4,
+      "onder": 8,
       "boven": 15
     }
   ],

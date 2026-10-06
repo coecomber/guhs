@@ -163,6 +163,12 @@
     "guhs:guhrio_pijp_lijf",
     "guhs:guhrio_schakelaar",
     "guhs:guhrio_schakelblok",
-    "guhs:guhrio_grillspies_plek"
+    "guhs:guhrio_grillspies_plek",
+    "guhs:guhriow2_keldergrond",
+    "guhs:guhriow2_keldersteen",
+    "guhs:guhriow2_warpbuis",
+    "guhs:guhriow2_warppijp",
+    "guhs:guhriow2_eislot",
+    "guhs:guhriow2_nest"
   ]
 }

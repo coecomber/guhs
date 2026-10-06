@@ -19,26 +19,26 @@
       "afstand": 11,
       "hoogte": 6,
       "onder": -4,
-      "boven": 8
+      "boven": 7
     },
     {
-      "id": "kelder",
+      "id": "munten",
       "punten": [
         [
-          6,
+          2,
           0,
           0
         ],
         [
-          28,
+          26,
           0,
           0
         ]
       ],
       "camera": "rechts",
       "afstand": 11,
-      "hoogte": 6,
-      "onder": 9,
+      "hoogte": 4,
+      "onder": 8,
       "boven": 15
     }
   ],
