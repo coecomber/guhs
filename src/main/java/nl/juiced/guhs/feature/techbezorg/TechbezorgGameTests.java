@@ -43,7 +43,8 @@ import nl.juiced.guhs.storage.Nbt;
 import nl.juiced.guhs.taal.NlTekst;
 
 /**
- * Game tests of the Bezorgguhtje (bbq2, batch "techbezorg"): a round from chest to chest with a filter, sleeping without
+ * Game tests of the Bezorgguhtje (bbq2, batch "techbezorg"): a round from chest to chest with a filter (also with the
+ * "afleveren" stop first in the round), sleeping without
  * vadskracht, taking only what can be delivered, a furnace (what is done comes out, the fuel stays), nothing is ever lost
  * (the guhtje killed on the road, a stranger that claims the station, the station broken with a full backpack, save and
  * load), linking poles to stations, hopping over a wall, the whistle, the two menus, the hover readout and the texts.
@@ -160,6 +161,33 @@ public class TechbezorgGameTests {
             BezorgguhtjeEntity k = r.station.koerier();
             helper.assertTrue(k != null && !k.slaapt(), "the guhtje is there and awake");
             helper.assertBlockProperty(p(7, 7), MachineBlock.SNOET, Snoet.WERKT);
+        });
+    }
+
+    /**
+     * The "afleveren" stop comes BEFORE the "ophalen" stop in the round: everything still arrives in ONE round (it rides
+     * past the "afleveren" stops once more before it goes home), and the face never says "full".
+     */
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 800)
+    public static void techbezorgAfleverHalteEerst(GameTestHelper helper) {
+        StepstationBlockEntity station = station(helper, p(7, 7), Direction.NORTH, true);
+        ChestBlockEntity a = kist(helper, p(2, 3)), b = kist(helper, p(12, 3));
+        HaltepaaltjeBlockEntity paalB = paal(helper, p(12, 4), Direction.NORTH, false, station);
+        HaltepaaltjeBlockEntity paalA = paal(helper, p(2, 4), Direction.NORTH, true, station);
+        gelijk(helper, List.of(paalB.getBlockPos(), paalA.getBlockPos()), station.haltes(), "the round: afleveren first");
+        a.setItem(0, new ItemStack(knabbel(), 40));
+        int[] thuisMetSpullen = {0};
+        helper.onEachTick(() -> {
+            if (station.fase() == Fase.RUST && !station.rugzakLeeg()) {
+                thuisMetSpullen[0]++;
+            }
+            helper.assertTrue(station.snoet() != Snoet.VOL, "the face never says the backpack does not get empty");
+        });
+        helper.succeedWhen(() -> {
+            gelijk(helper, 40, tel(b, knabbel()), "kaasknabbels in chest B");
+            gelijk(helper, Fase.RUST, station.fase(), "home again");
+            gelijk(helper, 0, thuisMetSpullen[0], "ticks it rested at home with things still in the backpack");
+            helper.assertTrue(station.rugzakLeeg(), "the backpack is empty");
         });
     }
 

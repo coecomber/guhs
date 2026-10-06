@@ -60,7 +60,8 @@ import nl.juiced.guhs.quest.GuhAdvancements;
  * has work ({@link #nuttig}), rummages for {@link #LAAD_TICKS} and moves the items ({@link #wissel}), and so on; after the last
  * stop it rides home and rests. At an "ophalen" stop it takes only what an "afleveren" stop of this round asks for (its
  * filter) and can hold right now, so the backpack does not fill up with things nobody wants. A stop that is not loaded, out
- * of reach or without a chest is skipped. When it does not get closer to where it is going for {@link #VAST_TICKS} it hops
+ * of reach or without a chest is skipped. What is still in the backpack after the last stop goes to the "afleveren" stops
+ * once more before it rides home ({@link #verder}). When it does not get closer to where it is going for {@link #VAST_TICKS} it hops
  * there ({@link BezorgguhtjeEntity#hop}): no wall, hole or missing path ever stops a delivery. Without vadskracht it rides
  * home and sleeps. The face: asleep without vadskracht, surprised while the backpack does not get empty, happy otherwise.
  * Resources and texts: tools/features/tech_bezorg.py.
@@ -99,6 +100,8 @@ public class StepstationBlockEntity extends MachineBlockEntity implements MenuPr
     private boolean vast;
     /** Something was delivered in this round. */
     private boolean geleverd;
+    /** The round is done but the backpack is not empty: once more along the "afleveren" stops (not saved). */
+    private boolean naronde;
     /** Items delivered in total. */
     private long gebracht;
     private boolean thuis = true;
@@ -227,6 +230,7 @@ public class StepstationBlockEntity extends MachineBlockEntity implements MenuPr
             zetFase(Fase.NAAR_HUIS);
         }
         doel = -1;
+        naronde = false;
         setChanged();
     }
 
@@ -461,6 +465,7 @@ public class StepstationBlockEntity extends MachineBlockEntity implements MenuPr
                 if (eerste >= 0) {
                     doel = eerste;
                     geleverd = false;
+                    naronde = false;
                     thuis = false;
                     zetFase(Fase.RIJDT);
                     k.bel();
@@ -544,9 +549,17 @@ public class StepstationBlockEntity extends MachineBlockEntity implements MenuPr
         }
     }
 
-    /** After stop {@link #doel}: on to the next stop with work, or home. */
+    /**
+     * After stop {@link #doel}: on to the next stop with work, or home. When the last stop is done and there still is
+     * something in the backpack (an "afleveren" stop that comes BEFORE the "ophalen" stop in the round), it rides once more
+     * along the "afleveren" stops that take it, in order, and only then home: the order of the stops never costs a round.
+     */
     private void verder(ServerLevel sl) {
-        int next = volgende(sl, doel);
+        int next = naronde ? losplek(sl, doel) : volgende(sl, doel);
+        if (next < 0 && !naronde && !rugzakLeeg()) {
+            naronde = true;
+            next = losplek(sl, -1);
+        }
         if (next >= 0) {
             doel = next;
             zetFase(Fase.RIJDT);
@@ -589,6 +602,17 @@ public class StepstationBlockEntity extends MachineBlockEntity implements MenuPr
     int volgende(ServerLevel sl, int na) {
         for (int i = Math.max(0, na + 1); i < haltes.size(); i++) {
             if (nuttig(sl, i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /** The first "afleveren" stop after stop {@code na} that takes something out of the backpack right now, or -1. */
+    private int losplek(ServerLevel sl, int na) {
+        for (int i = Math.max(0, na + 1); i < haltes.size(); i++) {
+            HaltepaaltjeBlockEntity h = halte(sl, i);
+            if (h != null && !h.ophalen() && kanAfleveren(h)) {
                 return i;
             }
         }
@@ -764,6 +788,7 @@ public class StepstationBlockEntity extends MachineBlockEntity implements MenuPr
     public void naarHuis() {
         roeper = null;
         doel = -1;
+        naronde = false;
         if (fase != Fase.SLAAPT && fase != Fase.RUST) {
             zetFase(Fase.NAAR_HUIS);
         }
