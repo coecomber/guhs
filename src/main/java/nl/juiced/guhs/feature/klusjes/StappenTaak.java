@@ -28,14 +28,13 @@ import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.band.Band;
 import nl.juiced.guhs.feature.band.BandVlaggen;
 import nl.juiced.guhs.feature.huisje.Huisje;
-import nl.juiced.guhs.feature.huisje.HuisjeOpslag;
 import nl.juiced.guhs.feature.huisje.Klus;
 import nl.juiced.guhs.feature.huisje.KlusTaak;
 
 /**
  * A chore as a little queue of steps ({@link Stap}): walk somewhere, work a while (looking at it, particles, sounds), do
- * the thing. What it collects ({@link #buit}) is carried (shown over its head) and brought to the Bank Guh / the chest
- * at the end ({@link HuisjeOpslag#lever}); if the chore is cut short (night, moved out...) the spoils are still delivered
+ * the thing. What it collects ({@link #buit}) is carried (shown over its head) and brought to the Bank Guh / a Hapluikje /
+ * the chest at the end ({@link Voorraad#lever}); if the chore is cut short (night, moved out...) the spoils are still delivered
  * straight away, nothing is ever lost. When the chore really did its job ({@link #gelukt()}) the resident is rewarded
  * once, at the end ({@link KlusBeloning#klaar}). While it runs the guh has the flag KLUSJE (the little carry icon).
  */
@@ -234,9 +233,9 @@ public abstract class StappenTaak implements KlusTaak {
         };
     }
 
-    /** Brings the spoils to the Bank Guh / the chest / the door. */
+    /** Brings the spoils to the Bank Guh / a Hapluikje / the chest / the door. */
     private Stap breng() {
-        BlockPos plek = Voorraad.brengPlek(level, huisje);
+        BlockPos plek = Voorraad.afleverPlek(level, huisje);
         Stap heen = loop(plek, 2.3);
         return new Stap() {
             boolean daar;
@@ -259,22 +258,26 @@ public abstract class StappenTaak implements KlusTaak {
     }
 
     private void lever() {
-        boolean bank = HuisjeOpslag.heeftBankGuh(level, huisje);
-        boolean iets = false;
+        BlockPos p = Voorraad.afleverPlek(level, huisje);
+        boolean bank = false, luikje = false, iets = false;
         for (ItemStack s : buit) {
             if (!s.isEmpty()) {
-                HuisjeOpslag.lever(level, huisje, s);
+                Voorraad.Geleverd g = Voorraad.lever(level, huisje, s);
+                bank |= g.bank();
+                luikje |= g.luikje();
                 iets = true;
             }
         }
         buit.clear();
         toon(ItemStack.EMPTY);
         if (iets) {
-            BlockPos p = Voorraad.brengPlek(level, huisje);
             level.sendParticles(KlusjesFeature.STERRETJE.get(), p.getX() + 0.5, p.getY() + 1.1, p.getZ() + 0.5, 5, 0.3, 0.2, 0.3, 0.0);
             level.playSound(null, p, SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 0.5f, 1.4f);
             if (bank) {
                 KlusBeloning.bankGesorteerd(mob);
+            }
+            if (luikje) {
+                KlusBeloning.luikje(mob);
             }
         }
     }

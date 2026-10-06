@@ -10,25 +10,37 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
 import nl.juiced.guhs.feature.Features;
+import nl.juiced.guhs.feature.bank.HapluikjeBlockEntity;
 import nl.juiced.guhs.feature.guhpolder.MolentjeBlockEntity;
 import nl.juiced.guhs.feature.huisje.Huisje;
 import nl.juiced.guhs.feature.huisje.HuisjeBlockEntity;
 import nl.juiced.guhs.feature.huisje.HuisjeOpslag;
+import nl.juiced.guhs.feature.vadskracht.Kisten;
+import nl.juiced.guhs.feature.vadskracht.VadsKnoop;
 import nl.juiced.guhs.storage.BankContents;
 
 /**
  * The huisje's stock for chores that need something (a bottle for kaasmelk, knabbelvoer, graan and ingredients for
  * baking, a snack for a hurt guh): taken from the chests around the huisje (the same ones {@link HuisjeOpslag} fills:
- * within 4 blocks) and from the Bank Guh of the home base. Output never goes through here: that is
- * {@link HuisjeOpslag#lever}.
+ * within 4 blocks) and from the Bank Guh of the home base.
+ * <p>
+ * bbq2: output goes through here too ({@link #lever}, {@link #afleverPlek}): the Bank Guhs of the home base first (each
+ * up to its cap), then a working Hapluikje anywhere in the home base ({@link #luikjes}: it passes everything on to its
+ * Bank Guh, however far away that one stands), then the chests around the huisje, and what is left pops out at the door.
+ * And a machine of the vadskracht kind (a Guh Oven, a Knutselmachine...) is never one of the huisje's chests, also not
+ * when it stands right next to it: what goes into a machine is the business of the machines chore
+ * ({@code feature/techklus}).
  */
 public final class Voorraad {
     /**
@@ -67,7 +79,8 @@ public final class Voorraad {
                 }
                 for (BlockEntity be : level.getChunk(cx, cz).getBlockEntities().values()) {
                     BlockPos p = be.getBlockPos();
-                    if (be instanceof BankGuhBlockEntity || be instanceof HuisjeBlockEntity || be instanceof MolentjeBlockEntity || blokken.contains(p)
+                    if (be instanceof BankGuhBlockEntity || be instanceof HuisjeBlockEntity || be instanceof MolentjeBlockEntity || isMachine(be)
+                            || blokken.contains(p)
                             || p.getX() < minX - 4 || p.getX() > maxX + 4 || p.getY() < minY - 4 || p.getY() > maxY + 4
                             || p.getZ() < minZ - 4 || p.getZ() > maxZ + 4
                             || Voorraad.handler(level, p) == null) {
@@ -81,9 +94,93 @@ public final class Voorraad {
         return uit;
     }
 
-    /** Is there anywhere to put things (a chest or a Bank Guh)? Without it, things would only pile up at the door. */
+    /** bbq2: a guh machine (anything on the vadskracht net that holds items) is no chest; the Hapluikje is the exception. */
+    public static boolean isMachine(BlockEntity be) {
+        return be instanceof VadsKnoop && !(be instanceof HapluikjeBlockEntity);
+    }
+
+    /**
+     * bbq2: the Hapluikjes in the home base that work right now (vadskracht, linked, their Bank Guh stands somewhere), the
+     * nearest to the huisje first. Chore output goes into them when no Bank Guh of the home base takes it.
+     */
+    public static List<HapluikjeBlockEntity> luikjes(ServerLevel level, Huisje h) {
+        List<HapluikjeBlockEntity> uit = new ArrayList<>();
+        net.minecraft.world.phys.AABB box = h.gebied();
+        for (int cx = ((int) Math.floor(box.minX)) >> 4; cx <= ((int) Math.floor(box.maxX)) >> 4; cx++) {
+            for (int cz = ((int) Math.floor(box.minZ)) >> 4; cz <= ((int) Math.floor(box.maxZ)) >> 4; cz++) {
+                if (!level.hasChunk(cx, cz)) {
+                    continue;
+                }
+                for (BlockEntity be : level.getChunk(cx, cz).getBlockEntities().values()) {
+                    if (be instanceof HapluikjeBlockEntity luikje && !be.isRemoved() && h.inGebied(be.getBlockPos())
+                            && KlusGebied.inTest(h, Vec3.atCenterOf(be.getBlockPos())) && luikje.stand() == HapluikjeBlockEntity.Stand.KLAAR) {
+                        uit.add(luikje);
+                    }
+                }
+            }
+        }
+        Vec3 m = h.midden();
+        uit.sort(Comparator.comparingDouble(l -> l.getBlockPos().distToCenterSqr(m)));
+        return uit;
+    }
+
+    /** bbq2: what {@link #lever} did with the stack: did a Bank Guh of the home base take some, did a Hapluikje? */
+    public record Geleverd(boolean bank, boolean luikje) {
+        static final Geleverd NIETS = new Geleverd(false, false);
+    }
+
+    /**
+     * bbq2: delivers chore output. Order: the Bank Guhs of the home base (nearest first, each up to its cap; never a
+     * loaned thing), the working Hapluikjes of the home base, the chests around the huisje, the door. Nothing is thrown
+     * away: what nobody takes lies in front of the door.
+     */
+    public static Geleverd lever(ServerLevel level, Huisje h, ItemStack stack) {
+        if (stack.isEmpty()) {
+            return Geleverd.NIETS;
+        }
+        ItemStack rest = stack.copy();
+        boolean bank = false, luikje = false;
+        if (!Features.isLoaned(rest)) {
+            for (BankGuhBlockEntity b : HuisjeOpslag.bankGuhs(level, h)) {
+                int voor = rest.getCount();
+                rest = Kisten.stop(b.handler(), rest);
+                bank |= rest.getCount() < voor;
+                if (rest.isEmpty()) {
+                    return new Geleverd(bank, false);
+                }
+            }
+            for (HapluikjeBlockEntity l : luikjes(level, h)) {
+                ResourceHandler<ItemResource> bek = Kisten.van(level, l.getBlockPos(), null);
+                if (bek == null) {
+                    continue;
+                }
+                int voor = rest.getCount();
+                rest = Kisten.stop(bek, rest);
+                luikje |= rest.getCount() < voor;
+                if (rest.isEmpty()) {
+                    return new Geleverd(bank, luikje);
+                }
+            }
+        }
+        for (BlockPos p : kisten(level, h)) {
+            IItemHandler handler = Voorraad.handler(level, p);
+            if (handler != null) {
+                rest = ItemHandlerHelper.insertItemStacked(handler, rest, false);
+                if (rest.isEmpty()) {
+                    return new Geleverd(bank, luikje);
+                }
+            }
+        }
+        BlockPos d = h.deur();
+        ItemEntity item = new ItemEntity(level, d.getX() + 0.5, d.getY() + 0.3, d.getZ() + 0.5, rest);
+        item.setDeltaMovement(h.facing().getStepX() * 0.1, 0.15, h.facing().getStepZ() * 0.1);
+        level.addFreshEntity(item);
+        return new Geleverd(bank, luikje);
+    }
+
+    /** Is there anywhere to put things (a chest, a Bank Guh or, bbq2, a working Hapluikje)? Without it, things would only pile up at the door. */
     public static boolean heeftOpslag(ServerLevel level, Huisje h) {
-        return HuisjeOpslag.heeftBankGuh(level, h) || !kisten(level, h).isEmpty();
+        return HuisjeOpslag.heeftBankGuh(level, h) || !kisten(level, h).isEmpty() || !luikjes(level, h).isEmpty();
     }
 
     /**
@@ -96,6 +193,17 @@ public final class Voorraad {
             return true;
         }
         ItemStack rest = stack.copyWithCount(stack.getCount() - (int) inBank);
+        if (!Features.isLoaned(rest)) {
+            for (HapluikjeBlockEntity l : luikjes(level, h)) {   // (bbq2: what a Hapluikje of the home base would take)
+                ResourceHandler<ItemResource> bek = Kisten.van(level, l.getBlockPos(), null);
+                if (bek != null) {
+                    rest = Kisten.stop(bek, rest, true);
+                    if (rest.isEmpty()) {
+                        return true;
+                    }
+                }
+            }
+        }
         for (BlockPos p : kisten(level, h)) {
             IItemHandler handler = Voorraad.handler(level, p);
             if (handler != null) {
@@ -173,18 +281,35 @@ public final class Voorraad {
         return ItemStack.EMPTY;
     }
 
-    /** Where a guh brings its spoils: the Bank Guh (it sorts), else the huisje's chest, else the door. */
+    /**
+     * Where the huisje's stock is (a guh walks here to take something out, and brings its spoils here when there is no
+     * Hapluikje, see {@link #afleverPlek}): the Bank Guh (it sorts), else the huisje's chest, else the door.
+     */
     public static BlockPos brengPlek(ServerLevel level, Huisje h) {
         BankGuhBlockEntity bank = HuisjeOpslag.bankGuh(level, h);
         if (bank != null) {
             return bank.getBlockPos();
         }
         Container kist = HuisjeOpslag.kist(level, h);
-        if (kist instanceof BlockEntity be) {
+        if (kist instanceof BlockEntity be && !isMachine(be)) {
             return be.getBlockPos();
         }
         List<BlockPos> kisten = kisten(level, h);
         return kisten.isEmpty() ? h.deur() : kisten.get(0);
+    }
+
+    /**
+     * bbq2: where a guh brings its spoils: the Bank Guh of the home base, else the nearest working Hapluikje of the home
+     * base, else {@link #brengPlek} (the chest, the door).
+     */
+    public static BlockPos afleverPlek(ServerLevel level, Huisje h) {
+        if (!HuisjeOpslag.heeftBankGuh(level, h)) {
+            List<HapluikjeBlockEntity> luikjes = luikjes(level, h);
+            if (!luikjes.isEmpty()) {
+                return luikjes.get(0).getBlockPos();
+            }
+        }
+        return brengPlek(level, h);
     }
 
     /** The chest itself (for sorting it into the Bank Guh), or null. */

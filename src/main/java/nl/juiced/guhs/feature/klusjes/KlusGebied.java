@@ -15,7 +15,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.NetherWartBlock;
+import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -25,6 +29,7 @@ import nl.juiced.guhs.feature.bakkerij.KnabbelovenBlock;
 import nl.juiced.guhs.feature.boerderij.KippennestjeBlock;
 import nl.juiced.guhs.feature.guhpolder.MolentjeBlock;
 import nl.juiced.guhs.feature.huisje.Huisje;
+import nl.juiced.guhs.feature.techmachine.Oogst;
 import nl.juiced.guhs.feature.tuintjes.TuinBlock;
 import nl.juiced.guhs.feature.vadswoud.KnabbelbessenstruikBlock;
 
@@ -33,13 +38,21 @@ import nl.juiced.guhs.feature.vadswoud.KnabbelbessenstruikBlock;
  * sorts the interesting blocks into kinds ({@link Soort}); kept for {@link #GELDIG} ticks per huisje so eight residents
  * trying ten chores don't all scan again. A chore always checks the block itself again before it works on it. Targets a
  * resident is walking to are claimed ({@link #claim}) so two guhs don't harvest the same wheat.
+ * <p>
+ * bbq2: a chore of another package adds a kind of its own with {@link #registreer} (a name and a test of one block) and
+ * reads it with {@link #van(ServerLevel, Huisje, String)}: the same scan, no second walk through the area. And the crops
+ * of {@link Soort#GEWAS} are more than crop blocks now ({@link #oogstbaar}): pumpkins and melons on their stem, sugar
+ * cane, cocoa, nether wart and the scheutjes of the Guhbarbecuether.
  */
 public final class KlusGebied {
     /** How long one scan stays valid. */
     public static final int GELDIG = 100;
 
     public enum Soort {
-        /** Ripe crops (vanilla, kaasknabbelplantjes) and ripe guhtuintjes. */
+        /**
+         * Ripe crops (vanilla, kaasknabbelplantjes, peppers: every crop block) and ripe guhtuintjes; bbq2: also what
+         * {@link #oogstbaar} knows (pumpkin and melon on a stem, sugar cane, cocoa, nether wart, rested scheutjes).
+         */
         GEWAS,
         /** Thirsty guhtuintjes. */
         DORSTIG,
@@ -62,7 +75,7 @@ public final class KlusGebied {
         /** Lamps of the tag guhs:klusjes/lampjes. */
         LAMP,
         // 1.2.8: only for the overview in the huisje screen ("everything is there, just nothing to do right now")
-        /** Crops and planted guhtuintjes that aren't ripe yet. */
+        /** Crops and planted guhtuintjes that aren't ripe yet (bbq2: and stems, young cocoa and wart, sugar cane, resting scheutjes). */
         GROEIT,
         /** Knabbelbessen and sweet berry bushes without ripe berries. */
         STRUIK,
@@ -74,8 +87,17 @@ public final class KlusGebied {
         KAMPVUUR
     }
 
-    private record Scan(long tot, Map<Soort, List<BlockPos>> lijsten) {
+    private record Scan(long tot, Map<Soort, List<BlockPos>> lijsten, Map<String, List<BlockPos>> extra) {
     }
+
+    /** bbq2: one block of the area looked at for a kind another package registered. */
+    @FunctionalInterface
+    public interface Proef {
+        boolean is(ServerLevel level, BlockPos pos, BlockState state);
+    }
+
+    /** bbq2: the kinds of other packages (name -> test), found in the same scan; a block may be of several of them. */
+    private static final Map<String, Proef> EXTRA = new ConcurrentHashMap<>();
 
     private static final Map<String, Scan> SCANS = new ConcurrentHashMap<>();
     /** Claimed targets: "dim|pos" -> game time the claim ends. */
@@ -112,6 +134,40 @@ public final class KlusGebied {
             }
         }
         return s.lijsten().getOrDefault(soort, List.of());
+    }
+
+    /**
+     * bbq2: adds a kind of block to the scan of every home base (call it once, from a feature's register). The name starts
+     * with the package of whoever asks ("techklus_machine"); the test must be cheap, it is asked for every block of the area.
+     */
+    public static void registreer(String naam, Proef proef) {
+        EXTRA.put(naam, proef);
+        SCANS.clear();
+    }
+
+    /** bbq2: every block of a {@link #registreer registered} kind in the home base (from the last scan). */
+    public static List<BlockPos> van(ServerLevel level, Huisje h, String naam) {
+        van(level, h, Soort.GEWAS);   // (makes sure the scan is fresh)
+        Scan s = SCANS.get(sleutel(level, h.pos()));
+        return s == null ? List.of() : s.extra().getOrDefault(naam, List.of());
+    }
+
+    /** bbq2: {@link #kies} for a registered kind (always the nearest first). */
+    @Nullable
+    public static BlockPos kies(ServerLevel level, Huisje h, String naam, Mob mob, Predicate<BlockPos> nog) {
+        List<BlockPos> lijst = new ArrayList<>(van(level, h, naam));
+        BlockPos from = mob.blockPosition();
+        lijst.sort(Comparator.comparingDouble(p -> p.distSqr(from)));
+        int geprobeerd = 0;
+        for (BlockPos p : lijst) {
+            if (++geprobeerd > 48) {
+                break;
+            }
+            if (!geclaimd(level, p) && level.isLoaded(p) && nog.test(p)) {
+                return p;
+            }
+        }
+        return null;
     }
 
     /** Forgets every scan (tests: the world was changed on purpose). */
@@ -171,6 +227,38 @@ public final class KlusGebied {
         return s.getBlock() instanceof CropBlock crop && crop.isMaxAge(s) || TuinBlock.rijp(s);
     }
 
+    /**
+     * bbq2 ("more harvesting"): what the farmen chore cuts besides crop blocks and guhtuintjes, the way the Oogster does
+     * ({@link Oogst}): a pumpkin or melon that hangs on its stem (never one somebody put down), sugar cane above its
+     * bottom piece, ripe cocoa that hangs low enough to reach ({@link FarmenKlus#bereikbaar}) and ripe nether wart; and the
+     * scheutjes of the Guhbarbecuether (tag guhs:klusjes/scheutjes: pinda- and mosterdscheutjes), which keep standing and
+     * give one scheutje per {@link FarmenKlus#SCHEUT_RUST} ticks.
+     */
+    public static boolean oogstbaar(ServerLevel level, BlockPos p, BlockState s) {
+        if (s.is(KlusjesFeature.SCHEUTJES)) {
+            return FarmenKlus.scheutRijp(level, p);
+        }
+        return oogstPlant(s) && Oogst.isRijp(level, p) && FarmenKlus.bereikbaar(level, p);
+    }
+
+    /** One of the plants {@link #oogstbaar} is about (ripe or not; not the scheutjes). */
+    private static boolean oogstPlant(BlockState s) {
+        return s.is(Blocks.PUMPKIN) || s.is(Blocks.MELON) || s.is(Blocks.SUGAR_CANE) || s.getBlock() instanceof CocoaBlock
+                || s.getBlock() instanceof NetherWartBlock;
+    }
+
+    /** Everything the farmen chore harvests: {@link #rijpGewas} or {@link #oogstbaar}. */
+    public static boolean rijp(ServerLevel level, BlockPos p) {
+        BlockState s = level.getBlockState(p);
+        return rijpGewas(s) || oogstbaar(level, p, s);
+    }
+
+    /** bbq2: a plant of {@link #oogstbaar} that has nothing to cut yet (a stem, a young pod, a lone cane, a resting scheutje). */
+    private static boolean oogstLater(BlockState s) {
+        return s.getBlock() instanceof StemBlock || s.is(Blocks.SUGAR_CANE) || s.getBlock() instanceof CocoaBlock
+                || s.getBlock() instanceof NetherWartBlock || s.is(KlusjesFeature.SCHEUTJES);
+    }
+
     public static boolean plukbaar(BlockState s) {
         return s.getBlock() instanceof KnabbelbessenstruikBlock && s.getValue(KnabbelbessenstruikBlock.AGE) > 1
                 || s.getBlock() instanceof SweetBerryBushBlock && s.getValue(SweetBerryBushBlock.AGE) > 1;
@@ -215,6 +303,7 @@ public final class KlusGebied {
 
     private static Scan scan(ServerLevel level, Huisje h, long nu) {
         Map<Soort, List<BlockPos>> uit = new EnumMap<>(Soort.class);
+        Map<String, List<BlockPos>> extra = new java.util.HashMap<>();
         AABB box = h.gebied();
         List<BlockPos> huisjeBlokken = h.blokken();
         net.minecraft.world.phys.AABB grens = TEST_GRENS.isEmpty() ? null : TEST_GRENS.get(h.pos());
@@ -243,15 +332,20 @@ public final class KlusGebied {
                     if (TuinBlock.dorstig(s)) {
                         uit.computeIfAbsent(Soort.DORSTIG, k -> new ArrayList<>()).add(p.immutable());
                     }
+                    for (Map.Entry<String, Proef> e : EXTRA.entrySet()) {
+                        if (e.getValue().is(level, p, s)) {
+                            extra.computeIfAbsent(e.getKey(), k -> new ArrayList<>()).add(p.immutable());
+                        }
+                    }
                 }
             }
         }
-        return new Scan(nu + GELDIG, uit);
+        return new Scan(nu + GELDIG, uit, extra);
     }
 
     @Nullable
     private static Soort soort(ServerLevel level, BlockPos p, BlockState s) {
-        if (rijpGewas(s)) {
+        if (rijpGewas(s) || oogstbaar(level, p, s)) {
             return Soort.GEWAS;
         }
         if (plukbaar(s)) {
@@ -275,7 +369,7 @@ public final class KlusGebied {
         if (lampje(s)) {
             return Soort.LAMP;
         }
-        if (s.getBlock() instanceof CropBlock || TuinBlock.groeit(s)) {
+        if (s.getBlock() instanceof CropBlock || TuinBlock.groeit(s) || oogstLater(s)) {
             return Soort.GROEIT;
         }
         if (s.getBlock() instanceof KnabbelbessenstruikBlock || s.getBlock() instanceof SweetBerryBushBlock) {

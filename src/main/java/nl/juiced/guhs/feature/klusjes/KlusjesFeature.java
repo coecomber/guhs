@@ -35,7 +35,8 @@ import net.minecraft.world.item.component.TooltipDisplay;
  * resident in the huisje screen. Ten chores, in this order (= the order in the screen):
  * <ol>
  *   <li>{@link OpgravenKlus opgraven}: dig up kaasknabbels in grass, dirt or sand (sometimes something rare);</li>
- *   <li>{@link FarmenKlus farmen}: harvest ripe crops and plant them again, water thirsty guhtuintjes;</li>
+ *   <li>{@link FarmenKlus farmen}: harvest ripe crops and plant them again, water thirsty guhtuintjes (bbq2: also pumpkins,
+ *       melons, sugar cane, cocoa, nether wart, peppers and the scheutjes of the Guhbarbecuether);</li>
  *   <li>{@link OpruimenKlus opruimen}: pick up things lying around, sort the chest into the Bank Guh;</li>
  *   <li>{@link DierenKlus dieren}: pet and feed the farm animals, collect wool, eggs, kaasmelk, harvest knabbelkorven;</li>
  *   <li>{@link BakkenKlus bakken}: knabbelgraan to the guh-molentje, bake pastries in the knabbeloven;</li>
@@ -45,7 +46,9 @@ import net.minecraft.world.item.component.TooltipDisplay;
  *   <li>{@link LampjesKlus lampjes}: guh lamps on in the evening, off in the morning (with a yawn);</li>
  *   <li>{@link OppasKlus oppas}: cuddle and feed muisjes and turtles, heal a hurt guh with a snack.</li>
  * </ol>
- * Everything a chore brings in goes through {@link nl.juiced.guhs.feature.huisje.HuisjeOpslag#lever} (a Bank Guh sorts it).
+ * Everything a chore brings in goes through {@link Voorraad#lever}: a Bank Guh of the home base sorts it, else (bbq2) a
+ * Hapluikje in the home base sends it to its bank far away, else the chest next to the huisje. bbq2 also adds the chores
+ * of the machines ({@code feature/techklus}: machines bijvullen & leeghalen, plantage).
  * Every finished chore: hearts ({@code Reden.KLUSJE}), the moment KLUSJE, the dagboek stats and first times
  * ({@link KlusBeloning}). Guhs are always lief: nothing here ever hurts anything. tools/features/klusjes.py makes the
  * resources.
@@ -63,6 +66,11 @@ public final class KlusjesFeature {
     public static final TagKey<Block> LAMPJES = TagKey.create(Registries.BLOCK, Guhs.id("klusjes/lampjes"));
     /** Where kaasknabbels can be dug up. */
     public static final TagKey<Block> GRAAFGROND = TagKey.create(Registries.BLOCK, Guhs.id("klusjes/graafgrond"));
+    /**
+     * bbq2: the little plants of the Guhbarbecuether the farmen chore picks a scheutje from while the plant keeps standing
+     * (pinda- and mosterdscheutjes; written by tools/features/tech_klusjes.py).
+     */
+    public static final TagKey<Block> SCHEUTJES = TagKey.create(Registries.BLOCK, Guhs.id("klusjes/scheutjes"));
     /** The rare finds of digging and fishing ("VAHOEG, kijk wat ik vond!"). */
     public static final TagKey<Item> ZELDZAAM = TagKey.create(Registries.ITEM, Guhs.id("klusjes/zeldzaam"));
 
