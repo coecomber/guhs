@@ -3,6 +3,12 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.2.11 — Minecraft 26.1.2
+
+A small change. Same requirements as 1.2.10, no worldgen changes.
+
+- **Captain Cloudy (Kapitein Wolkje) now asks first.** Clicking him used to put you in the balloon straight away, and his shop was hidden behind sneak + click. Now he opens a little menu: he tells you which loop he flies today and how full your Balloon Stamp Card is, and you choose **All aboard!**, **Your shop (Balloon Coins)** or **How does it work?**. Sneak + click still opens the shop directly.
+
 ## 1.2.10 — Minecraft 26.1.2
 
 A small addition. Same requirements as 1.2.9, no worldgen changes.

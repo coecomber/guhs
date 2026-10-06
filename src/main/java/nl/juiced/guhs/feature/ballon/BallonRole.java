@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -19,6 +20,7 @@ import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.feature.knus.KnusVoortgang;
+import nl.juiced.guhs.feature.verhaal.Praat;
 import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModItems;
@@ -26,15 +28,17 @@ import nl.juiced.guhs.registry.ModSounds;
 
 import net.minecraft.world.entity.EntitySpawnReason;
 /**
- * Kapitein Wolkje (BALLONGUH), at his kiosk by the ballonsteiger of the Ballonfestival. Talk to him and you're off: he
- * steps into the balloon with you and flies the next round (the first one with a viewpoint you haven't stamped yet).
- * Sneak + talk: his shop, for ballonmunten. While he's up in the air his kiosk is empty.
+ * Kapitein Wolkje (BALLONGUH), at his kiosk by the ballonsteiger of the Ballonfestival. Talk to him: he tells you today's
+ * round (the first one with a viewpoint you haven't stamped yet) and your stamps, and you pick (1.2.11): step in (he
+ * comes along and flies it), his shop for ballonmunten, or how it works. Sneak + talk still goes straight to the shop.
+ * While he's up in the air his kiosk is empty.
  */
 public final class BallonRole implements NpcRole {
     public static final BallonRole INSTANCE = new BallonRole();
     /** How far from him his balloon may wait. */
     public static final double BALLON_BEREIK = 20;
     public static final int PRIJS_PET = 5, PRIJS_BRIL = 4, PRIJS_MINI = 2, PRIJS_STEIGER = 1;
+    public static final int OPT_VLIEGEN = 0, OPT_WINKEL = 1, OPT_UITLEG = 2;
     private static final String GESPROKEN = "guhs_ballon_gesproken";
 
     @Override
@@ -46,31 +50,68 @@ public final class BallonRole implements NpcRole {
         var saved = GuhQuests.saved(player);
         int keer = saved.getIntOr(GESPROKEN, 0);
         if (player.isSecondaryUseActive() && keer > 0) {
-            GuhQuests.say(player, npc, "quest.guhs.ballon.winkel");
-            npc.openShop(player);
+            winkel(npc, player);
             return;
         }
         saved.putInt(GESPROKEN, keer + 1);
         if (keer == 0) {
-            GuhQuests.say(player, npc, "quest.guhs.ballon.hallo");
             KnusVoortgang.hoogste(player, BallonVlucht.GEVONDEN, 1);
             GuhAdvancements.grant(player, "ballon_wolkje");
         }
-        if (Minigames.refuse(player, npc, Minigames.BALLON)) {
+        Praat.open(player, npc, null, keer == 0 ? "quest.guhs.ballon.hallo" : "gui.guhs.ballon.wolkje.menu",
+                new Object[]{routeNaam(player), KnusVoortgang.ontdekt(player, BallonVlucht.STEMPELS).size(), BallonRoute.Uitzicht.values().length,
+                        KnusVoortgang.teller(player, BallonVlucht.VLUCHTEN)},
+                new Praat.Optie(OPT_VLIEGEN, "gui.guhs.ballon.optie.vliegen"), new Praat.Optie(OPT_WINKEL, "gui.guhs.ballon.optie.winkel"),
+                new Praat.Optie(OPT_UITLEG, "gui.guhs.ballon.optie.uitleg"));
+    }
+
+    @Override
+    public void antwoord(GuhNpcEntity npc, ServerPlayer player, int optie) {
+        if (npc.isInvisible()) {
             return;
+        }
+        switch (optie) {
+            case OPT_VLIEGEN -> {
+                Praat.sluit(player);
+                vlieg(npc, player);
+            }
+            case OPT_WINKEL -> {
+                Praat.sluit(player);
+                winkel(npc, player);
+            }
+            case OPT_UITLEG -> Praat.open(player, npc, null, "gui.guhs.ballon.wolkje.uitleg", new Object[0],
+                    new Praat.Optie(OPT_VLIEGEN, "gui.guhs.ballon.optie.vliegen"), new Praat.Optie(OPT_WINKEL, "gui.guhs.ballon.optie.winkel"));
+            default -> {
+            }
+        }
+    }
+
+    private static Component routeNaam(ServerPlayer player) {
+        return Component.translatable("gui.guhs.ballon.route." + BallonVlucht.volgendeRoute(player).id());
+    }
+
+    private static void winkel(GuhNpcEntity npc, ServerPlayer player) {
+        GuhQuests.say(player, npc, "quest.guhs.ballon.winkel");
+        npc.openShop(player);
+    }
+
+    /** Into the balloon and off: the next round of this player. False: no flight (busy elsewhere, no balloon, already up). */
+    static boolean vlieg(GuhNpcEntity npc, ServerPlayer player) {
+        if (Minigames.refuse(player, npc, Minigames.BALLON)) {
+            return false;
         }
         LuchtballonEntity ballon = ballon(npc);
         if (ballon == null) {
             GuhQuests.say(player, npc, "quest.guhs.ballon.geen_ballon");
-            return;
+            return false;
         }
         if (ballon.vliegt()) {
             GuhQuests.say(player, npc, "quest.guhs.ballon.al_in_de_lucht");
-            return;
+            return false;
         }
         BallonRoute route = BallonVlucht.volgendeRoute(player);
-        GuhQuests.say(player, npc, "quest.guhs.ballon.instappen", net.minecraft.network.chat.Component.translatable("gui.guhs.ballon.route." + route.id()));
-        ballon.stijgOp(player, route, npc);
+        GuhQuests.say(player, npc, "quest.guhs.ballon.instappen", Component.translatable("gui.guhs.ballon.route." + route.id()));
+        return ballon.stijgOp(player, route, npc);
     }
 
     /** His balloon: the nearest one within reach (the one on his steiger); if there's none, he gets one to the steiger. */
