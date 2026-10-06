@@ -1,9 +1,11 @@
 package nl.juiced.guhs.feature.techbuis;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -321,6 +323,7 @@ public class BuisStukBlockEntity extends BlockEntity {
         int kijk = Math.min(vakken, Buizen.MAX_ZOEK);
         boolean ietsGevonden = false;
         Set<ItemResource> geprobeerd = new HashSet<>();
+        Map<ItemResource, Long> totaal = null;   // (only counted when something must stay behind, once per bite)
         for (int k = 0; k < kijk; k++) {
             int vak = Math.floorMod(zoekVan + k, vakken);
             ItemResource soort = bron.getResource(vak);
@@ -333,8 +336,10 @@ public class BuisStukBlockEntity extends BlockEntity {
             }
             int beschikbaar = bron.getAmountAsInt(vak);
             if (bewaar() > 0) {
-                long totaal = Kisten.tel(bron, s -> ItemStack.isSameItemSameComponents(s, voorbeeld));
-                beschikbaar = (int) Math.min(beschikbaar, totaal - bewaar());
+                if (totaal == null) {
+                    totaal = telAlles(bron);
+                }
+                beschikbaar = (int) Math.min(beschikbaar, totaal.getOrDefault(soort, 0L) - bewaar());
             }
             if (beschikbaar <= 0) {
                 continue;
@@ -363,6 +368,21 @@ public class BuisStukBlockEntity extends BlockEntity {
         }
         verstopt = ietsGevonden;
         return false;
+    }
+
+    /**
+     * How many of each kind there are in the whole store: one walk over its slots (a Bank Guh can have thousands, and
+     * a kind may lie in several slots of a chest).
+     */
+    private static Map<ItemResource, Long> telAlles(ResourceHandler<ItemResource> bron) {
+        Map<ItemResource, Long> uit = new HashMap<>();
+        for (int vak = 0, n = bron.size(); vak < n; vak++) {
+            ItemResource soort = bron.getResource(vak);
+            if (!soort.isEmpty()) {
+                uit.merge(soort, bron.getAmountAsLong(vak), Long::sum);
+            }
+        }
+        return uit;
     }
 
     private record Plek(BuisRoutes.Route route, int aantal) {

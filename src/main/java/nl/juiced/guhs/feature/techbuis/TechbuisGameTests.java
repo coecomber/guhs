@@ -230,7 +230,11 @@ public class TechbuisGameTests {
      */
     @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 500)
     public static void techbuisFilterstuk(GameTestHelper helper) {
-        kist(helper, p(1, 5), new ItemStack(Items.WHEAT, 12), new ItemStack(Items.COBBLESTONE, 6));
+        kist(helper, p(1, 5), new ItemStack(Items.COBBLESTONE, 6));
+        // the twelve wheat lie in two slots: "bewaar minstens" counts the whole chest, not one slot
+        ChestBlockEntity voorraad = (ChestBlockEntity) helper.getLevel().getBlockEntity(helper.absolutePos(p(1, 5)));
+        voorraad.setItem(3, new ItemStack(Items.WHEAT, 8));
+        voorraad.setItem(7, new ItemStack(Items.WHEAT, 4));
         FilterBlockEntity filter = filter(helper, p(2, 5), Direction.EAST, Items.WHEAT);
         filter.filter().zetGetal(5);
         buis(helper, p(3, 5));
