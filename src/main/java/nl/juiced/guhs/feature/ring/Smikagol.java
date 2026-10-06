@@ -72,7 +72,7 @@ public final class Smikagol {
                 Zicht.alleenVoor(s, p.getUUID());
                 GIDSEN.put(p.getUUID(), s.getUUID());
                 p.level().addFreshEntity(s);
-                GuhAdvancements.grant(p, "ring_smikagol");
+                Ring.behaald(p, "ring_smikagol");
             }
         } else if (plek != null) {
             s.teleportTo(plek.x, plek.y, plek.z);
@@ -186,8 +186,7 @@ public final class Smikagol {
         }
         GuhQuests.saved(p).putBoolean(MAATJE, true);
         nl.juiced.guhs.feature.Minigames.give(p, new ItemStack(RingFeature.VISSENBOTJE.get()));
-        GuhAdvancements.grant(p, "ring_smikagol_maatje");
-        nl.juiced.guhs.feature.gids.GidsFeature.grant(p, "knabbelring/ring_maatje");
+        Ring.behaald(p, "ring_smikagol_maatje");
         return nieuwMaatje(p);
     }
 

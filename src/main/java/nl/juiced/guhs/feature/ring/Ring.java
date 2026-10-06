@@ -190,7 +190,7 @@ public final class Ring {
         }
         GuhQuests.saved(p).putBoolean(GEGEVEN, true);
         Minigames.give(p, new ItemStack(RingFeature.KNABBELRING.get()));
-        nl.juiced.guhs.quest.GuhAdvancements.grant(p, "ring_gekregen");
+        behaald(p, "ring_gekregen");
         return true;
     }
 
@@ -234,7 +234,7 @@ public final class Ring {
                 p.level().playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 0.8f, 0.6f);
                 p.level().sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 1.0, p.getZ(), 16, 0.3, 0.5, 0.3, 0.01);
                 p.sendOverlayMessage(Component.translatable(OM_TEKST).withStyle(ChatFormatting.GOLD));
-                nl.juiced.guhs.quest.GuhAdvancements.grant(p, "ring_omgedaan");
+                behaald(p, "ring_omgedaan");
             }
             return true;
         }
@@ -416,6 +416,15 @@ public final class Ring {
         String[] namen = {"z", "zw", "w", "nw", "n", "no", "o", "zo"};
         double graden = Math.toDegrees(Math.atan2(-dx, dz));   // 0 = south (+z), 90 = west
         return namen[(int) Math.floorMod(Math.round(graden / 45.0), 8)];
+    }
+
+    /**
+     * A milestone of the story for this player: the hidden advancement quest/&lt;naam&gt; (what the FTB quests look at) and,
+     * when there is one, its visible twin knabbelring/&lt;naam&gt; in the advancement tab of the story.
+     */
+    public static void behaald(ServerPlayer p, String naam) {
+        nl.juiced.guhs.quest.GuhAdvancements.grant(p, naam);
+        nl.juiced.guhs.feature.gids.GidsFeature.grant(p, "knabbelring/" + naam);
     }
 
     // =====================================================================================================================

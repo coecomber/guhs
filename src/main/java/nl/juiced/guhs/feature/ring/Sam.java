@@ -194,7 +194,7 @@ public final class Sam {
         RITTEN.put(p.getUUID(), new Rit(List.copyOf(route), 0, daarna));
         sam.getPersistentData().putString(DOET, DRAAGT);
         GuhQuests.say(p, sam, "quest.guhs.ring.sam.draag");
-        GuhAdvancements.grant(p, "ring_gedragen");
+        Ring.behaald(p, "ring_gedragen");
         return true;
     }
 
@@ -240,7 +240,7 @@ public final class Sam {
             Minigames.give(p, new ItemStack(RingFeature.STOOFPOTJE.get()));
             GuhQuests.say(p, sam, "quest.guhs.ring.sam.eten." + level.getRandom().nextInt(3));
             level.playSound(null, sam, ModSounds.GUH_HAPPY.get(), SoundSource.NEUTRAL, 1f, 1.1f);
-            GuhAdvancements.grant(p, "ring_stoofpotje");
+            Ring.behaald(p, "ring_stoofpotje");
         }
         Ring.vertelDoel(p, sam);
     }
@@ -302,7 +302,7 @@ public final class Sam {
         SAMS.put(p.getUUID(), sam.getUUID());
         level.addFreshEntity(sam);
         GuhDex.zie(p, GuhVariant.SAM_GUH);
-        GuhAdvancements.grant(p, "ring_sam");
+        Ring.behaald(p, "ring_sam");
         return sam;
     }
 

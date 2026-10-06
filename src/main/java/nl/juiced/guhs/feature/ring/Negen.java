@@ -74,7 +74,7 @@ public final class Negen {
                 JACHT.remove(p.getUUID());
                 if (p.isAlive()) {
                     p.sendSystemMessage(Component.translatable("quest.guhs.ring.negen.kwijt").withStyle(ChatFormatting.GREEN));
-                    GuhAdvancements.grant(p, "ring_negen_ontsnapt");
+                    Ring.behaald(p, "ring_negen_ontsnapt");
                 }
             }
             return;
@@ -127,7 +127,7 @@ public final class Negen {
         JACHT.put(p.getUUID(), ruiters);
         p.sendSystemMessage(Component.translatable("quest.guhs.ring.negen.komen").withStyle(ChatFormatting.DARK_RED));
         level.playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.SKELETON_HORSE_AMBIENT, SoundSource.HOSTILE, 1.4f, 0.5f);
-        GuhAdvancements.grant(p, "ring_negen_gezien");
+        Ring.behaald(p, "ring_negen_gezien");
         return ruiters.size();
     }
 

@@ -105,7 +105,7 @@ public final class Gaven {
         for (Item gift : List.of(RingFeature.LICHTFLESJE.get(), RingFeature.ELFENMANTELTJE.get(), RingFeature.ELFENTOUW.get())) {
             geefAlsKwijt(p, gift);
         }
-        GuhAdvancements.grant(p, "ring_gaven");
+        Ring.behaald(p, "ring_gaven");
     }
 
     /** Gives this gift when the player doesn't carry it. */
@@ -161,9 +161,9 @@ public final class Gaven {
         int verblind = Negen.verblind(level, p.position(), FLITS_STRAAL, FLITS_TICKS);
         if (verblind > 0) {
             p.sendOverlayMessage(Component.translatable("quest.guhs.ring.lichtflesje.verblind").withStyle(ChatFormatting.AQUA));
-            GuhAdvancements.grant(p, "ring_verblind");
+            Ring.behaald(p, "ring_verblind");
         }
-        GuhAdvancements.grant(p, "ring_lichtflesje");
+        Ring.behaald(p, "ring_lichtflesje");
         for (BiConsumer<ServerPlayer, Vec3> l : BIJ_LICHT) {
             l.accept(p, plek);
         }
@@ -292,7 +292,7 @@ public final class Gaven {
         level.sendParticles(ParticleTypes.POOF, p.getX(), p.getY() + 0.6, p.getZ(), 10, 0.4, 0.4, 0.4, 0.01);
         level.playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.STONE_PLACE, SoundSource.PLAYERS, 0.8f, 0.8f);
         p.sendOverlayMessage(Component.translatable("quest.guhs.ring.manteltje.rots").withStyle(ChatFormatting.GREEN));
-        GuhAdvancements.grant(p, "ring_rots");
+        Ring.behaald(p, "ring_rots");
     }
 
     private static ListTag floats(float... waarden) {
@@ -420,7 +420,7 @@ public final class Gaven {
             p.teleportTo(sta.x, sta.y, sta.z);
             p.hurtMarked = true;
             level.playSound(null, sta.x, sta.y, sta.z, SoundEvents.WOOL_STEP, SoundSource.PLAYERS, 1f, 1.1f);
-            GuhAdvancements.grant(p, "ring_elfentouw");
+            Ring.behaald(p, "ring_elfentouw");
             for (BiConsumer<ServerPlayer, BlockPos> l : BIJ_HAAK) {
                 l.accept(p, k.haak());
             }

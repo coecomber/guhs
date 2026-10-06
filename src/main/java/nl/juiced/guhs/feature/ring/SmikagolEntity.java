@@ -289,7 +289,7 @@ public class SmikagolEntity extends PathfinderMob implements GeoEntity {
             }
             GuhQuests.say(p, this, "quest.guhs.ring.smikagol.vis", vissen);
             vissen = 0;
-            GuhAdvancements.grant(p, "ring_smikagol_vis");
+            Ring.behaald(p, "ring_smikagol_vis");
             return InteractionResult.SUCCESS;
         }
         GuhQuests.say(p, this, bijWater ? "quest.guhs.ring.smikagol.bijt_nog_niet" : "quest.guhs.ring.smikagol.maatje." + random.nextInt(4));

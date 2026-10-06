@@ -99,7 +99,7 @@ public final class Cast {
             String fase = fase(p);
             GuhQuests.say(p, npc, "quest.guhs.ring.cast." + kind.id() + "." + fase + "." + p.getRandom().nextInt(REGELS));
             if (kind == GuhNpcEntity.Kind.GUHDALF) {
-                GuhAdvancements.grant(p, "ring_guhdalf");
+                Ring.behaald(p, "ring_guhdalf");
                 if (fase.equals(REIS)) {
                     Ring.vertelDoel(p, npc);
                 }

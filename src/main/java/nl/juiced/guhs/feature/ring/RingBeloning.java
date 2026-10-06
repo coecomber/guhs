@@ -68,8 +68,7 @@ public final class RingBeloning {
         GuhQuests.saved(p).putBoolean(Sam.MEE, true);
         Smikagol.stuurWeg(p);
         Smikagol.maakMaatje(p);
-        GuhAdvancements.grant(p, "ring_klaar");
-        GidsFeature.grant(p, "knabbelring/ring_ringdrager");
+        Ring.behaald(p, "ring_klaar");
         ServerLevel level = p.level();
         level.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, p.getX(), p.getY() + 1.0, p.getZ(), 40, 0.5, 0.8, 0.5, 0.3);
         level.playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.8f, 1.0f);
@@ -102,7 +101,7 @@ public final class RingBeloning {
         ServerLevel level = p.level();
         level.sendParticles(ParticleTypes.FIREWORK, p.getX(), p.getY() + 1.6, p.getZ(), 30, 0.6, 0.6, 0.6, 0.12);
         level.playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.PLAYERS, 0.7f, 1.2f);
-        GuhAdvancements.grant(p, "ring_feest");
+        Ring.behaald(p, "ring_feest");
         return true;
     }
 

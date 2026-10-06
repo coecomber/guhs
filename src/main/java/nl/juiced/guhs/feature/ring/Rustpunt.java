@@ -139,9 +139,9 @@ public final class Rustpunt {
             p.sendSystemMessage(Component.translatable("quest.guhs.ring.rustpunt.nieuw").withStyle(ChatFormatting.GOLD));
             level.playSound(null, vuur, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 1.2f, 1.0f);
             level.sendParticles(p, ParticleTypes.HAPPY_VILLAGER, false, false, vuur.getX() + 0.5, vuur.getY() + 1.0, vuur.getZ() + 0.5, 8, 0.5, 0.4, 0.5, 0);
-            GuhAdvancements.grant(p, "ring_rustpunt");
+            Ring.behaald(p, "ring_rustpunt");
             if (n >= 5) {
-                GuhAdvancements.grant(p, "ring_rustpunt_5");
+                Ring.behaald(p, "ring_rustpunt_5");
             }
             Sam.kook(p, vuur);
         } else if (klik) {

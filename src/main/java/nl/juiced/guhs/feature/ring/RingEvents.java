@@ -103,7 +103,7 @@ public final class RingEvents {
         }
         GuhQuests.saved(p).putBoolean(WEGWIJS, true);
         GidsFeature.grant(p, "knabbelring/root");
-        GuhAdvancements.grant(p, "ring_wegwijs");
+        Ring.behaald(p, "ring_wegwijs");
         p.sendSystemMessage(Component.translatable("quest.guhs.ring.wegwijs").withStyle(ChatFormatting.GOLD));
     }
 
@@ -137,7 +137,7 @@ public final class RingEvents {
         Vec3 snoet = guh.position().add(Vec3.directionFromRotation(0, guh.getYHeadRot()).scale(0.55 * guh.getGuhScale())).add(0, 0.35 * guh.getGuhScale(), 0);
         level.sendParticles(ParticleTypes.FALLING_WATER, snoet.x, snoet.y, snoet.z, 2, 0.05, 0.02, 0.05, 0);
         if (guh.getRandom().nextInt(6) == 0) {
-            GuhAdvancements.grant(p, "ring_kwijlen");
+            Ring.behaald(p, "ring_kwijlen");
         }
     }
 
@@ -146,7 +146,7 @@ public final class RingEvents {
     public static void onKlik(PlayerInteractEvent.EntityInteractSpecific event) {
         if (event.getHand() == InteractionHand.MAIN_HAND && event.getEntity() instanceof ServerPlayer p && event.getTarget() instanceof GuhNpcEntity npc
                 && npc.getKind() == GuhNpcEntity.Kind.GUHDALF) {
-            GuhAdvancements.grant(p, "ring_guhdalf");
+            Ring.behaald(p, "ring_guhdalf");
             GidsFeature.grant(p, "knabbelring/root");
         }
     }
