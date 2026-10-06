@@ -681,6 +681,26 @@ def _stempel(h, b, baan, poort, uitgang, na, duel):
                                                              "NaarY": dyy, "NaarZ": -dx * fz + dz * fx})
 
 
+def verlicht_binnen(b):
+    """Invisible lamps where you walk indoors (the hall, the stairs, the tower room and its corridor, the gate): no dark
+    corners. Put in last: they are air to everything, but not to the checks of the shell."""
+    def lamp(x, y, z):
+        if b.get(x, y, z) == AIR:
+            b.set(x, y, z, LAMP[0], LAMP[1])
+    for x in range(44, 84, 6):
+        for z in range(39, 80, 6):
+            lamp(x, G + 5, z)
+    for x in range(70, 84, 4):
+        lamp(x, G + 4 + (x - 68), 78)
+    for x in range(55, 73, 6):
+        for z in range(60, 70, 4):
+            lamp(x, 47, z)
+    for x in range(64, 84, 5):
+        lamp(x, 45, 74)
+    for z in (104, 107, 110):
+        lamp(C, G + 5, z)
+
+
 def controleer_camera(b, banen):
     """The camera's room of every lane must be empty (air or an invisible lamp): a wall there hides the level."""
     fouten = []
@@ -760,6 +780,7 @@ def bouw(h):
         for fn in (fns if fns else ([standaard] if standaard else [])):
             fn(plek)
     banen = levels(h, b, poorten)
+    verlicht_binnen(b)
     problems += controleer_camera(b, banen) + controleer_naden(b)
     return b, banen, problems
 
@@ -777,4 +798,7 @@ def build(h):
                          gegarandeerd=dict(sector=11, min=400, max=1100), voorrang=290,
                          burcht=dict(placement="paleis", tiles_x=nx, tiles_z=nz, tile_size=sb.TILE, anchor=ANKER, min_y=33, max_y=33, reach=48),
                          spawns=None)
+    # nothing spawns inside the castle (its tiles): the levels bring their own creatures, and they only shove
+    h.patch_json(f"{h.D}/worldgen/structure/{NAAM}.json", lambda d: d.update(spawn_overrides={
+        "monster": {"bounding_box": "piece", "spawns": []}, "creature": {"bounding_box": "piece", "spawns": []}}))
     return b, banen
