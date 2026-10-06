@@ -8,7 +8,7 @@
         "location": "guhs:guhvendel",
         "projection": "rigid",
         "processors": "minecraft:empty",
-        "ground_level_delta": 5
+        "ground_level_delta": 9
       }
     }
   ]

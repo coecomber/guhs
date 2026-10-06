@@ -11,9 +11,9 @@
   "terrain_adaptation": "beard_thin",
   "start_pool": "guhs:guhvendel/start",
   "start_jigsaw_name": "guhs:guhvendel_midden",
-  "check_radius": 40,
-  "max_height_difference": 10,
-  "headroom": 16,
+  "check_radius": 16,
+  "max_height_difference": 16,
+  "headroom": 12,
   "keep_clear": 36,
   "voorrang": 300
 }
