@@ -59,37 +59,13 @@ VERHAAL_GUHS = {"sam_guh": ("ring", "Een eigen Sam-guh", "Neem Sam-guh mee naar 
 
 # CONTRACT_130 7: id -> (kind, placeholder name, colour); the owner slice writes the real thing over it
 VASTE_IDS = {
-    # tech-bronnen
-    "knuffelgenerator": ("block", "Knuffelgenerator", (244, 150, 190)), "disco_dynamo": ("block", "Disco-dynamo", (150, 110, 230)),
-    "blubkacheltje": ("block", "Blubkacheltje", (236, 150, 60)), "gloeisterkern": ("block", "Gloeisterkern", (250, 214, 110)),
-    "knabbelbatterij": ("block", "Knabbelbatterij", (240, 200, 90)),
-    # tech-buizen
-    "knabbelbuis": ("block", "Knabbelbuis", (200, 232, 240)), "knabbelbuis_filter": ("block", "Knabbelbuis-filter", (180, 214, 236)),
-    "knabbelbuis_richting": ("block", "Knabbelbuis-richtingstuk", (170, 204, 240)), "opzuiger": ("block", "Opzuiger", (232, 140, 180)),
-    "voorraadmeter": ("block", "Voorraadmeter", (220, 180, 120)), "snuffelsensor": ("block", "Snuffelsensor", (236, 170, 200)),
-    "guhklok": ("block", "Guhklok", (240, 210, 150)), "guhteller": ("block", "Guhteller", (210, 190, 230)),
-    # tech-machines
-    "oogster": ("block", "Oogster", (170, 214, 120)), "knabbelaar": ("block", "Knabbelaar", (238, 160, 150)),
-    "neerzetter": ("block", "Neerzetter", (160, 190, 236)), "knutselmachine": ("block", "Knutselmachine", (226, 176, 120)),
-    "tekentafel": ("block", "Tekentafel", (200, 160, 110)), "plantagebak": ("block", "Plantagebak", (150, 190, 110)),
-    "vadsmolen": ("block", "Vadsmolen", (230, 200, 170)), "bouwtekening": ("item", "Bouwtekening", (120, 170, 230)),
-    # tech-vloeistof
-    "sauspomp": ("block", "Sauspomp", (246, 196, 80)), "sausslang": ("block", "Sausslang", (240, 180, 70)),
-    "sausvat": ("block", "Sausvat", (214, 160, 90)), "brouwautomaat": ("block", "Brouwautomaat", (150, 150, 170)),
-    "frituurautomaat": ("block", "Frituurautomaat", (226, 150, 70)), "grillkoolpers": ("block", "Grillkoolpers", (90, 84, 92)),
-    # tech-bezorg
-    "stepstation": ("block", "Stepstation", (240, 150, 200)), "haltepaaltje": ("block", "Haltepaaltje", (250, 220, 90)),
-    "bezorgguhtje_fluitje": ("item", "Bezorgguhtje-fluitje", (250, 214, 90)), "bezorgguhtje": ("entity", "Bezorgguhtje", None),
-    # bank
-    "hapluikje": ("block", "Hapluikje", (240, 140, 180)), "bank_sleutel": ("item", "Banksleutel", (250, 210, 80)),
-    "bank_upgrade": ("item", "Bank Guh-upgrade", (240, 120, 200)),
+    # (the rows of bank, tech-bronnen, tech-buizen, tech-machines, tech-vloeistof, tech-bezorg, fossiel-mijn and sausdieren
+    # went at their merge: those slices write every file of their ids themselves)
     # tech-quests
     "grote_knabbelmachine": ("block", "De Grote Knabbelmachine", (240, 170, 90)), "perfecte_knabbel": ("item", "Perfecte knabbel", (255, 214, 90)),
     "knabbelmachine_beeldje": ("block", "Knabbelmachine-beeldje", (214, 170, 80)),
-    # fossiel-mijn, sausdieren, paleizen
-    "zoutkristal": ("item", "Zoutkristal", (236, 240, 250)), "blubroom": ("item", "Blubroom", (250, 226, 170)),
-    "sausblubje_potje": ("item", "Sausblubje in een potje", (240, 170, 70)), "sausblubje": ("entity", "Sausblubje", None),
-    "sausloper": ("entity", "Sausloper", None), "worstzwijntje": ("entity", "Worstzwijntje", None),
+    # paleizen
+    "worstzwijntje": ("entity", "Worstzwijntje", None),
     # ring-kern, ring-h3, ring-h5
     "knabbelring": ("item", "De Knabbelring", (255, 200, 60)), "lichtflesje": ("item", "Lichtflesje", (220, 244, 255)),
     "elfenmanteltje": ("item", "Elfenmanteltje", (140, 180, 130)), "elfentouw": ("item", "Elfentouw", (220, 210, 180)),

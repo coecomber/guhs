@@ -55,7 +55,10 @@ MALEN = [
 # never gnawed (next to everything with a block entity and every vadskracht block, which Java refuses by itself): blocks
 # that are not meant to be mined, and the invisible parts of the mod's bigger things (a bite would take the whole thing)
 KNABBELT_NIET = ["minecraft:reinforced_deepslate", "minecraft:budding_amethyst", "guhs:guhhuisje_deel", "guhs:speelgoed_deel",
-                 "guhs:slee_rail_part", "guhs:guh_wheel_part"]
+                 "guhs:slee_rail_part", "guhs:guh_wheel_part",
+                 # (added at the merge) machine parts of the other tech slices that have no block entity and are no
+                 # vadskracht block, and the two quest blocks of the Zoutkristalmijn that only "break" for a player
+                 "guhs:knabbelbuis", "guhs:sausslang", "guhs:tekentafel", "guhs:fossielmijn_zoutader", "guhs:fossielmijn_puin"]
 
 
 def recept(h, naam, kaart=None):

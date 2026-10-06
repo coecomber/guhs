@@ -108,7 +108,7 @@ public final class ModBlocks {
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).noCollision().instabreak()
                     .pushReaction(PushReaction.DESTROY));
 
-    /** Bank Guh: infinite storage in a vadsige guh's stomach (reward of the Hungry Guh quest). */
+    /** Bank Guh: storage in a vadsige guh's stomach, 256 per kind until it is upgraded (reward of the Hungry Guh quest). */
     public static final DeferredBlock<Block> BANK_GUH = BLOCKS.registerBlock("bank_guh",
             BankGuhBlock::new,
             () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(2.5f).sound(SoundType.WOOL).noOcclusion()

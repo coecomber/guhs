@@ -24,6 +24,7 @@ import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
 import nl.juiced.guhs.feature.kaasmoeras.KaasmoerasFeature;
 import nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature;
 import nl.juiced.guhs.feature.piep.PiepFeature;
+import nl.juiced.guhs.feature.sausdieren.SausdierenFeature;
 import nl.juiced.guhs.feature.spiesburcht.SpiesburchtFeature;
 import nl.juiced.guhs.feature.vogels.VogelsFeature;
 import nl.juiced.guhs.feature.vogels.Vogeltje;
@@ -72,7 +73,8 @@ public final class WildeDieren {
                     ModEntities.MIKA.get(), ModEntities.NETHER_MIKA.get(), GuheindeFeature.MIKA_LARFJE.get(),
                     KaasmoerasFeature.KAASMOT.get(), KaasmoerasFeature.KIKKERGUH.get(), KaasmoerasFeature.MOERASHEKS_MIKA.get(),
                     SpiesburchtFeature.ROOKGUH.get(), SpiesburchtFeature.VONK_MIKA.get(), SpiesburchtFeature.KNEKEL_MIKA.get(),
-                    PiepFeature.POEPSCHILLY.get(), PiepFeature.SCHILLY.get());
+                    PiepFeature.POEPSCHILLY.get(), PiepFeature.SCHILLY.get(),
+                    SausdierenFeature.SAUSLOPER.get(), SausdierenFeature.SAUSBLUBJE.get());
         }
         return soorten;
     }
