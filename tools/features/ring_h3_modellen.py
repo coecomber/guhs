@@ -741,6 +741,7 @@ def animaties():
     donker.update(gebukt)
     donker["head"] = _rot(_sleutels((0.0, [24, 0, 0]), (2.0, [20, 5, 0]), (4.0, [24, 0, 0])))
     donker["borst"] = {"rotation": _sleutels((0.0, [16, 0, 0])), "scale": _sleutels((0.0, [1, 1, 1]), (2.0, [1.03, 1.03, 1.05]), (4.0, [1, 1, 1]))}
+    donker["zweep_1"] = {"scale": _sleutels((0.0, [0, 0, 0]))}          # (the whip lies coiled out of sight until it burns)
     A["donker"] = (True, L, donker)
     # --- opkomst: out of the dark: the head lifts, the mane catches fire flame by flame, the blade ignites, he rises to his full height
     #     and the wings open like a storm ---------------------------------------------------------------------------------------------------
@@ -776,6 +777,7 @@ def animaties():
         "zwaardvlam": {"scale": _sleutels((0.0, [0, 0, 0]), (2.6, [0, 0, 0]), (3.0, [1.5, 1.5, 0.5]), (3.5, [1.2, 1.2, 1.1]), (7.0, [1, 1, 1]))},
     })
     opkomst.update({naam: _rot(_sleutels((0.0, [0, 0, 0]), (3.0, [0, 0, 0]), (3.4, [20, 0, 6]), (4.0, [-12, 0, -6]), (7.0, [0, 0, 0]))) for naam in ZWEEP[:5]})
+    opkomst["zweep_1"]["scale"] = _sleutels((0.0, [0, 0, 0]), (2.9, [0, 0, 0]), (3.3, [1, 1, 1]), (7.0, [1, 1, 1]))
     A["opkomst"] = (False, L, opkomst)
     # --- wankel: the stone goes from under him: arms flail, wings beat for air that isn't there ---------------------------------------------
     L = 1.2
