@@ -59,6 +59,19 @@ public final class WezenRenderers {
         return (float) Math.toDegrees(Math.atan2(-x, z));
     }
 
+    /**
+     * The yaw of a creature that always shows its face: in a level straight at the side the camera stands on, outside a
+     * level (a summoned one, a spawn egg) simply the way the entity itself looks.
+     */
+    static float naarKijker(float yaw) {
+        Baan baan = GuhrioClient.baan();
+        if (baan == null) {
+            return yaw;
+        }
+        Vec3 c = baan.naarCamera(BaanBesturing.stukNu());
+        return (float) Math.toDegrees(Math.atan2(-c.x, c.z));
+    }
+
     /** The yaw that puts a model's +x along {@code langs} (and so its front, +z, towards the camera of a "rechts" lane). */
     static float langsYaw(Direction langs) {
         return (float) Math.toDegrees(Math.atan2(langs.getStepZ(), langs.getStepX()));
@@ -174,9 +187,7 @@ public final class WezenRenderers {
         @Override
         public void extractRenderState(PlofMikaEntity e, Staat state, float partialTick) {
             super.extractRenderState(e, state, partialTick);
-            Baan baan = GuhrioClient.baan();
-            Vec3 c = baan == null ? new Vec3(0, 0, 1) : baan.naarCamera(BaanBesturing.stukNu());
-            state.yaw = (float) Math.toDegrees(Math.atan2(-c.x, c.z));
+            state.yaw = naarKijker(Mth.rotLerp(partialTick, e.yRotO, e.getYRot()));
             state.stand = e.stand();
             state.a = e.tickCount + partialTick;
         }
@@ -202,9 +213,7 @@ public final class WezenRenderers {
         @Override
         public void extractRenderState(HapbloemEntity e, Staat state, float partialTick) {
             super.extractRenderState(e, state, partialTick);
-            Baan baan = GuhrioClient.baan();
-            Vec3 c = baan == null ? new Vec3(0, 0, 1) : baan.naarCamera(BaanBesturing.stukNu());
-            state.yaw = (float) Math.toDegrees(Math.atan2(-c.x, c.z));
+            state.yaw = naarKijker(Mth.rotLerp(partialTick, e.yRotO, e.getYRot()));
             state.a = Mth.lerp(partialTick, e.hapO, e.hap);
             state.b = e.uit();
         }

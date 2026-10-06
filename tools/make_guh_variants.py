@@ -154,8 +154,10 @@ def free_swatch(used):
     raise RuntimeError("no free texture space for a swatch")
 
 
-# bones that were renamed or dropped (so an old guh.geo.json loses them): kaasmijn_lamp is now outfit_kaasmijn_lamp
-RETIRED_BONES = ("kaasmijn_lamp",)
+# bones that were renamed or dropped (so an old guh.geo.json loses them): kaasmijn_lamp is now outfit_kaasmijn_lamp;
+# guhshi_wangen (bbq2) became guhshi_kin. A variant bone that is no longer in any BONES stays in the model for ever (it is
+# still drawn on its variant and keeps its swatch cell occupied) unless it is named here.
+RETIRED_BONES = ("kaasmijn_lamp", "guhshi_wangen")
 
 
 SHARED_OUTFIT_FROM = "knuffeldal"   # features from this one on (tools/features FEATURES order) share the outfit space

@@ -88,7 +88,7 @@ guhriopos against the step
 wait 6
 
 section the Guhmba: landed on
-/execute at @e[type=guhs:guhrio_guhmba,sort=nearest,limit=1] run tp @s ~ ~2.6 ~
+/execute at @e[type=guhs:guhmba,sort=nearest,limit=1] run tp @s ~ ~2.6 ~
 wait 4
 guhriopos falling on the Guhmba
 shot guhrio_07_stamp gui
