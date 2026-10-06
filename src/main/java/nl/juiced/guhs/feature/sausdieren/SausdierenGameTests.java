@@ -315,6 +315,9 @@ public class SausdierenGameTests {
         rol.talk(npc, a);
         helper.assertTrue(GuhQuests.count(a, scheutjes()) == SausdierenFeature.VOER_NODIG, "only once");
         a.getInventory().clearContent();
+        rol.talk(npc, a);
+        helper.assertTrue(GuhQuests.count(a, scheutjes()) == SausdierenFeature.VOER_NODIG, "lost them all: he hands out what A still needs");
+        a.getInventory().clearContent();
         inHand(b, scheutjes(), 5);
         bewoner.mobInteract(b, InteractionHand.MAIN_HAND);
         helper.assertTrue(LIJN.stap(b) == 0 && SausdierenFeature.voer(b) == 0 && b.getMainHandItem().getCount() == 4, "B feeds it too: eaten, but B's story does not move");

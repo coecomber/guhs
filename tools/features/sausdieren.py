@@ -126,7 +126,8 @@ LANG = {
     V + "stok_kwijt": "Stok kwijt? Opgelikt zeker. Hier heb je een nieuwe, njeg.",
     V + "gelokt": "Kijk hem eens stappen! En zie je hem bibberen? Dat is de kou. Kom, we maken hem warm vanbinnen.",
     V + "voer": "Vriendschap gaat door de maag. Hier zijn drie pindascheutjes: voer ze aan een Sausloper van de stal.",
-    V + "voer_nog": "Nog %s pindascheutje(s) en hij vertrouwt je. Ze groeien ook in mijn tuintje en in het Satebos.",
+    V + "voer_nog": "Nog %s pindascheutje(s) en hij vertrouwt je. Voer ze aan een Sausloper hier in de stal, njeg.",
+    V + "voer_kwijt": "Scheutjes op? Zelf opgesmikkeld zeker, njeg. Hier heb je er nog %s. Maar deze zijn echt voor de Sausloper!",
     V + "proefrit": "Hij vertrouwt je! Tijd voor een proefrondje door de sausbak: door de vier poortjes, eindigen bij de geblokte "
                     "finish. Houd je stok goed vast, hij loopt waar jij heen kijkt.",
     V + "start": "Fiet-fiew! Daar is je Sausloper, bij de steiger. Stap op en volg de sterretjes. Geen haast, hij kan niet omvallen.",
@@ -243,8 +244,9 @@ def textures(h):
     for (x, y) in ((2, 13), (3, 12), (15, 13), (14, 12), (8, 14), (9, 14)):
         ip[x, y] = (255, 232, 150, 255)
     h.save(icon, "mob_effect", "sausdieren_stuiter.png")
-    # the Verzorger-guh: a caramel sitting guh
-    bbq2.stub_npc(h, "verzorgerguh", "Verzorger-guh", 0.085, sat=1.05)
+    # the Verzorger-guh: a caramel sitting guh (his name here; his straw hat, neckerchief and apron: sausdieren_modellen)
+    bbq2.stub_npc(h, "verzorgerguh", "Verzorger-guh", 0.085, sat=2.6, val=0.96)
+    modellen.verzorger(h)
 
 
 # =====================================================================================================================
@@ -299,6 +301,16 @@ def stal(h):
                          tooltip="De stal van de Sauslopers, met de Verzorger-guh en een proefrit door de sausbak (Guhbarbecuether)",
                          biomes=wereld.BBQ, salt=SALT, templates=[(STRUCTUUR, 1)], spacing=32, separation=12,
                          gegarandeerd=dict(sector=6, min=250, max=900), grootte=30, vlak=8, hoogte=12)
+
+    # the pool says where the ground really is (sausdieren_bouw.midden): the yard lands on the cave floor and the terrain is
+    # smoothed towards it, instead of towards the bottom of the template's foundation
+    def grond(pool):
+        for e in pool["elements"]:
+            el = {"element_type": "guhs:grond_single_pool_element"}
+            el.update({k: v for k, v in e["element"].items() if k not in ("element_type", "ground_level_delta")})
+            el["ground_level_delta"] = bouw.G + 1
+            e["element"] = el
+    h.patch_json(f"{h.D}/worldgen/template_pool/{STRUCTUUR}/start.json", grond)
     # the game test room: a floor of houtskoolsteen with a walled tub of sauce (8 x 8) on it and room to stand next to it
     t = h.Structure((24, 8, 16))
     for x in range(24):
@@ -374,7 +386,7 @@ def selfcheck(h):
     for key, text in LANG.items():
         if "hamster" in text.lower():
             problems.append(f"lore: {key}")
-    for p in ([f"{h.A}/geckolib/models/entity/{e}.geo.json" for e in ("sausloper", "sausblubje")]
+    for p in ([f"{h.A}/geckolib/models/entity/{e}.geo.json" for e in ("sausloper", "sausblubje", modellen.VERZORGER)]
               + [os.path.join(h.TEX, "entity", f"{t}.png") for t in ("sausloper", "sausloper_koud", "sausblubje", "sausblubje_glowmask", "npc_verzorgerguh")]
               + [os.path.join(h.TEX, "item", f"{t}.png") for t in ("blubroom", "sausblubje_potje", "sausdieren_pindasaus_stok", "sausdieren_stuiterdrankje",
                                                                    "sausloper_spawn_egg", "sausblubje_spawn_egg")]

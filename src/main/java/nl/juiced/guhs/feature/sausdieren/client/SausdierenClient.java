@@ -16,14 +16,16 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.client.SittingGuhRenderers;
+import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.feature.sausdieren.SausblubjeEntity;
 import nl.juiced.guhs.feature.sausdieren.SausdierenFeature;
 import nl.juiced.guhs.feature.sausdieren.SausloperEntity;
 
 /**
  * Client side of bbq2 (sausdieren): the GeckoLib renderers of the Sausloper (a cold one gets its pale blue coat, the saddle
- * shows when it wears one) and the Sausblubje (drawn as big as it is; its sauce glows). Models, animations and textures:
- * tools/features/sausdieren_modellen.py.
+ * shows when it wears one) and the Sausblubje (drawn as big as it is; its sauce glows), and the Verzorger-guh's own model.
+ * Models, animations and textures: tools/features/sausdieren_modellen.py.
  */
 public final class SausdierenClient {
     private static final DataTicket<Boolean> KOUD = DataTicket.create("guhs_sausloper_koud", Boolean.class);
@@ -34,6 +36,8 @@ public final class SausdierenClient {
     static final float SCHERM_SCHAAL = 1.9f;
 
     public static void init(IEventBus modBus) {
+        // the Verzorger-guh wears his straw hat, neckerchief and apron (model: sausdieren_modellen.verzorger)
+        SittingGuhRenderers.NPC_MODELEN.put(GuhNpcEntity.Kind.VERZORGERGUH, Guhs.id("entity/guh_npc_verzorgerguh"));
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> {
             event.registerEntityRenderer(SausdierenFeature.SAUSLOPER.get(), SausloperRenderer::new);
             event.registerEntityRenderer(SausdierenFeature.SAUSBLUBJE.get(), SausblubjeRenderer::new);

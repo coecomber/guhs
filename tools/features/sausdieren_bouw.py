@@ -23,7 +23,7 @@ import random
 import sys
 
 MIDDEN = "guhs:sausloper_stal_midden"
-G = 3                                   # the ground layer (the jigsaw's layer: the top block of the cave floor)
+G = 3                                   # the ground layer: its top block is the cave floor (see midden())
 SIZE = (38, 17, 31)
 
 HOUTSKOOL = "guhs:houtskoolsteen"
@@ -415,10 +415,14 @@ class Bouw:
         self.bord(15, G + 5, 30, "south", ["Welkom bij de", "Sausloper-stal", "Niet voeren?", "Juist wel! Njeg"])
 
     def midden(self, x, z):
-        floor = self.s.blocks.get((x, G, z))
-        name, props = (floor[0], floor[1]) if floor else (STENEN, {})
+        """The centre jigsaw, in layer 0. The barbecueput type puts the jigsaw's piece on the cave floor and sinks it by the
+        start pool's ground_level_delta, and the terrain is smoothed towards that same level: sausdieren.stal gives the pool
+        ground_level_delta = G + 1, so layer G is the top block of the cave floor and the land meets the yard (with the
+        jigsaw in layer G and the default delta of 1 the stable stood on a pedestal three blocks high)."""
+        floor = self.s.blocks.get((x, 0, z))
+        name, props = (floor[0], floor[1]) if floor else (HOUTSKOOL, {})
         final = name + ("[" + ",".join(f"{k}={v}" for k, v in props.items()) + "]" if props else "")
-        self.s.set(x, G, z, "minecraft:jigsaw", {"orientation": "up_north"},
+        self.s.set(x, 0, z, "minecraft:jigsaw", {"orientation": "up_north"},
                    {"id": "minecraft:jigsaw", "name": MIDDEN, "target": "minecraft:empty", "pool": "minecraft:empty",
                     "final_state": final, "joint": "rollable", "placement_priority": 0, "selection_priority": 0})
 
@@ -514,8 +518,8 @@ def check(s):
     x, y, z = PLEKKEN["BEWONERS"][2]
     if nm((x, y - 1, z)) not in (GLOEIKOOL, STENEN) or nm((x, y, z)) != AIR:
         problems.append(f"the stall resident has no stall at {(x, y, z)}")
-    if not any(b[0] == "minecraft:jigsaw" and b[2] and b[2].get("name") == MIDDEN and c[1] == G for c, b in blocks.items()):
-        problems.append("no centre jigsaw in the ground layer")
+    if [c[1] for c, b in blocks.items() if b[0] == "minecraft:jigsaw" and b[2] and b[2].get("name") == MIDDEN] != [0]:
+        problems.append("the centre jigsaw belongs in layer 0, exactly once")
     return problems
 
 

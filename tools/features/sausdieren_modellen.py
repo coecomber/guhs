@@ -7,13 +7,17 @@ model in a pale blue coat (sausloper_koud.png: same atlas layout). The saddle is
 Het Sausblubje: a wobbly cube of golden sauce in three slices (like the magma cube: they come apart when it jumps and show
 the glowing core), a caramel crust on top, a guh face over the front of all three slices, two small ears. One model for the
 three sizes (the renderer scales it); sausblubje_glowmask.png lights the core and the eyes' shine.
+De Verzorger-guh: the sitting guh in caramel with a straw hat (a frietje tucked behind its red band, his ears through the
+brim), a red dotted neckerchief and a leather stable apron with a pocket (sterrenwacht_hulp: extra bones on guh_sitting).
 
 Textures are painted face by face on an atlas (boerderij_dieren.Atlas: every cube face its own patch, 4 texels per pixel).
 
   build(h)       writes geckolib/models/entity/<x>.geo.json, geckolib/animations/entity/<x>.animation.json and
-                 textures/entity/{sausloper,sausloper_koud,sausblubje,sausblubje_glowmask}.png
+                 textures/entity/{sausloper,sausloper_koud,sausblubje,sausblubje_glowmask}.png, and the Verzorger-guh
+                 (geckolib/models/entity/guh_npc_verzorgerguh.geo.json, textures/entity/npc_verzorgerguh.png)
   check(h)       every animated bone exists, the animations the Java code asks for exist, the saddle and head bones exist
-  preview(out)   (python tools/features/sausdieren_modellen.py <out>) offline renders of both (wiki_renders), saddled too
+  preview(out)   (python tools/features/sausdieren_modellen.py <out>) offline renders of both (wiki_renders), saddled too,
+                 and of the Verzorger-guh as he was last generated
 """
 import math
 import os
@@ -27,6 +31,7 @@ try:
 except ImportError:                                   # (run as a script from the project root)
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
     from features import boerderij_dieren as bd
+from features import sterrenwacht_hulp as hulp
 
 Atlas, plain, disc, guh_face, cube, bone, geo, transparent = bd.Atlas, bd.plain, bd.disc, bd.guh_face, bd.cube, bd.bone, bd.geo, bd.transparent
 S = bd.S
@@ -352,7 +357,7 @@ def sausblubje_anims():
 # =====================================================================================================================
 NODIG = {"sausloper": (["idle", "walk", "bibber", "walk_koud", "zit", "blij", "eet"], ["head", "zadel", "leg_left", "leg_right"]),
          "sausblubje": (["idle", "lucht", "plof", "blij", "eet"], ["body", "kern", "laag_boven"])}
-SEED_LOPER, SEED_BLUBJE = 21301251, 21301252
+SEED_LOPER, SEED_BLUBJE, SEED_VERZORGER = 21301251, 21301252, 21301253
 
 
 def maak():
@@ -373,6 +378,75 @@ def maak():
     tex["sausblubje_glowmask"] = atlas.img
     json_uit["animations/entity/sausblubje.animation.json"] = sausblubje_anims()
     return json_uit, tex
+
+
+# =====================================================================================================================
+# the Verzorger-guh: the sitting guh with a straw hat, a neckerchief and a stable apron
+# =====================================================================================================================
+VERZORGER = "guh_npc_verzorgerguh"
+STRO = (232, 200, 112)
+STRO_DONKER = (196, 158, 76)
+HOEDBAND = (198, 56, 48)
+SCHORT = (150, 92, 54)
+SCHORT_LICHT = (188, 128, 78)
+
+
+def verzorger(h):
+    """Writes his model and texture (after bbq2.stub_npc gave the kind its name)."""
+    c = hulp.cube
+    geo_file, g = hulp.sitting_geo(h, f"geometry.{VERZORGER}")
+    sw = hulp.swatches(g, ["stro", "band", "friet", "doek", "schort", "zak"])
+    # the hat sits a little askew on the back of his head; the brim is wide enough for the ears to stick through it
+    g["bones"].append({"name": "verzorger_hoed", "parent": "head", "pivot": [0, 26, -1], "rotation": [-6, 0, 3], "cubes": [
+        c([-10.0, 25.4, -10.4], [20.0, 0.7, 19.0], sw["stro"]),                 # the brim
+        c([-8.6, 25.0, -9.0], [17.2, 0.5, 16.2], sw["stro"]),                   # (its thicker middle, so it reads as woven)
+        c([-4.3, 26.1, -5.6], [8.6, 1.5, 9.4], sw["band"]),                     # the band
+        c([-4.1, 27.6, -5.4], [8.2, 2.0, 9.0], sw["stro"]),                     # the crown
+        c([-3.3, 29.6, -4.6], [6.6, 0.6, 7.4], sw["stro"]),
+        c([3.1, 26.4, -6.2], [0.9, 4.6, 0.9], sw["friet"], rotation=[0, 0, -16], pivot=[3.5, 26.4, -5.8]),   # a frietje behind the band
+        c([1.9, 26.4, -6.1], [0.8, 3.4, 0.8], sw["friet"], rotation=[0, 0, 8], pivot=[2.3, 26.4, -5.7])]})
+    g["bones"].append({"name": "verzorger_doek", "parent": "body", "pivot": [0, 13, 0], "cubes": [
+        c([-5.2, 11.3, -4.6], [10.4, 1.9, 8.4], sw["doek"], inflate=0.1),
+        c([-1.9, 9.6, -5.0], [3.8, 1.9, 0.7], sw["doek"]), c([-0.9, 8.6, -5.0], [1.8, 1.1, 0.7], sw["doek"])]})
+    g["bones"].append({"name": "verzorger_schort", "parent": "body", "pivot": [0, 6, -4], "cubes": [
+        c([-3.4, 2.2, -4.6], [6.8, 6.6, 0.7], sw["schort"]),
+        c([-1.8, 3.2, -5.0], [3.6, 2.4, 0.5], sw["zak"]),
+        c([-4.3, 6.6, -4.3], [8.6, 0.9, 8.6], sw["schort"], inflate=0.05)]})    # the strap around his middle
+    hulp.save_geo(h, f"{VERZORGER}.geo.json", geo_file)
+    a = hulp.sitting_texture(h, hue=0.085, sat=2.6, val=0.96)
+    rng = np.random.default_rng(SEED_VERZORGER)
+
+    def vlechtwerk(block):
+        for y in range(0, block.shape[0], 4):                                   # rows of straw, each a little offset
+            block[y, :, :3] = STRO_DONKER
+            for x in range((y // 4 % 2) * 4, block.shape[1], 8):
+                block[y:y + 4, x, :3] = STRO_DONKER
+
+    def stippen(block):
+        for y in range(3, block.shape[0], 8):
+            for x in range(3 + (y // 8 % 2) * 4, block.shape[1], 8):
+                block[y:y + 2, x:x + 2, :3] = (255, 244, 232)
+
+    def stiksel(block):
+        block[2, 2:-2, :3] = SCHORT_LICHT
+        block[-3, 2:-2, :3] = SCHORT_LICHT
+        block[2:-2, 2, :3] = SCHORT_LICHT
+        block[2:-2, -3, :3] = SCHORT_LICHT
+
+    def knoop(block):
+        stiksel(block)
+        block[13:19, 13:19, :3] = (236, 200, 96)
+
+    def frietpunt(block):
+        block[:6, :, :3] = (255, 238, 160)
+
+    hulp.paint_swatch(a, sw["stro"], STRO, rng, 8, vlechtwerk)
+    hulp.paint_swatch(a, sw["band"], HOEDBAND, rng, 6)
+    hulp.paint_swatch(a, sw["friet"], (250, 208, 84), rng, 6, frietpunt)
+    hulp.paint_swatch(a, sw["doek"], HOEDBAND, rng, 6, stippen)
+    hulp.paint_swatch(a, sw["schort"], SCHORT, rng, 7, stiksel)
+    hulp.paint_swatch(a, sw["zak"], SCHORT_LICHT, rng, 6, knoop)
+    h.save(Image.fromarray(a), "entity", "npc_verzorgerguh.png")
 
 
 def build(h):
@@ -432,6 +506,12 @@ def preview(out):
         for yaw, pitch in ((205, -14), (270, -8), (25, -18)):
             img = wr.render(q, yaw, pitch, 360, margin=0.06)
             tiles.append(img)
+    # the Verzorger-guh as the generators last wrote him (he is built on the sitting guh's files, so he needs make_resources)
+    npc = os.path.join("src", "main", "resources", "assets", "guhs", "geckolib", "models", "entity", f"{VERZORGER}.geo.json")
+    if os.path.exists(npc):
+        q = wr.geo_quads(npc, "guhs:entity/npc_verzorgerguh")
+        for yaw, pitch in ((205, -14), (270, -8), (25, -18)):
+            tiles.append(wr.render(q, yaw, pitch, 360, margin=0.06))
     sheet = Image.new("RGBA", (360 * 3, 360 * ((len(tiles) + 2) // 3)), (62, 50, 54, 255))
     for i, t in enumerate(tiles):
         sheet.alpha_composite(t, ((i % 3) * 360, (i // 3) * 360))

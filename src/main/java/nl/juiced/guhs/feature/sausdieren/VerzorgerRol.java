@@ -49,10 +49,15 @@ public final class VerzorgerRol extends QuestRol {
                 hint(p, "quest.guhs.sausdieren.hint.lok");
             }
             case 2 -> {
+                int nog = SausdierenFeature.VOER_NODIG - SausdierenFeature.voer(p);
                 if (geefEenmalig(p, "scheutjes", new ItemStack(BarbecuetherFeature.PINDASCHEUTJES.get(), SausdierenFeature.VOER_NODIG))) {
                     zeg(p, npc, T + "voer");
+                } else if (GuhQuests.count(p, BarbecuetherFeature.PINDASCHEUTJES.get().asItem()) == 0) {
+                    // (eaten, lost, fed to the wrong one: the stable's own garden is protected, so he hands out what is still needed)
+                    geef(p, new ItemStack(BarbecuetherFeature.PINDASCHEUTJES.get(), nog));
+                    zeg(p, npc, T + "voer_kwijt", nog);
                 } else {
-                    zeg(p, npc, T + "voer_nog", SausdierenFeature.VOER_NODIG - SausdierenFeature.voer(p));
+                    zeg(p, npc, T + "voer_nog", nog);
                 }
                 hint(p, "quest.guhs.sausdieren.hint.voer");
             }
