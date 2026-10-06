@@ -64,6 +64,18 @@
         "weight": 10,
         "minCount": 1,
         "maxCount": 2
+      },
+      {
+        "type": "guhs:sausloper",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      {
+        "type": "guhs:sausblubje",
+        "weight": 12,
+        "minCount": 1,
+        "maxCount": 3
       }
     ],
     "ambient": [],

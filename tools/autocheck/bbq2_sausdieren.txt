@@ -1,0 +1,95 @@
+# Sausdieren (bbq2, slice 12) AutoCheck: the Sausloper-stal from four sides and from the yard, its residents on the sauce,
+# a cold Sausloper next to a warm one, the three sizes of the Sausblubje, the test lap's loaner and the first gate's sparkles.
+# Run:   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_sausdieren.txt
+# (commands: see autocheck.txt; /guhs sausdieren stal|proefrit|blubje <1-3> are this slice's own: "stal" exists in dev runs only
+#  and puts the template with its corner 15 blocks north-west of you, 4 down)
+
+section setup: a floor of houtskoolsteen with the stable on it (template corner 3200 140 3200, ground layer at y 143)
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/gamerule doFireTick false
+/tp @s 3215 150 3215
+/forceload add 3170 3170 3260 3260
+wait 80
+/fill 3170 140 3170 3260 142 3260 guhs:houtskoolsteen
+/fill 3170 143 3170 3260 162 3260 minecraft:air
+/gamemode creative
+/tp @s 3215.5 144 3215.5
+wait 20
+/guhs sausdieren stal
+wait 60
+
+section the stable from its four corners
+/gamemode spectator
+camera 3188 160 3186 -42 30
+waitrender 300
+shot sausdieren_stal_noordwest
+camera 3250 160 3186 42 30
+waitrender 300
+shot sausdieren_stal_noordoost
+camera 3250 160 3246 138 30
+waitrender 300
+shot sausdieren_stal_zuidoost
+camera 3188 160 3246 -138 30
+waitrender 300
+shot sausdieren_stal_zuidwest
+
+section from the ground: the entrance arch and the yard, the open front of the stalls, the basin with its gates, inside a stall
+camera 3215.5 145.6 3236 180 2
+waitrender 200
+shot sausdieren_stal_ingang
+camera 3219.5 145.8 3215.5 90 4
+waitrender 200
+shot sausdieren_stal_voorkant
+camera 3217.5 146.5 3215.5 -90 8
+waitrender 200
+shot sausdieren_sausbak
+camera 3210.5 145.2 3212.5 90 0
+waitrender 200
+shot sausdieren_stal_binnen
+camera 3227.5 152 3203 0 35
+waitrender 200
+shot sausdieren_sausbak_boven
+
+section the Verzorger-guh and a resident in the basin (warm), next to one on the cold yard (blue, shivering)
+/summon guhs:sausloper 3216.5 144 3213.5 {NoAI:0b,PersistenceRequired:1b}
+wait 60
+camera 3219.5 145.6 3212.5 60 6
+waitrender 100
+shot sausdieren_koude_loper
+/kill @e[type=guhs:sausloper,x=3216,y=144,z=3213,distance=..3]
+
+section the three sizes of the Sausblubje on the yard
+/gamemode creative
+/tp @s 3214.5 144 3220.5 -90 10
+wait 10
+/guhs sausdieren blubje 3
+/tp @s 3214.5 144 3222.5 -90 10
+wait 10
+/guhs sausdieren blubje 2
+/tp @s 3214.5 144 3224.5 -90 10
+wait 10
+/guhs sausdieren blubje 1
+/gamemode spectator
+camera 3220.5 145.2 3222.5 90 8
+wait 30
+shot sausdieren_blubjes
+/kill @e[type=guhs:sausblubje]
+/kill @e[type=minecraft:item]
+
+section the test lap: the loaner at the pier and the sparkles at the first gate
+/gamemode creative
+/tp @s 3216.5 144 3214.5 -90 5
+wait 20
+/guhs sausdieren proefrit
+wait 40
+shot sausdieren_proefrit_start gui
+/gamemode spectator
+camera 3222.5 147 3214.5 -150 12
+wait 30
+shot sausdieren_proefrit_poort
+quit
