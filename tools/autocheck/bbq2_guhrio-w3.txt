@@ -1,0 +1,215 @@
+# bbq2 (guhrio-w3): world 3 of Super Guhrio and the duel with the Grote Nether-Mika in the real client.
+# NOT run by the slice (a slice starts no game client): this is for the merge step's visual check.
+# Builds the whole castle unturned in the sky with its corner at 6000 100 6000 (dev command /guhs guhrio bouwkasteel), as
+# tools/autocheck/bbq2_guhrio-engine.txt does. World coordinates of this slice's lanes:
+#   3-1 (west wing, runs south):  x 6019, z = 6011 + s, you walk at y 154; the treasury in the sky: y 164 (s 66..90)
+#   3-2 (east wing, runs north):  x 6107, z = 6106 - s, you walk at y 154; the Peperkamer: y 164 (s 60..86)
+#   the duel (runs east):         x = 6043 + s, z 6039, you walk at y 147 (the bridge is s 9..28, the lever s 35)
+# Look at:
+#   - 3-1 / 3-2: a clean side view; dark masonry, the sauce glowing in the pits; the chains the spit hubs hang on; Guhshi under
+#     the player; the hitching post (Guhshi stays, a line above the panel); the Vuurpeper bush (the panel says VUURPEPER);
+#     a knabbel through the slit and the red wall opening; the two bonus rooms.
+#   - the duel: the Grote Nether-Mika's MODEL (horns, red mane and brows, glowing eyes, cream belly, the green spiked shell
+#     on his back, big enough: about 2 x 3.3 blocks), his walk / crouch / jump / landing, a coal, the boss bar, the bridge
+#     dropping column by column, the lever leaning over, the shell rolling like a wheel (and his head peeking out at the
+#     broken end), the knabbel bouncing it back, the splash, him sitting sulking on the far ledge, the bridge coming back.
+#   - the end scene: black bars, the princess and the cake coming out of the door (the princess looks like whatever
+#     guhrio-beloning made of the kind PERZIKGUH), the cake losing a quarter, his happy face, the fade; then the tower room.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_guhrio-w3.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/execute in minecraft:overworld run tp @s 6063.5 190 6063.5 0 90
+wait 60
+/forceload add 6000 6000 6127 6127
+wait 40
+/guhs guhrio bouwkasteel 6000 100 6000
+wait 100
+waitrender 600
+/guhs guhrio wis
+/guhs guhrio gehaald kasteel_1_1
+/guhs guhrio gehaald kasteel_1_2
+/guhs guhrio gehaald kasteel_2_1
+/guhs guhrio gehaald kasteel_2_2
+/guhs guhrio ei
+/gamemode survival
+
+section 3-1 De Grillgang
+/guhs guhrio start 6019 154 6013
+wait 20
+shot w3_3_1_00_start gui
+/tp @s 6019.5 154 6020.5
+wait 15
+guhriopos 3-1 on Guhshi
+shot w3_3_1_01_op_guhshi gui
+/tp @s 6019.5 154 6025.5
+wait 12
+shot w3_3_1_02_eerste_spies gui
+wait 25
+shot w3_3_1_03_eerste_spies_later gui
+/tp @s 6019.5 155 6049.5
+wait 6
+shot w3_3_1_04_spiesnaven_boven_de_saus gui
+/tp @s 6019.5 154 6062.5
+wait 4
+shot w3_3_1_05_plof_mika_1 gui
+wait 14
+shot w3_3_1_06_plof_mika_valt gui
+/tp @s 6019.5 154 6068.5
+wait 8
+/tp @s 6019.5 154 6069.5
+wait 10
+guhriopos 3-1 at the hitching post (Guhshi stays behind)
+shot w3_3_1_07_parkeerpaal gui
+/tp @s 6019.5 154 6071.5
+wait 10
+shot w3_3_1_08_vuurpeperstruik gui
+/tp @s 6019.5 154 6078.5
+wait 10
+/guhs guhrio gooi
+wait 8
+shot w3_3_1_09_knabbel_naar_de_spleet gui
+wait 30
+shot w3_3_1_10_rode_muur_open gui
+/tp @s 6019.5 164 6083.5
+wait 12
+shot w3_3_1_11_schatkamer gui
+/tp @s 6019.5 154 6098.5
+wait 12
+shot w3_3_1_12_trap_en_mast gui
+/guhs guhrio stop
+wait 20
+
+section 3-2 De Sauskelder
+/guhs guhrio gehaald kasteel_3_1
+/guhs guhrio start 6107 154 6104
+wait 20
+shot w3_3_2_00_start gui
+/tp @s 6107.5 154 6100.5
+wait 15
+shot w3_3_2_01_guhmba_hok gui
+/tp @s 6107.5 154 6086.5
+wait 8
+key right on
+key sprint on
+wait 6
+key jump on
+wait 44
+key jump off
+key sprint off
+key right off
+wait 10
+guhriopos 3-2 after the flutter jump over the first gap
+shot w3_3_2_02_fladdersprong gui
+/tp @s 6107.5 154 6071.5
+wait 12
+shot w3_3_2_03_valblokken_en_spiesen gui
+wait 20
+shot w3_3_2_04_valblokken_later gui
+/tp @s 6107.5 154 6050.5
+wait 12
+shot w3_3_2_05_platform_en_plof_mikas gui
+/tp @s 6107.5 154 6034.5
+wait 8
+/tp @s 6107.5 154 6033.5
+wait 8
+key up on
+wait 3
+key up off
+wait 20
+guhriopos 3-2 through the door (the Peperkamer)
+shot w3_3_2_06_peperkamer gui
+/tp @s 6107.5 164 6035.5
+wait 10
+/tp @s 6107.5 164 6033.5
+wait 6
+key left on
+wait 2
+key left off
+wait 4
+/guhs guhrio gooi
+wait 10
+shot w3_3_2_07_knabbel_door_de_spleet gui
+wait 30
+shot w3_3_2_08_kooi_open gui
+/tp @s 6107.5 154 6031.5
+wait 12
+shot w3_3_2_09_tweede_gat_met_spies gui
+/guhs guhrio stop
+wait 20
+
+section the duel: round 1
+/guhs guhrio gehaald kasteel_3_2
+/guhs verhaal vergeet guhriow3_duel
+/guhs guhrio start 6045 147 6039
+wait 30
+shot w3_duel_00_vertelkaart gui
+key jump on
+wait 3
+key jump off
+wait 140
+shot w3_duel_01_brul gui
+wait 60
+shot w3_duel_02_ronde_1 gui
+wait 40
+shot w3_duel_03_ronde_1_later gui
+wait 40
+shot w3_duel_04_ronde_1_nog_later gui
+/tp @s 6077.5 147 6039.5
+wait 4
+/tp @s 6078.5 147 6039.5
+wait 6
+shot w3_duel_05_hendel gui
+wait 20
+shot w3_duel_06_brug_valt gui
+wait 60
+shot w3_duel_07_hij_wacht gui
+
+section the duel: round 2 and 3
+/tp @s 6048.5 147 6039.5
+wait 70
+shot w3_duel_08_schild_rolt gui
+wait 20
+shot w3_duel_09_schild_rolt_later gui
+/guhs guhriow3 ronde 3
+wait 20
+shot w3_duel_10_kijkt_uit_zijn_schild gui
+/guhs guhrio kracht 2
+wait 50
+/guhs guhrio gooi
+wait 6
+shot w3_duel_11_knabbel gui
+/guhs guhriow3 ronde 4
+wait 14
+shot w3_duel_12_over_de_rand gui
+wait 20
+shot w3_duel_13_plons gui
+wait 70
+shot w3_duel_14_klimt_eruit gui
+wait 40
+shot w3_duel_15_mokt gui
+
+section the end scene
+wait 60
+shot w3_einde_00_brug_terug
+wait 80
+shot w3_einde_01_de_deur
+wait 90
+shot w3_einde_02_prinses_en_taart
+wait 90
+shot w3_einde_03_alleen_een_stukje
+wait 100
+shot w3_einde_04_het_grootste_stuk
+wait 60
+shot w3_einde_05_blij
+wait 90
+shot w3_einde_06_naar_de_torenkamer
+wait 80
+guhriopos after the duel (the tower room)
+shot w3_einde_07_torenkamer gui
+/guhs guhrio kasteel
+gui verhalen
+wait 20
+shot w3_guhdex_verhalen_guhrio
