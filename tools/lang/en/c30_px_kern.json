@@ -42,7 +42,7 @@
   "gui.guhs.guhpixel.grap.stap": "Step %1$s/%2$s: %3$s",
   "gui.guhs.guhpixel.grap.klaar": "+100 coins and a keepsake. Wahoog!",
   "gui.guhs.guhpixel.grap.opnieuw": "One more time! Just as fun, Nyeg.",
-  "gui.guhs.guhpixel.film.nieuw": "New movie at the Guh Cinema!",
+  "gui.guhs.guhpixel.film.nieuw": "New movie at the Guh Cinema: %s!",
   "gui.guhs.guhpixel.aandenken.kleding": "New outfit for your guhs: %s!",
   "gui.guhs.guhpixel.aandenken.item": "Keepsake: %s!",
   "gui.guhs.guhpixel.aandenken.heb_je_al": "You still have that one, Nyeg! Check your pockets.",
@@ -99,6 +99,12 @@
   "gui.guhs.guhpixel.winkel.groep.among_deco": "Ship Deco",
   "ftb.guhs_guhpixel.title": "&dGuhpixel",
   "ftb.guhs_guhpixel.sub": "The minigame server of the guhs. /lobby, Nyeg!",
+  "ftb.guhs_guhpixel.section.px_lobby": "The Guhpixel Lobby",
+  "ftb.guhs_guhpixel.section.px_grapjes": "Joke Games",
+  "ftb.guhs_guhpixel.section.px_among": "Among Guhs",
+  "ftb.guhs_guhpixel.section.px_thuis": "For Home: Guhcade, Guh Office & Guh Cinema",
+  "ftb.guhs_guhpixel.section.px_reisbureau": "Travel Agency The Chonk Vacation",
+  "ftb.guhs_guhpixel.section.px_parkour": "Guh Parkour",
   "ftb.guhs_guhpixel.q.intro_guhs_guhpixel.title": "How Do You Get Here?",
   "ftb.guhs_guhpixel.q.intro_guhs_guhpixel.desc": "This chapter comes after &6The Super Compass&r in &dThe Guhmension&r: in the &dMinigames&r tab there, pick the &dGuh Internet Café \"The Slow Connection\"&r.\n\nIn the café guhs are asleep behind old beige computers. Walk through the big screen and you're standing in the lobby of &dGuhpixel&r: the minigame server of the guhs. After that &6/lobby&r, &6/hub&r and &6/l&r work everywhere.\n\nPlay the joke games, earn &6Guhpixel Coins&r (not an item: they are on your name) and buy things for your home with them: the Guhcade, the Guh Office and the Guh Cinema. The &dTravel Agency&r and the &dGuh Parkour&r are simply in the Guhmension. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!"
 }

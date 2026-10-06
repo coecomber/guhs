@@ -32,7 +32,7 @@ public final class Films {
         }
         films.putBoolean(filmId, true);
         PxData.vuil(p.level().getServer());
-        p.sendSystemMessage(Component.translatable("gui.guhs.guhpixel.film.nieuw").withStyle(ChatFormatting.GOLD));
+        p.sendSystemMessage(Component.translatable("gui.guhs.guhpixel.film.nieuw", Component.translatable("gui.guhs.guhbioscoop.film." + filmId + ".naam")).withStyle(ChatFormatting.GOLD));
         return true;
     }
 

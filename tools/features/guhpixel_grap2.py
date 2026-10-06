@@ -20,11 +20,6 @@ from features import guhpixel_grap2_bouw as bouw
 from features import guhpixel_grap2_tekst as tekst
 from features import guhpixel_grap2_tex as tex
 from features import guhpixel_lib as lib
-from features import kleding
-
-# kleding.py's self-check only knows the marker blocks of the older slices: the pieces of this slice register their own
-# source in Grap2Slice (KledingBronnen.bron), like the 3.0 story slices do. (All modules are imported before the first build.)
-kleding.ANDERE_30.add("px_grap2")
 
 TEXTS = tekst.TEXTS
 CLOTHES = ["guhmon_trainerspet", "bzg_strohoed", "bzg_overall"]

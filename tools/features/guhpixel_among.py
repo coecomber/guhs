@@ -19,7 +19,6 @@ from features import guhpixel_among_bouw as bouw
 from features import guhpixel_among_tekst as tekst
 from features import guhpixel_among_tex as tex
 from features import guhpixel_lib as lib
-from features import kleding
 
 TEXTS = tekst.TEXTS
 BLOKKEN = ("among_taakpaneel", "among_noodknop", "among_ventilatieluik", "among_sus_bord")
@@ -32,11 +31,6 @@ CLOTHES = tex.CLOTHES
 BONES = tex.BONES
 clothes = tex.clothes
 icons = tex.icons
-# kleding.py checks that every piece has exactly one source in KledingBronLijst.java, except the pieces inside the marker
-# blocks of slices that register their own source. This slice registers its own (KledingBronnen.bron in AmongSlice.winkel)
-# and may not edit kleding.py, so it tells that check about its marker block here (every feature module is imported
-# before the first build runs). Shared edit wanted: a line for the px_* markers in kleding.py; then this line can go.
-kleding.ANDERE_30.add("px_among")
 SOUNDS = {
     "among.begin": [{"name": "minecraft:block.bell.use", "type": "event", "pitch": 1.3}],
     "among.duw": [{"name": "minecraft:block.wool.fall", "type": "event", "pitch": 0.7}, {"name": "guhs:guh_ambient5", "pitch": 0.7}],

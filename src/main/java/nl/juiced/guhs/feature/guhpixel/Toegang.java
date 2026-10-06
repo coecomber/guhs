@@ -151,6 +151,8 @@ public final class Toegang {
             Sessies.verlaat(p, Vertrek.VERLATEN);
         }
         p.stopRiding();
+        // the stored spot can lie INSIDE the café's screen (they walked in there): no new trip until they step out of it
+        p.setPortalCooldown();
         p.teleport(huisTransitie(p));
         return true;
     }

@@ -1913,6 +1913,684 @@
     ],
     "subtitle": "subtitles.guhs.guhpixel.portaal"
   },
+  "lobby.knabbel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.lobby.knabbel"
+  },
+  "lobby.parkour_start": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.pling",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.lobby.parkour_start"
+  },
+  "lobby.parkour_finish": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.levelup",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.lobby.parkour_finish"
+  },
+  "lobby.chat": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.hat",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.lobby.chat"
+  },
+  "skyblok.uitgespeeld": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.toast.challenge_complete",
+        "type": "event",
+        "pitch": 1.1,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.skyblok.uitgespeeld"
+  },
+  "bedwars.verdedigd": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.levelup",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.bedwars.verdedigd"
+  },
+  "vadsnite.sprong": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.ender_dragon.flap",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.vadsnite.sprong"
+  },
+  "vadsnite.overwinning": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.toast.challenge_complete",
+        "type": "event",
+        "pitch": 0.9,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.vadsnite.overwinning"
+  },
+  "guhmon.gevecht": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhmon.gevecht"
+  },
+  "guhmon.zet": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.harp",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhmon.zet"
+  },
+  "guhmon.slaapt": {
+    "sounds": [
+      {
+        "name": "guhs:huisje.snurk",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhmon.slaapt"
+  },
+  "guhmon.gewonnen": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.levelup",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhmon.gewonnen"
+  },
+  "bzg.tune": {
+    "sounds": [
+      {
+        "name": "minecraft:block.bell.use",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.bzg.tune"
+  },
+  "bzg.brief": {
+    "sounds": [
+      {
+        "name": "minecraft:item.book.page_turn",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.bzg.brief"
+  },
+  "among.begin": {
+    "sounds": [
+      {
+        "name": "minecraft:block.bell.use",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.begin"
+  },
+  "among.duw": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wool.fall",
+        "type": "event",
+        "pitch": 0.7
+      },
+      {
+        "name": "guhs:guh_ambient5",
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.duw"
+  },
+  "among.vergadering": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.vergadering"
+  },
+  "among.stem": {
+    "sounds": [
+      {
+        "name": "minecraft:item.book.page_turn",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.stem"
+  },
+  "among.weggestemd": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.firework_rocket.launch",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.weggestemd"
+  },
+  "among.sabotage": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.deactivate",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.sabotage"
+  },
+  "among.alarm": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.pling",
+        "type": "event",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.alarm"
+  },
+  "among.taak": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.experience_orb.pickup",
+        "type": "event",
+        "pitch": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.taak"
+  },
+  "among.luik": {
+    "sounds": [
+      {
+        "name": "minecraft:block.iron_trapdoor.open",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.luik"
+  },
+  "among.paneel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 1.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.paneel"
+  },
+  "among.snurk": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.sleep",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.among.snurk"
+  },
+  "guhkade.muntje": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkade.muntje"
+  },
+  "guhkade.piep": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 1.4,
+        "volume": 0.5
+      },
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkade.piep"
+  },
+  "guhkade.punt": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 2.0,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkade.punt"
+  },
+  "guhkade.af": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.didgeridoo",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkade.af"
+  },
+  "guhkade.record": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.levelup",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkade.record"
+  },
+  "guhkade.sip": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient3",
+        "pitch": 0.7,
+        "volume": 0.7
+      },
+      {
+        "name": "guhs:guh_ambient7",
+        "pitch": 0.7,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkade.sip"
+  },
+  "guhkantoor.inklokken": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkantoor.inklokken"
+  },
+  "guhkantoor.uitklokken": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.1,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkantoor.uitklokken"
+  },
+  "guhkantoor.printer": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.cartography_table.take_result",
+        "type": "event",
+        "pitch": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkantoor.printer"
+  },
+  "guhkantoor.toetsenbord": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wooden_button.click_on",
+        "type": "event",
+        "pitch": 1.8,
+        "volume": 0.5
+      },
+      {
+        "name": "minecraft:block.wooden_button.click_off",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhkantoor.toetsenbord"
+  },
+  "guhbioscoop.projector_aan": {
+    "sounds": [
+      {
+        "name": "minecraft:block.lever.click",
+        "type": "event",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:block.dispenser.dispense",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.projector_aan"
+  },
+  "guhbioscoop.projector_uit": {
+    "sounds": [
+      {
+        "name": "minecraft:block.lever.click",
+        "type": "event",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.projector_uit"
+  },
+  "guhbioscoop.pop": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.chicken.egg",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:block.bubble_column.bubble_pop",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.pop"
+  },
+  "guhbioscoop.film.titel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.0
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.titel"
+  },
+  "guhbioscoop.film.guh": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient3"
+      },
+      {
+        "name": "guhs:guh_ambient7"
+      },
+      {
+        "name": "guhs:guh_ambient11"
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.guh"
+  },
+  "guhbioscoop.film.njeg": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient5",
+        "pitch": 0.8
+      },
+      {
+        "name": "guhs:guh_ambient9",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.njeg"
+  },
+  "guhbioscoop.film.vahoeg": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient4",
+        "pitch": 1.3
+      },
+      {
+        "name": "guhs:guh_ambient10",
+        "pitch": 1.3
+      },
+      {
+        "name": "guhs:guh_ambient16",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.vahoeg"
+  },
+  "guhbioscoop.film.snurk": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.sleep",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.snurk"
+  },
+  "guhbioscoop.film.gaap": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient2",
+        "pitch": 0.6
+      },
+      {
+        "name": "guhs:guh_ambient14",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.gaap"
+  },
+  "guhbioscoop.film.fanfare": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.toast.challenge_complete",
+        "type": "event",
+        "pitch": 1.2,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.fanfare"
+  },
+  "guhbioscoop.film.boem": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.firework_rocket.blast",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.boem"
+  },
+  "guhbioscoop.film.pling": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.pling",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.pling"
+  },
+  "guhbioscoop.film.plof": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wool.place",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.plof"
+  },
+  "guhbioscoop.film.spanning": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.didgeridoo",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.spanning"
+  },
+  "guhbioscoop.film.piep": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 1.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.piep"
+  },
+  "guhbioscoop.film.mika": {
+    "sounds": [
+      {
+        "name": "guhs:mika_ambient1"
+      },
+      {
+        "name": "guhs:mika_ambient4"
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.mika"
+  },
+  "guhbioscoop.film.wind": {
+    "sounds": [
+      {
+        "name": "minecraft:item.elytra.flying",
+        "type": "event",
+        "volume": 0.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.wind"
+  },
+  "guhbioscoop.film.klik": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wooden_button.click_on",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.klik"
+  },
+  "guhbioscoop.film.lach": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient6",
+        "pitch": 1.4
+      },
+      {
+        "name": "guhs:guh_ambient12",
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.lach"
+  },
+  "guhbioscoop.film.oeh": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient8",
+        "pitch": 1.7
+      },
+      {
+        "name": "guhs:guh_ambient1",
+        "pitch": 1.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.oeh"
+  },
+  "guhbioscoop.film.smak": {
+    "sounds": [
+      {
+        "name": "guhs:guh_eat"
+      }
+    ],
+    "subtitle": "subtitles.guhs.guhbioscoop.film.smak"
+  },
+  "reisbureau.vertrek": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.villager.work_cartographer",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:item.bundle.insert",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.reisbureau.vertrek"
+  },
+  "reisbureau.terug": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:block.note_block.chime",
+        "type": "event",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.reisbureau.terug"
+  },
+  "reisbureau.stempel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wood.place",
+        "type": "event",
+        "pitch": 0.7,
+        "volume": 0.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.reisbureau.stempel"
+  },
+  "reisbureau.balie": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.reisbureau.balie"
+  },
   "guhparkour.klik": {
     "sounds": [
       {

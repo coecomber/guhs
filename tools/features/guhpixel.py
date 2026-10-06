@@ -73,7 +73,7 @@ TEXTS = {
     "gui.guhs.guhpixel.grap.stap": "Stap %1$s/%2$s: %3$s",
     "gui.guhs.guhpixel.grap.klaar": "+100 muntjes en een aandenken. Vahoeg!",
     "gui.guhs.guhpixel.grap.opnieuw": "Nog een keer! Net zo leuk, njeg.",
-    "gui.guhs.guhpixel.film.nieuw": "Nieuwe film in de Guhbioscoop!",
+    "gui.guhs.guhpixel.film.nieuw": "Nieuwe film in de Guhbioscoop: %s!",
     "gui.guhs.guhpixel.aandenken.kleding": "Nieuw pakje voor je guhs: %s!",
     "gui.guhs.guhpixel.aandenken.item": "Aandenken: %s!",
     "gui.guhs.guhpixel.aandenken.heb_je_al": "Die heb je nog, njeg! Kijk eens in je zakken.",

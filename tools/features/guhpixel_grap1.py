@@ -20,16 +20,8 @@ from features import guhpixel_grap1_bouw as bouw
 from features import guhpixel_grap1_tekst as tekst
 from features import guhpixel_grap1_tex as tex
 from features import guhpixel_lib as lib
-from features import kleding
 
 TEXTS = tekst.TEXTS
-
-# kleding.py checks that every piece has exactly one source in KledingBronLijst.java, except the pieces inside the marker
-# blocks of slices that register their own source (hard-coded sets ANDERE_29 / ANDERE_30). This slice registers its own
-# (KledingBronnen.bron in Grap1Slice.register) and may not edit kleding.py, so it tells that check about its marker block
-# here (every feature module is imported before the first build runs). Shared edit wanted: a line for the px_* markers
-# in kleding.py; then this line can go.
-kleding.ANDERE_30.add("px_grap1")
 
 # --- clothes -----------------------------------------------------------------------------------------------------------
 # team: (the cap's colour, its stripe, the icon's dark edge)

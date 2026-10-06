@@ -11,6 +11,150 @@
     "",
     "Play the joke games, earn &6Guhpixel Coins&r (not an item: they are on your name) and buy things for your home with them: the Guhcade, the Guh Office and the Guh Cinema. The &dTravel Agency&r and the &dGuh Parkour&r are simply in the Guhmension. Nothing is locked: every quest ticks itself off as soon as you've done it, even if you did it before. The headings show what logically comes next. Tick this off and get chonking!",
   ],
+  "quest.475548AC675103AC.title": "The Slow Connection",
+  "quest.475548AC675103AC.quest_desc": [
+    "Somewhere in the Guhmension stands a little beige building with a dish on its roof: the &dGuh Internet Café \"The Slow Connection\"&r. Your Super Compass (tab &dMinigames&r) shows the way. Inside, guhs are asleep behind old computers, and the &fAdmin Guh&r asks whether you have tried turning it off and on again. Nyeg.",
+  ],
+  "quest.4755480367800A14.title": "Connected!",
+  "quest.4755480367800A14.quest_desc": [
+    "In the internet café, walk straight through the &dgiant screen&r. Beeeeep krrr... and you are in the lobby of &dGuhpixel&r! From now on &e/lobby&r (or &e/hub&r, or &e/l&r) works everywhere. Talk to the &eWelcome Guh&r: it gives you a &bNetwork Cable&r.",
+  ],
+  "quest.475548CAE2BE14CB.title": "A Gate for Home",
+  "quest.475548CAE2BE14CB.quest_desc": [
+    "With the &bNetwork Cable&r from the Welcome Guh you make a &dGuhpixel Gate&r at home: iron, glass, redstone and the cable in the middle. Right-click the little screen and off you go, to the lobby. Lost the cable? The Welcome Guh has another one.",
+  ],
+  "quest.47554852CDD9EA16.title": "Rooftop Runner",
+  "quest.47554852CDD9EA16.quest_desc": [
+    "On the east side of the lobby lies a green &astart plate&r. Step off it and the clock runs: over the AFK Corner, the floating cushions and the roofs of all the stalls to the &ffinish&r on the roof of the shop. Falling doesn't hurt. The first time you get 50 coins.",
+  ],
+  "quest.475548C7D82A87BD.title": "Nibble Sleuth",
+  "quest.475548C7D82A87BD.quest_desc": [
+    "&6Ten golden nibbles&r are hidden in the lobby: behind things, on roofs and... under the ground. Right-click them: every nibble is 10 coins. They stay where they are for everyone, so nobody snatches them from under your nose.",
+  ],
+  "quest.47554810A339D3A4.title": "Most Valuable Guh",
+  "quest.47554810A339D3A4.quest_desc": [
+    "Your &drank&r stands in front of your name and depends on all the coins you ever earned: &7[GUH]&r, &a[CHONK]&r (250), &b[CHONK+]&r (750), &6[MVG]&r (1250) and &d[MVG++]&r (1750). Become at least &6[MVG]&r. Spending is just fine!",
+  ],
+  "quest.47554803B5F85396.title": "Skyblok Completed",
+  "quest.47554803B5F85396.quest_desc": [
+    "Talk to the &dSkyblok Guh&r in the &dGuhpixel&r lobby and travel to THE island. The manual has 4,812 steps. Nobody has ever reached step 2... but there is said to be a shortcut, Nyeg. The first time you get 100 coins and a keepsake.",
+  ],
+  "quest.4755484319B5D57C.title": "Bed Defended",
+  "quest.4755484319B5D57C.quest_desc": [
+    "Talk to the &dBedwars Guh&r in the &dGuhpixel&r lobby. Four teams come to your island over little bridges of wool. Defend your bed, with everything you've got! The first time you get 100 coins and a keepsake.",
+  ],
+  "quest.475548D9CF5ABA3F.title": "Chonk Royale",
+  "quest.475548D9CF5ABA3F.quest_desc": [
+    "Talk to the &dChonknite Guh&r in the &dGuhpixel&r lobby and jump out of the flying &dChonk Bus&r with 99 guhs. Whoever stays awake the longest wins. The first time you get 100 coins and a keepsake.",
+  ],
+  "quest.4755483F8948F2EB.title": "Guhmon Battle",
+  "quest.4755483F8948F2EB.quest_desc": [
+    "Talk to &dGym Leader Naps&r in the Guhpixel lobby and challenge him with one of your own guhs (or the gym's loaner guh). No HP here, only a &9SLEEP bar&r: whoever falls asleep first wins. Losing costs nothing.",
+  ],
+  "quest.475548298AF628B6.title": "All three gym badges",
+  "quest.475548298AF628B6.quest_desc": [
+    "The &6Badge Case&r has room for more than one badge. Win again and earn the &dNyeg Badge&r (make one of Snorkel's Naps fail with your Nyeg) and the &6Nibble Badge&r (fall asleep on a full tummy). The other five gyms are closed for a nap.",
+  ],
+  "quest.4755481EE824C15B.title": "Farmer Wants a Guh",
+  "quest.4755481EE824C15B.quest_desc": [
+    "&dHost Guhvon&r in the Guhpixel lobby is recording her TV show. Read the three letters for &6Farmer Guhrrit&r, tuck everybody in during the stay-over week and help him choose. It's only television, nyeg.",
+  ],
+  "quest.47554895BB596105.title": "The Practice Round",
+  "quest.47554895BB596105.quest_desc": [
+    "Talk to &bCaptain Guh&r in the lobby of &dGuhpixel&r and fly a practice round on &dThe Chonkfarer&r. Do your task, see what the rest of the crew is up to and find the Mika. There is said to be one on board, Nyeg. The first time you get 100 coins and a keepsake, and after that you may join the real game.",
+  ],
+  "quest.4755486551019EA3.title": "Aboard The Chonkfarer",
+  "quest.4755486551019EA3.quest_desc": [
+    "Talk to &bCaptain Guh&r in the Guhpixel lobby and play a whole round of &dAmong Guhs&r. Crew: do your tasks and vote the Mika out. Mika: push everybody asleep without anybody seeing it. Empty places are filled with guhs in space suits. Nobody gets hurt: whoever sleeps simply dreams on.",
+  ],
+  "quest.47554876EC1B2EC8.title": "Tasks Done, Mika Gone",
+  "quest.47554876EC1B2EC8.quest_desc": [
+    "Win a round as &bcrew&r: finish all tasks together, or vote the Mika out in a meeting. Listen well to what the guhs say: they tell what they really saw. Mostly, Nyeg.",
+  ],
+  "quest.475548A3D794F646.title": "Secretly a Mika",
+  "quest.475548A3D794F646.quest_desc": [
+    "Win a round as the &cMika&r. Only push when nobody is looking, crawl through the vents, put the lights out and say in the meeting with a straight snout that you were in the Cafeteria.",
+  ],
+  "quest.4755483F60762104.title": "Two Mikas on Board",
+  "quest.4755483F60762104.quest_desc": [
+    "Play a round on &6Hard&r: ten participants, two Mikas and one and a half times the coins. The leader of the queue picks the level.",
+  ],
+  "quest.47554882233FE417.title": "An Arcade Cabinet for Home",
+  "quest.47554882233FE417.quest_desc": [
+    "The &dShopkeeper Guh&r in the Guhpixel lobby sells real &dGuhcade cabinets&r: &6Flappy Guh&r and &6Mika Pong&r. Your first cabinet costs 250 coins, every one after that 150. Buy one and put it down at home: two blocks tall, with a screen that really moves.",
+  ],
+  "quest.475548362F88FE22.title": "Coin In!",
+  "quest.475548362F88FE22.quest_desc": [
+    "Right-click your cabinet and play a game. &6Flappy Guh&r: space, W or click to flap. &6Mika Pong&r: W and S (or the arrow keys) for your paddle. Every cabinet keeps its own top 5, with names.",
+  ],
+  "quest.47554892A98798C2.title": "Flapping Champion",
+  "quest.47554892A98798C2.quest_desc": [
+    "Score &610 points&r in Flappy Guh: 10 cheese nibble pillars passed without touching a single one. The pillars keep coming faster, Nyeg!",
+  ],
+  "quest.475548C7C681575C.title": "The Mika Has Had Enough",
+  "quest.475548C7C681575C.quest_desc": [
+    "Score &630 points&r in Mika Pong. Rolling the guh back is 1 point, rolling it past the Mika is 5. Three times past you and the game is over.",
+  ],
+  "quest.4755480E71FDD2C3.title": "Sorry, Little Chonk",
+  "quest.4755480E71FDD2C3.quest_desc": [
+    "Now and then your tame guhs walk up to a cabinet to play by themselves, and they keep getting better at it (up to their ceiling: that depends on their kind). Get a higher score than a guh on the same cabinet. It looks glum for a moment... and then practices extra.",
+  ],
+  "quest.475548FF6140570D.title": "The Guh Office",
+  "quest.475548FF6140570D.quest_desc": [
+    "At the &dShopkeeper Guh&r in the Guhpixel lobby, buy the &6Guh Office Set&r: a &dTime Clock&r and a &dLittle Desk&r. Place the Little Desk within 8 blocks of the Time Clock (4 fit on one clock) and click the clock to put a guh to work. Working here means: sleeping on the keyboard. Nyeg!",
+  ],
+  "quest.475548EBD6A644EC.title": "A Fair Day's Sleep",
+  "quest.475548EBD6A644EC.quest_desc": [
+    "After &68 real hours&r of sleep a &dpayslip&r for your guh is ready at the Time Clock. Gross: 0 nibbles. Withheld: a few naps. Read it (right-click in the air) or hang it on the wall. Time simply keeps running while you're away.",
+  ],
+  "quest.4755488ADDD499D0.title": "The Line Is Flat",
+  "quest.4755488ADDD499D0.quest_desc": [
+    "With every third payslip you get a &dquarterly report&r: graphs (all flat), highlights (\"Meeting postponed due to chonking\") and the &6Employee of the Month&r: the guh that slept the longest. It earns you absolutely nothing. Wahoog!",
+  ],
+  "quest.47554846911EC7FE.title": "Your Own Guh Cinema",
+  "quest.47554846911EC7FE.quest_desc": [
+    "Buy a &dGuh Cinema Set&r from the &dShopkeeper Guh&r in the Guhpixel lobby: a projector, a whole screen of Cinema Screen (7 wide, 4 high) and four Cinema Seats. Build the screen at home and put the projector in front of it, with the lens toward the screen. Rattle rattle!",
+  ],
+  "quest.4755486F480C2C6A.title": "Movie Night",
+  "quest.4755486F480C2C6A.quest_desc": [
+    "Right-click the projector and pick a movie: you get one for every Guhpixel joke game you finish, and for the stories of Baltoguh, Guhtwo and 626-guh too. Watch it to the end. Your guhs find a seat by themselves, and with a &dPopcorn Machine&r they get popcorn. Quiet in the theater, nyeg!",
+  ],
+  "quest.475548E739739DA4.title": "Movie Buff",
+  "quest.475548E739739DA4.quest_desc": [
+    "Watch all &dnine movies&r to the end: Skyblok, Bedwars, Chonknite, Guhmon, Farmer Wants a Guh, Among Guhs, Baltoguh, Guhtwo and 626. They all end the same way. Guess how, nyeg.",
+  ],
+  "quest.475548529F28E877.title": "Travel Agency The Chonk Vacation",
+  "quest.475548529F28E877.quest_desc": [
+    "Somewhere far away in the &dGuhmension&r stands a little white-and-pink house with a giant suitcase on its roof: &dTravel Agency \"The Chonk Vacation\"&r. The &6Super Compass&r shows the way (tab Cozy). There you can send your guh on vacation!",
+  ],
+  "quest.4755483E342CB0B7.title": "The Travel Agent Guh",
+  "quest.4755483E342CB0B7.quest_desc": [
+    "Talk to the &dTravel Agent Guh&r behind the desk. He sends guhs on trips: they come back with a postcard, a souvenir and sunglasses on.",
+  ],
+  "quest.4755485957984174.title": "Packing the Little Suitcase",
+  "quest.4755485957984174.quest_desc": [
+    "A guh does not travel without a little suitcase. Bring the Travel Agent Guh &64 cheese nibbles&r for the road, &61 piece of wool&r as a little pillow and &61 piece of paper&r for the postcard.",
+  ],
+  "quest.4755482ECF97EF67.title": "Trial Trip Around the Corner",
+  "quest.4755482ECF97EF67.quest_desc": [
+    "Put one of your guhs at the desk and send him on the &dtrial trip around the corner&r. That takes five real minutes. Then collect him at the desk: you get the &6Travel Stamp&r!",
+  ],
+  "quest.47554852A5E7DE08.title": "A Travel Desk for at Home",
+  "quest.47554852A5E7DE08.quest_desc": [
+    "With the Travel Stamp, paper and planks you make your own &dTravel Desk&r. It works exactly like the desk in the Travel Agency: every real day four new trips of 1, 2, 8 or 24 hours. One guh at a time may go, and he can never get lost.",
+  ],
+  "quest.4755480A72DEA640.title": "Have a Nice Trip, Nyeg!",
+  "quest.4755480A72DEA640.quest_desc": [
+    "Send a guh on a real trip and collect him when he is back. He brings a &6postcard&r (right-click to read) and a &6souvenir&r for your house.",
+  ],
+  "quest.475548B7E99FCC44.title": "With a Bit of Luck",
+  "quest.475548B7E99FCC44.quest_desc": [
+    "Every trip also has a &drare souvenir&r. The longer the trip, the bigger the chance: from 1 in 20 on a 1-hour trip to almost 1 in 3 on a 24-hour trip. Find one!",
+  ],
+  "quest.475548CA9C4A9A9B.title": "The Golden Suitcase",
+  "quest.475548CA9C4A9A9B.quest_desc": [
+    "A souvenir you already have becomes a &6stamp&r on your travel pass. At ten stamps the Travel Agent Guh gives you a &6Golden Suitcase&r.",
+  ],
   "quest.475548FA03A2D79D.title": "On Your Marks...",
   "quest.475548FA03A2D79D.quest_desc": [
     "Make a &dStart Post&r and a &dFinish Post&r. Between them comes the &dGuh Parkour&r: a route past toys and obstacles that your guhs run laps on. Hold the Start Post in your hand and click the pieces in order: 1, 2, 3... and the Finish Post last. Then put the Start Post down (within 32 blocks of all the pieces).",
