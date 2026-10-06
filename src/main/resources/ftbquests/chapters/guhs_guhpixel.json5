@@ -86,23 +86,23 @@
       shape: "gear",
     },
     {
-      id: "475548FF6140570D",
+      id: "47554846911EC7FE",
       icon: {
-        id: "guhs:guhkantoor_prikklok",
+        id: "guhs:guhbioscoop_projector",
       },
       tasks: [
         {
           type: "item",
           item: {
             count: 1,
-            id: "guhs:guhkantoor_prikklok",
+            id: "guhs:guhbioscoop_projector",
           },
-          id: "475548DAB9D0D3A4",
+          id: "4755488296749D6B",
         },
       ],
       rewards: [
         {
-          id: "475548A6817E1C8E",
+          id: "475548DF4FAB5F3C",
           type: "item",
           item: {
             count: 1,
@@ -111,31 +111,30 @@
           count: 8,
         },
         {
-          id: "47554898B2E514FD",
+          id: "475548D81D94FEAF",
           type: "xp",
           xp: 50,
         },
       ],
       x: 0.0,
       y: 6.5625,
-      shape: "rsquare",
     },
     {
-      id: "475548EBD6A644EC",
+      id: "4755486F480C2C6A",
       icon: {
-        id: "guhs:guhkantoor_loonstrookje",
+        id: "guhs:guhbioscoop_popcorn",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/guhkantoor_loonstrookje",
-          id: "4755486CBAE578AB",
+          advancement: "guhs:quest/guhbioscoop_eerste_film",
+          id: "47554893286795DC",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "47554872DDA4EAAE",
+          id: "4755481520238753",
           type: "item",
           item: {
             count: 1,
@@ -144,46 +143,45 @@
           count: 8,
         },
         {
-          id: "475548F942D0EE3B",
+          id: "4755480EDE744497",
           type: "xp",
-          xp: 100,
+          xp: 50,
         },
       ],
       x: 1.5,
       y: 6.5625,
     },
     {
-      id: "4755488ADDD499D0",
+      id: "475548E739739DA4",
       icon: {
-        id: "guhs:guhkantoor_kwartaalrapport",
+        id: "guhs:guhbioscoop_stoeltje",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/guhkantoor_kwartaal",
-          id: "475548DD00DC1E2A",
+          advancement: "guhs:quest/guhbioscoop_alles",
+          id: "475548B841DA973C",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548B2C87EE30B",
+          id: "4755480254A3795D",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 8,
+          count: 16,
         },
         {
-          id: "4755489643A089CE",
+          id: "475548126EBDA55A",
           type: "xp",
-          xp: 150,
+          xp: 100,
         },
       ],
       x: 3.0,
       y: 6.5625,
-      shape: "gear",
     },
   ],
 }

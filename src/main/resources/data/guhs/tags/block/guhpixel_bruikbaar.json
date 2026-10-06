@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "guhs:lobby_gouden_knabbel"
+    "guhs:guhbioscoop_projector",
+    "guhs:guhbioscoop_stoeltje",
+    "guhs:guhbioscoop_popcornmachine"
   ]
 }
