@@ -23,6 +23,7 @@ import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.feature.kleding.KledingUnlocks;
 import nl.juiced.guhs.network.ModNetworking;
+import nl.juiced.guhs.quest.GuhAdvancements;
 import nl.juiced.guhs.storage.Nbt;
 import nl.juiced.guhs.taal.Tekst;
 
@@ -196,6 +197,7 @@ public final class Winkel {
         CompoundTag gekocht = PxData.sub(Muntjes.data(p), GEKOCHT);
         gekocht.putInt(id, gekocht.getIntOr(id, 0) + 1);
         PxData.vuil(p.level().getServer());
+        GuhAdvancements.grant(p, "lobby_winkel");   // (FTB quest "Nu 0% korting!": the first thing bought)
         PxGeluid.speel(p, GuhpixelFeature.MUNTJE.get(), SoundSource.PLAYERS, 0.8f, 0.8f);
         return Uitkomst.OK;
     }

@@ -3942,7 +3942,8 @@ def build():
 
     # --- new in 3.0: Guhverhalen, and 2.10.1 ------------------------------------------------------------------------------
     # --- new in 1.2.8: het Bleekwoud ------------------------------------------------------------------------------------------
-    for _sid, _en, _nl, _html in guhpixel_sections():   # guhpixel, the Reisbureau, the Guh-parkour
+    _px = guhpixel_sections()                # guhpixel, the Reisbureau, the Guh-parkour (built once: the contents list below reuses it)
+    for _sid, _en, _nl, _html in _px:
         S.append(_html)
     S.append(bleekwoud_section())
 
@@ -5300,7 +5301,7 @@ def build():
     S.append(section("more", "Advancements and commands", "Vooruitgangen en commando's", adv))
 
     toc = "".join(f'<a href="#{sid}">{t(en, nl)}</a>' for sid, en, nl in [
-        ("start", "Getting started", "Aan de slag"), *[(_s, _e, _n) for _s, _e, _n, _ in guhpixel_sections()], ("new128", "New in 1.2.8", "Nieuw in 1.2.8"), ("new30", "New in 3.0", "Nieuw in 3.0"), ("fixes2101", "2.10.1", "2.10.1"), ("new210", "New in 2.10", "Nieuw in 2.10"), ("fixes210", "Fixes in 2.10", "Fixes in 2.10"), ("new29", "New in 2.9", "Nieuw in 2.9"), ("new281", "New in 2.8.1", "Nieuw in 2.8.1"), ("new28", "New in 2.8", "Nieuw in 2.8"), ("new27", "New in 2.7", "Nieuw in 2.7"), ("new26", "New in 2.6", "Nieuw in 2.6"), ("new25", "New in 2.5", "Nieuw in 2.5"), ("new24", "New in 2.4", "Nieuw in 2.4"), ("rare24", "Rare places", "Zeldzame plekken"), ("mobs", "Creatures", "Wezens"), ("care", "Your guh", "Jouw guh"), ("personalities", "Personalities", "Karakters"),
+        ("start", "Getting started", "Aan de slag"), *[(_s, _e, _n) for _s, _e, _n, _ in _px], ("new128", "New in 1.2.8", "Nieuw in 1.2.8"), ("new30", "New in 3.0", "Nieuw in 3.0"), ("fixes2101", "2.10.1", "2.10.1"), ("new210", "New in 2.10", "Nieuw in 2.10"), ("fixes210", "Fixes in 2.10", "Fixes in 2.10"), ("new29", "New in 2.9", "Nieuw in 2.9"), ("new281", "New in 2.8.1", "Nieuw in 2.8.1"), ("new28", "New in 2.8", "Nieuw in 2.8"), ("new27", "New in 2.7", "Nieuw in 2.7"), ("new26", "New in 2.6", "Nieuw in 2.6"), ("new25", "New in 2.5", "Nieuw in 2.5"), ("new24", "New in 2.4", "Nieuw in 2.4"), ("rare24", "Rare places", "Zeldzame plekken"), ("mobs", "Creatures", "Wezens"), ("care", "Your guh", "Jouw guh"), ("personalities", "Personalities", "Karakters"),
         ("maag", "The guh stomach", "De guhmaag"), ("sled", "The guh sled", "De guh-slee"), ("guhdex", "Guhdex", "Guhdex"),
         ("food", "Food &amp; deco", "Eten &amp; deco"),
         ("items", "Items &amp; blocks", "Voorwerpen &amp; blokken"), ("vads", "Vahoege Vads", "Vahoege vads"),

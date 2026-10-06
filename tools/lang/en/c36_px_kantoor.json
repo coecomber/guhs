@@ -342,5 +342,7 @@
   "ftb.guhs_guhpixel.q.guhkantoor_loonstrookje.title": "A Fair Day's Sleep",
   "ftb.guhs_guhpixel.q.guhkantoor_loonstrookje.desc": "After &68 real hours&r of sleep a &dpayslip&r for your guh is ready at the Time Clock. Gross: 0 nibbles. Withheld: a few naps. Read it (right-click in the air) or hang it on the wall. Time simply keeps running while you're away.",
   "ftb.guhs_guhpixel.q.guhkantoor_kwartaal.title": "The Line Is Flat",
-  "ftb.guhs_guhpixel.q.guhkantoor_kwartaal.desc": "With every third payslip you get a &dquarterly report&r: graphs (all flat), highlights (\"Meeting postponed due to chonking\") and the &6Employee of the Month&r: the guh that slept the longest. It earns you absolutely nothing. Wahoog!"
+  "ftb.guhs_guhpixel.q.guhkantoor_kwartaal.desc": "With every third payslip you get a &dquarterly report&r: graphs (all flat), highlights (\"Meeting postponed due to chonking\") and the &6Employee of the Month&r: the guh that slept the longest. It earns you absolutely nothing. Wahoog!",
+  "ftb.guhs_guhpixel.q.guhkantoor_oorkonde.title": "Employee of the Month",
+  "ftb.guhs_guhpixel.q.guhkantoor_oorkonde.desc": "At the end of every real month the guh that slept the most hours at a desk gets the &6Employee of the Month Certificate&r. It arrives by itself with the mail from the Guh Office. Hang it up: nobody has ever done nothing this hard."
 }

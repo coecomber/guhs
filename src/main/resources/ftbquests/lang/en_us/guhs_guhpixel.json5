@@ -35,6 +35,14 @@
   "quest.47554810A339D3A4.quest_desc": [
     "Your &drank&r stands in front of your name and depends on all the coins you ever earned: &7[GUH]&r, &a[CHONK]&r (250), &b[CHONK+]&r (750), &6[MVG]&r (1250) and &d[MVG++]&r (1750). Become at least &6[MVG]&r. Spending is just fine!",
   ],
+  "quest.4755485A55E43807.title": "Now 0% Off!",
+  "quest.4755485A55E43807.quest_desc": [
+    "The &dShopkeeper Guh&r has the biggest shop in the lobby, with sale signs everywhere. Buy something there with your &6coins&r: a Guhcade cabinet, a Guh Office, a Guh Cinema... Everything is for home and everything is cosmetic only. Really, nyeg.",
+  ],
+  "quest.475548B7BBA4AC39.title": "Off and On Again",
+  "quest.475548B7BBA4AC39.quest_desc": [
+    "Talk to the &fAdmin Guh&r in the internet café. It knows everything about computers. Well, one thing: have you tried turning it off and on again, nyeg? Meanwhile the guhs behind the computers calmly keep on surfing. In their sleep.",
+  ],
   "quest.47554803B5F85396.title": "Skyblok Completed",
   "quest.47554803B5F85396.quest_desc": [
     "Talk to the &dSkyblok Guh&r in the &dGuhpixel&r lobby and travel to THE island. The manual has 4,812 steps. Nobody has ever reached step 2... but there is said to be a shortcut, Nyeg. The first time you get 100 coins and a keepsake.",
@@ -79,6 +87,14 @@
   "quest.4755483F60762104.quest_desc": [
     "Play a round on &6Hard&r: ten participants, two Mikas and one and a half times the coins. The leader of the queue picks the level.",
   ],
+  "quest.475548FC3FC4C068.title": "Red Is Sus",
+  "quest.475548FC3FC4C068.quest_desc": [
+    "After your first real round the &dShopkeeper Guh&r sells &dspace suits&r in eight colors and six little hats for your guhs. Buy the &cRed Space Suit&r and put it on a guh. From now on that one always did everything, nyeg.",
+  ],
+  "quest.4755485F4BC46F55.title": "The Chonkfarer at Home",
+  "quest.4755485F4BC46F55.quest_desc": [
+    "Bring the ship home: buy the &dEmergency Button&r, the &dVent Hatch&r and the &dTask Panel&r from the &dShopkeeper Guh&r. The Emergency Button calls your guhs together for a meeting (nothing gets decided), a guh peeks out of the hatch now and then, and on the panel you do a little task. Reward: nothing, nyeg.",
+  ],
   "quest.47554882233FE417.title": "An Arcade Cabinet for Home",
   "quest.47554882233FE417.quest_desc": [
     "The &dShopkeeper Guh&r in the Guhpixel lobby sells real &dGuhcade cabinets&r: &6Flappy Guh&r and &6Mika Pong&r. Your first cabinet costs 250 coins, every one after that 150. Buy one and put it down at home: two blocks tall, with a screen that really moves.",
@@ -111,6 +127,10 @@
   "quest.4755488ADDD499D0.quest_desc": [
     "With every third payslip you get a &dquarterly report&r: graphs (all flat), highlights (\"Meeting postponed due to chonking\") and the &6Employee of the Month&r: the guh that slept the longest. It earns you absolutely nothing. Wahoog!",
   ],
+  "quest.475548E57F20D0C2.title": "Employee of the Month",
+  "quest.475548E57F20D0C2.quest_desc": [
+    "At the end of every real month the guh that slept the most hours at a desk gets the &6Employee of the Month Certificate&r. It arrives by itself with the mail from the Guh Office. Hang it up: nobody has ever done nothing this hard.",
+  ],
   "quest.47554846911EC7FE.title": "Your Own Guh Cinema",
   "quest.47554846911EC7FE.quest_desc": [
     "Buy a &dGuh Cinema Set&r from the &dShopkeeper Guh&r in the Guhpixel lobby: a projector, a whole screen of Cinema Screen (7 wide, 4 high) and four Cinema Seats. Build the screen at home and put the projector in front of it, with the lens toward the screen. Rattle rattle!",
@@ -122,6 +142,10 @@
   "quest.475548E739739DA4.title": "Movie Buff",
   "quest.475548E739739DA4.quest_desc": [
     "Watch all &dnine movies&r to the end: Skyblok, Bedwars, Chonknite, Guhmon, Farmer Wants a Guh, Among Guhs, Baltoguh, Guhtwo and 626. They all end the same way. Guess how, nyeg.",
+  ],
+  "quest.4755481778C704EE.title": "Pop!",
+  "quest.4755481778C704EE.quest_desc": [
+    "Buy a &dPopcorn Machine&r from the &dShopkeeper Guh&r and put it in your theater. Every guh that comes to watch gets a tub of popcorn with the movie. Right-click it and you get one too. No crumbs, nyeg. (Crumbs.)",
   ],
   "quest.475548529F28E877.title": "Travel Agency The Chonk Vacation",
   "quest.475548529F28E877.quest_desc": [
@@ -154,6 +178,10 @@
   "quest.475548CA9C4A9A9B.title": "The Golden Suitcase",
   "quest.475548CA9C4A9A9B.quest_desc": [
     "A souvenir you already have becomes a &6stamp&r on your travel pass. At ten stamps the Travel Agent Guh gives you a &6Golden Suitcase&r.",
+  ],
+  "quest.4755483FEFD1A548.title": "The Whole Album",
+  "quest.4755483FEFD1A548.quest_desc": [
+    "Collect the common souvenir of &6all sixteen destinations&r, from Chonking at House Lingsesdijk 86 to the Staycation \"Balconia\". Every real day there are four other trips, so this takes a while. Your album is in the Guhdex.",
   ],
   "quest.475548FA03A2D79D.title": "On Your Marks...",
   "quest.475548FA03A2D79D.quest_desc": [

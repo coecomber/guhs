@@ -139,3 +139,7 @@ def ftb(fq):
     q(f"{NAME}_koffertje", "Het Gouden koffertje", "Een souvenir dat je al hebt wordt een &6stempel&r op je reispas. Bij tien "
       "stempels krijg je van de Reisagent-guh een &6Gouden koffertje&r.", f"guhs:{NAME}_gouden_koffertje",
       [item(f"guhs:{NAME}_gouden_koffertje")], rewards=(("guhs:gefrituurde_kaasknabbels", 4),), deps=[f"{NAME}_eerste_reis"], xp=150)
+    q(f"{NAME}_album", "Het hele album", "Verzamel het gewone souvenir van &6alle zestien bestemmingen&r, van Vadsen bij huize "
+      "Lingsesdijk 86 tot de Thuisblijfvakantie \"Balkonië\". Elke echte dag zijn er vier andere reizen, dus dit duurt even. Je album "
+      "staat in de Guhdex.", f"guhs:{NAME}_souvenir_lingsesdijk", [adv(f"{NAME}_album")], rewards=(("guhs:gefrituurde_kaasknabbels", 6),),
+      deps=[f"{NAME}_eerste_reis"], shape="hexagon", xp=300)

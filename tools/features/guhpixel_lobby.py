@@ -186,7 +186,7 @@ SOUNDS = {
 }
 SUBTITLES = {"lobby.knabbel": "Gouden knabbel glinstert", "lobby.parkour_start": "Parkourplaat piept", "lobby.parkour_finish": "Finish gehaald",
              "lobby.chat": "Lobbychat tikt"}
-ADVANCEMENTS = ("lobby_welkom", "lobby_parkour", "lobby_knabbels", "lobby_rang_mvg", "internetcafe_beheerder")
+ADVANCEMENTS = ("lobby_welkom", "lobby_parkour", "lobby_knabbels", "lobby_rang_mvg", "internetcafe_beheerder", "lobby_winkel")
 TEST_PLEIN = "lobby_test_plein"
 
 
@@ -396,3 +396,9 @@ def ftb(fq):
     q("lobby_rang_mvg", "Meest Vadsige Guh", "Je &drang&r staat voor je naam en hangt af van alle muntjes die je ooit verdiende: &7[GUH]&r, "
       "&a[VADS]&r (250), &b[VADS+]&r (750), &6[MVG]&r (1250) en &d[MVG++]&r (1750). Word minstens &6[MVG]&r. Uitgeven mag gewoon!",
       "minecraft:gold_ingot", [adv("lobby_rang_mvg")], rewards=(("guhs:kaas_knabbels", 24),), deps=["lobby_binnen"], shape="hexagon", xp=300)
+    q("lobby_winkel", "Nu 0% korting!", "De &dVerkoper-guh&r heeft de grootste winkel van de lobby, met overal uitverkoopbordjes. Koop er "
+      "iets van je &6muntjes&r: een Guhkade-kast, een Guhkantoor, een Guhbioscoop... Alles is voor thuis en alles is alleen cosmetisch. "
+      "Echt waar, njeg.", "minecraft:gold_nugget", [adv("lobby_winkel")], deps=["lobby_binnen"], xp=50)
+    q("internetcafe_beheerder", "Uit en weer aan", "Praat in het internetcafé met de &fBeheerder-guh&r. Hij weet alles van computers. Nou ja, "
+      "één ding: heb je hem al uit en weer aan gezet, njeg? De guhs achter de computers surfen ondertussen rustig verder. In hun slaap.",
+      "guhs:internetcafe_computer", [adv("internetcafe_beheerder")], rewards=(("guhs:kaas_knabbels", 4),), deps=["internetcafe_vinden"])

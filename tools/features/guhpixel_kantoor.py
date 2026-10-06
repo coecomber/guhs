@@ -154,3 +154,8 @@ def ftb(fq):
          "Bij elk derde loonstrookje krijg je een &dkwartaalrapport&r: grafieken (allemaal vlak), hoogtepunten (\"Vergadering uitgesteld "
          "wegens vadsen\") en de &6Werknemer van de maand&r: de guh die het langst sliep. Het levert helemaal niks op. Vahoeg!",
          "guhs:guhkantoor_kwartaalrapport", [fq.adv("guhkantoor_kwartaal")], deps=["guhkantoor_loonstrookje"], x=4, y=4, shape="gear", xp=150)
+    fq.q("guhkantoor_oorkonde", "Werknemer van de maand",
+         "Aan het eind van elke echte maand krijgt de guh die de meeste uren aan een bureau sliep de &6Oorkonde Werknemer van de maand&r. "
+         "Hij komt vanzelf met de post van het Guhkantoor. Hang hem op: zo hard heeft nog nooit iemand niks gedaan.",
+         "guhs:guhkantoor_oorkonde", [fq.item("guhs:guhkantoor_oorkonde")], rewards=(("guhs:kaas_knabbels", 12),),
+         deps=["guhkantoor_prikklok"], x=6, y=4, xp=100)

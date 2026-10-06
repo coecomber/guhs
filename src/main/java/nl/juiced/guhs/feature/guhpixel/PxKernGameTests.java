@@ -600,9 +600,12 @@ public class PxKernGameTests {
         helper.assertTrue(Winkel.koop(p, "px_test_kast") == Winkel.Uitkomst.MISLUKT && Muntjes.saldo(p) == 500 && Winkel.gekocht(p, "px_test_kast") == 0,
                 "a failed delivery charges nothing");
         leveren[0] = true;
+        var winkelAdv = p.level().getServer().getAdvancements().get(Guhs.id("quest/lobby_winkel"));
+        helper.assertTrue(winkelAdv != null && !p.getAdvancements().getOrStartProgress(winkelAdv).isDone(), "nothing bought yet: no shop advancement");
         helper.assertTrue(Winkel.prijs(p, Winkel.van("px_test_kast")) == 250, "the first one costs 250");
         helper.assertTrue(Winkel.koop(p, "px_test_kast") == Winkel.Uitkomst.OK && Muntjes.saldo(p) == 250 && Winkel.gekocht(p, "px_test_kast") == 1
                 && tel(p, Items.JUKEBOX) == 1, "bought: a real item, 250 muntjes less");
+        helper.assertTrue(p.getAdvancements().getOrStartProgress(winkelAdv).isDone(), "the first purchase: the advancement of the FTB quest");
         helper.assertTrue(Winkel.prijs(p, Winkel.van("px_test_kast")) == 150, "the second one costs 150");
         helper.assertTrue(Winkel.koop(p, "px_test_kast") == Winkel.Uitkomst.OK && Muntjes.saldo(p) == 100 && tel(p, Items.JUKEBOX) == 2, "the second");
         Muntjes.zet(p, 999);

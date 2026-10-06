@@ -2971,6 +2971,17 @@ def main_px(out):
         print("rendered guhpixel_poort, icon_guhpixel_netwerkkabeltje")
     except Exception as e:
         print("no render for the guhpixel kern", e)
+    # the NPC pages of the wiki site look for npc_<kind>.png (own model when the kind has one, else the sitting guh)
+    geo = lambda n: os.path.join(ASSETS, "geckolib", "models", "entity", n + ".geo.json")
+    for kind in ("lobby_welkomstguh", "lobby_verkoper_guh", "lobby_chatguh", "internetcafe_beheerder", "internetcafe_slaper", "skyblok_guh",
+                 "bedwars_guh", "vadsnite_guh", "guhmon_gymleider", "bzg_presentatrice", "bzg_boer", "among_kapitein", "among_logboekguh",
+                 "reisbureau_agent"):
+        try:
+            model = geo(f"guh_npc_{kind}") if os.path.exists(geo(f"guh_npc_{kind}")) else geo("guh_sitting")
+            render(geo_quads(model, f"guhs:entity/npc_{kind}"), 28, -12, 360).save(os.path.join(out, f"npc_{kind}.png"))
+        except Exception as e:  # noqa: BLE001
+            print("no render for npc", kind, e)
+    print("rendered the guhpixel npc pictures")
     import wiki_px
     for x in wiki_px.SLICES:
         importlib.import_module(f"wiki_px.{x}").renders(r)

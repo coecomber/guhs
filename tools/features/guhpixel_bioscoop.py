@@ -257,3 +257,7 @@ def ftb(fq):
          "Kijk alle &dnegen films&r helemaal uit: Skyblok, Bedwars, Vadsnite, Guhmon, Boer zoekt Guh, Among Guhs, Baltoguh, Guhtwo en 626. "
          "Ze lopen allemaal hetzelfde af. Raad maar hoe, njeg.",
          "guhs:guhbioscoop_stoeltje", [fq.adv("guhbioscoop_alles")], rewards=(("guhs:kaas_knabbels", 16),), deps=["guhbioscoop_eerste_film"], xp=100)
+    fq.q("guhbioscoop_popcorn", "Pof!",
+         "Koop bij de &dVerkoper-guh&r een &dPopcornmachine&r en zet hem in je bioscoopzaal. Elke guh die komt kijken krijgt een bakje popcorn "
+         "bij de film. Rechtsklik erop en jij krijgt er ook een. Niet kruimelen, njeg. (Wel kruimelen.)",
+         "guhs:guhbioscoop_popcornmachine", [fq.item("guhs:guhbioscoop_popcornmachine")], deps=["guhbioscoop_projector"])

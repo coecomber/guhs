@@ -96,9 +96,31 @@ MINIGAMES = {
     "hula": dict(nl="Hula", en="Hula", structure="guhwaii_surfstrand", npc="lilo_guh", bron="guhwaii_spellen", munt="schelpjesmunt",
                  gids="hula", img="shot30_guhwaiispellen_hula", group="verhalen",
                  lead_nl="Dans de hula op het strand van Guhwai'i: kies een liedje en volg de pasjes.", lead_en="Dance the hula on the Guhwai'i beach: pick a song and follow the steps."),
+    # guhpixel: the six joke games and the real Among Guhs (no structure: they are played from the Guhpixel lobby, key "home")
+    "skyblok": dict(nl="Skyblok", en="Skyblok", npc="skyblok_guh", home="dimensies/guhpixel", img="skyblok_eiland", group="guhpixel",
+                    lead_nl="Hét zwevende eilandje, met een handleiding van 4.812 stappen. De kortste weg naar de overwinning is het bed.",
+                    lead_en="The floating island, with a manual of 4,812 steps. The shortest way to victory is the bed."),
+    "bedwars": dict(nl="Bedwars", en="Bedwars", npc="bedwars_guh", home="dimensies/guhpixel", img="bedwars_eilanden", group="guhpixel",
+                    lead_nl="Verdedig je bed door erin te gaan liggen. De andere teams komen over bruggetjes van wol... en kruipen erbij.",
+                    lead_en="Defend your bed by lying in it. The other teams come over little wool bridges... and snuggle in."),
+    "vadsnite": dict(nl="Vadsnite", en="Chonknite", npc="vadsnite_guh", bron="vadsnite_aandenken", home="dimensies/guhpixel", img="vadsnite_eiland",
+                     group="guhpixel",
+                     lead_nl="Spring met 99 guhs uit de Vadsbus. Ze vallen allemaal meteen in slaap: wie het laatst wakker is, wint.",
+                     lead_en="Jump out of the Chonk Bus with 99 guhs. They all fall asleep at once: the last one awake wins."),
+    "guhmon": dict(nl="Het Guhmon-gevecht", en="The Guhmon Battle", npc="guhmon_gymleider", bron="guhmon_gym", home="dimensies/guhpixel", img="guhmon_gym",
+                   group="guhpixel",
+                   lead_nl="Daag Gymleider Dutjes uit met een van je eigen guhs. Geen HP maar een SLAAPbalk: wie het eerst slaapt, wint.",
+                   lead_en="Challenge Gym Leader Naps with one of your own guhs. No HP but a SLEEP bar: whoever falls asleep first wins."),
+    "bzg": dict(nl="Boer zoekt Guh", en="Farmer Wants a Guh", npc="bzg_presentatrice", bron="bzg_show", home="dimensies/guhpixel", img="bzg_studio",
+                group="guhpixel",
+                lead_nl="Het tv-programma van Presentatrice Guhvon: drie brieven, een logeerweek en een boer die niet kan kiezen.",
+                lead_en="Host Guhvon's TV show: three letters, a sleepover week and a farmer who cannot choose."),
+    "among": dict(nl="Among Guhs", en="Among Guhs", npc="among_kapitein", home="dimensies/guhpixel", img="among_vadsvaarder", group="guhpixel",
+                  lead_nl="Het enige echte spel van Guhpixel: doe je taakjes op De Vadsvaarder en zoek de Mika, of wees de Mika en duw iedereen stiekem in slaap. Niemand doet elkaar pijn.",
+                  lead_en="The one real game of Guhpixel: do your tasks on The Chonkfarer and find the Mika, or be the Mika and secretly push everyone asleep. Nobody gets hurt."),
 }
 MINIGAME_GROUPS = {"klassiekers": ("Klassiekers", "Classics"), "grote_guhspelen": ("De Grote Guhspelen", "The Grote Guhspelen"),
-                   "knuffeldal": ("Knuffeldal", "Knuffeldal"), "verhalen": ("Guhverhalen", "Guh stories")}
+                   "knuffeldal": ("Knuffeldal", "Knuffeldal"), "verhalen": ("Guhverhalen", "Guh stories"), "guhpixel": ("Guhpixel", "Guhpixel")}
 
 # --- stories and questlines --------------------------------------------------------------------------------------------------
 # id -> dict(nl, en, img, lead_nl, lead_en, ftb=[(chapter, section id or None = whole chapter)], structure, npcs, reward (clothing bron / variant))
@@ -160,6 +182,20 @@ SYSTEMS = {
     "guhparkour": ("Guh-parkour", "Guh Parkour", "guh_wip",
                    "Bouw een parcours van speelgoed en hindernissen tussen een Startpaaltje en een Finishpaaltje; je guhs rennen het rondje na rondje.",
                    "Build a course of toys and obstacles between a Start Post and a Finish Post; your guhs run it lap after lap.", ["systemen/hartjes"]),
+    "guhkade": ("De Guhkade", "The Guhcade", "guhkade_kasten",
+                "Speelkasten voor thuis uit de Guhpixel-winkel: Flappy Guh en Mika-Pong, met een top 5 op de kast. Je guhs spelen zelf ook.",
+                "Arcade cabinets for your home from the Guhpixel Shop: Flappy Guh and Mika Pong, with a top 5 on the cabinet. Your guhs play too.",
+                ["dimensies/guhpixel", "blokken/guhkade_kast_flappy", "blokken/guhkade_kast_pong"]),
+    "guhkantoor": ("Het Guhkantoor", "The Guh Office", "guhkantoor_bureautje_bezet",
+                   "Een Prikklok en tot vier Bureautjes: je guhs slapen op het toetsenbord en krijgen er loonstrookjes en kwartaalrapporten voor. Het levert niks op.",
+                   "A Time Clock and up to four Little Desks: your guhs sleep on the keyboard and get payslips and quarterly reports for it. It earns nothing.",
+                   ["dimensies/guhpixel", "blokken/guhkantoor_prikklok", "blokken/guhkantoor_bureautje", "blokken/guhkantoor_loonstrookje",
+                    "blokken/guhkantoor_kwartaalrapport", "blokken/guhkantoor_oorkonde"]),
+    "guhbioscoop": ("De Guhbioscoop", "The Guh Cinema", "guhbioscoop_projector",
+                    "Een projector, een scherm van Bioscoopdoek en Bioscoopstoeltjes: draai thuis de negen films, met je guhs en popcorn in de zaal.",
+                    "A projector, a screen of Cinema Screen and Cinema Seats: play the nine movies at home, with your guhs and popcorn in the theater.",
+                    ["dimensies/guhpixel", "blokken/guhbioscoop_projector", "blokken/guhbioscoop_doek", "blokken/guhbioscoop_stoeltje",
+                     "blokken/guhbioscoop_popcornmachine"]),
     "temmen": ("Temmen, rijden en oppakken", "Taming, riding and picking up", "guh_saddle",
                "Een wilde guh tem je met kaasknabbels. Een tamme guh kun je berijden, oppakken, aankleden en lanceren.",
                "You tame a wild guh with kaasknabbels. A tamed guh can be ridden, picked up, dressed up and launched.", ["systemen/karakters", "systemen/hartjes"]),
@@ -274,6 +310,17 @@ NPC_HOME = {
     "creche_babyguh": "minigames/creche", "tamboerguh": "systemen/evenementen",
     "vads_temmer": "bouwwerken/guh_village", "guh_kleermaker": "bouwwerken/guh_village", "vadssmid": "bouwwerken/guh_village",
     "hamsterbouwer": "bouwwerken/guh_village", "mika_jager": "bouwwerken/guh_village", "knabbelboer": "bouwwerken/guh_village",
+    # guhpixel
+    "lobby_welkomstguh": "dimensies/guhpixel", "lobby_verkoper_guh": "dimensies/guhpixel", "lobby_chatguh": "dimensies/guhpixel",
+    "internetcafe_beheerder": "bouwwerken/internetcafe", "internetcafe_slaper": "bouwwerken/internetcafe", "skyblok_guh": "dimensies/guhpixel",
+    "bedwars_guh": "dimensies/guhpixel", "vadsnite_guh": "dimensies/guhpixel", "guhmon_gymleider": "dimensies/guhpixel",
+    "bzg_presentatrice": "dimensies/guhpixel", "bzg_boer": "minigames/bzg", "among_kapitein": "dimensies/guhpixel",
+    "among_logboekguh": "dimensies/guhpixel", "reisbureau_agent": "bouwwerken/reisbureau",
+}
+# dimension -> pages to list under "see also" (what the game data doesn't link by itself)
+DIMENSION_RELATED = {
+    "guhpixel": ["bouwwerken/internetcafe", "minigames/skyblok", "minigames/bedwars", "minigames/vadsnite", "minigames/guhmon", "minigames/bzg",
+                 "minigames/among", "systemen/guhkade", "systemen/guhkantoor", "systemen/guhbioscoop", "blokken/guhpixel_poort"],
 }
 # NPC kind -> the story it plays in
 NPC_STORY = {"moeder_vadsig": "moeder-vadsig", "slee_guh": "kapotte-slee", "grillguh": "grillguh", "burgemeesterguh": "knusfeest",
@@ -364,6 +411,7 @@ OUTFIT_PICS = {
 }
 # clothing source -> the page it links to (a minigame, story, structure...)
 BRON_PAGE = {
+    "vadsnite_aandenken": "minigames/vadsnite", "guhmon_gym": "minigames/guhmon", "bzg_show": "minigames/bzg",
     "kermis": "minigames/kermis", "verstop": "minigames/verstopguh", "beauty": "minigames/beauty", "race": "minigames/race",
     "meppen": "minigames/meppen", "disco": "minigames/disco", "golf": "minigames/golf", "smul": "minigames/smul", "vissen": "minigames/vissen",
     "sjoelen": "minigames/sjoelen", "doolhof": "minigames/doolhof", "katapult": "minigames/katapult", "knabbelspelen": "minigames/knabbelspelen",
@@ -398,6 +446,18 @@ LOOT_LABEL = {"knabbelschat": ("Knabbelschat (Guheinde)", "Knabbel treasure (Guh
 DROP = "-"
 # (section, English title) -> page (DROP: leave out). Checked first.
 CHUNK_RULES = {
+    # guhpixel: every game and home thing has its own page; the rest of the section (how to get in, lobby, ranks) is the dimension page
+    ("guhpixel", "Skyblok"): "minigames/skyblok", ("guhpixel", "Bedwars"): "minigames/bedwars", ("guhpixel", "Chonknite"): "minigames/vadsnite",
+    ("guhpixel", "Guhmon Battle"): "minigames/guhmon", ("guhpixel", "The Nap Gym"): "minigames/guhmon", ("guhpixel", "Badge Case"): "minigames/guhmon",
+    ("guhpixel", "Farmer Wants a Guh"): "minigames/bzg", ("guhpixel", "Studio and farm set"): "minigames/bzg",
+    ("guhpixel", "Farmer Guhrrit"): "minigames/bzg", ("guhpixel", "Mailbox"): "minigames/bzg", ("guhpixel", "Framed Letter"): "minigames/bzg",
+    ("guhpixel", "The practice round"): "minigames/among", ("guhpixel", "The real game on The Chonkfarer"): "minigames/among",
+    ("guhpixel", "The ship's things at home"): "minigames/among",
+    ("guhpixel", "Arcade cabinets for your home"): "systemen/guhkade", ("guhpixel", "Flappy Guh"): "systemen/guhkade",
+    ("guhpixel", "Mika Pong"): "systemen/guhkade", ("guhpixel", "The top 5"): "systemen/guhkade", ("guhpixel", "Your guhs play too"): "systemen/guhkade",
+    ("guhpixel", "Time Clock"): "systemen/guhkantoor", ("guhpixel", "Little Desk"): "systemen/guhkantoor",
+    ("guhpixel", "Guh Cinema Projector"): "systemen/guhbioscoop", ("guhpixel", "Cinema Seat"): "systemen/guhbioscoop",
+    ("guhpixel", "Popcorn Machine"): "systemen/guhbioscoop",
     ("new30", "New in 3.0: Guhverhalen"): DROP, ("new30", "Baltoguh, Guhtwo and 626-guh"): "systemen/verhaalguhs",
     ("new30", "Home with you"): "systemen/verhaalguhs", ("new30", "The sledesprint against Steele-Mika"): "minigames/sledesprint",
     ("new30", "Steele-Mika before the story"): "minigames/sledesprint", ("new30", "The sprint panel"): "minigames/sledesprint",
@@ -460,6 +520,14 @@ CHUNK_RULES = {
 }
 # (section or "*", start of the h3 title) -> page, checked after the pictures
 H3_RULES = [
+    ("guhpixel", "Among Guhs", "minigames/among"), ("guhpixel", "Crew and Mika", "minigames/among"), ("guhpixel", "The ship", "minigames/among"),
+    ("guhpixel", "Tasks", "minigames/among"), ("guhpixel", "Sabotage", "minigames/among"), ("guhpixel", "Meetings", "minigames/among"),
+    ("guhpixel", "Rewards", "minigames/among"), ("guhpixel", "In the shop", "minigames/among"),
+    ("guhpixel", "The Guhcade", "systemen/guhkade"),
+    ("guhpixel", "The Guh Office", "systemen/guhkantoor"), ("guhpixel", "How it works", "systemen/guhkantoor"),
+    ("guhpixel", "The paperwork", "systemen/guhkantoor"),
+    ("guhpixel", "The Guh Cinema", "systemen/guhbioscoop"), ("guhpixel", "In the Guhpixel shop", "systemen/guhbioscoop"),
+    ("guhpixel", "The nine movies", "systemen/guhbioscoop"),
     ("new30", "Where are the stories", "systemen/superkompas"), ("new30", "The story guhs", "systemen/verhaalguhs"),
     ("new30", "A &middot; De Timmerguh", "verhalen/timmerguh"), ("new30", "B &middot; Baltoguh", "bouwwerken/nomguh"),
     ("new30", "The characters of Nomguh", "verhalen/nomguh"), ("new30", "C &middot; De slee", "verhalen/sneeuwstorm"),

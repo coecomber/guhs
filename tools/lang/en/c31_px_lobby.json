@@ -284,5 +284,9 @@
   "ftb.guhs_guhpixel.q.lobby_knabbels.title": "Nibble Sleuth",
   "ftb.guhs_guhpixel.q.lobby_knabbels.desc": "&6Ten golden nibbles&r are hidden in the lobby: behind things, on roofs and... under the ground. Right-click them: every nibble is 10 coins. They stay where they are for everyone, so nobody snatches them from under your nose.",
   "ftb.guhs_guhpixel.q.lobby_rang_mvg.title": "Most Valuable Guh",
-  "ftb.guhs_guhpixel.q.lobby_rang_mvg.desc": "Your &drank&r stands in front of your name and depends on all the coins you ever earned: &7[GUH]&r, &a[CHONK]&r (250), &b[CHONK+]&r (750), &6[MVG]&r (1250) and &d[MVG++]&r (1750). Become at least &6[MVG]&r. Spending is just fine!"
+  "ftb.guhs_guhpixel.q.lobby_rang_mvg.desc": "Your &drank&r stands in front of your name and depends on all the coins you ever earned: &7[GUH]&r, &a[CHONK]&r (250), &b[CHONK+]&r (750), &6[MVG]&r (1250) and &d[MVG++]&r (1750). Become at least &6[MVG]&r. Spending is just fine!",
+  "ftb.guhs_guhpixel.q.lobby_winkel.title": "Now 0% Off!",
+  "ftb.guhs_guhpixel.q.lobby_winkel.desc": "The &dShopkeeper Guh&r has the biggest shop in the lobby, with sale signs everywhere. Buy something there with your &6coins&r: a Guhcade cabinet, a Guh Office, a Guh Cinema... Everything is for home and everything is cosmetic only. Really, nyeg.",
+  "ftb.guhs_guhpixel.q.internetcafe_beheerder.title": "Off and On Again",
+  "ftb.guhs_guhpixel.q.internetcafe_beheerder.desc": "Talk to the &fAdmin Guh&r in the internet café. It knows everything about computers. Well, one thing: have you tried turning it off and on again, nyeg? Meanwhile the guhs behind the computers calmly keep on surfing. In their sleep."
 }

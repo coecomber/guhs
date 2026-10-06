@@ -61,7 +61,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 8.74375,
+      y: 10.24375,
       hover: [
         "Komt na: Het superkompas (De Guhmensie)",
       ],
@@ -73,7 +73,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 16.0,
-      y: 8.74375,
+      y: 10.24375,
       hover: [
         "Komt na: Het superkompas (De Guhmensie)",
       ],
@@ -85,7 +85,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 14.20625,
+      y: 15.70625,
       hover: [
         "Komt na: Het superkompas (De Guhmensie)",
       ],
@@ -97,7 +97,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 16.0,
-      y: 14.20625,
+      y: 15.70625,
       hover: [
         "Komt na: Het superkompas (De Guhmensie)",
       ],
@@ -336,6 +336,65 @@
       shape: "hexagon",
     },
     {
+      id: "4755485A55E43807",
+      icon: {
+        id: "minecraft:gold_nugget",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/lobby_winkel",
+          id: "475548D503F3978E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F2787F322E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B81251CC50",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548B7BBA4AC39",
+      icon: {
+        id: "guhs:internetcafe_computer",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/internetcafe_beheerder",
+          id: "475548B04ADEC130",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B252FDE346",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 9.0,
+      y: 8.0625,
+    },
+    {
       id: "47554803B5F85396",
       icon: {
         id: "guhs:skyblok_fles",
@@ -557,7 +616,7 @@
         },
       ],
       x: 0.0,
-      y: 10.525,
+      y: 12.025,
     },
     {
       id: "4755486551019EA3",
@@ -589,7 +648,7 @@
         },
       ],
       x: 1.5,
-      y: 10.525,
+      y: 12.025,
       shape: "circle",
     },
     {
@@ -622,7 +681,7 @@
         },
       ],
       x: 3.0,
-      y: 10.525,
+      y: 12.025,
     },
     {
       id: "475548A3D794F646",
@@ -654,7 +713,7 @@
         },
       ],
       x: 4.5,
-      y: 10.525,
+      y: 12.025,
     },
     {
       id: "4755483F60762104",
@@ -686,8 +745,92 @@
         },
       ],
       x: 6.0,
-      y: 10.525,
+      y: 12.025,
       shape: "hexagon",
+    },
+    {
+      id: "475548FC3FC4C068",
+      icon: {
+        id: "guhs:among_ruimtepakje_rood",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:among_ruimtepakje_rood",
+          },
+          id: "475548BBACB92CD7",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E0677FC2A6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554861F96FDF4D",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 7.5,
+      y: 12.025,
+    },
+    {
+      id: "4755485F4BC46F55",
+      icon: {
+        id: "guhs:among_noodknop",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:among_noodknop",
+          },
+          id: "475548288AB8CAA7",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:among_ventilatieluik",
+          },
+          id: "47554824E000046A",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:among_taakpaneel",
+          },
+          id: "47554853816C7A7F",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554854FB4050E0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548D551F2AA33",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 9.0,
+      y: 12.025,
     },
     {
       id: "47554882233FE417",
@@ -719,7 +862,7 @@
         },
       ],
       x: 11.5,
-      y: 10.525,
+      y: 12.025,
       shape: "gear",
     },
     {
@@ -752,7 +895,7 @@
         },
       ],
       x: 13.0,
-      y: 10.525,
+      y: 12.025,
     },
     {
       id: "47554892A98798C2",
@@ -784,7 +927,7 @@
         },
       ],
       x: 14.5,
-      y: 10.525,
+      y: 12.025,
     },
     {
       id: "475548C7C681575C",
@@ -816,7 +959,7 @@
         },
       ],
       x: 16.0,
-      y: 10.525,
+      y: 12.025,
     },
     {
       id: "4755480E71FDD2C3",
@@ -848,7 +991,7 @@
         },
       ],
       x: 17.5,
-      y: 10.525,
+      y: 12.025,
       shape: "gear",
     },
     {
@@ -883,7 +1026,7 @@
         },
       ],
       x: 19.0,
-      y: 10.525,
+      y: 12.025,
       shape: "rsquare",
     },
     {
@@ -916,7 +1059,7 @@
         },
       ],
       x: 20.5,
-      y: 10.525,
+      y: 12.025,
     },
     {
       id: "4755488ADDD499D0",
@@ -948,8 +1091,42 @@
         },
       ],
       x: 20.5,
-      y: 12.025,
+      y: 13.525,
       shape: "gear",
+    },
+    {
+      id: "475548E57F20D0C2",
+      icon: {
+        id: "guhs:guhkantoor_oorkonde",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhkantoor_oorkonde",
+          },
+          id: "475548CA695A3437",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548686721A39C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755482EE11ED086",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 19.0,
+      y: 13.525,
     },
     {
       id: "47554846911EC7FE",
@@ -982,8 +1159,8 @@
           xp: 50,
         },
       ],
-      x: 19.0,
-      y: 12.025,
+      x: 17.5,
+      y: 13.525,
     },
     {
       id: "4755486F480C2C6A",
@@ -1014,8 +1191,8 @@
           xp: 50,
         },
       ],
-      x: 17.5,
-      y: 12.025,
+      x: 16.0,
+      y: 13.525,
     },
     {
       id: "475548E739739DA4",
@@ -1046,8 +1223,37 @@
           xp: 100,
         },
       ],
-      x: 16.0,
-      y: 12.025,
+      x: 14.5,
+      y: 13.525,
+    },
+    {
+      id: "4755481778C704EE",
+      icon: {
+        id: "guhs:guhbioscoop_popcornmachine",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhbioscoop_popcornmachine",
+          },
+          id: "4755483D3716BA3F",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548224920CFA5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 13.525,
     },
     {
       id: "475548529F28E877",
@@ -1078,7 +1284,7 @@
         },
       ],
       x: 0.0,
-      y: 15.9875,
+      y: 17.4875,
       shape: "circle",
     },
     {
@@ -1111,7 +1317,7 @@
         },
       ],
       x: 1.5,
-      y: 15.9875,
+      y: 17.4875,
     },
     {
       id: "4755485957984174",
@@ -1143,7 +1349,7 @@
         },
       ],
       x: 3.0,
-      y: 15.9875,
+      y: 17.4875,
     },
     {
       id: "4755482ECF97EF67",
@@ -1175,7 +1381,7 @@
         },
       ],
       x: 4.5,
-      y: 15.9875,
+      y: 17.4875,
       shape: "gear",
     },
     {
@@ -1210,7 +1416,7 @@
         },
       ],
       x: 6.0,
-      y: 15.9875,
+      y: 17.4875,
     },
     {
       id: "4755480A72DEA640",
@@ -1242,7 +1448,7 @@
         },
       ],
       x: 7.5,
-      y: 15.9875,
+      y: 17.4875,
     },
     {
       id: "475548B7E99FCC44",
@@ -1274,7 +1480,7 @@
         },
       ],
       x: 9.0,
-      y: 15.9875,
+      y: 17.4875,
       shape: "gear",
     },
     {
@@ -1309,7 +1515,40 @@
         },
       ],
       x: 9.0,
-      y: 17.4875,
+      y: 18.9875,
+    },
+    {
+      id: "4755483FEFD1A548",
+      icon: {
+        id: "guhs:reisbureau_souvenir_lingsesdijk",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/reisbureau_album",
+          id: "4755482505F2AADC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484C137B9D6E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 6,
+        },
+        {
+          id: "4755487CDCF361C9",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 7.5,
+      y: 18.9875,
+      shape: "hexagon",
     },
     {
       id: "475548FA03A2D79D",
@@ -1346,7 +1585,7 @@
         },
       ],
       x: 11.5,
-      y: 15.9875,
+      y: 17.4875,
       shape: "circle",
     },
     {
@@ -1384,7 +1623,7 @@
         },
       ],
       x: 13.0,
-      y: 15.9875,
+      y: 17.4875,
     },
     {
       id: "475548972CFE8071",
@@ -1416,7 +1655,7 @@
         },
       ],
       x: 14.5,
-      y: 15.9875,
+      y: 17.4875,
     },
     {
       id: "4755481300707161",
@@ -1445,7 +1684,7 @@
         },
       ],
       x: 16.0,
-      y: 15.9875,
+      y: 17.4875,
     },
     {
       id: "475548C63C272CFB",
@@ -1477,7 +1716,7 @@
         },
       ],
       x: 17.5,
-      y: 15.9875,
+      y: 17.4875,
       shape: "gear",
     },
   ],

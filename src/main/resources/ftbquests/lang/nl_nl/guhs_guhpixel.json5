@@ -35,6 +35,14 @@
   "quest.47554810A339D3A4.quest_desc": [
     "Je &drang&r staat voor je naam en hangt af van alle muntjes die je ooit verdiende: &7[GUH]&r, &a[VADS]&r (250), &b[VADS+]&r (750), &6[MVG]&r (1250) en &d[MVG++]&r (1750). Word minstens &6[MVG]&r. Uitgeven mag gewoon!",
   ],
+  "quest.4755485A55E43807.title": "Nu 0% korting!",
+  "quest.4755485A55E43807.quest_desc": [
+    "De &dVerkoper-guh&r heeft de grootste winkel van de lobby, met overal uitverkoopbordjes. Koop er iets van je &6muntjes&r: een Guhkade-kast, een Guhkantoor, een Guhbioscoop... Alles is voor thuis en alles is alleen cosmetisch. Echt waar, njeg.",
+  ],
+  "quest.475548B7BBA4AC39.title": "Uit en weer aan",
+  "quest.475548B7BBA4AC39.quest_desc": [
+    "Praat in het internetcafé met de &fBeheerder-guh&r. Hij weet alles van computers. Nou ja, één ding: heb je hem al uit en weer aan gezet, njeg? De guhs achter de computers surfen ondertussen rustig verder. In hun slaap.",
+  ],
   "quest.47554803B5F85396.title": "Skyblok uitgespeeld",
   "quest.47554803B5F85396.quest_desc": [
     "Praat in de lobby van &dGuhpixel&r met de &dSkyblok-guh&r en reis naar hét eiland. De handleiding telt 4.812 stappen. Niemand heeft ooit stap 2 gehaald... maar er schijnt een kortere weg te zijn, njeg. De eerste keer krijg je 100 muntjes en een aandenken.",
@@ -79,6 +87,14 @@
   "quest.4755483F60762104.quest_desc": [
     "Speel een ronde op &6Lastig&r: tien deelnemers, twee Mika's en anderhalf keer zoveel muntjes. De leider van de wachtrij kiest het niveau.",
   ],
+  "quest.475548FC3FC4C068.title": "Rood is sus",
+  "quest.475548FC3FC4C068.quest_desc": [
+    "Na je eerste echte ronde verkoopt de &dVerkoper-guh&r &druimtepakjes&r in acht kleuren en zes hoedjes voor je guhs. Koop het &cRode ruimtepakje&r en trek het een guh aan. Die heeft vanaf nu altijd alles gedaan, njeg.",
+  ],
+  "quest.4755485F4BC46F55.title": "De Vadsvaarder thuis",
+  "quest.4755485F4BC46F55.quest_desc": [
+    "Haal het schip in huis: koop bij de &dVerkoper-guh&r de &dNoodknop&r, het &dVentilatieluik&r en het &dTaakjes-paneel&r. De Noodknop roept je guhs bij elkaar voor een vergadering (er wordt niets besloten), uit het luik gluurt af en toe een guh, en op het paneel doe je een taakje. Beloning: niks, njeg.",
+  ],
   "quest.47554882233FE417.title": "Een speelkast voor thuis",
   "quest.47554882233FE417.quest_desc": [
     "De &dVerkoper-guh&r in de Guhpixel-lobby verkoopt echte &dGuhkade-kasten&r: &6Flappy Guh&r en &6Mika-Pong&r. Je eerste kast kost 250 muntjes, elke volgende 150. Koop er een en zet hem thuis neer: twee blokken hoog, met een scherm dat echt beweegt.",
@@ -111,6 +127,10 @@
   "quest.4755488ADDD499D0.quest_desc": [
     "Bij elk derde loonstrookje krijg je een &dkwartaalrapport&r: grafieken (allemaal vlak), hoogtepunten (\"Vergadering uitgesteld wegens vadsen\") en de &6Werknemer van de maand&r: de guh die het langst sliep. Het levert helemaal niks op. Vahoeg!",
   ],
+  "quest.475548E57F20D0C2.title": "Werknemer van de maand",
+  "quest.475548E57F20D0C2.quest_desc": [
+    "Aan het eind van elke echte maand krijgt de guh die de meeste uren aan een bureau sliep de &6Oorkonde Werknemer van de maand&r. Hij komt vanzelf met de post van het Guhkantoor. Hang hem op: zo hard heeft nog nooit iemand niks gedaan.",
+  ],
   "quest.47554846911EC7FE.title": "Je eigen Guhbioscoop",
   "quest.47554846911EC7FE.quest_desc": [
     "Koop bij de &dVerkoper-guh&r in de Guhpixel-lobby een &dGuhbioscoop-set&r: een projector, een heel scherm van Bioscoopdoek (7 breed, 4 hoog) en vier Bioscoopstoeltjes. Bouw thuis het scherm en zet de projector ervoor, met de lens naar het doek. Ratelratel!",
@@ -122,6 +142,10 @@
   "quest.475548E739739DA4.title": "Filmkenner",
   "quest.475548E739739DA4.quest_desc": [
     "Kijk alle &dnegen films&r helemaal uit: Skyblok, Bedwars, Vadsnite, Guhmon, Boer zoekt Guh, Among Guhs, Baltoguh, Guhtwo en 626. Ze lopen allemaal hetzelfde af. Raad maar hoe, njeg.",
+  ],
+  "quest.4755481778C704EE.title": "Pof!",
+  "quest.4755481778C704EE.quest_desc": [
+    "Koop bij de &dVerkoper-guh&r een &dPopcornmachine&r en zet hem in je bioscoopzaal. Elke guh die komt kijken krijgt een bakje popcorn bij de film. Rechtsklik erop en jij krijgt er ook een. Niet kruimelen, njeg. (Wel kruimelen.)",
   ],
   "quest.475548529F28E877.title": "Reisbureau De Vadsvakantie",
   "quest.475548529F28E877.quest_desc": [
@@ -154,6 +178,10 @@
   "quest.475548CA9C4A9A9B.title": "Het Gouden koffertje",
   "quest.475548CA9C4A9A9B.quest_desc": [
     "Een souvenir dat je al hebt wordt een &6stempel&r op je reispas. Bij tien stempels krijg je van de Reisagent-guh een &6Gouden koffertje&r.",
+  ],
+  "quest.4755483FEFD1A548.title": "Het hele album",
+  "quest.4755483FEFD1A548.quest_desc": [
+    "Verzamel het gewone souvenir van &6alle zestien bestemmingen&r, van Vadsen bij huize Lingsesdijk 86 tot de Thuisblijfvakantie \"Balkonië\". Elke echte dag zijn er vier andere reizen, dus dit duurt even. Je album staat in de Guhdex.",
   ],
   "quest.475548FA03A2D79D.title": "Op uw plaatsen...",
   "quest.475548FA03A2D79D.quest_desc": [

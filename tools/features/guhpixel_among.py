@@ -344,3 +344,11 @@ def ftb(fq):
     q("among_lastig", "Twee Mika's aan boord", "Speel een ronde op &6Lastig&r: tien deelnemers, twee Mika's en anderhalf keer zoveel muntjes. "
       "De leider van de wachtrij kiest het niveau.",
       "guhs:among_ventilatieluik", [adv("among_lastig")], rewards=(("guhs:kaas_knabbels", 16),), x=4, y=y, shape="hexagon", xp=100)
+    q("among_pakje", "Rood is sus", "Na je eerste echte ronde verkoopt de &dVerkoper-guh&r &druimtepakjes&r in acht kleuren en zes hoedjes "
+      "voor je guhs. Koop het &cRode ruimtepakje&r en trek het een guh aan. Die heeft vanaf nu altijd alles gedaan, njeg.",
+      "guhs:among_ruimtepakje_rood", [fq.item("guhs:among_ruimtepakje_rood")], rewards=(("guhs:kaas_knabbels", 8),), x=6, y=y - 1, xp=50)
+    q("among_thuis", "De Vadsvaarder thuis", "Haal het schip in huis: koop bij de &dVerkoper-guh&r de &dNoodknop&r, het &dVentilatieluik&r en "
+      "het &dTaakjes-paneel&r. De Noodknop roept je guhs bij elkaar voor een vergadering (er wordt niets besloten), uit het luik gluurt af en "
+      "toe een guh, en op het paneel doe je een taakje. Beloning: niks, njeg.",
+      "guhs:among_noodknop", [fq.item("guhs:among_noodknop"), fq.item("guhs:among_ventilatieluik"), fq.item("guhs:among_taakpaneel")],
+      rewards=(("guhs:kaas_knabbels", 12),), x=6, y=y + 1, xp=100)
