@@ -1,7 +1,57 @@
 {
-  "variants": {
-    "": {
-      "model": "guhs:block/sausslang"
+  "multipart": [
+    {
+      "apply": {
+        "model": "guhs:block/sausslang_knoop"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "guhs:block/sausslang_arm_north"
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "guhs:block/sausslang_arm_south"
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "guhs:block/sausslang_arm_west"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "guhs:block/sausslang_arm_east"
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "guhs:block/sausslang_arm_down"
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "guhs:block/sausslang_arm_up"
+      }
     }
-  }
+  ]
 }

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " R ",
+    "SKS",
+    "IDI"
+  ],
+  "key": {
+    "R": "guhs:blubroom",
+    "S": "guhs:sausslang",
+    "K": "guhs:guhbrouwketel",
+    "I": "minecraft:iron_ingot",
+    "D": "guhs:guh_wire"
+  },
+  "result": {
+    "id": "guhs:brouwautomaat"
+  }
+}

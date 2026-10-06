@@ -1,0 +1,6 @@
+{
+  "parent": "guhs:block/sausvat_vorm_0",
+  "textures": {
+    "voor": "guhs:block/sausvat_voor_slaapt"
+  }
+}

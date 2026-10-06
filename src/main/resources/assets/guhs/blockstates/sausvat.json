@@ -1,7 +1,379 @@
 {
   "variants": {
-    "": {
-      "model": "guhs:block/sausvat"
+    "facing=north,niveau=0,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg"
+    },
+    "facing=north,niveau=1,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg"
+    },
+    "facing=north,niveau=2,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg"
+    },
+    "facing=north,niveau=3,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg"
+    },
+    "facing=north,niveau=4,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg"
+    },
+    "facing=north,niveau=0,saus=kaassaus": {
+      "model": "guhs:block/sausvat_leeg"
+    },
+    "facing=north,niveau=1,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_1"
+    },
+    "facing=north,niveau=2,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_2"
+    },
+    "facing=north,niveau=3,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_3"
+    },
+    "facing=north,niveau=4,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_4"
+    },
+    "facing=north,niveau=0,saus=frituursaus": {
+      "model": "guhs:block/sausvat_leeg"
+    },
+    "facing=north,niveau=1,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_1"
+    },
+    "facing=north,niveau=2,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_2"
+    },
+    "facing=north,niveau=3,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_3"
+    },
+    "facing=north,niveau=4,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_4"
+    },
+    "facing=north,niveau=0,saus=water": {
+      "model": "guhs:block/sausvat_leeg"
+    },
+    "facing=north,niveau=1,saus=water": {
+      "model": "guhs:block/sausvat_water_1"
+    },
+    "facing=north,niveau=2,saus=water": {
+      "model": "guhs:block/sausvat_water_2"
+    },
+    "facing=north,niveau=3,saus=water": {
+      "model": "guhs:block/sausvat_water_3"
+    },
+    "facing=north,niveau=4,saus=water": {
+      "model": "guhs:block/sausvat_water_4"
+    },
+    "facing=north,niveau=0,saus=melk": {
+      "model": "guhs:block/sausvat_leeg"
+    },
+    "facing=north,niveau=1,saus=melk": {
+      "model": "guhs:block/sausvat_melk_1"
+    },
+    "facing=north,niveau=2,saus=melk": {
+      "model": "guhs:block/sausvat_melk_2"
+    },
+    "facing=north,niveau=3,saus=melk": {
+      "model": "guhs:block/sausvat_melk_3"
+    },
+    "facing=north,niveau=4,saus=melk": {
+      "model": "guhs:block/sausvat_melk_4"
+    },
+    "facing=east,niveau=0,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 90
+    },
+    "facing=east,niveau=1,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 90
+    },
+    "facing=east,niveau=2,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 90
+    },
+    "facing=east,niveau=3,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 90
+    },
+    "facing=east,niveau=4,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 90
+    },
+    "facing=east,niveau=0,saus=kaassaus": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 90
+    },
+    "facing=east,niveau=1,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_1",
+      "y": 90
+    },
+    "facing=east,niveau=2,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_2",
+      "y": 90
+    },
+    "facing=east,niveau=3,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_3",
+      "y": 90
+    },
+    "facing=east,niveau=4,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_4",
+      "y": 90
+    },
+    "facing=east,niveau=0,saus=frituursaus": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 90
+    },
+    "facing=east,niveau=1,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_1",
+      "y": 90
+    },
+    "facing=east,niveau=2,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_2",
+      "y": 90
+    },
+    "facing=east,niveau=3,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_3",
+      "y": 90
+    },
+    "facing=east,niveau=4,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_4",
+      "y": 90
+    },
+    "facing=east,niveau=0,saus=water": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 90
+    },
+    "facing=east,niveau=1,saus=water": {
+      "model": "guhs:block/sausvat_water_1",
+      "y": 90
+    },
+    "facing=east,niveau=2,saus=water": {
+      "model": "guhs:block/sausvat_water_2",
+      "y": 90
+    },
+    "facing=east,niveau=3,saus=water": {
+      "model": "guhs:block/sausvat_water_3",
+      "y": 90
+    },
+    "facing=east,niveau=4,saus=water": {
+      "model": "guhs:block/sausvat_water_4",
+      "y": 90
+    },
+    "facing=east,niveau=0,saus=melk": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 90
+    },
+    "facing=east,niveau=1,saus=melk": {
+      "model": "guhs:block/sausvat_melk_1",
+      "y": 90
+    },
+    "facing=east,niveau=2,saus=melk": {
+      "model": "guhs:block/sausvat_melk_2",
+      "y": 90
+    },
+    "facing=east,niveau=3,saus=melk": {
+      "model": "guhs:block/sausvat_melk_3",
+      "y": 90
+    },
+    "facing=east,niveau=4,saus=melk": {
+      "model": "guhs:block/sausvat_melk_4",
+      "y": 90
+    },
+    "facing=south,niveau=0,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 180
+    },
+    "facing=south,niveau=1,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 180
+    },
+    "facing=south,niveau=2,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 180
+    },
+    "facing=south,niveau=3,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 180
+    },
+    "facing=south,niveau=4,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 180
+    },
+    "facing=south,niveau=0,saus=kaassaus": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 180
+    },
+    "facing=south,niveau=1,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_1",
+      "y": 180
+    },
+    "facing=south,niveau=2,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_2",
+      "y": 180
+    },
+    "facing=south,niveau=3,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_3",
+      "y": 180
+    },
+    "facing=south,niveau=4,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_4",
+      "y": 180
+    },
+    "facing=south,niveau=0,saus=frituursaus": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 180
+    },
+    "facing=south,niveau=1,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_1",
+      "y": 180
+    },
+    "facing=south,niveau=2,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_2",
+      "y": 180
+    },
+    "facing=south,niveau=3,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_3",
+      "y": 180
+    },
+    "facing=south,niveau=4,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_4",
+      "y": 180
+    },
+    "facing=south,niveau=0,saus=water": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 180
+    },
+    "facing=south,niveau=1,saus=water": {
+      "model": "guhs:block/sausvat_water_1",
+      "y": 180
+    },
+    "facing=south,niveau=2,saus=water": {
+      "model": "guhs:block/sausvat_water_2",
+      "y": 180
+    },
+    "facing=south,niveau=3,saus=water": {
+      "model": "guhs:block/sausvat_water_3",
+      "y": 180
+    },
+    "facing=south,niveau=4,saus=water": {
+      "model": "guhs:block/sausvat_water_4",
+      "y": 180
+    },
+    "facing=south,niveau=0,saus=melk": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 180
+    },
+    "facing=south,niveau=1,saus=melk": {
+      "model": "guhs:block/sausvat_melk_1",
+      "y": 180
+    },
+    "facing=south,niveau=2,saus=melk": {
+      "model": "guhs:block/sausvat_melk_2",
+      "y": 180
+    },
+    "facing=south,niveau=3,saus=melk": {
+      "model": "guhs:block/sausvat_melk_3",
+      "y": 180
+    },
+    "facing=south,niveau=4,saus=melk": {
+      "model": "guhs:block/sausvat_melk_4",
+      "y": 180
+    },
+    "facing=west,niveau=0,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 270
+    },
+    "facing=west,niveau=1,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 270
+    },
+    "facing=west,niveau=2,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 270
+    },
+    "facing=west,niveau=3,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 270
+    },
+    "facing=west,niveau=4,saus=leeg": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 270
+    },
+    "facing=west,niveau=0,saus=kaassaus": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 270
+    },
+    "facing=west,niveau=1,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_1",
+      "y": 270
+    },
+    "facing=west,niveau=2,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_2",
+      "y": 270
+    },
+    "facing=west,niveau=3,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_3",
+      "y": 270
+    },
+    "facing=west,niveau=4,saus=kaassaus": {
+      "model": "guhs:block/sausvat_kaassaus_4",
+      "y": 270
+    },
+    "facing=west,niveau=0,saus=frituursaus": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 270
+    },
+    "facing=west,niveau=1,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_1",
+      "y": 270
+    },
+    "facing=west,niveau=2,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_2",
+      "y": 270
+    },
+    "facing=west,niveau=3,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_3",
+      "y": 270
+    },
+    "facing=west,niveau=4,saus=frituursaus": {
+      "model": "guhs:block/sausvat_frituursaus_4",
+      "y": 270
+    },
+    "facing=west,niveau=0,saus=water": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 270
+    },
+    "facing=west,niveau=1,saus=water": {
+      "model": "guhs:block/sausvat_water_1",
+      "y": 270
+    },
+    "facing=west,niveau=2,saus=water": {
+      "model": "guhs:block/sausvat_water_2",
+      "y": 270
+    },
+    "facing=west,niveau=3,saus=water": {
+      "model": "guhs:block/sausvat_water_3",
+      "y": 270
+    },
+    "facing=west,niveau=4,saus=water": {
+      "model": "guhs:block/sausvat_water_4",
+      "y": 270
+    },
+    "facing=west,niveau=0,saus=melk": {
+      "model": "guhs:block/sausvat_leeg",
+      "y": 270
+    },
+    "facing=west,niveau=1,saus=melk": {
+      "model": "guhs:block/sausvat_melk_1",
+      "y": 270
+    },
+    "facing=west,niveau=2,saus=melk": {
+      "model": "guhs:block/sausvat_melk_2",
+      "y": 270
+    },
+    "facing=west,niveau=3,saus=melk": {
+      "model": "guhs:block/sausvat_melk_3",
+      "y": 270
+    },
+    "facing=west,niveau=4,saus=melk": {
+      "model": "guhs:block/sausvat_melk_4",
+      "y": 270
     }
   }
 }

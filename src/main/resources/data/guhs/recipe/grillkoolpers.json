@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IPI",
+    "SGS",
+    "HDH"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "P": "minecraft:piston",
+    "S": "guhs:sausslang",
+    "G": "guhs:grillspies",
+    "H": "guhs:houtskoolsteen",
+    "D": "guhs:guh_wire"
+  },
+  "result": {
+    "id": "guhs:grillkoolpers"
+  }
+}
