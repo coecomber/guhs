@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:knabbelbuis_filter"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_buizen_filter.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_buizen_filter.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "knabbelbuis_filter": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:knabbelbuis_filter"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:techniek/tech_buizen_buis"
+}

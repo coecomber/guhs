@@ -1,7 +1,67 @@
 {
   "variants": {
-    "": {
-      "model": "guhs:block/knabbelbuis_filter"
+    "facing=north,snoet=slaapt": {
+      "model": "guhs:block/knabbelbuis_filter_slaapt"
+    },
+    "facing=north,snoet=werkt": {
+      "model": "guhs:block/knabbelbuis_filter_werkt"
+    },
+    "facing=north,snoet=vol": {
+      "model": "guhs:block/knabbelbuis_filter_vol"
+    },
+    "facing=east,snoet=slaapt": {
+      "model": "guhs:block/knabbelbuis_filter_slaapt",
+      "y": 90
+    },
+    "facing=east,snoet=werkt": {
+      "model": "guhs:block/knabbelbuis_filter_werkt",
+      "y": 90
+    },
+    "facing=east,snoet=vol": {
+      "model": "guhs:block/knabbelbuis_filter_vol",
+      "y": 90
+    },
+    "facing=south,snoet=slaapt": {
+      "model": "guhs:block/knabbelbuis_filter_slaapt",
+      "y": 180
+    },
+    "facing=south,snoet=werkt": {
+      "model": "guhs:block/knabbelbuis_filter_werkt",
+      "y": 180
+    },
+    "facing=south,snoet=vol": {
+      "model": "guhs:block/knabbelbuis_filter_vol",
+      "y": 180
+    },
+    "facing=west,snoet=slaapt": {
+      "model": "guhs:block/knabbelbuis_filter_slaapt",
+      "y": 270
+    },
+    "facing=west,snoet=werkt": {
+      "model": "guhs:block/knabbelbuis_filter_werkt",
+      "y": 270
+    },
+    "facing=west,snoet=vol": {
+      "model": "guhs:block/knabbelbuis_filter_vol",
+      "y": 270
+    },
+    "facing=up,snoet=slaapt": {
+      "model": "guhs:block/knabbelbuis_filter_op_slaapt"
+    },
+    "facing=up,snoet=werkt": {
+      "model": "guhs:block/knabbelbuis_filter_op_werkt"
+    },
+    "facing=up,snoet=vol": {
+      "model": "guhs:block/knabbelbuis_filter_op_vol"
+    },
+    "facing=down,snoet=slaapt": {
+      "model": "guhs:block/knabbelbuis_filter_neer_slaapt"
+    },
+    "facing=down,snoet=werkt": {
+      "model": "guhs:block/knabbelbuis_filter_neer_werkt"
+    },
+    "facing=down,snoet=vol": {
+      "model": "guhs:block/knabbelbuis_filter_neer_vol"
     }
   }
 }

@@ -1,7 +1,27 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "guhs:block/knabbelbuis_richting"
+    },
+    "facing=east": {
+      "model": "guhs:block/knabbelbuis_richting",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/knabbelbuis_richting",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/knabbelbuis_richting",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "guhs:block/knabbelbuis_richting",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "guhs:block/knabbelbuis_richting",
+      "x": 90
     }
   }
 }

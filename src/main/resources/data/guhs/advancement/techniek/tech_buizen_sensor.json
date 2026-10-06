@@ -1,0 +1,68 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:snuffelsensor"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_buizen_sensor.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_buizen_sensor.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "voorraadmeter": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:voorraadmeter"
+          }
+        ]
+      }
+    },
+    "snuffelsensor": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:snuffelsensor"
+          }
+        ]
+      }
+    },
+    "guhklok": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:guhklok"
+          }
+        ]
+      }
+    },
+    "guhteller": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:guhteller"
+          }
+        ]
+      }
+    }
+  },
+  "parent": "guhs:techniek/tech_buizen_buis",
+  "requirements": [
+    [
+      "voorraadmeter",
+      "snuffelsensor",
+      "guhklok",
+      "guhteller"
+    ]
+  ]
+}

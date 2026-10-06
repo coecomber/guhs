@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "KZK",
+    "GGG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "K": "guhs:kaas_knabbels",
+    "Z": "guhs:zoutkristal"
+  },
+  "result": {
+    "id": "guhs:knabbelbuis",
+    "count": 8
+  }
+}
