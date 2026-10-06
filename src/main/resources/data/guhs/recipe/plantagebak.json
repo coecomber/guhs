@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "LEL",
+    "XEL",
     "LBL",
     "LDL"
   ],
@@ -10,7 +10,8 @@
     "L": "#minecraft:logs",
     "E": "minecraft:dirt",
     "B": "guhs:blubroom",
-    "D": "guhs:guh_wire"
+    "D": "guhs:guh_wire",
+    "X": "guhs:campingmarkt_recept_plantagebak"
   },
   "result": {
     "id": "guhs:plantagebak"

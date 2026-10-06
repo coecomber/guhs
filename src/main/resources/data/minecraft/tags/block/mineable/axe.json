@@ -108,6 +108,12 @@
     "guhs:tekentafel",
     "guhs:plantagebak",
     "guhs:techmachine_plantagebak_deel",
-    "guhs:sausvat"
+    "guhs:sausvat",
+    "guhs:paleizen_brugplank",
+    "guhs:paleizen_brugleuning",
+    "guhs:campingmarkt_hakblok",
+    "guhs:campingmarkt_kampvuur",
+    "guhs:campingmarkt_kampeerplek",
+    "guhs:torenpeper_kweekbak"
   ]
 }
