@@ -1875,5 +1875,64 @@
       }
     ],
     "subtitle": "subtitles.guhs.bleekwoud.oogbloempje.dicht"
+  },
+  "techbezorg.bel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.techbezorg.bel"
+  },
+  "techbezorg.fluitje": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.flute",
+        "type": "event",
+        "pitch": 1.9
+      }
+    ],
+    "subtitle": "subtitles.guhs.techbezorg.fluitje"
+  },
+  "techbezorg.hop": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.rabbit.jump",
+        "type": "event",
+        "pitch": 1.5
+      },
+      {
+        "name": "minecraft:entity.slime.jump_small",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.techbezorg.hop"
+  },
+  "techbezorg.rits": {
+    "sounds": [
+      {
+        "name": "minecraft:item.bundle.insert",
+        "type": "event",
+        "pitch": 1.3,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.techbezorg.rits"
+  },
+  "techbezorg.guhtje": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.ambient",
+        "type": "event",
+        "pitch": 1.8,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.techbezorg.guhtje"
   }
 }
