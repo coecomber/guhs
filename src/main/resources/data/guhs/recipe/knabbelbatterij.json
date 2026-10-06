@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IZI",
+    "ZKZ",
+    "IRI"
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "Z": "guhs:zoutkristal",
+    "K": "guhs:kaas_knabbels",
+    "R": "minecraft:redstone_block"
+  },
+  "result": {
+    "id": "guhs:knabbelbatterij"
+  }
+}

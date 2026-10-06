@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:gloeisterkern"
+    },
+    "title": {
+      "translate": "advancements.guhs.techniek.tech_bronnen_kern.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.techniek.tech_bronnen_kern.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:techniek/tech_bronnen_blub"
+}
