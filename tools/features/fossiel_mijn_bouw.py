@@ -360,9 +360,8 @@ def opgraving(h):
     for dz, dy in ((1, 1), (1, 2), (2, 1), (2, 2), (2, 3), (3, 1), (3, 2)):   # the closed back (east)
         b.set(tx1, G + dy, tz0 + dz, "white_wool")
     b.set(tx1, G + 2, tz0 + 2, "pink_stained_glass_pane", {"north": "true", "south": "true", "east": "false", "west": "false", "waterlogged": "false"})
-    # (a guh_slaapzak, not a vanilla bed: the Guhbarbecuether has bed_works false, so a click on a bed would explode in the
-    # player's face; the sleeping bag only says that you can't sleep here)
-    b.set(tx1 - 1, G + 1, tz0 + 1, "guhs:guh_slaapzak", {"facing": "east", "occupied": "false"})
+    b.set(tx1 - 1, G + 1, tz0 + 1, "red_bed", {"facing": "east", "part": "head", "occupied": "false"}, {"id": "minecraft:bed"})
+    b.set(tx1 - 2, G + 1, tz0 + 1, "red_bed", {"facing": "east", "part": "foot", "occupied": "false"}, {"id": "minecraft:bed"})
     b.vat(tx1 - 1, G + 1, tz0 + 3, "guhs:chests/fossielmijn_opgraving")
     b.pot(tx1 - 1, G + 2, tz0 + 3, "west")
     b.set(tx1 - 2, G + 1, tz0 + 3, "bookshelf")
@@ -805,7 +804,7 @@ def mijn(h):
 # the geometry self-check
 # =====================================================================================================================
 OP_DE_GROND = (KRISTALLETJES, SMEUL, "minecraft:rail", PUIN, "minecraft:barrel", "minecraft:campfire", ZOUTHOOP, "minecraft:spruce_sign",
-               "minecraft:white_carpet", "minecraft:pink_carpet", REK, "minecraft:cartography_table", "minecraft:lectern", "guhs:guh_slaapzak",
+               "minecraft:white_carpet", "minecraft:pink_carpet", REK, "minecraft:cartography_table", "minecraft:lectern", "minecraft:red_bed",
                "minecraft:grindstone", "minecraft:stonecutter", "minecraft:decorated_pot", "minecraft:flower_pot", "minecraft:powder_snow_cauldron",
                "minecraft:spruce_pressure_plate")
 GEEN_VLOER = (None, AIR, KRISTALLETJES, SMEUL, "minecraft:rail", "minecraft:white_carpet", "minecraft:pink_carpet", "minecraft:spruce_pressure_plate")
