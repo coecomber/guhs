@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "guhs:guh_oven",
+    "guhs:knutselmachine",
+    "guhs:brouwautomaat",
+    "guhs:frituurautomaat",
+    "guhs:vadsmolen",
+    "guhs:grillkoolpers",
+    "guhs:oogster",
+    "guhs:knabbelaar",
+    "guhs:neerzetter",
+    "guhs:opzuiger"
+  ]
+}
