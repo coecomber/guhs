@@ -684,7 +684,7 @@
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/ring_sausuman_stap_1",
+          advancement: "guhs:quest/ring_sausuman_mikarad",
           id: "47554881B31293F9",
           criterion: "",
         },
