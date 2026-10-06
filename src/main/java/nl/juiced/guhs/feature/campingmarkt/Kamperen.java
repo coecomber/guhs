@@ -487,9 +487,13 @@ public final class Kamperen {
      * ({@link #THUIS}); strayed further than {@link #THUIS_TERUG} it is put back there.
      */
     public static void bewonerTick(GuhEntity guh) {
-        if ((guh.tickCount + guh.getId()) % 40 != 0 || kampeerder(guh) < 0) {
-            return;
+        if ((guh.tickCount + guh.getId()) % 40 == 0 && kampeerder(guh) >= 0) {
+            houdThuis(guh);
         }
+    }
+
+    /** What {@link #bewonerTick} does for a resident, every two seconds. */
+    static void houdThuis(GuhEntity guh) {
         CompoundTag data = guh.getPersistentData();
         if (!data.contains(THUIS)) {
             data.putLong(THUIS, guh.blockPosition().asLong());
