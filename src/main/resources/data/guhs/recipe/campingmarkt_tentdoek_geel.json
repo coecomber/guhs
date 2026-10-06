@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WW",
+    "WS"
+  ],
+  "key": {
+    "W": "minecraft:yellow_wool",
+    "S": "minecraft:string"
+  },
+  "result": {
+    "id": "guhs:campingmarkt_tentdoek_geel",
+    "count": 4
+  }
+}

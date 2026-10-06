@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "guhs:block/campingmarkt_tentdoek_geel",
+    "top": "guhs:block/campingmarkt_tentdoek_geel",
+    "side": "guhs:block/campingmarkt_tentdoek_geel"
+  }
+}

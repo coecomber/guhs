@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "XEL",
+    "LBL",
+    "LDL"
+  ],
+  "key": {
+    "X": "guhs:campingmarkt_recept_plantagebak",
+    "L": "#minecraft:logs",
+    "E": "minecraft:dirt",
+    "B": "guhs:blubroom",
+    "D": "guhs:guh_wire"
+  },
+  "result": {
+    "id": "guhs:plantagebak"
+  }
+}

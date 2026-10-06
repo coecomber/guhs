@@ -10,6 +10,11 @@
     "guhs:pluisdak_trap",
     "guhs:nomguh_sneeuwdak_trap",
     "guhs:tiki_rietdak_trap",
-    "guhs:harsstenen_trap"
+    "guhs:harsstenen_trap",
+    "guhs:campingmarkt_tentdoek_rood_trap",
+    "guhs:campingmarkt_tentdoek_geel_trap",
+    "guhs:campingmarkt_tentdoek_groen_trap",
+    "guhs:campingmarkt_tentdoek_blauw_trap",
+    "guhs:campingmarkt_tentdoek_creme_trap"
   ]
 }

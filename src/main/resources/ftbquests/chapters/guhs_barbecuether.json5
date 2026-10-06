@@ -78,6 +78,30 @@
         "Komt na: Rookdelta",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548290F1B459E",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_camping_markt_camping.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755481044EC9EEB",
+      image: "guhs:textures/ftbquests/guhs_barbecuether/kop_camping_markt_markt.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 15.70625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 6,
   progression_mode: "flexible",
@@ -1244,6 +1268,496 @@
       x: 20.5,
       y: 13.525,
       shape: "diamond",
+    },
+    {
+      id: "47554884D886C06F",
+      icon: {
+        id: "guhs:campingmarkt_tentdoek_groen_trap",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:grillcamping",
+          id: "475548121BCA056C",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E5CE021548",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "47554880C4AD48F9",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "475548531B556A4C",
+      icon: {
+        id: "guhs:campingmarkt_tentzak",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/camping_stap_1",
+          id: "4755483575D34622",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554819643C4FA9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 17.4875,
+    },
+    {
+      id: "4755487D9A03545D",
+      icon: {
+        id: "guhs:campingmarkt_haring",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/camping_stap_2",
+          id: "475548D5F8E4A05B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E20977FEBA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755483754CC0EEB",
+      icon: {
+        id: "guhs:campingmarkt_hakblok",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/camping_stap_3",
+          id: "475548836D494169",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DEBA74211A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548744A9DAC98",
+      icon: {
+        id: "guhs:campingmarkt_kampvuur",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/camping_stap_4",
+          id: "475548D05EADE31F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485AC3E98D5F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554871269AD3BD",
+      icon: {
+        id: "guhs:campingmarkt_roosterstok",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/camping_stap_5",
+          id: "47554886366DF847",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554867B536E050",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:marshmallow_knabbel",
+          },
+          count: 8,
+        },
+        {
+          id: "4755488C76E3B095",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 7.5,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "475548830DB65386",
+      icon: {
+        id: "guhs:guh_slaapzak",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/camping_markt_kampeerder",
+          id: "475548F0FFB34487",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554852804AF3AE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 9.0,
+      y: 17.4875,
+      shape: "circle",
+    },
+    {
+      id: "475548EBFD90C5FB",
+      icon: {
+        id: "guhs:marshmallow_knabbel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/camping_markt_goudbruin",
+          id: "475548B39AE9730E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FAC3216FF6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:marshmallow_knabbel",
+          },
+          count: 4,
+        },
+      ],
+      x: 9.0,
+      y: 18.9875,
+      shape: "diamond",
+    },
+    {
+      id: "47554886E3C2B859",
+      icon: {
+        id: "guhs:campingmarkt_tentdoek_geel_trap",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:campingmarkt_tentdoek_geel_trap",
+          },
+          count: 8,
+          id: "475548B474EAD6C2",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554880EB6075CC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 18.9875,
+      shape: "rsquare",
+    },
+    {
+      id: "47554829C3FC0A32",
+      icon: {
+        id: "guhs:campingmarkt_tentdoek_rood",
+      },
+      tasks: [
+        {
+          type: "structure",
+          structure: "guhs:mika_ruilmarkt",
+          id: "475548F67D5F2A15",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488C2937B385",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "475548F6FC1BD93B",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 17.4875,
+      shape: "hexagon",
+    },
+    {
+      id: "475548FED4908288",
+      icon: {
+        id: "guhs:vahoege_vads_ingot",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ruilmarkt_stap_1",
+          id: "475548D4876A0C65",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E5FDF28420",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 17.4875,
+    },
+    {
+      id: "4755485F8DEDBBCC",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ruilmarkt_stap_2",
+          id: "4755480F8A0D7A0C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C99E00F370",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 17.4875,
+    },
+    {
+      id: "4755489C183EC7F4",
+      icon: {
+        id: "guhs:campingmarkt_keurstempel",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ruilmarkt_stap_3",
+          id: "475548CDEFEC392C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A4DD1FE8B8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554892433E2AF3",
+      icon: {
+        id: "guhs:campingmarkt_weegschaal",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/ruilmarkt_stap_4",
+          id: "475548FF293AAFE2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483B30178E44",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548329131B2DA",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 17.4875,
+      shape: "gear",
+    },
+    {
+      id: "4755486E4AF37D45",
+      icon: {
+        id: "guhs:vahoege_vads_ingot",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/camping_markt_kraam",
+          id: "475548EF4B074BA1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554819C91C4D32",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 17.4875,
+      shape: "circle",
+    },
+    {
+      id: "47554860AF9FEAAE",
+      icon: {
+        id: "minecraft:bundle",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/camping_markt_extraatje",
+          id: "4755489E4926BCFC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554872DBB03412",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 17.4875,
+      shape: "diamond",
+    },
+    {
+      id: "47554811611D6829",
+      icon: {
+        id: "guhs:campingmarkt_tentdoek_creme",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/camping_markt_koopje",
+          id: "4755488666418C81",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548711E99D043",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 18.9875,
+      shape: "rsquare",
     },
   ],
 }

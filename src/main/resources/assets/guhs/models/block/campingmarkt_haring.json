@@ -1,0 +1,232 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/campingmarkt_haring",
+    "ijzer": "guhs:block/campingmarkt_haring",
+    "touw": "guhs:block/campingmarkt_tentdoek_creme"
+  },
+  "elements": [
+    {
+      "from": [
+        7.25,
+        0,
+        7.25
+      ],
+      "to": [
+        8.75,
+        8,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.25,
+            8.0,
+            8.75,
+            16.0
+          ],
+          "texture": "#ijzer"
+        },
+        "south": {
+          "uv": [
+            7.25,
+            8.0,
+            8.75,
+            16.0
+          ],
+          "texture": "#ijzer"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            8.0,
+            8.75,
+            16.0
+          ],
+          "texture": "#ijzer"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            8.0,
+            8.75,
+            16.0
+          ],
+          "texture": "#ijzer"
+        },
+        "up": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#ijzer"
+        },
+        "down": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#ijzer"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        6.25,
+        8,
+        6.75
+      ],
+      "to": [
+        9.75,
+        9,
+        9.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.25,
+            7,
+            9.75,
+            8
+          ],
+          "texture": "#ijzer"
+        },
+        "south": {
+          "uv": [
+            6.25,
+            7,
+            9.75,
+            8
+          ],
+          "texture": "#ijzer"
+        },
+        "west": {
+          "uv": [
+            6.75,
+            7,
+            9.25,
+            8
+          ],
+          "texture": "#ijzer"
+        },
+        "east": {
+          "uv": [
+            6.75,
+            7,
+            9.25,
+            8
+          ],
+          "texture": "#ijzer"
+        },
+        "up": {
+          "uv": [
+            6.25,
+            6.75,
+            9.75,
+            9.25
+          ],
+          "texture": "#ijzer"
+        },
+        "down": {
+          "uv": [
+            6.25,
+            6.75,
+            9.75,
+            9.25
+          ],
+          "texture": "#ijzer"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          0,
+          8
+        ],
+        "axis": "z",
+        "angle": 22.5
+      }
+    },
+    {
+      "from": [
+        7.6,
+        5.5,
+        7.6
+      ],
+      "to": [
+        8.4,
+        6.3,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.6,
+            9.7,
+            8.4,
+            10.5
+          ],
+          "texture": "#touw"
+        },
+        "south": {
+          "uv": [
+            7.6,
+            9.7,
+            8.4,
+            10.5
+          ],
+          "texture": "#touw"
+        },
+        "west": {
+          "uv": [
+            7.6,
+            9.7,
+            12.0,
+            10.5
+          ],
+          "texture": "#touw"
+        },
+        "east": {
+          "uv": [
+            7.6,
+            9.7,
+            12.0,
+            10.5
+          ],
+          "texture": "#touw"
+        },
+        "up": {
+          "uv": [
+            7.6,
+            4,
+            8.4,
+            8.4
+          ],
+          "texture": "#touw"
+        },
+        "down": {
+          "uv": [
+            7.6,
+            4,
+            8.4,
+            8.4
+          ],
+          "texture": "#touw"
+        }
+      }
+    }
+  ]
+}

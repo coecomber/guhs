@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DDD"
+  ],
+  "key": {
+    "D": "guhs:campingmarkt_tentdoek_rood"
+  },
+  "result": {
+    "id": "guhs:campingmarkt_tentdoek_rood_plaat",
+    "count": 6
+  }
+}

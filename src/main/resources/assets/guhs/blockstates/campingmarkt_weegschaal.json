@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,stand=midden": {
+      "model": "guhs:block/campingmarkt_weegschaal"
+    },
+    "facing=north,stand=links": {
+      "model": "guhs:block/campingmarkt_weegschaal_links"
+    },
+    "facing=north,stand=rechts": {
+      "model": "guhs:block/campingmarkt_weegschaal_rechts"
+    },
+    "facing=east,stand=midden": {
+      "model": "guhs:block/campingmarkt_weegschaal",
+      "y": 90
+    },
+    "facing=east,stand=links": {
+      "model": "guhs:block/campingmarkt_weegschaal_links",
+      "y": 90
+    },
+    "facing=east,stand=rechts": {
+      "model": "guhs:block/campingmarkt_weegschaal_rechts",
+      "y": 90
+    },
+    "facing=south,stand=midden": {
+      "model": "guhs:block/campingmarkt_weegschaal",
+      "y": 180
+    },
+    "facing=south,stand=links": {
+      "model": "guhs:block/campingmarkt_weegschaal_links",
+      "y": 180
+    },
+    "facing=south,stand=rechts": {
+      "model": "guhs:block/campingmarkt_weegschaal_rechts",
+      "y": 180
+    },
+    "facing=west,stand=midden": {
+      "model": "guhs:block/campingmarkt_weegschaal",
+      "y": 270
+    },
+    "facing=west,stand=links": {
+      "model": "guhs:block/campingmarkt_weegschaal_links",
+      "y": 270
+    },
+    "facing=west,stand=rechts": {
+      "model": "guhs:block/campingmarkt_weegschaal_rechts",
+      "y": 270
+    }
+  }
+}

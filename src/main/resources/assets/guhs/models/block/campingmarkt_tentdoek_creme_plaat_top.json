@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "guhs:block/campingmarkt_tentdoek_creme",
+    "top": "guhs:block/campingmarkt_tentdoek_creme",
+    "side": "guhs:block/campingmarkt_tentdoek_creme"
+  }
+}

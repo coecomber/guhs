@@ -151,4 +151,72 @@
   "quest.475548D585541FDC.quest_desc": [
     "Drink een Guhdrankje. Probeer de Sluipknabbel eens: dan hoort niemand je meer.",
   ],
+  "quest.47554884D886C06F.title": "Tentjes in de as",
+  "quest.47554884D886C06F.quest_desc": [
+    "Ergens in de Guhbarbecuether staat een heel dorp van tentjes rond een groot kampvuur: de &6Grillcamping&r. Het superkompas (Barbecue > Grillcamping) wijst de weg.",
+  ],
+  "quest.475548531B556A4C.title": "Welkom op de camping",
+  "quest.475548531B556A4C.quest_desc": [
+    "Praat met de &dKampbaas-guh&r in de receptie (het huisje met het puntdak). Je krijgt een &6tentzak&r van hem.",
+  ],
+  "quest.4755487D9A03545D.title": "Plof, een tent!",
+  "quest.4755487D9A03545D.quest_desc": [
+    "Klik met de tentzak op een bordje &6VRIJ&r (op het gele gras bij de poort) en sla daarna de vier &6haringen&r van je tent vast: klik op de ijzeren pennen. Staat er overal al een tent? Die gaan na een paar minuten vanzelf weer de zak in.",
+  ],
+  "quest.4755483754CC0EEB.title": "Tjak! Tjak!",
+  "quest.4755483754CC0EEB.quest_desc": [
+    "Vraag de &dHouthakker-guh&r bij de houtschuur om brandhout en klik zes keer op een &6hakblok&r. Je krijgt een bos brandhout.",
+  ],
+  "quest.475548744A9DAC98.title": "Het kampvuurfeest",
+  "quest.475548744A9DAC98.quest_desc": [
+    "Gooi de bos brandhout op het &6grote kampvuur&r midden op de camping. De kampeerguhs komen erbij zitten en gaan dansen!",
+  ],
+  "quest.47554871269AD3BD.title": "Goudbruin!",
+  "quest.47554871269AD3BD.quest_desc": [
+    "Haal de &6Roosterstok&r bij de Kampbaas-guh. Houd rechtsklik ingedrukt op het brandende kampvuur en laat los als de marshmallow &6goudbruin&r is (te vroeg is koud, te laat is zwart: dan probeer je het gewoon opnieuw). Drie goudbruine, en vertel het hem: je krijgt het &dkampeerpakje&r en de &6receptkaart van de Plantagebak&r.",
+  ],
+  "quest.475548830DB65386.title": "Kennismaken met de buren",
+  "quest.475548830DB65386.quest_desc": [
+    "Op de camping wonen vijf kampeerguhs. Klik er eentje aan voor een praatje. (Ze horen bij de camping: temmen kan niet.)",
+  ],
+  "quest.475548EBFD90C5FB.title": "Marshmallows voor altijd",
+  "quest.475548EBFD90C5FB.quest_desc": [
+    "De Roosterstok werkt boven &6elk&r brandend kampvuur, ook thuis en ook overdag. Rooster er een goudbruin! (Je hebt marshmallowknabbels nodig: stokje + suiker + kaasknabbel.)",
+  ],
+  "quest.47554886E3C2B859.title": "Een tent voor thuis",
+  "quest.47554886E3C2B859.quest_desc": [
+    "Van &6tentdoek&r (wol + draad) bouw je je eigen tent: de schuine stukken zijn het dak. Maak acht schuine stukken in een kleur naar keuze.",
+  ],
+  "quest.47554829C3FC0A32.title": "Kraampjes in het donker",
+  "quest.47554829C3FC0A32.quest_desc": [
+    "Gestreepte kraampjes rond een grote tent met een weegschaal: de &6Nether-Mika-ruilmarkt&r. Het superkompas (Barbecue > Nether-Mika-ruilmarkt) wijst de weg.",
+  ],
+  "quest.475548FED4908288.title": "De Marktmeester",
+  "quest.475548FED4908288.quest_desc": [
+    "Praat met de &dMarktmeester-Mika&r op zijn spreekgestoelte voor de Waag.",
+  ],
+  "quest.4755485F8DEDBBCC.title": "Leer afdingen",
+  "quest.4755485F8DEDBBCC.quest_desc": [
+    "Praat nog eens met hem en ding af van 30 naar 10 knabbels. Lees goed wat hij zegt: &6schept hij op&r, geef dan een compliment; &6zucht hij&r, bied dan laag; &6gromt hij&r over zijn laatste bod, doe dan alsof je wegloopt. Drie keer fout en hij stuurt je weg (dan begin je gewoon opnieuw).",
+  ],
+  "quest.4755489C183EC7F4.title": "De nepvads",
+  "quest.4755489C183EC7F4.quest_desc": [
+    "In de Waag liggen vijf stapels vads. Eén is &6nep&r en nepvads is lichter. Klik op twee stapels om ze te wegen; klik daarna met de &6Keurstempel&r op de neppe. (Welke nep is, is voor iedereen anders. Fout gestempeld? Dan wisselt de oplichter ze om.)",
+  ],
+  "quest.47554892433E2AF3.title": "Ontmaskerd!",
+  "quest.47554892433E2AF3.quest_desc": [
+    "Vertel het de Marktmeester-Mika. Je krijgt de &6weegschaal&r en voortaan een extraatje bij elke ruil met een Nether-Mika.",
+  ],
+  "quest.4755486E4AF37D45.title": "Vads erin, verrassing eruit",
+  "quest.4755486E4AF37D45.quest_desc": [
+    "De &dkraam-Mika's&r van de markt ruilen meteen: geef er een een staaf &6vahoege vads&r en je krijgt je verrassing. Geen gesnuffel, en ze doen je niks.",
+  ],
+  "quest.47554860AF9FEAAE.title": "Een extraatje, mjauw",
+  "quest.47554860AF9FEAAE.quest_desc": [
+    "Ruil na de questlijn met een Nether-Mika (op de markt of in het wild, door de staaf in zijn poot te geven): je krijgt er een tweede cadeautje bij.",
+  ],
+  "quest.47554811611D6829.title": "Het koopje van de dag",
+  "quest.47554811611D6829.quest_desc": [
+    "Elke dag kun je bij de Marktmeester-Mika opnieuw afdingen. Win je, dan krijg je het koopje van de dag.",
+  ],
 }
