@@ -27,7 +27,7 @@ public final class PaleisPlekken {
     public static final class Brug {
         // <mika_brugpaleis>
         public static final BlockPos TOLWACHTER_MIKA = new BlockPos(35, 29, 13);
-        public static final BlockPos ANKER = new BlockPos(48, 28, 15);
+        public static final BlockPos ANKER = new BlockPos(55, 28, 16);
         /** The passage through the tolhuis: whoever has not paid is shoved back out of it. */
         public static final BoundingBox TOLPOORT = new BoundingBox(38, 29, 13, 46, 34, 17);
         /** Where the Tolwachter shoves you to: the deck in front of the mouth. */
@@ -56,7 +56,7 @@ public final class PaleisPlekken {
         public static final BlockPos MOPPER_3 = new BlockPos(17, 18, 33);
         public static final BlockPos MOPPER_4 = new BlockPos(33, 13, 36);
         public static final BlockPos MOPPER_5 = new BlockPos(10, 33, 34);
-        public static final BlockPos ANKER = new BlockPos(31, 12, 31);
+        public static final BlockPos ANKER = new BlockPos(24, 12, 23);
         // </mika_woonblokken>
         /** The six neighbours by number (0, 1, 2: the grumpy three of the questline) and how they look in the template. */
         public static final BlockPos[] MOPPERS = {MOPPER_0, MOPPER_1, MOPPER_2, MOPPER_3, MOPPER_4, MOPPER_5};
@@ -69,17 +69,17 @@ public final class PaleisPlekken {
     /** De Mika-stal. */
     public static final class Stal {
         // <mika_stal>
-        public static final BlockPos SCHUIL_1 = new BlockPos(9, 9, 16);
-        public static final BlockPos ZWIJNTJE_0 = new BlockPos(8, 4, 7);
-        public static final BlockPos ZWIJNTJE_1 = new BlockPos(13, 4, 7);
-        public static final BlockPos ZWIJNTJE_2 = new BlockPos(18, 4, 7);
-        public static final BlockPos ZWIJNTJE_3 = new BlockPos(8, 4, 17);
-        public static final BlockPos VOERBAK = new BlockPos(7, 4, 12);
-        public static final BlockPos STALKNECHTGUH = new BlockPos(32, 4, 12);
-        public static final BlockPos SCHUIL_0 = new BlockPos(35, 4, 34);
-        public static final BlockPos SCHUIL_2 = new BlockPos(25, 4, 33);
-        public static final BlockPos ZWIJNTJE_4 = new BlockPos(15, 4, 28);
-        public static final BlockPos ONTSNAPT = new BlockPos(22, 4, 31);
+        public static final BlockPos SCHUIL_1 = new BlockPos(9, 12, 16);
+        public static final BlockPos ZWIJNTJE_0 = new BlockPos(8, 7, 7);
+        public static final BlockPos ZWIJNTJE_1 = new BlockPos(13, 7, 7);
+        public static final BlockPos ZWIJNTJE_2 = new BlockPos(18, 7, 7);
+        public static final BlockPos ZWIJNTJE_3 = new BlockPos(8, 7, 17);
+        public static final BlockPos VOERBAK = new BlockPos(7, 7, 12);
+        public static final BlockPos STALKNECHTGUH = new BlockPos(32, 7, 12);
+        public static final BlockPos SCHUIL_0 = new BlockPos(35, 7, 34);
+        public static final BlockPos SCHUIL_2 = new BlockPos(25, 7, 33);
+        public static final BlockPos ZWIJNTJE_4 = new BlockPos(15, 7, 28);
+        public static final BlockPos ONTSNAPT = new BlockPos(22, 7, 31);
         // </mika_stal>
         /** The stable's own Worstzwijntjes by number (4 = the piglet in the paddock) and how they look in the template. */
         public static final BlockPos[] ZWIJNTJES = {ZWIJNTJE_0, ZWIJNTJE_1, ZWIJNTJE_2, ZWIJNTJE_3, ZWIJNTJE_4};

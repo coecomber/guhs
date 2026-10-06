@@ -85,7 +85,7 @@ public final class PaleisProef {
         BlockPos ingang = switch (structuur) {
             case PaleisPlekken.BRUGPALEIS -> new BlockPos(2, 26, 15);        // (the foot of the west stair)
             case PaleisPlekken.WOONBLOKKEN -> new BlockPos(31, 13, 53);      // (the landing outside the gate)
-            default -> new BlockPos(40, 4, 12);                              // (the yard in front of the barn door)
+            default -> new BlockPos(40, 7, 12);                              // (the yard in front of the barn door)
         };
         return bouw(level, structuur, ingang, bij, blokken);
     }

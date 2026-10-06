@@ -408,8 +408,8 @@ public class PaleizenGameTests {
         ServerLevel level = helper.getLevel();
         ServerPlayer a = speler(helper, new BlockPos(20, 2, 16)), b = speler(helper, new BlockPos(22, 2, 16));
         try {
-            // (template 5, 4, 5 is the room's corner at standing height: every spot of the questline lies in the room)
-            StructureStart start = PaleisProef.bouw(level, PaleisPlekken.STAL, new BlockPos(5, 4, 5), helper.absolutePos(new BlockPos(0, 2, 0)), false);
+            // (template 5, 7, 5 is the room's corner at standing height: every spot of the questline lies in the room)
+            StructureStart start = PaleisProef.bouw(level, PaleisPlekken.STAL, new BlockPos(5, 7, 5), helper.absolutePos(new BlockPos(0, 2, 0)), false);
             BlockPos midden = helper.absolutePos(new BlockPos(16, 2, 16));
             BlockPos bak = PaleisPlekken.wereld(start, PaleisPlekken.Stal.VOERBAK);
             helper.assertTrue(helper.absolutePos(new BlockPos(2, 2, 7)).equals(bak) && PaleisPlekken.kopie(level, PaleisPlekken.STAL, midden) == start, "template -> world: " + bak);

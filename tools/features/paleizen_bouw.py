@@ -261,12 +261,99 @@ def check(b, start, extra=()):
 
 
 # =====================================================================================================================
+# room round a build, and the seams of a guhs:burcht (both found on a dev server: /guhs bouwcheck ... compleet)
+# =====================================================================================================================
+def hoogste(b, vanaf):
+    """{(x, z): the highest y >= vanaf with a block of the build that is not air}."""
+    hoog = {}
+    for (x, y, z), v in b.s.blocks.items():
+        if y >= vanaf and v[0] != AIR and y > hoog.get((x, z), -1):
+            hoog[(x, z)] = y
+    return hoog
+
+
+def lucht(b, bereik_):
+    """Carves the cave round a build: every cell the build left alone becomes air, per column from y0 up to y1 =
+    bereik_(x, z) (None: not in this column). The Barbecuether is one big cave and the placement of a palace only looks at a
+    few columns: where a copy lands half in the rock, its roofs, galleries and face would be buried, and since the building
+    is protected nobody could dig their way to them (the first real copy of the flats had its roof garden full of rock)."""
+    sx, sy, sz = b.s.size
+    for x in range(sx):
+        for z in range(sz):
+            r = bereik_(x, z)
+            if r is None:
+                continue
+            for y in range(max(0, r[0]), min(sy - 1, r[1]) + 1):
+                if b.get(x, y, z) is None:
+                    b.set(x, y, z, AIR)
+
+
+def rondom(hoog, x, z, r=2):
+    """The highest block of the build within r columns of (x, z), or None."""
+    best = None
+    for dx in range(-r, r + 1):
+        for dz in range(-r, r + 1):
+            y = hoog.get((x + dx, z + dz))
+            if y is not None and (best is None or y > best):
+                best = y
+    return best
+
+
+RICHTING = {"north": (0, -1), "south": (0, 1), "east": (1, 0), "west": (-1, 0)}
+# shapes that carry nothing that hangs on their side
+GEEN_STEUN = ("_stairs", "_slab", "_fence", "_fence_gate", "_wall", "_pane", "_door", "_trapdoor", "_bed", "_carpet", "_sign", "_banner",
+              "lantern", "campfire", "chain", "ladder", "bell", "cauldron", "composter", "_trap", "_plaat", "_muur", "_hek", "_tralies",
+              "_brugleuning", "_breiwerk", "_voerbak", "_mikakop")
+
+
+def steunt(name):
+    """Can a ladder or a wall sign hang on the side of this block?"""
+    return vast(name) and name != AIR and not name.endswith(GEEN_STEUN)
+
+
+def naadparen(a, n, tegel):
+    """The c along one axis for which the blocks c and c + 1 can lie on two sides of a seam of a guhs:burcht. A burcht is
+    placed tile by tile and chunk by chunk, and after each bit the game lets the blocks of that bit look at their neighbours:
+    a ladder whose wall, or half a bed whose other half, is in a bit that comes later breaks off. The seams are the tile
+    edges and the chunk edges; the anchor `a` stands on block 8 of its chunk, and a turned copy moves the chunk edges one up."""
+    return {c for c in range(-1, n) if (c + 1) % tegel == 0 or (c - a) % 16 in (7, 8)}
+
+
+def check_steun(b, anker=None, tegel=sb.TILE):
+    """Everything that hangs on the block beside it (ladders, wall signs, wall banners) or is two blocks long (beds) has that
+    neighbour, and, for a burcht (anker given), not across a seam."""
+    naam = b.naam
+    nx = naadparen(anker[0], b.s.size[0], tegel) if anker else set()
+    nz = naadparen(anker[2], b.s.size[2], tegel) if anker else set()
+    problems = []
+    for (x, y, z), (name, props, _nbt) in b.s.blocks.items():
+        if name == mc("ladder") or name.endswith(("_wall_sign", "_wall_banner", "wall_torch")):
+            dx, dz = RICHTING[props["facing"]]
+            buur = (x - dx, y, z - dz)
+            if not steunt(b.get(*buur)):
+                problems.append(f"{naam}: {name} at {(x, y, z)} hangs on {b.get(*buur)}")
+        elif name.endswith("_bed"):
+            dx, dz = RICHTING[props["facing"]]
+            s_ = 1 if props["part"] == "foot" else -1
+            buur = (x + s_ * dx, y, z + s_ * dz)
+            if b.get(*buur) != name:
+                problems.append(f"{naam}: half a bed at {(x, y, z)}")
+        else:
+            continue
+        if (buur[0] != x and min(x, buur[0]) in nx) or (buur[2] != z and min(z, buur[2]) in nz):
+            problems.append(f"{naam}: {name} at {(x, y, z)} and its neighbour {buur} lie on two sides of a seam")
+    return problems
+
+
+# =====================================================================================================================
 # Het Mika-brugpaleis
 # =====================================================================================================================
 BR = (96, 60, 31)
 BR_CZ = 15
 BR_Y = 28                      # the deck (template y); the piers go down to y 0
-BR_ANKER = (48, BR_Y, BR_CZ)
+# the anchor (it stands on block 8 of its chunk): chosen with scratch/paleizen/anker.py so that no ladder, wall sign or bed lies
+# on a seam (check_steun) and as few fence and bar arms as possible reach across one
+BR_ANKER = (55, BR_Y, BR_CZ + 1)
 POORT = (34, 48)               # the tolhuis (x from .. to)
 GAT = (58, 62)                 # the five missing rows of planks (x from .. to), each BR_CZ - 2 .. BR_CZ + 2
 TOREN = (76, 88)               # the bell tower
@@ -282,6 +369,7 @@ def brugpaleis(h):
     br_gat(b)
     br_klokkentoren(b)
     br_aankleding(b)
+    br_lucht(b)
     b.connect()
     Y, cz = BR_Y, BR_CZ
     b.plek.update({"anker": BR_ANKER, "tolpoort": (38, Y + 1, cz - 2, 46, Y + 6, cz + 2), "tolpoort_buiten": (30, Y + 1, cz),
@@ -506,7 +594,7 @@ def br_tolhuis(b):
     b.set(38, Y + 1, cz - 5, "minecraft:crimson_stairs", {"facing": "south", "half": "bottom", "shape": "straight", "waterlogged": "false"})
     b.hang_lantern(41, Y + 7, cz - 6, 1)
     b.sign(42, Y + 3, cz - 4, "north", ["paleizen.brug.kantoor1", "paleizen.brug.kantoor2", "paleizen.brug.kantoor3"])
-    b.ladder(46, Y + 1, floors[1] + 1, cz - 8, "west")
+    b.ladder(46, Y + 1, floors[1] + 1, cz - 8, "south")              # (on the north wall)
     # the waiting room: a bench, a carpet, a price list
     for x in (36, 37, 38, 39):
         b.set(x, Y + 1, cz + 8, "minecraft:crimson_stairs", {"facing": "north", "half": "bottom", "shape": "straight", "waterlogged": "false"})
@@ -753,10 +841,34 @@ def br_aankleding(b):
     b.sign(89, Y + 1, cz - 2, "east", ["paleizen.brug.welkom1", "paleizen.brug.welkom2", "paleizen.brug.welkom3"], wall=False)
 
 
+def br_lucht(b):
+    """Room round the bridge when it runs through rock: a vaulted tunnel over the deck, a dome over the tolhuis (so the Mika
+    face can be seen from the deck in front of it) and one over the bell tower, and never less than three blocks of air over
+    and two beside anything of the build above the deck."""
+    Y, cz = BR_Y, BR_CZ
+    hoog = hoogste(b, Y + 1)
+    koepels = ((41, 19.0, 17.0, 31), (82, 15.0, 15.0, 31))            # x of the middle, radius along x and z, height
+
+    def bereik_(x, z):
+        dz = abs(z - cz)
+        top = Y + (10, 10, 10, 10, 9, 7, 5)[dz] if dz <= 6 else None
+        onder = Y + 1
+        for (xm, rx, rz, h) in koepels:
+            q = ((x - xm) / rx) ** 2 + ((z - cz) / rz) ** 2
+            if q < 1.0:
+                top = max(top or 0, Y + int(h * math.sqrt(1.0 - q)))
+                onder = Y - 4                                         # (the corbels and brackets under the eaves too)
+        near = rondom(hoog, x, z)
+        if near is not None:
+            top = max(top or 0, near + 3)
+        return None if top is None else (onder, top)
+    lucht(b, bereik_)
+
+
 def check_brugpaleis(b):
     Y, cz = BR_Y, BR_CZ
     heel = [(x, Y + 1, z) for x in range(GAT[0], GAT[1] + 1) for z in range(cz - 2, cz + 3)]
-    problems = check(b, (2, Y - 2, cz), extra=heel)
+    problems = check(b, (2, Y - 2, cz), extra=heel) + check_steun(b, BR_ANKER)
     # without the planks nobody walks from the tolhuis to the bell (the gap is the quest), but from the gap you land on the
     # scaffold and climb back to the west side
     seen, _ = bereik(b, (2, Y - 2, cz))
@@ -781,8 +893,8 @@ def check_brugpaleis(b):
 # =====================================================================================================================
 # De Mika-stal
 # =====================================================================================================================
-ST = (45, 24, 41)
-ST_G = 3                       # the ground layer (template y): the top block of the cave floor
+ST = (45, 27, 41)
+ST_G = 6                       # the ground layer (template y): the top block of the cave floor; under it a foot of rock
 ST_MIDDEN = (22, ST_G, 20)     # the centre jigsaw
 STAL_MIDDEN = "guhs:mika_stal_midden"
 SCHUUR = (6, 28, 5, 19)        # the barn: x0, x1, z0, z1 (its walls)
@@ -812,7 +924,9 @@ def stal(h):
 
 
 def st_grond(b):
-    """The trampled ground: an oval of ash earth and houtskoolsteen, frayed at the edge, two layers under it, air above."""
+    """The trampled ground: an oval of ash earth and houtskoolsteen, frayed at the edge, air above. Under it a foot of rock
+    that narrows downwards: where the cave floor falls away under the edge the stable stands on a knoll, not on a floating
+    plate (on the first real copies a fifth of the bottom layer hung over a dip)."""
     G = ST_G
     cx, cz = 22, 20
     for x in range(ST[0]):
@@ -822,10 +936,25 @@ def st_grond(b):
                 continue
             b.set(x, G, z, b.rng.choice([AS_AARDE] * 5 + [HOUTSKOOL] * 3 + [AS] + [GEBARSTEN]))
             for y in range(0, G):
-                b.set(x, y, z, HOUTSKOOL if (x + z + y) % 3 else AS_AARDE)
+                diep = G - 1 - y                                      # 0 = right under the ground layer
+                if diep < 2:
+                    b.set(x, y, z, HOUTSKOOL if (x + z + y) % 3 else AS_AARDE)
+                elif d < 1.0 - (diep - 1) * 0.09 + ((x * 31 + z * 17 + y * 7) % 7 - 3) * 0.012:
+                    b.set(x, y, z, HOUTSKOOL)
             top = ST[1] if d < 0.9 else G + 4 + int((1.0 - d) * 60)
             for y in range(G + 1, min(ST[1], top)):
                 b.set(x, y, z, AIR)
+    # the frayed edge leaves a loose column here and there: it would hang in the air where the ground falls away
+    vast_ = {(cx, cz)}
+    todo = [(cx, cz)]
+    while todo:
+        x, z = todo.pop()
+        for n in ((x + 1, z), (x - 1, z), (x, z + 1), (x, z - 1)):
+            if n not in vast_ and b.get(n[0], G, n[1]) is not None:
+                vast_.add(n)
+                todo.append(n)
+    for (x, y, z) in [c for c in b.s.blocks if (c[0], c[2]) not in vast_]:
+        del b.s.blocks[(x, y, z)]
 
 
 def st_dak_y(z):
@@ -1088,7 +1217,7 @@ def st_wei(b):
 
 def check_stal(b):
     G = ST_G
-    problems = check(b, (38, G + 1, 12))
+    problems = check(b, (38, G + 1, 12)) + check_steun(b)
     jig = [c for c, v in b.s.blocks.items() if v[0] == "minecraft:jigsaw"]
     if jig != [ST_MIDDEN]:
         problems.append(f"mika_stal: the centre jigsaw is at {jig}")
@@ -1105,7 +1234,7 @@ def check_stal(b):
 WB = (63, 60, 63)
 WB_C = 31
 WB_G = 12                      # the ground floor (template y); the base goes down to y 0, into the sauce
-WB_ANKER = (WB_C, WB_G, WB_C)
+WB_ANKER = (WB_C - 7, WB_G, WB_C - 8)   # (not the middle: see BR_ANKER; here it keeps every bed whole)
 V = 5                          # a storey: a floor and four blocks of room
 BUITEN = 28                    # how far the base reaches from the middle
 NETHER = "minecraft:nether_bricks"
@@ -1138,6 +1267,7 @@ def woonblokken(h):
     wb_daken(b)
     wb_poort_en_plein(b)
     wb_bewoners(b)
+    wb_lucht(b)
     b.connect()
     c, G = WB_C, WB_G
     b.plek["anker"] = WB_ANKER
@@ -1420,7 +1550,7 @@ def wb_flat(b, deel, u0, u1, du, k, soort):
         for (u, w) in ((2, 0), (U - 1, 0)):
             if u != ud:
                 zet(u, w, 1, "potted_crimson_fungus")
-        x, z = P(2, 8)
+        x, z = P(4, 8)                                                # (on the wall beside the window, over the wool)
         b.sign(x, F + 2, z, binnen, ["paleizen.woon.mand1", "paleizen.woon.mand2", "paleizen.woon.mand3"])
     return P, (ud, U, uit, links)
 
@@ -1707,7 +1837,7 @@ def wb_bewoners(b):
     b.set(c - 2, T + 1, c - 14, HOUT_TRAP, {"facing": "south", "half": "bottom", "shape": "straight", "waterlogged": "false"})   # her rocking chair
     b.set(c - 4, T + 1, c - 14, "potted_crimson_fungus")
     b.set(c - 1, T + 1, c - 14, "pink_wool")
-    b.sign(c - 5, T + 2, c - 15, "south", ["paleizen.woon.oma1", "paleizen.woon.oma2", "paleizen.woon.oma3"])
+    b.sign(c - 6, T + 2, c - 14, "south", ["paleizen.woon.oma1", "paleizen.woon.oma2", "paleizen.woon.oma3"])   # (on the wall beside her door)
     # the grumpy three: Brom-Mika (west block, ground floor), Zeur-Mika (east block, second storey), Snurk-Mika (north block, second storey)
     moppers = (((c - 20, G + 1, c + 5), -90.0, (c - 17, G + 1, c + 6)),
                ((c + 20, G + 2 * V + 1, c - 8), 90.0, (c + 17, G + 2 * V + 1, c - 8)),
@@ -1721,9 +1851,26 @@ def wb_bewoners(b):
         b.wezen(x, y, z, "guhs:paleizen_mopper_mika", f"paleizen_mopper_{nr}", yaw, f"mopper_{nr}", Nr=nr)
 
 
+def wb_lucht(b):
+    """Room round the flats when they stand half in the rock: a dome with the plan of a rounded square over the whole estate
+    (the roofs, the galleries, the roof garden with the knitting), and never less than three blocks of air over and two
+    beside anything of the build."""
+    c, G = WB_C, WB_G
+    hoog = hoogste(b, G + 1)
+
+    def bereik_(x, z):
+        r = ((abs(x - c) / 31.5) ** 4 + (abs(z - c) / 31.5) ** 4) ** 0.25
+        top = G + 6 + int(44 * math.sqrt(1.0 - r ** 6)) if r < 1.0 else None
+        near = rondom(hoog, x, z)
+        if near is not None:
+            top = max(top or 0, near + 3)
+        return None if top is None else (G + 1, top)
+    lucht(b, bereik_)
+
+
 def check_woonblokken(b):
     c, G = WB_C, WB_G
-    problems = check(b, (c, G + 1, c + 20))
+    problems = check(b, (c, G + 1, c + 20)) + check_steun(b, WB_ANKER)
     if b.get(*b.plek["breiwerk"]) != mc(BREIWERK):
         problems.append("mika_woonblokken: the knitting is not where PLEKKEN says")
     if sum(1 for w in b.wezens if w[3] == "guhs:paleizen_mopper_mika") < 6:

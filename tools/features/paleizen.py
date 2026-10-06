@@ -99,7 +99,7 @@ def structuren(h):
                          burcht=dict(placement="paleis", tiles_x=nx, tiles_z=nz, tile_size=bouw.sb.TILE, anchor=bouw.WB_ANKER, min_y=33, max_y=33, reach=24))
     wereld.bbq_structuur(h, "mika_stal", soort="grot", titel=S["mika_stal"][0], tooltip=S["mika_stal"][1],
                          biomes=["worstenwoud", "satebos", "houtskoolvlakte", "asdal"], salt=SALT["mika_stal"], templates=[("mika_stal", 1)],
-                         spacing=28, separation=10, gegarandeerd=dict(sector=2, min=250, max=900), grootte=26, vlak=10, hoogte=12)
+                         spacing=28, separation=10, gegarandeerd=dict(sector=2, min=250, max=900), grootte=26, vlak=8, hoogte=12)
     nx, nz, _ = built["mika_brugpaleis"][2]
     wereld.bbq_structuur(h, "mika_brugpaleis", soort="burcht", titel=S["mika_brugpaleis"][0], tooltip=S["mika_brugpaleis"][1],
                          biomes=wereld.BBQ, salt=SALT["mika_brugpaleis"], spacing=34, separation=12, gegarandeerd=dict(sector=3, min=250, max=900),

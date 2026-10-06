@@ -167,7 +167,9 @@ public final class PaleizenFeature {
      * /guhs paleizen bouw &lt;mika_woonblokken|mika_stal|mika_brugpaleis&gt; (operators, dev runs only: it builds): puts that
      * building in front of you as a try-out copy that the questlines, the protection and the inhabitants treat as a real one
      * until the server stops ({@link PaleisProef}). For the AutoCheck script tools/autocheck/bbq2_paleizen.txt and for looking
-     * at a building without searching the Barbecuether for it.
+     * at a building without searching the Barbecuether for it. "/guhs paleizen dump &lt;structuur&gt;" saves the copy you stand
+     * at, with 8 blocks of the land around it, as a template file in the server folder (to look at how a palace lies in real
+     * terrain: scratch render_dump.py).
      */
     private static void commando(RegisterCommandsEvent event) {
         if (FMLEnvironment.isProduction()) {
@@ -182,6 +184,29 @@ public final class PaleizenFeature {
                     }
                     var start = PaleisProef.bouw(c.getSource().getLevel(), naam, net.minecraft.core.BlockPos.containing(c.getSource().getPosition()), true);
                     c.getSource().sendSuccess(() -> Component.literal("Proefkopie van guhs:" + naam + ": " + start.getBoundingBox()), false);
+                    return 1;
+                })))
+                .then(Commands.literal("dump").then(Commands.argument("structuur", StringArgumentType.word()).executes(c -> {
+                    String naam = StringArgumentType.getString(c, "structuur");
+                    var level = c.getSource().getLevel();
+                    var start = PaleisPlekken.kopie(level, naam, net.minecraft.core.BlockPos.containing(c.getSource().getPosition()));
+                    if (start == null) {
+                        c.getSource().sendFailure(Component.literal("Geen kopie van guhs:" + naam + " hier"));
+                        return 0;
+                    }
+                    var box = start.getBoundingBox().inflatedBy(8);
+                    var hoek = new net.minecraft.core.BlockPos(box.minX(), Math.max(level.getMinY(), box.minY()), box.minZ());
+                    var maat = new net.minecraft.core.BlockPos(box.getXSpan(), Math.min(level.getMaxY(), box.maxY()) - hoek.getY() + 1, box.getZSpan());
+                    var template = new net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate();
+                    template.fillFromWorld(level, hoek, maat, true, List.of(Blocks.AIR));
+                    var file = level.getServer().getServerDirectory().resolve("paleizen_dump_" + naam + ".nbt");
+                    try {
+                        net.minecraft.nbt.NbtIo.writeCompressed(template.save(new net.minecraft.nbt.CompoundTag()), file);
+                    } catch (java.io.IOException e) {
+                        c.getSource().sendFailure(Component.literal("dump mislukt: " + e));
+                        return 0;
+                    }
+                    c.getSource().sendSuccess(() -> Component.literal("Kopie " + start.getBoundingBox() + " met rand 8 vanaf " + hoek.toShortString() + " naar " + file), false);
                     return 1;
                 })))
                 .then(Commands.literal("weg").executes(c -> {
