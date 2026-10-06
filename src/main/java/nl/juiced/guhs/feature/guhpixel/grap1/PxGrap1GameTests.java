@@ -411,7 +411,7 @@ public class PxGrap1GameTests {
         helper.assertTrue(Sessies.van(q) == null, "no guhpixel dimension on the test server: no game");
         // the Guhdex section: three questlines of four steps
         ListTag rijen = GidsBlad.stand(p).getListOrEmpty("Rijen");
-        long stappen = rijen.stream().filter(r -> ((CompoundTag) r).getStringOr("T", "").equals(GidsBlad.STAP)).count();
+        long stappen = PxTest.stappen(rijen, SkyblokSessie.ID, BedwarsSessie.ID, VadsniteSessie.ID);
         helper.assertTrue(stappen == 12, "the Guhdex shows the steps of the three games: " + stappen);
         npc.discard();
         PxTest.klaar(helper, p, q);

@@ -62,4 +62,28 @@ public final class PxTest {
 
     private PxTest() {
     }
+
+    /**
+     * How many step rows the Guhdex page shows for these joke games: the step rows between the heading of that game and
+     * the next heading. (A test counts its own games only: the page also holds the sections of every other slice.)
+     */
+    public static int stappen(net.minecraft.nbt.ListTag rijen, String... grapIds) {
+        java.util.Set<String> koppen = new java.util.HashSet<>();
+        for (String id : grapIds) {
+            koppen.add("gui.guhs." + id + ".grap.naam");
+        }
+        int n = 0;
+        boolean eigen = false;
+        for (net.minecraft.nbt.Tag rij : rijen) {
+            net.minecraft.nbt.CompoundTag r = (net.minecraft.nbt.CompoundTag) rij;
+            String soort = r.getStringOr("T", "");
+            if (soort.equals(GidsBlad.KOP)) {
+                eigen = nl.juiced.guhs.taal.Tekst.get(r, "A").getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents tc
+                        && koppen.contains(tc.getKey());
+            } else if (eigen && soort.equals(GidsBlad.STAP)) {
+                n++;
+            }
+        }
+        return n;
+    }
 }

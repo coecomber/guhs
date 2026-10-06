@@ -533,7 +533,7 @@ public class PxKernGameTests {
         });
         CompoundTag blad = GidsBlad.stand(p);
         ListTag rijen = blad.getListOrEmpty("Rijen");
-        long stappen = rijen.stream().filter(r -> ((CompoundTag) r).getStringOr("T", "").equals(GidsBlad.STAP)).count();
+        long stappen = PxTest.stappen(rijen, "px_testgrap");
         helper.assertTrue(blad.getBooleanOr("Toegang", false) && blad.getIntOr("Saldo", 0) == 100 && stappen == 4
                 && rijen.stream().anyMatch(r -> ((CompoundTag) r).getStringOr("T", "").equals(GidsBlad.PLAATJE)), "the page: muntjes and the section's rows: " + rijen.size());
         Toegang.vergrendel(q);
