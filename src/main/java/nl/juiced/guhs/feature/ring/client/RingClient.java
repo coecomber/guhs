@@ -50,6 +50,10 @@ public final class RingClient {
     private static final Map<GuhNpcEntity.Kind, String> WUIFT = Map.of(GuhNpcEntity.Kind.GUHDALF, "guhdalf_baard", GuhNpcEntity.Kind.GIMGUH, "gimguh_baard",
             GuhNpcEntity.Kind.LEGUHLAS, "leguhlas_haar", GuhNpcEntity.Kind.GUHROND, "guhrond_haar", GuhNpcEntity.Kind.GUHLADRIEL, "guhladriel_haar");
 
+    /** Who holds something long in a paw (that arm keeps still in a scene). */
+    private static final Map<GuhNpcEntity.Kind, Lijf> VOL = Map.of(GuhNpcEntity.Kind.GUHDALF, Lijf.RECHTS_VOL, GuhNpcEntity.Kind.GIMGUH, Lijf.RECHTS_VOL,
+            GuhNpcEntity.Kind.LEGUHLAS, Lijf.LINKS_VOL, GuhNpcEntity.Kind.MERRIE, Lijf.LINKS_VOL, GuhNpcEntity.Kind.PIPPGUH, Lijf.LINKS_VOL);
+
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> {
             event.registerEntityRenderer(RingFeature.SMIKAGOL.get(), ctx -> new WezenRenderer<SmikagolEntity>(ctx, "smikagol", 0.4f, 0.85f, Lijf.VIERPOOT));
@@ -61,7 +65,7 @@ public final class RingClient {
             if (mika) {
                 SittingGuhRenderers.NPC_ANIMATIES.put(kind, Guhs.id("entity/guh_npc_" + kind.id()));
             }
-            SittingGuhRenderers.NPC_ANIMATORS.put(kind, animator(kind, mika ? Lijf.VIERPOOT : Lijf.ZITTEND));
+            SittingGuhRenderers.NPC_ANIMATORS.put(kind, animator(kind, mika ? Lijf.VIERPOOT : VOL.getOrDefault(kind, Lijf.ZITTEND)));
         }
         // Sam-guh in a scene: the same names, on four paws
         GuhRenderer.hook((guh, partialTick, frame) -> {

@@ -232,7 +232,7 @@ def structuren(h):
         templates.append((f"{STRUCTUUR}_{naam}", 1))
     titel, tooltip = tekst.STRUCTUUR
     wereld.bbq_structuur(h, STRUCTUUR, soort="grot", titel=titel, tooltip=tooltip, biomes=wereld.BBQ, salt=SALT, templates=templates,
-                         spacing=9, separation=4, grootte=12, vlak=5, hoogte=6)
+                         spacing=5, separation=2, grootte=12, vlak=8, hoogte=6)   # (dense: a dev world had one per ~430 blocks at 9 / 4)
     bouw.test_template(h).save("ring_test_kamer")
 
 

@@ -30,15 +30,22 @@ public final class CastAnimaties {
     public static final List<String> NAMEN = List.of("praat", "knik", "schud", "buig", "juich", "wijs", "schrik", "ruzie", "schaam", "grijp", "eet",
             "slaap", "toover", "val", "kniel", "lach", "sluip", "huil", "draag", "kijk");
 
-    /** How a character is built: sitting upright with two arms, or on four paws. */
+    /**
+     * How a character is built: sitting upright with two free arms, sitting with something long in one paw (Guhdalf's staff,
+     * Gimguh's axe, Leguhlas' bow: that arm keeps still, or the thing would swing through its owner; gestures go to the
+     * other one), or on four paws.
+     */
     public enum Lijf {
-        ZITTEND("arm_left", "arm_right"), VIERPOOT("leg_front_left", "leg_front_right");
+        ZITTEND("arm_left", "arm_right", "arm_right"), RECHTS_VOL("arm_left", "-", "arm_left"), LINKS_VOL("-", "arm_right", "arm_right"),
+        VIERPOOT("leg_front_left", "leg_front_right", "leg_front_right");
 
-        final String links, rechts;
+        /** The bones of the two arms ("-": that arm holds something and stays as it is) and the arm that makes one-armed gestures. */
+        final String links, rechts, gebaar;
 
-        Lijf(String links, String rechts) {
+        Lijf(String links, String rechts, String gebaar) {
             this.links = links;
             this.rechts = rechts;
+            this.gebaar = gebaar;
         }
     }
 
@@ -63,15 +70,15 @@ public final class CastAnimaties {
      */
     @Nullable
     public static GuhRenderFrame.BoneMove maak(String naam, float t, Lijf lijf) {
-        final String L = lijf.links, R = lijf.rechts;
+        final String L = lijf.links, R = lijf.rechts, G = lijf.gebaar;
         // (a four-legged character lifts a paw less far than an arm goes)
-        final float arm = lijf == Lijf.ZITTEND ? 1f : 0.55f;
+        final float arm = lijf == Lijf.VIERPOOT ? 0.55f : 1f;
         switch (naam) {
             case "praat": {
                 float h = golf(t, 14) * 0.09f, z = golf(t, 23) * 0.05f, a = (0.55f + golf(t, 17) * 0.3f) * arm;
                 return b -> {
                     b.ifPresent("head", s -> s.setRotX(s.getRotX() + h).setRotZ(s.getRotZ() + z));
-                    b.ifPresent(R, s -> s.setRotX(s.getRotX() + a));
+                    b.ifPresent(G, s -> s.setRotX(s.getRotX() + a));
                 };
             }
             case "knik": {
@@ -85,8 +92,8 @@ public final class CastAnimaties {
             case "buig": {
                 float k = in(t, 10);
                 return b -> {
-                    b.ifPresent("body", s -> s.setRotX(s.getRotX() - 0.45f * k));
-                    b.ifPresent("head", s -> s.setRotX(s.getRotX() - 0.3f * k));
+                    b.ifPresent("body", s -> s.setRotX(s.getRotX() - 0.22f * k));
+                    b.ifPresent("head", s -> s.setRotX(s.getRotX() - 0.45f * k));
                 };
             }
             case "juich": {
@@ -103,7 +110,7 @@ public final class CastAnimaties {
             case "wijs": {
                 float k = in(t, 6), a = 1.45f * k * arm;
                 return b -> {
-                    b.ifPresent(R, s -> s.setRotX(s.getRotX() + a));
+                    b.ifPresent(G, s -> s.setRotX(s.getRotX() + a));
                     b.ifPresent("head", s -> s.setRotX(s.getRotX() + 0.08f * k));
                 };
             }
@@ -167,8 +174,16 @@ public final class CastAnimaties {
             }
             case "toover": {
                 float k = in(t, 8), a = (2.45f + golf(t, 4) * 0.07f) * k * arm, tril = golf(t, 3) * 0.3f * k;
+                if (lijf == Lijf.RECHTS_VOL) {
+                    // the staff itself: lifted off the ground and thrust forward, trembling
+                    float til = 4.5f * k + tril, kantel = (-0.42f + golf(t, 4) * 0.05f) * k;
+                    return b -> {
+                        b.ifPresent("arm_right", s -> s.setTranslateY(s.getTranslateY() + til).setRotX(s.getRotX() + kantel));
+                        b.ifPresent("head", s -> s.setRotX(s.getRotX() + 0.2f * k));
+                    };
+                }
                 return b -> {
-                    b.ifPresent(R, s -> s.setRotX(s.getRotX() + a));
+                    b.ifPresent(G, s -> s.setRotX(s.getRotX() + a));
                     b.ifPresent("head", s -> s.setRotX(s.getRotX() + 0.25f * k));
                     b.ifPresent("root", s -> s.setTranslateY(s.getTranslateY() + 0.8f * k + tril));
                 };
@@ -247,8 +262,8 @@ public final class CastAnimaties {
 
     /** The engine's "zwaai" on a character without a vanilla arm: the right paw waves for as long as the swing lasts (0..1). */
     public static GuhRenderFrame.BoneMove zwaai(float voortgang, Lijf lijf) {
-        float a = (1.9f + Mth.sin(voortgang * Mth.TWO_PI * 2) * 0.4f) * Mth.sin(voortgang * Mth.PI) * (lijf == Lijf.ZITTEND ? 1f : 0.55f);
-        return b -> b.ifPresent(lijf.rechts, s -> s.setRotX(s.getRotX() + a));
+        float a = (1.9f + Mth.sin(voortgang * Mth.TWO_PI * 2) * 0.4f) * Mth.sin(voortgang * Mth.PI) * (lijf == Lijf.VIERPOOT ? 0.55f : 1f);
+        return b -> b.ifPresent(lijf.gebaar, s -> s.setRotX(s.getRotX() + a));
     }
 
     /** Both moves, one after the other (either may be null). */
