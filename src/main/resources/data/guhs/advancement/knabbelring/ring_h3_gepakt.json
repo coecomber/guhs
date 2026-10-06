@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:lead"
+    },
+    "title": {
+      "translate": "advancements.guhs.knabbelring.ring_h3_gepakt.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knabbelring.ring_h3_gepakt.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knabbelring/ring_h3_emmer"
+}

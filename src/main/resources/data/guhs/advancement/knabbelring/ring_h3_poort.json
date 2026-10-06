@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:ringh3_rune"
+    },
+    "title": {
+      "translate": "advancements.guhs.knabbelring.ring_h3_poort.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.knabbelring.ring_h3_poort.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:knabbelring/ring_gekregen"
+}

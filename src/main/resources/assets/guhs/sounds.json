@@ -2183,5 +2183,212 @@
       }
     ],
     "subtitle": "subtitles.guhs.torenpeper.heet"
+  },
+  "ringh3.barbecuerog.brul": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.ravager.roar",
+        "type": "event",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:entity.ender_dragon.growl",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity.warden.roar",
+        "type": "event",
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.barbecuerog.brul"
+  },
+  "ringh3.barbecuerog.grom": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.ravager.ambient",
+        "type": "event",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:entity.warden.agitated",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity.blaze.ambient",
+        "type": "event",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.barbecuerog.grom"
+  },
+  "ringh3.barbecuerog.stap": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.ravager.step",
+        "type": "event",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:entity.warden.step",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity.iron_golem.step",
+        "type": "event",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.barbecuerog.stap"
+  },
+  "ringh3.barbecuerog.zweep": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.blaze.shoot",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity.player.attack.sweep",
+        "type": "event",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.barbecuerog.zweep"
+  },
+  "ringh3.barbecuerog.ontbrand": {
+    "sounds": [
+      {
+        "name": "minecraft:item.firecharge.use",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity.ghast.shoot",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.barbecuerog.ontbrand"
+  },
+  "ringh3.trommel": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.warden.heartbeat",
+        "type": "event",
+        "pitch": 0.55
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.trommel"
+  },
+  "ringh3.emmer": {
+    "sounds": [
+      {
+        "name": "minecraft:block.anvil.land",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.7
+      },
+      {
+        "name": "minecraft:block.chain.break",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.emmer"
+  },
+  "ringh3.staf": {
+    "sounds": [
+      {
+        "name": "minecraft:block.anvil.land",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:block.respawn_anchor.deplete",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.staf"
+  },
+  "ringh3.breuk": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.generic.explode",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity.wither.break_block",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.breuk"
+  },
+  "ringh3.val": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.ender_dragon.flap",
+        "type": "event",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:entity.phantom.swoop",
+        "type": "event",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.val"
+  },
+  "ringh3.poort": {
+    "sounds": [
+      {
+        "name": "minecraft:block.piston.extend",
+        "type": "event",
+        "pitch": 0.5
+      },
+      {
+        "name": "minecraft:block.grindstone.use",
+        "type": "event",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.poort"
+  },
+  "ringh3.klonk": {
+    "sounds": [
+      {
+        "name": "minecraft:block.anvil.land",
+        "type": "event",
+        "pitch": 0.9,
+        "volume": 0.5
+      },
+      {
+        "name": "minecraft:block.iron_trapdoor.close",
+        "type": "event",
+        "pitch": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.klonk"
+  },
+  "ringh3.brokkel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.deepslate.break",
+        "type": "event",
+        "pitch": 0.7
+      },
+      {
+        "name": "minecraft:block.basalt.break",
+        "type": "event",
+        "pitch": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.ringh3.brokkel"
   }
 }

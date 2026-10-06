@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "staat=0": {
+      "model": "guhs:block/ringh3_brokkelsteen"
+    },
+    "staat=1": {
+      "model": "guhs:block/ringh3_brokkelsteen_barst"
+    },
+    "staat=2": {
+      "model": "guhs:block/ringh3_brokkelsteen_weg"
+    }
+  }
+}
