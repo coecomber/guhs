@@ -283,6 +283,18 @@ public class PxLobbyGameTests {
         p.snapTo(ver.getX() + 0.5, ver.getY(), ver.getZ() + 0.5);
         LobbyParkour.stap(p, null, ver, 4002);
         helper.assertTrue(!LobbyParkour.bezig(p), "teleported: the run is over");
+        // no help: a potion effect that moves you ends the run, an item cannot be used during one, a teleport ends it
+        op(helper, p, start, true, 4100);
+        op(helper, p, start, false, 4101);
+        helper.assertTrue(LobbyParkour.bezig(p) && LobbyParkour.geenItems(p), "running: nothing from the pockets is used");
+        p.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.SPEED, 200, 1));
+        op(helper, p, start, false, 4102);
+        p.removeAllEffects();
+        helper.assertTrue(!LobbyParkour.bezig(p) && !LobbyParkour.geenItems(p), "a speed potion does not count (and without a run items work again)");
+        op(helper, p, start, true, 4200);
+        op(helper, p, start, false, 4201);
+        LobbyParkour.geteleporteerd(p);
+        helper.assertTrue(!LobbyParkour.bezig(p), "an ender pearl: the run is over");
         // falling off: standing on the plain ground again, away from the start plate, ends the run (beside the plate it goes on)
         op(helper, p, start, true, 5000);
         op(helper, p, start, false, 5001);

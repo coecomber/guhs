@@ -37,6 +37,7 @@
   "gui.guhs.guhpixel.spel.bezig": "%s is still busy with something else, Nyeg.",
   "gui.guhs.guhpixel.spel.niet_hier": "%s isn't in the lobby, Nyeg.",
   "gui.guhs.guhpixel.kluis.terug": "Your own things are back: exactly the way you had them. Nothing lost, Nyeg!",
+  "gui.guhs.guhpixel.kluis.rest": "Your pockets are full. Still waiting for a free slot: %s stack(s). Nothing lost, Nyeg!",
   "gui.guhs.guhpixel.regels.niet_bouwen": "Nothing gets broken or built here, Nyeg. Only chonking.",
   "gui.guhs.guhpixel.regels.void": "Oops, fell off the edge! Up you go, back again.",
   "gui.guhs.guhpixel.grap.stap": "Step %1$s/%2$s: %3$s",

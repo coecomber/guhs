@@ -93,10 +93,16 @@ q("frying", "Frituurvads", "Vul de guh-koekenpan met Mika's vet en frituur kaask
 # --- de Guhmensie: biomen ----------------------------------------------------------------------------------------------
 BIOMES = [("guh_fields", "Guhvelden"), ("knabbel_crumbs", "Knabbelkruimels"), ("pink_puffs", "Roze pluisjes"), ("kaas_flats", "Kaasvlakte"),
           ("guh_meadows", "Guhweides"), ("guh_peaks", "Guhpieken"), ("vads_cliffs", "Vadskliffen"), ("mikas_biome", "Mika's bioom"),
-          ("guh_sea", "Guhzee"), ("guh_kristalmijn", "Guhkristalmijn")]
+          ("guh_sea", "Guhzee"), ("guh_kristalmijn", "Guhkristalmijn"),
+          # guhpixel: the nine biomes of dimension/guhmension.json that were missing here (new ids only; the ten above keep theirs)
+          ("bleekwoud", "Bleekwoud"), ("gatenkaasgrotten", "Gatenkaasgrotten"), ("kaasmoeras", "Kaasmoeras"), ("vadswoud", "Vadswoud"),
+          ("diepe_guhzee", "Diepe Guhzee"), ("knuffeldal", "Knuffeldal"), ("guhpolder", "Guhpolder"),
+          ("sneeuwguhtoendra", "Sneeuwguhtoendra"), ("guhwaii", "Guhwai'i")]
 for i, (b, name) in enumerate(BIOMES):
+    # (the first ten in one row at y=6 as always; the new ones in a second row, clear of the fish at 6,7 and the slime block at 8,5.5)
     q(f"biome_{b}", name, f"Bezoek het bioom &d{name}&r in de Guhmensie.", "minecraft:filled_map", [biome(b)],
-      rewards=(("guhs:kaas_knabbels", 4),), deps=["guhmension"], x=-6 + i * 1.5, y=6, shape="circle")
+      rewards=(("guhs:kaas_knabbels", 4),), deps=["guhmension"], x=-6 + i * 1.5 if i < 10 else -21 + (i - 10) * 1.5, y=6 if i < 10 else 4.75,
+      shape="circle")
 q("pink_moon", "Roze maan", "Blijf een nacht in de Guhmensie en kijk omhoog: een roze maan en roze sterren!", "minecraft:clock",
   [dim("guhs:guhmension")], deps=["guhmension"], x=2, y=4, shape="circle")
 

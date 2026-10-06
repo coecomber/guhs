@@ -295,6 +295,23 @@ public class PxParkourGameTests {
         ParkourPayloads.doe(p, pos, ParkourPayloads.GUH_AF, 0, guhs.get(1).getUUID());
         helper.assertTrue(paal.guhs().size() == 3 && !guhs.get(1).getPersistentData().contains(RouteGoal.PAAL) && GuhKiezer.geclaimd(guhs.get(1)).isEmpty()
                 && GuhKiezer.bezet(guhs.get(1)) == null, "taken off: free again");
+        // a guh that stays away from its post (far off, the post not loaded) frees itself after a while, and the post lets it go
+        GuhEntity weg = guhs.get(0);
+        RouteGoal doel = new RouteGoal(weg);
+        helper.assertTrue(!RouteGoal.isWeg(weg) && !doel.bewaakWeg(0) && !doel.bewaakWeg(RouteGoal.WEG_TICKS * 2L), "near its post: it stays on the route");
+        BlockPos ver = new BlockPos(pos.getX() + 20_000, pos.getY(), pos.getZ());
+        weg.getPersistentData().putLong(RouteGoal.PAAL, ver.asLong());     // (as if the guh was carried 20 000 blocks from its post)
+        helper.assertTrue(RouteGoal.isWeg(weg) && !doel.bewaakWeg(100) && !doel.bewaakWeg(100 + RouteGoal.WEG_TICKS - 1) && GuhKiezer.bezet(weg) != null,
+                "away, but not long enough yet: still claimed");
+        helper.assertTrue(doel.bewaakWeg(100 + RouteGoal.WEG_TICKS) && !weg.getPersistentData().contains(RouteGoal.PAAL) && GuhKiezer.bezet(weg) == null,
+                "away for five minutes: free for a holiday, the office, the arcade, the cinema");
+        int voorRuim = paal.guhs().size();
+        paal.ruimOp();
+        helper.assertTrue(paal.guhs().size() == voorRuim - 1 && !paal.heeftGuh(weg.getUUID()), "the post gives its place away");
+        weg.getPersistentData().putString(RouteGoal.PAAL_DIM, "guhs:ergens_anders");
+        weg.getPersistentData().putLong(RouteGoal.PAAL, pos.asLong());
+        helper.assertTrue(RouteGoal.isWeg(weg) && RouteGoal.paal(weg) == null, "a post in another dimension is not this block");
+        RouteGoal.vrij(weg);
         // laying out from the screen
         ParkourPayloads.doe(p, pos, ParkourPayloads.UITZETTEN, 0, nul);
         helper.assertTrue(Uitzetten.bezig(p, pos), "the screen's button starts laying out");

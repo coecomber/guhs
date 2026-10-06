@@ -136,6 +136,17 @@ public final class LobbySlice {
         NeoForge.EVENT_BUS.addListener(LobbySlice::opServerTick);
         NeoForge.EVENT_BUS.addListener(LobbySlice::opSpelerTick);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> weg(e.getEntity()));
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickItem e) -> {
+            if (e.getEntity() instanceof ServerPlayer p && LobbyParkour.geenItems(p)) {
+                e.setCanceled(true);
+                e.setCancellationResult(net.minecraft.world.InteractionResult.FAIL);
+            }
+        });
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.EntityTeleportEvent e) -> {
+            if (e.getEntity() instanceof ServerPlayer p && !e.isCanceled()) {
+                LobbyParkour.geteleporteerd(p);
+            }
+        });
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerChangedDimensionEvent e) -> {
             weg(e.getEntity());
             if (e.getFrom() == Guhpixel.DIM) {

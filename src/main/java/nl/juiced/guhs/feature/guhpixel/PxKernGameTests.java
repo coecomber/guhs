@@ -300,6 +300,43 @@ public class PxKernGameTests {
         Regels.onRespawn(new PlayerEvent.PlayerRespawnEvent(p, false));
         anders = verschil(voor, p);
         helper.assertTrue(!Kluis.heeft(p) && anders == null, "respawn: everything back: " + anders);
+        // 5) logging in again while still on the death screen: nothing goes onto the dead body, the safe opens at the respawn
+        Regels.onDeath(new net.neoforged.neoforge.event.entity.living.LivingDeathEvent(p, helper.getLevel().damageSources().genericKill()));
+        p.setHealth(0f);
+        Regels.onLogin(new PlayerEvent.PlayerLoggedInEvent(p));
+        helper.assertTrue(Kluis.heeft(p) && leeg(p), "dead at login: the safe stays shut");
+        // ... and the health floor leaves the dead alone (else the respawn would never come)
+        Regels.onPlayerTick(new net.neoforged.neoforge.event.tick.PlayerTickEvent.Post(p));
+        helper.assertTrue(p.getHealth() <= 0f, "no health floor for a dead player");
+        p.setHealth(p.getMaxHealth());
+        Regels.onRespawn(new PlayerEvent.PlayerRespawnEvent(p, false));
+        anders = verschil(voor, p);
+        helper.assertTrue(!Kluis.heeft(p) && anders == null, "respawn after a login on the death screen: everything back: " + anders);
+        PxTest.klaar(helper, p);
+        helper.succeed();
+    }
+
+    /** A stack on the cursor with pockets that are full: it is never dropped (the arena is wiped), it waits for a free slot. */
+    @GuhTest(template = KLEIN, batch = BATCH)
+    public static void kluisRestWacht(GameTestHelper helper) {
+        PxTest.gebied(helper);
+        ServerPlayer p = PxTest.speler(helper);
+        Inventory inv = p.getInventory();
+        for (int i = 0; i < inv.getContainerSize(); i++) {
+            inv.setItem(i, new ItemStack(Items.DIAMOND_PICKAXE));
+        }
+        p.containerMenu.setCarried(new ItemStack(Items.GOLD_INGOT, 7));
+        helper.assertTrue(Kluis.bewaar(p) && leeg(p), "stored");
+        helper.assertTrue(Kluis.herstel(p) && !Kluis.heeft(p), "restored");
+        helper.assertTrue(Kluis.heeftRest(p) && !inv.hasAnyMatching(x -> x.is(Items.GOLD_INGOT)), "the cursor stack does not fit: it waits");
+        helper.assertTrue(helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, helper.getBounds().inflate(2)).isEmpty(),
+                "nothing was dropped");
+        Kluis.geefRest(p);
+        helper.assertTrue(Kluis.heeftRest(p), "still no room: still waiting");
+        inv.setItem(4, ItemStack.EMPTY);
+        Kluis.geefRest(p);
+        helper.assertTrue(!Kluis.heeftRest(p) && inv.getItem(4).is(Items.GOLD_INGOT) && inv.getItem(4).getCount() == 7, "a free slot: the stack is back");
+        GuhQuests.saved(p).remove(Kluis.REST);
         PxTest.klaar(helper, p);
         helper.succeed();
     }

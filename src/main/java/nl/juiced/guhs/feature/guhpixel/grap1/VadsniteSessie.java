@@ -15,6 +15,7 @@ import com.mojang.math.Transformation;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
@@ -203,6 +204,26 @@ public final class VadsniteSessie extends GrapSessie {
         return a.wereld(new Vec3(MIDDEN + 0.5 + rng.nextDouble() * 2, EILAND_Y + 1, MIDDEN + 0.5 + rng.nextDouble() * 2));
     }
 
+    /**
+     * The bus "flies": it is a fixed part of the arena (it carries the player and the guhs), so the sky moves instead. While
+     * the player is still on board, wisps of cloud rush past the windows on both sides and under the floor, from the nose
+     * (the driver sits at the high z end) to the tail.
+     */
+    private void vaart(Arena a) {
+        var rng = level().getRandom();
+        for (int i = 0; i < 4; i++) {
+            double x = switch (i) {
+                case 0 -> 20.5 - rng.nextDouble() * 4;
+                case 1 -> 28.5 + rng.nextDouble() * 4;
+                default -> 20 + rng.nextDouble() * 9;
+            };
+            double y = i < 2 ? BUS_Y + 0.5 + rng.nextDouble() * 4 : BUS_Y - 1 - rng.nextDouble() * 3;
+            Vec3 plek = a.wereld(new Vec3(x, y, 31 + rng.nextDouble() * 4));
+            // (count 0: the three numbers are the particle's own speed)
+            level().sendParticles(ParticleTypes.CLOUD, plek.x, plek.y, plek.z, 0, 0, 0, -1, 0.55 + rng.nextDouble() * 0.25);
+        }
+    }
+
     @Override
     protected void tick() {
         if (klaarTick()) {
@@ -218,6 +239,9 @@ public final class VadsniteSessie extends GrapSessie {
         aftellen(p, t);
         for (Valguh g : guhs) {
             tickGuh(g, t);
+        }
+        if (!gesprongen && t % 2 == 0) {
+            vaart(a);
         }
         // the player: out of the bus, floating down, landed
         double busVloer = a.oorsprong().getY() + BUS_Y;

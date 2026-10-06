@@ -156,7 +156,7 @@ public final class Reizen {
     private static void bewaarNu(MinecraftServer server) {
         PxData.vuil(server);
         try {
-            server.overworld().getDataStorage().scheduleSave();   // (a guh went into or came out of the data: on disk at once)
+            server.overworld().getDataStorage().scheduleSave();   // (a guh went INTO the data: on disk at once; never on the way out, see haalOp)
         } catch (RuntimeException e) {
             com.mojang.logging.LogUtils.getLogger().warn("Reisbureau: the saved data could not be written right away", e);
         }
@@ -323,7 +323,10 @@ public final class Reizen {
             return Uitkomst.GEEN_PLEK;
         }
         d.remove(REIS);
-        bewaarNu(server);
+        // NOT bewaarNu here: the guh is in the world again but its chunk is only written at the next save. The record must not
+        // reach the disk before the entity does (a crash in between would leave neither); the normal save writes both together,
+        // and a crash before it simply rolls back to "still on holiday".
+        PxData.vuil(server);
         level.sendParticles(ParticleTypes.POOF, plek.x, plek.y + 0.4, plek.z, 10, 0.25, 0.25, 0.25, 0.02);
         if (!eerder) {
             level.playSound(null, BlockPos.containing(plek), ReisbureauSlice.GELUID_TERUG.get(), SoundSource.NEUTRAL, 1f, 1f);

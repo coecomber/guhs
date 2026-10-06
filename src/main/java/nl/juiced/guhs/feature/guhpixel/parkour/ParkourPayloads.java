@@ -142,6 +142,7 @@ public final class ParkourPayloads {
 
     /** Puts one of the player's guhs on the route; the message says how it went. */
     public static Component guhOp(ServerPlayer p, StartpaalBlockEntity paal, UUID id) {
+        paal.ruimOp();
         if (paal.heeftGuh(id)) {
             return Component.translatable("gui.guhs.guhparkour.scherm.melding.al_op");
         }
@@ -177,6 +178,7 @@ public final class ParkourPayloads {
 
     /** Everything the screen shows of this post, for this player. */
     public static CompoundTag stand(ServerPlayer p, StartpaalBlockEntity paal, @Nullable Component melding) {
+        paal.ruimOp();
         ServerLevel level = (ServerLevel) p.level();
         CompoundTag t = new CompoundTag();
         t.putLong("Pos", paal.getBlockPos().asLong());

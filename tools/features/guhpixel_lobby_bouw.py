@@ -23,7 +23,7 @@ import os
 import random
 import re
 
-VERSIE = 2
+VERSIE = 3
 NAME = "guhpixel/lobby"
 W, H = 97, 56                    # (H may grow to 96)
 MIN = (-48, 68, -48)             # world position of the template's min corner
@@ -276,7 +276,7 @@ def stal_z(naam):
 
 def stallen(h, b):
     """Behind every game NPC a little market stall: a back wall in the game's colour and a striped awning (the parkour
-    runs over these roofs). The reserve stall is a building site with a "BINNENKORT, njeg" sign."""
+    runs over these roofs). The seventh stall has no game: it is the nap corner (sign "DUTJESHOEK")."""
     for naam, (wol, beton) in STALLEN.items():
         ax, ay, az, _ = ANKERS[naam]
         zb = stal_z(naam)
@@ -290,10 +290,11 @@ def stallen(h, b):
         if naam == "SPEL_RESERVE":
             for x in range(ax - 2, ax + 3):
                 b.zet(x, 100, zb, "yellow_concrete" if x % 2 else "black_concrete")
-            staand_bord(h, b, ax, 100, az + 3, 0, ["~ Kraampje 7 ~", "BINNENKORT,", "njeg", "(guh slaapt nog)"], gloei=True)
-            staand_bord(h, b, ax - 3, 100, az, 0, ["Hier wordt", "hard gewerkt.", "Morgen.", "Misschien."])
-            b.zet(ax + 3, 100, az, "scaffolding", {"bottom": "false", "distance": "0", "waterlogged": "false"})
-            b.zet(ax + 3, 101, az, "scaffolding", {"bottom": "false", "distance": "0", "waterlogged": "false"})
+            # (no game belongs here and none is promised: it is the nap corner, not a "coming soon" stall)
+            staand_bord(h, b, ax, 100, az + 3, 0, ["~ Kraampje 7 ~", "DUTJESHOEK", "Geen spel.", "Wel een kussen."], gloei=True)
+            staand_bord(h, b, ax - 3, 100, az, 0, ["Dit kraampje", "is voor dutjes.", "Meer niet.", "Echt niet."])
+            b.zet(ax + 3, 100, az, "pink_wool")
+            b.zet(ax + 3, 101, az, "pink_carpet")
 
 
 # =====================================================================================================================

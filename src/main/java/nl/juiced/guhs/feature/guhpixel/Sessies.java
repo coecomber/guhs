@@ -247,8 +247,8 @@ public final class Sessies {
      * player goes to the lobby spawn. True when something was restored.
      */
     static boolean opLogin(ServerPlayer p) {
-        if (van(p) != null || !Kluis.heeft(p)) {
-            return false;
+        if (van(p) != null || !Kluis.heeft(p) || p.isDeadOrDying()) {
+            return false;   // (dead: the safe opens at the respawn, see Regels.onLogin)
         }
         Kluis.herstel(p);
         ServerLevel lobby = Guhpixel.level(p.level().getServer());

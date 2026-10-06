@@ -200,11 +200,29 @@ public class StartpaalBlockEntity extends BlockEntity {
         }
         guhs.add(guh.getUUID());
         guh.getPersistentData().putLong(RouteGoal.PAAL, worldPosition.asLong());
+        if (level != null) {
+            guh.getPersistentData().putString(RouteGoal.PAAL_DIM, level.dimension().identifier().toString());
+        }
         GuhKiezer.claim(guh, ParkourSlice.NS);
         guh.setOrderedToSit(false);
         guh.setInSittingPose(false);
         setChanged();
         return true;
+    }
+
+    /**
+     * Drops the listed guhs that are loaded here and no longer belong to this post (a guh that was away too long freed
+     * itself: {@link RouteGoal#WEG_TICKS}), so their places are free again. Unloaded guhs stay listed.
+     */
+    public void ruimOp() {
+        if (!(level instanceof ServerLevel sl)) {
+            return;
+        }
+        boolean weg = guhs.removeIf(id -> sl.getEntity(id) instanceof GuhEntity guh
+                && guh.getPersistentData().getLongOr(RouteGoal.PAAL, Long.MIN_VALUE) != worldPosition.asLong());
+        if (weg) {
+            setChanged();
+        }
     }
 
     /** Takes a guh out (also when it is not loaded: it frees itself when it finds it is no longer on the list). */

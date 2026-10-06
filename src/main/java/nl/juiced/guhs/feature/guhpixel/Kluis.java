@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.storage.Nbt;
 
@@ -18,10 +17,13 @@ import nl.juiced.guhs.storage.Nbt;
  * <p>
  * The snapshot lives in {@code GuhQuests.saved(p)["guhs_guhpixel_kluis"]}: in the player's own file, the same file as the
  * inventory, so one write holds both and a crash can never leave "game items but no snapshot". It survives death too
- * (PlayerPersisted). A snapshot found at login without a running game is restored at once ({@link Sessies}).
+ * (PlayerPersisted). A snapshot found at login without a running game is restored at once ({@link Sessies}); a dead player
+ * gets it at the respawn (never onto the dead body: a respawn copies no inventory).
  */
 public final class Kluis {
     public static final String SLEUTEL = "guhs_guhpixel_kluis";
+    /** Stacks of a restored inventory (cursor, crafting grid) that did not fit yet: see {@link #geefRest}. */
+    public static final String REST = "guhs_guhpixel_kluis_rest";
 
     public static boolean heeft(ServerPlayer p) {
         return GuhQuests.saved(p).getCompound(SLEUTEL).isPresent();
@@ -102,15 +104,69 @@ public final class Kluis {
         }
         // the snapshot goes first: whatever happens next, nothing can be given twice
         saved.remove(SLEUTEL);
+        // what was on the cursor or in the crafting grid: into the pockets. What does not fit is NOT dropped (the player may
+        // still stand in an arena that is wiped in a moment, be logging out, or be dead): it waits in REST for a free slot.
         ListTag extra = kluis.getListOrEmpty("Extra");
+        ListTag rest = saved.getListOrEmpty(REST).copy();
         for (int i = 0; i < extra.size(); i++) {
             ItemStack stack = Nbt.parseStack(p.registryAccess(), extra.getCompoundOrEmpty(i));
             if (!stack.isEmpty()) {
-                Minigames.give(p, stack);   // (into the pockets; when they are full it lies at the player's feet, theirs only)
+                inv.add(stack);
+                if (!stack.isEmpty()) {
+                    rest.add(Nbt.saveStack(p.registryAccess(), stack));
+                }
             }
+        }
+        if (rest.isEmpty()) {
+            saved.remove(REST);
+        } else {
+            saved.put(REST, rest);
         }
         p.inventoryMenu.broadcastChanges();
         return true;
+    }
+
+    /** Do stacks of a restored inventory still wait for a free slot? */
+    public static boolean heeftRest(ServerPlayer p) {
+        return GuhQuests.saved(p).contains(REST);
+    }
+
+    /**
+     * Gives what did not fit at {@link #herstel} as soon as there is room (called about once a second for a living player
+     * who is in no game and holds no snapshot). Nothing is ever dropped; what still does not fit keeps waiting.
+     */
+    public static void geefRest(ServerPlayer p) {
+        CompoundTag saved = GuhQuests.saved(p);
+        if (!saved.contains(REST) || heeft(p) || !p.isAlive()) {
+            return;
+        }
+        ListTag rest = saved.getListOrEmpty(REST);
+        ListTag over = new ListTag();
+        boolean iets = false;
+        for (int i = 0; i < rest.size(); i++) {
+            ItemStack stack = Nbt.parseStack(p.registryAccess(), rest.getCompoundOrEmpty(i));
+            if (stack.isEmpty()) {
+                continue;
+            }
+            int voor = stack.getCount();
+            p.getInventory().add(stack);
+            iets |= stack.getCount() != voor;
+            if (!stack.isEmpty()) {
+                over.add(Nbt.saveStack(p.registryAccess(), stack));
+            }
+        }
+        if (over.isEmpty()) {
+            saved.remove(REST);
+        } else {
+            saved.put(REST, over);
+            if (p.tickCount % 200 < 20) {
+                p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.guhpixel.kluis.rest", over.size())
+                        .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+            }
+        }
+        if (iets) {
+            p.inventoryMenu.broadcastChanges();
+        }
     }
 
     /** (Dev) what the snapshot holds, as a short text. */

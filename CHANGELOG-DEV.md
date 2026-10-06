@@ -7,6 +7,20 @@ old history for the curious; it is not needed to play. Player-facing changes fro
 
 Worlds from the internal versions were never meant to carry over; start a new world for 1.0.0.
 
+## guhpixel (in development, no version number yet)
+Build notes of the Guhpixel update; the player-facing text is the "Unreleased" section of [CHANGELOG.md](CHANGELOG.md).
+- Built as a kern plus nine slices (lobby, grap1, grap2, among, guhkade, kantoor, bioscoop, reisbureau, parkour) in
+  `feature/guhpixel/*` and `tools/features/guhpixel_*.py`; game test batches `px_*`.
+- FTB chapter "De Guhmensie", section "De biomen": the nine missing Guhmensie biomes added (bleekwoud, gatenkaasgrotten,
+  kaasmoeras, vadswoud, diepe_guhzee, knuffeldal, guhpolder, sneeuwguhtoendra, guhwaii) with new quest ids; the ten
+  existing ids are unchanged. `CHAPTER_VERSION` 28 covers it.
+- Review fixes: a collected holiday guh is no longer written out of the trip record ahead of its chunk; a death in Guhpixel
+  (only `/kill`) can be respawned from and never restores onto a dead body; cursor and crafting-grid stacks that do not fit
+  wait for a free slot instead of being dropped in an arena; the lobby parkour ends on potion effects and teleports and
+  blocks item use during a run; a parkour guh that stays away from its post for five minutes is free again; name tags of
+  real players are hidden during an Among Guhs round; the lobby template (version 3) has a nap corner instead of a
+  "coming soon" stall.
+
 ## Public 1.0.0 fix round (on top of internal 3.0.0)
 - Overworld guh spawns made much rarer (a bit rarer than sheep/cows, still in every biome).
 - Crash fix: the story sled no longer sends a vanilla-reserved entity event (it was read as a sniffer event by clients).

@@ -61,7 +61,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 10.24375,
+      y: 11.74375,
       hover: [
         "Komt na: Welkom in de Guhmensie!",
       ],
@@ -73,7 +73,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 16.0,
-      y: 10.24375,
+      y: 11.74375,
       hover: [
         "Komt na: Welkom in de Guhmensie!",
       ],
@@ -85,7 +85,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 15.70625,
+      y: 17.20625,
       hover: [
         "Komt na: Guhpieken",
       ],
@@ -97,7 +97,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 16.0,
-      y: 15.70625,
+      y: 17.20625,
       hover: [
         "Komt na: Welkom in de Guhmensie!",
       ],
@@ -109,7 +109,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 22.66875,
+      y: 24.16875,
       hover: [
         "Komt na: Guh-picknick",
       ],
@@ -121,7 +121,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 16.0,
-      y: 22.66875,
+      y: 24.16875,
       hover: [
         "Komt na: Welkom in de Guhmensie!",
       ],
@@ -133,7 +133,7 @@
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
-      y: 26.631249999999998,
+      y: 28.131249999999998,
       hover: [
         "Komt na: Welkom in de Guhmensie!",
       ],
@@ -601,6 +601,249 @@
       shape: "circle",
     },
     {
+      id: "475548A960531D47",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:bleekwoud",
+          id: "475548ED693687B6",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DE21366A24",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 16.0,
+      y: 8.0625,
+      shape: "circle",
+    },
+    {
+      id: "4755487D942DE60F",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:gatenkaasgrotten",
+          id: "4755486ED3AF0708",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548ACCB26D798",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 17.5,
+      y: 8.0625,
+      shape: "circle",
+    },
+    {
+      id: "475548216DA3DE65",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:kaasmoeras",
+          id: "475548412587A07C",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486F3DBF9805",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 19.0,
+      y: 8.0625,
+      shape: "circle",
+    },
+    {
+      id: "475548FCCF76966A",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:vadswoud",
+          id: "475548D2BB2CA9CE",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480D35333922",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 20.5,
+      y: 8.0625,
+      shape: "circle",
+    },
+    {
+      id: "4755483F486040C4",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:diepe_guhzee",
+          id: "475548F2F3AF9AE9",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C79E9D21A2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 11.5,
+      y: 9.5625,
+      shape: "circle",
+    },
+    {
+      id: "475548B8326769D5",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:knuffeldal",
+          id: "4755480ADE926291",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554848EE2D47C1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 13.0,
+      y: 9.5625,
+      shape: "circle",
+    },
+    {
+      id: "475548D803B1E716",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:guhpolder",
+          id: "4755481FB965000D",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487ECCD49851",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 14.5,
+      y: 9.5625,
+      shape: "circle",
+    },
+    {
+      id: "47554800E11C9827",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:sneeuwguhtoendra",
+          id: "475548C6FC6B4A1E",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BE3DE8944D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 16.0,
+      y: 9.5625,
+      shape: "circle",
+    },
+    {
+      id: "4755488E61CB72B7",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:guhwaii",
+          id: "475548FB5D97F1BC",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485E98EB1C31",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 17.5,
+      y: 9.5625,
+      shape: "circle",
+    },
+    {
       id: "4755489DFD70FDF1",
       icon: {
         id: "guhs:guh_bee_spawn_egg",
@@ -625,7 +868,7 @@
         },
       ],
       x: 0.0,
-      y: 12.025,
+      y: 13.525,
     },
     {
       id: "475548AD1F58DE5A",
@@ -654,7 +897,7 @@
         },
       ],
       x: 1.5,
-      y: 12.025,
+      y: 13.525,
     },
     {
       id: "475548F79F052803",
@@ -681,7 +924,7 @@
         },
       ],
       x: 3.0,
-      y: 12.025,
+      y: 13.525,
     },
     {
       id: "475548922FB8ACFA",
@@ -710,7 +953,7 @@
         },
       ],
       x: 4.5,
-      y: 12.025,
+      y: 13.525,
     },
     {
       id: "47554883E4A96AED",
@@ -745,7 +988,7 @@
         },
       ],
       x: 6.0,
-      y: 12.025,
+      y: 13.525,
     },
     {
       id: "47554807AF613EEA",
@@ -772,7 +1015,7 @@
         },
       ],
       x: 7.5,
-      y: 12.025,
+      y: 13.525,
     },
     {
       id: "4755488C315625E3",
@@ -801,7 +1044,7 @@
         },
       ],
       x: 9.0,
-      y: 12.025,
+      y: 13.525,
     },
     {
       id: "475548BF9CE78C33",
@@ -833,7 +1076,7 @@
         },
       ],
       x: 9.0,
-      y: 13.525,
+      y: 15.025,
       shape: "hexagon",
     },
     {
@@ -861,7 +1104,7 @@
         },
       ],
       x: 7.5,
-      y: 13.525,
+      y: 15.025,
     },
     {
       id: "4755482D2E52EC6D",
@@ -892,7 +1135,7 @@
         },
       ],
       x: 11.5,
-      y: 12.025,
+      y: 13.525,
       shape: "gear",
     },
     {
@@ -925,7 +1168,7 @@
         },
       ],
       x: 13.0,
-      y: 12.025,
+      y: 13.525,
     },
     {
       id: "4755485B4889FC1E",
@@ -959,7 +1202,7 @@
         },
       ],
       x: 14.5,
-      y: 12.025,
+      y: 13.525,
     },
     {
       id: "4755483DF8204894",
@@ -991,7 +1234,7 @@
         },
       ],
       x: 16.0,
-      y: 12.025,
+      y: 13.525,
     },
     {
       id: "475548D4C3375F86",
@@ -1017,7 +1260,7 @@
         },
       ],
       x: 0.0,
-      y: 17.4875,
+      y: 18.9875,
     },
     {
       id: "475548DA47804556",
@@ -1053,7 +1296,7 @@
         },
       ],
       x: 1.5,
-      y: 17.4875,
+      y: 18.9875,
     },
     {
       id: "475548D4F4C1FC17",
@@ -1085,7 +1328,7 @@
         },
       ],
       x: 3.0,
-      y: 17.4875,
+      y: 18.9875,
     },
     {
       id: "4755488BA428ACEF",
@@ -1130,7 +1373,7 @@
         },
       ],
       x: 4.5,
-      y: 17.4875,
+      y: 18.9875,
       shape: "diamond",
     },
     {
@@ -1157,7 +1400,7 @@
         },
       ],
       x: 11.5,
-      y: 17.4875,
+      y: 18.9875,
       shape: "square",
     },
     {
@@ -1184,7 +1427,7 @@
         },
       ],
       x: 13.0,
-      y: 17.4875,
+      y: 18.9875,
       shape: "square",
     },
     {
@@ -1211,7 +1454,7 @@
         },
       ],
       x: 14.5,
-      y: 17.4875,
+      y: 18.9875,
       shape: "square",
     },
     {
@@ -1238,7 +1481,7 @@
         },
       ],
       x: 16.0,
-      y: 17.4875,
+      y: 18.9875,
       shape: "square",
     },
     {
@@ -1265,7 +1508,7 @@
         },
       ],
       x: 17.5,
-      y: 17.4875,
+      y: 18.9875,
       shape: "square",
     },
     {
@@ -1292,7 +1535,7 @@
         },
       ],
       x: 19.0,
-      y: 17.4875,
+      y: 18.9875,
       shape: "square",
     },
     {
@@ -1319,7 +1562,7 @@
         },
       ],
       x: 20.5,
-      y: 17.4875,
+      y: 18.9875,
       shape: "square",
     },
     {
@@ -1346,7 +1589,7 @@
         },
       ],
       x: 11.5,
-      y: 18.9875,
+      y: 20.4875,
       shape: "square",
     },
     {
@@ -1373,7 +1616,7 @@
         },
       ],
       x: 13.0,
-      y: 18.9875,
+      y: 20.4875,
       shape: "square",
     },
     {
@@ -1400,7 +1643,7 @@
         },
       ],
       x: 14.5,
-      y: 18.9875,
+      y: 20.4875,
       shape: "square",
     },
     {
@@ -1427,7 +1670,7 @@
         },
       ],
       x: 16.0,
-      y: 18.9875,
+      y: 20.4875,
       shape: "square",
     },
     {
@@ -1454,7 +1697,7 @@
         },
       ],
       x: 17.5,
-      y: 18.9875,
+      y: 20.4875,
       shape: "square",
     },
     {
@@ -1481,7 +1724,7 @@
         },
       ],
       x: 19.0,
-      y: 18.9875,
+      y: 20.4875,
       shape: "square",
     },
     {
@@ -1508,7 +1751,7 @@
         },
       ],
       x: 20.5,
-      y: 18.9875,
+      y: 20.4875,
       shape: "square",
     },
     {
@@ -1535,7 +1778,7 @@
         },
       ],
       x: 11.5,
-      y: 20.4875,
+      y: 21.9875,
       shape: "square",
     },
     {
@@ -1562,7 +1805,7 @@
         },
       ],
       x: 13.0,
-      y: 20.4875,
+      y: 21.9875,
       shape: "square",
     },
     {
@@ -1589,7 +1832,7 @@
         },
       ],
       x: 14.5,
-      y: 20.4875,
+      y: 21.9875,
       shape: "square",
     },
     {
@@ -1616,7 +1859,7 @@
         },
       ],
       x: 16.0,
-      y: 20.4875,
+      y: 21.9875,
       shape: "square",
     },
     {
@@ -1643,7 +1886,7 @@
         },
       ],
       x: 17.5,
-      y: 20.4875,
+      y: 21.9875,
       shape: "square",
     },
     {
@@ -1670,7 +1913,7 @@
         },
       ],
       x: 19.0,
-      y: 20.4875,
+      y: 21.9875,
       shape: "square",
     },
     {
@@ -1703,7 +1946,7 @@
         },
       ],
       x: 0.0,
-      y: 24.45,
+      y: 25.95,
       size: 1.3,
       shape: "gear",
     },
@@ -1734,7 +1977,7 @@
         },
       ],
       x: 1.5,
-      y: 24.45,
+      y: 25.95,
       shape: "rsquare",
     },
     {
@@ -1765,7 +2008,7 @@
         },
       ],
       x: 11.5,
-      y: 24.45,
+      y: 25.95,
       shape: "diamond",
     },
     {
@@ -1795,7 +2038,7 @@
         },
       ],
       x: 13.0,
-      y: 24.45,
+      y: 25.95,
       shape: "diamond",
     },
     {
@@ -1825,7 +2068,7 @@
         },
       ],
       x: 14.5,
-      y: 24.45,
+      y: 25.95,
       shape: "diamond",
     },
     {
@@ -1856,7 +2099,7 @@
         },
       ],
       x: 16.0,
-      y: 24.45,
+      y: 25.95,
       shape: "diamond",
     },
     {
@@ -1886,7 +2129,7 @@
         },
       ],
       x: 17.5,
-      y: 24.45,
+      y: 25.95,
       shape: "diamond",
     },
     {
@@ -1916,7 +2159,7 @@
         },
       ],
       x: 19.0,
-      y: 24.45,
+      y: 25.95,
       shape: "diamond",
     },
     {
@@ -1946,7 +2189,7 @@
         },
       ],
       x: 20.5,
-      y: 24.45,
+      y: 25.95,
       shape: "diamond",
     },
     {
@@ -1979,7 +2222,7 @@
         },
       ],
       x: 0.0,
-      y: 28.412499999999998,
+      y: 29.912499999999998,
     },
     {
       id: "475548A0D2BDA039",
@@ -2011,7 +2254,7 @@
         },
       ],
       x: 1.5,
-      y: 28.412499999999998,
+      y: 29.912499999999998,
     },
     {
       id: "4755489987A6924E",
@@ -2043,7 +2286,7 @@
         },
       ],
       x: 3.0,
-      y: 28.412499999999998,
+      y: 29.912499999999998,
     },
     {
       id: "475548A5029A1872",
@@ -2075,7 +2318,7 @@
         },
       ],
       x: 4.5,
-      y: 28.412499999999998,
+      y: 29.912499999999998,
     },
     {
       id: "475548C88413AA21",
@@ -2107,7 +2350,7 @@
         },
       ],
       x: 6.0,
-      y: 28.412499999999998,
+      y: 29.912499999999998,
       shape: "gear",
     },
     {
@@ -2140,7 +2383,7 @@
         },
       ],
       x: 7.5,
-      y: 28.412499999999998,
+      y: 29.912499999999998,
       shape: "gear",
     },
     {
@@ -2172,7 +2415,7 @@
         },
       ],
       x: 9.0,
-      y: 28.412499999999998,
+      y: 29.912499999999998,
     },
   ],
 }

@@ -21,6 +21,43 @@ public final class Schermen {
         }
     }
 
+    /**
+     * The score list on the cabinet itself (it takes turns with the title screen while nobody plays): "TOP 5" and up to five
+     * lines "place name score". A name is cut to what fits; the pixel font shows letters without accents and digits.
+     */
+    public static void top(Doek d, Sim achtergrond, String kop, java.util.List<String> namen, int[] scores) {
+        achtergrond.teken(d);
+        d.rect(4, 4, Sim.B - 8, Sim.H - 8, 0xFFFF9AC8);
+        d.rect(6, 6, Sim.B - 12, Sim.H - 12, 0xFF3D1F47);
+        PixelFont.midden(d, kop, Sim.B / 2, 11, 2, 0xFFFFD84E);
+        d.rect(10, 25, Sim.B - 20, 1, 0xFFFF9AC8);
+        for (int i = 0; i < namen.size() && i < scores.length && i < 5; i++) {
+            int y = 31 + i * 16;
+            int kleur = i == 0 ? 0xFFFFD84E : 0xFFFFFFFF;
+            String score = Integer.toString(scores[i]);
+            int scoreX = Sim.B - 11 - PixelFont.breedte(score, 2);
+            PixelFont.teken(d, Integer.toString(i + 1), 11, y, 2, 0xFFFF9AC8);
+            int tekens = Math.max(1, (scoreX - 6 - 23) / 8);
+            String naam = schoon(namen.get(i));
+            PixelFont.teken(d, naam.length() > tekens ? naam.substring(0, tekens) : naam, 23, y, 2, kleur);
+            PixelFont.teken(d, score, scoreX, y, 2, kleur);
+        }
+    }
+
+    /** A name for the pixel font: capitals, accents dropped, anything else it does not know becomes a dot. */
+    static String schoon(String naam) {
+        String kaal = java.text.Normalizer.normalize(naam, java.text.Normalizer.Form.NFD).toUpperCase(java.util.Locale.ROOT);
+        StringBuilder uit = new StringBuilder();
+        for (int i = 0; i < kaal.length(); i++) {
+            char c = kaal.charAt(i);
+            if (Character.getType(c) == Character.NON_SPACING_MARK) {
+                continue;
+            }
+            uit.append(c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c == ' ' || c == '-' || c == '!' || c == '?' || c == '+' || c == ':' ? c : '.');
+        }
+        return uit.toString().trim();
+    }
+
     /** Over the last picture of a game: a card with a word ("NJEG!", or "VAHOEG!" for a new best) and the score. */
     public static void af(Doek d, String woord, int score, boolean record) {
         d.rect(24, 38, Sim.B - 48, 44, 0xFFFF9AC8);

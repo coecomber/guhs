@@ -3,6 +3,20 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## Unreleased: the Guhpixel update (no version number yet) — Minecraft 26.1.2
+
+A big update. New structures (the Guh internet café and the travel agency) only appear in chunks that were not generated yet.
+
+- **Guhpixel**, a minigame-server parody in its own dimension. Find the **Guh internet café "De Trage Verbinding"** in the Guhmension (it is in the Superkompas) and walk through the giant monitor. After that `/lobby`, `/hub` and `/l` work, and you can craft a **Guhpixel-poort** for home with the Netwerkkabeltje the lobby greeter gives you. In Guhpixel nothing can hurt you, nothing can be broken, and you can never lose an item: during a game your inventory is put away and comes back exactly as it was.
+- **The lobby**: a floating plaza with game stalls, ranks (`[GUH]` to `[MVG++]`), guhs that "chat", a parkour over the roofs with a personal best and a world top 3, ten hidden golden knabbels, personal stats boards and the shop of the Verkoper-guh.
+- **Six joke games**, each a short questline with a punchline, 100 Guhpixel-muntjes and a keepsake the first time: **Skyblok**, **Bedwars**, **Vadsnite**, the **Guhmon battle**, **Boer zoekt Guh** and the **Among Guhs practice round**.
+- **Among Guhs**, the real game: 10 to 15 minutes on the ship De Vadsvaarder, alone with guh crew mates or with friends from the queue. Eight task mini-games, a Mika (or two on Lastig) who pushes guhs asleep, vents, three sabotages, meetings with statements and votes, droomguhs, a logbook and titles. Other players' name tags are hidden behind the ship's walls during a round. Rounds pay muntjes with a daily cap.
+- **For home, from the shop**: the **Guhkade** (arcade cabinets with Flappy Guh and Mika-Pong, a top 5 with names on the cabinet, and your guhs come to play), the **Guhkantoor** (a time clock and desks where guhs "work", payslips and quarterly reports) and the **Guhbioscoop** (projector, a screen up to 7x4, seats, popcorn; nine films to unlock).
+- **Reisbureau "De Vadsvakantie"**: a second new structure with its own short questline. Send one guh at a time on a trip of 1, 2, 8 or 24 real hours (16 destinations, 4 on offer every day) and collect it at any Reisbalie with a postcard and a souvenir. A guh on holiday is stored safely and can never be lost.
+- **Guh-parkour**: Startpaaltje, Finishpaaltje, obstacles (hurdle, springboard, crawl tunnel, slalom posts, seesaw, balance beam, knabbel table) and a scoreboard. Click toys and obstacles into a route and up to four of your guhs run laps.
+- **Guhmensie quest book**: the section "De biomen" now has all 19 biomes of the Guhmension (Bleekwoud, Gatenkaasgrotten, Kaasmoeras, Vadswoud, Diepe Guhzee, Knuffeldal, Guhpolder, Sneeuwguhtoendra and Guhwai'i were missing). Progress on the existing quests is kept.
+- Everything is in the Guhdex (new tab **Guhpixel**), the FTB quest book (new chapter **Guhpixel**) and the wiki, in Dutch and English.
+
 ## 1.2.11 — Minecraft 26.1.2
 
 A small change. Same requirements as 1.2.10, no worldgen changes.

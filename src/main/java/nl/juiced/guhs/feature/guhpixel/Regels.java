@@ -204,7 +204,19 @@ public final class Regels {
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
-        if (!(event.getEntity() instanceof ServerPlayer p) || !Guhpixel.in(p)) {
+        if (!(event.getEntity() instanceof ServerPlayer p)) {
+            return;
+        }
+        if ((p.tickCount + p.getId()) % 20 == 0 && Sessies.van(p) == null) {
+            Kluis.geefRest(p);   // (wherever the player is: what did not fit when the inventory came back)
+        }
+        if (!Guhpixel.in(p)) {
+            return;
+        }
+        if (!p.isAlive()) {
+            // dead (only /kill gets through): NO health floor, or the player is alive again one tick later and vanilla ignores
+            // the respawn that gives the inventory back
+            Minigames.forget(p);
             return;
         }
         if (!p.isCreative() && !p.isSpectator()) {
@@ -239,6 +251,7 @@ public final class Regels {
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer p && (Guhpixel.in(p) || Sessies.van(p) != null)) {
+            Minigames.forget(p);   // (no health floor for the dead: see onPlayerTick)
             Sessies.verlaat(p, Vertrek.DOOD);
             if (Kluis.bewaar(p)) {   // (nothing drops: the whole inventory waits in the safe until the respawn)
                 GuhQuests.saved(p).putBoolean(DOOD, true);
@@ -276,6 +289,14 @@ public final class Regels {
     @SubscribeEvent
     public static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer p) {
+            if (p.isDeadOrDying()) {
+                // logged out (or the server stopped) on the death screen: nothing goes onto the dead body, a respawn copies no
+                // inventory. The safe stays shut and opens at the respawn.
+                if (Kluis.heeft(p)) {
+                    GuhQuests.saved(p).putBoolean(DOOD, true);
+                }
+                return;
+            }
             GuhQuests.saved(p).remove(DOOD);
             Sessies.opLogin(p);
         }

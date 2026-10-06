@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.guhpixel.Muntjes;
@@ -32,9 +33,10 @@ import nl.juiced.guhs.quest.Scorebord;
  * </ul>
  * Per player: the personal best and the number of finishes ({@code PxData "lobby"}); the first finish pays
  * {@link #MUNTJES} muntjes (once-key {@code lobby:parkour}) and grants quest/lobby_parkour. Every finish goes to the
- * world's top 3 (Scorebord board {@link #BORD}). Flying, gliding, riding, being moved far in one tick, or standing on
- * the ground again away from the start plate (fallen off, or walked away) ends the run: nothing is lost, just start
- * again. Any number of players run at the same time.
+ * world's top 3 (Scorebord board {@link #BORD}). Flying, gliding, riding, being moved far in one tick or teleported, a
+ * potion effect that moves you, or standing on the ground again away from the start plate (fallen off, or walked away)
+ * ends the run: nothing is lost, just start again. During a run no item from the pockets can be used. Any number of
+ * players run at the same time.
  */
 public final class LobbyParkour {
     public static final int MUNTJES = 50, TUSSENPUNTEN = 3;
@@ -122,6 +124,10 @@ public final class LobbyParkour {
             stop(p, "gui.guhs.lobby.parkour.weg");
             return;
         }
+        if (hulp(p)) {
+            stop(p, "gui.guhs.lobby.parkour.hulp");
+            return;
+        }
         if (ticks > MAX_TICKS) {
             stop(p, "gui.guhs.lobby.parkour.te_lang");
             return;
@@ -153,6 +159,29 @@ public final class LobbyParkour {
         if (nu >= l.melding && nu % 4 == 0) {
             p.sendOverlayMessage(Component.translatable("gui.guhs.lobby.parkour.loopt", tijdTekst(ticks), l.tussen.size(), TUSSENPUNTEN).withStyle(ChatFormatting.AQUA));
         }
+    }
+
+    /** Does something other than the player's own legs help right now (a potion effect that moves you, a riptide spin)? */
+    static boolean hulp(ServerPlayer p) {
+        return p.isAutoSpinAttack() || p.hasEffect(MobEffects.SPEED) || p.hasEffect(MobEffects.JUMP_BOOST) || p.hasEffect(MobEffects.SLOW_FALLING)
+                || p.hasEffect(MobEffects.LEVITATION);
+    }
+
+    /**
+     * The player uses an item (right-click in the air): true = not now. On the start plate and during a run nothing from the
+     * pockets is used (ender pearls, wind charges, potions, rockets): the time on the world board is a time on foot.
+     */
+    static boolean geenItems(ServerPlayer p) {
+        if (!LOPEN.containsKey(p.getUUID()) || p.getAbilities().instabuild) {
+            return false;
+        }
+        p.sendOverlayMessage(Component.translatable("gui.guhs.lobby.parkour.hulp").withStyle(ChatFormatting.LIGHT_PURPLE));
+        return true;
+    }
+
+    /** The player was teleported (an ender pearl thrown earlier, a chorus fruit, a command): the run is over. */
+    static void geteleporteerd(ServerPlayer p) {
+        stop(p, "gui.guhs.lobby.parkour.weg");
     }
 
     private static void stop(ServerPlayer p, String waarom) {

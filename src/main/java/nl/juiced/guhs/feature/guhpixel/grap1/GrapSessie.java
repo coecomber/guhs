@@ -143,7 +143,7 @@ abstract class GrapSessie extends Sessie {
         }
         if (gewonnen && !uitbetaald) {
             uitbetaald = true;
-            beloond(p, Grappen.voltooi(p, grap));
+            beloond(p, Grappen.voltooi(p, grap, false));   // (clou() showed the punchline title already)
         }
     }
 

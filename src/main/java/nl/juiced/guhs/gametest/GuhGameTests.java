@@ -1859,8 +1859,9 @@ public class GuhGameTests {
             helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.installInto(quests), "installs the first time");
             java.util.List<String> names = nl.juiced.guhs.compat.FtbQuestsChapter.chapters();
             helper.assertTrue(names.equals(java.util.List.of("guhs_basis", "guhs_guhmensie", "guhs_minigames", "guhs_onderwater", "guhs_maag",
-                    "guhs_guheinde", "guhs_barbecuether", "guhs_extra27", "guhs_knuffeldal", "guhs_piep", "guhs_band", "guhs_verhalen", "guhs_diertjes")),
-                    "the thirteen chapters (3.0: Guhverhalen, Diertjes van de Guhmensie), in reading order: " + names);
+                    "guhs_guheinde", "guhs_barbecuether", "guhs_extra27", "guhs_knuffeldal", "guhs_piep", "guhs_band", "guhs_verhalen", "guhs_diertjes",
+                    "guhs_guhpixel")),
+                    "the fourteen chapters (3.0: Guhverhalen, Diertjes van de Guhmensie; guhpixel: Guhpixel), in reading order: " + names);
             for (String name : names) {
                 helper.assertTrue(java.nio.file.Files.exists(quests.resolve("chapters").resolve(name + ".json5")), "chapter " + name + " is there");
                 // 1.2.0: Dutch in nl_nl, English in en_us (the shipped file; keys without English yet stay Dutch), the same keys in both

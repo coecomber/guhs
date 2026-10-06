@@ -75,6 +75,14 @@ public final class Grappen {
      * the run is counted and the punchline shows as a title.
      */
     public static boolean voltooi(ServerPlayer p, String id) {
+        return voltooi(p, id, true);
+    }
+
+    /**
+     * As {@link #voltooi(ServerPlayer, String)}; {@code titel} false when the game showed the punchline title itself already
+     * (the reward then only shows as a line above the hotbar, not as the same title a second time).
+     */
+    public static boolean voltooi(ServerPlayer p, String id, boolean titel) {
         Grap g = GRAPPEN.get(id);
         CompoundTag d = data(p, id);
         boolean eerste = !d.getBooleanOr(KLAAR, false);
@@ -88,8 +96,12 @@ public final class Grappen {
             }
         }
         PxData.vuil(p.level().getServer());
-        PxGeluid.titel(p, Component.translatable("gui.guhs." + id + ".grap.clou").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
-                Component.translatable(eerste ? "gui.guhs.guhpixel.grap.klaar" : "gui.guhs.guhpixel.grap.opnieuw").withStyle(ChatFormatting.LIGHT_PURPLE), 80);
+        Component onder = Component.translatable(eerste ? "gui.guhs.guhpixel.grap.klaar" : "gui.guhs.guhpixel.grap.opnieuw").withStyle(ChatFormatting.LIGHT_PURPLE);
+        if (titel) {
+            PxGeluid.titel(p, Component.translatable("gui.guhs." + id + ".grap.clou").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD), onder, 80);
+        } else {
+            p.sendOverlayMessage(onder);
+        }
         if (eerste) {
             Muntjes.verdienEens(p, "grap:" + id, BELONING);
             if (g != null) {

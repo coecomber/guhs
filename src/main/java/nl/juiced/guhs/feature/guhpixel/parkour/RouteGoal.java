@@ -40,6 +40,14 @@ import nl.juiced.guhs.registry.ModEntities;
 public class RouteGoal extends Goal {
     /** Guh persistent data: the position (as a long) of its Startpaaltje. */
     public static final String PAAL = "guhs_px_parkour_paal";
+    /** Guh persistent data: the dimension of that post (posts set before this existed have none: any dimension). */
+    public static final String PAAL_DIM = "guhs_px_parkour_dim";
+    /**
+     * A guh that is this long (ticks) away from its post (far from it, or in another dimension) is off the route: it would
+     * otherwise keep its claim for ever, because an unloaded post cannot tell it that it was taken off or broken, and a
+     * claimed guh cannot go on holiday, to the Guhkantoor, the Guhkade or the Guhbioscoop.
+     */
+    static final int WEG_TICKS = 20 * 60 * 5;
     private static final Identifier VER_PAD = Guhs.id("guhparkour_pad");
     /** A guh further than this from its post (its owner took it along) just waits until it is back. */
     private static final int MAX_AFSTAND = Routes.BEREIK + 24;
@@ -52,6 +60,8 @@ public class RouteGoal extends Goal {
     private int index, gedaan, faseTicks, wacht;
     private long rondeStart;
     private boolean geldig;
+    /** The game time at which the guh was first seen away from its post (-1: it is not away). */
+    private long wegSinds = -1;
     @Nullable
     private RouteStukken.Stap stap;
     @Nullable
@@ -65,6 +75,7 @@ public class RouteGoal extends Goal {
     /** Takes a guh off its route: free again (also called by the guh itself when its post is gone). */
     public static void vrij(GuhEntity guh) {
         guh.getPersistentData().remove(PAAL);
+        guh.getPersistentData().remove(PAAL_DIM);
         if (ParkourSlice.NS.equals(GuhKiezer.geclaimd(guh))) {
             GuhKiezer.los(guh);
         }
@@ -79,7 +90,7 @@ public class RouteGoal extends Goal {
             return null;
         }
         BlockPos pos = BlockPos.of(data.getLongOr(PAAL, 0L));
-        if (!level.isLoaded(pos)) {
+        if (andereDimensie(guh, level) || !level.isLoaded(pos)) {
             return null;
         }
         if (level.getBlockEntity(pos) instanceof StartpaalBlockEntity paal && paal.heeftGuh(guh.getUUID())) {
@@ -87,6 +98,45 @@ public class RouteGoal extends Goal {
         }
         vrij(guh);
         return null;
+    }
+
+    private static boolean andereDimensie(GuhEntity guh, ServerLevel level) {
+        String dim = guh.getPersistentData().getStringOr(PAAL_DIM, "");
+        return !dim.isEmpty() && !dim.equals(level.dimension().identifier().toString());
+    }
+
+    /**
+     * Is this guh away from its post: in another dimension, or further than a waiting guh ever is while the post is not
+     * loaded? (A guh near an unloaded post just waits: the chunk border can run between them.)
+     */
+    static boolean isWeg(GuhEntity guh) {
+        var data = guh.getPersistentData();
+        if (!data.contains(PAAL) || !(guh.level() instanceof ServerLevel level)) {
+            return false;
+        }
+        if (andereDimensie(guh, level)) {
+            return true;
+        }
+        BlockPos pos = BlockPos.of(data.getLongOr(PAAL, 0L));
+        return !level.isLoaded(pos) && !guh.blockPosition().closerThan(pos, MAX_AFSTAND);
+    }
+
+    /** Called while the guh has a post but cannot run: frees it when it has been away for {@link #WEG_TICKS}. True = freed. */
+    boolean bewaakWeg(long nu) {
+        if (!isWeg(guh)) {
+            wegSinds = -1;
+            return false;
+        }
+        if (wegSinds < 0) {
+            wegSinds = nu;
+            return false;
+        }
+        if (nu - wegSinds < WEG_TICKS) {
+            return false;
+        }
+        wegSinds = -1;
+        vrij(guh);
+        return true;
     }
 
     private boolean kan(StartpaalBlockEntity paal) {
@@ -107,8 +157,14 @@ public class RouteGoal extends Goal {
         StartpaalBlockEntity paal = paal(guh);
         if (paal == null || !kan(paal)) {
             wacht = 10;
+            if (paal == null) {
+                bewaakWeg(guh.level().getGameTime());
+            } else {
+                wegSinds = -1;
+            }
             return false;
         }
+        wegSinds = -1;
         return true;
     }
 

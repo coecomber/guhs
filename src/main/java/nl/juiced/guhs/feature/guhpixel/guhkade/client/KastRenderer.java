@@ -131,8 +131,18 @@ public class KastRenderer implements BlockEntityRenderer<KastBlockEntity, KastRe
                 Schermen.af(state, KastScherm.woord(sim.stappen() >= Sim.MAX_STAPPEN ? "tijd" : "af"), sim.score(), false);
             }
         } else if (sim.af() || sim.stappen() == 0) {
-            // between two demo rounds: the title
-            Schermen.titel(state, spel.nieuw(sim.seed()), KastScherm.woord("naam." + spel.id), KastScherm.woord("top"), topScore, KastScherm.woord("start"), knipper);
+            // between two demo rounds: the title, taking turns with the top 5 (with names) when there is one
+            if (!top.isEmpty() && tijd / 60 % 2 == 1) {
+                int[] scores = new int[top.size()];
+                java.util.List<String> namen = new java.util.ArrayList<>();
+                for (int i = 0; i < top.size(); i++) {
+                    scores[i] = top.get(i).score();
+                    namen.add(top.get(i).naam().getString());
+                }
+                Schermen.top(state, spel.nieuw(sim.seed()), KastScherm.woord("top") + " " + KastBlockEntity.TOP, namen, scores);
+            } else {
+                Schermen.titel(state, spel.nieuw(sim.seed()), KastScherm.woord("naam." + spel.id), KastScherm.woord("top"), topScore, KastScherm.woord("start"), knipper);
+            }
         } else {
             sim.teken(state);
             if (knipper) {

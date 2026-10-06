@@ -68,6 +68,7 @@ TEXTS = {
     "gui.guhs.guhpixel.spel.bezig": "%s is nog met iets anders bezig, njeg.",
     "gui.guhs.guhpixel.spel.niet_hier": "%s is niet in de lobby, njeg.",
     "gui.guhs.guhpixel.kluis.terug": "Je eigen spullen zijn terug: precies zoals je ze had. Niks kwijt, njeg!",
+    "gui.guhs.guhpixel.kluis.rest": "Je zakken zitten vol. Wacht nog op een vrij plekje: %s stapeltje(s). Niks kwijt, njeg!",
     "gui.guhs.guhpixel.regels.niet_bouwen": "Hier wordt niks gesloopt of gebouwd, njeg. Alleen gevadst.",
     "gui.guhs.guhpixel.regels.void": "Oeps, van het randje gevallen! Hup, terug.",
     "gui.guhs.guhpixel.grap.stap": "Stap %1$s/%2$s: %3$s",

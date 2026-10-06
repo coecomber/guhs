@@ -15,10 +15,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.TriState;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
+import net.neoforged.neoforge.client.event.RenderNameTagEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.client.GuhRenderer;
@@ -60,10 +63,22 @@ public final class AmongClient {
                 frame.pass(VIZIER, 0xFFFFFFFF, bone -> bone.startsWith("outfit_glasses"));
             }
         });
+        NeoForge.EVENT_BUS.addListener(AmongClient::naamkaartje);
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> {
             hud = null;
             GuhpixelClient.hudVerborgen = false;
         });
+    }
+
+    /**
+     * During a round the name of another real player only shows when you look straight at them from close by, exactly as
+     * for the guh NPCs: no name tags through the ship's walls (they would give away where everybody is, the Mika too).
+     */
+    private static void naamkaartje(RenderNameTagEvent.CanRender event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (hud != null && event.getEntity() instanceof Player ander && ander != mc.player && mc.crosshairPickEntity != ander) {
+            event.setCanRender(TriState.FALSE);
+        }
     }
 
     /**
