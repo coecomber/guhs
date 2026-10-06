@@ -24,6 +24,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -376,9 +377,20 @@ public class SausdierenGameTests {
         zet(nieuw, baan.poorten().get(0));
         Proefrit.tick(a);
         helper.assertTrue(Proefrit.poort(a) == 1, "the first gate of the second lap");
-        zet(nieuw, baan.start().add(Proefrit.TE_VER + 6, 0, 0));
-        Proefrit.tick(a);
-        helper.assertTrue(Proefrit.poort(a) == 0 && nieuw.distanceToSqr(baan.start()) < 9 && a.getHealth() == a.getMaxHealth(), "strayed far: back to the start, unharmed");
+        // (the far spot lies outside the test's own chunks: an entity put into a chunk that is not loaded can't be found any more)
+        Vec3 ver = baan.start().add(Proefrit.TE_VER + 6, 0, 0);
+        ChunkPos verChunk = ChunkPos.containing(BlockPos.containing(ver));
+        level.setChunkForced(verChunk.x(), verChunk.z(), true);
+        level.getChunk(verChunk.x(), verChunk.z());
+        try {
+            zet(nieuw, ver);
+            Proefrit.tick(a);
+        } finally {
+            level.setChunkForced(verChunk.x(), verChunk.z(), false);
+        }
+        helper.assertTrue(Proefrit.poort(a) == 0, "strayed far: the lap starts again (gate " + Proefrit.poort(a) + ")");
+        helper.assertTrue(nieuw.isAlive() && nieuw.distanceToSqr(baan.start()) < 9, "strayed far: back to the start (" + nieuw.position() + ")");
+        helper.assertTrue(a.getVehicle() == nieuw && a.getHealth() == a.getMaxHealth(), "still riding, unharmed");
         for (int i = 0; i < 4; i++) {
             zet(nieuw, baan.poorten().get(i));
             Proefrit.tick(a);
