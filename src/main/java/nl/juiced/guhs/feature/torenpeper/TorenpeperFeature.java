@@ -3,12 +3,17 @@ package nl.juiced.guhs.feature.torenpeper;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
@@ -28,6 +33,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
@@ -247,8 +255,11 @@ public final class TorenpeperFeature {
 
     /**
      * {@code /guhs torenpeper ...} (ops; for the AutoCheck script and dev checks): {@code stand} says where the caller is in both
-     * questlines, {@code rookguh} lets a lost Rookguh of the caller appear at the nearest lamp, {@code rijp} makes the caller's
-     * plants in the kweekbakken ripe, and in dev runs only {@code toren} / {@code tuin} place a building's template at your feet.
+     * questlines, {@code rookguh} lets a lost Rookguh of the caller appear at the nearest lamp, {@code kweek <0-4>} gives the
+     * caller's plants in the three kweekbakken that stage (0 empty, 4 ripe), and in dev runs only {@code toren} / {@code tuin}
+     * place a building's template around you (your feet on its guh's spot) and {@code dump <structuur>} saves the generated
+     * copy at the source's position, with the land around it, as a template file in the server folder (to look at how a
+     * building lies in real terrain).
      */
     private static void commando(RegisterCommandsEvent event) {
         var wortel = Commands.literal("torenpeper").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
@@ -267,13 +278,15 @@ public final class TorenpeperFeature {
                     }
                     return Vuurtoren.laatVerdwalen(p, lamp) != null ? 1 : 0;
                 }))
-                .then(Commands.literal("rijp").executes(c -> {
+                .then(Commands.literal("kweek").then(Commands.argument("groei", IntegerArgumentType.integer(0, Kweek.RIJP)).executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
-                    return Kweek.maakRijp(p);
-                }));
+                    return Kweek.zetGroei(p, IntegerArgumentType.getInteger(c, "groei"));
+                })));
         if (!FMLEnvironment.isProduction()) {
             wortel.then(Commands.literal("toren").executes(c -> plaats(c.getSource(), Vuurtoren.STRUCTUUR, Vuurtoren.NPC)));
             wortel.then(Commands.literal("tuin").executes(c -> plaats(c.getSource(), Pepertuin.STRUCTUUR, Pepertuin.NPC)));
+            wortel.then(Commands.literal("dump").then(Commands.argument("structuur", StringArgumentType.word())
+                    .executes(c -> dump(c.getSource(), StringArgumentType.getString(c, "structuur")))));
         }
         event.getDispatcher().register(Commands.literal("guhs").then(wortel));
     }
@@ -284,6 +297,30 @@ public final class TorenpeperFeature {
         boolean gelukt = Vuurtoren.plaats(s.getLevel(), structuur, hoek);
         s.sendSuccess(() -> Component.literal(gelukt ? "guhs:" + structuur + " staat op " + hoek.toShortString() : "Geen template guhs:" + structuur), false);
         return gelukt ? 1 : 0;
+    }
+
+    /** (dev) the copy of this structure around the source, 10 blocks of land around it and 4 under it, as a template file. */
+    private static int dump(CommandSourceStack source, String structuur) {
+        ServerLevel level = source.getLevel();
+        StructureStart start = Bezetting.start(level, structuur, BlockPos.containing(source.getPosition()));
+        if (start == null) {
+            source.sendFailure(Component.literal("no copy of guhs:" + structuur + " here"));
+            return 0;
+        }
+        BoundingBox box = start.getBoundingBox();
+        BlockPos hoek = new BlockPos(box.minX() - 10, Math.max(level.getMinY(), box.minY() - 4), box.minZ() - 10);
+        BlockPos maat = new BlockPos(box.getXSpan() + 20, Math.min(level.getMaxY(), box.maxY() + 6) - hoek.getY() + 1, box.getZSpan() + 20);
+        StructureTemplate template = new StructureTemplate();
+        template.fillFromWorld(level, hoek, maat, false, List.of());
+        var file = level.getServer().getServerDirectory().resolve("torenpeper_dump_" + structuur + ".nbt");
+        try {
+            NbtIo.writeCompressed(template.save(new CompoundTag()), file);
+        } catch (java.io.IOException e) {
+            source.sendFailure(Component.literal("dump failed: " + e));
+            return 0;
+        }
+        source.sendSuccess(() -> Component.literal("dumped " + box + " from corner " + hoek.toShortString() + " to " + file), false);
+        return 1;
     }
 
     private TorenpeperFeature() {

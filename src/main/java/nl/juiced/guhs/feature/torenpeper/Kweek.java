@@ -79,11 +79,18 @@ public final class Kweek {
         zet(p, a);
     }
 
-    /** (op command) every kweekbak of this player holds a ripe plant. */
+    /** (op command, tests) every kweekbak of this player holds a ripe plant. */
     public static int maakRijp(ServerPlayer p) {
+        return zetGroei(p, RIJP);
+    }
+
+    /** (op command) every kweekbak of this player holds a plant that just reached this stage (0: all three empty). */
+    public static int zetGroei(ServerPlayer p, int groei) {
+        long[] a = geplant(p);
         for (PeperSoort s : PeperSoort.values()) {
-            plant(p, s, 3L * GROEI_TICKS);
+            a[s.ordinal()] = groei <= 0 ? 0 : stempel(p.level().getGameTime() - (long) (groei - 1) * GROEI_TICKS);
         }
+        zet(p, a);
         return PeperSoort.values().length;
     }
 
