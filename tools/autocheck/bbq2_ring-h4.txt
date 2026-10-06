@@ -1,0 +1,166 @@
+# bbq2, ring-h4 (AutoCheck, dev only): chapter 4 of the Knabbelring, De Spiegel van Guhladriel. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_ring-h4.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs ringh4 ..., feature/ringh4/RingH4Commands.java)
+# The whole tree city is built as a try-out copy (/guhs ringh4 bouw, dev runs only: the very tiles worldgen places), its
+# gate at 7000 100 7000, so the city spans x 6996..7188, z 6952..7048, y 98..150 (template 0,0,0 = 6996 98 6952).
+# Shots: the gate with Leguhlas, the glade, the great stair, the hall with Guhladriel, the guest flet, the dell with the
+# mirror, the narrator card, six frames of the mirror scene (bars, Guhladriel, Sam-guh, the visions, the temptation), the
+# quay with the boats and the guides, the trip boat with Leguhlas and Gimguh in it at the Arguhnath, the landing, the
+# Guhdex page of the chapter.
+# NOT run by the slice itself (no game client in phase 2): this is for the merge step's visual check.
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 7000 100 7000
+/forceload add 6992 6944 7120 7056
+/forceload add 7121 6944 7192 7056
+wait 80
+/fill 6990 97 6990 7010 99 7010 guhs:houtskoolsteen
+/tp @s 7000.5 100 7000.5 -90 0
+/guhs ring wis
+/guhs ringh4 bouw
+wait 120
+waitrender 400
+/guhs ringh4 stap 1
+wait 40
+clearchat
+
+section the gate (Leguhlas waits behind it) and the glade
+camera 6994.5 102 7000.5 -90 -5
+wait 40
+shot bbq2_ringh4_poort world
+camera 7016.5 105 7002.5 -80 0
+wait 40
+shot bbq2_ringh4_weide world
+camera 7030.5 104.5 6996.5 -110 -25
+wait 40
+shot bbq2_ringh4_grote_spies world
+camera 7046.5 138 7046.5 180 35
+wait 40
+shot bbq2_ringh4_van_boven world
+
+section Leguhlas at the gate (step 1 -> 2)
+/guhs ringh4 ga leguhlas_poort
+wait 10
+npc leguhlas 3 1
+wait 20
+shot bbq2_ringh4_leguhlas world
+interact npc
+wait 30
+shot bbq2_ringh4_leguhlas_praat gui
+clearchat
+
+section the hall of Guhladriel (step 2 -> 3)
+/guhs ringh4 ga zaal_voor
+wait 20
+npc guhladriel 4 1
+wait 30
+shot bbq2_ringh4_zaal world
+interact npc
+wait 30
+shot bbq2_ringh4_guhladriel_praat gui
+clearchat
+camera 7034.5 127 7004.5 -100 10
+wait 30
+shot bbq2_ringh4_zaal_breed world
+
+section the guest flet (step 3 -> 4: a night's rest)
+/guhs ringh4 ga gast
+wait 60
+shot bbq2_ringh4_gastenvlonder gui
+clearchat
+
+section the dell and the mirror
+/guhs ringh4 ga dal_rand
+wait 20
+camera 7033.5 104 7015.5 60 25
+wait 40
+shot bbq2_ringh4_dal world
+
+section the narrator card
+/guhs ringh4 kaart
+wait 30
+shot bbq2_ringh4_kaart_1 gui
+wait 110
+shot bbq2_ringh4_kaart_2 gui
+press Verder
+wait 60
+
+section the mirror scene (1100 ticks, step 4 -> 5)
+/guhs ringh4 stap 4
+/guhs ringh4 scene
+wait 60
+shot bbq2_ringh4_scene_1_dal gui
+wait 130
+shot bbq2_ringh4_scene_2_sam gui
+wait 90
+shot bbq2_ringh4_scene_3_vullen gui
+wait 110
+shot bbq2_ringh4_scene_4_visioen gui
+wait 150
+shot bbq2_ringh4_scene_5_oog gui
+wait 150
+shot bbq2_ringh4_scene_6_aanbod gui
+wait 130
+shot bbq2_ringh4_scene_7_koningin gui
+wait 150
+shot bbq2_ringh4_scene_8_proef gui
+wait 260
+clearchat
+
+section the three gifts (step 5 -> 6)
+npc guhladriel 3 1
+wait 20
+interact npc
+wait 30
+shot bbq2_ringh4_gaven gui
+clearchat
+
+section the quay: the boats, Leguhlas and Gimguh
+/guhs ringh4 ga steiger
+wait 20
+camera 7078.5 103.5 6996.5 -60 15
+wait 40
+shot bbq2_ringh4_steiger world
+camera 7092.5 101.5 6998.5 -150 10
+wait 30
+shot bbq2_ringh4_bootje world
+
+section the trip down the Guhduin (step 6 -> done)
+/guhs ringh4 boot
+wait 30
+shot bbq2_ringh4_instappen gui
+wait 200
+shot bbq2_ringh4_vaart_1 gui
+wait 170
+shot bbq2_ringh4_vaart_2_arguhnath gui
+wait 120
+shot bbq2_ringh4_vaart_3_tussen gui
+wait 400
+shot bbq2_ringh4_aanleg gui
+clearchat
+
+section the Arguhnath from the bank, the landing
+camera 7112.5 104 6993.5 -70 -15
+wait 40
+shot bbq2_ringh4_arguhnath world
+camera 7168.5 104 6990.5 -50 15
+wait 40
+shot bbq2_ringh4_aanlegplaats world
+
+section the Guhdex: the chapter's page and the travel map
+gui verhalen ring_h4
+wait 20
+shot bbq2_ringh4_gids gui
+gui close
+gui verhalen @kaart:knabbelring
+wait 20
+shot bbq2_ringh4_reiskaart gui
+gui close
+/forceload remove all
+quit
