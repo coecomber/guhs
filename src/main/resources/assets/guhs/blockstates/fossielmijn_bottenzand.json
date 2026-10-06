@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "leeg=false": {
+      "model": "guhs:block/fossielmijn_bottenzand"
+    },
+    "leeg=true": {
+      "model": "guhs:block/fossielmijn_bottenzand_leeg"
+    }
+  }
+}

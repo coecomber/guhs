@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/fossielmijn_bottenzand",
+    "bottom": "guhs:block/as_aarde",
+    "side": "guhs:block/as_aarde"
+  }
+}

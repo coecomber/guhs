@@ -1,0 +1,13 @@
+{
+  "type": "guhs:barbecueput",
+  "biomes": "#guhs:has_structure/zoutkristalmijn",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "guhs:zoutkristalmijn/start",
+  "start_jigsaw_name": "guhs:zoutkristalmijn_midden",
+  "check_radius": 30,
+  "max_height_difference": 8,
+  "headroom": 14,
+  "keep_clear": 22
+}

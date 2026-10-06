@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/fossielmijn_fossielbeeldje"
+    },
+    "facing=east": {
+      "model": "guhs:block/fossielmijn_fossielbeeldje",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/fossielmijn_fossielbeeldje",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/fossielmijn_fossielbeeldje",
+      "y": 270
+    }
+  }
+}

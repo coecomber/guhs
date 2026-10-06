@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "guhs:fossielmijn_zoutkristalerts",
+  "result": {
+    "id": "guhs:zoutkristal"
+  },
+  "experience": 0.2,
+  "cookingtime": 200
+}

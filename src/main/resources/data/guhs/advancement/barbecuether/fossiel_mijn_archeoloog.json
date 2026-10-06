@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "guhs:fossielmijn_fossielbeeldje"
+    },
+    "title": {
+      "translate": "advancements.guhs.barbecuether.fossiel_mijn_archeoloog.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.barbecuether.fossiel_mijn_archeoloog.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "guhs:barbecuether/binnen"
+}

@@ -1,0 +1,102 @@
+# bbq2 fossiel-mijn AutoCheck: the Fossiel-opgraving and the Zoutkristalmijn as templates on a flat piece of land (how
+# they lie in the real Guhbarbecuether is the merge step's /guhs bouwcheck + tplocate), the blocks and items, the
+# per-player skeleton on the stand, the vein, the NPCs. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_fossiel-mijn.txt
+# (commands: see autocheck.txt)
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3020 150 3020
+/forceload add 2960 2960 3110 3070
+wait 80
+/fill 2970 133 2970 3030 139 3030 guhs:houtskoolsteen
+/fill 3040 131 2970 3100 139 3030 guhs:houtskoolsteen
+/fill 2970 140 2970 3030 160 3030 minecraft:air
+/fill 3040 140 2970 3100 166 3030 minecraft:air
+wait 20
+
+section the Fossiel-opgraving (ground at y 140: the template's layer 3)
+/place template guhs:fossiel_opgraving 2980 137 2980
+wait 60
+camera 3000.5 156 3034.5 180 38
+waitrender 300
+shot fossiel_opgraving_zuid
+camera 3034.5 152 2996.5 90 32
+waitrender 200
+shot fossiel_opgraving_oost
+camera 2966.5 150 2996.5 -90 30
+waitrender 200
+shot fossiel_opgraving_west
+# down in the pit, looking at the skull and through the ribs
+camera 3000.5 139.8 3003.0 100 -8
+waitrender 200
+shot fossiel_opgraving_schedel
+camera 3009.5 139.8 2996.0 90 -5
+waitrender 200
+shot fossiel_opgraving_ribben
+# the camp: the tent, the Archeoloog-guh, the finds table
+camera 3003.5 142.6 3012.5 -70 12
+waitrender 200
+shot fossiel_opgraving_kamp
+npc archeoloogguh 3 0.4
+wait 10
+shot npc_archeoloogguh
+
+section the stand: every player their own skeleton
+/guhs fossielmijn rek 0
+camera 2994.5 143.2 3009.0 100 12
+waitrender 200
+shot rek_leeg
+/guhs fossielmijn rek 24
+wait 10
+shot rek_staart_en_pootjes
+/guhs fossielmijn rek 31
+wait 10
+shot rek_compleet
+camera 2989.0 143.0 3013.5 180 10
+waitrender 100
+shot rek_compleet_opzij
+
+section the Zoutkristalmijn (ground at y 140: the template's layer 5)
+/place template guhs:zoutkristalmijn 3048 135 2978
+wait 80
+camera 3069.5 158 3040.5 180 30
+waitrender 300
+shot zoutkristalmijn_zuid
+camera 3106.5 160 3000.5 90 32
+waitrender 200
+shot zoutkristalmijn_oost
+camera 3069.5 163 2962.5 0 36
+waitrender 200
+shot zoutkristalmijn_noord
+# the yard: the mouth, the shed, the heap of salt
+camera 3069.5 142.6 3021.5 180 4
+waitrender 200
+shot zoutkristalmijn_mond
+npc mijnwerkerguh 3 0.4
+wait 10
+shot npc_mijnwerkerguh
+# into the tunnel: the first rubble, the frames
+camera 3069.5 141.7 3011.0 180 6
+waitrender 200
+shot zoutkristalmijn_gang
+camera 3064.0 141.7 3005.5 90 4
+waitrender 200
+shot zoutkristalmijn_gang_west
+# the grotto from the landing, and from its floor
+camera 3066.0 142.7 2996.5 -90 8
+waitrender 200
+shot zoutkristalmijn_grot
+camera 3070.5 138.7 2996.5 -70 -14
+waitrender 200
+shot zoutkristalmijn_grot_ader
+
+section blocks and items
+gui creative guhs
+gui close
+quit

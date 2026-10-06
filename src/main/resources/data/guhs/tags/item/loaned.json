@@ -19,6 +19,11 @@
     "guhs:stempelkaart",
     "guhs:guh_brandslang",
     "guhs:beroepen_dakpan",
-    "guhs:surfplankje_leen"
+    "guhs:surfplankje_leen",
+    "guhs:fossielmijn_bot_schedel",
+    "guhs:fossielmijn_bot_ruggengraat",
+    "guhs:fossielmijn_bot_ribben",
+    "guhs:fossielmijn_bot_pootjes",
+    "guhs:fossielmijn_bot_staart"
   ]
 }
