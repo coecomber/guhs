@@ -17,7 +17,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -27,6 +29,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
@@ -49,6 +52,7 @@ import nl.juiced.guhs.quest.GuhDex;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
+import nl.juiced.guhs.world.WildeDieren;
 
 /**
  * Game tests of bbq2 (sausdieren). Templates: sausdieren_test_kamer (24 x 8 x 16: a floor of houtskoolsteen with a walled
@@ -610,6 +614,20 @@ public class SausdierenGameTests {
         helper.assertTrue(!SausloperEntity.magSpawnen(type, level, EntitySpawnReason.SPAWN_ITEM_USE, saus, level.getRandom()), "not under rock");
         helper.assertTrue(SausblubjeEntity.magSpawnen(SausdierenFeature.SAUSBLUBJE.get(), level, EntitySpawnReason.SPAWN_ITEM_USE, droog, level.getRandom()),
                 "a spawn egg always works");
+        helper.setBlock(new BlockPos(6, 3, 7), Blocks.AIR);
+        helper.assertTrue(!SausloperEntity.magSpawnen(type, level, EntitySpawnReason.CHUNK_GENERATION, saus, level.getRandom())
+                && !SausblubjeEntity.magSpawnen(SausdierenFeature.SAUSBLUBJE.get(), level, EntitySpawnReason.CHUNK_GENERATION, droog, level.getRandom()),
+                "none are made with the world: wild ones only come and go");
+        // what the natural spawner brings is a come-and-go animal; one that somebody cares about is not
+        for (EntityType<? extends Mob> soort : List.of(SausdierenFeature.SAUSLOPER.get(), SausdierenFeature.SAUSBLUBJE.get())) {
+            Mob wild = soort.create(level, EntitySpawnReason.NATURAL);
+            wild.snapTo(droog.getX() + 0.5, droog.getY(), droog.getZ() + 0.5, 0, 0);
+            net.neoforged.neoforge.event.EventHooks.finalizeMobSpawn(wild, level, level.getCurrentDifficultyAt(droog), EntitySpawnReason.NATURAL, null);
+            helper.assertTrue(WildeDieren.isKomEnGa(wild), "a wild " + soort.getDescriptionId() + " comes and goes");
+            wild.setPersistenceRequired();
+            helper.assertTrue(!WildeDieren.isKomEnGa(wild), "a kept one stays");
+            wild.discard();
+        }
         var biomes = level.registryAccess().lookupOrThrow(Registries.BIOME);
         for (String naam : List.of("houtskoolvlakte", "asdal", "satebos", "worstenwoud", "rookdelta")) {
             Biome biome = biomes.getValue(ResourceKey.create(Registries.BIOME, Guhs.id(naam)));

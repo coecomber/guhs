@@ -138,8 +138,16 @@ public class SausloperEntity extends TamableAnimal implements GeoEntity, ItemSte
                 .add(Attributes.FOLLOW_RANGE, 16.0);
     }
 
-    /** Wild ones come up out of the sauce sea (the spot is in the sauce, see {@link SausdierenFeature#IN_SAUS}): open air above it, not too many together. */
+    /**
+     * Wild ones come up out of the sauce sea (the spot is in the sauce, see {@link SausdierenFeature#IN_SAUS}): open air above
+     * it, not too many together. Never at chunk generation: those would stay for ever and fill the creature cap around every
+     * sauce sea (no Rookguhs or Sausblubjes any more); the ones the natural spawner brings come and go
+     * ({@link SausdierenEvents#onFinalizeSpawn}).
+     */
     public static boolean magSpawnen(EntityType<SausloperEntity> type, LevelAccessor level, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
+        if (reason == EntitySpawnReason.CHUNK_GENERATION) {
+            return false;
+        }
         BlockPos.MutableBlockPos p = pos.mutable();
         int n = 0;
         do {
@@ -148,10 +156,10 @@ public class SausloperEntity extends TamableAnimal implements GeoEntity, ItemSte
         if (!level.getBlockState(p).isAir()) {
             return false;
         }
-        if (reason != EntitySpawnReason.NATURAL && reason != EntitySpawnReason.CHUNK_GENERATION) {
+        if (reason != EntitySpawnReason.NATURAL) {
             return true;
         }
-        return random.nextInt(3) == 0 && level.getEntitiesOfClass(SausloperEntity.class, new AABB(pos).inflate(48, 16, 48)).size() < 3;
+        return random.nextInt(3) == 0 && level.getEntitiesOfClass(SausloperEntity.class, new AABB(pos).inflate(80, 24, 80)).size() < 3;
     }
 
     /** A Sausloper of the stable (made by {@link Bezetting} at a copy that misses one). */

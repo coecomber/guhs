@@ -5,6 +5,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
@@ -16,7 +17,7 @@ import nl.juiced.guhs.world.WildeDieren;
 
 /**
  * bbq2 (sausdieren): the game-bus side. The test lap's tick, the questline's "lure a Sausloper to the Verzorger-guh" step,
- * the bounce of the Stuiterdrankje, and wild Sauslopers that come and go like the other wild Guhs animals.
+ * the bounce of the Stuiterdrankje, and wild Sauslopers and Sausblubjes that come and go like the other wild Guhs animals.
  */
 public final class SausdierenEvents {
     /** A fall shorter than this does nothing special (and never hurts with the effect). */
@@ -86,11 +87,12 @@ public final class SausdierenEvents {
         return Math.min(1.1, 0.3 * Math.sqrt(afstand));
     }
 
-    /** A wild Sausloper that the spawner brings while you play comes and goes (never piles up, never saved). */
+    /** A wild Sausloper or Sausblubje that the spawner brings while you play comes and goes (never piles up, never saved). */
     @SubscribeEvent
     public static void onFinalizeSpawn(FinalizeSpawnEvent event) {
-        if (event.getEntity() instanceof SausloperEntity loper && WildeDieren.komtEnGaat(event.getSpawnType()) && !loper.isPersistenceRequired()) {
-            WildeDieren.markeer(loper);
+        Mob mob = event.getEntity();
+        if ((mob instanceof SausloperEntity || mob instanceof SausblubjeEntity) && WildeDieren.komtEnGaat(event.getSpawnType()) && !mob.isPersistenceRequired()) {
+            WildeDieren.markeer(mob);
         }
     }
 

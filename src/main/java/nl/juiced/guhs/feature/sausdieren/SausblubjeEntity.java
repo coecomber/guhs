@@ -70,8 +70,8 @@ import nl.juiced.guhs.quest.GuhAdvancements;
  *   <li>A small one grows back to a middle one after {@link #GROEI_VOER} knabbels, so a pen of them keeps giving blubroom as
  *       long as somebody feeds and hugs them (there is nothing to automate: no drops without a player).</li>
  *   <li>A small one fits in a glass bottle: {@link SausblubjePotjeItem het Sausblubje in een potje}.</li>
- *   <li>It bounces over kaasfrituursaus as over ground and never burns. Wild ones despawn like any wild mob; one a player
- *       fed, hugged apart or let out of a jar stays.</li>
+ *   <li>It bounces over kaasfrituursaus as over ground and never burns. Wild ones come and go (never saved, gone when
+ *       every player is far: {@code world/WildeDieren}); one a player fed, hugged apart or let out of a jar stays.</li>
  * </ul>
  * Model, animations and texture: tools/features/sausdieren_modellen.py.
  */
@@ -104,13 +104,20 @@ public class SausblubjeEntity extends Mob implements GeoEntity {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0).add(Attributes.MOVEMENT_SPEED, 0.32).add(Attributes.FOLLOW_RANGE, 12.0);
     }
 
-    /** Wild ones: on the floor of the Barbecuether, never many together (spawn eggs and commands always work). */
+    /**
+     * Wild ones: on the floor of the Barbecuether, never many together (spawn eggs and commands always work). Only the natural
+     * spawner brings them, and those come and go ({@link SausdierenEvents#onFinalizeSpawn}): one that a player fed, hugged
+     * apart or let out of a jar stays.
+     */
     public static boolean magSpawnen(EntityType<SausblubjeEntity> type, LevelAccessor level, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
-        if (reason != EntitySpawnReason.NATURAL && reason != EntitySpawnReason.CHUNK_GENERATION) {
+        if (reason == EntitySpawnReason.CHUNK_GENERATION) {
+            return false;
+        }
+        if (reason != EntitySpawnReason.NATURAL) {
             return true;
         }
         return random.nextInt(3) == 0 && level.getBlockState(pos).isAir()
-                && level.getEntitiesOfClass(SausblubjeEntity.class, new AABB(pos).inflate(32, 12, 32)).size() < 4;
+                && level.getEntitiesOfClass(SausblubjeEntity.class, new AABB(pos).inflate(48, 16, 48)).size() < 4;
     }
 
     @Nullable
