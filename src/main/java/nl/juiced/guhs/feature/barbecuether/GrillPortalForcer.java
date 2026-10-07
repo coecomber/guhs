@@ -32,6 +32,15 @@ import nl.juiced.guhs.world.ModDimensions;
  * coordinates divided / multiplied by 8. An existing barbecue portal near the spot is used (16 blocks around in the
  * Barbecuether, 128 in the Guhmensie); otherwise a new one is built on a good spot nearby, or on a little grillkool
  * platform in a carved-out pocket.
+ * <p>
+ * bbq2 phase 3 (PHASE3 R14): a portal never comes out inside a story structure or a protected quest building. A story
+ * structure can stand right where a portal from near the Guhmensie's spawn arrives (the mine was seen 125 blocks from
+ * 0,0), and "a good spot nearby" used to be anywhere within 16 blocks, the carved-out pocket even exactly on the spot: a
+ * grillkool frame inside the mine, air cut out of its rock. Now the search starts outside every sluier
+ * ({@link nl.juiced.guhs.feature.verhaal.Sluiers#buitenAlleMuren}: known from the world's guaranteed spots, no chunk has
+ * to be loaded for it), a spot inside a protected box ({@link nl.juiced.guhs.feature.wereld.Bescherming}) is never taken,
+ * a portal that stands inside a sluier is not used as an arrival, and the pocket is not carved into a protected building
+ * (then the portal simply does not work from that spot: walk a few blocks and light another).
  */
 public final class GrillPortalForcer {
     /** The other side, or null: the barbecue portal only works between the Guhmensie and the Barbecuether. */
@@ -95,6 +104,7 @@ public final class GrillPortalForcer {
                 .map(PoiRecord::getPos)
                 .filter(border::isWithinBounds)
                 .filter(p -> level.getBlockState(p).is(BarbecuetherFeature.BARBECUETHER_PORTAAL.get()))
+                .filter(p -> !nl.juiced.guhs.feature.verhaal.Sluiers.bijMuur(level, p, 0))   // (R14: never arrive inside a story structure)
                 .min(Comparator.<BlockPos>comparingDouble(p -> p.distSqr(exitPos)).thenComparingInt(Vec3i::getY));
     }
 
@@ -128,8 +138,30 @@ public final class GrillPortalForcer {
         return new TeleportTransition(level, free, newSpeed, entity.getYRot() + turn, entity.getXRot(), post);
     }
 
+    /** How far (blocks, sideways) a new portal stays away from Guhdalfs sluiers: the search radius of 16, the frame and a little air. */
+    public static final int MUUR_MARGE = 22;
+
+    /** May a block of a portal be put here: not in a protected building, not at a sluier? */
+    public static boolean magHier(ServerLevel level, BlockPos pos) {
+        return !nl.juiced.guhs.feature.wereld.Bescherming.beschermd(level, pos) && !nl.juiced.guhs.feature.verhaal.Sluiers.bijMuur(level, pos, 4);
+    }
+
+    /** May a whole frame (4 wide along {@code direction}, 5 high, its lower inner corner at {@code pos}) be built here? */
+    private static boolean magFrame(ServerLevel level, BlockPos pos, Direction direction) {
+        for (int i = -1; i <= 2; i += 3) {
+            for (int j = -1; j <= 3; j += 2) {
+                if (!magHier(level, pos.relative(direction, i).above(j))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     /** Vanilla's PortalForcer.createPortal, with a grillkool frame (and grillkool platform). */
-    public static Optional<BlockUtil.FoundRectangle> createPortal(ServerLevel level, BlockPos pos, Direction.Axis axis) {
+    public static Optional<BlockUtil.FoundRectangle> createPortal(ServerLevel level, BlockPos wens, Direction.Axis axis) {
+        // (R14) the search starts outside every story structure
+        BlockPos pos = nl.juiced.guhs.feature.verhaal.Sluiers.buitenAlleMuren(level, wens, MUUR_MARGE);
         Direction direction = Direction.get(Direction.AxisDirection.POSITIVE, axis);
         double best = -1.0;
         BlockPos bestPos = null;
@@ -153,7 +185,7 @@ public final class GrillPortalForcer {
                             int depth = start - l;
                             if (depth <= 0 || depth >= 3) {
                                 p.setY(l);
-                                if (canHostFrame(level, p, m, direction, 0)) {
+                                if (canHostFrame(level, p, m, direction, 0) && magFrame(level, p, direction)) {
                                     double d = pos.distSqr(p);
                                     if (canHostFrame(level, p, m, direction, -1) && canHostFrame(level, p, m, direction, 1)
                                             && (best == -1.0 || best > d)) {
@@ -183,6 +215,9 @@ public final class GrillPortalForcer {
                 return Optional.empty();
             }
             bestPos = border.clampToBounds(new BlockPos(pos.getX() - direction.getStepX(), Mth.clamp(pos.getY(), low, high), pos.getZ() - direction.getStepZ()));
+            if (!magFrame(level, bestPos, direction)) {
+                return Optional.empty();   // (R14: no pocket is carved into a protected building; the portal does not work from here)
+            }
             Direction side = direction.getClockWise();
             for (int i = -1; i < 2; i++) {
                 for (int j = 0; j < 2; j++) {

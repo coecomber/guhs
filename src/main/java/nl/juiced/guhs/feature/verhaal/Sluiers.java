@@ -184,6 +184,52 @@ public final class Sluiers {
         return null;
     }
 
+    /**
+     * PHASE3 R14: a spot near {@code pos} whose column lies at least {@code marge} blocks (sideways) outside EVERY wall of
+     * this level, whoever asks and whatever the height: {@code pos} itself when it already does, else the nearest way out
+     * of the wall it is in or too near to (straight through its nearest side), a few times over when walls stand close
+     * together. For things that build by themselves (the grill portal that makes its own frame on arrival): a story
+     * structure is never built into, also not for a player whose story is there. Y is kept.
+     */
+    public static BlockPos buitenAlleMuren(Level level, BlockPos pos, int marge) {
+        Map<String, Zone> zones = ZONES.get(level.dimension());
+        if (zones == null || zones.isEmpty()) {
+            return pos;
+        }
+        BlockPos nu = pos;
+        for (int ronde = 0; ronde < 6; ronde++) {
+            Zone te = null;
+            for (Zone z : zones.values()) {
+                if (z.afstand(nu.getX() + 0.5, nu.getZ() + 0.5) < marge) {
+                    te = z;
+                    break;
+                }
+            }
+            if (te == null) {
+                return nu;
+            }
+            // out through the nearest side of this wall, marge blocks beyond it
+            int w = nu.getX() - (te.x0() - marge), e = (te.x1() + marge) - nu.getX(), n = nu.getZ() - (te.z0() - marge), s = (te.z1() + marge) - nu.getZ();
+            int m = Math.min(Math.min(w, e), Math.min(n, s));
+            nu = m == w ? new BlockPos(te.x0() - marge - 1, nu.getY(), nu.getZ()) : m == e ? new BlockPos(te.x1() + marge + 1, nu.getY(), nu.getZ())
+                    : m == n ? new BlockPos(nu.getX(), nu.getY(), te.z0() - marge - 1) : new BlockPos(nu.getX(), nu.getY(), te.z1() + marge + 1);
+        }
+        return nu;
+    }
+
+    /** Is this column inside (or within {@code marge} blocks of) a wall of this level, whoever asks and whatever the height? */
+    public static boolean bijMuur(Level level, BlockPos pos, int marge) {
+        Map<String, Zone> zones = ZONES.get(level.dimension());
+        if (zones != null) {
+            for (Zone z : zones.values()) {
+                if (z.afstand(pos.getX() + 0.5, pos.getZ() + 0.5) < Math.max(marge, 0.001)) {
+                    return true;   // (afstand is 0 inside the wall)
+                }
+            }
+        }
+        return false;
+    }
+
     /** The closed wall (for this player) around this spot, or null. */
     @Nullable
     private static Zone dicht(ServerPlayer p, Level level, double x, double y, double z) {
@@ -237,6 +283,51 @@ public final class Sluiers {
     public static List<Zone> zones(Level level, String structuur) {
         Map<String, Zone> zones = ZONES.get(level.dimension());
         return zones == null ? List.of() : zones.values().stream().filter(z -> z.structuur().equals(structuur)).toList();
+    }
+
+    /**
+     * PHASE3 R06 (no spoilers after a restart): the walls of the story's own places are known from the moment the world
+     * has its guaranteed spots, not from the moment somebody walks up to one. A story structure exists exactly once per
+     * world, as the guaranteed copy of its set ({@link nl.juiced.guhs.world.GegarandeerdPlacement}); its box is worked out
+     * from the generator ({@code doos}: no chunk is loaded for it), with the very key {@link #ontdek} would give it, so
+     * nothing is ever registered twice. Until this ran {@link #magZien} called such a place "free" for everybody, and the
+     * creatures inside (the Eye, the cast, the guards) were sent to a player who was not that far in the story as soon as a
+     * chunk of it loaded within their tracking range. Called on the search thread when a level's search is done
+     * ({@code GegarandeerdPlacement.NA_VOORUIT}); returns how many walls it knows now. Any thread.
+     */
+    public static int kenGegarandeerd(ServerLevel level) {
+        var state = level.getChunkSource().getGeneratorState();
+        return kenGegarandeerd(level, state, level.getSeed(), structuur -> true);
+    }
+
+    /**
+     * (also for the tests: a structure state of another generator, registered with {@code GegarandeerdPlacement.onthoud...},
+     * and only the structures {@code welke} lets through: every one of them is a search of its own)
+     */
+    public static int kenGegarandeerd(ServerLevel level, net.minecraft.world.level.chunk.ChunkGeneratorStructureState state, long seed,
+                                      Predicate<String> welke) {
+        int bekend = 0;
+        for (net.minecraft.core.Holder<net.minecraft.world.level.levelgen.structure.StructureSet> set : state.possibleStructureSets()) {
+            if (!(set.value().placement() instanceof nl.juiced.guhs.world.GegarandeerdPlacement g)) {
+                continue;
+            }
+            for (var entry : set.value().structures()) {
+                var key = entry.structure().unwrapKey().orElse(null);
+                Sluier sluier = key == null || !Guhs.MODID.equals(key.identifier().getNamespace()) ? null : van(key.identifier().getPath());
+                if (sluier == null || !welke.test(sluier.structuur())) {
+                    continue;
+                }
+                var plek = g.plek(state, seed);
+                var doos = plek.isEmpty() ? java.util.Optional.<BoundingBox>empty() : g.doos(state, seed);
+                if (doos.isEmpty()) {
+                    continue;   // (GEEN PLEK: there is nothing to hide; the search says so loudly itself)
+                }
+                ZONES.computeIfAbsent(level.dimension(), d -> new ConcurrentHashMap<>())
+                        .putIfAbsent(sluier.structuur() + "@" + plek.get().pack(), Zone.van(sluier.structuur(), doos.get(), sluier.rand()));
+                bekend++;
+            }
+        }
+        return bekend;
     }
 
     /** Looks for copies of the sluier structures in the loaded chunks around the player (their own chunk included). */

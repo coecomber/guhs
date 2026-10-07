@@ -426,6 +426,41 @@ public final class RingH2GameTests {
             if (doos.getXSpan() < 2 * Guhvendel.KOM || doos.getZSpan() < 2 * Guhvendel.KOM) {
                 fouten.add("seed " + seed + ": the start is not the whole house: " + doos);
             }
+            if (seed == 20261099L) {
+                // PHASE3 R06 (no spoilers after a restart): the wall of Guhdalfs sluier is known from the world's guaranteed
+                // spot alone, before a single chunk of the house is loaded and before any player came near it
+                nl.juiced.guhs.feature.verhaal.Sluiers.wisPlekken(level, Guhvendel.STRUCTUUR);
+                helper.assertTrue(nl.juiced.guhs.feature.verhaal.Sluiers.zones(level, Guhvendel.STRUCTUUR).isEmpty(), "no wall known yet");
+                BoundingBox heel = plaatsing.doos(state, seed).orElse(null);
+                helper.assertTrue(heel != null && heel.equals(start.getBoundingBox()), "the box of the guaranteed copy, without a chunk: " + heel);
+                int bekend = nl.juiced.guhs.feature.verhaal.Sluiers.kenGegarandeerd(level, state, seed, Guhvendel.STRUCTUUR::equals);
+                List<nl.juiced.guhs.feature.verhaal.Sluiers.Zone> muren = nl.juiced.guhs.feature.verhaal.Sluiers.zones(level, Guhvendel.STRUCTUUR);
+                helper.assertTrue(bekend == 1 && muren.size() == 1 && muren.get(0).binnen(heel.getCenter()), "the wall stands around the copy: " + muren);
+                helper.assertTrue(nl.juiced.guhs.feature.verhaal.Sluiers.kenGegarandeerd(level, state, seed, Guhvendel.STRUCTUUR::equals) == 1
+                        && nl.juiced.guhs.feature.verhaal.Sluiers.zones(level, Guhvendel.STRUCTUUR).size() == 1, "asked again: still one wall");
+                ServerPlayer nieuw = GuhMockPlayer.of(helper), verder = GuhMockPlayer.of(helper);
+                nieuw.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+                verder.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+                Ring.lijn(1).begin(verder);
+                Ring.lijn(1).zet(verder, Ring.lijn(1).stappen());
+                // (a creature in the middle of the house; it is not put in the world: the tracker's question needs no chunk)
+                nl.juiced.guhs.entity.GuhNpcEntity guhrond = nl.juiced.guhs.registry.ModEntities.GUH_NPC.get().create(level, net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+                BlockPos hart = heel.getCenter();
+                guhrond.snapTo(hart.getX() + 0.5, hart.getY(), hart.getZ() + 0.5);
+                helper.assertTrue(!nl.juiced.guhs.feature.verhaal.Sluiers.magZien(nieuw, guhrond) && nl.juiced.guhs.feature.verhaal.Sluiers.magZien(verder, guhrond),
+                        "an entity inside a copy nobody visited since the start is not sent to who is not that far, and is to who is");
+                helper.assertTrue(!nl.juiced.guhs.feature.verhaal.Sluiers.magHoren(nieuw, level, hart.getX() + 0.5, hart.getY(), hart.getZ() + 0.5)
+                        && nl.juiced.guhs.feature.barbecuether.GrillPortalForcer.MUUR_MARGE > 16
+                        && !nl.juiced.guhs.feature.verhaal.Sluiers.bijMuur(level, nl.juiced.guhs.feature.verhaal.Sluiers.buitenAlleMuren(level, hart,
+                        nl.juiced.guhs.feature.barbecuether.GrillPortalForcer.MUUR_MARGE), nl.juiced.guhs.feature.barbecuether.GrillPortalForcer.MUUR_MARGE),
+                        "no sound or particle from inside either; and a grill portal that would come out here is built outside the wall (R14)");
+                guhrond.discard();
+                Ring.wis(nieuw);
+                Ring.wis(verder);
+                level.removePlayerImmediately(nieuw, Entity.RemovalReason.DISCARDED);
+                level.removePlayerImmediately(verder, Entity.RemovalReason.DISCARDED);
+                nl.juiced.guhs.feature.verhaal.Sluiers.wisPlekken(level, Guhvendel.STRUCTUUR);
+            }
         }
         org.slf4j.LoggerFactory.getLogger("guhs").info("RingH2: Guhvendel in the Barbecuether: {} problems: {}", verslag, fouten);
         helper.assertTrue(fouten.isEmpty(), "Guhvendel has its spot in every world: " + fouten + " (" + verslag + ")");
