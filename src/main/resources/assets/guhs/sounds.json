@@ -2706,78 +2706,44 @@
     ],
     "subtitle": "subtitles.guhs.guhparkour.smak"
   },
-  "einde2_appa.jip_jip": {
+  "einde2_vetbootje.fluitje": {
     "sounds": [
-      {
-        "name": "minecraft:entity.camel.dash",
-        "type": "event",
-        "pitch": 0.7
-      },
-      {
-        "name": "minecraft:entity.polar_bear.ambient",
-        "type": "event",
-        "pitch": 0.75,
-        "volume": 0.8
-      }
+      "guhs:einde2_vetbootje/fluitje1",
+      "guhs:einde2_vetbootje/fluitje2"
     ],
-    "subtitle": "subtitles.guhs.einde2_appa.jip_jip"
+    "subtitle": "subtitles.guhs.einde2_vetbootje.fluitje"
   },
-  "einde2_appa.brul": {
+  "einde2_vetbootje.aankomst": {
     "sounds": [
-      {
-        "name": "minecraft:entity.polar_bear.ambient",
-        "type": "event",
-        "pitch": 0.55
-      },
-      {
-        "name": "minecraft:entity.camel.ambient",
-        "type": "event",
-        "pitch": 0.6
-      },
-      {
-        "name": "minecraft:entity.panda.ambient",
-        "type": "event",
-        "pitch": 0.6
-      }
+      "guhs:einde2_vetbootje/aankomst"
     ],
-    "subtitle": "subtitles.guhs.einde2_appa.brul"
+    "subtitle": "subtitles.guhs.einde2_vetbootje.aankomst"
   },
-  "einde2_appa.momo": {
+  "einde2_vetbootje.kraak": {
     "sounds": [
-      {
-        "name": "minecraft:entity.parrot.ambient",
-        "type": "event",
-        "pitch": 1.7
-      },
-      {
-        "name": "minecraft:entity.fox.ambient",
-        "type": "event",
-        "pitch": 1.9,
-        "volume": 0.7
-      },
-      {
-        "name": "minecraft:entity.bat.ambient",
-        "type": "event",
-        "pitch": 1.2,
-        "volume": 0.6
-      }
+      "guhs:einde2_vetbootje/kraak1",
+      "guhs:einde2_vetbootje/kraak2"
     ],
-    "subtitle": "subtitles.guhs.einde2_appa.momo"
+    "subtitle": "subtitles.guhs.einde2_vetbootje.kraak"
   },
-  "einde2_appa.fluitje": {
+  "einde2_vetbootje.verf": {
     "sounds": [
-      {
-        "name": "minecraft:block.note_block.flute",
-        "type": "event",
-        "pitch": 2.0
-      },
-      {
-        "name": "minecraft:entity.allay.ambient_without_item",
-        "type": "event",
-        "pitch": 1.8,
-        "volume": 0.6
-      }
+      "guhs:einde2_vetbootje/verf"
     ],
-    "subtitle": "subtitles.guhs.einde2_appa.fluitje"
+    "subtitle": "subtitles.guhs.einde2_vetbootje.verf"
+  },
+  "einde2_vetbootje.brander": {
+    "sounds": [
+      "guhs:einde2_vetbootje/brander1",
+      "guhs:einde2_vetbootje/brander2"
+    ],
+    "subtitle": "subtitles.guhs.einde2_vetbootje.brander"
+  },
+  "einde2_vetbootje.vouw": {
+    "sounds": [
+      "guhs:einde2_vetbootje/vouw1",
+      "guhs:einde2_vetbootje/vouw2"
+    ],
+    "subtitle": "subtitles.guhs.einde2_vetbootje.vouw"
   }
 }
