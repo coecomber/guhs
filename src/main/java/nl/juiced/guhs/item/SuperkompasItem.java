@@ -76,7 +76,7 @@ public class SuperkompasItem extends GuhCompassItem {
      * (2.9) One Minigames tab with every game: the classics, the Knuffeldal games (their places also stay under Knus) and De
      * Grote Guhspelen.
      */
-    public static final List<Category> CATEGORIES = List.of(
+    private static final List<Category> VASTE_CATEGORIES = List.of(
             cat("avontuur", "guhs:kaashouweel", net.minecraft.world.item.Items.IRON_PICKAXE, "guh_caves", "challenging_guh_caves", "evil_mika_home",
                     "kaasmijn", "moerasheks_hut", "kaasknabbel_nest",   // 2.8.1 Piep
                     "bleke_open_plek", "houthakkershutje"),   // 1.2.8 het Bleekwoud
@@ -101,6 +101,47 @@ public class SuperkompasItem extends GuhCompassItem {
             // 3.0 (Guhverhalen): the story places
             cat("verhalen", "guhs:baltoguh_beeldje", net.minecraft.world.item.Items.BOOK, "nomguh", "kloon_eiland", "hemelkapelletje", "guhwaii_ohana",
                     "guhwaii_surfstrand", "knuffeldal_stadje"));   // (1.3.1: the capsule is part of the Ohana questline, no place of its own)
+    /**
+     * The tabs of the menu (bbq2: {@link #voegToe} adds structures to a tab; the fixed list above keeps its shape, the
+     * self-check of tools/features/gids.py reads it).
+     */
+    public static final List<Category> CATEGORIES = new java.util.concurrent.CopyOnWriteArrayList<>(VASTE_CATEGORIES);
+
+    /**
+     * bbq2: adds a structure (a guhs structure id without namespace) to a tab of the menu, after what is there (from your
+     * Feature.register; common code, both sides): {@code SuperkompasItem.voegToe("barbecue", "pepertuin")}. Lang
+     * structure.guhs.&lt;id&gt; (+ .tooltip). A structure behind Guhdalfs sluier only shows once it is open for the player.
+     */
+    public static void voegToe(String tab, String structuur) {
+        synchronized (CATEGORIES) {
+            for (int i = 0; i < CATEGORIES.size(); i++) {
+                Category c = CATEGORIES.get(i);
+                if (!c.id().equals(tab)) {
+                    continue;
+                }
+                if (c.structures().contains(structuur)) {
+                    return;
+                }
+                List<Kopje> kopjes = new java.util.ArrayList<>(c.kopjes());
+                int los = -1;
+                for (int k = 0; k < kopjes.size(); k++) {
+                    if (kopjes.get(k).id() == null) {
+                        los = k;
+                    }
+                }
+                if (los < 0) {
+                    kopjes.add(new Kopje(null, List.of(structuur)));
+                } else {
+                    List<String> lijst = new java.util.ArrayList<>(kopjes.get(los).structures());
+                    lijst.add(structuur);
+                    kopjes.set(los, new Kopje(null, lijst));
+                }
+                CATEGORIES.set(i, new Category(c.id(), c.icon(), c.standIn(), kopjes));
+                return;
+            }
+        }
+        throw new IllegalArgumentException("The Superkompas has no tab " + tab);
+    }
 
     /** The first tab that has this structure (-1: none). */
     public static int categoryOf(@Nullable String structure) {

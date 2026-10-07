@@ -38,7 +38,11 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'bleekwoud',
             # guhpixel: the kern, then its nine slices (each a stub until its slice fills it in)
             'guhpixel', 'guhpixel_lobby', 'guhpixel_grap1', 'guhpixel_grap2', 'guhpixel_among', 'guhpixel_guhkade', 'guhpixel_kantoor',
-            'guhpixel_bioscoop', 'guhpixel_reisbureau', 'guhpixel_parkour']
+            'guhpixel_bioscoop', 'guhpixel_reisbureau', 'guhpixel_parkour',
+            # biomes3: the kern, then its slices, the blocks first (each a stub until its slice fills it in; nothing here may
+            # depend on its index: variant and clothes painters take their rng from bio_lib.rng)
+            'bio', 'bio_blokken_dal', 'bio_blokken_wolk', 'bio_wereld', 'bio_dieren', 'bio_kompas', 'bio_bouw_dal', 'bio_bouw_meer',
+            'bio_bouw_wolk1', 'bio_bouw_wolk2', 'bio_systemen']
 
 
 def modules():

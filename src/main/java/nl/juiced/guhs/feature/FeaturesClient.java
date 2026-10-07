@@ -78,6 +78,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.guhoven.client.GuhovenClient.init(modBus);
         // --- 1.2.8: het Bleekwoud ---
         nl.juiced.guhs.feature.bleekwoud.client.BleekwoudClient.init(modBus);
+        nl.juiced.guhs.feature.bio.client.BioClient.init(modBus);   // biomes3
         // --- guhpixel ---
         nl.juiced.guhs.feature.guhpixel.client.GuhpixelClient.init(modBus);
     }

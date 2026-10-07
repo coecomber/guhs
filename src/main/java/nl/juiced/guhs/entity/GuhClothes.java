@@ -416,6 +416,9 @@ public enum GuhClothes {
     // </px_reisbureau>
     // <px_parkour>
     // </px_parkour>
+    // biomes3: the outfits of het weebhuisje (the slice bouw-dal adds them only between these two lines)
+    // <bio_bouw_dal>
+    // </bio_bouw_dal>
     ;
 
     /**

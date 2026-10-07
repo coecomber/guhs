@@ -344,8 +344,9 @@ public class KnusGameTests {
         }
         // the superkompas: category knus with the six cosy places (plus the Reisbureau of guhpixel), all real structures
         var knus = SuperkompasItem.CATEGORIES.stream().filter(c -> c.id().equals("knus")).findFirst().orElse(null);
-        helper.assertTrue(knus != null && knus.structures().equals(List.of("knuffeldal_stadje", "guhboerderij", "guh_sterrenwacht", "ballonfestival",
-                "kampeerplekje", "knuffelbad", "reisbureau")), "the knus category: " + knus);
+        // (biomes3: later updates append their cosy places with SuperkompasItem.voegToe, after these seven)
+        helper.assertTrue(knus != null && knus.structures().size() >= 7 && knus.structures().subList(0, 7).equals(List.of("knuffeldal_stadje",
+                "guhboerderij", "guh_sterrenwacht", "ballonfestival", "kampeerplekje", "knuffelbad", "reisbureau")), "the knus category: " + knus);
         var structures = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
         for (String s : knus.structures()) {
             helper.assertTrue(structures.containsKey(Guhs.id(s)), "structure " + s);
