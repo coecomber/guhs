@@ -1,0 +1,53 @@
+# einde2 appa: the Appa-guh and the Momo-guh (looks, the flight by himself, Momo on the shoulder, at home).
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_appa.txt -PautocheckTimeout=20
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in minecraft:overworld run tp @s 0 200 0
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
+wait 60
+
+section the Appa-guh
+/guhs einde2 appa geef
+wait 40
+/execute at @e[type=guhs:appa_guh,limit=1,sort=nearest] run tp @s ~6 ~1.5 ~-6 facing entity @e[type=guhs:appa_guh,limit=1,sort=nearest]
+waitrender 200
+shot appa_voor
+/execute at @e[type=guhs:appa_guh,limit=1,sort=nearest] run tp @s ~-7 ~3 ~5 facing entity @e[type=guhs:appa_guh,limit=1,sort=nearest]
+wait 40
+shot appa_achter
+/execute at @e[type=guhs:appa_guh,limit=1,sort=nearest] run tp @s ~0 ~7 ~0.1 facing entity @e[type=guhs:appa_guh,limit=1,sort=nearest]
+wait 40
+shot appa_zadelmand
+
+section he flies by himself
+/guhs einde2 appa vlieg ~40 ~ ~40
+wait 60
+shot appa_stijgt_op
+wait 200
+shot appa_onderweg
+wait 400
+shot appa_geland
+/guhs einde2 appa stop
+
+section the Momo-guh
+/guhs einde2 appa momo
+wait 30
+shot momo_komt
+wait 60
+shot momo_op_schouder
+/give @s guhs:kaas_knabbels 4
+/guhs einde2 appa jat
+wait 20
+shot momo_jat
+wait 80
+shot momo_terug
+/guhs einde2 appa thuis true
+wait 20
+/execute at @e[type=guhs:momo_guh,limit=1,sort=nearest] run tp @s ~1.5 ~0.5 ~1.5 facing entity @e[type=guhs:momo_guh,limit=1,sort=nearest]
+waitrender 100
+shot momo_thuis
+/guhs einde2 appa thuis false
+wait 80
+shot momo_weer_mee
