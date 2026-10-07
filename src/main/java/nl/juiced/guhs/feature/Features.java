@@ -130,6 +130,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhriow3.GuhrioW3Feature.register(modBus);
         nl.juiced.guhs.feature.guhriobeloning.GuhrioBeloningFeature.register(modBus);
         nl.juiced.guhs.feature.snuffel.SnuffelFeature.register(modBus);   // verhalenpad: snuffel-kern
+        nl.juiced.guhs.feature.snuffeldorp.SnuffeldorpFeature.register(modBus);   // verhalenpad: snuffel-dorp
     }
 
     public static void payloads(PayloadRegistrar registrar) {

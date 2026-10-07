@@ -30,6 +30,20 @@ public final class Snuffel {
 
     private static final List<DoelBron> DOELEN = new CopyOnWriteArrayList<>();
 
+    private record SleutelBron(int van, int tot, BiFunction<ServerPlayer, Integer, String> bron) {
+    }
+
+    private static final List<SleutelBron> SLEUTELS_VAN = new CopyOnWriteArrayList<>();
+    /**
+     * Every text variant of a step of the questline besides the step numbers ("4_bot": the Guhdex and the objective line
+     * then show {@code gui.guhs.verhalen.snuffeleiland.nu/waar/kort.4_bot}). A slice that gives a step variants names them
+     * here (the texts: tools/features/snuffel.py EXTRA) and registers who picks one with {@link #sleutel}.
+     */
+    static final String[] SLEUTELS = {
+            // snuffel-dorp (the steps 2-8)
+            "thuis", "4_bot", "4_fluit", "4_bij", "4_terug", "6_zoek", "6_breng", "7_bezig", "7_diploma", "8_snuffel",
+    };
+
     private Snuffel() {
     }
 
@@ -135,6 +149,26 @@ public final class Snuffel {
      */
     public static void doel(int vanStap, int totStap, BiFunction<ServerPlayer, Integer, Doel> bron) {
         DOELEN.add(new DoelBron(vanStap, totStap, bron));
+    }
+
+    /**
+     * Which text variant the steps van..tot (inclusive) show for a player: a name of {@link #SLEUTELS}, or null for the
+     * step's own text.
+     */
+    public static void sleutel(int vanStap, int totStap, BiFunction<ServerPlayer, Integer, String> bron) {
+        SLEUTELS_VAN.add(new SleutelBron(vanStap, totStap, bron));
+    }
+
+    static String sleutelVan(ServerPlayer p, int stap) {
+        for (SleutelBron s : SLEUTELS_VAN) {
+            if (stap >= s.van() && stap <= s.tot()) {
+                String sleutel = s.bron().apply(p, stap);
+                if (sleutel != null) {
+                    return sleutel;
+                }
+            }
+        }
+        return String.valueOf(stap);
     }
 
     @Nullable

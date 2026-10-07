@@ -123,6 +123,7 @@ public final class SnuffelFeature {
     public static final int DADEN_NODIG = Boom.MAX;
 
     public static final Verhaallijn LIJN = Verhaallijn.maak("snuffeleiland", "snuffeleiland").stappen(STAPPEN).icoon("guhs:guhstation").doelregel(true)
+            .sleutel(Snuffel::sleutelVan).extraSleutels(Snuffel.SLEUTELS)
             .nodig((p, stap) -> stap == STAP_DADEN
                     ? List.of(Verhaallijn.nodig("minecraft:oak_sapling", "gui.guhs.snuffel.nodig.daden", Daden.aantal(p), DADEN_NODIG)) : List.of())
             .beloningen(Snuffel::beloningen)
