@@ -380,8 +380,10 @@ public final class GuhpadTab implements GidsVerhalenTab.Indeling {
             } else if (bekend) {
                 List<GuhpadPayloads.Verhaal> verhalen = stand.verhalen(wereld);
                 long klaar = verhalen.stream().filter(GuhpadPayloads.Verhaal::klaar).count();
-                Component telling = Component.literal((allesGedaan(stand, wereld) ? "✔ " : "") + klaar + " / " + verhalen.size() + " ★");
-                GidsTekst.schaal(g, telling, rechts, y + 8, 0.75f, allesGedaan(stand, wereld) ? GROEN : GOUD, true);
+                // (a world without big stories of its own yet, the Guheinde: just "open")
+                Component telling = verhalen.isEmpty() ? Component.translatable("gui.guhs.guhpad.open")
+                        : Component.literal((allesGedaan(stand, wereld) ? "✔ " : "") + klaar + " / " + verhalen.size() + " ★");
+                GidsTekst.schaal(g, telling, rechts, y + 8, 0.75f, allesGedaan(stand, wereld) || verhalen.isEmpty() ? GROEN : GOUD, true);
                 rechts -= 6 + Math.round(font().width(telling) * 0.75f);
             }
             GidsTekst.passend(g, wereld.naam().withStyle(ChatFormatting.BOLD), x + 34, y + 7, rechts - x - 36, 1f, kleur, false);

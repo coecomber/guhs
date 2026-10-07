@@ -568,7 +568,7 @@ public class GuhpadGameTests {
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void guhpadTekstenBestaan(GameTestHelper helper) {
         List<String> keys = new java.util.ArrayList<>(List.of("gui.guhs.guhpad.titel", "gui.guhs.guhpad.uitleg", "gui.guhs.guhpad.teller", "gui.guhs.guhpad.teller.uitleg",
-                "gui.guhs.guhpad.slot.open", "gui.guhs.guhpad.slot.dicht", "gui.guhs.guhpad.slot.echt", "gui.guhs.guhpad.op_slot", "gui.guhs.guhpad.nog_nodig",
+                "gui.guhs.guhpad.slot.open", "gui.guhs.guhpad.slot.dicht", "gui.guhs.guhpad.slot.echt", "gui.guhs.guhpad.op_slot", "gui.guhs.guhpad.open", "gui.guhs.guhpad.nog_nodig",
                 "gui.guhs.guhpad.leeg", "gui.guhs.guhpad.hier", "gui.guhs.guhpad.klik_halte", "gui.guhs.guhpad.vouw_open", "gui.guhs.guhpad.vouw_dicht",
                 "gui.guhs.guhpad.groot", "gui.guhs.guhpad.lijst.komma", "gui.guhs.guhpad.lijst.en", Guhpad.EIS_KNABBELFEEST, Guhpad.EIS_MIKA, Guhpad.EIS_ECHT,
                 "gui.guhs.guhpad.echt.bekend", "gui.guhs.guhpad.echt.laag6", "gui.guhs.guhpad.echt.laag6.tekst", "gui.guhs.guhpad.echt.raadsel.1",

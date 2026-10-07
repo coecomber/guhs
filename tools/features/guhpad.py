@@ -74,6 +74,7 @@ TEXTS = {
     "gui.guhs.guhpad.slot.dicht": "Op slot. Dit ontbreekt nog:",
     "gui.guhs.guhpad.slot.echt": "Op slot voor iedereen. Nog wel, njeg...",
     "gui.guhs.guhpad.op_slot": "op slot",
+    "gui.guhs.guhpad.open": "open",
     "gui.guhs.guhpad.nog_nodig": "Op slot, njeg. Nog nodig: %s.",
     "gui.guhs.guhpad.leeg": "Hier zijn nog geen verhalen.",
     "gui.guhs.guhpad.hier": "Hier ben je nu op het Guhpad",
