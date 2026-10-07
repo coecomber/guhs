@@ -1,0 +1,266 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/ringh1_krat",
+    "krat": "guhs:block/ringh1_krat",
+    "a": "guhs:block/block_of_kaasknabbels"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        1,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#krat"
+        },
+        "up": {
+          "texture": "#krat"
+        },
+        "north": {
+          "texture": "#krat"
+        },
+        "south": {
+          "texture": "#krat"
+        },
+        "west": {
+          "texture": "#krat"
+        },
+        "east": {
+          "texture": "#krat"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        1,
+        1
+      ],
+      "to": [
+        15,
+        9,
+        2
+      ],
+      "faces": {
+        "down": {
+          "texture": "#krat"
+        },
+        "up": {
+          "texture": "#krat"
+        },
+        "north": {
+          "texture": "#krat"
+        },
+        "south": {
+          "texture": "#krat"
+        },
+        "west": {
+          "texture": "#krat"
+        },
+        "east": {
+          "texture": "#krat"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        1,
+        14
+      ],
+      "to": [
+        15,
+        9,
+        15
+      ],
+      "faces": {
+        "down": {
+          "texture": "#krat"
+        },
+        "up": {
+          "texture": "#krat"
+        },
+        "north": {
+          "texture": "#krat"
+        },
+        "south": {
+          "texture": "#krat"
+        },
+        "west": {
+          "texture": "#krat"
+        },
+        "east": {
+          "texture": "#krat"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        1,
+        2
+      ],
+      "to": [
+        2,
+        9,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#krat"
+        },
+        "up": {
+          "texture": "#krat"
+        },
+        "north": {
+          "texture": "#krat"
+        },
+        "south": {
+          "texture": "#krat"
+        },
+        "west": {
+          "texture": "#krat"
+        },
+        "east": {
+          "texture": "#krat"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        1,
+        2
+      ],
+      "to": [
+        15,
+        9,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#krat"
+        },
+        "up": {
+          "texture": "#krat"
+        },
+        "north": {
+          "texture": "#krat"
+        },
+        "south": {
+          "texture": "#krat"
+        },
+        "west": {
+          "texture": "#krat"
+        },
+        "east": {
+          "texture": "#krat"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        8,
+        2
+      ],
+      "to": [
+        14,
+        11,
+        14
+      ],
+      "faces": {
+        "down": {
+          "texture": "#a"
+        },
+        "up": {
+          "texture": "#a"
+        },
+        "north": {
+          "texture": "#a"
+        },
+        "south": {
+          "texture": "#a"
+        },
+        "west": {
+          "texture": "#a"
+        },
+        "east": {
+          "texture": "#a"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        11,
+        4
+      ],
+      "to": [
+        12,
+        13,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#a"
+        },
+        "up": {
+          "texture": "#a"
+        },
+        "north": {
+          "texture": "#a"
+        },
+        "south": {
+          "texture": "#a"
+        },
+        "west": {
+          "texture": "#a"
+        },
+        "east": {
+          "texture": "#a"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        13,
+        6
+      ],
+      "to": [
+        10,
+        14,
+        10
+      ],
+      "faces": {
+        "down": {
+          "texture": "#a"
+        },
+        "up": {
+          "texture": "#a"
+        },
+        "north": {
+          "texture": "#a"
+        },
+        "south": {
+          "texture": "#a"
+        },
+        "west": {
+          "texture": "#a"
+        },
+        "east": {
+          "texture": "#a"
+        }
+      }
+    }
+  ]
+}

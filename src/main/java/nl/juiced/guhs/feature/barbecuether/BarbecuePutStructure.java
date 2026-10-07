@@ -32,6 +32,11 @@ import nl.juiced.guhs.Guhs;
  *       enough room above it (never in the frying-sauce sea); the four corners must have floor at about the same height.</li>
  * </ul>
  * The template is placed with its centre jigsaw (start_jigsaw_name) on that spot, one layer into the ground.
+ * <p>
+ * bbq2 (ring-h1): an optional {@code surface_pool} is used instead of the start pool where there is no ceiling. The
+ * structure guhs:barbecueput uses it for the Guhmensie: there it only makes the SMALL pits from now on, because a new big
+ * pit there is always the middle of a Knabbelgouw (the structure guhs:knabbelgouw of the same structure set, also of this
+ * type). In the Guhbarbecuether nothing changes: big and small pits from the start pool, never a Knabbelgouw.
  */
 public class BarbecuePutStructure extends Structure implements nl.juiced.guhs.world.BouwRuimte.Ruimte {
     public static final MapCodec<BarbecuePutStructure> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
@@ -42,7 +47,8 @@ public class BarbecuePutStructure extends Structure implements nl.juiced.guhs.wo
             Codec.INT.fieldOf("max_height_difference").forGetter(s -> s.maxHeightDifference),
             Codec.INT.optionalFieldOf("headroom", 10).forGetter(s -> s.headroom),
             Codec.INT.optionalFieldOf("keep_clear", 0).forGetter(s -> s.keepClear),
-            Codec.INT.optionalFieldOf("voorrang").forGetter(s -> s.voorrang)
+            Codec.INT.optionalFieldOf("voorrang").forGetter(s -> s.voorrang),
+            StructureTemplatePool.CODEC.optionalFieldOf("surface_pool").forGetter(s -> s.surfacePool)
     ).apply(i, BarbecuePutStructure::new));
 
     /** Biomes that have a ceiling over them (the Barbecuether's). */
@@ -56,9 +62,12 @@ public class BarbecuePutStructure extends Structure implements nl.juiced.guhs.wo
     /** Room kept around the build (see BouwRuimte). */
     private final int keepClear;
     private final Optional<Integer> voorrang;
+    /** bbq2 (ring-h1): the start pool where there is no ceiling (the Guhmensie); empty: the start pool everywhere. */
+    private final Optional<Holder<StructureTemplatePool>> surfacePool;
 
     public BarbecuePutStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, Identifier startJigsawName,
-                                int checkRadius, int maxHeightDifference, int headroom, int keepClear, Optional<Integer> voorrang) {
+                                int checkRadius, int maxHeightDifference, int headroom, int keepClear, Optional<Integer> voorrang,
+                                Optional<Holder<StructureTemplatePool>> surfacePool) {
         super(settings);
         this.startPool = startPool;
         this.startJigsawName = startJigsawName;
@@ -67,6 +76,12 @@ public class BarbecuePutStructure extends Structure implements nl.juiced.guhs.wo
         this.headroom = headroom;
         this.keepClear = keepClear;
         this.voorrang = voorrang;
+        this.surfacePool = surfacePool;
+    }
+
+    /** The pool a start is taken from: under a ceiling the start pool, in the open the surface pool when there is one. */
+    public Holder<StructureTemplatePool> pool(boolean cave) {
+        return cave ? startPool : surfacePool.orElse(startPool);
     }
 
     @Override
@@ -121,7 +136,7 @@ public class BarbecuePutStructure extends Structure implements nl.juiced.guhs.wo
         // the centre jigsaw lands on (x, y, z); without heightmap projection the piece sinks one layer, so the template's
         // ground layer (the jigsaw's layer) ends up in the top block of the floor
         // (max depth 1, not 0: with 0 vanilla's jigsaw placement never adds even the start piece)
-        return nl.juiced.guhs.world.BouwRuimte.claim(context, this, JigsawPlacement.addPieces(context, startPool, Optional.of(startJigsawName), 1, new BlockPos(x, y, z), false,
+        return nl.juiced.guhs.world.BouwRuimte.claim(context, this, JigsawPlacement.addPieces(context, pool(cave), Optional.of(startJigsawName), 1, new BlockPos(x, y, z), false,
                 Optional.empty(), new net.minecraft.world.level.levelgen.structure.structures.JigsawStructure.MaxDistance(64), PoolAliasLookup.EMPTY,
                 DimensionPadding.ZERO, LiquidSettings.IGNORE_WATERLOGGING));
     }

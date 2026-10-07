@@ -1,0 +1,144 @@
+# bbq2, ring-h1 (AutoCheck, dev only): chapter 1 of the Knabbelring, "Een langverwacht knabbelfeest". Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_ring-h1.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs ringh1 ..., feature/ringh1/RingH1Events.java, and
+#  /guhs verhaal ..., /guhs ring ...)
+# Shots: Guhdalf's camp (tent, cart with the fireworks crate, party table, provisions, Rustvuurtje) with Guhdalf and Sam-guh,
+# a rocket from the crate, the narrator card, four frames of each scene, the objective line per step, the Guhdex page of the
+# chapter, and the whole Knabbelgouw template (the holes from outside and from inside, the feestwei, the pit).
+# NOT run by the slice itself (no game client in phase 2): this is for the merge step's visual check.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 7000 141 7000
+/forceload add 6940 6940 7100 7100
+wait 100
+/fill 6960 139 6960 7040 139 7040 minecraft:grass_block
+/fill 6960 140 6960 7040 160 7040 minecraft:air
+/gamemode creative
+/kill @e[type=!minecraft:player,distance=..80]
+/guhs ring wis
+/guhs ringh1 wis
+wait 20
+clearchat
+
+section the camp (its corner under the player), Guhdalf and Sam-guh at home
+/tp @s 6990 140 6990
+/guhs ringh1 kamp
+wait 20
+/tp @s 6997.5 143 7006.5 180 22
+wait 20
+/tp @s 6997.5 143 7006.5 180 22
+wait 10
+shot bbq2_ringh1_kamp_voor world
+/tp @s 7010.5 144 6988.5 100 28
+wait 20
+/tp @s 7010.5 144 6988.5 100 28
+wait 10
+shot bbq2_ringh1_kamp_zij world
+/tp @s 7001.5 141 6999.5 150 10
+wait 20
+/tp @s 7001.5 141 6999.5 150 10
+wait 10
+shot bbq2_ringh1_kar_tafel world
+
+section a rocket from the crate
+/tp @s 6998.5 141 7010.5 180 -35
+wait 10
+/execute positioned 7000 141 6992 run guhs ringh1 vuurwerk
+wait 24
+shot bbq2_ringh1_vuurwerk world
+
+section the story: the gate, the card, the arrival (600 ticks)
+/gamemode survival
+/tp @s 7000.5 140 6999.5 180 0
+/guhs ringh1 stand
+/guhs verhaal kaart ring_h1
+wait 40
+shot bbq2_ringh1_kaart_1 gui
+wait 120
+shot bbq2_ringh1_kaart_2 gui
+wait 400
+/execute positioned 7000 140 6996 run guhs verhaal scene ringh1_aankomst
+wait 40
+shot bbq2_ringh1_aankomst_1 gui
+wait 130
+shot bbq2_ringh1_aankomst_2 gui
+wait 150
+shot bbq2_ringh1_aankomst_3 gui
+wait 200
+shot bbq2_ringh1_aankomst_4 gui
+wait 200
+
+section the farewell party (820 ticks)
+/execute positioned 7000 140 6996 run guhs verhaal scene ringh1_feest
+wait 60
+shot bbq2_ringh1_feest_1 gui
+wait 140
+shot bbq2_ringh1_feest_2 gui
+wait 240
+shot bbq2_ringh1_feest_3 gui
+wait 320
+shot bbq2_ringh1_feest_4 gui
+wait 200
+
+section the objective line and the Guhdex
+/guhs verhaal stap ring_h1 @s 1
+wait 30
+shot bbq2_ringh1_doel_klusjes gui
+/guhs verhaal stap ring_h1 @s 4
+/guhs ring geef
+/guhs ring sam
+wait 40
+shot bbq2_ringh1_doel_proviand_sam world
+gui verhalen ring_h1
+wait 20
+shot bbq2_ringh1_guhdex gui
+gui verhalen @kaart:knabbelring
+wait 20
+shot bbq2_ringh1_reiskaart gui
+
+section the Knabbelgouw (the whole template, its lawn at the player's feet)
+/gamemode creative
+/kill @e[type=!minecraft:player,distance=..80]
+/fill 6960 140 6960 7040 150 7040 minecraft:air
+/tp @s 6920 141 6920
+/forceload add 6900 6900 7020 7020
+wait 60
+/guhs ringh1 gouw
+wait 60
+/tp @s 6960.5 168 7018.5 180 45
+wait 30
+/tp @s 6960.5 168 7018.5 180 45
+wait 20
+shot bbq2_ringh1_gouw_boven world
+/tp @s 6960.5 146 6950.5 180 12
+wait 30
+/tp @s 6960.5 146 6950.5 180 12
+wait 20
+shot bbq2_ringh1_gouw_feestwei world
+/tp @s 6960.5 142 6937.5 180 0
+wait 30
+/tp @s 6960.5 142 6937.5 180 0
+wait 20
+shot bbq2_ringh1_knabbel_eind_deur world
+/tp @s 6960.5 142 6929.5 180 10
+wait 30
+/tp @s 6960.5 142 6929.5 180 10
+wait 20
+shot bbq2_ringh1_knabbel_eind_binnen world
+/tp @s 6942.5 143 6958.5 90 15
+wait 30
+/tp @s 6942.5 143 6958.5 90 15
+wait 20
+shot bbq2_ringh1_sam_hol_moestuin world
+/tp @s 6960.5 146 6962.5 0 20
+wait 30
+/tp @s 6960.5 146 6962.5 0 20
+wait 20
+shot bbq2_ringh1_put world
+/forceload remove all

@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "guhs:knabbelgouw",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "guhs:gegarandeerd",
+    "salt": 21301608,
+    "min_afstand": 600,
+    "max_afstand": 1400,
+    "alleen_nieuw": true,
+    "sector": 5,
+    "sectoren": 16
+  }
+}

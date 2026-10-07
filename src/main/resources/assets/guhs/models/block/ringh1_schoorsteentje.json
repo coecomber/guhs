@@ -1,0 +1,92 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "minecraft:block/bricks",
+    "steen": "minecraft:block/bricks",
+    "pot": "minecraft:block/terracotta",
+    "roet": "minecraft:block/coal_block"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        10,
+        11
+      ],
+      "faces": {
+        "down": {
+          "texture": "#steen"
+        },
+        "up": {
+          "texture": "#steen"
+        },
+        "north": {
+          "texture": "#steen"
+        },
+        "south": {
+          "texture": "#steen"
+        },
+        "west": {
+          "texture": "#steen"
+        },
+        "east": {
+          "texture": "#steen"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        10,
+        4
+      ],
+      "to": [
+        12,
+        12,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#pot"
+        },
+        "up": {
+          "texture": "#pot"
+        },
+        "north": {
+          "texture": "#pot"
+        },
+        "south": {
+          "texture": "#pot"
+        },
+        "west": {
+          "texture": "#pot"
+        },
+        "east": {
+          "texture": "#pot"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        11.9,
+        6
+      ],
+      "to": [
+        10,
+        12,
+        10
+      ],
+      "faces": {
+        "up": {
+          "texture": "#roet"
+        }
+      }
+    }
+  ]
+}

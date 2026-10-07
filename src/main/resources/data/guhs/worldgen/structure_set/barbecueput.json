@@ -2,7 +2,11 @@
   "structures": [
     {
       "structure": "guhs:barbecueput",
-      "weight": 1
+      "weight": 2
+    },
+    {
+      "structure": "guhs:knabbelgouw",
+      "weight": 3
     }
   ],
   "placement": {

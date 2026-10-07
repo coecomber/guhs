@@ -9,5 +9,6 @@
   "check_radius": 20,
   "max_height_difference": 12,
   "headroom": 10,
+  "surface_pool": "guhs:barbecueput/klein",
   "keep_clear": 19
 }
