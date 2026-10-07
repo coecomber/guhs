@@ -298,7 +298,10 @@ public class SmikagolEntity extends PathfinderMob implements GeoEntity {
 
     /** The guide: ahead along the route, never further than {@link #WACHT_AFSTAND} from his player. */
     private final class Leid extends Goal {
-        private int wacht, roep;
+        /** (PHASE3 R20) this many looks (two ticks each) without getting nearer to the next point: he is stuck, and hops. */
+        private static final int VAST = 60;
+        private int wacht, roep, stil;
+        private double dichtst = Double.MAX_VALUE;
 
         Leid() {
             setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
@@ -340,6 +343,24 @@ public class SmikagolEntity extends PathfinderMob implements GeoEntity {
                 }
                 routeStap++;
                 wacht = 0;
+                stil = 0;
+                dichtst = Double.MAX_VALUE;
+                return;
+            }
+            // the watchdog of a guided walk: a guide who cannot get on (a ledge the path finder does not take, a block a
+            // player put in the way) must not leave his player waiting for ever: after a few seconds he hops to the next point
+            double afstand = naar.distanceToSqr(position());
+            if (afstand < dichtst - 0.25) {
+                dichtst = afstand;
+                stil = 0;
+            } else if (++stil > VAST) {
+                stil = 0;
+                dichtst = Double.MAX_VALUE;
+                getNavigation().stop();
+                teleportTo(naar.x, naar.y, naar.z);
+                if (level() instanceof net.minecraft.server.level.ServerLevel server) {
+                    server.sendParticles(p, net.minecraft.core.particles.ParticleTypes.POOF, false, false, naar.x, naar.y + 0.4, naar.z, 6, 0.2, 0.2, 0.2, 0.01);
+                }
                 return;
             }
             if (--wacht <= 0) {
@@ -348,6 +369,12 @@ public class SmikagolEntity extends PathfinderMob implements GeoEntity {
                     getMoveControl().setWantedPosition(naar.x, naar.y, naar.z, 1.05);
                 }
             }
+        }
+
+        @Override
+        public void start() {
+            stil = 0;
+            dichtst = Double.MAX_VALUE;
         }
 
         @Override
