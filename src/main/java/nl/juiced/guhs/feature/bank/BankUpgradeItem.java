@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
@@ -47,6 +48,12 @@ public class BankUpgradeItem extends Item {
             level.playSound(null, p, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.5f, 1.4f);
         }
         player.sendOverlayMessage(Component.translatable("item.guhs.bank_upgrade.gelukt"));
+        // from now on pipes and hoppers may also take things OUT, and all but the Filterstuk take everything: say so now,
+        // in the chat (it stays readable), and louder when a hopper already hangs under this bank
+        player.sendSystemMessage(Component.translatable("item.guhs.bank_upgrade.uit").withStyle(ChatFormatting.GOLD));
+        if (player.level().getBlockState(p.below()).is(Blocks.HOPPER)) {
+            player.sendSystemMessage(Component.translatable("item.guhs.bank_upgrade.trechter").withStyle(ChatFormatting.RED));
+        }
         BankFeature.opgevoerd(player);
         return true;
     }
@@ -60,5 +67,6 @@ public class BankUpgradeItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         tooltip.accept(Component.translatable("item.guhs.bank_upgrade.lore", BankStorage.CAP).withStyle(ChatFormatting.GRAY));
         tooltip.accept(Component.translatable("item.guhs.bank_upgrade.lore.blijft").withStyle(ChatFormatting.LIGHT_PURPLE));
+        tooltip.accept(Component.translatable("item.guhs.bank_upgrade.lore.uit").withStyle(ChatFormatting.GOLD));
     }
 }

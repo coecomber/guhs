@@ -58,6 +58,8 @@ WIKI = {
          "in de bak een echte boom. Dat werkt met elke zaailing: gewone bomen, guhbloesem, vadshout, bleekhout, sneeuwguhsparren, de sate- en "
          "worstzwammetjes en zelfs paddenstoelen. Soorten die alleen met z'n vieren groeien (donkere eik) krijgen er vanzelf drie bij als je er "
          "vier in stopt. Hak de boom gewoon om, of klik met een bijl op de bak: dan gaat de hele boom in één keer om, blaadjes en al, en de "
-         "zaailingen die eruit vallen gaan meteen terug de bak in. Klusguhs uit een Guhhuisje kunnen het ook."),
+         "zaailingen die eruit vallen gaan meteen terug de bak in. Klusguhs uit een Guhhuisje kunnen het ook. Hak je met de hand eerst "
+         "de onderste stam weg, dan wacht de bak met planten tot de rest van de stam ook weg is. Een bijennest dat met de boom meegroeide "
+         "krijg je erbij, met bijen en honing en al."),
     ],
 }

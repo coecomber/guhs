@@ -13,6 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.DirectionalPlaceContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import nl.juiced.guhs.feature.techbezorg.HaltepaaltjeBlockEntity;
+import nl.juiced.guhs.feature.vadskracht.MachineBlockEntity;
 import nl.juiced.guhs.feature.vadskracht.VadsGetallen;
 import nl.juiced.guhs.feature.wereld.Bescherming;
 
@@ -107,10 +110,28 @@ public class NeerzetterBlockEntity extends TechBlockEntity {
         InteractionResult gelukt = ((BlockItem) soort.getItem()).place(new DirectionalPlaceContext(server, doel, voor, een, voor.getOpposite()));
         if (gelukt.consumesAction()) {
             vakken().set(vak, soort, vakken().getAmountAsInt(vak) - 1);
+            geefDoor(server, doel);
             beloon("neergezet");
         } else {
             lukteNiet = true;
             stondEr = eerst;
+        }
+    }
+
+    /**
+     * A machine (or a Haltepaaltje) the Neerzetter put down belongs to whoever placed the Neerzetter. Without an owner it
+     * would be refused in every huisje's home base, earn nobody an advancement, and the chore guhs of any huisje around
+     * would serve it.
+     */
+    private void geefDoor(ServerLevel server, BlockPos doel) {
+        if (eigenaar() == null) {
+            return;
+        }
+        BlockEntity be = server.getBlockEntity(doel);
+        if (be instanceof MachineBlockEntity machine && machine.eigenaar() == null) {
+            machine.zetEigenaar(eigenaar());
+        } else if (be instanceof HaltepaaltjeBlockEntity halte && halte.eigenaar() == null) {
+            halte.zetEigenaar(eigenaar());
         }
     }
 

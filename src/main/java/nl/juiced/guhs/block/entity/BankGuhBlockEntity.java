@@ -53,6 +53,8 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
     /** This bank's id; given the first time the bank stands in a world (banks from before bbq2 get one then). */
     @Nullable
     private UUID bankId;
+    /** Set when the chunk unloads: the {@link #setRemoved} that follows is then no removal of the block. */
+    private boolean ontladen;
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     public BankGuhBlockEntity(BlockPos pos, BlockState state) {
@@ -127,8 +129,36 @@ public class BankGuhBlockEntity extends BlockEntity implements GeoBlockEntity, M
                 }
             }
         }
-        boek.zet(bankId(), hier);
+        boek.onthoud(bankId(), hier, storage);   // (the address, and the stomach: a Hapluikje asks the book what fits)
         toonUpgrade();
+    }
+
+    /**
+     * The bank's chunk unloads. The address book goes on looking at this stomach ({@link BankAdressen.Schaduw}): it is what
+     * was saved, and nothing changes it any more, so a Hapluikje can say what still fits without loading this chunk again.
+     */
+    @Override
+    public void onChunkUnloaded() {
+        super.onChunkUnloaded();
+        ontladen = true;
+    }
+
+    /** Removed while its chunk stays loaded (broken or replaced, also without side effects): a shadow of it would lie. */
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if (!ontladen && level instanceof ServerLevel server && bankId != null) {
+            BankAdressen boek = BankAdressen.van(server.getServer());
+            if (GlobalPos.of(server.dimension(), worldPosition).equals(boek.plek(bankId))) {
+                boek.vergeet(bankId);   // (only when the book means THIS bank: a copy elsewhere keeps its own)
+            }
+        }
+    }
+
+    @Override
+    public void clearRemoved() {
+        super.clearRemoved();
+        ontladen = false;
     }
 
     /** The block is really gone (broken, replaced): this bank stands nowhere until it is placed again. */

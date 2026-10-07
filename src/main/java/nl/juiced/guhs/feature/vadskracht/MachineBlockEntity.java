@@ -239,7 +239,7 @@ public abstract class MachineBlockEntity extends BlockEntity implements VadsVerb
     @Override
     protected final void loadAdditional(ValueInput in) {
         super.loadAdditional(in);
-        vakken.deserialize(in.childOrEmpty("Vakken"));
+        in.child("Vakken").ifPresent(vakken::deserialize);   // (absent in what a client gets: getUpdateTag)
         eigenaar = in.read("Eigenaar", UUIDUtil.CODEC).orElse(null);
         bezig = in.getBooleanOr("Bezig", false);
         laden(in);
@@ -254,9 +254,17 @@ public abstract class MachineBlockEntity extends BlockEntity implements VadsVerb
         opslaan(uit);
     }
 
+    /**
+     * What the clients get: the saved data WITHOUT the items. Nothing on a client looks into a machine's slots (a screen
+     * gets them through its menu, a renderer draws from {@link #bezig} and the block state), and a machine is synced every
+     * time it starts or stops working: nine stacks with their components (a Neerzetter full of filled shulker boxes) to
+     * everybody around, each time, is a lot of nothing. A subclass that needs more removes or adds keys on top of this.
+     */
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-        return saveWithoutMetadata(registries);
+        CompoundTag tag = saveWithoutMetadata(registries);
+        tag.remove("Vakken");
+        return tag;
     }
 
     @Nullable

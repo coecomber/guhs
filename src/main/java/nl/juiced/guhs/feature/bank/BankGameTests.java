@@ -300,9 +300,11 @@ public class BankGameTests {
         // broken (the loot table copies the components) and placed again
         weg(helper, speler);
         level.destroyBlock(abs, true);
-        helper.succeedWhen(() -> {
+        // (wait for the drop first; what follows runs ONCE: placing the bank again inside a retried check would put down a
+        // new bank at every try and hide the real failure behind a follow-up one)
+        helper.startSequence().thenWaitUntil(() -> helper.assertTrue(!level.getEntitiesOfClass(ItemEntity.class, new AABB(abs).inflate(2)).isEmpty(),
+                "the Bank Guh drops")).thenExecute(() -> {
             List<ItemEntity> drops = level.getEntitiesOfClass(ItemEntity.class, new AABB(abs).inflate(2));
-            helper.assertTrue(!drops.isEmpty(), "the Bank Guh drops");
             ItemStack item = drops.get(0).getItem();
             helper.assertTrue(item.is(ModItems.BANK_GUH.get()), "a Bank Guh item");
             helper.assertTrue(Boolean.TRUE.equals(item.get(BankFeature.BANK_OPGEVOERD.get())), "the item carries the upgrade");
@@ -317,7 +319,7 @@ public class BankGameTests {
                     "placed again: upgraded, the same id, everything inside");
             helper.assertBlockProperty(p(4, 4), BankGuhBlock.OPGEVOERD, true);
             drops.forEach(Entity::discard);
-        });
+        }).thenSucceed();
     }
 
     // =====================================================================================================================
@@ -551,8 +553,12 @@ public class BankGameTests {
         });
     }
 
-    /** Any distance, another dimension: the bank stands in the Nether in a chunk that is not loaded. */
-    @GuhTest(template = KAMER, batch = "bank_luikje_ver", timeoutTicks = 1200)
+    /**
+     * Any distance, another dimension: the bank stands in the Nether in a chunk that is not loaded. Asking the luikje what
+     * fits loads nothing and keeps nothing loaded (it answers from what the address book remembers of the unloaded bank);
+     * only a real delivery loads the chunk; a bank the book knows nothing of (after a server start) comes in the background.
+     */
+    @GuhTest(template = KAMER, batch = "bank_luikje_ver", timeoutTicks = 4000)
     public static void bankHapluikjeAndereDimensie(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerLevel nether = level.getServer().getLevel(Level.NETHER);
@@ -568,10 +574,25 @@ public class BankGameTests {
         bron(helper, p(1, 2));
         ResourceHandler<ItemResource> bek = Kisten.van(level, helper.absolutePos(p(1, 1)), null);
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(luikje.heeftKracht() && !nether.isLoaded(ver), "vadskracht, and the bank's chunk has unloaded"))
+                .thenWaitUntil(() -> helper.assertTrue(luikje.heeftKracht() && !nether.isLoaded(ver) && !BankAdressen.geladen(nether, ver),
+                        "vadskracht, and the bank's chunk has unloaded"))
                 .thenExecute(() -> {
                     helper.assertTrue(BankAdressen.zoek(level.getServer(), id, false) == null, "(not loaded: without loading there is no bank at hand)");
                     gelijk(helper, HapluikjeBlockEntity.Stand.KLAAR, luikje.stand(), "the address book still knows where it stands");
+                    // a question (a transaction that is not committed) is answered from memory: nothing is loaded
+                    helper.assertTrue(BankAdressen.van(level.getServer()).schaduw(id) != null, "the book still knows the stomach of the unloaded bank");
+                    for (int i = 0; i < 5; i++) {
+                        gelijk(helper, 44, Kisten.stop(bek, kei(64), true).getCount(), "asked: 20 of the 64 would fit");
+                        helper.assertTrue(Kisten.past(bek, kei(20)) && !Kisten.past(bek, kei(21)) && Kisten.past(bek, new ItemStack(Items.DIRT, 64)),
+                                "asked: 20 fit, 21 do not, dirt does");
+                    }
+                    try (Transaction tx = Transaction.openRoot()) {
+                        gelijk(helper, 12, bek.insert(ItemResource.of(kei(1)), 12, tx), "inside one question: 12 of the 20");
+                        gelijk(helper, 8, bek.insert(ItemResource.of(kei(1)), 30, tx), "and then only the 8 that are left");
+                    }
+                    helper.assertTrue(!BankAdressen.geladen(nether, ver) && !nether.isLoaded(ver), "asking what fits did not load the bank's chunk");
+                    gelijk(helper, 44, Kisten.stop(bek, kei(64), true).getCount(), "(a question that was thrown away left nothing behind)");
+                    // the real delivery
                     ItemStack rest = Kisten.stop(bek, kei(64));
                     gelijk(helper, 44, rest.getCount(), "20 fit in the far bank, 44 come back");
                     helper.assertTrue(nether.isLoaded(ver), "the luikje loaded the bank's chunk");
@@ -582,7 +603,38 @@ public class BankGameTests {
                 })
                 .thenIdle(40)
                 .thenExecute(() -> helper.assertTrue(nether.isLoaded(ver), "a bank in use stays loaded for a while (no reload per item)"))
-                .thenWaitUntil(() -> helper.assertTrue(!nether.isLoaded(ver), "left alone, the chunk unloads again"))
+                // from here on something asks the luikje every tick (a Richtingstuk, a hopper holding what the bank is full of): that
+                // keeps nothing loaded
+                .thenWaitUntil(() -> {
+                    gelijk(helper, 7, Kisten.stop(bek, kei(7)).getCount(), "full of cobblestone: nothing is taken");
+                    helper.assertTrue(Kisten.past(bek, new ItemStack(Items.DIRT, 5)), "(asked: dirt fits)");
+                    helper.assertTrue(!nether.isLoaded(ver) && !BankAdressen.geladen(nether, ver), "asked every tick, and still the chunk unloads again");
+                })
+                .thenExecute(() -> {
+                    BankAdressen boek = BankAdressen.van(level.getServer());
+                    helper.assertTrue(boek.schaduw(id) != null && boek.schaduw(id).ruimte(ItemResource.of(kei(1))) == 0
+                            && boek.schaduw(id).ruimte(ItemResource.of(new ItemStack(Items.DIRT))) == CAP - 9, "the book remembers the full bank");
+                    gelijk(helper, 7, Kisten.stop(bek, kei(7)).getCount(), "full of cobblestone: refused, really asked or not");
+                    helper.assertTrue(!BankAdressen.geladen(nether, ver), "and nothing was loaded to say so");
+                    // after a server start the book remembers nothing: the chunk is fetched in the background, the luikje waits
+                    boek.vergeet(id);
+                    gelijk(helper, 4, Kisten.stop(bek, new ItemStack(Items.DIRT, 4)).getCount(), "not known what the bank holds: nothing is taken yet");
+                    helper.assertTrue(!BankAdressen.geladen(nether, ver), "and the server did not wait for the chunk");
+                })
+                // (whoever brings something tries again, a tube every 8 ticks: each try asks for the chunk again, so on a test
+                // server whose ticks race ahead of the disk the 20 second ticket cannot run out before the chunk is there)
+                .thenWaitUntil(() -> {
+                    if (!BankAdressen.geladen(nether, ver)) {
+                        Kisten.past(bek, new ItemStack(Items.DIRT, 4));
+                    }
+                    helper.assertTrue(BankAdressen.geladen(nether, ver), "the chunk came in the background");
+                })
+                .thenExecute(() -> {
+                    gelijk(helper, 0, Kisten.stop(bek, new ItemStack(Items.DIRT, 4)).getCount(), "now the dirt goes in");
+                    BankGuhBlockEntity daar = (BankGuhBlockEntity) nether.getBlockEntity(ver);
+                    gelijk(helper, 13L, daar.getStorage().count(new ItemStack(Items.DIRT)), "thirteen dirt in the Nether");
+                })
+                .thenWaitUntil(() -> helper.assertTrue(!nether.isLoaded(ver) && !BankAdressen.geladen(nether, ver), "left alone, the chunk unloads again"))
                 .thenExecute(() -> {
                     // gone from the far place: the luikje refuses and tidies the address book
                     nether.setBlock(ver, Blocks.AIR.defaultBlockState(), 3 | 256);   // (no side effects: a stale address)

@@ -35,6 +35,10 @@
   "quest.475548857F9855C8.quest_desc": [
     "Woont er een guh in je &dGuhhuisje&r? Dan doet hij je machines: het klusje &eMachines bijvullen \\& leeghalen&r. Het staat &cuit&r tot jij het bij je bewoner aanzet. Doe het één keer voor: leg zelf een stapeltje in de machine, dan onthoudt hij wat erin hoort en vult hij bij uit de kist naast het huisje of uit je Bank Guh. Wat klaarligt, haalt hij op. Alleen bij machines van jou in zijn klus-area. Njeg, wie heeft er dan nog trechters nodig?",
   ],
+  "quest.475548FAE94982EA.title": "Pompoenenplukker",
+  "quest.475548FAE94982EA.quest_desc": [
+    "Een bewoner met het klusje &eFarmen&r oogst meer dan graan: ook &epompoenen&r en &emeloenen&r aan hun stengel, &esuikerriet&r, &ecacao&r, &enetherwrat&r en de &escheutjes&r uit de Guhbarbecuether. Hij laat de plant staan, dus alles groeit vanzelf weer aan. Laat hem er één oogsten. Njeg, pompoentaart!",
+  ],
   "quest.4755484ABA7ABFD0.title": "Malen zonder wind",
   "quest.4755484ABA7ABFD0.quest_desc": [
     "De &dVadsmolen&r (een guh-molentje, ijzer, Guhdraad, steen en een knabbel) maalt op 5 vadskracht: knabbelgraan tot knabbelmeel, botten tot beendermeel, grillspiesen tot poeder, keisteen tot grind en grind tot zand. En hij geeft meer dan malen met de hand. Maal er iets mee!",
@@ -53,7 +57,7 @@
   ],
   "quest.475548420F21E4DE.title": "De Oude Guhrad-centrale",
   "quest.475548420F21E4DE.quest_desc": [
-    "In de &6Guhbarbecuether&r staat een oude krachtcentrale met een koperen dak en twee schoorstenen. Vijf oude guhs rennen er nog altijd hun rondjes. Het superkompas (Barbecue > Oude Guhrad-centrale) wijst de weg.",
+    "In de &6Guhbarbecuether&r staat een oude krachtcentrale met een koperen dak en twee schoorstenen. Vijf oude guhs rennen er nog altijd hun rondjes. Het superkompas (Barbecue > Oude Guhrad-centrale) wijst de weg. &7Daar kom je alleen &eeerst door het grillportaal&7. Laat het je nog niet door? Dan vertelt het portaal zelf wat er eerst moet gebeuren.&r",
   ],
   "quest.47554831DB6F1928.title": "De Uitvinder-guh",
   "quest.47554831DB6F1928.quest_desc": [
@@ -89,7 +93,7 @@
   ],
   "quest.475548CB872211C2.title": "Een maag zonder bodem",
   "quest.475548CB872211C2.quest_desc": [
-    "Klik met het &dBodemloos Knabbelmaagje&r op je neergezette Bank Guh: de grens van 256 per soort is weg, voor altijd (ook als je hem oppakt). En pas dan mogen buizen er ook spullen &euit&r halen.",
+    "Klik met het &dBodemloos Knabbelmaagje&r op je neergezette Bank Guh: de grens van 256 per soort is weg, voor altijd (ook als je hem oppakt). En pas dan mogen buizen er ook spullen &euit&r halen. &cLet op:&r een trechter onder je bank, een gewoon Richtingstuk of een ophaal-Haltepaaltje haalt hem dan helemaal leeg. Alleen een Filterstuk met &elaat liggen&r houdt iets voor je achter.",
   ],
   "quest.475548F60C0C821A.title": "Drie receptkaarten",
   "quest.475548F60C0C821A.quest_desc": [
@@ -97,7 +101,7 @@
   ],
   "quest.4755482BE2D9F769.title": "Een zak zout",
   "quest.4755482BE2D9F769.quest_desc": [
-    "De slimme machines vragen &dzoutkristal&r. Haal een voorraadje: de kristalader van de Zoutkristalmijn groeit voor iedere speler vanzelf weer aan.",
+    "De slimme machines vragen &dzoutkristal&r uit de &6Guhbarbecuether&r. Haal een voorraadje: de kristalader van de Zoutkristalmijn groeit voor iedere speler vanzelf weer aan. &7Daar kom je alleen &eeerst door het grillportaal&7. Laat het je nog niet door? Dan vertelt het portaal zelf wat er eerst moet gebeuren.&r",
   ],
   "quest.4755487386E05705.title": "Knabbelbuizen",
   "quest.4755487386E05705.quest_desc": [
@@ -123,6 +127,10 @@
   "quest.47554882DC1A04E7.quest_desc": [
     "Het &dHapluikje&r (2 vadskracht) is een mondje van je Bank Guh: klik er met de Banksleutel op en alles wat erin gaat (uit je hand, een trechter, een buis, klusguhs, een Bezorgguhtje) belandt in je bank. Hoe ver weg ook, zelfs in een andere dimensie. Zet er een bij je mijn, je akker en je oven. Vol is vol: wat niet past, blijft waar het was.",
   ],
+  "quest.4755488D31012FE1.title": "Hap, opgeruimd!",
+  "quest.4755488D31012FE1.quest_desc": [
+    "Staat er een werkend &dHapluikje&r in het klusgebied van je &dGuhhuisje&r? Dan stoppen je bewoners de buit van hun klusjes daarin als er geen Bank Guh in de buurt staat (of als die vol zit): de oogst, het hout, wat ze opruimen. Zo ligt alles in je bank, hoe ver die ook weg staat. Laat een bewoner iets door het luikje happen.",
+  ],
   "quest.475548BDFB85CAA9.title": "De Opzuiger",
   "quest.475548BDFB85CAA9.quest_desc": [
     "De &dOpzuiger&r (3 vadskracht) slurpt alles op wat binnen vier blokken los op de grond ligt. Zet hem onder je boomgaard of naast je guhs, met een buis naar een Hapluikje.",
@@ -145,7 +153,7 @@
   ],
   "quest.475548EE50E67F23.title": "Saus en slangen",
   "quest.475548EE50E67F23.quest_desc": [
-    "Voor dit project heb je de &dreceptkaart: saus en slangen&r nodig (van de Uitvinder-guh, na zijn oefenhal), en &dgrillspiesen&r of &dblubroom&r uit de Guhbarbecuether. &dSausslangen&r maak je zonder kaart: gedroogde kelp, koper en een grillspies geven er 8.",
+    "Voor dit project heb je de &dreceptkaart: saus en slangen&r nodig (van de Uitvinder-guh, na zijn oefenhal), en &dgrillspiesen&r of &dblubroom&r uit de Guhbarbecuether. &dSausslangen&r maak je zonder kaart: gedroogde kelp, koper en een grillspies geven er 8. &7Daar kom je alleen &eeerst door het grillportaal&7. Laat het je nog niet door? Dan vertelt het portaal zelf wat er eerst moet gebeuren.&r",
   ],
   "quest.475548E3DE1ED0DD.title": "De Sauspomp",
   "quest.475548E3DE1ED0DD.quest_desc": [
@@ -169,7 +177,7 @@
   ],
   "quest.4755482AAA464E6F.title": "Het Blubkacheltje",
   "quest.4755482AAA464E6F.quest_desc": [
-    "Een &dSausblubje&r in een potje op een &dBlubkacheltje&r geeft 6 vadskracht zolang hij warm is: voer hem af en toe een kaasknabbel (één knabbel is 10 minuten; een buis mag hem ook voeren). Sluip en klik met een lege hand om je blubje terug te krijgen.",
+    "Een &dSausblubje&r in een potje op een &dBlubkacheltje&r geeft 6 vadskracht zolang hij warm is: voer hem af en toe een kaasknabbel (één knabbel is 10 minuten; een buis mag hem ook voeren). Sluip en klik met een lege hand om je blubje terug te krijgen. Geen blubje te vinden? De Verzorger-guh van de &6Sausloper-stal&r geeft er na zijn questlijn elke dag één.",
   ],
   "quest.475548D2FB73B680.title": "Knabbelende machines",
   "quest.475548D2FB73B680.quest_desc": [
@@ -225,7 +233,7 @@
   ],
   "quest.475548E6B2C7EA62.title": "Een gloeister",
   "quest.475548E6B2C7EA62.quest_desc": [
-    "De laatste laag begint met een &dgloeister&r: die laat alleen de &cAangebrande Mika&r vallen, de baas van het Mika-grillpaleis.",
+    "De laatste laag begint met een &dgloeister&r: die laat alleen de &cAangebrande Mika&r vallen, de baas van het Mika-grillpaleis in de &6Guhbarbecuether&r. &7Daar kom je alleen &eeerst door het grillportaal&7. Laat het je nog niet door? Dan vertelt het portaal zelf wat er eerst moet gebeuren.&r",
   ],
   "quest.475548C6100523DE.title": "De Gloeisterkern",
   "quest.475548C6100523DE.quest_desc": [

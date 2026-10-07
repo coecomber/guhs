@@ -624,4 +624,168 @@ public final class TechquestGameTests {
         }
         helper.succeed();
     }
+
+    // =====================================================================================================================
+    // phase 3: a second player who starts after the first one is done
+    // =====================================================================================================================
+
+    /**
+     * Player p walks the practice hall with the real clicks and blocks, from the first talk up to the hose of setup 5 (the
+     * pump then needs a moment). Asserts first that all five setups are broken: that is what a player who arrives finds.
+     */
+    private static void totDeSlang(GameTestHelper helper, Centrale.Kopie k, GuhNpcEntity npc, UitvinderRol rol, ServerPlayer p, String wie) {
+        ServerLevel level = helper.getLevel();
+        Item draad = ModBlocks.GUH_WIRE.get().asItem();
+        for (Centrale.Opstelling o : Centrale.Opstelling.values()) {
+            helper.assertTrue(!Centrale.werkt(k, o), "setup " + o + " is broken when " + wie + " begins");
+        }
+        helper.assertTrue(level.getBlockState(k.w(Centrale.S1_GAT[0])).isAir() && level.getBlockState(k.w(Centrale.S5_GAT[0])).isAir()
+                && level.getBlockState(k.w(Centrale.S2_KNIP[1])).is(ModBlocks.GUH_WIRE.get()), "the gaps are open and the cut wire is whole for " + wie);
+        helper.assertTrue(tel(level, k.w(Centrale.S3_VAT_A[0]), TechquestFeature.OEFENKNABBEL.get()) == Centrale.OEFENKNABBELS
+                && tel(level, k.w(Centrale.S4_VAT_A[0]), TechquestFeature.OEFENKNABBEL.get()) == Centrale.OEFENKNABBELS / 2, "the practice knabbels are back for " + wie);
+        rol.talk(npc, p);
+        helper.assertTrue(LIJN.stap(p) == 1 && heeft(p, draad) == 2, wie + " began and got two pieces of Guhdraad");
+        // setup 1: the wire in the gap
+        BlockPos gat = k.w(Centrale.S1_GAT[0]);
+        naar(p, gat.south(2));
+        p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(draad, 2));
+        Centrale.proefAan(k);
+        boolean gelegd = klik(p, gat.below(), Direction.UP);
+        Centrale.proefUit(k);
+        helper.assertTrue(gelegd && Centrale.werkt(k, Centrale.Opstelling.DRAAD), wie + " laid the wire");
+        Centrale.tik(k, List.of(p));
+        helper.assertTrue(LIJN.stap(p) == 2, wie + ": setup 1 done");
+        // setup 2: cut a wire
+        BlockPos knip = k.w(Centrale.S2_KNIP[1]);
+        naar(p, knip.south(2));
+        Centrale.proefAan(k);
+        boolean magKnippen = Centrale.magBreken(p, knip) && !Centrale.magBreken(p, k.w(Centrale.S2_OVENS[0]));
+        Centrale.proefUit(k);
+        helper.assertTrue(magKnippen, wie + " may cut the marked wire (and nothing else)");
+        level.destroyBlock(knip, false);
+        Centrale.tik(k, List.of(p));
+        helper.assertTrue(LIJN.stap(p) == 3, wie + ": setup 2 done");
+        // the salt
+        p.getInventory().add(new ItemStack(FossielmijnFeature.ZOUTKRISTAL.get(), UitvinderRol.ZOUT));
+        rol.talk(npc, p);
+        helper.assertTrue(LIJN.stap(p) == 4 && heeft(p, FossielmijnFeature.ZOUTKRISTAL.get()) == 0, wie + " brought the salt");
+        // setup 3: turn the Richtingstuk
+        BlockPos stuk = k.w(Centrale.S3_STUK[0]);
+        naar(p, stuk.south(2));
+        p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        p.setShiftKeyDown(true);
+        level.getBlockState(stuk).useWithoutItem(level, p, new BlockHitResult(Vec3.atCenterOf(stuk), Direction.SOUTH, stuk, false));
+        p.setShiftKeyDown(false);
+        helper.assertTrue(Centrale.werkt(k, Centrale.Opstelling.BUIS), wie + " turned the piece");
+        Centrale.tik(k, List.of(p));
+        helper.assertTrue(LIJN.stap(p) == 5, wie + ": setup 3 done");
+        // setup 4: the filter
+        BlockPos filter = k.w(Centrale.S4_FILTER[0]);
+        naar(p, filter.south(2));
+        FilterBlockEntity f = (FilterBlockEntity) level.getBlockEntity(filter);
+        helper.assertTrue(f.filter().behalve() && !Centrale.werkt(k, Centrale.Opstelling.FILTER), "the filter stands wrong for " + wie);
+        f.filter().items().clearContent();
+        f.filter().zetBehalve(false);
+        f.filter().voegToe(new ItemStack(TechquestFeature.OEFENKNABBEL.get()));
+        Centrale.tik(k, List.of(p));
+        helper.assertTrue(LIJN.stap(p) == 6, wie + ": setup 4 done");
+        // setup 5: the hose (the pump needs a moment after this)
+        p.getInventory().clearContent();
+        rol.talk(npc, p);
+        helper.assertTrue(heeft(p, TechsausFeature.SAUSSLANG_ITEM.get()) == 1 && LIJN.stap(p) == 6, wie + " was lent a Sausslang");
+        BlockPos gat5 = k.w(Centrale.S5_GAT[0]);
+        naar(p, gat5.east(2));
+        p.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(TechsausFeature.SAUSSLANG_ITEM.get()));
+        Centrale.proefAan(k);
+        boolean slang = klik(p, gat5.below(), Direction.UP);
+        Centrale.proefUit(k);
+        helper.assertTrue(slang && level.getBlockState(gat5).is(TechsausFeature.SAUSSLANG.get()), wie + " laid the hose");
+    }
+
+    /** Setup 5 works: player p goes back to the Uitvinder-guh and gets the reward, once. */
+    private static void rondAf(GameTestHelper helper, Centrale.Kopie k, GuhNpcEntity npc, UitvinderRol rol, ServerPlayer p, BlockPos weg, String wie) {
+        Centrale.tik(k, List.of(p));
+        helper.assertTrue(LIJN.stap(p) == 7, wie + ": setup 5 done");
+        naar(p, weg);
+        p.getInventory().clearContent();
+        GuhQuests.saved(p).remove(AangebrandeMika.SLEUTEL);
+        rol.talk(npc, p);
+        helper.assertTrue(LIJN.klaar(p) && heeft(p, BankFeature.BANK_UPGRADE.get()) == 1 && heeft(p, TechquestFeature.RECEPT_SAUS.get()) == 1
+                && heeft(p, TechquestFeature.RECEPT_MACHINES.get()) == 1 && heeft(p, TechquestFeature.RECEPT_BEZORG.get()) == 1,
+                wie + " is done: the Bodemloos Knabbelmaagje and the three recipe cards");
+        rol.talk(npc, p);
+        helper.assertTrue(heeft(p, BankFeature.BANK_UPGRADE.get()) == 1 && heeft(p, TechquestFeature.RECEPT_SAUS.get()) == 1 && MACHINE.stap(p) == 0,
+                wie + ": talking again gives no second reward, and the second questline waits for the Aangebrande Mika");
+    }
+
+    /**
+     * "Completable by an unlimited number of players" for the thirteenth building questline: player a walks the WHOLE of
+     * {@code techniek} with the real setups and starts De Grote Knabbelmachine; only then player b begins. For b the five
+     * setups are broken again, b mends them all, gets the reward of his own (once), can buy a lost card again, and the
+     * machine's stages are his own (a's deliveries are not b's, b's start does not touch a's).
+     */
+    @GuhTest(template = KAMER, batch = "techquest_twee", timeoutTicks = 3000)
+    public static void techquestTweedeSpelerNaDeEerste(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Centrale.Kopie k = kopie(helper);
+        BlockPos weg = helper.absolutePos(new BlockPos(16, 3, 11));
+        for (Centrale.Opstelling o : Centrale.Opstelling.values()) {
+            helper.assertTrue(!new BlockPos(16 + 7, 3 + 1, 11 + 9).closerThan(o.midden, Centrale.KIJK + 1),
+                    "(the waiting spot is out of sight of setup " + o + ")");
+        }
+        ServerPlayer a = speler(helper, weg), b = speler(helper, weg);
+        GuhNpcEntity npc = uitvinder(helper, new BlockPos(16, 3, 12));
+        UitvinderRol rol = new UitvinderRol();
+        Centrale.richtIn(k);
+        var eerste = Knabbelmachine.FASEN.get(0);
+        helper.startSequence()
+                .thenExecute(() -> totDeSlang(helper, k, npc, rol, a, "a"))
+                .thenWaitUntil(() -> helper.assertTrue(Centrale.werkt(k, Centrale.Opstelling.SAUS), "the pump fills the vat through a's hose"))
+                .thenExecute(() -> {
+                    rondAf(helper, k, npc, rol, a, weg, "a");
+                    // a also starts the big machine and delivers the whole first stage
+                    AangebrandeMika.zet(a);
+                    rol.talk(npc, a);
+                    helper.assertTrue(MACHINE.stap(a) == 1, "a has the plan");
+                    geef(a, new ItemStack(Items.COBBLESTONE), 256);
+                    geef(a, new ItemStack(Items.OAK_LOG), 128);
+                    rol.talk(npc, a);
+                    helper.assertTrue(MACHINE.stap(a) == 2 && Knabbelmachine.fase(a) == 2, "a's foundation lies");
+                    // b never began, and gets nothing from a's work
+                    helper.assertTrue(LIJN.stap(b) == 0 && MACHINE.stap(b) == 0 && heeft(b, BankFeature.BANK_UPGRADE.get()) == 0, "b has nothing of it");
+                    // everybody is away from the setups: they break again
+                    rust(k);
+                    // now b begins, in a hall the first player finished
+                    totDeSlang(helper, k, npc, rol, b, "b");
+                })
+                .thenWaitUntil(() -> helper.assertTrue(Centrale.werkt(k, Centrale.Opstelling.SAUS), "the pump fills the vat through b's hose"))
+                .thenExecute(() -> {
+                    rondAf(helper, k, npc, rol, b, weg, "b");
+                    helper.assertTrue(LIJN.klaar(a) && MACHINE.stap(a) == 2, "a's own progress is untouched");
+                    // a lost card: the Uitvinder-guh sells it again (sneak + click opens his shop for who is done)
+                    b.getInventory().clearContent();
+                    var winkel = rol.offers(npc);
+                    for (Item kaart : List.of(TechquestFeature.RECEPT_SAUS.get(), TechquestFeature.RECEPT_MACHINES.get(), TechquestFeature.RECEPT_BEZORG.get())) {
+                        helper.assertTrue(winkel != null && winkel.stream().anyMatch(o -> o.getResult().is(kaart)), "b can buy the lost card " + kaart + " again");
+                    }
+                    // the machine: b's stages are b's own
+                    rol.talk(npc, b);
+                    helper.assertTrue(MACHINE.stap(b) == 0 && heeft(b, BankFeature.BANK_UPGRADE.get()) == 0,
+                            "not before b beat the Aangebrande Mika himself (a's flag is a's), and no second Knabbelmaagje");
+                    AangebrandeMika.zet(b);
+                    rol.talk(npc, b);
+                    helper.assertTrue(MACHINE.stap(b) == 1 && Knabbelmachine.fase(b) == 1, "b has the plan: stage 1");
+                    helper.assertTrue(Knabbelmachine.geleverd(b, 1, eerste.get(0)) == 0 && Knabbelmachine.geleverd(b, 1, eerste.get(1)) == 0,
+                            "nothing of what a delivered counts for b");
+                    geef(b, new ItemStack(Items.COBBLESTONE), 100);
+                    rol.talk(npc, b);
+                    helper.assertTrue(Knabbelmachine.geleverd(b, 1, eerste.get(0)) == 100 && MACHINE.stap(b) == 1 && MACHINE.stap(a) == 2,
+                            "b's portion is counted for b, a stays where a was");
+                    Titels.Titel titel = Titels.van(TechquestFeature.KNABBELMACHINIST);
+                    helper.assertTrue(titel != null && !titel.behaald().test(a) && !titel.behaald().test(b), "(nobody is a Knabbelmachinist yet)");
+                    npc.discard();
+                    weg(helper, a, b);
+                })
+                .thenSucceed();
+    }
 }

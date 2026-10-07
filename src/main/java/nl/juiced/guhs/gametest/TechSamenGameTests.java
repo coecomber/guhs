@@ -460,7 +460,15 @@ public class TechSamenGameTests {
         oven.setItem(2, new ItemStack(Items.IRON_INGOT, 5));
         Bescherming.zetDoos(level, doos, new BoundingBox(ovenAbs.getX() - 1, ovenAbs.getY() - 1, ovenAbs.getZ() - 1,
                 ovenAbs.getX() + 1, ovenAbs.getY() + 1, ovenAbs.getZ() + 1));
+        // a second ripe peperplant INSIDE that box (a show bed of a quest building): no chore of the older kind works there either
+        BlockPos binnen = ovenPlek.north(), binnenAbs = helper.absolutePos(binnen);
+        helper.setBlock(binnen.below(), BarbecuetherFeature.PINDASAUS_NYLIUM.get());
+        helper.setBlock(binnen, plant.getStateForAge(PeperplantBlock.MAX_AGE));
         Huisje h = KlusjesGameTests.huisje(helper, speler);
+        helper.assertTrue(Bescherming.beschermd(level, binnenAbs) && h.inGebied(binnenAbs) && h.inGebied(peperAbs), "both plants stand in the home base, one in the box");
+        KlusGebied.vergeet();
+        List<BlockPos> gewas = KlusGebied.van(level, h, KlusGebied.Soort.GEWAS);
+        helper.assertTrue(gewas.contains(peperAbs) && !gewas.contains(binnenAbs), "the scan of the home base leaves the protected plant out: " + gewas);
         helper.assertTrue(Bescherming.beschermd(level, ovenAbs) && !Bescherming.beschermd(level, peperAbs), "the oven stands in a protected box, the plant does not");
         helper.assertTrue(Klusmachines.heeftUitvoer(level, ovenAbs), "bars lie ready in the oven");
         helper.assertTrue(!Klusmachines.mag(level, h, ovenAbs) && Klusmachines.rond(level, h).isEmpty(), "a machine in a protected building is not served");
@@ -474,8 +482,11 @@ public class TechSamenGameTests {
         helper.succeedWhen(() -> {
             String waar = KlusjesGameTests.staat(helper, guh);
             int pepers = KlusjesGameTests.telKist(kist, s -> s.is(TorenpeperFeature.SNOEPPEPER.get()));
-            helper.assertTrue(pepers >= PeperplantBlock.PLUK_MIN && pepers <= PeperplantBlock.PLUK_MAX, "2 or 3 Snoeppepers in the chest: " + pepers + waar);
             if (!vrij[0]) {
+                helper.assertTrue(pepers >= PeperplantBlock.PLUK_MIN && pepers <= PeperplantBlock.PLUK_MAX, "2 or 3 Snoeppepers in the chest: " + pepers + waar);
+                BlockState inDoos = level.getBlockState(binnenAbs);
+                helper.assertTrue(inDoos.is(plant) && inDoos.getValue(PeperplantBlock.AGE) == PeperplantBlock.MAX_AGE,
+                        "the ripe plant inside the protected building was left alone: " + inDoos + waar);
                 BlockState jong = level.getBlockState(peperAbs);
                 helper.assertTrue(jong.is(plant) && jong.getValue(PeperplantBlock.AGE) == 0, "a young plant stands there: " + jong);
                 gelijk(helper, PeperSoort.ROZE, jong.getValue(PeperplantBlock.SOORT), "that still knows its sweet ground");
@@ -494,7 +505,398 @@ public class TechSamenGameTests {
             }
             gelijk(helper, 5, KlusjesGameTests.telKist(kist, s -> s.is(Items.IRON_INGOT)), "now the resident fetched the bars" + waar);
             helper.assertTrue(oven.getItem(2).isEmpty(), "and the oven is empty");
+            BlockState nuVrij = level.getBlockState(binnenAbs);
+            helper.assertTrue(nuVrij.is(plant) && nuVrij.getValue(PeperplantBlock.AGE) == 0 && pepers >= 2 * PeperplantBlock.PLUK_MIN
+                    && pepers <= 2 * PeperplantBlock.PLUK_MAX, "and cut the plant that is no longer protected: " + nuVrij + ", " + pepers + " peppers" + waar);
             KlusjesGameTests.weg(helper, h, speler);
         });
+    }
+
+    // =====================================================================================================================
+    // phase 3 (fix-tech): the tiers, the faces, the loot, and the seams that were found after the merges
+    // =====================================================================================================================
+
+    private static net.minecraft.world.item.crafting.Recipe<?> recept(GameTestHelper helper, String naam) {
+        var r = helper.getLevel().getServer().getRecipeManager().byKey(net.minecraft.resources.ResourceKey.create(
+                net.minecraft.core.registries.Registries.RECIPE, nl.juiced.guhs.Guhs.id(naam)));
+        helper.assertTrue(r.isPresent(), "the recipe guhs:" + naam + " loads");
+        return r.get().value();
+    }
+
+    private static boolean vraagt(net.minecraft.world.item.crafting.Recipe<?> recept, Item item) {
+        ItemStack stack = new ItemStack(item);
+        return recept.placementInfo().ingredients().stream().anyMatch(i -> i.test(stack));
+    }
+
+    private static Item item(GameTestHelper helper, String id) {
+        Item item = net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(nl.juiced.guhs.Guhs.id(id));
+        helper.assertTrue(item != Items.AIR, "the item guhs:" + id + " exists");
+        return item;
+    }
+
+    /**
+     * ONE table for the four tiers of the Guh-technologie (DESIGN_130 2, "Progression"), on the merged tree: every recipe
+     * sits in its tier.
+     * <ol>
+     * <li>Knutselen: nothing of the Guhbarbecuether in it (no zoutkristal, grillspies, blubroom, grillkool, gloeister, no card).</li>
+     * <li>Zout: needs zoutkristal (after chapter 1 of the Knabbelring: the grill portal), no recipe card.</li>
+     * <li>Saus: needs its recipe card (the Uitvinder-guh's three after his questline; the Plantagebak the Grillcamping's).</li>
+     * <li>Gloeister: needs a gloeister (only the Aangebrande Mika drops one).</li>
+     * </ol>
+     * The Vadsmolen is not named in DESIGN: as built it is tier 1. The Sausslang is tier 3 in DESIGN and needs a grillspies
+     * but no card (the practice hall lends one; it is of no use without a pump or a vat, which do need the card).
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void techsamenElkReceptInZijnLaag(GameTestHelper helper) {
+        Item zout = FossielmijnFeature.ZOUTKRISTAL.get(), gloeister = item(helper, "gloeister");
+        Item saus = TechquestFeature.RECEPT_SAUS.get(), machines = TechquestFeature.RECEPT_MACHINES.get(), bezorg = TechquestFeature.RECEPT_BEZORG.get();
+        Item camping = CampingmarktFeature.RECEPT_PLANTAGEBAK.get();
+        List<Item> kaarten = List.of(saus, machines, bezorg, camping);
+        List<Item> barbecue = new java.util.ArrayList<>(kaarten);
+        barbecue.addAll(List.of(zout, gloeister, item(helper, "grillspies"), item(helper, "blubroom"), item(helper, "grillkool"), item(helper, "houtskoolsteen")));
+        // tier 1
+        for (String naam : List.of("guh_wheel", "guh_wire", "guh_oven", "knuffelgenerator", "disco_dynamo", "vadsmolen")) {
+            var r = recept(helper, naam);
+            for (Item b : barbecue) {
+                helper.assertTrue(!vraagt(r, b), "tier 1 (Knutselen): guhs:" + naam + " needs nothing of the Guhbarbecuether, but asks for " + b);
+            }
+        }
+        // tier 2
+        for (String naam : List.of("knabbelbuis", "knabbelbuis_richting", "knabbelbuis_filter", "hapluikje", "bank_sleutel", "opzuiger", "oogster",
+                "voorraadmeter", "snuffelsensor", "guhklok", "guhteller", "knabbelbatterij")) {
+            var r = recept(helper, naam);
+            helper.assertTrue(vraagt(r, zout), "tier 2 (Zout): guhs:" + naam + " needs zoutkristal");
+            helper.assertTrue(!vraagt(r, gloeister) && kaarten.stream().noneMatch(k -> vraagt(r, k)), "tier 2 (Zout): guhs:" + naam + " needs no card and no gloeister");
+        }
+        // tier 3
+        java.util.Map<String, Item> laag3 = new java.util.LinkedHashMap<>();
+        for (String naam : List.of("sauspomp", "sausvat", "brouwautomaat", "frituurautomaat", "grillkoolpers", "blubkacheltje")) {
+            laag3.put(naam, saus);
+        }
+        for (String naam : List.of("knabbelaar", "neerzetter", "knutselmachine", "tekentafel")) {
+            laag3.put(naam, machines);
+        }
+        laag3.put("stepstation", bezorg);
+        laag3.put("haltepaaltje", bezorg);
+        laag3.put("plantagebak", camping);
+        gelijk(helper, 13, laag3.size(), "the twelve recipes with a card of the Uitvinder-guh and the Plantagebak");
+        for (var e : laag3.entrySet()) {
+            var r = recept(helper, e.getKey());
+            for (Item k : kaarten) {
+                gelijk(helper, k == e.getValue(), vraagt(r, k), "tier 3 (Saus): guhs:" + e.getKey() + " and the card " + k);
+            }
+            helper.assertTrue(!vraagt(r, gloeister), "tier 3 (Saus): guhs:" + e.getKey() + " needs no gloeister");
+            ItemStack kaart = new ItemStack(e.getValue());
+            helper.assertTrue(kaart.getItem().getCraftingRemainder(kaart) != null, "the card " + e.getValue() + " stays in the grid");
+        }
+        var slang = recept(helper, "sausslang");
+        helper.assertTrue(vraagt(slang, item(helper, "grillspies")) && kaarten.stream().noneMatch(k -> vraagt(slang, k)),
+                "the Sausslang: a grillspies of the Guhbarbecuether, no card (as built)");
+        // tier 4
+        var kern = recept(helper, "gloeisterkern");
+        helper.assertTrue(vraagt(kern, gloeister) && vraagt(kern, zout), "tier 4 (Gloeister): the Gloeisterkern needs a gloeister");
+        // the cards and the gloeister come from nowhere else: no recipe makes them, no chest of a building holds them
+        var recepten = helper.getLevel().getServer().getRecipeManager();
+        var context = net.minecraft.world.item.crafting.display.SlotDisplayContext.fromLevel(helper.getLevel());
+        int bekeken = 0;
+        for (var houder : recepten.getRecipes()) {
+            if (!houder.id().identifier().getNamespace().equals(nl.juiced.guhs.Guhs.MODID)) {
+                continue;
+            }
+            bekeken++;
+            List<ItemStack> uit = houder.value().display().stream().flatMap(d -> d.result().resolveForStacks(context).stream()).toList();
+            for (Item gesloten : List.of(saus, machines, bezorg, camping, gloeister)) {
+                helper.assertTrue(uit.stream().noneMatch(st -> st.is(gesloten)), "no recipe makes " + gesloten + ": " + houder.id().identifier());
+            }
+        }
+        helper.assertTrue(bekeken > 100, "(the recipes of the mod were looked at: " + bekeken + ")");
+        // the questline of tier 4 behind the Aangebrande Mika: TechquestGameTests (techquestGroteKnabbelmachine, techquestTweedeSpelerNaDeEerste)
+        helper.succeed();
+    }
+
+    /** The models a blockstate file uses for snoet=&lt;state&gt; (variants, or multipart with a plain / AND / OR condition). */
+    private static java.util.Set<String> modellen(com.google.gson.JsonObject bs, String snoet) {
+        java.util.Set<String> uit = new java.util.TreeSet<>();
+        if (bs.has("variants")) {
+            for (var e : bs.getAsJsonObject("variants").entrySet()) {
+                boolean past = true;
+                for (String deel : e.getKey().split(",")) {
+                    if (deel.startsWith("snoet=") && !deel.equals("snoet=" + snoet)) {
+                        past = false;
+                    }
+                }
+                if (past) {
+                    voegModellen(uit, e.getValue());
+                }
+            }
+        }
+        if (bs.has("multipart")) {
+            for (var deel : bs.getAsJsonArray("multipart")) {
+                com.google.gson.JsonObject o = deel.getAsJsonObject();
+                if (!o.has("when") || past(o.get("when"), snoet)) {
+                    voegModellen(uit, o.get("apply"));
+                }
+            }
+        }
+        return uit;
+    }
+
+    private static boolean past(com.google.gson.JsonElement when, String snoet) {
+        com.google.gson.JsonObject o = when.getAsJsonObject();
+        for (String groep : List.of("AND", "OR")) {
+            if (o.has(groep)) {
+                boolean alle = true, een = false;
+                for (var sub : o.getAsJsonArray(groep)) {
+                    boolean p = past(sub, snoet);
+                    alle &= p;
+                    een |= p;
+                }
+                return groep.equals("AND") ? alle : een;
+            }
+        }
+        return !o.has("snoet") || List.of(o.get("snoet").getAsString().split("\\|")).contains(snoet);
+    }
+
+    private static void voegModellen(java.util.Set<String> uit, com.google.gson.JsonElement apply) {
+        if (apply.isJsonArray()) {
+            apply.getAsJsonArray().forEach(e -> uit.add(e.getAsJsonObject().get("model").getAsString()));
+        } else {
+            uit.add(apply.getAsJsonObject().get("model").getAsString());
+        }
+    }
+
+    private static com.google.gson.JsonObject bron(GameTestHelper helper, String pad) {
+        try (var in = TechSamenGameTests.class.getResourceAsStream(pad)) {
+            helper.assertTrue(in != null, "the resource " + pad + " exists");
+            return com.google.gson.JsonParser.parseReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
+        } catch (java.io.IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /**
+     * EVERY machine has a snoet with three faces (DESIGN_130 2 "Look"): asleep without vadskracht, happy at work, surprised
+     * when full. For each of them: the block has the property, its blockstate file tells the three faces apart (three
+     * different sets of models, every model file there), and a machine that uses vadskracht really wakes up when its net
+     * runs and falls asleep again when the source is gone. The sources sleep when they give nothing or do not count
+     * (TechbronGameTests); the Guhrad's face is the guh that runs in it. No face on purpose: Knabbelbuis, Richtingstuk,
+     * Sausslang, Sausvat, Haltepaaltje, Knabbelbatterij (asserted too, so a face that is added there is noticed).
+     */
+    @GuhTest(template = KAMER, batch = "techsamen_snoet", timeoutTicks = 400)
+    public static void techsamenElkeMachineHeeftDrieSnoeten(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        List<net.neoforged.neoforge.registries.DeferredBlock<? extends net.minecraft.world.level.block.Block>> verbruikers = List.of(
+                GuhovenFeature.GUH_OVEN, TechmachineFeature.VADSMOLEN, TechmachineFeature.OOGSTER, TechmachineFeature.KNABBELAAR, TechmachineFeature.NEERZETTER,
+                TechmachineFeature.KNUTSELMACHINE, TechmachineFeature.PLANTAGEBAK, TechsausFeature.SAUSPOMP, TechsausFeature.BROUWAUTOMAAT,
+                TechsausFeature.FRITUURAUTOMAAT, TechsausFeature.GRILLKOOLPERS, TechbuisFeature.KNABBELBUIS_FILTER, TechbuisFeature.OPZUIGER,
+                TechbuisFeature.VOORRAADMETER, TechbuisFeature.SNUFFELSENSOR, TechbuisFeature.GUHKLOK, TechbuisFeature.GUHTELLER,
+                TechbezorgFeature.STEPSTATION, BankFeature.HAPLUIKJE);
+        List<net.neoforged.neoforge.registries.DeferredBlock<? extends net.minecraft.world.level.block.Block>> bronnen = List.of(
+                TechbronFeature.KNUFFELGENERATOR, TechbronFeature.DISCO_DYNAMO, TechbronFeature.BLUBKACHELTJE, TechbronFeature.GLOEISTERKERN);
+        List<net.neoforged.neoforge.registries.DeferredBlock<? extends net.minecraft.world.level.block.Block>> alle = new java.util.ArrayList<>(verbruikers);
+        alle.addAll(bronnen);
+        alle.add(TechmachineFeature.TEKENTAFEL);
+        for (var blok : alle) {
+            String id = blok.getId().getPath();
+            helper.assertTrue(blok.get().defaultBlockState().hasProperty(MachineBlock.SNOET), id + " has a snoet");
+            gelijk(helper, nl.juiced.guhs.feature.vadskracht.Snoet.SLAAPT, blok.get().defaultBlockState().getValue(MachineBlock.SNOET), id + " is put down asleep");
+            com.google.gson.JsonObject bs = bron(helper, "/assets/guhs/blockstates/" + id + ".json");
+            java.util.Set<String> slaapt = modellen(bs, "slaapt"), werkt = modellen(bs, "werkt"), vol = modellen(bs, "vol");
+            helper.assertTrue(!slaapt.isEmpty() && !werkt.isEmpty() && !vol.isEmpty(), id + ": a model for each face");
+            helper.assertTrue(!slaapt.equals(werkt) && !werkt.equals(vol) && !slaapt.equals(vol),
+                    id + ": three different faces in its blockstate: " + slaapt + " / " + werkt + " / " + vol);
+            for (String model : java.util.stream.Stream.of(slaapt, werkt, vol).flatMap(java.util.Set::stream).toList()) {
+                helper.assertTrue(model.startsWith("guhs:"), id + ": its own model " + model);
+                bron(helper, "/assets/guhs/models/" + model.substring(5) + ".json");
+            }
+        }
+        for (var blok : List.of(TechbuisFeature.KNABBELBUIS, TechbuisFeature.KNABBELBUIS_RICHTING, TechsausFeature.SAUSSLANG, TechsausFeature.SAUSVAT,
+                TechbezorgFeature.HALTEPAALTJE, TechbronFeature.KNABBELBATTERIJ)) {
+            helper.assertTrue(!blok.get().defaultBlockState().hasProperty(MachineBlock.SNOET), blok.getId().getPath() + " has no face (on purpose)");
+        }
+        // the users of vadskracht: each on a source of its own (under it), three blocks apart
+        List<BlockPos> plekken = new java.util.ArrayList<>();
+        for (int i = 0; i < verbruikers.size(); i++) {
+            BlockPos plek = p(1 + 3 * (i % 5), 1 + 3 * (i / 5));
+            plekken.add(plek);
+            helper.setBlock(plek.below(), VadskrachtFeature.TESTBRON.get().defaultBlockState().setValue(TestbronBlock.KRACHT, 2));
+            helper.setBlock(plek, verbruikers.get(i).get());
+        }
+        boolean[] uit = {false};
+        helper.succeedWhen(() -> {
+            if (!uit[0]) {
+                for (int i = 0; i < plekken.size(); i++) {
+                    helper.assertTrue(helper.getBlockState(plekken.get(i)).getValue(MachineBlock.SNOET) != nl.juiced.guhs.feature.vadskracht.Snoet.SLAAPT,
+                            verbruikers.get(i).getId().getPath() + " wakes up when its net runs: " + helper.getBlockState(plekken.get(i)));
+                }
+                for (BlockPos plek : plekken) {
+                    helper.setBlock(plek.below(), Blocks.STONE);
+                }
+                uit[0] = true;
+            }
+            for (int i = 0; i < plekken.size(); i++) {
+                gelijk(helper, nl.juiced.guhs.feature.vadskracht.Snoet.SLAAPT, helper.getBlockState(plekken.get(i)).getValue(MachineBlock.SNOET),
+                        verbruikers.get(i).getId().getPath() + " falls asleep without vadskracht");
+            }
+            for (BlockPos plek : plekken) {
+                helper.setBlock(plek, Blocks.AIR);
+            }
+            level.getEntitiesOfClass(net.minecraft.world.entity.Entity.class, new net.minecraft.world.phys.AABB(helper.absolutePos(p(0, 0)))
+                    .expandTowards(15, 5, 15), e -> !(e instanceof net.minecraft.world.entity.player.Player)).forEach(net.minecraft.world.entity.Entity::discard);
+        });
+    }
+
+    /**
+     * Every block of the tech slices that a player can hold drops something when it is broken (the placeholder rows that
+     * once gave every fixed id a loot table are gone: each owner writes its own). Not asked of a part block or a test block
+     * (no item of its own) nor of a block that cannot be broken (De Grote Knabbelmachine).
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void techsamenElkBlokHeeftZijnBuit(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos pos = helper.absolutePos(new BlockPos(0, 2, 0));
+        List<net.neoforged.neoforge.registries.DeferredRegister.Blocks> registers = List.of(BankFeature.BLOCKS, TechbronFeature.BLOCKS, TechbuisFeature.BLOCKS,
+                TechmachineFeature.BLOCKS, TechsausFeature.BLOCKS, TechbezorgFeature.BLOCKS, TechquestFeature.BLOCKS, VadskrachtFeature.BLOCKS, GuhovenFeature.BLOCKS);
+        List<net.minecraft.world.level.block.Block> blokken = new java.util.ArrayList<>();
+        registers.forEach(r -> r.getEntries().forEach(e -> blokken.add(e.get())));
+        blokken.addAll(List.of(ModBlocks.BANK_GUH.get(), ModBlocks.GUH_WHEEL.get(), ModBlocks.GUH_WIRE.get()));
+        int metItem = 0;
+        List<String> zonder = new java.util.ArrayList<>();
+        for (var blok : blokken) {
+            String id = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(blok).getPath();
+            if (blok.asItem() == Items.AIR) {
+                zonder.add(id);
+                continue;
+            }
+            metItem++;
+            if (blok.defaultDestroyTime() < 0) {
+                helper.assertTrue(blok == TechquestFeature.GROTE_KNABBELMACHINE.get(), "only De Grote Knabbelmachine cannot be broken, not " + id);
+                continue;
+            }
+            helper.assertTrue(blok.getLootTable().isPresent(), id + " has a loot table");
+            List<ItemStack> buit = net.minecraft.world.level.block.Block.getDrops(blok.defaultBlockState(), level, pos, null);
+            helper.assertTrue(buit.stream().anyMatch(st -> !st.isEmpty()), id + " drops something when it is broken (its own loot table)");
+            helper.assertTrue(buit.stream().anyMatch(st -> st.is(blok.asItem())), id + " drops itself: " + buit);
+        }
+        helper.assertTrue(metItem >= 30, "all the blocks of the tech slices were looked at: " + metItem);
+        for (String id : zonder) {
+            helper.assertTrue(id.endsWith("_deel") || id.startsWith("vadskracht_test") || id.equals("machine_deel"), "a block without an item is a part or a test block: " + id);
+        }
+        helper.succeed();
+    }
+
+    /**
+     * An "ophalen" pole at an upgraded Bank Guh that holds hundreds of kinds: a look walks at most
+     * {@link StepstationBlockEntity#MAX_ZOEK} slots (it walked all of them, and asked every "afleveren" stop about each),
+     * goes on where it stopped, and so still finds the one kind the other stop asks for at the very end of the bank.
+     */
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 3000)
+    public static void techsamenBezorgguhtjeBijEenBankMetHonderdenSoorten(GameTestHelper helper) {
+        BankGuhBlockEntity bank = bank(helper, p(2, 3));
+        int soorten = 0;
+        for (Item soort : net.minecraft.core.registries.BuiltInRegistries.ITEM) {
+            if (soort == Items.AIR || soort == knabbel() || Features.isLoaned(new ItemStack(soort))) {
+                continue;
+            }
+            bank.getStorage().insert(new ItemStack(soort), 3);
+            if (++soorten == 300) {
+                break;
+            }
+        }
+        gelijk(helper, 300, soorten, "(three hundred kinds of item exist)");
+        gelijk(helper, 20L, bank.getStorage().insert(new ItemStack(knabbel()), 20), "20 knabbels go in last: the last slot of the bank");
+        bank.getStorage().setUpgraded(true);
+        gelijk(helper, 302, bank.handler().size(), "301 kinds and one free slot");
+        StepstationBlockEntity station = station(helper, p(7, 7));
+        ChestBlockEntity b = kist(helper, p(12, 3));
+        paal(helper, p(2, 4), true, station);
+        HaltepaaltjeBlockEntity paalB = paal(helper, p(12, 4), false, station);
+        paalB.zetFilter(0, new ItemStack(knabbel()));
+        int[] meeste = {0};
+        helper.onEachTick(() -> meeste[0] = Math.max(meeste[0], station.bekeken()));
+        helper.succeedWhen(() -> {
+            gelijk(helper, 20, b.countItem(knabbel()), "the knabbels from the end of the bank are in the chest");
+            gelijk(helper, 0L, bank.getStorage().count(new ItemStack(knabbel())), "and out of the bank");
+            gelijk(helper, 300, bank.getStorage().snapshot().entries().size(), "every other kind stays in the bank");
+            helper.assertTrue(station.rugzakLeeg(), "the backpack is empty");
+            helper.assertTrue(meeste[0] > 0 && meeste[0] <= StepstationBlockEntity.MAX_ZOEK, "no look walked more than " + StepstationBlockEntity.MAX_ZOEK
+                    + " slots of the bank: " + meeste[0]);
+        });
+    }
+
+    /**
+     * A sneaking player with a Sausblubje jar clicks a Blubkacheltje: the blubje goes INTO the stove (vanilla skips the
+     * block for a sneaking player with an item, and the jar then let the blubje out next to the stove).
+     */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void techsamenBlubjeInDeKachelOokAlsJeSluipt(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer speler = GuhMockPlayer.of(helper);
+        speler.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+        speler.getInventory().clearContent();
+        BlockPos kachel = p(7, 7), abs = helper.absolutePos(kachel);
+        speler.snapTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 2.5);
+        helper.setBlock(kachel, TechbronFeature.BLUBKACHELTJE.get());
+        var be = (nl.juiced.guhs.feature.techbron.BlubkacheltjeBlockEntity) level.getBlockEntity(abs);
+        var klik = new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(abs), Direction.SOUTH, abs, false);
+        try {
+            speler.setShiftKeyDown(true);
+            speler.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(SausdierenFeature.SAUSBLUBJE_POTJE.get()));
+            var uitkomst = speler.gameMode.useItemOn(speler, level, speler.getMainHandItem(), net.minecraft.world.InteractionHand.MAIN_HAND, klik);
+            helper.assertTrue(uitkomst.consumesAction() && be.heeftBlubje() && speler.getMainHandItem().isEmpty(), "sneaking: the blubje is in the stove: " + uitkomst);
+            gelijk(helper, 0, level.getEntitiesOfClass(nl.juiced.guhs.feature.sausdieren.SausblubjeEntity.class,
+                    new net.minecraft.world.phys.AABB(abs).inflate(6)).size(), "and no blubje hops around next to it");
+            // sneaking with food: into the bakje
+            speler.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(knabbel(), 3));
+            speler.gameMode.useItemOn(speler, level, speler.getMainHandItem(), net.minecraft.world.InteractionHand.MAIN_HAND, klik);
+            helper.assertTrue(speler.getMainHandItem().isEmpty() && be.voorraad() + (be.warm() ? 1 : 0) == 3, "sneaking with knabbels feeds it: " + be.voorraad());
+            // a jar on any other block still lets the blubje out
+            speler.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(SausdierenFeature.SAUSBLUBJE_POTJE.get()));
+            BlockPos vloer = helper.absolutePos(new BlockPos(3, 1, 3));
+            speler.gameMode.useItemOn(speler, level, speler.getMainHandItem(), net.minecraft.world.InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(vloer), Direction.UP, vloer, false));
+            var los = level.getEntitiesOfClass(nl.juiced.guhs.feature.sausdieren.SausblubjeEntity.class, new net.minecraft.world.phys.AABB(abs).inflate(8));
+            gelijk(helper, 1, los.size(), "on the floor the jar lets its blubje out as before");
+            los.forEach(net.minecraft.world.entity.Entity::discard);
+        } finally {
+            helper.setBlock(kachel, Blocks.AIR);
+            level.removePlayerImmediately(speler, net.minecraft.world.entity.Entity.RemovalReason.DISCARDED);
+        }
+        level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, new net.minecraft.world.phys.AABB(abs).inflate(8)).forEach(net.minecraft.world.entity.Entity::discard);
+        helper.succeed();
+    }
+
+    /**
+     * A Haltepaaltje only serves a block its owner may touch (like the machines that change the world): not the chest of a
+     * protected quest building. And a pole a Neerzetter puts down belongs to the Neerzetter's owner.
+     */
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 400)
+    public static void techsamenHaltepaaltjeVraagtBescherming(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        String doos = "techsamen_halte";
+        Bescherming.wisDozen(level, doos);
+        StepstationBlockEntity station = station(helper, p(7, 7));
+        ChestBlockEntity kist = kist(helper, p(2, 3));
+        kist.setItem(0, kei(5));
+        HaltepaaltjeBlockEntity halte = paal(helper, p(2, 4), true, station);
+        helper.assertTrue(halte.mag() && halte.uitKant() != null && halte.inKant() != null && halte.heeftKist(), "a pole at a chest in the open serves it");
+        BlockPos kistAbs = helper.absolutePos(p(2, 3));
+        Bescherming.zetDoos(level, doos, new BoundingBox(kistAbs.getX(), kistAbs.getY(), kistAbs.getZ(), kistAbs.getX(), kistAbs.getY(), kistAbs.getZ()));
+        java.util.UUID baas = java.util.UUID.randomUUID();
+        halte.zetEigenaar(baas);   // (asks again)
+        helper.assertTrue(Bescherming.beschermd(level, kistAbs) && !halte.mag(), "the chest of a protected building: the pole may not");
+        helper.assertTrue(halte.uitKant() == null && halte.inKant() == null && !halte.heeftKist(), "so it serves nothing there");
+        Bescherming.wisDozen(level, doos);
+        halte.zetEigenaar(baas);
+        helper.assertTrue(halte.mag() && halte.uitKant() != null, "the protection gone: it serves the chest again");
+        // a Neerzetter of that owner puts down a pole
+        BlockPos zetter = p(11, 11);
+        helper.setBlock(zetter.south(), VadskrachtFeature.TESTBRON.get().defaultBlockState().setValue(TestbronBlock.KRACHT, 2));
+        helper.setBlock(zetter, TechmachineFeature.NEERZETTER.get().defaultBlockState().setValue(MachineBlock.FACING, Direction.NORTH));
+        var neerzetter = (nl.juiced.guhs.feature.techmachine.NeerzetterBlockEntity) level.getBlockEntity(helper.absolutePos(zetter));
+        neerzetter.zetEigenaar(baas);
+        neerzetter.vakken().set(0, ItemResource.of(TechbezorgFeature.HALTEPAALTJE.get().asItem()), 1);
+        helper.succeedWhen(() -> helper.assertTrue(level.getBlockEntity(helper.absolutePos(zetter.north())) instanceof HaltepaaltjeBlockEntity nieuw
+                && baas.equals(nieuw.eigenaar()), "the pole the Neerzetter placed belongs to the Neerzetter's owner"));
     }
 }

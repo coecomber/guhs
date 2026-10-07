@@ -66,7 +66,8 @@ public class BankStorage {
         return like.isEmpty() ? 0 : room(ItemResource.of(like));
     }
 
-    long room(ItemResource key) {
+    /** How many more of this kind fit (the same rule, for a kind without a stack). */
+    public long room(ItemResource key) {
         return Math.max(0, cap() - amount(key));
     }
 
