@@ -412,7 +412,8 @@ LANG = {
     "gui.guhs.fossielmijn.beloning.ader": "De kristalader: jouw eigen voorraad zout, die altijd weer aangroeit",
     "quest.guhs.fossielmijn.mijnwerker.hallo1": "Njeg, wat een puinhoop! Het dak kwam naar beneden en nu ligt mijn hele karrenspoor vol puin.",
     "quest.guhs.fossielmijn.mijnwerker.hallo2": "Mijn rug doet het niet meer. Hak jij vijf brokken puin van het spoor? Dan vertel ik je waar het zout zit!",
-    "quest.guhs.fossielmijn.mijnwerker.puin": "Nog %s brokken puin. Ze liggen op het spoor, in de gangen van de berg. Hakken maar!",
+    "quest.guhs.fossielmijn.mijnwerker.puin": "Nog %s brokken puin. Ze liggen op het spoor, in de gangen van de berg. Hakken maar! Is het "
+                                              "spoor net door een ander leeggehakt? Wacht een minuutje, njeg: het dak blijft brokkelen.",
     "quest.guhs.fossielmijn.mijnwerker.ader": "Vahoeg, het spoor is vrij! Volg het tot in de grot aan het eind: daar zit de kristalader. Hak er maar eens in!",
     "quest.guhs.fossielmijn.mijnwerker.breng": "Je hebt de ader gevonden! Breng me drie zoutkristallen voor op mijn boterham. Je hebt er nu %s.",
     "quest.guhs.fossielmijn.mijnwerker.klaar1": "Mmm, zout! Zonder zout smaakt een knabbel nergens naar. VAHOEG!",

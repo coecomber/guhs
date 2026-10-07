@@ -29,7 +29,9 @@ import nl.juiced.guhs.feature.spiesburcht.RookguhEntity;
  * when it has been led ({@link #LEID_TICKS} of following) to within {@link Vuurtoren#THUIS_STRAAL} blocks of a burning lamp it
  * sees the light, eats its fill (it gets round and rosy like any fed Rookguh) and floats home, which counts for its guide
  * ({@link Vuurtoren#thuisgekomen}).
- * Feeding it six kaasknabbels by hand sends it home just the same.
+ * Feeding it six kaasknabbels by hand sends it home just the same. One that gets stuck while it follows hops to its guide
+ * (three seconds without getting closer), and one that its guide never finds comes by itself after {@link #ZOEK_TICKS} ticks
+ * of the lantern being held nearby.
  * <p>
  * It is never saved and never spawned by the world; {@link Vuurtoren#tik} makes the ones a player still needs. Without its
  * guide (gone, in another dimension, done with that step) it drifts off after a few seconds. Like every Rookguh it can't
@@ -42,12 +44,15 @@ public class VerdwaaldeRookguhEntity extends RookguhEntity {
     public static final int HAP_TICKS = 8;
     /** It only trusts the light after following its guide this long (a lost Rookguh never comes home by itself). */
     public static final int LEID_TICKS = 20;
+    /** A guide who holds the lantern this long (ticks, in all) within {@link #ZOEK_BEREIK} blocks without it ever following: it hops to them. */
+    public static final int ZOEK_TICKS = 3600;
+    public static final double ZOEK_BEREIK = 64.0;
 
     @Nullable
     private UUID gids;
     private BlockPos lamp = BlockPos.ZERO;
     private Vec3 anker = Vec3.ZERO;
-    private int alleen, eet, vast, geleid;
+    private int alleen, eet, vast, geleid, gezocht;
     private double vorigeAfstand;
     private boolean geteld, volgt;
 
@@ -84,6 +89,11 @@ public class VerdwaaldeRookguhEntity extends RookguhEntity {
     /** Has it followed its guide long enough to trust the light? */
     public boolean isGeleid() {
         return geleid >= LEID_TICKS;
+    }
+
+    /** (tests) as if its guide has been looking for it with the lantern for this many ticks. */
+    public void zetGezocht(int ticks) {
+        gezocht = ticks;
     }
 
     /** Is it following its guide right now? */
@@ -138,6 +148,11 @@ public class VerdwaaldeRookguhEntity extends RookguhEntity {
             return;
         }
         alleen = 0;
+        // its guide walks around with the lantern for minutes and it never saw it (a pocket of the cave, a ledge nobody can
+        // reach): it comes by itself, so no lost Rookguh can keep a player at this step for ever
+        if (!volgt && Vuurtoren.houdtLantaarn(gids) && gids.distanceToSqr(this) < ZOEK_BEREIK * ZOEK_BEREIK && ++gezocht >= ZOEK_TICKS && hop(gids)) {
+            gezocht = 0;
+        }
         if (tickCount % 10 == 0) {
             // (a sparkle only its guide sees: "this one is yours")
             level.sendParticles(gids, ParticleTypes.END_ROD, false, false, getX(), getY() + getBbHeight() + 0.35, getZ(), 1, 0.15, 0.1, 0.15, 0.0);

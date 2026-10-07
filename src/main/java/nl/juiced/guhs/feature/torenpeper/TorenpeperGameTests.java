@@ -351,6 +351,137 @@ public class TorenpeperGameTests {
         helper.succeed();
     }
 
+    /**
+     * A real right-click of this player on this block with one of this item out of their pockets (the interact event fires,
+     * then the block). With the off hand, so nothing in the pockets is in the way; what is left in it goes back.
+     */
+    private static void klikMet(GameTestHelper helper, ServerPlayer p, BlockPos abs, Item item) {
+        GuhQuests.take(p, item, 1);
+        p.setItemInHand(InteractionHand.OFF_HAND, new ItemStack(item));
+        p.gameMode.useItemOn(p, helper.getLevel(), p.getOffhandItem(), InteractionHand.OFF_HAND, new BlockHitResult(Vec3.atCenterOf(abs), Direction.UP, abs, false));
+        ItemStack over = p.getOffhandItem().copyAndClear();
+        if (!over.isEmpty()) {
+            p.getInventory().add(over);
+        }
+    }
+
+    /**
+     * The Guhbrouwketel of the kas is ONE pan for everybody. Whoever stirs a pepper of their own into it has brewed their
+     * first pepper drink, whoever fills the bottles; a player whose powder and sauce went into somebody else's brew gets them
+     * again from the Peperteler-guh (once a day), and one who ran out of peppers gets a seed. And the questline is done again,
+     * from the first talk on, by somebody who only arrives when the others are finished.
+     */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void torenpeperGedeeldeKetel(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer a = speler(helper, new BlockPos(4, 2, 9)), b = speler(helper, new BlockPos(4, 2, 11)), c = speler(helper, new BlockPos(4, 2, 13)),
+                d = speler(helper, new BlockPos(4, 2, 15));
+        GuhNpcEntity npc = npc(helper, GuhNpcEntity.Kind.PEPERTELERGUH, new BlockPos(3, 2, 9));
+        NpcRole rol = NpcRollen.van(npc);
+        Item poeder = SpiesburchtFeature.GRILLSPIESPOEDER.get(), saus = ModItems.KAAS_SAUS_BUCKET.get(), fles = Items.GLASS_BOTTLE;
+        Item rood = TorenpeperFeature.VAHOEGPEPER.get(), roze = TorenpeperFeature.SNOEPPEPER.get(), zaad = TorenpeperFeature.PEPERZAADJES.get();
+        Item vuur = TorenpeperFeature.PEPERVUURDRANKJE.get(), zoet = TorenpeperFeature.PEPERZOETDRANKJE.get();
+        helper.setBlock(new BlockPos(8, 2, 9), SpiesburchtFeature.GUHBROUWKETEL.get());
+        BlockPos pan = helper.absolutePos(new BlockPos(8, 2, 9));
+        try {
+            GuhbrouwketelBlockEntity ketel = (GuhbrouwketelBlockEntity) level.getBlockEntity(pan);
+            // a and b both at the brewing step, each with the kit and the peppers of their own kweekbakken
+            for (ServerPlayer p : List.of(a, b)) {
+                TUIN.zet(p, 2);
+                rol.talk(npc, p);
+                p.getInventory().add(new ItemStack(rood, Kweek.PEPERS));
+                helper.assertTrue(GuhQuests.count(p, poeder) == 1 && GuhQuests.count(p, saus) == 1 && GuhQuests.count(p, fles) == 3, "the brewing kit");
+            }
+            // a stokes the fire and pours the sauce; b is quicker with the pepper
+            klikMet(helper, a, pan, poeder);
+            klikMet(helper, a, pan, saus);
+            helper.assertTrue(ketel.fuel() == GuhbrouwketelBlockEntity.BREWS_PER_POWDER && ketel.portions() == GuhbrouwketelBlockEntity.PORTIONS && TUIN.stap(a) == 2,
+                    "a made the pan ready: no step for that");
+            klikMet(helper, a, pan, TorenpeperFeature.NJEGPEPER.get());
+            helper.assertTrue(TUIN.stap(a) == 2 && !ketel.isBrewing(), "(a green pepper brews nothing and counts for nothing)");
+            klikMet(helper, b, pan, rood);
+            helper.assertTrue(ketel.isBrewing() && GuhQuests.count(b, rood) == Kweek.PEPERS - 1, "b's pepper went into the pan that a made ready");
+            helper.assertTrue(TUIN.stap(b) == 3 && TUIN.stap(a) == 2, "the pepper was b's: the step is b's, not a's");
+            klikMet(helper, a, pan, rood);
+            helper.assertTrue(TUIN.stap(a) == 2 && GuhQuests.count(a, rood) == Kweek.PEPERS, "a pepper the pan refuses (it bubbles already) counts for nothing");
+            // a has no powder and no sauce left: the Peperteler-guh gives both again, once a day
+            helper.assertTrue(GuhQuests.count(a, poeder) == 0 && GuhQuests.count(a, saus) == 0, "a's kit is in b's brew");
+            rol.talk(npc, a);
+            helper.assertTrue(GuhQuests.count(a, poeder) == 1 && GuhQuests.count(a, saus) == 1 && GuhQuests.count(a, fles) == 3,
+                    "powder and sauce again (a still had the bottles)");
+            rol.talk(npc, a);
+            helper.assertTrue(GuhQuests.count(a, poeder) == 1 && GuhQuests.count(a, saus) == 1, "not while a has them");
+            GuhQuests.take(a, poeder, 1);
+            GuhQuests.take(a, saus, 1);
+            rol.talk(npc, a);
+            helper.assertTrue(GuhQuests.count(a, poeder) == 0 && GuhQuests.count(a, saus) == 0, "and only once a day");
+            TUIN.teller(a, "pakket_dag", 0);
+            rol.talk(npc, a);
+            helper.assertTrue(GuhQuests.count(a, poeder) == 1 && GuhQuests.count(a, saus) == 1, "(another day: again)");
+            // b taps the whole brew
+            ketel.finishBrewing();
+            for (int i = 0; i < 3; i++) {
+                klikMet(helper, b, pan, fles);
+            }
+            helper.assertTrue(GuhQuests.count(b, vuur) == 3 && ketel.portions() == 0, "b filled three bottles: the pan is empty");
+            // a brews in the same pan (its fire still burns): the moment a's own pepper goes in, the step is a's
+            klikMet(helper, a, pan, saus);
+            klikMet(helper, a, pan, rood);
+            helper.assertTrue(ketel.isBrewing() && TUIN.stap(a) == 3 && !Pepertuin.heeftDrankje(a), "a's own pepper bubbles: a brewed, before any bottle is filled");
+            // c, who has nothing to do with it, taps all of a's brew: nothing changes for a
+            ketel.finishBrewing();
+            c.getInventory().add(new ItemStack(fles, 3));
+            for (int i = 0; i < 3; i++) {
+                klikMet(helper, c, pan, fles);
+            }
+            helper.assertTrue(GuhQuests.count(c, vuur) == 3 && ketel.portions() == 0 && !Pepertuin.heeftDrankje(a) && TUIN.stap(a) == 3 && TUIN.stap(c) == 0,
+                    "somebody else took every bottle of a's brew: a keeps the step");
+            Item slinger = ModItems.clothingItem(GuhClothes.TORENPEPER_PEPERSLINGER);
+            rol.talk(npc, a);
+            helper.assertTrue(TUIN.klaar(a) && GuhQuests.count(a, slinger) == 1 && GuhQuests.count(a, zaad) == PepertelerRol.BELONING_ZAADJES
+                    && GuhQuests.count(a, vuur) == 1, "a is done all the same: seeds, a bottle from the Peperteler-guh, the peperslinger");
+            // b finishes after a
+            rol.talk(npc, b);
+            helper.assertTrue(TUIN.klaar(b) && GuhQuests.count(b, slinger) == 1 && GuhQuests.count(b, zoet) == 1, "b is done after a, with the other drink");
+            // c only begins now: seeds, the same three kweekbakken, the kit, the same pan
+            c.getInventory().clearContent();
+            rol.talk(npc, c);
+            rol.antwoord(npc, c, 1);
+            helper.assertTrue(TUIN.stap(c) == 1 && GuhQuests.count(c, zaad) == 3 && Kweek.groei(c, PeperSoort.ROOD) == 0, "a newcomer: three seeds, empty troughs of their own");
+            for (PeperSoort soort : PeperSoort.values()) {
+                Kweek.plant(c, soort, 3L * Kweek.GROEI_TICKS);
+                Kweek.klik(c, c.blockPosition(), soort);
+            }
+            helper.assertTrue(TUIN.stap(c) == 2 && GuhQuests.count(c, roze) == Kweek.PEPERS, "the three peppers");
+            rol.talk(npc, c);
+            klikMet(helper, c, pan, poeder);
+            klikMet(helper, c, pan, saus);
+            klikMet(helper, c, pan, roze);
+            helper.assertTrue(TUIN.stap(c) == 3 && ketel.isBrewing(), "the newcomer brews in the pan the others used");
+            ketel.finishBrewing();
+            klikMet(helper, c, pan, fles);
+            rol.talk(npc, c);
+            helper.assertTrue(TUIN.klaar(c) && GuhQuests.count(c, zoet) == 1 && GuhQuests.count(c, vuur) == 1 && GuhQuests.count(c, slinger) == 1,
+                    "and is done, with both drinks: any number of players, one after the other");
+            // d is at the brewing step without a pepper, a seed or a plant: a seed (the kweekbakken are d's own)
+            TUIN.zet(d, 2);
+            rol.talk(npc, d);
+            helper.assertTrue(GuhQuests.count(d, poeder) == 1 && GuhQuests.count(d, zaad) == 0, "the kit first");
+            rol.talk(npc, d);
+            helper.assertTrue(GuhQuests.count(d, zaad) == 1 && GuhQuests.count(d, poeder) == 1, "no pepper, no seed, nothing growing: a seed");
+            rol.talk(npc, d);
+            helper.assertTrue(GuhQuests.count(d, zaad) == 1, "not a second one");
+            GuhQuests.take(d, zaad, 1);
+            Kweek.plant(d, PeperSoort.ROZE, 0);
+            rol.talk(npc, d);
+            helper.assertTrue(GuhQuests.count(d, zaad) == 0, "nor while a pepper that brews is growing");
+        } finally {
+            weg(helper, a, b, c, d);
+            npc.discard();
+        }
+        helper.succeed();
+    }
+
     /** The two drinks brew from their peppers and do what they say; the green pepper brews nothing; a raw Vahoegpeper makes you run. */
     @GuhTest(template = KAMER, batch = BATCH)
     public static void torenpeperPepersEnDrankjes(GameTestHelper helper) {
@@ -516,6 +647,31 @@ public class TorenpeperGameTests {
             helper.assertTrue(TOREN.stap(b) == 0 && !TOREN.begonnen(b) && GuhQuests.count(b, lantaarn) == 0, "B's story did not move");
             klik(helper, a, lamp);
             helper.assertTrue(TOREN.klaar(a), "clicking the lamp afterwards changes nothing");
+            // B begins now that A is done: gloeikoolgruis, a lampkooltje of B's own for the lamp that already burns for A,
+            // three lost Rookguhs of B's own, the same rewards
+            BlockPos lampAbs = helper.absolutePos(lamp);
+            rol.talk(npc, b);
+            rol.antwoord(npc, b, 1);
+            b.getInventory().add(new ItemStack(gruis, Vuurtoren.GRUIS_NODIG));
+            rol.talk(npc, b);
+            helper.assertTrue(TOREN.stap(b) == 2 && GuhQuests.count(b, kooltje) == 1 && GuhQuests.count(b, lantaarn) == 1, "B has a lampkooltje and a seinlantaarn too");
+            klik(helper, b, lamp);
+            helper.assertTrue(TOREN.stap(b) == 3 && GuhQuests.count(b, kooltje) == 0 && Vuurtoren.heeftAangestoken(b), "B lights the lamp for B, though it burns for A already");
+            Vuurtoren.meld(level, lampAbs);
+            for (int i = 0; i < 5; i++) {
+                Vuurtoren.tik(a);
+                Vuurtoren.tik(b);
+            }
+            List<VerdwaaldeRookguhEntity> vanB = Vuurtoren.van(level, b.getUUID(), lampAbs);
+            helper.assertTrue(vanB.size() == Vuurtoren.ROOKGUHS && Vuurtoren.alleVan(level, a.getUUID()).isEmpty(),
+                    "three lost Rookguhs for B, none for A (who brought theirs home long ago): " + vanB.size());
+            for (int i = 1; i <= Vuurtoren.ROOKGUHS; i++) {
+                Vuurtoren.thuisgekomen(b, vanB.get(i - 1));
+                helper.assertTrue(Vuurtoren.thuis(b) == i && Vuurtoren.thuis(a) == Vuurtoren.ROOKGUHS, "B's Rookguh " + i + " home");
+            }
+            rol.talk(npc, b);
+            helper.assertTrue(TOREN.klaar(b) && GuhQuests.count(b, fluitje) == 1 && GuhQuests.count(b, jas) == 1,
+                    "the second player finishes the whole line after the first, with the same reward");
         } finally {
             weg(helper, a, b);
             npc.discard();
@@ -643,6 +799,38 @@ public class TorenpeperGameTests {
                 weg(helper, a, b);
                 throw e;
             }
+        });
+    }
+
+    /**
+     * A lost Rookguh that its guide never gets close to (a pocket of the cave, a ledge) can't keep a player at step 3 for
+     * ever: when the guide has held the seinlantaarn nearby for a long time without it ever following, it hops to them.
+     */
+    @GuhTest(template = KAMER, batch = "torenpeper_zoek", timeoutTicks = 600)
+    public static void torenpeperRookguhKomtNaLangZoeken(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer a = speler(helper, new BlockPos(19, 2, 19));
+        TOREN.zet(a, 3);
+        VerdwaaldeRookguhEntity r = TorenpeperFeature.VERDWAALDE_ROOKGUH.get().create(level, EntitySpawnReason.EVENT);
+        zet(helper, r, new BlockPos(2, 3, 2));
+        r.begin(a.getUUID(), helper.absolutePos(new BlockPos(2, 3, 2)).above(60));   // (its lamp is nowhere near: it can't come home in this test)
+        level.addFreshEntity(r);
+        inHand(a, TorenpeperFeature.SEINLANTAARN.get(), 1);
+        int[] fase = {0};
+        helper.runAfterDelay(60, () -> {
+            try {
+                helper.assertTrue(r.isAlive() && !r.volgt() && r.distanceTo(a) > VerdwaaldeRookguhEntity.VOLG_BEREIK,
+                        "too far to see the lantern: it drifts where it is (" + r.distanceTo(a) + ")");
+                r.zetGezocht(VerdwaaldeRookguhEntity.ZOEK_TICKS - 20);
+                fase[0] = 1;
+            } catch (RuntimeException | Error e) {
+                weg(helper, a);
+                throw e;
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(fase[0] == 1 && r.isAlive() && r.distanceTo(a) < 8.0, "after a long search with the lantern it comes to its guide by itself");
+            weg(helper, a);
         });
     }
 
