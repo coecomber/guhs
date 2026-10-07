@@ -1,0 +1,26 @@
+{
+  "type": "guhs:bio_plek",
+  "biomes": "#guhs:has_structure/klaterdal_plektest_oever",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "keep_clear": 11,
+  "jigsaw": {
+    "type": "minecraft:jigsaw",
+    "biomes": "#guhs:has_structure/klaterdal_plektest_oever",
+    "step": "fluid_springs",
+    "spawn_overrides": {},
+    "terrain_adaptation": "none",
+    "start_pool": "guhs:klaterdal_plektest_oever/start",
+    "size": 1,
+    "start_height": {
+      "absolute": 0
+    },
+    "project_start_to_heightmap": "WORLD_SURFACE_WG",
+    "max_distance_from_center": 16,
+    "use_expansion_hack": false,
+    "start_jigsaw_name": "guhs:klaterdal_plektest_oever_midden"
+  },
+  "plek": "oever",
+  "alleen_test": true
+}
