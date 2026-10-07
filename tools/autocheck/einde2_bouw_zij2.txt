@@ -1,0 +1,149 @@
+# einde2, slice bouw_zij2, in a real generated world: the five side places from their uitzicht spot and from inside
+# (the Leegtehaven, the Kyoshi-dorp, the Bibliotheek van Wan Shi Guh, the Leeuwschildpad-eiland, the Guhvleugel-ringenrace).
+# /guhs einde2 plek <structuur> <plek> teleports to a marker of the one guaranteed copy (the Guheinde has no skylight, so no
+# time of day). A /tp with a new pitch right after a look may not turn the head: every view waits first.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_bouw_zij2.txt -PautocheckTimeout=60
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 1400 200 0
+wait 80
+
+section Leegtehaven: from the south, then the quay, a vetschip, the pub
+/guhs einde2 plek leegtehaven uitzicht
+wait 40
+look 180 25
+waitrender 400
+hier
+shot e2_zij2_haven_uitzicht
+/guhs einde2 plek leegtehaven aankomst_speler
+wait 40
+look 180 0
+waitrender 200
+shot e2_zij2_haven_aankomst
+/guhs einde2 plek leegtehaven prikbord
+wait 40
+look 180 -5
+wait 60
+shot e2_zij2_haven_markt
+/guhs einde2 plek leegtehaven kapitein
+wait 40
+look 90 5
+wait 60
+shot e2_zij2_haven_kroeg
+/guhs einde2 plek leegtehaven scheepsbouwer
+wait 40
+look 90 10
+wait 60
+shot e2_zij2_haven_werf
+/guhs einde2 plek leegtehaven veerman
+wait 40
+look -60 5
+wait 60
+shot e2_zij2_haven_veer
+
+section Kyoshi-dorp: the statue down the street, the square, the dojo
+/guhs einde2 plek kyoshi_dorp uitzicht
+wait 40
+look 180 25
+waitrender 400
+hier
+shot e2_zij2_kyoshi_uitzicht
+/guhs einde2 plek kyoshi_dorp aankomst_speler
+wait 40
+look 180 -10
+waitrender 200
+shot e2_zij2_kyoshi_straat
+/guhs einde2 plek kyoshi_dorp kyoshi_beeld
+wait 40
+look 180 -40
+wait 60
+shot e2_zij2_kyoshi_beeld
+/guhs einde2 plek kyoshi_dorp dans_speler
+wait 40
+look 180 0
+wait 60
+shot e2_zij2_kyoshi_dojo
+/guhs einde2 plek kyoshi_dorp otter_1
+wait 40
+look 45 15
+wait 60
+shot e2_zij2_kyoshi_vijver
+
+section Bibliotheek van Wan Shi Guh: the tip in the sand, the well, a hall, the uilenzaal, the planetarium
+/guhs einde2 plek bibliotheek_wan_shi_guh uitzicht
+wait 40
+look 180 30
+waitrender 400
+hier
+shot e2_zij2_bieb_uitzicht
+/guhs einde2 plek bibliotheek_wan_shi_guh aankomst_speler
+wait 40
+look 180 -5
+waitrender 200
+shot e2_zij2_bieb_spits
+/guhs einde2 plek bibliotheek_wan_shi_guh vosguh_1
+wait 40
+look 180 60
+wait 60
+shot e2_zij2_bieb_schacht
+/guhs einde2 plek bibliotheek_wan_shi_guh vosguh_2
+wait 40
+look 0 0
+wait 60
+shot e2_zij2_bieb_zaal_3
+/guhs einde2 plek bibliotheek_wan_shi_guh vosguh_3
+wait 40
+look 90 -5
+wait 60
+shot e2_zij2_bieb_uilenzaal
+/guhs einde2 plek bibliotheek_wan_shi_guh professor
+wait 40
+look 135 -30
+wait 60
+shot e2_zij2_bieb_planetarium
+
+section Leeuwschildpad-eiland: his face, the forest on his back, the palm
+/guhs einde2 plek leeuwschildpad_eiland uitzicht
+wait 40
+look 180 25
+waitrender 400
+hier
+shot e2_zij2_schildpad_uitzicht
+/guhs einde2 plek leeuwschildpad_eiland aankomst_speler
+wait 40
+look 0 5
+waitrender 200
+shot e2_zij2_schildpad_bos
+/guhs einde2 plek leeuwschildpad_eiland schild_top
+wait 40
+look 0 10
+wait 60
+shot e2_zij2_schildpad_top
+/guhs einde2 plek leeuwschildpad_eiland leeuwschildpad
+wait 40
+look 180 -5
+wait 60
+shot e2_zij2_schildpad_snuit
+
+section Guhvleugel-ringenrace: the island, the start, down the course, the finish
+/guhs einde2 plek guhvleugel_ringenrace uitzicht
+wait 40
+look -65 20
+waitrender 400
+hier
+shot e2_zij2_race_uitzicht
+/guhs einde2 plek guhvleugel_ringenrace racemeester
+wait 40
+look -90 0
+waitrender 200
+shot e2_zij2_race_start
+/guhs einde2 plek guhvleugel_ringenrace finishlijn
+wait 40
+look -90 -5
+wait 60
+shot e2_zij2_race_finish
+/guhs einde2 plek guhvleugel_ringenrace scorebord
+wait 40
+look -90 0
+wait 60
+shot e2_zij2_race_scorebord
