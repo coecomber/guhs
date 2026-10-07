@@ -412,7 +412,7 @@ public class GuhrioGameTests {
     // =====================================================================================================================
 
     /** The Guhmba of a spot: there while somebody plays, walks, turns at a wall and at a ledge, gone when the level is empty. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 420)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void guhmbaLooptHeenEnWeer(GameTestHelper helper) {
         BlockPos startAbs = bouw(helper);
         helper.setBlock(new BlockPos(7, 2, Z), GuhrioFeature.BLOK.get());         // a wall on one side
@@ -452,7 +452,7 @@ public class GuhrioGameTests {
     }
 
     /** Landed on: flat, harmless, pops back. From the side: back to your flag. Never hurt. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void guhmbaPlatEnTerug(GameTestHelper helper) {
         BlockPos startAbs = bouw(helper);
         helper.setBlock(new BlockPos(9, 2, Z), GuhrioFeature.BLOK.get());

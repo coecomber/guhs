@@ -222,8 +222,9 @@ public class GuhrioW1GameTests {
      * Pad-guh stands at the end of 1-2.
      */
     // (the timeout is in ticks, and the test server runs hundreds of ticks a second: the template's entities and the level's
-    //  creatures come when their chunks are loaded, which takes real time - 400 ticks were over in one second at the merge)
-    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 4000)
+    //  creatures come when their chunks are loaded, which takes real time - 400 ticks were over in one second at the merge,
+    //  and 4000 in less than the chunk took in a run of fifteen classes together)
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 40000)
     public static void guhriow1BinnentuinGelopen(GameTestHelper helper) {
         String naam = "guhriow1_test_1_1";
         BlockPos hoek = plaats(helper, naam, 40);
@@ -305,8 +306,9 @@ public class GuhrioW1GameTests {
      * later: every time, each player their own count, the advancements the first time.
      */
     // (the timeout is in ticks, and the test server runs hundreds of ticks a second: the template's entities and the level's
-    //  creatures come when their chunks are loaded, which takes real time - 400 ticks were over in one second at the merge)
-    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 4000)
+    //  creatures come when their chunks are loaded, which takes real time - 400 ticks were over in one second at the merge,
+    //  and 4000 in less than the chunk took in a run of fifteen classes together: "Pad-guh at the end of 1-2: 0 on tick 4002")
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 40000)
     public static void guhriow1HeggentuinEnPrinses(GameTestHelper helper) {
         String naam = "guhriow1_test_1_2";
         BlockPos hoek = plaats(helper, naam, 70);

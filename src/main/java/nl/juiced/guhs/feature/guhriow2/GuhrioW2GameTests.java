@@ -150,7 +150,7 @@ public class GuhrioW2GameTests {
     }
 
     /** Hatching: with the egg, the hatching spot plays the scene once; then Guhshi waits on his nest and carries you. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void guhriow2Uitbroeden(GameTestHelper helper) {
         BlockPos startAbs = bouw(helper);
         nestgang(helper);

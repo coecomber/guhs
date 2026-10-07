@@ -35,6 +35,7 @@ from PIL import Image
 from features import bbq2
 from features import guhrio_baan
 from features import guhrio_kasteel
+from features import guhrio_loop
 from features import guhrio_modellen
 from features import guhrio_tex
 from features.guhrio_baan import level_json  # noqa: F401  (also the import path the prototype had)
@@ -490,6 +491,7 @@ TEXTS = {
     "gui.guhs.guhrio.vadsmunten_alle": "Alle achttien grote vadsmunten van het kasteel zijn van jou. Super vahoege vads!",
     "gui.guhs.guhrio.ei": "Er beweegt iets in dat ei... Het is van Guhshi! In de burcht wacht hij op je, njeg.",
     "gui.guhs.guhrio.geen_ei": "Guhshi kijkt je vragend aan. Hij komt alleen mee met wie zijn ei gevonden heeft (in de kelders), njeg.",
+    "gui.guhs.guhrio.verdwaald": "Hé, hoe kom jij hier? Hier kun je alleen spelen. Pad-guh zet je even terug bij de poort, njeg!",
     "gui.guhs.guhrio.kasteel": "Het hele kasteel in één keer: %s. Vahoeg!",
     "gui.guhs.guhrio.kasteel.record": "Het hele kasteel in één keer: %s. Dat is je snelste keer ooit, super vahoeg!",
     "gui.guhs.guhrio.vadsmunt.0": "De eerste grote vadsmunt van dit level",
@@ -818,10 +820,37 @@ def selfcheck(h, banen):
         raise SystemExit(f"guhrio: missing {missing}")
 
 
+# the inside of an ear in the guh's base texture (guh.png). The ears are bones of the base model, so make_guh_variants.py
+# leaves them as they are: purple, also on a green Guhshi
+OOR_BINNEN, OOR_GUHSHI = (160, 109, 174), (72, 148, 56)
+
+
+def guhshi_oren(h):
+    """
+    Guhshi's ears are green inside (a darker green than his fur): the purple of the base texture is repainted in his own two
+    textures (awake and asleep), which make_guh_variants.py and make_sleep_eyes.py have just written. No swatch moves and no
+    other texture is touched.
+    """
+    for pad in (os.path.join(h.TEX, "entity", "guh_guhshi.png"), os.path.join(h.TEX, "entity", "guh_slaap", "guh_guhshi.png")):
+        if not os.path.exists(pad):
+            continue
+        a = np.asarray(Image.open(pad).convert("RGBA")).astype(np.int32)
+        verschil = a[..., :3] - np.array(OOR_BINNEN)
+        mask = (np.abs(verschil).sum(-1) <= 14) & (a[..., 3] > 0)
+        if not mask.any():
+            continue
+        a[..., :3] = np.where(mask[..., None], np.clip(np.array(OOR_GUHSHI) + verschil, 0, 255), a[..., :3])
+        # (written the way the tool that made the file writes it: make_sleep_eyes.py optimises its pictures)
+        Image.fromarray(a.astype(np.uint8)).save(pad, optimize="guh_slaap" in pad)
+
+
 def build(h):
     textures(h)
+    guhshi_oren(h)
     blocks_and_items(h)
     texts(h)
     verhaal(h)
     _b, banen = structures(h)
+    # every level of the castle is walked with a jump 10 % weaker than the game's (and its route written for the game tests)
+    guhrio_loop.controleer(h, banen)
     selfcheck(h, banen)
