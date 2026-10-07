@@ -188,6 +188,7 @@
     "guhs:guhriobeloning_vraagblok",
     "guhs:guhriobeloning_vlaggenmast",
     "guhs:guhriobeloning_pijp",
-    "guhs:guhriobeloning_scorebord"
+    "guhs:guhriobeloning_scorebord",
+    "guhs:guhstation"
   ]
 }

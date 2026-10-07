@@ -3276,5 +3276,148 @@
       }
     ],
     "subtitle": "subtitles.guhs.ringsausuman.mok"
+  },
+  "snuffel.snuf": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.fox.sniff",
+        "type": "event",
+        "pitch": 1.25,
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.snuf"
+  },
+  "snuffel.blaf": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.wolf_cute.ambient",
+        "type": "event",
+        "pitch": 1.15
+      },
+      {
+        "name": "minecraft:entity.wolf.ambient",
+        "type": "event",
+        "pitch": 1.25
+      },
+      {
+        "name": "minecraft:entity.wolf_puglin.ambient",
+        "type": "event",
+        "pitch": 1.2
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.blaf"
+  },
+  "snuffel.njeg": {
+    "sounds": [
+      {
+        "name": "guhs:entity.guh.happy",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.45
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.njeg"
+  },
+  "snuffel.graaf": {
+    "sounds": [
+      {
+        "name": "minecraft:block.sand.break",
+        "type": "event",
+        "pitch": 0.9
+      },
+      {
+        "name": "minecraft:block.gravel.break",
+        "type": "event",
+        "pitch": 1.1
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.graaf"
+  },
+  "snuffel.kwispel": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.wolf.shake",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.kwispel"
+  },
+  "snuffel.gevonden": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:entity.experience_orb.pickup",
+        "type": "event",
+        "pitch": 0.9,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.gevonden"
+  },
+  "snuffel.geleerd": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.levelup",
+        "type": "event",
+        "pitch": 1.6,
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.geleerd"
+  },
+  "snuffel.groei": {
+    "sounds": [
+      {
+        "name": "minecraft:item.bone_meal.use",
+        "type": "event",
+        "pitch": 0.9
+      },
+      {
+        "name": "minecraft:block.azalea_leaves.place",
+        "type": "event",
+        "pitch": 1.1
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.groei"
+  },
+  "snuffel.reis": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.generic.splash",
+        "type": "event",
+        "pitch": 0.8,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.reis"
+  },
+  "snuffel.guhstation": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bit",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.6
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.guhstation"
+  },
+  "snuffel.maatje": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.allay.ambient_without_item",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffel.maatje"
   }
 }

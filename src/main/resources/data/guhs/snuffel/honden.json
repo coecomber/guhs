@@ -1,0 +1,155 @@
+{
+  "rassen": {
+    "shiba": {
+      "kleuren": [
+        "rood",
+        "zwart",
+        "creme"
+      ],
+      "speelbaar": true,
+      "pup": true,
+      "hoogte": 0.825,
+      "oog": 0.645,
+      "pup_hoogte": 0.631,
+      "pup_oog": 0.469
+    },
+    "jackrussell": {
+      "kleuren": [
+        "bruin",
+        "zwart",
+        "driekleur"
+      ],
+      "speelbaar": true,
+      "pup": true,
+      "hoogte": 0.825,
+      "oog": 0.653,
+      "pup_hoogte": 0.617,
+      "pup_oog": 0.462
+    },
+    "teckel": {
+      "kleuren": [
+        "rood",
+        "zwart",
+        "choco"
+      ],
+      "speelbaar": true,
+      "pup": true,
+      "hoogte": 0.715,
+      "oog": 0.543,
+      "pup_hoogte": 0.58,
+      "pup_oog": 0.425
+    },
+    "corgi": {
+      "kleuren": [
+        "rood",
+        "sable",
+        "driekleur"
+      ],
+      "speelbaar": true,
+      "pup": true,
+      "hoogte": 0.77,
+      "oog": 0.59,
+      "pup_hoogte": 0.616,
+      "pup_oog": 0.454
+    },
+    "golden": {
+      "kleuren": [
+        "goud",
+        "licht",
+        "rood"
+      ],
+      "speelbaar": true,
+      "pup": true,
+      "hoogte": 0.9,
+      "oog": 0.78,
+      "pup_hoogte": 0.773,
+      "pup_oog": 0.601
+    },
+    "mops": {
+      "kleuren": [
+        "beige",
+        "abrikoos",
+        "zwart"
+      ],
+      "speelbaar": true,
+      "pup": true,
+      "hoogte": 0.83,
+      "oog": 0.628,
+      "pup_hoogte": 0.643,
+      "pup_oog": 0.462
+    },
+    "speurhond": {
+      "kleuren": [
+        "bruin"
+      ],
+      "speelbaar": false,
+      "pup": false,
+      "hoogte": 0.9,
+      "oog": 0.78,
+      "pup_hoogte": 0.9,
+      "pup_oog": 0.78
+    }
+  },
+  "bewoners": {
+    "dokter": {
+      "ras": "teckel",
+      "kleur": "rood",
+      "pup": false
+    },
+    "trainer": {
+      "ras": "speurhond",
+      "kleur": "bruin",
+      "pup": false
+    },
+    "kapitein": {
+      "ras": "mops",
+      "kleur": "beige",
+      "pup": false
+    },
+    "redder": {
+      "ras": "golden",
+      "kleur": "goud",
+      "pup": false
+    },
+    "vader": {
+      "ras": "shiba",
+      "kleur": "rood",
+      "pup": false
+    },
+    "bakker": {
+      "ras": "corgi",
+      "kleur": "rood",
+      "pup": false
+    },
+    "visser": {
+      "ras": "jackrussell",
+      "kleur": "zwart",
+      "pup": false
+    },
+    "juf": {
+      "ras": "shiba",
+      "kleur": "creme",
+      "pup": false
+    },
+    "oma": {
+      "ras": "golden",
+      "kleur": "licht",
+      "pup": false
+    },
+    "tuinder": {
+      "ras": "teckel",
+      "kleur": "zwart",
+      "pup": false
+    },
+    "pup": {
+      "ras": "mops",
+      "kleur": "abrikoos",
+      "pup": true
+    }
+  },
+  "maatjes": [
+    "a",
+    "b",
+    "c"
+  ]
+}
