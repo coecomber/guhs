@@ -20,6 +20,12 @@ public final class HuisjeClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) ->
                 event.registerBlockEntityRenderer(HuisjeFeature.HUISJE_BE.get(), HuisjeRenderer::new));
+        // 1.3.2: the sleeping stand-ins inside a huisje look like guhs; the door fade
+        modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> event.registerEntityRenderer(HuisjeFeature.SLAPER.get(), GuhRenderer::new));
+        modBus.addListener((net.neoforged.neoforge.client.event.RegisterGuiLayersEvent event) ->
+                event.registerAboveAll(nl.juiced.guhs.Guhs.id("huisje_binnen_fade"), BinnenFade::extractRenderState));
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.ClientTickEvent.Post event) -> BinnenFade.tick());
+        HuisjePayloads.fade = p -> Minecraft.getInstance().execute(BinnenFade::start);
         modBus.addListener(HuisjeRenderer::registerModels);
         HuisjePayloads.opener = p -> Minecraft.getInstance().execute(() -> {
             Minecraft mc = Minecraft.getInstance();

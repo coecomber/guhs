@@ -43,7 +43,7 @@ import nl.juiced.guhs.feature.Minigames;
 import nl.juiced.guhs.quest.GuhQuests;
 
 /**
- * The safe rules everywhere {@link Guhpixel#in}: no breaking or placing blocks, no explosions or mob griefing, players
+ * The safe rules everywhere {@link Guhpixel#in} (1.3.2: and in the extra {@link #zone zones}): no breaking or placing blocks, no explosions or mob griefing, players
  * take no damage (only /kill gets through), food, health and air stay what they were, items cannot be tossed (they come
  * straight back) or picked up by others, nobody attacks anything, and a block can only be right-clicked when it is in the
  * block tag {@code guhs:guhpixel_bruikbaar} (lobby things) or the player's game says so. A game may allow a specific thing
@@ -56,6 +56,34 @@ import nl.juiced.guhs.quest.GuhQuests;
 public final class Regels {
     public static final TagKey<Block> BRUIKBAAR = TagKey.create(Registries.BLOCK, Guhs.id("guhpixel_bruikbaar"));
     private static final String DOOD = "guhs_guhpixel_dood";
+
+    /**
+     * 1.3.2: other places where the same safe rules count (the rooms inside the Guhhuisjes, feature/huisje/Binnen). Such a
+     * zone has no games: nothing is broken, placed, hurt, tossed or lost there. Guhpixel itself is unchanged.
+     */
+    private static final java.util.List<java.util.function.BiPredicate<net.minecraft.world.level.Level, BlockPos>> ZONES =
+            new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    public static void zone(java.util.function.BiPredicate<net.minecraft.world.level.Level, BlockPos> zone) {
+        ZONES.add(zone);
+    }
+
+    /** Guhpixel ({@link Guhpixel#in}) or one of the extra {@link #zone zones}. */
+    private static boolean veilig(net.minecraft.world.level.Level level, BlockPos pos) {
+        if (Guhpixel.in(level, pos)) {
+            return true;
+        }
+        for (var zone : ZONES) {
+            if (zone.test(level, pos)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean veilig(@javax.annotation.Nullable Entity e) {
+        return e != null && veilig(e.level(), e.blockPosition());
+    }
 
     private static boolean vrij(Player p) {
         return p.getAbilities().instabuild;
@@ -72,7 +100,7 @@ public final class Regels {
     @SubscribeEvent
     public static void onBreak(BreakBlockEvent event) {
         Player p = event.getPlayer();
-        if (!(event.getLevel() instanceof ServerLevel level) || !Guhpixel.in(level, event.getPos()) || vrij(p)) {
+        if (!(event.getLevel() instanceof ServerLevel level) || !veilig(level, event.getPos()) || vrij(p)) {
             return;
         }
         Sessie s = p instanceof ServerPlayer sp ? Sessies.van(sp) : null;
@@ -84,7 +112,7 @@ public final class Regels {
 
     @SubscribeEvent
     public static void onPlace(BlockEvent.EntityPlaceEvent event) {
-        if (!(event.getLevel() instanceof ServerLevel level) || !Guhpixel.in(level, event.getPos())) {
+        if (!(event.getLevel() instanceof ServerLevel level) || !veilig(level, event.getPos())) {
             return;
         }
         if (event.getEntity() instanceof ServerPlayer sp) {
@@ -103,7 +131,7 @@ public final class Regels {
     @SubscribeEvent
     public static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
         // (server only: the client cannot know what a game allows; the server answers with the real blocks)
-        if (!(event.getEntity() instanceof ServerPlayer sp) || !Guhpixel.in(event.getLevel(), event.getPos()) || vrij(sp)) {
+        if (!(event.getEntity() instanceof ServerPlayer sp) || !veilig(event.getLevel(), event.getPos()) || vrij(sp)) {
             return;
         }
         BlockPos pos = event.getPos();
@@ -129,13 +157,13 @@ public final class Regels {
 
     @SubscribeEvent
     public static void onExplosion(ExplosionEvent.Detonate event) {
-        event.getAffectedBlocks().removeIf(pos -> Guhpixel.in(event.getLevel(), pos));
-        event.getAffectedEntities().removeIf(Guhpixel::in);
+        event.getAffectedBlocks().removeIf(pos -> veilig(event.getLevel(), pos));
+        event.getAffectedEntities().removeIf(Regels::veilig);
     }
 
     @SubscribeEvent
     public static void onGriefing(EntityMobGriefingEvent event) {
-        if (Guhpixel.in(event.getEntity())) {
+        if (veilig(event.getEntity())) {
             event.setCanGrief(false);
         }
     }
@@ -144,7 +172,7 @@ public final class Regels {
 
     @SubscribeEvent
     public static void onDamage(LivingIncomingDamageEvent event) {
-        if (!Guhpixel.in(event.getEntity())) {
+        if (!veilig(event.getEntity())) {
             return;
         }
         if (event.getEntity() instanceof Player) {
@@ -158,7 +186,7 @@ public final class Regels {
 
     @SubscribeEvent
     public static void onAttack(AttackEntityEvent event) {
-        if (Guhpixel.in(event.getEntity()) && !vrij(event.getEntity())) {
+        if (veilig(event.getEntity()) && !vrij(event.getEntity())) {
             event.setCanceled(true);
         }
     }
@@ -166,7 +194,7 @@ public final class Regels {
     @SubscribeEvent
     public static void onToss(ItemTossEvent event) {
         Player p = event.getPlayer();
-        if (!(p instanceof ServerPlayer) || !Guhpixel.in(p) || vrij(p)) {
+        if (!(p instanceof ServerPlayer) || !veilig(p) || vrij(p)) {
             return;
         }
         ItemStack stack = event.getEntity().getItem().copy();
@@ -187,7 +215,7 @@ public final class Regels {
     @SubscribeEvent
     public static void onPickup(ItemEntityPickupEvent.Pre event) {
         Player p = event.getPlayer();
-        if (Guhpixel.in(p) && !vrij(p)) {
+        if (veilig(p) && !vrij(p)) {
             Entity eigenaar = event.getItemEntity().getOwner();
             if (eigenaar != null && eigenaar != p) {
                 event.setCanPickup(TriState.FALSE);
@@ -210,7 +238,7 @@ public final class Regels {
         if ((p.tickCount + p.getId()) % 20 == 0 && Sessies.van(p) == null) {
             Kluis.geefRest(p);   // (wherever the player is: what did not fit when the inventory came back)
         }
-        if (!Guhpixel.in(p)) {
+        if (!veilig(p)) {
             return;
         }
         if (!p.isAlive()) {
@@ -250,7 +278,7 @@ public final class Regels {
 
     @SubscribeEvent
     public static void onDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof ServerPlayer p && (Guhpixel.in(p) || Sessies.van(p) != null)) {
+        if (event.getEntity() instanceof ServerPlayer p && (veilig(p) || Sessies.van(p) != null)) {
             Minigames.forget(p);   // (no health floor for the dead: see onPlayerTick)
             Sessies.verlaat(p, Vertrek.DOOD);
             if (Kluis.bewaar(p)) {   // (nothing drops: the whole inventory waits in the safe until the respawn)

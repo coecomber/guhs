@@ -1,0 +1,13 @@
+{
+  "type": "guhs:huisje_binnen",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "guhs:huisje_binnen",
+      "layers": [],
+      "lakes": false,
+      "features": false,
+      "structure_overrides": []
+    }
+  }
+}

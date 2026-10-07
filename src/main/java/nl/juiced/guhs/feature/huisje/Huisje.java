@@ -47,6 +47,10 @@ public final class Huisje {
     final Map<UUID, net.minecraft.network.chat.Component> namen = new HashMap<>();
     /** Chores switched on/off per resident (only what was set; the rest is the chore's default). */
     final Map<UUID, Map<String, Boolean>> klussen = new HashMap<>();
+    /** 1.3.2: its room in the dimension guhs:huisje_binnen ({@link Binnen}): the grid cell (-1: none yet; given out by a
+     *  counter the first time somebody goes inside) and the version of the room template stamped there (0: not built). */
+    int cel = -1;
+    int celVersie;
 
     Huisje(ResourceKey<Level> dim, BlockPos pos, Direction facing, HuisjeMaat maat, UUID eigenaar, String naam) {
         this.dim = dim;
@@ -120,6 +124,11 @@ public final class Huisje {
             }
         }
         return net.minecraft.network.chat.Component.literal(naam);
+    }
+
+    /** 1.3.2: the cell of its room ({@link Binnen}), or -1. */
+    public int cel() {
+        return cel;
     }
 
     /** Band ids of the residents (guhs and maatjes). */
@@ -248,6 +257,10 @@ public final class Huisje {
         t.putString("EigenaarNaam", eigenaarNaam);
         t.putString("Naam", naam);
         t.putBoolean("Meldingen", meldingen);
+        if (cel >= 0) {
+            t.putInt("Cel", cel);
+            t.putInt("CelVersie", celVersie);
+        }
         ListTag list = new ListTag();
         for (UUID b : bewoners) {
             CompoundTag c = new CompoundTag();
@@ -275,6 +288,8 @@ public final class Huisje {
                 t.read("Eigenaar", UUIDUtil.CODEC).orElseThrow(), t.getStringOr("Naam", ""));
         h.eigenaarNaam = t.getStringOr("EigenaarNaam", "");
         h.meldingen = t.getBooleanOr("Meldingen", true);
+        h.cel = t.getIntOr("Cel", -1);
+        h.celVersie = t.getIntOr("CelVersie", 0);
         ListTag list = t.getListOrEmpty("Bewoners");
         for (int i = 0; i < list.size(); i++) {
             CompoundTag c = list.getCompoundOrEmpty(i);

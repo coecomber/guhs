@@ -511,6 +511,8 @@ def build(h):
     texts(h)
     test_templates(h)
     selfcheck(h)
+    from features import huisje_binnen   # 1.3.2: the inside of the huisje (dimension, room templates, texts)
+    huisje_binnen.build(h)
 
 
 # =====================================================================================================================

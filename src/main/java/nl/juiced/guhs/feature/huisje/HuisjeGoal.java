@@ -45,6 +45,8 @@ public class HuisjeGoal extends Goal {
     private final PathfinderMob mob;
     @Nullable
     private KlusTaak taak;
+    /** 1.3.2: what the running task is: a chore's id, "" for a toy (the note on its bed in the room says it). */
+    private String taakKlus = "";
     private int taakTicks;
     private long volgendeKlus, volgendeWandel;
     @Nullable
@@ -243,6 +245,7 @@ public class HuisjeGoal extends Goal {
             geprobeerd(k, level.getGameTime());
             if (t != null) {
                 start(t);
+                taakKlus = k.id();
                 return true;
             }
         }
@@ -269,6 +272,7 @@ public class HuisjeGoal extends Goal {
 
     private void start(KlusTaak t) {
         taak = t;
+        taakKlus = "";
         taakTicks = 0;
         if (mob instanceof GuhEntity g) {
             GuhHooks.bezig(g, 40);
@@ -294,5 +298,16 @@ public class HuisjeGoal extends Goal {
     @Nullable
     public KlusTaak taak() {
         return taak;
+    }
+
+    /** 1.3.2: what this resident is doing right now: null = nothing, "" = playing with a toy, else the chore's id. */
+    @Nullable
+    public static String bezigMet(net.minecraft.world.entity.Mob mob) {
+        for (WrappedGoal w : mob.goalSelector.getAvailableGoals()) {
+            if (w.getGoal() instanceof HuisjeGoal g) {
+                return g.taak == null ? null : g.taakKlus;
+            }
+        }
+        return null;
     }
 }

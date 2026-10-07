@@ -904,6 +904,16 @@
     ],
     "subtitle": "subtitles.guhs.huisje.snurk"
   },
+  "huisje.bel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.bell",
+        "type": "event",
+        "volume": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.huisje.bel"
+  },
   "klusjes.graaf": {
     "sounds": [
       {

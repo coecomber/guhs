@@ -75,6 +75,24 @@ public final class HuisjeFeature {
     public static final DeferredHolder<SoundEvent, SoundEvent> SNURK_GELUID = SOUNDS.register("huisje.snurk",
             () -> SoundEvent.createVariableRangeEvent(Guhs.id("huisje.snurk")));
 
+    // --- 1.3.2 "Huisje betreden" (Binnen): the doorbell, the two blocks of the rooms, the sleeping stand-in ------------------
+    public static final DeferredRegister<net.minecraft.world.entity.EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
+    public static final DeferredHolder<SoundEvent, SoundEvent> BEL_GELUID = SOUNDS.register("huisje.bel",
+            () -> SoundEvent.createVariableRangeEvent(Guhs.id("huisje.bel")));
+    /** The little guh bed of the rooms (no item: it only stands in the room templates). */
+    public static final DeferredBlock<nl.juiced.guhs.block.GuhFurnitureBlock> BEDJE = BLOCKS.registerBlock("huisje_bedje",
+            p -> new nl.juiced.guhs.block.GuhFurnitureBlock(p, -1, new double[] {1, 0, 0, 15, 7, 16}),
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PINK).strength(-1f, 3600000f).sound(SoundType.WOOL).noOcclusion()
+                    .noLootTable().pushReaction(PushReaction.BLOCK));
+    /** The little window with a painted view (no item either). */
+    public static final DeferredBlock<net.minecraft.world.level.block.Block> RAAM = BLOCKS.registerSimpleBlock("huisje_raam",
+            () -> BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).strength(-1f, 3600000f).sound(SoundType.GLASS)
+                    .noLootTable().lightLevel(s -> 11).pushReaction(PushReaction.BLOCK));
+    public static final DeferredHolder<net.minecraft.world.entity.EntityType<?>, net.minecraft.world.entity.EntityType<BinnenGuh>> SLAPER =
+            ENTITY_TYPES.register("huisje_slaper", () -> net.minecraft.world.entity.EntityType.Builder.of(BinnenGuh::new, net.minecraft.world.entity.MobCategory.MISC)
+                    .sized(0.9f, 0.8f).eyeHeight(0.55f).clientTrackingRange(10).noSave().noSummon()
+                    .build(net.minecraft.resources.ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("huisje_slaper"))));
+
     public static HuisjeBlock blok(HuisjeMaat maat) {
         return switch (maat) {
             case KLEIN -> KLEIN.get();
@@ -89,10 +107,19 @@ public final class HuisjeFeature {
         BLOCK_ENTITIES.register(modBus);
         POI_TYPES.register(modBus);
         SOUNDS.register(modBus);
+        ENTITY_TYPES.register(modBus);
+        modBus.addListener((net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent event) ->
+                event.put(SLAPER.get(), nl.juiced.guhs.entity.GuhEntity.createAttributes().build()));
+        Binnen.register();
+        NeoForge.EVENT_BUS.addListener(BinnenCommando::register);
         GuhHooks.doelen((guh, goals) -> goals.addGoal(3, new HuisjeGoal(guh)));
         GuhHooks.tick(guh -> {
             if (Huisjes.isBinnen(guh)) {
                 Huisjes.binnenTick(guh);
+            }
+            // 1.3.2: hearts it was given in its room (tucked in, petted) while it was not loaded
+            if (!guh.level().isClientSide() && (guh.tickCount + guh.getId()) % 60 == 0 && !(guh instanceof BinnenGuh)) {
+                BinnenInrichting.teGoed(guh);
             }
         });
         // maatjes (muisjes, Schilly, Poepschilly) get the home-base goal when they join the level
