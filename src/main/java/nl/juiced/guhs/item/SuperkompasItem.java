@@ -171,6 +171,7 @@ public class SuperkompasItem extends GuhCompassItem {
     public static void choose(ItemStack stack, String structure) {
         CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> {
             tag.putString("Structure", structure);
+            nl.juiced.guhs.feature.bio.kompas.BiomeKompas.wis(tag);   // biomes3: a structure instead of a biome
             tag.remove("SearchedAt");
             tag.remove("Target");
         });
@@ -194,6 +195,10 @@ public class SuperkompasItem extends GuhCompassItem {
 
     @Override
     public Component getName(ItemStack stack) {
+        Component biome = nl.juiced.guhs.feature.bio.kompas.BiomeKompas.naam(stack);   // biomes3: a biome is chosen
+        if (biome != null) {   // biomes3
+            return biome;   // biomes3
+        }   // biomes3
         String id = chosen(stack);
         return id == null ? super.getName(stack)
                 : Component.translatable("item.guhs.guhmensie_superkompas.named", Component.translatable("structure.guhs." + id));
