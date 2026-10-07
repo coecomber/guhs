@@ -1097,5 +1097,10 @@
   "gui.guhs.guheinde.koning.pakje": "The King Guh gives you the pieces of his royal outfit you were still missing! Hold right-click with them to unlock them.",
   "gui.guhs.piep.recept_gekregen": "You helped too: here's the recipe for the Pink Guh Cookie for you! Right-click to learn it.",
   "gui.guhs.guheinde.beloning.later": "Overlord Mika was beaten while you were away for a moment. You fought along, so this is for you too!",
-  "gui.guhs.guheinde.gevecht_verlaten": "Nobody left to see... Overlord Mika flies off, grumbling. The portal back opens again."
+  "gui.guhs.guheinde.gevecht_verlaten": "Nobody left to see... Overlord Mika flies off, grumbling. The portal back opens again.",
+  "gui.guhs.ballon.wolkje.menu": "Ahoy, ground guh! Today we're flying %1$s. Your Balloon Stamp Card has %2$s of the %3$s views and you've flown along %4$s time(s). What will it be, nyeg?",
+  "gui.guhs.ballon.wolkje.uitleg": "I fly four loops, each past two views. No steering needed: stay snug in the basket and look. After landing you get a stamp for every new view, and Balloon Coins for my little shop. I always pick the loop where you still miss a stamp. Your Balloon Stamp Card is in the Guhdex, on the Cozy tab. WAHOOG!",
+  "gui.guhs.ballon.optie.vliegen": "All aboard!",
+  "gui.guhs.ballon.optie.winkel": "Your shop (Balloon Coins)",
+  "gui.guhs.ballon.optie.uitleg": "How does it work?"
 }
