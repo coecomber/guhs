@@ -317,12 +317,13 @@ public class E2KernGameTests {
     public static void einde2KernLeeg(GameTestHelper helper) throws java.io.IOException {
         ServerLevel level = helper.getLevel();
         Einde2Test.Wereld w = Einde2Test.wereld(helper, SEED, Einde2Ids.GATENKAASHEUVELS);
-        // the stand-in Bikinibodem's structure with a terrain-free box of its own (a small one: such a spot is easy to find)
+        // Bikinibodem's structure with a small terrain-free box in place of its own (such a spot is easy to find)
         JsonObject json;
         try (var reader = level.getServer().getResourceManager().getResource(Guhs.id("worldgen/structure/bikinibodem.json")).orElseThrow().openAsReader()) {
             json = JsonParser.parseReader(reader).getAsJsonObject();
         }
-        helper.assertTrue(!json.has("leeg") && json.get("ruim").getAsBoolean(), "the stand-in asks for no terrain-free box (it always finds its spot)");
+        helper.assertTrue(json.get("ruim").getAsBoolean() && (!json.has("leeg") || json.getAsJsonArray("leeg").get(0).getAsInt() == 480),
+                "Bikinibodem empties its box; the real build asks for its box of 480 x 224 (the stand-in asked for none)");
         JsonArray leeg = new JsonArray();
         leeg.add(96);
         leeg.add(64);
