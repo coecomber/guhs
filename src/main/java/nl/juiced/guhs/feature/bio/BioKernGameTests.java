@@ -135,6 +135,29 @@ public class BioKernGameTests {
         helper.succeed();
     }
 
+    /**
+     * After the merge of wave A: what the slices asked of each other by id is the real thing now, no stand-in. (The ids
+     * of wereld and wave B are not listed here: nothing asks for them by id yet.)
+     */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void bioKernGolfA(GameTestHelper helper) {
+        for (String id : List.of("wolkenpluis", "drijvende_bloesemblaadjes", "toro", "esdoorn_zaailing", "wolkenblok_wit")) {
+            helper.assertTrue(Bio.item(id, Items.STICK) != Items.STICK, "the item guhs:" + id + " exists");
+        }
+        helper.assertTrue(Bio.heeftBlok("drijvende_bloesemblaadjes") && Bio.blok("drijvende_bloesemblaadjes", Blocks.LILY_PAD) != Blocks.LILY_PAD,
+                "the kikkerguh's leaf is the real petal block");
+        var schaapje = helper.spawn(nl.juiced.guhs.feature.bio.dieren.DierenSlice.WOLKENSCHAAPJE.get(), new net.minecraft.core.BlockPos(1, 2, 1));
+        var pluis = schaapje.scheer(null, helper.getLevel());
+        helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(pluis.getItem()).equals(Guhs.id("wolkenpluis")),
+                "a shorn wolkenschaapje gives the real wolkenpluis: " + pluis);
+        schaapje.discard();
+        var iconen = java.util.Map.of("bloesemmeertje", "drijvende_bloesemblaadjes", "klaterdal", "toro", "wolkenweide", "wolkenblok_wit");
+        iconen.forEach((biome, item) -> helper.assertTrue(
+                net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(nl.juiced.guhs.feature.bio.kompas.BiomeIconen.icoon(biome).getItem()).equals(Guhs.id(item)),
+                "the Superkompas icon of " + biome + " is its first choice, guhs:" + item));
+        helper.succeed();
+    }
+
     /** A slice adds its structure to a Superkompas tab with voegToe: a place that is there adds nothing, an unknown tab is refused. */
     @GuhTest(template = EMPTY, batch = BATCH)
     public static void bioKernSuperkompas(GameTestHelper helper) {

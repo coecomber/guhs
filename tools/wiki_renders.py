@@ -161,7 +161,7 @@ def geo_quads(geo_path, tex_ref, hide=(), show_only_variant_bones=(), lift=None)
     for bone in geo["bones"]:
         if bone["name"] in hide:
             continue
-        if bone["name"].startswith(("outfit_", "neck", "teckel", "ender", "koning", "wolk", "zeemeer", "asguh", "pluis", "pinguh", "balto", "mewtwo", "stitch")) and not bone["name"].startswith(tuple(show_only_variant_bones) or ("-none-",)):
+        if bone["name"].startswith(("outfit_", "neck", "teckel", "ender", "koning", "wolk", "zeemeer", "asguh", "pluis", "pinguh", "balto", "mewtwo", "stitch", "bloesem", "tanuki")) and not bone["name"].startswith(tuple(show_only_variant_bones) or ("-none-",)):
             continue
         shift = [v / 16 for v in lift[1]] if lift and under(bone["name"], lift[0]) else [0, 0, 0]
         M, t = transform(bone["name"])
