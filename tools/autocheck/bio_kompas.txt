@@ -3,6 +3,7 @@
 # (gui 640x360 at gui scale 2: the menu is at 170,64 and 300x232. With 11 tabs the Biomes tab is the last one, at
 #  438..462 x 86..108; the list starts at 178,134 and is 128 high; a section heading is 21 high, a row of biomes 23.)
 section setup
+guhstaal nl
 /gamemode creative
 /time set noon
 /weather clear
@@ -61,7 +62,7 @@ wait 5
 shot kompas_11_teaser_onderaan gui
 scroll 300 200 30
 wait 5
-log --- choose a biome in the overworld: the compass says where it lies
+log --- choose a biome in the overworld: the compass says where it lies (AutoCheck's click reports a PROBLEM here: see the end)
 click 240 166
 wait 30
 shot kompas_12_gekozen_elders gui
@@ -90,23 +91,23 @@ gui close
 
 section a structure tab still works, and the compass in the Guhmensie
 gui superkompas kompas_tabs
-/execute in guhs:guhmension run tp @s 0 200 0
+/execute in guhs:guhmension run tp @s 0 150 0
+/execute at @s run fill ~-2 ~-1 ~-2 ~2 ~-1 ~2 minecraft:glass
 wait 100
-/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1.2 ~
-/item replace entity @s weapon.mainhand with guhs:guhmensie_superkompas
+log --- the compass still looks for the Guhvelden (chosen above): the menu opens on Biomes with the Guhmensie folded open
 useitem 2
 wait 10
-click 450 97
-wait 5
 mouse 20 20
 wait 5
 shot kompas_17_in_de_guhmensie gui
-scroll 300 200 -8
-wait 5
-log --- choose the Bleekwoud (the last row of the released biomes): zoeken, then the distance
-click 240 200
-wait 5
+log --- choose the second biome: the compass says it is looking, then how far it is
+log --- (the click closes the menu, and AutoCheck's click then reports a PROBLEM "mc2.screen is null": that is the tool, not the menu)
+click 400 166
+wait 3
+shot kompas_17b_gekozen gui
+wait 20
 shot kompas_18_zoeken gui
-wait 60
+wait 40
 shot kompas_19_afstand gui
+/execute at @s run fill ~-2 ~-1 ~-2 ~2 ~-1 ~2 minecraft:air
 quit

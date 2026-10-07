@@ -237,8 +237,8 @@ public final class BiomesTab {
                 uit.add(Component.translatable("gui.guhs.biokompas.op_slot").withStyle(ChatFormatting.GOLD));
                 regelsIn(uit, Component.translatable("gui.guhs.superkompas.sectie." + rij.id() + ".slot"), ChatFormatting.GRAY);
             } else {
-                uit.add(Component.translatable("gui.guhs.biokompas.telling", rij.bezocht(), rij.totaal()).withStyle(ChatFormatting.GRAY));
-                uit.add(Component.translatable(rij.open() ? "gui.guhs.biokompas.dicht" : "gui.guhs.biokompas.open").withStyle(ChatFormatting.DARK_GRAY));
+                uit.add(Component.translatable("gui.guhs.biokompas.telling", rij.bezocht(), rij.totaal()).withStyle(ChatFormatting.GREEN));
+                uit.add(Component.translatable(rij.open() ? "gui.guhs.biokompas.dicht" : "gui.guhs.biokompas.open").withStyle(ChatFormatting.GRAY));
             }
             return uit;
         }
@@ -324,9 +324,9 @@ public final class BiomesTab {
             List<Component> uit = new ArrayList<>();
             uit.add(BiomeKompas.biomeNaam(b.biome()).copy().withStyle(ChatFormatting.BOLD));
             uit.add(Component.translatable(b.bezocht() ? "gui.guhs.biokompas.geweest" : "gui.guhs.biokompas.niet_geweest")
-                    .withStyle(b.bezocht() ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
+                    .withStyle(b.bezocht() ? ChatFormatting.GREEN : ChatFormatting.GRAY));
             if (!b.sectie().equals(nu)) {
-                regelsIn(uit, Component.translatable("gui.guhs.biokompas.tip_elders", BiomeKompas.sectieNaam(b.sectie())), ChatFormatting.GRAY);
+                regelsIn(uit, Component.translatable("gui.guhs.biokompas.tip_elders", BiomeKompas.sectieNaam(b.sectie())), ChatFormatting.DARK_AQUA);
             }
             if (b.biome().equals(gekozen)) {
                 uit.add(Component.translatable("gui.guhs.superkompas.zoekt_al").withStyle(ChatFormatting.GOLD));

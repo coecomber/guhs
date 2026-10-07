@@ -50,7 +50,7 @@ public final class BiomeKompas {
     /** Custom data of the compass: the chosen biome, and after how many blocks walked it looks again. */
     public static final String BIOME = "Biome", OPNIEUW = "BiomeOpnieuw";
     /** How far the compass looks (blocks around the holder), and its grid. */
-    public static final int STRAAL = 8192, STAP = 64;
+    public static final int STRAAL = 8192, STAP = 32;
     public static final int OPNIEUW_MIN = 32, OPNIEUW_MAX = 512;
 
     /** A running or finished search of one player for one biome. */
