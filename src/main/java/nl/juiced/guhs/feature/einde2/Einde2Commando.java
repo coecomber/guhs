@@ -25,7 +25,9 @@ import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
  *   <li>{@code /guhs einde2 waar <structuur>}: where the guaranteed copy of a big place lies in this world (start chunk,
  *       origin, box);</li>
  *   <li>{@code /guhs einde2 plek <structuur> <plek>}: takes you to a marker of the guaranteed copy;</li>
- *   <li>{@code /guhs einde2 plekken}: lists the markers of the structure you stand in (or next to).</li>
+ *   <li>{@code /guhs einde2 plekken}: lists the markers of the structure you stand in (or next to);</li>
+ *   <li>{@code /guhs einde2 hier} (a dev run only, from the console too: {@code execute in guhs:guheinde positioned x y z run
+ *       guhs einde2 hier}): which big place {@link Einde2Ontdekt} finds at this spot, and whether it is protected.</li>
  * </ul>
  */
 public final class Einde2Commando {
@@ -47,6 +49,19 @@ public final class Einde2Commando {
                                 .suggests((c, b) -> SharedSuggestionProvider.suggest(Plekken.van(StringArgumentType.getString(c, "structuur")).keySet(), b))
                                 .executes(c -> plek(c.getSource(), StringArgumentType.getString(c, "structuur"), StringArgumentType.getString(c, "plek"))))))
                 .then(Commands.literal("plekken").executes(c -> plekken(c.getSource())))));
+        if (!net.neoforged.fml.loading.FMLEnvironment.isProduction()) {
+            event.getDispatcher().register(Commands.literal("guhs").then(Commands.literal("einde2").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                    .then(Commands.literal("hier").executes(c -> hier(c.getSource())))));
+        }
+    }
+
+    /** (dev run) What discovery and protection say about the spot the command runs at. */
+    private static int hier(CommandSourceStack source) {
+        BlockPos pos = BlockPos.containing(source.getPosition());
+        String bouw = Einde2Ontdekt.bouwBij(source.getLevel(), pos);
+        String beschermd = Einde2Bescherming.structuurBij(source.getLevel(), pos);
+        source.sendSuccess(() -> Component.literal("einde2 hier " + pos.toShortString() + ": bouw " + bouw + ", beschermd " + beschermd), false);
+        return bouw == null ? 0 : 1;
     }
 
     private static ServerLevel guheinde(CommandSourceStack source) {
