@@ -1,0 +1,28 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "leaves": "none"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bamboe"
+      }
+    },
+    {
+      "when": {
+        "leaves": "small"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bamboe_klein"
+      }
+    },
+    {
+      "when": {
+        "leaves": "large"
+      },
+      "apply": {
+        "model": "guhs:block/guh_bamboe_groot"
+      }
+    }
+  ]
+}

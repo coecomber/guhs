@@ -1,0 +1,79 @@
+{
+  "variants": {
+    "facing=north,vorm=recht": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_recht"
+    },
+    "facing=north,vorm=hoek_links": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_hoek"
+    },
+    "facing=north,vorm=hoek_rechts": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_hoek",
+      "y": 90
+    },
+    "facing=north,vorm=eind_links": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_eind"
+    },
+    "facing=north,vorm=eind_rechts": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_eind",
+      "y": 90
+    },
+    "facing=east,vorm=recht": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_recht",
+      "y": 90
+    },
+    "facing=east,vorm=hoek_links": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_hoek",
+      "y": 90
+    },
+    "facing=east,vorm=hoek_rechts": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_hoek",
+      "y": 180
+    },
+    "facing=east,vorm=eind_links": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_eind",
+      "y": 90
+    },
+    "facing=east,vorm=eind_rechts": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_eind",
+      "y": 180
+    },
+    "facing=south,vorm=recht": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_recht",
+      "y": 180
+    },
+    "facing=south,vorm=hoek_links": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_hoek",
+      "y": 180
+    },
+    "facing=south,vorm=hoek_rechts": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_hoek",
+      "y": 270
+    },
+    "facing=south,vorm=eind_links": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_eind",
+      "y": 180
+    },
+    "facing=south,vorm=eind_rechts": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_eind",
+      "y": 270
+    },
+    "facing=west,vorm=recht": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_recht",
+      "y": 270
+    },
+    "facing=west,vorm=hoek_links": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_hoek",
+      "y": 270
+    },
+    "facing=west,vorm=hoek_rechts": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_hoek"
+    },
+    "facing=west,vorm=eind_links": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_eind",
+      "y": 270
+    },
+    "facing=west,vorm=eind_rechts": {
+      "model": "guhs:block/guh_dakpan_wit_hoek_eind"
+    }
+  }
+}

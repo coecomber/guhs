@@ -1,0 +1,136 @@
+# biomes3 slice blokken-dal: the Klaterdal block sets in a real client (looks, the sliding shoji, the toro by night).
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bio_blokken_dal.txt -PautocheckTimeout=30
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2970 139 2970 3030 139 3030 minecraft:smooth_quartz
+/fill 2975 140 2975 3025 152 3025 minecraft:air
+wait 40
+
+section roze lakhout: the row, next to the soft pinks of the mod
+/setblock 2990 140 3000 guhs:roze_lakhout_planken
+/setblock 2991 140 3000 guhs:roze_lakhout_plaat
+/setblock 2992 140 3000 guhs:roze_lakhout_trap[facing=north]
+/setblock 2993 140 3000 guhs:roze_lakhout_hek
+/setblock 2994 140 3000 guhs:roze_lakhout_poort[facing=south]
+/setblock 2995 140 3000 guhs:roze_lakhout_hek
+/setblock 2997 140 3000 guhs:roze_lakhout_deur[half=lower,facing=north]
+/setblock 2997 141 3000 guhs:roze_lakhout_deur[half=upper,facing=north]
+/setblock 2999 140 3000 guhs:roze_lakhout_luik[half=bottom]
+/setblock 3000 140 3000 guhs:roze_lakhout_luik[half=bottom,open=true,facing=south]
+/setblock 3002 140 3000 guhs:roze_lakhout_balk[axis=y]
+/setblock 3002 141 3000 guhs:roze_lakhout_balk[axis=y]
+/setblock 3003 141 3000 guhs:roze_lakhout_balk[axis=x]
+/setblock 3005 140 3000 minecraft:pink_wool
+/setblock 3006 140 3000 guhs:knuffelsteen
+/setblock 3007 140 3000 guhs:pluisdak
+/setblock 3008 140 3000 guhs:guhbloesem_planks
+camera 2999.5 143 3009 180 14
+waitrender 300
+shot dal_lakhout
+
+section guh-dakpannen: a small hip roof with slab eaves (the krul on each corner) and a row of every piece
+/fill 2980 140 2980 3020 150 3008 minecraft:air
+/fill 2996 140 2986 3002 142 2990 guhs:roze_lakhout_planken
+/fill 2996 143 2986 3002 143 2986 guhs:guh_dakpan_roze_trap[facing=south]
+/fill 2996 143 2990 3002 143 2990 guhs:guh_dakpan_roze_trap[facing=north]
+/fill 2996 143 2987 2996 143 2989 guhs:guh_dakpan_roze_trap[facing=east]
+/fill 3002 143 2987 3002 143 2989 guhs:guh_dakpan_roze_trap[facing=west]
+/fill 2997 143 2987 3001 143 2989 guhs:guh_dakpan_roze
+/fill 2996 143 2985 3002 143 2985 guhs:guh_dakpan_roze_plaat
+/fill 2996 143 2991 3002 143 2991 guhs:guh_dakpan_roze_plaat
+/fill 2995 143 2986 2995 143 2990 guhs:guh_dakpan_roze_plaat
+/fill 3003 143 2986 3003 143 2990 guhs:guh_dakpan_roze_plaat
+/setblock 2995 143 2985 guhs:guh_dakpan_roze_hoek[facing=north,vorm=hoek_links]
+/setblock 3003 143 2985 guhs:guh_dakpan_roze_hoek[facing=north,vorm=hoek_rechts]
+/setblock 2995 143 2991 guhs:guh_dakpan_roze_hoek[facing=south,vorm=hoek_rechts]
+/setblock 3003 143 2991 guhs:guh_dakpan_roze_hoek[facing=south,vorm=hoek_links]
+/setblock 3006 140 2992 guhs:guh_dakpan_wit
+/setblock 3007 140 2992 guhs:guh_dakpan_wit_plaat
+/setblock 3008 140 2992 guhs:guh_dakpan_wit_trap[facing=north]
+/setblock 3009 140 2992 guhs:guh_dakpan_wit_hoek[facing=south]
+/setblock 3011 140 2992 guhs:guh_dakpan_grijs
+/setblock 3012 140 2992 guhs:guh_dakpan_grijs_plaat
+/setblock 3013 140 2992 guhs:guh_dakpan_grijs_trap[facing=north]
+/setblock 3014 140 2992 guhs:guh_dakpan_grijs_hoek[facing=south,vorm=eind_links]
+camera 3004.5 146 3001 195 18
+waitrender 300
+shot dal_dakpannen
+camera 2999.5 142.5 2998 180 -8
+waitrender 200
+shot dal_dakkrul_van_onder
+
+section shoji and tatami: a wall of panels, the middle pair open, mats on the floor
+/fill 2980 140 2980 3020 150 3008 minecraft:air
+/fill 2996 139 2996 3002 139 3000 guhs:tatami[facing=east,gekoppeld=false]
+/setblock 2997 139 2998 guhs:tatami[facing=east,gekoppeld=true]
+/setblock 2998 139 2998 guhs:tatami[facing=west,gekoppeld=true]
+/setblock 3000 139 2997 guhs:tatami[facing=south,gekoppeld=true]
+/setblock 3000 139 2998 guhs:tatami[facing=north,gekoppeld=true]
+/fill 2996 140 2995 2997 142 2995 guhs:shoji[facing=north,hinge=left]
+/fill 2998 140 2995 2998 142 2995 guhs:shoji[facing=north,hinge=left,open=true]
+/fill 2999 140 2995 2999 142 2995 guhs:shoji[facing=north,hinge=right,open=true]
+/fill 3000 140 2995 3002 142 2995 guhs:shoji[facing=north,hinge=right]
+camera 2999.5 143.5 3004 180 22
+waitrender 300
+shot dal_shoji_tatami
+
+section the garden: toro by day and by night, raked sand with rings, guh-bamboe, bonsai, gladde knuffelsteen, esdoorn
+/fill 2980 139 2980 3020 150 3008 minecraft:air
+/fill 2970 139 2970 3030 139 3030 minecraft:smooth_quartz
+/fill 2992 139 2992 3006 139 3002 guhs:geharkt_zand[axis=x]
+/setblock 2996 139 2996 guhs:geharkt_zand_ring[vorm=rond]
+/setblock 2996 139 2995 guhs:geharkt_zand_ring[vorm=noord]
+/setblock 2997 139 2995 guhs:geharkt_zand_ring[vorm=noordoost]
+/setblock 2997 139 2996 guhs:geharkt_zand_ring[vorm=oost]
+/setblock 2997 139 2997 guhs:geharkt_zand_ring[vorm=zuidoost]
+/setblock 2996 139 2997 guhs:geharkt_zand_ring[vorm=zuid]
+/setblock 2995 139 2997 guhs:geharkt_zand_ring[vorm=zuidwest]
+/setblock 2995 139 2996 guhs:geharkt_zand_ring[vorm=west]
+/setblock 2995 139 2995 guhs:geharkt_zand_ring[vorm=noordwest]
+/setblock 2996 140 2996 guhs:gladde_knuffelsteen
+/setblock 3001 140 2998 guhs:gladde_knuffelsteen_plaat
+/setblock 3002 140 2998 guhs:gladde_knuffelsteen_trap[facing=north]
+/setblock 2993 140 3001 guhs:toro
+/setblock 3005 140 2993 guhs:toro
+/setblock 3000 140 3001 guhs:bonsai_pot[vorm=0,facing=south]
+/setblock 3001 140 3001 guhs:bonsai_pot[vorm=1,facing=south]
+/setblock 3002 140 3001 guhs:bonsai_pot[vorm=2,facing=south]
+/setblock 3003 140 3001 guhs:bonsai_pot[vorm=3,facing=south]
+/setblock 3004 140 2996 guhs:guh_bamboe[leaves=none]
+/setblock 3004 141 2996 guhs:guh_bamboe[leaves=none]
+/setblock 3004 142 2996 guhs:guh_bamboe[leaves=small]
+/setblock 3004 143 2996 guhs:guh_bamboe[leaves=large]
+/setblock 2993 139 2993 minecraft:dirt
+/place feature guhs:esdoorn_boom_rood 2993 140 2993
+camera 2999.5 146 3007 180 28
+waitrender 300
+shot dal_tuin_dag
+/gamerule doDaylightCycle true
+/gamerule randomTickSpeed 300
+/time set midnight
+wait 200
+shot dal_tuin_nacht
+/gamerule randomTickSpeed 3
+/time set noon
+
+section the items (hotbar)
+/gamemode creative
+/item replace entity @s hotbar.0 with guhs:roze_lakhout_deur
+/item replace entity @s hotbar.1 with guhs:guh_dakpan_roze_hoek
+/item replace entity @s hotbar.2 with guhs:shoji
+/item replace entity @s hotbar.3 with guhs:tatami
+/item replace entity @s hotbar.4 with guhs:toro
+/item replace entity @s hotbar.5 with guhs:geharkt_zand_ring
+/item replace entity @s hotbar.6 with guhs:guh_bamboe
+/item replace entity @s hotbar.7 with guhs:bonsai_pot
+/item replace entity @s hotbar.8 with guhs:esdoorn_zaailing
+wait 20
+shot dal_items gui

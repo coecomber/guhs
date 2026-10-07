@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/guh_dakpan_roze_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/guh_dakpan_roze"
+    },
+    "type=top": {
+      "model": "guhs:block/guh_dakpan_roze_plaat_top"
+    }
+  }
+}

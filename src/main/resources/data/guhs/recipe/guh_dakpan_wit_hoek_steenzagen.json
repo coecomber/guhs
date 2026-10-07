@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:guh_dakpan_wit",
+  "result": {
+    "id": "guhs:guh_dakpan_wit_hoek"
+  }
+}
