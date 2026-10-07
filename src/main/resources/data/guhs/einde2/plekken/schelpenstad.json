@@ -3,7 +3,7 @@
   "soort": "leegte_bouw",
   "grootte": [
     256,
-    48,
+    114,
     96
   ],
   "anker": [
@@ -396,7 +396,7 @@
     "uitzicht": {
       "soort": "prop",
       "pos": [
-        276,
+        250,
         34,
         84
       ],
