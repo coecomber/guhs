@@ -146,6 +146,12 @@ public class BioKernGameTests {
         }
         helper.assertTrue(Bio.heeftBlok("drijvende_bloesemblaadjes") && Bio.blok("drijvende_bloesemblaadjes", Blocks.LILY_PAD) != Blocks.LILY_PAD,
                 "the kikkerguh's leaf is the real petal block");
+        // what the wereld slice asks for: natural cloud, the Klaterdal rock, the lake's placeholder tree
+        for (String id : List.of("wolkenblok_wit", "wolkenblok_roze", "gladde_knuffelsteen", "wolkenlift", "wolkenstroom", "guhbloesem_log", "guhbloesem_leaves")) {
+            helper.assertTrue(Bio.heeftBlok(id), "the block guhs:" + id + " exists");
+        }
+        helper.assertTrue(Bio.blok("wolkenblok_wit", Blocks.WHITE_WOOL) != Blocks.WHITE_WOOL && Bio.blok("wolkenblok_roze", Blocks.PINK_WOOL) != Blocks.PINK_WOOL,
+                "natural cloud is the real wolkenblok");
         var schaapje = helper.spawn(nl.juiced.guhs.feature.bio.dieren.DierenSlice.WOLKENSCHAAPJE.get(), new net.minecraft.core.BlockPos(1, 2, 1));
         var pluis = schaapje.scheer(null, helper.getLevel());
         helper.assertTrue(net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(pluis.getItem()).equals(Guhs.id("wolkenpluis")),
