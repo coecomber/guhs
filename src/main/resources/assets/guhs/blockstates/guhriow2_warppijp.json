@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "guhs:block/guhriow2_warppijp"
+    },
+    "facing=down": {
+      "model": "guhs:block/guhriow2_warppijp",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "guhs:block/guhriow2_warppijp",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guhriow2_warppijp",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guhriow2_warppijp",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "guhs:block/guhriow2_warppijp",
+      "x": 90,
+      "y": 90
+    }
+  }
+}
