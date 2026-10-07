@@ -173,7 +173,12 @@
     "ring_guhdalfhoed": "blauw",
     "ring_elfenmantel": "groen",
     "ring_hobbitvoeten": "bruin",
-    "ring_ringketting": "wit"
+    "ring_ringketting": "wit",
+    "guhriobeloning_rode_pet": "rood",
+    "guhriobeloning_groene_pet": "groen",
+    "guhriobeloning_schild": "groen",
+    "guhriobeloning_prinsessenkroon": "blauw",
+    "guhriobeloning_gouden_pet": "goud"
   },
   "wistjedat": {
     "eten_ijskoud": 3,

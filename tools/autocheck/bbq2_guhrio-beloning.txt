@@ -1,0 +1,195 @@
+# bbq2 (guhrio-beloning): the forecourt and the tower room of the Kasteel van de Grote Nether-Mika in the real client.
+# NOT run by the slice (a slice starts no game client): this is for the merge step's visual check.
+# Builds the whole castle unturned in the sky with its corner at 6000 100 6000 (dev command /guhs guhrio bouwkasteel), so
+# castle coordinates + (6000, 100, 6000) are world coordinates: the forecourt's floor is y 126, you stand at y 127.
+#   Pad-guh 6051 128 6120 (on his counter), the highscore block 6074 127 6119, the two green pipes: their mouths at
+#   6045 128 6121 (left, by the balustrade) and 6068 128 6120 (right of the path), the flagpole 6080 128 6120,
+#   the floating ?-block 6058 130 6121; the tower room: Prinses Perzikguh 6063 143 6063, Guhshi 6068 143 6065.
+# Look at: Pad-guh's paddenstoelenkraam (a toadstool with a striped valance; he sits on the counter under it, his toadstool
+# cap and blue vest), the highscore board (the floating text reads against the black panel), the flagpole's foot / pole /
+# flag, the pipes (a round green pipe with a rim), the talking screens of the shop (three buttons, no overlap), a pipe trip
+# (you shrink into the pipe, the screen closes like an iris, you grow out of the other one), the ?-block's knabbel, the
+# tower room (peach on the wall, cake table, the princess with crown and golden hair, Guhshi with his own red saddle and
+# NOT the leather one), the five outfits on a guh, Guhshi's flutter and tongue.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_guhrio-beloning.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doMobSpawning false
+/execute in minecraft:overworld run tp @s 6063.5 190 6063.5 0 90
+wait 60
+/forceload add 6000 6000 6127 6127
+wait 40
+/guhs guhrio bouwkasteel 6000 100 6000
+wait 100
+waitrender 600
+/guhs guhriobeloning wis
+/guhs guhrio wis
+
+section the forecourt
+/tp @s 6063.5 131 6128.5 180 14
+wait 5
+/tp @s 6063.5 131 6128.5 180 14
+waitrender 300
+shot beloning_00_voorplein
+/tp @s 6052.5 127 6124.5 180 -6
+wait 5
+/tp @s 6052.5 127 6124.5 180 -6
+waitrender 200
+shot beloning_01_kraam_voor
+/tp @s 6058.5 128 6121.5 110 4
+wait 5
+/tp @s 6058.5 128 6121.5 110 4
+waitrender 100
+shot beloning_02_padguh
+/tp @s 6074.5 127 6124.5 180 -8
+wait 5
+/tp @s 6074.5 127 6124.5 180 -8
+wait 120
+waitrender 100
+shot beloning_03_highscorebord
+/tp @s 6077.5 127 6123.5 -140 -20
+wait 5
+/tp @s 6077.5 127 6123.5 -140 -20
+waitrender 100
+shot beloning_04_vlaggenmast
+
+section Pad-guh: intro, shop, vadsmunten
+/gamemode survival
+/tp @s 6051.5 127 6122.5 180 0
+wait 10
+gui keep
+interact 6051 128 6120
+wait 20
+shot beloning_10_intro_1 gui
+widgets
+press Verder
+wait 5
+press Verder
+wait 5
+shot beloning_11_intro_3_hoofdmenu gui
+widgets
+gui close
+/guhs guhriobeloning munten 120
+gui keep
+interact 6051 128 6120
+wait 20
+shot beloning_12_hoofdmenu gui
+press Outfits kopen
+wait 10
+shot beloning_13_outfits gui
+widgets
+press Rode pet met snor
+wait 10
+shot beloning_14_gekocht gui
+gui close
+gui keep
+interact 6051 128 6120
+wait 20
+press Bouwblokken kopen
+wait 10
+shot beloning_15_bouwblokken gui
+widgets
+press Groene reispijp
+wait 10
+gui close
+gui keep
+interact 6051 128 6120
+wait 20
+press Mijn grote vadsmunten
+wait 10
+shot beloning_16_vadsmunten gui
+gui close
+
+section the highscore board and the ?-block
+/tp @s 6074.5 127 6121.5 180 10
+wait 10
+use 6074 127 6119
+wait 10
+shot beloning_20_eigen_tijden gui
+/tp @s 6058.5 127 6121.5 0 0
+wait 10
+use 6058 130 6121
+wait 15
+shot beloning_21_vraagblok_knabbel gui
+use 6058 130 6121
+wait 15
+shot beloning_22_vraagblok_morgen gui
+
+section a pipe trip (third person: you shrink into the pipe and grow out of the other)
+/tp @s 6068.5 129 6120.5 180 20
+wait 10
+perspective back
+shot beloning_30_op_de_pijp gui
+use 6068 128 6120
+wait 5
+shot beloning_31_erin gui
+wait 8
+shot beloning_32_eruit gui
+wait 20
+shot beloning_33_aan_de_overkant gui
+perspective first
+/guhs guhriobeloning stand
+
+section the tower room, the princess and Guhshi
+/gamemode creative
+/tp @s 6063.5 143 6069.5 180 5
+wait 5
+/tp @s 6063.5 143 6069.5 180 5
+waitrender 200
+shot beloning_40_torenkamer
+/tp @s 6063.5 143 6066.5 180 0
+wait 5
+/tp @s 6063.5 143 6066.5 180 0
+waitrender 100
+shot beloning_41_perzikguh
+/gamemode survival
+gui keep
+interact 6063 143 6063
+wait 20
+shot beloning_42_perzik_voor_het_duel gui
+gui close
+/guhs guhriobeloning duel
+wait 10
+gui keep
+interact 6063 143 6063
+wait 20
+shot beloning_43_perzik_dank gui
+gui close
+/tp @s 6066.5 143 6067.5 -140 5
+wait 10
+shot beloning_44_guhshi_wacht
+gui keep
+interact 6068 143 6065
+wait 20
+shot beloning_45_guhshi_vraag gui
+press Ja! Kom maar mee, Guhshi
+wait 30
+gui close
+shot beloning_46_guhshi_is_van_jou gui
+/guhs guhriobeloning stand
+
+section the outfits on a guh
+/gamemode creative
+/execute in minecraft:overworld run tp @s 6200.5 200 6200.5 0 0
+wait 20
+/fill 6190 199 6190 6210 199 6210 minecraft:smooth_stone
+/summon guhs:guh 6200.5 200 6204.5 {Variant:"normal",NoAI:1b,ClothesHead:"guhriobeloning_rode_pet",ClothesBack:"guhriobeloning_schild",Rotation:[180f,0f]}
+/summon guhs:guh 6197.5 200 6204.5 {Variant:"normal",NoAI:1b,ClothesHead:"guhriobeloning_groene_pet",Rotation:[180f,0f]}
+/summon guhs:guh 6203.5 200 6204.5 {Variant:"normal",NoAI:1b,ClothesHead:"guhriobeloning_gouden_pet",Rotation:[180f,0f]}
+/summon guhs:guh 6194.5 200 6204.5 {Variant:"normal",NoAI:1b,ClothesHead:"guhriobeloning_prinsessenkroon",Rotation:[180f,0f]}
+wait 20
+/tp @s 6199.0 201 6200.5 0 5
+wait 5
+/tp @s 6199.0 201 6200.5 0 5
+waitrender 100
+shot beloning_50_outfits_voor
+/tp @s 6199.0 202 6208.5 180 15
+wait 5
+/tp @s 6199.0 202 6208.5 180 15
+waitrender 100
+shot beloning_51_outfits_achter
+gui creative guhs
+quit
