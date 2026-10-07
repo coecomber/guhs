@@ -216,6 +216,17 @@ def tag_values(d, reg):
     return d
 
 
+def vanilla_dimension(d):
+    """Our own biome source types -> a fixed source with the first biome the real one names."""
+    src = d.get("generator", {}).get("biome_source", {})
+    if own(src.get("type")):
+        REPLACED[("biome_source", src["type"])] = 1
+        biomes = [v for val in src.values() for v in (val if isinstance(val, list) else [val])
+                  if isinstance(v, str) and v != src["type"] and ":" in v]
+        d["generator"]["biome_source"] = {"type": "minecraft:fixed", "biome": biomes[0] if biomes else "minecraft:plains"}
+    return d
+
+
 TAG_REGS = {"block": "minecraft:block", "item": "minecraft:item", "entity_type": "minecraft:entity_type", "fluid": "minecraft:fluid",
             "point_of_interest_type": "minecraft:point_of_interest_type", "painting_variant": None, "damage_type": None,
             "villager_trade": None}
@@ -284,6 +295,8 @@ def build_pack():
                 d = vanilla_structure_set(d)
             elif folder == "worldgen" and sub == "biome":
                 d = vanilla_features(d)
+            if folder == "dimension":
+                d = vanilla_dimension(d)
             if folder == "dimension_type":
                 d.get("attributes", {}).pop("neoforge:custom_skybox", None)
                 d.get("attributes", {}).pop("neoforge:custom_weather_effects", None)
