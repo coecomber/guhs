@@ -305,7 +305,7 @@ def run_server(world, gen):
     log_path = os.path.join(run_dir, "server.log")
     cmds = []
     if gen:
-        for dim in ("guhmension", "guhmaag", "barbecuether", "guheinde", "guhpixel"):
+        for dim in ("guhmension", "guhmaag", "barbecuether", "guheinde", "guhpixel", "huisje_binnen"):
             cmds.append(f"execute in guhs:{dim} run forceload add -64 -64 64 64")
     cmds.append("stop")
     with open(log_path, "w", encoding="utf-8") as log:

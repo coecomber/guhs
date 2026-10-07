@@ -256,7 +256,11 @@ public final class Huisjes extends SavedData {
             return;
         }
         data.setDirty();
-        Binnen.huisjeWeg(level.getServer(), h);   // (1.3.2: whoever is inside stands outside again, the room is cleared)
+        try {
+            Binnen.huisjeWeg(level.getServer(), h);   // (1.3.2: whoever is inside stands outside again, the room is cleared)
+        } catch (RuntimeException e) {
+            com.mojang.logging.LogUtils.getLogger().error("Guhs: emptying the room of huisje {} failed", h.naam, e);
+        }
         for (UUID id : h.bewoners) {
             Entity e = zoekBewoner(level, h, id);
             if (e != null) {
