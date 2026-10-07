@@ -1,0 +1,134 @@
+{
+  "type": "guhs:kust_steiger",
+  "biomes": "#guhs:has_structure/steigerhuisje",
+  "step": "fluid_springs",
+  "spawn_overrides": {},
+  "terrain_adaptation": "none",
+  "start_pool": "guhs:steigerhuisje/start",
+  "zee_noise": "guhs:guhmension_zee",
+  "band_van": 0.34,
+  "band_tot": 0.51,
+  "oever": 0.4375,
+  "water_van": 0.427,
+  "water_y": 62,
+  "anker": [
+    10,
+    30,
+    14
+  ],
+  "y": 64,
+  "land": [
+    [
+      1,
+      0,
+      -7,
+      7
+    ],
+    [
+      11,
+      0,
+      -7,
+      7
+    ],
+    [
+      21,
+      0,
+      -7,
+      7
+    ],
+    [
+      1,
+      6,
+      -7,
+      7
+    ],
+    [
+      21,
+      6,
+      -7,
+      7
+    ],
+    [
+      11,
+      6,
+      -7,
+      7
+    ],
+    [
+      6,
+      3,
+      -7,
+      7
+    ],
+    [
+      16,
+      3,
+      -7,
+      7
+    ],
+    [
+      1,
+      12,
+      -7,
+      5
+    ],
+    [
+      21,
+      12,
+      -7,
+      5
+    ],
+    [
+      6,
+      12,
+      -7,
+      3
+    ],
+    [
+      15,
+      12,
+      -7,
+      3
+    ]
+  ],
+  "water": [
+    [
+      10,
+      18,
+      2
+    ],
+    [
+      10,
+      24,
+      3
+    ],
+    [
+      10,
+      31,
+      4
+    ],
+    [
+      5,
+      30,
+      3
+    ],
+    [
+      15,
+      28,
+      3
+    ],
+    [
+      15,
+      33,
+      4
+    ]
+  ],
+  "open_zee": [
+    24,
+    34,
+    44,
+    54,
+    62
+  ],
+  "keep_clear": 76
+}

@@ -3419,5 +3419,84 @@
       }
     ],
     "subtitle": "subtitles.guhs.snuffel.maatje"
+  },
+  "snuffelsteiger.piep": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.wolf_cute.whine",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.8
+      },
+      {
+        "name": "minecraft:entity.wolf.whine",
+        "type": "event",
+        "pitch": 1.7,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffelsteiger.piep"
+  },
+  "snuffelsteiger.plof": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wool.fall",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffelsteiger.plof"
+  },
+  "snuffelsteiger.donder": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.lightning_bolt.thunder",
+        "type": "event",
+        "volume": 0.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffelsteiger.donder"
+  },
+  "snuffelsteiger.bel": {
+    "sounds": [
+      {
+        "name": "minecraft:block.bell.use",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffelsteiger.bel"
+  },
+  "snuffelsteiger.plank": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wood.step",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffelsteiger.plank"
+  },
+  "snuffelsteiger.riem": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.boat.paddle_water",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffelsteiger.riem"
+  },
+  "snuffelsteiger.golf": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.generic.splash",
+        "type": "event",
+        "pitch": 0.6
+      },
+      {
+        "name": "minecraft:entity.player.splash.high_speed",
+        "type": "event",
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.snuffelsteiger.golf"
   }
 }

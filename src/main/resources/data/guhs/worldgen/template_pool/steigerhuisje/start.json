@@ -1,0 +1,182 @@
+{
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "guhs:steigerhuisje",
+        "projection": "rigid",
+        "processors": {
+          "processors": [
+            {
+              "processor_type": "minecraft:rule",
+              "rules": [
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:white_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:air"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:air"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:white_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:stone_bricks"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:light_gray_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:air"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:air"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:light_gray_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:mossy_stone_bricks"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:yellow_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:air"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:cobblestone_wall"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:yellow_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:stone_bricks"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:lime_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:air"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:mossy_cobblestone_wall"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:lime_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:mossy_stone_bricks"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:orange_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:air"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:spruce_fence_gate",
+                    "Properties": {
+                      "facing": "south",
+                      "open": "false",
+                      "in_wall": "true",
+                      "powered": "false"
+                    }
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:orange_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:stone_bricks"
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:red_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:air"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:lantern",
+                    "Properties": {
+                      "hanging": "false",
+                      "waterlogged": "false"
+                    }
+                  }
+                },
+                {
+                  "input_predicate": {
+                    "predicate_type": "minecraft:block_match",
+                    "block": "minecraft:red_stained_glass"
+                  },
+                  "location_predicate": {
+                    "predicate_type": "minecraft:always_true"
+                  },
+                  "output_state": {
+                    "Name": "minecraft:stone_bricks"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
