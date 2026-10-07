@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/end_rod",
   "textures": {
-    "all": "guhs:block/lichtstaafje"
+    "end_rod": "guhs:block/lichtstaafje",
+    "particle": "guhs:block/lichtstaafje"
   }
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "B  ",
+    "BB ",
+    "BBB"
+  ],
+  "key": {
+    "B": "guhs:knabbelkoorblok"
+  },
+  "result": {
+    "id": "guhs:knabbelkoorblok_trap",
+    "count": 4
+  }
+}

@@ -78,6 +78,18 @@
         "Komt na: OPPER-GEVADST!",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548E38EB7A3F8",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_biomes.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 20.63125,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 5,
   progression_mode: "flexible",
@@ -768,6 +780,298 @@
       ],
       x: 6.0,
       y: 18.450000000000003,
+    },
+    {
+      id: "47554853B36716B7",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:gatenkaasheuvels",
+          id: "4755480617833E07",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554829A2BABC74",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 0.0,
+      y: 22.4125,
+      shape: "circle",
+    },
+    {
+      id: "47554805D50DEDAC",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:korstwoestijn",
+          id: "47554873258ADA1F",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486F3099B3C6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 6,
+        },
+      ],
+      x: 1.5,
+      y: 22.4125,
+      shape: "circle",
+    },
+    {
+      id: "4755487D3AA3ECF4",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:kruimelwolken",
+          id: "475548600C04352C",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D1A27A2A04",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 3.0,
+      y: 22.4125,
+      shape: "circle",
+    },
+    {
+      id: "475548260E8335EA",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:schimmelkaasvlakte",
+          id: "47554805DA08936E",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B05098F9D4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 4.5,
+      y: 22.4125,
+      shape: "circle",
+    },
+    {
+      id: "4755489AAB3712B8",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:kristalkaasklippen",
+          id: "475548841570E71C",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F9261CCB19",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 6.0,
+      y: 22.4125,
+      shape: "circle",
+    },
+    {
+      id: "4755481479785AC4",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "biome",
+          biome: "guhs:knabbelkoorbos",
+          id: "47554833FE4B6B97",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A32273EE09",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 10,
+        },
+      ],
+      x: 7.5,
+      y: 22.4125,
+      shape: "circle",
+    },
+    {
+      id: "475548D46E709FAB",
+      icon: {
+        id: "guhs:kristalkaas",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kristalkaas",
+          },
+          count: 3,
+          id: "475548FD877345F6",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FD7BC46B5C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+      ],
+      x: 9.0,
+      y: 22.4125,
+      shape: "diamond",
+    },
+    {
+      id: "475548D6CC0341A8",
+      icon: {
+        id: "guhs:knabbelkoorvrucht",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knabbelkoorvrucht",
+          },
+          id: "47554832126B455A",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548367E97A94A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 23.9125,
+    },
+    {
+      id: "475548F9822BE5AD",
+      icon: {
+        id: "guhs:gepofte_knabbelkoorvrucht",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gepofte_knabbelkoorvrucht",
+          },
+          count: 4,
+          id: "47554812DD7A802E",
+        },
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:knabbelkoorblok",
+          },
+          count: 4,
+          id: "4755487E420EA820",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554868152935E0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 23.9125,
+    },
+    {
+      id: "4755481C21C11078",
+      icon: {
+        id: "guhs:lichtstaafje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:lichtstaafje",
+          },
+          count: 4,
+          id: "475548F1CDEA4C0D",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554860C77EC6A8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 23.9125,
+      shape: "rsquare",
     },
   ],
 }

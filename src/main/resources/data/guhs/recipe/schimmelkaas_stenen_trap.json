@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S  ",
+    "SS ",
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:schimmelkaas_stenen"
+  },
+  "result": {
+    "id": "guhs:schimmelkaas_stenen_trap",
+    "count": 4
+  }
+}

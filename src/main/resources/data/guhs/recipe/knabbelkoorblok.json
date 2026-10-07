@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PP",
+    "PP"
+  ],
+  "key": {
+    "P": "guhs:gepofte_knabbelkoorvrucht"
+  },
+  "result": {
+    "id": "guhs:knabbelkoorblok",
+    "count": 4
+  }
+}

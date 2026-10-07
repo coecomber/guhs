@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WW",
+    "WW"
+  ],
+  "key": {
+    "W": "guhs:kruimelwolk"
+  },
+  "result": {
+    "id": "guhs:dichte_kruimelwolk"
+  }
+}

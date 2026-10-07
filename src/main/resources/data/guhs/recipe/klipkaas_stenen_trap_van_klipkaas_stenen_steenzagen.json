@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:klipkaas_stenen",
+  "result": {
+    "id": "guhs:klipkaas_stenen_trap"
+  }
+}

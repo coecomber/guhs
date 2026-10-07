@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_chorus_flower",
+  "textures": {
+    "texture": "guhs:block/knabbelkoorbloem_dood",
+    "bottom": "guhs:block/knabbelkoorplant",
+    "particle": "guhs:block/knabbelkoorbloem_dood"
+  }
+}

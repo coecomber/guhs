@@ -12,6 +12,10 @@
     "guhs:circuit_kaasweg_plaat",
     "guhs:nomguh_sneeuwdak_plaat",
     "guhs:tiki_rietdak_plaat",
-    "guhs:harsstenen_plaat"
+    "guhs:harsstenen_plaat",
+    "guhs:kruimelrots_stenen_plaat",
+    "guhs:schimmelkaas_stenen_plaat",
+    "guhs:klipkaas_stenen_plaat",
+    "guhs:knabbelkoorblok_plaat"
   ]
 }

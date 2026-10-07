@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:knabbelkoorblok",
+  "result": {
+    "id": "guhs:knabbelkoorblok_trap"
+  }
+}

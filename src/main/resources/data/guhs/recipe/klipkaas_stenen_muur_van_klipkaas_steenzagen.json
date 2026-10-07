@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:klipkaas",
+  "result": {
+    "id": "guhs:klipkaas_stenen_muur"
+  }
+}

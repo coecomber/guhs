@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "guhs:block/kruimelrots_stenen",
+    "top": "guhs:block/kruimelrots_stenen",
+    "side": "guhs:block/kruimelrots_stenen"
+  }
+}

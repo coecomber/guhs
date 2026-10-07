@@ -1,0 +1,80 @@
+{
+  "parent": "guhs:guheinde/guheinde_poort",
+  "display": {
+    "icon": {
+      "id": "guhs:gebarsten_korst"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.einde2_biomes_zes_streken.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.einde2_biomes_zes_streken.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "gatenkaasheuvels": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:gatenkaasheuvels"
+          }
+        }
+      }
+    },
+    "korstwoestijn": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:korstwoestijn"
+          }
+        }
+      }
+    },
+    "kruimelwolken": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:kruimelwolken"
+          }
+        }
+      }
+    },
+    "schimmelkaasvlakte": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:schimmelkaasvlakte"
+          }
+        }
+      }
+    },
+    "kristalkaasklippen": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:kristalkaasklippen"
+          }
+        }
+      }
+    },
+    "knabbelkoorbos": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "player": {
+          "location": {
+            "biomes": "guhs:knabbelkoorbos"
+          }
+        }
+      }
+    }
+  }
+}

@@ -2705,5 +2705,26 @@
       }
     ],
     "subtitle": "subtitles.guhs.guhparkour.smak"
+  },
+  "einde2_biomes.knabbelkoor_zing": {
+    "sounds": [
+      "guhs:einde2_biomes/zing1",
+      "guhs:einde2_biomes/zing2",
+      "guhs:einde2_biomes/zing3"
+    ],
+    "subtitle": "subtitles.guhs.einde2_biomes.knabbelkoor_zing"
+  },
+  "einde2_biomes.vrucht_flits": {
+    "sounds": [
+      "guhs:einde2_biomes/flits"
+    ],
+    "subtitle": "subtitles.guhs.einde2_biomes.vrucht_flits"
+  },
+  "einde2_biomes.wolk_plof": {
+    "sounds": [
+      "guhs:einde2_biomes/plof1",
+      "guhs:einde2_biomes/plof2"
+    ],
+    "subtitle": "subtitles.guhs.einde2_biomes.wolk_plof"
   }
 }
