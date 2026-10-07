@@ -78,6 +78,18 @@
         "Komt na: OPPER-GEVADST!",
       ],
     },
+    {
+      height: 1.5625,
+      id: "4755488D3CB1C1B5",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_mikas.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 20.63125,
+      hover: [
+        "Komt na: Hoe groter de Mika... (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 5,
   progression_mode: "flexible",
@@ -768,6 +780,207 @@
       ],
       x: 6.0,
       y: 18.450000000000003,
+    },
+    {
+      id: "475548B4376A3CA0",
+      icon: {
+        id: "guhs:ender_mika_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_ender_mika",
+          id: "475548919AC1CA77",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480DB86071D7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548943FD6A48A",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 0.0,
+      y: 22.4125,
+      shape: "gear",
+    },
+    {
+      id: "47554807581C62D4",
+      icon: {
+        id: "guhs:flitskruimel",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:flitskruimel",
+          },
+          id: "475548117E252405",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481D7E3F82D4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 12,
+        },
+        {
+          id: "4755484CCDBDA6A0",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 1.5,
+      y: 22.4125,
+    },
+    {
+      id: "4755481CB9AB65EB",
+      icon: {
+        id: "guhs:kaasmijt_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_kaasmijt",
+          id: "475548C53A9C9311",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481CA1206C6F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755481F45DE1507",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 3.0,
+      y: 22.4125,
+    },
+    {
+      id: "47554806DC2A1289",
+      icon: {
+        id: "guhs:schuilguh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/seen_schuilguh",
+          id: "4755486A1FBDAA28",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482A4EECB310",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548A38B64F69C",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 22.4125,
+      shape: "circle",
+    },
+    {
+      id: "4755485CBCF10D62",
+      icon: {
+        id: "guhs:doosschil",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:doosschil",
+          },
+          id: "475548A72686A686",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F1F7F2F3CE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554888D4D80DF0",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 6.0,
+      y: 22.4125,
+    },
+    {
+      id: "475548EFBFE1D433",
+      icon: {
+        id: "guhs:schuildoos",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:schuildoos",
+          },
+          id: "475548B27C92F133",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E702C05C31",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548E1F0FDAE8A",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 7.5,
+      y: 22.4125,
+      shape: "gear",
     },
   ],
 }
