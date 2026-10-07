@@ -1,17 +1,20 @@
 {
-  "chapter.4755484EAFF30E44.title": "&5Het Guheinde",
+  "chapter.4755484EAFF30E44.title": "&5Verhalen van het Guheinde",
   "chapter.4755484EAFF30E44.chapter_subtitle": [
-    "6. Opper-Mika heeft alle knabbels, njeg!",
+    "3. Opper-Mika heeft alle knabbels, njeg!",
   ],
-  "quest.4755482CDD9DBAAA.title": "Hoe kom je hier?",
-  "quest.4755482CDD9DBAAA.quest_desc": [
-    "Dit hoofdstuk komt na twee quests in &dDe Guhmensie&r:",
+  "task.475548837D6916B0.title": "In de ban van de Knabbelring",
+  "task.47554864DEB36D85.title": "Super Guhrio",
+  "task.475548993527E0BB.title": "De Aangebrande Mika verslaan",
+  "quest.4755482CB82CCF3D.title": "Slotje: eerst de Guhbarbecuether",
+  "quest.4755482CB82CCF3D.quest_desc": [
+    "&cDit hoofdstuk zit op slot.&r Het portaal in de Knabbelkelder laat je pas door als je &6In de ban van de Knabbelring&r en &cSuper Guhrio&r hebt gevolgd en de &cAangebrande Mika&r hebt verslagen. Hieronder zie je wat je al hebt: een vinkje per ding.",
     "",
-    "- &cHoe groter de Mika...&r: Mika's (vooral Grote Mika) huilen &5Mika-tranen&r. Die heb je nodig voor de Ogen van Vadsig.",
+    "Was je al eens in het Guheinde? Wie er nog is mag er blijven, maar wie eruit stapt volgt eerst het Guhpad verder. Alles wat je al gedaan hebt blijft gewoon bewaard, njeg.",
     "",
-    "- &dLang leve de Koning!&r: de Koningguh in het guhkasteel vertelt je waar alle kaasknabbels gebleven zijn.",
+    "Dit verhaal begint bij twee quests in &dDe Guhmensie&r: &cHoe groter de Mika...&r (Mika's, vooral Grote Mika, huilen &5Mika-tranen&r: die heb je nodig voor de Ogen van Vadsig) en &dLang leve de Koning!&r (de Koningguh in het guhkasteel vertelt je waar alle kaasknabbels gebleven zijn).",
     "",
-    "Daarna: twaalf Ogen van Vadsig, de Knabbelkelder en... Opper-Mika. Zonder knabbels is je guh niet VAHOEG, dus haal ze terug! Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
+    "Daarna: twaalf Ogen van Vadsig, de Knabbelkelder en... Opper-Mika. Zonder knabbels is je guh niet VAHOEG, dus haal ze terug! Hier komen later nog meer verhalen bij.",
   ],
   "quest.475548F95D32C0F4.title": "Een Mika huilt",
   "quest.475548F95D32C0F4.quest_desc": [

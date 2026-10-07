@@ -1,0 +1,301 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_pad_echt",
+  group: "4755489B04766E01",
+  guhs_chapter_version: 31,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_pad_echt.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "4755483F0D99CCB6",
+  images: [
+    {
+      height: 3.0,
+      id: "475548410776559E",
+      image: "guhs:textures/ftbquests/guhs_pad_echt/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 10.25,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "475548D48CBC628D",
+      image: "guhs:textures/ftbquests/guhs_pad_echt/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 12.15,
+      y: 1.5,
+    },
+    {
+      height: 1.5625,
+      id: "4755489EB84FB347",
+      image: "guhs:textures/ftbquests/guhs_pad_echt/kop_guhpad_echt.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Verhalen gevolgd",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755487CCBCE53DD",
+      image: "guhs:textures/ftbquests/guhs_pad_echt/kop_guhpad_laag6.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 4.78125,
+      hover: [
+        "Komt na: Verhalen gevolgd",
+      ],
+    },
+  ],
+  order_index: 16,
+  progression_mode: "flexible",
+  quest_links: [],
+  quests: [
+    {
+      id: "4755482522DDBDC2",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_pad_echt.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:verhalen_gevolgd",
+          value: 6,
+          id: "4755484B9D13BD15",
+          icon: {
+            id: "guhs:guhdex",
+          },
+        },
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_echt",
+          id: "4755484F2824E4AA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481B7B73D066",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 0.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "4755480CB07B0783",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_vraag.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_echt",
+          id: "4755484AA963D1D5",
+          criterion: "",
+        },
+      ],
+      rewards: [],
+      x: 0.0,
+      y: 6.5625,
+      dependencies: [
+        "4755482522DDBDC2",
+      ],
+      hide_dependency_lines: true,
+    },
+    {
+      id: "475548F782453039",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_vraag.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_echt",
+          id: "475548F7F9095E5C",
+          criterion: "",
+        },
+      ],
+      rewards: [],
+      x: 1.5,
+      y: 6.5625,
+      dependencies: [
+        "4755482522DDBDC2",
+      ],
+      hide_dependency_lines: true,
+    },
+    {
+      id: "475548BF5AF93AFF",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_vraag.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_echt",
+          id: "47554871B39F93C7",
+          criterion: "",
+        },
+      ],
+      rewards: [],
+      x: 3.0,
+      y: 6.5625,
+      dependencies: [
+        "4755482522DDBDC2",
+      ],
+      hide_dependency_lines: true,
+    },
+    {
+      id: "475548F39E2DE459",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_vraag.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_echt",
+          id: "475548DFBFC27276",
+          criterion: "",
+        },
+      ],
+      rewards: [],
+      x: 11.5,
+      y: 6.5625,
+      dependencies: [
+        "4755482522DDBDC2",
+      ],
+      hide_dependency_lines: true,
+      shape: "rsquare",
+    },
+    {
+      id: "4755480615D136DA",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_vraag.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_echt",
+          id: "475548490CA571B6",
+          criterion: "",
+        },
+      ],
+      rewards: [],
+      x: 13.0,
+      y: 6.5625,
+      dependencies: [
+        "4755482522DDBDC2",
+      ],
+      hide_dependency_lines: true,
+      shape: "rsquare",
+    },
+    {
+      id: "475548F13AC92BC0",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_vraag.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_echt",
+          id: "475548BB9E3D6868",
+          criterion: "",
+        },
+      ],
+      rewards: [],
+      x: 14.5,
+      y: 6.5625,
+      dependencies: [
+        "4755482522DDBDC2",
+      ],
+      hide_dependency_lines: true,
+      shape: "rsquare",
+    },
+    {
+      id: "475548147D36C2C7",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_vraag.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_echt",
+          id: "475548AB96460E89",
+          criterion: "",
+        },
+      ],
+      rewards: [],
+      x: 16.0,
+      y: 6.5625,
+      dependencies: [
+        "4755482522DDBDC2",
+      ],
+      hide_dependency_lines: true,
+      shape: "rsquare",
+    },
+    {
+      id: "47554854D8F3DA4D",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_vraag.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/guhpad_echt",
+          id: "4755484209FEB78C",
+          criterion: "",
+        },
+      ],
+      rewards: [],
+      x: 17.5,
+      y: 6.5625,
+      dependencies: [
+        "4755482522DDBDC2",
+      ],
+      hide_dependency_lines: true,
+      shape: "rsquare",
+    },
+  ],
+}
