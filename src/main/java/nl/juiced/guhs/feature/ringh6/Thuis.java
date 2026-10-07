@@ -21,6 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.ring.Ring;
 import nl.juiced.guhs.feature.ring.Sam;
+import nl.juiced.guhs.feature.ringknipoog.Knipogen;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
 import nl.juiced.guhs.feature.verhaal.Doel;
 import nl.juiced.guhs.feature.verhaal.Duwtje;
@@ -200,7 +201,8 @@ public final class Thuis {
         }
         Sam.roep(p);
         BlockPos anker = feestplek(p.level(), p.blockPosition());
-        Cutscenes.speel(p, Finale.FEEST, anker, Rotation.NONE, Thuis::klaar);
+        // (ring-knipogen: the first time a late guest shuffles in right after the feast)
+        Knipogen.speel(p, Finale.FEEST, Knipogen.SJOKKEL, anker, Rotation.NONE, Thuis::klaar);
     }
 
     /** The feast is over: the questline is done; ring-kern gives the rewards of the whole story when its last step falls. */
