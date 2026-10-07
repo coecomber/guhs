@@ -33,9 +33,10 @@ import nl.juiced.guhs.world.ModDimensions;
  * bbq2 (ring-h6): home. After the flight the Rookguhs put the player down in the Guhmensie ({@link #breng}), and there the
  * feast of the Knabbelgouw plays ({@link #seconde}: step 6 of the chapter), which ends the story.
  * <p>
- * Where "home" is ({@link #plek}), the first that exists: the grill portal this player last left the Guhmensie through (the
- * verhaal engine remembers it: that is the big barbecueput with the Knabbelgouw, or with Guhdalf's cart in a world that was
- * generated before the update), else the nearest Knabbelgouw, else the nearest barbecueput, else the world's spawn. The
+ * Where "home" is ({@link #plek}), the first that exists: this player's own Gouw ({@link #gouw}: Guhdalf's camp where their
+ * chapter 1 played, which chapter 1 wrote in their saved data), else the grill portal they last left the Guhmensie through
+ * (the verhaal engine remembers it: that is the big barbecueput with the Knabbelgouw, or with Guhdalf's cart in a world that
+ * was generated before the update), else the nearest Knabbelgouw, else the nearest barbecueput, else the world's spawn. The
  * player lands on open ground a few steps from it. The spot is saved ({@link #THUIS}), it is what the compass points at
  * for step 6 ("Mijn verhaal"), and the feast starts once the player stands near it; so somebody who logged out in the air
  * or wandered off still gets their party.
@@ -48,6 +49,12 @@ public final class Thuis {
     public static final String THUIS = "guhs_ringh6_thuis";
     /** The key of the verhaal engine's portal memory in the player's saved data (feature/verhaal/Doelen). */
     private static final String PORTALEN = "guhs_verhaal_portalen";
+    /**
+     * Chapter 1's keys in the player's saved data (feature/ringh1/Feest: the block Guhdalf sits on in this player's Gouw, and
+     * the id of its dimension). Read by name only: this chapter does not need chapter 1's classes, and a player without
+     * them (the keys are written when they meet Guhdalf) simply gets the next choice.
+     */
+    private static final String GOUW = "guhs_ringh1_thuis", GOUW_DIM = "guhs_ringh1_thuis_dim";
     /** The feast starts within this many blocks of the landing spot, this many ticks after landing. */
     public static final int FEEST_BEREIK = 40, FEEST_NA = 60;
 
@@ -75,9 +82,12 @@ public final class Thuis {
         if (level == null) {
             return null;
         }
-        CompoundTag portalen = GuhQuests.saved(p).getCompoundOrEmpty(PORTALEN);
-        String dim = level.dimension().identifier().toString();
-        BlockPos rond = portalen.contains(dim) ? BlockPos.of(portalen.getLongOr(dim, 0L)) : null;
+        BlockPos rond = gouw(p, level);
+        if (rond == null) {
+            CompoundTag portalen = GuhQuests.saved(p).getCompoundOrEmpty(PORTALEN);
+            String dim = level.dimension().identifier().toString();
+            rond = portalen.contains(dim) ? BlockPos.of(portalen.getLongOr(dim, 0L)) : null;
+        }
         if (rond == null) {
             BlockPos spawn = level.getRespawnData().pos();
             rond = GuhCompassItem.findCenter(level, ResourceKey.create(Registries.STRUCTURE, Guhs.id(Ring.STRUCTUREN.get(0))), spawn);
@@ -89,6 +99,16 @@ public final class Thuis {
             }
         }
         return landing(level, rond);
+    }
+
+    /** This player's own Gouw: where Guhdalf sat when their story began, when that is in this level (null: not known). */
+    @Nullable
+    static BlockPos gouw(ServerPlayer p, ServerLevel level) {
+        CompoundTag saved = GuhQuests.saved(p);
+        if (!saved.contains(GOUW) || !level.dimension().identifier().toString().equals(saved.getStringOr(GOUW_DIM, ""))) {
+            return null;
+        }
+        return BlockPos.of(saved.getLongOr(GOUW, 0L));
     }
 
     /** Open ground a few steps from this spot: a block with two free cells above it, not a fluid, not the portal itself. */

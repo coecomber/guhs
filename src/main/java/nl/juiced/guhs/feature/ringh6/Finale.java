@@ -49,17 +49,23 @@ import nl.juiced.guhs.registry.ModSounds;
  * The flow survives a logout at any point: the step only moves in a scene's {@code daarna}; the flag {@link #GEFRITUURD}
  * remembers that the first scene is over (the ring is gone for good), so a player who comes back sees the flight only.
  * <p>
- * The Eye is ring-h5's entity ({@code RingH5Feature.OOG_VAN_SAUSRON}); the scenes ask it for the animations "kijk", "eet"
- * and "slaap" of ring-kern's vocabulary and mark its spot with flames, so the story reads the same while that slice's
- * entity is still the invisible placeholder.
+ * The Eye is ring-h5's entity ({@code RingH5Feature.OOG_VAN_SAUSRON}) as an actor. That slice draws it about 8 blocks wide
+ * and 4 high with its feet 2 blocks under its middle, looking half down by itself, and knows the scene animations "slaap",
+ * "zoek" and "tevreden" (the pleased squint; any other name is its open stare): the scenes ask for "kijk" (the stare),
+ * "tevreden" and "slaap". {@link #OOG} is where its feet are: beside the gantry, in air the mountain's template carves
+ * (tools/features/ring_h6.py checks that the whole Eye fits there). Flames at its middle mark the spot, so the story reads
+ * the same on a branch where that slice's entity is still the invisible placeholder.
  */
 public final class Finale {
     /** Questline flag: the ring is fried (scene 1 is over), the flight home still has to happen. */
     public static final String GEFRITUURD = "gefrituurd";
     /** The frituur in the middle of the frying basket (its surface), and a little above it. */
     private static final Vec3 SAUS = new Vec3(7.0, -2.0, 0.0), BOVEN_MAND = new Vec3(7.0, -0.9, 0.0);
-    /** Where the Eye looks in from: high in the crater, beside the gantry, under the smoke hole. */
-    private static final Vec3 OOG = new Vec3(11.0, 13.0, -6.0);
+    /** Where the Eye looks in from (its feet): high in the crater, beside the gantry, under the smoke hole. It faces the balcony. */
+    private static final Vec3 OOG = new Vec3(12.0, 13.0, -6.0);
+    private static final float OOG_YAW = 60f;
+    /** The middle of the Eye, and just over its upper lid. */
+    private static final Vec3 OOG_MIDDEN = OOG.add(0, 2.0, 0), OOG_BOVEN = OOG.add(0, 4.5, 0);
 
     public static Cutscene FRITUUR, VLUCHT, FEEST;
 
@@ -76,7 +82,7 @@ public final class Finale {
                 .guh("sam", GuhVariant.SAM_GUH, new Vec3(-1.6, 0, 2.2), -90)
                 .acteur("smikagol", RingFeature.SMIKAGOL, new Vec3(-0.5, 0, -3.2), -60)
                 .acteur("krokant", RingH6Feature.KROKANTE_SMIKAGOL, new Vec3(7.0, -9.0, 0.0), 90)
-                .acteur("oog", RingH5Feature.OOG_VAN_SAUSRON, OOG, 60);
+                .acteur("oog", RingH5Feature.OOG_VAN_SAUSRON, OOG, OOG_YAW);
         // 1. the crater
         b.zwart(0, 20)
                 .camera(0, new Vec3(-1.0, 7.0, -3.0), new Vec3(6.0, -1.5, 0.5)).camera(90, new Vec3(-1.5, 2.4, 3.2), new Vec3(4.0, -0.5, 0.0))
@@ -133,13 +139,13 @@ public final class Finale {
                 .geluid(1072, () -> ModSounds.GUH_EAT.get(), 1.0f, 1.3f)
                 .zeg(1056, "", "iedereen", 80);
         // 7. the Eye gets a piece, blinks and naps
-        b.cameraKnip(1140, new Vec3(-1.6, 1.4, 0.5), OOG.add(0, -1.0, 0)).camera(1440, new Vec3(-1.2, 1.2, 0.5), OOG)
-                .animatie("oog", 1140, "kijk").deeltjes(1141, ParticleTypes.FLAME, OOG, 50, 1.6).deeltjes(1170, ParticleTypes.FLAME, OOG, 30, 1.6)
+        b.cameraKnip(1140, new Vec3(-1.6, 1.4, 0.5), OOG_MIDDEN.add(0, -1.5, 0)).camera(1440, new Vec3(-1.2, 1.2, 0.5), OOG_MIDDEN)
+                .animatie("oog", 1140, "kijk").deeltjes(1141, ParticleTypes.FLAME, OOG_MIDDEN, 50, 2.2).deeltjes(1170, ParticleTypes.FLAME, OOG_MIDDEN, 30, 2.2)
                 .zeg(1142, "", "oog", 85)
                 .zeg(1230, "krokant", "voor_oog", 55).animatie("krokant", 1230, "wijs")
-                .deeltjes(1236, ParticleTypes.WAX_ON, new Vec3(5.0, 5.0, -2.0), 10, 0.4).deeltjes(1244, ParticleTypes.WAX_ON, new Vec3(8.5, 10.0, -4.5), 10, 0.4)
-                .animatie("oog", 1290, "eet").zeg(1292, "", "oog_eet", 70).deeltjes(1300, ParticleTypes.HEART, OOG.add(0, -1.5, 0), 6, 1.0)
-                .animatie("oog", 1368, "slaap").zeg(1370, "", "dutje", 75).deeltjes(1390, ParticleTypes.CAMPFIRE_COSY_SMOKE, OOG.add(0, 1, 0), 4, 0.5)
+                .deeltjes(1236, ParticleTypes.WAX_ON, new Vec3(5.5, 6.0, -2.4), 10, 0.4).deeltjes(1244, ParticleTypes.WAX_ON, new Vec3(9.5, 11.5, -4.6), 10, 0.4)
+                .animatie("oog", 1290, "tevreden").zeg(1292, "", "oog_eet", 70).deeltjes(1300, ParticleTypes.HEART, OOG_BOVEN, 6, 1.6)
+                .animatie("oog", 1368, "slaap").zeg(1370, "", "dutje", 75).deeltjes(1390, ParticleTypes.CAMPFIRE_COSY_SMOKE, OOG_BOVEN, 4, 0.8)
                 .zwart(1445, 1470);
         return b.registreer();
     }
@@ -149,7 +155,7 @@ public final class Finale {
                 .speler(new Vec3(1.5, 0, 0.5), -90)
                 .guh("sam", GuhVariant.SAM_GUH, new Vec3(0.4, 0, 2.2), -90)
                 .acteur("krokant", RingH6Feature.KROKANTE_SMIKAGOL, new Vec3(2.3, 0, -0.6), 0)
-                .acteur("oog", RingH5Feature.OOG_VAN_SAUSRON, OOG, 60)
+                .acteur("oog", RingH5Feature.OOG_VAN_SAUSRON, OOG, OOG_YAW)
                 .acteur("kleintje", RingH6Feature.ROOKGUH, new Vec3(8.0, 22.0, -1.0), 90)
                 .acteur("kleintje2", RingH6Feature.ROOKGUH, new Vec3(6.5, 23.0, 1.5), 90)
                 .acteur("kleintje3", RingH6Feature.ROOKGUH, new Vec3(9.0, 24.0, 0.5), 90)

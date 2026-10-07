@@ -724,6 +724,26 @@ def check(b):
     return problems
 
 
+def oog_vrij(b, voeten, yaw):
+    """What is in the way of the Eye of Sausron in the finale (feature/ringh6/Finale.OOG; ring-h5 draws its entity about 8
+    blocks wide and 4 high, its feet 2 blocks under its middle). `voeten` is the scene position of its feet (relative to the
+    spot "rand"), `yaw` the way it faces. Every cell of its box must be air that the TEMPLATE carves: a cell the template
+    leaves alone may be solid rock in a real copy."""
+    cx, cy, cz = RAND[0] + 0.5 + voeten[0], RAND[1] + voeten[1] + 2.0, RAND[2] + 0.5 + voeten[2]
+    a = math.radians(yaw)
+    kijk, dwars = (-math.sin(a), math.cos(a)), (math.cos(a), math.sin(a))
+    problems = []
+    for x in range(int(cx) - 6, int(cx) + 7):
+        for y in range(int(cy) - 3, int(cy) + 4):
+            for z in range(int(cz) - 6, int(cz) + 7):
+                px, py, pz = x + 0.5 - cx, y + 0.5 - cy, z + 0.5 - cz
+                if abs(px * dwars[0] + pz * dwars[1]) <= 4.5 and abs(py) <= 2.5 and abs(px * kijk[0] + pz * kijk[1]) <= 2.5:
+                    n = _naam(b, (x, y, z))
+                    if n != AIR:
+                        problems.append(f"the Eye of the finale would hang in {n or 'rock the template does not carve'} at {(x, y, z)}")
+    return problems[:6]
+
+
 # =====================================================================================================================
 # the test mountain (RingH6GameTests): the same named spots on one floor
 # =====================================================================================================================

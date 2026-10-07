@@ -15,6 +15,7 @@ sector 13 of the ring 500-900 instead, so a dev world of this branch has a mount
 """
 import json
 import os
+import re
 
 from PIL import Image
 
@@ -160,6 +161,16 @@ def selfcheck(h, b):
         staat = blocks.get(cel, (None,))[0]
         if staat is None or (naam is not None and staat != naam) or (naam is None and staat in ("minecraft:air",)):
             problems.append(f"the finale expects {naam or 'a floor'} at {cel}, there is {staat}")
+    # ...and the Eye of Sausron hangs beside the gantry: its whole box is air of the template (the spot is read from the scene)
+    finale = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "ringh6", "Finale.java")
+    if os.path.exists(finale):
+        bron = open(finale, encoding="utf-8").read()
+        oog = re.search(r"Vec3 OOG = new Vec3\(([-\d.]+), ([-\d.]+), ([-\d.]+)\);", bron)
+        yaw = re.search(r"float OOG_YAW = ([-\d.]+)f;", bron)
+        if not oog or not yaw:
+            problems.append("Finale.java no longer says where the Eye hangs (OOG, OOG_YAW)")
+        else:
+            problems += bouw.oog_vrij(b, tuple(float(v) for v in oog.groups()), float(yaw.group(1)))
     java = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "ringh6", "RingH6Feature.java")
     if os.path.exists(java):
         bron = open(java, encoding="utf-8").read()

@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -393,6 +394,19 @@ public final class RingH6GameTests {
         GuhQuests.saved(p).putLong(Thuis.THUIS, kamp.asLong());
         Doel doel = RingH6Feature.LIJN.doel(p);
         helper.assertTrue(doel != null && kamp.equals(doel.plek()) && doel.dim() == level.dimension(), "step 6 points at home");
+        // the player's own Gouw (chapter 1 wrote it down) comes first, but only when it is in the level of the feast
+        CompoundTag saved = GuhQuests.saved(p);
+        helper.assertTrue(Thuis.gouw(p, level) == null, "no Gouw known yet");
+        BlockPos gouw = berg.wereld("richel_1");
+        saved.putLong("guhs_ringh1_thuis", gouw.asLong());
+        saved.putString("guhs_ringh1_thuis_dim", "guhs:ergens_anders");
+        helper.assertTrue(Thuis.gouw(p, level) == null, "a Gouw in another dimension is not home here");
+        saved.putString("guhs_ringh1_thuis_dim", level.dimension().identifier().toString());
+        helper.assertTrue(gouw.equals(Thuis.gouw(p, level)), "the Gouw of chapter 1 is home");
+        Thuis.testPlek = null;
+        BlockPos bij = Thuis.plek(p);
+        helper.assertTrue(bij != null && bij.closerThan(gouw, 12) && level.getBlockState(bij.below()).blocksMotion(),
+                "the Rookguhs put the player down next to their Gouw: " + bij + " / " + gouw);
         weg(helper, p);
         helper.succeed();
     }
