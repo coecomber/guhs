@@ -25,6 +25,7 @@ import nl.juiced.guhs.feature.ring.RingFeature;
 import nl.juiced.guhs.feature.ring.Sam;
 import nl.juiced.guhs.feature.ring.Smikagol;
 import nl.juiced.guhs.feature.ring.SmikagolEntity;
+import nl.juiced.guhs.feature.ringknipoog.Knipogen;
 import nl.juiced.guhs.feature.verhaal.Duwtje;
 import nl.juiced.guhs.feature.verhaal.Rustpunten;
 import nl.juiced.guhs.feature.verhaal.Sluiers;
@@ -384,7 +385,8 @@ public final class Klim {
         }
         int stap = lijn.stap(p);
         if (stap == 4) {
-            return draag(p, berg) ? InteractionResult.SUCCESS : InteractionResult.PASS;
+            // (ring-knipogen: the first time Boris the goose has something to say first; Sam-guh carries right after it)
+            return Knipogen.boris(p, berg.wereld("richel_3"), berg.draai(), q -> draag(q, berg)) ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
         if (Ring.zwaarte(p) < Sam.DRAAG_VANAF) {
             return InteractionResult.PASS;                    // (light enough: his usual small talk)
