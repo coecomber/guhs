@@ -429,7 +429,11 @@ public class VerhaalMotorGameTests {
         helper.assertTrue(p.blockPosition().equals(Doelen.portaal(p)) && p.blockPosition().equals(Doelen.wijs(p)), "it points at the portal the player came through");
         l.zet(p, 3);
         VerhaalDemo.vervolg().zet(p, 1);
-        helper.assertTrue(Doelen.van(p) == null && Doelen.wijs(p) == null, "everything done: no goal");
+        // (guhpad: with no questline left to follow, "Mijn verhaal" falls back on the nearest big story that is not done:
+        // this player's are in the Guhmensie, so the compass keeps showing the portal)
+        Doel anders = Doelen.anders.apply(p);
+        helper.assertTrue(Doelen.van(p) == null && (anders == null ? Doelen.wijs(p) == null
+                : anders.dim() != level.dimension() && p.blockPosition().equals(Doelen.wijs(p))), "everything done: no goal of a questline");
         // a slice adds its structure to a tab (and the tab is as it was afterwards)
         int tab = -1;
         for (int i = 0; i < SuperkompasItem.CATEGORIES.size(); i++) {
@@ -470,6 +474,8 @@ public class VerhaalMotorGameTests {
             h1.zet(p, h1.stappen());
             h1.zet(q, h1.stappen());
         }
+        nl.juiced.guhs.feature.guhpad.GuhpadGameTests.guhmensieGedaan(p);   // (guhpad: and they followed the stories of the Guhmensie: the Guhpad's lock is open for them too)
+        nl.juiced.guhs.feature.guhpad.GuhpadGameTests.guhmensieGedaan(q);
         java.util.function.BiFunction<ServerLevel, Entity, Component> slot = (lvl, e) -> e == p ? Component.literal("nee") : null;
         helper.assertTrue(GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, p) == null, "no lock: open");
         GrillPortalBlock.SLOTEN.add(slot);

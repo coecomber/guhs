@@ -97,6 +97,9 @@ public final class RingGameTests {
     public static void ringPortaalslot(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer nieuw = speler(helper, 2, 2), bezig = speler(helper, 3, 2), klaar = speler(helper, 4, 2);
+        for (ServerPlayer p : List.of(nieuw, bezig, klaar)) {
+            nl.juiced.guhs.feature.guhpad.GuhpadGameTests.guhmensieGedaan(p);   // (guhpad: they followed the stories of the Guhmensie; that lock has its own tests)
+        }
         Ring.lijn(1).begin(bezig);
         klaarTot(klaar, 1);
         helper.assertTrue(RingFeature.PORTAAL_DICHT.equals(key(GrillPortalBlock.slot(ModDimensions.GUHMENSION, level, nieuw))), "refused: the story has not begun");

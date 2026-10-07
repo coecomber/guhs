@@ -130,9 +130,12 @@ public final class Feest {
         return Ring.doel(Gouw.STRUCTUUR);
     }
 
-    /** May this player start the story: the Grillguh's quest is done (they lit a grill portal)? */
+    /**
+     * May this player start the story: the Grillguh's quest is done (they lit a grill portal), and (guhpad) they finished
+     * every big story of the Guhmensie?
+     */
     public static boolean magBeginnen(ServerPlayer p) {
-        return Grillguh.step(p) >= Grillguh.DONE;
+        return Grillguh.step(p) >= Grillguh.DONE && nl.juiced.guhs.feature.guhpad.Guhpad.magKnabbelring(p);
     }
 
     /** (once a second per player) the story starts by itself once the Grillguh's barbecue burns: "zoek Guhdalf". */
@@ -181,7 +184,10 @@ public final class Feest {
         switch (stap) {
             case 0 -> {
                 if (!magBeginnen(p)) {
-                    GuhQuests.say(p, npc, "quest.guhs.ringh1.guhdalf.grillguh");
+                    // (guhpad: first the stories of the Guhmensie that are missing, as a list; then, as before, the Grillguh)
+                    if (!nl.juiced.guhs.feature.guhpad.Guhpad.guhdalfWeigert(npc, p) || Grillguh.step(p) < Grillguh.DONE) {
+                        GuhQuests.say(p, npc, "quest.guhs.ringh1.guhdalf.grillguh");
+                    }
                     return;
                 }
                 l.begin(p);

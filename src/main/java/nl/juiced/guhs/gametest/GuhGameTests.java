@@ -1859,9 +1859,13 @@ public class GuhGameTests {
                 int locks = (int) java.util.regex.Pattern.compile("(?m)^\\s*\"?dependencies\"?\\s*:").matcher(chapter).results().count();
                 if (name.equals("guhs_maag")) {
                     helper.assertTrue(locks == 5, "the five stomach sizes come after each other, not " + locks);
-                } else if (name.equals("guhs_knabbelring")) {
-                    // (bbq2: the one story that is told in order: its quests really depend on each other, FTB_LINEAIR)
+                } else if (name.equals("guhs_pad_barbecuether")) {
+                    // (bbq2: the one story that is told in order: its quests really depend on each other, FTB_LINEAIR;
+                    // guhpad: it is the first half of the chapter "Verhalen van de Guhbarbecuether" now)
                     helper.assertTrue(locks >= 1, "the Knabbelring is told in order");
+                } else if (name.equals("guhs_pad_echt")) {
+                    // (guhpad: a preview nobody can do yet: everything hangs behind its lock quest)
+                    helper.assertTrue(locks == 8, "Het echte Guheinde is locked: " + locks);
                 } else {
                     helper.assertTrue(locks == 0, name + " has " + locks + " locked quests");
                 }
@@ -1886,16 +1890,20 @@ public class GuhGameTests {
             helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.installInto(quests), "installs the first time");
             java.util.List<String> names = nl.juiced.guhs.compat.FtbQuestsChapter.chapters();
             helper.assertTrue(names.equals(java.util.List.of("guhs_basis", "guhs_guhmensie", "guhs_minigames", "guhs_onderwater", "guhs_maag",
-                    "guhs_guheinde", "guhs_barbecuether", "guhs_extra27", "guhs_knuffeldal", "guhs_piep", "guhs_band", "guhs_verhalen", "guhs_diertjes",
-                    "guhs_guhpixel", "guhs_techniek", "guhs_knabbelring", "guhs_guhrio")),
-                    "the seventeen chapters (3.0: Guhverhalen, Diertjes van de Guhmensie; guhpixel: Guhpixel; bbq2: Guh-technologie, de Knabbelring, "
-                            + "Super Guhrio), in reading order: " + names);
+                    "guhs_barbecuether", "guhs_extra27", "guhs_knuffeldal", "guhs_piep", "guhs_band", "guhs_diertjes",
+                    "guhs_guhpixel", "guhs_techniek", "guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_pad_echt")),
+                    "the seventeen chapters (3.0: Diertjes van de Guhmensie; guhpixel: Guhpixel; bbq2: Guh-technologie), in reading order, and "
+                            + "(guhpad) the four chapters of the group Het Guhpad at the end: the stories of the Guhmensie (3.0's Guhverhalen), of the "
+                            + "Guhbarbecuether (bbq2: the Knabbelring and Super Guhrio), of the Guheinde, and Het echte Guheinde: " + names);
+            java.util.Set<String> guhpad = java.util.Set.of("guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_pad_echt");
             for (String name : names) {
                 helper.assertTrue(java.nio.file.Files.exists(quests.resolve("chapters").resolve(name + ".json5")), "chapter " + name + " is there");
                 // 1.2.0: Dutch in nl_nl, English in en_us (the shipped file; keys without English yet stay Dutch), the same keys in both
                 String nl = java.nio.file.Files.readString(quests.resolve("lang").resolve("nl_nl").resolve("chapters").resolve(name + ".json5"));
                 String en = java.nio.file.Files.readString(quests.resolve("lang").resolve("en_us").resolve("chapters").resolve(name + ".json5"));
-                helper.assertTrue(nl.contains("Hoe kom je hier?"), "the Dutch texts of " + name + " in nl_nl");
+                // (guhpad: a chapter of the Guhpad starts with its lock quest in the place of "Hoe kom je hier?")
+                helper.assertTrue(nl.contains(guhpad.contains(name) ? "chapter_subtitle" : "Hoe kom je hier?") && nl.contains("\"quest."),
+                        "the Dutch texts of " + name + " in nl_nl");
                 helper.assertTrue(en.equals(ftbResource("ftbquests/lang/en_us/" + name + ".json5")) && nl.equals(ftbResource("ftbquests/lang/nl_nl/" + name + ".json5")),
                         "the texts of " + name + " are the shipped ones, per language");
                 helper.assertTrue(ftbLangKeys(en).equals(ftbLangKeys(nl)) && !ftbLangKeys(nl).isEmpty(), "every text of " + name + " is in both languages");
@@ -1905,6 +1913,7 @@ public class GuhGameTests {
             helper.assertTrue(g.contains("0123456789ABCDEF") && java.util.regex.Pattern.compile("id: \"475548[0-9A-F]{10}\"").matcher(g).find()
                     && g.indexOf("475548") > g.indexOf("icon: [1, 2]") && g.trim().endsWith("}") && g.contains("},\n    {"),
                     "our group is added after the pack's own: " + g);
+            helper.assertTrue(g.split("id: \"475548", -1).length - 1 == 2, "(guhpad) both our groups, Guhs and Het Guhpad: " + g);
             for (String locale : nl.juiced.guhs.compat.FtbQuestsChapter.LOCALES) {
                 String basis = java.nio.file.Files.readString(quests.resolve("lang").resolve(locale).resolve("chapters").resolve("guhs_basis.json5"));
                 helper.assertTrue(basis.contains("chapter_group.475548"), "group title with the first chapter in " + locale);
@@ -2005,7 +2014,9 @@ public class GuhGameTests {
                     helper.assertTrue(quests.add(m.group(1)) && chapter.contains("id: \"" + m.group(1) + "\""), "quest " + m.group(1) + " once, in " + name);
                     n++;
                 }
-                helper.assertTrue(n > 0 && lang.contains("Hoe kom je hier?"), name + " has quests and a Hoe kom je hier?");
+                // (guhpad: a chapter of the Guhpad has its lock quest in that place)
+                helper.assertTrue(n > 0 && (lang.contains("Hoe kom je hier?") || name.equals("guhs_verhalen") || name.startsWith("guhs_pad_")
+                        || name.equals("guhs_guheinde")), name + " has quests and a Hoe kom je hier?");
                 java.util.regex.Matcher l = java.util.regex.Pattern.compile("linked_quest: \"([0-9A-F]{16})\"").matcher(chapter);
                 while (l.find()) {
                     links.add(l.group(1));
@@ -2015,7 +2026,8 @@ public class GuhGameTests {
                     helper.assertTrue(nl.juiced.guhs.compat.FtbQuestsChapter.class.getClassLoader().getResource("assets/guhs/" + img.group(1)) != null,
                             "picture " + img.group(1));
                 }
-                boolean verhaal = name.equals("guhs_knabbelring");   // (bbq2: the one story told in order, FTB_LINEAIR)
+                // (bbq2: the one story told in order, FTB_LINEAIR; guhpad: in the chapter "Verhalen van de Guhbarbecuether")
+                boolean verhaal = name.equals("guhs_pad_barbecuether");
                 linear += verhaal ? 0 : chapter.split("progression_mode: \"linear\"", -1).length - 1;
                 helper.assertTrue(name.equals("guhs_maag") || verhaal || !chapter.contains("\"linear\""), name + ": nothing locked");
             }

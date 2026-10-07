@@ -53,6 +53,9 @@ public class GuheindePortaalBlock extends Block implements Portal {
 
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+        if (level instanceof ServerLevel server && entity.canUsePortal(false) && nl.juiced.guhs.feature.guhpad.Guhpad.guheindeGeweigerd(server, entity)) {
+            return;   // (guhpad: the Guheinde is still locked for this player; the way back is never asked)
+        }
         if (entity.canUsePortal(false) && Shapes.joinIsNotEmpty(Shapes.create(entity.getBoundingBox().move(-pos.getX(), -pos.getY(), -pos.getZ())),
                 state.getShape(level, pos), BooleanOp.AND)) {
             entity.setAsInsidePortal(this, pos);
@@ -62,6 +65,9 @@ public class GuheindePortaalBlock extends Block implements Portal {
     @Nullable
     @Override
     public TeleportTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
+        if (nl.juiced.guhs.feature.guhpad.Guhpad.guheindeSlot(level, entity) != null) {
+            return null;   // (guhpad: locked; entityInside already said why)
+        }
         return GuheindeReis.portalDestination(level, entity, pos);
     }
 

@@ -129,6 +129,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhriow2.GuhrioW2Feature.register(modBus);
         nl.juiced.guhs.feature.guhriow3.GuhrioW3Feature.register(modBus);
         nl.juiced.guhs.feature.guhriobeloning.GuhrioBeloningFeature.register(modBus);
+        nl.juiced.guhs.feature.guhpad.GuhpadFeature.register(modBus);   // --- verhalenpad: het Guhpad ---
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -233,6 +234,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhriow2.GuhrioW2Feature.payloads(registrar);
         nl.juiced.guhs.feature.guhriow3.GuhrioW3Feature.payloads(registrar);
         nl.juiced.guhs.feature.guhriobeloning.GuhrioBeloningFeature.payloads(registrar);
+        nl.juiced.guhs.feature.guhpad.GuhpadFeature.payloads(registrar);   // --- verhalenpad: het Guhpad ---
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -339,6 +341,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhriow2.GuhrioW2Feature.creative(output);
         nl.juiced.guhs.feature.guhriow3.GuhrioW3Feature.creative(output);
         nl.juiced.guhs.feature.guhriobeloning.GuhrioBeloningFeature.creative(output);
+        nl.juiced.guhs.feature.guhpad.GuhpadFeature.creative(output);   // --- verhalenpad: het Guhpad ---
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */
