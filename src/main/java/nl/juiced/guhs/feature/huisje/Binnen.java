@@ -328,6 +328,7 @@ public final class Binnen {
                 : Component.translatable("gui.guhs.huisje.binnen.welkom_gast", h.naamTekst(), h.eigenaarNaam.isEmpty() ? "?" : h.eigenaarNaam))
                 .withStyle(ChatFormatting.LIGHT_PURPLE));
         GuhAdvancements.grant(p, "huisje_binnen");
+        nl.juiced.guhs.feature.gids.GidsFeature.grant(p, "lieve_vadsjes/huisje_binnen");
         ACTIEF.add(h.cel);
         BinnenInrichting.ververs(level, h, k, true);
         return true;

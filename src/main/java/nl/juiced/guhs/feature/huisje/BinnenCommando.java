@@ -81,8 +81,11 @@ public final class BinnenCommando {
         }));
         huisje.then(Commands.literal("zelftest").executes(ctx -> {
             List<String> regels = zelftest(ctx.getSource().getServer());
+            boolean console = ctx.getSource().getEntity() == null;
             for (String regel : regels) {
-                LOGGER.info(regel);
+                if (!console) {
+                    LOGGER.info(regel);   // (the console prints what it is told already)
+                }
                 ctx.getSource().sendSuccess(() -> Component.literal(regel), false);
             }
             return regels.get(regels.size() - 1).contains(" 0 FOUT") ? 1 : 0;

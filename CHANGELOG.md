@@ -3,6 +3,17 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.3.2 — Minecraft 26.1.2
+
+One new thing: you can go inside your Guh Houses. Same requirements as 1.3.1 and no worldgen changes. The rooms are in a new hidden dimension that the game adds by itself: players do not have to do anything, and existing worlds and servers keep everything (no world reset). Every Guh House that already stands gets its room the first time somebody goes in.
+
+- **New: go inside a Guhhuisje (Guh House).** The house screen has a new button, **Naar binnen (Go inside)**, for the owner and for visitors. Ding-dong, a short fade, and you stand on the doormat of a snug little room on guh scale: the ceiling is low, the beds are tiny and you are suddenly very big. The door inside brings you back to just in front of the house. Small, medium and large houses each have their own room with three, five or eight beds.
+- **Everybody has a bed.** Each resident has its own little bed with a name sign, its favourite thing on the bedside table (a favourite you have discovered; a kaasknabbel until then) and a hook for its clothes. At night the residents lie asleep in their beds, softly snoring. Is somebody away? Then the bed is empty and a little note says where your guh is: playing outside, doing a chore (and which one), on holiday, along with you, at the Guhkantoor, in the Guhkamer or on the Guh-parkour. The beds follow when residents move in or out.
+- **Somebody is home by day now and then.** Babies take a midday nap in the house and stay in when it rains; of the grown-up residents one in six takes the nap and one in four shelters from the rain (a different few every day). They never drop a chore for it and come out again afterwards.
+- **For the owner:** tuck a sleeping guh in (the blanket goes up, a heart, and it sleeps on; once per guh per night), pet it softly, click a bed or name sign to open that guh's dagboekje (Diary) with its hearts and favourites, and read the prikbord (notice board) to see who does which chore. The hearts go to your real guh, also when it is far away at that moment. Visitors may walk around and look; the rest is for the owner.
+- **Sleep among your guhs.** The pink logeerbedje (guest bed) is for you. Sleeping in it counts as sleeping in the world the house stands in: the night is skipped with the usual sleeping rule there, the phantom timer is reset, and your spawn point does not change.
+- **Safe, as always.** Nothing can be broken, placed, hurt or lost in a room, you do not get hungry there, and if you ever end up outside the room you are put back on the doormat. If the house is picked up while you are inside, you simply stand where it stood. The guhs you see inside are sleepy stand-ins: your real guhs stay exactly where they are.
+
 ## 1.3.1 — Minecraft 26.1.2
 
 A small follow-up to the Guhpixel update. Same requirements as 1.3.0, no worldgen changes.

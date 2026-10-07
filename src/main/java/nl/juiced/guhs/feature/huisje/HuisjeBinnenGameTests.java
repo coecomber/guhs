@@ -310,6 +310,39 @@ public class HuisjeBinnenGameTests {
         helper.succeed();
     }
 
+    /** Point 4: by day a resident with nothing to finish goes home (a nap, the rain) and comes out again afterwards. */
+    @GuhTest(template = VELD, batch = BATCH, timeoutTicks = 600)
+    public static void binnenOverdagThuis(GameTestHelper helper) {
+        ServerPlayer p = HuisjeGameTests.speler(helper, new BlockPos(20, 2, 20));
+        ServerLevel level = helper.getLevel();
+        Huisje h = huis(helper, HuisjeMaat.KLEIN, p);
+        HuisjeGoal.TEST_DAGDEEL.put(h.pos(), Dagdeel.DAG);
+        GuhEntity guh = HuisjeGameTests.guh(helper, p, new BlockPos(5, 2, 8));
+        helper.assertTrue(Huisjes.trekIn(h, guh), "moves in");
+        helper.assertTrue(!HuisjeGoal.dagThuis(level, h, guh), "an ordinary day: outside");
+        java.util.concurrent.atomic.AtomicInteger fase = new java.util.concurrent.atomic.AtomicInteger();
+        helper.runAfterDelay(20, () -> {
+            helper.assertTrue(!Huisjes.isBinnen(guh), "by day it is outside");
+            HuisjeGoal.TEST_THUIS.add(h.pos());
+            fase.set(1);
+        });
+        helper.onEachTick(() -> {
+            if (fase.get() == 1 && Huisjes.isBinnen(guh)) {
+                helper.assertTrue(Binnen.betreed(p, h), "the owner looks inside");
+                helper.assertTrue(BinnenInrichting.slots(level.getServer(), h).get(0).waar() == BinnenInrichting.Waar.SLAAPT, "and finds it asleep in its bed by day");
+                Binnen.naarBuiten(p, null);
+                HuisjeGoal.TEST_THUIS.remove(h.pos());
+                fase.set(2);
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(fase.get() == 2, "went home by day");
+            helper.assertTrue(!Huisjes.isBinnen(guh) && !guh.isInvisible() && Huisjes.isBewoner(guh), "and came out again when the nap was over");
+            HuisjeGoal.TEST_THUIS.remove(h.pos());
+            klaar(helper, h, p);
+        });
+    }
+
     @GuhTest(template = VELD, batch = BATCH)
     public static void binnenSlapersRekenen(GameTestHelper helper) {
         helper.assertTrue(BinnenSlaap.nodig(1, 100) == 1 && BinnenSlaap.nodig(3, 100) == 3 && BinnenSlaap.nodig(3, 50) == 2 && BinnenSlaap.nodig(4, 50) == 2

@@ -889,6 +889,22 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | Bleke open plek / De Bleke Open Plek | Pale Clearing / The Pale Clearing | |
 | Houthakkershutje / Houthakkerguh | Woodcutter's Hut / Woodcutter Guh | |
 
+## 22b. Inside the Guh House
+
+| Dutch | English | Note |
+|---|---|---|
+| Naar binnen | Go inside | the button in the Guh House screen |
+| Kijk eens binnen | Have a Look Inside | the quest and the advancement |
+| guhbedje / bedje | Guh Bed / little bed | one per resident |
+| logeerbedje | guest bed | the pink bed the player sleeps in |
+| prikbord | notice board | who does which chore |
+| instoppen | tuck in | once per guh per night |
+| briefje | note | on the bed of a guh that is away |
+| deurmat | doormat | |
+| snoetdeurtje | snoot door | as in the other Guh House texts |
+| het baasje | my human | on a guh's note |
+| Huisjesraampje | Little House Window | the painted window |
+
 ## 23. Guhpixel (lobby, minigames, things for home, Reisbureau, Guh-parkour)
 
 ### kern

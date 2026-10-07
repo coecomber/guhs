@@ -2384,6 +2384,22 @@ def lieve_vadsjes_section():
              "<b>Waar de buit heen gaat</b>: een <b>Bank Guh</b> in de buurt sorteert alles; anders een kist naast het huisje; anders komt het voor de deur te liggen."),
             ("Babies and sitting guhs don't do chores; they just live there and play. Break the huisje and the residents are free again (nothing is lost).",
              "Baby's en zittende guhs doen geen klusjes; ze wonen er gewoon gezellig en spelen. Breek je het huisje af, dan zijn de bewoners weer vrij (er gaat niks verloren).")]) + \
+        p("<b>Going inside</b>: press <i>Naar binnen</i> in the huisje screen (your own huisje or somebody else's). Ding-dong, and you stand on the doormat of a "
+          "snug little room on guh scale, where you are suddenly very big. Every resident has its own little bed with a name sign, its favourite thing on the "
+          "bedside table and its clothes on a hook. At night they lie asleep in their beds, and now and then somebody is home by day too (a midday nap, or "
+          "sheltering from the rain); an empty bed has a note that says where its guh is. In your own huisje you can <b>tuck a sleeper in</b> (once a night, a "
+          "few hearts for the real guh), pet it softly, click a bed for its dagboekje and read the <b>prikbord</b> with everybody's chores; visitors may only "
+          "look. The pink <b>logeerbedje</b> is for you: sleeping there counts as sleeping in the world outside (the night is skipped, your spawn point "
+          "stays). The door brings you back in front of the huisje. Nothing can be broken, hurt or lost inside, and the guhs you see there are sleepy "
+          "stand-ins: your real guhs stay where they are.",
+          "<b>Naar binnen</b>: druk in het huisjesscherm op <i>Naar binnen</i> (bij je eigen huisje of dat van een ander). Ding-dong, en je staat op de deurmat "
+          "van een knus kamertje op guhmaat, waar jij ineens heel groot bent. Elke bewoner heeft een eigen bedje met een naambordje, zijn lievelingsding op het "
+          "kastje en zijn kleren aan een haakje. 's Nachts liggen ze in hun bedje te slapen, en overdag is er af en toe ook iemand thuis (een middagdutje, of "
+          "schuilen voor de regen); op een leeg bedje ligt een briefje waar die guh is. In je eigen huisje kun je een slaper <b>instoppen</b> (een keer per "
+          "nacht, een paar hartjes voor de echte guh), zachtjes aaien, op een bedje klikken voor het dagboekje en het <b>prikbord</b> lezen met ieders klusjes; "
+          "bezoekers mogen alleen kijken. Het roze <b>logeerbedje</b> is voor jou: daar slapen telt als slapen in de wereld buiten (de nacht gaat voorbij, je "
+          "spawnpunt blijft). De deur brengt je terug voor het huisje. Binnen kan niks stuk, pijn doen of kwijtraken, en de guhs die je er ziet zijn slaperige "
+          "dubbelgangers: je echte guhs blijven waar ze zijn.") + \
         gallery(fig("shot210_huisje_groot", "Groot, with residents", "Groot, met bewoners", "A resident walks home.", "Een bewoner loopt naar huis."),
                 fig("shot210_huisje_groot_nacht", "At night", "'s Nachts", "Everyone inside, lights in the eyes. Zzz...", "Iedereen binnen, licht in de oogjes. Zzz..."),
                 fig("shot210_huisjes_voor", "Three sizes", "Drie maten", "Klein, medium and groot in a row.", "Klein, medium en groot op een rij."))

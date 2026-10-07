@@ -118,8 +118,9 @@ def template(h, maat):
     ramen = [(0, 2, d - 1), (X - 1, 2, d - 1), (dx - 2, 2, d + 1), (dx + 2, 2, d + 1)]
     if p["west"] == 0:
         ramen += [(0, 2, 3), (X - 1, 2, 3)]
+    achter_prikbord = (k["prikbord"][0], 2, d + 1)
     for r in ramen:
-        if s.get(*r) == MUUR:
+        if s.get(*r) == MUUR and r != achter_prikbord:
             s.set(*r, "guhs:huisje_raam")
     # the pink lamp(s) in the ceiling
     for x in ((X // 2,) if w <= 7 else (X // 2 - 2, X // 2 + 2)):
@@ -250,7 +251,6 @@ TEXTS = {
     "gui.guhs.huisje.binnen.huisje_weg": "Het huisje staat er niet meer! Je staat weer buiten, njeg.",
     "gui.guhs.huisje.binnen.op_de_mat": "Hup, terug op de deurmat, njeg!",
     "gui.guhs.huisje.binnen.niet_hier": "Hier kom je alleen door het snoetdeurtje van een Guhhuisje, njeg.",
-    "gui.guhs.huisje.binnen.netjes": "Hier blijft alles netjes staan, njeg!",
     # looking around
     "gui.guhs.huisje.binnen.van_wie": "Dit is het huisje van %s, njeg. Kijken mag, aankomen niet!",
     "gui.guhs.huisje.binnen.instoppen": "Je stopt %s lekker in. Welterusten, njeg! ♥",

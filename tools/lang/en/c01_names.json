@@ -1752,5 +1752,10 @@
   "block.guhs.guhwaii_palm_poort": "Guh Palm Fence Gate",
   "block.guhs.guhwaii_palm_deur": "Guh Palm Door",
   "block.guhs.guhwaii_palm_luik": "Guh Palm Trapdoor",
-  "block.guhs.guhwaii_palm_bord": "Guh Palm Sign"
+  "block.guhs.guhwaii_palm_bord": "Guh Palm Sign",
+  "block.guhs.huisje_bedje": "Guh Bed",
+  "block.guhs.huisje_raam": "Little House Window",
+  "entity.guhs.huisje_slaper": "Sleeping Guh",
+  "dimension.guhs.huisje_binnen": "Inside a Guh House",
+  "subtitles.guhs.huisje.bel": "Ding-dong, nyeg"
 }
