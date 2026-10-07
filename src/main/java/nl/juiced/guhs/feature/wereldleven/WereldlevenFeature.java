@@ -80,6 +80,9 @@ public final class WereldlevenFeature {
     static {
         List<String> ids = new ArrayList<>();
         for (GuhVariant v : GuhVariant.values()) {
+            if (v.isBioGuh()) {
+                continue;   // biomes3: the Bloesemguh and the Tanukiguh have no plush (the complete knuffelkast stays what it was)
+            }
             if (!v.isCharacter() && !v.isVerhaalGuh()) {   // (3.0: the story guhs have no plush; tools/features/wereldleven.py KNUFFEL_IDS)
                 ids.add(v.name().toLowerCase(Locale.ROOT));
             }

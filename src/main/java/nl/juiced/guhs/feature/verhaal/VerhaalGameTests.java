@@ -488,8 +488,9 @@ public class VerhaalGameTests {
             helper.assertTrue(c.isCharacter() && c.npcKind() == null, c + ": a creature page");
         }
         helper.assertTrue(GuhDex.ENTRIES.get(GuhDex.ENTRIES.size() - 1) == GuhVariant.values()[GuhVariant.values().length - 1]
-                && GuhDex.EXTRA.equals(java.util.Set.of(GuhVariant.ROOKGUH, GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA)),
-                "appended in enum order; the bonus pages are the Rookguh and (1.2.8) the two of the Bleekwoud");
+                && GuhDex.EXTRA.equals(java.util.Set.of(GuhVariant.ROOKGUH, GuhVariant.KRAAKGUH, GuhVariant.KRAAK_MIKA,
+                        GuhVariant.BLOESEMGUH, GuhVariant.TANUKIGUH, GuhVariant.KOI, GuhVariant.WOLKENSCHAAPJE)),   // biomes3
+                "appended in enum order; the bonus pages are the Rookguh, (1.2.8) the two of the Bleekwoud and (biomes3) the four of the new biomes");
         // the range overload: a creature page seen from further away (only here when no slice registered this page yet)
         if (!GuhDex.isCreaturePage(GuhVariant.PLUISVINKJE)) {
             ServerPlayer p = speler(helper, new BlockPos(1, 1, 1));

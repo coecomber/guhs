@@ -570,6 +570,9 @@ public class WereldlevenGameTests {
                     && ids.contains("pinguh"), "21 variants + glitter: " + ids);
             int echte = 0;
             for (GuhVariant v : GuhVariant.values()) {
+                if (v.isBioGuh()) {
+                    continue;   // biomes3: no plush for the Bloesemguh and the Tanukiguh
+                }
                 if (!v.isCharacter() && !v.isVerhaalGuh()) {   // (3.0: the story guhs have no plush)
                     echte++;
                     helper.assertTrue(ids.contains(v.id()), "a plushie for " + v.id());
