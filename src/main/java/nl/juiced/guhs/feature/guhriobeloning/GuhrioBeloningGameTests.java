@@ -204,6 +204,8 @@ public class GuhrioBeloningGameTests {
         helper.assertTrue(b.equals(Pijpreis.partner(level, a)) && a.equals(Pijpreis.partner(level, b)) && Pijpreis.partner(level, rood) == null,
                 "green goes to green, the red one leads nowhere");
         ServerPlayer p = speler(helper, new BlockPos(1, 2, 1));
+        // (a player whose client never said "loaded" can't be hurt at all: this one is loaded, so the pipe is what protects them)
+        p.connection.handleAcceptPlayerLoad(new net.minecraft.network.protocol.game.ServerboundPlayerLoadedPacket());
         helper.assertTrue(Pijpreis.onder(p) == null, "not on a pipe");
         Pijpreis.tick(p);
         opMond(p, a);

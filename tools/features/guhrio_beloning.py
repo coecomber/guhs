@@ -68,7 +68,7 @@ BONES = {
     "outfit_guhriobeloning_pet": ("head", _H, "guhriobeloning_pet", [([-5.6, 15.0, -10.6], [11.2, 2.3, 8.8], 0), ([-4.6, 17.3, -9.8], [9.2, 1.4, 7.0], 0),
                                                                       ([-0.8, 18.7, -7.1], [1.6, 0.5, 1.6], 0)]),
     "outfit_guhriobeloning_pet_klep": ("head", _H, "guhriobeloning_pet_klep", [([-5.0, 15.0, -13.9], [10.0, 0.7, 3.5], 0)]),
-    "outfit_guhriobeloning_pet_embleem": ("head", _H, "guhriobeloning_embleem", [([-2.2, 15.05, -10.95], [4.4, 2.3, 0.4], 0)]),
+    "outfit_guhriobeloning_pet_embleem": ("head", _H, "guhriobeloning_embleem", [([-2.0, 15.1, -10.95], [4.0, 3.3, 0.4], 0)]),
     # the moustache (the red cap only): two bushy halves under the nose, the tips curl up
     "outfit_guhriobeloning_snor": ("head", _H, "guhriobeloning_snor", [([-5.6, 3.4, -13.4], [5.3, 2.1, 0.9], 0), ([0.3, 3.4, -13.4], [5.3, 2.1, 0.9], 0),
                                                                        ([-6.9, 4.4, -13.2], [1.5, 1.9, 0.8], 0), ([5.4, 4.4, -13.2], [1.5, 1.9, 0.8], 0)]),

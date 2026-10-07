@@ -55,7 +55,7 @@ def padguh(h):
         c([-5.5, 2.8, -4.4], [3.5, 0.8, 9.0], sw["zoom"], inflate=0.1), c([2.0, 2.8, -4.4], [3.5, 0.8, 9.0], sw["zoom"], inflate=0.1),
         c([-2.0, 2.2, -4.5], [4.0, 8.4, 0.5], sw["buik"])]})
     hulp.save_geo(h, f"{PADGUH}.geo.json", geo_file)
-    a = hulp.sitting_texture(h, hue=0.09, sat=0.3, val=1.06)
+    a = hulp.sitting_texture(h, hue=0.1, sat=0.5, val=1.05)
     rng = np.random.default_rng(SEED_PADGUH)
 
     def rand(block):
@@ -87,7 +87,7 @@ def perzikguh(h):
     # golden hair: a cap of hair on top, a fringe, a long lock at each side and down her back
     g["bones"].append({"name": "perzikguh_haar", "parent": "head", "pivot": [0, 24, -1], "cubes": [
         c([-6.0, 24.3, -6.6], [12.0, 1.9, 12.8], sw["haar"]),
-        c([-7.3, 21.6, -7.6], [14.6, 2.9, 0.9], sw["haar"]),
+        c([-7.3, 22.8, -7.6], [14.6, 1.7, 0.9], sw["haar"]),
         c([-8.7, 13.6, -6.2], [1.3, 10.6, 9.8], sw["haar"]), c([7.4, 13.6, -6.2], [1.3, 10.6, 9.8], sw["haar"]),
         c([-7.4, 12.0, 5.7], [14.8, 12.6, 1.2], sw["haar"]),
         c([-9.2, 11.6, -4.4], [1.6, 2.6, 3.0], sw["haar"]), c([7.6, 11.6, -4.4], [1.6, 2.6, 3.0], sw["haar"])]})
@@ -98,7 +98,7 @@ def perzikguh(h):
         c([-5.5, 10.6, -4.7], [11.0, 1.4, 9.2], sw["kraag"], inflate=0.1),
         c([-1.0, 9.0, -5.2], [2.0, 1.8, 0.6], sw["saffier"])]})
     hulp.save_geo(h, f"{PERZIKGUH}.geo.json", geo_file)
-    a = hulp.sitting_texture(h, hue=0.035, sat=0.62, val=1.04)
+    a = hulp.sitting_texture(h, hue=0.05, sat=1.15, val=1.03)
     rng = np.random.default_rng(SEED_PERZIKGUH)
 
     def glans(block):

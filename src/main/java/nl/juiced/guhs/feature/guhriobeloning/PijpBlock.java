@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
+import nl.juiced.guhs.feature.wereld.Bescherming;
 
 /**
  * The green pipe to build with (a reward of Super Guhrio, sold by Pad-guh): the pipe that really works. Stack the blocks
@@ -97,6 +98,13 @@ public class PijpBlock extends Block {
             return InteractionResult.PASS;
         }
         if (!level.isClientSide()) {
+            if (Bescherming.beschermd(level, pos) && !Bescherming.mag(player, pos)) {
+                // (a pipe of a protected building, like the pair on the castle's forecourt, keeps its colour)
+                if (player instanceof ServerPlayer sp) {
+                    sp.sendOverlayMessage(Component.translatable("gui.guhs.wereld.beschermd").withStyle(ChatFormatting.YELLOW));
+                }
+                return InteractionResult.SUCCESS;
+            }
             BlockPos.MutableBlockPos p = mond(level, pos).mutable();
             for (int i = 0; i < 128 && level.getBlockState(p).is(this); i++) {
                 level.setBlock(p, level.getBlockState(p).setValue(KLEUR, kleur), Block.UPDATE_ALL);
