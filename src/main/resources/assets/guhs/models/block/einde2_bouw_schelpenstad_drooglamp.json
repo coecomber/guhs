@@ -1,0 +1,164 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/einde2_bouw_schelpenstad_drooglamp",
+    "kap": "guhs:block/einde2_bouw_schelpenstad_drooglamp",
+    "gloed": "guhs:block/einde2_bouw_schelpenstad_drooglamp_gloed",
+    "snoer": "guhs:block/einde2_bouw_schelpenstad_drooglamp_snoer"
+  },
+  "elements": [
+    {
+      "from": [
+        7.5,
+        12,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#snoer"
+        },
+        "south": {
+          "texture": "#snoer"
+        },
+        "east": {
+          "texture": "#snoer"
+        },
+        "west": {
+          "texture": "#snoer"
+        },
+        "up": {
+          "texture": "#snoer"
+        },
+        "down": {
+          "texture": "#snoer"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        10,
+        5
+      ],
+      "to": [
+        11,
+        12,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#gloed",
+          "uv": [
+            4,
+            4,
+            12,
+            12
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        7,
+        3
+      ],
+      "to": [
+        13,
+        10,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kap"
+        },
+        "south": {
+          "texture": "#kap"
+        },
+        "east": {
+          "texture": "#kap"
+        },
+        "west": {
+          "texture": "#kap"
+        },
+        "up": {
+          "texture": "#kap",
+          "uv": [
+            0,
+            0,
+            16,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#gloed",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        5.5,
+        5.5
+      ],
+      "to": [
+        10.5,
+        7,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#gloed"
+        },
+        "south": {
+          "texture": "#gloed"
+        },
+        "east": {
+          "texture": "#gloed"
+        },
+        "west": {
+          "texture": "#gloed"
+        },
+        "up": {
+          "texture": "#gloed"
+        },
+        "down": {
+          "texture": "#gloed"
+        }
+      },
+      "shade": false
+    }
+  ]
+}

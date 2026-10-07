@@ -92,8 +92,8 @@
     },
     {
       height: 1.5625,
-      id: "4755486CE658189C",
-      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_bouw_bikinibodem.png",
+      id: "47554811371356E9",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_bouw_schelpenstad.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
@@ -1086,26 +1086,26 @@
       shape: "rsquare",
     },
     {
-      id: "475548DCC194C801",
+      id: "475548B44B8692E1",
       icon: {
-        id: "guhs:zeepbel",
+        id: "guhs:einde2_bouw_schelpenstad_schelpsteen",
       },
       tasks: [
         {
           type: "structure",
-          structure: "guhs:bikinibodem",
-          id: "4755482BE967199F",
+          structure: "guhs:schelpenstad",
+          id: "475548EDD86C88EC",
         },
       ],
       rewards: [
         {
-          id: "47554814A632C641",
+          id: "475548E626F787BC",
           type: "item",
           item: {
             count: 1,
             id: "guhs:kaas_knabbels",
           },
-          count: 12,
+          count: 10,
         },
       ],
       x: 0.0,

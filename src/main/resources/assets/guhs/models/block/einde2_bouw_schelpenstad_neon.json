@@ -1,0 +1,49 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/einde2_bouw_schelpenstad_neon_rand",
+    "beeld": "guhs:block/einde2_bouw_schelpenstad_neon",
+    "rand": "guhs:block/einde2_bouw_schelpenstad_neon_rand"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        1,
+        15
+      ],
+      "to": [
+        16,
+        15,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#beeld",
+          "uv": [
+            0,
+            1,
+            16,
+            15
+          ]
+        },
+        "south": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#rand"
+        },
+        "up": {
+          "texture": "#rand"
+        },
+        "down": {
+          "texture": "#rand"
+        }
+      },
+      "shade": false
+    }
+  ]
+}

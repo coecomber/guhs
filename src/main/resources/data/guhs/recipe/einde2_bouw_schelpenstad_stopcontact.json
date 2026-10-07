@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I",
+    "R"
+  ],
+  "key": {
+    "I": "minecraft:iron_nugget",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_schelpenstad_stopcontact",
+    "count": 2
+  }
+}

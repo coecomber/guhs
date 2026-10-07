@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PZ",
+    "ZP"
+  ],
+  "key": {
+    "P": "guhs:parelmoer",
+    "Z": "guhs:kruimelzand"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_schelpenstad_schelpsteen",
+    "count": 4
+  }
+}
