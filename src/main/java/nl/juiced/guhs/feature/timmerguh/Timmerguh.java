@@ -182,6 +182,11 @@ public final class Timmerguh implements NpcRole {
         if (TimmerguhVoortgang.stap(player) != TimmerguhVoortgang.DAK) {
             return;
         }
+        // bbq2 (oude-scenes): the first time, the roof and the first resident play as a camera scene; the rest comes after it
+        if (nl.juiced.guhs.feature.oudescenes.OudeScenes.speel(player, nl.juiced.guhs.feature.oudescenes.OudeScenes.TIMMER, npc.blockPosition(),
+                s -> dakAf(npc, s))) {
+            return;
+        }
         TimmerguhVoortgang.zet(player, TimmerguhVoortgang.BEWONER);
         neemPluisjes(player);
         GuhAdvancements.grant(player, "timmerguh_dak");

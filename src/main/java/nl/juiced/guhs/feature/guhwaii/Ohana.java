@@ -159,6 +159,11 @@ public final class Ohana {
 
     /** The big moment: Lilo, Nani and 626 together, the quote, and the rewards. */
     static void ohana(ServerPlayer p, GuhNpcEntity lilo, @Nullable Entity nani, @Nullable Entity stitch) {
+        // bbq2 (oude-scenes): the first time, the ohana moment plays as a camera scene; the rest comes after it
+        if (nl.juiced.guhs.feature.oudescenes.OudeScenes.speel(p, nl.juiced.guhs.feature.oudescenes.OudeScenes.OHANA, lilo.blockPosition(),
+                s -> ohana(s, lilo, nani, stitch))) {
+            return;
+        }
         Praat.scene(p, SCENE, List.of(
                 regel(lilo, "", "gui.guhs.guhwaii.ohana.1"),
                 regel(stitch, "entity.guhs.guh.stitch626", "gui.guhs.guhwaii.ohana.2"),
