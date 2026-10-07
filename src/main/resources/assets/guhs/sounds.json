@@ -2706,25 +2706,130 @@
     ],
     "subtitle": "subtitles.guhs.guhparkour.smak"
   },
-  "einde2_biomes.knabbelkoor_zing": {
+  "einde2_biomeguhs.korstguh.rol": {
     "sounds": [
-      "guhs:einde2_biomes/zing1",
-      "guhs:einde2_biomes/zing2",
-      "guhs:einde2_biomes/zing3"
+      {
+        "name": "minecraft:entity.armadillo.roll",
+        "type": "event",
+        "pitch": 1.2
+      }
     ],
-    "subtitle": "subtitles.guhs.einde2_biomes.knabbelkoor_zing"
+    "subtitle": "subtitles.guhs.einde2_biomeguhs.korstguh.rol"
   },
-  "einde2_biomes.vrucht_flits": {
+  "einde2_biomeguhs.korstguh.uitrol": {
     "sounds": [
-      "guhs:einde2_biomes/flits"
+      {
+        "name": "minecraft:entity.armadillo.unroll_finish",
+        "type": "event",
+        "pitch": 1.2
+      }
     ],
-    "subtitle": "subtitles.guhs.einde2_biomes.vrucht_flits"
+    "subtitle": "subtitles.guhs.einde2_biomeguhs.korstguh.uitrol"
   },
-  "einde2_biomes.wolk_plof": {
+  "einde2_biomeguhs.korstguh.tik": {
     "sounds": [
-      "guhs:einde2_biomes/plof1",
-      "guhs:einde2_biomes/plof2"
+      {
+        "name": "minecraft:entity.armadillo.land",
+        "type": "event",
+        "pitch": 1.3
+      },
+      {
+        "name": "guhs:entity.guh.happy",
+        "type": "event",
+        "pitch": 1.3
+      }
     ],
-    "subtitle": "subtitles.guhs.einde2_biomes.wolk_plof"
+    "subtitle": "subtitles.guhs.einde2_biomeguhs.korstguh.tik"
+  },
+  "einde2_biomeguhs.duinguh.graaf": {
+    "sounds": [
+      {
+        "name": "minecraft:block.sand.break",
+        "type": "event",
+        "pitch": 0.9
+      },
+      {
+        "name": "minecraft:block.sand.hit",
+        "type": "event",
+        "pitch": 0.8
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_biomeguhs.duinguh.graaf"
+  },
+  "einde2_biomeguhs.duinguh.plop": {
+    "sounds": [
+      {
+        "name": "minecraft:block.sand.place",
+        "type": "event",
+        "pitch": 1.4
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_biomeguhs.duinguh.plop"
+  },
+  "einde2_biomeguhs.kruimelguh.plof": {
+    "sounds": [
+      {
+        "name": "minecraft:block.wool.fall",
+        "type": "event",
+        "pitch": 1.5
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_biomeguhs.kruimelguh.plof"
+  },
+  "einde2_biomeguhs.schimmelguh.gloei": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.resonate",
+        "type": "event",
+        "pitch": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_biomeguhs.schimmelguh.gloei"
+  },
+  "einde2_biomeguhs.kristalguh.vondst": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event",
+        "pitch": 1.3
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_biomeguhs.kristalguh.vondst"
+  },
+  "einde2_biomeguhs.koorguh.zing": {
+    "sounds": [
+      {
+        "name": "minecraft:block.note_block.flute",
+        "type": "event",
+        "pitch": 0.84
+      },
+      {
+        "name": "minecraft:block.note_block.flute",
+        "type": "event",
+        "pitch": 1.0
+      },
+      {
+        "name": "minecraft:block.note_block.flute",
+        "type": "event",
+        "pitch": 1.12
+      },
+      {
+        "name": "minecraft:block.note_block.flute",
+        "type": "event",
+        "pitch": 1.26
+      },
+      {
+        "name": "minecraft:block.note_block.flute",
+        "type": "event",
+        "pitch": 1.5
+      },
+      {
+        "name": "guhs:entity.guh.happy",
+        "type": "event",
+        "pitch": 1.5,
+        "volume": 0.7
+      }
+    ],
+    "subtitle": "subtitles.guhs.einde2_biomeguhs.koorguh.zing"
   }
 }

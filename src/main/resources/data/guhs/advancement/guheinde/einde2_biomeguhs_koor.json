@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:guheinde/einde2_biomeguhs_eerste",
+  "display": {
+    "icon": {
+      "id": "minecraft:jukebox"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.einde2_biomeguhs_koor.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.einde2_biomeguhs_koor.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

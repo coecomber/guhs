@@ -1,0 +1,105 @@
+# einde2, slice biomeguhs: the six biome guhs and their tricks, on a platform high in the Guhmensie (the tricks need no Guheinde).
+# Look at: the six looks next to each other, the Korstguh as a ball (and rolling), the ears of the Duinguh above the sand, the
+# Kruimelguh floating down, the Schimmelguh lighting the night, the glow of the Kristalguh, the Koorguh singing at a jukebox.
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_biomeguhs.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 1000 200 1000
+wait 80
+/fill 990 150 990 1010 150 1010 guhs:kaaskorst
+/fill 990 151 990 1010 160 1010 minecraft:air
+/fill 1003 150 1003 1008 150 1008 guhs:kruimelzand
+/kill @e[type=guhs:guh,distance=..60]
+/tp @s 1000 151 1000
+wait 20
+
+section the six looks
+/tp @s 994 151 995
+/guhs einde2 biomeguhs zet korstguh
+/tp @s 994 151 997
+/guhs einde2 biomeguhs zet duinguh
+/tp @s 994 151 999
+/guhs einde2 biomeguhs zet kruimelguh
+/tp @s 994 151 1001
+/guhs einde2 biomeguhs zet schimmelguh
+/tp @s 994 151 1003
+/guhs einde2 biomeguhs zet kristalguh
+/tp @s 994 151 1005
+/guhs einde2 biomeguhs zet koorguh
+/execute as @e[type=guhs:guh,distance=..30] run data merge entity @s {Sitting:1b}
+camera 991.5 152.5 1000.5 -90 12
+waitrender 200
+shot zes_guhs
+camera 999.5 153 1000.5 90 20
+wait 40
+shot zes_guhs_achter
+/guhs einde2 biomeguhs wild
+wait 20
+
+section the Korstguh rolls up and rolls when tapped
+/kill @e[type=guhs:guh,distance=..60]
+/tp @s 996 151 1000
+/guhs einde2 biomeguhs zet korstguh
+wait 20
+camera 995.5 152 997.5 -20 15
+wait 20
+shot korstguh_gewoon
+/guhs einde2 biomeguhs truc
+wait 20
+shot korstguh_bal
+sla guhs:guh
+wait 10
+shot korstguh_rolt
+wait 260
+shot korstguh_weer_uit
+
+section the Duinguh digs in on kruimelzand
+/kill @e[type=guhs:guh,distance=..60]
+/tp @s 1004 151 1005
+/guhs einde2 biomeguhs zet duinguh
+wait 140
+camera 1003.5 152 1002.5 -25 18
+wait 40
+shot duinguh_oortjes
+
+section the Kruimelguh floats down
+/kill @e[type=guhs:guh,distance=..60]
+/tp @s 996 151 1000
+/guhs einde2 biomeguhs zet kruimelguh
+/execute as @e[type=guhs:guh,limit=1,sort=nearest] at @s run tp @s ~ ~9 ~
+camera 995.5 154 996.5 -15 -20
+wait 30
+shot kruimelguh_zweeft
+wait 120
+
+section the Schimmelguh is a lamp, the Kristalguh glows (night)
+/kill @e[type=guhs:guh,distance=..60]
+/time set midnight
+/tp @s 996 151 999
+/guhs einde2 biomeguhs zet schimmelguh
+/tp @s 996 151 1002
+/guhs einde2 biomeguhs zet kristalguh
+/execute as @e[type=guhs:guh,distance=..30] run data merge entity @s {Sitting:1b}
+wait 100
+camera 994.5 152.5 1000.5 -90 15
+wait 40
+shot schimmelguh_lamp_en_kristalguh
+/guhs einde2 biomeguhs truc
+wait 20
+shot kristalguh_brokje
+
+section the Koorguh sings along
+/kill @e[type=guhs:guh,distance=..60]
+/time set noon
+/setblock 999 151 1000 minecraft:jukebox
+/item replace entity @s weapon.mainhand with minecraft:music_disc_cat
+/tp @s 996 151 1000
+/guhs einde2 biomeguhs zet koorguh
+use 999 151 1000
+wait 100
+camera 995.5 152 998.5 -30 12
+wait 20
+shot koorguh_zingt
+/setblock 999 151 1000 minecraft:air

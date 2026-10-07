@@ -97,44 +97,32 @@
   "quest.47554806041E9EFE.quest_desc": [
     "Place four Nibble Crystals on the four Nibble Pedestals around the return portal and Overlord Mika comes back. Defeat him again for an Enderguh Egg.",
   ],
-  "quest.47554853B36716B7.title": "Holey Cheese Hills",
-  "quest.47554853B36716B7.quest_desc": [
-    "Visit the &6Holey Cheese Hills&r on the outer islands of the Guh End. Rolling yellow hills full of round holes, with a little pond of cheese sauce here and there. Who has been nibbling here?",
+  "quest.475548D84B9AE10E.title": "Cheese With a Rind",
+  "quest.475548D84B9AE10E.quest_desc": [
+    "In the &6Holey Cheese Hills&r of the Guh End the &6Rind Guhs&r roll around: holey-cheese yellow, with a shield of rind. Tame one with cheese nibbles. Sneak next to him and he rolls up into a little ball you can push away. Nyeg, he likes it!",
   ],
-  "quest.47554805D50DEDAC.title": "Rind Desert",
-  "quest.47554805D50DEDAC.quest_desc": [
-    "Visit the &6Rind Desert&r on the outer islands of the Guh End. Flat, dry and cracked, with dunes of crumb sand that you sink into. Somewhere there is an oasis, nyeg.",
+  "quest.475548CEE65ECAF0.title": "Just the Ears",
+  "quest.475548CEE65ECAF0.quest_desc": [
+    "In the dry &6Rind Desert&r lives the &6Dune Guh&r, with ears you could make a sail out of. Tame one. Let him stand still on &7crumb sand&r and he digs himself in: only his little ears still stick out.",
   ],
-  "quest.4755487D3AA3ECF4.title": "Crumb Clouds",
-  "quest.4755487D3AA3ECF4.quest_desc": [
-    "Visit the &6Crumb Clouds&r on the outer islands of the Guh End. Crumbs that float and clouds you slowly sink through. Watch where you land! This region is small and rare: have a good look around.",
+  "quest.475548AEAF6A3954.title": "Lighter Than a Crumb",
+  "quest.475548AEAF6A3954.quest_desc": [
+    "High up in the &6Crumb Clouds&r the &6Crumb Guh&r drifts from island to island. He simply stands on the crumb clouds you sink through, and floats down ever so slowly. Tame one!",
   ],
-  "quest.475548260E8335EA.title": "Blue Cheese Plains",
-  "quest.475548260E8335EA.quest_desc": [
-    "Visit the &6Blue Cheese Plains&r on the outer islands of the Guh End. Blue cheese as far as you can see, mist, ponds and giant mushrooms that glow. It smells... special here. This region is small and rare: have a good look around.",
+  "quest.4755481074B8D283.title": "A Lamp on Little Legs",
+  "quest.4755481074B8D283.quest_desc": [
+    "Something is glowing in the mist of the &6Blue Cheese Plains&r. It is a &6Blue Cheese Guh&r: blue-veined cheese with little mushrooms. Tame one and you will never need a torch again: he glows like a lamp and walks along with you.",
   ],
-  "quest.4755489AAB3712B8.title": "Crystal Cheese Cliffs",
-  "quest.4755489AAB3712B8.quest_desc": [
-    "Visit the &6Crystal Cheese Cliffs&r on the outer islands of the Guh End. Tall pillars of old cliff cheese with golden crystals on them. This is where the &6crystal cheese&r grows. This region is small and rare: have a good look around.",
+  "quest.47554826934AB4E3.title": "A Nose for Shinies",
+  "quest.47554826934AB4E3.quest_desc": [
+    "On the &6Crystal Cheese Cliffs&r the &6Crystal Guh&r glitters, with a little crown of cheese crystal. Tame one. Now and then he sniffs up a &6Crystal Cheese Nugget&r for you: one a day at most, so make it last.",
   ],
-  "quest.4755481479785AC4.title": "Nibble Chorus Forest",
-  "quest.4755481479785AC4.quest_desc": [
-    "Visit the &6Nibble Chorus Forest&r on the outer islands of the Guh End. Tall purple nibble chorus plants that softly sing. Be quiet and listen: every flower has its own note. This region is small and rare: have a good look around.",
+  "quest.475548762616D09E.title": "First Voice: Nyeg",
+  "quest.475548762616D09E.quest_desc": [
+    "Among the singing plants of the &6Nibble Chorus Forest&r one of them sings back: the &6Chorus Guh&r, choir collar and all. Tame one, put on a &7music disc&r and listen. Nyeg-nyeg-nyeeeeg!",
   ],
-  "quest.475548D46E709FAB.title": "Cheese with a Golden Edge",
-  "quest.475548D46E709FAB.quest_desc": [
-    "In the Crystal Cheese Cliffs there is &6crystal cheese ore&r in the cliff cheese, and golden crystals grow on the pillars. Mine some &6crystal cheese&r. Nine nuggets make a whole one too. (Not for eating: it is far too hard for that.)",
-  ],
-  "quest.475548D6CC0341A8.title": "Floop!",
-  "quest.475548D6CC0341A8.quest_desc": [
-    "Chop down a nibble chorus plant and eat a &dnibble chorus fruit&r. Floop: suddenly you stand a little further on. Handy near a cliff. Or not at all, nyeg.",
-  ],
-  "quest.475548F9822BE5AD.title": "Popped Is Tasty Too",
-  "quest.475548F9822BE5AD.quest_desc": [
-    "Put a nibble chorus fruit in the furnace: it pops open. Four &dpopped nibble chorus fruits&r make four nibble chorus blocks, and those make stairs, slabs and pillars.",
-  ],
-  "quest.4755481C21C11078.title": "A Little Light for Your Guh",
-  "quest.4755481C21C11078.quest_desc": [
-    "A popped nibble chorus fruit on a guh crystal: four &dlight rods&r. Now the Guh End is never completely dark again.",
+  "quest.475548D40EDC0FD6.title": "Six Lands, Six Friends",
+  "quest.475548D40EDC0FD6.quest_desc": [
+    "Every land of the outer islands has its own guh. Tame all six: the &6Rind Guh&r, the &6Dune Guh&r, the &6Crumb Guh&r, the &6Blue Cheese Guh&r, the &6Crystal Guh&r and the &6Chorus Guh&r. Each gets a page of its own in your Guhdex.",
   ],
 }

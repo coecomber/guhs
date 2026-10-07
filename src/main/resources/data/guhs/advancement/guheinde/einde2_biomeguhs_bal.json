@@ -1,0 +1,23 @@
+{
+  "parent": "guhs:guheinde/einde2_biomeguhs_eerste",
+  "display": {
+    "icon": {
+      "id": "guhs:kruimelrots"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.einde2_biomeguhs_bal.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.einde2_biomeguhs_bal.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
