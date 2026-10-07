@@ -304,7 +304,7 @@ public final class GuhrioW3Feature {
     }
 
     /**
-     * Plays the owed end scene when this player can watch it now: not watching or reading anything, in the duel arena (not
+     * Plays the owed end scene when this player can watch it now: not watching or reading anything, in that duel arena (not
      * in a pipe or at a flagpole) or, without a level, near it in the same dimension - the level hall under the arena, where
      * a login puts whoever logged out in the duel. True when the scene started; its end is {@link GroteNetherMikaEntity#gewonnen}.
      */
@@ -315,7 +315,7 @@ public final class GuhrioW3Feature {
             return false;
         }
         GuhrioSpel.Sessie s = GuhrioSpel.sessie(player);
-        if (s != null ? !GuhrioKasteel.DUEL.equals(s.level().level().id()) || s.inPijp() || s.klaar()
+        if (s != null ? !s.level().anker().equals(t.anker()) || s.inPijp() || s.klaar()
                 : !t.anker().closerToCenterThan(player.position(), TEGOED_NABIJ)) {
             return false;
         }
