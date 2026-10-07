@@ -42,7 +42,7 @@ Run from the project root:  python tools/make_ftbquests.py   (--art: redraw all 
 import hashlib
 import os
 
-CHAPTER_VERSION = 31   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel; 29 = 1.3.1: the Vadsschaar quest; 30 = 1.3.2: Kijk eens binnen (inside the Guhhuisje); 31 = bbq2: Guh-technologie, de Knabbelring, Super Guhrio, the questlines of the Barbecuether buildings
+CHAPTER_VERSION = 32   # 20 = 1.1.0: JSON5 for FTB Quests 26.1; 21 = 1.1.3: no locks (only the stomach sizes); 22 = 1.2.0: English; 23 = 1.2.0: Wilde-guhweerder; 24 = 1.2.5: Sterrenhemelguh only from the sterrenregen; 25 = 1.2.5: Guhoven; 26 = 1.2.7: everyone can finish every quest; 27 = 1.2.8: Palewood, Bank Guh questline, Enderguh quests moved; 28 = guhpixel: the chapter Guhpixel; 29 = 1.3.1: the Vadsschaar quest; 30 = 1.3.2: Kijk eens binnen (inside the Guhhuisje); 31 = bbq2: Guh-technologie, de Knabbelring, Super Guhrio, the questlines of the Barbecuether buildings; 32 = verhalenpad: the chapter group "Het Guhpad" (four chapters with a lock quest, the chapters guhs_knabbelring and guhs_guhrio moved into guhs_pad_barbecuether), Het Snuffeleiland
 OUT = os.path.join("src", "main", "resources", "ftbquests")
 
 
