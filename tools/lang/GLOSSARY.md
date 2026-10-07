@@ -547,8 +547,8 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | Vahoege-vads(zwaard/houweel/bijl/schep/schoffel/paxel/schaar) | Wahoog Chonk (Sword/Pickaxe/Axe/Shovel/Hoe/Paxel/Shears) | |
 | Vahoege-vads(helm/borstplaat/beenstukken/laarzen) | Wahoog Chonk (Helmet/Chestplate/Leggings/Boots) | |
 | guhpantser (IJzeren/Diamanten/Netherieten) | Guh Armor (Iron/Diamond/Netherite) | |
-| Bankguh / Bank Guh | Bank Guh | infinite storage; *het buikje* = *the tummy* |
-| Guhrad / Guhdraad | Guh Wheel / Guh Wire | redstone |
+| Bankguh / Bank Guh | Bank Guh | storage, 256 of each kind (endless with the Bottomless Nibble Belly, section 24); *het buikje* = *the tummy* |
+| Guhrad / Guhdraad | Guh Wheel / Guh Wire | they make and carry *vadskracht* = *chonk power* (section 24), no longer redstone |
 | Guhspawner | Guh Spawner | |
 | Knabbelbak | Nibble Trough | |
 | Guhnaaitafel | Guh Sewing Table | |
@@ -1175,3 +1175,459 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | verplichte pitstop | mandatory pit stop | |
 | Hup! / Boing! / Oeps! | Hup! / Boing! / Oops! | |
 | vadsje | little chonk | |
+
+## 24. Guh Technology, the Barbecuether buildings, The Lord of the Nibble Ring, Super Guhrio (bbq2)
+
+Chunks `c40` - `c62`. Everything above still holds: njeg = **nyeg**, vads = **chonk**, vahoeg = **wahoog**, knabbel =
+**nibble**, guhtje in a name = **guhling**, drankje = **Potion**, kooltje = **Ember**, beeldje = **Statuette**, snoet =
+**snoot**, buikje = **tummy**, American spelling (*cozy, neighbor, mustache, apartment, campground, range hood*).
+
+**The one fixed line.** Guhdalf on the bridge (`scene.guhs.ringh3_brug.you_1` .. `you_4`, the advancement and the FTB quest
+of the same name) says **"YOU.. SHALL.. NOT.. VADS!"** in BOTH languages, word for word: this one "VADS" is never "CHONK".
+
+**Parodies keep their quote.** The Nibble Ring story is *The Lord of the Rings*, Super Guhrio is *Super Mario*: where the
+Dutch bends a famous line, take the famous ENGLISH line and bend it the same way (table "famous lines" below). Names of the
+cast keep their guh/Mika pun and follow the English names of the originals (Rivendel -> Rivendell, Merrie -> Merry).
+
+**Nobody gets hurt.** A Mika, the Barbecuerog, the Eye, the Nine, a Flomp Mika or a falling ember only *shove* or *send you
+back* to your rest fire / flag: never "kill", "die", "damage", "attack", "lives". The Eye *looks you back*, the Nine *sniff*.
+
+**How they talk.**
+- **Smikagol** hisses and says "we" for "I": stretch the s at the END of a word as the Dutch does (*vissss* -> *fishesss*,
+  *oogjesss* -> *eyesss*, *Sssst!* -> *Shhhh!*), calls the ring AND the player *vadsje* = **chonkie** (*ons vadsje* = *our
+  chonkie*, *Deze kant op, vadsje!* = *This way, chonkie!*). Never "precious".
+- **Sam-guh** calls the player *baas* = **boss** (as the guhs on the postcards do) and Guhdalf *meneer Guhdalf* = *Mr. Guhdalf*.
+- **Marktmeester-Mika** (a cat-like Mika) says *Mjauw* = **Meow**. **Pad-guh** says *Njam-njeg!* = *Nom-nyeg!*
+- **Guhdalf**'s spells are dog Latin and stay: *Vadsus opendus! Knabbelum portalis!* -> *Chonkus opendus! Nibblum portalis!*
+- Counted time in screens: *tellen* = *seconds* (as in section 23).
+
+### vadskracht, bank, tech
+
+| Dutch | English | note |
+|---|---|---|
+| Guh-technologie | Guh Technology | FTB chapter, advancement tab, Tales heading |
+| vadskracht | chonk power | lowercase in prose; replaces the old *guhkracht* = *guh power* everywhere; no unit: "%s chonk power" |
+| Knuffelkracht | Cuddle Power | advancement title |
+| opstelling | setup | everything on one stretch of Guh Wire; *Opstelling 1* = *Setup 1* (practice hall) |
+| guhmachine(s) / guh-machine | guh machine(s) | lowercase in prose; the block *Guhmachine* (machine_deel) = *Guh Machine* |
+| Telt niet mee | Doesn't count | hover line of a source over the limit |
+| Te zwaar / Te groot / staat uit | Too heavy / Too big / is off | hover lines of a setup |
+| een machine met een snoet / snoetje | a machine with a snoot / little snoot | every guh machine has a face |
+| Proefbron / Proefbatterij | Test Source / Test Battery | dev blocks |
+| Proefmachientje / Groot proefmachientje | Little Test Machine / Big Test Machine | dev blocks |
+| Knabbelbatterij | Nibble Battery | |
+| Knuffelgenerator | Cuddle Generator | knuffel = the act here, so Cuddle |
+| Disco-dynamo | Disco Dynamo | no hyphen |
+| Blubkacheltje | Blub Stove | "little blub stove" in prose where the Dutch is cute about it |
+| Gloeisterkern | Glowstar Core | *Een ster in een kooitje* = *A Star in a Little Cage* |
+| draaitafel / bakje | turntable / little tray | parts of the dynamo and the stove |
+| Knabbelbuis / Knabbelbuizen | Nibble Tube / Nibble Tubes | as *hamster tubes*, *Tube Workbench* |
+| Richtingstuk | Direction Piece | |
+| Filterstuk | Filter Piece | |
+| Opzuiger | Slurper | *Slurp!* stays |
+| Voorraadmeter | Stock Meter | |
+| Snuffelsensor | Sniff Sensor | not the Nibble Sensor (Knabbelsensor) |
+| Guhklok / Guhteller | Guh Clock / Guh Counter | |
+| Rollebollen / Kieskeurig guhtje / De guh ziet alles | Roly-Poly / Picky Little Guh / The Guh Sees All | advancement titles |
+| Sauspomp / Sausslang / Sausvat | Sauce Pump / Sauce Hose / Sauce Vat | |
+| Grillkoolpers | Grill Coal Press | |
+| Brouwautomaat | Auto Brewer | |
+| Frituurautomaat | Auto Fryer | |
+| Saus uit de grond / Tapje, njeg? | Sauce from the Ground / A Little Tap, Nyeg? | advancement titles |
+| Roeren is voor vroeger / Vanzelf vahoeg | Stirring Is So Yesterday / Wahoog All by Itself | advancement titles |
+| Onder druk wordt alles grillkool | Under Pressure Everything Turns to Grill Coal | |
+| Oogster | Harvester | |
+| Knabbelaar | Nibbler | the block breaker |
+| Neerzetter | Placer | |
+| Knutselmachine | Tinker Machine | *knutselen* (of this machine) = *to tinker*: *Het knutselt vanzelf* = *It Tinkers by Itself* |
+| Tekentafel | Drawing Table | |
+| Bouwtekening / Lege bouwtekening / Bouwtekening: %s | Blueprint / Empty Blueprint / Blueprint: %s | also *Bouwtekening: Mika-brug* = *Blueprint: Mika Bridge* |
+| Plantagebak | Plantation Box | bak = Box (as *Chonk Seed Box*); *Een bos in een bak* = *A Forest in a Box* |
+| Vadsmolen | Chonk Mill | |
+| Stepstation | Scooter Station | step = kick scooter |
+| Haltepaaltje / halte | Stop Post / stop | *aflever-halte* = *drop-off stop* |
+| Bezorgguhtje | Delivery Guhling | creature, variant, Guhdex page; *Bezorgguhtje-fluitje* = *Delivery Guhling Whistle* |
+| Ophalen / Afleveren | Pick Up / Drop Off | what a stop does |
+| Rugzak / Haltes / Naar huis! / Ander station / Leegmaken | Backpack / Stops / Go Home! / Other Station / Clear | Scooter Station screen |
+| Tuut tuut! / Bezorgd, njeg! / Op je wenken bediend | Toot Toot! / Delivered, Nyeg! / At Your Beck and Call | advancement titles |
+| Hapluikje / luikje | Nom Hatch / hatch | hap = nom: *Hap!* = *Nom!*, *het luikje hapt* = *the hatch noms* |
+| Banksleutel | Bank Key | |
+| Bodemloos Knabbelmaagje | Bottomless Nibble Belly | the bank upgrade; *Bodemloos buikje* = *Bottomless Tummy* |
+| Vol is vol / opgevoerd | Full Is Full / upgraded | bank: 256 of each kind, "%s/%s" |
+| Machines bijvullen & leeghalen | Refill & Empty Machines | chore name, in the style of *Tidy Up & Sort* |
+| Plantage: planten & hakken | Plantation: Plant & Chop | chore name |
+| voordoen / voorgedaan | show it once / shown | what a guh learns to refill |
+| klus-area / klusgebied | chore area | one word for both |
+| scheutjes | sprouts | as *Peanut Sprouts* |
+| Collega's met een snoet / Houthakkertje guh | Colleagues with a Snoot / Little Lumberjack Guh | advancements, diary firsts |
+| Hap, opgeruimd! / Pompoenenplukker / Machinist guh | Nom, All Tidy! / Pumpkin Picker / Machinist Guh | |
+| Oude Guhrad-centrale | Old Guh Wheel Power Plant | structure; "the power plant" in prose |
+| Uitvinder-guh | Inventor Guh | |
+| oefenhal | practice hall | *De oefenhal draait weer* = *The Practice Hall Is Running Again* |
+| Project 1: Nooit meer zelf bakken | Project 1: Never Bake Yourself Again | FTB sections |
+| Project 2: Alles vanzelf in de bank | Project 2: Everything into the Bank by Itself | |
+| Project 3: Saus uit de kraan | Project 3: Sauce on Tap | |
+| Project 4: Een fabriek die doorwerkt | Project 4: A Factory That Keeps Going | |
+| De Grote Knabbelmachine | The Great Nibble Machine | *Stukje Grote Knabbelmachine* = *Piece of the Great Nibble Machine* |
+| Knabbelmachine-beeldje | Nibble Machine Statuette | |
+| Knabbelmachinist | Nibble Machinist | title |
+| Perfecte knabbel | Perfect Nibble | |
+| Receptkaart / receptkaarten | Recipe Card / recipe cards | *Receptkaart: saus en slangen* = *Recipe Card: Sauce and Hoses* |
+| Receptkaart: knabbelende machines / het Bezorgguhtje / Plantagebak | Recipe Card: Nibbling Machines / The Delivery Guhling / Plantation Box | |
+| Oefenknabbel / Propje papier | Practice Nibble / Paper Wad | practice hall items |
+| Ome Knabbel | Uncle Nibble | a sign in the practice hall |
+| Wordt vervolgd in het Guheinde... | To Be Continued in the Guh End... | the locked FTB slot |
+| Bestelguh / Guhterminal / draadloze vadskracht | Order Guh / Guh Terminal / wireless chonk power | named in that slot only |
+
+### gebouwen (the Guhbarbecuether buildings)
+
+| Dutch | English | note |
+|---|---|---|
+| frituursauszee / sauszee | frying sauce sea / sauce sea | the Barbecuether's lava sea of Cheese Frying Sauce |
+| Sausloper | Sauce Strider | vanilla Strider nod |
+| Sausblubje / blubje | Sauce Blubby / blubby | plural *Sauce Blubbies*; *Blubje to go* = *Blubby to Go* |
+| Blubroom | Blub Cream | "blub cream" in prose |
+| Sausblubje in een potje | Sauce Blubby in a Jar | a creature in a jar, not "Potted" |
+| Pindasaus aan een stok | Peanut Sauce on a Stick | |
+| Stuiterdrankje / Stuiterblub | Bouncy Potion / Bouncy Blub | Guh Potion and its effect |
+| Sausloper-stal | Sauce Strider Stable | |
+| Verzorger-guh | Caretaker Guh | not the Stable Hand Guh of the Mika Stable |
+| sausbak / proefrit / proefrondje | sauce basin / test ride / test lap | |
+| Sausloper-vriend / Sausracer | Sauce Strider Friend / Sauce Racer | |
+| Lange poten, klein hartje / Kom maar, langpoot! | Long Legs, Little Heart / Come On, Longlegs! | |
+| Vriendschap gaat door de maag / Een knuffel te veel / Boing! | Friendship Goes Through the Tummy / One Cuddle Too Many / Boing! | |
+| Rookguh-vuurtoren | Smoke Guh Lighthouse | |
+| Torenwachter-guh | Lighthouse Keeper Guh | |
+| Pepertuin | Pepper Garden | *Pluktuin* = *Picking Garden* |
+| Peperteler-guh | Pepper Grower Guh | |
+| Vuurtorenlamp / Seinlantaarn / Lampkooltje | Lighthouse Lamp / Signal Lantern / Lamp Ember | |
+| Verdwaalde Rookguh | Lost Smoke Guh | |
+| Kweekbak / Peperplant / Peperzaadjes | Grow Box / Pepper Plant / Pepper Seeds | |
+| Njegpeper / Vahoegpeper / Snoeppeper | Nyeg Pepper / Wahoog Pepper / Candy Pepper | green / red / pink |
+| Pepervuurdrankje / Peperzoetdrankje / peperdrankje | Pepperfire Potion / Peppersweet Potion / pepper potion | |
+| Peperadem | Pepper Breath | effect |
+| Wachtersjas van de vuurtoren / Peperslinger | Lighthouse Keeper's Coat / Pepper Garland | outfit pieces |
+| Licht in de rook / Peperbrouwer / Lampaansteker | A Light in the Smoke / Pepper Brewer / Lamplighter | |
+| Heet! Heet! Heet! / Ahoi, njeg! / Fiet-fiew! | Hot! Hot! Hot! / Ahoy, Nyeg! / Fweet-fwee! | |
+| Mika-woonblokken | Mika Apartments | American: never "flats" |
+| flat / westflat / oostflat / hoge flat | apartment block / west block / east block / tall block | *daktuin* = *roof garden*, *galerij* = *walkway* |
+| Mika-stal | Mika Stable | |
+| Mika-brugpaleis | Mika Bridge Palace | *Door de bek van de Mika* = *Through the Mika's Mouth* |
+| Mika-oma | Granny Mika | as *Granny Nibbles* |
+| Mopper-Mika / mopperaars | Grumpy Mika / grumps | |
+| Brom-Mika / Zeur-Mika / Snurk-Mika | Grumble Mika / Whiny Mika / Snore Mika | no hyphens, as every Mika |
+| Buur-Mika / Barbecue-Mika / Zonnebad-Mika | Neighbor Mika / Barbecue Mika / Sunbathing Mika | |
+| Worstzwijntje | Sausage Piglet | creature, variant |
+| Knorretje | Oinky | the runaway piglet; *Knorretje (in je armen)* = *Oinky (in Your Arms)* |
+| Knir / Snuffel / Mosterdje / Truffel | Snort / Snuffles / Mustard / Truffle | name signs in the stable |
+| Knor! / Zwijntjesfluisteraar | Oink! / Piglet Whisperer | |
+| Stalknecht-guh | Stable Hand Guh | |
+| Tolwachter-Mika | Toll Keeper Mika | *HALT! Tol!* = *HALT! Toll!*, *Tolvrij!* = *Toll-Free!* |
+| tolbel / tolhuis / tolbrug | toll bell / toll house / toll bridge | *DONG!* stays |
+| Raadselkoning / Mika-kwaliteit | Riddle King / Mika Quality | |
+| Oma's worstsoep / Soep van oma | Granny's Sausage Soup / Granny's Soup | |
+| Breiwerk van Mika-oma / Breimandje van Mika-oma | Granny Mika's Knitting / Granny Mika's Knitting Basket | |
+| Gebreide Mika-muts | Knitted Mika Cap | muts = cap |
+| Zak zwijnenvoer | Sack of Piglet Feed | |
+| Worstzwijntje in een mandje | Sausage Piglet in a Basket | |
+| Brugplank van de Tolwachter / Mika-brugplanken / Touwleuning | Toll Keeper's Bridge Plank / Mika Bridge Planks / Rope Railing | |
+| Wachter-guh | Guard Guh | at the Skewer Keep; not the Gatekeeper |
+| Ere-wachter / wachterspak | Honorary Guard / guard outfit | |
+| Wachtershelm / Wachtersmantel | Guard's Helmet / Guard's Cloak | |
+| Knuffelmaker-guh | Plushie Maker Guh | |
+| Knuffelguh / Knuffel-Mika / Knuffel-Rookguh | Plush Guh / Plush Mika / Plush Smoke Guh | the three plushie BLOCKS; in prose they are "plushies" |
+| Knuffelpatroon | Plushie Pattern | |
+| De wacht bij de Spiesburcht / De gestolen knuffels | The Watch at the Skewer Keep / The Stolen Plushies | storylines |
+| Brugvuurkorf / brugvuren | Bridge Brazier / bridge fires | *Fwoesj!* = *Fwoosh!* |
+| Mikakruid | Mika Weed | onkruid pun; *wieden* = *to weed* |
+| Zielig lantaarntje | Sad Little Lantern | |
+| Aansteekspies van de Wachter-guh / Lantaarnrecept van de Wachter-guh | Guard Guh's Lighting Skewer / Guard Guh's Lantern Recipe | |
+| Op kousenvoetjes / Knuffels horen bij guhs | On Tiptoe / Plushies Belong with Guhs | |
+| wachthokje / naaihoek | sentry box / sewing corner | |
+| Zoutkristal | Salt Crystal | |
+| Zoutkristalmijn | Salt Crystal Mine | |
+| Zoutkristalader / Zoutkristalerts / Zoutkristalblok / Zoutkristalletjes | Salt Crystal Vein / Salt Crystal Ore / Salt Crystal Block / Little Salt Crystals | *kristalader* = *crystal vein* |
+| Zoutkristalhouweel | Salt Crystal Pickaxe | |
+| Puin op het spoor | Rubble on the Track | *karrenspoor* = *cart track* |
+| Mijnwerker-guh | Mineworker Guh | not the Miner Guh (Mijnguh) of the Cheese Mine |
+| Fossiel-opgraving | Fossil Dig | |
+| Archeoloog-guh | Archaeologist Guh | |
+| Bottenzand / Skeletrek | Bone Sand / Skeleton Rack | |
+| Guhkwastje | Guh Dusting Brush | not the Guh Brush (Guhborstel) of the farm; *kwasten* = *to dust* |
+| Tyrannoguhrus Njex / Njex | Tyrannoguhrus Nyex / Nyex | *Njex!* = *Nyex!* |
+| Tyrannoguhrus-beeldje | Tyrannoguhrus Statuette | |
+| Tyrannoguhrus-schedel / -ruggengraat / -ribben / -pootjes / -staartje | Tyrannoguhrus Skull / Spine / Ribs / Legs / Tail | |
+| Guhceratops | Guhceratops | stays |
+| Een korreltje zout / Zout op de boterham / Njex op de kast | A Grain of Salt / Salt on Your Sandwich / Nyex on the Shelf | |
+| Botten in de as / Een berg van zout / De vondst van de eeuw | Bones in the Ash / A Mountain of Salt / The Find of the Century | |
+| Grillcamping | Grill Campground | not the Snuggledale Campsite (Kampeerplekje) |
+| De Gloeiende Guh | The Glowing Guh | the campground's name |
+| Kampbaas-guh | Camp Boss Guh | |
+| Houthakker-guh | Lumberjack Guh | not the Woodcutter Guh of the Palewood; *Tjak! Tjak!* = *Chop! Chop!* |
+| Nether-Mika-ruilmarkt / ruilmarkt | Nether Mika Barter Market / barter market | piglin-barter nod |
+| Marktmeester-Mika / Marktmeester | Market Master Mika / Market Master | says *Mjauw* = *Meow* |
+| Kraam-Mika | Stall Mika | |
+| Saté-Mika / Vads-Mika / Kolen-Mika | Satay Mika / Chonk Mika / Coal Mika | the three stalls |
+| de Waag / Weegschaal van de Waag | the Weigh House / Weigh House Scale | |
+| Stapel vads / nepvads | Stack of Chonk / fake chonk | *De nepvads* = *The Fake Chonk*; *NEP!* = *FAKE!* |
+| Keurstempel van de Marktmeester | Market Master's Seal of Approval | |
+| afdingen / Meester-afdinger | to haggle / Master Haggler | *bod* = *offer* |
+| koopje van de dag / extraatje | deal of the day / little extra | |
+| Smikkel | Smikkel | the Market Master's nephew, stays |
+| tentdoek (Rood/Blauw/Geel/Groen/Crèmekleurig) | Tent Canvas (Red/Blue/Yellow/Green/Cream) | *Red Tent Canvas* |
+| tentdoek (schuin) / tentdoekplaat | Tent Canvas (Sloped) / Tent Canvas Slab | *Red Tent Canvas (Sloped)*, *Red Tent Canvas Slab* |
+| Tentzak / Tentharing / Kampeerplekbordje | Tent Bag / Tent Stake / Campsite Sign | |
+| Hakblok / Groot kampvuur / Bos brandhout / Roosterstok | Chopping Block / Big Campfire / Bundle of Firewood / Roasting Stick | *goudbruin* = *golden brown* |
+| Kampeerhoedje / Padvindersdasje / Kampeerrugzak / kampeerpakje | Camping Hat / Scout Neckerchief / Camping Backpack / camping outfit | |
+| Kampeerguh / Kampregels | Camper Guh / Camp Rules | |
+| Kamperen bij De Gloeiende Guh / De nepvads van de ruilmarkt | Camping at The Glowing Guh / The Fake Chonk of the Barter Market | storylines |
+
+### verhaal (the story engine)
+
+| Dutch | English | note |
+|---|---|---|
+| Mijn verhaal | My Story | Super Compass entry; in prose a tale you follow is a "story", the tab stays *Tales* |
+| Doel op het scherm | Objective on Screen | *aan / uit* = *on / off* |
+| Reiskaart | Journey Map | *De reis van de Knabbelring* = *The Journey of the Nibble Ring* |
+| Je bent hier / Dit moet je nu doen | You are here / What to do now | on the Journey Map |
+| vertelkaart | story card | the narrator's card before a chapter |
+| filmpje | scene | a cutscene: *Kijk het filmpje* = *Watch the scene* |
+| Opnieuw bekijken | Watch Again | heading |
+| Hoofdstuk %s | Chapter %s | |
+| Guhdalfs sluier / sluier / rookmuur | Guhdalf's Veil / veil / wall of smoke | the smoke wall around a chapter you have not reached |
+| Guhdalf vindt dat je hier nog niet aan toe bent, njeg | Guhdalf thinks you're not ready for this yet, nyeg | |
+| Je volgt dit verhaal / vanzelf / vastzetten | You're following this story / automatically / pin | |
+| Dit hoort bij het verhaal / bij het gebouw | This is part of the story / of the building | protected ground |
+| rustpunt / Rustpunt | rest stop / Rest Stop | structure name *Rest Stop* |
+| Rustvuurtje | Rest Fire | where a shove sends you back to |
+
+### Knabbelring (The Lord of the Nibble Ring)
+
+| Dutch | English | note |
+|---|---|---|
+| In de ban van de Knabbelring | The Lord of the Nibble Ring | the Dutch is the Dutch title of *The Lord of the Rings*: FTB chapter, advancement tab, Tales heading, clothing source |
+| De Knabbelring / de ring | The Nibble Ring / the ring | item *The Nibble Ring*; "the Nibble Ring" in prose |
+| Ringdrager / ringdrager / ringdragertje | Ring-Bearer / ring-bearer / little ring-bearer | title *Ring-Bearer* |
+| Het Reisgenootschap van de Knabbelring / het Reisgenootschap | The Fellowship of the Nibble Ring / the Fellowship | *reisgenoten*, *het gezelschap* = *the companions*, *the company* |
+| Guhdalf | Guhdalf | stays; *Guhdalf de Grijze / de Witte* = *Guhdalf the Grey / the White* (the one British "Grey": it is his name) |
+| Sam-guh | Sam-guh | stays, with the hyphen |
+| Araguh / Leguhlas / Gimguh / Boromika / Pippguh | Araguh / Leguhlas / Gimguh / Boromika / Pippguh | stay |
+| Merrie | Merry | |
+| Guhrond / Guhladriel | Guhrond / Guhladriel | stay; *Vrouwe Guhladriel* = *Lady Guhladriel* |
+| Smikagol | Smikagol | stays; *Smikagol (krokant)* = *Smikagol (Crispy)* |
+| Guhstapper | Guhstrider | Araguh's nickname (Stapper = Strider) |
+| Gimguh, zoon van Gluhin | Gimguh, son of Gluhin | |
+| Durguh | Durguh | stays; *Durguh, Heer van Knabbelmoria* = *Durguh, Lord of Nibblemoria* |
+| Sausron | Sauceron | |
+| Het Oog van Sausron / het Oog | The Eye of Sauceron / the Eye | *Beeldje van het Oog van Sausron* = *Eye of Sauceron Statuette* |
+| Sausuman | Sauceruman | *Sausuman van de Vele Sauzen* = *Sauceruman of Many Sauces* |
+| Barbecuerog | Barbecuerog | stays; *Braadworstzweep* = *bratwurst whip* |
+| Knekel-Mika-ruiter / de Negen | Skelly Mika Rider / the Nine | Knekel-Mika = Skelly Mika |
+| Uruk-Mika | Uruk-Mika | stays |
+| dwerg-guh / boomguhs / Gouwguh | dwarf guh / tree guhs / Shire Guh | *dwergendeur* = *dwarf door* |
+| Rookguhje | Smoke Guhling | the three caged ones on Mount Fry |
+| Knabbelgouw | Nibble Shire | "the Nibble Shire" in prose; *de Gouw* = *the Shire* |
+| Knabbel-eind | Nibble End | Bag End |
+| heuvelholletje / moestuin / Hovenier | hill hole / vegetable patch / Gardener | |
+| Bakkerguh Knabbelings | Baker Guh Nibbins | Baggins |
+| Tante Lobelia Guhzak | Aunt Lobelia Guhsackville | Sackville-Baggins |
+| Visser Guhpkuil | Fisher Guhpool | |
+| Rozie Katoenguh | Rosie Cottonguh | |
+| Een langverwacht knabbelfeest | A Long-Expected Nibble Party | chapter 1 |
+| afscheidsfeest / Guhdalfs vuurwerkkist / vuurpijl | farewell party / Guhdalf's Fireworks Crate / rocket | *Fwoesh!* = *Fwoosh!* |
+| Feesttafel van de Knabbelgouw / Proviandkrat / Heuvelschoorsteentje | Party Table of the Nibble Shire / Provisions Crate / Little Hill Chimney | *proviand* = *provisions* |
+| tweede ontbijt / derde ontbijt / elfuurtje / tussendoorknabbel | second breakfast / third breakfast / elevenses / in-between nibble | |
+| grillportaal | grill portal | the Barbecuether portal of the big Barbecue Pit |
+| Guhvendel | Guhvendell | Rivendell |
+| Het Laatste Knusse Huis | The Last Cozy House | Last Homely House |
+| De Raad van Guhrond / raadskring / raadsbel | The Council of Guhrond / council ring / council bell | chapter 2 |
+| Knabsil / de scherven van Knabsil | Nibsil / the shards of Nibsil | Narsil |
+| De Mijnen van Knabbelmoria / Knabbelmoria | The Mines of Nibblemoria / Nibblemoria | chapter 3; knabbel = nibble here too |
+| Brug van Knabbel-dûm / Knabbel-dûm | Bridge of Nibble-dûm / Nibble-dûm | Khazad-dûm; keep the û |
+| De Poort van Durguh / Diepe Poort / Zuilenhal / Hal van de Hefbomen | The Gate of Durguh / Deep Gate / Hall of Pillars / Hall of Levers | |
+| Zeg njeg en treed binnen | Say Nyeg and Enter | "Speak friend and enter"; *Sesam, open u!* = *Open sesame!* |
+| Brokkelpad / Brokkelsteen | Crumble Path / Crumble Stone | |
+| de Kloof van Knabbelmoria | the Chasm of Nibblemoria | |
+| Dwergen-hefboom / hefboom | Dwarf Lever / lever | |
+| Runensteen van Knabbelmoria / rune / tombe | Runestone of Nibblemoria / rune / tomb | |
+| Trommels in de diepte / Doem... doem... | Drums in the deep / Doom... doom... | |
+| De emmer van Pippguh / Dwaas van een Pippguh | Pippguh's Bucket / Fool of a Pippguh | "Fool of a Took" |
+| Aan de worst geregen / Even de diepte in / Eronderdoor | Strung on the Sausage / A Quick Trip into the Deep / Underneath | advancement titles |
+| De Spiegel van Guhladriel / Spiegel van Guhladriel | The Mirror of Guhladriel / Mirror of Guhladriel | chapter 4 / the block |
+| Guhlórien / Caras Guhladhon | Guhlórien / Caras Guhladhon | stay; *boomstad* = *tree city*, *het gouden woud* = *the golden wood* |
+| de Grote Spies | the Great Skewer | the mallorn of the tree city |
+| gastenvlonder | guest platform | |
+| de Guhduin / de Arguhnath / de Guhkoningen | the Guhduin / the Arguhnath / the Guh Kings | *de Pilaren van de Guhkoningen* = *the Pillars of the Guh Kings* |
+| de Sausval van Rauguhs | the Sauce Falls of Rauguhs | |
+| Elfenbootje / elfenogen | Elven Boat / elf eyes | |
+| De gaven van Guhladriel / Guhladriels zegen | The Gifts of Guhladriel / Guhladriel's blessing | |
+| Lichtflesje | Light Phial | |
+| Elfenmanteltje | Little Elven Cloak | the story item ("be a rock"); the outfit is *Elfenmantel met blaadjesspeld* = *Elven Cloak with Leaf Pin* |
+| Elfentouw / Elfentouwhaak | Elven Rope / Elven Rope Hook | |
+| De Zwarte Roosterpoort | The Black Grill Gate | chapter 5; rooster = grill, as *Grill Iron* |
+| Roosterwachter / Poortrooster / Roosterpoortje | Grill Guard / Gate Grate / Little Grill Door | |
+| Blik van het Oog | Gaze of the Eye | |
+| het Asveld / de Kale Vlakte / de Schaduwlaan | the Ash Field / the Bare Plain / Shadow Lane | in Ash Vale (Asdal) |
+| het Wachthek / de Slakkenhut / de Holte | the Guard Fence / the Slag Hut / the Hollow | |
+| de schedelpaal / de uitkijkrug / sluipweg | the skull post / the lookout ridge / sneak path | |
+| Kamp van de Reisgenoten / Basiskamp | Camp of the Fellowship / Base Camp | |
+| Ik ben een rots, njeg / Achterom | I'm a Rock, Nyeg / Round the Back | |
+| De Frituurberg | Mount Fry | chapter 6 and structure; Mount Doom |
+| Frituurspleet | the Crack of Fry | Crack of Doom; scene title *The Crack of Fry* |
+| Kronkelpad / Eerste, Tweede, Derde Richel / Bakrandje | the Winding Path / First, Second, Third Ledge / the Frying Edge | |
+| Kooislot van de Frituurberg / Vallend kooltje | Cage Lock of Mount Fry / Falling Ember | |
+| afzuigkap | range hood | *Geen afzuigkap meer* = *No More Range Hood*; signs *AFZUIGKAP 1* = *RANGE HOOD 1* |
+| Stukje gefrituurde Knabbelring | Piece of the Fried Nibble Ring | |
+| Toren van Sausuman | Tower of Sauceruman | |
+| De Ringenbakker | The Ring Baker | his machine |
+| Mika-rad | Mika Wheel | the wheel an Uruk-Mika trudges in (a Mika does not run) |
+| Sputterpijp / Deegkneder / Sauskraan / Kaaskast | Sputter Pipe / Dough Kneader / Sauce Tap / Cheese Cupboard | |
+| Mokhoek / mokken / Ik mok | Sulking Corner / to sulk / I'm Sulking | |
+| Pannantír | Pannantír | stays (palantír + pan) |
+| Voorraad van Sausuman | Sauceruman's Supplies | |
+| Uienring / Ringdeeg | Onion Ring / Ring Dough | |
+| Kannetje hete frituursaus / Ui uit de Kaaskast | Jug of Hot Frying Sauce / Onion from the Cheese Cupboard | |
+| Stoofpotje van Sam-guh / stoofpotje | Sam-guh's Stew / stew | |
+| Feestknabbel | Party Nibble | |
+| Smikagols vissenbotje | Smikagol's Fish Bone | |
+| lekkere vissss | tasty fishesss | |
+| Guhdalfs punthoed met baard | Guhdalf's Pointy Hat with Beard | outfit |
+| Harige hobbitvoetjes / De ring aan een kettinkje | Hairy Hobbit Feet / The Ring on a Chain | outfit |
+| Een eigen Sam-guh / Een eigen Guhshi | A Sam-guh of Your Own / A Guhshi of Your Own | advancements |
+| Mewtwo-guh (in the mirror wink) | Guhtwo | the Dutch line means Guhtwo (section 8) |
+
+**Famous lines (the Nibble Ring).**
+
+| Dutch | English | note |
+|---|---|---|
+| YOU.. SHALL.. NOT.. VADS! | YOU.. SHALL.. NOT.. VADS! | identical, see the top of this section |
+| Een tovenaar komt nooit te laat. Hij komt precies wanneer de knabbels klaar zijn | A wizard is never late. He arrives precisely when the nibbles are ready | title: *A Wizard Is Never Late* |
+| Bewaar hem geheim. Bewaar hem heel. En wat je ook doet: NIET opeten. | Keep it secret. Keep it whole. And whatever you do: do NOT eat it. | |
+| Kook ze, stamp ze, stop ze in een stoofpotje | Boil 'em, mash 'em, stick 'em in a stew | *Aardappelen!* = *Po-ta-toes!* |
+| Verder van huis dan ooit | Farther from Home than Ever | |
+| Ik ga niet zonder jou / Ik ga mee! | I'm Not Going Without You / I'm Coming Too! | |
+| Ik neem de ring wel mee! Al weet ik de weg niet. | I will take the ring! Though I do not know the way. | |
+| Men wandelt niet zomaar naar de Frituurberg | One does not simply walk to Mount Fry | |
+| Pootjes vegen, njeg | Wipe your paws, nyeg | the line; on the three SIGNS it is *Wipe paws, nyeg* (a sign line is 90 pixels wide) |
+| dingen die nog gebakken moeten worden | things that have yet to be baked | the mirror; title *Wat nog gebakken moet worden* = *What Has Yet to Be Baked* |
+| Niet duister, maar ROND en VADS als de dageraad! | Not dark, but ROUND and CHONK as the dawn! | |
+| Ik heb alleen maar een beetje trek | I'm only a tiny bit hungry | |
+| Tot hier, en geen kruimel verder / Vaarwel, Guhlórien | This Far, and Not a Crumb Further / Farewell, Guhlórien | |
+| Wij zweren het op het vadsje / Ons vadsje | We Swears It on the Chonkie / Our Chonkie | |
+| Ruik jij ook knabbel? / Wie het licht heeft | Do You Smell Nibble Too? / Whoever Holds the Light | |
+| Eén knabbel om ze allemaal te delen | One Nibble to Share Them All | the story's motto (FTB subtitle) |
+| Eén ring om ze allemaal op te eten / Eén uienring om ze allemaal op te eten | One Ring to Eat Them All / One Onion Ring to Eat Them All | |
+| Ik kan de ring niet dragen... maar wel jou, njeg! / Maar wel jou | I can't carry the ring... but I can carry you, nyeg! / But I Can Carry You | |
+| Het prikt in onze oogjesss | It Stings Our Little Eyesss | |
+| Daar staat hij dan / Lang leve de koning | There It Stands / Long Live the King | |
+| Niet omdoen! / De Negen te snel af / Even uitpuffen | Don't Put It On! / Outrunning the Nine / Catching Your Breath | |
+| Iedereen wil een hapje / Er is altijd wel iets te vieren | Everyone Wants a Bite / There's Always Something to Celebrate | |
+
+### Super Guhrio
+
+| Dutch | English | note |
+|---|---|---|
+| Super Guhrio / Guhrio / Luiguh | Super Guhrio / Guhrio / Luiguh | stay |
+| Guhmba / Guhshi | Guhmba / Guhshi | stay; plural *Guhmbas* |
+| Kasteel van de Grote Nether-Mika | Big Nether Mika's Castle | "Bowser's Castle" |
+| Grote Nether-Mika | Big Nether Mika | as *Big Mika* |
+| Prinses Perzikguh | Princess Peachguh | |
+| Pad-guh / Pad-guh's kraam | Toad-guh / Toad-guh's Stall | |
+| Schild-Mika / Schild-Mika-schild | Shell Mika / Shell Mika Shell | Koopa |
+| Plof-Mika | Flomp Mika | Thwomp; PLOF! = FLOMP! |
+| Hapbloem | Chomp Flower | Piranha Plant |
+| Draaiende grillspies / Naaf van een grillspies | Spinning Grill Skewer / Grill Skewer Hub | fire bar |
+| Superknabbel / Gegooide knabbel | Super Nibble / Thrown Nibble | |
+| Vuurpeper / Vuurpeperstruik | Fire Pepper / Fire Pepper Bush | |
+| Grote vadsmunt / vadsmunten | Big Chonk Coin / chonk coins | *(al gehad)* = *(Already Collected)*; *Achttien keer vads* = *Eighteen Times Chonk* |
+| Guhrio-munt / munten | Guhrio Coin / coins | what Toad-guh's stall takes |
+| Ei van Guhshi / Een gespikkeld ei | Guhshi's Egg / A Speckled Egg | |
+| Vraagtekenblok / Onzichtbaar vraagtekenblok | Question Block / Hidden Question Block | |
+| Knabbel-vraagtekenblok | Nibble Question Block | the one for at home |
+| Uitroeptekenschakelaar / Schakelblok / klokschakelaar | Exclamation Switch / Switch Block / timer switch | |
+| Valblok / Platform | Falling Block / Platform | |
+| Groene pijp / Groene pijp (onderstuk) | Green Pipe / Green Pipe (Base) | |
+| Warppijp / Warppijp (onderstuk) | Warp Pipe / Warp Pipe (Base) | |
+| Groene reispijp | Green Travel Pipe | the one for at home |
+| Levelpoort / levelhal | Level Gate / level hall | |
+| Guhrio-vlaggetje / Guhrio-vlaggenmast / Guhrio-startvlag | Guhrio Flag / Guhrio Flagpole / Guhrio Start Flag | the flag is the checkpoint a shove sends you back to |
+| Kasteelvlaggenmast | Castle Flagpole | the one for at home |
+| Guhrio-blok / Guhrio-steen / Guhrio-grond / Guhrio-deur / Guhrio-siersteen | Guhrio Block / Guhrio Brick / Guhrio Ground / Guhrio Door / Guhrio Trim Brick | |
+| ...-plekje (Guhmba-, Hapbloem-, Platform-, Plof-Mika-, Schild-Mika-, Valblok-) | ... Spot (*Guhmba Spot*, *Chomp Flower Spot*, ...) | builder marker blocks; *Wachtplekje van Guhshi* = *Guhshi's Waiting Spot*, *Plekje van de Grote Nether-Mika* = *Big Nether Mika's Spot* |
+| Guhrio-tip / Guhrio-geheimpje | Guhrio Tip / Guhrio Secret | |
+| Geschilderd(e) gras / aarde / heg / wolk / lucht | Painted Grass / Dirt / Hedge / Cloud / Sky | the painted scenery of world 1 |
+| Geschilderde heuvel / heuvel met oogjes / Geschilderd tuinplantje | Painted Hill / Painted Hill with Eyes / Painted Garden Plant | |
+| Geschilderd loof in de verte / wolkje in de verte / wolkje met een snoet | Painted Distant Leaves / Painted Distant Cloud / Painted Cloud with a Snoot | |
+| Wereld 1: de binnentuin / Wereld 2: de kelders / Wereld 3: de burcht | World 1: The Courtyard / World 2: The Cellars / World 3: The Keep | burcht = Keep, as *Skewer Keep* |
+| Level 1-1: de binnentuin / Level 1-2: de heggentuin | Level 1-1: The Courtyard / Level 1-2: The Hedge Garden | |
+| Level 2-1: De buizenkelder / Level 2-2: Het nest van Guhshi | Level 2-1: The Pipe Cellar / Level 2-2: Guhshi's Nest | |
+| Level 3-1: De Grillgang / Level 3-2: De Sauskelder | Level 3-1: The Grill Corridor / Level 3-2: The Sauce Cellar | |
+| Het hele kasteel in één keer | The Whole Castle in One Go | high score row |
+| het mollenhol / de muntenkas | the Mole Hole / the Coin Greenhouse | the secrets of world 1 |
+| Keldergrond / Keldersteen | Cellar Ground / Cellar Brick | |
+| Eierslot / Broednest van Guhshi / Broedplekje | Egg Lock / Guhshi's Hatching Nest / Hatching Spot | |
+| Roosterbrug / Brughendel | Grate Bridge / Bridge Lever | |
+| Guhshi-parkeerpaal | Guhshi Hitching Post | |
+| Gloeiend kooltje (the duel) | Glowing Ember | the existing name |
+| Taartkarretje van Prinses Perzikguh | Princess Peachguh's Cake Cart | |
+| voorplein / torenkamer / Peperkamer / schatkamer | forecourt / tower room / Pepper Room / treasure room | |
+| Highscorebord van het kasteel | Castle High Score Board | |
+| Rode Guhrio-pet met snor / Groene Luiguh-pet | Red Guhrio Cap with Mustache / Green Luiguh Cap | |
+| Kroontje van Prinses Perzikguh / Gouden vadspet | Princess Peachguh's Little Crown / Golden Chonk Cap | |
+| Loodguhter | Plumbguh | loodgieter pun |
+| Vlaggenmastenverzamelaar / Super vahoege vadsverzamelaar | Flagpole Collector / Super Wahoog Chonk Collector | |
+| Njeg! Mama! / Binnendoor / Kelder-vads / Krak... njeg! | Nyeg! Mama! / Shortcut / Cellar Chonk / Crack... nyeg! | |
+| Guhshi kruipt uit zijn ei / Een stukje taart / Taart voor iedereen | Guhshi Hatches from His Egg / A Piece of Cake / Cake for Everyone | |
+
+**Famous lines (Super Guhrio).**
+
+| Dutch | English | note |
+|---|---|---|
+| Bedankt! Maar de prinses is in een ander kasteeldeel, njeg | Thank you! But the princess is in another part of the castle, nyeg | "...in another castle"; title *In een ander kasteeldeel* = *In Another Part of the Castle* |
+| Het is-a mij, Guhrio! | It's-a Me, Guhrio! | |
+| Hij had gewoon trek in taart | He Just Wanted Some Cake | |
+| Geheim gevonden, njeg! | Secret found, nyeg! | |
+| Een held! Njeg! / Guhshi is van jou! | A Hero! Nyeg! / Guhshi Is Yours! | |
+
+### Added during the review of c40 - c62 (cross-chunk rules and names)
+
+**Floors.** Dutch *begane grond* = *ground floor*; *eerste / tweede / derde verdieping* = *one floor up / two floors up /
+three floors up* (never "first / second / third floor": American and British counting differ by one, and the player has to
+find the right stairs). *een trap omhoog* = *one staircase up*.
+
+**A quoted button is the button.** Where a text quotes a screen label, use the label's own words: the Filter Piece's
+*alleen deze / alles behalve / laat liggen* = *only these / all except / leave behind* (screen: *Only these*, *All except*,
+*Leave behind:*), a Stop Post's *Ophalen / Afleveren* = *Pick Up / Drop Off*.
+
+**The quest book ticks.** *afvinken* = *to tick off* (as in the older chapters), and the closing lines of a "How Do You
+Get Here?" quest are the standard ones: *Nothing is locked: every quest ticks itself off as soon as you've done it, even
+if you did it earlier. The headings show what logically comes after what. Tick this off and get chonky to work!*
+
+**Steps of a story** (`gui.guhs.verhalen.<story>.stap.N`) are sentences: only the first word and names get a capital
+(*The lookout ridge*, *Up the rope*, but *The Ash Field*, *Shadow Lane*). Quest and advancement TITLES stay Title Case.
+
+**Dutch that stays in en_us on purpose.** Guhdalf's *YOU.. SHALL.. NOT.. VADS!*; the word **VRIJ** on the campsite board of
+the Grill Campground (it is painted into the texture, green, and *BEZET* in red: the English says *a green VRIJ (vacant)
+sign*, never "a VACANT sign"); the dev command `/guhs verhaal demo`; the names *Smikkel*, *Guhdalf*, *Smikagol*...
+
+| Dutch | English | note |
+|---|---|---|
+| baasje (Smikagol to the player) | master | *Volg ons, vadsje... eh, baasje* = *Follow us, chonkie... er, master*; a guh's note still says *my human* |
+| Opa Njeg / Tante Vads / Oma Vahoeg / Neef Guh | Grandpa Nyeg / Auntie Chonk / Granny Wahoog / Cousin Guh | the runners of the Old Guh Wheel Power Plant (with *Uncle Nibble*) |
+| Prof. dr. Guh | Prof. Dr. Guh | sign at the Fossil Dig |
+| wachtkamer (Knabbelmoria) / westpoort / oostpoort / valhek | guard room / West Gate / East Gate / portcullis | the *Wachtkamer* of the toll bridge is a *Waiting Room* |
+| steiger | dock (boats, Sauce Striders) / scaffold (under the toll bridge) / little jetty (the castle) | |
+| gang (under the Black Grill Gate) | tunnel | *de gang* of Nibblemoria is *the corridor* |
+| wei / box / gangpad / voerbak (Mika-stal) | paddock / pen / aisle / feeding trough | |
+| receptie / houtschuur / kampeerplekjes | reception / woodshed / campsites | Grill Campground |
+| afdakje | little roof | Fossil Dig, Ash Field |
+| kijkbedden / brouwhoek | display beds / brewing corner | Pepper Garden |
+| knabbelbak (vuurtoren) | Nibble Trough | |
+| pollen Mikakruid | clumps of Mika Weed | |
+| brok(ken) puin / hakken (puin, zout) | chunk(s) of rubble / to chip | *Hak maar raak!* = *Chip away!* |
+| marktbewijs | market permit | what you haggle over |
+| kaasvijver | cheese pond | Super Guhrio world 1 |
+| ?-blok | ?-block | in the duel's texts; the block itself is the *Question Block* |
+| Floep! (the lighthouse lamp) | Fwoop! | *floept aan* = *fwoops on*; the catapult's *Floep!* is still *Floop!* |
+| Hmpf | Hmph | |
+| %s uur (a duration) | %s h | never "%s hours" (1 hours) |
