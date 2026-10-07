@@ -24,6 +24,7 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import nl.juiced.guhs.feature.guhrio.Baan;
+import nl.juiced.guhs.feature.guhrio.BaanSprong;
 import nl.juiced.guhs.feature.guhrio.GuhrioBlocks;
 import nl.juiced.guhs.feature.guhrio.GuhrioPayloads;
 import nl.juiced.guhs.feature.guhrio.GuhrioSpel;
@@ -47,24 +48,21 @@ import nl.juiced.guhs.feature.verhaal.Cutscenes;
  *     <li>What carries you: a moving platform takes you along; on Guhshi a held jump flutters.</li>
  *     <li>The little films: into a pipe and out of the other (in any direction), sliding down the flagpole.</li>
  * </ul>
- * A cutscene always wins: while {@code Cutscenes.bezig} nothing here touches you. The numbers at the top are the feel of
- * the game (together with GuhrioSpel's jump strength, gravity and speed); change them here.
+ * A cutscene always wins: while {@code Cutscenes.bezig} nothing here touches you. The feel of the game is the numbers of
+ * {@link BaanSprong} (the jump itself: the sums there are what this class does every tick, and what the generators walk
+ * every level with) together with GuhrioSpel's jump strength, gravity and speed, and the few numbers at the top here.
  */
 public final class BaanBesturing {
-    /** In the air you steer much better than normal: this much speed per tick towards where you push, up to these speeds. */
-    public static final double LUCHT_STUUR = 0.04, LUCHT_LOOP = 0.26, LUCHT_REN = 0.365;
-    /**
-     * The jump of the old platform games: while you rise with space held you are lighter (this much speed back per tick),
-     * letting go cuts what is left of the rise, and you fall heavier than you rose.
-     */
-    public static final double STIJG_LICHTER = 0.035, HOP_REST = 0.4, VAL_ERBIJ = 0.03, VAL_MAX = -1.3;
+    /** (the jump's numbers live in {@link BaanSprong}; these names stay for whoever reads them here) */
+    public static final double LUCHT_STUUR = BaanSprong.LUCHT_STUUR, LUCHT_LOOP = BaanSprong.LUCHT_LOOP, LUCHT_REN = BaanSprong.LUCHT_REN;
+    public static final double STIJG_LICHTER = BaanSprong.STIJG_LICHTER, HOP_REST = BaanSprong.HOP_REST, VAL_ERBIJ = BaanSprong.VAL_ERBIJ,
+            VAL_MAX = BaanSprong.VAL_MAX;
     /** The bounce off a creature: normal, and with space held. */
     public static final double STUITER = 0.48, STUITER_HOOG = 0.70;
     /** Sliding down the flagpole (blocks per tick). */
     public static final double GLIJ = 0.14;
-    /** On Guhshi: holding space at the top of a jump flutters this long, rising this fast. */
-    public static final int FLADDER_TICKS = 24;
-    public static final double FLADDER = 0.03;
+    public static final int FLADDER_TICKS = BaanSprong.FLADDER_TICKS;
+    public static final double FLADDER = BaanSprong.FLADDER;
     /** Ticks between two throws / licks, and how long "press Q again" waits. */
     public static final int ACTIE_RUST = 6, STOP_WACHT = 40;
 
@@ -72,8 +70,8 @@ public final class BaanBesturing {
     private static int stuk;
     private static int kijk = 1;
     private static float yaw;
-    /** Rising from a jump of your own (so letting go of space may cut it). */
-    private static boolean sprong;
+    /** Your jump from tick to tick (rising from a jump of your own, Guhshi's flutter). */
+    private static final BaanSprong.Staat SPRONG = new BaanSprong.Staat();
     private static double valVoor;
     private static boolean wasW, cutscene;
     /** 0 not in a pipe; 1 going in; 2 waiting inside for the server; 3 coming out. */
@@ -83,7 +81,7 @@ public final class BaanBesturing {
     private static boolean pijpStaat;
     @Nullable
     private static BlockPos mast;
-    private static int rustStamp, rustDuik, rustActie, stopWacht, fladder;
+    private static int rustStamp, rustDuik, rustActie, stopWacht;
     private static final Map<Integer, Integer> RUST_WEZENS = new HashMap<>();
     private static final Map<BlockPos, Integer> RUST_STAP = new HashMap<>();
     /** What carries you (a platform) and where it was last tick. */
@@ -147,7 +145,7 @@ public final class BaanBesturing {
         }
         stuk = baan.plek(p.getX(), p.getZ()).stuk();
         kijk = 1;
-        sprong = false;
+        SPRONG.sprong = false;
         mast = null;
         drager = null;
         yaw = yawVan(baan);
@@ -159,7 +157,7 @@ public final class BaanBesturing {
     static void einde() {
         pijpFase = 0;
         mast = null;
-        sprong = false;
+        SPRONG.sprong = false;
         cutscene = false;
         drager = null;
         stopWacht = 0;
@@ -171,7 +169,7 @@ public final class BaanBesturing {
     static void terug(LocalPlayer p) {
         Baan baan = GuhrioClient.baan();
         pijpFase = 0;
-        sprong = false;
+        SPRONG.sprong = false;
         drager = null;
         if (baan != null) {
             stuk = baan.plek(p.getX(), p.getZ()).stuk();
@@ -260,37 +258,14 @@ public final class BaanBesturing {
         stuk = nieuw;
         boolean lucht = !p.onGround() && !p.isInWater();
         // in the air: steer
-        if (lucht && teken != 0) {
-            double top = p.isSprinting() ? LUCHT_REN : LUCHT_LOOP;
-            if (langs * teken < top) {
-                langs = teken > 0 ? Math.min(top, langs + LUCHT_STUUR) : Math.max(-top, langs - LUCHT_STUUR);
-            }
+        if (lucht) {
+            langs = BaanSprong.stuur(langs, teken, p.isSprinting());
         }
-        double vy = v.y;
+        // the jump: a held one rises longer, letting go cuts it, falling is heavier, Guhshi flutters
         boolean spatie = mc.options.keyJump.isDown() && mc.screen == null;
-        if (p.onGround()) {
-            sprong = false;
-            fladder = 0;
-        } else if (lucht) {
-            if (vy > 0) {
-                if (sprong && spatie) {
-                    vy += STIJG_LICHTER;                       // a held jump rises longer
-                } else if (sprong) {
-                    vy *= HOP_REST;                            // let go: a small hop
-                    sprong = false;
-                }
-            } else {
-                sprong = false;
-                if (GuhrioClient.guhshi != 0 && spatie && fladder < FLADDER_TICKS) {
-                    fladder++;                                 // Guhshi flutters: a little higher, a lot further
-                    vy = FLADDER;
-                    if (fladder % 4 == 1) {
-                        p.playSound(SoundEvents.PARROT_FLY, 0.5f, 1.5f);
-                    }
-                } else {
-                    vy = Math.max(VAL_MAX, vy - VAL_ERBIJ);    // falling is heavier than rising
-                }
-            }
+        double vy = SPRONG.val(v.y, p.onGround(), lucht, spatie, GuhrioClient.guhshi != 0);
+        if (SPRONG.fladderde && SPRONG.fladder % 4 == 1) {
+            p.playSound(SoundEvents.PARROT_FLY, 0.5f, 1.5f);
         }
         // a hidden block right above your head on the way up: it is there now (your head will find it this very step)
         if (vy > 0 && lucht) {
@@ -382,9 +357,8 @@ public final class BaanBesturing {
             p.setPos(op.x(), p.getY(), op.z());
         }
         boolean spatie = mc.options.keyJump.isDown() && mc.screen == null;
-        if (!p.onGround() && valVoor <= 0 && p.getDeltaMovement().y > 0.3 && spatie) {
-            sprong = true;                                    // (left the ground by a jump of your own this tick)
-            drager = null;
+        if (SPRONG.na(p.onGround(), valVoor, p.getDeltaMovement().y, spatie)) {
+            drager = null;                                    // (left the ground by a jump of your own this tick)
         }
         Level level = p.level();
         kop(p, level);
@@ -419,7 +393,7 @@ public final class BaanBesturing {
                     p.playSound(SoundEvents.STONE_HIT, 0.6f, 0.9f);
                 }
                 stuur(GuhrioPayloads.Actie.BOTS, pos, 0);
-                sprong = false;
+                SPRONG.sprong = false;
                 return;
             }
         }
@@ -465,8 +439,8 @@ public final class BaanBesturing {
                 Vec3 v = p.getDeltaMovement();
                 p.setDeltaMovement(v.x, spatie ? STUITER_HOOG : STUITER, v.z);
                 p.resetFallDistance();
-                sprong = spatie;
-                fladder = 0;
+                SPRONG.sprong = spatie;
+                SPRONG.fladder = 0;
                 rustStamp = 3;
                 RUST_WEZENS.put(e.getId(), 12);
                 p.playSound(SoundEvents.SLIME_SQUISH_SMALL, 0.8f, 1.2f);
@@ -561,7 +535,7 @@ public final class BaanBesturing {
         pijpTick = 0;
         pijpVan = GuhrioBlocks.PijpBlok.buiten(p.level(), pos, state);
         pijpNaar = GuhrioBlocks.PijpBlok.binnen(p.level(), pos, state);
-        sprong = false;
+        SPRONG.sprong = false;
         drager = null;
         p.playSound(SoundEvents.BUBBLE_COLUMN_WHIRLPOOL_INSIDE, 0.7f, 0.7f);
     }
@@ -575,7 +549,7 @@ public final class BaanBesturing {
         pijpNaar = GuhrioBlocks.PijpBlok.buiten(p.level(), pos, state);
         // (out of a mouth that hangs from above you drop; out of any other you stand)
         pijpStaat = !(state.getBlock() instanceof GuhrioBlocks.PijpBlok) || state.getValue(GuhrioBlocks.PijpBlok.FACING) != Direction.DOWN;
-        sprong = false;
+        SPRONG.sprong = false;
         Baan baan = GuhrioClient.baan();
         if (baan != null) {
             stuk = baan.plek(pijpNaar.x, pijpNaar.z).stuk();
@@ -620,7 +594,7 @@ public final class BaanBesturing {
     /** The flagpole at {@code pos}: you slide down it and wait. */
     static void klaar(LocalPlayer p, BlockPos pos) {
         mast = pos.immutable();
-        sprong = false;
+        SPRONG.sprong = false;
         drager = null;
         p.setDeltaMovement(0, Math.min(0, p.getDeltaMovement().y), 0);
     }
