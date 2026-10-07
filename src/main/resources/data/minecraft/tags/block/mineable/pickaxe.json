@@ -139,6 +139,10 @@
     "guhs:knabbelkoorblok_plaat",
     "guhs:kruimelrots_stenen_muur",
     "guhs:schimmelkaas_stenen_muur",
-    "guhs:klipkaas_stenen_muur"
+    "guhs:klipkaas_stenen_muur",
+    "guhs:einde2_bouw_aarde_stadssteen",
+    "guhs:einde2_bouw_aarde_aardemunt",
+    "guhs:einde2_bouw_aarde_spoor",
+    "guhs:einde2_bouw_aarde_groen_kristal"
   ]
 }

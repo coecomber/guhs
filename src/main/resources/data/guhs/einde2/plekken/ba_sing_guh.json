@@ -1,0 +1,1375 @@
+{
+  "structuur": "ba_sing_guh",
+  "soort": "leegte_bouw",
+  "grootte": [
+    256,
+    110,
+    256
+  ],
+  "anker": [
+    120,
+    0,
+    120
+  ],
+  "plekken": {
+    "aankomst": {
+      "soort": "zone",
+      "pos": [
+        5,
+        46,
+        121
+      ],
+      "tot": [
+        17,
+        59,
+        135
+      ],
+      "wie": "de landingsplek op de westlob: vlak, vrij naar boven"
+    },
+    "aankomst_speler": {
+      "soort": "prop",
+      "pos": [
+        11,
+        46,
+        128
+      ],
+      "wie": "hier sta je na aankomst, met je neus naar de poort"
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        -30,
+        66,
+        128
+      ],
+      "wie": "buiten de bouw, ten westen van de poort: het openingsshot op de buitenmuur"
+    },
+    "rustpunt_1": {
+      "soort": "prop",
+      "pos": [
+        19,
+        46,
+        128
+      ],
+      "wie": "voor de buitenpoort"
+    },
+    "kamp": {
+      "soort": "zone",
+      "pos": [
+        5,
+        46,
+        139
+      ],
+      "tot": [
+        21,
+        53,
+        154
+      ],
+      "wie": "het kamp van het team, naast de landingsplek"
+    },
+    "appa_kamp": {
+      "soort": "prop",
+      "pos": [
+        17,
+        46,
+        151
+      ],
+      "wie": "Appa-guh ligt hier: 5 x 5 vrij"
+    },
+    "team_aang": {
+      "soort": "npc",
+      "pos": [
+        12,
+        46,
+        144
+      ],
+      "yaw": -20.0,
+      "wie": "aang bij het kampvuur"
+    },
+    "team_momo": {
+      "soort": "npc",
+      "pos": [
+        14,
+        46,
+        144
+      ],
+      "yaw": 20.0,
+      "wie": "momo bij het kampvuur"
+    },
+    "team_katara": {
+      "soort": "npc",
+      "pos": [
+        10,
+        46,
+        146
+      ],
+      "yaw": -90.0,
+      "wie": "katara bij het kampvuur"
+    },
+    "team_sokka": {
+      "soort": "npc",
+      "pos": [
+        16,
+        46,
+        146
+      ],
+      "yaw": 90.0,
+      "wie": "sokka bij het kampvuur"
+    },
+    "team_toph": {
+      "soort": "npc",
+      "pos": [
+        12,
+        46,
+        148
+      ],
+      "yaw": -160.0,
+      "wie": "toph bij het kampvuur"
+    },
+    "team_zuka": {
+      "soort": "npc",
+      "pos": [
+        14,
+        46,
+        148
+      ],
+      "yaw": 160.0,
+      "wie": "zuka bij het kampvuur"
+    },
+    "loketguh": {
+      "soort": "npc",
+      "pos": [
+        27,
+        46,
+        122
+      ],
+      "yaw": 0.0,
+      "wie": "de strenge loketguh, achter het raampje",
+      "kind": "LOKETGUH"
+    },
+    "loket": {
+      "soort": "prop",
+      "pos": [
+        27,
+        46,
+        124
+      ],
+      "wie": "de balie van het paspoortloket (het raampje erboven is open)"
+    },
+    "buitenpoort": {
+      "soort": "prop",
+      "pos": [
+        22,
+        46,
+        128
+      ],
+      "wie": "de drempel van de buitenpoort (7 breed, 6 tot 8 hoog): fase B zet hem dicht of open"
+    },
+    "station_buiten": {
+      "soort": "prop",
+      "pos": [
+        32,
+        66,
+        109
+      ],
+      "wie": "het perron op de buitenmuur"
+    },
+    "monorail_wagen": {
+      "soort": "prop",
+      "pos": [
+        34,
+        66,
+        112
+      ],
+      "wie": "hier wacht de wagen (op de balk)"
+    },
+    "monorail_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          32,
+          67,
+          112
+        ],
+        [
+          52,
+          67,
+          112
+        ],
+        [
+          80,
+          67,
+          112
+        ],
+        [
+          110,
+          67,
+          112
+        ],
+        [
+          113,
+          67,
+          112
+        ]
+      ],
+      "wie": "de balk van de monorail, van de buitenmuur naar de bovenring (de wagen rijdt erboven)"
+    },
+    "station_onder": {
+      "soort": "prop",
+      "pos": [
+        52,
+        66,
+        108
+      ],
+      "wie": "het perron van station Onderring"
+    },
+    "station_midden": {
+      "soort": "prop",
+      "pos": [
+        80,
+        66,
+        108
+      ],
+      "wie": "het perron van station Middenring"
+    },
+    "station_boven": {
+      "soort": "prop",
+      "pos": [
+        111,
+        66,
+        115
+      ],
+      "wie": "het perron van de bovenring (de trap omlaag komt uit bij het paleisplein)"
+    },
+    "aardrommel": {
+      "soort": "zone",
+      "pos": [
+        75,
+        40,
+        188
+      ],
+      "tot": [
+        105,
+        51,
+        220
+      ],
+      "wie": "de arena van de Aardrommel"
+    },
+    "toph": {
+      "soort": "npc",
+      "pos": [
+        90,
+        42,
+        202
+      ],
+      "yaw": 0.0,
+      "wie": "Toph-guh, De Blinde Bandiet",
+      "kind": "TOPH_GUH"
+    },
+    "kei": {
+      "soort": "npc",
+      "pos": [
+        90,
+        42,
+        208
+      ],
+      "yaw": 180.0,
+      "wie": "De Kei-guh",
+      "kind": "KEI_GUH"
+    },
+    "omroeper": {
+      "soort": "npc",
+      "pos": [
+        90,
+        47,
+        189
+      ],
+      "yaw": 0.0,
+      "wie": "de omroeper, op zijn verhoging bij de bel",
+      "kind": "AARDROMMEL_OMROEPER"
+    },
+    "arena_speler": {
+      "soort": "prop",
+      "pos": [
+        87,
+        42,
+        205
+      ],
+      "wie": "hier staat de speler in de ring"
+    },
+    "arena_tegenstander": {
+      "soort": "prop",
+      "pos": [
+        93,
+        42,
+        205
+      ],
+      "wie": "hier staat de tegenstander"
+    },
+    "rustpunt_2": {
+      "soort": "prop",
+      "pos": [
+        78,
+        46,
+        193
+      ],
+      "wie": "bij de ingang van de Aardrommel"
+    },
+    "tril_doel_1": {
+      "soort": "prop",
+      "pos": [
+        112,
+        45,
+        208
+      ],
+      "wie": "een aardemunt in de vloer: hier trilt het"
+    },
+    "tril_doel_2": {
+      "soort": "prop",
+      "pos": [
+        116,
+        45,
+        218
+      ],
+      "wie": "een aardemunt in de vloer: hier trilt het"
+    },
+    "tril_doel_3": {
+      "soort": "prop",
+      "pos": [
+        119,
+        45,
+        213
+      ],
+      "wie": "een aardemunt in de vloer: hier trilt het"
+    },
+    "tril_doel_4": {
+      "soort": "prop",
+      "pos": [
+        123,
+        45,
+        208
+      ],
+      "wie": "een aardemunt in de vloer: hier trilt het"
+    },
+    "tril_doel_5": {
+      "soort": "prop",
+      "pos": [
+        126,
+        45,
+        218
+      ],
+      "wie": "een aardemunt in de vloer: hier trilt het"
+    },
+    "tril_doel_6": {
+      "soort": "prop",
+      "pos": [
+        126,
+        45,
+        212
+      ],
+      "wie": "een aardemunt in de vloer: hier trilt het"
+    },
+    "blinddoek_baan": {
+      "soort": "zone",
+      "pos": [
+        111,
+        46,
+        207
+      ],
+      "tot": [
+        127,
+        50,
+        219
+      ],
+      "wie": "de ommuurde blinddoekbaan naast de arena"
+    },
+    "meer_laogai": {
+      "soort": "zone",
+      "pos": [
+        210,
+        41,
+        109
+      ],
+      "tot": [
+        236,
+        51,
+        147
+      ],
+      "wie": "het meer in de onderring (4 diep)"
+    },
+    "basis_ingang": {
+      "soort": "prop",
+      "pos": [
+        221,
+        46,
+        105
+      ],
+      "wie": "de deur van de botenschuur: daarachter de trap omlaag naar de basis"
+    },
+    "pai_sho": {
+      "soort": "prop",
+      "pos": [
+        84,
+        49,
+        142
+      ],
+      "wie": "hier komt de Pai Sho-tafel: 3 x 3 vrij op de groene mat"
+    },
+    "theeketel": {
+      "soort": "prop",
+      "pos": [
+        76,
+        50,
+        147
+      ],
+      "wie": "de grote theeketel op het fornuis in de keuken"
+    },
+    "theehuis": {
+      "soort": "zone",
+      "pos": [
+        72,
+        49,
+        133
+      ],
+      "tot": [
+        88,
+        64,
+        149
+      ],
+      "wie": "De Jasmijn Draak met zijn terras"
+    },
+    "keuken": {
+      "soort": "zone",
+      "pos": [
+        74,
+        49,
+        145
+      ],
+      "tot": [
+        86,
+        52,
+        147
+      ],
+      "wie": "de keuken achter de toonbank"
+    },
+    "miroh": {
+      "soort": "npc",
+      "pos": [
+        80,
+        49,
+        145
+      ],
+      "yaw": 180.0,
+      "wie": "Oom Miroh, achter de toonbank",
+      "kind": "OOM_MIROH"
+    },
+    "zuka_ober": {
+      "soort": "npc",
+      "pos": [
+        79,
+        49,
+        141
+      ],
+      "yaw": 180.0,
+      "wie": "Zuka, de chagrijnige ober",
+      "kind": "ZUKA"
+    },
+    "klant_1": {
+      "soort": "npc",
+      "pos": [
+        78,
+        49,
+        140
+      ],
+      "yaw": 180.0,
+      "wie": "een klant bij een theetafel",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "klant_2": {
+      "soort": "npc",
+      "pos": [
+        84,
+        49,
+        140
+      ],
+      "yaw": 180.0,
+      "wie": "een klant bij een theetafel",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "klant_3": {
+      "soort": "npc",
+      "pos": [
+        78,
+        49,
+        141
+      ],
+      "yaw": 0.0,
+      "wie": "een klant bij een theetafel",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "joo_dee_huis": {
+      "soort": "zone",
+      "pos": [
+        139,
+        49,
+        62
+      ],
+      "tot": [
+        149,
+        57,
+        69
+      ],
+      "wie": "het huis van Joo Dee-guh (links en rechts precies gelijk)"
+    },
+    "joo_dee": {
+      "soort": "npc",
+      "pos": [
+        144,
+        49,
+        71
+      ],
+      "yaw": 0.0,
+      "wie": "Joo Dee-guh, voor haar deur",
+      "kind": "JOO_DEE_GUH"
+    },
+    "gasthuis": {
+      "soort": "zone",
+      "pos": [
+        139,
+        52,
+        149
+      ],
+      "tot": [
+        153,
+        60,
+        159
+      ],
+      "wie": "het gasthuis van de bovenring"
+    },
+    "aardekoning": {
+      "soort": "npc",
+      "pos": [
+        146,
+        57,
+        128
+      ],
+      "yaw": 90.0,
+      "wie": "de Aardekoning-guh, voor zijn troon",
+      "kind": "AARDEKONING_GUH"
+    },
+    "long_feng": {
+      "soort": "npc",
+      "pos": [
+        145,
+        57,
+        130
+      ],
+      "yaw": 90.0,
+      "wie": "Long Feng-Mika, vlak naast de troon (hij fluistert)",
+      "kind": "LONG_FENG_MIKA"
+    },
+    "bosco": {
+      "soort": "npc",
+      "pos": [
+        143,
+        56,
+        117
+      ],
+      "yaw": 0.0,
+      "wie": "beer Bosco, in zijn kamer",
+      "kind": "BOSCO"
+    },
+    "bosco_kamer": {
+      "soort": "zone",
+      "pos": [
+        136,
+        56,
+        115
+      ],
+      "tot": [
+        149,
+        60,
+        120
+      ],
+      "wie": "de kamer van beer Bosco"
+    },
+    "paleis": {
+      "soort": "zone",
+      "pos": [
+        119,
+        52,
+        111
+      ],
+      "tot": [
+        153,
+        87,
+        145
+      ],
+      "wie": "het paleis van de Aardekoning-guh met zijn podium"
+    },
+    "dai_li_6": {
+      "soort": "npc",
+      "pos": [
+        120,
+        56,
+        124
+      ],
+      "yaw": 90.0,
+      "wie": "een Dai Li-Mika op het paleisterras",
+      "kind": "DAI_LI_MIKA"
+    },
+    "catacomben_ingang": {
+      "soort": "prop",
+      "pos": [
+        156,
+        52,
+        108
+      ],
+      "wie": "de deur van de oude poort in de paleistuin: daarachter de trap omlaag naar de catacomben"
+    },
+    "koolkraam_1": {
+      "soort": "prop",
+      "pos": [
+        44,
+        46,
+        133
+      ],
+      "wie": "de hoek (laagste x, y, z) van de koolkraam: 5 x 4 x 4 vrij"
+    },
+    "koolkraam_2": {
+      "soort": "prop",
+      "pos": [
+        84,
+        49,
+        118
+      ],
+      "wie": "de hoek (laagste x, y, z) van de koolkraam: 5 x 4 x 4 vrij"
+    },
+    "koolkraam_3": {
+      "soort": "prop",
+      "pos": [
+        98,
+        52,
+        117
+      ],
+      "wie": "de hoek (laagste x, y, z) van de koolkraam: 5 x 4 x 4 vrij"
+    },
+    "koolman": {
+      "soort": "npc",
+      "pos": [
+        50,
+        46,
+        134
+      ],
+      "yaw": 90.0,
+      "wie": "de koolman, naast zijn kraam",
+      "kind": "KOOLMAN"
+    },
+    "basis": {
+      "soort": "zone",
+      "pos": [
+        196,
+        27,
+        97
+      ],
+      "tot": [
+        240,
+        45,
+        152
+      ],
+      "wie": "de geheime basis van de Dai Li-Mika's onder Meer Laogai (met de trap vanuit de botenschuur)"
+    },
+    "rustpunt_3": {
+      "soort": "prop",
+      "pos": [
+        222,
+        28,
+        108
+      ],
+      "wie": "in de hal van de basis, voor het sluipstuk"
+    },
+    "sluip_start": {
+      "soort": "prop",
+      "pos": [
+        222,
+        28,
+        113
+      ],
+      "wie": "het begin van de gang met de cellen"
+    },
+    "sluip_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          222,
+          28,
+          113
+        ],
+        [
+          222,
+          28,
+          132
+        ],
+        [
+          222,
+          28,
+          134
+        ],
+        [
+          222,
+          28,
+          136
+        ]
+      ],
+      "wie": "door de gang met de cellen naar de tralies van Appa's kamer"
+    },
+    "sluip_wacht_1": {
+      "soort": "npc",
+      "pos": [
+        220,
+        28,
+        110
+      ],
+      "yaw": -90.0,
+      "wie": "een Dai Li-Mika op wacht in de hal",
+      "kind": "DAI_LI_MIKA"
+    },
+    "sluip_wacht_2": {
+      "soort": "npc",
+      "pos": [
+        223,
+        28,
+        119
+      ],
+      "yaw": 90.0,
+      "wie": "een Dai Li-Mika op wacht bij de cellen",
+      "kind": "DAI_LI_MIKA"
+    },
+    "sluip_wacht_3": {
+      "soort": "npc",
+      "pos": [
+        221,
+        28,
+        127
+      ],
+      "yaw": -90.0,
+      "wie": "een Dai Li-Mika op wacht halverwege de gang",
+      "kind": "DAI_LI_MIKA"
+    },
+    "sluip_wacht_4": {
+      "soort": "npc",
+      "pos": [
+        213,
+        28,
+        134
+      ],
+      "yaw": -90.0,
+      "wie": "een Dai Li-Mika op wacht naar de lampkamer",
+      "kind": "DAI_LI_MIKA"
+    },
+    "sluip_wacht_5": {
+      "soort": "npc",
+      "pos": [
+        231,
+        28,
+        134
+      ],
+      "yaw": 90.0,
+      "wie": "een Dai Li-Mika op wacht naar de slaapzaal",
+      "kind": "DAI_LI_MIKA"
+    },
+    "sluip_wacht_6": {
+      "soort": "npc",
+      "pos": [
+        220,
+        28,
+        136
+      ],
+      "yaw": -90.0,
+      "wie": "een Dai Li-Mika op wacht bij de tralies van Appa",
+      "kind": "DAI_LI_MIKA"
+    },
+    "cel_1": {
+      "soort": "prop",
+      "pos": [
+        218,
+        28,
+        115
+      ],
+      "wie": "een cel (tralies en een ijzeren deur aan de gang)"
+    },
+    "cel_2": {
+      "soort": "prop",
+      "pos": [
+        218,
+        28,
+        119
+      ],
+      "wie": "een cel (tralies en een ijzeren deur aan de gang)"
+    },
+    "cel_3": {
+      "soort": "prop",
+      "pos": [
+        218,
+        28,
+        123
+      ],
+      "wie": "een cel (tralies en een ijzeren deur aan de gang)"
+    },
+    "cel_4": {
+      "soort": "prop",
+      "pos": [
+        218,
+        28,
+        127
+      ],
+      "wie": "een cel (tralies en een ijzeren deur aan de gang)"
+    },
+    "knipoog_mewtwo_tank": {
+      "soort": "prop",
+      "pos": [
+        228,
+        29,
+        120
+      ],
+      "wie": "in de tank (3 x 3 binnen, 2 diep water, luik erboven): hier zit Mewtwo-guh"
+    },
+    "knipoog_mewtwo_dai_li": {
+      "soort": "npc",
+      "pos": [
+        225,
+        28,
+        121
+      ],
+      "yaw": -90.0,
+      "wie": "een Dai Li-Mika naast de tank",
+      "kind": "DAI_LI_MIKA"
+    },
+    "knipoog_mewtwo_mew": {
+      "soort": "pad",
+      "punten": [
+        [
+          224,
+          31,
+          117
+        ],
+        [
+          224,
+          31,
+          123
+        ]
+      ],
+      "wie": "Mew-guh giechelt voorbij, door de lucht voor de tank langs"
+    },
+    "knipoog_mewtwo_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          221,
+          30,
+          126
+        ],
+        [
+          228,
+          30,
+          120
+        ]
+      ],
+      "wie": "vanuit de gang met de cellen, schuin op de tank"
+    },
+    "appa_kamer": {
+      "soort": "zone",
+      "pos": [
+        216,
+        28,
+        138
+      ],
+      "tot": [
+        228,
+        35,
+        150
+      ],
+      "wie": "de kamer waar Appa-guh vastzit (13 x 8 x 13 vrij), achter tralies"
+    },
+    "appa_gevangen": {
+      "soort": "prop",
+      "pos": [
+        222,
+        28,
+        144
+      ],
+      "wie": "hier ligt Appa-guh aan de ketting"
+    },
+    "appa_poort": {
+      "soort": "prop",
+      "pos": [
+        222,
+        28,
+        137
+      ],
+      "wie": "het midden van de tralies (7 breed, 5 hoog): fase B haalt ze weg"
+    },
+    "lampkamer": {
+      "soort": "zone",
+      "pos": [
+        198,
+        28,
+        129
+      ],
+      "tot": [
+        208,
+        32,
+        139
+      ],
+      "wie": "de ronde kamer met de draaiende lamp"
+    },
+    "rustpunt_4": {
+      "soort": "prop",
+      "pos": [
+        163,
+        30,
+        104
+      ],
+      "wie": "onderaan de trap van de oude poort, voor de catacomben"
+    },
+    "catacomben": {
+      "soort": "zone",
+      "pos": [
+        118,
+        16,
+        100
+      ],
+      "tot": [
+        190,
+        34,
+        158
+      ],
+      "wie": "de kristalcatacomben van Oud Ba Sing Guh (gangen, het hol, de ruine, de cel)"
+    },
+    "das_molguh_1": {
+      "soort": "wezen",
+      "pos": [
+        183,
+        25,
+        125
+      ],
+      "yaw": 90.0,
+      "entity": "guhs:das_molguh"
+    },
+    "das_molguh_2": {
+      "soort": "wezen",
+      "pos": [
+        182,
+        25,
+        128
+      ],
+      "yaw": 120.0,
+      "entity": "guhs:das_molguh"
+    },
+    "das_molguh_hol": {
+      "soort": "zone",
+      "pos": [
+        177,
+        25,
+        120
+      ],
+      "tot": [
+        189,
+        30,
+        132
+      ],
+      "wie": "het hol van de das-molguhs naast de lange gang"
+    },
+    "kristalcel": {
+      "soort": "prop",
+      "pos": [
+        122,
+        17,
+        138
+      ],
+      "wie": "de kristalcel aan de gang naar de kristalkamer (hier zaten Zuka en Katara-guh)"
+    },
+    "kristalkamer": {
+      "soort": "zone",
+      "pos": [
+        135,
+        17,
+        113
+      ],
+      "tot": [
+        167,
+        36,
+        143
+      ],
+      "wie": "de grote kristalkamer onder het paleis"
+    },
+    "azula": {
+      "soort": "npc",
+      "pos": [
+        141,
+        17,
+        131
+      ],
+      "yaw": -90.0,
+      "wie": "Azula-Mika",
+      "kind": "AZULA_MIKA"
+    },
+    "bliksem_azula": {
+      "soort": "prop",
+      "pos": [
+        142,
+        17,
+        127
+      ],
+      "wie": "van hieruit schiet Azula-Mika haar bliksem"
+    },
+    "bliksem_speler": {
+      "soort": "prop",
+      "pos": [
+        149,
+        17,
+        127
+      ],
+      "wie": "hier hangt de speler in de Guhvatar-staat als de bliksem inslaat"
+    },
+    "zuka_keuze": {
+      "soort": "prop",
+      "pos": [
+        146,
+        17,
+        133
+      ],
+      "wie": "hier kiest Zuka de verkeerde kant"
+    },
+    "katara_redt": {
+      "soort": "prop",
+      "pos": [
+        153,
+        17,
+        126
+      ],
+      "wie": "hier vangt Katara-guh je op, bij het water"
+    },
+    "miroh_gevangen": {
+      "soort": "prop",
+      "pos": [
+        146,
+        17,
+        119
+      ],
+      "wie": "hier wordt Oom Miroh in kristal gevangen (de halve ring staat er al)"
+    },
+    "vlucht_gat": {
+      "soort": "prop",
+      "pos": [
+        161,
+        29,
+        127
+      ],
+      "wie": "de Koningsput: een schacht van 9 x 7 (x 157-165, z 124-130) van de kristalkamer omhoog naar de paleistuin, groot genoeg voor Appa-guh"
+    },
+    "vlucht_schacht": {
+      "soort": "zone",
+      "pos": [
+        157,
+        29,
+        124
+      ],
+      "tot": [
+        165,
+        52,
+        130
+      ],
+      "wie": "de schacht zelf (Appa vliegt hierdoor naar buiten)"
+    },
+    "bewoner_1": {
+      "soort": "npc",
+      "pos": [
+        61,
+        46,
+        77
+      ],
+      "yaw": 125.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_2": {
+      "soort": "npc",
+      "pos": [
+        104,
+        46,
+        44
+      ],
+      "yaw": 160.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_3": {
+      "soort": "npc",
+      "pos": [
+        178,
+        46,
+        51
+      ],
+      "yaw": -150.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_4": {
+      "soort": "npc",
+      "pos": [
+        215,
+        46,
+        90
+      ],
+      "yaw": -115.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_5": {
+      "soort": "npc",
+      "pos": [
+        202,
+        46,
+        185
+      ],
+      "yaw": -50.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_6": {
+      "soort": "npc",
+      "pos": [
+        162,
+        46,
+        213
+      ],
+      "yaw": -18.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_7": {
+      "soort": "npc",
+      "pos": [
+        94,
+        49,
+        100
+      ],
+      "yaw": 125.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_8": {
+      "soort": "npc",
+      "pos": [
+        158,
+        49,
+        86
+      ],
+      "yaw": -150.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_9": {
+      "soort": "npc",
+      "pos": [
+        158,
+        49,
+        170
+      ],
+      "yaw": -30.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_10": {
+      "soort": "npc",
+      "pos": [
+        117,
+        49,
+        174
+      ],
+      "yaw": 20.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_11": {
+      "soort": "npc",
+      "pos": [
+        115,
+        52,
+        95
+      ],
+      "yaw": 150.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "bewoner_12": {
+      "soort": "npc",
+      "pos": [
+        127,
+        52,
+        165
+      ],
+      "yaw": 10.0,
+      "wie": "een burger van Ba Sing Guh",
+      "kind": "BA_SING_GUH_BURGER"
+    },
+    "dai_li_1": {
+      "soort": "npc",
+      "pos": [
+        46,
+        46,
+        140
+      ],
+      "yaw": 0.0,
+      "wie": "een Dai Li-Mika bij de hoofdweg van de onderring",
+      "kind": "DAI_LI_MIKA"
+    },
+    "dai_li_2": {
+      "soort": "npc",
+      "pos": [
+        220,
+        46,
+        150
+      ],
+      "yaw": 90.0,
+      "wie": "een Dai Li-Mika bij Meer Laogai",
+      "kind": "DAI_LI_MIKA"
+    },
+    "dai_li_3": {
+      "soort": "npc",
+      "pos": [
+        80,
+        49,
+        123
+      ],
+      "yaw": 0.0,
+      "wie": "een Dai Li-Mika tegenover De Jasmijn Draak",
+      "kind": "DAI_LI_MIKA"
+    },
+    "dai_li_4": {
+      "soort": "npc",
+      "pos": [
+        141,
+        49,
+        72
+      ],
+      "yaw": 0.0,
+      "wie": "een Dai Li-Mika bij het huis van Joo Dee-guh",
+      "kind": "DAI_LI_MIKA"
+    },
+    "dai_li_5": {
+      "soort": "npc",
+      "pos": [
+        137,
+        52,
+        148
+      ],
+      "yaw": -90.0,
+      "wie": "een Dai Li-Mika bij het gasthuis",
+      "kind": "DAI_LI_MIKA"
+    },
+    "knipoog_sjokkel": {
+      "soort": "pad",
+      "punten": [
+        [
+          68,
+          61,
+          100
+        ],
+        [
+          71,
+          61,
+          93
+        ]
+      ],
+      "wie": "Sjokkel kruipt over de kap van de muur tussen onder- en middenring"
+    },
+    "knipoog_sjokkel_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          76,
+          68,
+          106
+        ],
+        [
+          69,
+          61,
+          97
+        ]
+      ],
+      "wie": "vanaf het perron van station Middenring"
+    },
+    "ring_onder": {
+      "soort": "zone",
+      "pos": [
+        24,
+        46,
+        18
+      ],
+      "tot": [
+        244,
+        71,
+        238
+      ],
+      "wie": "de onderring (alles binnen de buitenmuur, buiten de middenmuur)"
+    },
+    "ring_midden": {
+      "soort": "zone",
+      "pos": [
+        64,
+        49,
+        58
+      ],
+      "tot": [
+        204,
+        72,
+        198
+      ],
+      "wie": "de middenring"
+    },
+    "ring_boven": {
+      "soort": "zone",
+      "pos": [
+        94,
+        52,
+        88
+      ],
+      "tot": [
+        174,
+        91,
+        168
+      ],
+      "wie": "de bovenring met het paleis"
+    }
+  },
+  "lagen": {
+    "koolkraam_heel": {
+      "template": "guhs:ba_sing_guh/laag_koolkraam_heel",
+      "pos": [
+        44,
+        46,
+        133
+      ],
+      "grootte": [
+        5,
+        4,
+        4
+      ]
+    },
+    "koolkraam_kapot": {
+      "template": "guhs:ba_sing_guh/laag_koolkraam_kapot",
+      "pos": [
+        44,
+        46,
+        133
+      ],
+      "grootte": [
+        5,
+        4,
+        4
+      ]
+    }
+  }
+}

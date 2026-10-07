@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "MMM",
+    "III"
+  ],
+  "key": {
+    "M": "guhs:einde2_bouw_aarde_stadssteen",
+    "I": "minecraft:iron_nugget"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_aarde_spoor",
+    "count": 6
+  }
+}
