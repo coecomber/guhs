@@ -8,7 +8,7 @@
   "quest.475548077F9CDE38.quest_desc": [
     "You're already here! This is the very first chapter: every guh adventure starts here, with a handful of &6cheese nibbles&r.",
     "",
-    "Read the chapters from top to bottom: &dGuhs \\& Basics&r > &dThe Guhmension&r > &6Minigames \\& Special Places&r > &9Underwater&r > &cThe Guhbelly&r > &5The Guh End&r > &6The Guhbarbecuether&r > &eCaves, Swamp \\& Woods&r > &dSnuggledale&r > &dSqueak!&r > &dSweet Chonkies&r > &dGuh Tales&r > &aCritters&r > &dGuhpixel&r.",
+    "Read the chapters from top to bottom: &dGuhs \\& Basics&r > &dThe Guhmension&r > &6Minigames \\& Special Places&r > &9Underwater&r > &cThe Guhbelly&r > &5The Guh End&r > &6The Guhbarbecuether&r > &eCaves, Swamp \\& Woods&r > &dSnuggledale&r > &dSqueak!&r > &dSweet Chonkies&r > &dGuh Tales&r > &aCritters&r > &dGuhpixel&r > &bGuh Technology&r > &6The Lord of the Nibble Ring&r > &cSuper Guhrio&r.",
     "",
     "At the top of every chapter there's a &dHow Do You Get Here?&r quest like this one, with a link to the quest in another chapter where it all starts.",
     "",
@@ -128,11 +128,11 @@
   ],
   "quest.4755485EDA0EA987.title": "Guh Wheel",
   "quest.4755485EDA0EA987.quest_desc": [
-    "Put your tame guh in a Guh Wheel: full redstone power!",
+    "Put your tame guh in a &dGuh Wheel&r: it runs up &dchonk power&r for your guh machines, and it never gets tired. A happy little guh runs extra fast! &dGuh Wire&r carries the chonk power to your machines. Look at the wheel or the wire and you'll read how much chonk power your setup uses. Nyeg!",
   ],
-  "quest.4755485299AA59F1.title": "Baking on Guh Power",
+  "quest.4755485299AA59F1.title": "Baking on Chonk Power",
   "quest.4755485299AA59F1.quest_desc": [
-    "A &dGuh Oven&r (8 cobblestone around a cheese nibble) needs no coal: it bakes on guh power! Put it next to a running &dGuh Wheel&r, or hook it up with &dGuh Wire&r. It doesn't care for plain redstone. The little guh runs, the oven bakes. Nyeg!",
+    "A &dGuh Oven&r (8 cobblestone around a cheese nibble) needs no coal: it bakes on &dchonk power&r! Put it next to a &dGuh Wheel&r with a guh running in it, or hook it up with &dGuh Wire&r. Look at the oven and you'll read how much chonk power your setup uses: if it asks for more than your guhs run up together, everything stands still. It doesn't care for plain redstone. The little guh runs, the oven bakes. Nyeg!",
   ],
   "quest.47554803591FB2A0.title": "Look What I Can Do!",
   "quest.47554803591FB2A0.quest_desc": [
