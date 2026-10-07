@@ -10,6 +10,10 @@
 # their pictures), every level from the side (the picture must be a clean side view with the panel, nothing in front of the
 # lane), every creature's model (Guhmba, Schild-Mika, Plof-Mika, Hapbloem, grill spit, platform, falling block), the big
 # vadsmunten on the panel, the Vuurpeper's knabbel, Guhshi under the player, a pipe trip, the timed bridge.
+# (merge guhrio-werelden) The level sections of this script walked the engine's PRACTICE lanes; those are gone now that
+# guhrio-w1..w3 fill the six slots and the duel (other heights, other obstacles). They were cut here: this script is the
+# castle itself (outside, hall, tower room, the Guhdex page). The levels: bbq2_guhrio-w1.txt, bbq2_guhrio-w2.txt,
+# bbq2_guhrio-w3.txt (3-1, 3-2 and the duel); forecourt, shop, board and rewards: bbq2_guhrio-beloning.txt.
 # Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_guhrio-engine.txt -PautocheckTimeout=30
 section setup
 /gamemode creative
@@ -81,177 +85,7 @@ wait 5
 waitrender 100
 shot kasteel_10_torenkamer
 
-section a gate: walk into 1-1 from the hall
-/gamemode survival
-/tp @s 6044.5 127 6068.5 90 0
-wait 10
-key up on
-wait 30
-key up off
-wait 20
-guhriopos through the gate of 1-1
-shot level_1_1_00_start gui
-key right on
-guhriowacht 9
-shot level_1_1_01_munten gui
-guhriowacht 13.4
-key jump on
-wait 4
-key jump off
-guhriowacht 18.5
-key jump on
-wait 10
-key jump off
-wait 6
-key right off
-wait 10
-guhriopos 1-1 after the first row
-shot level_1_1_02_super gui
-/tp @s 6019.5 131 6037.5
-wait 15
-shot level_1_1_03_guhmba gui
-/tp @s 6019.5 135 6052.5
-wait 12
-shot level_1_1_04_trap_en_gat gui
-/tp @s 6019.5 131 6083.5
-wait 15
-shot level_1_1_05_vlag gui
-/tp @s 6019.5 131 6095.5
-wait 6
-key right on
-wait 60
-key right off
-wait 90
-guhriopos 1-1 after the flagpole (back in the hall)
-shot level_1_1_06_terug_in_de_hal gui
-
-section 1-2: hidden blocks, the Schild-Mika, the switch bridge, the bonus room
-/guhs guhrio start 6107 131 6104
-wait 20
-shot level_1_2_00_start gui
-/tp @s 6107.5 131 6094.5
-wait 4
-key jump on
-wait 10
-key jump off
-wait 12
-shot level_1_2_01_onzichtbaar_blok gui
-/tp @s 6107.5 131 6089.5
-wait 30
-shot level_1_2_02_schild_mika gui
-/tp @s 6107.5 131 6062.5
-wait 4
-key jump on
-wait 10
-key jump off
-wait 12
-shot level_1_2_03_schakelaar gui
-/tp @s 6107.5 131 6054.5
-wait 15
-shot level_1_2_04_brug gui
-/tp @s 6107.5 131 6072.5
-wait 10
-key up on
-wait 3
-key up off
-wait 20
-guhriopos 1-2 through the door (the bonus lane)
-shot level_1_2_05_bonuskamer gui
-/guhs guhrio stop
-wait 20
-
-section 2-1: pipes, the Hapbloem, platforms, falling blocks
-/guhs guhrio gehaald kasteel_1_1
-/guhs guhrio gehaald kasteel_1_2
-/guhs guhrio start 6019 108 6013
-wait 20
-shot level_2_1_00_start gui
-/tp @s 6019.5 108 6021.5
-wait 70
-shot level_2_1_01_hapbloem gui
-/tp @s 6019.5 108 6048.5
-wait 20
-shot level_2_1_02_platform gui
-/tp @s 6019.5 108 6072.5
-wait 20
-shot level_2_1_03_valblokken gui
-/tp @s 6019.5 108 6082.5
-wait 20
-shot level_2_1_04_lift gui
-/guhs guhrio stop
-wait 20
-
-section 2-2: the Vuurpeper, Guhshi's egg
-/guhs guhrio gehaald kasteel_2_1
-/guhs guhrio start 6107 108 6104
-wait 20
-/guhs guhrio kracht 2
-wait 5
-/tp @s 6107.5 108 6092.5
-wait 10
-/guhs guhrio gooi
-wait 6
-shot level_2_2_01_knabbel gui
-/tp @s 6107.5 108 6052.5
-wait 15
-shot level_2_2_02_rode_muur_en_ei gui
-/guhs guhrio stop
-wait 20
-
-section 3-1: grill spits, the Plof-Mika
-/guhs guhrio gehaald kasteel_2_2
-/guhs guhrio start 6019 154 6013
-wait 20
-/tp @s 6019.5 154 6024.5
-wait 10
-shot level_3_1_01_grillspies gui
-wait 20
-shot level_3_1_02_grillspies_later gui
-/tp @s 6019.5 154 6033.5
-wait 14
-shot level_3_1_03_plof_mika gui
-/tp @s 6019.5 154 6050.5
-wait 10
-shot level_3_1_04_twee_spiesen gui
-/guhs guhrio stop
-wait 20
-
-section 3-2: Guhshi, the timed bridge
-/guhs guhrio gehaald kasteel_3_1
-/guhs guhrio ei
-/guhs guhrio start 6107 154 6104
-wait 20
-/tp @s 6107.5 154 6094.5
-wait 15
-guhriopos 3-2 on Guhshi
-shot level_3_2_01_op_guhshi gui
-key right on
-key sprint on
-wait 12
-key jump on
-wait 40
-key jump off
-key sprint off
-key right off
-wait 10
-shot level_3_2_02_fladdersprong gui
-/tp @s 6107.5 154 6077.5
-wait 4
-key jump on
-wait 10
-key jump off
-wait 10
-shot level_3_2_03_tijdbrug gui
-/guhs guhrio stop
-wait 20
-
-section the duel arena (the engine's empty one) and what the castle remembers
-/guhs guhrio gehaald kasteel_3_2
-/guhs guhrio start 6045 147 6039
-wait 20
-shot duel_00_arena gui
-/guhs guhrio stop
-wait 20
+section what the castle remembers
 /guhs guhrio kasteel
 gui verhalen
 wait 20
