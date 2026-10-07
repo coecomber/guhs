@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/roze_lakhout_balk"
+    },
+    "axis=z": {
+      "model": "guhs:block/roze_lakhout_balk_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "guhs:block/roze_lakhout_balk_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

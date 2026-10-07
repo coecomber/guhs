@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "roze_lakhout_trapdoor",
+  "key": {
+    "#": "guhs:roze_lakhout_planken"
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 2,
+    "id": "guhs:roze_lakhout_luik"
+  }
+}

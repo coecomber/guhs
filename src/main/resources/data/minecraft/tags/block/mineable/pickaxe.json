@@ -115,6 +115,23 @@
     "guhs:skyblok_fles",
     "guhs:guhkantoor_prikklok",
     "guhs:guhbioscoop_projector",
-    "guhs:guhbioscoop_popcornmachine"
+    "guhs:guhbioscoop_popcornmachine",
+    "guhs:guh_dakpan_roze",
+    "guhs:guh_dakpan_roze_trap",
+    "guhs:guh_dakpan_roze_plaat",
+    "guhs:guh_dakpan_roze_hoek",
+    "guhs:guh_dakpan_wit",
+    "guhs:guh_dakpan_wit_trap",
+    "guhs:guh_dakpan_wit_plaat",
+    "guhs:guh_dakpan_wit_hoek",
+    "guhs:guh_dakpan_grijs",
+    "guhs:guh_dakpan_grijs_trap",
+    "guhs:guh_dakpan_grijs_plaat",
+    "guhs:guh_dakpan_grijs_hoek",
+    "guhs:gladde_knuffelsteen",
+    "guhs:gladde_knuffelsteen_trap",
+    "guhs:gladde_knuffelsteen_plaat",
+    "guhs:toro",
+    "guhs:bonsai_pot"
   ]
 }
