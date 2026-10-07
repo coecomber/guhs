@@ -1,0 +1,35 @@
+{
+  "type": "guhs:leegte_bouw",
+  "biomes": "#guhs:has_structure/vuurnatie_hoofdstad",
+  "step": "fluid_springs",
+  "terrain_adaptation": "none",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "full",
+      "spawns": []
+    },
+    "creature": {
+      "bounding_box": "full",
+      "spawns": []
+    }
+  },
+  "templates": "guhs:vuurnatie_hoofdstad",
+  "tiles_x": 8,
+  "tiles_z": 8,
+  "tile_size": 32,
+  "anchor": [
+    120,
+    0,
+    120
+  ],
+  "size": [
+    256,
+    118,
+    256
+  ],
+  "y": 134,
+  "min_distance": 1100,
+  "rand": 48,
+  "keep_clear": 184,
+  "voorrang": 397
+}

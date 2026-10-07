@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "guhs:block/einde2_bouw_vuur_lauwe_vlam"
+  }
+}

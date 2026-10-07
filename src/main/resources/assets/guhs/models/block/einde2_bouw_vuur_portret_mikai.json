@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "guhs:block/einde2_bouw_vuur_portret_mikai_top",
+    "side": "guhs:block/einde2_bouw_vuur_portret_mikai"
+  }
+}
