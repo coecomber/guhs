@@ -1,0 +1,168 @@
+# einde2, slice bouw_aarde, in a real generated world: Ba Sing Guh from the outside, its gate and passport desk, the monorail,
+# the three rings, the Aardrommel, De Jasmijn Draak, the palace, Meer Laogai, the base under it and the crystal catacombs,
+# and the koolman's stall whole and wrecked. (The markers of data/guhs/einde2/plekken/ba_sing_guh.json are the camera spots:
+# /guhs einde2 plek teleports to one. The Guheinde has no skylight, so no time of day.)
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_bouw_aarde.txt -PautocheckTimeout=60
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 1400 200 0
+wait 80
+
+section The city from outside (the opening shot) and from above
+/guhs einde2 plek ba_sing_guh uitzicht
+look -90 5
+waitrender 400
+hier
+shot e2_aarde_uitzicht
+/guhs einde2 plek ba_sing_guh aankomst_speler
+/tp @s ~110 ~70 ~
+look 0 90
+waitrender 400
+shot e2_aarde_boven
+
+section The landing place, the camp, the gate with the passport desk
+/guhs einde2 plek ba_sing_guh aankomst_speler
+look -90 -10
+waitrender 200
+shot e2_aarde_aankomst
+/guhs einde2 plek ba_sing_guh kamp
+look 0 15
+wait 40
+shot e2_aarde_kamp
+/guhs einde2 plek ba_sing_guh buitenpoort
+/tp @s ~5 ~ ~
+look 180 0
+wait 40
+shot e2_aarde_loket
+
+section The monorail: station Buitenmuur, along the track, the terminus
+/guhs einde2 plek ba_sing_guh station_buiten
+look -90 10
+waitrender 200
+shot e2_aarde_station_buiten
+/guhs einde2 plek ba_sing_guh station_midden
+look -90 20
+wait 40
+shot e2_aarde_station_midden
+look 120 15
+wait 20
+shot e2_aarde_knipoog_sjokkel
+/guhs einde2 plek ba_sing_guh station_boven
+look -60 15
+wait 40
+shot e2_aarde_station_boven
+
+section The lower ring: a street, the Aardrommel, the blindfold course
+/guhs einde2 plek ba_sing_guh bewoner_1
+look 45 0
+waitrender 200
+shot e2_aarde_onderring
+/guhs einde2 plek ba_sing_guh rustpunt_2
+look -45 20
+wait 40
+shot e2_aarde_aardrommel
+/guhs einde2 plek ba_sing_guh arena_speler
+look -90 -5
+wait 40
+shot e2_aarde_ring
+/guhs einde2 plek ba_sing_guh tril_doel_3
+/tp @s ~ ~1 ~
+look 90 20
+wait 40
+shot e2_aarde_blinddoekbaan
+
+section The koolman's stall: whole, wrecked, gone
+/guhs einde2 plek ba_sing_guh koolman
+look 90 10
+wait 40
+/guhs einde2 bouw_aarde koolkraam 1 heel
+wait 20
+shot e2_aarde_koolkraam_heel
+/guhs einde2 bouw_aarde koolkraam 1 kapot
+wait 20
+shot e2_aarde_koolkraam_kapot
+/guhs einde2 bouw_aarde koolkraam 1 weg
+wait 10
+
+section The middle ring: De Jasmijn Draak outside and inside, Joo Dee-guh's house
+/guhs einde2 plek ba_sing_guh dai_li_3
+look 0 -5
+waitrender 200
+shot e2_aarde_theehuis
+/guhs einde2 plek ba_sing_guh zuka_ober
+look 0 5
+wait 40
+shot e2_aarde_theehuis_binnen
+/guhs einde2 plek ba_sing_guh miroh
+look 180 10
+wait 20
+shot e2_aarde_toonbank
+/guhs einde2 plek ba_sing_guh joo_dee
+look 180 -5
+wait 40
+shot e2_aarde_joo_dee
+
+section The upper ring: the palace, the throne, Bosco's room, the garden with the Koningsput
+/guhs einde2 plek ba_sing_guh station_boven
+/tp @s ~ ~-13 ~12
+look -90 -15
+waitrender 200
+shot e2_aarde_paleis
+/guhs einde2 plek ba_sing_guh aardekoning
+/tp @s ~-14 ~ ~
+look -90 -5
+wait 40
+shot e2_aarde_troonzaal
+/guhs einde2 plek ba_sing_guh bosco
+look -90 10
+wait 40
+shot e2_aarde_bosco
+/guhs einde2 plek ba_sing_guh catacomben_ingang
+/tp @s ~3 ~ ~8
+look -40 15
+wait 40
+shot e2_aarde_paleistuin
+
+section Meer Laogai and the base under it
+/guhs einde2 plek ba_sing_guh basis_ingang
+/tp @s ~ ~ ~3
+look 0 15
+waitrender 200
+shot e2_aarde_meer
+/guhs einde2 plek ba_sing_guh sluip_start
+look 0 5
+wait 40
+shot e2_aarde_basis_gang
+/guhs einde2 plek ba_sing_guh knipoog_mewtwo_dai_li
+/tp @s ~-4 ~1 ~5
+look -130 5
+wait 40
+shot e2_aarde_knipoog_mewtwo
+/guhs einde2 plek ba_sing_guh appa_poort
+/tp @s ~ ~ ~-2
+look 0 0
+wait 40
+shot e2_aarde_appa_kamer
+/guhs einde2 plek ba_sing_guh lampkamer
+/tp @s ~5 ~ ~5
+look 90 5
+wait 40
+shot e2_aarde_lampkamer
+
+section The catacombs and the kristalkamer
+/guhs einde2 plek ba_sing_guh rustpunt_4
+look -90 5
+waitrender 200
+shot e2_aarde_catacomben
+/guhs einde2 plek ba_sing_guh kristalcel
+look 90 0
+wait 40
+shot e2_aarde_kristalcel
+/guhs einde2 plek ba_sing_guh azula
+look -90 -15
+wait 60
+shot e2_aarde_kristalkamer
+/guhs einde2 plek ba_sing_guh katara_redt
+look -80 -50
+wait 40
+shot e2_aarde_koningsput
