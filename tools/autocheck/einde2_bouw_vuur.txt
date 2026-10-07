@@ -1,0 +1,181 @@
+# einde2, slice bouw_vuur (visual QA, run by the merge step): the Vuurnatie-hoofdstad in a real generated world, from the
+# opening shot to every part of the build. /guhs einde2 plek <structure> <marker> teleports to a marker of the sidecar.
+# (The Guheinde has no skylight, so no time of day. look <yaw> <pitch>: yaw 0 = south, 180 = north, -90 = east, 90 = west.)
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_bouw_vuur.txt -PautocheckTimeout=40
+section setup
+/gamemode creative
+/execute in guhs:guheinde run tp @s 1400 200 0
+wait 80
+/guhs einde2 waar vuurnatie_hoofdstad
+
+section the opening shot: the slab from the south, the crater with the palace above the harbour
+/guhs einde2 plek vuurnatie_hoofdstad uitzicht
+look 180 20
+waitrender 400
+hier
+shot e2_vuur_uitzicht
+
+section the harbour: the landing field, the camp, the harbour gate, the pier and the ship
+/guhs einde2 plek vuurnatie_hoofdstad aankomst_speler
+look 180 -5
+waitrender 200
+shot e2_vuur_aankomst
+look 90 5
+wait 40
+shot e2_vuur_kamp
+/guhs einde2 plek vuurnatie_hoofdstad havenpoort
+/tp @s ~ ~2 ~8
+look 180 -10
+wait 60
+shot e2_vuur_havenpoort
+look 0 10
+wait 40
+shot e2_vuur_steiger_en_schip
+
+section the crater gate and the city
+/guhs einde2 plek vuurnatie_hoofdstad kraterpoort
+/tp @s ~ ~1 ~6
+look 180 -5
+wait 60
+shot e2_vuur_kraterpoort
+/guhs einde2 plek vuurnatie_hoofdstad rustpunt_2
+look 180 -8
+waitrender 200
+shot e2_vuur_laan
+/guhs einde2 plek vuurnatie_hoofdstad bewoner_8
+look 180 -25
+wait 40
+shot e2_vuur_gezicht_van_de_vuurheer
+/guhs einde2 plek vuurnatie_hoofdstad bewoner_7
+look 180 0
+wait 40
+shot e2_vuur_markt
+
+section the school and the dance cave
+/guhs einde2 plek vuurnatie_hoofdstad schoolbank_speler
+look 90 -5
+wait 60
+shot e2_vuur_school
+/guhs einde2 plek vuurnatie_hoofdstad dansgrot_ingang
+look 90 10
+wait 40
+shot e2_vuur_grot_ingang
+/guhs einde2 plek vuurnatie_hoofdstad dans_speler
+look 90 -10
+wait 60
+shot e2_vuur_dansgrot
+
+section the palace: the forecourt, the throne room with the flame curtain, the wings, the pond
+/guhs einde2 plek vuurnatie_hoofdstad knipoog_sjokkel_finish
+/tp @s ~8 ~2 ~6
+look 160 -12
+waitrender 200
+shot e2_vuur_voorplein
+/guhs einde2 plek vuurnatie_hoofdstad kroning_zuka
+/tp @s ~ ~1 ~-4
+look 180 -5
+wait 60
+shot e2_vuur_troonzaal
+/guhs einde2 plek vuurnatie_hoofdstad mikai
+look 0 5
+wait 40
+shot e2_vuur_vanaf_de_troon
+/guhs einde2 plek vuurnatie_hoofdstad brood
+look -90 15
+wait 60
+shot e2_vuur_paleisvijver
+
+section the bunker
+/guhs einde2 plek vuurnatie_hoofdstad bunker_ingang
+/tp @s ~2 ~ ~
+look 90 5
+wait 40
+shot e2_vuur_bunkerdeur
+/guhs einde2 plek vuurnatie_hoofdstad rustpunt_4
+look -90 0
+wait 60
+shot e2_vuur_bunkergang
+/guhs einde2 plek vuurnatie_hoofdstad zuka_vader
+look 0 0
+wait 40
+shot e2_vuur_schuilkamer
+/guhs einde2 plek vuurnatie_hoofdstad azula_bunker
+/tp @s ~-6 ~-1 ~
+look -90 -5
+wait 40
+shot e2_vuur_bunkertroon
+
+section Het Kokend Rotsblok: the upper station, the lake, the prison
+/guhs einde2 plek vuurnatie_hoofdstad rustpunt_5
+/tp @s ~ ~3 ~
+look -90 20
+waitrender 300
+shot e2_vuur_kokend_rotsblok
+/guhs einde2 plek vuurnatie_hoofdstad steiger
+look -90 0
+wait 60
+shot e2_vuur_steigertje
+/guhs einde2 plek vuurnatie_hoofdstad rustpunt_6
+/tp @s ~3 ~ ~-3
+look -90 0
+wait 60
+shot e2_vuur_binnenplaats
+/guhs einde2 plek vuurnatie_hoofdstad knipoog_stitch_bewaker
+look 180 5
+wait 40
+shot e2_vuur_wachtkamer
+/guhs einde2 plek vuurnatie_hoofdstad ty_lee
+look 90 5
+wait 40
+shot e2_vuur_benedenstation
+
+section the Zonnekrijgers: the ruin, the long stair, the terrace, a dragon cave
+/guhs einde2 plek vuurnatie_hoofdstad rustpunt_7
+look 180 -20
+waitrender 200
+shot e2_vuur_ruine_en_trap
+/guhs einde2 plek vuurnatie_hoofdstad trap_boven
+/tp @s ~ ~3 ~-8
+look 180 25
+wait 60
+shot e2_vuur_terras
+/guhs einde2 plek vuurnatie_hoofdstad draak_rood
+look -90 0
+wait 40
+shot e2_vuur_drakengrot
+
+section the duel arena
+/guhs einde2 plek vuurnatie_hoofdstad rustpunt_8
+/tp @s ~ ~6 ~
+look 180 10
+waitrender 200
+shot e2_vuur_arena
+/guhs einde2 plek vuurnatie_hoofdstad duel_speler
+look -90 -5
+wait 40
+shot e2_vuur_duel_vanaf_de_pilaar
+
+section Sintelstrand
+/guhs einde2 plek vuurnatie_hoofdstad rustpunt_9
+look 90 0
+waitrender 200
+shot e2_vuur_sintelstrand
+/guhs einde2 plek vuurnatie_hoofdstad publiek_speler
+/tp @s ~ ~2 ~
+look 0 10
+wait 60
+shot e2_vuur_theater
+
+section the camp of the Witte Lotus and the quay
+/guhs einde2 plek vuurnatie_hoofdstad rustpunt_10
+look -90 0
+waitrender 200
+shot e2_vuur_lotus_kamp
+/guhs einde2 plek vuurnatie_hoofdstad verzoening_zuka
+look -90 0
+wait 40
+shot e2_vuur_tent_van_miroh
+/guhs einde2 plek vuurnatie_hoofdstad leeuwschildpad_kade
+look 180 -5
+wait 60
+shot e2_vuur_kade_zonder_schildpad

@@ -1,0 +1,2122 @@
+{
+  "structuur": "vuurnatie_hoofdstad",
+  "soort": "leegte_bouw",
+  "grootte": [
+    256,
+    118,
+    256
+  ],
+  "anker": [
+    120,
+    0,
+    120
+  ],
+  "plekken": {
+    "kraterpoort": {
+      "soort": "prop",
+      "pos": [
+        128,
+        50,
+        167
+      ],
+      "wie": "de poort in de kraterwand (de weg van de haven naar de stad)"
+    },
+    "rustpunt_2": {
+      "soort": "prop",
+      "pos": [
+        128,
+        51,
+        141
+      ],
+      "wie": "rustpunt: net binnen de kraterpoort"
+    },
+    "gezicht_mikai": {
+      "soort": "prop",
+      "pos": [
+        128,
+        56,
+        98
+      ],
+      "wie": "de muur met het gezicht van de Vuurheer"
+    },
+    "bakker": {
+      "soort": "npc",
+      "pos": [
+        113,
+        51,
+        107
+      ],
+      "yaw": -90.0,
+      "wie": "de bakker van Heet Hapje",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "smid": {
+      "soort": "npc",
+      "pos": [
+        143,
+        51,
+        135
+      ],
+      "yaw": 90.0,
+      "wie": "de smid van Mika & Zonen",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "postmika": {
+      "soort": "npc",
+      "pos": [
+        157,
+        51,
+        123
+      ],
+      "yaw": 90.0,
+      "wie": "de postbeambte (havikpost)",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "kok": {
+      "soort": "npc",
+      "pos": [
+        156,
+        51,
+        91
+      ],
+      "yaw": 90.0,
+      "wie": "de kok van De Dikke Draak",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "markt": {
+      "soort": "zone",
+      "pos": [
+        136,
+        51,
+        100
+      ],
+      "tot": [
+        158,
+        56,
+        114
+      ],
+      "wie": "de markt van de hoofdstad"
+    },
+    "exercitieplein": {
+      "soort": "zone",
+      "pos": [
+        91,
+        51,
+        68
+      ],
+      "tot": [
+        103,
+        56,
+        80
+      ],
+      "wie": "het exercitieplein naast de school"
+    },
+    "bewoner_1": {
+      "soort": "npc",
+      "pos": [
+        123,
+        51,
+        106
+      ],
+      "yaw": -90.0,
+      "wie": "voor de bakkerij, eet vuurvlokken",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "bewoner_2": {
+      "soort": "npc",
+      "pos": [
+        133,
+        51,
+        110
+      ],
+      "yaw": 90.0,
+      "wie": "op de markt, pingelt",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "bewoner_3": {
+      "soort": "npc",
+      "pos": [
+        124,
+        51,
+        122
+      ],
+      "yaw": -90.0,
+      "wie": "veegt de laan",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "bewoner_4": {
+      "soort": "npc",
+      "pos": [
+        140,
+        51,
+        106
+      ],
+      "yaw": 180.0,
+      "wie": "marktkoopman achter zijn kraam",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "bewoner_5": {
+      "soort": "npc",
+      "pos": [
+        132,
+        51,
+        134
+      ],
+      "yaw": 90.0,
+      "wie": "voor de smederij, poetst een helm",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "bewoner_6": {
+      "soort": "npc",
+      "pos": [
+        99,
+        51,
+        116
+      ],
+      "yaw": 0.0,
+      "wie": "oma Mika's buurman, schoffelt as",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "bewoner_7": {
+      "soort": "npc",
+      "pos": [
+        146,
+        51,
+        114
+      ],
+      "yaw": 180.0,
+      "wie": "roddelt bij de markt",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "bewoner_8": {
+      "soort": "npc",
+      "pos": [
+        128,
+        51,
+        100
+      ],
+      "yaw": 180.0,
+      "wie": "kijkt op naar het gezicht van de Vuurheer",
+      "kind": "VUURNATIE_BURGER_MIKA"
+    },
+    "portret_mikai": {
+      "soort": "prop",
+      "pos": [
+        86,
+        52,
+        90
+      ],
+      "wie": "het portret van Vuurheer Mikai, midden in het bord"
+    },
+    "juf": {
+      "soort": "npc",
+      "pos": [
+        88,
+        51,
+        90
+      ],
+      "yaw": -90.0,
+      "wie": "de juf van de Vuurnatie-school",
+      "kind": "VUURNATIE_JUF"
+    },
+    "leerling_1": {
+      "soort": "npc",
+      "pos": [
+        93,
+        51,
+        84
+      ],
+      "yaw": 90.0,
+      "wie": "een leerling achter zijn bankje",
+      "kind": "VUURNATIE_LEERLING"
+    },
+    "leerling_2": {
+      "soort": "npc",
+      "pos": [
+        93,
+        51,
+        88
+      ],
+      "yaw": 90.0,
+      "wie": "een leerling achter zijn bankje",
+      "kind": "VUURNATIE_LEERLING"
+    },
+    "leerling_3": {
+      "soort": "npc",
+      "pos": [
+        93,
+        51,
+        92
+      ],
+      "yaw": 90.0,
+      "wie": "een leerling achter zijn bankje",
+      "kind": "VUURNATIE_LEERLING"
+    },
+    "leerling_4": {
+      "soort": "npc",
+      "pos": [
+        96,
+        51,
+        84
+      ],
+      "yaw": 90.0,
+      "wie": "een leerling achter zijn bankje",
+      "kind": "VUURNATIE_LEERLING"
+    },
+    "leerling_5": {
+      "soort": "npc",
+      "pos": [
+        96,
+        51,
+        88
+      ],
+      "yaw": 90.0,
+      "wie": "een leerling achter zijn bankje",
+      "kind": "VUURNATIE_LEERLING"
+    },
+    "schoolbank_speler": {
+      "soort": "prop",
+      "pos": [
+        99,
+        51,
+        88
+      ],
+      "wie": "jouw plek in de klas (vermomd)"
+    },
+    "school": {
+      "soort": "zone",
+      "pos": [
+        86,
+        51,
+        82
+      ],
+      "tot": [
+        103,
+        56,
+        97
+      ],
+      "wie": "het schooltje"
+    },
+    "rustpunt_3": {
+      "soort": "prop",
+      "pos": [
+        106,
+        51,
+        92
+      ],
+      "wie": "rustpunt: het schoolplein"
+    },
+    "dansvloer": {
+      "soort": "zone",
+      "pos": [
+        63,
+        46,
+        98
+      ],
+      "tot": [
+        71,
+        49,
+        106
+      ],
+      "wie": "de dansvloer (negen bij negen)"
+    },
+    "dans_speler": {
+      "soort": "prop",
+      "pos": [
+        67,
+        46,
+        104
+      ],
+      "wie": "waar jij danst"
+    },
+    "muzikant_1": {
+      "soort": "npc",
+      "pos": [
+        61,
+        47,
+        100
+      ],
+      "yaw": -90.0,
+      "wie": "de xylofonist",
+      "kind": "VUURNATIE_LEERLING"
+    },
+    "muzikant_2": {
+      "soort": "npc",
+      "pos": [
+        61,
+        47,
+        102
+      ],
+      "yaw": -90.0,
+      "wie": "de trommelaar",
+      "kind": "VUURNATIE_LEERLING"
+    },
+    "muzikant_3": {
+      "soort": "npc",
+      "pos": [
+        61,
+        47,
+        104
+      ],
+      "yaw": -90.0,
+      "wie": "de platendraaier",
+      "kind": "VUURNATIE_LEERLING"
+    },
+    "dansgrot": {
+      "soort": "zone",
+      "pos": [
+        59,
+        46,
+        94
+      ],
+      "tot": [
+        75,
+        51,
+        110
+      ],
+      "wie": "de geheime dansgrot"
+    },
+    "dansgrot_ingang": {
+      "soort": "prop",
+      "pos": [
+        82,
+        51,
+        102
+      ],
+      "wie": "de ingang van de grot, aan het eind van het steegje naast de school"
+    },
+    "troon": {
+      "soort": "prop",
+      "pos": [
+        128,
+        57,
+        54
+      ],
+      "wie": "de troon van de Vuurheer"
+    },
+    "mikai": {
+      "soort": "npc",
+      "pos": [
+        128,
+        57,
+        55
+      ],
+      "yaw": 0.0,
+      "wie": "Vuurheer Mikai, voor zijn troon",
+      "kind": "VUURHEER_MIKAI"
+    },
+    "vlamgordijn": {
+      "soort": "zone",
+      "pos": [
+        118,
+        54,
+        60
+      ],
+      "tot": [
+        138,
+        56,
+        60
+      ],
+      "wie": "de rij vlammen voor de troon"
+    },
+    "troonzaal": {
+      "soort": "zone",
+      "pos": [
+        118,
+        54,
+        53
+      ],
+      "tot": [
+        138,
+        62,
+        71
+      ],
+      "wie": "de troonzaal"
+    },
+    "krijgsraad": {
+      "soort": "zone",
+      "pos": [
+        106,
+        54,
+        57
+      ],
+      "tot": [
+        116,
+        58,
+        69
+      ],
+      "wie": "de krijgsraadzaal in de westvleugel"
+    },
+    "kamer_zuka": {
+      "soort": "zone",
+      "pos": [
+        140,
+        54,
+        57
+      ],
+      "tot": [
+        150,
+        58,
+        69
+      ],
+      "wie": "de oude kamer van prins Zuka in de oostvleugel"
+    },
+    "kroning": {
+      "soort": "zone",
+      "pos": [
+        112,
+        51,
+        76
+      ],
+      "tot": [
+        144,
+        59,
+        92
+      ],
+      "wie": "het voorplein: de kroning"
+    },
+    "kroning_zuka": {
+      "soort": "prop",
+      "pos": [
+        128,
+        53,
+        74
+      ],
+      "wie": "waar Zuka gekroond wordt, boven aan de paleistrap"
+    },
+    "knipoog_sjokkel_finish": {
+      "soort": "prop",
+      "pos": [
+        112,
+        50,
+        85
+      ],
+      "wie": "de finish van de luchtscooter-baan (drie breed)"
+    },
+    "knipoog_sjokkel": {
+      "soort": "pad",
+      "punten": [
+        [
+          118,
+          51,
+          91
+        ],
+        [
+          115,
+          51,
+          88
+        ],
+        [
+          113,
+          51,
+          85
+        ]
+      ],
+      "wie": "Sjokkels laatste stukje, tot op de finish"
+    },
+    "knipoog_sjokkel_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          121,
+          54,
+          88
+        ],
+        [
+          113,
+          51,
+          85
+        ]
+      ],
+      "wie": "de camera van knipoog_sjokkel"
+    },
+    "paleis": {
+      "soort": "zone",
+      "pos": [
+        103,
+        54,
+        49
+      ],
+      "tot": [
+        153,
+        84,
+        74
+      ],
+      "wie": "het paleis van de Vuurheer"
+    },
+    "paleisvijver": {
+      "soort": "zone",
+      "pos": [
+        154,
+        49,
+        67
+      ],
+      "tot": [
+        164,
+        53,
+        79
+      ],
+      "wie": "de vijver van de schildpad-eendguhs"
+    },
+    "eendguh_1": {
+      "soort": "wezen",
+      "pos": [
+        158,
+        51,
+        71
+      ],
+      "yaw": 90.0,
+      "entity": "guhs:schildpad_eendguh"
+    },
+    "eendguh_2": {
+      "soort": "wezen",
+      "pos": [
+        160,
+        51,
+        73
+      ],
+      "yaw": 180.0,
+      "entity": "guhs:schildpad_eendguh"
+    },
+    "eendguh_3": {
+      "soort": "wezen",
+      "pos": [
+        157,
+        51,
+        75
+      ],
+      "yaw": 270.0,
+      "entity": "guhs:schildpad_eendguh"
+    },
+    "eendguh_4": {
+      "soort": "wezen",
+      "pos": [
+        161,
+        51,
+        76
+      ],
+      "yaw": 360.0,
+      "entity": "guhs:schildpad_eendguh"
+    },
+    "brood": {
+      "soort": "prop",
+      "pos": [
+        153,
+        51,
+        73
+      ],
+      "wie": "de broodmand bij de vijver"
+    },
+    "paleistuin": {
+      "soort": "zone",
+      "pos": [
+        153,
+        51,
+        64
+      ],
+      "tot": [
+        165,
+        59,
+        80
+      ],
+      "wie": "de paleistuin"
+    },
+    "bunker_ingang": {
+      "soort": "prop",
+      "pos": [
+        110,
+        54,
+        59
+      ],
+      "wie": "de ijzeren deur naar de bunkertrap (onderste helft)"
+    },
+    "rustpunt_4": {
+      "soort": "prop",
+      "pos": [
+        109,
+        30,
+        86
+      ],
+      "wie": "rustpunt: de hal van de bunker"
+    },
+    "kaartkamer": {
+      "soort": "zone",
+      "pos": [
+        116,
+        30,
+        91
+      ],
+      "tot": [
+        126,
+        33,
+        99
+      ],
+      "wie": "de kaartkamer van de bunker"
+    },
+    "zuka_vader": {
+      "soort": "prop",
+      "pos": [
+        134,
+        30,
+        95
+      ],
+      "wie": "waar Zuka tegenover zijn vader staat"
+    },
+    "mikai_bunker": {
+      "soort": "npc",
+      "pos": [
+        134,
+        31,
+        100
+      ],
+      "yaw": 180.0,
+      "wie": "Vuurheer Mikai in zijn schuilkamer",
+      "kind": "VUURHEER_MIKAI"
+    },
+    "schuilkamer": {
+      "soort": "zone",
+      "pos": [
+        129,
+        30,
+        91
+      ],
+      "tot": [
+        139,
+        33,
+        101
+      ],
+      "wie": "de schuilkamer van de Vuurheer"
+    },
+    "bunker_troon": {
+      "soort": "prop",
+      "pos": [
+        151,
+        32,
+        90
+      ],
+      "wie": "de troon in de bunker"
+    },
+    "azula_bunker": {
+      "soort": "npc",
+      "pos": [
+        150,
+        32,
+        90
+      ],
+      "yaw": 90.0,
+      "wie": "Azula-Mika, die het al wist",
+      "kind": "AZULA_MIKA"
+    },
+    "bunker_troonzaal": {
+      "soort": "zone",
+      "pos": [
+        142,
+        30,
+        85
+      ],
+      "tot": [
+        151,
+        34,
+        95
+      ],
+      "wie": "de troonzaal van de bunker"
+    },
+    "bunker": {
+      "soort": "zone",
+      "pos": [
+        104,
+        30,
+        84
+      ],
+      "tot": [
+        152,
+        34,
+        110
+      ],
+      "wie": "de bunker onder het voorplein"
+    },
+    "havenpoort": {
+      "soort": "prop",
+      "pos": [
+        128,
+        44,
+        204
+      ],
+      "wie": "de drempel van de havenpoort"
+    },
+    "poortwacht_1": {
+      "soort": "npc",
+      "pos": [
+        124,
+        45,
+        208
+      ],
+      "yaw": 0.0,
+      "wie": "poortwacht links",
+      "kind": "VUURNATIE_MIKA"
+    },
+    "poortwacht_2": {
+      "soort": "npc",
+      "pos": [
+        132,
+        45,
+        208
+      ],
+      "yaw": 0.0,
+      "wie": "poortwacht rechts",
+      "kind": "VUURNATIE_MIKA"
+    },
+    "schip": {
+      "soort": "zone",
+      "pos": [
+        131,
+        41,
+        219
+      ],
+      "tot": [
+        137,
+        54,
+        238
+      ],
+      "wie": "het afgemeerde Vuurnatie-schip VNS Aangebrand"
+    },
+    "aankomst": {
+      "soort": "zone",
+      "pos": [
+        101,
+        45,
+        186
+      ],
+      "tot": [
+        117,
+        53,
+        202
+      ],
+      "wie": "het landingsveld bij de haven"
+    },
+    "aankomst_speler": {
+      "soort": "prop",
+      "pos": [
+        109,
+        45,
+        194
+      ],
+      "wie": "waar je staat als je bent aangekomen"
+    },
+    "rustpunt_1": {
+      "soort": "prop",
+      "pos": [
+        109,
+        45,
+        200
+      ],
+      "wie": "rustpunt: het landingsveld"
+    },
+    "kamp": {
+      "soort": "zone",
+      "pos": [
+        83,
+        45,
+        185
+      ],
+      "tot": [
+        99,
+        52,
+        203
+      ],
+      "wie": "het kamp van het team naast het landingsveld"
+    },
+    "appa_kamp": {
+      "soort": "prop",
+      "pos": [
+        88,
+        45,
+        197
+      ],
+      "wie": "waar Appa-guh ligt (vijf bij vijf vrij)"
+    },
+    "team_aang": {
+      "soort": "npc",
+      "pos": [
+        92,
+        45,
+        189
+      ],
+      "yaw": 0.0,
+      "wie": "Aang-guh bij het kampvuur"
+    },
+    "team_momo": {
+      "soort": "npc",
+      "pos": [
+        94,
+        45,
+        189
+      ],
+      "yaw": 0.0,
+      "wie": "Momo-guh bij het kampvuur"
+    },
+    "team_katara": {
+      "soort": "npc",
+      "pos": [
+        96,
+        45,
+        190
+      ],
+      "yaw": 90.0,
+      "wie": "Katara-guh bij het kampvuur"
+    },
+    "team_sokka": {
+      "soort": "npc",
+      "pos": [
+        96,
+        45,
+        192
+      ],
+      "yaw": 90.0,
+      "wie": "Sokka-guh bij het kampvuur"
+    },
+    "team_toph": {
+      "soort": "npc",
+      "pos": [
+        90,
+        45,
+        192
+      ],
+      "yaw": -90.0,
+      "wie": "Toph-guh bij het kampvuur"
+    },
+    "team_zuka": {
+      "soort": "npc",
+      "pos": [
+        94,
+        45,
+        194
+      ],
+      "yaw": 180.0,
+      "wie": "Zuka bij het kampvuur"
+    },
+    "invasie_strand": {
+      "soort": "zone",
+      "pos": [
+        135,
+        40,
+        204
+      ],
+      "tot": [
+        154,
+        54,
+        228
+      ],
+      "wie": "het strand waar de invasie aan land gaat"
+    },
+    "strandwacht": {
+      "soort": "npc",
+      "pos": [
+        152,
+        53,
+        207
+      ],
+      "yaw": 0.0,
+      "wie": "de uitkijk op de wachttoren",
+      "kind": "VUURNATIE_MIKA"
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        128,
+        84,
+        292
+      ],
+      "wie": "in de lucht ten zuiden van de haven: de krater met het paleis erboven"
+    },
+    "rustpunt_5": {
+      "soort": "prop",
+      "pos": [
+        157,
+        61,
+        195
+      ],
+      "wie": "rustpunt: het bovenstation van de gondel"
+    },
+    "gondelwacht": {
+      "soort": "npc",
+      "pos": [
+        160,
+        61,
+        196
+      ],
+      "yaw": 90.0,
+      "wie": "de bewaker bij de lier",
+      "kind": "VUURNATIE_MIKA"
+    },
+    "bovenstation": {
+      "soort": "zone",
+      "pos": [
+        155,
+        61,
+        190
+      ],
+      "tot": [
+        163,
+        69,
+        198
+      ],
+      "wie": "het bovenstation van de gondel"
+    },
+    "gondel_boven": {
+      "soort": "prop",
+      "pos": [
+        165,
+        61,
+        194
+      ],
+      "wie": "in de gondel bij het bovenstation (op de kraterrand)"
+    },
+    "gondel_onder": {
+      "soort": "prop",
+      "pos": [
+        186,
+        61,
+        194
+      ],
+      "wie": "in de gondel bij het dak van de gevangenis"
+    },
+    "gondel_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          165,
+          61,
+          194
+        ],
+        [
+          175,
+          59,
+          194
+        ],
+        [
+          186,
+          61,
+          194
+        ]
+      ],
+      "wie": "de gondellijn over het kokende meer"
+    },
+    "azula_gondel": {
+      "soort": "prop",
+      "pos": [
+        186,
+        64,
+        194
+      ],
+      "wie": "boven op de gondel: waar Azula-Mika staat bij de achtervolging"
+    },
+    "steiger": {
+      "soort": "prop",
+      "pos": [
+        170,
+        50,
+        211
+      ],
+      "wie": "het steigertje onder aan de binnenwand (de sluipweg over het meer)"
+    },
+    "gevangenis_plein": {
+      "soort": "zone",
+      "pos": [
+        193,
+        50,
+        189
+      ],
+      "tot": [
+        203,
+        60,
+        199
+      ],
+      "wie": "de binnenplaats van de gevangenis"
+    },
+    "rustpunt_6": {
+      "soort": "prop",
+      "pos": [
+        190,
+        50,
+        197
+      ],
+      "wie": "rustpunt: de hal van de gevangenis"
+    },
+    "gevangenis_poort": {
+      "soort": "prop",
+      "pos": [
+        188,
+        50,
+        194
+      ],
+      "wie": "de poort van de gevangenis aan de steigerkant"
+    },
+    "knipoog_stitch_celdeur_1": {
+      "soort": "prop",
+      "pos": [
+        194,
+        50,
+        188
+      ],
+      "wie": "een celdeur die openvliegt (onderste helft)"
+    },
+    "gevangene_1": {
+      "soort": "npc",
+      "pos": [
+        194,
+        50,
+        186
+      ],
+      "yaw": 0.0,
+      "wie": "een gevangen guh in zijn cel",
+      "kind": "GEVANGENE_GUH"
+    },
+    "knipoog_stitch_celdeur_2": {
+      "soort": "prop",
+      "pos": [
+        198,
+        50,
+        188
+      ],
+      "wie": "een celdeur die openvliegt (onderste helft)"
+    },
+    "gevangene_2": {
+      "soort": "npc",
+      "pos": [
+        198,
+        50,
+        186
+      ],
+      "yaw": 0.0,
+      "wie": "een gevangen guh in zijn cel",
+      "kind": "GEVANGENE_GUH"
+    },
+    "knipoog_stitch_celdeur_3": {
+      "soort": "prop",
+      "pos": [
+        202,
+        50,
+        188
+      ],
+      "wie": "een celdeur die openvliegt (onderste helft)"
+    },
+    "gevangene_3": {
+      "soort": "npc",
+      "pos": [
+        202,
+        50,
+        186
+      ],
+      "yaw": 0.0,
+      "wie": "een gevangen guh in zijn cel",
+      "kind": "GEVANGENE_GUH"
+    },
+    "gevangene_4": {
+      "soort": "npc",
+      "pos": [
+        194,
+        50,
+        202
+      ],
+      "yaw": 180.0,
+      "wie": "een gevangen guh in zijn cel",
+      "kind": "GEVANGENE_GUH"
+    },
+    "gevangene_5": {
+      "soort": "npc",
+      "pos": [
+        198,
+        50,
+        202
+      ],
+      "yaw": 180.0,
+      "wie": "een gevangen guh in zijn cel",
+      "kind": "GEVANGENE_GUH"
+    },
+    "suki": {
+      "soort": "npc",
+      "pos": [
+        202,
+        50,
+        202
+      ],
+      "yaw": 180.0,
+      "wie": "Suki-guh in haar cel",
+      "kind": "SUKI_GUH"
+    },
+    "cel_suki": {
+      "soort": "prop",
+      "pos": [
+        202,
+        50,
+        200
+      ],
+      "wie": "de deur van Suki-guh's cel (onderste helft)"
+    },
+    "koelcel": {
+      "soort": "prop",
+      "pos": [
+        206,
+        50,
+        191
+      ],
+      "wie": "de deur van de middelste koelcel (onderste helft)"
+    },
+    "knipoog_stitch_paneel": {
+      "soort": "prop",
+      "pos": [
+        191,
+        56,
+        194
+      ],
+      "wie": "het bedieningspaneel aan het raam (626-guh zit erop)"
+    },
+    "knipoog_stitch_bewaker": {
+      "soort": "npc",
+      "pos": [
+        190,
+        56,
+        197
+      ],
+      "yaw": 180.0,
+      "wie": "de bewaker-Mika die het niet snapt",
+      "kind": "VUURNATIE_MIKA"
+    },
+    "knipoog_stitch_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          201,
+          58,
+          197
+        ],
+        [
+          191,
+          57,
+          194
+        ]
+      ],
+      "wie": "de camera van knipoog_stitch"
+    },
+    "wachtkamer": {
+      "soort": "zone",
+      "pos": [
+        189,
+        56,
+        185
+      ],
+      "tot": [
+        191,
+        59,
+        203
+      ],
+      "wie": "de wachtkamer met uitzicht op de binnenplaats"
+    },
+    "directeur": {
+      "soort": "npc",
+      "pos": [
+        197,
+        56,
+        186
+      ],
+      "yaw": 0.0,
+      "wie": "de gevangenisdirecteur achter zijn bureau",
+      "kind": "GEVANGENIS_DIRECTEUR_MIKA"
+    },
+    "ty_lee": {
+      "soort": "npc",
+      "pos": [
+        190,
+        61,
+        195
+      ],
+      "yaw": 90.0,
+      "wie": "Ty Lee-Mika bij het benedenstation",
+      "kind": "TY_LEE_MIKA"
+    },
+    "gevangenis": {
+      "soort": "zone",
+      "pos": [
+        188,
+        50,
+        184
+      ],
+      "tot": [
+        208,
+        67,
+        204
+      ],
+      "wie": "de gevangenis"
+    },
+    "inbraak_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          186,
+          61,
+          194
+        ],
+        [
+          190,
+          61,
+          194
+        ],
+        [
+          189,
+          61,
+          199
+        ],
+        [
+          189,
+          56,
+          199
+        ],
+        [
+          190,
+          56,
+          185
+        ],
+        [
+          189,
+          56,
+          185
+        ],
+        [
+          189,
+          50,
+          192
+        ],
+        [
+          190,
+          50,
+          194
+        ],
+        [
+          193,
+          50,
+          194
+        ],
+        [
+          202,
+          50,
+          199
+        ]
+      ],
+      "wie": "van de gondel over het dak naar binnen, tot Suki-guh's cel"
+    },
+    "kokend_rotsblok": {
+      "soort": "zone",
+      "pos": [
+        154,
+        40,
+        150
+      ],
+      "tot": [
+        242,
+        68,
+        238
+      ],
+      "wie": "de krater van Het Kokend Rotsblok"
+    },
+    "kokend_meer": {
+      "soort": "zone",
+      "pos": [
+        164,
+        45,
+        160
+      ],
+      "tot": [
+        232,
+        50,
+        228
+      ],
+      "wie": "het meer van kokende kaassaus"
+    },
+    "trap_onder": {
+      "soort": "prop",
+      "pos": [
+        34,
+        45,
+        151
+      ],
+      "wie": "de voet van de lange trap"
+    },
+    "trap_boven": {
+      "soort": "prop",
+      "pos": [
+        34,
+        79,
+        115
+      ],
+      "wie": "boven aan de lange trap, op het terras"
+    },
+    "trap_arena": {
+      "soort": "prop",
+      "pos": [
+        34,
+        45,
+        64
+      ],
+      "wie": "de voet van de trap naar de duelarena"
+    },
+    "drakendans": {
+      "soort": "zone",
+      "pos": [
+        25,
+        79,
+        99
+      ],
+      "tot": [
+        43,
+        86,
+        117
+      ],
+      "wie": "het ronde terras van de Drakendans"
+    },
+    "drakendans_speler": {
+      "soort": "pad",
+      "punten": [
+        [
+          34,
+          79,
+          113
+        ],
+        [
+          32,
+          79,
+          112
+        ],
+        [
+          30,
+          79,
+          110
+        ],
+        [
+          29,
+          79,
+          108
+        ],
+        [
+          30,
+          79,
+          106
+        ],
+        [
+          31,
+          79,
+          104
+        ],
+        [
+          34,
+          79,
+          103
+        ]
+      ],
+      "wie": "jouw danspassen: de westelijke halve cirkel"
+    },
+    "drakendans_zuka": {
+      "soort": "pad",
+      "punten": [
+        [
+          34,
+          79,
+          113
+        ],
+        [
+          36,
+          79,
+          112
+        ],
+        [
+          38,
+          79,
+          110
+        ],
+        [
+          39,
+          79,
+          108
+        ],
+        [
+          38,
+          79,
+          106
+        ],
+        [
+          36,
+          79,
+          104
+        ],
+        [
+          34,
+          79,
+          103
+        ]
+      ],
+      "wie": "Zuka's danspassen: de oostelijke halve cirkel, in spiegelbeeld"
+    },
+    "draak_rood": {
+      "soort": "npc",
+      "pos": [
+        16,
+        79,
+        108
+      ],
+      "yaw": -90.0,
+      "wie": "de rode draakguh in zijn grot",
+      "kind": "DRAAKGUH"
+    },
+    "drakengrot_rood": {
+      "soort": "zone",
+      "pos": [
+        9,
+        79,
+        101
+      ],
+      "tot": [
+        23,
+        85,
+        115
+      ],
+      "wie": "de grot van de rode draakguh"
+    },
+    "draak_blauw": {
+      "soort": "npc",
+      "pos": [
+        52,
+        79,
+        108
+      ],
+      "yaw": 90.0,
+      "wie": "de blauwe draakguh in zijn grot",
+      "kind": "DRAAKGUH"
+    },
+    "drakengrot_blauw": {
+      "soort": "zone",
+      "pos": [
+        45,
+        79,
+        101
+      ],
+      "tot": [
+        59,
+        85,
+        115
+      ],
+      "wie": "de grot van de blauwe draakguh"
+    },
+    "eeuwige_vlam": {
+      "soort": "prop",
+      "pos": [
+        24,
+        49,
+        166
+      ],
+      "wie": "de eeuwige vlam boven op de trappiramide"
+    },
+    "zonnekrijger": {
+      "soort": "npc",
+      "pos": [
+        37,
+        45,
+        166
+      ],
+      "yaw": 90.0,
+      "wie": "het hoofd van de Zonnekrijgers",
+      "kind": "ZONNEKRIJGER_GUH"
+    },
+    "zonnekrijger_wacht_1": {
+      "soort": "npc",
+      "pos": [
+        31,
+        45,
+        158
+      ],
+      "yaw": 0.0,
+      "wie": "een Zonnekrijger-guh",
+      "kind": "ZONNEKRIJGER_GUH"
+    },
+    "zonnekrijger_wacht_2": {
+      "soort": "npc",
+      "pos": [
+        40,
+        45,
+        176
+      ],
+      "yaw": 180.0,
+      "wie": "een Zonnekrijger-guh",
+      "kind": "ZONNEKRIJGER_GUH"
+    },
+    "rustpunt_7": {
+      "soort": "prop",
+      "pos": [
+        34,
+        45,
+        156
+      ],
+      "wie": "rustpunt: de ruïne, voor de lange trap"
+    },
+    "zonnekrijger_ruine": {
+      "soort": "zone",
+      "pos": [
+        8,
+        42,
+        65
+      ],
+      "tot": [
+        62,
+        112,
+        184
+      ],
+      "wie": "de ruïne van de Zonnekrijgers, met de trap en de drakengrotten"
+    },
+    "pilaar_01": {
+      "soort": "prop",
+      "pos": [
+        54,
+        47,
+        61
+      ],
+      "wie": "de top van rotspilaar 1"
+    },
+    "pilaar_02": {
+      "soort": "prop",
+      "pos": [
+        47,
+        49,
+        55
+      ],
+      "wie": "de top van rotspilaar 2"
+    },
+    "pilaar_03": {
+      "soort": "prop",
+      "pos": [
+        43,
+        52,
+        48
+      ],
+      "wie": "de top van rotspilaar 3"
+    },
+    "pilaar_04": {
+      "soort": "prop",
+      "pos": [
+        41,
+        55,
+        39
+      ],
+      "wie": "de top van rotspilaar 4"
+    },
+    "pilaar_05": {
+      "soort": "prop",
+      "pos": [
+        48,
+        58,
+        33
+      ],
+      "wie": "de top van rotspilaar 5"
+    },
+    "pilaar_06": {
+      "soort": "prop",
+      "pos": [
+        56,
+        61,
+        29
+      ],
+      "wie": "de top van rotspilaar 6"
+    },
+    "pilaar_07": {
+      "soort": "prop",
+      "pos": [
+        64,
+        63,
+        33
+      ],
+      "wie": "de top van rotspilaar 7"
+    },
+    "pilaar_08": {
+      "soort": "prop",
+      "pos": [
+        70,
+        57,
+        40
+      ],
+      "wie": "de top van rotspilaar 8"
+    },
+    "pilaar_09": {
+      "soort": "prop",
+      "pos": [
+        71,
+        60,
+        49
+      ],
+      "wie": "de top van rotspilaar 9"
+    },
+    "pilaar_10": {
+      "soort": "prop",
+      "pos": [
+        66,
+        53,
+        57
+      ],
+      "wie": "de top van rotspilaar 10"
+    },
+    "pilaar_11": {
+      "soort": "prop",
+      "pos": [
+        60,
+        50,
+        53
+      ],
+      "wie": "de top van rotspilaar 11"
+    },
+    "pilaar_12": {
+      "soort": "prop",
+      "pos": [
+        56,
+        54,
+        46
+      ],
+      "wie": "de top van rotspilaar 12"
+    },
+    "pilaar_13": {
+      "soort": "prop",
+      "pos": [
+        50,
+        51,
+        43
+      ],
+      "wie": "de top van rotspilaar 13"
+    },
+    "duel_speler": {
+      "soort": "prop",
+      "pos": [
+        44,
+        53,
+        48
+      ],
+      "wie": "waar jij staat bij het begin van het duel"
+    },
+    "duel_mikai": {
+      "soort": "prop",
+      "pos": [
+        69,
+        58,
+        40
+      ],
+      "wie": "waar Vuurheer Mikai staat"
+    },
+    "duel_arena": {
+      "soort": "zone",
+      "pos": [
+        29,
+        39,
+        19
+      ],
+      "tot": [
+        83,
+        84,
+        73
+      ],
+      "wie": "de duelarena: rotspilaren boven het water"
+    },
+    "ronde_lucht": {
+      "soort": "zone",
+      "pos": [
+        44,
+        43,
+        25
+      ],
+      "tot": [
+        68,
+        84,
+        37
+      ],
+      "wie": "ronde 1 (lucht): de hoge pilaren in het noorden"
+    },
+    "ronde_water": {
+      "soort": "zone",
+      "pos": [
+        43,
+        39,
+        50
+      ],
+      "tot": [
+        70,
+        60,
+        66
+      ],
+      "wie": "ronde 2 (water): de lage pilaren boven het water in het zuiden"
+    },
+    "ronde_aarde": {
+      "soort": "zone",
+      "pos": [
+        37,
+        43,
+        36
+      ],
+      "tot": [
+        53,
+        70,
+        52
+      ],
+      "wie": "ronde 3 (aarde): de pilaren in het westen"
+    },
+    "ronde_vuur": {
+      "soort": "zone",
+      "pos": [
+        51,
+        43,
+        37
+      ],
+      "tot": [
+        75,
+        76,
+        53
+      ],
+      "wie": "ronde 4 (vuur): de brede middenpilaar en het oosten"
+    },
+    "komeet_zicht": {
+      "soort": "prop",
+      "pos": [
+        56,
+        114,
+        22
+      ],
+      "wie": "waar de knabbelkomeet aan de hemel staat, gezien vanaf de arena"
+    },
+    "komeetscherf": {
+      "soort": "prop",
+      "pos": [
+        23,
+        45,
+        50
+      ],
+      "wie": "waar na het duel de scherf van de knabbelkomeet ligt"
+    },
+    "rustpunt_8": {
+      "soort": "prop",
+      "pos": [
+        52,
+        45,
+        76
+      ],
+      "wie": "rustpunt: de oever van de arena"
+    },
+    "strandhuis": {
+      "soort": "zone",
+      "pos": [
+        66,
+        45,
+        192
+      ],
+      "tot": [
+        82,
+        54,
+        206
+      ],
+      "wie": "het oude strandhuis van de familie van de Vuurheer"
+    },
+    "toneel": {
+      "soort": "zone",
+      "pos": [
+        40,
+        46,
+        221
+      ],
+      "tot": [
+        56,
+        52,
+        226
+      ],
+      "wie": "het toneel"
+    },
+    "acteur_1": {
+      "soort": "npc",
+      "pos": [
+        42,
+        46,
+        224
+      ],
+      "yaw": 180.0,
+      "wie": "de acteur die Aang-guh speelt (een meisje)",
+      "kind": "TONEELSPELER_GUH"
+    },
+    "acteur_2": {
+      "soort": "npc",
+      "pos": [
+        45,
+        46,
+        224
+      ],
+      "yaw": 180.0,
+      "wie": "de acteur die Katara-guh speelt",
+      "kind": "TONEELSPELER_GUH"
+    },
+    "acteur_3": {
+      "soort": "npc",
+      "pos": [
+        48,
+        46,
+        224
+      ],
+      "yaw": 180.0,
+      "wie": "de acteur die Sokka-guh speelt",
+      "kind": "TONEELSPELER_GUH"
+    },
+    "acteur_4": {
+      "soort": "npc",
+      "pos": [
+        51,
+        46,
+        224
+      ],
+      "yaw": 180.0,
+      "wie": "de acteur die Toph-guh speelt (een reus)",
+      "kind": "TONEELSPELER_GUH"
+    },
+    "acteur_5": {
+      "soort": "npc",
+      "pos": [
+        54,
+        46,
+        224
+      ],
+      "yaw": 180.0,
+      "wie": "de acteur die Zuka speelt (litteken verkeerd)",
+      "kind": "TONEELSPELER_GUH"
+    },
+    "publiek_speler": {
+      "soort": "prop",
+      "pos": [
+        45,
+        47,
+        212
+      ],
+      "wie": "jouw stoel op de tribune (derde rij)"
+    },
+    "theater": {
+      "soort": "zone",
+      "pos": [
+        32,
+        45,
+        205
+      ],
+      "tot": [
+        64,
+        55,
+        228
+      ],
+      "wie": "het openluchttheater van Sintelstrand"
+    },
+    "eendguh_5": {
+      "soort": "wezen",
+      "pos": [
+        52,
+        44,
+        29
+      ],
+      "yaw": 225.0,
+      "entity": "guhs:schildpad_eendguh"
+    },
+    "eendguh_6": {
+      "soort": "wezen",
+      "pos": [
+        62,
+        44,
+        23
+      ],
+      "yaw": 270.0,
+      "entity": "guhs:schildpad_eendguh"
+    },
+    "sintelstrand": {
+      "soort": "zone",
+      "pos": [
+        20,
+        39,
+        186
+      ],
+      "tot": [
+        96,
+        57,
+        250
+      ],
+      "wie": "Sintelstrand"
+    },
+    "rustpunt_9": {
+      "soort": "prop",
+      "pos": [
+        64,
+        45,
+        210
+      ],
+      "wie": "rustpunt: Sintelstrand"
+    },
+    "miroh_tent": {
+      "soort": "npc",
+      "pos": [
+        231,
+        45,
+        104
+      ],
+      "yaw": 90.0,
+      "wie": "Oom Miroh in zijn tent",
+      "kind": "OOM_MIROH"
+    },
+    "verzoening_zuka": {
+      "soort": "prop",
+      "pos": [
+        227,
+        45,
+        104
+      ],
+      "wie": "waar Zuka knielt: 'Ik was nooit boos op je'"
+    },
+    "lotus_tent": {
+      "soort": "zone",
+      "pos": [
+        222,
+        45,
+        98
+      ],
+      "tot": [
+        236,
+        53,
+        110
+      ],
+      "wie": "de tent van Oom Miroh"
+    },
+    "bumi": {
+      "soort": "npc",
+      "pos": [
+        215,
+        45,
+        97
+      ],
+      "yaw": 0.0,
+      "wie": "Bumi-guh, die net een steen opat",
+      "kind": "BUMI_GUH"
+    },
+    "pakguh_lotus": {
+      "soort": "npc",
+      "pos": [
+        215,
+        45,
+        110
+      ],
+      "yaw": 180.0,
+      "wie": "Meester Pakguh met zijn snor",
+      "kind": "PAKGUH"
+    },
+    "piandao": {
+      "soort": "npc",
+      "pos": [
+        241,
+        45,
+        112
+      ],
+      "yaw": 180.0,
+      "wie": "Piandao-guh, de zwaardmeester",
+      "kind": "PIANDAO_GUH"
+    },
+    "lotus_kamp": {
+      "soort": "zone",
+      "pos": [
+        208,
+        45,
+        84
+      ],
+      "tot": [
+        248,
+        54,
+        124
+      ],
+      "wie": "het tentenkamp van de Witte Lotus"
+    },
+    "rustpunt_10": {
+      "soort": "prop",
+      "pos": [
+        218,
+        45,
+        107
+      ],
+      "wie": "rustpunt: het kamp van de Witte Lotus"
+    },
+    "leeuwschildpad_kade": {
+      "soort": "prop",
+      "pos": [
+        228,
+        45,
+        64
+      ],
+      "wie": "waar je staat als je met de Leeuwschildpad-guh praat (zijn kin ligt op de kade)"
+    },
+    "kade": {
+      "soort": "zone",
+      "pos": [
+        224,
+        45,
+        63
+      ],
+      "tot": [
+        232,
+        51,
+        70
+      ],
+      "wie": "de kade bij de hap uit de rand"
+    },
+    "rustpunt_11": {
+      "soort": "prop",
+      "pos": [
+        228,
+        45,
+        69
+      ],
+      "wie": "rustpunt: de kade"
+    },
+    "leeuwschildpad_anker": {
+      "soort": "prop",
+      "pos": [
+        206,
+        30,
+        6
+      ],
+      "wie": "de oorsprong van de laag laag_leeuwschildpad (in de hap uit de rand)"
+    },
+    "leeuwschildpad_rug": {
+      "soort": "prop",
+      "pos": [
+        230,
+        54,
+        29
+      ],
+      "wie": "waar je wakker wordt op zijn rug"
+    },
+    "leeuwschildpad": {
+      "soort": "npc",
+      "pos": [
+        228,
+        51,
+        60
+      ],
+      "yaw": 0.0,
+      "wie": "de Leeuwschildpad-guh: boven op zijn snuit, bij zijn gezicht",
+      "kind": "LEEUWSCHILDPAD_GUH"
+    }
+  },
+  "lagen": {
+    "leeuwschildpad": {
+      "template": "guhs:vuurnatie_hoofdstad/laag_leeuwschildpad",
+      "pos": [
+        206,
+        30,
+        6
+      ],
+      "grootte": [
+        45,
+        33,
+        57
+      ]
+    }
+  }
+}
