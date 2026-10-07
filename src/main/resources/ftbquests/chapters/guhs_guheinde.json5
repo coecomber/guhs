@@ -80,8 +80,8 @@
     },
     {
       height: 1.5625,
-      id: "4755488D3CB1C1B5",
-      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_mikas.png",
+      id: "4755489B1CA6ACF4",
+      image: "guhs:textures/ftbquests/guhs_guheinde/kop_extra_einde2_zwevers.png",
       rotation: 0.0,
       width: 10.0,
       x: 4.5,
@@ -782,21 +782,56 @@
       y: 18.450000000000003,
     },
     {
-      id: "475548B4376A3CA0",
+      id: "47554853F4D5793F",
       icon: {
-        id: "guhs:ender_mika_spawn_egg",
+        id: "guhs:kruimelkwal_spawn_egg",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/seen_ender_mika",
-          id: "475548919AC1CA77",
+          advancement: "guhs:quest/seen_kruimelkwal",
+          id: "475548D66AF3CF19",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "4755480DB86071D7",
+          id: "475548D2AE80AC5E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "minecraft:glass_bottle",
+          },
+          count: 3,
+        },
+        {
+          id: "475548B5ED139EB0",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 22.4125,
+      shape: "gear",
+    },
+    {
+      id: "4755487E247ECC2E",
+      icon: {
+        id: "guhs:kruimelkwal_pot",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kruimelkwal_pot",
+          },
+          id: "475548E0FA880EC2",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548764697BCF8",
           type: "item",
           item: {
             count: 1,
@@ -805,42 +840,7 @@
           count: 8,
         },
         {
-          id: "475548943FD6A48A",
-          type: "xp",
-          xp: 100,
-        },
-      ],
-      x: 0.0,
-      y: 22.4125,
-      shape: "gear",
-    },
-    {
-      id: "47554807581C62D4",
-      icon: {
-        id: "guhs:flitskruimel",
-      },
-      tasks: [
-        {
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:flitskruimel",
-          },
-          id: "475548117E252405",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755481D7E3F82D4",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 12,
-        },
-        {
-          id: "4755484CCDBDA6A0",
+          id: "475548D05C0405DF",
           type: "xp",
           xp: 100,
         },
@@ -849,88 +849,85 @@
       y: 22.4125,
     },
     {
-      id: "4755481CB9AB65EB",
+      id: "475548A9F00BDC3A",
       icon: {
-        id: "guhs:kaasmijt_spawn_egg",
+        id: "guhs:vleermuis_lemurguh_spawn_egg",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/seen_kaasmijt",
-          id: "475548C53A9C9311",
+          advancement: "guhs:quest/seen_vleermuis_lemurguh",
+          id: "4755484D5855D21F",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "4755481CA1206C6F",
+          id: "475548F5AB4DB856",
           type: "item",
           item: {
             count: 1,
-            id: "guhs:kaas_knabbels",
+            id: "minecraft:apple",
           },
-          count: 8,
+          count: 4,
         },
         {
-          id: "4755481F45DE1507",
+          id: "47554838EC44465A",
           type: "xp",
-          xp: 100,
+          xp: 50,
         },
       ],
       x: 3.0,
       y: 22.4125,
     },
     {
-      id: "47554806DC2A1289",
+      id: "4755484B866D6CF8",
       icon: {
-        id: "guhs:schuilguh_spawn_egg",
+        id: "guhs:otter_pinguinguh_spawn_egg",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/seen_schuilguh",
-          id: "4755486A1FBDAA28",
+          advancement: "guhs:quest/seen_otter_pinguinguh",
+          id: "4755487A3733A30C",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "4755482A4EECB310",
+          id: "4755480318BCEE47",
           type: "item",
           item: {
             count: 1,
-            id: "guhs:kaas_knabbels",
+            id: "minecraft:cod",
           },
-          count: 8,
+          count: 4,
         },
         {
-          id: "475548A38B64F69C",
+          id: "475548128543D606",
           type: "xp",
-          xp: 100,
+          xp: 50,
         },
       ],
       x: 4.5,
       y: 22.4125,
-      shape: "circle",
     },
     {
-      id: "4755485CBCF10D62",
+      id: "475548360D83FBB8",
       icon: {
-        id: "guhs:doosschil",
+        id: "guhs:das_molguh_spawn_egg",
       },
       tasks: [
         {
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:doosschil",
-          },
-          id: "475548A72686A686",
+          type: "advancement",
+          advancement: "guhs:quest/seen_das_molguh",
+          id: "475548085F512F5F",
+          criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548F1F7F2F3CE",
+          id: "475548DD2030EADA",
           type: "item",
           item: {
             count: 1,
@@ -939,48 +936,45 @@
           count: 8,
         },
         {
-          id: "47554888D4D80DF0",
+          id: "475548537C0E283D",
           type: "xp",
-          xp: 100,
+          xp: 50,
         },
       ],
       x: 6.0,
       y: 22.4125,
     },
     {
-      id: "475548EFBFE1D433",
+      id: "47554827FF086DFC",
       icon: {
-        id: "guhs:schuildoos",
+        id: "guhs:schildpad_eendguh_spawn_egg",
       },
       tasks: [
         {
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:schuildoos",
-          },
-          id: "475548B27C92F133",
+          type: "advancement",
+          advancement: "guhs:quest/seen_schildpad_eendguh",
+          id: "47554896F97AFFB9",
+          criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548E702C05C31",
+          id: "4755487279C3D22B",
           type: "item",
           item: {
             count: 1,
-            id: "guhs:kaas_knabbels",
+            id: "minecraft:bread",
           },
-          count: 16,
+          count: 4,
         },
         {
-          id: "475548E1F0FDAE8A",
+          id: "475548B95BCDA21C",
           type: "xp",
-          xp: 150,
+          xp: 50,
         },
       ],
       x: 7.5,
       y: 22.4125,
-      shape: "gear",
     },
   ],
 }

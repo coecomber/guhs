@@ -1,0 +1,204 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "glas": {
+      "sprite": "guhs:block/kruimelkwal_pot_glas",
+      "force_translucent": true
+    },
+    "deksel": {
+      "sprite": "guhs:block/kruimelkwal_pot_deksel",
+      "force_translucent": true
+    },
+    "kwal": {
+      "sprite": "guhs:block/kruimelkwal_pot_kwal",
+      "force_translucent": true
+    },
+    "particle": {
+      "sprite": "guhs:block/kruimelkwal_pot_glas",
+      "force_translucent": true
+    }
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        2,
+        5
+      ],
+      "to": [
+        11,
+        9,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#glas"
+        },
+        "south": {
+          "texture": "#glas"
+        },
+        "east": {
+          "texture": "#glas"
+        },
+        "west": {
+          "texture": "#glas"
+        },
+        "up": {
+          "texture": "#glas"
+        },
+        "down": {
+          "texture": "#glas"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        9,
+        6
+      ],
+      "to": [
+        10,
+        10.5,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#deksel"
+        },
+        "south": {
+          "texture": "#deksel"
+        },
+        "east": {
+          "texture": "#deksel"
+        },
+        "west": {
+          "texture": "#deksel"
+        },
+        "up": {
+          "texture": "#deksel"
+        },
+        "down": {
+          "texture": "#deksel"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        4,
+        6
+      ],
+      "to": [
+        10,
+        8,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kwal"
+        },
+        "south": {
+          "texture": "#kwal"
+        },
+        "east": {
+          "texture": "#kwal"
+        },
+        "west": {
+          "texture": "#kwal"
+        },
+        "up": {
+          "texture": "#kwal"
+        },
+        "down": {
+          "texture": "#kwal"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        2.6,
+        6.5
+      ],
+      "to": [
+        7.5,
+        4,
+        7.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kwal"
+        },
+        "south": {
+          "texture": "#kwal"
+        },
+        "east": {
+          "texture": "#kwal"
+        },
+        "west": {
+          "texture": "#kwal"
+        },
+        "down": {
+          "texture": "#kwal"
+        }
+      }
+    },
+    {
+      "from": [
+        8.5,
+        2.6,
+        8.5
+      ],
+      "to": [
+        9.5,
+        4,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kwal"
+        },
+        "south": {
+          "texture": "#kwal"
+        },
+        "east": {
+          "texture": "#kwal"
+        },
+        "west": {
+          "texture": "#kwal"
+        },
+        "down": {
+          "texture": "#kwal"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        10.5,
+        7.5
+      ],
+      "to": [
+        8.5,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#deksel"
+        },
+        "south": {
+          "texture": "#deksel"
+        },
+        "east": {
+          "texture": "#deksel"
+        },
+        "west": {
+          "texture": "#deksel"
+        }
+      }
+    }
+  ]
+}

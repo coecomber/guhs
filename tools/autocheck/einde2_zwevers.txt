@@ -1,0 +1,62 @@
+# einde2, slice zwevers: the Kruimelkwal, the four element animals, the kruimelkwal_pot and the Leegtewalvisguh, on a
+# cleared stretch of the Guhmension (the creatures need no Guheinde to be looked at; the script changes blocks: dev world only).
+# Run:  gradlew runAutocheckClient -PautocheckScript=tools/autocheck/einde2_zwevers.txt -PautocheckTimeout=30
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/execute in guhs:guhmension run tp @s 0 200 0
+wait 60
+/execute at @s positioned over motion_blocking_no_leaves run tp @s ~ ~1 ~
+/fill ~-8 ~-1 ~-4 ~12 ~-1 ~14 minecraft:smooth_stone
+/fill ~-8 ~ ~-4 ~12 ~8 ~14 minecraft:air
+wait 20
+
+section the kwal and the four animals in a row
+/guhs einde2 zwevers rij
+/tp @s ~3 ~0.4 ~4.5 180 8
+waitrender 200
+shot zwevers_rij
+/tp @s ~-1.2 ~ ~-2.4 180 12
+wait 20
+shot zwevers_rij_dichtbij
+
+section a swarm, by night (they glow)
+/tp @s ~-6 ~ ~6 0 -10
+/guhs einde2 zwevers zwerm
+/time set midnight
+wait 200
+shot zwevers_zwerm_nacht
+
+section the kruimelkwal_pot, standing and hanging
+/setblock ~2 ~ ~3 guhs:kruimelkwal_pot
+/setblock ~4 ~3 ~3 minecraft:smooth_stone
+/setblock ~4 ~2 ~3 guhs:kruimelkwal_pot[hanging=true]
+/tp @s ~ ~ ~ -45 0
+wait 60
+shot zwevers_pot_nacht
+/time set noon
+wait 100
+shot zwevers_pot_dag
+
+section the otter on ice (a sled)
+/fill ~-6 ~-1 ~8 ~10 ~-1 ~10 minecraft:packed_ice
+/summon guhs:otter_pinguinguh ~ ~ ~9 {Slee:1b}
+/tp @s ~3 ~1 ~12 160 15
+wait 100
+shot zwevers_otter_ijs
+
+section the Leegtewalvisguh: nothing without the flag, the whale with it
+/tp @s ~ ~40 ~ 0 10
+wait 20
+/guhs einde2 zwevers walviszicht uit
+/guhs einde2 zwevers walvis
+wait 60
+shot zwevers_walvis_zonder_vlag
+/guhs einde2 zwevers walviszicht aan
+waitrender 100
+shot zwevers_walvis
+/tp @s ~ ~ ~ 0 60
+wait 40
+shot zwevers_walvis_rug
+/guhs einde2 zwevers walviszicht uit
