@@ -379,6 +379,9 @@ def eigen_check(b):
     ogen = [c for c, bl in b.s.blocks.items() if bl[0] == "minecraft:sea_lantern" and c[2] > 125]
     if len(ogen) < 6:
         p.append(f"de kop heeft geen ogen ({len(ogen)} lichtblokken)")
+    los = [c for c, bl in b.s.blocks.items() if "leaves" in bl[0] and bl[1].get("persistent") != "true"]
+    if los:
+        p.append(f"{len(los)} bladeren zijn niet persistent (ze vallen af, de tegels krijgen geen buur-updates), bv. {los[:3]}")
     if b.bomen < 18:
         p.append(f"maar {b.bomen} bomen op het schild: dat is geen bos")
     return p

@@ -253,11 +253,10 @@ def stam(b, x, y, z, blok, as_="y"):
 
 
 def blad(b, x, y, z, blok="oak_leaves"):
-    """A leaf block that never decays (vanilla leaves need persistent; our own leaf blocks have no states)."""
-    if gb.mc(blok).startswith("minecraft:"):
-        b.set(x, y, z, blok, {"distance": "7", "persistent": "true", "waterlogged": "false"})
-    else:
-        b.set(x, y, z, blok)
+    """A leaf block that never decays: persistent, for the vanilla leaves and for our own (guhs:guhbloesem_leaves is a real
+    leaves block too: a tile is placed without neighbour updates, so its leaves keep the distance 7 of the template, and a
+    leaf at distance 7 that is not persistent falls off at its first random tick)."""
+    b.set(x, y, z, blok, {"distance": "7", "persistent": "true", "waterlogged": "false"})
 
 
 def vlag(b, x, y, z, kleur, facing=None, rotatie=0):
