@@ -150,6 +150,10 @@ ol.steps{padding-left:1.4em}ol.steps li{margin:0 0 10px}
 .task{margin-top:4px;font-size:14px}
 details.book{border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:8px 0;background:var(--card)}
 details.book summary{cursor:pointer;font-weight:700}
+details.spoiler{border:1.5px dashed var(--line2);border-radius:12px;padding:8px 12px;margin:10px 0;background:var(--card)}
+details.spoiler>summary{cursor:pointer;font-weight:700;color:var(--muted)}
+details.spoiler[open]>summary{margin-bottom:6px}
+.infobox details.spoiler{margin:8px;border-radius:10px}
 code,kbd{font-family:var(--mono);font-size:.88em;background:var(--rasp-soft);padding:1px 6px;border-radius:6px}
 .cmd{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
 .cmd code{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;padding:6px 10px}

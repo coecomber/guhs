@@ -3,8 +3,8 @@ Renders the pictures for the Guhs wiki (docs): mobs from their .geo.json models,
 item icons, and isometric views of the structures. Everything comes from the mod's own files, so the wiki
 always matches the mod.
 
-Usage (from the project root):  python tools/wiki_renders.py <output folder>   (add --only-29 / --only-210 / --only-30 / --only-128
-for just the pictures of 2.9 / 2.10 / 3.0 / 1.2.8; -h shows this text)
+Usage (from the project root):  python tools/wiki_renders.py <output folder>   (add --only-29 / --only-210 / --only-30 / --only-128 /
+--only-px / --only-bbq2 for just the pictures of 2.9 / 2.10 / 3.0 / 1.2.8 / Guhpixel / bbq2; -h shows this text)
 Requires: pillow, numpy
 """
 import collections
@@ -271,6 +271,8 @@ def model_quads(ref, extra_textures=None, offset=(0, 0, 0), tint=None):
         if "elements" in m:
             elements = m["elements"]
     textures.update(extra_textures or {})
+    # (26.1: a texture may be written as {"sprite": ..., "force_translucent": true})
+    textures = {k: (v.get("sprite", "minecraft:missingno") if isinstance(v, dict) else v) for k, v in textures.items()}
     quads = []
     for el in elements or []:
         f, t = np.array(el["from"], float), np.array(el["to"], float)
@@ -2987,12 +2989,30 @@ def main_px(out):
         importlib.import_module(f"wiki_px.{x}").renders(r)
 
 
+def main_bbq2(out, only=None):
+    """bbq2 (Guh-technologie, the Guhbarbecuether buildings, In de ban van de Knabbelring, Super Guhrio): the characters, the
+    creatures, the blocks and the buildings, drawn by tools/wiki_bbq2/renders.py (renders(r): r is this module, r.OUT the folder).
+    only: a set of "npcs" / "wezens" / "blokken" / "bouwwerken" (default everything)."""
+    sys.path.insert(0, "tools")
+    os.makedirs(out, exist_ok=True)
+    r = sys.modules[__name__]
+    r.OUT = out
+    from wiki_bbq2 import renders as bbq2
+    bbq2.renders(r, only)
+
+
 if __name__ == "__main__":
     if sys.argv[1:2] in (["-h"], ["--help"]):
         print(__doc__)
     elif "--only-px" in sys.argv:      # (just the guhpixel pictures, into an existing img folder)
         sys.argv.remove("--only-px")
         main_px(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
+    elif "--only-bbq2" in sys.argv:    # (just the bbq2 pictures, into an existing img folder; --bbq2=npcs,wezens,blokken,bouwwerken for a part)
+        sys.argv.remove("--only-bbq2")
+        part = next((a for a in sys.argv if a.startswith("--bbq2=")), None)
+        if part:
+            sys.argv.remove(part)
+        main_bbq2(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"), set(part[7:].split(",")) if part else None)
     elif "--only-128" in sys.argv:     # (just the 1.2.8 pictures, into an existing img folder)
         sys.argv.remove("--only-128")
         main_v128(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
@@ -3008,3 +3028,4 @@ if __name__ == "__main__":
     else:
         main(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
         main_px(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))
+        main_bbq2(sys.argv[1] if len(sys.argv) > 1 else os.path.join("docs", "wiki", "img"))

@@ -5,7 +5,14 @@ links between things that the game data doesn't spell out, and where the knowled
 Everything here is small tables. The texts themselves come from tools/make_wiki.py (the knowledge base), the lists from
 the game data; a new variant, item, block, structure, biome, clothing piece, NPC or critter gets its page without any
 change here (and turns up in the "unassigned" part of the report if the knowledge base has text for it that has no home).
+
+bbq2 (Guh-technologie, the Guhbarbecuether buildings, In de ban van de Knabbelring, Super Guhrio) is the exception to "small
+tables here": its stories, mechanics and links come from the slices' own notes (tools/features/*_wiki.py), joined by
+tools/wiki_bbq2 and put into the tables below by extend(), which the page builder calls before it builds anything.
 """
+import html
+import os
+import sys
 
 # --- dimensions ------------------------------------------------------------------------------------------------------------
 # id -> (NL name, EN name, picture, NL lead, EN lead)
@@ -20,8 +27,8 @@ DIMENSIONS = {
                  "Het eindspel van Guhs: een eiland van kaaskorst in het niets, waar Opper-Mika op de hongerige Enderguh alle kaasknabbels bewaakt.",
                  "The endgame of Guhs: an island of cheese crust in the void, where Opper-Mika guards every kaasknabbel on the starved Enderguh."),
     "barbecuether": ("De Guhbarbecuether", "The Guh Barbecuether", "barbecuether_portaal",
-                     "Een hete barbecuedimensie van houtskool, roosterijzer, pindasaus en mosterd, met Spiesburchten en het Mika-grillpaleis. Je gaat erheen door een grillkoolframe.",
-                     "A hot barbecue dimension of charcoal, grill iron, peanut sauce and mustard, with Spiesburchten and the Mika grill palace. You get there through a grillkool frame."),
+                     "Een hete barbecuedimensie van houtskool, roosterijzer, pindasaus en mosterd, met Spiesburchten, Mika-paleizen, dertien gebouwen met een eigen questlijn, het verhaal In de ban van de Knabbelring en het kasteel van Super Guhrio. Je gaat erheen door een grillkoolframe, zodra Guhdalf het portaal voor je heeft aangezet.",
+                     "A hot barbecue dimension of charcoal, grill iron, peanut sauce and mustard, with Spiesburchten, Mika palaces, thirteen buildings with a questline of their own, the story The Lord of the Nibble Ring and the castle of Super Guhrio. You get there through a grillkool frame, once Guhdalf has switched the portal on for you."),
     "guhpixel": ("Guhpixel", "Guhpixel", "guhpixel_poort",
                  "De minigame-server van de guhs: een zwevende lobby vol spelletjes, een winkel en Guhpixel-muntjes. Je komt er door het grote beeldscherm in het Guh-internetcafé, daarna met /lobby.",
                  "The minigame server of the guhs: a floating lobby full of games, a shop and Guhpixel Coins. You get there through the big screen in the Guh Internet Café, after that with /lobby."),
@@ -214,8 +221,9 @@ SYSTEMS = {
                   "A little house shaped like a guh head, in three sizes: your guhs live there, sleep there at night and do chores in the day.",
                   ["systemen/klusjes", "verhalen/timmerguh"]),
     "klusjes": ("Klusjes", "Chores", "shot210_klusjes_erf_bezig",
-                "Guhs die in een guhhuisje wonen doen overdag tien soorten klusjes rond hun huisje.",
-                "Guhs that live in a guh house do ten kinds of chores around it during the day.", ["systemen/guhhuisje"]),
+                "Guhs die in een guhhuisje wonen doen overdag klusjes rond hun huisje: opgraven, farmen, opruimen, en ook je guhmachines bijvullen en bomen hakken in een Plantagebak.",
+                "Guhs that live in a guh house do chores around it during the day: digging, farming, tidying up, and also refilling your guh machines and chopping trees in a Plantation Box.",
+                ["systemen/guhhuisje", "systemen/guhmachines"]),
     "speelgoed": ("Speelgoed", "Toys", "shot210_speelgoed_spelen2",
                   "Een guhspeeltuin: knabbelbal, glijbaantje, pluizige tunnel, wip en schommel.",
                   "A guh playground: knabbel ball, little slide, fluffy tunnel, seesaw and swing.", ["systemen/samen"]),
@@ -235,12 +243,13 @@ SYSTEMS = {
                "Het boek van alle guhs, personages en diertjes die je tegenkwam, met tabs voor Knus, Minigames, Kleding en Mijn guhs.",
                "The book of every guh, character and critter you met, with tabs for Knus, Minigames, Clothes and My guhs.", ["guhs/index", "systemen/superkompas"]),
     "superkompas": ("Het superkompas", "The super compass", "icon_guhmensie_superkompas_00",
-                    "Het Guhmensie-superkompas wijst de weg naar (bijna) elk bouwwerk, per tab: Avontuur, Quests, Minigames, Wonderen, Wonen, Einde, Ondergrond, Barbecue, Knus en Verhalen.",
-                    "The Guhmension super compass points the way to (almost) every structure, by tab: Adventure, Quests, Minigames, Wonders, Homes, End, Underground, Barbecue, Cosy and Stories.",
+                    "Het Guhmensie-superkompas wijst de weg naar (bijna) elk bouwwerk, per tab: Avontuur, Quests, Minigames, Wonderen, Wonen, Einde, Ondergrond, Barbecue, Knus en Verhalen. En met 'Mijn verhaal' naar de volgende stap van het verhaal dat je volgt.",
+                    "The Guhmension super compass points the way to (almost) every structure, by tab: Adventure, Quests, Minigames, Wonders, Homes, End, Underground, Barbecue, Cosy and Stories. And with 'My Story' to the next step of the story you are following.",
                     ["bouwwerken/index"]),
     "ftb-quests": ("FTB-quests", "FTB quests", "icon_timmerguh_bouwboekje",
-                   "Met FTB Quests in je pack krijg je vanzelf een Guhs-hoofdstukgroep in het questboek. Niks zit op slot.",
-                   "With FTB Quests in your pack you automatically get a Guhs chapter group in the quest book. Nothing is locked.", ["verhalen/index"]),
+                   "Met FTB Quests in je pack krijg je vanzelf een Guhs-hoofdstukgroep in het questboek. Niks zit op slot, behalve het grote verhaal In de ban van de Knabbelring: dat gaat stap voor stap open.",
+                   "With FTB Quests in your pack you automatically get a Guhs chapter group in the quest book. Nothing is locked, except the big story The Lord of the Nibble Ring: it opens step by step.",
+                   ["verhalen/index"]),
     "emotes": ("Emotes", "Emotes", "shot210_gui_samen_emotes", "Je guh kan zwaaien, dansen, knuffelen, gapen en nog veel meer.",
                "Your guh can wave, dance, hug, yawn and much more.", ["systemen/guhmenu"]),
     "evenementen": ("Evenementen", "Events", "guh_outfit_evenementen",
@@ -260,7 +269,8 @@ SYSTEMS = {
                      "Bij bijna elke minigame kies je hoe moeilijk je het wilt: makkelijk, medium of lastig.",
                      "In almost every minigame you choose how hard you want it: easy, medium or hard.", ["minigames/index"]),
     "brouwen": ("De Guhbrouwketel", "The guh brewing kettle", "guhbrouwketel_vahoegheid_3",
-                "Brouw guhdrankjes in de Guhbrouwketel.", "Brew guh potions in the guh brewing kettle.", ["blokken/guhbrouwketel"]),
+                "Brouw guhdrankjes in de Guhbrouwketel.", "Brew guh potions in the guh brewing kettle.",
+                ["blokken/guhbrouwketel", "systemen/saus", "systemen/pepers", "systemen/sausdieren"]),
     "vahoege-vads": ("Vahoege vads", "Vahoege vads", "compressed_super_vahoege_vads",
                      "Het sterkste metaal van de Guhmensie: gereedschap en harnas die nooit kapotgaan.",
                      "The strongest metal of the Guhmension: tools and armour that never break.", []),
@@ -578,3 +588,56 @@ SECTION_RULES = {
     "recipes": DROP, "new22": "minigames/verstopguh", "new23": "bouwwerken/guh_kasteel", "rare24": DROP, "new24": DROP,
     "new25": DROP, "mobs": DROP,
 }
+
+# --- bbq2: filled in by extend() from tools/wiki_bbq2 (the slices' notes tools/features/*_wiki.py) ----------------------------
+STORY_GUHS = {}          # Guhdex creatures that are tameable guhs: variant -> where you get it (their page is a guhs/ page)
+SPOILER_PAGES = set()    # pages without a picture in lists, cards and the search; their own picture sits behind a toggle
+SPOILER_STEPS = set()    # story pages whose list of FTB quests sits behind a toggle
+SPOILER_FTB = set()      # FTB chapters whose quest-book page hides every section behind a toggle
+SUPERKOMPAS_EXTRA = {}   # tab -> the structures the features add from code (SuperkompasItem.voegToe)
+NOTES = []               # what the build should tell (a text without English, a note that could not be read)
+_extended = set()
+
+
+def extend(root):
+    """Puts the bbq2 pages into the tables above: the story and mechanic pages (with their English), where the new
+    characters and creatures live, which knowledge-base section belongs on which page, and the spoiler rules. Called once per
+    project root by pages.Builder; a later slice's tools/features/<module>_wiki.py joins in without a change here."""
+    root = os.path.abspath(root)
+    if root in _extended:
+        return
+    _extended.add(root)
+    tools = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if tools not in sys.path:
+        sys.path.insert(0, tools)
+    import wiki_bbq2 as W
+    b = W.cached(root)
+    esc = lambda s: html.escape(s or "", quote=False)
+    for pid, st in b.verhalen.items():
+        STORIES[pid.split("/", 1)[1]] = dict(nl=st["nl"], en=st["en"], img=st.get("img"), lead_nl=esc(st["lead_nl"]), lead_en=esc(st["lead_en"]),
+                                             ftb=list(st.get("ftb") or []), structure=st.get("structure"), npcs=list(st.get("npcs") or []),
+                                             related=list(st["related"]))
+    for pid, sy in b.systemen.items():
+        SYSTEMS[pid.split("/", 1)[1]] = (sy["nl"], sy["en"], sy.get("img"), esc(sy["lead_nl"]), esc(sy["lead_en"]), list(sy["related"]))
+    NPC_HOME.update(b.npc_home)
+    ENTITY_HOME.update(b.entity_home)
+    NPC_STORY.update(b.npc_verhaal)
+    for row in b.tekst:
+        SECTION_RULES[W.sectie(row["pagina"])] = row["pagina"]
+    for gid, _, _, _ in W.GROEPEN:          # (the group sections themselves hold no text of their own)
+        SECTION_RULES.setdefault(gid, DROP)
+    NO_PAGE.update(W.GEEN_PAGINA)
+    CRITTERS.extend(x for x in W.DIERTJES if x not in CRITTERS)
+    BOSSES.update(W.BAZEN)
+    BRON_PAGE.update(W.BRON_PAGINA)
+    STRUCTURE_PICS.update(W.STRUCTURE_PICS)
+    STORY_GUHS.update(W.VERHAALGUHS)
+    VARIANT_HOME.update(W.VERHAALGUHS)
+    SPOILER_PAGES.update(W.SPOILER_PAGINA)
+    SPOILER_STEPS.update(W.SPOILER_STAPPEN)
+    SPOILER_FTB.update(W.SPOILER_FTB)
+    for tab, ids in W.SUPERKOMPAS.items():
+        SUPERKOMPAS_EXTRA.setdefault(tab, []).extend(x for x in ids if x not in SUPERKOMPAS_EXTRA.get(tab, []))
+    for did, pages in W.DIMENSIE_VERWANT.items():
+        DIMENSION_RELATED.setdefault(did, []).extend(x for x in pages if x not in DIMENSION_RELATED.get(did, []))
+    NOTES.extend(b.notes)

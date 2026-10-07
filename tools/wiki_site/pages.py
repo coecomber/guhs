@@ -80,6 +80,9 @@ class Builder:
         self.g, self.chunks, self.im = game, chunks, images
         self.site = Site()
         self.report = dict(unassigned=[], dropped=0, assigned=0, notes=[])
+        T.extend(game.root)          # bbq2: the stories, mechanics and spoiler rules of the slices' notes (tools/wiki_bbq2)
+        self.report["notes"] += T.NOTES
+        self.im.spoiler_tile()
         self.item_page = {}          # item id -> page id
         self.ftb_quest_page = {}     # quest key -> page id
 
@@ -146,11 +149,45 @@ class Builder:
         return f'<div class="recipe"><div class="inputs">{ins}</div><span class="arrow" aria-hidden="true"></span>{res}<span class="tag">{t(en, nl)}</span></div>'
 
     def resolve_pid(self, pid):
-        """items/x and blokken/x are the same thing to the hand tables."""
+        """items/x and blokken/x are the same thing to the hand tables; so are wezens/x, diertjes/x, npcs/x and guhs/x (a
+        creature's page is in one of them, and a note need not know which)."""
         if pid and pid not in self.site.pages and pid.split("/")[0] in ("items", "blokken", "kleding"):
             iid = pid.split("/", 1)[1]
             return self.item_page.get(iid, pid)
+        if pid and pid not in self.site.pages and pid.split("/")[0] in ("wezens", "diertjes", "npcs", "guhs"):
+            eid = pid.split("/", 1)[1]
+            for cat in ("wezens", "diertjes", "guhs", "npcs"):
+                if f"{cat}/{eid}" in self.site.pages:
+                    return f"{cat}/{eid}"
         return pid
+
+    def pic(self, name):
+        """A picture a hand table or a note names: the render of that name, else the icon of the item or block it names
+        ('icon_x', 'block_x', 'item_x', 'block:guhs:x'), else None."""
+        if not name:
+            return None
+        name = name.replace("block:guhs:", "block_").replace("entity/", "").replace("struct_", "structure_")
+        if self.im.has(name):
+            return name
+        for pre in ("icon_", "block_", "item_", "entity_"):
+            if name.startswith(pre):
+                bare = name[len(pre):]
+                return self.im.first(bare, f"block_{bare}", f"icon_{bare}") or self.im.item_icon(bare)
+        return self.im.item_icon(name)
+
+    @property
+    def superkompas(self):
+        """The Superkompas tabs with the structures the features add from code (T.SUPERKOMPAS_EXTRA) at the end of their tab;
+        a place the spoiler rule hides is left out (the game only lists it once the player's story has reached it)."""
+        if not hasattr(self, "_superkompas"):
+            out = []
+            for cat, kopjes in self.g.superkompas:
+                have = {s for _, ids in kopjes for s in ids}
+                extra = [s for s in T.SUPERKOMPAS_EXTRA.get(cat, []) if s not in have and s in self.g.structures
+                         and f"bouwwerken/{s}" not in T.SPOILER_PAGES]
+                out.append((cat, list(kopjes) + ([(None, extra)] if extra else [])))
+            self._superkompas = out
+        return self._superkompas
 
     def add(self, page):
         return self.site.add(page)
@@ -201,15 +238,16 @@ class Builder:
         g = self.g
         roll = None
         for v in g.variants:
-            if v["kind"] not in ("variant", "verhaal"):
+            vid = v["id"]
+            story_guh = v["kind"] == "verhaal" or vid in T.STORY_GUHS      # (Sam-guh and Guhshi are Guhdex creatures AND tameable guhs)
+            if v["kind"] not in ("variant", "verhaal") and not story_guh:
                 continue
             roll = roll or getattr(g, "variant_roll_out_of", 1000)
-            vid = v["id"]
-            name = "Guh" if vid == "normal" else g.lang_nl.get(f"entity.guhs.guh.{vid}", vid)
+            name = "Guh" if vid == "normal" else g.lang_nl.get(f"entity.guhs.guh.{vid}") or g.entity_names.get(vid, vid)
             name = name[:1].upper() + name[1:]
             if vid == "normal":
                 kind = ("Base guh", "Basisguh")
-            elif v["kind"] == "verhaal":
+            elif story_guh:
                 kind = ("Story guh", "Verhaalguh")
             elif v["weight"] > 0:
                 kind = ("Variant", "Variant")
@@ -241,7 +279,7 @@ class Builder:
                 pg.info("Special", "Bijzonder", t(", ".join(e[0] for e in extras), ", ".join(e[1] for e in extras)))
             pg.lead_nl = esc(v["info"])
             pg.data["guhdex"] = True
-            if v["kind"] == "verhaal":
+            if story_guh:
                 pg.related.append("systemen/verhaalguhs")
             pg.data["sort"] = v["order"]
             pg.columns["rarity"] = (v["weight"] if v["weight"] else -1, esc(rarity))
@@ -599,7 +637,7 @@ class Builder:
     def structures(self):
         g = self.g
         tabs = {}
-        for cat, kopjes in g.superkompas:
+        for cat, kopjes in list(g.superkompas) + [(c, [(None, ids)]) for c, ids in T.SUPERKOMPAS_EXTRA.items()]:
             for _, ids in kopjes:
                 for sid in ids:
                     tabs.setdefault(sid, [])
@@ -823,6 +861,12 @@ class Builder:
         for s in secs:
             if section is None or s.get("sid") == section:
                 keys += s["quests"]
+        if not keys and section is not None:
+            # the section moved to another chapter of the quest book (a note still names the old one): find it by its own id
+            for other in ftb["sections"].values():
+                for s in other:
+                    if s.get("sid") == section:
+                        keys += s["quests"]
         items = []
         for k in keys:
             q = ftb["quests"].get(k)
@@ -855,8 +899,9 @@ class Builder:
     def stories(self):
         g = self.g
         for stid, st in T.STORIES.items():
-            pg = Page("verhalen", f"verhalen/{stid}", st["nl"], st["en"], "Verhaal", "Story", self.im.first(st.get("img") or ""))
-            pg.images = [n for n in [st.get("img")] if n and self.im.has(n)]
+            pic = self.pic(st.get("img"))
+            pg = Page("verhalen", f"verhalen/{stid}", st["nl"], st["en"], "Verhaal", "Story", pic)
+            pg.images = [pic] if pic else []
             pg.lead_nl, pg.lead_en = st["lead_nl"], st["lead_en"]
             pg.info("Kind", "Soort", t("Story / questline", "Verhaal / questline"))
             if st.get("structure"):
@@ -873,10 +918,14 @@ class Builder:
             for chapter, section in st.get("ftb", []):
                 steps += self.ftb_steps(chapter, section)
             if steps:
+                lijst = '<ol class="steps">' + "".join(steps) + "</ol>"
+                if f"verhalen/{stid}" in T.SPOILER_STEPS:       # (every step of a later chapter gives something away)
+                    lijst = (f'<details class="spoiler"><summary>{t("Spoiler: show every quest of this part", "Spoiler: laat alle quests van dit deel zien")}'
+                             f'</summary>{lijst}</details>')
                 pg.add_section("steps", "Steps (FTB quests)", "Stappen (FTB-quests)",
                                '<p class="note">' + t("The quest texts are in English and Dutch, like everything in the game (Guhs follows your language setting).",
                                                       "De questteksten zijn Nederlands en Engels, net als alles in het spel (Guhs volgt je taalinstelling).")
-                               + '</p><ol class="steps">' + "".join(steps) + "</ol>")
+                               + '</p>' + lijst)
                 pg.info("Steps", "Stappen", str(len(steps)))
             pg.columns["kind"] = (0, t("Story", "Verhaal"))
             pg.data["sort"] = list(T.STORIES).index(stid)
@@ -899,7 +948,11 @@ class Builder:
             for s in ftb["sections"].get(c, []):
                 steps = self.ftb_steps(c, s.get("sid"))
                 total += len(steps)
-                pg.add_section(f"sec-{s.get('sid')}", plain_(s["title"]), plain_(s["title"]), '<ol class="steps">' + "".join(steps) + "</ol>")
+                lijst = '<ol class="steps">' + "".join(steps) + "</ol>"
+                if c in T.SPOILER_FTB:      # (a story's quests in order: every one of them is a spoiler for who is not there yet)
+                    lijst = (f'<details class="spoiler"><summary>{t("Spoiler: show these quests", "Spoiler: laat deze quests zien")}</summary>'
+                             f'{lijst}</details>')
+                pg.add_section(f"sec-{s.get('sid')}", plain_(s["title"]), plain_(s["title"]), lijst)
             pg.info("Quests", "Quests", str(total))
             pg.info("Kind", "Soort", t("FTB quest chapter", "FTB-questhoofdstuk"))
             pg.related.append("systemen/ftb-quests")
@@ -910,8 +963,9 @@ class Builder:
     def systems(self):
         g = self.g
         for sid, (nl, en, pic, lead_nl, lead_en, related) in T.SYSTEMS.items():
-            pg = Page("systemen", f"systemen/{sid}", nl, en, "Systeem", "Mechanic", self.im.first(pic))
-            pg.images = [n for n in [pic] if self.im.has(n)]
+            pic = self.pic(pic)
+            pg = Page("systemen", f"systemen/{sid}", nl, en, "Systeem", "Mechanic", pic)
+            pg.images = [pic] if pic else []
             pg.claims = set(pg.images) if sid in ("guhdex", "superkompas", "guhslee", "brouwen", "hartjes", "favorietjes") else set()
             pg.lead_nl, pg.lead_en = lead_nl, lead_en
             pg.related += related
@@ -932,7 +986,7 @@ class Builder:
         P["systemen/guhboeken"].add_section("books", f"The {len(books)} books", f"De {len(books)} boeken", "".join(books))
         # the superkompas tabs
         out = []
-        for cat, kopjes in g.superkompas:
+        for cat, kopjes in self.superkompas:
             en_, nl_ = SUPERKOMPAS_TABS.get(cat, (cat, cat))
             items = []
             for kop, ids in kopjes:
@@ -1059,6 +1113,8 @@ class Builder:
     # --- the last touches --------------------------------------------------------------------------------------------------------
     def finish(self):
         for pg in self.site.pages.values():
+            if pg.id in T.SPOILER_PAGES:        # (render.py: no picture in lists, cards and the search; its own behind a toggle)
+                pg.data["spoiler"] = True
             # stats boxes of the entries -> the infobox
             have = {fold(x[1]) for x in pg.infobox}
             for c in pg.chunks:
@@ -1088,7 +1144,7 @@ class Builder:
             if not pg.thumb:
                 imgs = [n for c in pg.chunks for n in c.images if self.im.has(n)]
                 pg.thumb = imgs[0] if imgs else CAT_ICON.get(pg.cat)
-            pg.related = list(dict.fromkeys(r for r in pg.related if r in self.site.pages and r != pg.id))
+            pg.related = list(dict.fromkeys(r for r in (self.resolve_pid(x) for x in pg.related) if r in self.site.pages and r != pg.id))
 
     @property
     def english(self):

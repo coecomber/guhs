@@ -51,14 +51,28 @@ Guhs are always friendly. Nothing in the mod makes them hurt you, and the one gr
 - **Stories.** Four story questlines with their own characters, talking screens with answers, and a special story
   guh to tame at the end (a medicine sled ride through a snowstorm, a clone-island lab, a chapel in the clouds that
   brings lost guhs back, and a tropical *ohana* island).
+- **The Lord of the Nibble Ring.** The big story of the Guh Barbecuether: a ring-shaped nibble that makes everyone
+  greedy has to go to Mount Fry, not to be destroyed but to be fried and shared. Six chapters with real camera scenes,
+  a Journey Map in the Guhdex, an objective on screen, and Sam-guh who walks with you the whole way. The Eye, the Nine
+  and everything else on the road only shove you back to your last rest fire.
+- **Super Guhrio.** A castle in the sauce sea with six levels played in side view (A/D, jump, pipes, flags, coins,
+  secrets, time records), Guhshi to ride, and a duel at the end. No lives: a fall puts you back at your last flag.
+- **The Guh Barbecuether's buildings.** Thirteen buildings, each with somebody who has a short questline for every
+  player: a fossil dig, a salt crystal mine, a lighthouse, a pepper garden, a campground, a barter market, the Mika
+  Apartments, a Sauce Strider stable and more. New creatures: the Sauce Strider, the Sauce Blubby, the Sausage Piglet.
+- **Guh Technology.** Guhs make **chonk power** (running in a Guh Wheel, cuddling on a Cuddle Generator, dancing on a
+  Disco Dynamo) and guh machines use it: see-through Nibble Tubes with filters, sauce pumps and hoses, a Harvester, a
+  Nibbler, a Placer, a Tinker Machine for auto-crafting, a Plantation Box, sensors, and the Delivery Guhling on its
+  scooter. Every machine has a snoot that shows how it is doing. The quest book teaches it in projects.
 - **Three extra dimensions.** Your own **Guhbelly** (a pocket dimension inside a giant guh), the fiery
   **Guhbarbecuether** and the endgame **Guh End**, where Overlord Mika has stolen every cheese nibble in the kingdom.
 - **Little critters.** Squeaksqueak mice, plush turtles, birds, ducklings, bunnies, hedgehogs, squirrels, axolotl
   guhs and more, most of them tameable.
-- **Useful blocks.** The **Bank Guh** (infinite storage with search and a crafting grid), the guh wheel and guh wire
-  (redstone), the frying pan, sled rails, furniture, food and lots of decoration blocks.
-- **FTB Quests support.** If FTB Quests is installed, a *Guhs* chapter group (13 chapters, 700+ quests, nothing
-  locked, in English and Dutch) installs itself.
+- **Useful blocks.** The **Bank Guh** (storage for every kind of item with search and a crafting grid: 256 of each
+  kind, more with its upgrade), the **Nom Hatch** that puts things into your bank from anywhere, the frying pan, sled
+  rails, furniture, food and lots of decoration blocks.
+- **FTB Quests support.** If FTB Quests is installed, a *Guhs* chapter group (more than 1,000 quests, in English and
+  Dutch) installs itself. Only the chapters of the big story open one by one.
 
 Everything is explained, with pictures, in the **[Guhs wiki](https://guhs.nl/wiki/)**.
 
@@ -140,10 +154,20 @@ hem aan, rij op hem, knuffel hem tot jullie *zielsguh bff 5evr <3* zijn, en volg
 - Gebouwen om te ontdekken: hamsterhuizen, guhdorpen met guh-dorpelingen, het pretpark Guhland, een guhkasteel, een kermis met achtbaan, zwevende eilanden en veel meer, met een **superkompas**.
 - Meer dan twintig **minigames**, elk met een eigen gebouw, gastguh, munten, winkel, pakje en top-3-borden.
 - Vier **verhalen** met personages, gesprekken met antwoordknoppen en een bijzondere verhaalguh als beloning.
+- **In de ban van de Knabbelring**: het grote verhaal van de Guhbarbecuether. Een ringvormige knabbel moet naar de Frituurberg,
+  niet om hem te vernietigen maar om hem te frituren en te delen. Zes hoofdstukken met echte filmpjes, een reiskaart in de
+  Guhdex en Sam-guh die de hele weg meeloopt. Niemand doet je pijn: wie gezien wordt, staat weer bij zijn laatste rustvuurtje.
+- **Super Guhrio**: een kasteel in de sauszee met zes levels van opzij, Guhshi om op te rijden en een duel aan het eind.
+- Dertien **gebouwen in de Guhbarbecuether** met elk een eigen questlijn (voor iedere speler), en nieuwe wezens: de Sausloper,
+  het Sausblubje en het Worstzwijntje.
+- **Guh-technologie**: guhs maken **vadskracht** (in een Guhrad, op een Knuffelgenerator, op een Disco-dynamo) en guhmachines
+  gebruiken het: Knabbelbuizen met filters, sauspompen en slangen, een Oogster, een Knabbelaar, een Knutselmachine, een
+  Plantagebak, sensoren en het Bezorgguhtje op zijn stepje. Elke machine heeft een snoet die laat zien hoe het gaat.
 - Drie extra dimensies: je eigen **Guhmaag**, de **Guhbarbecuether** en het **Guheinde** met Opper-Mika.
 - Diertjes: pieppiepmuisjes, knuffelschildpadjes, vogeltjes, eendjes, konijntjes, egeltjes en meer.
-- Handige blokken: de **Bankguh** (oneindige opslag), het guhwiel en guhdraad, de frituurpan, sledebanen en meubels.
-- **FTB Quests**: is het geïnstalleerd, dan komt er vanzelf een Guhs-hoofdstukkengroep bij (13 hoofdstukken, 700+ quests).
+- Handige blokken: de **Bankguh** (opslag voor alles, 256 van elke soort en meer met zijn upgrade), het **Hapluikje** dat van
+  overal spullen in je bank stopt, de frituurpan, sledebanen en meubels.
+- **FTB Quests**: is het geïnstalleerd, dan komt er vanzelf een Guhs-hoofdstukkengroep bij (meer dan 1000 quests).
 - De **officiële Guhs-server** `guhs.nl` (dag en nacht aan). Zo speel je mee: [Speel op de officiële server](https://guhs.nl/wiki/server.html).
 
 **Nodig:** Guhs 1.1.x en 1.2.x: Minecraft 26.1.2, NeoForge 26.1.2.71+, GeckoLib 5.5.2+ (Java 25). Guhs 1.0.x: Minecraft 1.21.1,

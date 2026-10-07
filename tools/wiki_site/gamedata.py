@@ -269,6 +269,13 @@ class Game:
             c["wild"] = c["const"] in wild_ids
         return out
 
+    def class_src(self, name):
+        """The (comment-free) source of the class with this simple name, or None."""
+        if not hasattr(self, "_class_files"):
+            self._class_files = {os.path.splitext(os.path.basename(f))[0]: f for f in self.java_files}
+        f = self._class_files.get(name)
+        return self.java_stripped(f) if f else None
+
     def _clothing_sources(self, consts):
         bron, prijs, loose = {}, {}, {}
         const_set = set(consts)
@@ -282,13 +289,20 @@ class Game:
             cls = os.path.splitext(os.path.basename(f))[0]
             strings = dict(re.findall(r'static\s+final\s+String\s+([A-Z_]+)\s*=\s*"([^"]*)"', src))
 
-            def sval(expr):
+            def sval(expr, here=src, depth=0):
+                """A string argument: a literal, a constant of this class, or (bbq2) a constant of another class
+                (RingBeloning.BRON), also when that constant is itself another class's constant (BRON = GuhrioKasteel.GROEP)."""
                 expr = expr.strip()
                 if expr.startswith('"'):
                     return unquote(expr)
-                if re.fullmatch(r"[A-Z_]+", expr) and expr in strings:
+                if here is src and re.fullmatch(r"[A-Z_]+", expr) and expr in strings:
                     return strings[expr]
-                return None
+                m = re.fullmatch(r"(?:(\w+)\.)?([A-Z_][A-Z0-9_]*)", expr)
+                if not m or depth > 4:
+                    return None
+                other = self.class_src(m.group(1)) if m.group(1) else here
+                d = re.search(r"static\s+final\s+String\s+" + m.group(2) + r"\s*=\s*([^;]+);", other or "")
+                return sval(d.group(1), other, depth + 1) if d else None
             # KledingBronLijst: b("bron", X, "prijs")
             if cls == "KledingBronLijst":
                 for m in re.finditer(r'\bb\(\s*"(\w+)"\s*,\s*([A-Z0-9_]+)\s*,\s*([^;]+?)\)\s*;', src):
@@ -306,6 +320,10 @@ class Game:
                 if b is None:
                     continue
                 p = self.resolve_string_expr(args[2], cls) if len(args) > 2 else None
+                if p is None and len(args) > 2:      # (bbq2) KledingBronnen.prijs("lang key"): the text of that key, when it takes no number
+                    pm = re.fullmatch(r'KledingBronnen\.prijs\(\s*"([\w.]+)"\s*\)', args[2].strip())
+                    if pm and "%" not in self.lang_nl.get(pm.group(1), "%"):
+                        p = self.lang_nl[pm.group(1)]
                 if target in const_set:
                     bron[target] = b
                     if p:
@@ -319,6 +337,11 @@ class Game:
                     names = re.findall(r"GuhClothes\.([A-Z0-9_]+)", expr)
                     if not names:
                         lm = re.search(re.escape(expr.strip()) + r"\s*=\s*List\.of\((.*?)\);", src, re.S)
+                        if lm:
+                            names = re.findall(r"\b([A-Z][A-Z0-9_]+)\b", lm.group(1))
+                    if not names:       # (bbq2) a list of another class: for (GuhClothes c : RingBeloning.KLEDING)
+                        qm = re.fullmatch(r"(\w+)\.([A-Z_][A-Z0-9_]*)", expr.strip())
+                        lm = qm and re.search(r"\b" + qm.group(2) + r"\s*=\s*List\.of\((.*?)\);", self.class_src(qm.group(1)) or "", re.S)
                         if lm:
                             names = re.findall(r"\b([A-Z][A-Z0-9_]+)\b", lm.group(1))
                     if not names:
@@ -504,6 +527,9 @@ class Game:
                 continue
             lore = [self.lang_nl[x] for x in (f"{kind}.{NS}.{iid}.lore", f"{kind}.{NS}.{iid}.tooltip", f"{kind}.{NS}.{iid}.desc")
                     if x in self.lang_nl]
+            if iid in ("bank_guh", "bank_upgrade"):      # their text takes the bank's cap ("wel %s van elke soort"): BankStorage.CAP
+                cap = re.search(r"int CAP = (\d+);", self.java_src(os.path.join("storage", "BankStorage.java")))
+                lore = [x.replace("%s", cap.group(1)) if cap else x for x in lore]
             out[iid] = dict(id=iid, name=v, block=kind == "block" or iid in self.blockstates, lore=lore)
         return out
 

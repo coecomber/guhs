@@ -272,9 +272,23 @@ class Renderer:
         shown.add(page.thumb)
         extra = [n for n in page.images if n not in shown and self.im.has(n)]
         if extra:
-            parts.append('<section class="data"><h2>' + t("Pictures", "Plaatjes") + '</h2><div class="pics">' + "".join(
-                f'<figure>{self.b.img(n, page.title, "shot" if n.startswith("shot") else "")}</figure>' for n in extra[:12]) + "</div></section>")
+            pics = '<div class="pics">' + "".join(
+                f'<figure>{self.b.img(n, page.title, "shot" if n.startswith("shot") else "")}</figure>' for n in extra[:12]) + "</div>"
+            if page.data.get("spoiler"):
+                pics = self.spoiler(pics, "Spoiler: show the pictures", "Spoiler: laat de plaatjes zien")
+            parts.append('<section class="data"><h2>' + t("Pictures", "Plaatjes") + '</h2>' + pics + "</section>")
         return "".join(parts)
+
+    @staticmethod
+    def spoiler(inner, en="Spoiler: click to see", nl="Spoiler: klik om te kijken"):
+        """The toggle of the spoiler rule: closed until the reader opens it."""
+        return f'<details class="spoiler"><summary>{t(en, nl)}</summary>{inner}</details>'
+
+    def thumb_of(self, pg):
+        """The picture of a page in a list, a card or the search: its own, or the question mark when its own is a spoiler."""
+        if pg.data.get("spoiler"):
+            return "spoiler" if self.im.has("spoiler") else None
+        return pg.thumb if pg.thumb and self.im.has(pg.thumb) else None
 
     def infobox_html(self, page):
         if page.cat == "home" or page.id.endswith("/index") or page.data.get("guide"):
@@ -283,6 +297,9 @@ class Renderer:
         img = self.b.img(pic, page.title, "shot" if pic and pic.startswith("shot") else "") if pic else ""
         rows = "".join(f"<div><dt>{t(en, nl)}</dt><dd>{v}</dd></div>" for en, nl, v in page.infobox)
         title = t(page.title_en, page.title)
+        if img and page.data.get("spoiler"):
+            return (f'<aside class="infobox" aria-label="Info">' + self.spoiler(f'<div class="stage">{img}</div>', "Spoiler: show the picture", "Spoiler: laat het plaatje zien")
+                    + f'<div class="ititle">{title}</div><dl>{rows}</dl></aside>')
         return (f'<aside class="infobox" aria-label="Info">' + (f'<div class="stage">{img}</div>' if img else "")
                 + f'<div class="ititle">{title}</div><dl>{rows}</dl></aside>')
 
@@ -321,7 +338,8 @@ class Renderer:
         return "".join(parts)
 
     def card(self, pg):
-        img = f'<img src="@thumb:{pg.thumb}@" alt="" loading="lazy">' if pg.thumb and self.im.has(pg.thumb) else ""
+        thumb = self.thumb_of(pg)
+        img = f'<img src="@thumb:{thumb}@" alt="" loading="lazy">' if thumb else ""
         kind = CATEGORIES[pg.cat][1] if pg.cat in CATEGORIES else ""
         kind_en = CATEGORIES[pg.cat][2] if pg.cat in CATEGORIES else ""
         return f'<a href="@@{pg.id}@@">{img}<span>{t(esc(pg.title_en), esc(pg.title))}<small>{t(kind_en, kind)}</small></span></a>'
@@ -476,7 +494,7 @@ class Renderer:
                 + "".join(f'<th data-sort="{typ}">{t(en, nl)}</th>' for _, en, nl, typ in cols) + "<th>" + t("About", "Over") + "</th></tr>")
         rows = []
         for x in pages:
-            thumb = f'<img src="@thumb:{x.thumb}@" alt="" loading="lazy">' if x.thumb and self.im.has(x.thumb) else ""
+            thumb = f'<img src="@thumb:{self.thumb_of(x)}@" alt="" loading="lazy">' if self.thumb_of(x) else ""
             summary = first_sentences(plain(x.lead_nl), 110)
             summary_en = first_sentences(plain(x.lead_en), 110) if x.lead_en else summary
             extra = ""
@@ -525,10 +543,12 @@ class Renderer:
                  f'<li><b>{counts["bouwwerken"]}</b> {t("structures", "bouwwerken")}</li><li><b>{counts["minigames"]}</b> minigames</li></ul>')
         what = p("Guhs is a Minecraft mod full of <b>lieve vadsige guhs</b>: chubby pink plush mice you can tame, dress up, ride and cuddle. "
                  "Walk through a portal of blocks of kaasknabbels into the <b>Guhmension</b>: a pink world of wool and cheese sauce with guh villages, "
-                 "a guh theme park, minigames, stories, critters, a very hot barbecue dimension and an endgame against Opper-Mika.",
+                 "a guh theme park, minigames, stories, critters, guh machines that run on chonk power, a very hot barbecue dimension with a "
+                 "great journey and a castle full of side-view levels, and an endgame against Opper-Mika.",
                  "Guhs is een Minecraft-mod vol <b>lieve vadsige guhs</b>: mollige roze knuffelmuisjes die je kunt temmen, aankleden, berijden en knuffelen. "
                  "Stap door een portaal van blokken kaasknabbels de <b>Guhmensie</b> in: een roze wereld van wol en kaassaus met guhdorpen, "
-                 "een guhpretpark, minigames, verhalen, diertjes, een heel hete barbecuedimensie en een eindspel tegen Opper-Mika.")
+                 "een guhpretpark, minigames, verhalen, diertjes, guhmachines die op vadskracht lopen, een heel hete barbecuedimensie met een "
+                 "grote reis en een kasteel vol levels van opzij, en een eindspel tegen Opper-Mika.")
         cta = (f'<a class="start-cta" href="@@systemen/aan-de-slag@@"><span class="cta-art">{self.b.img("npc_reisguh", "") if self.im.has("npc_reisguh") else ""}</span>'
                f'<span class="cta-txt"><small>{t("New here? Start here!", "Nieuw hier? Begin hier!")}</small><b>{t("Getting started", "Aan de slag")}</b>'
                f'<span>{t("The step-by-step guide: kaasknabbels, your first guh, the portal, the Reisguh, the super compass and your first goals.", "De stap-voor-stapgids: kaasknabbels, je eerste guh, het portaal, de Reisguh, het superkompas en je eerste doelen.")}</span></span>'
@@ -625,7 +645,7 @@ class Renderer:
             if pg.cat == "home":
                 continue
             d = CATEGORIES[pg.cat]
-            thumb = self.im.use(pg.thumb, thumb=True) if pg.thumb and self.im.has(pg.thumb) else ""
+            thumb = self.im.use(self.thumb_of(pg), thumb=True) if self.thumb_of(pg) else ""
             e = dict(t=plain(pg.title), c=d[1] if not pg.id.endswith("/index") else "Lijst", u=pg.path, i=thumb or "",
                      s=first_sentences(plain(pg.lead_nl), 120))
             title_en = self.en.text(plain(pg.title_en))
