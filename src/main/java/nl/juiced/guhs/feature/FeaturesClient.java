@@ -112,6 +112,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.guhriobeloning.client.GuhrioBeloningClient.init(modBus);
         nl.juiced.guhs.feature.ringknipoog.client.RingKnipoogClient.init(modBus);
         nl.juiced.guhs.feature.guhpad.client.GuhpadClient.init(modBus);   // --- verhalenpad: het Guhpad ---
+        nl.juiced.guhs.feature.oudescenes.client.OudeScenesClient.init(modBus);   // bbq2 verhalenpad: oude-scenes
     }
 
     private FeaturesClient() {

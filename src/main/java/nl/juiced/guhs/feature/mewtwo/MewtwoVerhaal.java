@@ -161,6 +161,11 @@ public final class MewtwoVerhaal {
         if (MewtwoVoortgang.stap(p) != MewtwoVoortgang.NOTITIES || MewtwoVoortgang.aantalNotities(p) < MewtwoFeature.NOTITIES) {
             return;
         }
+        // bbq2 (oude-scenes): the first time, what he remembers plays as a camera scene; the rest comes after it
+        if (nl.juiced.guhs.feature.oudescenes.OudeScenes.speel(p, nl.juiced.guhs.feature.oudescenes.OudeScenes.MEWTWO,
+                prof != null ? prof.blockPosition() : p.blockPosition(), s -> notitiesKlaar(s, prof))) {
+            return;
+        }
         MewtwoVoortgang.zetStap(p, MewtwoVoortgang.ONDERDELEN);
         adv(p, "mewtwo_notities");
         geef(p, GuhClothes.MEWTWO_TRAINERPETJE);

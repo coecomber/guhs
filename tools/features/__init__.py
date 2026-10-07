@@ -50,7 +50,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # bbq2 phase 3 (append only): the winks at the older stories
             'ring_knipogen',
             # verhalenpad: het Guhpad (the stories open the worlds; lang, hidden advancements, two pictures, FTB lock quests)
-            'guhpad']
+            'guhpad',
+            'oude_scenes']    # bbq2 verhalenpad: oude-scenes (append only, see above)
 
 
 def modules():
