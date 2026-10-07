@@ -165,8 +165,12 @@ public abstract class StappenTaak implements KlusTaak {
                     mob.getNavigation().stop();
                     return true;
                 }
+                boolean staatStil = t > 1 && mob.getNavigation().isDone();
                 if (t == 1 || t % 20 == 0 || mob.getNavigation().isDone()) {
                     mob.getNavigation().moveTo(doel.getX() + 0.5, doel.getY(), doel.getZ() + 0.5, 1.0 * snel());
+                }
+                if (staatStil) {
+                    laatsteStap(Vec3.atBottomCenterOf(doel), bereik, 1.0 * snel());
                 }
                 if (t > 400) {
                     if (dichtbij(Vec3.atBottomCenterOf(doel), bereik + 1.5)) {
@@ -177,6 +181,21 @@ public abstract class StappenTaak implements KlusTaak {
                 return false;
             }
         };
+    }
+
+    /**
+     * The last step, straight at the goal. A path ends in a block NEXT to its goal, and a mob that comes in at an angle
+     * stops there up to one and a half blocks from the goal's middle: just out of a small {@code bereik}. Every new path
+     * from that spot is finished at once, so the resident stood still for twenty seconds next to its dig spot, or kept
+     * trying for ever to reach the apple it stood next to. (Found at the merge of tech-klusjes: two chore tests failed in
+     * some runs, depending on where the resident happened to come from.) Only when its path is finished and the goal is
+     * near; the 400 ticks of the step stay the way out.
+     */
+    private void laatsteStap(Vec3 doel, double bereik, double snelheid) {
+        double dx = doel.x - mob.getX(), dz = doel.z - mob.getZ(), ver = bereik + 1.5;
+        if (dx * dx + dz * dz <= ver * ver && Math.abs(doel.y - mob.getY()) <= 1.25) {
+            mob.getMoveControl().setWantedPosition(doel.x, doel.y, doel.z, snelheid);
+        }
     }
 
     /** Walks to an entity (it may move) until within {@code bereik}. */
@@ -196,8 +215,12 @@ public abstract class StappenTaak implements KlusTaak {
                     mob.getNavigation().stop();
                     return true;
                 }
+                boolean staatStil = t > 1 && mob.getNavigation().isDone();
                 if (t == 1 || t % 10 == 0) {
                     mob.getNavigation().moveTo(e, 1.15 * snel());
+                }
+                if (staatStil) {
+                    laatsteStap(e.position(), bereik, 1.15 * snel());
                 }
                 if (t > 400) {
                     afbreken();

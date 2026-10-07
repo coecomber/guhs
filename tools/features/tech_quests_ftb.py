@@ -18,13 +18,17 @@ Nothing is locked (a dependency only draws a line). The tasks are the hidden adv
 machine of the player really does its thing (tech_machines_*, tech_vloeistof_*, tech_bronnen_*, tech_bezorg_*, bank_*), an
 item in the hand, or a tick the player sets (a project that only the player can judge). The picture at the end of the
 chapter (FTB_SLOT in tech_quests.py) previews what the Guheinde will add. Dutch only.
+
+Added at the merge of tech-klusjes and tech-quests (the two slices were built side by side): the two chores of the Guhhuisje
+that work the machines, "tech_quests_klus_machines" in project 1 and "tech_quests_klus_plantage" in project 4. Their tasks
+are the hidden advancements of features/tech_klusjes.py (quest/tech_klusjes_machines, quest/tech_klusjes_plantage).
 """
 from features import tech_bezorg, tech_bronnen, tech_vloeistof, vadskracht, wereld
 
 SECTIES = [
     ("tech_quests_bakken", "Project 1: Nooit meer zelf bakken", "item:guhs:block/guh_oven_front_on",
-     ["tech_quests_rad", "tech_quests_draad", "tech_quests_oven", "tech_quests_aflezen", "tech_quests_trechters", "tech_quests_molen",
-      "tech_quests_knuffel", "tech_quests_disco", "tech_quests_hoeveel"]),
+     ["tech_quests_rad", "tech_quests_draad", "tech_quests_oven", "tech_quests_aflezen", "tech_quests_trechters", "tech_quests_klus_machines",
+      "tech_quests_molen", "tech_quests_knuffel", "tech_quests_disco", "tech_quests_hoeveel"]),
     ("tech_quests_centrale", "De Oude Guhrad-centrale", "npc:uitvinderguh",
      ["tech_quests_centrale_vind"] + [f"tech_quests_techniek_{i}" for i in range(1, 9)] + ["tech_quests_maagje", "tech_quests_kaarten"]),
     ("tech_quests_bank", "Project 2: Alles vanzelf in de bank", "item:guhs:block/hapluikje_voor_werkt",
@@ -34,7 +38,8 @@ SECTIES = [
      ["tech_quests_saus_kaart", "tech_quests_pomp", "tech_quests_vat", "tech_quests_frituur", "tech_quests_brouw", "tech_quests_pers",
       "tech_quests_blub"]),
     ("tech_quests_fabriek", "Project 4: Een fabriek die doorwerkt", "item:guhs:block/knabbelaar_voor_werkt",
-     ["tech_quests_machine_kaart", "tech_quests_knabbelaar", "tech_quests_neerzetter", "tech_quests_plantagebak", "tech_quests_tekening",
+     ["tech_quests_machine_kaart", "tech_quests_knabbelaar", "tech_quests_neerzetter", "tech_quests_plantagebak", "tech_quests_klus_plantage",
+      "tech_quests_tekening",
       "tech_quests_knutsel", "tech_quests_bezorg_kaart", "tech_quests_station", "tech_quests_halte", "tech_quests_bezorgd", "tech_quests_guhtje",
       "tech_quests_fluitje"]),
     ("tech_quests_knabbelmachine", "De Grote Knabbelmachine", "item:guhs:perfecte_knabbel", None),
@@ -87,6 +92,12 @@ def ftb(fq):
       "de bovenste kist gooit, ligt even later gebakken in de onderste, en je guh rent gewoon door terwijl jij iets anders doet. Later "
       "vervang je de trechters door Knabbelbuizen.",
       "minecraft:hopper", [item("minecraft:hopper", 2)], rewards=(("guhs:kaas_knabbels", 16),), deps=["tech_quests_aflezen"], shape="gear", xp=100)
+    q("tech_quests_klus_machines", "Collega's met een snoet",
+      "Woont er een guh in je &dGuhhuisje&r? Dan doet hij je machines: het klusje &eMachines bijvullen & leeghalen&r. Het staat &cuit&r tot "
+      "jij het bij je bewoner aanzet. Doe het één keer voor: leg zelf een stapeltje in de machine, dan onthoudt hij wat erin hoort en vult "
+      "hij bij uit de kist naast het huisje of uit je Bank Guh. Wat klaarligt, haalt hij op. Alleen bij machines van jou in zijn klus-area. "
+      "Njeg, wie heeft er dan nog trechters nodig?",
+      "guhs:guhhuisje_klein", [adv("tech_klusjes_machines")], deps=["tech_quests_trechters"])
     q("tech_quests_molen", "Malen zonder wind",
       f"De &dVadsmolen&r (een guh-molentje, ijzer, Guhdraad, steen en een knabbel) maalt op {g('MOLEN')} vadskracht: knabbelgraan tot "
       "knabbelmeel, botten tot beendermeel, grillspiesen tot poeder, keisteen tot grind en grind tot zand. En hij geeft meer dan malen "
@@ -249,6 +260,12 @@ def ftb(fq):
       "saté- en worstzwammetjes. Klik met een bijl en de hele boom ligt in je zakken; de zaailingen plant hij zelf opnieuw. (Zijn "
       "receptkaart krijg je op de &6Grillcamping&r.)",
       "guhs:plantagebak", [adv("tech_machines_boom")], rewards=(("guhs:kaas_knabbels", 16),), deps=["tech_quests_machine_kaart"], shape="gear", xp=100)
+    q("tech_quests_klus_plantage", "Houthakkertje guh",
+      "Geen zin om zelf te hakken? Een bewoner van je &dGuhhuisje&r met het klusje &ePlantage: planten & hakken&r hakt de boom op je "
+      "Plantagebak in één keer om en brengt het hout naar de kist of je Bank Guh. Is de bak leeg, dan haalt hij zaailingen uit de kist. "
+      "Andere bomen laat hij lekker staan. Staat er een werkend Hapluikje in de klus-area, dan hapt dat de buit van al zijn klusjes door "
+      "naar je bank. Krak, njeg, klaar!",
+      "minecraft:iron_axe", [adv("tech_klusjes_plantage")], deps=["tech_quests_plantagebak"])
     q("tech_quests_tekening", "De Tekentafel",
       "Leg een recept in het rooster van de &dTekentafel&r en een lege &dBouwtekening&r (papier + blauwe kleurstof) erbij: het recept "
       "staat erop getekend. Het kost alleen het vel, niks uit het rooster.",

@@ -6,22 +6,33 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import nl.juiced.guhs.block.entity.BankGuhBlockEntity;
+import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.feature.Features;
+import nl.juiced.guhs.feature.band.Band;
 import nl.juiced.guhs.feature.bank.BankFeature;
 import nl.juiced.guhs.feature.bank.HapluikjeBlockEntity;
 import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
 import nl.juiced.guhs.feature.bestaand.BestaandFeature;
 import nl.juiced.guhs.feature.campingmarkt.CampingmarktFeature;
 import nl.juiced.guhs.feature.fossielmijn.FossielmijnFeature;
+import nl.juiced.guhs.feature.guhoven.GuhOvenBlockEntity;
+import nl.juiced.guhs.feature.guhoven.GuhovenFeature;
+import nl.juiced.guhs.feature.huisje.Huisje;
+import nl.juiced.guhs.feature.huisje.KlusStand;
+import nl.juiced.guhs.feature.huisje.Klusjes;
+import nl.juiced.guhs.feature.klusjes.KlusGebied;
+import nl.juiced.guhs.feature.klusjes.KlusjesGameTests;
 import nl.juiced.guhs.feature.paleizen.PaleizenFeature;
 import nl.juiced.guhs.feature.ring.RingFeature;
 import nl.juiced.guhs.feature.sausdieren.SausdierenFeature;
@@ -35,9 +46,12 @@ import nl.juiced.guhs.feature.techbuis.BuisStukBlockEntity;
 import nl.juiced.guhs.feature.techbuis.FilterBlockEntity;
 import nl.juiced.guhs.feature.techbuis.TechbuisFeature;
 import nl.juiced.guhs.feature.techbezorg.FluitjeItem;
+import nl.juiced.guhs.feature.techklus.Klusmachines;
+import nl.juiced.guhs.feature.techklus.TechklusFeature;
 import nl.juiced.guhs.feature.techmachine.KnabbelaarBlockEntity;
 import nl.juiced.guhs.feature.techmachine.Oogst;
 import nl.juiced.guhs.feature.techmachine.TechmachineFeature;
+import nl.juiced.guhs.feature.techquest.TechquestFeature;
 import nl.juiced.guhs.feature.techsaus.TechsausFeature;
 import nl.juiced.guhs.feature.torenpeper.PeperSoort;
 import nl.juiced.guhs.feature.torenpeper.PeperplantBlock;
@@ -46,6 +60,7 @@ import nl.juiced.guhs.feature.vadskracht.Kisten;
 import nl.juiced.guhs.feature.vadskracht.MachineBlock;
 import nl.juiced.guhs.feature.vadskracht.TestbronBlock;
 import nl.juiced.guhs.feature.vadskracht.VadskrachtFeature;
+import nl.juiced.guhs.feature.wereld.Bescherming;
 import nl.juiced.guhs.registry.ModBlocks;
 import nl.juiced.guhs.registry.ModItems;
 import nl.juiced.guhs.world.WildeDieren;
@@ -57,7 +72,10 @@ import nl.juiced.guhs.world.WildeDieren;
  * what the Knabbelaar never eats of the other slices. Template techbezorg_test_kamer: 15 x 6 x 15 with a stone floor
  * (things stand at helper y 2). Added at the merge of the buildings (paleizen, bestaand, camping-markt, toren-peper): the
  * Oogster's harvest of the peperplant, the camping's recipe card in the Plantagebak recipe, the keeper's real whistle, and
- * the quest props of those buildings that a Knabbelaar leaves alone.
+ * the quest props of those buildings that a Knabbelaar leaves alone. Added at the merge of tech-klusjes and tech-quests:
+ * the recipe cards of the Uitvinder-guh in the twelve recipes of the other tech slices, the machines the chore "machines"
+ * serves, and (batch "techsamen_klus", template techklus_test_tuin, a real Guhhuisje with a resident) the farmen chore on a
+ * peperplant and the chores that stay out of a protected quest building.
  */
 public class TechSamenGameTests {
     private static final String BATCH = "techsamen", KAMER = "techbezorg_test_kamer";
@@ -316,6 +334,45 @@ public class TechSamenGameTests {
             var key = net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.RECIPE, nl.juiced.guhs.Guhs.id(recept));
             helper.assertTrue(level.getServer().getRecipeManager().byKey(key).isPresent(), "the recipe guhs:" + recept + " loads");
         }
+        // the "Saus" tier (tech-quests): the three recipe cards of the Uitvinder-guh sit in twelve recipes that tech-bronnen,
+        // tech-machines, tech-vloeistof and tech-bezorg wrote, and a card stays in the grid; the Plantagebak keeps the camping's
+        // card (above) and gets no second one; the Sausslang stays free (the practice hall lends one)
+        java.util.Map<Item, List<String>> kaarten = java.util.Map.of(
+                TechquestFeature.RECEPT_SAUS.get(), List.of("sauspomp", "sausvat", "brouwautomaat", "frituurautomaat", "grillkoolpers", "blubkacheltje"),
+                TechquestFeature.RECEPT_MACHINES.get(), List.of("knabbelaar", "neerzetter", "knutselmachine", "tekentafel"),
+                TechquestFeature.RECEPT_BEZORG.get(), List.of("stepstation", "haltepaaltje"));
+        for (var e : kaarten.entrySet()) {
+            ItemStack k = new ItemStack(e.getKey());
+            helper.assertTrue(k.getItem().getCraftingRemainder(k) != null, "the card " + e.getKey() + " stays in the grid");
+            for (String recept : e.getValue()) {
+                var r = level.getServer().getRecipeManager().byKey(net.minecraft.resources.ResourceKey.create(
+                        net.minecraft.core.registries.Registries.RECIPE, nl.juiced.guhs.Guhs.id(recept)));
+                helper.assertTrue(r.isPresent() && r.get().value().placementInfo().ingredients().stream().anyMatch(i -> i.test(k)),
+                        "the recipe guhs:" + recept + " asks for " + e.getKey());
+            }
+        }
+        for (String recept : List.of("plantagebak", "sausslang", "guh_oven", "vadsmolen", "oogster", "knabbelbuis", "hapluikje", "gloeisterkern")) {
+            var r = level.getServer().getRecipeManager().byKey(net.minecraft.resources.ResourceKey.create(
+                    net.minecraft.core.registries.Registries.RECIPE, nl.juiced.guhs.Guhs.id(recept)));
+            helper.assertTrue(r.isPresent(), "the recipe guhs:" + recept + " loads");
+            for (Item k : kaarten.keySet()) {
+                helper.assertTrue(r.get().value().placementInfo().ingredients().stream().noneMatch(i -> i.test(new ItemStack(k))),
+                        "the recipe guhs:" + recept + " needs no card of the Uitvinder-guh");
+            }
+        }
+        // the chore "machines" (tech-klusjes) serves the ten machines of the other slices through their item capability; De
+        // Grote Knabbelmachine (tech-quests) is no machine to serve and nothing a Knabbelaar eats
+        for (var machine : List.of(GuhovenFeature.GUH_OVEN, TechmachineFeature.KNUTSELMACHINE, TechmachineFeature.VADSMOLEN, TechmachineFeature.OOGSTER,
+                TechmachineFeature.KNABBELAAR, TechmachineFeature.NEERZETTER, TechsausFeature.BROUWAUTOMAAT, TechsausFeature.FRITUURAUTOMAAT,
+                TechsausFeature.GRILLKOOLPERS, TechbuisFeature.OPZUIGER)) {
+            helper.assertTrue(machine.get().defaultBlockState().is(TechklusFeature.MACHINES), machine.getId() + " is a machine the residents serve");
+        }
+        BlockState kern = TechquestFeature.GROTE_KNABBELMACHINE.get().defaultBlockState();
+        helper.assertTrue(!kern.is(TechklusFeature.MACHINES) && !TechmachineFeature.PLANTAGEBAK.get().defaultBlockState().is(TechklusFeature.MACHINES),
+                "De Grote Knabbelmachine and the Plantagebak (its own chore) are not in the machines tag");
+        helper.assertTrue(!KnabbelaarBlockEntity.magKnabbelen(level, pos, kern)
+                && !KnabbelaarBlockEntity.magKnabbelen(level, pos, TechquestFeature.KNABBELMACHINE_DEEL.get().defaultBlockState()),
+                "the Knabbelaar never eats De Grote Knabbelmachine");
         helper.succeed();
     }
 
@@ -364,5 +421,80 @@ public class TechSamenGameTests {
         helper.assertTrue(level.getBlockTicks().hasScheduledTick(plek, plant), "and grows on by itself (its clock runs)");
         helper.assertTrue(!Oogst.isRijp(level, plek), "nothing to cut again right away");
         helper.succeed();
+    }
+
+    // =====================================================================================================================
+    // the chores of the Guhhuisje (tech-klusjes) and what the other slices put in the world
+    // =====================================================================================================================
+
+    /**
+     * A real Guhhuisje with one resident that does the chores farmen and machines.
+     * <ul>
+     *   <li>Peppers (toren-peper was merged after the chore slice branched): the old crop path of farmen takes a ripe
+     *       peperplant. On sweet ground it gives pink Snoeppepers, they land in the chest, and the plant stands young again
+     *       with its kind and its clock.</li>
+     *   <li>A machine in a protected quest building (the practice hall of the Oude Guhrad-centrale holds real Guh Ovens
+     *       that nobody placed, and a klus-area reaches 16 blocks): while its spot is protected the residents do not serve it,
+     *       the overview does not count it and its bars stay where they are. Once the spot is free the same oven is emptied
+     *       like any other.</li>
+     * </ul>
+     */
+    @GuhTest(template = "techklus_test_tuin", batch = "techsamen_klus", timeoutTicks = 1600)
+    public static void techsamenKlusguhPepersEnBeschermdeMachines(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        String doos = "techsamen_proef";
+        Bescherming.wisDozen(level, doos);
+        ServerPlayer speler = KlusjesGameTests.speler(helper, new BlockPos(21, 2, 21));
+        ChestBlockEntity kist = KlusjesGameTests.kist(helper);
+        // a ripe peperplant on pindasaus-nylium
+        PeperplantBlock plant = TorenpeperFeature.PEPERPLANT.get();
+        BlockPos peper = new BlockPos(7, 2, 15), peperAbs = helper.absolutePos(peper);
+        helper.setBlock(peper.below(), BarbecuetherFeature.PINDASAUS_NYLIUM.get());
+        helper.setBlock(peper, plant.getStateForAge(PeperplantBlock.MAX_AGE));
+        gelijk(helper, PeperSoort.ROZE, level.getBlockState(peperAbs).getValue(PeperplantBlock.SOORT), "a plant on pindasaus-nylium carries pink peppers");
+        // a Guh Oven that nobody placed, with bars lying ready, inside a protected box
+        BlockPos ovenPlek = new BlockPos(16, 2, 15), ovenAbs = helper.absolutePos(ovenPlek);
+        helper.setBlock(ovenPlek, GuhovenFeature.GUH_OVEN.get());
+        helper.setBlock(ovenPlek.east(), VadskrachtFeature.TESTBRON.get().defaultBlockState().setValue(TestbronBlock.KRACHT, 5));
+        GuhOvenBlockEntity oven = (GuhOvenBlockEntity) level.getBlockEntity(ovenAbs);
+        oven.setItem(2, new ItemStack(Items.IRON_INGOT, 5));
+        Bescherming.zetDoos(level, doos, new BoundingBox(ovenAbs.getX() - 1, ovenAbs.getY() - 1, ovenAbs.getZ() - 1,
+                ovenAbs.getX() + 1, ovenAbs.getY() + 1, ovenAbs.getZ() + 1));
+        Huisje h = KlusjesGameTests.huisje(helper, speler);
+        helper.assertTrue(Bescherming.beschermd(level, ovenAbs) && !Bescherming.beschermd(level, peperAbs), "the oven stands in a protected box, the plant does not");
+        helper.assertTrue(Klusmachines.heeftUitvoer(level, ovenAbs), "bars lie ready in the oven");
+        helper.assertTrue(!Klusmachines.mag(level, h, ovenAbs) && Klusmachines.rond(level, h).isEmpty(), "a machine in a protected building is not served");
+        KlusGebied.vergeet();
+        KlusStand stand = Klusjes.van("machines").stand(level, h);
+        gelijk(helper, "NEE:geen:0", stand.staat() + ":" + stand.reden() + ":" + stand.aantal(), "the overview does not count it");
+        helper.assertTrue(KlusGebied.rijp(level, peperAbs), "the farmen chore sees the ripe peperplant");
+        GuhEntity guh = KlusjesGameTests.bewoner(helper, h, speler, new BlockPos(12, 2, 14), "farmen");
+        h.zetKlus(Band.id(guh), "machines", true);
+        boolean[] vrij = {false};
+        helper.succeedWhen(() -> {
+            String waar = KlusjesGameTests.staat(helper, guh);
+            int pepers = KlusjesGameTests.telKist(kist, s -> s.is(TorenpeperFeature.SNOEPPEPER.get()));
+            helper.assertTrue(pepers >= PeperplantBlock.PLUK_MIN && pepers <= PeperplantBlock.PLUK_MAX, "2 or 3 Snoeppepers in the chest: " + pepers + waar);
+            if (!vrij[0]) {
+                BlockState jong = level.getBlockState(peperAbs);
+                helper.assertTrue(jong.is(plant) && jong.getValue(PeperplantBlock.AGE) == 0, "a young plant stands there: " + jong);
+                gelijk(helper, PeperSoort.ROZE, jong.getValue(PeperplantBlock.SOORT), "that still knows its sweet ground");
+                helper.assertTrue(level.getBlockTicks().hasScheduledTick(peperAbs, plant), "and grows on by itself (its clock runs)");
+                gelijk(helper, 0, KlusjesGameTests.telKist(kist, s -> s.is(TorenpeperFeature.NJEGPEPER.get()) || s.is(TorenpeperFeature.VAHOEGPEPER.get())),
+                        "no pepper of another kind");
+                helper.assertTrue(KlusjesGameTests.telKist(kist, s -> s.is(TorenpeperFeature.PEPERZAADJES.get())) <= 1,
+                        "at most one spare seed (one went back into the ground)");
+                // all this time the resident had the chore machines too, and the oven kept its bars
+                gelijk(helper, 5, oven.getItem(2).getCount(), "the bars in the protected oven were not touched" + waar);
+                gelijk(helper, 0, KlusjesGameTests.telKist(kist, s -> s.is(Items.IRON_INGOT)), "no bars in the chest");
+                Bescherming.wisDozen(level, doos);
+                KlusGebied.vergeet();
+                vrij[0] = true;
+                helper.assertTrue(!Bescherming.beschermd(level, ovenAbs) && Klusmachines.mag(level, h, ovenAbs), "the same oven outside a protected box is served");
+            }
+            gelijk(helper, 5, KlusjesGameTests.telKist(kist, s -> s.is(Items.IRON_INGOT)), "now the resident fetched the bars" + waar);
+            helper.assertTrue(oven.getItem(2).isEmpty(), "and the oven is empty");
+            KlusjesGameTests.weg(helper, h, speler);
+        });
     }
 }

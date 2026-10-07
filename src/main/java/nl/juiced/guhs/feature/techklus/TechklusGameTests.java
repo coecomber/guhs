@@ -387,7 +387,9 @@ public class TechklusGameTests {
     // the Hapluikje
     // =====================================================================================================================
 
-    @GuhTest(template = TUIN, batch = "techklus_luikje", timeoutTicks = 1600)
+    // (the test waits for a SECOND kaasknabbel to be dug up, and the loot of opgraven is random: 69 in 100 digs give one.
+    // With 1600 ticks the resident dug two or three times and the test failed about once in eight runs: plenty of time now)
+    @GuhTest(template = TUIN, batch = "techklus_luikje", timeoutTicks = 4800)
     public static void techklusBuitDoorHetHapluikje(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = KlusjesGameTests.speler(helper, new BlockPos(21, 2, 21));

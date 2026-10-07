@@ -32,6 +32,7 @@ import nl.juiced.guhs.feature.techmachine.Bouwtekening;
 import nl.juiced.guhs.feature.techmachine.KnutselmachineBlockEntity;
 import nl.juiced.guhs.feature.vadskracht.Kisten;
 import nl.juiced.guhs.feature.vadskracht.MachineBlockEntity;
+import nl.juiced.guhs.feature.wereld.Bescherming;
 
 /**
  * What the machines chore ({@link MachineKlus}) knows about a machine, all of it through the machine's item capability,
@@ -53,8 +54,9 @@ import nl.juiced.guhs.feature.vadskracht.MachineBlockEntity;
  * <b>When?</b> A slot is topped up when it is empty of that kind, at most half full, or has room for {@link #DREMPEL}
  * more: no walking up and down for one item.
  * <p>
- * <b>Whose?</b> Residents only serve machines their huisje's owner placed (or that nobody placed: a structure, a
- * command; a Guh Oven keeps no owner): they never carry a neighbour's iron bars into their own Bank Guh ({@link #mag}).
+ * <b>Whose?</b> Residents only serve machines their huisje's owner placed (or that nobody placed: a command; a Guh Oven
+ * keeps no owner): they never carry a neighbour's iron bars into their own Bank Guh ({@link #mag}). A machine inside a
+ * protected quest building ({@link Bescherming}) is never served, whoever placed it.
  */
 public final class Klusmachines {
     /** Key in a machine's persistent data: slot number -> item id (what lay there, see {@link #leer}). */
@@ -95,6 +97,12 @@ public final class Klusmachines {
         }
         BlockEntity be = level.getBlockEntity(pos);
         if (be == null || be.isRemoved()) {
+            return false;
+        }
+        // (merge of tech-klusjes and tech-quests: never a machine of a protected quest building. The practice hall of the
+        // Oude Guhrad-centrale holds real Guh Ovens and a Vadsmolen that nobody placed, and the klus-area of a huisje that
+        // stands just outside such a building reaches into it)
+        if (Bescherming.beschermd(level, pos)) {
             return false;
         }
         return !(be instanceof MachineBlockEntity machine) || machine.eigenaar() == null || machine.eigenaar().equals(h.eigenaar());

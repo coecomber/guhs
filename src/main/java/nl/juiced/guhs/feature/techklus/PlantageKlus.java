@@ -29,6 +29,7 @@ import nl.juiced.guhs.feature.klusjes.Voorraad;
 import nl.juiced.guhs.feature.techmachine.PlantagebakBlockEntity;
 import nl.juiced.guhs.feature.techmachine.Plantagebakken;
 import nl.juiced.guhs.feature.techmachine.TechmachineFeature;
+import nl.juiced.guhs.feature.wereld.Bescherming;
 
 /**
  * Plantage (bbq2): the resident works the Plantagebakken of the home base, and only those: it never touches a tree that
@@ -79,8 +80,9 @@ public class PlantageKlus extends BasisKlus {
     /** The bak whose kern stands here, when the residents of this huisje may work it. */
     @Nullable
     static PlantagebakBlockEntity bak(ServerLevel level, Huisje h, BlockPos kern) {
+        // (not in a protected quest building: see Klusmachines.mag)
         if (level.isLoaded(kern) && level.getBlockEntity(kern) instanceof PlantagebakBlockEntity bak && !bak.isRemoved()
-                && (bak.eigenaar() == null || bak.eigenaar().equals(h.eigenaar()))) {
+                && (bak.eigenaar() == null || bak.eigenaar().equals(h.eigenaar())) && !Bescherming.beschermd(level, kern)) {
             return bak;
         }
         return null;
