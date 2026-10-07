@@ -18,13 +18,16 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
@@ -35,27 +38,39 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.entity.GuhEntity;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.einde2.biomeguhs.Biomeguhs;
+import nl.juiced.guhs.feature.einde2.biomes.E2BiomesFeature;
+import nl.juiced.guhs.feature.einde2.deco.E2DecoFeature;
+import nl.juiced.guhs.feature.einde2.mikas.E2MikasFeature;
+import nl.juiced.guhs.feature.einde2.mikas.KaasmijtEntity;
+import nl.juiced.guhs.feature.einde2.mikas.Kaasmijten;
+import nl.juiced.guhs.feature.einde2.mikas.SchuilguhEntity;
+import nl.juiced.guhs.feature.einde2.zwevers.E2ZweversFeature;
 import nl.juiced.guhs.feature.spelen.SpelGroepen;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
 import nl.juiced.guhs.gametest.GuhTest;
 import nl.juiced.guhs.item.SuperkompasItem;
 import nl.juiced.guhs.quest.GuhDex;
+import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.world.GegarandeerdPlacement;
+import nl.juiced.guhs.world.WildeDieren;
 
 /**
  * Game tests of the einde2 skeleton: the structure type guhs:leegte_bouw on the test build {@code einde2_test_bouw}
  * (tools/features/einde2.py: 3 x 2 tiles, in no structure set), {@link Plekken} (sidecar to world and back, for a
  * leegte_bouw and for a jigsaw piece, the guaranteed copy, the overlays), the deep band (a tile that empties its box and
  * keeps its template's shapes, the terrain-free box, the pair that stands next to each other, the void of ten seeds),
- * protection, discovery, the hooks and the wiring (pages, compass, stand-in entities). The Guheinde's generator comes from
- * {@link Einde2Test}.
+ * protection, discovery, the hooks and the wiring (pages, compass, stand-in entities), and after the merge of the slices
+ * what they left for each other ({@code einde2KernSamen}). The Guheinde's generator comes from {@link Einde2Test}.
  */
 public class E2KernGameTests {
     private static final String EMPTY = "empty";
@@ -385,6 +400,13 @@ public class E2KernGameTests {
             helper.assertTrue(Einde2Bescherming.beschermd(level, pos) && Einde2Bescherming.TEST.equals(Einde2Bescherming.structuurBij(level, pos)),
                     "the box is protected");
             helper.assertTrue(!Einde2Bescherming.beschermd(level, pos.offset(20, 0, 0)), "outside is free");
+            // a bed in a protected place never explodes (the Guheinde's bed rule): it only says a line; a bed elsewhere is left alone
+            helper.setBlock(new BlockPos(1, 1, 1), Blocks.PURPLE_BED);
+            helper.setBlock(new BlockPos(20, 1, 2), Blocks.PURPLE_BED);
+            helper.assertTrue(Einde2Bescherming.bedBlijftHeel(level, helper.absolutePos(new BlockPos(1, 1, 1))) && !Einde2Bescherming.bedBlijftHeel(level, pos)
+                    && !Einde2Bescherming.bedBlijftHeel(level, helper.absolutePos(new BlockPos(20, 1, 2))), "only a bed inside the box");
+            helper.setBlock(new BlockPos(1, 1, 1), Blocks.AIR);
+            helper.setBlock(new BlockPos(20, 1, 2), Blocks.AIR);
             helper.assertTrue(NeoForge.EVENT_BUS.post(new BreakBlockEvent(level, pos, state, player)).isCanceled(), "no breaking");
             var place = new BlockEvent.EntityPlaceEvent(BlockSnapshot.create(level.dimension(), level, pos.above()), Blocks.END_STONE.defaultBlockState(), player);
             helper.assertTrue(NeoForge.EVENT_BUS.post(place).isCanceled(), "no building");
@@ -534,6 +556,64 @@ public class E2KernGameTests {
         }
         helper.assertTrue(BuiltInRegistries.BLOCK.getValue(Guhs.id("kaaskorst")).defaultBlockState().is(Einde2Ids.EILANDGROND),
                 "kaaskorst is island ground");
+        helper.succeed();
+    }
+
+    /**
+     * After the merge of the slices: what one slice left for another really meets. The Kaasmijt of the knabbelkoorvrucht,
+     * the Duinguh on kruimelzand, a Schuilguh in a piece that is turned, the creatures the buildings place and name, and
+     * the wild kinds the tidy-up knows.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void einde2KernSamen(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        // biomes -> mikas: the fruit's Kaasmijt is the real one
+        KaasmijtEntity mijt = Kaasmijten.zet(level, helper.absoluteVec(new Vec3(2.5, 2, 2.5)));
+        helper.assertTrue(mijt != null && mijt.getType() == E2MikasFeature.KAASMIJT.get(), "a knabbelkoorvrucht can hold a real Kaasmijt");
+        mijt.discard();
+        // biomes <-> biomeguhs: kruimelzand lets everybody sink in a little, except the Duinguh
+        helper.setBlock(new BlockPos(2, 2, 2), E2BiomesFeature.KRUIMELZAND.get());
+        BlockPos zand = helper.absolutePos(new BlockPos(2, 2, 2));
+        GuhEntity duin = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 2, 4)), korst = helper.spawn(ModEntities.GUH.get(), new BlockPos(4, 2, 2));
+        duin.setVariant(GuhVariant.DUINGUH);
+        korst.setVariant(GuhVariant.KORSTGUH);
+        BlockState staat = level.getBlockState(zand);
+        helper.assertTrue(staat.getCollisionShape(level, zand, CollisionContext.of(duin)).max(Direction.Axis.Y) == 1.0
+                && staat.getCollisionShape(level, zand, CollisionContext.of(korst)).max(Direction.Axis.Y) < 1.0, "only the Duinguh stands on top of kruimelzand");
+        duin.discard();
+        korst.discard();
+        helper.setBlock(new BlockPos(2, 2, 2), Blocks.AIR);
+        // vesting -> mikas: a Schuilguh on a wall turns with its piece; one on a floor or a ceiling does not
+        SchuilguhEntity schuil = E2MikasFeature.SCHUILGUH.get().create(level, EntitySpawnReason.STRUCTURE);
+        helper.assertTrue(schuil != null, "a Schuilguh");
+        schuil.setAttachFace(Direction.NORTH);
+        schuil.rotate(Rotation.CLOCKWISE_90);
+        helper.assertTrue(schuil.attachFace() == Direction.EAST, "the wall it holds turns with the piece");
+        schuil.setAttachFace(Direction.UP);
+        schuil.rotate(Rotation.CLOCKWISE_180);
+        helper.assertTrue(schuil.attachFace() == Direction.UP, "a ceiling stays a ceiling");
+        // the buildings -> the creature slices: every creature a sidecar names exists, and none is a stand-in any more
+        List<String> bouwsels = new java.util.ArrayList<>(Einde2Ids.LEEGTE_STRUCTUREN);
+        bouwsels.add(Einde2Ids.MIKA_VESTING);
+        bouwsels.addAll(E2DecoFeature.BOUWSELS);
+        int wezens = 0;
+        for (String id : bouwsels) {
+            helper.assertTrue(!Plekken.van(id).isEmpty(), id + " has a sidecar");
+            for (Plekken.Plek plek : Plekken.van(id).values()) {
+                if (plek.entity() == null) {
+                    continue;
+                }
+                var soort = BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.parse(plek.entity())).orElse(null);
+                helper.assertTrue(soort != null, id + "/" + plek.id() + ": the entity type " + plek.entity() + " exists");
+                Entity wezen = soort.create(level, EntitySpawnReason.STRUCTURE);
+                helper.assertTrue(wezen != null && !(wezen instanceof Einde2Plaatshouder), id + "/" + plek.id() + ": " + plek.entity() + " is the real creature");
+                wezens++;
+            }
+        }
+        helper.assertTrue(wezens >= 40, "the buildings name their creatures (" + wezens + ")");
+        // the wild ones of the outer islands are kinds the tidy-up knows (an Ender-Mika of the natural spawner comes and goes)
+        helper.assertTrue(WildeDieren.soorten().containsAll(List.of(E2MikasFeature.ENDER_MIKA.get(), E2MikasFeature.KAASMIJT.get(),
+                E2ZweversFeature.KRUIMELKWAL.get(), E2ZweversFeature.LEEGTEWALVISGUH.get(), E2ZweversFeature.DAS_MOLGUH.get())), "the wild kinds of einde2");
         helper.succeed();
     }
 }

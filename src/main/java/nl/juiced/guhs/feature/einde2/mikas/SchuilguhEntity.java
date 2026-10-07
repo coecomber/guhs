@@ -34,6 +34,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -203,6 +204,16 @@ public class SchuilguhEntity extends PathfinderMob implements GeoEntity {
             setYRot(Mth.floor((getYRot() + 45f) / 90f) * 90f);
         }
         return super.finalizeSpawn(level, difficulty, reason, data);
+    }
+
+    /** A building piece that is turned when it is placed turns the wall it holds on to as well (the Mika-vesting). */
+    @Override
+    public float rotate(Rotation rotation) {
+        Direction face = attachFace();
+        if (face.getAxis().isHorizontal()) {
+            setAttachFace(rotation.rotate(face));
+        }
+        return super.rotate(rotation);
     }
 
     @Override

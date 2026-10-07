@@ -340,7 +340,7 @@ def parasol(b, x, z, kleur):
             b.set(x + dx, g + 4, z + dz, f"minecraft:{kleur}_wool" if (dx + dz) % 2 == 0 else "minecraft:white_wool")
     b.set(x, g + 5, z, f"minecraft:{kleur}_wool")
     for (dx, dz, c) in ((1, 1, kleur), (-1, 2, "white")):
-        gg = b.grond(x + dx, z + dz)
+        gg = b.grond(x + dx, z + dz, van=g + 3)             # (the sand under the parasol, not its cloth)
         if gg is not None and b.naam(x + dx, gg, z + dz) == ZAND and b.naam(x + dx, gg + 1, z + dz) is None:
             b.set(x + dx, gg + 1, z + dz, f"minecraft:{c}_carpet")       # a towel
 

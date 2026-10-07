@@ -20,6 +20,8 @@ import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
 import net.neoforged.neoforge.event.entity.living.MobDespawnEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import nl.juiced.guhs.entity.MikaEntity;
+import nl.juiced.guhs.feature.einde2.mikas.E2MikasFeature;
+import nl.juiced.guhs.feature.einde2.zwevers.E2ZweversFeature;
 import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
 import nl.juiced.guhs.feature.kaasmoeras.KaasmoerasFeature;
 import nl.juiced.guhs.feature.landdiertjes.LanddiertjesFeature;
@@ -72,7 +74,11 @@ public final class WildeDieren {
                     ModEntities.MIKA.get(), ModEntities.NETHER_MIKA.get(), GuheindeFeature.MIKA_LARFJE.get(),
                     KaasmoerasFeature.KAASMOT.get(), KaasmoerasFeature.KIKKERGUH.get(), KaasmoerasFeature.MOERASHEKS_MIKA.get(),
                     SpiesburchtFeature.ROOKGUH.get(), SpiesburchtFeature.VONK_MIKA.get(), SpiesburchtFeature.KNEKEL_MIKA.get(),
-                    PiepFeature.POEPSCHILLY.get(), PiepFeature.SCHILLY.get());
+                    PiepFeature.POEPSCHILLY.get(), PiepFeature.SCHILLY.get(),
+                    // einde2: the wild ones of the outer islands (their top-ups mark them; the Ender-Mika is a natural spawn)
+                    E2MikasFeature.ENDER_MIKA.get(), E2MikasFeature.KAASMIJT.get(),
+                    E2ZweversFeature.KRUIMELKWAL.get(), E2ZweversFeature.LEEGTEWALVISGUH.get(), E2ZweversFeature.VLEERMUIS_LEMURGUH.get(),
+                    E2ZweversFeature.OTTER_PINGUINGUH.get(), E2ZweversFeature.DAS_MOLGUH.get(), E2ZweversFeature.SCHILDPAD_EENDGUH.get());
         }
         return soorten;
     }

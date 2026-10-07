@@ -29,6 +29,7 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.feature.einde2.Einde2Ids;
+import nl.juiced.guhs.feature.einde2.biomeguhs.Biomeguhs;
 
 /**
  * einde2, slice biomes: the block classes of the outer islands that do more than stand there (registered in
@@ -69,7 +70,7 @@ public final class E2BiomesBlokken {
     }
 
     // ------------------------------------------------------------------------------------------------------------------
-    /** Crumb sand: falls like sand, and you sink in a little (it is a touch lower than a block) and wade slowly. */
+    /** Crumb sand: falls like sand, and you sink in a little (it is a touch lower than a block) and wade slowly. A Duinguh stands on top. */
     public static class Kruimelzand extends ColoredFallingBlock {
         private static final VoxelShape ZAK = Block.column(16, 0, 14);
 
@@ -79,6 +80,10 @@ public final class E2BiomesBlokken {
 
         @Override
         protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+            // (the Duinguh never sinks in: Biomeguhs.zaktNiet only looks at the synced variant, so both sides agree)
+            if (context instanceof EntityCollisionContext ecc && ecc.getEntity() != null && Biomeguhs.zaktNiet(ecc.getEntity())) {
+                return Shapes.block();
+            }
             return ZAK;
         }
 

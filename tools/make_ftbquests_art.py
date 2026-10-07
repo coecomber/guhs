@@ -156,6 +156,8 @@ HIDE = ("saddle",) + tuple(f"armor_{t}{p}" for t in ("iron", "diamond", "netheri
 VARIANT_BONES = {"teckel": ("teckel",), "ender": ("ender",), "koning": ("koning",), "wolk": ("wolk",), "zeemeerguh": ("zeemeer",),
                  "asguh": ("asguh",), "pluisguh": ("pluis",), "brontosaurus": ("neck",), "vahoege_ender": ("ender",),
                  "baltoguh": ("balto",), "mewtwo": ("mewtwo",), "stitch626": ("stitch",)}   # 3.0: the story guhs
+# einde2: the six guhs of the outer islands (their shell, wings, crystals...)
+VARIANT_BONES.update({v: (v,) for v in ("korstguh", "duinguh", "kruimelguh", "schimmelguh", "kristalguh", "koorguh")})
 
 
 @lru_cache(maxsize=None)

@@ -19,6 +19,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.TriState;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -26,6 +27,7 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
@@ -44,7 +46,8 @@ import nl.juiced.guhs.feature.guheinde.GuheindeFeature;
  * einde2: the big places of the outer islands can't be broken or built in, so every player finds them whole: no
  * breaking, no placing blocks, no buckets, no explosions, no griefing mobs inside the boxes of a registered structure's
  * pieces (plus a rim), and no fire or fluids from outside ({@link Protected}). Doors, chests, buttons and riding still
- * work; creative players may change everything. The empty rim piece of a story structure protects nothing.
+ * work; creative players may change everything. The empty rim piece of a story structure protects nothing. A bed in a
+ * protected place never explodes ({@link #bedBlijftHeel}).
  * <p>
  * hook fase B: the same shape as the sister update's {@code feature/wereld/Bescherming}; after the merge the bodies here
  * become a delegation to it. {@link #uitzondering} is where a quest lets a player change some blocks.
@@ -177,9 +180,26 @@ public final class Einde2Bescherming {
         }
     }
 
+    /**
+     * A bed in a protected place: the Guheinde's beds explode when clicked (the dimension's bed rule), and the towns of
+     * the outer islands are full of them. Here a bed only says a line; nobody gets hurt.
+     */
+    public static boolean bedBlijftHeel(Level level, BlockPos pos) {
+        return level.getBlockState(pos).getBlock() instanceof BedBlock && beschermd(level, pos);
+    }
+
     private static void onUseBlock(PlayerInteractEvent.RightClickBlock event) {
         ItemStack stack = event.getItemStack();
-        if (event.getLevel().isClientSide() || stack.isEmpty()) {
+        if (event.getLevel().isClientSide()) {
+            return;
+        }
+        if (bedBlijftHeel(event.getLevel(), event.getPos())) {
+            event.setCanceled(true);
+            event.setCancellationResult(InteractionResult.SUCCESS);
+            event.getEntity().sendOverlayMessage(Component.translatable("gui.guhs.einde2.bed").withStyle(ChatFormatting.LIGHT_PURPLE));
+            return;
+        }
+        if (stack.isEmpty()) {
             return;
         }
         if (!(stack.getItem() instanceof BlockItem || stack.getItem() instanceof BucketItem || stack.is(Items.BONE_MEAL))) {

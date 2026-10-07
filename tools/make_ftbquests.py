@@ -669,7 +669,8 @@ def assign():
         if s is None:
             mod = MODULES.get(src)
             title = getattr(mod, "FTB_SECTION", None) or ("Nog meer guh-dingen" if src == "core" else src.capitalize())
-            s = dict(sec(sid, title, "guh:normal", module=src, upstream="intro"), quests=[])
+            # (einde2: FTB_PORTRAIT also gives a section of this kind its own picture)
+            s = dict(sec(sid, title, getattr(mod, "FTB_PORTRAIT", None) or "guh:normal", module=src, upstream="intro"), quests=[])
             out[c].append(s)
         s["quests"].append(k)
         done.add(k)

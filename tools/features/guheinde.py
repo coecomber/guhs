@@ -762,7 +762,7 @@ def ftb(fq):
       "guhs:mika_steen", [adv("guheinde_poort")], x=4, y=y2)
     q("guheinde_vesting", "Een Mika-vesting", "Op de buiteneilanden staan Mika-vestingen van paarse Mika-steen, vol Mika's en buit.",
       "guhs:mika_steen_pilaar", [fq.structure("mika_vesting")], rewards=(("guhs:kaas_knabbels", 16),), x=6, y=y2, shape="octagon", xp=200)
-    q("guheinde_vleugels", "Guhvleugels!", "Bij de helft van de vestingen ligt een vettig Mika-vetschip. Op de boeg hangen de &dGuhvleugels&r: zweven maar!",
+    q("guheinde_vleugels", "Guhvleugels!", "Bij een Mika-vesting ligt vaak een vettig Mika-vetschip. Aan boord hangen de &dGuhvleugels&r: zweven maar!",
       "guhs:guhvleugels", [fq.item("guhs:guhvleugels")], x=8, y=y2, shape="gear", xp=500)
     q("guheinde_terugpoort", "Tuut, terug naar het midden", "Overal op de buiteneilanden staat een &dTerugpoort&r: een poortje met een guhkop erop. Stap erin en je zweeft vahoeg terug naar het grote eiland.",
       "guhs:mika_steen", [adv("guheinde_terugpoort")], x=8, y=y1, xp=100)

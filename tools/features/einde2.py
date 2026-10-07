@@ -19,6 +19,7 @@ import features.einde2_kit as kit
 
 TEXTS = {
     "gui.guhs.einde2.beschermd": "Njeg! Deze plek blijft heel, voor iedere guh die na jou komt.",
+    "gui.guhs.einde2.bed": "Njeg! Dit bedje is al van een vadsige guh. Slapen doe je thuis.",
     "gui.guhs.einde2.commando.geen": "Njeg: van %s ligt er in deze wereld geen vaste plek (nog niet gebouwd, of geen plekje gevonden).",
     "gui.guhs.einde2.commando.waar": "%s: startchunk %s, oorsprong %s, doos %s",
     "gui.guhs.einde2.commando.geen_plek": "Njeg: %s heeft geen plek '%s' (of die ligt in deze wereld nog niet vast).",

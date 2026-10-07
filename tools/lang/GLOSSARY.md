@@ -1175,3 +1175,615 @@ Knabbelsward -> **Nibblesward** · Guhlingen -> **Guhlingen** · Franeguh -> **F
 | verplichte pitstop | mandatory pit stop | |
 | Hup! / Boing! / Oeps! | Hup! / Boing! / Oops! | |
 | vadsje | little chonk | |
+
+## 24. einde2 (the outer islands of the Guheinde: biomes, creatures, the big places, the Sponsguh cast)
+
+### kern
+
+| Dutch | English | note |
+|---|---|---|
+| Gatenkaasheuvels | Holey Cheese Hills | biome |
+| Korstwoestijn | Rind Desert | biome |
+| Kruimelwolken | Crumb Clouds | biome |
+| Schimmelkaasvlakte | Blue Cheese Plains | biome |
+| Kristalkaasklippen | Crystal Cheese Cliffs | biome |
+| Knabbelkoorbos | Nibble Chorus Forest | biome |
+| buiteneilanden | outer islands | the islands of the Guh End far from the main island |
+| kristalkaas | Crystal Cheese |  |
+| knabbelkoor | Nibble Chorus | chorus plant parody |
+| knabbelkoorvrucht | Nibble Chorus Fruit |  |
+| gepofte | Popped | gepofte knabbelkoorvrucht = Popped Nibble Chorus Fruit |
+| lichtstaafje | Light Rod | end rod parody |
+| kruimelrots | Crumb Rock |  |
+| kruimelzand | Crumb Sand |  |
+| kruimelwolk | Crumb Cloud |  |
+| schimmelkaas | Blue Cheese |  |
+| klipkaas | Cliff Cheese |  |
+| Korstguh | Rind Guh |  |
+| Duinguh | Dune Guh |  |
+| Kruimelguh | Crumb Guh |  |
+| Schimmelguh | Blue Cheese Guh |  |
+| Kristalguh | Crystal Guh |  |
+| Koorguh | Chorus Guh |  |
+| Ender-Mika | Ender Mika |  |
+| Kaasmijt | Cheese Mite |  |
+| Schuilguh | Hidey Guh |  |
+| Schuildoos | Hidey Box |  |
+| doosschil | Box Shell |  |
+| Flitskruimel | Flash Crumb |  |
+| hik | Hiccups | effect |
+| Kruimelkwal | Crumb Jelly |  |
+| Leegtewalvisguh | Void Whale Guh |  |
+| vleermuis-lemurguh | Bat-Lemur Guh |  |
+| otter-pinguïnguh | Otter-Penguin Guh |  |
+| das-molguh | Badger-Mole Guh |  |
+| schildpad-eendguh | Turtle-Duck Guh |  |
+| Appa-guh | Appa Guh |  |
+| Momo-guh | Momo Guh |  |
+| Appa-fluitje | Appa Whistle |  |
+| vetbootje | Little Grease Boat |  |
+| vetschip | Grease Ship |  |
+| heteluchtballon | Hot Air Balloon |  |
+| Zuidelijke Luchttempel | Southern Air Temple |  |
+| Noordelijke Waterstam | Northern Water Tribe |  |
+| Ba Sing Guh | Ba Sing Guh |  |
+| Vuurnatie-hoofdstad | Fire Nation Capital |  |
+| Omashguh | Omashguh |  |
+| Westelijke Luchttempel | Western Air Temple |  |
+| Vuurtempel van Roku-guh | Fire Temple of Roku Guh |  |
+| Kyoshi-dorp | Kyoshi Village |  |
+| Bibliotheek van Wan Shi Guh | Wan Shi Guh's Library |  |
+| Leeuwschildpad-eiland | Lion Turtle Island |  |
+| Leegtehaven | Void Harbor |  |
+| Guhvleugel-ringenrace | Guh Wing Ring Race |  |
+| Guhvatar | Guhvatar |  |
+| Mika-vesting | Mika Fortress | already in the glossary |
+| Sponsguh Kaasbroek | Spongeguh Cheesepants | the Sponsguh story (proposals: the well-known English names of the parodied show, guh-ified the same way) |
+| Patguh Ster | Patguh Star |  |
+| Meneer Krabguh | Mr. Krabguh |  |
+| Parel | Pearl |  |
+| Sandy-guh | Sandy Guh |  |
+| Gerrit | Gary | the snail |
+| Octo Tentakel | Squidmika Tentacles | Octo-Mika = Squidmika |
+| Octoliam | Squilliam |  |
+| Plankmika | Plankmika |  |
+| Karen | Karen |  |
+| juf Pufguh | Mrs. Puffguh |  |
+| koning Neptuguh | King Neptuguh |  |
+| prinses Mindy-guh | Princess Mindy Guh |  |
+| Dennis-Mika | Dennis Mika |  |
+| de Cycloop | the Cyclops |  |
+| David Hasselguh | David Hasselguh |  |
+| Zeemeerman | Mermaid Guh |  |
+| Mosselguh | Barnacle Guh |  |
+| De Vliegende Guhlander | The Flying Guhchman |  |
+| Bikinibodem | Bikini Bottom | structure |
+| Schelpenstad | Shell City | structure |
+| De Krokante Knabbel | The Krusty Nibble |  |
+| De Vetemmer | The Grease Bucket |  |
+| De Ruige Kroeg | The Thug Tug |  |
+| de loopgraaf | the Trench |  |
+| Bellenkom | Bubble Bowl |  |
+| Kwallenvelden | Jelly Fields |  |
+| Guhfy Guhber | Guhfy Guhber |  |
+| Knabbelburger | Nibble Patty |  |
+| Knabbelburgermobiel | Patty Wagon |  |
+| kwallenjam | Jelly Jam |  |
+| spooklantaarn | Ghost Lantern |  |
+| bellenblaas | Bubble Blower |  |
+| zeepbel | Soap Bubble |  |
+| bubbelstroom | Bubble Stream |  |
+| bloemwolk | Flower Cloud |  |
+| leegtemist | void mist |  |
+| besteltafel | Order Table |  |
+| grill | Grill |  |
+| vruchthuis | Fruit House |  |
+| heldencape | Hero Cape |  |
+
+### biomes
+
+| Dutch | English | note |
+|---|---|---|
+| streek / de zes streken | region / The Six Regions | the six biomes of the outer islands; FTB section title |
+| Korstgras | Rind Grass | korst = rind, as in Cheese Rind (kaaskorst) |
+| Dorre korststruik | Dry Rind Bush | |
+| Gebarsten korst | Cracked Rind | |
+| Koorkorst | Chorus Rind | the purple ground of the Nibble Chorus Forest |
+| Kruimelrots(stenen) | Crumb Rock (Bricks) | "Crumb Rock Brick Stairs / Slab / Wall" |
+| Kruimelzand / Laagje kruimelzand | Crumb Sand / Crumb Sand Layer | |
+| Kruimelwolk / Dichte kruimelwolk | Crumb Cloud / Dense Crumb Cloud | |
+| Schimmelkaas(stenen) | Blue Cheese (Bricks) | |
+| Schimmelpaddenstoel / Schimmelhoed / Schimmelsteel | Blue Cheese Mushroom / Blue Cheese Mushroom Cap / Blue Cheese Mushroom Stem | "schimmel" is never "mold" in a name: it is the blue of blue cheese |
+| Klipkaas(stenen) | Cliff Cheese (Bricks) | |
+| Kristalkaaserts / Kristalkaaskristal / Blok kristalkaas | Crystal Cheese Ore / Crystal Cheese Cluster / Block of Crystal Cheese | |
+| Kristalkaasbrokje | Crystal Cheese Nugget | nine make one Crystal Cheese |
+| Knabbelkoorplant / -bloem / -blok / -pilaar | Nibble Chorus Plant / Flower / Block / Pillar | "Nibble Chorus Stairs", "Nibble Chorus Slab" |
+| Knabbelkoorvrucht / Gepofte knabbelkoorvrucht | Nibble Chorus Fruit / Popped Nibble Chorus Fruit | |
+| Lichtstaafje | Light Rod | |
+| Floep! | Floop! | the sound of the fruit's flash (as Captain Floopguh) |
+| Zes smaken kaas | Six Flavors of Cheese | advancement |
+| Kaas met een randje goud | Cheese with a Golden Edge | advancement, quest |
+
+### biomeguhs
+
+| Dutch | English | note |
+|---|---|---|
+| Guhs van de buiteneilanden | Guhs of the Outer Islands | FTB section |
+| kaasgat | cheese hole | the round holes of the Holey Cheese Hills; a Rind Guh naps in one |
+| korst (van de Korstguh) | rind | its shield of baked rind |
+| koorkraagje | choir collar | the Chorus Guh's white collar (koor = choir and chorus) |
+| blauwaderkaas | blue-veined cheese | the Blue Cheese Guh's fur |
+| kaaskristal(len) | cheese crystal(s) | what grows on the Crystal Guh |
+| kristalkaasbrokje | Crystal Cheese Nugget | item of the biomes slice: use its name there if it differs |
+| Schimmelguh-gloed | Blue Cheese Guh Glow | the invisible light block `schimmelguh_licht` |
+| Disco-dynamo | Disco Dynamo | bbq2's machine: use bbq2's English name if it differs |
+| Vriendje van ver | A Friend From Afar | advancement |
+| Balletje balletje | Roly-Poly | advancement |
+| Ik zie, ik zie... | I Spy... | advancement |
+| Het Guhkoor | The Guh Choir | advancement |
+| Zes streken, zes vriendjes | Six Lands, Six Friends | advancement and quest |
+| Kaas met een korstje | Cheese With a Rind | quest |
+| Alleen de oortjes | Just the Ears | quest |
+| Lichter dan een kruimel | Lighter Than a Crumb | quest |
+| Een lampje op pootjes | A Lamp on Little Legs | quest |
+| Een neus voor glimmers | A Nose for Shinies | quest |
+| Eerste stem: njeg | First Voice: Nyeg | quest |
+
+### mikas
+
+| Dutch | English | note |
+|---|---|---|
+| Ender-Mika | Ender Mika | enderman parody; plural *Ender Mikas* |
+| Kaasmijt | Cheese Mite | endermite parody; plural *Cheese Mites* |
+| Schuilguh | Hidey Guh | shulker parody; plural *Hidey Guhs* |
+| Schuildoos | Hidey Box | shulker box parody; plural *Hidey Boxes* |
+| doosschil | Box Shell | shulker shell parody; lowercase in prose: *a box shell* |
+| Flitskruimel | Flash Crumb | ender pearl parody (a material); lowercase in prose |
+| kaasdoos / kaasdoosje | cheese box / little cheese box | the round wooden box a Hidey Guh lives in |
+| flitsen / flitst weg | to flit / flits away | how an Ender Mika teleports; never "teleports" in flavor text |
+| jatten / jat | to swipe / swipes | what the Ender Mika does with your nibble |
+| hik / de hik | Hiccups / the hiccups | effect name *Hiccups*; the sound *Hik!* = *Hic!* |
+| kusje | smooch | *een kusje van de Schuilguh* = *a smooch from the Hidey Guh* |
+| kietelen / Kiele kiele! | to tickle / Tickle tickle! | |
+| Toe! | Shut! | the Hidey Guh's lid snapping shut |
+| Plop! / Smak! / Krak! | Pop! / Smooch! / Crack! | |
+| buiteneilanden | outer islands | (shared, see kern.md) |
+
+### zwevers
+
+| Dutch | English | note |
+|---|---|---|
+| Kruimelkwal | Crumb Jelly | (in kern.md too) the jellyfish of cheese crumbs |
+| kruimelkwalpot | Crumb Jelly Jar | block kruimelkwal_pot: a caught Crumb Jelly, a lamp |
+| Leegtewalvisguh | Void Whale Guh | (in kern.md too) |
+| Rug van de Leegtewalvisguh | Void Whale Guh's Back | entity leegtewalvisguh_rug: a technical part, players never read it |
+| leegteparel | Void Pearl | the whale's thank-you |
+| Vleermuis-lemurguh | Bat-Lemur Guh | lucht |
+| Otter-pinguïnguh | Otter-Penguin Guh | water |
+| Das-molguh | Badger-Mole Guh | aarde |
+| Schildpad-eendguh | Turtle-Duck Guh | vuur |
+| elementdieren | element animals | the four hybrid animals of the Guhvatar story |
+| Zwevers & elementdieren | Floaters & Element Animals | FTB section |
+| BOING | BOING | the bounce on a Crumb Jelly |
+| kwak-njeg | quack-nyeg | the Turtle-Duck Guh's happy sound |
+| luchttempels / de Waterstam / de paleisvijver | the air temples / the Water Tribe / the palace pond | the place names of kern.md |
+| de oude kapitein (in de havenkroeg) | the old captain (in the harbor pub) | a character of the Void Harbor, a later phase |
+| aardestuurders | earthbenders | the Guhvatar story's word for who steers earth |
+
+### appa
+
+| Dutch | English | note |
+|---|---|---|
+| Appa-guh | Appa Guh | the sky bison of the Guhvatar story; "he" |
+| Momo-guh | Momo Guh | the winged lemur; "he" |
+| Appa-fluitje | Appa Whistle | item |
+| jip jip | yip yip | the take-off call, as in the parodied show |
+| zadelmand | saddle basket | where the guests ride |
+| zadelkist | saddle chest | the 27-slot chest on his back |
+| luchtbizon | sky bison | |
+| mensje | human | a player, as elsewhere in the mod |
+| aangevadst (komen) | come chonking along | vads = chonk |
+| lenen (een knabbel) | borrow (a nibble) | Momo never takes one for good |
+
+### vetbootje
+
+| Dutch | English | note |
+|---|---|---|
+| vetbootje | Little Grease Boat | the player's own small flying ship (contract 3.5); lowercase in running text: "your little grease boat" |
+| Vetfluitje | Grease Whistle | calls the boat |
+| Werfboekje | Shipyard Booklet | opens the customise screen |
+| De Scheepswerf | The Shipyard | the screen now, the yard of the Void Harbor later |
+| Leenbootje | Loaner Boat | a boat that belongs to nobody (the boating exam of phase B) |
+| Ruim van %s | Hold of %s | the chest's title; a ship's hold |
+| Heteluchtballon | Hot Air Balloon | contract 3.5 |
+| Mika-snoet (zeil) | Mika Face | sail picture |
+| Knabbelzak (zeil) | Nibble Bag | sail picture: the bag of Cheese Nibbles |
+| Vetstrepen (zeil) | Grease Stripes | sail picture |
+| Vahoeg-ster (zeil) | Wahoog Star | sail picture |
+| Kruimels (zeil) | Crumbs | sail picture |
+| Pootjes thuis, njeg! | Pawsies off, nyeg! | "hands off" |
+| Glibber, glibber! | Slip, slide! | the boat gliding in |
+| De Vette Knabbel | The Greasy Nibble | made-up boat name |
+| Glibberguh | Slipperyguh | made-up boat name |
+| Mika's Nachtmerrie | Mika's Nightmare | made-up boat name |
+| De Dobberende Vadsbaal | The Bobbing Chonkball | made-up boat name |
+| Frituurpiraat | Fryer Pirate | made-up boat name |
+| Njegvaart | Nyeg Cruise | made-up boat name |
+| SS Kaaskorst | SS Cheese Rind | made-up boat name (kaaskorst = Cheese Rind) |
+| De Slome Guh | The Slowpoke Guh | made-up boat name |
+| Vadsig door de Lucht | Chonky in the Sky | made-up boat name |
+| Knabbelkruiser | Nibble Cruiser | made-up boat name |
+| Het Vette Hapje | The Greasy Bite | made-up boat name |
+| Kruimeldief | Crumb Thief | made-up boat name |
+
+### vesting
+
+| Dutch | English | note |
+|---|---|---|
+| Mika-vesting | Mika Fortress | already in the glossary; the modular one keeps the name |
+| burcht | keep | the main tower of a fortress |
+| wachtlokaal | guard room | ground floor of the keep |
+| vesting-kapitein / de kapitein | fortress captain / the captain | character of a later phase; signs are signed "-the captain" |
+| de spijtige Mika-kok / de kok | the Sorry Mika Cook / the cook | character of a later phase |
+| cellenblok / "de logeervleugel" | cell block / "the guest wing" | the Mikas' own name for it is the joke |
+| kerkertoren / "de logeerkamer" | dungeon tower / "the guest room" | |
+| wachttoren / uitkijktoren | guard tower / lookout tower | |
+| troonzaal / schatkamer | throne room / treasury | |
+| knabbeldepot / buitkamer | nibble depot / loot room | |
+| vetstokerij | grease works | |
+| steiger / havenbord | pier / harbor board | American spelling |
+| vetschip / de sloep / de vetblaas | grease ship / the sloop / the grease bubble | the three ships |
+| kajuit | cabin | |
+| vestingguh | fortress guh | a skinny guh freed from a fortress cell |
+| magere guh | skinny guh | as in the glossary |
+| duwpop / duwoefening | shove dummy / shove drill | Mikas only shove |
+| knabbelkar | nibble cart | |
+| knabbelsoep (zonder knabbel) | nibble soup (minus nibble) | |
+
+### deco
+
+| Dutch | English | note |
+|---|---|---|
+| luchtbizon | sky bison | Appa's kind; "Luchtbizon-stal" = Sky Bison Stable |
+| meditatiepaal | Meditation Pole |  |
+| luchtbal | airball | the air nomads' game; "Luchtbal-veld" = Airball Court |
+| Guhatso | Guhatso | monk Gyatso as a guh (the name DESIGN uses) |
+| geestenoase | Spirit Oasis |  |
+| Zhao-Mika | Zhao Mika | the admiral; proper nouns with -Mika / -guh lose the hyphen |
+| ijsvissen | ice fishing |  |
+| Waterstam | Water Tribe | as in Noordelijke Waterstam = Northern Water Tribe |
+| kaasbol | cheese ball | the ball of ice and cheese the old Guhvatar slept in ("De jongen in de kaasbol" = The Boy in the Cheese Ball) |
+| das-molguh-hol / -grot | Badger-Mole Den / Badger-Mole Guh Burrow | the sign is short of room |
+| Aardrommel | Earth Rumble |  |
+| De Blinde Bandiet | The Blind Bandit |  |
+| De Kei-guh | The Boulder Guh |  |
+| koolkraam | cabbage cart |  |
+| MIJN KOLEN! | MY CABBAGES! | the cabbage merchant's cry, always in capitals |
+| kool | Cabbage | the block `einde2_deco_kool` |
+| geplet | squashed |  |
+| Geheime tunnel! Door de bergen! | Secret tunnel! Through the mountains! | the nomads' song; on the sign "Thru mountains!" (16 characters) |
+| Sintelstrand | Ember Beach | Ember Island's beach |
+| Vuurheer | Fire Lord |  |
+| Zonnekrijger | Sun Warrior |  |
+| eeuwige vlam | Eternal Flame | the block `einde2_deco_eeuwige_vlam` |
+| draakguh | Dragon Guh |  |
+| zonnesteen | Sun Stone |  |
+| Oom Miroh | Uncle Miroh | Iroh as a Mika (DESIGN) |
+| windgong | Wind Chime | the block `einde2_deco_windgong` |
+| witte lotustegel | White Lotus Tile | the block `einde2_deco_lotustegel` |
+| wachtpost | guard post |  |
+| Vetschip Njegus | G.S. Nyegus | G.S. = Grease Ship, as S.S. |
+| karavaan | caravan |  |
+| Appa-afdruk | Appa Footprint |  |
+| jip jip | yip yip | what Appa answers to |
+| boemerang | boomerang |  |
+| Sokka-guh, Aang-guh | Sokka Guh, Aang Guh |  |
+
+### bouw_lucht
+
+| Dutch | English | note |
+|---|---|---|
+| Zuidelijke Luchttempel | Southern Air Temple | contract 3.5 |
+| Hal van de Guhvatars | Hall of the Guhvatars | the statue hall |
+| de Werktuigguh | the Mechanist Guh | the Mechanist of the show; on a sign "- Mechanist Guh" |
+| Werkplaats / Werkplaatsdeur | Workshop / Workshop Door | the door's sign: "Nog niet af, njeg!" = "Not finished yet, nyeg!" |
+| Vredesballon | Peace Balloon | the tier-5 end project; never called the last or the final one |
+| Bouwplaats | Building Site | |
+| Guhatso | Guhatso | monk Gyatso; stays as it is |
+| Taart van Guhatso / taart | Guhatso's Pie / pie | the fruit pies he throws; NOT cake (guh_taart = Guh Cake is another block) |
+| Luchtnomade / luchtnomaden | Air Nomad / Air Nomads | Luchtnomadentegel = Air Nomad Tile |
+| Waterstam / Aarderijk / Vuurnatie | Water Tribe / Earth Kingdom / Fire Nation | on the statue signs |
+| Pijltegel | Arrow Tile | |
+| Tandwielblok | Gear Block | |
+| Blauwdruk van de Werktuigguh | Mechanist Guh's Blueprint | |
+| Luchtbalveld / luchtbal | Airball Court / airball | |
+| Luchtscooter(-baan) | Air Scooter (Track) | |
+| Zweefringen | Glide Rings | |
+| Rustpunt | Rest Point | |
+| Tempelbel / Windgong / Windfluiten | Temple Bell / Wind Gong / Wind Flutes | |
+| Stal van Appa | Appa's Stable | |
+| Monnikentoren / windtoren / grote toren | the Monks' Tower / the Wind Tower / the Great Tower | only in code comments and the wiki text so far |
+| Wan-guh, Szeto-guh, Yangchen-guh, Kuruk-guh, Kyoshi-guh, Roku-guh, Aang-guh | Wan Guh, Szeto Guh, Yangchen Guh, Kuruk Guh, Kyoshi Guh, Roku Guh, Aang Guh | earlier Guhvatars; "<name>-guh" = "<Name> Guh" as Appa-guh = Appa Guh |
+| Plons-guh / Kluit-guh | Splash Guh / Clod Guh | two made-up early Guhvatars (water, earth) |
+| kaasbol | cheese ball | "Ging even vadsen in een kaasbol" = "Went for a chonk in a cheese ball" |
+
+### bouw_water
+
+The Noordelijke Waterstam parodies the Northern Water Tribe of Avatar: The Last Airbender. Names follow the well-known English
+ones of the show, guh-ified the way the Dutch is (the kit's section 3.5 has the names shared with the other slices).
+
+| Dutch | English | note |
+|---|---|---|
+| Noordelijke Waterstam | Northern Water Tribe | the structure (contract 3.5) |
+| Waterstam-ijsstenen | Water Tribe Ice Bricks | "Water Tribe Ice Brick Stairs", "Water Tribe Ice Brick Slab" |
+| IJslantaarn | Ice Lantern | |
+| Waterstamteken | Water Tribe Emblem | block |
+| Vuurnatieteken | Fire Nation Emblem | block |
+| Vuurnatie | Fire Nation | the Mikas of this story |
+| Meester Pakguh | Master Pakguh | Pakku; "alleen guhs met een snor" = "only guhs with a mustache" |
+| hoofdman Arnook-guh | Chief Arnook Guh | |
+| prinses Yue-guh / Yue | Princess Yue Guh / Yue | |
+| Katara-guh / Sokka-guh | Katara Guh / Sokka Guh | |
+| admiraal Zhao-Mika / Zhao | Admiral Zhao Mika / Zhao | "Zhao de Onoverwinbare" = "Zhao the Invincible" (his own words) |
+| Yugoda-guh | Yugoda Guh | the healer |
+| Tui en La | Tui and La | the moon fish and the ocean fish of the Spirit Oasis; unchanged |
+| Geestenoase | Spirit Oasis | |
+| Golfkansel | Wave Pulpit | the platform above the gate where the great wave is made |
+| Golfbassin | Wave Pool | on the training square |
+| Glijkansel / Otterslee | (the start of the) Otter Sled | sign: "Otter Sled" |
+| Otterhoek | Otter Corner | |
+| otter(-pinguïnguh) | otter (Otter-Penguin Guh) | contract 3.5 |
+| Landingsijs | Landing Ice | |
+| Kamp Guhvatar | Camp Guhvatar | |
+| Appa / Momo | Appa / Momo | |
+| Gondel / Gondelhalte / Gondelwerf / Gondelverhuur | Gondola / Gondola Stop / Gondola Yard / Gondola Rental | |
+| watersturen | waterbending | "Zelf duwen met watersturen" = "Push it yourself with waterbending" |
+| Genezershut | Healing Hut | |
+| Wapenkamer | Armory | American spelling |
+| Krijgsraad / Raadzaal | War Council / council hall | |
+| Maankamer | Moon Room | |
+| Maanwachters | Moon Watchers | |
+| Snorrenschool / Plaksnorren | Mustache School / Stick-On Mustaches | |
+| Zeepruimen | Sea Prunes | as in the show |
+| Zweepdoelen | Whip Targets | water whip |
+| De Dampende Guh | The Steaming Guh | tea house |
+| Brr-en-breakfast | Brr and Breakfast | pun on bed and breakfast; keep the pun |
+| Bakker Brrr | Baker Brrr | |
+| Badmeester | Lifeguard | |
+| Havenmeester | Harbor Master | American spelling |
+| VNS Schroeiplek | FNS Scorch Mark | Zhao's flagship ("Vuurnatieschip" = "Fire Nation Ship") |
+| Wachtlokaal / Hut van Zhao / Brug | Guard Room / Zhao's Cabin / Bridge | on the ship |
+| Hier vadsen alleen Mika's | Only Mikas chonk here | vadsen = to chonk |
+| zwarte sneeuw | black snow | soot of the fleet: the warning sign of the show |
+
+### bouw_aarde
+
+| Dutch | English | note |
+|---|---|---|
+| Ba Sing Guh | Ba Sing Guh | never translated (the contract's name) |
+| Oud Ba Sing Guh | Old Ba Sing Guh | the city under the city |
+| Er is geen knabbeltekort in Ba Sing Guh | There is no nibble shortage in Ba Sing Guh | the running line of the city (the show's "There is no war in Ba Sing Se"); on signs: "There is no / nibble shortage." |
+| Stadssteen van Ba Sing Guh | Ba Sing Guh City Stone | the big wall stone |
+| Aardemuntsteen | Earth Coin Stone | aardemunt = Earth Coin (the emblem: round, a square bite out of it) |
+| Kool van de koolman / de koolman | Cabbage Man's Cabbage / the Cabbage Man | "MIJN KOLEN!" = "MY CABBAGES!" (the show's line) |
+| koolkraam | cabbage stall | |
+| Monorailbalk | Monorail Beam | |
+| Catacombenkristal | Catacomb Crystal | |
+| Theekist | Tea Crate | |
+| onderring / middenring / bovenring | Lower Ring / Middle Ring / Upper Ring | the show's names |
+| buitenmuur / buitenpoort | Outer Wall / outer gate | station "Buitenmuur" = "Outer Wall" |
+| paspoortloket / de loketguh | passport desk / the desk guh | |
+| De Jasmijn Draak | The Jasmine Dragon | the show's name |
+| Oom Miroh | Uncle Miroh | Miroh = Mika + Iroh; stays |
+| Aardrommel | Earth Rumble | the show's name |
+| De Blinde Bandiet / De Kei-guh | The Blind Bandit / The Boulder Guh | the show's names |
+| blinddoekbaan | blindfold course | |
+| Meer Laogai | Lake Laogai | the show's name |
+| Botenverhuur | Boat Rental | the shed that is the way down to the base |
+| Dai Li(-Mika) | Dai Li (Mika) | plural "Dai Li Mikas" |
+| Joo Dee-guh | Joo Dee Guh | |
+| Aardekoning-guh | Earth King Guh | |
+| beer Bosco | Bosco the bear | "Gewoon een beer." = "Just a bear." |
+| Long Feng-Mika, Cultuurminister | Long Feng Mika, Minister of Culture | |
+| De Koningsput | The King's Well | the shaft from the palace garden to the crystal chamber |
+| kristalcatacomben / kristalkamer / kristalcel | crystal catacombs / crystal chamber / crystal cell | |
+| gasthuis | guest house | |
+| luchtbizon(-guh) | sky bison (guh) | as the Appa slice |
+| das-molguh | Badger-Mole Guh | contract 3.5 |
+| aardesturen | earthbending | as the show |
+| kn (op het menubord) | nb | "2 kn" = two knabbels -> "2 nb" (nibbles) |
+
+### bouw_vuur
+
+| Dutch | English | note |
+|---|---|---|
+| Vuurnatie | Fire Nation | as the show |
+| Vuurheer Mikai | Fire Lord Mikai | Ozai as a Mika; never translated |
+| Zuka / Oom Miroh / Azula-Mika / Ty Lee-Mika | Zuka / Uncle Miroh / Azula Mika / Ty Lee Mika | the names of DESIGN 5 |
+| Lauwe lava | Lukewarm Lava | the block: looks like lava, harms nobody |
+| Lauwe vlam | Lukewarm Flame | |
+| Vuurnatie-embleem | Fire Nation Emblem | |
+| Portret van Vuurheer Mikai | Portrait of Fire Lord Mikai | |
+| Zonnekrijgersteen | Sun Warrior Stone | Zonnekrijgers = Sun Warriors |
+| Witte Lotus-tegel | White Lotus Tile | Orde van de Witte Lotus = Order of the White Lotus |
+| Kraterpoort | Crater Gate | the tunnel through the crater wall |
+| Havenpoort | Harbor Gate | American spelling |
+| Het Kokend Rotsblok | The Boiling Rock | as the show |
+| De Koelcel | The Cooler | as the show |
+| Sintelstrand | Ember Island | the show's name for the place; "Ember Beach" where only the beach is meant |
+| De jongen in de kaasbol | The Boy in the Cheese Ball | the play (the show: The Boy in the Iceberg); kaasbol = Cheese Ball |
+| Dag van de Zwarte Zon | Day of Black Sun | as the show |
+| Drakendans | Dancing Dragon | as the show |
+| Leeuwschildpad-guh | Lion Turtle Guh | |
+| vuurvlokken | fire flakes | as the show |
+| duwstok | shoving stick | Mikas only shove |
+| Heet Hapje | Hot Bite | the bakery |
+| De Lauwe Plons | The Lukewarm Splash | the bathhouse |
+| VNS Aangebrand | FNS Scorched | the moored ship (VNS = Vuurnatie-schip) |
+| havikpost | messenger hawk mail | |
+
+### bouw_zij1
+
+| Dutch | English | note |
+|---|---|---|
+| Omashguh | Omashguh | the mountain town (Omashu); untranslated |
+| Westelijke Luchttempel | Western Air Temple | |
+| Vuurtempel van Roku-guh | Fire Temple of Roku Guh | |
+| koning Bumi-guh | King Bumi Guh | |
+| Flopsie | Flopsie | the king's far too big pet |
+| postgoot | Mail Chute | the block of the slides; "postglijbaan" = mail slide |
+| postkantoor / postguh / postbak | Post Office / the mail guh / Mail Bin | |
+| de kurkentrekker | the corkscrew | the spiral tower on the post square |
+| proef | Trial | Proef 1-3: the trial rooms of the king |
+| kristalsnoep | Crystal Candy | rock candy; the reward ring is phase B |
+| das-molguh | Badger-Mole Guh | as in the shared glossary |
+| luchtnon-guh | the air nun guh | |
+| windgang / windfluit | wind corridor / Wind Flute | "Windfluit 3" = "Wind Flute 3" |
+| orgelpijp | organ pipe | the fifth, vertical wind corridor |
+| luchtbizon-guh / bizonstal / hok | sky bison guh / Bison Stable / Pen | |
+| Vuurwijze | Fire Sage | |
+| vuurdeur | fire door | |
+| heiligdom | sanctum | |
+| Guhvatar Roku-guh | Guhvatar Roku Guh | |
+| eeuwige vlam | Eternal Flame | |
+| vuurvlokken | Fire Flakes | the snack |
+| Halvemaaneiland | Crescent Island | |
+| zonnewende | solstice | |
+| Stiltezaal / Eetzaal | Quiet Hall / Dining Hall | |
+| Grote plekken van de buiteneilanden | Great Places of the Outer Islands | FTB section title |
+
+### bouw_zij2
+
+| Dutch | English | note |
+|---|---|---|
+| Kyoshi-dorp | Kyoshi Village | contract 3.5 |
+| Bibliotheek van Wan Shi Guh | Wan Shi Guh's Library | contract 3.5 |
+| Leeuwschildpad-eiland / Leeuwschildpad-guh | Lion Turtle Island / Lion Turtle Guh | contract 3.5 |
+| Leegtehaven | Void Harbor | contract 3.5; American spelling |
+| Guhvleugel-ringenrace | Guh Wing Ring Race | contract 3.5 |
+| Ringenrace-ring | Ring Race Ring | the block of the hoops |
+| Haven, dorp en bibliotheek | Harbor, Village and Library | FTB section title |
+| Kyoshi-guh | Kyoshi Guh | the statue; "Kyoshi-krijgsterguhs" = Kyoshi Warrior Guhs |
+| dojo / waaierdans / schminktafel | Dojo / fan dance / Makeup Table | |
+| dorpsoudste | village elder | |
+| Unaguh | Unaguh | the Unagi of the pond; not translated |
+| uilenzaal / kennisbalie | Owl Hall / Knowledge Desk | |
+| Zaal 1-5: Knabbelkunde, Vadskunst, Njegologie, Mika-zaken, Kaaskaarten | Hall 1-5: Nibble Studies, Art of Chonking, Nyegology, Mika Matters, Cheese Maps | vads = chonk, njeg = nyeg |
+| planetarium / Het Wiel | planetarium / The Wheel | |
+| prof. Zei-guh | Prof. Zei Guh | |
+| steiger / veerpier / scheepswerf / helling / loods | Jetty / Ferry Pier / Shipyard / slip / The Shed | |
+| De Vadsige Walvis | The Chonky Whale | the pub of the Void Harbor |
+| De Vadsige Golf | The Chonky Wave | the ferry |
+| De Spijtige Spatel | The Sorry Spatula | the kitchen that waits for the Mika cook |
+| De Vette Hap / De Gladde Aal | The Greasy Bite / The Slippery Eel | the two moored Grease Ships |
+| Vuurtoren Guhoortje | Guh Ear Lighthouse | |
+| prikbord | notice board | |
+| Flitskraam / Vet & Honing / Bijna Vers / Teruggevonden | Flash Stall / Grease & Honey / Almost Fresh / Lost & Found | the four market stalls |
+| Starttoren / Landingsbaan / Landingskussen | Start Tower / Landing Strip / Landing Cushion | |
+| Kruimelkraam | Crumb Stall | |
+| Erepodium | Winners' Podium | |
+
+### sponsguh_wezens
+
+The English follows the well-known English names of the parodied show, guh-ified the same way as the Dutch (build contract 3.5).
+
+| Dutch | English | note |
+|---|---|---|
+| Sponsguh Kaasbroek | Spongeguh Cheesepants | the hero of the story; "Sponsguh" alone = Spongeguh |
+| Patguh Ster | Patguh Star |  |
+| Meneer Krabguh | Mr. Krabguh |  |
+| Parel | Pearl | his daughter |
+| Sandy-guh | Sandy Guh |  |
+| Gerrit | Gary | the snail; he says njeg = nyeg |
+| Octo Tentakel | Squidmika Tentacles | Octo-Mika = Squidmika |
+| Octoliam | Squilliam | the rival |
+| Plankmika | Plankmika |  |
+| Karen | Karen | his computer wife (a block) |
+| Juf Pufguh | Mrs. Puffguh |  |
+| Koning Neptuguh | King Neptuguh |  |
+| Prinses Mindy-guh | Princess Mindy Guh |  |
+| Dennis-Mika | Dennis Mika |  |
+| De Cycloop | The Cyclops | "the Cyclops" in running text |
+| David Hasselguh | David Hasselguh |  |
+| Loopgraafmonster | Trench Monster | de loopgraaf = the Trench |
+| Bikinibodemguh | Bikini Bottom Guh | a citizen |
+| De Vliegende Guhlander | The Flying Guhchman | the ghost captain and his ship |
+| Zeemeerman | Mermaid Guh |  |
+| Mosselguh | Barnacle Guh |  |
+| Knabbelburgermobiel | Patty Wagon |  |
+| Knabbelburger | Nibble Patty |  |
+| kwallenjam | Jelly Jam |  |
+| Krokante grill | Krusty Grill | De Krokante Knabbel = The Krusty Nibble |
+| Besteltafel | Order Table |  |
+| Vruchthuis (-wand, -dak, -raam, -deur) | Fruit House (Wall, Roof, Window, Door) |  |
+| Bellenblaas | Bubble Blower |  |
+| Spooklantaarn | Ghost Lantern |  |
+| Vierkante broek met stropdas | Square Pants with Tie | clothes |
+| Krokante Knabbel-petje | Krusty Nibble Cap | clothes |
+| Patguh's bloemetjesbroek | Patguh's Flower Trunks | clothes |
+| Sandy's luchthelm | Sandy's Air Helmet | clothes |
+| Plankmika-antennes | Plankmika Antennas | clothes |
+| Guhfy Guhber-ijshoedje | Guhfy Guhber Ice Cream Hat | clothes |
+| Heldencape | Hero Cape | clothes |
+| maatje (Sponsguh) | buddy | "Sponsguh als maatje" = Spongeguh as your buddy |
+| knabbelkluis | nibble safe |  |
+| eetsok | dining sock | the Flying Guhchman's dining sock |
+| onzichtbare bootmobiel | invisible boatmobile |  |
+
+Lines that follow a well-known English line of the show:
+
+| Dutch | English |
+|---|---|
+| Ik ben er klaar voor! | I'm ready! |
+| Is knabbelsaus een instrument? | Is nibble sauce an instrument? |
+| Hallo, ik hou van knabbels! | Hello, I like nibbles! |
+| MIJN POOT! | MY LEG! |
+| KWAAAD! | EVIL! |
+
+### bouw_bikinibodem
+
+| Dutch | English | note |
+|---|---|---|
+| Bikinibodem onder de leegte | Bikini Bottom Under the Void | the structure name; Bikinibodem = Bikini Bottom (kern.md) |
+| Gloeikoraal | Glow Coral | the street lighting of the town |
+| Zelfportret van Octo Tentakel | Self-Portrait of Squidmika Tentacles | |
+| Klarinet op standaard | Clarinet on a Stand | |
+| Bewakingscamera | Security Camera | |
+| Archiefkast | Filing Cabinet | Plan A to Plan Z |
+| Bellenplein | Bubble Square | the plein with the lift |
+| Hoofdstraat / Bellenlaan / Schelpstraat | Main Street / Bubble Lane / Conch Street | Schelpstraat follows the show (Conch Street) |
+| Vaarschool | Boating School | juf Pufguh = Mrs. Puffguh |
+| Rusthuis De Luie Schelp | The Lazy Shell Rest Home | the show: Shady Shoals |
+| Zeemeergrot | Mermalair | follows the show |
+| Rotsbodem | Rock Bottom | the bus that never comes |
+| Aanlegplaats | Mooring | of De Vliegende Guhlander (The Flying Guhchman) |
+| Tot bubbels! | See you in the bubbles! | the goodbye of the town |
+| "Ik ben er klaar voor!" | "I'm ready!" | the well-known line |
+| "CHOCOLA?!" | "CHOCOLATE?!" | the well-known line |
+| "MIJN POOT!" | "MY LEG!" | (sponsguh_wezens uses the same) |
+
+### bouw_schelpenstad
+
+Names of build contract 3.5 are used as they stand (Schelpenstad = Shell City, De Ruige Kroeg = The Thug Tug, de loopgraaf =
+the Trench). New here:
+
+| Dutch | English | note |
+|---|---|---|
+| Leegtezee | Void Sea | the void beyond the beach of Shell City |
+| Schelpenstad Souvenirs & Zo | Shell City Gifts & Stuff | the Cyclops's shop (the film: "Marine Gifts & Sundries") |
+| schelpsteen | Shell Stone | building block |
+| droogtelamp | Drying Lamp | "heat lamp" of the film; Drying fits the dried souvenirs |
+| gedroogd souvenir | Dried Souvenir |  |
+| wiebeloogjes | googly eyes |  |
+| kroonkussen | Crown Cushion |  |
+| stopcontact | Power Socket |  |
+| sproeier | Sprinkler |  |
+| neonbord | Neon Sign | Neonbord van De Ruige Kroeg = Thug Tug Neon Sign |
+| ansichtkaartenrek | Postcard Rack |  |
+| De Lange Njeg | The Long Nyeg | the lighthouse |
+| Guhwatch | Guhwatch | the lifeguard tower (Baywatch) |
+| De Zoute Snoet | The Salty Snout | beach bar |
+| Kaartjes & Kruimels | Cards & Crumbs | postcard kiosk |
+| De Brullende Mika's | The Roaring Mikas | the band on the bar's poster |
+| baby'tje | baby | "Wie hier een bel blaast is een baby'tje" = "Whoever blows a bubble here is a baby" (the film's bubble-blowing baby) |
+| Groetjes uit Schelpenstad | Greetings from Shell City | advancement, postcards |

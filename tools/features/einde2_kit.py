@@ -125,10 +125,13 @@ LICHT.update({"guhs:lichtstaafje": 14, "guhs:kristalkaas_kristal": 12, "guhs:kri
 WATER = ("minecraft:water", "guhs:kaas_saus")
 # small things you walk through (on top of guheinde_bouw's thin blocks) and things you climb
 DUN = ("korstgras", "korststruik", "schimmelpaddenstoel", "kristalkaas_kristal", "lichtstaafje", "minecraft:rail", "_rail", "flower", "_tulip",
-       "minecraft:short_grass", "minecraft:tall_grass", "minecraft:fern", "minecraft:snow", "minecraft:end_rod", "minecraft:candle", "_banner",
-       "minecraft:lever", "minecraft:tripwire", "minecraft:redstone_wire", "minecraft:light", "minecraft:structure_void", "glow_lichen",
+       "minecraft:short_grass", "minecraft:tall_grass", "minecraft:fern", "minecraft:end_rod", "minecraft:candle", "_banner",
+       "minecraft:lever", "minecraft:tripwire", "minecraft:redstone_wire", "minecraft:structure_void", "glow_lichen", "lightning_rod",
        "minecraft:ladder", "minecraft:scaffolding", "_fence_gate", "trapdoor", "amethyst_cluster", "minecraft:fire", "sapling", "minecraft:dandelion",
        "minecraft:poppy")
+# ... and these only by their whole name (as a part of a name "minecraft:light" is also light_blue_* and light_gray_*, and
+# "minecraft:snow" also the snow block: the check walked and shone through such walls)
+DUN_HEEL = ("minecraft:snow", "minecraft:light")
 KLIM = ("minecraft:ladder", "minecraft:scaffolding", "minecraft:vine")
 
 
@@ -320,7 +323,7 @@ class Bouw(gb.Bouw):
         self.ruim = self.band == "laag"   # (the tiles empty their box first: every tile is saved, also an empty one)
 
     def is_dun(self, n):
-        return n in self.dun or gb.is_thin(n) or any(t in n for t in DUN)
+        return n in self.dun or n in DUN_HEEL or gb.is_thin(n) or any(t in n for t in DUN)
 
     def solid_at(self, c):
         b = self.s.blocks.get(c)

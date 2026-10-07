@@ -1,5 +1,6 @@
 {
   "gui.guhs.einde2.beschermd": "Nyeg! This place stays whole, for every guh that comes after you.",
+  "gui.guhs.einde2.bed": "Nyeg! This little bed already belongs to a chonky guh. Do your sleeping at home.",
   "gui.guhs.einde2.commando.geen": "Nyeg: %s has no fixed spot in this world (not built yet, or no spot found).",
   "gui.guhs.einde2.commando.waar": "%s: start chunk %s, origin %s, box %s",
   "gui.guhs.einde2.commando.geen_plek": "Nyeg: %s has no spot '%s' (or it isn't fixed in this world yet).",
