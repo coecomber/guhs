@@ -103,6 +103,11 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         // </balto>
         // <mewtwo>
         // </mewtwo>
+        // einde2, cast_schurk (CONTRACT_E2 11): the Mika's of the Guhvatar story (they only shove); its creatures are entity types of their own
+        // <einde2_cast_schurk>
+        VUURHEER_MIKAI(1.6f), VUURHEER_MIKAI_KOMEET(1.6f), VUURHEER_MIKAI_VADSIG(1.25f), AZULA_MIKA(1.0f), TY_LEE_MIKA(0.9f), ZHAO_MIKA(1.05f),
+        LONG_FENG_MIKA(1.05f), DAI_LI_MIKA(1.0f), VUURNATIE_MIKA(1.0f), GEVANGENIS_DIRECTEUR_MIKA(1.1f), MIKA_KOK(1.0f), VESTINGKAPITEIN_MIKA(1.15f),
+        // </einde2_cast_schurk>
         // <hemel>
         // </hemel>
         // <guhwaii>

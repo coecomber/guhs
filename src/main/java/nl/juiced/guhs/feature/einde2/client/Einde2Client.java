@@ -27,6 +27,7 @@ public final class Einde2Client {
         nl.juiced.guhs.feature.einde2.bouwzij1.client.E2BouwZij1Client.init(modBus);
         nl.juiced.guhs.feature.einde2.bouwzij2.client.E2BouwZij2Client.init(modBus);
         nl.juiced.guhs.feature.einde2.sponsguh.client.E2SponsguhClient.init(modBus);
+        nl.juiced.guhs.feature.einde2.castschurk.client.E2CastSchurkClient.init(modBus);
         nl.juiced.guhs.feature.einde2.bouwbikinibodem.client.E2BouwBikinibodemClient.init(modBus);
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.client.E2BouwSchelpenstadClient.init(modBus);
     }

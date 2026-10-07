@@ -103,6 +103,7 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.bouwzij1.E2BouwZij1Feature.register(modBus);
         nl.juiced.guhs.feature.einde2.bouwzij2.E2BouwZij2Feature.register(modBus);
         nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature.register(modBus);
+        nl.juiced.guhs.feature.einde2.castschurk.E2CastSchurkFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.bouwbikinibodem.E2BouwBikinibodemFeature.register(modBus);
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.register(modBus);
         // the stand-ins that are left: attributes, and their Guhdex page (the page's name is the entity id)
@@ -134,6 +135,7 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.bouwzij1.E2BouwZij1Feature.payloads(registrar);
         nl.juiced.guhs.feature.einde2.bouwzij2.E2BouwZij2Feature.payloads(registrar);
         nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature.payloads(registrar);
+        nl.juiced.guhs.feature.einde2.castschurk.E2CastSchurkFeature.payloads(registrar);
         nl.juiced.guhs.feature.einde2.bouwbikinibodem.E2BouwBikinibodemFeature.payloads(registrar);
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.payloads(registrar);
     }
@@ -154,6 +156,7 @@ public final class Einde2 {
         nl.juiced.guhs.feature.einde2.bouwzij1.E2BouwZij1Feature.creative(output);
         nl.juiced.guhs.feature.einde2.bouwzij2.E2BouwZij2Feature.creative(output);
         nl.juiced.guhs.feature.einde2.sponsguh.E2SponsguhFeature.creative(output);
+        nl.juiced.guhs.feature.einde2.castschurk.E2CastSchurkFeature.creative(output);
         nl.juiced.guhs.feature.einde2.bouwbikinibodem.E2BouwBikinibodemFeature.creative(output);
         nl.juiced.guhs.feature.einde2.bouwschelpenstad.E2BouwSchelpenstadFeature.creative(output);
     }
