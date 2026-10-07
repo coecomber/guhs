@@ -2,37 +2,227 @@
   "structuur": "kyoshi_dorp",
   "soort": "leegte_bouw",
   "grootte": [
-    5,
-    4,
-    5
+    128,
+    72,
+    128
   ],
   "anker": [
-    8,
+    72,
     0,
-    8
+    72
   ],
   "plekken": {
     "aankomst": {
       "soort": "zone",
       "pos": [
-        0,
-        1,
-        0
+        59,
+        31,
+        105
       ],
       "tot": [
-        4,
-        3,
-        4
+        69,
+        39,
+        115
       ],
-      "wie": "hier komt de echte plek nog"
+      "wie": "het landingsterras van het Kyoshi-dorp"
     },
     "aankomst_speler": {
       "soort": "prop",
       "pos": [
-        2,
-        1,
-        2
+        64,
+        31,
+        110
       ]
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        64,
+        64,
+        152
+      ],
+      "wie": "van het zuiden, hoog: over de straat heen recht in het gezicht van het beeld"
+    },
+    "kyoshi_beeld": {
+      "soort": "prop",
+      "pos": [
+        64,
+        31,
+        59
+      ],
+      "wie": "de voet van het reuzenbeeld van Kyoshi-guh: de onderste trede, midden voor"
+    },
+    "bewoner_1": {
+      "soort": "npc",
+      "pos": [
+        60,
+        31,
+        85
+      ],
+      "yaw": -90.0,
+      "wie": "een dorpsguh voor Huize Natte Sok"
+    },
+    "bewoner_2": {
+      "soort": "npc",
+      "pos": [
+        68,
+        31,
+        85
+      ],
+      "yaw": 90.0,
+      "wie": "een dorpsguh voor Het Waaierhuis"
+    },
+    "bewoner_3": {
+      "soort": "npc",
+      "pos": [
+        60,
+        31,
+        97
+      ],
+      "yaw": -90.0,
+      "wie": "een dorpsguh voor Vis & Vads"
+    },
+    "bewoner_4": {
+      "soort": "npc",
+      "pos": [
+        68,
+        31,
+        97
+      ],
+      "yaw": 90.0,
+      "wie": "een dorpsguh voor Bij Tante Koi"
+    },
+    "dorpsoudste": {
+      "soort": "npc",
+      "pos": [
+        52,
+        31,
+        68
+      ],
+      "yaw": -90.0,
+      "wie": "de dorpsoudste-guh, voor zijn veranda aan het plein",
+      "kind": "KYOSHI_DORPSOUDSTE"
+    },
+    "dojo": {
+      "soort": "zone",
+      "pos": [
+        85,
+        31,
+        61
+      ],
+      "tot": [
+        107,
+        41,
+        79
+      ],
+      "wie": "de dojo van de Kyoshi-krijgsterguhs"
+    },
+    "dansvloer": {
+      "soort": "zone",
+      "pos": [
+        91,
+        31,
+        65
+      ],
+      "tot": [
+        101,
+        34,
+        75
+      ],
+      "wie": "de waaierdansvloer: 11 x 11, vlak"
+    },
+    "dans_speler": {
+      "soort": "prop",
+      "pos": [
+        96,
+        31,
+        70
+      ],
+      "wie": "hier staat de speler bij de waaierdans (op het gouden blok)"
+    },
+    "krijgster_leider": {
+      "soort": "npc",
+      "pos": [
+        96,
+        31,
+        63
+      ],
+      "yaw": 0.0,
+      "wie": "de leidster van de Kyoshi-krijgsterguhs, voor de waaierwand",
+      "kind": "KYOSHI_KRIJGSTERGUH"
+    },
+    "krijgster_1": {
+      "soort": "npc",
+      "pos": [
+        105,
+        31,
+        66
+      ],
+      "yaw": 90.0,
+      "wie": "een Kyoshi-krijgsterguh, langs de oostkant van de dansvloer",
+      "kind": "KYOSHI_KRIJGSTERGUH"
+    },
+    "krijgster_2": {
+      "soort": "npc",
+      "pos": [
+        105,
+        31,
+        70
+      ],
+      "yaw": 90.0,
+      "wie": "een Kyoshi-krijgsterguh, langs de oostkant van de dansvloer",
+      "kind": "KYOSHI_KRIJGSTERGUH"
+    },
+    "krijgster_3": {
+      "soort": "npc",
+      "pos": [
+        105,
+        31,
+        74
+      ],
+      "yaw": 90.0,
+      "wie": "een Kyoshi-krijgsterguh, langs de oostkant van de dansvloer",
+      "kind": "KYOSHI_KRIJGSTERGUH"
+    },
+    "schminktafel": {
+      "soort": "prop",
+      "pos": [
+        87,
+        31,
+        79
+      ],
+      "wie": "de schminktafel onder de spiegel (hier krijg je de Kyoshi-schmink)"
+    },
+    "fan_guh": {
+      "soort": "npc",
+      "pos": [
+        61,
+        31,
+        100
+      ],
+      "yaw": -90.0,
+      "wie": "de schuimbekkende fan-guh, naast zijn fanclubkraam bij de poort",
+      "kind": "FANGUH"
+    },
+    "otter_1": {
+      "soort": "wezen",
+      "pos": [
+        40,
+        31,
+        80
+      ],
+      "yaw": 180.0,
+      "entity": "guhs:otter_pinguinguh"
+    },
+    "otter_2": {
+      "soort": "wezen",
+      "pos": [
+        33,
+        31,
+        99
+      ],
+      "yaw": 0.0,
+      "entity": "guhs:otter_pinguinguh"
     }
   }
 }

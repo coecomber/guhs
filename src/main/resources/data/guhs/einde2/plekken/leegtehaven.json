@@ -2,37 +2,308 @@
   "structuur": "leegtehaven",
   "soort": "leegte_bouw",
   "grootte": [
-    5,
-    4,
-    5
+    144,
+    60,
+    116
   ],
   "anker": [
-    8,
+    72,
     0,
-    8
+    56
   ],
   "plekken": {
+    "vetschip_1": {
+      "soort": "zone",
+      "pos": [
+        42,
+        23,
+        15
+      ],
+      "tot": [
+        54,
+        46,
+        52
+      ],
+      "wie": "het afgemeerde vetschip aan steiger 1"
+    },
+    "steiger_1": {
+      "soort": "zone",
+      "pos": [
+        56,
+        31,
+        14
+      ],
+      "tot": [
+        60,
+        36,
+        54
+      ],
+      "wie": "steiger 1"
+    },
+    "vetschip_2": {
+      "soort": "zone",
+      "pos": [
+        90,
+        23,
+        18
+      ],
+      "tot": [
+        102,
+        46,
+        55
+      ],
+      "wie": "het afgemeerde vetschip aan steiger 2"
+    },
+    "steiger_2": {
+      "soort": "zone",
+      "pos": [
+        84,
+        31,
+        14
+      ],
+      "tot": [
+        88,
+        36,
+        54
+      ],
+      "wie": "steiger 2"
+    },
+    "veer_dek": {
+      "soort": "zone",
+      "pos": [
+        105,
+        31,
+        83
+      ],
+      "tot": [
+        121,
+        36,
+        91
+      ],
+      "wie": "het open dek van veerboot De Vadsige Golf: hier staan de passagiers"
+    },
+    "handelaar_1": {
+      "soort": "wezen",
+      "pos": [
+        63,
+        31,
+        57
+      ],
+      "yaw": 0.0,
+      "entity": "guhs:ender_mika"
+    },
+    "handelaar_2": {
+      "soort": "wezen",
+      "pos": [
+        69,
+        31,
+        57
+      ],
+      "yaw": 0.0,
+      "entity": "guhs:ender_mika"
+    },
+    "handelaar_3": {
+      "soort": "wezen",
+      "pos": [
+        75,
+        31,
+        57
+      ],
+      "yaw": 0.0,
+      "entity": "guhs:ender_mika"
+    },
+    "handelaar_4": {
+      "soort": "wezen",
+      "pos": [
+        81,
+        31,
+        57
+      ],
+      "yaw": 0.0,
+      "entity": "guhs:ender_mika"
+    },
+    "markt": {
+      "soort": "zone",
+      "pos": [
+        61,
+        31,
+        55
+      ],
+      "tot": [
+        83,
+        36,
+        66
+      ],
+      "wie": "de markt van de Ender-Mika's"
+    },
+    "prikbord": {
+      "soort": "prop",
+      "pos": [
+        72,
+        32,
+        68
+      ],
+      "wie": "het prikbord: 3 breed, 2 hoog, kijkt naar het zuiden"
+    },
+    "veerpier": {
+      "soort": "zone",
+      "pos": [
+        98,
+        31,
+        74
+      ],
+      "tot": [
+        130,
+        36,
+        78
+      ],
+      "wie": "de veerpier"
+    },
+    "veerman": {
+      "soort": "npc",
+      "pos": [
+        100,
+        31,
+        76
+      ],
+      "yaw": 90.0,
+      "wie": "de veerman-guh, aan het begin van de veerpier bij de loopplank",
+      "kind": "VEERGUH"
+    },
+    "werf": {
+      "soort": "zone",
+      "pos": [
+        8,
+        31,
+        62
+      ],
+      "tot": [
+        46,
+        42,
+        90
+      ],
+      "wie": "de scheepswerf"
+    },
+    "helling": {
+      "soort": "prop",
+      "pos": [
+        18,
+        30,
+        76
+      ],
+      "wie": "de helling: de wieg is x 12-24, z 72-80; daarboven 7 hoog vrij (hier wordt het vetbootje gebouwd)"
+    },
+    "scheepsbouwer": {
+      "soort": "npc",
+      "pos": [
+        28,
+        31,
+        76
+      ],
+      "yaw": 90.0,
+      "wie": "de scheepsbouwer-guh, kijkt uit over de helling",
+      "kind": "SCHEEPSBOUWERGUH"
+    },
+    "kroeg": {
+      "soort": "zone",
+      "pos": [
+        80,
+        31,
+        80
+      ],
+      "tot": [
+        95,
+        42,
+        95
+      ],
+      "wie": "havenkroeg De Vadsige Walvis"
+    },
+    "kroegbaas": {
+      "soort": "npc",
+      "pos": [
+        86,
+        31,
+        92
+      ],
+      "yaw": 180.0,
+      "wie": "de kroegbaas-guh, achter de tap",
+      "kind": "KROEGBAASGUH"
+    },
+    "kapitein_hoek": {
+      "soort": "zone",
+      "pos": [
+        90,
+        31,
+        81
+      ],
+      "tot": [
+        94,
+        35,
+        85
+      ],
+      "wie": "de hoek van de oude kapitein-guh"
+    },
+    "walvis_bewijs": {
+      "soort": "prop",
+      "pos": [
+        90,
+        31,
+        81
+      ],
+      "wie": "de lessenaar in de kapiteinshoek: hier leg je het bewijs van de walvis neer"
+    },
+    "kapitein": {
+      "soort": "npc",
+      "pos": [
+        93,
+        31,
+        83
+      ],
+      "yaw": 90.0,
+      "wie": "de oude kapitein-guh, voor zijn bankje",
+      "kind": "KAPITEINGUH"
+    },
+    "mika_kok": {
+      "soort": "npc",
+      "pos": [
+        92,
+        31,
+        65
+      ],
+      "yaw": 90.0,
+      "wie": "de spijtige Mika-kok (later: hij verhuist hierheen uit de vesting)",
+      "kind": "MIKA_KOK"
+    },
     "aankomst": {
       "soort": "zone",
       "pos": [
-        0,
-        1,
-        0
+        67,
+        31,
+        98
       ],
       "tot": [
-        4,
-        3,
-        4
+        77,
+        39,
+        108
       ],
-      "wie": "hier komt de echte plek nog"
+      "wie": "de landingsvlonder van de Leegtehaven"
     },
     "aankomst_speler": {
       "soort": "prop",
       "pos": [
-        2,
-        1,
-        2
+        72,
+        31,
+        104
       ]
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        72,
+        52,
+        150
+      ],
+      "wie": "van het zuiden, hoog: de hele haven met de masten erachter"
     }
   }
 }

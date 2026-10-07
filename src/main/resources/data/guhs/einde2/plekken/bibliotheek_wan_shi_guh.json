@@ -2,37 +2,321 @@
   "structuur": "bibliotheek_wan_shi_guh",
   "soort": "leegte_bouw",
   "grootte": [
-    5,
-    4,
-    5
+    112,
+    96,
+    112
   ],
   "anker": [
-    8,
+    56,
     0,
-    8
+    56
   ],
   "plekken": {
+    "planetarium_wiel": {
+      "soort": "prop",
+      "pos": [
+        22,
+        56,
+        56
+      ],
+      "wie": "het wiel van het planetarium: de magneetsteen op de sokkel (draai zon en maan)"
+    },
+    "professor": {
+      "soort": "npc",
+      "pos": [
+        25,
+        55,
+        59
+      ],
+      "yaw": 135.0,
+      "wie": "professor Zei-guh, bij het wiel van het planetarium",
+      "kind": "PROFESSOR_ZEI_GUH"
+    },
+    "planetarium": {
+      "soort": "zone",
+      "pos": [
+        14,
+        55,
+        48
+      ],
+      "tot": [
+        30,
+        69,
+        64
+      ],
+      "wie": "het planetarium"
+    },
+    "guhboek_kast_1": {
+      "soort": "prop",
+      "pos": [
+        56,
+        56,
+        76
+      ],
+      "wie": "de gouden kast van zaal 1: hier verschijnen nieuwe Guhboeken"
+    },
+    "zaal_1": {
+      "soort": "zone",
+      "pos": [
+        36,
+        55,
+        36
+      ],
+      "tot": [
+        76,
+        62,
+        76
+      ],
+      "wie": "Zaal 1: Knabbelkunde"
+    },
+    "guhboek_kast_2": {
+      "soort": "prop",
+      "pos": [
+        56,
+        47,
+        76
+      ],
+      "wie": "de gouden kast van zaal 2: hier verschijnen nieuwe Guhboeken"
+    },
+    "zaal_2": {
+      "soort": "zone",
+      "pos": [
+        36,
+        46,
+        36
+      ],
+      "tot": [
+        76,
+        53,
+        76
+      ],
+      "wie": "Zaal 2: Vadskunst"
+    },
+    "guhboek_kast_3": {
+      "soort": "prop",
+      "pos": [
+        56,
+        38,
+        76
+      ],
+      "wie": "de gouden kast van zaal 3: hier verschijnen nieuwe Guhboeken"
+    },
+    "zaal_3": {
+      "soort": "zone",
+      "pos": [
+        36,
+        37,
+        36
+      ],
+      "tot": [
+        76,
+        44,
+        76
+      ],
+      "wie": "Zaal 3: Njegologie"
+    },
+    "guhboek_kast_4": {
+      "soort": "prop",
+      "pos": [
+        56,
+        29,
+        76
+      ],
+      "wie": "de gouden kast van zaal 4: hier verschijnen nieuwe Guhboeken"
+    },
+    "zaal_4": {
+      "soort": "zone",
+      "pos": [
+        36,
+        28,
+        36
+      ],
+      "tot": [
+        76,
+        35,
+        76
+      ],
+      "wie": "Zaal 4: Mika-zaken"
+    },
+    "guhboek_kast_5": {
+      "soort": "prop",
+      "pos": [
+        56,
+        20,
+        76
+      ],
+      "wie": "de gouden kast van zaal 5: hier verschijnen nieuwe Guhboeken"
+    },
+    "zaal_5": {
+      "soort": "zone",
+      "pos": [
+        36,
+        19,
+        36
+      ],
+      "tot": [
+        76,
+        26,
+        76
+      ],
+      "wie": "Zaal 5: Kaaskaarten"
+    },
+    "knipoog_mew_plank": {
+      "soort": "prop",
+      "pos": [
+        56,
+        13,
+        52
+      ],
+      "wie": "de bovenkant van de boekenkast achter Wan Shi Guh: hier gooit Mew-guh de boeken af"
+    },
+    "knipoog_mew_zweef": {
+      "soort": "pad",
+      "punten": [
+        [
+          53,
+          14,
+          52
+        ],
+        [
+          59,
+          14,
+          52
+        ]
+      ],
+      "wie": "de lijn waarlangs Mew-guh boven de kast zweeft"
+    },
+    "wan_shi_guh": {
+      "soort": "npc",
+      "pos": [
+        56,
+        11,
+        54
+      ],
+      "yaw": 0.0,
+      "wie": "de uil-guh Wan Shi Guh, op zijn verhoging onder de schacht",
+      "kind": "WAN_SHI_GUH"
+    },
+    "kennis_balie": {
+      "soort": "prop",
+      "pos": [
+        56,
+        11,
+        57
+      ],
+      "wie": "de kennisbalie: hier ruil je een stukje kennis"
+    },
+    "knipoog_mew_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          56,
+          13,
+          63
+        ],
+        [
+          56,
+          12,
+          54
+        ]
+      ],
+      "wie": "de camera van de knipoog met Mew-guh: kijkt naar de uil, met de kast achter hem"
+    },
+    "vosguh_3": {
+      "soort": "npc",
+      "pos": [
+        61,
+        11,
+        59
+      ],
+      "yaw": 90.0,
+      "wie": "een vos-guh, naast de verhoging in de uilenzaal",
+      "kind": "VOSGUH"
+    },
+    "uilenzaal": {
+      "soort": "zone",
+      "pos": [
+        36,
+        10,
+        36
+      ],
+      "tot": [
+        76,
+        17,
+        76
+      ],
+      "wie": "de uilenzaal: de onderste zaal, het rijk van Wan Shi Guh"
+    },
+    "guhboek_kast_6": {
+      "soort": "prop",
+      "pos": [
+        56,
+        11,
+        76
+      ],
+      "wie": "de gouden kast van de uilenzaal: hier verschijnen nieuwe Guhboeken"
+    },
+    "ingang_top": {
+      "soort": "prop",
+      "pos": [
+        56,
+        66,
+        66
+      ],
+      "wie": "de vensterbank van het raam in de torenspits: hier klim je naar binnen"
+    },
+    "vosguh_1": {
+      "soort": "npc",
+      "pos": [
+        60,
+        64,
+        63
+      ],
+      "yaw": 180.0,
+      "wie": "een vos-guh, in de torenspits bij de ingang",
+      "kind": "VOSGUH"
+    },
     "aankomst": {
       "soort": "zone",
       "pos": [
-        0,
-        1,
-        0
+        51,
+        67,
+        92
       ],
       "tot": [
-        4,
-        3,
-        4
+        61,
+        75,
+        102
       ],
-      "wie": "hier komt de echte plek nog"
+      "wie": "het landingsplein in de woestijn"
     },
     "aankomst_speler": {
       "soort": "prop",
       "pos": [
-        2,
-        1,
-        2
+        56,
+        67,
+        97
       ]
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        56,
+        90,
+        138
+      ],
+      "wie": "van het zuiden, hoog: de spits in het zand, en daaronder de toren in de leegte"
+    },
+    "vosguh_2": {
+      "soort": "npc",
+      "pos": [
+        56,
+        37,
+        45
+      ],
+      "yaw": 0.0,
+      "wie": "een vos-guh, met een stapel boeken in zaal 3",
+      "kind": "VOSGUH"
     }
   }
 }

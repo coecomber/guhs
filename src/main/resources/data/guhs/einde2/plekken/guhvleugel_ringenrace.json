@@ -2,37 +2,292 @@
   "structuur": "guhvleugel_ringenrace",
   "soort": "leegte_bouw",
   "grootte": [
-    5,
-    4,
-    5
+    256,
+    80,
+    96
   ],
   "anker": [
-    8,
+    120,
     0,
-    8
+    40
   ],
   "plekken": {
     "aankomst": {
       "soort": "zone",
       "pos": [
-        0,
-        1,
-        0
+        19,
+        41,
+        43
       ],
       "tot": [
-        4,
-        3,
-        4
+        29,
+        48,
+        53
       ],
-      "wie": "hier komt de echte plek nog"
+      "wie": "de landingsplek van de ringenrace"
     },
     "aankomst_speler": {
       "soort": "prop",
       "pos": [
-        2,
-        1,
-        2
+        24,
+        41,
+        48
       ]
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        -28,
+        66,
+        4
+      ],
+      "wie": "over het eiland heen de hele baan in"
+    },
+    "startlijn": {
+      "soort": "prop",
+      "pos": [
+        66,
+        54,
+        24
+      ],
+      "wie": "de startstreep (twee breed, over de hele tong)"
+    },
+    "start": {
+      "soort": "zone",
+      "pos": [
+        43,
+        55,
+        17
+      ],
+      "tot": [
+        70,
+        63,
+        29
+      ],
+      "wie": "het startplatform"
+    },
+    "racemeester": {
+      "soort": "npc",
+      "pos": [
+        59,
+        56,
+        18
+      ],
+      "yaw": 0.0,
+      "wie": "de racemeester-guh, op zijn kistje naast de startstreep",
+      "kind": "RINGENRACEGUH"
+    },
+    "finishlijn": {
+      "soort": "prop",
+      "pos": [
+        62,
+        44,
+        70
+      ],
+      "wie": "de finishstreep (twee breed, over de hele baan)"
+    },
+    "finish": {
+      "soort": "zone",
+      "pos": [
+        40,
+        45,
+        62
+      ],
+      "tot": [
+        76,
+        53,
+        78
+      ],
+      "wie": "de landingsbaan"
+    },
+    "scorebord": {
+      "soort": "prop",
+      "pos": [
+        55,
+        42,
+        45
+      ],
+      "wie": "het scorebord: het middelste blok van de onderste rij; 5 breed (z 43-47), 3 hoog (y 42-44), kijkt west"
+    },
+    "ring_01": {
+      "soort": "ring",
+      "pos": [
+        84,
+        56,
+        26
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_02": {
+      "soort": "ring",
+      "pos": [
+        104,
+        52,
+        23
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_03": {
+      "soort": "ring",
+      "pos": [
+        124,
+        45,
+        28
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_04": {
+      "soort": "ring",
+      "pos": [
+        144,
+        40,
+        22
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_05": {
+      "soort": "ring",
+      "pos": [
+        164,
+        46,
+        30
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_06": {
+      "soort": "ring",
+      "pos": [
+        184,
+        56,
+        26
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_07": {
+      "soort": "ring",
+      "pos": [
+        204,
+        63,
+        21
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_08": {
+      "soort": "ring",
+      "pos": [
+        224,
+        59,
+        28
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_09": {
+      "soort": "ring",
+      "pos": [
+        241,
+        54,
+        42
+      ],
+      "as": "z",
+      "straal": 5
+    },
+    "ring_10": {
+      "soort": "ring",
+      "pos": [
+        241,
+        49,
+        57
+      ],
+      "as": "z",
+      "straal": 5
+    },
+    "ring_11": {
+      "soort": "ring",
+      "pos": [
+        224,
+        45,
+        71
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_12": {
+      "soort": "ring",
+      "pos": [
+        204,
+        39,
+        75
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_13": {
+      "soort": "ring",
+      "pos": [
+        184,
+        33,
+        68
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_14": {
+      "soort": "ring",
+      "pos": [
+        164,
+        30,
+        73
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_15": {
+      "soort": "ring",
+      "pos": [
+        144,
+        36,
+        66
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_16": {
+      "soort": "ring",
+      "pos": [
+        124,
+        44,
+        72
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_17": {
+      "soort": "ring",
+      "pos": [
+        104,
+        48,
+        68
+      ],
+      "as": "x",
+      "straal": 5
+    },
+    "ring_18": {
+      "soort": "ring",
+      "pos": [
+        86,
+        48,
+        70
+      ],
+      "as": "x",
+      "straal": 5
     }
   }
 }
