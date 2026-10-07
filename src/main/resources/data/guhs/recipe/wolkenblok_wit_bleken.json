@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RRR",
+    "RDR",
+    "RRR"
+  ],
+  "key": {
+    "R": "guhs:wolkenblok_roze",
+    "D": "minecraft:white_dye"
+  },
+  "result": {
+    "id": "guhs:wolkenblok_wit",
+    "count": 8
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/wolkenblok_roze_0"
+      },
+      {
+        "model": "guhs:block/wolkenblok_roze_0",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/wolkenblok_roze_1"
+      },
+      {
+        "model": "guhs:block/wolkenblok_roze_1",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/wolkenblok_roze_2"
+      },
+      {
+        "model": "guhs:block/wolkenblok_roze_2",
+        "y": 90
+      }
+    ]
+  }
+}

@@ -2705,5 +2705,34 @@
       }
     ],
     "subtitle": "subtitles.guhs.guhparkour.smak"
+  },
+  "wolkenblok.stap": {
+    "sounds": [
+      "guhs:wolkenblok/stap1",
+      "guhs:wolkenblok/stap2",
+      "guhs:wolkenblok/stap3",
+      "guhs:wolkenblok/stap4"
+    ],
+    "subtitle": "subtitles.guhs.wolkenblok.stap"
+  },
+  "wolkenblok.plaats": {
+    "sounds": [
+      "guhs:wolkenblok/plaats1",
+      "guhs:wolkenblok/plaats2"
+    ],
+    "subtitle": "subtitles.guhs.wolkenblok.plaats"
+  },
+  "wolkenblok.breek": {
+    "sounds": [
+      "guhs:wolkenblok/breek1",
+      "guhs:wolkenblok/breek2"
+    ],
+    "subtitle": "subtitles.guhs.wolkenblok.breek"
+  },
+  "waterval.ruis": {
+    "sounds": [
+      "guhs:waterval/ruis"
+    ],
+    "subtitle": "subtitles.guhs.waterval.ruis"
   }
 }
