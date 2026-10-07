@@ -118,6 +118,11 @@ public final class Schijn {
         STRAKS.add(p.getUUID());
     }
 
+    /** (tests) Was a refresh in this player's next tick asked for? Forgets it. */
+    static boolean neemStraks(ServerPlayer p) {
+        return STRAKS.remove(p.getUUID());
+    }
+
     /** What this player sees at this spot: what was last sent to them, else the real block. */
     public static BlockState ziet(ServerPlayer p, BlockPos pos) {
         BlockState state = GETOOND.getOrDefault(p.getUUID(), Map.of()).get(pos);

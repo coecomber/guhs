@@ -252,8 +252,17 @@ public class BestaandGameTests {
             helper.assertTrue(BestaandFeature.WACHTER.stap(a) == BestaandFeature.WACHTER_MELDEN, "the screen waits for an answer");
             rol.antwoord(wachter, a, WIEDEN);
             helper.assertTrue(BestaandFeature.WACHTER.stap(a) == BestaandFeature.WACHTER_TUIN && advancement(a, "wachter_stap_3"), "step 3: the tuintje");
+            // a chunk that is sent to a (again) gets a's burning bowls right behind it (nothing to see on a mock client: it must not fail)
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.level.ChunkWatchEvent.Sent(a, level.getChunkAt(korven.get(0)), level));
+            // a real update of a block that a is shown otherwise: a's list goes out again in a's next tick; b is shown nothing there
+            Schijn.neemStraks(a);
+            Schijn.neemStraks(b);
+            level.setBlockAndUpdate(korven.get(3).above(2), Blocks.COBBLESTONE.defaultBlockState());
+            helper.assertTrue(!Schijn.neemStraks(a), "(a block update somewhere else asks nothing)");
+            level.setBlockAndUpdate(korven.get(3).above(2), Blocks.AIR.defaultBlockState());
             // a fire bowl that goes away is forgotten
             level.setBlockAndUpdate(korven.get(3), Blocks.AIR.defaultBlockState());
+            helper.assertTrue(Schijn.neemStraks(a) && !Schijn.neemStraks(b), "the real block under a's burning bowl changed: a refresh for a, not for b");
             helper.assertTrue(zietHier(helper, a, 16).size() == 3, "a removed bowl is no longer shown");
         } finally {
             weg(helper, a, b);
