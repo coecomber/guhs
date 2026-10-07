@@ -415,7 +415,7 @@ def gondellijn(b):
     cabine(b, bx, PDAK, sz, "east")
     b.fill(bx + 1, PDAK + 4, sz, bx + 1, yb - 1, sz, "iron_bars")
     b.prop("gondel_boven", ax + 1, sy + 1, sz, wie="in de gondel bij het bovenstation (op de kraterrand)")
-    b.prop("gondel_onder", bx + 1, PDAK + 1, sz, wie="in de gondel bij het dak van de gevangenis", los=True)
+    b.prop("gondel_onder", bx + 1, PDAK + 1, sz, wie="in de gondel bij het dak van de gevangenis")
     b.pad("gondel_route", [(ax + 1, sy + 1, sz), ((ax + bx) // 2 + 1, sy - 1, sz), (bx + 1, PDAK + 1, sz)], wie="de gondellijn over het kokende meer")
     b.prop("azula_gondel", bx + 1, PDAK + 4, sz, wie="boven op de gondel: waar Azula-Mika staat bij de achtervolging", los=True)
 
