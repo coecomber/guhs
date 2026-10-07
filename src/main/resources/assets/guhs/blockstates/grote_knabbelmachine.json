@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "guhs:block/grote_knabbelmachine"
+    },
+    "facing=east": {
+      "model": "guhs:block/grote_knabbelmachine",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/grote_knabbelmachine",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/grote_knabbelmachine",
+      "y": 270
     }
   }
 }

@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "IRI",
+    "XRI",
     "GDG",
     "SKS"
   ],
@@ -12,7 +12,8 @@
     "G": "guhs:grillspies",
     "D": "guhs:guh_wire",
     "S": "#minecraft:stone_crafting_materials",
-    "K": "guhs:kaas_knabbels"
+    "K": "guhs:kaas_knabbels",
+    "X": "guhs:techquest_recept_machines"
   },
   "result": {
     "id": "guhs:neerzetter"

@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "IKI",
+    "XKI",
     "GWG",
     "IMI"
   ],
@@ -11,7 +11,8 @@
     "K": "guhs:kaas_knabbels",
     "G": "guhs:grillspies",
     "W": "guhs:guh_wire",
-    "M": "minecraft:minecart"
+    "M": "minecraft:minecart",
+    "X": "guhs:techquest_recept_bezorg"
   },
   "result": {
     "id": "guhs:stepstation"
