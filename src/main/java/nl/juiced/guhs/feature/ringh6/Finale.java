@@ -190,7 +190,7 @@ public final class Finale {
     }
 
     private static Cutscene feest() {
-        Cutscene.Builder b = Cutscene.maak("ringh6_feest").duur(960).bij("ring_h6").kaart(Klim.KAART).verbergEcht(14)
+        Cutscene.Builder b = Cutscene.maak("ringh6_feest").duur(960).bij("ring_h6").kaart(Klim.KAART).verbergEcht(14).cameraOntwijkt()
                 .speler(new Vec3(0.5, 0, 3.5), 180)
                 .guh("sam", GuhVariant.SAM_GUH, new Vec3(2.0, 0, 3.9), 180)
                 .acteur("guhdalf", ModEntities.GUH_NPC, new Vec3(0.5, 0, -3.0), 0, Cast.acteur(GuhNpcEntity.Kind.GUHDALF, "wit"))

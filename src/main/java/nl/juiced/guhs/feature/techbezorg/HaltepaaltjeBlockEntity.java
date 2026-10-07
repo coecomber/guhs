@@ -29,6 +29,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import nl.juiced.guhs.feature.vadskracht.Kisten;
+import nl.juiced.guhs.feature.wereld.Bescherming;
 import nl.juiced.guhs.quest.GuhAdvancements;
 
 /**
@@ -41,6 +42,10 @@ import nl.juiced.guhs.quest.GuhAdvancements;
  * ({@link StepstationBlockEntity#adopteer}, when a player places it); the button "Ander station" moves it to the next one ({@link #volgendStation}).
  * Where the guhtje reaches in: bringing goes into the side of the chest the pole stands at (like a hopper pointing at it,
  * {@link #inKant}), taking comes out of the bottom (like a hopper under it, {@link #uitKant}).
+ * <p>
+ * Like the machines that change the world (Opzuiger, Knabbelaar, Neerzetter, Oogster, Plantagebak) a pole only works where
+ * whoever placed it may ({@link #mag}, {@link Bescherming#magWijzigen}): never at a chest inside a protected quest
+ * building or in the home base of somebody else's Guhhuisje. There the pole serves nothing and the guhtje skips it.
  */
 public class HaltepaaltjeBlockEntity extends BlockEntity implements MenuProvider {
     @Nullable
@@ -48,6 +53,12 @@ public class HaltepaaltjeBlockEntity extends BlockEntity implements MenuProvider
     private final NonNullList<ItemStack> filter = NonNullList.withSize(Bezorgnet.FILTER, ItemStack.EMPTY);
     @Nullable
     private UUID eigenaar;
+    /** How long (in ticks) an answer of {@link #mag} is kept: protection hardly ever changes, the guhtje asks all the time. */
+    private static final int MAG_ONTHOUDEN = 20;
+    private long magTot = Long.MIN_VALUE;
+    private boolean magAntwoord;
+    /** (not saved) where the look at a very big store goes on, see {@code StepstationBlockEntity.haalOpGroot}. */
+    private int zoekVan;
 
     public HaltepaaltjeBlockEntity(BlockPos pos, BlockState state) {
         super(TechbezorgFeature.HALTEPAALTJE_BE.get(), pos, state);
@@ -84,7 +95,7 @@ public class HaltepaaltjeBlockEntity extends BlockEntity implements MenuProvider
      */
     @Nullable
     public ResourceHandler<ItemResource> inKant() {
-        if (level == null) {
+        if (level == null || !mag()) {
             return null;
         }
         ResourceHandler<ItemResource> in = Kisten.van(level, kist(), kant().getOpposite());
@@ -98,7 +109,7 @@ public class HaltepaaltjeBlockEntity extends BlockEntity implements MenuProvider
      */
     @Nullable
     public ResourceHandler<ItemResource> uitKant() {
-        if (level == null) {
+        if (level == null || !mag()) {
             return null;
         }
         for (Direction kant : new Direction[] {Direction.DOWN, kant().getOpposite(), null}) {
@@ -112,6 +123,31 @@ public class HaltepaaltjeBlockEntity extends BlockEntity implements MenuProvider
 
     public boolean heeftKist() {
         return inKant() != null || uitKant() != null;
+    }
+
+    /**
+     * May this pole serve the block it stands at, on behalf of whoever placed it? Not inside a protected building, a
+     * protected area, the spawn protection or the home base of a Guhhuisje that is somebody else's (a pole nobody placed:
+     * of anybody's). The answer is kept for a second.
+     */
+    public boolean mag() {
+        if (!(level instanceof ServerLevel server)) {
+            return true;
+        }
+        long nu = server.getGameTime();
+        if (nu >= magTot || nu < magTot - MAG_ONTHOUDEN) {
+            magTot = nu + MAG_ONTHOUDEN;
+            magAntwoord = Bescherming.magWijzigen(server, kist(), eigenaar);
+        }
+        return magAntwoord;
+    }
+
+    int zoekVan() {
+        return zoekVan;
+    }
+
+    void zetZoekVan(int vak) {
+        zoekVan = Math.max(0, vak);
     }
 
     // =====================================================================================================================
@@ -235,6 +271,13 @@ public class HaltepaaltjeBlockEntity extends BlockEntity implements MenuProvider
         return eigenaar;
     }
 
+    /** Who this pole works for (a player who placed it: {@link #geplaatst}; a pole a Neerzetter put down: the Neerzetter's owner). */
+    public void zetEigenaar(@Nullable UUID wie) {
+        eigenaar = wie;
+        magTot = Long.MIN_VALUE;   // (another owner: ask again)
+        setChanged();
+    }
+
     /**
      * Joins the nearest loaded Stepstation within reach that has room. With {@code na}: the first one AFTER that station in
      * the list (nearest first), wrapping around, so pressing the button walks along all of them. False: there is none (it
@@ -286,7 +329,10 @@ public class HaltepaaltjeBlockEntity extends BlockEntity implements MenuProvider
             zeg = Component.translatable("gui.guhs.techbezorg.halte.vol").withStyle(ChatFormatting.GRAY);
         }
         player.sendOverlayMessage(zeg);
-        if (!heeftKist()) {
+        magTot = Long.MIN_VALUE;
+        if (!mag()) {
+            player.sendSystemMessage(Component.translatable("gui.guhs.techbezorg.halte.mag_niet").withStyle(ChatFormatting.GOLD));
+        } else if (!heeftKist()) {
             player.sendSystemMessage(Component.translatable("gui.guhs.techbezorg.halte.geen_kist").withStyle(ChatFormatting.GRAY));
         }
     }

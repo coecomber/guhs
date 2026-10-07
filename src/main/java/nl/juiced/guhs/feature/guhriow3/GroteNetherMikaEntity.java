@@ -32,7 +32,6 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.phys.Vec3;
@@ -60,7 +59,11 @@ import nl.juiced.guhs.registry.ModSounds;
  *     and everybody in the arena gets the end scene ({@link GuhrioW3Feature#EINDE}) and has won the duel.</li>
  * </ol>
  * He never hurts anybody: a touch is {@link GuhrioSpel#geraakt} (your power-up, or back to your flag) and the shockwave
- * is a {@link Duwtje}. He is shared by everybody in the arena (they fight him together, and all of them win), he is never
+ * is a {@link Duwtje}. Whoever still reads the narrator card of the duel (or watches anything else) is not in the fight:
+ * he is nobody's target, nothing shoves or touches him ({@link #doetMee}), and the fight does not wait for him either - it
+ * starts as soon as ONE player in the arena is ready. He wins with the others all the same: the end scene he could not be
+ * shown is owed to him ({@link GuhrioW3Feature#TEGOED}) and plays when he closes the card.
+ * He is shared by everybody in the arena (they fight him together, and all of them win), he is never
  * saved and gone with his level; the next visitor finds him back on a whole bridge. The bridge and the lever are the one
  * thing of Super Guhrio that really changes in the world for a moment (everybody in the arena sees the same fight): he
  * mends them when he appears, when the fight starts again and when he goes.
@@ -425,7 +428,9 @@ public class GroteNetherMikaEntity extends LevelWezen {
 
     private void intro(ServerLevel level) {
         if (doel() == null) {
-            ticks = Math.min(ticks, 1);                       // (whoever is here still reads the narrator card: he waits)
+            // (NOBODY here is ready: everybody still reads the narrator card. One player who closed it is enough to
+            //  begin; a slow reader never keeps the others waiting, he just joins when he is done)
+            ticks = Math.min(ticks, 1);
             return;
         }
         kijkNaar(doel());
@@ -656,6 +661,10 @@ public class GroteNetherMikaEntity extends LevelWezen {
     /**
      * He sits on the far ledge, sulking. The bridge comes back; then everybody in the arena gets the end scene and has won.
      * Somebody who walks in later finds him ready for a new fight.
+     * <p>
+     * "Has won" is owed from this moment on ({@link GuhrioW3Feature#zetTegoed}) and paid by the end of the scene
+     * ({@link #gewonnen}): a player the scene cannot start for now (still reading the narrator card) gets it as soon as
+     * he can watch, and a player who logs out half-way gets it again at the next login - nobody fights him twice for one win.
      */
     private void mokt(ServerLevel level) {
         if (ticks % 30 == 15) {
@@ -665,7 +674,9 @@ public class GroteNetherMikaEntity extends LevelWezen {
         if (ticks == SCENE_NA) {
             for (ServerPlayer p : spelers()) {
                 if (winnaars.add(p.getUUID())) {
-                    einde(p);
+                    GuhrioSpel.Sessie s = GuhrioSpel.sessie(p);
+                    GuhrioW3Feature.zetTegoed(p, actief.level, s == null ? 0 : s.ticks);
+                    GuhrioW3Feature.probeerEinde(p);
                 }
             }
         }
@@ -679,29 +690,26 @@ public class GroteNetherMikaEntity extends LevelWezen {
         }
     }
 
-    /** The end scene for this player; afterwards (or at once, when the scene can't play) the duel is won. */
-    private void einde(ServerPlayer p) {
-        Direction kant = actief.level.kant();
-        Rotation draai = Rotation.NONE;
-        for (Rotation r : Rotation.values()) {
-            if (r.rotate(Direction.EAST) == kant) {
-                draai = r;
-            }
-        }
-        if (!Cutscenes.speel(p, GuhrioW3Feature.EINDE, actief.level.anker(), draai, GroteNetherMikaEntity::gewonnen)) {
-            gewonnen(p);
-        }
-    }
-
-    /** The duel is won for this player: the questline, the advancements, a line with the time, and out to the tower room. */
+    /**
+     * The duel is won for this player (the end of the end scene; {@code /guhs guhriow3 win}): the questline, the
+     * advancements, a line with the time, and out to the tower room. Nothing is owed any more.
+     */
     public static void gewonnen(ServerPlayer p) {
         GuhrioSpel.Sessie s = GuhrioSpel.sessie(p);
+        GuhrioW3Feature.Tegoed tegoed = GuhrioW3Feature.neemTegoed(p);
         GuhAdvancements.grant(p, "guhrio_w3_taart");
         GidsFeature.grant(p, "guhrio/guhrio_w3_taart");
         GuhrioKasteel.winDuel(p);
         if (s != null) {
             p.sendSystemMessage(Component.translatable("gui.guhs.guhriow3.gewonnen", GuhrioSpel.tijd(s.ticks)).withStyle(ChatFormatting.GOLD));
             GuhrioSpel.stop(p, GuhrioSpel.Einde.KLAAR);
+        } else if (tegoed != null) {
+            // (the scene was watched from outside the arena: after a login that came half-way the first showing)
+            p.sendSystemMessage(Component.translatable("gui.guhs.guhriow3.gewonnen", GuhrioSpel.tijd(tegoed.ticks())).withStyle(ChatFormatting.GOLD));
+            if (tegoed.uit() != null && p.level().dimension().identifier().toString().equals(tegoed.dim())) {
+                p.setDeltaMovement(Vec3.ZERO);
+                p.teleportTo(tegoed.uit().getX() + 0.5, tegoed.uit().getY(), tegoed.uit().getZ() + 0.5);
+            }
         }
     }
 

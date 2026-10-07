@@ -18,8 +18,10 @@ import nl.juiced.guhs.registry.ModItems;
  * <ol start="0">
  *   <li>Talk: three peperzaadjes (once; and new ones whenever a kweekbak still needs one and you have none).</li>
  *   <li>Grow the three peppers in the three kweekbakken of the kas and pick them ({@link Kweek}, {@link Pepertuin#opGeplukt}).</li>
- *   <li>Brew a first pepper drink: he gives what the Guhbrouwketel in the kas needs (once). Having a drink, or having drunk
- *       one, finishes the step ({@link Pepertuin#gebrouwen}).</li>
+ *   <li>Brew a first pepper drink: he gives what the Guhbrouwketel in the kas needs (and again, once a day, to whoever has
+ *       nothing left of it: {@link #pakketWeer}). Stirring a red or pink pepper of your own into a ketel finishes the step
+ *       ({@link Pepertuin#eigenPeper}; that pan is shared, so who fills the bottles does not matter), and so does having a
+ *       drink or having drunk one ({@link Pepertuin#gebrouwen}).</li>
  *   <li>Let him taste: more seeds, a bottle of the OTHER drink and the peperslinger for your guh.</li>
  * </ol>
  * Afterwards he explains which pepper grows where, and helps out with two seeds a day when you lost all of yours.
@@ -76,7 +78,7 @@ public final class PepertelerRol extends QuestRol {
                         new ItemStack(Items.GLASS_BOTTLE, 3))) {
                     zeg(p, npc, T + "brouw");
                     hint(p, "quest.guhs.torenpeper.hint.brouw");
-                } else {
+                } else if (!pakketWeer(npc, p)) {
                     zeg(p, npc, T + "brouw_nog");
                     hint(p, "quest.guhs.torenpeper.hint.brouw");
                 }
@@ -85,6 +87,39 @@ public final class PepertelerRol extends QuestRol {
             default -> scherm(p, npc, T + "na", new Praat.Optie(UITLEG, "gui.guhs.torenpeper.optie.uitleg"),
                     new Praat.Optie(ZAADJES, "gui.guhs.torenpeper.optie.zaadjes"));
         }
+    }
+
+    /**
+     * Step 2, the kit was given before and there is no drink yet. The Guhbrouwketel of the kas is one pan for everybody: a
+     * player whose powder and sauce went into a brew that somebody else stirred or tapped must not be stuck. So whoever has
+     * neither grillspiespoeder nor a bucket of kaassaus left gets both again (and bottles when they have none), at most once
+     * a day; and whoever has no red or pink pepper left, no seed and nothing growing in those two kweekbakken gets a seed.
+     * True when he gave (and said) something.
+     */
+    private boolean pakketWeer(GuhNpcEntity npc, ServerPlayer p) {
+        boolean gaf = false;
+        if (GuhQuests.count(p, SpiesburchtFeature.GRILLSPIESPOEDER.get()) == 0 && GuhQuests.count(p, ModItems.KAAS_SAUS_BUCKET.get()) == 0) {
+            int dag = (int) (p.level().getGameTime() / 24000L) + 1;
+            if (LIJN.teller(p, "pakket_dag") != dag) {
+                LIJN.teller(p, "pakket_dag", dag);
+                geef(p, new ItemStack(SpiesburchtFeature.GRILLSPIESPOEDER.get()));
+                geef(p, new ItemStack(ModItems.KAAS_SAUS_BUCKET.get()));
+                if (GuhQuests.count(p, Items.GLASS_BOTTLE) == 0) {
+                    geef(p, new ItemStack(Items.GLASS_BOTTLE, 3));
+                }
+                zeg(p, npc, T + "brouw_weer");
+                gaf = true;
+            }
+        }
+        if (!Pepertuin.heeftBrouwpeper(p) && GuhQuests.count(p, zaadjes()) == 0 && Kweek.groei(p, PeperSoort.ROOD) == 0 && Kweek.groei(p, PeperSoort.ROZE) == 0) {
+            geef(p, new ItemStack(zaadjes()));
+            zeg(p, npc, T + "peper_op");
+            gaf = true;
+        }
+        if (gaf) {
+            hint(p, "quest.guhs.torenpeper.hint.brouw");
+        }
+        return gaf;
     }
 
     /** Step 3: he tastes, and the questline is done. */

@@ -323,10 +323,84 @@ public final class Bezetting {
         e.getPersistentData().putString(TAG, tag);
         bescherm(e);
         if (!e.isAddedToLevel()) {
+            // (an old Spiesburcht or grillpaleis may be built over by now: never inside somebody's blocks)
+            Vec3 vrij = vrijePlek(level, e, plek);
+            if (vrij == null) {
+                LOGGER.info("Guhs: no free spot for the inhabitant {} around {} ({} {}): it stands at its own spot all the same", w.id, pos.toShortString(),
+                        w.structuur, start.getChunkPos());
+            } else if (!vrij.equals(plek)) {
+                LOGGER.info("Guhs: the spot of the inhabitant {} at {} is built over ({} {}): it stands at {} instead", w.id, pos.toShortString(), w.structuur,
+                        start.getChunkPos(), BlockPos.containing(vrij).toShortString());
+                e.snapTo(vrij.x, vrij.y, vrij.z, e.getYRot(), e.getXRot());
+                plek = vrij;
+            }
             level.addFreshEntity(e);
         }
         level.sendParticles(ParticleTypes.POOF, plek.x, plek.y + 0.6, plek.z, 8, 0.3, 0.3, 0.3, 0.02);
         return true;
+    }
+
+    /** How far (blocks: sideways, and up or down) a new inhabitant may stand from its own spot when that is built over. */
+    public static final int UITWIJK = 4, UITWIJK_HOOGTE = 2;
+
+    /**
+     * Where this new inhabitant can stand: its own spot unless that is built over ({@link #dichtgebouwd}; the usual case:
+     * nothing changes), else the nearest spot within {@link #UITWIJK} blocks where its whole box is free of blocks and
+     * fluids and it has something to stand on (the same height first). Null: nothing free nearby. Only blocks count, not
+     * other entities, and only for an entity that collides with blocks at all.
+     */
+    @Nullable
+    static Vec3 vrijePlek(ServerLevel level, Entity e, Vec3 plek) {
+        if (e.noPhysics || !dichtgebouwd(level, e, plek)) {
+            return plek;
+        }
+        Vec3 beste = null;
+        double bestD = Double.MAX_VALUE;
+        for (int dy = -UITWIJK_HOOGTE; dy <= UITWIJK_HOOGTE; dy++) {
+            for (int dx = -UITWIJK; dx <= UITWIJK; dx++) {
+                for (int dz = -UITWIJK; dz <= UITWIJK; dz++) {
+                    // (a step up or down counts double: it stays on its own floor when it can)
+                    double d = dx * dx + dz * dz + 4.0 * dy * dy;
+                    if ((dx == 0 && dz == 0 && dy == 0) || d >= bestD) {
+                        continue;
+                    }
+                    Vec3 daar = plek.add(dx, dy, dz);
+                    BlockPos onder = BlockPos.containing(daar).below();
+                    if (level.isLoaded(onder) && level.getBlockState(onder).isFaceSturdy(level, onder, net.minecraft.core.Direction.UP)
+                            && past(level, e, daar, 0.0) && !level.containsAnyLiquid(doos(e, daar, 0.0))) {
+                        beste = daar;
+                        bestD = d;
+                    }
+                }
+            }
+        }
+        return beste;
+    }
+
+    /**
+     * Is the own spot of this inhabitant built over: does a FULL block stand in its body? Only that counts there. The chair,
+     * stair, slab, carpet or fence a template seats its people on (or the sauce a Sausloper stands in) is in the way of
+     * nobody, and neither is whatever lies at its feet.
+     */
+    private static boolean dichtgebouwd(ServerLevel level, Entity e, Vec3 plek) {
+        AABB doos = doos(e, plek, Math.min(0.6, e.getBbHeight() * 0.5));
+        for (BlockPos pos : BlockPos.betweenClosed(BlockPos.containing(doos.minX, doos.minY, doos.minZ), BlockPos.containing(doos.maxX, doos.maxY, doos.maxZ))) {
+            if (level.isLoaded(pos) && level.getBlockState(pos).isCollisionShapeFullBlock(level, pos)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** The box of this entity as if it stood at this spot, without its lowest {@code voet} blocks. */
+    private static AABB doos(Entity e, Vec3 plek, double voet) {
+        AABB doos = e.getBoundingBox().move(plek.subtract(e.position()));
+        return new AABB(doos.minX, doos.minY + voet, doos.minZ, doos.maxX, doos.maxY, doos.maxZ).deflate(1.0E-4);
+    }
+
+    /** Would this entity, standing at this spot, be clear of every block (its lowest {@code voet} blocks not counted)? */
+    private static boolean past(ServerLevel level, Entity e, Vec3 plek, double voet) {
+        return level.noBlockCollision(e, doos(e, plek, voet));
     }
 
     /** An inhabitant can't be hurt or leashed and never despawns. */

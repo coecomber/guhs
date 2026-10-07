@@ -87,6 +87,8 @@ public final class VerhaalFeature {
         NeoForge.EVENT_BUS.register(VerhaalMotor.class);
         NeoForge.EVENT_BUS.register(Vast.class);
         NeoForge.EVENT_BUS.register(Sluiers.class);
+        // (PHASE3 R06: the walls of the story's own places are known as soon as a world has its guaranteed spots)
+        nl.juiced.guhs.world.GegarandeerdPlacement.NA_VOORUIT.add(Sluiers::kenGegarandeerd);
         NeoForge.EVENT_BUS.register(Doelen.class);
         VerhaalDemo.register();
     }

@@ -293,6 +293,10 @@ TEXTS = {
     G + "beloning.guhriobeloning_prinsessenkroon": "Kroontje van Prinses Perzikguh (van de prinses, na het duel)",
     G + "beloning.guhriobeloning_gouden_pet": "Gouden vadspet (van Pad-guh, voor alle 18 grote vadsmunten)",
     G + "beloning.bouwblokken": "Een bouwblok uit Pad-guh's kraam: vraagtekenblok, vlaggenmast of groene reispijp",
+    # the secrets that have a quest in the quest book: the Guhdex says which you found, never where they are
+    G + "geheim.1_1": "Het geheim van level 1-1 gevonden",
+    G + "geheim.1_2": "Het geheim van level 1-2 gevonden",
+    G + "geheim.warp": "De geheime kamer van wereld 2 gevonden",
 }
 WERELDEN = {"1": "de binnentuin", "2": "de kelders", "3": "de burcht"}
 RANG = ("eerste", "tweede", "derde")

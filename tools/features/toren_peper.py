@@ -215,6 +215,10 @@ LANG = {
                  "of een Snoeppeper door en tap een flesje. Groene Njegpepers zijn om op te knabbelen, niet om te brouwen.",
     P + "brouw_nog": "De ketel staat achter in de kas. Poeder erin, kaassaus erin, een rode of roze peper erdoor, even laten borrelen en dan "
                      "een flesje vullen. Ik wil proeven, njeg!",
+    P + "brouw_weer": "Poeder op en geen saus meer? Tja, mijn ketel is van iedereen: wie het eerst roert, die brouwt. Hier, een nieuw "
+                      "snufje grillspiespoeder en een verse emmer kaassaus. Zodra JOUW peper erdoor gaat, telt het voor jou, njeg.",
+    P + "peper_op": "Geen rode of roze peper meer? Hier is een zaadje. Plant het in de bak met gloeikool of pindasaus-nylium: je "
+                    "kweekbakken blijven van jou.",
     P + "klaar": "Laat eens ruiken... Oeh. OEH. Dat is een goeie! Jij bent een echte peperbrouwer. Hier: een zak zaadjes voor thuis, een "
                  "flesje van het andere drankje en een peperslinger voor je guh. Op as-aarde groeien ze overal, maar onder glas gaat "
                  "het drie keer zo snel.",
@@ -232,6 +236,7 @@ LANG = {
     HINT + "geplukt": "je hebt alle drie de pepers gekweekt: ga terug naar de Peperteler-guh",
     HINT + "brouw": "brouw een peperdrankje in de Guhbrouwketel achter in de kas",
     HINT + "gebrouwen": "je eerste peperdrankje! Laat het de Peperteler-guh proeven",
+    HINT + "borrelt": "jouw peper borrelt in de ketel: vul straks een flesje en ga terug naar de Peperteler-guh",
     HINT + "klaar_tuin": "plant je peperzaadjes thuis op as-aarde, gloeikool of pindasaus-nylium, het liefst onder glas",
 }
 

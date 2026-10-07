@@ -6,6 +6,7 @@ import java.util.Map;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
@@ -44,6 +45,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -53,6 +56,9 @@ import nl.juiced.guhs.entity.MikaEntity;
 import nl.juiced.guhs.feature.barbecuether.BarbecuePutStructure;
 import nl.juiced.guhs.feature.kamperen.LuisterGoal;
 import nl.juiced.guhs.feature.kleding.KledingBronnen;
+import nl.juiced.guhs.feature.knus.GuhHooks;
+import nl.juiced.guhs.feature.ring.Ring;
+import nl.juiced.guhs.feature.spiesburcht.NetherMikaRuil;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import nl.juiced.guhs.feature.wereld.Bescherming;
@@ -359,6 +365,151 @@ public class CampingmarktGameTests {
         });
     }
 
+    /** One player does the whole questline of the camping at this pitch, this chopping block and this fire, with the real step calls. */
+    private static void kampeer(GameTestHelper helper, ServerPlayer p, GuhNpcEntity baas, GuhNpcEntity hakker, BlockPos sign, BlockPos blok, BlockPos vuur, String wie) {
+        ServerLevel level = helper.getLevel();
+        Verhaallijn lijn = CampingmarktFeature.CAMPING;
+        var baasRol = NpcRollen.van(baas);
+        var hakRol = NpcRollen.van(hakker);
+        baasRol.talk(baas, p);
+        helper.assertTrue(lijn.stap(p) == 1 && tel(p, CampingmarktFeature.TENTZAK.get()) == 1, wie + " begins: the tent bag");
+        Kamperen.zetOp(p, sign);
+        helper.assertTrue(lijn.vlag(p, Kamperen.TENT_VLAG) && level.getBlockState(sign).getValue(CampingmarktBlocks.Kampeerplek.BEZET), wie + " pitches a tent on the pitch");
+        for (int[] pen : new int[][]{{0, 0}, {6, 0}, {0, 3}, {6, 3}}) {
+            BlockPos q = inPlek(level, sign, pen[0], 0, pen[1]);
+            Kamperen.slaHaring(p, q, level.getBlockState(q));
+        }
+        helper.assertTrue(lijn.stap(p) == 2, wie + ": four pegs");
+        hakRol.talk(hakker, p);
+        for (int i = 0; i < Kamperen.HOUT_NODIG; i++) {
+            Kamperen.gehakt(p, blok);
+        }
+        helper.assertTrue(lijn.stap(p) == 3 && tel(p, CampingmarktFeature.BRANDHOUT.get()) == 1, wie + ": a bundle of fire wood");
+        inHand(p, new ItemStack(CampingmarktFeature.BRANDHOUT.get()));
+        Kampvuur.klik(p, vuur, level.getBlockState(vuur), InteractionHand.MAIN_HAND);
+        helper.assertTrue(lijn.stap(p) == 4 && Kampvuur.brandt(level, vuur), wie + ": the wood is on the fire, the party is on");
+        p.getInventory().clearContent();
+        baasRol.talk(baas, p);
+        helper.assertTrue(tel(p, CampingmarktFeature.ROOSTERSTOK.get()) == 1 && Kamperen.marshmallows(p) == 4, wie + ": the roasting stick and marshmallows");
+        for (int i = 0; i < Kamperen.MARSHMALLOWS; i++) {
+            helper.assertTrue(RoosterstokItem.rooster(p, RoosterstokItem.GOUD_VAN + 5) == RoosterstokItem.Uitkomst.GOUDBRUIN, wie + ": golden brown " + (i + 1));
+        }
+        baasRol.talk(baas, p);
+        helper.assertTrue(lijn.klaar(p) && tel(p, CampingmarktFeature.RECEPT_PLANTAGEBAK.get()) == 1
+                && tel(p, ModItems.clothingItem(GuhClothes.CAMPINGMARKT_HOEDJE)) == 1, wie + " is done: the recipe card and the camping outfit");
+    }
+
+    /**
+     * Any number of players, one after the other: a first player does the whole questline of the camping; a second one who
+     * only begins then does it all again, at the same pitch (folded up by itself), the same chopping block and the fire that
+     * still burns from the first player's party; and a third one after the fire went out.
+     */
+    @GuhTest(template = KAMER, batch = "campingmarkt_tweede")
+    public static void campingmarktTweedeSpelerNaDeEerste(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer a = speler(helper, new BlockPos(10, 2, 9)), b = speler(helper, new BlockPos(11, 2, 9)), c = speler(helper, new BlockPos(12, 2, 9));
+        GuhNpcEntity baas = npc(helper, GuhNpcEntity.Kind.KAMPBAASGUH, new BlockPos(2, 2, 21));
+        GuhNpcEntity hakker = npc(helper, GuhNpcEntity.Kind.HOUTHAKKERGUH, new BlockPos(21, 2, 21));
+        try {
+            Verhaallijn lijn = CampingmarktFeature.CAMPING;
+            helper.setBlock(new BlockPos(18, 2, 18), CampingmarktFeature.HAKBLOK.get());
+            helper.setBlock(new BlockPos(10, 2, 12), CampingmarktFeature.KAMPVUUR.get());
+            BlockPos blok = helper.absolutePos(new BlockPos(18, 2, 18)), vuur = helper.absolutePos(new BlockPos(10, 2, 12));
+            BlockPos sign = bord(helper, new BlockPos(8, 2, 20), Direction.SOUTH);
+            BlockState leeg = level.getBlockState(sign);
+            kampeer(helper, a, baas, hakker, sign, blok, vuur, "a");
+            helper.assertTrue(lijn.stap(b) == 0 && lijn.stap(c) == 0 && !lijn.begonnen(b), "nothing a did moved the story of anybody else");
+            // b begins after a is done. The tent of a still stands on the only pitch: taken, until it is folded up by itself
+            NpcRollen.van(baas).talk(baas, b);
+            Kamperen.zetOp(b, sign);
+            helper.assertTrue(!lijn.vlag(b, Kamperen.TENT_VLAG), "the pitch is still taken by the tent of a");
+            Herstel.verschuif(level, Kamperen.TENT_TICKS);
+            Herstel.verwerk(level);
+            helper.assertTrue(level.getBlockState(sign) == leeg && !Kampvuur.brandt(level, vuur), "two minutes later the pitch is free and the fire is out");
+            lijn.wis(b);
+            b.getInventory().clearContent();
+            kampeer(helper, b, baas, hakker, sign, blok, vuur, "b (after a)");
+            // c begins while a fire already burns (the pitch is free again): wood on a burning fire counts for c too
+            Herstel.verschuif(level, Kamperen.TENT_TICKS);
+            Herstel.verwerk(level);
+            helper.assertTrue(level.getBlockState(sign) == leeg, "(the tent of b is folded up)");
+            Kampvuur.klik(b, vuur, level.getBlockState(vuur), InteractionHand.OFF_HAND);
+            helper.assertTrue(Kampvuur.brandt(level, vuur), "b (who had the party) pokes the fire up again");
+            kampeer(helper, c, baas, hakker, sign, blok, vuur, "c (after a and b, at a fire that already burns)");
+            helper.assertTrue(lijn.klaar(a) && lijn.klaar(b) && lijn.klaar(c), "all three are done");
+        } finally {
+            Herstel.verschuif(level, Kamperen.TENT_TICKS + Kampvuur.BRAND_TICKS);   // (nothing of this test is put back later, in somebody else's room)
+            Herstel.verwerk(level);
+            baas.discard();
+            hakker.discard();
+            weg(helper, a, b, c);
+        }
+        helper.succeed();
+    }
+
+    /**
+     * A vads bar that is THROWN on the ground for a wild Nether-Mika: the extra present of the ruilmarkt belongs to its
+     * thrower, when that is a certified customer, and to nobody else (not to a certified customer who happens to stand
+     * closest). A bar that nobody gave it (a dispenser) still counts for the customer who stands closest.
+     */
+    @GuhTest(template = KAMER, batch = "campingmarkt_ruil")
+    public static void campingmarktGegooideStaaf(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer klant = speler(helper, new BlockPos(7, 2, 6)), vreemde = speler(helper, new BlockPos(12, 2, 6));
+        MikaEntity wild = ModEntities.NETHER_MIKA.get().create(level, EntitySpawnReason.TRIGGERED);
+        AABB kamer = new AABB(helper.absolutePos(BlockPos.ZERO)).expandTowards(24, 10, 24);
+        try {
+            BlockPos bij = helper.absolutePos(new BlockPos(6, 2, 6));
+            wild.snapTo(bij.getX() + 0.5, bij.getY(), bij.getZ() + 0.5);
+            wild.setNoAi(true);
+            level.addFreshEntity(wild);
+            CampingmarktFeature.RUILMARKT.zet(klant, CampingmarktFeature.RUILMARKT.stappen());
+            CompoundTag data = wild.getPersistentData();
+            // the bar of somebody who is no customer, with a customer right next to the Mika: no extra for anybody
+            data.store(Ruilmarkt.RUIL_PARTNER, UUIDUtil.CODEC, vreemde.getUUID());
+            Ruilmarkt.snuffelt(wild);
+            helper.assertTrue(Ruilmarkt.GEEN_KLANT.equals(data.getStringOr(Ruilmarkt.KLANT, "")), "the Mika sniffs a bar that is not a customer's");
+            BehaviorUtils.throwItem(wild, new ItemStack(Items.CHARCOAL), vreemde.position().add(0, 1, 0));
+            helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, kamer).size() == 1 && data.getStringOr(Ruilmarkt.KLANT, "").isEmpty(),
+                    "one present, no extra for the customer who only stood closest: " + level.getEntitiesOfClass(ItemEntity.class, kamer).size());
+            level.getEntitiesOfClass(ItemEntity.class, kamer).forEach(Entity::discard);
+            // the bar a customer threw from across the room, while the stranger stands next to the Mika: the extra is the customer's
+            klant.snapTo(bij.getX() + 10.5, bij.getY(), bij.getZ() + 0.5);
+            vreemde.snapTo(bij.getX() + 1.5, bij.getY(), bij.getZ() + 0.5);
+            data.remove(Ruilmarkt.EXTRA_TIJD);
+            data.store(Ruilmarkt.RUIL_PARTNER, UUIDUtil.CODEC, klant.getUUID());
+            Ruilmarkt.snuffelt(wild);
+            helper.assertTrue(klant.getUUID().toString().equals(data.getStringOr(Ruilmarkt.KLANT, "")), "the Mika knows whose bar it sniffs");
+            BehaviorUtils.throwItem(wild, new ItemStack(Items.CHARCOAL), klant.position().add(0, 1, 0));
+            helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, kamer).size() >= 2, "the thrower gets the second present");
+            level.getEntitiesOfClass(ItemEntity.class, kamer).forEach(Entity::discard);
+            // a bar from nobody (a dispenser): the customer who stands closest, as before
+            klant.snapTo(bij.getX() + 3.5, bij.getY(), bij.getZ() + 0.5);
+            data.remove(Ruilmarkt.EXTRA_TIJD);
+            data.remove(Ruilmarkt.RUIL_PARTNER);
+            Ruilmarkt.snuffelt(wild);
+            helper.assertTrue(data.getStringOr(Ruilmarkt.KLANT, "").isEmpty(), "nobody's bar");
+            BehaviorUtils.throwItem(wild, new ItemStack(Items.CHARCOAL), klant.position().add(0, 1, 0));
+            helper.assertTrue(level.getEntitiesOfClass(ItemEntity.class, kamer).size() >= 2, "a bar from a dispenser: the nearest customer");
+            level.getEntitiesOfClass(ItemEntity.class, kamer).forEach(Entity::discard);
+            // the real thing: the Mika takes the stranger's bar (the Nether-Mika's own code writes down whose it is), and the
+            // game tells us a tick later that it holds one
+            data.remove(Ruilmarkt.EXTRA_TIJD);
+            helper.assertTrue(NetherMikaRuil.offer(wild, vreemde, new ItemStack(ModItems.VAHOEGE_VADS_INGOT.get())), "the Mika takes the stranger's bar");
+            helper.assertTrue(data.read(Ruilmarkt.RUIL_PARTNER, UUIDUtil.CODEC).map(vreemde.getUUID()::equals).orElse(false),
+                    "feature/spiesburcht keeps its partner where the ruilmarkt looks for it");
+        } catch (RuntimeException | Error e) {
+            wild.discard();
+            weg(helper, klant, vreemde);
+            throw e;
+        }
+        helper.succeedWhen(() -> {
+            helper.assertTrue(Ruilmarkt.GEEN_KLANT.equals(wild.getPersistentData().getStringOr(Ruilmarkt.KLANT, "")), "the bar in its paw was noticed by itself");
+            wild.discard();
+            weg(helper, klant, vreemde);
+        });
+    }
+
     /** The residents: who they are, dressed for camping, never tamed or fed, and they keep to the camping. */
     @GuhTest(template = KAMER, batch = BATCH)
     public static void campingmarktKampeerders(GameTestHelper helper) {
@@ -395,6 +546,35 @@ public class CampingmarktGameTests {
             gewoon.snapTo(thuis.getX() + 0.5, thuis.getY(), thuis.getZ() + 2.5);
             level.addFreshEntity(gewoon);
             helper.assertTrue(Kamperen.bewonerKlik(gewoon, p, InteractionHand.MAIN_HAND) == InteractionResult.PASS, "any other guh is left alone");
+
+            // the Knabbelring: a wild guh trots after its bearer, drooling; a resident of the camping stays where it is
+            GuhEntity bewoner = (GuhEntity) Kamperen.kampeerder(level, Vec3.atBottomCenterOf(thuis.offset(2, 0, 0)), Rotation.NONE, 3);
+            bewoner.getPersistentData().putString(Bezetting.TAG, Kamperen.KAMPEERDER_ID + 3 + "@12345");
+            level.addFreshEntity(bewoner);
+            p.snapTo(thuis.getX() + 0.5, thuis.getY(), thuis.getZ() - 6.5);
+            helper.assertTrue(!bewoner.isOrderedToSit() && !Kamperen.nietKwijlen(bewoner) && !GuhHooks.isBezig(bewoner), "nobody with a ring near: the resident has its own day");
+            helper.assertTrue(Ring.geef(p) && Ring.heeft(p), "p carries the Knabbelring");
+            p.tickCount = 40 - p.getId() % 20;
+            NeoForge.EVENT_BUS.post(new PlayerTickEvent.Post(p));          // (the ring's own once-a-second look: p is a ring bearer now)
+            // half a second before the ring's hook looks at this guh, the camping's hook marked it
+            bewoner.tickCount = 50 - bewoner.getId() % 40;
+            GuhHooks.runTick(bewoner);
+            helper.assertTrue(GuhHooks.isBezig(bewoner), "a ring bearer within " + Kamperen.RING_BEREIK + " blocks: the resident is busy");
+            bewoner.tickCount += 10;
+            gewoon.tickCount = 40 - gewoon.getId() % 20;
+            bewoner.setOnGround(true);   // (neither guh has ticked yet, and a mob only looks for a path while it stands on something)
+            gewoon.setOnGround(true);
+            GuhHooks.runTick(bewoner);
+            GuhHooks.runTick(gewoon);
+            helper.assertTrue(!gewoon.getNavigation().isDone(), "(a wild guh does walk to the ring: the hook is live in this test)");
+            helper.assertTrue(bewoner.getNavigation().isDone(), "the resident does not trot after the ring");
+            Ring.neem(p);
+            p.snapTo(thuis.getX() + 0.5 + Kamperen.RING_BEREIK + 4, thuis.getY(), thuis.getZ() + 0.5);
+            helper.assertTrue(!Kamperen.nietKwijlen(bewoner), "no ring, or far away: not marked again");
+            helper.assertTrue(bewoner.getPersistentData().getLongOr("guhs_knus_bezig_tot", 0L) <= level.getGameTime() + Kamperen.RING_BEZIG, "and busy for a few seconds only");
+            p.tickCount = 40 - p.getId() % 20;
+            NeoForge.EVENT_BUS.post(new PlayerTickEvent.Post(p));
+            bewoner.discard();
         } finally {
             gewoon.discard();
             weg(helper, p);
@@ -533,6 +713,38 @@ public class CampingmarktGameTests {
             rol.talk(npc, a);
             helper.assertTrue(lijn.klaar(a) && tel(a, CampingmarktFeature.WEEGSCHAAL_ITEM.get()) == 1 && tel(a, CampingmarktFeature.KEURSTEMPEL.get()) == 0,
                     "done: the scales");
+            // b goes on now that a is done: the same stacks, b's own fake (stack 5), the same reward
+            helper.assertTrue(!Ruilmarkt.koopjeVrij(b), "(no bargain of the day before the questline is done)");
+            b.getInventory().add(stempel.copy());
+            Ruilmarkt.klikStapel(b, stapel[4], 4, ItemStack.EMPTY);
+            Ruilmarkt.klikStapel(b, stapel[5], 5, ItemStack.EMPTY);
+            Ruilmarkt.klikStapel(b, stapel[5], 5, stempel);
+            helper.assertTrue(lijn.stap(b) == 3, "b unmasks their own fake after a did");
+            rol.talk(npc, b);
+            helper.assertTrue(lijn.klaar(b) && tel(b, CampingmarktFeature.WEEGSCHAAL_ITEM.get()) == 1 && tel(b, CampingmarktFeature.KEURSTEMPEL.get()) == 0,
+                    "the second player finishes after the first, with the same reward");
+            // and somebody who only arrives now: haggling, a fake of their own, the scales
+            ServerPlayer c = speler(helper, new BlockPos(8, 2, 8));
+            try {
+                rol.talk(npc, c);
+                rol.talk(npc, c);
+                Ruilmarkt.Afdingen hc = Ruilmarkt.bezig(c);
+                helper.assertTrue(lijn.stap(c) == 1 && hc != null && hc.prijs == Ruilmarkt.BEGINPRIJS, "the newcomer haggles from his first price");
+                Ruilmarkt.Zet zc = Ruilmarkt.Zet.VERDER;
+                for (int i = 0; i < 6 && zc == Ruilmarkt.Zet.VERDER; i++) {
+                    zc = Ruilmarkt.zet(npc, c, hc.stemming + 1);
+                }
+                helper.assertTrue(zc == Ruilmarkt.Zet.GEWONNEN && Ruilmarkt.zet(npc, c, 1) == Ruilmarkt.Zet.DEAL && lijn.stap(c) == 2
+                        && tel(c, CampingmarktFeature.KEURSTEMPEL.get()) == 1, "learnt: the Keurstempel");
+                int nepC = Ruilmarkt.nep(c), anderC = nepC == 5 ? 4 : nepC + 1;
+                Ruilmarkt.klikStapel(c, stapel[anderC], anderC, ItemStack.EMPTY);
+                Ruilmarkt.klikStapel(c, stapel[nepC], nepC, ItemStack.EMPTY);
+                Ruilmarkt.klikStapel(c, stapel[nepC], nepC, stempel);
+                rol.talk(npc, c);
+                helper.assertTrue(lijn.klaar(c) && tel(c, CampingmarktFeature.WEEGSCHAAL_ITEM.get()) == 1, "and is done: any number of players, one after the other");
+            } finally {
+                weg(helper, c);
+            }
             // at home the scales weigh what you hold: the fuller hand is the heavier
             inHand(a, new ItemStack(Items.STICK, 2));
             a.getInventory().setItem(net.minecraft.world.entity.player.Inventory.SLOT_OFFHAND, new ItemStack(Items.STICK, 5));
@@ -540,7 +752,7 @@ public class CampingmarktGameTests {
             helper.assertTrue(level.getBlockState(schaal).getValue(CampingmarktBlocks.Weegschaal.STAND) == CampingmarktBlocks.Stand.RECHTS, "2 against 5: down on the right");
             a.getInventory().clearContent();
             // the bargain of the day: once a day, for a haggle won
-            helper.assertTrue(Ruilmarkt.koopjeVrij(a) && !Ruilmarkt.koopjeVrij(b), "a may haggle for the bargain of the day");
+            helper.assertTrue(Ruilmarkt.koopjeVrij(a), "a may haggle for the bargain of the day");
             rol.talk(npc, a);
             helper.assertTrue(Ruilmarkt.bezig(a) == null, "he asks first: the bargain, or the shop?");
             rol.antwoord(npc, a, Ruilmarkt.KOOPJE_OPTIE);
@@ -697,6 +909,62 @@ public class CampingmarktGameTests {
             weg(helper, p);
         }
         helper.succeed();
+    }
+
+    /**
+     * A copy of the Grillcamping without its people (an old one, or one that lost them): the Kampbaas-guh, the Houthakker-guh
+     * and the five residents come by themselves, each once; and the two that are taken away come back, once.
+     */
+    @GuhTest(template = KAMER, batch = "campingmarkt_volk", timeoutTicks = 3000)
+    public static void campingmarktVolkKomtEnKomtTerug(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        // (the spots of the seven lie between template 12..33 / 9..23: this corner puts them round the middle of the room)
+        StructureStart start = kopie(helper, CampingmarktFeature.CAMPING_STRUCTUUR, new BlockPos(-10, -2, -4));
+        BlockPos bij = helper.absolutePos(new BlockPos(12, 2, 12));
+        // a resident that walks is looked for 26 blocks around its spot: those chunks have to be there, with their entities
+        ChunkPos van = ChunkPos.containing(bij.offset(-48, 0, -48)), tot = ChunkPos.containing(bij.offset(48, 0, 48));
+        for (int cx = van.x(); cx <= tot.x(); cx++) {
+            for (int cz = van.z(); cz <= tot.z(); cz++) {
+                level.setChunkForced(cx, cz, true);
+            }
+        }
+        AABB ruim = new AABB(bij).inflate(48, 16, 48);
+        java.util.function.Supplier<List<Entity>> volk = () -> level.getEntitiesOfClass(Entity.class, ruim, e -> e.isAlive() && Bezetting.isBezetting(e));
+        int alle = 2 + Kamperen.KAMPEERDERS.size();
+        int[] fase = {0}, gekomen = {0};
+        helper.succeedWhen(() -> {
+            if (fase[0] == 0) {
+                Bezetting.controleer(level, bij);
+                Bezetting.bevestigAlles(level);
+                gekomen[0] += Bezetting.controleer(level, bij);
+                List<Entity> er = volk.get();
+                helper.assertTrue(gekomen[0] == alle && er.size() == alle, "the two guhs of the camping and its five residents come: " + gekomen[0] + " made, " + er.size() + " there");
+                GuhNpcEntity baas = er.stream().filter(e -> e instanceof GuhNpcEntity n && n.getKind() == GuhNpcEntity.Kind.KAMPBAASGUH).map(e -> (GuhNpcEntity) e).findFirst().orElse(null);
+                GuhEntity drie = er.stream().filter(e -> e instanceof GuhEntity g && Kamperen.kampeerder(g) == 3).map(e -> (GuhEntity) e).findFirst().orElse(null);
+                helper.assertTrue(baas != null && NpcRollen.van(baas) instanceof Kamperen.KampbaasRol && baas.isInvulnerable() && drie != null && !drie.isTame()
+                        && drie.isPersistenceRequired() && baas.blockPosition().equals(Bezetting.wereld(start, null, CampingmarktFeature.KAMPBAAS_PLEK)),
+                        "the Kampbaas-guh at his spot with his talk, resident 3 known by its tag");
+                Bezetting.bevestigAlles(level);
+                helper.assertTrue(Bezetting.controleer(level, bij) == 0 && volk.get().size() == alle, "nobody twice");
+                baas.discard();
+                drie.discard();
+                gekomen[0] = 0;
+                fase[0] = 1;
+            }
+            Bezetting.controleer(level, bij);
+            Bezetting.bevestigAlles(level);
+            gekomen[0] += Bezetting.controleer(level, bij);
+            helper.assertTrue(gekomen[0] == 2 && volk.get().size() == alle, "the two that were lost are back: " + gekomen[0] + " made, " + volk.get().size() + " there");
+            Bezetting.bevestigAlles(level);
+            helper.assertTrue(Bezetting.controleer(level, bij) == 0 && volk.get().size() == alle, "and no doubles");
+            volk.get().forEach(Entity::discard);
+            Kopieen.testWissen(level);
+            for (int cx = van.x(); cx <= tot.x(); cx++) {
+                for (int cz = van.z(); cz <= tot.z(); cz++) {
+                    level.setChunkForced(cx, cz, false);
+                }
+            }
+        });
     }
 
     private static int tel(StructureTemplate template, Block block) {

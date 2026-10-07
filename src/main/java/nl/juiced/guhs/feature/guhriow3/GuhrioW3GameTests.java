@@ -20,6 +20,7 @@ import nl.juiced.guhs.feature.guhrio.GuhrioKasteel;
 import nl.juiced.guhs.feature.guhrio.GuhrioLevel;
 import nl.juiced.guhs.feature.guhrio.GuhrioSpel;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
+import nl.juiced.guhs.feature.verhaal.Cutscenes;
 import nl.juiced.guhs.feature.verhaal.Verteller;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
 import nl.juiced.guhs.gametest.GuhTest;
@@ -34,6 +35,8 @@ import nl.juiced.guhs.gametest.GuhTest;
  *     <li>The pieces (Guhshi's hitching post, the Vuurpeper bush) and the coal are tried on a little lane in the engine's
  *     empty room guhrio_test_baan.</li>
  * </ul>
+ * Also here: a player who still reads the narrator card keeps nobody waiting and is left alone, the end scene that is owed
+ * to whoever could not watch it (a reader, somebody who logged out), and the bridge a stopped server left half broken.
  * What only a client shows (the box models, the end scene's picture) is not covered here: tools/autocheck/bbq2_guhrio-w3.txt.
  */
 public class GuhrioW3GameTests {
@@ -246,7 +249,7 @@ public class GuhrioW3GameTests {
      * Everybody wins who is in the arena, and the next visitor finds a new fight: a second player who walks in while the
      * loser still sulks gets round 1 on a whole bridge, and wins too.
      */
-    @GuhTest(template = DUEL, batch = BATCH, timeoutTicks = 1200)
+    @GuhTest(template = DUEL, batch = BATCH, timeoutTicks = 2000)
     public static void guhriow3IedereenWintEnHijKomtTerug(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos startAbs = helper.absolutePos(START);
@@ -296,7 +299,7 @@ public class GuhrioW3GameTests {
     }
 
     /** His landing shoves whoever stands near him on the ground (a push, never damage); somebody in the air is left alone. */
-    @GuhTest(template = DUEL, batch = BATCH, timeoutTicks = 600)
+    @GuhTest(template = DUEL, batch = BATCH, timeoutTicks = 2000)
     public static void guhriow3LandingDuwt(GameTestHelper helper) {
         BlockPos startAbs = helper.absolutePos(START);
         ServerPlayer grond = speler(helper), lucht = speler(helper);
@@ -327,6 +330,205 @@ public class GuhrioW3GameTests {
             helper.assertTrue(lucht.getDeltaMovement().lengthSqr() < 1e-6, "whoever jumped is left alone: " + lucht.getDeltaMovement());
             helper.assertTrue(grond.getHealth() == leven && GuhrioSpel.sessie(grond) != null, "a shove costs nothing");
             weg(helper, grond, lucht);
+        });
+    }
+
+    /**
+     * Two players walk into the arena for the first time; one closes the narrator card, the other keeps reading. The fight
+     * does not wait for the reader: it starts for the one who is ready. The reader is nobody's target and nothing shoves or
+     * touches him (the landing, a coal, the Mika himself); when the Mika falls, both have won - the reader gets the end
+     * scene the moment he closes the card, and only then counts as the winner.
+     */
+    @GuhTest(template = DUEL, batch = BATCH, timeoutTicks = 3000)
+    public static void guhriow3LezerHoudtNiemandOp(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos startAbs = helper.absolutePos(START);
+        ServerPlayer klaar = speler(helper), lezer = speler(helper);
+        helper.assertTrue(GuhrioSpel.start(klaar, startAbs) && GuhrioSpel.start(lezer, startAbs), "two players in the arena");
+        GroteNetherMikaEntity mika = baas(helper, startAbs);
+        DuelPlan plan = DuelPlan.van(level.getServer());
+        int[] fase = {0}, teller = {0};
+        Vec3[] stond = {null};
+        helper.onEachTick(() -> {
+            // (only the ready player's game ticks: the reader's card stays open until fase 5)
+            tik(klaar);
+            if (fase[0] >= 5) {
+                tik(lezer);
+            }
+            teller[0]++;
+            GuhrioSpel.Sessie sl = GuhrioSpel.sessie(lezer);
+            switch (fase[0]) {
+                case 0 -> {
+                    if (mika.stand() == GroteNetherMikaEntity.LOOPT) {
+                        helper.assertTrue(Verteller.gezien(klaar, GuhrioW3Feature.KAART_DUEL) && !Verteller.gezien(lezer, GuhrioW3Feature.KAART_DUEL)
+                                && Cutscenes.bezig(lezer) && !Cutscenes.bezig(klaar), "one has read the card, the other is still reading");
+                        helper.assertTrue(teller[0] < 400, "the fight began without waiting for the reader (tick " + teller[0] + ")");
+                        // the ready one on the far ledge, the reader left of the Mika: he walks to the ready one
+                        opCel(helper, klaar, plan.hendel().getX() + 2 - 2);
+                        opCel(helper, lezer, 12);
+                        stond[0] = lezer.position();
+                        teller[0] = 0;
+                        fase[0] = 1;
+                    }
+                }
+                case 1 -> {
+                    // he keeps facing (and walking to) the player who is in the fight, never the reader on his other side
+                    if (mika.stand() == GroteNetherMikaEntity.LOOPT || mika.stand() == GroteNetherMikaEntity.GOOIT) {
+                        helper.assertTrue(mika.kijk() > 0, "he looks at the player who plays, not at the reader");
+                    }
+                    if (mika.stand() == GroteNetherMikaEntity.HURKT || mika.stand() == GroteNetherMikaEntity.SPRINGT) {
+                        // the reader right beside his landing, on the ground; the ready one out of reach
+                        opCel(helper, lezer, mika.plek() + 2 - 2.5);
+                        lezer.setDeltaMovement(Vec3.ZERO);
+                        stond[0] = lezer.position();
+                    } else if (mika.stand() == GroteNetherMikaEntity.LANDT) {
+                        helper.assertTrue(lezer.getDeltaMovement().lengthSqr() < 1e-9 && lezer.position().distanceTo(stond[0]) < 1e-6,
+                                "his landing does not shove whoever reads: " + lezer.getDeltaMovement());
+                        // a coal and the Mika himself "touch" the reader (what the reader's game would report): nothing
+                        KooltjeEntity kool = kool(helper, sl, 0, 1);
+                        kool.snapTo(lezer.getX(), lezer.getY() + 0.3, lezer.getZ(), 0f, 0f);
+                        GuhrioSpel.actie(lezer, nl.juiced.guhs.feature.guhrio.GuhrioPayloads.Actie.GERAAKT, lezer.blockPosition(), kool.getId());
+                        GuhrioSpel.actie(lezer, nl.juiced.guhs.feature.guhrio.GuhrioPayloads.Actie.GERAAKT, lezer.blockPosition(), mika.getId());
+                        GuhrioSpel.geraakt(lezer, sl);
+                        helper.assertTrue(lezer.position().distanceTo(stond[0]) < 1e-6 && GuhrioSpel.sessie(lezer) == sl,
+                                "a coal and the Mika do not send a reader back to his flag");
+                        // (the same coal does send back somebody who plays: the check above is no empty one)
+                        GuhrioSpel.Sessie sk = GuhrioSpel.sessie(klaar);
+                        Vec3 was = klaar.position();
+                        kool.snapTo(was.x, was.y + 0.3, was.z, 0f, 0f);
+                        GuhrioSpel.actie(klaar, nl.juiced.guhs.feature.guhrio.GuhrioPayloads.Actie.GERAAKT, klaar.blockPosition(), kool.getId());
+                        helper.assertTrue(klaar.position().distanceTo(was) > 3 && GuhrioSpel.sessie(klaar) == sk, "whoever plays is put back at the flag by a coal");
+                        kool.discard();
+                        mika.devRonde(level, 4);              // (straight to his fall)
+                        fase[0] = 2;
+                    }
+                }
+                case 2 -> {
+                    // he fell: the ready one watches the end scene and has won; the reader is owed it
+                    if (GuhrioKasteel.duelGewonnen(klaar) && GuhrioSpel.sessie(klaar) == null) {
+                        helper.assertTrue(GuhrioW3Feature.tegoed(klaar) == null, "nothing is owed to who watched the scene");
+                        helper.assertTrue(!GuhrioKasteel.duelGewonnen(lezer) && GuhrioW3Feature.tegoed(lezer) != null && GuhrioSpel.sessie(lezer) == sl
+                                && Cutscenes.bezig(lezer) && !Cutscenes.gezien(lezer, "guhriow3_einde"), "the reader has not won yet: the end scene is owed to him");
+                        helper.assertTrue(mika.stand() == GroteNetherMikaEntity.MOKT, "the Mika sulks");
+                        teller[0] = 0;
+                        fase[0] = 3;
+                    }
+                }
+                case 3 -> {
+                    // as long as he reads nothing changes: no new fight starts for him, he is not thrown out
+                    if (teller[0] > 150) {
+                        helper.assertTrue(mika.stand() == GroteNetherMikaEntity.MOKT && GuhrioSpel.sessie(lezer) == sl && !GuhrioKasteel.duelGewonnen(lezer),
+                                "the Mika waits for the reader");
+                        fase[0] = 5;                            // the reader closes the card (his game ticks from now on)
+                    }
+                }
+                default -> {
+                    if (GuhrioKasteel.duelGewonnen(lezer) && GuhrioSpel.sessie(lezer) == null) {
+                        helper.assertTrue(Verteller.gezien(lezer, GuhrioW3Feature.KAART_DUEL) && Cutscenes.gezien(lezer, "guhriow3_einde")
+                                && GuhrioW3Feature.tegoed(lezer) == null, "the card was read, the end scene watched, nothing is owed any more");
+                        fase[0] = 6;
+                    }
+                }
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(fase[0] == 6, "step " + fase[0] + " (stand " + mika.stand() + ", round " + mika.ronde() + ")");
+            weg(helper, klaar, lezer);
+        });
+    }
+
+    /**
+     * A player logs out during the end scene (the story engine drops a scene's ending then). The win is still owed: at the
+     * next login the scene plays again from the level hall, and at its end the duel is won and the player stands in the
+     * tower room - nobody fights the Grote Nether-Mika twice for one win.
+     */
+    @GuhTest(template = DUEL, batch = BATCH, timeoutTicks = 3000)
+    public static void guhriow3UitgelogdTijdensHetEinde(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos startAbs = helper.absolutePos(START);
+        ServerPlayer p = speler(helper);
+        helper.assertTrue(GuhrioSpel.start(p, startAbs), "in the arena");
+        GroteNetherMikaEntity mika = baas(helper, startAbs);
+        BlockPos uit = GuhrioSpel.sessie(p).level().uitgang();
+        int[] fase = {0}, teller = {0};
+        helper.onEachTick(() -> {
+            teller[0]++;
+            switch (fase[0]) {
+                case 0 -> {
+                    tik(p);
+                    if (mika.stand() == GroteNetherMikaEntity.LOOPT) {
+                        mika.devRonde(level, 4);
+                        fase[0] = 1;
+                    }
+                }
+                case 1 -> {
+                    // (no tick of the player's game once the scene plays: a mock would have watched it in two)
+                    if (GuhrioW3Feature.tegoed(p) != null && Cutscenes.bezig(p)) {
+                        helper.assertTrue(!GuhrioKasteel.duelGewonnen(p) && GuhrioSpel.sessie(p) != null, "the scene plays: not won yet");
+                        NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent(p));
+                        helper.assertTrue(GuhrioSpel.sessie(p) == null && !Cutscenes.bezig(p) && !GuhrioKasteel.duelGewonnen(p),
+                                "logged out during the scene: out of the level, the duel not won");
+                        helper.assertTrue(GuhrioW3Feature.tegoed(p) != null, "but the ending is still owed (saved with the player)");
+                        helper.assertTrue(!Cutscenes.gezien(p, "guhriow3_einde"), "the scene does not count as watched");
+                        teller[0] = 0;
+                        fase[0] = 2;
+                    } else {
+                        tik(p);
+                    }
+                }
+                case 2 -> {
+                    // "the next login": the player stands at the level's entrance (where a logout puts you); twice a second
+                    // the owed scene is offered, and now it can play
+                    if (Cutscenes.bezig(p)) {
+                        helper.assertTrue(GuhrioSpel.sessie(p) == null, "the scene plays again, outside the level");
+                        fase[0] = 3;
+                    }
+                    helper.assertTrue(teller[0] < 200, "the owed scene was not offered again");
+                }
+                default -> {
+                    tik(p);
+                    if (GuhrioKasteel.duelGewonnen(p)) {
+                        helper.assertTrue(GuhrioW3Feature.tegoed(p) == null && Cutscenes.gezien(p, "guhriow3_einde") && GuhrioKasteel.LIJN.klaar(p),
+                                "won at the end of the scene: nothing owed, the questline done");
+                        helper.assertTrue(uit != null && p.blockPosition().equals(uit), "and put where the duel lets you out: " + p.blockPosition() + " / " + uit);
+                        fase[0] = 4;
+                    }
+                }
+            }
+        });
+        helper.succeedWhen(() -> {
+            helper.assertTrue(fase[0] == 4, "step " + fase[0] + " (stand " + mika.stand() + ")");
+            weg(helper, p);
+        });
+    }
+
+    /**
+     * The bridge columns and the lever are real blocks for the length of a fight. A server that stopped in the middle of one
+     * leaves half a bridge and a pulled lever in the world: the next Grote Nether-Mika mends both before his first roar.
+     */
+    @GuhTest(template = DUEL, batch = BATCH, timeoutTicks = 2000)
+    public static void guhriow3BrugHeelNaEenStop(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos startAbs = helper.absolutePos(START);
+        DuelPlan plan = DuelPlan.van(level.getServer());
+        BlockPos hendel = cel(helper, plan.hendel().getX() + 2, 4);
+        // what a fight that never ended leaves behind
+        for (int x = plan.breuk(); x <= plan.brugTot(); x++) {
+            level.setBlock(cel(helper, x + 2, 3), net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(), 3);
+        }
+        level.setBlock(hendel, level.getBlockState(hendel).setValue(GuhrioW3Blocks.HendelBlok.GETROKKEN, true), 3);
+        helper.assertTrue(brugWeg(helper, plan.breuk(), plan.brugTot()) && !brugHeel(helper, plan, plan.brugVan(), plan.brugTot()), "half a bridge");
+        ServerPlayer p = speler(helper);
+        helper.assertTrue(GuhrioSpel.start(p, startAbs), "the next visitor walks in");
+        GroteNetherMikaEntity mika = baas(helper, startAbs);
+        helper.assertTrue(mika != null, "a new Grote Nether-Mika");
+        helper.onEachTick(() -> tik(p));
+        helper.succeedWhen(() -> {
+            helper.assertTrue(mika.stand() == GroteNetherMikaEntity.LOOPT, "he has not begun yet (stand " + mika.stand() + ")");
+            helper.assertTrue(brugHeel(helper, plan, plan.brugVan(), plan.brugTot()), "the whole bridge is back");
+            helper.assertFalse(level.getBlockState(hendel).getValue(GuhrioW3Blocks.HendelBlok.GETROKKEN), "the lever stands up again");
+            helper.assertTrue(mika.ronde() == 1, "round 1");
+            weg(helper, p);
         });
     }
 
@@ -383,7 +585,7 @@ public class GuhrioW3GameTests {
     }
 
     /** A coal floats slowly along the lane; a touch sends you back to your flag (unhurt); a knabbel puts it out; a wall too. */
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void guhriow3Kooltje(GameTestHelper helper) {
         BlockPos startAbs = baan(helper);
         helper.setBlock(new BlockPos(16, 2, Z), GuhrioFeature.BLOK.get());

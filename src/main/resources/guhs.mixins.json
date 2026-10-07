@@ -10,6 +10,7 @@
     "GameTestInfoMixin",
     "GuhrioDuwMixin",
     "MockConnectionMixin",
+    "RingSluierDeeltjesMixin",
     "RingSluierGeluidMixin",
     "RingZichtMixin",
     "ServerLevelMixin",

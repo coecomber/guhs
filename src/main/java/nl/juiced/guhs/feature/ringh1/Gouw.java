@@ -59,7 +59,11 @@ import nl.juiced.guhs.world.ModDimensions;
  *       open the structure guhs:barbecueput only makes small pits from now on).</li>
  *   <li><b>Guhdalf's camp at an old big pit</b> (prop template guhs:ringh1_kamp): {@link Bezetting} puts it once per pit on
  *       the first free spot of {@link #KEUZES}, a ring of spots around the pit: only where there is nothing but air, plants and
- *       natural ground, so never over something a player built. A pit without a free spot has no camp and no Guhdalf.</li>
+ *       natural ground, so never over something a player built. When none of those is free {@link #zoekRuimer} looks
+ *       further (a fourth ring, and the camp turned all four ways), and when even that finds nothing the server log says so
+ *       once and an operator puts the camp down by hand ({@code /guhs ringh1 zetkamp}, {@link #zetKampBijPut}): without a
+ *       camp nobody can start the story at that pit. Camps that Bezetting did not place itself are kept in
+ *       {@link Kampen}.</li>
  *   <li>Who lives where: Guhdalf and (until he joins a player) Sam-guh at every camp, four Gouwguhs in the Knabbelgouw. All
  *       of them come through {@link Bezetting}, also in a new Knabbelgouw (one code path for old and new).</li>
  *   <li>{@link #dichtstbij}: the nearest place where Guhdalf stands (a Knabbelgouw or an old big pit): what the Superkompas
@@ -275,7 +279,10 @@ public final class Gouw {
             return null;
         }
         Optional<BlockPos> hoek = Bezetting.Geplaatst.get(level).plek(KAMP, start);
-        return hoek.map(h -> new Plek(h, Kopieen.draai(start, PUT_STUK))).orElse(null);
+        if (hoek.isPresent()) {
+            return new Plek(hoek.get(), Kopieen.draai(start, PUT_STUK));
+        }
+        return Kampen.get(level).plek(Bezetting.tag(KAMP, start));   // (the wider search, or an operator)
     }
 
     /** The camp on the feestwei of this Knabbelgouw. */
@@ -332,6 +339,360 @@ public final class Gouw {
             return;
         }
         for (StructureStart start : Kopieen.bij(level, put, bij, Bezetting.BEREIK)) {
+            Plek kamp = kampVan(level, start);
+            if (kamp == null && Bezetting.Geplaatst.get(level).gehad(KAMP, start)) {
+                kamp = zoekRuimer(level, start);   // (Bezetting found no free spot on its strip: look further, once)
+            }
+            if (kamp != null) {
+                Bescherming.zetDoos(level, KAMP, kamp.doos());
+            }
+        }
+    }
+
+    // =====================================================================================================================
+    // a pit without a free spot on Bezetting's strip (PHASE3 R03): the wider search, the operator's camp
+    // =====================================================================================================================
+
+    private static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
+    /** The rings of the wider search (blocks between the pit and the camp), from near to far. */
+    private static final int[] RUIMER = {3, 7, 12, 17};
+    /** (not saved) the pits without a camp that this server run has told the log about. */
+    private static final java.util.Set<String> GEMELD = ConcurrentHashMap.newKeySet();
+
+    /**
+     * SavedData {@code guhs:ringh1_kampen} (per dimension): the camps of old big pits that {@link Bezetting} did not place
+     * itself, by the tag of the pit ({@code Bezetting.tag(KAMP, start)}): found by the wider search or put down by an
+     * operator, and the pits where even the wider search found nothing ("geen": it is not tried again).
+     */
+    public static class Kampen extends net.minecraft.world.level.saveddata.SavedData {
+        public static final net.minecraft.world.level.saveddata.SavedDataType<Kampen> TYPE = nl.juiced.guhs.storage.GuhSavedData.tagType("ringh1_kampen", Kampen::new,
+                Kampen::load, Kampen::save);
+        private final Map<String, Plek> kampen = new java.util.HashMap<>();
+        private final java.util.Set<String> geen = new java.util.HashSet<>();
+
+        public static Kampen get(ServerLevel level) {
+            return level.getDataStorage().computeIfAbsent(TYPE);
+        }
+
+        @Nullable
+        public Plek plek(String put) {
+            return kampen.get(put);
+        }
+
+        /** Did the wider search look at this pit and find nothing? */
+        public boolean geen(String put) {
+            return geen.contains(put);
+        }
+
+        void zet(String put, Plek kamp) {
+            kampen.put(put, kamp);
+            geen.remove(put);
+            setDirty();
+        }
+
+        void zetGeen(String put) {
+            if (geen.add(put)) {
+                setDirty();
+            }
+        }
+
+        /** Forgets what is known about this pit (true: there was something). */
+        public boolean vergeet(String put) {
+            boolean was = kampen.remove(put) != null | geen.remove(put);
+            if (was) {
+                setDirty();
+            }
+            return was;
+        }
+
+        private net.minecraft.nbt.CompoundTag save() {
+            net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
+            net.minecraft.nbt.CompoundTag k = new net.minecraft.nbt.CompoundTag();
+            kampen.forEach((put, kamp) -> {
+                net.minecraft.nbt.CompoundTag t = new net.minecraft.nbt.CompoundTag();
+                t.putLong("Hoek", kamp.hoek().asLong());
+                t.putInt("Draai", kamp.draai().ordinal());
+                k.put(put, t);
+            });
+            tag.put("Kampen", k);
+            net.minecraft.nbt.CompoundTag g = new net.minecraft.nbt.CompoundTag();
+            geen.forEach(put -> g.putBoolean(put, true));
+            tag.put("Geen", g);
+            return tag;
+        }
+
+        private static Kampen load(net.minecraft.nbt.CompoundTag tag) {
+            Kampen uit = new Kampen();
+            net.minecraft.nbt.CompoundTag k = tag.getCompoundOrEmpty("Kampen");
+            for (String put : k.keySet()) {
+                net.minecraft.nbt.CompoundTag t = k.getCompoundOrEmpty(put);
+                uit.kampen.put(put, new Plek(BlockPos.of(t.getLongOr("Hoek", 0L)), Rotation.values()[Math.floorMod(t.getIntOr("Draai", 0), 4)]));
+            }
+            uit.geen.addAll(tag.getCompoundOrEmpty("Geen").keySet());
+            return uit;
+        }
+    }
+
+    /** Where the camp could go around a big pit when Bezetting's own 48 spots are taken: the corner and the turn, in the world. */
+    static List<Plek> ruimereKeuzes(StructureStart start) {
+        List<Plek> uit = new ArrayList<>();
+        Rotation put = Kopieen.draai(start, PUT_STUK);
+        BlockPos midden = Kopieen.wereld(start, PUT_STUK, PUT_MIDDEN);
+        if (midden == null) {
+            return uit;
+        }
+        for (int ver : RUIMER) {
+            for (Rotation r : new Rotation[]{Rotation.NONE, Rotation.CLOCKWISE_90, Rotation.CLOCKWISE_180, Rotation.COUNTERCLOCKWISE_90}) {
+                if (r == Rotation.NONE && ver != RUIMER[RUIMER.length - 1]) {
+                    continue;   // (the camp turned as the pit is, on the three near rings: Bezetting's own spots)
+                }
+                boolean dwars = r == Rotation.CLOCKWISE_90 || r == Rotation.COUNTERCLOCKWISE_90;
+                int bx = dwars ? KAMP_MAAT.getZ() : KAMP_MAAT.getX(), bz = dwars ? KAMP_MAAT.getX() : KAMP_MAAT.getZ();
+                int noord = -bz - ver + 1, zuid = PUT_MAAT + ver - 1, west = -bx - ver + 1, oost = PUT_MAAT + ver - 1;
+                int[] langsX = {(PUT_MAAT - bx) / 2, 0, PUT_MAAT - bx}, langsZ = {(PUT_MAAT - bz) / 2, 0, PUT_MAAT - bz};
+                List<int[]> dozen = new ArrayList<>();   // {x0, z0}: the least corner of the camp's box, in the pit's own coordinates
+                for (int x : langsX) {
+                    dozen.add(new int[]{x, noord});
+                }
+                for (int z : langsZ) {
+                    dozen.add(new int[]{oost, z});
+                    dozen.add(new int[]{west, z});
+                }
+                for (int x : langsX) {
+                    dozen.add(new int[]{x, zuid});
+                }
+                dozen.add(new int[]{west, noord});
+                dozen.add(new int[]{oost, noord});
+                dozen.add(new int[]{west, zuid});
+                dozen.add(new int[]{oost, zuid});
+                for (int[] d : dozen) {
+                    // (the template's corner is the camp's (0, 0, 0): which corner of its box that is depends on the turn)
+                    int hx = r == Rotation.CLOCKWISE_90 || r == Rotation.CLOCKWISE_180 ? d[0] + bx - 1 : d[0];
+                    int hz = r == Rotation.CLOCKWISE_180 || r == Rotation.COUNTERCLOCKWISE_90 ? d[1] + bz - 1 : d[1];
+                    BlockPos hoek = Kopieen.wereld(start, PUT_STUK, new BlockPos(hx, G, hz));
+                    if (hoek == null) {
+                        continue;
+                    }
+                    Plek kamp = new Plek(hoek, put.getRotated(r));
+                    if (binnenBereik(kamp, midden)) {
+                        uit.add(kamp);
+                    }
+                }
+            }
+        }
+        return uit;
+    }
+
+    /** Bezetting looks for Guhdalf and Sam-guh within {@link #KAMP_ZOEK} blocks (per axis) of the pit's middle: are both in there? */
+    private static boolean binnenBereik(Plek kamp, BlockPos midden) {
+        for (BlockPos lokaal : new BlockPos[]{GUHDALF, SAM}) {
+            BlockPos w = kamp.wereld(lokaal);
+            if (Math.abs(w.getX() - midden.getX()) > KAMP_ZOEK - 2 || Math.abs(w.getZ() - midden.getZ()) > KAMP_ZOEK - 2) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * The wider search for the camp of an old big pit where Bezetting's strip had no free spot: the camp turned all four ways
+     * on the same three rings, and a fourth ring further out, each also one and two blocks higher and lower, with the very
+     * rule of Bezetting for "free" (air and plants; natural ground only in its bottom layer; ground under at least half of it:
+     * never over something a player built). Done once per pit: the camp is placed and kept in {@link Kampen}, or the pit is
+     * marked "geen" and the log says what an operator can do. Null: no camp (yet: not everything around the pit is loaded).
+     */
+    @Nullable
+    static Plek zoekRuimer(ServerLevel level, StructureStart start) {
+        return zoekRuimer(level, start, null);
+    }
+
+    /** {@link #zoekRuimer(ServerLevel, StructureStart)} over these spots (null: {@link #ruimereKeuzes}; the tests give their own). */
+    @Nullable
+    static Plek zoekRuimer(ServerLevel level, StructureStart start, @Nullable List<Plek> keuzes) {
+        String tag = Bezetting.tag(KAMP, start);
+        Kampen data = Kampen.get(level);
+        Plek had = data.plek(tag);
+        if (had != null) {
+            return had;
+        }
+        if (data.geen(tag)) {
+            meldGeenKamp(level, start, tag);
+            return null;
+        }
+        Optional<StructureTemplate> template = level.getStructureManager().get(KAMP_TEMPLATE);
+        if (template.isEmpty() || Kopieen.wereld(start, PUT_STUK, BlockPos.ZERO) == null) {
+            return null;
+        }
+        for (Plek keuze : keuzes != null ? keuzes : ruimereKeuzes(start)) {
+            net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings zo =
+                    new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings().setRotation(keuze.draai()).setMirror(Mirror.NONE);
+            for (int dy : new int[]{0, 1, -1, 2, -2}) {
+                BlockPos hoek = keuze.hoek().above(dy);
+                Boolean past = past(level, template.get().getBoundingBox(zo, hoek));
+                if (past == null) {
+                    return null;   // (not loaded: later, so the spots keep their order)
+                }
+                if (past) {
+                    template.get().placeInWorld(level, hoek, hoek, zo, level.getRandom(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                    Plek kamp = new Plek(hoek, keuze.draai());
+                    data.zet(tag, kamp);
+                    LOGGER.info("Guhs: Guhdalf's camp stands at {} (turned {}) next to the big barbecueput of chunk {}: found by the wider search", hoek.toShortString(),
+                            kamp.draai(), start.getChunkPos());
+                    return kamp;
+                }
+            }
+        }
+        data.zetGeen(tag);
+        meldGeenKamp(level, start, tag);
+        return null;
+    }
+
+    /** Bezetting's own rule for a prop's box (its {@code past} is private): free, or not, or (null) not loaded. */
+    @Nullable
+    private static Boolean past(ServerLevel level, BoundingBox box) {
+        if (box.minY() <= level.getMinY() || box.maxY() >= level.getMaxY()) {
+            return false;
+        }
+        for (int x = box.minX() >> 4; x <= box.maxX() >> 4; x++) {
+            for (int z = box.minZ() >> 4; z <= box.maxZ() >> 4; z++) {
+                if (!level.hasChunk(x, z)) {
+                    return null;
+                }
+            }
+        }
+        BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+        int kolommen = 0, grond = 0;
+        for (int x = box.minX(); x <= box.maxX(); x++) {
+            for (int z = box.minZ(); z <= box.maxZ(); z++) {
+                for (int y = box.minY(); y <= box.maxY(); y++) {
+                    net.minecraft.world.level.block.state.BlockState state = level.getBlockState(at.set(x, y, z));
+                    if (!(y == box.minY() ? Bezetting.vrij(state) : Bezetting.leeg(state)) || level.getBlockEntity(at) != null) {
+                        return false;
+                    }
+                }
+                kolommen++;
+                net.minecraft.world.level.block.state.BlockState onder = level.getBlockState(at.set(x, box.minY() - 1, z));
+                grond += onder.isSolidRender() || onder.is(Bezetting.NATUURLIJK) && !onder.canBeReplaced() ? 1 : 0;
+            }
+        }
+        return grond * 2 >= kolommen;
+    }
+
+    /** One clear line per pit and server run: no room for the camp here, and what an operator can do about it. */
+    private static void meldGeenKamp(ServerLevel level, StructureStart start, String tag) {
+        if (GEMELD.add(level.dimension().identifier() + "|" + tag)) {
+            BlockPos midden = start.getBoundingBox().getCenter();
+            LOGGER.warn("Guhs: NO ROOM for Guhdalf's camp at the big barbecueput at {} ({}): players built all around it. Nobody can start the "
+                    + "Knabbelring at THIS pit (the grill portal stays shut for who has no other pit or Knabbelgouw). An operator can put the camp down by "
+                    + "hand: stand where it should be, look the way its open side should face, and run /guhs ringh1 zetkamp", midden.toShortString(),
+                    level.dimension().identifier());
+        }
+    }
+
+    /**
+     * (the operator's command {@code /guhs ringh1 zetkamp}) Guhdalf's camp at the old big pit near this spot, exactly where
+     * the operator wants it: its plate centred on the block under {@code voeten}, its open side facing {@code kijk}. The
+     * operator decides, so nothing is asked about what stands there (it is replaced by the camp); the camp may not cut into
+     * the pit itself and must be near enough for Bezetting to find Guhdalf and Sam-guh. It is kept ({@link Kampen}) and
+     * protected like any other camp; Guhdalf and Sam-guh walk in by themselves within a few seconds. Returns null when the
+     * camp stands, else a text (literal, for the operator) that says why not.
+     */
+    @Nullable
+    static String zetKampBijPut(ServerLevel level, BlockPos voeten, net.minecraft.core.Direction kijk) {
+        if (Bezetting.start(level, STRUCTUUR, voeten) != null) {
+            return "this is a Knabbelgouw: it has its own camp on the feestwei";
+        }
+        StructureStart start = Bezetting.start(level, PUT, voeten);
+        if (start == null || Kopieen.wereld(start, PUT_STUK, BlockPos.ZERO) == null) {
+            return "no big barbecueput within " + Bezetting.BEREIK + " blocks of " + voeten.toShortString() + " (a small pit has no Grillguh and gets no camp)";
+        }
+        Bezetting.controleer(level, voeten);   // (let Bezetting try its own strip first: there is one camp per pit)
+        Plek er = kampVan(level, start);
+        if (er != null) {
+            return "this pit has a camp already, at " + er.hoek().toShortString() + " (turned " + er.draai() + ")";
+        }
+        if (!Bezetting.Geplaatst.get(level).gehad(KAMP, start)) {
+            return "the land around the pit is not all loaded yet: walk once around the pit and try again";
+        }
+        Optional<StructureTemplate> template = level.getStructureManager().get(KAMP_TEMPLATE);
+        if (template.isEmpty()) {
+            return "no template " + KAMP_TEMPLATE;
+        }
+        // (the camp's open side is south when it is not turned)
+        Rotation draai = switch (kijk) {
+            case WEST -> Rotation.CLOCKWISE_90;
+            case NORTH -> Rotation.CLOCKWISE_180;
+            case EAST -> Rotation.COUNTERCLOCKWISE_90;
+            default -> Rotation.NONE;
+        };
+        BlockPos midden = new BlockPos(KAMP_MAAT.getX() / 2, 0, KAMP_MAAT.getZ() / 2);
+        Plek kamp = new Plek(voeten.below().subtract(StructureTemplate.transform(midden, Mirror.NONE, draai, BlockPos.ZERO)), draai);
+        BoundingBox doos = kamp.doos();
+        for (net.minecraft.world.level.levelgen.structure.StructurePiece stuk : start.getPieces()) {
+            if (stuk.getBoundingBox().intersects(doos)) {
+                return "the camp would cut into the pit itself: stand a few blocks further from it";
+            }
+        }
+        BlockPos put = Kopieen.wereld(start, PUT_STUK, PUT_MIDDEN);
+        if (put == null || !binnenBereik(kamp, put)) {
+            return "too far from the pit: Guhdalf has to stand within " + (KAMP_ZOEK - 2) + " blocks (per axis) of its middle";
+        }
+        net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings zo =
+                new net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings().setRotation(draai).setMirror(Mirror.NONE);
+        template.get().placeInWorld(level, kamp.hoek(), kamp.hoek(), zo, level.getRandom(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+        Kampen.get(level).zet(Bezetting.tag(KAMP, start), kamp);
+        Bescherming.zetDoos(level, KAMP, doos);
+        LOGGER.info("Guhs: an operator put Guhdalf's camp at {} (turned {}) next to the big barbecueput of chunk {}", kamp.hoek().toShortString(), draai,
+                start.getChunkPos());
+        return null;
+    }
+
+    /**
+     * (the operator's command {@code /guhs ringh1 vergeetkamp}) forgets the camp of the pit here that the wider search or an
+     * operator placed (not one of Bezetting's own strip), so it can be put down again: Guhdalf and Sam-guh of that camp go,
+     * the blocks stay for the operator to clear. Returns what was done (a literal text).
+     */
+    static String vergeetKampBijPut(ServerLevel level, BlockPos bij) {
+        StructureStart start = Bezetting.start(level, PUT, bij);
+        if (start == null) {
+            return "no barbecueput within " + Bezetting.BEREIK + " blocks";
+        }
+        String tag = Bezetting.tag(KAMP, start);
+        Plek kamp = Kampen.get(level).plek(tag);
+        if (!Kampen.get(level).vergeet(tag)) {
+            return "nothing to forget: this pit has no camp of the wider search or of an operator";
+        }
+        GEMELD.remove(level.dimension().identifier() + "|" + tag);
+        Bescherming.wisDozen(level, KAMP);   // (every camp's box comes back by itself; this one's does not)
+        int weg = 0;
+        if (kamp != null) {
+            String guhdalf = Bezetting.tag(GUHDALF_KAMP, start), sam = Bezetting.tag(SAM_KAMP, start);
+            for (Entity e : level.getEntitiesOfClass(Entity.class, new net.minecraft.world.phys.AABB(kamp.wereld(GUHDALF)).inflate(KAMP_ZOEK), Entity::isAlive)) {
+                String t = e.getPersistentData().getStringOr(Bezetting.TAG, "");
+                if (t.equals(guhdalf) || t.equals(sam)) {
+                    e.discard();
+                    weg++;
+                }
+            }
+        }
+        return "forgotten" + (kamp == null ? "" : ": the camp at " + kamp.hoek().toShortString() + " (" + weg + " of its two inhabitants sent away; its blocks stay: "
+                + "clear them yourself)") + ". The wider search looks again; /guhs ringh1 zetkamp puts a camp where you stand";
+    }
+
+    /**
+     * (a chunk of the Guhmensie was loaded, {@link RingH1Events}) the camps of the big pits that reach into this chunk are
+     * protected boxes from now on, whoever loaded it: boxes put down by code are not saved, and before this they only came
+     * back when a player stood within 48 blocks of the pit (PHASE3 R21).
+     */
+    static void beschermBijChunk(ServerLevel level, ChunkPos chunk) {
+        Structure put = Kopieen.structuur(level, PUT);
+        if (put == null) {
+            return;
+        }
+        // (a piece that reaches into this chunk lies within 8 blocks of its middle; the pit lies at the surface)
+        int mx = chunk.getMiddleBlockX(), mz = chunk.getMiddleBlockZ();
+        BlockPos bij = new BlockPos(mx, level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, mx, mz), mz);
+        for (StructureStart start : Kopieen.bij(level, put, bij, 24)) {
             Plek kamp = kampVan(level, start);
             if (kamp != null) {
                 Bescherming.zetDoos(level, KAMP, kamp.doos());
@@ -433,7 +794,7 @@ public final class Gouw {
             if (template == null || !template.getPath().contains(PUT_STUK)) {
                 continue;   // (a small pit: no Grillguh, no Guhdalf)
             }
-            if (geplaatst.gehad(KAMP, start) && geplaatst.plek(KAMP, start).isEmpty()) {
+            if (geplaatst.gehad(KAMP, start) && kampVan(level, start) == null) {
                 continue;   // (no room for the camp there: Guhdalf is not at this pit)
             }
             return start.getPieces().get(0).getBoundingBox().getCenter();
@@ -447,6 +808,7 @@ public final class Gouw {
 
     static void wisAlles() {
         GEZOCHT.clear();
+        GEMELD.clear();
     }
 
     private Gouw() {

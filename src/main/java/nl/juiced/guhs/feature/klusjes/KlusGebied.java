@@ -32,6 +32,7 @@ import nl.juiced.guhs.feature.huisje.Huisje;
 import nl.juiced.guhs.feature.techmachine.Oogst;
 import nl.juiced.guhs.feature.tuintjes.TuinBlock;
 import nl.juiced.guhs.feature.vadswoud.KnabbelbessenstruikBlock;
+import nl.juiced.guhs.feature.wereld.Bescherming;
 
 /**
  * What there is to do in the home base of a huisje: one scan of its whole area ({@link Huisje#inGebied}, the blue dome)
@@ -43,6 +44,11 @@ import nl.juiced.guhs.feature.vadswoud.KnabbelbessenstruikBlock;
  * reads it with {@link #van(ServerLevel, Huisje, String)}: the same scan, no second walk through the area. And the crops
  * of {@link Soort#GEWAS} are more than crop blocks now ({@link #oogstbaar}): pumpkins and melons on their stem, sugar
  * cane, cocoa, nether wart and the scheutjes of the Guhbarbecuether.
+ * <p>
+ * <b>Never inside a protected quest building</b> ({@link Bescherming#beschermd}): the home base of a huisje that stands
+ * next to one reaches into it (the show beds of the Pepertuin, the lamps and the nests of a building, things a quest laid
+ * on the ground). The scan leaves every such spot out ({@link #beschermd}), so no chore finds work there and the overview
+ * of the huisje does not count it; the chores that look for animals or loose items ask the same question.
  */
 public final class KlusGebied {
     /** How long one scan stays valid. */
@@ -115,6 +121,14 @@ public final class KlusGebied {
     }
 
     private KlusGebied() {
+    }
+
+    /**
+     * Does this spot lie inside a protected quest building? Then nothing there is a chore: not for the scan, not for the
+     * chores that look for animals or for things on the ground.
+     */
+    public static boolean beschermd(ServerLevel level, BlockPos pos) {
+        return Bescherming.beschermd(level, pos);
     }
 
     private static String sleutel(ServerLevel level, BlockPos pos) {
@@ -326,15 +340,27 @@ public final class KlusGebied {
                         continue;
                     }
                     Soort soort = soort(level, p, s);
-                    if (soort != null && !(soort == Soort.GRAAF && naastHuisje(huisjeBlokken, p))) {
-                        uit.computeIfAbsent(soort, k -> new ArrayList<>()).add(p.immutable());
-                    }
-                    if (TuinBlock.dorstig(s)) {
-                        uit.computeIfAbsent(Soort.DORSTIG, k -> new ArrayList<>()).add(p.immutable());
-                    }
+                    boolean dorstig = TuinBlock.dorstig(s);
+                    boolean eigen = soort != null && !(soort == Soort.GRAAF && naastHuisje(huisjeBlokken, p));
+                    List<String> andere = null;
                     for (Map.Entry<String, Proef> e : EXTRA.entrySet()) {
                         if (e.getValue().is(level, p, s)) {
-                            extra.computeIfAbsent(e.getKey(), k -> new ArrayList<>()).add(p.immutable());
+                            (andere == null ? andere = new ArrayList<>(2) : andere).add(e.getKey());
+                        }
+                    }
+                    // (asked only for a block that is something: a quest building's own crops, lamps, nests, machines are no chore)
+                    if (!eigen && !dorstig && andere == null || beschermd(level, p)) {
+                        continue;
+                    }
+                    if (eigen) {
+                        uit.computeIfAbsent(soort, k -> new ArrayList<>()).add(p.immutable());
+                    }
+                    if (dorstig) {
+                        uit.computeIfAbsent(Soort.DORSTIG, k -> new ArrayList<>()).add(p.immutable());
+                    }
+                    if (andere != null) {
+                        for (String naam : andere) {
+                            extra.computeIfAbsent(naam, k -> new ArrayList<>()).add(p.immutable());
                         }
                     }
                 }

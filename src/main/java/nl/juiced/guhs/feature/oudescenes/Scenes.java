@@ -26,7 +26,9 @@ import nl.juiced.guhs.registry.ModSounds;
  * bbq2 (oude-scenes): the six camera scenes of the older stories, as the verhaal engine wants them. Positions are relative to
  * the scene's anchor (a block of the story's own template), in template coordinates, so they fit every copy however it is
  * turned. The scripts themselves, with what every beat is for, are tools/features/oude_scenes_scene.py (which also checks every
- * camera and actor against the template); their texts: scene.guhs.oudescenes_*. {@link OudeScenes} says when each plays.
+ * camera and actor against the template); their texts: scene.guhs.oudescenes_*. {@link OudeScenes} says when each plays
+ * (and tries every camera against the real blocks first); in a replay from the Guhdex, later, a camera that somebody
+ * has built over steps out of the block by itself (cameraOntwijkt).
  */
 public final class Scenes {
     // ---- oudescenes_balto: De witte wolf-guh ----
@@ -39,7 +41,7 @@ public final class Scenes {
             new Effecten.Stroom(160, 330, BaltoFeature.WOLFGLANS::get, new Vec3(0.5, 4.8, -5.0), new Vec3(0.5, 4.8, -5.0), 1.0f, 0.7, new Vec3(0.0, 0.02, 0.0)),
             new Effecten.Stroom(316, 317, BaltoFeature.WOLFGLANS::get, new Vec3(0.5, 5.2, -5.0), new Vec3(0.5, 5.2, -5.0), 60.0f, 0.9, new Vec3(0.0, 0.02, 0.0)),
             new Effecten.Stroom(372, 373, BaltoFeature.WOLFGLANS::get, new Vec3(0.5, 4.9, -5.0), new Vec3(0.5, 4.9, -5.0), 50.0f, 0.7, new Vec3(0.0, 0.02, 0.0))));
-    public static final Cutscene BALTO = Cutscene.maak("oudescenes_balto").duur(420).bij("balto").kaart("oudescenes_balto").verbergEcht(26.0)
+    public static final Cutscene BALTO = Cutscene.maak("oudescenes_balto").duur(420).bij("balto").kaart("oudescenes_balto").verbergEcht(26.0).cameraOntwijkt()
             .speler(new Vec3(2.0, 0.0, 1.6), 90.0f)
             .guh("balto", GuhVariant.BALTOGUH, new Vec3(0.9, 0.0, 0.9), 90.0f)
             .npc("wolf", GuhNpcEntity.Kind.WITTE_WOLFGUH, new Vec3(0.5, -40.0, -5.0), 0.0f)
@@ -103,7 +105,7 @@ public final class Scenes {
             new Effecten.Stroom(198, 252, () -> new DustParticleOptions(0xB45CFF, 1.25f), new Vec3(0.72, 1.55, 2.06), new Vec3(0.72, 1.55, 2.06), 2.0f, 0.0, new Vec3(0.0, 0.0, 0.0)),
             new Effecten.Stroom(242, 243, MewtwoFeature.GLOED::get, new Vec3(0.5, 3.2, 0.5), new Vec3(0.5, 3.2, 0.5), 40.0f, 0.7, new Vec3(0.0, 0.02, 0.0)),
             new Effecten.Stroom(244, 300, MewtwoFeature.GLOED::get, new Vec3(0.5, 1.6, 0.5), new Vec3(0.5, 4.6, 0.5), 2.0f, 0.5, new Vec3(0.0, 0.0, 0.0))));
-    public static final Cutscene MEWTWO = Cutscene.maak("oudescenes_mewtwo").duur(440).bij("mewtwo").kaart("oudescenes_mewtwo").verbergEcht(34.0)
+    public static final Cutscene MEWTWO = Cutscene.maak("oudescenes_mewtwo").duur(440).bij("mewtwo").kaart("oudescenes_mewtwo").verbergEcht(34.0).cameraOntwijkt()
             .guh("guhtwo", GuhVariant.MEWTWO, new Vec3(0.5, -40.0, 0.5), 0.0f)
             .acteur("mew", MewtwoFeature.MEW, new Vec3(9.5, -40.0, 5.5), 90.0f)
             .camera(0, new Vec3(0.5, 9.6, 23.0), new Vec3(0.5, 5.0, 11.5))
@@ -158,7 +160,7 @@ public final class Scenes {
     public static final Effecten OHANA_EFFECTEN = new Effecten(new float[][] {{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f}}, new int[] {}, List.of(
             new Effecten.Stroom(272, 273, BandFeature.HARTJE::get, new Vec3(0.85, 1.2, 0.4), new Vec3(0.85, 1.2, 0.4), 10.0f, 0.35, new Vec3(0.0, 0.02, 0.0)),
             new Effecten.Stroom(280, 326, BandFeature.HARTJE::get, new Vec3(0.85, 1.25, 0.4), new Vec3(0.85, 1.25, 0.4), 0.25f, 0.3, new Vec3(0.0, 0.0, 0.0))));
-    public static final Cutscene OHANA = Cutscene.maak("oudescenes_ohana").duur(420).bij("guhwaii").kaart("oudescenes_ohana").verbergEcht(40.0)
+    public static final Cutscene OHANA = Cutscene.maak("oudescenes_ohana").duur(420).bij("guhwaii").kaart("oudescenes_ohana").verbergEcht(40.0).cameraOntwijkt()
             .guh("stitch", GuhVariant.STITCH626, new Vec3(0.2, 0.0, 0.9), 0.0f)
             .npc("lilo", GuhNpcEntity.Kind.LILO_GUH, new Vec3(1.05, -40.0, 0.25), 0.0f)
             .acteur("boek", () -> EntityType.ITEM_DISPLAY, new Vec3(-0.1, 0.03, 0.3), 135.0f, Rekwisieten::prentenboek)
@@ -208,7 +210,7 @@ public final class Scenes {
             new Effecten.Stroom(56, 104, () -> ParticleTypes.END_ROD, new Vec3(0.5, 18.0, -13.9), new Vec3(0.5, 5.0, -3.4), 6.0f, 0.12, new Vec3(0.0, 0.0, 0.0)),
             new Effecten.Stroom(100, 362, () -> ParticleTypes.END_ROD, new Vec3(0.5, 18.0, -13.9), new Vec3(0.5, 1.55, -0.5), 9.0f, 0.1, new Vec3(0.0, 0.0, 0.0)),
             new Effecten.Stroom(110, 362, HemelFeature.STERRETJE::get, new Vec3(0.5, 1.55, -0.5), new Vec3(0.5, 1.55, -0.5), 1.2f, 0.45, new Vec3(0.0, 0.0, 0.0))));
-    public static final Cutscene HEMEL = Cutscene.maak("oudescenes_hemel").duur(380).bij("hemel").kaart("oudescenes_hemel").verbergEcht(22.0)
+    public static final Cutscene HEMEL = Cutscene.maak("oudescenes_hemel").duur(380).bij("hemel").kaart("oudescenes_hemel").verbergEcht(22.0).cameraOntwijkt()
             .npc("hoeder", GuhNpcEntity.Kind.WOLKENHOEDER, new Vec3(3.5, 0.0, 1.5), 0.0f)
             .speler(new Vec3(0.5, 0.0, 3.5), 180.0f)
             .camera(0, new Vec3(7.5, 14.5, -16.5), new Vec3(0.5, 9.5, -1.0))
@@ -276,7 +278,7 @@ public final class Scenes {
             new Effecten.Stroom(64, 81, () -> ParticleTypes.SMALL_FLAME, new Vec3(-8.05, 3.95, 12.5), new Vec3(-9.95, 3.95, 12.5), 2.0f, 0.08, new Vec3(0.0, 0.0, 0.0)),
             new Effecten.Stroom(81, 98, () -> ParticleTypes.FLAME, new Vec3(-9.95, 3.95, 12.5), new Vec3(-9.95, 1.05, 12.5), 3.0f, 0.05, new Vec3(0.0, 0.01, 0.0)),
             new Effecten.Stroom(81, 98, () -> ParticleTypes.SMALL_FLAME, new Vec3(-9.95, 3.95, 12.5), new Vec3(-9.95, 1.05, 12.5), 2.0f, 0.08, new Vec3(0.0, 0.0, 0.0))));
-    public static final Cutscene GRILL = Cutscene.maak("oudescenes_grill").duur(360).bij("grillguh").kaart("oudescenes_grill").verbergEcht(30.0)
+    public static final Cutscene GRILL = Cutscene.maak("oudescenes_grill").duur(360).bij("grillguh").kaart("oudescenes_grill").verbergEcht(30.0).cameraOntwijkt()
             .speler(new Vec3(-9.0, 0.0, 10.7), 0.0f)
             .npc("grillguh", GuhNpcEntity.Kind.GRILLGUH, new Vec3(0.5, 0.0, 0.5), 90.0f)
             .npc("guhdalf", GuhNpcEntity.Kind.GUHDALF, new Vec3(-19.5, 7.0, -6.5), 0.0f)
@@ -330,7 +332,7 @@ public final class Scenes {
     public static final BlockPos TIMMER_DEUR = new BlockPos(11, 5, 16);
     public static final Effecten TIMMER_EFFECTEN = new Effecten(new float[][] {}, new int[] {}, List.of(
             ));
-    public static final Cutscene TIMMER = Cutscene.maak("oudescenes_timmer").duur(340).bij("timmerguh").kaart("oudescenes_timmer").verbergEcht(24.0)
+    public static final Cutscene TIMMER = Cutscene.maak("oudescenes_timmer").duur(340).bij("timmerguh").kaart("oudescenes_timmer").verbergEcht(24.0).cameraOntwijkt()
             .npc("timmerguh", GuhNpcEntity.Kind.TIMMERGUH, new Vec3(0.5, 0.0, 0.5), 90.0f)
             .acteur("bewoner", ModEntities.GUH, new Vec3(6.5, -40.0, 0.5), 90.0f, tag -> Rekwisieten.bewonertje(tag, GuhVariant.NORMAL))
             .speler(new Vec3(-1.4, 0.0, -1.6), 90.0f)

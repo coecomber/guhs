@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -424,16 +425,40 @@ public final class Ruilmarkt {
         }
     }
 
+    /** {@link #KLANT} of a Nether-Mika that sniffs a bar of somebody who is no certified customer: nobody gets an extra. */
+    static final String GEEN_KLANT = "-";
+    /** (feature/spiesburcht/NetherMikaRuil.PARTNER, which is not public) where a sniffing Nether-Mika keeps who gave or threw its bar. */
+    static final String RUIL_PARTNER = "guhs_ruil_speler";
+
+    /**
+     * A wild Nether-Mika took a vads bar in its paw (it starts sniffing; called for every bar, also one it picked up from the
+     * ground): it remembers whose bar it is. A click of a certified customer was already written down by {@link #klant}; a
+     * bar that was THROWN for it belongs to its thrower, whoever stands closest when the present comes.
+     */
+    static void snuffelt(MikaEntity mika) {
+        CompoundTag data = mika.getPersistentData();
+        if (!data.getStringOr(KLANT, "").isEmpty() || !(mika.level() instanceof ServerLevel level)) {
+            return;
+        }
+        UUID partner = data.read(RUIL_PARTNER, UUIDUtil.CODEC).orElse(null);
+        if (partner == null) {
+            return;   // (a bar from a dispenser or a hopper: nobody's)
+        }
+        ServerPlayer p = level.getServer().getPlayerList().getPlayer(partner);
+        data.putString(KLANT, p != null && CampingmarktFeature.RUILMARKT.klaar(p) ? partner.toString() : GEEN_KLANT);
+    }
+
     /**
      * A Nether-Mika threw something (not the vads bar itself: that is a barter that was broken off): when it was bartering
-     * with a certified customer, or one stands right next to it, it throws a second present. Once per barter.
+     * with a certified customer it throws a second present, to that customer. Once per barter. A bar that nobody gave it
+     * (a dispenser) counts for the certified customer who stands closest.
      */
     static void gegooid(ServerLevel level, MikaEntity mika, ItemStack wat) {
         CompoundTag data = mika.getPersistentData();
         String klant = data.getStringOr(KLANT, "");
         data.remove(KLANT);
         long nu = level.getGameTime();
-        if (wat.is(ModItems.VAHOEGE_VADS_INGOT.get()) || Math.abs(nu - data.getLongOr(EXTRA_TIJD, -100L)) < 20) {
+        if (wat.is(ModItems.VAHOEGE_VADS_INGOT.get()) || Math.abs(nu - data.getLongOr(EXTRA_TIJD, -100L)) < 20 || klant.equals(GEEN_KLANT)) {
             return;
         }
         ServerPlayer p = null;
@@ -444,7 +469,7 @@ public final class Ruilmarkt {
                 // (not a uuid: nobody)
             }
         } else {
-            // (the bar was thrown on the ground for it: the certified customer who stands closest)
+            // (a bar that was nobody's: the certified customer who stands closest)
             for (ServerPlayer q : level.getEntitiesOfClass(ServerPlayer.class, mika.getBoundingBox().inflate(8), CampingmarktFeature.RUILMARKT::klaar)) {
                 if (p == null || q.distanceToSqr(mika) < p.distanceToSqr(mika)) {
                     p = q;

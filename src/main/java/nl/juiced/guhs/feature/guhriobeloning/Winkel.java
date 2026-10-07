@@ -115,6 +115,6 @@ public final class Winkel {
 
     /** Puts coins into the pocket (the tip; dev commands). */
     public static void geef(ServerPlayer p, int munten) {
-        GuhrioSpel.spaar(p).putInt("Munten", GuhrioSpel.munten(p) + Math.max(0, munten));
+        GuhrioKasteel.geef(p, munten);
     }
 }

@@ -1,0 +1,220 @@
+# bbq2, ring-knipogen (AutoCheck, dev only): the seven winks at the older stories. Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/bbq2_ring-knipogen.txt
+# (commands: see autocheck.txt; the op commands used here: /guhs ringknipoog speel <naam> | stand | vergeet
+#  (feature/ringknipoog/RingKnipoogCommands.java: speel plays a wink in the frame of the building the player stands in,
+#  whether or not it was seen), and the chapters' own try-out builders, dev runs only: /guhs ringh2 bouw, /guhs ringh3
+#  bouw, /guhs ringh4 bouw, /guhs ringh6 bouw, /guhs ringsausuman toren.)
+# Every wink is 5 to 10 seconds; the shots are taken at its beats. What to look at, per wink:
+#   baltoguh  the council ring of Guhvendel: Baltoguh trots in from the bridge, everybody turns to him, his line, he leaves
+#   kloon     the west forecourt of the mine: the professor hops up to Guhdalf at the gate (the wall behind them), "Nee."
+#   spiegel   the dell: Mieuwguh floats over the rim BEHIND Guhladriel (is she in the picture?), then the look into the
+#             bowl: a tiny Mewtwo-guh on the water with two kaasknabbels (size, does it stand ON the water?)
+#   stitch    Sausuman's hall: the 626-guh comes in through the door, the button on the Guh Oven (a block display: is it
+#             on the oven's face?), his paw, the confetti, Sausuman's line
+#   boris     the Derde Richel: Boris flaps in along the wall (wings: his cutscene animation "vlieg"), his line, Sam-guh's
+#   sjokkel   the feast: Sjokkel in the foreground, the party behind him, everybody cheers
+#   kistje    a ?-block over a lane: the chest pops out of the block, Pad-guh pops out of the ground two cells on
+# NOT run by the slice itself (no game client in phase 3 so far): this is for the final visual check.
+
+section setup
+/gamemode creative
+/time set noon
+/weather clear
+/effect give @s minecraft:night_vision infinite 0 true
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/guhs ring wis
+/guhs ringknipoog vergeet
+
+section 1. Baltoguh in the Raad van Guhrond (196 ticks)
+/tp @s 6030 154 6035
+/forceload add 5990 5990 6070 6070
+wait 80
+/fill 5990 139 5990 6070 139 6070 guhs:houtskoolsteen
+/kill @e[type=!minecraft:player,distance=..90]
+/tp @s 6000 140 6000
+wait 10
+/guhs ringh2 bouw
+wait 60
+waitrender 300
+/guhs ringh2 ga bel
+wait 20
+clearchat
+/guhs ringknipoog speel baltoguh
+wait 30
+shot bbq2_knipoog_baltoguh_1_raad gui
+wait 30
+shot bbq2_knipoog_baltoguh_2_binnen gui
+wait 50
+shot bbq2_knipoog_baltoguh_3_afslag gui
+wait 70
+shot bbq2_knipoog_baltoguh_4_weg gui
+wait 60
+/forceload remove 5990 5990 6070 6070
+
+section 7. Professor Knabbelkloon at the gate of the mine (190 ticks)
+/tp @s 7000 120 7000
+/forceload add 6960 6920 7080 7020
+wait 100
+/fill 6990 119 6990 7010 119 7010 minecraft:stone
+/tp @s 7000.5 120 7000.5
+wait 20
+/guhs ringh3 bouw
+wait 100
+/guhs ringh3 ga plein
+wait 40
+waitrender 300
+clearchat
+/guhs ringknipoog speel kloon
+wait 36
+shot bbq2_knipoog_kloon_1_komt gui
+wait 50
+shot bbq2_knipoog_kloon_2_twee_ringen gui
+wait 50
+shot bbq2_knipoog_kloon_3_nee gui
+wait 36
+shot bbq2_knipoog_kloon_4_weg gui
+wait 60
+/forceload remove 6960 6920 7080 7020
+
+section 3. Mieuwguh and Mewtwo-guh at the mirror (176 ticks)
+/tp @s 8000 100 7000
+/forceload add 7992 6944 8120 7056
+/forceload add 8121 6944 8192 7056
+wait 80
+/fill 7990 97 6990 8010 99 7010 guhs:houtskoolsteen
+/tp @s 8000.5 100 7000.5 -90 0
+/guhs ringh4 bouw
+wait 120
+waitrender 400
+/guhs ringh4 ga dal_rand
+wait 40
+/time set midnight
+clearchat
+/guhs ringknipoog speel spiegel
+wait 30
+shot bbq2_knipoog_spiegel_1_mieuwguh gui
+wait 26
+shot bbq2_knipoog_spiegel_2_mieuwguh gui
+wait 36
+shot bbq2_knipoog_spiegel_3_kom gui
+wait 40
+shot bbq2_knipoog_spiegel_4_dubbele_portie gui
+wait 60
+/time set noon
+/forceload remove 7992 6944 8120 7056
+/forceload remove 8121 6944 8192 7056
+
+section 4. the 626-guh in the Toren van Sausuman (184 ticks)
+/tp @s 9000 141 7000
+/forceload add 8970 6970 9040 7040
+wait 80
+/fill 8975 139 6975 9035 139 7035 guhs:houtskoolsteen
+/fill 8984 140 6978 9016 160 7012 minecraft:air
+/fill 8984 161 6978 9016 181 7012 minecraft:air
+/kill @e[type=!minecraft:player,distance=..70]
+# the tower: its corner at 8986 137 6980, so the spot outside the door (template 14 4 20) is 9000 141 7000; the hall's
+# floor in front of the Ringenbakker (template 14 4 13) is 9000 141 6993
+/tp @s 9000 141 7000
+/guhs ringsausuman toren
+wait 60
+/tp @s 9000.5 141 6993.5 180 0
+wait 20
+waitrender 300
+clearchat
+/guhs ringknipoog speel stitch
+wait 36
+shot bbq2_knipoog_stitch_1_binnen gui
+wait 34
+shot bbq2_knipoog_stitch_2_knop gui
+wait 44
+shot bbq2_knipoog_stitch_3_confetti gui
+wait 30
+shot bbq2_knipoog_stitch_4_sausuman gui
+wait 70
+/forceload remove 8970 6970 9040 7040
+
+section 6. Sjokkel arrives at the feast (180 ticks)
+/tp @s 10000 140 7000
+/forceload add 9980 6980 10020 7020
+wait 60
+/fill 9980 139 6980 10020 139 7020 minecraft:grass_block
+/fill 9980 140 6980 10020 150 7020 minecraft:air
+/tp @s 10000.5 140 7000.5
+wait 40
+clearchat
+/guhs ringknipoog speel sjokkel
+wait 40
+shot bbq2_knipoog_sjokkel_1_ver gui
+wait 50
+shot bbq2_knipoog_sjokkel_2_sjokkel gui
+wait 56
+shot bbq2_knipoog_sjokkel_3_toetje gui
+wait 60
+
+section 2. the medicine chest in a ?-block (130 ticks; here a ?-block over a bare lane, the camera's side to the south)
+/fill 9990 143 7000 10010 143 7000 minecraft:air
+/setblock 10000 143 7000 guhs:guhrio_vraagblok
+/tp @s 10000.5 140 7000.5
+wait 20
+clearchat
+/guhs ringknipoog speel kistje
+wait 16
+shot bbq2_knipoog_kistje_1_kistje gui
+wait 50
+shot bbq2_knipoog_kistje_2_padguh gui
+wait 50
+shot bbq2_knipoog_kistje_3_weg gui
+wait 40
+/setblock 10000 143 7000 minecraft:air
+/forceload remove 9980 6980 10020 7020
+
+section 5. Boris on the Frituurberg (192 ticks)
+/execute in guhs:barbecuether run tp @s 5000 33 5000
+wait 60
+/forceload add 4944 4904 5056 5016
+wait 100
+/guhs ringh6 bouw
+wait 200
+/kill @e[type=item,distance=..120]
+/guhs ringh6 ga richel_3
+wait 40
+waitrender 300
+clearchat
+/guhs ringknipoog speel boris
+wait 36
+shot bbq2_knipoog_boris_1_komt gui
+wait 46
+shot bbq2_knipoog_boris_2_berg gui
+wait 56
+shot bbq2_knipoog_boris_3_sam gui
+wait 40
+shot bbq2_knipoog_boris_4_weg gui
+wait 60
+/forceload remove 4944 4904 5056 5016
+
+section Sjokkel on the bridge of the mine (no camera: a figure in the background of chapter 3, only for a player at step 5)
+/execute in minecraft:overworld run tp @s 7000.5 120 7000.5
+/forceload add 6960 6920 7080 7020
+wait 80
+/guhs ring hoofdstuk 3
+wait 20
+gui close
+/guhs ringh3 stap 5
+/gamemode survival
+/guhs ringh3 ga hal
+wait 120
+/gamemode spectator
+/guhs ringh3 ga brug
+wait 60
+shot bbq2_knipoog_sjokkel_brug world
+/gamemode creative
+/forceload remove 6960 6920 7080 7020
+
+section the Guhdex: the winks under "Opnieuw bekijken" of their chapters
+/guhs ringknipoog stand
+gui dexopen verhalen open
+wait 20
+shot bbq2_knipoog_guhdex gui
+gui close
+quit

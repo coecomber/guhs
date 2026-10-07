@@ -40,6 +40,7 @@ import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.NpcRole;
 import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
 import nl.juiced.guhs.feature.spiesburcht.Brouwsel;
+import nl.juiced.guhs.feature.titels.Titels;
 import nl.juiced.guhs.feature.verhaal.NpcRollen;
 import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import nl.juiced.guhs.feature.wereld.Bescherming;
@@ -52,6 +53,7 @@ import nl.juiced.guhs.quest.GuhDex;
 import nl.juiced.guhs.quest.GuhQuests;
 import nl.juiced.guhs.registry.ModEntities;
 import nl.juiced.guhs.registry.ModItems;
+import nl.juiced.guhs.world.GuhWorldData;
 import nl.juiced.guhs.world.WildeDieren;
 
 /**
@@ -257,7 +259,7 @@ public class SausdierenGameTests {
      * Two players at one Verzorger-guh: one does the whole questline (the stick, luring, feeding, the lap through the four
      * gates in order, the saddle), the other one's story does not move, and the stable's Sausloper stays nobody's.
      */
-    @GuhTest(template = PLEIN, batch = BATCH, timeoutTicks = 400)
+    @GuhTest(template = PLEIN, batch = BATCH, timeoutTicks = 2000)
     public static void sausdierenQuestlijn(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer a = speler(helper, new BlockPos(4, 2, 9));
@@ -292,21 +294,71 @@ public class SausdierenGameTests {
         }
         // 1: the Sausloper follows the stick in A's hand, next to the Verzorger-guh
         inHand(a, stok, 1);
-        long[] gelokt = {-1};
+        int[] fase = {0};
         helper.onEachTick(() -> {
-            if (gelokt[0] >= 0) {
-                return;
-            }
-            if (bewoner.lokker() == a && SausdierenEvents.lokCheck(a)) {
-                gelokt[0] = level.getGameTime();
+            if (fase[0] == 0 && bewoner.lokker() == a && SausdierenEvents.lokCheck(a)) {
+                fase[0] = 1;
                 try {
                     rest(helper, a, b, npc, rol, bewoner);
+                    // B begins now that A is done: the same Verzorger-guh, the same Sausloper of the stable
+                    a.getInventory().clearContent();
+                    a.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                    rol.talk(npc, b);
+                    rol.antwoord(npc, b, 1);
+                    helper.assertTrue(LIJN.stap(b) == 1 && GuhQuests.count(b, stok) == 1 && !bewoner.isTame() && bewoner.isAlive(),
+                            "B begins after A finished: the stick, and the stable's Sausloper is still there for B");
+                    inHand(b, stok, 1);
+                    bewoner.snapTo(b.getX() + 2.5, b.getY(), b.getZ(), 0, 0);
+                } catch (RuntimeException | Error e) {
+                    weg(helper, a, b);
+                    throw e;
+                }
+            } else if (fase[0] == 1 && bewoner.lokker() == b && SausdierenEvents.lokCheck(b)) {
+                fase[0] = 2;
+                try {
+                    tweede(helper, a, b, npc, rol, bewoner);
                 } finally {
                     weg(helper, a, b);
                 }
                 helper.succeed();
             }
         });
+    }
+
+    /** The rest of the questline for B, who began after A was done: feeding, a loaner of B's own, the lap, the saddle. */
+    private static void tweede(GameTestHelper helper, ServerPlayer a, ServerPlayer b, GuhNpcEntity npc, NpcRole rol, SausloperEntity bewoner) {
+        Item stok = SausdierenFeature.PINDASAUS_STOK.get();
+        helper.assertTrue(LIJN.stap(b) == 2 && LIJN.klaar(a), "the Sausloper that A lured follows B's stick too: step 2 for B");
+        b.getInventory().clearContent();
+        rol.talk(npc, b);
+        helper.assertTrue(GuhQuests.count(b, scheutjes()) == SausdierenFeature.VOER_NODIG, "B gets the first three pindascheutjes too");
+        b.getInventory().clearContent();
+        inHand(b, scheutjes(), 5);
+        for (int i = 0; i < SausdierenFeature.VOER_NODIG; i++) {
+            bewoner.mobInteract(b, InteractionHand.MAIN_HAND);
+        }
+        helper.assertTrue(LIJN.stap(b) == 3 && !bewoner.isTame(), "it trusts B as well, and is still nobody's");
+        b.getInventory().clearContent();
+        rol.talk(npc, b);
+        rol.antwoord(npc, b, 1);
+        SausloperEntity loper = Proefrit.loper(b);
+        Stal.Baan baan = Proefrit.baan(b);
+        helper.assertTrue(loper != null && baan != null && loper.isSaddled() && b.getUUID().equals(loper.leen()) && loper != Proefrit.loper(a),
+                "a saddled loaner of B's own");
+        inHand(b, stok, 1);
+        loper.mobInteract(b, InteractionHand.MAIN_HAND);
+        helper.assertTrue(b.getVehicle() == loper, "B rides");
+        for (int i = 0; i < 4; i++) {
+            zet(loper, baan.poorten().get(i));
+            Proefrit.tick(b);
+        }
+        helper.assertTrue(LIJN.stap(b) == 4, "the four gates: step 4 for B");
+        b.stopRiding();
+        b.getInventory().clearContent();
+        rol.talk(npc, b);
+        helper.assertTrue(LIJN.klaar(b) && GuhQuests.count(b, Items.SADDLE) == 1 && GuhQuests.count(b, scheutjes()) == 4 && SausdierenFeature.magTemmen(b),
+                "the second player finishes the whole line after the first, with the same reward");
+        helper.assertTrue(bewoner.isAlive() && !bewoner.isTame() && bewoner.getOwnerReference() == null, "and the stable's Sausloper is there for the next one");
     }
 
     private static void rest(GameTestHelper helper, ServerPlayer a, ServerPlayer b, GuhNpcEntity npc, NpcRole rol, SausloperEntity bewoner) {
@@ -401,6 +453,30 @@ public class SausdierenGameTests {
         }
         helper.assertTrue(LIJN.teller(a, "record") > 0 && LIJN.stap(b) == 0 && LIJN.teller(b, "record") == 0, "A's best time is kept, B's story never moved");
         a.stopRiding();
+        // a Sausblubje in a jar from the Verzorger-guh: the source of blubroom that is always there (wild ones only come with the
+        // natural spawner). For whoever finished, one a day, and only when you carry none
+        Item potje = SausdierenFeature.SAUSBLUBJE_POTJE.get();
+        rol.antwoord(npc, b, 3);
+        helper.assertTrue(GuhQuests.count(b, potje) == 0, "not before the questline is done");
+        rol.antwoord(npc, a, 3);
+        helper.assertTrue(GuhQuests.count(a, potje) == 1, "a Sausblubje in a jar for A");
+        rol.antwoord(npc, a, 3);
+        helper.assertTrue(GuhQuests.count(a, potje) == 1, "not a second one while you carry one");
+        BlockPos vrij = a.blockPosition().offset(2, 0, 2);
+        SausblubjeEntity blubje = SausblubjePotjeItem.laatVrij(level, Vec3.atBottomCenterOf(vrij), new ItemStack(potje));
+        GuhQuests.take(a, potje, 1);
+        helper.assertTrue(blubje != null && blubje.grootte() == SausblubjeEntity.KLEIN && blubje.isPersistenceRequired(), "let out: a small blubje that stays");
+        blubje.setGrootte(SausblubjeEntity.MIDDEL);
+        List<SausblubjeEntity> kleintjes = blubje.splits(a);
+        List<ItemEntity> room = level.getEntitiesOfClass(ItemEntity.class, new AABB(vrij).inflate(3), i -> i.getItem().is(SausdierenFeature.BLUBROOM.get()));
+        helper.assertTrue(kleintjes.size() == 2 && !room.isEmpty(), "grown and hugged it is two blubjes and a blob of blubroom: a pen of your own");
+        kleintjes.forEach(Entity::discard);
+        room.forEach(Entity::discard);
+        rol.antwoord(npc, a, 3);
+        helper.assertTrue(GuhQuests.count(a, potje) == 0, "one a day");
+        LIJN.teller(a, "blubje_dag", 0);
+        rol.antwoord(npc, a, 3);
+        helper.assertTrue(GuhQuests.count(a, potje) == 1, "and a new one on another day");
     }
 
     private static void zet(SausloperEntity loper, Vec3 plek) {
@@ -598,6 +674,54 @@ public class SausdierenGameTests {
         helper.assertTrue(Stal.verzorger(level, npc.blockPosition().offset(3, 0, 0), 8) == npc && Stal.verzorger(level, npc.blockPosition().offset(60, 0, 0), 8) == null,
                 "the nearest Verzorger-guh is found");
         npc.discard();
+        helper.succeed();
+    }
+
+    /**
+     * The six Guhdex pages of this update count for "compleet", but a player who had a full Guhdex (and the title Guhkenner)
+     * before them keeps the title: the old state is a player whose first login with the update finds every older page seen.
+     */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void sausdierenGuhdexTeltEnKennerBlijft(GameTestHelper helper) {
+        ServerPlayer oud = speler(helper, new BlockPos(16, 2, 5)), nieuw = speler(helper, new BlockPos(16, 2, 9));
+        GuhWorldData data = GuhWorldData.get(helper.getLevel().getServer());
+        try {
+            Titels.Titel kenner = Titels.van(Titels.GUHKENNER);
+            List<GuhVariant> zes = GuhDex.TELLEND.stream().filter(v -> GuhDex.NIEUW_BBQ2.contains(v.name())).toList();
+            helper.assertTrue(zes.size() == 6 && zes.containsAll(List.of(GuhVariant.SAUSLOPER, GuhVariant.SAUSBLUBJE, GuhVariant.WORSTZWIJNTJE, GuhVariant.BEZORGGUHTJE,
+                    GuhVariant.SAM_GUH, GuhVariant.GUHSHI)), "the six new pages are pages that count: " + zes);
+            List<GuhVariant> ouder = GuhDex.TELLEND.stream().filter(v -> !GuhDex.NIEUW_BBQ2.contains(v.name())).toList();
+            // the old state: every older page seen, never logged in with this update
+            for (ServerPlayer p : List.of(oud, nieuw)) {
+                data.player(p.getUUID()).seen.clear();
+                data.player(p.getUUID()).seen.addAll(ouder);
+                GuhQuests.saved(p).remove(GuhDex.KENNER_OUD);
+            }
+            GuhQuests.saved(oud).remove(GuhDex.KENNER_GEKEKEN);
+            GuhQuests.saved(nieuw).putBoolean(GuhDex.KENNER_GEKEKEN, true);   // (somebody whose first login with the update was before their Guhdex was full)
+            GuhDex.onthoudKenner(oud);                                         // (what the login does)
+            GuhDex.onthoudKenner(nieuw);
+            helper.assertTrue(Titels.heeft(oud, kenner) && Titels.behaald(oud).contains(kenner), "the Guhkenner of before the update still has the title");
+            helper.assertTrue(!Titels.heeft(nieuw, kenner), "somebody who fills the Guhdex now needs the six new pages too");
+            // the progress counts the new pages for both: not full, six short
+            for (ServerPlayer p : List.of(oud, nieuw)) {
+                var seen = data.player(p.getUUID()).seen;
+                helper.assertTrue(!GuhDex.vol(seen) && GuhDex.geteld(seen) == GuhDex.TELLEND.size() - 6, "six pages short of a full Guhdex: " + GuhDex.geteld(seen));
+            }
+            helper.assertTrue(GuhDex.MILESTONES.get(2).seen() == GuhDex.TELLEND.size(), "the 'every page' milestone asks for the new ones as well");
+            // the new one sees the six: the title; the old one keeps it whatever happens next
+            data.player(nieuw.getUUID()).seen.addAll(zes);
+            helper.assertTrue(GuhDex.vol(data.player(nieuw.getUUID()).seen) && Titels.heeft(nieuw, kenner), "with the six new pages: a Guhkenner");
+            GuhDex.onthoudKenner(oud);
+            data.player(oud.getUUID()).seen.remove(GuhVariant.SAUSLOPER);
+            helper.assertTrue(Titels.heeft(oud, kenner), "and the old Guhkenner stays one at every later login");
+        } finally {
+            for (ServerPlayer p : List.of(oud, nieuw)) {
+                data.player(p.getUUID()).seen.clear();
+                GuhQuests.saved(p).remove(GuhDex.KENNER_OUD);
+            }
+            weg(helper, oud, nieuw);
+        }
         helper.succeed();
     }
 

@@ -22,11 +22,12 @@ import nl.juiced.guhs.quest.GuhQuests;
  *   <li>Ride the test lap: he whistles a saddled Sausloper for you ({@link Proefrit}).</li>
  *   <li>Come back: a saddle and some pindascheutjes, and from now on you can tame wild Sauslopers.</li>
  * </ol>
- * Afterwards he chats, and whistles a Sausloper for another (timed) lap whenever you like.
+ * Afterwards he chats, whistles a Sausloper for another (timed) lap whenever you like, and has a small Sausblubje in a jar
+ * for whoever carries none (one a day: {@link #blubje}).
  */
 public final class VerzorgerRol extends QuestRol {
     private static final String T = "quest.guhs.sausdieren.verzorger.";
-    private static final int JA = 1, UITLEG = 2;
+    private static final int JA = 1, UITLEG = 2, BLUBJE = 3;
     private static final Verhaallijn LIJN = SausdierenFeature.LIJN;
 
     public VerzorgerRol() {
@@ -70,7 +71,8 @@ public final class VerzorgerRol extends QuestRol {
                     hint(p, "quest.guhs.sausdieren.hint.klaar");
                 }
             }
-            default -> scherm(p, npc, T + "na", new Praat.Optie(JA, "gui.guhs.sausdieren.optie.rondje"), new Praat.Optie(UITLEG, "gui.guhs.sausdieren.optie.uitleg"));
+            default -> scherm(p, npc, T + "na", new Praat.Optie(JA, "gui.guhs.sausdieren.optie.rondje"), new Praat.Optie(UITLEG, "gui.guhs.sausdieren.optie.uitleg"),
+                    new Praat.Optie(BLUBJE, "gui.guhs.sausdieren.optie.blubje"));
         }
     }
 
@@ -94,6 +96,27 @@ public final class VerzorgerRol extends QuestRol {
             }
         } else if (optie == UITLEG && stap >= 5) {
             zeg(p, npc, T + "uitleg");
+        } else if (optie == BLUBJE && stap >= 5) {
+            blubje(npc, p);
+        }
+    }
+
+    /**
+     * After the questline: a small Sausblubje in a jar for whoever carries none, at most one a day. Wild Sausblubjes only
+     * come with the natural spawner, and blubroom (the "Saus" tier of Guh-technologie, the Stuiterdrankje) and the
+     * Blubkacheltje both need one: this is the source that is always there. Fed three knabbels it grows, hugged it splits
+     * and leaves blubroom, so one blubje is a pen of them.
+     */
+    private void blubje(GuhNpcEntity npc, ServerPlayer p) {
+        int dag = (int) (p.level().getGameTime() / 24000L) + 1;
+        if (GuhQuests.count(p, SausdierenFeature.SAUSBLUBJE_POTJE.get()) > 0) {
+            zeg(p, npc, T + "blubje_heb_je");
+        } else if (LIJN.teller(p, "blubje_dag") == dag) {
+            zeg(p, npc, T + "blubje_morgen");
+        } else {
+            LIJN.teller(p, "blubje_dag", dag);
+            geef(p, new ItemStack(SausdierenFeature.SAUSBLUBJE_POTJE.get()));
+            zeg(p, npc, T + "blubje");
         }
     }
 

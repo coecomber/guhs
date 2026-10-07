@@ -31,10 +31,16 @@ public final class RingH6Events {
 
     @SubscribeEvent
     public static void onSchade(LivingIncomingDamageEvent event) {
-        if (event.getEntity() instanceof ServerPlayer p && Berg.van(p) != null
-                && (event.getSource().is(DamageTypeTags.IS_FIRE) || event.getSource().is(DamageTypeTags.IS_FALL))
-                && !event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+        if (!(event.getEntity() instanceof ServerPlayer p) || event.getSource().is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            return;
+        }
+        boolean vuur = event.getSource().is(DamageTypeTags.IS_FIRE);
+        if (Berg.van(p) != null && (vuur || event.getSource().is(DamageTypeTags.IS_FALL))) {
             event.setCanceled(true);
+        } else if (vuur && Klim.beschermdOpWeg(p)) {
+            // (PHASE3 R15) on the way to the mountain, across the frituur sea: the ring bearer of this chapter is not burnt
+            event.setCanceled(true);
+            p.clearFire();
         }
     }
 

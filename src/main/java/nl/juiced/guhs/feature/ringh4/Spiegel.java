@@ -22,6 +22,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import nl.juiced.guhs.entity.GuhNpcEntity;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.ring.Ring;
+import nl.juiced.guhs.feature.ringknipoog.Knipogen;
 import nl.juiced.guhs.feature.verhaal.Cutscene;
 import nl.juiced.guhs.feature.verhaal.Cutscenes;
 import nl.juiced.guhs.feature.verhaal.Verhaallijn;
@@ -131,14 +132,18 @@ public final class Spiegel {
         Boomstad.Kopie kopie = Boomstad.bij(p.level(), pos);
         Rotation draai = kopie == null ? Rotation.NONE : kopie.draai();
         if (Ring.aanZet(p, lijn, 4)) {
-            Cutscenes.speel(p, SCENE, pos, draai, s -> {
+            // (ring-knipogen: the first time the mirror has one more thing to show right after it)
+            Knipogen.speel(p, SCENE, Knipogen.SPIEGEL, pos, draai, s -> {
                 if (lijn.verder(s, 4)) {
                     Ring.behaald(s, "ring_h4_spiegel");
                     GuhQuests.hint(s, "quest.guhs.ringh4.hint.gaven");
                 }
             });
         } else if (lijn.aanDeBeurt(p) && lijn.stap(p) > 4) {
-            Cutscenes.speel(p, SCENE, pos, draai, null);        // (again, for whoever likes to be scared)
+            // (PHASE3 R07) the mirror showed this player what it had to show: a second click does not lock them into the whole
+            // scene again (55 s, not skippable). Who wants to see it again does so in the Guhdex ("Opnieuw bekijken"), where it
+            // is their own choice and can be closed.
+            p.sendOverlayMessage(Component.translatable(Q + "kalm").withStyle(ChatFormatting.AQUA));
         } else {
             p.sendOverlayMessage(Component.translatable(Q + (lijn.aanDeBeurt(p) ? "donker" : "eigen_snoet")).withStyle(ChatFormatting.AQUA));
         }

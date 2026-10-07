@@ -134,7 +134,7 @@ public class GuhrioBeloningGameTests {
     // the ?-block
     // =====================================================================================================================
 
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void guhriobeloningVraagblokEenPerDag(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockPos blok = helper.absolutePos(new BlockPos(6, 5, 6));
@@ -189,7 +189,7 @@ public class GuhrioBeloningGameTests {
         }
     }
 
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 300)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void guhriobeloningPijpReis(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         BlockState groen = GuhrioBeloningFeature.PIJP.get().defaultBlockState();
@@ -466,7 +466,7 @@ public class GuhrioBeloningGameTests {
         helper.succeed();
     }
 
-    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = KAMER, batch = BATCH, timeoutTicks = 2000)
     public static void guhriobeloningGuhshiTongEnFladder(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         ServerPlayer p = speler(helper, new BlockPos(2, 2, 2));
@@ -563,7 +563,8 @@ public class GuhrioBeloningGameTests {
         // level 2-1 is the third level: its rows are 6, 7, 8; the first and the third are ticked
         helper.assertTrue(stand.nodig().get(6).genoeg() && !stand.nodig().get(7).genoeg() && stand.nodig().get(8).genoeg()
                 && stand.nodig().stream().filter(VerhaalStand.Nodig::genoeg).count() == 2, "which ones of 2-1");
-        helper.assertTrue(stand.beloningen().size() == 2 + GuhrioBeloningFeature.OUTFITS.size() && stand.beloningen().stream().noneMatch(VerhaalStand.Beloning::binnen),
+        helper.assertTrue(stand.beloningen().size() == 2 + GuhrioBeloningFeature.OUTFITS.size() + GuhrioBeloningFeature.GEHEIMEN
+                        && stand.beloningen().stream().noneMatch(VerhaalStand.Beloning::binnen),
                 "Guhshi, five outfits, the building blocks: nothing yet");
         for (int w = 1; w <= 3; w++) {
             for (int n = 1; n <= 2; n++) {

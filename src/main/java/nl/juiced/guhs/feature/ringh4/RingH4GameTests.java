@@ -236,6 +236,9 @@ public final class RingH4GameTests {
                 case 2 -> {
                     if (stap == 5 && !Cutscenes.bezig(p)) {
                         helper.assertTrue(Cutscenes.gezien(p, Spiegel.SCENE_ID), "the scene was seen");
+                        // PHASE3 R07: a second click on the mirror never locks the player into the 55 seconds again
+                        Spiegel.kijk(p, helper.absolutePos(SPIEGEL));
+                        helper.assertTrue(!Cutscenes.bezig(p) && lijn.stap(p) == 5, "the mirror is calm: no second scene, the Guhdex has the replay");
                         helper.assertTrue(!Vaart.stapIn(p, gidsboot), "no boat before the gifts");
                         NpcRollen.van(guhladriel).talk(guhladriel, p);
                         helper.assertTrue(lijn.stap(p) == 6 && Gaven.heeft(p, RingFeature.LICHTFLESJE.get()) && Gaven.heeft(p, RingFeature.ELFENMANTELTJE.get())

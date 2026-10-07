@@ -348,6 +348,10 @@ public final class CutsceneSpeler {
             return;
         }
         Vec3 pos = Cutscene.wereld(anker, draai, cam[0]), kijk = Cutscene.wereld(anker, draai, cam[1]);
+        Cutscene s = scene;
+        if (s != null && s.cameraOntwijkt()) {
+            pos = Cutscene.uitDeGrond(c.level(), pos, kijk);   // (PHASE3 R18: not inside a hill at a camp on unknown land)
+        }
         Vec3 d = kijk.subtract(pos);
         float yaw = Cutscene.yawVan(d), pitch = Cutscene.pitchVan(d);
         c.setOldPosAndRot();

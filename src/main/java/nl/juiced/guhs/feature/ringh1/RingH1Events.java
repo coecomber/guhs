@@ -41,6 +41,8 @@ import nl.juiced.guhs.quest.GuhQuests;
  *   <li>Once a second per player: the story starts by itself when the Grillguh's barbecue burns, and the walk to the portal
  *       ends at the portal ({@link Feest}). About every two seconds: the camps around are protected boxes.</li>
  *   <li>Nobody tramples Sam-guh's moestuin.</li>
+ *   <li>{@code /guhs ringh1 zetkamp | vergeetkamp} (production, for an operator: Guhdalf's camp at an old big pit that has
+ *       no room for it by itself, exactly where the operator stands; PHASE3 R03).</li>
  *   <li>{@code /guhs ringh1 stand | zoek | vuurwerk | wis}, and in a dev run {@code kamp} (the camp with Guhdalf and Sam-guh
  *       where you stand), {@code gouw} (the whole Knabbelgouw template where you stand) and {@code dump <structuur> [marge]}
  *       (a generated copy with the land around it as a template file): for AutoCheck scripts and dev checks. The texts are
@@ -76,6 +78,36 @@ public final class RingH1Events {
         }
     }
 
+    /** Chunks of the Guhmensie that were loaded since the last server tick (their camps get their protected box then). */
+    private static final java.util.Queue<net.minecraft.world.level.ChunkPos> GELADEN = new java.util.concurrent.ConcurrentLinkedQueue<>();
+
+    /** A chunk of the Guhmensie that a big pit reaches into was loaded: its camp is protected from the next tick on (R21). */
+    @SubscribeEvent
+    public static void onChunk(net.neoforged.neoforge.event.level.ChunkEvent.Load event) {
+        if (event.getLevel() instanceof ServerLevel level && level.dimension() == nl.juiced.guhs.world.ModDimensions.GUHMENSION
+                && event.getChunk() instanceof net.minecraft.world.level.chunk.LevelChunk chunk && !chunk.getAllReferences().isEmpty()) {
+            net.minecraft.world.level.levelgen.structure.Structure put = nl.juiced.guhs.feature.wereld.Kopieen.structuur(level, Gouw.PUT);
+            it.unimi.dsi.fastutil.longs.LongSet refs = put == null ? null : chunk.getAllReferences().get(put);
+            if (refs != null && !refs.isEmpty()) {
+                GELADEN.add(chunk.getPos());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onServerTick(net.neoforged.neoforge.event.tick.ServerTickEvent.Post event) {
+        if (GELADEN.isEmpty()) {
+            return;
+        }
+        ServerLevel level = event.getServer().getLevel(nl.juiced.guhs.world.ModDimensions.GUHMENSION);
+        net.minecraft.world.level.ChunkPos chunk;
+        while ((chunk = GELADEN.poll()) != null) {
+            if (level != null && level.hasChunk(chunk.x(), chunk.z())) {
+                Gouw.beschermBijChunk(level, chunk);
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onUitloggen(PlayerEvent.PlayerLoggedOutEvent event) {
         Gouw.vergeet(event.getEntity().getUUID());
@@ -84,6 +116,7 @@ public final class RingH1Events {
     @SubscribeEvent
     public static void onGestopt(ServerStoppedEvent event) {
         Gouw.wisAlles();
+        GELADEN.clear();
     }
 
     // =====================================================================================================================
@@ -103,7 +136,27 @@ public final class RingH1Events {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     wis(p);
                     return zeg(c, "ring_h1 forgotten for " + p.getScoreboardName());
-                }));
+                }))
+                // (PHASE3 R03, production on purpose: the one way to start the story at a pit players built all around. It
+                // changes the world only where the operator stands, next to an old big barbecueput of the Guhmensie.)
+                .then(Commands.literal("zetkamp").executes(c -> {
+                    ServerLevel level = c.getSource().getLevel();
+                    if (level.dimension() != nl.juiced.guhs.world.ModDimensions.GUHMENSION) {
+                        c.getSource().sendFailure(Component.literal("Guhdalf's camp only stands in the Guhmensie"));
+                        return 0;
+                    }
+                    net.minecraft.world.phys.Vec2 kijk = c.getSource().getRotation();
+                    String nee = Gouw.zetKampBijPut(level, BlockPos.containing(c.getSource().getPosition()), net.minecraft.core.Direction.fromYRot(kijk.y));
+                    if (nee != null) {
+                        c.getSource().sendFailure(Component.literal("no camp: " + nee));
+                        return 0;
+                    }
+                    c.getSource().sendSuccess(() -> Component.literal("Guhdalf's camp stands here and is kept; Guhdalf and Sam-guh walk in within a few seconds "
+                            + "(/guhs ringh1 zoek shows it, /guhs ringh1 vergeetkamp undoes it)"), true);
+                    return 1;
+                }))
+                .then(Commands.literal("vergeetkamp").executes(c -> zeg(c, Gouw.vergeetKampBijPut(c.getSource().getLevel(),
+                        BlockPos.containing(c.getSource().getPosition())))));
         if (!FMLEnvironment.isProduction()) {
             // (these change the world: never on a real server)
             ringh1.then(Commands.literal("kamp").executes(c -> {
@@ -139,7 +192,7 @@ public final class RingH1Events {
         for (String v : Feest.PROVIAND) {
             vlaggen.append(' ').append(v).append('=').append(l.vlag(p, v) ? 1 : 0);
         }
-        zeg(c, "ring_h1: step " + l.stap(p) + " of " + l.stappen() + (l.begonnen(p) ? "" : " (not begun)") + ", may begin: " + Feest.magBeginnen(p) + ","
+        zeg(c, "ring_h1: step " + l.stap(p) + " of " + l.stappen() + (l.begonnen(p) ? "" : " (not begun)") + ", may begin: " + Ring.magBeginnen(p) + ","
                 + vlaggen + ", ring: " + Ring.heeft(p) + ", Sam-guh walks along: " + Sam.looptMee(p) + ", at a portal: " + Feest.bijPortaal(p));
         return 1 + l.stap(p);
     }

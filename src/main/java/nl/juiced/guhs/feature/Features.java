@@ -129,6 +129,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhriow2.GuhrioW2Feature.register(modBus);
         nl.juiced.guhs.feature.guhriow3.GuhrioW3Feature.register(modBus);
         nl.juiced.guhs.feature.guhriobeloning.GuhrioBeloningFeature.register(modBus);
+        nl.juiced.guhs.feature.ringknipoog.RingKnipoogFeature.register(modBus);
         nl.juiced.guhs.feature.oudescenes.OudeScenesFeature.register(modBus);   // bbq2 verhalenpad: oude-scenes
     }
 
@@ -234,6 +235,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhriow2.GuhrioW2Feature.payloads(registrar);
         nl.juiced.guhs.feature.guhriow3.GuhrioW3Feature.payloads(registrar);
         nl.juiced.guhs.feature.guhriobeloning.GuhrioBeloningFeature.payloads(registrar);
+        nl.juiced.guhs.feature.ringknipoog.RingKnipoogFeature.payloads(registrar);
         nl.juiced.guhs.feature.oudescenes.OudeScenesFeature.payloads(registrar);   // bbq2 verhalenpad: oude-scenes
     }
 
@@ -341,6 +343,7 @@ public final class Features {
         nl.juiced.guhs.feature.guhriow2.GuhrioW2Feature.creative(output);
         nl.juiced.guhs.feature.guhriow3.GuhrioW3Feature.creative(output);
         nl.juiced.guhs.feature.guhriobeloning.GuhrioBeloningFeature.creative(output);
+        nl.juiced.guhs.feature.ringknipoog.RingKnipoogFeature.creative(output);
         nl.juiced.guhs.feature.oudescenes.OudeScenesFeature.creative(output);   // bbq2 verhalenpad: oude-scenes
     }
 

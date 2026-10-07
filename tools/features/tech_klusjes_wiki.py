@@ -30,7 +30,8 @@ WIKI = {
          "die aan hun stengel hangen (de stengel blijft staan; een pompoen die jij ergens hebt neergezet is geen oogst en blijft "
          "liggen), suikerriet (het onderste stuk blijft staan), rijpe cacao waar ze bij kunnen (hooguit twee blokken boven de grond), "
          "netherwrat en pepers. Van elk pinda- en mosterdscheutjesplantje plukken ze één scheutje; het plantje blijft staan en rust "
-         "daarna vijf minuten uit, net als een bloem."),
+         "daarna vijf minuten uit, net als een bloem. In een beschermd gebouw (de Pepertuin, de Grillcamping, de Oude Guhrad-centrale...) "
+         "doen bewoners nooit een klusje, ook niet als het in de klus-area van je huisje ligt: wat daar groeit of ligt is niet van jou."),
         ("systemen/guhhuisje", "Waar gaan de spulletjes heen?",
          "Wat je bewoners met hun klusjes verzamelen, brengen ze naar een Bank Guh in de klus-area (die sorteert, tot 256 van een "
          "soort). Staat er geen Bank Guh in de klus-area, of zit die vol van iets, dan stoppen ze het in een Hapluikje dat in de "

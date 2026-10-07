@@ -76,7 +76,7 @@ def _scene(s):
         bron = STROOM.get(soort, f"() -> ParticleTypes.{soort}")
         stromen.append(f"            new Effecten.Stroom({t0}, {t1}, {bron}, {_vec(s, van)}, {_vec(s, naar)}, {_f(per_tick)}f, {_f(spreiding)}, {_richting(snelheid)})")
     r.append(",\n".join(stromen) + "));" if stromen else "            ));")
-    regel = f'    public static final Cutscene {naam} = Cutscene.maak("{s.id}").duur({s.duur}).bij("{s.lijn}").kaart("{s.id}").verbergEcht({_f(s.verberg)})'
+    regel = f'    public static final Cutscene {naam} = Cutscene.maak("{s.id}").duur({s.duur}).bij("{s.lijn}").kaart("{s.id}").verbergEcht({_f(s.verberg)}).cameraOntwijkt()'
     r.append(regel)
     for a in s.acteurs:
         if a.soort == "speler":
@@ -131,7 +131,9 @@ def scenes():
          " * bbq2 (oude-scenes): the six camera scenes of the older stories, as the verhaal engine wants them. Positions are relative to",
          " * the scene's anchor (a block of the story's own template), in template coordinates, so they fit every copy however it is",
          " * turned. The scripts themselves, with what every beat is for, are tools/features/oude_scenes_scene.py (which also checks every",
-         " * camera and actor against the template); their texts: scene.guhs.oudescenes_*. {@link OudeScenes} says when each plays.",
+         " * camera and actor against the template); their texts: scene.guhs.oudescenes_*. {@link OudeScenes} says when each plays",
+         " * (and tries every camera against the real blocks first); in a replay from the Guhdex, later, a camera that somebody",
+         " * has built over steps out of the block by itself (cameraOntwijkt).",
          " */",
          "public final class Scenes {"]
     for s in S.alle():
