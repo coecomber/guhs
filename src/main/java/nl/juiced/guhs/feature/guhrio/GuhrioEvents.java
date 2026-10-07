@@ -68,6 +68,9 @@ public final class GuhrioEvents {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             GuhrioSpel.tick(player);
+            if (player.tickCount % GuhrioKasteel.BEWAAK_ELKE == 0) {
+                GuhrioKasteel.bewaak(player);
+            }
         }
     }
 
@@ -141,6 +144,7 @@ public final class GuhrioEvents {
     @SubscribeEvent
     public static void onStopped(ServerStoppedEvent event) {
         GuhrioSpel.vergeetAlles();
+        GuhrioKasteel.vergeetHallen();
     }
 
     /** The data packs were read again: the level files too. */
@@ -148,16 +152,28 @@ public final class GuhrioEvents {
     public static void onDatapack(OnDatapackSyncEvent event) {
         if (event.getPlayer() == null) {
             GuhrioLevel.vergeet();
+            GuhrioKasteel.vergeetHallen();
         }
     }
 
     // =====================================================================================================================
 
+    /** The commands that put a big template into the world (they carve air): never in a released game. */
+    public static final List<String> DEV_COMMANDOS = List.of("testlevel", "testhoek", "bouwkasteel");
+
     @SubscribeEvent
     public static void onCommands(RegisterCommandsEvent event) {
+        registreer(event.getDispatcher(), !net.neoforged.fml.loading.FMLEnvironment.isProduction());
+    }
+
+    /**
+     * {@code /guhs guhrio ...}. {@code dev}: with the commands of {@link #DEV_COMMANDOS} (a dev run; a game test asks for
+     * both and looks at what was registered).
+     */
+    static void registreer(com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher, boolean dev) {
         var guhrio = Commands.literal("guhrio").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS));
-        if (!net.neoforged.fml.loading.FMLEnvironment.isProduction()) {
-            // (these two carve a box of 84 x 28 x 20 blocks of air: never in a real world)
+        if (dev) {
+            // (these carve a box of 84 x 28 x 20 blocks of air, or put the whole castle down: never in a real world)
             guhrio = guhrio.then(Commands.literal("testlevel").executes(c -> testlevel(c.getSource(), TESTLEVEL, null))
                             .then(Commands.argument("pos", BlockPosArgument.blockPos()).executes(c -> testlevel(c.getSource(), TESTLEVEL, BlockPosArgument.getBlockPos(c, "pos")))))
                     .then(Commands.literal("testhoek").executes(c -> testlevel(c.getSource(), TESTHOEK, null))
@@ -293,7 +309,7 @@ public final class GuhrioEvents {
                     c.getSource().sendSuccess(() -> Component.literal(tekst), false);
                     return 1;
                 }));
-        event.getDispatcher().register(Commands.literal("guhs").then(guhrio));
+        dispatcher.register(Commands.literal("guhs").then(guhrio));
     }
 
     private static int testlevel(CommandSourceStack source, String naam, @Nullable BlockPos pos) throws CommandSyntaxException {

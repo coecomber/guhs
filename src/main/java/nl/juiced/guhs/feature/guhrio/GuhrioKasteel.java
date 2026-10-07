@@ -5,16 +5,24 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.entity.player.Player;
 import nl.juiced.guhs.feature.barbecuether.BarbecuetherFeature;
 import nl.juiced.guhs.feature.gids.GidsFeature;
 import nl.juiced.guhs.feature.verhaal.Doel;
 import nl.juiced.guhs.feature.gids.VerhaalStand;
 import nl.juiced.guhs.feature.verhaal.Verhaallijn;
+import nl.juiced.guhs.feature.wereld.Kopieen;
 import nl.juiced.guhs.quest.Scorebord;
 
 /**
@@ -30,6 +38,8 @@ import nl.juiced.guhs.quest.Scorebord;
  *     highscore page shows your own best and the server record;</li>
  *     <li>Guhshi's egg ({@link #heeftEi}) and the duel ({@link #winDuel}, {@link #duelGewonnen}).</li>
  * </ul>
+ * And one thing of the building itself: its level halls are sealed boxes, so whoever is in one without playing its level is
+ * put at that level's gate ({@link #bewaak}).
  * The level slices and the reward slice only call what is public here.
  */
 public final class GuhrioKasteel {
@@ -60,6 +70,128 @@ public final class GuhrioKasteel {
     public static final List<Consumer<ServerPlayer>> BIJ_DUEL = new CopyOnWriteArrayList<>();
 
     private GuhrioKasteel() {
+    }
+
+    // =====================================================================================================================
+    // the sealed level halls
+    // =====================================================================================================================
+
+    /**
+     * A sealed level hall of the castle (the lane, its gallery and the trench under it), in the coordinates of the whole
+     * build: the level that is played in it, where that level's start block is and which way it faces. Written by
+     * tools/features/guhrio_kasteel.py ({@code hallen}) to data/guhs/guhrio_kasteel/hallen.json.
+     */
+    public record Hal(String level, BlockPos start, Direction kijkt, BoundingBox doos) {
+    }
+
+    /** How often a player without a level is looked for in a hall, and how long he must have been there (ticks). */
+    public static final int BEWAAK_ELKE = 40;
+    @Nullable
+    private static volatile List<Hal> hallen;
+    /** Who was seen in a hall without playing its level, and when (game time): put back the second time. */
+    private static final java.util.Map<java.util.UUID, Long> VERDWAALD = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** The halls of the castle (read once; again after the data packs were read again). */
+    public static List<Hal> hallen(MinecraftServer server) {
+        List<Hal> uit = hallen;
+        if (uit != null) {
+            return uit;
+        }
+        List<Hal> gelezen = new ArrayList<>();
+        var res = server.getResourceManager().getResource(nl.juiced.guhs.Guhs.id(STRUCTUUR + "/hallen.json"));
+        if (res.isPresent()) {
+            try (java.io.Reader reader = res.get().openAsReader()) {
+                for (com.google.gson.JsonElement e : com.google.gson.JsonParser.parseReader(reader).getAsJsonArray()) {
+                    com.google.gson.JsonObject o = e.getAsJsonObject();
+                    com.google.gson.JsonArray s = o.getAsJsonArray("start"), d = o.getAsJsonArray("doos");
+                    Direction kijkt = Direction.byName(o.get("kijkt").getAsString());
+                    gelezen.add(new Hal(o.get("level").getAsString(), new BlockPos(s.get(0).getAsInt(), s.get(1).getAsInt(), s.get(2).getAsInt()),
+                            kijkt == null ? Direction.SOUTH : kijkt, new BoundingBox(d.get(0).getAsInt(), d.get(1).getAsInt(), d.get(2).getAsInt(),
+                            d.get(3).getAsInt(), d.get(4).getAsInt(), d.get(5).getAsInt())));
+                }
+            } catch (Exception e) {
+                org.slf4j.LoggerFactory.getLogger("guhs").error("Guhrio: the halls of the castle can't be read", e);
+            }
+        }
+        hallen = List.copyOf(gelezen);
+        return hallen;
+    }
+
+    /** (the data packs were read again, the server stopped) */
+    static void vergeetHallen() {
+        hallen = null;
+        VERDWAALD.clear();
+    }
+
+    /** Where a level hall lets somebody out who does not play its level: that level's gate in the hall of the keep. */
+    public record Uitweg(Hal hal, BlockPos poort) {
+    }
+
+    /**
+     * The level hall of a castle this spot lies in, with the way out of it; null: no hall here (or the castle around it
+     * is not a copy the world knows). Looks at the loaded chunks only.
+     */
+    @Nullable
+    public static Uitweg halBij(ServerLevel level, BlockPos pos) {
+        net.minecraft.world.level.levelgen.structure.Structure structuur = Kopieen.structuur(level, STRUCTUUR);
+        if (structuur == null) {
+            return null;
+        }
+        for (net.minecraft.world.level.levelgen.structure.StructureStart kopie : Kopieen.bij(level, structuur, pos, 0)) {
+            BlockPos lokaal = Kopieen.lokaal(kopie, null, pos);
+            if (lokaal == null) {
+                continue;
+            }
+            for (Hal hal : hallen(level.getServer())) {
+                if (!hal.doos().isInside(lokaal)) {
+                    continue;
+                }
+                BlockPos start = Kopieen.wereld(kopie, null, hal.start());
+                GuhrioLevel def = GuhrioLevel.vind(level.getServer(), hal.level());
+                if (start == null || def == null) {
+                    return null;
+                }
+                // (the start block itself says which way the level runs in this copy; else: the copy's turn)
+                net.minecraft.world.level.block.state.BlockState state = level.getBlockState(start);
+                Direction kijkt = state.getBlock() instanceof GuhrioBlocks.StartBlok ? state.getValue(GuhrioBlocks.StartBlok.FACING)
+                        : Kopieen.draai(kopie, null).rotate(hal.kijkt());
+                BlockPos poort = def.plaats(level.dimension(), start, kijkt).ingang();
+                return poort == null ? null : new Uitweg(hal, poort);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * (every {@link #BEWAAK_ELKE} ticks, for a player who is in no level) Somebody who stands in a sealed level hall
+     * without playing its level cannot get out: a hall has no door (the server stopped between the end of a level and the
+     * step outside, an operator's teleport, a pearl thrown through a window). Seen there twice in a row, a survival or
+     * adventure player is put at that level's gate. True when the player was put back now.
+     */
+    static boolean bewaak(ServerPlayer player) {
+        java.util.UUID id = player.getUUID();
+        if (GuhrioSpel.sessie(player) != null || player.isCreative() || player.isSpectator() || !player.isAlive()
+                || nl.juiced.guhs.feature.verhaal.Cutscenes.bezig(player)) {
+            VERDWAALD.remove(id);
+            return false;
+        }
+        ServerLevel level = player.level();
+        Uitweg uit = halBij(level, player.blockPosition());
+        if (uit == null) {
+            VERDWAALD.remove(id);
+            return false;
+        }
+        long nu = level.getGameTime();
+        Long sinds = VERDWAALD.putIfAbsent(id, nu);
+        if (sinds == null || nu - sinds < BEWAAK_ELKE) {
+            return false;                                     // (a level that ended this very tick lets go of you by itself)
+        }
+        VERDWAALD.remove(id);
+        player.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+        player.resetFallDistance();
+        player.teleportTo(uit.poort().getX() + 0.5, uit.poort().getY(), uit.poort().getZ() + 0.5);
+        player.sendOverlayMessage(Component.translatable("gui.guhs.guhrio.verdwaald").withStyle(ChatFormatting.YELLOW));
+        return true;
     }
 
     /** (GuhrioFeature.register) */
