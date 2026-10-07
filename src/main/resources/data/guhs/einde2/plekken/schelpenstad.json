@@ -2,37 +2,1137 @@
   "structuur": "schelpenstad",
   "soort": "leegte_bouw",
   "grootte": [
-    5,
-    4,
-    5
+    256,
+    48,
+    96
   ],
   "anker": [
-    8,
+    120,
     0,
-    8
+    40
   ],
   "plekken": {
+    "ruige_kroeg": {
+      "soort": "zone",
+      "pos": [
+        14,
+        15,
+        18
+      ],
+      "tot": [
+        54,
+        33,
+        34
+      ],
+      "wie": "De Ruige Kroeg: de sleepboot op het droge"
+    },
+    "kroeg_parkeer": {
+      "soort": "prop",
+      "pos": [
+        41,
+        16,
+        41
+      ],
+      "wie": "het middelste vak: hier staat de Knabbelburgermobiel (5 x 4 x 7 vrij)"
+    },
+    "kroeg_podium": {
+      "soort": "zone",
+      "pos": [
+        16,
+        17,
+        21
+      ],
+      "tot": [
+        20,
+        19,
+        31
+      ],
+      "wie": "het podium in de achtersteven"
+    },
+    "bellenblaas_plek": {
+      "soort": "prop",
+      "pos": [
+        45,
+        17,
+        22
+      ],
+      "wie": "de pot zeepsop in de wc: hier worden de bellen geblazen"
+    },
+    "barman": {
+      "soort": "npc",
+      "pos": [
+        31,
+        16,
+        20
+      ],
+      "yaw": 0.0,
+      "wie": "de barman-Mika, achter de tap",
+      "entity": "guhs:mika"
+    },
+    "uitsmijter": {
+      "soort": "npc",
+      "pos": [
+        34,
+        16,
+        36
+      ],
+      "yaw": 0.0,
+      "wie": "de uitsmijter-Mika, naast de deur",
+      "entity": "guhs:mika"
+    },
+    "stoere_mika_1": {
+      "soort": "npc",
+      "pos": [
+        30,
+        16,
+        22
+      ],
+      "yaw": 180.0,
+      "wie": "een stoere Mika",
+      "entity": "guhs:mika"
+    },
+    "stoere_mika_2": {
+      "soort": "npc",
+      "pos": [
+        37,
+        16,
+        23
+      ],
+      "yaw": 90.0,
+      "wie": "een stoere Mika",
+      "entity": "guhs:mika"
+    },
+    "stoere_mika_3": {
+      "soort": "npc",
+      "pos": [
+        23,
+        16,
+        27
+      ],
+      "yaw": -90.0,
+      "wie": "een stoere Mika",
+      "entity": "guhs:mika"
+    },
+    "stoere_mika_4": {
+      "soort": "npc",
+      "pos": [
+        36,
+        16,
+        30
+      ],
+      "yaw": 180.0,
+      "wie": "een stoere Mika",
+      "entity": "guhs:mika"
+    },
+    "stoere_mika_5": {
+      "soort": "npc",
+      "pos": [
+        36,
+        16,
+        28
+      ],
+      "yaw": 0.0,
+      "wie": "een stoere Mika",
+      "entity": "guhs:mika"
+    },
+    "stoere_mika_6": {
+      "soort": "npc",
+      "pos": [
+        39,
+        16,
+        25
+      ],
+      "yaw": -90.0,
+      "wie": "een stoere Mika",
+      "entity": "guhs:mika"
+    },
+    "slapende_mika": {
+      "soort": "npc",
+      "pos": [
+        28,
+        16,
+        30
+      ],
+      "yaw": -90.0,
+      "wie": "de slapende Mika met het sleuteltje, hoofd op tafel",
+      "entity": "guhs:mika"
+    },
+    "sleutel": {
+      "soort": "prop",
+      "pos": [
+        29,
+        16,
+        30
+      ],
+      "wie": "de tafel van de slaper: hier ligt (hangt) het sleuteltje"
+    },
+    "kroeg_sluip": {
+      "soort": "pad",
+      "punten": [
+        [
+          31,
+          16,
+          33
+        ],
+        [
+          32,
+          16,
+          32
+        ],
+        [
+          32,
+          16,
+          28
+        ],
+        [
+          30,
+          16,
+          28
+        ],
+        [
+          28,
+          16,
+          29
+        ],
+        [
+          28,
+          16,
+          30
+        ]
+      ],
+      "wie": "de sluipweg van de deur tussen de tafels door naar het sleuteltje"
+    },
+    "rustpunt_1": {
+      "soort": "prop",
+      "pos": [
+        26,
+        16,
+        43
+      ],
+      "wie": "het rustpunt voor De Ruige Kroeg (bij het bankje)"
+    },
+    "souvenirwinkel": {
+      "soort": "zone",
+      "pos": [
+        171,
+        13,
+        13
+      ],
+      "tot": [
+        197,
+        20,
+        31
+      ],
+      "wie": "Schelpenstad Souvenirs & Zo, de winkel van de Cycloop"
+    },
+    "cycloop": {
+      "soort": "npc",
+      "pos": [
+        181,
+        14,
+        17
+      ],
+      "yaw": -90.0,
+      "wie": "de Cycloop, bij zijn droogtafel",
+      "entity": "guhs:cycloop_mika"
+    },
+    "droogtafel": {
+      "soort": "prop",
+      "pos": [
+        184,
+        14,
+        16
+      ],
+      "wie": "de tafel onder de droogtelamp"
+    },
+    "droogtafel_sponsguh": {
+      "soort": "prop",
+      "pos": [
+        183,
+        15,
+        16
+      ],
+      "wie": "hier ligt Sponsguh te drogen"
+    },
+    "droogtafel_patguh": {
+      "soort": "prop",
+      "pos": [
+        185,
+        15,
+        16
+      ],
+      "wie": "hier ligt Patguh te drogen"
+    },
+    "droogtafel_speler": {
+      "soort": "prop",
+      "pos": [
+        184,
+        14,
+        18
+      ],
+      "wie": "hier sta jij (vastgehouden)"
+    },
+    "drooglamp": {
+      "soort": "prop",
+      "pos": [
+        184,
+        18,
+        16
+      ],
+      "wie": "de droogtelamp boven de tafel"
+    },
+    "stopcontact": {
+      "soort": "prop",
+      "pos": [
+        187,
+        15,
+        14
+      ],
+      "wie": "het stopcontact waar de traan in loopt"
+    },
+    "sproeier": {
+      "soort": "prop",
+      "pos": [
+        184,
+        18,
+        18
+      ],
+      "wie": "de sproeier aan het plafond"
+    },
+    "souvenirplank_1": {
+      "soort": "prop",
+      "pos": [
+        172,
+        14,
+        24
+      ],
+      "wie": "een plank vol gedroogde souvenirs"
+    },
+    "souvenirplank_2": {
+      "soort": "prop",
+      "pos": [
+        196,
+        14,
+        24
+      ],
+      "wie": "een plank vol gedroogde souvenirs"
+    },
+    "souvenirplank_3": {
+      "soort": "prop",
+      "pos": [
+        177,
+        14,
+        25
+      ],
+      "wie": "een plank vol gedroogde souvenirs"
+    },
+    "souvenirplank_4": {
+      "soort": "prop",
+      "pos": [
+        191,
+        14,
+        25
+      ],
+      "wie": "een plank vol gedroogde souvenirs"
+    },
+    "souvenirplank_5": {
+      "soort": "prop",
+      "pos": [
+        175,
+        14,
+        21
+      ],
+      "wie": "een plank vol gedroogde souvenirs"
+    },
+    "souvenirplank_6": {
+      "soort": "prop",
+      "pos": [
+        193,
+        14,
+        21
+      ],
+      "wie": "een plank vol gedroogde souvenirs"
+    },
+    "kroon": {
+      "soort": "prop",
+      "pos": [
+        184,
+        15,
+        25
+      ],
+      "wie": "op het kussen: de kroon van koning Neptuguh (1 x 2 x 1 vrij)"
+    },
+    "rustpunt_3": {
+      "soort": "prop",
+      "pos": [
+        184,
+        14,
+        34
+      ],
+      "wie": "het rustpunt voor de souvenirwinkel"
+    },
     "aankomst": {
       "soort": "zone",
       "pos": [
-        0,
-        1,
-        0
+        178,
+        14,
+        37
       ],
       "tot": [
-        4,
-        3,
-        4
+        190,
+        34,
+        49
       ],
-      "wie": "hier komt de echte plek nog"
+      "wie": "het plein van Schelpenstad: hier land je"
     },
     "aankomst_speler": {
       "soort": "prop",
       "pos": [
-        2,
-        1,
-        2
+        184,
+        14,
+        46
       ]
+    },
+    "uitzicht": {
+      "soort": "prop",
+      "pos": [
+        276,
+        34,
+        84
+      ],
+      "wie": "boven de Leegtezee: de stad, het strand en daarachter de heuvel met de loopgraaf"
+    },
+    "schelpenstad": {
+      "soort": "zone",
+      "pos": [
+        162,
+        9,
+        8
+      ],
+      "tot": [
+        232,
+        44,
+        90
+      ],
+      "wie": "Schelpenstad, op de rand van het strand"
+    },
+    "strand": {
+      "soort": "zone",
+      "pos": [
+        164,
+        9,
+        57
+      ],
+      "tot": [
+        232,
+        18,
+        90
+      ],
+      "wie": "het strand van kruimelzand"
+    },
+    "kust": {
+      "soort": "zone",
+      "pos": [
+        213,
+        7,
+        12
+      ],
+      "tot": [
+        255,
+        18,
+        84
+      ],
+      "wie": "de rand van de plaat: daarachter is de leegte de zee"
+    },
+    "bewoner_1": {
+      "soort": "npc",
+      "pos": [
+        189,
+        14,
+        47
+      ],
+      "yaw": 90.0,
+      "wie": "een bewoner op het plein",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_2": {
+      "soort": "npc",
+      "pos": [
+        174,
+        14,
+        54
+      ],
+      "yaw": 0.0,
+      "wie": "een bewoner op de boulevard",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_3": {
+      "soort": "npc",
+      "pos": [
+        194,
+        14,
+        61
+      ],
+      "yaw": 0.0,
+      "wie": "de barguh van De Zoute Snoet, achter de bar",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "bewoner_4": {
+      "soort": "npc",
+      "pos": [
+        200,
+        14,
+        57
+      ],
+      "yaw": 180.0,
+      "wie": "een bewoner op het strand",
+      "entity": "guhs:bikinibodem_guh"
+    },
+    "hasselguh_opstap": {
+      "soort": "prop",
+      "pos": [
+        244,
+        14,
+        52
+      ],
+      "wie": "de kop van de pier: hier stap je op"
+    },
+    "hasselguh": {
+      "soort": "npc",
+      "pos": [
+        239,
+        10,
+        62
+      ],
+      "yaw": 90.0,
+      "wie": "David Hasselguh, dobberend naast de pier (13 x 6 x 13 vrij)",
+      "entity": "guhs:david_hasselguh"
+    },
+    "mindy_strand": {
+      "soort": "npc",
+      "pos": [
+        214,
+        14,
+        53
+      ],
+      "yaw": -90.0,
+      "wie": "prinses Mindy-guh op het strand",
+      "entity": "guhs:mindy_guh"
+    },
+    "weg_naad": {
+      "soort": "prop",
+      "pos": [
+        0,
+        16,
+        48
+      ],
+      "wie": "het midden van de weg op de naad met Bikinibodem"
+    },
+    "weg_west": {
+      "soort": "pad",
+      "punten": [
+        [
+          0,
+          16,
+          48
+        ],
+        [
+          6,
+          16,
+          48
+        ],
+        [
+          10,
+          16,
+          48
+        ],
+        [
+          12,
+          16,
+          49
+        ],
+        [
+          18,
+          16,
+          50
+        ],
+        [
+          24,
+          16,
+          52
+        ],
+        [
+          30,
+          16,
+          52
+        ],
+        [
+          36,
+          16,
+          52
+        ],
+        [
+          42,
+          16,
+          52
+        ],
+        [
+          48,
+          16,
+          52
+        ],
+        [
+          54,
+          16,
+          52
+        ],
+        [
+          60,
+          17,
+          50
+        ],
+        [
+          66,
+          18,
+          49
+        ],
+        [
+          72,
+          19,
+          48
+        ],
+        [
+          78,
+          20,
+          46
+        ],
+        [
+          84,
+          22,
+          46
+        ],
+        [
+          89,
+          22,
+          46
+        ]
+      ],
+      "wie": "de weg van de naad langs De Ruige Kroeg naar de westrand van de loopgraaf"
+    },
+    "weg_oost": {
+      "soort": "pad",
+      "punten": [
+        [
+          129,
+          22,
+          50
+        ],
+        [
+          135,
+          21,
+          50
+        ],
+        [
+          138,
+          21,
+          50
+        ],
+        [
+          141,
+          20,
+          49
+        ],
+        [
+          147,
+          18,
+          47
+        ],
+        [
+          153,
+          17,
+          45
+        ],
+        [
+          159,
+          15,
+          42
+        ],
+        [
+          160,
+          15,
+          42
+        ],
+        [
+          165,
+          14,
+          42
+        ],
+        [
+          171,
+          14,
+          42
+        ],
+        [
+          175,
+          14,
+          42
+        ]
+      ],
+      "wie": "de weg van de oostrand de heuvel af, de stad in"
+    },
+    "loopgraaf": {
+      "soort": "zone",
+      "pos": [
+        89,
+        1,
+        4
+      ],
+      "tot": [
+        129,
+        31,
+        91
+      ],
+      "wie": "de loopgraaf: diep, donker, vol monsters"
+    },
+    "loopgraaf_bodem": {
+      "soort": "zone",
+      "pos": [
+        99,
+        4,
+        14
+      ],
+      "tot": [
+        119,
+        8,
+        81
+      ],
+      "wie": "de bodem van de loopgraaf"
+    },
+    "loopgraaf_rand_west": {
+      "soort": "prop",
+      "pos": [
+        89,
+        22,
+        46
+      ],
+      "wie": "hier houdt de weg op: de westrand"
+    },
+    "loopgraaf_rand_oost": {
+      "soort": "prop",
+      "pos": [
+        129,
+        22,
+        50
+      ],
+      "wie": "hier begint de weg weer: de oostrand"
+    },
+    "pad_omlaag": {
+      "soort": "pad",
+      "punten": [
+        [
+          89,
+          22,
+          48
+        ],
+        [
+          92,
+          22,
+          50
+        ],
+        [
+          92,
+          20,
+          53
+        ],
+        [
+          93,
+          19,
+          56
+        ],
+        [
+          94,
+          18,
+          59
+        ],
+        [
+          94,
+          16,
+          62
+        ],
+        [
+          94,
+          14,
+          65
+        ],
+        [
+          95,
+          13,
+          68
+        ],
+        [
+          96,
+          12,
+          71
+        ],
+        [
+          96,
+          10,
+          74
+        ],
+        [
+          98,
+          10,
+          77
+        ],
+        [
+          101,
+          10,
+          75
+        ],
+        [
+          101,
+          8,
+          72
+        ],
+        [
+          102,
+          7,
+          69
+        ],
+        [
+          102,
+          6,
+          66
+        ],
+        [
+          102,
+          4,
+          63
+        ],
+        [
+          102,
+          4,
+          63
+        ]
+      ],
+      "wie": "het pad omlaag langs de westwand"
+    },
+    "pad_omhoog": {
+      "soort": "pad",
+      "punten": [
+        [
+          116,
+          4,
+          36
+        ],
+        [
+          116,
+          6,
+          33
+        ],
+        [
+          116,
+          7,
+          30
+        ],
+        [
+          117,
+          8,
+          27
+        ],
+        [
+          117,
+          10,
+          24
+        ],
+        [
+          120,
+          10,
+          23
+        ],
+        [
+          122,
+          10,
+          25
+        ],
+        [
+          123,
+          12,
+          28
+        ],
+        [
+          123,
+          14,
+          31
+        ],
+        [
+          124,
+          15,
+          34
+        ],
+        [
+          124,
+          16,
+          37
+        ],
+        [
+          125,
+          18,
+          40
+        ],
+        [
+          125,
+          20,
+          43
+        ],
+        [
+          126,
+          21,
+          46
+        ],
+        [
+          127,
+          22,
+          49
+        ],
+        [
+          129,
+          22,
+          50
+        ]
+      ],
+      "wie": "het pad omhoog langs de oostwand"
+    },
+    "monster_1": {
+      "soort": "npc",
+      "pos": [
+        95,
+        14,
+        22
+      ],
+      "yaw": -90.0,
+      "wie": "een loopgraafmonster op zijn zitplek",
+      "entity": "guhs:loopgraafmonster"
+    },
+    "monster_2": {
+      "soort": "npc",
+      "pos": [
+        97,
+        9,
+        37
+      ],
+      "yaw": -90.0,
+      "wie": "een loopgraafmonster op zijn zitplek",
+      "entity": "guhs:loopgraafmonster"
+    },
+    "monster_3": {
+      "soort": "npc",
+      "pos": [
+        123,
+        14,
+        62
+      ],
+      "yaw": 90.0,
+      "wie": "een loopgraafmonster op zijn zitplek",
+      "entity": "guhs:loopgraafmonster"
+    },
+    "monster_4": {
+      "soort": "npc",
+      "pos": [
+        121,
+        9,
+        75
+      ],
+      "yaw": 90.0,
+      "wie": "een loopgraafmonster op zijn zitplek",
+      "entity": "guhs:loopgraafmonster"
+    },
+    "monster_5": {
+      "soort": "npc",
+      "pos": [
+        110,
+        4,
+        14
+      ],
+      "yaw": 0.0,
+      "wie": "een loopgraafmonster op zijn zitplek",
+      "entity": "guhs:loopgraafmonster"
+    },
+    "monster_6": {
+      "soort": "npc",
+      "pos": [
+        108,
+        4,
+        82
+      ],
+      "yaw": 180.0,
+      "wie": "een loopgraafmonster op zijn zitplek",
+      "entity": "guhs:loopgraafmonster"
+    },
+    "mindy": {
+      "soort": "npc",
+      "pos": [
+        86,
+        22,
+        52
+      ],
+      "yaw": 180.0,
+      "wie": "prinses Mindy-guh verschijnt hier, aan de westrand",
+      "entity": "guhs:mindy_guh"
+    },
+    "snor_plek": {
+      "soort": "prop",
+      "pos": [
+        87,
+        22,
+        53
+      ],
+      "wie": "hier krijg je je snor van knabbelkoordraad"
+    },
+    "rustpunt_2": {
+      "soort": "prop",
+      "pos": [
+        84,
+        21,
+        44
+      ],
+      "wie": "het rustpunt aan de westrand van de loopgraaf"
+    },
+    "knipoog_appa_sponsguh": {
+      "soort": "npc",
+      "pos": [
+        87,
+        22,
+        45
+      ],
+      "yaw": -90.0,
+      "wie": "Sponsguh kijkt omhoog",
+      "entity": "guhs:sponsguh"
+    },
+    "knipoog_appa_patguh": {
+      "soort": "npc",
+      "pos": [
+        87,
+        22,
+        43
+      ],
+      "yaw": -90.0,
+      "wie": "Patguh kijkt omhoog",
+      "entity": "guhs:patguh"
+    },
+    "knipoog_appa_vlucht": {
+      "soort": "pad",
+      "punten": [
+        [
+          82,
+          36,
+          46
+        ],
+        [
+          136,
+          36,
+          49
+        ]
+      ],
+      "wie": "Appa-guh vliegt hier fluitend over de loopgraaf (9 breed vrij), Aang-guh zwaait"
+    },
+    "knipoog_appa_camera": {
+      "soort": "pad",
+      "punten": [
+        [
+          80,
+          23,
+          40
+        ],
+        [
+          108,
+          36,
+          47
+        ]
+      ],
+      "wie": "een lage camera: de twee aan de rand en de lucht boven de loopgraaf"
+    },
+    "dennis": {
+      "soort": "npc",
+      "pos": [
+        131,
+        22,
+        50
+      ],
+      "yaw": -90.0,
+      "wie": "Dennis-Mika duikt hier op, achter je, op de motor",
+      "entity": "guhs:dennis_mika"
+    },
+    "dennis_route": {
+      "soort": "pad",
+      "punten": [
+        [
+          131,
+          22,
+          50
+        ],
+        [
+          136,
+          21,
+          50
+        ],
+        [
+          138,
+          21,
+          50
+        ],
+        [
+          141,
+          20,
+          49
+        ],
+        [
+          146,
+          19,
+          47
+        ],
+        [
+          151,
+          17,
+          45
+        ],
+        [
+          156,
+          16,
+          43
+        ],
+        [
+          160,
+          15,
+          42
+        ],
+        [
+          161,
+          15,
+          42
+        ],
+        [
+          166,
+          14,
+          42
+        ],
+        [
+          171,
+          14,
+          42
+        ],
+        [
+          175,
+          14,
+          42
+        ],
+        [
+          180,
+          14,
+          43
+        ]
+      ],
+      "wie": "de achtervolging over de weg de stad in (3 breed)"
     }
   }
 }

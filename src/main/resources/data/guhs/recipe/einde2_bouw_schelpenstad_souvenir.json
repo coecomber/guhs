@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "K",
+    "P"
+  ],
+  "key": {
+    "K": "guhs:kaas_knabbels",
+    "P": "#minecraft:wooden_slabs"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_schelpenstad_souvenir",
+    "count": 2
+  }
+}

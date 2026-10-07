@@ -1,0 +1,75 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/einde2_bouw_schelpenstad_souvenir_voet",
+    "voet": "guhs:block/einde2_bouw_schelpenstad_souvenir_voet",
+    "plaat": "guhs:block/einde2_bouw_schelpenstad_souvenir_0",
+    "rand": "guhs:block/einde2_bouw_schelpenstad_souvenir_0_rand"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        5
+      ],
+      "to": [
+        12,
+        1,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "down": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        1,
+        7.5
+      ],
+      "to": [
+        15,
+        15,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#plaat",
+          "uv": [
+            15,
+            1,
+            1,
+            15
+          ]
+        },
+        "south": {
+          "texture": "#plaat",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        }
+      }
+    }
+  ]
+}

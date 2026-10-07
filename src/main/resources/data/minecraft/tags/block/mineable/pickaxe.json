@@ -139,6 +139,12 @@
     "guhs:knabbelkoorblok_plaat",
     "guhs:kruimelrots_stenen_muur",
     "guhs:schimmelkaas_stenen_muur",
-    "guhs:klipkaas_stenen_muur"
+    "guhs:klipkaas_stenen_muur",
+    "guhs:einde2_bouw_schelpenstad_schelpsteen",
+    "guhs:einde2_bouw_schelpenstad_drooglamp",
+    "guhs:einde2_bouw_schelpenstad_stopcontact",
+    "guhs:einde2_bouw_schelpenstad_sproeier",
+    "guhs:einde2_bouw_schelpenstad_neon",
+    "guhs:einde2_bouw_schelpenstad_kaartenrek"
   ]
 }

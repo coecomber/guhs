@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "soort=0,facing=north": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_0"
+    },
+    "soort=0,facing=east": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_0",
+      "y": 90
+    },
+    "soort=0,facing=south": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_0",
+      "y": 180
+    },
+    "soort=0,facing=west": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_0",
+      "y": 270
+    },
+    "soort=1,facing=north": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_1"
+    },
+    "soort=1,facing=east": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_1",
+      "y": 90
+    },
+    "soort=1,facing=south": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_1",
+      "y": 180
+    },
+    "soort=1,facing=west": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_1",
+      "y": 270
+    },
+    "soort=2,facing=north": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_2"
+    },
+    "soort=2,facing=east": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_2",
+      "y": 90
+    },
+    "soort=2,facing=south": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_2",
+      "y": 180
+    },
+    "soort=2,facing=west": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_2",
+      "y": 270
+    },
+    "soort=3,facing=north": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_3"
+    },
+    "soort=3,facing=east": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_3",
+      "y": 90
+    },
+    "soort=3,facing=south": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_3",
+      "y": 180
+    },
+    "soort=3,facing=west": {
+      "model": "guhs:block/einde2_bouw_schelpenstad_souvenir_3",
+      "y": 270
+    }
+  }
+}

@@ -14,18 +14,18 @@
     }
   },
   "templates": "guhs:schelpenstad",
-  "tiles_x": 1,
-  "tiles_z": 1,
+  "tiles_x": 8,
+  "tiles_z": 3,
   "tile_size": 32,
   "anchor": [
-    8,
+    120,
     0,
-    8
+    40
   ],
   "size": [
-    5,
-    4,
-    5
+    256,
+    48,
+    96
   ],
   "y": 4,
   "min_distance": 1100,
@@ -36,6 +36,6 @@
     "dx": 224,
     "dz": 64
   },
-  "keep_clear": 9,
+  "keep_clear": 136,
   "voorrang": 293
 }

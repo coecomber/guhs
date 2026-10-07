@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WGW",
+    " P "
+  ],
+  "key": {
+    "W": "minecraft:red_wool",
+    "G": "minecraft:gold_nugget",
+    "P": "guhs:parelmoer"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_schelpenstad_kroonkussen"
+  }
+}

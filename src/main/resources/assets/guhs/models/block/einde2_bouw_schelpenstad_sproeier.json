@@ -1,0 +1,138 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/einde2_bouw_schelpenstad_sproeier",
+    "staal": "guhs:block/einde2_bouw_schelpenstad_sproeier",
+    "kop": "guhs:block/einde2_bouw_schelpenstad_sproeier_kop"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        12,
+        7
+      ],
+      "to": [
+        9,
+        16,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#staal"
+        },
+        "south": {
+          "texture": "#staal"
+        },
+        "east": {
+          "texture": "#staal"
+        },
+        "west": {
+          "texture": "#staal"
+        },
+        "up": {
+          "texture": "#staal"
+        },
+        "down": {
+          "texture": "#staal"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        10,
+        6
+      ],
+      "to": [
+        10,
+        12,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kop"
+        },
+        "south": {
+          "texture": "#kop"
+        },
+        "east": {
+          "texture": "#kop"
+        },
+        "west": {
+          "texture": "#kop"
+        },
+        "up": {
+          "texture": "#kop"
+        },
+        "down": {
+          "texture": "#kop"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        9,
+        5
+      ],
+      "to": [
+        11,
+        9.5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#staal"
+        },
+        "south": {
+          "texture": "#staal"
+        },
+        "east": {
+          "texture": "#staal"
+        },
+        "west": {
+          "texture": "#staal"
+        },
+        "up": {
+          "texture": "#staal"
+        },
+        "down": {
+          "texture": "#staal"
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        9.5,
+        7.5
+      ],
+      "to": [
+        8.5,
+        10,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#staal"
+        },
+        "south": {
+          "texture": "#staal"
+        },
+        "east": {
+          "texture": "#staal"
+        },
+        "west": {
+          "texture": "#staal"
+        },
+        "up": {
+          "texture": "#staal"
+        },
+        "down": {
+          "texture": "#staal"
+        }
+      }
+    }
+  ]
+}

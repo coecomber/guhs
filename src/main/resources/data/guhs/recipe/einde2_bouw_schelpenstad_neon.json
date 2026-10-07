@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GLG",
+    "RRR"
+  ],
+  "key": {
+    "G": "minecraft:glass_pane",
+    "L": "guhs:lichtstaafje",
+    "R": "minecraft:pink_dye"
+  },
+  "result": {
+    "id": "guhs:einde2_bouw_schelpenstad_neon",
+    "count": 2
+  }
+}
