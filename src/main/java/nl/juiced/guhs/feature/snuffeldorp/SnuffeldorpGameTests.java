@@ -482,7 +482,8 @@ public class SnuffeldorpGameTests {
         ServerPlayer p = t.speler(0), q = t.speler(1);
         Draaiboek d = new Draaiboek();
         d.dan("two dogs wash ashore", () -> {
-            helper.assertTrue(LIJN.sleutel(p).equals("0") && LIJN.doel(p) == null, "before the island: not this slice's step");
+            // (merge verhalenpad: the steps 0-1 are the dock's, and its goal is a steigerhuisje; nothing of the village yet)
+            helper.assertTrue(LIJN.sleutel(p).equals("0") && steigerDoel(p), "before the island: not this slice's step, the dock's goal");
             Reis.naarEiland(p, t.plaats, Reis.Aankomst.STRAND);
             Reis.naarEiland(q, t.plaats, Reis.Aankomst.STRAND);
         }, null, () -> LIJN.vlag(p, Dorp.WAKKER) && LIJN.vlag(q, Dorp.WAKKER) && !Cutscenes.bezig(p) && !Cutscenes.bezig(q) && t.bewoond());
@@ -561,6 +562,49 @@ public class SnuffeldorpGameTests {
         d.speel(helper, t);
     }
 
+    /**
+     * (merge verhalenpad) The hand-over from the dock, which the two slices never tried together: the crossing leaves a
+     * player on the beach at step 2 already ({@code SteigerVerhaal.aanLand}: {@code Snuffel.spoelAan}, then
+     * {@code LIJN.verder(STAP_UITVAREN)}), with the sickbed's flag and a chosen dog. The village takes over there: the
+     * waking scene plays, the step is not moved a second time, the text and "Mijn verhaal" are the village's from then on.
+     */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 600)
+    public static void snuffeldorpNaDeOvertocht(GameTestHelper helper) {
+        Proef t = new Proef(helper, true);
+        ServerPlayer p = t.speler(0);
+        Draaiboek d = new Draaiboek();
+        d.dan("the dock's crossing ends on the beach", () -> {
+            // what the dock did for this player before the island: the feast, the sickbed, the choice
+            LIJN.begin(p);
+            helper.assertTrue(LIJN.verder(p, SnuffelFeature.STAP_STEIGER), "the feast at the dock: step 0 done");
+            LIJN.vlag(p, nl.juiced.guhs.feature.snuffelsteiger.SteigerVerhaal.ZIEKBED, true);
+            helper.assertTrue(nl.juiced.guhs.feature.snuffel.Keuze.zet(p, new nl.juiced.guhs.feature.snuffel.Keuze("jackrussell", "driekleur", "Stuiter", "b")),
+                    "the choice at the captain");
+            helper.assertTrue("1".equals(LIJN.sleutel(p)) && steigerDoel(p), "at the dock: step 1 with the dock's text and goal: " + LIJN.sleutel(p));
+            // SteigerVerhaal.aanLand(p, true), with this test's island named: washed ashore, then the dock's step is done
+            helper.assertTrue(Reis.naarEiland(p, t.plaats, Reis.Aankomst.STRAND) && LIJN.verder(p, SnuffelFeature.STAP_UITVAREN), "washed ashore: step 1 done");
+            helper.assertTrue(LIJN.stap(p) == SnuffelFeature.STAP_STRAND && !LIJN.vlag(p, Dorp.WAKKER) && Hondvorm.actief(p),
+                    "a dog at step 2; the village has not seen it yet");
+        }, null, () -> LIJN.vlag(p, Dorp.WAKKER) && !Cutscenes.bezig(p) && t.bewoond());
+        d.dan("the village takes over", () -> {
+            helper.assertTrue(Cutscenes.gezien(p, DorpScenes.WAKKER.id()), "the waking scene played after the crossing");
+            helper.assertTrue(LIJN.stap(p) == SnuffelFeature.STAP_STRAND && "2".equals(LIJN.sleutel(p)),
+                    "still step 2 (not moved a second time), with the village's text: " + LIJN.stap(p) + " / " + LIJN.sleutel(p));
+            Doel doel = LIJN.doel(p);
+            helper.assertTrue(doel != null && t.plaats.wereld(new BlockPos(3, 1, 7)).equals(doel.plek()), "Mijn verhaal: the strandpoort now, not a steigerhuisje");
+            helper.assertTrue(Reis.thuis(p) != null && Reis.thuis(p).plek().distanceTo(t.thuis(0)) < 0.01, "home is where the crossing began");
+            t.praat(p, "redder");
+            helper.assertTrue(LIJN.stap(p) == SnuffelFeature.STAP_DOKTER, "Jutje sends the dog on to the doctor");
+        });
+        d.speel(helper, t);
+    }
+
+    /** (merge verhalenpad) the goal of the steps 0-1, which the dock slice registers: the nearest steigerhuisje in the Guhmensie. */
+    private static boolean steigerDoel(ServerPlayer p) {
+        nl.juiced.guhs.feature.verhaal.Doel d = LIJN.doel(p);
+        return d != null && d.dim() == nl.juiced.guhs.world.ModDimensions.GUHMENSION && "steigerhuisje".equals(d.structuur());
+    }
+
     @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 400)
     public static void snuffeldorpAlleenInHetDorp(GameTestHelper helper) {
         Proef t = new Proef(helper, false);
@@ -576,7 +620,8 @@ public class SnuffeldorpGameTests {
         d.dan("nothing of the village happened", () -> {
             helper.assertTrue(dicht(p.position(), t.op(15.5, 1.5)), "no roadblock moved the dog");
             helper.assertTrue(!LIJN.vlag(p, Dorp.WAKKER) && !LIJN.begonnen(p) && LIJN.stap(p) == 0 && !Cutscenes.bezig(p), "no story began");
-            helper.assertTrue(LIJN.doel(p) == null && "0".equals(LIJN.sleutel(p)), "the questline's own texts");
+            // (merge verhalenpad: step 0 has the dock's goal, a steigerhuisje; the village adds none on an island that is not its own)
+            helper.assertTrue(steigerDoel(p) && "0".equals(LIJN.sleutel(p)), "the questline's own texts, the dock's goal");
         });
         d.speel(helper, t);
     }
