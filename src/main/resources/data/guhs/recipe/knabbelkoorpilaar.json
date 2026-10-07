@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P",
+    "P"
+  ],
+  "key": {
+    "P": "guhs:knabbelkoorblok_plaat"
+  },
+  "result": {
+    "id": "guhs:knabbelkoorpilaar"
+  }
+}

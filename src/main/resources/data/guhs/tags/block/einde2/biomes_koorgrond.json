@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#guhs:einde2/eilandgrond",
+    "guhs:knabbelkoorblok",
+    "guhs:knabbelkoorpilaar",
+    "minecraft:end_stone"
+  ]
+}

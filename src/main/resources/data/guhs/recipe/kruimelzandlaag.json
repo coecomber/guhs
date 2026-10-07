@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ZZZ"
+  ],
+  "key": {
+    "Z": "guhs:kruimelzand"
+  },
+  "result": {
+    "id": "guhs:kruimelzandlaag",
+    "count": 6
+  }
+}

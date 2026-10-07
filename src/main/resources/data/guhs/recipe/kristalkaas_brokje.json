@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:kristalkaas"
+  ],
+  "result": {
+    "id": "guhs:kristalkaas_brokje",
+    "count": 9
+  }
+}

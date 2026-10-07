@@ -26,23 +26,23 @@
           "type": "minecraft:dust",
           "color": [
             1.0,
-            0.82,
-            0.3
+            0.9,
+            0.45
           ],
-          "scale": 1.0
+          "scale": 0.6
         },
-        "probability": 0.002
+        "probability": 0.004
       }
     ],
-    "minecraft:visual/fog_color": "#3c1e34",
-    "minecraft:visual/sky_color": "#2a1028",
-    "minecraft:visual/water_fog_color": "#6a2a50"
+    "minecraft:visual/fog_color": "#54380e",
+    "minecraft:visual/sky_color": "#30200e",
+    "minecraft:visual/water_fog_color": "#7a4a12"
   },
   "has_precipitation": false,
   "temperature": 0.5,
   "downfall": 0.5,
   "effects": {
-    "water_color": "#f08cc0",
+    "water_color": "#f2b84a",
     "foliage_color": "#e8b83c",
     "grass_color": "#e8b83c"
   },
@@ -50,7 +50,7 @@
     "monster": [
       {
         "type": "guhs:mika",
-        "weight": 4,
+        "weight": 2,
         "minCount": 1,
         "maxCount": 1
       }
@@ -58,5 +58,23 @@
   },
   "spawn_costs": {},
   "carvers": [],
-  "features": []
+  "features": [
+    [],
+    [],
+    [
+      "guhs:einde2_biomes_kristalspits"
+    ],
+    [],
+    [],
+    [],
+    [
+      "guhs:einde2_biomes_kristalkaas_erts"
+    ],
+    [],
+    [],
+    [
+      "guhs:einde2_biomes_kristallen"
+    ],
+    []
+  ]
 }

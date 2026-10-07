@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "guhs:block/klipkaas_stenen",
+    "top": "guhs:block/klipkaas_stenen",
+    "side": "guhs:block/klipkaas_stenen"
+  }
+}

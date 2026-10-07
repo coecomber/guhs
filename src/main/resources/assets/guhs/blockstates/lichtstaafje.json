@@ -1,7 +1,30 @@
 {
   "variants": {
-    "": {
+    "facing=down": {
+      "model": "guhs:block/lichtstaafje",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "guhs:block/lichtstaafje",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "guhs:block/lichtstaafje",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/lichtstaafje",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
       "model": "guhs:block/lichtstaafje"
+    },
+    "facing=west": {
+      "model": "guhs:block/lichtstaafje",
+      "x": 90,
+      "y": 270
     }
   }
 }

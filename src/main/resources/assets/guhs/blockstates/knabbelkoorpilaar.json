@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/knabbelkoorpilaar"
+    },
+    "axis=z": {
+      "model": "guhs:block/knabbelkoorpilaar_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "guhs:block/knabbelkoorpilaar_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

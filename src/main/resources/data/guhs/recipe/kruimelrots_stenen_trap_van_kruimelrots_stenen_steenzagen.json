@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:kruimelrots_stenen",
+  "result": {
+    "id": "guhs:kruimelrots_stenen_trap"
+  }
+}

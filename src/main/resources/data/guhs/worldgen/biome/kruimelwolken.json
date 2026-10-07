@@ -23,19 +23,13 @@
     "minecraft:visual/ambient_particles": [
       {
         "particle": {
-          "type": "minecraft:dust",
-          "color": [
-            1.0,
-            0.82,
-            0.3
-          ],
-          "scale": 1.0
+          "type": "minecraft:white_ash"
         },
-        "probability": 0.002
+        "probability": 0.012
       }
     ],
-    "minecraft:visual/fog_color": "#3c1e34",
-    "minecraft:visual/sky_color": "#2a1028",
+    "minecraft:visual/fog_color": "#6e5e6a",
+    "minecraft:visual/sky_color": "#4a3a52",
     "minecraft:visual/water_fog_color": "#6a2a50"
   },
   "has_precipitation": false,
@@ -50,7 +44,7 @@
     "monster": [
       {
         "type": "guhs:mika",
-        "weight": 4,
+        "weight": 2,
         "minCount": 1,
         "maxCount": 1
       }
@@ -58,5 +52,23 @@
   },
   "spawn_costs": {},
   "carvers": [],
-  "features": []
+  "features": [
+    [],
+    [],
+    [
+      "guhs:einde2_biomes_kei_schaars",
+      "guhs:einde2_biomes_kruimeleilandje",
+      "guhs:einde2_biomes_wolk"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "guhs:einde2_biomes_korstgras_schaars"
+    ],
+    []
+  ]
 }

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "S  ",
+    "SS ",
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:kruimelrots_stenen"
+  },
+  "result": {
+    "id": "guhs:kruimelrots_stenen_trap",
+    "count": 4
+  }
+}

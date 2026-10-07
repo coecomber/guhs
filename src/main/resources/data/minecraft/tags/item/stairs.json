@@ -10,6 +10,10 @@
     "guhs:pluisdak_trap",
     "guhs:nomguh_sneeuwdak_trap",
     "guhs:tiki_rietdak_trap",
-    "guhs:harsstenen_trap"
+    "guhs:harsstenen_trap",
+    "guhs:kruimelrots_stenen_trap",
+    "guhs:schimmelkaas_stenen_trap",
+    "guhs:klipkaas_stenen_trap",
+    "guhs:knabbelkoorblok_trap"
   ]
 }

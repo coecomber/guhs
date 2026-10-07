@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:schimmelkaas",
+  "result": {
+    "id": "guhs:schimmelkaas_stenen_muur"
+  }
+}

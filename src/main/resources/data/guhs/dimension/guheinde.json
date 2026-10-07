@@ -4,8 +4,20 @@
     "type": "minecraft:noise",
     "settings": "guhs:guheinde",
     "biome_source": {
-      "type": "minecraft:fixed",
-      "biome": "guhs:guheinde"
+      "type": "guhs:guheinde_biomes",
+      "midden": "guhs:guheinde",
+      "straal_midden": 960,
+      "gewoon": [
+        "guhs:gatenkaasheuvels",
+        "guhs:korstwoestijn"
+      ],
+      "zeldzaam": [
+        "guhs:kruimelwolken",
+        "guhs:schimmelkaasvlakte",
+        "guhs:kristalkaasklippen",
+        "guhs:knabbelkoorbos"
+      ],
+      "drempel": 0.46
     }
   }
 }

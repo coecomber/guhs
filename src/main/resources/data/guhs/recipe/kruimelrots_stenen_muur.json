@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:kruimelrots_stenen"
+  },
+  "result": {
+    "id": "guhs:kruimelrots_stenen_muur",
+    "count": 6
+  }
+}

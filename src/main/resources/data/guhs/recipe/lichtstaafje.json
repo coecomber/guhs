@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "P",
+    "K"
+  ],
+  "key": {
+    "P": "guhs:gepofte_knabbelkoorvrucht",
+    "K": "guhs:guh_kristal"
+  },
+  "result": {
+    "id": "guhs:lichtstaafje",
+    "count": 4
+  }
+}

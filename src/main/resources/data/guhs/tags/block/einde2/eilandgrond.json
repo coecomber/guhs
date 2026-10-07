@@ -1,6 +1,12 @@
 {
   "replace": false,
   "values": [
-    "guhs:kaaskorst"
+    "guhs:kaaskorst",
+    "guhs:gebarsten_korst",
+    "guhs:kruimelzand",
+    "guhs:schimmelkaas",
+    "guhs:klipkaas",
+    "guhs:koorkorst",
+    "guhs:kruimelrots"
   ]
 }

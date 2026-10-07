@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/kruimelrots_stenen_plaat"
+    },
+    "type=top": {
+      "model": "guhs:block/kruimelrots_stenen_plaat_top"
+    },
+    "type=double": {
+      "model": "guhs:block/kruimelrots_stenen"
+    }
+  }
+}

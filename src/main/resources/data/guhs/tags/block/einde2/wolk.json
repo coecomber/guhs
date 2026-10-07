@@ -1,4 +1,7 @@
 {
   "replace": false,
-  "values": []
+  "values": [
+    "guhs:kruimelwolk",
+    "guhs:dichte_kruimelwolk"
+  ]
 }

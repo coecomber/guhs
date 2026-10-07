@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:schimmelkaas_stenen"
+  },
+  "result": {
+    "id": "guhs:schimmelkaas_stenen_plaat",
+    "count": 6
+  }
+}

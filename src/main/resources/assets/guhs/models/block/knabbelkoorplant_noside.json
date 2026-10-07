@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/chorus_plant_noside",
+  "textures": {
+    "texture": "guhs:block/knabbelkoorplant",
+    "inside": "guhs:block/knabbelkoorplant",
+    "particle": "guhs:block/knabbelkoorplant"
+  }
+}

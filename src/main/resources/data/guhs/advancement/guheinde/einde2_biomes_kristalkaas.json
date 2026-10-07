@@ -1,0 +1,30 @@
+{
+  "parent": "guhs:guheinde/einde2_biomes_zes_streken",
+  "display": {
+    "icon": {
+      "id": "guhs:kristalkaas"
+    },
+    "title": {
+      "translate": "advancements.guhs.guheinde.einde2_biomes_kristalkaas.title"
+    },
+    "description": {
+      "translate": "advancements.guhs.guheinde.einde2_biomes_kristalkaas.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "guhs:kristalkaas"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,6 +1,8 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/template_chorus_flower",
   "textures": {
-    "all": "guhs:block/knabbelkoorbloem"
+    "texture": "guhs:block/knabbelkoorbloem",
+    "bottom": "guhs:block/knabbelkoorplant",
+    "particle": "guhs:block/knabbelkoorbloem"
   }
 }
